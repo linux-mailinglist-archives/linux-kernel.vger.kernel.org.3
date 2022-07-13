@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A82572D7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253D2572D83
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234374AbiGMFli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 01:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55032 "EHLO
+        id S231940AbiGMFmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 01:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234315AbiGMFlU (ORCPT
+        with ESMTP id S233952AbiGMFly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 01:41:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBD43E74B;
-        Tue, 12 Jul 2022 22:35:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B2F4B81C13;
-        Wed, 13 Jul 2022 05:35:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D31EC3411E;
-        Wed, 13 Jul 2022 05:35:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657690507;
-        bh=C6Qvmu8YGI/7zZ+PW9nfbi7sR3QFFcB/JWTbSIlVJFg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XqpAoqynsEuoTHKPzK+XyGdIWKe+7LwOpsOoLz0GOmgpMQt0yAIdlRHvR1/dz0gpL
-         f1wM4YPqOe8Q45XvOqaqsBLBLObiEYHaMn3MGzSN6Anu69/mnWCc1y+6OwF0hxgOsi
-         asY0eSNZbsKov8qKtbpNnfhOgwkmycFbKcbnl7ew=
-Date:   Wed, 13 Jul 2022 07:35:02 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Chuck Zmudzinski <brchuckz@netscape.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Jane Chu <jane.chu@oracle.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, stable@vger.kernel.org
-Subject: Re: [PATCH] x86/PAT: Report PAT on CPUs that support PAT without MTRR
-Message-ID: <Ys5ZhmRHvRtpFN6t@kroah.com>
-References: <2885cdcaccffd287ef69c7509056ddf183a38a0e.1657647656.git.brchuckz.ref@aol.com>
- <2885cdcaccffd287ef69c7509056ddf183a38a0e.1657647656.git.brchuckz@aol.com>
- <Ys2/Lho9vQO33RZc@kroah.com>
- <a9efcbf3-3b34-53b7-0fa8-55a5ed3a17b4@netscape.net>
- <Ys3K0oS9QLx778Lb@kroah.com>
- <008ff24c-d059-8d39-5e57-6f5e9de0dcbf@netscape.net>
+        Wed, 13 Jul 2022 01:41:54 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A6EE1C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:40:27 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id q26so7373375vsp.11
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:40:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mxd6fF/X1Ur+T+IrYqysa9WFiYiRwcyC9Oo1dC8zTkc=;
+        b=kzjjWIOImgWc02VlKrN3u+XMYt5cyG3BKjJ5QvjsnH6M8ExUdJw9pFuLQ/stTLsdx7
+         2pooghQkcdClAMMNMGuEoHYOR1sPc7SbQRezE/bfmy2NbfyFj8M2KHDTZiogT7jY0HZ5
+         76LuyM4hjUQTT9nxXogNSYt4uv6F5UDgE6rYrU4A8fUf+PIuaYwUv3kPpAgufGmfVi0T
+         hx/JzGlREJQXHhlk/sPoXqRM9d5/9N2vnTqpuFRJPJpCYmJMTAEY/3jkzeGVe0H24PYu
+         Q8osxZai16iaAvkxmJZOra0xVcE6USTOA2a3FMdKquQYlt8CmZQ0MX0eSY5T8pgLESGJ
+         FyOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mxd6fF/X1Ur+T+IrYqysa9WFiYiRwcyC9Oo1dC8zTkc=;
+        b=ZpsD2CHxX5AVgB1OVHvAGLCE0ZErJJ5ucdyCHmIY82eFhpK7mAAN89kksEEatye6ad
+         aoibcMRgwKg2V3/F5fTIOPr0c5Z2k0orO1c9nb1F1M2YIq6uuVuTxk6HFCJNwHhJyjLq
+         tWVEIqbPbLrsIGDPIYA6O0BHtOmVwGycaAPleBNoXipKi3Udt+cRj4I0dHcBj8W9gSle
+         yZDNqoqRRDZBXRTjZ5GLR/pFJaVxkACW9RJQ0nUteD69xK89t/F+ilkqVA77Y899NJE3
+         A13DLgLhpTFNz/YdIZAFUK1TSXWKRR39nQ0FKkd33pvlQaa3rUt57NPAJJsIsVV3+9uW
+         DBpw==
+X-Gm-Message-State: AJIora+ZBfAO00au/SLKbi2x/klVmHeesqPHOxWcu40b4EYI9SPZG3tr
+        KGWsfsAnuxcEA25q6tVsvNffuXovoENpDwrpHs/HFw==
+X-Google-Smtp-Source: AGRyM1tbfSxhI6hN959fnDuXsUf5sxFkJhhZa6wobkH3cjsYiZx53U9Z+ls08De6yAm6U+nRv6jwxw56Yv7Y67ZWclg=
+X-Received: by 2002:a67:cf48:0:b0:357:158a:7654 with SMTP id
+ f8-20020a67cf48000000b00357158a7654mr603497vsm.0.1657690826992; Tue, 12 Jul
+ 2022 22:40:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <008ff24c-d059-8d39-5e57-6f5e9de0dcbf@netscape.net>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org> <20220309151541.139511-3-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20220309151541.139511-3-manivannan.sadhasivam@linaro.org>
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Wed, 13 Jul 2022 11:10:14 +0530
+Message-ID: <CAKohponOKCNFXUi6cyTOMV8Gd_erm4=2L9sFjgTs0+n0x5EmxQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to
+ YAML bindings
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        angelogioacchino.delregno@somainline.org,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,74 +71,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 03:57:45PM -0400, Chuck Zmudzinski wrote:
-> On 7/12/22 3:26 PM, Greg KH wrote:
-> > On Tue, Jul 12, 2022 at 03:16:01PM -0400, Chuck Zmudzinski wrote:
-> > > On 7/12/22 2:36 PM, Greg KH wrote:
-> > > > On Tue, Jul 12, 2022 at 02:20:37PM -0400, Chuck Zmudzinski wrote:
-> > > > > The commit 99c13b8c8896d7bcb92753bf
-> > > > > ("x86/mm/pat: Don't report PAT on CPUs that don't support it")
-> > > > > incorrectly failed to account for the case in init_cache_modes() when
-> > > > > CPUs do support PAT and falsely reported PAT to be disabled when in
-> > > > > fact PAT is enabled. In some environments, notably in Xen PV domains,
-> > > > > MTRR is disabled but PAT is still enabled, and that is the case
-> > > > > that the aforementioned commit failed to account for.
-> > > > > 
-> > > > > As an unfortunate consequnce, the pat_enabled() function currently does
-> > > > > not correctly report that PAT is enabled in such environments. The fix
-> > > > > is implemented in init_cache_modes() by setting pat_bp_enabled to true
-> > > > > in init_cache_modes() for the case that commit 99c13b8c8896d7bcb92753bf
-> > > > > ("x86/mm/pat: Don't report PAT on CPUs that don't support it") failed
-> > > > > to account for.
-> > > > > 
-> > > > > This patch fixes a regression that some users are experiencing with
-> > > > > Linux as a Xen Dom0 driving particular Intel graphics devices by
-> > > > > correctly reporting to the Intel i915 driver that PAT is enabled where
-> > > > > previously it was falsely reporting that PAT is disabled.
-> > > > > 
-> > > > > Fixes: 99c13b8c8896d7bcb92753bf ("x86/mm/pat: Don't report PAT on CPUs that don't support it")
-> > > > > Cc: stable@vger.kernel.org
-> > > > > Signed-off-by: Chuck Zmudzinski <brchuckz@aol.com>
-> > > > > ---
-> > > > > Reminder: This patch is a regression fix that is needed on stable
-> > > > > versions 5.17 and later.
-> > > >
-> > > > Then why are you saying it fixes a commit that is in 4.4.y and newer?
-> > > >
-> > > > confused,
-> > > >
-> > > > greg k-h
-> > > 
-> > > It is true the erroneous reporting of PAT goes back to 4.4.y. But it
-> > > was not until 5.17.y when the i915 driver was patched with a commit
-> > > that started using pat_enabled() instead of boot_cpu_has(X86_FEATURE_PAT)
-> > > and that is when a regression that started annoying users appeared
-> > > in the kernel. I presume that we only backport patches to stable that
-> > > fix regressions that are really bothering users, so even though the
-> > > problem dates to 4.4.y, there is no need to backport before 5.17.y
-> > > which is when the problem manifested in a way that started
-> > > bothering users.
-> >
-> > If it needs to go back to 4.9.y or so, let's take it all the way back to
-> > be consistent everywhere.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> I presume you want me to prepare the backport patches, or at
-> least the ones that need the patch to be significantly modified to
-> apply to those branches. I expect older versions will need the
-> patch to be significantly modified to apply. If not, please let me know.
+On Wed, 9 Mar 2022 at 20:45, Manivannan Sadhasivam
+<manivannan.sadhasivam@linaro.org> wrote:
 
-I will not know until it hits Linus's tree and the patch is backported
-then.  If there are problems, you will get an email at that point in
-time.
+> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> +    soc {
+> +      #address-cells = <1>;
+> +      #size-cells = <1>;
+> +
+> +      cpufreq@17d43000 {
+> +        compatible = "qcom,cpufreq-hw";
+> +        reg = <0x17d43000 0x1400>, <0x17d45800 0x1400>;
+> +        reg-names = "freq-domain0", "freq-domain1";
+> +
+> +        clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+> +        clock-names = "xo", "alternate";
+> +
+> +        #freq-domain-cells = <1>;
+> +      };
+> +    };
 
-> Is 4.9.y the oldest version we are still supporting?
-
-Yes, the front page of kernel.org lists the active kernel versions.
-
-thanks,
-
-greg k-h
+Why didn't we migrate to #performance-domain-cells here ? We can keep
+the kernel backward compatible to support old DT definitions, but won't it be
+better to move to a more generic solution, now that we have one ?

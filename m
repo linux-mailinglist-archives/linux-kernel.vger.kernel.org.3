@@ -2,57 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82740573542
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889E9573546
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235616AbiGMLXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 07:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
+        id S235260AbiGMLXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 07:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbiGMLXD (ORCPT
+        with ESMTP id S235415AbiGMLXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:23:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202CC102061
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:23:02 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oBaSB-0004w6-PK; Wed, 13 Jul 2022 13:22:51 +0200
-Message-ID: <4f4ab64a45c23cd1820423bb9a6513d2a4cb15e4.camel@pengutronix.de>
-Subject: Re: [PATCH v14 10/17] PCI: imx6: Turn off regulator when system is
- in suspend mode
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Hongxing Zhu <hongxing.zhu@nxp.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "francesco.dolcini@toradex.com" <francesco.dolcini@toradex.com>
-Cc:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-Date:   Wed, 13 Jul 2022 13:22:50 +0200
-In-Reply-To: <AS8PR04MB8676F0E41C38891B2C21F8D78C899@AS8PR04MB8676.eurprd04.prod.outlook.com>
-References: <1656645935-1370-1-git-send-email-hongxing.zhu@nxp.com>
-         <1656645935-1370-11-git-send-email-hongxing.zhu@nxp.com>
-         <6f0cd4c69e0eba3e5da513cfbbe5f162e650a8f1.camel@pengutronix.de>
-         <AS8PR04MB8676F0E41C38891B2C21F8D78C899@AS8PR04MB8676.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Wed, 13 Jul 2022 07:23:49 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318C012D26
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:23:47 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so3196623pjn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mBv65ePymP8BrvBqJEccHdic2EPa2EXBPtUssXzhwOg=;
+        b=WJAHzNZPHYaBkOnHpUQsHsNvlMG0D7+q0blC0hb3ey7VLNCE6BhnhWgLR5TKOl4CVy
+         KlBzLf6ICrSJyRZiQ3Jfb13yrTfH4mY8+LQhzMKRdp9948RtdB8bjg0dYdKTNlridZpL
+         x1XKBhSYeYAFLvts3J4JXpPcQeGtNvuJu3ZocsMTzZklY/vRr6OEBwF0luD3QTpjxDI1
+         0gd2HF+OXqxmKU0e5YvHukDOUKKZl1Dslaut8KNfBnWoyLRGEtci8Oe6f7nMFXSL+xhH
+         Gx78N5kAO/ESczBNpyuKdpcUP2QQ+fCpS/ntuX+IWdzTHPCFi1FJlBufX8AEVTn4LR5L
+         gqqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mBv65ePymP8BrvBqJEccHdic2EPa2EXBPtUssXzhwOg=;
+        b=TkH3txy1RX9MRL4xvnDkU1YrKadIKzSKpOcMRtkH4sgrHpbStaAU7Otib93PmlWymP
+         ad+JUfaoRvQKypeeZ2zU6tk+W9/6Tj4rCzisyQxBwMbBr0jWDOmgUIuhE2YIt/nFafKi
+         +jD6NCRwsRtw0VkunRuZBt37XXOR+43LUbFReg6HrcVgYXVO2lxEItFGdKFP32KFrQb1
+         dXMmbwfzYlb77f3uQUQUwR5HUWwQSXQ7zP7iEh65gJnBMYA9zwBywP0sq+U0jSd9Tcfp
+         t8Yy4zrtj7GKYt9mWZWTr/HNeTjUwsGkN4wglrdSAMM6RbIS54rd6FObYBeC0Q1sryaJ
+         2iSg==
+X-Gm-Message-State: AJIora//vYNiGN4/3rFpKvdAo+IcBcGKZgeX5VMR1usOOzXTkaCjxRsi
+        mdWuaSWhDSbGv8XYM73NFb+q0Q==
+X-Google-Smtp-Source: AGRyM1vma2fRTzKqlFqr8JzUoIhx2aJdRjOGe9vLEj93pDZb3OCTdhl1QJ6TIZS+hluNNhT9C8eGSA==
+X-Received: by 2002:a17:90b:4a08:b0:1ef:f36b:18e1 with SMTP id kk8-20020a17090b4a0800b001eff36b18e1mr9731642pjb.246.1657711426680;
+        Wed, 13 Jul 2022 04:23:46 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id 200-20020a6219d1000000b00528d7d27211sm8754024pfz.178.2022.07.13.04.23.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 04:23:46 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 16:53:44 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     rafael@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        matthias.bgg@gmail.com, rex-bc.chen@mediatek.com,
+        jia-wei.chang@mediatek.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] cpufreq: mediatek: Handle sram regulator probe deferral
+Message-ID: <20220713112344.ye4xgjlqbhyvb46h@vireshk-i7>
+References: <20220713111536.115097-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713111536.115097-1-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,181 +74,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, dem 13.07.2022 um 10:56 +0000 schrieb Hongxing Zhu:
-> > -----Original Message-----
-> > From: Lucas Stach <l.stach@pengutronix.de>
-> > Sent: 2022年7月13日 16:34
-> > To: Hongxing Zhu <hongxing.zhu@nxp.com>; bhelgaas@google.com;
-> > robh+dt@kernel.org; broonie@kernel.org; lorenzo.pieralisi@arm.com;
-> > festevam@gmail.com; francesco.dolcini@toradex.com
-> > Cc: linux-pci@vger.kernel.org;
-> > linux-arm-kernel@lists.infradead.org;
-> > linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
-> > <linux-imx@nxp.com>
-> > Subject: Re: [PATCH v14 10/17] PCI: imx6: Turn off regulator when
-> > system is in
-> > suspend mode
-> > 
-> > Am Freitag, dem 01.07.2022 um 11:25 +0800 schrieb Richard Zhu:
-> > > The driver should undo any enables it did itself. The regulator
-> > > disable shouldn't be basing decisions on regulator_is_enabled().
-> > > 
-> > > Move the regulator_disable to the suspend function, turn off
-> > > regulator
-> > > when the system is in suspend mode.
-> > > 
-> > > To keep the balance of the regulator usage counter, disable the
-> > > regulator in shutdown.
-> > > 
-> > > Link:
-> > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore
-> > > .kernel.org%2Fr%2F1655189942-12678-6-git-send-email-
-> > > hongxing.z&amp;d
-> > at
-> > > 
-> > a=05%7C01%7Chongxing.zhu%40nxp.com%7C361c9bf365b64895482808da6
-> > 4aa7cca%
-> > > 
-> > 7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6379329806385373
-> > 39%7CUnkn
-> > > 
-> > own%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1
-> > haWwi
-> > > 
-> > LCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=A%2Fw6AFCddC0T%2FA
-> > ocBT%2F7OJZ
-> > > ddAeYPTbgeAxpHpPubkw%3D&amp;reserved=0
-> > > hu@nxp.com
-> > > Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> > > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> > > ---
-> > >  drivers/pci/controller/dwc/pci-imx6.c | 19 +++++++------------
-> > >  1 file changed, 7 insertions(+), 12 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/dwc/pci-imx6.c
-> > > b/drivers/pci/controller/dwc/pci-imx6.c
-> > > index 2b42c37f1617..f72eb609769b 100644
-> > > --- a/drivers/pci/controller/dwc/pci-imx6.c
-> > > +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> > > @@ -670,8 +670,6 @@ static void imx6_pcie_clk_disable(struct
-> > > imx6_pcie
-> > > *imx6_pcie)
-> > > 
-> > >  static void imx6_pcie_assert_core_reset(struct imx6_pcie
-> > > *imx6_pcie)
-> > > {
-> > > -	struct device *dev = imx6_pcie->pci->dev;
-> > > -
-> > >  	switch (imx6_pcie->drvdata->variant) {
-> > >  	case IMX7D:
-> > >  	case IMX8MQ:
-> > > @@ -702,14 +700,6 @@ static void
-> > > imx6_pcie_assert_core_reset(struct
-> > imx6_pcie *imx6_pcie)
-> > >  		break;
-> > >  	}
-> > > 
-> > > -	if (imx6_pcie->vpcie && regulator_is_enabled(imx6_pcie-
-> > > >vpcie) > 0) {
-> > > -		int ret = regulator_disable(imx6_pcie->vpcie);
-> > > -
-> > > -		if (ret)
-> > > -			dev_err(dev, "failed to disable vpcie
-> > > regulator: %d\n",
-> > > -				ret);
-> > > -	}
-> > > -
-> > >  	/* Some boards don't have PCIe reset GPIO. */
-> > >  	if (gpio_is_valid(imx6_pcie->reset_gpio))
-> > >  		gpio_set_value_cansleep(imx6_pcie->reset_gpio,
-> > > @@ -722,7 +712,7 @@ static int
-> > > imx6_pcie_deassert_core_reset(struct
-> > imx6_pcie *imx6_pcie)
-> > >  	struct device *dev = pci->dev;
-> > >  	int ret;
-> > > 
-> > > -	if (imx6_pcie->vpcie && !regulator_is_enabled(imx6_pcie-
-> > > >vpcie)) {
-> > > +	if (imx6_pcie->vpcie) {
-> > >  		ret = regulator_enable(imx6_pcie->vpcie);
-> > >  		if (ret) {
-> > >  			dev_err(dev, "failed to enable vpcie
-> > > regulator: %d\n",
-> > 
-> > The regulator really has nothing to do with the core reset. Please
-> > move this
-> > regulator enable into imx6_pcie_host_init().
-> Hi Lucas:
-> Thanks for your comments.
-> Got that. Had done it in the 11/17 commit.
+On 13-07-22, 13:15, AngeloGioacchino Del Regno wrote:
+> If the regulator_get_optional() call for the SRAM regulator returns
+> a probe deferral, we must bail out and retry probing later: failing
+> to do this will produce unstabilities on platforms requiring the
+> handling for this regulator.
 > 
-> > 
-> > > @@ -795,7 +785,7 @@ static int
-> > > imx6_pcie_deassert_core_reset(struct
-> > imx6_pcie *imx6_pcie)
-> > >  	return 0;
-> > > 
-> > >  err_clks:
-> > > -	if (imx6_pcie->vpcie && regulator_is_enabled(imx6_pcie-
-> > > >vpcie) > 0) {
-> > > +	if (imx6_pcie->vpcie) {
-> > >  		ret = regulator_disable(imx6_pcie->vpcie);
-> > >  		if (ret)
-> > >  			dev_err(dev, "failed to disable vpcie
-> > > regulator: %d\n", @@
-> > -1022,6
-> > > +1012,9 @@ static int imx6_pcie_suspend_noirq(struct device *dev)
-> > >  		break;
-> > >  	}
-> > > 
-> > > +	if (imx6_pcie->vpcie)
-> > > +		regulator_disable(imx6_pcie->vpcie);
-> > > +
-> > >  	return 0;
-> > >  }
-> > > 
-> > > @@ -1268,6 +1261,8 @@ static void imx6_pcie_shutdown(struct
-> > > platform_device *pdev)
-> > > 
-> > >  	/* bring down link, so bootloader gets clean state in
-> > > case of reboot */
-> > >  	imx6_pcie_assert_core_reset(imx6_pcie);
-> > > +	if (imx6_pcie->vpcie)
-> > > +		regulator_disable(imx6_pcie->vpcie);
-> > 
-> > This looks like a separate change, not mentioned in the commit
-> > message.
-> > I'm not sure if we should do this. Shutdown is supposed to just
-> > stop the device,
-> > which is already achieved by imx6_pcie_assert_core_reset().
-> > 
-> > If we would want to do a full cleanup here we would also need to
-> > disable
-> > clocks and get the reset GPIO into asserted state. I don't think we
-> > want to do
-> > all of this here.
-> The regulator_disable() was contained in
-> imx6_pcie_assert_core_reset() before.
-> When refine the regulator usage, the regulator_disable() is moved out
-> of
->  imx6_pcie_assert_core_reset().
-> Based on the discussion [1] with Francesco.
-> To keep the same behavior, the regulator_disable() is placed behind
-> of
->  imx6_pcie_assert_core_reset() in imx6_pcie_shutdown() here.
-> [1]
-> https://patchwork.ozlabs.org/project/linux-pci/patch/1644290735-3797-6-git-send-email-hongxing.zhu@nxp.com/
+> Fixes: ffa7bdf7f344 ("cpufreq: mediatek: Make sram regulator optional")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/cpufreq/mediatek-cpufreq.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index 3a2be4552020..7f2680bc9a0f 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -439,9 +439,13 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+>  
+>  	/* Both presence and absence of sram regulator are valid cases. */
+>  	info->sram_reg = regulator_get_optional(cpu_dev, "sram");
+> -	if (IS_ERR(info->sram_reg))
+> +	if (IS_ERR(info->sram_reg)) {
+> +		ret = PTR_ERR(info->sram_reg);
+> +		if (ret == -EPROBE_DEFER)
+> +			goto out_free_resources;
+> +
+>  		info->sram_reg = NULL;
+> -	else {
+> +	} else {
+>  		ret = regulator_enable(info->sram_reg);
+>  		if (ret) {
+>  			dev_warn(cpu_dev, "cpu%d: failed to enable vsram\n", cpu);
 
-I disagree with Francesco on this. This kind of half-done cleanup
-doesn't help in any way. Either we care about doing a full cleanup
-here, which would involve clocks and reset GPIOs, or we just care about
-getting the core in a state where it survives a reboot, which frankly
-was the original intention when I added the shutdown callback.
+Applied. Thanks.
 
-As the devices on the bus will see a full PERST reset via the reset
-GPIO anyways, there is no harm in keeping them powered across the
-reboot.
-
-Regards,
-Lucas
-
+-- 
+viresh

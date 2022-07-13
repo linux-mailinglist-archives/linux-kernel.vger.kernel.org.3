@@ -2,383 +2,545 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C88572F36
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0F5572F38
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234507AbiGMH2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
+        id S234613AbiGMH2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234486AbiGMH2D (ORCPT
+        with ESMTP id S234450AbiGMH2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:28:03 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BF9E3C31
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:27:58 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 19so12506496ljz.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:27:58 -0700 (PDT)
+        Wed, 13 Jul 2022 03:28:10 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54ECE3C1E
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:28:08 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id eq6so12980207edb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:28:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qvvhomGYxh568AGzjojM/+vjUS/JUjZdwsCQhUeoe+A=;
-        b=rAStiLl4BCjScjyYhy8ewWucNU3to99QQsy2c7vbcyTNxQLa5HvG/pJFm+y9/IEhe5
-         qx1SaQvjXAkckDC+Wo/BhoXoS2qcebpXitqyJvhcbS/Ry6p9rWuQ3FiHRK+gbIBawScz
-         p8CllDp9YyWwEO5/YYsogbQxrqynRxRcJUIvNnA7f9QYqtpigrLOFTDcugiPWP+4Dn/V
-         ddIfhj9SKdb7hNr+JIWPSlD9OLFfWA4CSz6Mr6iex3KHAdb6aNFxia13GZRgfLtW/NAe
-         aCa/bk/NS56WWt0rVgJMdKlbmm/6Wk694M+95ezfSdrNxYDaQ9ZjtaqYN1Xw1AKRSTYM
-         q6/A==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wwzETJKIQrlU+8+QLl9F0AGowG0zSA3uMJrcnyFEu/c=;
+        b=ornLNe9OOfq6PnB/k5Z5tWvTBEd/cGXmE13J9IbhA1+7I9SLxu2WcQiRYvY8Y6fgGi
+         lHvSm3XOxH4JV5MHPqHaPI6mFZ6SXXYC8e+ap9cyr0e8AtbYBt+uR8Gj9uhW9a3/99gZ
+         M9YLWVml/J/d2Mnf1vyXW7SZu+YG4UTRCmCb3P9795f8BjGqC68ComatjWZRvZBXQpGq
+         dsEa53pNz2Pj+bYpzUycIbAPPShd72qCRmZc6N5Gz1Y0aWnM2opW8xHbb8ahwp7pgUPZ
+         h1DRxgZ5volkY3d2opjGX/Kdmj3FZL+z3SZCprwNNPXMk3OzjzEXOLCzf5kboMCysuLn
+         plEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qvvhomGYxh568AGzjojM/+vjUS/JUjZdwsCQhUeoe+A=;
-        b=jkOeGW02qUF8P7Tb9vnTFDhEYNrxdmFUp4JYG03yl2dg01/4pc6xrTrUQcAjfY3K7B
-         2BMSLhIXLLd0kxohb+72IbLuq95XypCkw5AggsFq/3md4mIlJmXY8BAtXwdherztsFm7
-         ZA8Dm7aJMQDvSfmk4azodCtDQvNstjsK9X8NRoP1oi9t5l3zqF20+0qB3lrHdZNuiPTf
-         /nl99KYeeataNVF7KpMguHO9GLzqPe6IwQIK987c4AP/VxDJRrDbzAOLMPkXZRRndKHQ
-         PBbBs9kmh3dMjeik1D55MEKO6NGXfhAQew6eHfHHyZ00E28wgwjrW6drCjkqs43YJcy3
-         VaLw==
-X-Gm-Message-State: AJIora+ogASgvJfxtIcyeIqsGC22cQ0y/mT+ubqoOwxO/e6kXjf/qvm6
-        ClPczmqscCf7KYVrYvhlEobYLQ==
-X-Google-Smtp-Source: AGRyM1surgPeoakhJynXpUFVY0pgRy+1Zm6CBFx6AvxxVm2BvPHnSomshzat3mOu4EUp/tBftgPl1w==
-X-Received: by 2002:a05:651c:511:b0:25b:f78e:cb30 with SMTP id o17-20020a05651c051100b0025bf78ecb30mr978208ljp.327.1657697276784;
-        Wed, 13 Jul 2022 00:27:56 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id w15-20020a05651234cf00b00489e88d6a72sm1162960lfr.198.2022.07.13.00.27.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 00:27:55 -0700 (PDT)
-Message-ID: <f0ab0036-54eb-f0e4-3169-740e7fca9c65@linaro.org>
-Date:   Wed, 13 Jul 2022 09:27:52 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wwzETJKIQrlU+8+QLl9F0AGowG0zSA3uMJrcnyFEu/c=;
+        b=0Hhm9BJNNWSrEIuAtX+skJzB3mRsLen38Fw+iA89IgU0Jn7snjQjopqLtEniNz6TcU
+         MX9DK1NqnprUGbe4WR1SDiJ7NMlCmQnyrZNMdrCiZU/e1PgjoXpTj7+xAN+ox03p2KFA
+         ckxbN9ncIN3Q+oCdU8V01MUBCG1dNc08Zjacew4ZRUseV/wFRIW+ShlhEyxXer6SDXcl
+         RwEQFxVHnyk5oGuJpMX7Hw7qsGykGDWiRs3IL+sg9+r7zqKSzIdHnW0lzkq6jTI2twfn
+         eDVgi/H4MX5P8nLL5HXf2wg7DSJjIHRAHGVJKAxLubdTDG2Nx9499cq0Ys+ThoLrPygv
+         9G4w==
+X-Gm-Message-State: AJIora/vjs7yzaYInqta3uJeE+cdasqydRzyVwWOTBLdDGM+u2mcHWl3
+        dm7WmxyZxAEgqhlWsRqx9azF/ad5y4s9nTcE0uzpyQ==
+X-Google-Smtp-Source: AGRyM1sQw++6I/l2EhVW6jlBTxMvQTO3mfdwwI8tvG/HGB7ECkghVpYMQmg1p1shY2t/qsrgvuXSo7B6SPggglIdLvM=
+X-Received: by 2002:a05:6402:27c8:b0:43a:f392:8fdd with SMTP id
+ c8-20020a05640227c800b0043af3928fddmr2857035ede.328.1657697287109; Wed, 13
+ Jul 2022 00:28:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4/4] mfd: Samsung: Add Samsung sysmgr driver
-Content-Language: en-US
-To:     dj76.yang@samsung.com,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>
-Cc:     "javierm@redhat.com" <javierm@redhat.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Wangseok Lee <wangseok.lee@samsung.com>
-References: <CGME20220713045746epcms1p302c6643d12ed505d24298e1edb5889ec@epcms1p3>
- <20220713045746epcms1p302c6643d12ed505d24298e1edb5889ec@epcms1p3>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220713045746epcms1p302c6643d12ed505d24298e1edb5889ec@epcms1p3>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220712143237.13992-1-henning.schild@siemens.com> <20220712143237.13992-2-henning.schild@siemens.com>
+In-Reply-To: <20220712143237.13992-2-henning.schild@siemens.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 13 Jul 2022 09:27:56 +0200
+Message-ID: <CAMRc=Md7uVpwSweCSfrNJKqhQLYs2sVv9UasL59ZpqJ50fSC5w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] gpio: nct6116d: add new driver for several Nuvoton
+ super io chips
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tasanakorn Phaipool <tasanakorn@gmail.com>,
+        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
+        Kuan-Wei Ho <cwho@nuvoton.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/07/2022 06:57, Dongjin Yang wrote:
-> This driver is used for SoCs produced by Samsung Foundry to provide
-> Samsung sysmgr API. The read/write request of sysmgr is delivered to
-> Samsung secure monitor call.
-> 
-> Signed-off-by: Dongjin Yang <dj76.yang@samsung.com>
+On Tue, Jul 12, 2022 at 4:32 PM Henning Schild
+<henning.schild@siemens.com> wrote:
+>
+> This patch adds gpio support for several Nuvoton NCTXXX chips. These
+> Super-I/O chips offer multiple functions of which several already have
+> drivers in the kernel, i.e. hwmon and watchdog.
+>
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
 > ---
->  MAINTAINERS                        |   2 +
->  drivers/mfd/Kconfig                |  11 +++
->  drivers/mfd/Makefile               |   1 +
->  drivers/mfd/samsung-sysmgr.c       | 167 +++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/samsung-sysmgr.h |  30 +++++++
->  5 files changed, 211 insertions(+)
->  create mode 100644 drivers/mfd/samsung-sysmgr.c
->  create mode 100644 include/linux/mfd/samsung-sysmgr.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 55cb8901ccdc..44ad4bd406a9 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1870,9 +1870,11 @@ F:	arch/arm/mach-artpec
->  F:	drivers/clk/axis
->  F:	drivers/crypto/axis
->  F:	drivers/firmware/samsung-smc-svc.c
-> +F:	drivers/mfd/samsung-sysmgr.c
->  F:	drivers/mmc/host/usdhi6rol0.c
->  F:	drivers/pinctrl/pinctrl-artpec*
->  F:	include/linux/firmware/samsung-smc-svc.h
-> +F:	include/linux/mfd/samsung-sysmgr.h
-
-Not related to Axis/Artpec SoC.
-
->  
->  ARM/ASPEED I2C DRIVER
->  M:	Brendan Higgins <brendanhiggins@google.com>
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 3b59456f5545..ce6ab5842bf0 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -51,6 +51,17 @@ config MFD_ACT8945A
->  	  linear regulators, along with a complete ActivePath battery
->  	  charger.
->  
-> +config MFD_SAMSUNG_SYSMGR
-> +	bool "System Manager for Samsung Foundry platforms"
-> +	depends on ARCH_ARTPEC && OF
-
-Samsung Foundry does not match ARTPEC... Artpec 6 is not Samsung Foundry
-SoC, is it?
-
-Missing compile test.
-
-> +	select MFD_SYSCON
-> +	select SAMSUNG_SECURE_SERVICE
-> +	help
-> +	  Select this to get System Manager support for SoCs which use
-> +	  Samsung Foundry platforms.
-> +	  This System Manager has depedency on Samsung Secure Service
-> +	  for providing secure service call.
-
-Looking at the driver, it does literally nothing. Looks like workaround
-for incomplete bindings and DTS. It's a no-go.
-
+>  drivers/gpio/Kconfig         |   9 +
+>  drivers/gpio/Makefile        |   1 +
+>  drivers/gpio/gpio-nct6116d.c | 412 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 422 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-nct6116d.c
+>
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index b01961999ced..1f1ec035f3c6 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -899,6 +899,15 @@ config GPIO_IT87
+>           To compile this driver as a module, choose M here: the module will
+>           be called gpio_it87.
+>
+> +config GPIO_NCT6116D
+> +       tristate "Nuvoton Super-I/O GPIO support"
+> +       help
+> +         This option enables support for GPIOs found on Nuvoton Super-I/O
+> +         chips NCT5104D, NCT6106D, NCT6116D, NCT6122D.
 > +
->  config MFD_SUN4I_GPADC
->  	tristate "Allwinner sunxi platforms' GPADC MFD driver"
->  	select MFD_CORE
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 858cacf659d6..490f041d1262 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -248,6 +248,7 @@ obj-$(CONFIG_INTEL_SOC_PMIC_MRFLD)	+= intel_soc_pmic_mrfld.o
->  
->  obj-$(CONFIG_MFD_ALTERA_A10SR)	+= altera-a10sr.o
->  obj-$(CONFIG_MFD_ALTERA_SYSMGR) += altera-sysmgr.o
-> +obj-$(CONFIG_MFD_SAMSUNG_SYSMGR) += samsung-sysmgr.o
->  obj-$(CONFIG_MFD_STPMIC1)	+= stpmic1.o
->  obj-$(CONFIG_MFD_SUN4I_GPADC)	+= sun4i-gpadc.o
->  
-> diff --git a/drivers/mfd/samsung-sysmgr.c b/drivers/mfd/samsung-sysmgr.c
+> +         To compile this driver as a module, choose M here: the module will
+> +         be called gpio_nct6116d.
+> +
+>  config GPIO_SCH
+>         tristate "Intel SCH/TunnelCreek/Centerton/Quark X1000 GPIO"
+>         depends on (X86 || COMPILE_TEST) && ACPI
+> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+> index 14352f6dfe8e..87f1b0a0cda2 100644
+> --- a/drivers/gpio/Makefile
+> +++ b/drivers/gpio/Makefile
+> @@ -107,6 +107,7 @@ obj-$(CONFIG_GPIO_MT7621)           += gpio-mt7621.o
+>  obj-$(CONFIG_GPIO_MVEBU)               += gpio-mvebu.o
+>  obj-$(CONFIG_GPIO_MXC)                 += gpio-mxc.o
+>  obj-$(CONFIG_GPIO_MXS)                 += gpio-mxs.o
+> +obj-$(CONFIG_GPIO_NCT6116D)            += gpio-nct6116d.o
+>  obj-$(CONFIG_GPIO_OCTEON)              += gpio-octeon.o
+>  obj-$(CONFIG_GPIO_OMAP)                        += gpio-omap.o
+>  obj-$(CONFIG_GPIO_PALMAS)              += gpio-palmas.o
+> diff --git a/drivers/gpio/gpio-nct6116d.c b/drivers/gpio/gpio-nct6116d.c
 > new file mode 100644
-> index 000000000000..a202e8c4c4f2
+> index 000000000000..2ff92f3e11aa
 > --- /dev/null
-> +++ b/drivers/mfd/samsung-sysmgr.c
-> @@ -0,0 +1,167 @@
+> +++ b/drivers/gpio/gpio-nct6116d.c
+> @@ -0,0 +1,412 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Copyright (C) 2019 Samsung Electronics, Co. Ltd.
-> + * Copyright (C) 2018-2019, Intel Corporation.
-> + * Copyright (C) 2012 Freescale Semiconductor, Inc.
-> + * Copyright (C) 2012 Linaro Ltd.
+> + * GPIO driver for Nuvoton Super-I/O chips NCT5104D, NCT6106D, NCT6116D, NCT6122D
 > + *
-> + * Inspired by drivers/mfd/altera-sysmgr.c
+> + * Authors:
+> + *  Tasanakorn Phaipool <tasanakorn@gmail.com>
+> + *  Sheng-Yuan Huang <syhuang3@nuvoton.com>
+> + *  Kuan-Wei Ho <cwho@nuvoton.com>
+> + *  Henning Schild <henning.schild@siemens.com>
 > + */
 > +
-> +#include <linux/arm-smccc.h>
-> +#include <linux/err.h>
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/gpio/driver.h>
+> +#include <linux/init.h>
 > +#include <linux/io.h>
-> +#include <linux/mfd/samsung-sysmgr.h>
-> +#include <linux/mfd/syscon.h>
 > +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/regmap.h>
-> +#include <linux/slab.h>
+> +#include <linux/platform_device.h>
 > +
-> +/**
-> + * struct samsung_sysmgr - Samsung System Manager
-> + * @regmap: the regmap used for System Manager accesses.
-> + * @base  : the base address for the System Manager
-> + */
-> +struct samsung_sysmgr {
-> +	struct regmap   *regmap;
-> +	resource_size_t *base;
-> +};
-> +
-> +static struct platform_driver samsung_sysmgr_driver;
-
-No, no static variables.
-
-> +
-> +static struct regmap_config mmio_regmap_cfg = {
-> +	.name = "sysmgr_mmio",
-> +	.reg_bits = 32,
-> +	.reg_stride = 4,
-> +	.val_bits = 32,
-> +	.fast_io = true,
-> +	.use_single_read = true,
-> +	.use_single_write = true,
-> +};
-> +
-> +static struct regmap_config samsung_smccc_regmap_cfg = {
-> +	.name = "samsung_sysmgr_smccc",
-> +	.reg_bits = 32,
-> +	.reg_stride = 4,
-> +	.val_bits = 32,
-> +	.fast_io = true,
-> +	.use_single_read = true,
-> +	.use_single_write = true,
-> +	.reg_read = samsung_smc_reg_read,
-> +	.reg_write = samsung_smc_reg_write,
-> +};
-> +
-> +/**
-> + * samsung_sysmgr_regmap_lookup_by_phandle
-> + * Find the sysmgr previous configured in probe() and return regmap property.
-> + * Return: regmap if found or error if not found.
-> + */
-> +struct regmap *samsung_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
-> +						       const char *property)
-> +{
-> +	struct device *dev;
-> +	struct samsung_sysmgr *sysmgr;
-> +	struct device_node *sysmgr_np;
-> +
-> +	if (property)
-> +		sysmgr_np = of_parse_phandle(np, property, 0);
-> +	else
-> +		sysmgr_np = np;
-> +
-> +	if (!sysmgr_np)
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	dev = driver_find_device_by_of_node(&samsung_sysmgr_driver.driver,
-> +					    (void *)sysmgr_np);
-> +	of_node_put(sysmgr_np);
-> +	if (!dev)
-> +		return ERR_PTR(-EPROBE_DEFER);
-> +
-> +	sysmgr = dev_get_drvdata(dev);
-> +
-> +	return sysmgr->regmap;
-> +}
-> +EXPORT_SYMBOL_GPL(samsung_sysmgr_regmap_lookup_by_phandle);
-
-This breaks layers/encapsulation and looks like a hack for incomplete
-bindings/DTS. No, no exporting regmaps.
-
-> +
-> +static int sysmgr_probe(struct platform_device *pdev)
-> +{
-> +	struct samsung_sysmgr *sysmgr;
-> +	struct regmap *regmap;
-> +	struct resource *res;
-> +	struct device *dev = &pdev->dev;
-> +	struct regmap_config sysmgr_config =
-> +		*((struct regmap_config *)of_device_get_match_data(dev));
-> +
-> +	sysmgr = devm_kzalloc(dev, sizeof(*sysmgr), GFP_KERNEL);
-> +	if (!sysmgr)
-> +		return -ENOMEM;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!res)
-> +		return -ENOENT;
-> +
-> +	sysmgr_config.max_register = resource_size(res) -
-> +				     sysmgr_config.reg_stride;
-> +	if (sysmgr_config.reg_read) {
-> +		/* Need physical address for SMCC call */
-> +		sysmgr->base = (resource_size_t *)res->start;
-> +		regmap = devm_regmap_init(dev, NULL, sysmgr->base,
-> +					  &sysmgr_config);
-> +	} else {
-> +		sysmgr->base = devm_ioremap(dev, res->start,
-> +					    resource_size(res));
-> +		if (!sysmgr->base)
-> +			return -ENOMEM;
-> +
-> +		regmap = devm_regmap_init_mmio(dev, sysmgr->base,
-> +					       &sysmgr_config);
-> +	}
-> +
-> +	if (IS_ERR(regmap)) {
-> +		pr_err("regmap init failed\n");
-
-dev_err
-
-> +		return PTR_ERR(regmap);
-> +	}
-> +
-> +	sysmgr->regmap = regmap;
-> +
-> +	platform_set_drvdata(pdev, sysmgr);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id samsung_sysmgr_of_match[] = {
-> +	{ .compatible = "samsung,sys-mgr", .data = &mmio_regmap_cfg },
-> +	{
-> +	  .compatible = "samsung,sys-mgr-smccc",
-> +	  .data = &samsung_smccc_regmap_cfg
-> +	},
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, samsung_sysmgr_of_match);
-> +
-> +static struct platform_driver samsung_sysmgr_driver = {
-> +	.probe =  sysmgr_probe,
-> +	.driver = {
-> +		.name = "samsung,system_manager",
-> +		.of_match_table = samsung_sysmgr_of_match,
-> +	},
-> +};
-> +
-> +static int __init samsung_sysmgr_init(void)
-> +{
-> +	return platform_driver_register(&samsung_sysmgr_driver);
-> +}
-> +core_initcall(samsung_sysmgr_init);
-
-module_platform_driver() instead.
-
-> +
-> +static void __exit samsung_sysmgr_exit(void)
-> +{
-> +	platform_driver_unregister(&samsung_sysmgr_driver);
-> +}
-> +module_exit(samsung_sysmgr_exit);
-> +
-> +MODULE_AUTHOR("Dongjin Yang <dj76.yang@samsung.com>");
-> +MODULE_DESCRIPTION("Samsung System Manager driver");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/mfd/samsung-sysmgr.h b/include/linux/mfd/samsung-sysmgr.h
-> new file mode 100644
-> index 000000000000..d6887cb86ea8
-> --- /dev/null
-> +++ b/include/linux/mfd/samsung-sysmgr.h
-> @@ -0,0 +1,30 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
-> + * Copyright (C) 2019 Samsung Electronics, Co. Ltd.
-> + * Copyright (C) 2018-2019 Intel Corporation
-> + * Copyright (C) 2012 Freescale Semiconductor, Inc.
-> + * Copyright (C) 2012 Linaro Ltd.
+> + * Super-I/O registers
+> + */
+> +#define SIO_LDSEL              0x07    /* Logical device select */
+> +#define SIO_CHIPID             0x20    /* Chaip ID (2 bytes) */
+> +#define SIO_GPIO_ENABLE                0x30    /* GPIO enable */
+> +
+> +#define SIO_LD_GPIO            0x07    /* GPIO logical device */
+> +#define SIO_UNLOCK_KEY         0x87    /* Key to enable Super-I/O */
+> +#define SIO_LOCK_KEY           0xAA    /* Key to disable Super-I/O */
+> +
+> +#define SIO_ID_MASK            GENMASK(15, 4)
+> +#define SIO_NCT5104D_ID                0x1061
+> +#define SIO_NCT6106D_ID                0xC452
+> +#define SIO_NCT6116D_ID                0xD282
+> +#define SIO_NCT6122D_ID                0xD2A3
+> +
+> +enum chips {
+> +       nct5104d,
+> +       nct6106d,
+> +       nct6116d,
+> +       nct6122d,
+> +};
+> +
+> +static const char * const nct6116d_names[] = {
+> +       [nct5104d] = "nct5104d",
+> +       [nct6106d] = "nct6106d",
+> +       [nct6116d] = "nct6116d",
+> +       [nct6122d] = "nct6122d",
+> +};
+> +
+> +struct nct6116d_sio {
+> +       int addr;
+> +       enum chips type;
+> +};
+> +
+> +struct nct6116d_gpio_bank {
+> +       struct gpio_chip chip;
+> +       unsigned int regbase;
+> +       struct nct6116d_gpio_data *data;
+> +};
+> +
+> +struct nct6116d_gpio_data {
+> +       struct nct6116d_sio *sio;
+> +       int nr_bank;
+> +       struct nct6116d_gpio_bank *bank;
+> +};
+> +
+> +/*
+> + * Super-I/O functions.
 > + */
 > +
-> +#ifndef __LINUX_MFD_SAMSUNG_SYSMGR_H__
-> +#define __LINUX_MFD_SAMSUNG_SYSMGR_H__
+> +static inline int superio_inb(int base, int reg)
+> +{
+> +       outb(reg, base);
+> +       return inb(base + 1);
+> +}
 > +
-> +#include <linux/err.h>
-> +#include <linux/errno.h>
-> +#include <linux/firmware/samsung-smc-svc.h>
+> +static int superio_inw(int base, int reg)
+> +{
+> +       int val;
 > +
-> +struct device_node;
+> +       outb(reg++, base);
+> +       val = inb(base + 1) << 8;
+> +       outb(reg, base);
+> +       val |= inb(base + 1);
 > +
-> +#if defined(CONFIG_MFD_SAMSUNG_SYSMGR)
+> +       return val;
+> +}
+> +
+> +static inline void superio_outb(int base, int reg, int val)
+> +{
+> +       outb(reg, base);
+> +       outb(val, base + 1);
+> +}
+> +
+> +static inline int superio_enter(int base)
+> +{
+> +       /* Don't step on other drivers' I/O space by accident. */
+> +       if (!request_muxed_region(base, 2, KBUILD_MODNAME)) {
+> +               pr_err("I/O address 0x%04x already in use\n", base);
+> +               return -EBUSY;
+> +       }
+> +
+> +       /* According to the datasheet the key must be send twice. */
+> +       outb(SIO_UNLOCK_KEY, base);
+> +       outb(SIO_UNLOCK_KEY, base);
+> +
+> +       return 0;
+> +}
+> +
+> +static inline void superio_select(int base, int ld)
+> +{
+> +       outb(SIO_LDSEL, base);
+> +       outb(ld, base + 1);
+> +}
+> +
+> +static inline void superio_exit(int base)
+> +{
+> +       outb(SIO_LOCK_KEY, base);
+> +       release_region(base, 2);
+> +}
+> +
+> +/*
+> + * GPIO chip.
+> + */
+> +
+> +#define gpio_dir(base) ((base) + 0)
+> +#define gpio_data(base) ((base) + 1)
+> +
+> +static inline void *nct6116d_to_gpio_bank(struct gpio_chip *chip)
+> +{
+> +       return container_of(chip, struct nct6116d_gpio_bank, chip);
+> +}
+> +
+> +static int nct6116d_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
+> +{
+> +       struct nct6116d_gpio_bank *bank = nct6116d_to_gpio_bank(chip);
+> +       struct nct6116d_sio *sio = bank->data->sio;
+> +       int err;
+> +       u8 dir;
+> +
+> +       err = superio_enter(sio->addr);
+> +       if (err)
+> +               return err;
+> +       superio_select(sio->addr, SIO_LD_GPIO);
+> +
+> +       dir = superio_inb(sio->addr, gpio_dir(bank->regbase));
+> +
+> +       superio_exit(sio->addr);
+> +
+> +       if (dir & 1 << offset)
+> +               return GPIO_LINE_DIRECTION_OUT;
+> +
+> +       return GPIO_LINE_DIRECTION_IN;
+> +}
+> +
+> +static int nct6116d_gpio_direction_in(struct gpio_chip *chip, unsigned int offset)
+> +{
+> +       struct nct6116d_gpio_bank *bank = nct6116d_to_gpio_bank(chip);
+> +       struct nct6116d_sio *sio = bank->data->sio;
+> +       int err;
+> +       u8 dir;
+> +
+> +       err = superio_enter(sio->addr);
+> +       if (err)
+> +               return err;
+> +       superio_select(sio->addr, SIO_LD_GPIO);
+> +
+> +       dir = superio_inb(sio->addr, gpio_dir(bank->regbase));
+> +       dir |= BIT(offset);
+> +       superio_outb(sio->addr, gpio_dir(bank->regbase), dir);
+> +
+> +       superio_exit(sio->addr);
+> +
+> +       return 0;
+> +}
+> +
+> +static int nct6116d_gpio_get(struct gpio_chip *chip, unsigned int offset)
+> +{
+> +       struct nct6116d_gpio_bank *bank = nct6116d_to_gpio_bank(chip);
+> +       struct nct6116d_sio *sio = bank->data->sio;
+> +       int err;
+> +       u8 data;
+> +
+> +       err = superio_enter(sio->addr);
+> +       if (err)
+> +               return err;
+> +       superio_select(sio->addr, SIO_LD_GPIO);
+> +
+> +       data = superio_inb(sio->addr, gpio_data(bank->regbase));
+> +
+> +       superio_exit(sio->addr);
+> +
+> +       return !!(data & BIT(offset));
+> +}
+> +
+> +static int nct6116d_gpio_direction_out(struct gpio_chip *chip,
+> +                                    unsigned int offset, int value)
+> +{
+> +       struct nct6116d_gpio_bank *bank = nct6116d_to_gpio_bank(chip);
+> +       struct nct6116d_sio *sio = bank->data->sio;
+> +       u8 dir, data_out;
+> +       int err;
+> +
+> +       err = superio_enter(sio->addr);
+> +       if (err)
+> +               return err;
+> +       superio_select(sio->addr, SIO_LD_GPIO);
+> +
+> +       data_out = superio_inb(sio->addr, gpio_data(bank->regbase));
+> +       if (value)
+> +               data_out |= BIT(offset);
+> +       else
+> +               data_out &= ~BIT(offset);
+> +       superio_outb(sio->addr, gpio_data(bank->regbase), data_out);
+> +
+> +       dir = superio_inb(sio->addr, gpio_dir(bank->regbase));
+> +       dir &= ~BIT(offset);
+> +       superio_outb(sio->addr, gpio_dir(bank->regbase), dir);
+> +
+> +       superio_exit(sio->addr);
+> +
+> +       return 0;
+> +}
+> +
+> +static void nct6116d_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
+> +{
+> +       struct nct6116d_gpio_bank *bank = nct6116d_to_gpio_bank(chip);
+> +       struct nct6116d_sio *sio = bank->data->sio;
+> +       u8 data_out;
+> +       int err;
+> +
+> +       err = superio_enter(sio->addr);
+> +       if (err)
+> +               return;
+> +       superio_select(sio->addr, SIO_LD_GPIO);
+> +
+> +       data_out = superio_inb(sio->addr, gpio_data(bank->regbase));
+> +       if (value)
+> +               data_out |= BIT(offset);
+> +       else
+> +               data_out &= ~BIT(offset);
+> +       superio_outb(sio->addr, gpio_data(bank->regbase), data_out);
+> +
+> +       superio_exit(sio->addr);
+> +}
+> +
+> +#define NCT6116D_GPIO_BANK(_base, _ngpio, _regbase, _label)                    \
+> +       {                                                                       \
+> +               .chip = {                                                       \
+> +                       .label            = _label,                             \
+> +                       .owner            = THIS_MODULE,                        \
+> +                       .get_direction    = nct6116d_gpio_get_direction,        \
+> +                       .direction_input  = nct6116d_gpio_direction_in,         \
+> +                       .get              = nct6116d_gpio_get,                  \
+> +                       .direction_output = nct6116d_gpio_direction_out,        \
+> +                       .set              = nct6116d_gpio_set,                  \
+> +                       .base             = _base,                              \
+> +                       .ngpio            = _ngpio,                             \
+> +                       .can_sleep        = false,                              \
+> +               },                                                              \
+> +               .regbase = _regbase,                                            \
+> +       }
+> +
+> +static struct nct6116d_gpio_bank nct6116d_gpio_bank[] = {
+> +       NCT6116D_GPIO_BANK(0, 8, 0xE0, KBUILD_MODNAME "-0"),
+> +       NCT6116D_GPIO_BANK(10, 8, 0xE4, KBUILD_MODNAME "-1"),
+> +       NCT6116D_GPIO_BANK(20, 8, 0xE8, KBUILD_MODNAME "-2"),
+> +       NCT6116D_GPIO_BANK(30, 8, 0xEC, KBUILD_MODNAME "-3"),
+> +       NCT6116D_GPIO_BANK(40, 8, 0xF0, KBUILD_MODNAME "-4"),
+> +};
+> +
+> +/*
+> + * Platform device and driver.
+> + */
+> +
+> +static int nct6116d_gpio_probe(struct platform_device *pdev)
+> +{
+> +       struct nct6116d_sio *sio = pdev->dev.platform_data;
+> +       struct nct6116d_gpio_data *data;
+> +       int err;
+> +       int i;
+> +
+> +       data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> +       if (!data)
+> +               return -ENOMEM;
+> +
+> +       data->nr_bank = ARRAY_SIZE(nct6116d_gpio_bank);
+> +       data->bank = nct6116d_gpio_bank;
+> +       data->sio = sio;
+> +
+> +       platform_set_drvdata(pdev, data);
+> +
+> +       /* For each GPIO bank, register a GPIO chip. */
+> +       for (i = 0; i < data->nr_bank; i++) {
+> +               struct nct6116d_gpio_bank *bank = &data->bank[i];
+> +
+> +               bank->chip.parent = &pdev->dev;
+> +               bank->data = data;
+> +
+> +               err = devm_gpiochip_add_data(&pdev->dev, &bank->chip, bank);
+> +               if (err)
+> +                       return dev_err_probe(&pdev->dev, err,
+> +                               "Failed to register gpiochip %d\n", i);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int __init nct6116d_find(int addr, struct nct6116d_sio *sio)
+> +{
+> +       u16 devid;
+> +       int err;
+> +
+> +       err = superio_enter(addr);
+> +       if (err)
+> +               return err;
+> +
+> +       devid = superio_inw(addr, SIO_CHIPID);
+> +       superio_exit(addr);
+> +       switch (devid & SIO_ID_MASK) {
+> +       case SIO_NCT5104D_ID & SIO_ID_MASK:
+> +               sio->type = nct5104d;
+> +               break;
+> +       case SIO_NCT6106D_ID & SIO_ID_MASK:
+> +               sio->type = nct6106d;
+> +               break;
+> +       case SIO_NCT6116D_ID & SIO_ID_MASK:
+> +               sio->type = nct6116d;
+> +               break;
+> +       case SIO_NCT6122D_ID & SIO_ID_MASK:
+> +               sio->type = nct6122d;
+> +               break;
+> +       default:
+> +               pr_info("Unsupported device 0x%04x\n", devid);
+> +               return -ENODEV;
+> +       }
+> +       sio->addr = addr;
+> +
+> +       pr_info("Found %s at 0x%x chip id 0x%04x\n",
+> +               nct6116d_names[sio->type], addr, devid);
+> +       return 0;
+> +}
+> +
+> +static struct platform_device *nct6116d_gpio_pdev;
+> +
+> +static int __init
+> +nct6116d_gpio_device_add(const struct nct6116d_sio *sio)
+> +{
+> +       int err;
+> +
+> +       nct6116d_gpio_pdev = platform_device_alloc(KBUILD_MODNAME, -1);
+> +       if (!nct6116d_gpio_pdev)
+> +               return -ENOMEM;
+> +
+> +       err = platform_device_add_data(nct6116d_gpio_pdev, sio, sizeof(*sio));
+> +       if (err) {
+> +               pr_err("Platform data allocation failed\n");
+> +               goto err;
+> +       }
+> +
+> +       err = platform_device_add(nct6116d_gpio_pdev);
+> +       if (err) {
+> +               pr_err("Device addition failed\n");
+> +               goto err;
+> +       }
+> +
+> +       return 0;
+> +
+> +err:
+> +       platform_device_put(nct6116d_gpio_pdev);
+> +
+> +       return err;
+> +}
+> +
+> +static struct platform_driver nct6116d_gpio_driver = {
+> +       .driver = {
+> +               .name   = KBUILD_MODNAME,
+> +       },
+> +       .probe          = nct6116d_gpio_probe,
+> +};
+> +
+> +static int __init nct6116d_gpio_init(void)
+> +{
+> +       struct nct6116d_sio sio;
+> +       int err;
+> +
+> +       if (nct6116d_find(0x2e, &sio) &&
+> +           nct6116d_find(0x4e, &sio))
+> +               return -ENODEV;
+> +
+> +       err = platform_driver_register(&nct6116d_gpio_driver);
+> +       if (!err) {
+> +               err = nct6116d_gpio_device_add(&sio);
+> +               if (err)
+> +                       platform_driver_unregister(&nct6116d_gpio_driver);
+> +       }
+> +
+> +       return err;
+> +}
 
-No ifdefs, no stubs.
+I'm confused - have we not discussed removing this part?
 
+Bart
 
-
-Best regards,
-Krzysztof
+> +
+> +static void __exit nct6116d_gpio_exit(void)
+> +{
+> +       platform_device_unregister(nct6116d_gpio_pdev);
+> +       platform_driver_unregister(&nct6116d_gpio_driver);
+> +}
+> +module_init(nct6116d_gpio_init);
+> +module_exit(nct6116d_gpio_exit);
+> +
+> +MODULE_DESCRIPTION("GPIO driver for Nuvoton Super-I/O chips  NCT5104D, NCT6106D, NCT6116D, NCT6122D");
+> +MODULE_AUTHOR("Tasanakorn Phaipool <tasanakorn@gmail.com>");
+> +MODULE_LICENSE("GPL");
+> --
+> 2.35.1
+>

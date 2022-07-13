@@ -2,140 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C875739C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACE65739EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236736AbiGMPJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
+        id S236880AbiGMPUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236820AbiGMPJE (ORCPT
+        with ESMTP id S236576AbiGMPUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:09:04 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719A8616A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657724943; x=1689260943;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aqknmWmJOsBdvhrSHtYcz3nXpZCJ67cmJTQcTW1LI0A=;
-  b=mZ6CrTyaWyyAIBV8fBGY0Rg+WGJFu0bJnpACQLbZQ0sdCK2rmiSkMp0O
-   tJ0ZsaYcxuKJedug8eaLPdUqv78EvjeXEJ97PPPoi+vgg9UzQn1yGEQKQ
-   oUk7ZY+KQQCrIpI/FtcVaEp1k4CDpM9ueQ5F127sxDstsxP2gMs/VfaIC
-   r98TVUnrJlWDF4cGrdX4iKpxGmmXa4wiTHSvzcFWLdp+FohSN4rlI7Ckt
-   Q+XVWr281QMIO+ft4YX+K6kUuBQKQuQHHkg1hHiyZxUGkvw17nDgroqRR
-   JerNHbHATAvMBO5qdhilR9g/cYG2hdHTkqn7mtur+jdfsVrtVJHNsuTZA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="310875511"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="310875511"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 08:09:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="922664452"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Jul 2022 08:09:02 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oBdz3-0003cN-Nq;
-        Wed, 13 Jul 2022 15:09:01 +0000
-Date:   Wed, 13 Jul 2022 23:08:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: include/linux/compiler_types.h:319:45: error: call to
- '__compiletime_assert_239' declared with attribute error: BUILD_BUG_ON
- failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
-Message-ID: <202207132306.7zlGsvcO-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 13 Jul 2022 11:20:14 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1020345071
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:20:12 -0700 (PDT)
+Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DDxIqL011285;
+        Wed, 13 Jul 2022 15:20:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id; s=pps0720;
+ bh=WNdA1m28axZGBfBPgm+cwg45ry5Fy0HjTYzYu1KJoPY=;
+ b=XkA0K7LUcRCL6g50wN5KSie/CjFMPQo0JB7zdh/Ac510xrQq+EjS4by6NEEzSjOqBoSd
+ e7IQVEhjIjR9J4aiF+Bl8BcTn3Gdd0DhYSapZVtsL5G7RuHGfZgmD0uBLHGOB/BsrQvO
+ cq23IspHucsu44bRxderJNA453Rx/vOrexG/N977liKOY99npjQNLxAhpo9ZLtYnRW8X
+ 27FY8kANiD+RoqjWEWLbHKNvjW17q8VXpmVWWGrp9TxdUYDIroGFBW+Y7BrDbumXgNvt
+ sEFLZWaXA/eYCd/2kY6sj5zeZF/07xoiTps3O/5WlnVTkaUWW3VhMD+1sYjZUlQWed71 QA== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3h9ydjs05f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 15:20:09 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id BF35814786;
+        Wed, 13 Jul 2022 15:20:08 +0000 (UTC)
+Received: from blofly.os1.tw (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id C6B04809C4D;
+        Wed, 13 Jul 2022 15:20:06 +0000 (UTC)
+From:   matt.hsiao@hpe.com
+To:     linux-kernel@vger.kernel.org
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org, jerry.hoemann@hpe.com,
+        scott.norton@hpe.com, geoffrey.ndu@hpe.com, gustavo.knuppe@hpe.com,
+        camille.lu@hpe.com, Matt Hsiao <matt.hsiao@hpe.com>
+Subject: [PATCH] misc: hpilo: switch .{read,write} ops to .{read,write}_iter
+Date:   Wed, 13 Jul 2022 23:08:31 +0800
+Message-Id: <20220713150831.32453-1-matt.hsiao@hpe.com>
+X-Mailer: git-send-email 2.16.6
+X-Proofpoint-GUID: VM1JLXDYjjE1fXkLxch-EbWZ_OchXDfP
+X-Proofpoint-ORIG-GUID: VM1JLXDYjjE1fXkLxch-EbWZ_OchXDfP
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-13_04,2022-07-13_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 spamscore=0 lowpriorityscore=0 adultscore=0 phishscore=0
+ clxscore=1011 bulkscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207130062
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+From: Matt Hsiao <matt.hsiao@hpe.com>
 
-FYI, the error/warning still remains.
+Commit 4d03e3cc59828c82ee89 ("fs: don't allow kernel reads and writes
+without iter ops") requested exclusive .{read,write}_iter ops for
+kernel_{read,write}. To support dependent drivers to access hpilo by
+kernel_{read,write}, switch .{read,write} ops to its iter variants.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b047602d579b4fb028128a525f056bbdc890e7f0
-commit: 39cac191ff37939544af80d5d2af6b870fd94c9b arc/mm/highmem: Use generic kmap atomic implementation
-date:   1 year, 8 months ago
-config: arc-randconfig-r023-20220712 (https://download.01.org/0day-ci/archive/20220713/202207132306.7zlGsvcO-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=39cac191ff37939544af80d5d2af6b870fd94c9b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 39cac191ff37939544af80d5d2af6b870fd94c9b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+Signed-off-by: Matt Hsiao <matt.hsiao@hpe.com>
+---
+ hpilo.c | 31 ++++++++++++++++++-------------
+ 1 file changed, 18 insertions(+), 13 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from <command-line>:
-   arch/arc/mm/highmem.c: In function 'kmap_init':
->> include/linux/compiler_types.h:319:45: error: call to '__compiletime_assert_239' declared with attribute error: BUILD_BUG_ON failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
-     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:300:25: note: in definition of macro '__compiletime_assert'
-     300 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:319:9: note: in expansion of macro '_compiletime_assert'
-     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   arch/arc/mm/highmem.c:69:9: note: in expansion of macro 'BUILD_BUG_ON'
-      69 |         BUILD_BUG_ON(FIX_KMAP_SLOTS > PTRS_PER_PTE);
-         |         ^~~~~~~~~~~~
-
-
-vim +/__compiletime_assert_239 +319 include/linux/compiler_types.h
-
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  305  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  306  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  307  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  308  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  309  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  310   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  311   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  312   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  314   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  315   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  316   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  317   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  318  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @319  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  320  
-
-:::::: The code at line 319 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
-
+diff --git a/hpilo.c b/hpilo.c
+index 8d00df9..5d431a5 100644
+--- a/hpilo.c
++++ b/hpilo.c
+@@ -23,6 +23,7 @@
+ #include <linux/wait.h>
+ #include <linux/poll.h>
+ #include <linux/slab.h>
++#include <linux/uio.h>
+ #include "hpilo.h"
+ 
+ static struct class *ilo_class;
+@@ -435,14 +436,14 @@ static void ilo_set_reset(struct ilo_hwinfo *hw)
+ 	}
+ }
+ 
+-static ssize_t ilo_read(struct file *fp, char __user *buf,
+-			size_t len, loff_t *off)
++static ssize_t ilo_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ {
+-	int err, found, cnt, pkt_id, pkt_len;
+-	struct ccb_data *data = fp->private_data;
++	int err = 0, found, cnt, pkt_id, pkt_len;
++	struct ccb_data *data = iocb->ki_filp->private_data;
+ 	struct ccb *driver_ccb = &data->driver_ccb;
+ 	struct ilo_hwinfo *hw = data->ilo_hw;
+ 	void *pkt;
++	size_t len = iov_iter_count(to), copied;
+ 
+ 	if (is_channel_reset(driver_ccb)) {
+ 		/*
+@@ -477,7 +478,9 @@ static ssize_t ilo_read(struct file *fp, char __user *buf,
+ 	if (pkt_len < len)
+ 		len = pkt_len;
+ 
+-	err = copy_to_user(buf, pkt, len);
++	copied = copy_to_iter(pkt, len, to);
++	if (unlikely(copied != len))
++		err = -EFAULT;
+ 
+ 	/* return the received packet to the queue */
+ 	ilo_pkt_enqueue(hw, driver_ccb, RECVQ, pkt_id, desc_mem_sz(1));
+@@ -485,14 +488,14 @@ static ssize_t ilo_read(struct file *fp, char __user *buf,
+ 	return err ? -EFAULT : len;
+ }
+ 
+-static ssize_t ilo_write(struct file *fp, const char __user *buf,
+-			 size_t len, loff_t *off)
++static ssize_t ilo_write_iter(struct kiocb *iocb, struct iov_iter *from)
+ {
+-	int err, pkt_id, pkt_len;
+-	struct ccb_data *data = fp->private_data;
++	int err = 0, pkt_id, pkt_len;
++	struct ccb_data *data = iocb->ki_filp->private_data;
+ 	struct ccb *driver_ccb = &data->driver_ccb;
+ 	struct ilo_hwinfo *hw = data->ilo_hw;
+ 	void *pkt;
++	size_t len = iov_iter_count(from), copied;
+ 
+ 	if (is_channel_reset(driver_ccb))
+ 		return -ENODEV;
+@@ -506,9 +509,11 @@ static ssize_t ilo_write(struct file *fp, const char __user *buf,
+ 		len = pkt_len;
+ 
+ 	/* on failure, set the len to 0 to return empty packet to the device */
+-	err = copy_from_user(pkt, buf, len);
+-	if (err)
++	copied = copy_from_iter(pkt, len, from);
++	if (unlikely(copied != len)) {
+ 		len = 0;
++		err = -EFAULT;
++	}
+ 
+ 	/* send the packet */
+ 	ilo_pkt_enqueue(hw, driver_ccb, SENDQ, pkt_id, len);
+@@ -639,8 +644,8 @@ out:
+ 
+ static const struct file_operations ilo_fops = {
+ 	.owner		= THIS_MODULE,
+-	.read		= ilo_read,
+-	.write		= ilo_write,
++	.read_iter	= ilo_read_iter,
++	.write_iter	= ilo_write_iter,
+ 	.poll		= ilo_poll,
+ 	.open 		= ilo_open,
+ 	.release 	= ilo_close,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.16.6
+

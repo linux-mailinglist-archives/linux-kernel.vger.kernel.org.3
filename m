@@ -2,101 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24F35738BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048345738C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236328AbiGMOZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
+        id S235690AbiGMOZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236360AbiGMOYr (ORCPT
+        with ESMTP id S234245AbiGMOZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:24:47 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53ADB3342F;
-        Wed, 13 Jul 2022 07:24:44 -0700 (PDT)
+        Wed, 13 Jul 2022 10:25:39 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE8333341
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:25:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657722284; x=1689258284;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Qcu2fDzbjH+8Pob7GAhka1a5X+B4rezoCFYuJ3gdx9w=;
-  b=SZaS28hDr+JcVFtTVgjatL0muvDmpIc9VgNTKk/H+vko53aQQ3DFQSyK
-   U3ruq7WJnzO3guHJ4yKX/i76/OQwOGtymeq0ybHwVhHCXmq391bPJMRBt
-   ESm4yiq2uBY/e0awxlUp77pI90U3qclYdji+RxgvdEaeBHzu8h6hjSeA2
-   6QPlvv5G16SMmPSxYbkrd94BkpMoeDFu5lXg6s1JfyPF1jhLnwtuSe2pK
-   q0z8bX9UoV9M+ZYFaIZHIYR4p2NpV1kv/IpxVRXCh5lMyuGhdsTPIgTeV
-   M5jka+I+bNK3Xh9zqwByyAgYQvtTj/uiPL74DvTrIOGF4fq/x2D78qNqK
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="371537551"
+  t=1657722339; x=1689258339;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2Y8BF1Rg345QyJ8e8eE55+o9RRvwy3FhDzVO20P6JmI=;
+  b=NxI4/4qJH8SoAawKMkknSSJu4cXYAQlkLQrdOzIp9WATE4Z/tgc5voI8
+   oQC4TNv4IHvC+nD1u3BHng8YwYtCaUoXhNAj8PuZcQD6yBE1dK/ztn/u5
+   6OyiLs0QQ5hUkZ4cwTPk/LIN9Bj5ETHtdl2Z2xQIl25kfmQV+hTK54wFF
+   W8trJBGM2oUp9YuvMOo1Ywr1t0xaW/fxSEf9rK0zwmMsKEHMDuR2aFfA/
+   Pq55ta+QMJ2Y231vLzwR+OzabeOZ3sDPafPBibjQApjs/9klIv8/puhiz
+   uxgT83n4qs119d6bBhuIpwVePYraKxD8R12nVkUs67YlU8Nn3DmTSSi91
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="285968182"
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="371537551"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:24:44 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="285968182"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:25:38 -0700
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="663375775"
-Received: from wopr.jf.intel.com ([10.54.75.125])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Jul 2022 07:24:43 -0700
-Message-ID: <838bd68dbdc14e556d0b69d910b9fd6dd5898f29.camel@linux.intel.com>
-Subject: Re: PNP0501 serial driver takes almost 2 seconds to suspend/resume
- (printk issue)
-From:   Todd Brandt <todd.e.brandt@linux.intel.com>
-Reply-To: todd.e.brandt@linux.intel.com
-To:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Date:   Wed, 13 Jul 2022 07:24:43 -0700
-In-Reply-To: <87ilo1wdac.fsf@jogness.linutronix.de>
-References: <12fb98fe27e23e3f74a139e5e8eb83a97a343372.camel@linux.intel.com>
-         <51b9e2cc3baf61a604bd239b736ec2d12f1f6695.camel@linux.intel.com>
-         <87czegxccb.fsf@jogness.linutronix.de>
-         <045ebee30af2b80aaeace1dab18ecd113e3f17c7.camel@linux.intel.com>
-         <87tu7qvx1q.fsf@jogness.linutronix.de>
-         <CAHp75VfyzMNMO2NRwXwSjAmQqBbdRG3+SzyFDG+90dmvmg1xLQ@mail.gmail.com>
-         <87o7xwbuoy.fsf@jogness.linutronix.de> <Ysvbp8vz7R9hDNqx@alley>
-         <Ysv3JNs4RwE7kAou@google.com> <87ilo1wdac.fsf@jogness.linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+   d="scan'208";a="570643748"
+Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:25:37 -0700
+From:   Bard Liao <yung-chuan.liao@linux.intel.com>
+To:     alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
+Subject: [PATCH 0/3] soundwire: allocate device_number with IDA
+Date:   Wed, 13 Jul 2022 22:25:26 +0800
+Message-Id: <20220713142529.17323-1-yung-chuan.liao@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-13 at 11:57 +0206, John Ogness wrote:
-> On 2022-07-11, Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
-> > > It seems that __pr_flush() does not check whether all consoles
-> > > are
-> > > suspended. In this case the progress is not possible and it has
-> > > to
-> > > wait the entire timeout.
-> > 
-> > But isn't console_suspended set after pr_flush() call?
-> 
-> There should not be any printing after the suspend_console() message.
-> If
-> Todd's report is coming from 5.19-rc1, then it is likely a kthread
-> issue, where the kthread is not respecting @console_suspended. (This
-> would still need to be fixed for the kthreads, but would not be
-> relevant
-> for 5.19.)
-> 
-> John
+The device_number is currently allocated in the scope of each bus and does
+not need to be unique at the system level.
+This leads e.g. on Dell devices with three or four Device1 on different
+bus segments. To make the device_number unique at the system level, and
+unified with the HDaudio/iDISP SDI values, this PRs allocates the
+dev_number with an IDA restricted between 4 and 11 (inclusive).
 
-It appears to still be there in rc5 (our lab system is usually 6 days
-behind, so rc6 hasn't been run yet). I'm building a new rc6 kernel with
-CONFIG_PRINTK_CALLER today and will run it on all affected machines,
-I'll send out the data this afternoon Oregon Time. I'll include
-timelines for all affected machines to give you a better sampling.
+Pierre-Louis Bossart (3):
+  soundwire: bus: rename sdw_ida as sdw_bus_ida
+  soundwire: bus: allow device number to be unique at system level
+  soundwire: intel: set dev_num_ida_min
+
+ drivers/soundwire/bus.c       | 29 ++++++++++++++++++++---------
+ drivers/soundwire/intel.c     |  4 ++++
+ include/linux/soundwire/sdw.h |  4 ++++
+ 3 files changed, 28 insertions(+), 9 deletions(-)
+
+-- 
+2.25.1
 

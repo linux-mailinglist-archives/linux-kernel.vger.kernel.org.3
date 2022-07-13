@@ -2,211 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D95572AE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2C6572AE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233607AbiGMBeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 21:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39230 "EHLO
+        id S233682AbiGMBgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 21:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiGMBee (ORCPT
+        with ESMTP id S229775AbiGMBgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 21:34:34 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A024C923C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:34:33 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so1156244pjr.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:34:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XGSpGU9y1qKiwBDHtAjINY9EHDaIDTEGfdXCP9bclWI=;
-        b=V4fBHAYghVFtCj/gyK9mu3PyvFXqcOoz2B2mKkJDh/adD4u9JvaBL253pjyTFBedRt
-         GVuAft2l+07Oz6wgg4sUN8GjywhMpSBY8JBWFfogIjh3h/wQnPJNZJ7+uzDvCbVEyy7c
-         TJy9acvtLuLwkUzPXiqBbcfn+02wtNDgmDZvo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XGSpGU9y1qKiwBDHtAjINY9EHDaIDTEGfdXCP9bclWI=;
-        b=rHr6mNQHvF/Jti5YDtwB+i3sndlvx8USrOC2y8MNivB6u5xRaWI9ZNlt3oBiAgIgmV
-         4Mcq9nK8jLop47pOTl9cYsME05r3WqrlFOEau1on326jc82YzB5X5R29VkMLO4R01enk
-         T7il+NKSmb+3Y99D/ZrxggR8tYMO9B4aM8f355MNc9MzneobmapBHdp/rpI55zABo7p7
-         ROa1Z20+1EYHoIXYNxT2XmBnAm4Io1SYUrg6T9cH/k2rICvfrMZdcUg+vSdom5IhjK5k
-         gtrkg6eIZQw/p7xWhqGrtH4PUAjUqFV4Y2wubPBKHrgqufsmEPHGDbK8vO8ynp58oDFX
-         uwhQ==
-X-Gm-Message-State: AJIora9dsMdh1HhkGrs2qfEzeFFOLrx6MJgUMgrV13vF2n/mAWj5NklY
-        yx7Z0XM1Lo8fcrgHZ7Q24184Rg==
-X-Google-Smtp-Source: AGRyM1vI7qTqran/oYY9YxCvZJ1Kt81TzkURUZr5Ev/sRdQsuRtTkDpVmPEpjwtDdB06uhd4ToiPtA==
-X-Received: by 2002:a17:902:b7c4:b0:16b:e3d0:c0fe with SMTP id v4-20020a170902b7c400b0016be3d0c0femr842506plz.98.1657676072727;
-        Tue, 12 Jul 2022 18:34:32 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:e036:8c0d:9cf:7a45])
-        by smtp.gmail.com with UTF8SMTPSA id kk18-20020a17090b4a1200b001ec9dce6f10sm226231pjb.38.2022.07.12.18.34.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 18:34:32 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 18:34:30 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Pavan Kondeti <quic_pkondeti@quicinc.com>, saravanak@google.com,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <Ys4hJrWjkn+LREZL@google.com>
-References: <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
- <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
- <c16a1c37-9183-8d0c-a5ad-39b897a0ab24@quicinc.com>
- <Yr5JmrSaus8xKpM9@google.com>
- <20220701101526.GA30468@hu-pkondeti-hyd.qualcomm.com>
- <Yr8YUYJGJ5FRA3cv@google.com>
- <09f6a717-2bbb-6bd3-f7a8-5ac9e3db51f3@quicinc.com>
- <9f9f9abc-9b37-8bfb-3efa-6c860b5dba8d@quicinc.com>
+        Tue, 12 Jul 2022 21:36:38 -0400
+Received: from sonic307-8.consmr.mail.gq1.yahoo.com (sonic307-8.consmr.mail.gq1.yahoo.com [98.137.64.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0035CC7B8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1657676196; bh=ilQ63Qlh/pxWEmqxuxayijK2KJ9t+TQhVpcbdyvIRRY=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=PCONkz1sV3u1EryJ5YBSI/Vg3MtWr6jEa9qOBNKYeqP/Pu6ltZV6+rChsMyx2fJ0XNHhav48mVNbeMzN2giGWwr+L1ybbfbkWPwYQcyWgKV3jZHBEEDo6+j9k+Qx0uP/h4TIw2yb876mthUEMZiFnB1mVhLAVEid1wCr7BlYoeVoZ8SOMWaJwnJab8YfxRZdb3lfqDKdQ6ApQOVEc2QaxkV6HxRjRtlzjzKWri1C63iYeC0DZm3gZ+5lXCT1+6VBF7a1Agox/psCN8YXf2DWtq67jCV00N2BvL4BtXzU2Y9P7f+eHK53Kucx0Hdosg2tCpiFqZnZ4MLBz7NjzKJTfA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1657676196; bh=CfK7C2itV8VfkLP5ECLS/mYB/CEjf8Zzcx3VvW/HYW9=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=tgZea/8XuqvZi2f1BW+Srlk2njPyiMDabqbEwXkgH0gX6YGvIpBueBL3stkKGhgDn7D0bNNQvjlyl8uJSInpr5AN/9dPEyXlksyOwCwE5BD0DJjwoBzvUzaVCVamanpTe3xea8CJRLEhyRvPO3Msj4I0cx876o1GiM2L9dKw/ZTGUjzVGwG9fahmE+9qUSXxVgg/tgDsYxoCjBE9uBZTYs4GstjDlRN8A9aEsXmEy7E5IHgdIhRbIwlgTnocHEFm4cctb/0i9vMDONq5m+dkBPYJfEppqnnY9BAQ6T1mQsiz0/vh6P7Zm3/rofVHmpZDcInIQMbvXQrawdDZd7v0AQ==
+X-YMail-OSG: wumnrFAVM1nJcpCj0FRu7OkeKPNBfKyNn3Z3Xi7QLjW.NGYqi6U1HzPu3JduYmS
+ M08rb_OnmfwSrtLELFpb2Vg_BaA3lskWK9BQbt_OE0hAQuOHqVF1CW.2wjcgkuxnIbx0mQgZJ3vF
+ gcIw84.JIufPAuJP6FwCP3MN467DUrjpjvdYuX4m9mwb7ZbFHUYIYxHi1dpzsfCMmGO0dRo0.Thg
+ DkSvAAIUeGCGvsVR0MA17XtODtkZ03ZaFOUrh2vxV_mzBhNG2lXuiA1_FqpFLRECexBLZbEK472_
+ oTcTejAsPR_D5leIh4fzHHJ_.q6LVK6GHWc3ynEyeuv4J0GT8TBT_NwbuUODDpJE41cUfl_ecbq2
+ lDIz0WLKfPNZH0VhsGbteMKmhjEzU.J38Aa1lrnOMAncw0zT4ipL1MLzKRwLu3j2aAnbkzjjAm8I
+ GpzjzCw5Y3AQCQcvnsrRGWaWIgXPoe25qnwcQojKGXgQTcXXnh4P47FZGGrvHZndLvfRmScTYtz6
+ jiKIPBuxEcX2ybGjXcKWVBiw3dvSFm1GpyLGe9ifV40G47pjXUAzjYBWU_aof7qMCxJXX7EuFOmH
+ 3j7stKBYQ4GEQ2MNBwooPucjzeNZPH9Mm9Vjc48uCju0WSRYTHfdRNRyFieoZX50hm8eiPAEjAmY
+ 8MvIT1EJ0Zhsb_32VWnn98jqlUO0GFiKiZtuRNE6COb4QHzNAYv3aMuU6xEcZXMCGbuUAyK8HdEf
+ _i9HqQ9.Rt78Wav9FK7FnZwVi6FNJ6urdS1IiWxCbEelvhJbAgoHIuwkwLN1cKrOtUjPMsEByu5Q
+ tIn.ZoLx4gu2eoz_y5ZvUxKhE2rEu1wHveInW7IesHyldbHbUJqCEbFBG1AZBdUCIefG0Vaynt8B
+ qZI85nCdssUT96AwufSzKvkTxeb2OFJubJHRHAjO_yz2.taV0HvCuTfmWNWMANKMOv_vevgD7HAj
+ kIqTL05wZoHGlUVnE.OMqzeVbNAU7KqoVYLJ1tR6SBaThKwunBBo4kFqMsfjuOVJYidwMRSrLp35
+ dCXUCr8KG.wJG24o6I6zh84zxvcOjTbLPkpdSfZOVLRPcoA8NfR80kTIaS9U1t97ZcOSivJp1UzL
+ uJqiFSu4ydh.OzVFxi45.2iG6L593Sy2QTJg6vmMxWNmoS24QzIbwgScbhETPchGdvCM2Fe.IjvT
+ 06RvN8kaIHooA8VebWoErAWlN3yMEUzhbTjBQizIlF3A4zU4ZsI3.0AOnKBGaUpmBz_PBSCgglnT
+ kgdawGYS1C4x9fPLEH4DZ1pZ6wGPZORHVCwZw3mAEcJgQ..5BPXHJd2.CEvNOO52bKuvwjCiMf_h
+ LjNa3m2fwVbLiLio0uo9oypoUjOubL5F34v4qlvx9fjnryCzMKne9em_d5sfAxghrmuOX3N21FEU
+ RtR_soeO4aSbO2ppt0cXdiq8wtdc2xhSJeec4bvKzRLDmEojX5slrdyJPJDwL3eNMhnJePcVynfi
+ cwLqIFqlvtA8zE4oN_e6k0YTcu6GEZrpaxPIFVzIzY5_VALY4NztEI2h8EwiLT.f2Mh6e_.bZSUk
+ .j1w6ikSRiEehXxzA.uSQJsKAuj9VmEheZEo4GWe0AHY.7_nXbz4CE3F1DevEgmefKoX2NBLAl1p
+ Jm5p173vfBI2_Ad8LOOcVOPEVJzYo5rfQQeYNN.svewXFyEvIC1c_ARsrDAnMb_0IWn4H293rCs5
+ BY7GewJHlVZ60golVgZkdTef5wTbxNYtGxPYqPzqma2TlPO_RdydxbgUYVycpF0hX3pGokxJUpf0
+ m2QtoVvyLID.ifyCGyGP7Cl7EaJ9Kz5vjSqVq2l2mS8sctELhiKgxlPpIlgPoNs2W_1HkONFJ4OO
+ PFIFV9b2NXnkH5mQqlbX.SN1awwekaNX0NlA0aJpycsTrDYkW9BZVWnxPtFw1MM.ykkNXzzOzubJ
+ VBP5UVpFTo_v9T7RB_TcwQpbf98RJyb8Ezp8yeV2sp7YuF0wlCbzAcpK8dBtDijt0LBsA9U0sgZa
+ Xni.JVxiN2Q37LtsDV2MVZuyA7wzHjxifbyic.ti_T3kZbCpevWuQEWrCc8ji6OtoR0mWx1Kyi_a
+ CgMVcvzynmRKHXdP5qxuUj9JHf.XXfqNGJUdugXIdYXnIOOd475oNRctSulgNDDRTMnH5RlC4yZB
+ _LzGgqoISOPb7rz807J2Zeb2lDc2MgByXghDseqr6KhO51QP8KJnCsPup.oM8svNsHg--
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.gq1.yahoo.com with HTTP; Wed, 13 Jul 2022 01:36:36 +0000
+Received: by hermes--production-ne1-7864dcfd54-jt2sh (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 103a284e887da164b6a51a28e1ee36f6;
+          Wed, 13 Jul 2022 01:36:33 +0000 (UTC)
+From:   Chuck Zmudzinski <brchuckz@aol.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, stable@vger.kernel.org
+Subject: [PATCH v2] Subject: x86/PAT: Report PAT on CPUs that support PAT without MTRR
+Date:   Tue, 12 Jul 2022 21:36:12 -0400
+Message-Id: <9d5070ae4f3e956a95d3f50e24f1a93488b9ff52.1657671676.git.brchuckz@aol.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9f9f9abc-9b37-8bfb-3efa-6c860b5dba8d@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+References: <9d5070ae4f3e956a95d3f50e24f1a93488b9ff52.1657671676.git.brchuckz.ref@aol.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 04:37:19PM +0530, Krishna Kurapati PSSNV wrote:
->    On 7/6/2022 12:28 PM, Krishna Kurapati PSSNV wrote:
-> 
->    On 7/1/2022 9:22 PM, Matthias Kaehlcke wrote:
-> 
-> On Fri, Jul 01, 2022 at 03:45:26PM +0530, Pavan Kondeti wrote:
-> 
-> On Thu, Jun 30, 2022 at 06:10:50PM -0700, Matthias Kaehlcke wrote:
-> 
-> dwc3-qcom should wait for dwc3 core to call component_add() and then do
-> whatever needs to be done once the dwc3 core is registered in the
-> dwc3-qcom bind callback. Honestly this may all be a little overkill if
-> there's only two drivers here, dwc3-qcom and dwc3 core. It could
-> probably just be some callback from dwc3 core at the end of probe that
-> calls some function in dwc3-qcom.
-> 
-> Since the issue we are facing is that the ssphy device links are not ready
-> causing the dwc3 probe not being invoked, can we add an API as Pavan
-> suggested
-> to check if deferred_probe listfor dwc3 device is empty or not andbased on
-> that we can choose to defer our qcomprobe ? In this case, we don't need to
-> touch the dwc3 core driver and would be making changesonly in qcom glue
-> driver.
-> 
-> As mentioned above, it shouldn't be necessary to add component support to
-> all the glue drivers. An API to check for deferred probing is an option,
-> however there is a possible race condition: When the dwc3-qcom driver checks
-> for a deferred probe the core could still be probing, in that situation the
-> glue would proceed before the core driver is ready. That could be avoided
-> with the component based approach.
-> 
-> The race can happen only if asynchronous probe is enabled, otherwise the
-> child's probe happens synchronously in of_platform_populate()
-> 
-> I was thinking about the case where the dwc3-qcom probe is initially deferred,
-> then the deferred probe starts shortly after (asynchronously) and now the
-> dwc3-qcom driver does its check. Probably it's not very likely to happen ...
-> 
-> 
-> OTOH, would the below condition suffice for our needs here? if our device
-> is not bounded to a driver, we check the state of initcalls and return
-> either error or -EPROBE_DEFER
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 7b6eff5..519a503 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device
->  *pdev)
->                 dev_err(dev, "failed to get dwc3 platform device\n");
->         }
-> 
-> +       if (!qcom->dwc3->dev.driver)
-> +               return driver_deferred_probe_check_state(&qcom->dwc3->dev);
-> +
->  node_put:
->         of_node_put(dwc3_np);
-> 
-> I like the simplicity of it, no need for new APIs.
-> 
-> The components based approach would be slightly safer, but in practice I
-> think this should be good enough.
-> 
->    Hi Pavan, Mathias,
->      I have tested the suggested code and verified that it works on
->    sc7180. I see that the API has been removed recently in the following
->    patch :\
->    commit 9cbffc7a59561be950ecc675d19a3d2b45202b2b
->    Author: Saravana Kannan [1]<saravanak@google.com>
->    Date:   Wed Jun 1 00:07:05 2022 -0700
->    driver core: Delete driver_deferred_probe_check_state()
->    Can we make a patch and add it back to the kernel for this purpose ?
->    Hi Saravana,
->      Can you help suggest if we can revert your patch or make a new one to
->    add back the function.
+The commit 99c13b8c8896d7bcb92753bf
+("x86/mm/pat: Don't report PAT on CPUs that don't support it")
+incorrectly failed to account for the case in init_cache_modes() when
+CPUs do support PAT and falsely reported PAT to be disabled when in
+fact PAT is enabled. In some environments, notably in Xen PV domains,
+MTRR is disabled but PAT is still enabled, and that is the case
+that the aforementioned commit failed to account for.
 
-The cover letter [1] of the 'deferred_probe_timeout logic clean up'
-series [2] has more context:
+As an unfortunate consequnce, the pat_enabled() function currently does
+not correctly report that PAT is enabled in such environments. The fix
+is implemented in init_cache_modes() by setting pat_bp_enabled to true
+in init_cache_modes() for the case that commit 99c13b8c8896d7bcb92753bf
+("x86/mm/pat: Don't report PAT on CPUs that don't support it") failed
+to account for.
 
+This approach arranges for pat_enabled() to return true in the Xen PV
+environment without undermining the rest of PAT MSR management logic
+that considers PAT to be disabled: Specifically, no writes to the PAT
+MSR should occur.
 
-  A lot of the deferred_probe_timeout logic is redundant with
-  fw_devlink=on.  Also, enabling deferred_probe_timeout by default breaks
-  a few cases.
+This patch fixes a regression that some users are experiencing with
+Linux as a Xen Dom0 driving particular Intel graphics devices by
+correctly reporting to the Intel i915 driver that PAT is enabled where
+previously it was falsely reporting that PAT is disabled. Some users
+are experiencing system hangs in Xen PV Dom0 and all users on Xen PV
+Dom0 are experiencing reduced graphics performance because the keying of
+the use of WC mappings to pat_enabled() (see arch_can_pci_mmap_wc())
+means that in particular graphics frame buffer accesses are quite a bit
+less performant than possible without this patch.
 
-  This series tries to delete the redundant logic, simplify the frameworks
-  that use driver_deferred_probe_check_state(), enable
-  deferred_probe_timeout=10 by default, and fixes the nfsroot failure
-  case.
+Also, with the current code, in the Xen PV environment, PAT will not be
+disabled if the administrator sets the "nopat" boot option. Introduce
+a new boolean variable, pat_force_disable, to forcibly disable PAT
+when the administrator sets the "nopat" option to override the default
+behavior of using the PAT configuration that Xen has provided.
 
-  The overall idea of this series is to replace the global behavior of
-  driver_deferred_probe_check_state() where all devices give up waiting on
-  supplier at the same time with a more granular behavior:
+For the new boolean to live in .init.data, init_cache_modes() also needs
+moving to .init.text (where it could/should have lived already before).
 
-  1. Devices with all their suppliers successfully probed by late_initcall
-     probe as usual and avoid unnecessary deferred probe attempts.
+Fixes: 99c13b8c8896d7bcb92753bf ("x86/mm/pat: Don't report PAT on CPUs that don't support it")
+Co-developed-by: Jan Beulich <jbeulich@suse.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Chuck Zmudzinski <brchuckz@aol.com>
+---
+v2: *Add force_pat_disabled variable to fix "nopat" on Xen PV (Jan Beulich)
+    *Add the necessary code to incorporate the "nopat" fix
+    *void init_cache_modes(void) -> void __init init_cache_modes(void)
+    *Add Jan Beulich as Co-developer (Jan has not signed off yet)
+    *Expand the commit message to include relevant parts of the commit
+     message of Jan Beulich's proposed patch for this problem
+    *Fix 'else if ... {' placement and indentation
+    *Remove indication the backport to stable branches is only back to 5.17.y
 
-  2. At or after late_initcall, in cases where boot would break because of
-     fw_devlink=on being strict about the ordering, we
+I think these changes address all the comments on the original patch
 
-     a. Temporarily relax the enforcement to probe any unprobed devices
-        that can probe successfully in the current state of the system.
-        For example, when we boot with a NFS rootfs and no network device
-        has probed.
-     b. Go back to enforcing the ordering for any devices that haven't
-        probed.
+I added Jan Beulich as a Co-developer because Juergen Gross asked me to
+include Jan's idea for fixing "nopat" that was missing from the first
+version of the patch.
 
-  3. After deferred probe timeout expires, we permanently give up waiting
-     on supplier devices without drivers. At this point, whatever devices
-     can probe without some of their optional suppliers end up probing.
+The patch has been tested, it works as expected with and without nopat
+in the Xen PV Dom0 environment. That is, "nopat" causes the system to
+exhibit the effects and problems that lack of PAT support causes.
 
-  In the case where module support is disabled, it's fairly
-  straightforward and all device probes are completed before the initcalls
-  are done.
+ arch/x86/mm/pat/memtype.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-[1] https://lore.kernel.org/all/20220601070707.3946847-1-saravanak@google.com/
-[2] https://patchwork.kernel.org/project/linux-pm/list/?series=646471&archive=both&state=*
+diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
+index d5ef64ddd35e..10a37d309d23 100644
+--- a/arch/x86/mm/pat/memtype.c
++++ b/arch/x86/mm/pat/memtype.c
+@@ -62,6 +62,7 @@
+ 
+ static bool __read_mostly pat_bp_initialized;
+ static bool __read_mostly pat_disabled = !IS_ENABLED(CONFIG_X86_PAT);
++static bool __initdata pat_force_disabled = !IS_ENABLED(CONFIG_X86_PAT);
+ static bool __read_mostly pat_bp_enabled;
+ static bool __read_mostly pat_cm_initialized;
+ 
+@@ -86,6 +87,7 @@ void pat_disable(const char *msg_reason)
+ static int __init nopat(char *str)
+ {
+ 	pat_disable("PAT support disabled via boot option.");
++	pat_force_disabled = true;
+ 	return 0;
+ }
+ early_param("nopat", nopat);
+@@ -272,7 +274,7 @@ static void pat_ap_init(u64 pat)
+ 	wrmsrl(MSR_IA32_CR_PAT, pat);
+ }
+ 
+-void init_cache_modes(void)
++void __init init_cache_modes(void)
+ {
+ 	u64 pat = 0;
+ 
+@@ -292,7 +294,7 @@ void init_cache_modes(void)
+ 		rdmsrl(MSR_IA32_CR_PAT, pat);
+ 	}
+ 
+-	if (!pat) {
++	if (!pat || pat_force_disabled) {
+ 		/*
+ 		 * No PAT. Emulate the PAT table that corresponds to the two
+ 		 * cache bits, PWT (Write Through) and PCD (Cache Disable).
+@@ -313,6 +315,16 @@ void init_cache_modes(void)
+ 		 */
+ 		pat = PAT(0, WB) | PAT(1, WT) | PAT(2, UC_MINUS) | PAT(3, UC) |
+ 		      PAT(4, WB) | PAT(5, WT) | PAT(6, UC_MINUS) | PAT(7, UC);
++	} else if (!pat_bp_enabled) {
++		/*
++		 * In some environments, specifically Xen PV, PAT
++		 * initialization is skipped because MTRRs are disabled even
++		 * though PAT is available. In such environments, set PAT to
++		 * enabled to correctly indicate to callers of pat_enabled()
++		 * that CPU support for PAT is available.
++		 */
++		pat_bp_enabled = true;
++		pr_info("x86/PAT: PAT enabled by init_cache_modes\n");
+ 	}
+ 
+ 	__init_cache_modes(pat);
+-- 
+2.36.1
 
-
-Does anything speak against returning -EPROBE_DEFER directly from dwc3-qcom's
-probe()? Now with deferred_probe_timeout > 0 there should be at least no endless
-probing.

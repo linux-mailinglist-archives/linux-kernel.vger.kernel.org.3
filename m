@@ -2,101 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE95573607
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FCB573619
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236268AbiGMMJE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 13 Jul 2022 08:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
+        id S236333AbiGMMKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 08:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235037AbiGMMJD (ORCPT
+        with ESMTP id S236276AbiGMMKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 08:09:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF27B8149C
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 05:09:02 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oBbAr-0002Oe-3V; Wed, 13 Jul 2022 14:09:01 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oBbAp-000hWx-V2; Wed, 13 Jul 2022 14:08:59 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oBbAo-0006a0-SV; Wed, 13 Jul 2022 14:08:58 +0200
-Message-ID: <4a12868d0bffbaef9912fbc54e5998e0c50bccf6.camel@pengutronix.de>
-Subject: Re: [PATCH] Revert "reset: microchip-sparx5: allow building as a
- module"
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Michael Walle <michael@walle.cc>,
-        Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        =?ISO-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Date:   Wed, 13 Jul 2022 14:08:58 +0200
-In-Reply-To: <595347d292ee31a9f0de031d6349f44e@walle.cc>
-References: <20220713084010.168720-1-p.zabel@pengutronix.de>
-         <73dc6fcedebcae098751bd093fe2d028@walle.cc>
-         <ba905391f3258c2d780677e09e4f89192df7bc31.camel@microchip.com>
-         <595347d292ee31a9f0de031d6349f44e@walle.cc>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Wed, 13 Jul 2022 08:10:21 -0400
+Received: from out199-15.us.a.mail.aliyun.com (out199-15.us.a.mail.aliyun.com [47.90.199.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3A5F5D6F
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 05:10:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VJDq.BW_1657714212;
+Received: from 30.240.98.52(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VJDq.BW_1657714212)
+          by smtp.aliyun-inc.com;
+          Wed, 13 Jul 2022 20:10:14 +0800
+Message-ID: <a97e0e17-e4cc-8cc8-673d-28966b95a42b@linux.alibaba.com>
+Date:   Wed, 13 Jul 2022 20:10:12 +0800
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:103.0)
+ Gecko/20100101 Thunderbird/103.0
+Subject: Re: [PATCH v2 1/3] mm/slub: fix the race between validate_slab and
+ slab_free
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, iamjoonsoo.kim@lge.com,
+        rientjes@google.com, penberg@kernel.org, cl@gentwo.de,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Feng Tang <feng.tang@intel.com>
+References: <20220712022807.44113-1-rongwei.wang@linux.alibaba.com>
+ <Ys6cymrtnHNlCDG9@ip-172-31-24-42.ap-northeast-1.compute.internal>
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+In-Reply-To: <Ys6cymrtnHNlCDG9@ip-172-31-24-42.ap-northeast-1.compute.internal>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Mi, 2022-07-13 at 11:52 +0200, Michael Walle wrote:
-> [+ Horatiu, I missed you earlier, sorry]
+
+On 7/13/22 6:22 PM, Hyeonggon Yoo wrote:
+> On Tue, Jul 12, 2022 at 10:28:05AM +0800, Rongwei Wang wrote:
+>> In use cases where allocating and freeing slab frequently, some
+>> error messages, such as "Left Redzone overwritten", "First byte
+>> 0xbb instead of 0xcc" would be printed when validating slabs.
+>> That's because an object has been filled with SLAB_RED_INACTIVE,
+>> but has not been added to slab's freelist. And between these
+>> two states, the behaviour of validating slab is likely to occur.
+>>
+>> Actually, it doesn't mean the slab can not work stably. But, these
+>> confusing messages will disturb slab debugging more or less.
+>>
+>> Signed-off-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
+>> ---
+>>   mm/slub.c | 43 +++++++++++++++++++++++++------------------
+>>   1 file changed, 25 insertions(+), 18 deletions(-)
+>>
 > 
-> Hi Steen,
+> This makes the code more complex.
 > 
-> Am 2022-07-13 11:40, schrieb Steen Hegelund:
-> > I am afraid that the exact list of affected modules is not available,
-> > so using the
-> > RESET_PROT_STAT.SYS_RST_PROT_VCORE bit is the best known way of
-> > resetting as much as possible, and
-> > still continue execution.
+> A part of me says it may be more pleasant to split implementation
+> allocating from caches for debugging. That would make it simpler.
 > 
-> Mh, you are designing that chip (at least the LAN966x) no? Shouldn't
-> that information be available anywhere at Microchip? ;)
+> something like:
 > 
-> Anyway, it looks like almost the whole chip is reset
-> except some minor things. So the driver has actually a
-> wrong name. Until recently only the switch driver was the
-> sole user of it (at least on the lan966x). So, my question
-> remains, is this correct? I mean the switch driver says,
-> "reset the switch core", but what actually happens is that
-> the the entire SoC except the CPU and maybe the io mux is reset.
-> What about the watchdog for example? Will that be reset, too?
+> __slab_alloc() {
+> 	if (kmem_cache_debug(s))
+> 		slab_alloc_debug()
+> 	else
+> 		___slab_alloc()
+> }
+> 
+> slab_free() {
+> 	if (kmem_cache_debug(s))
+> 		slab_free_debug()
+> 	else
+> 		__do_slab_free()
+> }
+Oh, I also have same idea, but not sure whether it is accepted because 
+of it needs more changes than now. Since you agree with this way, I can
+rewrite this code.
 
-If [1-3] are to be trusted, RESET_PROT_STAT[VCORE_RST_PROT_WDT], which
-protects the watchdog from soft reset, is not set by default. So yes?
-
-There are also AMBA, PCIe, PDBG protection bits against Vcore soft
-reset in this register, depending on the platform.
-
-[1] https://microchip-ung.github.io/sparx-5_reginfo/reginfo_sparx-5.html?select=cpu,cpu_regs,reset_prot_stat
-[2] https://microchip-ung.github.io/lan9662_reginfo/reginfo_LAN9662.html?select=cpu,cpu_regs,reset_prot_stat
-[3] https://microchip-ung.github.io/lan9668_reginfo/reginfo_LAN9668.html?select=cpu,cpu_regs,reset_prot_stat
-
-regards
-Philipp
+Thanks.
+> 
+> See also:
+> 	https://lore.kernel.org/lkml/faf416b9-f46c-8534-7fb7-557c046a564d@suse.cz/
+Thanks, it seems that I had missed it.
+> 
+>> diff --git a/mm/slub.c b/mm/slub.c
+>> index b1281b8654bd..e950d8df8380 100644
+>> --- a/mm/slub.c
+>> +++ b/mm/slub.c
+>> @@ -1391,18 +1391,16 @@ static noinline int free_debug_processing(
+>>   	void *head, void *tail, int bulk_cnt,
+>>   	unsigned long addr)
+>>   {
+>> -	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+>>   	void *object = head;
+>>   	int cnt = 0;
+>> -	unsigned long flags, flags2;
+>> +	unsigned long flags;
+>>   	int ret = 0;
+>>   	depot_stack_handle_t handle = 0;
+>>   
+>>   	if (s->flags & SLAB_STORE_USER)
+>>   		handle = set_track_prepare();
+>>   
+>> -	spin_lock_irqsave(&n->list_lock, flags);
+>> -	slab_lock(slab, &flags2);
+>> +	slab_lock(slab, &flags);
+>>   
+>>   	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+>>   		if (!check_slab(s, slab))
+>> @@ -1435,8 +1433,7 @@ static noinline int free_debug_processing(
+>>   		slab_err(s, slab, "Bulk freelist count(%d) invalid(%d)\n",
+>>   			 bulk_cnt, cnt);
+>>   
+>> -	slab_unlock(slab, &flags2);
+>> -	spin_unlock_irqrestore(&n->list_lock, flags);
+>> +	slab_unlock(slab, &flags);
+>>   	if (!ret)
+>>   		slab_fix(s, "Object at 0x%p not freed", object);
+>>   	return ret;
+>> @@ -3330,7 +3327,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>>   
+>>   {
+>>   	void *prior;
+>> -	int was_frozen;
+>> +	int was_frozen, to_take_off = 0;
+>>   	struct slab new;
+>>   	unsigned long counters;
+>>   	struct kmem_cache_node *n = NULL;
+>> @@ -3341,14 +3338,23 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>>   	if (kfence_free(head))
+>>   		return;
+>>   
+>> -	if (kmem_cache_debug(s) &&
+>> -	    !free_debug_processing(s, slab, head, tail, cnt, addr))
+>> -		return;
+>> +	n = get_node(s, slab_nid(slab));
+>> +	if (kmem_cache_debug(s)) {
+>> +		int ret;
+>>   
+>> -	do {
+>> -		if (unlikely(n)) {
+>> +		spin_lock_irqsave(&n->list_lock, flags);
+>> +		ret = free_debug_processing(s, slab, head, tail, cnt, addr);
+>> +		if (!ret) {
+>>   			spin_unlock_irqrestore(&n->list_lock, flags);
+>> -			n = NULL;
+>> +			return;
+>> +		}
+>> +	}
+>> +
+>> +	do {
+>> +		if (unlikely(to_take_off)) {
+>> +			if (!kmem_cache_debug(s))
+>> +				spin_unlock_irqrestore(&n->list_lock, flags);
+>> +			to_take_off = 0;
+>>   		}
+>>   		prior = slab->freelist;
+>>   		counters = slab->counters;
+>> @@ -3369,8 +3375,6 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>>   				new.frozen = 1;
+>>   
+>>   			} else { /* Needs to be taken off a list */
+>> -
+>> -				n = get_node(s, slab_nid(slab));
+>>   				/*
+>>   				 * Speculatively acquire the list_lock.
+>>   				 * If the cmpxchg does not succeed then we may
+>> @@ -3379,8 +3383,10 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>>   				 * Otherwise the list_lock will synchronize with
+>>   				 * other processors updating the list of slabs.
+>>   				 */
+>> -				spin_lock_irqsave(&n->list_lock, flags);
+>> +				if (!kmem_cache_debug(s))
+>> +					spin_lock_irqsave(&n->list_lock, flags);
+>>   
+>> +				to_take_off = 1;
+>>   			}
+>>   		}
+>>   
+>> @@ -3389,8 +3395,9 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>>   		head, new.counters,
+>>   		"__slab_free"));
+>>   
+>> -	if (likely(!n)) {
+>> -
+>> +	if (likely(!to_take_off)) {
+>> +		if (kmem_cache_debug(s))
+>> +			spin_unlock_irqrestore(&n->list_lock, flags);
+>>   		if (likely(was_frozen)) {
+>>   			/*
+>>   			 * The list lock was not taken therefore no list
+>> -- 
+>> 2.27.0
+>>

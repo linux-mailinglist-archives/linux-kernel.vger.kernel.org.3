@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5A2572D41
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1F8572D52
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234448AbiGMFbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 01:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
+        id S234520AbiGMFcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 01:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234305AbiGMFaa (ORCPT
+        with ESMTP id S234411AbiGMFbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 01:30:30 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82D053D2C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:29:37 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id g4so9541876pgc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:29:37 -0700 (PDT)
+        Wed, 13 Jul 2022 01:31:06 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC52B9DAD
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:29:49 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso1874035pjc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:29:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=mIKNUqGIZ9Qcs/aIEKfbb45zWwyQ7ymHQgJEzGuRfmY=;
-        b=Ny8rhS1WZKQMuXVGjP+3D5R7oWYDMe916j3R1gOjKLQ0uNcPLnRsXXTJ8aJ6zhZFMs
-         rDLokRXUEOIpoWENgB3XswNHOHfvZ5skLPosEfWp57e3Q8YP11IJDqp07+73sNtbwLn7
-         n6oaXuYJRmojFkeXUYCpZpJZBTUBjmigVSXHD8izxH1M+Vo2x98/MNSbpSQV4IBrR7E9
-         zNozXCMeMBmxuWeMrNYy6N7I062K5Y/qPoHuodNTT5d6CdrcGIi3BMihJrXpFCLxFR/E
-         ROd0OsHcxjwqkHcyV8hnHYbYdUmcKVxwq5Fm6+VFDCHtWDhUCp7jNvcgfSXSQrrBCWpK
-         cYaQ==
+        bh=73CbFZyz5/Oh4NJ0Bvz1lGW0c6O6K5fxXQrseozXHcw=;
+        b=Rbrcne9hJO5zFt0sQ2gZynRRzzWRe5SVR1wRHlRMHAKMVaSR6X+f7wxY71QYwDLec5
+         s1z9K4AKE3ujnTmHO73UkxpIQcmIopjo41Z9xVevoud6Y6vZagu0xcBbMD8l4JZtcqYA
+         eidITirbBSI0SmJx9c5CY2c3yzVBlDgFSPxAkbPnxz8wdCsVE3EBxJRs17Ih9ca1Jk/1
+         7sGzaQqZEthak1timNppoSF+bPzgKtq3FSNQHLZk8mJoxTEwWDvitnTP5Kcac0JeTYEY
+         BBN32x3b30jEKItgp+Seb0c+QCGKPsdYwz4eOjF2zQD8xoA55OtPd7ycjv6siuOA/KIK
+         t/cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=mIKNUqGIZ9Qcs/aIEKfbb45zWwyQ7ymHQgJEzGuRfmY=;
-        b=X8PLUt/yFHGUFt99VOpqhzMCKvUTPwHHoXAyRqiBiKY/0r4K/4JBmYGlRDyajpUCUP
-         2BTqaygw8Cvy9MZISSiDMYa5LaOwsMPCwNxzWvD5IsP8es2WA1KPtz1alRez7fE9hG02
-         etsNWncHFIBKlRNnEl8LhrbH5loHoBBd7Aj6xACu17baGlDKzfzmBDZxOMbjO4rEQq7G
-         2XD6Q8Bu0eGdWOb62ozJc03jxj5qDbQam7iEGbh6DEna+QpTe0NkL6ac+xPsFZa+PMN/
-         skBanNMt6F/ILt2wzOUa35Elsb3qVNy65qubo46tGYrTgt4tMKg8hwnp2Oxx+fGyLzrx
-         cGPA==
-X-Gm-Message-State: AJIora9LzQ8L0n86O685BpTPF6Vpip5C+Je6RHjArFKLQ3ICJDxEClyF
-        sjbMKQMzclD4lKstx6sSQfjdOcDb0ypjyw==
-X-Google-Smtp-Source: AGRyM1vwYLqbhaAA03Mv+i80sYx6T4NMLgMu73ZRb+nLgx+7PT4COnSsBifwZ3Z9fx92oFlYFbznkw==
-X-Received: by 2002:a63:1c4c:0:b0:412:6eef:f91a with SMTP id c12-20020a631c4c000000b004126eeff91amr1520167pgm.361.1657690176550;
-        Tue, 12 Jul 2022 22:29:36 -0700 (PDT)
+        bh=73CbFZyz5/Oh4NJ0Bvz1lGW0c6O6K5fxXQrseozXHcw=;
+        b=t/mLykSLcQWYsipQsH77L2USpZ2zg80t2XS6PAm6rZ4Hespdj60EnsbcFmWt0Mg/8z
+         ysQCer0DwTt8/E1T9WrIblLv2FloAzAHhyvoH0Ui8AUa6nmgRgkWbcQO32wShnR218FL
+         LN1zu29WRYVz33LLEUcd9dd+/rGWs4YF7ybsd3zwtQp2e1Fx8rjg7I3C3OKBZb18HXqW
+         meupjKWpkXZ55QnqyJ9qA1YXKEhpfwpPBRRgd6Tv4bsZpUwXGFoFzbzLdbF52XzON4aL
+         HTb8EXkoNJCdVYiE5KpytBGKr2sGHMOtEiLn4zd5wXbl0OB1gaxIho8s9urdz4f9jdMO
+         aBDA==
+X-Gm-Message-State: AJIora/usPbTvobxHQtw+wuxWgYw4kUzNGJwvjEGE9QCx3F7XyKg4dsE
+        boLKx6y8ikm3X82n7OIsbtKdig==
+X-Google-Smtp-Source: AGRyM1suN/HlXdQcKewriih20qhQdaYhuVcOHxFq9ixS+8B1rNZ4ZjRmQjrryfvQPl5jijyUwIbL5Q==
+X-Received: by 2002:a17:90b:4c8c:b0:1ef:bff6:c964 with SMTP id my12-20020a17090b4c8c00b001efbff6c964mr1892390pjb.36.1657690188493;
+        Tue, 12 Jul 2022 22:29:48 -0700 (PDT)
 Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id p23-20020a170902a41700b0016a71196150sm7777872plq.135.2022.07.12.22.29.35
+        by smtp.gmail.com with ESMTPSA id m17-20020a170902bb9100b0016a1e2d148csm7809072pls.32.2022.07.12.22.29.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 22:29:35 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 10:59:31 +0530
+        Tue, 12 Jul 2022 22:29:48 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 10:59:44 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Perry Yuan <Perry.Yuan@amd.com>
 Cc:     rafael.j.wysocki@intel.com, Ray.Huang@amd.com,
@@ -56,17 +56,16 @@ Cc:     rafael.j.wysocki@intel.com, Ray.Huang@amd.com,
         Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
         Jinzhou.Su@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
         Li.Meng@amd.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v3 12/13] arch_topology: remove the acpi_disabled check
-Message-ID: <20220713052931.hifhtonr7rkg3r2d@vireshk-i7>
+Subject: Re: [PATCH v3 13/13] cpufreq: CPPC: remove the acpi_disabled check
+Message-ID: <20220713052944.xpk4fi7nuj6rmekd@vireshk-i7>
 References: <cover.1657638462.git.Perry.Yuan@amd.com>
- <c31b9c213e7c3b344b299abdbef87b7d1bc29d57.1657638462.git.Perry.Yuan@amd.com>
+ <d36d38953cf819d89eb9be4d1a2baa5b5feeb52a.1657638462.git.Perry.Yuan@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c31b9c213e7c3b344b299abdbef87b7d1bc29d57.1657638462.git.Perry.Yuan@amd.com>
+In-Reply-To: <d36d38953cf819d89eb9be4d1a2baa5b5feeb52a.1657638462.git.Perry.Yuan@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -83,22 +82,22 @@ On 12-07-22, 11:43, Perry Yuan wrote:
 > 
 > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 > ---
->  drivers/base/arch_topology.c | 2 +-
+>  drivers/cpufreq/cppc_cpufreq.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 579c851a2bd7..73a8cb31529d 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -352,7 +352,7 @@ void topology_init_cpu_capacity_cppc(void)
->  	struct cppc_perf_caps perf_caps;
->  	int cpu;
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 24eaf0ec344d..9adb7612993e 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -947,7 +947,7 @@ static int __init cppc_cpufreq_init(void)
+>  {
+>  	int ret;
 >  
-> -	if (likely(acpi_disabled || !acpi_cpc_valid()))
-> +	if (likely(!acpi_cpc_valid()))
->  		return;
+> -	if ((acpi_disabled) || !acpi_cpc_valid())
+> +	if (!acpi_cpc_valid())
+>  		return -ENODEV;
 >  
->  	raw_capacity = kcalloc(num_possible_cpus(), sizeof(*raw_capacity),
+>  	cppc_check_hisi_workaround();
 
 Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 

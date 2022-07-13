@@ -2,112 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55830572F97
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B341A572F9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234839AbiGMHtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
+        id S234351AbiGMHu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234906AbiGMHsa (ORCPT
+        with ESMTP id S229456AbiGMHu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:48:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B882E6336
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:48:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4A5DB1FF64;
-        Wed, 13 Jul 2022 07:48:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1657698507; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=0CGUbRqbAXCelWKPuWFUYe6GAN1O07JgHKbKoC7xYHQ=;
-        b=Y3ZpLT2lCpW1dP6yPmM2DmZPeTqeyduPSIW9j7irvcpEF7hscExLoibMTUTOBjlVYa6RAN
-        MAaMEJuj4PpJQ4LNdRt3ptF4g7VnicAhhhBm76Zc3eTHt/e4GiPFYnOVq6BvrNbHoVFjJD
-        0e6RHrT4QQt2etZ/ByOKjGOcAQDVyeM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EC05313AAD;
-        Wed, 13 Jul 2022 07:48:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ueYpOMp4zmKUJQAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 13 Jul 2022 07:48:26 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>, Wei Liu <wei.liu@kernel.org>,
-        Paul Durrant <paul@xen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH] xen/netback: handle empty rx queue in xenvif_rx_next_skb()
-Date:   Wed, 13 Jul 2022 09:48:23 +0200
-Message-Id: <20220713074823.5679-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Wed, 13 Jul 2022 03:50:26 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B460A25E87;
+        Wed, 13 Jul 2022 00:50:22 -0700 (PDT)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Wed, 13 Jul 2022 15:50:06
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.190.69.130]
+Date:   Wed, 13 Jul 2022 15:50:06 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Paolo Abeni" <pabeni@redhat.com>
+Cc:     linux-hams@vger.kernel.org, ralf@linux-mips.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v6] net: rose: fix null-ptr-deref caused by
+ rose_kill_by_neigh
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <daa2b799956c286b2cce898bee22fb2a043f5177.camel@redhat.com>
+References: <20220711013111.33183-1-duoming@zju.edu.cn>
+ <daa2b799956c286b2cce898bee22fb2a043f5177.camel@redhat.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <540ab034.3f081.181f6895dba.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgC3vQwuec5iSCdsAA--.7231W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgQKAVZdtapPBQAFsW
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xenvif_rx_next_skb() is expecting the rx queue not being empty, but
-in case the loop in xenvif_rx_action() is doing multiple iterations,
-the availability of another skb in the rx queue is not being checked.
-
-This can lead to crashes:
-
-[40072.537261] BUG: unable to handle kernel NULL pointer dereference at 0000000000000080
-[40072.537407] IP: xenvif_rx_skb+0x23/0x590 [xen_netback]
-[40072.537534] PGD 0 P4D 0
-[40072.537644] Oops: 0000 [#1] SMP NOPTI
-[40072.537749] CPU: 0 PID: 12505 Comm: v1-c40247-q2-gu Not tainted 4.12.14-122.121-default #1 SLE12-SP5
-[40072.537867] Hardware name: HP ProLiant DL580 Gen9/ProLiant DL580 Gen9, BIOS U17 11/23/2021
-[40072.537999] task: ffff880433b38100 task.stack: ffffc90043d40000
-[40072.538112] RIP: e030:xenvif_rx_skb+0x23/0x590 [xen_netback]
-[40072.538217] RSP: e02b:ffffc90043d43de0 EFLAGS: 00010246
-[40072.538319] RAX: 0000000000000000 RBX: ffffc90043cd7cd0 RCX: 00000000000000f7
-[40072.538430] RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffffc90043d43df8
-[40072.538531] RBP: 000000000000003f R08: 000077ff80000000 R09: 0000000000000008
-[40072.538644] R10: 0000000000007ff0 R11: 00000000000008f6 R12: ffffc90043ce2708
-[40072.538745] R13: 0000000000000000 R14: ffffc90043d43ed0 R15: ffff88043ea748c0
-[40072.538861] FS: 0000000000000000(0000) GS:ffff880484600000(0000) knlGS:0000000000000000
-[40072.538988] CS: e033 DS: 0000 ES: 0000 CR0: 0000000080050033
-[40072.539088] CR2: 0000000000000080 CR3: 0000000407ac8000 CR4: 0000000000040660
-[40072.539211] Call Trace:
-[40072.539319] xenvif_rx_action+0x71/0x90 [xen_netback]
-[40072.539429] xenvif_kthread_guest_rx+0x14a/0x29c [xen_netback]
-
-Fix that by stopping the loop in case the rx queue becomes empty.
-
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
- drivers/net/xen-netback/rx.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/xen-netback/rx.c b/drivers/net/xen-netback/rx.c
-index dbac4c03d21a..a0335407be42 100644
---- a/drivers/net/xen-netback/rx.c
-+++ b/drivers/net/xen-netback/rx.c
-@@ -495,6 +495,7 @@ void xenvif_rx_action(struct xenvif_queue *queue)
- 	queue->rx_copy.completed = &completed_skbs;
- 
- 	while (xenvif_rx_ring_slots_available(queue) &&
-+	       !skb_queue_empty(&queue->rx_queue) &&
- 	       work_done < RX_BATCH_SIZE) {
- 		xenvif_rx_skb(queue);
- 		work_done++;
--- 
-2.35.3
-
+SGVsbG8sCgpPbiBUdWUsIDEyIEp1bCAyMDIyIDEzOjAwOjQ5ICswMjAwIFBhb2xvIEFiZW5pIHdy
+b3RlOgoKPiBPbiBNb24sIDIwMjItMDctMTEgYXQgMDk6MzEgKzA4MDAsIER1b21pbmcgWmhvdSB3
+cm90ZToKPiA+IFdoZW4gdGhlIGxpbmsgbGF5ZXIgY29ubmVjdGlvbiBpcyBicm9rZW4sIHRoZSBy
+b3NlLT5uZWlnaGJvdXIgaXMKPiA+IHNldCB0byBudWxsLiBCdXQgcm9zZS0+bmVpZ2hib3VyIGNv
+dWxkIGJlIHVzZWQgYnkgcm9zZV9jb25uZWN0aW9uKCkKPiA+IGFuZCByb3NlX3JlbGVhc2UoKSBs
+YXRlciwgYmVjYXVzZSB0aGVyZSBpcyBubyBzeW5jaHJvbml6YXRpb24gYW1vbmcKPiA+IHRoZW0u
+IEFzIGEgcmVzdWx0LCB0aGUgbnVsbC1wdHItZGVyZWYgYnVncyB3aWxsIGhhcHBlbi4KPiA+IAo+
+ID4gT25lIG9mIHRoZSBudWxsLXB0ci1kZXJlZiBidWdzIGlzIHNob3duIGJlbG93Ogo+ID4gCj4g
+PiAgICAgKHRocmVhZCAxKSAgICAgICAgICAgICAgICAgIHwgICAgICAgICh0aHJlYWQgMikKPiA+
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgcm9zZV9jb25uZWN0Cj4gPiByb3Nl
+X2tpbGxfYnlfbmVpZ2ggICAgICAgICAgICAgIHwgICAgbG9ja19zb2NrKHNrKQo+ID4gICBzcGlu
+X2xvY2tfYmgoJnJvc2VfbGlzdF9sb2NrKSB8ICAgIGlmICghcm9zZS0+bmVpZ2hib3VyKQo+ID4g
+ICByb3NlLT5uZWlnaGJvdXIgPSBOVUxMOy8vKDEpICB8Cj4gPiAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHwgICAgcm9zZS0+bmVpZ2hib3VyLT51c2UrKzsvLygyKQo+ID4gCj4gPiBU
+aGUgcm9zZS0+bmVpZ2hib3VyIGlzIHNldCB0byBudWxsIGluIHBvc2l0aW9uICgxKSBhbmQgZGVy
+ZWZlcmVuY2VkCj4gPiBpbiBwb3NpdGlvbiAoMikuCj4gPiAKPiA+IFRoZSBLQVNBTiByZXBvcnQg
+dHJpZ2dlcmVkIGJ5IFBPQyBpcyBzaG93biBiZWxvdzoKPiA+IAo+ID4gS0FTQU46IG51bGwtcHRy
+LWRlcmVmIGluIHJhbmdlIFsweDAwMDAwMDAwMDAwMDAwMjgtMHgwMDAwMDAwMDAwMDAwMDJmXQo+
+ID4gLi4uCj4gPiBSSVA6IDAwMTA6cm9zZV9jb25uZWN0KzB4NmMyLzB4ZjMwCj4gPiBSU1A6IDAw
+MTg6ZmZmZjg4ODAwYWI0N2Q2MCBFRkxBR1M6IDAwMDAwMjA2Cj4gPiBSQVg6IDAwMDAwMDAwMDAw
+MDAwMDUgUkJYOiAwMDAwMDAwMDAwMDAwMDJhIFJDWDogMDAwMDAwMDAwMDAwMDAwMAo+ID4gUkRY
+OiBmZmZmODg4MDBhYjM4MDAwIFJTSTogZmZmZjg4ODAwYWI0N2U0OCBSREk6IGZmZmY4ODgwMGFi
+MzgzMDkKPiA+IFJCUDogZGZmZmZjMDAwMDAwMDAwMCBSMDg6IDAwMDAwMDAwMDAwMDAwMDAgUjA5
+OiBmZmZmZWQxMDAxNTY3MDYyCj4gPiBSMTA6IGRmZmZlOTEwMDE1NjcwNjMgUjExOiAxZmZmZjEx
+MDAxNTY3MDYxIFIxMjogMWZmZmYxMTAwMGQxN2NkMAo+ID4gUjEzOiBmZmZmODg4MDA2OGJlNjgw
+IFIxNDogMDAwMDAwMDAwMDAwMDAwMiBSMTU6IDFmZmZmMTEwMDBkMTdjZDAKPiA+IC4uLgo+ID4g
+Q2FsbCBUcmFjZToKPiA+ICAgPFRBU0s+Cj4gPiAgID8gX19sb2NhbF9iaF9lbmFibGVfaXArMHg1
+NC8weDgwCj4gPiAgID8gc2VsaW51eF9uZXRsYmxfc29ja2V0X2Nvbm5lY3QrMHgyNi8weDMwCj4g
+PiAgID8gcm9zZV9iaW5kKzB4NWIwLzB4NWIwCj4gPiAgIF9fc3lzX2Nvbm5lY3QrMHgyMTYvMHgy
+ODAKPiA+ICAgX194NjRfc3lzX2Nvbm5lY3QrMHg3MS8weDgwCj4gPiAgIGRvX3N5c2NhbGxfNjQr
+MHg0My8weDkwCj4gPiAgIGVudHJ5X1NZU0NBTExfNjRfYWZ0ZXJfaHdmcmFtZSsweDQ2LzB4YjAK
+PiA+IAo+ID4gVGhpcyBwYXRjaCBhZGRzIGxvY2tfc29jaygpIGluIHJvc2Vfa2lsbF9ieV9uZWln
+aCgpIGluIG9yZGVyIHRvCj4gPiBzeW5jaHJvbml6ZSB3aXRoIHJvc2VfY29ubmVjdCgpIGFuZCBy
+b3NlX3JlbGVhc2UoKS4gVGhlbiwgY2hhbmdpbmcKPiA+IHR5cGUgb2YgJ25laWdoYm91ci0+dXNl
+JyBmcm9tIHVuc2lnbmVkIHNob3J0IHRvIGF0b21pY190IGluIG9yZGVyIHRvCj4gPiBtaXRpZ2F0
+ZSByYWNlIGNvbmRpdGlvbnMgY2F1c2VkIGJ5IGhvbGRpbmcgZGlmZmVyZW50IHNvY2tldCBsb2Nr
+IHdoaWxlCj4gPiB1cGRhdGluZyAnbmVpZ2hib3VyLT51c2UnLgo+ID4gCj4gPiBNZWFud2hpbGUs
+IHRoaXMgcGF0Y2ggYWRkcyBzb2NrX2hvbGQoKSBwcm90ZWN0ZWQgYnkgcm9zZV9saXN0X2xvY2sK
+PiA+IHRoYXQgY291bGQgc3luY2hyb25pemUgd2l0aCByb3NlX3JlbW92ZV9zb2NrZXQoKSBpbiBv
+cmRlciB0byBtaXRpZ2F0ZQo+ID4gVUFGIGJ1ZyBjYXVzZWQgYnkgbG9ja19zb2NrKCkgd2UgYWRk
+Lgo+ID4gCj4gPiBXaGF0J3MgbW9yZSwgdGhlcmUgaXMgbm8gbmVlZCB1c2luZyByb3NlX25laWdo
+X2xpc3RfbG9jayB0byBwcm90ZWN0Cj4gPiByb3NlX2tpbGxfYnlfbmVpZ2goKS4gQmVjYXVzZSB3
+ZSBoYXZlIGFscmVhZHkgdXNlZCByb3NlX25laWdoX2xpc3RfbG9jawo+ID4gdG8gcHJvdGVjdCB0
+aGUgc3RhdGUgY2hhbmdlIG9mIHJvc2VfbmVpZ2ggaW4gcm9zZV9saW5rX2ZhaWxlZCgpLCB3aGlj
+aAo+ID4gaXMgd2VsbCBzeW5jaHJvbml6ZWQuCj4gPiAKPiA+IEZpeGVzOiAxZGExNzdlNGMzZjQg
+KCJMaW51eC0yLjYuMTItcmMyIikKPiA+IFNpZ25lZC1vZmYtYnk6IER1b21pbmcgWmhvdSA8ZHVv
+bWluZ0B6anUuZWR1LmNuPgo+ID4gLS0tCj4gPiBDaGFuZ2VzIGluIHY2Ogo+ID4gICAtIENoYW5n
+ZSBza19mb3JfZWFjaCgpIHRvIHNrX2Zvcl9lYWNoX3NhZmUoKS4KPiA+ICAgLSBDaGFuZ2UgdHlw
+ZSBvZiAnbmVpZ2hib3VyLT51c2UnIGZyb20gdW5zaWduZWQgc2hvcnQgdG8gYXRvbWljX3QuCj4g
+PiAKPiA+ICBpbmNsdWRlL25ldC9yb3NlLmggICAgfCAgMiArLQo+ID4gIG5ldC9yb3NlL2FmX3Jv
+c2UuYyAgICB8IDE5ICsrKysrKysrKysrKystLS0tLS0KPiA+ICBuZXQvcm9zZS9yb3NlX2luLmMg
+ICAgfCAxMiArKysrKystLS0tLS0KPiA+ICBuZXQvcm9zZS9yb3NlX3JvdXRlLmMgfCAyNCArKysr
+KysrKysrKystLS0tLS0tLS0tLS0KPiA+ICBuZXQvcm9zZS9yb3NlX3RpbWVyLmMgfCAgMiArLQo+
+ID4gIDUgZmlsZXMgY2hhbmdlZCwgMzMgaW5zZXJ0aW9ucygrKSwgMjYgZGVsZXRpb25zKC0pCj4g
+PiAKPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL25ldC9yb3NlLmggYi9pbmNsdWRlL25ldC9yb3Nl
+LmgKPiA+IGluZGV4IDBmMGE0Y2UwZmVlLi5kNWRkZWJjNTU2ZCAxMDA2NDQKPiA+IC0tLSBhL2lu
+Y2x1ZGUvbmV0L3Jvc2UuaAo+ID4gKysrIGIvaW5jbHVkZS9uZXQvcm9zZS5oCj4gPiBAQCAtOTUs
+NyArOTUsNyBAQCBzdHJ1Y3Qgcm9zZV9uZWlnaCB7Cj4gPiAgCWF4MjVfY2IJCQkqYXgyNTsKPiA+
+ICAJc3RydWN0IG5ldF9kZXZpY2UJCSpkZXY7Cj4gPiAgCXVuc2lnbmVkIHNob3J0CQljb3VudDsK
+PiA+IC0JdW5zaWduZWQgc2hvcnQJCXVzZTsKPiA+ICsJYXRvbWljX3QJCXVzZTsKPiA+ICAJdW5z
+aWduZWQgaW50CQludW1iZXI7Cj4gPiAgCWNoYXIJCQlyZXN0YXJ0ZWQ7Cj4gPiAgCWNoYXIJCQlk
+Y2VfbW9kZTsKPiA+IGRpZmYgLS1naXQgYS9uZXQvcm9zZS9hZl9yb3NlLmMgYi9uZXQvcm9zZS9h
+Zl9yb3NlLmMKPiA+IGluZGV4IGJmMmQ5ODZhNmJjLi41NGU3Yjc2YzRmMyAxMDA2NDQKPiA+IC0t
+LSBhL25ldC9yb3NlL2FmX3Jvc2UuYwo+ID4gKysrIGIvbmV0L3Jvc2UvYWZfcm9zZS5jCj4gPiBA
+QCAtMTYzLDE2ICsxNjMsMjMgQEAgc3RhdGljIHZvaWQgcm9zZV9yZW1vdmVfc29ja2V0KHN0cnVj
+dCBzb2NrICpzaykKPiA+ICB2b2lkIHJvc2Vfa2lsbF9ieV9uZWlnaChzdHJ1Y3Qgcm9zZV9uZWln
+aCAqbmVpZ2gpCj4gPiAgewo+ID4gIAlzdHJ1Y3Qgc29jayAqczsKPiA+ICsJc3RydWN0IGhsaXN0
+X25vZGUgKnRtcDsKPiA+ICAKPiA+ICAJc3Bpbl9sb2NrX2JoKCZyb3NlX2xpc3RfbG9jayk7Cj4g
+PiAtCXNrX2Zvcl9lYWNoKHMsICZyb3NlX2xpc3QpIHsKPiA+ICsJc2tfZm9yX2VhY2hfc2FmZShz
+LCB0bXAsICZyb3NlX2xpc3QpIHsKPiA+ICAJCXN0cnVjdCByb3NlX3NvY2sgKnJvc2UgPSByb3Nl
+X3NrKHMpOwo+ID4gIAo+ID4gKwkJc29ja19ob2xkKHMpOwo+ID4gKwkJc3Bpbl91bmxvY2tfYmgo
+JnJvc2VfbGlzdF9sb2NrKTsKPiA+ICsJCWxvY2tfc29jayhzKTsKPiA+ICAJCWlmIChyb3NlLT5u
+ZWlnaGJvdXIgPT0gbmVpZ2gpIHsKPiA+ICAJCQlyb3NlX2Rpc2Nvbm5lY3QocywgRU5FVFVOUkVB
+Q0gsIFJPU0VfT1VUX09GX09SREVSLCAwKTsKPiA+IC0JCQlyb3NlLT5uZWlnaGJvdXItPnVzZS0t
+Owo+ID4gKwkJCWF0b21pY19kZWMoJnJvc2UtPm5laWdoYm91ci0+dXNlKTsKPiA+ICAJCQlyb3Nl
+LT5uZWlnaGJvdXIgPSBOVUxMOwo+ID4gIAkJfQo+ID4gKwkJcmVsZWFzZV9zb2NrKHMpOwo+ID4g
+KwkJc29ja19wdXQocyk7Cj4gCj4gSSdtIHNvcnJ5LCB0aGlzIGRvZXMgbm90IHdvcmsuIEF0IHRo
+aXMgcG9pbnQgYm90aCAncycgYW5kICd0bXAnIHNvY2tldHMKPiBjYW4gYmUgZnJlZWQgYW5kIHJl
+dXNlZC4gQm90aCBpdGVyYXRvcnMgYXJlIG5vdCB2YWxpZCBhbnltb3JlIHdoZW4geW91Cj4gYWNx
+dWlyZSB0aGUgJ3Jvc2VfbGlzdF9sb2NrJyBsYXRlci4KClRoYW5rIHlvdSBmb3IgeW91ciB0aW1l
+IGFuZCByZXBseSEgQnV0IEkgdGhpbmsgYm90aCAncycgYW5kICd0bXAnIGNhbiBub3QKYmUgZnJl
+ZWQgYW5kIHJldXNlZCBpbiByb3NlX2tpbGxfYnlfbmVpZ2goKS4gQmVjYXVzZSByb3NlX3JlbW92
+ZV9zb2NrZXQoKQpjYWxscyBza19kZWxfbm9kZV9pbml0KCkgd2hpY2ggaXMgcHJvdGVjdGVkIGJ5
+IHJvc2VfbGlzdF9sb2NrIHRvIGRlbGV0ZSB0aGUKc29ja2V0IG5vZGUgZnJvbSB0aGUgaGxpc3Qg
+YW5kIGlmIHNrLT5za19yZWZjbnQgZXF1YWxzIHRvIDEsIHRoZSBzb2NrZXQgd2lsbApiZSBkZWFs
+bG9jYXRlZC4KCnN0YXRpYyB2b2lkIHJvc2VfcmVtb3ZlX3NvY2tldChzdHJ1Y3Qgc29jayAqc2sp
+CnsKCXNwaW5fbG9ja19iaCgmcm9zZV9saXN0X2xvY2spOwoJc2tfZGVsX25vZGVfaW5pdChzayk7
+CglzcGluX3VubG9ja19iaCgmcm9zZV9saXN0X2xvY2spOwp9CgpodHRwczovL2VsaXhpci5ib290
+bGluLmNvbS9saW51eC92NS4xOS1yYzYvc291cmNlL25ldC9yb3NlL2FmX3Jvc2UuYyNMMTUyCgpC
+b3RoICdzJyBhbmQgJ3RtcCcgaW4gcm9zZV9raWxsX2J5X25laWdoKCkgaXMgYWxzbyBwcm90ZWN0
+ZWQgYnkgcm9zZV9saXN0X2xvY2suCgpJZiB0aGUgc29ja2V0IGlzIGRlbGV0ZWQgZnJvbSB0aGUg
+aGxpc3QsIHNrX2Zvcl9lYWNoX3NhZmUoKSBjb3VsZCBub3QgZmluZAp0aGUgc29ja2V0IGFuZCB0
+aGUgVUFGIGJ1ZyBjb3VsZCBiZSBwcmV2ZW50ZWQuIAoKSWYgdGhlIHNvY2tldCBjb3VsZCBiZSBm
+b3VuZCBieSBza19mb3JfZWFjaF9zYWZlKCksIHdlIHVzZSBzb2NrX2hvbGQocykKdG8gaW5jcmVh
+c2UgdGhlIHJlZmNvdW50IG9mIHRoZSBzb2NrZXQuIEFzIGEgcmVzdWx0LCB0aGUgVUFGIGJ1Z3Mg
+Y291bGQKYmUgcHJldmVudGVkLgoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3UK

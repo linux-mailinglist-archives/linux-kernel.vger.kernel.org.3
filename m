@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD16573ECC
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C543573ED0
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237525AbiGMVT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 17:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
+        id S237347AbiGMVUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 17:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237523AbiGMVTJ (ORCPT
+        with ESMTP id S237544AbiGMVTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 17:19:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4619D1E3FC;
-        Wed, 13 Jul 2022 14:18:57 -0700 (PDT)
+        Wed, 13 Jul 2022 17:19:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC6622501;
+        Wed, 13 Jul 2022 14:19:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81E62B8215D;
-        Wed, 13 Jul 2022 21:18:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B4EC341C6;
-        Wed, 13 Jul 2022 21:18:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB2C461E9B;
+        Wed, 13 Jul 2022 21:18:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7D95C341C0;
+        Wed, 13 Jul 2022 21:18:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657747134;
-        bh=O763c7lmps3MrVyhYCW3upz7wIWygL4GsjnYJadULyA=;
+        s=k20201202; t=1657747139;
+        bh=ihODpkPUdPlFucCSCUuOKohjYN3t271AgCm1Vu/2mkw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RL4+OwgcHsI0/BtIfDRsg1LBnT5Lfug5Gk563r8rOLkDFdi2dm6Jde/C8M5XWzr1Y
-         KbUIoIzrhlBr0Bg7WVQfDc+ghoKTqDYORMEeCQD4XBN3TRGdOgnRdTbEPkP9pToRVn
-         jp2Ub3ktenAFOnmIgPKqvsnPmO+GCleYE4gsRih7NL12Wmvq0wxOX3WptdtUBm1qqr
-         A280djgOHXKCIRFfKSJ05AgeEeq6lnhG8PQRXW3xkoEDRS6zBitR99DnIxl/BmJL6O
-         J7YPJpvCBd/uGSapUPFE7+5Xf25JFd0ylICpSYf2HcbMOnYZVIAyNLtZ9iZ8CIU8bO
-         r1EGNgfqz0FGQ==
+        b=jknWY4inAatX8aPE0ME87T/1pF/8A7dL8uRzz7Mt4mKPBa/wkNDLbCVs7Zj3idoWj
+         uf96asR3Pjmj1VBlNx3ezxo7J1/cGPx9PpULylEFzD69ef/DCC/GF+OKaG7ZzzGcMU
+         SYVo862pSXLFAE6tGxrkZ3BB+9CqtzDrTsiPSPmCIi2YnKuK6gFV0/12xfTk8SCmAf
+         xHsQVC74h2aNpjKolTyjI2slN/sTKq0NL8RzqGsWngdG0fODBnT8uQIIObsw3p7YYl
+         HJH2exoFkO+JTiw+Dr35HPNzbB9MN3leESuGNc9jPSFk+Fw6hUj9UEXpc1+KxPrSFB
+         Y7wFLSVxhvUxg==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -54,9 +54,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-trace-devel@vger.kernel.org
-Subject: [PATCH V5 13/16] rv/monitor: Add the wip monitor
-Date:   Wed, 13 Jul 2022 23:17:29 +0200
-Message-Id: <c2ab6a5fe0476cc8f3082d6d9aaa930b4093fbd3.1657745645.git.bristot@kernel.org>
+Subject: [PATCH V5 14/16] rv/monitor: Add the wwnr monitor
+Date:   Wed, 13 Jul 2022 23:17:30 +0200
+Message-Id: <3b96d741e73314112a228c9cff46a6e38b9451a6.1657745645.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1657745645.git.bristot@kernel.org>
 References: <cover.1657745645.git.bristot@kernel.org>
@@ -72,30 +72,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The wakeup in preemptive (wip) monitor verifies if the
-wakeup events always take place with preemption disabled:
+Per task wakeup while not running (wwnr) monitor.
 
-                     |
-                     |
-                     v
-                   #==================#
-                   H    preemptive    H <+
-                   #==================#  |
-                     |                   |
-                     | preempt_disable   | preempt_enable
-                     v                   |
-    sched_waking   +------------------+  |
-  +--------------- |                  |  |
-  |                |  non_preemptive  |  |
-  +--------------> |                  | -+
-                   +------------------+
+This model is broken, the reason is that a task can be running in the
+processor without being set as RUNNABLE. Think about a task about to
+sleep:
 
-The wakeup event always takes place with preemption disabled because
-of the scheduler synchronization. However, because the preempt_count
-and its trace event are not atomic with regard to interrupts, some
-inconsistencies might happen.
+1:      set_current_state(TASK_UNINTERRUPTIBLE);
+2:      schedule();
 
-The documentation illustrates one of these cases.
+And then imagine an IRQ happening in between the lines one and two,
+waking the task up. BOOM, the wakeup will happen while the task is
+running.
+
+Q: Why do we need this model, so?
+A: To test the reactors.
 
 Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
@@ -120,261 +111,303 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-trace-devel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- Documentation/trace/rv/index.rst       |  1 +
- Documentation/trace/rv/monitor_wip.rst | 55 ++++++++++++++++++++++++++
- include/trace/events/rv.h              | 10 +++++
- kernel/trace/rv/Kconfig                | 13 ++++++
- kernel/trace/rv/Makefile               |  1 +
- kernel/trace/rv/monitors/wip/wip.c     | 51 +++++++-----------------
- tools/verification/models/wip.dot      | 16 ++++++++
- 7 files changed, 111 insertions(+), 36 deletions(-)
- create mode 100644 Documentation/trace/rv/monitor_wip.rst
- create mode 100644 tools/verification/models/wip.dot
+ Documentation/trace/rv/index.rst        |  1 +
+ Documentation/trace/rv/monitor_wwnr.rst | 45 +++++++++++++
+ include/trace/events/rv.h               | 12 ++++
+ kernel/trace/rv/Kconfig                 | 12 ++++
+ kernel/trace/rv/Makefile                |  1 +
+ kernel/trace/rv/monitors/wwnr/wwnr.c    | 90 +++++++++++++++++++++++++
+ kernel/trace/rv/monitors/wwnr/wwnr.h    | 46 +++++++++++++
+ tools/verification/models/wwnr.dot      | 16 +++++
+ 8 files changed, 223 insertions(+)
+ create mode 100644 Documentation/trace/rv/monitor_wwnr.rst
+ create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.c
+ create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.h
+ create mode 100644 tools/verification/models/wwnr.dot
 
 diff --git a/Documentation/trace/rv/index.rst b/Documentation/trace/rv/index.rst
-index db2ae3f90b90..4cb71ed628b8 100644
+index 4cb71ed628b8..15fa966102c0 100644
 --- a/Documentation/trace/rv/index.rst
 +++ b/Documentation/trace/rv/index.rst
-@@ -10,3 +10,4 @@ Runtime Verification
-    deterministic_automata.rst
+@@ -11,3 +11,4 @@ Runtime Verification
     da_monitor_synthesis.rst
     da_monitor_instrumentation.rst
-+   monitor_wip.rst
-diff --git a/Documentation/trace/rv/monitor_wip.rst b/Documentation/trace/rv/monitor_wip.rst
+    monitor_wip.rst
++   monitor_wwnr.rst
+diff --git a/Documentation/trace/rv/monitor_wwnr.rst b/Documentation/trace/rv/monitor_wwnr.rst
 new file mode 100644
-index 000000000000..0ea2d9388945
+index 000000000000..cfa6abe867e6
 --- /dev/null
-+++ b/Documentation/trace/rv/monitor_wip.rst
-@@ -0,0 +1,55 @@
-+Monitor wip
-+===========
++++ b/Documentation/trace/rv/monitor_wwnr.rst
+@@ -0,0 +1,45 @@
++Monitor wwnr
++============
 +
-+ - Name: wip - wakeup in preemptive
-+ - Type: per-cpu deterministic automaton
++ - Name: wwrn - wakeup while not running
++ - Type: per-task deterministic automaton
 + - Author: Daniel Bristot de Oliveira <bristot@kernel.org>
 +
 +Description
 +-----------
 +
-+The wakeup in preemptive (wip) monitor is a sample per-cpu monitor
-+that verifies if the wakeup events always take place with
-+preemption disabled::
++This is a per-task sample monitor, with the following
++definition::
 +
-+                     |
-+                     |
-+                     v
-+                   #==================#
-+                   H    preemptive    H <+
-+                   #==================#  |
-+                     |                   |
-+                     | preempt_disable   | preempt_enable
-+                     v                   |
-+    sched_waking   +------------------+  |
-+  +--------------- |                  |  |
-+  |                |  non_preemptive  |  |
-+  +--------------> |                  | -+
-+                   +------------------+
++               |
++               |
++               v
++    wakeup   +-------------+
++  +--------- |             |
++  |          | not_running |
++  +--------> |             | <+
++             +-------------+  |
++               |              |
++               | switch_in    | switch_out
++               v              |
++             +-------------+  |
++             |   running   | -+
++             +-------------+
 +
-+The wakeup event always takes place with preemption disabled because
-+of the scheduler synchronization. However, because the preempt_count
-+and its trace event are not atomic with regard to interrupts, some
-+inconsistencies might happen. For example::
++This model is borken, the reason is that a task can be running
++in the processor without being set as RUNNABLE. Think about a
++task about to sleep::
 +
-+  preempt_disable() {
-+	__preempt_count_add(1)
-+	------->	smp_apic_timer_interrupt() {
-+				preempt_disable()
-+					do not trace (preempt count >= 1)
++  1:      set_current_state(TASK_UNINTERRUPTIBLE);
++  2:      schedule();
 +
-+				wake up a thread
++And then imagine an IRQ happening in between the lines one and two,
++waking the task up. BOOM, the wakeup will happen while the task is
++running.
 +
-+				preempt_enable()
-+					 do not trace (preempt count >= 1)
-+			}
-+	<------
-+	trace_preempt_disable();
-+  }
-+
-+This problem was reported and discussed here:
-+  https://lore.kernel.org/r/cover.1559051152.git.bristot@redhat.com/
++- Why do we need this model, so?
++- To test the reactors.
 +
 +Specification
 +-------------
-+Grapviz Dot file in tools/verification/models/wip.dot
++Grapviz Dot file in tools/verification/models/wwnr.dot
 diff --git a/include/trace/events/rv.h b/include/trace/events/rv.h
-index 480aac18f403..90fa36cea517 100644
+index 90fa36cea517..495d3eece0ee 100644
 --- a/include/trace/events/rv.h
 +++ b/include/trace/events/rv.h
-@@ -56,6 +56,16 @@ DECLARE_EVENT_CLASS(error_da_monitor,
+@@ -122,6 +122,18 @@ DECLARE_EVENT_CLASS(error_da_monitor_id,
  		__entry->event,
  		__entry->state)
  );
 +
-+#ifdef CONFIG_RV_MON_WIP
-+DEFINE_EVENT(event_da_monitor, event_wip,
-+	    TP_PROTO(char *state, char *event, char *next_state, bool final_state),
-+	    TP_ARGS(state, event, next_state, final_state));
++#ifdef CONFIG_RV_MON_WWNR
++/* id is the pid of the task */
++DEFINE_EVENT(event_da_monitor_id, event_wwnr,
++	     TP_PROTO(int id, char *state, char *event, char *next_state, bool final_state),
++	     TP_ARGS(id, state, event, next_state, final_state));
 +
-+DEFINE_EVENT(error_da_monitor, error_wip,
-+	     TP_PROTO(char *state, char *event),
-+	     TP_ARGS(state, event));
-+#endif /* CONFIG_RV_MON_WIP */
- #endif /* CONFIG_DA_MON_EVENTS_IMPLICIT */
++DEFINE_EVENT(error_da_monitor_id, error_wwnr,
++	     TP_PROTO(int id, char *state, char *event),
++	     TP_ARGS(id, state, event));
++#endif /* CONFIG_RV_MON_WWNR */
++
+ #endif /* CONFIG_DA_MON_EVENTS_ID */
+ #endif /* _TRACE_RV_H */
  
- #ifdef CONFIG_DA_MON_EVENTS_ID
 diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
-index 7ad6c93cda64..8755ad74ec22 100644
+index 8755ad74ec22..d8c40fd67e88 100644
 --- a/kernel/trace/rv/Kconfig
 +++ b/kernel/trace/rv/Kconfig
-@@ -28,6 +28,19 @@ menuconfig RV
+@@ -41,6 +41,18 @@ config RV_MON_WIP
  	  For further information, see:
- 	    Documentation/trace/rv/runtime-verification.rst
+ 	    Documentation/trace/rv/monitor_wip.rst
  
-+config RV_MON_WIP
++config RV_MON_WWNR
 +	depends on RV
-+	depends on PREEMPT_TRACER
-+	select DA_MON_EVENTS_IMPLICIT
-+	bool "wip monitor"
++	select DA_MON_EVENTS_ID
++	bool "wwnr monitor"
 +	help
-+	  Enable wip (wakeup in preemptive) sample monitor that illustrates
-+	  the usage of per-cpu monitors, and one limitation of the
-+	  preempt_disable/enable events.
++	  Enable wwnr (wakeup while not running) sample monitor, this is a
++	  sample monitor that illustrates the usage of per-task monitor.
++	  The model is borken on purpose: it serves to test reactors.
 +
 +	  For further information, see:
-+	    Documentation/trace/rv/monitor_wip.rst
++	    Documentation/trace/rv/monitor_wwnr.rst
 +
  config RV_REACTORS
  	bool "Runtime verification reactors"
  	default y
 diff --git a/kernel/trace/rv/Makefile b/kernel/trace/rv/Makefile
-index 8944274d9b41..b41109d2750a 100644
+index b41109d2750a..af0ff9a46418 100644
 --- a/kernel/trace/rv/Makefile
 +++ b/kernel/trace/rv/Makefile
-@@ -2,3 +2,4 @@
- 
+@@ -3,3 +3,4 @@
  obj-$(CONFIG_RV) += rv.o
  obj-$(CONFIG_RV_REACTORS) += rv_reactors.o
-+obj-$(CONFIG_RV_MON_WIP) += monitors/wip/wip.o
-diff --git a/kernel/trace/rv/monitors/wip/wip.c b/kernel/trace/rv/monitors/wip/wip.c
-index 9ac5dc9618a3..cda13ac8f6c0 100644
---- a/kernel/trace/rv/monitors/wip/wip.c
-+++ b/kernel/trace/rv/monitors/wip/wip.c
-@@ -10,44 +10,26 @@
- 
- #define MODULE_NAME "wip"
- 
--/*
-- * XXX: include required tracepoint headers, e.g.,
-- * #include <linux/trace/events/sched.h>
-- */
- #include <trace/events/rv.h>
-+#include <trace/events/sched.h>
-+#include <trace/events/preemptirq.h>
- 
--/*
-- * This is the self-generated part of the monitor. Generally, there is no need
-- * to touch this section.
-- */
- #include "wip.h"
- 
--/*
-- * Declare the deterministic automata monitor.
-- *
-- * The rv monitor reference is needed for the monitor declaration.
-- */
- struct rv_monitor rv_wip;
- DECLARE_DA_MON_PER_CPU(wip, unsigned char);
- 
--/*
-- * This is the instrumentation part of the monitor.
-- *
-- * This is the section where manual work is required. Here the kernel events
-- * are translated into model's event.
-- *
-- */
--static void handle_preempt_disable(void *data, /* XXX: fill header */)
-+static void handle_preempt_disable(void *data, unsigned long ip, unsigned long parent_ip)
- {
- 	da_handle_event_wip(preempt_disable_wip);
- }
- 
--static void handle_preempt_enable(void *data, /* XXX: fill header */)
-+static void handle_preempt_enable(void *data, unsigned long ip, unsigned long parent_ip)
- {
--	da_handle_event_wip(preempt_enable_wip);
-+	da_handle_init_event_wip(preempt_enable_wip);
- }
- 
--static void handle_sched_waking(void *data, /* XXX: fill header */)
-+static void handle_sched_waking(void *data, struct task_struct *task)
- {
- 	da_handle_event_wip(sched_waking_wip);
- }
-@@ -60,9 +42,9 @@ static int start_wip(void)
- 	if (retval)
- 		return retval;
- 
--	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_disable);
--	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_enable);
--	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_sched_waking);
-+	rv_attach_trace_probe("wip", preempt_disable, handle_preempt_disable);
-+	rv_attach_trace_probe("wip", preempt_enable, handle_preempt_enable);
-+	rv_attach_trace_probe("wip", sched_waking, handle_sched_waking);
- 
- 	return 0;
- }
-@@ -71,19 +53,16 @@ static void stop_wip(void)
- {
- 	rv_wip.enabled = 0;
- 
--	rv_detach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_disable);
--	rv_detach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_enable);
--	rv_detach_trace_probe("wip", /* XXX: tracepoint */, handle_sched_waking);
-+	rv_detach_trace_probe("wip", preempt_disable, handle_preempt_disable);
-+	rv_detach_trace_probe("wip", preempt_enable, handle_preempt_enable);
-+	rv_detach_trace_probe("wip", sched_waking, handle_sched_waking);
- 
- 	da_monitor_destroy_wip();
- }
- 
--/*
-- * This is the monitor register section.
-- */
- struct rv_monitor rv_wip = {
- 	.name = "wip",
--	.description = "auto-generated wip",
-+	.description = "wakeup in preemptive per-cpu testing monitor.",
- 	.start = start_wip,
- 	.stop = stop_wip,
- 	.reset = da_monitor_reset_all_wip,
-@@ -108,5 +87,5 @@ module_init(register_wip);
- module_exit(unregister_wip);
- 
- MODULE_LICENSE("GPL");
--MODULE_AUTHOR("dot2k: auto-generated");
--MODULE_DESCRIPTION("wip");
-+MODULE_AUTHOR("Daniel Bristot de Oliveira <bristot@kernel.org>");
-+MODULE_DESCRIPTION("wip: wakeup in preemptive - per-cpu sample monitor.");
-diff --git a/tools/verification/models/wip.dot b/tools/verification/models/wip.dot
+ obj-$(CONFIG_RV_MON_WIP) += monitors/wip/wip.o
++obj-$(CONFIG_RV_MON_WWNR) += monitors/wwnr/wwnr.o
+diff --git a/kernel/trace/rv/monitors/wwnr/wwnr.c b/kernel/trace/rv/monitors/wwnr/wwnr.c
 new file mode 100644
-index 000000000000..2a53a9700a89
+index 000000000000..77b4692b3a5a
 --- /dev/null
-+++ b/tools/verification/models/wip.dot
++++ b/kernel/trace/rv/monitors/wwnr/wwnr.c
+@@ -0,0 +1,90 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/ftrace.h>
++#include <linux/tracepoint.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/rv.h>
++#include <rv/instrumentation.h>
++#include <rv/da_monitor.h>
++
++#define MODULE_NAME "wwnr"
++
++#include <trace/events/rv.h>
++#include <trace/events/sched.h>
++
++#include "wwnr.h"
++
++struct rv_monitor rv_wwnr;
++DECLARE_DA_MON_PER_TASK(wwnr, unsigned char);
++
++static void handle_switch(void *data, bool preempt, struct task_struct *p,
++			  struct task_struct *n, unsigned int prev_state)
++{
++	/* start monitoring only after the first suspension */
++	if (prev_state == TASK_INTERRUPTIBLE)
++		da_handle_init_event_wwnr(p, switch_out_wwnr);
++	else
++		da_handle_event_wwnr(p, switch_out_wwnr);
++
++	da_handle_event_wwnr(n, switch_in_wwnr);
++}
++
++static void handle_wakeup(void *data, struct task_struct *p)
++{
++	da_handle_event_wwnr(p, wakeup_wwnr);
++}
++
++static int start_wwnr(void)
++{
++	int retval;
++
++	retval = da_monitor_init_wwnr();
++	if (retval)
++		return retval;
++
++	rv_attach_trace_probe("wwnr", sched_switch, handle_switch);
++	rv_attach_trace_probe("wwnr", sched_wakeup, handle_wakeup);
++
++	return 0;
++}
++
++static void stop_wwnr(void)
++{
++	rv_wwnr.enabled = 0;
++
++	rv_detach_trace_probe("wwnr", sched_switch, handle_switch);
++	rv_detach_trace_probe("wwnr", sched_wakeup, handle_wakeup);
++
++	da_monitor_destroy_wwnr();
++}
++
++struct rv_monitor rv_wwnr = {
++	.name = "wwnr",
++	.description = "wakeup while not running per-task testing model.",
++	.start = start_wwnr,
++	.stop = stop_wwnr,
++	.reset = da_monitor_reset_all_wwnr,
++	.enabled = 0,
++};
++
++static int register_wwnr(void)
++{
++	rv_register_monitor(&rv_wwnr);
++	return 0;
++}
++
++static void unregister_wwnr(void)
++{
++	if (rv_wwnr.enabled)
++		stop_wwnr();
++
++	rv_unregister_monitor(&rv_wwnr);
++}
++
++module_init(register_wwnr);
++module_exit(unregister_wwnr);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Daniel Bristot de Oliveira <bristot@kernel.org>");
++MODULE_DESCRIPTION("wwnr: wakeup while not running monitor");
+diff --git a/kernel/trace/rv/monitors/wwnr/wwnr.h b/kernel/trace/rv/monitors/wwnr/wwnr.h
+new file mode 100644
+index 000000000000..d1afe55cdd4c
+--- /dev/null
++++ b/kernel/trace/rv/monitors/wwnr/wwnr.h
+@@ -0,0 +1,46 @@
++/*
++ * Automatically generated C representation of wwnr automaton
++ * For further information about this format, see kernel documentation:
++ *   Documentation/trace/rv/deterministic_automata.rst
++ */
++
++enum states_wwnr {
++	not_running_wwnr = 0,
++	running_wwnr,
++	state_max_wwnr
++};
++
++#define INVALID_STATE state_max_wwnr
++
++enum events_wwnr {
++	switch_in_wwnr = 0,
++	switch_out_wwnr,
++	wakeup_wwnr,
++	event_max_wwnr
++};
++
++struct automaton_wwnr {
++	char *state_names[state_max_wwnr];
++	char *event_names[event_max_wwnr];
++	unsigned char function[state_max_wwnr][event_max_wwnr];
++	unsigned char initial_state;
++	bool final_states[state_max_wwnr];
++};
++
++struct automaton_wwnr automaton_wwnr = {
++	.state_names = {
++		"not_running",
++		"running"
++	},
++	.event_names = {
++		"switch_in",
++		"switch_out",
++		"wakeup"
++	},
++	.function = {
++		{       running_wwnr,      INVALID_STATE,   not_running_wwnr },
++		{      INVALID_STATE,   not_running_wwnr,      INVALID_STATE },
++	},
++	.initial_state = not_running_wwnr,
++	.final_states = { 1, 0 },
++};
+diff --git a/tools/verification/models/wwnr.dot b/tools/verification/models/wwnr.dot
+new file mode 100644
+index 000000000000..1b206e83129c
+--- /dev/null
++++ b/tools/verification/models/wwnr.dot
 @@ -0,0 +1,16 @@
 +digraph state_automaton {
-+	{node [shape = circle] "non_preemptive"};
-+	{node [shape = plaintext, style=invis, label=""] "__init_preemptive"};
-+	{node [shape = doublecircle] "preemptive"};
-+	{node [shape = circle] "preemptive"};
-+	"__init_preemptive" -> "preemptive";
-+	"non_preemptive" [label = "non_preemptive"];
-+	"non_preemptive" -> "non_preemptive" [ label = "sched_waking" ];
-+	"non_preemptive" -> "preemptive" [ label = "preempt_enable" ];
-+	"preemptive" [label = "preemptive"];
-+	"preemptive" -> "non_preemptive" [ label = "preempt_disable" ];
++	{node [shape = plaintext, style=invis, label=""] "__init_not_running"};
++	{node [shape = ellipse] "not_running"};
++	{node [shape = plaintext] "not_running"};
++	{node [shape = plaintext] "running"};
++	"__init_not_running" -> "not_running";
++	"not_running" [label = "not_running", color = green3];
++	"not_running" -> "not_running" [ label = "wakeup" ];
++	"not_running" -> "running" [ label = "switch_in" ];
++	"running" [label = "running"];
++	"running" -> "not_running" [ label = "switch_out" ];
 +	{ rank = min ;
-+		"__init_preemptive";
-+		"preemptive";
++		"__init_not_running";
++		"not_running";
 +	}
 +}
 -- 

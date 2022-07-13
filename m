@@ -2,95 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9DE573499
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF815734C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234859AbiGMKuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 06:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
+        id S235989AbiGMK50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232641AbiGMKuR (ORCPT
+        with ESMTP id S235895AbiGMK5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 06:50:17 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BFAF54D1;
-        Wed, 13 Jul 2022 03:50:16 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id y3so10459706iof.4;
-        Wed, 13 Jul 2022 03:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2RqjFJExuIYZwBX8Yxs9/9nbKJpcdKItijbRYCGkX2s=;
-        b=dnoDadG8MXcw9eHxsc3hJ9Qg7TVGOlZpaqIGW7EjMfC5YAySdk8Sfsy+BCTZvZfHZF
-         6F5R3PUs6xVBMX8U4fOF+ehi7Oa0jipiRTmN4z2NJdOM0S6oEt0QJLGbKF9hkzdm1RTi
-         Jtnl9M19+rpFpUB+7C6VN8qgoKXjP/whBMnjyeMZSVhCNNxv2aTRfAfS38W/eiQ8HF/9
-         82/mvP1xm5qOgigqfCQDtyQnUAyh1ErBP8A4lBYeqR3nwtYEubEYIuukvkjnMOw+r51p
-         8A+iV6isn/7vbJzCkCcB2w33+5OX+ZHgphMXBnEnsZn9M4Li6b8YgmNMwu6fplvljF8j
-         lu7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2RqjFJExuIYZwBX8Yxs9/9nbKJpcdKItijbRYCGkX2s=;
-        b=npP6UU2jgwGqPh/vIyeAkUTJNjmB4zKwkNf2nei/qfxzCRw0lQLYOkxPq02NUi9vwu
-         vbmHy+rLqEHc1DgZL4y7LbziCSaOFh2TyAdbagdjUGLwbcRdLxUw0+d4toT5Pl5Hkc3k
-         FCwp1uMhYJgaVw/8vmMjwDMzer8j9oUunAN9axlMqMtv4R7Y+tjb0rfB7zTGR+jxMjo+
-         szZM52DR8rGr47KKlALk/oVT881aT7c03nNQPj82+8r2cAPh4wJU53uGHabGeSjt3kn0
-         eCwkyy5knucTgJibCiOipXwObItsYhCqKSNjJo+8ccFrCAupTA2pYKVNOEUDowgM2IIp
-         NmvQ==
-X-Gm-Message-State: AJIora+DvrOaZmjsripjbWC57oPplBRHjoMRC7eBwC3t7cp7nyi5xrZd
-        SWqLedL6mjh4uozG2dIeQQfRHr5yNKhTYytUI1c=
-X-Google-Smtp-Source: AGRyM1sF37Py8y1nJDd5RhUQ4GVwZ7NBf4NQmFJl+cV2BICHgfELgLuTa4XQ32p3GSml8jKytJUg0LflnFPRWfpBWM4=
-X-Received: by 2002:a05:6638:25d3:b0:33f:3c9b:24fb with SMTP id
- u19-20020a05663825d300b0033f3c9b24fbmr1546316jat.308.1657709416265; Wed, 13
- Jul 2022 03:50:16 -0700 (PDT)
+        Wed, 13 Jul 2022 06:57:25 -0400
+X-Greylist: delayed 14977 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Jul 2022 03:57:23 PDT
+Received: from 16.mo561.mail-out.ovh.net (16.mo561.mail-out.ovh.net [188.165.56.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A1BFF5B2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:57:23 -0700 (PDT)
+Received: from player755.ha.ovh.net (unknown [10.109.156.29])
+        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 71A3B243A6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:51:10 +0000 (UTC)
+Received: from RCM-web6.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
+        (Authenticated sender: rafal@milecki.pl)
+        by player755.ha.ovh.net (Postfix) with ESMTPSA id 137262CA9DA91;
+        Wed, 13 Jul 2022 10:50:56 +0000 (UTC)
 MIME-Version: 1.0
-References: <20220713203409.559c5464@canb.auug.org.au>
-In-Reply-To: <20220713203409.559c5464@canb.auug.org.au>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 13 Jul 2022 12:50:05 +0200
-Message-ID: <CANiq72kGpadW4o8QPc9khGiGmJgirT6BgzTKoF=px9YQQN-ojw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Borislav Petkov <bp@suse.de>, Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        David Gow <davidgow@google.com>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Cano <macanroj@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 13 Jul 2022 12:50:55 +0200
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        kursad.oney@broadcom.com, anand.gore@broadcom.com,
+        dan.beygelman@broadcom.com, f.fainelli@gmail.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        joel.peshkin@broadcom.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/3] dt-bindings: arm64: bcmbca: Merge BCM4908 into
+ BCMBCA
+In-Reply-To: <6efb1cfe-6129-276a-eeb3-44147304d211@broadcom.com>
+References: <20220712021144.7068-1-william.zhang@broadcom.com>
+ <20220712021144.7068-2-william.zhang@broadcom.com>
+ <ca8c3003-1bcb-6658-592c-566609fd7bd2@linaro.org>
+ <94b0ab39-279d-d3c2-98a4-054c10ad041c@broadcom.com>
+ <c40f20c7-59ee-99f4-9a11-e928b41eda9f@linaro.org>
+ <6efb1cfe-6129-276a-eeb3-44147304d211@broadcom.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e4356c5e89492eb690e3dc863ba281bd@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Ovh-Tracer-Id: 11789860877335440347
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudejjedgfedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeegvdffjeelvdeggeetheegveejieetgeeiiefggeelveejffehieekhfduueelhfenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejheehrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedu
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On 2022-07-13 02:57, William Zhang wrote:
+> On 7/12/22 11:18, Krzysztof Kozlowski wrote:
+>> On 12/07/2022 19:37, William Zhang wrote:
+>>>>> +      - description: BCM4908 Family based boards
+>>>>> +        items:
+>>>>> +          - enum:
+>>>>> +              # BCM4908 SoC based boards
+>>>>> +              - brcm,bcm94908
+>>>>> +              - asus,gt-ac5300
+>>>>> +              - netgear,raxe500
+>>>>> +              # BCM4906 SoC based boards
+>>>>> +              - brcm,bcm94906
+>>>>> +              - netgear,r8000p
+>>>>> +              - tplink,archer-c2300-v1
+>>>>> +          - enum:
+>>>>> +              - brcm,bcm4908
+>>>>> +              - brcm,bcm4906
+>>>>> +              - brcm,bcm49408
+>>>> 
+>>>> This is wrong.  brcm,bcm94908 followed by brcm,bcm4906 does not look
+>>>> like valid list of compatibles.
+>>>> 
+>>> For 4908 board variant, it will need to be followed by 4908 chip. 
+>>> Sorry
+>>> for the basic question but is there any requirement to enforce this 
+>>> kind
+>>> of rule?  I would assume dts writer know what he/she is doing and 
+>>> select
+>>> the right combination.
+>> 
+>> The entire point of DT schema is to validate DTS. Combination like 
+>> above
+>> prevents that goal.
+>> 
+>> Best regards,
+>> Krzysztof
+> Understand the DT schema purpose. But items property allows multiple
+> enums in the list which gives a lot of flexibility but make it hard to
+> validate. I am not familiar with DT schema, is there any directive to
+> specify one enum value depending on another so dts validation tool can
+> report error if combination is wrong?
+> 
+> This is our preferred format of all bcmbca compatible string
+> especially when we could have more than 10 chip variants for the same
+> chip family and we really want to work on the chip family id.  We will
+> make sure they are in the right combination in our own patch and patch
+> from other contributors. Would this work? If not, I will probably have
+> to revert the change of 4908(maybe append brcm,bcmbca as this chip
+> belongs to the same bca group) and use "enum board variant", "const
+> main chip id", "brcm,bca" for all other chips as our secondary choice.
 
-On Wed, Jul 13, 2022 at 12:34 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Today's linux-next merge of the rust tree got a conflict in:
->
->   arch/x86/Makefile
+I'm not sure why I didn't even receive 1/3 and half of discussion
+e-mails.
 
-Thank you, looks good to me.
+You can't just put all strings into a single bag and allow mixing them
+in any combos. Please check how it's properly handled in the current
+existing binding:
+Documentation/devicetree/bindings/arm/bcm/brcm,bcm4908.yaml
 
-Cheers,
-Miguel
+Above binding enforces that non-matching compatible strings are not used
+together.

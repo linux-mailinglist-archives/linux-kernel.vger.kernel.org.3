@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F23573151
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1D8573152
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235727AbiGMIkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        id S235607AbiGMIkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235722AbiGMIke (ORCPT
+        with ESMTP id S234703AbiGMIkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:40:34 -0400
+        Wed, 13 Jul 2022 04:40:37 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF935E3C3F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:40:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9801AE529D
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:40:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657701632; x=1689237632;
+  t=1657701636; x=1689237636;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ZK6DkasljSymevGDQf2xTVIgQQLs+cXDTG/ii+RxWjc=;
-  b=BcLKO2m52paVXzvxOE4P8mKRg7LAURfAP/ssw7k87bh0BtbOpCumZpdr
-   OhYG6RkyIcBfa6YSRkkpcG+i2ESt0kGeenxpQBPXd9QNe5N8FU6Iy4wgN
-   ZJYa+jGmdfki08sqh1aXuHwh4XoeZXn/5KzSkKdpp8rfJB+LZc0lckBQO
-   FSHRGeAs9Xa+F7SPYH8u4+k2P29SiqgZlxh8fCVE+ruuUqpiTbytXGe4h
-   HGP0800XflqGBOxKQfvhzl+kIE4vUVJItviz3LVPmjtotqTexC5pPo0tK
-   yO2FrYXpZAkiNK0r3v2Jef5QAz2IzrA33wmytKpcUmEA2qToJ/23rj5DF
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="265563068"
+  bh=vUd05dvyBiM84Ezjr6E/K54uJBFgUb38qWnD0JwjrJs=;
+  b=gEC9Eysj8UoFV0fz3SrW7yZEyDH/d4NRUr6jWJh9yqKwliHi2lO7W3qD
+   4AoOgzLxWefppfc46QKdlqp04+u4S+Yh98pAfIHbxJBvRPVVnc0/PYsHQ
+   CLp7Cwwxu8tRik+bKVcD9umNzOH5hLdfOOymJn3xVxM1/94/AqqA8zANM
+   ht3KQEkXNXZB/9/ckJuB2yjKihKtSW+CNmKuK81WmnvsQuxTOKFkPhDyy
+   5pF4ungQX1g6KX/O3lmexN3anTDEtqYlnYkNUK2vx4euairosVJQIB7rk
+   T2W5qsYkWlY0vwOzb4rh6MRx3817VtHi59lzHjhr9XrW7W2BJHJZQI5wz
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="265563078"
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="265563068"
+   d="scan'208";a="265563078"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 01:40:32 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 01:40:36 -0700
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="653284462"
+   d="scan'208";a="653284485"
 Received: from yijunwa1-mobl.ccr.corp.intel.com (HELO yhuang6-mobl1.ccr.corp.intel.com) ([10.254.215.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 01:40:28 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 01:40:32 -0700
 From:   Huang Ying <ying.huang@intel.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -52,9 +52,9 @@ Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
         Shakeel Butt <shakeelb@google.com>,
         Zhong Jiang <zhongjiang-ali@linux.alibaba.com>
-Subject: [PATCH -V4 RESEND 1/3] memory tiering: hot page selection with hint page fault latency
-Date:   Wed, 13 Jul 2022 16:39:51 +0800
-Message-Id: <20220713083954.34196-2-ying.huang@intel.com>
+Subject: [PATCH -V4 RESEND 2/3] memory tiering: rate limit NUMA migration throughput
+Date:   Wed, 13 Jul 2022 16:39:52 +0800
+Message-Id: <20220713083954.34196-3-ying.huang@intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220713083954.34196-1-ying.huang@intel.com>
 References: <20220713083954.34196-1-ying.huang@intel.com>
@@ -70,77 +70,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To optimize page placement in a memory tiering system with NUMA
-balancing, the hot pages in the slow memory node need to be
-identified.  Essentially, the original NUMA balancing implementation
-selects the mostly recently accessed (MRU) pages to promote.  But this
-isn't a perfect algorithm to identify the hot pages.  Because the
-pages with quite low access frequency may be accessed eventually given
-the NUMA balancing page table scanning period could be quite
-long (e.g. 60 seconds).  The most frequently accessed (MFU) algorithm
-is better.
+In NUMA balancing memory tiering mode, if there are hot pages in slow
+memory node and cold pages in fast memory node, we need to
+promote/demote hot/cold pages between the fast and cold memory nodes.
 
-So, in this patch we implemented a better hot page selection
-algorithm.  Which is based on NUMA balancing page table scanning and
-hint page fault as follows,
+A choice is to promote/demote as fast as possible.  But the CPU cycles
+and memory bandwidth consumed by the high promoting/demoting
+throughput will hurt the latency of some workload because of accessing
+inflating and slow memory bandwidth contention.
 
-- When the page tables of the processes are scanned to change PTE/PMD
-  to be PROT_NONE, the current time is recorded in struct page as scan
-  time.
+A way to resolve this issue is to restrict the max promoting/demoting
+throughput.  It will take longer to finish the promoting/demoting.
+But the workload latency will be better.  This is implemented in this
+patch as the page promotion rate limit mechanism.
 
-- When the page is accessed, hint page fault will occur.  The scan
-  time is gotten from the struct page.  And The hint page fault
-  latency is defined as
+The number of the candidate pages to be promoted to the fast memory
+node via NUMA balancing is counted, if the count exceeds the limit
+specified by the users, the NUMA balancing promotion will be stopped
+until the next second.
 
-    hint page fault time - scan time
-
-The shorter the hint page fault latency of a page is, the higher the
-probability of their access frequency to be higher.  So the hint page
-fault latency is a better estimation of the page hot/cold.
-
-It's hard to find some extra space in struct page to hold the scan
-time.  Fortunately, we can reuse some bits used by the original NUMA
-balancing.
-
-NUMA balancing uses some bits in struct page to store the page
-accessing CPU and PID (referring to page_cpupid_xchg_last()).  Which
-is used by the multi-stage node selection algorithm to avoid to
-migrate pages shared accessed by the NUMA nodes back and forth.  But
-for pages in the slow memory node, even if they are shared accessed by
-multiple NUMA nodes, as long as the pages are hot, they need to be
-promoted to the fast memory node.  So the accessing CPU and PID
-information are unnecessary for the slow memory pages.  We can reuse
-these bits in struct page to record the scan time.  For the fast
-memory pages, these bits are used as before.
-
-For the hot threshold, the default value is 1 second, which works well
-in our performance test.  All pages with hint page fault latency < hot
-threshold will be considered hot.
-
-It's hard for users to determine the hot threshold.  So we don't
-provide a kernel ABI to set it, just provide a debugfs interface for
-advanced users to experiment.  We will continue to work on a hot
-threshold automatic adjustment mechanism.
-
-The downside of the above method is that the response time to the
-workload hot spot changing may be much longer.  For example,
-
-- A previous cold memory area becomes hot
-
-- The hint page fault will be triggered.  But the hint page fault
-  latency isn't shorter than the hot threshold.  So the pages will
-  not be promoted.
-
-- When the memory area is scanned again, maybe after a scan period,
-  the hint page fault latency measured will be shorter than the hot
-  threshold and the pages will be promoted.
-
-To mitigate this, if there are enough free space in the fast memory
-node, the hot threshold will not be used, all pages will be promoted
-upon the hint page fault for fast response.
-
-Thanks Zhong Jiang reported and tested the fix for a bug when
-disabling memory tiering mode dynamically.
+A new sysctl knob kernel.numa_balancing_promote_rate_limit_MBps is
+added for the users to specify the limit.
 
 Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
 Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
@@ -161,364 +111,169 @@ Cc: Zhong Jiang <zhongjiang-ali@linux.alibaba.com>
 Cc: linux-kernel@vger.kernel.org
 Cc: linux-mm@kvack.org
 ---
- include/linux/mm.h   | 25 +++++++++++
- kernel/sched/debug.c |  1 +
- kernel/sched/fair.c  | 99 ++++++++++++++++++++++++++++++++++++++++++++
- kernel/sched/sched.h |  1 +
- mm/huge_memory.c     | 17 ++++++--
- mm/memory.c          | 11 ++++-
- mm/migrate.c         | 12 ++++++
- mm/mprotect.c        |  8 +++-
- 8 files changed, 169 insertions(+), 5 deletions(-)
+ Documentation/admin-guide/sysctl/kernel.rst | 11 +++++++
+ include/linux/mmzone.h                      |  7 +++++
+ include/linux/sched/sysctl.h                |  1 +
+ kernel/sched/fair.c                         | 33 +++++++++++++++++++--
+ kernel/sysctl.c                             |  8 +++++
+ mm/vmstat.c                                 |  1 +
+ 6 files changed, 59 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index cf3d0d673f6b..5ad465f5e830 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1311,6 +1311,18 @@ static inline int folio_nid(const struct folio *folio)
- }
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index ddccd1077462..c99bceafd162 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -623,6 +623,17 @@ different types of memory (represented as different NUMA nodes) to
+ place the hot pages in the fast memory.  This is implemented based on
+ unmapping and page fault too.
  
++numa_balancing_promote_rate_limit_MBps
++======================================
++
++Too high promotion/demotion throughput between different memory types
++may hurt application latency.  This can be used to rate limit the
++promotion throughput.  The per-node max promotion throughput in MB/s
++will be limited to be no more than the set value.
++
++A rule of thumb is to set this to less than 1/10 of the PMEM node
++write bandwidth.
++
+ oops_all_cpu_backtrace
+ ======================
+ 
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index aab70355d64f..994a0cd39595 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -221,6 +221,7 @@ enum node_stat_item {
+ #endif
  #ifdef CONFIG_NUMA_BALANCING
-+/* page access time bits needs to hold at least 4 seconds */
-+#define PAGE_ACCESS_TIME_MIN_BITS	12
-+#if LAST_CPUPID_SHIFT < PAGE_ACCESS_TIME_MIN_BITS
-+#define PAGE_ACCESS_TIME_BUCKETS				\
-+	(PAGE_ACCESS_TIME_MIN_BITS - LAST_CPUPID_SHIFT)
-+#else
-+#define PAGE_ACCESS_TIME_BUCKETS	0
-+#endif
-+
-+#define PAGE_ACCESS_TIME_MASK				\
-+	(LAST_CPUPID_MASK << PAGE_ACCESS_TIME_BUCKETS)
-+
- static inline int cpu_pid_to_cpupid(int cpu, int pid)
- {
- 	return ((cpu & LAST__CPU_MASK) << LAST__PID_SHIFT) | (pid & LAST__PID_MASK);
-@@ -1374,12 +1386,25 @@ static inline void page_cpupid_reset_last(struct page *page)
- 	page->flags |= LAST_CPUPID_MASK << LAST_CPUPID_PGSHIFT;
- }
- #endif /* LAST_CPUPID_NOT_IN_PAGE_FLAGS */
-+
-+static inline int xchg_page_access_time(struct page *page, int time)
-+{
-+	int last_time;
-+
-+	last_time = page_cpupid_xchg_last(page, time >> PAGE_ACCESS_TIME_BUCKETS);
-+	return last_time << PAGE_ACCESS_TIME_BUCKETS;
-+}
- #else /* !CONFIG_NUMA_BALANCING */
- static inline int page_cpupid_xchg_last(struct page *page, int cpupid)
- {
- 	return page_to_nid(page); /* XXX */
- }
- 
-+static inline int xchg_page_access_time(struct page *page, int time)
-+{
-+	return 0;
-+}
-+
- static inline int page_cpupid_last(struct page *page)
- {
- 	return page_to_nid(page); /* XXX */
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index bb3d63bdf4ae..ad63dbfc54f1 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -333,6 +333,7 @@ static __init int sched_init_debug(void)
- 	debugfs_create_u32("scan_period_min_ms", 0644, numa, &sysctl_numa_balancing_scan_period_min);
- 	debugfs_create_u32("scan_period_max_ms", 0644, numa, &sysctl_numa_balancing_scan_period_max);
- 	debugfs_create_u32("scan_size_mb", 0644, numa, &sysctl_numa_balancing_scan_size);
-+	debugfs_create_u32("hot_threshold_ms", 0644, numa, &sysctl_numa_balancing_hot_threshold);
+ 	PGPROMOTE_SUCCESS,	/* promote successfully */
++	PGPROMOTE_CANDIDATE,	/* candidate pages to promote */
+ #endif
+ 	NR_VM_NODE_STAT_ITEMS
+ };
+@@ -912,6 +913,12 @@ typedef struct pglist_data {
+ 	struct deferred_split deferred_split_queue;
  #endif
  
- 	debugfs_create_file("debug", 0444, debugfs_sched, NULL, &sched_debug_fops);
++#ifdef CONFIG_NUMA_BALANCING
++	/* start time in ms of current promote rate limit period */
++	unsigned int nbp_rl_start;
++	/* number of promote candidate pages at start time of current rate limit period */
++	unsigned long nbp_rl_nr_cand;
++#endif
+ 	/* Fields commonly accessed by the page reclaim scanner */
+ 
+ 	/*
+diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
+index e650946816d0..303ee7dd0c7e 100644
+--- a/include/linux/sched/sysctl.h
++++ b/include/linux/sched/sysctl.h
+@@ -27,6 +27,7 @@ enum sched_tunable_scaling {
+ 
+ #ifdef CONFIG_NUMA_BALANCING
+ extern int sysctl_numa_balancing_mode;
++extern unsigned int sysctl_numa_balancing_promote_rate_limit;
+ #else
+ #define sysctl_numa_balancing_mode	0
+ #endif
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 77b2048a9326..edc3d741ef84 100644
+index edc3d741ef84..d779a91a8ca0 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -1070,6 +1070,9 @@ unsigned int sysctl_numa_balancing_scan_size = 256;
- /* Scan @scan_size MB every @scan_period after an initial @scan_delay in ms */
- unsigned int sysctl_numa_balancing_scan_delay = 1000;
+@@ -1073,6 +1073,9 @@ unsigned int sysctl_numa_balancing_scan_delay = 1000;
+ /* The page with hint page fault latency < threshold in ms is considered hot */
+ unsigned int sysctl_numa_balancing_hot_threshold = MSEC_PER_SEC;
  
-+/* The page with hint page fault latency < threshold in ms is considered hot */
-+unsigned int sysctl_numa_balancing_hot_threshold = MSEC_PER_SEC;
++/* Restrict the NUMA promotion throughput (MB/s) for each target node. */
++unsigned int sysctl_numa_balancing_promote_rate_limit = 65536;
 +
  struct numa_group {
  	refcount_t refcount;
  
-@@ -1412,6 +1415,68 @@ static inline unsigned long group_weight(struct task_struct *p, int nid,
- 	return 1000 * faults / total_faults;
+@@ -1477,6 +1480,29 @@ static int numa_hint_fault_latency(struct page *page)
+ 	return (time - last_time) & PAGE_ACCESS_TIME_MASK;
  }
  
 +/*
-+ * If memory tiering mode is enabled, cpupid of slow memory page is
-+ * used to record scan time instead of CPU and PID.  When tiering mode
-+ * is disabled at run time, the scan time (in cpupid) will be
-+ * interpreted as CPU and PID.  So CPU needs to be checked to avoid to
-+ * access out of array bound.
++ * For memory tiering mode, too high promotion/demotion throughput may
++ * hurt application latency.  So we provide a mechanism to rate limit
++ * the number of pages that are tried to be promoted.
 + */
-+static inline bool cpupid_valid(int cpupid)
++static bool numa_promotion_rate_limit(struct pglist_data *pgdat,
++				      unsigned long rate_limit, int nr)
 +{
-+	return cpupid_to_cpu(cpupid) < nr_cpu_ids;
-+}
++	unsigned long nr_cand;
++	unsigned int now, start;
 +
-+/*
-+ * For memory tiering mode, if there are enough free pages (more than
-+ * enough watermark defined here) in fast memory node, to take full
-+ * advantage of fast memory capacity, all recently accessed slow
-+ * memory pages will be migrated to fast memory node without
-+ * considering hot threshold.
-+ */
-+static bool pgdat_free_space_enough(struct pglist_data *pgdat)
-+{
-+	int z;
-+	unsigned long enough_wmark;
-+
-+	enough_wmark = max(1UL * 1024 * 1024 * 1024 >> PAGE_SHIFT,
-+			   pgdat->node_present_pages >> 4);
-+	for (z = pgdat->nr_zones - 1; z >= 0; z--) {
-+		struct zone *zone = pgdat->node_zones + z;
-+
-+		if (!populated_zone(zone))
-+			continue;
-+
-+		if (zone_watermark_ok(zone, 0,
-+				      wmark_pages(zone, WMARK_PROMO) + enough_wmark,
-+				      ZONE_MOVABLE, 0))
-+			return true;
-+	}
++	now = jiffies_to_msecs(jiffies);
++	mod_node_page_state(pgdat, PGPROMOTE_CANDIDATE, nr);
++	nr_cand = node_page_state(pgdat, PGPROMOTE_CANDIDATE);
++	start = pgdat->nbp_rl_start;
++	if (now - start > MSEC_PER_SEC &&
++	    cmpxchg(&pgdat->nbp_rl_start, start, now) == start)
++		pgdat->nbp_rl_nr_cand = nr_cand;
++	if (nr_cand - pgdat->nbp_rl_nr_cand >= rate_limit)
++		return true;
 +	return false;
-+}
-+
-+/*
-+ * For memory tiering mode, when page tables are scanned, the scan
-+ * time will be recorded in struct page in addition to make page
-+ * PROT_NONE for slow memory page.  So when the page is accessed, in
-+ * hint page fault handler, the hint page fault latency is calculated
-+ * via,
-+ *
-+ *	hint page fault latency = hint page fault time - scan time
-+ *
-+ * The smaller the hint page fault latency, the higher the possibility
-+ * for the page to be hot.
-+ */
-+static int numa_hint_fault_latency(struct page *page)
-+{
-+	int last_time, time;
-+
-+	time = jiffies_to_msecs(jiffies);
-+	last_time = xchg_page_access_time(page, time);
-+
-+	return (time - last_time) & PAGE_ACCESS_TIME_MASK;
 +}
 +
  bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
  				int src_nid, int dst_cpu)
  {
-@@ -1419,9 +1484,34 @@ bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
- 	int dst_nid = cpu_to_node(dst_cpu);
- 	int last_cpupid, this_cpupid;
+@@ -1491,7 +1517,7 @@ bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
+ 	if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
+ 	    !node_is_toptier(src_nid)) {
+ 		struct pglist_data *pgdat;
+-		unsigned long latency, th;
++		unsigned long rate_limit, latency, th;
  
-+	/*
-+	 * The pages in slow memory node should be migrated according
-+	 * to hot/cold instead of private/shared.
-+	 */
-+	if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
-+	    !node_is_toptier(src_nid)) {
-+		struct pglist_data *pgdat;
-+		unsigned long latency, th;
-+
-+		pgdat = NODE_DATA(dst_nid);
-+		if (pgdat_free_space_enough(pgdat))
-+			return true;
-+
-+		th = sysctl_numa_balancing_hot_threshold;
-+		latency = numa_hint_fault_latency(page);
-+		if (latency >= th)
-+			return false;
-+
-+		return true;
-+	}
-+
+ 		pgdat = NODE_DATA(dst_nid);
+ 		if (pgdat_free_space_enough(pgdat))
+@@ -1502,7 +1528,10 @@ bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
+ 		if (latency >= th)
+ 			return false;
+ 
+-		return true;
++		rate_limit = sysctl_numa_balancing_promote_rate_limit << \
++			(20 - PAGE_SHIFT);
++		return !numa_promotion_rate_limit(pgdat, rate_limit,
++						  thp_nr_pages(page));
+ 	}
+ 
  	this_cpupid = cpu_pid_to_cpupid(dst_cpu, current->pid);
- 	last_cpupid = page_cpupid_xchg_last(page, this_cpupid);
- 
-+	if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
-+	    !node_is_toptier(src_nid) && !cpupid_valid(last_cpupid))
-+		return false;
-+
- 	/*
- 	 * Allow first faults or private faults to migrate immediately early in
- 	 * the lifetime of a task. The magic number 4 is based on waiting for
-@@ -2654,6 +2744,15 @@ void task_numa_fault(int last_cpupid, int mem_node, int pages, int flags)
- 	if (!p->mm)
- 		return;
- 
-+	/*
-+	 * NUMA faults statistics are unnecessary for the slow memory
-+	 * node for memory tiering mode.
-+	 */
-+	if (!node_is_toptier(mem_node) &&
-+	    (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING ||
-+	     !cpupid_valid(last_cpupid)))
-+		return;
-+
- 	/* Allocate buffer to track faults on a per-node basis */
- 	if (unlikely(!p->numa_faults)) {
- 		int size = sizeof(*p->numa_faults) *
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 47b89a0fc6e5..64a7f15be0e3 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2411,6 +2411,7 @@ extern unsigned int sysctl_numa_balancing_scan_delay;
- extern unsigned int sysctl_numa_balancing_scan_period_min;
- extern unsigned int sysctl_numa_balancing_scan_period_max;
- extern unsigned int sysctl_numa_balancing_scan_size;
-+extern unsigned int sysctl_numa_balancing_hot_threshold;
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index e52b6e372c60..3188698e2c8e 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1597,6 +1597,14 @@ static struct ctl_table kern_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_FOUR,
+ 	},
++	{
++		.procname	= "numa_balancing_promote_rate_limit_MBps",
++		.data		= &sysctl_numa_balancing_promote_rate_limit,
++		.maxlen		= sizeof(unsigned int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO,
++	},
+ #endif /* CONFIG_NUMA_BALANCING */
+ 	{
+ 		.procname	= "panic",
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index 373d2730fcf2..068ca7d150ab 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -1245,6 +1245,7 @@ const char * const vmstat_text[] = {
+ #endif
+ #ifdef CONFIG_NUMA_BALANCING
+ 	"pgpromote_success",
++	"pgpromote_candidate",
  #endif
  
- #ifdef CONFIG_SCHED_HRTICK
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 834f288b3769..6f9831ae10fe 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1410,7 +1410,7 @@ vm_fault_t do_huge_pmd_numa_page(struct vm_fault *vmf)
- 	struct page *page;
- 	unsigned long haddr = vmf->address & HPAGE_PMD_MASK;
- 	int page_nid = NUMA_NO_NODE;
--	int target_nid, last_cpupid = -1;
-+	int target_nid, last_cpupid = (-1 & LAST_CPUPID_MASK);
- 	bool migrated = false;
- 	bool was_writable = pmd_savedwrite(oldpmd);
- 	int flags = 0;
-@@ -1431,7 +1431,12 @@ vm_fault_t do_huge_pmd_numa_page(struct vm_fault *vmf)
- 		flags |= TNF_NO_GROUP;
- 
- 	page_nid = page_to_nid(page);
--	last_cpupid = page_cpupid_last(page);
-+	/*
-+	 * For memory tiering mode, cpupid of slow memory page is used
-+	 * to record page access time.  So use default value.
-+	 */
-+	if (node_is_toptier(page_nid))
-+		last_cpupid = page_cpupid_last(page);
- 	target_nid = numa_migrate_prep(page, vma, haddr, page_nid,
- 				       &flags);
- 
-@@ -1755,6 +1760,7 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 
- 	if (prot_numa) {
- 		struct page *page;
-+		bool toptier;
- 		/*
- 		 * Avoid trapping faults against the zero page. The read-only
- 		 * data is likely to be read-cached on the local CPU and
-@@ -1767,13 +1773,18 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 			goto unlock;
- 
- 		page = pmd_page(*pmd);
-+		toptier = node_is_toptier(page_to_nid(page));
- 		/*
- 		 * Skip scanning top tier node if normal numa
- 		 * balancing is disabled
- 		 */
- 		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_NORMAL) &&
--		    node_is_toptier(page_to_nid(page)))
-+		    toptier)
- 			goto unlock;
-+
-+		if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
-+		    !toptier)
-+			xchg_page_access_time(page, jiffies_to_msecs(jiffies));
- 	}
- 	/*
- 	 * In case prot_numa, we are under mmap_read_lock(mm). It's critical
-diff --git a/mm/memory.c b/mm/memory.c
-index 3383d3530a4f..c1dac8095880 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -74,6 +74,7 @@
- #include <linux/perf_event.h>
- #include <linux/ptrace.h>
- #include <linux/vmalloc.h>
-+#include <linux/sched/sysctl.h>
- 
- #include <trace/events/kmem.h>
- 
-@@ -4726,8 +4727,16 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
- 	if (page_mapcount(page) > 1 && (vma->vm_flags & VM_SHARED))
- 		flags |= TNF_SHARED;
- 
--	last_cpupid = page_cpupid_last(page);
- 	page_nid = page_to_nid(page);
-+	/*
-+	 * For memory tiering mode, cpupid of slow memory page is used
-+	 * to record page access time.  So use default value.
-+	 */
-+	if ((sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
-+	    !node_is_toptier(page_nid))
-+		last_cpupid = (-1 & LAST_CPUPID_MASK);
-+	else
-+		last_cpupid = page_cpupid_last(page);
- 	target_nid = numa_migrate_prep(page, vma, vmf->address, page_nid,
- 			&flags);
- 	if (target_nid == NUMA_NO_NODE) {
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 2ab026e305ac..1e977d45199e 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -541,6 +541,18 @@ void folio_migrate_flags(struct folio *newfolio, struct folio *folio)
- 	 * future migrations of this same page.
- 	 */
- 	cpupid = page_cpupid_xchg_last(&folio->page, -1);
-+	/*
-+	 * For memory tiering mode, when migrate between slow and fast
-+	 * memory node, reset cpupid, because that is used to record
-+	 * page access time in slow memory node.
-+	 */
-+	if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) {
-+		bool f_toptier = node_is_toptier(page_to_nid(&folio->page));
-+		bool t_toptier = node_is_toptier(page_to_nid(&newfolio->page));
-+
-+		if (f_toptier != t_toptier)
-+			cpupid = -1;
-+	}
- 	page_cpupid_xchg_last(&newfolio->page, cpupid);
- 
- 	folio_migrate_ksm(newfolio, folio);
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index ba5592655ee3..4da10376a23b 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -89,6 +89,7 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
- 			if (prot_numa) {
- 				struct page *page;
- 				int nid;
-+				bool toptier;
- 
- 				/* Avoid TLB flush if possible */
- 				if (pte_protnone(oldpte))
-@@ -118,14 +119,19 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
- 				nid = page_to_nid(page);
- 				if (target_node == nid)
- 					continue;
-+				toptier = node_is_toptier(nid);
- 
- 				/*
- 				 * Skip scanning top tier node if normal numa
- 				 * balancing is disabled
- 				 */
- 				if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_NORMAL) &&
--				    node_is_toptier(nid))
-+				    toptier)
- 					continue;
-+				if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
-+				    !toptier)
-+					xchg_page_access_time(page,
-+						jiffies_to_msecs(jiffies));
- 			}
- 
- 			oldpte = ptep_modify_prot_start(vma, addr, pte);
+ 	/* enum writeback_stat_item counters */
 -- 
 2.30.2
 

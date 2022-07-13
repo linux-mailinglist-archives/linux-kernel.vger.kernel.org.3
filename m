@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8465734A1
+	by mail.lfdr.de (Postfix) with ESMTP id D3E1B5734A2
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234846AbiGMKwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 06:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S235145AbiGMKwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiGMKwO (ORCPT
+        with ESMTP id S229941AbiGMKwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 13 Jul 2022 06:52:14 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FFEF6829;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0124F90D3;
         Wed, 13 Jul 2022 03:52:13 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 10:52:10 -0000
+Date:   Wed, 13 Jul 2022 10:52:11 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657709531;
+        s=2020; t=1657709532;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=M7xyNCWV08xgCjBtfOWIb6vnWXw98ni8zhJW1q5WDB8=;
-        b=GxpMmIzbJCwZreatIxF91xeR5FERIo1nhbMFScLRuYBnQ2g7eIGJPgyvnAnpNuGhnf/8iH
-        ff9dQx3j0YE3XIYjvQSAmSqWGfeEenDn7xzT6KANQNqcBwuxJCgPmQusqWgTA/H+Ae1/63
-        rAuJvBD1lC3KmEg2IftTSD1mzab+L3BKenowDs4vi9EwOlxT0wOWmD+OkDrhXz/4Nr1NfA
-        t2+Sk7ICpRPXUub1JsBfbjFIryZc6Osl9Ri5DRp0nBcph8Uh2BTMzJnZ5X1ZdFqQu5Zl3P
-        3ml+O+nO5ssbf/0xutSw6RanQvsdr+vVqBlIYMQbSjyhNRiQdZoCwxmUZvpZug==
+        bh=psh6WM6tuF479vJvLIQ+GBcKmgj2tpGcGifVisQx9RM=;
+        b=ge7Hjf2Q4VKtmOZsF5kwDB2S4Ld/hAMOBxwMZJbjc6/VtDyGebDmom4BpFlyKTfnRMGSTM
+        7Mpw3YePqTJ6rTGglo/aftW5ES0xyEeBli9LJBqgZiD4tVGXKFQarQylkLlrN1GVADmNTI
+        3kYuS+VwqrLm/NBcpzqfY9NdyMdSTK0ZB4pm7G4ooIwUk484xIsurGrJ8vlDA7HMxVh/zx
+        8F/6k7yETuTjObyMzZdMON1fF4gpCVvIf13LwatUFB12w0UolbmMDdWL5bboX1miHtll/w
+        5XSYV0gbB166/DkIzOKlYaTjDgsjrPaUTWdxKt3sQnt6q9pSXqHVWs+a3T2N3g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657709531;
+        s=2020e; t=1657709532;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=M7xyNCWV08xgCjBtfOWIb6vnWXw98ni8zhJW1q5WDB8=;
-        b=AwSK8xobYYCI+d8gV0XS0lc4x3Il6qRlfhFlwI32y6Y+ZiP2eQAg1AGS7JxTwpfLJ/B72C
-        f7oovuX+1/jUQzAA==
-From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
+        bh=psh6WM6tuF479vJvLIQ+GBcKmgj2tpGcGifVisQx9RM=;
+        b=lPoXyM5jv5J/Bkviw7MU9GNAsP5BfAqujGVk6zwujTo/F7+JlbYaLuPYbvC7yf5r6Fhq/p
+        bA6IUKEvoZtFnVBQ==
+From:   "tip-bot2 for Jiri Slaby" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/pat: Fix x86_has_pat_wp()
-Cc:     Juergen Gross <jgross@suse.com>, Borislav Petkov <bp@suse.de>,
-        <stable@vger.kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220503132207.17234-1-jgross@suse.com>
-References: <20220503132207.17234-1-jgross@suse.com>
+Subject: [tip: x86/urgent] x86/asm/32: Fix ANNOTATE_UNRET_SAFE use on 32-bit
+Cc:     Jiri Slaby <jslaby@suse.cz>, Borislav Petkov <bp@suse.de>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <63e23f80-033f-f64e-7522-2816debbc367@kernel.org>
+References: <63e23f80-033f-f64e-7522-2816debbc367@kernel.org>
 MIME-Version: 1.0
-Message-ID: <165770953023.15455.12477223338024740459.tip-bot2@tip-bot2>
+Message-ID: <165770953127.15455.14007409023493265693.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,67 +66,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     230ec83d4299b30c51a1c133b4f2a669972cc08a
-Gitweb:        https://git.kernel.org/tip/230ec83d4299b30c51a1c133b4f2a669972cc08a
-Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Fri, 08 Jul 2022 15:14:56 +02:00
+Commit-ID:     3131ef39fb03bbde237d0b8260445898f3dfda5b
+Gitweb:        https://git.kernel.org/tip/3131ef39fb03bbde237d0b8260445898f3dfda5b
+Author:        Jiri Slaby <jslaby@suse.cz>
+AuthorDate:    Wed, 13 Jul 2022 11:50:46 +02:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 13 Jul 2022 12:44:04 +02:00
+CommitterDate: Wed, 13 Jul 2022 12:43:26 +02:00
 
-x86/pat: Fix x86_has_pat_wp()
+x86/asm/32: Fix ANNOTATE_UNRET_SAFE use on 32-bit
 
-x86_has_pat_wp() is using a wrong test, as it relies on the normal
-PAT configuration used by the kernel. In case the PAT MSR has been
-setup by another entity (e.g. Xen hypervisor) it might return false
-even if the PAT configuration is allowing WP mappings. This due to the
-fact that when running as Xen PV guest the PAT MSR is setup by the
-hypervisor and cannot be changed by the guest. This results in the WP
-related entry to be at a different position when running as Xen PV
-guest compared to the bare metal or fully virtualized case.
+The build on x86_32 currently fails after commit
 
-The correct way to test for WP support is:
+  9bb2ec608a20 (objtool: Update Retpoline validation)
 
-1. Get the PTE protection bits needed to select WP mode by reading
-   __cachemode2pte_tbl[_PAGE_CACHE_MODE_WP] (depending on the PAT MSR
-   setting this might return protection bits for a stronger mode, e.g.
-   UC-)
-2. Translate those bits back into the real cache mode selected by those
-   PTE bits by reading __pte2cachemode_tbl[__pte2cm_idx(prot)]
-3. Test for the cache mode to be _PAGE_CACHE_MODE_WP
+with:
 
-Fixes: f88a68facd9a ("x86/mm: Extend early_memremap() support with additional attrs")
-Signed-off-by: Juergen Gross <jgross@suse.com>
+  arch/x86/kernel/../../x86/xen/xen-head.S:35: Error: no such instruction: `annotate_unret_safe'
+
+ANNOTATE_UNRET_SAFE is defined in nospec-branch.h. And head_32.S is
+missing this include. Fix this.
+
+Fixes: 9bb2ec608a20 ("objtool: Update Retpoline validation")
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: <stable@vger.kernel.org> # 4.14
-Link: https://lore.kernel.org/r/20220503132207.17234-1-jgross@suse.com
+Link: https://lore.kernel.org/r/63e23f80-033f-f64e-7522-2816debbc367@kernel.org
 ---
- arch/x86/mm/init.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ arch/x86/kernel/head_32.S | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index d8cfce2..57ba550 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -77,10 +77,20 @@ static uint8_t __pte2cachemode_tbl[8] = {
- 	[__pte2cm_idx(_PAGE_PWT | _PAGE_PCD | _PAGE_PAT)] = _PAGE_CACHE_MODE_UC,
- };
- 
--/* Check that the write-protect PAT entry is set for write-protect */
-+/*
-+ * Check that the write-protect PAT entry is set for write-protect.
-+ * To do this without making assumptions how PAT has been set up (Xen has
-+ * another layout than the kernel), translate the _PAGE_CACHE_MODE_WP cache
-+ * mode via the __cachemode2pte_tbl[] into protection bits (those protection
-+ * bits will select a cache mode of WP or better), and then translate the
-+ * protection bits back into the cache mode using __pte2cm_idx() and the
-+ * __pte2cachemode_tbl[] array. This will return the really used cache mode.
-+ */
- bool x86_has_pat_wp(void)
- {
--	return __pte2cachemode_tbl[_PAGE_CACHE_MODE_WP] == _PAGE_CACHE_MODE_WP;
-+	uint16_t prot = __cachemode2pte_tbl[_PAGE_CACHE_MODE_WP];
-+
-+	return __pte2cachemode_tbl[__pte2cm_idx(prot)] == _PAGE_CACHE_MODE_WP;
- }
- 
- enum page_cache_mode pgprot2cachemode(pgprot_t pgprot)
+diff --git a/arch/x86/kernel/head_32.S b/arch/x86/kernel/head_32.S
+index eb8656b..9b7acc9 100644
+--- a/arch/x86/kernel/head_32.S
++++ b/arch/x86/kernel/head_32.S
+@@ -23,6 +23,7 @@
+ #include <asm/cpufeatures.h>
+ #include <asm/percpu.h>
+ #include <asm/nops.h>
++#include <asm/nospec-branch.h>
+ #include <asm/bootparam.h>
+ #include <asm/export.h>
+ #include <asm/pgtable_32.h>

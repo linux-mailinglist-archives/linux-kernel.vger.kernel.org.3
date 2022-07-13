@@ -2,142 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C37573A58
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283BE573A64
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236746AbiGMPlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
+        id S236852AbiGMPpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiGMPlK (ORCPT
+        with ESMTP id S235702AbiGMPpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:41:10 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F018C33350
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:41:08 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 72so10848761pge.0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:41:08 -0700 (PDT)
+        Wed, 13 Jul 2022 11:45:05 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FA64B0FC
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:45:04 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id w12so13896088edd.13
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:45:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UT9udr50GJyKecsX3LcPCWE8RWAbvRVT9oWgYzDIcoI=;
-        b=N/vz09RBgdWROPujBdceXyeBj9//LIn7VgkL1kKVPjyw7AHYvpVidq1atlGd09WNGf
-         GLogGH3KycLY6csUZJ1od98eTTmv6klSKuLEb5ZQMcEz/HpLm99idSsBrnPjwru5ncrj
-         ODJNP029hxSgU8MF/bxgX4T5u3IQaw0XHtcPePOqAhPtFSEonJFwRfaiZ9N7P7fog/3m
-         kIawcWMHNTT4gpMqdZcYaehLMp+1eVWobTXsl1prvqgm8O0bjfCC82rdrS6iMtybZ//q
-         qqUKI/joS2+cRs2bdeBQCpocHIMG5EGLBXa7Agf1aE7L4bbsJA+lDS2N5iCA8B2AtpVk
-         h7SA==
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0RDV3LfY9Xy3Jm7IZZiFccn5WkHlef0xh/HmK2Mp+Vk=;
+        b=LmfgKrINvMuZlEn8iqQZ6HTz4/4vGZBsH9SLwcu8sX9PonQhZBiBxh8DCeWKAiLQC+
+         /BzHsdGUcTbypRZkH4ipYSSiPo/BXDKF9BzxRia+hgVobwfLaiwTbS/MXU2oIVMvfUbQ
+         L9nfav3udmn5ekoPnxs4iQq4PKnO+U5eZx0Rs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UT9udr50GJyKecsX3LcPCWE8RWAbvRVT9oWgYzDIcoI=;
-        b=u8ft2ezFUJvRX0NV1bQIFMhanhI7+hqp62b7X+O+cZH4S6Ztkl4Efn6jOBBtNgHEOJ
-         EvxcBJKVXw7GoagY6B6qDhPzbz68LQEKnE+ljyzsuFzBROuAh8NqZ+nK5RBJi40AIYIl
-         t41WN2snooA52q1EUHlkX4sT1om5ISrndc93wyibyczUjak5GJnIm3g30CpeiSC16shv
-         t2tp/JbVKcuVO3MvT0stCi4ctj2eib7nEVp0mUCylFKvWkkl8Ms7gn5ZBwZILyC2qiW7
-         2JHBuphGH1/XVVQQZUI8xsgXgNM7M4OrgYe5rzP5J8oQ+k0e0u0cvQMD2gCHtiuOmsLW
-         pEBQ==
-X-Gm-Message-State: AJIora+HwjulFTMu80d6IRXL0VMX79zqKw2WvZy2htM+Xv4RmoiTr6om
-        ajE19M5vSz/kbxaHUkOzSftYZA==
-X-Google-Smtp-Source: AGRyM1tPCkg0z8Kca+zmBEg/o3uMJ/7f3MFzfn93JX1PyykFLy92b+ibQxZRHEFJ7WItU7DNR66iaw==
-X-Received: by 2002:a63:eb0f:0:b0:419:a843:aa29 with SMTP id t15-20020a63eb0f000000b00419a843aa29mr794459pgh.314.1657726868237;
-        Wed, 13 Jul 2022 08:41:08 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id s4-20020a17090ad48400b001ec85441515sm1752965pju.24.2022.07.13.08.41.07
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0RDV3LfY9Xy3Jm7IZZiFccn5WkHlef0xh/HmK2Mp+Vk=;
+        b=yGTZPOjkDm4GasSGEkamW1Gv8fpHM7NICiKoOUmxOMzLkzwjhPWYebo+yhITi5prc7
+         Cg55PffXblFwqbA3/rjPZr5V0ePXbaYn3KaI7BL/UXDW21WnTqnx1EJiaqpyDp4pcQ1d
+         RoSlPDxHiLIHtKoYey24zfnFyyeMB8unnO5VEjMRxhkJAnAcCUz0fFwZbiTMp4ruvia6
+         lOBnXLS7qDgqVePaLNMJPULYi53BzgwLUf+MM7OQrsydUqFdsF9KvGBcSuQb5F/XwYqq
+         gBm4spdmMu/ce5B/91y08lrF30X0GL4uL58lwEE5r4PCg/W/dfcbnZXTPM0YR04KaIch
+         uj4Q==
+X-Gm-Message-State: AJIora+dZ5pOzpl+vUNOTxBH4PJhrxIAVnF56J5705aNMfm7898gVDzh
+        SA8wvL6xp6g3akc8jeKDGIUR+U9RZ2PSkbnr
+X-Google-Smtp-Source: AGRyM1t3DmASLYur8LXJjGGYj+/MpBaNAz/lRVvtFJB89fZFe2d4pgQ0c2/XFlStz8o/Fp8tJfUASQ==
+X-Received: by 2002:a05:6402:28c4:b0:43a:cdde:e047 with SMTP id ef4-20020a05640228c400b0043acddee047mr5753304edb.368.1657727102841;
+        Wed, 13 Jul 2022 08:45:02 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-80-182-13-224.pool80182.interbusiness.it. [80.182.13.224])
+        by smtp.gmail.com with ESMTPSA id 4-20020a170906300400b006fe9e717143sm5122181ejz.94.2022.07.13.08.45.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 08:41:07 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 15:41:04 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] KVM: selftests: Fix wrmsr_safe()
-Message-ID: <Ys7nkBcfYlSuF7rt@google.com>
-References: <20220713150532.1012466-1-vkuznets@redhat.com>
- <20220713150532.1012466-3-vkuznets@redhat.com>
+        Wed, 13 Jul 2022 08:45:02 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     lkp@lists.01.org, Jeroen Hofstee <jhofstee@victronenergy.com>,
+        lkp@intel.com, kernel test robot <oliver.sang@intel.com>,
+        Richard Palethorpe <rpalethorpe@suse.de>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        ltp@lists.linux.it,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v2] can: slcan: do not sleep with a spin lock held
+Date:   Wed, 13 Jul 2022 17:44:58 +0200
+Message-Id: <20220713154458.253076-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713150532.1012466-3-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022, Vitaly Kuznetsov wrote:
-> It seems to be a misconception that "A" places an u64 operand to
-> EAX:EDX, at least with GCC11.
+We can't call close_candev() with a spin lock held, so release the lock
+before calling it.
 
-It's not a misconception, it's just that the "A" trick only works for 32-bit
-binaries.  For 64-bit, the 64-bit integer fits into "rax" without needing to spill
-into "rdx".
+Fixes: c4e54b063f42f ("can: slcan: use CAN network device driver API")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Link: https://lore.kernel.org/linux-kernel/Ysrf1Yc5DaRGN1WE@xsang-OptiPlex-9020/
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-I swear I had fixed this, but apparently I had only done that locally and never
-pushed/posted the changes :-/
+---
 
-> While writing a new test, I've noticed that wrmsr_safe() tries putting
-> garbage to the upper bits of the MSR, e.g.:
-> 
->   kvm_exit:             reason MSR_WRITE rip 0x402919 info 0 0
->   kvm_msr:              msr_write 40000118 = 0x60000000001 (#GP)
-> ...
-> when it was supposed to write '1'. Apparently, "A" works the same as
-> "a" and not as EAX/EDX. Here's the relevant disassembled part:
-> 
-> With "A":
-> 
-> 	48 8b 43 08          	mov    0x8(%rbx),%rax
-> 	49 b9 ba da ca ba 0a 	movabs $0xabacadaba,%r9
-> 	00 00 00
-> 	4c 8d 15 07 00 00 00 	lea    0x7(%rip),%r10        # 402f44 <guest_msr+0x34>
-> 	4c 8d 1d 06 00 00 00 	lea    0x6(%rip),%r11        # 402f4a <guest_msr+0x3a>
-> 	0f 30                	wrmsr
-> 
-> With "a"/"d":
-> 
-> 	48 8b 43 08          	mov    0x8(%rbx),%rax
-> 	48 89 c2             	mov    %rax,%rdx
-> 	48 c1 ea 20          	shr    $0x20,%rdx
-> 	49 b9 ba da ca ba 0a 	movabs $0xabacadaba,%r9
-> 	00 00 00
-> 	4c 8d 15 07 00 00 00 	lea    0x7(%rip),%r10        # 402fc3 <guest_msr+0xb3>
-> 	4c 8d 1d 06 00 00 00 	lea    0x6(%rip),%r11        # 402fc9 <guest_msr+0xb9>
-> 	0f 30                	wrmsr
-> 
-> I was only able to find one online reference that "A" gives "eax and
-> edx combined into a 64-bit integer", other places don't mention it at
-> all.
-> 
-> Fixes: 3b23054cd3f5 ("KVM: selftests: Add x86-64 support for exception fixup")
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  tools/testing/selftests/kvm/include/x86_64/processor.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> index 79dcf6be1b47..3d412c578e78 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> @@ -612,7 +612,7 @@ static inline uint8_t rdmsr_safe(uint32_t msr, uint64_t *val)
->  
->  static inline uint8_t wrmsr_safe(uint32_t msr, uint64_t val)
->  {
-> -	return kvm_asm_safe("wrmsr", "A"(val), "c"(msr));
-> +	return kvm_asm_safe("wrmsr", "a"((u32)val), "d"(val >> 32), "c"(msr));
->  }
->  
->  uint64_t vm_get_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
-> -- 
-> 2.35.3
-> 
+Changes in v2:
+- Release the lock just before calling the close_candev().
+
+ drivers/net/can/slcan/slcan-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
+index 54d29a410ad5..5214421dedf3 100644
+--- a/drivers/net/can/slcan/slcan-core.c
++++ b/drivers/net/can/slcan/slcan-core.c
+@@ -689,6 +689,7 @@ static int slc_close(struct net_device *dev)
+ 		clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
+ 	}
+ 	netif_stop_queue(dev);
++	spin_unlock_bh(&sl->lock);
+ 	close_candev(dev);
+ 	sl->can.state = CAN_STATE_STOPPED;
+ 	if (sl->can.bittiming.bitrate == CAN_BITRATE_UNKNOWN)
+@@ -696,7 +697,6 @@ static int slc_close(struct net_device *dev)
+ 
+ 	sl->rcount   = 0;
+ 	sl->xleft    = 0;
+-	spin_unlock_bh(&sl->lock);
+ 
+ 	return 0;
+ }
+-- 
+2.32.0
+

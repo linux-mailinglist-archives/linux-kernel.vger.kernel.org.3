@@ -2,149 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B341A572F9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68625572F9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234351AbiGMHu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47000 "EHLO
+        id S234589AbiGMHut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGMHu0 (ORCPT
+        with ESMTP id S233765AbiGMHuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:50:26 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B460A25E87;
-        Wed, 13 Jul 2022 00:50:22 -0700 (PDT)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Wed, 13 Jul 2022 15:50:06
- +0800 (GMT+08:00)
-X-Originating-IP: [10.190.69.130]
-Date:   Wed, 13 Jul 2022 15:50:06 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Paolo Abeni" <pabeni@redhat.com>
-Cc:     linux-hams@vger.kernel.org, ralf@linux-mips.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v6] net: rose: fix null-ptr-deref caused by
- rose_kill_by_neigh
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <daa2b799956c286b2cce898bee22fb2a043f5177.camel@redhat.com>
-References: <20220711013111.33183-1-duoming@zju.edu.cn>
- <daa2b799956c286b2cce898bee22fb2a043f5177.camel@redhat.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Wed, 13 Jul 2022 03:50:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D574B313A4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:50:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657698643;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UUUAyRjzYTQJMt+N0hTGhBJ/lch625duUKNPGtSQaX4=;
+        b=RxKzGtlFqBQxL5g6hDySHpSI/8Cl1YWx4VuZMX2h6VXuHyroT2tJkecROBSq98L/uAhz+1
+        1/DaDd7udqJWA5pW8xTFutbqkt+50hA3wnwXpE4bmmMIYGA++dxrvZQn5g3ueEjG3UfNYk
+        YLi5PFRVYn65vZ7zs5G53O+5nOwNWYA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-394-bTeqqciWMX23RezB32E6HA-1; Wed, 13 Jul 2022 03:50:39 -0400
+X-MC-Unique: bTeqqciWMX23RezB32E6HA-1
+Received: by mail-wm1-f70.google.com with SMTP id a6-20020a05600c348600b003a2d72b7a15so711421wmq.9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:50:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UUUAyRjzYTQJMt+N0hTGhBJ/lch625duUKNPGtSQaX4=;
+        b=yi28+s1tmAsSZ97VJIiC6gmg9VZqHIf6YGrNugJtBUEzd13wlMzPueaMnXTqgGNIjV
+         1wEWMaA1asVhIzXMKOxhCDYhXH2kGDT58PuUpK00LLQEf62mQ8Ni1N3Z8FzYiut3CkQH
+         ot7de1Ud8IH3MLLulesaJ1XSuZQAG+eiSJlw4qliADLKCa0BkpS2MwEZvXjflFxdhBn7
+         XqriN3KIwjzhx9H5vzgLWqLaaY+aNtjr9B+z/+1bWtmgFbOq00BeyV9YFIhb1poGHMFF
+         mzzbbEO9sJP3+gyE2T/wmlwgRLTOFs5LJSmQn8k2BY+E/DJY6ugeevfbHpv9CtDEVAmS
+         PNCA==
+X-Gm-Message-State: AJIora+frCwNeRs5wgD9AAY2Btf/PPY7MOIW0moLhRUgF7xwS6lmFWbd
+        TdXyBwnuqI6xsrnSHuMfm1YJ43SfkXlelYkRCNZFJlVwp7yi0rXZKFA2BXB5m1yY2wf5X7G5K9Z
+        Ohh9pR/TSHKp7uHY06d9N6PHNkCgwKKC+aEwrsGKvy92zVLTqgVUT0/8pw3B3LDAlgMWhsfeV3x
+        iMPzQ=
+X-Received: by 2002:a05:6000:12c8:b0:21d:6913:89af with SMTP id l8-20020a05600012c800b0021d691389afmr1868516wrx.546.1657698638250;
+        Wed, 13 Jul 2022 00:50:38 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tVAaqjUmmT74Sd86HbMQeLDUALnySAzJYvk/gvhv1S4gh1URgjketeKTeNtjKaCdqglG2bdQ==
+X-Received: by 2002:a05:6000:12c8:b0:21d:6913:89af with SMTP id l8-20020a05600012c800b0021d691389afmr1868479wrx.546.1657698637897;
+        Wed, 13 Jul 2022 00:50:37 -0700 (PDT)
+Received: from localhost.localdomain.com ([151.29.54.26])
+        by smtp.gmail.com with ESMTPSA id c10-20020adffb4a000000b0021db7b0162esm2220413wrs.105.2022.07.13.00.50.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 00:50:37 -0700 (PDT)
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Subject: [PATCH] sched/deadline: Fix BUG_ON condition for deboosted tasks
+Date:   Wed, 13 Jul 2022 09:50:14 +0200
+Message-Id: <20220713075014.411739-1-juri.lelli@redhat.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Message-ID: <540ab034.3f081.181f6895dba.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgC3vQwuec5iSCdsAA--.7231W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgQKAVZdtapPBQAFsW
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBUdWUsIDEyIEp1bCAyMDIyIDEzOjAwOjQ5ICswMjAwIFBhb2xvIEFiZW5pIHdy
-b3RlOgoKPiBPbiBNb24sIDIwMjItMDctMTEgYXQgMDk6MzEgKzA4MDAsIER1b21pbmcgWmhvdSB3
-cm90ZToKPiA+IFdoZW4gdGhlIGxpbmsgbGF5ZXIgY29ubmVjdGlvbiBpcyBicm9rZW4sIHRoZSBy
-b3NlLT5uZWlnaGJvdXIgaXMKPiA+IHNldCB0byBudWxsLiBCdXQgcm9zZS0+bmVpZ2hib3VyIGNv
-dWxkIGJlIHVzZWQgYnkgcm9zZV9jb25uZWN0aW9uKCkKPiA+IGFuZCByb3NlX3JlbGVhc2UoKSBs
-YXRlciwgYmVjYXVzZSB0aGVyZSBpcyBubyBzeW5jaHJvbml6YXRpb24gYW1vbmcKPiA+IHRoZW0u
-IEFzIGEgcmVzdWx0LCB0aGUgbnVsbC1wdHItZGVyZWYgYnVncyB3aWxsIGhhcHBlbi4KPiA+IAo+
-ID4gT25lIG9mIHRoZSBudWxsLXB0ci1kZXJlZiBidWdzIGlzIHNob3duIGJlbG93Ogo+ID4gCj4g
-PiAgICAgKHRocmVhZCAxKSAgICAgICAgICAgICAgICAgIHwgICAgICAgICh0aHJlYWQgMikKPiA+
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgcm9zZV9jb25uZWN0Cj4gPiByb3Nl
-X2tpbGxfYnlfbmVpZ2ggICAgICAgICAgICAgIHwgICAgbG9ja19zb2NrKHNrKQo+ID4gICBzcGlu
-X2xvY2tfYmgoJnJvc2VfbGlzdF9sb2NrKSB8ICAgIGlmICghcm9zZS0+bmVpZ2hib3VyKQo+ID4g
-ICByb3NlLT5uZWlnaGJvdXIgPSBOVUxMOy8vKDEpICB8Cj4gPiAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIHwgICAgcm9zZS0+bmVpZ2hib3VyLT51c2UrKzsvLygyKQo+ID4gCj4gPiBU
-aGUgcm9zZS0+bmVpZ2hib3VyIGlzIHNldCB0byBudWxsIGluIHBvc2l0aW9uICgxKSBhbmQgZGVy
-ZWZlcmVuY2VkCj4gPiBpbiBwb3NpdGlvbiAoMikuCj4gPiAKPiA+IFRoZSBLQVNBTiByZXBvcnQg
-dHJpZ2dlcmVkIGJ5IFBPQyBpcyBzaG93biBiZWxvdzoKPiA+IAo+ID4gS0FTQU46IG51bGwtcHRy
-LWRlcmVmIGluIHJhbmdlIFsweDAwMDAwMDAwMDAwMDAwMjgtMHgwMDAwMDAwMDAwMDAwMDJmXQo+
-ID4gLi4uCj4gPiBSSVA6IDAwMTA6cm9zZV9jb25uZWN0KzB4NmMyLzB4ZjMwCj4gPiBSU1A6IDAw
-MTg6ZmZmZjg4ODAwYWI0N2Q2MCBFRkxBR1M6IDAwMDAwMjA2Cj4gPiBSQVg6IDAwMDAwMDAwMDAw
-MDAwMDUgUkJYOiAwMDAwMDAwMDAwMDAwMDJhIFJDWDogMDAwMDAwMDAwMDAwMDAwMAo+ID4gUkRY
-OiBmZmZmODg4MDBhYjM4MDAwIFJTSTogZmZmZjg4ODAwYWI0N2U0OCBSREk6IGZmZmY4ODgwMGFi
-MzgzMDkKPiA+IFJCUDogZGZmZmZjMDAwMDAwMDAwMCBSMDg6IDAwMDAwMDAwMDAwMDAwMDAgUjA5
-OiBmZmZmZWQxMDAxNTY3MDYyCj4gPiBSMTA6IGRmZmZlOTEwMDE1NjcwNjMgUjExOiAxZmZmZjEx
-MDAxNTY3MDYxIFIxMjogMWZmZmYxMTAwMGQxN2NkMAo+ID4gUjEzOiBmZmZmODg4MDA2OGJlNjgw
-IFIxNDogMDAwMDAwMDAwMDAwMDAwMiBSMTU6IDFmZmZmMTEwMDBkMTdjZDAKPiA+IC4uLgo+ID4g
-Q2FsbCBUcmFjZToKPiA+ICAgPFRBU0s+Cj4gPiAgID8gX19sb2NhbF9iaF9lbmFibGVfaXArMHg1
-NC8weDgwCj4gPiAgID8gc2VsaW51eF9uZXRsYmxfc29ja2V0X2Nvbm5lY3QrMHgyNi8weDMwCj4g
-PiAgID8gcm9zZV9iaW5kKzB4NWIwLzB4NWIwCj4gPiAgIF9fc3lzX2Nvbm5lY3QrMHgyMTYvMHgy
-ODAKPiA+ICAgX194NjRfc3lzX2Nvbm5lY3QrMHg3MS8weDgwCj4gPiAgIGRvX3N5c2NhbGxfNjQr
-MHg0My8weDkwCj4gPiAgIGVudHJ5X1NZU0NBTExfNjRfYWZ0ZXJfaHdmcmFtZSsweDQ2LzB4YjAK
-PiA+IAo+ID4gVGhpcyBwYXRjaCBhZGRzIGxvY2tfc29jaygpIGluIHJvc2Vfa2lsbF9ieV9uZWln
-aCgpIGluIG9yZGVyIHRvCj4gPiBzeW5jaHJvbml6ZSB3aXRoIHJvc2VfY29ubmVjdCgpIGFuZCBy
-b3NlX3JlbGVhc2UoKS4gVGhlbiwgY2hhbmdpbmcKPiA+IHR5cGUgb2YgJ25laWdoYm91ci0+dXNl
-JyBmcm9tIHVuc2lnbmVkIHNob3J0IHRvIGF0b21pY190IGluIG9yZGVyIHRvCj4gPiBtaXRpZ2F0
-ZSByYWNlIGNvbmRpdGlvbnMgY2F1c2VkIGJ5IGhvbGRpbmcgZGlmZmVyZW50IHNvY2tldCBsb2Nr
-IHdoaWxlCj4gPiB1cGRhdGluZyAnbmVpZ2hib3VyLT51c2UnLgo+ID4gCj4gPiBNZWFud2hpbGUs
-IHRoaXMgcGF0Y2ggYWRkcyBzb2NrX2hvbGQoKSBwcm90ZWN0ZWQgYnkgcm9zZV9saXN0X2xvY2sK
-PiA+IHRoYXQgY291bGQgc3luY2hyb25pemUgd2l0aCByb3NlX3JlbW92ZV9zb2NrZXQoKSBpbiBv
-cmRlciB0byBtaXRpZ2F0ZQo+ID4gVUFGIGJ1ZyBjYXVzZWQgYnkgbG9ja19zb2NrKCkgd2UgYWRk
-Lgo+ID4gCj4gPiBXaGF0J3MgbW9yZSwgdGhlcmUgaXMgbm8gbmVlZCB1c2luZyByb3NlX25laWdo
-X2xpc3RfbG9jayB0byBwcm90ZWN0Cj4gPiByb3NlX2tpbGxfYnlfbmVpZ2goKS4gQmVjYXVzZSB3
-ZSBoYXZlIGFscmVhZHkgdXNlZCByb3NlX25laWdoX2xpc3RfbG9jawo+ID4gdG8gcHJvdGVjdCB0
-aGUgc3RhdGUgY2hhbmdlIG9mIHJvc2VfbmVpZ2ggaW4gcm9zZV9saW5rX2ZhaWxlZCgpLCB3aGlj
-aAo+ID4gaXMgd2VsbCBzeW5jaHJvbml6ZWQuCj4gPiAKPiA+IEZpeGVzOiAxZGExNzdlNGMzZjQg
-KCJMaW51eC0yLjYuMTItcmMyIikKPiA+IFNpZ25lZC1vZmYtYnk6IER1b21pbmcgWmhvdSA8ZHVv
-bWluZ0B6anUuZWR1LmNuPgo+ID4gLS0tCj4gPiBDaGFuZ2VzIGluIHY2Ogo+ID4gICAtIENoYW5n
-ZSBza19mb3JfZWFjaCgpIHRvIHNrX2Zvcl9lYWNoX3NhZmUoKS4KPiA+ICAgLSBDaGFuZ2UgdHlw
-ZSBvZiAnbmVpZ2hib3VyLT51c2UnIGZyb20gdW5zaWduZWQgc2hvcnQgdG8gYXRvbWljX3QuCj4g
-PiAKPiA+ICBpbmNsdWRlL25ldC9yb3NlLmggICAgfCAgMiArLQo+ID4gIG5ldC9yb3NlL2FmX3Jv
-c2UuYyAgICB8IDE5ICsrKysrKysrKysrKystLS0tLS0KPiA+ICBuZXQvcm9zZS9yb3NlX2luLmMg
-ICAgfCAxMiArKysrKystLS0tLS0KPiA+ICBuZXQvcm9zZS9yb3NlX3JvdXRlLmMgfCAyNCArKysr
-KysrKysrKystLS0tLS0tLS0tLS0KPiA+ICBuZXQvcm9zZS9yb3NlX3RpbWVyLmMgfCAgMiArLQo+
-ID4gIDUgZmlsZXMgY2hhbmdlZCwgMzMgaW5zZXJ0aW9ucygrKSwgMjYgZGVsZXRpb25zKC0pCj4g
-PiAKPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL25ldC9yb3NlLmggYi9pbmNsdWRlL25ldC9yb3Nl
-LmgKPiA+IGluZGV4IDBmMGE0Y2UwZmVlLi5kNWRkZWJjNTU2ZCAxMDA2NDQKPiA+IC0tLSBhL2lu
-Y2x1ZGUvbmV0L3Jvc2UuaAo+ID4gKysrIGIvaW5jbHVkZS9uZXQvcm9zZS5oCj4gPiBAQCAtOTUs
-NyArOTUsNyBAQCBzdHJ1Y3Qgcm9zZV9uZWlnaCB7Cj4gPiAgCWF4MjVfY2IJCQkqYXgyNTsKPiA+
-ICAJc3RydWN0IG5ldF9kZXZpY2UJCSpkZXY7Cj4gPiAgCXVuc2lnbmVkIHNob3J0CQljb3VudDsK
-PiA+IC0JdW5zaWduZWQgc2hvcnQJCXVzZTsKPiA+ICsJYXRvbWljX3QJCXVzZTsKPiA+ICAJdW5z
-aWduZWQgaW50CQludW1iZXI7Cj4gPiAgCWNoYXIJCQlyZXN0YXJ0ZWQ7Cj4gPiAgCWNoYXIJCQlk
-Y2VfbW9kZTsKPiA+IGRpZmYgLS1naXQgYS9uZXQvcm9zZS9hZl9yb3NlLmMgYi9uZXQvcm9zZS9h
-Zl9yb3NlLmMKPiA+IGluZGV4IGJmMmQ5ODZhNmJjLi41NGU3Yjc2YzRmMyAxMDA2NDQKPiA+IC0t
-LSBhL25ldC9yb3NlL2FmX3Jvc2UuYwo+ID4gKysrIGIvbmV0L3Jvc2UvYWZfcm9zZS5jCj4gPiBA
-QCAtMTYzLDE2ICsxNjMsMjMgQEAgc3RhdGljIHZvaWQgcm9zZV9yZW1vdmVfc29ja2V0KHN0cnVj
-dCBzb2NrICpzaykKPiA+ICB2b2lkIHJvc2Vfa2lsbF9ieV9uZWlnaChzdHJ1Y3Qgcm9zZV9uZWln
-aCAqbmVpZ2gpCj4gPiAgewo+ID4gIAlzdHJ1Y3Qgc29jayAqczsKPiA+ICsJc3RydWN0IGhsaXN0
-X25vZGUgKnRtcDsKPiA+ICAKPiA+ICAJc3Bpbl9sb2NrX2JoKCZyb3NlX2xpc3RfbG9jayk7Cj4g
-PiAtCXNrX2Zvcl9lYWNoKHMsICZyb3NlX2xpc3QpIHsKPiA+ICsJc2tfZm9yX2VhY2hfc2FmZShz
-LCB0bXAsICZyb3NlX2xpc3QpIHsKPiA+ICAJCXN0cnVjdCByb3NlX3NvY2sgKnJvc2UgPSByb3Nl
-X3NrKHMpOwo+ID4gIAo+ID4gKwkJc29ja19ob2xkKHMpOwo+ID4gKwkJc3Bpbl91bmxvY2tfYmgo
-JnJvc2VfbGlzdF9sb2NrKTsKPiA+ICsJCWxvY2tfc29jayhzKTsKPiA+ICAJCWlmIChyb3NlLT5u
-ZWlnaGJvdXIgPT0gbmVpZ2gpIHsKPiA+ICAJCQlyb3NlX2Rpc2Nvbm5lY3QocywgRU5FVFVOUkVB
-Q0gsIFJPU0VfT1VUX09GX09SREVSLCAwKTsKPiA+IC0JCQlyb3NlLT5uZWlnaGJvdXItPnVzZS0t
-Owo+ID4gKwkJCWF0b21pY19kZWMoJnJvc2UtPm5laWdoYm91ci0+dXNlKTsKPiA+ICAJCQlyb3Nl
-LT5uZWlnaGJvdXIgPSBOVUxMOwo+ID4gIAkJfQo+ID4gKwkJcmVsZWFzZV9zb2NrKHMpOwo+ID4g
-KwkJc29ja19wdXQocyk7Cj4gCj4gSSdtIHNvcnJ5LCB0aGlzIGRvZXMgbm90IHdvcmsuIEF0IHRo
-aXMgcG9pbnQgYm90aCAncycgYW5kICd0bXAnIHNvY2tldHMKPiBjYW4gYmUgZnJlZWQgYW5kIHJl
-dXNlZC4gQm90aCBpdGVyYXRvcnMgYXJlIG5vdCB2YWxpZCBhbnltb3JlIHdoZW4geW91Cj4gYWNx
-dWlyZSB0aGUgJ3Jvc2VfbGlzdF9sb2NrJyBsYXRlci4KClRoYW5rIHlvdSBmb3IgeW91ciB0aW1l
-IGFuZCByZXBseSEgQnV0IEkgdGhpbmsgYm90aCAncycgYW5kICd0bXAnIGNhbiBub3QKYmUgZnJl
-ZWQgYW5kIHJldXNlZCBpbiByb3NlX2tpbGxfYnlfbmVpZ2goKS4gQmVjYXVzZSByb3NlX3JlbW92
-ZV9zb2NrZXQoKQpjYWxscyBza19kZWxfbm9kZV9pbml0KCkgd2hpY2ggaXMgcHJvdGVjdGVkIGJ5
-IHJvc2VfbGlzdF9sb2NrIHRvIGRlbGV0ZSB0aGUKc29ja2V0IG5vZGUgZnJvbSB0aGUgaGxpc3Qg
-YW5kIGlmIHNrLT5za19yZWZjbnQgZXF1YWxzIHRvIDEsIHRoZSBzb2NrZXQgd2lsbApiZSBkZWFs
-bG9jYXRlZC4KCnN0YXRpYyB2b2lkIHJvc2VfcmVtb3ZlX3NvY2tldChzdHJ1Y3Qgc29jayAqc2sp
-CnsKCXNwaW5fbG9ja19iaCgmcm9zZV9saXN0X2xvY2spOwoJc2tfZGVsX25vZGVfaW5pdChzayk7
-CglzcGluX3VubG9ja19iaCgmcm9zZV9saXN0X2xvY2spOwp9CgpodHRwczovL2VsaXhpci5ib290
-bGluLmNvbS9saW51eC92NS4xOS1yYzYvc291cmNlL25ldC9yb3NlL2FmX3Jvc2UuYyNMMTUyCgpC
-b3RoICdzJyBhbmQgJ3RtcCcgaW4gcm9zZV9raWxsX2J5X25laWdoKCkgaXMgYWxzbyBwcm90ZWN0
-ZWQgYnkgcm9zZV9saXN0X2xvY2suCgpJZiB0aGUgc29ja2V0IGlzIGRlbGV0ZWQgZnJvbSB0aGUg
-aGxpc3QsIHNrX2Zvcl9lYWNoX3NhZmUoKSBjb3VsZCBub3QgZmluZAp0aGUgc29ja2V0IGFuZCB0
-aGUgVUFGIGJ1ZyBjb3VsZCBiZSBwcmV2ZW50ZWQuIAoKSWYgdGhlIHNvY2tldCBjb3VsZCBiZSBm
-b3VuZCBieSBza19mb3JfZWFjaF9zYWZlKCksIHdlIHVzZSBzb2NrX2hvbGQocykKdG8gaW5jcmVh
-c2UgdGhlIHJlZmNvdW50IG9mIHRoZSBzb2NrZXQuIEFzIGEgcmVzdWx0LCB0aGUgVUFGIGJ1Z3Mg
-Y291bGQKYmUgcHJldmVudGVkLgoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3UK
+Tasks the are being deboosted from SCHED_DEADLINE might enter
+enqueue_task_dl() one last time and hit an erroneous BUG_ON condition:
+since they are not boosted anymore, the if (is_dl_boosted()) branch is
+not taken, but the else if (!dl_prio) is and inside this one we
+BUG_ON(!is_dl_boosted), which is of course false (BUG_ON triggered)
+otherwise we had entered the if branch above. Long story short, the
+current condition doesn't make sense and always leads to triggering of a
+BUG.
+
+Fix this by only checking enqueue flags, properly: ENQUEUE_REPLENISH has
+to be present, but additional flags are not a problem.
+
+Fixes: 2279f540ea7d ("sched/deadline: Fix priority inheritance with multiple scheduling classes")
+Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
+---
+ kernel/sched/deadline.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index 5867e186c39a..0447d46f4718 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -1703,7 +1703,7 @@ static void enqueue_task_dl(struct rq *rq, struct task_struct *p, int flags)
+ 		 * the throttle.
+ 		 */
+ 		p->dl.dl_throttled = 0;
+-		BUG_ON(!is_dl_boosted(&p->dl) || flags != ENQUEUE_REPLENISH);
++		BUG_ON(!(flags & ENQUEUE_REPLENISH));
+ 		return;
+ 	}
+ 
+-- 
+2.36.1
+

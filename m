@@ -2,88 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63052573F2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61C3573F32
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236817AbiGMVwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 17:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
+        id S237179AbiGMVxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 17:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236680AbiGMVwr (ORCPT
+        with ESMTP id S237287AbiGMVxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 17:52:47 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E37E31217;
-        Wed, 13 Jul 2022 14:52:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=G2ZOPGS1s/jNjHUZohK4oD7bAWGFIaLsK1fmshVdrLA=; b=lCP1Z88lpIqV+na/2FY7KizYUu
-        VEHdfudO26jYIrXf4IXcQT8Sbr9+Cswaq2oI1t01M5EQaC0ZJfSueHkRqj3dpTl740wRNmtPhN9e1
-        0/cDBxx1abEqG2Foug2G3wg+W2sV0xnmXMv6WqmwH1K81AjEKasejuPNoLuqELc4J4PU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oBkHh-00ADyR-AM; Wed, 13 Jul 2022 23:52:41 +0200
-Date:   Wed, 13 Jul 2022 23:52:41 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, yevhen.orlov@plvision.eu,
-        taras.chornyi@plvision.eu
-Subject: Re: [PATCH V2 net-next] net: marvell: prestera: add phylink support
-Message-ID: <Ys8+qT6ED4dty+3i@lunn.ch>
-References: <20220713172013.29531-1-oleksandr.mazur@plvision.eu>
- <Ys8lgQGBsvWAtXDZ@shell.armlinux.org.uk>
+        Wed, 13 Jul 2022 17:53:47 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F4E1209D;
+        Wed, 13 Jul 2022 14:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657749226; x=1689285226;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jpAc4UmL+hbbIRayobXbAS07B1tTi/T+zKwuYIkv7LM=;
+  b=Rkdtqs0KXncbvz37eiUwBKnTjAYRV3lhYhms3e5riw1spl1EKTVGLfpJ
+   NgPj+f8bJUtPeFnG90a567Lsj6tOA2EcEqq0nvbgL1yh8b61MZ4MXfIf7
+   a6h3lvCRV9oUgdn95bMzHZrfSEEAtU0ieopOweiDhwF9F0oSDsiIqxfOA
+   c=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jul 2022 14:53:45 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 14:53:45 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 14:53:45 -0700
+Received: from jackp-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 14:53:44 -0700
+Date:   Wed, 13 Jul 2022 14:53:43 -0700
+From:   Jack Pham <quic_jackp@quicinc.com>
+To:     John Keeping <john@metanate.com>
+CC:     Wesley Cheng <quic_wcheng@quicinc.com>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH v2 5/5] usb: dwc3: gadget: Increase DWC3 controller halt
+ timeout
+Message-ID: <20220713215342.GD8200@jackp-linux.qualcomm.com>
+References: <20220713003523.29309-1-quic_wcheng@quicinc.com>
+ <20220713003523.29309-6-quic_wcheng@quicinc.com>
+ <20220713025643.GC8200@jackp-linux.qualcomm.com>
+ <Ys6vReAwrYbEavob@donbot>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <Ys8lgQGBsvWAtXDZ@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Ys6vReAwrYbEavob@donbot>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 09:05:21PM +0100, Russell King (Oracle) wrote:
-> On Wed, Jul 13, 2022 at 08:20:13PM +0300, Oleksandr Mazur wrote:
-> > For SFP port prestera driver will use kernel
-> > phylink infrastucture to configure port mode based on
-> > the module that has beed inserted
+On Wed, Jul 13, 2022 at 12:40:53PM +0100, John Keeping wrote:
+> On Tue, Jul 12, 2022 at 07:56:43PM -0700, Jack Pham wrote:
+> > Hi Wesley,
 > > 
-> > Co-developed-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
-> > Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
-> > Co-developed-by: Taras Chornyi <taras.chornyi@plvision.eu>
-> > Signed-off-by: Taras Chornyi <taras.chornyi@plvision.eu>
-> > Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+> > On Tue, Jul 12, 2022 at 05:35:23PM -0700, Wesley Cheng wrote:
+> > > Since EP0 transactions need to be completed before the controller halt
+> > > sequence is finished, this may take some time depending on the host and the
+> > > enabled functions.  Increase the controller halt timeout, so that we give
+> > > the controller sufficient time to handle EP0 transfers.
+> > > 
+> > > Fixes: 861c010a2ee1 ("usb: dwc3: gadget: Refactor pullup()")
+> > > Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> > > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> > > ---
+> > > Link:
+> > >   https://lore.kernel.org/linux-usb/4988ed34-04a4-060a-ccef-f57790f76a2b@synopsys.com/
+> > > 
+> > >  drivers/usb/dwc3/gadget.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > > index 41b7007358de..e32d7293c447 100644
+> > > --- a/drivers/usb/dwc3/gadget.c
+> > > +++ b/drivers/usb/dwc3/gadget.c
+> > > @@ -2476,6 +2476,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
+> > >  	dwc3_gadget_dctl_write_safe(dwc, reg);
+> > >  
+> > >  	do {
+> > > +		msleep(1);
 > > 
-> > PATCH V2:
-> >   - fix mistreat of bitfield values as if they were bools.
-> >   - remove phylink_config ifdefs.
-> >   - remove obsolete phylink pcs / mac callbacks;
-> >   - rework mac (/pcs) config to not look for speed / duplex
-> >     parameters while link is not yet set up.
-> >   - remove unused functions.
-> >   - add phylink select cfg to prestera Kconfig.
+> > Be aware that this probably won't sleep for *just* 1ms.  From
+> > Documentation/timers/timers-howto.rst:
+> > 
+> > 	msleep(1~20) may not do what the caller intends, and
+> > 	will often sleep longer (~20 ms actual sleep for any
+> > 	value given in the 1~20ms range). In many cases this
+> > 	is not the desired behavior.
+> > 
+> > So with timeout==500 this loop could very well end up iterating for up
+> > to 10 seconds.  Granted this shouldn't be called from any atomic context
+> > but just wanted to make sure that the effective increase in timeout as
+> > $SUBJECT intends is made clear here and that it's not overly generous.
+> > 
+> > >  		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
+> > >  		reg &= DWC3_DSTS_DEVCTRLHLT;
+> > >  	} while (--timeout && !(!is_on ^ !reg));
 > 
-> I would appreciate answers to my questions, rather than just another
-> patch submission. So I'll repeat my question in the hope of an answer:
+> Does it make sense to convert this loop to use read_poll_timeout() and
+> make the timeout explicit, something like:
 > 
-> First question which applies to everything in this patch is - why make
-> phylink conditional for this driver?
+> 	ret = read_poll_timeout(dwc3_readl, reg, !(!is_on ^ !(reg & DWC3_DSTS_DEVCTRLHLT)),
+> 				100, timeout * USEC_PER_MSEC, true, dwc->regs, DWC3_DSTS);
+> 
+> ?
 
-Hi Oleksandr
+Yeah I think it would make sense.  Might even be worthwhile to revisit
+similar loops being performed in dwc3_send_gadget_generic_command() and
+dwc3_send_gadget_ep_cmd() which are currently spinning delay-lessly for a
+fixed number of iterations.
 
-I agree with Russell here. This driver should depend on PHYLINK and
-remove all the #ifdefs. We try to avoid this sort of code, it hides
-bugs and does not get compile tested very well etc.
-
-You need to give us a good reason if you want to keep the code like this.
-
-    Andrew
+Jack

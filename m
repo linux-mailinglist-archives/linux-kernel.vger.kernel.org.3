@@ -2,97 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CA95739E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A88755739ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236865AbiGMPUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
+        id S234663AbiGMPUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236820AbiGMPUA (ORCPT
+        with ESMTP id S236873AbiGMPUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:20:00 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990463C8CF
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:19:59 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 8-20020a05600c024800b003a2fe343db1so615514wmj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:19:59 -0700 (PDT)
+        Wed, 13 Jul 2022 11:20:15 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18A145F5C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:20:14 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10bec750eedso14414143fac.8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:20:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=amarulasolutions.com; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=x6cQzIVXOIBGsoXiuif7G7saQrxwRpZyrgHwFA3owXw=;
-        b=UbfTqu9UK6HYMNNZQE81zT8rSE22hs7tx/XmkR6naxIYHSRGj6AEx6AltM1hsmzR4F
-         4bXiETy55+RlwNvk1IjEOCCbrBKWjYwh8FJes5Nj5Gtm0KJ0htpOIJcD7Hqwk2zDs7Iq
-         TdthzJ+MRMfxWgMott1HwM2DG2cj/Ltjf6j/wAqI5snSDTfKrvkC9XrwI0qTjTRcvv+c
-         5LWJTTUyjFR99MZfzZv0TGCrJP0PiIujZlTZZ4o1r1cfo8P2cE8WuqC3pSDEs4JlOAeL
-         YWJ0AJHbxRcc0zRWjx++Lf/SLw0q11YGW/x+ml0SCKTD9TzAh2NljacWhysNuOeW9n9o
-         irzw==
+        bh=LKNJ81XHX1rVWPGtQSPsv7xkRycDjY6KgGLmlaN+gNY=;
+        b=UGv5W4X0AgNs0e90Jxbuk8yoqkf1YIvPuG32cxJaOFdhOKMYtLT3UzjNMyJo3NmCSB
+         h/K0iglgBA1TRNjZsaY3WPDnmRX23YpSMViygd9NRIhPlSo9yiPb+fbPadGOwbmeYz9x
+         0j6tumQO78ZJbjdyG1XX+ZjluB6BIV4JYujzA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=x6cQzIVXOIBGsoXiuif7G7saQrxwRpZyrgHwFA3owXw=;
-        b=CdQ2BS2aTu60nOrAp+/36gAAe3F/BdoWJjdkwHrsEWyTOpegBXejP1L78JsXKLsVSJ
-         x4s65oWPBx1wE2DbtaCDBawT49CnLCq22a28mXKnsthlhHAjCITPrHWkuiH1z9PcxLmS
-         5mnxER8YlAoW46c4vEF5MwBQtthXy+tPkXvVu/68xrz1vsjtWJoNFWyLCrTDoYCBcMjB
-         5HXYzoJ0L1kR1/WIXmV3soB61LzRF8Ch9cvgJlTIHU9SQq80HrtX+XiIfXyz3n4vAJGt
-         QUiV+izIYjKFrl0ycwvf65maIBgFm0XjFz26n08TY7LqtzXO+TRV5v60lWdq3BTwaxFr
-         I/Bw==
-X-Gm-Message-State: AJIora8w8tGbXpdAA1ZkhWn88A49FSEWevdQKF7uTUG00W+rpIkKEa9s
-        1OQonsTR0cinZ3SyydqheqI=
-X-Google-Smtp-Source: AGRyM1vdjvXKJQAC8aIpaLRCPxjr+/igY107IqJbiR9fjfmShIfWeDr52ubwhRVrPyxEKfoziD1OXw==
-X-Received: by 2002:a05:600c:1e20:b0:3a2:e540:17ad with SMTP id ay32-20020a05600c1e2000b003a2e54017admr4151536wmb.205.1657725598094;
-        Wed, 13 Jul 2022 08:19:58 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id i16-20020a05600c355000b003a2f88b2559sm2329150wmq.44.2022.07.13.08.19.57
+        bh=LKNJ81XHX1rVWPGtQSPsv7xkRycDjY6KgGLmlaN+gNY=;
+        b=HyZBLu1H2CMNGSvzUe2B5uHcVHQp0NEL2fRdeWAEbnBamkUBiU5nV+wNDKmzeHY5ND
+         9vtglEhLWTgim2T7C8c7mQaYwh19h4TSLj8KDn6bl0C4l8DLZOAbHuYAc4GRE/bzzCTv
+         BLY8T0tsNcIRvUF9fKY4L6IWZLqtHtHwRcuUownUa6RbccdCXRqdYXixtIqnp/7czltF
+         iruom7x2jkyXOlQSq1dN9kT3CtFOTaRWtnoYxDOYDPpXoR9qCpBxS5Yh7+T8WF2jT/LW
+         e/nj03gtD3VVkYNdvsBFo0Xu03UnApUu4nUJtD4UGFUTWOHU15KB6aN83fTr7SOjs6L8
+         Wfyw==
+X-Gm-Message-State: AJIora/Xc6wcSaYDbJTAhuTAPs0nCsePya+zDKIRs5ZBB4u3kfaPoizs
+        yD3a1HMz7OHSBxJBpUPQS4zqzsUg77oTVvmC
+X-Google-Smtp-Source: AGRyM1usHml13CDD+aHqFlxY8s5H+Eng7j9UX5kgdAqCwghIPyT60PRhwo1GRoZ8vA6nrb+/q/6Bdg==
+X-Received: by 2002:a05:6871:60c:b0:10b:ee7c:2e28 with SMTP id w12-20020a056871060c00b0010bee7c2e28mr4774059oan.21.1657725613728;
+        Wed, 13 Jul 2022 08:20:13 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.pdxnet.pdxeng.ch (host-80-182-13-224.pool80182.interbusiness.it. [80.182.13.224])
+        by smtp.gmail.com with ESMTPSA id x24-20020a4a3f58000000b00432ac97ad09sm4895477ooe.26.2022.07.13.08.20.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 08:19:57 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH] ALSA: usb-audio: Use atomic_try_cmpxchg in ep_state_update
-Date:   Wed, 13 Jul 2022 17:19:46 +0200
-Message-Id: <20220713151946.4743-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Wed, 13 Jul 2022 08:20:12 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Richard Palethorpe <rpalethorpe@suse.de>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        kernel test robot <oliver.sang@intel.com>, lkp@intel.com,
+        lkp@lists.01.org, ltp@lists.linux.it,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH] can: slcan: do not sleep with a spin lock held
+Date:   Wed, 13 Jul 2022 17:19:47 +0200
+Message-Id: <20220713151947.56379-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use atomic_try_cmpxchg instead of atomic_cmpxchg (*ptr, old, new) == old in
-ep_state_update. x86 CMPXCHG instruction returns success in ZF flag,
-so this change saves a compare after cmpxchg (and related move instruction
-in front of cmpxchg).
+We can't call close_candev() with a spin lock held, so release the lock
+before calling it.
 
-No functional change intended.
+Fixes: c4e54b063f42f ("can: slcan: use CAN network device driver API")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Link: https://lore.kernel.org/linux-kernel/Ysrf1Yc5DaRGN1WE@xsang-OptiPlex-9020/
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.de>
 ---
- sound/usb/endpoint.c | 2 +-
+
+ drivers/net/can/slcan/slcan-core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/usb/endpoint.c b/sound/usb/endpoint.c
-index f9c921683948..0d7b73bf7945 100644
---- a/sound/usb/endpoint.c
-+++ b/sound/usb/endpoint.c
-@@ -133,7 +133,7 @@ static inline bool ep_state_running(struct snd_usb_endpoint *ep)
+diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
+index 54d29a410ad5..6aaf2986effc 100644
+--- a/drivers/net/can/slcan/slcan-core.c
++++ b/drivers/net/can/slcan/slcan-core.c
+@@ -688,6 +688,7 @@ static int slc_close(struct net_device *dev)
+ 		/* TTY discipline is running. */
+ 		clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
+ 	}
++	spin_unlock_bh(&sl->lock);
+ 	netif_stop_queue(dev);
+ 	close_candev(dev);
+ 	sl->can.state = CAN_STATE_STOPPED;
+@@ -696,7 +697,6 @@ static int slc_close(struct net_device *dev)
  
- static inline bool ep_state_update(struct snd_usb_endpoint *ep, int old, int new)
- {
--	return atomic_cmpxchg(&ep->state, old, new) == old;
-+	return atomic_try_cmpxchg(&ep->state, &old, new);
+ 	sl->rcount   = 0;
+ 	sl->xleft    = 0;
+-	spin_unlock_bh(&sl->lock);
+ 
+ 	return 0;
  }
- 
- /**
 -- 
-2.35.3
+2.32.0
 

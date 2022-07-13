@@ -2,284 +2,433 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E2357301F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E624457301C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234629AbiGMIKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
+        id S234404AbiGMIKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiGMIKP (ORCPT
+        with ESMTP id S229968AbiGMIKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 13 Jul 2022 04:10:15 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CB1E9211;
-        Wed, 13 Jul 2022 01:10:04 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LjVbK2b8Qz1L95Y;
-        Wed, 13 Jul 2022 16:07:25 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Jul 2022 16:09:46 +0800
-Received: from [10.67.100.236] (10.67.100.236) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Jul 2022 16:09:45 +0800
-Message-ID: <767e9981-721a-f298-220c-4fd8bf3e9c70@huawei.com>
-Date:   Wed, 13 Jul 2022 16:09:45 +0800
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE32E922B
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:10:09 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id v16so14324141wrd.13
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:10:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=0GqG1BS7duofznD7e4pYx0NZnR4aAfeMrhDrHXO4LRU=;
+        b=ld5F+PLSePRhAOJj4cezt1eO8YWjJBGGY/QSeNSwAlg+DA106xRqccDuE7lOFjDBhE
+         fGjBL6tT2/cpX6zgHb3l+cjs+drTkS5I67NYUP/oW3SwZKt82N3TpUS/vTbvrVnIbeQF
+         Ve2wrMOFiwRCed2iHAqxobFZQ7wmVqNWHPAhZzgDI6m+1uuMsToWeRbKuv6zlWiY4+4I
+         rT4vhKzIi657ht5HAeBp/S4+gtD1jgFEaVHAyAWFZyewJtivdzdnP4KQKZo2rfqFqOUX
+         TxUOi6CIPJ0r7pKEfr6f+P0zNW92dE8MQ9075bgByKB4hb0Xhi9Uxv3NKvG//0B2T3kj
+         C5fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=0GqG1BS7duofznD7e4pYx0NZnR4aAfeMrhDrHXO4LRU=;
+        b=1Lu0YD3Tg5nL9317uxHTBg75+h2Hx1H3sEkdY6ZTn6FDjwUS3I9oGRkua+l5cvW27u
+         I0Rba/COZUZB4XgBM3w0UFQtQMIlwmCwi4/AUCf8v7S0wAfSjK7m4X8Hvo+8O4KduDfo
+         Wvr3wEIg66j2rJ929dlAICMxQOHgsvrd0mKXTu/V4xS2maSVWmRolMWLXJ8mEAj03wiq
+         30NoS3FjfeAT75gFTthw+IzbAOJsCrvs+hL6PxBr4UIYXgRvcECmmTKWk2it90H9VasJ
+         hnYh72rkweuVYz0FsaMt+eN7fbi4Qd60U7KfZI/UNl2PgdL333wfDj6wvnkE6NL0tE7w
+         gh9A==
+X-Gm-Message-State: AJIora/CEq3q2daGLxT14KGftjswCkWcSWh6XBhjT0Mxh28cewZldhOu
+        +nIreIfsoE4yxVIGmu7p1g2jS00R3DsRXg==
+X-Google-Smtp-Source: AGRyM1vNl2BJS7V95SvT6qyCjAZwbtbgSZHBaYC5KbJJvFonqzGwPo8+P196pQMm/XESqdxhGhX1eQ==
+X-Received: by 2002:a5d:58ef:0:b0:21d:9fc8:302e with SMTP id f15-20020a5d58ef000000b0021d9fc8302emr1873959wrd.22.1657699808218;
+        Wed, 13 Jul 2022 01:10:08 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id g10-20020a5d46ca000000b0021badf3cb26sm12180167wrs.63.2022.07.13.01.10.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 01:10:07 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 09:10:06 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] mfd: intel-lpss: Provide an SSP type to the SPI
+ driver
+Message-ID: <Ys593spfcFtoILhS@google.com>
+References: <20220702211903.9093-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3] RAS: Report ARM processor information to userspace
-To:     <james.morse@arm.com>
-References: <20220214030813.135766-1-lostway@zju.edu.cn>
-CC:     <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-        <bp@alien8.de>, <tony.luck@intel.com>,
-        <jason@os.amperecomputing.com>, <mchehab@kernel.org>,
-        <lostway@zju.edu.cn>, <mark.rutland@arm.com>, <rjw@rjwysocki.net>
-From:   tanxiaofei <tanxiaofei@huawei.com>
-In-Reply-To: <20220214030813.135766-1-lostway@zju.edu.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.100.236]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220702211903.9093-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 03 Jul 2022, Andy Shevchenko wrote:
 
-Hi James,
-
-This patch is necceary for error collection of rasdaemon, and also cpu 
-core error  prediction feature . Please help to give some comment when 
-you are free. thanks.
-
-
-在 2022/2/14 11:08, lostway@zju.edu.cn 写道:
-> From: Shengwei Luo <luoshengwei@huawei.com>
+> The SPI driver wants to know the exact type of the controller.
+> Provide this information to it. This is a complementary part to
+> the previously updated intel-lpss-acpi.c.
 > 
-> The original arm_event trace code only traces out ARM processor error
-> information data. It's not enough for user to take appropriate action.
-> 
-> According to UEFI_2_9 specification chapter N2.4.4, the ARM processor
-> error section includes several ARM processor error information, several
-> ARM processor context information and several vendor specific error
-> information structures. In addition to these info, there are error
-> severity and cpu logical index about the event. Report all of these
-> information to userspace via perf i/f. So that the user can do cpu core
-> isolation according to error severity and other info.
-> 
-> Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
-> Signed-off-by: Jason Tian <jason@os.amperecomputing.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
-> Links:
-> https://lore.kernel.org/lkml/20220126030906.56765-1-lostway@zju.edu.cn/
-> https://lore.kernel.org/lkml/20210205022229.313030-1-jason@os.amperecomputing.com/
 > 
-> v2->v3:
-> Add signed-off of original author.
-> Fix commit message to explain why a change is being done.
+> Note that this patch depends on earlier sent [1].
+> [1]: https://lore.kernel.org/lkml/20220628223047.34301-1-andriy.shevchenko@linux.intel.com/
 > 
-> v1->v2:
-> Cleaned up ci warnings.
-> ---
->   drivers/acpi/apei/ghes.c |  3 +--
->   drivers/ras/ras.c        | 46 ++++++++++++++++++++++++++++++++++++--
->   include/linux/ras.h      | 15 +++++++++++--
->   include/ras/ras_event.h  | 48 +++++++++++++++++++++++++++++++++++-----
->   4 files changed, 101 insertions(+), 11 deletions(-)
+>  drivers/mfd/intel-lpss-pci.c | 141 +++++++++++++++++++++++------------
+>  1 file changed, 95 insertions(+), 46 deletions(-)
 > 
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 0c5c9acc6254..f824c26057b1 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -490,9 +490,8 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
->   	int sec_sev, i;
->   	char *p;
->   
-> -	log_arm_hw_error(err);
-> -
->   	sec_sev = ghes_severity(gdata->error_severity);
-> +	log_arm_hw_error(err, sec_sev);
->   	if (sev != GHES_SEV_RECOVERABLE || sec_sev != GHES_SEV_RECOVERABLE)
->   		return false;
->   
-> diff --git a/drivers/ras/ras.c b/drivers/ras/ras.c
-> index 95540ea8dd9d..2a7f424d59b9 100644
-> --- a/drivers/ras/ras.c
-> +++ b/drivers/ras/ras.c
-> @@ -21,9 +21,51 @@ void log_non_standard_event(const guid_t *sec_type, const guid_t *fru_id,
->   	trace_non_standard_event(sec_type, fru_id, fru_text, sev, err, len);
->   }
->   
-> -void log_arm_hw_error(struct cper_sec_proc_arm *err)
-> +void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
->   {
-> -	trace_arm_event(err);
-> +	u32 pei_len;
-> +	u32 ctx_len = 0;
-> +	s32 vsei_len;
-> +	u8 *pei_err;
-> +	u8 *ctx_err;
-> +	u8 *ven_err_data;
-> +	struct cper_arm_err_info *err_info;
-> +	struct cper_arm_ctx_info *ctx_info;
-> +	int n, sz;
-> +	int cpu;
+> diff --git a/drivers/mfd/intel-lpss-pci.c b/drivers/mfd/intel-lpss-pci.c
+> index bb08b7a73fe1..dde31c50a632 100644
+> --- a/drivers/mfd/intel-lpss-pci.c
+> +++ b/drivers/mfd/intel-lpss-pci.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/pci.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/property.h>
+> +#include <linux/pxa2xx_ssp.h>
+>  
+>  #include "intel-lpss.h"
+>  
+> @@ -73,8 +74,18 @@ static void intel_lpss_pci_remove(struct pci_dev *pdev)
+>  
+>  static INTEL_LPSS_PM_OPS(intel_lpss_pci_pm_ops);
+>  
+> +static const struct property_entry spt_spi_properties[] = {
+> +	PROPERTY_ENTRY_U32("intel,spi-pxa2xx-type", LPSS_SPT_SSP),
+> +	{ }
+> +};
 > +
-> +	pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
-> +	pei_err = (u8 *)err + sizeof(struct cper_sec_proc_arm);
+> +static const struct software_node spt_spi_node = {
+> +	.properties = spt_spi_properties,
+> +};
 > +
-> +	err_info = (struct cper_arm_err_info *)(err + 1);
-> +	ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
-> +	ctx_err = (u8 *)ctx_info;
-> +	for (n = 0; n < err->context_info_num; n++) {
-> +		sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
-> +		ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
-> +		ctx_len += sz;
-> +	}
+>  static const struct intel_lpss_platform_info spt_info = {
+>  	.clk_rate = 120000000,
+> +	.swnode = &spt_spi_node,
+>  };
+
+IMHO, this is a rubbish interface.
+
+The amount of 10-line changes required to store a 32-bit value is
+depressing.  Is there not a reduced interface for storing small pieces
+of data that doesn't require arrays of structs?
+
+>  static const struct property_entry spt_i2c_properties[] = {
+> @@ -108,8 +119,18 @@ static const struct intel_lpss_platform_info spt_uart_info = {
+>  	.swnode = &uart_node,
+>  };
+>  
+> +static const struct property_entry bxt_spi_properties[] = {
+> +	PROPERTY_ENTRY_U32("intel,spi-pxa2xx-type", LPSS_BXT_SSP),
+> +	{ }
+> +};
 > +
-> +	vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
-> +						pei_len + ctx_len);
-> +	if (vsei_len < 0) {
-> +		pr_warn(FW_BUG
-> +			"section length: %d\n", err->section_length);
-> +		pr_warn(FW_BUG
-> +			"section length is too small\n");
-> +		pr_warn(FW_BUG
-> +			"firmware-generated error record is incorrect\n");
-> +		vsei_len = 0;
-> +	}
-> +	ven_err_data = (u8 *)ctx_info;
+> +static const struct software_node bxt_spi_node = {
+> +	.properties = bxt_spi_properties,
+> +};
 > +
-> +	cpu = GET_LOGICAL_INDEX(err->mpidr);
-> +	/* when return value is invalid, set cpu index to -1 */
-> +	if (cpu < 0)
-> +		cpu = -1;
+>  static const struct intel_lpss_platform_info bxt_info = {
+>  	.clk_rate = 100000000,
+> +	.swnode = &bxt_spi_node,
+>  };
+>  
+>  static const struct intel_lpss_platform_info bxt_uart_info = {
+> @@ -166,6 +187,20 @@ static const struct intel_lpss_platform_info glk_i2c_info = {
+>  	.swnode = &glk_i2c_node,
+>  };
+>  
+> +static const struct property_entry cnl_spi_properties[] = {
+> +	PROPERTY_ENTRY_U32("intel,spi-pxa2xx-type", LPSS_CNL_SSP),
+> +	{ }
+> +};
 > +
-> +	trace_arm_event(err, pei_err, pei_len, ctx_err, ctx_len,
-> +			ven_err_data, (u32)vsei_len, sev, cpu);
->   }
->   
->   static int __init ras_init(void)
-> diff --git a/include/linux/ras.h b/include/linux/ras.h
-> index 1f4048bf2674..4529775374d0 100644
-> --- a/include/linux/ras.h
-> +++ b/include/linux/ras.h
-> @@ -24,7 +24,7 @@ int __init parse_cec_param(char *str);
->   void log_non_standard_event(const guid_t *sec_type,
->   			    const guid_t *fru_id, const char *fru_text,
->   			    const u8 sev, const u8 *err, const u32 len);
-> -void log_arm_hw_error(struct cper_sec_proc_arm *err);
-> +void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev);
->   #else
->   static inline void
->   log_non_standard_event(const guid_t *sec_type,
-> @@ -32,7 +32,18 @@ log_non_standard_event(const guid_t *sec_type,
->   		       const u8 sev, const u8 *err, const u32 len)
->   { return; }
->   static inline void
-> -log_arm_hw_error(struct cper_sec_proc_arm *err) { return; }
-> +log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev) { return; }
->   #endif
->   
-> +#if defined(CONFIG_ARM) || defined(CONFIG_ARM64)
-> +#include <asm/smp_plat.h>
-> +/*
-> + * Include ARM specific SMP header which provides a function mapping mpidr to
-> + * cpu logical index.
-> + */
-> +#define GET_LOGICAL_INDEX(mpidr) get_logical_index(mpidr & MPIDR_HWID_BITMASK)
-> +#else
-> +#define GET_LOGICAL_INDEX(mpidr) -EINVAL
-> +#endif /* CONFIG_ARM || CONFIG_ARM64 */
+> +static const struct software_node cnl_spi_node = {
+> +	.properties = cnl_spi_properties,
+> +};
 > +
->   #endif /* __RAS_H__ */
-> diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
-> index d0337a41141c..92cfb61bdb20 100644
-> --- a/include/ras/ras_event.h
-> +++ b/include/ras/ras_event.h
-> @@ -168,11 +168,24 @@ TRACE_EVENT(mc_event,
->    * This event is generated when hardware detects an ARM processor error
->    * has occurred. UEFI 2.6 spec section N.2.4.4.
->    */
-> +#define APEIL "ARM Processor Err Info data len"
-> +#define APEID "ARM Processor Err Info raw data"
-> +#define APECIL "ARM Processor Err Context Info data len"
-> +#define APECID "ARM Processor Err Context Info raw data"
-> +#define VSEIL "Vendor Specific Err Info data len"
-> +#define VSEID "Vendor Specific Err Info raw data"
->   TRACE_EVENT(arm_event,
->   
-> -	TP_PROTO(const struct cper_sec_proc_arm *proc),
-> +	TP_PROTO(const struct cper_sec_proc_arm *proc, const u8 *pei_err,
-> +			const u32 pei_len,
-> +			const u8 *ctx_err,
-> +			const u32 ctx_len,
-> +			const u8 *oem,
-> +			const u32 oem_len,
-> +			u8 sev,
-> +			int cpu),
->   
-> -	TP_ARGS(proc),
-> +	TP_ARGS(proc, pei_err, pei_len, ctx_err, ctx_len, oem, oem_len, sev, cpu),
->   
->   	TP_STRUCT__entry(
->   		__field(u64, mpidr)
-> @@ -180,6 +193,14 @@ TRACE_EVENT(arm_event,
->   		__field(u32, running_state)
->   		__field(u32, psci_state)
->   		__field(u8, affinity)
-> +		__field(u32, pei_len)
-> +		__dynamic_array(u8, buf, pei_len)
-> +		__field(u32, ctx_len)
-> +		__dynamic_array(u8, buf1, ctx_len)
-> +		__field(u32, oem_len)
-> +		__dynamic_array(u8, buf2, oem_len)
-> +		__field(u8, sev)
-> +		__field(int, cpu)
->   	),
->   
->   	TP_fast_assign(
-> @@ -199,12 +220,29 @@ TRACE_EVENT(arm_event,
->   			__entry->running_state = ~0;
->   			__entry->psci_state = ~0;
->   		}
-> +		__entry->pei_len = pei_len;
-> +		memcpy(__get_dynamic_array(buf), pei_err, pei_len);
-> +		__entry->ctx_len = ctx_len;
-> +		memcpy(__get_dynamic_array(buf1), ctx_err, ctx_len);
-> +		__entry->oem_len = oem_len;
-> +		memcpy(__get_dynamic_array(buf2), oem, oem_len);
-> +		__entry->sev = sev;
-> +		__entry->cpu = cpu;
->   	),
->   
-> -	TP_printk("affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
-> -		  "running state: %d; PSCI state: %d",
-> +	TP_printk("cpu: %d; error: %d; affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
-> +		  "running state: %d; PSCI state: %d; "
-> +		  "%s: %d; %s: %s; %s: %d; %s: %s; %s: %d; %s: %s",
-> +		  __entry->cpu,
-> +		  __entry->sev,
->   		  __entry->affinity, __entry->mpidr, __entry->midr,
-> -		  __entry->running_state, __entry->psci_state)
-> +		  __entry->running_state, __entry->psci_state,
-> +		  APEIL, __entry->pei_len, APEID,
-> +		  __print_hex(__get_dynamic_array(buf), __entry->pei_len),
-> +		  APECIL, __entry->ctx_len, APECID,
-> +		  __print_hex(__get_dynamic_array(buf1), __entry->ctx_len),
-> +		  VSEIL, __entry->oem_len, VSEID,
-> +		  __print_hex(__get_dynamic_array(buf2), __entry->oem_len))
->   );
->   
->   /*
-> 
+> +static const struct intel_lpss_platform_info cnl_info = {
+> +	.clk_rate = 120000000,
+> +	.swnode = &cnl_spi_node,
+> +};
+> +
+>  static const struct intel_lpss_platform_info cnl_i2c_info = {
+>  	.clk_rate = 216000000,
+>  	.swnode = &spt_i2c_node,
+> @@ -176,12 +211,26 @@ static const struct intel_lpss_platform_info ehl_i2c_info = {
+>  	.swnode = &bxt_i2c_node,
+>  };
+>  
+> +static const struct property_entry tgl_spi_properties[] = {
+> +	PROPERTY_ENTRY_U32("intel,spi-pxa2xx-type", LPSS_CNL_SSP),
+> +	{ }
+> +};
+> +
+> +static const struct software_node tgl_spi_node = {
+> +	.properties = tgl_spi_properties,
+> +};
+> +
+> +static const struct intel_lpss_platform_info tgl_info = {
+> +	.clk_rate = 100000000,
+> +	.swnode = &tgl_spi_node,
+> +};
+> +
+>  static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	/* CML-LP */
+>  	{ PCI_VDEVICE(INTEL, 0x02a8), (kernel_ulong_t)&spt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x02a9), (kernel_ulong_t)&spt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x02aa), (kernel_ulong_t)&spt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x02ab), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x02aa), (kernel_ulong_t)&cnl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x02ab), (kernel_ulong_t)&cnl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x02c5), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x02c6), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x02c7), (kernel_ulong_t)&spt_uart_info },
+> @@ -189,18 +238,18 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	{ PCI_VDEVICE(INTEL, 0x02e9), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x02ea), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x02eb), (kernel_ulong_t)&cnl_i2c_info },
+> -	{ PCI_VDEVICE(INTEL, 0x02fb), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x02fb), (kernel_ulong_t)&cnl_info },
+>  	/* CML-H */
+>  	{ PCI_VDEVICE(INTEL, 0x06a8), (kernel_ulong_t)&spt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x06a9), (kernel_ulong_t)&spt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x06aa), (kernel_ulong_t)&spt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x06ab), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x06aa), (kernel_ulong_t)&cnl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x06ab), (kernel_ulong_t)&cnl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x06c7), (kernel_ulong_t)&spt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x06e8), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x06e9), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x06ea), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x06eb), (kernel_ulong_t)&cnl_i2c_info },
+> -	{ PCI_VDEVICE(INTEL, 0x06fb), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x06fb), (kernel_ulong_t)&cnl_info },
+>  	/* BXT A-Step */
+>  	{ PCI_VDEVICE(INTEL, 0x0aac), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x0aae), (kernel_ulong_t)&bxt_i2c_info },
+> @@ -255,8 +304,8 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	/* ICL-LP */
+>  	{ PCI_VDEVICE(INTEL, 0x34a8), (kernel_ulong_t)&spt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x34a9), (kernel_ulong_t)&spt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x34aa), (kernel_ulong_t)&spt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x34ab), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x34aa), (kernel_ulong_t)&cnl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x34ab), (kernel_ulong_t)&cnl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x34c5), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x34c6), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x34c7), (kernel_ulong_t)&spt_uart_info },
+> @@ -264,15 +313,15 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	{ PCI_VDEVICE(INTEL, 0x34e9), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x34ea), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x34eb), (kernel_ulong_t)&bxt_i2c_info },
+> -	{ PCI_VDEVICE(INTEL, 0x34fb), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x34fb), (kernel_ulong_t)&cnl_info },
+>  	/* ICL-N */
+>  	{ PCI_VDEVICE(INTEL, 0x38a8), (kernel_ulong_t)&spt_uart_info },
+>  	/* TGL-H */
+>  	{ PCI_VDEVICE(INTEL, 0x43a7), (kernel_ulong_t)&bxt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x43a8), (kernel_ulong_t)&bxt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x43a9), (kernel_ulong_t)&bxt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x43aa), (kernel_ulong_t)&bxt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x43ab), (kernel_ulong_t)&bxt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x43aa), (kernel_ulong_t)&tgl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x43ab), (kernel_ulong_t)&tgl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x43ad), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x43ae), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x43d8), (kernel_ulong_t)&bxt_i2c_info },
+> @@ -281,8 +330,8 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	{ PCI_VDEVICE(INTEL, 0x43e9), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x43ea), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x43eb), (kernel_ulong_t)&bxt_i2c_info },
+> -	{ PCI_VDEVICE(INTEL, 0x43fb), (kernel_ulong_t)&bxt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x43fd), (kernel_ulong_t)&bxt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x43fb), (kernel_ulong_t)&tgl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x43fd), (kernel_ulong_t)&tgl_info },
+>  	/* EHL */
+>  	{ PCI_VDEVICE(INTEL, 0x4b28), (kernel_ulong_t)&bxt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x4b29), (kernel_ulong_t)&bxt_uart_info },
+> @@ -301,8 +350,8 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	/* JSL */
+>  	{ PCI_VDEVICE(INTEL, 0x4da8), (kernel_ulong_t)&spt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x4da9), (kernel_ulong_t)&spt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x4daa), (kernel_ulong_t)&spt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x4dab), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x4daa), (kernel_ulong_t)&cnl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x4dab), (kernel_ulong_t)&cnl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x4dc5), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x4dc6), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x4dc7), (kernel_ulong_t)&spt_uart_info },
+> @@ -310,12 +359,12 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	{ PCI_VDEVICE(INTEL, 0x4de9), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x4dea), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x4deb), (kernel_ulong_t)&bxt_i2c_info },
+> -	{ PCI_VDEVICE(INTEL, 0x4dfb), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x4dfb), (kernel_ulong_t)&cnl_info },
+>  	/* ADL-P */
+>  	{ PCI_VDEVICE(INTEL, 0x51a8), (kernel_ulong_t)&bxt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x51a9), (kernel_ulong_t)&bxt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x51aa), (kernel_ulong_t)&bxt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x51ab), (kernel_ulong_t)&bxt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x51aa), (kernel_ulong_t)&tgl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x51ab), (kernel_ulong_t)&tgl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x51c5), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x51c6), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x51c7), (kernel_ulong_t)&bxt_uart_info },
+> @@ -325,12 +374,12 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	{ PCI_VDEVICE(INTEL, 0x51e9), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x51ea), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x51eb), (kernel_ulong_t)&bxt_i2c_info },
+> -	{ PCI_VDEVICE(INTEL, 0x51fb), (kernel_ulong_t)&bxt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x51fb), (kernel_ulong_t)&tgl_info },
+>  	/* ADL-M */
+>  	{ PCI_VDEVICE(INTEL, 0x54a8), (kernel_ulong_t)&bxt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x54a9), (kernel_ulong_t)&bxt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x54aa), (kernel_ulong_t)&bxt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x54ab), (kernel_ulong_t)&bxt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x54aa), (kernel_ulong_t)&tgl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x54ab), (kernel_ulong_t)&tgl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x54c5), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x54c6), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x54c7), (kernel_ulong_t)&bxt_uart_info },
+> @@ -338,7 +387,7 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	{ PCI_VDEVICE(INTEL, 0x54e9), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x54ea), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x54eb), (kernel_ulong_t)&bxt_i2c_info },
+> -	{ PCI_VDEVICE(INTEL, 0x54fb), (kernel_ulong_t)&bxt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x54fb), (kernel_ulong_t)&tgl_info },
+>  	/* APL */
+>  	{ PCI_VDEVICE(INTEL, 0x5aac), (kernel_ulong_t)&apl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x5aae), (kernel_ulong_t)&apl_i2c_info },
+> @@ -358,39 +407,39 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	/* RPL-S */
+>  	{ PCI_VDEVICE(INTEL, 0x7a28), (kernel_ulong_t)&bxt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7a29), (kernel_ulong_t)&bxt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x7a2a), (kernel_ulong_t)&bxt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x7a2b), (kernel_ulong_t)&bxt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x7a2a), (kernel_ulong_t)&tgl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x7a2b), (kernel_ulong_t)&tgl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7a4c), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7a4d), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7a4e), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7a4f), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7a5c), (kernel_ulong_t)&bxt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x7a79), (kernel_ulong_t)&bxt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x7a7b), (kernel_ulong_t)&bxt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x7a79), (kernel_ulong_t)&tgl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x7a7b), (kernel_ulong_t)&tgl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7a7c), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7a7d), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7a7e), (kernel_ulong_t)&bxt_uart_info },
+>  	/* ADL-S */
+>  	{ PCI_VDEVICE(INTEL, 0x7aa8), (kernel_ulong_t)&bxt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7aa9), (kernel_ulong_t)&bxt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x7aaa), (kernel_ulong_t)&bxt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x7aab), (kernel_ulong_t)&bxt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x7aaa), (kernel_ulong_t)&tgl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x7aab), (kernel_ulong_t)&tgl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7acc), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7acd), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7ace), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7acf), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7adc), (kernel_ulong_t)&bxt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x7af9), (kernel_ulong_t)&bxt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x7afb), (kernel_ulong_t)&bxt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x7af9), (kernel_ulong_t)&tgl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x7afb), (kernel_ulong_t)&tgl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7afc), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7afd), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7afe), (kernel_ulong_t)&bxt_uart_info },
+>  	/* MTL-P */
+>  	{ PCI_VDEVICE(INTEL, 0x7e25), (kernel_ulong_t)&bxt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7e26), (kernel_ulong_t)&bxt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x7e27), (kernel_ulong_t)&bxt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x7e30), (kernel_ulong_t)&bxt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x7e46), (kernel_ulong_t)&bxt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x7e27), (kernel_ulong_t)&tgl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x7e30), (kernel_ulong_t)&tgl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x7e46), (kernel_ulong_t)&tgl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7e50), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7e51), (kernel_ulong_t)&bxt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x7e52), (kernel_ulong_t)&bxt_uart_info },
+> @@ -424,8 +473,8 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	/* CNL-LP */
+>  	{ PCI_VDEVICE(INTEL, 0x9da8), (kernel_ulong_t)&spt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0x9da9), (kernel_ulong_t)&spt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0x9daa), (kernel_ulong_t)&spt_info },
+> -	{ PCI_VDEVICE(INTEL, 0x9dab), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x9daa), (kernel_ulong_t)&cnl_info },
+> +	{ PCI_VDEVICE(INTEL, 0x9dab), (kernel_ulong_t)&cnl_info },
+>  	{ PCI_VDEVICE(INTEL, 0x9dc5), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x9dc6), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x9dc7), (kernel_ulong_t)&spt_uart_info },
+> @@ -433,12 +482,12 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	{ PCI_VDEVICE(INTEL, 0x9de9), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x9dea), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0x9deb), (kernel_ulong_t)&cnl_i2c_info },
+> -	{ PCI_VDEVICE(INTEL, 0x9dfb), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0x9dfb), (kernel_ulong_t)&cnl_info },
+>  	/* TGL-LP */
+>  	{ PCI_VDEVICE(INTEL, 0xa0a8), (kernel_ulong_t)&bxt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa0a9), (kernel_ulong_t)&bxt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0xa0aa), (kernel_ulong_t)&spt_info },
+> -	{ PCI_VDEVICE(INTEL, 0xa0ab), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0xa0aa), (kernel_ulong_t)&cnl_info },
+> +	{ PCI_VDEVICE(INTEL, 0xa0ab), (kernel_ulong_t)&cnl_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa0c5), (kernel_ulong_t)&spt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa0c6), (kernel_ulong_t)&spt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa0c7), (kernel_ulong_t)&bxt_uart_info },
+> @@ -448,15 +497,15 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	{ PCI_VDEVICE(INTEL, 0xa0db), (kernel_ulong_t)&bxt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa0dc), (kernel_ulong_t)&bxt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa0dd), (kernel_ulong_t)&bxt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0xa0de), (kernel_ulong_t)&spt_info },
+> -	{ PCI_VDEVICE(INTEL, 0xa0df), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0xa0de), (kernel_ulong_t)&cnl_info },
+> +	{ PCI_VDEVICE(INTEL, 0xa0df), (kernel_ulong_t)&cnl_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa0e8), (kernel_ulong_t)&spt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa0e9), (kernel_ulong_t)&spt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa0ea), (kernel_ulong_t)&spt_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa0eb), (kernel_ulong_t)&spt_i2c_info },
+> -	{ PCI_VDEVICE(INTEL, 0xa0fb), (kernel_ulong_t)&spt_info },
+> -	{ PCI_VDEVICE(INTEL, 0xa0fd), (kernel_ulong_t)&spt_info },
+> -	{ PCI_VDEVICE(INTEL, 0xa0fe), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0xa0fb), (kernel_ulong_t)&cnl_info },
+> +	{ PCI_VDEVICE(INTEL, 0xa0fd), (kernel_ulong_t)&cnl_info },
+> +	{ PCI_VDEVICE(INTEL, 0xa0fe), (kernel_ulong_t)&cnl_info },
+>  	/* SPT-H */
+>  	{ PCI_VDEVICE(INTEL, 0xa127), (kernel_ulong_t)&spt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa128), (kernel_ulong_t)&spt_uart_info },
+> @@ -479,14 +528,14 @@ static const struct pci_device_id intel_lpss_pci_ids[] = {
+>  	/* CNL-H */
+>  	{ PCI_VDEVICE(INTEL, 0xa328), (kernel_ulong_t)&spt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa329), (kernel_ulong_t)&spt_uart_info },
+> -	{ PCI_VDEVICE(INTEL, 0xa32a), (kernel_ulong_t)&spt_info },
+> -	{ PCI_VDEVICE(INTEL, 0xa32b), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0xa32a), (kernel_ulong_t)&cnl_info },
+> +	{ PCI_VDEVICE(INTEL, 0xa32b), (kernel_ulong_t)&cnl_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa347), (kernel_ulong_t)&spt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa368), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa369), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa36a), (kernel_ulong_t)&cnl_i2c_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa36b), (kernel_ulong_t)&cnl_i2c_info },
+> -	{ PCI_VDEVICE(INTEL, 0xa37b), (kernel_ulong_t)&spt_info },
+> +	{ PCI_VDEVICE(INTEL, 0xa37b), (kernel_ulong_t)&cnl_info },
+>  	/* CML-V */
+>  	{ PCI_VDEVICE(INTEL, 0xa3a7), (kernel_ulong_t)&spt_uart_info },
+>  	{ PCI_VDEVICE(INTEL, 0xa3a8), (kernel_ulong_t)&spt_uart_info },
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

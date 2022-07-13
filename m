@@ -2,163 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71EA573663
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CC6573665
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235521AbiGMM3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 08:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
+        id S235715AbiGMMaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 08:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235261AbiGMM3M (ORCPT
+        with ESMTP id S235592AbiGMMaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 08:29:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681EECB46B
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 05:29:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JH791TW76klmRBesh5KjjW8tQhY5Q9TfC3bF5rUIXOs=; b=JTkDLoch66fdbTS/mB1AA4oU+3
-        +bqc+aKbSyHLdLzscPQBfzwmA+pZDjbMAzDGHWUr1cs3Ynyltk6eM9hTdNg06cpGmG+XoCSHlLo5e
-        a6Wlz8eptkUvmMN8aX81unuZoRisHqq8OGBu1k7YXoqzWQD+LdjDbt0K3gK93oY+yrDkDuByF2xWU
-        3aEJxsUYzNgO37kG91KBqyq0IGNQ/RM0uLpD4SYk+sIALo2VXmf0JBZWrrhzO8ME13Pw8APhId/jy
-        B0GBbjbHq6uOTX8MTte0iNIQ6PrOs/PI4vT9Ed8sOt7ACaDz0F9F2EECR5xlvN8BFYkyR7jKiGP+D
-        QigtQnEQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBbU9-008BXJ-OA; Wed, 13 Jul 2022 12:28:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5C732300252;
-        Wed, 13 Jul 2022 14:28:55 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 46946201C6D24; Wed, 13 Jul 2022 14:28:55 +0200 (CEST)
-Date:   Wed, 13 Jul 2022 14:28:55 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     Borislav Petkov <bp@suse.de>, Josh Poimboeuf <jpoimboe@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, keescook@chromium.org
-Subject: Re: [x86,static_call]  ee88d363d1:
- WARNING:at_arch/x86/kernel/alternative.c:#apply_returns
-Message-ID: <Ys66hwtFcGbYmoiZ@hirez.programming.kicks-ass.net>
-References: <Ys58BxHxoDZ7rfpr@xsang-OptiPlex-9020>
+        Wed, 13 Jul 2022 08:30:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21505EA16B;
+        Wed, 13 Jul 2022 05:30:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1D09B81E9C;
+        Wed, 13 Jul 2022 12:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 740F3C3411E;
+        Wed, 13 Jul 2022 12:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657715417;
+        bh=z+L2ToGiFTJupu7Yhz4NCUZ6QHX9gsvVXZR6jaSO6oY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=tXZRKPYEK1VSkZFCCfdkOS1b6Es0ZssSUw71DM3M05TkYQta/NrYB53p1GavCc+ee
+         oSR1SBMV7NGH8FS/SBfNW+TzwpeKn8hReYhujhF/iemgR/z1eWc853Jp/S8LHXJ1C2
+         tacZCl2qNb/lTnSKg9Nt4fIYwC43+z9y203aR3YlBqGqHbCuVbGmVJl3XEgHc0M6y1
+         O9TAooHfP4PA5nad9AxHNxTsBf2wCkyMvMlxU2P9I5WBQ1dtJKAReY0ha5HQgOFh/B
+         JDEHmL1C9c1Cuk8ZBCS9Faql0kb+cj/LOO2AZVoGQpANqHDux79HVQ6+t+1iO20GXf
+         Lrh0My5X90Hkg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 54B00E45227;
+        Wed, 13 Jul 2022 12:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys58BxHxoDZ7rfpr@xsang-OptiPlex-9020>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v1 net 00/15] sysctl: Fix data-races around ipv4_net_table
+ (Round 1).
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165771541734.30030.5319187042476768216.git-patchwork-notify@kernel.org>
+Date:   Wed, 13 Jul 2022 12:30:17 +0000
+References: <20220712001533.89927-1-kuniyu@amazon.com>
+In-Reply-To: <20220712001533.89927-1-kuniyu@amazon.com>
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, dsahern@kernel.org, mcgrof@kernel.org,
+        keescook@chromium.org, yzaikin@google.com, kuni1840@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 04:02:15PM +0800, kernel test robot wrote:
+Hello:
 
-> [   22.065014][    T0] ------------[ cut here ]------------
-> [ 22.066738][ T0] WARNING: CPU: 0 PID: 0 at arch/x86/kernel/alternative.c:557 apply_returns (arch/x86/kernel/alternative.c:557 (discriminator 1)) 
-> [   22.069534][    T0] Modules linked in:
-> [   22.070738][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc4-00008-gee88d363d156 #1
-> [   22.072739][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
-> [ 22.074741][ T0] RIP: 0010:apply_returns (arch/x86/kernel/alternative.c:557 (discriminator 1)) 
-> [ 22.076739][ T0] Code: ff ff 74 cb 48 83 c5 04 49 39 ee 0f 87 81 fe ff ff e9 22 ff ff ff 0f 0b 48 83 c5 04 49 39 ee 0f 87 6d fe ff ff e9 0e ff ff ff <0f> 0b 48 83 c5 04 49 39 ee 0f 87 59 fe ff ff e9 fa fe ff ff 48 89
-> All code
-> ========
->    0:	ff                   	(bad)  
->    1:	ff 74 cb 48          	pushq  0x48(%rbx,%rcx,8)
->    5:	83 c5 04             	add    $0x4,%ebp
->    8:	49 39 ee             	cmp    %rbp,%r14
->    b:	0f 87 81 fe ff ff    	ja     0xfffffffffffffe92
->   11:	e9 22 ff ff ff       	jmpq   0xffffffffffffff38
->   16:	0f 0b                	ud2    
->   18:	48 83 c5 04          	add    $0x4,%rbp
->   1c:	49 39 ee             	cmp    %rbp,%r14
->   1f:	0f 87 6d fe ff ff    	ja     0xfffffffffffffe92
->   25:	e9 0e ff ff ff       	jmpq   0xffffffffffffff38
->   2a:*	0f 0b                	ud2    		<-- trapping instruction
->   2c:	48 83 c5 04          	add    $0x4,%rbp
->   30:	49 39 ee             	cmp    %rbp,%r14
->   33:	0f 87 59 fe ff ff    	ja     0xfffffffffffffe92
->   39:	e9 fa fe ff ff       	jmpq   0xffffffffffffff38
->   3e:	48                   	rex.W
->   3f:	89                   	.byte 0x89
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Mon, 11 Jul 2022 17:15:18 -0700 you wrote:
+> This series fixes data-races around the first 13 knobs and
+> nexthop_compat_mode in ipv4_net_table.
 > 
-> Code starting with the faulting instruction
-> ===========================================
->    0:	0f 0b                	ud2    
->    2:	48 83 c5 04          	add    $0x4,%rbp
->    6:	49 39 ee             	cmp    %rbp,%r14
->    9:	0f 87 59 fe ff ff    	ja     0xfffffffffffffe68
->    f:	e9 fa fe ff ff       	jmpq   0xffffffffffffff0e
->   14:	48                   	rex.W
->   15:	89                   	.byte 0x89
-> [   22.078738][    T0] RSP: 0000:ffffffffa2807dc0 EFLAGS: 00010202
-> [   22.080737][    T0] RAX: 0000000000000000 RBX: ffffffffa1b8fe05 RCX: 0000000000000000
-> [   22.082546][    T0] RDX: 000000000000000f RSI: ffffffffa184a3e0 RDI: ffffffffa1b8fe05
-> [   22.083738][    T0] RBP: ffffffffa42851e8 R08: 0000000000000001 R09: ffffffffa1b8fe05
-> [   22.086491][    T0] R10: 0000000000000000 R11: 0000000000000000 R12: ffffffffa1b8fe00
-> [   22.087738][    T0] R13: dffffc0000000000 R14: ffffffffa4299890 R15: 1ffffffff4500fbb
-> [   22.089739][    T0] FS:  0000000000000000(0000) GS:ffff888396600000(0000) knlGS:0000000000000000
-> [   22.091743][    T0] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   22.093738][    T0] CR2: ffff88843ffff000 CR3: 00000003a562a000 CR4: 00000000000006f0
-> [   22.095753][    T0] Call Trace:
-> [   22.097742][    T0]  <TASK>
-> [ 22.098765][ T0] ? rwlock_bug+0xc0/0xc0 
-> [ 22.100230][ T0] ? apply_retpolines (arch/x86/kernel/alternative.c:538) 
-> [ 22.101791][ T0] ? int3_exception_notify (arch/x86/kernel/alternative.c:849) 
-> [ 22.103261][ T0] ? check_bugs (arch/x86/kernel/cpu/bugs.c:149) 
-> [ 22.104751][ T0] alternative_instructions (arch/x86/kernel/alternative.c:932) 
-> [ 22.106766][ T0] check_bugs (arch/x86/kernel/cpu/bugs.c:159) 
-> [ 22.108244][ T0] start_kernel (init/main.c:1132) 
-> [ 22.109747][ T0] secondary_startup_64_no_verify (arch/x86/kernel/head_64.S:358) 
-> [   22.111300][    T0]  </TASK>
-> [   22.112742][    T0] irq event stamp: 87769
-> [ 22.113741][ T0] hardirqs last enabled at (87781): __up_console_sem (arch/x86/include/asm/irqflags.h:45 (discriminator 1) arch/x86/include/asm/irqflags.h:80 (discriminator 1) arch/x86/include/asm/irqflags.h:138 (discriminator 1) kernel/printk/printk.c:264 (discriminator 1)) 
-> [ 22.115740][ T0] hardirqs last disabled at (87794): __up_console_sem (kernel/printk/printk.c:262 (discriminator 1)) 
-> [ 22.117739][ T0] softirqs last enabled at (2774): cgroup_idr_alloc+0x5b/0x1c0 
-> [ 22.119739][ T0] softirqs last disabled at (2772): cgroup_idr_alloc+0x2e/0x1c0 
-> [   22.121741][    T0] ---[ end trace 0000000000000000 ]---
+> I will post another patch for three early_demux knobs later,
+> so the next round will start from ip_default_ttl.
+> 
+> 
+> [...]
+
+Here is the summary with links:
+  - [v1,net,01/15] sysctl: Fix data-races in proc_dou8vec_minmax().
+    https://git.kernel.org/netdev/net/c/7dee5d7747a6
+  - [v1,net,02/15] sysctl: Fix data-races in proc_dointvec_ms_jiffies().
+    https://git.kernel.org/netdev/net/c/7d1025e55978
+  - [v1,net,03/15] tcp: Fix a data-race around sysctl_max_tw_buckets.
+    https://git.kernel.org/netdev/net/c/6f605b57f378
+  - [v1,net,04/15] icmp: Fix a data-race around sysctl_icmp_echo_ignore_all.
+    https://git.kernel.org/netdev/net/c/bb7bb35a63b4
+  - [v1,net,05/15] icmp: Fix data-races around sysctl_icmp_echo_enable_probe.
+    https://git.kernel.org/netdev/net/c/4a2f7083cc6c
+  - [v1,net,06/15] icmp: Fix a data-race around sysctl_icmp_echo_ignore_broadcasts.
+    https://git.kernel.org/netdev/net/c/66484bb98ed2
+  - [v1,net,07/15] icmp: Fix a data-race around sysctl_icmp_ignore_bogus_error_responses.
+    https://git.kernel.org/netdev/net/c/b04f9b7e85c7
+  - [v1,net,08/15] icmp: Fix a data-race around sysctl_icmp_errors_use_inbound_ifaddr.
+    https://git.kernel.org/netdev/net/c/d2efabce81db
+  - [v1,net,09/15] icmp: Fix a data-race around sysctl_icmp_ratelimit.
+    https://git.kernel.org/netdev/net/c/2a4eb714841f
+  - [v1,net,10/15] icmp: Fix a data-race around sysctl_icmp_ratemask.
+    https://git.kernel.org/netdev/net/c/1ebcb25ad6fc
+  - [v1,net,11/15] raw: Fix a data-race around sysctl_raw_l3mdev_accept.
+    https://git.kernel.org/netdev/net/c/1dace014928e
+  - [v1,net,12/15] tcp: Fix data-races around sysctl_tcp_ecn.
+    https://git.kernel.org/netdev/net/c/4785a66702f0
+  - [v1,net,13/15] tcp: Fix a data-race around sysctl_tcp_ecn_fallback.
+    https://git.kernel.org/netdev/net/c/12b8d9ca7e67
+  - [v1,net,14/15] ipv4: Fix data-races around sysctl_ip_dynaddr.
+    https://git.kernel.org/netdev/net/c/e49e4aff7ec1
+  - [v1,net,15/15] nexthop: Fix data-races around nexthop_compat_mode.
+    https://git.kernel.org/netdev/net/c/bdf00bf24bef
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index d6858533e6e5..ff309e829192 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -555,8 +555,10 @@ void __init_or_module noinline apply_returns(s32 *start, s32 *end)
- 			dest = addr + insn.length + insn.immediate.value;
- 
- 		if (__static_call_fixup(addr, op, dest) ||
--		    WARN_ON_ONCE(dest != &__x86_return_thunk))
-+		    WARN_ON_ONCE(dest != &__x86_return_thunk)) {
-+			printk("XXX: %pS %pS : %*ph", addr, dest, 5, addr);
- 			continue;
-+		}
- 
- 		DPRINTK("return thunk at: %pS (%px) len: %d to: %pS",
- 			addr, addr, insn.length,
-
-Gets me:
-
-[    2.559091][    T0] ---[ end trace 0000000000000000 ]---
-[    2.561092][    T0] XXX: lkdtm_rodata_do_nothing+0x0/0x1240 lkdtm_rodata_do_nothing+0x5/0x1240 : e9 00 00 00 00
-
-which is a result of:
-
-drivers/misc/lkdtm/Makefile:OBJCOPYFLAGS_rodata_objcopy.o   := \
-drivers/misc/lkdtm/Makefile:                        --rename-section .noinstr.text=.rodata,alloc,readonly,load,contents
-
-which makes that:
-
-0000000000000000 <lkdtm_rodata_do_nothing>:
-   0:   e9 00 00 00 00          jmp    5 <lkdtm_rodata_do_nothing+0x5>  1: R_X86_64_PLT32       __x86_return_thunk-0x4
-
-remains unresolved.
-
-Kees, what's up with that thing, this is 'weird' at best.

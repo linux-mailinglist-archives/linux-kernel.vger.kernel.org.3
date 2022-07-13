@@ -2,120 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D495732E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B260B5732EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiGMJfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
+        id S236071AbiGMJgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235705AbiGMJfi (ORCPT
+        with ESMTP id S235715AbiGMJf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:35:38 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5E131380;
-        Wed, 13 Jul 2022 02:33:52 -0700 (PDT)
-X-UUID: dc83719dc6aa49389a9f4ee898ac56b0-20220713
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:4740321d-ea39-4deb-848a-676b3c1d834d,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:06845fd7-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: dc83719dc6aa49389a9f4ee898ac56b0-20220713
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 630642156; Wed, 13 Jul 2022 17:33:45 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 13 Jul 2022 17:33:44 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 13 Jul 2022 17:33:44 +0800
-Message-ID: <039bc647aaf4f0b744e40164ff6eae2032345c1a.camel@mediatek.com>
-Subject: Re: [PATCH v14 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 13 Jul 2022 17:33:43 +0800
-In-Reply-To: <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
-         <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 13 Jul 2022 05:35:57 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDB9F5105
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:35:38 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id p13so6374231ilq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:35:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8hCvbhUuE7iA1/u1sNKoZ3id9VEaO10A7n+3QCiRIug=;
+        b=hfH7DEq5PaONpaOoC647h1QB7wqN7ibRVfxQ+Xv95kLw7AhVojhtcQgrKDqLicU4QE
+         GwcQYYXHEXeoVPCquIZ/TOddIAdtxbFMosgwecmOQV58ZycM9NzoI78HyWgQC++dJMNd
+         dWW8QSN+yFeLDmP3WyS4cskhDfC3zUx5N3EirLIjL/KbsUFyv7j9BWkRqLdC8wKIlFwv
+         nZx+6pkV+ELrnrsconDcEOSD6uM+uc8CjOWQBLyNVxXssJ2QillHuTmCAO3IqbRJLriG
+         fmunFgvzm1yDRy9Hz+eP9qiBqd0Rn5VQtCzXMnkTEfqmspVhCtT8okVrktepS73pNCjm
+         ReFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8hCvbhUuE7iA1/u1sNKoZ3id9VEaO10A7n+3QCiRIug=;
+        b=X4XFCDD2/xgGYxxWkDLeeFDCegaysorr3365llKbazvvwdTKl/vkYAJilh7hqgktjc
+         4FC7P+WAjdbM70RRzli+FOteZ/uju0lCHaWGkr0BN6DUKdaDLm0eikYZslS7K1tnmonO
+         2/KDwa0n6slnlCLl493Osds02SbeeYl3gS1C7b/KClvjXcwFEht64xL4oinx9Y7WZRQj
+         u2R/xEUJEYfidNGZszKuK90a+ftWGjXok/4Te0WFO+SNElE8dOj1DVcM2G04XDLCnq9a
+         3v/nQZw2d9QKk/xO6ILdDFbrJqyyytWoBbCPlrqB48mFodX6y7UZRmGbWd1GLMSx6kD1
+         w0ZQ==
+X-Gm-Message-State: AJIora/nDmX64131T9C+zRAhxzInj5yk+h3M1Du3XPxA404gW+bPzhEo
+        CzZodaxidLlmebzmB38PoUpsflkjcZjD1hEy3FgHqA==
+X-Google-Smtp-Source: AGRyM1t9eiVKIpWe4xlNSO62SErkGf4i8C+vihhnHmuNi/We+kH/fQZ2vpDcp0Tiu2AjZh1r5+/53BhiqZgn9YTo1sk=
+X-Received: by 2002:a05:6e02:1549:b0:2dc:616a:1dd4 with SMTP id
+ j9-20020a056e02154900b002dc616a1dd4mr1338068ilu.131.1657704938001; Wed, 13
+ Jul 2022 02:35:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220712183246.394947160@linuxfoundation.org> <6acd1cd0-25aa-eb9c-4176-49f623f79301@gmail.com>
+In-Reply-To: <6acd1cd0-25aa-eb9c-4176-49f623f79301@gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 13 Jul 2022 15:05:26 +0530
+Message-ID: <CA+G9fYsBFy65-Y1Yo_Zr_bJWGV6QYhMaEhyaShOG+qoOD7pu+w@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/130] 5.10.131-rc1 review
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+On Wed, 13 Jul 2022 at 04:45, Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> On 7/12/22 11:37, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.10.131 release.
+> > There are 130 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Thu, 14 Jul 2022 18:32:19 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >       https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.131-rc1.gz
+> > or in the git tree and branch at:
+> >       git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
 
-On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
 
-[snip]
+> perf fails to build with:
 
-> +
-> +static void mtk_dp_aux_fill_write_fifo(struct mtk_dp *mtk_dp, u8
-> *buf,
-> +				       size_t length)
-> +{
-> +	mtk_dp_bulk_16bit_write(mtk_dp, MTK_DP_AUX_P0_3708, buf,
-> length);
+I have also noticed perf build failed.
 
-mtk_dp_aux_fill_write_fifo() directly call mtk_dp_bulk_16bit_write(),
-so I think we could just keep one of them and drop another one.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Regards,
-CK
+In file included from util/intel-pt-decoder/intel-pt-insn-decoder.c:15:
+util/intel-pt-decoder/../../../arch/x86/lib/insn.c:13:10: fatal error:
+asm/inat.h: No such file or directory
+   13 | #include <asm/inat.h> /* __ignore_sync_check__ */
+      |          ^~~~~~~~~~~~
+compilation terminated.
 
-> +}
-> +
+Build log:
+https://builds.tuxbuild.com/2BrKWlDZbrZwQIfxzeMf6fv37sn/
 
+>    CC
+> /local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/perf/util/intel-pt-decoder/intel-pt-insn-decoder.o
+> In file included from util/intel-pt-decoder/intel-pt-insn-decoder.c:15:
+> util/intel-pt-decoder/../../../arch/x86/lib/insn.c:13:10: fatal error:
+> asm/inat.h: No such file or directory
+>   #include <asm/inat.h> /* __ignore_sync_check__ */
+>            ^~~~~~~~~~~~
+> compilation terminated.
+> make[7]: *** [util/intel-pt-decoder/Build:14:
+> /local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/perf/util/intel-pt-decoder/intel-pt-insn-decoder.o]
+> Error 1
+> make[6]: ***
+> [/local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/build/Makefile.build:139:
+> intel-pt-decoder] Error 2
+> make[5]: ***
+> [/local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/build/Makefile.build:139:
+> util] Error 2
+> make[4]: *** [Makefile.perf:643:
+> /local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/perf/perf-in.o]
+> Error 2
+> make[3]: *** [Makefile.perf:229: sub-make] Error 2
+> make[2]: *** [Makefile:70: all] Error 2
+> make[1]: *** [package/pkg-generic.mk:294:
+> /local/users/fainelli/buildroot/output/arm64/build/linux-tools/.stamp_built]
+> Error 2
+> make: *** [Makefile:27: _all] Error 2
+>
+> you will need to pick this patch as well:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0705ef64d1ff52b817e278ca6e28095585ff31e1
+>
+> With that one applied:
+>
+> On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+>
+> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> --
+> Florian
+
+- Naresh

@@ -2,198 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E940573E5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 760DF573E6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237052AbiGMU5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 16:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51652 "EHLO
+        id S236968AbiGMU70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 16:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbiGMU5W (ORCPT
+        with ESMTP id S231907AbiGMU7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 16:57:22 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54505CD9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:57:21 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id os14so21999405ejb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:57:21 -0700 (PDT)
+        Wed, 13 Jul 2022 16:59:23 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023DA31384
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:59:22 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-10c0119dd16so77963fac.6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:59:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HZ0I7rnRXF+zKo0Waz+59mR5IWLr5zhMjzNRsbDc0Ws=;
-        b=kbNLt4GGJ0sc1EmhUvJ/nBDhM7MzpppeLTEiVqt1Mi8RStPTVFb7yar8xhsEm7N2ar
-         16n8lgc0/OFEDLkstvqYUHdsacAqFDKMt1lpHbs3SELgH70FmMmtn3h1aiAkU2nxkkGz
-         MlQ3zM2K+C2761yoiOt/pxnaT9Ii7THH8RKQNczpF4KXcD4inezFwm97AfLCS1GYixEv
-         dxLcv86wRnYaQYaunEL+C/boLRFZsYDrC1snpyCW6uVJH+Yb/4f4mcMiJ7Vl3rY0J/3c
-         znK1kKRdiQ0tYR3oqMShaiL4zx2Qzp9vbRhHMi2kQ3KUm/+0ExteICtQrCghfPX8G5V4
-         zFZg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Iy/UJWKR5huMTWOTUJ7PMuUKCqyKp2GPADHXYhygaqo=;
+        b=DA3R8cYIRk7VKjccdgyjTm7HOAuA6Y8SrziD5UUQql3w24Ae4kEhMhp1Lo2MaV+E2O
+         n3eJlHO6iPzUY8pxVEGrtax/2QTZfoZD7w97jvsmVxqD/9N2VwC5vvQ2ro6ph00Uv4bc
+         kbHVtaQ+hEY2HqZ1jhq/qXkVIsZtvxbDCOOdR5OTv9l8CzAr61OkBOYhvTCTqrBE9Zay
+         p9mv8XKfSah3JLLS3Taq0AwK85ucucA1eZ2GNDPUkVLtAxuTrIarWGBjBydZMV9/jK7Z
+         sBiBA2y/sjYcBMYsogJh8h5bU7fp46xuR/1EYkyT+UfYWIm7qN9sqeUTwX0h70ZhkjTZ
+         O1WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HZ0I7rnRXF+zKo0Waz+59mR5IWLr5zhMjzNRsbDc0Ws=;
-        b=1rJCzPfnyQgIahuwxPT97lXRwYi9kFRyrZpG50rPABbYNLtz+vh2dWLQUIj6LIAUw3
-         +7UMKXbYjgB7LGhmr5j6foGgi24Ic2u1kUQHMhPbtnDTDduO4Yk6dqIxkMITq11p+ZDq
-         onEyITnpzN9mBxrocJrepiyGwgk0407j9Ot1DL3gp+2VuZgM90NiTg1TgS5ojuTxkK7M
-         PU3pTOVGUvvaohxO+IEer2ZCdBNvHSAqJd5nvfzhzo/ZUqStbcVYAWJqZ8aHJ0XiLiLI
-         zf7V4r45Wmie3yXcwy92cq7QFRQG4E1FGt0Ot2Q1JGfKolF+wLpj/0k2iNVr+T95jqdX
-         dFlA==
-X-Gm-Message-State: AJIora+dhC/oJotFPGLNSx+T+Laf5pa7ecLoQ7AJPCceT2wCuFEU13NC
-        mKmz2tW5Pqg3vgVyv62b63WCGTfdrKc1EkZiR5c=
-X-Google-Smtp-Source: AGRyM1uPyc6+oUjj8sxdsfwRjpKkRBg+PEmXlXc4IkoxS0NXVrY2lloMcRZqBmqBBO/sNEK20eTJvLXeCNhIaSa3NOM=
-X-Received: by 2002:a17:907:2702:b0:72b:307b:98e6 with SMTP id
- w2-20020a170907270200b0072b307b98e6mr5315152ejk.658.1657745839832; Wed, 13
- Jul 2022 13:57:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Iy/UJWKR5huMTWOTUJ7PMuUKCqyKp2GPADHXYhygaqo=;
+        b=2+OlGBpHTYP8AJG3hMxYRHP+ICsW7WWZSmUduPVa34p/V5kYC2qPFvaAIQO3gTXd7v
+         iLAEi+0h+s0IOfzfHvMVW1NJjLAGyEKSHJKxT7rlsd85M3FG7df/TMLKXivyvzB0MvvT
+         EQeZWREv9sOIovLcYFMz987LmC3WL9WM1vY6DZHgPYAPVq7I6XNksemJDyhrNfiUegFL
+         VUCRhO26k2WGKrDZTnXjiaDY97ZCIzCk//soOZEmidIqujqT1wGhAKtD4VAyy/GaXYyE
+         hFmaNcMJa2C9CxgT3BIoDSg4FP1pPk9TNuFjUTOR8H8BnMr8qfwU8LU3TPRVIMnmL//3
+         fS8w==
+X-Gm-Message-State: AJIora/3fJBsm80EfuVlx7inH3Y4/moHJ1c9ToLA+fgzedXhUw7FFzpI
+        jozIoRK6cfBWpmOaJmK6SXf2hQ==
+X-Google-Smtp-Source: AGRyM1uMUmDVNAa09N+U5l3pz+CeglZM4P6VYV/blyF9YOHUeJDqtcqxoQfEMA2sCoBJoj4UTgRgUg==
+X-Received: by 2002:a05:6871:78b:b0:101:dc48:72c4 with SMTP id o11-20020a056871078b00b00101dc4872c4mr2912688oap.145.1657745961285;
+        Wed, 13 Jul 2022 13:59:21 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id i10-20020a056830402a00b0060c237c6355sm5119997ots.71.2022.07.13.13.59.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 13:59:20 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 15:59:18 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     agross@kernel.org, konrad.dybcio@somainline.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/5] drivers: thermal: tsens: Add support for combined
+ interrupt
+Message-ID: <Ys8yJutlV00q1hFX@builder.lan>
+References: <20220708132930.595897-1-robimarko@gmail.com>
+ <20220708132930.595897-2-robimarko@gmail.com>
 MIME-Version: 1.0
-References: <20220618232737.2036722-1-linux@roeck-us.net> <584fc348-7a60-26a2-af61-9edc4f4830e4@amd.com>
-In-Reply-To: <584fc348-7a60-26a2-af61-9edc4f4830e4@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 13 Jul 2022 16:57:07 -0400
-Message-ID: <CADnq5_NkVWqcxwLMBeskqpcSEYCEjUAK0hqvA_PAo7ACHKL2cA@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Add missing hard-float compile flags for
- PPC64 builds
-To:     Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Axtens <dja@axtens.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220708132930.595897-2-robimarko@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 5:01 PM Rodrigo Siqueira Jordao
-<Rodrigo.Siqueira@amd.com> wrote:
->
->
->
-> On 2022-06-18 19:27, Guenter Roeck wrote:
-> > ppc:allmodconfig builds fail with the following error.
-> >
-> > powerpc64-linux-ld:
-> >       drivers/gpu/drm/amd/amdgpu/../display/dc/dml/display_mode_lib.o
-> >               uses hard float,
-> >       drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.o
-> >               uses soft float
-> > powerpc64-linux-ld:
-> >       failed to merge target specific data of file
-> >       drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.o
-> > powerpc64-linux-ld:
-> >       drivers/gpu/drm/amd/amdgpu/../display/dc/dml/display_mode_lib.o
-> >               uses hard float,
-> >       drivers/gpu/drm/amd/amdgpu/../display/dc/dcn315/dcn315_resource.o
-> >               uses soft float
-> > powerpc64-linux-ld:
-> >       failed to merge target specific data of
-> >       file drivers/gpu/drm/amd/amdgpu/../display/dc/dcn315/dcn315_resource.o
-> > powerpc64-linux-ld:
-> >       drivers/gpu/drm/amd/amdgpu/../display/dc/dml/display_mode_lib.o
-> >               uses hard float,
-> >       drivers/gpu/drm/amd/amdgpu/../display/dc/dcn316/dcn316_resource.o
-> >               uses soft float
-> > powerpc64-linux-ld:
-> >       failed to merge target specific data of file
-> >       drivers/gpu/drm/amd/amdgpu/../display/dc/dcn316/dcn316_resource.o
-> >
-> > The problem was introduced with commit 41b7a347bf14 ("powerpc: Book3S
-> > 64-bit outline-only KASAN support") which adds support for KASAN. This
-> > commit in turn enables DRM_AMD_DC_DCN because KCOV_INSTRUMENT_ALL and
-> > KCOV_ENABLE_COMPARISONS are no longer enabled. As result, new files are
-> > compiled which lack the selection of hard-float.
-> >
-> > Fixes: 41b7a347bf14 ("powerpc: Book3S 64-bit outline-only KASAN support")
-> > Cc: Michael Ellerman <mpe@ellerman.id.au>
-> > Cc: Daniel Axtens <dja@axtens.net>
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> >   drivers/gpu/drm/amd/display/dc/dcn31/Makefile  | 4 ++++
-> >   drivers/gpu/drm/amd/display/dc/dcn315/Makefile | 4 ++++
-> >   drivers/gpu/drm/amd/display/dc/dcn316/Makefile | 4 ++++
-> >   3 files changed, 12 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/Makefile b/drivers/gpu/drm/amd/display/dc/dcn31/Makefile
-> > index ec041e3cda30..74be02114ae4 100644
-> > --- a/drivers/gpu/drm/amd/display/dc/dcn31/Makefile
-> > +++ b/drivers/gpu/drm/amd/display/dc/dcn31/Makefile
-> > @@ -15,6 +15,10 @@ DCN31 = dcn31_resource.o dcn31_hubbub.o dcn31_hwseq.o dcn31_init.o dcn31_hubp.o
-> >       dcn31_apg.o dcn31_hpo_dp_stream_encoder.o dcn31_hpo_dp_link_encoder.o \
-> >       dcn31_afmt.o dcn31_vpg.o
-> >
-> > +ifdef CONFIG_PPC64
-> > +CFLAGS_$(AMDDALPATH)/dc/dcn31/dcn31_resource.o := -mhard-float -maltivec
-> > +endif
-> > +
-> >   AMD_DAL_DCN31 = $(addprefix $(AMDDALPATH)/dc/dcn31/,$(DCN31))
-> >
-> >   AMD_DISPLAY_FILES += $(AMD_DAL_DCN31)
-> > diff --git a/drivers/gpu/drm/amd/display/dc/dcn315/Makefile b/drivers/gpu/drm/amd/display/dc/dcn315/Makefile
-> > index 59381d24800b..1395c1ced8c5 100644
-> > --- a/drivers/gpu/drm/amd/display/dc/dcn315/Makefile
-> > +++ b/drivers/gpu/drm/amd/display/dc/dcn315/Makefile
-> > @@ -25,6 +25,10 @@
-> >
-> >   DCN315 = dcn315_resource.o
-> >
-> > +ifdef CONFIG_PPC64
-> > +CFLAGS_$(AMDDALPATH)/dc/dcn315/dcn315_resource.o := -mhard-float -maltivec
-> > +endif
-> > +
-> >   AMD_DAL_DCN315 = $(addprefix $(AMDDALPATH)/dc/dcn315/,$(DCN315))
-> >
-> >   AMD_DISPLAY_FILES += $(AMD_DAL_DCN315)
-> > diff --git a/drivers/gpu/drm/amd/display/dc/dcn316/Makefile b/drivers/gpu/drm/amd/display/dc/dcn316/Makefile
-> > index 819d44a9439b..c3d2dd78f1e2 100644
-> > --- a/drivers/gpu/drm/amd/display/dc/dcn316/Makefile
-> > +++ b/drivers/gpu/drm/amd/display/dc/dcn316/Makefile
-> > @@ -25,6 +25,10 @@
-> >
-> >   DCN316 = dcn316_resource.o
-> >
-> > +ifdef CONFIG_PPC64
-> > +CFLAGS_$(AMDDALPATH)/dc/dcn316/dcn316_resource.o := -mhard-float -maltivec
-> > +endif
-> > +
-> >   AMD_DAL_DCN316 = $(addprefix $(AMDDALPATH)/dc/dcn316/,$(DCN316))
-> >
-> >   AMD_DISPLAY_FILES += $(AMD_DAL_DCN316)
->
-> Hi,
->
-> I don't want to re-introduce those FPU flags for DCN31/DCN314/DCN316
-> since we fully isolate FPU operations for those ASICs inside the DML
+On Fri 08 Jul 08:29 CDT 2022, Robert Marko wrote:
+[..]
+> +static irqreturn_t tsens_combined_irq_thread(int irq, void *data)
+> +{
+> +	irqreturn_t ret;
+> +
+> +	ret = tsens_critical_irq_thread(irq, data);
 
-I don't understand why we don't need to add the hard-float flags back
-on the other DCN blocks.  Did we miss something in the DML cleanup for
-DCN 3.1.x?  Anyway, at this point, the patch is:
-Acked-by: Alex Deucher <alexander.deucher@amd.com>
-We can sort the rest out for 5.20.
+Perhaps you could do something with this return value?
 
-Alex
+> +	ret = tsens_irq_thread(irq, data);
 
-> folder. Notice that we have the PPC64 in the DML Makefile:
->
-> https://gitlab.freedesktop.org/agd5f/linux/-/blob/amd-staging-drm-next/drivers/gpu/drm/amd/display/dc/dml/Makefile
->
-> Could you share what you see without your patch in the
-> amd-staging-drm-next? Also:
-> * Are you using cross-compilation? If so, could you share your setup?
-> * Which GCC/Clang version are you using?
->
-> Thanks
-> Siqueira
->
+As written here, return tsens_irq_thread() seems cleaner.
+
+Regards,
+Bjorn

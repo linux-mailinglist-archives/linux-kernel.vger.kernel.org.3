@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D939F572FB7
+	by mail.lfdr.de (Postfix) with ESMTP id 4956C572FB5
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234947AbiGMHyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
+        id S234922AbiGMHyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234824AbiGMHxw (ORCPT
+        with ESMTP id S234823AbiGMHxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 13 Jul 2022 03:53:52 -0400
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EF5B1057A;
-        Wed, 13 Jul 2022 00:53:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D5DA12743;
+        Wed, 13 Jul 2022 00:53:40 -0700 (PDT)
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26D7rRHE1015457, This message is accepted by code: ctloc85258
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26D7rRHG1015457, This message is accepted by code: ctloc85258
 Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26D7rRHE1015457
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26D7rRHG1015457
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
         Wed, 13 Jul 2022 15:53:27 +0800
 Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
@@ -35,9 +35,9 @@ CC:     <johan.hedberg@gmail.com>, <luiz.dentz@gmail.com>,
         <linux-bluetooth@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <max.chou@realtek.com>, <alex_lu@realsil.com.cn>,
         <kidman@realtek.com>
-Subject: [PATCH 1/5] Bluetooth: btusb: Add the support ID for Realtek RTL8852C
-Date:   Wed, 13 Jul 2022 15:53:14 +0800
-Message-ID: <20220713075318.18176-2-hildawu@realtek.com>
+Subject: [PATCH 2/5] Bluetooth: btusb: Add the support ID for Realtek RTL8852C
+Date:   Wed, 13 Jul 2022 15:53:15 +0800
+Message-ID: <20220713075318.18176-3-hildawu@realtek.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220713075318.18176-1-hildawu@realtek.com>
 References: <20220713075318.18176-1-hildawu@realtek.com>
@@ -72,14 +72,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Hilda Wu <hildawu@realtek.com>
 
-Add the support ID(0x04CA, 0x4007) to usb_device_id table for
+Add the support ID(0x04c5, 0x1675) to usb_device_id table for
 Realtek RTL8852C.
 
 The device info from /sys/kernel/debug/usb/devices as below.
 
 T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=12   MxCh= 0
 D:  Ver= 1.00 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=04ca ProdID=4007 Rev= 0.00
+P:  Vendor=04c5 ProdID=1675 Rev= 0.00
 S:  Manufacturer=Realtek
 S:  Product=Bluetooth Radio
 S:  SerialNumber=00e04c000001
@@ -109,24 +109,22 @@ E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
 
 Signed-off-by: Hilda Wu <hildawu@realtek.com>
 ---
- drivers/bluetooth/btusb.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/bluetooth/btusb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index fb1a67189412..f3a68d755099 100644
+index f3a68d755099..fe0434eeac78 100644
 --- a/drivers/bluetooth/btusb.c
 +++ b/drivers/bluetooth/btusb.c
-@@ -427,6 +427,10 @@ static const struct usb_device_id blacklist_table[] = {
- 	{ USB_DEVICE(0x04ca, 0x4006), .driver_info = BTUSB_REALTEK |
+@@ -430,6 +430,8 @@ static const struct usb_device_id blacklist_table[] = {
+ 	/* Realtek 8852CE Bluetooth devices */
+ 	{ USB_DEVICE(0x04ca, 0x4007), .driver_info = BTUSB_REALTEK |
  						     BTUSB_WIDEBAND_SPEECH },
- 
-+	/* Realtek 8852CE Bluetooth devices */
-+	{ USB_DEVICE(0x04ca, 0x4007), .driver_info = BTUSB_REALTEK |
++	{ USB_DEVICE(0x04c5, 0x1675), .driver_info = BTUSB_REALTEK |
 +						     BTUSB_WIDEBAND_SPEECH },
-+
+ 
  	/* Realtek Bluetooth devices */
  	{ USB_VENDOR_AND_INTERFACE_INFO(0x0bda, 0xe0, 0x01, 0x01),
- 	  .driver_info = BTUSB_REALTEK },
 -- 
 2.17.1
 

@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ECEC572CD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0F9572CD4
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbiGME7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 00:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
+        id S233759AbiGMFAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 01:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234092AbiGME7Y (ORCPT
+        with ESMTP id S234060AbiGME7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 00:59:24 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6A930F5E
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 21:59:23 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id os14so17861244ejb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 21:59:23 -0700 (PDT)
+        Wed, 13 Jul 2022 00:59:44 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B77174340
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 21:59:42 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id e15so12655144edj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 21:59:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=7H0JOtMHighA4NUcVbg55FWnla2SH6bqiX/5b8b857o=;
-        b=akdxdB5uNZw0lylqaVFOuTgTdgXfsnuYjjFJ5KnwqCN0lviQ6bdB4Zw6tnbG8BwLX8
-         42Ngvnh48s5MVW/uHatI0fn/ufQUNtUUMz9vmImpbSCG63fGzytMU2vnBs9n6+GoggbO
-         1o4t0wPX0PQCkHCjgPzltMDxOXVueT5YL/swWBtGTTI/XR2WGR4UJlVfZKc6sBgChGst
-         e47vpGFDhI2Gq1hVvOzu7QKYlh1huL1wJ8h1iiuaGZOeOVEFWbkItONaKOTD7xfGM7q3
-         kDpLXaCVEf3SSR46nMSezd5AIO2arMvhwg7TTOhf60d9aZ4c5WmwGoSVcwiZd1B2P90s
-         3ztA==
+        bh=QbR77KaYU0b8CrpQnqAfg4nKTl226cIZ6lhPDiInDxI=;
+        b=k5LPmNUzmeiJ8k5kn7gY+1x2BNP/YPF8Hk0Tqiwp50RoSEMbIYmfAbzPYYtsAIh2Sq
+         Fny0cpUJVkafQysIxsceNQw/B3g+i0KjrDXhY1zKiuMuvAyOl9A85jqx4TVYFZWJSH+n
+         pPU2zL4BVblAWaE6m4sPBjVmYUNYPI/iwWHoRogEMIOrmg+Oyz5nei3HcH10eusrGNug
+         FSoMsQGYaYOmK1Oyv12rH8CkE1aVOBiA/lOfoeKfrps23MrtHMCo2DVhzDLXDIKpYez7
+         +uVu4T/5LqSNpDmYhor6keD7Bps+JkP7dYVrwgRNDd4mzxgbYFDoXZ9S0GlGkKzN3Ja1
+         sPkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=7H0JOtMHighA4NUcVbg55FWnla2SH6bqiX/5b8b857o=;
-        b=MjZS3wmXrqN1k0923ilaytQ/60YtefhnFMmPkQz0OdJcaDHmVBYj7aQN9SiATP6Co/
-         0E7v5uaUFvj+f47GsECX0LIpf0sBVqDe2to1gmWpZ1CRGzqGhmRie2F6SDE2zNIJ7gjF
-         exDstS+GRlE88mTSTtSQzDThPPrViHNsE8l1ITc4Mi6m2W1hSmKA2wM19DA7qQ5nMe9B
-         nti6kI7xxjBjMwqEH6B7CV1BEZTVH5H1rSXxigCS6IJQj+Bmwl5rZdll48q5wUBhINEh
-         6h3dYMerg+sjEDjoBpc1qd4w/m5HdI/AfBndaWLwGrOOl6lvCsp709DKZ0gx4BaNGLsA
-         N++w==
-X-Gm-Message-State: AJIora9TQ04dmu8JDYcZl4G9QZxAoVvUed/iVldFn35ycMRHHXGaYAcE
-        KLFgrAoT2lrwFnoJpv1ocg8IB2F/H3A=
-X-Google-Smtp-Source: AGRyM1toMQafwzlwa483zjFA86aisXRzS8jnUVp3X+1tgX55MFVfh3N4EmqTzBEPf1Xl02aHgEy+TQ==
-X-Received: by 2002:a17:907:75f5:b0:72b:40da:a7cd with SMTP id jz21-20020a17090775f500b0072b40daa7cdmr1561552ejc.662.1657688361962;
-        Tue, 12 Jul 2022 21:59:21 -0700 (PDT)
+        bh=QbR77KaYU0b8CrpQnqAfg4nKTl226cIZ6lhPDiInDxI=;
+        b=8K26IYQV2REw6sZG4FK7xBJ91qma+wNAWgoGKWxsjqYepQRubS5C7X1NhD/IoCLKW9
+         Q/d/7hOu5PW69C1Q/xEiHVPtte1uDLV36w3KfYB/S2Ths71TIda0+g+BXXlIwd1QmEsn
+         rlFklKM1LSq4ypreii0nJYTRwGzrRtu1rvBE/G17iLyiT/m0k+YkM1CT7o/lOUi1IU5Y
+         hxc/KI/9AvWq19ft7IAbrQ8rjJxuAUvAHaqlaCYKWkt9IQ3gUu7uG7NfSPZ+vWwbxjyo
+         BBu3FDuLeyeD48HCELEv1RDPicVjyahmknp/hB7oaG/in2BdObIJRr1+qMWKdxvIGc74
+         h1gg==
+X-Gm-Message-State: AJIora+IYbY877BvqJWG/I3yr6XMMpqp3epL8AGh7TXA4607J7a1pDZS
+        x3c/WhkmaVsYKaqcg78s860=
+X-Google-Smtp-Source: AGRyM1vPMh/lKBc+3VZvDGn4Tto6gf+E77gQ31z5PtD81c0cRx3reRfRsckERlTIDcf8sbhXOprrgg==
+X-Received: by 2002:a05:6402:16:b0:43a:f435:5d07 with SMTP id d22-20020a056402001600b0043af4355d07mr2290455edu.420.1657688381130;
+        Tue, 12 Jul 2022 21:59:41 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id j5-20020a056402238500b004358f6e0570sm7227027eda.17.2022.07.12.21.59.21
+        by smtp.gmail.com with ESMTPSA id w12-20020a05640234cc00b0043ac761db43sm6187706edc.55.2022.07.12.21.59.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 21:59:21 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 06:59:18 +0200
+        Tue, 12 Jul 2022 21:59:40 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 06:59:38 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Forest Bond <forest@alittletooquiet.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 02/13] staging: vt6655: Rename byBits to bit_mask in two
- macros
-Message-ID: <5ac7e8860ecb23232cf5befea024872e7db76d59.1657657918.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 03/13] staging: vt6655: Rename wBits to bit_mask in two macros
+Message-ID: <8929407dc7355df515b7f9fdd195b45ff44f6b98.1657657918.git.philipp.g.hortmann@gmail.com>
 References: <cover.1657657918.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -80,37 +79,37 @@ Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/staging/vt6655/mac.h b/drivers/staging/vt6655/mac.h
-index b3803143673c..3037502c1883 100644
+index 3037502c1883..b8f543aef716 100644
 --- a/drivers/staging/vt6655/mac.h
 +++ b/drivers/staging/vt6655/mac.h
-@@ -537,11 +537,11 @@
+@@ -544,11 +544,11 @@ do {									\
+ 	iowrite8(byData | (bit_mask), iobase + reg_offset);		\
+ } while (0)
  
- /*---------------------  Export Macros ------------------------------*/
- 
--#define MACvRegBitsOn(iobase, reg_offset, byBits)			\
-+#define MACvRegBitsOn(iobase, reg_offset, bit_mask)			\
+-#define MACvWordRegBitsOn(iobase, reg_offset, wBits)			\
++#define MACvWordRegBitsOn(iobase, reg_offset, bit_mask)		\
  do {									\
- 	unsigned char byData;						\
- 	byData = ioread8(iobase + reg_offset);				\
--	iowrite8(byData | (byBits), iobase + reg_offset);		\
-+	iowrite8(byData | (bit_mask), iobase + reg_offset);		\
+ 	unsigned short wData;						\
+ 	wData = ioread16(iobase + reg_offset);				\
+-	iowrite16(wData | (wBits), iobase + reg_offset);		\
++	iowrite16(wData | (bit_mask), iobase + reg_offset);		\
  } while (0)
  
- #define MACvWordRegBitsOn(iobase, reg_offset, wBits)			\
-@@ -551,11 +551,11 @@ do {									\
- 	iowrite16(wData | (wBits), iobase + reg_offset);		\
+ #define MACvRegBitsOff(iobase, reg_offset, bit_mask)			\
+@@ -558,11 +558,11 @@ do {									\
+ 	iowrite8(byData & ~(bit_mask), iobase + reg_offset);		\
  } while (0)
  
--#define MACvRegBitsOff(iobase, reg_offset, byBits)			\
-+#define MACvRegBitsOff(iobase, reg_offset, bit_mask)			\
+-#define MACvWordRegBitsOff(iobase, reg_offset, wBits)			\
++#define MACvWordRegBitsOff(iobase, reg_offset, bit_mask)		\
  do {									\
- 	unsigned char byData;						\
- 	byData = ioread8(iobase + reg_offset);				\
--	iowrite8(byData & ~(byBits), iobase + reg_offset);		\
-+	iowrite8(byData & ~(bit_mask), iobase + reg_offset);		\
+ 	unsigned short wData;						\
+ 	wData = ioread16(iobase + reg_offset);				\
+-	iowrite16(wData & ~(wBits), iobase + reg_offset);		\
++	iowrite16(wData & ~(bit_mask), iobase + reg_offset);		\
  } while (0)
  
- #define MACvWordRegBitsOff(iobase, reg_offset, wBits)			\
+ #define MACvReceive0(iobase)						\
 -- 
 2.37.0
 

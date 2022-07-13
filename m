@@ -2,72 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22232572A51
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 02:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD26572A57
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 02:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbiGMAhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 20:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
+        id S229988AbiGMAnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 20:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbiGMAha (ORCPT
+        with ESMTP id S230259AbiGMAnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 20:37:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD22B7D6A;
-        Tue, 12 Jul 2022 17:37:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C8C361852;
-        Wed, 13 Jul 2022 00:37:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 748CAC3411C;
-        Wed, 13 Jul 2022 00:37:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657672648;
-        bh=zrEAqCvFaLLRfDkoCkAVybVZ0VUg0r6WiAhoHWGPViU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=POM9zk+cYuG8o1oZk2xlHZdtmynzg8avxWcTBUX8reU8tgQ+AHP8ej2XVH5woil6q
-         a82BdQYfUnGT1aAYmh/3UxC1vOzG8glQr5JDazfnP/PwbmlcyRJkOak1ajzwaf3XhD
-         0JfWp+IzEVfSyecROZ/WuSaKwwAiteku88YP/xnCzFLZNsJpXxvitCbt0YEboWrCWB
-         CW/oHbmpaS1U7+cl25XGgoaPexqTw5A8l32a4cqq/ndrSVwh6DRDdWWrCsZ/Jij3DF
-         PBYxrIAqh+evFBkqj4BSYczxw8I/IgyYAAp+Ys+aifYIo/5JHYul8rrJHCNcs5rMta
-         aspntO1csOddg==
-Date:   Tue, 12 Jul 2022 17:37:19 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>, davem@davemloft.net,
-        netdev@vger.kernel.org, nic_swsd@realtek.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] r8152: fix accessing unset transport header
-Message-ID: <20220712173719.0e834365@kernel.org>
-In-Reply-To: <e3745b77b8537e08bbace5088d9f41e21755e08b.camel@redhat.com>
-References: <20220711070004.28010-389-nic_swsd@realtek.com>
-        <e3745b77b8537e08bbace5088d9f41e21755e08b.camel@redhat.com>
+        Tue, 12 Jul 2022 20:43:16 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878B46EEBA;
+        Tue, 12 Jul 2022 17:43:15 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so1002022pjf.2;
+        Tue, 12 Jul 2022 17:43:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pWi/ITrU9+1q/g+LldOfAE+sN2PBiYJyiUG/tbEyBz4=;
+        b=aa6KGZH7zgMVUG6mKOoVEtJh/ygmJTJQy07v16lqFVJ0ldQBx0RVAFuC/q8PYqDrEt
+         CSfI2YpBsLjbj2/83+aGqWbs9XRHcBv2p7Y8bOXOUaATzvzgqUcGloWUkcETq2QX9+6U
+         u4ScRF1B99EJlpvny13x4x4K3emMKaVk0cyOzrfuJLfN1wy+msZSZHmPoLNELFzOW0nT
+         EVAVzaBpTfrZWD/UJRXWtmE6EgE1jj3ozLt0h13Yzx8XwyzruGwuaYTr6O07ILxhyKSP
+         QnQ/hkjHQ7ILVE/rWCDs76F9n+LbwhAJVBfSrXm3ieTh2bRc10dGABScdfg0FKIT+RiS
+         bnPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pWi/ITrU9+1q/g+LldOfAE+sN2PBiYJyiUG/tbEyBz4=;
+        b=QTVKDH7VtH25/tAl2cj69dMQniPXLeTwyBp9Xe6HSSc0eHN6UWKa5iWFKEGe088CDj
+         23h2erNAetiRdJHX5SFzL+OZlHkYGXlWKKEdQkA4VOuGL9FEKMIoPJZVlcWkoz4ItWub
+         PqGpZaDw9AYtANNMCb/ps86hcukrQSI86oaCDVgClId66uuWWIR3c55IXjH98Lda7MEc
+         G0cUjnY2PMvB5/GgJMYf/WRZub+SpbLduxiPeTyw/QD27dr/PFjdlqJGo0/M0sVv+NCg
+         I/2zSdnPxelE2YmNlzXPphy0DFxrTAL96i0MnHkFYN69pjhqSEFy8/HD2Ry5RMmQJzO2
+         SO0g==
+X-Gm-Message-State: AJIora83baSmrXEmywutlz2v50ZqhEf29+IMKpNSUETYULwd4z8DATkr
+        lJutqrfQSSTCrVOySx2y2JcIlmPfVxsos+IOWpA=
+X-Google-Smtp-Source: AGRyM1sN7m9IP3OC6ev1JdLNOa8JL2XTdH6ZOv9F28RfT8K1LqAzWnsFfl2qKMAVaAwkn97Z7IP2dYfjHQfwSgOiszk=
+X-Received: by 2002:a17:903:2654:b0:16c:5120:f379 with SMTP id
+ je20-20020a170903265400b0016c5120f379mr891063plb.3.1657672994875; Tue, 12 Jul
+ 2022 17:43:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220712183236.931648980@linuxfoundation.org>
+In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
+From:   Zan Aziz <zanaziz313@gmail.com>
+Date:   Tue, 12 Jul 2022 18:43:03 -0600
+Message-ID: <CAFU3qoaV20obXT8nkanMjD6A63Fz4GNkC8VVmpMW4fAVdX2HVw@mail.gmail.com>
+Subject: Re: [PATCH 5.18 00/61] 5.18.12-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 15:06:25 +0200 Paolo Abeni wrote:
-> On Mon, 2022-07-11 at 15:00 +0800, Hayes Wang wrote:
-> > A warning is triggered by commit 66e4c8d95008 ("net: warn if transport
-> > header was not set"). The warning is harmless, because the value from
-> > skb_transport_offset() is only used for skb_is_gso() is true or the
-> > skb->ip_summed is equal to CHECKSUM_PARTIAL.
-> > 
-> > Signed-off-by: Hayes Wang <hayeswang@realtek.com>  
-> 
-> If this is targeting the -net tree please add a suitable Fixes tag,
-> thanks!
+On Tue, Jul 12, 2022 at 3:34 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.18.12 release.
+> There are 61 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 14 Jul 2022 18:32:19 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.12-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+Hi Greg,
 
-And FWIW I think the fixes tag you want is:
+Compiled and booted on my test system Lenovo P50s: Intel Core i7
+No emergency and critical messages in the dmesg
 
-Fixes: 66e4c8d95008 ("net: warn if transport header was not set")
+./perf bench sched all
+# Running sched/messaging benchmark...
+# 20 sender and receiver processes per group
+# 10 groups == 400 processes run
+
+     Total time: 0.669 [sec]
+
+# Running sched/pipe benchmark...
+# Executed 1000000 pipe operations between two processes
+
+     Total time: 8.228 [sec]
+
+       8.228933 usecs/op
+         121522 ops/sec
+
+Tested-by: Zan Aziz <zanaziz313@gmail.com>
+
+Thanks
+-Zan

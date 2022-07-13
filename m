@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E771572FB8
+	by mail.lfdr.de (Postfix) with ESMTP id BE26F572FBA
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234062AbiGMHx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
+        id S234971AbiGMHyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbiGMHxw (ORCPT
+        with ESMTP id S235037AbiGMHyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:53:52 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE9B611810;
-        Wed, 13 Jul 2022 00:53:41 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26D7rRHI1015457, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26D7rRHI1015457
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Wed, 13 Jul 2022 15:53:27 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 13 Jul 2022 15:53:29 +0800
-Received: from localhost.localdomain (172.21.132.192) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 13 Jul 2022 15:53:25 +0800
-From:   <hildawu@realtek.com>
-To:     <marcel@holtmann.org>
-CC:     <johan.hedberg@gmail.com>, <luiz.dentz@gmail.com>,
-        <linux-bluetooth@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <max.chou@realtek.com>, <alex_lu@realsil.com.cn>,
-        <kidman@realtek.com>
-Subject: [PATCH 5/5] Bluetooth: btusb: Add the support ID for Realtek RTL8852C
-Date:   Wed, 13 Jul 2022 15:53:18 +0800
-Message-ID: <20220713075318.18176-6-hildawu@realtek.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220713075318.18176-1-hildawu@realtek.com>
-References: <20220713075318.18176-1-hildawu@realtek.com>
+        Wed, 13 Jul 2022 03:54:19 -0400
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88901DABA9;
+        Wed, 13 Jul 2022 00:54:04 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id j22so18444189ejs.2;
+        Wed, 13 Jul 2022 00:54:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=xyiAbcKEwIGxp7PBwRMpuDfi9s7uX1yxh0HxeedfbwY=;
+        b=2Pg/tCdFnkc5SmWdfOe/jrRxLoWbXOgUjmMzwF4qbDHzOWDyN8eAeT9qeNy3wHbVep
+         2sLeqWB3cpnfkpQ5afe4I9Vt36ABrnhmc1RAAUaJZgVxDCx8Z1Iy6pGj7hqhEOHYYAYF
+         J+2L9Xm6mtMNoPC2B0WS6YTb8FdcXfYv/8iUkGu/K01JCvOrExYXu0R/2IsgbBu7LD9N
+         wCHFSdJdltCXtW2GyHbZ+iKZthWAkchomGdbtlgxl8xW9Glkazf1r24APQ4k7bUt1UCb
+         WqoCH0UHSo41+XtTT1QScuhDnqtqHG04Xoaz4So2aPZdXZz7YTOro/TViBZ+Cag7/z1I
+         Mdcw==
+X-Gm-Message-State: AJIora9epWkEiJwFqpx0xrVaPiZz/QHuYOeBVXejYLsmr+wyn2I/JO2C
+        ZvgheGwRQ2jzYu1MCSbVttw=
+X-Google-Smtp-Source: AGRyM1t8wbeI5BUtThwdeXpeOWbjFRWUgi+T55oMZagY1JleWDccVgbPhVCuqj2FQIiyW0HPopZXvw==
+X-Received: by 2002:a17:906:84f0:b0:72b:5cf4:465d with SMTP id zp16-20020a17090684f000b0072b5cf4465dmr2141063ejb.705.1657698843269;
+        Wed, 13 Jul 2022 00:54:03 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id h4-20020a50ed84000000b0043a85d7d15esm7396951edr.12.2022.07.13.00.54.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 00:54:02 -0700 (PDT)
+Message-ID: <509dd891-73cc-31b9-18ac-2e930084c02f@kernel.org>
+Date:   Wed, 13 Jul 2022 09:54:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.21.132.192]
-X-ClientProxiedBy: RTEXH36504.realtek.com.tw (172.21.6.27) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: trusted connection
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 07/13/2022 07:37:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzcvMTMgpFekyCAwNjowNjowMA==?=
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5.18 34/61] objtool: Update Retpoline validation
+Content-Language: en-US
+From:   Jiri Slaby <jirislaby@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+References: <20220712183236.931648980@linuxfoundation.org>
+ <20220712183238.342232911@linuxfoundation.org>
+ <63e23f80-033f-f64e-7522-2816debbc367@kernel.org>
+In-Reply-To: <63e23f80-033f-f64e-7522-2816debbc367@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,61 +70,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hilda Wu <hildawu@realtek.com>
+On 13. 07. 22, 9:45, Jiri Slaby wrote:
+> On 12. 07. 22, 20:39, Greg Kroah-Hartman wrote:
+>> From: Peter Zijlstra <peterz@infradead.org>
+>>
+>> commit 9bb2ec608a209018080ca262f771e6a9ff203b6f upstream.
+>>
+>> Update retpoline validation with the new CONFIG_RETPOLINE requirement of
+>> not having bare naked RET instructions.
+> 
+> Hi,
+> 
+> this breaks compilation on i386:
+>  > arch/x86/kernel/../../x86/xen/xen-head.S:35: Error: no such 
+> instruction: `annotate_unret_safe'
+> 
+> Config:
+> https://raw.githubusercontent.com/openSUSE/kernel-source/stable/config/i386/pae 
+> 
+> 
+> And yeah, upstream¹⁾ is affected too.
+> 
+> ¹⁾I am at commit b047602d579b4fb028128a525f056bbdc890e7f0.
 
-Add the support ID(0x13D3, 0x3586) to usb_device_id table for
-Realtek RTL8852C.
+A naive fix is:
+--- a/arch/x86/kernel/head_32.S
++++ b/arch/x86/kernel/head_32.S
+@@ -23,6 +23,7 @@
+  #include <asm/cpufeatures.h>
+  #include <asm/percpu.h>
+  #include <asm/nops.h>
++#include <asm/nospec-branch.h>
+  #include <asm/bootparam.h>
+  #include <asm/export.h>
+  #include <asm/pgtable_32.h>
 
-The device info from /sys/kernel/debug/usb/devices as below.
+The question (I don't know answer to) is whether x86_32 should actually 
+do ANNOTATE_UNRET_SAFE.
 
-T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=12   MxCh= 0
-D:  Ver= 1.00 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=13d3 ProdID=3586 Rev= 0.00
-S:  Manufacturer=Realtek
-S:  Product=Bluetooth Radio
-S:  SerialNumber=00e04c000001
-C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-
-Signed-off-by: Hilda Wu <hildawu@realtek.com>
----
- drivers/bluetooth/btusb.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index e2da9d2573c9..aaba2d737178 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -436,6 +436,8 @@ static const struct usb_device_id blacklist_table[] = {
- 						     BTUSB_WIDEBAND_SPEECH },
- 	{ USB_DEVICE(0x13d3, 0x3587), .driver_info = BTUSB_REALTEK |
- 						     BTUSB_WIDEBAND_SPEECH },
-+	{ USB_DEVICE(0x13d3, 0x3586), .driver_info = BTUSB_REALTEK |
-+						     BTUSB_WIDEBAND_SPEECH },
- 
- 	/* Realtek Bluetooth devices */
- 	{ USB_VENDOR_AND_INTERFACE_INFO(0x0bda, 0xe0, 0x01, 0x01),
+thanks,
 -- 
-2.17.1
-
+js

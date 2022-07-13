@@ -2,95 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07862573E29
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8045573E2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237207AbiGMUuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 16:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
+        id S237214AbiGMUvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 16:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiGMUuW (ORCPT
+        with ESMTP id S237203AbiGMUvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 16:50:22 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF182C113
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:50:21 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id z23so5399654eju.8
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:50:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ahgWcY0Qhtt2gptPxS6Knb/YUD/M/kyPSyAouT+Dg5Q=;
-        b=eWyzJ3DkQPO8/Ucp2ZtR+aYlDD2nT9ApRtgzzfquSIYkokAIYRl2vW5b6bt/Xwhfra
-         YQI4Qfok3pGM9xg+494aKlrf4c/au02ChfkaI2ab6CUK47+sfbQuj+0F8SkDyDqEUYxc
-         kEmSkZbf4Ya4CAZSLIIzXiikXy/Wr2/bBFVmM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ahgWcY0Qhtt2gptPxS6Knb/YUD/M/kyPSyAouT+Dg5Q=;
-        b=hUOVr2t1EY9VPdV0R3SLLT9I81wSy6bwrlPL+5CqQMkJZoFNWWbG7ucgogkr9Xq79b
-         iQAooAIUA4UHdLmfz+EcJGoFtCCf4Kt5PgrCZ/gCdPpsktozQqkW8D2ZeQkhFf08vnzC
-         blQ0/m4Gtb+b0A8ZkJVq8/OzPkZvYKYmb7Qy6DLUfkTS0yABP2OGmDJl5O8MlLgxh8iR
-         a3wrk8WQ2HI/TY5MQhSYmQwBEiiI1XgpzsST8ehNLV6TnTnoNvGJ/lLpbEJ7r6T6RwHQ
-         d820mXi3VQW93lZU9NgJvScgVTDSZ8Epk7ZDoz/ZAWtDifo9KVj2G/Q4cDSxziDQTbF1
-         4ICQ==
-X-Gm-Message-State: AJIora+7EwcyEyh2YCgW9qVXI/IIKd4DjFJaNyNDzyf17c6Tg8XOeO2w
-        u65VASOVatSHrm52XGQ0TmNOnQrsRGFANQWD3sg=
-X-Google-Smtp-Source: AGRyM1ufkhU/o/5IZ7X6LapPaDOW6X3tf5nNukaXA9mZ2w1bALqJkXNQzhYdiMcvfZDAGgj1rlW7sw==
-X-Received: by 2002:a17:907:1dde:b0:72b:11ae:700b with SMTP id og30-20020a1709071dde00b0072b11ae700bmr5181983ejc.520.1657745419565;
-        Wed, 13 Jul 2022 13:50:19 -0700 (PDT)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id fp17-20020a1709069e1100b0072a55ec6f3bsm5345113ejc.165.2022.07.13.13.50.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 13:50:17 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id ay25so7221741wmb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:50:17 -0700 (PDT)
-X-Received: by 2002:a05:600c:354e:b0:3a1:9ddf:468d with SMTP id
- i14-20020a05600c354e00b003a19ddf468dmr11442317wmq.145.1657745416681; Wed, 13
- Jul 2022 13:50:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
- <20220713050724.GA2471738@roeck-us.net> <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
- <a804b76e-159f-dbc2-f8dc-62a58552e88d@roeck-us.net>
-In-Reply-To: <a804b76e-159f-dbc2-f8dc-62a58552e88d@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 13 Jul 2022 13:50:00 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgBDup4LrJBr2WPkT09e_zk8g+Uq-5P-q5+THZ4jeoWVQ@mail.gmail.com>
-Message-ID: <CAHk-=wgBDup4LrJBr2WPkT09e_zk8g+Uq-5P-q5+THZ4jeoWVQ@mail.gmail.com>
-Subject: Re: Linux 5.19-rc6
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
+        Wed, 13 Jul 2022 16:51:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F883137E
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:51:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657745466; x=1689281466;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=p7AddPEbmNXipfnrDJYWSD6RDTq4SByDhh3kApijBTA=;
+  b=Cu+Af2doW1X9hZSqNCEbRgw7VR3Z2aWuGFFB/San3/IQxnmdpEGJfFfh
+   TDHmzsXKgLzo7BUVBt/DEgqjS437c8yItbdmkZNLJC7g2e8meFMFziAnb
+   aeG+LpUOdZp8m8Tl86BOvAnUUWgziYSPhLQw26mhniSaTQyFOWwNAvKyq
+   ROugqkuOskhK7rZtobbV8ny/SVQJ1SUrY5hTitEI0hYV5s0TtKzluLSxP
+   tcUzfyb7F/c5MdmHiZXJYSXnMnMw0+x3HdkfLEE9fWKItLQ3urh2P7QAD
+   z8GjjBUXLROSh2prfCiuzjGMcmEgpNGj6FQHpuNINIeNO8fJGMsfJbvxx
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="282896043"
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="282896043"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 13:51:06 -0700
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="685313799"
+Received: from schen9-mobl.amr.corp.intel.com ([10.209.49.100])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 13:51:06 -0700
+Message-ID: <ff27aa3bce81a4f9cdf9e71b989af7db5b0fa44a.camel@linux.intel.com>
+Subject: Re: [PATCH] sched/fair: no sync wakeup from interrupt context
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     Libo Chen <libo.chen@oracle.com>, peterz@infradead.org,
+        vincent.guittot@linaro.org, mgorman@suse.de, 21cnbao@gmail.com,
+        dietmar.eggemann@arm.com
+Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de
+Date:   Wed, 13 Jul 2022 13:51:05 -0700
+In-Reply-To: <0917f479-b6aa-19de-3d6a-6fd422df4d21@oracle.com>
+References: <20220711224704.1672831-1-libo.chen@oracle.com>
+         <2c0c61a1c4c54d06905279a9a724a9390d9ee5c3.camel@linux.intel.com>
+         <0917f479-b6aa-19de-3d6a-6fd422df4d21@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 1:46 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> It does, but I can't imagine that the drm or ppc people would be happy
-> about it.
+On Wed, 2022-07-13 at 12:17 -0700, Libo Chen wrote:
+> 
+> 
+> On 7/13/22 09:40, Tim Chen wrote:
+> > On Mon, 2022-07-11 at 15:47 -0700, Libo Chen wrote:
+> > > Barry Song first pointed out that replacing sync wakeup with regular wakeup
+> > > seems to reduce overeager wakeup pulling and shows noticeable performance
+> > > improvement.[1]
+> > > 
+> > > This patch argues that allowing sync for wakeups from interrupt context
+> > > is a bug and fixing it can improve performance even when irq/softirq is
+> > > evenly spread out.
+> > > 
+> > > For wakeups from ISR, the waking CPU is just the CPU of ISR and the so-called
+> > > waker can be any random task that happens to be running on that CPU when the
+> > > interrupt comes in. This is completely different from other wakups where the
+> > > task running on the waking CPU is the actual waker. For example, two tasks
+> > > communicate through a pipe or mutiple tasks access the same critical section,
+> > > etc. This difference is important because with sync we assume the waker will
+> > > get off the runqueue and go to sleep immedately after the wakeup. The
+> > > assumption is built into wake_affine() where it discounts the waker's presence
+> > > from the runqueue when sync is true. The random waker from interrupts bears no
+> > > relation to the wakee and don't usually go to sleep immediately afterwards
+> > > unless wakeup granularity is reached. Plus the scheduler no longer enforces the
+> > > preepmtion of waker for sync wakeup as it used to before
+> > > patch f2e74eeac03ffb7 ("sched: Remove WAKEUP_SYNC feature"). Enforcing sync
+> > > wakeup preemption for wakeups from interrupt contexts doesn't seem to be
+> > > appropriate too but at least sync wakeup will do what it's supposed to do.
+> > 
+> > Will there be scenarios where you do want the task being woken up be pulled
+> > to the CPU where the interrupt happened, as the data that needs to be accessed is
+> > on local CPU/NUMA that interrupt happened?  For example, interrupt associated with network
+> > packets received.  Sync still seems desirable, at least if there is no task currently
+> > running on the CPU where interrupt happened.  So maybe we should have some consideration
+> > of the load on the CPU/NUMA before deciding whether we should do sync wake for such
+> > interrupt.
+> > 
+>  There are only two places where sync wakeup matters: wake_affine_idle() and wake_affine_weight().
+> In wake_affine_idle(), it considers pulling if there is one runnable on the waking CPU because
+> of the belief that this runnable will voluntarily get off the runqueue. In wake_affine_weight(),
+> it basically takes off the waker's load again assuming the waker goes to sleep after the wakeup.
+> My argument is that this assumption doesn't really hold for wakeups from the interrupt contexts
+> when the waking CPU is non-idle. Wakeups from task context? sure, it seems to be a reasonable
+> assumption. 
 
-When something has been reported as not building for five weeks?
+I agree with you that the the sync case load computation for wake_affine_idle()
+and wake_affine_weight() is incorrect when waking a task from the interrupt context.
+In this light, your proposal makes sense.
 
-I have zero f's to give at that point about their "happiness".
+> For your idle case, I totally agree but I don't think having sync or not will actually
+> have any impacts here giving what the code does. Real impact comes from Mel's patch 7332dec055f2457c3
+> which makes it less likely to pull tasks when the waking CPU is idle. I believe we should consider
+> reverting 7332dec055f2 because a significant RDS latency regression has been spotted recently on our
+> system due to this patch. 
 
-             Linus
+The commit 7332dec055f2 prevented cross NUMA node pulling.  I think if the 
+waking CPU's NUMA node's average load is less than the prev CPU's NUMA node, 
+this cross NUMA node pull could be allowed for better load distribution.    
+
+> > 
+> > Can you provide some further insights on why pgebench is helped at low load
+> > case?  Is it because the woken tasks tend to stay put and not get moved around with interrupts
+> > and maintain cache warmth?
+>  Yes, and for read-only database workloads, the cache (whether it's incoming packet or not) on the interrupt
+> CPU isn't as performance critical as cache from its previous CPU where the db task run to process data.
+> To give you an example, consider a db client/server case, a client sends a request for a select query
+> through the network, the server accepts the query request and does all the heavy lifting and sends the result
+> back. For the server, the incoming packet is just a line of query whereas the CPU and its L3 db process previously
+> on has all the warm db caches, pulling it away from them is a crime :)  This may seem to be a little contradictory
+> to what I said earlier about the idle case and Mel's patch, but ¯\_(ツ)_/¯ it's hard to make all the workloads out
+> there happy. Anyway like I said earlier, this patch doesn't affect the idle case  
+> 
+> At higher load, sync in wake_affine_idle() doesn't really matter because the waking CPU could easily have more than
+> 1 runnable tasks. Sync in wake_affine_weight() also doesn't matter much as both sides have work to do, and cache
+> benefit of not pulling decreases simply because there are a lot more db processes under the same L3, they can compete
+> for the same cachelines.
+> 
+> Hope my explanation helps!
+
+Yes, that makes sense.
+
+Tim
+
+

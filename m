@@ -2,125 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B564F5738B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531875738BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbiGMOY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
+        id S236200AbiGMOYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234565AbiGMOYR (ORCPT
+        with ESMTP id S231576AbiGMOYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:24:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59E343120A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:24:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657722255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qU+KHYCrnvvC8T5bF7a/9GP4ChOrSrmP53V18b7bwkk=;
-        b=Dw6Sg9FbpbrLxgRlKTmpLgG2S6xaaNMe0HXXuDNIeMD+cywWsFrgOVdIzYMKJ5Fs5/Qpz1
-        BsJN879gbKskI7XFGxMpu0voRw6dPXOzeLyKP3yFTrENrKOP/YFCpR7wEqG2FoJK9C8COc
-        LE1LU8PPl9yh2BXrsXChgjRosmOFkTw=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-jKJIcsfCNoyAbaS9erDE-Q-1; Wed, 13 Jul 2022 10:24:13 -0400
-X-MC-Unique: jKJIcsfCNoyAbaS9erDE-Q-1
-Received: by mail-qv1-f71.google.com with SMTP id ok7-20020a0562143c8700b00472f0b33853so3835410qvb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:24:13 -0700 (PDT)
+        Wed, 13 Jul 2022 10:24:19 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8042F390
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:24:18 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id g4so10619819pgc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iZg4jV9qnfZ0cCGgCJhgdQT0+ATbFFKvPnKzJuPEFBg=;
+        b=nIjE3fdScssfGbGhj5AXLnpdMh20vhlpDufc+QPyNHwtFHhXLJzOstGW7gTkD4OQKK
+         FHDb8LG8k6W/FGT85Wep9ks6SInwfyFg4fnzpNzAqCLiRROa6MbsPO33ZRwrBINoYfz0
+         0Zxj4R5Yg3PsEpET4L15WQOksv1YepAR+SMHXFKsOcBs/VxbHgcs25qlRsS7wWifP3L3
+         1CV/mA6TLlEVx+XlsnPeq2B722iio3vXtP2LXnkp7yOUKg+Og39xri7BZTWb0r4Ih4Ak
+         KPWewfgTb79s6NsadVNBVzSgKV7AiCsvGnSjoExlEoQjA9y8h6uYz9yj921WELAF58qz
+         BZwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=qU+KHYCrnvvC8T5bF7a/9GP4ChOrSrmP53V18b7bwkk=;
-        b=Xr431p7bxvj3cqKvfcKcL3MlsO4WNdUAup9scG+NmBlSvJVqsVNv4kZ95NBYJ9Q+HU
-         ppAEuw222WpNaL3kIF4l54MP2vbSILlqgdqDmIvKJ/aDGR+VmVi9LRbmjrm03BaWblrU
-         sCI+k+dNH1KWCcQbSwakyLPFjkrsPcTrTH3wYWBJFhCErW72FzxFbEIAnkiLx2erU+KB
-         U9QdMH/Ij6Tgdx+UHpwn4En2DNhaydomSHBWU3+GynIiWpGQsRe06nPPKAkPmg5om9si
-         Gukzrskz7G/2jDtWQQGnpbTm9eI19ECXckvvgMXBvfd7fPx7PkDJoALhV37wH1xs/eIY
-         P7gQ==
-X-Gm-Message-State: AJIora+HiFyhQkSjVQU1XKJOKu+L6WoiGXujGJY5vYscnkCwkyzbYcHM
-        s/YVXQaJjD5n9su4YF+rWFssX1YlKP6lMO0wlNrGQ47vurUHVxilC3li3ewYkPgkP7jZ7t++3lR
-        GquXi5ukZZDnRWOJEfUBVR3f3
-X-Received: by 2002:a05:620a:1404:b0:6b5:a44b:80f8 with SMTP id d4-20020a05620a140400b006b5a44b80f8mr2541021qkj.380.1657722252468;
-        Wed, 13 Jul 2022 07:24:12 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tGBes8AqdSXg08o3SbPXKt7aSXWfqI0biomEA3nNuTESP6sI6rucDtPB/jonvg9ke07JhCfA==
-X-Received: by 2002:a05:620a:1404:b0:6b5:a44b:80f8 with SMTP id d4-20020a05620a140400b006b5a44b80f8mr2541005qkj.380.1657722252224;
-        Wed, 13 Jul 2022 07:24:12 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
-        by smtp.gmail.com with ESMTPSA id az30-20020a05620a171e00b006b14b303b37sm11601253qkb.102.2022.07.13.07.24.10
+        bh=iZg4jV9qnfZ0cCGgCJhgdQT0+ATbFFKvPnKzJuPEFBg=;
+        b=0qt+K2otwU/N+L1q/4jZ4Qyg1zSz+VMyzpVquC8WcRUPnnl2FGu7wPTM+R8obKBc7J
+         Yy+HNYwT+k8zrh5eRzX9sCwj2dMMFlRp3l+yY9nTbm7rhUFPIZragnVFB/m0E469efOH
+         j18q+ND8+7Ve+gI26XGgKRZOW/AxAooBOLIhwvw3EzZjTEI059FOm1YIGEF7MTSt9JtV
+         srPACaE9jbJsjwPFlwtkKa447KCyyfj97fex0Or4jOLfvW3X5yhkS85MWqcx4XB3iapX
+         U7ggxi6EziVYYcLLLUHNVnr8y5tZZAugagOyNJvROYllB7eS02/FbPQlXUofDlcgPF+k
+         cbVw==
+X-Gm-Message-State: AJIora95ZdzJliJ1ib7C665sUFG4gwFlp1vdcCP/AOkyNCroJbH4etGc
+        agd+GvLPFBLxyq7ROP141BpN6Q==
+X-Google-Smtp-Source: AGRyM1vxsQVbA5kAcWs5mJCADfkSTANLlvfyl4jcgvqjBIWIjnx87Wn/UG9vyvu2JXY/xXEaMW5r1Q==
+X-Received: by 2002:aa7:88d0:0:b0:52a:f0ea:1fbb with SMTP id k16-20020aa788d0000000b0052af0ea1fbbmr3400167pff.85.1657722257668;
+        Wed, 13 Jul 2022 07:24:17 -0700 (PDT)
+Received: from google.com (55.212.185.35.bc.googleusercontent.com. [35.185.212.55])
+        by smtp.gmail.com with ESMTPSA id y145-20020a626497000000b00528655cd6a6sm8928260pfb.53.2022.07.13.07.24.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 07:24:11 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 10:24:09 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
-        songmuchun@bytedance.com,
-        Axel Rasmussen <axelrasmussen@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/hugetlb: avoid corrupting page->mapping in
- hugetlb_mcopy_atomic_pte
-Message-ID: <Ys7ViSsOxLaQJIfy@xz-m1.local>
-References: <20220712130542.18836-1-linmiaohe@huawei.com>
- <Ys2xyCUnqpJt0eIo@monkey>
+        Wed, 13 Jul 2022 07:24:17 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 07:24:14 -0700
+From:   Zach O'Keefe <zokeefe@google.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
+        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [akpm-mm:mm-unstable 284/293] mm/khugepaged.c:2409
+ madvise_collapse() warn: possible memory leak of 'cc'
+Message-ID: <Ys7Vjt5QXz8XK1LZ@google.com>
+References: <202207100715.TBIYQ4fc-lkp@intel.com>
+ <CAHbLzkoFjZoX0WFy9YaOO1rEC+=yyytgDimapeTEyuNyMNTHLg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ys2xyCUnqpJt0eIo@monkey>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHbLzkoFjZoX0WFy9YaOO1rEC+=yyytgDimapeTEyuNyMNTHLg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 10:39:20AM -0700, Mike Kravetz wrote:
-> On 07/12/22 21:05, Miaohe Lin wrote:
-> > In MCOPY_ATOMIC_CONTINUE case with a non-shared VMA, pages in the page
-> > cache are installed in the ptes. But hugepage_add_new_anon_rmap is called
-> > for them mistakenly because they're not vm_shared. This will corrupt the
-> > page->mapping used by page cache code.
-> > 
-> > Fixes: f619147104c8 ("userfaultfd: add UFFDIO_CONTINUE ioctl")
-> > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> > ---
-> >  mm/hugetlb.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+On Jul 12 10:02, Yang Shi wrote:
+> On Tue, Jul 12, 2022 at 5:36 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> > head:   0e9f775fb0b4adf1a4ef50ea156ead09a0fc5194
+> > commit: 9f626ffb1d1c5c26b4a8e0fdffec784a5f773274 [284/293] mm/madvise: introduce MADV_COLLAPSE sync hugepage collapse
+> > config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220710/202207100715.TBIYQ4fc-lkp@intel.com/config)
+> > compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> >
+> > smatch warnings:
+> > mm/khugepaged.c:2409 madvise_collapse() warn: possible memory leak of 'cc'
+> >
+> > vim +/cc +2409 mm/khugepaged.c
+> >
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2387  int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2388                 unsigned long start, unsigned long end)
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2389  {
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2390    struct collapse_control *cc;
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2391    struct mm_struct *mm = vma->vm_mm;
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2392    unsigned long hstart, hend, addr;
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2393    int thps = 0, last_fail = SCAN_FAIL;
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2394    bool mmap_locked = true;
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2395
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2396    BUG_ON(vma->vm_start > start);
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2397    BUG_ON(vma->vm_end < end);
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2398
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2399    cc = kmalloc(sizeof(*cc), GFP_KERNEL);
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2400    if (!cc)
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2401            return -ENOMEM;
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2402    cc->is_khugepaged = false;
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2403    cc->last_target_node = NUMA_NO_NODE;
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2404
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2405    *prev = vma;
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2406
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2407    /* TODO: Support file/shmem */
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2408    if (!vma->anon_vma || !vma_is_anonymous(vma))
+> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06 @2409            return -EINVAL;
 > 
-> This looks correct to me.
-> 
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> 
-> However, I am having a hard time wrapping my head around how UFFDIO_CONTINUE
-> should work on non-anon private mappings.  For example, a private mapping of
-> a hugetlbfs file.  I think we just map the page in the file/cache and do not
-> set the write bit in the pte.  So, yes we would want page_dup_file_rmap()
-> in this case as shown below.
-> 
-> Adding Axel and Peter on Cc: as they were more involved in adding that code
-> and the design of UFFDIO_CONTINUE.
+> It seems better to move the cc kmalloc after the anonymous vma check?
+>
 
-Yes the change makes sense to me too.  There's just one thing to check on
-whether minor mode should support private mappings at all as it's probably
-not in the major goal of when it's proposed.
+Agreed - something I only noticed when fixing this. I've cleaned up some
+ordering here, now looks like:
 
-I don't see why it can't logically, but I think we should have failed the
-uffdio-register already somewhere before when the vma was private and
-registered with minor mode.  It's just that I cannot quickly find it in the
-code anywhere..  ideally it should be checked in vma_can_userfault() but it
-seems not.
+---8<---
+	BUG_ON(vma->vm_start > start);
+	BUG_ON(vma->vm_end < end);
 
-Axel?
+	*prev = vma;
 
-PS: the minor mode man page update seems to be still missing.
+        /* TODO: Support file/shmem */
+        if (!vma->anon_vma || !vma_is_anonymous(vma))
+                return -EINVAL;
 
--- 
-Peter Xu
+	if (!hugepage_vma_check(vma, vma->vm_flags, false, false, false))
+		return -EINVAL;
 
+	cc = kmalloc(sizeof(*cc), GFP_KERNEL);
+	if (!cc)
+		return -ENOMEM;
+	cc->is_khugepaged = false;
+	cc->last_target_node = NUMA_NO_NODE;
+
+	mmgrab(mm);
+	lru_add_drain_all();
+
+	hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
+	hend = end & HPAGE_PMD_MASK;
+
+	for (addr = hstart; addr < hend; addr += HPAGE_PMD_SIZE) {
+---8<---
+out_nolock:
+	mmap_assert_locked(mm);
+	mmdrop(mm);
+	kfree(cc);
+---8<---
+
+> >
+> > kfree(cc);?
+> >
+> >
+> > --
+> > 0-DAY CI Kernel Test Service
+> > https://01.org/lkp
+> >
+> >

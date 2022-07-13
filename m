@@ -2,94 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192A4573982
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABE4573988
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236681AbiGMPBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        id S236724AbiGMPCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiGMPBv (ORCPT
+        with ESMTP id S236720AbiGMPCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:01:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86A6813F25
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:01:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657724509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=w0hQGbL9sUey3asO5//RVCwLG4Fv9JCcj/VgRL7bqrA=;
-        b=AmbX5CRXBTrhGskowu2GhFAM5f2OFPRYOnH+7kZSUBnc1bNP+juUaaeYvBfC9ttsimwoY1
-        0z5JX48u6catF/WOfv9HboZpMl+JSNjjXCdN+SOtSvk0n5v6PvXUydnjXnwxIXD5XHSztF
-        g2LD3Z6W/Cp7FRQCIg0XvO9q2uc0tl0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-15-o_HSiA-VPWyfXP-L7SP2aA-1; Wed, 13 Jul 2022 11:01:45 -0400
-X-MC-Unique: o_HSiA-VPWyfXP-L7SP2aA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 51AEF85A586;
-        Wed, 13 Jul 2022 15:01:45 +0000 (UTC)
-Received: from raketa.redhat.com (unknown [10.40.192.102])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F0C04141510F;
-        Wed, 13 Jul 2022 15:01:43 +0000 (UTC)
-From:   Maurizio Lombardi <mlombard@redhat.com>
-To:     alexander.duyck@gmail.com
-Cc:     kuba@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        chen45464546@163.com
-Subject: [PATCH V2] mm: prevent page_frag_alloc() from corrupting the memory
-Date:   Wed, 13 Jul 2022 17:01:43 +0200
-Message-Id: <20220713150143.147537-1-mlombard@redhat.com>
+        Wed, 13 Jul 2022 11:02:20 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CC741991
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:02:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657724538; x=1689260538;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=qCQxxpW97qNlDywooKT7HFcvXI52Z+rKG3JMYF5em0M=;
+  b=SKmNhJd9ObY2INvwz0D7w5MUGSPxEOluNZ4oN8w97t6yU5uP2mhcEj0J
+   4154YwRtdEDVdGSgDGw3XzQmlru1Tx0ou1pH1K7y4kP2atiEoL/w3XrVp
+   yZQxcNOrYgTP8n25Sf5go5T/5MDh0NccrOBJVcngzDnrZHWCRBB/EJwQT
+   cF22fhXx6KRFDdG66fHGZVpC+zWDU31S0XQ+kqvW9Hv8wbS+pbD8ZLX8n
+   k6de5Mbs2D1iNVgakie4ls7TlwiY0tfKG1pTQpxNNyVJnBP13EqC7ex1e
+   XzysZFiNfyshtwE9xeMFWH8qMakLS1nwpMoMZfMtyGEPw8Xa1/3WPmlCN
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265644919"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="265644919"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 08:01:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="599767612"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jul 2022 08:01:54 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 5988BF1; Wed, 13 Jul 2022 18:02:02 +0300 (EEST)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     kirill.shutemov@linux.intel.com
+Cc:     ak@linux.intel.com, andreyknvl@gmail.com,
+        dave.hansen@linux.intel.com, dvyukov@google.com, glider@google.com,
+        hjl.tools@gmail.com, kcc@google.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, luto@kernel.org, peterz@infradead.org,
+        rick.p.edgecombe@intel.com, ryabinin.a.a@gmail.com,
+        tarasmadan@google.com, x86@kernel.org
+Subject: [PATCHv5.1 04/13] x86/mm: Handle LAM on context switch
+Date:   Wed, 13 Jul 2022 18:02:00 +0300
+Message-Id: <20220713150200.17080-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220712231328.5294-6-kirill.shutemov@linux.intel.com>
+References: <20220712231328.5294-6-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A number of drivers call page_frag_alloc() with a
-fragment's size > PAGE_SIZE.
-In low memory conditions, __page_frag_cache_refill() may fail the order 3
-cache allocation and fall back to order 0;
-In this case, the cache will be smaller than the fragment, causing
-memory corruptions.
+Linear Address Masking mode for userspace pointers encoded in CR3 bits.
+The mode is selected per-thread. Add new thread features indicate that the
+thread has Linear Address Masking enabled.
 
-Prevent this from happening by checking if the newly allocated cache
-is large enough for the fragment; if not, the allocation will fail
-and page_frag_alloc() will return NULL.
+switch_mm_irqs_off() now respects these flags and constructs CR3
+accordingly.
 
-V2: do not free the cache page because this could make memory pressure
-even worse, just return NULL.
+The active LAM mode gets recorded in the tlb_state.
 
-Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- mm/page_alloc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ v5.1:
+  - Fix build issue with CONFIG_MODULE=y
+---
+ arch/x86/include/asm/mmu.h         |  3 +++
+ arch/x86/include/asm/mmu_context.h | 24 +++++++++++++++++
+ arch/x86/include/asm/tlbflush.h    | 35 +++++++++++++++++++++++++
+ arch/x86/mm/tlb.c                  | 42 +++++++++++++++++++-----------
+ 4 files changed, 89 insertions(+), 15 deletions(-)
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index e008a3df0485..b1407254a826 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -5617,6 +5617,8 @@ void *page_frag_alloc_align(struct page_frag_cache *nc,
- 		/* reset page count bias and offset to start of new frag */
- 		nc->pagecnt_bias = PAGE_FRAG_CACHE_MAX_SIZE + 1;
- 		offset = size - fragsz;
-+		if (unlikely(offset < 0))
-+			return NULL;
+diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
+index 5d7494631ea9..002889ca8978 100644
+--- a/arch/x86/include/asm/mmu.h
++++ b/arch/x86/include/asm/mmu.h
+@@ -40,6 +40,9 @@ typedef struct {
+ 
+ #ifdef CONFIG_X86_64
+ 	unsigned short flags;
++
++	/* Active LAM mode:  X86_CR3_LAM_U48 or X86_CR3_LAM_U57 or 0 (disabled) */
++	unsigned long lam_cr3_mask;
+ #endif
+ 
+ 	struct mutex lock;
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index b8d40ddeab00..69c943b2ae90 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -91,6 +91,29 @@ static inline void switch_ldt(struct mm_struct *prev, struct mm_struct *next)
+ }
+ #endif
+ 
++#ifdef CONFIG_X86_64
++static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
++{
++	return mm->context.lam_cr3_mask;
++}
++
++static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
++{
++	mm->context.lam_cr3_mask = oldmm->context.lam_cr3_mask;
++}
++
++#else
++
++static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
++{
++	return 0;
++}
++
++static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
++{
++}
++#endif
++
+ #define enter_lazy_tlb enter_lazy_tlb
+ extern void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk);
+ 
+@@ -168,6 +191,7 @@ static inline int arch_dup_mmap(struct mm_struct *oldmm, struct mm_struct *mm)
+ {
+ 	arch_dup_pkeys(oldmm, mm);
+ 	paravirt_arch_dup_mmap(oldmm, mm);
++	dup_lam(oldmm, mm);
+ 	return ldt_dup_context(oldmm, mm);
+ }
+ 
+diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+index 4af5579c7ef7..efe83d33327f 100644
+--- a/arch/x86/include/asm/tlbflush.h
++++ b/arch/x86/include/asm/tlbflush.h
+@@ -100,6 +100,16 @@ struct tlb_state {
+ 	 */
+ 	bool invalidate_other;
+ 
++#ifdef CONFIG_X86_64
++	/*
++	 * Active LAM mode.
++	 *
++	 * X86_CR3_LAM_U57/U48 shifted right by X86_CR3_LAM_U57_BIT or 0 if LAM
++	 * disabled.
++	 */
++	u8 lam;
++#endif
++
+ 	/*
+ 	 * Mask that contains TLB_NR_DYN_ASIDS+1 bits to indicate
+ 	 * the corresponding user PCID needs a flush next time we
+@@ -356,6 +366,30 @@ static inline bool huge_pmd_needs_flush(pmd_t oldpmd, pmd_t newpmd)
+ }
+ #define huge_pmd_needs_flush huge_pmd_needs_flush
+ 
++#ifdef CONFIG_X86_64
++static inline unsigned long tlbstate_lam_cr3_mask(void)
++{
++	unsigned long lam = this_cpu_read(cpu_tlbstate.lam);
++
++	return lam << X86_CR3_LAM_U57_BIT;
++}
++
++static inline void set_tlbstate_cr3_lam_mask(unsigned long mask)
++{
++	this_cpu_write(cpu_tlbstate.lam, mask >> X86_CR3_LAM_U57_BIT);
++}
++
++#else
++
++static inline unsigned long tlbstate_lam_cr3_mask(void)
++{
++	return 0;
++}
++
++static inline void set_tlbstate_cr3_lam_mask(u64 mask)
++{
++}
++#endif
+ #endif /* !MODULE */
+ 
+ static inline void __native_tlb_flush_global(unsigned long cr4)
+@@ -363,4 +397,5 @@ static inline void __native_tlb_flush_global(unsigned long cr4)
+ 	native_write_cr4(cr4 ^ X86_CR4_PGE);
+ 	native_write_cr4(cr4);
+ }
++
+ #endif /* _ASM_X86_TLBFLUSH_H */
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index d400b6d9d246..4c93f87a8928 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -154,17 +154,18 @@ static inline u16 user_pcid(u16 asid)
+ 	return ret;
+ }
+ 
+-static inline unsigned long build_cr3(pgd_t *pgd, u16 asid)
++static inline unsigned long build_cr3(pgd_t *pgd, u16 asid, unsigned long lam)
+ {
+ 	if (static_cpu_has(X86_FEATURE_PCID)) {
+-		return __sme_pa(pgd) | kern_pcid(asid);
++		return __sme_pa(pgd) | kern_pcid(asid) | lam;
+ 	} else {
+ 		VM_WARN_ON_ONCE(asid != 0);
+-		return __sme_pa(pgd);
++		return __sme_pa(pgd) | lam;
+ 	}
+ }
+ 
+-static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid)
++static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid,
++					      unsigned long lam)
+ {
+ 	VM_WARN_ON_ONCE(asid > MAX_ASID_AVAILABLE);
+ 	/*
+@@ -173,7 +174,7 @@ static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid)
+ 	 * boot because all CPU's the have same capabilities:
+ 	 */
+ 	VM_WARN_ON_ONCE(!boot_cpu_has(X86_FEATURE_PCID));
+-	return __sme_pa(pgd) | kern_pcid(asid) | CR3_NOFLUSH;
++	return __sme_pa(pgd) | kern_pcid(asid) | lam | CR3_NOFLUSH;
+ }
+ 
+ /*
+@@ -274,15 +275,16 @@ static inline void invalidate_user_asid(u16 asid)
+ 		  (unsigned long *)this_cpu_ptr(&cpu_tlbstate.user_pcid_flush_mask));
+ }
+ 
+-static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, bool need_flush)
++static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, unsigned long lam,
++			    bool need_flush)
+ {
+ 	unsigned long new_mm_cr3;
+ 
+ 	if (need_flush) {
+ 		invalidate_user_asid(new_asid);
+-		new_mm_cr3 = build_cr3(pgdir, new_asid);
++		new_mm_cr3 = build_cr3(pgdir, new_asid, lam);
+ 	} else {
+-		new_mm_cr3 = build_cr3_noflush(pgdir, new_asid);
++		new_mm_cr3 = build_cr3_noflush(pgdir, new_asid, lam);
  	}
  
- 	nc->pagecnt_bias--;
+ 	/*
+@@ -491,6 +493,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ {
+ 	struct mm_struct *real_prev = this_cpu_read(cpu_tlbstate.loaded_mm);
+ 	u16 prev_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
++	unsigned long prev_lam = tlbstate_lam_cr3_mask();
++	unsigned long new_lam = mm_lam_cr3_mask(next);
+ 	bool was_lazy = this_cpu_read(cpu_tlbstate_shared.is_lazy);
+ 	unsigned cpu = smp_processor_id();
+ 	u64 next_tlb_gen;
+@@ -520,7 +524,7 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 	 * isn't free.
+ 	 */
+ #ifdef CONFIG_DEBUG_VM
+-	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid))) {
++	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid, prev_lam))) {
+ 		/*
+ 		 * If we were to BUG here, we'd be very likely to kill
+ 		 * the system so hard that we don't see the call trace.
+@@ -622,15 +626,16 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 		barrier();
+ 	}
+ 
++	set_tlbstate_cr3_lam_mask(new_lam);
+ 	if (need_flush) {
+ 		this_cpu_write(cpu_tlbstate.ctxs[new_asid].ctx_id, next->context.ctx_id);
+ 		this_cpu_write(cpu_tlbstate.ctxs[new_asid].tlb_gen, next_tlb_gen);
+-		load_new_mm_cr3(next->pgd, new_asid, true);
++		load_new_mm_cr3(next->pgd, new_asid, new_lam, true);
+ 
+ 		trace_tlb_flush(TLB_FLUSH_ON_TASK_SWITCH, TLB_FLUSH_ALL);
+ 	} else {
+ 		/* The new ASID is already up to date. */
+-		load_new_mm_cr3(next->pgd, new_asid, false);
++		load_new_mm_cr3(next->pgd, new_asid, new_lam, false);
+ 
+ 		trace_tlb_flush(TLB_FLUSH_ON_TASK_SWITCH, 0);
+ 	}
+@@ -691,6 +696,10 @@ void initialize_tlbstate_and_flush(void)
+ 	/* Assert that CR3 already references the right mm. */
+ 	WARN_ON((cr3 & CR3_ADDR_MASK) != __pa(mm->pgd));
+ 
++	/* LAM expected to be disabled in CR3 and init_mm */
++	WARN_ON(cr3 & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57));
++	WARN_ON(mm_lam_cr3_mask(&init_mm));
++
+ 	/*
+ 	 * Assert that CR4.PCIDE is set if needed.  (CR4.PCIDE initialization
+ 	 * doesn't work like other CR4 bits because it can only be set from
+@@ -699,8 +708,8 @@ void initialize_tlbstate_and_flush(void)
+ 	WARN_ON(boot_cpu_has(X86_FEATURE_PCID) &&
+ 		!(cr4_read_shadow() & X86_CR4_PCIDE));
+ 
+-	/* Force ASID 0 and force a TLB flush. */
+-	write_cr3(build_cr3(mm->pgd, 0));
++	/* Disable LAM, force ASID 0 and force a TLB flush. */
++	write_cr3(build_cr3(mm->pgd, 0, 0));
+ 
+ 	/* Reinitialize tlbstate. */
+ 	this_cpu_write(cpu_tlbstate.last_user_mm_spec, LAST_USER_MM_INIT);
+@@ -708,6 +717,7 @@ void initialize_tlbstate_and_flush(void)
+ 	this_cpu_write(cpu_tlbstate.next_asid, 1);
+ 	this_cpu_write(cpu_tlbstate.ctxs[0].ctx_id, mm->context.ctx_id);
+ 	this_cpu_write(cpu_tlbstate.ctxs[0].tlb_gen, tlb_gen);
++	set_tlbstate_cr3_lam_mask(0);
+ 
+ 	for (i = 1; i < TLB_NR_DYN_ASIDS; i++)
+ 		this_cpu_write(cpu_tlbstate.ctxs[i].ctx_id, 0);
+@@ -1047,8 +1057,10 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
+  */
+ unsigned long __get_current_cr3_fast(void)
+ {
+-	unsigned long cr3 = build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
+-		this_cpu_read(cpu_tlbstate.loaded_mm_asid));
++	unsigned long cr3 =
++		build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
++		this_cpu_read(cpu_tlbstate.loaded_mm_asid),
++		tlbstate_lam_cr3_mask());
+ 
+ 	/* For now, be very restrictive about when this can be called. */
+ 	VM_WARN_ON(in_nmi() || preemptible());
 -- 
-2.31.1
+2.35.1
 

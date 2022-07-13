@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C5C572E33
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E5B572E34
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233942AbiGMGeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 02:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
+        id S234021AbiGMGeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 02:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233744AbiGMGeA (ORCPT
+        with ESMTP id S231305AbiGMGeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 02:34:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB026EEB6;
-        Tue, 12 Jul 2022 23:33:59 -0700 (PDT)
-Received: from localhost.localdomain (86.166.5.84.rev.sfr.net [84.5.166.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E7D3A6601A34;
-        Wed, 13 Jul 2022 07:33:56 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657694037;
-        bh=Bh/K41wvIG4TPoBcy9qS5NVjHErbM3kSr7yTQO5HdGQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZkUIHeIvVE+nK75mXrZnTV8XnnkY5xN4jaBLk4AGP1ga7UIw3Gqs/lITrZzNT3NAX
-         8nGbdgW0hsaqMfh/+MG2hoOkjwI1dHVD6Yyc8qWSb0GdKxQiT5iFEZr3rwlHIeM6qu
-         TDGyoVq8+SI7QUXBheDqtg8ZwH83UTfPwWuyQCVCbpS7xAgfjy3FYtMDZUWDV+XqT/
-         g1kTcL8FcZZHnvmDTbvgYJ8IzY2NPJz4tzrO5/tTuu0FKEMxOSzt6jQHhC2cL6epVa
-         nsAYJws3pz829E2ZSOyDaKR+FAdGxPI7K4R1MsA/ygcXNtSAoJacJgeBZNdLkSYPT4
-         52TgQUTW53RFQ==
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH] Makefile: replace headers_install with headers for kselftest
-Date:   Wed, 13 Jul 2022 08:33:43 +0200
-Message-Id: <a7af58feaa6ae6d3b0c8c55972a470cec62341e5.1657693952.git.guillaume.tucker@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 13 Jul 2022 02:34:18 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47AD88F14;
+        Tue, 12 Jul 2022 23:34:16 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id EF0615C00AE;
+        Wed, 13 Jul 2022 02:34:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 13 Jul 2022 02:34:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1657694053; x=1657780453; bh=edLOb4Wr+qoejHKWqJQsSuBKuAII
+        JA4woz+ajV4n8eM=; b=Bei3h0FEFXmn+HvqhOFlqfEx3yHwcsKqzRLdE6b0gXR2
+        V/sVXsRITn92miR3vMH0OZPUoyzToqazMy9IX2pxKE06qXuEwCF2TwwTs3LuE4/2
+        mk8EtiEhr7dS+y/NTSXc2MsvX4dJGc+iIISk0VcDF/qrJ+0bD8vk0MfBKHrLo9iq
+        WuQse7NCoyuB0+KNxlugZkJv3cw+A6q04RZ1fyDGj6pwk3RLAyKbkMCTAVDuM5sC
+        J1XZOlUBaf7b7vaRf7sTUsFowjVJEia6hYuJvRAJySFunwSwlO8PBUg3hyL4xTTn
+        YbDfowrJDNZR+wpNGqACck5xGHhJqHuhXaFCGCpPXw==
+X-ME-Sender: <xms:ZWfOYhhFYxC7BZSW38KDT2x0bG86NvvwWmv89Od6Hz4ZxAQGnkoTlg>
+    <xme:ZWfOYmAXbvRvnB7e2XwFBxKGRDossqWaeV4U2eXdapkqaJzB1eR3N_IUUjBZbuDr0
+    Uylm9qYQV1Fy6E>
+X-ME-Received: <xmr:ZWfOYhGMwL9JzhNsBPsxlVk5Ioeo1SC6ryVsWAX8CpFBuunfQVJDiytUqc9RcLqnFwUhIzCTMpyZEoBuoFF29lDrpHg-aA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejiedgudduudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkugho
+    ucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrg
+    htthgvrhhnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeej
+    geeghfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:ZWfOYmRVYsXN4JrsUswsrcxWCimGpdmbyVxcpiBizVPv3SJrhAYDmQ>
+    <xmx:ZWfOYuz3CRCW_7B03RTGF_rGDfW-tCrmRnW6EQFyGlNh_SS-_a12FA>
+    <xmx:ZWfOYs4zc3-_36HMg9ecV6r-EThG3kM0ap9WswjCsxSTitRpeWXbTw>
+    <xmx:ZWfOYloJqzQBBe8ZtMS3McomUPDmfPoTpAmKBkGT2SC_7EayHfmxjA>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 13 Jul 2022 02:34:12 -0400 (EDT)
+Date:   Wed, 13 Jul 2022 09:34:09 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: Re: [PATCH v2] tracing: devlink: Use static array for string in
+ devlink_trap_report even
+Message-ID: <Ys5nYctVGd6WD70M@shredder>
+References: <20220712185820.002d9fb5@gandalf.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712185820.002d9fb5@gandalf.local.home>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace headers_install with headers as kselftest uses the header
-files from within the kernel tree rather than from a system-wide
-installation.
+On Tue, Jul 12, 2022 at 06:58:20PM -0400, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> The trace event devlink_trap_report uses the __dynamic_array() macro to
+> determine the size of the input_dev_name field. This is because it needs
+> to test the dev field for NULL, and will use "NULL" if it is. But it also
+> has the size of the dynamic array as a fixed IFNAMSIZ bytes. This defeats
+> the purpose of the dynamic array, as this will reserve that amount of
+> bytes on the ring buffer, and to make matters worse, it will even save
+> that size in the event as the event expects it to be dynamic (for which it
+> is not).
+> 
+> Since IFNAMSIZ is just 16 bytes, just make it a static array and this will
+> remove the meta data from the event that records the size.
+> 
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: Jiri Pirko <jiri@nvidia.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-We can still run this directly:
-
-  $ make O=build kselftest-all
-
-and when building from the selftests directory:
-
-  $ make O=build headers
-  $ make O=build -C tools/testing/selftests all
-
-Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-Reported-by: Masahiro Yamada <masahiroy@kernel.org>
----
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index fb2f3bb53a6b..5c934d16664c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1347,10 +1347,10 @@ tools/%: FORCE
- # Kernel selftest
- 
- PHONY += kselftest
--kselftest: headers_install
-+kselftest: headers
- 	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
- 
--kselftest-%: headers_install FORCE
-+kselftest-%: headers FORCE
- 	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
- 
- PHONY += kselftest-merge
--- 
-2.30.2
-
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Tested-by: Ido Schimmel <idosch@nvidia.com>

@@ -2,161 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CA15734EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DC85734F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbiGMLI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 07:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
+        id S234308AbiGMLI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 07:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiGMLIY (ORCPT
+        with ESMTP id S229579AbiGMLIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:08:24 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC139FE529;
-        Wed, 13 Jul 2022 04:08:22 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id 20so8321926qky.5;
-        Wed, 13 Jul 2022 04:08:22 -0700 (PDT)
+        Wed, 13 Jul 2022 07:08:55 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8852529D
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:08:54 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id b11so19186503eju.10
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:08:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Oo6klbm63qFTddEWFtIVJFRecDH3MaiqQdekaNqNRts=;
-        b=hv/4y8XMTu7hWpAwUYub0wWknicp49B81mcByPFcZVDMaLvKKJbG5g4goAoFZfgfdM
-         TrEkRr6AaAH4yxqZ3DGhT/2Cu45V0at7Os6XxE3l7e6XFOPR3uVbW+iiWjFnbQ0NK1zq
-         N2dAkxjmq+pmaGbx3cnqp7gfswiw6d+0BVBhk8+/1A/tQmFeNOTU+9b6QcLD2JOq6KCa
-         oWpQlgMKf4H7oeiaUoPOEuFM+5uyrJEgbtTd5zYK0DyUH0jD978FuXlKfUKnCkaPPNlv
-         aa7s9LQJA5Ub3ls5WnbNFI+CZM2EWIeIsOrAlrTbswdGI5xWLZfv+PwGaAUxGKPO9L1Y
-         VjyA==
+         :cc:content-transfer-encoding;
+        bh=lJvpiSOQRpps7ywZWOpMZ0fV9KTgjPhhMacpKKuKlpc=;
+        b=gooZU2UNAzr+ekmSNuvUfmAtNk41a5lzyKio83+PtxdQhaDpirWIqI4gKrh6tMdugO
+         VDygYM8jm6Ax0w63VXe0VvAn5ff4MvuoNQydY8GBfd6wiUYj9flKTLfhscd39iuP8yvy
+         wFcvGQgmMz8uCnFSivzXseEnfxJ4aWw4AlHpWlp54pKUQOiGOzO1yRxB7AS6qbNvVRGp
+         wYQtqYmHAPBT4WHKJHud45k/z2tb/ZI6fgmG1pdOnINbHuFvDOfr1k7jYyyeLA9iUUTQ
+         gB5Y6cQcjigsTwgAtD+pfOl4xAWh9ufxCwDclsT6fN+IZoLorvzas4hEhGJ+KKe5UYAe
+         3Krg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Oo6klbm63qFTddEWFtIVJFRecDH3MaiqQdekaNqNRts=;
-        b=Kg7iuDENZY8lvCErJbcwTXQ+b4f3V0eP0Ij+92EbZMqkxskhpHc/zRMRomv2k1LXUB
-         M5+omrbMFIJUbGFkWjoPIrhIR84/NmjwqN20Tb/LwyqfyyMcgtgVgxskxsFsKAsLpN1Y
-         mEaIxxZNMbe/v4vLDK3/PgWLe/kt5sCRmOKuZdzDw0bzs2nHFmcH6Ut6I8ob4Rr/g1XE
-         gQxu4Eg1rInLAlGWPhEllHYwBD+RFK6G8qgl5ts/L/zwotwlgcXXEIDF8QQ7D7UEKMqs
-         AwtiZDzohureEFB8gw7CsA2bF74iWu+SVW6Y8OQz7+LtrVMQ/low59JuazQ8VjLGpn5k
-         AFVw==
-X-Gm-Message-State: AJIora+jRYc3QNSFRItUlfsnjCS4ZHk3qCXcO+42QxDaA1+ymjt1qyaR
-        +yLIB3rcPVlBbrTGiikvI1e+sQlrG3jSjSGWn1isi7KBJ/g=
-X-Google-Smtp-Source: AGRyM1tH3AvexDZy9/hr1C5OV+En4+P/Qxd4ZgpM5CmvpoKhfrAjgGA7M1YcthQ5CymParxZmaZRUgrw/IE3tk1EsMw=
-X-Received: by 2002:a05:620a:c8e:b0:6b5:91da:9b04 with SMTP id
- q14-20020a05620a0c8e00b006b591da9b04mr1817976qki.25.1657710501624; Wed, 13
- Jul 2022 04:08:21 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lJvpiSOQRpps7ywZWOpMZ0fV9KTgjPhhMacpKKuKlpc=;
+        b=osFxtM1eLc8r6Pw/d62cjYIniouo7NewvLUh4xHjrov0xzaRNuq/K8OlXBXy8o167z
+         gmycBwI21kVt6RsQkPmeqJmJcdWU4kx9vrL4gy1bP3XMjSFA43aIKJt3ZujPDU38HjYS
+         Q1Oua8Rszep6X5wSzzNCbiSZqh462wz0MZ9ZQ0adDghSJYoAD9MzIM+DxYmSv5Mhe+VI
+         NCDjbITJbxzhm+/Le+PRR4nibwpsjd+HTu1XiR7/2EgqLXb4ISUgOJJmEZwc/sWx58GM
+         Bcit6Koxi+aq8ShI6qUR7ncMrjP9AiXZlFkHkD8ubouvYF0ZMJpAP7XA2uCQ1ZAgCoPc
+         6Z/Q==
+X-Gm-Message-State: AJIora+XVWoSvYOTm0eWvQtWOYlwpdLrxSyw1FcUBAkchpluTnuLdo8n
+        dfTOqhgqJhTSECNMZnuSOH+S6SfYj0+njA+cwqxi
+X-Google-Smtp-Source: AGRyM1tMajvdaUW3g0GchHdyscPm64iC1ebSNxBBjRwvlKSl0dgXAwdIWpiaj+/d3AjQmepPUxddGr9vaz46P5t23Ak=
+X-Received: by 2002:a17:906:5055:b0:6ff:1dfb:1e2c with SMTP id
+ e21-20020a170906505500b006ff1dfb1e2cmr2977364ejk.200.1657710532643; Wed, 13
+ Jul 2022 04:08:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220624195112.894916-1-robimarko@gmail.com> <87edyq1ujr.wl-maz@kernel.org>
- <20220712124445.GC21746@workstation> <87czea1i2f.wl-maz@kernel.org>
-In-Reply-To: <87czea1i2f.wl-maz@kernel.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Wed, 13 Jul 2022 13:08:10 +0200
-Message-ID: <CAOX2RU5RX+H=omuKGye2fBy9dOFmfC9HC_3pekeGMxDJuReCUw@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: qcom: spmi-gpio: make the irqchip immutable
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-gpio@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
+References: <20220706050503.171-1-xieyongji@bytedance.com> <20220706050503.171-2-xieyongji@bytedance.com>
+ <1106133f-ebd4-f6a8-83ab-19e995bcdba6@redhat.com>
+In-Reply-To: <1106133f-ebd4-f6a8-83ab-19e995bcdba6@redhat.com>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Wed, 13 Jul 2022 19:08:42 +0800
+Message-ID: <CACycT3sNt_PcPQ__KVSqV6xd=+z5+gbMqWhu6H3vcj_fTGzUsw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] vduse: Remove unnecessary spin lock protection
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Liu Xiaodong <xiaodong.liu@intel.com>,
+        Maxime Coquelin <maxime.coquelin@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        songmuchun@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 at 17:12, Marc Zyngier <maz@kernel.org> wrote:
+On Wed, Jul 13, 2022 at 1:44 PM Jason Wang <jasowang@redhat.com> wrote:
 >
-> On Tue, 12 Jul 2022 13:44:45 +0100,
-> Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org> wrote:
+>
+> =E5=9C=A8 2022/7/6 13:04, Xie Yongji =E5=86=99=E9=81=93:
+> > Taking iotlb lock to access bounce page in page fault
+> > handler is meaningless since vduse_domain_free_bounce_pages()
+> > would only be called during file release.
 > >
-> > On Tue, Jul 12, 2022 at 11:42:32AM +0100, Marc Zyngier wrote:
-> > > On Fri, 24 Jun 2022 20:51:12 +0100,
-> > > Robert Marko <robimarko@gmail.com> wrote:
-> > > >
-> > > > Commit 6c846d026d49 ("gpio: Don't fiddle with irqchips marked as
-> > > > immutable") added a warning to indicate if the gpiolib is altering the
-> > > > internals of irqchips.
-> > > >
-> > > > Following this change the following warning is now observed for the SPMI
-> > > > PMIC pinctrl driver:
-> > > > gpio gpiochip1: (200f000.spmi:pmic@0:gpio@c000): not an immutable chip, please consider fixing it!
-> > > >
-> > > > Fix this by making the irqchip in the SPMI PMIC pinctrl driver immutable.
-> > > >
-> > > > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > > > ---
-> > > >  drivers/pinctrl/qcom/pinctrl-spmi-gpio.c | 22 ++++++++++++----------
-> > > >  1 file changed, 12 insertions(+), 10 deletions(-)
-> > > >
-> > > > diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-> > > > index c3255b0bece4..406ee0933d0b 100644
-> > > > --- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-> > > > +++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-> > > > @@ -171,7 +171,6 @@ struct pmic_gpio_state {
-> > > >   struct regmap   *map;
-> > > >   struct pinctrl_dev *ctrl;
-> > > >   struct gpio_chip chip;
-> > > > - struct irq_chip irq;
-> > > >   u8 usid;
-> > > >   u8 pid_base;
-> > > >  };
-> > > > @@ -988,6 +987,17 @@ static void *pmic_gpio_populate_parent_fwspec(struct gpio_chip *chip,
-> > > >   return fwspec;
-> > > >  }
-> > > >
-> > > > +static const struct irq_chip spmi_gpio_irq_chip = {
-> > > > + .name           = "spmi-gpio",
-> > > > + .irq_ack        = irq_chip_ack_parent,
-> > > > + .irq_mask       = irq_chip_mask_parent,
-> > > > + .irq_unmask     = irq_chip_unmask_parent,
-> > >
-> > > No, this is wrong. Please look at the documentation to see how you
-> > > must now directly call into the gpiolib helpers for these two
-> > > callbacks.
-> > >
+> > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> > ---
+> >   drivers/vdpa/vdpa_user/iova_domain.c | 7 ++-----
+> >   1 file changed, 2 insertions(+), 5 deletions(-)
 > >
-> > IIUC, you are referring to gpiochip_disable_irq() and
-> > gpiochip_enable_irq() APIs.
+> > diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_u=
+ser/iova_domain.c
+> > index 6daa3978d290..bca1f0b8850c 100644
+> > --- a/drivers/vdpa/vdpa_user/iova_domain.c
+> > +++ b/drivers/vdpa/vdpa_user/iova_domain.c
+> > @@ -211,17 +211,14 @@ static struct page *
+> >   vduse_domain_get_bounce_page(struct vduse_iova_domain *domain, u64 io=
+va)
+> >   {
+> >       struct vduse_bounce_map *map;
+> > -     struct page *page =3D NULL;
+> > +     struct page *page;
+> >
+> > -     spin_lock(&domain->iotlb_lock);
+> >       map =3D &domain->bounce_maps[iova >> PAGE_SHIFT];
+> >       if (!map->bounce_page)
+> > -             goto out;
+> > +             return NULL;
 >
-> I am indeed.
 >
-> > These APIs are supposed to let the gpiolib know about that the IRQ
-> > usage of these GPIOs. But for the case of hierarchial IRQ domain,
-> > isn't the parent is going to do that?
+> Interesting, I wonder why we don't serialize with
+> vduse_domain_map_bounce_page() with iotlb_lock?
 >
-> Why would it? The parent has no clue about what sits above it. In a
-> hierarchical configuration, each level is responsible for its own
-> level, and the GPIO layer should be responsible for its own
-> management.
->
-> > Please correct me if I'm wrong.
->
-> I'm afraid you are, and this patch is a fairly obvious change in
-> behaviour, as the callbacks you mention above are not called anymore,
-> while they were before.
->
-> If they are not necessary (for reasons I can't fathom), then this
-> should be clearly explained.
 
-Hi Marc,
-I will look at IRQ GPIO docs, but in this case, then we have more
-conversions that
-are not correct.
+Userspace should only access the bounce page after we set up the dma
+mapping, so we don't need serialization from the iotlb_lock in this
+case. And vduse_domain_map_bounce_page() only sets the
+map->bounce_page rather than clears the map->bounce_page, we would not
+have any problem without the lock protection.
 
-Regards,
-Robert
->
-> Thanks,
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+Thanks,
+Yongji

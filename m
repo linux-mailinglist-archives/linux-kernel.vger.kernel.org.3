@@ -2,45 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC6F5738F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1F75738F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236556AbiGMOeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
+        id S235592AbiGMOey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbiGMOeB (ORCPT
+        with ESMTP id S230326AbiGMOev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:34:01 -0400
-Received: from out28-171.mail.aliyun.com (out28-171.mail.aliyun.com [115.124.28.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DC213FAF;
-        Wed, 13 Jul 2022 07:33:49 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07781884|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00565203-0.000234054-0.994114;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047193;MF=zhouyu@wanyeetech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.ORke3Uw_1657722824;
-Received: from 192.168.10.152(mailfrom:zhouyu@wanyeetech.com fp:SMTPD_---.ORke3Uw_1657722824)
-          by smtp.aliyun-inc.com;
-          Wed, 13 Jul 2022 22:33:45 +0800
-Subject: Re: [PATCH v4 07/11] ASoC: jz4740-i2s: Make the PLL clock name
- SoC-specific
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com
-Cc:     linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
- <20220708160244.21933-8-aidanmacdonald.0x0@gmail.com>
-From:   Zhou Yanjie <zhouyu@wanyeetech.com>
-Message-ID: <0269b850-f33a-7aa9-a3eb-83655bd4e19a@wanyeetech.com>
-Date:   Wed, 13 Jul 2022 22:33:44 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Wed, 13 Jul 2022 10:34:51 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF01D357E1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:34:50 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso3994741pjc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2EojiiqnaR1Vv9soFAihFtCV+EF4ew9tNYkxtmv1eok=;
+        b=yF01ur2I88yDa32mCYv4eenhFmUAzs9Y5pELgNgyAZI7lHRy1yd0lpdl31fiViswHU
+         ZouLyEyPQuRqG0TRkC6nao2r/n4qG0AgC7d+Elq711xNGqlF/G8rfVi5ZgJG3/wREA8j
+         W+36NFgQrPayuMmnK816i+J/8qmDDT3XlgpnyF5nL7JxYsPwQQPAgGYmZR6vOQvVDlwX
+         mD3nqeQvVtlLcETnbUsYmbklEMBnyPmH/reXSf/BZFpCXZUwru/Onf5sR72wKcr0w+Ns
+         KhKLfyc8x7LH+YNyszuaiO83rF71CeA5/oQl256IQq/c/MQY7mg+UzdinOfCj2x9IoNH
+         ax3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2EojiiqnaR1Vv9soFAihFtCV+EF4ew9tNYkxtmv1eok=;
+        b=tu+X2otggA+rURWQnIPVTz2hI3R0iApmfwYa0I8fkm23XQxVaJTqHrrDJfpfckuFt3
+         tbXmqW/+AwIrYciD+lgWnbW/k0BNRrhstb2VYdDWplb7xh7IRIp6SmRUhtBu9GPCY9r1
+         7Z3vM3NBeehb7L52AJS8wWMUn25pmjNXZwLjaolJYNWN0JPFFXh/eO5EpUyrUvwIlebF
+         gpK8Z+7a/qU2uL8ZaVXgE/7eXsq/34yjGCBar3Uiu7vpic+mJ+beo0mGrhtUYyfWtOaB
+         XgpojxbTyAtts/HOxVOFgU3Sc4E9LHFo4eiS+jhH5xupSHvHQDVkpQlnkfakl/lPime5
+         1S2g==
+X-Gm-Message-State: AJIora902Y9AYgfRcKx149ffwv1sbbMK1Wx/KuDRWMtTavQQHTDpMrrq
+        tdOoCXhGJl0ro3JzNob89oL8
+X-Google-Smtp-Source: AGRyM1t+5vdlca/j5x85wtZOkOXyR6Zw1Jdx14KpG1VbIXcgYR/E5OG0uRpCCrwYLmM4Mrqv86DE+Q==
+X-Received: by 2002:a17:903:32c3:b0:16b:fbc3:3269 with SMTP id i3-20020a17090332c300b0016bfbc33269mr3808418plr.117.1657722890168;
+        Wed, 13 Jul 2022 07:34:50 -0700 (PDT)
+Received: from localhost.localdomain ([117.248.1.226])
+        by smtp.gmail.com with ESMTPSA id p14-20020a170902780e00b001620960f1dfsm8977872pll.198.2022.07.13.07.34.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 07:34:49 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Steve Capper <Steve.Capper@arm.com>
+Subject: [PATCH] arm64: dts: qcom: sc8280xp: Fix PMU interrupt
+Date:   Wed, 13 Jul 2022 20:04:29 +0530
+Message-Id: <20220713143429.22624-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220708160244.21933-8-aidanmacdonald.0x0@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,91 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aidan,
+PPI interrupt should be 7 for the PMU.
 
-On 2022/7/9 上午12:02, Aidan MacDonald wrote:
-> On some Ingenic SoCs, such as the X1000, there is a programmable
-> divider used to generate the I2S system clock from a PLL, rather
-> than a fixed PLL/2 clock. It doesn't make much sense to call the
-> clock "pll half" on those SoCs, so the clock name should really be
-> a SoC-dependent value.
->
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->   sound/soc/jz4740/jz4740-i2s.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
-> index 0dcc658b3784..a41398c24d0e 100644
-> --- a/sound/soc/jz4740/jz4740-i2s.c
-> +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -75,6 +75,8 @@ struct i2s_soc_info {
->   	struct reg_field field_i2sdiv_capture;
->   	struct reg_field field_i2sdiv_playback;
->   
-> +	const char *pll_clk_name;
-> +
->   	bool shared_fifo_flush;
->   };
->   
-> @@ -281,7 +283,7 @@ static int jz4740_i2s_set_sysclk(struct snd_soc_dai *dai, int clk_id,
->   		clk_set_parent(i2s->clk_i2s, parent);
->   		break;
->   	case JZ4740_I2S_CLKSRC_PLL:
-> -		parent = clk_get(NULL, "pll half");
-> +		parent = clk_get(NULL, i2s->soc_info->pll_clk_name);
->   		if (IS_ERR(parent))
->   			return PTR_ERR(parent);
->   		clk_set_parent(i2s->clk_i2s, parent);
-> @@ -400,6 +402,7 @@ static const struct i2s_soc_info jz4740_i2s_soc_info = {
->   	.field_tx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 8, 11),
->   	.field_i2sdiv_capture	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
->   	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
-> +	.pll_clk_name		= "pll half",
->   	.shared_fifo_flush	= true,
->   };
->   
-> @@ -409,6 +412,7 @@ static const struct i2s_soc_info jz4760_i2s_soc_info = {
->   	.field_tx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
->   	.field_i2sdiv_capture	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
->   	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
-> +	.pll_clk_name		= "pll half",
->   };
+Cc: Johan Hovold <johan+linaro@kernel.org>
+Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+Reported-by: Steve Capper <Steve.Capper@arm.com>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+index 268ab423577a..2d7823cb783c 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+@@ -477,7 +477,7 @@ memory@80000000 {
+ 
+ 	pmu {
+ 		compatible = "arm,armv8-pmuv3";
+-		interrupts = <GIC_PPI 5 IRQ_TYPE_LEVEL_HIGH>;
++		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+ 
+ 	psci {
+-- 
+2.25.1
 
-Since JZ4760, according to the description of the I2SCDR register,
-Ingenic SoCs no longer use PLL/2 clock, but directly use PLL clock,
-so it seems also inappropriate to use "pll half" for these SoCs.
-
-
->   
->   static struct snd_soc_dai_driver jz4770_i2s_dai = {
-> @@ -435,6 +439,7 @@ static const struct i2s_soc_info jz4770_i2s_soc_info = {
->   	.field_tx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
->   	.field_i2sdiv_capture	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
->   	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
-> +	.pll_clk_name		= "pll half",
->   };
-
-
-Same here.
-
-
->   
->   static const struct i2s_soc_info jz4780_i2s_soc_info = {
-> @@ -443,6 +448,7 @@ static const struct i2s_soc_info jz4780_i2s_soc_info = {
->   	.field_tx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
->   	.field_i2sdiv_capture	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
->   	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
-> +	.pll_clk_name		= "pll half",
->   };
->   
-
-
-Same here.
-
-
-Thanks and best regards!
-
-
->   static const struct snd_soc_component_driver jz4740_i2s_component = {

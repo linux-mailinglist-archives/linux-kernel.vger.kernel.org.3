@@ -2,108 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794CF573AA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BCD6573AAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236494AbiGMP4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
+        id S237078AbiGMP4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236954AbiGMP4H (ORCPT
+        with ESMTP id S236391AbiGMP4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:56:07 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F286250041
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:56:06 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id j3so1777341oif.8
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:56:06 -0700 (PDT)
+        Wed, 13 Jul 2022 11:56:17 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30B14F6AB;
+        Wed, 13 Jul 2022 08:56:16 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id i8-20020a17090a4b8800b001ef8a65bfbdso4310173pjh.1;
+        Wed, 13 Jul 2022 08:56:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=WkSQGMlzkcg7F25RRv5rghI0mHalOBr7A56+aczRN84=;
-        b=TokE2vNEcYXOMc500qMsLWmfRFBNAnA2uXvm+HMyhAe7V5c3ZxWMyZwZjtBi0haXR8
-         HGp/59n2cy5qMOW13Jyx/nBGhBVCuc6cMJxHpAoFEJJ9MFF04rbMfzejGcBRYpGcHnDF
-         uU/p+EDK/T7/nTWm44yWdQkH6kFZhK08PL4dZLmzKRWuJE5MivwpMoBoBnqbLRiCWJJ+
-         9O6zXKo+ZRqjSyBM1B1rzvxLRRI5TZ7k3QfmKYp9djPkN3F9qDEdRSE8FJC0YsaPaCBb
-         o4Xv5RiCw4ZJycv+SCfQBsaKaSOy8KzJnrn7cuMWTP19XQJ88fmZHW5gvIwV5cuR82X+
-         iPNw==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jKAUXPLBrNevdC9OiqEXv5Wg4h8+PAmTG/9uIdwRKNA=;
+        b=aBupZpHtg8XwLvVKFAXLuBmAAWVRVghrIn9ZNgreYANgaU0v/qCvdDEIc9xI6H79sA
+         NZ9TpP6vHRQfG0DdPuQH99iG2Or/tN6/USEXUEs94hwwJ9T1Ot0kdHuLklolhFTu1Vu9
+         cKQ6OXNFiSNTWdoo8iVDnSAn3mrj0hegvaqHgYgwIMTY9yydRqsECiJY8UoWpnWVLHDN
+         FcDZGik/5xc59Zm0aKoHj/wl6bramtnIqRkQpLRP/6gZglOCfL9cKd2/o7COVFIMV6Dd
+         Uj8Nj+baniaDNUtmjMqcutA/zmMl6wqmPchds9edCbIIq6IseZdbXIU74IjSddrpobOK
+         BVYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=WkSQGMlzkcg7F25RRv5rghI0mHalOBr7A56+aczRN84=;
-        b=Qax+1LpOMXZYTfWakWiGkGyiqow3VPAyAMMK51OGVYeGLBNy8HvTOAFdlY3/FKUxrh
-         yB1vEx9oNiZRNyannGaQvw3OgqWMg83kpRIaCAqn9+pdIJgNLXuZwHKfreXMBU0bdyCi
-         Akll/+/pwTcY9Vlmp3GTVQF7FXyIgSpRZLzBRvKkLNMN6U//h7AXrD0/f8d/bPBiUBYA
-         0UlTvK22Cz7YAavUox7EXD2TW50zTjnic8FBv6ZDYuqoXmzyIPmDonj/GtjVHSdmYqAg
-         +86aHCHz//5wetFiynOqH7jgMrCXF7j+U1NVD1niWnNf5fZ+v3d8tkWZTqVJIoU9G/1X
-         f4Hw==
-X-Gm-Message-State: AJIora93yRrMMvFxQr3hRltrkFxjk2mHrkTzx+/zSSs+vqcY3/IZ8TWp
-        9jtine1VjoBCfbAwx2fJ5mdvOA==
-X-Google-Smtp-Source: AGRyM1uf0Tdw2UqbBNRwyWQHGpfHBB44kcUu4QCB3PbjhmzP3bihR91dHuYa4cms3heNmXYpoaGk7A==
-X-Received: by 2002:a05:6808:19a5:b0:335:cffd:b276 with SMTP id bj37-20020a05680819a500b00335cffdb276mr2134313oib.226.1657727766210;
-        Wed, 13 Jul 2022 08:56:06 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id q16-20020a9d7c90000000b0061c35e7aceesm5016860otn.42.2022.07.13.08.56.05
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=jKAUXPLBrNevdC9OiqEXv5Wg4h8+PAmTG/9uIdwRKNA=;
+        b=Y0bw9kq1lRhusmzgx1Vf5LWmHFXydV5++nTTjED6ZZtM24KrDsVQEgBOFmz4MS3odt
+         Zvhmju0AGGWu2Uk80LNukVti+0+vLKW3kYKCwDgixlDNeciYQ0tT//Uztz2VInm1Lie0
+         ovL/YhpGDf2BqT1Y0ZATdbvjDtDO7oMwf3A/pZHgqOYFDOLEwrAGTQYyKZwwIkCb6XKK
+         9fjJ/3FC+ZoOhHr1yoWhQZk211TDfuE84fztU1WkDIM1EbW/YhdIQTg6mIJtjB6hYYlc
+         Gj41bpbdj2TFCOrjTjI+qHLlyaIRS6MApLXGl/3a/5qkNPu8qlFl5PpcqMUCCYtKjH51
+         o05Q==
+X-Gm-Message-State: AJIora/iN7oz30snwaLnF/jCHgSOBd/MpPhZjRrBCA97k/x+5M42wJ09
+        Id44Alw1uY1JMWsIMQceDrP4tjpx7rlfmA==
+X-Google-Smtp-Source: AGRyM1uztx7H1jzf5s+TTvAW1XBZNKgEQoYqHpqn6WNTf/pSYOGA8xIgngVh0T1SEhc5aR5zpYFJEA==
+X-Received: by 2002:a17:902:7106:b0:16c:6c95:6153 with SMTP id a6-20020a170902710600b0016c6c956153mr3706590pll.166.1657727776276;
+        Wed, 13 Jul 2022 08:56:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x10-20020a170902a38a00b001678ce9080dsm8962079pla.258.2022.07.13.08.56.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 08:56:05 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 08:55:53 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Liam Howlett <liam.howlett@oracle.com>
-cc:     David Hildenbrand <david@redhat.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] maple_tree: Fix sparse reported issues
-In-Reply-To: <20220713132926.3sl7gs67dyjj7kit@revolver>
-Message-ID: <44a478e8-2ccc-e82-bd5a-172778c01529@google.com>
-References: <20220712142441.4184969-1-Liam.Howlett@oracle.com> <653cc1da-e45a-9a93-7158-cee3e710ba35@redhat.com> <20220713132926.3sl7gs67dyjj7kit@revolver>
+        Wed, 13 Jul 2022 08:56:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 13 Jul 2022 08:56:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Xin Ji <xji@analogixsemi.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v16 1/3] usb: typec: tcpci: move tcpci.h to
+ include/linux/usb/
+Message-ID: <20220713155613.GA2194204@roeck-us.net>
+References: <20220712090534.2783494-1-xji@analogixsemi.com>
+ <0bd85140-f006-8b29-0a43-500733f1654c@roeck-us.net>
+ <Ys16lEvhVSSSRMP7@kroah.com>
+ <20220713062845.GB2788915@anxtwsw-Precision-3640-Tower>
+ <Ys5oBTeIcLjf7gnX@kroah.com>
+ <20220713064818.GA2789090@anxtwsw-Precision-3640-Tower>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713064818.GA2789090@anxtwsw-Precision-3640-Tower>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022, Liam Howlett wrote:
-> * David Hildenbrand <david@redhat.com> [220713 04:34]:
-> > On 12.07.22 16:24, Liam Howlett wrote:
-> > > When building with C=1, the maple tree had some rcu type mismatch &
-> > > locking mismatches in the destroy functions.  There were cosmetic only
-> > > since this happens after the nodes are removed from the tree.
-> > > 
-> > > Fixes: f8acc5e9581e (Maple Tree: add new data structure)
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+On Wed, Jul 13, 2022 at 02:48:18PM +0800, Xin Ji wrote:
+> On Wed, Jul 13, 2022 at 08:36:53AM +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Jul 13, 2022 at 02:28:45PM +0800, Xin Ji wrote:
+> > > On Tue, Jul 12, 2022 at 03:43:48PM +0200, Greg Kroah-Hartman wrote:
+> > > > On Tue, Jul 12, 2022 at 06:31:22AM -0700, Guenter Roeck wrote:
+> > > > > On 7/12/22 02:05, Xin Ji wrote:
+> > > > > > USB PD controllers which consisting of a microcontroller (acting as the TCPM)
+> > > > > > and a port controller (TCPC) - may require that the driver for the PD
+> > > > > > controller accesses directly also the on-chip port controller in some cases.
+> > > > > > 
+> > > > > > Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
+> > > > > > 
+> > > > > > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> > > > > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > > > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> > > > > > 
+> > > > > > ---
+> > > > > > V9 -> V10: Rebase on the latest code
+> > > > > > V8 -> V9 : Add more commit message
+> > > > > > V7 -> V8 : Fix Guanter's comment, remove unnecessary explain
+> > > > > 
+> > > > > We are now at v16. The change log has not been updated since v10,
+> > > > > making it all but worthless.
+> > > > 
+> > > > It's also already in my tree for a while, so I have no idea what this is
+> > > > being generated against :(
+> > > Hi all, I'm little confused, do I need update change log from v11 to
+> > > v16? There is no changes since v10.
 > > 
-> > Sorry to say, but the fixes become hard to follow (what/where/why). :)
+> > I'm confused, why are you sending a patch over that is already in my
+> > tree and in linux-next?  You got an email saying it was merged, see
+> > commit 7963d4d71011 ("usb: typec: tcpci: move tcpci.h to
+> > include/linux/usb/").
 > > 
-> > I guess it's time for a new series soon. Eventually it makes sense to
-> > send the fixes as reply to the individual problematic patches. (instead
-> > of fixes to commit ids that are not upstream)
+> > thanks,
 > > 
-> > [yes, I'll do more review soon :) ]
-> 
-> I appreciate the feedback, it's much better than yelling into the void.
-> I have one more fix in the works - for __vma_adjust() of all functions
-> so that'll be impossible to follow anyways :)  I'll work on a v11 to
-> include that last one.
+> > greg k-h
+> Hi greg k-h, sorry for that, this serial has 3 patches, so I just think
+> need update all 3 patches in each upstream.
 
-Please do also post the incremental for that "one more fix" once it's
-ready: I have been keeping up with what you've been posting so far,
-folding them into my debugging here, and believe we have made some but
-still not enough progress on the bugs I hit.  Folding in one more fix
-will be easy for me, advancing to v11 of a 69-part patchset will be...
-dispiriting.
+If you resend patches as part of a series, please explain in the change
+log that this patch was unchanged.
 
-Thanks,
-Hugh
+Guenter

@@ -2,106 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB397572B11
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7330572B15
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233825AbiGMBtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 21:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
+        id S230470AbiGMBxG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 12 Jul 2022 21:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbiGMBtW (ORCPT
+        with ESMTP id S230052AbiGMBxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 21:49:22 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71B530F67
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:49:20 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id n12-20020a9d64cc000000b00616ebd87fc4so7406152otl.7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:49:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bErvpN7ev2z51mrThK4Hgu7Hu1RI9O6rD8kjQnhV8qI=;
-        b=lWMw/oK2XRAciWdm+D60egBwew+3p7ao9Q9uDbs7nBh+whOMEBTyMaHVrbmzTL08e7
-         wEYDf4yofg+35r28I9fV8uvi89b7ZzyGW2p7mzJGJF5xX1BM93FGoH2vUcKesibHEl3q
-         tHOJQFvEzxB06/+PBF1pdiEKLzyTrbKkoE3NP6Ep1riGHRoL36+2Sv5VniTodb0GRaLP
-         vS9baac08sWgqfr7/2wIQbvaA3cZkLi9GVN7zeH8XDzcdAVIdXxVmTmgCDA1FYY9Qp8X
-         K3+kvpnfVE8ucW9jXfKH5FdA3nRvQyqW+gE4g/faWkSLSUJbRizBb58Fc5iayKBZ+cCY
-         d1sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bErvpN7ev2z51mrThK4Hgu7Hu1RI9O6rD8kjQnhV8qI=;
-        b=GDJ4KlELKIhrfJXl9v9j9PaeJRpI0Rk+nTEuVgYxtE75JXUVRJFIBZxfVy2NbzFwh+
-         7NVKO1RzroYSMFOMgiK9VnE+Vo5v9VM4XvEVfVUyWx1+qPn9iV5G/JrTFGf1KJWr4PaO
-         f7OHS4bVCvkUbwvRDYXJOzZdhO5/x2LSS6JP3Sa27mRT9BHG+ZThWcQqyleFCjohknEG
-         FaPSbSMyQq2HcveHOXW4ezfFZ7MgyKksjgV9eQSmT030kURuSktUnIYtAqjFGPdfCV4s
-         xGYVGufMBlCo84dD0hnPPOtzJxS7QIYLBmlu3cwdvAaMH43Q9gk/dKr+ZsMT5H6ZNpn+
-         9Skw==
-X-Gm-Message-State: AJIora8TeUnf0WqlzeeahwdRnomM+QZDvRDADCJBvr+WKdP4kkP13D9L
-        2WoL2CO8ttoqdR/P0xZa5J6lcQ==
-X-Google-Smtp-Source: AGRyM1su3mhYSLe/zS1BVIMxYMxM1iuICQXzpZHD2iwTtpu9eHl+1idrFnYIt7eswUaHo7QJUQd3Jw==
-X-Received: by 2002:a9d:6b9a:0:b0:61c:4c90:f94b with SMTP id b26-20020a9d6b9a000000b0061c4c90f94bmr408104otq.245.1657676960219;
-        Tue, 12 Jul 2022 18:49:20 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id y9-20020a544d89000000b003331f695f0asm4784882oix.30.2022.07.12.18.49.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 18:49:19 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 20:49:17 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_ppareek@quicinc.com
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Add lost ranges for timer
-Message-ID: <Ys4knQAd87bfKW8G@builder.lan>
-References: <20220707160858.3178771-1-bjorn.andersson@linaro.org>
+        Tue, 12 Jul 2022 21:53:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8520D4469
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:53:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DE24618E2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:53:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF779C3411C;
+        Wed, 13 Jul 2022 01:53:00 +0000 (UTC)
+Date:   Tue, 12 Jul 2022 21:52:59 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: schedstat false counting of domain load_balance() tried to move one
+ or more tasks failed
+Message-ID: <20220712215259.6cb28bed@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707160858.3178771-1-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 07 Jul 11:08 CDT 2022, Bjorn Andersson wrote:
+I've been tasked to analyze the /proc/schedstat file to determine
+appropriate metrics to look after in production. So I'm looking at both the
+documentation and the code that generates it.
 
-> The timer node needs ranges specified to map the 1-cell children to the
-> 2-cell address range used in /soc. This addition never made it into the
-> patch that was posted and merged, so add it now.
-> 
-> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+From the documentation at https://docs.kernel.org/scheduler/sched-stats.html
 
-Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+(and Documentation/scheduler/sched-stats.rst for those of you that are
+allergic to html)
 
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 2bdb42c88311..37a4cd6f85b6 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -1667,6 +1667,7 @@ timer@17c20000 {
->  			reg = <0x0 0x17c20000 0x0 0x1000>;
->  			#address-cells = <1>;
->  			#size-cells = <1>;
-> +			ranges = <0 0 0 0x20000000>;
->  
->  			frame@17c21000 {
->  				frame-number = <0>;
-> -- 
-> 2.35.1
-> 
+   Domain statistics
+   -----------------
+   One of these is produced per domain for each cpu described. (Note that if
+   CONFIG_SMP is not defined, *no* domains are utilized and these lines
+   will not appear in the output.)
+
+   domain<N> <cpumask> 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36
+
+   The first field is a bit mask indicating what cpus this domain operates over.
+
+   The next 24 are a variety of load_balance() statistics in grouped into types
+   of idleness (idle, busy, and newly idle):
+
+       1)  # of times in this domain load_balance() was called when the
+           cpu was idle
+       2)  # of times in this domain load_balance() checked but found
+           the load did not require balancing when the cpu was idle
+       3)  # of times in this domain load_balance() tried to move one or
+           more tasks and failed, when the cpu was idle
+
+I was looking at this #3 (which is also #11 and #19 for CPU_BUSY and
+CPU_NEW_IDLE respectively). It states that it gets incremented when one or
+more tasks were tried to be moved but failed. I found this is not always
+the case.
+
+We have:
+
+	ld_moved = 0;
+	/* Clear this flag as soon as we find a pullable task */
+	env.flags |= LBF_ALL_PINNED;
+	if (busiest->nr_running > 1) {
+[..]
+	}
+
+	if (!ld_moved) {
+		schedstat_inc(sd->lb_failed[idle]);
+
+Where the lb_failed[] is that counter. I added the following code:
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 77b2048a9326..4835ea4d9d01 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -9865,6 +9865,7 @@ static int load_balance(int this_cpu, struct rq *this_rq,
+ 	struct rq *busiest;
+ 	struct rq_flags rf;
+ 	struct cpumask *cpus = this_cpu_cpumask_var_ptr(load_balance_mask);
++	bool redo = false;
+ 
+ 	struct lb_env env = {
+ 		.sd		= sd,
+@@ -10012,11 +10013,13 @@ static int load_balance(int this_cpu, struct rq *this_rq,
+ 			if (!cpumask_subset(cpus, env.dst_grpmask)) {
+ 				env.loop = 0;
+ 				env.loop_break = sched_nr_migrate_break;
++				redo = true;
+ 				goto redo;
+ 			}
+ 			goto out_all_pinned;
+ 		}
+-	}
++	} else if (!redo)
++		trace_printk("Did not try to move! %d\n", idle);
+ 
+ 	if (!ld_moved) {
+ 		schedstat_inc(sd->lb_failed[idle]);
+
+
+And sure enough that triggers on CPU_IDLE and CPU_NEW_IDLE calls (I haven't
+seen it for CPU_BUSY yet, but I didn't try).
+
+Thus, if we get to that check for (busiest->nr_running > 1) and fail, then
+we will increment that counter incorrectly.
+
+Do we care? Should it be fixed? Should it be documented?
+
+Thoughts?
+
+-- Steve
+

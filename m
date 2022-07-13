@@ -2,197 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACA35734FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F4B573500
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235404AbiGMLMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 07:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
+        id S235762AbiGMLMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 07:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiGMLMB (ORCPT
+        with ESMTP id S229579AbiGMLM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:12:01 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA2E1005E2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:11:59 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id y3so10503171iof.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:11:59 -0700 (PDT)
+        Wed, 13 Jul 2022 07:12:28 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCA11005E2;
+        Wed, 13 Jul 2022 04:12:27 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id a15so9909691pfv.13;
+        Wed, 13 Jul 2022 04:12:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vkJzBdhAPnus30vWZUDhoGlIesPZU6wdK/9XY54AqKE=;
-        b=TOq7MiGSZplMJVVxX6sSCfGXliPlSBpORzBi2qG0kb0/gQ7gaf3GGlhXJbZLxqrTCT
-         88Byuok1DNIGL3vxFqELvbzon5A9CqzpMhoxaeqN3I30ettFKzpwkX8Spp9rkYUJezWU
-         dby5KGaqS3c03aIODh/gibnfYebZmCcDYJeBCD/rGt/5irgCMEqOIaP2Huv0s4PgQzsM
-         3FL/QCLUX0f0im/Df81FdFJdX6FccYl52OOQ0DJz1gDf4JfVZfbPu3QJaU9MpfwypLwp
-         aaaNYuoTXEix8NPYANEPtTQmLYtMhnxp7fcAqqhTmpr98+NB4JsIDLo6FcEfyJ2lkdyG
-         pF5w==
+        d=gmail.com; s=20210112;
+        h=sender:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1b/MRvHRlr04K9YKU9yX4GmLbVKqvcAwXCZ6Wb7inMQ=;
+        b=W0AAxWPcHX4waKArnjIQfPn5EvbSZ1Nk17CX5TuK01Wlh78J81p5D43+b1F+vSRG4C
+         uux/QmuzikRch0+aPcd9OICrFGdiQwyetByojZx5WyjggGkU9V0yHCvnWnN4waXpok1k
+         QnrdK2Oxaw7LBRl+oAlVh2HOyfUtPEENPxK8Oe4YRKTQ4mGYCiRQDg+D0qY0LSBB61tC
+         2K7CkSb57BCE6xJNI2R/lbbKA6V7n7Do2cWa0YfCjdPL2Eq5hP2mKEX/RFiOFaEB1Zlg
+         WwEbhQOgG/AHlICppafDHjY2YB22W8xNPYpYLaqLjBjIoFxSkyizD1j2iIOB9Vd9LSX6
+         uZcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vkJzBdhAPnus30vWZUDhoGlIesPZU6wdK/9XY54AqKE=;
-        b=sQIZ5xTCOKQZWXZkaLaV0A8VqArgYs+gzsLviwRs2U6ZqSj3KMpjkrrzDOAMRrd4De
-         w58tJfkba7UuuHrZIrp72LFECOJ6VQ9645JS+3aOl2wHupQA9Zqt+YkFdQlFz1sD8jLh
-         2cOgXtjE4QfxdTLDRJBhlaALFWKCKuYG15uw8xvdh452dOxI4THSjjjTswpZWBWjzE0i
-         aCxVnK/4+s+U3lnRXH44CakL4R6IoBwQmYzDL72fxRThee3CpRcTDHwU6b/fHihdnSH5
-         pX+vFZxv0SxpQyB2IL8XctIoG6g1fOFiaorF2NOBBh5j53W9zpqo7XLVCQxXDqIjZR1P
-         ET7A==
-X-Gm-Message-State: AJIora+0CHJ9m6bhtJ9nG5kQPRPoTZYLTD22dDqW4jiwUvQd3V3Uhvgd
-        JRXW0k4ukdahinY2wnNp8OVWcf6wuKEzaU3dgJJ4eA==
-X-Google-Smtp-Source: AGRyM1vrldNjTJ0dhHIKZVP9o1actTfcyIS2tt0HbtwtGtmNgSMucO+V5JWjve1ZGR5q+4OsxT+cKnGfz1s4t0Tq++g=
-X-Received: by 2002:a05:6638:2410:b0:33f:8518:659b with SMTP id
- z16-20020a056638241000b0033f8518659bmr968365jat.253.1657710719238; Wed, 13
- Jul 2022 04:11:59 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=1b/MRvHRlr04K9YKU9yX4GmLbVKqvcAwXCZ6Wb7inMQ=;
+        b=UQUq73qfCmP0UoNjvPbnPYXuX0Iv7D2LCtZS3kGKrxGYjkpGqJKqPnkfXDStDiid92
+         j8C6FmHRwrvXEGQPVTWNpfGGKMJ+rgFVEv7zMGFiVrsV678q3RDYbFLheLsoLeRo2C+K
+         HPWEQoS47TaO5hcjo+Vvrfkwqgnvl5a4TlA0j7CNpugSdWuNITgelzpGB6DQy3lBVqJe
+         oIhpXwOsCrxEWEyXrixnJOGllBlPGxyWABNg0Y3hiQG8g6aFdJYuYvSluHZrMsBHFl4E
+         8LHLz1dMpop7oi6F5R+4Gbq3CVZw4qQdsGboi9CdSVzaBVzEmhC1GBUjrr1VwFKuMLGA
+         3etQ==
+X-Gm-Message-State: AJIora/exOf7h1haIhN49DmgSGtPGx8lZJHGbeqgtu8azqinH9tM13SN
+        Eqr2fj2YFJ+Qu2/Hw7dKXZk=
+X-Google-Smtp-Source: AGRyM1vR/ldtZUn+g70C68LOzooEl9N1TbXddKJsQ661WbsNhdAvYT7cnhP+pHllI6kL3hDkdyEQrw==
+X-Received: by 2002:a63:5d21:0:b0:40d:d9fd:7254 with SMTP id r33-20020a635d21000000b0040dd9fd7254mr2526204pgb.353.1657710746784;
+        Wed, 13 Jul 2022 04:12:26 -0700 (PDT)
+Received: from localhost (220-135-95-34.hinet-ip.hinet.net. [220.135.95.34])
+        by smtp.gmail.com with ESMTPSA id r30-20020aa7989e000000b00528baea53afsm8590716pfl.46.2022.07.13.04.12.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 04:12:26 -0700 (PDT)
+Sender: AceLan Kao <acelan@gmail.com>
+From:   AceLan Kao <acelan.kao@canonical.com>
+To:     Igor Russkikh <irusskikh@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Manuel Ullmann <labre@posteo.de>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] net: atlantic: remove deep parameter on suspend/resume functions
+Date:   Wed, 13 Jul 2022 19:12:23 +0800
+Message-Id: <20220713111224.1535938-1-acelan.kao@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cf4f316274c5474586d0d99b17db4a4c@hyperstone.com>
-In-Reply-To: <cf4f316274c5474586d0d99b17db4a4c@hyperstone.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 13 Jul 2022 13:11:23 +0200
-Message-ID: <CAPDyKFqfx07ePLLwn-w_c4WB6rbM43aio7xDh=h3V914QB-3GQ@mail.gmail.com>
-Subject: Re: [PATCHv4] mmc: block: Add single read for 4k sector cards
-To:     Christian Loehle <CLoehle@hyperstone.com>
-Cc:     Avri Altman <Avri.Altman@wdc.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Jul 2022 at 14:43, Christian Loehle <CLoehle@hyperstone.com> wrote:
->
-> Cards with 4k native sector size may only be read 4k-aligned,
-> accommodate for this in the single read recovery and use it.
->
-> Fixes: 81196976ed946 (mmc: block: Add blk-mq support)
-> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
 
-Applied for next (please tell if you prefer this to be queued for
-v5.19rc and/or stable), thanks!
+Below commit claims that atlantic NIC requires to reset the device on pm
+op, and had set the deep to true for all suspend/resume functions.
+commit 1809c30b6e5a ("net: atlantic: always deep reset on pm op, fixing up my null deref regression")
+So, we could remove deep parameter on suspend/resume functions without
+any functional change.
 
-Kind regards
-Uffe
+Fixes: 1809c30b6e5a ("net: atlantic: always deep reset on pm op, fixing up my null deref regression")
+Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+---
+ .../ethernet/aquantia/atlantic/aq_pci_func.c  | 24 ++++++++-----------
+ 1 file changed, 10 insertions(+), 14 deletions(-)
 
-> ---
->  drivers/mmc/core/block.c | 28 ++++++++++++++--------------
->  1 file changed, 14 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-> index f4a1281658db..912a398a9a76 100644
-> --- a/drivers/mmc/core/block.c
-> +++ b/drivers/mmc/core/block.c
-> @@ -176,7 +176,7 @@ static inline int mmc_blk_part_switch(struct mmc_card *card,
->                                       unsigned int part_type);
->  static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
->                                struct mmc_card *card,
-> -                              int disable_multi,
-> +                              int recovery_mode,
->                                struct mmc_queue *mq);
->  static void mmc_blk_hsq_req_done(struct mmc_request *mrq);
->
-> @@ -1302,7 +1302,7 @@ static void mmc_blk_eval_resp_error(struct mmc_blk_request *brq)
->  }
->
->  static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
-> -                             int disable_multi, bool *do_rel_wr_p,
-> +                             int recovery_mode, bool *do_rel_wr_p,
->                               bool *do_data_tag_p)
->  {
->         struct mmc_blk_data *md = mq->blkdata;
-> @@ -1368,12 +1368,12 @@ static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
->                         brq->data.blocks--;
->
->                 /*
-> -                * After a read error, we redo the request one sector
-> +                * After a read error, we redo the request one (native) sector
->                  * at a time in order to accurately determine which
->                  * sectors can be read successfully.
->                  */
-> -               if (disable_multi)
-> -                       brq->data.blocks = 1;
-> +               if (recovery_mode)
-> +                       brq->data.blocks = queue_physical_block_size(mq->queue) >> 9;
->
->                 /*
->                  * Some controllers have HW issues while operating
-> @@ -1590,7 +1590,7 @@ static int mmc_blk_cqe_issue_rw_rq(struct mmc_queue *mq, struct request *req)
->
->  static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
->                                struct mmc_card *card,
-> -                              int disable_multi,
-> +                              int recovery_mode,
->                                struct mmc_queue *mq)
->  {
->         u32 readcmd, writecmd;
-> @@ -1599,7 +1599,7 @@ static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
->         struct mmc_blk_data *md = mq->blkdata;
->         bool do_rel_wr, do_data_tag;
->
-> -       mmc_blk_data_prep(mq, mqrq, disable_multi, &do_rel_wr, &do_data_tag);
-> +       mmc_blk_data_prep(mq, mqrq, recovery_mode, &do_rel_wr, &do_data_tag);
->
->         brq->mrq.cmd = &brq->cmd;
->
-> @@ -1690,7 +1690,7 @@ static int mmc_blk_fix_state(struct mmc_card *card, struct request *req)
->
->  #define MMC_READ_SINGLE_RETRIES        2
->
-> -/* Single sector read during recovery */
-> +/* Single (native) sector read during recovery */
->  static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
->  {
->         struct mmc_queue_req *mqrq = req_to_mmc_queue_req(req);
-> @@ -1698,6 +1698,7 @@ static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
->         struct mmc_card *card = mq->card;
->         struct mmc_host *host = card->host;
->         blk_status_t error = BLK_STS_OK;
-> +       size_t bytes_per_read = queue_physical_block_size(mq->queue);
->
->         do {
->                 u32 status;
-> @@ -1732,13 +1733,13 @@ static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
->                 else
->                         error = BLK_STS_OK;
->
-> -       } while (blk_update_request(req, error, 512));
-> +       } while (blk_update_request(req, error, bytes_per_read));
->
->         return;
->
->  error_exit:
->         mrq->data->bytes_xfered = 0;
-> -       blk_update_request(req, BLK_STS_IOERR, 512);
-> +       blk_update_request(req, BLK_STS_IOERR, bytes_per_read);
->         /* Let it try the remaining request again */
->         if (mqrq->retries > MMC_MAX_RETRIES - 1)
->                 mqrq->retries = MMC_MAX_RETRIES - 1;
-> @@ -1879,10 +1880,9 @@ static void mmc_blk_mq_rw_recovery(struct mmc_queue *mq, struct request *req)
->                 return;
->         }
->
-> -       /* FIXME: Missing single sector read for large sector size */
-> -       if (!mmc_large_sector(card) && rq_data_dir(req) == READ &&
-> -           brq->data.blocks > 1) {
-> -               /* Read one sector at a time */
-> +       if (rq_data_dir(req) == READ && brq->data.blocks >
-> +                       queue_physical_block_size(mq->queue) >> 9) {
-> +               /* Read one (native) sector at a time */
->                 mmc_blk_read_single(mq, req);
->                 return;
->         }
-> --
-> 2.36.1
->
-> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-> Managing Director: Dr. Jan Peter Berns.
-> Commercial register of local courts: Freiburg HRB381782
->
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
+index 831833911a52..dbd5263130f9 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
+@@ -379,7 +379,7 @@ static void aq_pci_shutdown(struct pci_dev *pdev)
+ 	}
+ }
+ 
+-static int aq_suspend_common(struct device *dev, bool deep)
++static int aq_suspend_common(struct device *dev)
+ {
+ 	struct aq_nic_s *nic = pci_get_drvdata(to_pci_dev(dev));
+ 
+@@ -392,17 +392,15 @@ static int aq_suspend_common(struct device *dev, bool deep)
+ 	if (netif_running(nic->ndev))
+ 		aq_nic_stop(nic);
+ 
+-	if (deep) {
+-		aq_nic_deinit(nic, !nic->aq_hw->aq_nic_cfg->wol);
+-		aq_nic_set_power(nic);
+-	}
++	aq_nic_deinit(nic, !nic->aq_hw->aq_nic_cfg->wol);
++	aq_nic_set_power(nic);
+ 
+ 	rtnl_unlock();
+ 
+ 	return 0;
+ }
+ 
+-static int atl_resume_common(struct device *dev, bool deep)
++static int atl_resume_common(struct device *dev)
+ {
+ 	struct pci_dev *pdev = to_pci_dev(dev);
+ 	struct aq_nic_s *nic;
+@@ -415,10 +413,8 @@ static int atl_resume_common(struct device *dev, bool deep)
+ 	pci_set_power_state(pdev, PCI_D0);
+ 	pci_restore_state(pdev);
+ 
+-	if (deep) {
+-		/* Reinitialize Nic/Vecs objects */
+-		aq_nic_deinit(nic, !nic->aq_hw->aq_nic_cfg->wol);
+-	}
++	/* Reinitialize Nic/Vecs objects */
++	aq_nic_deinit(nic, !nic->aq_hw->aq_nic_cfg->wol);
+ 
+ 	if (netif_running(nic->ndev)) {
+ 		ret = aq_nic_init(nic);
+@@ -444,22 +440,22 @@ static int atl_resume_common(struct device *dev, bool deep)
+ 
+ static int aq_pm_freeze(struct device *dev)
+ {
+-	return aq_suspend_common(dev, true);
++	return aq_suspend_common(dev);
+ }
+ 
+ static int aq_pm_suspend_poweroff(struct device *dev)
+ {
+-	return aq_suspend_common(dev, true);
++	return aq_suspend_common(dev);
+ }
+ 
+ static int aq_pm_thaw(struct device *dev)
+ {
+-	return atl_resume_common(dev, true);
++	return atl_resume_common(dev);
+ }
+ 
+ static int aq_pm_resume_restore(struct device *dev)
+ {
+-	return atl_resume_common(dev, true);
++	return atl_resume_common(dev);
+ }
+ 
+ static const struct dev_pm_ops aq_pm_ops = {
+-- 
+2.25.1
+

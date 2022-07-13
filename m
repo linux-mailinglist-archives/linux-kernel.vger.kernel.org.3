@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9ACF572FED
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 627CB572FD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234902AbiGMIB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
+        id S234945AbiGMH6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiGMIBZ (ORCPT
+        with ESMTP id S234523AbiGMH6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:01:25 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED1FE024B;
-        Wed, 13 Jul 2022 01:01:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657699284; x=1689235284;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=7ENYqPqKTk0ESIJ/QoNgf3KZMY16w1kA6fyDKtIJ5rs=;
-  b=kNCjkJ85qfjLYK9qXQSQByNS+v9xJRKUpuzu8lH80gStYi9Iozs7Rl0h
-   0HWCpUEP5oZSEvmpeWEXVAV+YKETkCaOUeZ3C7XOuk59dNVJkhoQKYaEI
-   GiPmRlpQ8wZQPNJDZokx6u0l3H9jYr7KtOsoh0Dwl96MjgUuJBz++qjsh
-   kqkF32AcVYSyINx5VEzI0vbCScmCr08tsJaZJ4tMhc+b6DZ6c8Rp6xi4C
-   /RCaXDMVFL9tbZ+xIJdK2hij6L3q9l23+m8Kt8u3D76xOALO4b1TytUNh
-   VIeD9HjgOzaIS2Tf8JHtjjtaePuqrlqN41IOwCDb860KmKZJPxx2d0s75
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="286277206"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="286277206"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 01:01:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="685071104"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Jul 2022 01:00:56 -0700
-Date:   Wed, 13 Jul 2022 15:57:38 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220713075738.GC2831541@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <b1c12a4b-46f7-081b-242f-005a8824aad1@amd.com>
+        Wed, 13 Jul 2022 03:58:02 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E256DDF389;
+        Wed, 13 Jul 2022 00:58:00 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id b8so9522781pjo.5;
+        Wed, 13 Jul 2022 00:58:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=itk4b7NI3cUu3jWtxKH1xulHC15KgYDHmxRNmYEuEag=;
+        b=cQqpDFouGoelXK+51mWiEyy4aEqiZ1PTeTmzjbIJXULZsc55Hbhisz/JLHfIreC8JU
+         FlMILCQc2lWfedW7qPP+6KWG7af3vv0zWWGIKRUqeaVAhV5ZrPZCfQIQTfCoTxDxDXUo
+         xyKrWQ/YoLnC1oEHX7AZmG6ZE9gEt2oX5M+aQebEF6tDkh+t+6XmViv8Fz4D+jhHVdm9
+         Lna+PV31ZyBTXYOrXzvNfaZh/vmKhFYwn9/z6Emtarf0AQJ0Tx/cmEPeN7/Qq+ymVWXR
+         BsfWhhogTaw4SkoBLkHTHiWmGUlOtz9I3gkHlzR+n3tRgrPERBkBCW42d830u46bfZYl
+         nZhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=itk4b7NI3cUu3jWtxKH1xulHC15KgYDHmxRNmYEuEag=;
+        b=zKAuzrrJMRX/xhsp6Ks5Lv39dfjhlAozREaQWamtracc3Ieq1fQR+UdmPw1S31+sMT
+         C3B5suS1LwqjtO0VTHMMWFAisoJVGlvbYUotIIRunxke87KkAI/U0F3MEl+mq42GLKcZ
+         sulqjJsvBhUawMgHMsekyOYLq9JVn9+bOvAjvyDL7C+COOKcvO/uOB3FZS6Y9hQlIue0
+         htae8gan8rc3ysWAgyVutAGgBk6OJq27SzCqlJbQDe30SCVgYGlIkK7zdE5uj4HSbJB7
+         vBRt0IK4I1d8O3y8az0DYDwOjbO8TAZ9Lm+UGyfFZWAxcQ8if4Td8WBTRHsEPPTRP3FQ
+         BCAA==
+X-Gm-Message-State: AJIora/L7t/lhmR02cZysTWJVRraSD9TMm79eZq8rpNkiF1skR+BX+qD
+        Ld5HgXESizdQA6ulDatSrqvmwAcO1wo6Bg==
+X-Google-Smtp-Source: AGRyM1vEOmrtElVqUWrF6r6F+AV+U/B8Oom5YuRasbPruMxHLX3oh3h9bSstYS/cpgxpJ6B+HGc3cw==
+X-Received: by 2002:a17:902:cecf:b0:16c:4a62:62ab with SMTP id d15-20020a170902cecf00b0016c4a6262abmr2005587plg.129.1657699080012;
+        Wed, 13 Jul 2022 00:58:00 -0700 (PDT)
+Received: from cloud-MacBookPro ([2601:646:8201:c2e0:5ee1:7060:fe1d:88a2])
+        by smtp.gmail.com with ESMTPSA id x16-20020aa79570000000b00528c0e516fesm8124882pfq.152.2022.07.13.00.57.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 00:57:59 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 00:57:58 -0700
+From:   Binyi Han <dantengknight@gmail.com>
+To:     Manish Chopra <manishc@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
+        Coiby Xu <coiby.xu@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joe Perches <joe@perches.com>
+Cc:     netdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] staging: qlge: code refinement around a for loop
+Message-ID: <cover.1657697683.git.dantengknight@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b1c12a4b-46f7-081b-242f-005a8824aad1@amd.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 05:58:32AM +0200, Gupta, Pankaj wrote:
-> 
-> > This is the v7 of this series which tries to implement the fd-based KVM
-> > guest private memory. The patches are based on latest kvm/queue branch
-> > commit:
-> > 
-> >    b9b71f43683a (kvm/queue) KVM: x86/mmu: Buffer nested MMU
-> > split_desc_cache only by default capacity
-> > 
-> > Introduction
-> > ------------
-> > In general this patch series introduce fd-based memslot which provides
-> > guest memory through memory file descriptor fd[offset,size] instead of
-> > hva/size. The fd can be created from a supported memory filesystem
-> > like tmpfs/hugetlbfs etc. which we refer as memory backing store. KVM
-> 
-> Thinking a bit, As host side fd on tmpfs or shmem will store memory on host
-> page cache instead of mapping pages into userspace address space. Can we hit
-> double (un-coordinated) page cache problem with this when guest page cache
-> is also used?
+*	Patch 1: 
+		Fix indentation according to checkpatch.
+		Format the long for loop thanks to Joe's review.
+*	Patch 2: 
+		Optimize by avoiding the multiplication thanks to Joe's
+		review.
+		I agree with Joe and think it's the same logic, and it
+		compiles without error.
+		But I don't have the real hardware, so can't prove that
+		code is still doing the same thing. So I understand if you
+		don't apply this patch without the "proof".
 
-This is my understanding: in host it will be indeed in page cache (in
-current shmem implementation) but that's just the way it allocates and
-provides the physical memory for the guest. In guest, guest OS will not
-see this fd (absolutely), it only sees guest memory, on top of which it
-can build its own page cache system for its own file-mapped content but
-that is unrelated to host page cache.
+v4:
+	- Separate the code style change and "optimization" into 2 patches
+v3:
+	Thanks to Joe's review.
+	- Align page_entries in the for loop to open parenthesis.
+	- Optimize by avoiding the multiplication.
+v2:
+	- Change the long for loop into 3 lines
 
-Chao
-> 
-> Thanks,
-> Pankaj
-> 
+Binyi Han (2):
+  staging: qlge: Fix indentation issue under long for loop
+  staging: qlge: Avoid multiplication while keep the same logic
+
+ drivers/staging/qlge/qlge_main.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+-- 
+2.25.1
+

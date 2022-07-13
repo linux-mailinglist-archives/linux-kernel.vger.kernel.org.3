@@ -2,121 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E895757337E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AED9257337F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235230AbiGMJuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
+        id S235264AbiGMJu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiGMJuE (ORCPT
+        with ESMTP id S230348AbiGMJux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:50:04 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5AAF8944
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:50:03 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id bp17so10339085lfb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=T1kY0ST+/OZ6JUPh282LY+9WXk87b1CObSxnDhtdh60=;
-        b=kDYFijXp9HZI/LwyQ5qFldstlQvx74xzJWFSzViDxarvndpgxDSlExGpsuGcef6o6E
-         5sYG+U9u+iEhcm3O/aynHjAyRB99Ha0bPs+DxqMbCMDXClGTTsh42hbXb9b46RwMEBh6
-         1CI5FeQHY9+helIqak2mtKj9Vdlil+msgjSGB80yPvHRq0CMRzL8ppfi0glvRxENHFwm
-         uIws7o/5YYChfj+/kYnVNqyDDaBPLDjxnghAWpueRHBf1BshqqaglNxXadgvR9hH7v3E
-         dMIsTM2cUhm9N8q42F5k+9msG0C1SyJoEf65J1OveLLJtpX9xPryA8xmE5qJ1zTh5JtC
-         0YHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T1kY0ST+/OZ6JUPh282LY+9WXk87b1CObSxnDhtdh60=;
-        b=Gfeppqs9RUs+a564GQXCzbZ2AnHSr2IDjesMhXiclY7EmU3htDwAlx4BrrdwePU6si
-         ZP/yDAzLmc68SqdpvkSu3mipXsynzKB/nQjCj2MPPQm94jmL7n8C6Fp83WsG0M/jqcnC
-         fhHnE1nRjXiHarRM/7Q0Vj59Ti/g71ArEJllD5T5JFtLyOmQDFsm5qpDrLgBFJ1in7Bb
-         gbjHB8u9hfsLR0LSEhWEhykBEfxEv2X7KA+xdDnldGVP0jdAe4Ko5/FBoQGBMCCOutus
-         XSz+NZziGBFAU1CVi9vh6OJNznevrsDJUvTMS7FG1Is6wuf2OQ1OuJBuuz2R3GVFiQFp
-         pZ3g==
-X-Gm-Message-State: AJIora8HsKXsfwUCI3TiaZ2YZVdc4DlsUDkqqdfM3Y27QMNYeoNUmA8I
-        t6y375EeknMp/I0fXgBkaMw=
-X-Google-Smtp-Source: AGRyM1s8sir4G6AV3gxRmM/qBD4NN6fiIO7omuEh6Cz7Bb1T2wc8hgCCVJlRMOBz8sURcixPlZTE2w==
-X-Received: by 2002:a05:6512:3193:b0:489:e883:3c06 with SMTP id i19-20020a056512319300b00489e8833c06mr1532187lfe.211.1657705801345;
-        Wed, 13 Jul 2022 02:50:01 -0700 (PDT)
-Received: from [192.168.1.2] (broadband-188-32-106-30.ip.moscow.rt.ru. [188.32.106.30])
-        by smtp.gmail.com with ESMTPSA id b7-20020a056512024700b004849077e2c6sm2724787lfo.82.2022.07.13.02.50.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 02:50:00 -0700 (PDT)
-Message-ID: <5d14cf64-46b7-dc37-bbb8-dd6be82d06af@gmail.com>
-Date:   Wed, 13 Jul 2022 12:49:58 +0300
+        Wed, 13 Jul 2022 05:50:53 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCBEF6837
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:50:52 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id D185B33AB2;
+        Wed, 13 Jul 2022 09:50:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1657705850; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1cLqF9b/idfjjmBVHpl66HKFXX47ckAo/g2nKjU6yJY=;
+        b=EBbFm7h3uKOXK69EOLNZqpXjpToKxOCRB6kQduEM5m8GB2NJx7PV8hTqiLNO41OeBGbb+U
+        WOmDRxbcv4Wm+h/MAh4aZE+nLTl+3i7j+pvsP19ZRvN057HZW5Y98/uKxGg43YwyDeaaLm
+        nZWqb3mVj3MB6xSjyqUDrdArvC6E6AY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1657705850;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1cLqF9b/idfjjmBVHpl66HKFXX47ckAo/g2nKjU6yJY=;
+        b=6piFxlNhqABKztsI4IU7WR+vUxnCL6LEavG0Kdc1l4Y5tX2Jowk9qkyVkq2a7L6NvV1Opv
+        1bvMecZTmQpp9IBg==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 6FBD42C141;
+        Wed, 13 Jul 2022 09:50:50 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     bp@alien8.de
+Cc:     dave.hansen@linux.intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: [PATCH] x86/asm/32: fix ANNOTATE_UNRET_SAFE use on 32bit
+Date:   Wed, 13 Jul 2022 11:50:46 +0200
+Message-Id: <20220713095046.26737-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <Ys6OiDQCuP072GCX@nazgul.tnic>
+References: <Ys6OiDQCuP072GCX@nazgul.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/2] lib/string.c: Optimize memchr()
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Yu-Jen Chang' <arthurchang09@gmail.com>
-Cc:     "andy@kernel.org" <andy@kernel.org>,
-        "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220710142822.52539-1-arthurchang09@gmail.com>
- <20220710142822.52539-3-arthurchang09@gmail.com>
- <3a1b50d2-a7aa-3e89-56fe-5d14ef9da22f@gmail.com>
- <CAD4RrFPihC+8LScC1RJ5GfOsLs4kze0QwALS1ykNH_m89Z1NGg@mail.gmail.com>
- <48db247e-f6fd-cb4b-7cc5-455bf26bb153@gmail.com>
- <CAD4RrFPfwu4Ascj5tdz8qq2Qgnu5GN2eHjVwMW5AqUa1H7JapA@mail.gmail.com>
- <49a8be9269ee47de9fc2d0d7f09eb0b1@AcuMS.aculab.com>
-From:   Andrey Semashev <andrey.semashev@gmail.com>
-In-Reply-To: <49a8be9269ee47de9fc2d0d7f09eb0b1@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/13/22 12:39, David Laight wrote:
-> From: Yu-Jen Chang
->> Sent: 12 July 2022 15:59
-> ...
->>> I think you're missing the point. Loads at unaligned addresses may not
->>> be allowed by hardware using conventional load instructions or may be
->>> inefficient. Given that this memchr implementation is used as a fallback
->>> when no hardware-specific version is available, you should be
->>> conservative wrt. hardware capabilities and behavior. You should
->>> probably have a pre-alignment loop.
->>
->> Got it. I add  pre-alignment loop. It aligns the address to 8 or 4bytes.
-> 
-> That should be predicated on !HAS_EFFICIENT_UNALIGNED_ACCESS.
-> 
-> ...
->>         for (; p <= end - 8; p += 8) {
->>             val = *(u64*)p ^ mask;
->>             if ((val + 0xfefefefefefefeffull)
->> & (~val & 0x8080808080808080ull))
->>                 break;
-> 
-> I would add a couple of comments, like:
-> 	// Convert to check for zero byte.
-> 	// Standard check for a zero byte in a word.
-> (But not the big 4 line explanation you had.
-> 
-> It is also worth looking at how that code compiles
-> on 32bit arch that don't have a carry flag.
-> That is everything based on MIPS, including riscv.
+The build on x86_32 currently fails after commit 9bb2ec608a20 (objtool:
+Update Retpoline validation) with:
+arch/x86/kernel/../../x86/xen/xen-head.S:35: Error: no such instruction: `annotate_unret_safe'
 
-It may be worth looking at how glibc does it:
+ANNOTATE_UNRET_SAFE is defined in nospec-branch.h. And head_32.S is
+missing this include. Fix this.
 
-https://sourceware.org/git/?p=glibc.git;a=blob;f=string/memchr.c;h=422bcd0cd646ea46711a57fa3cbdb8a3329fc302;hb=refs/heads/release/2.35/master#l46
+Fixes: 9bb2ec608a20 (objtool: Update Retpoline validation)
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+ arch/x86/kernel/head_32.S | 1 +
+ 1 file changed, 1 insertion(+)
 
-They do use 32-bit words on 32-bit targets and 64-bit on 64-bit ones. I
-think memchr in the kernel should follow this.
+diff --git a/arch/x86/kernel/head_32.S b/arch/x86/kernel/head_32.S
+index eb8656bac99b..9b7acc9c7874 100644
+--- a/arch/x86/kernel/head_32.S
++++ b/arch/x86/kernel/head_32.S
+@@ -23,6 +23,7 @@
+ #include <asm/cpufeatures.h>
+ #include <asm/percpu.h>
+ #include <asm/nops.h>
++#include <asm/nospec-branch.h>
+ #include <asm/bootparam.h>
+ #include <asm/export.h>
+ #include <asm/pgtable_32.h>
+-- 
+2.37.0
+

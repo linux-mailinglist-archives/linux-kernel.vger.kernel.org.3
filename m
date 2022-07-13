@@ -2,80 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA0757339D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7AF5733A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234765AbiGMJ6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        id S231550AbiGMJ6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiGMJ54 (ORCPT
+        with ESMTP id S229863AbiGMJ62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:57:56 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3A4F90CB
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:57:55 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id o7so18192970lfq.9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:57:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5yJHhqVPk2ZS/u5R/efMYnn4/6Ff7LLWCXjWXuOmA44=;
-        b=KIdTsJJgOB+9snLwV677m/c3z4hhqQIkaFBF4oO6Xla3+z7OP3eSW062s/19GsAeyC
-         HbxoIuT8Kl3Dz0UtJ6QTpITKSJ0qFKXazj4ZnJSz8j8xfqVC1oI/ArDFAxcUzi+aLXxL
-         S/1S13TCOM6CVxxbgekoYa467td9h0u8IeaMxG1+4LtnqSLOsBojiC2accWglubsOPq7
-         x31AWRgVoMettp3rH58vNkHWi+vG2vMGttZ02lGj5SeljvVFhUIesq9shjpfjGTLUJOu
-         78SnhapNIoPadruEXeclkxywmrYDnbBLJMS0ASL1qSm3vBF3a1ugcuB6Wb1XXoFv67NK
-         2rfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5yJHhqVPk2ZS/u5R/efMYnn4/6Ff7LLWCXjWXuOmA44=;
-        b=2r0Py10q3LTx12Ftz9AUBAN4Qz0GCjUn6nW0DypUukT4MHdmV+LdU294ts+Y+4XVx9
-         ZGxuEfm0x9FKuaG+PCwEmsGJsA30WiycKIonzAYQ0VBtlcTeEs3qcoelWj0NGJ3qI5w0
-         EzLgqxaZ4kLB9xngv7EF2jrE0rzfwcrk7wlHEfbDLk9RxaE5y2WZk90CTvlktaGf76rR
-         o63mCCIbvz5qJ2lf3OhckBzOPcrBN5COdXx+yFy4Be96IhR5y3orFq84kDZn2QOsZtY3
-         LAgBQdQcIlMZx1X8TyaTrQ+6z0P1VSJlJRGeDywQSTE3kFiJmG2m8DACXrKchOsIYTaD
-         0C6Q==
-X-Gm-Message-State: AJIora/zxABK3+4f1Bht7jdB4plzVoHHcJNI4NsTrvlPHREvVuRkj48J
-        AZ2zOJZTQZndN2/BxOw4aZA=
-X-Google-Smtp-Source: AGRyM1uHmrRyQOgBw36xgx7SvFrGhNZGwduPjYLZtzRtCrL8NLSzjnWpX3S8N5Lp+O46NN2AwEPpKQ==
-X-Received: by 2002:a05:6512:1295:b0:481:1a61:8d21 with SMTP id u21-20020a056512129500b004811a618d21mr1455205lfs.500.1657706273830;
-        Wed, 13 Jul 2022 02:57:53 -0700 (PDT)
-Received: from [192.168.1.2] (broadband-188-32-106-30.ip.moscow.rt.ru. [188.32.106.30])
-        by smtp.gmail.com with ESMTPSA id q16-20020a2eb4b0000000b002559299b0e7sm3032200ljm.86.2022.07.13.02.57.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 02:57:53 -0700 (PDT)
-Message-ID: <a9106c37-51d3-be8e-c9c2-4ca279b4523e@gmail.com>
-Date:   Wed, 13 Jul 2022 12:57:52 +0300
+        Wed, 13 Jul 2022 05:58:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46338B8EBF;
+        Wed, 13 Jul 2022 02:58:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 048EDB81D61;
+        Wed, 13 Jul 2022 09:58:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0446DC34114;
+        Wed, 13 Jul 2022 09:58:23 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="i/ZymLFw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1657706302;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cC9+vyBosgoNyCNggp5RRMhlmkVtUs2ndvxh9Fw5GoU=;
+        b=i/ZymLFw+lmlx/vdDUjVgFygwHuBebZkorP5rHZUDrqfAlx/WXlzfsy09IaONc7Kq8Ktmp
+        aRY/VhPUaGGmr+m/ggDuUmtCVyl7D6FF3d3eyxfu0KOd9+QeDvg/ih8Z5n0KpSAc/4BwNv
+        6IykJlOgT6z64wqegKqplKmi0fl1Ld4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 97711f6d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 13 Jul 2022 09:58:22 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        johannes@sipsolutions.net
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, stable@vger.kernel.org,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Subject: [PATCH v2] um: seed rng using host OS rng
+Date:   Wed, 13 Jul 2022 11:58:15 +0200
+Message-Id: <20220713095815.162741-1-Jason@zx2c4.com>
+In-Reply-To: <Ys6V//WUKvDu3sjs@zx2c4.com>
+References: <Ys6V//WUKvDu3sjs@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/2] lib/string.c: Optimize memchr()
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Yu-Jen Chang' <arthurchang09@gmail.com>
-Cc:     "andy@kernel.org" <andy@kernel.org>,
-        "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220710142822.52539-1-arthurchang09@gmail.com>
- <20220710142822.52539-3-arthurchang09@gmail.com>
- <3a1b50d2-a7aa-3e89-56fe-5d14ef9da22f@gmail.com>
- <CAD4RrFPihC+8LScC1RJ5GfOsLs4kze0QwALS1ykNH_m89Z1NGg@mail.gmail.com>
- <48db247e-f6fd-cb4b-7cc5-455bf26bb153@gmail.com>
- <CAD4RrFPfwu4Ascj5tdz8qq2Qgnu5GN2eHjVwMW5AqUa1H7JapA@mail.gmail.com>
- <49a8be9269ee47de9fc2d0d7f09eb0b1@AcuMS.aculab.com>
-From:   Andrey Semashev <andrey.semashev@gmail.com>
-In-Reply-To: <49a8be9269ee47de9fc2d0d7f09eb0b1@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,21 +58,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/13/22 12:39, David Laight wrote:
-> From: Yu-Jen Chang
->> Sent: 12 July 2022 15:59
-> ...
->>> I think you're missing the point. Loads at unaligned addresses may not
->>> be allowed by hardware using conventional load instructions or may be
->>> inefficient. Given that this memchr implementation is used as a fallback
->>> when no hardware-specific version is available, you should be
->>> conservative wrt. hardware capabilities and behavior. You should
->>> probably have a pre-alignment loop.
->>
->> Got it. I add  pre-alignment loop. It aligns the address to 8 or 4bytes.
-> 
-> That should be predicated on !HAS_EFFICIENT_UNALIGNED_ACCESS.
+UML generally does not provide access to special CPU instructions like
+RDRAND, and execution tends to be rather deterministic, with no real
+hardware interrupts, making good randomness really very hard, if not
+all together impossible. Not only is this a security eyebrow raiser, but
+it's also quite annoying when trying to do various pieces of UML-based
+automation that takes a long time to boot, if ever.
 
-If there is a pre-alignment loop, there won't be unaligned loads, so
-there shouldn't be the need for the HAS_EFFICIENT_UNALIGNED_ACCESS
-check. Unless I misunderstand what HAS_EFFICIENT_UNALIGNED_ACCESS indicates.
+Fix this by trivially calling getrandom() in the host and using that
+seed as "bootloader randomness", which initializes the rng immediately
+at UML boot.
+
+The old behavior can be restored the same way as on any other arch, by
+way of CONFIG_TRUST_BOOTLOADER_RANDOMNESS=n or
+random.trust_bootloader=0. So seen from that perspective, this just
+makes UML act like other archs, which is positive in its own right.
+
+Cc: stable@vger.kernel.org
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Acked-By: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Changes v1->v2:
+- Include sys/types.h instead of stddef.h.
+
+ arch/um/include/shared/os.h | 7 +++++++
+ arch/um/kernel/um_arch.c    | 8 ++++++++
+ arch/um/os-Linux/util.c     | 6 ++++++
+ 3 files changed, 21 insertions(+)
+
+diff --git a/arch/um/include/shared/os.h b/arch/um/include/shared/os.h
+index fafde1d5416e..0df646c6651e 100644
+--- a/arch/um/include/shared/os.h
++++ b/arch/um/include/shared/os.h
+@@ -11,6 +11,12 @@
+ #include <irq_user.h>
+ #include <longjmp.h>
+ #include <mm_id.h>
++/* This is to get size_t */
++#ifndef __UM_HOST__
++#include <linux/types.h>
++#else
++#include <sys/types.h>
++#endif
+ 
+ #define CATCH_EINTR(expr) while ((errno = 0, ((expr) < 0)) && (errno == EINTR))
+ 
+@@ -243,6 +249,7 @@ extern void stack_protections(unsigned long address);
+ extern int raw(int fd);
+ extern void setup_machinename(char *machine_out);
+ extern void setup_hostinfo(char *buf, int len);
++extern ssize_t os_getrandom(void *buf, size_t len, unsigned int flags);
+ extern void os_dump_core(void) __attribute__ ((noreturn));
+ extern void um_early_printk(const char *s, unsigned int n);
+ extern void os_fix_helper_signals(void);
+diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
+index 0760e24f2eba..74f3efd96bd4 100644
+--- a/arch/um/kernel/um_arch.c
++++ b/arch/um/kernel/um_arch.c
+@@ -16,6 +16,7 @@
+ #include <linux/sched/task.h>
+ #include <linux/kmsg_dump.h>
+ #include <linux/suspend.h>
++#include <linux/random.h>
+ 
+ #include <asm/processor.h>
+ #include <asm/cpufeature.h>
+@@ -406,6 +407,8 @@ int __init __weak read_initrd(void)
+ 
+ void __init setup_arch(char **cmdline_p)
+ {
++	u8 rng_seed[32];
++
+ 	stack_protections((unsigned long) &init_thread_info);
+ 	setup_physmem(uml_physmem, uml_reserved, physmem_size, highmem);
+ 	mem_total_pages(physmem_size, iomem_size, highmem);
+@@ -416,6 +419,11 @@ void __init setup_arch(char **cmdline_p)
+ 	strlcpy(boot_command_line, command_line, COMMAND_LINE_SIZE);
+ 	*cmdline_p = command_line;
+ 	setup_hostinfo(host_info, sizeof host_info);
++
++	if (os_getrandom(rng_seed, sizeof(rng_seed), 0) == sizeof(rng_seed)) {
++		add_bootloader_randomness(rng_seed, sizeof(rng_seed));
++		memzero_explicit(rng_seed, sizeof(rng_seed));
++	}
+ }
+ 
+ void __init check_bugs(void)
+diff --git a/arch/um/os-Linux/util.c b/arch/um/os-Linux/util.c
+index 41297ec404bf..fc0f2a9dee5a 100644
+--- a/arch/um/os-Linux/util.c
++++ b/arch/um/os-Linux/util.c
+@@ -14,6 +14,7 @@
+ #include <sys/wait.h>
+ #include <sys/mman.h>
+ #include <sys/utsname.h>
++#include <sys/random.h>
+ #include <init.h>
+ #include <os.h>
+ 
+@@ -96,6 +97,11 @@ static inline void __attribute__ ((noreturn)) uml_abort(void)
+ 			exit(127);
+ }
+ 
++ssize_t os_getrandom(void *buf, size_t len, unsigned int flags)
++{
++	return getrandom(buf, len, flags);
++}
++
+ /*
+  * UML helper threads must not handle SIGWINCH/INT/TERM
+  */
+-- 
+2.35.1
+

@@ -2,88 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F4C572E92
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEFE572E94
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbiGMGzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 02:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
+        id S234306AbiGMG5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 02:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiGMGzg (ORCPT
+        with ESMTP id S229487AbiGMG5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 02:55:36 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6C0E7A
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:55:35 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id r186so2427928pgr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LPiteU3ZIDPphGuDd6qhaM0GwMlw0tFWabPide3YTOc=;
-        b=A/kI71ePqkRtbdh4z6E8oeAEwMemeTtnsPnzauycFrQoDgCe+7rvrRi8TQvwCXXNyj
-         RFLSAMfWDCCpRvvNJBs6c3ToSnFVUsOCdltIm1Qbeux9Y6+Mn/i2mWVDL7LQa/yDFxqc
-         EMO9vGsRsf509RRlWOkCehzKiYr0eztVxUhdbzmelL2SSbnuoE7CJd0ypVnzhGEIB4/3
-         tJ9DsgdifTfpn787hTxrdhBpblSzUQ3Xueyk4JWpNBe3RVThL191Yt99vaZ/525Fve8M
-         JrZhOZ8tnZgkMYMhXTj2Yum+vqffdzlakiEqSwY+d+i4ij90oU1zd2xP+t8wC75XE77n
-         94Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LPiteU3ZIDPphGuDd6qhaM0GwMlw0tFWabPide3YTOc=;
-        b=EaUM1uf9arSp/5qCURNfh9nFprR1nu8qQ386wvlLSwUmBDqUT4zYDAwNXQKc2B3BW0
-         agDPggq7gc9u4fIuUyyJCpG9hn59oIZ5119TDk7u4T/VmDu0EaZN8/5r/yMRE6JAC05g
-         6nUzo9z/7kNdFn4luS83Az4jT0baPgn7tv73+iHAWW0bRa1+agt1pDLIgpCzCqewIK6v
-         G7/fsKenoOmjWen3vJHmKLTFRh+uLX2F8p+ffE3eeIadfhL8Nuw4TsJrHVa/9De2ms9G
-         nAsb0yywt0PIKW3Saz4p3PODUeb6sDiSn2fUZMVFd7ZxdjkZclBHhQjLSL6/Tpoesr7s
-         Ce3w==
-X-Gm-Message-State: AJIora+8rLs3sh9hmvmU8L2mLWeyHSUoO7oCyJdH2pM8us5UPtL1AQmV
-        KaMdvgkhhx0P6LavncjWQourwQ==
-X-Google-Smtp-Source: AGRyM1uSwqDpVinLdL7ntciXJbFOuFBhY5TCrb7J80kwb6l2HhsFvOzbue+FzpiDNyS4smvxav+8Og==
-X-Received: by 2002:a05:6a00:b8b:b0:51c:2487:57b5 with SMTP id g11-20020a056a000b8b00b0051c248757b5mr1916239pfj.56.1657695334722;
-        Tue, 12 Jul 2022 23:55:34 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id p14-20020a170902780e00b001620960f1dfsm8061328pll.198.2022.07.12.23.55.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 23:55:34 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 12:25:32 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
-Message-ID: <20220713065532.qncnjpj5isjmsxf5@vireshk-i7>
-References: <cover.1657003420.git.viresh.kumar@linaro.org>
- <YsxSkswzsqgMOc0l@hovoldconsulting.com>
- <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
- <Ys2FZa6YDwt7d/Zc@hovoldconsulting.com>
- <20220712151045.vn4tpat4c4cplndo@vireshk-i7>
- <Ys2ZVeBHyhrUBC4m@hovoldconsulting.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys2ZVeBHyhrUBC4m@hovoldconsulting.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Wed, 13 Jul 2022 02:57:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B8613D6A;
+        Tue, 12 Jul 2022 23:56:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BDBB611A5;
+        Wed, 13 Jul 2022 06:56:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D6AC34114;
+        Wed, 13 Jul 2022 06:56:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657695414;
+        bh=DKPBIy5G1EM3xhqzMqfJWRNGFPADJwakpp4q2L0oBi4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r4+vtgJ/BjF/IHHR46dA/3SZPJjB5AcuGaE29qnGPKYUd83wfoHSn5NLmyD6fKD6h
+         wSfTI81txXPJiV22p36SnJ+pKJmu6mpcEeVKpw7sH+ENSnhHY3L16hbOviV3hDbiNh
+         Y5qNjZDqTybvJC9nb3nHFPQZ5GIvlKLOJxGT/Qry3m6FjvIf4BYyYYD9dpCEjUZnvO
+         RuWS9ddu/EBANk5tBwso7AacLcyxfg8TbCcR+WKg1VWoAF9QZaAa5ma+D3dqMx0mOl
+         xqGdPNUIcFHPU9Fobfk8o4mjHZVMLnUS1a7Z95Sh2Yn+qG3QRvHRZxWInlJcdh4SKa
+         KaWyiEBpUf5QA==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oBWIm-0078fU-85;
+        Wed, 13 Jul 2022 07:56:52 +0100
+Date:   Wed, 13 Jul 2022 07:56:42 +0100
+Message-ID: <87cze9lcut.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "chenxiang (M)" <chenxiang66@hisilicon.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        <pbonzini@redhat.com>, <kvm@vger.kernel.org>,
+        chenxiang via <qemu-devel@nongnu.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [QUESTION] Exception print when enabling GICv4
+In-Reply-To: <13e4fde9-05e9-f492-a2b6-20d567eb2920@hisilicon.com>
+References: <6d6d61fb-6241-4e1e-ddff-8ae8be96f9ff@hisilicon.com>
+        <87bktu1hfj.wl-maz@kernel.org>
+        <13e4fde9-05e9-f492-a2b6-20d567eb2920@hisilicon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: chenxiang66@hisilicon.com, alex.williamson@redhat.com, pbonzini@redhat.com, kvm@vger.kernel.org, qemu-devel@nongnu.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,15 +71,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12-07-22, 17:55, Johan Hovold wrote:
-> Ok, thanks for the details. I'd still look into if there's some way to
-> avoid setting clk_count when there are no clocks as it sounds like an
-> anti-pattern that will just make the code harder to understand and
-> maintain.
+On Wed, 13 Jul 2022 07:02:10 +0100,
+"chenxiang (M)" <chenxiang66@hisilicon.com> wrote:
+>=20
+> Hi Marc,
+>=20
+> Thank you for your reply.
+>=20
+> =E5=9C=A8 2022/7/12 23:25, Marc Zyngier =E5=86=99=E9=81=93:
+> > Hi Xiang,
+> >=20
+> > On Tue, 12 Jul 2022 13:55:16 +0100,
+> > "chenxiang (M)" <chenxiang66@hisilicon.com> wrote:
+> >> Hi,
+> >> I encounter a issue related to GICv4 enable on ARM64 platform (kernel
+> >> 5.19-rc4, qemu 6.2.0):
+> >> We have a accelaration module whose VF has 3 MSI interrupts, and we
+> >> passthrough it to virtual machine with following steps:
+> >>=20
+> >> echo 0000:79:00.1 > /sys/bus/pci/drivers/hisi_hpre/unbind
+> >> echo vfio-pci >
+> >> /sys/devices/pci0000\:78/0000\:78\:00.0/0000\:79\:00.1/driver_override
+> >> echo 0000:79:00.1 > /sys/bus/pci/drivers_probe
+> >>=20
+> >> Then we boot VM with "-device vfio-pci,host=3D79:00.1,id=3Dnet0 \".
+> >> When insmod the driver which registers 3 PCI MSI interrupts in VM,
+> >> some exception print occur as following:
+> >>=20
+> >> vfio-pci 0000:3a:00.1: irq bypass producer (token 000000008f08224d)
+> >> registration fails: 66311
+> >>=20
+> >> I find that bit[6:4] of register PCI_MSI_FLAGS is 2 (4 MSI interrupts)
+> >> though we only register 3 PCI MSI interrupt,
+> >>=20
+> >> and only 3 MSI interrupt is activated at last.
+> >> It allocates 4 vectors in function vfio_msi_enable() (qemu)  as it
+> >> reads the register PCI_MSI_FLAGS.
+> >> Later it will  call system call VFIO_DEVICE_SET_IRQS to set forwarding
+> >> for those interrupts
+> >> using function kvm_vgic_v4_set_forrwarding() as GICv4 is enabled. For
+> >> interrupt 0~2, it success to set forwarding as they are already
+> >> activated,
+> >> but for the 4th interrupt, it is not activated, so ite is not found in
+> >> function vgic_its_resolve_lpi(), so above printk occurs.
+> >>=20
+> >> It seems that we only allocate and activate 3 MSI interrupts in guest
+> >> while it tried to set forwarding for 4 MSI interrupts in host.
+> >> Do you have any idea about this issue?
+> > I have a hunch: QEMU cannot know that the guest is only using 3 MSIs
+> > out of the 4 that the device can use, and PCI/Multi-MSI only has a
+> > single enable bit for all MSIs. So it probably iterates over all
+> > possible MSIs and enable the forwarding. Since the guest has only
+> > created 3 mappings in the virtual ITS, the last call fails. I would
+> > expect the guest to still work properly though.
+>=20
+> Yes, that's the reason of exception print.
+> Is it possible for QEMU to get the exact number of interrupts guest is
+> using? It seems not.
 
-Here is an attempt from me :)
+Not really. Or rather, this is a pretty involved process: you'd need
+to stop the guest, perform a save operation on the ITS (as if you were
+doing a migration), and then introspect the ITS tables to find whether
+there is a mapping for each of the possible events generated by the
+device. Clearly, that's overkill.
 
-https://lore.kernel.org/lkml/cover.1657695140.git.viresh.kumar@linaro.org/
+A better approach would be to be able to retrieve an individual
+mapping, using a new API that would be similar to KVM_SIGNAL_MSI. It
+would take the same kvm_msi structure as input, and retrieving the
+{LPI, CPU} pair or an error if there is no mapping.
 
--- 
-viresh
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

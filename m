@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A83657380B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB10B5737C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236147AbiGMNy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
+        id S236032AbiGMNqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiGMNy1 (ORCPT
+        with ESMTP id S231435AbiGMNpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:54:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA981240;
-        Wed, 13 Jul 2022 06:54:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 13 Jul 2022 09:45:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 739F4D41
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:45:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657719950;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=FVrKbANdCl2uTQnD6+EajsfE/aId+mnisf9oBHzf9wQ=;
+        b=fiBafRxLJvPLf9ovct9vGycGTUkZ6vh/5ErOw/nc+TjJPZRvs4MiXy4ADu2Z55AXW+8ztp
+        SklEm/iaMwFHwToVRUfiK3ZDFIOP7uN5ag+jRYhFyEfu735xXAmT4tXsrFhzHTCNsTJx2G
+        127FLlTCJb5NiIyEgyrU3wjPrgwY4tY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-2o0gadQRPJyROXsSets1aw-1; Wed, 13 Jul 2022 09:45:47 -0400
+X-MC-Unique: 2o0gadQRPJyROXsSets1aw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 904DAB81F66;
-        Wed, 13 Jul 2022 13:54:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 051ECC34114;
-        Wed, 13 Jul 2022 13:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657720463;
-        bh=/tvxZwralFJ4cZXdPkXxJEQCgvBw9Ua4U7XdiklwROc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NPugggpNWrapctlNOMvCLfTS/6nQRBp4qtBMpShlx6IuKz8VtqvV92KmfK6a055Tb
-         LiJm0Itggmfb7TuXYij4Qj6U/BGcO0EHimH0uvGiXoRZJ7NEHvEROtj1fYTQlSfPxK
-         R/tWGZ91pxAnfu7R8AQykRLoxbSlFGaVYImN/9d2g5A+SbMhW2DvPn9ogQ/BGfCmR9
-         Hvik6QiYCSrsweYDeehsB7cCqGeCVaf5oiWomt2MANb/k699X3JxZDTJXczafFUY/o
-         18S9t443e72R5l29VEEe9usJERuwbaF9WLxXASWJNiX/TKwYBa4SMiBkto4yLcAk0N
-         udxMjiowqC0vQ==
-Received: by pali.im (Postfix)
-        id 3B1619D9; Wed, 13 Jul 2022 15:54:20 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc: dts: turris1x.dts: Add CPLD reboot node
-Date:   Wed, 13 Jul 2022 15:44:29 +0200
-Message-Id: <20220713134429.18748-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0667C85A581;
+        Wed, 13 Jul 2022 13:45:47 +0000 (UTC)
+Received: from pauld.bos.com (dhcp-17-237.bos.redhat.com [10.18.17.237])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 85EF140CFD05;
+        Wed, 13 Jul 2022 13:45:46 +0000 (UTC)
+From:   Phil Auld <pauld@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Tian Tao <tiantao6@hisilicon.com>
+Subject: [PATCH v2] drivers/base/node.c: fix userspace break from using bin_attributes for cpumap and cpulist
+Date:   Wed, 13 Jul 2022 09:45:45 -0400
+Message-Id: <20220713134545.1382367-1-pauld@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,43 +60,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CPLD firmware can reset board by writing value 0x01 at CPLD memory offset
-0x0d. Define syscon-reboot node for this reset support.
+Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
+This breaks userspace code that retrieves the size before reading the file. Rather
+than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
+limitation of cpumap ABI") let's put in a size value at compile time. Use direct
+comparison and a worst-case maximum to ensure compile time constants. For cpulist the
+max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960
+(8192 * 5). In order to get near that you'd need a system with every other CPU on one
+node or something similar. e.g. (0,2,4,... 1024,1026...). To simplify the math and
+support larger NR_CPUS we are using NR_CPUS * 6. We also set it to a min of PAGE_SIZE
+to retain the older behavior for smaller NR_CPUS. The cpumap file wants to be something
+like NR_CPUS/4 + NR_CPUS/32, for the ","s so for simplicity we are using NR_CPUS/2.
 
-Fixes: 54c15ec3b738 ("powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers")
-Signed-off-by: Pali Rohár <pali@kernel.org>
+On an 80 cpu 4-node sytem (NR_CPUS == 8192)
+
+before:
+
+-r--r--r--. 1 root root 0 Jul 12 14:08 /sys/devices/system/node/node0/cpulist
+-r--r--r--. 1 root root 0 Jul 11 17:25 /sys/devices/system/node/node0/cpumap
+
+after:
+
+-r--r--r--. 1 root root 49152 Jul 13 09:26 /sys/devices/system/node/node0/cpulist
+-r--r--r--. 1 root root  4096 Jul 13 09:24 /sys/devices/system/node/node0/cpumap
+
+Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Signed-off-by: Phil Auld <pauld@redhat.com>
 ---
- arch/powerpc/boot/dts/turris1x.dts | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/base/node.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
-index c76b628cf026..12e08271e61f 100644
---- a/arch/powerpc/boot/dts/turris1x.dts
-+++ b/arch/powerpc/boot/dts/turris1x.dts
-@@ -332,7 +332,7 @@
- 			 * Turris CPLD firmware is open source and available at:
- 			 * https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Router_CPLD.v
- 			 */
--			compatible = "cznic,turris1x-cpld", "fsl,p1021rdb-pc-cpld", "simple-bus";
-+			compatible = "cznic,turris1x-cpld", "fsl,p1021rdb-pc-cpld", "simple-bus", "syscon";
- 			reg = <0x3 0x0 0x30>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-@@ -352,6 +352,14 @@
- 				gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
- 			};
+diff --git a/drivers/base/node.c b/drivers/base/node.c
+index 0ac6376ef7a1..3577f4eb4ac6 100644
+--- a/drivers/base/node.c
++++ b/drivers/base/node.c
+@@ -45,7 +45,7 @@ static inline ssize_t cpumap_read(struct file *file, struct kobject *kobj,
+ 	return n;
+ }
  
-+			reboot@d {
-+				compatible = "syscon-reboot";
-+				reg = <0x0d 0x01>;
-+				offset = <0x0d>;
-+				mask = <0x01>;
-+				value = <0x01>;
-+			};
-+
- 			led-controller@13 {
- 				/*
- 				 * LEDs are controlled by CPLD firmware.
+-static BIN_ATTR_RO(cpumap, 0);
++static BIN_ATTR_RO(cpumap, (((NR_CPUS>>1) > PAGE_SIZE) ? NR_CPUS >> 1 : PAGE_SIZE));
+ 
+ static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
+ 				   struct bin_attribute *attr, char *buf,
+@@ -66,7 +66,7 @@ static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
+ 	return n;
+ }
+ 
+-static BIN_ATTR_RO(cpulist, 0);
++static BIN_ATTR_RO(cpulist, (((NR_CPUS * 6) > PAGE_SIZE) ? NR_CPUS *6 : PAGE_SIZE));
+ 
+ /**
+  * struct node_access_nodes - Access class device to hold user visible
 -- 
-2.20.1
+2.31.1
 

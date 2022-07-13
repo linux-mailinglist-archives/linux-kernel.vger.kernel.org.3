@@ -2,178 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16622573B0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCAC573B07
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236650AbiGMQUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
+        id S236087AbiGMQUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235051AbiGMQUn (ORCPT
+        with ESMTP id S229916AbiGMQUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:20:43 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDC0183B6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:20:42 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id y4so14758870edc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:20:41 -0700 (PDT)
+        Wed, 13 Jul 2022 12:20:09 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154CBAE6A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:20:08 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id o4so16224546wrh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:20:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=Y5NSihFez2XvScqkpb+CatCLJeMlzbRshfYp6qFIWEg=;
-        b=V42I4AWxhP/5u6RJWY6rIv4SzWcfBjIUqxRPakHX6Yb+w3tyOt0fOvtHLq3/sogGFp
-         FLjZeSiOSuZPDv9EB/oEG7GRojgR8EmPUrLsBloo8xLL2dxMvUuqp3FmdaseK4IAESvk
-         tKwZQPlnP4cF/dfidXHkinL3RBa3fOAIEgEPSWLz4Trwo40o0rgwllfvv1bta525QBlj
-         uvzCiWk+ibkOBFZl2Dpw/UMVgzqxLECNxLooRrHGzlgJGep/UKivJpmAfW19EX5Nu4iX
-         egolLTDkilPAXxtjdXxCEpOaRMSL+EmPQdffhwchFIidUL0ZCC4CDXNAOjxXuos9oVlQ
-         f2Lw==
+        d=sifive.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=O3+Y7xcE56ph/bvUjELsiX/t1x6avdlbiSjzSBYYUlE=;
+        b=aSUHr0nuX4xfoUZDKsuhmdVDCaLbqOoeKmHWM4teWn4+t2CDpIjvsny21pSIbMWgpd
+         GZxeidyUizUQPGBEqinM4bNO05NJpRDTZ6D1ua5cUrfKHAXJLlBII5SM7S0r1ohxrHHB
+         EbECwQtw0ByEA1f6HOEIA964/yBOZyilvpneKDkL11pbscTCPyATKIS5T3T1fkHuAXF9
+         J5q9vEOKPZGPrt58qfJsPysNqGzFZchy6yx+fChKra/FQ0UtxuhPUEyhfUa/T0+ILeJe
+         7i6+gLK7jFjOoxWkm6Iil/N30e1HefVX1LQ6XGzkw1/GKGOj+ZN7Jgo/GWm7cZSIksEE
+         vJrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=Y5NSihFez2XvScqkpb+CatCLJeMlzbRshfYp6qFIWEg=;
-        b=T7YZwpPLR0eLxBH1JhKDECmNHskLcpsZwLLvXJClY0VS8PKahdvwCiI+mKLvpIBr52
-         jWPEFmmESTUX8N0evAjFDZdBPJ5Vituwmzp8fYkg6gLJ8cXptIDZgEUgYWLLjkeGF5gm
-         PQEu2HIm24Xm860lnnHua2ZhXu2b/gmiFtZkeOOOOqK6wFUCTGEcMEbJnSE8PFViGnDS
-         0ddlCkXMjsa91VEL51pAWdpdBRK6Tzy700VlzyYVm3+cEzwkbgtqAy6LxO2vEVuWip3i
-         fyDiYHsGfh2VaI9Y2d5vL1FpYYpEmBCKvAqGqaFxXp0FC6p59wizzcZskKss+ARRJV/r
-         4NfQ==
-X-Gm-Message-State: AJIora+0zIyUrS/EFKxoVCOKWxi6zQXO//o0Oafw1AJP3BHJ0kqTuYLJ
-        SGDCoIjXmy86FeGi2PLvQ1/rHk+pO8ry2o7krqiUmC89CNs=
-X-Google-Smtp-Source: AGRyM1sW1QTgI5c4TuGK/LXKqTEpM+koCDujf6eIGiEGfCQNWWxiZiaEyRT7kH8SwCaXXBjteVx1zH+ds2Cr7SKNYxQ=
-X-Received: by 2002:a05:6402:239f:b0:43a:92a7:84e with SMTP id
- j31-20020a056402239f00b0043a92a7084emr6036924eda.293.1657729240178; Wed, 13
- Jul 2022 09:20:40 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=O3+Y7xcE56ph/bvUjELsiX/t1x6avdlbiSjzSBYYUlE=;
+        b=Af5RaVh7roR57o7LAGVNeKboLxge97jHv/k9g++xhlYrV5DKdfWf+DYUUEQuylF5D/
+         d86y1EqqQuzLZLmfCeDG4qNJ3NmTC5jofJKh+l+gWW8p1tnJER8RZbdsPqddCypLt7/o
+         80jWBHfAqxXZZpfxb3OtsAkIyH8YoJQUhdYoHpkvNIm+1stm3zeGvCdEpmEjmR2pdbjv
+         RaK+d7pg2bt2klXHhHsUnMkx7DJX7RtKlznJJW25/p6AZUinXbCMqiCl0dKg9D4R+317
+         eL4+RabJz6nh2DoqfIlbQ2791VqhvUYnjo0rwiAIWxZo5H24DKdjUbFv2I9ObSnOlIQf
+         pWwg==
+X-Gm-Message-State: AJIora9bZNiOu86e4elGHfc5nJ5V0Obx7bv+wvQNXcC5FbsAyHcatQGZ
+        W5ajen1osvYbAD/Chnz997SMeg==
+X-Google-Smtp-Source: AGRyM1utO9qcCtGSq+NZKZMNSEDCuaTjWDFpSNSpcDbotF2tXMRHIpZ7Q/OQt5gzO40+J1VuZR0wEQ==
+X-Received: by 2002:adf:9d92:0:b0:21d:66c4:e311 with SMTP id p18-20020adf9d92000000b0021d66c4e311mr4282466wre.575.1657729206626;
+        Wed, 13 Jul 2022 09:20:06 -0700 (PDT)
+Received: from [192.168.0.17] (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net. [86.15.83.122])
+        by smtp.gmail.com with ESMTPSA id w13-20020adff9cd000000b0021d20461bbbsm11405894wrr.88.2022.07.13.09.20.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 09:20:06 -0700 (PDT)
+Message-ID: <83b53b26-6621-d580-c704-b7c82bd96a12@sifive.com>
+Date:   Wed, 13 Jul 2022 17:20:05 +0100
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Thu, 14 Jul 2022 00:20:04 +0800
-Message-ID: <CAO4mrfcHQRSgR923e==6Y4nXU-BfdJ_UE8bhjZxoqxWo_=L-MQ@mail.gmail.com>
-Subject: BUG: unable to handle kernel NULL pointer dereference in sctp_sched_dequeue_common
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 3/7] pwm: dwc: add of/platform support
+Content-Language: en-GB
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Rob Herring <robh@kernel.org>, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Adnan Chowdhury <adnan.chowdhury@sifive.com>
+References: <20220712100113.569042-1-ben.dooks@sifive.com>
+ <20220712100113.569042-4-ben.dooks@sifive.com>
+ <20220712221715.GT1823936-robh@kernel.org>
+ <feaacf44-f9a8-b892-d8ba-8a396b49d56b@sifive.com>
+ <20220713135230.gjbd3v6iih2uicpu@pengutronix.de>
+ <7999fec2-847a-86ce-ed78-d2a9008bf654@sifive.com>
+ <20220713150755.bimcq2yiuvxn6n6v@pengutronix.de>
+From:   Ben Dooks <ben.dooks@sifive.com>
+In-Reply-To: <20220713150755.bimcq2yiuvxn6n6v@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
+On 13/07/2022 16:07, Uwe Kleine-König wrote:
+> On Wed, Jul 13, 2022 at 03:30:07PM +0100, Ben Dooks wrote:
+>> On 13/07/2022 14:52, Uwe Kleine-König wrote:
+>>> On Wed, Jul 13, 2022 at 12:56:55PM +0100, Ben Dooks wrote:
+>>>> On 12/07/2022 23:17, Rob Herring wrote:
+>>>>> On Tue, Jul 12, 2022 at 11:01:09AM +0100, Ben Dooks wrote:
+>>>>>> The dwc pwm controller can be used in non-PCI systems, so allow
+>>>>>> either platform or OF based probing.
+>>>>>>
+>>>>>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+>>
+>> [snip]
+>>
+>>>>>> +properties:
+>>>>>> +  "#pwm-cells":
+>>>>>> +    description: |
+>>>>>> +      See pwm.yaml in this directory for a description of the cells format.
+>>>>>
+>>>>> pwm.yaml doesn't define how many cells. You need to. And you don't need
+>>>>> generic descriptions.
+>>>>
+>>>>    "#pwm-cells":
+>>>>       const: 1
+>>>>
+>>>> should be sufficient then?
+>>>
+>>> I would expect a value of (at least) 2 or (better) 3.
+>>
+>> OOPS, forgot the phandle.
+>>
+>> I will have to check if we have any support yet for dealing
+>> with any of the pwm flags yet.
+> 
+> I didn't double check, but given that the driver only supports inversed
+> polarity it might not even work without passing the flag for inversed
+> polarity. Having said that, I expect you have to only add "#pwm-cells =
+> <3>;" to your dts and then everything should work just fine.
 
-Recently when using our tool to fuzz kernel, the following crash was triggered:
+I hadn't noticed, but we've been testing with the sysfs interface
+as we're using qemu.
 
-HEAD commit: c5eb0a61238d Linux 5.18-rc6
-git tree: upstream
-compiler: clang 12.0.0
-console output:
-https://drive.google.com/file/d/1zbd9t-NNorzTXESdQ3bxE-q9uLu-Bm9d/view?usp=sharing
-Syzlang reproducer:
-https://drive.google.com/file/d/18wnwTf53Ln4K8e4G9d8hS4-e0URQKHet/view?usp=sharing
-C reproducer: https://drive.google.com/file/d/1ttiMq0WYi46zFP1II8O9eee_dvDweIb6/view?usp=sharing
-kernel config: https://drive.google.com/file/d/1fITkvcuglspvuhI0mhXUndx112fJmcOZ/view?usp=sharing
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: Wei Chen <harperchen1110@gmail.com>
-
-BUG: kernel NULL pointer dereference, address: 0000000000000000
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 12f83067 P4D 12f83067 PUD 0
-Oops: 0000 [#1] PREEMPT SMP
-CPU: 0 PID: 13 Comm: ksoftirqd/0 Not tainted 5.18.0-rc6 #12
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:__list_del_entry_valid+0x26/0x80
-Code: 00 00 00 00 55 48 89 e5 48 89 fe 48 ba 00 01 00 00 00 00 ad de
-48 8b 0f 48 39 d1 74 22 48 8b 46 08 48 83 c2 22 48 39 d0 74 25 <48> 8b
-10 48 39 f2 75 2d 48 8b 51 08 48 39 f2 75 37 b0 01 5d c3 48
-RSP: 0018:ffff888007313720 EFLAGS: 00010217
-RAX: 0000000000000000 RBX: ffff88800c6283e8 RCX: 0000000000000000
-RDX: dead000000000122 RSI: ffff88800c6283e8 RDI: ffff88800c6283e8
-RBP: ffff888007313720 R08: ffffffff84399732 R09: ffffffff84392a74
-R10: 0000000000000042 R11: ffff8880072a2f80 R12: ffff8880138be238
-R13: ffff888016cdb000 R14: ffff888016cdb5a0 R15: ffff888016cdb000
-FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 0000000012f82000 CR4: 0000000000750ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
- <TASK>
- sctp_sched_dequeue_common+0x1c/0x90
- sctp_sched_prio_dequeue+0x67/0x80
- __sctp_outq_teardown+0x299/0x380
- sctp_outq_free+0x15/0x20
- sctp_association_free+0xc3/0x440
- sctp_do_sm+0x1ca7/0x2210
- sctp_assoc_bh_rcv+0x1f6/0x340
- sctp_inq_push+0x98/0xb0
- sctp_rcv+0x134e/0x16b0
- sctp6_rcv+0x1b/0x30
- ip6_protocol_deliver_rcu+0x5b7/0x930
- ip6_input+0x80/0x140
- ip6_rcv_finish+0x16e/0x1d0
- ipv6_rcv+0x72/0x110
- __netif_receive_skb+0x66/0x140
- process_backlog+0x13d/0x230
- __napi_poll+0x4b/0x310
- net_rx_action+0x1ae/0x410
- __do_softirq+0x16e/0x30f
- run_ksoftirqd+0x23/0x30
- smpboot_thread_fn+0x210/0x370
- kthread+0x124/0x160
- ret_from_fork+0x1f/0x30
- </TASK>
-Modules linked in:
-Dumping ftrace buffer:
-   (ftrace buffer empty)
-CR2: 0000000000000000
----[ end trace 0000000000000000 ]---
-RIP: 0010:__list_del_entry_valid+0x26/0x80
-Code: 00 00 00 00 55 48 89 e5 48 89 fe 48 ba 00 01 00 00 00 00 ad de
-48 8b 0f 48 39 d1 74 22 48 8b 46 08 48 83 c2 22 48 39 d0 74 25 <48> 8b
-10 48 39 f2 75 2d 48 8b 51 08 48 39 f2 75 37 b0 01 5d c3 48
-RSP: 0018:ffff888007313720 EFLAGS: 00010217
-RAX: 0000000000000000 RBX: ffff88800c6283e8 RCX: 0000000000000000
-RDX: dead000000000122 RSI: ffff88800c6283e8 RDI: ffff88800c6283e8
-RBP: ffff888007313720 R08: ffffffff84399732 R09: ffffffff84392a74
-R10: 0000000000000042 R11: ffff8880072a2f80 R12: ffff8880138be238
-R13: ffff888016cdb000 R14: ffff888016cdb5a0 R15: ffff888016cdb000
-FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 0000000012f82000 CR4: 0000000000750ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-----------------
-Code disassembly (best guess):
-   0: 00 00                add    %al,(%rax)
-   2: 00 00                add    %al,(%rax)
-   4: 55                    push   %rbp
-   5: 48 89 e5              mov    %rsp,%rbp
-   8: 48 89 fe              mov    %rdi,%rsi
-   b: 48 ba 00 01 00 00 00 movabs $0xdead000000000100,%rdx
-  12: 00 ad de
-  15: 48 8b 0f              mov    (%rdi),%rcx
-  18: 48 39 d1              cmp    %rdx,%rcx
-  1b: 74 22                je     0x3f
-  1d: 48 8b 46 08          mov    0x8(%rsi),%rax
-  21: 48 83 c2 22          add    $0x22,%rdx
-  25: 48 39 d0              cmp    %rdx,%rax
-  28: 74 25                je     0x4f
-* 2a: 48 8b 10              mov    (%rax),%rdx <-- trapping instruction
-  2d: 48 39 f2              cmp    %rsi,%rdx
-  30: 75 2d                jne    0x5f
-  32: 48 8b 51 08          mov    0x8(%rcx),%rdx
-  36: 48 39 f2              cmp    %rsi,%rdx
-  39: 75 37                jne    0x72
-  3b: b0 01                mov    $0x1,%al
-  3d: 5d                    pop    %rbp
-  3e: c3                    retq
-  3f: 48                    rex.W
-
-Best,
-Wei

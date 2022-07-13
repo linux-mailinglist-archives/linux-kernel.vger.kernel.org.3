@@ -2,66 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38385733A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CCF5733A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234713AbiGMJ7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
+        id S234750AbiGMKAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiGMJ7t (ORCPT
+        with ESMTP id S229863AbiGMKAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:59:49 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0124265D51;
-        Wed, 13 Jul 2022 02:59:47 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id p129so18415551yba.7;
-        Wed, 13 Jul 2022 02:59:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3V7JNBzAmCFMy3KxZokjQA49UEMuoZy2lqB3+H595sU=;
-        b=VZ4UJtzK8yDW1jD4r6pXDGeurS3US2G79ZHGbw++f7O8EcsTWHlHnWZ3YdgXIrm+TB
-         h3ehiMpWVlBbisUH55ntPt3Fwulgmn8JeLuLarVKHc1NbCyUrp2NxXAKWCRDRtsS8486
-         ROx3NR/YyUeny7fkiPCmMgTsYvP7+YItl2cFmbJY5DHNrtdODQf0rWMcDcqQXGV7W+g3
-         2DrFgGZjAsqiE/E7Nu8jBcidl9+6Nqen0Pvui+LSoLfer4pV0sY7qBq/KbwSEOiU+P6B
-         9dke3usKPuSmxFp2suGzxV4T+lG3Zn1ATGKE3Hw41OLfKH/9cd2K8NJ4+n9zMIhHZ/oz
-         CZfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3V7JNBzAmCFMy3KxZokjQA49UEMuoZy2lqB3+H595sU=;
-        b=bKpc73mF46vOMBH91b2JpDcivVIDn375cyTpnjjuuAozm1+OwURkwrVufVrqCFHK93
-         2duxSEuPrMGbnKjfvg+IKnqt/JvKVxWu2MF4M0/RgAEs+wCRjLfG3CR13qKlkmtBx1DY
-         SeNtd/wyYy3A86MgNvRsoVATzkgYolYHMCn+NHWUzgiZFjF3lkIn/kck2m53o9o5dgdp
-         /dE73Qz7V7La4w/SIjCLBDHqf6TA1Q0eBhdbcJ0C03wwG5Gouv8m3/rgvOQelZeQM0Sk
-         dSgb6KmznQ1WdKbYJ8Eoktb5MbTta0eWrqGoOCqIkdfxRHicoXsQeaPQYdWVxOvQqyCr
-         mp2g==
-X-Gm-Message-State: AJIora9hiFl3mjn9WB+FcJ/TpqG61vE68f+jciWIOPKKA81kh9DF5a5s
-        wav/IY+20Wlhqg1Ydz9GdFQoTxepPkWMTK5mYSQ=
-X-Google-Smtp-Source: AGRyM1sikGdrKDgS1wWPc2PwWg67hih6R2IQ9l/6VFeL3SbKFA6k29BWl/ZIaykidyteAhSp2mqDvRth5yWYVnALiIc=
-X-Received: by 2002:a05:6902:686:b0:66e:627f:4d29 with SMTP id
- i6-20020a056902068600b0066e627f4d29mr2556805ybt.385.1657706387134; Wed, 13
- Jul 2022 02:59:47 -0700 (PDT)
+        Wed, 13 Jul 2022 06:00:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7FFEB017
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:00:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 503ACB81D89
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:00:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B261C34114;
+        Wed, 13 Jul 2022 10:00:36 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="k9oNWpMV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1657706434;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lFRNshCYldrPF3aNOW7vz7FukysK89WspPfxLYVWLsw=;
+        b=k9oNWpMVZ0EQNdkVpXfyWGIPHBAfRbxfy9D/4nrCXxsxJFgJkum0q3nBacTG4xndmbbcqG
+        DMGLWm0xvwoslg6XYfZGJ1KJGSRULNueZXVOD1CUueMKOQq6BnEVSM8GVRXxrFuw4miZ6V
+        JARYP0PsAYONCQ4yFdsfQ2rinxb6Fk8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1c0f8483 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 13 Jul 2022 10:00:34 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] um: include sys/types.h instead of stddef.h for size_t
+Date:   Wed, 13 Jul 2022 12:00:29 +0200
+Message-Id: <20220713100029.163083-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20220713013721.68879-1-warthog618@gmail.com> <20220713013721.68879-5-warthog618@gmail.com>
-In-Reply-To: <20220713013721.68879-5-warthog618@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 13 Jul 2022 11:59:10 +0200
-Message-ID: <CAHp75VeRshC3Db8Q2J80fk7=UvLiRymrkoAbuWceOfncfzvr7A@mail.gmail.com>
-Subject: Re: [PATCH 4/6] gpiolib: cdev: simplify line event identification
-To:     Kent Gibson <warthog618@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dipen Patel <dipenp@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,19 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 3:39 AM Kent Gibson <warthog618@gmail.com> wrote:
->
-> Reorganise line event identification code to reduce code duplication,
-> and replace if-else initializers with the ternary equivalent to
-> improve readability.
+Usually size_t comes from sys/types.h, not stddef.h. This code likely
+worked only because something else in its usage chain was pulling in
+sys/types.h.
 
-...
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ arch/um/include/shared/user.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +               le.id = level ? GPIO_V2_LINE_EVENT_RISING_EDGE :
-> +                               GPIO_V2_LINE_EVENT_FALLING_EDGE;
-
-It seems several times you are doing the same, perhaps a helper?
-
+diff --git a/arch/um/include/shared/user.h b/arch/um/include/shared/user.h
+index dd4badffdeb3..a0a8f0d19a85 100644
+--- a/arch/um/include/shared/user.h
++++ b/arch/um/include/shared/user.h
+@@ -13,21 +13,21 @@
+  * fancier, type-safe, definition.  Using that one would require
+  * copying too much infrastructure for my taste, so userspace files
+  * get less checking than kernel files.
+  */
+ #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+ 
+ /* This is to get size_t */
+ #ifndef __UM_HOST__
+ #include <linux/types.h>
+ #else
+-#include <stddef.h>
++#include <sys/types.h>
+ #endif
+ 
+ extern void panic(const char *fmt, ...)
+ 	__attribute__ ((format (printf, 1, 2)));
+ 
+ /* Requires preincluding include/linux/kern_levels.h */
+ #define UM_KERN_EMERG	KERN_EMERG
+ #define UM_KERN_ALERT	KERN_ALERT
+ #define UM_KERN_CRIT	KERN_CRIT
+ #define UM_KERN_ERR	KERN_ERR
 -- 
-With Best Regards,
-Andy Shevchenko
+2.35.1
+

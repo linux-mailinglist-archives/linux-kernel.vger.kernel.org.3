@@ -2,93 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7310572B58
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 04:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 970A7572B61
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 04:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234029AbiGMCaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 22:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
+        id S231681AbiGMCkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 22:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiGMCaM (ORCPT
+        with ESMTP id S229555AbiGMCks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 22:30:12 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA21457213;
-        Tue, 12 Jul 2022 19:30:10 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id l2so3927105qvt.2;
-        Tue, 12 Jul 2022 19:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=OjfC14UX0Yga/TzH1v0XIRdS4rXd21Y3Whv/aSf9VoA=;
-        b=d3I0uyWADejKdR2ES/RfLbaYBixqc/pl4ONk6M0eghfOWigj1wL2AwyJTiYBHumkOP
-         QMMt9q41clp4V6BsejwpV/Kl0Xz4uTOGgRIlhdZTijpJawwBltr/v573h/+fpHjQVSKw
-         8tOC3ZJZwHwwa+Uzoz+G1w7m6LpwkriUVLi/vuR44LkWDCMOb+FknjYGti9zhacuWWSt
-         1MUzdrHOXK3MPSFRpdonH2pingai18e94oIAJNGwVbbuAgSEJ4fQerayKzJLnK+Ih/sj
-         gacQwjBu8pL2gnKTmJLKdwjAG7tC/E5hPvexUdr63DamPuyfr1asanQdIobuBC+Of5Sj
-         HcMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OjfC14UX0Yga/TzH1v0XIRdS4rXd21Y3Whv/aSf9VoA=;
-        b=R9lVI/xpQOQKbCp6IiFq8kGy+r9O9xGuSVvyohnnsCT4jztTDPijmpvwOMKkWHZNCo
-         Ln3DI1cGNVBTqhOhWmQ5YAkSQ0LLggqXqICEOWAR1izJdYsyadEIl6pG55tljyB04o9M
-         N/7/Sa8n6xkuFO/rawmnUKXoV6HZyIK1kn1xLgblygJ9wdF8agCN+otnUBqMJECRqgcF
-         yx+atn1W3jBKrM8mjlNGnaYzO8wmT0Gl9fN8yLK9QPKHx9BWJ5J+FwGjVcOE8vCuYIeN
-         pcXpTvV7s35iBEErUz3LzwwBCGGMTybLoulPD0+Mw4hP09SNDd/Y0+yuXe476o2JhZ7F
-         UT5Q==
-X-Gm-Message-State: AJIora+i8tRYoEoIuidR1R8qifZpP7kklA//1JvvXtI81oAdGLOmnmZx
-        iJdTH1nKKL6CmW+wlbC5Y3aokdXnv14/HPqjqwE=
-X-Google-Smtp-Source: AGRyM1voO0WaciH9DbhHkt/YKM8zHErAoG8R5FY3ClpbpAMi/UFk4qToRxpZVzAaxlfFrE6sPEoLPhyJTtfHNfIojxg=
-X-Received: by 2002:a05:6214:23cb:b0:472:f1a5:5cea with SMTP id
- hr11-20020a05621423cb00b00472f1a55ceamr943713qvb.13.1657679409770; Tue, 12
- Jul 2022 19:30:09 -0700 (PDT)
+        Tue, 12 Jul 2022 22:40:48 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2079.outbound.protection.outlook.com [40.107.223.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD04F7435D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 19:40:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b5puDZ9FrGFhy5Nhd/PYFnFcJE8sUZ67ud3T+qyLUojcd4BFycx2WbQXVDtJzMSedSBlQMh8x28642NlSRR2DoWX4/aOAi57owCa5/MZkLfkm8ovVnD4r0pefOVw0F33p1pXdYyXGB+aTdwK4yNS85yciskynxS4rpIhjK/Nf1rvKWg43WjEgENmRalviVb7kgvoPF76bOz8alsgfTFbKFWN5hx0aDzeJYYQkDO0EWFCIfLlj3W0VWehQBq9OV2as6ul5smHxYVRusid1kf7yMWXu9+uC/22t4gUOO97Ulc2dVs8BjTEumwYtNa50MyDc/whO3YA+ltx2ABFjbPfWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cbe5HOUiuIbv2xrqecMKT1iB2xlFKVcpN10p0z78tMw=;
+ b=lFO4xNGfcwUArdFbsRJkoNUrjOnZOBDFL53OlJLyqgwcPe6Xqs390tQOknvqzns5nVRVwJXvC0wzScAISxk1DSwrsK0krQr4Z1SxlMoD7HNbycUV2LP0fCrxkAbgt+mle4HZMsNqR+6pP0eqNs9pBZQ5u2xhm0quD42H9k2+N3p5QA3NV2awA/XXR4CA9bxg+3N/OArl191miFObCfFCc8ES5QEKHfTWLAWZlX6bz2m/jTkB9gDfJ4w9DX37HD0rKshpNBW1rqV/BnmMcGw1iE9V1GHAOZNQfwoqjGy7YFCxaEQGQVPYt3yUAGhp9JW/DP/LnYsk0EPkHnIZpNppNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cbe5HOUiuIbv2xrqecMKT1iB2xlFKVcpN10p0z78tMw=;
+ b=pfTT/bmMZOBSbVSxudXjFYQMCGil6aAMjB+aBGGrEwyI3YxG1I024uGHbAdkbl6zQMQKDWcxaK4vWsm7inOy5aaQzSd/1LiviBkEL77tTnsIO7MD8Ew9Up6jIo8bt3MNDg3OIL6qKoMrZOo56oMDs99MX/Nxdo56R0aP8/0EKfY=
+Received: from DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17)
+ by BY5PR12MB3745.namprd12.prod.outlook.com (2603:10b6:a03:1ae::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Wed, 13 Jul
+ 2022 02:40:40 +0000
+Received: from DM4PR12MB5278.namprd12.prod.outlook.com
+ ([fe80::bd3b:532c:bc96:c60a]) by DM4PR12MB5278.namprd12.prod.outlook.com
+ ([fe80::bd3b:532c:bc96:c60a%9]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
+ 02:40:40 +0000
+From:   "Yuan, Perry" <Perry.Yuan@amd.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Huang, Ray" <Ray.Huang@amd.com>
+CC:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: RE: [REGRESSION] amd-pstate doesn't work since v5.18.11
+Thread-Topic: [REGRESSION] amd-pstate doesn't work since v5.18.11
+Thread-Index: AQHYlhZ+c9Aa2f/ahUWWW71UnOnBzK17AyTwgAAAc4CAAAD7AIAAJTaAgABsMtA=
+Date:   Wed, 13 Jul 2022 02:40:40 +0000
+Message-ID: <DM4PR12MB5278A45B6DD497ADD85DD5399C899@DM4PR12MB5278.namprd12.prod.outlook.com>
+References: <3559249.JlDtxWtqDm@natalenko.name>
+ <DM4PR12MB527879122FE84DCD355C33B59C869@DM4PR12MB5278.namprd12.prod.outlook.com>
+ <MN0PR12MB6101ECFEFBBDBB65CA75F1C3E2869@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <2414945.NDPYyZybsh@natalenko.name>
+ <4c9e3a4c-40b2-3ce9-da88-ad507769658b@amd.com>
+In-Reply-To: <4c9e3a4c-40b2-3ce9-da88-ad507769658b@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-07-13T02:40:36Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=356b0b60-f51c-4dab-b61c-1a159b3fe59c;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-07-13T02:40:36Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 02d78f67-9de3-4dc7-af64-54191d5d4f6f
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 16e68019-42f9-4da1-9dde-08da64791320
+x-ms-traffictypediagnostic: BY5PR12MB3745:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: x6HRs6WhtGcubHxcg0rO3SzuPok68RCQRZIbhb1+9fMGUv2DSuSIR7vFq0kKOyTBq8mfUR7yyWyt9PWcQFdNaHADNLrzt+2GAGMzKqTb3oSnMnCmbd2NeUFhcMgiCNL4lR4YQELZB/znr2hv6gwawEltgGpOuBImSl/kNvySrAq3FrPL9RQneW8c/9ffomzNFhbvn+AtZopo4A/OnZfKNudkCl3aNTrSODoNLGuuB7/oFXGQy1MOCJdmJipb0IFB8DQPJU3zWX+Hw3mdd5RyfdAAvnboUxrPlZNupM8v0Hr8t4wnxFt7P6+hss4BIG9+pass+BzkSfOgxN7HflKz4lXZj8A4zu7HGTAWAqfsQ7jsWkgiBdLX1CLQgnQn/tBCWBN3xjrj72OQpHNwy6dF6/a+MIpcI617+YbI94abgvJjHpofLnflbXuPbS3zofzhWldeq5xZeDDZV0KaNwMS8Rxu26o2yc7ZcGdjD/9WzgO1G8JFLTy+hrjVjyXLcjchQM/xYHKFaHTkuuvNbKB4cdXegTypy0/hdgSYx10sNTnmMyRmQsBWLbFCqwaJTTxsCSisdERRp+IbSSneHosLcMQFUSkNwMi7j732Wwp83NtEkrHuri0kKmIQPioey6uBYSHQKX2XgCNY6YVByx7CDl1iZyMpC5JiBbODLLms9M7OA5OJwHNOb2VAmg/DvqdskID/SPxxyR6OQFDfcoBtFae1rdfmdJNcIeNAMxjc1IWU80WRU8a9lxXvUdC8u5seAhUZbudI3AFnwtq2+gLlGIB4+2e5HcT170KvYg9pCKFVnIs9hl7nnsgSCPHFM8pAsGnypfyE2xJs2/8TDemxC7sdnprGgS+v3d8HZZgZza5Cn5uvKRd+PJdVkwjpycyW
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5278.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(346002)(39860400002)(396003)(136003)(316002)(52536014)(66446008)(71200400001)(66556008)(8936002)(8676002)(54906003)(41300700001)(64756008)(478600001)(76116006)(6636002)(45080400002)(4326008)(110136005)(55016003)(66946007)(5660300002)(66476007)(2906002)(6506007)(66574015)(53546011)(186003)(33656002)(86362001)(38100700002)(26005)(7696005)(122000001)(83380400001)(9686003)(38070700005)(473944003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K29uZWFDaFYwMkxOQjJGd2pOeTA3aHpadlVmQU9Fa0FodEs0M21uY0dVa1gw?=
+ =?utf-8?B?eWJ2K2RMQzJqOHVBWE9zWHhMaEp3N29nY2JzZjh6dVc4bVJBYmNQVFR3a0E5?=
+ =?utf-8?B?SCs0WmpXM2RqbzhLUE1TelJONEhrdlJWeDYwZFNLMXl0U2NhbmVFU2kySk1y?=
+ =?utf-8?B?NVRFeE0yK2QyMG0yTE1DTzcyWFhmWWxIS0ZtRHhiWm1wSlhGa2lOT3BYdVNq?=
+ =?utf-8?B?VHRLTUNJOUlaS0d4UnBicWEvUmZFcmJ0SkprRm8xV1JORngvSVJudlgzV3k3?=
+ =?utf-8?B?Z1JoYklwNG1kSUUvcGgwSW9TNnlLMTh6VGFZNTZZRysrRVZZbytmTThSaGxW?=
+ =?utf-8?B?a0RPMk00UVRrc2hTMThQV20wdUtGR2FPVTdUbFR5Zi80ekR5SzMwUWlVYitx?=
+ =?utf-8?B?RmJQK2tIWHFxYXREZXM5cFl6dlBMVVRuUG80KzJGNkRvM0R2WjFGbUhZM2ZF?=
+ =?utf-8?B?M2JiV0lraVV3KzRZRnVqOGtwc0cxK28yZU5jV2pIUlNzQlYzajFwZzhtUTJu?=
+ =?utf-8?B?clk5ZGQvQkJhejdybHA4OGpLOXduWnlsS1dEcjNTbk5sNmo2NVBKQzlqejkr?=
+ =?utf-8?B?NlJOajRuZnluUk02S25BYXJObWo1Y1BSbjBLaG1wUFY3Y0wxcjBicDVUbEVU?=
+ =?utf-8?B?S1NxT20vdDhCbzN4MlBVRlB4S0R2YWRNU0ZkRHc1ZU9JK1ozSmQ5U0cyN1U0?=
+ =?utf-8?B?YVN2a0ZrOXl0UnVKMDlZT0ZkbUlIQitYTEhVaGEwUWN6MG5rR0R0aGc1LzUv?=
+ =?utf-8?B?amtaZ0Y3RXI1K3pMZFJUUUlLVjFsbXFIdXkzYktYWjg0QmZmd0RaUzVMM1Zh?=
+ =?utf-8?B?bW1GcDYwQzNIbE1naldLaUVtemxvWTNXdHg4V3o0U0hlWStRbURVSkxXL2hH?=
+ =?utf-8?B?OWxBWTAwV2grVHJxSjF0Z1ExMGxGSVBwVENibmJUanJSMkFMRXM2WUNzNnVl?=
+ =?utf-8?B?bWZxSnVkVkZGTEtlTlUvTS9PR0dJQ0FTb3FiTmVMVjNKT2Vwd3FxVWtJVWdV?=
+ =?utf-8?B?a3hwUURCTG1RZnE3Vy9iZkxuK0t1Mmx0MnZBTTZEQWlUMDVvVDVuZXBFZ1ha?=
+ =?utf-8?B?RGJMZXhTVm5iazEyWFpDUFg3SE0reDNTakRvcks1Q1Z0M281Rk16TzAvT01Z?=
+ =?utf-8?B?V09GMjVBcmdINWVNeTY2cmFIczV4RDBSS1VHYWNqUmZvRFA3dk5kQmgwR2sw?=
+ =?utf-8?B?bzRPRitXMHg4STY1cTNpa3QyMVNaRjZtVUdQNjdqRVpKQ3V5QjJTenN1bXA2?=
+ =?utf-8?B?SHJaQXI0a1ZaMkFUYm51cnlBWG14NDFvWElzb3RrclJTTHlDMFcyQlBYRmVu?=
+ =?utf-8?B?RWRKdGhHeEd6eTd5clR1dkpFL3dtRWZaTE1qNU9uY1hkbGZyZnU0S3BGY0dl?=
+ =?utf-8?B?OFpUbFk5TjJYRDZML3RraW9obngzdkJkalpvZVJoSDNZNmo2Qy9ZS1QvRkhh?=
+ =?utf-8?B?Sk9MRlZKemhoYXJvV2g4YU5jSWlQb012dko1VUs1M0toa0RJSkNvMGloMGQw?=
+ =?utf-8?B?TUtKN2drVFB3Y0VaakpVc0JTdDMvRkV2akl0MCtjTXc2cFhDZlpvcldmaHp2?=
+ =?utf-8?B?aFZUcGNZVkRjVzNINUtuclJvbFJ6a2NIOHMxUGZWcnVjVnNOTXhNUXN5Z2ZO?=
+ =?utf-8?B?eGs2ZldYcmJFNWZIbjRTOE9uenhweXZCSmQyU3RGNVhrc001alFmOXVoN0tN?=
+ =?utf-8?B?RnNqeU5GSEJ4bUlvMVlHcktSc0c0c0luU3ZGVzhKNGFCVzN1ZmozaWptTWxz?=
+ =?utf-8?B?YU8xbzkybHJQWCtCRGZuQnlnMnpPb08vZ1ZEdU1EaGQzdzNFSHNsSVk5K3dN?=
+ =?utf-8?B?NklLSlMzU25JYnFoYnVDTG8yZzhKM1lrZGJDSlRLZFhxL2xrL0dUZ1p0Zjc2?=
+ =?utf-8?B?aWp3czNjTk5EVHhYcnU5MGs4bDU4azlDWXhpRkNUM3lHcVRyQlNoMSsrSWVE?=
+ =?utf-8?B?S3FKTUhHRStBVHNkZDZTM3ZwRHhpcFNCdTBHV3ErRjN6aVhFc1ljbzl2ZFJz?=
+ =?utf-8?B?dGgyaEdmYXhRMTVYaENqUDhEMXBHemZCYm1uazBRcDZQaHhWYlBHaFNHNG12?=
+ =?utf-8?B?Z1ZCelJ4ckVwamdib20waWdmcnVMTG5Ga3dEZUFmRHYwdzgrbTdudWtCYTg4?=
+ =?utf-8?Q?5xLTsG/Da+GDzAi+1ZPXGrYbO?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-8-peterwu.pub@gmail.com>
- <Ys2TTsv1oU8n1fUE@google.com>
-In-Reply-To: <Ys2TTsv1oU8n1fUE@google.com>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Wed, 13 Jul 2022 10:29:57 +0800
-Message-ID: <CABtFH5LMHrfOdLZZxpjwsHmyHZsHUmevpQJYDFqZtvfpC6AVxg@mail.gmail.com>
-Subject: Re: [PATCH v3 07/14] mfd: mt6370: Add Mediatek MT6370 support
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5278.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 16e68019-42f9-4da1-9dde-08da64791320
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2022 02:40:40.0447
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: M6fKSk52MVK1Bd1gwVEY4Ywoi6a1kRvPb+9TLoCxRc1Jg7luTmAWhP/onQ+ALcZ26CupcJiVFq4qfog3vo90gA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3745
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,517 +148,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee,
-
-Thanks for your reply.
-
-Lee Jones <lee.jones@linaro.org> =E6=96=BC 2022=E5=B9=B47=E6=9C=8812=E6=97=
-=A5 =E9=80=B1=E4=BA=8C =E6=99=9A=E4=B8=8A11:29=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Thu, 23 Jun 2022, ChiaEn Wu wrote:
->
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> >
-> > Add Mediatek MT6370 MFD support.
->
-> No such thing as "MFD support".
->
-> And you're not getting away with submitting a 370 line patch with a 5
-> word change log either. :)
->
-> Please at least tell us what the device is and what it's used for.
-
-I sincerely apologize.
-We will add more descriptions of the MT6370 feature in the v5 patch.
-
->
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
-> >
-> > v3
-> > - Refine Kconfig help text
-> > - Refine error message of unknown vendor ID in
-> >   mt6370_check_vendor_info()
-> > - Refine return value handling of mt6370_regmap_read()
-> > - Refine all probe error by using dev_err_probe()
-> > - Refine "bank_idx" and "bank_addr" in mt6370_regmap_read() and
-> >   mt6370_regmap_write()
-> > - Add "#define VENID*" and drop the comments in
-> >   mt6370_check_vendor_info()
-> > - Drop "MFD" in MODULE_DESCRIPTION()
-> > ---
-> >  drivers/mfd/Kconfig  |  13 ++
-> >  drivers/mfd/Makefile |   1 +
-> >  drivers/mfd/mt6370.c | 358 +++++++++++++++++++++++++++++++++++++++++++=
-++++++++
-> >  3 files changed, 372 insertions(+)
-> >  create mode 100644 drivers/mfd/mt6370.c
-> >
-> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > index 3b59456..4c900c4 100644
-> > --- a/drivers/mfd/Kconfig
-> > +++ b/drivers/mfd/Kconfig
-> > @@ -937,6 +937,19 @@ config MFD_MT6360
-> >         PMIC part includes 2-channel BUCKs and 2-channel LDOs
-> >         LDO part includes 4-channel LDOs
-> >
-> > +config MFD_MT6370
-> > +     tristate "Mediatek MT6370 SubPMIC"
-> > +     select MFD_CORE
-> > +     select REGMAP_I2C
-> > +     select REGMAP_IRQ
-> > +     depends on I2C
-> > +     help
-> > +       Say Y here to enable MT6370 SubPMIC functional support.
-> > +       It consists of a single cell battery charger with ADC monitorin=
-g, RGB
-> > +       LEDs, dual channel flashlight, WLED backlight driver, display b=
-ias
-> > +       voltage supply, one general purpose LDO, and the USB Type-C & P=
-D
-> > +       controller complies with the latest USB Type-C and PD standards=
-.
-> > +
-> >  config MFD_MT6397
-> >       tristate "MediaTek MT6397 PMIC Support"
-> >       select MFD_CORE
-> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > index 858cacf..62b2712 100644
-> > --- a/drivers/mfd/Makefile
-> > +++ b/drivers/mfd/Makefile
-> > @@ -242,6 +242,7 @@ obj-$(CONFIG_INTEL_SOC_PMIC_BXTWC)        +=3D inte=
-l_soc_pmic_bxtwc.o
-> >  obj-$(CONFIG_INTEL_SOC_PMIC_CHTWC)   +=3D intel_soc_pmic_chtwc.o
-> >  obj-$(CONFIG_INTEL_SOC_PMIC_CHTDC_TI)        +=3D intel_soc_pmic_chtdc=
-_ti.o
-> >  obj-$(CONFIG_MFD_MT6360)     +=3D mt6360-core.o
-> > +obj-$(CONFIG_MFD_MT6370)     +=3D mt6370.o
-> >  mt6397-objs                  :=3D mt6397-core.o mt6397-irq.o mt6358-ir=
-q.o
-> >  obj-$(CONFIG_MFD_MT6397)     +=3D mt6397.o
-> >  obj-$(CONFIG_INTEL_SOC_PMIC_MRFLD)   +=3D intel_soc_pmic_mrfld.o
-> > diff --git a/drivers/mfd/mt6370.c b/drivers/mfd/mt6370.c
-> > new file mode 100644
-> > index 0000000..49f02b1
-> > --- /dev/null
-> > +++ b/drivers/mfd/mt6370.c
-> > @@ -0,0 +1,358 @@
-> > +// SPDX-License-Identifier: GPL-2.0
->
-> No Copyright?
-
-We have already added Copyright in the v4 patch.
-
->
-> > +#include <linux/bits.h>
-> > +#include <linux/i2c.h>
-> > +#include <linux/interrupt.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/mfd/core.h>
-> > +#include <linux/module.h>
-> > +#include <linux/regmap.h>
-> > +
-> > +enum {
-> > +     MT6370_USBC_I2C =3D 0,
-> > +     MT6370_PMU_I2C,
-> > +     MT6370_MAX_I2C
-> > +};
-> > +
-> > +#define MT6370_REG_DEV_INFO  0x100
-> > +#define MT6370_REG_CHG_IRQ1  0x1C0
-> > +#define MT6370_REG_CHG_MASK1 0x1E0
-> > +
-> > +#define MT6370_VENID_MASK    GENMASK(7, 4)
-> > +
-> > +#define MT6370_NUM_IRQREGS   16
-> > +#define MT6370_USBC_I2CADDR  0x4E
-> > +#define MT6370_REG_ADDRLEN   2
-> > +#define MT6370_REG_MAXADDR   0x1FF
-> > +
-> > +#define MT6370_VENID_RT5081  0x8
-> > +#define MT6370_VENID_RT5081A 0xA
-> > +#define MT6370_VENID_MT6370  0xE
-> > +#define MT6370_VENID_MT6371  0xF
-> > +#define MT6370_VENID_MT6372P 0x9
-> > +#define MT6370_VENID_MT6372CP        0xB
-> > +
-> > +/* IRQ definitions */
-> > +#define MT6370_IRQ_DIRCHGON          0
-> > +#define MT6370_IRQ_CHG_TREG          4
-> > +#define MT6370_IRQ_CHG_AICR          5
-> > +#define MT6370_IRQ_CHG_MIVR          6
-> > +#define MT6370_IRQ_PWR_RDY           7
-> > +#define MT6370_IRQ_FL_CHG_VINOVP     11
-> > +#define MT6370_IRQ_CHG_VSYSUV                12
-> > +#define MT6370_IRQ_CHG_VSYSOV                13
-> > +#define MT6370_IRQ_CHG_VBATOV                14
-> > +#define MT6370_IRQ_CHG_VINOVPCHG     15
-> > +#define MT6370_IRQ_TS_BAT_COLD               20
-> > +#define MT6370_IRQ_TS_BAT_COOL               21
-> > +#define MT6370_IRQ_TS_BAT_WARM               22
-> > +#define MT6370_IRQ_TS_BAT_HOT                23
-> > +#define MT6370_IRQ_TS_STATC          24
-> > +#define MT6370_IRQ_CHG_FAULT         25
-> > +#define MT6370_IRQ_CHG_STATC         26
-> > +#define MT6370_IRQ_CHG_TMR           27
-> > +#define MT6370_IRQ_CHG_BATABS                28
-> > +#define MT6370_IRQ_CHG_ADPBAD                29
-> > +#define MT6370_IRQ_CHG_RVP           30
-> > +#define MT6370_IRQ_TSHUTDOWN         31
-> > +#define MT6370_IRQ_CHG_IINMEAS               32
-> > +#define MT6370_IRQ_CHG_ICCMEAS               33
-> > +#define MT6370_IRQ_CHGDET_DONE               34
-> > +#define MT6370_IRQ_WDTMR             35
-> > +#define MT6370_IRQ_SSFINISH          36
-> > +#define MT6370_IRQ_CHG_RECHG         37
-> > +#define MT6370_IRQ_CHG_TERM          38
-> > +#define MT6370_IRQ_CHG_IEOC          39
-> > +#define MT6370_IRQ_ADC_DONE          40
-> > +#define MT6370_IRQ_PUMPX_DONE                41
-> > +#define MT6370_IRQ_BST_BATUV         45
-> > +#define MT6370_IRQ_BST_MIDOV         46
-> > +#define MT6370_IRQ_BST_OLP           47
-> > +#define MT6370_IRQ_ATTACH            48
-> > +#define MT6370_IRQ_DETACH            49
-> > +#define MT6370_IRQ_HVDCP_STPDONE     51
-> > +#define MT6370_IRQ_HVDCP_VBUSDET_DONE        52
-> > +#define MT6370_IRQ_HVDCP_DET         53
-> > +#define MT6370_IRQ_CHGDET            54
-> > +#define MT6370_IRQ_DCDT                      55
-> > +#define MT6370_IRQ_DIRCHG_VGOK               59
-> > +#define MT6370_IRQ_DIRCHG_WDTMR              60
-> > +#define MT6370_IRQ_DIRCHG_UC         61
-> > +#define MT6370_IRQ_DIRCHG_OC         62
-> > +#define MT6370_IRQ_DIRCHG_OV         63
-> > +#define MT6370_IRQ_OVPCTRL_SWON              67
-> > +#define MT6370_IRQ_OVPCTRL_UVP_D     68
-> > +#define MT6370_IRQ_OVPCTRL_UVP               69
-> > +#define MT6370_IRQ_OVPCTRL_OVP_D     70
-> > +#define MT6370_IRQ_OVPCTRL_OVP               71
-> > +#define MT6370_IRQ_FLED_STRBPIN              72
-> > +#define MT6370_IRQ_FLED_TORPIN               73
-> > +#define MT6370_IRQ_FLED_TX           74
-> > +#define MT6370_IRQ_FLED_LVF          75
-> > +#define MT6370_IRQ_FLED2_SHORT               78
-> > +#define MT6370_IRQ_FLED1_SHORT               79
-> > +#define MT6370_IRQ_FLED2_STRB                80
-> > +#define MT6370_IRQ_FLED1_STRB                81
-> > +#define mT6370_IRQ_FLED2_STRB_TO     82
-> > +#define MT6370_IRQ_FLED1_STRB_TO     83
-> > +#define MT6370_IRQ_FLED2_TOR         84
-> > +#define MT6370_IRQ_FLED1_TOR         85
-> > +#define MT6370_IRQ_OTP                       93
-> > +#define MT6370_IRQ_VDDA_OVP          94
-> > +#define MT6370_IRQ_VDDA_UV           95
-> > +#define MT6370_IRQ_LDO_OC            103
-> > +#define MT6370_IRQ_BLED_OCP          118
-> > +#define MT6370_IRQ_BLED_OVP          119
-> > +#define MT6370_IRQ_DSV_VNEG_OCP              123
-> > +#define MT6370_IRQ_DSV_VPOS_OCP              124
-> > +#define MT6370_IRQ_DSV_BST_OCP               125
-> > +#define MT6370_IRQ_DSV_VNEG_SCP              126
-> > +#define MT6370_IRQ_DSV_VPOS_SCP              127
->
-> Can you pop these into a header file please?
-
-We have already popped them into "mt6370.h" in the v4 patch.
-
->
-> > +struct mt6370_info {
-> > +     struct i2c_client *i2c[MT6370_MAX_I2C];
-> > +     struct device *dev;
->
-> You don't need both 'i2c' and 'dev'.
->
-> You can derive one from the other.
->
-> > +     struct regmap *regmap;
-> > +     struct regmap_irq_chip_data *irq_data;
-> > +};
->
-> This can do into the header file too.
->
-> > +static const struct regmap_irq mt6370_irqs[] =3D {
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHGON, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_TREG, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_AICR, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_MIVR, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_PWR_RDY, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_FL_CHG_VINOVP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VSYSUV, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VSYSOV, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VBATOV, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_VINOVPCHG, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_COLD, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_COOL, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_WARM, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_BAT_HOT, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_TS_STATC, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_FAULT, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_STATC, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_TMR, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_BATABS, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_ADPBAD, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_RVP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_TSHUTDOWN, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_IINMEAS, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_ICCMEAS, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHGDET_DONE, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_WDTMR, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_SSFINISH, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_RECHG, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_TERM, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHG_IEOC, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_ADC_DONE, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_PUMPX_DONE, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_BST_BATUV, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_BST_MIDOV, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_BST_OLP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_ATTACH, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DETACH, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_HVDCP_STPDONE, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_HVDCP_VBUSDET_DONE, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_HVDCP_DET, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_CHGDET, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DCDT, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_VGOK, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_WDTMR, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_UC, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_OC, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DIRCHG_OV, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_SWON, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_UVP_D, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_UVP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_OVP_D, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_OVPCTRL_OVP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_STRBPIN, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_TORPIN, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_TX, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED_LVF, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED2_SHORT, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_SHORT, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED2_STRB, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_STRB, 8),
-> > +     REGMAP_IRQ_REG_LINE(mT6370_IRQ_FLED2_STRB_TO, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_STRB_TO, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED2_TOR, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_FLED1_TOR, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_OTP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_VDDA_OVP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_VDDA_UV, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_LDO_OC, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_BLED_OCP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_BLED_OVP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VNEG_OCP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VPOS_OCP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_BST_OCP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VNEG_SCP, 8),
-> > +     REGMAP_IRQ_REG_LINE(MT6370_IRQ_DSV_VPOS_SCP, 8)
-> > +};
-> > +
-> > +static const struct regmap_irq_chip mt6370_irq_chip =3D {
-> > +     .name           =3D "mt6370-irqs",
-> > +     .status_base    =3D MT6370_REG_CHG_IRQ1,
-> > +     .mask_base      =3D MT6370_REG_CHG_MASK1,
-> > +     .num_regs       =3D MT6370_NUM_IRQREGS,
-> > +     .irqs           =3D mt6370_irqs,
-> > +     .num_irqs       =3D ARRAY_SIZE(mt6370_irqs),
-> > +};
-> > +
-> > +static const struct resource mt6370_regulator_irqs[] =3D {
-> > +     DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VPOS_SCP, "db_vpos_scp"),
-> > +     DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VNEG_SCP, "db_vneg_scp"),
-> > +     DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_BST_OCP, "db_vbst_ocp"),
-> > +     DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VPOS_OCP, "db_vpos_ocp"),
-> > +     DEFINE_RES_IRQ_NAMED(MT6370_IRQ_DSV_VNEG_OCP, "db_vneg_ocp"),
-> > +     DEFINE_RES_IRQ_NAMED(MT6370_IRQ_LDO_OC, "ldo_oc")
-> > +};
-> > +
-> > +static const struct mfd_cell mt6370_devices[] =3D {
-> > +     MFD_CELL_OF("adc", NULL, NULL, 0, 0, "mediatek,mt6370-adc"),
-> > +     MFD_CELL_OF("charger", NULL, NULL, 0, 0, "mediatek,mt6370-charger=
-"),
-> > +     MFD_CELL_OF("backlight", NULL, NULL, 0, 0, "mediatek,mt6370-backl=
-ight"),
-> > +     MFD_CELL_OF("flashlight", NULL, NULL, 0, 0, "mediatek,mt6370-flas=
-hlight"),
-> > +     MFD_CELL_OF("indicator", NULL, NULL, 0, 0, "mediatek,mt6370-indic=
-ator"),
-> > +     MFD_CELL_OF("tcpc", NULL, NULL, 0, 0, "mediatek,mt6370-tcpc"),
-> > +     MFD_CELL_RES("regulator", mt6370_regulator_irqs)
->
-> The first parameters here should be prepended with something, perhaps
-> "mt6370_"?
-
-OK, we will add the prefix in the next patch.
-
->
-> > +};
-> > +
-> > +static int mt6370_check_vendor_info(struct mt6370_info *info)
-> > +{
-> > +     unsigned int devinfo;
-> > +     int ret;
-> > +
-> > +     ret =3D regmap_read(info->regmap, MT6370_REG_DEV_INFO, &devinfo);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     switch (FIELD_GET(MT6370_VENID_MASK, devinfo)) {
-> > +     case MT6370_VENID_RT5081:
-> > +     case MT6370_VENID_RT5081A:
-> > +     case MT6370_VENID_MT6370:
-> > +     case MT6370_VENID_MT6371:
-> > +     case MT6370_VENID_MT6372P:
-> > +     case MT6370_VENID_MT6372CP:
-> > +             break;
-> > +     default:
-> > +             dev_err(info->dev, "Unknown Vendor ID 0x%02x\n", devinfo)=
-;
-> > +             return -ENODEV;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int mt6370_regmap_read(void *context, const void *reg_buf,
-> > +                           size_t reg_size, void *val_buf, size_t val_=
-size)
-> > +{
-> > +     struct mt6370_info *info =3D context;
-> > +     u8 bank_idx, bank_addr;
-> > +     int ret;
-> > +
-> > +     bank_idx =3D *(u8 *)reg_buf;
-> > +     bank_addr =3D *(u8 *)(reg_buf + 1);
-> > +
-> > +     ret =3D i2c_smbus_read_i2c_block_data(info->i2c[bank_idx], bank_a=
-ddr,
-> > +                                         val_size, val_buf);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +     else if (ret !=3D val_size)
-> > +             return -EIO;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int mt6370_regmap_write(void *context, const void *data, size_t=
- count)
-> > +{
-> > +     struct mt6370_info *info =3D context;
-> > +     u8 bank_idx, bank_addr;
-> > +     int len =3D count - MT6370_REG_ADDRLEN;
-> > +
-> > +     bank_idx =3D *(u8 *)data;
-> > +     bank_addr =3D *(u8 *)(data + 1);
-> > +
-> > +     return i2c_smbus_write_i2c_block_data(info->i2c[bank_idx], bank_a=
-ddr,
-> > +                                           len, data + MT6370_REG_ADDR=
-LEN);
-> > +}
-> > +
-> > +static const struct regmap_bus mt6370_regmap_bus =3D {
-> > +     .read           =3D mt6370_regmap_read,
-> > +     .write          =3D mt6370_regmap_write,
-> > +};
-> > +
-> > +static const struct regmap_config mt6370_regmap_config =3D {
-> > +     .reg_bits               =3D 16,
-> > +     .val_bits               =3D 8,
-> > +     .reg_format_endian      =3D REGMAP_ENDIAN_BIG,
-> > +     .max_register           =3D MT6370_REG_MAXADDR,
-> > +};
-> > +
-> > +static int mt6370_probe(struct i2c_client *i2c)
-> > +{
-> > +     struct mt6370_info *info;
-> > +     struct i2c_client *usbc_i2c;
-> > +     int ret;
-> > +
-> > +     info =3D devm_kzalloc(&i2c->dev, sizeof(*info), GFP_KERNEL);
-> > +     if (!info)
-> > +             return -ENOMEM;
-> > +
-> > +     info->dev =3D &i2c->dev;
-> > +
-> > +     usbc_i2c =3D devm_i2c_new_dummy_device(&i2c->dev, i2c->adapter,
-> > +                                          MT6370_USBC_I2CADDR);
-> > +     if (IS_ERR(usbc_i2c))
-> > +             return dev_err_probe(&i2c->dev, PTR_ERR(usbc_i2c),
-> > +                                  "Failed to register USBC I2C client\=
-n");
-> > +
-> > +     /* Assign I2C client for PMU and TypeC */
-> > +     info->i2c[MT6370_PMU_I2C] =3D i2c;
-> > +     info->i2c[MT6370_USBC_I2C] =3D usbc_i2c;
-> > +
-> > +     info->regmap =3D devm_regmap_init(&i2c->dev, &mt6370_regmap_bus, =
-info,
-> > +                                     &mt6370_regmap_config);
->
-> Apart from in mt6370_check_vendor_info() where is this actually used?
-
-Well... from my understanding, we use this MFD driver to make other
-drivers of MT6370 (e.g. charger, ADC, led...) use the same regmap
-settings.
-Thus, this regmap is not only used in mt6370_check_vendor_info().
-
->
-> > +     if (IS_ERR(info->regmap))
-> > +             return dev_err_probe(&i2c->dev, PTR_ERR(info->regmap),
-> > +                                  "Failed to register regmap\n");
-> > +
-> > +     ret =3D mt6370_check_vendor_info(info);
-> > +     if (ret)
-> > +             return dev_err_probe(&i2c->dev, ret,
-> > +                                  "Failed to check vendor info\n");
-> > +
-> > +     ret =3D devm_regmap_add_irq_chip(&i2c->dev, info->regmap, i2c->ir=
-q,
-> > +                                    IRQF_ONESHOT, -1, &mt6370_irq_chip=
-,
-> > +                                    &info->irq_data);
-> > +     if (ret)
-> > +             return dev_err_probe(&i2c->dev, ret,
-> > +                                  "Failed to add irq chip\n");
-> > +
-> > +     return devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO,
-> > +                                 mt6370_devices, ARRAY_SIZE(mt6370_dev=
-ices),
-> > +                                 NULL, 0,
-> > +                                 regmap_irq_get_domain(info->irq_data)=
-);
-> > +}
-> > +
-> > +static const struct of_device_id mt6370_match_table[] =3D {
-> > +     { .compatible =3D "mediatek,mt6370", },
-> > +     {}
-> > +};
-> > +MODULE_DEVICE_TABLE(of, mt6370_match_table);
-> > +
-> > +static struct i2c_driver mt6370_driver =3D {
-> > +     .driver =3D {
-> > +             .name =3D "mt6370",
-> > +             .of_match_table =3D mt6370_match_table,
-> > +     },
-> > +     .probe_new =3D mt6370_probe,
-> > +};
-> > +module_i2c_driver(mt6370_driver);
-> > +
-> > +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
-> > +MODULE_DESCRIPTION("MT6370 I2C Driver");
->
-> This is not an I2C driver.
->
-> > +MODULE_LICENSE("GPL v2");
->
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Principal Technical Lead - Developer Services
-> Linaro.org =E2=94=82 Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
-
-Best regards,
-ChiaEn Wu
+W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCkhpIE1hcmlvLg0KDQo+IC0tLS0t
+T3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IExpbW9uY2llbGxvLCBNYXJpbyA8TWFyaW8u
+TGltb25jaWVsbG9AYW1kLmNvbT4NCj4gU2VudDogV2VkbmVzZGF5LCBKdWx5IDEzLCAyMDIyIDQ6
+MDcgQU0NCj4gVG86IE9sZWtzYW5kciBOYXRhbGVua28gPG9sZWtzYW5kckBuYXRhbGVua28ubmFt
+ZT47IFl1YW4sIFBlcnJ5DQo+IDxQZXJyeS5ZdWFuQGFtZC5jb20+OyBsaW51eC1rZXJuZWxAdmdl
+ci5rZXJuZWwub3JnOyBIdWFuZywgUmF5DQo+IDxSYXkuSHVhbmdAYW1kLmNvbT4NCj4gQ2M6IFJh
+ZmFlbCBKLiBXeXNvY2tpIDxyYWZhZWwuai53eXNvY2tpQGludGVsLmNvbT47IFNhc2hhIExldmlu
+DQo+IDxzYXNoYWxAa2VybmVsLm9yZz47IHg4NkBrZXJuZWwub3JnOyBILiBQZXRlciBBbnZpbiA8
+aHBhQHp5dG9yLmNvbT47DQo+IEdyZWcgS3JvYWgtSGFydG1hbiA8Z3JlZ2toQGxpbnV4Zm91bmRh
+dGlvbi5vcmc+DQo+IFN1YmplY3Q6IFJlOiBbUkVHUkVTU0lPTl0gYW1kLXBzdGF0ZSBkb2Vzbid0
+IHdvcmsgc2luY2UgdjUuMTguMTENCj4gDQo+IE9uIDcvMTIvMjAyMiAxMjo1NCwgT2xla3NhbmRy
+IE5hdGFsZW5rbyB3cm90ZToNCj4gPiBIZWxsby4NCj4gPg0KPiA+IE9uIMO6dGVyw70gMTIuIMSN
+ZXJ2ZW5jZSAyMDIyIDE5OjUwOjMzIENFU1QgTGltb25jaWVsbG8sIE1hcmlvIHdyb3RlOg0KPiA+
+PiBbUHVibGljXQ0KPiA+Pg0KPiA+PiArIFJheQ0KPiA+Pg0KPiA+Pj4gLS0tLS1PcmlnaW5hbCBN
+ZXNzYWdlLS0tLS0NCj4gPj4+IEZyb206IFl1YW4sIFBlcnJ5IDxQZXJyeS5ZdWFuQGFtZC5jb20+
+DQo+ID4+PiBTZW50OiBUdWVzZGF5LCBKdWx5IDEyLCAyMDIyIDEyOjUwDQo+ID4+PiBUbzogT2xl
+a3NhbmRyIE5hdGFsZW5rbyA8b2xla3NhbmRyQG5hdGFsZW5rby5uYW1lPjsgTGltb25jaWVsbG8s
+DQo+ID4+PiBNYXJpbyA8TWFyaW8uTGltb25jaWVsbG9AYW1kLmNvbT47IGxpbnV4LWtlcm5lbEB2
+Z2VyLmtlcm5lbC5vcmcNCj4gPj4+IENjOiBSYWZhZWwgSi4gV3lzb2NraSA8cmFmYWVsLmoud3lz
+b2NraUBpbnRlbC5jb20+OyBTYXNoYSBMZXZpbg0KPiA+Pj4gPHNhc2hhbEBrZXJuZWwub3JnPjsg
+eDg2QGtlcm5lbC5vcmc7IEguIFBldGVyIEFudmluIDxocGFAenl0b3IuY29tPjsNCj4gPj4+IEdy
+ZWcgS3JvYWgtSGFydG1hbiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+DQo+ID4+PiBTdWJq
+ZWN0OiBSRTogW1JFR1JFU1NJT05dIGFtZC1wc3RhdGUgZG9lc24ndCB3b3JrIHNpbmNlIHY1LjE4
+LjExDQo+ID4+Pg0KPiA+Pj4gW0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQo+ID4+
+Pg0KPiA+Pj4gSGkgT2xla3NhbmRyOg0KPiA+Pj4NCj4gPj4+PiAtLS0tLU9yaWdpbmFsIE1lc3Nh
+Z2UtLS0tLQ0KPiA+Pj4+IEZyb206IE9sZWtzYW5kciBOYXRhbGVua28gPG9sZWtzYW5kckBuYXRh
+bGVua28ubmFtZT4NCj4gPj4+PiBTZW50OiBXZWRuZXNkYXksIEp1bHkgMTMsIDIwMjIgMTo0MCBB
+TQ0KPiA+Pj4+IFRvOiBMaW1vbmNpZWxsbywgTWFyaW8gPE1hcmlvLkxpbW9uY2llbGxvQGFtZC5j
+b20+OyBsaW51eC0NCj4gPj4+PiBrZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+ID4+Pj4gQ2M6IFl1
+YW4sIFBlcnJ5IDxQZXJyeS5ZdWFuQGFtZC5jb20+OyBSYWZhZWwgSi4gV3lzb2NraQ0KPiA+Pj4+
+IDxyYWZhZWwuai53eXNvY2tpQGludGVsLmNvbT47IFNhc2hhIExldmluIDxzYXNoYWxAa2VybmVs
+Lm9yZz47DQo+ID4+Pj4geDg2QGtlcm5lbC5vcmc7IEguIFBldGVyIEFudmluIDxocGFAenl0b3Iu
+Y29tPjsgR3JlZyBLcm9haC1IYXJ0bWFuDQo+ID4+Pj4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24u
+b3JnPg0KPiA+Pj4+IFN1YmplY3Q6IFtSRUdSRVNTSU9OXSBhbWQtcHN0YXRlIGRvZXNuJ3Qgd29y
+ayBzaW5jZSB2NS4xOC4xMQ0KPiA+Pj4+DQo+ID4+Pj4gW0NBVVRJT046IEV4dGVybmFsIEVtYWls
+XQ0KPiA+Pj4+DQo+ID4+Pj4gSGVsbG8gTWFyaW8uDQo+ID4+Pj4NCj4gPj4+PiBUaGUgZm9sbG93
+aW5nIGNvbW1pdHMgd2VyZSBwdWxsZWQgaW50byB2NS4xOC4xMToNCj4gPj4+Pg0KPiA+Pj4+IGBg
+YA0KPiA+Pj4+ICQgZ2l0IGxvZyAtLW9uZWxpbmUgLS1uby1tZXJnZXMgdjUuMTguMTAuLnY1LjE4
+LjExIHwgZ3JlcCBBQ1BJDQo+ID4+Pj4gMjc4MzQxNGU2ZWY3IEFDUEk6IENQUEM6IERvbid0IHJl
+cXVpcmUgX09TQyBpZiBYODZfRkVBVFVSRV9DUFBDIGlzDQo+ID4+Pj4gc3VwcG9ydGVkDQo+ID4+
+Pj4gMzA2OGNmZWNhM2I1IEFDUEk6IENQUEM6IE9ubHkgcHJvYmUgZm9yIF9DUEMgaWYgQ1BQQyB2
+MiBpcyBhY2tlZA0KPiA+Pj4+IDhiZWI3MTc1OWNjOCBBQ1BJOiBidXM6IFNldCBDUFBDIF9PU0Mg
+Yml0cyBmb3IgYWxsIGFuZCB3aGVuDQo+ID4+Pj4gQ1BQQ19MSUIgaXMgc3VwcG9ydGVkDQo+ID4+
+Pj4gMTNiYjY5NmRkMmYzIEFDUEk6IENQUEM6IENoZWNrIF9PU0MgZm9yIGZsZXhpYmxlIGFkZHJl
+c3Mgc3BhY2UgYGBgDQo+ID4+Pj4NCj4gPj4+PiBhbmQgbm93IHRoaXMgaGFwcGVuczoNCj4gPj4+
+Pg0KPiA+Pj4+IGBgYA0KPiA+Pj4+ICQgc3VkbyBtb2Rwcm9iZSBhbWQtcHN0YXRlIHNoYXJlZF9t
+ZW09MQ0KPiA+Pj4+IG1vZHByb2JlOiBFUlJPUjogY291bGQgbm90IGluc2VydCAnYW1kX3BzdGF0
+ZSc6IE5vIHN1Y2ggZGV2aWNlIGBgYA0KPiA+Pj4+DQo+ID4+Pj4gV2l0aCB2NS4xOC4xMCB0aGlz
+IHdvcmtlZCBqdXN0IGZpbmUuDQo+ID4+Pj4NCj4gPj4+PiBJbiB5b3VyIHVwc3RyZWFtIGNvbW1p
+dA0KPiA4YjM1NmU1MzZlNjlmM2E0ZDY3NzhhZTlmMDg1OGExYmVhZGFiYjFmDQo+ID4+Pj4geW91
+IHdyaXRlOg0KPiA+Pj4+DQo+ID4+Pj4gYGBgDQo+ID4+Pj4gSWYgdGhlcmUgaXMgYWRkaXRpb25h
+bCBicmVha2FnZSBvbiB0aGUgc2hhcmVkIG1lbW9yeSBkZXNpZ25zIGFsc28NCj4gPj4+PiBtaXNz
+aW5nIHRoaXMgX09TQywgYWRkaXRpb25hbCBmb2xsb3cgdXAgY2hhbmdlcyBtYXkgYmUgbmVlZGVk
+Lg0KPiA+Pj4+IGBgYA0KPiA+Pj4+DQo+ID4+Pj4gU28gdGhlIHF1ZXN0aW9uIGlzIHdoYXQgZWxz
+ZSBzaG91bGQgYmUgcHVsbGVkIGludG8gdGhlIHN0YWJsZSB0cmVlDQo+ID4+Pj4gdG8gdW5icmVh
+ayBhbWQtcHN0YXRlPw0KPiA+Pj4+DQo+ID4+Pj4gVGhhbmtzLg0KPiA+Pj4+DQo+ID4+Pj4gLS0N
+Cj4gPj4+PiBPbGVrc2FuZHIgTmF0YWxlbmtvIChwb3N0LWZhY3R1bSkNCj4gPj4+Pg0KPiA+Pj4N
+Cj4gPj4+IENvdWxkIHlvdSBzaGFyZSB0aGUgbHNjcHUgb3V0cHV0ID8NCj4gPg0KPiA+IEhlcmUn
+cyBteSBgbHNjcHVgOg0KPiA+DQo+ID4gYGBgDQo+ID4gQXJjaGl0ZWN0dXJlOiAgICAgICAgICAg
+ICAgICAgICAgeDg2XzY0DQo+ID4gQ1BVIG9wLW1vZGUocyk6ICAgICAgICAgICAgICAgICAgMzIt
+Yml0LCA2NC1iaXQNCj4gPiBBZGRyZXNzIHNpemVzOiAgICAgICAgICAgICAgICAgICA0MyBiaXRz
+IHBoeXNpY2FsLCA0OCBiaXRzIHZpcnR1YWwNCj4gPiBCeXRlIE9yZGVyOiAgICAgICAgICAgICAg
+ICAgICAgICBMaXR0bGUgRW5kaWFuDQo+ID4gQ1BVKHMpOiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgMjQNCj4gPiBPbi1saW5lIENQVShzKSBsaXN0OiAgICAgICAgICAgICAwLTIzDQo+ID4gVmVu
+ZG9yIElEOiAgICAgICAgICAgICAgICAgICAgICAgQXV0aGVudGljQU1EDQo+ID4gTW9kZWwgbmFt
+ZTogICAgICAgICAgICAgICAgICAgICAgQU1EIFJ5emVuIDkgMzkwMFhUIDEyLUNvcmUgUHJvY2Vz
+c29yDQo+ID4gQ1BVIGZhbWlseTogICAgICAgICAgICAgICAgICAgICAgMjMNCj4gPiBNb2RlbDog
+ICAgICAgICAgICAgICAgICAgICAgICAgICAxMTMNCj4gPiBUaHJlYWQocykgcGVyIGNvcmU6ICAg
+ICAgICAgICAgICAyDQo+ID4gQ29yZShzKSBwZXIgc29ja2V0OiAgICAgICAgICAgICAgMTINCj4g
+PiBTb2NrZXQocyk6ICAgICAgICAgICAgICAgICAgICAgICAxDQo+ID4gU3RlcHBpbmc6ICAgICAg
+ICAgICAgICAgICAgICAgICAgMA0KPiA+IEZyZXF1ZW5jeSBib29zdDogICAgICAgICAgICAgICAg
+IGVuYWJsZWQNCj4gPiBDUFUocykgc2NhbGluZyBNSHo6ICAgICAgICAgICAgICA1OSUNCj4gPiBD
+UFUgbWF4IE1IejogICAgICAgICAgICAgICAgICAgICAzODAwLDAwMDANCj4gPiBDUFUgbWluIE1I
+ejogICAgICAgICAgICAgICAgICAgICAyMjAwLDAwMDANCj4gPiBCb2dvTUlQUzogICAgICAgICAg
+ICAgICAgICAgICAgICA3NTg5LjcxDQo+ID4gRmxhZ3M6ICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgZnB1IHZtZSBkZSBwc2UgdHNjIG1zciBwYWUgbWNlIGN4OCBhcGljIHNlcCBtdHJyIHBnZQ0K
+PiBtY2EgY21vdiBwYXQgcHNlMzYgY2xmbHVzaCBtbXggZnhzciBzc2Ugc3NlMiBodCBzeXNjYWxs
+IG54IG1teGV4dCBmeHNyX29wdA0KPiBwZHBlMWdiIHJkdHNjcCBsbSBjb25zdGFudF90c2MgcmVw
+X2dvb2Qgbm9wbCBub25zdG9wX3RzYyBjcHVpZCBleHRkX2FwaWNpZA0KPiBhcGVyZm1wZXJmIHJh
+cGwgcG5pIHBjbG11bHFkcSBtb25pdG9yIHNzc2UzIGZtYSBjeDE2IHNzZTRfMSBzc2U0XzIgeDJh
+cGljDQo+IG1vdmJlIHBvcGNudCBhZXMgeHNhdmUgYXZ4IGYxNmMgcmRyYW5kIGxhaGZfbG0gY21w
+X2xlZ2FjeSBzdm0gZXh0YXBpYw0KPiBjcjhfbGVnYWN5IGFibSBzc2U0YSBtaXNhbGlnbnNzZSAz
+ZG5vd3ByZWZldGNoIG9zdncgaWJzIHNraW5pdCB3ZHQgdGNlDQo+IHRvcG9leHQgcGVyZmN0cl9j
+b3JlIHBlcmZjdHJfbmIgYnBleHQgcGVyZmN0cl9sbGMgbXdhaXR4IGNwYiBjYXRfbDMgY2RwX2wz
+DQo+IGh3X3BzdGF0ZSBzc2JkIG1iYSBpYnBiIHN0aWJwIHZtbWNhbGwgZnNnc2Jhc2UgYm1pMSBh
+dngyIHNtZXAgYm1pMiBjcW0NCj4gcmR0X2EgcmRzZWVkIGFkeCBzbWFwIGNsZmx1c2hvcHQgY2x3
+YiBzaGFfbmkgeHNhdmVvcHQgeHNhdmVjIHhnZXRidjEgeHNhdmVzDQo+IGNxbV9sbGMgY3FtX29j
+Y3VwX2xsYyBjcW1fbWJtX3RvdGFsIGNxbV9tYm1fbG9jYWwgY2x6ZXJvIGlycGVyZg0KPiB4c2F2
+ZWVycHRyIHJkcHJ1IHdibm9pbnZkIGFyYXQgbnB0IGxicnYgc3ZtX2xvY2sgbnJpcF9zYXZlIHRz
+Y19zY2FsZQ0KPiB2bWNiX2NsZWFuIGZsdXNoYnlhc2lkIGRlY29kZWFzc2lzdHMgcGF1c2VmaWx0
+ZXIgcGZ0aHJlc2hvbGQgYXZpYw0KPiB2X3Ztc2F2ZV92bWxvYWQgdmdpZiB2X3NwZWNfY3RybCB1
+bWlwIHJkcGlkIG92ZXJmbG93X3JlY292IHN1Y2NvciBzbWNhDQo+IHNldiBzZXZfZXMNCj4gPiBW
+aXJ0dWFsaXphdGlvbjogICAgICAgICAgICAgICAgICBBTUQtVg0KPiA+IEwxZCBjYWNoZTogICAg
+ICAgICAgICAgICAgICAgICAgIDM4NCBLaUIgKDEyIGluc3RhbmNlcykNCj4gPiBMMWkgY2FjaGU6
+ICAgICAgICAgICAgICAgICAgICAgICAzODQgS2lCICgxMiBpbnN0YW5jZXMpDQo+ID4gTDIgY2Fj
+aGU6ICAgICAgICAgICAgICAgICAgICAgICAgNiBNaUIgKDEyIGluc3RhbmNlcykNCj4gPiBMMyBj
+YWNoZTogICAgICAgICAgICAgICAgICAgICAgICA2NCBNaUIgKDQgaW5zdGFuY2VzKQ0KPiA+IE5V
+TUEgbm9kZShzKTogICAgICAgICAgICAgICAgICAgIDENCj4gPiBOVU1BIG5vZGUwIENQVShzKTog
+ICAgICAgICAgICAgICAwLTIzDQo+ID4gVnVsbmVyYWJpbGl0eSBJdGxiIG11bHRpaGl0OiAgICAg
+Tm90IGFmZmVjdGVkDQo+ID4gVnVsbmVyYWJpbGl0eSBMMXRmOiAgICAgICAgICAgICAgTm90IGFm
+ZmVjdGVkDQo+ID4gVnVsbmVyYWJpbGl0eSBNZHM6ICAgICAgICAgICAgICAgTm90IGFmZmVjdGVk
+DQo+ID4gVnVsbmVyYWJpbGl0eSBNZWx0ZG93bjogICAgICAgICAgTm90IGFmZmVjdGVkDQo+ID4g
+VnVsbmVyYWJpbGl0eSBNbWlvIHN0YWxlIGRhdGE6ICAgTm90IGFmZmVjdGVkDQo+ID4gVnVsbmVy
+YWJpbGl0eSBTcGVjIHN0b3JlIGJ5cGFzczogTWl0aWdhdGlvbjsgU3BlY3VsYXRpdmUgU3RvcmUg
+QnlwYXNzDQo+IGRpc2FibGVkIHZpYSBwcmN0bA0KPiA+IFZ1bG5lcmFiaWxpdHkgU3BlY3RyZSB2
+MTogICAgICAgIE1pdGlnYXRpb247IHVzZXJjb3B5L3N3YXBncyBiYXJyaWVycyBhbmQNCj4gX191
+c2VyIHBvaW50ZXIgc2FuaXRpemF0aW9uDQo+ID4gVnVsbmVyYWJpbGl0eSBTcGVjdHJlIHYyOiAg
+ICAgICAgTWl0aWdhdGlvbjsgUmV0cG9saW5lcywgSUJQQiBjb25kaXRpb25hbCwgU1RJQlANCj4g
+Y29uZGl0aW9uYWwsIFJTQiBmaWxsaW5nDQo+ID4gVnVsbmVyYWJpbGl0eSBTcmJkczogICAgICAg
+ICAgICAgTm90IGFmZmVjdGVkDQo+ID4gVnVsbmVyYWJpbGl0eSBUc3ggYXN5bmMgYWJvcnQ6ICAg
+Tm90IGFmZmVjdGVkDQo+ID4NCj4gPiBgYGANCj4gPg0KPiA+Pj4gUGVycnkuDQo+ID4+DQo+ID4+
+IFRoYW5rcyB0aGlzIGlzIHRoZSBzb3J0IG9mIHRoaW5nIEkgd2FzIHdvcnJpZWQgbWlnaHQgaGFw
+cGVuIGFzIGENCj4gPj4gcmVzdWx0IG9mIHJlcXVpcmluZyB0aGUgX09TQy4gIEl0IHdhcyBpbnRy
+b2R1Y2VkIGFzIHBhcnQgb2YgdGhhdCBjb21taXQNCj4gOGJlYjcxNzU5Y2M4Lg0KPiA+Pg0KPiA+
+PiBUbyBzb2x2ZSBpdCBJIHRoaW5rIHdlIG5lZWQgdG8gYWRkIG1vcmUgdGhpbmdzIHRvDQo+ID4+
+IGNwY19zdXBwb3J0ZWRfYnlfY3B1DQo+ID4+IChodHRwczovL25hbTExLnNhZmVsaW5rcy5wcm90
+ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMlM0ElMkYlMkZnaQ0KPiA+Pg0KPiB0aHViLmNv
+bSUyRnRvcnZhbGRzJTJGbGludXglMkZibG9iJTJGNTI1NDk2YTAzMGRlNGFlNjRiYjllMWQ2YmZj
+OA0KPiA4ZWVjDQo+ID4+DQo+IDZmNWZlNmUyJTJGYXJjaCUyRng4NiUyRmtlcm5lbCUyRmFjcGkl
+MkZjcHBjLmMlMjNMMTkmYW1wO2RhdGE9MDUNCj4gJTdDMDENCj4gPj4gJTdDTWFyaW8uTGltb25j
+aWVsbG8lNDBhbWQuY29tJTdDOTZhZGRhYWIwZWRjNGUyMjc3OTkwOGRhNjQyZg0KPiA4NGFjJTdD
+Mw0KPiA+Pg0KPiBkZDg5NjFmZTQ4ODRlNjA4ZTExYTgyZDk5NGUxODNkJTdDMCU3QzAlN0M2Mzc5
+MzI0NTMwOTkzMDQ2NzANCj4gJTdDVW5rbm93DQo+ID4+DQo+IG4lN0NUV0ZwYkdac2IzZDhleUpX
+SWpvaU1DNHdMakF3TURBaUxDSlFJam9pVjJsdU16SWlMQ0pCVGlJNklrMWhhDQo+IFd3aUwNCj4g
+Pj4NCj4gQ0pYVkNJNk1uMCUzRCU3QzMwMDAlN0MlN0MlN0MmYW1wO3NkYXRhPTRLSEQzVVVsZkRK
+RW1wVHBxREMNCj4gbXVWMXglMkY3bg0KPiA+PiBqJTJGMGl1aHdkbmhKcXRRZVUlM0QmYW1wO3Jl
+c2VydmVkPTApDQo+ID4+DQo+ID4+IFRoZSBxdWVzdGlvbiBpcyBob3cgZG8gd2Ugc2FmZWx5IGRl
+dGVjdCB0aGUgc2hhcmVkIG1lbW9yeSBkZXNpZ25zPw0KPiA+PiBUaGVzZSBhcmUgYSBmaXhlZCBx
+dWFudGl0eSBhcyBuZXdlciBkZXNpZ25zIC9zaG91bGQvIGJlIHVzaW5nIHRoZSBNU1IuDQo+ID4+
+DQo+ID4+IEkgYW0gdGVuZGluZyB0byB0aGluZyB0aGF0IHVuZm9ydHVuYXRlbHkgd2UgbmVlZCB0
+byBoYXZlIGFuDQo+ID4+IGFsbG93LWxpc3Qgb2Ygc2hhcmVkIG1lbW9yeSBkZXNpZ24gaGVyZSB1
+bmxlc3Mgc29tZW9uZSBoYXMgb3RoZXIgaWRlYXMuDQo+ID4NCj4gPiBIYXBweSB0byB0ZXN0IGFu
+eSBwYXRjaGVzIGFzIG5lZWRlZC4NCj4gPg0KPiANCj4gU2VlIGlmIHRoaXMgaGVscHMgb3V0Og0K
+PiANCj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9hY3BpL2NwcGMuYyBiL2FyY2gveDg2
+L2tlcm5lbC9hY3BpL2NwcGMuYyBpbmRleA0KPiA3MzRiOTY0NTQ4OTYuLjg4YTgxZTZiOTIyOCAx
+MDA2NDQNCj4gLS0tIGEvYXJjaC94ODYva2VybmVsL2FjcGkvY3BwYy5jDQo+ICsrKyBiL2FyY2gv
+eDg2L2tlcm5lbC9hY3BpL2NwcGMuYw0KPiBAQCAtMTYsNiArMTYsMTMgQEAgYm9vbCBjcGNfc3Vw
+cG9ydGVkX2J5X2NwdSh2b2lkKQ0KPiAgICAgICAgICBzd2l0Y2ggKGJvb3RfY3B1X2RhdGEueDg2
+X3ZlbmRvcikgew0KPiAgICAgICAgICBjYXNlIFg4Nl9WRU5ET1JfQU1EOg0KPiAgICAgICAgICBj
+YXNlIFg4Nl9WRU5ET1JfSFlHT046DQo+ICsgICAgICAgICAgICAgICBpZiAoYm9vdF9jcHVfZGF0
+YS54ODYgPT0gMHgxOSAmJg0KPiArICAgICAgICAgICAgICAgICAgICgoYm9vdF9jcHVfZGF0YS54
+ODZfbW9kZWwgPj0gMHgwMCAmJg0KPiBib290X2NwdV9kYXRhLng4Nl9tb2RlbCA8PSAweDBmKSB8
+fA0KPiArICAgICAgICAgICAgICAgICAgIChib290X2NwdV9kYXRhLng4Nl9tb2RlbCA+PSAweDIw
+ICYmDQo+IGJvb3RfY3B1X2RhdGEueDg2X21vZGVsIDw9IDB4MmYpKSkNCj4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgcmV0dXJuIHRydWU7DQo+ICsgICAgICAgICAgICAgICBlbHNlIGlmIChib290
+X2NwdV9kYXRhLng4NiA9PSAweDE3ICYmDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICBib290
+X2NwdV9kYXRhLng4Nl9tb2RlbCA+PSAweDcwICYmDQo+IGJvb3RfY3B1X2RhdGEueDg2X21vZGVs
+IDw9IDB4N2YpDQo+ICsgICAgICAgICAgICAgICAgICAgICAgIHJldHVybiB0cnVlOw0KPiAgICAg
+ICAgICAgICAgICAgIHJldHVybiBib290X2NwdV9oYXMoWDg2X0ZFQVRVUkVfQ1BQQyk7DQo+ICAg
+ICAgICAgIH0NCj4gICAgICAgICAgcmV0dXJuIGZhbHNlOw0KPiANCj4gSWYgdGhhdCB3b3JrcyBh
+bmQgbm8gb25lIGhhcyBhIGJldHRlciBpZGVhIGhvdyB0byBkbyBpdCBmb3IgdGhlc2Ugc3lzdGVt
+cyBJJ2xsDQo+IHNlbmQgb3V0IGEgcHJvcGVyIHByb3BlciBwYXRjaCB0b21vcnJvdy4NCg0KVGhp
+cyBjb3VsZCBiZSBhIHNob3J0LXRlcm0gc29sdXRpb24sIEkgd291bGQgcHJlZmVyIHRvIGFkZCBD
+UFUgSWRzIGNoZWNrIGFuZCB3ZSBjYW4gbWFpbnRhaW4gdGhhdCBsaXN0IGZvciANCmFsbCB0aGUg
+bW9kZWwgaW5mbyBpbmNsdWRpbmcgTVNScyBhbmQgU2hhcmVkIG1lbSB0eXBlcy4gDQoNCk1lYW53
+aGlsZSBJIGhhdmUgdGhlIHNpbWlsYXIgaXNzdWVzIGNvbmNlcm4gZm9yIHRoZSBjb21pbmcgRVBQ
+IGRyaXZlciwgc29tZSBzeXN0ZW1zIGRvbmB0IHN1cHBvcnQgRVBQIGFuZCB3ZSBjYW5ub3QgaWRl
+bnRpZnkgdGhhdCB3aXRob3V0IElEcyBsaXN0Lg0KDQpQZXJyeS4NCiANCg==

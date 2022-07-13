@@ -2,96 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6905573C2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E10573C43
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236319AbiGMRvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 13:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
+        id S236453AbiGMRyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 13:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiGMRvc (ORCPT
+        with ESMTP id S231910AbiGMRy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 13:51:32 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0068A2D1C0;
-        Wed, 13 Jul 2022 10:51:31 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id r3so20522820ybr.6;
-        Wed, 13 Jul 2022 10:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Yvxn6S29978hI/T6QCXVM0v4iM3QSPq55Yrl5aDYI6c=;
-        b=jnIlgLZ2fiKVP4qOrCjnBx+br4vJ+AmDf+BbxMlEqjvFesMThRdGWab3fDiIvvn2mB
-         CmBxUOCxy2LqsH2wGXitO5Lfd/xlKrNOJ4OOQk0CvE/4662285ihChr5BOeODFoM0Djj
-         TE1cAwEZU6cGC1W/hAkA24xyIRtxr7behpzhdScSTAeWzsJV1sS6Jx8NNufcYoq63jKO
-         pGMki2J1eHtPAzKT4giZiZsud0sWt3ExHfRjMt0lCsErtHjFsp6AGxka7B8AOPetDhgd
-         7YUl2ki7MQVY5/xeiiIRbA7zz3FECmqWo801qtV5C6QC7rpc1fmgRNLwBRzUUndQdpYi
-         sAbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Yvxn6S29978hI/T6QCXVM0v4iM3QSPq55Yrl5aDYI6c=;
-        b=WNXo4iJN85IHgaDmDtwrD9mVZID/3ioFpFiasBQAg/d77jodd+4AJ4rmGZxRWmdihF
-         X82oCDfQXnEfY8hWuTV9K+7cPYg1qB9OoZZerr9eoEaTrRNJUqyERXr0chYrC5xgJr1L
-         UlvNyOKNOlpXWl8dskAyt6dUhuAAspfOW9uFSwvWtYTALJjfmLQywiO1MAm+jVvsgQtu
-         SS6GkvMYeQaU64Uh3kcfbXjgYBp0C6UGDygV7aZfX2KCIvn7nXhM7gsxHWowdbtR8gsb
-         Jv+TOevDP/sjqNhFIAJCGE3+sitYz06NB6ffykUFLqgzb3ROGZXTKurmeY0FZxFpCObT
-         8UYA==
-X-Gm-Message-State: AJIora/E9ZHD6voTIIR6s45WvbXi94neLwhsF3GqlqWHVuiFWzrbU6o9
-        yHT05cLUAMdDzvFAk43+/sKXQdkU5pwLwMtIg+f6aPovQkWwgg==
-X-Google-Smtp-Source: AGRyM1tc3NLn7Lq5FqcnSNwh12uwTn1m7HqDTESwOhZ9axw2eDvlOUPo/cX8YrMrSaelLE8rqb6sZoX6+2Z9hNYexbo=
-X-Received: by 2002:a25:df97:0:b0:66f:6e7c:b3c0 with SMTP id
- w145-20020a25df97000000b0066f6e7cb3c0mr4738839ybg.93.1657734690911; Wed, 13
- Jul 2022 10:51:30 -0700 (PDT)
+        Wed, 13 Jul 2022 13:54:27 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA60255B5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:54:14 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 136E03200914;
+        Wed, 13 Jul 2022 13:54:10 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 13 Jul 2022 13:54:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1657734850; x=1657821250; bh=74
+        oXSxFNn1MwBfyW3gXrhD6qD6ZzeAULMw+VqWVUwcI=; b=at0HztpjdQ7Z0JJat7
+        ppknirEUW+EpDw1XX7uAF1fPypvBro7wQBb5K4zYziXHJonvshHsbgNhdU7sVnKF
+        w5jf8LcF0PbduVXiBjndcGkD4QmLyJwVfwM8Do89KdovMJ8e3zedmsypfQpNUbgI
+        bmgOBRnfu5eEmf1pTdsNjZBBmnUxl4wFcornEaOyocToVN1i9StCeCPdlNDlCMkb
+        yX17C4wOCxYDvtktAyn542tdVbk3UbPBlzBcy9Uy7Y2hoHEawWCmIQ8i5h0/LkOd
+        4lFCSNFed6X97mjcRexAbXEoEyG26gZboF7SBR0BHoDFx7RelPaEd1iGF+mghR15
+        Dhdw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1657734850; x=1657821250; bh=74oXSxFNn1MwB
+        fyW3gXrhD6qD6ZzeAULMw+VqWVUwcI=; b=lcqzxLuHXa9ACXF6oRy9d8lCdlWrT
+        mm8TGuhGjcD114AIMOdKe0AP9jzRav5kr+vCIsSvU+bFoSjmYwGe2x9Y+Ci7OJ5e
+        RYLUHAQuv9RwzIzwSNBHcdlVCIetBRF6uLf1RDrht4fAQU4awodY5xNqDshwNrbG
+        hNDRsMIUwiYF9Zj2Y+KQ3kQFOwN35cES40OX9hUqNhbXgMHA2L3hkCbaEltr/wEm
+        kZtgmT92bRBSJ19BaXfzF8F6rUuXPlLfmFLvS5KL8DECHSmvUePd4FARzLd8v7P3
+        pekWkg2CsqgJRsmnEdiCf6U7tx9aP3/MCK0kOs9cpDGsE3uOEFRr66wJw==
+X-ME-Sender: <xms:wQbPYqAokUshw0fcv1zGmKbUEAtiVViznY45uM-cqLfTJReteD2yBg>
+    <xme:wQbPYkgoxBI9ZnjPRwd0PBPcxElLpYyvKKQ7BqZ5Ea-Gs_5s9bPEAV1SbtnSlzEMG
+    0ekSkniZZPGW4lV-gw>
+X-ME-Received: <xmr:wQbPYtkudsPrVkh-8peIppN0nXQBwH6C-PhGiyA1_5KS844T3FTYtlG3SYLHb0WECw6ziJ03>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejjedguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefvhigt
+    hhhoucetnhguvghrshgvnhcuoehthigthhhosehthigthhhordhpihiiiigrqeenucggtf
+    frrghtthgvrhhnpedvgeffheelvdeljedvtefhgfeifeevvefhieegffffgfehgeeutdei
+    kedtieegueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehthigthhhosehthigthhhordhpihiiiigr
+X-ME-Proxy: <xmx:wQbPYoxUWApziLxECi4HJ6skkbe5dvfBdWnkFAsG29jft3ycIqYhHg>
+    <xmx:wQbPYvSL5Vj2ziuqMUMD7cp4N-F121m0ILrz0XPGZIOBJSE1I2JGFw>
+    <xmx:wQbPYjZrUDO09ce_LLAo8ACbR-dNNxT3XKknuVGvwB7kc0AtH9raAg>
+    <xmx:wgbPYqejkoqC5eu0ZXwMUeLOKz11VDNQAtrThUBocZAOFlmyIXZLww>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 13 Jul 2022 13:54:08 -0400 (EDT)
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     "Eric W . Biederman" <ebiederm@xmission.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-kernel@vger.kernel.org,
+        Tycho Andersen <tycho@tycho.pizza>
+Subject: [PATCH] sched: __fatal_signal_pending() should also check PF_EXITING
+Date:   Wed, 13 Jul 2022 11:53:05 -0600
+Message-Id: <20220713175305.1327649-1-tycho@tycho.pizza>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Ys2PwTS0qFmGNFqy@netflix>
+References: <Ys2PwTS0qFmGNFqy@netflix>
 MIME-Version: 1.0
-References: <20220713105910.931983-1-lewis.hanly@microchip.com>
- <20220713105910.931983-2-lewis.hanly@microchip.com> <CAHp75VfGTd02jKYsFq94BF_Gqro2trk3iyyALBatS1Bps3HYhw@mail.gmail.com>
- <debb6cf6-65f8-53d2-d8d7-3ed1c3d5a8c7@microchip.com>
-In-Reply-To: <debb6cf6-65f8-53d2-d8d7-3ed1c3d5a8c7@microchip.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 13 Jul 2022 19:50:54 +0200
-Message-ID: <CAHp75VcoiCVrdEMDrDC8qVZZwYgLTdi50tBxB4BQk=tWQWyOBA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] gpio: mpfs: add polarfire soc gpio support
-To:     Conor.Dooley@microchip.com
-Cc:     Lewis.Hanly@microchip.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Marc Zyngier <maz@kernel.org>, Daire.McNamara@microchip.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 7:44 PM <Conor.Dooley@microchip.com> wrote:
-> On 13/07/2022 12:59, Andy Shevchenko wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+The wait_* code uses signal_pending_state() to test whether a thread has
+been interrupted, which ultimately uses __fatal_signal_pending() to detect
+if there is a fatal signal.
 
-...
+When a pid ns dies, it does:
 
-> >> +#define BYTE_BOUNDARY                  0x04
-> >
-> > Without namespace?
->
-> Does byte_boundary even need to be defined?
-> is incrementing an address by 0x4 not kinda obvious on its own
-> as to what it is doing?
+    group_send_sig_info(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_MAX);
 
-The less magic is the better.
+for all the tasks in the pid ns. That calls through:
 
-Btw, have you considered gpio-regmap? Can it be utilized here?
+    group_send_sig_info() ->
+      do_send_sig_info() ->
+        send_signal_locked() ->
+          __send_signal_locked()
 
+which does:
+
+    pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
+
+which puts sigkill in the set of shared signals, but not the individual
+pending ones. When complete_signal() is called at the end of
+__send_signal_locked(), if the task already had PF_EXITING (i.e. was
+already waiting on something in its fd closing path like a fuse flush),
+complete_signal() will not wake up the thread, since wants_signal() checks
+PF_EXITING before testing for SIGKILL.
+
+If tasks are stuck in a killable wait (e.g. a fuse flush operation), they
+won't see this shared signal, and will hang forever, since TIF_SIGPENDING
+is set, but the fatal signal can't be detected. So, let's also look for
+PF_EXITING in __fatal_signal_pending().
+
+Signed-off-by: Tycho Andersen <tycho@tycho.pizza>
+---
+ include/linux/sched/signal.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+index cafbe03eed01..c20b7e1d89ef 100644
+--- a/include/linux/sched/signal.h
++++ b/include/linux/sched/signal.h
+@@ -402,7 +402,8 @@ static inline int signal_pending(struct task_struct *p)
+ 
+ static inline int __fatal_signal_pending(struct task_struct *p)
+ {
+-	return unlikely(sigismember(&p->pending.signal, SIGKILL));
++	return unlikely(sigismember(&p->pending.signal, SIGKILL) ||
++			p->flags & PF_EXITING);
+ }
+ 
+ static inline int fatal_signal_pending(struct task_struct *p)
+
+base-commit: 32346491ddf24599decca06190ebca03ff9de7f8
 -- 
-With Best Regards,
-Andy Shevchenko
+2.34.1
+

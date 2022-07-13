@@ -2,78 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784035736C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391125736C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235540AbiGMNBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
+        id S231801AbiGMNDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235148AbiGMNBJ (ORCPT
+        with ESMTP id S230364AbiGMNDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:01:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F4EFE53
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657717267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c5tTaTQWdtIl7l1GJF3+E3vkHxBuOg16Ki+fSt3hNw8=;
-        b=bcmcmnPF0rK2cH2cokmatFLEn7go4LfHZfmhlUe+c/cYrTCsqBlAt4k4cYSv8crlaEYEu1
-        scnDmunvWGlD2+fVQWKUVA578bpzx6DNgAltd674irs683GYVgSGqxapTbMRBRmz+hvYFd
-        AgmLZEeCAiNDaLLsg0WZgrUSQSdTT20=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-526-oWvjLATDPBW9S-f3McZg-A-1; Wed, 13 Jul 2022 09:01:05 -0400
-X-MC-Unique: oWvjLATDPBW9S-f3McZg-A-1
-Received: by mail-ed1-f71.google.com with SMTP id x21-20020a05640226d500b0043abb7ac086so8308752edd.14
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:01:05 -0700 (PDT)
+        Wed, 13 Jul 2022 09:03:19 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7BE18D
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:03:17 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id n7so10752941ioo.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=rDKiIEBiJkD3wii1WeUC6W7Tfb9Ha6NHPyBcXqQXFzo=;
+        b=bmxQ8QZvSNH/RUaxaCA4+Y7aR0hqilUjcWXANUsDBUtdoaoSJ7hilTe8pQwcbt8Iyw
+         4w+gknVfgYl+zh9JTx1FVTbypYnza62sRWjEsv2XJRd+T9ijwAR7Od9GMFBPZ4OMExlF
+         lR9zAJlY2xRbhvlEKXAal0XMQNQ2CnMh8tcjGpcmQI6uZtrjJaDlKgscH+iBgw5z7bgL
+         LWYw0jgh/Q7xLFHLfn+ZQ4y15uK0k9QlUDrXP6cI+yDGyd74X8ohxmGaDIKAHWsQvZaz
+         hxxQvKt9a9Ak2CNaxAhBigijE9aRr8aZ6F2K2bmDxIHbixeI/zvC/KWBGBPXiA7LAFs0
+         sD6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c5tTaTQWdtIl7l1GJF3+E3vkHxBuOg16Ki+fSt3hNw8=;
-        b=h0yvdmM4FDYS1RP7oRm7c8awLFxiDA5PH6szROrSPAa3igqTHhiTfrEoFwPik/4TPH
-         rdMc7DUpe8KhIzRowFDXKLH9aYi+o1L3EaTmqUxQDmryC6pYsoSNok6+C6ehB1bDUbDq
-         7LRX4m2czdUMnbltY7sUY02QUcH9ksTY+skIOjLz9cGU82c/QWpu+Hvxbv5rreK1CdRM
-         P42sKcpAAq0f1cXyuT3E3s+559R+2ix09WMwAptmxcnttt9XDttdVM3+oijKH/wqVZyo
-         m2CStXJ7TnzJdlCLf7kJGJcp6cVpWdC+ntFO/he10uzZMxQ6tM1MWc5LVfy3uEyZoHyZ
-         AwZA==
-X-Gm-Message-State: AJIora9dUCplodEt7n40wvUMDrxS2Tl4QUi2RLyZoyTs0I2UlFK4GbUv
-        EJt2QZyijXPeSrICOZK0pUTq0bVgM37HBdjz3D4Fm5GuK8fEi6FURTT+Orqa012LXpHDrJ8qCaf
-        fisHL0RYQ1FSHUZRyU19/NNAIIxsZFOw+mYR6c21y
-X-Received: by 2002:a17:907:168f:b0:72b:5571:2228 with SMTP id hc15-20020a170907168f00b0072b55712228mr3497009ejc.397.1657717264496;
-        Wed, 13 Jul 2022 06:01:04 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sM/Q/qXIJtvyge1RBA27I1zfyOERWxp2hTuT6He8VnUbVBaCHWeBofNJRY+F3CAMZEc4y1/wzNTDwJ7jxzCyM=
-X-Received: by 2002:a17:907:168f:b0:72b:5571:2228 with SMTP id
- hc15-20020a170907168f00b0072b55712228mr3496979ejc.397.1657717264233; Wed, 13
- Jul 2022 06:01:04 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rDKiIEBiJkD3wii1WeUC6W7Tfb9Ha6NHPyBcXqQXFzo=;
+        b=MS6+5Ozblek1O+7Rl0tQVR4Kvk69/1neHcbqLu6qE9F3Nj8rAClmBeD9eNOYCHQLbS
+         6VCXYLpXF1+a96rxOSZJ3pWTZ+ayGIJ7LRxPu6m307IStpsRJXIz3vlS6RywzxZHky+p
+         jtO8X2K8gy4QhmfYKBbiwaU48xND/TvnbZRF+wWVwTXBugpEOaHIvhEnDClfXlvJuBVl
+         gHfbPxn5oxAcQHB6SHet+p8UidiMyvJZxnTHXGK3cMFdjKn2xFMcyKnCen7cvMQ2dHqT
+         Y8DQKlyzX+SUwaUdHLcOMOExwuAc5NwFgD65efjHKdGB7cpRdvSJm1eA+G73Dm2cKvTO
+         +YbA==
+X-Gm-Message-State: AJIora/VOYI7+3T2tDjeHxAKuDc7aPdWyKbc/1j2Bn5HLRPIeyK0ODaS
+        81pjeR+Si5t5WNzH0DOYfiJq7G/5PQ/A4KDnXYxZ5w==
+X-Google-Smtp-Source: AGRyM1sxpSMZ9dqgbdpZSzcjbfJOvUnpCwfLUU55sKoo/gZEeVb5n3gcaNc+ZsS+5AOpIkr8Lr3gidPYymL89Ml2xIY=
+X-Received: by 2002:a05:6638:272c:b0:33f:6fe4:b76f with SMTP id
+ m44-20020a056638272c00b0033f6fe4b76fmr1794998jav.284.1657717395274; Wed, 13
+ Jul 2022 06:03:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220713085627.175604-1-bagasdotme@gmail.com> <20220713085627.175604-2-bagasdotme@gmail.com>
-In-Reply-To: <20220713085627.175604-2-bagasdotme@gmail.com>
-From:   Vlad Dronov <vdronov@redhat.com>
-Date:   Wed, 13 Jul 2022 15:00:53 +0200
-Message-ID: <CAMusb+S+JPJOzHYfuK+YvZydNxoQ9nvE_jGoudTPJiD2HfsTNw@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2 1/2] Documentation: qat: Use code block for qat
- sysfs example
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-next@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        Adam Guerin <adam.guerin@intel.com>,
-        Fiona Trahe <fiona.trahe@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Tomasz Kowallik <tomaszx.kowalik@intel.com>,
-        linux-crypto@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <20220712183246.394947160@linuxfoundation.org> <6acd1cd0-25aa-eb9c-4176-49f623f79301@gmail.com>
+ <CA+G9fYsBFy65-Y1Yo_Zr_bJWGV6QYhMaEhyaShOG+qoOD7pu+w@mail.gmail.com>
+In-Reply-To: <CA+G9fYsBFy65-Y1Yo_Zr_bJWGV6QYhMaEhyaShOG+qoOD7pu+w@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 13 Jul 2022 18:33:04 +0530
+Message-ID: <CA+G9fYsAUpE4jrdSG7u2cx8Hftvxm7cyMP_pgYq26nQKuUH90A@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/130] 5.10.131-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Arnaldo Carvalho de Melo <acme@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,55 +73,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 13 Jul 2022 at 15:05, Naresh Kamboju <naresh.kamboju@linaro.org> wr=
+ote:
+>
+> On Wed, 13 Jul 2022 at 04:45, Florian Fainelli <f.fainelli@gmail.com> wro=
+te:
+> >
+> > On 7/12/22 11:37, Greg Kroah-Hartman wrote:
+> > > This is the start of the stable review cycle for the 5.10.131 release=
+.
+> > > There are 130 patches in this series, all will be posted as a respons=
+e
+> > > to this one.  If anyone has any issues with these being applied, plea=
+se
+> > > let me know.
+> > >
+> > > Responses should be made by Thu, 14 Jul 2022 18:32:19 +0000.
+> > > Anything received after that time might be too late.
+> > >
+> > > The whole patch series can be found in one patch at:
+> > >       https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patc=
+h-5.10.131-rc1.gz
+> > > or in the git tree and branch at:
+> > >       git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
+le-rc.git linux-5.10.y
+> > > and the diffstat can be found below.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
 
-On Wed, Jul 13, 2022 at 10:57 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-> kernel test robot and Stephen Rothwell reported htmldocs warning:
->
-> Documentation/ABI/testing/sysfs-driver-qat:24: WARNING: Unexpected indentation.
->
-> The warning isn't caused by Date: field pointed by the warning, but rather
-> by sysfs example that isn't in literal code block.
->
-> Add the code block marker.
->
-> Link: https://lore.kernel.org/linux-next/20220711204932.333379b4@canb.auug.org.au/
-> Link: https://lore.kernel.org/linux-doc/202207090803.TEGI95qw-lkp@intel.com/
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Fixes: d4cfb144f60551 ("crypto: qat - expose device config through sysfs for 4xxx")
-> Acked-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-> Cc: Wojciech Ziemba <wojciech.ziemba@intel.com>
-> Cc: Adam Guerin <adam.guerin@intel.com>
-> Cc: Fiona Trahe <fiona.trahe@intel.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: Vladis Dronov <vdronov@redhat.com>
-> Cc: Tomasz Kowallik <tomaszx.kowalik@intel.com>
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  Documentation/ABI/testing/sysfs-driver-qat | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/ABI/testing/sysfs-driver-qat b/Documentation/ABI/testing/sysfs-driver-qat
-> index a600531e95628f..43e081ec22cc4a 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-qat
-> +++ b/Documentation/ABI/testing/sysfs-driver-qat
-> @@ -46,7 +46,8 @@ Description:  Reports the current configuration of the QAT device and allows
->
->                 The following example shows how to change the configuration of
->                 a device configured for running crypto services in order to
-> -               run data compression:
-> +               run data compression::
-> +
->                         # cat /sys/bus/pci/devices/<BDF>/qat/state
->                         up
->                         # cat /sys/bus/pci/devices/<BDF>/qat/cfg_services
-> --
+Results from Linaro=E2=80=99s test farm.
+Regressions on x86_64.
 
-Acked-by: Vladis Dronov <vdronov@redhat.com>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Best regards,
-Vladis Dronov | Red Hat, Inc. | The Core Kernel | Senior Software Engineer
+Kernel panic noticed on x86 while running kvm-unit-tests.
+  - https://lkft.validation.linaro.org/scheduler/job/5280665#L1696
 
+TESTNAME=3Demulator TIMEOUT=3D90s ACCEL=3D ./x86/run x86/emulator.flat -smp=
+ 1
+[   62.210623] APIC base relocation is unsupported by KVM
+[  104.645616] kvm: emulating exchange as write
+[  104.656718] int3: 0000 [#1] SMP PTI
+[  104.656719] CPU: 1 PID: 3785 Comm: qemu-system-x86 Not tainted
+5.10.131-rc2 #1
+[  104.656719] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.2 05/23/2018
+[  104.656720] RIP: 0010:xaddw_ax_dx+0x9/0x10
+[  104.656720] Code: 00 0f bb d0 c3 cc cc cc cc 48 0f bb d0 c3 cc cc
+cc cc 0f 1f 80 00 00 00 00 0f c0 d0 c3 cc cc cc cc 66 0f c1 d0 c3 cc
+cc cc cc <0f> 1f 80 00 00 00 00 0f c1 d0 c3 cc cc cc cc 48 0f c1 d0 c3
+cc cc
+[  104.656720] RSP: 0018:ffffb823431c7d00 EFLAGS: 00000206
+[  104.656721] RAX: 0000000089abcdef RBX: 0000000000000001 RCX: 00000000000=
+00000
+[  104.656721] RDX: 0000000076543210 RSI: ffffffff91a4d4d0 RDI: 00000000000=
+00204
+[  104.656722] RBP: ffffb823431c7d08 R08: ffff9a578cbaddf0 R09: 00000000000=
+00002
+[  104.656722] R10: ffff9a578cbaddf0 R11: 0000000000000000 R12: ffff9a578cb=
+addf0
+[  104.656722] R13: ffffffff92e08040 R14: 0000000000000000 R15: 00000000000=
+00000
+[  104.656723] FS:  00007f3f3f53c700(0000) GS:ffff9a58afa80000(0000)
+knlGS:0000000000000000
+[  104.656723] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  104.656723] CR2: 0000000000000000 CR3: 00000001068b6003 CR4: 00000000003=
+726e0
+[  104.656724] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 00000000000=
+00000
+[  104.656724] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 00000000000=
+00400
+[  104.656724] Call Trace:
+[  104.656724]  ? fastop+0x5a/0xa0
+[  104.656725]  x86_emulate_insn+0x7c9/0xf20
+[  104.656725]  x86_emulate_instruction+0x2ec/0x7b0
+[  104.656725]  ? __local_bh_enable_ip+0x48/0x80
+[  104.656725]  complete_emulated_mmio+0x238/0x310
+[  104.656726]  kvm_arch_vcpu_ioctl_run+0x1799/0x1980
+[  104.656726]  ? vfs_writev+0xcb/0x140
+[  104.656726]  kvm_vcpu_ioctl+0x243/0x5e0
+[  104.656726]  ? selinux_file_ioctl+0xae/0x140
+[  104.656727]  ? selinux_file_ioctl+0xae/0x140
+[  104.656727]  __x64_sys_ioctl+0x92/0xd0
+[  104.656727]  do_syscall_64+0x35/0x50
+[  104.656727]  entry_SYSCALL_64_after_hwframe+0x61/0xc6
+[  104.656728] RIP: 0033:0x7f3f40ec68f7
+[  104.656728] Code: b3 66 90 48 8b 05 a1 35 2c 00 64 c7 00 26 00 00
+00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00
+00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 71 35 2c 00 f7 d8 64 89
+01 48
+[  104.656729] RSP: 002b:00007f3f3f53ba28 EFLAGS: 00000246 ORIG_RAX:
+0000000000000010
+[  104.656729] RAX: ffffffffffffffda RBX: 000000000000ae80 RCX: 00007f3f40e=
+c68f7
+[  104.656729] RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 00000000000=
+0000f
+[  104.656730] RBP: 00005624bc6bdaa0 R08: 00005624ba47c450 R09: 00000000fff=
+fffff
+[  104.656730] R10: 00000000000ff000 R11: 0000000000000246 R12: 00000000000=
+00000
+[  104.656730] R13: 00007f3f431f6000 R14: 0000000000000006 R15: 00005624bc6=
+bdaa0
+[  104.656731] Modules linked in: x86_pkg_temp_thermal
+[  104.900206] ---[ end trace 51088e5987576a23 ]---
+[  104.900206] RIP: 0010:xaddw_ax_dx+0x9/0x10
+[  104.900207] Code: 00 0f bb d0 c3 cc cc cc cc 48 0f bb d0 c3 cc cc
+cc cc 0f 1f 80 00 00 00 00 0f c0 d0 c3 cc cc cc cc 66 0f c1 d0 c3 cc
+cc cc cc <0f> 1f 80 00 00 00 00 0f c1 d0 c3 cc cc cc cc 48 0f c1 d0 c3
+cc cc
+[  104.900207] RSP: 0018:ffffb823431c7d00 EFLAGS: 00000206
+[  104.900207] RAX: 0000000089abcdef RBX: 0000000000000001 RCX: 00000000000=
+00000
+[  104.900208] RDX: 0000000076543210 RSI: ffffffff91a4d4d0 RDI: 00000000000=
+00204
+[  104.900208] RBP: ffffb823431c7d08 R08: ffff9a578cbaddf0 R09: 00000000000=
+00002
+[  104.900208] R10: ffff9a578cbaddf0 R11: 0000000000000000 R12: ffff9a578cb=
+addf0
+[  104.900209] R13: ffffffff92e08040 R14: 0000000000000000 R15: 00000000000=
+00000
+[  104.900209] FS:  00007f3f3f53c700(0000) GS:ffff9a58afa80000(0000)
+knlGS:0000000000000000
+[  104.900209] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  104.900210] CR2: 0000000000000000 CR3: 00000001068b6003 CR4: 00000000003=
+726e0
+[  104.900210] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 00000000000=
+00000
+[  104.900210] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 00000000000=
+00400
+[  104.900211] Kernel panic - not syncing: Fatal exception in interrupt
+[  104.900250] Kernel Offset: 0x10a00000 from 0xffffffff81000000
+(relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org

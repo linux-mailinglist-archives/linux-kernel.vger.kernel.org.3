@@ -2,180 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BCE572B37
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 04:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358D7572B3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 04:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233900AbiGMCNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 22:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
+        id S233956AbiGMCPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 22:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiGMCN3 (ORCPT
+        with ESMTP id S230200AbiGMCPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 22:13:29 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6D3CEB96
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 19:13:26 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CLDxQR003008;
-        Wed, 13 Jul 2022 02:13:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=corp-2021-07-09;
- bh=tG0GWvHwkjqSqHTxjLpeS5GZjF6JcQXL5jo37nNYviM=;
- b=FEbdODziBymBwEf6KSyMnDC30PjeIr7okARWkJAC4ksKstGbXIxc5ZbZ04vJNGGoRw2g
- E/V5DOMWVmVaY5lkMBT2EgOO0L/GSbAjBvvDNawHad504RLVzInIkXLq67m1qsYXGEwO
- 591KwVrqT4SUVz6oc+HNWa9hp/Tdw7OstCBqbKdPQEjnxPsQmJmzG1N6yli5msgsuSog
- xLo1+SPe+AqLQ7DdHwY9Syuu+mCan8JYwCZhKVZhaThQ1V8s9ve/YERu1k9cHlMJA2HH
- jjLBR+kgQ8jdvAYDZ30QSHWE0IXA5FIUgNOQwJZvZg5mlpgaJGq764nztutcqOiF97mz OQ== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h71r18g4d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jul 2022 02:13:15 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26D2Alun002270;
-        Wed, 13 Jul 2022 02:13:14 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2173.outbound.protection.outlook.com [104.47.73.173])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h704421wf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jul 2022 02:13:14 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lsktWNNSVvU+qZ0pD724QjpdBpG3BGNROK3/Q0J7fbK2RoNhG4zEoVs/y8e0nmOpdz3cfL6BKB8sZUDDLR1jB5Irjb0uAnKANNRjGjDao67L/Y3t2rtrP11xNn7+LM2B3kQ0RMtTScGRzCHS2cMS1lTmSXfUqVV9ra9sFjEioIGzq5CooeJAlePetYEwJqSPozKaGtTVyTY0dpxFMHAh/oMEjfHsSfGcgZS71Bl3JR8WopEdxwgMyYJIdbESYT7YhxHH+k3gmzCxejZXhkHwT4JU6Mtq43giq/82FAVR6eDGiej31HnLEZO5ueLGQfF/sU/2uHeJV0BTKlmhggC1FA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tG0GWvHwkjqSqHTxjLpeS5GZjF6JcQXL5jo37nNYviM=;
- b=gBTC6K1xedBZqGnzzmjoCcNO7MOdNDkuTLcY3bXWCni+hMwt6Lv8+iy/VPMIQm5vHGJc5u0wD0vA2n4sHOXrPgPlqxNR7JFQdJrcxsQgAyAuiBnOgAtrqZp2zqlS8bXOWsrZYPf3wFwGYiAyRihR2ybnNsjP+AcGNU4DsYsG9BSQaaR0pOqD9m7H8aG+oZgUenR5ef8R6DjCkBr4oEu+stkZbfTXhhnh/X0HI438OrlfjowhDT7nkH5pbKYERgHOzYFKK7nL2xCKZc2q/odRauq+KiUQqyNE6wzTnQJA5JCrAaFQV9tfqM/u65CUBbjDPonGAhTzsVD3PP3+TGy5AQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tG0GWvHwkjqSqHTxjLpeS5GZjF6JcQXL5jo37nNYviM=;
- b=ngM9L4YopCPTOw897d+PV/tI7jjChAJBA8jER+MhTJZ5f0IfkKei1rpyxHxuJoTnJlKeExpGPgFy4Dk3GoDFntVcfd2feMZoFcbLuhk6UTUYf9W2qXOeSYsZ6s0nKlLpsHJN9LkJADL3cXwyO+8dQgPCVpqf96fnk5A3DejMxpY=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by DS7PR10MB5341.namprd10.prod.outlook.com (2603:10b6:5:38d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Wed, 13 Jul
- 2022 02:13:12 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::c4d1:edc3:7d21:7c68]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::c4d1:edc3:7d21:7c68%6]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
- 02:13:12 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Yu Zhao <yuzhao@google.com>
-Subject: [PATCH] maple_tree: Fix out of bounds access on mas_wr_node_walk()
-Thread-Topic: [PATCH] maple_tree: Fix out of bounds access on
- mas_wr_node_walk()
-Thread-Index: AQHYll4aW9UZx1DO8EydhVSI8CL9gQ==
-Date:   Wed, 13 Jul 2022 02:13:12 +0000
-Message-ID: <20220713021256.542856-1-Liam.Howlett@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.35.1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 75ab44a5-1c90-41a5-3bbb-08da64753d27
-x-ms-traffictypediagnostic: DS7PR10MB5341:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nxm0/Es/rKWonN5Wkwk92mtCHNz2S1lSPP8bGFQCG0B/7a2k2Xa0DD2Y/2xJYaHTtlez23qMCNe3kD5bL2IIyBbdSHjhM0QD9QQIL2nqMBE+H3dXW1KUuyBaOhYnQojl1y4NOOd+IYBgtCudQJs2p+EF6n5Q/twgU95LPpnOPpP06VkgNUqU3oE2+UIEgRyPulKsTswgkXgSksRtqa9coTIXwl9OqgCs5OZKyEU2wV4NQnDGhWACDpJS9DEulu3ApGYGIDe7Tf+swCxVKd7n2Im/r1prh/3heHUB549A+DfwtvSzlLMFzTuyKnfFcCVV+Xtb9r8uBXwNYDSlJ3lZaP3D+NMBWCl8FvUttKxkxxplqJJVdFmpNhE0GFn9msIHEj2qmN1crnOU+jhV5XbZvXa+/YZXr+99+jYU9VCD3Blsz62IA0dvKlan/HCV2/7dYrV0rFcXzIxKRMdyujf4skXek3PsoGC7GyBmO809m0Nw2q9mbkoCEtNbmsKNtEbrQ519iig/oL3Prwb4FapobgqldGr3nFr8hw026QUMcTVu54uX898/o7ZkfJ9Q0xV3FQSC2PcB4tAEHgjezdckuBMKMdCnNVsKNiO59KqyXDc8LHA6kxzxvJ+qewjMrNxIZnxEvY8I/TImhmm7rNKthSEBns7DNGo4VYTA2t0heSokSNHageL2MEbTraGxDoqE261eto0m62hYjLSOUw+MZ0AZuzIyx21rdWtKfRd+rApjOCfBVk9Zoj4xzdhOMM9wDGh0/KpfMSPKJBzld4QZHNpAfBjsrneuFG29BZI484Gl34Szg3hq3Ttgn0gc8f2A
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(39860400002)(396003)(346002)(136003)(366004)(122000001)(38070700005)(71200400001)(64756008)(38100700002)(6506007)(8676002)(41300700001)(26005)(66476007)(4326008)(66946007)(316002)(76116006)(8936002)(66446008)(66556008)(6512007)(91956017)(1076003)(44832011)(86362001)(4744005)(83380400001)(2906002)(6486002)(5660300002)(186003)(2616005)(110136005)(478600001)(36756003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?9FHXnJ+nfj1sdh1Rthp7DWRq4x1glQGa6UMxF76jKvnRNDKrO5FdzUi5Hd?=
- =?iso-8859-1?Q?5JsT4Ig1Ml8+933WZUpC+NRsohni0QWyzL/lSn1CUhikScM4gU9N6Zz8aZ?=
- =?iso-8859-1?Q?LnAINU2tsUwC3Z9shWnr2r0Pkohh/m+xl2C0vxwHB3+1PrPOfOA4YhWIxv?=
- =?iso-8859-1?Q?CVQ8emEyH2X5eZte/iZd+isOAAFI2sghLdwvZ/vtGiBVjCU5lpC+UUkwJy?=
- =?iso-8859-1?Q?HoDm64a5tdD6gecKM/hJeg/xURnJsE0bhlQB/a+Ufas92YOoXspsE6wNU8?=
- =?iso-8859-1?Q?0laG5WGH1ZgAg4/uF25N8emaEhPC+OPjHCKhJBQlCYHIjMkJTj7WL8WawI?=
- =?iso-8859-1?Q?xxjv2c9k4tOFtWc+OwtZs5t05VFIhgMAy7FWOzMneJ5CUbQoTTFvNKmxDm?=
- =?iso-8859-1?Q?9A0BBn0fX164vL8k6A5paYVuXaCwPcnes41maXDp/S+yFj2Zl55fi0vxWU?=
- =?iso-8859-1?Q?UzYk/eiwJOOM3kXC2hdcC/DYE1Ja84Pd+gYWzb1azoqOILBVHn8mkNzbKn?=
- =?iso-8859-1?Q?Vt+XkWzXaLOf3t+nkOsrFjWd6KrBPmL8sJx0jAskt0U3L68O2DAGPH/Dgf?=
- =?iso-8859-1?Q?XLu4huTROO0/JKWVr2wz9ls3rAlxQNooTrCJCW0+2/Egc9xYNwliiT3jTN?=
- =?iso-8859-1?Q?3OnQjlr7Z8GxYhiqqmT/qbUCajobRi9VG9P9U7+jEqrWPLizBvvD0oUh7a?=
- =?iso-8859-1?Q?QWxwRAFYPGDias3Am5svXYtCTMxB0i+LtGDb5oASzpLSMlFgPdWPPNppdz?=
- =?iso-8859-1?Q?SE2v3X1tzTCuW+hPJ1LYryzxI98/8kkHEJqU8unyg494uF26Ho5IuebYOz?=
- =?iso-8859-1?Q?ktMPil8dazpJjz7nL216sPuHZ7KEa3NxYV5arPLTbbWNMDo8PvnW8PHRU9?=
- =?iso-8859-1?Q?B4zFCvRzoQfvlThdGCgtUFu15PdodrAeELMser+mDcr8hNfmTW5eFmeTAb?=
- =?iso-8859-1?Q?OPUOERQTviuWZeceowWK4CLBDEcbGGFxZEbb5xLpLNBxnF/EZo7azPGN0u?=
- =?iso-8859-1?Q?L9K8FgNZH73TMUU5ZQEGmk9z2X3GxPHZyp4Og06fZHAtfga3caXdHx6mdO?=
- =?iso-8859-1?Q?S9f2AjhYbY00ZYB5cwhVESksQIwGpwaqpK1QHGv2cKbxG/xz3k2g0rIDOB?=
- =?iso-8859-1?Q?Dnm/otIhc9IDjMfoKckGXs6+KGkW8HkSXvZHPMNc+57imyg/gGVzDKDQQj?=
- =?iso-8859-1?Q?sKKxnOLwVX4Zr8dSxWw/+einjLbG5nDFAW/+y528YWvgJulABx/u/Ybu1u?=
- =?iso-8859-1?Q?HrSJtqBULeca41XkxzMkX4PAwzGwvd/GT2Tz09XgVKLRcp5BqZ6XfmCa8B?=
- =?iso-8859-1?Q?yU/4m4b6LhCZTTWetsjedCYdDir7wfDr1TlCn7Ug8d4zZxONg28Bcr6d8U?=
- =?iso-8859-1?Q?fVh/eRE/O1ukyh2veYLc7ZOpGCRRoOmcEK/taKGp16a17VPQD5e5mK+CK+?=
- =?iso-8859-1?Q?miBY5E5LHhxwVfOAzq/u+vfq3rbsUHHtZQjVyogx8M3looTjEKynMQnrP+?=
- =?iso-8859-1?Q?/v2zD3QEfYJaNSc6rNUFcYGScIi8SLqlaWuv1pbyo9YVTuIl4x9/LLcZbx?=
- =?iso-8859-1?Q?ar9TCk5g+U7oeb0BIPsWgMHXQuz3CQtaDnvmJI5bxXcYKizoI5iLJY3Sfi?=
- =?iso-8859-1?Q?4NLqmLzo14m0upNIj2dFW3R1WpI8kL0uTe92+z8NjzC6pqI339leQ6yA?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 12 Jul 2022 22:15:00 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1773761D72;
+        Tue, 12 Jul 2022 19:14:59 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 19:13:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1657678497;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d3ZWU/BSJQ8KaUrQyBtjftgf/8Wn3DQWN5MEjZ2mDVs=;
+        b=Tck2SANcnLqLDykX8OugLEEXRUSNr75MjIrc5U1/4fbr2atgS5nKAB0ycOzOYHMEjJG8vh
+        g+VrB4n0kR8v1/qvZeaoXBJSTYVZhcA0jKYPuhBe7yCnx109y4DIYa8Uw/ALWYmFfFGZrF
+        3JRVjjLe5NAy3xFuit9ZvrLSGPPN1NU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Shakeel Butt <shakeelb@google.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2] bpf: reparent bpf maps on memcg offlining
+Message-ID: <Ys4qYsCozq0zF9n/@castle>
+References: <20220711162827.184743-1-roman.gushchin@linux.dev>
+ <CAADnVQ+2Az23WLHj_1pQWYXdd8CbeKooCLrkT_GnzKXV7Yp8hw@mail.gmail.com>
+ <CALvZod5uPV9cNKCMjs3HmadVnF--fum5BgG-Zcv1vTM_Bak8hw@mail.gmail.com>
+ <CAADnVQJPm13Mu_XMyzsYk40eW-4CPKWF52LkwwJTJhA6OyJT+g@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75ab44a5-1c90-41a5-3bbb-08da64753d27
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2022 02:13:12.5966
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vU0KPO2Tw+piL63/UjlhTRi/ucVS/n5dJ0mfqVnZRkcrjaRDoQCTSG4MDkvLhteLaCYFkS301mgj0Toc9+/D+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5341
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-07-12_14:2022-07-12,2022-07-12 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 phishscore=0 spamscore=0 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207130008
-X-Proofpoint-ORIG-GUID: aHNScOpVoHgOjM4GtLA9JKKVm1Y-8YzV
-X-Proofpoint-GUID: aHNScOpVoHgOjM4GtLA9JKKVm1Y-8YzV
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQJPm13Mu_XMyzsYk40eW-4CPKWF52LkwwJTJhA6OyJT+g@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When walking the node, check to see if offset is within the range of
-pivots before reading that pivot, otherwise return the max of the node.
+On Tue, Jul 12, 2022 at 03:15:27PM -0700, Alexei Starovoitov wrote:
+> On Tue, Jul 12, 2022 at 3:11 PM Shakeel Butt <shakeelb@google.com> wrote:
+> >
+> > On Tue, Jul 12, 2022 at 2:49 PM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Mon, Jul 11, 2022 at 9:28 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+> > > >
+> > > > The memory consumed by a mpf map is always accounted to the memory
+> > > > cgroup of the process which created the map. The map can outlive
+> > > > the memory cgroup if it's used by processes in other cgroups or
+> > > > is pinned on bpffs. In this case the map pins the original cgroup
+> > > > in the dying state.
+> > > >
+> > > > For other types of objects (slab objects, non-slab kernel allocations,
+> > > > percpu objects and recently LRU pages) there is a reparenting process
+> > > > implemented: on cgroup offlining charged objects are getting
+> > > > reassigned to the parent cgroup. Because all charges and statistics
+> > > > are fully recursive it's a fairly cheap operation.
+> > > >
+> > > > For efficiency and consistency with other types of objects, let's do
+> > > > the same for bpf maps. Fortunately thanks to the objcg API, the
+> > > > required changes are minimal.
+> > > >
+> > > > Please, note that individual allocations (slabs, percpu and large
+> > > > kmallocs) already have the reparenting mechanism. This commit adds
+> > > > it to the saved map->memcg pointer by replacing it to map->objcg.
+> > > > Because dying cgroups are not visible for a user and all charges are
+> > > > recursive, this commit doesn't bring any behavior changes for a user.
+> > > >
+> > > > v2:
+> > > >   added a missing const qualifier
+> > > >
+> > > > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> > > > Reviewed-by: Shakeel Butt <shakeelb@google.com>
+> > > > ---
+> > > >  include/linux/bpf.h  |  2 +-
+> > > >  kernel/bpf/syscall.c | 35 +++++++++++++++++++++++++++--------
+> > > >  2 files changed, 28 insertions(+), 9 deletions(-)
+> > > >
+> > > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > > > index 2b21f2a3452f..85a4db3e0536 100644
+> > > > --- a/include/linux/bpf.h
+> > > > +++ b/include/linux/bpf.h
+> > > > @@ -221,7 +221,7 @@ struct bpf_map {
+> > > >         u32 btf_vmlinux_value_type_id;
+> > > >         struct btf *btf;
+> > > >  #ifdef CONFIG_MEMCG_KMEM
+> > > > -       struct mem_cgroup *memcg;
+> > > > +       struct obj_cgroup *objcg;
+> > > >  #endif
+> > > >         char name[BPF_OBJ_NAME_LEN];
+> > > >         struct bpf_map_off_arr *off_arr;
+> > > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > > > index ab688d85b2c6..ef60dbc21b17 100644
+> > > > --- a/kernel/bpf/syscall.c
+> > > > +++ b/kernel/bpf/syscall.c
+> > > > @@ -419,35 +419,52 @@ void bpf_map_free_id(struct bpf_map *map, bool do_idr_lock)
+> > > >  #ifdef CONFIG_MEMCG_KMEM
+> > > >  static void bpf_map_save_memcg(struct bpf_map *map)
+> > > >  {
+> > > > -       map->memcg = get_mem_cgroup_from_mm(current->mm);
+> > > > +       /* Currently if a map is created by a process belonging to the root
+> > > > +        * memory cgroup, get_obj_cgroup_from_current() will return NULL.
+> > > > +        * So we have to check map->objcg for being NULL each time it's
+> > > > +        * being used.
+> > > > +        */
+> > > > +       map->objcg = get_obj_cgroup_from_current();
+> > > >  }
+> > > >
+> > > >  static void bpf_map_release_memcg(struct bpf_map *map)
+> > > >  {
+> > > > -       mem_cgroup_put(map->memcg);
+> > > > +       if (map->objcg)
+> > > > +               obj_cgroup_put(map->objcg);
+> > > > +}
+> > > > +
+> > > > +static struct mem_cgroup *bpf_map_get_memcg(const struct bpf_map *map) {
+> > > > +       if (map->objcg)
+> > > > +               return get_mem_cgroup_from_objcg(map->objcg);
+> > > > +
+> > > > +       return root_mem_cgroup;
+> > > >  }
+> > > >
+> > > >  void *bpf_map_kmalloc_node(const struct bpf_map *map, size_t size, gfp_t flags,
+> > > >                            int node)
+> > > >  {
+> > > > -       struct mem_cgroup *old_memcg;
+> > > > +       struct mem_cgroup *memcg, *old_memcg;
+> > > >         void *ptr;
+> > > >
+> > > > -       old_memcg = set_active_memcg(map->memcg);
+> > > > +       memcg = bpf_map_get_memcg(map);
+> > > > +       old_memcg = set_active_memcg(memcg);
+> > > >         ptr = kmalloc_node(size, flags | __GFP_ACCOUNT, node);
+> > > >         set_active_memcg(old_memcg);
+> > > > +       mem_cgroup_put(memcg);
+> > >
+> > > Here we might css_put root_mem_cgroup.
+> > > Should we css_get it when returning or
+> > > it's marked as CSS_NO_REF ?
+> > > But mem_cgroup_alloc() doesn't seem to be doing that marking.
+> > > I'm lost at that code.
+> >
+> > CSS_NO_REF is set for root_mem_cgroup in cgroup_init_subsys().
 
-Reported-by: Yu Zhao <yuzhao@google.com>
-Fixes: d0aac5e48048 (Maple Tree: add new data structure)
-Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
----
- lib/maple_tree.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Yeah, the root cgroups can't be deleted so we save on the refcounting.
+> 
+> Ahh. I see that
+> css = ss->css_alloc(NULL); css->flags |= CSS_NO_REF; now.
+> Thanks.
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 14e9ab14c1da..768707770926 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -2254,10 +2254,10 @@ static inline void mas_wr_node_walk(struct ma_wr_st=
-ate *wr_mas)
- 					       wr_mas->pivots, mas->max);
- 	offset =3D mas->offset;
- 	min =3D mas_safe_min(mas, wr_mas->pivots, offset);
--	max =3D wr_mas->pivots[offset];
- 	if (unlikely(offset =3D=3D count))
--		goto max; /* may have been set to zero */
-+		goto max;
-=20
-+	max =3D wr_mas->pivots[offset];
- 	index =3D mas->index;
- 	if (unlikely(index <=3D max))
- 		goto done;
---=20
-2.35.1
+Thanks for applying the patch!

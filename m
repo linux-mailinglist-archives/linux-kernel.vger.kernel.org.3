@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B664572EC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD40572EC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiGMHHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
+        id S233927AbiGMHHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiGMHHN (ORCPT
+        with ESMTP id S231444AbiGMHHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:07:13 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9B7BBD3B
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:07:12 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso2182114pjo.0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:07:12 -0700 (PDT)
+        Wed, 13 Jul 2022 03:07:17 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373B8BBD3B
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:07:16 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id j1-20020a17090aeb0100b001ef777a7befso3255260pjz.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:07:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K+tELvoFN/jC1Zp7hb52deJSxuYVi0jGo6aErK5pMA4=;
-        b=Pzi+Mbdcj9PJ+icOu1HrIeU69tO2Hs3pb7MmRmLjkvpQ27PTjJSCXoDF5ayPdm/J0j
-         asy2BOhK5s9+3EUABIH7e8EO6cMoUEVyfOPBAt6LefF0y9OIN+tS8nBOi/4lqlnwixXx
-         vA2/B6CNVN8/e/GMVk3eBcjsF8pSTw1pUAe0WhEprPxV7PpNP1HVXEYWGhrJjnr6xLU7
-         OUFQO5P9MHHFHD9W1eEO/tdMTerzYPLzCa+mMXMEVyl2rFNTwJb8Ypj3tXcCS1vGl2wP
-         z65+NIa1FIJ5viEfrcj/p/r2niOdM1io0kAZ0CMRKn+r7iMiHKII9qfxUzaEwxoMICgV
-         2Alg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=nIVi6szaPftFCT7jYhps4oIfP07eIgzoCYWVaDAqgoQ=;
+        b=BFD/C46Q87ejWKOc9b/qlPNL9CZxExulinW0M9tXzfP5kj9IrthSOh9/uxRdhaPOfj
+         Q8Q73ICx6+yBN7pFHe/q+Nsp/adJQZgF+pSXS0JSmaEkEFtA/UyQvgHQDGyGijwMjdwd
+         sKfRXfLSzLL25IA8/EfuASHG6SlcCa/3CiOaZCWEL2fItVZFiOGE1zPY4ENgoONQ6V0i
+         DIQp75cLnrCpP/ZSOWcDWTU2Sq5+3Vb9lWeCBH6VPyQy/JdZlvx1GOTlpm9OUivcCAhY
+         g32pjLicdwrImEtEVimMLKCjBLcyNjxp0HWZBjcrYDieOtpLwW8Ly47sk2dEoOD6Y8En
+         jNTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K+tELvoFN/jC1Zp7hb52deJSxuYVi0jGo6aErK5pMA4=;
-        b=ON3fS7dGHykjrUqDr28rjDGmpj83nUeNih4rLkrahsSWnGENqwQmEV60piOJ5fhryM
-         nyW7IA/KafRby+aWLIHNKZ6vdxwcONn17lTAZBt6pwW4u9hGS1XnAUHg/UGpQ8/TFxnh
-         I469RpLUHEcx4yHUqJ9lJrwOkSaz1Eqg2UYUbDfgSLrY0pGazH6Pcnt8qlSlisTUPg/l
-         yJwSrDN8dXOeoVawOn7Pxj163wi7siq3LVdu/oxZjmdULAcjSahMkMqu4M48bm0n0LQw
-         pp+9M6vT646FN/DNonPIhCG6Hux2Rfdg3j1inWiTuw6pwwuOE83Tex0Ntc4nz1H0nXR9
-         Lm8w==
-X-Gm-Message-State: AJIora/kCXZ+fSaLC7nLRJKFgUJXvOUHNhtaA+c9pm7BwOBs/pcDB2AD
-        yPKh6d2/zDLr8HpiqaXy+Ev4ZehVL5w=
-X-Google-Smtp-Source: AGRyM1t8oz+4VptoFqjNiFqS+6ET7xp4+JPzyv6eBUts404OD9rKTtS9e915XbVorZ43AafZrwch5Q==
-X-Received: by 2002:a17:90a:e008:b0:1ef:831a:1fff with SMTP id u8-20020a17090ae00800b001ef831a1fffmr8455187pjy.221.1657696032041;
-        Wed, 13 Jul 2022 00:07:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=nIVi6szaPftFCT7jYhps4oIfP07eIgzoCYWVaDAqgoQ=;
+        b=wWAVg2bZaWuiNa2iCRNCu1ZlinIl/LO9hbeTY/s/xSARF4MrQY4ZAtWc2tumXd0oAj
+         xhNehwrFtsf8YmUhAJmb4L0HnpDbS+RcNTYjH2P634d6wIdH/b5RQ1MVGzWdazrRwoSb
+         pdH2vjT704updSdlT2kik5cibnEMuVMJXFEPSRIIxbJgXiLInr8z1pTJmnDNaTEN/zrR
+         oHt4OGWjYHi7404/QD2QZFA4fytgekXZ+99SzwNUs4sF4SI4aEPt0xSGV9FS705NCYqu
+         2mI0f8oAp65ID5fDX4la80B5ZPYAza/7q43RJyQWDU8itgezdEGh+SunmUFr1n9SRlqi
+         ULDQ==
+X-Gm-Message-State: AJIora8Vx71g6Gr5So+eCvQU7L5TH6aDvdc6AYTJ57ZjHaA3eD8zhRqc
+        I34kz0Kv2nj3R7k0xJclHJGhbsVNfrQ=
+X-Google-Smtp-Source: AGRyM1sy3hCOh9JjKUCk6MzP07UHRkxvstO04sI7CRb3TdEYRMhUsRjqRLh0WqE97QHODrhezngF4A==
+X-Received: by 2002:a17:902:c64b:b0:16b:d51a:dc24 with SMTP id s11-20020a170902c64b00b0016bd51adc24mr2096645pls.48.1657696035751;
+        Wed, 13 Jul 2022 00:07:15 -0700 (PDT)
 Received: from bobo.ozlabs.ibm.com (193-116-203-247.tpgi.com.au. [193.116.203.247])
-        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b0016bd5da20casm8099061plg.134.2022.07.13.00.07.08
+        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b0016bd5da20casm8099061plg.134.2022.07.13.00.07.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 00:07:11 -0700 (PDT)
+        Wed, 13 Jul 2022 00:07:15 -0700 (PDT)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Nicholas Piggin <npiggin@gmail.com>,
@@ -55,10 +55,12 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         "linux-kernel @ vger . kernel . org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 00/12] locking/qspinlock: simplify code generation
-Date:   Wed, 13 Jul 2022 17:06:52 +1000
-Message-Id: <20220713070704.308394-1-npiggin@gmail.com>
+Subject: [PATCH v2 01/12] locking/qspinlock: remove pv_node abstraction
+Date:   Wed, 13 Jul 2022 17:06:53 +1000
+Message-Id: <20220713070704.308394-2-npiggin@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220713070704.308394-1-npiggin@gmail.com>
+References: <20220713070704.308394-1-npiggin@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,78 +73,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This accounts for comments from last post. Thanks for the feedback.
+There isn't much point trying to separate struct qnode from struct pv_node
+when struct qnode has to know about pv_node anyway.
 
-Thanks,
-Nick
+Acked-by: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+---
+ kernel/locking/qspinlock.c          |  3 ++-
+ kernel/locking/qspinlock_paravirt.h | 34 +++++++++++------------------
+ 2 files changed, 15 insertions(+), 22 deletions(-)
 
-v2:
-- Remove BUILD_BUG_ON contradiction
-- Add Longman's for pending bit for !paravirt case
-- Make queued_spin_lock_mcs_queue __always_inline
-- Drop cmpxchg_acquire->trylock patch that changed generated
-  code slightly (and had wild indenting).
-- Fix dropped acquire memory ordering in pv_wait_node cleanup
-  (and renamed it to pv_wait_node_acquire).
-
-
-Nicholas Piggin (12):
-  locking/qspinlock: remove pv_node abstraction
-  locking/qspinlock: inline mcs_spinlock functions into qspinlock
-  locking/qspinlock: split common mcs queueing code into its own
-    function
-  locking/qspinlock: move pv lock word helpers into qspinlock.c
-  locking/qspinlock: be less clever with the preprocessor
-  locking/qspinlock: merge qspinlock_paravirt.h into qspinlock.c
-  locking/qspinlock: remove arch qspinlock_paravirt.h includes
-  locking/qspinlock: stop renaming queued_spin_lock_slowpath to
-    native_queued_spin_lock_slowpath
-  locking/qspinlock: rename __pv_init_lock_hash to pv_spinlocks_init
-  locking/qspinlock: paravirt use simple trylock in case idx overflows
-  locking/qspinlock: separate pv_wait_node from the non-paravirt path
-  locking/qspinlock: simplify pv_wait_head_or_lock calling scheme
-
- arch/alpha/include/asm/Kbuild                 |   1 -
- arch/arc/include/asm/Kbuild                   |   1 -
- arch/arm/include/asm/mcs_spinlock.h           |  24 -
- arch/arm64/include/asm/Kbuild                 |   1 -
- arch/hexagon/include/asm/Kbuild               |   1 -
- arch/ia64/include/asm/Kbuild                  |   1 -
- arch/m68k/include/asm/Kbuild                  |   1 -
- arch/microblaze/include/asm/Kbuild            |   1 -
- arch/mips/include/asm/Kbuild                  |   1 -
- arch/nios2/include/asm/Kbuild                 |   1 -
- arch/parisc/include/asm/Kbuild                |   1 -
- arch/powerpc/include/asm/Kbuild               |   1 -
- arch/powerpc/include/asm/qspinlock.h          |  45 +-
- arch/powerpc/include/asm/qspinlock_paravirt.h |   7 -
- arch/powerpc/include/asm/spinlock.h           |   2 +-
- arch/s390/include/asm/Kbuild                  |   1 -
- arch/sh/include/asm/Kbuild                    |   1 -
- arch/sparc/include/asm/Kbuild                 |   1 -
- arch/um/include/asm/Kbuild                    |   1 -
- arch/x86/hyperv/hv_spinlock.c                 |   2 +-
- arch/x86/include/asm/Kbuild                   |   1 -
- arch/x86/include/asm/qspinlock.h              |  19 +-
- arch/x86/include/asm/qspinlock_paravirt.h     |  72 --
- arch/x86/kernel/kvm.c                         |   2 +-
- arch/x86/kernel/paravirt-spinlocks.c          |  71 ++
- arch/x86/kernel/paravirt.c                    |   2 +-
- arch/x86/xen/spinlock.c                       |   2 +-
- arch/xtensa/include/asm/Kbuild                |   1 -
- include/asm-generic/mcs_spinlock.h            |  13 -
- include/asm-generic/qspinlock.h               |   6 +
- kernel/locking/mcs_spinlock.h                 | 121 ---
- kernel/locking/qspinlock.c                    | 835 ++++++++++++++----
- kernel/locking/qspinlock_paravirt.h           | 562 ------------
- 33 files changed, 764 insertions(+), 1038 deletions(-)
- delete mode 100644 arch/arm/include/asm/mcs_spinlock.h
- delete mode 100644 arch/powerpc/include/asm/qspinlock_paravirt.h
- delete mode 100644 arch/x86/include/asm/qspinlock_paravirt.h
- delete mode 100644 include/asm-generic/mcs_spinlock.h
- delete mode 100644 kernel/locking/mcs_spinlock.h
- delete mode 100644 kernel/locking/qspinlock_paravirt.h
-
+diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+index 65a9a10caa6f..a0fc21d99199 100644
+--- a/kernel/locking/qspinlock.c
++++ b/kernel/locking/qspinlock.c
+@@ -82,7 +82,8 @@
+ struct qnode {
+ 	struct mcs_spinlock mcs;
+ #ifdef CONFIG_PARAVIRT_SPINLOCKS
+-	long reserved[2];
++	int			cpu;
++	u8			state;
+ #endif
+ };
+ 
+diff --git a/kernel/locking/qspinlock_paravirt.h b/kernel/locking/qspinlock_paravirt.h
+index e84d21aa0722..4efe00e6b441 100644
+--- a/kernel/locking/qspinlock_paravirt.h
++++ b/kernel/locking/qspinlock_paravirt.h
+@@ -47,12 +47,6 @@ enum vcpu_state {
+ 	vcpu_hashed,		/* = pv_hash'ed + vcpu_halted */
+ };
+ 
+-struct pv_node {
+-	struct mcs_spinlock	mcs;
+-	int			cpu;
+-	u8			state;
+-};
+-
+ /*
+  * Hybrid PV queued/unfair lock
+  *
+@@ -170,7 +164,7 @@ static __always_inline int trylock_clear_pending(struct qspinlock *lock)
+  */
+ struct pv_hash_entry {
+ 	struct qspinlock *lock;
+-	struct pv_node   *node;
++	struct qnode   *node;
+ };
+ 
+ #define PV_HE_PER_LINE	(SMP_CACHE_BYTES / sizeof(struct pv_hash_entry))
+@@ -209,7 +203,7 @@ void __init __pv_init_lock_hash(void)
+ 	     offset < (1 << pv_lock_hash_bits);						\
+ 	     offset++, he = &pv_lock_hash[(hash + offset) & ((1 << pv_lock_hash_bits) - 1)])
+ 
+-static struct qspinlock **pv_hash(struct qspinlock *lock, struct pv_node *node)
++static struct qspinlock **pv_hash(struct qspinlock *lock, struct qnode *node)
+ {
+ 	unsigned long offset, hash = hash_ptr(lock, pv_lock_hash_bits);
+ 	struct pv_hash_entry *he;
+@@ -236,11 +230,11 @@ static struct qspinlock **pv_hash(struct qspinlock *lock, struct pv_node *node)
+ 	BUG();
+ }
+ 
+-static struct pv_node *pv_unhash(struct qspinlock *lock)
++static struct qnode *pv_unhash(struct qspinlock *lock)
+ {
+ 	unsigned long offset, hash = hash_ptr(lock, pv_lock_hash_bits);
+ 	struct pv_hash_entry *he;
+-	struct pv_node *node;
++	struct qnode *node;
+ 
+ 	for_each_hash_entry(he, offset, hash) {
+ 		if (READ_ONCE(he->lock) == lock) {
+@@ -264,7 +258,7 @@ static struct pv_node *pv_unhash(struct qspinlock *lock)
+  * in a running state.
+  */
+ static inline bool
+-pv_wait_early(struct pv_node *prev, int loop)
++pv_wait_early(struct qnode *prev, int loop)
+ {
+ 	if ((loop & PV_PREV_CHECK_MASK) != 0)
+ 		return false;
+@@ -277,9 +271,7 @@ pv_wait_early(struct pv_node *prev, int loop)
+  */
+ static void pv_init_node(struct mcs_spinlock *node)
+ {
+-	struct pv_node *pn = (struct pv_node *)node;
+-
+-	BUILD_BUG_ON(sizeof(struct pv_node) > sizeof(struct qnode));
++	struct qnode *pn = (struct qnode *)node;
+ 
+ 	pn->cpu = smp_processor_id();
+ 	pn->state = vcpu_running;
+@@ -292,8 +284,8 @@ static void pv_init_node(struct mcs_spinlock *node)
+  */
+ static void pv_wait_node(struct mcs_spinlock *node, struct mcs_spinlock *prev)
+ {
+-	struct pv_node *pn = (struct pv_node *)node;
+-	struct pv_node *pp = (struct pv_node *)prev;
++	struct qnode *pn = (struct qnode *)node;
++	struct qnode *pp = (struct qnode *)prev;
+ 	int loop;
+ 	bool wait_early;
+ 
+@@ -359,7 +351,7 @@ static void pv_wait_node(struct mcs_spinlock *node, struct mcs_spinlock *prev)
+  */
+ static void pv_kick_node(struct qspinlock *lock, struct mcs_spinlock *node)
+ {
+-	struct pv_node *pn = (struct pv_node *)node;
++	struct qnode *pn = (struct qnode *)node;
+ 
+ 	/*
+ 	 * If the vCPU is indeed halted, advance its state to match that of
+@@ -402,7 +394,7 @@ static void pv_kick_node(struct qspinlock *lock, struct mcs_spinlock *node)
+ static u32
+ pv_wait_head_or_lock(struct qspinlock *lock, struct mcs_spinlock *node)
+ {
+-	struct pv_node *pn = (struct pv_node *)node;
++	struct qnode *pn = (struct qnode *)node;
+ 	struct qspinlock **lp = NULL;
+ 	int waitcnt = 0;
+ 	int loop;
+@@ -492,7 +484,7 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct mcs_spinlock *node)
+ __visible void
+ __pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
+ {
+-	struct pv_node *node;
++	struct qnode *node;
+ 
+ 	if (unlikely(locked != _Q_SLOW_VAL)) {
+ 		WARN(!debug_locks_silent,
+@@ -517,14 +509,14 @@ __pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
+ 	node = pv_unhash(lock);
+ 
+ 	/*
+-	 * Now that we have a reference to the (likely) blocked pv_node,
++	 * Now that we have a reference to the (likely) blocked qnode,
+ 	 * release the lock.
+ 	 */
+ 	smp_store_release(&lock->locked, 0);
+ 
+ 	/*
+ 	 * At this point the memory pointed at by lock can be freed/reused,
+-	 * however we can still use the pv_node to kick the CPU.
++	 * however we can still use the qnode to kick the CPU.
+ 	 * The other vCPU may not really be halted, but kicking an active
+ 	 * vCPU is harmless other than the additional latency in completing
+ 	 * the unlock.
 -- 
 2.35.1
 

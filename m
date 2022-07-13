@@ -2,224 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E27573F7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF97573F7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237220AbiGMWPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 18:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        id S237229AbiGMWRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 18:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiGMWPE (ORCPT
+        with ESMTP id S229601AbiGMWRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 18:15:04 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE3C2A265;
-        Wed, 13 Jul 2022 15:15:02 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-31c89111f23so423227b3.0;
-        Wed, 13 Jul 2022 15:15:02 -0700 (PDT)
+        Wed, 13 Jul 2022 18:17:43 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C252A26C;
+        Wed, 13 Jul 2022 15:17:42 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id 70so227431pfx.1;
+        Wed, 13 Jul 2022 15:17:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lX7k/axtDRxzgIi4P0RLXUpMp7jh1OeNazvCuzYxTm8=;
-        b=buxyNclJkzDaDQmBMmX+cdNC2uQlC/SYJrbRkk5OpDiJ3b1RT91rskkzWprVhaerfD
-         DXLUl8w1Ga1h6x2iGYBgSKkRd2BfyEaWnHbyc0+NSsPu+c+nJh3Mc7VkME174OkIqsiW
-         R0UF3SB8R2nQVUsagBJWJJMOvG79Zj0B3F1eJmpqGEXWzN/9lY93xQJd324DoYY6XL8F
-         hypWXuBcTjLhRFSers4+b/cMJ21FfqBCitzmUDMQGq5VNxSE8fBOH8pLPE/N/Nf9Bmt7
-         7BDeZzR5VVsgaJyi16/YNQ5CPCPDq0rPTsUdFRCM9SBgN3EbQwVVrnfAYUs/FWeT/3qA
-         Pp2g==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=k/Sfn7fFPDZzuiNhEGRbLFmyWjKnhhjZclNeEieBmH4=;
+        b=q2yg+dlnILzrgGTyFb7L0tTPiuYNvagtJfH/NBf5y2Fl6BGX+qYbwVpHIz155W8gsP
+         FcZCAVZo6kCGRCO3YmOvAefaqI241+wjzuwzj8tAkPY9MalCxnrX+e0aKNtGqcPdSWr/
+         RT+Fp4PkQFZxyY8UnJb5v4E/hQK04ux9JCP4zUCSt1lMa4aHEhGPTclZ2k6liqtQGJRP
+         mJHUDiO6dt0XDVx/96JdRwjm1IrxUktY5N9Hwq83JELJw8ZdNIfops2EfKuirCGK6oIs
+         oPdTNOqhPCnZhS5y6vwyCzdyvTlWhLxb+lquyZBcymHoKSfgHQ+PMB4l4kc8p9ISSbLV
+         ZkSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lX7k/axtDRxzgIi4P0RLXUpMp7jh1OeNazvCuzYxTm8=;
-        b=sceZQT4NXbEiHv8wPg+8iNAULHEWwMpwEUl+S8R38u1PdqQW6lGxrS4HNXnqTNCk66
-         uKenqv04Kk4kmYdXUOSoKcQj/NKxQcKFpHjhF47LJf51TiXxwAwaBFCyvQTF9w09BEIW
-         QjkdQhSt/to1h7hiaxdZD9q9T/VHbZNqtYZBm9oCDFHNMHrcizj1mlrr2uJ01URWLQpc
-         Lu8V/pdmbNdAmJBUleUIPKDvwksKkFuWX16YbWZ78m8Bc7MZ9jE65kCBDENcXaD5HQ4X
-         DNBu1Z6/5+lwqIss+j8V+dfzLwKHSXimZ9TkXJFjOUZHQs6AC4ujQIeAYJK9mkz1HKNS
-         mMyw==
-X-Gm-Message-State: AJIora8X9ubXtleFmTAOltMesChsBYIpC4Z3pSzg360ICV9QZRbvg+ZH
-        ute+sSNq03VaJsqei/55ZKnB0/mTS4qUmE5m660=
-X-Google-Smtp-Source: AGRyM1vd//RCXP39iX9dVoexAOOcjKn30pTDRU1fUa0SdZOmCe9lU/VCLrmBrclJF0+8dMBysQ845jMQ2WSn2YvEZgg=
-X-Received: by 2002:a81:72c4:0:b0:31c:b309:c4e8 with SMTP id
- n187-20020a8172c4000000b0031cb309c4e8mr6692569ywc.520.1657750501924; Wed, 13
- Jul 2022 15:15:01 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=k/Sfn7fFPDZzuiNhEGRbLFmyWjKnhhjZclNeEieBmH4=;
+        b=JzTyaO8zZMgI37PKIHjERw5H6Jar+fjsozvTorURpwYqIL0/GSI2fyZKu+L7MxSTa3
+         i2IlTSObtKS2ajdKuyFjELOBee13qTwii0yG0n98GXG0pmuHjchOVXHFYCpz4wIqKj6H
+         Waj7rBp+Ud/ma5LkjgNYl3whzkiKzsI9OtI4BhZ+3wzDSTrFSO8ggXCKfsyZqx7k5oar
+         2Bctz6KlL+GJhMPFXglNVzi/8KCGeelSJN0WiTMlkcdzu0wBIsmjoyg4qMPQbExuomjz
+         QwZhfm/uzBLUIdC+RBdXSDLmA1cfTChSRMRoDI6MohCBfrE/rV08jkvasfKRWgoetg3U
+         YeDA==
+X-Gm-Message-State: AJIora/BJSEbKTJz4faeRqjCD7q2qw+ueUv0vmCOtRfXU1+RrNnE63YH
+        vrB+IhOnBqT4XK5hgPNrD+4=
+X-Google-Smtp-Source: AGRyM1ubo0nEnvfDaOn4n8ikNSp5c0NjOo0hj/eKRipmkN/T7udN3OgbG/aRBXms3gjMmRteWCI7ag==
+X-Received: by 2002:aa7:8318:0:b0:528:c331:e576 with SMTP id bk24-20020aa78318000000b00528c331e576mr5328795pfb.58.1657750661709;
+        Wed, 13 Jul 2022 15:17:41 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n1-20020a622701000000b00525496442ccsm15174pfn.216.2022.07.13.15.17.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 15:17:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 13 Jul 2022 15:17:40 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/131] 5.10.131-rc2 review
+Message-ID: <20220713221740.GA69517@roeck-us.net>
+References: <20220713094820.698453505@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220713105910.931983-1-lewis.hanly@microchip.com>
- <20220713105910.931983-2-lewis.hanly@microchip.com> <CAHp75VfGTd02jKYsFq94BF_Gqro2trk3iyyALBatS1Bps3HYhw@mail.gmail.com>
- <abdf389cfd049f60b951447c047bbd186fa19469.camel@microchip.com>
-In-Reply-To: <abdf389cfd049f60b951447c047bbd186fa19469.camel@microchip.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 14 Jul 2022 00:14:25 +0200
-Message-ID: <CAHp75VeX8p4m7Bi=9Zvk5=MRTOb=BTmcuDbtW1ZUOr_-1mHvyQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] gpio: mpfs: add polarfire soc gpio support
-To:     Lewis.Hanly@microchip.com
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
-        Conor.Dooley@microchip.com, Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daire.McNamara@microchip.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713094820.698453505@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 10:44 PM <Lewis.Hanly@microchip.com> wrote:
-> On Wed, 2022-07-13 at 13:59 +0200, Andy Shevchenko wrote:
-> > On Wed, Jul 13, 2022 at 1:00 PM <lewis.hanly@microchip.com> wrote:
+On Wed, Jul 13, 2022 at 03:10:15PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.131 release.
+> There are 131 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 15 Jul 2022 09:47:55 +0000.
+> Anything received after that time might be too late.
+> 
 
-...
+Build results:
+	total: 163 pass: 162 fail: 1
+Failed builds:
+	um:defconfig
+Qemu test results:
+	total: 477 pass: 469 fail: 8
+Failed tests:
+	x86_64:q35:SandyBridge:defconfig:smp4:net,ne2k_pci:efi32:mem1G:usb:hd
+	x86_64:q35:Conroe:defconfig:smp4:net,tulip:efi32:mem256:scsi[DC395]:hd
+	x86_64:q35:Skylake-Server:defconfig:smp4:net,e1000-82544gc:efi32:mem2G:scsi[53C895A]:hd
+	x86_64:q35:Opteron_G5:defconfig:smp4:net,i82559c:efi32:mem256:scsi[MEGASAS2]:hd
+	x86_64:pc:Opteron_G2:defconfig:smp:net,usb:efi32:mem2G:scsi[virtio-pci]:hd
+	x86_64:q35:Nehalem:defconfig:smp2:net,i82558a:efi32:mem1G:virtio:hd
+	x86_64:q35:Skylake-Client-IBRS:defconfig:preempt:smp2:net,i82558b:efi32:mem1G:sdhci:mmc:hd
+	x86_64:q35:Haswell-noTSX-IBRS:defconfig:nosmp:net,pcnet:efi32:mem2G:ata:hd
 
-> > > +config GPIO_POLARFIRE_SOC
-> > > +       bool "Microchip FPGA GPIO support"
-> >
-> > Why not tristate?
-> OK.
+Build error:
 
-(1)
+/opt/kernel/gcc-11.3.0-2.38-nolibc/x86_64-linux/bin/../lib/gcc/x86_64-linux/11.3.0/../../../../x86_64-linux/bin/ld: arch/x86/um/../kernel/module.o: in function `module_finalize':
+arch/x86/um/../kernel/module.c:283: undefined reference to `apply_returns'
 
-...
+Crash:
 
-> > > +       help
-> > > +         Say yes here to support the GPIO device on Microchip
-> > > FPGAs.
-> >
-> > When allowing it to be a module, add a text that tells how the driver
-> > will be called.
-> Not loading as a module.
+[    0.709966] kernel tried to execute NX-protected page - exploit attempt? (uid: 0)
+[    0.709966] BUG: unable to handle page fault for address: 0000000021803b80
+[    0.709966] #PF: supervisor instruction fetch in kernel mode
+[    0.709966] #PF: error_code(0x0011) - permissions violation
+[    0.709966] PGD 175a063 P4D 175a063 PUD 175b063 PMD 1766063 PTE 8000000021803063
+[    0.709966] Oops: 0011 [#1] SMP PTI
+[    0.709966] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.10.131-rc2+ #1
+[    0.709966] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+[    0.709966] RIP: 0010:0x21803b80
+[    0.709966] Code: Unable to access opcode bytes at RIP 0x21803b56.
+[    0.709966] RSP: 0018:ffffffffb9403e80 EFLAGS: 00000046
+[    0.709966] RAX: 0000000000000000 RBX: 0000000001798000 RCX: 00000000df24be60
+[    0.709966] RDX: 000000003feab058 RSI: 0000000000000600 RDI: 000000003fe7e038
+[    0.709966] RBP: 0000000000000600 R08: 0000000001798000 R09: 00000000229ed067
+[    0.709966] R10: 0000000000000000 R11: 00000000229ed067 R12: 0000000000000030
+[    0.709966] R13: 0000000000000001 R14: ffff9aca41790000 R15: 0000000000000282
+[    0.709966] FS:  0000000000000000(0000) GS:ffff9aca7f800000(0000) knlGS:0000000000000000
+[    0.709966] CS:  0010 DS: 0018 ES: 0018 CR0: 0000000080050033
+[    0.709966] CR2: 0000000021803b80 CR3: 0000000001758000 CR4: 00000000000406b0
+[    0.709966] Call Trace:
+[    0.709966]  ? efi_set_virtual_address_map+0x87/0x160
+[    0.709966]  ? efi_enter_virtual_mode+0x39a/0x3f5
+[    0.709966]  ? start_kernel+0x4aa/0x544
+[    0.709966]  ? secondary_startup_64_no_verify+0xc2/0xcb
+[    0.709966] Modules linked in:
+[    0.709966] CR2: 0000000021803b80
+[    0.709966] ---[ end trace 1b5f45b6ffd42130 ]---
+[    0.709966] RIP: 0010:0x21803b80
+[    0.709966] Code: Unable to access opcode bytes at RIP 0x21803b56.
+[    0.709966] RSP: 0018:ffffffffb9403e80 EFLAGS: 00000046
+[    0.709966] RAX: 0000000000000000 RBX: 0000000001798000 RCX: 00000000df24be60
+[    0.709966] RDX: 000000003feab058 RSI: 0000000000000600 RDI: 000000003fe7e038
+[    0.709966] RBP: 0000000000000600 R08: 0000000001798000 R09: 00000000229ed067
+[    0.709966] R10: 0000000000000000 R11: 00000000229ed067 R12: 0000000000000030
+[    0.709966] R13: 0000000000000001 R14: ffff9aca41790000 R15: 0000000000000282
+[    0.709966] FS:  0000000000000000(0000) GS:ffff9aca7f800000(0000) knlGS:0000000000000000
+[    0.709966] CS:  0010 DS: 0018 ES: 0018 CR0: 0000000080050033
+[    0.709966] CR2: 0000000021803b80 CR3: 0000000001758000 CR4: 00000000000406b0
+[    0.709966] Kernel panic - not syncing: Attempted to kill the idle task!
 
-I didn't get this. Together with (1) it makes nonsense. What did you
-mean by (1) _or_ by this?
+This is the same for all stable release candidates, and is also seen
+in the mainline kernel.
 
-...
-
-> > Also don't forget mod_devicetable.h.
-> Can't see why I need this header.
-
-Because you are using data types from it.
-
-...
-
-> > > +       if (gpio_cfg & MPFS_GPIO_EN_IN)
-> > > +               return 1;
-> > > +
-> > > +       return 0;
-> >
-> > Don't we have specific definitions for the directions?
-> No defines in file.
-
-We have. Please, check again.
-
-...
-
-> > > +       mpfs_gpio_assign_bit(mpfs_gpio->base + (gpio_index *
-> > > BYTE_BOUNDARY),
-> > > +                            MPFS_GPIO_EN_INT, 1);
-> >
-> > Too many parentheses.
-> I do think it makes reading easier.
-
-You can multiply inside mpfs_gpio_assign_bit(), no?
-
-...
-
-> > > +       mpfs_gpio_assign_bit(mpfs_gpio->base + (gpio_index *
-> > > BYTE_BOUNDARY),
-> > > +                            MPFS_GPIO_EN_INT, 0);
-
-Ditto.
-
-...
-
-> > > +static int mpfs_gpio_irq_set_affinity(struct irq_data *data,
-> > > +                                     const struct cpumask *dest,
-> > > +                                     bool force)
-> > > +{
-> > > +       if (data->parent_data)
-> > > +               return irq_chip_set_affinity_parent(data, dest,
-> > > force);
-> > > +
-> > > +       return -EINVAL;
-> > > +}
-> >
-> > Why do you need this? Isn't it taken care of by the IRQ chip core?
-> Yes I believe we do/should, data->parent_data is used in
-> irq_chip_set_affinity_parent(..) without checking so hence checked
-> before calling.
-
-I mean the entire function. Isn't it the default in the IRQ chip core?
-Or can it be made as a default with some flags set?
-
-...
-
-> > > +       struct device_node *node = pdev->dev.of_node;
-> > > +       struct device_node *irq_parent;
-> >
-> > Why do you need these?
-> Yes they are needed. Both of the same type but used in different
-> places. I don't think I can reuse.
-
-This is related to the pattern of how you are enumerating IRQs. If the
-pattern is changed, it would be not needed anymore.
-
-...
-
-> > > +       if (ngpio > NUM_GPIO) {
-> > > +               dev_err(dev, "Too many GPIO interrupts (max=%d)\n",
-> > > +                       NUM_GPIO);
-> > > +               ret = -ENXIO;
-> > > +               goto cleanup_clock;
-> >
-> > return dev_err_probe(...);
-> I need to cleanup clock before returning, will use dev_err_probe.
-
-Have you read what I wrote above?
-I wrote that you need to wrap the clk_disable_unprepare() into devm,
-so you may use as I pointed out, i.e. return dev_err_probe()
-everywhere in the ->probe().
-
-> > > +       }
-
-...
-
-> > Why do you need all these? Seems a copy'n'paste from gpio-sifive,
-> > which is the only GPIO driver using this pattern.
-> Yes I believe we do need all this information. Yes it is similiar
-> implementation to sifive. Not the only driver using this pattern, check
-> gpio-ixp4xxx.c
-
-My question: why do you need this? What is so special about this driver?
-
-...
-
-> > > +               mpfs_gpio_assign_bit(mpfs_gpio->base + (i *
-> > > BYTE_BOUNDARY),
-> > > +                                    MPFS_GPIO_EN_INT, 0);
-> >
-> > Too many parentheses.
-
-As per above.
-
-...
-
-> > > +       dev_info(dev, "Microchip MPFS GPIO registered, ngpio=%d\n",
-> > > ngpio);
-> >
-> > Noise.
-> Maybe, but useful information to know the ngpio.
-
-Nope. Use sysfs / debugfs / etc. No need to noise the log.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Guenter

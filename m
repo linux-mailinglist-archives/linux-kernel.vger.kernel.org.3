@@ -2,82 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BBB573881
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44DC1573886
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236296AbiGMOMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
+        id S235794AbiGMONn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235187AbiGMOMg (ORCPT
+        with ESMTP id S229770AbiGMONh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:12:36 -0400
+        Wed, 13 Jul 2022 10:13:37 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C261326FF
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:12:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CDAA2AC3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:13:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657721555;
+        s=mimecast20190719; t=1657721615;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YhNVgFhX89B7Or7dxJO6r91xjY7lqXIdMrL3sFKe62o=;
-        b=F6qLBuj9pKEp6bXdUjd6VVQrE7ky+YlCw+mVa79DE85vIIGH3+p6pyMpRzAdIrP44/nBic
-        l+p8+jJlpcPLYKJ88ale6dC0iW7yodHat9G6MQZG2IUHbUwyQYPsvpSIt36FXo2TOlU6La
-        0VDi7amcNGKaVERKuFlcHraFYmW0eKo=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=16fe0zG+Df80Kw/yiUxFcqE0wkKzreKjMLbVHAylSVs=;
+        b=XEIAvEbqe2WmnngYIdejpMstSw2gdIPnN6YBImU/w/+n2aIFILogFSLBSSTcBsHx/Zl7wO
+        Vyw58IonxRGrkbW4ZrbX7p9cTC1BxcyOtEHNHjCRed/hQerUiZaMv40GrMbCDvL+ZO/kxy
+        kHlXze8WNY6mbt/W/847gO81YN2HF8E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-nYOuzBz5Oa-QQHeb58jLNQ-1; Wed, 13 Jul 2022 10:12:33 -0400
-X-MC-Unique: nYOuzBz5Oa-QQHeb58jLNQ-1
-Received: by mail-oi1-f198.google.com with SMTP id ay32-20020a056808302000b002f96abff093so7051926oib.23
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:12:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YhNVgFhX89B7Or7dxJO6r91xjY7lqXIdMrL3sFKe62o=;
-        b=vD0AFl3XE5MSHC0H+eGxUQGh9ZQL1+9F3ti41e3iq3WCQ01QwOVEjx/Ku13hea6YdQ
-         xKWtEAvEnWrWq2iN9XCKD8e4wfuU9uDX1MDVWzapW3iKvCtbiRS+xAEy0KihE/Qek4PX
-         KBqCduQnZQMfQvZWLlHD2VjsC3hyl0fvAJe5fiH+03zTe1DLyE0bgi2lDcy1zaocEtF1
-         +SA286uO2pFC7rfb6C6hkqKmW/WkUTptf1Nbmd4fFWbGIdU5Mtw1cRNSgtyJuB653CTw
-         QLekjXYJgRszV6CLRQp+XyCpC8KQNc+yT1kPiZcMZBSYT5tAnQtnEPXUnyS8dKYQVqdX
-         o5lQ==
-X-Gm-Message-State: AJIora/bkhy8aRxFrnQ6ZF1H4bDhiPFAKsQhupYnUoA0NDdeiGaK3yRP
-        cOfm1zwJbt1wB3PUCa4Kmz3NjBxBLPyab5/IXV89CobXOs5h5hrGSpT3A8fNcZRUH2w4JadPb+j
-        fKjH17+MM5yrmkaYW+ONAA5Xf
-X-Received: by 2002:a05:6870:73c7:b0:10c:24de:63d4 with SMTP id a7-20020a05687073c700b0010c24de63d4mr1824442oan.76.1657721551042;
-        Wed, 13 Jul 2022 07:12:31 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1spJxbEpfi2ss2QX18y+16qhda8NVczHl6f2bXHBKRgiIdBeWnn3ihlz7RHzcUQDgWHPCHuqg==
-X-Received: by 2002:a05:6870:73c7:b0:10c:24de:63d4 with SMTP id a7-20020a05687073c700b0010c24de63d4mr1824432oan.76.1657721550855;
-        Wed, 13 Jul 2022 07:12:30 -0700 (PDT)
-Received: from halaneylaptop ([2600:1700:1ff0:d0e0::2e])
-        by smtp.gmail.com with ESMTPSA id t17-20020a056830225100b00616929b93d6sm4860341otd.14.2022.07.13.07.12.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 07:12:30 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 09:12:28 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/7] arm64: dts: qcom: sc8280xp: fix USB interrupts
-Message-ID: <20220713141228.5z5rmgepj6mepjyp@halaneylaptop>
-References: <20220713131340.29401-1-johan+linaro@kernel.org>
- <20220713131340.29401-6-johan+linaro@kernel.org>
+ us-mta-271-2JqrfoevOESecsRjA0hvJQ-1; Wed, 13 Jul 2022 10:13:31 -0400
+X-MC-Unique: 2JqrfoevOESecsRjA0hvJQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF853811E76;
+        Wed, 13 Jul 2022 14:13:30 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.32.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 146842026D64;
+        Wed, 13 Jul 2022 14:13:30 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 10:13:28 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Tian Tao <tiantao6@hisilicon.com>
+Subject: Re: [PATCH v2] drivers/base/node.c: fix userspace break from using
+ bin_attributes for cpumap and cpulist
+Message-ID: <Ys7TCFoGIk3hlCpB@lorien.usersys.redhat.com>
+References: <20220713134545.1382367-1-pauld@redhat.com>
+ <Ys7Pkxqzrz75gCiN@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220713131340.29401-6-johan+linaro@kernel.org>
+In-Reply-To: <Ys7Pkxqzrz75gCiN@kroah.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,76 +64,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 03:13:38PM +0200, Johan Hovold wrote:
-> The two single-port SC8280XP USB controllers do not have an hs_phy_irq
-> interrupt. Instead they have a pwr_event interrupt which is distinct
-> from the former and not yet supported by the driver.
+On Wed, Jul 13, 2022 at 03:58:43PM +0200 Greg Kroah-Hartman wrote:
+> On Wed, Jul 13, 2022 at 09:45:45AM -0400, Phil Auld wrote:
+> > Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
+> > This breaks userspace code that retrieves the size before reading the file. Rather
+> > than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
+> > limitation of cpumap ABI") let's put in a size value at compile time. Use direct
+> > comparison and a worst-case maximum to ensure compile time constants. For cpulist the
+> > max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960
+> > (8192 * 5). In order to get near that you'd need a system with every other CPU on one
+> > node or something similar. e.g. (0,2,4,... 1024,1026...). To simplify the math and
+> > support larger NR_CPUS we are using NR_CPUS * 6. We also set it to a min of PAGE_SIZE
+> > to retain the older behavior for smaller NR_CPUS. The cpumap file wants to be something
+> > like NR_CPUS/4 + NR_CPUS/32, for the ","s so for simplicity we are using NR_CPUS/2.
+> > 
+> > On an 80 cpu 4-node sytem (NR_CPUS == 8192)
+> > 
+> > before:
+> > 
+> > -r--r--r--. 1 root root 0 Jul 12 14:08 /sys/devices/system/node/node0/cpulist
+> > -r--r--r--. 1 root root 0 Jul 11 17:25 /sys/devices/system/node/node0/cpumap
+> > 
+> > after:
+> > 
+> > -r--r--r--. 1 root root 49152 Jul 13 09:26 /sys/devices/system/node/node0/cpulist
+> > -r--r--r--. 1 root root  4096 Jul 13 09:24 /sys/devices/system/node/node0/cpumap
+> > 
+> > Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Signed-off-by: Phil Auld <pauld@redhat.com>
+> > ---
+> >  drivers/base/node.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/base/node.c b/drivers/base/node.c
+> > index 0ac6376ef7a1..3577f4eb4ac6 100644
+> > --- a/drivers/base/node.c
+> > +++ b/drivers/base/node.c
+> > @@ -45,7 +45,7 @@ static inline ssize_t cpumap_read(struct file *file, struct kobject *kobj,
+> >  	return n;
+> >  }
+> >  
+> > -static BIN_ATTR_RO(cpumap, 0);
+> > +static BIN_ATTR_RO(cpumap, (((NR_CPUS>>1) > PAGE_SIZE) ? NR_CPUS >> 1 : PAGE_SIZE));
 > 
-> Fix the USB node interrupt names so that they match the devicetree
-> binding.
+> Why not just PAGE_SIZE?
+>
+
+This one is likely to grow beyond page size if NR_CPUS is larger than 8192. It's about 2300 bytes
+at 8192 if my math is right.
+
+Let me ask again before I write the comments... what values of NR_CPUS are you seeing? Are people
+using an order of magnitude above 8192? Two orders?  This patch (with the 6 below) handles about 1
+order more.
+
+> If not, a HUGE comment explaining what you are doing here is going to be
+> required.
+
+Sure, will do. See above :)
+
 > 
-> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+> >  
+> >  static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
+> >  				   struct bin_attribute *attr, char *buf,
+> > @@ -66,7 +66,7 @@ static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
+> >  	return n;
+> >  }
+> >  
+> > -static BIN_ATTR_RO(cpulist, 0);
+> > +static BIN_ATTR_RO(cpulist, (((NR_CPUS * 6) > PAGE_SIZE) ? NR_CPUS *6 : PAGE_SIZE));
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 45cc7d714fd2..4a7aa9992f3a 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -1875,8 +1875,10 @@ usb_0: usb@a6f8800 {
->  					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
->  					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
->  					      <&pdc 138 IRQ_TYPE_LEVEL_HIGH>;
-> -			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
-> -					  "dm_hs_phy_irq", "ss_phy_irq";
-> +			interrupt-names = "pwr_event",
-> +					  "dp_hs_phy_irq",
-> +					  "dm_hs_phy_irq",
-> +					  "ss_phy_irq";
->  
->  			power-domains = <&gcc USB30_PRIM_GDSC>;
->  
-> @@ -1925,8 +1927,10 @@ usb_1: usb@a8f8800 {
->  					      <&pdc 12 IRQ_TYPE_EDGE_BOTH>,
->  					      <&pdc 13 IRQ_TYPE_EDGE_BOTH>,
->  					      <&pdc 136 IRQ_TYPE_LEVEL_HIGH>;
-> -			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
-> -					  "dm_hs_phy_irq", "ss_phy_irq";
-> +			interrupt-names = "pwr_event",
-> +					  "dp_hs_phy_irq",
-> +					  "dm_hs_phy_irq",
-> +					  "ss_phy_irq";
+> "* 6" in both places here?
+>
 
-For this specific change to pwr_event:
+It's compile time so it's cheap. But yes, 6 in both places.  That's to support NR_CPUS=100000.
 
-    Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+> And again, we need a huge comment explaining this so that we can
+> understand it in a few weeks, and in 10 years...
 
-That being said, I was reviewing this against the (fairly old)
-downstream release I have, and the IRQs defined there look like this:
+Will do.
 
-		interrupts-extended = <&pdc 12 IRQ_TYPE_EDGE_RISING>,
-				<&intc GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
-				<&pdc 136 IRQ_TYPE_LEVEL_HIGH>,
-				<&pdc 13 IRQ_TYPE_EDGE_RISING>;
-		interrupt-names = "dp_hs_phy_irq", "pwr_event_irq",
-				"ss_phy_irq", "dm_hs_phy_irq";
-
-The part I want to highlight is that the "pwr_event" irq downstream maps
-to <&intc GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>, but the current upstream
-devicetree I'm looking at has it mapped to <&intc GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>
-
-Do you happen to have any source you can also check to confirm if this
-is a bug or not?
 
 Thanks,
-Andrew
+Phil
 
->  
->  			power-domains = <&gcc USB30_SEC_GDSC>;
->  
-> -- 
-> 2.35.1
 > 
+> thanks,
+> 
+> greg k-h
+> 
+
+-- 
 

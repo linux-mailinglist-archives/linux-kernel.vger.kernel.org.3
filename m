@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19436573C71
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 20:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19845573C72
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 20:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236439AbiGMSSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 14:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
+        id S236626AbiGMSTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 14:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiGMSSr (ORCPT
+        with ESMTP id S236597AbiGMSTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 14:18:47 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8C319C1B
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 11:18:45 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id ss3so15265233ejc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 11:18:45 -0700 (PDT)
+        Wed, 13 Jul 2022 14:19:10 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED6C24964
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 11:19:09 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id l23so21291701ejr.5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 11:19:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MLaLblQd1msZWwY9FiReYrNm7ZLhdWFbMkP58jqCGA8=;
-        b=LBXWbxHrwlSAa2xQU0mbSSLoCYx7g55A+eR9KWl97wN1VeT8uphM+HgXqYIYO4Aur2
-         EdpfiOasKKdceP2dm3EIrp02LI0czYATVPeoJbqXxXkllYv9Qt/SAT5N+e6pT2B3OzZ1
-         XnSFN6xmmOdT972YMzrJ8VNw/5Fzx0hEfCHiXpWdHERP1l/4Ij6ns0YligN0JsPWL+fe
-         yXB2sw3wm7JPANQlMqIDXfs+ubX1zmNFVX2QEqPsHIwyxHTSXlVoQXkll/nTqnYti14k
-         cSm/Z/olJTDzjY9pDEJZOSOik/E3of86mI0HkkUUv3r68LguOz+NysGB4IRQUyclLF2x
-         W8oA==
+        bh=KohUrBmDurVBooPdiYyB7gOaJD1TmlyoWIhvQZBEuEU=;
+        b=dKsPRBVLByu28QFGbHxsNaJ7Oj051WWN9eXj89MWzHIHTee+qkO/AiGhoh4UnteV9m
+         FvcSG+2Na8HGyqJzyUbqmkMrqkfIt4BMIduf9jIkPY36PfouJKys6TiGIIoFiyBIqM1h
+         c3bP2WDQzbMgDACvRkHF+0+7EjVNcpmkI8vHLqOQLT6Ljmo6ZktaFzu34V6rMpptHDg7
+         LLtCeK96hmm7UksmkE4SzjBeHMTbzR0p6pjXU6bF5nhSHFOqSeLpYpzRdeG2jszMM/le
+         VtDIGEygSedRachxWG5X3QyC12xdEGnjBDP/D4vkTBJwUGxJLyyiWw7cXDjuDzqyGEZZ
+         KcqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MLaLblQd1msZWwY9FiReYrNm7ZLhdWFbMkP58jqCGA8=;
-        b=d0F6bGrSftz2ocTkBWhIuaOllycfi7mgb57ulOuI0BIDer/a8grqJqCN5L8YgzDz+A
-         XikmjpqsP9ltQO34SzSEoo84TVj0OYuFKlk397QYzOYMffSYcpYXTf4AhIkhfarUxnP3
-         9TqfBv6uS8E9oVS4UHaTXV3XtJJkEY0yn4X11S8iBi5WYeIzOc0iwbOOSjTWuzXQ9xXb
-         QxsWLAI7dKt72SyBUXabE/VBSrSQ5l35ToXhcUTJwAGjcaRSX3YQYD7sWBr8ZwRr5wH8
-         vgaSmihnuND3iZRsinbGEorXXxbsoXWot+DI7/PiVVsF3G8wZiKr2SGno6kI3NYEKkZt
-         ceag==
-X-Gm-Message-State: AJIora+/2XxkgXy0dihw6Z9pwu+0Rl8fZxPoiy9hIR1Gl6wwolXVG5cd
-        H/PjWz4JNNp7tTfMbjxm2gEdgF4+m4w38TLNw/5mbA==
-X-Google-Smtp-Source: AGRyM1teizRCFtWFKbPHLS6yIUMTOL2oH8WTlV4P3Mml7SNEMBR21p9JLUZzeig/m9tzX0V1nujmXSJmHdnx6euZw80=
-X-Received: by 2002:a17:907:a06f:b0:72b:564c:465b with SMTP id
- ia15-20020a170907a06f00b0072b564c465bmr4793767ejc.344.1657736324173; Wed, 13
- Jul 2022 11:18:44 -0700 (PDT)
+        bh=KohUrBmDurVBooPdiYyB7gOaJD1TmlyoWIhvQZBEuEU=;
+        b=ZxmHHX90M+LGC9ypGZgcTic3KE6BjdD9iY9x9dcgtvMiWw6W+OlzpoALPO68y3ad/l
+         ODmzA9KERl9Ab2fa1KVBb3KCfUxgQ8MxxTK7NVnz3iAfYnklM3KKq5WPVxS2pCdkQSpP
+         e6RskwwSdw5zDVaWr/TS3zVoZzdMHy+xm6iCJQr8QdsdLGRcR/Wcct/AjopQtvi02oli
+         JrvTzYNWZop+GljMjAyd6tvoj2OxdR1qCx4Zm5ddzudImIGuLp96FZcKrlZZvz3MtBsx
+         wUoSjEZ/mfi/44hvAkRS40LUMlrtmSPL1+mU1SDQnae741GMpTWO/gFJ18vv3s8M9g4a
+         gBpA==
+X-Gm-Message-State: AJIora8EXmDr24vTOb24Bf9tc8qGc6h2XJV5b1OKHLRVhErzqv3+nFqR
+        rZOdBkriX6QpwZqTDyMn3Oyvl2RYzX8MnEn3EHpHww==
+X-Google-Smtp-Source: AGRyM1smYL3KTATzHxWiw4hPtQUF27x/M3YaAXOvvUqkVlsIeJKQeuxcfy/93Llvw3gIJjHFe1eZ8Eufp7P04LLNirQ=
+X-Received: by 2002:a17:907:6d12:b0:72b:6e70:8c7d with SMTP id
+ sa18-20020a1709076d1200b0072b6e708c7dmr4925612ejc.23.1657736347623; Wed, 13
+ Jul 2022 11:19:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220628024913.1755292-1-tzungbi@kernel.org> <20220628024913.1755292-8-tzungbi@kernel.org>
-In-Reply-To: <20220628024913.1755292-8-tzungbi@kernel.org>
+References: <20220628024913.1755292-1-tzungbi@kernel.org> <20220628024913.1755292-9-tzungbi@kernel.org>
+In-Reply-To: <20220628024913.1755292-9-tzungbi@kernel.org>
 From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 13 Jul 2022 11:18:32 -0700
-Message-ID: <CABXOdTft0Nu_hJQuXwepBXE3tWZf7jaidGE5mamq_=1Zi4hevg@mail.gmail.com>
-Subject: Re: [RESEND PATCH 07/11] platform/chrome: cros_ec_proto: return
- -EAGAIN when retries timed out
+Date:   Wed, 13 Jul 2022 11:18:56 -0700
+Message-ID: <CABXOdTec8MtFU2N60fXy-z=cKUXkO4ZtCCRHPXjZUuX3JJ2NOw@mail.gmail.com>
+Subject: Re: [RESEND PATCH 08/11] platform/chrome: cros_ec_proto: change Kunit
+ expectation for EC errors
 To:     Tzung-Bi Shih <tzungbi@kernel.org>
 Cc:     Benson Leung <bleung@chromium.org>,
         Guenter Roeck <groeck@chromium.org>,
@@ -73,36 +73,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, Jun 27, 2022 at 7:49 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
 >
-> While EC_COMMS_STATUS_PROCESSING flag is still on after it tries
-> EC_COMMAND_RETRIES times for sending EC_CMD_GET_COMMS_STATUS,
-> cros_ec_wait_until_complete() doesn't return an error code.
+> cros_ec_wait_until_complete() checks `msg->result` for
+> EC_CMD_GET_COMMS_STATUS.  However, it doesn't return standard error codes
+> like most of others.
 >
-> Return -EAGAIN in the case instead.
-
-Does this make sense, or should it be -ETIMEDOUT ? What does the EC do
-if it is still busy (stuck ?) with executing a command and it gets
-another one ?
-
+> Change the Kunit test expectation to align them.
 >
 > Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+
 > ---
->  drivers/platform/chrome/cros_ec_proto.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/platform/chrome/cros_ec_proto_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index 466ecb063bd6..49772a4c5353 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -167,6 +167,9 @@ static int cros_ec_wait_until_complete(struct cros_ec_device *ec_dev, uint32_t *
->                         break;
+> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
+> index fbb872040711..2a6b099fbfd9 100644
+> --- a/drivers/platform/chrome/cros_ec_proto_test.c
+> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
+> @@ -1927,7 +1927,7 @@ static void cros_ec_proto_test_cmd_xfer_in_progress_return_error(struct kunit *t
 >         }
 >
-> +       if (i >= EC_COMMAND_RETRIES)
-> +               ret = -EAGAIN;
-> +
->         kfree(msg);
->         return ret;
->  }
+>         ret = cros_ec_cmd_xfer(ec_dev, &msg);
+> -       KUNIT_EXPECT_EQ(test, ret, 0);
+> +       KUNIT_EXPECT_EQ(test, ret, -EOPNOTSUPP);
+>
+>         KUNIT_EXPECT_EQ(test, msg.result, EC_RES_INVALID_COMMAND);
+>
 > --
 > 2.37.0.rc0.161.g10f37bed90-goog
 >

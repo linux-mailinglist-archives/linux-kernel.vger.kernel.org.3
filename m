@@ -2,40 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3AF4573158
+	by mail.lfdr.de (Postfix) with ESMTP id AB30E573157
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234546AbiGMIlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S235035AbiGMIlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235745AbiGMIkn (ORCPT
+        with ESMTP id S235737AbiGMIkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:40:43 -0400
+        Wed, 13 Jul 2022 04:40:41 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE44BDF639
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:40:38 -0700 (PDT)
-Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oBXvB-00046d-6h; Wed, 13 Jul 2022 10:40:37 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [PATCH] Revert "reset: microchip-sparx5: allow building as a module"
-Date:   Wed, 13 Jul 2022 10:40:10 +0200
-Message-Id: <20220713084010.168720-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87ED9E2A2A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:40:39 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oBXvB-00046c-4O; Wed, 13 Jul 2022 10:40:37 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oBXvA-0005TM-Kx; Wed, 13 Jul 2022 10:40:36 +0200
+Date:   Wed, 13 Jul 2022 10:40:36 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        linux-amarula@amarulasolutions.com,
+        Sascha Hauer <s.hauer@pengutronix.de>, stable@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        dmaengine@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 1/2] dmaengine: mxs: use platform_driver_register
+Message-ID: <20220713084036.ipcd6bhcdb574w7h@pengutronix.de>
+References: <20220712160909.2054141-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::28
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712160909.2054141-1-dario.binacchi@amarulasolutions.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -47,58 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit b6b9585876da018bdde2d5f15d206a689c0d70f3.
+Hi Dario,
 
-This breaks MDIO on kswitch-d10, presumably because the global switch
-reset is not released early enough anymore.
+On 22-07-12, Dario Binacchi wrote:
+> Driver registration fails on SOC imx8mn as its supplier, the clock
+> control module, is probed later than subsys initcall level. This driver
+> uses platform_driver_probe which is not compatible with deferred probing
+> and won't be probed again later if probe function fails due to clock not
+> being available at that time.
+> 
+> This patch replaces the use of platform_driver_probe with
+> platform_driver_register which will allow probing the driver later again
+> when the clock control module will be available.
+> 
+> Fixes: a580b8c5429a ("dmaengine: mxs-dma: add dma support for i.MX23/28")
+> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Cc: stable@vger.kernel.org
+> 
+> ---
+> 
+> Changes in v5:
+> - Update the commit message.
+> - Create a new patch to remove the warning generated by this patch.
 
-Reported-by: Michael Walle <michael@walle.cc>
-Cc: Clément Léger <clement.leger@bootlin.com>
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
----
- drivers/reset/Kconfig                  | 2 +-
- drivers/reset/reset-microchip-sparx5.c | 8 ++++++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
+Please squash this new patch into this patch since you introduce the
+warning with this patch.
 
-diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index d9a08ec343e2..f9a7cee01659 100644
---- a/drivers/reset/Kconfig
-+++ b/drivers/reset/Kconfig
-@@ -115,7 +115,7 @@ config RESET_LPC18XX
- 	  This enables the reset controller driver for NXP LPC18xx/43xx SoCs.
- 
- config RESET_MCHP_SPARX5
--	tristate "Microchip Sparx5 reset driver"
-+	bool "Microchip Sparx5 reset driver"
- 	depends on ARCH_SPARX5 || SOC_LAN966 || COMPILE_TEST
- 	default y if SPARX5_SWITCH
- 	select MFD_SYSCON
-diff --git a/drivers/reset/reset-microchip-sparx5.c b/drivers/reset/reset-microchip-sparx5.c
-index 3d54dda3593e..00b612a0effa 100644
---- a/drivers/reset/reset-microchip-sparx5.c
-+++ b/drivers/reset/reset-microchip-sparx5.c
-@@ -149,7 +149,6 @@ static const struct of_device_id mchp_sparx5_reset_of_match[] = {
- 	},
- 	{ }
- };
--MODULE_DEVICE_TABLE(of, mchp_sparx5_reset_of_match);
- 
- static struct platform_driver mchp_sparx5_reset_driver = {
- 	.probe = mchp_sparx5_reset_probe,
-@@ -159,7 +158,12 @@ static struct platform_driver mchp_sparx5_reset_driver = {
- 	},
- };
- 
--module_platform_driver(mchp_sparx5_reset_driver);
-+static int __init mchp_sparx5_reset_init(void)
-+{
-+	return platform_driver_register(&mchp_sparx5_reset_driver);
-+}
-+
-+postcore_initcall(mchp_sparx5_reset_init);
- 
- MODULE_DESCRIPTION("Microchip Sparx5 switch reset driver");
- MODULE_AUTHOR("Steen Hegelund <steen.hegelund@microchip.com>");
--- 
-2.30.2
+Regards,
+  Marco
 
+> Changes in v4:
+> - Restore __init in front of mxs_dma_probe() definition.
+> - Rename the mxs_dma_driver variable to mxs_dma_driver_probe.
+> - Update the commit message.
+> - Use builtin_platform_driver() instead of module_platform_driver().
+> 
+> Changes in v3:
+> - Restore __init in front of mxs_dma_init() definition.
+> 
+> Changes in v2:
+> - Add the tag "Cc: stable@vger.kernel.org" in the sign-off area.
+> 
+>  drivers/dma/mxs-dma.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
+> index 994fc4d2aca4..18f8154b859b 100644
+> --- a/drivers/dma/mxs-dma.c
+> +++ b/drivers/dma/mxs-dma.c
+> @@ -839,10 +839,6 @@ static struct platform_driver mxs_dma_driver = {
+>  		.name	= "mxs-dma",
+>  		.of_match_table = mxs_dma_dt_ids,
+>  	},
+> +	.probe = mxs_dma_probe,
+>  };
+> -
+> -static int __init mxs_dma_module_init(void)
+> -{
+> -	return platform_driver_probe(&mxs_dma_driver, mxs_dma_probe);
+> -}
+> -subsys_initcall(mxs_dma_module_init);
+> +builtin_platform_driver(mxs_dma_driver);
+> -- 
+> 2.32.0
+> 
+> 
+> 

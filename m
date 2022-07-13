@@ -2,67 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6C2573C44
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 025F9573C47
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236533AbiGMRzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 13:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
+        id S236524AbiGMR7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 13:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236524AbiGMRzL (ORCPT
+        with ESMTP id S229772AbiGMR7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 13:55:11 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193C42559F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:55:11 -0700 (PDT)
-Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DHBfbs025425;
-        Wed, 13 Jul 2022 17:55:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references; s=pps0720;
- bh=efIXf5V8/hDg6Z+y3iB4jN9bgmdy8cHxvB7MA2dQbVc=;
- b=LyzbeS88Z+eA0w/YPh5MGblQ9RLzWXlC3oFG204DaB/NifGG8vXEnXWeKvMFOHMWlxMi
- F7A3v8U3HX9VKEX1QWb3iHxMBH4IdnbVczOX9QAH8Rn7U4KVO39KBE+bbZAh4g9KniWM
- sTF8aesbj30V49UYld6GoufjtXEMRIDTnpF0JK4gn0p5oI5gg6dNSoO/GM0Zhbtb5xbN
- ZfRKG9bmnphemf7OUTE2zkXmxsvGYX/J3iPRnizxEfgDd7tmiFR/0bfMS5egd3aDeiSK
- SuhEYRtmOIFV3gggOOHSiv8OzwNOSNpv61ueC+/Z0QAg5WD+tNizDWlSgFTpxzS8SWgk +Q== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3ha1tj0kb3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Jul 2022 17:55:06 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id E9C11802085;
-        Wed, 13 Jul 2022 17:55:05 +0000 (UTC)
-Received: from blofly.os1.tw (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 37C73808E80;
-        Wed, 13 Jul 2022 17:55:04 +0000 (UTC)
-From:   matt.hsiao@hpe.com
-To:     linux-kernel@vger.kernel.org
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org, jerry.hoemann@hpe.com,
-        scott.norton@hpe.com, camille.lu@hpe.com, geoffrey.ndu@hpe.com,
-        gustavo.knuppe@hpe.com, Matt Hsiao <matt.hsiao@hpe.com>
-Subject: [PATCH v2 1/1] misc: hpilo: switch .{read,write} ops to .{read,write}_iter
-Date:   Thu, 14 Jul 2022 01:54:52 +0800
-Message-Id: <20220713175452.4221-2-matt.hsiao@hpe.com>
-X-Mailer: git-send-email 2.16.6
-In-Reply-To: <20220713175452.4221-1-matt.hsiao@hpe.com>
-References: <20220713175452.4221-1-matt.hsiao@hpe.com>
-X-Proofpoint-ORIG-GUID: sZQi1_2SDoyvamWHGmgQ10ruQSYa15Xp
-X-Proofpoint-GUID: sZQi1_2SDoyvamWHGmgQ10ruQSYa15Xp
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-13_07,2022-07-13_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- mlxlogscore=999 impostorscore=0 priorityscore=1501 spamscore=0 bulkscore=0
- phishscore=0 malwarescore=0 clxscore=1015 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207130073
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        Wed, 13 Jul 2022 13:59:38 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CA013F89;
+        Wed, 13 Jul 2022 10:59:37 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DFj3jZ011678;
+        Wed, 13 Jul 2022 17:58:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=WTNM2Y71uH9YkmnI4mHkdgPbRXPl1KZ4R5WR4o8bZms=;
+ b=DGqPLwi8plihiaC9wjqz1jdK4vocQj/FeBkawYmBfBtPVt9IOHYvNZI42MiBEcJhQSU8
+ RmQeCEVNrGxD5Cox3y1TivrRSWRAi+R4pLbBR6vysnIYmilEASRDj1M6tLRuteMREbcY
+ ngXF1u6kNpOiKAHzJvMLGWUC5gKDQbJCxpyKLs/IhaCRfApy9NoFfMXBV6Jehe4eOceW
+ Lr/TdBf5s4NWDtELAoHBjdDz34EQTrt/tAQlnjSU4D6biLjRKZUDFQfXYv58CexZIBN6
+ rEQL85DzqgOLWdXub3YYFMlc0L+nQN0hC6UK2vfkzkRZ6IDSGQ8Gyp9amTb3Hd7JP+U7 2w== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h71r1amjn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Jul 2022 17:58:14 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26DHeeU2012140;
+        Wed, 13 Jul 2022 17:58:13 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h7044m9ak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Jul 2022 17:58:13 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KMahaE4jvzS7mLKkEICd43Fr3q4xDRvH8fL1XhzOk8E4m84PiBhehYReiFmjUHDeKLb1jlmyw7NRmIGZgW7dFzZCUBR09DHJGPcLa+a/HJz3wwxav2glX+npnFD7Ry4t5cDaqSqhjslxB88koGaDtXCd88P5gTTxY+2n+pDqLy3IP0EQnKB2AS1wUrPPj6p84dqCa8gjUYAl5Rs/GbRzb77gXF07xynlRKUvjKysv1hLRJWZwfVWV4DAl35zT9/5g58iHftfkEQ12cW9LACHYchOokvIbwQdVnW4LkqgBt2WkmDrGyAHzakrzwdYk64oT8WRruE1+UTkQpka+A8Xxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WTNM2Y71uH9YkmnI4mHkdgPbRXPl1KZ4R5WR4o8bZms=;
+ b=Hg+3iA6u4ehxES7Bm0dRMoYH6lLZTY+PzutWUGP5maigq9OMtIE2Cy+VVSA2i2osftvG2rfNceAo/+huykKzk45G9dFgbwAVQJNlrPql9mTA5Gn2u8nqFEJiZ/3m9JFtoPDJV5rZpWuFzKjiuYlKTpPs1hQfk0idJXktHh/GItI3uaEHyahvu8qWomyJ9EwLnPnisW/Rhmlc64mMz8tNfUwKjBbaKyz8qazzF0o03lgCMVr07+UXu4r7p0erf+0jC8Bjz2VNcRTtwiDEga9UPvrYbygmu3yTBw8czJ4MM/PE2/6hBprUstcAkXsVkxsDF2H4dHwCdP/inBdhH5d0Fg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WTNM2Y71uH9YkmnI4mHkdgPbRXPl1KZ4R5WR4o8bZms=;
+ b=OtVp5iNnZmRTAVGNXLCPBOeaENLrYLNtetyvx6TircAjf+PdLDDKS8XCnSNwU4KbBkjt/Pq+ONgYfdip89eJ28dx6RokG2u8AKfhrwJg0vRQIkm0jEBg1yvT+b2I6uYYoyra7bjpdZyJS4mmts+2mU5U7aFPXuhK7n4dB97HHrk=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by CH0PR10MB5196.namprd10.prod.outlook.com (2603:10b6:610:c0::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Wed, 13 Jul
+ 2022 17:58:09 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0%6]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
+ 17:58:09 +0000
+Date:   Wed, 13 Jul 2022 10:58:05 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Khalid Aziz <khalid.aziz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>, willy@infradead.org,
+        aneesh.kumar@linux.ibm.com, arnd@arndb.de, 21cnbao@gmail.com,
+        corbet@lwn.net, dave.hansen@linux.intel.com, ebiederm@xmission.com,
+        hagen@jauu.net, jack@suse.cz, keescook@chromium.org,
+        kirill@shutemov.name, kucharsk@gmail.com, linkinjeon@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, longpeng2@huawei.com, luto@kernel.org,
+        markhemm@googlemail.com, pcc@google.com, rppt@kernel.org,
+        sieberf@amazon.com, sjpark@amazon.de, surenb@google.com,
+        tst@schoebel-theuer.de, yzaikin@google.com
+Subject: Re: [PATCH v2 0/9] Add support for shared PTEs across processes
+Message-ID: <Ys8HrW+52EwQbeh8@monkey>
+References: <cover.1656531090.git.khalid.aziz@oracle.com>
+ <20220701212403.77ab8139b6e1aca87fae119e@linux-foundation.org>
+ <0864a811-53c8-a87b-a32d-d6f4c7945caa@redhat.com>
+ <357da99d-d096-a790-31d7-ee477e37c705@oracle.com>
+ <397f3cb2-1351-afcf-cd87-e8f9fb482059@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <397f3cb2-1351-afcf-cd87-e8f9fb482059@redhat.com>
+X-ClientProxiedBy: MW4PR04CA0248.namprd04.prod.outlook.com
+ (2603:10b6:303:88::13) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f5d0c6c9-58c0-49f9-0a84-08da64f93f02
+X-MS-TrafficTypeDiagnostic: CH0PR10MB5196:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RyzPm3UIhR/7PCnwxvwXOF5tKSxoDk3VkWDHO3AsSprNZWASizkZ9FAekthiAxwrImpt29sCof9ZtWdZwoNI8NIyJjJ1gXd3xDsGgAqexfiFickZLJeJMnu/z69HTyvHlrEOtX9HgddJASD+25pm4M261y4THbkRSYweLAc+SoEB8jqQ39fv3aTPWKV+0samV/MQiXqhRvOQxyOLLwYMd0EgA50TlLiaUuwhil2uoWqmg7uitki3AuX2//tlQBF+0f3PRl/scvy1b/vIv7JvoQa2zPZF6Eg7HVsWFJY/UTl5/CrUdvSXQh1FQ+ThMASBpoyl5pQbrjd+nGALqVfzzpoQgW5tHDsP2zbrDdo3vjsSdHQfZibECK5tqulCXDszW/Xd0gGg9Xv88JoP2ciaXM/qwu7B3gStFqye9P6FHrL6AG4H8Li8XsaX3fERr09ui5CzWAh5e3THWSNYLv0FI9ZrLF3TMZQT/9bG/sZ6Mo+S+mBN5qWhyeK0B/ZYzwZWCG1fS/Vq1WWFEljkqjEW+vkYtLT2JD7fCTdUTEvYeAjixRQDCSgPGNAaIZGQngBJ4+jsAjd/9MqZVH0V31je8TiseSZ/NhALHeIHS7P2wH82HqD+mwHOByfn7b7rYli6sdrrTyGaiHIERcj/lGGAND+TaPiyABzs1dLPxOy1MBpvPumXVgUnswZl3L8Dhwm+ZTDalE5an14sDbLB6gad8MjwKOlJ12Vci9mShN/r+uSDSP0SI+8r4zFPZ6OFAv271exKx9oiuZ2ThVjLq0PbqOOm5JQ3BmqbewrBTR7Ngnl/gQNQiY1WONtYYb5UdBbp
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(376002)(136003)(396003)(346002)(39860400002)(53546011)(6506007)(2906002)(41300700001)(6916009)(6486002)(8936002)(6666004)(316002)(54906003)(66476007)(8676002)(66946007)(66556008)(5660300002)(4326008)(7416002)(44832011)(478600001)(86362001)(38100700002)(6512007)(83380400001)(186003)(26005)(33716001)(9686003)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Hv3MPyvlKJecu8/1MrqxMgM2l4/lrD5D3ml8NTn6PpqjnHMUisJB4dRjpCql?=
+ =?us-ascii?Q?csQX+ETeYWBdYILvFsh58P60aIZfK+MRLlgiELCXVcJNEE8Ej/VxrhWZd0m9?=
+ =?us-ascii?Q?8wiSBAepOPtyAcbjA6ukLVug0eNCZkJqCuuzCERUEWwwcTKsBsD8joas2zuA?=
+ =?us-ascii?Q?g2p46ZDxQ/JpBc9AvgM9k14+NFdoBslbfIrqXpCU98tE9LIGj3hWGP9b19jD?=
+ =?us-ascii?Q?sw97RZKeafdAgEnop0yF27eB5IlqqsgBGsrNhMkPIbWDAqobzNFXdG6TXLpM?=
+ =?us-ascii?Q?15yc7Bontv+WdES0izG0nFY5FzdrSEWIHQfm97Pu4bnj3kdhOX+uKepJC7Vo?=
+ =?us-ascii?Q?zfEKfzizTJVSlAKMeoi9Oh8/YBGUvRAq/gUXOmjsxwqJvwFXNpC0sI6eCCNy?=
+ =?us-ascii?Q?R/E/Og6SI0ALv301QUzXHss3sZ/sbK66jTl5B07M0FTMgcDbbs+c2EUmtBux?=
+ =?us-ascii?Q?9BloCIxoL1ASFt8ApfFK2Pk6RGiIGH3b2CPPcZq6koWTzKhZZfIBwNuVzkzD?=
+ =?us-ascii?Q?GurszFUYyaxMzAKTrtry34lJ+vghZCtuP4bRd03N464mcXL0hjGO8YzIrNHt?=
+ =?us-ascii?Q?kX2G0lvvwoq7wUGpZi+ANUIaoxotbd+B4ZRhxL3nTKTmCWNk45abh5bCNqGx?=
+ =?us-ascii?Q?qkl7QCjxo4qR7K0X6ErjYopeTi+h7xQNkG3z3B1k6KLuOLe/Vqhc4bMIaXBN?=
+ =?us-ascii?Q?nj4z0POlCTmSVefUfFfVz6R3Jkepy5B0iVxzkL8OKHAsefzFB0UVb/NaZ3PP?=
+ =?us-ascii?Q?rCz+xEXbTrYd8MnxtUKSBnIwEWuNlXqK1kd5+NctVHKriaCdfIUX/lK3TI/t?=
+ =?us-ascii?Q?RXCyE8tM8NwEyYkn3DKPg8LJdaJx53sY2cjlNZQQ4mcqcGS0V1Sx3jtpAR2e?=
+ =?us-ascii?Q?7s7VidvkJSXxTIB9ylxGpNB1454tQ1JEdXZuSM0RYpcepaVoN3ToUUYWN6Fb?=
+ =?us-ascii?Q?m6QvxaYBArcQim8YamH7klLClUqLox5t5520/bC/W9BXVTw6iH8BfTRCOMTy?=
+ =?us-ascii?Q?kEqOei7Sfelv/u0AgnCqZ3zy8ynB7dXvHwr2lDnmeQDNT9qXeQ4ThC9vZvdi?=
+ =?us-ascii?Q?3aDPre0HP1uO31JveUYZjZPtCc3J6ttEybpeRBemd1t9jMN+boM1I3DPvTkC?=
+ =?us-ascii?Q?OS5rwbjg/JHTP1HXNg6svqDB2Ww/KTsboes+3qWqkWe8QFQkmpMjhEGHYZmE?=
+ =?us-ascii?Q?/zLi/1sp1JF2ccd2HmJitl4uNyuZvjhqGYm3iuRnQvl9kqRzmHs3Dp9zFH/O?=
+ =?us-ascii?Q?2/yMoCFwfOQHKetRCkHgC1Peq8jeeCqNa1Z6rCpiUE1asNHJQbNT1Hn0L+vC?=
+ =?us-ascii?Q?skDA5Gtz4PZuXeG35LFbbvlgvnaruY/SW+xTcLr91o7UutJKYp9U9TU1xW//?=
+ =?us-ascii?Q?hO0qrdmd2ZbsJH8Yr3XQjBg+N+EdxTMeH6s83oNondhPT21EneZvGG+q6DHe?=
+ =?us-ascii?Q?dUrguoZhqdlYx0HsIJPl0UyX6pHG+u+T/vHJ8aAjPmPvjft9N4x4rVGcqKA/?=
+ =?us-ascii?Q?QZsbj7xI3Oju2p+eRzBK0wAt30YaRQdbvlCXPnLlJIBNiFrC4FW9I/DT97ZO?=
+ =?us-ascii?Q?Pd8FQhrTlD6jsd5hyoDLfYEDPSD+78m66/qjVnK4IkTk/DkHo/2kkY6ZZYlN?=
+ =?us-ascii?Q?cA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5d0c6c9-58c0-49f9-0a84-08da64f93f02
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 17:58:09.4640
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uumXRnPh2R1jT8ihaqXCs1bOC6Zxc9CkxU+vjwzwLBTfCieaDLpOCPKjBObMApJ0jyuNG7sn20tE1BGlKnRCsw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5196
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-07-13_07:2022-07-13,2022-07-13 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
+ mlxlogscore=999 suspectscore=0 adultscore=0 mlxscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207130073
+X-Proofpoint-ORIG-GUID: _H_TIk3QMScriLrOmrCfGKfcVZTH_h7w
+X-Proofpoint-GUID: _H_TIk3QMScriLrOmrCfGKfcVZTH_h7w
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,104 +156,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matt Hsiao <matt.hsiao@hpe.com>
+On 07/13/22 16:00, David Hildenbrand wrote:
+> On 08.07.22 21:36, Khalid Aziz wrote:
+> > On 7/8/22 05:47, David Hildenbrand wrote:
+> >> On 02.07.22 06:24, Andrew Morton wrote:
+> >>> On Wed, 29 Jun 2022 16:53:51 -0600 Khalid Aziz <khalid.aziz@oracle.com> wrote:
+> 
+> > suggestion to extend hugetlb PMD sharing was discussed briefly. Conclusion from that discussion and earlier discussion 
+> > on mailing list was hugetlb PMD sharing is built with special case code in too many places in the kernel and it is 
+> > better to replace it with something more general purpose than build even more on it. Mike can correct me if I got that 
+> > wrong.
+> 
+> Yes, I pushed for the removal of that yet-another-hugetlb-special-stuff,
+> and asked the honest question if we can just remove it and replace it by
+> something generic in the future. And as I learned, we most probably
+> cannot rip that out without affecting existing user space. Even
+> replacing it by mshare() would degrade existing user space.
+> 
+> So the natural thing to reduce page table consumption (again, what this
+> cover letter talks about) for user space (semi- ?)automatically for
+> MAP_SHARED files is to factor out what hugetlb has, and teach generic MM
+> code to cache and reuse page tables (PTE and PMD tables should be
+> sufficient) where suitable.
+> 
+> For reasonably aligned mappings and mapping sizes, it shouldn't be too
+> hard (I know, locking ...), to cache and reuse page tables attached to
+> files -- similar to what hugetlb does, just in a generic way. We might
+> want a mechanism to enable/disable this for specific processes and/or
+> VMAs, but these are minor details.
+> 
+> And that could come for free for existing user space, because page
+> tables, and how they are handled, would just be an implementation detail.
+> 
+> 
+> I'd be really interested into what the major roadblocks/downsides
+> file-based page table sharing has. Because I am not convinced that a
+> mechanism like mshare() -- that has to be explicitly implemented+used by
+> user space -- is required for that.
 
-Commit 4d03e3cc59828c82ee89 ("fs: don't allow kernel reads and writes
-without iter ops") requested exclusive .{read,write}_iter ops for
-kernel_{read,write}. To support dependent drivers to access hpilo by
-kernel_{read,write}, switch .{read,write} ops to their iter variants.
-
-Signed-off-by: Matt Hsiao <matt.hsiao@hpe.com>
----
- drivers/misc/hpilo.c | 31 ++++++++++++++++++-------------
- 1 file changed, 18 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/misc/hpilo.c b/drivers/misc/hpilo.c
-index 8d00df9243c4..5d431a56b7eb 100644
---- a/drivers/misc/hpilo.c
-+++ b/drivers/misc/hpilo.c
-@@ -23,6 +23,7 @@
- #include <linux/wait.h>
- #include <linux/poll.h>
- #include <linux/slab.h>
-+#include <linux/uio.h>
- #include "hpilo.h"
- 
- static struct class *ilo_class;
-@@ -435,14 +436,14 @@ static void ilo_set_reset(struct ilo_hwinfo *hw)
- 	}
- }
- 
--static ssize_t ilo_read(struct file *fp, char __user *buf,
--			size_t len, loff_t *off)
-+static ssize_t ilo_read_iter(struct kiocb *iocb, struct iov_iter *to)
- {
--	int err, found, cnt, pkt_id, pkt_len;
--	struct ccb_data *data = fp->private_data;
-+	int err = 0, found, cnt, pkt_id, pkt_len;
-+	struct ccb_data *data = iocb->ki_filp->private_data;
- 	struct ccb *driver_ccb = &data->driver_ccb;
- 	struct ilo_hwinfo *hw = data->ilo_hw;
- 	void *pkt;
-+	size_t len = iov_iter_count(to), copied;
- 
- 	if (is_channel_reset(driver_ccb)) {
- 		/*
-@@ -477,7 +478,9 @@ static ssize_t ilo_read(struct file *fp, char __user *buf,
- 	if (pkt_len < len)
- 		len = pkt_len;
- 
--	err = copy_to_user(buf, pkt, len);
-+	copied = copy_to_iter(pkt, len, to);
-+	if (unlikely(copied != len))
-+		err = -EFAULT;
- 
- 	/* return the received packet to the queue */
- 	ilo_pkt_enqueue(hw, driver_ccb, RECVQ, pkt_id, desc_mem_sz(1));
-@@ -485,14 +488,14 @@ static ssize_t ilo_read(struct file *fp, char __user *buf,
- 	return err ? -EFAULT : len;
- }
- 
--static ssize_t ilo_write(struct file *fp, const char __user *buf,
--			 size_t len, loff_t *off)
-+static ssize_t ilo_write_iter(struct kiocb *iocb, struct iov_iter *from)
- {
--	int err, pkt_id, pkt_len;
--	struct ccb_data *data = fp->private_data;
-+	int err = 0, pkt_id, pkt_len;
-+	struct ccb_data *data = iocb->ki_filp->private_data;
- 	struct ccb *driver_ccb = &data->driver_ccb;
- 	struct ilo_hwinfo *hw = data->ilo_hw;
- 	void *pkt;
-+	size_t len = iov_iter_count(from), copied;
- 
- 	if (is_channel_reset(driver_ccb))
- 		return -ENODEV;
-@@ -506,9 +509,11 @@ static ssize_t ilo_write(struct file *fp, const char __user *buf,
- 		len = pkt_len;
- 
- 	/* on failure, set the len to 0 to return empty packet to the device */
--	err = copy_from_user(pkt, buf, len);
--	if (err)
-+	copied = copy_from_iter(pkt, len, from);
-+	if (unlikely(copied != len)) {
- 		len = 0;
-+		err = -EFAULT;
-+	}
- 
- 	/* send the packet */
- 	ilo_pkt_enqueue(hw, driver_ccb, SENDQ, pkt_id, len);
-@@ -639,8 +644,8 @@ static int ilo_open(struct inode *ip, struct file *fp)
- 
- static const struct file_operations ilo_fops = {
- 	.owner		= THIS_MODULE,
--	.read		= ilo_read,
--	.write		= ilo_write,
-+	.read_iter	= ilo_read_iter,
-+	.write_iter	= ilo_write_iter,
- 	.poll		= ilo_poll,
- 	.open 		= ilo_open,
- 	.release 	= ilo_close,
+Perhaps this is an 'opportunity' for me to write up in detail how
+hugetlb pmd sharing works.  As you know, I have been struggling with
+keeping that working AND safe AND performant.  Who knows, this may lead
+to changes in the existing implementation.
 -- 
-2.16.6
-
+Mike Kravetz

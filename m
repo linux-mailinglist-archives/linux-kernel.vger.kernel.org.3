@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B29D57354C
+	by mail.lfdr.de (Postfix) with ESMTP id D4D5357354D
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236204AbiGMLZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 07:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        id S235245AbiGMLZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 07:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235849AbiGMLY7 (ORCPT
+        with ESMTP id S234439AbiGMLY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:24:59 -0400
+        Wed, 13 Jul 2022 07:24:58 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CEF102087
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:24:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82E71014AC
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:24:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657711498; x=1689247498;
+  t=1657711497; x=1689247497;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LOLSMfBH+ThyF9oJWZiO1uOl+c5t8VSAaXVhaqK53BY=;
-  b=QRzEwtw/CeFGQRpjlBBXrmSSDi26AaOIrKokGHsVewKrtxXubpMey8JL
-   Ks6oJ1qo1ifejCpuISwZAQfAD+QL8epoDtjns3sBgDVRMQbrkjY6Rby5x
-   BzRdeD8pqk/BuLBjIhuuqYiXwSBGo/KT6SOU4+i/wp3Dzi6ybrtpSWTZw
-   +Yalad2SoD5kRx8u9cifLGd6ydk0hT7R8iq3DFS+433C2mD8EvljBZ3Q9
-   Szr1zIXMSYZBN2p/yZRER3OPFT+2K8vzoIx76p/YesQ9nUS34wRtTR/kk
-   lZ6H2DCihOA88mjIuD+q/wxMywQCn0V6yudXydIF1YvgKqCvW7qQ0hHC/
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="371497260"
+  bh=xA6De5du1h40WQGQhyOrLijvhmThcZKzStWUuRAh97k=;
+  b=DbLYpd8p6MCD5wdNKHtkJzkuXMmsPEnrQOjxhvp6v3YCoInjaFikYvWg
+   5XZuXPEaQsWNa7QJ8Jzz7VbXPdHOF2NEHuUw80uAPJk99ivXW6zl11pDH
+   ZXS+UQFhIlI/VH3ZAqUkzKk0p2HtU4MpUbnxnrafoKqkEU3zLqXc8ifqT
+   U2VK5AGd++ZnYSsZiUty7bitm5OFZB/76P81jD55k0QwxKRQNJQM6zENL
+   E7QDnjuG5abPbcPRWYJ+0rksT+W0fK/+QzvdcQJgvI4+oV70+AAOBa8hV
+   u6JvFqMRMFiCtR973qQfrxP1+t6wPnZSKvvQouB9ERyEGiPYZT5DTr0Qg
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="371497259"
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="371497260"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
+   d="scan'208";a="371497259"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 04:24:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="622903395"
+   d="scan'208";a="737841061"
 Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 13 Jul 2022 04:24:56 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 13 Jul 2022 04:24:56 -0700
 Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1oBaUB-0003Pb-Ny;
+        id 1oBaUB-0003Pl-PZ;
         Wed, 13 Jul 2022 11:24:55 +0000
-Date:   Wed, 13 Jul 2022 19:24:21 +0800
+Date:   Wed, 13 Jul 2022 19:24:23 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
@@ -49,7 +49,7 @@ Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
 Subject: [cilium:pr/meta5 4/4] kernel/bpf/net.c:52:28: warning: variable
  'peer' is uninitialized when used here
-Message-ID: <202207131941.ZTw3SDaO-lkp@intel.com>
+Message-ID: <202207131933.oKjzatHd-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -66,7 +66,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://github.com/cilium/linux.git pr/meta5
 head:   3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
 commit: 3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5 [4/4] bpf: Add fd-based API to attach tc BPF programs
-config: hexagon-randconfig-r003-20220712 (https://download.01.org/0day-ci/archive/20220713/202207131941.ZTw3SDaO-lkp@intel.com/config)
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220713/202207131933.oKjzatHd-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e60b4fb2b777118c0ff664a6347851df14fcf75b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -77,7 +77,7 @@ reproduce (this is a W=1 build):
         git checkout 3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>

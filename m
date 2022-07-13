@@ -2,70 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8BD35736D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2FB5736D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235740AbiGMNF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
+        id S235711AbiGMNGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiGMNFZ (ORCPT
+        with ESMTP id S229640AbiGMNGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:05:25 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B948C95A5
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:05:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657717523; x=1689253523;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3/JrVfpmFvfLGf0fxASAn43yBmIG5r41lKNLXkTMb8A=;
-  b=cK0q3aCK5z+a6bw2u4bYXoSKpRt5xaNHs6jbPlUDSBawtHrAz4d4VxV7
-   HAyxaThX2/PwL0g7bM5doYjL7RT6DGb6c95dFnhwWhbqnfq5Re82TSnVV
-   TWU0htkEZq5Z7jsCPQ5nJP7Ejf4WEPHt3ReoR//vTR7r9fhtAgVYroFeJ
-   Ed9NZEWif4tzv3P3x701Sl8LuTPbaovIjWjQCa6E0t2hmemDzEUOjCuy8
-   sXkqCDh+hur4SaTRagUIU3FFoIDceH4+N7WW7eAYe5RY/TOh1npCSOaCk
-   9UWj+6VFi3CApWJwgSTUtOzZk04DPkBeJns0+P/AEUEv29MNtyI8x37c4
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="264991991"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="264991991"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 06:05:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="570618560"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jul 2022 06:05:23 -0700
-Received: from [10.252.208.247] (kliang2-mobl1.ccr.corp.intel.com [10.252.208.247])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Wed, 13 Jul 2022 09:06:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6328F
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:05:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 3829B580298;
-        Wed, 13 Jul 2022 06:05:22 -0700 (PDT)
-Message-ID: <75aaa2a8-7956-84bb-a811-f70802753e21@linux.intel.com>
-Date:   Wed, 13 Jul 2022 09:05:21 -0400
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70C62B81F01
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:05:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8710DC34114;
+        Wed, 13 Jul 2022 13:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657717556;
+        bh=EAXJgBwI2keLSIZeMjBVYhrmB+hmvho7oKlJJvuBDX0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SZOes/DyH4JRiebZpMxx53KG38Dafheux35ejHA0o9MHMZpakEvwj43twiQyl3abP
+         UfeF4rbCTbQs2ydHXAQlZ9+437+WVwPYu8oRqJ78uyNKiT/Awonlt/OKmF8nAExojw
+         dfoAblEzeIZ1gcslNHonoE2yKR5aR306u0rjxKDg=
+Date:   Wed, 13 Jul 2022 15:05:52 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Phil Auld <pauld@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Barry Song <song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH] drivers/base/node.c: fix userspace break from using
+ bin_attributes for cpumap and cpulist
+Message-ID: <Ys7DMC66cUWUcvtu@kroah.com>
+References: <20220712214301.809967-1-pauld@redhat.com>
+ <Ys5gyqMqB/TW6ftv@kroah.com>
+ <Ys6w7pqQdlaHoiIG@lorien.usersys.redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.1
-Subject: Re: [PATCH 2/2] perf tests: Fix Convert perf time to TSC test for
- hybrid
-Content-Language: en-US
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org
-References: <20220713123459.24145-1-adrian.hunter@intel.com>
- <20220713123459.24145-3-adrian.hunter@intel.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220713123459.24145-3-adrian.hunter@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys6w7pqQdlaHoiIG@lorien.usersys.redhat.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,74 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-07-13 8:34 a.m., Adrian Hunter wrote:
-> The test does not always correctly determine the number of events for
-> hybrids, nor allow for more than 1 evsel when parsing.
+On Wed, Jul 13, 2022 at 07:47:58AM -0400, Phil Auld wrote:
+> Hi Greg,
 > 
-> Fix by iterating the events actually created and getting the correct
-> evsel for the events processed.
+> On Wed, Jul 13, 2022 at 08:06:02AM +0200 Greg Kroah-Hartman wrote:
+> > On Tue, Jul 12, 2022 at 05:43:01PM -0400, Phil Auld wrote:
+> > > Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
+> > > This breaks userspace code that retrieves the size before reading the file. Rather
+> > > than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
+> > > limitation of cpumap ABI") let's put in a size value at compile time. Use direct
+> > > comparison and a worst-case maximum to ensure compile time constants. For cpulist the 
+> > > max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960. 
+> > > In order to get near that you'd need a system with every other CPU on one node or 
+> > > something similar. e.g. (0,2,4,... 1024,1026...). We set it to a min of PAGE_SIZE 
+> > > to retain the older behavior. For cpumap, PAGE_SIZE is plenty big.
+> > 
+> > Does userspace care about that size, or can we just put any value in
+> > there and it will be ok?  How about just returning to the original
+> > PAGE_SIZE value to keep things looking identical, will userspace not
+> > read more than that size from the file then?
+> >
 > 
-
-Yes, we cannot always assume there are two events for hybrid.
-
-> Fixes: d9da6f70eb23 ("perf tests: Support 'Convert perf time to TSC' test for hybrid")
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-
-
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks,
-Kan
-> ---
->  tools/perf/tests/perf-time-to-tsc.c | 18 ++++--------------
->  1 file changed, 4 insertions(+), 14 deletions(-)
+> I'll go look. But I think the point of pre-reading the size with fstat is to allocate
+> a buffer to read into. So that may be a problem. 
 > 
-> diff --git a/tools/perf/tests/perf-time-to-tsc.c b/tools/perf/tests/perf-time-to-tsc.c
-> index 8d6d60173693..7c7d20fc503a 100644
-> --- a/tools/perf/tests/perf-time-to-tsc.c
-> +++ b/tools/perf/tests/perf-time-to-tsc.c
-> @@ -20,8 +20,6 @@
->  #include "tsc.h"
->  #include "mmap.h"
->  #include "tests.h"
-> -#include "pmu.h"
-> -#include "pmu-hybrid.h"
->  
->  /*
->   * Except x86_64/i386 and Arm64, other archs don't support TSC in perf.  Just
-> @@ -106,18 +104,8 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
->  
->  	evlist__config(evlist, &opts, NULL);
->  
-> -	evsel = evlist__first(evlist);
-> -
-> -	evsel->core.attr.comm = 1;
-> -	evsel->core.attr.disabled = 1;
-> -	evsel->core.attr.enable_on_exec = 0;
-> -
-> -	/*
-> -	 * For hybrid "cycles:u", it creates two events.
-> -	 * Init the second evsel here.
-> -	 */
-> -	if (perf_pmu__has_hybrid() && perf_pmu__hybrid_mounted("cpu_atom")) {
-> -		evsel = evsel__next(evsel);
-> +	/* For hybrid "cycles:u", it creates two events */
-> +	evlist__for_each_entry(evlist, evsel) {
->  		evsel->core.attr.comm = 1;
->  		evsel->core.attr.disabled = 1;
->  		evsel->core.attr.enable_on_exec = 0;
-> @@ -170,10 +158,12 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
->  				goto next_event;
->  
->  			if (strcmp(event->comm.comm, comm1) == 0) {
-> +				CHECK_NOT_NULL__(evsel = evlist__event2evsel(evlist, event));
->  				CHECK__(evsel__parse_sample(evsel, event, &sample));
->  				comm1_time = sample.time;
->  			}
->  			if (strcmp(event->comm.comm, comm2) == 0) {
-> +				CHECK_NOT_NULL__(evsel = evlist__event2evsel(evlist, event));
->  				CHECK__(evsel__parse_sample(evsel, event, &sample));
->  				comm2_time = sample.time;
->  			}
+> That said, I believe in this case it's the cpulist file which given the use of ranges
+> is very unlikely to actually get that big. 
+
+That is why we had to change this to a binary file.  Think about
+every-other CPU being there, that's a huge list.  This already was
+broken on some systems which is why it had to be changed (i.e. we didn't
+change it for no reason at all.)
+
+> > > On an 80 cpu 4-node sytem (NR_CPUS == 8192)
+> > 
+> > We have systems running Linux with many more cpus than that, and your
+> > company knows this :)
+> 
+> The 80 cpus here don't matter and we only build with NR_CPUS = 8192 :)
+> 
+> But yes, I realize now that the cpumap part I posted is broken for larger
+> NR_CPUS.  I originally had it as NR_CPUS, but as I said in my reply to Barry,
+> it wants to be ~= NR_CPUS/4 + NR_CPUS/32. I'll change that.  
+> 
+> I think we should decide on a max for each and use that. 
+
+Sure, pick a max size please, that's fine with me.
+
+greg k-h

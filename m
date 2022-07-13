@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58240572B86
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 04:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539C9572B80
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 04:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233590AbiGMCxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 22:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        id S234095AbiGMCxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 22:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232803AbiGMCwv (ORCPT
+        with ESMTP id S233530AbiGMCw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 22:52:51 -0400
+        Tue, 12 Jul 2022 22:52:58 -0400
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E042FD4BE7;
-        Tue, 12 Jul 2022 19:52:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8179D216F;
+        Tue, 12 Jul 2022 19:52:46 -0700 (PDT)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4D93B5C0178;
-        Tue, 12 Jul 2022 22:52:41 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id 579A55C017E;
+        Tue, 12 Jul 2022 22:52:42 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 12 Jul 2022 22:52:41 -0400
+  by compute5.internal (MEProxy); Tue, 12 Jul 2022 22:52:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1657680761; x=1657767161; bh=JP
-        PhtYnwHFL5tOpJp64gzLaWi6hHTvx/TUczNa0g4Dc=; b=Ttcdpul57046XeVqLH
-        dpji8I4Mef82ooqSYUDrrfvIeikiABvR/OM89KsaHBMxowCXtputHGlH1kPeL536
-        r7EcizwdkgKyGmGyRGF1LhuUpSLL2CpLgTIOaDxNejMn2E/usbeDTDx47fP2NoKU
-        vvAxU21xTwZOciizmKwMVgJdHSXp0WPeee3Lr052ZfpGH3L9KHfYfPYpg3WidUxf
-        GncvpieyO8ITe5HFRiZStYmO9kvf4OaRtxJaOluw8A4CfWfcPXOCRKB65YyniMEr
-        OaZeG+6YwKUnLtqHF9wTM1uRIVnayYCaiG4BgeDisDhXEDUfl6YzrLYPt2Jz9gEc
-        hC1A==
+        :subject:subject:to:to; s=fm1; t=1657680762; x=1657767162; bh=85
+        dYMDBxkngf3AGHqpJfPSNEwCAp/9eapLV0Ti+OS/E=; b=g5+UnNSl9hTJb6NTtt
+        3VQLXbKNeZSf2QSWCWzs4le9MjWzFvPhEksLx/FiN3SikjsscMEK/xaBHN7/veRv
+        48vcPIltb9pW0PnFtyB8eZqS2b5gOo93DEqYBMFe7dLUq918EcIKduHCAyhAfoXR
+        AurmHua98LvvWuYJ9r8eITgEACPrrmNQl/EGR579rSvtH1DEIjAFh4GvsFi3iun1
+        mFbwL52gx0uTqYMZsWaF5Vf5WKjwEayuYpxZyIZhdSunRPMNwHTHOMp6Lp1Moszl
+        Bd12rmhLVEGjOXOk2FvNHjp9+LAKl9JcSicKUT7aB78e/ksOFNQi8vsRKPjZTU95
+        fNew==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1657680761; x=1657767161; bh=JPPhtYnwHFL5t
-        OpJp64gzLaWi6hHTvx/TUczNa0g4Dc=; b=Hp5Aa/w3jQ01DOjuHKi+n5FPqCJDv
-        5uf+ot3pCk/iA2BhvweBjUNDhMbH/A5yduFe5skKD5tQu7UC5eyG3WNOLaskZl+e
-        Htg7kLJNX2cFx+1jRDvPcLtrs5Vc0TerOdTq9zy2fpwY1UrGRB9odSsERlp64D0g
-        ANqjRL5XW0g1xPNDbi00GSFRQp4ITSadD85Vb9EcH4y1XmbS+zUJkWVqkydzN+xx
-        l2au6dJHXMSJsuqnQcHEMjNDK8kplfc8w85lqLamc4yjx8ScOB2KzwaHtk/gsT1f
-        O99a/nlx77PuMH090S+HhZfeQuQz6q2vc+/3MmaiPXxfHMy4Za+8grSEQ==
-X-ME-Sender: <xms:eTPOYogqVN8Rrtz0KT8n7QzNB7jt87n3SwKjFBuaw_hFv-Yq12K9nQ>
-    <xme:eTPOYhBoYiLhxdvqssN3UFltQqJ6gCTYKt7AWUlRL_GQhirVT2SPepxrT3e_o60BY
-    Ia3RasMVCZ5lqNjXQ>
-X-ME-Received: <xmr:eTPOYgEHhdNdyc40O7K--I3OEFvoYzs3zZikRAaXOoGmdF801BimVjyIeV_8WERxrtJG2ywprJxwYR1JN58928VpM7tmX9dpfhaXO0WslKY6sm6eBhogSma98Au-yyMDDeliNQ>
+        :x-sasl-enc; s=fm3; t=1657680762; x=1657767162; bh=85dYMDBxkngf3
+        AGHqpJfPSNEwCAp/9eapLV0Ti+OS/E=; b=RFvlKNLL7w+TC3ou5kL2cEVhZCSel
+        zHgFvDYYSJZ87GsljtrYcj5BsETmKUxCs8vRw0r9E+8jGFc/vzv/PZpqVZOTFzaT
+        RThRKl2+ySzCOKN4Dlg50RlkqlJFkEwq30B4sMZaZAIJT/MjY8V5GUHjyNGbF1sd
+        HcdWb2VVzwv/8fHiWWt9E+yNDLfo9cv9NZbYYitxiGBmC6F//68If/woHDqD8URM
+        Usfb+hHkPptuYn79Kds9qjzFd0HL1pif7AQg0J4A9hctHVtKB4/a8k5P+iDaFex8
+        9641vIcF0iWIIImKr0tGqIKiDBjUjt4kbSBNBHRRtIO/oLRKG8DVqe8mQ==
+X-ME-Sender: <xms:ejPOYlmN29_g-vgURmIOZu2JkVenTxaMyemRSw5cPfzbBnQ6ZwRlow>
+    <xme:ejPOYg1Be1UTNdR0J97COp0rh2AeRq6BLLlUzHgpmbgbrLJRQ-Y7qiISOnsQrQLMv
+    xM6BWIxacWKP1-5ug>
+X-ME-Received: <xmr:ejPOYrq4SFcJLQT8BQ9ShgOXCNgzmGZHNEToRp3xodB7bYV5rXTospOtPVTJ0jKzmsdAn_-jaaDE1PSfS8nyLm_9VNossOYdXYGxceABilYhvaZnUyoxJkih_WtDf8fbFYMp7g>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejiedgieejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejiedgieejucetufdoteggod
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
     udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:eTPOYpRNvivQ3Lt3WsnjAV_vYeskVZX4gaDVH2rGpOkF26EvrRLe8A>
-    <xmx:eTPOYlzEbbKwniyT_oKju7gwdfHMO8iid6rNkKjzSDiG4u_VYvvnnQ>
-    <xmx:eTPOYn7f3eRQzFs9goFsN1n62gOMg_84AExrU_U13DwC1zB1kwAiDw>
-    <xmx:eTPOYorRvK4zd4aNIJ05BTKSjmaYYEPwTYkN_EzNBThxPY5UNbrNng>
+X-ME-Proxy: <xmx:ejPOYlkvSVx5V3UAJe9YbiC6sk8nA2s0NHMUcIjJCkkp4jASde3xXg>
+    <xmx:ejPOYj3jAhzj-dDPlQ19sstbm4gdjEFRquQjhA3Ds3muk-LovB-pDQ>
+    <xmx:ejPOYksrhmhWiA35m5oK1hFQz3UHmJUdGaJLKS1hFLlhyFJSC45KDQ>
+    <xmx:ejPOYhPqFJbdxjri0Zjoja8dtCtlESb7vGT1spTlYqzS_J6wODHosw>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 12 Jul 2022 22:52:40 -0400 (EDT)
+ 12 Jul 2022 22:52:41 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -74,9 +74,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
         Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH v2 4/6] pinctrl: sunxi: Refactor register/offset calculation
-Date:   Tue, 12 Jul 2022 21:52:31 -0500
-Message-Id: <20220713025233.27248-5-samuel@sholland.org>
+Subject: [PATCH v2 5/6] pinctrl: sunxi: Make some layout parameters dynamic
+Date:   Tue, 12 Jul 2022 21:52:32 -0500
+Message-Id: <20220713025233.27248-6-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220713025233.27248-1-samuel@sholland.org>
 References: <20220713025233.27248-1-samuel@sholland.org>
@@ -96,370 +96,179 @@ Starting with the D1/D1s/T113 SoC, Allwinner changed the layout of the
 pinctrl registers. This new layout widens the drive level field, which
 affects the pull register offset and the overall bank size.
 
-As a first step to support this, combine the register and offset
-calculation functions, and refactor the math to depend on one constant
-for field widths instead of three. This minimizes the code size impact
-of making some of the factors dynamic.
+In order to support multiple register layouts, some of the layout
+parameters need to be set based on the pinctrl variant. This requires
+passing the pinctrl struct pointer to the register/offset calculation
+functions.
 
-While rewriting these functions, move them to the implementation file,
-since that is the only file where they are used. And make the comment
-more generic, without mentioning specific offsets/sizes.
-
-The callers are updated to expect a shifted mask, and to use consistent
-terminology (reg/shift/mask/val).
-
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 Tested-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
 (no changes since v1)
 
- drivers/pinctrl/sunxi/pinctrl-sunxi.c | 119 ++++++++++++++++++--------
- drivers/pinctrl/sunxi/pinctrl-sunxi.h |  93 +-------------------
- 2 files changed, 89 insertions(+), 123 deletions(-)
+ drivers/pinctrl/sunxi/pinctrl-sunxi.c | 44 ++++++++++++++++-----------
+ drivers/pinctrl/sunxi/pinctrl-sunxi.h |  3 ++
+ 2 files changed, 29 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/pinctrl/sunxi/pinctrl-sunxi.c b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-index eb3d595f816a..78b7ab69d7a5 100644
+index 78b7ab69d7a5..ec7daaa5666b 100644
 --- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
 +++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-@@ -46,6 +46,63 @@ static struct lock_class_key sunxi_pinctrl_irq_request_class;
- static struct irq_chip sunxi_pinctrl_edge_irq_chip;
- static struct irq_chip sunxi_pinctrl_level_irq_chip;
- 
-+/*
-+ * The sunXi PIO registers are organized as a series of banks, with registers
-+ * for each bank in the following order:
-+ *  - Mux config
-+ *  - Data value
-+ *  - Drive level
-+ *  - Pull direction
-+ *
-+ * Multiple consecutive registers are used for fields wider than one bit.
-+ *
-+ * The following functions calculate the register and the bit offset to access.
-+ * They take a pin number which is relative to the start of the current device.
-+ */
-+static void sunxi_mux_reg(u32 pin, u32 *reg, u32 *shift, u32 *mask)
-+{
-+	u32 bank   = pin / PINS_PER_BANK;
-+	u32 offset = pin % PINS_PER_BANK * MUX_FIELD_WIDTH;
-+
-+	*reg   = bank * BANK_MEM_SIZE + MUX_REGS_OFFSET +
-+		 offset / BITS_PER_TYPE(u32) * sizeof(u32);
-+	*shift = offset % BITS_PER_TYPE(u32);
-+	*mask  = (BIT(MUX_FIELD_WIDTH) - 1) << *shift;
-+}
-+
-+static void sunxi_data_reg(u32 pin, u32 *reg, u32 *shift, u32 *mask)
-+{
-+	u32 bank   = pin / PINS_PER_BANK;
-+	u32 offset = pin % PINS_PER_BANK * DATA_FIELD_WIDTH;
-+
-+	*reg   = bank * BANK_MEM_SIZE + DATA_REGS_OFFSET +
-+		 offset / BITS_PER_TYPE(u32) * sizeof(u32);
-+	*shift = offset % BITS_PER_TYPE(u32);
-+	*mask  = (BIT(DATA_FIELD_WIDTH) - 1) << *shift;
-+}
-+
-+static void sunxi_dlevel_reg(u32 pin, u32 *reg, u32 *shift, u32 *mask)
-+{
-+	u32 bank   = pin / PINS_PER_BANK;
-+	u32 offset = pin % PINS_PER_BANK * DLEVEL_FIELD_WIDTH;
-+
-+	*reg   = bank * BANK_MEM_SIZE + DLEVEL_REGS_OFFSET +
-+		 offset / BITS_PER_TYPE(u32) * sizeof(u32);
-+	*shift = offset % BITS_PER_TYPE(u32);
-+	*mask  = (BIT(DLEVEL_FIELD_WIDTH) - 1) << *shift;
-+}
-+
-+static void sunxi_pull_reg(u32 pin, u32 *reg, u32 *shift, u32 *mask)
-+{
-+	u32 bank   = pin / PINS_PER_BANK;
-+	u32 offset = pin % PINS_PER_BANK * PULL_FIELD_WIDTH;
-+
-+	*reg   = bank * BANK_MEM_SIZE + PULL_REGS_OFFSET +
-+		 offset / BITS_PER_TYPE(u32) * sizeof(u32);
-+	*shift = offset % BITS_PER_TYPE(u32);
-+	*mask  = (BIT(PULL_FIELD_WIDTH) - 1) << *shift;
-+}
-+
- static struct sunxi_pinctrl_group *
- sunxi_pinctrl_find_group_by_name(struct sunxi_pinctrl *pctl, const char *group)
+@@ -59,45 +59,49 @@ static struct irq_chip sunxi_pinctrl_level_irq_chip;
+  * The following functions calculate the register and the bit offset to access.
+  * They take a pin number which is relative to the start of the current device.
+  */
+-static void sunxi_mux_reg(u32 pin, u32 *reg, u32 *shift, u32 *mask)
++static void sunxi_mux_reg(const struct sunxi_pinctrl *pctl,
++			  u32 pin, u32 *reg, u32 *shift, u32 *mask)
  {
-@@ -452,21 +509,17 @@ static const struct pinctrl_ops sunxi_pctrl_ops = {
+ 	u32 bank   = pin / PINS_PER_BANK;
+ 	u32 offset = pin % PINS_PER_BANK * MUX_FIELD_WIDTH;
+ 
+-	*reg   = bank * BANK_MEM_SIZE + MUX_REGS_OFFSET +
++	*reg   = bank * pctl->bank_mem_size + MUX_REGS_OFFSET +
+ 		 offset / BITS_PER_TYPE(u32) * sizeof(u32);
+ 	*shift = offset % BITS_PER_TYPE(u32);
+ 	*mask  = (BIT(MUX_FIELD_WIDTH) - 1) << *shift;
+ }
+ 
+-static void sunxi_data_reg(u32 pin, u32 *reg, u32 *shift, u32 *mask)
++static void sunxi_data_reg(const struct sunxi_pinctrl *pctl,
++			   u32 pin, u32 *reg, u32 *shift, u32 *mask)
+ {
+ 	u32 bank   = pin / PINS_PER_BANK;
+ 	u32 offset = pin % PINS_PER_BANK * DATA_FIELD_WIDTH;
+ 
+-	*reg   = bank * BANK_MEM_SIZE + DATA_REGS_OFFSET +
++	*reg   = bank * pctl->bank_mem_size + DATA_REGS_OFFSET +
+ 		 offset / BITS_PER_TYPE(u32) * sizeof(u32);
+ 	*shift = offset % BITS_PER_TYPE(u32);
+ 	*mask  = (BIT(DATA_FIELD_WIDTH) - 1) << *shift;
+ }
+ 
+-static void sunxi_dlevel_reg(u32 pin, u32 *reg, u32 *shift, u32 *mask)
++static void sunxi_dlevel_reg(const struct sunxi_pinctrl *pctl,
++			     u32 pin, u32 *reg, u32 *shift, u32 *mask)
+ {
+ 	u32 bank   = pin / PINS_PER_BANK;
+-	u32 offset = pin % PINS_PER_BANK * DLEVEL_FIELD_WIDTH;
++	u32 offset = pin % PINS_PER_BANK * pctl->dlevel_field_width;
+ 
+-	*reg   = bank * BANK_MEM_SIZE + DLEVEL_REGS_OFFSET +
++	*reg   = bank * pctl->bank_mem_size + DLEVEL_REGS_OFFSET +
+ 		 offset / BITS_PER_TYPE(u32) * sizeof(u32);
+ 	*shift = offset % BITS_PER_TYPE(u32);
+-	*mask  = (BIT(DLEVEL_FIELD_WIDTH) - 1) << *shift;
++	*mask  = (BIT(pctl->dlevel_field_width) - 1) << *shift;
+ }
+ 
+-static void sunxi_pull_reg(u32 pin, u32 *reg, u32 *shift, u32 *mask)
++static void sunxi_pull_reg(const struct sunxi_pinctrl *pctl,
++			   u32 pin, u32 *reg, u32 *shift, u32 *mask)
+ {
+ 	u32 bank   = pin / PINS_PER_BANK;
+ 	u32 offset = pin % PINS_PER_BANK * PULL_FIELD_WIDTH;
+ 
+-	*reg   = bank * BANK_MEM_SIZE + PULL_REGS_OFFSET +
++	*reg   = bank * pctl->bank_mem_size + pctl->pull_regs_offset +
+ 		 offset / BITS_PER_TYPE(u32) * sizeof(u32);
+ 	*shift = offset % BITS_PER_TYPE(u32);
+ 	*mask  = (BIT(PULL_FIELD_WIDTH) - 1) << *shift;
+@@ -508,18 +512,19 @@ static const struct pinctrl_ops sunxi_pctrl_ops = {
+ 	.get_group_pins		= sunxi_pctrl_get_group_pins,
  };
  
- static int sunxi_pconf_reg(unsigned pin, enum pin_config_param param,
--			   u32 *offset, u32 *shift, u32 *mask)
-+			   u32 *reg, u32 *shift, u32 *mask)
+-static int sunxi_pconf_reg(unsigned pin, enum pin_config_param param,
++static int sunxi_pconf_reg(const struct sunxi_pinctrl *pctl,
++			   u32 pin, enum pin_config_param param,
+ 			   u32 *reg, u32 *shift, u32 *mask)
  {
  	switch (param) {
  	case PIN_CONFIG_DRIVE_STRENGTH:
--		*offset = sunxi_dlevel_reg(pin);
--		*shift = sunxi_dlevel_offset(pin);
--		*mask = DLEVEL_PINS_MASK;
-+		sunxi_dlevel_reg(pin, reg, shift, mask);
+-		sunxi_dlevel_reg(pin, reg, shift, mask);
++		sunxi_dlevel_reg(pctl, pin, reg, shift, mask);
  		break;
  
  	case PIN_CONFIG_BIAS_PULL_UP:
  	case PIN_CONFIG_BIAS_PULL_DOWN:
  	case PIN_CONFIG_BIAS_DISABLE:
--		*offset = sunxi_pull_reg(pin);
--		*shift = sunxi_pull_offset(pin);
--		*mask = PULL_PINS_MASK;
-+		sunxi_pull_reg(pin, reg, shift, mask);
+-		sunxi_pull_reg(pin, reg, shift, mask);
++		sunxi_pull_reg(pctl, pin, reg, shift, mask);
  		break;
  
  	default:
-@@ -481,17 +534,17 @@ static int sunxi_pconf_get(struct pinctrl_dev *pctldev, unsigned pin,
- {
- 	struct sunxi_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
- 	enum pin_config_param param = pinconf_to_config_param(*config);
--	u32 offset, shift, mask, val;
-+	u32 reg, shift, mask, val;
- 	u16 arg;
- 	int ret;
+@@ -540,7 +545,7 @@ static int sunxi_pconf_get(struct pinctrl_dev *pctldev, unsigned pin,
  
  	pin -= pctl->desc->pin_base;
  
--	ret = sunxi_pconf_reg(pin, param, &offset, &shift, &mask);
-+	ret = sunxi_pconf_reg(pin, param, &reg, &shift, &mask);
+-	ret = sunxi_pconf_reg(pin, param, &reg, &shift, &mask);
++	ret = sunxi_pconf_reg(pctl, pin, param, &reg, &shift, &mask);
  	if (ret < 0)
  		return ret;
  
--	val = (readl(pctl->membase + offset) >> shift) & mask;
-+	val = (readl(pctl->membase + reg) & mask) >> shift;
- 
- 	switch (pinconf_to_config_param(*config)) {
- 	case PIN_CONFIG_DRIVE_STRENGTH:
-@@ -545,16 +598,15 @@ static int sunxi_pconf_set(struct pinctrl_dev *pctldev, unsigned pin,
- 	int i;
- 
- 	for (i = 0; i < num_configs; i++) {
-+		u32 arg, reg, shift, mask, val;
- 		enum pin_config_param param;
- 		unsigned long flags;
--		u32 offset, shift, mask, reg;
--		u32 arg, val;
- 		int ret;
- 
+@@ -606,7 +611,7 @@ static int sunxi_pconf_set(struct pinctrl_dev *pctldev, unsigned pin,
  		param = pinconf_to_config_param(configs[i]);
  		arg = pinconf_to_config_argument(configs[i]);
  
--		ret = sunxi_pconf_reg(pin, param, &offset, &shift, &mask);
-+		ret = sunxi_pconf_reg(pin, param, &reg, &shift, &mask);
+-		ret = sunxi_pconf_reg(pin, param, &reg, &shift, &mask);
++		ret = sunxi_pconf_reg(pctl, pin, param, &reg, &shift, &mask);
  		if (ret < 0)
  			return ret;
  
-@@ -591,9 +643,8 @@ static int sunxi_pconf_set(struct pinctrl_dev *pctldev, unsigned pin,
- 		}
- 
- 		raw_spin_lock_irqsave(&pctl->lock, flags);
--		reg = readl(pctl->membase + offset);
--		reg &= ~(mask << shift);
--		writel(reg | val << shift, pctl->membase + offset);
-+		writel((readl(pctl->membase + reg) & ~mask) | val << shift,
-+		       pctl->membase + reg);
- 		raw_spin_unlock_irqrestore(&pctl->lock, flags);
- 	} /* for each config */
- 
-@@ -719,16 +770,16 @@ static void sunxi_pmx_set(struct pinctrl_dev *pctldev,
- 				 u8 config)
- {
- 	struct sunxi_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
-+	u32 reg, shift, mask;
+@@ -774,7 +779,7 @@ static void sunxi_pmx_set(struct pinctrl_dev *pctldev,
  	unsigned long flags;
--	u32 val, mask;
-+
-+	pin -= pctl->desc->pin_base;
-+	sunxi_mux_reg(pin, &reg, &shift, &mask);
+ 
+ 	pin -= pctl->desc->pin_base;
+-	sunxi_mux_reg(pin, &reg, &shift, &mask);
++	sunxi_mux_reg(pctl, pin, &reg, &shift, &mask);
  
  	raw_spin_lock_irqsave(&pctl->lock, flags);
  
--	pin -= pctl->desc->pin_base;
--	val = readl(pctl->membase + sunxi_mux_reg(pin));
--	mask = MUX_PINS_MASK << sunxi_mux_offset(pin);
--	writel((val & ~mask) | config << sunxi_mux_offset(pin),
--		pctl->membase + sunxi_mux_reg(pin));
-+	writel((readl(pctl->membase + reg) & ~mask) | config << shift,
-+	       pctl->membase + reg);
- 
- 	raw_spin_unlock_irqrestore(&pctl->lock, flags);
- }
-@@ -861,43 +912,43 @@ static int sunxi_pinctrl_gpio_direction_input(struct gpio_chip *chip,
- static int sunxi_pinctrl_gpio_get(struct gpio_chip *chip, unsigned offset)
- {
- 	struct sunxi_pinctrl *pctl = gpiochip_get_data(chip);
--	u32 reg = sunxi_data_reg(offset);
--	u8 index = sunxi_data_offset(offset);
- 	bool set_mux = pctl->desc->irq_read_needs_mux &&
- 		gpiochip_line_is_irq(chip, offset);
+@@ -917,7 +922,7 @@ static int sunxi_pinctrl_gpio_get(struct gpio_chip *chip, unsigned offset)
  	u32 pin = offset + chip->base;
--	u32 val;
-+	u32 reg, shift, mask, val;
-+
-+	sunxi_data_reg(offset, &reg, &shift, &mask);
+ 	u32 reg, shift, mask, val;
+ 
+-	sunxi_data_reg(offset, &reg, &shift, &mask);
++	sunxi_data_reg(pctl, offset, &reg, &shift, &mask);
  
  	if (set_mux)
  		sunxi_pmx_set(pctl->pctl_dev, pin, SUN4I_FUNC_INPUT);
- 
--	val = (readl(pctl->membase + reg) >> index) & DATA_PINS_MASK;
-+	val = (readl(pctl->membase + reg) & mask) >> shift;
- 
- 	if (set_mux)
- 		sunxi_pmx_set(pctl->pctl_dev, pin, SUN4I_FUNC_IRQ);
- 
--	return !!val;
-+	return val;
- }
- 
- static void sunxi_pinctrl_gpio_set(struct gpio_chip *chip,
- 				unsigned offset, int value)
- {
- 	struct sunxi_pinctrl *pctl = gpiochip_get_data(chip);
--	u32 reg = sunxi_data_reg(offset);
--	u8 index = sunxi_data_offset(offset);
-+	u32 reg, shift, mask, val;
+@@ -937,7 +942,7 @@ static void sunxi_pinctrl_gpio_set(struct gpio_chip *chip,
+ 	u32 reg, shift, mask, val;
  	unsigned long flags;
--	u32 regval;
-+
-+	sunxi_data_reg(offset, &reg, &shift, &mask);
+ 
+-	sunxi_data_reg(offset, &reg, &shift, &mask);
++	sunxi_data_reg(pctl, offset, &reg, &shift, &mask);
  
  	raw_spin_lock_irqsave(&pctl->lock, flags);
  
--	regval = readl(pctl->membase + reg);
-+	val = readl(pctl->membase + reg);
+@@ -1489,6 +1494,9 @@ int sunxi_pinctrl_init_with_variant(struct platform_device *pdev,
+ 	pctl->dev = &pdev->dev;
+ 	pctl->desc = desc;
+ 	pctl->variant = variant;
++	pctl->bank_mem_size = BANK_MEM_SIZE;
++	pctl->pull_regs_offset = PULL_REGS_OFFSET;
++	pctl->dlevel_field_width = DLEVEL_FIELD_WIDTH;
  
- 	if (value)
--		regval |= BIT(index);
-+		val |= mask;
- 	else
--		regval &= ~(BIT(index));
-+		val &= ~mask;
- 
--	writel(regval, pctl->membase + reg);
-+	writel(val, pctl->membase + reg);
- 
- 	raw_spin_unlock_irqrestore(&pctl->lock, flags);
- }
+ 	pctl->irq_array = devm_kcalloc(&pdev->dev,
+ 				       IRQ_PER_BANK * pctl->desc->irq_banks,
 diff --git a/drivers/pinctrl/sunxi/pinctrl-sunxi.h b/drivers/pinctrl/sunxi/pinctrl-sunxi.h
-index 0f1aab58650c..efaa97457e08 100644
+index efaa97457e08..c705828add73 100644
 --- a/drivers/pinctrl/sunxi/pinctrl-sunxi.h
 +++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.h
-@@ -36,23 +36,15 @@
+@@ -169,6 +169,9 @@ struct sunxi_pinctrl {
+ 	raw_spinlock_t			lock;
+ 	struct pinctrl_dev		*pctl_dev;
+ 	unsigned long			variant;
++	u32				bank_mem_size;
++	u32				pull_regs_offset;
++	u32				dlevel_field_width;
+ };
  
- #define BANK_MEM_SIZE		0x24
- #define MUX_REGS_OFFSET		0x0
-+#define MUX_FIELD_WIDTH		4
- #define DATA_REGS_OFFSET	0x10
-+#define DATA_FIELD_WIDTH	1
- #define DLEVEL_REGS_OFFSET	0x14
-+#define DLEVEL_FIELD_WIDTH	2
- #define PULL_REGS_OFFSET	0x1c
-+#define PULL_FIELD_WIDTH	2
- 
- #define PINS_PER_BANK		32
--#define MUX_PINS_PER_REG	8
--#define MUX_PINS_BITS		4
--#define MUX_PINS_MASK		0x0f
--#define DATA_PINS_PER_REG	32
--#define DATA_PINS_BITS		1
--#define DATA_PINS_MASK		0x01
--#define DLEVEL_PINS_PER_REG	16
--#define DLEVEL_PINS_BITS	2
--#define DLEVEL_PINS_MASK	0x03
--#define PULL_PINS_PER_REG	16
--#define PULL_PINS_BITS		2
--#define PULL_PINS_MASK		0x03
- 
- #define IRQ_PER_BANK		32
- 
-@@ -222,83 +214,6 @@ struct sunxi_pinctrl {
- 		.irqnum = _irq,					\
- 	}
- 
--/*
-- * The sunXi PIO registers are organized as is:
-- * 0x00 - 0x0c	Muxing values.
-- *		8 pins per register, each pin having a 4bits value
-- * 0x10		Pin values
-- *		32 bits per register, each pin corresponding to one bit
-- * 0x14 - 0x18	Drive level
-- *		16 pins per register, each pin having a 2bits value
-- * 0x1c - 0x20	Pull-Up values
-- *		16 pins per register, each pin having a 2bits value
-- *
-- * This is for the first bank. Each bank will have the same layout,
-- * with an offset being a multiple of 0x24.
-- *
-- * The following functions calculate from the pin number the register
-- * and the bit offset that we should access.
-- */
--static inline u32 sunxi_mux_reg(u16 pin)
--{
--	u8 bank = pin / PINS_PER_BANK;
--	u32 offset = bank * BANK_MEM_SIZE;
--	offset += MUX_REGS_OFFSET;
--	offset += pin % PINS_PER_BANK / MUX_PINS_PER_REG * 0x04;
--	return round_down(offset, 4);
--}
--
--static inline u32 sunxi_mux_offset(u16 pin)
--{
--	u32 pin_num = pin % MUX_PINS_PER_REG;
--	return pin_num * MUX_PINS_BITS;
--}
--
--static inline u32 sunxi_data_reg(u16 pin)
--{
--	u8 bank = pin / PINS_PER_BANK;
--	u32 offset = bank * BANK_MEM_SIZE;
--	offset += DATA_REGS_OFFSET;
--	offset += pin % PINS_PER_BANK / DATA_PINS_PER_REG * 0x04;
--	return round_down(offset, 4);
--}
--
--static inline u32 sunxi_data_offset(u16 pin)
--{
--	u32 pin_num = pin % DATA_PINS_PER_REG;
--	return pin_num * DATA_PINS_BITS;
--}
--
--static inline u32 sunxi_dlevel_reg(u16 pin)
--{
--	u8 bank = pin / PINS_PER_BANK;
--	u32 offset = bank * BANK_MEM_SIZE;
--	offset += DLEVEL_REGS_OFFSET;
--	offset += pin % PINS_PER_BANK / DLEVEL_PINS_PER_REG * 0x04;
--	return round_down(offset, 4);
--}
--
--static inline u32 sunxi_dlevel_offset(u16 pin)
--{
--	u32 pin_num = pin % DLEVEL_PINS_PER_REG;
--	return pin_num * DLEVEL_PINS_BITS;
--}
--
--static inline u32 sunxi_pull_reg(u16 pin)
--{
--	u8 bank = pin / PINS_PER_BANK;
--	u32 offset = bank * BANK_MEM_SIZE;
--	offset += PULL_REGS_OFFSET;
--	offset += pin % PINS_PER_BANK / PULL_PINS_PER_REG * 0x04;
--	return round_down(offset, 4);
--}
--
--static inline u32 sunxi_pull_offset(u16 pin)
--{
--	u32 pin_num = pin % PULL_PINS_PER_REG;
--	return pin_num * PULL_PINS_BITS;
--}
--
- static inline u32 sunxi_irq_hw_bank_num(const struct sunxi_pinctrl_desc *desc, u8 bank)
- {
- 	if (!desc->irq_bank_map)
+ #define SUNXI_PIN(_pin, ...)					\
 -- 
 2.35.1
 

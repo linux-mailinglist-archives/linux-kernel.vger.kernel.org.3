@@ -2,100 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092A557389C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7102D5738B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236526AbiGMOUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
+        id S233735AbiGMOWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236144AbiGMOUB (ORCPT
+        with ESMTP id S231129AbiGMOWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:20:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8524B326FF;
-        Wed, 13 Jul 2022 07:20:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EE1DB82011;
-        Wed, 13 Jul 2022 14:19:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A76FFC341C0;
-        Wed, 13 Jul 2022 14:19:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657721997;
-        bh=gZlZ9XEUO5Tr8VlBA2Fy3TMHOnEzakxg3l035XJS0ew=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=sXmw8e0T8l3/UhBWRTNHdZt1I2FAsDabkybIwxE8ZSVsvo3XpM7EVxvoGFoCuFFby
-         mrDnJv2plFpgTEqQUdMBC/GJad8zgFGmWr53rhHX/OhYSp8T8Z/KVSYBqRbyXlltvv
-         eMoB+bHhBaCksiIngXRQRhMY5UhMN7fTYIcuAe0vHexHuw5cURbWveLEJPqDQMvURH
-         TYBbaYkJTR10pWjb8KIuTqdaxuaoKSZ3yJICfmiN+h5C97EL3MR1vNrjhA077Ma8yo
-         FwRhDK5fBz4zyJJ4wtQx+wQ1a/DnFeUxmN7jiMgm1xLi01Hpffxeu8nc1GpI4sGCXX
-         SNwLEpeC8AOoQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, yangyingliang@huawei.com
-Cc:     daire.mcnamara@microchip.com, conor.dooley@microchip.com
-In-Reply-To: <20220713025657.3524506-1-yangyingliang@huawei.com>
-References: <20220713025657.3524506-1-yangyingliang@huawei.com>
-Subject: Re: [PATCH -next v2 0/3] spi: microchip-core: fix and cleanups
-Message-Id: <165772199640.105087.16657528468194823666.b4-ty@kernel.org>
-Date:   Wed, 13 Jul 2022 15:19:56 +0100
+        Wed, 13 Jul 2022 10:22:18 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57FC32ED2;
+        Wed, 13 Jul 2022 07:22:15 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DCwFt2023204;
+        Wed, 13 Jul 2022 16:21:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=8StrFdxqKvIx4QP9Pz3BRbHaQVEul95a7IIOW+3FDyE=;
+ b=mbd8/DRWSAHB9fs2osy45tUAP9aL1EgVM8p4JRWkOHnMse5S8fPVRE+mEBZDnozs/4Hk
+ 2ZTjabVz4IC6PX3in8W4UJF0wXXrcebeeU8wCTjEaDr0d661vcY5zSXdcMLQ/L4bePDL
+ Rir995zjFoUrIkZ0GOZxdkr2E6V8sJFBe98QCj401h5+kc/QyrWL5w4J8R5xBGmbXYQx
+ qCKNSDgZUuZ1UfizPzbImlpKO5D7kwAgcZbV5z7G0hxYH8homz4W72ZCohXmKMfd1yng
+ mgdj/Ah8dMv7U59G0hQu7bY1LztQlM8DkhW02WJL7D7dJAveqPHIK9IhnhvjvR6k0M0j GA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h94guhnam-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 16:21:56 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CEF9410002A;
+        Wed, 13 Jul 2022 16:21:55 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C1BD3226FC5;
+        Wed, 13 Jul 2022 16:21:55 +0200 (CEST)
+Received: from localhost (10.75.127.45) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 13 Jul
+ 2022 16:21:54 +0200
+From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
+To:     Jonathan Corbet <corbet@lwn.net>, Vinod Koul <vkoul@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-doc@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>
+Subject: [PATCH v2 0/4] STM32 DMA-MDMA chaining feature
+Date:   Wed, 13 Jul 2022 16:21:44 +0200
+Message-ID: <20220713142148.239253-1-amelie.delaunay@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-13_03,2022-07-13_03,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022 10:56:54 +0800, Yang Yingliang wrote:
-> Patch #1 fix a UAF in mchp_corespi_remove().
-> Patch #2 and #3 some cleanups to simpify code.
-> 
-> v1 -> v2:
->   add patch #3 to use dev_err_probe to simpify code.
-> 
-> Yang Yingliang (3):
->   spi: microchip-core: fix UAF in mchp_corespi_remove()
->   spi: microchip-core: switch to use devm_spi_alloc_master()
->   spi: microchip-core: switch to use dev_err_probe()
-> 
-> [...]
+This patchset (re)introduces STM32 DMA-MDMA chaining feature.
 
-Applied to
+As the DMA is not able to generate convenient burst transfer on the DDR,
+it penalises the AXI bus when accessing the DDR. While it accesses
+optimally the SRAM. The DMA-MDMA chaining then consists in having an SRAM
+buffer between DMA and MDMA, so the DMA deals with peripheral and SRAM,
+and the MDMA with SRAM and DDR.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+The feature relies on the fact that DMA channel Transfer Complete signal
+can trigger a MDMA channel transfer and MDMA can clear the DMA request by
+writing to DMA Interrupt Clear register.
 
-Thanks!
+A deeper introduction can be found in patch 1.
 
-[1/3] spi: microchip-core: fix UAF in mchp_corespi_remove()
-      commit: e82c6d62a1f2347cde69c169fcf37e4d26f89b98
-[2/3] spi: microchip-core: switch to use devm_spi_alloc_master()
-      commit: 5d56d8974d1e5fa5d7d0761037377e03f6edcc66
-[3/3] spi: microchip-core: switch to use dev_err_probe()
-      commit: cdeaf3a99a02b6f8566bcaacc9c3501c6cceda74
+Previous implementation [1] has been dropped as nacked.
+Unlike this previous implementation (where all the stuff was embedded in
+stm32-dma driver), the user (in peripheral drivers using dma) has now to
+configure the MDMA channel.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+[1] https://lore.kernel.org/lkml/1538139715-24406-1-git-send-email-pierre-yves.mordret@st.com/
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Changes in v2:
+- wrap to 80-column limit for documentation
+- add an entry for this documentation in index.rst
+- use simple table instead of csv-table in documentation
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Amelie Delaunay (4):
+  docs: arm: stm32: introduce STM32 DMA-MDMA chaining feature
+  dmaengine: stm32-dmamux: set dmamux channel id in dma features
+    bitfield
+  dmaengine: stm32-dma: add support to trigger STM32 MDMA
+  dmaengine: stm32-mdma: add support to be triggered by STM32 DMA
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+ Documentation/arm/index.rst                   |   1 +
+ .../arm/stm32/stm32-dma-mdma-chaining.rst     | 415 ++++++++++++++++++
+ drivers/dma/stm32-dma.c                       |  56 ++-
+ drivers/dma/stm32-dmamux.c                    |   2 +-
+ drivers/dma/stm32-mdma.c                      |  70 ++-
+ 5 files changed, 541 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
 
-Thanks,
-Mark
+-- 
+2.25.1
+

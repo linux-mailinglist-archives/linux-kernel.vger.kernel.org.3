@@ -2,150 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B260B5732EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2255732ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236071AbiGMJgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S236129AbiGMJg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235715AbiGMJf5 (ORCPT
+        with ESMTP id S236156AbiGMJgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:35:57 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDB9F5105
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:35:38 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id p13so6374231ilq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8hCvbhUuE7iA1/u1sNKoZ3id9VEaO10A7n+3QCiRIug=;
-        b=hfH7DEq5PaONpaOoC647h1QB7wqN7ibRVfxQ+Xv95kLw7AhVojhtcQgrKDqLicU4QE
-         GwcQYYXHEXeoVPCquIZ/TOddIAdtxbFMosgwecmOQV58ZycM9NzoI78HyWgQC++dJMNd
-         dWW8QSN+yFeLDmP3WyS4cskhDfC3zUx5N3EirLIjL/KbsUFyv7j9BWkRqLdC8wKIlFwv
-         nZx+6pkV+ELrnrsconDcEOSD6uM+uc8CjOWQBLyNVxXssJ2QillHuTmCAO3IqbRJLriG
-         fmunFgvzm1yDRy9Hz+eP9qiBqd0Rn5VQtCzXMnkTEfqmspVhCtT8okVrktepS73pNCjm
-         ReFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8hCvbhUuE7iA1/u1sNKoZ3id9VEaO10A7n+3QCiRIug=;
-        b=X4XFCDD2/xgGYxxWkDLeeFDCegaysorr3365llKbazvvwdTKl/vkYAJilh7hqgktjc
-         4FC7P+WAjdbM70RRzli+FOteZ/uju0lCHaWGkr0BN6DUKdaDLm0eikYZslS7K1tnmonO
-         2/KDwa0n6slnlCLl493Osds02SbeeYl3gS1C7b/KClvjXcwFEht64xL4oinx9Y7WZRQj
-         u2R/xEUJEYfidNGZszKuK90a+ftWGjXok/4Te0WFO+SNElE8dOj1DVcM2G04XDLCnq9a
-         3v/nQZw2d9QKk/xO6ILdDFbrJqyyytWoBbCPlrqB48mFodX6y7UZRmGbWd1GLMSx6kD1
-         w0ZQ==
-X-Gm-Message-State: AJIora/nDmX64131T9C+zRAhxzInj5yk+h3M1Du3XPxA404gW+bPzhEo
-        CzZodaxidLlmebzmB38PoUpsflkjcZjD1hEy3FgHqA==
-X-Google-Smtp-Source: AGRyM1t9eiVKIpWe4xlNSO62SErkGf4i8C+vihhnHmuNi/We+kH/fQZ2vpDcp0Tiu2AjZh1r5+/53BhiqZgn9YTo1sk=
-X-Received: by 2002:a05:6e02:1549:b0:2dc:616a:1dd4 with SMTP id
- j9-20020a056e02154900b002dc616a1dd4mr1338068ilu.131.1657704938001; Wed, 13
- Jul 2022 02:35:38 -0700 (PDT)
+        Wed, 13 Jul 2022 05:36:01 -0400
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D568E222AC
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:35:56 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by xavier.telenet-ops.be with bizsmtp
+        id uZbt2700R4C55Sk01Zbtd4; Wed, 13 Jul 2022 11:35:54 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oBYmf-003LRy-7N; Wed, 13 Jul 2022 11:35:53 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oBYme-00B78G-Ol; Wed, 13 Jul 2022 11:35:52 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Rob Herring <robh@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] PCI: Fix dropping valid root bus resources with .end = zero
+Date:   Wed, 13 Jul 2022 11:35:50 +0200
+Message-Id: <9c41a4372b27420c732ff5599d823e363de00c6d.1657704829.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220712183246.394947160@linuxfoundation.org> <6acd1cd0-25aa-eb9c-4176-49f623f79301@gmail.com>
-In-Reply-To: <6acd1cd0-25aa-eb9c-4176-49f623f79301@gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 13 Jul 2022 15:05:26 +0530
-Message-ID: <CA+G9fYsBFy65-Y1Yo_Zr_bJWGV6QYhMaEhyaShOG+qoOD7pu+w@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/130] 5.10.131-rc1 review
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022 at 04:45, Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> On 7/12/22 11:37, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.10.131 release.
-> > There are 130 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 14 Jul 2022 18:32:19 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >       https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.131-rc1.gz
-> > or in the git tree and branch at:
-> >       git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
+On r8a7791/koelsch:
 
+    kmemleak: 1 new suspected memory leaks (see /sys/kernel/debug/kmemleak)
+    # cat /sys/kernel/debug/kmemleak
+    unreferenced object 0xc3a34e00 (size 64):
+      comm "swapper/0", pid 1, jiffies 4294937460 (age 199.080s)
+      hex dump (first 32 bytes):
+	b4 5d 81 f0 b4 5d 81 f0 c0 b0 a2 c3 00 00 00 00  .]...]..........
+	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+      backtrace:
+	[<fe3aa979>] __kmalloc+0xf0/0x140
+	[<34bd6bc0>] resource_list_create_entry+0x18/0x38
+	[<767046bc>] pci_add_resource_offset+0x20/0x68
+	[<b3f3edf2>] devm_of_pci_get_host_bridge_resources.constprop.0+0xb0/0x390
 
-> perf fails to build with:
+When coalescing two resources for a contiguous aperture, the first
+resource is enlarged to cover the full contiguous range, while the
+second resource is marked invalid.  This invalidation is done by
+clearing the flags, start, and end members.
 
-I have also noticed perf build failed.
+When adding the initial resources to the bus later, invalid resources
+are skipped.  Unfortunately, the check for an invalid resource considers
+only the end member, causing false positives.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+E.g. on r8a7791/koelsch, root bus resource 0 ("bus 00") is skipped, and
+no longer registered with pci_bus_insert_busn_res() (causing the memory
+leak), nor printed:
 
-In file included from util/intel-pt-decoder/intel-pt-insn-decoder.c:15:
-util/intel-pt-decoder/../../../arch/x86/lib/insn.c:13:10: fatal error:
-asm/inat.h: No such file or directory
-   13 | #include <asm/inat.h> /* __ignore_sync_check__ */
-      |          ^~~~~~~~~~~~
-compilation terminated.
+     pci-rcar-gen2 ee090000.pci: host bridge /soc/pci@ee090000 ranges:
+     pci-rcar-gen2 ee090000.pci:      MEM 0x00ee080000..0x00ee08ffff -> 0x00ee080000
+     pci-rcar-gen2 ee090000.pci: PCI: revision 11
+     pci-rcar-gen2 ee090000.pci: PCI host bridge to bus 0000:00
+    -pci_bus 0000:00: root bus resource [bus 00]
+     pci_bus 0000:00: root bus resource [mem 0xee080000-0xee08ffff]
 
-Build log:
-https://builds.tuxbuild.com/2BrKWlDZbrZwQIfxzeMf6fv37sn/
+Fix this by only skipping resources where all of the flags, start, and
+end members are zero.
 
->    CC
-> /local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/perf/util/intel-pt-decoder/intel-pt-insn-decoder.o
-> In file included from util/intel-pt-decoder/intel-pt-insn-decoder.c:15:
-> util/intel-pt-decoder/../../../arch/x86/lib/insn.c:13:10: fatal error:
-> asm/inat.h: No such file or directory
->   #include <asm/inat.h> /* __ignore_sync_check__ */
->            ^~~~~~~~~~~~
-> compilation terminated.
-> make[7]: *** [util/intel-pt-decoder/Build:14:
-> /local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/perf/util/intel-pt-decoder/intel-pt-insn-decoder.o]
-> Error 1
-> make[6]: ***
-> [/local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/build/Makefile.build:139:
-> intel-pt-decoder] Error 2
-> make[5]: ***
-> [/local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/build/Makefile.build:139:
-> util] Error 2
-> make[4]: *** [Makefile.perf:643:
-> /local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/perf/perf-in.o]
-> Error 2
-> make[3]: *** [Makefile.perf:229: sub-make] Error 2
-> make[2]: *** [Makefile:70: all] Error 2
-> make[1]: *** [package/pkg-generic.mk:294:
-> /local/users/fainelli/buildroot/output/arm64/build/linux-tools/.stamp_built]
-> Error 2
-> make: *** [Makefile:27: _all] Error 2
->
-> you will need to pick this patch as well:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0705ef64d1ff52b817e278ca6e28095585ff31e1
->
-> With that one applied:
->
-> On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
->
-> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-> --
-> Florian
+Fixes: 7c3855c423b17f6c ("PCI: Coalesce host bridge contiguous apertures")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Is there any side effect of not registering the root bus resource with
+pci_bus_insert_busn_res()?  This is the resource created by
+of_pci_parse_bus_range(), and thus affects any DT platforms using
+"bus-range = <0 0>".
 
-- Naresh
+Perhaps checking for "!res->flags" would be sufficient?
+
+I assume this still causes memory leaks on systems where resources are
+coalesced, as the second resource of a contiguous aperture is no longer
+referenced? Perhaps instead of clearing the resource, it should be
+removed from the list (and freed? is it actually safe to do that?)?
+
+Apparently Johannes had identified the bug before, but didn't realize
+the full impact...
+https://lore.kernel.org/r/5331e942ff28bb191d62bb403b03ceb7d750856c.camel@sipsolutions.net/
+---
+ drivers/pci/probe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 17a969942d37033a..be628798d279ada0 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -994,7 +994,7 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+ 	resource_list_for_each_entry_safe(window, n, &resources) {
+ 		offset = window->offset;
+ 		res = window->res;
+-		if (!res->end)
++		if (!res->flags && !res->start && !res->end)
+ 			continue;
+ 
+ 		list_move_tail(&window->node, &bridge->windows);
+-- 
+2.25.1
+

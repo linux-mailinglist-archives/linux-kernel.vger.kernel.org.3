@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC83572C86
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE17572C89
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbiGME2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 00:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
+        id S230210AbiGME2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 00:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbiGME2R (ORCPT
+        with ESMTP id S233761AbiGME2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 00:28:17 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5527E5C9F4;
-        Tue, 12 Jul 2022 21:28:16 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id a15so9184406pfv.13;
-        Tue, 12 Jul 2022 21:28:16 -0700 (PDT)
+        Wed, 13 Jul 2022 00:28:20 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D575C9F4;
+        Tue, 12 Jul 2022 21:28:19 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id s21so10327355pjq.4;
+        Tue, 12 Jul 2022 21:28:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=v+sMBqp6ooJWJMiKxkcuWRrYdEMc2s2mHBQ5ff60zrg=;
-        b=YrfCRc/lr//lkQWdNidRTq+YhnzWWh9PpK/45rbwYG36xJ7RSCbTW9P6+Kddbkdpsz
-         RJhiuKedGrAJxV1qQ/uA58Ki6hjhJc/YPa6kx3Qcx2jKKOkjG+zu4vazZ0F1dpAlkIDG
-         dTWODtRt0dEJ2s32Rol2siS2/uVuhyEuZ+jZhX0bKKmUjgrc5lrg9dhn8JH6NCrlOMV5
-         cX3FsMIZJp2ieP0Bb8U2zPpxfYpdkzSn/OjDwQaxepSp8a5IRT7X0yKsKMxODiorIWkr
-         v/MEOK6eUJXNSHP8F0nAwQsVLVttcHu5gnb5vAbupF/yjPAvAc54wPTbVugQsE3pAGXG
-         62eQ==
+        bh=cVU0VI6SHUHssnCSIRaLHSdROjTj9L70izUE69+SVQI=;
+        b=VadUZY6UnFi1GZKkPTGWEx6p9p8OtGaFA8ixYPSj5oPo47HbSqaCLJSuzmgeAZ0Vfz
+         +hyQsZsfgrH4hv80taG+hAdxskgo57toHAXDrvzDXPBH+denvHxvWQCpaunJP0tJ0xol
+         AHvqBkgeUdvJ7aAl/BT37D6kx2g+d34x/9HciKNxvAGHSpjUuwh2LWuhJiLt4h1XuAbI
+         3RS9mPHe1IltNeKEfrbJ6aViRlvFoBHDcL586oFZ/Bch29MsjtJYXfttAPizPgiwIlB0
+         b6f//RPGXzIJWXRgAd+AHzT37UpzmdOF2osy+3s1FeOiTIfxzCkgEzZd+14TFy6DET4d
+         KqNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=v+sMBqp6ooJWJMiKxkcuWRrYdEMc2s2mHBQ5ff60zrg=;
-        b=L5BBqC9YjQmFVKhme2grD+hxzACjGtHAScJxLpFnxN4nwaIYhGvZZUepcoq2s1jCKx
-         p2KCXp05MRa40ICojlZR9lZg71Mi6/UVlpCNwxJcLCb2/xds8sSQAD5GeJER/lfO2ZRl
-         s2B2xn4L+Ctjm2NhpZvRreZif2jCmMKkpVcgk4F+uQWC0rfVgOuEeWjYlh2ze45hkqW1
-         XeiKd8ufQCF/9rGPvRuy5fVZdZz8Kh+G4Q3kTqzJpm1rFDwec8zwz4vxV0AT11Skeqm3
-         ozBK5NueUvp/HKtRCV/qljG41e5BH/6pDsi2qhh07LyntHAg2wIJxha+cgl2VLRY2MEq
-         WsvQ==
-X-Gm-Message-State: AJIora8Py0wE5eYrU8OP9MwyY8YlcD/xg87xzpvvCsY+9DKqIZ92+v12
-        0G8984TyiJLp6ZmJYM1QxkQ=
-X-Google-Smtp-Source: AGRyM1vZM5WujfLKVRsQYiDFz9xZS0FV6nfL+YC4CbxI9VzqIuaLn4J7RReRmF2ujbV0MZXctuZXzg==
-X-Received: by 2002:a63:4558:0:b0:411:442a:b740 with SMTP id u24-20020a634558000000b00411442ab740mr1352262pgk.540.1657686495918;
-        Tue, 12 Jul 2022 21:28:15 -0700 (PDT)
+        bh=cVU0VI6SHUHssnCSIRaLHSdROjTj9L70izUE69+SVQI=;
+        b=SfZPnZtL+aomgADbqkK5RX/pylrCttZlp4jfdlbchmfEDCs/oscqC2eanAm7nqUP/a
+         O0RptdliP0Tsd1XpPPVWgp3EQtAlsCfmOcxGDYu/AQXpZJWnDl6M7KzUharAkxx7pAf+
+         UN9QMzTeShUNAjG+zpyB6cmlNRWHZKAQLlXbuQncDv39n4Yn3SASF7wh9WFlMhpLiXA8
+         xjWmLXehjUC1ppLHaI3EGppVe/e2/Xq0q4tzPVlU7tObAylVuSS8L8dgYsYNHEhE8U+q
+         ubbB9lZ+yYPr3yE1Mrf8SuYNcCPlmfiwEgSoHwcjZZRnRa60oTWbYJfdEMk2i10xFXvH
+         /M9w==
+X-Gm-Message-State: AJIora/hgZFjf6ncwLqv4yO2x5oV0lXlWB51pYKg3CgksSo2WXYAxx4w
+        SKfGjTqODkWzzkiYfMGLIFZeHVlRVLg=
+X-Google-Smtp-Source: AGRyM1tatiGwuci6RJxBxVvQPCr3zGspVZ/NLawV19EmxifvkxeY8ns2E9FstJPf5054KmMmFH4zqg==
+X-Received: by 2002:a17:902:ec8b:b0:16c:1cc2:6794 with SMTP id x11-20020a170902ec8b00b0016c1cc26794mr1290201plg.17.1657686498612;
+        Tue, 12 Jul 2022 21:28:18 -0700 (PDT)
 Received: from linux-l9pv.suse (123-194-153-158.dynamic.kbronet.com.tw. [123.194.153.158])
-        by smtp.gmail.com with ESMTPSA id e7-20020a17090301c700b0016c4f006603sm4732513plh.54.2022.07.12.21.28.13
+        by smtp.gmail.com with ESMTPSA id e7-20020a17090301c700b0016c4f006603sm4732513plh.54.2022.07.12.21.28.16
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 Jul 2022 21:28:15 -0700 (PDT)
+        Tue, 12 Jul 2022 21:28:18 -0700 (PDT)
 From:   "Lee, Chun-Yi" <joeyli.kernel@gmail.com>
 X-Google-Original-From: "Lee, Chun-Yi" <jlee@suse.com>
 To:     David Howells <dhowells@redhat.com>
@@ -60,9 +60,9 @@ Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
         Mimi Zohar <zohar@linux.ibm.com>, keyrings@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Lee, Chun-Yi" <jlee@suse.com>
-Subject: [PATCH v9,3/4] modsign: Add codeSigning EKU to the default
-Date:   Wed, 13 Jul 2022 12:24:20 +0800
-Message-Id: <20220713042421.21680-4-jlee@suse.com>
+Subject: [PATCH v9,4/4] Documentation/admin-guide/module-signing.rst: add openssl command option example for CodeSign EKU
+Date:   Wed, 13 Jul 2022 12:24:21 +0800
+Message-Id: <20220713042421.21680-5-jlee@suse.com>
 X-Mailer: git-send-email 2.12.3
 In-Reply-To: <20220713042421.21680-1-jlee@suse.com>
 References: <20220713042421.21680-1-jlee@suse.com>
@@ -76,23 +76,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add codeSigning EKU to the default X.509 key generation config for the
-build time autogenerated kernel key.
+Add an openssl command option example for generating CodeSign extended
+key usage in X.509 when CONFIG_CHECK_CODESIGN_EKU is enabled.
 
 Signed-off-by: "Lee, Chun-Yi" <jlee@suse.com>
 ---
- certs/default_x509.genkey | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/admin-guide/module-signing.rst | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/certs/default_x509.genkey b/certs/default_x509.genkey
-index d4c6628cb8e5..53be501ce57a 100644
---- a/certs/default_x509.genkey
-+++ b/certs/default_x509.genkey
-@@ -15,3 +15,4 @@ basicConstraints=critical,CA:FALSE
- keyUsage=digitalSignature
- subjectKeyIdentifier=hash
- authorityKeyIdentifier=keyid
-+extendedKeyUsage=codeSigning
+diff --git a/Documentation/admin-guide/module-signing.rst b/Documentation/admin-guide/module-signing.rst
+index 7d7c7c8a545c..ca3b8f19466c 100644
+--- a/Documentation/admin-guide/module-signing.rst
++++ b/Documentation/admin-guide/module-signing.rst
+@@ -170,6 +170,12 @@ generate the public/private key files::
+ 	   -config x509.genkey -outform PEM -out kernel_key.pem \
+ 	   -keyout kernel_key.pem
+ 
++When ``CONFIG_CHECK_CODESIGN_EKU`` option is enabled, the following openssl
++command option should be added where for generating CodeSign extended key usage
++in X.509::
++
++        -addext "extendedKeyUsage=codeSigning"
++
+ The full pathname for the resulting kernel_key.pem file can then be specified
+ in the ``CONFIG_MODULE_SIG_KEY`` option, and the certificate and key therein will
+ be used instead of an autogenerated keypair.
 -- 
 2.26.2
 

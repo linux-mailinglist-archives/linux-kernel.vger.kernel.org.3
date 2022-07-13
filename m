@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B23572E99
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C337572E9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234362AbiGMG54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 02:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S234369AbiGMG61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 02:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbiGMG5x (ORCPT
+        with ESMTP id S229898AbiGMG6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 02:57:53 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDBF18349
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:57:52 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id u15so1515630lji.10
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:57:52 -0700 (PDT)
+        Wed, 13 Jul 2022 02:58:25 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C39192AA
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:58:24 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso2147912pjo.0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:58:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LzDcCOyz/oL/Atfc+DxoSYENFDlt7iDBa7JxdWJN6Pg=;
-        b=zW3XIk4xCAluS7YJYHCruLMdLmB3lr7SulMprALEQ/L7GCtEhiZ4Sttthk2ih5h1JY
-         NKIkFLa6A9sPs81NC1QyKOBASgXOLdbVhcv9KTXY1kFVvCrt7htRkl8WwvnNxqFQ0im8
-         m25DR6KDePb8USlq+JdTV/5QQ8wsD11IDi1BBM7aDg/SUovyyoX3LiWYZy5fxB2S1/nQ
-         cE4ws5g67LxE/58IfArGC5V8IOGQ0facYLF8IDaJyMesNBh++ztrTih/Vk6RHfzcwMH1
-         d/Z+rvE4SuV2lnfN+TO54XZh90iLUu/sZgMoBkBKx7YH+7k6CmvDfTpY7yWtj0tANXnX
-         +JIQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=11lAwwFyeDArHB1vigA26oYLT3/Sq+N3CVWBYZLz8Sw=;
+        b=bcxk9W0GpZtOC1DS9JqcZghrYQklcPSuGTLzuHKUVkYMz3+gRmVwnJas2kqacvrH1r
+         E5FojF8QnkU7VyQyI52+ZfDcJoOoQ7dpSBMjp0jsH8kjxeboLWnibYzcum4rI8Mxfwjd
+         d1y/Fr+ubWYzuAkD9n/3WM/Z8kD/6KhyjVhsqBW5d1qjMalw1/2tS27P36HxOjuNuRe6
+         bZe/VKcUW1nQJO31nybIpWFROORl673dcnSVHkNiHhCyjZWlypStzS2MI6KWD+d7P10G
+         cDmDUuBlqY4LwmTRSf9BjbBP1Kk6RdoTZp31JkiR6B1PKHd7amKQFW1Djxis2AFtbD+M
+         Z4hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LzDcCOyz/oL/Atfc+DxoSYENFDlt7iDBa7JxdWJN6Pg=;
-        b=yb40k/Ub2xaZQF5RYwBR3akH78UDMXna+mGW07ngojgOIX4zvdH/koS6BC2cYasMwL
-         Ddi28ufiqsmTqJC0XSh/Tr3CUe/OuTHov1ENaYkMYaaT2jbLNXQAE1v+ekH9BxSbuyYx
-         SM/J1i8SmGgwIcu/A+UoO5DlKow1Y7R70+Z1h70GzyWRxM/fOaPvu6dvYF41RjDI5X4A
-         38unatkEzmGP/lf7PH72S3f4h3mOMrlH+OzIiFsfuRwLq5DtTO8F/fDfVIV8wUG3C8Ln
-         rMArKFHoXwB62SS1va4gfK/K0lONCpAOkJ198MB+Xfxl02wMc5N9XSHb8EMC8HRgKRbY
-         Preg==
-X-Gm-Message-State: AJIora9UozpGUzjDydWVkfUOe57yZ7HPPsSM6TMHZTSa6KpS2ykoK4r2
-        QqhYCQ/5SEf8Fm5pyoC3V45UyA==
-X-Google-Smtp-Source: AGRyM1uLh+si39qAWrmJ/KpiKy/ip5jRoTk1XpWo/Cisq6DFMkunBJGszPzlFjVI0NndiDLp+d2yMg==
-X-Received: by 2002:a2e:b538:0:b0:25d:881d:a10f with SMTP id z24-20020a2eb538000000b0025d881da10fmr734625ljm.65.1657695470468;
-        Tue, 12 Jul 2022 23:57:50 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id be20-20020a05651c171400b0025d86b425e7sm300131ljb.89.2022.07.12.23.57.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 23:57:49 -0700 (PDT)
-Message-ID: <f837b69d-b212-3107-504b-b5d716ab6878@linaro.org>
-Date:   Wed, 13 Jul 2022 08:57:47 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=11lAwwFyeDArHB1vigA26oYLT3/Sq+N3CVWBYZLz8Sw=;
+        b=CQ9XBLCbwpY2uEg2WKN5awVhWz7aVvLJAcKOhukhifnupm3LrxkIVeWZUt1KJPjivt
+         26K50yQmYq4x5/XDB+wcZIwp5P2kinNBpRHXHswn1UDka5doFrkRxUg2kSySt7vXk2U/
+         ORCQHr9i4TD590YhL5Biws4QStuXf4HfV2cwf2Bd48GsQ3iha3jWat7SolZrVIvpBeKR
+         3Lb/uM1icjNMqHjRHzTzXSqrJIj/wPa1eOvXT6udqxSB2LNrzMyI58QPevB+9aESjjUa
+         EoSF58Dz87W7xWzf8QbvtdR0dcaCZHjxGhtko5ZFuCSGIeI6507C7bfWrr23BV9SQqGm
+         Yaow==
+X-Gm-Message-State: AJIora/8F0YKhl90gzj8oYn6vR3iwfA/vIUX+nMXoUpTFw1P7R4e3+6A
+        vWYSh2ndrqNzDwuyy4Zv1YdtHg==
+X-Google-Smtp-Source: AGRyM1u76wLfHv41RAyQUawzks7ieW7IjMw63HRz8cbbFC0hUO5XEcFd2uQqfyZORgOPVmATos2SDg==
+X-Received: by 2002:a17:902:ce05:b0:16b:e725:6f6c with SMTP id k5-20020a170902ce0500b0016be7256f6cmr1884889plg.110.1657695503240;
+        Tue, 12 Jul 2022 23:58:23 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (n058152077182.netvigator.com. [58.152.77.182])
+        by smtp.gmail.com with ESMTPSA id n19-20020a17090a929300b001f02a72f29csm776529pjo.8.2022.07.12.23.58.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 23:58:22 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 14:58:17 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     carsten.haitzler@foss.arm.com
+Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Subject: Re: [PATCH 01/14] perf test: Refactor shell tests allowing subdirs
+Message-ID: <20220713065817.GC1354743@leoy-ThinkPad-X240s>
+References: <20220712135750.2212005-1-carsten.haitzler@foss.arm.com>
+ <20220712135750.2212005-2-carsten.haitzler@foss.arm.com>
+ <20220713065328.GB1354743@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] NFC: nxp-nci: fix deadlock during firmware update
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>
-References: <20220712152554.2909224-1-michael@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220712152554.2909224-1-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713065328.GB1354743@leoy-ThinkPad-X240s>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,67 +74,607 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2022 17:25, Michael Walle wrote:
-> During firmware update, both nxp_nci_i2c_irq_thread_fn() and
-> nxp_nci_fw_work() will hold the info_lock mutex and one will wait
-> for the other via a completion:
-> 
-> nxp_nci_fw_work()
->   mutex_lock(info_lock)
->   nxp_nci_fw_send()
->     wait_for_completion(cmd_completion)
->   mutex_unlock(info_lock)
-> 
-> nxp_nci_i2c_irq_thread_fn()
->   mutex_lock(info_lock)
->     nxp_nci_fw_recv_frame()
->       complete(cmd_completion)
->   mutex_unlock(info_lock)
-> 
-> This will result in a -ETIMEDOUT error during firmware update (note
-> that the wait_for_completion() above is a variant with a timeout).
-> 
-> Drop the lock in nxp_nci_fw_work() and instead take it after the
-> work is done in nxp_nci_fw_work_complete() when the NFC controller mode
-> is switched and the info structure is updated.
-> 
-> Fixes: dece45855a8b ("NFC: nxp-nci: Add support for NXP NCI chips")
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  drivers/nfc/nxp-nci/firmware.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/nfc/nxp-nci/firmware.c b/drivers/nfc/nxp-nci/firmware.c
-> index 119bf305c642..6a4d4aa7239f 100644
-> --- a/drivers/nfc/nxp-nci/firmware.c
-> +++ b/drivers/nfc/nxp-nci/firmware.c
-> @@ -54,6 +54,7 @@ void nxp_nci_fw_work_complete(struct nxp_nci_info *info, int result)
->  	struct nxp_nci_fw_info *fw_info = &info->fw_info;
->  	int r;
->  
-> +	mutex_lock(&info->info_lock);
->  	if (info->phy_ops->set_mode) {
->  		r = info->phy_ops->set_mode(info->phy_id, NXP_NCI_MODE_COLD);
->  		if (r < 0 && result == 0)
-> @@ -66,6 +67,7 @@ void nxp_nci_fw_work_complete(struct nxp_nci_info *info, int result)
->  		release_firmware(fw_info->fw);
->  		fw_info->fw = NULL;
->  	}
-> +	mutex_unlock(&info->info_lock);
->  
->  	nfc_fw_download_done(info->ndev->nfc_dev, fw_info->name, (u32) -result);
->  }
-> @@ -172,8 +174,6 @@ void nxp_nci_fw_work(struct work_struct *work)
->  	fw_info = container_of(work, struct nxp_nci_fw_info, work);
->  	info = container_of(fw_info, struct nxp_nci_info, fw_info);
->  
-> -	mutex_lock(&info->info_lock);
-> -
 
-I am not sure this is correct. info_lock should protect members of info
-thus also info->fw_info. By removing the mutex the protection is gone.
+Correct the typo for Carsten's email address, sorry I inputed some
+unexpected chars.
 
-Unless you are sure that fw_info cannot be modified concurrently?
-
-Best regards,
-Krzysztof
+On Wed, Jul 13, 2022 at 02:53:28PM +0800, Leo Yan wrote:
+> On Tue, Jul 12, 2022 at 02:57:37PM +0100, carsten.haitzler@foss.arm.com wrote:
+> > From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
+> > 
+> > This is a prelude to adding more tests to shell tests and in order to
+> > support putting those tests into subdirectories, I need to change the
+> > test code that scans/finds and runs them.
+> > 
+> > To support subdirs I have to recurse so it's time to refactor the code to
+> > allow this and centralize the shell script finding into one location and
+> > only one single scan that builds a list of all the found tests in memory
+> > instead of it being duplicated in 3 places.
+> > 
+> > This code also optimizes things like knowing the max width of desciption
+> > strings (as we can do that while we scan instead of a whole new pass
+> > of opening files). It also more cleanly filters scripts to see only
+> > *.sh files thus skipping random other files in directories like *~
+> > backup files, other random junk/data files that may appear and the
+> > scripts must be executable to make the cut (this ensures the script
+> > lib dir is not seen as scripts to run). This avoids perf test running
+> > previous older versions of test scripts that are editor backup files
+> > as well as skipping perf.data files that may appear and so on.
+> > 
+> > Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+> > ---
+> >  tools/perf/tests/Build               |   1 +
+> >  tools/perf/tests/builtin-test-list.c | 201 +++++++++++++++++++++++++++
+> >  tools/perf/tests/builtin-test-list.h |  12 ++
+> >  tools/perf/tests/builtin-test.c      | 152 +++-----------------
+> >  4 files changed, 232 insertions(+), 134 deletions(-)
+> >  create mode 100644 tools/perf/tests/builtin-test-list.c
+> >  create mode 100644 tools/perf/tests/builtin-test-list.h
+> > 
+> > diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
+> > index af2b37ef7c70..2064a640facb 100644
+> > --- a/tools/perf/tests/Build
+> > +++ b/tools/perf/tests/Build
+> > @@ -1,6 +1,7 @@
+> >  # SPDX-License-Identifier: GPL-2.0
+> >  
+> >  perf-y += builtin-test.o
+> > +perf-y += builtin-test-list.o
+> >  perf-y += parse-events.o
+> >  perf-y += dso-data.o
+> >  perf-y += attr.o
+> > diff --git a/tools/perf/tests/builtin-test-list.c b/tools/perf/tests/builtin-test-list.c
+> > new file mode 100644
+> > index 000000000000..1e60088c1005
+> > --- /dev/null
+> > +++ b/tools/perf/tests/builtin-test-list.c
+> > @@ -0,0 +1,201 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#include <fcntl.h>
+> > +#include <errno.h>
+> > +#include <unistd.h>
+> > +#include <string.h>
+> > +#include <stdlib.h>
+> > +#include <sys/types.h>
+> > +#include <dirent.h>
+> > +#include <sys/wait.h>
+> > +#include <sys/stat.h>
+> > +#include "builtin.h"
+> > +#include "hist.h"
+> > +#include "intlist.h"
+> > +#include "tests.h"
+> > +#include "debug.h"
+> > +#include "color.h"
+> > +#include <subcmd/parse-options.h>
+> > +#include "string2.h"
+> > +#include "symbol.h"
+> > +#include "util/rlimit.h"
+> > +#include <linux/kernel.h>
+> > +#include <linux/string.h>
+> > +#include <subcmd/exec-cmd.h>
+> > +#include <linux/zalloc.h>
+> 
+> I know some files in perf do not strictly use the alphabet ordering
+> for headers, but this is the convention for Linux mainline code.
+> 
+> It would be better to use the below ordering (just an example which
+> doesn't contain complete headers for this patch):
+> 
+> > +
+> > +#include "builtin-test-list.h"
+> > +
+> > +#include <linux/ctype.h>
+> 
+> #include <dirent.h>
+> #include <errno.h>
+> #include <fcntl.h>
+> ...
+> #include <linux/ctype.h>
+> #include <linux/kernel.h>
+> #include <linux/string.h>
+> #include <linux/zalloc.h>
+> #include <stdlib.h>
+> ...
+> #include <unistd.h>
+> 
+> #include "builtin.h"
+> #include "debug.h"
+> ...
+> 
+> > +
+> > +/* As this is a singleton built once for the run of the process, there is
+> > + * no value in trying to free it and just let it stay around until process
+> > + * exits when it's cleaned up. */
+> 
+> Multple comments format is:
+> 
+> /*
+>  * As this is a singleton built once for the run of the process, there is
+>  * no value in trying to free it and just let it stay around until process
+>  * exits when it's cleaned up.
+>  */
+> 
+> > +static size_t files_num = 0;
+> > +static struct script_file *files = NULL;
+> > +static int files_max_width = 0;
+> > +
+> > +static const char *shell_tests__dir(char *path, size_t size)
+> > +{
+> > +	const char *devel_dirs[] = { "./tools/perf/tests", "./tests", };
+> > +	char *exec_path;
+> > +	unsigned int i;
+> > +
+> > +	for (i = 0; i < ARRAY_SIZE(devel_dirs); ++i) {
+> > +		struct stat st;
+> > +
+> > +		if (!lstat(devel_dirs[i], &st)) {
+> > +			scnprintf(path, size, "%s/shell", devel_dirs[i]);
+> > +			if (!lstat(devel_dirs[i], &st))
+> > +				return path;
+> > +		}
+> > +	}
+> > +
+> > +	/* Then installed path. */
+> > +	exec_path = get_argv_exec_path();
+> > +	scnprintf(path, size, "%s/tests/shell", exec_path);
+> > +	free(exec_path);
+> > +	return path;
+> > +}
+> > +
+> > +static const char *shell_test__description(char *description, size_t size,
+> > +                                           const char *path, const char *name)
+> > +{
+> > +	FILE *fp;
+> > +	char filename[PATH_MAX];
+> > +	int ch;
+> > +
+> > +	path__join(filename, sizeof(filename), path, name);
+> > +	fp = fopen(filename, "r");
+> > +	if (!fp)
+> > +		return NULL;
+> > +
+> > +	/* Skip first line - should be #!/bin/sh Shebang */
+> > +	do {
+> > +		ch = fgetc(fp);
+> > +	} while (ch != EOF && ch != '\n');
+> > +
+> > +	description = fgets(description, size, fp);
+> > +	fclose(fp);
+> > +
+> > +	/* Assume first char on line is omment everything after that desc */
+> > +	return description ? strim(description + 1) : NULL;
+> > +}
+> > +
+> > +static bool is_shell_script(const char *path)
+> > +{ /* is this full file path a shell script */
+> > +	const char *ext;
+> > +
+> > +	ext = strrchr(path, '.');
+> > +	if (!ext)
+> > +		return false;
+> > +	if (!strcmp(ext, ".sh")) { /* Has .sh extension */
+> > +		if (access(path, R_OK | X_OK) == 0) /* Is executable */
+> > +			return true;
+> > +	}
+> > +	return false;
+> > +}
+> > +
+> > +static bool is_test_script(const char *path, const char *name)
+> > +{ /* Is this file in this dir a shell script (for test purposes) */
+> 
+> If this is a comment for function, place the comment on the top of the
+> function.
+> 
+> > +	char filename[PATH_MAX];
+> > +
+> > +	path__join(filename, sizeof(filename), path, name);
+> 
+> This patch is not only for refactoring handling test sub folders,
+> there have many minor changes, IIUC, here it drops macro
+> for_each_shell_test() and is_directory(), etc.
+> 
+> I am not saying this is wrong, but this is not easy for review.
+> 
+> > +	if (!is_shell_script(filename)) return false;
+> 
+>         if (!is_shell_script(filename))
+>                 return false;
+> 
+> > +	return true;
+> > +}
+> > +
+> > +static char *strdup_check(const char *str)
+> > +{ /* Duplicate a string and fall over and die if we run out of memory */
+> 
+> Place comment on the top of function.
+> 
+> > +	char *newstr;
+> > +
+> > +	newstr = strdup(str);
+> > +	if (!newstr) {
+> > +		pr_err("Out of memory while duplicating test script string\n");
+> > +		abort();
+> > +	}
+> > +	return newstr;
+> > +}
+> > +
+> > +static void append_script(const char *dir, const char *file, const char *desc)
+> > +{
+> > +	struct script_file *files_tmp;
+> > +	size_t files_num_tmp;
+> > +	int width;
+> > +
+> > +	files_num_tmp = files_num + 1;
+> > +	if (files_num_tmp < 1) {
+> 
+> How about below condition checking?
+> 
+>         if (files_num_tmp >= SIZE_MAX) {
+> 
+> > +		pr_err("Too many script files\n");
+> > +		abort();
+> 
+> Can don't use abort() and return error, so upper function can handle
+> the error gracefully?
+> 
+> > +	}
+> > +	/* Realloc is good enough, though we could realloc by chunks, not that
+> > +	 * anyone will ever measure performance here */
+> > +	files_tmp = realloc(files,
+> > +			    (files_num_tmp + 1) * sizeof(struct script_file));
+> 
+>         files = realloc(files,
+>                         (files_num_tmp + 1) * sizeof(struct script_file));
+> 
+> BTW, I don't see any where to free the memory for "files".
+> 
+> > +	if (files_tmp == NULL) {
+> > +		pr_err("Out of memory while building test list\n");
+> > +		abort();
+> > +	}
+> > +	/* Add file to end and NULL terminate the struct array */
+> > +	files = files_tmp;
+> > +	files_num = files_num_tmp;
+> > +	files[files_num - 1].dir = strdup_check(dir);
+> > +	files[files_num - 1].file = strdup_check(file);
+> > +	files[files_num - 1].desc = strdup_check(desc);
+> > +	files[files_num].dir = NULL;
+> > +	files[files_num].file = NULL;
+> > +	files[files_num].desc = NULL;
+> 
+> I personally think here it's over complex for using the last item in the
+> array as a redundant item and set NULL to its fields.  We have the
+> global variable "files_num", which can be used for checking boundary
+> for the array.
+> 
+> > +
+> > +	width = strlen(desc); /* Track max width of desc */
+> > +	if (width > files_max_width)
+> > +		files_max_width = width;
+> > +}
+> > +
+> > +static void append_scripts_in_dir(const char *path)
+> > +{
+> > +	struct dirent **entlist;
+> > +	struct dirent *ent;
+> > +	int n_dirs, i;
+> > +	char filename[PATH_MAX];
+> > +
+> > +	/* List files, sorted by alpha */
+> > +	n_dirs = scandir(path, &entlist, NULL, alphasort);
+> > +	if (n_dirs == -1)
+> > +		return;
+> > +	for (i = 0; i < n_dirs && (ent = entlist[i]); i++) {
+> > +		if (ent->d_name[0] == '.') continue; /* Skip hidden files */
+> 
+> Here really need to check '.'?  The function is_shell_script() has
+> checked for hidden files.
+> 
+> The code format should be:
+> 
+>                 /* Skip hidden files */
+>                 if (ent->d_name[0] == '.')
+>                         continue;
+> 
+> > +		if (is_test_script(path, ent->d_name)) { /* It's a test */
+> > +			char bf[256];
+> > +			const char *desc = shell_test__description
+> > +				(bf, sizeof(bf), path, ent->d_name);
+> > +
+> > +			if (desc) /* It has a desc line - valid script */
+> > +				append_script(path, ent->d_name, desc);
+> > +		} else if (is_directory(path, ent)) { /* Scan the subdir */
+> > +			path__join(filename, sizeof(filename),
+> > +				   path, ent->d_name);
+> > +			append_scripts_in_dir(filename);
+> > +		}
+> > +	}
+> > +	for (i = 0; i < n_dirs; i++) /* Clean up */
+> > +		zfree(&entlist[i]);
+> > +	free(entlist);
+> > +}
+> > +
+> > +const struct script_file *list_script_files(void)
+> > +{
+> > +	char path_dir[PATH_MAX];
+> > +	const char *path;
+> > +
+> > +	if (files) return files; /* Singleton - we already know our list */
+> 
+>         if (files)
+>                 return files;
+> 
+> The rest part of this patch looks good to me.
+> 
+> I strongly suggest you to consider how to organize the patches with
+> better format.  This patch actually finishes below things:
+> 
+> - Support sub folder searching for shell script (so the key change is
+>   using the recursion in append_scripts_in_dir());
+> - Refactoring to a common code for iterating testing scripts;
+> - Many minor refactoring, like dropping macro for_each_shell_test()
+>   and introduces new function is_shell_script().
+> 
+> Seems every part above is deserved to use a separate patch, which would
+> be much easier for review.
+> 
+> Thanks,
+> Leo
+> 
+> > +
+> > +	path = shell_tests__dir(path_dir, sizeof(path_dir)); /* Walk  dir */
+> > +	append_scripts_in_dir(path);
+> > +
+> > +	return files;
+> > +}
+> > +
+> > +int list_script_max_width(void)
+> > +{
+> > +	list_script_files(); /* Ensure we have scanned all scriptd */
+> > +	return files_max_width;
+> > +}
+> > diff --git a/tools/perf/tests/builtin-test-list.h b/tools/perf/tests/builtin-test-list.h
+> > new file mode 100644
+> > index 000000000000..eb81f3aa6683
+> > --- /dev/null
+> > +++ b/tools/perf/tests/builtin-test-list.h
+> > @@ -0,0 +1,12 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +
+> > +struct script_file {
+> > +	char *dir;
+> > +	char *file;
+> > +	char *desc;
+> > +};
+> > +
+> > +/* List available script tests to run - singleton - never freed */
+> > +const struct script_file *list_script_files(void);
+> > +/* Get maximum width of description string */
+> > +int list_script_max_width(void);
+> > diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+> > index 81cf241cd109..7122eae1d98d 100644
+> > --- a/tools/perf/tests/builtin-test.c
+> > +++ b/tools/perf/tests/builtin-test.c
+> > @@ -28,6 +28,8 @@
+> >  #include <subcmd/exec-cmd.h>
+> >  #include <linux/zalloc.h>
+> >  
+> > +#include "builtin-test-list.h"
+> > +
+> >  static bool dont_fork;
+> >  
+> >  struct test_suite *__weak arch_tests[] = {
+> > @@ -274,91 +276,6 @@ static int test_and_print(struct test_suite *t, int subtest)
+> >  	return err;
+> >  }
+> >  
+> > -static const char *shell_test__description(char *description, size_t size,
+> > -					   const char *path, const char *name)
+> > -{
+> > -	FILE *fp;
+> > -	char filename[PATH_MAX];
+> > -	int ch;
+> > -
+> > -	path__join(filename, sizeof(filename), path, name);
+> > -	fp = fopen(filename, "r");
+> > -	if (!fp)
+> > -		return NULL;
+> > -
+> > -	/* Skip shebang */
+> > -	do {
+> > -		ch = fgetc(fp);
+> > -	} while (ch != EOF && ch != '\n');
+> > -
+> > -	description = fgets(description, size, fp);
+> > -	fclose(fp);
+> > -
+> > -	return description ? strim(description + 1) : NULL;
+> > -}
+> > -
+> > -#define for_each_shell_test(entlist, nr, base, ent)	                \
+> > -	for (int __i = 0; __i < nr && (ent = entlist[__i]); __i++)	\
+> > -		if (!is_directory(base, ent) && \
+> > -			is_executable_file(base, ent) && \
+> > -			ent->d_name[0] != '.')
+> > -
+> > -static const char *shell_tests__dir(char *path, size_t size)
+> > -{
+> > -	const char *devel_dirs[] = { "./tools/perf/tests", "./tests", };
+> > -        char *exec_path;
+> > -	unsigned int i;
+> > -
+> > -	for (i = 0; i < ARRAY_SIZE(devel_dirs); ++i) {
+> > -		struct stat st;
+> > -		if (!lstat(devel_dirs[i], &st)) {
+> > -			scnprintf(path, size, "%s/shell", devel_dirs[i]);
+> > -			if (!lstat(devel_dirs[i], &st))
+> > -				return path;
+> > -		}
+> > -	}
+> > -
+> > -        /* Then installed path. */
+> > -        exec_path = get_argv_exec_path();
+> > -        scnprintf(path, size, "%s/tests/shell", exec_path);
+> > -	free(exec_path);
+> > -	return path;
+> > -}
+> > -
+> > -static int shell_tests__max_desc_width(void)
+> > -{
+> > -	struct dirent **entlist;
+> > -	struct dirent *ent;
+> > -	int n_dirs, e;
+> > -	char path_dir[PATH_MAX];
+> > -	const char *path = shell_tests__dir(path_dir, sizeof(path_dir));
+> > -	int width = 0;
+> > -
+> > -	if (path == NULL)
+> > -		return -1;
+> > -
+> > -	n_dirs = scandir(path, &entlist, NULL, alphasort);
+> > -	if (n_dirs == -1)
+> > -		return -1;
+> > -
+> > -	for_each_shell_test(entlist, n_dirs, path, ent) {
+> > -		char bf[256];
+> > -		const char *desc = shell_test__description(bf, sizeof(bf), path, ent->d_name);
+> > -
+> > -		if (desc) {
+> > -			int len = strlen(desc);
+> > -
+> > -			if (width < len)
+> > -				width = len;
+> > -		}
+> > -	}
+> > -
+> > -	for (e = 0; e < n_dirs; e++)
+> > -		zfree(&entlist[e]);
+> > -	free(entlist);
+> > -	return width;
+> > -}
+> > -
+> >  struct shell_test {
+> >  	const char *dir;
+> >  	const char *file;
+> > @@ -385,33 +302,17 @@ static int shell_test__run(struct test_suite *test, int subdir __maybe_unused)
+> >  static int run_shell_tests(int argc, const char *argv[], int i, int width,
+> >  				struct intlist *skiplist)
+> >  {
+> > -	struct dirent **entlist;
+> > -	struct dirent *ent;
+> > -	int n_dirs, e;
+> > -	char path_dir[PATH_MAX];
+> > -	struct shell_test st = {
+> > -		.dir = shell_tests__dir(path_dir, sizeof(path_dir)),
+> > -	};
+> > -
+> > -	if (st.dir == NULL)
+> > -		return -1;
+> > +	struct shell_test st;
+> > +	const struct script_file *files, *file;
+> >  
+> > -	n_dirs = scandir(st.dir, &entlist, NULL, alphasort);
+> > -	if (n_dirs == -1) {
+> > -		pr_err("failed to open shell test directory: %s\n",
+> > -			st.dir);
+> > -		return -1;
+> > -	}
+> > -
+> > -	for_each_shell_test(entlist, n_dirs, st.dir, ent) {
+> > +	files = list_script_files();
+> > +	if (!files)
+> > +		return 0;
+> > +	for (file = files; file->dir; file++) {
+> >  		int curr = i++;
+> > -		char desc[256];
+> >  		struct test_case test_cases[] = {
+> >  			{
+> > -				.desc = shell_test__description(desc,
+> > -								sizeof(desc),
+> > -								st.dir,
+> > -								ent->d_name),
+> > +				.desc = file->desc,
+> >  				.run_case = shell_test__run,
+> >  			},
+> >  			{ .name = NULL, }
+> > @@ -421,12 +322,13 @@ static int run_shell_tests(int argc, const char *argv[], int i, int width,
+> >  			.test_cases = test_cases,
+> >  			.priv = &st,
+> >  		};
+> > +		st.dir = file->dir;
+> >  
+> >  		if (test_suite.desc == NULL ||
+> >  		    !perf_test__matches(test_suite.desc, curr, argc, argv))
+> >  			continue;
+> >  
+> > -		st.file = ent->d_name;
+> > +		st.file = file->file;
+> >  		pr_info("%3d: %-*s:", i, width, test_suite.desc);
+> >  
+> >  		if (intlist__find(skiplist, i)) {
+> > @@ -436,10 +338,6 @@ static int run_shell_tests(int argc, const char *argv[], int i, int width,
+> >  
+> >  		test_and_print(&test_suite, 0);
+> >  	}
+> > -
+> > -	for (e = 0; e < n_dirs; e++)
+> > -		zfree(&entlist[e]);
+> > -	free(entlist);
+> >  	return 0;
+> >  }
+> >  
+> > @@ -448,7 +346,7 @@ static int __cmd_test(int argc, const char *argv[], struct intlist *skiplist)
+> >  	struct test_suite *t;
+> >  	unsigned int j, k;
+> >  	int i = 0;
+> > -	int width = shell_tests__max_desc_width();
+> > +	int width = list_script_max_width();
+> >  
+> >  	for_each_test(j, k, t) {
+> >  		int len = strlen(test_description(t, -1));
+> > @@ -529,36 +427,22 @@ static int __cmd_test(int argc, const char *argv[], struct intlist *skiplist)
+> >  
+> >  static int perf_test__list_shell(int argc, const char **argv, int i)
+> >  {
+> > -	struct dirent **entlist;
+> > -	struct dirent *ent;
+> > -	int n_dirs, e;
+> > -	char path_dir[PATH_MAX];
+> > -	const char *path = shell_tests__dir(path_dir, sizeof(path_dir));
+> > -
+> > -	if (path == NULL)
+> > -		return -1;
+> > +	const struct script_file *files, *file;
+> >  
+> > -	n_dirs = scandir(path, &entlist, NULL, alphasort);
+> > -	if (n_dirs == -1)
+> > -		return -1;
+> > -
+> > -	for_each_shell_test(entlist, n_dirs, path, ent) {
+> > +	files = list_script_files();
+> > +	if (!files)
+> > +		return 0;
+> > +	for (file = files; file->dir; file++) {
+> >  		int curr = i++;
+> > -		char bf[256];
+> >  		struct test_suite t = {
+> > -			.desc = shell_test__description(bf, sizeof(bf), path, ent->d_name),
+> > +			.desc = file->desc
+> >  		};
+> >  
+> >  		if (!perf_test__matches(t.desc, curr, argc, argv))
+> >  			continue;
+> >  
+> >  		pr_info("%3d: %s\n", i, t.desc);
+> > -
+> >  	}
+> > -
+> > -	for (e = 0; e < n_dirs; e++)
+> > -		zfree(&entlist[e]);
+> > -	free(entlist);
+> >  	return 0;
+> >  }
+> >  
+> > -- 
+> > 2.32.0
+> > 

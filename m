@@ -2,130 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6661857381A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E3A57381E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236418AbiGMN4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
+        id S236240AbiGMN5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236262AbiGMN4K (ORCPT
+        with ESMTP id S236221AbiGMN5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:56:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1ED762CE0F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657720569;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IMCa17u/KRBIFaG4KsLRIkbEcc9LdlhpCTT849G+Kvc=;
-        b=CfJVmFztqef2VRdYfHWM9biwwf4jEwJyIojk2Ga9NztLusPj2qaoO4ci7atv8hT38OwOEF
-        JRtQ9KdTsJnt9Mi/EirjHCgp/vmXECRmp/jZkhecqpeqkQLGozhducU4RjbUsIWWX4HXs4
-        ukuiLU9L0yunGizD6h13xk6vlWHRvkI=
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
- [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-341-TCeWATmfNWuUnuzNlGEN7Q-1; Wed, 13 Jul 2022 09:56:07 -0400
-X-MC-Unique: TCeWATmfNWuUnuzNlGEN7Q-1
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-10bfafe5bd0so5898853fac.18
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:56:06 -0700 (PDT)
+        Wed, 13 Jul 2022 09:57:16 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DF12CE1F
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:57:15 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id p27-20020a05600c1d9b00b003a2f36054d0so1235949wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kxqBWdiXM5WNeClMPGN89m5g9fK7yBoXSaVViiNVQ8g=;
+        b=g7sCyBZ237J9K19/0sLWl+a9stt/xgvJwPjoGXhb1JnLwI9WgOT5UER5tZx+ucO7HG
+         TUidhRNoQx+iPvX8Cgu5YLiKO+LQiydCKckRhJpvZ3WLOOvGGvPFEdLoR27DGwu4V6FC
+         zIkvixE0WB/haEqVW38dd4zgrBNkJ999UIgBDvj/EELkdCw9TTP2uxxC/AvujWJGOgkL
+         Wa0VFTm0j38hB0F08Z+72EJ9vjPAazAJ0OZ27HkdmdS/UrumBa6DjT7TOHxKNfhNd77N
+         c0IJDm7qvKme7P5/5iNKwpPqgpF4gdnSBFULZkFpjmRuC1ToMJxx3gDnMCXaxFwyYjma
+         rxWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IMCa17u/KRBIFaG4KsLRIkbEcc9LdlhpCTT849G+Kvc=;
-        b=K13a1NLhAMKsTfdxlXHPuIK7q+mTtpiXyiW8AuuGQWnvVJEW1pCltwcsRMzAjxeNBI
-         DJP+0HsoUZPAQUKiRj7R4IRlKQP6GItTsGCmTC4YiPqjLQdy7OZ0O9eB4IhFrOHbFsxu
-         plQGMuWKYTFxu4j3zx9FHh6jWJprLneTabTBWtxxrEuLuLtk5PF25m5RL0iyo62cv9L+
-         Ibcs7lCaZvtU++IIzfmTfYwUZ2TzWmu2yiYMbIg2QSjpLH6UiyP7x2VjCywo05mP/5VR
-         pBpk7DlEIEXaLo+E0Z0S8cru2Tjodga7KmPLqagzRiP8pW4B4cLJSFwWzJf2f+nQ1Y0N
-         JfpQ==
-X-Gm-Message-State: AJIora/DY1Fucv5X4u+A3IzYZpLq9dOpJZ1LuOP+fz5Vj2fp1R70qRxY
-        SADU4zt90I23ueg0ANgJ51IZIFFKIWX6xJGlWdYhSazF8OfLl2qR5rKlJqdgDlKfwufrywoETSv
-        ySAC2krOJfgsk1tVPYIDQcLQd
-X-Received: by 2002:a05:6808:209a:b0:33a:537:6d30 with SMTP id s26-20020a056808209a00b0033a05376d30mr4804572oiw.294.1657720566283;
-        Wed, 13 Jul 2022 06:56:06 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vuo5XeROM7lZoIMaa90JjCQfQyQRAPg6yPHfeiuOg8/rxYEdmyhZRf05BhrhKk9Hr1yX1uog==
-X-Received: by 2002:a05:6808:209a:b0:33a:537:6d30 with SMTP id s26-20020a056808209a00b0033a05376d30mr4804558oiw.294.1657720566055;
-        Wed, 13 Jul 2022 06:56:06 -0700 (PDT)
-Received: from halaneylaptop ([2600:1700:1ff0:d0e0::2e])
-        by smtp.gmail.com with ESMTPSA id f10-20020a4ace8a000000b0035ef3da8387sm4791255oos.4.2022.07.13.06.56.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 06:56:05 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 08:56:03 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     vkoul@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
-        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        quic_plai@quicinc.com, bgoswami@quicinc.com, perex@perex.cz,
-        tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org
-Subject: Re: [PATCH] soundwire: qcom: Update error prints to debug prints
-Message-ID: <20220713135603.4vkyofw6x4mldxzp@halaneylaptop>
-References: <1657714921-28072-1-git-send-email-quic_srivasam@quicinc.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kxqBWdiXM5WNeClMPGN89m5g9fK7yBoXSaVViiNVQ8g=;
+        b=6ztoAWxhCjpYmmQoMkf96qfVI3eSgfdaSH34k870FX6yB8t0en8JMV6xlT6MZoLoFe
+         kmLWF2I5oiCl5YAoOObNzp+vqwtsyj+hFhTea6peUCgIABEcA3u08fdqFaZG0J6gNM3a
+         pGUS+c1MDmt7v7lN6dgTBIBsk3u2yt6KOh1kghZXrYSLbUohJPMHvhHwc21K3+YgwZxP
+         76JtaDz5wC8WSB2+eVFcDWwut4qXwNTbRucNN/fIOVduUVE1HtcNoIwYDiUoKH6y7OyI
+         NCz48yYpEJqvTNAwjt2OL1l702sU1Ph+NFPqvCxyiDjMfuOs96jh7pSXnc61KLe95w62
+         apSg==
+X-Gm-Message-State: AJIora99gFrq8mgtQdpEPCAEh0SKDdkqRxBQsRyVPFhWP4cz1Gabqple
+        236ZM0VgCEEFZ6gc/D91y+chzg==
+X-Google-Smtp-Source: AGRyM1uyOfqclVmQuJNbbQ1yXc9HRCf/RwP0I+Sf1skoemahVccck27LpxY8u85oblBG8emnTLxgjQ==
+X-Received: by 2002:a05:600c:2117:b0:3a2:d44f:4d9f with SMTP id u23-20020a05600c211700b003a2d44f4d9fmr9634057wml.17.1657720634459;
+        Wed, 13 Jul 2022 06:57:14 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id z11-20020a5d4d0b000000b0021b9f126fd3sm10946839wrt.14.2022.07.13.06.57.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 06:57:14 -0700 (PDT)
+Message-ID: <e1b00ebf-fb06-6eb3-2fa2-7e7155594626@isovalent.com>
+Date:   Wed, 13 Jul 2022 14:57:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1657714921-28072-1-git-send-email-quic_srivasam@quicinc.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [RFC PATCH v2 1/1] bpftool: Align dumped file headers with
+ skeletons.
+Content-Language: en-GB
+To:     Francis Laniel <flaniel@linux.microsoft.com>, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220713134046.15020-1-flaniel@linux.microsoft.com>
+ <20220713134046.15020-2-flaniel@linux.microsoft.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20220713134046.15020-2-flaniel@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A couple of drive by nits:
-
-On Wed, Jul 13, 2022 at 05:52:01PM +0530, Srinivasa Rao Mandadapu wrote:
-> Upadte error prints to debug prints to avoid redundant logging in kernel
-> boot time, as these prints are informative prints in irq handler.
-
-s/Upadte/Update/
-
+On 13/07/2022 14:40, Francis Laniel wrote:
+> This commit adds the following lines to file generated by dump:
+> /* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
+> /* THIS FILE IS AUTOGENERATED BY BPFTOOL! */
+> Hence, the dumped file headers follows that of skeletons.
 > 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
 > ---
->  drivers/soundwire/qcom.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  tools/bpf/bpftool/btf.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-> index 9df970e..a4293d0 100644
-> --- a/drivers/soundwire/qcom.c
-> +++ b/drivers/soundwire/qcom.c
-> @@ -573,11 +573,10 @@ static irqreturn_t qcom_swrm_irq_handler(int irq, void *dev_id)
->  				break;
->  			case SWRM_INTERRUPT_STATUS_NEW_SLAVE_ATTACHED:
->  			case SWRM_INTERRUPT_STATUS_CHANGE_ENUM_SLAVE_STATUS:
-> -				dev_err_ratelimited(swrm->dev, "%s: SWR new slave attached\n",
-> -					__func__);
-> +				dev_dbg(swrm->dev, "%s: SWR new slave attached\n", __func__);
+> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> index 7e6accb9d9f7..066a0acd0ecd 100644
+> --- a/tools/bpf/bpftool/btf.c
+> +++ b/tools/bpf/bpftool/btf.c
+> @@ -425,6 +425,8 @@ static int dump_btf_c(const struct btf *btf,
+>  	if (err)
+>  		return err;
+>  
+> +	printf("/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */\n");
+> +	printf("/* THIS FILE IS AUTOGENERATED BY BPFTOOL! */\n");
+>  	printf("#ifndef __VMLINUX_H__\n");
+>  	printf("#define __VMLINUX_H__\n");
+>  	printf("\n");
 
-There's no need for __func__ usage with dev_dbg() when giving +f flag
-when enabling adds this for you!
+Looks good, simpler than v1, thank you!
 
-With those changes feel free to add:
-
-    Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
-
-Thanks,
-Andrew
-
->  				swrm->reg_read(swrm, SWRM_MCP_SLV_STATUS, &slave_status);
->  				if (swrm->slave_status == slave_status) {
-> -					dev_err(swrm->dev, "Slave status not changed %x\n",
-> +					dev_dbg(swrm->dev, "Slave status not changed %x\n",
->  						slave_status);
->  				} else {
->  					qcom_swrm_get_device_status(swrm);
-> -- 
-> 2.7.4
-> 
-
+Reviewed-by: Quentin Monnet <quentin@isovalent.com>

@@ -2,121 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9173A573D71
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71575573D76
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236987AbiGMUAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 16:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
+        id S237012AbiGMUB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 16:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbiGMUAf (ORCPT
+        with ESMTP id S231772AbiGMUBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 16:00:35 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF4A10FC2;
-        Wed, 13 Jul 2022 13:00:28 -0700 (PDT)
-X-UUID: b54785a67f5240e99cc2435e6ca6acb2-20220714
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:a0f31061-8a8f-48ec-b948-d03f7cb9a207,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:0f94e32,CLOUDID:ced6e632-b9e4-42b8-b28a-6364427c76bb,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: b54785a67f5240e99cc2435e6ca6acb2-20220714
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1792792266; Thu, 14 Jul 2022 04:00:23 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 14 Jul 2022 04:00:22 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Jul 2022 04:00:21 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
-CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
-        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
-        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
-        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
-        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
-        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
-        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
-        <steve.lee@mediatek.com>, <jsiuda@google.com>,
-        <frankgor@google.com>, <abhishekpandit@google.com>,
-        <michaelfsun@google.com>, <mcchou@chromium.org>,
-        <shawnku@google.com>, <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, "Jing Cai" <jing.cai@mediatek.com>
-Subject: [PATCH v2] Bluetooth: btusb: mediatek: fix shutdown failure during runtime suspend
-Date:   Thu, 14 Jul 2022 04:00:20 +0800
-Message-ID: <3f1ee6737f092ae6312a7ae6079d341b81c791a5.1657670957.git.objelf@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        Wed, 13 Jul 2022 16:01:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD2930558;
+        Wed, 13 Jul 2022 13:01:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC1F861E32;
+        Wed, 13 Jul 2022 20:01:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D95C34114;
+        Wed, 13 Jul 2022 20:01:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657742511;
+        bh=F2E5dTQrZQzujB+fPdwCFv/cDpnr/di8xaRzs4Sanec=;
+        h=From:To:Cc:Subject:Date:From;
+        b=njfILizSPShD5KwRKjs9jYbdTfQG5oNFVfF6vVIRTnYUjDj3l7JGdIPfObdXJ314x
+         JAHJrvD+g4iUCQ1ijJ4124KrQWTEoea2JSsDV9K4CAcouVCWdJY+ig+LJSsU1ytw8Q
+         eW/KtF4upgoC1bCBoalGZ7en9AmQ86A6tbFX9Ing8wbQEllwK1RwHu9mztEwKtZ7Lq
+         p7FqEzoQmjZOQG/yYHKmjOfYl22sT88woGSlh6aePLVBq9pqK5iWMLRX6EUzqFcRho
+         V8XvhYqVxBLaFSiBYNtAAS8yRQXocKHfmkrgJk9W+juC/7JsNNYJhCl/72reMfXT9y
+         9hGFhCGiGBLcA==
+Received: by pali.im (Postfix)
+        id 302519D9; Wed, 13 Jul 2022 22:01:48 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: marvell: Update Armada 37xx platform bindings
+Date:   Wed, 13 Jul 2022 22:01:23 +0200
+Message-Id: <20220713200123.22612-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+Distinguish between Armada 3700 family, Armada 3710 SoC and Armada 3720 SoC.
+Armada 3720 DB is name of the board with Armada 3720 SoC, so correctly
+indicate SoC in example.
 
-Fix the WMT command timed out during Bluetooth was being shutdown while USB
-was in runtime suspend state.
-
-Fixes: a1c49c434e15 ("Bluetooth: btusb: Add protocol support for MediaTek MT7668U USB devices")
-Co-developed-by: Jing Cai <jing.cai@mediatek.com>
-Signed-off-by: Jing Cai <jing.cai@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- drivers/bluetooth/btusb.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ .../devicetree/bindings/arm/marvell/armada-37xx.txt        | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index fb1a67189412..b1161853c6ab 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -2795,10 +2795,15 @@ static int btusb_mtk_setup(struct hci_dev *hdev)
+diff --git a/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt b/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt
+index f6d6642d81c0..d2ca008de266 100644
+--- a/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt
++++ b/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt
+@@ -4,6 +4,11 @@ Marvell Armada 37xx Platforms Device Tree Bindings
+ Boards using a SoC of the Marvell Armada 37xx family must carry the
+ following root node property:
  
- static int btusb_mtk_shutdown(struct hci_dev *hdev)
- {
-+	struct btusb_data *data = hci_get_drvdata(hdev);
- 	struct btmtk_hci_wmt_params wmt_params;
- 	u8 param = 0;
- 	int err;
- 
-+	err = usb_autopm_get_interface(data->intf);
-+	if (err < 0)
-+		return err;
++ - compatible: must contain "marvell,armada3700"
 +
- 	/* Disable the device */
- 	wmt_params.op = BTMTK_WMT_FUNC_CTRL;
- 	wmt_params.flag = 0;
-@@ -2807,12 +2812,12 @@ static int btusb_mtk_shutdown(struct hci_dev *hdev)
- 	wmt_params.status = NULL;
- 
- 	err = btusb_mtk_hci_wmt_sync(hdev, &wmt_params);
--	if (err < 0) {
-+	if (err < 0)
- 		bt_dev_err(hdev, "Failed to send wmt func ctrl (%d)", err);
--		return err;
--	}
- 
--	return 0;
-+	usb_autopm_put_interface(data->intf);
++In addition, boards using the Marvell Armada 3710 SoC shall have the
++following property before the previous one:
 +
-+	return err;
- }
+  - compatible: must contain "marvell,armada3710"
  
- static void btusb_mtk_cmd_timeout(struct hci_dev *hdev)
+ In addition, boards using the Marvell Armada 3720 SoC shall have the
+@@ -13,7 +18,7 @@ following property before the previous one:
+ 
+ Example:
+ 
+-compatible = "marvell,armada-3720-db", "marvell,armada3720", "marvell,armada3710";
++compatible = "marvell,armada-3720-db", "marvell,armada3720", "marvell,armada3700";
+ 
+ 
+ Power management
 -- 
-2.25.1
+2.20.1
 

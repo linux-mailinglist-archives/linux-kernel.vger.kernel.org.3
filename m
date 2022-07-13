@@ -2,89 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39058573410
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1D457340E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235900AbiGMKXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 06:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        id S234630AbiGMKXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236021AbiGMKX3 (ORCPT
+        with ESMTP id S235857AbiGMKXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 06:23:29 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D81FB8E9;
-        Wed, 13 Jul 2022 03:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=wHmQ4QutF9xLy8a32/xGDr4CB2rcz5qRvqhIsboHxus=; b=FCMpJerlIFQDhcbFGN31XMhAlB
-        Dyb1l9AOPzR26jZVjqfwDKgBNmKaTYL7nVXoA1xai6NsXQeQQ82Qzu589JcDOZfcDGzuAiO+R0o5g
-        fIPQi9dnf81OW5s4HZkKLLqY5LPwNfFrvSe6ACpDCPVthMmSBMHdVr/kHEC8kiR3izaHxZdceeGhi
-        5romADZ0TD7SoBKMNsygQcPINfBc3vg8Wa4Gfp/ewx5OvPWnpxN37hKdt8ufHXwkp86aVv7eNXrBc
-        i8tYPo8uVO8dhZecQCjxTogwEK95Oqp498g+hstlJm/xJ/+3FFEprFpk+AYMbbbfweuppmgQlAArX
-        QrKjHzP2FnJp6E/eu7UF5UzyLsdnmlX3O6hZKPsvDox7jAUBpwb+rDXDUhmFK8jkmLTNFHdRKELW+
-        a33x8rNmc+JRWYifK1WMN/pIqHBwGXvm8yxhj5uJAVnsRLqBYcXphx6xtTq7qJTXMAvgbl03FM8+D
-        CutdT+XiAoBlWHfbOz3balCpDiXuYsx30BwPfQybZ3B3V2uSg2N69pJzgSaGipwn3tofYDBSqOARK
-        76E4aiOGlLSh+xAG0nYZtr1PofnrUboxRWnapzHgqWT3cR4oej7MaDMiRGnBy3Of+zEj4YCMcYRpI
-        GzK3XIU2qpRX+/RTTFVzP1jnbeDC77jN4sjQvyA8Y=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Latchesar Ionkov <lucho@ionkov.net>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        Nikolay Kichukov <nikolay@oldum.net>
-Subject: Re: [V9fs-developer] [PATCH v5 11/11] net/9p: allocate appropriate reduced
- message buffers
-Date:   Wed, 13 Jul 2022 12:22:50 +0200
-Message-ID: <3177156.tURSKFNe1E@silver>
-In-Reply-To: <Ys6QlcShhji2sx9V@codewreck.org>
-References: <cover.1657636554.git.linux_oss@crudebyte.com> <4284956.GYXQZuIPEp@silver>
- <Ys6QlcShhji2sx9V@codewreck.org>
+        Wed, 13 Jul 2022 06:23:04 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB88FACB4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:23:01 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id r10so8676333wrv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:23:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=p3iDfE6X71ht0fb+AD37KbLhdKay+NMX0GxKDHXhdRo=;
+        b=q5OYPMJHc5NTpTBzTnc2mfMCiWiuFAgpk/TjYZp6GcepMPcq5lgDiZ6LzuOUflA0jP
+         mQ20OBCBA1dYRhBZlWXUYryRzuNxkRlU64ueE1Y3qgyhCS25l6CBUdFVPV/fyL6IUiPO
+         CfdQF6vBqI2Y4rRVsv0spa8Dm9hA9W4jMIxk1PEOiQKIF9jWR6+J4PxJMbZelE4LxXkG
+         U4TNOegzsfXO6Ejet7NiH1CF1VYsu6UgyAqkOZjOIS/Moqs10lM8FvGzfF5ouThkv9th
+         Hxv7S6vuFyiAFwApfnhAwh4XA0kMaKq6XMsmFQxQ4Gb+0c8t6UgA/iG370Ot+63SoAg+
+         nXKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=p3iDfE6X71ht0fb+AD37KbLhdKay+NMX0GxKDHXhdRo=;
+        b=EtK2PU55SRuywgKMVzBEjedpQ5p/9/65PPQPlCSg3+h/kkU6bW00hbzoINbJ0MythG
+         AzxQqs8Z2S75prLcHf+PQr25U+KnWHI5r8hKNuN1Of98f1oJvIBan3waC6t4Ch/dHNay
+         VsV2JRlQK3BO1x7qx/VI45yRLEtj5MKu5MZsN4sOuyEMWD9AzH37fOabofSg0RerX92T
+         tJEfXOV2oReOxHYkhqEN63Ag1BguF24iJtNTcajHG/EeHlOlmmTvaCs2qgaZLiWHMyQO
+         IO8yuh2Uv25xftBKB9TdNxWyozwlmklvZeT7u6BvvCY0BaANs9xY9jIrisdKBOYx2Gwj
+         fnvw==
+X-Gm-Message-State: AJIora8NRVyLZpjWk+hdesGJH/bDFssRUsvj/8EPf5Z2eKOMJoZOcNg/
+        /iqmNFAUU/L8vPOGiAqZHUt7NA==
+X-Google-Smtp-Source: AGRyM1vP2cGTFHqS8DKrWw0AYUkMavOCEdacrjPpnfgTi5vrwimbctVkcDkN5Hi39rFjMQJqVgMbGw==
+X-Received: by 2002:adf:f1d1:0:b0:21d:7f88:d638 with SMTP id z17-20020adff1d1000000b0021d7f88d638mr2542788wro.586.1657707780036;
+        Wed, 13 Jul 2022 03:23:00 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:63e6:a6c0:5e2a:ac17])
+        by smtp.gmail.com with ESMTPSA id g6-20020a5d64e6000000b0021d887f9468sm10685642wri.25.2022.07.13.03.22.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 03:22:58 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 12:22:52 +0200
+From:   Marco Elver <elver@google.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@google.com>
+Subject: Re: [PATCH v4 29/45] block: kmsan: skip bio block merging logic for
+ KMSAN
+Message-ID: <Ys6c/JYJlQjIfZtH@elver.google.com>
+References: <20220701142310.2188015-1-glider@google.com>
+ <20220701142310.2188015-30-glider@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701142310.2188015-30-glider@google.com>
+User-Agent: Mutt/2.2.3 (2022-04-12)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mittwoch, 13. Juli 2022 11:29:57 CEST Dominique Martinet wrote:
-> Christian Schoenebeck wrote on Wed, Jul 13, 2022 at 11:19:48AM +0200:
-> > > - for this particular patch, we can still allocate smaller short buffers
-> > > for requests, so we should probably keep tsize to 0.
-> > > rsize there really isn't much we can do without a protocol change
-> > > though...
-> > 
-> > Good to know! I don't have any RDMA setup here to test, so I rely on what
-> > you say and adjust this in v6 accordingly, along with the strcmp -> flag
-> > change of course.
-> 
-> Yeah... I've got a connect-x 3 (mlx4, got a cheap old one) card laying
-> around, I need to find somewhere to plug it in and actually run some
-> validation again at some point.
-> Haven't used 9p/RDMA since I left my previous work in 2020...
-> 
-> I'll try to find time for that before the merge
-> 
-> > As this flag is going to be very RDMA-transport specific, I'm still
-> > scratching my head for a good name though.
-> 
-> The actual limitation is that receive buffers are pooled, so something
-> to like pooled_rcv_buffers or shared_rcv_buffers or anything along that
-> line?
+On Fri, Jul 01, 2022 at 04:22PM +0200, 'Alexander Potapenko' via kasan-dev wrote:
+[...]
+> --- a/block/bio.c
+> +++ b/block/bio.c
+> @@ -867,6 +867,8 @@ static inline bool page_is_mergeable(const struct bio_vec *bv,
+>  		return false;
+>  
+>  	*same_page = ((vec_end_addr & PAGE_MASK) == page_addr);
+> +	if (!*same_page && IS_ENABLED(CONFIG_KMSAN))
+> +		return false;
+>  	if (*same_page)
+>  		return true;
 
-OK, I'll go this way then, as it's the easiest to do, can easily be refactored 
-in future if someone really cares, and it feels less like a hack than 
-injecting "if transport == rdma" into client code directly.
+  	if (*same_page)
+  		return true;
+	else if (IS_ENABLED(CONFIG_KMSAN))
+		return false;
 
-Best regards,
-Christian Schoenebeck
-
-
+>  	return (bv->bv_page + bv_end / PAGE_SIZE) == (page + off / PAGE_SIZE);

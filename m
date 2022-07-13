@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F54573733
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98D9573710
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbiGMNSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
+        id S235882AbiGMNOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236212AbiGMNSA (ORCPT
+        with ESMTP id S230048AbiGMNOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:18:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825FA5F6B;
-        Wed, 13 Jul 2022 06:17:59 -0700 (PDT)
+        Wed, 13 Jul 2022 09:14:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01A426EF;
+        Wed, 13 Jul 2022 06:14:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13B8E61CC1;
-        Wed, 13 Jul 2022 13:17:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1DF0C341CA;
-        Wed, 13 Jul 2022 13:17:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A3FF61C0C;
+        Wed, 13 Jul 2022 13:14:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69EACC3411E;
+        Wed, 13 Jul 2022 13:14:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657718277;
-        bh=vkbptp5oByb0OIdbEDrykCuoBKNZ8jnXeKx9uCOm2XA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oG5/bH/f1vecfU25hwe8kdKoNoAsi+g3mjXqhHGOkauOcGkv3RMRanZNMs1st9H07
-         8KOezumB6vRk6WH+/0iMy5rsIqDFuv3fAg97MXvB7+VnmcWMnjZi3ekjiAbILt5MDN
-         u2Ewu2wxBSgu86xD+BTtk1aYpsD5sOGxT3V5OfKXTXdImeb/x6mnwl0tuDUnSl2Dwd
-         EhnZLujLCO/hsbap104Sjo8yhMCBN72oV4nL/FpQwQbjXW3XRL4gncsZfyVvGFbUp3
-         D1YCJpZeG/mTup4IcrGbGiu4AFnbaD+WiV66zO9/bokkqAz7M51/z73s2t+3J9nvXw
-         lumBQ/LlB3K2Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1oBcFd-0007gV-KS; Wed, 13 Jul 2022 15:18:01 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        s=k20201202; t=1657718083;
+        bh=oYk6PAgMGiWtXcXkOteGGgjoV/CevK+hQrC/zso1/ho=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c7s3VQUaUTgBEpZbTYQ/g9id58XYAj62kISYhHz4P0BPSxl+KoceK/qbP/KRdHrXF
+         UocQcai75ia/i/SIPs5wsUmzWCz7zrc6qkF6BZn1RaCPhjg480pMf6rEl/gw1qGKKY
+         J/3Xr3cpMqD0aA7RrIP1qOSUwPXcrrGyawWujdOsijq0OltFskrib24nNh8QWvfcZN
+         pX8DWwedxRtHSQ10uVDWORCZgOISyjl/+egESBQDA4IIhBc7X6uVXfeajah8hH7PlH
+         SRsGJxS9IeOOehA0udENI66mtj4fx4vIlp6s69RPnMRbujePKsQeQ0p2UTSE2NN8o0
+         5W0e3YNmi2xtA==
+Date:   Wed, 13 Jul 2022 14:14:38 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 7/7] arm64: dts: qcom: reorder USB interrupts
-Date:   Wed, 13 Jul 2022 15:13:40 +0200
-Message-Id: <20220713131340.29401-8-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220713131340.29401-1-johan+linaro@kernel.org>
-References: <20220713131340.29401-1-johan+linaro@kernel.org>
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
+Subject: Re: [PATCH V15 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
+Message-ID: <Ys7FPt/KfRjgj3nL@sirena.org.uk>
+References: <Yr18M9dzTOWL0m2c@google.com>
+ <de1f3f33-0a8c-eb87-694c-16ebf2835720@quicinc.com>
+ <Yr6oLlmfWRkiAZG7@google.com>
+ <52c6ab15-1cd8-324e-4bcc-c449d8bceb19@quicinc.com>
+ <Yr66ZZqEnBApHYMA@google.com>
+ <0481d3cc-4bb9-4969-0232-76ba57ff260d@quicinc.com>
+ <YsLhxx+L3+GJDRyO@google.com>
+ <bcc5f059-b991-296a-bba6-9cb1236097f2@quicinc.com>
+ <Ys1tYAO39LKzEAOE@google.com>
+ <08460c2a-8e21-f149-edec-ee3523f1b727@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fME9Yj+i5Rh9lYLw"
+Content-Disposition: inline
+In-Reply-To: <08460c2a-8e21-f149-edec-ee3523f1b727@quicinc.com>
+X-Cookie: Positively no smoking.
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,121 +71,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Three SoCs did not follow the interrupt order specified by the USB
-controller binding.
 
-While keeping the non-SuperSpeed interrupts together seems natural,
-reorder the interrupts to match the binding.
+--fME9Yj+i5Rh9lYLw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- arch/arm/boot/dts/qcom-sdx65.dtsi    | 10 ++++++----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 20 ++++++++++++--------
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 20 ++++++++++++--------
- 3 files changed, 30 insertions(+), 20 deletions(-)
+On Wed, Jul 13, 2022 at 11:20:43AM +0530, Satya Priya Kakitapalli (Temp) wr=
+ote:
+> On 7/12/2022 6:17 PM, Lee Jones wrote:
+> > On Mon, 11 Jul 2022, Satya Priya Kakitapalli (Temp) wrote:
+> >=20
+> > > On 7/4/2022 6:19 PM, Lee Jones wrote:
+> > > > On Mon, 04 Jul 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > > >=20
+> > > > > On 7/1/2022 2:42 PM, Lee Jones wrote:
+> > > > > > On Fri, 01 Jul 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > > > > >=20
+> > > > > > > On 7/1/2022 1:24 PM, Lee Jones wrote:
+> > > > > > > > On Fri, 01 Jul 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > > > > > > >=20
+> > > > > > > > > On 6/30/2022 4:04 PM, Lee Jones wrote:
+> > > > > > > > > > On Thu, 30 Jun 2022, Satya Priya Kakitapalli (Temp) wro=
+te:
+> > > > > > > > > >=20
+> > > > > > > > > > > On 6/29/2022 8:48 PM, Lee Jones wrote:
+> > > > > > > > > > > > On Wed, 29 Jun 2022, Satya Priya Kakitapalli (Temp)=
+ wrote:
 
-diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
-index 7a193678b4f5..8daefd50217a 100644
---- a/arch/arm/boot/dts/qcom-sdx65.dtsi
-+++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
-@@ -372,11 +372,13 @@ usb: usb@a6f8800 {
- 			assigned-clock-rates = <19200000>, <200000000>;
- 
- 			interrupts-extended = <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
--					      <&pdc 19 IRQ_TYPE_EDGE_BOTH>,
- 					      <&pdc 76 IRQ_TYPE_LEVEL_HIGH>,
--					      <&pdc 18 IRQ_TYPE_EDGE_BOTH>;
--			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
--					  "ss_phy_irq", "dm_hs_phy_irq";
-+					      <&pdc 18 IRQ_TYPE_EDGE_BOTH>,
-+					      <&pdc 19 IRQ_TYPE_EDGE_BOTH>;
-+			interrupt-names = "hs_phy_irq",
-+					  "ss_phy_irq",
-+					  "dm_hs_phy_irq",
-+					  "dp_hs_phy_irq";
- 
- 			power-domains = <&gcc USB30_GDSC>;
- 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index 7ac8aa110f81..65be7f3ec74c 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -3026,11 +3026,13 @@ usb_1: usb@a6f8800 {
- 			assigned-clock-rates = <19200000>, <200000000>;
- 
- 			interrupts-extended = <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
--					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
-+					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
--					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
--					  "dm_hs_phy_irq", "ss_phy_irq";
-+					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>;
-+			interrupt-names = "hs_phy_irq",
-+					  "ss_phy_irq",
-+					  "dm_hs_phy_irq",
-+					  "dp_hs_phy_irq";
- 
- 			power-domains = <&gcc USB30_PRIM_GDSC>;
- 
-@@ -3081,11 +3083,13 @@ usb_2: usb@a8f8800 {
- 			assigned-clock-rates = <19200000>, <200000000>;
- 
- 			interrupts-extended = <&intc GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>,
--					      <&pdc 12 IRQ_TYPE_EDGE_BOTH>,
-+					      <&pdc 16 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&pdc 13 IRQ_TYPE_EDGE_BOTH>,
--					      <&pdc 16 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
--					  "dm_hs_phy_irq", "ss_phy_irq";
-+					      <&pdc 12 IRQ_TYPE_EDGE_BOTH>;
-+			interrupt-names = "hs_phy_irq",
-+					  "ss_phy_irq",
-+					  "dm_hs_phy_irq",
-+					  "dp_hs_phy_irq";
- 
- 			power-domains = <&gcc USB30_SEC_GDSC>;
- 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index 65c7fe54613d..e72a04411888 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -2461,11 +2461,13 @@ usb_1: usb@a6f8800 {
- 			assigned-clock-rates = <19200000>, <200000000>;
- 
- 			interrupts-extended = <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
--					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
-+					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
--					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
--					  "dm_hs_phy_irq", "ss_phy_irq";
-+					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>;
-+			interrupt-names = "hs_phy_irq",
-+					  "ss_phy_irq",
-+					  "dm_hs_phy_irq",
-+					  "dp_hs_phy_irq";
- 
- 			power-domains = <&gcc USB30_PRIM_GDSC>;
- 
-@@ -2509,11 +2511,13 @@ usb_2: usb@a8f8800 {
- 			assigned-clock-rates = <19200000>, <200000000>;
- 
- 			interrupts-extended = <&intc GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>,
--					      <&pdc 12 IRQ_TYPE_EDGE_BOTH>,
-+					      <&pdc 16 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&pdc 13 IRQ_TYPE_EDGE_BOTH>,
--					      <&pdc 16 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
--					  "dm_hs_phy_irq", "ss_phy_irq";
-+					      <&pdc 12 IRQ_TYPE_EDGE_BOTH>;
-+			interrupt-names = "hs_phy_irq",
-+					  "ss_phy_irq",
-+					  "dm_hs_phy_irq",
-+					  "dp_hs_phy_irq";
- 
- 			power-domains = <&gcc USB30_SEC_GDSC>;
- 
--- 
-2.35.1
+Please delete unneeded context from mails when replying.  Doing this
+makes it much easier to find your reply in the message, helping ensure
+it won't be missed by people scrolling through the irrelevant quoted
+material.
 
+> > That's not to say that the v9 submission was the right way to go
+> > either.  Everything in relation to:
+> >=20
+> >    i2c_add_driver(&pm8008_regulators_driver);
+> >=20
+> > ... should be moved into the Regulator driver itself.
+
+> Mark/Stephen,
+>=20
+>=20
+> Could you please share your inputs on this approach?
+
+I don't have particularly strong opinions.  It does seem like the chip
+should be visible as being a single entity in DT if it's a single
+physical thing in the schematic and board.
+
+--fME9Yj+i5Rh9lYLw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLOxT0ACgkQJNaLcl1U
+h9AIqwf/c822cuT8MEVNWVx2rTUwfteCeDrmeqoF8J1KMp7PSj/eyNcgDapREaTu
+09uM6kYsnXaAhJp/beBtFFlkSsxthl5nNdD02+VV1Ynu7UQXzWqCJAls9CpQPYAk
+dW2eSlhQfq2lgvWgJ+C821TpHEX1zTGPC1AnsntOxErTa/ojQeC4wtpW6gIC7qM6
+nJpy2Uayl4VD0Ll02U//WYvXbHoaPK0k+6DMUIevfZLqHUDozfaszoUxN26oh6jl
+94RVzmPA2WjC1E6NM2cTE9sRaBJOY6XGhCmT/YhrpfZh4yXXtb9UJVlU95PZjsVy
+1Gc/djp0iZWyHhChDWnXt3S4khRFvw==
+=Sr/t
+-----END PGP SIGNATURE-----
+
+--fME9Yj+i5Rh9lYLw--

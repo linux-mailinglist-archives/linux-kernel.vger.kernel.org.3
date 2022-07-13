@@ -2,97 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE93573A99
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE79573A9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237042AbiGMPxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57826 "EHLO
+        id S235774AbiGMPyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbiGMPxd (ORCPT
+        with ESMTP id S231698AbiGMPyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:53:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8911B0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:53:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E795E619F6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:53:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31707C34114;
-        Wed, 13 Jul 2022 15:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657727611;
-        bh=RLAlbg/ljGHtCwtTI1C+Qj2j4SMelIPhBh6jbFb1/wE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=W0sUWld8/5j9/EUWbwHhDi43z7rkQj6uNlXyqsWKnHPxCrEoQ1lfmSKlY0n090Cys
-         grsjSXFTqkM5v4N0scqFwIDz5oVLqvT+6+70FRnQLKWbe24bFWg63XOEumqC3A+Ys6
-         Wk6FsY0y4w6P2o4y4j4qY7Jtd17c9d3qwAnA9wI1mRUQNi0CEj7D3EKo7lSc26ieBN
-         s1uaWGcyugmcjklZ470VcGiX4/9g9fA4IC5chSiYH5SzuQICIkH8p3a+l6mmxY+df6
-         4CZsBFp2UzOKRgZ89PfF3WxrxWnmGkkmlunmPRC5uVqOCWTqll5qsEYhyjV/YU1//4
-         85joRwZfhU0gQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     yung-chuan.liao@linux.intel.com, vkoul@kernel.org,
-        alsa-devel@alsa-project.org
-Cc:     srinivas.kandagatla@linaro.org, bard.liao@intel.com,
-        sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com,
-        tiwai@suse.de, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, vinod.koul@linaro.org
-In-Reply-To: <20220708061312.25878-1-yung-chuan.liao@linux.intel.com>
-References: <20220708061312.25878-1-yung-chuan.liao@linux.intel.com>
-Subject: Re: [RESEND PATCH v3 0/2] ASoC/SoundWire: Intel: add sdw BE dai trigger
-Message-Id: <165772760890.142759.10751775895640491241.b4-ty@kernel.org>
-Date:   Wed, 13 Jul 2022 16:53:28 +0100
+        Wed, 13 Jul 2022 11:54:19 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9AA26130
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:54:18 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id fd6so14657149edb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:54:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ni0BZBOFnZlbLlyP3bZ+inMTCHkl9G9i0+j1BNStb2k=;
+        b=W/geH3sqmqfcZSQapGue4T5Vl3bSxlitOo5H83sKvuVa9xPX9OsZCVQAUCsxN9EeT/
+         +NW6mCjb3CsnImyXFxgGQhwC60JUh/1wZ/UEF9v8y4T+p1rcS/2WKmxQk0lsFT5Wy+jj
+         IYBTveTXDxRdivnauMn9LxmYlEafWYslNL2l8g//LEvpB9QtEhR8xKoINgP0WEOU5sKR
+         WJT8Z27itU7J0Gix8/oyeMbN8Nlhno96JkIs/SLcAy3xHZLe+IdbOsUuxLw5N37DPtX6
+         lsDQvB8V+5H9DgKCub6cK+zUcuRptrBvtw49tNdVOQq50Yib5K+DkTFZUWuUStuX+1oG
+         mOfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ni0BZBOFnZlbLlyP3bZ+inMTCHkl9G9i0+j1BNStb2k=;
+        b=XN6p1VTjT3y2ugS6tg3lJ0gn+TJg00PrKVN7h15IrFLUK5zGp5/7XbLVB9taLAbCue
+         hL5s+v0NAlaknnZ86g546gTb/unQ+e1gAw82w6UcoqZRM3ETnvLH8l+NGsBvd4m0ALma
+         UDxeFV1b8QvpmaOcDbXW/zNiEKTtx9bKE57ROJL1VWnOzy85TAVdI/uhr+XgV0SegPMF
+         l9xVrwkZ2xxG+orzp6hHOXE62N2KDH3DOm/lulsIZgFIUEzZaMBKAuCWfXfOQPwbrOQg
+         EYVquItBn5tgPvesRccCRDLtIysPOGCASpxkPaz5ifpz5QAaqesjl8+c2Sv71Ln/byJb
+         aaLA==
+X-Gm-Message-State: AJIora9aLKp7YbNgAtL1Bg//5e2Fo0whQcNB/DtiCDHXEsGOFHkmLVIG
+        IiPd+1Sd/0s3KF3TP6RSmxlWEg8lTSY=
+X-Google-Smtp-Source: AGRyM1txgEPpLdPtuWiGHHn3NE3EaCr9RV/3uDuMLbQZji2Zagm1CM7yDQnoV8iToH3dOOJfIhAv8Q==
+X-Received: by 2002:a05:6402:3486:b0:43a:9b82:6d8a with SMTP id v6-20020a056402348600b0043a9b826d8amr6086454edc.23.1657727656361;
+        Wed, 13 Jul 2022 08:54:16 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id n2-20020a17090695c200b0072b21cab5a5sm5073688ejy.133.2022.07.13.08.54.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 08:54:16 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: [PATCH 0/2] ucount: Fix and improve atomic_long_inc_below
+Date:   Wed, 13 Jul 2022 17:54:03 +0200
+Message-Id: <20220713155405.80663-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 8 Jul 2022 14:13:10 +0800, Bard Liao wrote:
-> For SOF IPC4, we need to set pipeline state in BE DAI trigger.
-> @Mark, resending this series in case it is lost in your mailbox.
-> 
-> v2:
->  - Change "#if IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE)" to
->    "if (IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE))"
-> 
-> [...]
+The series fixes wrong argument type and improves atomic_long_inc_below
+by using atomic_long_try_cmpxchg instead of atomic_long_cmpxchg.
 
-Applied to
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Uros Bizjak (2):
+  ucount: Fix atomic_long_inc_below argument type
+  ucount: Use atomic_long_try_cmpxchg in atomic_long_inc_below
 
-Thanks!
+ kernel/ucount.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-[1/2] soundwire: Intel: add trigger callback
-      commit: 6d1c1a73e1126572de0a8b063fe62fe43786ed59
-[2/2] ASoC: SOF: Intel: add trigger callback into sdw_callback
-      commit: 2a1be12c4d77d4f7b122568383382e006a60381b
+-- 
+2.35.3
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

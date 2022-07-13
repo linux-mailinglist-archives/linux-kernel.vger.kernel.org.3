@@ -2,47 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8BE573114
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D877757311A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235742AbiGMI10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S235561AbiGMI2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235587AbiGMI0u (ORCPT
+        with ESMTP id S235637AbiGMI1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:26:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9280620194
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:26:14 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oBXh6-0001Xl-MY; Wed, 13 Jul 2022 10:26:04 +0200
-Message-ID: <29492f419daf4334546826c54b206ccb2858063d.camel@pengutronix.de>
-Subject: Re: [PATCH v14 09/17] PCI: imx6: Call host init function directly
- in resume
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Richard Zhu <hongxing.zhu@nxp.com>, bhelgaas@google.com,
-        robh+dt@kernel.org, broonie@kernel.org, lorenzo.pieralisi@arm.com,
-        festevam@gmail.com, francesco.dolcini@toradex.com
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Date:   Wed, 13 Jul 2022 10:26:03 +0200
-In-Reply-To: <1656645935-1370-10-git-send-email-hongxing.zhu@nxp.com>
-References: <1656645935-1370-1-git-send-email-hongxing.zhu@nxp.com>
-         <1656645935-1370-10-git-send-email-hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Wed, 13 Jul 2022 04:27:34 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCAA974AD
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:27:12 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id d12so17856148lfq.12
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=EaV/rroW+dQe7iYZ/YnJOFxdJwgnAadz2Ja67j4jgO4=;
+        b=LUjO5qhY2tjcEVKD8B+TSFWdlzTe3qW3jv9SO0ESq+AaRaqyZo9jwoKTjgvGVBtPcZ
+         gNg0xSHgT7thnoelrVnS1Xn1K+vhF6otpZxgQUK4KMe3fUXybjhpAT1yQY0G4ow4TFae
+         sQFwM/2rP7RZJTNeoUyYEjyhTQcQro9OR8DuMJ58wGRXRuDTa1hh0HMIR7Pxcy3ohpQE
+         6MXRIN22NRjho9MsulkMWHqv2hJBYhTy+ieUmE1TqxD4ilRpKrCiKtg+0htwzCQ/sVBJ
+         Y0POU828ThNwL0gsAxoQR9KcPAoa6E7XF8rWmRS1fYDQSAV5ZY7HoiqZ+5bNdM+votAi
+         fTEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EaV/rroW+dQe7iYZ/YnJOFxdJwgnAadz2Ja67j4jgO4=;
+        b=r3+UdO8pxruXj1n+8Ez/5fOEJwfo36OflcTdxrP7Z8HckOLdA01dO3k7OpLK8GWVVE
+         NEfUgyiACz0mk5b2Hy0YoY9YQTh6m4O8IoJVvOiZ+lvQ2pE1hDhAT63GQZu8bYH6yS3z
+         K3iA+w0u3QX1/9EE/vxHmih8L8WXnENQjEC3tiI7HR/CV1nalN9CUHmLZRSDxlVi4qPR
+         YlQKzUa2jAG9TWdXz4yvKOvQqKv2dPBWwPgigQwbbMEFEPZmsu35PWsCjniYUPlu2mp/
+         RSAvGLwh1w3V/Vkb9nAc/Ln5VVKB9tj7h81T1O6B4DKYEPlguorulhNCZUGPkcTEH7Gb
+         LUPA==
+X-Gm-Message-State: AJIora9r8TLVbZ5hZpR80M3EQjT7keF2132bIJxF99C/w8z8qD6cCu6H
+        GBAibKq7T7iCzGZFw/W0dE7g+Q==
+X-Google-Smtp-Source: AGRyM1s2gLKEqx6vWnMmnxpoB9EkV7fOAVI0KGdYbPRp5LroYG358skPN2ZCi8n4aTuU1JBI49oMmQ==
+X-Received: by 2002:a05:6512:220d:b0:488:c3ba:acc4 with SMTP id h13-20020a056512220d00b00488c3baacc4mr1339256lfu.196.1657700831281;
+        Wed, 13 Jul 2022 01:27:11 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id f14-20020a05651c02ce00b0025d754ba5f4sm1336234ljo.99.2022.07.13.01.27.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 01:27:10 -0700 (PDT)
+Message-ID: <86fdd777-3c68-1f1f-3515-50426430bd85@linaro.org>
+Date:   Wed, 13 Jul 2022 10:27:08 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: iio: adc: npcm: Add npcm845
+ compatible string
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, jic23@kernel.org,
+        lars@metafoo.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, j.neuschaefer@gmx.net,
+        zhengbin13@huawei.com
+Cc:     openbmc@lists.ozlabs.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220713070517.172852-1-tmaimon77@gmail.com>
+ <20220713070517.172852-2-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220713070517.172852-2-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,38 +81,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, dem 01.07.2022 um 11:25 +0800 schrieb Richard Zhu:
-> Call imx6_pcie_host_init() instead of duplicating codes in resume.
+On 13/07/2022 09:05, Tomer Maimon wrote:
+> Add a compatible string for Nuvoton BMC NPCM845 ADC.
 > 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 
-So this isn't strictly a de-duplication, as imx6_pcie_host_init also
-does the MPLL setup again on i.MX6SX. Which I believe is absolutely the
-right thing to do in resume, even though I'm not aware of any system
-that would be affected by this change.
+I assume all properties from NPCM750 apply here as well:
 
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index eaae144db4f3..2b42c37f1617 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -1034,9 +1034,9 @@ static int imx6_pcie_resume_noirq(struct device *dev)
->  	if (!(imx6_pcie->drvdata->flags & IMX6_PCIE_FLAG_SUPPORTS_SUSPEND))
->  		return 0;
->  
-> -	imx6_pcie_assert_core_reset(imx6_pcie);
-> -	imx6_pcie_init_phy(imx6_pcie);
-> -	imx6_pcie_deassert_core_reset(imx6_pcie);
-> +	ret = imx6_pcie_host_init(pp);
-> +	if (ret)
-> +		return ret;
->  	dw_pcie_setup_rc(pp);
->  
->  	ret = imx6_pcie_start_link(imx6_pcie->pci);
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
+Best regards,
+Krzysztof

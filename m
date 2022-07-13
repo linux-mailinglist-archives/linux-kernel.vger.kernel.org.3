@@ -2,206 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518F05737CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3705737CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236014AbiGMNrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
+        id S236123AbiGMNrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiGMNrH (ORCPT
+        with ESMTP id S231274AbiGMNr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:47:07 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A5010BE;
-        Wed, 13 Jul 2022 06:47:06 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so3716724pjf.2;
-        Wed, 13 Jul 2022 06:47:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=E8QifYFp/lwvfFzsp4TOKlqipcqLOhcpZBS/KtNX/OI=;
-        b=YlJyOu2QRsl7m3bd5cIDXtw46d/GAajRopQjQ6XtV0d1SHK8UzrD60XhTw7SQbMFe1
-         gVbbQ05p1X1lFbtnPlkJGbiHW/YGAsYZq48F76SAAvEqQlezVOUy1uXlCm9djS0E12d4
-         0QqbGIOC6sTyMPrOnQJOHieC47LH2tELObQmUEAGV/2k9YfvOpy5lmxWh6gRu1ZzUzmT
-         UxKkCqWfCojQs+kPGKpNczq1pVpOHYwCUbTZ9lzEOI/+80maehBcw6cjH/CkrA2fxNd4
-         kI66VOaUDpsnTPo8CMIg7K54hVEDUwNASEKwmbexON19ClSoRKylwdOhYpCTCyLLAPGG
-         mj7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=E8QifYFp/lwvfFzsp4TOKlqipcqLOhcpZBS/KtNX/OI=;
-        b=KvOQmBFZrPXIxcTkcCnKgUNt+Mkc2G8C5w52/YrGgO4oopAXoLMf1ahUQBH2n3qyZY
-         f0WP5eOF2GxHBKlH/Ap62gJE+endI7o8AZcgVS80KcfP7wsDy6iF5RMoeqvT0jXSs1ki
-         Bk/ChiVnSurjVlYptXU2kDSIeF2Z6LrOVlTLCdl68/4+38Jj9EEtoo9wiFK9NxJslc17
-         1+ZjVA57IKeYWvQEm/JVJm7n56xG7epn6RzoYF2DruxwAbWFXmqfR4gWIK50qq15OAm2
-         2W8NAhYdLblhgrPhIc5Jmam34pfE0/I523wvqCbbW6QyEw6fEPBnZ2a/Dqmel6CCMJm8
-         TImg==
-X-Gm-Message-State: AJIora/3XqhBglrJaxLlbUIt4amOQ6OUHW5F7zHCgYa4aNfiYk5JuVFf
-        F4EKwOYYwKdnPnqzD/8jRl5fhvQeE0Rrlw==
-X-Google-Smtp-Source: AGRyM1tz+UvkD3ZH6hSSZJrft9mTXRXEtOVy7QebAZGY+GZZWMAcmCXDgroD4uzU5TCTQIkRGTHWOA==
-X-Received: by 2002:a17:90b:1807:b0:1f0:5875:9751 with SMTP id lw7-20020a17090b180700b001f058759751mr4044679pjb.25.1657720026209;
-        Wed, 13 Jul 2022 06:47:06 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k10-20020a170902d58a00b0015e8d4eb1d5sm8826990plh.31.2022.07.13.06.46.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 06:47:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 13 Jul 2022 06:46:57 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Urs Schroffenegger <nabajour@lampshade.ch>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] hwmon: (asus-ec-sensors) add definitions for ROG
- ZENITH II EXTREME
-Message-ID: <20220713134657.GA3799892@roeck-us.net>
-References: <20220710202639.1812058-1-eugene.shalygin@gmail.com>
- <20220710202639.1812058-2-eugene.shalygin@gmail.com>
+        Wed, 13 Jul 2022 09:47:29 -0400
+Received: from mx4.veeam.com (mx4.veeam.com [104.41.138.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1B2105;
+        Wed, 13 Jul 2022 06:47:28 -0700 (PDT)
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx4.veeam.com (Postfix) with ESMTPS id 580C9CAFC5;
+        Wed, 13 Jul 2022 16:47:26 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+        s=mx4-2022; t=1657720046;
+        bh=vOOalNQ9r9QRquMExxnzKYoMS7P4s1dLtt3mNir4PW4=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+        b=ANCTOIT4KS7uvUfMlXU2CGXcGYfNwh5Rx/e/jUQUBq5fd640Fwng2rLv5tgnGGYqH
+         K16LLp6tw21JrvQ5t+saL3Mn9b4j8NdM0lZjYTojFN6AEz36wfSovmzx3Wqq/Tdiz6
+         2e2RcjSc71OELSYb2iZlpqdPeaj+VuJd9I5IdvgWnac/Nw50qLVkUSXJy4JoDYkG5x
+         ZG/i2VgeGBkPfz1FMA05Eysy7i3QB7ZuZca4pZRCwHlVr0R35grSiQmw843ay2q+PZ
+         n6o0QKUoeBD4Hcl1IrtTK13bWV4GwomlXhwkvx7DolQzGcROK2NTviyyFKJIDkBDt4
+         Z3IHqVPGhR3bA==
+Received: from [172.24.11.83] (172.24.11.83) by prgmbx01.amust.local
+ (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Wed, 13 Jul
+ 2022 15:47:23 +0200
+Message-ID: <51e3fc9e-5b46-ab23-bbf8-5d0ad9dada29@veeam.com>
+Date:   Wed, 13 Jul 2022 15:47:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220710202639.1812058-2-eugene.shalygin@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 01/20] block, blk_filter: enable block device filters
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
+ <1655135593-1900-2-git-send-email-sergei.shtepa@veeam.com>
+ <YsWHHcCfSVFklh4M@infradead.org>
+ <ff78a1ee-8bc5-6e8e-040f-978cd07eacfe@veeam.com>
+ <YscXTGXumE5Ust15@infradead.org>
+ <aec88137-070e-7c1d-215f-86a1e6d4b10a@veeam.com>
+ <Ys6y1AYTl8r/i3UX@infradead.org>
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+In-Reply-To: <Ys6y1AYTl8r/i3UX@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.24.11.83]
+X-ClientProxiedBy: prgmbx01.amust.local (172.24.128.102) To
+ prgmbx01.amust.local (172.24.128.102)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29D2A50A54647160
+X-Veeam-MMEX: True
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 10, 2022 at 10:26:39PM +0200, Eugene Shalygin wrote:
-> From: Urs Schroffenegger <nabajour@lampshade.ch>
+On 7/13/22 13:56, Christoph Hellwig wrote:
 > 
-> Add definitions for ROG ZENITH II EXTREME and some unknown yet
-> temperature sensors in the second EC bank. Details are available at
-> [1, 2].
-> 
-> [1] https://github.com/zeule/asus-ec-sensors/pull/26
-> [2] https://github.com/zeule/asus-ec-sensors/issues/16
-> 
-> Signed-off-by: Urs Schroffenegger <nabajour@lampshade.ch>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> On Fri, Jul 08, 2022 at 12:45:33PM +0200, Sergei Shtepa wrote:
+>> 1. Work at the partition or disk level?
+>> At the user level, programs operate with block devices.
+>> In fact, the "disk" entity makes sense only for the kernel level. 
+>> When the user chooses which block devices to backup and which not,
+>> he operates with mounting points, which are converted into block
+>> devices, partitions. Therefore, it is better to handle bio before
+>> remapping to disk.
+>> If the filtering is performed after remapping, then we will be
+>> forced to apply a filter to the entire disk, or complicate the
+>> filtering algorithm by calculating which range of sectors bio is
+>> addressed to. And if bio is addressed to the partition boundary...
+>> Filtering at the block device level seems to me a simpler solution.
+>> But this is not the biggest problem.
+> Note that bi_bdev stays for the partition things came from.  So we
+> could still do filtering after blk_partition_remap has been called,
+> the filter driver just needs to be careful on how to interpret the
+> sector numbers.
 
-Applied.
+Thanks. I'll check it out.
 
-Thanks,
-Guenter
-> ---
->  Documentation/hwmon/asus_ec_sensors.rst |  1 +
->  drivers/hwmon/asus-ec-sensors.c         | 47 +++++++++++++++++++++++++
->  2 files changed, 48 insertions(+)
 > 
-> diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-> index 1e40c123db77..02f4ad314a1e 100644
-> --- a/Documentation/hwmon/asus_ec_sensors.rst
-> +++ b/Documentation/hwmon/asus_ec_sensors.rst
-> @@ -22,6 +22,7 @@ Supported boards:
->   * ROG STRIX X570-F GAMING
->   * ROG STRIX X570-I GAMING
->   * ROG STRIX Z690-A GAMING WIFI D4
-> + * ROG ZENITH II EXTREME
->  
->  Authors:
->      - Eugene Shalygin <eugene.shalygin@gmail.com>
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index 625c2baa35ec..3049537130be 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -56,6 +56,8 @@ static char *mutex_path_override;
->  
->  #define ASUS_HW_ACCESS_MUTEX_RMTW_ASMX	"\\RMTW.ASMX"
->  
-> +#define ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0 "\\_SB_.PCI0.SBRG.SIO1.MUT0"
-> +
->  #define MAX_IDENTICAL_BOARD_VARIATIONS	3
->  
->  /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
-> @@ -121,6 +123,18 @@ enum ec_sensors {
->  	ec_sensor_temp_water_in,
->  	/* "Water_Out" temperature sensor reading [℃] */
->  	ec_sensor_temp_water_out,
-> +	/* "Water_Block_In" temperature sensor reading [℃] */
-> +	ec_sensor_temp_water_block_in,
-> +	/* "Water_Block_Out" temperature sensor reading [℃] */
-> +	ec_sensor_temp_water_block_out,
-> +	/* "T_sensor_2" temperature sensor reading [℃] */
-> +	ec_sensor_temp_t_sensor_2,
-> +	/* "Extra_1" temperature sensor reading [℃] */
-> +	ec_sensor_temp_sensor_extra_1,
-> +	/* "Extra_2" temperature sensor reading [℃] */
-> +	ec_sensor_temp_sensor_extra_2,
-> +	/* "Extra_3" temperature sensor reading [℃] */
-> +	ec_sensor_temp_sensor_extra_3,
->  };
->  
->  #define SENSOR_TEMP_CHIPSET BIT(ec_sensor_temp_chipset)
-> @@ -136,6 +150,12 @@ enum ec_sensors {
->  #define SENSOR_CURR_CPU BIT(ec_sensor_curr_cpu)
->  #define SENSOR_TEMP_WATER_IN BIT(ec_sensor_temp_water_in)
->  #define SENSOR_TEMP_WATER_OUT BIT(ec_sensor_temp_water_out)
-> +#define SENSOR_TEMP_WATER_BLOCK_IN BIT(ec_sensor_temp_water_block_in)
-> +#define SENSOR_TEMP_WATER_BLOCK_OUT BIT(ec_sensor_temp_water_block_out)
-> +#define SENSOR_TEMP_T_SENSOR_2 BIT(ec_sensor_temp_t_sensor_2)
-> +#define SENSOR_TEMP_SENSOR_EXTRA_1 BIT(ec_sensor_temp_sensor_extra_1)
-> +#define SENSOR_TEMP_SENSOR_EXTRA_2 BIT(ec_sensor_temp_sensor_extra_2)
-> +#define SENSOR_TEMP_SENSOR_EXTRA_3 BIT(ec_sensor_temp_sensor_extra_3)
->  
->  enum board_family {
->  	family_unknown,
-> @@ -199,6 +219,18 @@ static const struct ec_sensor_info sensors_family_amd_500[] = {
->  		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
->  	[ec_sensor_temp_water_out] =
->  		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
-> +	[ec_sensor_temp_water_block_in] =
-> +		EC_SENSOR("Water_Block_In", hwmon_temp, 1, 0x01, 0x02),
-> +	[ec_sensor_temp_water_block_out] =
-> +		EC_SENSOR("Water_Block_Out", hwmon_temp, 1, 0x01, 0x03),
-> +	[ec_sensor_temp_sensor_extra_1] =
-> +		EC_SENSOR("Extra_1", hwmon_temp, 1, 0x01, 0x09),
-> +	[ec_sensor_temp_t_sensor_2] =
-> +		EC_SENSOR("T_sensor_2", hwmon_temp, 1, 0x01, 0x0a),
-> +	[ec_sensor_temp_sensor_extra_2] =
-> +		EC_SENSOR("Extra_2", hwmon_temp, 1, 0x01, 0x0b),
-> +	[ec_sensor_temp_sensor_extra_3] =
-> +		EC_SENSOR("Extra_3", hwmon_temp, 1, 0x01, 0x0c),
->  };
->  
->  static const struct ec_sensor_info sensors_family_intel_300[] = {
-> @@ -231,6 +263,9 @@ static const struct ec_sensor_info sensors_family_intel_600[] = {
->  #define SENSOR_SET_TEMP_CHIPSET_CPU_MB                                         \
->  	(SENSOR_TEMP_CHIPSET | SENSOR_TEMP_CPU | SENSOR_TEMP_MB)
->  #define SENSOR_SET_TEMP_WATER (SENSOR_TEMP_WATER_IN | SENSOR_TEMP_WATER_OUT)
-> +#define SENSOR_SET_WATER_BLOCK                                                 \
-> +	(SENSOR_TEMP_WATER_BLOCK_IN | SENSOR_TEMP_WATER_BLOCK_OUT)
-> +
->  
->  struct ec_board_info {
->  	const char *board_names[MAX_IDENTICAL_BOARD_VARIATIONS];
-> @@ -378,6 +413,18 @@ static const struct ec_board_info board_info[] = {
->  		.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
->  		.family = family_intel_600_series,
->  	},
-> +	{
-> +		.board_names = {"ROG ZENITH II EXTREME"},
-> +		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
-> +			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-> +			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET | SENSOR_FAN_VRM_HS |
-> +			SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE |
-> +			SENSOR_SET_WATER_BLOCK |
-> +			SENSOR_TEMP_T_SENSOR_2 | SENSOR_TEMP_SENSOR_EXTRA_1 |
-> +			SENSOR_TEMP_SENSOR_EXTRA_2 | SENSOR_TEMP_SENSOR_EXTRA_3,
-> +		.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0,
-> +		.family = family_amd_500_series,
-> +	},
->  	{}
->  };
->  
+>> 2. Can the filter sleep or postpone bio processing to the worker thread?
+> I think all of te above is fine, just for normal submit_bio based
+> drivers.
+ 
+Good. But I'm starting to think that for request-based block devices,
+filtering should be different. I need to check it out.
+
+>> The problem is in the implementation of the COW algorithm.
+>> If I send a bio to read a chunk (one bio), and then pass a write bio,
+>> then with some probability I am reading partially overwritten data.
+>> Writing overtakes reading. And flags REQ_SYNC and REQ_PREFLUSH don't help.
+>> Maybe it's a disk driver issue, or a hypervisor, or a NAS, or a RAID,
+>> or maybe normal behavior. I don't know. Although, maybe I'm not working
+>> correctly with flags. I have seen the comments on patch 11/20, but I am
+>> not sure that the fixes will solve this problem.
+>> But because of this, I have to postpone the write until the read completes.
+> In the I/O stack there really isn't any ordering.  While a general
+> reordering looks a bit odd to be, it absolutely it always possible.
+> 
+
+Thank you!
+So this is normal behavior and locking the writing is necessary.
+When designing the module, I mistakenly thought that it would be enough
+to set the correct order of sending bios.
+
+>> 2.1 The easiest way to solve the problem is to block the writer's thread
+>> with a semaphore. And for bio with a flag REQ_NOWAIT, complete processing
+>> with bio_wouldblock_error(). This is the solution currently being used.
+> This sounds ok.  The other option would be to put the write on hold and
+> only queue it up from the read completion (or rather a workqueue kicked
+> off from the read completion).  But this is basically the same, just
+> without blocking the I/O submitter, so we could do the semaphore first
+> and optimize later as needed.
+> 
+>> If I am blocked by the q->q_usage_counter counter, then I will not
+>> be able to execute COW in the context of the current thread due to deadlocks.
+>> I will have to use a scheme with an additional worker thread.
+>> Bio filtering will become much more complicated.
+> q_usage_counter itself doesn't really block you from doing anything.
+> You can still sleep inside of it, and most driver do that.
+> 
+Ok. I will try to lower the handle point under the protection of the
+q_usage_counter. Maybe I'm mistaken about deadlocks.
+
+Thank you so much for the review and for the explanatory answers!
+I got a lot of useful recommendations.
+I have a lot of work to do to improve the patch.

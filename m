@@ -2,64 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2567F572B20
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562AA572AE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233879AbiGMBzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 21:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
+        id S233657AbiGMBft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 21:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiGMBzv (ORCPT
+        with ESMTP id S229775AbiGMBfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 21:55:51 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A3AC9207;
-        Tue, 12 Jul 2022 18:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657677350; x=1689213350;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=pKiiCVx6jGcmxHkWq3i93Q32ZqFOuHeXNvvGly92q1U=;
-  b=eDWQ+qFPk+rh9yr0IK2HosdxG2gxtFtmwpjtEWwfVsBwr57oQ0MXauxa
-   GWuEmiUDlqq0fUnPbtJftLjqvz6JiBftcf6ehYmslQWaaMIOki/zfsZk0
-   ykxW+LaTU8/IGTxUoDNj6CGzWoEmbV65/M/5LEh4gL7kfJJIF1lQSlnDa
-   2pvrqV3jETXOLtPFZZoCzycG5b68D7KkJoldeMaj+U/hTi0D5vaGrTgzU
-   +6ns/EK6CZcy+YZg4CIJqTkp800w7ozrn0VA969Sd36LArSwzyiqTWRif
-   15FZgVl0Bf8gWFXFkeCdMMbYhj3K60RjyudLPfkvMEiF6FIDQItu0h34n
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="285110552"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="285110552"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 18:55:50 -0700
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="628113093"
-Received: from ifatima-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.1.196])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 18:55:48 -0700
-Message-ID: <e4604ad23788a6d2950c091d04b7b805684a1a01.camel@intel.com>
-Subject: Re: [PATCH v7 002/102] Partially revert "KVM: Pass kvm_init()'s
- opaque param to additional arch funcs"
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Anup Patel <anup@brainfault.org>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Date:   Wed, 13 Jul 2022 13:55:46 +1200
-In-Reply-To: <4566737e3c57c5ab17c0bc29d6f4758744b6eed1.1656366337.git.isaku.yamahata@intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
-         <4566737e3c57c5ab17c0bc29d6f4758744b6eed1.1656366337.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Tue, 12 Jul 2022 21:35:47 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2120.outbound.protection.outlook.com [40.107.92.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69A5CB448;
+        Tue, 12 Jul 2022 18:35:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hVDieQz88IsVnoFAwccPx9UKB0bWebYn1dhTvDFQRx6P9nEWvn/xwfmQ0NFi7oOjQ8PCVFjOeRM+9D3gxzPeLSkIJZIU/deqxPxI/6GTo8aMc1YIVmW9XHGHftroW2DRW51aeGfOHlowEuqCwYeHfhFQrxOUQuWgqEU3SP0SrSIHxdoXIC0zeKZ17GiEDTdFipmODaWtBxVHfg1Xk85eVtTdz60F4IyYtEKsX69YBcP7BGaXTy/1IlI2DYpF/M1izQs+AGZLyknBImYqSXisdSeqohOEEUiGdUpucF26bs1EbuNnk0Cr2KJnwDVIjBZeYqH3jUyCS4UygV0YptTzuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ddo/S8RK8zfpj2dyMNU8a7uWnD8XMriQO6FxXXYVM8E=;
+ b=Tr6Ef0kXDoQ3/QZ4oECcWSxkW6LVP/gziVO+ePKU4ck6assQXYwKi+FKt8LbdZE8SkmLwmfjaItecACa1SqF+mC/kYv4Os9axovDEzNWY0iBDl81ufK7l05Ewcr3Ff6FRfaYMP8JWLxYdgxp91TdxMcPu5h6iN9fDVC88IZyDlQxmwYrc1CdbkQcBw4xPo92AwtaPhTsfifkVR5wvL70BSXdx1C1VJMwSz30EqUJVihkcWwQRR/LJVuX6qg94UED/O8dXijIo/4ezw2DwHyB80tg8/mTfKa691Ur7t3vpAOIsS4D3TaY3HK2F3+aJwLGe89nTMQL2mTvdt3FpbKFyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ddo/S8RK8zfpj2dyMNU8a7uWnD8XMriQO6FxXXYVM8E=;
+ b=CqnNj9XHIcrD8u1MJJxW+AVA25sjlApk0cwdYQ3G+ukctqI42D4O4Kjj7McO99dMtmRiDS8ShQzPcmQl50sOgAsbtB0NviQH8RfjDRKocQruXfaHZfrU3u7yqMMJq1ndGWPlm0hJzxiYc+mnNaH5tjjuKv7ZbCuMDNhDQ4DM23M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by BLAPR10MB4931.namprd10.prod.outlook.com
+ (2603:10b6:208:331::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15; Wed, 13 Jul
+ 2022 01:35:40 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::712f:6916:3431:e74e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::712f:6916:3431:e74e%6]) with mapi id 15.20.5395.020; Wed, 13 Jul 2022
+ 01:35:40 +0000
+Date:   Wed, 13 Jul 2022 01:35:37 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linus.walleij@linaro.org, alexandre.belloni@bootlin.com,
+        kavyasree.kotagiri@microchip.com, UNGLinuxDriver@microchip.com,
+        maxime.chevallier@bootlin.com, michael@walle.cc,
+        andy.shevchenko@gmail.com
+Subject: Re: [PATCH v4 2/2] pinctrl: ocelot: Fix pincfg
+Message-ID: <Ys6D2adSuRmoSD3s@COLIN-DESKTOP1.localdomain>
+References: <20220712195043.3842081-1-horatiu.vultur@microchip.com>
+ <20220712195043.3842081-3-horatiu.vultur@microchip.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712195043.3842081-3-horatiu.vultur@microchip.com>
+X-ClientProxiedBy: SJ0PR03CA0055.namprd03.prod.outlook.com
+ (2603:10b6:a03:33e::30) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 770587ab-51bd-4b74-e28d-08da646ffe82
+X-MS-TrafficTypeDiagnostic: BLAPR10MB4931:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aQ0RsYgNmnKk6PfLdktylZ2taootKFXVkhKvtzelCuGAXKBaczhQv2CiEnbPJ/ghwoOvq2YhO0DFX1jiRFvzoCHBgAl37fiP0+S6khdz5S3QJgnSS3UaWUbC+BgqDKj3fIWB9E5T7lBRdrpJNMMeTznYurvpTDORn7+TTvmPeSkTSnGG3FTTyJiMMZVhBR2RG/Q/zIfgZkqE6aZKJ9aemSHg49/V6OF54AMpVI76n99iIWgi2cuZJhKrDMuJoOYfPu/V3qcw8WsMFvjm5h3FZppa2mprrOgJ4br9N7rC6oFkenQphKu4I3KI3OaGUG/2xf5gHwba+sqdQsObGjKJVE+gbMZnz6IA6RhKlUo0wflQUrJns0PB4qDOQvpl1RukaBbYVZebt/FhUlRPP7qYmh16e6fn/mT6sZWkPY1Lom3U5JIhv3rVLNgbmHthT7u4l2UpRwV811WeYe6J3u+I55dUd0R9jIhUHmpMQLdJdUO8XBI/6FYAOWQrgHL4XUNIZ+3Jkwwhq8F+1H7ls00MykPB4n8adKRoe/baJpsIqAk2ljxgN2fp/aZKcNxJOPo2B8nHgV/1yKepEk9xJqqWZdOLT1lmFe3sVG6IH34YoZbgejMaVITqAEeZHJTYqay4waZTk6NEo5Gika9xWRpTUxfYUOKb83UYF4f2ySZoC7uYl5/fSTeY8eLfWod5nNLxzbYT0oyFGDll+CixR1kchDoFNQ0R7i59Myf96OrqWMWQ6Fe8v5whu7J/EvMWtA27
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(346002)(39830400003)(136003)(366004)(396003)(478600001)(44832011)(4744005)(6666004)(83380400001)(8936002)(6486002)(6916009)(41300700001)(7416002)(5660300002)(316002)(66946007)(26005)(8676002)(66556008)(6512007)(186003)(4326008)(2906002)(66476007)(6506007)(9686003)(86362001)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5+AAGnYfYoeO6PWv9bbvdhcyqyyseZjGCuZcFUbqNKvFw/HprHUUoauyJHnP?=
+ =?us-ascii?Q?fzgx5bBtDg10QHnAJ221gD/98k5JZyK3rvzmm8Axtf/20VChC5L8ETAbwjHd?=
+ =?us-ascii?Q?TBa/xR7cgDPdnkvRKmroFOmOk11YPLEPVoLxTB0hXTrzxBmkUad661qgrokV?=
+ =?us-ascii?Q?SFUXGz+fGw0abbgO5NGkdH4MS49786KWNX+aF+UcURpVB3I9uXWzvC7b41XR?=
+ =?us-ascii?Q?2BlR8DUYOymAek8xzzCLK77yf5DPH/6qS8JDRU4uMwOgBo5zR3sugZ61FK31?=
+ =?us-ascii?Q?WuNZq93Eto8FxckW+lbk5SeKd4t9MZAGFj6vBLiK3pJzNmkIpd//IDugLeP9?=
+ =?us-ascii?Q?XLGXdU4ifpcecqnBDUi2ZRc6JpsXQ8cNtFcI8cP4C2G0SDylvVPnchqAVToO?=
+ =?us-ascii?Q?dnzHy1E87xxxebdPTunWe7fIBaf3ndK2aDaFAzuEN9dtAxbcDubB5A6vPSHd?=
+ =?us-ascii?Q?bm2vAjotb46h8aLomkC5ip9aQvHc4cn7NBPInR5dH99MV6oi9ISu5TH1BhNg?=
+ =?us-ascii?Q?aptkUSBAjxEjJO39/woDg2eGdCf/EXyoRumnLpek0mpySSebN6OBHbLHyRJ8?=
+ =?us-ascii?Q?RQ5sT2wprS7TV35b6AbIqFavGCDgoJF7rbDt2zt6lyh+QLrsLJQX1jSY3T/f?=
+ =?us-ascii?Q?9Sdqks4/gW2R5t0v61cU0/cJladOO9vbcrFPfl3wo7f9v7W+BAdyfoX/U4f/?=
+ =?us-ascii?Q?jQbFaZSh7P49TeWIbbIfMzNBVEZH45qqTuBFePSgyxEMMfoe8MH5VZeDEvpt?=
+ =?us-ascii?Q?a5ahfIJhtXumsbvgtDe4sAGOVoJrP/IT5Twsw/oEnjW/uDiul8MQudD3rH3h?=
+ =?us-ascii?Q?0zUbGAGEo/DGSCcWR39RxE2jo2QmKeQjnSnw/qARpALrlRyQ8kxklo/lsQzX?=
+ =?us-ascii?Q?O0xayj12fxmeGsj8ebpqb42VphEOvFWQUk9lZI+EM4R7GQOYQOhugyN3XAfN?=
+ =?us-ascii?Q?xV8CEyykRi8Ao7IftWunbC9xL6dU1VZMlsBpcLKO0k0HfzCU2iQigsff1Usm?=
+ =?us-ascii?Q?9ZUEHxNevzch6Z5SMPvOIx0aNNtFs2Y81VHOdLO+fOgh5+ou8wbhD/g1U/a7?=
+ =?us-ascii?Q?seWpNTVi8d9HDj/n4ION/mvqp/N1KUaZxJyuIKwcaPT7S9Bs0AVsRpaBVtet?=
+ =?us-ascii?Q?cLKzUl1TEE+zTnMSKGt/460lY3xC8XPJMcnGY/x+BDeO5hUvWYYPvGv+vt2n?=
+ =?us-ascii?Q?yrrnjXH0LKcoqgt7632bU+IkV+TiGqOLdpAxks5QP2QSk2wfV0W5ON0muMX9?=
+ =?us-ascii?Q?458E1nEgIW7KIUKTv4Hv9vtn5B2g2C9mT+QFx3ahv+nxiqg6MWO9ErPieVfy?=
+ =?us-ascii?Q?URzcl4WZPsPQnEmxBavr6GzbgYNDT20dc8ZZk9dcpn96HJg3id7nBiH4JllG?=
+ =?us-ascii?Q?wlMASSofql0UTO04DQ3GyK0N5xrPtq+WgdSEgYiSuZJUEpJRoJGUdGc8clT5?=
+ =?us-ascii?Q?iag3SYmf/TJpSbl94aPAMMRbIfzcx7etOPmZoMcEhfkZPYy2av8NfEhbCOsM?=
+ =?us-ascii?Q?eR/n02Rxt5JznCIM8VNwgisNHUg+R1i9is+/357Bw7DEDb9pnM+XUWMu9bpm?=
+ =?us-ascii?Q?INHDMLm7lvSEIhdYigSK7zlkWNy7qabG4KYJ4CnpVhzLalRCVxdpfrJLfNwV?=
+ =?us-ascii?Q?4A=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 770587ab-51bd-4b74-e28d-08da646ffe82
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 01:35:40.2515
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Zx1ozCkafBtslADpuZdWzNZdH81ubRhgD2LDdM9h8bn1Zbx8F0lmSzKrTO8R9CZWF8lGjTnvlFPvN89VW87TQrtIP8NWz650A8hP3rj4gYY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4931
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,185 +118,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-27 at 14:52 -0700, isaku.yamahata@intel.com wrote:
-> From: Chao Gao <chao.gao@intel.com>
->=20
-> This partially reverts commit b99040853738 ("KVM: Pass kvm_init()'s opaqu=
-e
-> param to additional arch funcs") remove opaque from
-> kvm_arch_check_processor_compat because no one uses this opaque now.
-> Address conflicts for ARM (due to file movement) and manually handle RISC=
--V
-> which comes after the commit.
->=20
-> And changes about kvm_arch_hardware_setup() in original commit are still
-> needed so they are not reverted.
+On Tue, Jul 12, 2022 at 09:50:43PM +0200, Horatiu Vultur wrote:
+> The blamed commit changed to use regmaps instead of __iomem. But it
+> didn't update the register offsets to be at word offset, so it uses byte
+> offset.
+> Another issue with the same commit is that it has a limit of 32 registers
+> which is incorrect. The sparx5 has 64 while lan966x has 77.
+> 
+> Fixes: 076d9e71bcf8 ("pinctrl: ocelot: convert pinctrl to regmap")
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-I tried to dig the history to find out why we are doing this.
-
-IMHO it's better to give a reason why you need to revert the opaque.  I gue=
-ss no
-one uses this opaque now doesn't mean we need to remove it?
-
-Perhaps you should mention this is a preparation to
-hardware_enable_all()/hardware_disable_all() during module loading time.=
-=20
-Instead of extending hardware_enable_all()/hardware_disable_all() to take t=
-he
-opaque and pass to kvm_arch_check_process_compat(), just remove the opaque.
-
-Or perhaps just merge this patch to next one?
-
->=20
-> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Acked-by: Anup Patel <anup@brainfault.org>
-> Acked-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Link: https://lore.kernel.org/r/20220216031528.92558-3-chao.gao@intel.com
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/arm64/kvm/arm.c       |  2 +-
->  arch/mips/kvm/mips.c       |  2 +-
->  arch/powerpc/kvm/powerpc.c |  2 +-
->  arch/riscv/kvm/main.c      |  2 +-
->  arch/s390/kvm/kvm-s390.c   |  2 +-
->  arch/x86/kvm/x86.c         |  2 +-
->  include/linux/kvm_host.h   |  2 +-
->  virt/kvm/kvm_main.c        | 16 +++-------------
->  8 files changed, 10 insertions(+), 20 deletions(-)
->=20
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index a0188144a122..7588efbac6be 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -68,7 +68,7 @@ int kvm_arch_hardware_setup(void *opaque)
->  	return 0;
->  }
-> =20
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->  {
->  	return 0;
->  }
-> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> index a25e0b73ee70..092d09fb6a7e 100644
-> --- a/arch/mips/kvm/mips.c
-> +++ b/arch/mips/kvm/mips.c
-> @@ -140,7 +140,7 @@ int kvm_arch_hardware_setup(void *opaque)
->  	return 0;
->  }
-> =20
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->  {
->  	return 0;
->  }
-> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-> index 191992fcb2c2..ca8ef51092c6 100644
-> --- a/arch/powerpc/kvm/powerpc.c
-> +++ b/arch/powerpc/kvm/powerpc.c
-> @@ -446,7 +446,7 @@ int kvm_arch_hardware_setup(void *opaque)
->  	return 0;
->  }
-> =20
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->  {
->  	return kvmppc_core_check_processor_compat();
->  }
-> diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
-> index 1549205fe5fe..f8d6372d208f 100644
-> --- a/arch/riscv/kvm/main.c
-> +++ b/arch/riscv/kvm/main.c
-> @@ -20,7 +20,7 @@ long kvm_arch_dev_ioctl(struct file *filp,
->  	return -EINVAL;
->  }
-> =20
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->  {
->  	return 0;
->  }
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 72bd5c9b9617..a05493f1cacf 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -251,7 +251,7 @@ int kvm_arch_hardware_enable(void)
->  	return 0;
->  }
-> =20
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->  {
->  	return 0;
->  }
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 3d9dbaf9828f..30af2bd0b4d5 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -11799,7 +11799,7 @@ void kvm_arch_hardware_unsetup(void)
->  	static_call(kvm_x86_hardware_unsetup)();
->  }
-> =20
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->  {
->  	struct cpuinfo_x86 *c =3D &cpu_data(smp_processor_id());
-> =20
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index c20f2d55840c..d4f130a9f5c8 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1442,7 +1442,7 @@ int kvm_arch_hardware_enable(void);
->  void kvm_arch_hardware_disable(void);
->  int kvm_arch_hardware_setup(void *opaque);
->  void kvm_arch_hardware_unsetup(void);
-> -int kvm_arch_check_processor_compat(void *opaque);
-> +int kvm_arch_check_processor_compat(void);
->  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu);
->  bool kvm_arch_vcpu_in_kernel(struct kvm_vcpu *vcpu);
->  int kvm_arch_vcpu_should_kick(struct kvm_vcpu *vcpu);
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index a67e996cbf7f..a5bada53f1fe 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -5697,22 +5697,14 @@ void kvm_unregister_perf_callbacks(void)
->  }
->  #endif
-> =20
-> -struct kvm_cpu_compat_check {
-> -	void *opaque;
-> -	int *ret;
-> -};
-> -
-> -static void check_processor_compat(void *data)
-> +static void check_processor_compat(void *rtn)
->  {
-> -	struct kvm_cpu_compat_check *c =3D data;
-> -
-> -	*c->ret =3D kvm_arch_check_processor_compat(c->opaque);
-> +	*(int *)rtn =3D kvm_arch_check_processor_compat();
->  }
-> =20
->  int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
->  		  struct module *module)
->  {
-> -	struct kvm_cpu_compat_check c;
->  	int r;
->  	int cpu;
-> =20
-> @@ -5740,10 +5732,8 @@ int kvm_init(void *opaque, unsigned vcpu_size, uns=
-igned vcpu_align,
->  	if (r < 0)
->  		goto out_free_1;
-> =20
-> -	c.ret =3D &r;
-> -	c.opaque =3D opaque;
->  	for_each_online_cpu(cpu) {
-> -		smp_call_function_single(cpu, check_processor_compat, &c, 1);
-> +		smp_call_function_single(cpu, check_processor_compat, &r, 1);
->  		if (r < 0)
->  			goto out_free_2;
->  	}
+Acked-by: Colin Foster <colin.foster@in-advantage.com>
 

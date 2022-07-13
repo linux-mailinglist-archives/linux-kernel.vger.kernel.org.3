@@ -2,94 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8076F572F25
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36037572F28
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbiGMHY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S234158AbiGMHZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbiGMHYr (ORCPT
+        with ESMTP id S233739AbiGMHZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:24:47 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4A3AE2A14;
-        Wed, 13 Jul 2022 00:24:46 -0700 (PDT)
-Received: from [192.168.87.140] (unknown [50.47.106.71])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0F8E2204DE8D;
-        Wed, 13 Jul 2022 00:24:46 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0F8E2204DE8D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1657697086;
-        bh=xyfcr3sQR84Ly/nvTJHG4HPfK1atahpyAidjxl2yWkE=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=XcZ097XeO7xeC7v5XUwwOFRNJp/3SfBdVsO4i5/EqL5rXYOykkBQcQFZrH5eUk+fH
-         GdHfinkZgeYf9WzJKRJWvBSVXhqwf+/+rj3ay/Dezbp07FtUsA2j0v1iYW0PJpX9OH
-         A6X9pNBzG17b2c4tBFt454w2F+v173E39Qb6miLI=
-Message-ID: <7041bf01-d91f-3149-e8ba-5db4ba59f9bb@linux.microsoft.com>
-Date:   Wed, 13 Jul 2022 00:24:45 -0700
+        Wed, 13 Jul 2022 03:25:04 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2035AB3D4A;
+        Wed, 13 Jul 2022 00:25:03 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LjTdJ4JRSzFq2Z;
+        Wed, 13 Jul 2022 15:24:04 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Jul 2022 15:24:51 +0800
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Jul 2022 15:24:50 +0800
+Subject: Re: [PATCH v4] proc: Fix a dentry lock race between release_task and
+ lookup
+To:     Brian Foster <bfoster@redhat.com>
+CC:     <ebiederm@xmission.com>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+References: <20220601062332.232439-1-chengzhihao1@huawei.com>
+ <Ys2CPO4FodMlAqRR@bfoster>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <f64637ac-9c9e-06c4-bbea-4af5c24878bf@huawei.com>
+Date:   Wed, 13 Jul 2022 15:24:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 1/5] crypto: aspeed: Add HACE hash driver
-Content-Language: en-US
-From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Dhananjay Phadke <dhphadke@microsoft.com>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-Cc:     linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
-References: <20220705020936.1751771-1-neal_liu@aspeedtech.com>
- <20220705020936.1751771-2-neal_liu@aspeedtech.com>
- <45058512-0661-5d34-7faf-ddf3eb6142ec@linux.microsoft.com>
-In-Reply-To: <45058512-0661-5d34-7faf-ddf3eb6142ec@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <Ys2CPO4FodMlAqRR@bfoster>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/2022 10:32 PM, Dhananjay Phadke wrote:
->> +static void aspeed_ahash_iV(struct aspeed_sham_reqctx *rctx)
->> +{
->> +    if (rctx->flags & SHA_FLAGS_SHA1)
->> +        memcpy(rctx->digest, sha1_iv, 32);
->> +    else if (rctx->flags & SHA_FLAGS_SHA224)
->> +        memcpy(rctx->digest, sha224_iv, 32);
->> +    else if (rctx->flags & SHA_FLAGS_SHA256)
->> +        memcpy(rctx->digest, sha256_iv, 32);
->> +    else if (rctx->flags & SHA_FLAGS_SHA384)
->> +        memcpy(rctx->digest, sha384_iv, 64);
->> +    else if (rctx->flags & SHA_FLAGS_SHA512)
->> +        memcpy(rctx->digest, sha512_iv, 64);
->> +    else if (rctx->flags & SHA_FLAGS_SHA512_224)
->> +        memcpy(rctx->digest, sha512_224_iv, 64);
->> +    else if (rctx->flags & SHA_FLAGS_SHA512_256)
->> +        memcpy(rctx->digest, sha512_256_iv, 64);
->> +}
+在 2022/7/12 22:16, Brian Foster 写道:
+> On Wed, Jun 01, 2022 at 02:23:32PM +0800, Zhihao Cheng wrote:
+>> Commit 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+>> moved proc_flush_task() behind __exit_signal(). Then, process systemd
+>> can take long period high cpu usage during releasing task in following
+>> concurrent processes:
+>>
+>>    systemd                                 ps
+>> kernel_waitid                 stat(/proc/tgid)
+>>    do_wait                       filename_lookup
+>>      wait_consider_task            lookup_fast
+>>        release_task
+>>          __exit_signal
+>>            __unhash_process
+>>              detach_pid
+>>                __change_pid // remove task->pid_links
+>>                                       d_revalidate -> pid_revalidate  // 0
+>>                                       d_invalidate(/proc/tgid)
+>>                                         shrink_dcache_parent(/proc/tgid)
+>>                                           d_walk(/proc/tgid)
+>>                                             spin_lock_nested(/proc/tgid/fd)
+>>                                             // iterating opened fd
+>>          proc_flush_pid                                    |
+>>             d_invalidate (/proc/tgid/fd)                   |
+>>                shrink_dcache_parent(/proc/tgid/fd)         |
+>>                  shrink_dentry_list(subdirs)               ↓
+>>                    shrink_lock_dentry(/proc/tgid/fd) --> race on dentry lock
+>>
 > 
-> Can use the "digsize" from reqctx to memcpy() instead lots of if..else
-> conditionals for every request?
+> Curious... can this same sort of thing happen with /proc/<tgid>/task if
+> that dir similarly has a lot of dentries?
+> 
 
-Sorry, meant pre-initialized ivsize not digsize, which could be
-in alg wrapper structure (aspeed_hace_alg).
+Yes. It could happend too. There will be many dentries under 
+/proc/<tgid>/task when there are many tasks under same thread group.
 
-Thanks,
-Dhananjay
+We must put /proc/<tgid>/task into pid->inodes, because we have to 
+handle single thread exiting situation: Any one of threads should 
+invalidate its /proc/<tgid>/task/<pid> dentry before begin released. You 
+may refer to the function proc_flush_task_mnt() before commit 
+7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc").
+
+> ...
+>> Fixes: 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216054
+>> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+>> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+>> ---
+>>   v1->v2: Add new helper proc_pid_make_base_inode that performs the extra
+>> 	 work of adding to the pid->list.
+>>   v2->v3: Add performance regression in commit message.
+>>   v3->v4: Make proc_pid_make_base_inode() static
+>>   fs/proc/base.c | 34 ++++++++++++++++++++++++++--------
+>>   1 file changed, 26 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/fs/proc/base.c b/fs/proc/base.c
+>> index c1031843cc6a..d884933950fd 100644
+>> --- a/fs/proc/base.c
+>> +++ b/fs/proc/base.c
+> ...
+>> @@ -1931,6 +1926,27 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
+>>   	return NULL;
+>>   }
+>>   
+>> +static struct inode *proc_pid_make_base_inode(struct super_block *sb,
+>> +				struct task_struct *task, umode_t mode)
+>> +{
+>> +	struct inode *inode;
+>> +	struct proc_inode *ei;
+>> +	struct pid *pid;
+>> +
+>> +	inode = proc_pid_make_inode(sb, task, mode);
+>> +	if (!inode)
+>> +		return NULL;
+>> +
+>> +	/* Let proc_flush_pid find this directory inode */
+>> +	ei = PROC_I(inode);
+>> +	pid = ei->pid;
+>> +	spin_lock(&pid->lock);
+>> +	hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
+>> +	spin_unlock(&pid->lock);
+>> +
+>> +	return inode;
+>> +}
+>> +
+> 
+> Somewhat related to the question above.. it would be nice if this
+> wrapper had a line or two comment above it that explained when it should
+> or shouldn't be used over the underlying function (for example, why or
+> why not include /proc/<tgid>/task?). Otherwise the patch overall seems
+> reasonable to me..
+> 
+
+Thanks for advice, I will add some notes in v5.
+> Brian
+> 
+>>   int pid_getattr(struct user_namespace *mnt_userns, const struct path *path,
+>>   		struct kstat *stat, u32 request_mask, unsigned int query_flags)
+>>   {
+>> @@ -3350,7 +3366,8 @@ static struct dentry *proc_pid_instantiate(struct dentry * dentry,
+>>   {
+>>   	struct inode *inode;
+>>   
+>> -	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
+>> +	inode = proc_pid_make_base_inode(dentry->d_sb, task,
+>> +					 S_IFDIR | S_IRUGO | S_IXUGO);
+>>   	if (!inode)
+>>   		return ERR_PTR(-ENOENT);
+>>   
+>> @@ -3649,7 +3666,8 @@ static struct dentry *proc_task_instantiate(struct dentry *dentry,
+>>   	struct task_struct *task, const void *ptr)
+>>   {
+>>   	struct inode *inode;
+>> -	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
+>> +	inode = proc_pid_make_base_inode(dentry->d_sb, task,
+>> +					 S_IFDIR | S_IRUGO | S_IXUGO);
+>>   	if (!inode)
+>>   		return ERR_PTR(-ENOENT);
+>>   
+>> -- 
+>> 2.31.1
+>>
+> 
+> .
+> 
+

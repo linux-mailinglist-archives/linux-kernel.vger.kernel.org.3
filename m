@@ -2,127 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913A8573122
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A633E573120
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234593AbiGMIaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
+        id S234899AbiGMIaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiGMIaP (ORCPT
+        with ESMTP id S229863AbiGMIaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:30:15 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F372867598;
+        Wed, 13 Jul 2022 04:30:10 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BD9675A2;
         Wed, 13 Jul 2022 01:30:09 -0700 (PDT)
-X-UUID: 650c26010cca47d9b5098c3f11462513-20220713
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:0e27b8a1-ebc3-4433-a98c-4f434658d320,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:7fddda32-b9e4-42b8-b28a-6364427c76bb,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 650c26010cca47d9b5098c3f11462513-20220713
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1252999840; Wed, 13 Jul 2022 16:30:04 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 13 Jul 2022 16:30:03 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 13 Jul 2022 16:30:03 +0800
-Message-ID: <386e09152ee920f89597ac1065f94fc8c804634f.camel@mediatek.com>
-Subject: Re: [PATCH v14 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 13 Jul 2022 16:30:02 +0800
-In-Reply-To: <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
-         <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Received: by mail-pg1-x535.google.com with SMTP id o18so9810499pgu.9;
+        Wed, 13 Jul 2022 01:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BWQvjMQ5inhsm0CdHfIF13hOiwKRb2a2r0nx6p9/cQg=;
+        b=Et5yLhyVmtQ/HToChewgH/H3j5oS9qpVmFXccRC53PvpTtqWzJlepeEJzcZzv2BGVc
+         W2T49G+70jqacCtK2w0nh/xJOEmqp7HeYrfIY9lNay9FCwxJ8MpUIzRkxRHwfPwkY9Zg
+         R2TeuWHrJWTBObVaB65Qjq344HIRQ29UFAuX30GzxcJGm44MdxeryYglcgHSup18QwVW
+         72JcC02zHvIakm/LTOxVuxLGRaioz+vIrrQPwke1sM+my8mYxZFUUUwWowm2aQpVgWSI
+         hLY6lFccqrCGLV6P0Ip6u6uk6BMkrPBuguHDIDUktiRX/C1iUM3xoCWKqKbeaQGDek6T
+         m1eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BWQvjMQ5inhsm0CdHfIF13hOiwKRb2a2r0nx6p9/cQg=;
+        b=6TpXHmpEHt0aDsc8zq+yhErj/+EJgG/d3qhvt2IOo5ZLdDWHweQc1panrpuLzFWAVP
+         W7bF9A9W2ZmnubJGWLuTPvC/DjSggwEsrV2rC7Zk/tZ9ZzbITLasFmjraVS4p8ijx6Ei
+         CXCkI5oAdZlRBXbKj3LkufphprbuspbJpZWLhxHw/9H+p1jPNXKPPomGj23lNhSBvy0w
+         kQ4egLClc68TXMxWoV/XKhM88g8D9IwWa/oAaLEQBDRYY1IvdJn+WFAex0LMoDMYZjpQ
+         xVrNxo711BleG0btqfGOniGBKtUfI3bBG4zKJy/bYWSbo2gdF/jJc6zN30Zr5k2GcKZS
+         N19Q==
+X-Gm-Message-State: AJIora8rPomU2D2lF8flrLac6MfbVCMiLlGZWFINhqT18JLXabr5XDCf
+        w2Ybmnv6sykONocemIoTu3g=
+X-Google-Smtp-Source: AGRyM1u6z3sl7mLQVq3cDI2EW77OeGWimtpFTZKrFrJbylx2lFL2WwlW7jI246VrujgqZCaxDQY0Dw==
+X-Received: by 2002:a63:f742:0:b0:415:cb55:7ceb with SMTP id f2-20020a63f742000000b00415cb557cebmr2107513pgk.134.1657701009430;
+        Wed, 13 Jul 2022 01:30:09 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-1.three.co.id. [180.214.232.1])
+        by smtp.gmail.com with ESMTPSA id c204-20020a624ed5000000b00528c4c770c5sm8168545pfb.77.2022.07.13.01.30.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 01:30:08 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 9F7D610396A; Wed, 13 Jul 2022 15:30:03 +0700 (WIB)
+Date:   Wed, 13 Jul 2022 15:30:02 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 00/61] 5.18.12-rc1 review
+Message-ID: <Ys6CilcxvmHAohV1@debian.me>
+References: <20220712183236.931648980@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
-
-On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Tue, Jul 12, 2022 at 08:38:57PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.12 release.
+> There are 61 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
 
-[snip]
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0)
+and powerpc (ps3_defconfig, GCC 12.1.0).
 
-> +
-> +static int mtk_dp_set_color_depth(struct mtk_dp *mtk_dp)
-> +{
-> +	/* Only support 8 bits currently */
-> +	mtk_dp->info.depth = DP_MSA_MISC_8_BPC;
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Only support DP_MSA_MISC_8_BPC, so it's not necessary use a variable to
-store this information. Drop depth.
-
-Regards,
-CK
-
-> +
-> +	/* Update MISC0 */
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3034,
-> +			   DP_MSA_MISC_8_BPC, DP_TEST_BIT_DEPTH_MASK);
-> +
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_303C,
-> +			   VIDEO_COLOR_DEPTH_DP_ENC0_P0_8BIT,
-> +			   VIDEO_COLOR_DEPTH_DP_ENC0_P0_MASK);
-> +	return 0;
-> +}
-> +
-
+-- 
+An old man doll... just what I always wanted! - Clara

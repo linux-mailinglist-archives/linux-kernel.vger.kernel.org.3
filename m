@@ -2,131 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D18573FA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF91573FA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237057AbiGMWcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 18:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
+        id S237148AbiGMWcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 18:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiGMWb7 (ORCPT
+        with ESMTP id S237056AbiGMWco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 18:31:59 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2064.outbound.protection.outlook.com [40.107.101.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4973C8D8;
-        Wed, 13 Jul 2022 15:31:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pmf6aEPkizUE4cvHub+/FclqO2MHABrASR7g7i2deDTZb+DodbD38pgeU7vcCRrtXXmqQREZii/8vWOcvlScwebqsp3+LCXXHw5kdbm6U4JULdQPdVn0cbqE9zQDzqyN7Z5pRO+/WbMf4uYyDu1frk0qK3HlK1HFBqRcsJSjHSurhUJF+7tCxy1VJfDkiqB6CmEHzdEEt1abDNjtCD6VnNtgHrersUlrwqv9cMXBz95TT3hqS7Y9WfyW+HD1REPHWS4NporlUEJY6EDOZinoP4kr5e0QDOA57XmUYmVuHFiAtYDRUCdQbrwTmdwZWrBHYNPtuHZrgPALduiO4X1pEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r5HOS6zqV6PQGrx9b+PqTeJi/XHFO7+Vptyee3OMFoE=;
- b=XoRKCzEUZW90EuxLLYwcycG7MCdAkG/mcA6BAGcdc7MlcWO1VpSHP4TsKxXmuYXMKFlgr3+vwVG/N8suxPKu2FMr4ZDBgxdfeiIwUyEiV3VFompKIzn6kY7COe4hhs9ChYgO1zSiOoJA7mBDXJP4r/RzxAT+cpjDRjgd0BIqcZ/3PFrBmV3yTCEPxKlLrddQTYfefKGjbQhNgD558nHkhOFexYbqOId7erzucyrJ/b9Lficv96nFNbiuOaZVcS4LA4WPw0EJP3OqaaUJgwtl29MHYewZLKhP3eo3hjvUq9txEAoz/cUBqozG72Bp2rz6dgA3IMbXZFAXD7Kv72hocw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r5HOS6zqV6PQGrx9b+PqTeJi/XHFO7+Vptyee3OMFoE=;
- b=E1+WGxMXYnYAtxpqk3Mu9MTDLlBYFMCdcnChihvSawKuN6V/ivtsLzzy9Cx/y9Uy+muqgJaJYtjdvA4wKg48CqqzJLkomIob5LOdZEiuqRoqzpeqz3HQ+EkA+is/k8dsyA8EsSqd8JJv5i3K0JYqEjlZKyfwQMo/n1ADMqy2A3s=
-Received: from MW4PR03CA0305.namprd03.prod.outlook.com (2603:10b6:303:dd::10)
- by DM5PR12MB1404.namprd12.prod.outlook.com (2603:10b6:3:77::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Wed, 13 Jul
- 2022 22:31:55 +0000
-Received: from CO1NAM11FT057.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dd:cafe::37) by MW4PR03CA0305.outlook.office365.com
- (2603:10b6:303:dd::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.22 via Frontend
- Transport; Wed, 13 Jul 2022 22:31:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT057.mail.protection.outlook.com (10.13.174.205) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5438.12 via Frontend Transport; Wed, 13 Jul 2022 22:31:55 +0000
-Received: from tlendack-t1.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 13 Jul
- 2022 17:31:53 -0500
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Subject: [PATCH net-next v2] MAINTAINERS: Add an additional maintainer to the AMD XGBE driver
-Date:   Wed, 13 Jul 2022 17:31:41 -0500
-Message-ID: <db367f24089c2bbbcd1cec8e21af49922017a110.1657751501.git.thomas.lendacky@amd.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 13 Jul 2022 18:32:44 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6F64D81D
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:32:43 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so6071699pjo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IC9WGNm/k/HKk/gJGNaIvhPEN6uro4h2Di4XSx0/wSo=;
+        b=OkSo1h56KPB5dkuCz8RIEJrgSYw4gI07VeoymulEGnmJB6DcrjGkznYuVr404v6pt+
+         9yHloAN4Q07BaVh71sQpHnPVZNumFT7r5SE3nqXAUTn0roPwGbrTLVS9ahctp1L8a+rq
+         0eps4wB9X7CAyqmAtmPUpchkdoEpFGHoNamrQl92nN/VEKkskeKEDPMM0ofVu6bqmp9D
+         2WLtOCI3Q6SNyOM4dA8/xuE/qSWNruUPJy1Pd8wbmIy4yw30BUz+lSMl86wtaz1GIOv1
+         /EpmiXBWNYnqo1hSvyQOIr7nXZT4xJ3AtRU6/rs7O09UaEfzBGIULZcvMZkk9pmQufia
+         S4UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IC9WGNm/k/HKk/gJGNaIvhPEN6uro4h2Di4XSx0/wSo=;
+        b=7rLhhJlC5fN94jeZf83HpHOOytlTPI3cMUoLwybegGmqjRHCzApvTl1Pv1iUA31JS8
+         fmv0F0M5izvlpBLGavg7jN/IklV/LDrovHyzZnP+KFVo3t33jVTUYuJ6+HncVwv+4ka8
+         eMCXZHub080wIEHcyDIyFtlsyWbFRJ9bE77Z68ZC8N8ZRx86ETOszcAxh222QGHJiOXq
+         EuCy51RoO7rt92x8wFk8gQvdHHPArnbE8oBW/VDThAhdpWre81BxbRS8//A0v8ufkVxT
+         kum+ndYV+W5BTbhPJ93jxpHu/B5SzitzFQ11Ej5s3tg1/qezjVsS/PQq3HseZugVuxND
+         AjIA==
+X-Gm-Message-State: AJIora+O2atyG1hMc3vDalx83QGOv3so3c/d3fRqLcJV/lVK4fw5ZTkE
+        ICGIYuFNPJ/jaS21AsjhCqYAFg==
+X-Google-Smtp-Source: AGRyM1uM2JXWmZ+X73tly9ctALwOfHOQQW2AF5qxNd9TwdS/gxM4q6HbjbNoMiJYW+NrmS56kvEVZg==
+X-Received: by 2002:a17:902:c409:b0:16c:10a2:afa8 with SMTP id k9-20020a170902c40900b0016c10a2afa8mr5250538plk.105.1657751563227;
+        Wed, 13 Jul 2022 15:32:43 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id i15-20020aa796ef000000b00528c6c7bf37sm43808pfq.129.2022.07.13.15.32.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 15:32:42 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 22:32:37 +0000
+From:   Joe Burton <jevburton@google.com>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Joe Burton <jevburton.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] libbpf: Add bpf_map__set_name()
+Message-ID: <Ys9IBYKqlTzkf3jA@google.com>
+References: <20220713214246.2545204-1-jevburton.kernel@gmail.com>
+ <CAKH8qBtkgsQ9snhno3aYnhyc8vG2a0xhgg_sCb4KFhcQt+gfqA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9db8fdab-3791-4593-c779-08da651f7dea
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1404:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8X8lYEKcYegcKJm6M76gVi8bfKyxmdTGgx4rW33VxbIft4dd3kZOLTXtL+aSCcl1uEJiW3hlQ61PThX+FOx8TUbYWmdEX+wQTDPkyMwBLRniVuDH5LvaqUqjY/N3W8wcl5RfL7k/LDCejNJOEaMPHfTyjK7sksNRKGIfms/bY8ZhRRRlt2FBPBR/G8CphJNc47a2HQ09R/GWjKJ2JXcSyLkkaP4OqONq9i1FsI7wy+fmJnKuE+gUOK6eRtrzD+qtsPL6llQxkIGYYbEa+4NecfimVU24rPb2trFeWGii6TH0xe0SwG1Ck07MH5E3ARfKYQccgLXbhBXGS40gl2JK2pmQ0j2VMN+jnOhQSILnSLVPUDoGxP2R4cRba1r2wIDvhqwAls3/kVe9yEQjZWKozOyShsEQAFnoqUsmf3y/B19iHTtPslS57GPEZhY27VkgzpaPUulll1jFHJK4ziD8WglRmVxWMXQJh3brkSluo5ighRSPQXeBzgRYGWd33xnHkjIoqvzPZ+LC3qaTzGlr/VktxBCBG2KIAFTUcpQM/DoM9hmMrqVNwdSN0j125apKyDmoG/Xhqv4TDBTgSt8NQqryVWThkDQfqlm0Dyx1kFJ7CyF1xI9gBUER/+g5IkNgOjMdlK56ira++vRZ/0lOu+H2YGl2ge3XPiZ5NJjj/sNEO17BdL2YUiaNjCUtv3H2OkV4w503Kk7UcbfKUXytHrXNj5WY6aTnbDVl/WdWDMpdqzvlO1EfAo9Hhb7P/Jj6yGPxVGWmjakB/lfpWbwB3FJwTPuPlt3VdXYhuU9OnbGVIr9Fcg7NMd2TlwA5Tgb0LSXLW8PGWE9cqaJ3XpX5+mKtPTS3bMVa1K0eaHsiaM8=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(396003)(136003)(39860400002)(40470700004)(36840700001)(46966006)(4326008)(8676002)(40460700003)(70586007)(40480700001)(316002)(82740400003)(8936002)(5660300002)(26005)(36756003)(110136005)(70206006)(54906003)(4744005)(36860700001)(478600001)(2616005)(6666004)(2906002)(41300700001)(82310400005)(426003)(356005)(86362001)(16526019)(7696005)(81166007)(47076005)(186003)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 22:31:55.5401
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9db8fdab-3791-4593-c779-08da651f7dea
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT057.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1404
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKH8qBtkgsQ9snhno3aYnhyc8vG2a0xhgg_sCb4KFhcQt+gfqA@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Shyam Sundar S K as an additional maintainer to support the AMD XGBE
-network device driver.
+> Asked you internally, but not sure I follow. Can you share more on why
+> the following won't fix it for us:
+> 
+> https://lore.kernel.org/bpf/OSZP286MB1725CEA1C95C5CB8E7CCC53FB8869@OSZP286MB1725.JPNP286.PROD.OUTLOOK.COM/
+> 
+> ?
+> 
+> The idea seems to be to get the supplied map name (from the obj)
+> instead of using pin name? So why is it not enough?
 
-Cc: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
-
----
-
-Changes since v1:
-- Added quotes around Shyam's name in the file (although the result when
-  running get_maintainer.pl was the same before and after).
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5fc2af7eb9bd..4bd8dd827311 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1039,6 +1039,7 @@ F:	arch/arm64/boot/dts/amd/
- 
- AMD XGBE DRIVER
- M:	Tom Lendacky <thomas.lendacky@amd.com>
-+M:	"Shyam Sundar S K" <Shyam-sundar.S-k@amd.com>
- L:	netdev@vger.kernel.org
- S:	Supported
- F:	arch/arm64/boot/dts/amd/amd-seattle-xgbe*.dtsi
--- 
-2.36.1
-
+You're correct, this approach also resolves the issue. No need for this
+new API.

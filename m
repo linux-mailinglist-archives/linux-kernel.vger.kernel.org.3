@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9FF573FC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C237573FD1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiGMW5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 18:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S230159AbiGMW5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 18:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGMW5O (ORCPT
+        with ESMTP id S229478AbiGMW5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 18:57:14 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2044.outbound.protection.outlook.com [40.107.101.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C98A4F66B
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:57:13 -0700 (PDT)
+        Wed, 13 Jul 2022 18:57:19 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2051.outbound.protection.outlook.com [40.107.102.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC354F6AA
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:57:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LCGiOC7Pjn+BOcgAJuvhktzVzh0K2ahw5y2U7pBZGcxWs9pULBFUcGKNolV5USXIUltf/AXL8j3GqiXMt+J0RTW0ZZCU2P+L3Sh8U0FWTNT+i+2Dp8znSvRnTz9FLfpBO/v4qb/tw2OS6rd56zVWsMnFUXYeNAVcZFqQ5mBtkebFV7IxRvAz47b5NO13ESu3bdDzhWt2E5keg//7gRHcXAlFWbBJK8zCsIXkWWkJWTIywGeaXmdQIb0ABeCLKoLgRHst7YUwtQhyTinI63fSDfzjgxrmLReS5S5zRy9l9dGZSicmlyJ6fT9chq3l1rYYUwrKRsSq8GnllIUeSnLjqg==
+ b=iPMnw8DzF38W0wfKFXMz7BcXTAviZKiOtWCmyMsfcFv71vhZQHB0JE5cEkbgkA47aZflLK+6YBadWJYOF3jpFNh6GnQ1aWN/HlOSMU2qq/em15bHh2r8bGt65SzJ8Zs6ewNsToPE+2CkTEYu2c3rCy3DaWbA30Palvvak9A4NI3IdN5Up0zjSAbe2fLJerAfUH/TQoqWmyTUFdULhVViDtEvimQAttAIGEl6U7JpncKyshMvGkFbJdq+xedIDBWKSiuwek7HuKQgMVHrX5SzVEMZDDkk7NyK6lhGBUJxswhqZZUdkRqQV/9RyyGsk4tcgn8dFCyTHpmqWo9S1/MHAQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B845tXD9xNEzOhDIFySyO2d5TZVXPQwOdLU4a6VXwEM=;
- b=NTIy8ZRRIGyb3Sp6rqChv0AbMXmtzxqRhShuDXw0+gEhXoPAUDVpms65v5CeCd4y0SLkXCI+JalDWwbeq83eMQq23pI34YihIF2LrOnP0O3mdPm5bfwuUEF320jjb9pUfckvu0W26TVE7Z6ZkLNurNTPMbsojw588rGS88hIymEsP3jTlf1hAPaq/CmsDLdnAyawf45+A1B3lORQLiADRWDqqoPzqsUkLbe/A/R7eKZcHqB4TuYGJpxhuChPst8IFEsQ7UqVwXrfdoKlwOt6h08e6hRna7KcjtE0geiPm5AjzOQH4myrGac1cGKUxFmZxlOhYi2WRZoeFi2xd4Yb7A==
+ bh=hWN6qb3LmVqgGNlejfdYzF0+Ae13n8zN70Q9tUPAXf4=;
+ b=ArSA6iwQDvrWHIDls3O9EaMwj29q0sBc6XG2rrgEXN4iCGltGGwnPEZufSCkIk2PxTi3hvFJB2926+6laYdNFrz5Sb5SRIO4ktM47CARAx0gXA1ZEeUzCJqi/cfELmFrVKHDPTznc3Ef4/SJk+sOwIPQouCg5Bc4ki5ZvTx0i/qbBRgnKaFfuIlk49WmKKI3rrNeYifrylYsIKJAO57Ce0FQ56KF4TMBLfkpzeLEZJj7ROgKQiMG25CA61G41Wy2PB2r9GbQ5jffG+tZKG+LKoy5rz03wA2u3F9gCG00d9mbzYAPOkCpJUv4frg54oXb2k8zTMEnwaLYa0+eXSsZwg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B845tXD9xNEzOhDIFySyO2d5TZVXPQwOdLU4a6VXwEM=;
- b=0qViuFZ/kNCNIA8QNQbS8cwTTwd6KVvbJis8978RPWOTMurklJHksdh7S/cYVJT5Rc9+15c47M4x5+jt4rHW2daTPRn71Z6h5PiTZyUHpa/hpi0ILD2QFnV/b9Wr3ALb+tqBbgvQ3TGVYcXfnrUeUugXz0sMWzZoE3ImkAj0Qi0=
-Received: from BN9PR03CA0511.namprd03.prod.outlook.com (2603:10b6:408:131::6)
- by BN6PR12MB1265.namprd12.prod.outlook.com (2603:10b6:404:1d::11) with
+ bh=hWN6qb3LmVqgGNlejfdYzF0+Ae13n8zN70Q9tUPAXf4=;
+ b=oxP6Lb2ga6R4IMAsldNQdPeoUwUv/uCPbfAv18We9ETsknGs6wyDXsLOxTNdTgHrW78y+79/jzY4h8D9aMyjirTBwWdqlErpJepvZNJJAcppc9sfeOY4T6pQ8pvN886nohSSgGglq3c/KlpYtPvvumvZU3ZppoOLjFYRgIUCvyY=
+Received: from BN9PR03CA0533.namprd03.prod.outlook.com (2603:10b6:408:131::28)
+ by MW2PR12MB2569.namprd12.prod.outlook.com (2603:10b6:907:11::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Wed, 13 Jul
- 2022 22:57:11 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Wed, 13 Jul
+ 2022 22:57:12 +0000
 Received: from BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:131:cafe::5e) by BN9PR03CA0511.outlook.office365.com
- (2603:10b6:408:131::6) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:408:131:cafe::5b) by BN9PR03CA0533.outlook.office365.com
+ (2603:10b6:408:131::28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.22 via Frontend
  Transport; Wed, 13 Jul 2022 22:57:11 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
@@ -59,10 +59,12 @@ To:     <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>
 CC:     <joro@8bytes.org>, <robin.murphy@arm.com>, <vasant.hegde@amd.com>,
         <ashish.kalra@amd.com>, <jon.grimm@amd.com>,
         Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: [PATCH v4 0/9] iommu/amd: Enforce IOMMU restrictions for SNP-enabled system
-Date:   Wed, 13 Jul 2022 17:56:42 -0500
-Message-ID: <20220713225651.20758-1-suravee.suthikulpanit@amd.com>
+Subject: [PATCH v4 1/9] iommu/amd: Change macro for IOMMU control register bit shift to decimal value
+Date:   Wed, 13 Jul 2022 17:56:43 -0500
+Message-ID: <20220713225651.20758-2-suravee.suthikulpanit@amd.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220713225651.20758-1-suravee.suthikulpanit@amd.com>
+References: <20220713225651.20758-1-suravee.suthikulpanit@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -71,23 +73,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 88eabf3b-7d9d-4a46-43f8-08da65230534
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1265:EE_
+X-MS-Office365-Filtering-Correlation-Id: 83e48eec-645a-480e-c91b-08da6523057b
+X-MS-TrafficTypeDiagnostic: MW2PR12MB2569:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RS3s9g5aIJfP9gZZahFWBQQ3JzQZ5HmR/Fau14/wNIJMYIBp7GdVSMV6xEe9kPTQF1RZoNgdI8KWgx84+Vur2EBGTv3ZtKJ44WZMG9kUwmDvhr/UvYnoaDUrsZXxINhYfqk4jQvaJyKm4pzEtpb7Ff5rzeU849I01d5rEO5KvOLbsJyIMroafpWErG4XJbsXKbaUMOmM/GZ5bm47IgwxPqtjRTw94SYpmCBhFhY82c699gI58Q5PIAlMjaShJnWpgP/bq5uiJVmmb4Q/GL3kF3TNvvC9FZAQrRDGJ6je2W3js2szv0/lIvHWe4/Dc4orGKob7qtuWC+9BUdr57T2Rnh60GfZIvRvWP837ooHZC0rSBjZw8R7C+8Ii43vyylauIdsovMT/tpQKrdewicWx1q96Rr8Bx18ZGGpnYhrp+xdxJF5z0C3gm3JTj566h9q/uveejogb6q6UJcLBhSxtOb7mLZbiaS58yrUxlGaX/VEkshAUNy4nP6vGvoH0PFMhrx9KggqXbKQ5/4uP/rHHIW5oGeIyz8MkB1SGFNA7dYX3Y6L281YkY/EoLZ4EFxB7lNDRGadn6AphzXIJeyKdsK5JYDSuqdjyH1iP9+4D7Ck+BOH983yr5l6j9EHHGrp6fJTaU0+EQLqn34MNFwDXSkvChuAA8TTYAE83Aka7ryoFTfgXkpXCGA9Qv3JMatf4d7mkOVzWVuMXh0DzhUUZQvXd6SFZjtKk646T+CuB7XBwtoqOb8ccJ0jJhEZoJ1aBkTmgCPQwVkz3kJMd1FDpEi4IuI7GDymkDKkmcb1vYohIjonebzPzUO6KS76qonOkSNWiu0Y3oSIe2vIov0uk99F9qgm2LdCiwpHGSa9nB+qij/aImc/v7h1uh6NOHhK
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(136003)(396003)(376002)(46966006)(40470700004)(36840700001)(26005)(41300700001)(7696005)(6666004)(478600001)(1076003)(8676002)(40460700003)(70586007)(70206006)(86362001)(110136005)(82310400005)(316002)(54906003)(83380400001)(4326008)(81166007)(2616005)(36860700001)(16526019)(82740400003)(47076005)(336012)(426003)(356005)(186003)(40480700001)(36756003)(8936002)(5660300002)(2906002)(44832011)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: GehDdZDVosumYtf/4wXD4dpnUSQ8ChQUAoGrwTV46wLmy5ZxmgyPMH7L59zto2F99u4zb3YjBA/G2K5JXD6R+NhcdaR2pJQGSyIHYKHtX9hE4+nVrYtphH9KILXvPvAleM6UW/STL+BGR/1+/3smGjC8yIPuzorSDEl0f01b1tBjbDgh/PcAT9ASrn+5JwteIfK8bwwxctpofXZ3NaII8NfxypdltQKZZP2BvhoAoKUf2OeBOhJsL8ov+xxI1PJp3L6zvy4w0cBgtoo1yBnQF9B+zNs5KDFsRl4sBCDKsjtaQjno4sYrWD4B9eVYTrvddF1mkYzzAIWkW8VjOKqYusTfCenL5AvwBH1mY4r8WsI5CyGUYdqEGh0LDgBLgVZjUSFRKLnp2+NRVlq66AqtMEA8pbErtMkN7DSZNlxIOWYLghE2d2B8aH7ZoGEYUQtNwVXC/BYHqUS0gHG5fpTBRt9Sqn8vJywA+E8QBPLNpTiYqPTygorA8/kV3L0zg/P/lkxs8Du7msZsMS4uEjxSHAWMoDgXqS/nSwVLFDC71MHsgFryMTT4G1TosuaAW7p2EdxCBZXMyhYODfBDzARRpwsE/wKb7sPn/JhkPDpdo2ZHdqV+fR7IOMehimoGylkSUUAeIYqqNQ8vAMNBUoq/Sj8Gw4v6KRztMrspVNF+btsjl3Z9gUyquPa1lrKeLYlEH04cg4pA6j4uqwuUsIgI7IyUtfNPJjkmtaJxp5XDtv1O62lnEHmVDnANUAml98RU1VyP8ACYvDNzXN1Hp0HE4M0mFL8L3FjY8CbWawpSHaU+retuGTDHRNUEbN3GYCHIBOVVKpm+62Bp3swjvOHCHVVWvBQ3wc8EgjtC/IqdSJI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(396003)(376002)(39860400002)(36840700001)(46966006)(40470700004)(6666004)(70206006)(478600001)(8936002)(40460700003)(2906002)(82310400005)(44832011)(7696005)(54906003)(41300700001)(2616005)(26005)(86362001)(110136005)(83380400001)(81166007)(1076003)(16526019)(82740400003)(316002)(186003)(4326008)(36756003)(5660300002)(8676002)(336012)(40480700001)(356005)(426003)(36860700001)(70586007)(47076005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 22:57:11.1293
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 22:57:11.5199
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88eabf3b-7d9d-4a46-43f8-08da65230534
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83e48eec-645a-480e-c91b-08da6523057b
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1265
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2569
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -98,73 +100,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To support the new AMD Secure Nested Paging (SNP) feature, AMD IOMMU driver
-needs to be modified to comply with new restrictions enforced by the SNP
-feature.
+There is no functional change.
 
-The SNP feature detection needs to happen early in the IOMMU driver
-initialization, and the feature must be supported across all IOMMUs.
+Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+---
+ drivers/iommu/amd/amd_iommu_types.h | 42 ++++++++++++++---------------
+ 1 file changed, 21 insertions(+), 21 deletions(-)
 
-To simplify the detection process, this series introduces global variables
-for tracking IOMMU Extended Feature Registers (EFR and EFR2), which store
-common feature bits across all IOMMUs. These global variables are available
-as soon as the IVRS table is parsed, which happens at the beginning of
-the driver initialization. Therefore, they can be used for early detection
-of SNP feature. (See patch 2 - 5)
-
-Once the feature is detected, IOMMU driver needs to be informed when the
-feature system-wide. Therefor, the function amd_iommu_snp_enable() is
-introduced in patch 6, and will be called by SEV-SNP driver.
-
-When IOMMU driver initializing the device table entries (DTEs), care must
-be taken when setting up the DTE[TV] bit on SNP-enabled system.
-(See patch 7)
-
-Lastly, an SNP-enabled system requires IOMMU v1 page table to be configured
-with non-zero DTE[Mode] for DMA-capable devices. This affects a number of
-use cases such as IOMMU pass-through mode and AMD IOMMUv2 APIs for binding/
-unbinding pasid cannot be supported with SNP. These are handled in patch 8
-and 9.
-
-Testing:
-  - Tested booting and verify dmesg.
-  - Tested booting with iommu=pt
-  - Tested changing the iommu domain to identity at runtime
-  - Tested loading amd_iommu_v2 driver
-  - Tested booting SEV/SNP-enabled guest
-  - Tested when CONFIG_AMD_MEM_ENCRYPT is not set
-
-Chanages from v3:
-(https://www.spinics.net/lists/kernel/msg4409539.html)
-  - Patch 1, 2, and 5 are new.
-  - Patch 3: Modify to use global common EFR/EFR2 vaiable
-             when tracking supported features.
-
-Best Regards,
-Suravee
-
-Brijesh Singh (1):
-  iommu/amd: Introduce function to check and enable SNP
-
-Suravee Suthikulpanit (8):
-  iommu/amd: Change macro for IOMMU control register bit shift to
-    decimal value
-  iommu/amd: Introduce Support for Extended Feature 2 Register
-  iommu/amd: Introduce global variable for storing common EFR and EFR2
-  iommu/amd: Process all IVHDs before enabling IOMMU features
-  iommu/amd: Globally detect SNP support
-  iommu/amd: Set translation valid bit only when IO page tables are in
-    use
-  iommu/amd: Do not support IOMMU_DOMAIN_IDENTITY after SNP is enabled
-  iommu/amd: Do not support IOMMUv2 APIs when SNP is enabled
-
- drivers/iommu/amd/amd_iommu.h       |   5 +
- drivers/iommu/amd/amd_iommu_types.h |  46 +++++----
- drivers/iommu/amd/init.c            | 153 +++++++++++++++++++++++-----
- drivers/iommu/amd/iommu.c           |  24 ++++-
- include/linux/amd-iommu.h           |   4 +
- 5 files changed, 183 insertions(+), 49 deletions(-)
-
+diff --git a/drivers/iommu/amd/amd_iommu_types.h b/drivers/iommu/amd/amd_iommu_types.h
+index 40f52d02c5b9..7c830e3c7a91 100644
+--- a/drivers/iommu/amd/amd_iommu_types.h
++++ b/drivers/iommu/amd/amd_iommu_types.h
+@@ -143,27 +143,27 @@
+ #define EVENT_FLAG_I		0x008
+ 
+ /* feature control bits */
+-#define CONTROL_IOMMU_EN        0x00ULL
+-#define CONTROL_HT_TUN_EN       0x01ULL
+-#define CONTROL_EVT_LOG_EN      0x02ULL
+-#define CONTROL_EVT_INT_EN      0x03ULL
+-#define CONTROL_COMWAIT_EN      0x04ULL
+-#define CONTROL_INV_TIMEOUT	0x05ULL
+-#define CONTROL_PASSPW_EN       0x08ULL
+-#define CONTROL_RESPASSPW_EN    0x09ULL
+-#define CONTROL_COHERENT_EN     0x0aULL
+-#define CONTROL_ISOC_EN         0x0bULL
+-#define CONTROL_CMDBUF_EN       0x0cULL
+-#define CONTROL_PPRLOG_EN       0x0dULL
+-#define CONTROL_PPRINT_EN       0x0eULL
+-#define CONTROL_PPR_EN          0x0fULL
+-#define CONTROL_GT_EN           0x10ULL
+-#define CONTROL_GA_EN           0x11ULL
+-#define CONTROL_GAM_EN          0x19ULL
+-#define CONTROL_GALOG_EN        0x1CULL
+-#define CONTROL_GAINT_EN        0x1DULL
+-#define CONTROL_XT_EN           0x32ULL
+-#define CONTROL_INTCAPXT_EN     0x33ULL
++#define CONTROL_IOMMU_EN	0
++#define CONTROL_HT_TUN_EN	1
++#define CONTROL_EVT_LOG_EN	2
++#define CONTROL_EVT_INT_EN	3
++#define CONTROL_COMWAIT_EN	4
++#define CONTROL_INV_TIMEOUT	5
++#define CONTROL_PASSPW_EN	8
++#define CONTROL_RESPASSPW_EN	9
++#define CONTROL_COHERENT_EN	10
++#define CONTROL_ISOC_EN		11
++#define CONTROL_CMDBUF_EN	12
++#define CONTROL_PPRLOG_EN	13
++#define CONTROL_PPRINT_EN	14
++#define CONTROL_PPR_EN		15
++#define CONTROL_GT_EN		16
++#define CONTROL_GA_EN		17
++#define CONTROL_GAM_EN		25
++#define CONTROL_GALOG_EN	28
++#define CONTROL_GAINT_EN	29
++#define CONTROL_XT_EN		50
++#define CONTROL_INTCAPXT_EN	51
+ 
+ #define CTRL_INV_TO_MASK	(7 << CONTROL_INV_TIMEOUT)
+ #define CTRL_INV_TO_NONE	0
 -- 
 2.32.0
 

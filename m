@@ -2,104 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B9C573C3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB734573C42
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235925AbiGMRyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 13:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
+        id S236528AbiGMRzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 13:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbiGMRx7 (ORCPT
+        with ESMTP id S230169AbiGMRzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 13:53:59 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2064.outbound.protection.outlook.com [40.107.100.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF2F23BE4;
-        Wed, 13 Jul 2022 10:53:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bYGNcoDfrfABSNoZC/zylco1h2Gc0GygvFGmKKF1DHJ2MiHirgeKDBsRBTdlEVsJGtuMxSzW4QaMJA/K/59lB64N8gseiqxKn+TRl3UJ3G57dmtNI5qFMpRkRpmBgadup0wX053wiNATzY2cbVNMJpZ09l/V5H9uoKyJ9RXdB/p+mEkQVLtU3ohxLYancsqDhjKFgPs5+1dHfttx8sN5gFPLfOXXUVsxzWGwk6Of0fPFtPjULOxVgdF+qs6Y/c4lXzfzxdF/S/QDeAtUO7tgeuHQQxMUwfHIYt6meniwpNU01FX/fx3JFkyI45ciIsapb89549GLbnhagAzv7kIJgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YydfP/cKPMOXsh1meXMvFeUVEkMRiwfhkltq+gyQkWg=;
- b=Pt7O+k+ttvHn8PutAEgwM97vHSWrfIwti1Fw37RJlktJYPLwbafUHKJvHA7y50dj1pquGBUhnrkHYIkUCN0DxPlMoxV+YX7rlOUbJTm0MInbdW1NXx+MAwqvJfEaueiuBZMWjmutQ/t1tUSp8NlAjnPWOwt/G3BI0xG19oSKFyeLd8y0YoPy2ib+IcalyDPMV4448Br0QgJRMal/WqQfmlJcxRl+RTLy23Ym+Luc+uufu/ZxC4S3hfowewL+pmv0PKo5e0hCi04mfwgtFtr06Tv8xtR85R4b4mcCfRtdiMHmIuYlsbXYN5FteFhW35npuRpmHDmFZN/Xc3iZCV2GUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YydfP/cKPMOXsh1meXMvFeUVEkMRiwfhkltq+gyQkWg=;
- b=rH+qWmbUMIb8gqWcGHKTRnH6wSJgxTggWGbGzcJXyHQ6J0bX6ZUoKxFzDSckUwZLZ3wCDFVWfEd7XK2X1gXt+uLNWbGCSuiJvSAGRyViHC2RQzI6Q6kAv8KjG1yG0oGcZQFnT7W2tmxXNXLq/Jv2547J9eAXcqbOn0B+xqCfYEo=
-Received: from MW2PR16CA0068.namprd16.prod.outlook.com (2603:10b6:907:1::45)
- by BL1PR12MB5777.namprd12.prod.outlook.com (2603:10b6:208:390::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.21; Wed, 13 Jul
- 2022 17:53:55 +0000
-Received: from CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
- (2603:10b6:907:1:cafe::be) by MW2PR16CA0068.outlook.office365.com
- (2603:10b6:907:1::45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.13 via Frontend
- Transport; Wed, 13 Jul 2022 17:53:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT063.mail.protection.outlook.com (10.13.175.37) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5438.12 via Frontend Transport; Wed, 13 Jul 2022 17:53:54 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 13 Jul
- 2022 12:53:52 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Len Brown" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>
-CC:     <perry.yuan@amd.com>, <ray.huang@amd.com>,
-        <stable@vger.kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ACPI: CPPC: Fix enabling CPPC on AMD systems with shared memory
-Date:   Wed, 13 Jul 2022 12:53:46 -0500
-Message-ID: <20220713175346.630-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4857ccd1-2eb6-486f-50e8-08da64f8a761
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5777:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VA7VCOUTGfmOPXgxNPIerfmftQxllg33elBbMgj90lC79638PyFNPs76WlFLgnnOZPJDQMJP5ToMNk2laquvY8YfXIEGw7cT/d2BPscVYBH/7pB06URi2tUTGuavo6GxUIuC0pWB1lbu0ieLQl2Vc66d+KzjGVg0hb0jPniBe2HuHNUVPC8nQ1aIGQmbgWRg4Z731sGGMn2DI5fcjxDMkq1yeu387V2VmEjbwOHTP46SUBgQ7IG2tNIgIedfRUP9tw6QsTZqFS9B7J4ayO9glzmXB8UNl/2C3HLfQUJEJeUhFKCxZ7iaj/Ptn7prp2KJDiebOT5GCpT+l+qXNu1AncZXpDEMPXKFLPrURrEj4RGL0TYhh2WrjgOON095CgyOOiMZQmdWGWiJDNoK8xtcGR4OqAdtjaKjE7Fi7WnrP/CibY+C30LUCAh/itxWyqTn0D9EUFdmnCvC3GTtl12kiNZNiwJf/XqiUMzuY1RD8X44G9rwF0U/hCeIpH9cXNG/hQSS/HYSEdYfwVR5yWEmL0oWAmQfsj7hDX/W+AfHgzlYoAjY5vDpU3F5MboXdl9sYOvejS37x3aEJFd/5LmGEKu1sU81/PtYKtRkx1nVEGjp+AqpeQbJpwAteCznZrHAhB1TlLtT6wt69x1Gy91RDkWNc8kCNeiel/SAd1KN3fWSnDRVpYNkMhFwWgdaa9rvIVW+ToQ1+W8lcdm9BfWRhIDr0OmUZcHFwwPU9gbgtVi60Dj7WS0VDOQ5/NFl3yq5Cmvlvp57I+7WUFjzxaYPNIvat7N3Drt04bTQ1dDFfMCNbYhddTUlgjUY9HppO8aoF7Ig1vix/TZl8i4bwSc1cnJ91ETQBX8ByeLxZCq0RZveBatuIgqo305j+BRKy5Zl
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(39860400002)(376002)(136003)(40470700004)(36840700001)(46966006)(2906002)(16526019)(478600001)(26005)(41300700001)(1076003)(2616005)(6666004)(70586007)(186003)(7696005)(966005)(110136005)(36756003)(8676002)(47076005)(8936002)(7416002)(40480700001)(82310400005)(54906003)(356005)(426003)(81166007)(86362001)(5660300002)(316002)(44832011)(36860700001)(336012)(70206006)(4326008)(40460700003)(82740400003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 17:53:54.7311
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4857ccd1-2eb6-486f-50e8-08da64f8a761
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5777
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 13 Jul 2022 13:55:04 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6436620F75
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:55:03 -0700 (PDT)
+Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DGVwII016560;
+        Wed, 13 Jul 2022 17:55:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id; s=pps0720;
+ bh=Vd5X4pebhPgRNBgsev16djsCScVsMJIg0cV3nu+BEjw=;
+ b=f2iDE7TmVZWwkwLnqggklBefPYe4ALRK359q9PfvtXOYT+dkSdNYciEqGEHLo6zU7u6m
+ oKTHlcaq2GNYPpYLaWrhu/bPsz1KPgn5eCAIBeTCQ+E4VYeJK6ue4GsjNYPt/zhUlW1r
+ 8g4a3ATgf6MMzLgP9Z8q3OZV8zTEgwX4niMtnHwPjdBVD1kEZaSTOkkwVsjjOKlcyMHj
+ ZLXBwdjrtqJu7Z4BnKJ+1TVJ1NNlFlpyZ4dWX7cOeFxyqV6+Ho+N9EdswUmiKAJZHVPH
+ LarAZPUby4Ju8mn9ZOjxOK8LxYhjcocUGBZm3XLFQtqyTRJGkSekHKZM/9lyLZGyhkuu 5A== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3h9yvksy5w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 17:54:59 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id E89F1D2CD;
+        Wed, 13 Jul 2022 17:54:58 +0000 (UTC)
+Received: from blofly.os1.tw (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id D2FBD802F38;
+        Wed, 13 Jul 2022 17:54:56 +0000 (UTC)
+From:   matt.hsiao@hpe.com
+To:     linux-kernel@vger.kernel.org
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org, jerry.hoemann@hpe.com,
+        scott.norton@hpe.com, camille.lu@hpe.com, geoffrey.ndu@hpe.com,
+        gustavo.knuppe@hpe.com, Matt Hsiao <matt.hsiao@hpe.com>
+Subject: [PATCH v2 0/1] misc: hpilo: switch .{read,write} ops to .{read,write}_iter
+Date:   Thu, 14 Jul 2022 01:54:51 +0800
+Message-Id: <20220713175452.4221-1-matt.hsiao@hpe.com>
+X-Mailer: git-send-email 2.16.6
+X-Proofpoint-GUID: W4M7nKSUv0FdQ88qbFpx9NL8rFGSlwc5
+X-Proofpoint-ORIG-GUID: W4M7nKSUv0FdQ88qbFpx9NL8rFGSlwc5
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-13_07,2022-07-13_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
+ bulkscore=0 impostorscore=0 spamscore=0 phishscore=0 mlxlogscore=858
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207130073
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,46 +69,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When commit 72f2ecb7ece7 ("ACPI: bus: Set CPPC _OSC bits for all
-and when CPPC_LIB is supported") was introduced, we found collateral
-damage that a number of AMD systems that supported CPPC but
-didn't advertise support in _OSC stopped having a functional
-amd-pstate driver. The _OSC was only enforced on Intel systems at that
-time.
+From: Matt Hsiao <matt.hsiao@hpe.com>
 
-This was fixed for the MSR based designs by commit 8b356e536e69f
-("ACPI: CPPC: Don't require _OSC if X86_FEATURE_CPPC is supported")
-but some shared memory based designs also support CPPC but haven't
-advertised support in the _OSC.  Add support for those designs as well by
-hardcoding the list of systems.
+This patch changes .{read,write} ops to their iter variants for
+dependent drivers to use hpilo through kernel_{read,write}.
 
-Fixes: 72f2ecb7ece7 ("ACPI: bus: Set CPPC _OSC bits for all and when CPPC_LIB is supported")
-Fixes: 8b356e536e69f ("ACPI: CPPC: Don't require _OSC if X86_FEATURE_CPPC is supported")
-Link: https://lore.kernel.org/all/3559249.JlDtxWtqDm@natalenko.name/
-Cc: stable@vger.kernel.org # 5.18
-Reported-and-tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- arch/x86/kernel/acpi/cppc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Changes since v1:
+- Fix the patch format so it could be applied cleanly.
 
-diff --git a/arch/x86/kernel/acpi/cppc.c b/arch/x86/kernel/acpi/cppc.c
-index 734b96454896..8d8752b44f11 100644
---- a/arch/x86/kernel/acpi/cppc.c
-+++ b/arch/x86/kernel/acpi/cppc.c
-@@ -16,6 +16,12 @@ bool cpc_supported_by_cpu(void)
- 	switch (boot_cpu_data.x86_vendor) {
- 	case X86_VENDOR_AMD:
- 	case X86_VENDOR_HYGON:
-+		if (boot_cpu_data.x86 == 0x19 && ((boot_cpu_data.x86_model <= 0x0f) ||
-+		    (boot_cpu_data.x86_model >= 0x20 && boot_cpu_data.x86_model <= 0x2f)))
-+			return true;
-+		else if (boot_cpu_data.x86 == 0x17 &&
-+			 boot_cpu_data.x86_model >= 0x70 && boot_cpu_data.x86_model <= 0x7f)
-+			return true;
- 		return boot_cpu_has(X86_FEATURE_CPPC);
- 	}
- 	return false;
+Matt Hsiao (1):
+  misc: hpilo: switch .{read,write} ops to .{read,write}_iter
+
+ drivers/misc/hpilo.c | 31 ++++++++++++++++++-------------
+ 1 file changed, 18 insertions(+), 13 deletions(-)
+
 -- 
-2.34.1
+2.16.6
 

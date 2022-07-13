@@ -2,92 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1051D573305
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2CA573304
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235681AbiGMJj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
+        id S236125AbiGMJj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236101AbiGMJj5 (ORCPT
+        with ESMTP id S234547AbiGMJjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:39:57 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E0E6F54F3
+        Wed, 13 Jul 2022 05:39:54 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B19F54EF
         for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:39:54 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-220-jNhFV5uvMoyY8ZVNPGX1qw-1; Wed, 13 Jul 2022 10:39:48 +0100
-X-MC-Unique: jNhFV5uvMoyY8ZVNPGX1qw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Wed, 13 Jul 2022 10:39:43 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Wed, 13 Jul 2022 10:39:43 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Yu-Jen Chang' <arthurchang09@gmail.com>,
-        Andrey Semashev <andrey.semashev@gmail.com>
-CC:     "andy@kernel.org" <andy@kernel.org>,
-        "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/2] lib/string.c: Optimize memchr()
-Thread-Topic: [PATCH 2/2] lib/string.c: Optimize memchr()
-Thread-Index: AQHYlf/m+SYzYfFyd0Sny8eSVHr68K18Ceug
-Date:   Wed, 13 Jul 2022 09:39:43 +0000
-Message-ID: <49a8be9269ee47de9fc2d0d7f09eb0b1@AcuMS.aculab.com>
-References: <20220710142822.52539-1-arthurchang09@gmail.com>
- <20220710142822.52539-3-arthurchang09@gmail.com>
- <3a1b50d2-a7aa-3e89-56fe-5d14ef9da22f@gmail.com>
- <CAD4RrFPihC+8LScC1RJ5GfOsLs4kze0QwALS1ykNH_m89Z1NGg@mail.gmail.com>
- <48db247e-f6fd-cb4b-7cc5-455bf26bb153@gmail.com>
- <CAD4RrFPfwu4Ascj5tdz8qq2Qgnu5GN2eHjVwMW5AqUa1H7JapA@mail.gmail.com>
-In-Reply-To: <CAD4RrFPfwu4Ascj5tdz8qq2Qgnu5GN2eHjVwMW5AqUa1H7JapA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+Received: by mail-pf1-x42e.google.com with SMTP id y141so9758802pfb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:39:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=J2J2u1LkrsbKi6YvldfMoSvbAoYgO95fp1M0s8Wr27g=;
+        b=q3Ou4++fA1E2GW1K5dfL+/AMScnGCdQYEknNYdOhQfS2mca12EWg6stFGOlyqhACDx
+         k9c6851FVlb/I+2EbEH2vk4abOpPhBNTeqS+AvSdFmbd0rr1sXumTOnhx+t85req/oQZ
+         7D8u6VwHoMJYWsGu/PUtFaAKyS5Ph29TpNxqXkXEPO+EoPGW46bDfz7+PNyFyRx9qulq
+         Yt2mUCrwsGhPtcO+IboNh8xwBdtuaKcpp8uqeg5ULghfTggd2AfXE/dWB3KsMVFtkW6M
+         ZXb34Pa82FmnmzLydjm9jQIAZrAhgvzXV6AIMKeIgqlR7i3xQIZkvuu0cUfdDrJpa8Go
+         1gpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=J2J2u1LkrsbKi6YvldfMoSvbAoYgO95fp1M0s8Wr27g=;
+        b=KM22Cdj9tsbkaAj2E3JIhVsgSw4Xm+k2JT+aopvI4rOWhYodfkA8IJD3d2JYjJ5wG4
+         omSvLIkpUtG1kE60JxJOBvBQjA4oGwUE5Ij7+73bigdG39aI0z0L2n7o+nI8fvZKhpnQ
+         OED4tTM1Ut6yMyk36YjW4tn2wGDk6pjxoC1WlaE+9mv0DUz0odDpiONQOKGVC/YpHAZy
+         jZk5qmOpAhGXk+FiEXhevGJmWI8e8AT3HdqmeMM+QIJ27+VVEA3jDGrS7vIpXkmS+XHZ
+         YyHfoOX5XpVwLCGJsZB55/kI27n6r3UHimVk1JDsjUmOV2IsKNeN0SdN0QTa6BNbg95u
+         eOTQ==
+X-Gm-Message-State: AJIora8b1bhClZ5MCGlNbAjO/YIUpVgIhBlc2PpCzSGWZGGzPXWIUcwa
+        bixg9ppAeuFkjgwJJAwMQls=
+X-Google-Smtp-Source: AGRyM1seFzWdcIfrPjmiqtO38PN1ilMVEJJ4f2IK2QQJ04vBjZCyutuvF1ySjmoy7Fu7GgsTchsKGA==
+X-Received: by 2002:a05:6a00:889:b0:510:91e6:6463 with SMTP id q9-20020a056a00088900b0051091e66463mr2516118pfj.58.1657705193789;
+        Wed, 13 Jul 2022 02:39:53 -0700 (PDT)
+Received: from ip-172-31-24-42.ap-northeast-1.compute.internal (ec2-35-77-58-189.ap-northeast-1.compute.amazonaws.com. [35.77.58.189])
+        by smtp.gmail.com with ESMTPSA id a3-20020a170902ee8300b001640aad2f71sm8335113pld.180.2022.07.13.02.39.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 02:39:53 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 09:39:48 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Christoph Lameter <cl@gentwo.de>
+Cc:     Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joe Perches <joe@perches.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Matthew WilCox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v3 1/15] mm/slab: move NUMA-related code to
+ __do_cache_alloc()
+Message-ID: <Ys6S5ALolh0z1JjJ@ip-172-31-24-42.ap-northeast-1.compute.internal>
+References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
+ <20220712133946.307181-2-42.hyeyoo@gmail.com>
+ <alpine.DEB.2.22.394.2207121626530.55992@gentwo.de>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2207121626530.55992@gentwo.de>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogWXUtSmVuIENoYW5nDQo+IFNlbnQ6IDEyIEp1bHkgMjAyMiAxNTo1OQ0KLi4uDQo+ID4g
-SSB0aGluayB5b3UncmUgbWlzc2luZyB0aGUgcG9pbnQuIExvYWRzIGF0IHVuYWxpZ25lZCBhZGRy
-ZXNzZXMgbWF5IG5vdA0KPiA+IGJlIGFsbG93ZWQgYnkgaGFyZHdhcmUgdXNpbmcgY29udmVudGlv
-bmFsIGxvYWQgaW5zdHJ1Y3Rpb25zIG9yIG1heSBiZQ0KPiA+IGluZWZmaWNpZW50LiBHaXZlbiB0
-aGF0IHRoaXMgbWVtY2hyIGltcGxlbWVudGF0aW9uIGlzIHVzZWQgYXMgYSBmYWxsYmFjaw0KPiA+
-IHdoZW4gbm8gaGFyZHdhcmUtc3BlY2lmaWMgdmVyc2lvbiBpcyBhdmFpbGFibGUsIHlvdSBzaG91
-bGQgYmUNCj4gPiBjb25zZXJ2YXRpdmUgd3J0LiBoYXJkd2FyZSBjYXBhYmlsaXRpZXMgYW5kIGJl
-aGF2aW9yLiBZb3Ugc2hvdWxkDQo+ID4gcHJvYmFibHkgaGF2ZSBhIHByZS1hbGlnbm1lbnQgbG9v
-cC4NCj4gDQo+IEdvdCBpdC4gSSBhZGQgIHByZS1hbGlnbm1lbnQgbG9vcC4gSXQgYWxpZ25zIHRo
-ZSBhZGRyZXNzIHRvIDggb3IgNGJ5dGVzLg0KDQpUaGF0IHNob3VsZCBiZSBwcmVkaWNhdGVkIG9u
-ICFIQVNfRUZGSUNJRU5UX1VOQUxJR05FRF9BQ0NFU1MuDQoNCi4uLg0KPiAgICAgICAgIGZvciAo
-OyBwIDw9IGVuZCAtIDg7IHAgKz0gOCkgew0KPiAgICAgICAgICAgICB2YWwgPSAqKHU2NCopcCBe
-IG1hc2s7DQo+ICAgICAgICAgICAgIGlmICgodmFsICsgMHhmZWZlZmVmZWZlZmVmZWZmdWxsKQ0K
-PiAmICh+dmFsICYgMHg4MDgwODA4MDgwODA4MDgwdWxsKSkNCj4gICAgICAgICAgICAgICAgIGJy
-ZWFrOw0KDQpJIHdvdWxkIGFkZCBhIGNvdXBsZSBvZiBjb21tZW50cywgbGlrZToNCgkvLyBDb252
-ZXJ0IHRvIGNoZWNrIGZvciB6ZXJvIGJ5dGUuDQoJLy8gU3RhbmRhcmQgY2hlY2sgZm9yIGEgemVy
-byBieXRlIGluIGEgd29yZC4NCihCdXQgbm90IHRoZSBiaWcgNCBsaW5lIGV4cGxhbmF0aW9uIHlv
-dSBoYWQuDQoNCkl0IGlzIGFsc28gd29ydGggbG9va2luZyBhdCBob3cgdGhhdCBjb2RlIGNvbXBp
-bGVzDQpvbiAzMmJpdCBhcmNoIHRoYXQgZG9uJ3QgaGF2ZSBhIGNhcnJ5IGZsYWcuDQpUaGF0IGlz
-IGV2ZXJ5dGhpbmcgYmFzZWQgb24gTUlQUywgaW5jbHVkaW5nIHJpc2N2Lg0KDQoJRGF2aWQNCg0K
-LQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0s
-IE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdh
-bGVzKQ0K
+On Tue, Jul 12, 2022 at 04:29:10PM +0200, Christoph Lameter wrote:
+> On Tue, 12 Jul 2022, Hyeonggon Yoo wrote:
+> 
+> > @@ -3241,31 +3219,46 @@ slab_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid, size_t orig_
+> >  }
+> >
+> >  static __always_inline void *
+> > -__do_cache_alloc(struct kmem_cache *cache, gfp_t flags)
+> > +__do_cache_alloc(struct kmem_cache *cachep, gfp_t flags, int nodeid)
+> >  {
+> > -	void *objp;
+> > +	void *objp = NULL;
+> > +	int slab_node = numa_mem_id();
+> >
+> > -	if (current->mempolicy || cpuset_do_slab_mem_spread()) {
+> > -		objp = alternate_node_alloc(cache, flags);
+> > -		if (objp)
+> > -			goto out;
+> > +	if (nodeid == NUMA_NO_NODE) {
+> > +		if (current->mempolicy || cpuset_do_slab_mem_spread()) {
+> > +			objp = alternate_node_alloc(cachep, flags);
+> > +			if (objp)
+> > +				goto out;
+> > +		}
+> > +		/*
+> > +		 * Use the locally cached objects if possible.
+> > +		 * However ____cache_alloc does not allow fallback
+> > +		 * to other nodes. It may fail while we still have
+> > +		 * objects on other nodes available.
+> > +		 */
+> > +		objp = ____cache_alloc(cachep, flags);
+> > +		nodeid = slab_node;
+> > +	} else if (nodeid == slab_node) {
+> > +		objp = ____cache_alloc(cachep, flags);
+> > +	} else if (!get_node(cachep, nodeid)) {
+> > +		/* Node not bootstrapped yet */
+> > +		objp = fallback_alloc(cachep, flags);
+> > +		goto out;
+> >  	}
+> > -	objp = ____cache_alloc(cache, flags);
+> >
+> >  	/*
+> >  	 * We may just have run out of memory on the local node.
+> >  	 * ____cache_alloc_node() knows how to locate memory on other nodes
+> >  	 */
+> >  	if (!objp)
+> > -		objp = ____cache_alloc_node(cache, flags, numa_mem_id());
+> > -
+> > +		objp = ____cache_alloc_node(cachep, flags, nodeid);
+> 
+> 
+> Does this preserve the original behavior? nodeid is the parameter passed
+> to __do_cache_alloc(). numa_mem_id() is the nearest memory node.
 
+Yes it does preserve the original behavior.
+
+nodeid equals to value of numa_mem_id() when nodeid was NUMA_NO_NODE and
+____cache_alloc() failed to allocate.

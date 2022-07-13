@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78158573809
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4BC573817
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236357AbiGMNxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
+        id S236367AbiGMNzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236309AbiGMNx0 (ORCPT
+        with ESMTP id S236377AbiGMNzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:53:26 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5C120182;
-        Wed, 13 Jul 2022 06:53:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 13 Jul 2022 09:55:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69612CDF7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:55:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1C5DF200C2;
-        Wed, 13 Jul 2022 13:53:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1657720404; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=DM39RGb67pC/dQ+Mn9Ekz27AAhpc6Ju3ivYPtP9YBvs=;
-        b=PKsAJZoJfkrCh5hlKucZ3+P2/L0LKquOqhJZlrEKdWTcV8r76nL07sOLRqnsNZGxze5+vi
-        rJmxMeIUwbdEIUKqqBpoKbEhQEJJdbgg9Gi9hF0ii5wA59hsnxdqbot1gMi31AeACQhp7s
-        9GFsn8IUMy7Qulz/jfF1ExTp7YNuBYM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BE89C13754;
-        Wed, 13 Jul 2022 13:53:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9UExLVPOzmLgUAAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 13 Jul 2022 13:53:23 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74584B81FE6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:55:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF2CC34114;
+        Wed, 13 Jul 2022 13:55:43 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LpCif7I6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1657720541;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bawxo4wQSGz34zHaH54dBSzxxCoLrOF8mCeNb04Rm14=;
+        b=LpCif7I6a9KEjcnOn0R4l//g3IiGbLp/2ehMOTGzXhHWltiluo5tYN0mgszeUy3mQ84Ldg
+        R658zg4D3TizZSIv/KDx+sEOUDbS2Bhswc7ENI2rbK12NDoZQxZ7r66CqOymwebCrrREda
+        sX/Ve7oQDI2VhP/qlZGr+3Npjnm78+Q=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8cc883ad (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 13 Jul 2022 13:55:41 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     johannes@sipsolutions.net, linux-um@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>, Wei Liu <wei.liu@kernel.org>,
-        Paul Durrant <paul@xen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, stable@vger.kernel.org,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH v2] xen/netback: avoid entering xenvif_rx_next_skb() with an empty rx queue
-Date:   Wed, 13 Jul 2022 15:53:22 +0200
-Message-Id: <20220713135322.19616-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] um: remove stray ) in macro expression
+Date:   Wed, 13 Jul 2022 15:55:39 +0200
+Message-Id: <20220713135539.919429-1-Jason@zx2c4.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xenvif_rx_next_skb() is expecting the rx queue not being empty, but
-in case the loop in xenvif_rx_action() is doing multiple iterations,
-the availability of another skb in the rx queue is not being checked.
+A commit erroneously added a stray ), causing compile errors:
 
-This can lead to crashes:
+In file included from /home/zx2c4/Projects/wireguard-linux/crypto/xor.c:17:
+/home/zx2c4/Projects/wireguard-linux/crypto/xor.c: In function ‘register_xor_blocks’:
+/home/zx2c4/Projects/wireguard-linux/arch/um/include/asm/xor.h:21:74: error: expected ‘;’ before ‘)’ token
+   21 |         (time_travel_mode == TT_MODE_INFCPU ? TT_CPU_INF_XOR_DEFAULT : x))
+      |                                                                          ^
+/home/zx2c4/Projects/wireguard-linux/crypto/xor.c:66:27: note: in expansion of macro ‘XOR_SELECT_TEMPLATE’
+   66 |         active_template = XOR_SELECT_TEMPLATE(NULL);
+      |                           ^~~~~~~~~~~~~~~~~~~
+/home/zx2c4/Projects/wireguard-linux/arch/um/include/asm/xor.h:21:74: error: expected statement before ‘)’ token
+   21 |         (time_travel_mode == TT_MODE_INFCPU ? TT_CPU_INF_XOR_DEFAULT : x))
+      |                                                                          ^
+/home/zx2c4/Projects/wireguard-linux/crypto/xor.c:66:27: note: in expansion of macro ‘XOR_SELECT_TEMPLATE’
+   66 |         active_template = XOR_SELECT_TEMPLATE(NULL);
+      |                           ^~~~~~~~~~~~~~~~~~~
+/home/zx2c4/Projects/wireguard-linux/crypto/xor.c: In function ‘calibrate_xor_blocks’:
+/home/zx2c4/Projects/wireguard-linux/arch/um/include/asm/xor.h:21:74: error: expected ‘;’ before ‘)’ token
+   21 |         (time_travel_mode == TT_MODE_INFCPU ? TT_CPU_INF_XOR_DEFAULT : x))
+      |                                                                          ^
+/home/zx2c4/Projects/wireguard-linux/crypto/xor.c:124:19: note: in expansion of macro ‘XOR_SELECT_TEMPLATE’
+  124 |         fastest = XOR_SELECT_TEMPLATE(NULL);
+      |                   ^~~~~~~~~~~~~~~~~~~
+/home/zx2c4/Projects/wireguard-linux/arch/um/include/asm/xor.h:21:74: error: expected statement before ‘)’ token
+   21 |         (time_travel_mode == TT_MODE_INFCPU ? TT_CPU_INF_XOR_DEFAULT : x))
+      |                                                                          ^
+/home/zx2c4/Projects/wireguard-linux/crypto/xor.c:124:19: note: in expansion of macro ‘XOR_SELECT_TEMPLATE’
+  124 |         fastest = XOR_SELECT_TEMPLATE(NULL);
+      |                   ^~~~~~~~~~~~~~~~~~~
+  CC      fs/namei.o
+make[3]: *** [/home/zx2c4/Projects/wireguard-linux/scripts/Makefile.build:249: crypto/xor.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
 
-[40072.537261] BUG: unable to handle kernel NULL pointer dereference at 0000000000000080
-[40072.537407] IP: xenvif_rx_skb+0x23/0x590 [xen_netback]
-[40072.537534] PGD 0 P4D 0
-[40072.537644] Oops: 0000 [#1] SMP NOPTI
-[40072.537749] CPU: 0 PID: 12505 Comm: v1-c40247-q2-gu Not tainted 4.12.14-122.121-default #1 SLE12-SP5
-[40072.537867] Hardware name: HP ProLiant DL580 Gen9/ProLiant DL580 Gen9, BIOS U17 11/23/2021
-[40072.537999] task: ffff880433b38100 task.stack: ffffc90043d40000
-[40072.538112] RIP: e030:xenvif_rx_skb+0x23/0x590 [xen_netback]
-[40072.538217] RSP: e02b:ffffc90043d43de0 EFLAGS: 00010246
-[40072.538319] RAX: 0000000000000000 RBX: ffffc90043cd7cd0 RCX: 00000000000000f7
-[40072.538430] RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffffc90043d43df8
-[40072.538531] RBP: 000000000000003f R08: 000077ff80000000 R09: 0000000000000008
-[40072.538644] R10: 0000000000007ff0 R11: 00000000000008f6 R12: ffffc90043ce2708
-[40072.538745] R13: 0000000000000000 R14: ffffc90043d43ed0 R15: ffff88043ea748c0
-[40072.538861] FS: 0000000000000000(0000) GS:ffff880484600000(0000) knlGS:0000000000000000
-[40072.538988] CS: e033 DS: 0000 ES: 0000 CR0: 0000000080050033
-[40072.539088] CR2: 0000000000000080 CR3: 0000000407ac8000 CR4: 0000000000040660
-[40072.539211] Call Trace:
-[40072.539319] xenvif_rx_action+0x71/0x90 [xen_netback]
-[40072.539429] xenvif_kthread_guest_rx+0x14a/0x29c [xen_netback]
-
-Fix that by stopping the loop in case the rx queue becomes empty.
-
-Cc: stable@vger.kernel.org
-Fixes: 98f6d57ced73 ("xen-netback: process guest rx packets in batches")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Reviewed-by: Paul Durrant <paul@xen.org>
+Fixes: e3a33af812c6 ("um: fix and optimize xor select template for CONFIG64 and timetravel mode")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
-V2:
-- modified patch title (Jan Beulich)
-- added Fixes: (Jan Beulich)
----
- drivers/net/xen-netback/rx.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/um/include/asm/xor.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/xen-netback/rx.c b/drivers/net/xen-netback/rx.c
-index dbac4c03d21a..a0335407be42 100644
---- a/drivers/net/xen-netback/rx.c
-+++ b/drivers/net/xen-netback/rx.c
-@@ -495,6 +495,7 @@ void xenvif_rx_action(struct xenvif_queue *queue)
- 	queue->rx_copy.completed = &completed_skbs;
+diff --git a/arch/um/include/asm/xor.h b/arch/um/include/asm/xor.h
+index 22b39de73c24..647fae200c5d 100644
+--- a/arch/um/include/asm/xor.h
++++ b/arch/um/include/asm/xor.h
+@@ -18,7 +18,7 @@
+ #undef XOR_SELECT_TEMPLATE
+ /* pick an arbitrary one - measuring isn't possible with inf-cpu */
+ #define XOR_SELECT_TEMPLATE(x)	\
+-	(time_travel_mode == TT_MODE_INFCPU ? TT_CPU_INF_XOR_DEFAULT : x))
++	(time_travel_mode == TT_MODE_INFCPU ? TT_CPU_INF_XOR_DEFAULT : x)
+ #endif
  
- 	while (xenvif_rx_ring_slots_available(queue) &&
-+	       !skb_queue_empty(&queue->rx_queue) &&
- 	       work_done < RX_BATCH_SIZE) {
- 		xenvif_rx_skb(queue);
- 		work_done++;
+ #endif
 -- 
-2.35.3
+2.35.1
 

@@ -2,126 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A18B573112
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3EE573115
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235696AbiGMI1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
+        id S235717AbiGMI1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234979AbiGMI0r (ORCPT
+        with ESMTP id S235155AbiGMI0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:26:47 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED51B4A6;
-        Wed, 13 Jul 2022 01:26:05 -0700 (PDT)
-Received: from mail-yb1-f172.google.com ([209.85.219.172]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MiJIk-1neypJ3S10-00fSLI; Wed, 13 Jul 2022 10:26:04 +0200
-Received: by mail-yb1-f172.google.com with SMTP id e69so18098168ybh.2;
-        Wed, 13 Jul 2022 01:26:03 -0700 (PDT)
-X-Gm-Message-State: AJIora+pN1pO7uIsnDEvVXEo+Gv3tBS8I58kXoCVCabu5m+z9dP3BxR6
-        sPFKUK4u9rMqqNudKzjazfqUW4yMdZFffFCAISg=
-X-Google-Smtp-Source: AGRyM1s5ctXDWESPghTwunvKDjAPfvsYu2kacgrA/MPXviowltYXdPpskedj7zs4LJm1sUX08EXGIUpvgkI0AhSfMmA=
-X-Received: by 2002:a5b:b47:0:b0:66e:3617:d262 with SMTP id
- b7-20020a5b0b47000000b0066e3617d262mr2405858ybr.106.1657700762384; Wed, 13
- Jul 2022 01:26:02 -0700 (PDT)
+        Wed, 13 Jul 2022 04:26:43 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B030F5F5D
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:26:00 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id t1so14343200lft.8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:26:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0GpYX1jWMK2wrDqmjLZTKM0tzfJSoRl5a+p8xGs1L+E=;
+        b=pdCfJp38OeUftbo762CFDDj5npKj6Py/1UeuPSNL/cdemmSWkBvyMlzXFPOEEYfTO+
+         uICnasyNJ03Wqf+BpdGGFzdVDJu+2y3kDr+Bal6uWRYdxl5VdAXQxop6eye/08pefgf2
+         lDHncP5gYvViaMTZJgU854s5c9RfnbNy5zBYiAkMafNfrVR+Ui93pyD9i1583n+IaJKn
+         3f85L7fv675HnvQBPrYHOzA9pJsa6RwEYs9K3F+o0J8VNqnNwQEyAiu3U5NuTL1ZxXIR
+         Wm1UEHsdx1fe0RTSBrjpctO4poq+ZH7aVB41O35tJ+NVJgL88dY7a03mtAW0+LtrLNMQ
+         6RoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0GpYX1jWMK2wrDqmjLZTKM0tzfJSoRl5a+p8xGs1L+E=;
+        b=JurKMQmGu9g6SOtoPoG+/zNWb3FaWznIwomU/GPFSyr8BhflXj0qns4lxTICfrSbZ9
+         NK8INx1hP1/VCeplcc8890ESe6/ug63Pg9eixPWP84+BvlYeS1vRXbARb9RF9LgCLime
+         B9mNdQP+pK5PFOeqITFNRVpPl7WxQ5A9BkXbsIDQkI0pFU1J9FCuApjXt9Fay2A5BbFV
+         GyzRkPpDdKUiDEtsRqjdxF6JccIeF6s/bQqU/mG+vtQNaKmxG8fqAMtZyLNMvn83iHu8
+         92ipjIiMqEDuwc/btlw3C455bfM17GCFCzXvwrjDJ+iz8LGURiI5nsSwNS8X4MsrvGQU
+         5X8Q==
+X-Gm-Message-State: AJIora8HVGf6ObkIy8U1EJkOy6YASkc6hicK2V5snYW/vDpNpBA74vRO
+        A23XKGaiA9CDxCG1v+eWYARkAQ==
+X-Google-Smtp-Source: AGRyM1sRhL07eFmV0OQSuYnU/YB2yIeFw+0PcB8uCGbrqwTlS4eUMyCu/IxtSO6yGnTIoJvjjHsX0w==
+X-Received: by 2002:a19:6d09:0:b0:481:3c54:ad52 with SMTP id i9-20020a196d09000000b004813c54ad52mr1351736lfc.393.1657700758243;
+        Wed, 13 Jul 2022 01:25:58 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id a24-20020a056512201800b0047f6b4f82d1sm2660260lfb.250.2022.07.13.01.25.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 01:25:57 -0700 (PDT)
+Message-ID: <1cbe0b48-c472-2bd8-9153-6ef0412adefe@linaro.org>
+Date:   Wed, 13 Jul 2022 10:25:55 +0200
 MIME-Version: 1.0
-References: <20220712164235.40293-1-f.fainelli@gmail.com>
-In-Reply-To: <20220712164235.40293-1-f.fainelli@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 13 Jul 2022 10:25:45 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2QrYbWOqV+CG-W0ZkzW6ORgw8R6Dv-L3o2ZAtJs-B3Kw@mail.gmail.com>
-Message-ID: <CAK8P3a2QrYbWOqV+CG-W0ZkzW6ORgw8R6Dv-L3o2ZAtJs-B3Kw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: Kconfig.platforms: Re-organized Broadcom menu
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        SoC Team <soc@kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        william.zhang@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        anand.gore@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Wei Xu <xuwei5@hisilicon.com>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:HeyXD8e/HaOaOGqEfNvCOVkZGJNjOMpMO6jAn5G7kFAUNXa3fdV
- hhmnoWd7mVgdNSxv2wv1tjqzk53qm19wVY8I0ImRpGD1HlDEAkdgY/V/bkg44wLPCpSQdnJ
- 1yUTDg4lH+HGhlAqWm/TO4QJKlA0c0rfGbIXcVHLXIcaDPiI3Q4FJ5oymRWzIl9F3OltS0r
- lJiMhqV3mjuiI5uWu2XwQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jmpPnYOmdD4=:IHFlISKYwMj9oc4o14PJOl
- JBe3oope5jInhkHXNjXQ+b6NNdchAapeA8Bh17yT2DzThtZYLweoX1ILblUzppI7eWHaLV/+C
- 4C3d4WpxluvEMNc8asGzUbtx5yarCUmPUhf7skTxSP14Uftuh7yWwygFJFH2WLthgm/+b7CTL
- EDjzl50QbLMx+ODk5TXraMZ6swz1iY7LO3N1fzL1RqbdYpShUww/vHMTSLdO2OQQmiSq9h3rI
- Qaa4rcX/sqNzdprzB4FZ0Mxd3kNBP9ym53rvgZK0NFVLNYFKjJSDslUgdW/qAUsPiZIs398Qu
- 0CuN5NNC0dYgMDBGE4dcsEdm7BGlKwjXHHFWkeyzVeH5KTJjUJYCuyNMq4q481BgMinhqA1bL
- qx9rWMtoQHF6wZPuRozvdsvK9bO2/NlLV5rppuDp3+2R660nMAulrNLNHJMct7TeARilNLbYC
- SYg89ZGdNJisrd0ash+z/Ybnjoco4E1UKB0e7r8ZD2dvQdFykxwx6VEPdC7B5PP68Mcgi0DjQ
- wVSC9GV5ylatR5GIOk56Yk1CzfqVSnYIcaC4K8+d/jmOpNGP4CySTdGmrnfueMmH48j71g2he
- AeFCOKZN5Qbry788kkRzAXIsomp8pAU0eX/aCsN8Faw5NUdlcIKhkuIGHApsMuWZT2ED+srDl
- mrbm4UKqBAGxeTh5CKj+giYVR0FXfYifqlT7rqho7Zn/0T6m4yn5HH1iZhFjlA4/JWAmdioqC
- xS1Bd40hj4k5+Mq21XF32LXvtZlBQBwp6BiKIw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v17 1/2] dt-bindings: usb: Add analogix anx7411 PD binding
+Content-Language: en-US
+To:     Xin Ji <xji@analogixsemi.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, Rob Herring <robh@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220713072943.2789612-1-xji@analogixsemi.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220713072943.2789612-1-xji@analogixsemi.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 6:42 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> There are now multiple Broadcom SoCs supported so group them under their
-> own menu such that the selection is visually more appealing and we can
-> easily add new platforms there in the future. This allows us to move
-> ARCH_BRCMSTB back to its siblings.
->
-> No functional changes introduced.
->
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+On 13/07/2022 09:29, Xin Ji wrote:
+> Add analogix PD chip anx7411 device binding
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> 
 > ---
->
-> Note this is based on "arm64: bcmbca: add arch bcmbca machine entry"
+> v16 -> v17 : Add node name "usb_typec"
+> v15 -> v16 : No changes
+> v14 -> v15 : No changes
+> v13 -> v14 :
+>     1. Fix Robot compile error. Fix node name not correct.
+>     2. Change HEX to lowercase.
+>     3. Use "ports" property.
+> v12 -> v13 :
+>     1. Drop the quotes for "$id" and "$schema"
+>     2. Remove "allOf" label
+>     3. Change node name from "i2c1" to "i2c"
+>     4. Change node name from "typec" to "usb-typec"
+> ---
+>  .../bindings/usb/analogix,anx7411.yaml        | 81 +++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+> new file mode 100644
+> index 000000000000..60aac5765320
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+> @@ -0,0 +1,81 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/analogix,anx7411.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analogix ANX7411 Type-C controller bindings
+> +
+> +maintainers:
+> +  - Xin Ji <xji@analogixsemi.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - analogix,anx7411
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  connector:
+> +    type: object
+> +    $ref: ../connector/usb-connector.yaml
+> +    description:
+> +      Properties for usb c connector.
+> +
+> +    properties:
+> +      compatible:
+> +        const: usb-c-connector
+> +
+> +      power-role: true
+> +
+> +      data-role: true
+> +
+> +      try-power-role: true
+> +
+> +    required:
+> +      - compatible
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - connector
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        usb_typec: anx7411@2c {
 
-Hi Florian,
+Node name is still specific.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+make it "typec".
 
-So far, we have tried to keep the Kconfig.platforms file rather coarse-grained,
-mainly limiting it to company names and high-level families, but avoiding
-sub-menus or adding too many sub-families.
-
-If we add per-vendor submenus, we should probably first decide how we
-want to structure this across vendors. I've added maintainers and lists to
-Cc for a couple of the ones that are in a similar situation.
-
-I can see a couple of ways we can do this:
-
-a) keep the list of platforms as short as possible, combining related
-  SoC families from a single vendor wherever possible, but no sub-menus
-  (same as today)
-
-b) Always use sub-menus when there is more than one family, but
-   keep relatively coarse platform selection.
-
-c) Use sub-menus and also move to a more fine-grained SoC
-    selection, similar to what we have on 32-bit arm.
-
-I would not really want to go to c), but a) and b) both make sense to
-me as long as do it consistently across all platforms.
-
-Any other ideas or opinions?
-
-        Arnd
+Best regards,
+Krzysztof

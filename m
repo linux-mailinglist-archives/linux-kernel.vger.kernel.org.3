@@ -2,150 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5108D573ADF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5E0573AE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237138AbiGMQLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
+        id S236914AbiGMQLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236733AbiGMQLH (ORCPT
+        with ESMTP id S231685AbiGMQLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:11:07 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC4550067
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:11:01 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id sz17so20696808ejc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:11:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=I1yHtelLfIuuksB/OCx4cTvNALVYaFuUlJJrqkka4yY=;
-        b=Q+lhLkXrv581QlmBwTnMFoFeQ0KhIhq1UWbsMA/nqfEmUfIoeWkNNQTl7IHZ+60/ur
-         tpnQPIvURh6nerhexLU8wLj4J64GiD7EQIhcSIue1O6ytmXKUMjYp90zbJ8SCVOVIrLI
-         Cf+vz7UW9lJs9WKlmfILG3E7L75M7wdsbI3PA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I1yHtelLfIuuksB/OCx4cTvNALVYaFuUlJJrqkka4yY=;
-        b=otWi0bdik77jezBRejEQaqHid+G77/PFEDpNqdQ0lhzk2XOZiE/96iM1X6efE4ZHpf
-         nDOc8R4ZMCWhJgsPI2yZEh3m1dkRWiTTaBgARwKx8O1kz+o1LfR71w76Ao2rieN1z7LM
-         jn5sDCeGEGMhTNn77wTntVEKN/ppNQcyqsgB/gpeUnpo6panqaFbj6T50Y2y72Bbq9ds
-         WESi7ONDoTIOD+uCK65eUizQckve1C53WkNZkB8IcgeNLkSr/8rvaBpxFO5+oImEzxDR
-         HATsEcRQCSPFkvwqyOmzBcZrds/nS5C2FS546GWLRHNsXaRqmp3AiAKOUFTrshoBG2gu
-         jgqg==
-X-Gm-Message-State: AJIora+xrRDKk/4aQju7IvMqoWF1FtjqvFM1Ge6cWu8oGJoHveRfcjTL
-        /s/Vg84rvShD2KBfyR+t9GsgOLFOe/Ub+vaT
-X-Google-Smtp-Source: AGRyM1vXLi4gCjTCJ0n1j7OA7A5hEOrZD7VFLPdy563cSN5zBVz1L2mFEj/jXfKxhJuaTZzrw4EbSw==
-X-Received: by 2002:a17:907:980b:b0:72b:215c:7933 with SMTP id ji11-20020a170907980b00b0072b215c7933mr4207521ejc.431.1657728660046;
-        Wed, 13 Jul 2022 09:11:00 -0700 (PDT)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
-        by smtp.gmail.com with ESMTPSA id g5-20020a170906538500b00711d5baae0esm5167112ejo.145.2022.07.13.09.10.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 09:10:59 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id l68so6804732wml.3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:10:58 -0700 (PDT)
-X-Received: by 2002:a05:600c:285:b0:3a2:e5fd:84eb with SMTP id
- 5-20020a05600c028500b003a2e5fd84ebmr4497164wmk.151.1657728657965; Wed, 13 Jul
- 2022 09:10:57 -0700 (PDT)
+        Wed, 13 Jul 2022 12:11:37 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584CF29C8F;
+        Wed, 13 Jul 2022 09:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657728696; x=1689264696;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MYSKoO4+JA1HLIxr6+ZiGU46DVwUCWwtwniY7flkkp4=;
+  b=aTzSBd44Q05EgMeRC11W9Xg2pTjAN5xZ6lvpvguTjW0/aP1cau3uXEkI
+   3+XcnsQSgrYgsitqLCPMCuEWK6Em4DDjgg9KTeV0hlPZ1rIq74xGWJVHA
+   eNluFRARFunYQ3fHqScjBOtYgeEpowrVBQMCqGOPTKX8vGOcW8dTTBtUA
+   7I+DN5G6SWvF6CGeFMe+btKvt+kxe9hvrb6pUrBuy+FvoIKdU/T0gMREB
+   pRNuzoLORybWebeqKpvZjXo9GmmZ5I14sGkYfmejj3RbmDL6f11HGYOQr
+   vkQY/oRuLxn8wdFvtuF42cjCxh8yf6KtsC5JihYIZyUCjB3XMA+BuZPSn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="268304430"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="268304430"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:11:35 -0700
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="545912368"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:11:33 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oBexW-001CSU-0Y;
+        Wed, 13 Jul 2022 19:11:30 +0300
+Date:   Wed, 13 Jul 2022 19:11:29 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Vamshi Gajjela <vamshigajjela@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com
+Subject: Re: [PATCH v3] serial: 8250_dw: Avoid pslverr on reading empty
+ receiver fifo
+Message-ID: <Ys7usW3W3kemtVc+@smile.fi.intel.com>
+References: <20220713131722.2316829-1-vamshigajjela@google.com>
 MIME-Version: 1.0
-References: <20220712150219.20539-1-krzysztof.kozlowski@linaro.org>
- <20220712150219.20539-4-krzysztof.kozlowski@linaro.org> <CAD=FV=VPHwkKUjanLtaM+cXdp+VGPExJ_XDe=-O8j=ayGNtnVQ@mail.gmail.com>
- <996a49ea-5fba-3885-09ca-5b9a92b840e7@linaro.org>
-In-Reply-To: <996a49ea-5fba-3885-09ca-5b9a92b840e7@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 13 Jul 2022 09:10:46 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WdH0FLfQ-MMwkrHfo3xTjg8M2vxV5iO-CEpCDWG8NKKw@mail.gmail.com>
-Message-ID: <CAD=FV=WdH0FLfQ-MMwkrHfo3xTjg8M2vxV5iO-CEpCDWG8NKKw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] mmc: sdhci-msm: drop redundant of_device_id entries
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713131722.2316829-1-vamshigajjela@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jul 13, 2022 at 06:47:22PM +0530, Vamshi Gajjela wrote:
+> From: VAMSHI GAJJELA <vamshigajjela@google.com>
+> 
+> With PSLVERR_RESP_EN parameter set to 1, the device generates an error
+> response when an attempt to read an empty RBR with FIFO enabled.
+> 
+> This happens when LCR writes are ignored when UART is busy.
+> dw8250_check_lcr() in retries to update LCR, invokes dw8250_force_idle()
+> to clear and reset FIFO and eventually reads UART_RX causing the error.
+> 
+> Avoid this by not reading RBR/UART_RX when no data is available.
 
-On Wed, Jul 13, 2022 at 9:07 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 13/07/2022 17:57, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Tue, Jul 12, 2022 at 8:02 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> This reverts three commits:
-> >> 1. Revert "mmc: sdhci-msm: Add compatible string check for sdx65"
-> >>    This reverts commit 953706844f0f2fd4dc6984cc010fe6cf51c041f2.
-> >>
-> >> 2. Revert "mmc: sdhci-msm: Add compatible string check for sm8150"
-> >>    This reverts commit 5acd6adb65802cc6f9986be3750179a820580d37.
-> >>
-> >> 3. Revert "mmc: sdhci-msm: Add SoC specific compatibles"
-> >>    This reverts commit 466614a9765c6fb67e1464d0a3f1261db903834b.
-> >>
-> >> The oldest commit 466614a9765c ("mmc: sdhci-msm: Add SoC specific
-> >> compatibles") did not specify what benefits such multiple compatibles
-> >> bring, therefore assume there is none.  On the other hand such approach
-> >> brings a lot of churn to driver maintenance by expecting commit for
-> >> every new compatible, even though it is already covered by the fallback.
-> >>
-> >> There is really no sense in duplicating of_device_id for each
-> >> variant, which is already covered by generic compatible fallback
-> >> qcom,sdhci-msm-v4 or qcom,sdhci-msm-v5.
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >
-> > Personally, I would have taken the extra step and added a comment in
-> > the code to prevent someone from doing this again. Maybe like this:
-> >
-> > /*
-> >  * In the device tree, all boards are required to have _two_ compatible
-> >  * strings listed: a SoC-specific one followed by a more generic one.
-> >  * Normally we can just rely on the generic string, but we always
-> >  * include both so that if we ever find a bug on a specific SoC that
-> >  * we need to workaround (like in sdm845/sc7180) that we can quickly
-> >  * work around it without any changes to the dts.
-> >  */
->
-> This actually does not instruct the developer not to add new variants to
-> the driver, so how about something like:
->
-> /* Do not add new variants to the driver which are compatible with
-> generic ones, unless they need customization. */
-> ?
+From code perspective looks good,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Sure, that would be fine.
+but maybe Ilpo or others have something to add based on the practical use.
+
+> Signed-off-by: VAMSHI GAJJELA <vamshigajjela@google.com>
+> ---
+> v3:
+> - check lsr based on FIFO enablement
+> v2:
+> - update as per review comments (re-format comments, xmas tree ordering)
+>  drivers/tty/serial/8250/8250_dw.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
+> index f57bbd32ef11..7573904579f6 100644
+> --- a/drivers/tty/serial/8250/8250_dw.c
+> +++ b/drivers/tty/serial/8250/8250_dw.c
+> @@ -82,8 +82,21 @@ static inline int dw8250_modify_msr(struct uart_port *p, int offset, int value)
+>  static void dw8250_force_idle(struct uart_port *p)
+>  {
+>  	struct uart_8250_port *up = up_to_u8250p(p);
+> +	unsigned int lsr;
+>  
+>  	serial8250_clear_and_reinit_fifos(up);
+> +
+> +	/*
+> +	 * With PSLVERR_RESP_EN parameter set to 1, the device generates an
+> +	 * error response when an attempt to read an empty RBR with FIFO
+> +	 * enabled.
+> +	 */
+> +	if (up->fcr & UART_FCR_ENABLE_FIFO) {
+> +		lsr = p->serial_in(p, UART_LSR);
+> +		if (!(lsr & UART_LSR_DR))
+> +			return;
+> +	}
+> +
+>  	(void)p->serial_in(p, UART_RX);
+>  }
+>  
+> -- 
+> 2.37.0.144.g8ac04bfd2-goog
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> The problem is that this applies to several such drivers on several
-> platforms (Qualcomm, NXP - these for sure use such pattern), so we would
-> be documenting something obvious, IMO.
-
-The problem is that the people adding to this file are probably not
-device tree experts and may not know, so a short comment might be
-worthwhile. If you don't think it's a good idea, though, I won't push.
-
--Doug

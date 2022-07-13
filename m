@@ -2,86 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016B4572A99
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A94C3572A9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbiGMBGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 21:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
+        id S230243AbiGMBJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 21:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiGMBGe (ORCPT
+        with ESMTP id S231404AbiGMBJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 21:06:34 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DCAC6376;
-        Tue, 12 Jul 2022 18:06:33 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 17298C01A; Wed, 13 Jul 2022 03:06:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1657674391; bh=1qv4IMb2MDp9Z7qtROj3Llp60lp0QU6Ztq2dP8uKKRw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=3Zh4QmOux1n0AJ7mi870ESPWe5V93WUfvIywSpDR3QPYgdIrK03fFACAzsQsDR0WK
-         gx9JDNlBMg/UYSrcUgZC1dkTjskA7jhO5FO4lhmOHXIE3gPV0VVgtvfBidS9cFNOT2
-         ON2zo2XgsAfFEgcRvhvlzVbQd7zArJUVEwARyhBTfjuogK0rZNADYe4qpmE4NJnmEV
-         ghiHTjQyBlIrxBgLmz7aVMjRCzUx3j5d6RsYCKWwLkG7Iv7VHleMGU0FVb93j+ds+A
-         3EVQj2lo2zcVIW9ca5AxH+CQnlj32Px6gFoL8tkKf16MB1TLyndwOJyyXfwyi8ROl1
-         X1XHoDcRIQJOw==
+        Tue, 12 Jul 2022 21:09:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E240C9100;
+        Tue, 12 Jul 2022 18:09:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC017618CA;
+        Wed, 13 Jul 2022 01:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C12C5C3411E;
+        Wed, 13 Jul 2022 01:09:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657674556;
+        bh=VmntzbmKZNafnsvnBrCuHRRxUYzJnrYmUnQpuOsb25c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=flhpv2LdQeVnrTmtUCCwfApQkLHolqYRJRldzyCy3iflwjtwG3OsmK3ElrktCKc/N
+         Dtk6frRurVe1SRfPMwQyBHMEfUCutZZNBu3pk+sGXKvi3kHYAVT15NPwx7sT6+r3AK
+         s7Sdml5NrAU6echUu5aUd3NiHeb2Rf6RzroS4nMBOVCdAlOL9ouUXcrdr5XSpdAOR7
+         OABef5AYx/axL45gRGlb49CwOyHp0spdrDlaf4f8PTshaaTT7wso1NX9lfjvAW416u
+         VV5FA5qhZRmPUXuBNWgFjhNncey479kx9NyHu0hISHRjhLdxlrzUUroMxEdThG+6Hl
+         BaYCLctE/ixDw==
+Date:   Tue, 12 Jul 2022 18:09:06 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>
+Subject: Re: [PATCH v2,net-next] net/sched: remove return value of
+ unregister_tcf_proto_ops
+Message-ID: <20220712180906.07bea7f8@kernel.org>
+In-Reply-To: <20220711080910.40270-1-shaozhengchao@huawei.com>
+References: <20220711080910.40270-1-shaozhengchao@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id BF121C009;
-        Wed, 13 Jul 2022 03:06:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1657674390; bh=1qv4IMb2MDp9Z7qtROj3Llp60lp0QU6Ztq2dP8uKKRw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gYw34qlOCbEJvT+kqGvsjs8gK3lF+9+9OEhIYk0cYM8mJvpJpcEnkCW15PukEtM5o
-         hIKB7k3A6qn3NN9fjc6WdmrvRKZAINr+IOWtQY7Oq9CjMTvRsrPkhPazotAPEHglzO
-         kTMEUzBJhDFyeqTBYFvEVxkfmya1DuMiGTcL5SvnDe9Cpsd+b78cqk05ezsW/zez0h
-         X+T1ec+Ihl65SkEt/1CDMabr8fEUnQEOmsEcVpDEXnr1OnBza0dvOAoxGsXtJTeUOb
-         yDf/B/Gm8HLCNCFRaeqJTQgIy7A1zxdTaobOW30wKKeIFdy19rbT1DxBHbzHsoSvBy
-         f07P8ZVT7MK0A==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id dc3077cb;
-        Wed, 13 Jul 2022 01:06:25 +0000 (UTC)
-Date:   Wed, 13 Jul 2022 10:06:10 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the v9fs tree
-Message-ID: <Ys4agrex2lNG/CzE@codewreck.org>
-References: <20220713110222.70ca5fc5@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220713110222.70ca5fc5@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen Rothwell wrote on Wed, Jul 13, 2022 at 11:02:22AM +1000:
-> After merging the v9fs tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> net/9p/trans_fd.c:275:12: error: 'failme' defined but not used [-Werror=unused-variable]
->   275 | static int failme;
->       |            ^~~~~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   c249fb4f9193 ("9p: roll p9_tag_remove into p9_req_put")
-> 
-> I have used the v9fs tree from next-20220712 for today.
+On Mon, 11 Jul 2022 16:09:10 +0800 Zhengchao Shao wrote:
+> Return value of unregister_tcf_proto_ops is unused, remove it.
 
-Sorry, fixed in my tree.
+> -int unregister_tcf_proto_ops(struct tcf_proto_ops *ops)
+> +void unregister_tcf_proto_ops(struct tcf_proto_ops *ops)
+>  {
+>  	struct tcf_proto_ops *t;
+>  	int rc = -ENOENT;
+> @@ -214,7 +214,10 @@ int unregister_tcf_proto_ops(struct tcf_proto_ops *ops)
+>  		}
+>  	}
+>  	write_unlock(&cls_mod_lock);
+> -	return rc;
+> +
 
-That can wait tomorrow.
+> +	if (rc)
+> +		pr_warn("unregister tc filter kind(%s) failed\n", ops->kind);
 
---
-Dominique
+I was saying WARN, by which I meant:
 
+WARN(rc, "unregister tc filter kind(%s) failed %d\n", ops->kind, rc);

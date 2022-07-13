@@ -2,182 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12F7573166
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B76B573148
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235293AbiGMIn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
+        id S235700AbiGMIiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235181AbiGMInR (ORCPT
+        with ESMTP id S234524AbiGMIiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:43:17 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541B9EA149;
-        Wed, 13 Jul 2022 01:43:10 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id z23so2057463eju.8;
-        Wed, 13 Jul 2022 01:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uWtRAmBLtsazF/pLmP45VTNHSNoFHCEzm5WXW96RpTE=;
-        b=HEMisfIyFpFrNW0h2/pTPWb3kvILB6Bc3/thWhhd0azh2fSvcAOKTDokiOQqFN/Etf
-         ch4Y811oJQAe+nMGWba6pnaxIRhG3K3as2beeHmc2T+tfa9HfKL3+kDjbggmEL/s+4Kg
-         R6HlWRDt+QHAaJX8TNCM5noXtMUa2tFPuddLnSYseMp7YFNECWFIFot+Q15rPawZYPbI
-         6lE6b+wHo9l+2QgibuFF/vCouYELhgTRXof41l4qLp/KYlAJt3x5BwNhCyE06dbh1QiS
-         e0cDvOFko0te1Avdoy0YeqlB6Tz0FV0mCLVOorF4pLltu4Z37ObiIuv2FTqKebLqorad
-         KQZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uWtRAmBLtsazF/pLmP45VTNHSNoFHCEzm5WXW96RpTE=;
-        b=iBeMLnSTll4WWe/WdMOQYpyhpg0e/FluMXKmqHGAnkI+FtyBOEY7T2GmFEBliPOAXx
-         zMaOZnApIMtehvVrIWcV4tOT53uSTQY1WdhTK5Y+ou6J1y2AFp7Rb4n4fwizPEMJwUH4
-         8I+js096+amxrnF43NuaAtq3FkVbhcM1HkUnEd2I9cB5AnwBSyIrLLarrW/C5T8qYEI4
-         ibR8UF6llaT8RE1As2H9SvtsHNNyhg8czY/ezxZsPINkSABzw9ogX7ZNeJf7VPypUGWw
-         AoLSPc8c9lFrzyeFpYQAY1Ptn80m85jPSZ/G70Q4SbrmKD9oqqXZFGO/2wk96VrknI+k
-         pPWQ==
-X-Gm-Message-State: AJIora8ftT9JvYaA+f2Q7sTxDH8RuH1K1da0drR90nV8fky5eYMJg13F
-        S1lVw8vOvCywf/vdStlhcDCm5kbpuVnfCATO
-X-Google-Smtp-Source: AGRyM1sp584MxHxw3c4ex/TlTzPwXtlgRFXh7RcT9gyKFbMJJoU7iLWVxz5I3RveFKfRzZOL+RMwSw==
-X-Received: by 2002:a17:907:3da0:b0:72b:47df:c1d7 with SMTP id he32-20020a1709073da000b0072b47dfc1d7mr2260949ejc.214.1657701788866;
-        Wed, 13 Jul 2022 01:43:08 -0700 (PDT)
-Received: from PCBABN.skidata.net ([2001:67c:2330:2014:7a45:c4ff:fe0f:c570])
-        by smtp.gmail.com with ESMTPSA id pv5-20020a170907208500b0072af4af2f46sm4690173ejb.74.2022.07.13.01.43.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 01:43:08 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-To:     dmitry.torokhov@gmail.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-Subject: [PATCH] Input: tsc2007 - enable GPIO chips that can sleep
-Date:   Wed, 13 Jul 2022 10:42:47 +0200
-Message-Id: <20220713084247.3090353-1-bbara93@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 13 Jul 2022 04:38:19 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EE9BEB6E;
+        Wed, 13 Jul 2022 01:38:18 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26D8aqMf007190;
+        Wed, 13 Jul 2022 08:38:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ZFvoD4hClcJWgrzecwcZftTd+IVYPCoJUlK1DihJvE4=;
+ b=ejGZlpFsRTaPIhN/HUQhxAhSbZ7vhV9AnlSxfo4A/G4nuBY5rFIMuuwiCu/VBtKuVAFK
+ si9JyFR7Xgw23eyf1NdVpQxCLSToizl3dcZt2Q7FtNkfj/O0t2WONutV5T6gyzYQlX7Z
+ gAmZk6RResVCp0e6+hHs+GkbldZr9uRt3Rn1s+HaPD2MR/GdTV78hhSfEqPM4atag6qy
+ c3APNPW9WsQzPocPMJcZ9KAI5ZNkvmuF0tqz1x996feE1AIpGsP10JdHVHcTvKOmQqJI
+ Le4jJK5X8xdmw9ugAKqHYutdamXBRoP4ZdkdY5ZScwb/cipfYYbK2J+fma3WTAsDP6yw Zw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9t2qgweh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 08:38:18 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26D8aqq1007051;
+        Wed, 13 Jul 2022 08:38:17 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9t2qgwd1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 08:38:17 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26D8M5oK026070;
+        Wed, 13 Jul 2022 08:38:15 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06fra.de.ibm.com with ESMTP id 3h8ncngskf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 08:38:15 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26D8cB5F11862438
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Jul 2022 08:38:12 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DAB73AE045;
+        Wed, 13 Jul 2022 08:38:11 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1EF1CAE04D;
+        Wed, 13 Jul 2022 08:38:11 +0000 (GMT)
+Received: from [9.171.80.107] (unknown [9.171.80.107])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 13 Jul 2022 08:38:11 +0000 (GMT)
+Message-ID: <85d3e0ca-186d-197b-308c-d7629488bb8a@linux.ibm.com>
+Date:   Wed, 13 Jul 2022 10:42:54 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v12 2/3] KVM: s390: guest support for topology function
+Content-Language: en-US
+To:     Janosch Frank <frankja@linux.ibm.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, cohuck@redhat.com, david@redhat.com,
+        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
+        nrb@linux.ibm.com
+References: <20220711084148.25017-1-pmorel@linux.ibm.com>
+ <20220711084148.25017-3-pmorel@linux.ibm.com>
+ <92c6d13c-4494-de56-83f4-9d7384444008@linux.ibm.com>
+ <1884bc26-b91b-83a7-7f8b-96b6090a0bac@linux.ibm.com>
+ <6124248a-24be-b43a-f827-b6bebf9e7f3d@linux.ibm.com>
+ <5c3d9637-7739-1323-8630-433ff8cb4dc4@linux.ibm.com>
+ <899e5148-8e65-8260-6f3c-546b4f5a650f@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <899e5148-8e65-8260-6f3c-546b4f5a650f@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9WLw3WvJstg0n8Z9IhcZp0jIJzoSL6Y9
+X-Proofpoint-ORIG-GUID: ZVuzvlEivkPLKnEZGtl3NjLYMW8cPfF2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_14,2022-07-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 mlxlogscore=999 spamscore=0 mlxscore=0 suspectscore=0
+ clxscore=1015 priorityscore=1501 phishscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207130035
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
 
-This enables the usage of "can_sleep" GPIO chips as "pin up" GPIO.
-This might be the case if the GPIO chip is an expander behind i2c.
 
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
----
- drivers/input/touchscreen/tsc2007.h      |  1 +
- drivers/input/touchscreen/tsc2007_core.c | 38 ++++++++++++++++++++----
- 2 files changed, 34 insertions(+), 5 deletions(-)
+On 7/13/22 10:34, Janosch Frank wrote:
+> [...]
+>>>>>>     +/**
+>>>>>> + * kvm_s390_update_topology_change_report - update CPU topology 
+>>>>>> change report
+>>>>>> + * @kvm: guest KVM description
+>>>>>> + * @val: set or clear the MTCR bit
+>>>>>> + *
+>>>>>> + * Updates the Multiprocessor Topology-Change-Report bit to signal
+>>>>>> + * the guest with a topology change.
+>>>>>> + * This is only relevant if the topology facility is present.
+>>>>>> + *
+>>>>>> + * The SCA version, bsca or esca, doesn't matter as offset is the 
+>>>>>> same.
+>>>>>> + */
+>>>>>> +static void kvm_s390_update_topology_change_report(struct kvm 
+>>>>>> *kvm, bool val)
+>>>>>> +{
+>>>>>> +    union sca_utility new, old;
+>>>>>> +    struct bsca_block *sca;
+>>>>>> +
+>>>>>> +    read_lock(&kvm->arch.sca_lock);
+>>>>>> +    do {
+>>>>>> +        sca = kvm->arch.sca;
+>>>>>
+>>>>> I find this assignment being in the loop unintuitive, but it should 
+>>>>> not make a difference.
+>>>>
+>>>> The price would be an ugly cast.
+>>>
+>>> I don't get what you mean. Nothing about the types changes if you 
+>>> move it before the loop.
+>>
+>> Yes right, did wrong understand.
+>> It is better before.
+> With the assignment moved one line up:
+> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-diff --git a/drivers/input/touchscreen/tsc2007.h b/drivers/input/touchscreen/tsc2007.h
-index 69b08dd6c8df..29bd1ff22c72 100644
---- a/drivers/input/touchscreen/tsc2007.h
-+++ b/drivers/input/touchscreen/tsc2007.h
-@@ -78,6 +78,7 @@ struct tsc2007 {
- 	bool			stopped;
- 
- 	int			(*get_pendown_state)(struct device *);
-+	int			(*get_pendown_state_cansleep)(struct device *);
- 	void			(*clear_penirq)(void);
- 
- 	struct mutex		mlock;
-diff --git a/drivers/input/touchscreen/tsc2007_core.c b/drivers/input/touchscreen/tsc2007_core.c
-index 3e871d182c40..0ad4c3c41297 100644
---- a/drivers/input/touchscreen/tsc2007_core.c
-+++ b/drivers/input/touchscreen/tsc2007_core.c
-@@ -20,6 +20,7 @@
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/gpio/driver.h>
- #include <linux/input.h>
- #include <linux/interrupt.h>
- #include <linux/i2c.h>
-@@ -108,6 +109,14 @@ bool tsc2007_is_pen_down(struct tsc2007 *ts)
- 	return ts->get_pendown_state(&ts->client->dev);
- }
- 
-+bool tsc2007_is_pen_down_cansleep(struct tsc2007 *ts)
-+{
-+	if (!ts->get_pendown_state_cansleep)
-+		return true;
-+
-+	return ts->get_pendown_state_cansleep(&ts->client->dev);
-+}
-+
- static irqreturn_t tsc2007_soft_irq(int irq, void *handle)
- {
- 	struct tsc2007 *ts = handle;
-@@ -115,7 +124,7 @@ static irqreturn_t tsc2007_soft_irq(int irq, void *handle)
- 	struct ts_event tc;
- 	u32 rt;
- 
--	while (!ts->stopped && tsc2007_is_pen_down(ts)) {
-+	while (!ts->stopped && tsc2007_is_pen_down_cansleep(ts)) {
- 
- 		/* pen is down, continue with the measurement */
- 
-@@ -125,7 +134,7 @@ static irqreturn_t tsc2007_soft_irq(int irq, void *handle)
- 
- 		rt = tsc2007_calculate_resistance(ts, &tc);
- 
--		if (!rt && !ts->get_pendown_state) {
-+		if (!rt && !ts->get_pendown_state_cansleep) {
- 			/*
- 			 * If pressure reported is 0 and we don't have
- 			 * callback to check pendown state, we have to
-@@ -229,6 +238,14 @@ static int tsc2007_get_pendown_state_gpio(struct device *dev)
- 	return gpiod_get_value(ts->gpiod);
- }
- 
-+static int tsc2007_get_pendown_state_gpio_cansleep(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct tsc2007 *ts = i2c_get_clientdata(client);
-+
-+	return gpiod_get_value_cansleep(ts->gpiod);
-+}
-+
- static int tsc2007_probe_properties(struct device *dev, struct tsc2007 *ts)
- {
- 	u32 val32;
-@@ -264,10 +281,21 @@ static int tsc2007_probe_properties(struct device *dev, struct tsc2007 *ts)
- 	if (IS_ERR(ts->gpiod))
- 		return PTR_ERR(ts->gpiod);
- 
--	if (ts->gpiod)
--		ts->get_pendown_state = tsc2007_get_pendown_state_gpio;
--	else
-+	if (ts->gpiod) {
-+		/* to support detection during the hard IRQ, the GPIO chip is required to not sleep.
-+		 * this might be the case if the GPIO is e.g. behind an i2c-based GPIO expander.
-+		 * it is fine to sleep later in the soft IRQ, as it is threaded.
-+		 */
-+		ts->get_pendown_state_cansleep = tsc2007_get_pendown_state_gpio_cansleep;
-+		if (gpiod_to_chip(ts->gpiod) && !gpiod_to_chip(ts->gpiod)->can_sleep) {
-+			ts->get_pendown_state = tsc2007_get_pendown_state_gpio;
-+		} else {
-+			dev_dbg(dev, "Pen down GPIO chip can sleep\n");
-+		}
-+
-+	} else {
- 		dev_warn(dev, "Pen down GPIO is not specified in properties\n");
-+	}
- 
- 	return 0;
- }
+Thanks
+
+> 
+>>
+>>>>
+>>>>
+>>>>>
+>>>>>> +        old = READ_ONCE(sca->utility);
+>>>>>> +        new = old;
+>>>>>> +        new.mtcr = val;
+>>>>>> +    } while (cmpxchg(&sca->utility.val, old.val, new.val) != 
+>>>>>> old.val);
+>>>>>> +    read_unlock(&kvm->arch.sca_lock);
+>>>>>> +}
+>>>>>> +
+>>>>> [...]
+>>>>>
+>>>>
+>>>>
+>>>
+>>
+> 
+
 -- 
-2.34.1
-
+Pierre Morel
+IBM Lab Boeblingen

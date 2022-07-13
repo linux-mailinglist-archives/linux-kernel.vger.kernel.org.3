@@ -2,200 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17799572A8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3729572A92
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiGMA74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 20:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
+        id S230153AbiGMBAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 21:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiGMA7y (ORCPT
+        with ESMTP id S229750AbiGMBAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 20:59:54 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42FAC7490
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:59:53 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 72so9148427pge.0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:59:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=ROoMTW/qFZ8QlgUUacgeoUi6/82BU9pCPIf9M2np39A=;
-        b=Hparme2aQ18/q/99rSwQ/Wko5zGyUz2UIh5lgFFAtZdvDVO7Fy8ZDkz41DIxDFfrdT
-         cJrKwqvdu6RF2cqOo4eHQnqAODUtGXrdgJjSgIycUumoUHqFhaN8Zm26nh5+PsplJ1Oc
-         v64phi2QvtvVnhHSr5YVfjDG/w826jbBdenDs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=ROoMTW/qFZ8QlgUUacgeoUi6/82BU9pCPIf9M2np39A=;
-        b=yxvSiQGU6W2SMILKv+va1LGc5eoL5JqfujnuLMfVkkFuibqEb2wouQXR0P9fh9w79D
-         hkWDx+HbzO8F+MNuUpPAp6HlLe4XRbLk09TSvhb7tYJ3dn1DqLyRAH/Eia2DFaRsq4MZ
-         GPLrO4VjOL7C5kR0BVURU5HGQKhQBHDYuPOnVbo4rDAuZb8/FI89WbSTy1cxn4k+2wUP
-         Xy96FkOfs2rapDgFlomllB+E6cT3SrU7K7xlxBf6EA0xNMkQm1/FnhQibAHG0q15LURD
-         YO0oJ17O8bT9K/AXV4Ksgcht80rrIw5G4FPec4Vee4CMNh13ZPcj/w+Sj30N69KPO20b
-         +xGg==
-X-Gm-Message-State: AJIora+xJwsK5RHY/iizQD6wQ0vXEHcAuWImMKFAsGdIi0f6TKNMBODT
-        nWbiAydYFPhIDba7rugDQEz2LQ==
-X-Google-Smtp-Source: AGRyM1tpEGAcRUVIqHwjZXKHpwYlMAXu5liPTH4UT0YVgvJuOkPWjVLmiF5d7ziQxIRl+2zYtQXkxA==
-X-Received: by 2002:aa7:9985:0:b0:528:d798:1de2 with SMTP id k5-20020aa79985000000b00528d7981de2mr861866pfh.84.1657673993150;
-        Tue, 12 Jul 2022 17:59:53 -0700 (PDT)
-Received: from [192.168.52.129] ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id b7-20020a170903228700b0016c50179b1esm4231433plh.152.2022.07.12.17.59.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 17:59:52 -0700 (PDT)
-Message-ID: <478e4189-f026-b4f8-b525-948cc7d7fd5a@broadcom.com>
-Date:   Tue, 12 Jul 2022 17:59:50 -0700
+        Tue, 12 Jul 2022 21:00:43 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F139C7490;
+        Tue, 12 Jul 2022 18:00:42 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CLk5cl018102;
+        Tue, 12 Jul 2022 18:00:42 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=AoHv8MU4aQ6PNMhTZb3wZB9KIb1a/xzeTpOOzvh+HT4=;
+ b=Ok+Q2wBg4KZ2UQhwk8PG9DEABDwTjNHgkIJFWxz67XSg4enytXNk/lS9zaf/SY/P3ko8
+ aLLbcTKFU0zgIj8upV+E23fZrnctP86fHOyx2IbAnNDbqMwKy5B86OxHtcDIqM1UTSYA
+ u67aXZ8hI8JkFgO+SioX1IPedHV/HbyCQ+8= 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h9h5f0usc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 18:00:41 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OJVpfPwXPww/7vNcXYrR3lfXuAKZ+6Cc84/+DtLy5SeTFya6sHO+393W6GxGRRB3ZmJAlKcv/eFURTo48hFYgygVhxxBsL/1QJcxfrodsuFgnBTSPE5ZY3IpcQgGL6xxQPDc4iWO9cYLpag0nuT5Lmpr3Rk89sidsmoEBLRg9jALCc8ffegG1psubzHm5VZhJobJOHpEsyIfzu7PdMSu1eUVyMSUUam3Yg5F2+1C1BrECcXKF1tucpPbhlPbO9pYafcRZ956Uz4Oarpvh0V4kIo2KBZJw8jZLffEs+UwKrTkjJpyxZfW2y1PfD+J/Zj6siuQGvAyGf3dKrSsevwr2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AoHv8MU4aQ6PNMhTZb3wZB9KIb1a/xzeTpOOzvh+HT4=;
+ b=STdxIg6gHafWrLLwxTLQGvazFhn38NmSgy+kH18ZwCzD+reExNjcNNhS1n90WgVckRAsmTli81i7rNzbIpPfezxjYSdn9vAu7tmDIcHm0ti/cl/9srTxzJNr19Lpu/lpiuGDYiwLUcn/wiwQgM5H/c8DyewXsXf9/LBiKgF+7zL8DFuv5GdLrg8rgCpzvj88WxmUq/1/LEWm6QcXxnAMJ3TDRzXM+muz7pkQNLgDcTA8rCcPW7PQUOobnh34yX2vlmJsT2TrjJGFPdcLlnmNKE+L34UU76i5mmxCN/hJMC0ZXYgHqqAOcP9j1jukVO54Fhs54jcYuc0sjxN6mdeiUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by MN2PR15MB2813.namprd15.prod.outlook.com (2603:10b6:208:128::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Wed, 13 Jul
+ 2022 01:00:38 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::e8cd:89e9:95b6:e19a]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::e8cd:89e9:95b6:e19a%8]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
+ 01:00:37 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Kees Cook <keescook@chromium.org>, Song Liu <song@kernel.org>,
+        bpf <bpf@vger.kernel.org>, Christoph Hellwig <hch@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v6 bpf-next 0/5] bpf_prog_pack followup
+Thread-Topic: [PATCH v6 bpf-next 0/5] bpf_prog_pack followup
+Thread-Index: AQHYklIC37qezjyxh0moueFgoO/pNa1zhdgAgAAO4YCAABD0AIAAC/MAgADwxACAAEM5AIAAKMMAgAAvboCABOqLgIAAGVQAgADeG4CAAEVBgIAACGmAgAAV1QA=
+Date:   Wed, 13 Jul 2022 01:00:37 +0000
+Message-ID: <728C4142-0070-4B85-9085-260EFC959681@fb.com>
+References: <YseAEsjE49AZDp8c@bombadil.infradead.org>
+ <C96F5607-6FFE-4B45-9A9D-B89E3F67A79A@fb.com>
+ <YshUEEQ0lk1ON7H6@bombadil.infradead.org>
+ <863A2D5B-976D-4724-AEB1-B2A494AD2BDB@fb.com>
+ <YsiupnNJ8WANZiIc@bombadil.infradead.org>
+ <6214B9C9-557B-4DC0-BFDE-77EAC425E577@fb.com>
+ <Ysz2LX3q2OsaO4gM@bombadil.infradead.org>
+ <E23B6EB1-AFFA-4B65-963E-B44BA0F2142D@fb.com>
+ <Ys3FvYnASr2v9iPc@bombadil.infradead.org>
+ <6CB56563-29E2-4CE0-BF7B-360979E42429@fb.com>
+ <Ys4G4/dG6SGYV/iz@bombadil.infradead.org>
+In-Reply-To: <Ys4G4/dG6SGYV/iz@bombadil.infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.100.31)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7ae795c5-22b8-4475-f63c-08da646b1962
+x-ms-traffictypediagnostic: MN2PR15MB2813:EE_
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NDi6kNGrrYzXfPHeTjcHAdL+mNnKhZMkFgcEDL20MP+NvJOWvtzyQ1H9iymxTaS+xLEuRqIM1AHf5cs647sszn6St1T8IAu5lowHVNi27eOrG/yEQs5K6+uZBIaQ1NTPfhxsNozB/Fl35EDn35D/KEfytsZXp7Kl5f7NEmjj1oHC2hkOQhiNNy6GLTpKPxJxUTjY28CzUMqp0tVutbFLVS9IDIotH0/JTkLGzQPSukE5vrZxkHUWe9dxrC4CRso453c5clihgH0h6N6soM13iPi3DMBFFjKp6ejJMJd9rWyUNr5YpN5n8ioMwxkwIaaT5+OstZseu9pBjBdIsD5atJkySghk3zt4XXh21AqXJQGZ1REsZ+TpC40cJWnl7FhjtOHZIzvq6js31aGfHMq4uAR272PN85PM+8BxdI058y4Igyab9ElBwitC8T2i5Eup7xDTjFFvIIgneO1b8hNawO1an5KYKHxi0BtTL6YcV4sRUb5njw9cR1CbCrC2mbHksNxasK+6xYhsqPR1SYhGyX1vnX3Fjg1xBQeXhDJYlv+Ci0kJn/dzeYLj0YudHFG5D7hcjDjZzL5n/7SIKrQXWuwud+ARF4aHDTvm+xxqKwjoakJCnPd1+Jw8scDOlevs4HLiEK8pt7vMgyrS6B+eFxr4uqH3mphFiVlopKxQOB2txwOzJ7qFMTg40vGminp1zqQiAJw6/CXtk7n1x8RqcXwYn5qnTrbBQi5UCMMUdaHCiPjAkqNIBDg7ZAH1h2H57HJXviSdZEBYdu6Ca/4QHxLkXuXhdPRQvfrnrjnQ6kAV6MKNOkSua17Y7l3FK8cMWfix+gkS1Js4gO07ALPCUNM0bpODcxABWTvBfmtlxR8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(39860400002)(346002)(376002)(136003)(38100700002)(66556008)(91956017)(66476007)(8676002)(8936002)(66946007)(64756008)(7416002)(66446008)(122000001)(76116006)(83380400001)(5660300002)(86362001)(6512007)(186003)(2616005)(478600001)(6506007)(36756003)(53546011)(38070700005)(54906003)(4326008)(6486002)(6916009)(41300700001)(71200400001)(2906002)(33656002)(316002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zJM/HR/ST/MsQMid6wGvSYhdx4+zjYmy5L2bu3TbVyhdbdMZiFGmBP+bpcGs?=
+ =?us-ascii?Q?oypPMxtAb7pegOK6G+1axMByKd4dmH8J8pJssAtoLbdp5zkd57BQ9T66F2Z0?=
+ =?us-ascii?Q?Y2f5QPotR6Ls1WIcUKN8I0C47g3UboTrtYdfwaMigjn+2uB0+y/ndloLwyl0?=
+ =?us-ascii?Q?kjkSEORRyRUMyIYdlUkbHxc5RLYVLMqxw1AjsMW8UfvxlroIU1nO470iT63z?=
+ =?us-ascii?Q?qmyrjcB9i6xLCF40quU7Erq/8r0cr1dddB5AoY9FNRT2+6+6whvW1thQ+l8l?=
+ =?us-ascii?Q?F+najP8/5xpYgt26Le1x3NhbzHa34tGxpYaEVuqrRpfLgxAyzdsiFMfDV+Zn?=
+ =?us-ascii?Q?FFDU2sA/2hZG6iSe+Nq4uRC87Ymwx27JiYGeFKvrvVtuQwhnTFcKf1ljk7+u?=
+ =?us-ascii?Q?8ZFugXnzcZBM0DlbqZ8NBXyqVWf+7kuZUB6Rci/Laj2KPOLMVUmNhV1W2j+h?=
+ =?us-ascii?Q?wrDgpZPi/yKbp/Et3qjVBBFhqqqeLecl5NKeCO/S8Bu36Yc8rGtYTWXQ/S9f?=
+ =?us-ascii?Q?tzuSS0yCPYk/bZSD/ibnvHJWd6wRPk1dKQLEvF5y6hufnQqRO3fkwd/EO4ma?=
+ =?us-ascii?Q?urMCl56eZTOpn3sSWsMQOsQlk+2GU+vZ3QUJ3/Die7jCmudcKWsK3O8c0yeP?=
+ =?us-ascii?Q?S0X/hoffk6IV7nV3x/ZwGIg9tG/AxzN0V6dTganb7e43Whf/plKwjpgX5Jpv?=
+ =?us-ascii?Q?ciwBQsqWxp6W12zB48wZ8VaLqYKSdX8oq9NffaKLM6+UPo/VmBrvOgtmUu67?=
+ =?us-ascii?Q?Nn9HCFI6/RFVyCO4YGqyij/5z4EI2JC81s6Nm9x4liWPOUTf+rM6FQbNUdGG?=
+ =?us-ascii?Q?WAEPC4SkINtIIFoJ43UMNyhF3gcUq+HrrVTqFtAKg59ens6OeHIGNW0iZyNu?=
+ =?us-ascii?Q?aesAGC1EfpuZEOCfC4whmA3+UQaFsCLXSgxghq46psmjWxmJx5Bagk9qYZ4u?=
+ =?us-ascii?Q?GsFBqUBwxKN+pwmUYWerkpNAHQXzFYd1PPyyHI4j+Mtr/d30EAjLYqwFjFrm?=
+ =?us-ascii?Q?t9KeUIjjfB5VelZG2CJzUwwU1zjgO0+JfB1RtQ5/PGWX7riR1n+/4X0H08wn?=
+ =?us-ascii?Q?9r49SNKs2KZwGi2UFBtHDWMZaRqmCYRRR2tjsJZf2eHuzFib8JGG9WsEmnvS?=
+ =?us-ascii?Q?eWm0P722aswE68L52D2kxFcIKpfd0VSdkZ/JYNTasVCFQVoh0B+zl3M8wJhA?=
+ =?us-ascii?Q?yIQCapgF4uJMt/FnBjKCVVIIam+egbTb6a4zFkRQnG4h8Ojhu+tCKD30Cdeb?=
+ =?us-ascii?Q?k1mS5PKihSwLDmc972Kgs9wC9o953ixyO9yY96QvPYaOPCUScvbbgSOsAVi4?=
+ =?us-ascii?Q?a0jbzJoyIMycxOqfulqdY+K785ML1LKLT7QPUSVFfvVeHi1LTa9IoL6rLwCU?=
+ =?us-ascii?Q?Tbj/uGAdHTzGiJJsgReFGhNFRQGwqEbD+jNI5Nsrdd+AJiBk1RlH325nsXfR?=
+ =?us-ascii?Q?s5yygJKkHMTarjyEfrlSUhVLtrTtsQk6zU+sXmYxUKh3b91O8c4dzcMLi7bW?=
+ =?us-ascii?Q?2qRWpveR0N4TEkoknKsGLgHmz798UDafZncVGeWsNXE06YZ3dBjYonEf7htV?=
+ =?us-ascii?Q?yCXmKMIdPz8R+BSzOTflIbiAJZo/vLw8ISrU8AoudaO7S1CWkRVxvGGjMKHR?=
+ =?us-ascii?Q?/oScHCX33l5SR3xQGLtvXFY=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <29F3282AA9BBE54E93CE7512CE4F72FA@namprd15.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH 3/3] arm64: dts: bcmbca: update bcm4808 board dts file
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     kursad.oney@broadcom.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        joel.peshkin@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220712021144.7068-1-william.zhang@broadcom.com>
- <20220712021144.7068-4-william.zhang@broadcom.com>
- <d93e55fa-3359-2609-aad5-c80eca78f380@linaro.org>
- <900ac3ed-a77c-3cc0-f5ab-c45267a1a4ba@gmail.com>
- <6b7bab04-90ce-6111-35bd-42cb3a1f73f8@linaro.org>
- <9bc3e0b6-833e-375e-70d6-1dbd036ef25a@broadcom.com>
- <5c79330d-7786-61a8-b464-d7e7171a7aab@linaro.org>
-From:   William Zhang <william.zhang@broadcom.com>
-In-Reply-To: <5c79330d-7786-61a8-b464-d7e7171a7aab@linaro.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000089118a05e3a54d09"
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ae795c5-22b8-4475-f63c-08da646b1962
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2022 01:00:37.6383
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pd/iiYBWmAYHhOTNNMkVg2mOpSAO6kOzUugy9ttzu9fxQduSzz0pTvWWGxh1PjnA/g8Sj5SrUdMwaQbPPSRScA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB2813
+X-Proofpoint-ORIG-GUID: izKhQGTm_14PMeCmgKs3m-f7mGXDNq6n
+X-Proofpoint-GUID: izKhQGTm_14PMeCmgKs3m-f7mGXDNq6n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_14,2022-07-12_01,2022-06-22_01
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000089118a05e3a54d09
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
 
-
-On 7/12/22 11:20, Krzysztof Kozlowski wrote:
-> On 12/07/2022 19:48, William Zhang wrote:
->>>
->>> Best regards,
->>> Krzysztof
->>
->> The reason for this patch is to keep the bcmbca board dts in the same
->> format and keep everything in the same yaml file.
+> On Jul 12, 2022, at 4:42 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
 > 
-> Not a good reason to change compatibles. You can have the same format
-> and keep everything in same YAML file without replacing compatibles.
+> On Tue, Jul 12, 2022 at 11:12:22PM +0000, Song Liu wrote:
+>> 
+>> 
+>>> On Jul 12, 2022, at 12:04 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
+>>> 
+>>> On Tue, Jul 12, 2022 at 05:49:32AM +0000, Song Liu wrote:
+>>>>> On Jul 11, 2022, at 9:18 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
+>>>> 
+>>>>> I believe you are mentioning requiring text_poke() because the way
+>>>>> eBPF code uses the module_alloc() is different. Correct me if I'm
+>>>>> wrong, but from what I gather is you use the text_poke_copy() as the data
+>>>>> is already RO+X, contrary module_alloc() use cases. You do this since your
+>>>>> bpf_prog_pack_alloc() calls set_memory_ro() and set_memory_x() after
+>>>>> module_alloc() and before you can use this memory. This is a different type
+>>>>> of allocator. And, again please correct me if I'm wrong but now you want to
+>>>>> share *one* 2 MiB huge-page for multiple BPF programs to help with the
+>>>>> impact of TLB misses.
+>>>> 
+>>>> Yes, sharing 1x 2MiB huge page is the main reason to require text_poke. 
+>>>> OTOH, 2MiB huge pages without sharing is not really useful. Both kprobe
+>>>> and ftrace only uses a fraction of a 4kB page. Most BPF programs and 
+>>>> modules cannot use 2MiB either. Therefore, vmalloc_rw_exec() doesn't add
+>>>> much value on top of current module_alloc(). 
+>>> 
+>>> Thanks for the clarification.
+>>> 
+>>>>> A vmalloc_ro_exec() by definition would imply a text_poke().
+>>>>> 
+>>>>> Can kprobes, ftrace and modules use it too? It would be nice
+>>>>> so to not have to deal with the loose semantics on the user to
+>>>>> have to use set_vm_flush_reset_perms() on ro+x later, but
+>>>>> I think this can be addressed separately on a case by case basis.
+>>>> 
+>>>> I am pretty confident that kprobe and ftrace can share huge pages with 
+>>>> BPF programs.
+>>> 
+>>> Then wonderful, we know where to go in terms of a new API then as it
+>>> can be shared in the future for sure and there are gains.
+>>> 
+>>>> I haven't looked into all the details with modules, but 
+>>>> given CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, I think it is also 
+>>>> possible.
+>>> 
+>>> Sure.
+>>> 
+>>>> Once this is done, a regular system (without huge BPF program or huge
+>>>> modules) will just use 1x 2MB page for text from module, ftrace, kprobe, 
+>>>> and bpf programs. 
+>>> 
+>>> That would be nice, if possible, however modules will require likely its
+>>> own thing, on my system I see about 57 MiB used on coresize alone.
+>>> 
+>>> lsmod | grep -v Module | cut -f1 -d ' ' | \
+>>> 	xargs sudo modinfo | grep filename | \
+>>> 	grep -o '/.*' | xargs stat -c "%s - %n" | \
+>>> 	awk 'BEGIN {sum=0} {sum+=$1} END {print sum}'
+>>> 60001272
+>>> 
+>>> And so perhaps we need such a pool size to be configurable.
+>>> 
+>>>>> But a vmalloc_ro_exec() with a respective free can remove the
+>>>>> requirement to do set_vm_flush_reset_perms().
+>>>> 
+>>>> Removing the requirement to set_vm_flush_reset_perms() is the other
+>>>> reason to go directly to vmalloc_ro_exec(). 
+>>> 
+>>> Yes fantastic.
+>>> 
+>>>> My current version looks like this:
+>>>> 
+>>>> void *vmalloc_exec(unsigned long size);
+>>>> void vfree_exec(void *ptr, unsigned int size);
+>>>> 
+>>>> ro is eliminated as there is no rw version of the API. 
+>>> 
+>>> Alright.
+>>> 
+>>> I am not sure if 2 MiB will suffice given what I mentioned above, and
+>>> what to do to ensure this grows at a reasonable pace. Then, at least for
+>>> usage for all architectures since not all will support text_poke() we
+>>> will want to consider a way to make it easy to users to use non huge
+>>> page fallbacks, but that would be up to those users, so we can wait for
+>>> that.
+>> 
+>> We are not limited to 2MiB total. The logic is like: 
+>> 
+>> 1. Anything bigger than 2MiB gets its own allocation.
 > 
-Well the existing 4908 compatible string is not the same format as we 
-are proposing here: "board variant", "chip variant", "brcm, bcmbca"
+> And does that allocation get split up into a few huge 2 MiB pages?
+> When freed does that go into the pool of available list of 2 MiB pages
+> to use?
 
->> Understand 4908 was
->> already upstream but luckily there is no driver in linux and u-boot that
->> uses these 4908 compatible strings. They are only used in the board dts
->> as far as I can see.  So it does not really break anything in the end,
->> unless someone use them in any driver but never upstream their code...
+This would have some 2MiB pages and some 4kB pages. For example, if we 
+need 4MiB + 5kB, it will allocate 2x 2MiB pages, and 2x 4kB pages (round
+up to 8kB). 
+
+On free, the will not go to the pool. Instead, it will be vfree()'ed. 
+
 > 
-> So maybe just briefly mention it in the commit msg?
+>> 2. We maintain a list of 2MiB pages, and bitmaps showing which parts of 
+>>   these pages are in use. 
 > 
-I can do that for sure.
+> How many 2 MiB huge pages are allocated initially? Do we have a cap?
 
-> Best regards,
-> Krzysztof
+Current logic just allocates 1 huge page at a time. No cap. 
 
---00000000000089118a05e3a54d09
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> 
+>> 3. For objects smaller than 2MiB, we will try to fit it in one of these
+>>   pages. 
+>>   3. a) If there isn't a page with big enough continuous free space, we
+>>        will allocate a new 2MiB page. 
+>> 
+>> (For system with n NUMA nodes, multiple 2MiB above by n). 
+>> 
+>> So, if we have 100 kernel modules using 1MiB each, they will share 50x
+>> 2MiB pages. 
+> 
+> lsmod | grep -v Module | cut -f1 -d ' ' | \
+> 	xargs sudo modinfo | grep filename |\
+> 	grep -o '/.*' | xargs stat -c "%s - %n" | \
+> 	awk 'BEGIN {sum=0} {sum+=$1} END {print sum/NR/1024}' 
+> 271.273
+> 
+> On average my system's modules are 271 KiB.
+> 
+> Then I only have 6 out of 216 modules which are use more than 2 MiB or
+> memory for coresize. So roughly 97% of my modules would be covered
+> with this. Not bad.
 
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJEiNF3X6SrZ4vmqQ/JEeRcztX2Z
-yFrvcQJkH0/ifgrLMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDcxMzAwNTk1M1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQC0r86ERM4Od0HWvQNLiz1O6p3ADM4aU+pkgz7TUjU6iKLH
-xD0Ym7gqCACxv5LUBc+jp/LgcggfhuGHMsuiy0rO32NYfXCfDmAmTkZCYNwDnpu8rnbLbWDhIQPL
-tpLio4l7Vh3HMztEu7bPUhxMhwY5ACmHF0fani0ST/4SeTzJyVCV3XBDFFaKQJnGSBHN10rc7hfB
-zLz3+57I+NKdeS+PTjJeCVWQg1oeBWtz2m2Ymy6EfABj3ucKQVWq/3my0GPAk09Qt5AdJJdDxH8S
-kZZtgDsPsp5SpyT54D9ciq0UMVk94nnGXeGCG456iM3riYcHzL9WYo685zDtHR+BcFNH
---00000000000089118a05e3a54d09--
+Are these all the modules we have in tree? ;)
+
+Thanks,
+Song
+
+> 
+> The monsters:
+> 
+> lsmod | grep -v Module | cut -f1 -d ' ' | xargs sudo modinfo \
+> 	| grep filename |grep -o '/.*' | xargs stat -c "%s %n" | \
+> 	sort -n -k 1 -r | head -10 | \
+> 	awk '{print $1/1024/1024" "$2}'
+> 6.50775 /lib/modules/5.17.0-1-amd64/kernel/drivers/gpu/drm/i915/i915.ko
+> 3.6847 /lib/modules/5.17.0-1-amd64/kernel/fs/xfs/xfs.ko
+> 3.34252 /lib/modules/5.17.0-1-amd64/kernel/fs/btrfs/btrfs.ko
+> 2.37677 /lib/modules/5.17.0-1-amd64/kernel/net/mac80211/mac80211.ko
+> 2.2972 /lib/modules/5.17.0-1-amd64/kernel/net/wireless/cfg80211.ko
+> 2.05754 /lib/modules/5.17.0-1-amd64/kernel/arch/x86/kvm/kvm.ko
+> 1.96126 /lib/modules/5.17.0-1-amd64/kernel/net/bluetooth/bluetooth.ko
+> 1.83429 /lib/modules/5.17.0-1-amd64/kernel/fs/ext4/ext4.ko
+> 1.7724 /lib/modules/5.17.0-1-amd64/kernel/fs/nfsd/nfsd.ko
+> 1.60539 /lib/modules/5.17.0-1-amd64/kernel/net/sunrpc/sunrpc.ko
+> 
+> On a big iron server I have 149 modules and the situation is better
+> there:
+> 
+> 3.69791 /lib/modules/5.16.0-6-amd64/kernel/fs/xfs/xfs.ko
+> 3.35575 /lib/modules/5.16.0-6-amd64/kernel/fs/btrfs/btrfs.ko
+> 3.21056 /lib/modules/5.16.0-6-amd64/kernel/drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko
+> 2.02773 /lib/modules/5.16.0-6-amd64/kernel/arch/x86/kvm/kvm.ko
+> 1.82574 /lib/modules/5.16.0-6-amd64/kernel/fs/ext4/ext4.ko
+> 1.36571 /lib/modules/5.16.0-6-amd64/kernel/net/sunrpc/sunrpc.ko
+> 1.32686 /lib/modules/5.16.0-6-amd64/kernel/fs/nfsd/nfsd.ko
+> 1.12648 /lib/modules/5.16.0-6-amd64/kernel/drivers/gpu/drm/drm.ko
+> 0.898623 /lib/modules/5.16.0-6-amd64/kernel/drivers/infiniband/hw/mlx5/mlx5_ib.ko
+> 0.86922 /lib/modules/5.16.0-6-amd64/kernel/drivers/infiniband/core/ib_core.ko
+> 
+> So this may just work nicely.
+> 
+>  Luis
+

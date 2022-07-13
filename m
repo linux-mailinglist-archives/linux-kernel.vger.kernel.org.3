@@ -2,192 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF44E5734F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A385734F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235276AbiGMLKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 07:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
+        id S235081AbiGMLJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 07:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiGMLKO (ORCPT
+        with ESMTP id S229579AbiGMLJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:10:14 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D52473932
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:10:14 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DA5jcW023048;
-        Wed, 13 Jul 2022 11:09:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=qJhay0kEwXBy/rDQ3o6/upCoHrhhEiz2Uf4NhLo+0YE=;
- b=rk/6VNQIxHaahIULquC1pBOsxbd3xGwTXC+6RtoHEwVrqsE4xCrO3CtIUTbIZReneHhL
- YYw1q+12x/s1VK6FIkztAzfSZCih5NYjqEtNvml5Ve7d9bYyo0oGRZe+mvkwXl7RESDw
- uJBFD+lHLKTZAW7l5DS830jOKwOtaTJjq45dbX8Bf9sM2ORAuOaG3heppBiTe+WnQyXl
- 03K5G8f5gEM4gZGz2LHrro2Q1Jb7BJW98Ptm9Cdz7+Zxmm8pf6akBMjOoLwFgOLA/0pQ
- a5bdYWdFXDfh7l31OWulb8w+VLln4/q/GmAA/kn5HzWZORK8VL+wEnPRL/5cl0kJRY1p 5A== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h727sj7ev-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jul 2022 11:09:42 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26DB5bSr023345;
-        Wed, 13 Jul 2022 11:09:41 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3h7044k0gm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jul 2022 11:09:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RAOSEv2BPSbf+kb3vpHPzEbUhEOwEwxv7Pr1gln/szv90SWK+zoX5eqYrM6HdMN5N4esl85Dmqn9gmIH2KyMkwAwzMQWqC+aSZ01CbuFxnhZNWF5fYVH3VZKnTS4GLD/BYrXRShcJNH5gF/ty8VN3k1ThyP4YAiFeRtJKVoCm+79SGkhsOdBtwLfzsCuhiITmMef9LxgXaO1h8EF1EMVL0nK8Dw+azvws3oWi4rhyEPvWFKjdVwYr1s2fic+ZNhCV+pTMHn99GJAtUVhHGa/WHgHzruEFVn+4zZVi5kCcAmkiILIDToW8H2A8BFmQkdH3PnuFNUK5lRwzxHSb7uefA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qJhay0kEwXBy/rDQ3o6/upCoHrhhEiz2Uf4NhLo+0YE=;
- b=O4C/kF39R/ARauFomGfPIcHvYDT+2GIl1G2qsDPQdLuM699+BQVDj5kMQY7bh5sBoQFr/dXWDVF19OG18Mhm39Mj3HePJrThJF2ZbczJixgnegk3kB7h+6VWNoze9ey6Ek40fYlDJXf/nriRVWm5ND6DkP/PnUI+jsLrNUgXvpB4Kn06EYc1laPdF6hQuP21ZnNsqrj+jiaNBNK8T30oIoSOUKwG4pV/VEUBjgPAujL8Ti7fAwtdYMJROKGBKSYmXP9vthwZ6UX0faAo1MmqOCYosrqRjuNp/v0Cm0fnyT3KVnKAFxjEEAkmzETodAGpMi0nEdqPq9IQ8rfwTSL18Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qJhay0kEwXBy/rDQ3o6/upCoHrhhEiz2Uf4NhLo+0YE=;
- b=il2XDTznIfmqkPZOuEMdRsZjiYWeA7P1R1+Jfw/5/29k8d9hQd5sTQ2WkqOSFMEV3vUy6A71iV9Iyys/D3PeiY/685hGkGdcMmeILYvveKhKLzsxM3ThLwqzCIQQq4iwmlCmvejt/u6E8sdTZUyH1RDdm3N3EZ/XrY6aYIy9IdU=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by IA1PR10MB6076.namprd10.prod.outlook.com
- (2603:10b6:208:3ac::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20; Wed, 13 Jul
- 2022 11:09:39 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
- 11:09:39 +0000
-Date:   Wed, 13 Jul 2022 14:09:08 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Joel Slebodnick <jslebodn@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, nsaenz@kernel.org,
-        athierry@redhat.com, gustavoars@kernel.org, keescook@chromium.org,
-        stefan.wahren@i2se.com, gascoar@gmail.com, ojaswin98@gmail.com,
-        len.baker@gmx.com, jakobkoschel@gmail.com,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, jsavitz@redhat.com
-Subject: Re: [PATCH] remove custom return values in vc04_services
-Message-ID: <20220713110908.GR2338@kadam>
-References: <20220712181928.17547-1-jslebodn@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712181928.17547-1-jslebodn@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0064.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4f::20)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        Wed, 13 Jul 2022 07:09:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB9BECB88;
+        Wed, 13 Jul 2022 04:09:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657710577; x=1689246577;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=mluzyxZAImsv355695EcParOvoSEmCd7NTEboqAuATQ=;
+  b=S1OZ1tH6c4XNbWkIUwmEYJmxtXV6n3OOQM1pfOpgStuIOweoj/gk2AWT
+   inbOjwn9bq/Led7z3Pn1fmJ4uGZOOOAYMVC+hwglB8lRv5BGYVZI9NF9h
+   BPjYRzwstJY9rF/UjN7kBqHomYwg+lyZBjApWUuHbkxCRm0CL6K24kpuJ
+   P0zHcR5+2A/54OHNK2kIiSchHkwSBtTXqT/uJc1Bat9KqYOTQwC/LH7y3
+   kMJGnS7aRvK9yZf4KetNG4mZWRqydpWKroghM9HYqDzai7UZv5wjeNutV
+   xpgRPH3yR4PxHo5TrSL3iJfU/cR2KkR0Y0Kt9X1rXg7f9lDRTX/3k634K
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="264969301"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="264969301"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 04:09:34 -0700
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="622899198"
+Received: from ifatima-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.1.196])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 04:09:29 -0700
+Message-ID: <173b20166a77012669fdc2c600556fca0623d0b1.camel@intel.com>
+Subject: Re: [PATCH v5 02/22] cc_platform: Add new attribute to prevent ACPI
+ CPU hotplug
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-acpi@vger.kernel.org, seanjc@google.com, pbonzini@redhat.com,
+        len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com, thomas.lendacky@amd.com,
+        Tianyu.Lan@microsoft.com, rdunlap@infradead.org, Jason@zx2c4.com,
+        juri.lelli@redhat.com, mark.rutland@arm.com, frederic@kernel.org,
+        yuehaibing@huawei.com, dongli.zhang@oracle.com
+Date:   Wed, 13 Jul 2022 23:09:27 +1200
+In-Reply-To: <5ebd7c3cfb3ab9d77a2577c4864befcffe5359d4.camel@intel.com>
+References: <cover.1655894131.git.kai.huang@intel.com>
+         <f4bff93d83814ea1f54494f51ce3e5d954cf0f5b.1655894131.git.kai.huang@intel.com>
+         <43a67bfe-9707-33e0-2574-1e6eca6aa24b@intel.com>
+         <5ebd7c3cfb3ab9d77a2577c4864befcffe5359d4.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0584b2e0-d5aa-49b9-d977-08da64c02da9
-X-MS-TrafficTypeDiagnostic: IA1PR10MB6076:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TUw0SgwiHQIfGqYyVziJQ63N5QZNdp83fYuA/MCRexznwFNidfX8a9TLNBaOq3yKXLVvQ5W1rois/zHd439v57iecetY8L6ojUrpFFzvG/FMEhRW4TIYjjClSLdlGMtykg3+xXFzBa46myWziw1QwzK34qr8JVFuyJC91vi9j+VQdz9ubbpGSvb0hkh3BNtC4NqVdgLkcegFmlEmwuhsPVI/t0fTD4/7ZXjiSCmvZvHC86d+gwhFTE7idx2M2iMU6galJGQJ6g2BCEhpzFEwD6MvauEXHSc+1WYtQAkiI5KNxIhu/SODdBfW/0BRPEUshQDD1gPfW8lkTbZ+xmUpFm7sf1SrgiJgkfZ0WmShyWI6j2BrS9H2itHHGouPXWN5lbPcTmYcaR3K/Xw+hDjBxxdqXIEby/nQdnbzKm8HDvFlmU2ZPTktX5L9m2ZhvGv0WvShVPE8mEP9ImkV36nHny+rg+y6ERhC6HQF/X1GVK/GmuW6I0Vf7piuNpjmC1/DwZZ/HH1MBiE5otyO+SoUj5H44uWPzDEJPmW+MsLyuwsF+GKmtEOsrwm/TBUgL475SmmZOz7LJpt3EhJKdWM04zDOOqM/1T02D/3ugJFpSGfsl2QQ3xnb4ETilYyj9ohVOVwwGtxE1cBEGLgZTYKSgSW7R/Ihiu3PwHTDrZKtmy2mJEQEAw7HNKvZB03pOICC6hrNmfyNmEaLDhOURc66fmXMw2Hb8aMW5yKL3wBwdpMZICa6mAko/NW1VUFEbKFIAxzqzuBQqR34chjZrxPU9PmNqxc/+z1O8pSLe5Vvy3DgKVSqysNyu1pySVQXHqyU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(39860400002)(136003)(366004)(396003)(376002)(6512007)(38100700002)(52116002)(86362001)(8936002)(478600001)(26005)(9686003)(2906002)(33656002)(7416002)(6666004)(1076003)(41300700001)(4326008)(6486002)(316002)(83380400001)(44832011)(8676002)(186003)(4744005)(66476007)(33716001)(66946007)(6916009)(38350700002)(5660300002)(6506007)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5/RLoZhtHICOAJ7dq16TJv0XEnqlMsLHQEDP5/vNpftbKB/Buludt7Myxrh8?=
- =?us-ascii?Q?ZLZRS8aLwHU2cl+c2NdhC4X0ek1RR9w9hPQlqiTPrdNOso2iRvwP3XlFoPPT?=
- =?us-ascii?Q?2DJuMgza7MeE7NXvLq/uY6FUpHjAe683lRtM4CLZJJz7bK+8lLmflopcLUbR?=
- =?us-ascii?Q?OjgBlSrPO0vMwS+8UNh30qpWQrXIOLNblNQ+oAjS8k/HQRC3pyTuFmvnmZJX?=
- =?us-ascii?Q?XnnFkOVceMracsNEY/34e1YlgjmmsJaJT9z3JwukgSStKx2yLd2p45/3dFnn?=
- =?us-ascii?Q?iZhpOl4huNOaiSWzhsWEKwbHp5N7wgthpMvQ/Uu1Vhygc2SplPQN3Vlc7UGo?=
- =?us-ascii?Q?UxFv9YgC9sX8XcJcwbMS8YMy0K0E1nyF6CVQpwIwwIMUgSNdWNgidoMNms1k?=
- =?us-ascii?Q?OENmvZtCOxPSNbyzTtmPxsLBnd2v4qI1s2+f2X7I0M0E/yZMooDAWT9+xOL2?=
- =?us-ascii?Q?r6f+tckc6tRbVxEt/HywyEsr0m0gbf53xqPGA3WIUxn/2otmopqIJQrr41RM?=
- =?us-ascii?Q?8OXg/Z2AVX8ltg02+y1TUa34mHzGjZwAkS6q283jBsOdkKMkfnomw51qBEMO?=
- =?us-ascii?Q?iZYDgT4tN+VJ2cRRTp+3WrECIMfelH6cMav7m6wz9yxfg5kgLbxn2n6N0mx8?=
- =?us-ascii?Q?UhKc8ENlwel+Pdjf2x2mvfldR9lLE0L/xaMamcFWvEfUW3D2uIOcNnbkTaHB?=
- =?us-ascii?Q?nKsC91YcqT3Ri4NkdWPqaF6lHY9WgUxmvd7ZJyPKCgHKkhrjBzJhGxwurNid?=
- =?us-ascii?Q?Fj5I/8Fy2NHEq5Y8T3y2j8YqaMfyDqiC4LfqnwylC9xxOSgb/cjn6ByVpTYl?=
- =?us-ascii?Q?QdD6cymOmbZ1XSrPLS8ajtLEYsb9Y7wtpnAjxg6mvBn9FWTlVGld8zcJku6J?=
- =?us-ascii?Q?nM0UqLZMh+sdrdys8Hf9+vvLBpmnPI4TwLCKpVj07f1QF7W1t7l5xJYZZ0JI?=
- =?us-ascii?Q?5kugEXZmORTabkmVfhBglj6S/FgINJFSac7P3wLo+SIq+XPBc0YlF5FF3PQF?=
- =?us-ascii?Q?J1WBHeAM3Cce7o99KIp4yR1d3XxSYBrxezeDI6zWE1JszEtQWBeTH2SN3drs?=
- =?us-ascii?Q?j2YoG1N8Qt9BdjnW8RpPbpHw1e4glFaFnSvaVAKUNAf/QclSKSLZGafZOBo/?=
- =?us-ascii?Q?LodZGmGlt5uSUuMmXcPeDAFUHo6nV93K+Arxed9XMSS5txFK18NtqQeMRu+C?=
- =?us-ascii?Q?CZw/JR7Syx/MSqk25P1xK1bxzsyRvYdU7+IULJ1QWsH30RrdTKejcav2nk9N?=
- =?us-ascii?Q?ZrNBCoYR+Cjd8C62mHaGLWjebXhYhyXl64JaLSS60HpSQbS1peNbJKGVpWyR?=
- =?us-ascii?Q?8N1I4cBJsABZMH4pxsiIoGRuM84vQ9PWlwqdkAncw+G6ifqgYsy0lG2aOtd5?=
- =?us-ascii?Q?y/1HfgA2VpY0WEUiIQ4NUEnrcnj0QFciMnLcTaTzrU5Bvja8sjR6CvZ90VNX?=
- =?us-ascii?Q?XqmZLENobMBsNDHzAWM6fazDM+z4B5Iw7e+76WZFHTEISJCaTS8GSOr2wvNd?=
- =?us-ascii?Q?iSBg8ZFF10Q0J9BOGbeZwB4fPrNWY3wnxMy/CsKrR2p5oUDSnfSVBaqmSyb+?=
- =?us-ascii?Q?S0Pa8eUgPqIh58qAKyTmzq877ymtq/moUcAzUqVkkFMhDl9sjxPy/tZKOtma?=
- =?us-ascii?Q?hQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0584b2e0-d5aa-49b9-d977-08da64c02da9
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 11:09:39.2544
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i0DofWAHfVHXvc2xm2yz7IFaSqsRT/PMkAQlTcyUjI6cB0W2JyJE9UsfOE+HbKlt5JwqTGn6QRxkseH+5WlTXRbYt8xazSxuE5+im77miMY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6076
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-07-13_02:2022-07-13,2022-07-12 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
- suspectscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207130046
-X-Proofpoint-ORIG-GUID: NeNlqZZhLBeCOuUL9nK5Nwe_r3b9vicW
-X-Proofpoint-GUID: NeNlqZZhLBeCOuUL9nK5Nwe_r3b9vicW
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 02:19:28PM -0400, Joel Slebodnick wrote:
-> @@ -3264,27 +3260,25 @@ release_message_sync(struct vchiq_state *state, struct vchiq_header *header)
->  	remote_event_signal(&state->remote->sync_release);
->  }
->  
-> -enum vchiq_status
-> +int
->  vchiq_get_peer_version(unsigned int handle, short *peer_version)
->  {
-> -	enum vchiq_status status = VCHIQ_ERROR;
-> +	int status = -EINVAL;
->  	struct vchiq_service *service = find_service_by_handle(handle);
->  
->  	if (!service)
->  		goto exit;
->  
-> -	if (vchiq_check_service(service) != VCHIQ_SUCCESS)
-> +	if (vchiq_check_service(service))
->  		goto exit;
->  
->  	if (!peer_version)
->  		goto exit;
->  
->  	*peer_version = service->peer_version;
-> -	status = VCHIQ_SUCCESS;
-> +	status = 0;
->  
->  exit:
-> -	if (service)
-> -		vchiq_service_put(service);
+On Mon, 2022-06-27 at 17:05 +1200, Kai Huang wrote:
+> On Fri, 2022-06-24 at 11:57 -0700, Dave Hansen wrote:
+> > On 6/22/22 04:15, Kai Huang wrote:
+> > > Platforms with confidential computing technology may not support ACPI
+> > > CPU hotplug when such technology is enabled by the BIOS.  Examples
+> > > include Intel platforms which support Intel Trust Domain Extensions
+> > > (TDX).
+> > >=20
+> > > If the kernel ever receives ACPI CPU hotplug event, it is likely a BI=
+OS
+> > > bug.  For ACPI CPU hot-add, the kernel should speak out this is a BIO=
+S
+> > > bug and reject the new CPU.  For hot-removal, for simplicity just ass=
+ume
+> > > the kernel cannot continue to work normally, and BUG().
+> >=20
+> > So, the kernel is now declaring ACPI CPU hotplug and TDX to be
+> > incompatible and even BUG()'ing if we see them together.  Has anyone
+> > told the firmware guys about this?  Is this in a spec somewhere?  When
+> > the kernel goes boom, are the firmware folks going to cry "Kernel bug!!=
+"?
+> >=20
+> > This doesn't seem like something the kernel should be doing unilaterall=
+y.
+>=20
+> TDX doesn't support ACPI CPU hotplug (both hot-add and hot-removal) is an
+> architectural behaviour.  The public specs doesn't explicitly say  it, bu=
+t it is
+> implied:
+>=20
+> 1) During platform boot MCHECK verifies all logical CPUs on all packages =
+that
+> they are TDX compatible, and it keeps some information, such as total CPU
+> packages and total logical cpus at some location of SEAMRR so it can late=
+r be
+> used by P-SEAMLDR and TDX module.  Please see "3.4 SEAMLDR_SEAMINFO" in t=
+he P-
+> SEAMLDR spec:
+>=20
+> https://cdrdv2.intel.com/v1/dl/getContent/733584
+>=20
+> 2) Also some SEAMCALLs must be called on all logical CPUs or CPU packages=
+ that
+> the platform has (such as such as TDH.SYS.INIT.LP and TDH.SYS.KEY.CONFIG)=
+,
+> otherwise the further step of TDX module initialization will fail.
+>=20
+> Unfortunately there's no public spec mentioning what's the behaviour of A=
+CPI CPU
+> hotplug on TDX enabled platform.  For instance, whether BIOS will ever ge=
+t the
+> ACPI CPU hot-plug event, or if BIOS gets the event, will it suppress it. =
+ What I
+> got from Intel internally is a non-buggy BIOS should never report such ev=
+ent to
+> the kernel, so if kernel receives such event, it should be fair enough to=
+ treat
+> it as BIOS bug.
+>=20
+> But theoretically, the BIOS isn't in TDX's TCB, and can be from 3rd party=
+..
+>=20
+> Also, I was told "CPU hot-plug is a system feature, not a CPU feature or =
+Intel
+> architecture feature", so Intel doesn't have an architectural specificati=
+on for
+> CPU hot-plug.=20
+>=20
+> At the meantime, I am pushing Intel internally to add some statements reg=
+arding
+> to the TDX and CPU hotplug interaction to the BIOS write guide and make i=
+t
+> public.  I guess this is the best thing we can do.
+>=20
+> Regarding to the code change, I agree the BUG() isn't good.  I used it be=
+cause:
+> 1) this basically on a theoretical problem and shouldn't happen in practi=
+ce; 2)
+> because there's no architectural specification regarding to the behaviour=
+ of TDX
+> when CPU hot-removal, so I just used BUG() in assumption that TDX isn't s=
+afe to
+> use anymore.
 
-Too aggressive with the delete key.
+Hi Dave,
 
->  	return status;
->  }
+Trying to close how to handle ACPI CPU hotplug for TDX.  Could you give som=
+e
+suggestion?
 
-regards,
-dan carpenter
+After discussion with TDX guys, they have agreed they will add below to eit=
+her
+the TDX module spec or TDX whitepaper:
 
+"TDX doesn=E2=80=99t support adding or removing CPUs from TDX security peri=
+meter. The
+BIOS should prevent CPUs from being hot-added or hot-removed after platform
+boots."
+
+This means if TDX is enabled in BIOS, a non-buggy BIOS should never deliver=
+ ACPI
+CPU hotplug event to kernel, otherwise it is a BIOS bug.  And this is only
+related to whether TDX is enabled in BIOS, no matter whether the TDX module=
+ has
+been loaded/initialized or not.
+
+So I think the proper way to handle is: we still have code to detect whethe=
+r TDX
+is enabled by BIOS (patch 01 in this series), and when ACPI CPU hotplug hap=
+pens
+on TDX enabled platform, we print out error message saying it is a BIOS bug=
+.
+
+Specifically, for CPU hot-add, we can print error message and reject the ne=
+w
+CPU.  For CPU hot-removal, when the kernel receives this event, the CPU hot=
+-
+removal has already handled by BIOS so the kernel cannot reject it.  So I t=
+hink
+we can either BUG(), or say "TDX is broken and please reboot the machine".
+
+I guess BUG() would catch a lot of eyeball, so how about choose the latter,=
+ like
+below?
+
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -799,6 +799,7 @@ static void __init acpi_set_irq_model_ioapic(void)
+  */
+ #ifdef CONFIG_ACPI_HOTPLUG_CPU
+ #include <acpi/processor.h>
++#include <asm/tdx.h>
+=20
+ static int acpi_map_cpu2node(acpi_handle handle, int cpu, int physid)
+ {
+@@ -819,6 +820,12 @@ int acpi_map_cpu(acpi_handle handle, phys_cpuid_t phys=
+id,
+u32 acpi_id,
+ {
+        int cpu;
+=20
++       if (platform_tdx_enabled()) {
++               pr_err("BIOS bug: CPU (physid %u) hot-added on TDX enabled
+platform. Reject it.\n",
++                               physid);
++               return -EINVAL;
++       }
++
+        cpu =3D acpi_register_lapic(physid, acpi_id, ACPI_MADT_ENABLED);
+        if (cpu < 0) {
+                pr_info("Unable to map lapic to logical cpu number\n");
+@@ -835,6 +842,10 @@ EXPORT_SYMBOL(acpi_map_cpu);
+=20
+ int acpi_unmap_cpu(int cpu)
+ {
++       if (platform_tdx_enabled())
++               pr_err("BIOS bug: CPU %d hot-removed on TDX enabled platfor=
+m.
+TDX is broken. Please reboot the machine.\n",
++                               cpu);
++
+ #ifdef CONFIG_ACPI_NUMA
+        set_apicid_to_node(per_cpu(x86_cpu_to_apicid, cpu), NUMA_NO_NODE);
+ #endif
+
+
+--=20
+Thanks,
+-Kai
 
 

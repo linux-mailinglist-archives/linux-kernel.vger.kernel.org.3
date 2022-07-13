@@ -2,126 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0A1573DDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBBC573DE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237017AbiGMUij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 16:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
+        id S236837AbiGMUks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 16:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiGMUig (ORCPT
+        with ESMTP id S230325AbiGMUkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 16:38:36 -0400
-Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F3C261C
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:38:32 -0700 (PDT)
-Received: (wp-smtpd smtp.wp.pl 7578 invoked from network); 13 Jul 2022 22:38:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1657744709; bh=+krRejcjJ8GRV1MoEXeN2f0MS3ELVlNB2yISMmLvhmc=;
-          h=Subject:To:Cc:From;
-          b=s7VyUtDJUT8tWkM4ih9yz5u73lQKgw4XBE485O5eOd8LZC0Hh85i9yw8STLCk/fmw
-           lWoNcRzIRcGH24TF302ng3BnBaDLiVAbQsGl7/T9Lds9cakxQUB7xrpfUSWG8rhv1H
-           GLISh+53P/WlDNF4pQonKMXaPls9DV1AGkTqErV4=
-Received: from ip-137-21.ds.pw.edu.pl (HELO [192.168.3.133]) (olek2@wp.pl@[194.29.137.21])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <edumazet@google.com>; 13 Jul 2022 22:38:29 +0200
-Message-ID: <72d3a578-f321-41aa-858c-9f3a6978a277@wp.pl>
-Date:   Wed, 13 Jul 2022 22:38:37 +0200
+        Wed, 13 Jul 2022 16:40:46 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4FE31219
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:40:45 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id g4so11519760pgc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2izuw3b6CY3C2bpErtejUyL+XN/ca0tS3/ecJTr2WVg=;
+        b=FS/DlMzuhgtjp0FHhoNu179kPvuygez5Dc/AJShi2OgnfLzoX5s05ZNQBfdDYCRJGg
+         SWrcCQEMxT78B3DpYT1S3YeFk02QXViEEDJs8Fhs9yBAjROVYAhAWpeGbZot9RxyPr+y
+         eUnRcHdX/ieWg6zojOCBfEGVwfUP2QO4StpNJnmPzHC5ZdtMwMyN1iq561V8gl/3KrfY
+         Nyx8U8NxdY60ZFrMk5UMGQ8GXd+ydDVD0MYl3PsFefG2RF8L3yQr+qSYyoDzJgwsRiFG
+         elj2/WYKbnsAPTUehRfq52gsV7XvvSInQCSbyNgx2KJj5KvCpQt+15S5beOcvs+/XpDC
+         WQGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2izuw3b6CY3C2bpErtejUyL+XN/ca0tS3/ecJTr2WVg=;
+        b=JkaNeSxuB7QgdelpVRgMNy0jPS8tx5i4fmyI69OWCxuaUprGBAJycDgF9rjz+bFlYx
+         xaR99+5bgZ3yGydV8tRuOimLc5O1PJ88zE3uHhBm8LEwF8RxzzzeGYv//VlLWiLPaaNE
+         XgxWMe9EkTDW9uxa4nMk5w0sOiZrtbP2scW+yn7Phw91nTEEKr3LBRgYvh2AcRwHiQxP
+         o8E4p/U0Qj9t1uFLln5zaAgpUKcVxFUUkDJC4fE1nTQOUkNwIFIktQg6DusA2w+f+Cph
+         qg6lPupxdG6ak/vzGgSi5TJoXTD5kBQX9tcUWKy/vG11qJhQOZ7lEUOCwN0Urgt2aJzU
+         WFMA==
+X-Gm-Message-State: AJIora/5T6QYa03B8rLFJ4wKnZz8MZ4ggcwsNEyO/4eQ3uXNWNLoY0DZ
+        ysFC7Rut7/a+NERCESkLs86X1B//aQU8dA==
+X-Google-Smtp-Source: AGRyM1uK17h0xK/cQK0JEnNk5fEEoDCzli9QA+bpk8q7ElV5jpQTvkPfmTAKCTkF9cn76KYhdbTBMA==
+X-Received: by 2002:a63:e552:0:b0:419:8dfb:386e with SMTP id z18-20020a63e552000000b004198dfb386emr4373697pgj.143.1657744844703;
+        Wed, 13 Jul 2022 13:40:44 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ja20-20020a170902efd400b0016c2da4e73fsm9226144plb.106.2022.07.13.13.40.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 13:40:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e63e108b-c99c-9ab7-0638-367b72983b81@roeck-us.net>
+Date:   Wed, 13 Jul 2022 13:40:41 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net-next] net: lantiq_xrx200: use skb cache
+ Thunderbird/91.9.1
+Subject: Re: Linux 5.19-rc6
 Content-Language: en-US
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     hauke@hauke-m.de, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220712181456.3398-1-olek2@wp.pl>
- <CANn89iLbFYaV9MhYMHAzZOKM=ZKaAPOAuuXec_t9G5s4ypnY6A@mail.gmail.com>
-From:   Aleksander Bajkowski <olek2@wp.pl>
-In-Reply-To: <CANn89iLbFYaV9MhYMHAzZOKM=ZKaAPOAuuXec_t9G5s4ypnY6A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
+ <20220713050724.GA2471738@roeck-us.net>
+ <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
+ <Ys8hqoiN5iWbslsM@shell.armlinux.org.uk>
+ <CAHk-=wjNxyXQqn=k0KipzUPoBYWQhUwybxee8GTkF_Oz6RPVFw@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAHk-=wjNxyXQqn=k0KipzUPoBYWQhUwybxee8GTkF_Oz6RPVFw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-WP-MailID: 34297892d757b274158439635bc78403
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000B [oZPU]                               
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
-
-On 7/13/22 14:50, Eric Dumazet wrote:
-> On Tue, Jul 12, 2022 at 8:15 PM Aleksander Jan Bajkowski <olek2@wp.pl> wrote:
+On 7/13/22 13:21, Linus Torvalds wrote:
+> On Wed, Jul 13, 2022 at 12:49 PM Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
 >>
->> napi_build_skb() reuses NAPI skbuff_head cache in order to save some
->> cycles on freeing/allocating skbuff_heads on every new Rx or completed
->> Tx.
->> Use napi_consume_skb() to feed the cache with skbuff_heads of completed
->> Tx. The budget parameter is added to indicate NAPI context, as a value
->> of zero can be passed in the case of netpoll.
+>> There may be a patch that solves that, but it's never been submitted to
+>> my patch system:
 >>
->> NAT performance results on BT Home Hub 5A (kernel 5.15.45, mtu 1500):
->>
->> Fast path (Software Flow Offload):
->>         Up      Down
->> Before  702.4   719.3
->> After   707.3   739.9
->>
->> Slow path:
->>         Up      Down
->> Before  91.8    184.1
->> After   92.0    185.7
->>
->> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
->> ---
->>  drivers/net/ethernet/lantiq_xrx200.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
->> index 5edb68a8aab1..83e07404803f 100644
->> --- a/drivers/net/ethernet/lantiq_xrx200.c
->> +++ b/drivers/net/ethernet/lantiq_xrx200.c
->> @@ -238,7 +238,7 @@ static int xrx200_hw_receive(struct xrx200_chan *ch)
->>                 return ret;
->>         }
->>
->> -       skb = build_skb(buf, priv->rx_skb_size);
->> +       skb = napi_build_skb(buf, priv->rx_skb_size);
+>> https://lore.kernel.org/all/20220524025139.40212-1-wangkefeng.wang@huawei.com/
 > 
-> If you are changing this code path, what about adding proper error recovery ?
-> 
-> skb can be NULL at this point :/
+> That patch looks sane to me, but I guess Guenter would need to check
+> ... Guenter?
 > 
 
+That patch is (and has been) in linux-next for a long time,
+as commit d2ca1fd2bc70, and with the following tags.
 
-Good catch. I will try to test the fix on the device tomorrow and send the patch.
+     Fixes: 7719a68b2fa4 ("ARM: 9192/1: amba: fix memory leak in amba_device_try_add()")
+     Reported-by: Guenter Roeck <linux@roeck-us.net>
+     Tested-by: Guenter Roeck <linux@roeck-us.net>
+     Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+     Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
->>         skb_reserve(skb, NET_SKB_PAD);
->>         skb_put(skb, len);
->>
->> @@ -321,7 +321,7 @@ static int xrx200_tx_housekeeping(struct napi_struct *napi, int budget)
->>                         pkts++;
->>                         bytes += skb->len;
->>                         ch->skb[ch->tx_free] = NULL;
->> -                       consume_skb(skb);
->> +                       napi_consume_skb(skb, budget);
->>                         memset(&ch->dma.desc_base[ch->tx_free], 0,
->>                                sizeof(struct ltq_dma_desc));
->>                         ch->tx_free++;
->> --
->> 2.30.2
->>
+So, yes, it fixes the problem. I don't know where it is pulled from, though.
+I thought that it is from Russell's tree, given his Signed-off-by:,
+but I never really checked.
 
-Best regards,
-Aleksander
+Guenter

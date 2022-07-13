@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9356573C27
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1FA573C29
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232559AbiGMRry convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 13 Jul 2022 13:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
+        id S230487AbiGMRu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 13:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiGMRrw (ORCPT
+        with ESMTP id S230102AbiGMRu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 13:47:52 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3705A2CDCC;
-        Wed, 13 Jul 2022 10:47:51 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id y195so20572179yby.0;
-        Wed, 13 Jul 2022 10:47:51 -0700 (PDT)
+        Wed, 13 Jul 2022 13:50:26 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3731183B;
+        Wed, 13 Jul 2022 10:50:25 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 75so19249330ybf.4;
+        Wed, 13 Jul 2022 10:50:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lCOHRAC0RC29Jq281ZITE4nTto1lryncJqmBxaX77Aw=;
-        b=Vxku07tcao+MgTSFdk9MJTdpHykt3zUgq8sodEnfrcAYjBBZbxClrv0UxD/SUhiVXp
-         UZVIRl64nRP/2O8/fl43sqFLe2oNZdwWg29nR0EboKuwhwVDo0DCUFS3ipFLAt/Fisme
-         6lhza+LJQPuB9TykjJjFGYMPYsnA/+owha4B6rZP8zRKPJoqktTV+arMHCL+ERF4qTtd
-         3rqysOOmI+I+DSjGWYCcG0YyCeDoD9bs9PzmOdc2hyK8LeVaX440T+KGlR9ah3JmH2GD
-         UGAnIQryWj8RvX7js43Uqc7ckX45qxSWligViQvjj2TrJuaL3ORDVjpRKp33b9RLnmH+
-         hHHA==
-X-Gm-Message-State: AJIora/TSAClChe9x5k2pUGBEnnjGBS9FSafXwibfn4eO6adek++V6l9
-        eFm+gNuCM+8WrRjszOWjDlfJIPVSHnnT+o823n287HDyWYQ=
-X-Google-Smtp-Source: AGRyM1sdU4SiAWDAcY0PHl+/RjIcSRotP6Dl1sabMHyKf4KVoUbbDQryJ/BDhKfxIRplyPbh6L4mM+oix2WtWhWaZ5k=
-X-Received: by 2002:a05:6902:154f:b0:66e:e2d3:ce1 with SMTP id
- r15-20020a056902154f00b0066ee2d30ce1mr4524326ybu.365.1657734470375; Wed, 13
- Jul 2022 10:47:50 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=O2ZB0zaBvuSigJ8wTixzYr0WCoqo0gk9Cx66gvFyjbU=;
+        b=Ip73G7DEceugIeRWXa5iePF8m8gmVdFo9Rl/Qc8gaIlH+Ju8WtNqC0FDdMn1R2SLaa
+         9scw3+semulEbWaUkGS1GZh07K1UW1itTL5pg9MBq/UOKpOYFLBqsAHgpzKnXSVxlyy3
+         hV+5t4yIBUIQqIudJA/lL8azQBTKC2ygelDzBhGL7KqNvFY4jF6/bDxGhmQZ7Cxa1km6
+         fyjPmRel/xfQqXWVAACC7B/ajznWslcvfqMBu2PiYPVOaebht9IkTfP8UdF08cgBxfsb
+         pwQKiDQ232EgtKSbH4Xn1i12R0zhunib/bNcfRbPNGHuYlpt83+8gc16lh7vFf/2846p
+         Ej/Q==
+X-Gm-Message-State: AJIora9WqU88sdlsRL/MjpLZL6A78CiMsgRN0KsjJ2gXyM9H2LEtxaaB
+        pXnj3QTFc2eaoUf3EG/6/4DtqDDjzJdspgd0deU=
+X-Google-Smtp-Source: AGRyM1uxYFBPZfrZx33fc81mpTSb3shrL42E4bhwZF0+lp1aDapUWl+W8lD9fdnwjC0wnaBWYIAv/EM/X4mqowxjsDY=
+X-Received: by 2002:a25:a2ca:0:b0:66e:719e:279 with SMTP id
+ c10-20020a25a2ca000000b0066e719e0279mr4629988ybn.622.1657734625055; Wed, 13
+ Jul 2022 10:50:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220713084739.j4cqab6rfz22nlko@pengutronix.de>
-In-Reply-To: <20220713084739.j4cqab6rfz22nlko@pengutronix.de>
+References: <20220623064605.2538969-1-quic_kshivnan@quicinc.com>
+ <CAJZ5v0hX6H1Z-2bAJvV92YO95N_D=uNotVxJRcA9cmGQwsr1fQ@mail.gmail.com> <a4f9eefd-79fc-e9cf-88b8-efef424fb7c9@quicinc.com>
+In-Reply-To: <a4f9eefd-79fc-e9cf-88b8-efef424fb7c9@quicinc.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Jul 2022 19:47:39 +0200
-Message-ID: <CAJZ5v0h4qQoo5uVBLtSFhdVBpD1tpd-SmVzV1dE0+VZMrr-eTA@mail.gmail.com>
-Subject: Re: pm_runtime_resume_and_get in .remove callbacks
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
+Date:   Wed, 13 Jul 2022 19:50:14 +0200
+Message-ID: <CAJZ5v0iK5zvyTj4F9cr8jNzpipqvYkYxZGG45u4YMFCQ_OwVTA@mail.gmail.com>
+Subject: Re: [PATCH] PM: QoS: Add check to make sure CPU freq is non-negative
+To:     Shivnandan Kumar <quic_kshivnan@quicinc.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
@@ -58,61 +58,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 10:47 AM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
+On Wed, Jul 13, 2022 at 10:37 AM Shivnandan Kumar
+<quic_kshivnan@quicinc.com> wrote:
 >
-> Hello,
+> Hi Rafael,
 >
-> there is a big bunch of kernel drivers (here:
-> drivers/i2c/busses/i2c-sprd.c) that have a remove callback that looks as
-> follows:
 >
->         static int sprd_i2c_remove(struct platform_device *pdev)
->         {
->                 struct sprd_i2c *i2c_dev = platform_get_drvdata(pdev);
->                 int ret;
+> Thanks for taking the time to review my patch and providing feedback.
 >
->                 ret = pm_runtime_resume_and_get(i2c_dev->dev);
->                 if (ret < 0)
->                         return ret;
+> Please find answer inline.
 >
->                 i2c_del_adapter(&i2c_dev->adap);
->                 clk_disable_unprepare(i2c_dev->clk);
+> Thanks,
 >
->                 pm_runtime_put_noidle(i2c_dev->dev);
->                 pm_runtime_disable(i2c_dev->dev);
+> Shivnandan
 >
->                 return 0;
->         }
->
-> If pm_runtime_resume_and_get fails, the i2c adapter isn't removed, but
-> as the memory backing i2c_dev goes away---it was allocated using
-> devm_kzalloc in .probe()---the next i2c action will probably access
-> freed memory.
->
-> I'm not familiar enough with pm-runtime stuff, but wonder what
-> can/should be done about that. The obvious (to me) candidates are:
->
->  - log an error if pm_runtime_resume_and_get() fails, but continue to
->    clean up
->  - don't check the return value at all
->
-> What do you think?
+> On 7/13/2022 12:07 AM, Rafael J. Wysocki wrote:
+> > On Thu, Jun 23, 2022 at 8:47 AM Shivnandan Kumar
+> > <quic_kshivnan@quicinc.com> wrote:
+> >>          CPU frequency should never be negative.
+> > Do you mean "always be non-negative"?
+> Yes,corrected subject now.
+> >
+> >>          If some client driver calls freq_qos_update_request with some
+> >>          value greater than INT_MAX, then it will set max CPU freq at
+> >>          fmax but it will add plist node with some negative priority.
+> >>          plist node has priority from INT_MIN (highest) to INT_MAX
+> >>          (lowest). Once priority is set as negative, another client
+> >>          will not be able to reduce max CPU frequency. Adding check
+> >>          to make sure CPU freq is non-negative will fix this problem.
+> >> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+> >>
+> >> ---
+> >>   kernel/power/qos.c | 6 ++++--
+> >>   1 file changed, 4 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+> >> index ec7e1e85923e..41e96fe34bfd 100644
+> >> --- a/kernel/power/qos.c
+> >> +++ b/kernel/power/qos.c
+> >> @@ -531,7 +531,8 @@ int freq_qos_add_request(struct freq_constraints *qos,
+> >>   {
+> >>          int ret;
+> >>
+> >> -       if (IS_ERR_OR_NULL(qos) || !req)
+> >> +       if (IS_ERR_OR_NULL(qos) || !req || value < FREQ_QOS_MIN_DEFAULT_VALUE
+> >> +               || value > FREQ_QOS_MAX_DEFAULT_VALUE)
+> > Why do you check against the defaults?
+> Want to make sure to guard against negative value.
+> >
+> >>                  return -EINVAL;
+> >>
+> >>          if (WARN(freq_qos_request_active(req),
+> >> @@ -563,7 +564,8 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
+> >>    */
+> >>   int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
+> >>   {
+> >> -       if (!req)
+> >> +       if (!req || new_value < FREQ_QOS_MIN_DEFAULT_VALUE ||
+> >> +               new_value > FREQ_QOS_MAX_DEFAULT_VALUE)
+> >>                  return -EINVAL;
+> >>
+> >>          if (WARN(!freq_qos_request_active(req),
+> >> --
+> > I agree that it should guard against adding negative values, but I
+> > don't see why s32 can be greater than INT_MAX.
+> yes, checking against negative values will be sufficient.
+> I will share patch v2 with only check against negative values.
+> >
+> > Also why don't you put the guard into freq_qos_apply() instead of
+> > duplicating it in the callers of that function?
+> Because function  freq_qos_remove_request calls freq_qos_apply with
+> PM_QOS_DEFAULT_VALUE which is actually negative.
+> So I do not want to break that.
 
-(1) Use pm_runtime_get_sync() instead of pm_runtime_resume_and_get()
-and don't check its return value,
-
-or if that is not viable, because something really can run if and only
-if the device is operational,
-
-(2) do something like
-
-ret = pm_runtime_resume_and_get(i2c_dev->dev);
-i2c_del_adapter(&i2c_dev->adap);
-if (ret >= 0)
-        clk_disable_unprepare(i2c_dev->clk);
-
-pm_runtime_put_noidle(i2c_dev->dev);
-pm_runtime_disable(i2c_dev->dev);
-
-Thanks!
+OK

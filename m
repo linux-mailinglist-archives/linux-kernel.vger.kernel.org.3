@@ -2,96 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0B9572CD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4783572CD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233539AbiGME7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 00:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
+        id S234037AbiGME7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 00:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbiGME6x (ORCPT
+        with ESMTP id S233650AbiGME7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 00:58:53 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A73959F;
-        Tue, 12 Jul 2022 21:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=79/v8d1oKbFOQQVh6pxwjkv3SRoNAmhseZcpDSRw8ts=; b=0sBThanHj4Uq4+WJyV2RWOG4UR
-        UyVwu1cJgsv7IYruVoAIQ1O4KOSnGwtYbhUsDurvOX/SiRnUZjBhQbZy470yPJkG7UXY/ZoS6ePng
-        eH3STODG7bM1Ay0aPZESpzEI+GLWtqGXbl0H+rE5b7mP3oGY4gKYT/qsTL8FmzqgTWqHVYC7qv90u
-        2/CeQJsEdDeeBJej1ferLQRlzBXPE/cQTlw2V6GVZmXqIpiVEvdWPblcIL40QdcuAPna1umDPvd/q
-        Wohi37T6ah42VMS99kBPMXhpzCs/voy2UF/Fki4WDeFULL2FPnluA0wVv7913aXglC5kZaQmqx8FP
-        66CH1oZQ==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBUSH-000AqY-Nh; Wed, 13 Jul 2022 04:58:33 +0000
-Message-ID: <f4585789-cec9-0787-cd80-57afed424ee4@infradead.org>
-Date:   Tue, 12 Jul 2022 21:58:31 -0700
+        Wed, 13 Jul 2022 00:59:02 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2D913F69
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 21:59:01 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id l23so17838236ejr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 21:59:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HbcwIWPSC+fHCTXFOVsF8fnI4X1+WKG7wU3WnkyeDuU=;
+        b=o9musvqbQVU5I5PDu4GLHZOb+zFGklvW+bWoAKcw+fPMYo5FLQJNn5Ik47CvKDSlvd
+         Ab87o0eSbRP1qCbZc0jxELNlz0amZjQnHSlaYooRoiBPqciTTdUTHlHaQC6cMQOAAKJ9
+         qQ/M7r40tsBENKUvqBVUlcxH7IWdvSoJ7rtWlfrK8Ut5QH0Wjcd37gLDaQaiaSgLCBdT
+         2VV4UBYun6kRBmR/uNu2R+As7hcT7FtsgnAUHOELtI4QqvC9DoLBZ8uoJvJGLaR3VKos
+         ELRXbCVSomzrfY2BdnUTxHEUuFJxY+Xn6og/LbzrwIffNI7UaDjCy0GhU67ODP68xHPN
+         DWNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HbcwIWPSC+fHCTXFOVsF8fnI4X1+WKG7wU3WnkyeDuU=;
+        b=ZBcyNviVAV0BX2B7rOJVxBc+RTF0dru2AbxdZ1NIIJ/LZBfBHrrF5Zfc2Yhelk0ERX
+         QRP1Xtlmo9rO58zcKfS5GyY4p43LVBNo6NIgVKOuZuxn5LCpH1ucJT9AuTXBgmXC6upB
+         d179NNNEUm/k8Esqfg2WqJh8oj30OKwZOpmkXJ6ISDvn6txJehzV/HehZOnwrpU+mXSO
+         gVGVawqIfVaNjprmaSdiIJiXxRqegZ9GoaLYoBAz+ePqa+ZUHRHbedrEc3c97usOfTdq
+         47E3FTmnCeSTOZ4N81pdq1LWRblNLEU/3Bpiyuy4fOKpQvdq1sJ8tN749MN4FtEw43+e
+         yzwg==
+X-Gm-Message-State: AJIora/c7QkechNWz9zLgjYyEEPBWZKdrxArpxJjqI/A984V4Qy7Q/5S
+        Pl/lIpUbNyzxnLnuxqAV4GM=
+X-Google-Smtp-Source: AGRyM1uKPuG2RuL009Jkm1vV9QPWuHjuZ9gD+QENU2/oRbaIlbDz1W0BLnCQmqlE336rNarCEbGnrg==
+X-Received: by 2002:a17:907:1dca:b0:72b:3cb2:81f7 with SMTP id og10-20020a1709071dca00b0072b3cb281f7mr1443032ejc.567.1657688339683;
+        Tue, 12 Jul 2022 21:58:59 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
+        by smtp.gmail.com with ESMTPSA id h4-20020a50ed84000000b0043a85d7d15esm7151457edr.12.2022.07.12.21.58.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 21:58:59 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 06:58:56 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 01/13] staging: vt6655: Rename byRegOfs to reg_offset in four
+ macros
+Message-ID: <82f65d22ac8cd75b2c7790c13be3d0068968925b.1657657918.git.philipp.g.hortmann@gmail.com>
+References: <cover.1657657918.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/4] firmware: Samsung: Add secure monitor driver
-Content-Language: en-US
-To:     dj76.yang@samsung.com,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>
-Cc:     "javierm@redhat.com" <javierm@redhat.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Wangseok Lee <wangseok.lee@samsung.com>
-References: <CGME20220713045516epcms1p86b3f6a8795d767faac65eb947405f911@epcms1p8>
- <20220713045516epcms1p86b3f6a8795d767faac65eb947405f911@epcms1p8>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220713045516epcms1p86b3f6a8795d767faac65eb947405f911@epcms1p8>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1657657918.git.philipp.g.hortmann@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Fix name of a variable in four macros that use CamelCase which is not
+accepted by checkpatch.pl
 
-On 7/12/22 21:55, Dongjin Yang wrote:
-> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-> index e5cfb01353d8..4b0f2d033f58 100644
-> --- a/drivers/firmware/Kconfig
-> +++ b/drivers/firmware/Kconfig
-> @@ -217,6 +217,17 @@ config QCOM_SCM_DOWNLOAD_MODE_DEFAULT
->  
->  	  Say Y here to enable "download mode" by default.
->  
-> +config SAMSUNG_SECURE_SERVICE
-> +	bool "Samsung Foundry Secure Service Layer"
-> +	depends on HAVE_ARM_SMCCC
-> +	default n
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+ drivers/staging/vt6655/mac.h | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-Drop that line, it's the default anyway.
-
-> +	help
-> +	  Support secure service layer for SoCs which is manufactured by
-
-	                                        which are
-
-> +	  Samsung Foundry.
-> +
-> +	  This option provide support of secure monitor service call using
-> +	  Trusted Foundations.
-
+diff --git a/drivers/staging/vt6655/mac.h b/drivers/staging/vt6655/mac.h
+index 5c14a76ed799..b3803143673c 100644
+--- a/drivers/staging/vt6655/mac.h
++++ b/drivers/staging/vt6655/mac.h
+@@ -537,32 +537,32 @@
+ 
+ /*---------------------  Export Macros ------------------------------*/
+ 
+-#define MACvRegBitsOn(iobase, byRegOfs, byBits)			\
++#define MACvRegBitsOn(iobase, reg_offset, byBits)			\
+ do {									\
+ 	unsigned char byData;						\
+-	byData = ioread8(iobase + byRegOfs);				\
+-	iowrite8(byData | (byBits), iobase + byRegOfs);			\
++	byData = ioread8(iobase + reg_offset);				\
++	iowrite8(byData | (byBits), iobase + reg_offset);		\
+ } while (0)
+ 
+-#define MACvWordRegBitsOn(iobase, byRegOfs, wBits)			\
++#define MACvWordRegBitsOn(iobase, reg_offset, wBits)			\
+ do {									\
+ 	unsigned short wData;						\
+-	wData = ioread16(iobase + byRegOfs);				\
+-	iowrite16(wData | (wBits), iobase + byRegOfs);			\
++	wData = ioread16(iobase + reg_offset);				\
++	iowrite16(wData | (wBits), iobase + reg_offset);		\
+ } while (0)
+ 
+-#define MACvRegBitsOff(iobase, byRegOfs, byBits)			\
++#define MACvRegBitsOff(iobase, reg_offset, byBits)			\
+ do {									\
+ 	unsigned char byData;						\
+-	byData = ioread8(iobase + byRegOfs);				\
+-	iowrite8(byData & ~(byBits), iobase + byRegOfs);		\
++	byData = ioread8(iobase + reg_offset);				\
++	iowrite8(byData & ~(byBits), iobase + reg_offset);		\
+ } while (0)
+ 
+-#define MACvWordRegBitsOff(iobase, byRegOfs, wBits)			\
++#define MACvWordRegBitsOff(iobase, reg_offset, wBits)			\
+ do {									\
+ 	unsigned short wData;						\
+-	wData = ioread16(iobase + byRegOfs);				\
+-	iowrite16(wData & ~(wBits), iobase + byRegOfs);			\
++	wData = ioread16(iobase + reg_offset);				\
++	iowrite16(wData & ~(wBits), iobase + reg_offset);		\
+ } while (0)
+ 
+ #define MACvReceive0(iobase)						\
 -- 
-~Randy
+2.37.0
+

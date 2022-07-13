@@ -2,130 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCAC573B07
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE8D573B09
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236087AbiGMQUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
+        id S236703AbiGMQUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiGMQUJ (ORCPT
+        with ESMTP id S236602AbiGMQUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:20:09 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154CBAE6A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:20:08 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id o4so16224546wrh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:20:08 -0700 (PDT)
+        Wed, 13 Jul 2022 12:20:23 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B9CF584
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:20:21 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 23so10894196pgc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:20:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=O3+Y7xcE56ph/bvUjELsiX/t1x6avdlbiSjzSBYYUlE=;
-        b=aSUHr0nuX4xfoUZDKsuhmdVDCaLbqOoeKmHWM4teWn4+t2CDpIjvsny21pSIbMWgpd
-         GZxeidyUizUQPGBEqinM4bNO05NJpRDTZ6D1ua5cUrfKHAXJLlBII5SM7S0r1ohxrHHB
-         EbECwQtw0ByEA1f6HOEIA964/yBOZyilvpneKDkL11pbscTCPyATKIS5T3T1fkHuAXF9
-         J5q9vEOKPZGPrt58qfJsPysNqGzFZchy6yx+fChKra/FQ0UtxuhPUEyhfUa/T0+ILeJe
-         7i6+gLK7jFjOoxWkm6Iil/N30e1HefVX1LQ6XGzkw1/GKGOj+ZN7Jgo/GWm7cZSIksEE
-         vJrQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=USCiroLCrx1eIq2fE4NYNm6R4ZIjqYme9mNE6xCMEl8=;
+        b=Xf6ZO3PaMEbsrJI7bGyWHJCyL4Xdxdh/LvmuLEmZg+LZJ81dntvVDVy3z1J1R1NXiN
+         PhWXnLZcZcy5NUwWwLNBfUaheFglFCLfwr5rBhXCTHCS4/tEJC3XRDNouu4cOuiWfyTZ
+         Yr+TTFMlF7k/64LmrChBbZ4LDctiuOGpvEJusA+lTqZLIkNzCDEAli8hOr8vtvnodtX3
+         TVvP7dap8Iic5YyG1DYOvHj8X5EQC2mDGBGl1mLRJpl4Knzu909OK9Hos13GNQDvvjWh
+         n8El1qMVOxfswaUcb5Kd3/CzFNI+qRrQEvOLPTCHTyBGIEm4oGqkl1nYA57Ef7+CPwmB
+         l4Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=O3+Y7xcE56ph/bvUjELsiX/t1x6avdlbiSjzSBYYUlE=;
-        b=Af5RaVh7roR57o7LAGVNeKboLxge97jHv/k9g++xhlYrV5DKdfWf+DYUUEQuylF5D/
-         d86y1EqqQuzLZLmfCeDG4qNJ3NmTC5jofJKh+l+gWW8p1tnJER8RZbdsPqddCypLt7/o
-         80jWBHfAqxXZZpfxb3OtsAkIyH8YoJQUhdYoHpkvNIm+1stm3zeGvCdEpmEjmR2pdbjv
-         RaK+d7pg2bt2klXHhHsUnMkx7DJX7RtKlznJJW25/p6AZUinXbCMqiCl0dKg9D4R+317
-         eL4+RabJz6nh2DoqfIlbQ2791VqhvUYnjo0rwiAIWxZo5H24DKdjUbFv2I9ObSnOlIQf
-         pWwg==
-X-Gm-Message-State: AJIora9bZNiOu86e4elGHfc5nJ5V0Obx7bv+wvQNXcC5FbsAyHcatQGZ
-        W5ajen1osvYbAD/Chnz997SMeg==
-X-Google-Smtp-Source: AGRyM1utO9qcCtGSq+NZKZMNSEDCuaTjWDFpSNSpcDbotF2tXMRHIpZ7Q/OQt5gzO40+J1VuZR0wEQ==
-X-Received: by 2002:adf:9d92:0:b0:21d:66c4:e311 with SMTP id p18-20020adf9d92000000b0021d66c4e311mr4282466wre.575.1657729206626;
-        Wed, 13 Jul 2022 09:20:06 -0700 (PDT)
-Received: from [192.168.0.17] (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net. [86.15.83.122])
-        by smtp.gmail.com with ESMTPSA id w13-20020adff9cd000000b0021d20461bbbsm11405894wrr.88.2022.07.13.09.20.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 09:20:06 -0700 (PDT)
-Message-ID: <83b53b26-6621-d580-c704-b7c82bd96a12@sifive.com>
-Date:   Wed, 13 Jul 2022 17:20:05 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=USCiroLCrx1eIq2fE4NYNm6R4ZIjqYme9mNE6xCMEl8=;
+        b=1dIWmCZSf4elyDOMeSY5hx1X4TxDkyh4VO7UxYoOEIV9GTsRC3qdn2IBN8DbEaXIgb
+         lNcfVG0TD1d7t/4MshZevCNWtSJF0Hat4oo4BwNnT1O57Rp5mbe17cFpNJfezq/0Tfdn
+         79fLyajYj5AduiVVIudny9v82h77NqDRD4Un4+XT8hBUALkgKrHfond4luWnYpPz7z7Y
+         PR5ttMV8OaEEe6kg/4+PieTgOU2ZIMNk8DMoHeel8A0RXDy9PFUZkMAhF3g8QVuQvf9b
+         mhafJpV5YRLX6pBQYM4XqFYhRI7pahFq2aufKQxKy1bN8C+vmPf/ZAo/Mfqc44JJYqwT
+         SDiA==
+X-Gm-Message-State: AJIora+eV7XRO6c3tD5AmUkAP/RunMVIW+vK2Z44pvAfYD0rqrGt3DDN
+        NeC1CSS7jrcSBRpI902IsKxIYg==
+X-Google-Smtp-Source: AGRyM1v7wfGBI2arrpxI58f3YqoOlxayVweaZeWPprONuwOCugvkhCrXpy57Q1/ZI9gHgsylwPlTig==
+X-Received: by 2002:a63:1619:0:b0:40d:37aa:9ace with SMTP id w25-20020a631619000000b0040d37aa9acemr3477474pgl.609.1657729221066;
+        Wed, 13 Jul 2022 09:20:21 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id jj14-20020a170903048e00b0016c5b2a16ffsm3886385plb.142.2022.07.13.09.20.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 09:20:20 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 16:20:16 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v2 9/9] KVM: x86/mmu: Promote pages in-place when
+ disabling dirty logging
+Message-ID: <Ys7wwPRaUOmvqFjb@google.com>
+References: <20220321224358.1305530-1-bgardon@google.com>
+ <20220321224358.1305530-10-bgardon@google.com>
+ <YkH0O2Qh7lRizGtC@google.com>
+ <CANgfPd8V_34TBb3m-JpmczZnY3t5aaFwHNZq1W0eknumbrXCRw@mail.gmail.com>
+ <Ys4CD/VHtbrBVi6a@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 3/7] pwm: dwc: add of/platform support
-Content-Language: en-GB
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Rob Herring <robh@kernel.org>, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Adnan Chowdhury <adnan.chowdhury@sifive.com>
-References: <20220712100113.569042-1-ben.dooks@sifive.com>
- <20220712100113.569042-4-ben.dooks@sifive.com>
- <20220712221715.GT1823936-robh@kernel.org>
- <feaacf44-f9a8-b892-d8ba-8a396b49d56b@sifive.com>
- <20220713135230.gjbd3v6iih2uicpu@pengutronix.de>
- <7999fec2-847a-86ce-ed78-d2a9008bf654@sifive.com>
- <20220713150755.bimcq2yiuvxn6n6v@pengutronix.de>
-From:   Ben Dooks <ben.dooks@sifive.com>
-In-Reply-To: <20220713150755.bimcq2yiuvxn6n6v@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys4CD/VHtbrBVi6a@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/07/2022 16:07, Uwe Kleine-König wrote:
-> On Wed, Jul 13, 2022 at 03:30:07PM +0100, Ben Dooks wrote:
->> On 13/07/2022 14:52, Uwe Kleine-König wrote:
->>> On Wed, Jul 13, 2022 at 12:56:55PM +0100, Ben Dooks wrote:
->>>> On 12/07/2022 23:17, Rob Herring wrote:
->>>>> On Tue, Jul 12, 2022 at 11:01:09AM +0100, Ben Dooks wrote:
->>>>>> The dwc pwm controller can be used in non-PCI systems, so allow
->>>>>> either platform or OF based probing.
->>>>>>
->>>>>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
->>
->> [snip]
->>
->>>>>> +properties:
->>>>>> +  "#pwm-cells":
->>>>>> +    description: |
->>>>>> +      See pwm.yaml in this directory for a description of the cells format.
->>>>>
->>>>> pwm.yaml doesn't define how many cells. You need to. And you don't need
->>>>> generic descriptions.
->>>>
->>>>    "#pwm-cells":
->>>>       const: 1
->>>>
->>>> should be sufficient then?
->>>
->>> I would expect a value of (at least) 2 or (better) 3.
->>
->> OOPS, forgot the phandle.
->>
->> I will have to check if we have any support yet for dealing
->> with any of the pwm flags yet.
+On Tue, Jul 12, 2022, Sean Christopherson wrote:
+> On Mon, Mar 28, 2022, Ben Gardon wrote:
+> > On Mon, Mar 28, 2022 at 10:45 AM David Matlack <dmatlack@google.com> wrote:
+> > > If iter.old_spte is not a leaf, the only loop would always continue to
+> > > the next SPTE. Now we try to promote it and if that fails we run through
+> > > the rest of the loop. This seems broken. For example, in the next line
+> > > we end up grabbing the pfn of the non-leaf SPTE (which would be the PFN
+> > > of the TDP MMU page table?) and treat that as the PFN backing this GFN,
+> > > which is wrong.
+> > >
+> > > In the worst case we end up zapping an SPTE that we didn't need to, but
+> > > we should still fix up this code.
 > 
-> I didn't double check, but given that the driver only supports inversed
-> polarity it might not even work without passing the flag for inversed
-> polarity. Having said that, I expect you have to only add "#pwm-cells =
-> <3>;" to your dts and then everything should work just fine.
+> My thought to remedy this is to drop the @pfn argument to kvm_mmu_max_mapping_level().
+> It's used only for historical reasons, where KVM didn't walk the host page tables
+> to get the max mapping level and instead pulled THP information out of struct page.
+> I.e. KVM needed the pfn to get the page.
+> 
+> That would also allow KVM to use huge pages for things that aren't backed by
+> struct page (I know of at least one potential use case).
+> 
+> I _think_ we can do the below.  It's compile tested only at this point, and I
+> want to split some of the changes into separate patches, e.g. the WARN on the step-up
+> not going out-of-bounds.  I'll put this on the backburner for now, it's too late
+> for 5.20, and too many people are OOO :-)
 
-I hadn't noticed, but we've been testing with the sysfs interface
-as we're using qemu.
+Heh, that was a bit of a lie.  _Now_ it's going on the backburner.
 
+Thinking about the pfn coming from the old leaf SPTE made me realize all of the
+information we need to use __make_spte() during promotion is available in the
+existing leaf SPTE.
+
+If KVM first retrieves a PRESENT leaf SPTE, then pfn _can't_ be different, because
+that would mean KVM done messed up and didn't zap existing entries in response to
+a MMU notifier invalidation, and holding mmu_lock prevents new invalidations.
+And because the primary MMU must invalidate before splitting a huge page, having a
+valid leaf SPTE means that host mapping level can't become stale until mmu_lock is
+dropped.  In other words, KVM can compute the huge pfn by using the smaller pfn
+and adjusting based on the target mapping level.
+
+As for the EPT memtype, that can also come from the existing leaf SPTE.  KVM only
+forces the memtype for host MMIO pfns, and if the primary MMU maps a huge page that
+straddles host MMIO (UC) and regular memory (WB), then the kernel is already hosed.
+If the VM doesn't have non-coherent DMA, then the EPT memtype will be WB regardless
+of the page size.  That means KVM just needs to reject promotion if the VM has
+non-coherent DMA and the target pfn is not host MMIO, else KVM can use the leaf's
+memtype as-is.
+
+Using the pfn avoids gup() (fast-only, but still), and using the memtype avoids
+having to split vmx_get_mt_mask() and add another kvm_x86_ops hook.
+
+And digging into all of that yielded another optimization.  kvm_tdp_page_fault()
+needs to restrict the host mapping level if and only if it may consume the guest
+MTRRs.  If KVM ignores the guest MTRRs, then the fact that they're inconsistent
+across a TDP page is irrelevant because the _guest_ MTRRs are completely virtual
+and are not consumed by either EPT or NPT.  I doubt this meaningfully affects
+whether or not KVM can create huge pages for real world VMs, but it does avoid
+having to walk the guest variable MTRRs when faulting in a huge page.
+
+Compile tested only at this point, but I'm mostly certain my logic is sound.
+
+int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+{
+	/*
+	 * If the guest's MTRRs may be used, restrict the mapping level to
+	 * ensure KVM uses a consistent memtype across the entire mapping.
+	 */
+	if (kvm_may_need_guest_mtrrs(vcpu->kvm)) {
+		for ( ; fault->max_level > PG_LEVEL_4K; --fault->max_level) {
+			int page_num = KVM_PAGES_PER_HPAGE(fault->max_level);
+			gfn_t base = (fault->addr >> PAGE_SHIFT) & ~(page_num - 1);
+
+			if (kvm_mtrr_check_gfn_range_consistency(vcpu, base, page_num))
+				break;
+		}
+	}
+
+	return direct_page_fault(vcpu, fault);
+}
+
+static int try_promote_to_huge_page(struct kvm *kvm,
+				    struct rsvd_bits_validate *rsvd_bits,
+				    const struct kvm_memory_slot *slot,
+				    u64 leaf_spte, struct tdp_iter *iter)
+{
+	struct kvm_mmu_page *sp = sptep_to_sp(iter->sptep);
+	kvm_pfn_t pfn;
+	u64 new_spte;
+	u8 mt_mask;
+
+	if (WARN_ON_ONCE(slot->flags & KVM_MEM_READONLY))
+		return -EINVAL;
+
+	pfn = spte_to_pfn(leaf_spte) & ~(KVM_PAGES_PER_HPAGE(iter->level) - 1);
+	mt_mask = leaf_spte & shadow_memtype_mask;
+
+	/*
+	 * Bail if KVM needs guest MTRRs to compute the memtype and will not
+	 * force the memtype (host MMIO).  There is no guarantee the guest uses
+	 * a consistent MTRR memtype for the entire huge page, and MTRRs are
+	 * tracked per vCPU, not per VM.
+	 */
+	if (kvm_may_need_guest_mtrrs(kvm) && !kvm_is_mmio_pfn(pfn))
+		return -EIO;
+
+	__make_spte(kvm, sp, slot, ACC_ALL, iter->gfn, pfn, 0, false, true,
+		    true, mt_mask, rsvd_bits, &new_spte);
+
+	return tdp_mmu_set_spte_atomic(kvm, iter, new_spte);
+}

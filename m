@@ -2,103 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62611573D27
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 21:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B8D573D3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 21:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236918AbiGMTd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 15:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
+        id S236887AbiGMTen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 15:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiGMTd1 (ORCPT
+        with ESMTP id S231329AbiGMTel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 15:33:27 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1D22A94D
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:33:26 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id q26so9256277vsp.11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:33:26 -0700 (PDT)
+        Wed, 13 Jul 2022 15:34:41 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBCA27160;
+        Wed, 13 Jul 2022 12:34:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=CAIH/48VCAZZUEhRpfaRPTSaBdpuCbyHyIV69iiJf1M=;
-        b=aM1IhBunUxE23qoS04VXLKhmfEzv0G+rIPuL+tw7ecWQpkkV/VIRfagQrgSyOoTIAm
-         AZWPXQE2ns7ZNMtu2h9VrGRckGYmFXAYncydcobmDBiRLde8BCgwi2hlvMDHXzYgqMkQ
-         SeJxIk0u87w3y3HvNwB5qYF3cTerdoWv2b9mV8jFDizIJX8stbEHhwQnKSILH4q0Huup
-         hTOO9Jx4LSsJcLZc09WMxCsF4ciSzvQTXVpvt0KUlX7r0Y8qXhkOofhAjq9rhr7n0O3a
-         0Nz5Fyl2IiFFXOdqA4nMId1341Np8datpnUgsVwvaqGydn6uB0z1+35u/mxwEULjiUxM
-         xCNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=CAIH/48VCAZZUEhRpfaRPTSaBdpuCbyHyIV69iiJf1M=;
-        b=cWA+LTVbisK8Z6ZhN+9H5RAioN9T+L873iFE+YUFdjuWQXgzRVUQ16tMeur57Iu040
-         iWGrPsiVWE+nkXHQtxq7L8eIAm7SQH+uUQ3WIAXEr2VrADitNMDUAXsyRX1Vzt0ogGzq
-         IruAZL6FoIsK5bCE9GptzRucaqO398klMW+pyeL/NgL1u8FQr36Rr398ZnZduC4EZzAt
-         KwDsV/XWuPkRHFp1E46wQsF7j4asOj+BUtNrWOCpywUeDS+5dCtAZ1NxS+w81IzNcNSa
-         DPZ78X93ghtKS2xMvH8SBKNgMTi/R1z9WxuAN35D98LUwI8TFus0OziZUsKSx8UV/GKW
-         Sjrw==
-X-Gm-Message-State: AJIora/vVKzU1xtLTR+Ie4F7FnVoQ+H0/k3BxIoQ5+oz4pVdhP5UmeIT
-        5OB8ZZT1Jj0OdyON1wLz1av5rzP50HY1tf1L/f0=
-X-Google-Smtp-Source: AGRyM1sJxaHNFmNllzWTe6lcXJtKq+jpeM0H1VbICZMt0N2iL7xjj1CQ/iGumgoql0QuMbeebjAgPClviShoH8saaK0=
-X-Received: by 2002:a67:a449:0:b0:357:3407:9f60 with SMTP id
- p9-20020a67a449000000b0035734079f60mr2391818vsh.17.1657740805145; Wed, 13 Jul
- 2022 12:33:25 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657740880; x=1689276880;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uz2sgm8GjwPKR98F7NkplBl1G37I0DkhynDs1KtQ2sE=;
+  b=r7yTRg1H9U9gL4x7dfQXq6fzoViRdhQ5U523w+PmuubSam1Nxunn0Wkk
+   qzLx/f9nJCEuVWZh/Rsq2Oyux0FwRDlkyjygFBn9X59t6dWeyrnNJa8F2
+   HijAeU7EzhSWWQeHSCa7M6INfC49ZA/TSOKTCt1C85SZU4+EuZ2/AUDlM
+   c=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jul 2022 12:34:40 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 12:34:40 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 12:34:39 -0700
+Received: from hu-amelende-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 12:34:38 -0700
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+To:     <corbet@lwn.net>, <sre@kernel.org>, <robh+dt@kernel.org>,
+        <agross@kernel.org>, <bjorn.andersson@linaro.org>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Anjelique Melendez <quic_amelende@quicinc.com>
+Subject: [PATCH v3 0/2] add support for PON GEN3 device
+Date:   Wed, 13 Jul 2022 12:33:49 -0700
+Message-ID: <20220713193350.29796-1-quic_amelende@quicinc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Received: by 2002:a67:e05b:0:0:0:0:0 with HTTP; Wed, 13 Jul 2022 12:33:24
- -0700 (PDT)
-Reply-To: pstefanopessina80@gmail.com
-From:   STEFANO PESSINA <awabuts49@gmail.com>
-Date:   Wed, 13 Jul 2022 22:33:24 +0300
-Message-ID: <CABqU-Kt960=z5WPCBXkW7U+2SM=criymhoesJ=oQD7uhrCaFLQ@mail.gmail.com>
-Subject: donation
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e43 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4960]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [awabuts49[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [pstefanopessina80[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [awabuts49[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
+Changes from v2:
+  - Added new "qcom,pmk8350-pon" compatible string as per Krysztof's
+    advice
+  - Updated dt logic to use comptaible strings to decide constraints
+    as per Krysztof's comment
+  - Added new patch (v3 2/2) to support new compatible string
 
-Congratulations!
-The sum of =E2=82=AC1,500,000.00 has been donated to you by STEFANO PESSINA=
-.
-Kindly get back for more info via pstefanopessina80@gmail.com
+Changes from v1:
+  - Updated path which was missing Documentation/devicetree prefix
+  - Updated CC list
+
+New patch series to seperate this patch from applied patches.
+Comments from original patch can be found
+https://lore.kernel.org/linux-arm-msm/27515993-18f3-8891-4835-9b6a8d7f86b0@quicinc.com/
+
+David Collins (1):
+  dt-bindings: power: reset: qcom-pon: update "reg" property details
+
+Anjelique Melendez (1):
+  power: reset: qcom-pon: add support for qcom,pmk8350-pon compatible string
+  
+
+ Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 73 ++++++++++++++++++++++++++++--
+ drivers/power/reset/qcom-pon.c | 1 +
+ 2 file changed, 70 insertions(+), 4 deletions(-)
+
+-- 
+2.35.1
+

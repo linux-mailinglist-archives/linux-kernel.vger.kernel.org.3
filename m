@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4966C5739A4
+	by mail.lfdr.de (Postfix) with ESMTP id DB9D65739A6
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236828AbiGMPFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S236801AbiGMPFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236767AbiGMPFQ (ORCPT
+        with ESMTP id S236752AbiGMPF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:05:16 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C7F41D11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:05:14 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id l68so6683981wml.3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:05:14 -0700 (PDT)
+        Wed, 13 Jul 2022 11:05:27 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167A6422D1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:05:16 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id r10so9760684wrv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:05:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=REFGbYhE8dpEN5VkA7iNJtkkSRmeBAdrouvG3pc5rZ4=;
-        b=AM60TdZ8HZ7OvyRBTLrizQyAPLSegdev4X8ef/09hXQ+9EFvoS7XjwIxhY63YCpNiU
-         7uSFl6+2V79L8KUeZ+9ysF/Ewo0Zk3Giv9QaI6kIPmPYMAQkv/nU8QmniG0W0guT2K14
-         hLuMRyufymQJR9pM7CjhmuqPNb209cVatb34s=
+        bh=ctpa/T2vVk1WErHGmcuqVVZ1P5/ZM5PQkEWqW8vXr7A=;
+        b=JVDAlTtDsN8PsHafG8dXhWTX7BJMdlCzVqsgtKaV1wrud89XcIpTz+LM58T+E10vtb
+         utb1i/Zjxo+/kx2kX1bsCxtzlzY06n31E6+IZnw6OsBkOIX6tno5D/tOrwOoYfrJJ2Mv
+         tdI4JUpnWU/mZVQSj2Wk7g3pnam43egQr8dpA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=REFGbYhE8dpEN5VkA7iNJtkkSRmeBAdrouvG3pc5rZ4=;
-        b=5APPpBpme1tI+QKnz5l5y6SYIQnC9mSLjyoKBFvbL9eVKYSM4yM+xTXDB4jWwcvmmM
-         lTo/5LrKcVzipTa9vTGHpdqiLg5SvrGkSGvAAmUYWYIJtX6wbGR3h6Sw6sgZ07afVaiS
-         DSAGEf+ytTjdKRALpNBcnJY2aj02YBjjstFZMB/v7ceXSWvB5TshV/ICgQUI/n5d/daP
-         vVvIG2Va1TvpvY86zsW1Q4UKX5UmRA3pRGj3u377OT0B81iXAQNCBLoqj1MBku5rB/yY
-         hX1REyB+3cRQUMDU3x7Gex46G7370M5jc1r5PtlhcNG+KZk2uOgsZqV7+rij7Hx4zjl7
-         uGkA==
-X-Gm-Message-State: AJIora/svb12a46LmOQYswrqTQDTGFZ0FC843Y7UwKWnCLoNIZ52dlyq
-        /qx8UdoRuCXSGT01JeUGWzKY3w==
-X-Google-Smtp-Source: AGRyM1tHZLl/74d091mxos1zDPmZ1SRQ+WdI5OSIR3EtkxpYjxa0w7cskJrV9t4ghkhHnD0Qyi9QKQ==
-X-Received: by 2002:a05:600c:4306:b0:3a2:e9e0:3626 with SMTP id p6-20020a05600c430600b003a2e9e03626mr3979142wme.175.1657724712868;
-        Wed, 13 Jul 2022 08:05:12 -0700 (PDT)
+        bh=ctpa/T2vVk1WErHGmcuqVVZ1P5/ZM5PQkEWqW8vXr7A=;
+        b=rR2PwL733UZFTJKM5ZNgGXbGV6a6OMQYTR11j/rRzoNJH37XO4CskBss1fGAPLBXGa
+         YQZrC6cU+fO4CYIli1823byKOdZYvkh6rm6DjmMP5AijV6ycKux2Ac4kWEbkbpQkX/5E
+         1AZZD0b8No0MRyByGrFTD0oFG8clHqpNm9uCpumWOQp7SKwUUiGntMKN+YEUBoDiDdlu
+         WP39aj6k1SOKkQGBwRcJ+hU9Uj/A89LU6YJ4lFV0qpAtEGsk5UaT4dFNTFCWtIPDz7tR
+         PRMG8Ojy8kV1CQTaFqV1Kn1jT2DZXsCZ/xYg1i+kYPZM+ssHH+Je+UrjX6DsOaxBoPHp
+         a3pA==
+X-Gm-Message-State: AJIora/qTUNiHjLyV1mgnVmZgjZnBpoWMPJmvG2mSWpFFuVJLfAaNkDT
+        HmGm72PngewSBX+upaJ+BQwLbQ==
+X-Google-Smtp-Source: AGRyM1tAev8LArHYi+huEh3+yoOvjVzMlK7NXt7yr3pRp5fyd99Ap26DP2Bki+psEKEV9rVlxQgXRA==
+X-Received: by 2002:a5d:4d0b:0:b0:21d:819e:5765 with SMTP id z11-20020a5d4d0b000000b0021d819e5765mr3648022wrt.232.1657724714580;
+        Wed, 13 Jul 2022 08:05:14 -0700 (PDT)
 Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-51-7.cust.vodafonedsl.it. [188.217.51.7])
-        by smtp.gmail.com with ESMTPSA id f17-20020a05600c4e9100b003a2d87aea57sm1465537wmq.10.2022.07.13.08.05.11
+        by smtp.gmail.com with ESMTPSA id f17-20020a05600c4e9100b003a2d87aea57sm1465537wmq.10.2022.07.13.08.05.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 08:05:12 -0700 (PDT)
+        Wed, 13 Jul 2022 08:05:14 -0700 (PDT)
 From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 To:     tommaso.merciai@amarulasolutions.com
 Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
@@ -53,9 +53,9 @@ Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
         Daniel Scally <djrscally@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v7 2/6] media: ov5693: add dvdd into ov5693_supply_names array
-Date:   Wed, 13 Jul 2022 17:05:02 +0200
-Message-Id: <20220713150506.2085214-3-tommaso.merciai@amarulasolutions.com>
+Subject: [PATCH v7 3/6] media: ov5693: rename clk into xvclk
+Date:   Wed, 13 Jul 2022 17:05:03 +0200
+Message-Id: <20220713150506.2085214-4-tommaso.merciai@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220713150506.2085214-1-tommaso.merciai@amarulasolutions.com>
 References: <20220713150506.2085214-1-tommaso.merciai@amarulasolutions.com>
@@ -71,34 +71,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing "dvdd" (Digital circuit power) entry into ov5693_supply_names
-array
+Rename clk pdata pointer into xvclk (system clock input).
+Same for clk_rate into xvclk_rate. This is more explicit
 
 Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes since v3:
  - Add reviewed-by tag, suggested by Jacopo, Krzysztof
 
-Changes since v4:
- - Add Daniel reviewed-by tag
-
- drivers/media/i2c/ov5693.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/i2c/ov5693.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
-index f410333c4c67..9e84468d920e 100644
+index 9e84468d920e..d2adc5513a21 100644
 --- a/drivers/media/i2c/ov5693.c
 +++ b/drivers/media/i2c/ov5693.c
-@@ -132,6 +132,7 @@
- static const char * const ov5693_supply_names[] = {
- 	"avdd",		/* Analog power */
- 	"dovdd",	/* Digital I/O power */
-+	"dvdd",		/* Digital circuit power */
- };
+@@ -157,7 +157,7 @@ struct ov5693_device {
+ 	struct gpio_desc *reset;
+ 	struct gpio_desc *powerdown;
+ 	struct regulator_bulk_data supplies[OV5693_NUM_SUPPLIES];
+-	struct clk *clk;
++	struct clk *xvclk;
  
- #define OV5693_NUM_SUPPLIES	ARRAY_SIZE(ov5693_supply_names)
+ 	struct ov5693_mode {
+ 		struct v4l2_rect crop;
+@@ -794,7 +794,7 @@ static void ov5693_sensor_powerdown(struct ov5693_device *ov5693)
+ 
+ 	regulator_bulk_disable(OV5693_NUM_SUPPLIES, ov5693->supplies);
+ 
+-	clk_disable_unprepare(ov5693->clk);
++	clk_disable_unprepare(ov5693->xvclk);
+ }
+ 
+ static int ov5693_sensor_powerup(struct ov5693_device *ov5693)
+@@ -804,7 +804,7 @@ static int ov5693_sensor_powerup(struct ov5693_device *ov5693)
+ 	gpiod_set_value_cansleep(ov5693->reset, 1);
+ 	gpiod_set_value_cansleep(ov5693->powerdown, 1);
+ 
+-	ret = clk_prepare_enable(ov5693->clk);
++	ret = clk_prepare_enable(ov5693->xvclk);
+ 	if (ret) {
+ 		dev_err(ov5693->dev, "Failed to enable clk\n");
+ 		goto fail_power;
+@@ -1390,7 +1390,7 @@ static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
+ static int ov5693_probe(struct i2c_client *client)
+ {
+ 	struct ov5693_device *ov5693;
+-	u32 clk_rate;
++	u32 xvclk_rate;
+ 	int ret = 0;
+ 
+ 	ov5693 = devm_kzalloc(&client->dev, sizeof(*ov5693), GFP_KERNEL);
+@@ -1408,16 +1408,16 @@ static int ov5693_probe(struct i2c_client *client)
+ 
+ 	v4l2_i2c_subdev_init(&ov5693->sd, client, &ov5693_ops);
+ 
+-	ov5693->clk = devm_clk_get(&client->dev, "xvclk");
+-	if (IS_ERR(ov5693->clk)) {
++	ov5693->xvclk = devm_clk_get(&client->dev, "xvclk");
++	if (IS_ERR(ov5693->xvclk)) {
+ 		dev_err(&client->dev, "Error getting clock\n");
+-		return PTR_ERR(ov5693->clk);
++		return PTR_ERR(ov5693->xvclk);
+ 	}
+ 
+-	clk_rate = clk_get_rate(ov5693->clk);
+-	if (clk_rate != OV5693_XVCLK_FREQ)
++	xvclk_rate = clk_get_rate(ov5693->xvclk);
++	if (xvclk_rate != OV5693_XVCLK_FREQ)
+ 		dev_warn(&client->dev, "Found clk freq %u, expected %u\n",
+-			 clk_rate, OV5693_XVCLK_FREQ);
++			 xvclk_rate, OV5693_XVCLK_FREQ);
+ 
+ 	ret = ov5693_configure_gpios(ov5693);
+ 	if (ret)
 -- 
 2.25.1
 

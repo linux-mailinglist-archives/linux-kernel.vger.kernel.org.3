@@ -2,214 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C131A573F53
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F134573F57
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237008AbiGMWDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 18:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
+        id S237254AbiGMWDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 18:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbiGMWDE (ORCPT
+        with ESMTP id S236974AbiGMWDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 18:03:04 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E60C31218
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657749784; x=1689285784;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=5DZ0T+GH+S+Iua4Yd3hVKJGGleI8tlgHshCc9cYBPpY=;
-  b=LE/w71d1ZOaj90MxYd0193rKrVZm6M2OW3c5ABLryGAXx1llJVGB+mh1
-   /fQiSIPfJDQUS2xbWy6od74wVaMMU4mwzaPQCZzGqTxqnAq8NFcXgZeKy
-   pUp9I6y7wXZFjR8xfxKQ+6/ZaUPkrT3fmaTExd3XM+YZwRGl9CgfASCVp
-   2BAwMNngrOELQuhl0gMiD48SsksAdZN1JQWOSKErp54TXxwh4jgonZcDH
-   LwHAIutrUwk/LcLTnGifPMUEd0mLw91l1kTRZtX/sDDilMNtukE2ZwgH3
-   tAEvppUmFy+bMcASMMI5JanLMkw01Q2zhcr/clrunjrQV2JoLLm4D7Uxz
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="286099161"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="286099161"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 15:03:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="653593231"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Jul 2022 15:03:03 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 13 Jul 2022 15:03:02 -0700
-Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
- ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 13 Jul 2022 15:03:02 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Wed, 13 Jul 2022 15:03:02 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Wed, 13 Jul 2022 15:03:01 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ONUBg/qjpSdESR2q11b9h4/56TGT/C+nRrdHfpqXuYQehx5jNS619t1M6hBnHjMsVJNw0EgRHIVrRSu41/zkIj7GjdNdUMvcANzPfjfu/JeVmSXvGqUPqS6taelNRWuGetLJO9OIU3C452gUgTTtM0JbH13YIwg8eMhFmNnylZ0uMEPJ9DrB11LjTDSxztTUnf5NFRv8wP8oPdvbmwPBXVdzEJQUUxQAnKhS0pM7N848VZIKryt85NBPcsiD/ZlxH+xvqYeXnDU1sVbkvXnvAsIRMpJ1wM4OKtN0pMqjNzzw9gcUQdJR2fCzUJiUA9tE5r1frRbiVVFUxyZlBUL8aQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MDbghXFJbEounZs66IPkjkkt8IIolV+0IcbQ4MO6Qtc=;
- b=FOVGSeo5MCm5eDaoNUOej/VVf66vKJcCO7eDkJv3Gp5fLvVijBeJaBMznCLZ0PzEadPzXfr0/kLTlUIn2IogxM4ZDaPBrSA3Z7baIevWmzcmw5FLnc7jYGvAg7nwYo0+l8wzOgkF+kp1CYA4SmRiJSAGDWeI70GtqflBxx0I09D+SEZtjUXFXgQZAOFmG7ZAQDTXQHHiJ/VVWhw9HD4tsvJ0ZVGRuPdGDzrMwT0rRQB0B31cr8gZUCTWj2c/CSg1SfbPQxeU8mjZHIP7Ut0x+G+8FQNpWtnG3lQGO0RzIAqFw3bpJWHbzLOwX6P3T2CYRjx3bndP92ow8sIHPgNa2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by CY4PR11MB1495.namprd11.prod.outlook.com (2603:10b6:910:c::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Wed, 13 Jul
- 2022 22:02:55 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::8053:3c59:9f5d:b615]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::8053:3c59:9f5d:b615%9]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
- 22:02:55 +0000
-Date:   Wed, 13 Jul 2022 18:02:49 -0400
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        <dri-devel@lists.freedesktop.org>,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        <linux-kernel@vger.kernel.org>,
-        <intel-gvt-dev@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>, Zhi Wang <zhi.a.wang@intel.com>
-Subject: Re: [PATCH v2 03/39] drm/i915/gvt: Fix kernel-doc for
- intel_vgpu_*_resource()
-Message-ID: <Ys9BCTYV9XMvA/61@intel.com>
-References: <cover.1657699522.git.mchehab@kernel.org>
- <4801d75e6c43c83fd5bba13bea3885da7b66fa9c.1657699522.git.mchehab@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <4801d75e6c43c83fd5bba13bea3885da7b66fa9c.1657699522.git.mchehab@kernel.org>
-X-ClientProxiedBy: BYAPR08CA0003.namprd08.prod.outlook.com
- (2603:10b6:a03:100::16) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
+        Wed, 13 Jul 2022 18:03:11 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0816F31218;
+        Wed, 13 Jul 2022 15:03:10 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id e16so161869pfm.11;
+        Wed, 13 Jul 2022 15:03:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2Nit9dg2fUOCAwhmRb3tYR/tqHtTiU+bduaXCgGuCVQ=;
+        b=TSNaU643bQ3VzBuxBfOvj895y403PdM2R8/cL24/oJdWe2suvLzsr35Tjwhnp3BA1T
+         BXOEc6NePxmbnjhWIHA7jiQqK6pSni5cW/yksqRiJjCUSng6IhW8nWmMZp6IQV5ubCw/
+         RZ4hhdcjsxnbzb9ZvJB9JCtYybqjiblb5B/89f5aS8jYY9ZNjjEhELFBY8A6BLLX/MOE
+         KfwEYVhmqRdi8AGxiDOc/ks7TgqdiwwCh7yfb9QRM9LrlQM4ODOto0iX7APoRRqjY1N3
+         MV6J/XeC6RvOR4+lY2u2G/x080uKOMzfkqWjD84dty1xT7CXw8noZSWwXE8l0KEJLx3g
+         VMCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=2Nit9dg2fUOCAwhmRb3tYR/tqHtTiU+bduaXCgGuCVQ=;
+        b=iIL3FfQv6KNqHsScaU9ZQM3soU+emV2ibFIgWwaD0VQ/+IEo+c2J4PLgTtVZJ/hZcG
+         2l2j5H/+Mh06dK/AiXoFiXgCC9YMYrmdkPp05VwtRTtXS1PamdnInacA1vFcHZCHY41x
+         4Rpk9tY2hRc499uvLA2L/sIQ3iEGLj9r9M1miXypPk0DFFG+igVnLUG/xQMqn/8MMt/U
+         fo4zqFR2/B8q70MwkYqA6xKSiMNZK20vc5+PuYEe4+0+ES4ITxEby4g8pqEkL710sS0K
+         A48/HRq3ykzt13rG/4afh/UEgB5iUU0hmihcD7NqCgLNP23l7I8aqfYyrlfg204GJd49
+         FC6g==
+X-Gm-Message-State: AJIora9P8TWZLBi2p+YGI7LR7ovNbVhw4imHcrwZHamWtnBDjjtH3Oxu
+        Bf9MNEddGjvbSECsh2RkAPY=
+X-Google-Smtp-Source: AGRyM1uBnZWlRfFdUjJ1bSSphxX4jqeWZTqtJdX2wjdedKPp6DU2LtWBORPm5srUmWrWmkayJ16E1w==
+X-Received: by 2002:a63:61d3:0:b0:416:15eb:dc43 with SMTP id v202-20020a6361d3000000b0041615ebdc43mr4586346pgb.241.1657749790484;
+        Wed, 13 Jul 2022 15:03:10 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id rv21-20020a17090b2c1500b001efb8804720sm25738pjb.46.2022.07.13.15.03.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 15:03:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 13 Jul 2022 15:03:06 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Luo Xueqin <luoxueqin66@gmail.com>
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luo Xueqin <luoxueqin@kylinos.cn>
+Subject: Re: [RESEND PATCH v2] watchdog:Fix typo in comment
+Message-ID: <20220713220306.GA32544@roeck-us.net>
+References: <20220705153138.29657-1-luoxueqin66@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fbdf536a-2347-49a4-c690-08da651b7030
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1495:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZVn4m9IpIcY9WFbZNliD/Hw+fzvX+9k/glf8N1LCXlp/ypUGSBKc/e4suRMnkvkYqB0O/OWHunyrvvsiBS+jwlja55FNLAXAvzMM59li5GefvTkfZJWQhGL321aCPYmon9x8MgT5XSSU6aymqm2iCN4UzD29Hzw1Q2YXiiS/qGksMbT1BCMtXRLdClUhOc9JvUzHL5lBFuuzR+A1pBBNSZBx2lJ7X0R3G/1ya3em/ECWd22QqHDFw++y0CvJriwfs8edOv50RmgXaUiDHdxMx8HsskvhCxwHuQr6wte8glHuWnbL2yeVEU2/zvT9YGBih07P116GvsdPXdRN+zDK3UoRO2+gX6T97q23J8rTBZzP3xF1yXukMI+6Vp/abpvhMSuuIYyAna1rDk6DJPZW99E+EXxASqgvuuoFjWMF0ImiyZ65hfD0uanQl0PFjsLNX50da0otAc6PXv134JnE+kyr/jvOsuSlpKIax8yzX9ZgAZm6R7qimrtcDXqRvT6tKdQH/0zJzQB/9ODVPejeR8tIbciu3tCJgowPmuCbuQI+UknNZUEiqvCDXaeLCIQoA6R7orpeQsvDztZmnqySGWxUNswSVuHSOWpzSJSoxm6RZDeZA/dDFVv/kwIfIaNOjMNozKDgFLRtZsGEQOhMUuoHwuxJoJbOFWchhFkDagHpTHj5ssHrT15qk2yYPp2DjafdQ/uSzSseb3hEY1kIYNc+9E+x9sp4eecEnGx+fcCKQXan9DPReDqdhC+KGFFJ+8jdDEwY0/iTdO1SHqP6qyzDVeXGnZRdPyNYkxEG1bc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(136003)(366004)(376002)(396003)(346002)(316002)(54906003)(41300700001)(8676002)(4326008)(38100700002)(66946007)(82960400001)(66476007)(66556008)(26005)(83380400001)(6506007)(6512007)(44832011)(478600001)(186003)(6666004)(966005)(86362001)(2616005)(6916009)(6486002)(2906002)(5660300002)(36756003)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1h4TqVJL/vAf88o0T2leJOjS0DuGfo3wIQt2nsLuepdIgzvs9PBq+qFI7ZdB?=
- =?us-ascii?Q?mlE1ilNRAHyIFAn7TezhOCdaoL9Kxjx8JzoZjrWVk2/SBoRtwyo4RF600vfA?=
- =?us-ascii?Q?6L11qn9MqGMEKhsQnhZjCZ9ZqU/c20tO0GQdXptOFISynIKnkbKlGcB7f1CQ?=
- =?us-ascii?Q?2RHLQNGWjDUHpS+9DNGaLS2x1IIVZzQIvLN9ez1tUWYsB46myhyzHa4SqcPN?=
- =?us-ascii?Q?FQBGwopJUY24tAhta+yp353Xpz2FYeR+EOJgHWdAcvwIktZM1EByi9kZjH7o?=
- =?us-ascii?Q?nJbClzMAOIAtHsTJmWyEILDS20qJFpDX/RWxHNsF4ob44htKoOLZVO8VYsw8?=
- =?us-ascii?Q?tFWxMSl7u2agPzP+spUfAOUckTOWimkR9U/9H86ljDkTIPLMcWz957pOPHvm?=
- =?us-ascii?Q?O4hVLtcsp2gDGcQkasipKKleJS8rFYL2S2dSbX+BB9iLycW9LXFnGKdK+E/m?=
- =?us-ascii?Q?U9c848MHH+AWxwLIyPnrTP8Ys+73uBBR42NtY7ERHvARddR5azjEOw62C81J?=
- =?us-ascii?Q?iazAJ3qw8I6U1nUOLIN8D99DWBwkDrC9iBhn4scZud3/sTB5zwDjnYRGaHGA?=
- =?us-ascii?Q?Bjgusp2UtB53GLK7HrTtp5KTIsHycsfZJkPi2uENHXfouPNInxga5uLANK9A?=
- =?us-ascii?Q?3ZgivOxav6/bb7YKl9TC4HH9PSFga/tJBQL5wKRn4izQGyaF9qqQHBnj3tDC?=
- =?us-ascii?Q?7UeGXY03awRSbBvRjxQnSoxJoTIR9lRlE0pua21/yDoD35NoB693WbOYGVIa?=
- =?us-ascii?Q?vCL0iOJx6VNeUtCFUbj936kFnMioF+uVEJoU3LE8w4jlRRv8dMHDHHV/w9Jo?=
- =?us-ascii?Q?vwTUEw4BwacG/pRNpfzeWixuJFzHpuoluxh6dJzx8u52g8DNDmGCS14qa4v+?=
- =?us-ascii?Q?qoq1hLIyvB+y0rg13T5TlqmgE+IZYrbrr5u0rH+t+60CpdRugR7IMQ0C5U76?=
- =?us-ascii?Q?U4tRfntAVolagMSfEbUjQNgqFL9/3A/tKBOD6LzGd8gLbdzYoBvpXYgdGWlI?=
- =?us-ascii?Q?YZQ0hQeRJxnUySwk3om+Fy7X6aPDNj246PAUBwQehf3BnD2aJd3fb4XIqIpz?=
- =?us-ascii?Q?abBffogF7ELU/iuECtFaTM1YCz8imlwm9PURZAIjgm8pXWLjYIPmVfbgPfYd?=
- =?us-ascii?Q?triIfcGc1EgHw4zWmsFbkNnHqLTikVFEQo1bXREAD8NxceTB6xsfIbbOzxpM?=
- =?us-ascii?Q?fj8loWqhREEPYSyC7HAtueiIt90b99bAvms05kdufAj89BR0032hs5W4RJ3m?=
- =?us-ascii?Q?HQHKGzuQK9ct0fNwkJcCZU9I7ZWF+79hooiJFwIdwx8uZW8IrzC05FnmmX/s?=
- =?us-ascii?Q?6jWNo1gIyToYcekz0sl2GByHGB8hr4yEk+yvt7jcDKArB/Fwa4iMfCx6VP2s?=
- =?us-ascii?Q?rH1MWLRrNBtkBVJ2yNHTaxW4lTQItvuCn/kFLDF8/sYN5I4uemDHSWIDhLil?=
- =?us-ascii?Q?ffQgoaE0cI1jGSeH/G04Ejs6jJv7Wv0E28B9sGJ2wtWV9/m4GBOZaL8gJ/RJ?=
- =?us-ascii?Q?LvnVV4264hUPD28FozMtHGMeOwaZ3LaZJjTYZCmNgJn8j2AwvAyzlikhP5w9?=
- =?us-ascii?Q?4QubuD55Fot8DRLFtXpFb1AHcQQ3duzQwtz+1Hg6cx3Goo2F4lPjDhZLO0Pm?=
- =?us-ascii?Q?dA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: fbdf536a-2347-49a4-c690-08da651b7030
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 22:02:55.1019
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: plXWXR0SCn0c6yDEJ3m1WGpW/mxpPblUOBA/Y4AufxE3BkKB7wc1hUuQZfNGt/9FoSXhkuGtc6DMrpMs11FkQQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1495
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220705153138.29657-1-luoxueqin66@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 09:11:51AM +0100, Mauro Carvalho Chehab wrote:
-> From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+On Tue, Jul 05, 2022 at 11:31:38PM +0800, Luo Xueqin wrote:
+> From: Luo Xueqin <luoxueqin@kylinos.cn>
 > 
-> Fix the following W=1 kernel warnings:
+> Spelling mistake in comment.
 > 
-> drivers/gpu/drm/i915/gvt/aperture_gm.c:308: warning: expecting prototype
-> for inte_gvt_free_vgpu_resource(). Prototype was for
-> intel_vgpu_free_resource() instead.
-> 
-> drivers/gpu/drm/i915/gvt/aperture_gm.c:344: warning: expecting prototype
-> for intel_alloc_vgpu_resource(). Prototype was for
-> intel_vgpu_alloc_resource() instead.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> Acked-by: Zhenyu Wang <zhenyuw@linux.intel.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Luo Xueqin <luoxueqin@kylinos.cn>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
 > 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
+> v2: add discoverers
 > 
->  drivers/gpu/drm/i915/gvt/aperture_gm.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/watchdog/pc87413_wdt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/gpu/drm/i915/gvt/aperture_gm.c b/drivers/gpu/drm/i915/gvt/aperture_gm.c
-> index 557f3314291a..3b81a6d35a7b 100644
-> --- a/drivers/gpu/drm/i915/gvt/aperture_gm.c
-> +++ b/drivers/gpu/drm/i915/gvt/aperture_gm.c
-> @@ -298,7 +298,7 @@ static int alloc_resource(struct intel_vgpu *vgpu,
+> diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
+> index 9f9a340427fc..c7f745caf203 100644
+> --- a/drivers/watchdog/pc87413_wdt.c
+> +++ b/drivers/watchdog/pc87413_wdt.c
+> @@ -442,7 +442,7 @@ static long pc87413_ioctl(struct file *file, unsigned int cmd,
+>  	}
 >  }
 >  
->  /**
-> - * inte_gvt_free_vgpu_resource - free HW resource owned by a vGPU
-> + * intel_vgpu_free_resource() - free HW resource owned by a vGPU
-
-with the consistency in the usage of "()" feel free to use
-
-Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-
-
-
->   * @vgpu: a vGPU
->   *
->   * This function is used to free the HW resource owned by a vGPU.
-> @@ -328,7 +328,7 @@ void intel_vgpu_reset_resource(struct intel_vgpu *vgpu)
->  }
+> -/* -- Notifier funtions -----------------------------------------*/
+> +/* -- Notifier functions -----------------------------------------*/
 >  
 >  /**
-> - * intel_alloc_vgpu_resource - allocate HW resource for a vGPU
-> + * intel_vgpu_alloc_resource() - allocate HW resource for a vGPU
->   * @vgpu: vGPU
->   * @param: vGPU creation params
->   *
+>   *	pc87413_notify_sys:
 > -- 
-> 2.36.1
+> 2.25.1
 > 

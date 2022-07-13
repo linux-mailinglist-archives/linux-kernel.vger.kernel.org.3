@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54C557373A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EEC573726
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236313AbiGMNSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S236275AbiGMNSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236169AbiGMNR7 (ORCPT
+        with ESMTP id S229968AbiGMNR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 13 Jul 2022 09:17:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472AC219A;
-        Wed, 13 Jul 2022 06:17:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF508C53;
+        Wed, 13 Jul 2022 06:17:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8AE361CB7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AECB61C3A;
         Wed, 13 Jul 2022 13:17:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96693C341C8;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93B78C36AE2;
         Wed, 13 Jul 2022 13:17:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1657718277;
-        bh=sfOPeQLpvb50JpTI/njvrEwkjhOXPUdfT53axlc0qnM=;
+        bh=nRLINNBJCDhGmMGFzIpD64NSda4uc+7Z5ulu67uURFM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ttijnUf2VtD/q7DFIXUCRX9qRFhTvG8F+9a05gi0jyCm77vuBQhHjm+2lfQxIPjrA
-         DQ0EGXSEwLCXAS/e+L2bdcbqD6vsw7sqPqdqYkGk8SofssDux4OOhb74pFPXRUjNi/
-         P/pKVNRC5/4aMGLlRM6+3WOEI3OOme66vzIz8O19kj1xIIDHEZzockmSXoiYcbmeul
-         /uz7zD45oCR+H/ciXWBhmViy3Wb510sxyvDnS6/xy57kDw5lXogdArL+4ADAxBuoKh
-         VioBFK5BcZHURVNQ8SaqFjxlsbrVVrfs4IaMHt2TE/9OvzejPsSzC/ZuNdLay0M06i
-         xI5Bg4o/qCS7g==
+        b=lPs2ZZ9zlkPigTxao1+C0Q7yCwqxv6bTj4xx7OD0pHxChls3CAhqpo4rhlCzUjo8I
+         NW4fq86qpr+hZumufZlkHlxWIHILzEbnuIle/rRRoV8CAdGUj1R/xBOge9tfoOtc8I
+         Ng2Mv51o/Lj3VlG1vr8ZAMIkHVZgjyRIh8I2v1KPyW3QZ5M8Qw3VTOBg+++05LbGGw
+         0etcV7ganfD+8aCuXK2zw0w+euwHQvyi3gGT1hJWlVCfSkTp+wzLZZh7D4ppZGfv6+
+         shIr8xEgasIgz4qd4T/2R+8JxYXneQZBVxQaR+6SF+sfSij2/LYZUmSz1qkxHJju1K
+         fxz7neoaea+Vw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oBcFd-0007gI-5g; Wed, 13 Jul 2022 15:18:01 +0200
+        id 1oBcFd-0007gK-8m; Wed, 13 Jul 2022 15:18:01 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 2/7] dt-bindings: usb: qcom,dwc3: refine interrupt requirements
-Date:   Wed, 13 Jul 2022 15:13:35 +0200
-Message-Id: <20220713131340.29401-3-johan+linaro@kernel.org>
+Subject: [PATCH 3/7] usb: dwc3: qcom: fix missing optional irq warnings
+Date:   Wed, 13 Jul 2022 15:13:36 +0200
+Message-Id: <20220713131340.29401-4-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220713131340.29401-1-johan+linaro@kernel.org>
 References: <20220713131340.29401-1-johan+linaro@kernel.org>
@@ -65,119 +65,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not all platforms have all of the four wakeup interrupts currently
-described by the bindings.
+Not all platforms have all of the four currently supported wakeup
+interrupts so use the optional irq helpers when looking up interrupts to
+avoid printing error messages when an optional interrupt is not found:
 
-Specifically, MSM8953/6/8 and SDM660 do not use the DP/DM interrupts,
-while the SS PHY interrupt is optional on SDM660 and SC7280.
+	dwc3-qcom a6f8800.usb: error -ENXIO: IRQ hs_phy_irq not found
 
-Note that no devicetree in mainline specify any wakeup interrupts for
-
-  - qcom,ipq4019-dwc3
-  - qcom,ipq6018-dwc3
-  - qcom,ipq8064-dwc3
-  - qcom,ipq8074-dwc3
-  - qcom,msm8994-dwc3
-  - qcom,qcs404-dwc3
-
-but let's keep the schema warnings about that for now.
-
+Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- .../devicetree/bindings/usb/qcom,dwc3.yaml    | 60 +++++++++++++++++--
- 1 file changed, 55 insertions(+), 5 deletions(-)
+ drivers/usb/dwc3/dwc3-qcom.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index c991d9103f87..fea3e7092ace 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -94,9 +94,11 @@ properties:
-       - const: apps-usb
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 77036551987a..c5e482f53e9d 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -490,9 +490,9 @@ static int dwc3_qcom_get_irq(struct platform_device *pdev,
+ 	int ret;
  
-   interrupts:
-+    minItems: 1
-     maxItems: 4
+ 	if (np)
+-		ret = platform_get_irq_byname(pdev_irq, name);
++		ret = platform_get_irq_byname_optional(pdev_irq, name);
+ 	else
+-		ret = platform_get_irq(pdev_irq, num);
++		ret = platform_get_irq_optional(pdev_irq, num);
  
-   interrupt-names:
-+    minItems: 1
-     maxItems: 4
- 
-   qcom,select-utmi-as-pipe-clk:
-@@ -333,14 +335,9 @@ allOf:
-               - qcom,ipq6018-dwc3
-               - qcom,ipq8064-dwc3
-               - qcom,ipq8074-dwc3
--              - qcom,msm8953-dwc3
-               - qcom,msm8994-dwc3
--              - qcom,msm8996-dwc3
--              - qcom,msm8998-dwc3
-               - qcom,qcs404-dwc3
-               - qcom,sc7180-dwc3
--              - qcom,sc7280-dwc3
--              - qcom,sdm660-dwc3
-               - qcom,sdm845-dwc3
-               - qcom,sdx55-dwc3
-               - qcom,sdx65-dwc3
-@@ -369,6 +366,59 @@ allOf:
-             - const: dm_hs_phy_irq
-             - const: dp_hs_phy_irq
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,msm8953-dwc3
-+              - qcom,msm8996-dwc3
-+              - qcom,msm8998-dwc3
-+    then:
-+      properties:
-+        interrupts:
-+          maxItems: 2
-+        interrupt-names:
-+          items:
-+            - const: hs_phy_irq
-+            - const: ss_phy_irq
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sdm660-dwc3
-+    then:
-+      properties:
-+        interrupts:
-+          minItems: 1
-+          maxItems: 2
-+        interrupt-names:
-+          minItems: 1
-+          items:
-+            - const: hs_phy_irq
-+            - const: ss_phy_irq
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sc7280-dwc3
-+    then:
-+      properties:
-+        interrupts:
-+          minItems: 3
-+          maxItems: 4
-+        interrupt-names:
-+          minItems: 3
-+          items:
-+            - const: hs_phy_irq
-+            - const: dp_hs_phy_irq
-+            - const: dm_hs_phy_irq
-+            - const: ss_phy_irq
-+
-   - if:
-       properties:
-         compatible:
+ 	return ret;
+ }
 -- 
 2.35.1
 

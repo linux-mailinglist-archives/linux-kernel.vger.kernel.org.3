@@ -2,132 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5E0573AE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD112573AE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236914AbiGMQLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
+        id S235687AbiGMQMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbiGMQLh (ORCPT
+        with ESMTP id S237147AbiGMQMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:11:37 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584CF29C8F;
-        Wed, 13 Jul 2022 09:11:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657728696; x=1689264696;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MYSKoO4+JA1HLIxr6+ZiGU46DVwUCWwtwniY7flkkp4=;
-  b=aTzSBd44Q05EgMeRC11W9Xg2pTjAN5xZ6lvpvguTjW0/aP1cau3uXEkI
-   3+XcnsQSgrYgsitqLCPMCuEWK6Em4DDjgg9KTeV0hlPZ1rIq74xGWJVHA
-   eNluFRARFunYQ3fHqScjBOtYgeEpowrVBQMCqGOPTKX8vGOcW8dTTBtUA
-   7I+DN5G6SWvF6CGeFMe+btKvt+kxe9hvrb6pUrBuy+FvoIKdU/T0gMREB
-   pRNuzoLORybWebeqKpvZjXo9GmmZ5I14sGkYfmejj3RbmDL6f11HGYOQr
-   vkQY/oRuLxn8wdFvtuF42cjCxh8yf6KtsC5JihYIZyUCjB3XMA+BuZPSn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="268304430"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="268304430"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:11:35 -0700
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="545912368"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:11:33 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oBexW-001CSU-0Y;
-        Wed, 13 Jul 2022 19:11:30 +0300
-Date:   Wed, 13 Jul 2022 19:11:29 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Vamshi Gajjela <vamshigajjela@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com
-Subject: Re: [PATCH v3] serial: 8250_dw: Avoid pslverr on reading empty
- receiver fifo
-Message-ID: <Ys7usW3W3kemtVc+@smile.fi.intel.com>
-References: <20220713131722.2316829-1-vamshigajjela@google.com>
+        Wed, 13 Jul 2022 12:12:03 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4F750737;
+        Wed, 13 Jul 2022 09:12:00 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id s206so10876131pgs.3;
+        Wed, 13 Jul 2022 09:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eg0jwY36541hZJchyMVRy74UzB7/OP6ZiEWz2ML7whQ=;
+        b=ABdQ3enjC2i0WpYuqLPdEWwq995SWkYpZdRmXGmEytGAWNPT8YjQ8IUVXUL83X7CRp
+         tT9eRG4BaONmE7P0sGH1S9B7orouZGsLnde6IZsMMQy8zrmvXzJR5Su0cRdKMws13GYs
+         /PU7vDg8WMtOrOrll0BFKNKQoOkYVqIozfjX8amgNshWx1mSYF7qTIOlNtt8zjNbAjC/
+         mrIpythPVWCwJYmZJj0Y2PSEp119AWO00cU8nqefOcyKhnOZ51QUcSfB4xxRv1wvFA01
+         qJIOjmuwj8haVMJdo3uEHFfd66yYx1R2duSKRlbk9HQZIwoeef9yqIx6jMhDbWHiu6tb
+         QW3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eg0jwY36541hZJchyMVRy74UzB7/OP6ZiEWz2ML7whQ=;
+        b=HZ3hiX+wGb0l4f0rGGAHS8Bg7PzQ3ekYeE8fZkkPSvcna5nbW/uwimS/PAgLVCdCbw
+         G8zJ6ubklY4LeYhUsbPwSj4bEDdI13oKOmBzXFCUSa8fMd9oNL3q/woIEQTrjCvwNR9x
+         aIvu5DqPolACJfRnv47fnhWXcocnwQYlzxR5T86pdFQk49ouFJG65g3godgFDN//6S56
+         ToZ+ThXKzqpXxLiju+hlKtB7K36fr5nDy6aY92m03jklznd5emi2ueyTdJzyejXdEUpZ
+         rabBxluR/U6Khj+g+knygHfaK3vUZg53T1QandYJjE4B5XYheSdoOjV3xOHrphOxxkqy
+         AHDw==
+X-Gm-Message-State: AJIora+flLsm+YV66NalN5zjqP9m3AtHC6TT47/wUDZgjShEk9QwJZu7
+        M7wDeHS3vHbDSxa9EeDPwWk=
+X-Google-Smtp-Source: AGRyM1tGVVzrg6o6zLqFqCGLE7KCRNXI6LzLmpZ/XGzwxSj3+MWmbmwFm6bY9m/47ZcNEJ4G80/omw==
+X-Received: by 2002:a63:85c6:0:b0:412:a94c:16d0 with SMTP id u189-20020a6385c6000000b00412a94c16d0mr3620950pgd.253.1657728719544;
+        Wed, 13 Jul 2022 09:11:59 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id mi9-20020a17090b4b4900b001ec84b0f199sm6501149pjb.1.2022.07.13.09.11.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 09:11:59 -0700 (PDT)
+Message-ID: <d86e4fc9-c4bc-b503-6f73-deac083452d8@gmail.com>
+Date:   Wed, 13 Jul 2022 09:11:50 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713131722.2316829-1-vamshigajjela@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RESEND PATCH 7/8] spi: bcm63xx-hsspi: bcmbca: Replace
+ ARCH_BCM_63XX with ARCH_BCMBCA
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        anand.gore@broadcom.com, dan.beygelman@broadcom.com,
+        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+References: <20220707065800.261269-1-william.zhang@broadcom.com>
+ <20220707065800.261269-7-william.zhang@broadcom.com>
+ <20220711021131.3289881-1-f.fainelli@gmail.com>
+ <Ysv/PNJzSEwRnQVI@sirena.org.uk>
+ <ce3f1df4-6919-e666-a8d0-a856e5d7bc3b@gmail.com>
+ <YsxLQgR8qj/JQY2G@sirena.org.uk>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <YsxLQgR8qj/JQY2G@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 06:47:22PM +0530, Vamshi Gajjela wrote:
-> From: VAMSHI GAJJELA <vamshigajjela@google.com>
+On 7/11/22 09:09, Mark Brown wrote:
+> On Mon, Jul 11, 2022 at 09:04:39AM -0700, Florian Fainelli wrote:
 > 
-> With PSLVERR_RESP_EN parameter set to 1, the device generates an error
-> response when an attempt to read an empty RBR with FIFO enabled.
+>> Each patch is independent from one another and there are not dependencies on
+>> the Broadcom arm-soc tree(s) other than for CONFIG_ARCH_BCMBCA which was
+>> introduced with v5.19 with b32c613b3fda3e1c26119609f1ad6b19178f82f5. That
+>> said, I prefer to take all patches via the Broadcom arm-soc tree(s) to
+>> ensure a timely inclusion for our upcoming v5.20 pull request, and ensure
+>> that all drivers are converted in one release cycle.
 > 
-> This happens when LCR writes are ignored when UART is busy.
-> dw8250_check_lcr() in retries to update LCR, invokes dw8250_force_idle()
-> to clear and reset FIFO and eventually reads UART_RX causing the error.
+>> If you want to give me your Acked-by or that I drop this and take it via the
+>> spi tree, please let me know.
 > 
-> Avoid this by not reading RBR/UART_RX when no data is available.
+> Acked-by: Mark Brown <broonie@kernel.org>
 
-From code perspective looks good,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-but maybe Ilpo or others have something to add based on the practical use.
-
-> Signed-off-by: VAMSHI GAJJELA <vamshigajjela@google.com>
-> ---
-> v3:
-> - check lsr based on FIFO enablement
-> v2:
-> - update as per review comments (re-format comments, xmas tree ordering)
->  drivers/tty/serial/8250/8250_dw.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-> index f57bbd32ef11..7573904579f6 100644
-> --- a/drivers/tty/serial/8250/8250_dw.c
-> +++ b/drivers/tty/serial/8250/8250_dw.c
-> @@ -82,8 +82,21 @@ static inline int dw8250_modify_msr(struct uart_port *p, int offset, int value)
->  static void dw8250_force_idle(struct uart_port *p)
->  {
->  	struct uart_8250_port *up = up_to_u8250p(p);
-> +	unsigned int lsr;
->  
->  	serial8250_clear_and_reinit_fifos(up);
-> +
-> +	/*
-> +	 * With PSLVERR_RESP_EN parameter set to 1, the device generates an
-> +	 * error response when an attempt to read an empty RBR with FIFO
-> +	 * enabled.
-> +	 */
-> +	if (up->fcr & UART_FCR_ENABLE_FIFO) {
-> +		lsr = p->serial_in(p, UART_LSR);
-> +		if (!(lsr & UART_LSR_DR))
-> +			return;
-> +	}
-> +
->  	(void)p->serial_in(p, UART_RX);
->  }
->  
-> -- 
-> 2.37.0.144.g8ac04bfd2-goog
-> 
-
+Thanks, FWIW, I had amended that patch with your ACked-by before sending 
+it to the arm-soc maintainers.
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Florian

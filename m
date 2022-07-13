@@ -2,93 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D31573C11
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72614573C13
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236083AbiGMRjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 13:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
+        id S236434AbiGMRjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 13:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236209AbiGMRjF (ORCPT
+        with ESMTP id S231617AbiGMRjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 13:39:05 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4763C2126B
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:39:03 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31c89653790so120137577b3.13
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:39:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RD0GRH4Ql0YFFRlQ5WE7C4dx47duLZOd3i+Z4AO1DPM=;
-        b=65eBjroirebcZZM+EXzJz01FsZav20mYrG1Yh43n5ISRXLySVqv2uOFXWNhbcVS42X
-         hfGJWP9ah1JgWnblcUcCjhNDUUubVz8ow1UrWu1LDr8mJc27v1M4C4X5hITyx9FdXDuU
-         2FDYavHsKKsLp7YpMzBBpzpDQ3m+wv2jiZEZAblHPleIXmFdA/Q036Ii3PsrwwalpEuP
-         GW087rtAYOW9R/SoSKO0EulDKYi8cvn95Z2VseWuGEqkE0ETom1ho3sePrWNMvQQZWkR
-         1cNqk0m3RHSYFRf2k+HDfJIHCzZUsxweK/QWO0Jmu11Ddp/wEw10sasdNGnHXAhyZzkb
-         oF9A==
-X-Gm-Message-State: AJIora/3LyWkhgoJTOeTByo57Y8GY3Xy2s6B5xPsH1s+PsBaIsOiJ0Nn
-        priXDErkiVWuWnn/ugT8zQ9cmYSOqDfnDzy49BzxJfNY
-X-Google-Smtp-Source: AGRyM1s4gXeCWRoXNhtxbRUwfe+h4fflXmP7GIjzQVbWWOGK5bt8/DGvLyPhaJsXJeFMTc+CnqMHIcbg69MakuyRZuc=
-X-Received: by 2002:a81:cd6:0:b0:31d:72e3:8b81 with SMTP id
- 205-20020a810cd6000000b0031d72e38b81mr5388854ywm.301.1657733942517; Wed, 13
- Jul 2022 10:39:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220713170239.84362-1-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0gReYjq5uBFZMF_r=fthTB6M_JpyG07-WAs=d+BC0H_Yw@mail.gmail.com> <Ys7++n8ZsmTY6J6s@smile.fi.intel.com>
-In-Reply-To: <Ys7++n8ZsmTY6J6s@smile.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Jul 2022 19:38:51 +0200
-Message-ID: <CAJZ5v0gVJM7t1k99wT0xtJPQTpQ44gXdxde-gH3iiu5Ua0G88g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] virt: acrn: Mark the uuid field as unused
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Fei Li <fei1.li@intel.com>, Shuo Liu <shuo.a.liu@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Wed, 13 Jul 2022 13:39:39 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E89B21E2A;
+        Wed, 13 Jul 2022 10:39:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 31FD9CE2349;
+        Wed, 13 Jul 2022 17:39:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F8DC34114;
+        Wed, 13 Jul 2022 17:39:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1657733975;
+        bh=hY34Ty6LLrpmsHEDeDeWG++UYJntFK70v8fR9W52Hm8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uWVyM7OVw4ZwRHp7DHN5Pc2YfWEfQ2/e794Jk2qvJyKZ74r6b0udb8VBtpPiCuPK6
+         EYJeQxuAMIrng8IXnhOdN2MkENapqZJr1oAVu6nxQ8lYWetlteOhG2MVfgb3fvJXXz
+         ckUbsR5I1Pv8K4OdA78tgWO3UCRLbXGYNdYC/DJU=
+Date:   Wed, 13 Jul 2022 10:39:33 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     Baoquan He <bhe@redhat.com>, kexec@lists.infradead.org,
+        linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        Arnd Bergmann <arnd@arndb.de>, Petr Mladek <pmladek@suse.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <jlelli@redhat.com>,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+Subject: Re: [PATCH v4 0/2] kexec, panic: Making crash_kexec() NMI safe
+Message-Id: <20220713103933.e7510daa1c1f6ccde32f4d42@linux-foundation.org>
+In-Reply-To: <xhsmh35f68tz4.mognet@vschneid.remote.csb>
+References: <20220630223258.4144112-1-vschneid@redhat.com>
+        <Yszgzwnk2Y+4ki58@MiWiFi-R3L-srv>
+        <xhsmh35f68tz4.mognet@vschneid.remote.csb>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 7:21 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, Jul 13, 2022 at 07:10:18PM +0200, Rafael J. Wysocki wrote:
-> > On Wed, Jul 13, 2022 at 7:03 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > After the commits for userspace [1][2] the uuid field is not being
-> > > used in the ACRN code. Update kernel to reflect these changes.
-> > > I.e. we do the following:
-> > > - adding a comment explaining that it's not used anymore
-> > > - replacing the specific type by a raw buffer
-> > > - updating the example code accordingly
-> > >
-> > > [1]: https://github.com/projectacrn/acrn-hypervisor/commit/da0d24326ed6
-> > > [2]: https://github.com/projectacrn/acrn-hypervisor/commit/bb0327e70097
-> >
-> > Why don't you use a Link tag for each of these?
->
-> I can use Link tags.
->
-> > > Fixes: 5b06931d7f8b ("sample/acrn: Introduce a sample of HSM ioctl interface usage")
-> > > Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
-> >
-> > Typically, the changelog should explain what was wrong in a previous
-> > commit that is being fixed in the current one, but that information is
-> > missing here.
->
-> The advertised field confused users and actually never been used. So
-> the wrong part here is that kernel puts something which userspace
-> never used and hence this may confuse a reader of this code.
->
-> Would it be sufficient? Another way is to drop Fixes tag.
+On Tue, 12 Jul 2022 12:13:03 +0100 Valentin Schneider <vschneid@redhat.com> wrote:
 
-Yes, it would.
+> On 12/07/22 10:47, Baoquan He wrote:
+> > Hi,
+> >
+> > On 06/30/22 at 11:32pm, Valentin Schneider wrote:
+> >> Hi folks,
+> >>
+> >> Here's ~v3~ v4 where we now completely get rid of kexec_mutex.
+> >>
+> >> o Patch 1 makes sure all kexec_mutex acquisitions are trylocks. This prevents
+> >>   having to add any while(atomic_cmpxchg()) loops which I'd really hate to see
+> >>   here. If that can't be done then I think we're better off with the combined
+> >>   mutex+atomic var approach.
+> >> o Patch 2 does the mutex -> atomic var switch.
+> >
+> > This series looks good, has it been taken into any tree?
+> >
+> 
+> I don't think so, briefly poked around git and haven't seen it anywhere.
+
+I'll stash it away for consideration after -rc1.

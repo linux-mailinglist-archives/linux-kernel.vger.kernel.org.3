@@ -2,152 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA7B5739BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB9F5739BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236657AbiGMPIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
+        id S236770AbiGMPIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236788AbiGMPIY (ORCPT
+        with ESMTP id S236827AbiGMPI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:08:24 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5C04BD1C;
-        Wed, 13 Jul 2022 08:07:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1657724871; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T0FfxSaCkfFkbBWXxE6Wzj1PxCYfgbtK0yTCw52GkdM=;
-        b=ZULgNyU35WqdIvHIEYL59a8ZtT6EuCJEilRjnhRRn4LbomjagX+Mn7qdh9yyvLvPsXHqIz
-        naSlIhmIFq3PK+8JIZjMYjKp/xk8mjGMYVdH/KO6wPIjlPm/cXxL/AYCkFiEBQ7gEHs6LM
-        C7Qdhlq/jAbRJeQ+Lv3MJkaZtmiFsXw=
-Date:   Wed, 13 Jul 2022 16:07:39 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 07/11] ASoC: jz4740-i2s: Make the PLL clock name
- SoC-specific
-To:     Zhou Yanjie <zhouyu@wanyeetech.com>
-Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <ROSYER.QTJF8J14H2YX1@crapouillou.net>
-In-Reply-To: <0269b850-f33a-7aa9-a3eb-83655bd4e19a@wanyeetech.com>
-References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
-        <20220708160244.21933-8-aidanmacdonald.0x0@gmail.com>
-        <0269b850-f33a-7aa9-a3eb-83655bd4e19a@wanyeetech.com>
+        Wed, 13 Jul 2022 11:08:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D07B4C61C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:08:07 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oBdy4-0001Jr-Tk; Wed, 13 Jul 2022 17:08:00 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oBdy3-000jno-4t; Wed, 13 Jul 2022 17:07:59 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oBdy2-004wvj-E3; Wed, 13 Jul 2022 17:07:58 +0200
+Date:   Wed, 13 Jul 2022 17:07:55 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     Rob Herring <robh@kernel.org>, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Adnan Chowdhury <adnan.chowdhury@sifive.com>
+Subject: Re: [PATCH 3/7] pwm: dwc: add of/platform support
+Message-ID: <20220713150755.bimcq2yiuvxn6n6v@pengutronix.de>
+References: <20220712100113.569042-1-ben.dooks@sifive.com>
+ <20220712100113.569042-4-ben.dooks@sifive.com>
+ <20220712221715.GT1823936-robh@kernel.org>
+ <feaacf44-f9a8-b892-d8ba-8a396b49d56b@sifive.com>
+ <20220713135230.gjbd3v6iih2uicpu@pengutronix.de>
+ <7999fec2-847a-86ce-ed78-d2a9008bf654@sifive.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r7fomtcfvjlx7yip"
+Content-Disposition: inline
+In-Reply-To: <7999fec2-847a-86ce-ed78-d2a9008bf654@sifive.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhou,
 
-Le mer., juil. 13 2022 at 22:33:44 +0800, Zhou Yanjie=20
-<zhouyu@wanyeetech.com> a =C3=A9crit :
-> Hi Aidan,
->=20
-> On 2022/7/9 =E4=B8=8A=E5=8D=8812:02, Aidan MacDonald wrote:
->> On some Ingenic SoCs, such as the X1000, there is a programmable
->> divider used to generate the I2S system clock from a PLL, rather
->> than a fixed PLL/2 clock. It doesn't make much sense to call the
->> clock "pll half" on those SoCs, so the clock name should really be
->> a SoC-dependent value.
->>=20
->> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->> ---
->>   sound/soc/jz4740/jz4740-i2s.c | 8 +++++++-
->>   1 file changed, 7 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
->> b/sound/soc/jz4740/jz4740-i2s.c
->> index 0dcc658b3784..a41398c24d0e 100644
->> --- a/sound/soc/jz4740/jz4740-i2s.c
->> +++ b/sound/soc/jz4740/jz4740-i2s.c
->> @@ -75,6 +75,8 @@ struct i2s_soc_info {
->>   	struct reg_field field_i2sdiv_capture;
->>   	struct reg_field field_i2sdiv_playback;
->>   =7F+	const char *pll_clk_name;
->> +
->>   	bool shared_fifo_flush;
->>   };
->>   =7F@@ -281,7 +283,7 @@ static int jz4740_i2s_set_sysclk(struct=20
->> snd_soc_dai *dai, int clk_id,
->>   		clk_set_parent(i2s->clk_i2s, parent);
->>   		break;
->>   	case JZ4740_I2S_CLKSRC_PLL:
->> -		parent =3D clk_get(NULL, "pll half");
->> +		parent =3D clk_get(NULL, i2s->soc_info->pll_clk_name);
->>   		if (IS_ERR(parent))
->>   			return PTR_ERR(parent);
->>   		clk_set_parent(i2s->clk_i2s, parent);
->> @@ -400,6 +402,7 @@ static const struct i2s_soc_info=20
->> jz4740_i2s_soc_info =3D {
->>   	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 8, 11),
->>   	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
->>   	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
->> +	.pll_clk_name		=3D "pll half",
->>   	.shared_fifo_flush	=3D true,
->>   };
->>   =7F@@ -409,6 +412,7 @@ static const struct i2s_soc_info=20
->> jz4760_i2s_soc_info =3D {
->>   	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
->>   	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
->>   	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
->> +	.pll_clk_name		=3D "pll half",
->>   };
->=20
->=20
-> Since JZ4760, according to the description of the I2SCDR register,
-> Ingenic SoCs no longer use PLL/2 clock, but directly use PLL clock,
-> so it seems also inappropriate to use "pll half" for these SoCs.
+--r7fomtcfvjlx7yip
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The device tree passes the clock as "pll half". So the driver should=20
-use this name as well...
+On Wed, Jul 13, 2022 at 03:30:07PM +0100, Ben Dooks wrote:
+> On 13/07/2022 14:52, Uwe Kleine-K=F6nig wrote:
+> > On Wed, Jul 13, 2022 at 12:56:55PM +0100, Ben Dooks wrote:
+> > > On 12/07/2022 23:17, Rob Herring wrote:
+> > > > On Tue, Jul 12, 2022 at 11:01:09AM +0100, Ben Dooks wrote:
+> > > > > The dwc pwm controller can be used in non-PCI systems, so allow
+> > > > > either platform or OF based probing.
+> > > > >=20
+> > > > > Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+>=20
+> [snip]
+>=20
+> > > > > +properties:
+> > > > > +  "#pwm-cells":
+> > > > > +    description: |
+> > > > > +      See pwm.yaml in this directory for a description of the ce=
+lls format.
+> > > >=20
+> > > > pwm.yaml doesn't define how many cells. You need to. And you don't =
+need
+> > > > generic descriptions.
+> > >=20
+> > >   "#pwm-cells":
+> > >      const: 1
+> > >=20
+> > > should be sufficient then?
+> >=20
+> > I would expect a value of (at least) 2 or (better) 3.
+>=20
+> OOPS, forgot the phandle.
+>=20
+> I will have to check if we have any support yet for dealing
+> with any of the pwm flags yet.
 
-Cheers,
--Paul
+I didn't double check, but given that the driver only supports inversed
+polarity it might not even work without passing the flag for inversed
+polarity. Having said that, I expect you have to only add "#pwm-cells =3D
+<3>;" to your dts and then everything should work just fine.
 
->>   =7F  static struct snd_soc_dai_driver jz4770_i2s_dai =3D {
->> @@ -435,6 +439,7 @@ static const struct i2s_soc_info=20
->> jz4770_i2s_soc_info =3D {
->>   	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
->>   	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
->>   	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
->> +	.pll_clk_name		=3D "pll half",
->>   };
->=20
->=20
-> Same here.
->=20
->=20
->>   =7F  static const struct i2s_soc_info jz4780_i2s_soc_info =3D {
->> @@ -443,6 +448,7 @@ static const struct i2s_soc_info=20
->> jz4780_i2s_soc_info =3D {
->>   	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
->>   	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
->>   	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
->> +	.pll_clk_name		=3D "pll half",
->>   };
->>=20
->=20
-> Same here.
->=20
->=20
-> Thanks and best regards!
->=20
->=20
->>   static const struct snd_soc_component_driver jz4740_i2s_component=20
->> =3D {
+Best regards
+Uwe
 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--r7fomtcfvjlx7yip
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLO38gACgkQwfwUeK3K
+7AlmswgAiqMblcZKY2HC5SkMnNz6H6mHLNEgzeCkHIteMgyJPzS3xsuSjuwWz+3m
+iA0HC08MY1I3nWzSTnnJjMakMX5dUIgn6Q95KVUSshSP2WHXX17DyOYwnZ18Du+0
+hxvFsp6x1tOEuFbcMSzYSxVwDCXahYUszFVz22O9ieNBsxk3/tf1v17lD9+kq8qt
+8YGnzYHLuL3m+7UENkVpqsXfDpWp2Nzshupq7g8TZFXfXX08lje5c7WK85q9JrKb
+dhyk6VsWrCJa4yXoNKpEE2WTZ8VZbQPwYyK+wyNgx83zI4l6wLKpkRjo2+4gQm2q
+0XbMxpCuONMAOhmV/BqzA46zdi6ggA==
+=CVm7
+-----END PGP SIGNATURE-----
+
+--r7fomtcfvjlx7yip--

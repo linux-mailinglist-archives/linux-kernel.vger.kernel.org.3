@@ -2,90 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E59573AC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8699573AEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237111AbiGMQCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
+        id S236619AbiGMQNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237124AbiGMQCj (ORCPT
+        with ESMTP id S230088AbiGMQNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:02:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2F850181;
-        Wed, 13 Jul 2022 09:02:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62047B820D6;
-        Wed, 13 Jul 2022 16:02:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB411C34114;
-        Wed, 13 Jul 2022 16:02:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657728155;
-        bh=0x7la21sx0eXpWEyHVI4LAHH8EFkUPLyeiwrINqKQwI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=i0rDRvXCD2agdvFTtmYpi2THI4Nae0zbbA+hI6/F0lLe6dDQuxOP06s/qRXSTUlpJ
-         ZQKK/s/DUnJzUBOJ0/CCzyJSCi3G52ztdC9MsP2WI1J3tbZb1wdmhdgVvB/KbKQMKh
-         pHu9/9arqbvertIappvNpaFz3FC2YrptGirOAOLQTaq7J3jy4Bp1r5ln9tvC5diYSs
-         yhWrds+OTMwVsegDB6TZAWZEMe2vjDb5cdYKmRNtS+hUy0F9FSWAlXMG7vi2TMkKsa
-         q5e/HfE//IrBeP6/TY7UvT2iUh38ebMfmeqaZ2KCWmyEC/ZAYuKyvdZ8yzoGoRGWAU
-         +sE9afk3Ll04g==
-Date:   Wed, 13 Jul 2022 17:12:23 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Michal Simek <michal.simek@amd.com>,
-        Conall O'Griofa <conall.o'griofa@xilinx.com>,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@xilinx.com>
-Subject: Re: [PATCH v1 1/2] iio: adc: xilinx-xadc: Make use of device
- properties
-Message-ID: <20220713171223.01005ca7@jic23-huawei>
-In-Reply-To: <YsMSvSJdc/eVqnYU@smile.fi.intel.com>
-References: <20220531141118.64540-1-andriy.shevchenko@linux.intel.com>
-        <20220603183224.540b3808@jic23-huawei>
-        <e2efcf6d-ed85-dc6e-64e1-f0efedd4a673@amd.com>
-        <YsBYvPKfZRLygCyz@smile.fi.intel.com>
-        <1d6eba67-5a63-e1b2-c9cd-583b950ddca6@amd.com>
-        <YsMSvSJdc/eVqnYU@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Wed, 13 Jul 2022 12:13:17 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1586B4D17B;
+        Wed, 13 Jul 2022 09:13:17 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id nd6so5155991qvb.6;
+        Wed, 13 Jul 2022 09:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GaxfdpGNL8YRjj66No72cOJoJPEZtfBFVgsIyJmO4lU=;
+        b=TbZQrMWzqmV2q4cNpeo632IJAuAP8p7vPi3HkNkBr45GfCmJh7BB5GThjXLE7e1i2F
+         Os6MdPT3kcLGAJegTHUPeeERf2seJDyDc0XLnMY13LqMj/AVXd9GZVyhtU4g7LjEDBzK
+         c5C+WDU6rcsm7/tktRdYH7I5mYZmReTokI9t2v5016SGuHDKaAZMVCDaDmeRKY71zo5B
+         E7d0GN7jE+bUgHEAAMqxMRZ8jpw4UMOWgqHjrBZnxarnhdFiVzNvqd9a3laCtUP/b/Dj
+         poiZnJ5p9ghaEPAM+mpeuJx55zSiArOPY/rwnr7hipglemmiijtCNtkyWUYUCYfvFUDv
+         w4GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GaxfdpGNL8YRjj66No72cOJoJPEZtfBFVgsIyJmO4lU=;
+        b=ozXDsrxyDvMzyTb1Ag91r4JWIsZII8N0aGOvpWshOO3h0BmxeZB5R4oBor0A5h1PAk
+         ZkXfuPbH/o1kHCGMcXJ1DbR8eApCswMequ4GXwnn2LrsqtAZt6zhQdHimvCVhPIz2fsX
+         65erYbYYOl0iI276X0GljtwhQcPSpeWZEKYfNa6mQ4aZrTkMhYQwVIBPtoH1Ic2Jeayg
+         WMEl/X9l4Ya8m55LupGGikme3FgADRz5SyxMfLcUEY/T0AJpYMC3z4o/b8b39VqH0zI8
+         I6L60d87LT4dzYsRJmMrDjC5Iox2O5r/5QtWIOcLfZvowPUzx3SaahDhkbSoUcZ5TS2k
+         DUHA==
+X-Gm-Message-State: AJIora94I8JAYcbt964sTs8Cc9NeedIGdQ0Mr4/Pq2Wic58dIPN1dzY/
+        OQsl8f7gInA46G4qRbEqpWhmA0BrHw0=
+X-Google-Smtp-Source: AGRyM1vX34USIrp8zyxD/WoTxnYaFdwszxXudT/G9ndO4Sj9LiwO+1hRlGftSRoX9GgdV/Okq+NYDw==
+X-Received: by 2002:a0c:eb4a:0:b0:472:f936:3ea0 with SMTP id c10-20020a0ceb4a000000b00472f9363ea0mr4017113qvq.43.1657728796043;
+        Wed, 13 Jul 2022 09:13:16 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:7360:5d5d:6684:e04b])
+        by smtp.gmail.com with ESMTPSA id s11-20020a05620a0bcb00b006b258b73eeesm11558730qki.120.2022.07.13.09.13.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 09:13:15 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 09:13:15 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Suresh Siddha <suresh.b.siddha@intel.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        iommu@lists.linux.dev, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu/vt-d: avoid invalid memory access via
+ node_online(NUMA_NO_NODE)
+Message-ID: <Ys7vG+CvJKEggPpM@yury-laptop>
+References: <20220712153836.41599-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712153836.41599-1-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Jul 2022 19:18:05 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On Tue, Jul 12, 2022 at 05:38:36PM +0200, Alexander Lobakin wrote:
+> KASAN reports:
+> 
+> [ 4.668325][ T0] BUG: KASAN: wild-memory-access in dmar_parse_one_rhsa (arch/x86/include/asm/bitops.h:214 arch/x86/include/asm/bitops.h:226 include/asm-generic/bitops/instrumented-non-atomic.h:142 include/linux/nodemask.h:415 drivers/iommu/intel/dmar.c:497)
+> [    4.676149][    T0] Read of size 8 at addr 1fffffff85115558 by task swapper/0/0
+> [    4.683454][    T0]
+> [    4.685638][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc3-00004-g0e862838f290 #1
+> [    4.694331][    T0] Hardware name: Supermicro SYS-5018D-FN4T/X10SDV-8C-TLN4F, BIOS 1.1 03/02/2016
+> [    4.703196][    T0] Call Trace:
+> [    4.706334][    T0]  <TASK>
+> [ 4.709133][ T0] ? dmar_parse_one_rhsa (arch/x86/include/asm/bitops.h:214 arch/x86/include/asm/bitops.h:226 include/asm-generic/bitops/instrumented-non-atomic.h:142 include/linux/nodemask.h:415 drivers/iommu/intel/dmar.c:497)
+> 
+> after converting the type of the first argument (@nr, bit number)
+> of arch_test_bit() from `long` to `unsigned long`[0].
+> 
+> Under certain conditions (for example, when ACPI NUMA is disabled
+> via command line), pxm_to_node() can return %NUMA_NO_NODE (-1).
+> It is valid 'magic' number of NUMA node, but not valid bit number
+> to use in bitops.
+> node_online() eventually descends to test_bit() without checking
+> for the input, assuming it's on caller side (which might be good
+> for perf-critical tasks). There, -1 becomes %ULONG_MAX which leads
+> to an insane array index when calculating bit position in memory.
+> 
+> For now, add an explicit check for @node being not %NUMA_NO_NODE
+> before calling test_bit(). The actual logics didn't change here
+> at all.
+> 
+> Fixes: ee34b32d8c29 ("dmar: support for parsing Remapping Hardware Static Affinity structure")
+> Cc: stable@vger.kernel.org # 2.6.33+
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-> On Mon, Jul 04, 2022 at 12:43:26PM +0200, Michal Simek wrote:
-> > On 7/2/22 16:39, Andy Shevchenko wrote:  
-> > > On Mon, Jun 20, 2022 at 04:58:04PM +0200, Michal Simek wrote:  
-> 
-> ...
-> 
-> > > Hmm... No news?  
-> > 
-> > Anand unfortunately left the company. I have asked testing team to test this
-> > patch and they can't see any issue.
-> > That's why:
-> > Acked-by: Michal Simek <michal.simek@amd.com>  
-> 
-> Ah, thanks! Jonathan, I guess we are set to apply now.
-> 
-
-Applied to the togreg branch of iio.git and pushed out as testing for all the
-normal reasons.
+Applied, thanks!
 
 Thanks,
+Yury
 
-Jonathan
+> ---
+>  drivers/iommu/intel/dmar.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
+> index 9699ca101c62..64b14ac4c7b0 100644
+> --- a/drivers/iommu/intel/dmar.c
+> +++ b/drivers/iommu/intel/dmar.c
+> @@ -494,7 +494,7 @@ static int dmar_parse_one_rhsa(struct acpi_dmar_header *header, void *arg)
+>  		if (drhd->reg_base_addr == rhsa->base_address) {
+>  			int node = pxm_to_node(rhsa->proximity_domain);
+>  
+> -			if (!node_online(node))
+> +			if (node != NUMA_NO_NODE && !node_online(node))
+>  				node = NUMA_NO_NODE;
+>  			drhd->iommu->node = node;
+>  			return 0;
+> -- 
+> 2.36.1

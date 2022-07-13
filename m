@@ -2,157 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28875730E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6235730E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235209AbiGMIWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S235055AbiGMIWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235283AbiGMIVZ (ORCPT
+        with ESMTP id S235459AbiGMIW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:21:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32F12C0505
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:17:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657700279;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uu20DLcBo8IMgtAmd4TXW8QAm+Rrq9nhKztBRSghNtQ=;
-        b=byHTz0ITw1BM/tXoHEUWGldmkSHzEOjVrE+C0yk7vOfXE6nmWHHgr+45Nl+mE/ZNDM//7P
-        iWRU68GVhk9wpwYW5LGMfqMSut5LS6Jvs+NgDG1s+MEpFBT48q5tZUg3meQnGrRyvkqK7I
-        wy+SjFrZgRqzX5dQgpz3cKssA0KOxQA=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-464-juk-u4hjOCO4kzmU0fcvbw-1; Wed, 13 Jul 2022 04:17:58 -0400
-X-MC-Unique: juk-u4hjOCO4kzmU0fcvbw-1
-Received: by mail-ed1-f71.google.com with SMTP id b15-20020a056402278f00b0043acaf76f8dso6493577ede.21
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:17:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Uu20DLcBo8IMgtAmd4TXW8QAm+Rrq9nhKztBRSghNtQ=;
-        b=TVKQKkYTxFj+Ai9/cQFUsLWiMEcoltYXROXD1c/IIVfNdebWZvvyn+eraEFdIIbxHp
-         ndodxOH/u231MUjaK5mxzWGg9IWjYYn9mCMllDTwA6SjK/yzIPCwBdwGwWjJon8R/l6L
-         /T+vgKINq29Kq1kod9nVmb7MA5PKbH19Gu0L9P/PYgOK8uMeGN4whw8w5Dkfz9j5VjZc
-         a0h15Y0W7c7eIWZO5LUT+wMxk/XmKm7Y3l1/rLP1Nyxo3ly95wZb+gwGPxEL5hEVCWQk
-         DQ/0mB8w+3eEtySr+NmoKwjJmc4WR9xur8ruCSzLPuArKKHEIQY/ErdBFp26RSwNEZ2v
-         QrRw==
-X-Gm-Message-State: AJIora8ZF222bqsTRv5pwQFh82aW/vCXoHxeJr/z1YUjUvtAnNgKRFQB
-        fCbUex+dOE85g+ZzwbxunuKkxCN6FlRUpfZxHv3XyvE6060erq9ZjV6eoOv0acmXZirUSuLEc3l
-        ed8WDtND59mnk8nS4Iuj4ojkO
-X-Received: by 2002:a05:6402:2743:b0:43a:7f92:8e30 with SMTP id z3-20020a056402274300b0043a7f928e30mr3058375edd.168.1657700276861;
-        Wed, 13 Jul 2022 01:17:56 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vvDRpXirRM0iB6PQcdsyPrWgZ0lhMW3iiiISyYBlWepAh94KQ4/f62jliEYyvjsvyWAvo3wQ==
-X-Received: by 2002:a05:6402:2743:b0:43a:7f92:8e30 with SMTP id z3-20020a056402274300b0043a7f928e30mr3058362edd.168.1657700276616;
-        Wed, 13 Jul 2022 01:17:56 -0700 (PDT)
-Received: from localhost (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id ce14-20020a170906b24e00b0071cbc7487e0sm4684104ejb.71.2022.07.13.01.17.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 01:17:56 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 10:17:54 +0200
-From:   Igor Mammedov <imammedo@redhat.com>
-To:     Bruce Fields <bfields@fieldses.org>
-Cc:     Jeff Layton <jlayton@redhat.com>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Ondrej Valousek <ondrej.valousek.xm@renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [GIT PULL] nfsd changes for 5.18
-Message-ID: <20220713101754.50ad9bde@redhat.com>
-In-Reply-To: <20220712114211.GA29976@fieldses.org>
-References: <EF97E1F5-B70F-4F9F-AC6D-7B48336AE3E5@oracle.com>
-        <20220710124344.36dfd857@redhat.com>
-        <B62B3A57-A8F7-478B-BBAB-785D0C2EE51C@oracle.com>
-        <5268baed1650b4cba32978ad32d14a5ef00539f2.camel@redhat.com>
-        <20220711181941.GC14184@fieldses.org>
-        <20220712102746.5404e88a@redhat.com>
-        <20220712114211.GA29976@fieldses.org>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 13 Jul 2022 04:22:27 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF02E529C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:19:10 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id E9B37C01E; Wed, 13 Jul 2022 10:19:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657700347; bh=kFnzNWxCZBAtAzvncVijnyMsZ788g9J2zeGCrsvs2KI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U5XqbnKR+EvimpzEGpDEPJp5D0lsrEpWfLmqC3xXBboSBynhQtNmAYFHuFf1a2W5D
+         NQC5i4FGCZ4vkWf79CA1wFhdC3aHnItMmlX7+Z/Nr+J5hVUdSYWBKQXDstNGGVZF3x
+         HTHCCLbgL46LlnSFEk4p7s8Jl1m7urIrUpOlTQodcXAm9WBWkqPyBrRES1A/gyFCzP
+         LLyj6i3kAVNrD/jGT62RDICDWmDjCeZmyIS8lz5LhQjIb75BrzqSesKvADZgCPp8ty
+         zj9y3kSbA/WdKo1ddZ2T1us8IJKrDUGNC++4wkVNEGDL7WfhIGTgymZxwLw6KtQd9y
+         BlJza7Fad+2ug==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 6D7B5C009;
+        Wed, 13 Jul 2022 10:19:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657700346; bh=kFnzNWxCZBAtAzvncVijnyMsZ788g9J2zeGCrsvs2KI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cBwR0TywevLZkr1EL7yOuaBuNlvTBdDQSBNdh+oapLKhMxpeZ8PsQoEGT/L7yvd1K
+         ZY37kU+pzgrRAaN8i9f360QYnOgMEIwejeG2701D36Bwk6cfpeJBoYgkqUVl27Wx7L
+         9IZebPQP+KHecYEtZG2ktJ/K+3YeO1bBx+cVHYX+qYjcU0u1rZpHHofa5SSQOQbJ1C
+         mdfntXkpvEVTIj2lENnsbyWveLFLxdpz/LedOmOU0rgLlC0layS1UVVQ1FehgxEa57
+         7fiTM64NpJAGJ7wRdZvhe9snJSnap4h2DT+yoXJjBI2b7HjFLfS13l7ewCR+eMQIQL
+         ReaKexNDnB1sw==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 88e820a3;
+        Wed, 13 Jul 2022 08:19:00 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 17:18:45 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        Greg Kurz <groug@kaod.org>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: Re: [RFC PATCH] 9p: forbid use of mempool for TFLUSH
+Message-ID: <Ys5/5RJCM6ur7oCc@codewreck.org>
+References: <12950409.o0bIpVV1Ut@silver>
+ <20220713041700.2502404-1-asmadeus@codewreck.org>
+ <0aa8323d-9461-a861-ac35-6952e7aeaf93@gmail.com>
+ <Ys5wRdSwtTeLF6nc@codewreck.org>
+ <a4d7f359-c430-6487-ec38-009bc2af2e97@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a4d7f359-c430-6487-ec38-009bc2af2e97@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 07:42:11 -0400
-Bruce Fields <bfields@fieldses.org> wrote:
-
-> On Tue, Jul 12, 2022 at 10:27:46AM +0200, Igor Mammedov wrote:
-> > On Mon, 11 Jul 2022 14:19:41 -0400
-> > Bruce Fields <bfields@fieldses.org> wrote:
-> >   
-> > > On Mon, Jul 11, 2022 at 06:33:04AM -0400, Jeff Layton wrote:  
-> > > > On Sun, 2022-07-10 at 16:42 +0000, Chuck Lever III wrote:    
-> > > > > > This patch regressed clients that support TIME_CREATE attribute.
-> > > > > > Starting with this patch client might think that server supports
-> > > > > > TIME_CREATE and start sending this attribute in its requests.    
-> > > > > 
-> > > > > Indeed, e377a3e698fb ("nfsd: Add support for the birth time
-> > > > > attribute") does not include a change to nfsd4_decode_fattr4()
-> > > > > that decodes the birth time attribute.
-> > > > > 
-> > > > > I don't immediately see another storage protocol stack in our
-> > > > > kernel that supports a client setting the birth time, so NFSD
-> > > > > might have to ignore the client-provided value.
-> > > > >     
-> > > > 
-> > > > Cephfs allows this. My thinking at the time that I implemented it was
-> > > > that it should be settable for backup purposes, but this was possibly a
-> > > > mistake. On most filesystems, the btime seems to be equivalent to inode
-> > > > creation time and is read-only.    
-> > > 
-> > > So supporting it as read-only seems reasonable.
-> > > 
-> > > Clearly, failing to decode the setattr attempt isn't the right way to do
-> > > that.  I'm not sure what exactly it should be doing--some kind of
-> > > permission error on any setattr containing TIME_CREATE?  
-> > 
-> > erroring out on TIME_CREATE will break client that try to
-> > set this attribute (legitimately). That's what by chance 
-> > happening with current master (return error when TIME_CREATE
-> > is present).  
+Kent Overstreet wrote on Wed, Jul 13, 2022 at 03:40:10AM -0400:
+>> I don't think it really matters either way -- I'm much more worried
+>> about the two points I gave in the commit comment section: mempools not
+>> being shared leading to increased memory usage when many mostly-idle
+>> mounts (I know users who need that), and more importantly that the
+>> mempool waiting is uninterruptible/non-failible might be "nice" from the
+>> using mempool side but I'd really prefer users to be able to ^C out of
+>> a mount made on a bad server getting stuck in mempool_alloc at least.
 > 
-> Hang on, now--our current server completely fails to decode any RPC
-> including a SETATTR that attempts to set TIME_CREATE, which means it
-> isn't able to return a useful error or tell the client which attribute
-> was the problem.
-> 
-> It's not too surprising that that would cause a problem for a client.
-> 
-> But failures to set supported attributes are completely normal, and if
-> mounts are failing completely because of that, something is really very
-> wrong with the client.
+> We should never get stuck allocating memory - if that happens, game over,
+> system can no longer make forward progress.
 
-returning unsupported attribute error might work, but as Chuck mentioned
-we do kind of support TIME_CREATE for some requests so client might be
-confused when server itself sends this attribute while errors out when
-client tries to send it.
-What I'm saying if we are to try returning error in this case
-it should be tested with variety of clients before committing
-to this approach. (meanwhile decoding and ignoring attribute
-with Chuck's patch fixes immediate issue).
+Well, that boils down to how much you want to trust your server.
+The qemu server has been working rather well but I just pulled out
+nfs-ganesha back from its grave for trans_fd tests earlier and got it to
+crash on fsstress in 5 minutes, because upstream hasn't had anyone
+working on the 9p side of things lately.
 
-> Could you first retest with a server that's patched to at least decode
-> the attribute correctly?  I suspect that may be enough.  If not, then
-it does work with fixed decoding path:
- (i.e. patched with https://lore.kernel.org/lkml/A4F0C111-B2EB-4325-AC6A-4A80BD19DA43@oracle.com/T/)
+In that particular case the socket closes and client gets out of
+requests, but if the server just stops replying you'll get requests
+stuck as 9p cannot get out of flushes -- another long standing bug, this
+one is even worse as it's unkillable.
+And as long as that waits it won't free up buffers.
 
-> the client in question has a more interesting problem on its hands.
+Even if that gets fixed, the buffers won't be freed until the server
+replies, which can be arbitrarily slow -- ^C on a process that waits
+for a free buffer must work.
+
+> > It looked good before I realized all the ways this could hang, but now I
+> > just think for something like 9p it makes more sense to fail the
+> > allocation and the IO than to bounce forever trying to allocate memory
+> > we don't have.
 > 
-> --b.
-> 
+> A filesystem that randomly fails IOs is, fundamentally, not a filesystem
+> that _works_. This whole thing started because 9pfs failing IOs has been
+> breaking my xfstests runs - and 9pfs isn't the thing I'm trying to test!
 
+I can agree with that and I probably wasn't clear, what I'm talking
+about here is interruptability.
+If all works well I agree some amount of waiting makes sense, but for
+networked stuff some fallback also is important.
+(if I could be greedy, some timeout would also make sense to me, but we
+can agree to disagree on this one and I'll live without one)
+
+> Local filesystems and the local IO stack have always had this understanding
+> - that IO needs to _just work_ and be able to make forward progress without
+> allocating additional memory, otherwise everything falls over because memory
+> reclaim requires doing IO. It's fundamentally no different with network
+> filesystems, the cultural expectation just hasn't been there historically
+> and not for any good technical reason - it's just that in -net land dropping
+> packets is generally a fine thing to do when you have to - but it's really
+> not in filesystem land, not if you want to make something that's reliable
+> under memory pressure!
+
+Well... I agree memory pressure isn't a good reason and am happy to
+spend some precious free time improving this, but while network
+reliability shouldn't be a problem (9p only works on reliable
+transports), I wouldn't be trusting 9p with too much.
+For virtio this isn't much of a problem but to give an example if the
+connection drops (server restart, or if over wan some stateful firewall
+restart) then the client gets lost and never recovers unless it's
+remounted.
+For this particular case, I know of a company that did an implementation
+to remember rebuild state (reopen fids etc) from the dentry paths but
+that was never made public nor would be applicable as is anyway.
+
+Priorities also aren't the same for everyone: while it probably is
+perfectly acceptable to put aside 2MB of memory in your case (single
+mount, 4x2x256KB msize), I've seen a usecase which requires many mounts
+(three per user logged in on the machine, possibly dozens) with large
+RPCs for performance (msize=1MB); clogging up 24MB of memory per user
+for filesystems they might not even use doesn't seem right to me.
+
+
+Well, frankly I've just been advising to get away from 9p whenever I
+could, it's simple so it's nice for testing, but I'm always surprised it
+keeps getting new users... So I probably shouldn't be maintaining this :)
+
+
+Anyway, for qemu it's probably possible to improve things some more:
+
+> > Let's first see if you still see if you still see high order allocation
+> > failures when these are made much less likely with Chritisan's patch.
+> 
+> Which patch is that? Unless you're talking about my mempool patch?
+
+You'll need his 4 patches to apply cleanly, it's what we were talking
+about for not allocating such large buffers for all requests.
+
+aa32658b1ca1 net/9p: split message size argument into 't_size' and 'r_size' pair
+86b277a492be 9p: add P9_ERRMAX for 9p2000 and 9p2000.u
+17c59311f84d net/9p: add p9_msg_buf_size()
+4b9eca5829ed net/9p: allocate appropriate reduced message buffers
+
+The first three prepare and last one enables it. Most requests will
+allocate much smaller buffers, so if you have parallel IOs in particular
+it should be quite less likely to hit allocation failures.
+They'll still happen for the larger messages (read/readdir/write) if you
+can't allocate a single contiguous segment, but even these would only
+need one such buffer instead of the current two, so that still helps a
+bit.
+
+--
+Dominique

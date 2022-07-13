@@ -2,62 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2976A57331B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1EE573320
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiGMJmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
+        id S234610AbiGMJoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236239AbiGMJme (ORCPT
+        with ESMTP id S235701AbiGMJoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:42:34 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149B9F6B8C;
-        Wed, 13 Jul 2022 02:42:27 -0700 (PDT)
-X-UUID: 3335e337e67f4c20abb0b27598c85d09-20220713
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:5cb099b1-7e7e-4fc9-b723-405512c90f1e,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:60b95fd7-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 3335e337e67f4c20abb0b27598c85d09-20220713
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 688521074; Wed, 13 Jul 2022 17:42:23 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 13 Jul 2022 17:42:23 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 13 Jul 2022 17:42:22 +0800
-Message-ID: <28177f7f7c1d48b30338071f57f9801d45617f8b.camel@mediatek.com>
-Subject: Re: [PATCH 1/5] usb: mtu3: fix coverity of string buffer
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Date:   Wed, 13 Jul 2022 17:42:22 +0800
-In-Reply-To: <YsvHD6dpU3O7gQD4@kroah.com>
-References: <20220708071903.25752-1-chunfeng.yun@mediatek.com>
-         <YsfcFXtkDxe6ndFT@kroah.com>
-         <9bbc0472bafa6116618e9861c3566d470c30c619.camel@mediatek.com>
-         <YsvHD6dpU3O7gQD4@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 13 Jul 2022 05:44:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7163F22B2C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:44:08 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 87BA91424;
+        Wed, 13 Jul 2022 02:44:08 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7AB1F3F792;
+        Wed, 13 Jul 2022 02:44:06 -0700 (PDT)
+Message-ID: <76169a43-cda0-177a-2b1f-7dcdad900935@arm.com>
+Date:   Wed, 13 Jul 2022 11:43:57 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 1/2] sched/rt: fix bad task migration for rt tasks
+Content-Language: en-US
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+References: <20220712150506.632304-1-schspa@gmail.com>
+ <c1db7f31-82e1-eac4-bd49-212859727cb2@arm.com> <m2h73me3nk.fsf@gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <m2h73me3nk.fsf@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,27 +48,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-11 at 08:45 +0200, Greg Kroah-Hartman wrote:
-> On Mon, Jul 11, 2022 at 02:39:10PM +0800, Chunfeng Yun wrote:
-> > On Fri, 2022-07-08 at 09:26 +0200, Greg Kroah-Hartman wrote:
-> > > On Fri, Jul 08, 2022 at 03:18:59PM +0800, Chunfeng Yun wrote:
-> > > > Use snprintf instead of sprintf which could cause buffer
-> > > > overflow.
-> > > 
-> > > How can it cause an overflow?
-> > 
-> > Maybe I didn't describe it clearly, this patch is used to fix
-> > coverity
-> > check warning of string buffer, in fact no overflow happens.
+On 12/07/2022 17:35, Schspa Shi wrote:
 > 
-> Then perhaps the coverity warning is useless and
-> yet-another-false-positive that that tool is known to spit out?
+> Dietmar Eggemann <dietmar.eggemann@arm.com> writes:
 > 
-> Don't make code changes just because broken tools say to do so.
-Got it, thanks a lot
+>> On 12/07/2022 17:05, Schspa Shi wrote:
 
-> 
-> thanks,
-> 
-> greg k-h
+[...]
 
+>> What code-base is this?
+> 
+> This is the logs from 5.10.59-rt
+> Link: https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+> v5.10.59-rt52 (9007b684f615750b0ee4ec57b5e547a4bf4a223e).
+
+Thanks.
+
+>> IMHO, currently this `WARN_ON_ONCE(is_migration_disabled(p))` in
+>> set_task_cpu() is at > line 3000.
+>>
+> 
+> But the master code have this BUG too.
+
+I see. It's just that need_to_push in task_woken_rt() triggers
+push_rt_tasks() much more often on preempt-rt.
+
+[...]
+
+>>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+>>> index 8c9ed96648409..7bd3e6ecbe45e 100644
+>>> --- a/kernel/sched/rt.c
+>>> +++ b/kernel/sched/rt.c
+>>> @@ -1998,11 +1998,15 @@ static struct rq *find_lock_lowest_rq(struct task_struct *task, struct rq *rq)
+>>>  			 * the mean time, task could have
+>>>  			 * migrated already or had its affinity changed.
+>>>  			 * Also make sure that it wasn't scheduled on its rq.
+>>> +			 * It is possible the task was scheduled, set
+>>> +			 * "migrate_disabled" and then got preempted, so we must
+>>> +			 * check the task migration disable flag here too.
+>>>  			 */
+>>>  			if (unlikely(task_rq(task) != rq ||
+>>>  				     !cpumask_test_cpu(lowest_rq->cpu, &task->cpus_mask) ||
+>>>  				     task_running(rq, task) ||
+>>>  				     !rt_task(task) ||
+>>> +				     is_migration_disabled(task) ||
+>>
+>> I wonder why this isn't covered by `task_rq(task) != rq` in this condition?
+>>
+> 
+> It's because thie task is not migrated, it just get scheduled and
+> calling migrate_disable(); and then got preempted by it's CPU core
+> before enable migrate_enable(). the task_rq not changed in this
+> scenarios.
+
+Yes, get it now. Essentially we need `current CPU (CPU0) != rq->cpu
+(CPU1)`. Now I see that you had the discussion with Steven already on v3 ;-)

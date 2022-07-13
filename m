@@ -2,555 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FD5572F2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC669572F30
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234456AbiGMH0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S234139AbiGMH1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiGMHZ7 (ORCPT
+        with ESMTP id S229968AbiGMH1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:25:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E245B3D4A;
-        Wed, 13 Jul 2022 00:25:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE1E06174C;
-        Wed, 13 Jul 2022 07:25:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD05AC3411E;
-        Wed, 13 Jul 2022 07:25:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657697156;
-        bh=OT8Api7J5MNjv9pePnC1AqBj8RdoNZ7Ynh8+jK0pT8Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dss9doratDpK3PAp8yU6bJpo55rdNxclLgkZbJKP4hVRPQHn4hV2NH2CXIUH70TcS
-         LfW0ZPxYI/aqxtDtzmE2n1Zkurwh2dbZGM3Zn6jk8t7bPEvOIxtL5XJ9afhR38H652
-         2njHTJK2DSXQvUmY1i9wB4RSCaRYeesdEJJb0C/s=
-Date:   Wed, 13 Jul 2022 09:25:53 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: Re: [PATCH 5.10 017/130] x86/insn: Add an insn_decode() API
-Message-ID: <Ys5zgem4Zp7y7ajh@kroah.com>
-References: <20220712183246.394947160@linuxfoundation.org>
- <20220712183247.196840353@linuxfoundation.org>
- <4186eb81-abce-7138-6c8d-791785ad4ad5@gmail.com>
+        Wed, 13 Jul 2022 03:27:02 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC21AE2A17;
+        Wed, 13 Jul 2022 00:27:01 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id e69so17897724ybh.2;
+        Wed, 13 Jul 2022 00:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=IaCuAnDuqRoO8/jU22pSfTKWD6iflCkcJh14rWsQ/1M=;
+        b=WoZDRQ+q4tjCB5Ct3FiO0sSoF6JBXWibfr32sk3pnnhFL0UsxcjrBDxiPnXoofMeyM
+         iQUHVpnRYtWrOpwNnBdndogbJvjd6dX2YoV9W+f9cWgVY5dEAw8Izu2ZQIMLkeGMF23t
+         w5uBm9CjTLC+tIoF8eO4pLfOPAxXk8dWSWMB9y7HUNC4rRDR/1d5f9JvG15NvFCLxfqP
+         HaJVHLVBWQ8rMEkrXabHa6KZm2qx5aA2qJMmnk9GJetQ/v3qfwH6Zga6xkQgNwtcEi4r
+         8k5I5dOZE2GSKp7rOqEUqHtPg06L49BvmoR71i+6sE3iAMHHZinocvvyUH8sJDi0vIrX
+         tFJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=IaCuAnDuqRoO8/jU22pSfTKWD6iflCkcJh14rWsQ/1M=;
+        b=3YHURmshsnDHOBSqgmf/Jz4+6bsMHZi0+6YFOCiB+EVZEX3Q7b+4y4y+licy+43G4C
+         yADW0XXzniCkSmb8Bsw4TUwyZnY5ONtAjN69THGKE+KXqmvCZbjayn7admSOMT6ztOVd
+         k5OX5oLvP9Inkxk5ub56FW/u2sYDZzb5ygbz+N7d7Zu4Vf+6F9kXSVOmrhaG4S6rEaMQ
+         rRnYkF+8WLXmwGMwm1xZZ+iODdZizEw708Txa4woP7xe6VXgjZ7FeaPK3CNoImHFYb09
+         CwDp5/bcSC3WUCkXxZc62YiLjpfc52ZOLAxYagGp8J7+2qQ0Z0t/2W00zoTw8vuRG6Ed
+         5WhQ==
+X-Gm-Message-State: AJIora8Zq6Urmh/6FpeGuHTjaPIaUJLd8gPDQtESJ8+U0wbEpMlSAE1S
+        AO7jiCpKhXGJYyDQspxnHTESmh7T7hlnqY4aQWU=
+X-Google-Smtp-Source: AGRyM1uLOl/Q7U4qmzQ49L6oSYRgW/l+cioK2zfHPb+jrHSM6prJh+ENQEK85RthI87HZllq440HCfZhjEqDovYWgtM=
+X-Received: by 2002:a25:1457:0:b0:66e:cb5a:5dae with SMTP id
+ 84-20020a251457000000b0066ecb5a5daemr2193434ybu.27.1657697220942; Wed, 13 Jul
+ 2022 00:27:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4186eb81-abce-7138-6c8d-791785ad4ad5@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Wed, 13 Jul 2022 09:26:50 +0200
+Message-ID: <CAKXUXMy2WfsRj+nJuNCV4bPNYTvDySLOq3HgpK+gWJSpWS81Kg@mail.gmail.com>
+Subject: Update "If something goes wrong" in Documentation/admin-guide/README.rst
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 04:04:29PM -0700, Florian Fainelli wrote:
-> On 7/12/22 11:37, Greg Kroah-Hartman wrote:
-> > From: Borislav Petkov <bp@suse.de>
-> > 
-> > commit 93281c4a96572a34504244969b938e035204778d upstream.
-> > 
-> > Users of the instruction decoder should use this to decode instruction
-> > bytes. For that, have insn*() helpers return an int value to denote
-> > success/failure. When there's an error fetching the next insn byte and
-> > the insn falls short, return -ENODATA to denote that.
-> > 
-> > While at it, make insn_get_opcode() more stricter as to whether what has
-> > seen so far is a valid insn and if not.
-> > 
-> > Copy linux/kconfig.h for the tools-version of the decoder so that it can
-> > use IS_ENABLED().
-> > 
-> > Also, cast the INSN_MODE_KERN dummy define value to (enum insn_mode)
-> > for tools use of the decoder because perf tool builds with -Werror and
-> > errors out with -Werror=sign-compare otherwise.
-> > 
-> > Signed-off-by: Borislav Petkov <bp@suse.de>
-> > Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > Link: https://lkml.kernel.org/r/20210304174237.31945-5-bp@alien8.de
-> > Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >   arch/x86/include/asm/insn.h       |   24 ++--
-> >   arch/x86/lib/insn.c               |  216 +++++++++++++++++++++++++++++-------
-> >   tools/arch/x86/include/asm/insn.h |   24 ++--
-> >   tools/arch/x86/lib/insn.c         |  222 +++++++++++++++++++++++++++++---------
-> >   tools/include/linux/kconfig.h     |   73 ++++++++++++
-> >   5 files changed, 452 insertions(+), 107 deletions(-)
-> >   create mode 100644 tools/include/linux/kconfig.h
-> > 
-> > --- a/arch/x86/include/asm/insn.h
-> > +++ b/arch/x86/include/asm/insn.h
-> > @@ -87,13 +87,23 @@ struct insn {
-> >   #define X86_VEX_M_MAX	0x1f			/* VEX3.M Maximum value */
-> >   extern void insn_init(struct insn *insn, const void *kaddr, int buf_len, int x86_64);
-> > -extern void insn_get_prefixes(struct insn *insn);
-> > -extern void insn_get_opcode(struct insn *insn);
-> > -extern void insn_get_modrm(struct insn *insn);
-> > -extern void insn_get_sib(struct insn *insn);
-> > -extern void insn_get_displacement(struct insn *insn);
-> > -extern void insn_get_immediate(struct insn *insn);
-> > -extern void insn_get_length(struct insn *insn);
-> > +extern int insn_get_prefixes(struct insn *insn);
-> > +extern int insn_get_opcode(struct insn *insn);
-> > +extern int insn_get_modrm(struct insn *insn);
-> > +extern int insn_get_sib(struct insn *insn);
-> > +extern int insn_get_displacement(struct insn *insn);
-> > +extern int insn_get_immediate(struct insn *insn);
-> > +extern int insn_get_length(struct insn *insn);
-> > +
-> > +enum insn_mode {
-> > +	INSN_MODE_32,
-> > +	INSN_MODE_64,
-> > +	/* Mode is determined by the current kernel build. */
-> > +	INSN_MODE_KERN,
-> > +	INSN_NUM_MODES,
-> > +};
-> > +
-> > +extern int insn_decode(struct insn *insn, const void *kaddr, int buf_len, enum insn_mode m);
-> >   /* Attribute will be determined after getting ModRM (for opcode groups) */
-> >   static inline void insn_get_attribute(struct insn *insn)
-> > --- a/arch/x86/lib/insn.c
-> > +++ b/arch/x86/lib/insn.c
-> > @@ -13,6 +13,9 @@
-> >   #include <asm/inat.h> /*__ignore_sync_check__ */
-> >   #include <asm/insn.h> /* __ignore_sync_check__ */
-> > +#include <linux/errno.h>
-> > +#include <linux/kconfig.h>
-> > +
-> >   #include <asm/emulate_prefix.h> /* __ignore_sync_check__ */
-> >   /* Verify next sizeof(t) bytes can be on the same instruction */
-> > @@ -97,8 +100,12 @@ static void insn_get_emulate_prefix(stru
-> >    * Populates the @insn->prefixes bitmap, and updates @insn->next_byte
-> >    * to point to the (first) opcode.  No effect if @insn->prefixes.got
-> >    * is already set.
-> > + *
-> > + * * Returns:
-> > + * 0:  on success
-> > + * < 0: on error
-> >    */
-> > -void insn_get_prefixes(struct insn *insn)
-> > +int insn_get_prefixes(struct insn *insn)
-> >   {
-> >   	struct insn_field *prefixes = &insn->prefixes;
-> >   	insn_attr_t attr;
-> > @@ -106,7 +113,7 @@ void insn_get_prefixes(struct insn *insn
-> >   	int i, nb;
-> >   	if (prefixes->got)
-> > -		return;
-> > +		return 0;
-> >   	insn_get_emulate_prefix(insn);
-> > @@ -217,8 +224,10 @@ vex_end:
-> >   	prefixes->got = 1;
-> > +	return 0;
-> > +
-> >   err_out:
-> > -	return;
-> > +	return -ENODATA;
-> >   }
-> >   /**
-> > @@ -230,16 +239,25 @@ err_out:
-> >    * If necessary, first collects any preceding (prefix) bytes.
-> >    * Sets @insn->opcode.value = opcode1.  No effect if @insn->opcode.got
-> >    * is already 1.
-> > + *
-> > + * Returns:
-> > + * 0:  on success
-> > + * < 0: on error
-> >    */
-> > -void insn_get_opcode(struct insn *insn)
-> > +int insn_get_opcode(struct insn *insn)
-> >   {
-> >   	struct insn_field *opcode = &insn->opcode;
-> > +	int pfx_id, ret;
-> >   	insn_byte_t op;
-> > -	int pfx_id;
-> > +
-> >   	if (opcode->got)
-> > -		return;
-> > -	if (!insn->prefixes.got)
-> > -		insn_get_prefixes(insn);
-> > +		return 0;
-> > +
-> > +	if (!insn->prefixes.got) {
-> > +		ret = insn_get_prefixes(insn);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> >   	/* Get first opcode */
-> >   	op = get_next(insn_byte_t, insn);
-> > @@ -254,9 +272,13 @@ void insn_get_opcode(struct insn *insn)
-> >   		insn->attr = inat_get_avx_attribute(op, m, p);
-> >   		if ((inat_must_evex(insn->attr) && !insn_is_evex(insn)) ||
-> >   		    (!inat_accept_vex(insn->attr) &&
-> > -		     !inat_is_group(insn->attr)))
-> > -			insn->attr = 0;	/* This instruction is bad */
-> > -		goto end;	/* VEX has only 1 byte for opcode */
-> > +		     !inat_is_group(insn->attr))) {
-> > +			/* This instruction is bad */
-> > +			insn->attr = 0;
-> > +			return -EINVAL;
-> > +		}
-> > +		/* VEX has only 1 byte for opcode */
-> > +		goto end;
-> >   	}
-> >   	insn->attr = inat_get_opcode_attribute(op);
-> > @@ -267,13 +289,18 @@ void insn_get_opcode(struct insn *insn)
-> >   		pfx_id = insn_last_prefix_id(insn);
-> >   		insn->attr = inat_get_escape_attribute(op, pfx_id, insn->attr);
-> >   	}
-> > -	if (inat_must_vex(insn->attr))
-> > -		insn->attr = 0;	/* This instruction is bad */
-> > +
-> > +	if (inat_must_vex(insn->attr)) {
-> > +		/* This instruction is bad */
-> > +		insn->attr = 0;
-> > +		return -EINVAL;
-> > +	}
-> >   end:
-> >   	opcode->got = 1;
-> > +	return 0;
-> >   err_out:
-> > -	return;
-> > +	return -ENODATA;
-> >   }
-> >   /**
-> > @@ -283,15 +310,25 @@ err_out:
-> >    * Populates @insn->modrm and updates @insn->next_byte to point past the
-> >    * ModRM byte, if any.  If necessary, first collects the preceding bytes
-> >    * (prefixes and opcode(s)).  No effect if @insn->modrm.got is already 1.
-> > + *
-> > + * Returns:
-> > + * 0:  on success
-> > + * < 0: on error
-> >    */
-> > -void insn_get_modrm(struct insn *insn)
-> > +int insn_get_modrm(struct insn *insn)
-> >   {
-> >   	struct insn_field *modrm = &insn->modrm;
-> >   	insn_byte_t pfx_id, mod;
-> > +	int ret;
-> > +
-> >   	if (modrm->got)
-> > -		return;
-> > -	if (!insn->opcode.got)
-> > -		insn_get_opcode(insn);
-> > +		return 0;
-> > +
-> > +	if (!insn->opcode.got) {
-> > +		ret = insn_get_opcode(insn);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> >   	if (inat_has_modrm(insn->attr)) {
-> >   		mod = get_next(insn_byte_t, insn);
-> > @@ -301,17 +338,22 @@ void insn_get_modrm(struct insn *insn)
-> >   			pfx_id = insn_last_prefix_id(insn);
-> >   			insn->attr = inat_get_group_attribute(mod, pfx_id,
-> >   							      insn->attr);
-> > -			if (insn_is_avx(insn) && !inat_accept_vex(insn->attr))
-> > -				insn->attr = 0;	/* This is bad */
-> > +			if (insn_is_avx(insn) && !inat_accept_vex(insn->attr)) {
-> > +				/* Bad insn */
-> > +				insn->attr = 0;
-> > +				return -EINVAL;
-> > +			}
-> >   		}
-> >   	}
-> >   	if (insn->x86_64 && inat_is_force64(insn->attr))
-> >   		insn->opnd_bytes = 8;
-> > +
-> >   	modrm->got = 1;
-> > +	return 0;
-> >   err_out:
-> > -	return;
-> > +	return -ENODATA;
-> >   }
-> > @@ -325,11 +367,16 @@ err_out:
-> >   int insn_rip_relative(struct insn *insn)
-> >   {
-> >   	struct insn_field *modrm = &insn->modrm;
-> > +	int ret;
-> >   	if (!insn->x86_64)
-> >   		return 0;
-> > -	if (!modrm->got)
-> > -		insn_get_modrm(insn);
-> > +
-> > +	if (!modrm->got) {
-> > +		ret = insn_get_modrm(insn);
-> > +		if (ret)
-> > +			return 0;
-> > +	}
-> >   	/*
-> >   	 * For rip-relative instructions, the mod field (top 2 bits)
-> >   	 * is zero and the r/m field (bottom 3 bits) is 0x5.
-> > @@ -343,15 +390,25 @@ int insn_rip_relative(struct insn *insn)
-> >    *
-> >    * If necessary, first collects the instruction up to and including the
-> >    * ModRM byte.
-> > + *
-> > + * Returns:
-> > + * 0: if decoding succeeded
-> > + * < 0: otherwise.
-> >    */
-> > -void insn_get_sib(struct insn *insn)
-> > +int insn_get_sib(struct insn *insn)
-> >   {
-> >   	insn_byte_t modrm;
-> > +	int ret;
-> >   	if (insn->sib.got)
-> > -		return;
-> > -	if (!insn->modrm.got)
-> > -		insn_get_modrm(insn);
-> > +		return 0;
-> > +
-> > +	if (!insn->modrm.got) {
-> > +		ret = insn_get_modrm(insn);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> >   	if (insn->modrm.nbytes) {
-> >   		modrm = (insn_byte_t)insn->modrm.value;
-> >   		if (insn->addr_bytes != 2 &&
-> > @@ -362,8 +419,10 @@ void insn_get_sib(struct insn *insn)
-> >   	}
-> >   	insn->sib.got = 1;
-> > +	return 0;
-> > +
-> >   err_out:
-> > -	return;
-> > +	return -ENODATA;
-> >   }
-> > @@ -374,15 +433,25 @@ err_out:
-> >    * If necessary, first collects the instruction up to and including the
-> >    * SIB byte.
-> >    * Displacement value is sign-expanded.
-> > + *
-> > + * * Returns:
-> > + * 0: if decoding succeeded
-> > + * < 0: otherwise.
-> >    */
-> > -void insn_get_displacement(struct insn *insn)
-> > +int insn_get_displacement(struct insn *insn)
-> >   {
-> >   	insn_byte_t mod, rm, base;
-> > +	int ret;
-> >   	if (insn->displacement.got)
-> > -		return;
-> > -	if (!insn->sib.got)
-> > -		insn_get_sib(insn);
-> > +		return 0;
-> > +
-> > +	if (!insn->sib.got) {
-> > +		ret = insn_get_sib(insn);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> >   	if (insn->modrm.nbytes) {
-> >   		/*
-> >   		 * Interpreting the modrm byte:
-> > @@ -425,9 +494,10 @@ void insn_get_displacement(struct insn *
-> >   	}
-> >   out:
-> >   	insn->displacement.got = 1;
-> > +	return 0;
-> >   err_out:
-> > -	return;
-> > +	return -ENODATA;
-> >   }
-> >   /* Decode moffset16/32/64. Return 0 if failed */
-> > @@ -538,20 +608,30 @@ err_out:
-> >   }
-> >   /**
-> > - * insn_get_immediate() - Get the immediates of instruction
-> > + * insn_get_immediate() - Get the immediate in an instruction
-> >    * @insn:	&struct insn containing instruction
-> >    *
-> >    * If necessary, first collects the instruction up to and including the
-> >    * displacement bytes.
-> >    * Basically, most of immediates are sign-expanded. Unsigned-value can be
-> > - * get by bit masking with ((1 << (nbytes * 8)) - 1)
-> > + * computed by bit masking with ((1 << (nbytes * 8)) - 1)
-> > + *
-> > + * Returns:
-> > + * 0:  on success
-> > + * < 0: on error
-> >    */
-> > -void insn_get_immediate(struct insn *insn)
-> > +int insn_get_immediate(struct insn *insn)
-> >   {
-> > +	int ret;
-> > +
-> >   	if (insn->immediate.got)
-> > -		return;
-> > -	if (!insn->displacement.got)
-> > -		insn_get_displacement(insn);
-> > +		return 0;
-> > +
-> > +	if (!insn->displacement.got) {
-> > +		ret = insn_get_displacement(insn);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> >   	if (inat_has_moffset(insn->attr)) {
-> >   		if (!__get_moffset(insn))
-> > @@ -604,9 +684,10 @@ void insn_get_immediate(struct insn *ins
-> >   	}
-> >   done:
-> >   	insn->immediate.got = 1;
-> > +	return 0;
-> >   err_out:
-> > -	return;
-> > +	return -ENODATA;
-> >   }
-> >   /**
-> > @@ -615,13 +696,58 @@ err_out:
-> >    *
-> >    * If necessary, first collects the instruction up to and including the
-> >    * immediates bytes.
-> > - */
-> > -void insn_get_length(struct insn *insn)
-> > + *
-> > + * Returns:
-> > + *  - 0 on success
-> > + *  - < 0 on error
-> > +*/
-> > +int insn_get_length(struct insn *insn)
-> >   {
-> > +	int ret;
-> > +
-> >   	if (insn->length)
-> > -		return;
-> > -	if (!insn->immediate.got)
-> > -		insn_get_immediate(insn);
-> > +		return 0;
-> > +
-> > +	if (!insn->immediate.got) {
-> > +		ret = insn_get_immediate(insn);
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> >   	insn->length = (unsigned char)((unsigned long)insn->next_byte
-> >   				     - (unsigned long)insn->kaddr);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +/**
-> > + * insn_decode() - Decode an x86 instruction
-> > + * @insn:	&struct insn to be initialized
-> > + * @kaddr:	address (in kernel memory) of instruction (or copy thereof)
-> > + * @buf_len:	length of the insn buffer at @kaddr
-> > + * @m:		insn mode, see enum insn_mode
-> > + *
-> > + * Returns:
-> > + * 0: if decoding succeeded
-> > + * < 0: otherwise.
-> > + */
-> > +int insn_decode(struct insn *insn, const void *kaddr, int buf_len, enum insn_mode m)
-> > +{
-> > +	int ret;
-> > +
-> > +/* #define INSN_MODE_KERN	-1 __ignore_sync_check__ mode is only valid in the kernel */
-> > +
-> > +	if (m == INSN_MODE_KERN)
-> > +		insn_init(insn, kaddr, buf_len, IS_ENABLED(CONFIG_X86_64));
-> > +	else
-> > +		insn_init(insn, kaddr, buf_len, m == INSN_MODE_64);
-> > +
-> > +	ret = insn_get_length(insn);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	if (insn_complete(insn))
-> > +		return 0;
-> > +
-> > +	return -EINVAL;
-> >   }
-> > --- a/tools/arch/x86/include/asm/insn.h
-> > +++ b/tools/arch/x86/include/asm/insn.h
-> > @@ -87,13 +87,23 @@ struct insn {
-> >   #define X86_VEX_M_MAX	0x1f			/* VEX3.M Maximum value */
-> >   extern void insn_init(struct insn *insn, const void *kaddr, int buf_len, int x86_64);
-> > -extern void insn_get_prefixes(struct insn *insn);
-> > -extern void insn_get_opcode(struct insn *insn);
-> > -extern void insn_get_modrm(struct insn *insn);
-> > -extern void insn_get_sib(struct insn *insn);
-> > -extern void insn_get_displacement(struct insn *insn);
-> > -extern void insn_get_immediate(struct insn *insn);
-> > -extern void insn_get_length(struct insn *insn);
-> > +extern int insn_get_prefixes(struct insn *insn);
-> > +extern int insn_get_opcode(struct insn *insn);
-> > +extern int insn_get_modrm(struct insn *insn);
-> > +extern int insn_get_sib(struct insn *insn);
-> > +extern int insn_get_displacement(struct insn *insn);
-> > +extern int insn_get_immediate(struct insn *insn);
-> > +extern int insn_get_length(struct insn *insn);
-> > +
-> > +enum insn_mode {
-> > +	INSN_MODE_32,
-> > +	INSN_MODE_64,
-> > +	/* Mode is determined by the current kernel build. */
-> > +	INSN_MODE_KERN,
-> > +	INSN_NUM_MODES,
-> > +};
-> > +
-> > +extern int insn_decode(struct insn *insn, const void *kaddr, int buf_len, enum insn_mode m);
-> >   /* Attribute will be determined after getting ModRM (for opcode groups) */
-> >   static inline void insn_get_attribute(struct insn *insn)
-> > --- a/tools/arch/x86/lib/insn.c
-> > +++ b/tools/arch/x86/lib/insn.c
-> > @@ -10,10 +10,13 @@
-> >   #else
-> >   #include <string.h>
-> >   #endif
-> > -#include "../include/asm/inat.h" /* __ignore_sync_check__ */
-> > -#include "../include/asm/insn.h" /* __ignore_sync_check__ */
-> > +#include <asm/inat.h> /* __ignore_sync_check__ */
-> > +#include <asm/insn.h> /* __ignore_sync_check__ */
-> 
-> These includes breaks the build for me with:
-> 
->   CC /local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/perf/util/intel-pt-decoder/intel-pt-insn-decoder.o
-> In file included from util/intel-pt-decoder/intel-pt-insn-decoder.c:15:
-> util/intel-pt-decoder/../../../arch/x86/lib/insn.c:13:10: fatal error:
-> asm/inat.h: No such file or directory
->  #include <asm/inat.h> /* __ignore_sync_check__ */
->           ^~~~~~~~~~~~
-> compilation terminated.
-> make[7]: *** [util/intel-pt-decoder/Build:14: /local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/perf/util/intel-pt-decoder/intel-pt-insn-decoder.o]
-> Error 1
-> make[6]: *** [/local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/build/Makefile.build:139:
-> intel-pt-decoder] Error 2
-> make[5]: *** [/local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/build/Makefile.build:139:
-> util] Error 2
-> make[4]: *** [Makefile.perf:643: /local/users/fainelli/buildroot/output/arm64/build/linux-custom/tools/perf/perf-in.o]
-> Error 2
-> make[3]: *** [Makefile.perf:229: sub-make] Error 2
-> make[2]: *** [Makefile:70: all] Error 2
-> make[1]: *** [package/pkg-generic.mk:294:
-> /local/users/fainelli/buildroot/output/arm64/build/linux-tools/.stamp_built]
-> Error 2
-> make: *** [Makefile:27: _all] Error 2
-> 
-> It looks like you would also need to back port this:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0705ef64d1ff52b817e278ca6e28095585ff31e1
+Dear Thorsten, dear Jonathan,
 
-Thanks for this, now queued up.
 
-greg k-h
+During some other unrelated clean-up work, I stumbled upon the section
+'If something goes wrong' in Documentation/admin-guide/README.rst
+(https://www.kernel.org/doc/html/latest/admin-guide/README.html).
+README.rst is---as it seems---the intended first summary page of the
+documentation for any user of the kernel (the kernel's release notes
+document).
+
+The section 'If something goes wrong' describes what to do when
+encountering a bug and how to report it. The second sentence in that
+section is especially historic and probably just discouraging for most
+bug reporters ( ..."the second best thing is to mail them to me
+(torvalds@linux-foundation.org)"...). Some random user (potentially
+even unknown to the community) sending an email to Linus is most
+probably the last best thing to do and is most likely just ignored,
+right?
+
+Probably this section in README.rst needs a rewrite (summarizing
+Thorsten's reporting-issues.rst, or just copying the summary from
+there) and should then refer to reporting-issues.rst for more details.
+
+Thorsten, do you have time to prepare a change to that document that
+gives a short summary on how to report potential issues and
+regressions? Otherwise, I will happily put that on my todo list and
+probably can suggest some RFC patch in a week or two.
+
+
+Best regards,
+
+Lukas

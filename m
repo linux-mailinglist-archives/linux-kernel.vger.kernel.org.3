@@ -2,64 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD1457376D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96213573776
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiGMNbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        id S232160AbiGMNdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiGMNbk (ORCPT
+        with ESMTP id S229786AbiGMNdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:31:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 618451B2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:31:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657719098;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sgNHH7BFb0s4RwPxS2Qx5icxf3D9jQ1/BExnQlyRDHc=;
-        b=YiaLdmSjOLTC6wy4VdDYRSELm///nAQX8iuPEYML/OgbRLotEYM5enFxJUlgDo/b0wkT/+
-        LEdzKIaK4b5qcI4GmgdEj9Duw/eBgwMdpyDrRYH45z7pQKPYxA1n3XcMoqgc1cmDoIp2FP
-        77H2qQOCQk6+4TXftzpX3V5ZQ7wyRiA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-650-m6BergIANhONx7akHrV2ng-1; Wed, 13 Jul 2022 09:31:32 -0400
-X-MC-Unique: m6BergIANhONx7akHrV2ng-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC6EE801231;
-        Wed, 13 Jul 2022 13:31:31 +0000 (UTC)
-Received: from wtfbox.lan (unknown [10.40.192.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 375F8400DFA6;
-        Wed, 13 Jul 2022 13:31:30 +0000 (UTC)
-Date:   Wed, 13 Jul 2022 15:31:27 +0200
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Song Liu <song@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>, dvacek@redhat.com
-Subject: Re: [RFC PATCH bpf-next 3/4] bpf: add bpf_panic() helper
-Message-ID: <Ys7JL9Ih3546Eynf@wtfbox.lan>
-References: <20220711083220.2175036-1-asavkov@redhat.com>
- <20220711083220.2175036-4-asavkov@redhat.com>
- <CAPhsuW7xTRpLf1kyj5ejH0fV_aHCMQjUwn-uhWeNytXedh4+TQ@mail.gmail.com>
- <CAADnVQ+ju04JAqyEbA_7oVj9uBAuL-fUP1FBr_OTygGf915RfQ@mail.gmail.com>
+        Wed, 13 Jul 2022 09:33:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75BB21153
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:33:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 737341424;
+        Wed, 13 Jul 2022 06:33:52 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AF71B3F73D;
+        Wed, 13 Jul 2022 06:33:50 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     linux-kernel@vger.kernel.org, conor.dooley@microchip.com
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH -next] arch_topology: Fix cache attributes detection in the CPU hotplug path
+Date:   Wed, 13 Jul 2022 14:33:44 +0100
+Message-Id: <20220713133344.1201247-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAADnVQ+ju04JAqyEbA_7oVj9uBAuL-fUP1FBr_OTygGf915RfQ@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,56 +46,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 11:08:54AM -0700, Alexei Starovoitov wrote:
-> On Tue, Jul 12, 2022 at 10:53 AM Song Liu <song@kernel.org> wrote:
-> >
-> > >
-> > > +BPF_CALL_1(bpf_panic, const char *, msg)
-> > > +{
-> > > +       panic(msg);
-> >
-> > I think we should also check
-> >
-> >    capable(CAP_SYS_BOOT) && destructive_ebpf_enabled()
-> >
-> > here. Or at least, destructive_ebpf_enabled(). Otherwise, we
-> > may trigger panic after the sysctl is disabled.
-> >
-> > In general, I don't think sysctl is a good API, as it is global, and
-> > the user can easily forget to turn it back off. If possible, I would
-> > rather avoid adding new BPF related sysctls.
-> 
-> +1. New syscal isn't warranted here.
-> Just CAP_SYS_BOOT would be enough here.
+init_cpu_topology() is called only once at the boot and all the cache
+attributes are detected early for all the possible CPUs. However when
+the CPUs are hotplugged out, the cacheinfo gets removed. While the
+attributes are added back when the CPUs are hotplugged back in as part
+of CPU hotplug state machine, it ends up called quite late after the
+update_siblings_masks() are called in the secondary_start_kernel()
+resulting in wrong llc_sibling_masks.
 
-Point taken, I'll remove sysctl knob in any further versions.
+Move the call to detect_cache_attributes() inside update_siblings_masks()
+to ensure the cacheinfo is updated before the LLC sibling masks are
+updated. This will fix the incorrect LLC sibling masks generated when
+the CPUs are hotplugged out and hotplugged back in again.
 
-> Also full blown panic() seems unnecessary.
-> If the motivation is to get a memory dump then crash_kexec() helper
-> would be more suitable.
-> If the goal is to reboot the system then the wrapper of sys_reboot()
-> is better.
-> Unfortunately the cover letter lacks these details.
+Reported-by: Ionela Voinescu <ionela.voinescu@arm.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ drivers/base/arch_topology.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-The main goal is to get the memory dump, so crash_kexec() should be enough.
-However panic() is a bit more versatile and it's consequences are configurable
-to some extent. Are there any downsides to using it?
+Hi Conor,
 
-> Why this destructive action cannot be delegated to user space?
+Ionela reported an issue with the CPU hotplug and as a fix I need to
+move the call to detect_cache_attributes() which I had thought to keep
+it there from first but for no reason had moved it to init_cpu_topology().
 
-Going through userspace adds delays and makes it impossible to hit "exactly
-the right moment" thus making it unusable in most cases.
+Wonder if this fixes the -ENOMEM on RISC-V as this one is called on the
+cpu in the secondary CPUs init path while init_cpu_topology executed
+detect_cache_attributes() for all possible CPUs much earlier. I think
+this might help as the percpu memory might be initialised in this case.
 
-I'll add this to the cover letter.
+Anyways give this a try, also test the CPU hotplug and check if nothing
+is broken on RISC-V. We noticed this bug only on one platform while
 
-> btw, we should avoid adding new uapi helpers in most cases.
-> Ideally all of them should be added as new kfunc-s, because they're
-> unstable and we can rip them out later if our judgement call
-> turns out to be problematic for whatever reason.
-
-Ok, I'll look into doing it this way.
-
--- 
 Regards,
-  Artem
+Sudeep
+
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 441e14ac33a4..0424b59b695e 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -732,7 +732,11 @@ const struct cpumask *cpu_clustergroup_mask(int cpu)
+ void update_siblings_masks(unsigned int cpuid)
+ {
+ 	struct cpu_topology *cpu_topo, *cpuid_topo = &cpu_topology[cpuid];
+-	int cpu;
++	int cpu, ret;
++
++	ret = detect_cache_attributes(cpuid);
++	if (ret)
++		pr_info("Early cacheinfo failed, ret = %d\n", ret);
+ 	/* update core and thread sibling masks */
+ 	for_each_online_cpu(cpu) {
+@@ -821,7 +825,7 @@ __weak int __init parse_acpi_topology(void)
+ #if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
+ void __init init_cpu_topology(void)
+ {
+-	int ret, cpu;
++	int ret;
+ 	reset_cpu_topology();
+ 	ret = parse_acpi_topology();
+@@ -836,13 +840,5 @@ void __init init_cpu_topology(void)
+ 		reset_cpu_topology();
+ 		return;
+ 	}
+-
+-	for_each_possible_cpu(cpu) {
+-		ret = detect_cache_attributes(cpu);
+-		if (ret) {
+-			pr_info("Early cacheinfo failed, ret = %d\n", ret);
+-			break;
+-		}
+-	}
+ }
+ #endif
+--2.37.1
 

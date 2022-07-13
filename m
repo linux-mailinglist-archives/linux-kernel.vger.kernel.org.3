@@ -2,200 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E382573DE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A040573DEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237107AbiGMUlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 16:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S229979AbiGMUmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 16:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237117AbiGMUlM (ORCPT
+        with ESMTP id S237133AbiGMUmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 16:41:12 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AED131223;
-        Wed, 13 Jul 2022 13:41:10 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id w185so18473pfb.4;
-        Wed, 13 Jul 2022 13:41:10 -0700 (PDT)
+        Wed, 13 Jul 2022 16:42:36 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAD831232
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:42:35 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id sz17so21916800ejc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:42:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v1DRyPsBFuh6aftETcwer1yzmkqbB6fixXL4Ircd/Lc=;
-        b=aVxai1dokJtxwXIP4M+Y3N2uoNHX5DBWKCxHOJcBiCTZ7W5YxUtk6vTyJ2oKHChLDM
-         /jwl5jFCvb4O1K0H37RGwyI/Lq24jmrS5DWGUZPZsLG00Bkx1arOkEKrQvChzjPv7xAB
-         zlju+oDLpNln5AKTxJRahDGvnLARAyPmLnceh4qWucyT82Rtstj3biKkZhjhy4sJaniV
-         I1dQleww4FG/B5eooLtQWmDiElSGGABMhcEjqwBsyiHRQ9yx+v11puhmJBVILbZ4COFI
-         /oBKd5Lmo8ppa7eVWYR+ejOcnwGpMgKfuFfQK311YXhHnv7i+m5Pzd9nq7Ndd7bJo4G6
-         arAg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qj46Expkx0Fdl04B5r2M/IKERzYmwL8GKHgYErVEHPU=;
+        b=JHjdAbofUWwRVhvgVOiZ0qRn5y1paVSqD7wjLfExQOlWpAYCzmmWAhpXfp4DH25Pdr
+         S/tTZ8eXCpU0d90H66vv6uX6XEeZwDh9ex84anB39Nz7x206N5/LYRYEGJ0Zj7Tqooc1
+         T51wu8yoaY7wBIa8QoqJgSeDtn7JAEV6eEmjc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v1DRyPsBFuh6aftETcwer1yzmkqbB6fixXL4Ircd/Lc=;
-        b=hzN6J7jMRToGQ0kEcS3AJ4SrzhTlr1OFu9wBvkiOJaAXb2lsJdsn0L4o2Btt93qSob
-         fo3b2/5KkMaqqUYZoMaf2T9AUy2i+5DzN/AAQvRzCtgKW4j7lUnX7TFV0y0HW6uxlawb
-         d7Vo9Gu3kFjsL+Xek9hYhfrcyj056P2X2qEOpF+dHjdE4HgzmfxQcJHuAAvr3rQwHmMZ
-         iEs0L36UxeRyCuToLlqFFAqR0MEaALwHBSgsOjbg62ZdT8J7MtrNxI0bVrnv3i86gE1O
-         KNKYEyULqxJ2A20u3YxMd//UDk/u++5mvj2dYxNO4XfZN9DHrC2AdV2o755/ljqgdeD0
-         S96Q==
-X-Gm-Message-State: AJIora9Nu94FY+UmwY4yycryJzvF2f1J2aJ6u6gb5OifTm27TJAHLwQD
-        dfC4pAnISMw6sokwEr2C2JtUC20YUw==
-X-Google-Smtp-Source: AGRyM1uQmusJsYXogPbDN8YI6ptYmN0gTrlR3DZFnf7x0Xebi7KCvIPMpeRHm2pOkJWSDRCdlX64Vg==
-X-Received: by 2002:a65:5207:0:b0:3fb:c00f:f6e4 with SMTP id o7-20020a655207000000b003fbc00ff6e4mr4427783pgp.415.1657744869763;
-        Wed, 13 Jul 2022 13:41:09 -0700 (PDT)
-Received: from bytedance.bytedance.net ([4.7.18.210])
-        by smtp.gmail.com with ESMTPSA id c204-20020a624ed5000000b00528c4c770c5sm9217825pfb.77.2022.07.13.13.41.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 13:41:09 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH net-next] net/sched: sch_cbq: Delete unused delay_timer
-Date:   Wed, 13 Jul 2022 13:40:51 -0700
-Message-Id: <20220713204051.32551-1-yepeilin.cs@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qj46Expkx0Fdl04B5r2M/IKERzYmwL8GKHgYErVEHPU=;
+        b=fYVT1v8S/a2BztGbcwLGP3Iw1rOQg/GtNLjRGo5fJxi25LrozB7x6QkBnamUqB5ksh
+         6K8HWBcO4LapfNdfTMdy7gY9wrt1ibVEJIiOrFf6EXreseRZMTOSKdzO3rTOP5V3+vHQ
+         3sg23Fx29ZodQbAr+f9v6ML2BSjRjea9aWpBCgXt70gpLJJEeCOdV2q8b30dLc9huHei
+         nulEB8E1RdLjRWa97myGkGXZHfZwh+2QYzSsNpc7EjCJ2zHN8KH11Xw6MzYgk6yr2avG
+         Tm4JJNXVvMagTcM06TbflD+I+zMuU9Ya68Qb6FWxOeNRpg0fWCAURAiVcqm7EcbIWkUF
+         x7kg==
+X-Gm-Message-State: AJIora9vbXfQGS6Uso4bZM/B8aexF199ZL4Ev+QGqJOiZi9rWVcFX0AR
+        G7zA/HdU0jt90XaZIHD9fQni0lKMyHaCO6r2o0M=
+X-Google-Smtp-Source: AGRyM1vB0RIuTLoqCq8KajenYUoi1yaHTzJQfEFnRKbuSLWquidV2NijemFg9a2DTSQhFUts6GuI4w==
+X-Received: by 2002:a17:906:5305:b0:712:388c:2bf5 with SMTP id h5-20020a170906530500b00712388c2bf5mr5152582ejo.559.1657744954111;
+        Wed, 13 Jul 2022 13:42:34 -0700 (PDT)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
+        by smtp.gmail.com with ESMTPSA id kz10-20020a17090777ca00b0072b40cb28a8sm4901415ejc.29.2022.07.13.13.42.32
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 13:42:32 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id z12so17116915wrq.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:42:32 -0700 (PDT)
+X-Received: by 2002:a05:6000:1a88:b0:21d:aa97:cb16 with SMTP id
+ f8-20020a0560001a8800b0021daa97cb16mr5060151wry.97.1657744951699; Wed, 13 Jul
+ 2022 13:42:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
+ <20220713050724.GA2471738@roeck-us.net> <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
+ <Ys8hqoiN5iWbslsM@shell.armlinux.org.uk> <CAHk-=wjNxyXQqn=k0KipzUPoBYWQhUwybxee8GTkF_Oz6RPVFw@mail.gmail.com>
+ <e63e108b-c99c-9ab7-0638-367b72983b81@roeck-us.net>
+In-Reply-To: <e63e108b-c99c-9ab7-0638-367b72983b81@roeck-us.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 13 Jul 2022 13:42:15 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh-SE=s+bJq_jwuQ6zfnifaAwYdXikpXo8iZ4JbbNph4Q@mail.gmail.com>
+Message-ID: <CAHk-=wh-SE=s+bJq_jwuQ6zfnifaAwYdXikpXo8iZ4JbbNph4Q@mail.gmail.com>
+Subject: Re: Linux 5.19-rc6
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+On Wed, Jul 13, 2022 at 1:40 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> That patch is (and has been) in linux-next for a long time,
+> as commit d2ca1fd2bc70, and with the following tags.
+>
+>      Fixes: 7719a68b2fa4 ("ARM: 9192/1: amba: fix memory leak in amba_device_try_add()")
+>      Reported-by: Guenter Roeck <linux@roeck-us.net>
+>      Tested-by: Guenter Roeck <linux@roeck-us.net>
+>      Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>      Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+>
+> So, yes, it fixes the problem. I don't know where it is pulled from, though.
+> I thought that it is from Russell's tree, given his Signed-off-by:,
+> but I never really checked.
 
-delay_timer has been unused since commit c3498d34dd36 ("cbq: remove
-TCA_CBQ_OVL_STRATEGY support").  Delete it.
+Heh. Yeah, with that sign-off, I bet it's in Russell's queue, bit it
+just ended up in the "for next release" branch. Russell?
 
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
- net/sched/sch_cbq.c | 79 ---------------------------------------------
- 1 file changed, 79 deletions(-)
-
-diff --git a/net/sched/sch_cbq.c b/net/sched/sch_cbq.c
-index 02d9f0dfe356..599e26fc2fa8 100644
---- a/net/sched/sch_cbq.c
-+++ b/net/sched/sch_cbq.c
-@@ -149,7 +149,6 @@ struct cbq_sched_data {
- 	psched_time_t		now;		/* Cached timestamp */
- 	unsigned int		pmask;
- 
--	struct hrtimer		delay_timer;
- 	struct qdisc_watchdog	watchdog;	/* Watchdog timer,
- 						   started when CBQ has
- 						   backlog, but cannot
-@@ -441,81 +440,6 @@ static void cbq_overlimit(struct cbq_class *cl)
- 	}
- }
- 
--static psched_tdiff_t cbq_undelay_prio(struct cbq_sched_data *q, int prio,
--				       psched_time_t now)
--{
--	struct cbq_class *cl;
--	struct cbq_class *cl_prev = q->active[prio];
--	psched_time_t sched = now;
--
--	if (cl_prev == NULL)
--		return 0;
--
--	do {
--		cl = cl_prev->next_alive;
--		if (now - cl->penalized > 0) {
--			cl_prev->next_alive = cl->next_alive;
--			cl->next_alive = NULL;
--			cl->cpriority = cl->priority;
--			cl->delayed = 0;
--			cbq_activate_class(cl);
--
--			if (cl == q->active[prio]) {
--				q->active[prio] = cl_prev;
--				if (cl == q->active[prio]) {
--					q->active[prio] = NULL;
--					return 0;
--				}
--			}
--
--			cl = cl_prev->next_alive;
--		} else if (sched - cl->penalized > 0)
--			sched = cl->penalized;
--	} while ((cl_prev = cl) != q->active[prio]);
--
--	return sched - now;
--}
--
--static enum hrtimer_restart cbq_undelay(struct hrtimer *timer)
--{
--	struct cbq_sched_data *q = container_of(timer, struct cbq_sched_data,
--						delay_timer);
--	struct Qdisc *sch = q->watchdog.qdisc;
--	psched_time_t now;
--	psched_tdiff_t delay = 0;
--	unsigned int pmask;
--
--	now = psched_get_time();
--
--	pmask = q->pmask;
--	q->pmask = 0;
--
--	while (pmask) {
--		int prio = ffz(~pmask);
--		psched_tdiff_t tmp;
--
--		pmask &= ~(1<<prio);
--
--		tmp = cbq_undelay_prio(q, prio, now);
--		if (tmp > 0) {
--			q->pmask |= 1<<prio;
--			if (tmp < delay || delay == 0)
--				delay = tmp;
--		}
--	}
--
--	if (delay) {
--		ktime_t time;
--
--		time = 0;
--		time = ktime_add_ns(time, PSCHED_TICKS2NS(now + delay));
--		hrtimer_start(&q->delay_timer, time, HRTIMER_MODE_ABS_PINNED);
--	}
--
--	__netif_schedule(qdisc_root(sch));
--	return HRTIMER_NORESTART;
--}
--
- /*
-  * It is mission critical procedure.
-  *
-@@ -1034,7 +958,6 @@ cbq_reset(struct Qdisc *sch)
- 	q->tx_class = NULL;
- 	q->tx_borrowed = NULL;
- 	qdisc_watchdog_cancel(&q->watchdog);
--	hrtimer_cancel(&q->delay_timer);
- 	q->toplevel = TC_CBQ_MAXLEVEL;
- 	q->now = psched_get_time();
- 
-@@ -1162,8 +1085,6 @@ static int cbq_init(struct Qdisc *sch, struct nlattr *opt,
- 	int err;
- 
- 	qdisc_watchdog_init(&q->watchdog, sch);
--	hrtimer_init(&q->delay_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_PINNED);
--	q->delay_timer.function = cbq_undelay;
- 
- 	err = cbq_opt_parse(tb, opt, extack);
- 	if (err < 0)
--- 
-2.20.1
-
+                 Linus

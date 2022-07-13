@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE30857363E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90551573640
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236168AbiGMMWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 08:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        id S235165AbiGMMWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 08:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiGMMWW (ORCPT
+        with ESMTP id S235991AbiGMMWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 08:22:22 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDA1E0F65;
-        Wed, 13 Jul 2022 05:22:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657714941; x=1689250941;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=VjPPJFpanEpj7EenUOLrvBNZWNf0gumX0k4X7udiVEg=;
-  b=zGnGWVDEwrHgNWyaOH87QmdKUxnXTA6FfVI2HJTQXy/ySTvNJa3rBE2c
-   NGeIau+mQTs8ZVHN33HNK9g42lny4vKSg4FmS6Jo076oBoqxJWD+ZlrYu
-   zFZFSZW+/ATlUdK1PSpJRhsETRjKI2J/ZHkDzT2yTjn7zQmz5qCEqr6h9
-   M=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Jul 2022 05:22:21 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 05:22:20 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Jul 2022 05:22:20 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Jul 2022 05:22:14 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <vkoul@kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH] soundwire: qcom: Update error prints to debug prints
-Date:   Wed, 13 Jul 2022 17:52:01 +0530
-Message-ID: <1657714921-28072-1-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 13 Jul 2022 08:22:32 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BB9E2A2E;
+        Wed, 13 Jul 2022 05:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=TcBfClxdcPPLZTVh2Tcevitg6Ai2r8deiaUkH5/8lM0=; b=d2j+/Xv5K+y1JSBxZaxTeOKH5Z
+        TWUuileEAoqTdJk0ZWJRwP7XZcb1wwOcrMDY/3z7H9WoKoCWJaGONv2PPAWLLk6u97Kc6GMmxVgz7
+        jg6XBi3QOsqOOGdNTFQx0FQx9cci4lIRz7y8OHQ1iYHXIK80p5II1NOUrvj86GrohPxCQsVykBBPP
+        qMxNhMq5UgdIgTrsu5RnCJaAEwcX5JVEnPZyNR0lcmwJfR51nu6AqkXgXChlxMeVvQL2aUm4mOAv9
+        4/C/D97Yj4CJ/ol8dr5Hhn9aVSbH9XS2LWdyefTUFnetIsmwL1k1EuosOeOoEF2oRdwyJqOEaVcvL
+        hDp1Pa0w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBbNT-003Yyq-Pd; Wed, 13 Jul 2022 12:22:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 87D77300252;
+        Wed, 13 Jul 2022 14:22:01 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 72786201DA175; Wed, 13 Jul 2022 14:22:01 +0200 (CEST)
+Date:   Wed, 13 Jul 2022 14:22:01 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: mainline build failure due to fc02735b14ff ("KVM: VMX: Prevent
+ guest RSB poisoning attacks with eIBRS")
+Message-ID: <Ys646XwC8SorCogQ@hirez.programming.kicks-ass.net>
+References: <Ys6sZj6KYthnDppq@debian>
+ <Ys6t+q4/y4DTjLQh@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys6t+q4/y4DTjLQh@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,32 +70,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Upadte error prints to debug prints to avoid redundant logging in kernel
-boot time, as these prints are informative prints in irq handler.
+On Wed, Jul 13, 2022 at 01:35:22PM +0200, Peter Zijlstra wrote:
+> On Wed, Jul 13, 2022 at 12:28:38PM +0100, Sudip Mukherjee (Codethink) wrote:
+> > Hi All,
+> > 
+> > The latest mainline kernel branch fails to build for x86_64 allmodconfig
+> > with clang and the error is:
+> > 
+> > arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
+> > DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
+> >                     ^
+> > ./arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
+> > extern u64 x86_spec_ctrl_current;
+> > 
+> > 
+> > git bisect pointed to fc02735b14ff ("KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS")
+> > 
+> > I will be happy to test any patch or provide any extra log if needed.
+> 
+> I suspect something like this will do.
+> 
+> diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+> index bb05ed4f46bd..6398d39e66b0 100644
+> --- a/arch/x86/include/asm/nospec-branch.h
+> +++ b/arch/x86/include/asm/nospec-branch.h
+> @@ -280,7 +280,7 @@ static inline void indirect_branch_prediction_barrier(void)
+>  
+>  /* The Intel SPEC CTRL MSR base value cache */
+>  extern u64 x86_spec_ctrl_base;
+> -extern u64 x86_spec_ctrl_current;
+> +DECLARE_PER_CPU(u64, x86_spec_ctrl_current);
+>  extern void write_spec_ctrl_current(u64 val, bool force);
+>  extern u64 spec_ctrl_current(void);
+>  
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+I hate headers...
+
 ---
- drivers/soundwire/qcom.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-index 9df970e..a4293d0 100644
---- a/drivers/soundwire/qcom.c
-+++ b/drivers/soundwire/qcom.c
-@@ -573,11 +573,10 @@ static irqreturn_t qcom_swrm_irq_handler(int irq, void *dev_id)
- 				break;
- 			case SWRM_INTERRUPT_STATUS_NEW_SLAVE_ATTACHED:
- 			case SWRM_INTERRUPT_STATUS_CHANGE_ENUM_SLAVE_STATUS:
--				dev_err_ratelimited(swrm->dev, "%s: SWR new slave attached\n",
--					__func__);
-+				dev_dbg(swrm->dev, "%s: SWR new slave attached\n", __func__);
- 				swrm->reg_read(swrm, SWRM_MCP_SLV_STATUS, &slave_status);
- 				if (swrm->slave_status == slave_status) {
--					dev_err(swrm->dev, "Slave status not changed %x\n",
-+					dev_dbg(swrm->dev, "Slave status not changed %x\n",
- 						slave_status);
- 				} else {
- 					qcom_swrm_get_device_status(swrm);
--- 
-2.7.4
-
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index bb05ed4f46bd..cbc3b8348939 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -280,7 +280,6 @@ static inline void indirect_branch_prediction_barrier(void)
+ 
+ /* The Intel SPEC CTRL MSR base value cache */
+ extern u64 x86_spec_ctrl_base;
+-extern u64 x86_spec_ctrl_current;
+ extern void write_spec_ctrl_current(u64 val, bool force);
+ extern u64 spec_ctrl_current(void);
+ 
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index be7c19374fdd..b64512978534 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -6831,6 +6831,8 @@ void noinstr vmx_update_host_rsp(struct vcpu_vmx *vmx, unsigned long host_rsp)
+ 	}
+ }
+ 
++DECLARE_PER_CPU(u64, x86_spec_ctrl_current);
++
+ void noinstr vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx,
+ 					unsigned int flags)
+ {

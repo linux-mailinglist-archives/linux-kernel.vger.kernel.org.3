@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA95572AD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D95572AE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233465AbiGMBbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 21:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S233607AbiGMBeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 21:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbiGMBbJ (ORCPT
+        with ESMTP id S229775AbiGMBee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 21:31:09 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E37C9112
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:31:07 -0700 (PDT)
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 623013FC12
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1657675866;
-        bh=BCcc4GfN+MGP0hj9IK2EKrG4OYSKiM0e7SGOkyqrreo=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=quaeGVgyzCiUGTDOirKxtSmbx5VPsnNPoR8kn9bWuWs92ixiryOywCnAJTbymel8u
-         If/K9Booud7G/nVEehB3ERLwgsYg9GO+svHGIpfhd5U56BnmoX1fIgx2Zf+hnkAl/v
-         Hp5NRMV1u/URl7NjxVxrEUQftkxW4ZaUcARhKwtqhE3zJJn98xxMZkDAwAbOaKQL8f
-         ITt01HJ01zpFvD3P08TjZLlATiYCK1TPmpn3t7OyfVMUY30yLe9LVGtU7uC0Ob7jri
-         hlAuCprZbloxWq7NCGlt+EI89rkcVwDawKwo/tmwpQwxJkFGNpa8fDtEUfByT8ErJJ
-         8AB51BQGfk1fQ==
-Received: by mail-oi1-f200.google.com with SMTP id w123-20020acaad81000000b0033a1f7de8e8so1278969oie.13
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:31:06 -0700 (PDT)
+        Tue, 12 Jul 2022 21:34:34 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A024C923C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:34:33 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so1156244pjr.4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XGSpGU9y1qKiwBDHtAjINY9EHDaIDTEGfdXCP9bclWI=;
+        b=V4fBHAYghVFtCj/gyK9mu3PyvFXqcOoz2B2mKkJDh/adD4u9JvaBL253pjyTFBedRt
+         GVuAft2l+07Oz6wgg4sUN8GjywhMpSBY8JBWFfogIjh3h/wQnPJNZJ7+uzDvCbVEyy7c
+         TJy9acvtLuLwkUzPXiqBbcfn+02wtNDgmDZvo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BCcc4GfN+MGP0hj9IK2EKrG4OYSKiM0e7SGOkyqrreo=;
-        b=inv+t/+ONTmL42PsP9MqXJcy/I0Vy6odkq4o9rxUUS+EWdt6f3GhKk8HcaHyqdA6J3
-         a7NrLefMFnmNY/Z5KJmDObuOVKlLVanb8LWblUhfUjywCsxUw+cL0XyTf0RfaqeIGazi
-         lHxk5Awb3Mcgryn0xYmudUmtS1JFp09vnEHTMHOy+9LgyfqyPTA8p5sp45GAzpzrlgpw
-         RrG/7bXJA9GZSOkA46hyjdBtfq6phGW8NrONDuZkwZVHDZmmxErLrDPkANxegY+QRaxl
-         pD3ibbB8vuJfpY4JdZJx+geBpKmNG6p/x4SoJcSnnAhKoQM4pOu1Bun2dqfj49DIO5Cd
-         rohQ==
-X-Gm-Message-State: AJIora+sexqI1eTl7Lj7Pp03SKzJjNoJLsy6LKWc3MtXaScpsU0vg+zT
-        BIQvU6nL2QBX9QEm3iIobFE4QVp0b9otHBx6D7RtvkbtnWc7BX4Br3ZN8JX8xk791EJmd5mGwEH
-        U5dCxasE6appIPpLkMwsHCXyUmwcPdfgkzLE+2qaivNuKW5Byc6OYoqvmJA==
-X-Received: by 2002:a05:6808:1643:b0:335:19ba:b696 with SMTP id az3-20020a056808164300b0033519bab696mr552723oib.42.1657675865301;
-        Tue, 12 Jul 2022 18:31:05 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v6KysfUndZJ6mEviiHlk0zOxcc1iB28C8yGi2owgz5pTmyxq1hkaNLbmASDCQ8QImXIjNRulZ6lU2Cu1DNF5g=
-X-Received: by 2002:a05:6808:1643:b0:335:19ba:b696 with SMTP id
- az3-20020a056808164300b0033519bab696mr552714oib.42.1657675865013; Tue, 12 Jul
- 2022 18:31:05 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XGSpGU9y1qKiwBDHtAjINY9EHDaIDTEGfdXCP9bclWI=;
+        b=rHr6mNQHvF/Jti5YDtwB+i3sndlvx8USrOC2y8MNivB6u5xRaWI9ZNlt3oBiAgIgmV
+         4Mcq9nK8jLop47pOTl9cYsME05r3WqrlFOEau1on326jc82YzB5X5R29VkMLO4R01enk
+         T7il+NKSmb+3Y99D/ZrxggR8tYMO9B4aM8f355MNc9MzneobmapBHdp/rpI55zABo7p7
+         ROa1Z20+1EYHoIXYNxT2XmBnAm4Io1SYUrg6T9cH/k2rICvfrMZdcUg+vSdom5IhjK5k
+         gtrkg6eIZQw/p7xWhqGrtH4PUAjUqFV4Y2wubPBKHrgqufsmEPHGDbK8vO8ynp58oDFX
+         uwhQ==
+X-Gm-Message-State: AJIora9dsMdh1HhkGrs2qfEzeFFOLrx6MJgUMgrV13vF2n/mAWj5NklY
+        yx7Z0XM1Lo8fcrgHZ7Q24184Rg==
+X-Google-Smtp-Source: AGRyM1vI7qTqran/oYY9YxCvZJ1Kt81TzkURUZr5Ev/sRdQsuRtTkDpVmPEpjwtDdB06uhd4ToiPtA==
+X-Received: by 2002:a17:902:b7c4:b0:16b:e3d0:c0fe with SMTP id v4-20020a170902b7c400b0016be3d0c0femr842506plz.98.1657676072727;
+        Tue, 12 Jul 2022 18:34:32 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:e036:8c0d:9cf:7a45])
+        by smtp.gmail.com with UTF8SMTPSA id kk18-20020a17090b4a1200b001ec9dce6f10sm226231pjb.38.2022.07.12.18.34.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 18:34:32 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 18:34:30 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Pavan Kondeti <quic_pkondeti@quicinc.com>, saravanak@google.com,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <Ys4hJrWjkn+LREZL@google.com>
+References: <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
+ <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
+ <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
+ <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
+ <c16a1c37-9183-8d0c-a5ad-39b897a0ab24@quicinc.com>
+ <Yr5JmrSaus8xKpM9@google.com>
+ <20220701101526.GA30468@hu-pkondeti-hyd.qualcomm.com>
+ <Yr8YUYJGJ5FRA3cv@google.com>
+ <09f6a717-2bbb-6bd3-f7a8-5ac9e3db51f3@quicinc.com>
+ <9f9f9abc-9b37-8bfb-3efa-6c860b5dba8d@quicinc.com>
 MIME-Version: 1.0
-References: <20220707000151.33381-1-kai.heng.feng@canonical.com> <20220707175037.1352fa6b@jic23-huawei>
-In-Reply-To: <20220707175037.1352fa6b@jic23-huawei>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 13 Jul 2022 09:30:52 +0800
-Message-ID: <CAAd53p6OS+WH+vP3GUyrExmy_a7KoGyN6-v5hspcFaBoS1S07Q@mail.gmail.com>
-Subject: Re: [PATCH v2] iio: light: cm32181: Add PM support
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     ktsai@capellamicro.com, lars@metafoo.de, hdegoede@redhat.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9f9f9abc-9b37-8bfb-3efa-6c860b5dba8d@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,82 +89,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 12:40 AM Jonathan Cameron <jic23@kernel.org> wrote:
->
-> On Thu,  7 Jul 2022 08:01:51 +0800
-> Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
->
-> > The read on in_illuminance_input keeps at 0 after system sleep.
-> >
-> > So add proper suspend and resume callback to make the sensor keep
-> > working after system sleep.
-> >
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Applied to the togreg branch of iio.git and pushed out as testing for
-> the autobuilders to poke at it and see if we missed anything,
+On Fri, Jul 08, 2022 at 04:37:19PM +0530, Krishna Kurapati PSSNV wrote:
+>    On 7/6/2022 12:28 PM, Krishna Kurapati PSSNV wrote:
+> 
+>    On 7/1/2022 9:22 PM, Matthias Kaehlcke wrote:
+> 
+> On Fri, Jul 01, 2022 at 03:45:26PM +0530, Pavan Kondeti wrote:
+> 
+> On Thu, Jun 30, 2022 at 06:10:50PM -0700, Matthias Kaehlcke wrote:
+> 
+> dwc3-qcom should wait for dwc3 core to call component_add() and then do
+> whatever needs to be done once the dwc3 core is registered in the
+> dwc3-qcom bind callback. Honestly this may all be a little overkill if
+> there's only two drivers here, dwc3-qcom and dwc3 core. It could
+> probably just be some callback from dwc3 core at the end of probe that
+> calls some function in dwc3-qcom.
+> 
+> Since the issue we are facing is that the ssphy device links are not ready
+> causing the dwc3 probe not being invoked, can we add an API as Pavan
+> suggested
+> to check if deferred_probe listfor dwc3 device is empty or not andbased on
+> that we can choose to defer our qcomprobe ? In this case, we don't need to
+> touch the dwc3 core driver and would be making changesonly in qcom glue
+> driver.
+> 
+> As mentioned above, it shouldn't be necessary to add component support to
+> all the glue drivers. An API to check for deferred probing is an option,
+> however there is a possible race condition: When the dwc3-qcom driver checks
+> for a deferred probe the core could still be probing, in that situation the
+> glue would proceed before the core driver is ready. That could be avoided
+> with the component based approach.
+> 
+> The race can happen only if asynchronous probe is enabled, otherwise the
+> child's probe happens synchronously in of_platform_populate()
+> 
+> I was thinking about the case where the dwc3-qcom probe is initially deferred,
+> then the deferred probe starts shortly after (asynchronously) and now the
+> dwc3-qcom driver does its check. Probably it's not very likely to happen ...
+> 
+> 
+> OTOH, would the below condition suffice for our needs here? if our device
+> is not bounded to a driver, we check the state of initcalls and return
+> either error or -EPROBE_DEFER
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 7b6eff5..519a503 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device
+>  *pdev)
+>                 dev_err(dev, "failed to get dwc3 platform device\n");
+>         }
+> 
+> +       if (!qcom->dwc3->dev.driver)
+> +               return driver_deferred_probe_check_state(&qcom->dwc3->dev);
+> +
+>  node_put:
+>         of_node_put(dwc3_np);
+> 
+> I like the simplicity of it, no need for new APIs.
+> 
+> The components based approach would be slightly safer, but in practice I
+> think this should be good enough.
+> 
+>    Hi Pavan, Mathias,
+>      I have tested the suggested code and verified that it works on
+>    sc7180. I see that the API has been removed recently in the following
+>    patch :\
+>    commit 9cbffc7a59561be950ecc675d19a3d2b45202b2b
+>    Author: Saravana Kannan [1]<saravanak@google.com>
+>    Date:   Wed Jun 1 00:07:05 2022 -0700
+>    driver core: Delete driver_deferred_probe_check_state()
+>    Can we make a patch and add it back to the kernel for this purpose ?
+>    Hi Saravana,
+>      Can you help suggest if we can revert your patch or make a new one to
+>    add back the function.
 
-This commit doesn't seem to be included in iio/togreg branch.
+The cover letter [1] of the 'deferred_probe_timeout logic clean up'
+series [2] has more context:
 
-Kai-Heng
 
->
-> Thanks,
->
-> Jonathan
->
-> > ---
-> > v2:
-> >  - Use dev_get_drvdata() instead of i2c_get_clientdata() to avoid extra
-> >    dereference.
-> >
-> >  drivers/iio/light/cm32181.c | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> >
-> > diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
-> > index 97649944f1df6..edbe6a3138d0b 100644
-> > --- a/drivers/iio/light/cm32181.c
-> > +++ b/drivers/iio/light/cm32181.c
-> > @@ -460,6 +460,8 @@ static int cm32181_probe(struct i2c_client *client)
-> >                       return PTR_ERR(client);
-> >       }
-> >
-> > +     i2c_set_clientdata(client, indio_dev);
-> > +
-> >       cm32181 = iio_priv(indio_dev);
-> >       cm32181->client = client;
-> >       cm32181->dev = dev;
-> > @@ -486,6 +488,25 @@ static int cm32181_probe(struct i2c_client *client)
-> >       return 0;
-> >  }
-> >
-> > +static int cm32181_suspend(struct device *dev)
-> > +{
-> > +     struct i2c_client *client = to_i2c_client(dev);
-> > +
-> > +     return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
-> > +                                      CM32181_CMD_ALS_DISABLE);
-> > +}
-> > +
-> > +static int cm32181_resume(struct device *dev)
-> > +{
-> > +     struct i2c_client *client = to_i2c_client(dev);
-> > +     struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
-> > +
-> > +     return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
-> > +                                      cm32181->conf_regs[CM32181_REG_ADDR_CMD]);
-> > +}
-> > +
-> > +DEFINE_SIMPLE_DEV_PM_OPS(cm32181_pm_ops, cm32181_suspend, cm32181_resume);
-> > +
-> >  static const struct of_device_id cm32181_of_match[] = {
-> >       { .compatible = "capella,cm3218" },
-> >       { .compatible = "capella,cm32181" },
-> > @@ -506,6 +527,7 @@ static struct i2c_driver cm32181_driver = {
-> >               .name   = "cm32181",
-> >               .acpi_match_table = ACPI_PTR(cm32181_acpi_match),
-> >               .of_match_table = cm32181_of_match,
-> > +             .pm = pm_sleep_ptr(&cm32181_pm_ops),
-> >       },
-> >       .probe_new      = cm32181_probe,
-> >  };
->
+  A lot of the deferred_probe_timeout logic is redundant with
+  fw_devlink=on.  Also, enabling deferred_probe_timeout by default breaks
+  a few cases.
+
+  This series tries to delete the redundant logic, simplify the frameworks
+  that use driver_deferred_probe_check_state(), enable
+  deferred_probe_timeout=10 by default, and fixes the nfsroot failure
+  case.
+
+  The overall idea of this series is to replace the global behavior of
+  driver_deferred_probe_check_state() where all devices give up waiting on
+  supplier at the same time with a more granular behavior:
+
+  1. Devices with all their suppliers successfully probed by late_initcall
+     probe as usual and avoid unnecessary deferred probe attempts.
+
+  2. At or after late_initcall, in cases where boot would break because of
+     fw_devlink=on being strict about the ordering, we
+
+     a. Temporarily relax the enforcement to probe any unprobed devices
+        that can probe successfully in the current state of the system.
+        For example, when we boot with a NFS rootfs and no network device
+        has probed.
+     b. Go back to enforcing the ordering for any devices that haven't
+        probed.
+
+  3. After deferred probe timeout expires, we permanently give up waiting
+     on supplier devices without drivers. At this point, whatever devices
+     can probe without some of their optional suppliers end up probing.
+
+  In the case where module support is disabled, it's fairly
+  straightforward and all device probes are completed before the initcalls
+  are done.
+
+[1] https://lore.kernel.org/all/20220601070707.3946847-1-saravanak@google.com/
+[2] https://patchwork.kernel.org/project/linux-pm/list/?series=646471&archive=both&state=*
+
+
+Does anything speak against returning -EPROBE_DEFER directly from dwc3-qcom's
+probe()? Now with deferred_probe_timeout > 0 there should be at least no endless
+probing.

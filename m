@@ -2,528 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEABF573FEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C495F573FEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiGMXFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 19:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S229969AbiGMXHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 19:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiGMXF2 (ORCPT
+        with ESMTP id S229597AbiGMXHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 19:05:28 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3C43E75F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:05:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657753526; x=1689289526;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KInjmH2Mnl3KyfiMWE+PiVRYHapnSc7B3QmSTQbGqV0=;
-  b=YYnCFuPJSu8VeHNmWtYZe6udjrSpvZC67C3KPu0qf0GueuCd5OVDPCSA
-   cXklhRCMOeGCP3lodZevi8R1GuTQtoOJDS7mM7asKt8WE3u1GIDPe/YZG
-   RxgOQtxXGZfqa7ldQG7Nxsyl1P2y9oKxe7gi3pRpY7DP08fZYFtHgImVQ
-   ccbOSZGkDMmQkRnlMso6vbaXW95A6DWH2MkEb7sZWyfxGEY3C7e4K9b2d
-   XtDjneRAS7hPMnUmAhQ2O7lP094fvHAuEPSvb2t3gvQqGtfoC1xCElwgS
-   XTVgPxvIaNzt8Bq2b1PkJsedEIYfUxJPzkuv4HQV6KLsIw42k8y4G6dvC
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="311012414"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="311012414"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 16:05:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="570823310"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jul 2022 16:05:24 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oBlQ3-0003s7-Gd;
-        Wed, 13 Jul 2022 23:05:23 +0000
-Date:   Thu, 14 Jul 2022 07:05:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Alexandru Ardelean <ardeleanalex@gmail.com>
-Subject: drivers/iio/adc/ad7476.c:39:8: warning: Excessive padding in 'struct
- ad7476_state' (72 padding bytes, where 8 is optimal). Optimal fields order:
- data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering
- the fields or adding explicit paddi...
-Message-ID: <202207140603.1fJMMFgV-lkp@intel.com>
+        Wed, 13 Jul 2022 19:07:04 -0400
+Received: from mail-oa1-x41.google.com (mail-oa1-x41.google.com [IPv6:2001:4860:4864:20::41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5033ED76
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:07:04 -0700 (PDT)
+Received: by mail-oa1-x41.google.com with SMTP id 586e51a60fabf-10bec750eedso431521fac.8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:07:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=eWssZ8ZNk3gocz18m8mxnb0jwQqX8IeZqZTs5Fk7aHM=;
+        b=OJ+98S7ntgNHWHtv22HJ8/gVT6S8a8eAl+H8exRu+4sNQnN1ynYvdaR++nDHWUUcVR
+         1vA6+fjuXIxmLyHQ5OhyOkp2T/EaSLMew/arl8AkR1tESK8mO15elbdPZt9EcbUVr5DP
+         EGXeH3ERN7OBuqqgpyD3NmAJ1jGXvbWZonrWTKddDmCJ5OyuQA02vkvsIQMMlJJs2j7n
+         V08JQwfawMxtV9Ndw2qz0tpi9haTjVMdkmoksO6FiRoFmSf7lkUsnC2J5zmz1WW1POSD
+         UZhcZ34dq9Kj72KVr01trzIWoL2vp25o22RytPbyQf2M3AHy3n5unw8Z8gsHIXII6dxz
+         WyJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=eWssZ8ZNk3gocz18m8mxnb0jwQqX8IeZqZTs5Fk7aHM=;
+        b=79In/KETvDE4GjsU4QSUGoNWIb16M8VvjGQifTANb+I1r0Jc3WyvxueB8r0RePbgMf
+         NY3woy/PIRCym8iEUzW/kjBV6IWhA270xrIZ7uckdydhBmiYd6RHpkPQqbaJRbVy6n7t
+         SBuaZDSxwqBXBtpQPxatK1TA/RXjsG6+zxFX1waEEf3nmFOrww1xrco7Vd98NohONk/V
+         Ch9zoJbf6GRw+PzSepfg+H0NQRV81iNwBREuEB0pN6uKIIxicCmy3rEj84dA/TOK+kzR
+         h9ktlqC94frMyJEyk0D8AWMc8mbkC/rs7I1DYhcaV2EyMO/o3FNw/CwpnNTl1rlua96p
+         oEMA==
+X-Gm-Message-State: AJIora9jY5tbqPbkQl3noOpi/bstmXKk2Kh9LUIvNosv0G2LMsxAyNXL
+        QezlmwqslMEBVoLcEfGM8/ekDYwG7G7EtUQ8w/E=
+X-Google-Smtp-Source: AGRyM1tSDlk2eWNOpG2G+ZaqYlKQYioqud+YtfZm1fUtwmNH/icbBTzPco8y0f7uVNW7LRnbcx8plJWQageTG+uLuC4=
+X-Received: by 2002:a05:6870:b005:b0:10c:1c42:4f7e with SMTP id
+ y5-20020a056870b00500b0010c1c424f7emr5810558oae.252.1657753623325; Wed, 13
+ Jul 2022 16:07:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Sender: samco.chambers1988@gmail.com
+Received: by 2002:a05:6358:a087:b0:a3:1662:bcab with HTTP; Wed, 13 Jul 2022
+ 16:07:02 -0700 (PDT)
+From:   Doris David <mrs.doris.david02@gmail.com>
+Date:   Wed, 13 Jul 2022 16:07:02 -0700
+X-Google-Sender-Auth: sJ4wX8O-WTDCdfkpYBuarDHYVdo
+Message-ID: <CACePhL==biXp09C1yBTMeEY47TgwNToLw+uxNSQy4=8tget64w@mail.gmail.com>
+Subject: Re: Greetings My Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:41 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrs.doris.david02[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [samco.chambers1988[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+Greetings,
 
-First bad commit (maybe != root cause):
+I sent this mail praying it will find you in a good condition, since I
+myself am in a very critical health condition in which I sleep every
+night  without knowing if I may be alive to see the next day. I am
+Mrs.Doris David, a widow suffering from a long time illness. I have
+some funds I  inherited from my late husband, the sum of
+($11,000,000.00) my Doctor told me recently that I have serious
+sickness which is a cancer problem. What disturbs me most is my stroke
+sickness. Having known my condition, I decided to donate this fund to
+a good person that will utilize it the way I am going to instruct
+herein. I need a very honest God.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4a57a8400075bc5287c5c877702c68aeae2a033d
-commit: 396f7234856956eb29f009da6e5d846f29f87ebd iio: core: move @chrdev from struct iio_dev to struct iio_dev_opaque
-date:   1 year, 2 months ago
-config: arm-randconfig-c002-20220702 (https://download.01.org/0day-ci/archive/20220714/202207140603.1fJMMFgV-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=396f7234856956eb29f009da6e5d846f29f87ebd
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 396f7234856956eb29f009da6e5d846f29f87ebd
-        # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
+fearing a person who can claim this money and use it for charity
+works, for orphanages, widows and also build schools for less
+privileges that will be named after my late husband if possible and to
+promote the word of God and the effort that the house of God is
+maintained. I do not want a situation where this money will be used in
+an ungodly manner. That's why I' making this decision. I'm not afraid
+of death so I know where I'm going. I accept this decision because I
+do not have any child who will inherit this money after I die. Please
+I want your sincere and urgent answer to know if you will be able to
+execute this project, and I will give you more information on how
+thunder will be transferred to your bank account. I am waiting for
+your reply.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-clang-analyzer warnings: (new ones prefixed by >>)
-           ^
-   arch/arm/include/asm/uaccess.h:393:3: note: expanded from macro '__put_user_switch'
-                   switch (sizeof(*(ptr))) {                               \
-                   ^
-   drivers/tee/tee_core.c:584:6: note:  Execution continues on line 584
-           if (put_user(arg.ret, &uarg->ret) ||
-               ^
-   arch/arm/include/asm/uaccess.h:406:2: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-           ^
-   arch/arm/include/asm/uaccess.h:396:47: note: expanded from macro '__put_user_switch'
-                   case 4: __fn(__pu_val, __pu_ptr, __err, 4); break;      \
-                                                               ^
-   drivers/tee/tee_core.c:584:6: note: Loop condition is false.  Exiting loop
-           if (put_user(arg.ret, &uarg->ret) ||
-               ^
-   arch/arm/include/asm/uaccess.h:406:2: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-           ^
-   arch/arm/include/asm/uaccess.h:387:2: note: expanded from macro '__put_user_switch'
-           do {                                                            \
-           ^
-   drivers/tee/tee_core.c:584:6: note: Assuming the condition is false
-           if (put_user(arg.ret, &uarg->ret) ||
-               ^
-   arch/arm/include/asm/uaccess.h:403:31: note: expanded from macro 'put_user'
-   #define put_user(x, ptr)                                                \
-                                                                           ^
-   drivers/tee/tee_core.c:584:6: note: Left side of '||' is false
-           if (put_user(arg.ret, &uarg->ret) ||
-               ^
-   arch/arm/include/asm/uaccess.h:403:31: note: expanded from macro 'put_user'
-   #define put_user(x, ptr)                                                \
-                                                                           ^
-   drivers/tee/tee_core.c:585:6: note: Control jumps to 'case 4:'  at line 585
-               put_user(arg.ret_origin, &uarg->ret_origin)) {
-               ^
-   arch/arm/include/asm/uaccess.h:406:2: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-           ^
-   arch/arm/include/asm/uaccess.h:393:3: note: expanded from macro '__put_user_switch'
-                   switch (sizeof(*(ptr))) {                               \
-                   ^
-   drivers/tee/tee_core.c:585:6: note:  Execution continues on line 585
-               put_user(arg.ret_origin, &uarg->ret_origin)) {
-               ^
-   arch/arm/include/asm/uaccess.h:406:2: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-           ^
-   arch/arm/include/asm/uaccess.h:396:47: note: expanded from macro '__put_user_switch'
-                   case 4: __fn(__pu_val, __pu_ptr, __err, 4); break;      \
-                                                               ^
-   drivers/tee/tee_core.c:585:6: note: Loop condition is false.  Exiting loop
-               put_user(arg.ret_origin, &uarg->ret_origin)) {
-               ^
-   arch/arm/include/asm/uaccess.h:406:2: note: expanded from macro 'put_user'
-           __put_user_switch((x), (ptr), __pu_err, __put_user_check);      \
-           ^
-   arch/arm/include/asm/uaccess.h:387:2: note: expanded from macro '__put_user_switch'
-           do {                                                            \
-           ^
-   drivers/tee/tee_core.c:585:6: note: Assuming the condition is false
-               put_user(arg.ret_origin, &uarg->ret_origin)) {
-               ^
-   arch/arm/include/asm/uaccess.h:403:31: note: expanded from macro 'put_user'
-   #define put_user(x, ptr)                                                \
-                                                                           ^
-   drivers/tee/tee_core.c:584:2: note: Taking false branch
-           if (put_user(arg.ret, &uarg->ret) ||
-           ^
-   drivers/tee/tee_core.c:589:47: note: Passing null pointer value via 3rd parameter 'params'
-           rc = params_to_user(uparams, arg.num_params, params);
-                                                        ^~~~~~
-   drivers/tee/tee_core.c:589:7: note: Calling 'params_to_user'
-           rc = params_to_user(uparams, arg.num_params, params);
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/tee/tee_core.c:439:14: note: Assuming 'n' is < 'num_params'
-           for (n = 0; n < num_params; n++) {
-                       ^~~~~~~~~~~~~~
-   drivers/tee/tee_core.c:439:2: note: Loop condition is true.  Entering loop body
-           for (n = 0; n < num_params; n++) {
-           ^
-   drivers/tee/tee_core.c:441:3: note: 'p' initialized to a null pointer value
-                   struct tee_param *p = params + n;
-                   ^~~~~~~~~~~~~~~~~~~
-   drivers/tee/tee_core.c:443:11: note: Access to field 'attr' results in a dereference of a null pointer (loaded from variable 'p')
-                   switch (p->attr) {
-                           ^
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   17 warnings generated.
-   drivers/iio/adc/ad7298.c:40:8: warning: Excessive padding in 'struct ad7298_state' (72 padding bytes, where 8 is optimal). Optimal fields order: rx_buf, spi, reg, ext_ref, ring_msg, scan_single_msg, scan_single_xfer, ring_xfer, tx_buf, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ad7298_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   drivers/iio/adc/ad7298.c:40:8: note: Excessive padding in 'struct ad7298_state' (72 padding bytes, where 8 is optimal). Optimal fields order: rx_buf, spi, reg, ext_ref, ring_msg, scan_single_msg, scan_single_xfer, ring_xfer, tx_buf, consider reordering the fields or adding explicit padding members
-   struct ad7298_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   17 warnings generated.
->> drivers/iio/adc/ad7476.c:39:8: warning: Excessive padding in 'struct ad7476_state' (72 padding bytes, where 8 is optimal). Optimal fields order: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ad7476_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   drivers/iio/adc/ad7476.c:39:8: note: Excessive padding in 'struct ad7476_state' (72 padding bytes, where 8 is optimal). Optimal fields order: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering the fields or adding explicit padding members
-   struct ad7476_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   16 warnings generated.
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   16 warnings generated.
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   15 warnings generated.
-   Suppressed 15 warnings (15 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   17 warnings generated.
-   drivers/soundwire/stream.c:848:10: warning: Use of memory after it is freed [clang-analyzer-unix.Malloc]
-                           kfree(bus->defer_msg.msg->buf);
-                                 ^
-   drivers/soundwire/stream.c:1756:6: note: Assuming 'stream' is non-null
-           if (!stream) {
-               ^~~~~~~
-   drivers/soundwire/stream.c:1756:2: note: Taking false branch
-           if (!stream) {
-           ^
-   drivers/soundwire/stream.c:1763:6: note: Assuming field 'state' is equal to SDW_STREAM_ENABLED
-           if (stream->state != SDW_STREAM_ENABLED) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/soundwire/stream.c:1763:2: note: Taking false branch
-           if (stream->state != SDW_STREAM_ENABLED) {
-           ^
-   drivers/soundwire/stream.c:1770:8: note: Calling '_sdw_disable_stream'
-           ret = _sdw_disable_stream(stream);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/soundwire/stream.c:1701:2: note: Left side of '&&' is false
-           list_for_each_entry(m_rt, &stream->master_list, stream_node) {
-           ^
-   include/linux/list.h:628:13: note: expanded from macro 'list_for_each_entry'
-           for (pos = list_first_entry(head, typeof(*pos), member);        \
-                      ^
-   include/linux/list.h:522:2: note: expanded from macro 'list_first_entry'
-           list_entry((ptr)->next, type, member)
-           ^
-   include/linux/list.h:511:2: note: expanded from macro 'list_entry'
-           container_of(ptr, type, member)
-           ^
-   include/linux/kernel.h:704:61: note: expanded from macro 'container_of'
-           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
-                                                                      ^
-   drivers/soundwire/stream.c:1701:2: note: Taking false branch
-           list_for_each_entry(m_rt, &stream->master_list, stream_node) {
-           ^
-   include/linux/list.h:628:13: note: expanded from macro 'list_for_each_entry'
-           for (pos = list_first_entry(head, typeof(*pos), member);        \
-                      ^
-   include/linux/list.h:522:2: note: expanded from macro 'list_first_entry'
-           list_entry((ptr)->next, type, member)
-           ^
-   include/linux/list.h:511:2: note: expanded from macro 'list_entry'
-           container_of(ptr, type, member)
-           ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:328:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:316:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:308:3: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                   ^
-   drivers/soundwire/stream.c:1701:2: note: Loop condition is false.  Exiting loop
-           list_for_each_entry(m_rt, &stream->master_list, stream_node) {
-           ^
-   include/linux/list.h:628:13: note: expanded from macro 'list_for_each_entry'
-           for (pos = list_first_entry(head, typeof(*pos), member);        \
-                      ^
-   include/linux/list.h:522:2: note: expanded from macro 'list_first_entry'
-           list_entry((ptr)->next, type, member)
-           ^
-   include/linux/list.h:511:2: note: expanded from macro 'list_entry'
-           container_of(ptr, type, member)
-           ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:328:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:316:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:306:2: note: expanded from macro '__compiletime_assert'
-           do {                                                            \
-           ^
-   drivers/soundwire/stream.c:1701:2: note: Loop condition is false. Execution continues on line 1711
-           list_for_each_entry(m_rt, &stream->master_list, stream_node) {
-           ^
-   include/linux/list.h:628:2: note: expanded from macro 'list_for_each_entry'
-           for (pos = list_first_entry(head, typeof(*pos), member);        \
-           ^
---
-                   ^
-   drivers/crypto/inside-secure/safexcel.c:651:3: note: Taking false branch
-                   if (priv->flags & SAFEXCEL_HW_EIP197)
-                   ^
-   drivers/crypto/inside-secure/safexcel.c:664:10: note: Assuming the condition is false
-                   while ((readl(EIP197_HIA_DSE_THR(priv) + EIP197_HIA_DSE_THR_STAT(pe)) &
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/crypto/inside-secure/safexcel.c:664:3: note: Loop condition is false. Execution continues on line 669
-                   while ((readl(EIP197_HIA_DSE_THR(priv) + EIP197_HIA_DSE_THR_STAT(pe)) &
-                   ^
-   drivers/crypto/inside-secure/safexcel.c:669:7: note: Assuming field 'hwnumpes' is <= 4
-                   if (priv->hwconfig.hwnumpes > 4) {
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/crypto/inside-secure/safexcel.c:669:3: note: Taking false branch
-                   if (priv->hwconfig.hwnumpes > 4) {
-                   ^
-   drivers/crypto/inside-secure/safexcel.c:684:3: note: Taking false branch
-                   if (priv->flags & SAFEXCEL_HW_EIP197)
-                   ^
-   drivers/crypto/inside-secure/safexcel.c:618:15: note: Assuming 'pe' is >= field 'pes'
-           for (pe = 0; pe < priv->config.pes; pe++) {
-                        ^~~~~~~~~~~~~~~~~~~~~
-   drivers/crypto/inside-secure/safexcel.c:618:2: note: Loop condition is false. Execution continues on line 712
-           for (pe = 0; pe < priv->config.pes; pe++) {
-           ^
-   drivers/crypto/inside-secure/safexcel.c:712:14: note: Assuming 'i' is >= field 'rings'
-           for (i = 0; i < priv->config.rings; i++) {
-                       ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/crypto/inside-secure/safexcel.c:712:2: note: Loop condition is false. Execution continues on line 738
-           for (i = 0; i < priv->config.rings; i++) {
-           ^
-   drivers/crypto/inside-secure/safexcel.c:738:2: note: Loop condition is false. Execution continues on line 760
-           for (i = 0; i < priv->config.rings; i++) {
-           ^
-   drivers/crypto/inside-secure/safexcel.c:760:2: note: Loop condition is true.  Entering loop body
-           for (pe = 0; pe < priv->config.pes; pe++) {
-           ^
-   drivers/crypto/inside-secure/safexcel.c:762:35: note: The result of the right shift is undefined due to shifting by '32', which is greater or equal to the width of type 'unsigned long'
-                   writel(EIP197_DxE_THR_CTRL_EN | GENMASK(priv->config.rings - 1, 0),
-                                                   ^
-   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
-           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-                                        ^
-   include/linux/bits.h:36:11: note: expanded from macro '__GENMASK'
-            (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
-                    ^
-   arch/arm/include/asm/io.h:307:51: note: expanded from macro 'writel'
-   #define writel(v,c)             ({ __iowmb(); writel_relaxed(v,c); })
-                                                 ~~~~~~~~~~~~~~~^~~~
-   arch/arm/include/asm/io.h:299:68: note: expanded from macro 'writel_relaxed'
-   #define writel_relaxed(v,c)     __raw_writel((__force u32) cpu_to_le32(v),c)
-                                                              ~~~~~~~~~~~~^~
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   15 warnings generated.
-   Suppressed 15 warnings (15 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   15 warnings generated.
-   Suppressed 15 warnings (15 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   15 warnings generated.
-   Suppressed 15 warnings (15 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   15 warnings generated.
-   Suppressed 15 warnings (15 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   17 warnings generated.
-   drivers/iio/imu/adis16400.c:179:8: warning: Excessive padding in 'struct adis16400_state' (112 padding bytes, where 48 is optimal). Optimal fields order: adis, variant, filt_int, avail_scan_mask, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct adis16400_state {
-   ~~~~~~~^~~~~~~~~~~~~~~~~
-   drivers/iio/imu/adis16400.c:179:8: note: Excessive padding in 'struct adis16400_state' (112 padding bytes, where 48 is optimal). Optimal fields order: adis, variant, filt_int, avail_scan_mask, consider reordering the fields or adding explicit padding members
-   struct adis16400_state {
-   ~~~~~~~^~~~~~~~~~~~~~~~~
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   17 warnings generated.
-   drivers/iio/imu/adis16475.c:100:8: warning: Excessive padding in 'struct adis16475' (73 padding bytes, where 9 is optimal). Optimal fields order: adis, data, info, clk_freq, lsb_flag, sync_mode, burst32, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct adis16475 {
-   ~~~~~~~^~~~~~~~~~~
-   drivers/iio/imu/adis16475.c:100:8: note: Excessive padding in 'struct adis16475' (73 padding bytes, where 9 is optimal). Optimal fields order: adis, data, info, clk_freq, lsb_flag, sync_mode, burst32, consider reordering the fields or adding explicit padding members
-   struct adis16475 {
-   ~~~~~~~^~~~~~~~~~~
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   16 warnings generated.
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   17 warnings generated.
-   drivers/iio/adc/ad7298.c:40:8: warning: Excessive padding in 'struct ad7298_state' (72 padding bytes, where 8 is optimal). Optimal fields order: rx_buf, spi, reg, ext_ref, ring_msg, scan_single_msg, scan_single_xfer, ring_xfer, tx_buf, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ad7298_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   drivers/iio/adc/ad7298.c:40:8: note: Excessive padding in 'struct ad7298_state' (72 padding bytes, where 8 is optimal). Optimal fields order: rx_buf, spi, reg, ext_ref, ring_msg, scan_single_msg, scan_single_xfer, ring_xfer, tx_buf, consider reordering the fields or adding explicit padding members
-   struct ad7298_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   17 warnings generated.
->> drivers/iio/adc/ad7476.c:39:8: warning: Excessive padding in 'struct ad7476_state' (72 padding bytes, where 8 is optimal). Optimal fields order: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct ad7476_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   drivers/iio/adc/ad7476.c:39:8: note: Excessive padding in 'struct ad7476_state' (72 padding bytes, where 8 is optimal). Optimal fields order: data, spi, chip_info, ref_reg, convst_gpio, msg, xfer, consider reordering the fields or adding explicit padding members
-   struct ad7476_state {
-   ~~~~~~~^~~~~~~~~~~~~~
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   16 warnings generated.
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   32 warnings generated.
-   net/9p/client.c:541:3: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-                   err = p9pdu_readf(&req->rc, c->proto_version, "d", &ecode);
-                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/9p/client.c:541:3: note: Value stored to 'err' is never read
-                   err = p9pdu_readf(&req->rc, c->proto_version, "d", &ecode);
-                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/9p/client.c:628:3: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-                   err = p9pdu_readf(&req->rc, c->proto_version, "d", &ecode);
-                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/9p/client.c:628:3: note: Value stored to 'err' is never read
-                   err = p9pdu_readf(&req->rc, c->proto_version, "d", &ecode);
-                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/9p/client.c:1008:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:1008:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   net/9p/client.c:1175:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:1175:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   net/9p/client.c:1252:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:1252:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   net/9p/client.c:1344:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:1344:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   net/9p/client.c:1713:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:1713:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   net/9p/client.c:1766:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:1766:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   net/9p/client.c:1916:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:1916:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   net/9p/client.c:2018:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:2018:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   net/9p/client.c:2095:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:2095:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   net/9p/client.c:2155:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:2155:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   net/9p/client.c:2186:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:2186:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   net/9p/client.c:2216:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:2216:2: note: Value stored to 'err' is never read
-           err = 0;
-           ^     ~
-   net/9p/client.c:2249:2: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-           err = 0;
-           ^     ~
-   net/9p/client.c:2249:2: note: Value stored to 'err' is never read
-           err = 0;
-
-vim +39 drivers/iio/adc/ad7476.c
-
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  38  
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10 @39  struct ad7476_state {
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  40  	struct spi_device		*spi;
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  41  	const struct ad7476_chip_info	*chip_info;
-7bf50a968a1cd0 drivers/iio/adc/ad7476.c         Jonathan Cameron   2021-04-25  42  	struct regulator		*ref_reg;
-af37e4703d00ce drivers/iio/adc/ad7476.c         Dragos Bogdan      2020-03-11  43  	struct gpio_desc		*convst_gpio;
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  44  	struct spi_transfer		xfer;
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  45  	struct spi_message		msg;
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  46  	/*
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  47  	 * DMA (thus cache coherency maintenance) requires the
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  48  	 * transfer buffers to live in their own cache lines.
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  49  	 * Make the buffer large enough for one 16 bit sample and one 64 bit
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  50  	 * aligned 64 bit timestamp.
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  51  	 */
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  52  	unsigned char data[ALIGN(2, sizeof(s64)) + sizeof(s64)]
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  53  			____cacheline_aligned;
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  54  };
-7a28fe3c93d6cd drivers/staging/iio/adc/ad7476.c Lars-Peter Clausen 2012-09-10  55  
-
-:::::: The code at line 39 was first introduced by commit
-:::::: 7a28fe3c93d6cd920c84678a1bf45af8b4248577 staging:iio:ad7476: Squash driver into a single file.
-
-:::::: TO: Lars-Peter Clausen <lars@metafoo.de>
-:::::: CC: Jonathan Cameron <jic23@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+May God Bless you,
+Mrs.Doris David,

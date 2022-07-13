@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC785733D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5065733D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235555AbiGMKJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 06:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        id S235634AbiGMKKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235503AbiGMKJh (ORCPT
+        with ESMTP id S235405AbiGMKKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 06:09:37 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD39D515A;
-        Wed, 13 Jul 2022 03:09:35 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id v14so14782712wra.5;
-        Wed, 13 Jul 2022 03:09:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ijw1Pj9mlwCMZV0dKb2NxQ12t1IxBRC3ITFocW6Ygu8=;
-        b=qfhYomL/hIUTsLfOE29RbhT7+fpojiJFR+9+FKQSJ0lKCBW0kbEXVNnXkpEsiOxcG8
-         CoGGKthycMvHQhri66yG1htJTDPD3DH/nFHke6n+xOoTyY1K/nYZ3WU9U5cC/oxMacfO
-         i2qKkAv0Y99DnT549erFzSUwuikQMM65TF3owJhDwdtHp3Lro3Qjs5o7R2hwMOqbq51D
-         ut+wCDIklEoNqfLnKZo1tBXhys3AIXyTd7CbViL1K7JEul5ZpSx+XNWSbDgoFNi8l+E6
-         TehsuW0Slvr868okRcU5RuIPL5ZDdk9fBlFL1V7NfSMJtNBVfVMRr7A/fHoFbTm0BWmZ
-         yarA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ijw1Pj9mlwCMZV0dKb2NxQ12t1IxBRC3ITFocW6Ygu8=;
-        b=aoJgw7SadIFomlZwyyEIom6e9dTjLRDBIu2zHSkrFDUaPnykpf93jU3sfHglrAuLvw
-         uI6CiLxXifenYtifoOfsjLa0PztU5pa641/8FHzcjHwxvX6Bt99Z4zQayBD/nODtnqgC
-         Ov8u7NL86d39eRJcUepvfN3xufYCI9l7bxvRd8w1E9QuCkPbF5oOVyJzVhB/Oz/X2F1m
-         FR67H/t4VrpjDF7xZN+TRdn1PAyUHOc0Ni5/JaT8O3Uwy/V01puKzJ7tVmCCR2SRo3FA
-         Iozec0q7vw91loK9zoudtvGMmVMn2uOJr9iDbzZP8JQuJs4M0CN20OI6y7/ktNnDMbwu
-         RRDg==
-X-Gm-Message-State: AJIora+1V1E0nHvaWX0zLY4Nx4a2rgtbGm6gqgNbgNPOaSEOJvA73PlY
-        ZaSX6xf/bBBYLKfLJhFLq0t9OtvL/xw=
-X-Google-Smtp-Source: AGRyM1smG189SqCRB9E1eVnbwGIe0z3YpAy+TUsVBU/Qzaq2TX3lLMuUDfI2SSMIdTlNfKMJHQFQxA==
-X-Received: by 2002:a5d:6dae:0:b0:21d:ac34:d087 with SMTP id u14-20020a5d6dae000000b0021dac34d087mr2584531wrs.336.1657706973656;
-        Wed, 13 Jul 2022 03:09:33 -0700 (PDT)
-Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
-        by smtp.gmail.com with ESMTPSA id q19-20020a1ce913000000b003a2cf5eb900sm1572920wmc.40.2022.07.13.03.09.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 03:09:33 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 11:09:31 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/78] 5.15.55-rc1 review
-Message-ID: <Ys6Z2/ypEiBfeCrv@debian>
-References: <20220712183238.844813653@linuxfoundation.org>
+        Wed, 13 Jul 2022 06:10:13 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69AC0F5120;
+        Wed, 13 Jul 2022 03:10:11 -0700 (PDT)
+X-UUID: 9d46bf7243284e70a9813910e841dc19-20220713
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:d9741fac-5a5e-4387-8b16-bf723e56bd8b,OB:20,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:100
+X-CID-INFO: VERSION:1.1.8,REQID:d9741fac-5a5e-4387-8b16-bf723e56bd8b,OB:20,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:100
+X-CID-META: VersionHash:0f94e32,CLOUDID:ed302e64-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:cf19541416a1,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 9d46bf7243284e70a9813910e841dc19-20220713
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2002970894; Wed, 13 Jul 2022 18:10:06 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 13 Jul 2022 18:10:04 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 13 Jul 2022 18:10:03 +0800
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     David Miller <davem@davemloft.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Biao Huang" <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <macpaul.lin@mediatek.com>,
+        "Jisheng Zhang" <jszhang@kernel.org>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+Subject: [PATCH net v4 0/3] stmmac: dwmac-mediatek: fix clock issue
+Date:   Wed, 13 Jul 2022 18:09:59 +0800
+Message-ID: <20220713101002.10970-1-biao.huang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,41 +75,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+changes in v4:
+1. improve commit message and test ko insertion/remove as Matthias's comments.
+2. add patch "net: stmmac: fix pm runtime issue in stmmac_dvr_remove()" to
+   fix vlan filter deletion issue.
+3. add patch "net: stmmac: fix unbalanced ptp clock issue in suspend/resume flow"
+   to fix unbalanced ptp clock issue in suspend/resume flow.
 
-On Tue, Jul 12, 2022 at 08:38:30PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.55 release.
-> There are 78 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 14 Jul 2022 18:32:19 +0000.
-> Anything received after that time might be too late.
+changes in v3:
+1. delete mediatek_dwmac_exit() since there is no operation in it,
+as Matthias's comments.
 
-Build test (gcc version 11.3.1 20220706):
-mips: 62 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+changes in v2:
+1. clock configuration is still needed in probe,
+and invoke mediatek_dwmac_clks_config() instead.
+2. update commit message.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+v1:
+remove duplicated clock configuration in init/exit.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1508
-[2]. https://openqa.qa.codethink.co.uk/tests/1511
-[3]. https://openqa.qa.codethink.co.uk/tests/1514
+Biao Huang (3):
+  stmmac: dwmac-mediatek: fix clock issue
+  net: stmmac: fix pm runtime issue in stmmac_dvr_remove()
+  net: stmmac: fix unbalanced ptp clock issue in suspend/resume flow
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+ .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 49 ++++++++-----------
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 21 ++++----
+ .../ethernet/stmicro/stmmac/stmmac_platform.c |  8 ++-
+ 3 files changed, 39 insertions(+), 39 deletions(-)
 
---
-Regards
-Sudip
+-- 
+2.25.1
+
+

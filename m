@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14405738C4
+	by mail.lfdr.de (Postfix) with ESMTP id 77AFF5738C3
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbiGMOZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S236443AbiGMOZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235360AbiGMOZo (ORCPT
+        with ESMTP id S236157AbiGMOZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:25:44 -0400
+        Wed, 13 Jul 2022 10:25:45 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D758C3337F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:25:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F5033416
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:25:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657722342; x=1689258342;
+  t=1657722344; x=1689258344;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ge8z9tQugUy9cTnjB8duw2RGaf7wv9bBNLATuLcW9CY=;
-  b=iz6MTCD55FLihvOBywSMsuFeJlIu7ceI3+WaoNQaUA7KMNFo8E0KZkN0
-   ptIOMZAYcRsV77kzQOF7A/wd8Bpdm6UkBP0vAhVbSiv+L9+ZEw8ugNdPb
-   nRPNmGW8lb3uWyJqik7+0NK6x5fXcPFiNvnanEt+z5Z073tDmT/84FF6K
-   uIgx7h8D4LnClJrKxgv6NL4r98l8ZCB0BvBIExRjPcQpWEeze2Ex+bmW7
-   9DuR3GDORdLvHAjvy/cdhcqYXJl3XC9rmSpdvxSa12vySAYuymoLGxX8H
-   lX6+8RCvOkbEXHf8+6t6Ml1hBq+6xxRd1mC5xLfdxwVwiSXANN3eeqQOQ
+  bh=tYwVi73XEXhFXoO6kNb2ZMDbR48obx7haFf1QGVKu6o=;
+  b=ZslnfeYPEwocF4EmwNl6q6AzIqIndRrRlGWYJNabL24lcn2Z2gbuwSvi
+   m7QxuQwyCI7ggqcHPC3inXCeSSXbqMI75HGJtZXgMGLKpgjLy/FIDt5LP
+   lM7MzGEQWoLh4rwWOrSRJ66i+qflduevJ/9RKLWMxTeE2pSHIT6hihQtg
+   UUoJyS857fJhXMVjfdBW1wjwFWahvbctlzDynTWmoJ1O9AgD6ywmy2PH8
+   ikSmy3UtGcUggWanTjoqXunpBOstE9r3Mlb7DNU+1NuVOYfSj6MtAPDMf
+   Y/mTkic2u0yH22cloq8nFvU3w2yy9wxRn/AmmqXfVwi4uaN8HQiLDW2yV
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="285968195"
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="285968200"
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="285968195"
+   d="scan'208";a="285968200"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:25:42 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:25:44 -0700
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="570643756"
+   d="scan'208";a="570643761"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:25:40 -0700
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:25:42 -0700
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org
 Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
         pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH 2/3] soundwire: bus: allow device number to be unique at system level
-Date:   Wed, 13 Jul 2022 22:25:28 +0800
-Message-Id: <20220713142529.17323-3-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH 3/3] soundwire: intel: set dev_num_ida_min
+Date:   Wed, 13 Jul 2022 22:25:29 +0800
+Message-Id: <20220713142529.17323-4-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220713142529.17323-1-yung-chuan.liao@linux.intel.com>
 References: <20220713142529.17323-1-yung-chuan.liao@linux.intel.com>
@@ -61,100 +61,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-The SoundWire specification allows the device number to be allocated
-at will. When a system includes multiple SoundWire links, the device
-number scope is limited to the link to which the device is attached.
-
-However, for integration/debug it can be convenient to have a unique
-device number across the system. This patch adds a 'dev_num_ida_min'
-field at the bus level, which when set will be used to allocate an
-IDA.
-
-The allocation happens when a hardware device reports as ATTACHED. If
-any error happens during the enumeration, the allocated IDA is not
-freed - the device number will be reused if/when the device re-joins
-the bus. The IDA is only freed when the Linux device is unregistered.
+The allowed values for SoundWire device numbers are between 1 and 11
+(inclusive). HDaudio/iDISP codecs typically use SDI values 0..3
+(inclusive). To allow for a unique peripheral SDI/dev_number across
+HDaudio and SoundWire buses, we set the minimum base to 4. This still
+allows for 8 SoundWire peripherals in the system, currently more than
+needed in actual products.
 
 Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 Reviewed-by: Rander Wang <rander.wang@intel.com>
 Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 ---
- drivers/soundwire/bus.c       | 23 +++++++++++++++++------
- include/linux/soundwire/sdw.h |  4 ++++
- 2 files changed, 21 insertions(+), 6 deletions(-)
+ drivers/soundwire/intel.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index 37638c20c804..8970f8560766 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -12,6 +12,7 @@
- #include "sysfs_local.h"
+diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
+index 95ce292994cc..85d4268eea65 100644
+--- a/drivers/soundwire/intel.c
++++ b/drivers/soundwire/intel.c
+@@ -22,6 +22,9 @@
+ #include "bus.h"
+ #include "intel.h"
  
- static DEFINE_IDA(sdw_bus_ida);
-+static DEFINE_IDA(sdw_peripheral_ida);
++/* IDA min selected to avoid conflicts with HDaudio/iDISP SDI values */
++#define INTEL_DEV_NUM_IDA_MIN           4
++
+ #define INTEL_MASTER_SUSPEND_DELAY_MS	3000
+ #define INTEL_MASTER_RESET_ITERATIONS	10
  
- static int sdw_get_id(struct sdw_bus *bus)
- {
-@@ -157,9 +158,11 @@ static int sdw_delete_slave(struct device *dev, void *data)
+@@ -1297,6 +1300,7 @@ static int intel_link_probe(struct auxiliary_device *auxdev,
+ 	cdns->msg_count = 0;
  
- 	mutex_lock(&bus->bus_lock);
+ 	bus->link_id = auxdev->id;
++	bus->dev_num_ida_min = INTEL_DEV_NUM_IDA_MIN;
  
--	if (slave->dev_num) /* clear dev_num if assigned */
-+	if (slave->dev_num) { /* clear dev_num if assigned */
- 		clear_bit(slave->dev_num, bus->assigned);
--
-+		if (bus->dev_num_ida_min)
-+			ida_free(&sdw_peripheral_ida, slave->dev_num);
-+	}
- 	list_del_init(&slave->node);
- 	mutex_unlock(&bus->bus_lock);
+ 	sdw_cdns_probe(cdns);
  
-@@ -639,10 +642,18 @@ static int sdw_get_device_num(struct sdw_slave *slave)
- {
- 	int bit;
- 
--	bit = find_first_zero_bit(slave->bus->assigned, SDW_MAX_DEVICES);
--	if (bit == SDW_MAX_DEVICES) {
--		bit = -ENODEV;
--		goto err;
-+	if (slave->bus->dev_num_ida_min) {
-+		bit = ida_alloc_range(&sdw_peripheral_ida,
-+				      slave->bus->dev_num_ida_min, SDW_MAX_DEVICES,
-+				      GFP_KERNEL);
-+		if (bit < 0)
-+			goto err;
-+	} else {
-+		bit = find_first_zero_bit(slave->bus->assigned, SDW_MAX_DEVICES);
-+		if (bit == SDW_MAX_DEVICES) {
-+			bit = -ENODEV;
-+			goto err;
-+		}
- 	}
- 
- 	/*
-diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
-index 39058c841469..a2b31d25ea27 100644
---- a/include/linux/soundwire/sdw.h
-+++ b/include/linux/soundwire/sdw.h
-@@ -889,6 +889,9 @@ struct sdw_master_ops {
-  * meaningful if multi_link is set. If set to 1, hardware-based
-  * synchronization will be used even if a stream only uses a single
-  * SoundWire segment.
-+ * @dev_num_ida_min: if set, defines the minimum values for the IDA
-+ * used to allocate system-unique device numbers. This value needs to be
-+ * identical across all SoundWire bus in the system.
-  */
- struct sdw_bus {
- 	struct device *dev;
-@@ -913,6 +916,7 @@ struct sdw_bus {
- 	u32 bank_switch_timeout;
- 	bool multi_link;
- 	int hw_sync_min_links;
-+	int dev_num_ida_min;
- };
- 
- int sdw_bus_master_add(struct sdw_bus *bus, struct device *parent,
 -- 
 2.25.1
 

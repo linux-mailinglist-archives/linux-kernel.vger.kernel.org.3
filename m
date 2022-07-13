@@ -2,63 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85455739DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA825739DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236843AbiGMPQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S236793AbiGMPQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236696AbiGMPP5 (ORCPT
+        with ESMTP id S233937AbiGMPQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:15:57 -0400
-Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CF13205E
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:15:54 -0700 (PDT)
+        Wed, 13 Jul 2022 11:16:50 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD043F300;
+        Wed, 13 Jul 2022 08:16:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657725409; x=1689261409;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=fABvcbkUbpc25gTQRPOQ6Ut2LhphBQCvxCgQOo+CO3E=;
+  b=T4GYgqQg7cfhMeWS8KEdm2EJzZeAPUX4KFgmBidNdQ5My16NwQcWoK7c
+   zJ07E1fs2W5a5hzepD2xXUqfJuEtpvpcP4Ow5dFscUa1IuSRH2H46zCVo
+   BJZue50TVtEAFEPtMtVreunCRZeAc5TUR304pErs0iHTdI83CWXdy+wUt
+   bh49q84I0MEQWHFhVcYGlgHCUIB8401y1sTknr1XxqEVxTLVCZX7zvQr/
+   9Pc3CipsJ5JR3qM5H9vLVmUa9S4ap6Um67Z6DXwJgfm6E9BxythA+BVRx
+   9udm0/4q5Nl8rXM6wSBMg7UIz/QkdPPYHtdIiKWtoW2J2er9uuhs05XWw
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="181977413"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jul 2022 08:16:47 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 13 Jul 2022 08:16:47 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Wed, 13 Jul 2022 08:16:47 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KwqHZ6MHBLb/4ck5Fr5hTZLrm32KOkI9vbCHLzvTUyTYE34+3TRc5f+zaymUGX7rx5wr1uxTt+3mKPgDL2kGpf51kgLM5C38gscT1qArW1zxygnRK18KiVcwhuHt+8NriSAvHzeVgm4pZlIE35+k3aA27zyKu93BqR21qu55gCUCem69sVnDPTXZxK+RtlALlaI1P1yS+tCM0vKbpborQdluPDpyQa0PCfSjMCDl/WMBmgthWokjWGohZjJFMaam9Q+7RZ0dc+9iMm1uqSStmQ+qRXblP3BXGK7OUZSdRF7V7AYrtW/ujyxgsUFD4Ejawb1AVKqxJ6rBgpdZcsqsSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fABvcbkUbpc25gTQRPOQ6Ut2LhphBQCvxCgQOo+CO3E=;
+ b=FwaeoAlus2SItKEzQTXdnoLC6ZVAzKqcR5q0TaBMiyliyH+T4aTwrGb0PafOToC6N7YpF13k6W1zKpzz2p1FMbJYIJheSRS1Sh9RXvfoY3/zzXpadp8mTs73nQSmNcAp0CmYEIaOZaXjg7/W95DIvofX9yXcg4K0H5A/GGCZVbcHXVvctz7R9Qku48Cg99AmZbyH5/o625W5iDlklpvIAHvLzSyQIKDkrVfPixgoxCImAiaAgbobXggBPavPCYmJy+oTe/yM8ZVJ78wXxcYvGcdVIAfp+LgY+uByCUydA0gDYi0mTqjqNUoO5fGNbry3rNlbWsk64qsNPNfgz9XzlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=+V543hgOwwxoHl3Yvw8fF/bbYpXWMPctUgWwDNhCItc=;
-        b=PYeTuM+26X9PJPpUOC9K20rbPE0TvoYgka9EVIZdknpQs+j1x1gIGMBjU/KfR7Hf3eJCduINKd4G4
-         L+1iY6Ppt0UxOt6DYndYbZUOs5Omi4vfPiBScjymxnKMsu3c55sxYyJzGv0u+erFwtZKx06uDAPfgV
-         VJAruJ4Z3HahfvAIeCS0eW2HNUTgsJOAKszTTb21KpH+7kshTB0Dyb+Gr5hBxiPidnNS9l7Q/VspQz
-         qse9c+XDF02tcfDrPJdOnAlGwoBkDFRmgEILxkb3bkQI49WmO/FQ89Xv9MoOPtTf9mb+A6zZHtADzD
-         53qby6VHjRUdVNpEKaR3Ar8nH/7pwDg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=+V543hgOwwxoHl3Yvw8fF/bbYpXWMPctUgWwDNhCItc=;
-        b=hgEV5nQJYDXvZ6UXqA+aG6mhNH5qUQI8KHi4REODgNx1h3zEAIHxJUuPWsG84xxkeofuh0KMSUcmJ
-         MmU/NALCQ==
-X-HalOne-Cookie: 0d64e30b687d6e582b456109a4c81e6d55393b4f
-X-HalOne-ID: ae03f1c3-02be-11ed-823e-d0431ea8bb10
-Received: from mailproxy1.cst.dirpod3-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id ae03f1c3-02be-11ed-823e-d0431ea8bb10;
-        Wed, 13 Jul 2022 15:15:50 +0000 (UTC)
-Date:   Wed, 13 Jul 2022 17:15:49 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        jamipkettunen@somainline.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        martin.botka@somainline.org, dri-devel@lists.freedesktop.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org
-Subject: Re: [PATCH 2/2] gpu/drm/panel: Add Sony TD4353 JDI panel driver
-Message-ID: <Ys7hpfX9rw+Uam0P@ravnborg.org>
-References: <20220712200244.960018-1-konrad.dybcio@somainline.org>
- <20220712200244.960018-2-konrad.dybcio@somainline.org>
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fABvcbkUbpc25gTQRPOQ6Ut2LhphBQCvxCgQOo+CO3E=;
+ b=h7gdutfpKjJ1oPwAO46kyOMuD0mx9DKNSIa5MtPCbzuTu69CCdy4HZnI/ucKIpvMt2qitKvHeyg1hoZg1I3RSRYBoErsJqN9dfKmUh/lHWmQcBxzYCUTLRvDISCGaJzn4ZB2c+AHwGntpcIcI6/57F/m/sQ8Ou66bt1w5d0f3gM=
+Received: from PH0PR11MB5160.namprd11.prod.outlook.com (2603:10b6:510:3e::8)
+ by DM6PR11MB3257.namprd11.prod.outlook.com (2603:10b6:5:5c::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Wed, 13 Jul
+ 2022 15:16:45 +0000
+Received: from PH0PR11MB5160.namprd11.prod.outlook.com
+ ([fe80::6090:db2c:283b:fe69]) by PH0PR11MB5160.namprd11.prod.outlook.com
+ ([fe80::6090:db2c:283b:fe69%8]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
+ 15:16:45 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <icenowy@aosc.io>, <kernel@esmil.dk>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <anup@brainfault.org>, <Conor.Dooley@microchip.com>
+CC:     <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 2/2] riscv: dts: starfive: add the missing monitor core
+Thread-Topic: [PATCH v1 2/2] riscv: dts: starfive: add the missing monitor
+ core
+Thread-Index: AQHYlVY+6t1yOzd6XkeyUffI8zZgAw==
+Date:   Wed, 13 Jul 2022 15:16:45 +0000
+Message-ID: <224a7ec2-62ca-a8a5-ff36-37de4186e05e@microchip.com>
+References: <20220711184325.1367393-1-mail@conchuod.ie>
+ <20220711184325.1367393-3-mail@conchuod.ie>
+ <2303fc91e5110f22fc9ea6008fa4bbc77c1bdb13.camel@aosc.io>
+In-Reply-To: <2303fc91e5110f22fc9ea6008fa4bbc77c1bdb13.camel@aosc.io>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 508ffb45-05ab-44d9-86dc-08da64e2b301
+x-ms-traffictypediagnostic: DM6PR11MB3257:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7CIEZLp8V56oci0cLx2wSPsGwAehDe6+eRK8zsAlpJqJQE8teZattqt57Qds5SxHLD5xxlRbQ2YLquu8b8VG4zTSzhFnQvQxEudmDnBzKX0rCEHaGwI53EVGG+8NXQW4xNblHwpP3VAe5+tYC2DVr8Ulo3uCtUXONytz6Dsw6ybrwBRa2JBTDrpzHVKzgGW0J9PiFTu/BnZ+kP/GiRjnEFcPdJ1/A4upJVlv/LbOqsacjwqTbvYNgzpDRoe9XjgTFcav0V8POHA8XfDWCKhOZtRdUuenuf9Tm5W/WcU8zlBeNwlYjbo5F9B0AvYtbsGcpvQsQTILw8WI8lWbdfSWxgRZ+SgyGucynjvF+Z/7qJkp/oreVm72maSM7Pda3LxR3UiwpM1I2RTolXaa5pnYFbjI7d6lKx9BrJkwPVsXM5L6W6Idj2y55gB4o06fRIfaUTn4EllT02JhMhxv8yHyacvzjSW2hKzJTkpSwLEeJgPki4LNXGp1/mwCMimjNi0TWeVmdCUOjWBXnawha0UKnJZqKqHj7jYDO1p5oBv99QAlVaIQRBfC9K/cND4X6CEixUmOrysdGNjPiYF6XBAv5CA/h7hC6GawiO2zrINsGbYA1pqobO9vf/QYU49zOuuipTURF21HEBgZVKXWcx4DDgmldP6mS2/A8peONlvfswEMgBKWnnYVPdaLy99aBAoeIwK95VGYT2bzIUAeEhlOkEUiiNFLtxmSK26lItSoKcFPQzuOjKEUBMbSZsLhg2zh5O2VPM2HgF+oE9qm2psVN4CL1r7p3nMOnHZywqxSo4NX+HKclrLuoTZ1jCEBnoHckWu9qBT8ayXZkZ2zOf3sL7mqQpPEzT9+oQ8S0P3K7wJwHcybUJS9Y9RqIyGoXvaM1VAJSyvSkQPsqkW9NPZHrkoFFHkpkIww/HONDijPu6c=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5160.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(376002)(366004)(346002)(136003)(396003)(122000001)(31696002)(8936002)(86362001)(66476007)(38070700005)(83380400001)(8676002)(66556008)(66446008)(64756008)(4326008)(38100700002)(36756003)(2906002)(66946007)(110136005)(7416002)(5660300002)(91956017)(71200400001)(478600001)(41300700001)(31686004)(6506007)(54906003)(26005)(76116006)(6486002)(316002)(186003)(53546011)(6512007)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NnFRcVZJcDJOa2tKN1lRZ1UyeUk5dm1XUW4zUTY1ZUprTEFKNUlnZmFyUEw5?=
+ =?utf-8?B?YmNIdlp4bjlDU3ZZcUZLTmxjYm1MTHI0ZnZTOWlpNGxtaUREVW9kNkVYU2dM?=
+ =?utf-8?B?NTNiVU1UbTdlT0hRZndPQlNtS2JwZ0dsdFRnYjJLYUZCWFVPSHZSOTJLVjJN?=
+ =?utf-8?B?K2w5SjBkMGlzM1ZoZytqeGdETGlrekxYelZhZm8zNkFvM0dLNFlPdHRDODZj?=
+ =?utf-8?B?SExkY3UvVTBEVFdDYnFyclcwU25NamxieHRhMTNGQmFKOGlPNDhYR3lYN3V2?=
+ =?utf-8?B?NHNFVktldFNzOWUzYWg3bmlHTkYzbWtNSEw0VFBCSW5GQXN0RzBuOWQrTXdH?=
+ =?utf-8?B?M2o0Y0llZkprb1UvOWZLMTliRzZSdjZ3R09Ca2VBN0VsUko1eEFXSFRrd1lN?=
+ =?utf-8?B?akxHUVNlUnNjZjdHZ0FSNUdnRC9KMHdQZmlEL1dZdTJnNjhrV1BoTGI3NXpU?=
+ =?utf-8?B?SWUxeDF3WFdUU2w5R3MvZUJxR3JRMmNpVnhCSTNRQWcwOFFiL2swREtEekFP?=
+ =?utf-8?B?SFRsN2NZeXJpN2pWdFROY3dqL0NRU2dscXJxREN1Rlh6a1M1RFNEcDRIYy9T?=
+ =?utf-8?B?ZHhWOXd2SEpwMnBUU0VMWlRGbWhmVkdEL0o4SkZHWmYxaklBT2x3SG4yOEZZ?=
+ =?utf-8?B?V1VzYVBwN2x2NTBWUVJHZkpSeFd4MXVZUXRYQjdnZ0JWdzVyeDZPb3dzQzlT?=
+ =?utf-8?B?YnRWakF6WXkyZElKeGtoek5RdDdYbENPSmg5S3ZTNVlRN1gvc1lwMnp0SFJy?=
+ =?utf-8?B?Qzk3U2RqNlJNd3NKdnk5ckRzZGtJUU5MZmFTOWNZMzRwUStNOG5mcEYzc0tt?=
+ =?utf-8?B?NkNDUDVIVURmbko0clIwT0s3aVZ6R1dHdGVCRnMraFlRcStWOEc5byt3NHlj?=
+ =?utf-8?B?c0x6QVhLbTA3NlBpcFFYcC9KOVMxNkRkUjZVR21jSTVhbGFwaTlZdGg2RFg4?=
+ =?utf-8?B?K09QSlZiY1dqZkh1WEp4R3d3dGpTWUZNZWFFNTZkU3ozT3EzYVpMOXlpZGtz?=
+ =?utf-8?B?MWg0bktmc25VRk9nbGx6bEN0a3QrRy9zYks0OG82OEVveGFhQTJtMmd2cjEx?=
+ =?utf-8?B?YWlVMnhFczhYYkdGbDI0SEtxWksrVExQYnZVbkRoS0gyZlBWUUwvYVRNNjVN?=
+ =?utf-8?B?cmliTHgvRDhzYjJzazVDV0JLZkJNNjZNYnNFZTh0YU1xdjJINjlvdWY2djdk?=
+ =?utf-8?B?VVh0YWhzSXhSRnhMMGRQTU1nZ1lib0doQ04xZVVNMEswcXdqTWFuOXlscnZp?=
+ =?utf-8?B?VUV1VU9wS245SHYvL2lCSCttRTFpNzRzbHN4dzVQR25ZbXMrM2ZqTDBPTHlL?=
+ =?utf-8?B?aW50UFQ4RllqS2lKQUxicTlaWC9Eem5lZjcvUjhzNTBzNm5pY1dic0Rra0Vx?=
+ =?utf-8?B?YzI2K2dVb2doR3hldWluMkdYZXY0Uldza0xqUnhIZ2VsMDlNYUVvb0UzSkZO?=
+ =?utf-8?B?cjJVbDNrMU8zSzVKRXNRS1RSQk9sRHhDbG1iUXJJemtjZHQrTElSaGU3QlQr?=
+ =?utf-8?B?Q0pkYkQ4ZmVKZGRqY2F5MUcvbVlNY21oMUdaMXhqc2Q0NE93Ym1qdGRxZVhs?=
+ =?utf-8?B?NnNQVytwVU5VMmxZWVF2Q0R2VXR2L28rR2g4WUhXWEwxUUsxcXJKMXdZYk4w?=
+ =?utf-8?B?SGUxOWh3UTFlS2lVcDB2ZVV0ZWJpK2YwUmdveGhsVSthR1h2ZDhsQk8xMFdv?=
+ =?utf-8?B?dlNXRi9YYkgwL2VHckRRMDBMczUyQUhXUkRDN2dkWGJETUFCMER3YU9IaUU0?=
+ =?utf-8?B?SURGc3l5L1VnS0lrQXBsMHE0ZlNSWENLMGFHYUk5NmZGUWUxV3RwWFJ3aHJk?=
+ =?utf-8?B?Y2R6dkF6ZGRvUTBIYUFtRU5ndGw0djJnN05BeHlzbHd1R1NBcE5ZSUQrYWQy?=
+ =?utf-8?B?aWtib1VkQzBhRDlaWDdmRUJBaXNXUmdBd1JLMkxrVEYxZ0Z5RlBTaDRvY00w?=
+ =?utf-8?B?bDJXVWpZWUhFaUVWMmxuK1BUQVYrSTRxcDRyS1Zuc1ZHakZkMVNhRHpUQVBB?=
+ =?utf-8?B?TDNDaFhzUnUrc2hiZGhIamtwVjRlV1hydGQ1VGNQQzVKVHN6Y1pBNzFUL2hy?=
+ =?utf-8?B?bURVTmgreG1OL0p0ZTRiS0NqVXVvUi84RzlORW03SVhlU2dza1J6VjBJWVpO?=
+ =?utf-8?B?YWpXWS9RRWYvUCtVQm1Xb0d3U3ZNY1NnVEF4RktqMWVsMEJxRGp5eXZ6ekNN?=
+ =?utf-8?B?UWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <644DA4F5C3DC6B4FB2734B6A8AF0F010@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712200244.960018-2-konrad.dybcio@somainline.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5160.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 508ffb45-05ab-44d9-86dc-08da64e2b301
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2022 15:16:45.4329
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fKQ75DdVRVDgtDQyD21x9I5gRpuAMXN4nm+JEuUXjpZkCjxkCzimEFndb2jMYKsMszsLe14wSZpDQS5eCkkh5QTarachWyi48oFLWr+f7oQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3257
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,437 +161,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konrad,
-
-thanks for submitting this driver. I know a new version is pending with
-the bindings changes but here is a few more things to address.
-
-	Sam
-
-
-On Tue, Jul 12, 2022 at 10:02:41PM +0200, Konrad Dybcio wrote:
-> Add support for the Sony TD4353 JDI 2160x1080 display panel used in
-> some Sony Xperia XZ2 and XZ2 Compact smartphones. Due to the specifics
-> of smartphone manufacturing, it is impossible to retrieve a better name
-> for this panel.
-> 
-> This revision adds support for the default 60 Hz configuration, however
-> there could possibly be some room for expansion, as the display panels
-> used on Sony devices have historically been capable of >2x refresh rate
-> overclocking.
-> ---
->  drivers/gpu/drm/panel/Kconfig                 |  10 +
->  drivers/gpu/drm/panel/Makefile                |   1 +
->  drivers/gpu/drm/panel/panel-sony-td4353-jdi.c | 352 ++++++++++++++++++
->  3 files changed, 363 insertions(+)
->  create mode 100644 drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
-> 
-> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-> index 38799effd00a..1baa0a2c36bd 100644
-> --- a/drivers/gpu/drm/panel/Kconfig
-> +++ b/drivers/gpu/drm/panel/Kconfig
-> @@ -624,6 +624,16 @@ config DRM_PANEL_SONY_ACX565AKM
->  	  Say Y here if you want to enable support for the Sony ACX565AKM
->  	  800x600 3.5" panel (found on the Nokia N900).
->  
-> +config DRM_PANEL_SONY_TD4353_JDI
-> +	tristate "Sony TD4353 JDI panel"
-> +	depends on GPIOLIB && OF
-> +	depends on DRM_MIPI_DSI
-> +	depends on BACKLIGHT_CLASS_DEVICE
-> +	help
-> +	  Say Y here if you want to enable support for the Sony Tama
-> +	  TD4353 JDI command mode panel as found on some Sony Xperia
-> +	  XZ2 and XZ2 Compact smartphones.
-> +
->  config DRM_PANEL_SONY_TULIP_TRULY_NT35521
->  	tristate "Sony Tulip Truly NT35521 panel"
->  	depends on GPIOLIB && OF
-> diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-> index eabd4d6a1845..df8a6b707dbb 100644
-> --- a/drivers/gpu/drm/panel/Makefile
-> +++ b/drivers/gpu/drm/panel/Makefile
-> @@ -63,6 +63,7 @@ obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7701) += panel-sitronix-st7701.o
->  obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7703) += panel-sitronix-st7703.o
->  obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) += panel-sitronix-st7789v.o
->  obj-$(CONFIG_DRM_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
-> +obj-$(CONFIG_DRM_PANEL_SONY_TD4353_JDI) += panel-sony-td4353-jdi.o
->  obj-$(CONFIG_DRM_PANEL_SONY_TULIP_TRULY_NT35521) += panel-sony-tulip-truly-nt35521.o
->  obj-$(CONFIG_DRM_PANEL_TDO_TL070WSH30) += panel-tdo-tl070wsh30.o
->  obj-$(CONFIG_DRM_PANEL_TPO_TD028TTEC1) += panel-tpo-td028ttec1.o
-> diff --git a/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
-> new file mode 100644
-> index 000000000000..8bc2e55af63c
-> --- /dev/null
-> +++ b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
-> @@ -0,0 +1,352 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022 Konrad Dybcio <konrad.dybcio@somainline.org>
-> + *
-> + * Generated with linux-mdss-dsi-panel-driver-generator with a
-> + * substantial amount of manual adjustments.
-> + *
-> + * SONY Downstream kernel calls this one:
-> + * - "JDI ID3" for Akari
-> + * - "JDI ID4" for Apollo
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/regulator/consumer.h>
-> +
-> +#include <video/mipi_display.h>
-> +
-> +#include <drm/drm_mipi_dsi.h>
-> +#include <drm/drm_modes.h>
-> +#include <drm/drm_panel.h>
-> +
-> +enum {
-> +	TYPE_AKARI_60HZ,
-> +	TYPE_APOLLO_60HZ
-> +};
-> +
-> +struct sony_td4353_jdi {
-> +	struct drm_panel panel;
-> +	struct mipi_dsi_device *dsi;
-> +	struct regulator_bulk_data supplies[3];
-> +	struct gpio_desc *preset_gpio;
-> +	struct gpio_desc *treset_gpio;
-> +	bool prepared;
-> +	int type;
-> +};
-> +
-> +static inline struct sony_td4353_jdi *to_sony_td4353_jdi(struct drm_panel *panel)
-> +{
-> +	return container_of(panel, struct sony_td4353_jdi, panel);
-> +}
-> +
-> +#define dsi_dcs_write_seq(dsi, seq...) do {				\
-> +		static const u8 d[] = { seq };				\
-> +		int ret;						\
-> +		ret = mipi_dsi_dcs_write_buffer(dsi, d, ARRAY_SIZE(d));	\
-> +		if (ret < 0)						\
-> +			return ret;					\
-> +	} while (0)
-Use the one already defined in drm_mipi_dsi - we do not want extra
-copies of the same.
-
-
-> +
-> +static int sony_td4353_jdi_on(struct sony_td4353_jdi *ctx)
-
-Maybe this is just me, but I had expected that a function named "on"
-would enable the power supply.
-
-> +{
-> +	struct mipi_dsi_device *dsi = ctx->dsi;
-> +	struct device *dev = &dsi->dev;
-> +	int ret;
-> +
-> +	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
-> +
-> +	ret = mipi_dsi_dcs_set_column_address(dsi, 0x0000, 0x0437);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set column address: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = mipi_dsi_dcs_set_page_address(dsi, 0x0000, 0x086f);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set page address: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = mipi_dsi_dcs_set_tear_scanline(dsi, 0x0000);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set tear scanline: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set tear on: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x00);
-> +
-> +	ret = mipi_dsi_dcs_set_pixel_format(dsi, 0x77);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set pixel format: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PARTIAL_ROWS,
-> +			  0x00, 0x00, 0x08, 0x6f);
-> +
-> +	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
-> +		return ret;
-> +	}
-> +	msleep(70);
-> +
-> +	dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_MEMORY_START);
-> +
-> +	ret = mipi_dsi_dcs_set_display_on(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to turn display on: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int sony_td4353_jdi_off(struct sony_td4353_jdi *ctx)
-> +{
-> +	struct mipi_dsi_device *dsi = ctx->dsi;
-> +	struct device *dev = &dsi->dev;
-> +	int ret;
-> +
-> +	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
-> +
-> +	ret = mipi_dsi_dcs_set_display_off(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set display off: %d\n", ret);
-> +		return ret;
-> +	}
-> +	msleep(22);
-> +
-> +	ret = mipi_dsi_dcs_set_tear_off(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set tear off: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
-> +		return ret;
-> +	}
-> +	msleep(80);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sony_td4353_jdi_prepare(struct drm_panel *panel)
-> +{
-> +	struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
-> +	struct device *dev = &ctx->dsi->dev;
-> +	int ret;
-> +
-> +	if (ctx->prepared)
-> +		return 0;
-> +
-> +	ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to enable regulators: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	msleep(100);
-> +
-> +	gpiod_set_value_cansleep(ctx->treset_gpio, 1);
-> +	gpiod_set_value_cansleep(ctx->preset_gpio, 1);
-> +	usleep_range(5000, 5100);
-> +
-> +	ret = sony_td4353_jdi_on(ctx);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to power on panel: %d\n", ret);
-> +		gpiod_set_value_cansleep(ctx->preset_gpio, 0);
-> +		gpiod_set_value_cansleep(ctx->treset_gpio, 0);
-> +		regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-The above sequence is almost the same as used in unprepare.
-Maybe do it in a helper. Then the steps will also be the same - right
-now treset is set to 0 either before or after power supplies are
-disabled. The difference is confusing.
-
-> +		return ret;
-> +	}
-> +
-> +	ctx->prepared = true;
-> +	return 0;
-> +}
-> +
-> +static int sony_td4353_jdi_unprepare(struct drm_panel *panel)
-> +{
-> +	struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
-> +	struct device *dev = &ctx->dsi->dev;
-> +	int ret;
-> +
-> +	if (!ctx->prepared)
-> +		return 0;
-> +
-> +	ret = sony_td4353_jdi_off(ctx);
-> +	if (ret < 0)
-> +		dev_err(dev, "Failed to power off panel: %d\n", ret);
-> +
-> +	gpiod_set_value_cansleep(ctx->preset_gpio, 0);
-> +	regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-> +
-> +	gpiod_set_value_cansleep(ctx->treset_gpio, 0);
-> +	usleep_range(5000, 5100);
-> +
-> +	ctx->prepared = false;
-> +	return 0;
-> +}
-> +
-> +static const struct drm_display_mode sony_td4353_jdi_mode_akari_60hz = {
-> +	.clock = (1080 + 4 + 8 + 8) * (2160 + 259 + 8 + 8) * 60 / 1000,
-> +	.hdisplay = 1080,
-> +	.hsync_start = 1080 + 4,
-> +	.hsync_end = 1080 + 4 + 8,
-> +	.htotal = 1080 + 4 + 8 + 8,
-> +	.vdisplay = 2160,
-> +	.vsync_start = 2160 + 259,
-> +	.vsync_end = 2160 + 259 + 8,
-> +	.vtotal = 2160 + 259 + 8 + 8,
-> +	.width_mm = 64,
-> +	.height_mm = 128,
-> +};
-> +
-> +static const struct drm_display_mode sony_td4353_jdi_mode_apollo_60hz = {
-> +	.clock = (1080 + 4 + 8 + 8) * (2160 + 259 + 8 + 8) * 60 / 1000,
-> +	.hdisplay = 1080,
-> +	.hsync_start = 1080 + 4,
-> +	.hsync_end = 1080 + 4 + 8,
-> +	.htotal = 1080 + 4 + 8 + 8,
-> +	.vdisplay = 2160,
-> +	.vsync_start = 2160 + 259,
-> +	.vsync_end = 2160 + 259 + 8,
-> +	.vtotal = 2160 + 259 + 8 + 8,
-> +	.width_mm = 56,
-> +	.height_mm = 112,
-> +};
-> +
-> +static int sony_td4353_jdi_get_modes(struct drm_panel *panel,
-> +				   struct drm_connector *connector)
-> +{
-> +	struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
-> +	struct drm_display_mode *mode = NULL;
-> +
-> +	if (ctx->type == TYPE_AKARI_60HZ)
-> +		mode = drm_mode_duplicate(connector->dev, &sony_td4353_jdi_mode_akari_60hz);
-> +	else if (ctx->type == TYPE_APOLLO_60HZ)
-> +		mode = drm_mode_duplicate(connector->dev, &sony_td4353_jdi_mode_apollo_60hz);
-> +	else
-> +		return -EINVAL;
-> +
-> +	if (!mode)
-> +		return -ENOMEM;
-> +
-> +	drm_mode_set_name(mode);
-> +
-> +	mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
-> +	connector->display_info.width_mm = mode->width_mm;
-> +	connector->display_info.height_mm = mode->height_mm;
-> +	drm_mode_probed_add(connector, mode);
-> +
-> +	return 1;
-> +}
-> +
-> +static const struct drm_panel_funcs sony_td4353_jdi_panel_funcs = {
-> +	.prepare = sony_td4353_jdi_prepare,
-> +	.unprepare = sony_td4353_jdi_unprepare,
-> +	.get_modes = sony_td4353_jdi_get_modes,
-> +};
-> +
-> +static int sony_td4353_jdi_probe(struct mipi_dsi_device *dsi)
-> +{
-> +	struct device *dev = &dsi->dev;
-> +	struct sony_td4353_jdi *ctx;
-> +	int ret;
-> +
-> +	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-> +	if (!ctx)
-> +		return -ENOMEM;
-> +
-> +	ctx->type = (uintptr_t)of_device_get_match_data(dev);
-> +
-> +	ctx->supplies[0].supply = "vddio";
-> +	ctx->supplies[1].supply = "vsp";
-> +	ctx->supplies[2].supply = "vsn";
-> +	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ctx->supplies),
-> +				      ctx->supplies);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "Failed to get regulators\n");
-> +
-> +	ctx->preset_gpio = devm_gpiod_get(dev, "preset", GPIOD_ASIS);
-> +	if (IS_ERR(ctx->preset_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(ctx->preset_gpio),
-> +				     "Failed to get preset-gpios\n");
-> +
-> +	ctx->treset_gpio = devm_gpiod_get(dev, "treset", GPIOD_ASIS);
-> +	if (IS_ERR(ctx->treset_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(ctx->treset_gpio),
-> +				     "Failed to get treset-gpios\n");
-> +
-> +	ctx->dsi = dsi;
-> +	mipi_dsi_set_drvdata(dsi, ctx);
-> +
-> +	dsi->lanes = 4;
-> +	dsi->format = MIPI_DSI_FMT_RGB888;
-> +	dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS;
-> +
-> +	drm_panel_init(&ctx->panel, dev, &sony_td4353_jdi_panel_funcs,
-> +		       DRM_MODE_CONNECTOR_DSI);
-> +
-> +	ret = drm_panel_of_backlight(&ctx->panel);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to get backlight\n");
-> +
-> +	drm_panel_add(&ctx->panel);
-> +
-> +	ret = mipi_dsi_attach(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
-> +		drm_panel_remove(&ctx->panel);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int sony_td4353_jdi_remove(struct mipi_dsi_device *dsi)
-In latest drm-misc-next tree this function returns a void - and this
-needs to be adjusted accordingly.
-
-> +{
-> +	struct sony_td4353_jdi *ctx = mipi_dsi_get_drvdata(dsi);
-> +	int ret;
-> +
-> +	ret = mipi_dsi_detach(dsi);
-> +	if (ret < 0)
-> +		dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
-> +
-> +	drm_panel_remove(&ctx->panel);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id sony_td4353_jdi_of_match[] = {
-> +	{ .compatible = "sony,td4353-jdi-akari", .data = (void *)TYPE_AKARI_60HZ },
-> +	{ .compatible = "sony,td4353-jdi-apollo", .data = (void *)TYPE_APOLLO_60HZ },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, sony_td4353_jdi_of_match);
-> +
-> +static struct mipi_dsi_driver sony_td4353_jdi_driver = {
-> +	.probe = sony_td4353_jdi_probe,
-> +	.remove = sony_td4353_jdi_remove,
-> +	.driver = {
-> +		.name = "panel-sony-td4353-jdi",
-> +		.of_match_table = sony_td4353_jdi_of_match,
-> +	},
-> +};
-> +module_mipi_dsi_driver(sony_td4353_jdi_driver);
-> +
-> +MODULE_AUTHOR("Konrad Dybcio <konrad.dybcio@somainline.org>");
-> +MODULE_DESCRIPTION("DRM panel driver for SONY Xperia XZ2/XZ2c JDI panel");
-> +MODULE_LICENSE("GPL v2");
-> -- 
-> 2.37.0
+T24gMTMvMDcvMjAyMiAxNjoxNSwgSWNlbm93eSBaaGVuZyB3cm90ZToNCj4g5ZyoIDIwMjItMDct
+MTHmmJ/mnJ/kuIDnmoQgMTk6NDMgKzAxMDDvvIxDb25vciBEb29sZXnlhpnpgZPvvJoNCj4+IEZy
+b206IENvbm9yIERvb2xleSA8Y29ub3IuZG9vbGV5QG1pY3JvY2hpcC5jb20+DQo+Pg0KPj4gVGhl
+IEpINzEwMCBoYXMgYSAzMiBiaXQgbW9uaXRvciBjb3JlIHRoYXQgaXMgbWlzc2luZyBmcm9tIHRo
+ZSBkZXZpY2UNCj4+IHRyZWUuIEFkZCBpdCAoYW5kIGl0cyBjcHUtbWFwIGVudHJ5KSB0byBtb3Jl
+IGFjY3VyYXRlbHkgcmVmbGVjdCB0aGUNCj4+IGFjdHVhbCB0b3BvbG9neSBvZiB0aGUgU29DLg0K
+Pj4NCj4+IFNpZ25lZC1vZmYtYnk6IENvbm9yIERvb2xleSA8Y29ub3IuZG9vbGV5QG1pY3JvY2hp
+cC5jb20+DQo+PiAtLS0NCj4+IMKgYXJjaC9yaXNjdi9ib290L2R0cy9zdGFyZml2ZS9qaDcxMDAu
+ZHRzaSB8IDIxICsrKysrKysrKysrKysrKysrKysrKw0KPj4gwqAxIGZpbGUgY2hhbmdlZCwgMjEg
+aW5zZXJ0aW9ucygrKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9hcmNoL3Jpc2N2L2Jvb3QvZHRzL3N0
+YXJmaXZlL2poNzEwMC5kdHNpDQo+PiBiL2FyY2gvcmlzY3YvYm9vdC9kdHMvc3RhcmZpdmUvamg3
+MTAwLmR0c2kNCj4+IGluZGV4IGM2MTdhNjFlMjZlMi4uOTJmY2U1YjY2ZDNkIDEwMDY0NA0KPj4g
+LS0tIGEvYXJjaC9yaXNjdi9ib290L2R0cy9zdGFyZml2ZS9qaDcxMDAuZHRzaQ0KPj4gKysrIGIv
+YXJjaC9yaXNjdi9ib290L2R0cy9zdGFyZml2ZS9qaDcxMDAuZHRzaQ0KPj4gQEAgLTY3LDYgKzY3
+LDIzIEBAIGNwdTFfaW50YzogaW50ZXJydXB0LWNvbnRyb2xsZXIgew0KPj4gwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfTsNCj4+IMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgfTsNCj4+IMKgDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgRTI0OiBjcHVAMiB7DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoGNvbXBhdGlibGUgPSAic2lmaXZlLGUyNCIsICJyaXNjdiI7DQo+IA0KPiBP
+aCwgYnkgdGhlIHdheSAic2lmaXZlLGUyNCIgaXMgbm90IGEgZG9jdW1lbnRlZCBjb21wYXRpYmxl
+IGluIHRoZSBEVA0KPiBiaW5kaW5nLg0KPiANCj4gSWYgeW91IHJlYWxseSB3YW50IHRvIGFkZCBp
+dCBoZXJlLCB5b3UgbmVlZCB0byBhZGQgdGhlIGNvbXBhdGlibGUNCj4gc3RyaW5nIHRvIHRoZSBE
+VCBiaW5kaW5nIGZpcnN0Lg0KDQpDaGVjayBwYXRjaCAxLzIuDQoNCj4gDQo+PiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZyA9IDwyPjsNCj4+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGV2aWNlX3R5cGUgPSAi
+Y3B1IjsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+aS1jYWNoZS1ibG9jay1zaXplID0gPDMyPjsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgaS1jYWNoZS1zZXRzID0gPDI1Nj47DQo+PiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGktY2FjaGUtc2l6ZSA9IDwxNjM4
+ND47DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJp
+c2N2LGlzYSA9ICJydjMyaW1hZmMiOw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBzdGF0dXMgPSAiZGlzYWJsZWQiOw0KPj4gKw0KPj4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjcHUyX2ludGM6IGludGVycnVw
+dC1jb250cm9sbGVyIHsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbXBhdGlibGUgPSAicmlzY3YsY3B1LWludGMiOw0K
+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgaW50ZXJydXB0LWNvbnRyb2xsZXI7DQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjaW50ZXJydXB0LWNlbGxz
+ID0gPDE+Ow0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqB9Ow0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH07DQo+PiArDQo+PiDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNwdS1tYXAgew0KPj4gwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2x1c3RlcjAgew0KPj4gwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNv
+cmUwIHsNCj4+IEBAIC03Niw2ICs5MywxMCBAQCBjb3JlMCB7DQo+PiDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29yZTEgew0K
+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjcHUgPSA8JlU3NF8xPjsNCj4+IMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Ow0K
+Pj4gKw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgY29yZTIgew0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNwdSA9IDwm
+RTI0PjsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoH07DQo+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqB9Ow0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Ow0K
+Pj4gwqDCoMKgwqDCoMKgwqDCoH07DQo+IA0KPiANCg==

@@ -2,103 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668F0573308
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D952B57330A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235229AbiGMJlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
+        id S236159AbiGMJl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234719AbiGMJlY (ORCPT
+        with ESMTP id S232153AbiGMJly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:41:24 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B30EF5D52
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:41:24 -0700 (PDT)
-X-UUID: c48515eafde34c24a69e8dffa919c64e-20220713
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:8b28c99f-208b-4729-8b97-ead5abd6d1e8,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:0f94e32,CLOUDID:57712d64-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: c48515eafde34c24a69e8dffa919c64e-20220713
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 611598397; Wed, 13 Jul 2022 17:41:17 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 13 Jul 2022 17:41:16 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 13 Jul 2022 17:41:14 +0800
-Message-ID: <9275f8df410632e348f68851ca347437967d8d0d.camel@mediatek.com>
-Subject: Re: [PATCH 01/13] tracing/events: Add __vstring() and
- __assign_vstr() helper macros
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     <linux-kernel@vger.kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Arend van Spriel" <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        "Hante Meuleman" <hante.meuleman@broadcom.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Bin Liu <b-liu@ti.com>,
-        Marek Lindner <mareklindner@neomailbox.ch>,
-        Simon Wunderlich <sw@simonwunderlich.de>,
-        Antonio Quartulli <a@unstable.cc>,
-        Sven Eckelmann <sven@narfation.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jim Cromie <jim.cromie@gmail.com>
-Date:   Wed, 13 Jul 2022 17:41:15 +0800
-In-Reply-To: <20220712140001.52bd8734@gandalf.local.home>
-References: <20220705224453.120955146@goodmis.org>
-         <20220705224749.053570613@goodmis.org>
-         <76e12594cf81b57c98e536c68b2947f9ed0a4296.camel@mediatek.com>
-         <20220712140001.52bd8734@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 13 Jul 2022 05:41:54 -0400
+Received: from smtpproxy21.qq.com (smtpbg701.qq.com [203.205.195.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2330F5D5A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:41:52 -0700 (PDT)
+X-QQ-mid: bizesmtp76t1657705300tjyq9kr6
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 13 Jul 2022 17:41:34 +0800 (CST)
+X-QQ-SSF: 01400000002000G0T000B00A0000000
+X-QQ-FEAT: RrZlkntZBflHKmwQ9JnxJ+0cUviccNuWWA2UCoNooBspxFz4wUMc0pcX4AdHT
+        7YBsLwZGo4x5aWl0oRiIAvFVTQ7WM1G4COQdMIun/coCnkREpN+wMCUStoC1E8D00W6qyUB
+        JF/ztQnqKdA/J+q33vAW5dJMFd0yfkm/srBtoJFsUioC4nCikVPb/oA6V/CFA3AmgDUW64k
+        7Pg69+3h5LPFPF6OjUqUial/RmELNkiR7lBFeQvk6ZlpH5kpSjYWbyv+xbHUAVsf9xGmyLE
+        zd7EzsXL73HLyP2pxzFB/jkypmGOuG2GLJuARb312khRkLG+Dp4cbwejS2Hul3GFUNEpl3+
+        ZWWYSY8l8BrZSD80Zd0fyLHKMi/d/J2xCqAamWXQu9oGWBtTrSv82qBP0Aq4kh3gxryHVAo
+        3WGh0zz0TEx6U6R6i5v2bg==
+X-QQ-GoodBg: 2
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     perex@perex.cz, tiwai@suse.com, tcrawford@system76.com,
+        wse@tuxedocomputers.com, kai.heng.feng@canonical.com,
+        tangmeng@uniontech.com, tanureal@opensource.cirrus.com,
+        cam@neo-zeon.de, kailang@realtek.com,
+        sbinding@opensource.cirrus.com, yong.wu@mediatek.com,
+        andy.chi@canonical.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ALSA: hda/realtek - Enable the headset-mic on a Xiaomi's laptop
+Date:   Wed, 13 Jul 2022 17:41:33 +0800
+Message-Id: <20220713094133.9894-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign3
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-12 at 14:00 -0400, Steven Rostedt wrote:
-> On Thu, 7 Jul 2022 09:35:53 +0800
-> Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
-> 
-> > Seems difficult to get this patch without, such as, '--cc="
-> > linux-kernel@vger.kernel.org"'
-> 
-> Not sure what you mean by this. It was sent *To:*
-> linux-kernel@vger.kernel.org.
-oh, maybe I miss it, sorry
+The headset on this machine is not defined, after applying the quirk
+ALC256_FIXUP_ASUS_HEADSET_MIC, the headset-mic works well
 
-> 
-> I don't need to add it to the Cc list. I never include it as all my
-> kernel
-> patches go there by default.
-> 
-> -- Steve
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ sound/pci/hda/patch_realtek.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 91cd58849ee8..383a814b8539 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9369,6 +9369,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1d72, 0x1602, "RedmiBook", ALC255_FIXUP_XIAOMI_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1d72, 0x1701, "XiaomiNotebook Pro", ALC298_FIXUP_DELL1_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1d72, 0x1901, "RedmiBook 14", ALC256_FIXUP_ASUS_HEADSET_MIC),
++	SND_PCI_QUIRK(0x1d72, 0x1945, "Redmi G", ALC256_FIXUP_ASUS_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1d72, 0x1947, "RedmiBook Air", ALC255_FIXUP_XIAOMI_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x8086, 0x2074, "Intel NUC 8", ALC233_FIXUP_INTEL_NUC8_DMIC),
+ 	SND_PCI_QUIRK(0x8086, 0x2080, "Intel NUC 8 Rugged", ALC256_FIXUP_INTEL_NUC8_RUGGED),
+-- 
+2.20.1
+
+
 

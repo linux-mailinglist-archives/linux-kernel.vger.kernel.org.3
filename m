@@ -2,162 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACED572FCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9ACF572FED
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234931AbiGMH5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
+        id S234902AbiGMIB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234217AbiGMH5Q (ORCPT
+        with ESMTP id S231664AbiGMIBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:57:16 -0400
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F394DDA995
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:57:15 -0700 (PDT)
-Received: from CHE01-GV0-obe.outbound.protection.outlook.com
- (mail-gv0che01lp2049.outbound.protection.outlook.com [104.47.22.49]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-33-_M00SPT-O4CMuQhu70jn3w-2; Wed, 13 Jul 2022 09:57:10 +0200
-X-MC-Unique: _M00SPT-O4CMuQhu70jn3w-2
-Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
- GV0P278MB0082.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:1e::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5438.12; Wed, 13 Jul 2022 07:57:08 +0000
-Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
- ([fe80::8c1d:4ad8:1fae:ae46]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
- ([fe80::8c1d:4ad8:1fae:ae46%7]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
- 07:57:08 +0000
-From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
-To:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH v1 1/2] arm64: dts: imx8mm-verdin: update CAN clock to
- 40MHz
-Thread-Topic: [PATCH v1 1/2] arm64: dts: imx8mm-verdin: update CAN clock to
- 40MHz
-Thread-Index: AQHYksgvnx0ILUdEQ0iQZ7kCRUtdMa179rwA
-Date:   Wed, 13 Jul 2022 07:57:08 +0000
-Message-ID: <aabe30ae3e46d2e5be2d5d81dabff05d09c7370c.camel@toradex.com>
-References: <20220708124205.59564-1-andrejs.cainikovs@toradex.com>
-         <20220708124205.59564-2-andrejs.cainikovs@toradex.com>
-In-Reply-To: <20220708124205.59564-2-andrejs.cainikovs@toradex.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e0ab31ac-6918-4d74-a8d3-08da64a54925
-x-ms-traffictypediagnostic: GV0P278MB0082:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0
-x-microsoft-antispam-message-info: XxzWNuZpCWZhA5a4aezI/Rpk24Kj6wWxPDPoJQMkGp0vX/Z291Rtf0LPYTbg3Bsblg17Sg5oHMHj53nj9DHXWKY5qokac9k7ximCLgtcjQ/o3SQ7C698FsIbwMgrmSeLexSjx3xHPwKVazROrrZUwBOJEe8TvebFccrwno8XPB/l/Dc5ZJSoRNZMXbxc3UOpxKCwKRlUsCwuF/XHh/vSL/vIhoJaT9YDp0/7T+WYqpAad4uWsgk/4RoStVZls/hcbOMXC/LhNZcjBuxLI5fBDGObJOY9AWBQai7q39Y1+X5N5YDIT2QbNN7kzMY2TAOOPq5qv8kSTBL2vKC3N49shK+3OVffeyQGDoic/iNhDIJ+cFNnrlqhhTWB8JZoadQmffBG2YOxJMT8RjX78+s5sO5mhnTcoO1sR01aBv62bh66CXpV9jJU4GqhujDprTdfNvzTawlucxZWMRaE4926HssMgp/kykAxzAe4EF5h635b7zSvaXj4NHsDtCmVgBzcAqIDZQnjDiOoQw/YwK26/OUMg9k9yCX4nMqTCOxH2Ef6v4LawT7ZDYneTkqPiYArnKJQxQ81kWTYkiskCYx0qyblaaFm4lQEnTUvBtgS11TEIpq67MRm2uj4gObvr8OYXUt2NSE9U24ZAdTbRfXUAepfWASsysM/NjbQGfYxGjbCVkwHdvzC0b58KFDs2tJR/3liqFeXx8MHsrcCp1xcmXke7Cq/c14QI/ePz5KierIgEseMBVUG8fC/kb/7QLgNbTVrmK0uei9aVldjDWPHmkYmeY6WE9sZhwM8ocI/4fyPIg5hPqnar5GNNLLVcdVogD0SaOreXnJSlXHN6KwAFg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(136003)(396003)(39850400004)(366004)(8676002)(66476007)(66446008)(64756008)(66946007)(83380400001)(86362001)(4326008)(76116006)(2906002)(66556008)(15650500001)(36756003)(122000001)(38100700002)(5660300002)(8936002)(38070700005)(44832011)(41300700001)(316002)(478600001)(107886003)(6506007)(6512007)(6486002)(2616005)(71200400001)(54906003)(7416002)(186003)(26005)(110136005)(32563001);DIR:OUT;SFP:1102
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SU5DTkVxeXk1eHI0a0kwaW9oWmMvRWNBdTdoclQza3AxcHVTaDY1RUhNQ25S?=
- =?utf-8?B?M3FCRC94Z2xRRnpnQ2Fpd1V6NnlZZ2dyeTI2cUs1c3VobFNMZmtEMlBhakV2?=
- =?utf-8?B?V090dFpqT2JtS3p4em1xWDVOVXFxZitsNSthcEN5NnFjRnJHb0I3b3NVaHI5?=
- =?utf-8?B?bGZqMHVtU1pOTW9QQ0t6VHRmQjR6NVZmRjdOZjNleVdGWFF3VkVXVHhrSmlO?=
- =?utf-8?B?TVM3U1FYVkYwU0lQUFlTdlFFZDg3V2FmcjJ4NFpmVTFyRGVlQ2g2TnFzTVls?=
- =?utf-8?B?WUo1cUw4Wmo5Y2gvUnlYY0swQVBZN2taYmg0VzNMZVRoZmpiY1JvTlJrZDNE?=
- =?utf-8?B?V05sUEZxRlBvME9WdmgxdXJDS2hkcVZ1TFRlZVFkRXlkL1B5TCt5NS9XbW1J?=
- =?utf-8?B?VTJEUlRqd3Vvc0lvV0p0VE53WTk3aXFlc2xaek1mRU11dHdRUGN4L2ZMQlFw?=
- =?utf-8?B?SzNKOVNpaGRmbUxqWnRyMEhqZnAvNEdHUlcweFN4aHFaZlgxSVBqQTk3WEEz?=
- =?utf-8?B?VVFKOTAzWURlOXh0V3pBRytFVWoxaWFVY2VDVXppQTQ5Z0psZ0lXWktMMjJE?=
- =?utf-8?B?WUdlQTFyZUx5K1BxTFVxT28xMHdGQUtZbmRPM3dHK01IRzZsaW1kdVpldVp1?=
- =?utf-8?B?NnhVdlNVWkZXSnBRKzdNNE9lSFhYc3N5NzBhdUJOenhJS1BselJMVmk1dkVk?=
- =?utf-8?B?YS9rZjIzcXIxcjNtelZQV3FZWnZrczc3TU5LWnpJa2NMTm1tUG04NW52NC8w?=
- =?utf-8?B?N0dpS3g1TmxDZ3QyVVZHb2pTbGovUnV5RW5WUXY2ZTAwTDlBNUlEeXp3TUJP?=
- =?utf-8?B?WnhwR1FpeVEySVNXeU8yOWtTdW9VTVlDSElFTk1jQ2N3TjdIWmxxeklUTkE0?=
- =?utf-8?B?eEVNNldQMkRRNzZjU0pnRERGSWgxRm1UejBhYmtKa3J0NXhqVmJzMDVweXJN?=
- =?utf-8?B?RWJmeTFQN0JneHlseTltT2crQzJHclZLcWFHamdlY0FwM1gwRUNQMmJ6QWhy?=
- =?utf-8?B?bWJrMXY4YzNGVU1PVkpkbkxBTWNPWi9scHRGWFYxUXBGaVYyZ3Ivc3lqY25L?=
- =?utf-8?B?NkVOU0lhU0FjOUxrMnlJQWZsbGEzU2xNbkY4RlNpM1JxKzZZYUZhaXVFL2tH?=
- =?utf-8?B?TUJrUGRJWCtpdXNsZ3ltV25yRkVzNnFmekNXcGNqbGxFQmFSK1NrcGlrUmMy?=
- =?utf-8?B?UUk4aC9VWldvZy9VQ2srOUc3d2JyTGlSTXhrR0dxeWl4cGJndWgyRDltSU9L?=
- =?utf-8?B?UW12UjlKQWZ2ZE5vZDJuRWJ6Z1BRbTBNQTZERFovZStTNkhuTjJnYm1FQVBJ?=
- =?utf-8?B?MGkvS0JycHpuZ3FVZDhiVGlTaXVaZkE2YmRTVEIvWkJqZHBQSlVpZFlzdG01?=
- =?utf-8?B?MEtXcDhjaVdZZWhtUjJrSjN2U1RTRUl1OTgwTmJRZUFMdzZZOWMvOGVBMm13?=
- =?utf-8?B?c0tkMDhQU0p2Vkh1WWFtSnBqd0I0eURlR1F0d3VhMy9tT3pBVWpHMnVxL0ZG?=
- =?utf-8?B?MzZSdFZTajJpM09UYzg3TzJmbUR0QlFQdXJkNmU2eTVab2Jac294aHVEWVJ4?=
- =?utf-8?B?R2IyOTVDY2dpcjJkdXJOSVVZZ2MrU2VTMEpaWjU0ekZHS1BBbS9pTDVNcDhM?=
- =?utf-8?B?aUxLcFQ3L3RnWlNMVXVtSzBHY0xhcDNEV0VYSm1DZFh3VzZ0ekpLeEZPcFp4?=
- =?utf-8?B?WVRZcTJvZHdBa2ZTM1dFYUs4aFA4NCtSYUlWZGppdSs2K0RUZVlYUFRqTVIz?=
- =?utf-8?B?eVhBbGlwRG5GYjBYazFRZG5uazA0VWhKaDJTY01jOUV6cEY3UDNUWW9jbVdO?=
- =?utf-8?B?T3FRb3ZYU2lyaUdmWFQ2dTR1aEI1aE96cWRLa0lGR2ZKVjNTZ0RDY0tGUDRr?=
- =?utf-8?B?a2N0Y3Yyd2hBaEdwWlRWMUREM2lrWCtMcURkM1ZqVEtlV0FnK2tpZ3ZzVWZO?=
- =?utf-8?B?WGZvMWh6NUlzUC93ZWx4L0JrK3hnc3B5dzczMXVKRWR4dElIZU13OC9CY28r?=
- =?utf-8?B?MERXOGQ2QU1kMmxNc2p6ZFl0Q2F1M1NFN2dJMXViR00vaVdrMy9HcjlzRUtn?=
- =?utf-8?B?cEFsSFhjSk5ydjUyZnNZVC9qQVM0RVFSaml3WFgxcUVvY2wvU0F6WUFCOE0z?=
- =?utf-8?B?MnRFNDE5UU52UHBPLzk5cWpDVmtZajBJUnhkLzBaTC9kMllzd2xiNmN4OHds?=
- =?utf-8?Q?I86UExP5n/hzGYfQODgEM9Q=3D?=
+        Wed, 13 Jul 2022 04:01:25 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED1FE024B;
+        Wed, 13 Jul 2022 01:01:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657699284; x=1689235284;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=7ENYqPqKTk0ESIJ/QoNgf3KZMY16w1kA6fyDKtIJ5rs=;
+  b=kNCjkJ85qfjLYK9qXQSQByNS+v9xJRKUpuzu8lH80gStYi9Iozs7Rl0h
+   0HWCpUEP5oZSEvmpeWEXVAV+YKETkCaOUeZ3C7XOuk59dNVJkhoQKYaEI
+   GiPmRlpQ8wZQPNJDZokx6u0l3H9jYr7KtOsoh0Dwl96MjgUuJBz++qjsh
+   kqkF32AcVYSyINx5VEzI0vbCScmCr08tsJaZJ4tMhc+b6DZ6c8Rp6xi4C
+   /RCaXDMVFL9tbZ+xIJdK2hij6L3q9l23+m8Kt8u3D76xOALO4b1TytUNh
+   VIeD9HjgOzaIS2Tf8JHtjjtaePuqrlqN41IOwCDb860KmKZJPxx2d0s75
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="286277206"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="286277206"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 01:01:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="685071104"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Jul 2022 01:00:56 -0700
+Date:   Wed, 13 Jul 2022 15:57:38 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220713075738.GC2831541@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <b1c12a4b-46f7-081b-242f-005a8824aad1@amd.com>
 MIME-Version: 1.0
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0ab31ac-6918-4d74-a8d3-08da64a54925
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2022 07:57:08.5307
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Wi92h6qgqBfdYPQ4l+S+yROmiRrDMDbD998pfXRadLZqXaIt+kiXhn8TUNZTU7YW92wZeSQKKZa3qCddtmr+Vk1874MGTzOLm/8x47FxPA0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0082
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-ID: <697BCCB5DF815742A5B803769AF4D87F@CHEP278.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b1c12a4b-46f7-081b-242f-005a8824aad1@amd.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTA3LTA4IGF0IDE0OjQyICswMjAwLCBBbmRyZWpzIENhaW5pa292cyB3cm90
-ZToKPiBVcGRhdGUgU1BJIENBTiBjb250cm9sbGVyIGNsb2NrIHRvIG1hdGNoIGN1cnJlbnQgaGFy
-ZHdhcmUgZGVzaWduLgo+IAo+IFNpZ25lZC1vZmYtYnk6IEFuZHJlanMgQ2Fpbmlrb3ZzIDxhbmRy
-ZWpzLmNhaW5pa292c0B0b3JhZGV4LmNvbT4KCkFja2VkLWJ5OiBNYXJjZWwgWmlzd2lsZXIgPG1h
-cmNlbC56aXN3aWxlckB0b3JhZGV4LmNvbT4KCj4gLS0tCj4gwqBhcmNoL2FybTY0L2Jvb3QvZHRz
-L2ZyZWVzY2FsZS9pbXg4bW0tdmVyZGluLmR0c2kgfCA2ICsrKy0tLQo+IMKgMSBmaWxlIGNoYW5n
-ZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvYXJj
-aC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OG1tLXZlcmRpbi5kdHNpIGIvYXJjaC9hcm02
-NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OG1tLQo+IHZlcmRpbi5kdHNpCj4gaW5kZXggZWFmYTg4
-ZDk4MGIzLi4yODQxYzZiZmUzYTkgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9hcm02NC9ib290L2R0cy9m
-cmVlc2NhbGUvaW14OG1tLXZlcmRpbi5kdHNpCj4gKysrIGIvYXJjaC9hcm02NC9ib290L2R0cy9m
-cmVlc2NhbGUvaW14OG1tLXZlcmRpbi5kdHNpCj4gQEAgLTMyLDEwICszMiwxMCBAQCBiYWNrbGln
-aHQ6IGJhY2tsaWdodCB7Cj4gwqDCoMKgwqDCoMKgwqDCoH07Cj4gwqAKPiDCoMKgwqDCoMKgwqDC
-oMKgLyogRml4ZWQgY2xvY2sgZGVkaWNhdGVkIHRvIFNQSSBDQU4gY29udHJvbGxlciAqLwo+IC3C
-oMKgwqDCoMKgwqDCoGNsazIwbTogb3NjaWxsYXRvciB7Cj4gK8KgwqDCoMKgwqDCoMKgY2xrNDBt
-OiBvc2NpbGxhdG9yIHsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbXBhdGli
-bGUgPSAiZml4ZWQtY2xvY2siOwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgI2Ns
-b2NrLWNlbGxzID0gPDA+Owo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9jay1m
-cmVxdWVuY3kgPSA8MjAwMDAwMDA+Owo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBj
-bG9jay1mcmVxdWVuY3kgPSA8NDAwMDAwMDA+Owo+IMKgwqDCoMKgwqDCoMKgwqB9Owo+IMKgCj4g
-wqDCoMKgwqDCoMKgwqDCoGdwaW8ta2V5cyB7Cj4gQEAgLTE5NCw3ICsxOTQsNyBAQCAmZWNzcGkz
-IHsKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqBjYW4xOiBjYW5AMCB7Cj4gwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqBjb21wYXRpYmxlID0gIm1pY3JvY2hpcCxtY3AyNTF4ZmQiOwo+IC3C
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9ja3MgPSA8JmNsazIwbT47Cj4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNsb2NrcyA9IDwmY2xrNDBtPjsKPiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGludGVycnVwdHMtZXh0ZW5kZWQgPSA8JmdwaW8xIDYgSVJR
-X1RZUEVfRURHRV9GQUxMSU5HPjsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBp
-bmN0cmwtbmFtZXMgPSAiZGVmYXVsdCI7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBwaW5jdHJsLTAgPSA8JnBpbmN0cmxfY2FuMV9pbnQ+Owo=
+On Wed, Jul 13, 2022 at 05:58:32AM +0200, Gupta, Pankaj wrote:
+> 
+> > This is the v7 of this series which tries to implement the fd-based KVM
+> > guest private memory. The patches are based on latest kvm/queue branch
+> > commit:
+> > 
+> >    b9b71f43683a (kvm/queue) KVM: x86/mmu: Buffer nested MMU
+> > split_desc_cache only by default capacity
+> > 
+> > Introduction
+> > ------------
+> > In general this patch series introduce fd-based memslot which provides
+> > guest memory through memory file descriptor fd[offset,size] instead of
+> > hva/size. The fd can be created from a supported memory filesystem
+> > like tmpfs/hugetlbfs etc. which we refer as memory backing store. KVM
+> 
+> Thinking a bit, As host side fd on tmpfs or shmem will store memory on host
+> page cache instead of mapping pages into userspace address space. Can we hit
+> double (un-coordinated) page cache problem with this when guest page cache
+> is also used?
 
+This is my understanding: in host it will be indeed in page cache (in
+current shmem implementation) but that's just the way it allocates and
+provides the physical memory for the guest. In guest, guest OS will not
+see this fd (absolutely), it only sees guest memory, on top of which it
+can build its own page cache system for its own file-mapped content but
+that is unrelated to host page cache.
+
+Chao
+> 
+> Thanks,
+> Pankaj
+> 

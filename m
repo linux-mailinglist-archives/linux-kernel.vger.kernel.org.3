@@ -2,53 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B17573A13
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69586573A16
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236854AbiGMPZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
+        id S236889AbiGMP0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236105AbiGMPZa (ORCPT
+        with ESMTP id S236105AbiGMP02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:25:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E84D45050;
-        Wed, 13 Jul 2022 08:25:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDE3F60EB0;
-        Wed, 13 Jul 2022 15:25:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA648C34114;
-        Wed, 13 Jul 2022 15:25:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657725929;
-        bh=+/3ieti++Xy7mm8wrFR/by+0eEvgDM9vrqEGTjYrD1c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=g325+NdsQber3QbzH7o3PvdaFg4snqkAZ6+jANUEcdPlvcESIV3T/NqS7C99sc3jW
-         bly3SPQ7GoeFIRGpPEJ03uldmiT5R6S0CHmnEaie8i4Q87Y03j5zZAh6RjzSSsxYlr
-         hkXT6QhUv3gLgYjMiYdnyiGCNNCpbulepk5EHfrUV1sDJFro6BLKwNju3GtUhaim/i
-         6ygGuSYEjZnXepKGpikUBFlO74y1WPUrpKqpOFmQQpNfvmuAVAUFq0Qcr8FSXLN+ev
-         CcJTHc87Jozw+0r286qaDYIFnzG+2I7MUhhWE+It+O0BP5DoZFj7ZQ6BPmExf7L4cT
-         pzSBl+0nlrDTw==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>, x86@kernel.org
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] x86/speculation: Use DECLARE_PER_CPU for x86_spec_ctrl_current
-Date:   Wed, 13 Jul 2022 08:24:37 -0700
-Message-Id: <20220713152436.2294819-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.1
+        Wed, 13 Jul 2022 11:26:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB0A54D146
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:26:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657725986;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kJkaLG9WJPX2u3dxR5FbaiE55jud0LnanxlOTAFcW1A=;
+        b=iz0wGXyDz+77lkslFqBr4IAwM+AC8OAVtZT9ZA6pFrF8NiuahWXl4LkLLYjLKrkZHj40YF
+        t2PaWHFZ1Vwu/IPcBbGihxtPLO2wpNz+GlaFaMuHvc7FzK9qeYXIq89oXNSPj8nwIxoYY7
+        YytWDfQJEz9yVl59PsSC7FBScWNUvWQ=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-41-noEoCM3-NrqgVHmoUrmYzw-1; Wed, 13 Jul 2022 11:26:16 -0400
+X-MC-Unique: noEoCM3-NrqgVHmoUrmYzw-1
+Received: by mail-qt1-f199.google.com with SMTP id h25-20020ac87779000000b0031ea852ca63so9328034qtu.11
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:26:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kJkaLG9WJPX2u3dxR5FbaiE55jud0LnanxlOTAFcW1A=;
+        b=hJi7+ggna4s7FQuhPuCiXiZbVsPeLm3iyOGFYcVRsryTFDpjrXXWVerscAjONrXYLt
+         bI65erSCZ02hOpd29RnIewlMh1hdUNabsQrl7C72dBC90gFAURmWm7hhOa1/RwhtRs9U
+         5W7HqGkOgbpmRALqalXEVtIVT7fT162StcAk9dFG6fsGMOy2cizr4YBrjKNtlt4H91Hg
+         7u2V0eBu/JNWNeGh3og1NeGzCtDPNKruNIGRAfgbRpl4T9StJ0G34LkrnlMAz2RTanml
+         AGUQk0gm0/kT8rCjftasY8p6rH1y8i7Jk4Fr06BMzDvHwOPq/k+EIunmVgaCqjrWqHZm
+         gwYA==
+X-Gm-Message-State: AJIora8WIlYWkqKbS13MScnFS+/ofxg4Bm48gyFuxaMW0BA5outGzpIy
+        91prZpKQmEHBBXjJMQeOSuJW1O8wkRqruJtB079bsSZFoxnLWvfgi4K8zcBAUr52HoN1rj15M3n
+        dArErOMbTJwU1v5TNy7f9kuWW
+X-Received: by 2002:a05:622a:181:b0:31d:476f:58a3 with SMTP id s1-20020a05622a018100b0031d476f58a3mr3649846qtw.389.1657725975635;
+        Wed, 13 Jul 2022 08:26:15 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uzqnK0jx1FbXH/slmZUIowJUVoVFeBmckvJKf1obuBX6QrR/01EHH5oxL61vgfFSoL3RdjWQ==
+X-Received: by 2002:a05:622a:181:b0:31d:476f:58a3 with SMTP id s1-20020a05622a018100b0031d476f58a3mr3649816qtw.389.1657725975426;
+        Wed, 13 Jul 2022 08:26:15 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::2e])
+        by smtp.gmail.com with ESMTPSA id dt8-20020a05620a478800b006a91da2fc8dsm9032814qkb.0.2022.07.13.08.26.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 08:26:15 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 10:26:13 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Johan Hovold <johan@kernel.org>, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Steve Capper <Steve.Capper@arm.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Fix PMU interrupt
+Message-ID: <20220713152613.yofokevcwzm2lc4x@halaneylaptop>
+References: <20220713143429.22624-1-manivannan.sadhasivam@linaro.org>
+ <Ys7c0JGAV7AAEjaO@hovoldconsulting.com>
+ <20220713151305.GA4591@workstation>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713151305.GA4591@workstation>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,56 +81,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang warns:
+On Wed, Jul 13, 2022 at 08:43:05PM +0530, Manivannan Sadhasivam wrote:
+> On Wed, Jul 13, 2022 at 04:55:12PM +0200, Johan Hovold wrote:
+> > On Wed, Jul 13, 2022 at 08:04:29PM +0530, Manivannan Sadhasivam wrote:
+> > > PPI interrupt should be 7 for the PMU.
+> > > 
+> > > Cc: Johan Hovold <johan+linaro@kernel.org>
+> > > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+> > > Reported-by: Steve Capper <Steve.Capper@arm.com>
+> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > ---
+> > >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > index 268ab423577a..2d7823cb783c 100644
+> > > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > > @@ -477,7 +477,7 @@ memory@80000000 {
+> > >  
+> > >  	pmu {
+> > >  		compatible = "arm,armv8-pmuv3";
+> > > -		interrupts = <GIC_PPI 5 IRQ_TYPE_LEVEL_HIGH>;
+> > > +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> > >  	};
+> > >  
+> > >  	psci {
+> > 
+> > The interrupt number matches the vendor devicetree I have access to, but
+> > the vendor source also has IRQ_TYPE_LEVEL_LOW instead of
+> > IRQ_TYPE_LEVEL_HIGH here.
 
-  arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
-  DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
-                      ^
-  arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
-  extern u64 x86_spec_ctrl_current;
-             ^
-  1 error generated.
++1 to what I see as well, fwiw. Totally missed that when reviewing
+earlier.
 
-The declaration should be using DECLARE_PER_CPU instead so all
-attributes stay in sync.
-
-Cc: stable@vger.kernel.org
-Fixes: fc02735b14ff ("KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-
-v1 -> v2: https://lore.kernel.org/20220713152222.1697913-1-nathan@kernel.org/
-
-* Use asm/percpu.h instead of linux/percpu.h to avoid static call
-  include errors.
-
- arch/x86/include/asm/nospec-branch.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-index bb05ed4f46bd..10a3bfc1eb23 100644
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -11,6 +11,7 @@
- #include <asm/cpufeatures.h>
- #include <asm/msr-index.h>
- #include <asm/unwind_hints.h>
-+#include <asm/percpu.h>
- 
- #define RETPOLINE_THUNK_SIZE	32
- 
-@@ -280,7 +281,7 @@ static inline void indirect_branch_prediction_barrier(void)
- 
- /* The Intel SPEC CTRL MSR base value cache */
- extern u64 x86_spec_ctrl_base;
--extern u64 x86_spec_ctrl_current;
-+DECLARE_PER_CPU(u64, x86_spec_ctrl_current);
- extern void write_spec_ctrl_current(u64 val, bool force);
- extern u64 spec_ctrl_current(void);
- 
-
-base-commit: 72a8e05d4f66b5af7854df4490e3135168694b6b
--- 
-2.37.1
+> > 
+> > Is that another copy-paste error, perhaps?
+> > 
+> 
+> I don't have access to the documentation of this SoC now but since Steve
+> tried with IRQ_TYPE_LEVEL_HIGH and it worked for him, I think it is best
+> to leave it as it is.
+> 
+> Thanks,
+> Mani
+> 
+> > Johan
+> 
 

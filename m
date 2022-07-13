@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0F2572C4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31100572C4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233618AbiGMEYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 00:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        id S233561AbiGMEYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 00:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbiGMEYS (ORCPT
+        with ESMTP id S233269AbiGMEYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 00:24:18 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12olkn2024.outbound.protection.outlook.com [40.92.21.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432724F65F;
-        Tue, 12 Jul 2022 21:24:17 -0700 (PDT)
+        Wed, 13 Jul 2022 00:24:23 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10olkn2055.outbound.protection.outlook.com [40.92.42.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3D261D71;
+        Tue, 12 Jul 2022 21:24:20 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kIh4f1GxxLfmPtyCqCLaztNNaKa1tSB6DAFRU7uGcI8lLVLoBGCsu2Dz49BBXXRzvHWQzFsDuxWuXjq1hnHlrlFgt9mBUnwwATNLKtstEBu+tvXMrveQKWfc0fbSKl1miMjWNWpQbmjRERUZSBgVazWEKhoPaOgUD8w2BWAz+7eg7eUum5AFkxkxIGcF73PQDuzoTWRPHjoGVfWmAZLE2Ak2vYeT7dHVqmOM1oRCjYLJLgS/bjoKDa+slGhXv8abz8Q2qqsIQwyhTP/gzdX81yIFX0v60bAIq4vNoeMJP9RhDrWMXv4EZHK5aIGyd7IpZjg+LqAruJs/Uz2s0867xw==
+ b=iiMEh5jOebWey0vPFbsgL4tzll7UDapm5ZVr0cX7TN1zO8UESfOOKrOQ1FYqEHlsPRuawLtPJ2QGil7b1jc+vKr0nBD0D5ui7GAnjwO3ZBZ8o8Ca327iL7jY9rr+hsSdKGzkARmrdQimkUnlAykWCaw3Y1pWQCzn7lHslwjkHQLjfm3F5fZvgiD7FyEHZ0ahCN5qGZ8tasCYp4WjSsmiiH7oIkbs9Xst4w6HYou6VR0M3eTuTCsi2iRy+bqDD6JE9Z/S12D8nI4XWqwF5vZqFoYkhiMfHzV3nU0W+Y1TORI8HdWPaWEebmMkLIWoBiToRrQOK4FrRaWM6MCJQ883nA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bn2FeymYptwhD2it0oITGti/8m3kN6YdE1EjOIr0Yis=;
- b=QuOE9lPUmz4O500ViSumIEFZcntJ5BhQI3137yQa2vYAitl4XWlkIjABBNtiIaoDqjXR3+g8141klX+Rpc9235VQHF3PtWEaM6+fLwXHmKafPIXqrgRE6GPItrIccu+DWoUnWV9OHKY16CCYOPC3Icv8iABOutc2+BGZDud/jiIWqU5bv5uHOmWWlJRtsB1pw6P/GDiVNvZsW2Oa7nXCMFi4dFQkl0ziDCK7Th2RF6W4LP9Yar4zc6fHxzsPEqEDxY8L/7+OJ7SsmxGUZoOx2ECHRz+/EmeF386WzPOaudJcX4njhC5DAwrMYQQIHdP0j29kn01yck1ttAXqICImug==
+ bh=k1IXg/zNiqmj4k6zzOycq3rG76MvSt1UXRXBkHBhFlA=;
+ b=bNoBfWusYvS1AKHAnHb9IvHgkHTHzwIKhDGatiOA4UyhccxJgEcYQVPjLDF3qHm8N08pDX4uOtaeSBs8sbjOYFtJreMJw/A+n4vW5dK4IBhZEPQDc6dChBohdMBpz7s+96PDJu2/VIWWkqPr3tUVF6fA2BLscDCF7YovT74iH20oq5Y2n57gY2DrVBODpP+Ry9vkYDsAbgqKaTXlv2TzCcsUNMGCJjNzNBYjcE3AejJSjlv92x40FJN4yV5wrXET8RnVPKZdPgdwr1uck7lyNNMYpDEsbifuijxCIF6w5Nvu5C+739VWbEZqiX1UXhnX2dRluoOp+xGTfqc/lguFFA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
  by DM5PR02MB3895.namprd02.prod.outlook.com (2603:10b6:4:b9::26) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Wed, 13 Jul
- 2022 04:24:16 +0000
+ 2022 04:24:19 +0000
 Received: from BY5PR02MB7009.namprd02.prod.outlook.com
  ([fe80::e080:d670:29c7:9180]) by BY5PR02MB7009.namprd02.prod.outlook.com
  ([fe80::e080:d670:29c7:9180%7]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
- 04:24:15 +0000
+ 04:24:19 +0000
 From:   Joel Selvaraj <jo@jsfamily.in>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -42,55 +42,55 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Joel Selvaraj <jo@jsfamily.in>
-Subject: [PATCH 4/5 RESEND] arm64: dts: qcom: sdm845-xiaomi-beryllium: introduce ebbg variant
-Date:   Wed, 13 Jul 2022 09:52:48 +0530
-Message-ID: <BY5PR02MB700951DAA15ED7FD54400B5CD9899@BY5PR02MB7009.namprd02.prod.outlook.com>
+Subject: [PATCH 5/5 RESEND] arm64: dts: qcom: Makefile: split beryllium into tianma and ebbg variant
+Date:   Wed, 13 Jul 2022 09:52:49 +0530
+Message-ID: <BY5PR02MB7009E1905A1DA82EDCF07F3ED9899@BY5PR02MB7009.namprd02.prod.outlook.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220713042249.31421-1-jo@jsfamily.in>
 References: <20220713042249.31421-1-jo@jsfamily.in>
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-TMN:  [vZukZcYZ1B3JP3FUrqrCkUfKF5+wRUTZjS9N/W9XcuJ2ekZixxVwpMRsJu47DU3w]
+X-TMN:  [4D7qTAnLbar5hdrcU34i+G/Vk7Qz8Hptr6W7K032ZUl8zqmS8trApm/ZljF3rjYr]
 X-ClientProxiedBy: PN2PR01CA0097.INDPRD01.PROD.OUTLOOK.COM
  (2603:1096:c01:27::12) To BY5PR02MB7009.namprd02.prod.outlook.com
  (2603:10b6:a03:236::13)
-X-Microsoft-Original-Message-ID: <20220713042249.31421-5-jo@jsfamily.in>
+X-Microsoft-Original-Message-ID: <20220713042249.31421-6-jo@jsfamily.in>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1f5231f4-7bf5-4190-1313-08da64878bd0
+X-MS-Office365-Filtering-Correlation-Id: 69757746-ac97-450b-2980-08da64878e0a
 X-MS-TrafficTypeDiagnostic: DM5PR02MB3895:EE_
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z7W2tlIrKOpxsvgyIq188dB1bbB+NOAUsdN0G+INWl7z8smapxGLJCWojo5PIo81jmJZ4+NVZID2el/NimW3AZ6iCqFbcYn5cu8PZ20V4T8GnBwj+b88m/3FsPLVyHX//0DAfpsy3StMQa0HksaoPfBoYIOxBzmNwp9/MnvBf5UDBLIz6JZlX3UqCyGVLSyAtVjhK/j57s+jMsdaWhWdAn6pFS9tS9S00FCi7bxodNsTvfowzTX2i66vmtj8GqUhqXZ7mzUZxOAWK+GQcHXQpSzD8aeB2orMY0zGIEM4tWiY/4VXtGZaDcpIbNP7kNICdu1PM/VVNywaDb9Oc01DPcGJViD7BK7/tZ6R6cc/pAM3y48qIeJlqzGDEUY7FPNcUz1eRtfrnZhzZYEdKEq57g7yH562MCnbAs60MlsHpWlkw1t2W+5q45LiYdxGMa1g0QhnuuGK64QxJNaATk2pnwNDqZ1TLcS2UIZNq/HjIrDavHHmvMvbYIMVv32R1vtL1Y+tRTdBsYPi40j1j1UOhgj2FbHke+R2H69mbDEt0LH4wLxJVCYp45G3DPB9t7CTSWnN5CU6cyAZb74JEkpM3WjSRJM9HdDe5xDpGbZJ4GrcgAz00kict4W9YHajonDmhjJIO8x/OHAWZW2fsV0HD7qn0/YDRI81lQ/4zqYRoqQANIju6RClbFXIHIIx3wBTVm3WDTYTouwiOHyFcnfIZA==
+X-Microsoft-Antispam-Message-Info: mtr0SrtYoaNivYO/jbhhKEubxvHYLHVCl0HKhl3Zx2Vx3NpiCVelksOa1dOk8AscweLDme/RlRzWglgFJ+rbBgdAdO12OP7ICNz9/QCOl2d1egloI5yqn+RszubdmQltlAys/OYyseaJa5CRwWzDVGSmMy/e0y2jo4+t4PiI6MrfBy8iBXfbABDQkhHfFQbZM7DFaBPzaB22zZWQqTBwTzlLfs37locLeWa+yyuQS0MP+Tgn1CPHG+LgCz6fcBhFzbpuQDvrl7keiQv/cHfAN7z8pVKXn+H10F1fCruot9k57uM1lxosRORFAWlbVmqmzi0k/vBtFlXtPCyEOAbJxKw2WY6SxiuiKGS+ogSeLwPCKPU62WEc/P4Uq4INCLS4hj5rQuSXtGuYxBxzIaAzSZ+h2Io4EYgB+civdMtwtEEvGP7yf3mWsq5tI+NWqdf7QJThNYX1qjE4Oideacuo25vayr/hyhORc/jPdNJQgXNh7SFcLnELBiZPPZ4QP3IShkz4Z/XRorIJCE+gm4jZrAHBok+nBoQyK+RHVcavTbvLELC3y45+eJqKmvxxD0jgM4iO0zeqdIfSZ+7m+r4k8DLAjK50IBcadxcYuAST3riX1wQwN7ZLxBcRG11P5ihZMImTCDF8F9NgblqfPQl61FMeRnZyjtcDumrhtRyF34ybO7wdxa5Wtw+PtvXApVUCyK5pAwdd7kMnCj5iE1oClA==
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?09QtDaMndSBpHm3b6RdcvHCIQVq/RYwc69By5fN4hIvohxu0dfsZErYmUtFu?=
- =?us-ascii?Q?sTs/e1UADQjazjfnXe9kRrqTIRDjZS5jmOqP+FsAHaIryHTpYOAfz0Gqa9WC?=
- =?us-ascii?Q?hpc/CtJXnhexTkhGj9fFM1qAfQEXGSK7uomc8+BiU0giRVRrwDfBZwcD2+DU?=
- =?us-ascii?Q?TYtepBfm3dBM0aS2FINMrR16p2OqTeNYCxM/nF8Uzv0R4LvQLLvAjAvozI08?=
- =?us-ascii?Q?2CsgYj/NyN4usff9+0e7X5q+DNpsgKofGYVqJAKPYI3AWD2Vo2Me5R2rf3D3?=
- =?us-ascii?Q?zJXO2gl7XUgQBkZGc5kGw0ZvDSpKpmqw36RD/vQCKXtTLdPMY1nAuV4565Mc?=
- =?us-ascii?Q?QXAiHbRofaIeGJKXP7YUJP0kjDiioUkQng3qlBRii+RyOYv0DSSFNoyPdORP?=
- =?us-ascii?Q?CrHvKJAHN4ZXJO34vQSGVT00r+2WG0ERmPA9hYZhGxB39vm8+ro0k3QzBHfq?=
- =?us-ascii?Q?R6xa3IEEMEotWH/myt4iFesvRXBHPWQBQuMcuWeNOI1X1X8LdW7q7CciT69E?=
- =?us-ascii?Q?7ykrYsx0SuuBwsFYvcDivwNq2zgxzRaJ6pIkLJfTtYtm1FiZG+LjWtpP00yH?=
- =?us-ascii?Q?zs3idGSAIPMXjMFKQZeeTcU14MvweV3DG4dmv7VWbcUhB9AKWifKC3KTG9l0?=
- =?us-ascii?Q?8KOhgmq5FO4CePCPrCWJa9/01WCkjmg2j/F/YUwi6ZXxh3MCLQs3cZJDUBJ2?=
- =?us-ascii?Q?2btk4rEoOJdR6G9Y9WomZ7PuC5cjnt8CQuU1HnAKeNvZ76FXqiCUk0/zqo7u?=
- =?us-ascii?Q?fWfdFL5yI8Qjp66X7hw35fZdXb/SeakySOEMMlhp5E1e/LZC5DIEixWcrRoS?=
- =?us-ascii?Q?pD7zYVTQ3vzp0U+DDwttZnNfkijGJmK8ysGGkT08G04UytBJFrZs3kMJx68n?=
- =?us-ascii?Q?2SooH4GEbhnd0BUddX1Vog7rtGUCoWcL+UwIGW0xIXHXGaudVgK7Mx0n9xXy?=
- =?us-ascii?Q?c7KQ2f3st3/HZvih/Bopq08q+SphLhmLUNcP39gr2XLncHD7sUzRs9NH1nyH?=
- =?us-ascii?Q?NVRYQvFEuuwJnx8uDD9eqfzF27FHxevqzTo3nelTY0456e0u3vkxpNGPZTY0?=
- =?us-ascii?Q?CD7kXtUsxv0QPFE2IUTEowSs/28/r05JaC+JpD/KnybneRWafbACkUOtyywg?=
- =?us-ascii?Q?tieQQfmy9SbRtputSG/XuKqb1mEUzY3/V53yC6eSmDMUP/P5ezar+Z361ySj?=
- =?us-ascii?Q?KGRn7OhaQGqyl5DVALdq5yVMtK3X62Dki66nZEVYib3H7jl9ADnjXaVdazjt?=
- =?us-ascii?Q?exwPp6KAAN1S1hB14ygbRhwoGChqleDKY8UO96idR9U3fF5WSsAssQK1ggzW?=
- =?us-ascii?Q?OXzBseGibDpWaO/799Q9OgEu?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DyxHmrfUFaS8EC4poHJJtpnehy4mTRActcVYWZ1bc6S034kJzezQwE636grd?=
+ =?us-ascii?Q?G58FOeoD6Oqo15wt++cyrKngxoPTEr63+0sTNFQhrMdzvsgBQrqLOGomWAqp?=
+ =?us-ascii?Q?8LWmLXqxx64ayjNJZvL73Q2yzHhBBZnPs6JT3FctSx3fXqG/yO9koblLZtt+?=
+ =?us-ascii?Q?EAKI//rgAl6uZbswhCwNuQpOY7pMh7f8bwQMybWLifXo18TGeve2QSjF99Xi?=
+ =?us-ascii?Q?2w41iyeqKtbAD0qUP61i1knDwCwCSJwP83sOLV/EGIPnTIvN8vUcKJpLcobg?=
+ =?us-ascii?Q?OTRfdoi5muikPLtsGGQT8GvLM8jfkqmJ+Y2tEIJB2x+PVwlHCzdH5ff9kq/D?=
+ =?us-ascii?Q?lJsUNvGs/HBCl6RH3XMN5fd6xv0dXAuQfboszbc6mwot/CDJkKxel1x7uboD?=
+ =?us-ascii?Q?uGNs49n/pB+hrWCZOXz6EF9uIUrgItB7+VLW64tWxkcR1NrEW/dTLXsoPEo0?=
+ =?us-ascii?Q?OqY4OboGZTofIGhLw8XeRj0pd3TV6XWLyTT4wYntumArigE0dpgr/9cbGT4S?=
+ =?us-ascii?Q?tCX9pGhxgryp3hmx4l49iG0kYNgIfb+FjV5s/olNBWtE2fIc+nGOoqqsZeMB?=
+ =?us-ascii?Q?S5q3aYsJX4Myq0+YHhsjXtFG1d7VvlsnhqiO9+8/pUPr1jx/9NKqsX3tOCrO?=
+ =?us-ascii?Q?ZvCjBXaSUVRLtSls7xyMpm1m7Eyg9lbSgnJAmxpg5peRk8+VxCEyMMEnlvzO?=
+ =?us-ascii?Q?IWGAtj0IDApx4tNPDo7koGZRc8au31Pu72OkWTKynMQdQjAQ8e+6VQTd0KJ2?=
+ =?us-ascii?Q?YWQpz0b7Q/x+2NWbfH2BcgoVhWUWAVj2nR/Oufg/Vla4OngEBJmreCfHcMkE?=
+ =?us-ascii?Q?zZvI9+TaTFG5DAqhQHcHysXpg1LYzjUb6k3D6KYWR5BTaJi2fpVeQCIF2Lfl?=
+ =?us-ascii?Q?7Q8gnUe2MN8s4tPXHFrjsaKOIXJu1PZhSrmEa9NXutQHjHXvjLCqA7vtbtIl?=
+ =?us-ascii?Q?zpsPDatc/IpwI+wCWE0RgVkBPgAV5+VuvL59SDRRxGO1/3qmovn6WrHg0+bF?=
+ =?us-ascii?Q?ow4meC1pgwuUHgCBhjrd9kkybN9X2opqK8nqeCAQ2xG4sSL0+YPuaFgI1hmF?=
+ =?us-ascii?Q?inkg8x+SaFzn7ikFLi6BKS5HVp5XIje+Qqwn1oU1M6Sh/PIz1mxR80kPZPLF?=
+ =?us-ascii?Q?inNoTVRRSd6X+RY1PpFZtNj5M6T76swOdbuSQwxSV9nrogVKZxNTxDUMNTJS?=
+ =?us-ascii?Q?LO6Ji6EvJ8tz3vQPJepc1bix/y+e/30vNYI8FC7Digi4a3HPPqqd2lhzB+U+?=
+ =?us-ascii?Q?X5CwSZ+OiEm8pVkgy10xRvYHkoxOASAKxM+cog9TC5c3MC4XSFU8uX+JtW3+?=
+ =?us-ascii?Q?dPhDy/VeOUxL+XfikR6yKOZL?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-99c3d.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f5231f4-7bf5-4190-1313-08da64878bd0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69757746-ac97-450b-2980-08da64878e0a
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 04:24:15.9283
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 04:24:19.6801
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -105,30 +105,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ebbg variant uses EBBG FT8719 panel manufactured by EBBG.
+Remove old beryllium dtb and compile the new tianma and ebbg variant dts.
 
 Signed-off-by: Joel Selvaraj <jo@jsfamily.in>
 ---
- .../boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts     | 10 ++++++++++
- 1 file changed, 10 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
+ arch/arm64/boot/dts/qcom/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
-new file mode 100644
-index 000000000000..3716e16e79b1
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-ebbg.dts
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/dts-v1/;
-+
-+#include "sdm845-xiaomi-beryllium-common.dtsi"
-+
-+&display_panel {
-+	status = "okay";
-+	compatible = "ebbg,ft8719";
-+};
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index 2f8aec2cc6db..5cc165dfbc94 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -106,7 +106,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-oneplus-fajita.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-sony-xperia-tama-akari.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-sony-xperia-tama-akatsuki.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-sony-xperia-tama-apollo.dtb
+-dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-xiaomi-beryllium.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-xiaomi-beryllium-tianma.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-xiaomi-beryllium-ebbg.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-shift-axolotl.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-lenovo-yoga-c630.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-samsung-w737.dtb
 -- 
 2.36.1
 

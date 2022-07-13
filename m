@@ -2,244 +2,781 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04090572E77
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8993572E80
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234244AbiGMGxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 02:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S234430AbiGMGxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 02:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiGMGxF (ORCPT
+        with ESMTP id S234364AbiGMGxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 02:53:05 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79A1C48CA
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:53:03 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220713065300euoutp0207e0fda0cde73ffa847b47f7de6532f0~BUPvxAHC61251012510euoutp02e
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:53:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220713065300euoutp0207e0fda0cde73ffa847b47f7de6532f0~BUPvxAHC61251012510euoutp02e
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1657695180;
-        bh=kglwyw0l+JmmPr2wkppTs/DXoUw0o2GRZnyznPS9T5U=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=QN1BH5e321CioFgCIOMUnxmEeD9poJHRCPZ3meNLU0MgkdvhixnLLOvrWRfFc53SH
-         JO5ufLd29iidYxDXuljzmtqszpc+pZdcr3SJ5e4HNR3W+hBMeT0wXns2K354i961Bd
-         zu+QrpWKZ1qOOTY1Vg0SRRQJh2Qy7dZ3nnHimABc=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220713065300eucas1p277757044958639fe93015c865cecfd14~BUPvX6x5z2003920039eucas1p27;
-        Wed, 13 Jul 2022 06:53:00 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 7C.DD.10067.CCB6EC26; Wed, 13
-        Jul 2022 07:53:00 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220713065300eucas1p1cfa32c4d59576d077762f76fd7b4a5e4~BUPu_SUFk1597015970eucas1p1H;
-        Wed, 13 Jul 2022 06:53:00 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220713065259eusmtrp20a6bbebda144b6f1b4a0301dee19a2e8~BUPu9bDcy2427524275eusmtrp27;
-        Wed, 13 Jul 2022 06:52:59 +0000 (GMT)
-X-AuditID: cbfec7f4-dd7ff70000002753-27-62ce6bcc79b6
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 8C.65.09095.BCB6EC26; Wed, 13
-        Jul 2022 07:52:59 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220713065259eusmtip20a42113d225dcd69e26dc001f6154dfd~BUPuTd6Uz1939919399eusmtip2V;
-        Wed, 13 Jul 2022 06:52:59 +0000 (GMT)
-Message-ID: <f68f8bcc-7543-5957-0e17-2cc797898ec0@samsung.com>
-Date:   Wed, 13 Jul 2022 08:52:57 +0200
+        Wed, 13 Jul 2022 02:53:20 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB1FDF629
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:53:17 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 72so9699780pge.0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:53:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=01vFMdurFLLB2L+21AvnP2mw3p+aEDf6OlIWo3hzJN4=;
+        b=EUzdGpNKIulWKMyQ1cjL4jnDgA/l2vRDXwXi+WQTQ/l5rzbiTjFjat1IQYBXGqBreB
+         HCzW42mWqE0CBrhZ6sqhEqZDq+EpXkf838oATbqK5DWJR1Vl3tCGednYG4BCljJECFMv
+         qf9UPHqvfXyvRZOoM3JhPaso37Uly6SYJ8vRWgyDkm57MSsipHPZo0YWYmb6OBDUIwCr
+         zAhGPfuCtNj6cjzfLgKIyzfRmRoZkdV1g4vgcqiUuHH8RKRjdXonHJgQkNiPV4s7G2qC
+         DO3Bly1gMjou4+fCjeUrSvrXupWGYMcAgqG/A8WxttImgxeKFVO3LbawcRYRp/Pbx2KF
+         70MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=01vFMdurFLLB2L+21AvnP2mw3p+aEDf6OlIWo3hzJN4=;
+        b=dDLkwyiGW9OuyeYutFjIpoSHxgM3SF9WZ3d6/ApbI5w/F+1Axx2PkKF3se+JQIBaLR
+         3kLwxCA2sVFl5O+mW+TrkF9EPPUmt6d3z/Etn7TWWKvQ0xbcMXg6PpJAQPMpBCjEoLye
+         03LLfjjzdJr3gAVIAeEW4wgnjPfzX9GK6/c2YloTf0fIcvZ3CGqm77USGPIRY4gEmfEe
+         FTFjp1sSIm+V6TVIbz1wSZKcyKuI35zeNi6IhrkLavJ9w4NC0BI6OJX7ZCSRZ4nLjIRr
+         2JsSH1aUSpKXqzksvGDpp7RqA8pcZa49KNSfC5DyPiYdJQZpnh8xC0AXe6qRWqEhCfhX
+         hBHw==
+X-Gm-Message-State: AJIora/L13lEa0tfzrlflle41w5iUjByGSH6Wa5plwx2oX6ZiqWL416j
+        FCMQb3CG00ybd6/65JG6ba2K+g==
+X-Google-Smtp-Source: AGRyM1vq8SgAr+uTGKmjWKQBrfQ9VPsmQ5+sUYCLQXIkaMpuftq5GcSvwSjtIuXCBcUOzKiN3iMPQA==
+X-Received: by 2002:a65:6c08:0:b0:3f2:6a6a:98d with SMTP id y8-20020a656c08000000b003f26a6a098dmr1824359pgu.30.1657695196693;
+        Tue, 12 Jul 2022 23:53:16 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id i7-20020a170902c94700b0016be5ed14d5sm8098456pla.40.2022.07.12.23.53.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 23:53:16 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 2/4] arm64: dts: qcom: Move clocks to CPU nodes
+Date:   Wed, 13 Jul 2022 12:22:57 +0530
+Message-Id: <25855e87505d1969fb3fba3661cbf31e44cb2747.1657695140.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+In-Reply-To: <cover.1657695140.git.viresh.kumar@linaro.org>
+References: <cover.1657695140.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH v4] amba: Remove deferred device addition
-Content-Language: en-US
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <CAGETcx93rWqt-Cyz_8JZ4mxcLpJruzSM1QOAgpkPSM-G1sBXWg@mail.gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEKsWRmVeSWpSXmKPExsWy7djPc7pnss8lGfQcFbeYO3sSo8WZ37oW
-        O7aLWEz5s5zJ4vKuOWwWh6buZbTYNms5m8XdeydYLP7v2cFu0XXoL5vF8lM7WCyOrw23aPx8
-        n9GB12Pb7m2sHmvmrWH0uHztIrPHxLO6Hgs2lXq0HHnL6rFpVSebx51re9g8+v8aeGw+Xe3x
-        eZNcAHcUl01Kak5mWWqRvl0CV8bVpTOZClZpVXx4+46xgXG3UhcjJ4eEgInE5/5tzF2MXBxC
-        AisYJa70nmCEcL4wSnz58YQNwvnMKNH2YSYbTMuRs4uZIBLLGSVuvvvCDuF8ZJTYf2UHK0gV
-        r4CdxOybB1lAbBYBVYlFP1dDxQUlTs58AhYXFUiWOHf2KthUYQFbiYnvPzCB2MwC4hK3nswH
-        s0UEtCQ2XXvMArKAWeAas8SBVdPBmtkEDCW63naBNXMKBEo8O/aAFaJZXmL72zlgH0kIrOaU
-        eDjlABPE3S4Sq2cfgrKFJV4d38IOYctI/N8Jso0DyM6X+DvDGCJcIXHt9RpmCNta4s65X2wg
-        JcwCmhLrd+lDhB0l9lw+zwLRySdx460gxAV8EpO2TWeGCPNKdLQJQVSrScw6vg5u58ELl5gn
-        MCrNQgqUWUien4Xkl1kIexcwsqxiFE8tLc5NTy02ykst1ytOzC0uzUvXS87P3cQITHan/x3/
-        soNx+auPeocYmTgYDzFKcDArifD+OXsqSYg3JbGyKrUoP76oNCe1+BCjNAeLkjhvcuaGRCGB
-        9MSS1OzU1ILUIpgsEwenVANTyoJn5pcEwy42H+b6vzxqc9e6wBaWxiOdGQVBG8x3Mtj6CApP
-        qjujxDVlTqVNKv/tPKdt0et//lrwaYaP/U2l4gOTmXN+Mp6emfUw7PWOWblOe34WCYme2vwq
-        1K1WOV7/pLL5r3c7Ls3VO2f7a84TpfWCrI/0+O6XGh7ZGpB1XMpbe7qDrL2Sz1Xr3aqWrQ+N
-        /zddNXm2sCTFRG2r3SKOyRyyko2M5QXzNCPqY5yYJW9dsPDZ6nT35aqNimcs9abanZAKaSrs
-        XyGkyfhZr0BA/rd9YJNDkbaDQsCKp44RX8JdlkWUmxw51GmR4Vjks3RK/N+LopK30z4GG9W+
-        PfKlZ0tPbdm2PHf7NH6FfiWW4oxEQy3mouJEAAvbKnHlAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOIsWRmVeSWpSXmKPExsVy+t/xe7qns88lGTz6bmExd/YkRoszv3Ut
-        dmwXsZjyZzmTxeVdc9gsDk3dy2ixbdZyNou7906wWPzfs4PdouvQXzaL5ad2sFgcXxtu0fj5
-        PqMDr8e23dtYPdbMW8PocfnaRWaPiWd1PRZsKvVoOfKW1WPTqk42jzvX9rB59P818Nh8utrj
-        8ya5AO4oPZui/NKSVIWM/OISW6VoQwsjPUNLCz0jE0s9Q2PzWCsjUyV9O5uU1JzMstQifbsE
-        vYyrS2cyFazSqvjw9h1jA+NupS5GTg4JAROJI2cXM3UxcnEICSxllGie2sUOkZCRODmtgRXC
-        Fpb4c62LDaLoPaPE+8V/mEASvAJ2ErNvHmQBsVkEVCUW/VzNChEXlDg58wlYXFQgWaJ5yyGw
-        emEBW4mJ7z+A2cwC4hK3nswHs0UEtCQ2XXvMArKAWeAGs0TX15NQ2w4wSVw40QY2lU3AUKLr
-        LcgZnBycAoESz449YIWYZCbRtbWLEcKWl9j+dg7zBEahWUgOmYVk4SwkLbOQtCxgZFnFKJJa
-        WpybnltsqFecmFtcmpeul5yfu4kRGOPbjv3cvINx3quPeocYmTgYDzFKcDArifD+OXsqSYg3
-        JbGyKrUoP76oNCe1+BCjKTA0JjJLiSbnA5NMXkm8oZmBqaGJmaWBqaWZsZI4r2dBR6KQQHpi
-        SWp2ampBahFMHxMHp1QD09K90Y0vQ659qn61UkhJ9OsDll2PO46HLTstw/s4pN/s8o/dzCFv
-        69Kr46ZIKUonuq2eO22NnICwOEu5Uu5KWQE2/fNKT1ZtvNP5z3DG25TeaoMzv7e+2CV0wNDQ
-        59XV1iRRg2TttGo/v77gs0xdGx95CLiaHznmFj45SiR5+QKOmP/1MdyLJ58TdnfxVlr+L/3U
-        hosdsdLm71gT/6r2bbpvbyunl/GqnjuzaIG/uO+nnYtM7atPyd+dyZ1bLqvDk3ex8Hd2tMzf
-        6gcx1W1lyxx3R86rN9c5dUpuym4er0d8Vc8ddLz2iTpqdT4RrW65VGjd+Ng3ct822wr+Wy9+
-        PI2d9Jxphk3lhzzxlbZKLMUZiYZazEXFiQAi5blWegMAAA==
-X-CMS-MailID: 20220713065300eucas1p1cfa32c4d59576d077762f76fd7b4a5e4
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220705083944eucas1p23419f52b9529c79c03c8cc23e2aaf4c5
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220705083944eucas1p23419f52b9529c79c03c8cc23e2aaf4c5
-References: <CGME20220705083944eucas1p23419f52b9529c79c03c8cc23e2aaf4c5@eucas1p2.samsung.com>
-        <20220705083934.3974140-1-saravanak@google.com>
-        <7482d3af-4b02-4c1d-0386-b0a4ddf529da@samsung.com>
-        <8a04332e-e7b1-8bc3-d569-5052427bcb13@samsung.com>
-        <CAGETcx93rWqt-Cyz_8JZ4mxcLpJruzSM1QOAgpkPSM-G1sBXWg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
+The clock specific properties must be part the consumer nodes, i.e. the
+CPUs here, instead of the node that manages the frequency engine.
 
-On 12.07.2022 21:38, Saravana Kannan wrote:
-> On Tue, Jul 12, 2022 at 5:34 AM Marek Szyprowski
-> <m.szyprowski@samsung.com> wrote:
->> On 12.07.2022 14:25, Marek Szyprowski wrote:
->>> On 05.07.2022 10:39, Saravana Kannan wrote:
->>>> The uevents generated for an amba device need PID and CID information
->>>> that's available only when the amba device is powered on, clocked and
->>>> out of reset. So, if those resources aren't available, the information
->>>> can't be read to generate the uevents. To workaround this requirement,
->>>> if the resources weren't available, the device addition was deferred and
->>>> retried periodically.
->>>>
->>>> However, this deferred addition retry isn't based on resources becoming
->>>> available. Instead, it's retried every 5 seconds and causes arbitrary
->>>> probe delays for amba devices and their consumers.
->>>>
->>>> Also, maintaining a separate deferred-probe like mechanism is
->>>> maintenance headache.
->>>>
->>>> With this commit, instead of deferring the device addition, we simply
->>>> defer the generation of uevents for the device and probing of the device
->>>> (because drivers needs PID and CID to match) until the PID and CID
->>>> information can be read. This allows us to delete all the amba specific
->>>> deferring code and also avoid the arbitrary probing delays.
->>>>
->>>> Cc: Rob Herring <robh@kernel.org>
->>>> Cc: Ulf Hansson <ulf.hansson@linaro.org>
->>>> Cc: John Stultz <john.stultz@linaro.org>
->>>> Cc: Saravana Kannan <saravanak@google.com>
->>>> Cc: Linus Walleij <linus.walleij@linaro.org>
->>>> Cc: Sudeep Holla <sudeep.holla@arm.com>
->>>> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
->>>> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
->>>> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
->>>> Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
->>>> Cc: Russell King <linux@armlinux.org.uk>
->>>> Signed-off-by: Saravana Kannan <saravanak@google.com>
->>>> ---
->>>>
->>>> v1 -> v2:
->>>> - Dropped RFC tag
->>>> - Complete rewrite to not use stub devices.
->>>>
->>>> v2 -> v3:
->>>> - Flipped the if() condition for hard-coded periphids.
->>>> - Added a stub driver to handle the case where all amba drivers are
->>>>     modules loaded by uevents.
->>>> - Cc Marek after I realized I forgot to add him.
->>>>
->>>> v3 -> v4:
->>>> - Finally figured out and fixed the issue reported by Kefeng (bus match
->>>>     can't return an error other than -EPROBE_DEFER).
->>>> - I tested the patch on "V2P-CA15" on qemu
->>>> - Marek tested v3, but that was so long ago and the rebase wasn't clean,
->>>>     so I didn't include the tested-by.
->>>>
->>>> Marek/Kefeng,
->>>>
->>>> Mind giving a Tested-by?
->>>
->>> Yes, it looks that it still works fine.
->>>
->>> I've tested it by changing the Exynos power domain driver to
->>> initialize from late_initcall. This in turn lead me to a bug in
->>> generic pm_domains code in __genpd_dev_pm_attach(), which returns -2
->>> if the pm domain driver is not yet registered. After fixing that, I've
->>> successfully observed the deferred probe of PL330 driver on Exynos
->>> 4210 based boards both with this patch and without (with the old timer
->>> based code).
-> Thanks for testing it again Marek! I was hoping you'll hit the crash
-> that Sudeep was hitting and it would give me some more clues.
->
-> Sudeep,
->
-> This makes me think the issue you are seeing is related to your
-> hardware drivers. Can you look into those please? I'm leaning towards
-> merging this amba clean up and adding delays (say 1ms) to your
-> clock/power domain drivers to avoid the crash you are seeing. And then
-> you can figure out the actual delays needed and update it.
->
->> While preparing a fix for the above issue in genpd I found that it has
->> been introduced by your commit 5a46079a9645 ("PM: domains: Delete usage
->> of driver_deferred_probe_check_state()"). I didn't analyze it enough,
->> but it looks that something is missing there if we are trying to probe
->> amba device. I assume that returning -EPROBE_DEFER unconditionally there
->> is also not a valid solution?
-> Yeah, the unconditionally returning -EPROBE_DEFER wouldn't work
-> because if the supplier is optional but not present, the consumer
-> driver would never stop waiting for it. I'm looking into issues
-> similar to the one you saw in other threads [1]. The problem always
-> boils down to the supplier device's DT node not having "compatible"
-> property and therefore fw_devlink creating the device link between the
-> consumer and the supplier's parent.
->
-> Basically if the drivers/DT are implemented "properly", you would
-> never get to the failure case (-2) if the driver is actually present.
-Well, I don't get what do you mean by not having the proper 'comaptible' 
-property. Both affected devices (amba's pl330 and its power domain) have 
-compatible strings: 'arm,pl330' and 'samsung,exynos4210-pd', but the 
-devlinks doesn't help. Is it related to the custom device addition code 
-in the amba bus?
-> I have some other ideas on how to get these to work better (not sure
-> if it'll be for 100% of the cases), but until I get those ideas sorted
-> out, I might do a partial revert of the change you mentioned.
->
-> [1] - https://lore.kernel.org/lkml/4799738.LvFx2qVVIh@steina-w/
+Move the clocks properties to the CPU node instead.
 
- > ...
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 19 ++++++++++++++++---
+ arch/arm64/boot/dts/qcom/sc7280.dtsi | 18 ++++++++++++++++--
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 19 ++++++++++++++++---
+ arch/arm64/boot/dts/qcom/sm6350.dtsi | 18 ++++++++++++++++--
+ arch/arm64/boot/dts/qcom/sm8150.dtsi | 19 ++++++++++++++++---
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 18 ++++++++++++++++--
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 19 ++++++++++++++++---
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 18 ++++++++++++++++--
+ 8 files changed, 128 insertions(+), 20 deletions(-)
 
-Best regards
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index 5dcaac23a138..4c9a5f5e4ab4 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -138,6 +138,8 @@ &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			capacity-dmips-mhz = <415>;
+ 			dynamic-power-coefficient = <137>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+@@ -164,6 +166,8 @@ &LITTLE_CPU_SLEEP_1
+ 			capacity-dmips-mhz = <415>;
+ 			dynamic-power-coefficient = <137>;
+ 			next-level-cache = <&L2_100>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+@@ -186,6 +190,8 @@ &LITTLE_CPU_SLEEP_1
+ 			capacity-dmips-mhz = <415>;
+ 			dynamic-power-coefficient = <137>;
+ 			next-level-cache = <&L2_200>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+@@ -208,6 +214,8 @@ &LITTLE_CPU_SLEEP_1
+ 			capacity-dmips-mhz = <415>;
+ 			dynamic-power-coefficient = <137>;
+ 			next-level-cache = <&L2_300>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+@@ -230,6 +238,8 @@ &LITTLE_CPU_SLEEP_1
+ 			capacity-dmips-mhz = <415>;
+ 			dynamic-power-coefficient = <137>;
+ 			next-level-cache = <&L2_400>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+@@ -252,6 +262,8 @@ &LITTLE_CPU_SLEEP_1
+ 			capacity-dmips-mhz = <415>;
+ 			dynamic-power-coefficient = <137>;
+ 			next-level-cache = <&L2_500>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+@@ -274,6 +286,8 @@ &BIG_CPU_SLEEP_1
+ 			capacity-dmips-mhz = <1024>;
+ 			dynamic-power-coefficient = <480>;
+ 			next-level-cache = <&L2_600>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu6_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+@@ -296,6 +310,8 @@ &BIG_CPU_SLEEP_1
+ 			capacity-dmips-mhz = <1024>;
+ 			dynamic-power-coefficient = <480>;
+ 			next-level-cache = <&L2_700>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu6_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+@@ -3538,9 +3554,6 @@ cpufreq_hw: cpufreq@18323000 {
+ 			reg = <0 0x18323000 0 0x1400>, <0 0x18325800 0 0x1400>;
+ 			reg-names = "freq-domain0", "freq-domain1";
+ 
+-			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+-			clock-names = "xo", "alternate";
+-
+ 			#freq-domain-cells = <1>;
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index e66fc67de206..f7600dbdd1e1 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -172,6 +172,8 @@ CPU0: cpu@0 {
+ 					   &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_0>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+@@ -195,6 +197,8 @@ CPU1: cpu@100 {
+ 					   &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_100>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+@@ -215,6 +219,8 @@ CPU2: cpu@200 {
+ 					   &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_200>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+@@ -235,6 +241,8 @@ CPU3: cpu@300 {
+ 					   &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_300>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+@@ -255,6 +263,8 @@ CPU4: cpu@400 {
+ 					   &BIG_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_400>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+@@ -275,6 +285,8 @@ CPU5: cpu@500 {
+ 					   &BIG_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_500>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+@@ -295,6 +307,8 @@ CPU6: cpu@600 {
+ 					   &BIG_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_600>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+@@ -315,6 +329,8 @@ CPU7: cpu@700 {
+ 					   &BIG_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_700>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			operating-points-v2 = <&cpu7_opp_table>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+ 					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+@@ -4915,8 +4931,6 @@ cpufreq_hw: cpufreq@18591000 {
+ 			reg = <0 0x18591000 0 0x1000>,
+ 			      <0 0x18592000 0 0x1000>,
+ 			      <0 0x18593000 0 0x1000>;
+-			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
+-			clock-names = "xo", "alternate";
+ 			#freq-domain-cells = <1>;
+ 		};
+ 	};
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 0692ae0e60a4..3154a8f67f76 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -202,6 +202,8 @@ &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			capacity-dmips-mhz = <611>;
+ 			dynamic-power-coefficient = <290>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+@@ -227,6 +229,8 @@ &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			capacity-dmips-mhz = <611>;
+ 			dynamic-power-coefficient = <290>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+@@ -249,6 +253,8 @@ &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			capacity-dmips-mhz = <611>;
+ 			dynamic-power-coefficient = <290>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+@@ -271,6 +277,8 @@ &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			capacity-dmips-mhz = <611>;
+ 			dynamic-power-coefficient = <290>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+@@ -293,6 +301,8 @@ CPU4: cpu@400 {
+ 					   &BIG_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			dynamic-power-coefficient = <442>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+@@ -315,6 +325,8 @@ CPU5: cpu@500 {
+ 					   &BIG_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			dynamic-power-coefficient = <442>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+@@ -337,6 +349,8 @@ CPU6: cpu@600 {
+ 					   &BIG_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			dynamic-power-coefficient = <442>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+@@ -359,6 +373,8 @@ CPU7: cpu@700 {
+ 					   &BIG_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			dynamic-power-coefficient = <442>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+@@ -5022,9 +5038,6 @@ cpufreq_hw: cpufreq@17d43000 {
+ 
+ 			interrupts-extended = <&lmh_cluster0 0>, <&lmh_cluster1 0>;
+ 
+-			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+-			clock-names = "xo", "alternate";
+-
+ 			#freq-domain-cells = <1>;
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+index d4f8f33f3f0c..645fb73fdad2 100644
+--- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+@@ -43,6 +43,8 @@ CPU0: cpu@0 {
+ 			capacity-dmips-mhz = <1024>;
+ 			dynamic-power-coefficient = <100>;
+ 			next-level-cache = <&L2_0>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_0: l2-cache {
+@@ -62,6 +64,8 @@ CPU1: cpu@100 {
+ 			capacity-dmips-mhz = <1024>;
+ 			dynamic-power-coefficient = <100>;
+ 			next-level-cache = <&L2_100>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_100: l2-cache {
+@@ -78,6 +82,8 @@ CPU2: cpu@200 {
+ 			capacity-dmips-mhz = <1024>;
+ 			dynamic-power-coefficient = <100>;
+ 			next-level-cache = <&L2_200>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_200: l2-cache {
+@@ -94,6 +100,8 @@ CPU3: cpu@300 {
+ 			capacity-dmips-mhz = <1024>;
+ 			dynamic-power-coefficient = <100>;
+ 			next-level-cache = <&L2_300>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_300: l2-cache {
+@@ -110,6 +118,8 @@ CPU4: cpu@400 {
+ 			capacity-dmips-mhz = <1024>;
+ 			dynamic-power-coefficient = <100>;
+ 			next-level-cache = <&L2_400>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_400: l2-cache {
+@@ -126,6 +136,8 @@ CPU5: cpu@500 {
+ 			capacity-dmips-mhz = <1024>;
+ 			dynamic-power-coefficient = <100>;
+ 			next-level-cache = <&L2_500>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_500: l2-cache {
+@@ -143,6 +155,8 @@ CPU6: cpu@600 {
+ 			capacity-dmips-mhz = <1894>;
+ 			dynamic-power-coefficient = <703>;
+ 			next-level-cache = <&L2_600>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
+ 			L2_600: l2-cache {
+@@ -159,6 +173,8 @@ CPU7: cpu@700 {
+ 			capacity-dmips-mhz = <1894>;
+ 			dynamic-power-coefficient = <703>;
+ 			next-level-cache = <&L2_700>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
+ 			L2_700: l2-cache {
+@@ -1462,8 +1478,6 @@ cpufreq_hw: cpufreq@18323000 {
+ 			compatible = "qcom,cpufreq-hw";
+ 			reg = <0 0x18323000 0 0x1000>, <0 0x18325800 0 0x1000>;
+ 			reg-names = "freq-domain0", "freq-domain1";
+-			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+-			clock-names = "xo", "alternate";
+ 
+ 			#freq-domain-cells = <1>;
+ 		};
+diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+index 8ea44c4b56b4..bb38e36ae659 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+@@ -51,6 +51,8 @@ CPU0: cpu@0 {
+ 			capacity-dmips-mhz = <488>;
+ 			dynamic-power-coefficient = <232>;
+ 			next-level-cache = <&L2_0>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -75,6 +77,8 @@ CPU1: cpu@100 {
+ 			capacity-dmips-mhz = <488>;
+ 			dynamic-power-coefficient = <232>;
+ 			next-level-cache = <&L2_100>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -97,6 +101,8 @@ CPU2: cpu@200 {
+ 			capacity-dmips-mhz = <488>;
+ 			dynamic-power-coefficient = <232>;
+ 			next-level-cache = <&L2_200>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -118,6 +124,8 @@ CPU3: cpu@300 {
+ 			capacity-dmips-mhz = <488>;
+ 			dynamic-power-coefficient = <232>;
+ 			next-level-cache = <&L2_300>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -139,6 +147,8 @@ CPU4: cpu@400 {
+ 			capacity-dmips-mhz = <1024>;
+ 			dynamic-power-coefficient = <369>;
+ 			next-level-cache = <&L2_400>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -160,6 +170,8 @@ CPU5: cpu@500 {
+ 			capacity-dmips-mhz = <1024>;
+ 			dynamic-power-coefficient = <369>;
+ 			next-level-cache = <&L2_500>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -181,6 +193,8 @@ CPU6: cpu@600 {
+ 			capacity-dmips-mhz = <1024>;
+ 			dynamic-power-coefficient = <369>;
+ 			next-level-cache = <&L2_600>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -202,6 +216,8 @@ CPU7: cpu@700 {
+ 			capacity-dmips-mhz = <1024>;
+ 			dynamic-power-coefficient = <421>;
+ 			next-level-cache = <&L2_700>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 2>;
+ 			operating-points-v2 = <&cpu7_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -4102,9 +4118,6 @@ cpufreq_hw: cpufreq@18323000 {
+ 			reg-names = "freq-domain0", "freq-domain1",
+ 				    "freq-domain2";
+ 
+-			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+-			clock-names = "xo", "alternate";
+-
+ 			#freq-domain-cells = <1>;
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index cf0c97bd5ad3..29c496e85dda 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -101,6 +101,8 @@ CPU0: cpu@0 {
+ 			next-level-cache = <&L2_0>;
+ 			power-domains = <&CPU_PD0>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -125,6 +127,8 @@ CPU1: cpu@100 {
+ 			next-level-cache = <&L2_100>;
+ 			power-domains = <&CPU_PD1>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -146,6 +150,8 @@ CPU2: cpu@200 {
+ 			next-level-cache = <&L2_200>;
+ 			power-domains = <&CPU_PD2>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -167,6 +173,8 @@ CPU3: cpu@300 {
+ 			next-level-cache = <&L2_300>;
+ 			power-domains = <&CPU_PD3>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -188,6 +196,8 @@ CPU4: cpu@400 {
+ 			next-level-cache = <&L2_400>;
+ 			power-domains = <&CPU_PD4>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -209,6 +219,8 @@ CPU5: cpu@500 {
+ 			next-level-cache = <&L2_500>;
+ 			power-domains = <&CPU_PD5>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -231,6 +243,8 @@ CPU6: cpu@600 {
+ 			next-level-cache = <&L2_600>;
+ 			power-domains = <&CPU_PD6>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -252,6 +266,8 @@ CPU7: cpu@700 {
+ 			next-level-cache = <&L2_700>;
+ 			power-domains = <&CPU_PD7>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 2>;
+ 			operating-points-v2 = <&cpu7_opp_table>;
+ 			interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+@@ -5020,8 +5036,6 @@ cpufreq_hw: cpufreq@18591000 {
+ 			reg-names = "freq-domain0", "freq-domain1",
+ 				    "freq-domain2";
+ 
+-			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+-			clock-names = "xo", "alternate";
+ 			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index 743cba9b683c..c7e9447f0388 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -66,6 +66,8 @@ CPU0: cpu@0 {
+ 			reg = <0x0 0x0>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_0>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			power-domains = <&CPU_PD0>;
+ 			power-domain-names = "psci";
+@@ -85,6 +87,8 @@ CPU1: cpu@100 {
+ 			reg = <0x0 0x100>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_100>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			power-domains = <&CPU_PD1>;
+ 			power-domain-names = "psci";
+@@ -101,6 +105,8 @@ CPU2: cpu@200 {
+ 			reg = <0x0 0x200>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_200>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			power-domains = <&CPU_PD2>;
+ 			power-domain-names = "psci";
+@@ -117,6 +123,8 @@ CPU3: cpu@300 {
+ 			reg = <0x0 0x300>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_300>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			power-domains = <&CPU_PD3>;
+ 			power-domain-names = "psci";
+@@ -133,6 +141,8 @@ CPU4: cpu@400 {
+ 			reg = <0x0 0x400>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_400>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			power-domains = <&CPU_PD4>;
+ 			power-domain-names = "psci";
+@@ -149,6 +159,8 @@ CPU5: cpu@500 {
+ 			reg = <0x0 0x500>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_500>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			power-domains = <&CPU_PD5>;
+ 			power-domain-names = "psci";
+@@ -166,6 +178,8 @@ CPU6: cpu@600 {
+ 			reg = <0x0 0x600>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_600>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			power-domains = <&CPU_PD6>;
+ 			power-domain-names = "psci";
+@@ -182,6 +196,8 @@ CPU7: cpu@700 {
+ 			reg = <0x0 0x700>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_700>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 2>;
+ 			power-domains = <&CPU_PD7>;
+ 			power-domain-names = "psci";
+@@ -2074,9 +2090,6 @@ cpufreq_hw: cpufreq@18591000 {
+ 			      <0 0x18593000 0 0x1000>;
+ 			reg-names = "freq-domain0", "freq-domain1", "freq-domain2";
+ 
+-			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
+-			clock-names = "xo", "alternate";
+-
+ 			#freq-domain-cells = <1>;
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 7d08fad76371..229cf5eb6447 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -48,6 +48,8 @@ CPU0: cpu@0 {
+ 			next-level-cache = <&L2_0>;
+ 			power-domains = <&CPU_PD0>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_0: l2-cache {
+@@ -67,6 +69,8 @@ CPU1: cpu@100 {
+ 			next-level-cache = <&L2_100>;
+ 			power-domains = <&CPU_PD1>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_100: l2-cache {
+@@ -83,6 +87,8 @@ CPU2: cpu@200 {
+ 			next-level-cache = <&L2_200>;
+ 			power-domains = <&CPU_PD2>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_200: l2-cache {
+@@ -99,6 +105,8 @@ CPU3: cpu@300 {
+ 			next-level-cache = <&L2_300>;
+ 			power-domains = <&CPU_PD3>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_300: l2-cache {
+@@ -115,6 +123,8 @@ CPU4: cpu@400 {
+ 			next-level-cache = <&L2_400>;
+ 			power-domains = <&CPU_PD4>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
+ 			L2_400: l2-cache {
+@@ -131,6 +141,8 @@ CPU5: cpu@500 {
+ 			next-level-cache = <&L2_500>;
+ 			power-domains = <&CPU_PD5>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
+ 			L2_500: l2-cache {
+@@ -148,6 +160,8 @@ CPU6: cpu@600 {
+ 			next-level-cache = <&L2_600>;
+ 			power-domains = <&CPU_PD6>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
+ 			L2_600: l2-cache {
+@@ -164,6 +178,8 @@ CPU7: cpu@700 {
+ 			next-level-cache = <&L2_700>;
+ 			power-domains = <&CPU_PD7>;
+ 			power-domain-names = "psci";
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
++			clock-names = "xo", "alternate";
+ 			qcom,freq-domain = <&cpufreq_hw 2>;
+ 			#cooling-cells = <2>;
+ 			L2_700: l2-cache {
+@@ -2998,8 +3014,6 @@ cpufreq_hw: cpufreq@17d91000 {
+ 			      <0 0x17d92000 0 0x1000>,
+ 			      <0 0x17d93000 0 0x1000>;
+ 			reg-names = "freq-domain0", "freq-domain1", "freq-domain2";
+-			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
+-			clock-names = "xo", "alternate";
+ 			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.31.1.272.g89b43f80a514
 

@@ -2,365 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A6B572F50
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FA9572F54
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbiGMHgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
+        id S234689AbiGMHhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiGMHgq (ORCPT
+        with ESMTP id S234646AbiGMHg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:36:46 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA8BE43C3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:36:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657697804; x=1689233804;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=baYNjrINGKubuturZ2TBTersOB6w/jQc+quIfBnQImg=;
-  b=U6rORPUnxoGsqO1NFNejUGdz+skrHtMa7DeBvn14wYhUk7UtbKZnzuAC
-   +yQsDIPbOTwy0hxdehzSeBeDrUZgPkykXqtIE8FpQ4d/bh27tG+mXRJl5
-   DOX3cWSw+30i6jSz+0o23z2sKO/pZA92SH8kWfofOdLYvV6/bsXiYLDVn
-   jCZYTD9anaifdfyWFnXwroKvsEOi5F6za+gtNpOJ20zt6xZjZE8UM5wGc
-   DLz084n9yAcBR/26EcBIE93Ma7xUf+zUKrmTHnTdw3rcgZcwAXVJ30W70
-   aJu5lnCAhctvrnY6kbMHm52mP+8Gk3ztGM2Ql6IhpZCniYfK2M/eWwXhI
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="265548907"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="265548907"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 00:36:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="922528570"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Jul 2022 00:36:40 -0700
-Date:   Wed, 13 Jul 2022 15:36:42 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, dave.hansen@intel.com,
-        Robin Murphy <robin.murphy@arm.com>,
-        John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH v1] mm/slub: enable debugging memory wasting of kmalloc
-Message-ID: <20220713073642.GA69088@shbuild999.sh.intel.com>
-References: <20220701135954.45045-1-feng.tang@intel.com>
- <41763154-f923-ae99-55c0-0f3717636779@suse.cz>
+        Wed, 13 Jul 2022 03:36:57 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2094.outbound.protection.outlook.com [40.107.237.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2532BE4F3A;
+        Wed, 13 Jul 2022 00:36:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CuyedYIcgbIIMGGOZTvdY3PTHC/NCkljlpg9XiqtUp2gCvJF3myxg4eDMuhUXqnD26iA8zyoF6Q4MrcHj66oxIXI2k4LGa6XqmUxOOhTblKLzBBTGUUVSEzI8Z+5zArc7NREtRkRpNv+5LNDn62270EMVDTavVudEPqrczDzn0nVrh3CEXVFZSpllS5Z4sChnhXTFTABx+H4oCguK8onCAL35LZdrmvNlk/j52hQ5J8sHvQAgeM0wk8C5ZNV4lEGp60qPBESFY9SuYMsj1Dl6w2oinK2bhA3do/GFjrRB9jPU9p7ALNi9G7pjNuxqVo6PRHPz/dRiU3L4Xe3RQUX9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=974UDoe/38JS6oFCdZKGhtXdB43MQFueCOLcGRrJMBQ=;
+ b=R7eLMd8eervxCcgPsc48jSW03dfx2BkBNsxcc0R2fztHA7CN7mHLmlQs+TqLIyEfAe2Ie0DsyO89C9LxJdycHHf/XlAgAH7t2T+i6IJ9V8HxjGnHDCmenNg/faVhvOp39fBjjNrE5tdxonPhiLFB0t37K7OXiWVZ5xxoZXeh7xnzJ8sPpPhWUDg0D4t/xxlkFR71g+UMoRdCPYHFjlcyUM++8yIWNCkPSDgp/eC/zQMINERJXgumpdUd/2TAMu8SZ457vWMIS1QfibQNZNhb57GSmRMYdXRj5YUeDFHmu9yp+G68BoEW6ZhimbrS3IJa4gLOoRUsEzB11isXquHe2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=974UDoe/38JS6oFCdZKGhtXdB43MQFueCOLcGRrJMBQ=;
+ b=V0rkygYeYWV3+rq0Fnf+DboECTrHXFrJZdH243LVhv06yCIxhmXdPJ/d1OBrIMAJ+N0aezqofXLTmdHThZDYcFFQ3oS1XvX/CBDIJ597aTB5Jx6nLFZpZ0ViApFLn6kcGhmmy71ztuqt0KEfIeFZ4O+zCxJ/2nPgj/q+Uxttp8E=
+Received: from SN6PR2101MB1327.namprd21.prod.outlook.com
+ (2603:10b6:805:107::9) by MN0PR21MB3535.namprd21.prod.outlook.com
+ (2603:10b6:208:3d0::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.5; Wed, 13 Jul
+ 2022 07:36:53 +0000
+Received: from SN6PR2101MB1327.namprd21.prod.outlook.com
+ ([fe80::59ea:cdde:5229:d4f0]) by SN6PR2101MB1327.namprd21.prod.outlook.com
+ ([fe80::59ea:cdde:5229:d4f0%7]) with mapi id 15.20.5458.005; Wed, 13 Jul 2022
+ 07:36:53 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Ajay Sharma <sharmaajay@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "shiraz.saleem@intel.com" <shiraz.saleem@intel.com>
+CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+Subject: RE: [Patch v4 12/12] RDMA/mana_ib: Add a driver for Microsoft Azure
+ Network Adapter
+Thread-Topic: [Patch v4 12/12] RDMA/mana_ib: Add a driver for Microsoft Azure
+ Network Adapter
+Thread-Index: AQHYgSXbp+YB12TPHUGa3Bv46Ly1sK14ihhQgANWzwCAADHU8A==
+Date:   Wed, 13 Jul 2022 07:36:53 +0000
+Message-ID: <SN6PR2101MB13271E9D5865923393D67649BF899@SN6PR2101MB1327.namprd21.prod.outlook.com>
+References: <1655345240-26411-1-git-send-email-longli@linuxonhyperv.com>
+ <1655345240-26411-13-git-send-email-longli@linuxonhyperv.com>
+ <SN6PR2101MB1327827B0EA68876717F0699BF879@SN6PR2101MB1327.namprd21.prod.outlook.com>
+ <BL1PR21MB328334421DE2FB3B33176646D6899@BL1PR21MB3283.namprd21.prod.outlook.com>
+In-Reply-To: <BL1PR21MB328334421DE2FB3B33176646D6899@BL1PR21MB3283.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=37fbf502-6d30-442e-a817-37730b6e8ac6;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-07-11T01:33:17Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0f9b41be-11b9-401a-d45e-08da64a27511
+x-ms-traffictypediagnostic: MN0PR21MB3535:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: r4G+9CtHP5Ff4HruDqi0hURt6ZDIa6cgMYtfFT0+6FJp4a6NSEdO9KI4AsWYj+WvpB+qpfbtDL2vUeV0wqxbnpmCT6pN8SRgNtHVNu6TOJ24hnsxoeP/Zgg6NI8tcfZ0aC9JM/v3RCPASDSNHE22iExJZG6N0fQ5oXrW7RtGBo0iLgRq7/nw6PVelSH/MYaAuzbSkGU2cpK1J0kZLK0CDD/oz12vaGOmS9JMOvAu77uPy3Zu4qmnBX/jahsn3t7K4QxmvD4rd3sS/crxpPdUqsV9YsQTY7rWt+pS7yHVMZwU6pzdnkMczTDaHUOK+cXh/dX0NjoMvhVHnJ9IikYvi2rbGLP9sOrDBxb+g0A/xJM2dSe7PP032ZiNrQRN05FGD9lINZwsBiXxpB1yOP7ZTh1zHATtT3ZniPUpcbPtJ4MFQv4Np+J/wSV+1LHTVW4VYedHO3p0P8W4zaaJGnvTXb8jlERJuFXxTxVRPwNSBuEVtDTW2FM7Qf6P6dO5+w0ny2vigVllnsSQcYLPEzF35N1l6PiIJWUtrXSA723VxsnjsSkZiK67sPnk7GPNeQGjYvVhP0xygkD4sbEpdtWI/H0CBQEWYwdeDeP1yMV40C3eUAgxQkF8OAzz7ZRqDjnHD5D/gz5j0oYvU2qd/XDlM6PPFiz6rYGGQ2OciGCBxp9zlEync3sdDaOEppQXKb66zHJ7lpg8yuVwz8LtYk+EX1QK9JUOd8pzpMFS3l8qyD6PYfgf7xo5Qs1piv1yQqY3MHKPhGn24pUEEsTsF239O4p2DM4agVKz4/igx5/Hbu1jw7y8b3Ec4RjEtJx9+KEoDcOC6tzblw0ZRCpOkbutje8GIVPaHefqxNOia4dP5L/W+k7KPi1hwR/hquueJbEE
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR2101MB1327.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(346002)(39860400002)(376002)(136003)(47530400004)(451199009)(7696005)(6506007)(478600001)(26005)(71200400001)(41300700001)(83380400001)(9686003)(10290500003)(186003)(2906002)(8990500004)(7416002)(5660300002)(55016003)(76116006)(54906003)(316002)(66946007)(66556008)(110136005)(8936002)(52536014)(8676002)(64756008)(66446008)(66476007)(4326008)(122000001)(38100700002)(33656002)(38070700005)(86362001)(82960400001)(82950400001)(921005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VxdOYkISOiTPtujJ1a91yeoPBIVIbI1MYHcT1S9/lR6CZm5RCa1akq4klaRm?=
+ =?us-ascii?Q?uSc0p79FXytK4fzFslI8VNId5LtyQvEHfP3ymskRdagwoFhJACLMv+vzUJcm?=
+ =?us-ascii?Q?wGBuq+RzjFww8EFPXbZd9xqXB8S9aSPWZZNKOZMDo+50KEx0XFcUeN+aJrIc?=
+ =?us-ascii?Q?8BF988MNRUainiy/Gki2YdhI22wSD6Gb8KjipgHzGKZ496NOhGdAnvt5j8FW?=
+ =?us-ascii?Q?ba33ipO+yb1B3W9LiOsKFalYpeSpar5w6bf2NMpl0Uvrx1moj5kt/Edf2Hyl?=
+ =?us-ascii?Q?mIk/pe5+SdZUsrxHZvusskXCC1XtNr3TGQKqBohs9P/9jlzcxXjMG+zaAbdQ?=
+ =?us-ascii?Q?Udy2uOZZrEKiOFows2AmIllNADHPgoZ529vn529fY0zA/B0DhO6MB8geSb3/?=
+ =?us-ascii?Q?FRkOB6HIeCC7ZWZpobXOND7giFy8bGA12l3EMCmXlOlKhdQBcr28+qIIkc5V?=
+ =?us-ascii?Q?GRcTlEbPxVhv48HNHTDBGuhLNTxwB/QUHgKrTIdObWG7n7jRCvJ761P0Hy0k?=
+ =?us-ascii?Q?9KKhlhZY6m05AY8sDKFspEGHk3owqhyPyFi5CHvivSRqXeq3GR15blniudcZ?=
+ =?us-ascii?Q?1CjuPV85bSM08PgOUPkc7fOF7incD/Pf6Ccr8V0oRNXVVuDNsFlN7qULn44P?=
+ =?us-ascii?Q?ko6wJTcoZr0seNxsQN7sxB3zOiV7jRuz2pYLer/GUEntbMrBDFd/iUl+jHF8?=
+ =?us-ascii?Q?Gm/cS4tIb1jndJZ99hT8iahXuQL2ec56F5VmzaQjbI4QBnRs4TLFH1MwJlWU?=
+ =?us-ascii?Q?zOjwU6KdPgGzAnffEd9qWWP3Jvrtnqwxz5oMGdf3WQsM+geSHTbeh8D6VHbo?=
+ =?us-ascii?Q?8qtRyD+GD788r28eze+GnCQKoRnSp+kpOtqg+qXYHCj+eZD+cggblBVo/TEn?=
+ =?us-ascii?Q?/x44EGmuve+VI9/DVjNiviFDvtSCpD+shCA8cCqNxF4QSb9Km/A+nqAAnlAj?=
+ =?us-ascii?Q?0EtgvdMTJMU2VyqsRygeTJlp0yWmwAY17ka1ZCoi4d6G1r4mZv5AeVGrr7mQ?=
+ =?us-ascii?Q?iKj+2Y2y6XCqpG21Y3Wdr6I7U+xmvOk2T3SyN8smsPYwb53mwInOZEa6SrDk?=
+ =?us-ascii?Q?f6xhNAHq+zHg5y2Qjhrt5iiK47G3nyCojoDHX97gsZ9px91gKKgcGD4WmcSy?=
+ =?us-ascii?Q?UO8hX0NyPvkA+8CWWVvIUVTs5mDu3nc+W8Pbq0PE/cXtAvCn5371kiAJ2WxE?=
+ =?us-ascii?Q?yB/x3xntn8CIT2IQvl6EvCmAVsYcru+521RIpT+lU2vOhUujqgAAoFdiYiY3?=
+ =?us-ascii?Q?rbUx8hgJVVRCvwMh9fq+PCyAeQwcJoBYoi3YQOn0dY+rUlSL7SZjmu0I7TYA?=
+ =?us-ascii?Q?zjjHWxrL1mh8WankWw7izv1Uh2sCylbC+qjiUUkJtX+9tM7vyp4cAI96d7Ny?=
+ =?us-ascii?Q?3bP2UfEv6EIPMCsGljua5JbnsPkoLYSJEK9w/WUEM2wzgb7w9QUyuebCljFH?=
+ =?us-ascii?Q?2c1oxxmCvPBKqfAoF9zlHyPtXOm035WiPabLbKjPwhDDEL+WQGy/NOVyvB1F?=
+ =?us-ascii?Q?mBMukdi24TKZBLWP1ZgtFcHV+hH8aUxs2Kz4B+bFh2w09apco9qXRJBQ4xrP?=
+ =?us-ascii?Q?0fn8tOb6uNjEsqq8Wb/UHF4BtPfimAnn2AR0CxiL?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41763154-f923-ae99-55c0-0f3717636779@suse.cz>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR2101MB1327.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f9b41be-11b9-401a-d45e-08da64a27511
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2022 07:36:53.7304
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nWvnOjHhfKEyWq+yi1hyNZF/3XTrxtgcyRvUSsPDt3JYAL0cMHNZ0Kpe/hXR2Xfx4mEg/agFBwVuMITBHNqVww==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3535
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vlastimil,
+> From: Ajay Sharma <sharmaajay@microsoft.com>
+> Sent: Tuesday, July 12, 2022 9:33 PM
+> >  ...
+> > +	switch (mr_params->mr_type) {
+> > +	case GDMA_MR_TYPE_GVA:
+> > +		req.mr_type =3D GDMA_MR_TYPE_GVA;
+> > +		req.gva.dma_region_handle =3D mr_params->gva.dma_region_handle;
+> > +		req.gva.virtual_address =3D mr_params->gva.virtual_address;
+> > +		req.gva.access_flags =3D mr_params->gva.access_flags;
+> > +		break;
+> > +
+> > +	case GDMA_MR_TYPE_GPA:
+> > +		req.mr_type =3D GDMA_MR_TYPE_GPA;
+> > +		req.gpa.access_flags =3D mr_params->gpa.access_flags;
+> > +		break;
+> > +
+> > +	case GDMA_MR_TYPE_FMR:
+> > +		req.mr_type =3D GDMA_MR_TYPE_FMR;
+> > +		req.fmr.page_size =3D mr_params->fmr.page_size;
+> > +		req.fmr.reserved_pte_count =3D mr_params->fmr.reserved_pte_count;
+> > +		break;
+> > +
+> > +	default:
+> > +		ibdev_dbg(&dev->ib_dev,
+> > +			  "invalid param (GDMA_MR_TYPE) passed, type %d\n",
+> > +			  req.mr_type);
+>=20
+> Here req.mr_type is always 0.
+> We should remove the 3 above lines of "req.mr_type =3D ...", and add a li=
+ne
+> "req.mr_type =3D mr_params->mr_type;" before the "switch" line..
+>=20
+> No, That's incorrect. The mr_type is being explicitly set here to control=
+ what
+> regions get exposed to the user and kernel. GPA and FMR are never exposed=
+ to
+> user. So we cannot assign req.mr_type =3D mr_params->mr_type.
 
-On Mon, Jul 11, 2022 at 10:15:21AM +0200, Vlastimil Babka wrote:
-> On 7/1/22 15:59, Feng Tang wrote:
-> > kmalloc's API family is critical for mm, with one shortcoming that
-> > its object size is fixed to be power of 2. When user requests memory
-> > for '2^n + 1' bytes, actually 2^(n+1) bytes will be allocated, so
-> > in worst case, there is around 50% memory space waste.
-> > 
-> > We've met a kernel boot OOM panic (v5.10), and from the dumped slab info:
-> > 
-> >     [   26.062145] kmalloc-2k            814056KB     814056KB
-> > 
-> > From debug we found there are huge number of 'struct iova_magazine',
-> > whose size is 1032 bytes (1024 + 8), so each allocation will waste
-> > 1016 bytes. Though the issue was solved by giving the right (bigger)
-> > size of RAM, it is still nice to optimize the size (either use a
-> > kmalloc friendly size or create a dedicated slab for it).
-[...]
-> 
-> Hi and thanks.
-> I would suggest some improvements to consider:
-> 
-> - don't use the struct track to store orig_size, although it's an obvious
-> first choice. It's unused waste for the free_track, and also for any
-> non-kmalloc caches. I'd carve out an extra int next to the struct tracks.
-> Only for kmalloc caches (probably a new kmem cache flag set on creation will
-> be needed to easily distinguish them).
-> Besides the saved space, you can then set the field from ___slab_alloc()
-> directly and not need to pass the orig_size also to alloc_debug_processing()
-> etc.
- 
-Here is a draft patch fowlling your suggestion, please check if I missed
-anything? (Quick test showed it achived similar effect as v1 patch). Thanks!
+I'm not following you. I meant the below change, which should have no
+functional change, right? In the "default:" branch , we just "goto error;",=
+ so
+there is no functional change either.
 
----
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 0fefdf528e0d..d3dacb0f013f 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -29,6 +29,8 @@
- #define SLAB_RED_ZONE		((slab_flags_t __force)0x00000400U)
- /* DEBUG: Poison objects */
- #define SLAB_POISON		((slab_flags_t __force)0x00000800U)
-+/* Indicate a slab of kmalloc */
-+#define SLAB_KMALLOC		((slab_flags_t __force)0x00001000U)
- /* Align objs on cache lines */
- #define SLAB_HWCACHE_ALIGN	((slab_flags_t __force)0x00002000U)
- /* Use GFP_DMA memory */
-diff --git a/mm/slub.c b/mm/slub.c
-index 26b00951aad1..3b0f80927817 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -1030,6 +1030,9 @@ static int check_pad_bytes(struct kmem_cache *s, struct slab *slab, u8 *p)
- 		/* We also have user information there */
- 		off += 2 * sizeof(struct track);
- 
-+	if (s->flags & SLAB_KMALLOC)
-+		off += sizeof(unsigned int);
-+
- 	off += kasan_metadata_size(s);
- 
- 	if (size_from_object(s) == off)
-@@ -1323,9 +1326,38 @@ static inline int alloc_consistency_checks(struct kmem_cache *s,
- 	return 1;
- }
- 
-+
-+static inline void set_orig_size(struct kmem_cache *s,
-+					void *object, unsigned int orig_size)
-+{
-+	void *p = kasan_reset_tag(object);
-+
-+	p = object + get_info_end(s);
-+
-+	if (s->flags & SLAB_STORE_USER)
-+		p += sizeof(struct track) * 2;
-+
-+	*(unsigned int *)p = orig_size;
-+}
-+
-+static unsigned int get_orig_size(struct kmem_cache *s, void *object)
-+{
-+	void *p = kasan_reset_tag(object);
-+
-+	if (!(s->flags & SLAB_KMALLOC))
-+		return s->object_size;
-+
-+	p = object + get_info_end(s);
-+	if (s->flags & SLAB_STORE_USER)
-+		p += sizeof(struct track) * 2;
-+
-+	return *(unsigned int *)p;
-+}
-+
- static noinline int alloc_debug_processing(struct kmem_cache *s,
- 					struct slab *slab,
--					void *object, unsigned long addr)
-+					void *object, unsigned long addr,
-+					unsigned int orig_size)
- {
- 	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
- 		if (!alloc_consistency_checks(s, slab, object))
-@@ -1335,6 +1367,10 @@ static noinline int alloc_debug_processing(struct kmem_cache *s,
- 	/* Success perform special debug activities for allocs */
- 	if (s->flags & SLAB_STORE_USER)
- 		set_track(s, object, TRACK_ALLOC, addr);
-+
-+	if (s->flags & SLAB_KMALLOC)
-+		set_orig_size(s, object, orig_size);
-+
- 	trace(s, slab, object, 1);
- 	init_object(s, object, SLUB_RED_ACTIVE);
- 	return 1;
-@@ -1661,7 +1697,8 @@ static inline
- void setup_slab_debug(struct kmem_cache *s, struct slab *slab, void *addr) {}
- 
- static inline int alloc_debug_processing(struct kmem_cache *s,
--	struct slab *slab, void *object, unsigned long addr) { return 0; }
-+	struct slab *slab, void *object, unsigned long addr,
-+	unsigned int orig_size) { return 0; }
- 
- static inline int free_debug_processing(
- 	struct kmem_cache *s, struct slab *slab,
-@@ -2905,7 +2942,7 @@ static inline void *get_freelist(struct kmem_cache *s, struct slab *slab)
-  * already disabled (which is the case for bulk allocation).
-  */
- static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
--			  unsigned long addr, struct kmem_cache_cpu *c)
-+			  unsigned long addr, struct kmem_cache_cpu *c, unsigned int orig_size)
- {
- 	void *freelist;
- 	struct slab *slab;
-@@ -3048,7 +3085,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
- check_new_slab:
- 
- 	if (kmem_cache_debug(s)) {
--		if (!alloc_debug_processing(s, slab, freelist, addr)) {
-+		if (!alloc_debug_processing(s, slab, freelist, addr, orig_size)) {
- 			/* Slab failed checks. Next slab needed */
- 			goto new_slab;
- 		} else {
-@@ -3102,7 +3139,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
-  * pointer.
-  */
- static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
--			  unsigned long addr, struct kmem_cache_cpu *c)
-+			  unsigned long addr, struct kmem_cache_cpu *c, unsigned int orig_size)
- {
- 	void *p;
- 
-@@ -3115,7 +3152,7 @@ static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
- 	c = slub_get_cpu_ptr(s->cpu_slab);
- #endif
- 
--	p = ___slab_alloc(s, gfpflags, node, addr, c);
-+	p = ___slab_alloc(s, gfpflags, node, addr, c, orig_size);
- #ifdef CONFIG_PREEMPT_COUNT
- 	slub_put_cpu_ptr(s->cpu_slab);
- #endif
-@@ -3206,7 +3243,7 @@ static __always_inline void *slab_alloc_node(struct kmem_cache *s, struct list_l
- 	 */
- 	if (IS_ENABLED(CONFIG_PREEMPT_RT) ||
- 	    unlikely(!object || !slab || !node_match(slab, node))) {
--		object = __slab_alloc(s, gfpflags, node, addr, c);
-+		object = __slab_alloc(s, gfpflags, node, addr, c, orig_size);
- 	} else {
- 		void *next_object = get_freepointer_safe(s, object);
- 
-@@ -3709,7 +3746,7 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
- 			 * of re-populating per CPU c->freelist
- 			 */
- 			p[i] = ___slab_alloc(s, flags, NUMA_NO_NODE,
--					    _RET_IP_, c);
-+					    _RET_IP_, c, s->object_size);
- 			if (unlikely(!p[i]))
- 				goto error;
- 
-@@ -4118,6 +4155,10 @@ static int calculate_sizes(struct kmem_cache *s)
- 		 * the object.
- 		 */
- 		size += 2 * sizeof(struct track);
-+
-+	/* Save the original requsted kmalloc size */
-+	if (flags & SLAB_KMALLOC)
-+		size += sizeof(unsigned int);
- #endif
- 
- 	kasan_cache_create(s, &size, &s->flags);
-@@ -4842,7 +4883,7 @@ void __init kmem_cache_init(void)
- 
- 	/* Now we can use the kmem_cache to allocate kmalloc slabs */
- 	setup_kmalloc_cache_index_table();
--	create_kmalloc_caches(0);
-+	create_kmalloc_caches(SLAB_KMALLOC);
- 
- 	/* Setup random freelists for each cache */
- 	init_freelist_randomization();
-@@ -5068,6 +5109,7 @@ struct location {
- 	depot_stack_handle_t handle;
- 	unsigned long count;
- 	unsigned long addr;
-+	unsigned long waste;
- 	long long sum_time;
- 	long min_time;
- 	long max_time;
-@@ -5114,13 +5156,15 @@ static int alloc_loc_track(struct loc_track *t, unsigned long max, gfp_t flags)
- }
- 
- static int add_location(struct loc_track *t, struct kmem_cache *s,
--				const struct track *track)
-+				const struct track *track,
-+				unsigned int orig_size)
- {
- 	long start, end, pos;
- 	struct location *l;
--	unsigned long caddr, chandle;
-+	unsigned long caddr, chandle, cwaste;
- 	unsigned long age = jiffies - track->when;
- 	depot_stack_handle_t handle = 0;
-+	unsigned int waste = s->object_size - orig_size;
- 
- #ifdef CONFIG_STACKDEPOT
- 	handle = READ_ONCE(track->handle);
-@@ -5138,11 +5182,13 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
- 		if (pos == end)
- 			break;
- 
--		caddr = t->loc[pos].addr;
--		chandle = t->loc[pos].handle;
--		if ((track->addr == caddr) && (handle == chandle)) {
-+		l = &t->loc[pos];
-+		caddr = l->addr;
-+		chandle = l->handle;
-+		cwaste = l->waste;
-+		if ((track->addr == caddr) && (handle == chandle) &&
-+			(waste == cwaste)) {
- 
--			l = &t->loc[pos];
- 			l->count++;
- 			if (track->when) {
- 				l->sum_time += age;
-@@ -5167,6 +5213,9 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
- 			end = pos;
- 		else if (track->addr == caddr && handle < chandle)
- 			end = pos;
-+		else if (track->addr == caddr && handle == chandle &&
-+				waste < cwaste)
-+			end = pos;
- 		else
- 			start = pos;
- 	}
-@@ -5190,6 +5239,7 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
- 	l->min_pid = track->pid;
- 	l->max_pid = track->pid;
- 	l->handle = handle;
-+	l->waste = waste;
- 	cpumask_clear(to_cpumask(l->cpus));
- 	cpumask_set_cpu(track->cpu, to_cpumask(l->cpus));
- 	nodes_clear(l->nodes);
-@@ -5208,7 +5258,7 @@ static void process_slab(struct loc_track *t, struct kmem_cache *s,
- 
- 	for_each_object(p, s, addr, slab->objects)
- 		if (!test_bit(__obj_to_index(s, addr, p), obj_map))
--			add_location(t, s, get_track(s, p, alloc));
-+			add_location(t, s, get_track(s, p, alloc), get_orig_size(s, p));
- }
- #endif  /* CONFIG_DEBUG_FS   */
- #endif	/* CONFIG_SLUB_DEBUG */
-@@ -6078,6 +6128,10 @@ static int slab_debugfs_show(struct seq_file *seq, void *v)
- 		else
- 			seq_puts(seq, "<not-available>");
- 
-+		if (l->waste)
-+			seq_printf(seq, " waste=%lu/%lu",
-+				l->count * l->waste, l->waste);
-+
- 		if (l->sum_time != l->min_time) {
- 			seq_printf(seq, " age=%ld/%llu/%ld",
- 				l->min_time, div_u64(l->sum_time, l->count),
+--- drivers/infiniband/hw/mana/main.c.orig
++++ drivers/infiniband/hw/mana/main.c
+@@ -394,21 +394,19 @@
+                             sizeof(resp));
+        req.pd_handle =3D mr_params->pd_handle;
 
-> - the knowledge of actual size could be used to improve poisoning checks as
-> well, detect cases when there's buffer overrun over the orig_size but not
-> cache's size. e.g. if you kmalloc(48) and overrun up to 64 we won't detect
-> it now, but with orig_size stored we could?
++       req.mr_type =3D mr_params->mr_type;
+        switch (mr_params->mr_type) {
+        case GDMA_MR_TYPE_GVA:
+-               req.mr_type =3D GDMA_MR_TYPE_GVA;
+                req.gva.dma_region_handle =3D mr_params->gva.dma_region_han=
+dle;
+                req.gva.virtual_address =3D mr_params->gva.virtual_address;
+                req.gva.access_flags =3D mr_params->gva.access_flags;
+                break;
 
-The above patch doesn't touch this. As I have a question, for the
-[orib_size, object_size) area, shall we fill it with POISON_XXX no matter
-REDZONE flag is set or not?
+        case GDMA_MR_TYPE_GPA:
+-               req.mr_type =3D GDMA_MR_TYPE_GPA;
+                req.gpa.access_flags =3D mr_params->gpa.access_flags;
+                break;
 
-Thanks,
-Feng
-
-> Thanks!
-> Vlastimil
+        case GDMA_MR_TYPE_FMR:
+-               req.mr_type =3D GDMA_MR_TYPE_FMR;
+                req.fmr.page_size =3D mr_params->fmr.page_size;
+                req.fmr.reserved_pte_count =3D mr_params->fmr.reserved_pte_=
+count;
+                break;

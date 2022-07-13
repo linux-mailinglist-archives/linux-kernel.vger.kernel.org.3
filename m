@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57F8572DE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF24572DE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbiGMGGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 02:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
+        id S234117AbiGMGHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 02:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiGMGGH (ORCPT
+        with ESMTP id S229568AbiGMGHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 02:06:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F00AAE543
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:06:06 -0700 (PDT)
+        Wed, 13 Jul 2022 02:07:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6848E9FE14;
+        Tue, 12 Jul 2022 23:07:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DDB461ADA
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:06:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF03C34114;
-        Wed, 13 Jul 2022 06:06:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657692365;
-        bh=dzm77fEEnjGbL+Mhdkf9rTXSRCDs1doi0Qc7/nfiyNA=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13B0DB81C13;
+        Wed, 13 Jul 2022 06:07:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC7C9C341C6;
+        Wed, 13 Jul 2022 06:07:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657692457;
+        bh=PGjtPrJEPTf/72LLV3qAcGcGsp8I6w2AwRMY1DZJTyQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kafTMeUehalTQFMB+NMQSv2ybE8kBufq3Ctx6OwBSOrBUfXkttF5QtFlwlbCfRh6D
-         FQns6dlzFsgRb1LiLqO832Gtqt/ocmM4VzTi9b8vnLU5coASiuM+moxHP5eYqP/X1L
-         kK7A/gZVqJryT4v+anGf8BuFxop/zR1NGzG0TTl4=
-Date:   Wed, 13 Jul 2022 08:06:02 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Barry Song <song.bao.hua@hisilicon.com>
-Subject: Re: [PATCH] drivers/base/node.c: fix userspace break from using
- bin_attributes for cpumap and cpulist
-Message-ID: <Ys5gyqMqB/TW6ftv@kroah.com>
-References: <20220712214301.809967-1-pauld@redhat.com>
+        b=jyASqPhDBB+76WOVuFljq3hv03BsQlkA3rh8uS2mAyt+3kqKZmrjTVcdeQkYIsUkt
+         5WsA8QYkLKdkKD3bepCpQjaABIxWU9ddv1z6NIoDyM6XJVxFqf66xm8CF763IehB/Y
+         6LslmGA/738L1rqMSydw8dDHdNzrZX5Ic1GvNYX2b7xJ4+KJxMLB+p1bq8jPLxV61Z
+         st3uwK2/ikysnh8ECBCbzTPJr/DNkRbSNde+zooY+1UezXsxgZfcaVkX+TaXeBT/H7
+         orgfiicgwIpWCyKDg0Dze6YyFivYyiP737h9fTzJ10t6qV56S0Jen18wN+rDmRT/3b
+         lGzaJnpbm+jvA==
+Date:   Wed, 13 Jul 2022 11:37:33 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] arm64: defconfig: Demote Qualcomm USB PHYs to modules
+Message-ID: <Ys5hJSRqRGWm27xg@matsya>
+References: <20220712031821.4134712-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220712214301.809967-1-pauld@redhat.com>
+In-Reply-To: <20220712031821.4134712-1-bjorn.andersson@linaro.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,27 +57,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 05:43:01PM -0400, Phil Auld wrote:
-> Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
-> This breaks userspace code that retrieves the size before reading the file. Rather
-> than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
-> limitation of cpumap ABI") let's put in a size value at compile time. Use direct
-> comparison and a worst-case maximum to ensure compile time constants. For cpulist the 
-> max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960. 
-> In order to get near that you'd need a system with every other CPU on one node or 
-> something similar. e.g. (0,2,4,... 1024,1026...). We set it to a min of PAGE_SIZE 
-> to retain the older behavior. For cpumap, PAGE_SIZE is plenty big.
+On 11-07-22, 20:18, Bjorn Andersson wrote:
+> The Qualcomm USB PHYs are not critical for reaching the ramdisk to load
+> modules, so they can be demoted to be built as such instead of builtin.
 
-Does userspace care about that size, or can we just put any value in
-there and it will be ok?  How about just returning to the original
-PAGE_SIZE value to keep things looking identical, will userspace not
-read more than that size from the file then?
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
 
-> On an 80 cpu 4-node sytem (NR_CPUS == 8192)
-
-We have systems running Linux with many more cpus than that, and your
-company knows this :)
-
-thanks,
-
-greg k-h
+-- 
+~Vinod

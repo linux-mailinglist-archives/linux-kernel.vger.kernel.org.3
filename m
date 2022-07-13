@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D381A57338E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF57B573395
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235366AbiGMJyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
+        id S234733AbiGMJzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235185AbiGMJyd (ORCPT
+        with ESMTP id S230398AbiGMJz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:54:33 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3946B1CD4;
-        Wed, 13 Jul 2022 02:54:32 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 6so18394784ybc.8;
-        Wed, 13 Jul 2022 02:54:32 -0700 (PDT)
+        Wed, 13 Jul 2022 05:55:29 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B220E814AA;
+        Wed, 13 Jul 2022 02:55:28 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-31c8bb90d09so106884327b3.8;
+        Wed, 13 Jul 2022 02:55:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=sPSIxVNqSB9G6SRgGp4hjqBXmPGfCStVgCLOhu5E9sY=;
-        b=GJ3HcaOWlpP40hbU/+p0Cf8DX90GQmn0aUsoMMXrVSg3WjgE/THWJUp72nHPRF1V2i
-         h1PJug/F0rU0uqjSfLe1Df4ete5iAKUHmO/dcw7hISBkASfVGB80X6exxuGSHFCtnbc7
-         aaquWzA8IYx5sKGfl5QJuLpQqW2BerSiFqOMTSFMljXMUjKUakWXjMl4eaG5rvhyfzEc
-         tu/zlkRn2yUsx2VjFHbhDQ090+inDXH2uQ0oE/+hwNfKhi5bK878Gg6x9olUc1cuSPdY
-         jjpQ9dsBH1eKQ7MuYo4hur5HEnn+Cq27wjVMc5Rj7FG3U3AOqeRR7h4EsDxmZABG3wNI
-         bA5w==
+        bh=5mK30C12kzWgZOeaCtMpdRb4PfxIih9mHJc8r0tTk/s=;
+        b=cHicjB7upzaw2IUfhKNmlKwjlNvYgN34lFE68OEHgN2QqZwJ12aSvKagS077XR11vK
+         jL9vyGik77iQcv7fhR6E8/Yrg7mYHIbJi3hng08BMIphFykVwgSj8sSV0x0jEVW9qOUH
+         e1b+pmtPIdlfa9E/Ge1XrJP+lK0ht+MNkyOMeX8w+JWFku89yZS/Tk2dYIZEpAhkoyze
+         SkgWQI6rCekZqrFFYvtwdt40C2s6So78mEtv/y85+V7uae4yrUwiBNN2sGwd1k1FY8lb
+         S1WhtfHmsRNxAVvoKDIXss/xEOd+hKByERW42xdDQOkOkJWwlQn9db+hecC+bsatsXep
+         dv8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sPSIxVNqSB9G6SRgGp4hjqBXmPGfCStVgCLOhu5E9sY=;
-        b=6P54VVhPE/9lNi+94zXwsbYcAi9h5Fsysisyt1omxsp4eqe38fFMtuNI6SImyv/Dra
-         cOzDqxDSeNV3RXVUL3GCjbOB4u/j8Iyyw8g0ergBCJd87sMwjPO+a5HsWM/84rCz+k/a
-         dYflGx6x5EZwSQJXMBJankMgNmGhDW8OzKgIP6tnWhRI2viS/QgMe2fCiC2m1DmQ/Vd8
-         A6BnPLAq2BbtwerErRas2B5GwpQMP+dAX0vlpATnWJwlQ1+JvvG7cy441G4aQoKU/qh9
-         30UpbiTKq1nqg4w5v7Pe91A8x0XnQXcJCyq/T565b8jScEqzcHxhnJrQl6UhFEc8Xdu0
-         QuFw==
-X-Gm-Message-State: AJIora8rCxLeFr4U9ssVeluHU4Ngmv9rhYgOJpoanjKzvx5+gIb8XyNU
-        vIfHHDzuy3Pihnap2jNaq39amK+ylqPC/0jQytxXbckY+BLnLQ==
-X-Google-Smtp-Source: AGRyM1vW6EzHFn8SmAqc0MGiAqqOrlbY41AYPMgRFDLYsDM6DU6s5kp/eDr1PcDAn6dFj5Tvca3Ta1GpQT5zj6tjSGM=
-X-Received: by 2002:a25:cbcf:0:b0:66e:8893:a02c with SMTP id
- b198-20020a25cbcf000000b0066e8893a02cmr2813539ybg.460.1657706071710; Wed, 13
- Jul 2022 02:54:31 -0700 (PDT)
+        bh=5mK30C12kzWgZOeaCtMpdRb4PfxIih9mHJc8r0tTk/s=;
+        b=Y8LlfvIV9JOGDH/QQIo2X9JaJQ5gKMNJ2LA/cBrWfRrUAXLfWrvIfN8xsptvc8cXiO
+         Tj9D3Pyg6zGGsB2i3oXF8eHKLRFiGQQHHTo25y/0U8vC4URFBIn2J6ZO1jR/F7XKPwfH
+         DCeaYWLOy2U/8Fl3HF8GuyRWmpdlq/SJ78p4eUIFj5RocqBiuf2yT944k9gP0jLYi0O8
+         BolM01IhRnzeHAn0hx4wnbLZjlrJF/5iLwFXuM1zGS4WhbTcj7g5+zMzkf0dyNGQYQ/1
+         JMH4xyaQ7GUn/Xq/8L/2nNKj4Sls90l+uHqsnBDnzTl+q72YNr1hyWXSw1arKSeY92c7
+         rTUQ==
+X-Gm-Message-State: AJIora8xX5Z2Ykwwir6mAFtKHmhPGvf8LhCmTBtyoksrvDTvmt66FzLw
+        prv3bQRekFNwMfQdkArayxpJA+UtD9PRa6Cq6t4=
+X-Google-Smtp-Source: AGRyM1tIC292TkGgkFTxCTbeScoERtWB6qImXnbiVNqjEYv1PLFbfH3S7dlCy/ZYei2QtcGx07IUkngCJApiDIpfohU=
+X-Received: by 2002:a81:8397:0:b0:31c:8a02:3f6d with SMTP id
+ t145-20020a818397000000b0031c8a023f6dmr3191115ywf.486.1657706127886; Wed, 13
+ Jul 2022 02:55:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220712195043.3842081-1-horatiu.vultur@microchip.com> <20220712195043.3842081-2-horatiu.vultur@microchip.com>
-In-Reply-To: <20220712195043.3842081-2-horatiu.vultur@microchip.com>
+References: <20220712195043.3842081-1-horatiu.vultur@microchip.com> <20220712195043.3842081-3-horatiu.vultur@microchip.com>
+In-Reply-To: <20220712195043.3842081-3-horatiu.vultur@microchip.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 13 Jul 2022 11:53:55 +0200
-Message-ID: <CAHp75VepPJXCiwW+Ztw6awoXwL-d3Sr=TF8xkLyg9uR-bzFxRQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] pinctrl: ocelot: Fix pincfg for lan966x
+Date:   Wed, 13 Jul 2022 11:54:51 +0200
+Message-ID: <CAHp75Ve9bhCMznLemFBc0K04S2vT8gv=aTkHZ6DVc9RZwsPVpw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] pinctrl: ocelot: Fix pincfg
 To:     Horatiu Vultur <horatiu.vultur@microchip.com>
 Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -76,40 +76,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Tue, Jul 12, 2022 at 9:46 PM Horatiu Vultur
 <horatiu.vultur@microchip.com> wrote:
 >
-> The blamed commit introduce support for lan966x which use the same
-> pinconf_ops as sparx5. The problem is that pinconf_ops is specific to
-> sparx5. More precisely the offset of the bits in the pincfg register are
-> different and also lan966x doesn't have support for
-> PIN_CONFIG_INPUT_SCHMITT_ENABLE.
+> The blamed commit changed to use regmaps instead of __iomem. But it
+> didn't update the register offsets to be at word offset, so it uses byte
+> offset.
+> Another issue with the same commit is that it has a limit of 32 registers
+> which is incorrect. The sparx5 has 64 while lan966x has 77.
+
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+> Fixes: 076d9e71bcf8 ("pinctrl: ocelot: convert pinctrl to regmap")
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  drivers/pinctrl/pinctrl-ocelot.c | 19 +++++++++++++------
+>  1 file changed, 13 insertions(+), 6 deletions(-)
 >
-> Fix this by making pinconf_ops more generic such that it can be also
-> used by lan966x. This is done by introducing 'ocelot_pincfg_data' which
-> contains the offset and what is supported for each SOC.
+> diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
+> index 873bba245522..c5a9f87f0c49 100644
+> --- a/drivers/pinctrl/pinctrl-ocelot.c
+> +++ b/drivers/pinctrl/pinctrl-ocelot.c
+> @@ -1334,7 +1334,9 @@ static int ocelot_hw_get_value(struct ocelot_pinctrl *info,
+>                 const struct ocelot_pincfg_data *opd = info->pincfg_data;
+>                 u32 regcfg;
+>
+> -               ret = regmap_read(info->pincfg, pin, &regcfg);
+> +               ret = regmap_read(info->pincfg,
+> +                                 pin * regmap_get_reg_stride(info->pincfg),
+> +                                 &regcfg);
+>                 if (ret)
+>                         return ret;
+>
+> @@ -1366,14 +1368,18 @@ static int ocelot_pincfg_clrsetbits(struct ocelot_pinctrl *info, u32 regaddr,
+>         u32 val;
+>         int ret;
+>
+> -       ret = regmap_read(info->pincfg, regaddr, &val);
+> +       ret = regmap_read(info->pincfg,
+> +                         regaddr * regmap_get_reg_stride(info->pincfg),
+> +                         &val);
+>         if (ret)
+>                 return ret;
+>
+>         val &= ~clrbits;
+>         val |= setbits;
+>
+> -       ret = regmap_write(info->pincfg, regaddr, val);
+> +       ret = regmap_write(info->pincfg,
+> +                          regaddr * regmap_get_reg_stride(info->pincfg),
+> +                          val);
+>
+>         return ret;
+>  }
+> @@ -1932,7 +1938,8 @@ static const struct of_device_id ocelot_pinctrl_of_match[] = {
+>         {},
+>  };
+>
+> -static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
+> +static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev,
+> +                                                  const struct ocelot_pinctrl *info)
+>  {
+>         void __iomem *base;
+>
+> @@ -1940,7 +1947,7 @@ static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
+>                 .reg_bits = 32,
+>                 .val_bits = 32,
+>                 .reg_stride = 4,
+> -               .max_register = 32,
+> +               .max_register = info->desc->npins * 4,
+>                 .name = "pincfg",
+>         };
+>
+> @@ -2008,7 +2015,7 @@ static int ocelot_pinctrl_probe(struct platform_device *pdev)
+>
+>         /* Pinconf registers */
+>         if (info->desc->confops) {
+> -               pincfg = ocelot_pinctrl_create_pincfg(pdev);
+> +               pincfg = ocelot_pinctrl_create_pincfg(pdev, info);
+>                 if (IS_ERR(pincfg))
+>                         dev_dbg(dev, "Failed to create pincfg regmap\n");
+>                 else
+> --
+> 2.33.0
+>
 
-Looks better, my comments below.
-
-...
-
-> +               const struct ocelot_pincfg_data *opd = info->pincfg_data;
-
-This one...
-
-...
-
-> @@ -1425,17 +1436,20 @@ static int ocelot_pinconf_get(struct pinctrl_dev *pctldev,
-
-...can also be applied here...
-
-...
-
->                 case PIN_CONFIG_BIAS_PULL_DOWN:
->                         arg = (param == PIN_CONFIG_BIAS_DISABLE) ? 0 :
-> -                       (param == PIN_CONFIG_BIAS_PULL_UP) ? BIAS_PU_BIT :
-> -                       BIAS_PD_BIT;
-> +                       (param == PIN_CONFIG_BIAS_PULL_UP) ? info->pincfg_data->pu_bit :
-> +                       info->pincfg_data->pd_bit;
-
-...which in particular may help to sort out this indentation mess.
 
 -- 
 With Best Regards,

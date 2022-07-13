@@ -2,124 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36FA3573265
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5667573268
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234421AbiGMJ0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S234793AbiGMJ0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbiGMJ0H (ORCPT
+        with ESMTP id S234603AbiGMJ0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:26:07 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94CCEF9DA
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:26:05 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so2693006pjm.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:26:05 -0700 (PDT)
+        Wed, 13 Jul 2022 05:26:32 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7913DF2700
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:26:30 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id c15so12839514ljr.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:26:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vQEG1g5aM3Tjy/jRcXsLvnY4WNvgT+rmdCcMcFykq/0=;
-        b=JUlmieSVVqSEZ9LhE/KCwIwkX6WoOfcIzrg+8if5/LvHSy0O7VM3vl1JErx0I1YeZH
-         eGBjdCY2Lb8Su/nARyD5liPLOZCf+r3VXv7niv6gASrPeoBDE6Ahc0n37LM+w/1doTc6
-         n2uPmlBcUBQ0VqfZU4d1/XYvQaSTcYGiKwmKyBRNZS/ozfZT1TovE+vhkpOp/CLFLx86
-         aPZm207VqtXAM4aUP3wXY4yMiNZ5bHRtiFgr+hcw/aad3AHDZSCEyzVcO2pW2eCEpgJt
-         jRjqPqpYqrLfGVq1fbdkr2TS8Ple8gVywscsXBjn7O79Z2B0UtKmw5ochTRIxwr8r4D6
-         wqqg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=OZFjfGPRJEW+XiqadcZTKJjaB0j0swaCsivThrUDMjU=;
+        b=FCq6yuxggtQBm0dxq0c7IwcN9P1nVA62ZuMomo1VhXktJb+Sd35ROgB0YAtDZn+KAx
+         ztIXecxk77fQfTuTU2FE7kDuGF0eFSy+kcNeFLyb9jdJeP4nQl0CvF5cvUAnIEaFu07o
+         ZNAc59DTx9DhmY0BPQ3Vo1AWzsisEqWKB+pKkqSwM0Qpty9YI1xHXiDqG65dc375evFf
+         uPnMKKwz0Aiz+KVRW+/lf2Ng0mF4QZj5M1kkTyZXZtscz4ASABAJ2efqmhG1/VCcCAnm
+         k+GOHSmkv5sVHk80Lrg7GD4GEs1b3dGa0uMQe5KEJ0pjKYC7j/mPNhbvo4NwQZgKwvzv
+         1Gkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vQEG1g5aM3Tjy/jRcXsLvnY4WNvgT+rmdCcMcFykq/0=;
-        b=NLZT/ZfPffMkrEcwyQRWFcpo0xvUkvR2U9z3HWe2Ps4Hsh70lzLrB3mgiqIwSsvphR
-         mPSLYL0E4ksnBdXdz3Aq9tKdjuy8N431Pbg1tPeiF8o9IJ6KWUO+bsT5QF8a0STQJqhM
-         fTWT7i33IsTTpGGoCIpueF3hMOliPYdLZy9dPQ6kHiRplXFfI5frsh+3nlaJeVT50HwE
-         r1yzCzs/R5v5xyngYEDV3GVvGGruKwbhEl8tR2IqTgZHU4p1OG9t/mOBsnBWTEh9h+Bw
-         wAV1GX7k0efclR7/C2G7nI8W86qEZxIobmaxFVdL4Z4Xu1Och7o8K1FHasRNTq/Stku4
-         Dd+Q==
-X-Gm-Message-State: AJIora+7J7jhqfXJNObCClw9dc42GFPerI2777ZIA1RPDcBRZlHyaLWK
-        5IfVuSJT6LpmS0oQp0iKOEU=
-X-Google-Smtp-Source: AGRyM1tsuoRCK6Jp4dz6GTmxO1McHEIzj8GM1jydMubRZRPWegfaivwvP6g3pGtHMWu32032Q4FOjQ==
-X-Received: by 2002:a17:90b:38ce:b0:1ef:c5bd:e2bd with SMTP id nn14-20020a17090b38ce00b001efc5bde2bdmr2873563pjb.149.1657704365217;
-        Wed, 13 Jul 2022 02:26:05 -0700 (PDT)
-Received: from ip-172-31-24-42.ap-northeast-1.compute.internal (ec2-35-77-58-189.ap-northeast-1.compute.amazonaws.com. [35.77.58.189])
-        by smtp.gmail.com with ESMTPSA id z4-20020a170902ccc400b001677fa34a07sm3693091ple.43.2022.07.13.02.26.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 02:26:04 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 09:25:59 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Christoph Lameter <cl@gentwo.de>
-Cc:     Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Joe Perches <joe@perches.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Matthew WilCox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Marco Elver <elver@google.com>
-Subject: Re: [PATCH 16/16] mm/sl[au]b: check if large object is valid in
- __ksize()
-Message-ID: <Ys6Pp6ZPwJTdJvpk@ip-172-31-24-42.ap-northeast-1.compute.internal>
-References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
- <20220712133946.307181-17-42.hyeyoo@gmail.com>
- <alpine.DEB.2.22.394.2207121701070.57893@gentwo.de>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OZFjfGPRJEW+XiqadcZTKJjaB0j0swaCsivThrUDMjU=;
+        b=35kLPthGw7xmZBSmHKOVd8UyHoerkl+AWFvEv840pgcw0VzWBpjLqAS3YDrvmLD4pu
+         x5LO0kAYfIpQKIYuOHcbZ5s2RqqVJqotAKukL2ae8ktw3Ghh2mQzxYNZSQZ3QH53jhoe
+         BtmbYtcbWZAy5gNy+vn7BLISs8Cp8Lmi7saLr66Bk/PhJQ48+cE1u4MO6NtJ1CdCc/LP
+         8hkGNvjXtrZ2Cyw5JuVYk/eFc9wk50kEe7voMIkb+3f5r8KOJIx0Ym07wl5JGwUxu92S
+         N23143T5DjbN6uMaDhs4F2KCSrO0eFQ51+2ppW26IOmZ7VBlDVI6FRr3ZW7cUxTIMZeX
+         oGVQ==
+X-Gm-Message-State: AJIora9zhrqXuCX7PtDfu9HXiYBy3M1djEp8jjyKegflsFqJxfDIaqou
+        rE/36tvdo+UORnhkrKron5tBtA==
+X-Google-Smtp-Source: AGRyM1sQ+DurMXduxwN29r9TeaVTPcZRiz0hdxAFf3tJqkALw+WRbPHct7ZSENDmwyDn5R8afxflAg==
+X-Received: by 2002:a05:651c:1a1f:b0:25d:4517:faf with SMTP id by31-20020a05651c1a1f00b0025d45170fafmr1166257ljb.415.1657704388771;
+        Wed, 13 Jul 2022 02:26:28 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id v6-20020a2ea606000000b0025a672e97a6sm3033273ljp.80.2022.07.13.02.26.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 02:26:27 -0700 (PDT)
+Message-ID: <6acbebb6-177c-c5b5-f9e8-a374b9276fc1@linaro.org>
+Date:   Wed, 13 Jul 2022 11:26:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2207121701070.57893@gentwo.de>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/7] pwm: dwc: add of/platform support
+Content-Language: en-US
+To:     Ben Dooks <ben.dooks@sifive.com>, linux-pwm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        u.kleine-koenig@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Adnan Chowdhury <adnan.chowdhury@sifive.com>
+References: <20220712100113.569042-1-ben.dooks@sifive.com>
+ <20220712100113.569042-4-ben.dooks@sifive.com>
+ <fdef31b4-9c27-ddda-f1e5-ee881812aa4e@linaro.org>
+ <3a1eea1f-b598-58ad-60a6-c76b77cb08c4@sifive.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3a1eea1f-b598-58ad-60a6-c76b77cb08c4@sifive.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 05:13:44PM +0200, Christoph Lameter wrote:
-> On Tue, 12 Jul 2022, Hyeonggon Yoo wrote:
+On 13/07/2022 11:21, Ben Dooks wrote:
+> On 12/07/2022 11:08, Krzysztof Kozlowski wrote:
+>> On 12/07/2022 12:01, Ben Dooks wrote:
+>>> The dwc pwm controller can be used in non-PCI systems, so allow
+>>> either platform or OF based probing.
+>>>
+>>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+>>> ---
+>>>   .../devicetree/bindings/pwm/pwm-synposys.yaml | 40 ++++++++++++++
+>>
+>> Bindings must be a separate patch. Preferably first in the series. Use
+>> proper subject prefix matching the subsystem.
+>>
+>> Best regards,
+>> Krzysztof
 > 
-> > __ksize() returns size of objects allocated from slab allocator.
-> > When invalid object is passed to __ksize(), returning zero
-> > prevents further memory corruption and makes caller be able to
-> > check if there is an error.
-> >
-> > If address of large object is not beginning of folio or size of
-> > the folio is too small, it must be invalid. Return zero in such cases.
-> 
-> Why return 0 if there is an error and why bother the callers with these
-> checks. BUG()?
+> Thanks, seems counter-intuitive that one change is split up like that.
 
-I thought BUG should be used when there is no other solution.
+Why? Bindings are not really related to driver implementation, they are
+shared with other projects. Binding reviewers usually care less about
+implementation, so combining it with drivers forces me to read carefully
+each one of 300 emails I receive...
 
-> > diff --git a/mm/slab_common.c b/mm/slab_common.c
-> > index 1f8db7959366..0d6cbe9d7ad0 100644
-> > --- a/mm/slab_common.c
-> > +++ b/mm/slab_common.c
-> > @@ -1013,8 +1013,12 @@ size_t __ksize(const void *object)
-> >
-> >  	folio = virt_to_folio(object);
-> >
-> > -	if (unlikely(!folio_test_slab(folio)))
-> > +	if (unlikely(!folio_test_slab(folio))) {
-> > +		if (WARN_ON(object != folio_address(folio) ||
-> > +				folio_size(folio) <= KMALLOC_MAX_CACHE_SIZE))
-> 
-> Hmmm... This may change things a bit. Before this patch it was possible to
-> determine the storage size of order-0 pages using ksize(). Now this
-> returns 0?
-> 
-> I guess this is an error since the order-0 page cannot come from slab
-> allocations.
+Anyway, that's the policy since years, so nothing new here.
 
-comment in ksize() says:
-	"The caller must guarantee that objp points to a valid object
-	previously allocated with either kmalloc() or kmem_cache_alloc()."
-
-It should not be used on order-0 page that is not allocated from slab. No?
+Best regards,
+Krzysztof

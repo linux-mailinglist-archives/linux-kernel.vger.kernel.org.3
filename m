@@ -2,104 +2,408 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1EE573320
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79425573333
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234610AbiGMJoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
+        id S234982AbiGMJpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235701AbiGMJoJ (ORCPT
+        with ESMTP id S235573AbiGMJp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:44:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7163F22B2C
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:44:08 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 87BA91424;
-        Wed, 13 Jul 2022 02:44:08 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7AB1F3F792;
-        Wed, 13 Jul 2022 02:44:06 -0700 (PDT)
-Message-ID: <76169a43-cda0-177a-2b1f-7dcdad900935@arm.com>
-Date:   Wed, 13 Jul 2022 11:43:57 +0200
+        Wed, 13 Jul 2022 05:45:26 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79347F32E5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:45:21 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26D9KUV2018825;
+        Wed, 13 Jul 2022 09:45:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : content-type :
+ mime-version; s=pp1; bh=4agpL7UqdqIDNwrizlkC9Ic+EJpRa8vQ/atAwysW8Eo=;
+ b=Jr1Pqq+hSOR3MdXpxDpucEsqRrDxu+R9adJ36pBdRP0osRMk0zQ1grpFTbwfeoe1E99Y
+ TuYY1eNmaM9aK9icYNymP5Eqmq4Dg+Q8IYPtULLx44oSrZUI7kR7VZSBCd6nV5NfmyfT
+ JuIc0eLr7U5DuPt/ZKOD4yU6Ro1woJkPE2ooqzEz7HEgK2HTYcv1dUL1iR9BvSVVQiY2
+ fTvdIS+3zm1XLs0zfgf8/SRSe4OKsNW1W3TqTQiaSQeW3a37a7hMRSxaKuLgcxQ2vPnS
+ b1Fv941g+YgdQawf8RZc1yvIWGDLNA+SOIaybuIW4cOvlg6JwLoK+T4vmWnwhduKEIsi cg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9ub60h7m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 09:45:02 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26D9Kp0p019677;
+        Wed, 13 Jul 2022 09:45:02 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9ub60h73-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 09:45:02 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26D9ZgHO002672;
+        Wed, 13 Jul 2022 09:45:01 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma01wdc.us.ibm.com with ESMTP id 3h71a9bags-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 09:45:01 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26D9j0Pj29426082
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Jul 2022 09:45:00 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 68FFF6E052;
+        Wed, 13 Jul 2022 09:45:00 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CA7CD6E04E;
+        Wed, 13 Jul 2022 09:44:54 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.122.219])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 13 Jul 2022 09:44:54 +0000 (GMT)
+X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Wei Xu <weixugc@google.com>, "Huang, Ying" <ying.huang@intel.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>, jvgediya.oss@gmail.com
+Subject: Re: [PATCH v8 00/12] mm/demotion: Memory tiers and demotion
+In-Reply-To: <CAAPL-u8pH1f+x+e5vSqq_m1zb+rPe0F-FH4GeJPu8-MrRS4mjQ@mail.gmail.com>
+References: <20220704070612.299585-1-aneesh.kumar@linux.ibm.com>
+ <87r130b2rh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <60e97fa2-0b89-cf42-5307-5a57c956f741@linux.ibm.com>
+ <87r12r5dwu.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <0a55e48a-b4b7-4477-a72f-73644b5fc4cb@linux.ibm.com>
+ <87mtde6cla.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <fef35622-0bd4-f220-26bd-37d8e0112c4d@linux.ibm.com>
+ <87ilo267jl.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <ad4b095b-bb85-b01f-5d69-383219384c29@linux.ibm.com>
+ <87edyp67m1.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAAPL-u8pH1f+x+e5vSqq_m1zb+rPe0F-FH4GeJPu8-MrRS4mjQ@mail.gmail.com>
+Date:   Wed, 13 Jul 2022 15:14:52 +0530
+Message-ID: <875yk1uz1n.fsf@linux.ibm.com>
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: gxwe0wXeV-Ud3RUnuoYPsND-6wgXBp3y
+X-Proofpoint-ORIG-GUID: QRYeX1Cr2ospAR_hSD87FsNbuLNjhcL-
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 1/2] sched/rt: fix bad task migration for rt tasks
-Content-Language: en-US
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org
-References: <20220712150506.632304-1-schspa@gmail.com>
- <c1db7f31-82e1-eac4-bd49-212859727cb2@arm.com> <m2h73me3nk.fsf@gmail.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <m2h73me3nk.fsf@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_14,2022-07-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ phishscore=0 adultscore=0 bulkscore=0 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207130040
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2022 17:35, Schspa Shi wrote:
-> 
-> Dietmar Eggemann <dietmar.eggemann@arm.com> writes:
-> 
->> On 12/07/2022 17:05, Schspa Shi wrote:
+Wei Xu <weixugc@google.com> writes:
 
-[...]
-
->> What code-base is this?
-> 
-> This is the logs from 5.10.59-rt
-> Link: https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-> v5.10.59-rt52 (9007b684f615750b0ee4ec57b5e547a4bf4a223e).
-
-Thanks.
-
->> IMHO, currently this `WARN_ON_ONCE(is_migration_disabled(p))` in
->> set_task_cpu() is at > line 3000.
+> On Tue, Jul 12, 2022 at 8:03 PM Huang, Ying <ying.huang@intel.com> wrote:
 >>
-> 
-> But the master code have this BUG too.
-
-I see. It's just that need_to_push in task_woken_rt() triggers
-push_rt_tasks() much more often on preempt-rt.
-
-[...]
-
->>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
->>> index 8c9ed96648409..7bd3e6ecbe45e 100644
->>> --- a/kernel/sched/rt.c
->>> +++ b/kernel/sched/rt.c
->>> @@ -1998,11 +1998,15 @@ static struct rq *find_lock_lowest_rq(struct task_struct *task, struct rq *rq)
->>>  			 * the mean time, task could have
->>>  			 * migrated already or had its affinity changed.
->>>  			 * Also make sure that it wasn't scheduled on its rq.
->>> +			 * It is possible the task was scheduled, set
->>> +			 * "migrate_disabled" and then got preempted, so we must
->>> +			 * check the task migration disable flag here too.
->>>  			 */
->>>  			if (unlikely(task_rq(task) != rq ||
->>>  				     !cpumask_test_cpu(lowest_rq->cpu, &task->cpus_mask) ||
->>>  				     task_running(rq, task) ||
->>>  				     !rt_task(task) ||
->>> +				     is_migration_disabled(task) ||
+>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 >>
->> I wonder why this isn't covered by `task_rq(task) != rq` in this condition?
+>> > On 7/12/22 2:18 PM, Huang, Ying wrote:
+>> >> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>> >>
+>> >>> On 7/12/22 12:29 PM, Huang, Ying wrote:
+>> >>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>> >>>>
+>> >>>>> On 7/12/22 6:46 AM, Huang, Ying wrote:
+>> >>>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>> >>>>>>
+>> >>>>>>> On 7/5/22 9:59 AM, Huang, Ying wrote:
+>> >>>>>>>> Hi, Aneesh,
+>> >>>>>>>>
+>> >>>>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>> >>>>>>>>
+>> >>>>>>>>> The current kernel has the basic memory tiering support: Inactive
+>> >>>>>>>>> pages on a higher tier NUMA node can be migrated (demoted) to a lower
+>> >>>>>>>>> tier NUMA node to make room for new allocations on the higher tier
+>> >>>>>>>>> NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
+>> >>>>>>>>> migrated (promoted) to a higher tier NUMA node to improve the
+>> >>>>>>>>> performance.
+>> >>>>>>>>>
+>> >>>>>>>>> In the current kernel, memory tiers are defined implicitly via a
+>> >>>>>>>>> demotion path relationship between NUMA nodes, which is created during
+>> >>>>>>>>> the kernel initialization and updated when a NUMA node is hot-added or
+>> >>>>>>>>> hot-removed.  The current implementation puts all nodes with CPU into
+>> >>>>>>>>> the top tier, and builds the tier hierarchy tier-by-tier by establishing
+>> >>>>>>>>> the per-node demotion targets based on the distances between nodes.
+>> >>>>>>>>>
+>> >>>>>>>>> This current memory tier kernel interface needs to be improved for
+>> >>>>>>>>> several important use cases:
+>> >>>>>>>>>
+>> >>>>>>>>> * The current tier initialization code always initializes
+>> >>>>>>>>>   each memory-only NUMA node into a lower tier.  But a memory-only
+>> >>>>>>>>>   NUMA node may have a high performance memory device (e.g. a DRAM
+>> >>>>>>>>>   device attached via CXL.mem or a DRAM-backed memory-only node on
+>> >>>>>>>>>   a virtual machine) and should be put into a higher tier.
+>> >>>>>>>>>
+>> >>>>>>>>> * The current tier hierarchy always puts CPU nodes into the top
+>> >>>>>>>>>   tier. But on a system with HBM (e.g. GPU memory) devices, these
+>> >>>>>>>>>   memory-only HBM NUMA nodes should be in the top tier, and DRAM nodes
+>> >>>>>>>>>   with CPUs are better to be placed into the next lower tier.
+>> >>>>>>>>>
+>> >>>>>>>>> * Also because the current tier hierarchy always puts CPU nodes
+>> >>>>>>>>>   into the top tier, when a CPU is hot-added (or hot-removed) and
+>> >>>>>>>>>   triggers a memory node from CPU-less into a CPU node (or vice
+>> >>>>>>>>>   versa), the memory tier hierarchy gets changed, even though no
+>> >>>>>>>>>   memory node is added or removed.  This can make the tier
+>> >>>>>>>>>   hierarchy unstable and make it difficult to support tier-based
+>> >>>>>>>>>   memory accounting.
+>> >>>>>>>>>
+>> >>>>>>>>> * A higher tier node can only be demoted to selected nodes on the
+>> >>>>>>>>>   next lower tier as defined by the demotion path, not any other
+>> >>>>>>>>>   node from any lower tier.  This strict, hard-coded demotion order
+>> >>>>>>>>>   does not work in all use cases (e.g. some use cases may want to
+>> >>>>>>>>>   allow cross-socket demotion to another node in the same demotion
+>> >>>>>>>>>   tier as a fallback when the preferred demotion node is out of
+>> >>>>>>>>>   space), and has resulted in the feature request for an interface to
+>> >>>>>>>>>   override the system-wide, per-node demotion order from the
+>> >>>>>>>>>   userspace.  This demotion order is also inconsistent with the page
+>> >>>>>>>>>   allocation fallback order when all the nodes in a higher tier are
+>> >>>>>>>>>   out of space: The page allocation can fall back to any node from
+>> >>>>>>>>>   any lower tier, whereas the demotion order doesn't allow that.
+>> >>>>>>>>>
+>> >>>>>>>>> * There are no interfaces for the userspace to learn about the memory
+>> >>>>>>>>>   tier hierarchy in order to optimize its memory allocations.
+>> >>>>>>>>>
+>> >>>>>>>>> This patch series make the creation of memory tiers explicit under
+>> >>>>>>>>> the control of userspace or device driver.
+>> >>>>>>>>>
+>> >>>>>>>>> Memory Tier Initialization
+>> >>>>>>>>> ==========================
+>> >>>>>>>>>
+>> >>>>>>>>> By default, all memory nodes are assigned to the default tier with
+>> >>>>>>>>> tier ID value 200.
+>> >>>>>>>>>
+>> >>>>>>>>> A device driver can move up or down its memory nodes from the default
+>> >>>>>>>>> tier.  For example, PMEM can move down its memory nodes below the
+>> >>>>>>>>> default tier, whereas GPU can move up its memory nodes above the
+>> >>>>>>>>> default tier.
+>> >>>>>>>>>
+>> >>>>>>>>> The kernel initialization code makes the decision on which exact tier
+>> >>>>>>>>> a memory node should be assigned to based on the requests from the
+>> >>>>>>>>> device drivers as well as the memory device hardware information
+>> >>>>>>>>> provided by the firmware.
+>> >>>>>>>>>
+>> >>>>>>>>> Hot-adding/removing CPUs doesn't affect memory tier hierarchy.
+>> >>>>>>>>>
+>> >>>>>>>>> Memory Allocation for Demotion
+>> >>>>>>>>> ==============================
+>> >>>>>>>>> This patch series keep the demotion target page allocation logic same.
+>> >>>>>>>>> The demotion page allocation pick the closest NUMA node in the
+>> >>>>>>>>> next lower tier to the current NUMA node allocating pages from.
+>> >>>>>>>>>
+>> >>>>>>>>> This will be later improved to use the same page allocation strategy
+>> >>>>>>>>> using fallback list.
+>> >>>>>>>>>
+>> >>>>>>>>> Sysfs Interface:
+>> >>>>>>>>> -------------
+>> >>>>>>>>> Listing current list of memory tiers details:
+>> >>>>>>>>>
+>> >>>>>>>>> :/sys/devices/system/memtier$ ls
+>> >>>>>>>>> default_tier max_tier  memtier1  power  uevent
+>> >>>>>>>>> :/sys/devices/system/memtier$ cat default_tier
+>> >>>>>>>>> memtier200
+>> >>>>>>>>> :/sys/devices/system/memtier$ cat max_tier
+>> >>>>>>>>> 400
+>> >>>>>>>>> :/sys/devices/system/memtier$
+>> >>>>>>>>>
+>> >>>>>>>>> Per node memory tier details:
+>> >>>>>>>>>
+>> >>>>>>>>> For a cpu only NUMA node:
+>> >>>>>>>>>
+>> >>>>>>>>> :/sys/devices/system/node# cat node0/memtier
+>> >>>>>>>>> :/sys/devices/system/node# echo 1 > node0/memtier
+>> >>>>>>>>> :/sys/devices/system/node# cat node0/memtier
+>> >>>>>>>>> :/sys/devices/system/node#
+>> >>>>>>>>>
+>> >>>>>>>>> For a NUMA node with memory:
+>> >>>>>>>>> :/sys/devices/system/node# cat node1/memtier
+>> >>>>>>>>> 1
+>> >>>>>>>>> :/sys/devices/system/node# ls ../memtier/
+>> >>>>>>>>> default_tier  max_tier  memtier1  power  uevent
+>> >>>>>>>>> :/sys/devices/system/node# echo 2 > node1/memtier
+>> >>>>>>>>> :/sys/devices/system/node#
+>> >>>>>>>>> :/sys/devices/system/node# ls ../memtier/
+>> >>>>>>>>> default_tier  max_tier  memtier1  memtier2  power  uevent
+>> >>>>>>>>> :/sys/devices/system/node# cat node1/memtier
+>> >>>>>>>>> 2
+>> >>>>>>>>> :/sys/devices/system/node#
+>> >>>>>>>>>
+>> >>>>>>>>> Removing a memory tier
+>> >>>>>>>>> :/sys/devices/system/node# cat node1/memtier
+>> >>>>>>>>> 2
+>> >>>>>>>>> :/sys/devices/system/node# echo 1 > node1/memtier
+>> >>>>>>>>
+>> >>>>>>>> Thanks a lot for your patchset.
+>> >>>>>>>>
+>> >>>>>>>> Per my understanding, we haven't reach consensus on
+>> >>>>>>>>
+>> >>>>>>>> - how to create the default memory tiers in kernel (via abstract
+>> >>>>>>>>   distance provided by drivers?  Or use SLIT as the first step?)
+>> >>>>>>>>
+>> >>>>>>>> - how to override the default memory tiers from user space
+>> >>>>>>>>
+>> >>>>>>>> As in the following thread and email,
+>> >>>>>>>>
+>> >>>>>>>> https://lore.kernel.org/lkml/YqjZyP11O0yCMmiO@cmpxchg.org/
+>> >>>>>>>>
+>> >>>>>>>> I think that we need to finalized on that firstly?
+>> >>>>>>>
+>> >>>>>>> I did list the proposal here
+>> >>>>>>>
+>> >>>>>>> https://lore.kernel.org/linux-mm/7b72ccf4-f4ae-cb4e-f411-74d055482026@linux.ibm.com
+>> >>>>>>>
+>> >>>>>>> So both the kernel default and driver-specific default tiers now become kernel parameters that can be updated
+>> >>>>>>> if the user wants a different tier topology.
+>> >>>>>>>
+>> >>>>>>> All memory that is not managed by a driver gets added to default_memory_tier which got a default value of 200
+>> >>>>>>>
+>> >>>>>>> For now, the only driver that is updated is dax kmem, which adds the memory it manages to memory tier 100.
+>> >>>>>>> Later as we learn more about the device attributes (HMAT or something similar) that we might want to use
+>> >>>>>>> to control the tier assignment this can be a range of memory tiers.
+>> >>>>>>>
+>> >>>>>>> Based on the above, I guess we can merge what is posted in this series and later fine-tune/update
+>> >>>>>>> the memory tier assignment based on device attributes.
+>> >>>>>>
+>> >>>>>> Sorry for late reply.
+>> >>>>>>
+>> >>>>>> As the first step, it may be better to skip the parts that we haven't
+>> >>>>>> reached consensus yet, for example, the user space interface to override
+>> >>>>>> the default memory tiers.  And we can use 0, 1, 2 as the default memory
+>> >>>>>> tier IDs.  We can refine/revise the in-kernel implementation, but we
+>> >>>>>> cannot change the user space ABI.
+>> >>>>>>
+>> >>>>>
+>> >>>>> Can you help list the use case that will be broken by using tierID as outlined in this series?
+>> >>>>> One of the details that were mentioned earlier was the need to track top-tier memory usage in a
+>> >>>>> memcg and IIUC the patchset posted https://lore.kernel.org/linux-mm/cover.1655242024.git.tim.c.chen@linux.intel.com
+>> >>>>> can work with tier IDs too. Let me know if you think otherwise. So at this point
+>> >>>>> I am not sure which area we are still debating w.r.t the userspace interface.
+>> >>>>
+>> >>>> In
+>> >>>>
+>> >>>> https://lore.kernel.org/lkml/YqjZyP11O0yCMmiO@cmpxchg.org/
+>> >>>>
+>> >>>> per my understanding, Johannes suggested to override the kernel default
+>> >>>> memory tiers with "abstract distance" via drivers implementing memory
+>> >>>> devices.  As you said in another email, that is related to [7/12] of the
+>> >>>> series.  And we can table it for future.
+>> >>>>
+>> >>>> And per my understanding, he also suggested to make memory tier IDs
+>> >>>> dynamic.  For example, after the "abstract distance" of a driver is
+>> >>>> overridden by users, the total number of memory tiers may be changed,
+>> >>>> and the memory tier ID of some nodes may be changed too.  This will make
+>> >>>> memory tier ID easier to be understood, but more unstable.  For example,
+>> >>>> this will make it harder to specify the per-memory-tier memory partition
+>> >>>> for a cgroup.
+>> >>>>
+>> >>>
+>> >>> With all the approaches we discussed so far, a memory tier of a numa node can be changed.
+>> >>> ie, pgdat->memtier can change anytime. The per memcg top tier mem usage tracking patches
+>> >>> posted here
+>> >>> https://lore.kernel.org/linux-mm/cefeb63173fa0fac7543315a2abbd4b5a1b25af8.1655242024.git.tim.c.chen@linux.intel.com/
+>> >>> doesn't consider the node movement from one memory tier to another. If we need
+>> >>> a stable pgdat->memtier we will have to prevent a node memory tier reassignment
+>> >>> while we have pages from the memory tier charged to a cgroup. This patchset should not
+>> >>> prevent such a restriction.
+>> >>
+>> >> Absolute stableness doesn't exist even in "rank" based solution.  But
+>> >> "rank" can improve the stableness at some degree.  For example, if we
+>> >> move the tier of HBM nodes (from below DRAM to above DRAM), the DRAM
+>> >> nodes can keep its memory tier ID stable.  This may be not a real issue
+>> >> finally.  But we need to discuss that.
+>> >>
+>> >
+>> > I agree that using ranks gives us the flexibility to change demotion order
+>> > without being blocked by cgroup usage. But how frequently do we expect the
+>> > tier assignment to change? My expectation was these reassignments are going
+>> > to be rare and won't happen frequently after a system is up and running?
+>> > Hence using tierID for demotion order won't prevent a node reassignment
+>> > much because we don't expect to change the node tierID during runtime. In
+>> > the rare case we do, we will have to make sure there is no cgroup usage from
+>> > the specific memory tier.
+>> >
+>> > Even if we use ranks, we will have to avoid a rank update, if such
+>> > an update can change the meaning of top tier? ie, if a rank update
+>> > can result in a node being moved from top tier to non top tier.
+>> >
+>> >> Tim has suggested to use top-tier(s) memory partition among cgroups.
+>> >> But I don't think that has been finalized.  We may use per-memory-tier
+>> >> memory partition among cgroups.  I don't know whether Wei will use that
+>> >> (may be implemented in the user space).
+>> >>
+>> >> And, if we thought stableness between nodes and memory tier ID isn't
+>> >> important.  Why should we use sparse memory device IDs (that is, 100,
+>> >> 200, 300)?  Why not just 0, 1, 2, ...?  That looks more natural.
+>> >>
+>> >
+>> >
+>> > The range allows us to use memtier ID for demotion order. ie, as we start initializing
+>> > devices with different attributes via dax kmem, there will be a desire to
+>> > assign them to different tierIDs. Having default memtier ID (DRAM) at 200 enables
+>> > us to put these devices in the range [0 - 200) without updating the node to memtier
+>> > mapping of existing NUMA nodes (ie, without updating default memtier).
 >>
-> 
-> It's because thie task is not migrated, it just get scheduled and
-> calling migrate_disable(); and then got preempted by it's CPU core
-> before enable migrate_enable(). the task_rq not changed in this
-> scenarios.
+>> I believe that sparse memory tier IDs can make memory tier more stable
+>> in some cases.  But this is different from the system suggested by
+>> Johannes.  Per my understanding, with Johannes' system, we will
+>>
+>> - one driver may online different memory types (such as kmem_dax may
+>>   online HBM, PMEM, etc.)
+>>
+>> - one memory type manages several memory nodes (NUMA nodes)
+>>
+>> - one "abstract distance" for each memory type
+>>
+>> - the "abstract distance" can be offset by user space override knob
+>>
+>> - memory tiers generated dynamic from different memory types according
+>>   "abstract distance" and overridden "offset"
+>>
+>> - the granularity to group several memory types into one memory tier can
+>>   be overridden via user space knob
+>>
+>> In this way, the memory tiers may be changed totally after user space
+>> overridden.  It may be hard to link memory tiers before/after the
+>> overridden.  So we may need to reset all per-memory-tier configuration,
+>> such as cgroup paritation limit or interleave weight, etc.
+>>
+>> Personally, I think the system above makes sense.  But I think we need
+>> to make sure whether it satisfies the requirements.
+>>
+>> Best Regards,
+>> Huang, Ying
+>>
+>
+> Th "memory type" and "abstract distance" concepts sound to me similar
+> to the memory tier "rank" idea.
+>
+> We can have some well-defined type/distance/rank values, e.g. HBM,
+> DRAM, CXL_DRAM, PMEM, CXL_PMEM, which a device can register with.  The
+> memory tiers will build from these values.  It can be configurable to
+> whether/how to collapse several values into a single tier.
 
-Yes, get it now. Essentially we need `current CPU (CPU0) != rq->cpu
-(CPU1)`. Now I see that you had the discussion with Steven already on v3 ;-)
+But then we also don't want to not use it directly for demotion
+order. Instead, we can use tierID. The memory type to memory tier assignment
+can be fine-tuned using device attribute/"abstract
+distance"/rank/userspace override etc.
+
+-aneesh

@@ -2,199 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F408C5739BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA7B5739BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236840AbiGMPI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
+        id S236657AbiGMPIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236351AbiGMPHe (ORCPT
+        with ESMTP id S236788AbiGMPIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:07:34 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068B34C62D
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:06:50 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id i204-20020a1c3bd5000000b003a2fa488efdso1049488wma.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=S870gAIGJJG5wbnKkLGfuHM1oPY3XJ0b8gnuuYnNBhk=;
-        b=HSaBi7kNblhwXwZ5+3BBnlTAa+0J+16JMVqfF+/WUAwzL/ajz/czXYl5lheiAmF8MV
-         l7pJ4rIxyoCDWNy9/NevaJewgVkbfsDVtwPKgQkzTyx1Mye/lskFbTQggS0fblSMT6vq
-         oW7lf25+g+v0KCk4y//xck/3pYqHkPUz8mmzc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=S870gAIGJJG5wbnKkLGfuHM1oPY3XJ0b8gnuuYnNBhk=;
-        b=E+DF/RK0pPi21f5/iUeqXBppkXX/j1WSQbNS/Y5ibx4aHsVOtezA26nq8FvQ55NGq5
-         7PQCkM+ah1JD5fKLnO+XwgOQhGsQCKbZx2N3RK3YcThLuPHZnKch7/kJf3vGcf4e8oPr
-         JX33lHOkDyUU9o2a3CyODB3cMS0N2wmCdi0viRwOYQhSUxTvIx2tm5EC+D19HSTRdxgh
-         vTMpCasMF5658VI2nfuCC3gKK6vuk9GRshjxVpMzNqTcq3IN7KpAkQRnWPYiaHXjRMZb
-         FODc50qisOrweqNrCNNaT+MZiLFFZJdWjMQQ91wEYsQqSv56pcOcSvS2t5/zbDCyKIbt
-         a7Uw==
-X-Gm-Message-State: AJIora8WdTFpySraP/kqWOE3DgsuMaLhI9V+qa9PDXiIujaDzMxu70ku
-        41Q04u8/hdBPHDhDFXKNc6+p7g==
-X-Google-Smtp-Source: AGRyM1vZGJwn8mfldPvJhnlwK/C8tCWflZBhZAobYR+Xmu7mnOWQcypB3EgZo3C/S9q70UytXZ7HTA==
-X-Received: by 2002:a05:600c:511c:b0:3a2:e2e9:6563 with SMTP id o28-20020a05600c511c00b003a2e2e96563mr10287808wms.204.1657724808544;
-        Wed, 13 Jul 2022 08:06:48 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-51-7.cust.vodafonedsl.it. [188.217.51.7])
-        by smtp.gmail.com with ESMTPSA id n7-20020a5d4c47000000b0021baf5e590dsm11214523wrt.71.2022.07.13.08.06.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 08:06:48 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 17:06:45 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>, linux-media@vger.kernel.org,
-        quentin.schulz@theobroma-systems.com,
-        Daniel Scally <djrscally@gmail.com>,
-        linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 5/6] media: dt-bindings: ov5693: document YAML binding
-Message-ID: <20220713150645.GB1725944@tom-ThinkPad-T14s-Gen-2i>
-References: <20220712163349.1308540-1-tommaso.merciai@amarulasolutions.com>
- <20220712163349.1308540-6-tommaso.merciai@amarulasolutions.com>
- <1657664975.862137.2476655.nullmailer@robh.at.kernel.org>
- <20220713064845.GA1386778@tom-ThinkPad-T14s-Gen-2i>
- <87086513-787c-3b0d-80df-b90ebdc3a28c@linaro.org>
- <20220713132451.GA1725944@tom-ThinkPad-T14s-Gen-2i>
- <Ys7YPIveQHRbG7BE@valkosipuli.retiisi.eu>
+        Wed, 13 Jul 2022 11:08:24 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5C04BD1C;
+        Wed, 13 Jul 2022 08:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1657724871; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=T0FfxSaCkfFkbBWXxE6Wzj1PxCYfgbtK0yTCw52GkdM=;
+        b=ZULgNyU35WqdIvHIEYL59a8ZtT6EuCJEilRjnhRRn4LbomjagX+Mn7qdh9yyvLvPsXHqIz
+        naSlIhmIFq3PK+8JIZjMYjKp/xk8mjGMYVdH/KO6wPIjlPm/cXxL/AYCkFiEBQ7gEHs6LM
+        C7Qdhlq/jAbRJeQ+Lv3MJkaZtmiFsXw=
+Date:   Wed, 13 Jul 2022 16:07:39 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v4 07/11] ASoC: jz4740-i2s: Make the PLL clock name
+ SoC-specific
+To:     Zhou Yanjie <zhouyu@wanyeetech.com>
+Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Message-Id: <ROSYER.QTJF8J14H2YX1@crapouillou.net>
+In-Reply-To: <0269b850-f33a-7aa9-a3eb-83655bd4e19a@wanyeetech.com>
+References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
+        <20220708160244.21933-8-aidanmacdonald.0x0@gmail.com>
+        <0269b850-f33a-7aa9-a3eb-83655bd4e19a@wanyeetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys7YPIveQHRbG7BE@valkosipuli.retiisi.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari,
+Hi Zhou,
 
-On Wed, Jul 13, 2022 at 05:35:40PM +0300, Sakari Ailus wrote:
-> Hi Tommaso, Krzysztof,
-> 
-> On Wed, Jul 13, 2022 at 03:24:51PM +0200, Tommaso Merciai wrote:
-> > On Wed, Jul 13, 2022 at 08:52:34AM +0200, Krzysztof Kozlowski wrote:
-> > > On 13/07/2022 08:48, Tommaso Merciai wrote:
-> > > > Hi Rob,
-> > > > 
-> > > > On Tue, Jul 12, 2022 at 04:29:35PM -0600, Rob Herring wrote:
-> > > >> On Tue, 12 Jul 2022 18:33:48 +0200, Tommaso Merciai wrote:
-> > > >>> Add documentation of device tree in YAML schema for the OV5693
-> > > >>> CMOS image sensor from Omnivision
-> > > >>>
-> > > >>> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > > >>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > >>> ---
-> > > >>> Changes since v1:
-> > > >>>  - Fix allOf position as suggested by Krzysztof
-> > > >>>  - Remove port description as suggested by Krzysztof
-> > > >>>  - Fix EOF as suggested by Krzysztof
-> > > >>>
-> > > >>> Changes since v2:
-> > > >>>  - Fix commit body as suggested by Krzysztof
-> > > >>>
-> > > >>> Changes since v3:
-> > > >>>  - Add reviewed-by tags, suggested by Jacopo, Krzysztof
-> > > >>>
-> > > >>> Changes since v4:
-> > > >>>  - Remove wrong Sakari reviewed-by tag, suggested by Krzysztof, Sakari
-> > > >>>
-> > > >>> Changes since v5:
-> > > >>>  - Remove dovdd-supply, avdd-supply, dvdd-supply from required properties
-> > > >>> as suggested by Jacopo
-> > > >>>
-> > > >>>  .../bindings/media/i2c/ovti,ov5693.yaml       | 103 ++++++++++++++++++
-> > > >>>  MAINTAINERS                                   |   1 +
-> > > >>>  2 files changed, 104 insertions(+)
-> > > >>>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
-> > > >>>
-> > > >>
-> > > >> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > > >> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > > >>
-> > > >> yamllint warnings/errors:
-> > > >>
-> > > >> dtschema/dtc warnings/errors:
-> > > >> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.example.dtb: camera@36: Unevaluated properties are not allowed ('port' was unexpected)
-> > > >> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
-> > > >>
-> > > >> doc reference errors (make refcheckdocs):
-> > > >>
-> > > >> See https://patchwork.ozlabs.org/patch/
-> > > >>
-> > > >> This check can fail if there are any dependencies. The base for a patch
-> > > >> series is generally the most recent rc1.
-> > > >>
-> > > >> If you already ran 'make dt_binding_check' and didn't see the above
-> > > >> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> > > >> date:
-> > > >>
-> > > >> pip3 install dtschema --upgrade
-> > > >>
-> > > >> Please check and re-submit.
-> > > >>
-> > > > 
-> > > > I run:
-> > > > 
-> > > > pip3 install dtschema --upgrade
-> > > > 
-> > > > Then I check .yaml using:
-> > > > 
-> > > > make DT_CHECKER_FLAGS=-m dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
-> > > > DTEX    Documentation/devicetree/bindings/media/i2c/ovti,ov5693.example.dts
-> > > > LINT    Documentation/devicetree/bindings
-> > > > CHKDT   Documentation/devicetree/bindings/processed-schema.json
-> > > > SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-> > > > DTC     Documentation/devicetree/bindings/media/i2c/ovti,ov5693.example.dtb
-> > > > CHECK   Documentation/devicetree/bindings/media/i2c/ovti,ov5693.example.dtb
-> > > > 
-> > > > No error on my side. I'm missing something?
-> > > 
-> > > Rob's check are running newer dtschema, from master branch. The error he
-> > > reports is about missing port, although I thought it is coming from
-> > > video-interface-devices.
-> > 
-> > Hi Krzysztof, 
-> > Thanks for the info! :)
-> 
-> These bindings are indeed missing the port node, please add one. See e.g.
-> Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml for an
-> example.
-> 
-> The reason why video-interfaces and video-interface-device are sparate is
-> because they deal with different nodes (device vs. port).
+Le mer., juil. 13 2022 at 22:33:44 +0800, Zhou Yanjie=20
+<zhouyu@wanyeetech.com> a =C3=A9crit :
+> Hi Aidan,
+>=20
+> On 2022/7/9 =E4=B8=8A=E5=8D=8812:02, Aidan MacDonald wrote:
+>> On some Ingenic SoCs, such as the X1000, there is a programmable
+>> divider used to generate the I2S system clock from a PLL, rather
+>> than a fixed PLL/2 clock. It doesn't make much sense to call the
+>> clock "pll half" on those SoCs, so the clock name should really be
+>> a SoC-dependent value.
+>>=20
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>> ---
+>>   sound/soc/jz4740/jz4740-i2s.c | 8 +++++++-
+>>   1 file changed, 7 insertions(+), 1 deletion(-)
+>>=20
+>> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
+>> b/sound/soc/jz4740/jz4740-i2s.c
+>> index 0dcc658b3784..a41398c24d0e 100644
+>> --- a/sound/soc/jz4740/jz4740-i2s.c
+>> +++ b/sound/soc/jz4740/jz4740-i2s.c
+>> @@ -75,6 +75,8 @@ struct i2s_soc_info {
+>>   	struct reg_field field_i2sdiv_capture;
+>>   	struct reg_field field_i2sdiv_playback;
+>>   =7F+	const char *pll_clk_name;
+>> +
+>>   	bool shared_fifo_flush;
+>>   };
+>>   =7F@@ -281,7 +283,7 @@ static int jz4740_i2s_set_sysclk(struct=20
+>> snd_soc_dai *dai, int clk_id,
+>>   		clk_set_parent(i2s->clk_i2s, parent);
+>>   		break;
+>>   	case JZ4740_I2S_CLKSRC_PLL:
+>> -		parent =3D clk_get(NULL, "pll half");
+>> +		parent =3D clk_get(NULL, i2s->soc_info->pll_clk_name);
+>>   		if (IS_ERR(parent))
+>>   			return PTR_ERR(parent);
+>>   		clk_set_parent(i2s->clk_i2s, parent);
+>> @@ -400,6 +402,7 @@ static const struct i2s_soc_info=20
+>> jz4740_i2s_soc_info =3D {
+>>   	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 8, 11),
+>>   	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>>   	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>> +	.pll_clk_name		=3D "pll half",
+>>   	.shared_fifo_flush	=3D true,
+>>   };
+>>   =7F@@ -409,6 +412,7 @@ static const struct i2s_soc_info=20
+>> jz4760_i2s_soc_info =3D {
+>>   	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+>>   	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>>   	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>> +	.pll_clk_name		=3D "pll half",
+>>   };
+>=20
+>=20
+> Since JZ4760, according to the description of the I2SCDR register,
+> Ingenic SoCs no longer use PLL/2 clock, but directly use PLL clock,
+> so it seems also inappropriate to use "pll half" for these SoCs.
 
-Thanks, sent v7.
+The device tree passes the clock as "pll half". So the driver should=20
+use this name as well...
 
-Tommaso
+Cheers,
+-Paul
 
-> 
-> -- 
-> Kind regards,
-> 
-> Sakari Ailus
+>>   =7F  static struct snd_soc_dai_driver jz4770_i2s_dai =3D {
+>> @@ -435,6 +439,7 @@ static const struct i2s_soc_info=20
+>> jz4770_i2s_soc_info =3D {
+>>   	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+>>   	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
+>>   	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>> +	.pll_clk_name		=3D "pll half",
+>>   };
+>=20
+>=20
+> Same here.
+>=20
+>=20
+>>   =7F  static const struct i2s_soc_info jz4780_i2s_soc_info =3D {
+>> @@ -443,6 +448,7 @@ static const struct i2s_soc_info=20
+>> jz4780_i2s_soc_info =3D {
+>>   	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
+>>   	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
+>>   	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
+>> +	.pll_clk_name		=3D "pll half",
+>>   };
+>>=20
+>=20
+> Same here.
+>=20
+>=20
+> Thanks and best regards!
+>=20
+>=20
+>>   static const struct snd_soc_component_driver jz4740_i2s_component=20
+>> =3D {
 
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
 
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com

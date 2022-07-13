@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262FF572D28
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0884F572D32
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbiGMFaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 01:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
+        id S231774AbiGMFai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 01:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234039AbiGMF3i (ORCPT
+        with ESMTP id S234210AbiGMFaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 01:29:38 -0400
+        Wed, 13 Jul 2022 01:30:06 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52D7037F8F;
-        Tue, 12 Jul 2022 22:29:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77B5F4F1A1;
+        Tue, 12 Jul 2022 22:29:31 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id 7BEBBBCA;
-        Wed, 13 Jul 2022 08:31:18 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 7BEBBBCA
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 92991BD0;
+        Wed, 13 Jul 2022 08:31:19 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 92991BD0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1657690278;
-        bh=242XWgd0beiIZrzRTnwpgzsZw6dSuiW41UyARfAwlLg=;
+        d=baikalelectronics.ru; s=mail; t=1657690279;
+        bh=rfP9tv07m8KPasmOo6D0Sv4vVtteEhbDo7iguTqD2lc=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=lFqAqLjk9SqMSPnmUaMrkXTXGWz0yBYj0mk0ua15M9VlMngbACzyGIgpxJeZE2Xdi
-         5ibwTUp1g4dViLIB6b+lckR0pRrgv9kvVo1trYpIRNGQoCns4eJE9e7Tyc8SKD+lo4
-         unKcH84aYdScNXhWgDUcj+/XNkqAkrEMO6cFbBWw=
+        b=llyiUpTjCj/iufvwvi3aZREeeO7g8G9CutCjk+FWlNy2nT2WbmYCRH9Ob0zxakPgc
+         Nj2GiFCGFBvX897bpty6qtP2wyQF6zIV3cKzflW12GLp6zP7SnWWP7zqFMBzw5rk/z
+         +sjjgTg7IpEpsywUya1EOChfM+Q3Wo/EvqE2pY1Q=
 Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 13 Jul 2022 08:29:22 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 13 Jul 2022 08:29:23 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 03/23] dt-bindings: ata: ahci-platform: Clarify common AHCI props constraints
-Date:   Wed, 13 Jul 2022 08:28:56 +0300
-Message-ID: <20220713052917.27036-4-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v5 04/23] dt-bindings: ata: sata: Extend number of SATA ports
+Date:   Wed, 13 Jul 2022 08:28:57 +0300
+Message-ID: <20220713052917.27036-5-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220713052917.27036-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220713052917.27036-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -59,11 +60,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Indeed in accordance with what is implemented in the AHCI platform driver
-and the way the AHCI DT nodes are defined in the DT files we can add the
-next AHCI DT properties constraints: AHCI CSR ID is fixed to 'ahci', PHY
-name is fixed to 'sata-phy', AHCI controller can't have more than 32 ports
-by design, AHCI controller can have up to 32 IRQ lines.
+The denoted in the description upper limit only concerns the Port
+Multipliers, but not the actual SATA ports. It's an external device
+attached to a SATA port in order to access more than one SATA-drive. So
+when it's attached to a SATA port it just extends the port capability
+while the number of actual SATA ports stays the same. For instance on AHCI
+controllers the number of actual ports is determined by the CAP.NP field
+and the PI (Ports Implemented) register. AFAICS in general the maximum
+number of SATA ports depends on the particular controller implementation.
+Generic AHCI controller can't have more than 32 ports (since CAP.NP is of
+5 bits wide and PI register is 32-bits size), while DWC AHCI SATA
+controller can't be configured with more than 8 ports activated. So let's
+discard the SATA ports reg-property restrictions and just make sure that
+it consists of a single reg-item.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
@@ -72,77 +81,30 @@ Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 
 Changelog v2:
-- This is a new patch created after rebasing v1 onto the 5.18-rc3 kernel.
-
-Changelog v4:
-- Fix spelling: 'imeplemtned' and 'paltform' in the patch log. (@Hannes)
-- Add the interrupts property constraints. (@Rob)
-- Add forgotten '---' patchlog-changelog separator. (@Sergei)
+- Add comma and replace "channel" with "SATA port" in the reg property
+  description (@Damien).
 ---
- .../devicetree/bindings/ata/ahci-common.yaml    | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ Documentation/devicetree/bindings/ata/sata-common.yaml | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/ata/ahci-common.yaml b/Documentation/devicetree/bindings/ata/ahci-common.yaml
-index e89bda3b62cc..12a97b56226f 100644
---- a/Documentation/devicetree/bindings/ata/ahci-common.yaml
-+++ b/Documentation/devicetree/bindings/ata/ahci-common.yaml
-@@ -31,12 +31,16 @@ properties:
- 
-   reg-names:
-     description: CSR space IDs
-+    contains:
-+      const: ahci
- 
-   interrupts:
-     description:
-       Generic AHCI state change interrupt. Can be implemented either as a
-       single line attached to the controller or as a set of the signals
-       indicating the particular port events.
-+    minItems: 1
-+    maxItems: 32
- 
-   ahci-supply:
-     description: Power regulator for AHCI controller
-@@ -52,14 +56,13 @@ properties:
-     maxItems: 1
- 
-   phy-names:
--    maxItems: 1
-+    const: sata-phy
- 
-   ports-implemented:
-     $ref: '/schemas/types.yaml#/definitions/uint32'
-     description:
-       Mask that indicates which ports the HBA supports. Useful if PI is not
-       programmed by the BIOS, which is true for some embedded SoC's.
--    maximum: 0x1f
- 
- patternProperties:
-   "^sata-port@[0-9a-f]+$":
-@@ -80,8 +83,12 @@ $defs:
- 
+diff --git a/Documentation/devicetree/bindings/ata/sata-common.yaml b/Documentation/devicetree/bindings/ata/sata-common.yaml
+index 5a31a902618d..58c9342b9925 100644
+--- a/Documentation/devicetree/bindings/ata/sata-common.yaml
++++ b/Documentation/devicetree/bindings/ata/sata-common.yaml
+@@ -49,10 +49,9 @@ $defs:
      properties:
        reg:
--        description: AHCI SATA port identifier
--        maxItems: 1
-+        description:
-+          AHCI SATA port identifier. By design AHCI controller can't have
-+          more than 32 ports due to the CAP.NP fields and PI register size
-+          constraints.
-+        minimum: 0
-+        maximum: 31
+         minimum: 0
+-        maximum: 14
+         description:
+-          The ID number of the drive port SATA can potentially use a port
+-          multiplier making it possible to connect up to 15 disks to a single
+-          SATA port.
++          The ID number of the SATA port. Aside with being directly used,
++          each port can have a Port Multiplier attached thus allowing to
++          access more than one drive by means of a single SATA port.
  
-       phys:
-         description: Individual AHCI SATA port PHY
-@@ -89,7 +96,7 @@ $defs:
- 
-       phy-names:
-         description: AHCI SATA port PHY ID
--        maxItems: 1
-+        const: sata-phy
- 
-       target-supply:
-         description: Power regulator for SATA port target device
+ ...
 -- 
 2.35.1
 

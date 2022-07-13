@@ -2,134 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 201E1573ACD
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2178A573AD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237094AbiGMQGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
+        id S237128AbiGMQHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiGMQGn (ORCPT
+        with ESMTP id S237109AbiGMQHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:06:43 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E27D99;
-        Wed, 13 Jul 2022 09:06:42 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 70so10641593pfx.1;
-        Wed, 13 Jul 2022 09:06:42 -0700 (PDT)
+        Wed, 13 Jul 2022 12:07:16 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9878BD99
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:07:13 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id y11so13314112lfs.6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:07:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JimlERLsMqT2Nz9D7lFX5LO4ZwAh+FG1kON4oOM8cGs=;
-        b=k9iKibiGCQuD2zEA86fVvLcPdZeaZhbMm30uCS5qrDfJKrxGvMrCunxhZ64YlBnGiU
-         Bjt4T23URvFHJc0j40lV20oEN5RSqLrZE9nrmCIXF2h2poMxlURZKOsQSdr3Mk7SyoKn
-         DmZkvFyCv+4Tg7L9spBd3/BqtzBG1mYLWFxJgXYhAf2uRfhKIZAcfnB10yDBVoRXwKee
-         GAuHHwGMV/fThFhz8upRxub53/LM4KFyiBERF7vTl8G5u804zDJ51EAKJP051p9gOaz+
-         3+5RmozlrJ2xgwKe8mPZXQMJVGjKAquTjF7RcYc70As4sDLgJhPRhImKxCKNH7auSCsb
-         vsQQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=f4uaObWWNXPp5U219pPbduTuGgXfEfl6t1YiDSAeW2w=;
+        b=o4WoL0O2zA/fw6V30nknwceTVBp2UJDNwqomXVWrg0aaviu5uaExwNqGI2xn67hVYq
+         yXHuLF7zf96rbDMYFCqATj7ark/i3JiXbla9sEX76ybkkSutPHsOw0j4bdeka+s55ggU
+         ZqbVt9vbe9NGrRPfZeiqej+b5JBb2WSlADyxYITbOD9ysO7q9AbbVEoIbFoOUkOUcV+p
+         mdmHCMUP8Bn4sVWi18Ipb/J3BLeK8bkYUXqRd72FJPn6iYPSBdCo9ZdT1DgvrUm94rFg
+         cG9bbeNrjJ5k1hHs2ND0OtQcHB5ydjReeBmBOght4PHgFSqFwssbLOhyZnzJVpH19D1X
+         NslA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=JimlERLsMqT2Nz9D7lFX5LO4ZwAh+FG1kON4oOM8cGs=;
-        b=ckud+XQ2nV/HEjtKwCHN2Zx8mzCqwECzlAQjQmMAg4pTza1kFlgY1sG/RmzSNT6skI
-         STGnU/7Kg2JAft9Q0vNyR/P7ngbeGoJHDkD35ty5ZMwsYy3sOI6EALEXlA4lgR0AoDmp
-         jYUsqvhOzNjvhsHupHK6FCtGlL+Rjau26Rlf9Z0F9xZm7N+KmzSnGz/ohkb2T/7bJt7t
-         LieP6oyOzRhB/MQdbSiUoOgHYvKRLCDB4WOXW6GGgOa187B4MSVBb8a+UHBYzCbY1YAP
-         d6ohFC7zbnj56TvOyhESWx9+hvfnLQxYPKIXs3mm6oeBe9foT1ET///vgjYdX/PZnv1V
-         BOJA==
-X-Gm-Message-State: AJIora/PxvgnEf/wUXnmSFyNZyvQOOKa7ZoeYl+u5Xc2LR22l8YxXFID
-        rARbVXU9C0koTZp5Fcct1Y8=
-X-Google-Smtp-Source: AGRyM1sxWxwNAU9KCujOdPjh/B4ozr+yo25FEIDSupXBxRp4hR/L9lq5BXxxDl91BbftNP1WRz0aXA==
-X-Received: by 2002:a65:6786:0:b0:415:c67a:49a9 with SMTP id e6-20020a656786000000b00415c67a49a9mr3524413pgr.395.1657728402380;
-        Wed, 13 Jul 2022 09:06:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a205-20020a621ad6000000b00528bc6d8939sm9039761pfa.157.2022.07.13.09.06.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 09:06:40 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 13 Jul 2022 09:06:39 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/131] 5.10.131-rc2 review
-Message-ID: <20220713160639.GB2194204@roeck-us.net>
-References: <20220713094820.698453505@linuxfoundation.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=f4uaObWWNXPp5U219pPbduTuGgXfEfl6t1YiDSAeW2w=;
+        b=jy9aGL/KSnJcVf27akGjPao8r86JPa+MGu8eEaQahK2usBBFGUEfM0QM3M/82WL0Km
+         6QPJZKK/LM+9iFxMjiWgVauztnD4s6eExMTb7s60TXFFcXGPmwBBxseIbVyUJ6C0S+gh
+         629kG4y9w6GLQ/yj2ua+bTt6xW4hrSbW2u/BmyuQnzljt70arCxp8agyxBWuNhbXI0tq
+         AtVP3aMgMUR4wzMwBntH0flh7/7hw3xxtasEgOQ5njnNmh9cIAjmOMoObzClq/2mecEp
+         yKcfzZdcoHd1DgXB1Hx4T5PblBBqYmDgVWeGOKLNyHLeyDozuDW2N6KxibBaGq90JETe
+         q6QA==
+X-Gm-Message-State: AJIora9MaTQXJBni0kOQhtKK/jRXd51V50vm6Cq7Bya8ND/D6yue4NTw
+        0s6nFunWYpySdExmCZwIy3fJ/g==
+X-Google-Smtp-Source: AGRyM1uM3uQVqr1DYFsJ8qJmc3t0U98qT2y3kigwqhVCsaVCX1P1CW+6rO7K6Rj7LzHdXwvlKGJ42w==
+X-Received: by 2002:a05:6512:b82:b0:488:6aa6:509b with SMTP id b2-20020a0565120b8200b004886aa6509bmr2480520lfv.637.1657728431936;
+        Wed, 13 Jul 2022 09:07:11 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id s21-20020a056512315500b00478fe3327aasm2863046lfi.217.2022.07.13.09.07.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 09:07:11 -0700 (PDT)
+Message-ID: <996a49ea-5fba-3885-09ca-5b9a92b840e7@linaro.org>
+Date:   Wed, 13 Jul 2022 18:07:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713094820.698453505@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 3/3] mmc: sdhci-msm: drop redundant of_device_id
+ entries
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <20220712150219.20539-1-krzysztof.kozlowski@linaro.org>
+ <20220712150219.20539-4-krzysztof.kozlowski@linaro.org>
+ <CAD=FV=VPHwkKUjanLtaM+cXdp+VGPExJ_XDe=-O8j=ayGNtnVQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAD=FV=VPHwkKUjanLtaM+cXdp+VGPExJ_XDe=-O8j=ayGNtnVQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 03:10:15PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.131 release.
-> There are 131 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 13/07/2022 17:57, Doug Anderson wrote:
+> Hi,
 > 
-> Responses should be made by Fri, 15 Jul 2022 09:47:55 +0000.
-> Anything received after that time might be too late.
+> On Tue, Jul 12, 2022 at 8:02 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> This reverts three commits:
+>> 1. Revert "mmc: sdhci-msm: Add compatible string check for sdx65"
+>>    This reverts commit 953706844f0f2fd4dc6984cc010fe6cf51c041f2.
+>>
+>> 2. Revert "mmc: sdhci-msm: Add compatible string check for sm8150"
+>>    This reverts commit 5acd6adb65802cc6f9986be3750179a820580d37.
+>>
+>> 3. Revert "mmc: sdhci-msm: Add SoC specific compatibles"
+>>    This reverts commit 466614a9765c6fb67e1464d0a3f1261db903834b.
+>>
+>> The oldest commit 466614a9765c ("mmc: sdhci-msm: Add SoC specific
+>> compatibles") did not specify what benefits such multiple compatibles
+>> bring, therefore assume there is none.  On the other hand such approach
+>> brings a lot of churn to driver maintenance by expecting commit for
+>> every new compatible, even though it is already covered by the fallback.
+>>
+>> There is really no sense in duplicating of_device_id for each
+>> variant, which is already covered by generic compatible fallback
+>> qcom,sdhci-msm-v4 or qcom,sdhci-msm-v5.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
+> Personally, I would have taken the extra step and added a comment in
+> the code to prevent someone from doing this again. Maybe like this:
+> 
+> /*
+>  * In the device tree, all boards are required to have _two_ compatible
+>  * strings listed: a SoC-specific one followed by a more generic one.
+>  * Normally we can just rely on the generic string, but we always
+>  * include both so that if we ever find a bug on a specific SoC that
+>  * we need to workaround (like in sdm845/sc7180) that we can quickly
+>  * work around it without any changes to the dts.
+>  */
 
-All boots with efi32 bios crash. This seems to affect all stable release
-candidates; so far I have seen it with v5.10.130-132-g6729599d99f and with
-v5.18.11-62-g18f94637a014. Test results from mainline and from v5.15.54-rc1
-are still pending.
+This actually does not instruct the developer not to add new variants to
+the driver, so how about something like:
 
-[    0.709966] kernel tried to execute NX-protected page - exploit attempt? (uid: 0)
-[    0.709966] BUG: unable to handle page fault for address: 0000000021803b80
-[    0.709966] #PF: supervisor instruction fetch in kernel mode
-[    0.709966] #PF: error_code(0x0011) - permissions violation
-[    0.709966] PGD 175a063 P4D 175a063 PUD 175b063 PMD 1766063 PTE 8000000021803063
-[    0.709966] Oops: 0011 [#1] SMP PTI
-[    0.709966] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.10.131-rc2+ #1
-[    0.709966] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
-[    0.709966] RIP: 0010:0x21803b80
-[    0.709966] Code: Unable to access opcode bytes at RIP 0x21803b56.
-[    0.709966] RSP: 0018:ffffffffb9403e80 EFLAGS: 00000046
-[    0.709966] RAX: 0000000000000000 RBX: 0000000001798000 RCX: 00000000df24be60
-[    0.709966] RDX: 000000003feab058 RSI: 0000000000000600 RDI: 000000003fe7e038
-[    0.709966] RBP: 0000000000000600 R08: 0000000001798000 R09: 00000000229ed067
-[    0.709966] R10: 0000000000000000 R11: 00000000229ed067 R12: 0000000000000030
-[    0.709966] R13: 0000000000000001 R14: ffff9aca41790000 R15: 0000000000000282
-[    0.709966] FS:  0000000000000000(0000) GS:ffff9aca7f800000(0000) knlGS:0000000000000000
-[    0.709966] CS:  0010 DS: 0018 ES: 0018 CR0: 0000000080050033
-[    0.709966] CR2: 0000000021803b80 CR3: 0000000001758000 CR4: 00000000000406b0
-[    0.709966] Call Trace:
-[    0.709966]  ? efi_set_virtual_address_map+0x87/0x160
-[    0.709966]  ? efi_enter_virtual_mode+0x39a/0x3f5
-[    0.709966]  ? start_kernel+0x4aa/0x544
-[    0.709966]  ? secondary_startup_64_no_verify+0xc2/0xcb
-[    0.709966] Modules linked in:
-[    0.709966] CR2: 0000000021803b80
-[    0.709966] ---[ end trace 1b5f45b6ffd42130 ]---
-[    0.709966] RIP: 0010:0x21803b80
-[    0.709966] Code: Unable to access opcode bytes at RIP 0x21803b56.
-[    0.709966] RSP: 0018:ffffffffb9403e80 EFLAGS: 00000046
-[    0.709966] RAX: 0000000000000000 RBX: 0000000001798000 RCX: 00000000df24be60
-[    0.709966] RDX: 000000003feab058 RSI: 0000000000000600 RDI: 000000003fe7e038
-[    0.709966] RBP: 0000000000000600 R08: 0000000001798000 R09: 00000000229ed067
-[    0.709966] R10: 0000000000000000 R11: 00000000229ed067 R12: 0000000000000030
-[    0.709966] R13: 0000000000000001 R14: ffff9aca41790000 R15: 0000000000000282
-[    0.709966] FS:  0000000000000000(0000) GS:ffff9aca7f800000(0000) knlGS:0000000000000000
-[    0.709966] CS:  0010 DS: 0018 ES: 0018 CR0: 0000000080050033
-[    0.709966] CR2: 0000000021803b80 CR3: 0000000001758000 CR4: 00000000000406b0
-[    0.709966] Kernel panic - not syncing: Attempted to kill the idle task!
-[    0.709966] ACPI MEMORY or I/O RESET_REG.
+/* Do not add new variants to the driver which are compatible with
+generic ones, unless they need customization. */
+?
 
-Guenter
+The problem is that this applies to several such drivers on several
+platforms (Qualcomm, NXP - these for sure use such pattern), so we would
+be documenting something obvious, IMO.
+
+> 
+> In any case:
+> 
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+
+Best regards,
+Krzysztof

@@ -2,116 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED2A5739CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6705739DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236830AbiGMPNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
+        id S236822AbiGMPP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236799AbiGMPNN (ORCPT
+        with ESMTP id S230151AbiGMPP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:13:13 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6A145F44
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:13:11 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso4185173pjc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:13:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=nHna6q8haXF012wFoVlU3mi09UNcmJSRQ4P1JKT5xOg=;
-        b=CXc23FklogJD5om5a2d6XqaWm8drlrQjWI+VzShzntPDCJYUU/32ANHo0nlRqD/jce
-         RsVnYDQg8oJCKAAMA5wvHkXAT4kSRxWjsFidkXSQdduRRwqYTgtWE/BgrmuW2b9a66VE
-         PfGbD6jFAsn90/GhjrmzFQrgv/wMn3kNFPmMJkNpvpXBgUSg6ZdaTlj/aGrMCn24ZdVm
-         4dY9YAHKqMfCQN0B0rEBNOFHDY/MoUYWDiugzIrOPgCSdbDK5LissQcyCrAD4iElyeMb
-         QFCYzDzxooZz/gGb3auvrS5VIEVtlR3RJkw+s6T+m2CjYrn666JNzP2kQcGPVHFclhF2
-         s2Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nHna6q8haXF012wFoVlU3mi09UNcmJSRQ4P1JKT5xOg=;
-        b=rm1mj+UlR9NMe/qi7Gnck3uOfql1UwiJJWFm9iBVPIEddlkv7OVAH5caNoE60ditu+
-         t9KMEpP2Xs+QShJ8PIXPNMr29omBuoJXEjd0toZqdrJa52YPa5hiNbh8a+LT9W/NvKOE
-         u68/UZGRSYehm85jUaErleBJLzXe6fK8kv7hr0U77v2IAhtY73Ctbly3mnTXbc+Oap6U
-         nN5VsR9nLkFMyHIu24RdCeSLDzkymtUT8VWV4SjbBijq1YgQYt5QxggUdpaCSlvicbJB
-         WUYFyG2d5iWXxMTXMCy9OfKtBS1RSlyFDxAYl4Chmi9H+ETE51dM+55yFzCn3Nxtk/RN
-         ZypA==
-X-Gm-Message-State: AJIora/5gwc5yMdr1jJo4E2K1M/O1TSwbpc2C9xA7C7M6sJ5XFOPD2wb
-        a0nydebRLtqWvn6uyxJOPq04
-X-Google-Smtp-Source: AGRyM1vOlU7utJFqv9U8LPiuqQgbEgKciktWFPD48RHUaXgen/iU/qGci5ug+URJIdPFy938rKFaxA==
-X-Received: by 2002:a17:90a:b398:b0:1ef:7e67:6 with SMTP id e24-20020a17090ab39800b001ef7e670006mr10416045pjr.123.1657725191006;
-        Wed, 13 Jul 2022 08:13:11 -0700 (PDT)
-Received: from workstation ([117.248.1.226])
-        by smtp.gmail.com with ESMTPSA id w185-20020a6362c2000000b0041292b732fdsm8138159pgb.38.2022.07.13.08.13.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 13 Jul 2022 08:13:10 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 20:43:05 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Steve Capper <Steve.Capper@arm.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Fix PMU interrupt
-Message-ID: <20220713151305.GA4591@workstation>
-References: <20220713143429.22624-1-manivannan.sadhasivam@linaro.org>
- <Ys7c0JGAV7AAEjaO@hovoldconsulting.com>
+        Wed, 13 Jul 2022 11:15:56 -0400
+Received: from relay-us1.mymailcheap.com (relay-us1.mymailcheap.com [51.81.35.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B31B32066;
+        Wed, 13 Jul 2022 08:15:54 -0700 (PDT)
+Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
+        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id 75205200E6;
+        Wed, 13 Jul 2022 15:15:53 +0000 (UTC)
+Received: from relay3.mymailcheap.com (relay3.mymailcheap.com [217.182.66.161])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id B4E34267CE;
+        Wed, 13 Jul 2022 15:15:50 +0000 (UTC)
+Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
+        by relay3.mymailcheap.com (Postfix) with ESMTPS id A989D40003;
+        Wed, 13 Jul 2022 17:15:48 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by filter1.mymailcheap.com (Postfix) with ESMTP id 0A57E2A37A;
+        Wed, 13 Jul 2022 15:15:48 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
+Received: from filter1.mymailcheap.com ([127.0.0.1])
+        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id SKa0_JsYQgeN; Wed, 13 Jul 2022 15:15:46 +0000 (UTC)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter1.mymailcheap.com (Postfix) with ESMTPS;
+        Wed, 13 Jul 2022 15:15:46 +0000 (UTC)
+Received: from edelgard.icenowy.me (unknown [59.41.163.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 3F308401DE;
+        Wed, 13 Jul 2022 15:15:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+        t=1657725346; bh=Y2nH9P4lQd9MCR3ibpoDErgHg30yJR8WsNyQiLQQcnI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=LGXGcFvpUIwwuv5s0jAN4DZ2KHePtfeo5GrfVTdeVDaYABtdN/qhFsbi1gX4d6PbB
+         iJSdRlj+drTxKqkj0YuAOx6ri7fzGlH+jnT0WJ/1nT59SciFDNmfq4BzohFYx8RZEe
+         aOU+qtxheODRZVckakLifKIqw6LY33dVCKiZTSk0=
+Message-ID: <2303fc91e5110f22fc9ea6008fa4bbc77c1bdb13.camel@aosc.io>
+Subject: Re: [PATCH v1 2/2] riscv: dts: starfive: add the missing monitor
+ core
+From:   Icenowy Zheng <icenowy@aosc.io>
+To:     Conor Dooley <mail@conchuod.ie>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 13 Jul 2022 23:15:02 +0800
+In-Reply-To: <20220711184325.1367393-3-mail@conchuod.ie>
+References: <20220711184325.1367393-1-mail@conchuod.ie>
+         <20220711184325.1367393-3-mail@conchuod.ie>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys7c0JGAV7AAEjaO@hovoldconsulting.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SORBS_HTTP,
+        RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 04:55:12PM +0200, Johan Hovold wrote:
-> On Wed, Jul 13, 2022 at 08:04:29PM +0530, Manivannan Sadhasivam wrote:
-> > PPI interrupt should be 7 for the PMU.
-> > 
-> > Cc: Johan Hovold <johan+linaro@kernel.org>
-> > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> > Reported-by: Steve Capper <Steve.Capper@arm.com>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > index 268ab423577a..2d7823cb783c 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > @@ -477,7 +477,7 @@ memory@80000000 {
-> >  
-> >  	pmu {
-> >  		compatible = "arm,armv8-pmuv3";
-> > -		interrupts = <GIC_PPI 5 IRQ_TYPE_LEVEL_HIGH>;
-> > +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> >  	};
-> >  
-> >  	psci {
+在 2022-07-11星期一的 19:43 +0100，Conor Dooley写道：
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> The interrupt number matches the vendor devicetree I have access to, but
-> the vendor source also has IRQ_TYPE_LEVEL_LOW instead of
-> IRQ_TYPE_LEVEL_HIGH here.
+> The JH7100 has a 32 bit monitor core that is missing from the device
+> tree. Add it (and its cpu-map entry) to more accurately reflect the
+> actual topology of the SoC.
 > 
-> Is that another copy-paste error, perhaps?
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  arch/riscv/boot/dts/starfive/jh7100.dtsi | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 > 
+> diff --git a/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> b/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> index c617a61e26e2..92fce5b66d3d 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> @@ -67,6 +67,23 @@ cpu1_intc: interrupt-controller {
+>                         };
+>                 };
+>  
+> +               E24: cpu@2 {
+> +                       compatible = "sifive,e24", "riscv";
 
-I don't have access to the documentation of this SoC now but since Steve
-tried with IRQ_TYPE_LEVEL_HIGH and it worked for him, I think it is best
-to leave it as it is.
+Oh, by the way "sifive,e24" is not a documented compatible in the DT
+binding.
 
-Thanks,
-Mani
+If you really want to add it here, you need to add the compatible
+string to the DT binding first.
 
-> Johan
+> +                       reg = <2>;
+> +                       device_type = "cpu";
+> +                       i-cache-block-size = <32>;
+> +                       i-cache-sets = <256>;
+> +                       i-cache-size = <16384>;
+> +                       riscv,isa = "rv32imafc";
+> +                       status = "disabled";
+> +
+> +                       cpu2_intc: interrupt-controller {
+> +                               compatible = "riscv,cpu-intc";
+> +                               interrupt-controller;
+> +                               #interrupt-cells = <1>;
+> +                       };
+> +               };
+> +
+>                 cpu-map {
+>                         cluster0 {
+>                                 core0 {
+> @@ -76,6 +93,10 @@ core0 {
+>                                 core1 {
+>                                         cpu = <&U74_1>;
+>                                 };
+> +
+> +                               core2 {
+> +                                       cpu = <&E24>;
+> +                               };
+>                         };
+>                 };
+>         };
+
+

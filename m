@@ -2,94 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960F457300E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A830573016
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234450AbiGMIGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
+        id S233066AbiGMIG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbiGMIGU (ORCPT
+        with ESMTP id S234828AbiGMIGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:06:20 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F004E1900
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:06:19 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id r14so14380643wrg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=TIuaU3v50n7bUWKXly5YPZTHcqli65zdWTasiUb17Ro=;
-        b=hNrPkbBaIwtvTfB5o8iVawtfDe4PZtFl8q4aucxnFP2YA/d4Jhlz2kWeEehvpOJA8U
-         gtRpOVmxBMZ69rhnKcO8qJdSOi5QIA6NdwhBhFuzYDgBMtV6KlB0Iwj990wb4I0hStE/
-         AYiPL8Nyew16SEze9sHV34IsbSpvuw/G3DpfMUA+tawm4lgNIWWFA0WAPcTkRoJuWLZO
-         9qYcrZwgzQBtydkW5mWwpzDfrUkdyenNF5tSIAhS/Ko7G6Vz4uujQvQK6FblzG8AlzlI
-         umJCV/WtRmJEHWxFKY8kbHEPRgYOa5htHqJIpPtI6TdwpOpVbKMkS10I2++64YDjPgh8
-         KuAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=TIuaU3v50n7bUWKXly5YPZTHcqli65zdWTasiUb17Ro=;
-        b=1JPAMG0O5AgUGbLsazZWW/0iCztSEY1h67Go/c8HXoI1FguGjPsGLxokqCUzDidx1t
-         XmfPcXaOP+NKLb8lahK1ihbP3sXtzx1IiW8gBk66i+l8/9lZatRsf8f3+A6y1DeIqMp/
-         WQ40+K+/9/hgv9jw+rTaTAqvBKHyLC6nw3ckrZqzZ1TQJTHesg9e1Vf0Xu6P8OvbwQZF
-         OTLqv2BAS0O2kitnJE6J95Xz8n+qWcPdQ1dqNAdAQTR2fO6RZM+O8fFqrAKM2D+lz7Ys
-         EVSJK6mfBeo5qf3/TYZdpiIDpql6bL0yuFCK+icLkI9hYSE1owMyWf5TLkHxqXHtISr1
-         D/pA==
-X-Gm-Message-State: AJIora+OZpabFMwzUnAwHNU2Y2/TNiYoh3MfIA8OgZ6vIH2juw2bn5UN
-        jDdCCn/mx/VNw6xeT3bXbvdVvQ==
-X-Google-Smtp-Source: AGRyM1uYd8s8Q17nqho/hNGXHSmtG7AshwsRk3tvmpwY/HVGw9Tpxj5Qk00Si2JmE0HOAt5dAYpZ8Q==
-X-Received: by 2002:a5d:6e8d:0:b0:21d:7adc:7102 with SMTP id k13-20020a5d6e8d000000b0021d7adc7102mr1859002wrz.9.1657699577792;
-        Wed, 13 Jul 2022 01:06:17 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id c15-20020a05600c0a4f00b003a02cbf862esm1376496wmq.13.2022.07.13.01.06.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 01:06:17 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 09:06:15 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>, linux-sunxi@lists.linux.dev,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mfd: sun6i-prcm: Update Kconfig description
-Message-ID: <Ys589/sLwmKYiKkV@google.com>
-References: <20220702184044.51144-1-samuel@sholland.org>
+        Wed, 13 Jul 2022 04:06:53 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E92FDE9213;
+        Wed, 13 Jul 2022 01:06:51 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 268A680AE;
+        Wed, 13 Jul 2022 08:01:08 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 11:06:49 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of
+ driver_deferred_probe_check_state()
+Message-ID: <Ys59Gctsllu6GraU@atomide.com>
+References: <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
+ <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
+ <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
+ <Yr6HQOtS4ctUYm9m@atomide.com>
+ <Yr6QUzdoFWv/eAI6@atomide.com>
+ <CAGETcx-0bStPx8sF3BtcJFiu74NwiB0btTQ+xx_B=8B37TEb8w@mail.gmail.com>
+ <CAGETcx-Yp2JKgCNfaGD0SzZg9F2Xnu8A3zXmV5=WX1hY7uR=0g@mail.gmail.com>
+ <Yr7wA8d4J7xtjwsH@atomide.com>
+ <Ys0ewNYFB25RWNju@atomide.com>
+ <CAGETcx8H9je6Yg-fciU5-dh22xB0_h6XzAfH5UsCSeET97wrpA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220702184044.51144-1-samuel@sholland.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAGETcx8H9je6Yg-fciU5-dh22xB0_h6XzAfH5UsCSeET97wrpA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 02 Jul 2022, Samuel Holland wrote:
-
-> This driver is used by a specific range of SoCs between when the PRCM
-> hardware was introduced (A31) and when the PRCM CCU driver was added
-> (A83T). It is unlikely to be extended to additional hardware. Update
-> the description to include the full list of applicable SoCs.
+* Saravana Kannan <saravanak@google.com> [220713 00:44]:
+> On Tue, Jul 12, 2022 at 12:12 AM Tony Lindgren <tony@atomide.com> wrote:
+> >
+> > * Tony Lindgren <tony@atomide.com> [220701 16:00]:
+> > > Also, looks like both with the initcall change for prm, and the patch
+> > > below, there seems to be also another problem where my test devices no
+> > > longer properly idle somehow compared to reverting the your two patches
+> > > in next.
+> >
+> > Sorry looks like was a wrong conclusion. While trying to track down this
+> > issue, I cannot reproduce it. So I don't see issues idling with either
+> > the initcall change or your test patch.
+> >
+> > Not sure what caused my earlier tests to fail though. Maybe a config
+> > change to enable more debugging, or possibly some kind of warm reset vs
+> > cold reset type issue.
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
->  drivers/mfd/Kconfig | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> Thanks for getting back to me about the false alarm.
 
-Applied, thanks.
+FYI I'm pretty sure I had also some pending sdhci related patches applied
+while testing causing extra issues.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> OK, so it looks like my patch to drivers/of/property.c fixed the issue
+> for you. In that case, let me test that a bit more thoroughly on my
+> end to make sure it's not breaking any existing functionality. And if
+> it's not breaking, I'll land that in the kernel eventually. Might be a
+> bit too late for 5.19. I'm considering temporarily reverting my series
+> depending on how the rest of the issues from my series go.
+
+OK. Seems the series is otherwise working and in case of issues, partial
+revert should be enough in the worst case. But yeah, probably some more
+testing is needed.
+
+Regards,
+
+Tony

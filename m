@@ -2,128 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB1357311D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 913A8573122
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234440AbiGMI3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
+        id S234593AbiGMIaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbiGMI32 (ORCPT
+        with ESMTP id S229863AbiGMIaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:29:28 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA661CE15
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:29:27 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id r9so9875893lfp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:29:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=b/K0bJPiP1IyBMjzSdHmTMvuIUPxJ5n8xtEUFv6wetw=;
-        b=H94ipJrjZLI4NZ938hH626pwqaM0iL9zkihgIbyqEeKS4rJT7xeIimPUUoR2p9olb7
-         owmyBfKgbc5B8QTzq5+JIe3PUbVZgIXBXgBbcRewFYcji+6DX5Tprsvhguhc0zzLU6Ay
-         oxdOo3JJcD3Wy6yHjTQo9mW/5JIVZhCh8lhgaGahfHHZo8U8PqyphHTHp8VXZfyitBOw
-         7cGivsQeJZC1+UvLN+Yu7U+SRVUNf1+vCOUbVaJRd5MirXeYQiCZn96bluvbPEoWXSVm
-         nb4j06tcsnRS1tKpJXZhIPvKMzq2u7DpbIy1Uq4kr2aC1zSmea3KW64B4tZG4PrKgIZ3
-         wGEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=b/K0bJPiP1IyBMjzSdHmTMvuIUPxJ5n8xtEUFv6wetw=;
-        b=LAjJKV0mwMTJfZXhLTnWHAaW1LSO5tDCp5dKtw0nGYrHFcWRfXET2zJbkj9xtofrgb
-         j1sJr3V7OfYJMgKvACxyhdafFUkin4EcPKgUQScjDQ9fTJJtiTwbc8Bj+aDWkdQNuhS1
-         agrBUKSU++LZuNOBWQkhtov1ANDb6w7FyGgfh6Tu5RkdQNEtiiAG16EniXwIloIZveDw
-         P9FTCeG/SXjQTIrvullfNEpeatcjNgEjJA3ITKIjNWZwjH9NOeUT7C50xdMfFEZ9ugBE
-         U1sg0MTNFLT7xEbYP4apTlv0feTBM0IczG4qO/Wl0spGh8dWm2v6ZnbDFn/ztfMEssi5
-         ZstQ==
-X-Gm-Message-State: AJIora9caqguTgP6HyYASRSkg3z0/BqJ1joSrvZvslvbBWjatNAHdJpa
-        RNdtjOZCrjvU4rOGAaWc71eHwA==
-X-Google-Smtp-Source: AGRyM1uC60E1c+Lkg7ekKCBTMSmjyTdeTZiQtu15ZUZD4azYzppFHMCeF9UldnYGFseZy09wi4R8EA==
-X-Received: by 2002:a05:6512:e9b:b0:489:e034:cfc9 with SMTP id bi27-20020a0565120e9b00b00489e034cfc9mr1258341lfb.366.1657700966183;
-        Wed, 13 Jul 2022 01:29:26 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05651c128b00b0025d6930d014sm1218702ljc.87.2022.07.13.01.29.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 01:29:25 -0700 (PDT)
-Message-ID: <52c0d236-49c6-7c31-abd8-2a083ca7ef8c@linaro.org>
-Date:   Wed, 13 Jul 2022 10:29:22 +0200
+        Wed, 13 Jul 2022 04:30:15 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F372867598;
+        Wed, 13 Jul 2022 01:30:09 -0700 (PDT)
+X-UUID: 650c26010cca47d9b5098c3f11462513-20220713
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:0e27b8a1-ebc3-4433-a98c-4f434658d320,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:7fddda32-b9e4-42b8-b28a-6364427c76bb,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 650c26010cca47d9b5098c3f11462513-20220713
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1252999840; Wed, 13 Jul 2022 16:30:04 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 13 Jul 2022 16:30:03 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 13 Jul 2022 16:30:03 +0800
+Message-ID: <386e09152ee920f89597ac1065f94fc8c804634f.camel@mediatek.com>
+Subject: Re: [PATCH v14 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 13 Jul 2022 16:30:02 +0800
+In-Reply-To: <20220712111223.13080-6-rex-bc.chen@mediatek.com>
+References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
+         <20220712111223.13080-6-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2 2/6] dt-bindings: soc: imx: add i.MX8MP vpu blk ctrl
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, l.stach@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        paul.elder@ideasonboard.com, aford173@gmail.com,
-        Markus.Niebel@ew.tq-group.com, alexander.stein@ew.tq-group.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-References: <20220713063653.2584488-1-peng.fan@oss.nxp.com>
- <20220713063653.2584488-3-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220713063653.2584488-3-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/07/2022 08:36, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+Hi, Bo-Chen:
+
+On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
 > 
-> i.MX8MP VPU blk ctrl module has similar design as i.MX8MM, so reuse
-> the i.MX8MM VPU blk ctrl yaml file. And add description for the items.
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 > ---
->  .../soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml      | 93 ++++++++++++++++---
->  include/dt-bindings/power/imx8mp-power.h      |  4 +
->  2 files changed, 86 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml
-> index 26487daa64d9..d05930f61f95 100644
-> --- a/Documentation/devicetree/bindings/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml
-> +++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml
-> @@ -28,24 +28,15 @@ properties:
->  
->    power-domains:
->      minItems: 4
-> -    maxItems: 4
 
-This is not correct. maxItems must stay, but you could drop minItems,
-prefferrably in separate patch.
+[snip]
 
->  
->    power-domain-names:
-> -    items:
-> -      - const: bus
-> -      - const: g1
-> -      - const: g2
-> -      - const: h1
-> +    minItems: 4
+> +
+> +static int mtk_dp_set_color_depth(struct mtk_dp *mtk_dp)
+> +{
+> +	/* Only support 8 bits currently */
+> +	mtk_dp->info.depth = DP_MSA_MISC_8_BPC;
 
-maxItems instead
+Only support DP_MSA_MISC_8_BPC, so it's not necessary use a variable to
+store this information. Drop depth.
 
->  
->    clocks:
->      minItems: 3
-> -    maxItems: 3
+Regards,
+CK
 
-Same error...
+> +
+> +	/* Update MISC0 */
+> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3034,
+> +			   DP_MSA_MISC_8_BPC, DP_TEST_BIT_DEPTH_MASK);
+> +
+> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_303C,
+> +			   VIDEO_COLOR_DEPTH_DP_ENC0_P0_8BIT,
+> +			   VIDEO_COLOR_DEPTH_DP_ENC0_P0_MASK);
+> +	return 0;
+> +}
+> +
 
-Best regards,
-Krzysztof

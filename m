@@ -2,426 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F675737F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925CC573802
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236380AbiGMNvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
+        id S236395AbiGMNxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236269AbiGMNuo (ORCPT
+        with ESMTP id S236452AbiGMNwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:50:44 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88517101D;
-        Wed, 13 Jul 2022 06:50:43 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DDdcbi013886;
-        Wed, 13 Jul 2022 13:50:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=lx9XFobL3Rx2ZxSx5JjD1Okol1DdGc/qGH3WJ0hxLBc=;
- b=rSNNsOKixwka3NwsSpEKuX9CPKPTaiMk1Zq9s8IMizHuTPeFjV2uVRN7m3W95IH3kCEH
- rMk1CUmsbY5mXdqOmvsnJnt/KA5QvUPYyXtN1NBDQkHZe7lZqDCqNum2C9j069wDIKZo
- TzN1laZ0b41E637HGbsbMBafPJAX4822TpoGMgoQE1HXpF4KFP4djn7M/xtdd0dUGPWW
- yKi3ApQV/7AIsvl36jp5DlWd5enxqcsN/53QwQ5NpSQm99HPAQE8wybgH1wkaxZFUDed
- 2NqiUQT9o9zTTa6yQ8vt5u4q6UXEdm1xxOfhJVPt5OffE78gkdDlbUaSY11pQnB0CBJb nQ== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9y4p0e5e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Jul 2022 13:50:41 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26DDmIGW022636;
-        Wed, 13 Jul 2022 13:50:39 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3h70xhwrv0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Jul 2022 13:50:39 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26DDn5B322544890
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jul 2022 13:49:05 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 37FDFA404D;
-        Wed, 13 Jul 2022 13:50:36 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AC2B3A4040;
-        Wed, 13 Jul 2022 13:50:35 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.0.75])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 13 Jul 2022 13:50:35 +0000 (GMT)
-Date:   Wed, 13 Jul 2022 15:50:33 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Steffen Eiden <seiden@linux.ibm.com>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, nrb@linux.ibm.com
-Subject: Re: [PATCH v2 1/3] s390/cpufeature: rework to allow more than only
- hwcap bits
-Message-ID: <20220713155033.46259c35@p-imbrenda>
-In-Reply-To: <20220713125644.16121-2-seiden@linux.ibm.com>
-References: <20220713125644.16121-1-seiden@linux.ibm.com>
-        <20220713125644.16121-2-seiden@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Wed, 13 Jul 2022 09:52:45 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2042.outbound.protection.outlook.com [40.107.20.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CDB2C12D;
+        Wed, 13 Jul 2022 06:52:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QsgpC7RkIM1A3AKlznaSkFJIGndkEpACUZZVF16voyeaqBVGFAT59IJdk/qcGY3C/bw00gkWrjzTw9gD6czyF5koA0JssQSCDrfdW7Pjr3aXeEpcOnQyOjlCMZS6NLibwGK3L/yanvagHrfNjYOyrLUgd24HAzQxhkM24JFiRmj/KezQCpKgdIwipBF/jkaWi2Nq/behvNlQmlfSBviANLcqxETBuOV5FkycvWAyxoU+aXdUjT7OFjHN6orIWaVqp6x68+Z4MQwXscjnnEjBZIU9l5l7tVdnDDxBfb2eDfDmoP8AK125fz3dzNVOwnRfzlmkvlVaxx1TEdFcwRCSwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yF24IXqYWvWlZbD6zmFf1dRj9zustWalBNss3N4AFag=;
+ b=ELMn2ctXs0dYLWi9MdTwsdB0qebfDWeKlOnFAqLNgn4x3fXu6Rqbvj9NDpRfD+3/g/bzefK5iH/3ltDXs9sMWKIi/zyW9tgv3BPsVvziretaRgBL9OwvSBlDmA1GtP7B5ttBS3PuEYgIpvC7KBqdvWX3T8+ns8DI7+0ug90nxbMimoC7Mi5Pc4M3JB0qpAQ5QWKrUXUSlT8PS4XJzRHB+8PVjnHSeWdv5Ce9VyTJ6Kz9TnKquLGv/zCuoOKtDrGaMFfPD+gLl8MnMU51Mp8SWE8s51mFZSaCQbA00cck8szc9tgHg1pYBHK/Ywpaj7TknzUDsof/jmfmFKgG6Z5zdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yF24IXqYWvWlZbD6zmFf1dRj9zustWalBNss3N4AFag=;
+ b=vQFcNxyYBe3QkvKmKAt8TatLuiUCzZgdrPsQpWdOh3v9PUhTtJ9UafSliwrGuecHrU8fW899Zq7KP8c5zQYA78Sa12GoB5ulzAzKGlVqpsWbpK5HGaIV1fsccRFPRRGXKqU3/N16bucDDdMdTSCqBw/hFrExeN0VOd43rTJ/oYUjdXJYwoYH4DsE7wPv2SVayMYT5yE9l1SHPcU/UFx08UiOFVZB/7wnGqXlDd9Ti+PvGc/6PoyuBUod24RUS2YHnrTXglSjAlhOUVPKAg/s8QTOPcV5GtoLY5hv4Ida8ASdJuXy2ujqB++gQrd/BErhSOe8mIUrR7oNmr6ngKP+Hw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
+ by AM6PR04MB6040.eurprd04.prod.outlook.com (2603:10a6:20b:bb::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Wed, 13 Jul
+ 2022 13:52:04 +0000
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::60ad:4d78:a28a:7df4]) by VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::60ad:4d78:a28a:7df4%4]) with mapi id 15.20.5417.025; Wed, 13 Jul 2022
+ 13:52:04 +0000
+Message-ID: <dbfd3a14-781e-c66e-b11c-e21ba4134067@suse.com>
+Date:   Wed, 13 Jul 2022 15:52:01 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] Subject: x86/PAT: Report PAT on CPUs that support PAT
+ without MTRR
+Content-Language: en-US
+To:     Chuck Zmudzinski <brchuckz@netscape.net>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        xen-devel@lists.xenproject.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+References: <9d5070ae4f3e956a95d3f50e24f1a93488b9ff52.1657671676.git.brchuckz.ref@aol.com>
+ <9d5070ae4f3e956a95d3f50e24f1a93488b9ff52.1657671676.git.brchuckz@aol.com>
+ <e0faeb99-6c32-a836-3f6b-269318a6b5a6@suse.com>
+ <3d3f0766-2e06-428b-65bb-5d9f778a2baf@netscape.net>
+ <e15c0030-3270-f524-17e4-c482e971eb88@suse.com>
+ <775493aa-618c-676f-8aa4-d1667cf2ca78@netscape.net>
+ <c2ead659-d0aa-5b1f-0079-ce7c02970b35@netscape.net>
+ <1d06203b-97ff-e7eb-28ae-4cdbc7569218@suse.com>
+ <62e32913-cfcb-e0b0-2bbe-75cc8597951d@netscape.net>
+From:   Jan Beulich <jbeulich@suse.com>
+In-Reply-To: <62e32913-cfcb-e0b0-2bbe-75cc8597951d@netscape.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _JviYa28RHmgl7Zi2VQO44GMeAu61XTv
-X-Proofpoint-ORIG-GUID: _JviYa28RHmgl7Zi2VQO44GMeAu61XTv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-13_03,2022-07-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- adultscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=0 clxscore=1015 mlxscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207130055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: AS9PR04CA0178.eurprd04.prod.outlook.com
+ (2603:10a6:20b:530::23) To VE1PR04MB6560.eurprd04.prod.outlook.com
+ (2603:10a6:803:122::25)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d43b685f-0701-4c70-cf9c-08da64d6de3f
+X-MS-TrafficTypeDiagnostic: AM6PR04MB6040:EE_
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TA2Bqkv1iGE3wbf8K0Bs/JPizFxpFQTkuyWdv4P+GTbX2LYwoYsOzu23WXuRl8Z1f9zwlTJohfUCkJST1lflUZMrQLyS119W5Gll/3EVUucT2rdFD9M+G5DNNsg3v+RdV9pOA2jgrBTjt890vxoN4VoHFz2tReQJ03lC3lvujtoxqncGN4fClTBGJxohRJNUgK3mI5l5f/k5c04IuDPczQnSr1U6NtQ1fRJr2gVoaLIkTRsasuTaPRnizH1kFIkXYDV6Lquc+OO5gfg+eDWvc2pMN5pSJAgzGs2jzAH3GX3UOLISivKOga/uSoO558qTpJn69sygRjCqIlt/53UsePLf/T8eokrTlJRIpBEzA2CxcXrj4ylNaS1O8Z9Nb9yCDSbYl+dUiSqwGC7vR9rOTirXIXjO0vlR41nZUexla41wzxgA23+thEH8Sj6CTFEk+s7TXQth/0svPduHHbYA8w8po3JhNo0lKugc2zP4SF4lEOW27fNrwLLuDZ+tQlaGV012jVYREPo+Ul5fcQEZgaRJwVtLb5sOA3xt9M5HS2MuXx1C1EYmrIhJDyYOPPFxFSPRh/gfHdSAFTQJlsa6QSMAOy9O0pxgUbUxfRwsl4IV8U9XSgeqDNB1gcMdxmnc/Apt4KlTOcG9gVlRY1cdGHN2xy9tU58bo+ojQeXdmcokIj84bqFBy1/hMsVBHNXpwvOt8S3xPjWCf65KJFhfwc1OP/GUNqpdd1axahIIUv2zzJzBZGsVfACOPzX6KmjIdaT0F1OBy6LUtdEfWit42xAydpYaVTtMoWvLyJgcp1yaOGkif2qcWWLIO05eGaig2PLQiLJEzOPR1uPoWoLaHeXgnVfoMPymol+d8k1Kkbc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(376002)(396003)(39860400002)(366004)(136003)(83380400001)(5660300002)(66476007)(8676002)(7416002)(31696002)(6916009)(66556008)(316002)(54906003)(66946007)(6486002)(478600001)(86362001)(2616005)(36756003)(4326008)(6506007)(26005)(6666004)(41300700001)(53546011)(6512007)(186003)(8936002)(2906002)(38100700002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YTRFUVNwdEYwSnFic2swMXpnRUdES1hYdFRCemFzaWpsWmRBTmtyTi9FSUhV?=
+ =?utf-8?B?WGlzMzFaVFdkRmVab1VQSXVOYjJpR1hKcjJnV1JkMmltcXVEeUpPMmkxNXg3?=
+ =?utf-8?B?ZTBCUm9VckNqVWc5dGJvQWI2WWt6TTRyQUlHYlJMZWZEK1VnNUR3V0ZhUlBk?=
+ =?utf-8?B?ZzJveVM1dFFlWXdDbWh5SGZaZW5xSENzaEs1NndhWHFQcEV2dFVrSmNoTDRH?=
+ =?utf-8?B?RlFhWW04bDNvYWowMnBCc0JaTUdIclFKZ3BxcS95U3BQTEVwckNUQVZtdHo1?=
+ =?utf-8?B?TkszZFVRL3VkUzNGcFlHS2xnZDNlZGxzOUNhbTZZaGRMUFQ5VGtzSzhxR0VO?=
+ =?utf-8?B?OXRQeDhBamV2MzBDVzdJUEdjaytzZnkrRnJmUFl3b0tiaXhRS2lnRFRibTVj?=
+ =?utf-8?B?U3pSdWVFV2NwN09ZWXhmeVFwbElZbzNzbFhxK00ydFNibml2UEZ6SVUzZDBM?=
+ =?utf-8?B?bjd1NUxaMElzVEFiWVdONURqSVJFVUREZkFGR1Z3bk1ZOHlvUlNoZWZ4Mm95?=
+ =?utf-8?B?WnlIbGhPdDNNaTVNVEZjbTE5Y2dOUkFxelZva2F4WGwwamhVUEtXelNNY2la?=
+ =?utf-8?B?ckRwdExkbWNoRC81d0sxMGwzSDdmTXgzd2xaSlkwdTJ3dWozSk1naFJTMmhY?=
+ =?utf-8?B?TW1meXVFZytXZ1UzMmdZNkwzV1R4OTNUMlRGQVZsVEtnNW03bDd5UnBMd21M?=
+ =?utf-8?B?M2g4c2pvT0R0Rk1sU0pnNVl3ZS91RkVVWUNiQ2RQYTd0eUlwbmF2OUNEWXpB?=
+ =?utf-8?B?YmFOamMxMHV4ZWFwYXAwVVNDbkxVS3JJcGJFaG15bitMWHFRelFpMC9DZDZL?=
+ =?utf-8?B?cmpkRDJ0MzFZWU4yQzEwbi9hTUdFeS9UcmtsTWpFK294ZDFRU25NbXE5Z2JP?=
+ =?utf-8?B?eGJWSHNuODQ2RkQ3aEpURkxXYXFkNEhGdDdKSkJaQWJaYjdhdW9HRVBRYzNs?=
+ =?utf-8?B?eUtxMGJ1K1Z4eHlkMnBIYTFmZ1hyTitXZi9jYXFyU2ExQ0xTTExyMTBsMno1?=
+ =?utf-8?B?NmRrSUNTamZsbFVzWU1wOXNCbmZSQzMveW9yN0E5bTByaExvdG1rSkdIKzcw?=
+ =?utf-8?B?WEdFZDNUMmtRNGJoMDV3clV3bmxoRlhUR2paQkQveGpVS0xQUmVwd1FsMlpG?=
+ =?utf-8?B?eDhaTWxIbFBSRkllMXk1Uk1DS3Q5TzAwQStaRnpDR2huWkZCRk9lY3p2dUIy?=
+ =?utf-8?B?MFVBSmFPbmhUYWh2VXE4ck94eVptQStuR29hOXl4ODI2T3Z2bjB2S3dJV0gw?=
+ =?utf-8?B?cGZMandrRDdkVVUvc0lGUkYrb1l6L0g1SHFNU1RUT3JnNFdNcyt1TFV3RHNW?=
+ =?utf-8?B?S24rRmFLTndyUmc2cEdQaTJiNFZlbHUwa1NjeWd1cklrM2pKZERrNmRJL2dz?=
+ =?utf-8?B?WlU3dC80aDJvL2VpWGkwSEc0ZUZTOGp1SFN3QXZNdkNZMm1TWUowQkk1Tm9G?=
+ =?utf-8?B?N1IzcWpUNFBmbE4yUWFLNW5rc0ZwQjRsclJYSXVYRjFmVkR2UytVeUlmZ0Yv?=
+ =?utf-8?B?Z1o4Nk8zOW5aKzN1R1NLc1FjVGp3R0RvNkRPM1l0VXo0bktkTXc3eU5UN0cv?=
+ =?utf-8?B?MmJUNTdwNGJmMk9wRlEzRkZ3dHJOSmdEcTdXWU8yU0VhMVBOZXdiWkl1Tzdt?=
+ =?utf-8?B?SnN1ajB0M3k3cUxOdW9qbzc0M1FxUk9IQ0UrY1ZjV3hZV0VqL3J6Qk1KYVFU?=
+ =?utf-8?B?Qi8xcnZCSXRwTmhDY1J1WTFOUG92NHFhcmNoTnVuMFdyTEpYTWNzeUQ0Z21z?=
+ =?utf-8?B?TFp0Lzl1OHhQd3VBSnJuckJuMVdpNW5lenkxL25leWRBdEF3YjZUSC9IbzRs?=
+ =?utf-8?B?d0FXVE1GaE1xSVY5aEw2YlU2VURXQXJxc09ySTJjVmo3ZnVnbFg1ZzNkYU8y?=
+ =?utf-8?B?V0E3L1FjTElOK05jbWZEblVhaDJscm1TZW5VV09SVVVzTUxHYjV1RWlEVXl4?=
+ =?utf-8?B?a3JTanRWWUVGL24xbUovS1BVQXBHQVVla2Vmc2hvVm8za29TOGxVQ3RvajUy?=
+ =?utf-8?B?cW52eFNKUDFXZU1xYlNYK0VDOUlwRXpJQW44cmpVcklZbjFlbW0reE93REtF?=
+ =?utf-8?B?bVI4ajdMYjNvNEVEOGNJZ2JNZk9sWWg2WC95ZHBrRVY5N21BYkcrVWdHQ0hE?=
+ =?utf-8?Q?BBXqE6/A2Vz3xlyvZnJDVaqB0?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d43b685f-0701-4c70-cf9c-08da64d6de3f
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 13:52:04.2255
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NXnMhclZSUYYkdh36X8UyTMVtmJR38FfisCAgS90E/kjqVarrlR7bCje2iFk+cIvh6ICQVnHOV52nCL2aXmE+g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6040
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022 14:56:42 +0200
-Steffen Eiden <seiden@linux.ibm.com> wrote:
-
-> From: Heiko Carstens <hca@linux.ibm.com>
+On 13.07.2022 15:49, Chuck Zmudzinski wrote:
+> On 7/13/2022 9:34 AM, Jan Beulich wrote:
+>> On 13.07.2022 13:10, Chuck Zmudzinski wrote:
+>>> On 7/13/2022 6:36 AM, Chuck Zmudzinski wrote:
+>>>> On 7/13/2022 5:09 AM, Jan Beulich wrote:
+>>>>> On 13.07.2022 10:51, Chuck Zmudzinski wrote:
+>>>>>> On 7/13/22 2:18 AM, Jan Beulich wrote:
+>>>>>>> On 13.07.2022 03:36, Chuck Zmudzinski wrote:
+>>>>>>>> v2: *Add force_pat_disabled variable to fix "nopat" on Xen PV (Jan Beulich)
+>>>>>>>>     *Add the necessary code to incorporate the "nopat" fix
+>>>>>>>>     *void init_cache_modes(void) -> void __init init_cache_modes(void)
+>>>>>>>>     *Add Jan Beulich as Co-developer (Jan has not signed off yet)
+>>>>>>>>     *Expand the commit message to include relevant parts of the commit
+>>>>>>>>      message of Jan Beulich's proposed patch for this problem
+>>>>>>>>     *Fix 'else if ... {' placement and indentation
+>>>>>>>>     *Remove indication the backport to stable branches is only back to 5.17.y
+>>>>>>>>
+>>>>>>>> I think these changes address all the comments on the original patch
+>>>>>>>>
+>>>>>>>> I added Jan Beulich as a Co-developer because Juergen Gross asked me to
+>>>>>>>> include Jan's idea for fixing "nopat" that was missing from the first
+>>>>>>>> version of the patch.
+>>>>>>>
+>>>>>>> You've sufficiently altered this change to clearly no longer want my
+>>>>>>> S-o-b; unfortunately in fact I think you broke things:
+>>>>>>
+>>>>>> Well, I hope we can come to an agreement so I have
+>>>>>> your S-o-b. But that would probably require me to remove
+>>>>>> Juergen's R-b.
+>>>>>>
+>>>>>>>> @@ -292,7 +294,7 @@ void init_cache_modes(void)
+>>>>>>>>  		rdmsrl(MSR_IA32_CR_PAT, pat);
+>>>>>>>>  	}
+>>>>>>>>  
+>>>>>>>> -	if (!pat) {
+>>>>>>>> +	if (!pat || pat_force_disabled) {
+>>>>>>>
+>>>>>>> By checking the new variable here ...
+>>>>>>>
+>>>>>>>>  		/*
+>>>>>>>>  		 * No PAT. Emulate the PAT table that corresponds to the two
+>>>>>>>>  		 * cache bits, PWT (Write Through) and PCD (Cache Disable).
+>>>>>>>> @@ -313,6 +315,16 @@ void init_cache_modes(void)
+>>>>>>>>  		 */
+>>>>>>>>  		pat = PAT(0, WB) | PAT(1, WT) | PAT(2, UC_MINUS) | PAT(3, UC) |
+>>>>>>>>  		      PAT(4, WB) | PAT(5, WT) | PAT(6, UC_MINUS) | PAT(7, UC);
+>>>>>>>
+>>>>>>> ... you put in place a software view which doesn't match hardware. I
+>>>>>>> continue to think that ...
+>>>>>>>
+>>>>>>>> +	} else if (!pat_bp_enabled) {
+>>>>>>>
+>>>>>>> ... the variable wants checking here instead (at which point, yes,
+>>>>>>> this comes quite close to simply being a v2 of my original patch).
+>>>>>>>
+>>>>>>> By using !pat_bp_enabled here you actually broaden where the change
+>>>>>>> would take effect. Iirc Boris had asked to narrow things (besides
+>>>>>>> voicing opposition to this approach altogether). Even without that
+>>>>>>> request I wonder whether you aren't going to far with this.
+>>>>>>>
+>>>>>>> Jan
+>>>>>>
+>>>>>> I thought about checking for the administrator's "nopat"
+>>>>>> setting where you suggest which would limit the effect
+>>>>>> of "nopat" to not reporting PAT as enabled to device
+>>>>>> drivers who query for PAT availability using pat_enabled().
+>>>>>> The main reason I did not do that is that due to the fact
+>>>>>> that we cannot write to the PAT MSR, we cannot really
+>>>>>> disable PAT. But we come closer to respecting the wishes
+>>>>>> of the administrator by configuring the caching modes as
+>>>>>> if PAT is actually disabled by the hardware or firmware
+>>>>>> when in fact it is not.
+>>>>>>
+>>>>>> What would you propose logging as a message when
+>>>>>> we report PAT as disabled via pat_enabled()? The main
+>>>>>> reason I did not choose to check the new variable in the
+>>>>>> new 'else if' block is that I could not figure out what to
+>>>>>> tell the administrator in that case. I think we would have
+>>>>>> to log something like, "nopat is set, but we cannot disable
+>>>>>> PAT, doing our best to disable PAT by not reporting PAT
+>>>>>> as enabled via pat_enabled(), but that does not guarantee
+>>>>>> that kernel drivers and components cannot use PAT if they
+>>>>>> query for PAT support using boot_cpu_has(X86_FEATURE_PAT)
+>>>>>> instead of pat_enabled()." However, I acknowledge WC mappings
+>>>>>> would still be disabled because arch_can_pci_mmap_wc() will
+>>>>>> be false if pat_enabled() is false.
+>>>>>>
+>>>>>> Perhaps we also need to log something if we keep the
+>>>>>> check for "nopat" where I placed it. We could say something
+>>>>>> like: "nopat is set, but we cannot disable hardware/firmware
+>>>>>> PAT support, so we are emulating as if there is no PAT support
+>>>>>> which puts in place a software view that does not match
+>>>>>> hardware."
+>>>>>>
+>>>>>> No matter what, because we cannot write to PAT MSR in
+>>>>>> the Xen PV case, we probably need to log something to
+>>>>>> explain the problems associated with trying to honor the
+>>>>>> administrator's request. Also, what log level should it be.
+>>>>>> Should it be a pr_warn instead of a pr_info?
+>>>>>
+>>>>> I'm afraid I'm the wrong one to answer logging questions. As you
+>>>>> can see from my original patch, I didn't add any new logging (and
+>>>>> no addition was requested in the comments that I have got). I also
+>>>>> don't think "nopat" has ever meant "disable PAT", as the feature
+>>>>> is either there or not. Instead I think it was always seen as
+>>>>> "disable fiddling with PAT", which by implication means using
+>>>>> whatever is there (if the feature / MSR itself is available).
+>>>>
+>>>> IIRC, I do think I mentioned in the comments on your patch that
+>>>> it would be preferable to mention in the commit message that
+>>>> your patch would change the current behavior of "nopat" on
+>>>> Xen. The question is, how much do we want to change the
+>>>> current behavior of "nopat" on Xen. I think if we have to change
+>>>> the current behavior of "nopat" on Xen and if we are going
+>>>> to propagate that change to all current stable branches all
+>>>> the way back to 4.9.y,, we better make a lot of noise about
+>>>> what we are doing here.
+>>>>
+>>>> Chuck
+>>>
+>>> And in addition, if we are going to backport this patch to
+>>> all current stable branches, we better have a really, really,
+>>> good reason for changing the behavior of "nopat" on Xen.
+>>>
+>>> Does such a reason exist?
+>>
+>> Well, the simple reason is: It doesn't work the same way under Xen
+>> and non-Xen (in turn because, before my patch or whatever equivalent
+>> work, things don't work properly anyway, PAT-wise). Yet it definitely
+>> ought to behave the same everywhere, imo.
+>>
+>> Jan
 > 
-> Rework cpufeature implementation to allow for various cpu feature
-> indications, which is not only limited to hwcap bits. This is achieved
-> by adding a sequential list of cpu feature numbers, where each of them
-> is mapped to an entry which indicates what this number is about.
+> IOW, you are saying PAT has been broken on Xen for a
+> long time, and it is necessary to fix it now not only on
+> master, but also on all the stable branches.
 > 
-> Each entry contains a type member, which indicates what feature
-> name space to look into (e.g. hwcap, or cpu facility). If wanted this
-> allows also to automatically load modules only in e.g. z/VM
-> configurations.
-> 
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> Why is it necessary to do it on all the stable branches?
 
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+I'm not saying that's _necessary_ (but I think it would make sense),
+and I'm not the one to decide whether or how far to backport this.
 
-> ---
->  arch/s390/crypto/aes_s390.c        |  2 +-
->  arch/s390/crypto/chacha-glue.c     |  2 +-
->  arch/s390/crypto/crc32-vx.c        |  2 +-
->  arch/s390/crypto/des_s390.c        |  2 +-
->  arch/s390/crypto/ghash_s390.c      |  2 +-
->  arch/s390/crypto/prng.c            |  2 +-
->  arch/s390/crypto/sha1_s390.c       |  2 +-
->  arch/s390/crypto/sha256_s390.c     |  2 +-
->  arch/s390/crypto/sha3_256_s390.c   |  2 +-
->  arch/s390/crypto/sha3_512_s390.c   |  2 +-
->  arch/s390/crypto/sha512_s390.c     |  2 +-
->  arch/s390/include/asm/cpufeature.h | 22 +++++-----------
->  arch/s390/kernel/Makefile          |  2 +-
->  arch/s390/kernel/cpufeature.c      | 42 ++++++++++++++++++++++++++++++
->  arch/s390/kernel/processor.c       | 10 -------
->  drivers/char/hw_random/s390-trng.c |  2 +-
->  drivers/s390/crypto/pkey_api.c     |  2 +-
->  17 files changed, 63 insertions(+), 39 deletions(-)
->  create mode 100644 arch/s390/kernel/cpufeature.c
-> 
-> diff --git a/arch/s390/crypto/aes_s390.c b/arch/s390/crypto/aes_s390.c
-> index 1023e9d43d44..526c3f40f6a2 100644
-> --- a/arch/s390/crypto/aes_s390.c
-> +++ b/arch/s390/crypto/aes_s390.c
-> @@ -1049,7 +1049,7 @@ static int __init aes_s390_init(void)
->  	return ret;
->  }
->  
-> -module_cpu_feature_match(MSA, aes_s390_init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_MSA, aes_s390_init);
->  module_exit(aes_s390_fini);
->  
->  MODULE_ALIAS_CRYPTO("aes-all");
-> diff --git a/arch/s390/crypto/chacha-glue.c b/arch/s390/crypto/chacha-glue.c
-> index 2ec51f339cec..7752bd314558 100644
-> --- a/arch/s390/crypto/chacha-glue.c
-> +++ b/arch/s390/crypto/chacha-glue.c
-> @@ -121,7 +121,7 @@ static void __exit chacha_mod_fini(void)
->  		crypto_unregister_skciphers(chacha_algs, ARRAY_SIZE(chacha_algs));
->  }
->  
-> -module_cpu_feature_match(VXRS, chacha_mod_init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_VXRS, chacha_mod_init);
->  module_exit(chacha_mod_fini);
->  
->  MODULE_DESCRIPTION("ChaCha20 stream cipher");
-> diff --git a/arch/s390/crypto/crc32-vx.c b/arch/s390/crypto/crc32-vx.c
-> index fafecad20752..017143e9cef7 100644
-> --- a/arch/s390/crypto/crc32-vx.c
-> +++ b/arch/s390/crypto/crc32-vx.c
-> @@ -298,7 +298,7 @@ static void __exit crc_vx_mod_exit(void)
->  	crypto_unregister_shashes(crc32_vx_algs, ARRAY_SIZE(crc32_vx_algs));
->  }
->  
-> -module_cpu_feature_match(VXRS, crc_vx_mod_init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_VXRS, crc_vx_mod_init);
->  module_exit(crc_vx_mod_exit);
->  
->  MODULE_AUTHOR("Hendrik Brueckner <brueckner@linux.vnet.ibm.com>");
-> diff --git a/arch/s390/crypto/des_s390.c b/arch/s390/crypto/des_s390.c
-> index e013088b5115..8e75b83a5ddc 100644
-> --- a/arch/s390/crypto/des_s390.c
-> +++ b/arch/s390/crypto/des_s390.c
-> @@ -492,7 +492,7 @@ static int __init des_s390_init(void)
->  	return ret;
->  }
->  
-> -module_cpu_feature_match(MSA, des_s390_init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_MSA, des_s390_init);
->  module_exit(des_s390_exit);
->  
->  MODULE_ALIAS_CRYPTO("des");
-> diff --git a/arch/s390/crypto/ghash_s390.c b/arch/s390/crypto/ghash_s390.c
-> index 6b07a2f1ce8a..0800a2a5799f 100644
-> --- a/arch/s390/crypto/ghash_s390.c
-> +++ b/arch/s390/crypto/ghash_s390.c
-> @@ -145,7 +145,7 @@ static void __exit ghash_mod_exit(void)
->  	crypto_unregister_shash(&ghash_alg);
->  }
->  
-> -module_cpu_feature_match(MSA, ghash_mod_init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_MSA, ghash_mod_init);
->  module_exit(ghash_mod_exit);
->  
->  MODULE_ALIAS_CRYPTO("ghash");
-> diff --git a/arch/s390/crypto/prng.c b/arch/s390/crypto/prng.c
-> index ae382bafc772..a077087bc6cc 100644
-> --- a/arch/s390/crypto/prng.c
-> +++ b/arch/s390/crypto/prng.c
-> @@ -907,5 +907,5 @@ static void __exit prng_exit(void)
->  	}
->  }
->  
-> -module_cpu_feature_match(MSA, prng_init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_MSA, prng_init);
->  module_exit(prng_exit);
-> diff --git a/arch/s390/crypto/sha1_s390.c b/arch/s390/crypto/sha1_s390.c
-> index a3fabf310a38..bc3a22704e09 100644
-> --- a/arch/s390/crypto/sha1_s390.c
-> +++ b/arch/s390/crypto/sha1_s390.c
-> @@ -95,7 +95,7 @@ static void __exit sha1_s390_fini(void)
->  	crypto_unregister_shash(&alg);
->  }
->  
-> -module_cpu_feature_match(MSA, sha1_s390_init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_MSA, sha1_s390_init);
->  module_exit(sha1_s390_fini);
->  
->  MODULE_ALIAS_CRYPTO("sha1");
-> diff --git a/arch/s390/crypto/sha256_s390.c b/arch/s390/crypto/sha256_s390.c
-> index 24983f175676..6f1ccdf93d3e 100644
-> --- a/arch/s390/crypto/sha256_s390.c
-> +++ b/arch/s390/crypto/sha256_s390.c
-> @@ -134,7 +134,7 @@ static void __exit sha256_s390_fini(void)
->  	crypto_unregister_shash(&sha256_alg);
->  }
->  
-> -module_cpu_feature_match(MSA, sha256_s390_init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_MSA, sha256_s390_init);
->  module_exit(sha256_s390_fini);
->  
->  MODULE_ALIAS_CRYPTO("sha256");
-> diff --git a/arch/s390/crypto/sha3_256_s390.c b/arch/s390/crypto/sha3_256_s390.c
-> index 30ac49b635bf..e1350e033a32 100644
-> --- a/arch/s390/crypto/sha3_256_s390.c
-> +++ b/arch/s390/crypto/sha3_256_s390.c
-> @@ -137,7 +137,7 @@ static void __exit sha3_256_s390_fini(void)
->  	crypto_unregister_shash(&sha3_256_alg);
->  }
->  
-> -module_cpu_feature_match(MSA, sha3_256_s390_init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_MSA, sha3_256_s390_init);
->  module_exit(sha3_256_s390_fini);
->  
->  MODULE_ALIAS_CRYPTO("sha3-256");
-> diff --git a/arch/s390/crypto/sha3_512_s390.c b/arch/s390/crypto/sha3_512_s390.c
-> index e70d50f7620f..06c142ed9bb1 100644
-> --- a/arch/s390/crypto/sha3_512_s390.c
-> +++ b/arch/s390/crypto/sha3_512_s390.c
-> @@ -147,7 +147,7 @@ static void __exit fini(void)
->  	crypto_unregister_shash(&sha3_384_alg);
->  }
->  
-> -module_cpu_feature_match(MSA, init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_MSA, init);
->  module_exit(fini);
->  
->  MODULE_LICENSE("GPL");
-> diff --git a/arch/s390/crypto/sha512_s390.c b/arch/s390/crypto/sha512_s390.c
-> index 43ce4956df73..04f11c407763 100644
-> --- a/arch/s390/crypto/sha512_s390.c
-> +++ b/arch/s390/crypto/sha512_s390.c
-> @@ -142,7 +142,7 @@ static void __exit fini(void)
->  	crypto_unregister_shash(&sha384_alg);
->  }
->  
-> -module_cpu_feature_match(MSA, init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_MSA, init);
->  module_exit(fini);
->  
->  MODULE_LICENSE("GPL");
-> diff --git a/arch/s390/include/asm/cpufeature.h b/arch/s390/include/asm/cpufeature.h
-> index 14cfd48d598e..771caf5281e5 100644
-> --- a/arch/s390/include/asm/cpufeature.h
-> +++ b/arch/s390/include/asm/cpufeature.h
-> @@ -2,28 +2,20 @@
->  /*
->   * Module interface for CPU features
->   *
-> - * Copyright IBM Corp. 2015
-> + * Copyright IBM Corp. 2015, 2022
->   * Author(s): Hendrik Brueckner <brueckner@linux.vnet.ibm.com>
->   */
->  
->  #ifndef __ASM_S390_CPUFEATURE_H
->  #define __ASM_S390_CPUFEATURE_H
->  
-> -#include <asm/elf.h>
-> +enum {
-> +	S390_CPU_FEATURE_MSA,
-> +	S390_CPU_FEATURE_VXRS,
-> +	MAX_CPU_FEATURES
-> +};
->  
-> -/* Hardware features on Linux on z Systems are indicated by facility bits that
-> - * are mapped to the so-called machine flags.  Particular machine flags are
-> - * then used to define ELF hardware capabilities; most notably hardware flags
-> - * that are essential for user space / glibc.
-> - *
-> - * Restrict the set of exposed CPU features to ELF hardware capabilities for
-> - * now.  Additional machine flags can be indicated by values larger than
-> - * MAX_ELF_HWCAP_FEATURES.
-> - */
-> -#define MAX_ELF_HWCAP_FEATURES	(8 * sizeof(elf_hwcap))
-> -#define MAX_CPU_FEATURES	MAX_ELF_HWCAP_FEATURES
-> -
-> -#define cpu_feature(feat)	ilog2(HWCAP_ ## feat)
-> +#define cpu_feature(feature)	(feature)
->  
->  int cpu_have_feature(unsigned int nr);
->  
-> diff --git a/arch/s390/kernel/Makefile b/arch/s390/kernel/Makefile
-> index 27d6b3c7aa06..3cbfa9fddd9a 100644
-> --- a/arch/s390/kernel/Makefile
-> +++ b/arch/s390/kernel/Makefile
-> @@ -35,7 +35,7 @@ CFLAGS_unwind_bc.o	+= -fno-optimize-sibling-calls
->  
->  obj-y	:= traps.o time.o process.o earlypgm.o early.o setup.o idle.o vtime.o
->  obj-y	+= processor.o syscall.o ptrace.o signal.o cpcmd.o ebcdic.o nmi.o
-> -obj-y	+= debug.o irq.o ipl.o dis.o diag.o vdso.o
-> +obj-y	+= debug.o irq.o ipl.o dis.o diag.o vdso.o cpufeature.o
->  obj-y	+= sysinfo.o lgr.o os_info.o machine_kexec.o
->  obj-y	+= runtime_instr.o cache.o fpu.o dumpstack.o guarded_storage.o sthyi.o
->  obj-y	+= entry.o reipl.o relocate_kernel.o kdebugfs.o alternative.o
-> diff --git a/arch/s390/kernel/cpufeature.c b/arch/s390/kernel/cpufeature.c
-> new file mode 100644
-> index 000000000000..9044c75d8b38
-> --- /dev/null
-> +++ b/arch/s390/kernel/cpufeature.c
-> @@ -0,0 +1,42 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright IBM Corp. 2022
-> + */
-> +#include <linux/cpufeature.h>
-> +#include <linux/bug.h>
-> +#include <asm/elf.h>
-> +
-> +enum {
-> +	TYPE_HWCAP,
-> +};
-> +
-> +struct s390_cpu_feature {
-> +	unsigned int type	: 4;
-> +	unsigned int num	: 28;
-> +};
-> +
-> +static struct s390_cpu_feature s390_cpu_features[MAX_CPU_FEATURES] = {
-> +	[S390_CPU_FEATURE_MSA]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_MSA},
-> +	[S390_CPU_FEATURE_VXRS]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_VXRS},
-> +};
-> +
-> +/*
-> + * cpu_have_feature - Test CPU features on module initialization
-> + */
-> +int cpu_have_feature(unsigned int num)
-> +{
-> +	struct s390_cpu_feature *feature;
-> +
-> +	if (WARN_ON_ONCE(num >= MAX_CPU_FEATURES))
-> +		return 0;
-> +
-> +	feature = &s390_cpu_features[num];
-> +	switch (feature->type) {
-> +	case TYPE_HWCAP:
-> +		return !!(elf_hwcap & BIT(feature->num));
-> +	default:
-> +		WARN_ON_ONCE(1);
-> +		return 0;
-> +	}
-> +}
-> +EXPORT_SYMBOL(cpu_have_feature);
-> diff --git a/arch/s390/kernel/processor.c b/arch/s390/kernel/processor.c
-> index aa0e0e7fc773..a194611ba88c 100644
-> --- a/arch/s390/kernel/processor.c
-> +++ b/arch/s390/kernel/processor.c
-> @@ -8,7 +8,6 @@
->  #define pr_fmt(fmt) KMSG_COMPONENT ": " fmt
->  
->  #include <linux/stop_machine.h>
-> -#include <linux/cpufeature.h>
->  #include <linux/bitops.h>
->  #include <linux/kernel.h>
->  #include <linux/random.h>
-> @@ -96,15 +95,6 @@ void cpu_init(void)
->  	enter_lazy_tlb(&init_mm, current);
->  }
->  
-> -/*
-> - * cpu_have_feature - Test CPU features on module initialization
-> - */
-> -int cpu_have_feature(unsigned int num)
-> -{
-> -	return elf_hwcap & (1UL << num);
-> -}
-> -EXPORT_SYMBOL(cpu_have_feature);
-> -
->  static void show_facilities(struct seq_file *m)
->  {
->  	unsigned int bit;
-> diff --git a/drivers/char/hw_random/s390-trng.c b/drivers/char/hw_random/s390-trng.c
-> index 2beaa35c0d74..12fbac0ed8ca 100644
-> --- a/drivers/char/hw_random/s390-trng.c
-> +++ b/drivers/char/hw_random/s390-trng.c
-> @@ -261,5 +261,5 @@ static void __exit trng_exit(void)
->  	trng_debug_exit();
->  }
->  
-> -module_cpu_feature_match(MSA, trng_init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_MSA, trng_init);
->  module_exit(trng_exit);
-> diff --git a/drivers/s390/crypto/pkey_api.c b/drivers/s390/crypto/pkey_api.c
-> index 7329caa7d467..5a05d1cdfec2 100644
-> --- a/drivers/s390/crypto/pkey_api.c
-> +++ b/drivers/s390/crypto/pkey_api.c
-> @@ -2115,5 +2115,5 @@ static void __exit pkey_exit(void)
->  	pkey_debug_exit();
->  }
->  
-> -module_cpu_feature_match(MSA, pkey_init);
-> +module_cpu_feature_match(S390_CPU_FEATURE_MSA, pkey_init);
->  module_exit(pkey_exit);
-
+Jan

@@ -2,88 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B83C572B09
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84EC572B0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233970AbiGMBpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 21:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
+        id S233685AbiGMBqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 21:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233879AbiGMBpb (ORCPT
+        with ESMTP id S230085AbiGMBqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 21:45:31 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E34ED216E;
-        Tue, 12 Jul 2022 18:45:23 -0700 (PDT)
-Received: from canpemm100009.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LjL2C4wSKzVfds;
-        Wed, 13 Jul 2022 09:41:39 +0800 (CST)
-Received: from dggpeml500026.china.huawei.com (7.185.36.106) by
- canpemm100009.china.huawei.com (7.192.105.213) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Jul 2022 09:45:21 +0800
-Received: from dggpeml500026.china.huawei.com ([7.185.36.106]) by
- dggpeml500026.china.huawei.com ([7.185.36.106]) with mapi id 15.01.2375.024;
- Wed, 13 Jul 2022 09:45:21 +0800
-From:   shaozhengchao <shaozhengchao@huawei.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "jhs@mojatatu.com" <jhs@mojatatu.com>,
-        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
-        "jiri@resnulli.us" <jiri@resnulli.us>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "weiyongjun (A)" <weiyongjun1@huawei.com>,
-        yuehaibing <yuehaibing@huawei.com>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIIHYyLG5ldC1uZXh0XSBuZXQvc2NoZWQ6IHJlbW92ZSBy?=
- =?gb2312?B?ZXR1cm4gdmFsdWUgb2YgdW5yZWdpc3Rlcl90Y2ZfcHJvdG9fb3Bz?=
-Thread-Topic: [PATCH v2,net-next] net/sched: remove return value of
- unregister_tcf_proto_ops
-Thread-Index: AQHYlPzZC3TG6GoUpUWj56DI8e3zxq16+jUAgACP27A=
-Date:   Wed, 13 Jul 2022 01:45:21 +0000
-Message-ID: <21adc0dadeb84320aa360135a5b639c9@huawei.com>
-References: <20220711080910.40270-1-shaozhengchao@huawei.com>
- <20220712180906.07bea7f8@kernel.org>
-In-Reply-To: <20220712180906.07bea7f8@kernel.org>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.178.66]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Tue, 12 Jul 2022 21:46:37 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBB4D2155
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:46:36 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id i21so9560964qtw.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yrXtUecsmBg0K4L1DUREg8dlroAqnP1q7zD25CeSLTo=;
+        b=UCAgNpWtV0pjlqA0EsR1TRQee1COJiv6CTfG334Z/15eK8FXww1AGoVkAuYpx3M8zm
+         gHJoTHs+vNK7aF/fFWrKQ0qeKW2071nRBGdkdfXF2nGPBuVoySEd/zKG5V/FgNEyigvF
+         huQHR/ELQsOS6Gld8+c9sd9hZ+T6s6OVVdkHplcRKCMsCixlSp0Y1oT683Lm90UVRndZ
+         TboD4zlY3bLUXxDc3qj5r8WPoAHzU17kyguZQWvfRefBQiuMZz8NuDJA8EVYklRDM3cO
+         3iqjoIxrWm2j4x+jrR3muXhkBi3vPAr0Xod2VwuR0YcAq9ektqm14w90AdSXYXmEVXbe
+         j9Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yrXtUecsmBg0K4L1DUREg8dlroAqnP1q7zD25CeSLTo=;
+        b=jZ2x0uQgqzJqD+d/fCfjcsOrjHv1w0a4rf0NvRdZ4LHl7to4pbTEJ43XI46JSHwaNg
+         TDUKRaNbzhPx0IIFKciMTca1KBafGwOCQLq7IdQ2rIruyu1HVm5fcmtx2/kCFYFtjjEV
+         go9OJSVU7DASMQ02tinC4v6Md3eRy5l7t1jf9krxOXafufMaSfpaGNryq4rwklaZ7rP+
+         6fvG5fkzPrZ1C7IuADl4ynIsghguFGsesA1QBZyS1vm3Gd3sGzlYTRFd1mMb4CunjNPK
+         p3q40EC8DItZtWSbv6/XEfps9K8VHoKsXKHyFRNqwSyQbcHypxgSE6ObSfU56FYQe2mT
+         RWFA==
+X-Gm-Message-State: AJIora953mbxrTL7Jl/fHEP1TohGNGytPCwd3vM9HFHEjQHljSnlt9MF
+        VBFQzt+38YMBUfTY6SDt0aw=
+X-Google-Smtp-Source: AGRyM1sdH714eDcooDa84IOTM+iYum1KsaHrSnmyJwSY0ba0ykZ5/mdGk+9SFyvj4lpFEEHdWki/CA==
+X-Received: by 2002:a05:622a:588:b0:31e:b37d:b93 with SMTP id c8-20020a05622a058800b0031eb37d0b93mr900093qtb.461.1657676795605;
+        Tue, 12 Jul 2022 18:46:35 -0700 (PDT)
+Received: from localhost (c-69-254-185-160.hsd1.fl.comcast.net. [69.254.185.160])
+        by smtp.gmail.com with ESMTPSA id o4-20020ac84284000000b00304e5839734sm8447639qtl.55.2022.07.12.18.46.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 18:46:35 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 18:46:34 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Kees Cook <keescook@chromium.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: Re: [PATCH v2 0/5] lib/find: add find_nth_bit()
+Message-ID: <Ys4j+graZRVH8RO2@yury-laptop>
+References: <20220711044711.466822-1-yury.norov@gmail.com>
+ <CAHp75Vf8EhRYWdQN6Oc79GzWCvo-sRJDvy7_Aek_Z63GCu2dMQ@mail.gmail.com>
+ <CAAH8bW_RYG_Tbpip=BkSFAymDm2y3jJBqTi0PJWA=H-a-L_3tg@mail.gmail.com>
+ <CAHp75VcQq3wmwmpaDtu6HC2yrK4rWp+4HOcqMaOHQ3EQQ0c=DA@mail.gmail.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75VcQq3wmwmpaDtu6HC2yrK4rWp+4HOcqMaOHQ3EQQ0c=DA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCi0tLS0t08q8/tStvP4tLS0tLQ0Kt6K8/sjLOiBKYWt1YiBLaWNpbnNraSBbbWFpbHRvOmt1
-YmFAa2VybmVsLm9yZ10gDQq3osvNyrG85DogMjAyMsTqN9TCMTPI1SA5OjA5DQrK1bz+yMs6IHNo
-YW96aGVuZ2NoYW8gPHNoYW96aGVuZ2NoYW9AaHVhd2VpLmNvbT4NCrOty806IGxpbnV4LWtlcm5l
-bEB2Z2VyLmtlcm5lbC5vcmc7IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7IGpoc0Btb2phdGF0dS5j
-b207IHhpeW91Lndhbmdjb25nQGdtYWlsLmNvbTsgamlyaUByZXNudWxsaS51czsgZGF2ZW1AZGF2
-ZW1sb2Z0Lm5ldDsgZWR1bWF6ZXRAZ29vZ2xlLmNvbTsgcGFiZW5pQHJlZGhhdC5jb207IHdlaXlv
-bmdqdW4gKEEpIDx3ZWl5b25nanVuMUBodWF3ZWkuY29tPjsgeXVlaGFpYmluZyA8eXVlaGFpYmlu
-Z0BodWF3ZWkuY29tPg0K1vfM4jogUmU6IFtQQVRDSCB2MixuZXQtbmV4dF0gbmV0L3NjaGVkOiBy
-ZW1vdmUgcmV0dXJuIHZhbHVlIG9mIHVucmVnaXN0ZXJfdGNmX3Byb3RvX29wcw0KDQpPbiBNb24s
-IDExIEp1bCAyMDIyIDE2OjA5OjEwICswODAwIFpoZW5nY2hhbyBTaGFvIHdyb3RlOg0KPiBSZXR1
-cm4gdmFsdWUgb2YgdW5yZWdpc3Rlcl90Y2ZfcHJvdG9fb3BzIGlzIHVudXNlZCwgcmVtb3ZlIGl0
-Lg0KDQo+IC1pbnQgdW5yZWdpc3Rlcl90Y2ZfcHJvdG9fb3BzKHN0cnVjdCB0Y2ZfcHJvdG9fb3Bz
-ICpvcHMpDQo+ICt2b2lkIHVucmVnaXN0ZXJfdGNmX3Byb3RvX29wcyhzdHJ1Y3QgdGNmX3Byb3Rv
-X29wcyAqb3BzKQ0KPiAgew0KPiAgCXN0cnVjdCB0Y2ZfcHJvdG9fb3BzICp0Ow0KPiAgCWludCBy
-YyA9IC1FTk9FTlQ7DQo+IEBAIC0yMTQsNyArMjE0LDEwIEBAIGludCB1bnJlZ2lzdGVyX3RjZl9w
-cm90b19vcHMoc3RydWN0IHRjZl9wcm90b19vcHMgKm9wcykNCj4gIAkJfQ0KPiAgCX0NCj4gIAl3
-cml0ZV91bmxvY2soJmNsc19tb2RfbG9jayk7DQo+IC0JcmV0dXJuIHJjOw0KPiArDQoNCj4gKwlp
-ZiAocmMpDQo+ICsJCXByX3dhcm4oInVucmVnaXN0ZXIgdGMgZmlsdGVyIGtpbmQoJXMpIGZhaWxl
-ZFxuIiwgb3BzLT5raW5kKTsNCg0KSSB3YXMgc2F5aW5nIFdBUk4sIGJ5IHdoaWNoIEkgbWVhbnQ6
-DQoNCldBUk4ocmMsICJ1bnJlZ2lzdGVyIHRjIGZpbHRlciBraW5kKCVzKSBmYWlsZWQgJWRcbiIs
-IG9wcy0+a2luZCwgcmMpOw0KDQpIaSBKYWt1YjoNCglUaGFuayB5b3UgZm9yIHlvdXIgcmVwbHku
-IEkgd2lsbCBmaXggaXQuDQoNClpoYW5nY2hhbyBTaGFvDQoNCg==
+On Tue, Jul 12, 2022 at 08:28:42PM +0200, Andy Shevchenko wrote:
+> On Tue, Jul 12, 2022 at 6:26 PM Yury Norov <yury.norov@gmail.com> wrote:
+> > On Mon, Jul 11, 2022 at 1:55 AM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Mon, Jul 11, 2022 at 6:51 AM Yury Norov <yury.norov@gmail.com> wrote:
+> 
+> ...
+> 
+> > > 2) fns() is not good abbreviation, because among ffs (First) and fls
+> > > (Last), fns would be read as Next, which is misleading, I'm not sure
+> > > fnths(), which is correct, is good for readers.
+> >
+> > I agree that fns() may be confusing, but fnths() is even worse to me.
+> 
+> I also think it's not the best choice.
+> 
+> > I expect that it will be mostly used indirectly via find_nth_bit(), and
+> > will not create a lot of confusion for users.
+> 
+> Perhaps in that case we can survive with something else? Naming is hard...
+
+OK, I'll move it to find.h and call __find_nth_bit().
+
+Is this the only issue, or I'd wait for more comments?
+
+Thanks,
+Yury

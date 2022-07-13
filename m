@@ -2,662 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796AD57365E
+	by mail.lfdr.de (Postfix) with ESMTP id C22C457365F
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236445AbiGMM00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 08:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S230223AbiGMM0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 08:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236435AbiGMMZy (ORCPT
+        with ESMTP id S236449AbiGMMZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 08:25:54 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AB7EBBEE;
-        Wed, 13 Jul 2022 05:25:46 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id b9so10076449pfp.10;
-        Wed, 13 Jul 2022 05:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mLfv4gYeDItEgVRz9PItH5aCwae3B43Nv7NY39XpJ2k=;
-        b=MmmpCkVPM08TYlivHR0ecqR0HXLSwGhKYmdjfwDbYwp+JTwsgf43AqGdohw6D34dcl
-         8jH4vtDWyTmSFHdsnTHAqueAh5g8m0j+gL7QzeLev6gccaDJoSTaKRW3MCk+OcheHJmy
-         oSM2se23+ReSpr3juvIainV1V58MCQ8QGUMZ4LuU5tDbubIxf1upnCOvwSGcq/0tppJK
-         svFiJAofLQ5nRnLdXoK+3zdu/X22ngPFZ+x7+Jewv84PDYhJtyAYbDhWJmYVmsiK8gPx
-         yDaJ3NYrKvHgb0Xv5JiLW6O/PnNoP8JOoFjZh3/bv9nbgocm2h40i4l8wdy6/LcwmYrb
-         KW9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mLfv4gYeDItEgVRz9PItH5aCwae3B43Nv7NY39XpJ2k=;
-        b=ANKhE0Eoyeg/JLjKlCGV1kPW1lasDQ09xz+MAsDs/GQH5BbTIdpY0c74eZmRJz/m/Q
-         CbDv/K9i246m70/5GWS96v99LQC9/2alLClkgr3KrpreOm2oz0/9QjlTS0/CWWlkaIMn
-         X8hL6xulNyAO2zsrgTY4izlqkdLZF6bIN1zuZbY1UA7Gm/Q3lyf3MH/FRHVFPFTnffwg
-         TRhE5X1YmlXv94WxqjxINWKVueEQX5HOsUlgHwWpd1PWFxAFegt5gOiGKNb7wSowhjKK
-         swdsW4xSXgfxTZGa57QehhNzy0O9aPF4/6hrWxTdiQ4Dn2z7GT6HrIIjHYw1sxFwKuEi
-         Mwvg==
-X-Gm-Message-State: AJIora9pc93TKdN/O1LqhsEn92yBKdw0T4tBWH4Svhe2BrG2by2sy0uU
-        yRv13w2q9CV1KJAVhClwoQ0=
-X-Google-Smtp-Source: AGRyM1shYNUzgPefO3LCFzU/EYXhJ9YTO32t47FM1lZmrUvuKKM+dQr9pB4C+tNR96AT5rryeIus0Q==
-X-Received: by 2002:a05:6a00:1248:b0:52b:ca7:f2b6 with SMTP id u8-20020a056a00124800b0052b0ca7f2b6mr2243449pfi.82.1657715145801;
-        Wed, 13 Jul 2022 05:25:45 -0700 (PDT)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id m7-20020a170902bb8700b0016bf1ed3489sm8719233pls.143.2022.07.13.05.25.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 05:25:45 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Like Xu <likexu@tencent.com>
-Subject: [kvm-unit-tests PATCH] x86: Add tests for Guest Processor Event Based Sampling (PEBS)
-Date:   Wed, 13 Jul 2022 20:25:07 +0800
-Message-Id: <20220713122507.29236-9-likexu@tencent.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220713122507.29236-1-likexu@tencent.com>
-References: <20220713122507.29236-1-likexu@tencent.com>
+        Wed, 13 Jul 2022 08:25:57 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181CFECB9A;
+        Wed, 13 Jul 2022 05:25:47 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26D8uJAv023228;
+        Wed, 13 Jul 2022 14:25:30 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=hY/DzheLCg0VbuBOH1SoR4Jn7G8LgrCI2a6S3S81Qto=;
+ b=gGZulg3bmSVzyMBi2Psy94w+lwfECK73kPsXyKle4m0kmGpa0dJ4OZxP8hFAHKJeReIM
+ /Gbs8FDoD+A3EABBqsSoStMGo5lP8q3yNBmJMTTcNVK9sEQqoYNzAPzAn0u54Xre79SK
+ K6NpGbYnvs9fcp9mLK8MSgz2wUIvm6UrD2CpYEPbG056aG6F/rOExf37tmNxH806gixm
+ Va+t/LRIxJwSTGKstDGPAndqcZi0OzZ6Us0j6k+1CY8rPi7uxfbS0AzPEpmkiiRqN0EP
+ 0noRPZ5RCjOSwUC6VyUCNJu13MiCtBdnKbamjsYNIY5CJ4ujiS7yPQFSp7Ko2vwXYzbV Ww== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h94gugy74-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 14:25:29 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0FC6610002A;
+        Wed, 13 Jul 2022 14:25:29 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 09B8221F14C;
+        Wed, 13 Jul 2022 14:25:29 +0200 (CEST)
+Received: from [10.48.1.102] (10.75.127.49) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 13 Jul
+ 2022 14:25:28 +0200
+Message-ID: <077731cf-0525-56af-c615-27cbb5f6e089@foss.st.com>
+Date:   Wed, 13 Jul 2022 14:25:28 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] dt-bindings: mfd: stm32-timers: Move fixed string node
+ names under 'properties'
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Lee Jones <lee.jones@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220706211934.567432-1-robh@kernel.org>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+In-Reply-To: <20220706211934.567432-1-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_14,2022-07-13_02,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On 7/6/22 23:19, Rob Herring wrote:
+> Fixed string node names should be under 'properties' rather than
+> 'patternProperties'. Additionally, without beginning and end of line
+> anchors, any prefix or suffix is allowed on the specified node name.
+> 
+> Move the stm32 timers 'counter' and 'timer' nodes to the 'properties'
+> section.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-This unit-test is intended to test the KVM's support for
-the Processor Event Based Sampling (PEBS) which is another
-PMU feature on Intel processors (start from Ice Lake Server).
+Hi Rob,
 
-If a bit in PEBS_ENABLE is set to 1, its corresponding counter will
-write at least one PEBS records (including partial state of the vcpu
-at the time of the current hardware event) to the guest memory on
-counter overflow, and trigger an interrupt at a specific DS state.
-The format of a PEBS record can be configured by another register.
+You can add my:
+Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 
-These tests cover most usage scenarios, for example there are some
-specially constructed scenarios (not a typical behaviour of Linux 
-PEBS driver). It lowers the threshold for others to understand this
-feature and opens up more exploration of KVM implementation or
-hw feature itself.
+Thanks and Best Regards,
+Fabrice
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- lib/x86/msr.h       |   1 +
- x86/Makefile.x86_64 |   1 +
- x86/pmu_pebs.c      | 511 ++++++++++++++++++++++++++++++++++++++++++++
- x86/unittests.cfg   |   7 +
- 4 files changed, 520 insertions(+)
- create mode 100644 x86/pmu_pebs.c
-
-diff --git a/lib/x86/msr.h b/lib/x86/msr.h
-index fa1c0c8..252e041 100644
---- a/lib/x86/msr.h
-+++ b/lib/x86/msr.h
-@@ -52,6 +52,7 @@
- #define MSR_IA32_MCG_CTL		0x0000017b
- 
- #define MSR_IA32_PEBS_ENABLE		0x000003f1
-+#define MSR_PEBS_DATA_CFG		0x000003f2
- #define MSR_IA32_DS_AREA		0x00000600
- #define MSR_IA32_PERF_CAPABILITIES	0x00000345
- 
-diff --git a/x86/Makefile.x86_64 b/x86/Makefile.x86_64
-index e19284a..c82c274 100644
---- a/x86/Makefile.x86_64
-+++ b/x86/Makefile.x86_64
-@@ -33,6 +33,7 @@ tests += $(TEST_DIR)/vmware_backdoors.$(exe)
- tests += $(TEST_DIR)/rdpru.$(exe)
- tests += $(TEST_DIR)/pks.$(exe)
- tests += $(TEST_DIR)/pmu_lbr.$(exe)
-+tests += $(TEST_DIR)/pmu_pebs.$(exe)
- 
- ifeq ($(CONFIG_EFI),y)
- tests += $(TEST_DIR)/amd_sev.$(exe)
-diff --git a/x86/pmu_pebs.c b/x86/pmu_pebs.c
-new file mode 100644
-index 0000000..5498bb0
---- /dev/null
-+++ b/x86/pmu_pebs.c
-@@ -0,0 +1,511 @@
-+#include "x86/msr.h"
-+#include "x86/processor.h"
-+#include "x86/isr.h"
-+#include "x86/apic.h"
-+#include "x86/apic-defs.h"
-+#include "x86/desc.h"
-+#include "alloc.h"
-+
-+#include "vm.h"
-+#include "types.h"
-+#include "processor.h"
-+#include "vmalloc.h"
-+#include "alloc_page.h"
-+
-+#define PC_VECTOR	32
-+
-+#define	X86_FEATURE_PDCM		(CPUID(0x1, 0, ECX, 15))
-+
-+#define PERF_CAP_PEBS_FORMAT           0xf00
-+#define PMU_CAP_FW_WRITES	(1ULL << 13)
-+
-+#define INTEL_PMC_IDX_FIXED				       32
-+
-+#define GLOBAL_STATUS_BUFFER_OVF_BIT		62
-+#define GLOBAL_STATUS_BUFFER_OVF	BIT_ULL(GLOBAL_STATUS_BUFFER_OVF_BIT)
-+
-+#define EVNTSEL_USR_SHIFT       16
-+#define EVNTSEL_OS_SHIFT        17
-+#define EVNTSEL_EN_SHIF         22
-+
-+#define EVNTSEL_EN      (1 << EVNTSEL_EN_SHIF)
-+#define EVNTSEL_USR     (1 << EVNTSEL_USR_SHIFT)
-+#define EVNTSEL_OS      (1 << EVNTSEL_OS_SHIFT)
-+
-+#define PEBS_DATACFG_MEMINFO	BIT_ULL(0)
-+#define PEBS_DATACFG_GP	BIT_ULL(1)
-+#define PEBS_DATACFG_XMMS	BIT_ULL(2)
-+#define PEBS_DATACFG_LBRS	BIT_ULL(3)
-+
-+#define ICL_EVENTSEL_ADAPTIVE				(1ULL << 34)
-+#define PEBS_DATACFG_LBR_SHIFT	24
-+#define MAX_NUM_LBR_ENTRY	32
-+
-+union perf_capabilities {
-+	struct {
-+		u64	lbr_format:6;
-+		u64	pebs_trap:1;
-+		u64	pebs_arch_reg:1;
-+		u64	pebs_format:4;
-+		u64	smm_freeze:1;
-+		/*
-+		 * PMU supports separate counter range for writing
-+		 * values > 32bit.
-+		 */
-+		u64	full_width_write:1;
-+		u64 pebs_baseline:1;
-+		u64	perf_metrics:1;
-+		u64	pebs_output_pt_available:1;
-+		u64	anythread_deprecated:1;
-+	};
-+	u64	capabilities;
-+};
-+
-+union cpuid10_eax {
-+        struct {
-+                unsigned int version_id:8;
-+                unsigned int num_counters:8;
-+                unsigned int bit_width:8;
-+                unsigned int mask_length:8;
-+        } split;
-+        unsigned int full;
-+} pmu_eax;
-+
-+union cpuid10_edx {
-+        struct {
-+                unsigned int num_counters_fixed:5;
-+                unsigned int bit_width_fixed:8;
-+                unsigned int reserved:19;
-+        } split;
-+        unsigned int full;
-+} pmu_edx;
-+
-+static u64 gp_counter_base = MSR_IA32_PERFCTR0;
-+static union perf_capabilities perf;
-+static unsigned int max_nr_gp_events;
-+static unsigned long *ds_bufer;
-+static unsigned long *pebs_buffer;
-+static u64 ctr_start_val;
-+
-+struct debug_store {
-+	u64	bts_buffer_base;
-+	u64	bts_index;
-+	u64	bts_absolute_maximum;
-+	u64	bts_interrupt_threshold;
-+	u64	pebs_buffer_base;
-+	u64	pebs_index;
-+	u64	pebs_absolute_maximum;
-+	u64	pebs_interrupt_threshold;
-+	u64	pebs_event_reset[64];
-+};
-+
-+struct pebs_basic {
-+	u64 format_size;
-+	u64 ip;
-+	u64 applicable_counters;
-+	u64 tsc;
-+};
-+
-+struct pebs_meminfo {
-+	u64 address;
-+	u64 aux;
-+	u64 latency;
-+	u64 tsx_tuning;
-+};
-+
-+struct pebs_gprs {
-+	u64 flags, ip, ax, cx, dx, bx, sp, bp, si, di;
-+	u64 r8, r9, r10, r11, r12, r13, r14, r15;
-+};
-+
-+struct pebs_xmm {
-+	u64 xmm[16*2];	/* two entries for each register */
-+};
-+
-+struct lbr_entry {
-+	u64 from;
-+	u64 to;
-+	u64 info;
-+};
-+
-+enum pmc_type {
-+	GP = 0,
-+	FIXED,
-+};
-+
-+static uint32_t intel_arch_events[] = {
-+	0x00c4, /* PERF_COUNT_HW_BRANCH_INSTRUCTIONS */
-+	0x00c5, /* PERF_COUNT_HW_BRANCH_MISSES */
-+	0x0300, /* PERF_COUNT_HW_REF_CPU_CYCLES */
-+	0x003c, /* PERF_COUNT_HW_CPU_CYCLES */
-+	0x00c0, /* PERF_COUNT_HW_INSTRUCTIONS */
-+	0x013c, /* PERF_COUNT_HW_BUS_CYCLES */
-+	0x4f2e, /* PERF_COUNT_HW_CACHE_REFERENCES */
-+	0x412e, /* PERF_COUNT_HW_CACHE_MISSES */
-+};
-+
-+static u64 pebs_data_cfgs[] = {
-+	PEBS_DATACFG_MEMINFO,
-+	PEBS_DATACFG_GP,
-+	PEBS_DATACFG_XMMS,
-+	PEBS_DATACFG_LBRS | ((MAX_NUM_LBR_ENTRY -1) << PEBS_DATACFG_LBR_SHIFT),
-+};
-+
-+/* Iterating each counter value is a waste of time, pick a few typical values. */
-+static u64 counter_start_values[] = {
-+	/* if PEBS counter doesn't overflow at all */
-+	0,
-+	0xfffffffffff0,
-+	/* normal counter overflow to have PEBS records */
-+	0xfffffffffffe,
-+	/* test whether emulated instructions should trigger PEBS */
-+	0xffffffffffff,
-+};
-+
-+static unsigned int get_adaptive_pebs_record_size(u64 pebs_data_cfg)
-+{
-+	unsigned int sz = sizeof(struct pebs_basic);
-+
-+	if (!perf.pebs_baseline)
-+		return sz;
-+
-+	if (pebs_data_cfg & PEBS_DATACFG_MEMINFO)
-+		sz += sizeof(struct pebs_meminfo);
-+	if (pebs_data_cfg & PEBS_DATACFG_GP)
-+		sz += sizeof(struct pebs_gprs);
-+	if (pebs_data_cfg & PEBS_DATACFG_XMMS)
-+		sz += sizeof(struct pebs_xmm);
-+	if (pebs_data_cfg & PEBS_DATACFG_LBRS)
-+		sz += MAX_NUM_LBR_ENTRY * sizeof(struct lbr_entry);
-+
-+	return sz;
-+}
-+
-+static void cnt_overflow(isr_regs_t *regs)
-+{
-+	apic_write(APIC_EOI, 0);
-+}
-+
-+static inline void workload(void)
-+{
-+	asm volatile(
-+		"mov $0x0, %%eax\n"
-+		"cmp $0x0, %%eax\n"
-+		"jne label2\n"
-+		"jne label2\n"
-+		"jne label2\n"
-+		"jne label2\n"
-+		"mov $0x0, %%eax\n"
-+		"cmp $0x0, %%eax\n"
-+		"jne label2\n"
-+		"jne label2\n"
-+		"jne label2\n"
-+		"jne label2\n"
-+		"mov $0xa, %%eax\n"
-+		"cpuid\n"
-+		"mov $0xa, %%eax\n"
-+		"cpuid\n"
-+		"mov $0xa, %%eax\n"
-+		"cpuid\n"
-+		"mov $0xa, %%eax\n"
-+		"cpuid\n"
-+		"mov $0xa, %%eax\n"
-+		"cpuid\n"
-+		"mov $0xa, %%eax\n"
-+		"cpuid\n"
-+		"label2:\n"
-+		:
-+		:
-+		: "eax", "ebx", "ecx", "edx");
-+}
-+
-+static inline void workload2(void)
-+{
-+	asm volatile(
-+		"mov $0x0, %%eax\n"
-+		"cmp $0x0, %%eax\n"
-+		"jne label3\n"
-+		"jne label3\n"
-+		"jne label3\n"
-+		"jne label3\n"
-+		"mov $0x0, %%eax\n"
-+		"cmp $0x0, %%eax\n"
-+		"jne label3\n"
-+		"jne label3\n"
-+		"jne label3\n"
-+		"jne label3\n"
-+		"mov $0xa, %%eax\n"
-+		"cpuid\n"
-+		"mov $0xa, %%eax\n"
-+		"cpuid\n"
-+		"mov $0xa, %%eax\n"
-+		"cpuid\n"
-+		"mov $0xa, %%eax\n"
-+		"cpuid\n"
-+		"mov $0xa, %%eax\n"
-+		"cpuid\n"
-+		"mov $0xa, %%eax\n"
-+		"cpuid\n"
-+		"label3:\n"
-+		:
-+		:
-+		: "eax", "ebx", "ecx", "edx");
-+}
-+
-+static void alloc_buffers(void)
-+{
-+	ds_bufer = alloc_page();
-+	force_4k_page(ds_bufer);
-+	memset(ds_bufer, 0x0, PAGE_SIZE);
-+
-+	pebs_buffer = alloc_page();
-+	force_4k_page(pebs_buffer);
-+	memset(pebs_buffer, 0x0, PAGE_SIZE);
-+}
-+
-+static void free_buffers(void)
-+{
-+	if (ds_bufer)
-+		free_page(ds_bufer);
-+
-+	if (pebs_buffer)
-+		free_page(pebs_buffer);
-+}
-+
-+static void pebs_enable(u64 bitmask, u64 pebs_data_cfg)
-+{
-+	static struct debug_store *ds;
-+	u64 baseline_extra_ctrl, fixed_ctr_ctrl = 0;
-+	unsigned int idx;
-+
-+	if (perf.pebs_baseline)
-+		wrmsr(MSR_PEBS_DATA_CFG, pebs_data_cfg);
-+
-+	ds = (struct debug_store *)ds_bufer;
-+	ds->pebs_index = ds->pebs_buffer_base = (unsigned long)pebs_buffer;
-+	ds->pebs_absolute_maximum = (unsigned long)pebs_buffer + PAGE_SIZE;
-+	ds->pebs_interrupt_threshold = ds->pebs_buffer_base +
-+		get_adaptive_pebs_record_size(pebs_data_cfg);
-+
-+	for (idx = 0; idx < pmu_edx.split.num_counters_fixed; idx++) {
-+		if (!(BIT_ULL(INTEL_PMC_IDX_FIXED + idx) & bitmask))
-+			continue;
-+		baseline_extra_ctrl = perf.pebs_baseline ?
-+			(1ULL << (INTEL_PMC_IDX_FIXED + idx * 4)) : 0;
-+		wrmsr(MSR_CORE_PERF_FIXED_CTR0 + idx, ctr_start_val);
-+		fixed_ctr_ctrl |= (0xbULL << (idx * 4) | baseline_extra_ctrl);
-+	}
-+	if (fixed_ctr_ctrl)
-+		wrmsr(MSR_CORE_PERF_FIXED_CTR_CTRL, fixed_ctr_ctrl);
-+
-+	for (idx = 0; idx < max_nr_gp_events; idx++) {
-+		if (!(BIT_ULL(idx) & bitmask))
-+			continue;
-+		baseline_extra_ctrl = perf.pebs_baseline ?
-+			ICL_EVENTSEL_ADAPTIVE : 0;
-+		wrmsr(MSR_P6_EVNTSEL0 + idx,
-+		      EVNTSEL_EN | EVNTSEL_OS | EVNTSEL_USR |
-+		      intel_arch_events[idx] | baseline_extra_ctrl);
-+		wrmsr(gp_counter_base + idx, ctr_start_val);
-+	}
-+
-+	wrmsr(MSR_IA32_DS_AREA,  (unsigned long)ds_bufer);
-+	wrmsr(MSR_IA32_PEBS_ENABLE, bitmask);
-+	wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, bitmask);
-+}
-+
-+static void pmu_env_cleanup(void)
-+{
-+	unsigned int idx;
-+
-+	memset(ds_bufer, 0x0, PAGE_SIZE);
-+	memset(pebs_buffer, 0x0, PAGE_SIZE);
-+	wrmsr(MSR_IA32_PEBS_ENABLE, 0);
-+	wrmsr(MSR_IA32_DS_AREA,  0);
-+	if (perf.pebs_baseline)
-+		wrmsr(MSR_PEBS_DATA_CFG, 0);
-+
-+	wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 0);
-+
-+	wrmsr(MSR_CORE_PERF_FIXED_CTR_CTRL, 0);
-+	for (idx = 0; idx < pmu_edx.split.num_counters_fixed; idx++) {
-+		wrmsr(MSR_CORE_PERF_FIXED_CTR0 + idx, 0);
-+	}
-+
-+	for (idx = 0; idx < pmu_eax.split.num_counters; idx++) {
-+		wrmsr(MSR_P6_EVNTSEL0 + idx, 0);
-+		wrmsr(MSR_IA32_PERFCTR0 + idx, 0);
-+	}
-+
-+	wrmsr(MSR_CORE_PERF_GLOBAL_OVF_CTRL, rdmsr(MSR_CORE_PERF_GLOBAL_STATUS));
-+}
-+
-+static inline void pebs_disable_1(void)
-+{
-+	wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 0);
-+}
-+
-+static inline void pebs_disable_2(void)
-+{
-+	wrmsr(MSR_IA32_PEBS_ENABLE, 0);
-+	wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 0);
-+}
-+
-+static void pebs_disable(unsigned int idx)
-+{
-+	if (idx % 2) {
-+		pebs_disable_1();
-+	} else {
-+		pebs_disable_2();
-+	}
-+}
-+
-+static void check_pebs_records(u64 bitmask, u64 pebs_data_cfg)
-+{
-+	struct pebs_basic *pebs_rec = (struct pebs_basic *)pebs_buffer;
-+	struct debug_store *ds = (struct debug_store *)ds_bufer;
-+	unsigned int pebs_record_size = get_adaptive_pebs_record_size(pebs_data_cfg);
-+	unsigned int count = 0;
-+	bool expected, pebs_idx_match, pebs_size_match, data_cfg_match;
-+	void *vernier;
-+
-+	expected = (ds->pebs_index == ds->pebs_buffer_base) && !pebs_rec->format_size;
-+	if (!(rdmsr(MSR_CORE_PERF_GLOBAL_STATUS) & GLOBAL_STATUS_BUFFER_OVF)) {
-+		report(expected, "No OVF irq, none PEBS records.");
-+		return;
-+	}
-+
-+	if (expected) {
-+		report(!expected, "A OVF irq, but none PEBS records.");
-+		return;
-+	}
-+
-+	expected = ds->pebs_index >= ds->pebs_interrupt_threshold;
-+	vernier = (void *)pebs_buffer;
-+	do {
-+		pebs_rec = (struct pebs_basic *)vernier;
-+		pebs_record_size = pebs_rec->format_size >> 48;
-+		pebs_idx_match =
-+			pebs_rec->applicable_counters & bitmask;
-+		pebs_size_match =
-+			pebs_record_size == get_adaptive_pebs_record_size(pebs_data_cfg);
-+		data_cfg_match =
-+			(pebs_rec->format_size & 0xffffffffffff) == pebs_data_cfg;
-+		expected = pebs_idx_match && pebs_size_match && data_cfg_match;
-+		report(expected,
-+		       "PEBS record (written seq %d) is verified (inclduing size, counters and cfg).", count);
-+		vernier = vernier + pebs_record_size;
-+		count++;
-+	} while (expected && (void *)vernier < (void *)ds->pebs_index);
-+
-+	if (!expected) {
-+		if (!pebs_idx_match)
-+			printf("FAIL: The applicable_counters (0x%lx) doesn't match with pmc_bitmask (0x%lx).\n",
-+			       pebs_rec->applicable_counters, bitmask);
-+		if (!pebs_size_match)
-+			printf("FAIL: The pebs_record_size (%d) doesn't match with MSR_PEBS_DATA_CFG (%d).\n",
-+			       pebs_record_size, get_adaptive_pebs_record_size(pebs_data_cfg));
-+		if (!data_cfg_match)
-+			printf("FAIL: The pebs_data_cfg (0x%lx) doesn't match with MSR_PEBS_DATA_CFG (0x%lx).\n",
-+			       pebs_rec->format_size & 0xffffffffffff, pebs_data_cfg);
-+	}
-+}
-+
-+static void check_one_counter(enum pmc_type type,
-+			      unsigned int idx, u64 pebs_data_cfg)
-+{
-+	report_prefix_pushf("%s counter %d (0x%lx)",
-+			    type == FIXED ? "Extended Fixed" : "GP", idx, ctr_start_val);
-+	pmu_env_cleanup();
-+	pebs_enable(BIT_ULL(type == FIXED ? INTEL_PMC_IDX_FIXED + idx : idx), pebs_data_cfg);
-+	workload();
-+	pebs_disable(idx);
-+	check_pebs_records(BIT_ULL(type == FIXED ? INTEL_PMC_IDX_FIXED + idx : idx), pebs_data_cfg);
-+	report_prefix_pop();
-+}
-+
-+static void check_multiple_counters(u64 bitmask, u64 pebs_data_cfg)
-+{
-+	pmu_env_cleanup();
-+	pebs_enable(bitmask, pebs_data_cfg);
-+	workload2();
-+	pebs_disable(0);
-+	check_pebs_records(bitmask, pebs_data_cfg);
-+}
-+
-+static void check_pebs_counters(u64 pebs_data_cfg)
-+{
-+	unsigned int idx;
-+	u64 bitmask = 0;
-+
-+	for (idx = 0; idx < pmu_edx.split.num_counters_fixed; idx++)
-+		check_one_counter(FIXED, idx, pebs_data_cfg);
-+
-+	for (idx = 0; idx < max_nr_gp_events; idx++)
-+		check_one_counter(GP, idx, pebs_data_cfg);
-+
-+	for (idx = 0; idx < pmu_edx.split.num_counters_fixed; idx++)
-+		bitmask |= BIT_ULL(INTEL_PMC_IDX_FIXED + idx);
-+	for (idx = 0; idx < max_nr_gp_events; idx += 2)
-+		bitmask |= BIT_ULL(idx);
-+	report_prefix_pushf("Multiple (0x%lx)", bitmask);
-+	check_multiple_counters(bitmask, pebs_data_cfg);
-+	report_prefix_pop();
-+}
-+
-+int main(int ac, char **av)
-+{
-+	struct cpuid id;
-+	unsigned int i, j;
-+
-+	setup_vm();
-+	id = cpuid(10);
-+
-+	pmu_eax.full = id.a;
-+	pmu_edx.full = id.d;
-+	max_nr_gp_events = MIN(pmu_eax.split.num_counters, ARRAY_SIZE(intel_arch_events));
-+
-+	printf("PMU version: %d\n", pmu_eax.split.version_id);
-+	if (this_cpu_has(X86_FEATURE_PDCM))
-+		perf.capabilities = rdmsr(MSR_IA32_PERF_CAPABILITIES);
-+
-+	if (perf.capabilities & PMU_CAP_FW_WRITES)
-+		gp_counter_base = MSR_IA32_PMC0;
-+
-+	if (!is_intel() || (pmu_eax.split.version_id < 2) ||
-+	    !(perf.capabilities & PERF_CAP_PEBS_FORMAT) ||
-+	    (rdmsr(MSR_IA32_MISC_ENABLE) & MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL)) {
-+		report_skip("This platform doesn't support guest PEBS.");
-+		return 0;
-+	}
-+
-+	printf("PEBS format: %d\n", perf.pebs_format);
-+	printf("PEBS GP counters: %d\n", pmu_eax.split.num_counters);
-+	printf("PEBS Fixed counters: %d\n", pmu_edx.split.num_counters_fixed);
-+	printf("PEBS baseline (Adaptive PEBS): %d\n", perf.pebs_baseline);
-+
-+	printf("Known reasons for none PEBS records:\n");
-+	printf("1. The selected event does not support PEBS;\n");
-+	printf("2. From a core pmu perspective, the vCPU and pCPU models are not same;\n");
-+	printf("3. Guest counter has not yet overflowed or been cross-mapped by the host;\n");
-+
-+	handle_irq(PC_VECTOR, cnt_overflow);
-+	alloc_buffers();
-+
-+	for (i = 0; i < ARRAY_SIZE(counter_start_values); i++) {
-+		ctr_start_val = counter_start_values[i];
-+		check_pebs_counters(0);
-+		if (!perf.pebs_baseline)
-+			continue;
-+
-+		for (j = 0; j < ARRAY_SIZE(pebs_data_cfgs); j++) {
-+			report_prefix_pushf("Adaptive (0x%lx)", pebs_data_cfgs[j]);
-+			check_pebs_counters(pebs_data_cfgs[j]);
-+			report_prefix_pop();
-+		}
-+	}
-+
-+	free_buffers();
-+
-+	return report_summary();
-+}
-diff --git a/x86/unittests.cfg b/x86/unittests.cfg
-index d6dc19f..5731454 100644
---- a/x86/unittests.cfg
-+++ b/x86/unittests.cfg
-@@ -198,6 +198,13 @@ check = /sys/module/kvm/parameters/ignore_msrs=N
- check = /proc/sys/kernel/nmi_watchdog=0
- accel = kvm
- 
-+[pmu_pebs]
-+arch = x86_64
-+file = pmu_pebs.flat
-+extra_params = -cpu host,migratable=no
-+check = /proc/sys/kernel/nmi_watchdog=0
-+accel = kvm
-+
- [pmu_emulation]
- file = pmu.flat
- arch = x86_64
--- 
-2.37.0
-
+> ---
+>  .../bindings/mfd/st,stm32-lptimer.yaml        | 28 +++++++++----------
+>  .../bindings/mfd/st,stm32-timers.yaml         | 20 ++++++-------
+>  2 files changed, 24 insertions(+), 24 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
+> index ec7f0190f46e..a58f08aa430d 100644
+> --- a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
+> @@ -58,43 +58,43 @@ properties:
+>        - "#pwm-cells"
+>        - compatible
+>  
+> -patternProperties:
+> -  "^trigger@[0-9]+$":
+> +  counter:
+>      type: object
+>  
+>      properties:
+>        compatible:
+> -        const: st,stm32-lptimer-trigger
+> -
+> -      reg:
+> -        description: Identify trigger hardware block.
+> -        items:
+> -          minimum: 0
+> -          maximum: 2
+> +        const: st,stm32-lptimer-counter
+>  
+>      required:
+>        - compatible
+> -      - reg
+>  
+> -  counter:
+> +  timer:
+>      type: object
+>  
+>      properties:
+>        compatible:
+> -        const: st,stm32-lptimer-counter
+> +        const: st,stm32-lptimer-timer
+>  
+>      required:
+>        - compatible
+>  
+> -  timer:
+> +patternProperties:
+> +  "^trigger@[0-9]+$":
+>      type: object
+>  
+>      properties:
+>        compatible:
+> -        const: st,stm32-lptimer-timer
+> +        const: st,stm32-lptimer-trigger
+> +
+> +      reg:
+> +        description: Identify trigger hardware block.
+> +        items:
+> +          minimum: 0
+> +          maximum: 2
+>  
+>      required:
+>        - compatible
+> +      - reg
+>  
+>  required:
+>    - "#address-cells"
+> diff --git a/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml b/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml
+> index 10b330d42901..1bd663f886dc 100644
+> --- a/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml
+> @@ -87,6 +87,16 @@ properties:
+>        - "#pwm-cells"
+>        - compatible
+>  
+> +  counter:
+> +    type: object
+> +
+> +    properties:
+> +      compatible:
+> +        const: st,stm32-timer-counter
+> +
+> +    required:
+> +      - compatible
+> +
+>  patternProperties:
+>    "^timer@[0-9]+$":
+>      type: object
+> @@ -107,16 +117,6 @@ patternProperties:
+>        - compatible
+>        - reg
+>  
+> -  counter:
+> -    type: object
+> -
+> -    properties:
+> -      compatible:
+> -        const: st,stm32-timer-counter
+> -
+> -    required:
+> -      - compatible
+> -
+>  required:
+>    - compatible
+>    - reg

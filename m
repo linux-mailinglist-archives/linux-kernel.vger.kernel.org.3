@@ -2,340 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABE4573988
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F58573986
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236724AbiGMPCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        id S236712AbiGMPCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236720AbiGMPCU (ORCPT
+        with ESMTP id S236703AbiGMPCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:02:20 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CC741991
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657724538; x=1689260538;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qCQxxpW97qNlDywooKT7HFcvXI52Z+rKG3JMYF5em0M=;
-  b=SKmNhJd9ObY2INvwz0D7w5MUGSPxEOluNZ4oN8w97t6yU5uP2mhcEj0J
-   4154YwRtdEDVdGSgDGw3XzQmlru1Tx0ou1pH1K7y4kP2atiEoL/w3XrVp
-   yZQxcNOrYgTP8n25Sf5go5T/5MDh0NccrOBJVcngzDnrZHWCRBB/EJwQT
-   cF22fhXx6KRFDdG66fHGZVpC+zWDU31S0XQ+kqvW9Hv8wbS+pbD8ZLX8n
-   k6de5Mbs2D1iNVgakie4ls7TlwiY0tfKG1pTQpxNNyVJnBP13EqC7ex1e
-   XzysZFiNfyshtwE9xeMFWH8qMakLS1nwpMoMZfMtyGEPw8Xa1/3WPmlCN
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265644919"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="265644919"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 08:01:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="599767612"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Jul 2022 08:01:54 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 5988BF1; Wed, 13 Jul 2022 18:02:02 +0300 (EEST)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     kirill.shutemov@linux.intel.com
-Cc:     ak@linux.intel.com, andreyknvl@gmail.com,
-        dave.hansen@linux.intel.com, dvyukov@google.com, glider@google.com,
-        hjl.tools@gmail.com, kcc@google.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, luto@kernel.org, peterz@infradead.org,
-        rick.p.edgecombe@intel.com, ryabinin.a.a@gmail.com,
-        tarasmadan@google.com, x86@kernel.org
-Subject: [PATCHv5.1 04/13] x86/mm: Handle LAM on context switch
-Date:   Wed, 13 Jul 2022 18:02:00 +0300
-Message-Id: <20220713150200.17080-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220712231328.5294-6-kirill.shutemov@linux.intel.com>
-References: <20220712231328.5294-6-kirill.shutemov@linux.intel.com>
+        Wed, 13 Jul 2022 11:02:13 -0400
+Received: from sonic314-19.consmr.mail.gq1.yahoo.com (sonic314-19.consmr.mail.gq1.yahoo.com [98.137.69.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10D641984
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:02:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1657724531; bh=2qU4AMVOzVh77LUM46UewjiYNReN14GbnEXIQ1mw9vo=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=gclZJ41efqOPK58T/6vj8hjsBOrEKzvbj0HjjwAGeILZZaFVknY3syb4E4nzyOmrhuLQWR7dj0RZecq0wEONUqwsg4Q8hojTb2SLuKjkZtMOy9s0Hof1CSdznLWRxAb2kKDDpkN7EvFXSGp+2PEr+ccqtlsyUCipoB+afPAAD1ChPYeEcRzSqELPc8d38Wld8K47Yrq+CgBhQRP8bnYxfE2AGAsEPhWe1qCHO6qyZkSW87wO464lBOtEkGYVGl82itB3hpxTWJqDE307bn25qSlgqsWsu5i4EA9PHjf7gk6eJAWISoHZiJZb/bonbbe/GTCqrF/yygyiFfSrRLV42Q==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1657724531; bh=moTNlFIVM88uUvO9QiA7OwTnLAbYXJBSXWVEVmIUCe0=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=X/Yd3yNqBTRP3KvTmhK1J5iW0aOGCIxX3ZR7Gh6M9oKudfbSXVi81DCe3ImNOuMPsU1TChIWAkVG2Fr8dBTGCLncTGxm6H1+FshcrcN9dyOY+/Iru/Vo7QEoxirNhQV7Bbjyx3QsQzY8SBidVPWj0AByQi5toNH9bWflZdgoM7gxMkZulkWVIWjQevUGJi+7SbVD+Dpo+xmwf97asxsh5F4mCpo1TmVCopSmiSyc/mgJQmIsRHZsFu+uoDoUI8uk1gwwvIU5qcrmPeb+WDK67UGicobWEQezdsZR6gwPNSOUeyRmG/61S4N7giJ7N+Uhv7j9VsxIUxb5ctFNn04mhg==
+X-YMail-OSG: qj0zHmYVM1nzHDV.djN2D6d0ziBgk39W6eLdzdBOwV3cBAch2depb_OulmFpDo3
+ hy9TS3Yi8WzQURpRy2XQF9od9F4IoRdg0BCQ.ZqY1mraIb_Uqu9JVmWz0ruoLcy1Ni8VWfy3LBG5
+ 03qVBkkVB8tfjnmcbzpsqco2DLPOl5UBskIauYm66xKH0v4GPspscRqEAREyD1Kc4jk6.SLuVOAR
+ 8FxUaT5lq5PgxaD62iaXMszSPnJdBObzl4TUAs5k01iIIFCKzrxqS49vD_fxsmFQ.BOjRP7v9f3E
+ ybrZ74jMRIM3Y6AQ3qaPJmCkgzoVjoYj8K2XtWjJU1uzpSQvRzOZm4hfzZLQlKpUZu9z.Rdwmc9s
+ gIDy32YVorkXKRiFqOEyEiIUztkyh4AyzUoiDvOi87mzz6sqPSVT7crwLrOMSlZift8GJSrB5f9C
+ K27JjP9o3d4DnICCW7dWzmAvzH6PfnTl3JyUvAQlLdS_s0EVdMExIH5G22EzYwF8.43KDu473SMg
+ b5mfsyYdcOu_Qy.y9UB3uykYrQ82fourZUoF2HwuBOvheugC4RVOmXQMTOPM.RG3SxvpPZhHwvE8
+ 9IhPpJe.d.NkgW4tCbLAHKxDSqOB_GqKvKrCIP37Gyqga5rqngUtYy6.xiBMlyc7.tKT.utbEDpS
+ 6wLdepQ39MGNZKEkb9FpnL7KAwrZNCPeokG.mG141f8Jr_eQjLWf4UWg2Oh_fpwYQrBeyw0.KqGT
+ E_2maAjib5OJZH93pDv45UEfrZzlTTNQMPX2aBRuptOFbRl70r6mZ_pwD956x1b2dShm1_woHCvy
+ 43lM2EDUKKJasYU7f8Ss9BwCobJAiHKXR9WsaEGPGW7C3viMqyT7EXc1Qzu1CtONLs4r8Cac.XVP
+ akHvtKAWs7d34ad_T_M70PEYfgXYVq724AzLdZ2CWeqJ_XRAKHNc8FAhEA80nUePAyNzYZuOoPEN
+ LJDDLSttPN5ec7OszVGxir0aQUDt8Ct8uAilVXQ6skQk9kcTztP2VuqFhxzPWD7rnvruXEANcfxy
+ e9ZJwu9T53jfiUezyqy1edHFZXRDkrRVbiOP_npOOZe0Ql9ATP_weCPXMF5xP9NBfajUsFmQdUmO
+ 7Y0udarIBFP_Za9P4BeYaKfxEBDMSHbc8RAsdqWejvZpmYlkcswQiraF1UBjaL2hvPtYEbNFR5ZE
+ cjWBkyVfx15rrQ8hqFsh9j7LCc1zQkhKuj25o0GlwBdxuiQFtW80IZPt9vX9erX73_LVe1gXvWz6
+ ROnIyNMrmg8rx9XKcludYLCW1XPjwzZczdeS7mPpW6TT.jarajIiDo_W5Q_kc5LQnydfh6ExSkfU
+ wpraA1uSJr1DbREEYKmJc8RurkCrHPnM9MoxwDnsTr1aiEy6kNvbha84tgeEuGreaSqZDVPJ5hRM
+ fOR91Xi85AyyEB9aPL8FYbrm6TzF2UHwCCvzWxWzcTrcSXDa.D7inS9Pzefit.4GAMc..ebQW8aW
+ 1TdsNi9vEwMJxJ6magoJeKniuzWqEf7WTUAI_WA3FBErHRLV6X9Hf.RiourXMTC6WiFMJVzR5Kbi
+ N8eBi3QVGpH1BvBQ1_kndts40_tkeXY1PHRiWOVE6vONvR_yknU83_oYqesBkMcg_VeWzCxuXSb8
+ 3epXYC0SphyEitHp00IGQL4toQlXX4lhWiEdpi7F.znFmBcnXWWeaTI6WlcO0qvbGvXRDDhWnzau
+ Y3tsgUs2u9BoDLLbeiL7OkJ9rzyma0jqO4HiMqVGI_ifDkQLY5wlkaDDvN_PnvOI2tKR1jIv8UHQ
+ oQu7TIPMq8wRwAASfsJB9I5mYg4xWiDQcsvvfIA0Rlj5dF6zxUjYOT0FShR2mWEbUz7UVLCrvlRh
+ _ACOiqu.KS114L9T9BlIDv3J_GOPYH8u6GVQdVxezuMdCXSngM7ibb33UWAoOAsR8YyoynZVcO84
+ MLCLqdiHc1DGtLuIAqCyXsKF5GvYu9IiOI1FcOVHGiCl6Z4g-
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.gq1.yahoo.com with HTTP; Wed, 13 Jul 2022 15:02:11 +0000
+Received: by hermes--production-bf1-58957fb66f-m4t8w (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 057c4b2c2f02905ae1f89a35d0a975ca;
+          Wed, 13 Jul 2022 15:02:07 +0000 (UTC)
+Message-ID: <dc0ee2d8-fc88-e4f1-6867-43d3ca3732b2@netscape.net>
+Date:   Wed, 13 Jul 2022 11:02:06 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] Subject: x86/PAT: Report PAT on CPUs that support PAT
+ without MTRR
+Content-Language: en-US
+To:     Jan Beulich <jbeulich@suse.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        xen-devel@lists.xenproject.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+References: <9d5070ae4f3e956a95d3f50e24f1a93488b9ff52.1657671676.git.brchuckz.ref@aol.com>
+ <9d5070ae4f3e956a95d3f50e24f1a93488b9ff52.1657671676.git.brchuckz@aol.com>
+ <e0faeb99-6c32-a836-3f6b-269318a6b5a6@suse.com>
+ <3d3f0766-2e06-428b-65bb-5d9f778a2baf@netscape.net>
+ <e15c0030-3270-f524-17e4-c482e971eb88@suse.com>
+ <775493aa-618c-676f-8aa4-d1667cf2ca78@netscape.net>
+ <c2ead659-d0aa-5b1f-0079-ce7c02970b35@netscape.net>
+ <1d06203b-97ff-e7eb-28ae-4cdbc7569218@suse.com>
+ <62e32913-cfcb-e0b0-2bbe-75cc8597951d@netscape.net>
+ <dbfd3a14-781e-c66e-b11c-e21ba4134067@suse.com>
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+In-Reply-To: <dbfd3a14-781e-c66e-b11c-e21ba4134067@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20407 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linear Address Masking mode for userspace pointers encoded in CR3 bits.
-The mode is selected per-thread. Add new thread features indicate that the
-thread has Linear Address Masking enabled.
+On 7/13/2022 9:52 AM, Jan Beulich wrote:
+> On 13.07.2022 15:49, Chuck Zmudzinski wrote:
+> > On 7/13/2022 9:34 AM, Jan Beulich wrote:
+> >> On 13.07.2022 13:10, Chuck Zmudzinski wrote:
+> >>> On 7/13/2022 6:36 AM, Chuck Zmudzinski wrote:
+> >>>> On 7/13/2022 5:09 AM, Jan Beulich wrote:
+> >>>>> On 13.07.2022 10:51, Chuck Zmudzinski wrote:
+> >>>>>> On 7/13/22 2:18 AM, Jan Beulich wrote:
+> >>>>>>> On 13.07.2022 03:36, Chuck Zmudzinski wrote:
+> >>>>>>>> v2: *Add force_pat_disabled variable to fix "nopat" on Xen PV (Jan Beulich)
+> >>>>>>>>     *Add the necessary code to incorporate the "nopat" fix
+> >>>>>>>>     *void init_cache_modes(void) -> void __init init_cache_modes(void)
+> >>>>>>>>     *Add Jan Beulich as Co-developer (Jan has not signed off yet)
+> >>>>>>>>     *Expand the commit message to include relevant parts of the commit
+> >>>>>>>>      message of Jan Beulich's proposed patch for this problem
+> >>>>>>>>     *Fix 'else if ... {' placement and indentation
+> >>>>>>>>     *Remove indication the backport to stable branches is only back to 5.17.y
+> >>>>>>>>
+> >>>>>>>> I think these changes address all the comments on the original patch
+> >>>>>>>>
+> >>>>>>>> I added Jan Beulich as a Co-developer because Juergen Gross asked me to
+> >>>>>>>> include Jan's idea for fixing "nopat" that was missing from the first
+> >>>>>>>> version of the patch.
+> >>>>>>>
+> >>>>>>> You've sufficiently altered this change to clearly no longer want my
+> >>>>>>> S-o-b; unfortunately in fact I think you broke things:
+> >>>>>>
+> >>>>>> Well, I hope we can come to an agreement so I have
+> >>>>>> your S-o-b. But that would probably require me to remove
+> >>>>>> Juergen's R-b.
+> >>>>>>
+> >>>>>>>> @@ -292,7 +294,7 @@ void init_cache_modes(void)
+> >>>>>>>>  		rdmsrl(MSR_IA32_CR_PAT, pat);
+> >>>>>>>>  	}
+> >>>>>>>>  
+> >>>>>>>> -	if (!pat) {
+> >>>>>>>> +	if (!pat || pat_force_disabled) {
+> >>>>>>>
+> >>>>>>> By checking the new variable here ...
+> >>>>>>>
+> >>>>>>>>  		/*
+> >>>>>>>>  		 * No PAT. Emulate the PAT table that corresponds to the two
+> >>>>>>>>  		 * cache bits, PWT (Write Through) and PCD (Cache Disable).
+> >>>>>>>> @@ -313,6 +315,16 @@ void init_cache_modes(void)
+> >>>>>>>>  		 */
+> >>>>>>>>  		pat = PAT(0, WB) | PAT(1, WT) | PAT(2, UC_MINUS) | PAT(3, UC) |
+> >>>>>>>>  		      PAT(4, WB) | PAT(5, WT) | PAT(6, UC_MINUS) | PAT(7, UC);
+> >>>>>>>
+> >>>>>>> ... you put in place a software view which doesn't match hardware. I
+> >>>>>>> continue to think that ...
+> >>>>>>>
+> >>>>>>>> +	} else if (!pat_bp_enabled) {
+> >>>>>>>
+> >>>>>>> ... the variable wants checking here instead (at which point, yes,
+> >>>>>>> this comes quite close to simply being a v2 of my original patch).
+> >>>>>>>
+> >>>>>>> By using !pat_bp_enabled here you actually broaden where the change
+> >>>>>>> would take effect. Iirc Boris had asked to narrow things (besides
+> >>>>>>> voicing opposition to this approach altogether). Even without that
+> >>>>>>> request I wonder whether you aren't going to far with this.
+> >>>>>>>
+> >>>>>>> Jan
+> >>>>>>
+> >>>>>> I thought about checking for the administrator's "nopat"
+> >>>>>> setting where you suggest which would limit the effect
+> >>>>>> of "nopat" to not reporting PAT as enabled to device
+> >>>>>> drivers who query for PAT availability using pat_enabled().
+> >>>>>> The main reason I did not do that is that due to the fact
+> >>>>>> that we cannot write to the PAT MSR, we cannot really
+> >>>>>> disable PAT. But we come closer to respecting the wishes
+> >>>>>> of the administrator by configuring the caching modes as
+> >>>>>> if PAT is actually disabled by the hardware or firmware
+> >>>>>> when in fact it is not.
+> >>>>>>
+> >>>>>> What would you propose logging as a message when
+> >>>>>> we report PAT as disabled via pat_enabled()? The main
+> >>>>>> reason I did not choose to check the new variable in the
+> >>>>>> new 'else if' block is that I could not figure out what to
+> >>>>>> tell the administrator in that case. I think we would have
+> >>>>>> to log something like, "nopat is set, but we cannot disable
+> >>>>>> PAT, doing our best to disable PAT by not reporting PAT
+> >>>>>> as enabled via pat_enabled(), but that does not guarantee
+> >>>>>> that kernel drivers and components cannot use PAT if they
+> >>>>>> query for PAT support using boot_cpu_has(X86_FEATURE_PAT)
+> >>>>>> instead of pat_enabled()." However, I acknowledge WC mappings
+> >>>>>> would still be disabled because arch_can_pci_mmap_wc() will
+> >>>>>> be false if pat_enabled() is false.
+> >>>>>>
+> >>>>>> Perhaps we also need to log something if we keep the
+> >>>>>> check for "nopat" where I placed it. We could say something
+> >>>>>> like: "nopat is set, but we cannot disable hardware/firmware
+> >>>>>> PAT support, so we are emulating as if there is no PAT support
+> >>>>>> which puts in place a software view that does not match
+> >>>>>> hardware."
+> >>>>>>
+> >>>>>> No matter what, because we cannot write to PAT MSR in
+> >>>>>> the Xen PV case, we probably need to log something to
+> >>>>>> explain the problems associated with trying to honor the
+> >>>>>> administrator's request. Also, what log level should it be.
+> >>>>>> Should it be a pr_warn instead of a pr_info?
+> >>>>>
+> >>>>> I'm afraid I'm the wrong one to answer logging questions. As you
+> >>>>> can see from my original patch, I didn't add any new logging (and
+> >>>>> no addition was requested in the comments that I have got). I also
+> >>>>> don't think "nopat" has ever meant "disable PAT", as the feature
+> >>>>> is either there or not. Instead I think it was always seen as
+> >>>>> "disable fiddling with PAT", which by implication means using
+> >>>>> whatever is there (if the feature / MSR itself is available).
+> >>>>
+> >>>> IIRC, I do think I mentioned in the comments on your patch that
+> >>>> it would be preferable to mention in the commit message that
+> >>>> your patch would change the current behavior of "nopat" on
+> >>>> Xen. The question is, how much do we want to change the
+> >>>> current behavior of "nopat" on Xen. I think if we have to change
+> >>>> the current behavior of "nopat" on Xen and if we are going
+> >>>> to propagate that change to all current stable branches all
+> >>>> the way back to 4.9.y,, we better make a lot of noise about
+> >>>> what we are doing here.
+> >>>>
+> >>>> Chuck
+> >>>
+> >>> And in addition, if we are going to backport this patch to
+> >>> all current stable branches, we better have a really, really,
+> >>> good reason for changing the behavior of "nopat" on Xen.
+> >>>
+> >>> Does such a reason exist?
+> >>
+> >> Well, the simple reason is: It doesn't work the same way under Xen
+> >> and non-Xen (in turn because, before my patch or whatever equivalent
+> >> work, things don't work properly anyway, PAT-wise). Yet it definitely
+> >> ought to behave the same everywhere, imo.
+> >>
+> >> Jan
+> > 
+> > IOW, you are saying PAT has been broken on Xen for a
+> > long time, and it is necessary to fix it now not only on
+> > master, but also on all the stable branches.
+> > 
+> > Why is it necessary to do it on all the stable branches?
+>
+> I'm not saying that's _necessary_ (but I think it would make sense),
+> and I'm not the one to decide whether or how far to backport this.
+>
+> Jan
 
-switch_mm_irqs_off() now respects these flags and constructs CR3
-accordingly.
+What conclusion do you draw from these facts?
 
-The active LAM mode gets recorded in the tlb_state.
+1. Linus' regression rule is a high priority in Linux
+2. Security concerns are even a higher priority in Linux
+3. You and I have been trying to fix a regression for the past two months
+4. The ones who can fix the regression have not accepted our patches.
+5. I have been asked to help backport my fix to all stable branches.
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- v5.1:
-  - Fix build issue with CONFIG_MODULE=y
----
- arch/x86/include/asm/mmu.h         |  3 +++
- arch/x86/include/asm/mmu_context.h | 24 +++++++++++++++++
- arch/x86/include/asm/tlbflush.h    | 35 +++++++++++++++++++++++++
- arch/x86/mm/tlb.c                  | 42 +++++++++++++++++++-----------
- 4 files changed, 89 insertions(+), 15 deletions(-)
-
-diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
-index 5d7494631ea9..002889ca8978 100644
---- a/arch/x86/include/asm/mmu.h
-+++ b/arch/x86/include/asm/mmu.h
-@@ -40,6 +40,9 @@ typedef struct {
- 
- #ifdef CONFIG_X86_64
- 	unsigned short flags;
-+
-+	/* Active LAM mode:  X86_CR3_LAM_U48 or X86_CR3_LAM_U57 or 0 (disabled) */
-+	unsigned long lam_cr3_mask;
- #endif
- 
- 	struct mutex lock;
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index b8d40ddeab00..69c943b2ae90 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -91,6 +91,29 @@ static inline void switch_ldt(struct mm_struct *prev, struct mm_struct *next)
- }
- #endif
- 
-+#ifdef CONFIG_X86_64
-+static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
-+{
-+	return mm->context.lam_cr3_mask;
-+}
-+
-+static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
-+{
-+	mm->context.lam_cr3_mask = oldmm->context.lam_cr3_mask;
-+}
-+
-+#else
-+
-+static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
-+{
-+	return 0;
-+}
-+
-+static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
-+{
-+}
-+#endif
-+
- #define enter_lazy_tlb enter_lazy_tlb
- extern void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk);
- 
-@@ -168,6 +191,7 @@ static inline int arch_dup_mmap(struct mm_struct *oldmm, struct mm_struct *mm)
- {
- 	arch_dup_pkeys(oldmm, mm);
- 	paravirt_arch_dup_mmap(oldmm, mm);
-+	dup_lam(oldmm, mm);
- 	return ldt_dup_context(oldmm, mm);
- }
- 
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 4af5579c7ef7..efe83d33327f 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -100,6 +100,16 @@ struct tlb_state {
- 	 */
- 	bool invalidate_other;
- 
-+#ifdef CONFIG_X86_64
-+	/*
-+	 * Active LAM mode.
-+	 *
-+	 * X86_CR3_LAM_U57/U48 shifted right by X86_CR3_LAM_U57_BIT or 0 if LAM
-+	 * disabled.
-+	 */
-+	u8 lam;
-+#endif
-+
- 	/*
- 	 * Mask that contains TLB_NR_DYN_ASIDS+1 bits to indicate
- 	 * the corresponding user PCID needs a flush next time we
-@@ -356,6 +366,30 @@ static inline bool huge_pmd_needs_flush(pmd_t oldpmd, pmd_t newpmd)
- }
- #define huge_pmd_needs_flush huge_pmd_needs_flush
- 
-+#ifdef CONFIG_X86_64
-+static inline unsigned long tlbstate_lam_cr3_mask(void)
-+{
-+	unsigned long lam = this_cpu_read(cpu_tlbstate.lam);
-+
-+	return lam << X86_CR3_LAM_U57_BIT;
-+}
-+
-+static inline void set_tlbstate_cr3_lam_mask(unsigned long mask)
-+{
-+	this_cpu_write(cpu_tlbstate.lam, mask >> X86_CR3_LAM_U57_BIT);
-+}
-+
-+#else
-+
-+static inline unsigned long tlbstate_lam_cr3_mask(void)
-+{
-+	return 0;
-+}
-+
-+static inline void set_tlbstate_cr3_lam_mask(u64 mask)
-+{
-+}
-+#endif
- #endif /* !MODULE */
- 
- static inline void __native_tlb_flush_global(unsigned long cr4)
-@@ -363,4 +397,5 @@ static inline void __native_tlb_flush_global(unsigned long cr4)
- 	native_write_cr4(cr4 ^ X86_CR4_PGE);
- 	native_write_cr4(cr4);
- }
-+
- #endif /* _ASM_X86_TLBFLUSH_H */
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index d400b6d9d246..4c93f87a8928 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -154,17 +154,18 @@ static inline u16 user_pcid(u16 asid)
- 	return ret;
- }
- 
--static inline unsigned long build_cr3(pgd_t *pgd, u16 asid)
-+static inline unsigned long build_cr3(pgd_t *pgd, u16 asid, unsigned long lam)
- {
- 	if (static_cpu_has(X86_FEATURE_PCID)) {
--		return __sme_pa(pgd) | kern_pcid(asid);
-+		return __sme_pa(pgd) | kern_pcid(asid) | lam;
- 	} else {
- 		VM_WARN_ON_ONCE(asid != 0);
--		return __sme_pa(pgd);
-+		return __sme_pa(pgd) | lam;
- 	}
- }
- 
--static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid)
-+static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid,
-+					      unsigned long lam)
- {
- 	VM_WARN_ON_ONCE(asid > MAX_ASID_AVAILABLE);
- 	/*
-@@ -173,7 +174,7 @@ static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid)
- 	 * boot because all CPU's the have same capabilities:
- 	 */
- 	VM_WARN_ON_ONCE(!boot_cpu_has(X86_FEATURE_PCID));
--	return __sme_pa(pgd) | kern_pcid(asid) | CR3_NOFLUSH;
-+	return __sme_pa(pgd) | kern_pcid(asid) | lam | CR3_NOFLUSH;
- }
- 
- /*
-@@ -274,15 +275,16 @@ static inline void invalidate_user_asid(u16 asid)
- 		  (unsigned long *)this_cpu_ptr(&cpu_tlbstate.user_pcid_flush_mask));
- }
- 
--static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, bool need_flush)
-+static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, unsigned long lam,
-+			    bool need_flush)
- {
- 	unsigned long new_mm_cr3;
- 
- 	if (need_flush) {
- 		invalidate_user_asid(new_asid);
--		new_mm_cr3 = build_cr3(pgdir, new_asid);
-+		new_mm_cr3 = build_cr3(pgdir, new_asid, lam);
- 	} else {
--		new_mm_cr3 = build_cr3_noflush(pgdir, new_asid);
-+		new_mm_cr3 = build_cr3_noflush(pgdir, new_asid, lam);
- 	}
- 
- 	/*
-@@ -491,6 +493,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
- {
- 	struct mm_struct *real_prev = this_cpu_read(cpu_tlbstate.loaded_mm);
- 	u16 prev_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
-+	unsigned long prev_lam = tlbstate_lam_cr3_mask();
-+	unsigned long new_lam = mm_lam_cr3_mask(next);
- 	bool was_lazy = this_cpu_read(cpu_tlbstate_shared.is_lazy);
- 	unsigned cpu = smp_processor_id();
- 	u64 next_tlb_gen;
-@@ -520,7 +524,7 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
- 	 * isn't free.
- 	 */
- #ifdef CONFIG_DEBUG_VM
--	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid))) {
-+	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid, prev_lam))) {
- 		/*
- 		 * If we were to BUG here, we'd be very likely to kill
- 		 * the system so hard that we don't see the call trace.
-@@ -622,15 +626,16 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
- 		barrier();
- 	}
- 
-+	set_tlbstate_cr3_lam_mask(new_lam);
- 	if (need_flush) {
- 		this_cpu_write(cpu_tlbstate.ctxs[new_asid].ctx_id, next->context.ctx_id);
- 		this_cpu_write(cpu_tlbstate.ctxs[new_asid].tlb_gen, next_tlb_gen);
--		load_new_mm_cr3(next->pgd, new_asid, true);
-+		load_new_mm_cr3(next->pgd, new_asid, new_lam, true);
- 
- 		trace_tlb_flush(TLB_FLUSH_ON_TASK_SWITCH, TLB_FLUSH_ALL);
- 	} else {
- 		/* The new ASID is already up to date. */
--		load_new_mm_cr3(next->pgd, new_asid, false);
-+		load_new_mm_cr3(next->pgd, new_asid, new_lam, false);
- 
- 		trace_tlb_flush(TLB_FLUSH_ON_TASK_SWITCH, 0);
- 	}
-@@ -691,6 +696,10 @@ void initialize_tlbstate_and_flush(void)
- 	/* Assert that CR3 already references the right mm. */
- 	WARN_ON((cr3 & CR3_ADDR_MASK) != __pa(mm->pgd));
- 
-+	/* LAM expected to be disabled in CR3 and init_mm */
-+	WARN_ON(cr3 & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57));
-+	WARN_ON(mm_lam_cr3_mask(&init_mm));
-+
- 	/*
- 	 * Assert that CR4.PCIDE is set if needed.  (CR4.PCIDE initialization
- 	 * doesn't work like other CR4 bits because it can only be set from
-@@ -699,8 +708,8 @@ void initialize_tlbstate_and_flush(void)
- 	WARN_ON(boot_cpu_has(X86_FEATURE_PCID) &&
- 		!(cr4_read_shadow() & X86_CR4_PCIDE));
- 
--	/* Force ASID 0 and force a TLB flush. */
--	write_cr3(build_cr3(mm->pgd, 0));
-+	/* Disable LAM, force ASID 0 and force a TLB flush. */
-+	write_cr3(build_cr3(mm->pgd, 0, 0));
- 
- 	/* Reinitialize tlbstate. */
- 	this_cpu_write(cpu_tlbstate.last_user_mm_spec, LAST_USER_MM_INIT);
-@@ -708,6 +717,7 @@ void initialize_tlbstate_and_flush(void)
- 	this_cpu_write(cpu_tlbstate.next_asid, 1);
- 	this_cpu_write(cpu_tlbstate.ctxs[0].ctx_id, mm->context.ctx_id);
- 	this_cpu_write(cpu_tlbstate.ctxs[0].tlb_gen, tlb_gen);
-+	set_tlbstate_cr3_lam_mask(0);
- 
- 	for (i = 1; i < TLB_NR_DYN_ASIDS; i++)
- 		this_cpu_write(cpu_tlbstate.ctxs[i].ctx_id, 0);
-@@ -1047,8 +1057,10 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
-  */
- unsigned long __get_current_cr3_fast(void)
- {
--	unsigned long cr3 = build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
--		this_cpu_read(cpu_tlbstate.loaded_mm_asid));
-+	unsigned long cr3 =
-+		build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
-+		this_cpu_read(cpu_tlbstate.loaded_mm_asid),
-+		tlbstate_lam_cr3_mask());
- 
- 	/* For now, be very restrictive about when this can be called. */
- 	VM_WARN_ON(in_nmi() || preemptible());
--- 
-2.35.1
-
+Chuck

@@ -2,51 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D952B57330A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5952057330B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236159AbiGMJl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        id S236163AbiGMJl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiGMJly (ORCPT
+        with ESMTP id S234469AbiGMJlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:41:54 -0400
-Received: from smtpproxy21.qq.com (smtpbg701.qq.com [203.205.195.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2330F5D5A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:41:52 -0700 (PDT)
-X-QQ-mid: bizesmtp76t1657705300tjyq9kr6
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 13 Jul 2022 17:41:34 +0800 (CST)
-X-QQ-SSF: 01400000002000G0T000B00A0000000
-X-QQ-FEAT: RrZlkntZBflHKmwQ9JnxJ+0cUviccNuWWA2UCoNooBspxFz4wUMc0pcX4AdHT
-        7YBsLwZGo4x5aWl0oRiIAvFVTQ7WM1G4COQdMIun/coCnkREpN+wMCUStoC1E8D00W6qyUB
-        JF/ztQnqKdA/J+q33vAW5dJMFd0yfkm/srBtoJFsUioC4nCikVPb/oA6V/CFA3AmgDUW64k
-        7Pg69+3h5LPFPF6OjUqUial/RmELNkiR7lBFeQvk6ZlpH5kpSjYWbyv+xbHUAVsf9xGmyLE
-        zd7EzsXL73HLyP2pxzFB/jkypmGOuG2GLJuARb312khRkLG+Dp4cbwejS2Hul3GFUNEpl3+
-        ZWWYSY8l8BrZSD80Zd0fyLHKMi/d/J2xCqAamWXQu9oGWBtTrSv82qBP0Aq4kh3gxryHVAo
-        3WGh0zz0TEx6U6R6i5v2bg==
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     perex@perex.cz, tiwai@suse.com, tcrawford@system76.com,
-        wse@tuxedocomputers.com, kai.heng.feng@canonical.com,
-        tangmeng@uniontech.com, tanureal@opensource.cirrus.com,
-        cam@neo-zeon.de, kailang@realtek.com,
-        sbinding@opensource.cirrus.com, yong.wu@mediatek.com,
-        andy.chi@canonical.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: hda/realtek - Enable the headset-mic on a Xiaomi's laptop
-Date:   Wed, 13 Jul 2022 17:41:33 +0800
-Message-Id: <20220713094133.9894-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Wed, 13 Jul 2022 05:41:55 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D50F5D64;
+        Wed, 13 Jul 2022 02:41:53 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oBYsQ-00012W-A6; Wed, 13 Jul 2022 11:41:50 +0200
+Message-ID: <1dc0ab09-2cfd-a310-d1da-ef7d3cc47a71@leemhuis.info>
+Date:   Wed, 13 Jul 2022 11:41:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign3
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAKXUXMy2WfsRj+nJuNCV4bPNYTvDySLOq3HgpK+gWJSpWS81Kg@mail.gmail.com>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: Update "If something goes wrong" in
+ Documentation/admin-guide/README.rst
+In-Reply-To: <CAKXUXMy2WfsRj+nJuNCV4bPNYTvDySLOq3HgpK+gWJSpWS81Kg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1657705313;f44ca44f;
+X-HE-SMSGID: 1oBYsQ-00012W-A6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,28 +46,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The headset on this machine is not defined, after applying the quirk
-ALC256_FIXUP_ASUS_HEADSET_MIC, the headset-mic works well
+Hi! Lukas, thx for bringing this up.
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- sound/pci/hda/patch_realtek.c | 1 +
- 1 file changed, 1 insertion(+)
+On 13.07.22 09:26, Lukas Bulwahn wrote:
+>
+> During some other unrelated clean-up work, I stumbled upon the section
+> 'If something goes wrong' in Documentation/admin-guide/README.rst
+> (https://www.kernel.org/doc/html/latest/admin-guide/README.html).
+> README.rst is---as it seems---the intended first summary page of the
+> documentation for any user of the kernel (the kernel's release notes
+> document).
+> 
+> The section 'If something goes wrong' describes what to do when
+> encountering a bug and how to report it. The second sentence in that
+> section is especially historic and probably just discouraging for most
+> bug reporters ( ..."the second best thing is to mail them to me
+> (torvalds@linux-foundation.org)"...).
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 91cd58849ee8..383a814b8539 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9369,6 +9369,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x1d72, 0x1602, "RedmiBook", ALC255_FIXUP_XIAOMI_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1d72, 0x1701, "XiaomiNotebook Pro", ALC298_FIXUP_DELL1_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1d72, 0x1901, "RedmiBook 14", ALC256_FIXUP_ASUS_HEADSET_MIC),
-+	SND_PCI_QUIRK(0x1d72, 0x1945, "Redmi G", ALC256_FIXUP_ASUS_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1d72, 0x1947, "RedmiBook Air", ALC255_FIXUP_XIAOMI_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x8086, 0x2074, "Intel NUC 8", ALC233_FIXUP_INTEL_NUC8_DMIC),
- 	SND_PCI_QUIRK(0x8086, 0x2080, "Intel NUC 8 Rugged", ALC256_FIXUP_INTEL_NUC8_RUGGED),
--- 
-2.20.1
+Ha, yeah, guess so :-D
 
+> Some random user (potentially
+> even unknown to the community) sending an email to Linus is most
+> probably the last best thing to do and is most likely just ignored,
+> right?
 
+I'd say it depends on the report and would guess Linus in quite a few
+cases will act on it if the report at least somewhat good -- or about
+something important, like a bisected regression.
 
+> Probably this section in README.rst needs a rewrite (summarizing
+> Thorsten's reporting-issues.rst, or just copying the summary from
+> there) and should then refer to reporting-issues.rst for more details.
+
+Well, any new summary sounds a bit like 'similar code paths for doing
+the same thing'. Sometimes that is necessary when coding, but often it's
+best avoided for known reasons. I think it's not that different for docs.
+
+Maybe just copying the "short guide" from the top of
+reporting-issues.rst might be the most elegant solution for README.rst
+while adding the link your mentioned (maybe while adding a comment to
+reporting-issues.rst saying something like 'if you update this section,
+update the copy over there, too'). But I'm not sure myself right now if
+that's really the best way forward; maybe a few modifications might be
+good here. Let's see what Jonathan says.
+
+Note, the section in README.rst you mentioned also contains a few
+aspects that reporting-issues.rst despite it's size doesn't cover. :-/
+But some of that stuff looks outdated anyway.
+
+> Thorsten, do you have time to prepare a change to that document that
+> gives a short summary on how to report potential issues and
+> regressions? Otherwise, I will happily put that on my todo list and
+> probably can suggest some RFC patch in a week or two.
+
+Then go for it. Normally I'd be interested, but I'm short on time
+currently, as I'm working a lot on bugzilla integration for regzbot,
+have a vacation coming up, and need to prepare talks for two conferences
+(Kernel Summit and Open Source Summit).
+
+Ciao, Thorsten

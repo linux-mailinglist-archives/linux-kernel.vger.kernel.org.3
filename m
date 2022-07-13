@@ -2,226 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84783573770
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1BE573764
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbiGMNbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
+        id S235220AbiGMN33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbiGMNbr (ORCPT
+        with ESMTP id S231748AbiGMN3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:31:47 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5941A1BF;
-        Wed, 13 Jul 2022 06:31:42 -0700 (PDT)
+        Wed, 13 Jul 2022 09:29:25 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E9613D3C;
+        Wed, 13 Jul 2022 06:29:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657719103; x=1689255103;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7RAwLlkavri+ef+7yhzzyVKIadFCcedXqPX61KMv+Gc=;
-  b=p6yGxL8zaFAFoRQG5MOfDu3on7R+0BLevhQD9r4rkdUvS+JAI3TerhMi
-   5vy4aCpcXtHFvTxozNzRx/l7qobe9YLnMLVsiS/nG+xLDvSqTqCduQ/Nd
-   sIybsV7Hm/ujt6iOQZprGFoY1PT+qRO5DGmWcUJlZ6x8SrKW+hz4y8bPq
-   yx/s5BzSTfD1IFpV+t/0ej5I6017mj5c+odvVp2EosYtoPzh0W9dSBhgX
-   NlZ1nOC1QoxqxSenZePcjfwfTPqz86sti/QL4ROQ5XbsI9PvABLb9raI6
-   Z3lUY8wK7pzepxlPskK2KrIA4C1BfrEO0jNwCA6Voc2mwEkosG/+7vvOH
-   Q==;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657718965; x=1689254965;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=L4CProI6gki3JdTLeUa3J0QD35v7lRC9rLkvXYbbm7s=;
+  b=lV/hhsEbkyd+L7t3ZQqw6MWnR9E18g8YfiL4VeXmzltRn/Wl5Ld0w8Ij
+   WvydpqY+Vn4rAmnoF/9KGGv00GIsL6Hgq1w7JbQtmIjwmPcZObUu1mV1Q
+   jv0gzWQpunN3QYPiyka3BNhDJ9gTGmKKp5k+NQ3yKOjdBylBs+0URuc3k
+   BYr+vkRarW+wj09oOSwn0TaOVdoEC6CWSTOx5Pw2JJk/FxJCw6UcK9Dox
+   7EV66XKD+4kB/RLeOvbJbJwNzkLfmzg5cG5I3ZAnksE7IUlOGFVJ+oEkD
+   yQqnaeg/8by2xkD+qlGyzTOWwT7md43TXq6e9uV7vUJctEyuyo5qDgQ6I
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="346891062"
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="171925387"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jul 2022 06:31:42 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 13 Jul 2022 06:31:39 -0700
-Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 13 Jul 2022 06:31:31 -0700
-From:   Sergiu Moga <sergiu.moga@microchip.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>
-CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <Kavyasree.Kotagiri@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, <tudor.ambarus@microchip.com>,
-        Sergiu Moga <sergiu.moga@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4] spi: dt-bindings: atmel,at91rm9200-spi: convert to json-schema
-Date:   Wed, 13 Jul 2022 16:29:10 +0300
-Message-ID: <20220713132908.175026-1-sergiu.moga@microchip.com>
-X-Mailer: git-send-email 2.25.1
+   d="scan'208";a="346891062"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 06:29:24 -0700
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="622940542"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.51.236])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 06:29:22 -0700
+Message-ID: <0c1da7b8-1be0-76a9-f613-ef307bac4e36@intel.com>
+Date:   Wed, 13 Jul 2022 16:29:18 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH] scsi: ufs: ufs-pci: default clock frequency for Intel's
+ UFS controller
+Content-Language: en-US
+To:     Daniil Lunev <dlunev@chromium.org>
+Cc:     Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20220708141612.1.Ice2e8173bd0937c7c4898b112350120063572269@changeid>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220708141612.1.Ice2e8173bd0937c7c4898b112350120063572269@changeid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert SPI DT binding for Atmel/Microchip SoCs to json-schema.
+On 8/07/22 07:17, Daniil Lunev wrote:
+> ARM platforms rely on 'ref_clk' of a UFS controller's node in DTS to set
+> up the proper bRefClkFreq for the UFS storage device. The facility is
+> not available on x86. To circumvene that, default the parameter,
+> responsible for carrying the value to the UFS storage device
+> initialization, to the one that Intel's controllers support. This is
+> required to support provisioning of UFS storage devices from userspace,
+> without relying on FW and/or bootloader to make the necessary
+> preparations.
+> 
+> Signed-off-by: Daniil Lunev <dlunev@chromium.org>
+> ---
+> 
+>  drivers/ufs/host/ufshcd-pci.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/ufs/host/ufshcd-pci.c b/drivers/ufs/host/ufshcd-pci.c
+> index 04166bda41daa..a6f9222cbea74 100644
+> --- a/drivers/ufs/host/ufshcd-pci.c
+> +++ b/drivers/ufs/host/ufshcd-pci.c
+> @@ -336,6 +336,7 @@ static int ufs_intel_common_init(struct ufs_hba *hba)
+>  	struct intel_host *host;
+>  
+>  	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
+> +	hba->dev_ref_clk_freq = REF_CLK_FREQ_19_2_MHZ;
 
-Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
+I have seen requirement documents saying 19.2 or 38.4, so this is would
+be a problem since it overwrites the value even if it has been set correctly
+to something other than 19.2 MHz.
 
-v1 -> v2:
-- change subject headline prefix from "dt-bindings: spi" to "spi: atmel"
-- change maintainer
-- kept the compatbile as items (instead of switching to enums) and at91rm9200
-as fallback for sam9x60, since the evolution of IP's is incremental.
-- removed unnecessay "cs-gpios" property and descriptions
-- added min/max for fifo-size property.
-
-
-v2 -> v3:
-- change subject headline prefix from "spi: atmel" to
-"spi: dt-bindings: atmel,at91rm9200-spi: convert to json-schema"
-- use enum instead of a range for "atmel,fifo-size"
-- change file name from "atmel,spi" to "atmel,at91rm9200-spi"
-
-
-v3 -> v4:
-- use "atmel,at91rm9200-spi.yaml" (the new file name) in $id
-- use "const" instead of "items" for single compatible
-
-
- .../bindings/spi/atmel,at91rm9200-spi.yaml    | 75 +++++++++++++++++++
- .../devicetree/bindings/spi/spi_atmel.txt     | 36 ---------
- 2 files changed, 75 insertions(+), 36 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi_atmel.txt
-
-diff --git a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-new file mode 100644
-index 000000000000..d85d54024b2e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-@@ -0,0 +1,75 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/atmel,at91rm9200-spi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Atmel SPI device
-+
-+maintainers:
-+  - Tudor Ambarus <tudor.ambarus@microchip.com>
-+
-+allOf:
-+  - $ref: spi-controller.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: atmel,at91rm9200-spi
-+      - items:
-+          - const: microchip,sam9x60-spi
-+          - const: atmel,at91rm9200-spi
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clock-names:
-+    contains:
-+      const: spi_clk
-+
-+  clocks:
-+    maxItems: 1
-+
-+  atmel,fifo-size:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Maximum number of data the RX and TX FIFOs can store for FIFO
-+      capable SPI controllers.
-+    enum: [ 16, 32 ]
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clock-names
-+  - clocks
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    spi1: spi@fffcc000 {
-+        compatible = "atmel,at91rm9200-spi";
-+        reg = <0xfffcc000 0x4000>;
-+        interrupts = <13 IRQ_TYPE_LEVEL_HIGH 5>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        clocks = <&spi1_clk>;
-+        clock-names = "spi_clk";
-+        cs-gpios = <&pioB 3 GPIO_ACTIVE_HIGH>;
-+        atmel,fifo-size = <32>;
-+
-+        mmc@0 {
-+            compatible = "mmc-spi-slot";
-+            reg = <0>;
-+            gpios = <&pioC 4 GPIO_ACTIVE_HIGH>;    /* CD */
-+            spi-max-frequency = <25000000>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/spi/spi_atmel.txt b/Documentation/devicetree/bindings/spi/spi_atmel.txt
-deleted file mode 100644
-index 5bb4a8f1df7a..000000000000
---- a/Documentation/devicetree/bindings/spi/spi_atmel.txt
-+++ /dev/null
-@@ -1,36 +0,0 @@
--Atmel SPI device
--
--Required properties:
--- compatible : should be "atmel,at91rm9200-spi" or "microchip,sam9x60-spi".
--- reg: Address and length of the register set for the device
--- interrupts: Should contain spi interrupt
--- cs-gpios: chipselects (optional for SPI controller version >= 2 with the
--  Chip Select Active After Transfer feature).
--- clock-names: tuple listing input clock names.
--	Required elements: "spi_clk"
--- clocks: phandles to input clocks.
--
--Optional properties:
--- atmel,fifo-size: maximum number of data the RX and TX FIFOs can store for FIFO
--  capable SPI controllers.
--
--Example:
--
--spi1: spi@fffcc000 {
--	compatible = "atmel,at91rm9200-spi";
--	reg = <0xfffcc000 0x4000>;
--	interrupts = <13 4 5>;
--	#address-cells = <1>;
--	#size-cells = <0>;
--	clocks = <&spi1_clk>;
--	clock-names = "spi_clk";
--	cs-gpios = <&pioB 3 0>;
--	atmel,fifo-size = <32>;
--
--	mmc-slot@0 {
--		compatible = "mmc-spi-slot";
--		reg = <0>;
--		gpios = <&pioC 4 0>;	/* CD */
--		spi-max-frequency = <25000000>;
--	};
--};
--- 
-2.25.1
+>  
+>  	host = devm_kzalloc(hba->dev, sizeof(*host), GFP_KERNEL);
+>  	if (!host)
 

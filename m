@@ -2,73 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531875738BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88ACA5738BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236200AbiGMOYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
+        id S235251AbiGMOY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbiGMOYT (ORCPT
+        with ESMTP id S236484AbiGMOYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:24:19 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8042F390
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:24:18 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id g4so10619819pgc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:24:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iZg4jV9qnfZ0cCGgCJhgdQT0+ATbFFKvPnKzJuPEFBg=;
-        b=nIjE3fdScssfGbGhj5AXLnpdMh20vhlpDufc+QPyNHwtFHhXLJzOstGW7gTkD4OQKK
-         FHDb8LG8k6W/FGT85Wep9ks6SInwfyFg4fnzpNzAqCLiRROa6MbsPO33ZRwrBINoYfz0
-         0Zxj4R5Yg3PsEpET4L15WQOksv1YepAR+SMHXFKsOcBs/VxbHgcs25qlRsS7wWifP3L3
-         1CV/mA6TLlEVx+XlsnPeq2B722iio3vXtP2LXnkp7yOUKg+Og39xri7BZTWb0r4Ih4Ak
-         KPWewfgTb79s6NsadVNBVzSgKV7AiCsvGnSjoExlEoQjA9y8h6uYz9yj921WELAF58qz
-         BZwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iZg4jV9qnfZ0cCGgCJhgdQT0+ATbFFKvPnKzJuPEFBg=;
-        b=0qt+K2otwU/N+L1q/4jZ4Qyg1zSz+VMyzpVquC8WcRUPnnl2FGu7wPTM+R8obKBc7J
-         Yy+HNYwT+k8zrh5eRzX9sCwj2dMMFlRp3l+yY9nTbm7rhUFPIZragnVFB/m0E469efOH
-         j18q+ND8+7Ve+gI26XGgKRZOW/AxAooBOLIhwvw3EzZjTEI059FOm1YIGEF7MTSt9JtV
-         srPACaE9jbJsjwPFlwtkKa447KCyyfj97fex0Or4jOLfvW3X5yhkS85MWqcx4XB3iapX
-         U7ggxi6EziVYYcLLLUHNVnr8y5tZZAugagOyNJvROYllB7eS02/FbPQlXUofDlcgPF+k
-         cbVw==
-X-Gm-Message-State: AJIora95ZdzJliJ1ib7C665sUFG4gwFlp1vdcCP/AOkyNCroJbH4etGc
-        agd+GvLPFBLxyq7ROP141BpN6Q==
-X-Google-Smtp-Source: AGRyM1vxsQVbA5kAcWs5mJCADfkSTANLlvfyl4jcgvqjBIWIjnx87Wn/UG9vyvu2JXY/xXEaMW5r1Q==
-X-Received: by 2002:aa7:88d0:0:b0:52a:f0ea:1fbb with SMTP id k16-20020aa788d0000000b0052af0ea1fbbmr3400167pff.85.1657722257668;
-        Wed, 13 Jul 2022 07:24:17 -0700 (PDT)
-Received: from google.com (55.212.185.35.bc.googleusercontent.com. [35.185.212.55])
-        by smtp.gmail.com with ESMTPSA id y145-20020a626497000000b00528655cd6a6sm8928260pfb.53.2022.07.13.07.24.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 07:24:17 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 07:24:14 -0700
-From:   Zach O'Keefe <zokeefe@google.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [akpm-mm:mm-unstable 284/293] mm/khugepaged.c:2409
- madvise_collapse() warn: possible memory leak of 'cc'
-Message-ID: <Ys7Vjt5QXz8XK1LZ@google.com>
-References: <202207100715.TBIYQ4fc-lkp@intel.com>
- <CAHbLzkoFjZoX0WFy9YaOO1rEC+=yyytgDimapeTEyuNyMNTHLg@mail.gmail.com>
+        Wed, 13 Jul 2022 10:24:45 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62ED357CA
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:24:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VJEGu4q_1657722263;
+Received: from 30.227.87.153(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VJEGu4q_1657722263)
+          by smtp.aliyun-inc.com;
+          Wed, 13 Jul 2022 22:24:25 +0800
+Message-ID: <bd4fff10-fc2d-2bbc-75e2-ee9f8f66947c@linux.alibaba.com>
+Date:   Wed, 13 Jul 2022 22:24:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHbLzkoFjZoX0WFy9YaOO1rEC+=yyytgDimapeTEyuNyMNTHLg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6] arm64: mm: fix linear mem mapping access performance
+ degradation
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org,
+        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
+        james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        thunder.leizhen@huawei.com, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        rppt@kernel.org, geert+renesas@glider.be, ardb@kernel.org,
+        linux-mm@kvack.org, yaohongbo@linux.alibaba.com,
+        alikernel-developer@linux.alibaba.com,
+        Baolin Wang <baolin.wang@linux.alibaba.com>
+References: <1657703631-93376-1-git-send-email-guanghuifeng@linux.alibaba.com>
+ <Ys7EbB9RUI27V6E/@FVFF77S0Q05N.cambridge.arm.com>
+ <81265f78-d35e-f3a4-1f41-1b176a3f90bc@linux.alibaba.com>
+ <Ys7Ri0AiWflm/YRg@FVFF77S0Q05N.cambridge.arm.com>
+From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+In-Reply-To: <Ys7Ri0AiWflm/YRg@FVFF77S0Q05N.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,93 +55,710 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jul 12 10:02, Yang Shi wrote:
-> On Tue, Jul 12, 2022 at 5:36 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-> > head:   0e9f775fb0b4adf1a4ef50ea156ead09a0fc5194
-> > commit: 9f626ffb1d1c5c26b4a8e0fdffec784a5f773274 [284/293] mm/madvise: introduce MADV_COLLAPSE sync hugepage collapse
-> > config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220710/202207100715.TBIYQ4fc-lkp@intel.com/config)
-> > compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> >
-> > smatch warnings:
-> > mm/khugepaged.c:2409 madvise_collapse() warn: possible memory leak of 'cc'
-> >
-> > vim +/cc +2409 mm/khugepaged.c
-> >
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2387  int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2388                 unsigned long start, unsigned long end)
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2389  {
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2390    struct collapse_control *cc;
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2391    struct mm_struct *mm = vma->vm_mm;
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2392    unsigned long hstart, hend, addr;
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2393    int thps = 0, last_fail = SCAN_FAIL;
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2394    bool mmap_locked = true;
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2395
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2396    BUG_ON(vma->vm_start > start);
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2397    BUG_ON(vma->vm_end < end);
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2398
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2399    cc = kmalloc(sizeof(*cc), GFP_KERNEL);
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2400    if (!cc)
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2401            return -ENOMEM;
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2402    cc->is_khugepaged = false;
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2403    cc->last_target_node = NUMA_NO_NODE;
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2404
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2405    *prev = vma;
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2406
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2407    /* TODO: Support file/shmem */
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2408    if (!vma->anon_vma || !vma_is_anonymous(vma))
-> > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06 @2409            return -EINVAL;
+Thanks.
+
+在 2022/7/13 22:07, Mark Rutland 写道:
+> On Wed, Jul 13, 2022 at 09:25:23PM +0800, guanghui.fgh wrote:
+>> Thanks.
+>>
+>> 在 2022/7/13 21:11, Mark Rutland 写道:
+>>> Hi,
+>>>
+>>> On Wed, Jul 13, 2022 at 05:13:51PM +0800, Guanghui Feng wrote:
+>>>> This patch changes mem_map to use block/section(1G/2M) mapping with
+>>>> crashkernel(DMA/DMA32 enabled, rodata full and kfence disabled).
+>>>
+>>> Can you please explain *why* ?
+>>>
+>>
+>> This patch has been talked very much.
+>> Please access these LINKS:
+>>
+>> https://lore.kernel.org/linux-arm-kernel/1656241815-28494-1-git-send-email-guanghuifeng@linux.alibaba.com/
+>>
+>> https://lore.kernel.org/linux-arm-kernel/1656777473-73887-1-git-send-email-guanghuifeng@linux.alibaba.com/
+>>
+>> https://lore.kernel.org/linux-arm-kernel/1656586222-98555-1-git-send-email-guanghuifeng@linux.alibaba.com/
 > 
-> It seems better to move the cc kmalloc after the anonymous vma check?
->
+> Regardless of whether that's been discussed to death it is *vital* that this
+> information is in the commit message. People shouldn't have to chase links to
+> understand the fundamental premise of a patch.
+> 
+> Please put *something* in the commit message as an introduction to the problem,
+> e.g.
+> 
+>    When a crashkernel is loaded into memory, the regular kernel's linear map is
+>    forced to page granularity so that the crash kernel can be protected, but as
+>    this applies to the entire linear map, this comes with an unnecessary memory
+>    and performance hit for regular workloads.
+> 
+Thanks.
+I'll add the basic information in next patch version commit message.
 
-Agreed - something I only noticed when fixing this. I've cleaned up some
-ordering here, now looks like:
-
----8<---
-	BUG_ON(vma->vm_start > start);
-	BUG_ON(vma->vm_end < end);
-
-	*prev = vma;
-
-        /* TODO: Support file/shmem */
-        if (!vma->anon_vma || !vma_is_anonymous(vma))
-                return -EINVAL;
-
-	if (!hugepage_vma_check(vma, vma->vm_flags, false, false, false))
-		return -EINVAL;
-
-	cc = kmalloc(sizeof(*cc), GFP_KERNEL);
-	if (!cc)
-		return -ENOMEM;
-	cc->is_khugepaged = false;
-	cc->last_target_node = NUMA_NO_NODE;
-
-	mmgrab(mm);
-	lru_add_drain_all();
-
-	hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
-	hend = end & HPAGE_PMD_MASK;
-
-	for (addr = hstart; addr < hend; addr += HPAGE_PMD_SIZE) {
----8<---
-out_nolock:
-	mmap_assert_locked(mm);
-	mmdrop(mm);
-	kfree(cc);
----8<---
-
-> >
-> > kfree(cc);?
-> >
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
-> >
-> >
+>>> What workload does this actually matter for, and when?
+>>>
+>>> If the system has crashed and we've entered a crash kernel, performance is the
+>>> least of our concerns, and what we really want is to be as *robust* and
+>>> *reliable* as possible.
+>>
+>> This patch is used for "normal kernel", not the crashkernel.
+> 
+> I see; sorry, I had misunderstood.
+> 
+> Regardless, my other comments below stand.
+> 
+> Thanks,
+> Mark.
+> 
+>>>> There is no [[[TLB conflict]]] and [[[Circular dependency]]].
+>>>>
+>>>> This patch [[[only]]] keep crashkernel memory mapping with non
+>>>> block/section mapping(normally 4K). So the linear mem mapping
+>>>> uses block/section mapping as more as possible. It will reduce
+>>>> the cpu dTLB miss conspicuously, and accelerate mem access about
+>>>> 20+% performance improvement.
+>>>>
+>>>> I have tested it with pft(Page Fault Test) and fio, obtained great
+>>>> performace improvement.
+>>>>
+>>>> For fio test:
+>>>> 1.prepare ramdisk
+>>>>     modprobe -r brd
+>>>>     modprobe brd rd_nr=1 rd_size=67108864
+>>>>     dmsetup remove_all
+>>>>     wipefs -a --force /dev/ram0
+>>>>     mkfs -t ext4 -E lazy_itable_init=0,lazy_journal_init=0 -q -F /dev/ram0
+>>>>     mkdir -p /fs/ram0
+>>>>     mount -t ext4 /dev/ram0 /fs/ram0
+>>>>
+>>>> 2.prepare fio paremeter in x.fio file:
+>>>> [global]
+>>>> bs=4k
+>>>> ioengine=psync
+>>>> iodepth=128
+>>>> size=32G
+>>>> direct=1
+>>>> invalidate=1
+>>>> group_reporting
+>>>> thread=1
+>>>> rw=read
+>>>> directory=/fs/ram0
+>>>> numjobs=1
+>>>>
+>>>> [task_0]
+>>>> cpus_allowed=16
+>>>> stonewall=1
+>>>>
+>>>> 3.run testcase:
+>>>> perf stat -e dTLB-load-misses fio x.fio
+>>>>
+>>>> 4.contrast
+>>>> ------------------------
+>>>> 			without patch		with patch
+>>>> fio READ		aggrb=1493.2MB/s	aggrb=1775.3MB/s
+>>>> dTLB-load-misses	1,818,320,693		438,729,774
+>>>> time elapsed(s)		70.500326434		62.877316408
+>>>> user(s)			15.926332000		15.684721000
+>>>> sys(s)			54.211939000		47.046165000
+>>>>
+>>>> 5.conclusion
+>>>> Using this patch will reduce dTLB misses and improve performace greatly.
+>>>>
+>>>> Signed-off-by: Guanghui Feng <guanghuifeng@linux.alibaba.com>
+>>>>
+>>>> ---
+>>>> Changes for v5:
+>>>> When rebuilding crashkernel mem mapping with swapper_pg_dir in
+>>>> ttbr1_el1(self-modifying), there may be TLB conflict and Circular
+>>>> dependency.
+>>>>
+>>>> LINK:
+>>>> https://lore.kernel.org/linux-arm-kernel/YsWtCLIG2qKETqmq@arm.com/
+>>>> https://lore.kernel.org/linux-arm-kernel/YsU9KF5abYe%2FLHAA@arm.com/
+>>>>
+>>>> In order to resolve them, This patch does:
+>>>>
+>>>> 1.Before rebuiling crashkernel mem, the pgd is swapper_pg_dir
+>>>>     in [[[ttbr1_el1]]]
+>>>>
+>>>> 2.Change the [[[ttbr0_el1]]] to use idmap_pg_dir pgd.
+>>>>     Add [[[idmap_cpu_replace_ttbr1_with_flush_tlb]]] func which is
+>>>>     mapped with idmap_pg_dir mapping in [[[ttbr0_el1]]]
+>>>>
+>>>> 3.Call the [[[idmap_cpu_replace_ttbr1_with_flush_tlb]]](mapped in ttbr0_el1)
+>>>>     It will flush tlb all, switch [[[ttbr1_el1]]] to use [[[init_pg_dir]]] pgd
+>>>>     and flush tlb all again.
+>>>>     There is no tlb cache for swapper_pg_dir(no TLB conflict).
+>>>>
+>>>> 4.Modify crashkernel mapping to use non block/section mapping
+>>>>     When using init_pg_dir pgd(in ttbr1_el1), it's safe to modify crashkernel mem
+>>>>     mapping in swapper_pg_dir pagetable with fix mapping.
+>>>>     And there is no any tlb conflict and no need to flush tlb.
+>>>>
+>>>> 5.When finishing it, restore ttbr1_el1 pgd to the swapper_pg_dir pgd
+>>>>     Using cpu_replace_ttbr1 function to restore without any tlb conflict
+>>>>     (the reason is similar to the above).
+>>>> ---
+>>>>    arch/arm64/include/asm/mmu.h         |   1 +
+>>>>    arch/arm64/include/asm/mmu_context.h |  28 ++++
+>>>>    arch/arm64/mm/init.c                 |   8 +-
+>>>>    arch/arm64/mm/mmu.c                  | 304 +++++++++++++++++++++++++----------
+>>>>    arch/arm64/mm/proc.S                 |  19 +++
+>>>>    5 files changed, 265 insertions(+), 95 deletions(-)
+>>>
+>>> This is a huge diffstat for a very niche case, the coe is now much harder to
+>>> understand, and I don't think that the changes are well justified. I am very
+>>> much not keen on this.
+>>>
+>>> I also thought Will had previously suggested a simpler approach; what was wrong with
+>>> that?
+>>>
+>>>>
+>>>> diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
+>>>> index 48f8466..1a46b81 100644
+>>>> --- a/arch/arm64/include/asm/mmu.h
+>>>> +++ b/arch/arm64/include/asm/mmu.h
+>>>> @@ -63,6 +63,7 @@ static inline bool arm64_kernel_unmapped_at_el0(void)
+>>>>    extern void arm64_memblock_init(void);
+>>>>    extern void paging_init(void);
+>>>>    extern void bootmem_init(void);
+>>>> +extern void map_crashkernel(void);
+>>>>    extern void __iomem *early_io_map(phys_addr_t phys, unsigned long virt);
+>>>>    extern void init_mem_pgprot(void);
+>>>>    extern void create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
+>>>> diff --git a/arch/arm64/include/asm/mmu_context.h b/arch/arm64/include/asm/mmu_context.h
+>>>> index 6770667..10dffd4 100644
+>>>> --- a/arch/arm64/include/asm/mmu_context.h
+>>>> +++ b/arch/arm64/include/asm/mmu_context.h
+>>>> @@ -139,6 +139,34 @@ static inline void cpu_install_ttbr0(phys_addr_t ttbr0, unsigned long t0sz)
+>>>>    	isb();
+>>>>    }
+>>>> +static inline void __nocfi cpu_replace_ttbr1_with_phys(phys_addr_t ttbr1)
+>>>> +{
+>>>> +	typedef void (ttbr_replace_func)(phys_addr_t);
+>>>> +	extern ttbr_replace_func idmap_cpu_replace_ttbr1_with_flush_tlb;
+>>>> +	ttbr_replace_func *replace_phys;
+>>>> +
+>>>> +	/* phys_to_ttbr() zeros lower 2 bits of ttbr with 52-bit PA */
+>>>> +	ttbr1 = phys_to_ttbr(ttbr1);
+>>>> +
+>>>> +	if (system_supports_cnp()) {
+>>>> +		/*
+>>>> +		 * cpu_replace_ttbr1() is used when there's a boot CPU
+>>>> +		 * up (i.e. cpufeature framework is not up yet) and
+>>>> +		 * latter only when we enable CNP via cpufeature's
+>>>> +		 * enable() callback.
+>>>> +		 * Also we rely on the cpu_hwcap bit being set before
+>>>> +		 * calling the enable() function.
+>>>> +		 */
+>>>> +		ttbr1 |= TTBR_CNP_BIT;
+>>>> +	}
+>>>> +
+>>>> +	replace_phys = (void *)__pa_symbol(function_nocfi(idmap_cpu_replace_ttbr1_with_flush_tlb));
+>>>> +
+>>>> +	cpu_install_idmap();
+>>>> +	replace_phys(ttbr1);
+>>>> +	cpu_uninstall_idmap();
+>>>> +}
+>>>
+>>> We already have cpu_replace_ttbr1(), NAK to a copy-paste of that.
+>>>
+>>> If we *really* need variants, the common parts should be factored out.
+>>>
+>>>> +
+>>>>    /*
+>>>>     * Atomically replaces the active TTBR1_EL1 PGD with a new VA-compatible PGD,
+>>>>     * avoiding the possibility of conflicting TLB entries being allocated.
+>>>> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+>>>> index 339ee84..241d27e 100644
+>>>> --- a/arch/arm64/mm/init.c
+>>>> +++ b/arch/arm64/mm/init.c
+>>>> @@ -190,6 +190,7 @@ static void __init reserve_crashkernel(void)
+>>>>    	crashk_res.start = crash_base;
+>>>>    	crashk_res.end = crash_base + crash_size - 1;
+>>>>    	insert_resource(&iomem_resource, &crashk_res);
+>>>> +	map_crashkernel();
+>>>>    }
+>>>>    /*
+>>>> @@ -388,10 +389,6 @@ void __init arm64_memblock_init(void)
+>>>>    	}
+>>>>    	early_init_fdt_scan_reserved_mem();
+>>>> -
+>>>> -	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+>>>> -		reserve_crashkernel();
+>>>> -
+>>>>    	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
+>>>>    }
+>>>> @@ -438,8 +435,7 @@ void __init bootmem_init(void)
+>>>>    	 * request_standard_resources() depends on crashkernel's memory being
+>>>>    	 * reserved, so do it here.
+>>>>    	 */
+>>>> -	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
+>>>> -		reserve_crashkernel();
+>>>> +	reserve_crashkernel();
+>>>>    	memblock_dump_all();
+>>>>    }
+>>>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+>>>> index 626ec32..8f8261e 100644
+>>>> --- a/arch/arm64/mm/mmu.c
+>>>> +++ b/arch/arm64/mm/mmu.c
+>>>> @@ -42,6 +42,7 @@
+>>>>    #define NO_BLOCK_MAPPINGS	BIT(0)
+>>>>    #define NO_CONT_MAPPINGS	BIT(1)
+>>>>    #define NO_EXEC_MAPPINGS	BIT(2)	/* assumes FEAT_HPDS is not used */
+>>>> +#define NO_SEC_REMAPPINGS	BIT(3)	/* rebuild with non block/sec mapping*/
+>>>>    u64 idmap_t0sz = TCR_T0SZ(VA_BITS_MIN);
+>>>>    u64 idmap_ptrs_per_pgd = PTRS_PER_PGD;
+>>>> @@ -155,8 +156,22 @@ static bool pgattr_change_is_safe(u64 old, u64 new)
+>>>>    	return ((old ^ new) & ~mask) == 0;
+>>>>    }
+>>>> +static void pte_clear_cont(pte_t *ptep)
+>>>> +{
+>>>> +	int i = 0;
+>>>> +	pte_t pte = READ_ONCE(*ptep);
+>>>> +	if (pte_none(pte) || !pte_cont(pte))
+>>>> +		return;
+>>>> +	ptep -= ((u64)ptep / sizeof(pte_t)) &
+>>>> +		((1 << CONFIG_ARM64_CONT_PTE_SHIFT) - 1);
+>>>> +	do {
+>>>> +		pte = pte_mknoncont(READ_ONCE(*ptep));
+>>>> +		set_pte(ptep, pte);
+>>>> +	} while (++ptep, ++i < CONT_PTES);
+>>>> +}
+>>>
+>>> This requires BBM.
+>>>
+>>>> +
+>>>>    static void init_pte(pmd_t *pmdp, unsigned long addr, unsigned long end,
+>>>> -		     phys_addr_t phys, pgprot_t prot)
+>>>> +		     phys_addr_t phys, pgprot_t prot, int flags)
+>>>>    {
+>>>>    	pte_t *ptep;
+>>>> @@ -164,6 +179,9 @@ static void init_pte(pmd_t *pmdp, unsigned long addr, unsigned long end,
+>>>>    	do {
+>>>>    		pte_t old_pte = READ_ONCE(*ptep);
+>>>> +		if (flags & NO_SEC_REMAPPINGS)
+>>>> +			pte_clear_cont(ptep);
+>>>> +
+>>>>    		set_pte(ptep, pfn_pte(__phys_to_pfn(phys), prot));
+>>>>    		/*
+>>>> @@ -179,6 +197,22 @@ static void init_pte(pmd_t *pmdp, unsigned long addr, unsigned long end,
+>>>>    	pte_clear_fixmap();
+>>>>    }
+>>>> +static inline void allock_pte_page(pmd_t *pmdp,
+>>>> +				   phys_addr_t (*pgtable_alloc)(int),
+>>>> +				   int flags)
+>>>> +{
+>>>> +	pmdval_t pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
+>>>> +	phys_addr_t pte_phys;
+>>>> +	if (!pmd_none(READ_ONCE(*pmdp)))
+>>>> +		return;
+>>>> +
+>>>> +	if (flags & NO_EXEC_MAPPINGS)
+>>>> +		pmdval |= PMD_TABLE_PXN;
+>>>> +	BUG_ON(!pgtable_alloc);
+>>>> +	pte_phys = pgtable_alloc(PAGE_SHIFT);
+>>>> +	__pmd_populate(pmdp, pte_phys, pmdval);
+>>>> +}
+>>>> +
+>>>>    static void alloc_init_cont_pte(pmd_t *pmdp, unsigned long addr,
+>>>>    				unsigned long end, phys_addr_t phys,
+>>>>    				pgprot_t prot,
+>>>> @@ -189,17 +223,8 @@ static void alloc_init_cont_pte(pmd_t *pmdp, unsigned long addr,
+>>>>    	pmd_t pmd = READ_ONCE(*pmdp);
+>>>>    	BUG_ON(pmd_sect(pmd));
+>>>> -	if (pmd_none(pmd)) {
+>>>> -		pmdval_t pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
+>>>> -		phys_addr_t pte_phys;
+>>>> -
+>>>> -		if (flags & NO_EXEC_MAPPINGS)
+>>>> -			pmdval |= PMD_TABLE_PXN;
+>>>> -		BUG_ON(!pgtable_alloc);
+>>>> -		pte_phys = pgtable_alloc(PAGE_SHIFT);
+>>>> -		__pmd_populate(pmdp, pte_phys, pmdval);
+>>>> -		pmd = READ_ONCE(*pmdp);
+>>>> -	}
+>>>> +	allock_pte_page(pmdp, pgtable_alloc, flags);
+>>>> +	pmd = READ_ONCE(*pmdp);
+>>>>    	BUG_ON(pmd_bad(pmd));
+>>>>    	do {
+>>>> @@ -208,16 +233,71 @@ static void alloc_init_cont_pte(pmd_t *pmdp, unsigned long addr,
+>>>>    		next = pte_cont_addr_end(addr, end);
+>>>>    		/* use a contiguous mapping if the range is suitably aligned */
+>>>> -		if ((((addr | next | phys) & ~CONT_PTE_MASK) == 0) &&
+>>>> -		    (flags & NO_CONT_MAPPINGS) == 0)
+>>>> +		if (!(flags & NO_SEC_REMAPPINGS) &&
+>>>> +		   (((addr | next | phys) & ~CONT_PTE_MASK) == 0) &&
+>>>> +		   (flags & NO_CONT_MAPPINGS) == 0)
+>>>>    			__prot = __pgprot(pgprot_val(prot) | PTE_CONT);
+>>>> -		init_pte(pmdp, addr, next, phys, __prot);
+>>>> +		init_pte(pmdp, addr, next, phys, __prot, flags);
+>>>>    		phys += next - addr;
+>>>>    	} while (addr = next, addr != end);
+>>>>    }
+>>>> +static void pmd_clear_cont(pmd_t *pmdp)
+>>>> +{
+>>>> +	int i = 0;
+>>>> +	pmd_t pmd = READ_ONCE(*pmdp);
+>>>> +	if (pmd_none(pmd) || !pmd_sect(pmd) || !pmd_cont(pmd))
+>>>> +		return;
+>>>> +	pmdp -= ((u64)pmdp / sizeof(pmd_t)) &
+>>>> +		((1 << CONFIG_ARM64_CONT_PMD_SHIFT) - 1);
+>>>> +	do {
+>>>> +		pmd = READ_ONCE(*pmdp);
+>>>> +		pmd = pte_pmd(pte_mknoncont(pmd_pte(pmd)));
+>>>> +		set_pmd(pmdp, pmd);
+>>>> +	} while (++pmdp, ++i < CONT_PMDS);
+>>>> +}
+>>>
+>>> This requires BBM.
+>>>
+>>>> +
+>>>> +static void init_pmd_remap(pud_t *pudp, unsigned long addr, unsigned long end,
+>>>> +			   phys_addr_t phys, pgprot_t prot,
+>>>> +			   phys_addr_t (*pgtable_alloc)(int), int flags)
+>>>> +{
+>>>> +	unsigned long next;
+>>>> +	pmd_t *pmdp;
+>>>> +	phys_addr_t map_offset;
+>>>> +
+>>>> +	pmdp = pmd_set_fixmap_offset(pudp, addr);
+>>>> +	do {
+>>>> +		next = pmd_addr_end(addr, end);
+>>>> +
+>>>> +		if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
+>>>> +			pmd_clear_cont(pmdp);
+>>>> +			pmd_clear(pmdp);
+>>>> +			allock_pte_page(pmdp, pgtable_alloc, flags);
+>>>> +
+>>>> +			map_offset = addr - (addr & PMD_MASK);
+>>>> +			if (map_offset)
+>>>> +			    alloc_init_cont_pte(pmdp, addr & PMD_MASK, addr,
+>>>> +						phys - map_offset, prot,
+>>>> +						pgtable_alloc,
+>>>> +						flags & (~NO_SEC_REMAPPINGS));
+>>>> +
+>>>> +			if (next < (addr & PMD_MASK) + PMD_SIZE)
+>>>> +			    alloc_init_cont_pte(pmdp, next,
+>>>> +					       (addr & PUD_MASK) + PUD_SIZE,
+>>>> +					        next - addr + phys,
+>>>> +						prot, pgtable_alloc,
+>>>> +						flags & (~NO_SEC_REMAPPINGS));
+>>>> +		}
+>>>> +		alloc_init_cont_pte(pmdp, addr, next, phys, prot,
+>>>> +				    pgtable_alloc, flags);
+>>>> +		phys += next - addr;
+>>>> +	} while (pmdp++, addr = next, addr != end);
+>>>> +
+>>>> +	pmd_clear_fixmap();
+>>>> +}
+>>>> +
+>>>>    static void init_pmd(pud_t *pudp, unsigned long addr, unsigned long end,
+>>>>    		     phys_addr_t phys, pgprot_t prot,
+>>>>    		     phys_addr_t (*pgtable_alloc)(int), int flags)
+>>>> @@ -255,6 +335,22 @@ static void init_pmd(pud_t *pudp, unsigned long addr, unsigned long end,
+>>>>    	pmd_clear_fixmap();
+>>>>    }
+>>>> +static inline void alloc_pmd_page(pud_t *pudp, phys_addr_t (*pgtable_alloc)(int), int flags)
+>>>> +{
+>>>> +
+>>>> +	pudval_t pudval = PUD_TYPE_TABLE | PUD_TABLE_UXN;
+>>>> +	phys_addr_t pmd_phys;
+>>>> +
+>>>> +	if (!pud_none(READ_ONCE(*pudp)))
+>>>> +		return;
+>>>> +
+>>>> +	if (flags & NO_EXEC_MAPPINGS)
+>>>> +		pudval |= PUD_TABLE_PXN;
+>>>> +	BUG_ON(!pgtable_alloc);
+>>>> +	pmd_phys = pgtable_alloc(PMD_SHIFT);
+>>>> +	__pud_populate(pudp, pmd_phys, pudval);
+>>>> +}
+>>>> +
+>>>>    static void alloc_init_cont_pmd(pud_t *pudp, unsigned long addr,
+>>>>    				unsigned long end, phys_addr_t phys,
+>>>>    				pgprot_t prot,
+>>>> @@ -267,17 +363,8 @@ static void alloc_init_cont_pmd(pud_t *pudp, unsigned long addr,
+>>>>    	 * Check for initial section mappings in the pgd/pud.
+>>>>    	 */
+>>>>    	BUG_ON(pud_sect(pud));
+>>>> -	if (pud_none(pud)) {
+>>>> -		pudval_t pudval = PUD_TYPE_TABLE | PUD_TABLE_UXN;
+>>>> -		phys_addr_t pmd_phys;
+>>>> -
+>>>> -		if (flags & NO_EXEC_MAPPINGS)
+>>>> -			pudval |= PUD_TABLE_PXN;
+>>>> -		BUG_ON(!pgtable_alloc);
+>>>> -		pmd_phys = pgtable_alloc(PMD_SHIFT);
+>>>> -		__pud_populate(pudp, pmd_phys, pudval);
+>>>> -		pud = READ_ONCE(*pudp);
+>>>> -	}
+>>>> +	alloc_pmd_page(pudp, pgtable_alloc, flags);
+>>>> +	pud = READ_ONCE(*pudp);
+>>>>    	BUG_ON(pud_bad(pud));
+>>>>    	do {
+>>>> @@ -286,16 +373,80 @@ static void alloc_init_cont_pmd(pud_t *pudp, unsigned long addr,
+>>>>    		next = pmd_cont_addr_end(addr, end);
+>>>>    		/* use a contiguous mapping if the range is suitably aligned */
+>>>> -		if ((((addr | next | phys) & ~CONT_PMD_MASK) == 0) &&
+>>>> +		if (!(flags & NO_SEC_REMAPPINGS) &&
+>>>> +		   (((addr | next | phys) & ~CONT_PMD_MASK) == 0) &&
+>>>>    		    (flags & NO_CONT_MAPPINGS) == 0)
+>>>>    			__prot = __pgprot(pgprot_val(prot) | PTE_CONT);
+>>>> -		init_pmd(pudp, addr, next, phys, __prot, pgtable_alloc, flags);
+>>>> +		if (flags & NO_SEC_REMAPPINGS)
+>>>> +			init_pmd_remap(pudp, addr, next, phys, __prot,
+>>>> +				       pgtable_alloc, flags);
+>>>> +		else
+>>>> +			init_pmd(pudp, addr, next, phys, __prot,
+>>>> +				 pgtable_alloc, flags);
+>>>>    		phys += next - addr;
+>>>>    	} while (addr = next, addr != end);
+>>>>    }
+>>>> +static void init_pud_remap(pud_t *pudp, unsigned long addr, unsigned long next,
+>>>> +			   phys_addr_t phys, pgprot_t prot,
+>>>> +			   phys_addr_t (*pgtable_alloc)(int),
+>>>> +			   int flags)
+>>>> +{
+>>>> +	phys_addr_t map_offset;
+>>>> +
+>>>> +	if (!pud_none(*pudp) && pud_sect(*pudp)) {
+>>>> +		pud_clear(pudp);
+>>>> +		alloc_pmd_page(pudp, pgtable_alloc, flags);
+>>>> +
+>>>> +		map_offset = addr - (addr & PUD_MASK);
+>>>> +		if (map_offset)
+>>>> +		    alloc_init_cont_pmd(pudp, addr & PUD_MASK,
+>>>> +					addr, phys - map_offset,
+>>>> +					prot, pgtable_alloc,
+>>>> +					flags &	(~NO_SEC_REMAPPINGS));
+>>>> +
+>>>> +		if (next < (addr & PUD_MASK) + PUD_SIZE)
+>>>> +		    alloc_init_cont_pmd(pudp, next,
+>>>> +				       (addr & PUD_MASK) + PUD_SIZE,
+>>>> +					next - addr + phys,
+>>>> +					prot, pgtable_alloc,
+>>>> +					flags & (~NO_SEC_REMAPPINGS));
+>>>> +	}
+>>>> +	alloc_init_cont_pmd(pudp, addr, next, phys, prot,
+>>>> +			    pgtable_alloc, flags);
+>>>> +}
+>>>> +
+>>>> +static void init_pud(pud_t *pudp, unsigned long addr, unsigned long next,
+>>>> +		     phys_addr_t phys, pgprot_t prot,
+>>>> +		     phys_addr_t (*pgtable_alloc)(int),
+>>>> +		     int flags)
+>>>> +{
+>>>> +	pud_t old_pud = READ_ONCE(*pudp);
+>>>> +	/*
+>>>> +	 * For 4K granule only, attempt to put down a 1GB block
+>>>> +	 */
+>>>> +	if (pud_sect_supported() &&
+>>>> +	   ((addr | next | phys) & ~PUD_MASK) == 0 &&
+>>>> +	   (flags & NO_BLOCK_MAPPINGS) == 0) {
+>>>> +		pud_set_huge(pudp, phys, prot);
+>>>> +
+>>>> +		/*
+>>>> +		 * After the PUD entry has been populated once, we
+>>>> +		 * only allow updates to the permission attributes.
+>>>> +		 */
+>>>> +		BUG_ON(!pgattr_change_is_safe(pud_val(old_pud),
+>>>> +					      READ_ONCE(pud_val(*pudp))));
+>>>> +	} else {
+>>>> +		alloc_init_cont_pmd(pudp, addr, next, phys, prot,
+>>>> +				    pgtable_alloc, flags);
+>>>> +
+>>>> +		BUG_ON(pud_val(old_pud) != 0 &&
+>>>> +		       pud_val(old_pud) != READ_ONCE(pud_val(*pudp)));
+>>>> +	}
+>>>> +}
+>>>> +
+>>>>    static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+>>>>    			   phys_addr_t phys, pgprot_t prot,
+>>>>    			   phys_addr_t (*pgtable_alloc)(int),
+>>>> @@ -325,37 +476,22 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+>>>>    	 */
+>>>>    	if (system_state != SYSTEM_BOOTING)
+>>>>    		mutex_lock(&fixmap_lock);
+>>>> +
+>>>>    	pudp = pud_set_fixmap_offset(p4dp, addr);
+>>>>    	do {
+>>>> -		pud_t old_pud = READ_ONCE(*pudp);
+>>>> -
+>>>>    		next = pud_addr_end(addr, end);
+>>>> -		/*
+>>>> -		 * For 4K granule only, attempt to put down a 1GB block
+>>>> -		 */
+>>>> -		if (pud_sect_supported() &&
+>>>> -		   ((addr | next | phys) & ~PUD_MASK) == 0 &&
+>>>> -		    (flags & NO_BLOCK_MAPPINGS) == 0) {
+>>>> -			pud_set_huge(pudp, phys, prot);
+>>>> -
+>>>> -			/*
+>>>> -			 * After the PUD entry has been populated once, we
+>>>> -			 * only allow updates to the permission attributes.
+>>>> -			 */
+>>>> -			BUG_ON(!pgattr_change_is_safe(pud_val(old_pud),
+>>>> -						      READ_ONCE(pud_val(*pudp))));
+>>>> -		} else {
+>>>> -			alloc_init_cont_pmd(pudp, addr, next, phys, prot,
+>>>> -					    pgtable_alloc, flags);
+>>>> -
+>>>> -			BUG_ON(pud_val(old_pud) != 0 &&
+>>>> -			       pud_val(old_pud) != READ_ONCE(pud_val(*pudp)));
+>>>> -		}
+>>>> +		if (flags & NO_SEC_REMAPPINGS)
+>>>> +			init_pud_remap(pudp, addr, next, phys, prot,
+>>>> +				       pgtable_alloc, flags);
+>>>> +		else
+>>>> +			init_pud(pudp, addr, next, phys, prot, pgtable_alloc,
+>>>> +				 flags);
+>>>>    		phys += next - addr;
+>>>>    	} while (pudp++, addr = next, addr != end);
+>>>>    	pud_clear_fixmap();
+>>>> +
+>>>>    	if (system_state != SYSTEM_BOOTING)
+>>>>    		mutex_unlock(&fixmap_lock);
+>>>>    }
+>>>> @@ -483,20 +619,37 @@ void __init mark_linear_text_alias_ro(void)
+>>>>    			    PAGE_KERNEL_RO);
+>>>>    }
+>>>> -static bool crash_mem_map __initdata;
+>>>> -
+>>>> -static int __init enable_crash_mem_map(char *arg)
+>>>> +#ifdef CONFIG_KEXEC_CORE
+>>>> +void __init map_crashkernel(void)
+>>>>    {
+>>>> -	/*
+>>>> -	 * Proper parameter parsing is done by reserve_crashkernel(). We only
+>>>> -	 * need to know if the linear map has to avoid block mappings so that
+>>>> -	 * the crashkernel reservations can be unmapped later.
+>>>> -	 */
+>>>> -	crash_mem_map = true;
+>>>> +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+>>>> +	    return;
+>>>> -	return 0;
+>>>> +	if (!crashk_res.end)
+>>>> +	    return;
+>>>> +
+>>>> +	cpu_replace_ttbr1_with_phys(__pa_symbol(init_pg_dir));
+>>>> +	init_mm.pgd = init_pg_dir;
+>>>> +
+>>>> +	__create_pgd_mapping(swapper_pg_dir, crashk_res.start,
+>>>> +			     __phys_to_virt(crashk_res.start),
+>>>> +			     crashk_res.end + 1 - crashk_res.start, PAGE_KERNEL,
+>>>> +			     early_pgtable_alloc,
+>>>> +			     NO_EXEC_MAPPINGS | NO_SEC_REMAPPINGS);
+>>>> +
+>>>> +	cpu_replace_ttbr1(lm_alias(swapper_pg_dir));
+>>>> +	init_mm.pgd = swapper_pg_dir;
+>>>> +
+>>>> +	memblock_phys_free(__pa_symbol(init_pg_dir),
+>>>> +			   __pa_symbol(init_pg_end) - __pa_symbol(init_pg_dir));
+>>>>    }
+>>>> -early_param("crashkernel", enable_crash_mem_map);
+>>>> +#else
+>>>> +void __init map_crashkernel(void)
+>>>> +{
+>>>> +	memblock_phys_free(__pa_symbol(init_pg_dir),
+>>>> +			   __pa_symbol(init_pg_end) - __pa_symbol(init_pg_dir));
+>>>> +}
+>>>> +#endif
+>>>
+>>> Freeing the init_pg_dir has nothing to do with maping the crash kernel, and
+>>> that doesn't belong in this function.
+>>>
+>>>>    static void __init map_mem(pgd_t *pgdp)
+>>>>    {
+>>>> @@ -527,17 +680,6 @@ static void __init map_mem(pgd_t *pgdp)
+>>>>    	 */
+>>>>    	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+>>>> -#ifdef CONFIG_KEXEC_CORE
+>>>> -	if (crash_mem_map) {
+>>>> -		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
+>>>> -		    IS_ENABLED(CONFIG_ZONE_DMA32))
+>>>> -			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+>>>> -		else if (crashk_res.end)
+>>>> -			memblock_mark_nomap(crashk_res.start,
+>>>> -			    resource_size(&crashk_res));
+>>>> -	}
+>>>> -#endif
+>>>> -
+>>>>    	/* map all the memory banks */
+>>>>    	for_each_mem_range(i, &start, &end) {
+>>>>    		if (start >= end)
+>>>> @@ -570,19 +712,6 @@ static void __init map_mem(pgd_t *pgdp)
+>>>>    	 * in page granularity and put back unused memory to buddy system
+>>>>    	 * through /sys/kernel/kexec_crash_size interface.
+>>>>    	 */
+>>>> -#ifdef CONFIG_KEXEC_CORE
+>>>> -	if (crash_mem_map &&
+>>>> -	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
+>>>> -		if (crashk_res.end) {
+>>>> -			__map_memblock(pgdp, crashk_res.start,
+>>>> -				       crashk_res.end + 1,
+>>>> -				       PAGE_KERNEL,
+>>>> -				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
+>>>> -			memblock_clear_nomap(crashk_res.start,
+>>>> -					     resource_size(&crashk_res));
+>>>> -		}
+>>>> -	}
+>>>> -#endif
+>>>>    }
+>>>>    void mark_rodata_ro(void)
+>>>> @@ -774,9 +903,6 @@ void __init paging_init(void)
+>>>>    	cpu_replace_ttbr1(lm_alias(swapper_pg_dir));
+>>>>    	init_mm.pgd = swapper_pg_dir;
+>>>> -	memblock_phys_free(__pa_symbol(init_pg_dir),
+>>>> -			   __pa_symbol(init_pg_end) - __pa_symbol(init_pg_dir));
+>>>> -
+>>>>    	memblock_allow_resize();
+>>>>    }
+>>>> diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
+>>>> index 50bbed9..161bae6 100644
+>>>> --- a/arch/arm64/mm/proc.S
+>>>> +++ b/arch/arm64/mm/proc.S
+>>>> @@ -178,6 +178,25 @@ SYM_FUNC_END(cpu_do_resume)
+>>>>    	isb
+>>>>    .endm
+>>>> +SYM_FUNC_START(idmap_cpu_replace_ttbr1_with_flush_tlb)
+>>>> +	save_and_disable_daif flags=x2
+>>>> +
+>>>> +	__idmap_cpu_set_reserved_ttbr1 x1, x3
+>>>> +
+>>>> +	offset_ttbr1 x0, x3
+>>>> +	msr	ttbr1_el1, x0
+>>>> +	isb
+>>>> +
+>>>> +	restore_daif x2
+>>>> +
+>>>> +	dsb nshst
+>>>> +	tlbi	vmalle1
+>>>> +	dsb	nsh
+>>>> +	isb
+>>>
+>>> Why aren't you using the existing idmap_cpu_replace_ttbr1() ?
+>>>
+>>> Why do you think you need a TLB flush? The existing code relies on
+>>> __idmap_cpu_set_reserved_ttbr1() to do that (and the fact that the TLB is not
+>>> permitted to cache the base address of the TTBR1 table).
+>>>
+>>> Why is the maintenance *after* unmasking exceptions? That's either unnecessary
+>>> or not safe.
+>>>
+>>> Thanks,
+>>> Mark.
+>>>
+Yes, this patch is RFC.
+If this method is accessed, idmap_cpu_replace_ttbr1 and 
+idmap_cpu_replace_ttbr1_with_flush_tlb can be merged.
+>>>> +
+>>>> +	ret
+>>>> +SYM_FUNC_END(idmap_cpu_replace_ttbr1_with_flush_tlb)
+>>>> +
+>>>>    /*
+>>>>     * void idmap_cpu_replace_ttbr1(phys_addr_t ttbr1)
+>>>>     *
+>>>> -- 
+>>>> 1.8.3.1
+>>>>

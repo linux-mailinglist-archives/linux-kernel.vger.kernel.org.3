@@ -2,138 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634795738D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D3F5738DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236529AbiGMO3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
+        id S236508AbiGMOaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbiGMO3u (ORCPT
+        with ESMTP id S236480AbiGMOaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:29:50 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A92275ED
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:29:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657722589; x=1689258589;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=79R+cGH+W8fdanIcU1gar7tgsMfMkUvcNYAcmuJq6rY=;
-  b=Lh6EuTddLGO/SEAhiOF2IR+U3S9BUHxBcJUrm7UnV4FH9pcn7NV2k+T6
-   q1fBdbN7QAaex5NtR8EJVA4O+JZF06oA2GFAT5CWAxp2hUeOEakwqK0e3
-   f6+nCAcG1QDCP1d+NdIBNCt8K2vKMLm/LJGULtUjWtAy28edbIKYAOqgd
-   RAQxfAsvSGs9g80eeVNHtRmaNatvj69ufTGhd6/5B44MrEKVBdmum1FWB
-   AQzmiR83EHai6pAGJht/zinysj0P3NTmYM+5TFIPOWhLh51ef5Gg5WPIx
-   k7HkZGTin5IVceyNYpCqHlwKu9l+vI4ATDnRmWR44yYYBBkwZ8IjZcjg9
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="285251402"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="285251402"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:29:48 -0700
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="622966734"
-Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:29:47 -0700
-From:   Bard Liao <yung-chuan.liao@linux.intel.com>
-To:     alsa-devel@alsa-project.org, vkoul@kernel.org
-Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com,
-        gregkh@linuxfoundation.org
-Subject: [PATCH 2/2] soundwire: intel: remove use of __func__ in dev_dbg
-Date:   Wed, 13 Jul 2022 22:29:37 +0800
-Message-Id: <20220713142937.17562-2-yung-chuan.liao@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220713142937.17562-1-yung-chuan.liao@linux.intel.com>
-References: <20220713142937.17562-1-yung-chuan.liao@linux.intel.com>
+        Wed, 13 Jul 2022 10:30:12 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED24357D2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:30:10 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id b26so15781034wrc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:30:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Vr7v5OA4OBuFn4xzfn7voat0f0rlZBh//6y8zR8UEcQ=;
+        b=LtGaDNd02/pBkiCw4rEu+Gg/LmhFDe5JyvbuCpuQz0R0RLL0zwI0IqV7m1KqKHGYq9
+         DHg6KR2gh+D3zbOwOr8Gp4JNhU8p+8BGBrC+wTGOmFpYgLnhJH/66d3djS58eqCVb2gY
+         iW1k/s2orJDLs2s4pQAox0fl6ytbUDHeGeL0f/TY5e9qA/H51tBJyzmmqffQumTA2QjX
+         aOXkQruEVyHiK+R8eSBULNtiyVZf7VrP7/iwFyim1BZrEmJEJwRpe22Nzg58P7Lgc/S9
+         3I3QC0vtUctDypg5meE2/CO8+SHH6ixssB0L6vseZscCk0ly/6meNrkXc3kG1oOU9k6Y
+         +S7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vr7v5OA4OBuFn4xzfn7voat0f0rlZBh//6y8zR8UEcQ=;
+        b=bezo5UYEXqKzRpPBSHan+BMLygpF17H3pMprTP3wzR21gskGAME8wtLpPiY2hOOFCD
+         5mLTHGeYXUK8DNNM9M/AVY7ZzV/l2uP48fxQBkGGN6aKAP8pE08vj7n3iIxdZm+dmjKa
+         jpzcFzdp5/GGCEIpiC2MoSNb+IS1/Zt1QTpDrj4h9MRSFt5ehZNEQEipn1WWcmJui+fs
+         4IPeItGIwqzgI8yWM9USQyd8pDyZ5HnH/TGtpltUIabwKihnE/uyPZOw/OzDH7seEINM
+         kWygxOUXLSeprtC2kaGxhp8uj3fWbP1UwTm56mRAhzg9EFQ0a+xFFBrd5di1PMed2r0q
+         2/Sg==
+X-Gm-Message-State: AJIora+1+5tEK5WwKBf7CQUDPSDcGdd/9SjRL2kjqo+gUBRtCcb/PMNC
+        xjG/kCp0nBtlHsBffOjsGY7PBw==
+X-Google-Smtp-Source: AGRyM1ucGrsnIOn+8xcBsGNx/uvSJl2zH2BOQbgbn2UCEBQxGPft+r17LbuIlwfpB09Pv8tj1i3Gog==
+X-Received: by 2002:adf:fb84:0:b0:21a:10f2:1661 with SMTP id a4-20020adffb84000000b0021a10f21661mr3629310wrr.2.1657722609075;
+        Wed, 13 Jul 2022 07:30:09 -0700 (PDT)
+Received: from [192.168.0.17] (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net. [86.15.83.122])
+        by smtp.gmail.com with ESMTPSA id f11-20020adfe90b000000b0021d7b41255esm11100425wrm.98.2022.07.13.07.30.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 07:30:08 -0700 (PDT)
+Message-ID: <7999fec2-847a-86ce-ed78-d2a9008bf654@sifive.com>
+Date:   Wed, 13 Jul 2022 15:30:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 3/7] pwm: dwc: add of/platform support
+Content-Language: en-GB
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Rob Herring <robh@kernel.org>, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Adnan Chowdhury <adnan.chowdhury@sifive.com>
+References: <20220712100113.569042-1-ben.dooks@sifive.com>
+ <20220712100113.569042-4-ben.dooks@sifive.com>
+ <20220712221715.GT1823936-robh@kernel.org>
+ <feaacf44-f9a8-b892-d8ba-8a396b49d56b@sifive.com>
+ <20220713135230.gjbd3v6iih2uicpu@pengutronix.de>
+From:   Ben Dooks <ben.dooks@sifive.com>
+In-Reply-To: <20220713135230.gjbd3v6iih2uicpu@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+On 13/07/2022 14:52, Uwe Kleine-König wrote:
+> On Wed, Jul 13, 2022 at 12:56:55PM +0100, Ben Dooks wrote:
+>> On 12/07/2022 23:17, Rob Herring wrote:
+>>> On Tue, Jul 12, 2022 at 11:01:09AM +0100, Ben Dooks wrote:
+>>>> The dwc pwm controller can be used in non-PCI systems, so allow
+>>>> either platform or OF based probing.
+>>>>
+>>>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
 
-The module and function information can be added with
-'modprobe foo dyndbg=+pmf'
+[snip]
 
-Suggested-by: Greg KH <gregkh@linuxfoundation.org>
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
----
- drivers/soundwire/intel.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+>>>> +properties:
+>>>> +  "#pwm-cells":
+>>>> +    description: |
+>>>> +      See pwm.yaml in this directory for a description of the cells format.
+>>>
+>>> pwm.yaml doesn't define how many cells. You need to. And you don't need
+>>> generic descriptions.
+>>
+>>   "#pwm-cells":
+>>      const: 1
+>>
+>> should be sufficient then?
+> 
+> I would expect a value of (at least) 2 or (better) 3.
 
-diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-index 85d4268eea65..25b27cd1be1d 100644
---- a/drivers/soundwire/intel.c
-+++ b/drivers/soundwire/intel.c
-@@ -293,11 +293,11 @@ static int intel_link_power_up(struct sdw_intel *sdw)
- 		syncprd = SDW_SHIM_SYNC_SYNCPRD_VAL_24;
- 
- 	if (!*shim_mask) {
--		dev_dbg(sdw->cdns.dev, "%s: powering up all links\n", __func__);
-+		dev_dbg(sdw->cdns.dev, "powering up all links\n");
- 
- 		/* we first need to program the SyncPRD/CPU registers */
- 		dev_dbg(sdw->cdns.dev,
--			"%s: first link up, programming SYNCPRD\n", __func__);
-+			"first link up, programming SYNCPRD\n");
- 
- 		/* set SyncPRD period */
- 		sync_reg = intel_readl(shim, SDW_SHIM_SYNC);
-@@ -479,7 +479,7 @@ static int intel_link_power_down(struct sdw_intel *sdw)
- 
- 	if (!*shim_mask) {
- 
--		dev_dbg(sdw->cdns.dev, "%s: powering down all links\n", __func__);
-+		dev_dbg(sdw->cdns.dev, "powering down all links\n");
- 
- 		/* Link power down sequence */
- 		link_control = intel_readl(shim, SDW_SHIM_LCTL);
-@@ -1547,11 +1547,11 @@ static int intel_resume_child_device(struct device *dev, void *data)
- 	struct sdw_slave *slave = dev_to_sdw_dev(dev);
- 
- 	if (!slave->probed) {
--		dev_dbg(dev, "%s: skipping device, no probed driver\n", __func__);
-+		dev_dbg(dev, "skipping device, no probed driver\n");
- 		return 0;
- 	}
- 	if (!slave->dev_num_sticky) {
--		dev_dbg(dev, "%s: skipping device, never detected on bus\n", __func__);
-+		dev_dbg(dev, "skipping device, never detected on bus\n");
- 		return 0;
- 	}
- 
-@@ -1637,7 +1637,7 @@ static int __maybe_unused intel_suspend(struct device *dev)
- 	}
- 
- 	if (pm_runtime_suspended(dev)) {
--		dev_dbg(dev, "%s: pm_runtime status: suspended\n", __func__);
-+		dev_dbg(dev, "pm_runtime status: suspended\n");
- 
- 		clock_stop_quirks = sdw->link_res->clock_stop_quirks;
- 
-@@ -1758,7 +1758,7 @@ static int __maybe_unused intel_resume(struct device *dev)
- 	multi_link = !(link_flags & SDW_INTEL_MASTER_DISABLE_MULTI_LINK);
- 
- 	if (pm_runtime_suspended(dev)) {
--		dev_dbg(dev, "%s: pm_runtime status was suspended, forcing active\n", __func__);
-+		dev_dbg(dev, "pm_runtime status was suspended, forcing active\n");
- 
- 		/* follow required sequence from runtime_pm.rst */
- 		pm_runtime_disable(dev);
--- 
-2.25.1
+OOPS, forgot the phandle.
+
+I will have to check if we have any support yet for dealing
+with any of the pwm flags yet.
+
+> Best regards
+> Uwe
+> 
 

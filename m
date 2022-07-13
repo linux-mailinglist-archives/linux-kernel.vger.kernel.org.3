@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253D2572D83
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04295572D85
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbiGMFmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 01:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
+        id S233952AbiGMFmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 01:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233952AbiGMFly (ORCPT
+        with ESMTP id S234064AbiGMFlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 01:41:54 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A6EE1C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:40:27 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id q26so7373375vsp.11
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:40:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mxd6fF/X1Ur+T+IrYqysa9WFiYiRwcyC9Oo1dC8zTkc=;
-        b=kzjjWIOImgWc02VlKrN3u+XMYt5cyG3BKjJ5QvjsnH6M8ExUdJw9pFuLQ/stTLsdx7
-         2pooghQkcdClAMMNMGuEoHYOR1sPc7SbQRezE/bfmy2NbfyFj8M2KHDTZiogT7jY0HZ5
-         76LuyM4hjUQTT9nxXogNSYt4uv6F5UDgE6rYrU4A8fUf+PIuaYwUv3kPpAgufGmfVi0T
-         hx/JzGlREJQXHhlk/sPoXqRM9d5/9N2vnTqpuFRJPJpCYmJMTAEY/3jkzeGVe0H24PYu
-         Q8osxZai16iaAvkxmJZOra0xVcE6USTOA2a3FMdKquQYlt8CmZQ0MX0eSY5T8pgLESGJ
-         FyOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mxd6fF/X1Ur+T+IrYqysa9WFiYiRwcyC9Oo1dC8zTkc=;
-        b=ZpsD2CHxX5AVgB1OVHvAGLCE0ZErJJ5ucdyCHmIY82eFhpK7mAAN89kksEEatye6ad
-         aoibcMRgwKg2V3/F5fTIOPr0c5Z2k0orO1c9nb1F1M2YIq6uuVuTxk6HFCJNwHhJyjLq
-         tWVEIqbPbLrsIGDPIYA6O0BHtOmVwGycaAPleBNoXipKi3Udt+cRj4I0dHcBj8W9gSle
-         yZDNqoqRRDZBXRTjZ5GLR/pFJaVxkACW9RJQ0nUteD69xK89t/F+ilkqVA77Y899NJE3
-         A13DLgLhpTFNz/YdIZAFUK1TSXWKRR39nQ0FKkd33pvlQaa3rUt57NPAJJsIsVV3+9uW
-         DBpw==
-X-Gm-Message-State: AJIora+ZBfAO00au/SLKbi2x/klVmHeesqPHOxWcu40b4EYI9SPZG3tr
-        KGWsfsAnuxcEA25q6tVsvNffuXovoENpDwrpHs/HFw==
-X-Google-Smtp-Source: AGRyM1tbfSxhI6hN959fnDuXsUf5sxFkJhhZa6wobkH3cjsYiZx53U9Z+ls08De6yAm6U+nRv6jwxw56Yv7Y67ZWclg=
-X-Received: by 2002:a67:cf48:0:b0:357:158a:7654 with SMTP id
- f8-20020a67cf48000000b00357158a7654mr603497vsm.0.1657690826992; Tue, 12 Jul
- 2022 22:40:26 -0700 (PDT)
+        Wed, 13 Jul 2022 01:41:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D43B226C5;
+        Tue, 12 Jul 2022 22:40:39 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2EAF1424;
+        Tue, 12 Jul 2022 22:40:39 -0700 (PDT)
+Received: from [10.162.42.9] (unknown [10.162.42.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CC5C73F70D;
+        Tue, 12 Jul 2022 22:40:34 -0700 (PDT)
+Message-ID: <ff1e0c31-488a-a054-ebc4-189eabf0b186@arm.com>
+Date:   Wed, 13 Jul 2022 11:10:32 +0530
 MIME-Version: 1.0
-References: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org> <20220309151541.139511-3-manivannan.sadhasivam@linaro.org>
-In-Reply-To: <20220309151541.139511-3-manivannan.sadhasivam@linaro.org>
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-Date:   Wed, 13 Jul 2022 11:10:14 +0530
-Message-ID: <CAKohponOKCNFXUi6cyTOMV8Gd_erm4=2L9sFjgTs0+n0x5EmxQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to
- YAML bindings
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        angelogioacchino.delregno@somainline.org,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V6 0/8] perf: Expand perf_branch_entry
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        peterz@infradead.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, acme@kernel.org
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220610035101.424112-1-anshuman.khandual@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220610035101.424112-1-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 at 20:45, Manivannan Sadhasivam
-<manivannan.sadhasivam@linaro.org> wrote:
 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> +    soc {
-> +      #address-cells = <1>;
-> +      #size-cells = <1>;
-> +
-> +      cpufreq@17d43000 {
-> +        compatible = "qcom,cpufreq-hw";
-> +        reg = <0x17d43000 0x1400>, <0x17d45800 0x1400>;
-> +        reg-names = "freq-domain0", "freq-domain1";
-> +
-> +        clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
-> +        clock-names = "xo", "alternate";
-> +
-> +        #freq-domain-cells = <1>;
-> +      };
-> +    };
 
-Why didn't we migrate to #performance-domain-cells here ? We can keep
-the kernel backward compatible to support old DT definitions, but won't it be
-better to move to a more generic solution, now that we have one ?
+On 6/10/22 09:20, Anshuman Khandual wrote:
+> Branch Record Buffer Extension (BRBE) implementation on arm64 captures more
+> branch type classification which cannot be accommodated in the current perf
+> branch record format via perf_branch_entry.type element (4 bit field). Also
+> it captures privilege information which does not have a corresponding slot
+> in perf_branch_entry. This series expands struct perf_branch_entry, to meet
+> both these requirements without breaking the existing user space ABI for
+> perf tools.
+> 
+> All architecture specific branch types added via perf_branch_entry.new_type
+> field in [PATCH 3/4] will be used in BRBE implementation on arm64 platform
+> later on with the following map.
+> 
+> #ifdef CONFIG_ARM64
+> #define PERF_BR_FIQ		PERF_BR_NEW_ARCH_1
+> #define PERF_BR_DEBUG_HALT	PERF_BR_NEW_ARCH_2
+> #define PERF_BR_DEBUG_EXIT	PERF_BR_NEW_ARCH_3
+> #define PERF_BR_DEBUG_INST	PERF_BR_NEW_ARCH_4
+> #define PERF_BR_DEBUG_DATA	PERF_BR_NEW_ARCH_5
+> #endif
+> 
+> This series applies on v5.19-rc1
+> 
+> perf API
+> 
+> The series being applied
+> 
+> - Clean : tools/perf/check-headers.sh
+> - Clean : diff -u tools/include/uapi/linux/perf_event.h include/uapi/linux/perf_event.h
+> 
+> References
+> 
+> - BRBE captured branch record information
+> 
+> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers/BRBINF-n--EL1--Branch-Record-Buffer-Information-Register--n-?lang=en
+> 
+> - BRBE based perf branch stack implementation on arm64 platform
+> 
+> https://lore.kernel.org/all/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
+> 
+> Changes in V6:
+> 
+> - Process PERF_BR_EXTEND_ABI in perf tools and fetch from perf_branch_entry.new_type
+> - Modified the commit message for [PATCH 1/8]
+
+Any updates on this series ?

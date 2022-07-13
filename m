@@ -2,126 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9262573B28
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50728573B2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237188AbiGMQZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
+        id S237170AbiGMQ00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237176AbiGMQZt (ORCPT
+        with ESMTP id S237093AbiGMQ0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:25:49 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10CD2DE9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=832nvkZXqaW1Rdvm3esdQt5krPHyQbIa8+WuQyv+HXM=; b=dph457u6XiKxidXKO4sosmAwGu
-        xPbibBbBM32DDiTYhs2OoY3zXXQPjdF9K6VsNUkq0Htv48uhqv9cZ8QQUGrex+vRrcTJfcl2YxNsM
-        PHcq3fRdG22401ROx3f9N4yPVz/h2tW+uuQyU3nqaeh9UBiL3jxDvt6MxpAR2WqM921kT9adnjvYw
-        tfFGPWo8D4PM8zZwbQM+BM0CfXMaSSeabOAMVgGh2KQtRLgt85oGDDgQrw7M+GubmMDtU7+0SRIKC
-        3kFApEdn7uproQKEn0RBpUN/65qsg/DtI+jNCyxXOxkjTS6VjlVD9IFyMZPnr/n6Gn4lZMX0gQrXV
-        t2OpBEng==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBfBG-008OTG-9T; Wed, 13 Jul 2022 16:25:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E40E930041D;
-        Wed, 13 Jul 2022 18:25:41 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CDF2220D74F04; Wed, 13 Jul 2022 18:25:41 +0200 (CEST)
-Date:   Wed, 13 Jul 2022 18:25:41 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: objtool "'naked' return found in RETHUNK build" with clang +
- CONFIG_K{A,C}SAN=y
-Message-ID: <Ys7yBcfBRWXPLsLq@hirez.programming.kicks-ass.net>
-References: <Ys7pLq+tQk5xEa/B@dev-arch.thelio-3990X>
- <CAKwvOd=kqfAZoywsOFbvvzUJD+zVgFgmDAAcb7h0U8LGzfG33A@mail.gmail.com>
- <Ys7vKYJ9tyih8Cng@dev-arch.thelio-3990X>
+        Wed, 13 Jul 2022 12:26:24 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE0F197;
+        Wed, 13 Jul 2022 09:26:22 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id bh13so10917322pgb.4;
+        Wed, 13 Jul 2022 09:26:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=crb5cIXxi4gQ1vTPA/VLZMHirV73SnIKGrsPdVuQdLI=;
+        b=WQdVZcuMsp1zBR0WXGRaAg2tM3B5oVRhw55kf06DgY443JkE0cXl6mHZYz9wj0RMwb
+         gqtETEHgJuYl67U+m1DZGitFtKfI6kdx/FWnr2ofiPmpcFZ8LNzsRRcVMZS9Lc7a9+2L
+         ShqAD0md/x8O8a8vDCEynjOYPN618hjDTUgnyLyoTSzKtzKcUHSoxlw5VWJLvDQIIK8W
+         W5ddwNrwqd+vHq57qlHdrWNMDhVtXIB7AlJobYb1cpKTxDToUG9Yxvgw6qft9vaxg8hU
+         iM1CNPsJYXEbLVB9PARKyAr9MNRn3uF6cZd6pg73NYRrUtrqiz6BdnamCA6ZhfDiK3qU
+         i1kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=crb5cIXxi4gQ1vTPA/VLZMHirV73SnIKGrsPdVuQdLI=;
+        b=1Vo6AxgPGeCccDfCXw97uTl0rM6XeZU8tqg0iF1rsDEHt0HAGTw6i2T2pN+eg9Bb2l
+         0+/fsTo9nVvubfVWGSKGpYHLaoPKUphaqwAMoOigTwxZXjoxVvCOokqvmlUGZo+rwDAN
+         EHFzMiCKnkpsC54qVoylUR3tA/icqYHUay4uNQ2BHOcS3U3Bzui17glwzlO4eBJ/e5DZ
+         2pGdrJXUlRs6hHAb3cQWHI/RievjdL6flWhpx4yoATbncb8b9SIhx+mmRZKHZBvRUnJQ
+         n+tyPeabpfoOmCRoJuSs5084V/LgjQmbg49WnMvj9Ybi1iHNDW4rbiMvJQs20eqvzqg1
+         TMcQ==
+X-Gm-Message-State: AJIora9zv52PEKY1DwMxZHo4FsydAyjkXzt/2pjXBwxmKvUXmWylc/s9
+        bqf53KdZ3NqymAmrjQHNH2Q=
+X-Google-Smtp-Source: AGRyM1ukRYaPF/Fg0YeFLTKFaZTsCVc1GLBmxzTNqjtvqslCi/+eD2WIWwxHXXJRFBKZBYG/TyPp/w==
+X-Received: by 2002:a63:3cd:0:b0:415:f76d:fb4 with SMTP id 196-20020a6303cd000000b00415f76d0fb4mr3505407pgd.587.1657729582428;
+        Wed, 13 Jul 2022 09:26:22 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id m12-20020a63710c000000b0040d287f1378sm8155638pgc.7.2022.07.13.09.26.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 09:26:22 -0700 (PDT)
+Message-ID: <1c3449c7-4f89-7678-f782-8cc03753f1bf@gmail.com>
+Date:   Wed, 13 Jul 2022 09:26:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys7vKYJ9tyih8Cng@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/3] clk: bcm: rpi: Add missing newline
+Content-Language: en-US
+To:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220713154953.3336-1-stefan.wahren@i2se.com>
+ <20220713154953.3336-3-stefan.wahren@i2se.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220713154953.3336-3-stefan.wahren@i2se.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 09:13:29AM -0700, Nathan Chancellor wrote:
-> On Wed, Jul 13, 2022 at 09:01:58AM -0700, Nick Desaulniers wrote:
-> > On Wed, Jul 13, 2022 at 8:48 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > Hi Josh and Peter,
-> > >
-> > > After commit 9bb2ec608a20 ("objtool: Update Retpoline validation") and
-> > > commit f43b9876e857 ("x86/retbleed: Add fine grained Kconfig knobs"), I
-> > > see a spew of objtool warnings when building certain configurations with
-> > > clang. Examples below, they appear to trigger in every single file.
-> > >
-> > > With x86_64_defconfig + CONFIG_KASAN=y:
-> > >
-> > > arch/x86/ia32/audit.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
-> > > arch/x86/ia32/audit.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
-> > > init/version.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
-> > > init/version.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
-> > > arch/x86/kernel/cpu/rdrand.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
-> > > arch/x86/kernel/cpu/rdrand.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
-> > > arch/x86/kernel/fpu/bugs.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
-> > > arch/x86/kernel/fpu/bugs.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
-> > > arch/x86/kernel/platform-quirks.o: warning: objtool: asan.module_ctor+0x0: 'naked' return found in RETHUNK build
-> > > init/calibrate.o: warning: objtool: asan.module_ctor+0x11: 'naked' return found in RETHUNK build
-> > > init/calibrate.o: warning: objtool: asan.module_dtor+0x11: 'naked' return found in RETHUNK build
-> > >
-> > > With x86_64_defconfig + CONFIG_KCSAN=y:
-> > >
-> > > arch/x86/ia32/audit.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
-> > > init/calibrate.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
-> > > init/version.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
-> > > arch/x86/kernel/fpu/bugs.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
-> > > arch/x86/kernel/cpu/rdrand.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
-> > > arch/x86/events/probe.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
-> > > arch/x86/kernel/apic/ipi.o: warning: objtool: tsan.module_ctor+0x5: 'naked' return found in RETHUNK build
-> > 
-> > Thanks for the report. I wonder if this might be a compiler bug; it
-> > seems like the {a|t}san.module_{c|d}tor functions are being emitted
-> > with ret instructions?
-> > 
-> > If you have one of these builds lying around still, can you provide:
-> > 
-> > $ llvm-objdump -dr --disassemble-symbols=tsan.module_ctor
-> > arch/x86/kernel/fpu/bugs.o
+On 7/13/22 08:49, Stefan Wahren wrote:
+> Some log messages lacks the final newline. So add them.
 > 
-> Sure thing.
-> 
-> With KASAN:
-> 
-> $ llvm-objdump -r --disassemble-symbols=asan.module_ctor,asan.module_dtor build/arch/x86/kernel/fpu/bugs.o
-> 
-> build/arch/x86/kernel/fpu/bugs.o:	file format elf64-x86-64
-> 
-> Disassembly of section .text.asan.module_ctor:
-> 
-> 0000000000000000 <asan.module_ctor>:
->        0: be 01 00 00 00               	movl	$1, %esi
->        5: 48 c7 c7 00 00 00 00         	movq	$0, %rdi
-> 		0000000000000008:  R_X86_64_32S	.data
->        c: e8 00 00 00 00               	callq	0x11 <asan.module_ctor+0x11>
-> 		000000000000000d:  R_X86_64_PLT32	__asan_register_globals-0x4
->       11: c3                           	retq
+> Fixes: 93d2725affd6 ("clk: bcm: rpi: Discover the firmware clocks")
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 
-As Nick said; this should be: 'jmp __x86_return_thunk', on those builds.
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

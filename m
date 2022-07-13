@@ -2,137 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD804573A50
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F74C573A55
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237036AbiGMPgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        id S236389AbiGMPji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237037AbiGMPgc (ORCPT
+        with ESMTP id S230102AbiGMPjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:36:32 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B86D4D830
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:36:31 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id o12so11293450ljc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:36:31 -0700 (PDT)
+        Wed, 13 Jul 2022 11:39:36 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD9C11472
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:39:34 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id k30so14603797edk.8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:39:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=frSkO8LINr4fIYviWk98zCOOmU6Ew1V0tF2nZHNwdSA=;
-        b=M/KSRgcUcJQvDr7kv37lS/FPE1C7EbhTDrVDDTHUGdFcWeTMm1zdyz7dfRaZjKSNeJ
-         R26kPb8JFoIXs7POF8i38ksSux8OlP8OXdhXJlM/MIglrSReWnjFtEs2LDnRVN23UF8S
-         pHVJVBM1yWymWPM/QFPzJ6kd2xvPT6e9/dJs07TmM/omaRNAtgFb1WYxL3pOsmO3Hr6b
-         mx32ykTgWBKQu+5zdxVRH9Xn1wM+ivrsi75SfnhLUP3/wB7WVI3Br2cdwOBciYXtZUZB
-         Y+SGKQxXcAAUdavWfKJeKi30cyXlCNdzpZ4myP8VydIPvoGrdmxVEaj0z23T6CV4UVaf
-         948w==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=ghoNfQpu7fqqpTXJ9FbOQJTsibz1KqkkG3UWT76wgg4=;
+        b=aIwmYt+9/bObY+nVk+17rVtldDQZUEPfi153zRIHUj0CHLaCdwCeL04imqDS4lHOPA
+         C5P7Lc93V5WSz4QKlrSQ6qS/2pEsLilellwSj4glfAce5PQ50LviVno5tboxZnCcemfm
+         trye3NqK9/GVr1p2w+Qs5OXsVZ3DL8JacmCoBGqaTw3/09GutQtcm300s4ViI2EbLukF
+         KUjIqjdgDD6pySljQwjeaURoxb0VTAaA1gHi8XHNLKypGf4tE0v8IpCTiyqCqdziTX5p
+         jnzMxlEJ5gqxsbYnXapSJQTl90i9qgXaxPgyd7fVIEwVkWCzbsbjzxhjF4kSv+BgIrwp
+         WRBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=frSkO8LINr4fIYviWk98zCOOmU6Ew1V0tF2nZHNwdSA=;
-        b=rRNPhxH4ZvSW3FNFtqiw1t1pnQx2sXE4qNQZiDkc3FRjxI1tzD6Z4RUgWI2b+Rv/Ab
-         8r5Pf6QcOXC4o1/oiMaDfiOEvtkmqBE80oV9A+Kb+PAlDpgNKVUkv3nuwOMQJ95I1giP
-         m3PscvNHkkNmDskHL89K5+hrXifzlv4watNTa/8sIUvpFAomni/iSAr+DpQtmxz3v6qf
-         qJ4GknpuJzzWpg88x/tmvAdsymRST8jLJjkJ6/C9anx1UCWRp1RORM2JT2pZr8Gw6KJe
-         ftIrP6ZadgwNPy/2xlPk7GJ694rWMLmKMYuPOWrvb+0NEcyV4LKwRhMQNxi+9yZPrUA+
-         5+vw==
-X-Gm-Message-State: AJIora8QZuCT300qQ4g6zgVn8XZUifnapu3bckEtZbv7ee0pSaGV0M3l
-        xQwNK7uvVRu8VXTADuDlNuj0tSFBKrL67lYJhQQDzkfDjD4=
-X-Google-Smtp-Source: AGRyM1t+27L+bFm9l7VHdmsBQUhxdg6zV9GyjGmpFKagRo+a2ORoV22JAC3XRC1j3aZr33+QHwqiqju1MiSuDlA2XKc=
-X-Received: by 2002:a2e:8609:0:b0:25d:6af0:63b5 with SMTP id
- a9-20020a2e8609000000b0025d6af063b5mr2153523lji.360.1657726588005; Wed, 13
- Jul 2022 08:36:28 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ghoNfQpu7fqqpTXJ9FbOQJTsibz1KqkkG3UWT76wgg4=;
+        b=WXeOnMXaqFo3gGudFZ+wDWFUv9aqMF7QrvwpQCYnM7wW1ZGEBmNZQ8BgZpehGK1Bse
+         K9bB/Xs6BUQwr0P1aFCzMKnuR2GnJQi0ncHb9nR1ZUMnKdWvNuM+Me8Rk9hsrvskeuBn
+         qEyhUynYf98SsX3qRF7cwxd4RMCWi+ziZma3EYZnYQz3tadDrDVAZWxZlB02AUlU5N8l
+         RG1/HTianT2Alm6doUKa8gcqCJXVVRoU8zVPJtWbXu95JMvNfVQOtu74xpG7pHHvXBxJ
+         ToLtSmcgvpAEYxdYFlEZ+10fKHQtwW17RMou8FAzc3rB/H0Q1JfjdvUXXtaUjMl+GFWk
+         7ykQ==
+X-Gm-Message-State: AJIora8NsoHOV+X0wzY3PQfdoL0bSz/MpC4lD/pGiJhdiKsQfvPVplKR
+        BYVcvXJnj1ZuMyMSTF71Hsg=
+X-Google-Smtp-Source: AGRyM1sLcUkrL/6qnTzZCSJGFHPeclOr5XWWLLDUR+gukRtnZK+s2CUMWKN/rndwmGDxfecZt65tHQ==
+X-Received: by 2002:aa7:c84a:0:b0:437:bc9c:af63 with SMTP id g10-20020aa7c84a000000b00437bc9caf63mr5520382edt.370.1657726773486;
+        Wed, 13 Jul 2022 08:39:33 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id ec10-20020a0564020d4a00b0043a45dc7158sm8048880edb.72.2022.07.13.08.39.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 08:39:32 -0700 (PDT)
+Message-ID: <86444849-e80a-6e28-c060-cecb9f07ae75@gmail.com>
+Date:   Wed, 13 Jul 2022 17:39:31 +0200
 MIME-Version: 1.0
-References: <20220713152436.2294819-1-nathan@kernel.org>
-In-Reply-To: <20220713152436.2294819-1-nathan@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 13 Jul 2022 08:36:16 -0700
-Message-ID: <CAKwvOdkXdAXBTLipv5A3vaTe_dRPvtCDJobi=tHR9oSJab9oBw@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/speculation: Use DECLARE_PER_CPU for x86_spec_ctrl_current
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [RESEND PATCH 1/8] ARM: debug: bcmbca: Replace ARCH_BCM_63XX with
+ ARCH_BCMBCA
+To:     William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
+        kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com, Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220707065800.261269-1-william.zhang@broadcom.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <20220707065800.261269-1-william.zhang@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 8:25 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Clang warns:
->
->   arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
->   DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
->                       ^
->   arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
->   extern u64 x86_spec_ctrl_current;
->              ^
->   1 error generated.
->
-> The declaration should be using DECLARE_PER_CPU instead so all
-> attributes stay in sync.
->
-> Cc: stable@vger.kernel.org
-> Fixes: fc02735b14ff ("KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-
+On 7.07.2022 08:57, William Zhang wrote:
+> Prepare for the BCM63138 ARCH_BCM_63XX migration to ARCH_BCMBCA. Make
+> DEBUG_BCM63XX_UART depending on ARCH_BCMBCA.
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
 > ---
->
-> v1 -> v2: https://lore.kernel.org/20220713152222.1697913-1-nathan@kernel.org/
->
-> * Use asm/percpu.h instead of linux/percpu.h to avoid static call
->   include errors.
->
->  arch/x86/include/asm/nospec-branch.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-> index bb05ed4f46bd..10a3bfc1eb23 100644
-> --- a/arch/x86/include/asm/nospec-branch.h
-> +++ b/arch/x86/include/asm/nospec-branch.h
-> @@ -11,6 +11,7 @@
->  #include <asm/cpufeatures.h>
->  #include <asm/msr-index.h>
->  #include <asm/unwind_hints.h>
-> +#include <asm/percpu.h>
->
->  #define RETPOLINE_THUNK_SIZE   32
->
-> @@ -280,7 +281,7 @@ static inline void indirect_branch_prediction_barrier(void)
->
->  /* The Intel SPEC CTRL MSR base value cache */
->  extern u64 x86_spec_ctrl_base;
-> -extern u64 x86_spec_ctrl_current;
-> +DECLARE_PER_CPU(u64, x86_spec_ctrl_current);
->  extern void write_spec_ctrl_current(u64 val, bool force);
->  extern u64 spec_ctrl_current(void);
->
->
-> base-commit: 72a8e05d4f66b5af7854df4490e3135168694b6b
-> --
-> 2.37.1
->
->
+> 
+>   arch/arm/Kconfig.debug | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
+> index 9b0aa4822d69..792796a348c3 100644
+> --- a/arch/arm/Kconfig.debug
+> +++ b/arch/arm/Kconfig.debug
+> @@ -271,7 +271,7 @@ choice
+>   
+>   	config DEBUG_BCM63XX_UART
+>   		bool "Kernel low-level debugging on BCM63XX UART"
+> -		depends on ARCH_BCM_63XX
+> +		depends on ARCH_BCMBCA
+>   
+>   	config DEBUG_BERLIN_UART
+>   		bool "Marvell Berlin SoC Debug UART"
 
+There is no such config symbol (ARCH_BCMBCA) in Linus's tree.
 
--- 
-Thanks,
-~Nick Desaulniers
+This patchset is going to break builds until code it depends on hits Linus's tree.
+
+All those patches should be hold until that.

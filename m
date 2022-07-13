@@ -2,179 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996A3572C27
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C379C572C28
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233360AbiGMEF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 00:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
+        id S230500AbiGMEGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 00:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233613AbiGMEF2 (ORCPT
+        with ESMTP id S230345AbiGMEGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 00:05:28 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C669DA0E4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 21:05:26 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id b8so8883923pjo.5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 21:05:26 -0700 (PDT)
+        Wed, 13 Jul 2022 00:06:22 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C35DA0E2;
+        Tue, 12 Jul 2022 21:06:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YxO3douG9yaDP325H3l2tI70xR2hZpS+aWxFMUKMRFw=;
-        b=auPbO2h7LsRh0gM5laDsxqiugnJF/UTbb95NxHR5R+lPBv3nn0ZvzDqgNMeEKd5jDt
-         fwZB+f/j3ByGbbss/INMM5XXu5JrDdjPGYXBiybN/XmGIB4Mr3eCfamx3AZ7Mwv39Joc
-         FzHgyfnxjc57xsr8Q/jfz+CiiLIbopxmCz07ZxmjOfyNUIk1TzIdJxUhFRkvryoqqXvb
-         EZGLs8jb0BmSTQ1OQpLI5B0MXL1S4RqHDEvgUj2CCBlyzBJMOB/Z84BS095VX/TdrpnG
-         8xkHujETtEbEjEscZB/AtQ0bIUPhXUJpyImGqYObrseIuFwJlvOfA8JY8/DVgIhEfI+E
-         S3Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YxO3douG9yaDP325H3l2tI70xR2hZpS+aWxFMUKMRFw=;
-        b=Tf6axrlmHdfMfTLSQecYccZI1WPW+29BywKuNRBkiBuzsVq5uVPOyAUzzlJtKg5BwO
-         MTMQAGvJ47OuK1QsHTUCHmvgkSdFISIKaoTYkxD5giLUmmi9hQyq6PBuYqJSgN+0J/Sz
-         2ZU0d0P6ZlWH0CLugxuW40XmEXDwPCAdXggCdaWLfvWdV36PNT0XdOLGei0BO3tVcP+0
-         RRh85EsdeCSzODwt1+f/n29vbiZYaP5HKDmj4IQ7f8ddxVOlmggYkBYKBZQVCDY7XI7S
-         eMJB/O+VpoiHTomhrnyiTgHwca9vcqUtVa/IwYfS60v24PyIqKCqe/z3B5W8Flm/sB+m
-         Zbwg==
-X-Gm-Message-State: AJIora9T6tqMAbrUNrvXEBl2uz/gpT7hTIp9Hv9NRRQN4+Yt+gcmLCQ8
-        8QVdoDD1t6d6Wa7BeNhKoGGZKHLLpLo3hUnT
-X-Google-Smtp-Source: AGRyM1ubREtBdERwinjkfVXTmWC38yQCiY3CzrFHJGyov5zSsVcwROeUDgetNw7hdK0J6h6IqKJY4A==
-X-Received: by 2002:a17:903:40cc:b0:16c:115d:5e80 with SMTP id t12-20020a17090340cc00b0016c115d5e80mr1282948pld.0.1657685125521;
-        Tue, 12 Jul 2022 21:05:25 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.235])
-        by smtp.gmail.com with ESMTPSA id y12-20020a17090322cc00b0016bd16f8acbsm6858942plg.114.2022.07.12.21.05.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 21:05:25 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v2 10/10] sched/fair: delete superfluous set_task_rq_fair()
-Date:   Wed, 13 Jul 2022 12:04:30 +0800
-Message-Id: <20220713040430.25778-11-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220713040430.25778-1-zhouchengming@bytedance.com>
-References: <20220713040430.25778-1-zhouchengming@bytedance.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657685164; x=1689221164;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=h21pW3u7dmAn7T6DdhtskCVqgHq2DRMMlW5PszHq9Uo=;
+  b=QHCX8PVpBCaWVvUPgVJ2dURo3wxmTU7eRpfsGY8TOmsuXUCTYNH4eKD1
+   UgaiD3F2nXbtEIhS96A2Q2J1dRQIbtp35MVIQDDYroz8/+LkuYNtzOAST
+   sNF3j/Emvo5fyQwHSd1iwsrT1ilhRRwVDrYDNxyfZ1OiaDITpARDu2RsZ
+   o=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 Jul 2022 21:06:03 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 21:06:03 -0700
+Received: from [10.242.59.11] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 12 Jul
+ 2022 21:05:59 -0700
+Message-ID: <ac0ef25b-b9a9-b4d5-381c-4e970a258cc9@quicinc.com>
+Date:   Wed, 13 Jul 2022 09:35:56 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V6] arm64: perf: Make exporting of pmu events configurable
+Content-Language: en-US
+To:     Will Deacon <will@kernel.org>
+CC:     <mark.rutland@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>,
+        <catalin.marinas@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1654779589-19937-1-git-send-email-quic_c_spathi@quicinc.com>
+ <20220624121825.GB18561@willie-the-truck>
+From:   Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+In-Reply-To: <20220624121825.GB18561@willie-the-truck>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-set_task_rq() is used when move task across CPUs/groups to change
-its cfs_rq and parent entity, and it will call set_task_rq_fair()
-to sync blocked task load_avg just before change its cfs_rq.
 
-1. task migrate CPU: will detach/remove from prev cfs_rq and reset
-   its sched_avg last_update_time to 0, so don't need to sync again.
+On 6/24/2022 5:48 PM, Will Deacon wrote:
+> On Thu, Jun 09, 2022 at 06:29:49PM +0530, Srinivasarao Pathipati wrote:
+>> The PMU export bit (PMCR_EL0.X) is getting reset during pmu reset,
+>> Make it configurable using sysctls to enable/disable at runtime.
+>>
+>> Signed-off-by: Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+>> ---
+>> Changes since V5:
+>> 	- removed configuring with kernel parameters.
+>> Changes since V4:
+>> 	- Registering sysctls dynamically for only arm64 as suggested by Will
+>> 	- Not removed the code to configure with kernel parameters
+>> 	  as the sysctl's kernel parameter(sysctl.kernel.export_pmu_events)
+>> 	  is not working at early bootup. pmu_reset() getting called before
+>> 	  sysctl's kernel parameter is set.
+>> Changes since V3:
+>> 	- export bit is now configurable with sysctl
+>> 	- enabling export bit on reset instead of retaining
+>>
+>> Changes since V2:
+>> 	Done below changes as per Will's comments
+>> 	- enabling pmcr_x now configurable with kernel parameters and
+>> 	  by default it is disabled.
+>> 	
+>> Changes since V1:
+>> 	- Preserving only PMCR_X bit as per Robin Murphy's comment.
+>>
+>> ---
+>>   Documentation/admin-guide/sysctl/kernel.rst | 11 +++++++++++
+>>   arch/arm64/kernel/perf_event.c              | 13 +++++++++++++
+>>   2 files changed, 24 insertions(+)
+>>
+>> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+>> index ddccd10..c2ecd84 100644
+>> --- a/Documentation/admin-guide/sysctl/kernel.rst
+>> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+>> @@ -267,6 +267,17 @@ domain names are in general different. For a detailed discussion
+>>   see the ``hostname(1)`` man page.
+>>   
+>>   
+>> +export_pmu_events (arm64 only)
+>> +==============================
+>> +
+>> +Controls the PMU export bit (PMCR_EL0.X), which enables the exporting of
+>> +events over an IMPLEMENTATION DEFINED PMU event export bus to another device.
+>> +
+>> +0: disables exporting of events (default).
+>> +
+>> +1: enables exporting of events.
+>> +
+>> +
+>>   firmware_config
+>>   ===============
+>>   
+>> diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
+>> index cb69ff1..a8c32a0 100644
+>> --- a/arch/arm64/kernel/perf_event.c
+>> +++ b/arch/arm64/kernel/perf_event.c
+>> @@ -298,6 +298,7 @@ PMU_FORMAT_ATTR(long, "config1:0");
+>>   PMU_FORMAT_ATTR(rdpmc, "config1:1");
+>>   
+>>   static int sysctl_perf_user_access __read_mostly;
+>> +static int sysctl_export_pmu_events __read_mostly;
+>>   
+>>   static inline bool armv8pmu_event_is_64bit(struct perf_event *event)
+>>   {
+>> @@ -1047,6 +1048,9 @@ static void armv8pmu_reset(void *info)
+>>   	if (armv8pmu_has_long_event(cpu_pmu))
+>>   		pmcr |= ARMV8_PMU_PMCR_LP;
+>>   
+>> +	if (sysctl_export_pmu_events)
+>> +		pmcr |= ARMV8_PMU_PMCR_X;
+> I think we need to do this in armv8pmu_start() rather than armv8pmu_reset(),
+> otherwise any changes to the sysctl at runtime won't take effect unless you
+> do something like re-online the CPU.
+>
+> Will
 
-2. task migrate cgroup: will detach from prev cfs_rq and reset its
-   sched_avg last_update_time to 0, so don't need to sync too.
+Hi Will ,
 
-3. !fair task migrate CPU/cgroup: we stop load tracking for !fair task,
-   reset sched_avg last_update_time to 0 when switched_from_fair(), so
-   don't need it too.
+We think it may not work.   Say for example pmu->reset is called which 
+disables the exporting of events,
+and pmu->start not called. This would lead to missing of events.
 
-So set_task_rq_fair() is not needed anymore, this patch delete it.
-And delete unused ATTACH_AGE_LOAD feature together.
+How about enabling it in both reset and start functions? do you see any 
+issue?
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- kernel/sched/fair.c     | 31 -------------------------------
- kernel/sched/features.h |  1 -
- kernel/sched/sched.h    |  8 --------
- 3 files changed, 40 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 576028f5a09e..b435eda88468 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3430,37 +3430,6 @@ static inline void update_tg_load_avg(struct cfs_rq *cfs_rq)
- 	}
- }
- 
--/*
-- * Called within set_task_rq() right before setting a task's CPU. The
-- * caller only guarantees p->pi_lock is held; no other assumptions,
-- * including the state of rq->lock, should be made.
-- */
--void set_task_rq_fair(struct sched_entity *se,
--		      struct cfs_rq *prev, struct cfs_rq *next)
--{
--	u64 p_last_update_time;
--	u64 n_last_update_time;
--
--	if (!sched_feat(ATTACH_AGE_LOAD))
--		return;
--
--	/*
--	 * We are supposed to update the task to "current" time, then its up to
--	 * date and ready to go to new CPU/cfs_rq. But we have difficulty in
--	 * getting what current time is, so simply throw away the out-of-date
--	 * time. This will result in the wakee task is less decayed, but giving
--	 * the wakee more load sounds not bad.
--	 */
--	if (!(se->avg.last_update_time && prev))
--		return;
--
--	p_last_update_time = cfs_rq_last_update_time(prev);
--	n_last_update_time = cfs_rq_last_update_time(next);
--
--	__update_load_avg_blocked_se(p_last_update_time, se);
--	se->avg.last_update_time = n_last_update_time;
--}
--
- /*
-  * When on migration a sched_entity joins/leaves the PELT hierarchy, we need to
-  * propagate its contribution. The key to this propagation is the invariant
-diff --git a/kernel/sched/features.h b/kernel/sched/features.h
-index ee7f23c76bd3..fb92431d496f 100644
---- a/kernel/sched/features.h
-+++ b/kernel/sched/features.h
-@@ -85,7 +85,6 @@ SCHED_FEAT(RT_PUSH_IPI, true)
- 
- SCHED_FEAT(RT_RUNTIME_SHARE, false)
- SCHED_FEAT(LB_MIN, false)
--SCHED_FEAT(ATTACH_AGE_LOAD, true)
- 
- SCHED_FEAT(WA_IDLE, true)
- SCHED_FEAT(WA_WEIGHT, true)
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 19e0076e4245..a8ec7af4bd51 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -505,13 +505,6 @@ extern int sched_group_set_shares(struct task_group *tg, unsigned long shares);
- 
- extern int sched_group_set_idle(struct task_group *tg, long idle);
- 
--#ifdef CONFIG_SMP
--extern void set_task_rq_fair(struct sched_entity *se,
--			     struct cfs_rq *prev, struct cfs_rq *next);
--#else /* !CONFIG_SMP */
--static inline void set_task_rq_fair(struct sched_entity *se,
--			     struct cfs_rq *prev, struct cfs_rq *next) { }
--#endif /* CONFIG_SMP */
- #endif /* CONFIG_FAIR_GROUP_SCHED */
- 
- #else /* CONFIG_CGROUP_SCHED */
-@@ -1937,7 +1930,6 @@ static inline void set_task_rq(struct task_struct *p, unsigned int cpu)
- #endif
- 
- #ifdef CONFIG_FAIR_GROUP_SCHED
--	set_task_rq_fair(&p->se, p->se.cfs_rq, tg->cfs_rq[cpu]);
- 	p->se.cfs_rq = tg->cfs_rq[cpu];
- 	p->se.parent = tg->se[cpu];
- 	p->se.depth = tg->se[cpu] ? tg->se[cpu]->depth + 1 : 0;
--- 
-2.36.1
+--Srinivas
 

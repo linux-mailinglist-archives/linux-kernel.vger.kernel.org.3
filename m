@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1F75738F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9863C5738F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235592AbiGMOey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
+        id S236565AbiGMOfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiGMOev (ORCPT
+        with ESMTP id S236219AbiGMOfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:34:51 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF01D357E1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:34:50 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso3994741pjc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:34:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2EojiiqnaR1Vv9soFAihFtCV+EF4ew9tNYkxtmv1eok=;
-        b=yF01ur2I88yDa32mCYv4eenhFmUAzs9Y5pELgNgyAZI7lHRy1yd0lpdl31fiViswHU
-         ZouLyEyPQuRqG0TRkC6nao2r/n4qG0AgC7d+Elq711xNGqlF/G8rfVi5ZgJG3/wREA8j
-         W+36NFgQrPayuMmnK816i+J/8qmDDT3XlgpnyF5nL7JxYsPwQQPAgGYmZR6vOQvVDlwX
-         mD3nqeQvVtlLcETnbUsYmbklEMBnyPmH/reXSf/BZFpCXZUwru/Onf5sR72wKcr0w+Ns
-         KhKLfyc8x7LH+YNyszuaiO83rF71CeA5/oQl256IQq/c/MQY7mg+UzdinOfCj2x9IoNH
-         ax3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2EojiiqnaR1Vv9soFAihFtCV+EF4ew9tNYkxtmv1eok=;
-        b=tu+X2otggA+rURWQnIPVTz2hI3R0iApmfwYa0I8fkm23XQxVaJTqHrrDJfpfckuFt3
-         tbXmqW/+AwIrYciD+lgWnbW/k0BNRrhstb2VYdDWplb7xh7IRIp6SmRUhtBu9GPCY9r1
-         7Z3vM3NBeehb7L52AJS8wWMUn25pmjNXZwLjaolJYNWN0JPFFXh/eO5EpUyrUvwIlebF
-         gpK8Z+7a/qU2uL8ZaVXgE/7eXsq/34yjGCBar3Uiu7vpic+mJ+beo0mGrhtUYyfWtOaB
-         XgpojxbTyAtts/HOxVOFgU3Sc4E9LHFo4eiS+jhH5xupSHvHQDVkpQlnkfakl/lPime5
-         1S2g==
-X-Gm-Message-State: AJIora902Y9AYgfRcKx149ffwv1sbbMK1Wx/KuDRWMtTavQQHTDpMrrq
-        tdOoCXhGJl0ro3JzNob89oL8
-X-Google-Smtp-Source: AGRyM1t+5vdlca/j5x85wtZOkOXyR6Zw1Jdx14KpG1VbIXcgYR/E5OG0uRpCCrwYLmM4Mrqv86DE+Q==
-X-Received: by 2002:a17:903:32c3:b0:16b:fbc3:3269 with SMTP id i3-20020a17090332c300b0016bfbc33269mr3808418plr.117.1657722890168;
-        Wed, 13 Jul 2022 07:34:50 -0700 (PDT)
-Received: from localhost.localdomain ([117.248.1.226])
-        by smtp.gmail.com with ESMTPSA id p14-20020a170902780e00b001620960f1dfsm8977872pll.198.2022.07.13.07.34.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 07:34:49 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     bjorn.andersson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Steve Capper <Steve.Capper@arm.com>
-Subject: [PATCH] arm64: dts: qcom: sc8280xp: Fix PMU interrupt
-Date:   Wed, 13 Jul 2022 20:04:29 +0530
-Message-Id: <20220713143429.22624-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Jul 2022 10:35:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3834F371B7;
+        Wed, 13 Jul 2022 07:35:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4C8FB82014;
+        Wed, 13 Jul 2022 14:35:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D559C34114;
+        Wed, 13 Jul 2022 14:35:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657722918;
+        bh=WlymjH9F+XhvwTLfQdzEjbhKt3wCFEw6cLV8ZRsbxyk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eSIDISQG7utxWtvkZCC6HbwtJRpLy37dPh/4I7G7Gshv6qNS1gokwTy2JujyN0mh0
+         tfhmDQSijMty4lDWUE3y25ATbodBh9d6wHw1m6UIm7mS8PwFSnS/4OHPgWBaKYbhQ5
+         9SKQgzaOFtzmI6LEmfDFL3nH9FLUdCF3td1AomumS4jtie8+6pfBMoXf7KvQU5eV0l
+         pjYyIn7bA696ismvSYmo2IKQ4qwrjh+EmezXLUXSVQFfm01HDjX8BXVATc9kBAXFYd
+         Sgd5xni6y+xNQ4r/0aWTknMQhnuqkdb+z3gi1qjAdM12+i/rez9uN9wDSOVOwLEBkr
+         3Yw0i3w8gSDoQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oBdSU-00013W-1I; Wed, 13 Jul 2022 16:35:22 +0200
+Date:   Wed, 13 Jul 2022 16:35:22 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Andrew Halaney <ahalaney@redhat.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] arm64: dts: qcom: sc8280xp: fix USB interrupts
+Message-ID: <Ys7YKkRAAI0Vbseh@hovoldconsulting.com>
+References: <20220713131340.29401-1-johan+linaro@kernel.org>
+ <20220713131340.29401-6-johan+linaro@kernel.org>
+ <20220713141228.5z5rmgepj6mepjyp@halaneylaptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713141228.5z5rmgepj6mepjyp@halaneylaptop>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,29 +68,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PPI interrupt should be 7 for the PMU.
+On Wed, Jul 13, 2022 at 09:12:28AM -0500, Andrew Halaney wrote:
+> On Wed, Jul 13, 2022 at 03:13:38PM +0200, Johan Hovold wrote:
+> > The two single-port SC8280XP USB controllers do not have an hs_phy_irq
+> > interrupt. Instead they have a pwr_event interrupt which is distinct
+> > from the former and not yet supported by the driver.
+> > 
+> > Fix the USB node interrupt names so that they match the devicetree
+> > binding.
+> > 
+> > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 12 ++++++++----
+> >  1 file changed, 8 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > index 45cc7d714fd2..4a7aa9992f3a 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > @@ -1875,8 +1875,10 @@ usb_0: usb@a6f8800 {
+> >  					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
+> >  					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
+> >  					      <&pdc 138 IRQ_TYPE_LEVEL_HIGH>;
+> > -			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
+> > -					  "dm_hs_phy_irq", "ss_phy_irq";
+> > +			interrupt-names = "pwr_event",
+> > +					  "dp_hs_phy_irq",
+> > +					  "dm_hs_phy_irq",
+> > +					  "ss_phy_irq";
+> >  
+> >  			power-domains = <&gcc USB30_PRIM_GDSC>;
+> >  
+> > @@ -1925,8 +1927,10 @@ usb_1: usb@a8f8800 {
+> >  					      <&pdc 12 IRQ_TYPE_EDGE_BOTH>,
+> >  					      <&pdc 13 IRQ_TYPE_EDGE_BOTH>,
+> >  					      <&pdc 136 IRQ_TYPE_LEVEL_HIGH>;
+> > -			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
+> > -					  "dm_hs_phy_irq", "ss_phy_irq";
+> > +			interrupt-names = "pwr_event",
+> > +					  "dp_hs_phy_irq",
+> > +					  "dm_hs_phy_irq",
+> > +					  "ss_phy_irq";
+> 
+> For this specific change to pwr_event:
+> 
+>     Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+> 
+> That being said, I was reviewing this against the (fairly old)
+> downstream release I have, and the IRQs defined there look like this:
+> 
+> 		interrupts-extended = <&pdc 12 IRQ_TYPE_EDGE_RISING>,
+> 				<&intc GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
+> 				<&pdc 136 IRQ_TYPE_LEVEL_HIGH>,
+> 				<&pdc 13 IRQ_TYPE_EDGE_RISING>;
+> 		interrupt-names = "dp_hs_phy_irq", "pwr_event_irq",
+> 				"ss_phy_irq", "dm_hs_phy_irq";
+> 
+> The part I want to highlight is that the "pwr_event" irq downstream maps
+> to <&intc GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>, but the current upstream
+> devicetree I'm looking at has it mapped to <&intc GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>
+> 
+> Do you happen to have any source you can also check to confirm if this
+> is a bug or not?
 
-Cc: Johan Hovold <johan+linaro@kernel.org>
-Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-Reported-by: Steve Capper <Steve.Capper@arm.com>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Good catch! I believe this is another copy-paste error when creating
+base dtsi based on some vendor source (or perhaps an error carried over
+from an earlier version).
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 268ab423577a..2d7823cb783c 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -477,7 +477,7 @@ memory@80000000 {
- 
- 	pmu {
- 		compatible = "arm,armv8-pmuv3";
--		interrupts = <GIC_PPI 5 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
- 	};
- 
- 	psci {
--- 
-2.25.1
+The vendor devicetree I have access to also has 811 here, which matches
+the pattern for usb_0 (dwc3 interrupt + 1).
 
+Do you mind if I fold a fix for that into a v2 of this patch?
+
+Thanks for reviewing!
+
+Johan

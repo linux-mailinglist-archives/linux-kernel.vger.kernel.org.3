@@ -2,139 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9550257376A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD1457376D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiGMNa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
+        id S231266AbiGMNbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiGMNaz (ORCPT
+        with ESMTP id S229563AbiGMNbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:30:55 -0400
-Received: from mail-yw1-x1144.google.com (mail-yw1-x1144.google.com [IPv6:2607:f8b0:4864:20::1144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1F61C6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:30:54 -0700 (PDT)
-Received: by mail-yw1-x1144.google.com with SMTP id 00721157ae682-31caffa4a45so112708767b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=vvtS89Fk2u1S3Szl4rrCs3KSXNS797GmNVbZS9fGKtQ=;
-        b=YV/nbq5Eho+tDEKLMGeJG7iWrue3/HyrfYRLfUs6Ie73XjMCNX23YFIK4L5hfuINas
-         eGZf+70rjdQmbGVslWcpbbYUKY9q4wvCeaAir91/EEoXv1cCNUGZRPHh8Msboy/1X2ZS
-         embWyfrbh8wJDOMvxBHz4zBdQzI3k6ZVX48dy62c6zRuD01EojimyM2UofhtxYxco1ZU
-         bM3/CGiJduX1GRUNHQGs7CvyuUO+tk1rTWFHc3EpzySVtP3W14j/YDvmeoklTqnk/ibD
-         Ks0Y9UKzL/XD7EI7PVMVWxKa1rFM8cJtnnFwYGN0M0sRTyEUB0WKKp64h1TN6mzm8RdF
-         pYjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=vvtS89Fk2u1S3Szl4rrCs3KSXNS797GmNVbZS9fGKtQ=;
-        b=myA53MSgrLaLBbTdgMEkiPI9yTePJipck+1g1zVs2Pfqi5vSU5wcMgWpiE2+Jhm47a
-         VNo6Hh2QzdNtR4ZBPaW27ARdYUlkZRpXK9pl0eIblJC1qF4A81TiBk4PMU1tQglL8FY9
-         RcrsU4QeGimcGNUzNJiiHCH9DJlRKd+6tVGLWr5vd7mpcXmfXw720FVI90SrFxzYlsrT
-         b6tqkVCGxDij1jmv5ae/ia1YaD84saBkJfhUdjM0lVDhOD8HdRUz1/nukcF8bQzaBrIp
-         3WerhTL+kmlVUWIqlAScfLpbZe9wbQsqsBCXHGf3DRycYwq5wUPSLn1IEH8cTaXzox8o
-         Tjkw==
-X-Gm-Message-State: AJIora9sukK+cwT7EgX3VHH/0iJujxbjx9aJhaDEQ0XuRMSzl8ZKoEf+
-        4DN9AL9nbjSuyMGPTVxmnP8zLIcrbTMYksIvQk8=
-X-Google-Smtp-Source: AGRyM1vB6W44BVeJ9oJ0JzFuySF2TuoQplsrQiu4RlD9Fio82QdvRAHVKc1fRA7pqHGMDDqrr+3N++BKTGcpGRu1v6A=
-X-Received: by 2002:a81:5211:0:b0:31c:89a8:b63 with SMTP id
- g17-20020a815211000000b0031c89a80b63mr4311001ywb.104.1657719053498; Wed, 13
- Jul 2022 06:30:53 -0700 (PDT)
+        Wed, 13 Jul 2022 09:31:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 618451B2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:31:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657719098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sgNHH7BFb0s4RwPxS2Qx5icxf3D9jQ1/BExnQlyRDHc=;
+        b=YiaLdmSjOLTC6wy4VdDYRSELm///nAQX8iuPEYML/OgbRLotEYM5enFxJUlgDo/b0wkT/+
+        LEdzKIaK4b5qcI4GmgdEj9Duw/eBgwMdpyDrRYH45z7pQKPYxA1n3XcMoqgc1cmDoIp2FP
+        77H2qQOCQk6+4TXftzpX3V5ZQ7wyRiA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-650-m6BergIANhONx7akHrV2ng-1; Wed, 13 Jul 2022 09:31:32 -0400
+X-MC-Unique: m6BergIANhONx7akHrV2ng-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC6EE801231;
+        Wed, 13 Jul 2022 13:31:31 +0000 (UTC)
+Received: from wtfbox.lan (unknown [10.40.192.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 375F8400DFA6;
+        Wed, 13 Jul 2022 13:31:30 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 15:31:27 +0200
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Song Liu <song@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>, dvacek@redhat.com
+Subject: Re: [RFC PATCH bpf-next 3/4] bpf: add bpf_panic() helper
+Message-ID: <Ys7JL9Ih3546Eynf@wtfbox.lan>
+References: <20220711083220.2175036-1-asavkov@redhat.com>
+ <20220711083220.2175036-4-asavkov@redhat.com>
+ <CAPhsuW7xTRpLf1kyj5ejH0fV_aHCMQjUwn-uhWeNytXedh4+TQ@mail.gmail.com>
+ <CAADnVQ+ju04JAqyEbA_7oVj9uBAuL-fUP1FBr_OTygGf915RfQ@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:7499:b0:2e5:4edb:11f3 with HTTP; Wed, 13 Jul 2022
- 06:30:53 -0700 (PDT)
-Reply-To: cfc.ubagroup09@gmail.com
-From:   Kristalina Georgieva <georgiamila084@gmail.com>
-Date:   Wed, 13 Jul 2022 06:30:53 -0700
-Message-ID: <CAGydNXHRJ0i_ia0-_jaSD9XQukSrPE4RPV0ciVR6wsAzBg6czw@mail.gmail.com>
-Subject: HEAD UUDISED
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,LOTTO_DEPT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1144 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [georgiamila084[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [cfc.ubagroup09[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [georgiamila084[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 LOTTO_DEPT Claims Department
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAADnVQ+ju04JAqyEbA_7oVj9uBAuL-fUP1FBr_OTygGf915RfQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lugupeetud abisaaja!
-Saatsin sulle selle kirja kuu aega tagasi, aga ma pole sinust midagi kuulnu=
-d, ei
-Olen kindel, et saite selle k=C3=A4tte ja sellep=C3=A4rast saatsin selle te=
-ile uuesti.
-Esiteks olen pr Kristalina Georgieva, tegevdirektor ja
-Rahvusvahelise Valuutafondi president.
+On Tue, Jul 12, 2022 at 11:08:54AM -0700, Alexei Starovoitov wrote:
+> On Tue, Jul 12, 2022 at 10:53 AM Song Liu <song@kernel.org> wrote:
+> >
+> > >
+> > > +BPF_CALL_1(bpf_panic, const char *, msg)
+> > > +{
+> > > +       panic(msg);
+> >
+> > I think we should also check
+> >
+> >    capable(CAP_SYS_BOOT) && destructive_ebpf_enabled()
+> >
+> > here. Or at least, destructive_ebpf_enabled(). Otherwise, we
+> > may trigger panic after the sysctl is disabled.
+> >
+> > In general, I don't think sysctl is a good API, as it is global, and
+> > the user can easily forget to turn it back off. If possible, I would
+> > rather avoid adding new BPF related sysctls.
+> 
+> +1. New syscal isn't warranted here.
+> Just CAP_SYS_BOOT would be enough here.
 
-Tegelikult oleme l=C3=A4bi vaadanud k=C3=B5ik =C3=BCmbritsevad takistused j=
-a probleemid
-teie mittet=C3=A4ielik tehing ja teie suutmatus tasuda
-=C3=BClekandetasud, mida v=C3=B5etakse teie vastu j=C3=A4rgmiste v=C3=B5ima=
-luste eest
-varasemate =C3=BClekannete kohta k=C3=BClastage kinnituse saamiseks meie sa=
-iti 38
-=C2=B0 53=E2=80=B256 =E2=80=B3 N 77 =C2=B0 2 =E2=80=B2 39 =E2=80=B3 W
+Point taken, I'll remove sysctl knob in any further versions.
 
-Oleme direktorite n=C3=B5ukogu, Maailmapank ja Valuutafond
-Washingtoni Rahvusvaheline (IMF) koos osakonnaga
-Ameerika =C3=9Chendriikide riigikassa ja m=C3=B5ned teised uurimisasutused
-asjakohane siin Ameerika =C3=9Chendriikides. on tellinud
-meie Overseas Payment Remittance Unit, United Bank of
-Africa Lome Togo, et v=C3=A4ljastada teile VISA kaart, kus $
-1,5 miljonit teie fondist, et oma fondist rohkem v=C3=A4lja v=C3=B5tta.
+> Also full blown panic() seems unnecessary.
+> If the motivation is to get a memory dump then crash_kexec() helper
+> would be more suitable.
+> If the goal is to reboot the system then the wrapper of sys_reboot()
+> is better.
+> Unfortunately the cover letter lacks these details.
 
-Uurimise k=C3=A4igus avastasime koos
-kardab, et teie makse on hilinenud korrumpeerunud ametnike poolt
-pangast, kes =C3=BCritavad teie raha teie kontodele suunata
-privaatne.
+The main goal is to get the memory dump, so crash_kexec() should be enough.
+However panic() is a bit more versatile and it's consequences are configurable
+to some extent. Are there any downsides to using it?
 
-Ja t=C3=A4na anname teile teada, et teie raha on kaardile kantud
-UBA panga VISA ja see on ka kohaletoimetamiseks valmis. N=C3=BC=C3=BCd
-v=C3=B5tke =C3=BChendust UBA panga direktoriga, tema nimi on hr Tony
-Elumelu, e-post: (cfc.ubagroup09@gmail.com)
-et =C3=B6elda, kuidas ATM VISA kaarti k=C3=A4tte saada.
+> Why this destructive action cannot be delegated to user space?
 
-Lugupidamisega
+Going through userspace adds delays and makes it impossible to hit "exactly
+the right moment" thus making it unusable in most cases.
 
-Proua Kristalina Georgieva
+I'll add this to the cover letter.
+
+> btw, we should avoid adding new uapi helpers in most cases.
+> Ideally all of them should be added as new kfunc-s, because they're
+> unstable and we can rip them out later if our judgement call
+> turns out to be problematic for whatever reason.
+
+Ok, I'll look into doing it this way.
+
+-- 
+Regards,
+  Artem
+

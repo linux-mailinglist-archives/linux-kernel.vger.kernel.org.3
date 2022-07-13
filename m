@@ -2,139 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2323D57324C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63521573252
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234791AbiGMJRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
+        id S235196AbiGMJTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234696AbiGMJRt (ORCPT
+        with ESMTP id S232153AbiGMJTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:17:49 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48982E0F4F;
-        Wed, 13 Jul 2022 02:17:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VJDOi.B_1657703862;
-Received: from 30.97.48.50(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VJDOi.B_1657703862)
-          by smtp.aliyun-inc.com;
-          Wed, 13 Jul 2022 17:17:43 +0800
-Message-ID: <1badee01-b872-8de8-4fe1-83d6dc6b756c@linux.alibaba.com>
-Date:   Wed, 13 Jul 2022 17:17:44 +0800
+        Wed, 13 Jul 2022 05:19:19 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE9E65D40
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:19:18 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id s3-20020a5eaa03000000b0067b8e40a536so4166590ioe.17
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:19:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=beK/RyAk6JMkokDhacR9sWsAak3KfcE5cJn8YM9YfXo=;
+        b=THUD/M/DkJ8qRRZV3pKQJ5wQVMQSJKCich5Us6AwjMXqGBCXYHwSvE5aiTduxsW4Ei
+         ElZ74a8Tt5+dbYF40qCDnLtdNobmVZQPVk7sZ6tuWDM4V9fEOq5cjqiTcX9Gwl7m3sPA
+         cIiuGiYteJO0vwT1xDWYVcVb11XLx9N4GbUskFfUD1640vsU4LFypY3kfWLxxuApLRuS
+         iwn3OHSdDoE0gzCugWJqsEEpHrIoMi2NM6p2H96BUQZ0HNf9Uu3+naPC0UYQXqwGMUFa
+         KS5y07bwriOmSi6l+X/EC1/GBW5R+CowSH2OIi8+8qXFzhg7+BZopzhj7P4T89Jb4p9d
+         dCgQ==
+X-Gm-Message-State: AJIora8y/t9Bao8fCZxUMpDeJKK0usEZqiUUsJ20BLeir2a5YUzydSqc
+        GoRKTUMXlwvxTbb/f84vNA7xxN93fg+b7F0DbxUrBpPSWCxY
+X-Google-Smtp-Source: AGRyM1tGKk8L7CaPoHPZN3L32agR0DF5b8G/3cjRJ3OTHH6uwupEEMGc5Zzm463FDp7p6zPKyV8fHNejR4x+ih82L8fDnCC6iM8z
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [mm] 0bf5cdf08f: BUG:Bad_page_state_in_process
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-arch@vger.kernel.org, lkp@lists.01.org,
-        akpm@linux-foundation.org, rppt@linux.ibm.com, willy@infradead.org,
-        linux-mm@kvack.org
-References: <Ys0P+ssAhAyfdA56@xsang-OptiPlex-9020>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <Ys0P+ssAhAyfdA56@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1412:b0:33f:7cd8:6a79 with SMTP id
+ k18-20020a056638141200b0033f7cd86a79mr1282583jad.119.1657703957555; Wed, 13
+ Jul 2022 02:19:17 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 02:19:17 -0700
+In-Reply-To: <000000000000f2b07b05d5dc87cc@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008870ab05e3ac4783@google.com>
+Subject: Re: [syzbot] general protection fault in fscache_free_cookie
+From:   syzbot <syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com>
+To:     dhowells@redhat.com, linux-cachefs-bounces@redhat.com,
+        linux-cachefs-owner@redhat.com, linux-cachefs@redhat.com,
+        linux-kernel@vger.kernel.org, mudongliangabcd@gmail.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/12/2022 2:08 PM, kernel test robot wrote:
-> 
-> 
-> Greeting,
-> 
-> FYI, we noticed the following commit (built with gcc-11):
-> 
-> commit: 0bf5cdf08f32bbb2d5dbc794fe609e1d97ca5257 ("[RFC PATCH v2 3/3] mm: Add kernel PTE level pagetable pages account")
-> url: https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/Add-PUD-and-kernel-PTE-level-pagetable-account/20220622-170051
-> base: https://git.kernel.org/cgit/linux/kernel/git/arnd/asm-generic.git master
-> patch link: https://lore.kernel.org/linux-mm/7882bbf467440f9a3ebe41d96ba5b6f384081bb7.1655887440.git.baolin.wang@linux.alibaba.com
-> 
-> in testcase: stress-ng
-> version: stress-ng-x86_64-0.11-06_20220709
-> with following parameters:
-> 
-> 	nr_threads: 10%
-> 	disk: 1HDD
-> 	testtime: 60s
-> 	fs: xfs
-> 	class: filesystem
-> 	test: dnotify
-> 	cpufreq_governor: performance
-> 	ucode: 0xb000280
-> 
-> 
-> 
-> on test machine: 96 threads 2 sockets Ice Lake with 256G memory
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> 
-> 
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-
-Thanks for reporting. I think I missed the changes in 
-pud_free_pmd_page(), which also can free a kernel pte page table.
-
-And I will use pte_free_kernel() instead in new version patch set.
-
-diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
-index 20f30762d618..f961578e2a54 100644
---- a/arch/x86/mm/pgtable.c
-+++ b/arch/x86/mm/pgtable.c
-@@ -828,6 +828,7 @@ int pud_free_pmd_page(pud_t *pud, unsigned long addr)
-         for (i = 0; i < PTRS_PER_PMD; i++) {
-                 if (!pmd_none(pmd_sv[i])) {
-                         pte = (pte_t *)pmd_page_vaddr(pmd_sv[i]);
-+                       pgtable_clear_and_dec(virt_to_page(pte));
-                         free_page((unsigned long)pte);
-                 }
-         }
-
-
-> 
-> 
-> [   36.465236][ T1887] BUG: Bad page state in process ucfr  pfn:1ed9a9
-> [   36.465238][ T1887] page:00000000c52990fe refcount:0 mapcount:-512 mapping:0000000000000000 index:0x0 pfn:0x1ed9a9
-> [   36.465244][ T1887] flags: 0x17ffffc0000000(node=0|zone=2|lastcpupid=0x1fffff)
-> [   36.465248][ T1887] raw: 0017ffffc0000000 dead000000000100 dead000000000122 0000000000000000
-> [   36.465249][ T1887] raw: 0000000000000000 0000000000000000 00000000fffffdff 0000000000000000
-> [   36.465249][ T1887] page dumped because: nonzero mapcount
-> [   36.465250][ T1887] Modules linked in: acpi_cpufreq(-) device_dax(+) nd_pmem nd_btt dax_pmem intel_rapl_msr intel_rapl_common btrfs ipmi_ssif x86_pkg_temp_thermal blake2b_generic intel_powerclamp xor raid6_pq coretemp zstd_compress libcrc32c nvme sd_mod ast drm_vram_helper sg drm_ttm_helper nvme_core kvm_intel kvm irqbypass crct10dif_pclmul crc32_pclmul crc32c_intel t10_pi ghash_clmulni_intel ttm rapl drm_kms_helper crc64_rocksoft_generic ahci intel_cstate syscopyarea crc64_rocksoft libahci intel_uncore crc64 sysfillrect ioatdma sysimgblt joydev fb_sys_fops libata dca wmi acpi_ipmi ipmi_si ipmi_devintf ipmi_msghandler nfit libnvdimm acpi_pad acpi_power_meter drm fuse ip_tables
-> [   36.465278][ T1887] CPU: 8 PID: 1887 Comm: ucfr Tainted: G S                5.19.0-rc2-00013-g0bf5cdf08f32 #1
-> [   36.465280][ T1887] Call Trace:
-> [   36.465283][ T1887]  <TASK>
-> [ 36.465285][ T1887] dump_stack_lvl (lib/dump_stack.c:107 (discriminator 1))
-> [ 36.465292][ T1887] bad_page.cold (mm/page_alloc.c:642)
-> [ 36.465296][ T1887] free_pcppages_bulk (mm/page_alloc.c:1526)
-> [ 36.465302][ T1887] free_unref_page (arch/x86/include/asm/irqflags.h:137 mm/page_alloc.c:3459)
-> [ 36.465304][ T1887] __mmdrop (arch/x86/include/asm/mmu_context.h:125 (discriminator 3) kernel/fork.c:789 (discriminator 3))
-> [ 36.465307][ T1887] finish_task_switch+0x200/0x2c0
-> [ 36.465312][ T1887] schedule_tail (arch/x86/include/asm/preempt.h:85 kernel/sched/core.c:5053)
-> [ 36.465315][ T1887] ret_from_fork (arch/x86/entry/entry_64.S:289)
-> [   36.465320][ T1887]  </TASK>
-> [   36.465320][ T1887] Disabling lock debugging due to kernel taint
-> [   37.204107][  T656] BUG: Bad page state in process kworker/7:1  pfn:4067654
-> [   37.204114][  T656] page:0000000017c1d009 refcount:0 mapcount:-512 mapping:0000000000000000 index:0x0 pfn:0x4067654
-> [   37.204120][  T656] flags: 0x57ffffc0000000(node=1|zone=2|lastcpupid=0x1fffff)
-> [   37.204126][  T656] raw: 0057ffffc0000000 dead000000000100 dead000000000122 0000000000000000
-> [   37.204128][  T656] raw: 0000000000000000 0000000000000000 00000000fffffdff 0000000000000000
-> [   37.204128][  T656] page dumped because: nonzero mapcount
-> [   37.204129][  T656] Modules linked in: acpi_cpufreq(-) device_dax(+) nd_pmem nd_btt dax_pmem intel_rapl_msr intel_rapl_common btrfs ipmi_ssif x86_pkg_temp_thermal blake2b_generic intel_powerclamp xor raid6_pq coretemp zstd_compress libcrc32c nvme sd_mod ast drm_vram_helper sg drm_ttm_helper nvme_core kvm_intel kvm irqbypass crct10dif_pclmul crc32_pclmul crc32c_intel t10_pi ghash_clmulni_intel ttm rapl drm_kms_helper crc64_rocksoft_generic ahci intel_cstate syscopyarea crc64_rocksoft libahci intel_uncore crc64 sysfillrect ioatdma sysimgblt joydev fb_sys_fops libata dca wmi acpi_ipmi ipmi_si ipmi_devintf ipmi_msghandler nfit libnvdimm acpi_pad acpi_power_meter drm fuse ip_tables
-> [   37.204165][  T656] CPU: 7 PID: 656 Comm: kworker/7:1 Tainted: G S  B             5.19.0-rc2-00013-g0bf5cdf08f32 #1
-> [   37.204168][  T656] Workqueue: mm_percpu_wq vmstat_update
-> [   37.204181][  T656] Call Trace:
-> [   37.204184][  T656]  <TASK>
-
-snip.
+This bug is marked as fixed by commit:
+fscache: fix GPF in fscache_free_cookie
+But I can't find it in any tested tree for more than 90 days.
+Is it a correct commit? Please update it by replying:
+#syz fix: exact-commit-title
+Until then the bug is still considered open and
+new crashes with the same signature are ignored.

@@ -2,270 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869D3572BE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 05:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E6B572BEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 05:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbiGMDaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 23:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
+        id S232206AbiGMDcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 23:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiGMDaG (ORCPT
+        with ESMTP id S231672AbiGMDcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 23:30:06 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4383AB8509
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 20:30:04 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 75so15977693ybf.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 20:30:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PP/OhW0gPEu1hOVZ+LUBvYiiXRfoCiVcRjdOa19gXfg=;
-        b=fDsANUBNqxqJQSzD5I2/ATj5PCX9C6oYXmSsRDPqIJ45RV85L2ujdW80J+UV2EFYmh
-         /o3RT8Rv27WC8ycz6U7qtk0uvwsITN64jrHZDfy6ZPNpX77n17kKX41JZbD9rSKjJKgV
-         Q4QTWPBPObM8fSN5jn4NI9Ih0wzO0ojEpf5BOwaD9o/E4r5+GV47XqEG2ehqqCmWbAf5
-         4v6ZNR5d2mPZPJOc0TY6MnOwMSq8BdX95606FmAIJC5JsblJHpbjSIEEvdDs7ZmI2X0T
-         ru+0gd1PETSjAdOK84tJdpELjLW+9w4sfgsvIsds4eEzVKAR/TtRXbEGArFTotmDFs2E
-         SfHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PP/OhW0gPEu1hOVZ+LUBvYiiXRfoCiVcRjdOa19gXfg=;
-        b=UBb7jYREesf8eVd7XyTZg0t5JnDIOEuq4Dho+/TUb41UlyUmwBQLq/Mpdvt01ECbLV
-         MZGvjGig9NAxXvrmX5UejBul/A8wHLGDghQmy/tTXe5GalQdMfwDtAQ9WnNhtMn3FQGo
-         Xo09PPusBjAJYYVSJjLhYmk4dbHRvClZ5aMuEWMM4vG0mkpz6F0FwK+Q7blMfVp0m9bl
-         w1k2rYI3+L51/yY0nFPG5nSKsnTB307lSr5JWV++KtCtNfRI5WghKCd2VSL8H0dV7gqz
-         CVChLCJDP+sGcTWk7KNHnNOElo9T1qXIR3TrO17e22tsvS9AgGpJXAd/xcEaZlQAa785
-         zCgw==
-X-Gm-Message-State: AJIora+vIck4dY5PUlAAkLZPqVLnsqQzJIGCgXvGKAqY2q6PGWvC8doG
-        pDo1HXfDMFSqZi7loijrlyz1MHeddlDC1jcTgtILZw==
-X-Google-Smtp-Source: AGRyM1sepXKZ1P9DsojICWLKf64xn0nLoGSMru9yJuTGxSqksRWOOShl7umoF9CZdjkI5nzPAVN7tRevwzwT8JNRdv0=
-X-Received: by 2002:a5b:58e:0:b0:66f:2c4f:e542 with SMTP id
- l14-20020a5b058e000000b0066f2c4fe542mr1635753ybp.572.1657683003374; Tue, 12
- Jul 2022 20:30:03 -0700 (PDT)
+        Tue, 12 Jul 2022 23:32:05 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6047D8601;
+        Tue, 12 Jul 2022 20:32:01 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26D3VcON2023796, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26D3VcON2023796
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Wed, 13 Jul 2022 11:31:38 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 13 Jul 2022 11:31:40 +0800
+Received: from fc34.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Wed, 13 Jul
+ 2022 11:31:40 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <kuba@kernel.org>, <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH v2 net] r8152: fix accessing unset transport header
+Date:   Wed, 13 Jul 2022 11:31:11 +0800
+Message-ID: <20220711070004.28010-390-nic_swsd@realtek.com>
+X-Mailer: git-send-email 2.34.3
+In-Reply-To: <20220711070004.28010-389-nic_swsd@realtek.com>
+References: <20220711070004.28010-389-nic_swsd@realtek.com>
 MIME-Version: 1.0
-References: <20220710012204.2390293-1-leo.yan@linaro.org> <CAP-5=fX_fT7e9tqDBKXh_1CQ8w80iOXCGz2kJT_nHpY6wYWqmQ@mail.gmail.com>
- <20220711172706.rtfd6pp2pochmdre@google.com> <20220712040538.GB10379@leoy-ThinkPad-X240s>
-In-Reply-To: <20220712040538.GB10379@leoy-ThinkPad-X240s>
-From:   Fangrui Song <maskray@google.com>
-Date:   Tue, 12 Jul 2022 20:29:52 -0700
-Message-ID: <CAFP8O3+dQi8b6C_f9bTb0TFpEmNjsroBv4agUpRKps2p3hpP+A@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] perf symbol: Correct address for bss symbols
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chang Rui <changruinj@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.21.177.102]
+X-ClientProxiedBy: RTEXH36504.realtek.com.tw (172.21.6.27) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: trusted connection
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 07/13/2022 03:13:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzcvMTIgpFWkyCAxMDo1MzowMA==?=
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 9:05 PM Leo Yan <leo.yan@linaro.org> wrote:
->
-> On Mon, Jul 11, 2022 at 10:27:06AM -0700, Fangrui Song wrote:
->
-> Thanks for review, Ian and Fangrui!
+A warning is triggered by commit 66e4c8d95008 ("net: warn if transport
+header was not set"). The warning is harmless, because the value from
+skb_transport_offset() is only used for skb_is_gso() is true or the
+skb->ip_summed is equal to CHECKSUM_PARTIAL.
 
-You are welcome:)
+Fixes: 66e4c8d95008 ("net: warn if transport header was not set")
+Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+---
+v2:
+The warining appears since commit 66e4c8d95008 ("net: warn if transport
+header was not set"), so add a Fixed tag for referring to it.
 
-> [...]
->
-> > > > First we used 'perf mem record' to run the test program and then us=
-ed
-> > > > 'perf --debug verbose=3D4 mem report' to observe what's the symbol =
-info
-> > > > for 'buf1' and 'buf2' structures.
-> > > >
-> > > >   # ./perf mem record -e ldlat-loads,ldlat-stores -- false_sharing.=
-exe 8
-> > > >   # ./perf --debug verbose=3D4 mem report
-> > > >     ...
-> > > >     dso__load_sym_internal: adjusting symbol: st_value: 0x40c0 sh_a=
-ddr: 0x4040 sh_offset: 0x3028
-> > > >     symbol__new: buf2 0x30a8-0x30e8
-> > > >     ...
-> > > >     dso__load_sym_internal: adjusting symbol: st_value: 0x4080 sh_a=
-ddr: 0x4040 sh_offset: 0x3028
-> > > >     symbol__new: buf1 0x3068-0x30a8
-> > > >     ...
-> >
-> > It seems unclear how 0x30a8 and 0x3068 are derived,
->
-> In perf tool, 0x30a8 and 0x3068 are adjusted address, which are derived
-> from 'st_value', 'sh_addr' and 'sh_offset' with the formula:
->
->   adjusted_address =3D st_value - sh_addr + sh_offset
->
-> So perf computes symbol address for buf1:
->
->   adjusted_address =3D st_value - sh_addr + sh_offset
->                    =3D 0x4080 - 0x4040 + 0x3028
->                    =3D 0x3068
+ drivers/net/usb/r8152.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Thanks.
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 7389d6ef8569..b082819509e1 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -2156,7 +2156,7 @@ static inline void rtl_rx_vlan_tag(struct rx_desc *desc, struct sk_buff *skb)
+ }
+ 
+ static int r8152_tx_csum(struct r8152 *tp, struct tx_desc *desc,
+-			 struct sk_buff *skb, u32 len, u32 transport_offset)
++			 struct sk_buff *skb, u32 len)
+ {
+ 	u32 mss = skb_shinfo(skb)->gso_size;
+ 	u32 opts1, opts2 = 0;
+@@ -2167,6 +2167,8 @@ static int r8152_tx_csum(struct r8152 *tp, struct tx_desc *desc,
+ 	opts1 = len | TX_FS | TX_LS;
+ 
+ 	if (mss) {
++		u32 transport_offset = (u32)skb_transport_offset(skb);
++
+ 		if (transport_offset > GTTCPHO_MAX) {
+ 			netif_warn(tp, tx_err, tp->netdev,
+ 				   "Invalid transport offset 0x%x for TSO\n",
+@@ -2197,6 +2199,7 @@ static int r8152_tx_csum(struct r8152 *tp, struct tx_desc *desc,
+ 		opts1 |= transport_offset << GTTCPHO_SHIFT;
+ 		opts2 |= min(mss, MSS_MAX) << MSS_SHIFT;
+ 	} else if (skb->ip_summed == CHECKSUM_PARTIAL) {
++		u32 transport_offset = (u32)skb_transport_offset(skb);
+ 		u8 ip_protocol;
+ 
+ 		if (transport_offset > TCPHO_MAX) {
+@@ -2260,7 +2263,6 @@ static int r8152_tx_agg_fill(struct r8152 *tp, struct tx_agg *agg)
+ 		struct tx_desc *tx_desc;
+ 		struct sk_buff *skb;
+ 		unsigned int len;
+-		u32 offset;
+ 
+ 		skb = __skb_dequeue(&skb_head);
+ 		if (!skb)
+@@ -2276,9 +2278,7 @@ static int r8152_tx_agg_fill(struct r8152 *tp, struct tx_agg *agg)
+ 		tx_data = tx_agg_align(tx_data);
+ 		tx_desc = (struct tx_desc *)tx_data;
+ 
+-		offset = (u32)skb_transport_offset(skb);
+-
+-		if (r8152_tx_csum(tp, tx_desc, skb, skb->len, offset)) {
++		if (r8152_tx_csum(tp, tx_desc, skb, skb->len)) {
+ 			r8152_csum_workaround(tp, skb, &skb_head);
+ 			continue;
+ 		}
+@@ -2759,9 +2759,9 @@ rtl8152_features_check(struct sk_buff *skb, struct net_device *dev,
+ {
+ 	u32 mss = skb_shinfo(skb)->gso_size;
+ 	int max_offset = mss ? GTTCPHO_MAX : TCPHO_MAX;
+-	int offset = skb_transport_offset(skb);
+ 
+-	if ((mss || skb->ip_summed == CHECKSUM_PARTIAL) && offset > max_offset)
++	if ((mss || skb->ip_summed == CHECKSUM_PARTIAL) &&
++	    skb_transport_offset(skb) > max_offset)
+ 		features &= ~(NETIF_F_CSUM_MASK | NETIF_F_GSO_MASK);
+ 	else if ((skb->len + sizeof(struct tx_desc)) > agg_buf_sz)
+ 		features &= ~NETIF_F_GSO_MASK;
+-- 
+2.34.3
 
-> > > > Perf tool relies on libelf to parse symbols, here 'st_value' is the
-> > > > address from executable file, 'sh_addr' is the belonged section's l=
-inked
-> > > > start address, and 'sh_offset' is the dynamic loaded address for th=
-is
-> > > > section, then perf tool uses below formula to adjust symbol address=
-:
-> > > >
-> > > >   adjusted_address =3D st_value - sh_addr + sh_offset
-> > > >
-> > > > So we can see the final adjusted address ranges for buf1 and buf2 a=
-re
-> > > > [0x30a8-0x30e8) and [0x3068-0x30a8) respectively, apparently this i=
-s
-> > > > incorrect, in the code, the structure for 'buf1' and 'buf2' specifi=
-es
-> > > > compiler attribute with 64-byte alignment.
-> >
-> > so I cannot judge this paragraph.
-> >
-> > > > The problem happens for 'sh_offset', libelf returns it as 0x3028 wh=
-ich
-> > > > is not 64-byte aligned, on the other hand, we can see both 'st_valu=
-e'
-> > > > and 'sh_addr' are 64-byte aligned.  Combining with disassembly, it'=
-s
-> > > > likely libelf uses the .data section end address as .bss section
-> > > > start address, therefore, it doesn't respect the alignment attribut=
-e for
-> > > > structures in .bss section.
-> > > >
-> > > > Since .data and .bss sections are in the continuous virtual address
-> > > > space, and .data section info returned by libelf is reliable, to fi=
-x
-> > > > this issue, if detects it's a bss symbol, it rolls back to use .dat=
-a
-> > > > section info to adjust symbol's virtual address.
-> >
-> > This is not necessarily true.
-> >
-> > * In GNU ld's internal linker script, .data1 sits between .data and .bs=
-s.
-> > * A linker script can add other sections between .data and .bss
-> > * A linker script may place .data and .bss in two PT_LOAD program heade=
-rs.
->
-> Agreed the approach in this patch cannot handle all cases.
->
-> > % readelf -WS aa
-> > There are 13 section headers, starting at offset 0x10a8:
-> >
-> > With a linker script like
-> >
-> > % cat a/a.lds
-> > SECTIONS {
-> >   .text : { *(.text) }
-> >   data1 : { *(data1) }
-> >   data2 : { *(data2) }
-> >   .bss : { *(.bss) }
-> > }
-> >
-> > I can get something like
-> >
-> > Section Headers:
-> >   [Nr] Name              Type            Address          Off    Size  =
- ES Flg Lk Inf Al
-> >   [ 0]                   NULL            0000000000000000 000000 000000=
- 00      0   0  0
-> >   [ 1] .text             PROGBITS        0000000000000000 001000 000001=
- 00  AX  0   0  1
-> >   [ 2] data1             PROGBITS        0000000000000001 001001 000001=
- 00  WA  0   0  1
-> >   [ 3] data2             PROGBITS        0000000000000002 001002 000001=
- 00  WA  0   0  1
-> >   [ 4] .data             PROGBITS        0000000000000003 001003 000000=
- 00  WA  0   0  1
-> >   [ 5] data3             PROGBITS        0000000000000003 001003 000001=
- 00  WA  0   0  1
-> >   [ 6] .bss              NOBITS          0000000000000020 001004 000001=
- 00  WA  0   0 32
-> >
-> > .bss's sh_offset does not need to be aligned per http://www.sco.com/dev=
-elopers/gabi/latest/ch4.sheader.html
-> >
-> >     sh_offset
-> >     This member's value gives the byte offset from the beginning of the=
- file to the first byte in the section. One section type, SHT_NOBITS descri=
-bed below, occupies no space in the file, and its sh_offset member locates =
-the conceptual placement in the file.
->
-> > I don't have more context why the file offset is needed for a variable =
-in the all-zero section.
->
-> We need to create symbol info for not only .text section but also for
-> .data section and .bss section=E1=B9=A1.  So based on the data address, w=
-e can
-> know what's the symbol for the data access.
->
-> But I need to correct the description for "st_value" [1]: In
-> executable and shared object files, st_value holds a virtual address.
-> To make these files' symbols more useful for the dynamic linker, the
-> section offset (file interpretation) gives way to a virtual address
-> (memory interpretation) for which the section number is irrelevant.
->
-> So perf tool uses the formula "st_value - sh_addr + sh_offset" to
-> convert from the memory address to file address.  But it calculates
-> the wrong file address because "sh_offset" doesn't respect the
-> alignment.
-
-Thanks for the explanation. I think st_value - p_vaddr + p_offset  may
-be a better formula where p_vaddr/p_offset is from the PT_LOAD program
-header.
-
-For a SHT_NOBITS section, sh_offset may not be accurate, but PT_LOAD
-has precise information.
-
-> [1] http://www.sco.com/developers/gabi/latest/ch4.symtab.html#symbol_valu=
-e
->
-> > If the file offset has to be used and we want to use a heuristic, a bet=
-ter one is to find the section index of .bss, say, i.
-> >
-> > const uint64_t align =3D shdr[i].sh_addralign;
-> > assert(i > 0);
-> > if (shdr[i].offset % align =3D=3D 0)
-> >   return shdr[i].offset;
-> > return (shdr[i-1].sh_offset + shdr[i-1].sh_size + align - 1) & -align;
-> >
-> > Really, it is better to use the program header to derive the virtual ad=
-dress of a variable residing in .bss.
->
-> I think we can simplify the code.  Because:
->
->   shdr[i].sh_offset =3D shdr[i-1].sh_offset + shdr[i-1].sh_size
->
-> ... thus we can simply fixup "sh_offset":
->
->   const uint64_t align =3D shdr[i].sh_addralign;
->   aligned_sh_offset =3D (shdr[i].sh_offset + align - 1) & ~(align - 1);
->
-> So:
->
->   symbol_addr =3D st_value - sh_addr + aligned_sh_offset
->
-> If you still see any issue, please let me know.
->
-> Thanks a lot for suggestions.
->
-> Leo

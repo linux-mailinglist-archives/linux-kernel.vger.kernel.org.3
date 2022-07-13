@@ -2,91 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3582457354F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD13057354B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236112AbiGMLZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 07:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
+        id S235996AbiGMLZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 07:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236101AbiGMLZN (ORCPT
+        with ESMTP id S231513AbiGMLY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:25:13 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A905B102717;
-        Wed, 13 Jul 2022 04:25:10 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-31cf1adbf92so109195677b3.4;
-        Wed, 13 Jul 2022 04:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zVsTRZ+KHVAlZ/Yd1qD9A+kSjJ/bpJiTUJw8KWJXUb4=;
-        b=hhUOvCL9G8gIcwEqLsONL+dYxWME5xylW5azzJVe8SIC8Q1Sa15cxrMdYRSaGFexS0
-         INQNO/z42XIiWGdHUf0nCSwvbZRAZqiOdn47tD+mibMkIGvp7bbPYb6CoJXHu3eDuT8Z
-         3CpeaZZCJyep8zZgLmbym9Q2i5/14I/FUUvpwlpxWQ9bF6VG5vNKJa6GEE1MYzI85wA+
-         7r5b0ssghr9NLUUv5bj6Ek2+Hjkp1yMhq7QdDHIIt8gHPX/K4tTi7Fcdl6hWWb2XqWva
-         Jg1x82mmspmPjBaowzbxQ8fs+5LP226V1Nj43Yt8iSfjy0b5t1RWnEcFw4C/NB6MPMrJ
-         6CJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zVsTRZ+KHVAlZ/Yd1qD9A+kSjJ/bpJiTUJw8KWJXUb4=;
-        b=EUuZGeruWqryo8iz4mlj5Ei6AVq6uAQH8kPV6hU6ZBa2eERx/i7O9ovOyP6QiQGGoS
-         eVWuI/Eq8RGJZ/WQDPuRLHQVA64pBdmg0VoWyG/ZiRJd0RszzWAytqLOrn5KKmuGLgMI
-         bKSBDRVZFQunzQNHzXNJ+Ftaf7/Jf/1lxZvOGpE9Fe1++Xv+htZJx1Q2jdm37pX0zHRo
-         r1AsOX8pu6/xNjRNfqSBPN5GXdo97J9ry0srr/DO8zW4a35QtIFhi/TMyo0lDSmi3yr8
-         LyakfkJ1mMSpUd1f6VwcuZH9wPUpEqhmFcPaKXpZskCB1b/Whs+qDq/PQGkyUwYx7p5d
-         buCQ==
-X-Gm-Message-State: AJIora+E1NZXhdQOEUdj11K/lOgLIXdxOvU0Qs6kMiTXKmy/T8o1BykS
-        mcoT3luMHqL9IownKOas3pnYasQGrLqlv1ujkrk=
-X-Google-Smtp-Source: AGRyM1sHfektbvTGawGrVDTdh8I9O3i+FHUJ6r1+OTP3JFit85WN3rs30yFgZW/AlLHUyKnHox1Xp8I+br72qnAN9ts=
-X-Received: by 2002:a81:108f:0:b0:31c:d7ae:9ff1 with SMTP id
- 137-20020a81108f000000b0031cd7ae9ff1mr3550642ywq.18.1657711509887; Wed, 13
- Jul 2022 04:25:09 -0700 (PDT)
+        Wed, 13 Jul 2022 07:24:58 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA47E7CCE
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657711497; x=1689247497;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=x2z96YWffgva57e/5SCnO/eg4fgCYmVKHGKY6tfFCw8=;
+  b=FbMufuyRf04N4dP5XOEb3Ut4dngu7WWf3eiVsbk1FFIIkhvhSf21o+gy
+   ig2NmDMgZonkyh+c8lQ8MpWux42MV2uva32cHeiAy2rHNKvAayJWaXw9m
+   y5JPiwY4zFhpoUSMihzPJwsThmpi+blQBvOUIRaG9Dv/n7nQ9+czON1yP
+   Nwc9VGLZDS6aTW5B5CfU3zAWha6j6NtnFCZIFez3xE4WUABw6TqTeAGzS
+   rc397h9UXmAXo+FAGy+XeX+8SE++scOGmUYxDT9FU/7JfL0UEnybvyIuM
+   qseolRw14fSRRS+3E0Cp5z1pVzN0HGbmVrFSVRDHykevP4Q3wMNDsVp1u
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="283939006"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="283939006"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 04:24:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="663322624"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 13 Jul 2022 04:24:56 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBaUB-0003Pj-PA;
+        Wed, 13 Jul 2022 11:24:55 +0000
+Date:   Wed, 13 Jul 2022 19:24:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     kbuild-all@lists.01.org, Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org
+Subject: [cilium:pr/meta5 4/4] include/net/sch_generic.h:819: undefined
+ reference to `__qdisc_calculate_pkt_len'
+Message-ID: <202207131955.CE8BXrij-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220713013721.68879-1-warthog618@gmail.com> <20220713013721.68879-5-warthog618@gmail.com>
- <CAHp75VeRshC3Db8Q2J80fk7=UvLiRymrkoAbuWceOfncfzvr7A@mail.gmail.com> <20220713102710.GB113115@sol>
-In-Reply-To: <20220713102710.GB113115@sol>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 13 Jul 2022 13:24:33 +0200
-Message-ID: <CAHp75VdL4Zy=1+m5e4gcNUM7uW-q4cfJb1xof3qiQx6ZWsMSPg@mail.gmail.com>
-Subject: Re: [PATCH 4/6] gpiolib: cdev: simplify line event identification
-To:     Kent Gibson <warthog618@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dipen Patel <dipenp@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 12:27 PM Kent Gibson <warthog618@gmail.com> wrote:
-> On Wed, Jul 13, 2022 at 11:59:10AM +0200, Andy Shevchenko wrote:
-> > On Wed, Jul 13, 2022 at 3:39 AM Kent Gibson <warthog618@gmail.com> wrote:
+tree:   https://github.com/cilium/linux.git pr/meta5
+head:   3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
+commit: 3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5 [4/4] bpf: Add fd-based API to attach tc BPF programs
+config: arc-buildonly-randconfig-r005-20220712 (https://download.01.org/0day-ci/archive/20220713/202207131955.CE8BXrij-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/cilium/linux/commit/3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
+        git remote add cilium https://github.com/cilium/linux.git
+        git fetch --no-tags cilium pr/meta5
+        git checkout 3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-...
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > > +               le.id = level ? GPIO_V2_LINE_EVENT_RISING_EDGE :
-> > > +                               GPIO_V2_LINE_EVENT_FALLING_EDGE;
-> >
-> > It seems several times you are doing the same, perhaps a helper?
->
-> If by several times you mean twice, then yeah.
-> Not sure that reaches the threshold for a helper though.
+All errors (new ones prefixed by >>):
 
-Up to you, then!
+   arc-elf-ld: net/core/dev.o: in function `__dev_xmit_skb':
+>> include/net/sch_generic.h:819: undefined reference to `__qdisc_calculate_pkt_len'
+>> arc-elf-ld: include/net/sch_generic.h:819: undefined reference to `__qdisc_calculate_pkt_len'
 
+
+vim +819 include/net/sch_generic.h
+
+378a2f090f7a47 Jarek Poplawski 2008-08-04  811  
+a2da570d62fcb9 Eric Dumazet    2011-01-20  812  static inline void qdisc_calculate_pkt_len(struct sk_buff *skb,
+a2da570d62fcb9 Eric Dumazet    2011-01-20  813  					   const struct Qdisc *sch)
+5f86173bdf1598 Jussi Kivilinna 2008-07-20  814  {
+3dd186e5096ad4 Daniel Borkmann 2022-06-13  815  #ifdef CONFIG_NET_XGRESS
+a2da570d62fcb9 Eric Dumazet    2011-01-20  816  	struct qdisc_size_table *stab = rcu_dereference_bh(sch->stab);
+a2da570d62fcb9 Eric Dumazet    2011-01-20  817  
+a2da570d62fcb9 Eric Dumazet    2011-01-20  818  	if (stab)
+a2da570d62fcb9 Eric Dumazet    2011-01-20 @819  		__qdisc_calculate_pkt_len(skb, stab);
+3a682fbd732d3d David S. Miller 2008-07-20  820  #endif
+a2da570d62fcb9 Eric Dumazet    2011-01-20  821  }
+a2da570d62fcb9 Eric Dumazet    2011-01-20  822  
+
+:::::: The code at line 819 was first introduced by commit
+:::::: a2da570d62fcb9e8816f6920e1ec02c706b289fa net_sched: RCU conversion of stab
+
+:::::: TO: Eric Dumazet <eric.dumazet@gmail.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 -- 
-With Best Regards,
-Andy Shevchenko
+0-DAY CI Kernel Test Service
+https://01.org/lkp

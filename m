@@ -2,65 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B6D573E68
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD79C573DC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237132AbiGMU72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 16:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S237029AbiGMUZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 16:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236702AbiGMU7Y (ORCPT
+        with ESMTP id S232043AbiGMUZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 16:59:24 -0400
-Received: from 19.mo550.mail-out.ovh.net (19.mo550.mail-out.ovh.net [178.32.97.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAAD31234
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:59:20 -0700 (PDT)
-Received: from player732.ha.ovh.net (unknown [10.109.146.211])
-        by mo550.mail-out.ovh.net (Postfix) with ESMTP id F3CA923D5B
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 20:23:19 +0000 (UTC)
-Received: from RCM-web6.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player732.ha.ovh.net (Postfix) with ESMTPSA id A1DDB1EC2A408;
-        Wed, 13 Jul 2022 20:23:07 +0000 (UTC)
+        Wed, 13 Jul 2022 16:25:30 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9218C25C5A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:25:27 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so5689317pjn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KNxdzYJ31Vhyt7oycuRbMlgHEjW6wotI0WNAdQq4UMw=;
+        b=t8kPJVCKtimxDlTtyzRgs6JNvOaLECNuXxarQU5OqBNA+ziab/DxNvRTorr+G98Cl5
+         2n5ZybUVwcbsU+P2E2FnhFqF/mDjUjQRVf+6EFKX70Vbyzk6vKllj0cfGMjRaaH7wV46
+         OJqqnL5CnvYZ/tMqCZLuH5USn/gtG52kAARi3QGK/WoJbpmkwcRGlqfg+bv7QswLkwWF
+         sqTDGUA8vN6GDwxQrdyDse3TUfWV6rQR1erg83hXbDszgJFa74wrL8rWeUtIlOlOn2rW
+         idSQYSMMEmA6NKhXQnU+1DLRu0Ph3fLJmWMrp5S4wqtLYYQgpiVlQDtmbrMJhScjh0kg
+         U6CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KNxdzYJ31Vhyt7oycuRbMlgHEjW6wotI0WNAdQq4UMw=;
+        b=a9byf8s5o8up0vy16mKrBe6GiJGW7kk3SbkbCb5puLXOSb8qKUSLK/98GXrk5xOdNH
+         UUKLbNfZpConYUa3Jf4pCo2lWAVoyN1tuU0OW9aibtNHmSGs8KxUFPY9N0/8FVXHerJv
+         +5hzmSIujeVtV+c9y6PhyK86RXqnZzDn9lWfQO2qCCnVPeCEAGoDJ0ECMTrrpZQxPfLe
+         RaQUcKqGzNywhLz+NlutTzaYrn08VTlvPkiPqoJ6X+PjiVo4Od4ip+cG5Fq81wI2lsLG
+         e16N1PeryjjxoPSyXQD6lBXzZozfwE6MDH9Y6isBf0CJ+iWnUlonrddtsB+2Htq9BHeU
+         RQZw==
+X-Gm-Message-State: AJIora+bLfrlbky9YVVWkkv6n9mbrQgyICaI+AgoMS8THzjfPMFGP3g1
+        R4lOXARWoydMoaq3eBFnOsX9MA==
+X-Google-Smtp-Source: AGRyM1uMWJM21AdMA4hg31Ti1BfbhNdmhNhNqXCJYSv6TufmkF9YayM6wEk9gfkZAYCsy7kM3FFnog==
+X-Received: by 2002:a17:90b:240b:b0:1ef:8a68:1596 with SMTP id nr11-20020a17090b240b00b001ef8a681596mr5542909pjb.234.1657743927006;
+        Wed, 13 Jul 2022 13:25:27 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id a15-20020a170902710f00b0016bedcced2fsm9332014pll.35.2022.07.13.13.25.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 13:25:26 -0700 (PDT)
+Message-ID: <6e5d590b-448d-ea75-f29d-877a2cd6413b@kernel.dk>
+Date:   Wed, 13 Jul 2022 14:25:25 -0600
 MIME-Version: 1.0
-Date:   Wed, 13 Jul 2022 22:23:07 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        kursad.oney@broadcom.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com, f.fainelli@gmail.com,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        joel.peshkin@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/3] dt-bindings: arm64: bcmbca: Merge BCM4908 into
- BCMBCA
-In-Reply-To: <147bc812-3971-9832-fb39-5545e280f562@broadcom.com>
-References: <20220712021144.7068-1-william.zhang@broadcom.com>
- <20220712021144.7068-2-william.zhang@broadcom.com>
- <ca8c3003-1bcb-6658-592c-566609fd7bd2@linaro.org>
- <94b0ab39-279d-d3c2-98a4-054c10ad041c@broadcom.com>
- <c40f20c7-59ee-99f4-9a11-e928b41eda9f@linaro.org>
- <6efb1cfe-6129-276a-eeb3-44147304d211@broadcom.com>
- <e4356c5e89492eb690e3dc863ba281bd@milecki.pl>
- <85219d59e2906534409fc24ad2e5e4c9@milecki.pl>
- <147bc812-3971-9832-fb39-5545e280f562@broadcom.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <a2007e2b7bcac30bdd6f6b03ee9cf61b@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 3005871276369751003
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudejjedgudeglecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthekjhdttderjeenucfhrhhomheptfgrfhgrlhgpofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepveejhfffffevledujeeftddvffdtkefggffhgeeileeivdefiefgjeetjeejkeefnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeefvddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehrrghfrghlsehmihhlvggtkhhirdhplhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheehtd
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH V5 0/2] ublk: add io_uring based userspace block driver
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+References: <20220713140711.97356-1-ming.lei@redhat.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220713140711.97356-1-ming.lei@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,111 +76,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-13 20:37, William Zhang wrote:
-> Hi Rafal,
+On 7/13/22 8:07 AM, Ming Lei wrote:
+> Hello Guys,
 > 
-> On 7/13/22 03:58, Rafał Miłecki wrote:
->> On 2022-07-13 12:50, Rafał Miłecki wrote:
->>> On 2022-07-13 02:57, William Zhang wrote:
->>>> On 7/12/22 11:18, Krzysztof Kozlowski wrote:
->>>>> On 12/07/2022 19:37, William Zhang wrote:
->>>>>>>> +      - description: BCM4908 Family based boards
->>>>>>>> +        items:
->>>>>>>> +          - enum:
->>>>>>>> +              # BCM4908 SoC based boards
->>>>>>>> +              - brcm,bcm94908
->>>>>>>> +              - asus,gt-ac5300
->>>>>>>> +              - netgear,raxe500
->>>>>>>> +              # BCM4906 SoC based boards
->>>>>>>> +              - brcm,bcm94906
->>>>>>>> +              - netgear,r8000p
->>>>>>>> +              - tplink,archer-c2300-v1
->>>>>>>> +          - enum:
->>>>>>>> +              - brcm,bcm4908
->>>>>>>> +              - brcm,bcm4906
->>>>>>>> +              - brcm,bcm49408
->>>>>>> 
->>>>>>> This is wrong.  brcm,bcm94908 followed by brcm,bcm4906 does not 
->>>>>>> look
->>>>>>> like valid list of compatibles.
->>>>>>> 
->>>>>> For 4908 board variant, it will need to be followed by 4908 chip. 
->>>>>> Sorry
->>>>>> for the basic question but is there any requirement to enforce 
->>>>>> this kind
->>>>>> of rule?  I would assume dts writer know what he/she is doing and 
->>>>>> select
->>>>>> the right combination.
->>>>> 
->>>>> The entire point of DT schema is to validate DTS. Combination like 
->>>>> above
->>>>> prevents that goal.
->>>>> 
->>>>> Best regards,
->>>>> Krzysztof
->>>> Understand the DT schema purpose. But items property allows multiple
->>>> enums in the list which gives a lot of flexibility but make it hard 
->>>> to
->>>> validate. I am not familiar with DT schema, is there any directive 
->>>> to
->>>> specify one enum value depending on another so dts validation tool 
->>>> can
->>>> report error if combination is wrong?
->>>> 
->>>> This is our preferred format of all bcmbca compatible string
->>>> especially when we could have more than 10 chip variants for the 
->>>> same
->>>> chip family and we really want to work on the chip family id.  We 
->>>> will
->>>> make sure they are in the right combination in our own patch and 
->>>> patch
->>>> from other contributors. Would this work? If not, I will probably 
->>>> have
->>>> to revert the change of 4908(maybe append brcm,bcmbca as this chip
->>>> belongs to the same bca group) and use "enum board variant", "const
->>>> main chip id", "brcm,bca" for all other chips as our secondary 
->>>> choice.
->>> 
->>> I'm not sure why I didn't even receive 1/3 and half of discussion
->>> e-mails.
->>> 
->>> You can't just put all strings into a single bag and allow mixing 
->>> them
->>> in any combos. Please check how it's properly handled in the current
->>> existing binding:
->>> Documentation/devicetree/bindings/arm/bcm/brcm,bcm4908.yaml
->>> 
->>> Above binding enforces that non-matching compatible strings are not 
->>> used
->>> together.
->> 
->> I just noticed you're actually removing brcm,bcm4908.yaml in the 2/3 
->> so
->> you must be aware of that file.
->> 
->> So you see a cleanly working binding in the brcm,bcm4908.yaml but
->> instead copying it you decided to wrote your own one from scratch.
->> Incorrectly.
->> 
->> This smells of NIH (not invented here). Please just use that binding I
->> wrote and move if it needed.
-> 
-> Not mean to discredit any of your work and I did copy over your
-> binding and combine them into one SoC entry to the new bcmbca.yaml and
-> add you as one of the maintainer to this file. As this change would
-> certainly concern you, that's why I sent RFC first.  As I explained in
-> the cover letter, the purpose of the change is to reduce the number of
-> compatible strings and keep one entry for one chip family due to
-> possible large number of chip variants.  But since there is no way to
-> validate the combination, I will copy the existing 4908 bindings as
-> they are now
+> ublk driver is one kernel driver for implementing generic userspace block
+> device/driver, which delivers io request from ublk block device(/dev/ublkbN) into
+> ublk server[1] which is the userspace part of ublk for communicating
+> with ublk driver and handling specific io logic by its target module.
 
-Right. I believe we need that.
+Ming, is this ready to get merged in an experimental state?
 
+-- 
+Jens Axboe
 
-> but I would propose to append "brcm, bcmbca" as it is
-> part of bcmbca chip. And for the other chips, we would just use enum
-> "board variant", const "main chip id", const "brcm,bca".  Does that
-> sound good to you?
-
-Nitpicking: you meant "brcm,bcmbca" (typo) but sounds absolutely fine!

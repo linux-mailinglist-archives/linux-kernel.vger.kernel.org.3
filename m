@@ -2,192 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F2D573B66
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8197B573B68
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237275AbiGMQkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
+        id S236620AbiGMQk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiGMQkj (ORCPT
+        with ESMTP id S229913AbiGMQkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:40:39 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DB82E6B7;
-        Wed, 13 Jul 2022 09:40:35 -0700 (PDT)
+        Wed, 13 Jul 2022 12:40:55 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150E42E9D4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:40:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657730435; x=1689266435;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fnQOCgmmuU1mQ1zCnnmtaPsBptE0xg9rGXhM5D+1Tlk=;
-  b=hWU4FroW9OMoBpYUTMolV51NOTFZscGW/KnSVAVP/TbOmUICHknoe1Nr
-   UCb+ZaOPwJqHDEL+uOHM5CED5pHsJn4HhPLhZhqQ1Wa+1ubLjjgMVU0+i
-   1sTK+ypcxUsKhTNoHnvK0S5t25KpyoW7m+N9Jru7ABKRBoRqg/T39Nsnu
-   JlIBmj9ILsF8YAXUIIM1YzFIvhgD7e5cPyZ3r+9gNHA/AYur1WfpPOoJp
-   fzAIQpUuenkNitYEeLzo9Q1OKPNPvgnm8P5oEV1pWSHyEolQ8IyomQB44
-   vyS1DtlLo9LctL82Xl79KJu5XD53Wz3uXEqtakrxJnM2oM9fhQWOGxTGB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265066890"
+  t=1657730454; x=1689266454;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xAdt4qVH1pt6vdLD3vfVxSgAx4E3ELm8hp08q/QI8jE=;
+  b=l7yZ4nSBdWUwpemRLWbWs13n1vVa1Aiv8UgRwG9B+FtQJ1763oXHQ6T6
+   anhzmPf7KfBzA8bdx0idjMgbUDitZStd4MfPIPQc+dHebobVyAiBGyWhT
+   7wYZdsDtI2cztQj1PS9fCmKPHPhpMqagYAiCK+4C1ymWpv1A0zJ2wm4vR
+   wRGDOQof7Hpj0882XGrqFrPQXNS4HAjHnZNSnUxXbkSYg66HEqhIEPTYw
+   x18bzCnmWdBmKtYNftLecHv8zCT2R+GHOEXyCxrvnKbK3duw5GrKXQt6f
+   idHlR6qvwubg7edtklYpEZS16SPXVRCQGz919oYDuOU2zCgF60A1hY3Pd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="286020923"
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="265066890"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:40:34 -0700
+   d="scan'208";a="286020923"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:40:53 -0700
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="722416355"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:40:27 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oBfPT-001CUH-2s;
-        Wed, 13 Jul 2022 19:40:23 +0300
-Date:   Wed, 13 Jul 2022 19:40:23 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
-Message-ID: <Ys71dyMdozGUAto0@smile.fi.intel.com>
-References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
- <YqBS8I62YBPFC9iS@google.com>
- <CAHp75Ve9Lju8AEQd5huz1aYGg4sOu-ae7tTdyDWCXPCBR=wXbQ@mail.gmail.com>
- <YrGyWCaY+swYAYzH@smile.fi.intel.com>
- <YryAXlZqcr/liN7n@smile.fi.intel.com>
- <20220629191406.35965d5b@md1za8fc.ad001.siemens.net>
+   d="scan'208";a="922710720"
+Received: from schen9-mobl.amr.corp.intel.com ([10.209.49.100])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:40:52 -0700
+Message-ID: <2c0c61a1c4c54d06905279a9a724a9390d9ee5c3.camel@linux.intel.com>
+Subject: Re: [PATCH] sched/fair: no sync wakeup from interrupt context
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     Libo Chen <libo.chen@oracle.com>, peterz@infradead.org,
+        vincent.guittot@linaro.org, mgorman@suse.de, 21cnbao@gmail.com,
+        dietmar.eggemann@arm.com
+Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de
+Date:   Wed, 13 Jul 2022 09:40:51 -0700
+In-Reply-To: <20220711224704.1672831-1-libo.chen@oracle.com>
+References: <20220711224704.1672831-1-libo.chen@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629191406.35965d5b@md1za8fc.ad001.siemens.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 07:14:06PM +0200, Henning Schild wrote:
-> Am Wed, 29 Jun 2022 19:39:58 +0300
-> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+On Mon, 2022-07-11 at 15:47 -0700, Libo Chen wrote:
+> Barry Song first pointed out that replacing sync wakeup with regular wakeup
+> seems to reduce overeager wakeup pulling and shows noticeable performance
+> improvement.[1]
 > 
-> > +Cc: Rafael
-> > 
-> > On Tue, Jun 21, 2022 at 02:58:16PM +0300, Andy Shevchenko wrote:
-> > > On Wed, Jun 08, 2022 at 12:50:44PM +0200, Andy Shevchenko wrote:  
-> > > > On Wed, Jun 8, 2022 at 9:42 AM Lee Jones <lee.jones@linaro.org>
-> > > > wrote:  
-> > > > > On Mon, 06 Jun 2022, Andy Shevchenko wrote:
-> > > > >  
-> > > > > > There are a few users that would like to utilize P2SB
-> > > > > > mechanism of hiding and unhiding a device from the PCI
-> > > > > > configuration space.
-> > > > > >
-> > > > > > Here is the series to consolidate p2sb handling code for
-> > > > > > existing users and to provide a generic way for new comer(s).
-> > > > > >
-> > > > > > It also includes a patch to enable GPIO controllers on Apollo
-> > > > > > Lake when it's used with ABL bootloader w/o ACPI support.
-> > > > > >
-> > > > > > The patch that brings the helper ("platform/x86/intel: Add
-> > > > > > Primary to Sideband (P2SB) bridge support") has a commit
-> > > > > > message that sheds a light on what the P2SB is and why this
-> > > > > > is needed.
-> > > > > >
-> > > > > > I have tested this on Apollo Lake platform (I'm able to see
-> > > > > > SPI NOR and since we have an ACPI device for GPIO I do not
-> > > > > > see any attempts to recreate one).
-> > > > > >
-> > > > > > The series is ready to be merged via MFD tree, but see below.
-> > > > > >
-> > > > > > The series also includes updates for Simatic IPC drivers that
-> > > > > > partially tagged by respective maintainers (the main question
-> > > > > > is if Pavel is okay with the last three patches, since I
-> > > > > > believe Hans is okay with removing some code under PDx86).
-> > > > > > Hence the first 8 patches can be merged right away and the
-> > > > > > rest when Pavel does his review.  
-> > > > >
-> > > > > Can we just wait for Pavel's review, then merge them all at
-> > > > > once?  
-> > > > 
-> > > > Sure, it would be the best course of action.  
-> > > 
-> > > Pavel, do you have a chance to review the patches (last three) that
-> > > touch LED drivers? What would be your verdict?  
-> > 
-> > Lee, Rafael,
-> > 
-> > It seems quite hard to get Pavel's attention to this series [1]. It's
-> > already passed more than 3 weeks for any sign of review of three top
-> > patches of the series that touched LED subsystem. The entire series
-> > has all necessary tags, but for LED changes.
-> > 
-> > Note, that the top of this series is not done by me and was sent for
-> > preliminary review much earlier [2], altogether it makes months of no
-> > response from the maintainer.
-> > 
-> > The nature of patches is pretty simple and doesn't touch any of other
-> > than Simatic LED drivers nor LED core. Moreover, it was written by
-> > Siemens, who produces the H/W in question and very well tested as a
-> > separate change and as part of the series.
+> This patch argues that allowing sync for wakeups from interrupt context
+> is a bug and fixing it can improve performance even when irq/softirq is
+> evenly spread out.
 > 
-> The code has been reviewed and is in fact pretty simple. The only
-> questionable but pragmatic change that might catch the attention of a
-> pedantic reviewer is that i did put the gpio implementation of the
-> driver under the same/existing kernel config switch.
-> 
-> > I think to move forward we may ask Rafael to review it on behalf of
-> > good maintainer and with his approval apply entire series.
-> > 
-> > Thoughts?
-> 
-> Thanks for pushing this Andy. I was wondering how and when that story
-> would continue. Technically these changes should really go in one badge
-> or we need to find a way to separate them somehow. I would try to go
-> that extra mile to get out of your way. But i am kind of afraid such an
-> effort might also end up touching the same files and block us at the
-> same maintainer.
-> 
-> Did anyone check whether Pavel was active at all in those last months
-> and maybe other patches waiting for review? Hope he is fine and active
-> and just somehow forgot/overlooked/ignored this one.
+> For wakeups from ISR, the waking CPU is just the CPU of ISR and the so-called
+> waker can be any random task that happens to be running on that CPU when the
+> interrupt comes in. This is completely different from other wakups where the
+> task running on the waking CPU is the actual waker. For example, two tasks
+> communicate through a pipe or mutiple tasks access the same critical section,
+> etc. This difference is important because with sync we assume the waker will
+> get off the runqueue and go to sleep immedately after the wakeup. The
+> assumption is built into wake_affine() where it discounts the waker's presence
+> from the runqueue when sync is true. The random waker from interrupts bears no
+> relation to the wakee and don't usually go to sleep immediately afterwards
+> unless wakeup granularity is reached. Plus the scheduler no longer enforces the
+> preepmtion of waker for sync wakeup as it used to before
+> patch f2e74eeac03ffb7 ("sched: Remove WAKEUP_SYNC feature"). Enforcing sync
+> wakeup preemption for wakeups from interrupt contexts doesn't seem to be
+> appropriate too but at least sync wakeup will do what it's supposed to do.
 
-I have send a private mail to Pavel and have got no response.
-Can we move this forward, let's say, by applying first 8 patches?
+Will there be scenarios where you do want the task being woken up be pulled
+to the CPU where the interrupt happened, as the data that needs to be accessed is
+on local CPU/NUMA that interrupt happened?  For example, interrupt associated with network
+packets received.  Sync still seems desirable, at least if there is no task currently
+running on the CPU where interrupt happened.  So maybe we should have some consideration
+of the load on the CPU/NUMA before deciding whether we should do sync wake for such
+interrupt.
 
-> > [1]:
-> > https://lore.kernel.org/all/20220606164138.66535-1-andriy.shevchenko@linux.intel.com/
-> > [2]:
-> > https://lore.kernel.org/linux-leds/20220513083652.974-1-henning.schild@siemens.com/
 > 
+> Add a check to make sure that sync can only be set when in_task() is true. If
+> a wakeup is from interrupt context, sync flag will be 0 because in_task()
+> returns 0.
+> 
+> Tested in two scenarios: wakeups from 1) task contexts, expected to see no
+> performance changes; 2) interrupt contexts, expected to see better performance
+> under low/medium load and no regression under heavy load.
+> 
+> Use hackbench for scenario 1 and pgbench for scenarios 2 both from mmtests on
+> a 2-socket Xeon E5-2699v3 box with 256G memory in total. Running 5.18 kernel
+> with SELinux disabled. Scheduler/MM tunables are all default. Irqbalance
+> daemon is active.
+> 
+> Hackbench (config-scheduler-unbound)
+> =========
+> process-pipes:
+>                 Baseline                Patched
+> Amean   1       0.4300  ( 0.00%)        0.4420  ( -2.79%)
+> Amean   4       0.8757  ( 0.00%)        0.8774  ( -0.20%)
+> Amean   7       1.3712  ( 0.00%)        1.3789  ( -0.56%)
+> Amean   12      2.3541  ( 0.00%)        2.3714  ( -0.73%)
+> Amean   21      4.2229  ( 0.00%)        4.2439  ( -0.50%)
+> Amean   30      5.9113  ( 0.00%)        5.9451  ( -0.57%)
+> Amean   48      9.3873  ( 0.00%)        9.4898  ( -1.09%)
+> Amean   79      15.9281 ( 0.00%)        16.1385 ( -1.32%)
+> Amean   110     22.0961 ( 0.00%)        22.3433 ( -1.12%)
+> Amean   141     28.2973 ( 0.00%)        28.6209 ( -1.14%)
+> Amean   172     34.4709 ( 0.00%)        34.9347 ( -1.35%)
+> Amean   203     40.7621 ( 0.00%)        41.2497 ( -1.20%)
+> Amean   234     47.0416 ( 0.00%)        47.6470 ( -1.29%)
+> Amean   265     53.3048 ( 0.00%)        54.1625 ( -1.61%)
+> Amean   288     58.0595 ( 0.00%)        58.8096 ( -1.29%)
+> 
+> process-sockets:
+>                 Baseline                Patched
+> Amean   1       0.6776   ( 0.00%)       0.6611   ( 2.43%)
+> Amean   4       2.6183   ( 0.00%)       2.5769   ( 1.58%)
+> Amean   7       4.5662   ( 0.00%)       4.4801   ( 1.89%)
+> Amean   12      7.7638   ( 0.00%)       7.6201   ( 1.85%)
+> Amean   21      13.5335  ( 0.00%)       13.2915  ( 1.79%)
+> Amean   30      19.3369  ( 0.00%)       18.9811  ( 1.84%)
+> Amean   48      31.0724  ( 0.00%)       30.6015  ( 1.52%)
+> Amean   79      51.1881  ( 0.00%)       50.4251  ( 1.49%)
+> Amean   110     71.3399  ( 0.00%)       70.4578  ( 1.24%)
+> Amean   141     91.4675  ( 0.00%)       90.3769  ( 1.19%)
+> Amean   172     111.7463 ( 0.00%)       110.3947 ( 1.21%)
+> Amean   203     131.6927 ( 0.00%)       130.3270 ( 1.04%)
+> Amean   234     151.7459 ( 0.00%)       150.1320 ( 1.06%)
+> Amean   265     171.9101 ( 0.00%)       169.9751 ( 1.13%)
+> Amean   288     186.9231 ( 0.00%)       184.7706 ( 1.15%)
+> 
+> thread-pipes:
+>                 Baseline                Patched
+> Amean   1       0.4523  ( 0.00%)        0.4535  ( -0.28%)
+> Amean   4       0.9041  ( 0.00%)        0.9085  ( -0.48%)
+> Amean   7       1.4111  ( 0.00%)        1.4146  ( -0.25%)
+> Amean   12      2.3532  ( 0.00%)        2.3688  ( -0.66%)
+> Amean   21      4.1550  ( 0.00%)        4.1701  ( -0.36%)
+> Amean   30      6.1043  ( 0.00%)        6.2391  ( -2.21%)
+> Amean   48      10.2077 ( 0.00%)        10.3511 ( -1.40%)
+> Amean   79      16.7922 ( 0.00%)        17.0427 ( -1.49%)
+> Amean   110     23.3350 ( 0.00%)        23.6522 ( -1.36%)
+> Amean   141     29.6458 ( 0.00%)        30.2617 ( -2.08%)
+> Amean   172     35.8649 ( 0.00%)        36.4225 ( -1.55%)
+> Amean   203     42.4477 ( 0.00%)        42.8332 ( -0.91%)
+> Amean   234     48.7117 ( 0.00%)        49.4042 ( -1.42%)
+> Amean   265     54.9171 ( 0.00%)        55.6551 ( -1.34%)
+> Amean   288     59.5282 ( 0.00%)        60.2903 ( -1.28%)
+> 
+> thread-sockets:
+>                 Baseline                Patched
+> Amean   1       0.6917   ( 0.00%)       0.6892   ( 0.37%)
+> Amean   4       2.6651   ( 0.00%)       2.6017   ( 2.38%)
+> Amean   7       4.6734   ( 0.00%)       4.5637   ( 2.35%)
+> Amean   12      8.0156   ( 0.00%)       7.8079   ( 2.59%)
+> Amean   21      14.0451  ( 0.00%)       13.6679  ( 2.69%)
+> Amean   30      20.0963  ( 0.00%)       19.5657  ( 2.64%)
+> Amean   48      32.4115  ( 0.00%)       31.6001  ( 2.50%)
+> Amean   79      53.1104  ( 0.00%)       51.8395  ( 2.39%)
+> Amean   110     74.0929  ( 0.00%)       72.4391  ( 2.23%)
+> Amean   141     95.1506  ( 0.00%)       93.0992  ( 2.16%)
+> Amean   172     116.1969 ( 0.00%)       113.8307 ( 2.04%)
+> Amean   203     137.4413 ( 0.00%)       134.5247 ( 2.12%)
+> Amean   234     158.5395 ( 0.00%)       155.2793 ( 2.06%)
+> Amean   265     179.7729 ( 0.00%)       176.1099 ( 2.04%)
+> Amean   288     195.5573 ( 0.00%)       191.3977 ( 2.13%)
+> 
+> Pgbench (config-db-pgbench-timed-ro-small)
+> =======
+>                 Baseline            Patched
+> Hmean   1       68.54    ( 0.00%)   69.72    ( 1.71%)
+> Hmean   6       27725.78 ( 0.00%)   34119.11 ( 23.06%)
+> Hmean   12      55724.26 ( 0.00%)   63158.22 ( 13.34%)
+> Hmean   22      72806.26 ( 0.00%)   73389.98 ( 0.80%)
+> Hmean   30      79000.45 ( 0.00%)   75197.02 ( -4.81%)
+> Hmean   48      78180.16 ( 0.00%)   75074.09 ( -3.97%)
+> Hmean   80      75001.93 ( 0.00%)   70590.72 ( -5.88%)
+> Hmean   110     74812.25 ( 0.00%)   74128.57 ( -0.91%)
+> Hmean   142     74261.05 ( 0.00%)   72910.48 ( -1.82%)
+> Hmean   144     75375.35 ( 0.00%)   71295.72 ( -5.41%)
+> 
+> For hackbench, +-3% fluctuation is normal on this two-socket box, it's safe to
+> conclude that there are no performance differences for wakeups from task context.
+> For pgbench, after many runs, 10~30% gains are very consistent at lower
+> client counts (< #cores per socket). 
 
--- 
-With Best Regards,
-Andy Shevchenko
+Can you provide some further insights on why pgebench is helped at low load
+case?  Is it because the woken tasks tend to stay put and not get moved around with interrupts
+and maintain cache warmth?
 
+Tim
+
+> For higher client counts, both kernels are
+> very close, +-5% swings are quite common. Also NET_TX|RX softirq load
+> does spread out across both NUMA nodes in this test so there is no need to do
+> any explicit RPS/RFS.
+> 
+> [1]: https://lkml.org/lkml/2021/11/5/234
+> 
+> Signed-off-by: Libo Chen <libo.chen@oracle.com>
+> ---
+>  kernel/sched/fair.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 794c2cb945f8..59b210d2cdb5 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6704,7 +6704,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  static int
+>  select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
+>  {
+> -	int sync = (wake_flags & WF_SYNC) && !(current->flags & PF_EXITING);
+> +	/* Don't set sync for wakeup from irq/soft ctx */
+> +	int sync = in_task() && (wake_flags & WF_SYNC)
+> +		   && !(current->flags & PF_EXITING);
+>  	struct sched_domain *tmp, *sd = NULL;
+>  	int cpu = smp_processor_id();
+>  	int new_cpu = prev_cpu;
+> --
+> 2.31.1
+> 
 

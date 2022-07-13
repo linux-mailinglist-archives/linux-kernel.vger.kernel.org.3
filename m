@@ -2,79 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3BB573490
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9860573496
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234457AbiGMKt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 06:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S235243AbiGMKtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiGMKtY (ORCPT
+        with ESMTP id S234717AbiGMKtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 06:49:24 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F88F512D
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:49:23 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-10bffc214ffso13594445fac.1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:49:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0qbtyN99cK4mvvoIfMSBe5OF0ud0j/RvqyS1bVE6mvI=;
-        b=sXB+ofZcK/LAavIEMbNzS/RppLU91VekRLLRnUUUcz3hySTTc6+0Cvua8FUkiVxVGg
-         CsTVCiHCUD1z4IM42vHJMA1uOkBt6I7mtUS60EAxhXVSoPtEVliIZBvRkuyyvQtCk8hA
-         66pq7A7KqdeGi1FN7GT5tm4aikbw5w61zMUS1fiHFrnzCMlQV8Jw//jjkP1lOCFkXbIa
-         ROCqeK2HTfqyZsaRk/4Wj5YWXDmdl1HXQFtpuVdPu+2F6c/OHkm0lv85b8gGrIjb2VUo
-         RDSDzkk/tL6hnUqnkLS36YykDayz89At8iHg1Y4kpzRCSDJDqidw81a8cVJzvCrMpOn8
-         4+7g==
+        Wed, 13 Jul 2022 06:49:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F25AF6829
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657709381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y4iSRKAh2WOknEOTLoiGqu+KnAPhB6D5WXL9Uh1JDhk=;
+        b=bE5/aaEpEB7eq77G7eC/uluoqIMb2++m1xA5LqWyMUl3VDZskjVa37KwIFvXVTO8QXakEx
+        JhSjN+BFi5QDIOhUXUrrqnTtxKinz6ekVWaZj+juUP/AXPOFe6ob/L88iX/3nJTTs2mMsH
+        uc/MI4CB5v51+ATAyafhc9GB4cVwdX4=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-217-deLRh3obNRuPMAzZVlLPVQ-1; Wed, 13 Jul 2022 06:49:40 -0400
+X-MC-Unique: deLRh3obNRuPMAzZVlLPVQ-1
+Received: by mail-pf1-f200.google.com with SMTP id h5-20020a62b405000000b00528c76085e4so3836499pfn.15
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:49:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0qbtyN99cK4mvvoIfMSBe5OF0ud0j/RvqyS1bVE6mvI=;
-        b=g//h/QoP7tq5PFbvb+CSra1erxZaCT/vsp6fzMt/bvaDb3ScxO2yHmpbONYKeGzSSU
-         ldC6lmFpI0+pOTOc+T7mxIemEpnH2tgkZGyhOXwFxUHxirZx8X7IhmJEgSpOk2zuS5TQ
-         tIthSN3JaqdVM/h3FTQIhF8nn5eTPNWVxj1lH1uR5Llp4ZLl/LUqLe5lS2kc3oOmZ3zG
-         yZCNMOnst4+QC74dZenKIfDmZlIG327oWNOeX6T+DMJvJr9VKYRRsnOwQZhu8AbP58Py
-         z7AJ0AYhAW9w2o1TB85wGFUiquPr6KZ1GCDnP5PnoTkcpLHZ3uJt4XjGfq5q4UZjPP7u
-         sudA==
-X-Gm-Message-State: AJIora8PuP3G/R7v3YEB2mY8qOx9RL+71ZDu2FpGshzNgNwZ6qcps8Up
-        Z3LT/hJ2IvlcGy1Ihlg8O/jNTz2Qpve7kg==
-X-Google-Smtp-Source: AGRyM1vnYIv2SCtg3vNhrycTOKsBFW2nBeSaxhdLJl9YJXsQI1oTuKI7/YPl9gNCgl5gRtUFw9mYLQ==
-X-Received: by 2002:a05:6870:d349:b0:f5:e9ea:5200 with SMTP id h9-20020a056870d34900b000f5e9ea5200mr4350244oag.235.1657709363243;
-        Wed, 13 Jul 2022 03:49:23 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id s3-20020a4adb83000000b0035eb4e5a6c8sm4608924oou.30.2022.07.13.03.49.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 03:49:22 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 06:49:20 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Fred Eckert <Frede@cmslaser.com>,
-        John Hentges <jhentges@accesio.com>,
-        Jay Dolan <jay.dolan@accesio.com>
-Subject: Re: [PATCH v2 1/6] gpio: i8255: Introduce the i8255 module
-Message-ID: <Ys6jMPk/6MsFCjv3@fedora>
-References: <cover.1657216200.git.william.gray@linaro.org>
- <6be749842a4ad629c8697101f170dc7e425ae082.1657216200.git.william.gray@linaro.org>
- <CACRpkdZn-PV6H+uBcoONt=SThGBAODy-YG=rkx5OX-rcpeE+aw@mail.gmail.com>
- <YszlP1+sBhxvz3Fo@fedora>
- <CAMRc=Mc0=nL_t9Fwmb1uNbsa_v4L4M5BJm2y-vZ8PV47Ryk+Sw@mail.gmail.com>
- <CAHp75Vd5QThEE9S+iL0e3rG+FHoPdts082R4H_beMv990ouGzQ@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=Y4iSRKAh2WOknEOTLoiGqu+KnAPhB6D5WXL9Uh1JDhk=;
+        b=cpv9i9rY08ROhqCgSBRj/bpLi8Dl/ILlACPLi/hHB+WwlHv71aL9n4qR11t9KH6qMA
+         DRH2YI+FocIPBwujJcNGoSwHVKK2+dWwyn3DHiHPuDPY/dQsRs5pJeIrKuxSLOxMRr9t
+         7hYUfAr7tL4kHRopFTcUlGyGG8h8abpdGdDjaDiGvuh6ExdSzJf3B2CNauN4O3vcjnQL
+         +jDcfuS+lz1PMxMF6W/7v97nVDmdUW7vATd0vVUOR23aCE1abPKpdzwmxpgqwVe6pbz8
+         wc8jde/l1plmvMlSgrr8a2zH/tVmBaMQQNDMQabUKbVOpM5lBa8Lsc7UkhSUAQ5uT1ru
+         q5RA==
+X-Gm-Message-State: AJIora/OQKGOX2ZE9VIPM+czm8hSuk9L2oUCDGrsoaC2qMuK2fTm1U0W
+        7v3VnEuBdEgQifSvwwrCy1FCO1B4eTZ9HmwXVzwfMW9Lr1iEhpfrII3huidcJeihiKX5bO3scJP
+        SWuCyAGpCzab4RYMJRZ0DK3BI
+X-Received: by 2002:a63:6bc4:0:b0:40d:fd98:bb21 with SMTP id g187-20020a636bc4000000b0040dfd98bb21mr2381406pgc.249.1657709379096;
+        Wed, 13 Jul 2022 03:49:39 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t/pgVPuQnqGTvQ2bM7jVP3fI6VvEpcGmG9Bl/0BXp+cqYoQrmW8ARh1cGFCo0DJkcHhve/JA==
+X-Received: by 2002:a63:6bc4:0:b0:40d:fd98:bb21 with SMTP id g187-20020a636bc4000000b0040dfd98bb21mr2381378pgc.249.1657709378675;
+        Wed, 13 Jul 2022 03:49:38 -0700 (PDT)
+Received: from [10.72.14.22] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id z8-20020a1709027e8800b0016c6e360ff6sm1384882pla.303.2022.07.13.03.49.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 03:49:37 -0700 (PDT)
+Subject: Re: [PATCH] ceph: fix up test_dummy_encryption handling for new mount
+ API
+To:     Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        idryomov@gmail.com
+Cc:     vshankar@redhat.com, linux-kernel@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>
+References: <20220713085641.50232-1-xiubli@redhat.com>
+ <c280ce5cc43474aa17767530bf280045b128e7af.camel@kernel.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <a84ca75d-7909-64c4-d91a-15caae05d704@redhat.com>
+Date:   Wed, 13 Jul 2022 18:49:32 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="icV+DHR0LXSRpmr9"
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vd5QThEE9S+iL0e3rG+FHoPdts082R4H_beMv990ouGzQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c280ce5cc43474aa17767530bf280045b128e7af.camel@kernel.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,49 +85,220 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---icV+DHR0LXSRpmr9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 7/13/22 6:42 PM, Jeff Layton wrote:
+> On Wed, 2022-07-13 at 16:56 +0800, xiubli@redhat.com wrote:
+>> From: Xiubo Li <xiubli@redhat.com>
+>>
+>>  From Eric the "fscrypt_set_test_dummy_encryption()" will be removed
+>> in the next circle. Switch it to new APIs.
+>>
+>> Cc: Eric Biggers <ebiggers@kernel.org>
+>> Cc: Jeff Layton <jlayton@kernel.org>
+>> Signed-off-by: Xiubo Li <xiubli@redhat.com>
+>> ---
+>>   fs/ceph/crypto.c |  4 +--
+>>   fs/ceph/super.c  | 94 ++++++++++++++++++++++++------------------------
+>>   fs/ceph/super.h  |  5 ++-
+>>   3 files changed, 52 insertions(+), 51 deletions(-)
+>>
+>> diff --git a/fs/ceph/crypto.c b/fs/ceph/crypto.c
+>> index 7e0c48e12554..5b807f8f4c69 100644
+>> --- a/fs/ceph/crypto.c
+>> +++ b/fs/ceph/crypto.c
+>> @@ -127,7 +127,7 @@ static bool ceph_crypt_empty_dir(struct inode *inode)
+>>   
+>>   static const union fscrypt_policy *ceph_get_dummy_policy(struct super_block *sb)
+>>   {
+>> -	return ceph_sb_to_client(sb)->dummy_enc_policy.policy;
+>> +	return ceph_sb_to_client(sb)->fsc_dummy_enc_policy.policy;
+>>   }
+>>   
+>>   static struct fscrypt_operations ceph_fscrypt_ops = {
+>> @@ -144,7 +144,7 @@ void ceph_fscrypt_set_ops(struct super_block *sb)
+>>   
+>>   void ceph_fscrypt_free_dummy_policy(struct ceph_fs_client *fsc)
+>>   {
+>> -	fscrypt_free_dummy_policy(&fsc->dummy_enc_policy);
+>> +	fscrypt_free_dummy_policy(&fsc->fsc_dummy_enc_policy);
+>>   }
+>>   
+>>   int ceph_fscrypt_prepare_context(struct inode *dir, struct inode *inode,
+>> diff --git a/fs/ceph/super.c b/fs/ceph/super.c
+>> index fa59a804b32c..4ac4a90755a2 100644
+>> --- a/fs/ceph/super.c
+>> +++ b/fs/ceph/super.c
+>> @@ -591,10 +591,16 @@ static int ceph_parse_mount_param(struct fs_context *fc,
+>>   		break;
+>>   	case Opt_test_dummy_encryption:
+>>   #ifdef CONFIG_FS_ENCRYPTION
+>> -		kfree(fsopt->test_dummy_encryption);
+>> -		fsopt->test_dummy_encryption = param->string;
+>> -		param->string = NULL;
+>> -		fsopt->flags |= CEPH_MOUNT_OPT_TEST_DUMMY_ENC;
+>> +		fscrypt_free_dummy_policy(&fsopt->dummy_enc_policy);
+>> +		ret = fscrypt_parse_test_dummy_encryption(param,
+>> +						&fsopt->dummy_enc_policy);
+>> +		if (ret == -EINVAL) {
+>> +			warnfc(fc, "Value of option \"%s\" is unrecognized",
+>> +			       param->key);
+>> +		} else if (ret == -EEXIST) {
+>> +			warnfc(fc, "Conflicting test_dummy_encryption options");
+>> +			ret = -EINVAL;
+>> +		}
+>>   #else
+>>   		warnfc(fc,
+>>   		       "FS encryption not supported: test_dummy_encryption mount option ignored");
+>> @@ -620,7 +626,7 @@ static void destroy_mount_options(struct ceph_mount_options *args)
+>>   	kfree(args->server_path);
+>>   	kfree(args->fscache_uniq);
+>>   	kfree(args->mon_addr);
+>> -	kfree(args->test_dummy_encryption);
+>> +	fscrypt_free_dummy_policy(&args->dummy_enc_policy);
+>>   	kfree(args);
+>>   }
+>>   
+>> @@ -1080,51 +1086,47 @@ static struct dentry *open_root_dentry(struct ceph_fs_client *fsc,
+>>   	return root;
+>>   }
+>>   
+>> -#ifdef CONFIG_FS_ENCRYPTION
+>> -static int ceph_set_test_dummy_encryption(struct super_block *sb, struct fs_context *fc,
+>> -						struct ceph_mount_options *fsopt)
+>> +static int ceph_apply_test_dummy_encryption(struct super_block *sb,
+>> +					    struct fs_context *fc,
+>> +					    struct ceph_mount_options *fsopt)
+>>   {
+>> -	/*
+>> -	 * No changing encryption context on remount. Note that
+>> -	 * fscrypt_set_test_dummy_encryption will validate the version
+>> -	 * string passed in (if any).
+>> -	 */
+>> -	if (fsopt->flags & CEPH_MOUNT_OPT_TEST_DUMMY_ENC) {
+>> -		struct ceph_fs_client *fsc = sb->s_fs_info;
+>> -		int err = 0;
+>> +	struct ceph_fs_client *fsc = sb->s_fs_info;
+>> +	int err;
+>>   
+>> -		if (fc->purpose == FS_CONTEXT_FOR_RECONFIGURE && !fsc->dummy_enc_policy.policy) {
+>> -			errorfc(fc, "Can't set test_dummy_encryption on remount");
+>> -			return -EEXIST;
+>> -		}
+>> +	if (!fscrypt_is_dummy_policy_set(&fsopt->dummy_enc_policy))
+>> +		return 0;
+>>   
+>> -		err = fscrypt_set_test_dummy_encryption(sb,
+>> -							fsc->mount_options->test_dummy_encryption,
+>> -							&fsc->dummy_enc_policy);
+>> -		if (err) {
+>> -			if (err == -EEXIST)
+>> -				errorfc(fc, "Can't change test_dummy_encryption on remount");
+>> -			else if (err == -EINVAL)
+>> -				errorfc(fc, "Value of option \"%s\" is unrecognized",
+>> -					fsc->mount_options->test_dummy_encryption);
+>> -			else
+>> -				errorfc(fc, "Error processing option \"%s\" [%d]",
+>> -					fsc->mount_options->test_dummy_encryption, err);
+>> -			return err;
+>> -		}
+>> -		warnfc(fc, "test_dummy_encryption mode enabled");
+>> +	/* No changing encryption context on remount. */
+>> +	if (fc->purpose == FS_CONTEXT_FOR_RECONFIGURE &&
+>> +	    !fscrypt_is_dummy_policy_set(&fsc->fsc_dummy_enc_policy)) {
+>> +		if (fscrypt_dummy_policies_equal(&fsopt->dummy_enc_policy,
+>> +						 &fsc->fsc_dummy_enc_policy))
+>> +			return 0;
+>> +		errorfc(fc, "Can't set test_dummy_encryption on remount");
+>> +		return -EINVAL;
+>>   	}
+>> +
+>> +	/* Also make sure fsopt doesn't contain a conflicting value. */
+>> +	if (fscrypt_is_dummy_policy_set(&fsc->fsc_dummy_enc_policy)) {
+>> +		if (fscrypt_dummy_policies_equal(&fsopt->dummy_enc_policy,
+>> +						 &fsc->fsc_dummy_enc_policy))
+>> +			return 0;
+>> +		errorfc(fc, "Conflicting test_dummy_encryption options");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	fsc->fsc_dummy_enc_policy = fsopt->dummy_enc_policy;
+>> +	memset(&fsopt->dummy_enc_policy, 0, sizeof(fsopt->dummy_enc_policy));
+>> +
+>> +	err = fscrypt_add_test_dummy_key(sb, &fsc->fsc_dummy_enc_policy);
+>> +	if (err) {
+>> +		errorfc(fc, "Error adding test dummy encryption key, %d", err);
+>> +		return err;
+>> +	}
+>> +
+>> +	warnfc(fc, "test_dummy_encryption mode enabled");
+>>   	return 0;
+>>   }
+>> -#else
+>> -static inline int ceph_set_test_dummy_encryption(struct super_block *sb, struct fs_context *fc,
+>> -						struct ceph_mount_options *fsopt)
+>> -{
+>> -	if (fsopt->flags & CEPH_MOUNT_OPT_TEST_DUMMY_ENC)
+>> -		warnfc(fc, "test_dummy_encryption mode ignored");
+>> -	return 0;
+>> -}
+>> -#endif
+>>   
+>>   /*
+>>    * mount: join the ceph cluster, and open root directory.
+>> @@ -1154,7 +1156,7 @@ static struct dentry *ceph_real_mount(struct ceph_fs_client *fsc,
+>>   				goto out;
+>>   		}
+>>   
+>> -		err = ceph_set_test_dummy_encryption(fsc->sb, fc, fsc->mount_options);
+>> +		err = ceph_apply_test_dummy_encryption(fsc->sb, fc, fsc->mount_options);
+>>   		if (err)
+>>   			goto out;
+>>   
+>> @@ -1373,7 +1375,7 @@ static int ceph_reconfigure_fc(struct fs_context *fc)
+>>   	struct super_block *sb = fc->root->d_sb;
+>>   	struct ceph_fs_client *fsc = ceph_sb_to_client(sb);
+>>   
+>> -	err = ceph_set_test_dummy_encryption(sb, fc, fsopt);
+>> +	err = ceph_apply_test_dummy_encryption(sb, fc, fsopt);
+>>   	if (err)
+>>   		return err;
+>>   
+>> diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+>> index bfc8bfcea799..5ea0ac6450dd 100644
+>> --- a/fs/ceph/super.h
+>> +++ b/fs/ceph/super.h
+>> @@ -44,7 +44,6 @@
+>>   #define CEPH_MOUNT_OPT_ASYNC_DIROPS    (1<<15) /* allow async directory ops */
+>>   #define CEPH_MOUNT_OPT_NOPAGECACHE     (1<<16) /* bypass pagecache altogether */
+>>   #define CEPH_MOUNT_OPT_SPARSEREAD      (1<<17) /* always do sparse reads */
+>> -#define CEPH_MOUNT_OPT_TEST_DUMMY_ENC  (1<<18) /* enable dummy encryption (for testing) */
+>>   
+>>   #define CEPH_MOUNT_OPT_DEFAULT			\
+>>   	(CEPH_MOUNT_OPT_DCACHE |		\
+>> @@ -101,7 +100,7 @@ struct ceph_mount_options {
+>>   	char *server_path;    /* default NULL (means "/") */
+>>   	char *fscache_uniq;   /* default NULL */
+>>   	char *mon_addr;
+>> -	char *test_dummy_encryption;	/* default NULL */
+>> +	struct fscrypt_dummy_policy dummy_enc_policy;
+>>   };
+>>   
+>>   #define CEPH_ASYNC_CREATE_CONFLICT_BITS 8
+>> @@ -148,7 +147,7 @@ struct ceph_fs_client {
+>>   	struct fscache_volume *fscache;
+>>   #endif
+>>   #ifdef CONFIG_FS_ENCRYPTION
+>> -	struct fscrypt_dummy_policy dummy_enc_policy;
+>> +	struct fscrypt_dummy_policy fsc_dummy_enc_policy;
+>>   #endif
+>>   };
+>>   
+> LGTM
+>
+> Reviewed-by: Jeff Layton <jlayton@kernel.org>
 
-On Wed, Jul 13, 2022 at 12:10:51PM +0200, Andy Shevchenko wrote:
-> On Wed, Jul 13, 2022 at 9:40 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > On Tue, Jul 12, 2022 at 5:06 AM William Breathitt Gray
-> > <william.gray@linaro.org> wrote:
-> > > On Mon, Jul 11, 2022 at 03:02:10PM +0200, Linus Walleij wrote:
->=20
-> ...
->=20
-> > > I think I'll move this to gpio/driver.h as per Andy Shevchenko's
-> >
-> > I don't think this is what Andy meant. I think he suggested moving
-> > this header into drivers/gpio/ because it doesn't make sense for it to
-> > be publicly accessible for anyone else than the GPIO drivers.
-> >
-> > Andy: correct me if I'm wrong.
->=20
-> No, you are right. I was talking about localizing the header to drivers/g=
-pio.
->=20
-> --=20
-> With Best Regards,
-> Andy Shevchenko
+Thanks Jeff.
 
-Sure, I can move it to drivers/gpio/i8255.h to keep it local to the GPIO
-drivers. It'll be trivia to move this out if the need ever arrives in
-the future so I have no problem with that.
+I will fold this into the previous commit.
 
-William Breathitt Gray
+-- Xiubo
 
---icV+DHR0LXSRpmr9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYs6jMAAKCRC1SFbKvhIj
-KwnXAQCJpBVEphHMhfC/JnJ+qSOjVUOzzJKeTHZ6fLTeBbKs+QD/Y2JHqr7hRysr
-KB/A0pp9RCId3EJp53kUALdYlbwR0Aw=
-=153X
------END PGP SIGNATURE-----
-
---icV+DHR0LXSRpmr9--

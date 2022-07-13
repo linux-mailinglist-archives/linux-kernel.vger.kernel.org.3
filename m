@@ -2,169 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D35C573246
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2323D57324C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235626AbiGMJRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
+        id S234791AbiGMJRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235255AbiGMJRS (ORCPT
+        with ESMTP id S234696AbiGMJRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:17:18 -0400
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A50FE4F0D;
-        Wed, 13 Jul 2022 02:17:17 -0700 (PDT)
-Received: by mail-qv1-f44.google.com with SMTP id p14so4404021qvo.9;
-        Wed, 13 Jul 2022 02:17:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Zby97TNc1ghpjXRqZzrsX3Uiwj/4uwx2MsSKfbl6g7E=;
-        b=u5CPOFktHPDoBx0+1PEVf4b5eS/AEEDoa5fAZucWF8UAspytg0asKGIDYNU5xX/25A
-         ZdndZqfeFshpZCWXjZ0qoDJQ3+vRBTJBd+eacmVGYMYienQya6K84rf5uyWQlrxSyTey
-         EkeSCiyScl+bul9yy7VYg9UOpXdld+zUwUCJSqiYeW1FViEs79aLcTX2zqHF+mEod9mY
-         5vyYs27sVVavFmOesgoGeJIUeXkJ4cQA/+mu8l1KW9zInoGWsK2j7ptZp6F4o0N4kRUg
-         5NEkuUj36U3t/fiXA2e97ZcNEDtP++uTRqRtzgBnfQzNutfl2ZQSn5RfaFJ9YecYwqEm
-         PFAw==
-X-Gm-Message-State: AJIora9GF/51kq0zZfRgKcnYOU2eKa/VG+UPfWVxf4cbhqcaIf116Ya2
-        WMtXqYlv01dY/8Dsz8+mgaAykoal97ddog==
-X-Google-Smtp-Source: AGRyM1vExN4xusyHHPvUVXKPu3A04mwXo+bSfaFOyCZGSr+d6fdvfVFoTiI9EG3ZsX+tE1/XVJLjOg==
-X-Received: by 2002:a05:6214:29c4:b0:472:fb62:3a03 with SMTP id gh4-20020a05621429c400b00472fb623a03mr1846804qvb.93.1657703836439;
-        Wed, 13 Jul 2022 02:17:16 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id d9-20020ac85ac9000000b0031eb3af3ffesm1535185qtd.52.2022.07.13.02.17.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 02:17:15 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id p129so18267155yba.7;
-        Wed, 13 Jul 2022 02:17:15 -0700 (PDT)
-X-Received: by 2002:a25:bc8e:0:b0:66e:fe43:645c with SMTP id
- e14-20020a25bc8e000000b0066efe43645cmr2777562ybk.202.1657703835228; Wed, 13
- Jul 2022 02:17:15 -0700 (PDT)
+        Wed, 13 Jul 2022 05:17:49 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48982E0F4F;
+        Wed, 13 Jul 2022 02:17:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VJDOi.B_1657703862;
+Received: from 30.97.48.50(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VJDOi.B_1657703862)
+          by smtp.aliyun-inc.com;
+          Wed, 13 Jul 2022 17:17:43 +0800
+Message-ID: <1badee01-b872-8de8-4fe1-83d6dc6b756c@linux.alibaba.com>
+Date:   Wed, 13 Jul 2022 17:17:44 +0800
 MIME-Version: 1.0
-References: <20220712164235.40293-1-f.fainelli@gmail.com> <CAK8P3a2QrYbWOqV+CG-W0ZkzW6ORgw8R6Dv-L3o2ZAtJs-B3Kw@mail.gmail.com>
- <0131e1d6-09c0-31a4-5b9d-0e2fc49d61ac@linaro.org>
-In-Reply-To: <0131e1d6-09c0-31a4-5b9d-0e2fc49d61ac@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 13 Jul 2022 11:17:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWDDY_72y3WYt401hG122xg1s7_VRCG9Vyhhkzco-nBYw@mail.gmail.com>
-Message-ID: <CAMuHMdWDDY_72y3WYt401hG122xg1s7_VRCG9Vyhhkzco-nBYw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: Kconfig.platforms: Re-organized Broadcom menu
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        SoC Team <soc@kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        william.zhang@broadcom.com, anand.gore@broadcom.com,
-        Olof Johansson <olof@lixom.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Wei Xu <xuwei5@hisilicon.com>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [mm] 0bf5cdf08f: BUG:Bad_page_state_in_process
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-arch@vger.kernel.org, lkp@lists.01.org,
+        akpm@linux-foundation.org, rppt@linux.ibm.com, willy@infradead.org,
+        linux-mm@kvack.org
+References: <Ys0P+ssAhAyfdA56@xsang-OptiPlex-9020>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <Ys0P+ssAhAyfdA56@xsang-OptiPlex-9020>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
 
-On Wed, Jul 13, 2022 at 10:40 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 13/07/2022 10:25, Arnd Bergmann wrote:
-> > On Tue, Jul 12, 2022 at 6:42 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >> There are now multiple Broadcom SoCs supported so group them under their
-> >> own menu such that the selection is visually more appealing and we can
-> >> easily add new platforms there in the future. This allows us to move
-> >> ARCH_BRCMSTB back to its siblings.
-> >>
-> >> No functional changes introduced.
-> >>
-> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> >> ---
-> >>
-> >> Note this is based on "arm64: bcmbca: add arch bcmbca machine entry"
-> >
-> > Hi Florian,
-> >
-> > So far, we have tried to keep the Kconfig.platforms file rather coarse-grained,
-> > mainly limiting it to company names and high-level families, but avoiding
-> > sub-menus or adding too many sub-families.
-> >
-> > If we add per-vendor submenus, we should probably first decide how we
-> > want to structure this across vendors. I've added maintainers and lists to
-> > Cc for a couple of the ones that are in a similar situation.
-> >
-> > I can see a couple of ways we can do this:
-> >
-> > a) keep the list of platforms as short as possible, combining related
-> >   SoC families from a single vendor wherever possible, but no sub-menus
-> >   (same as today)
-> >
-> > b) Always use sub-menus when there is more than one family, but
-> >    keep relatively coarse platform selection.
-> >
-> > c) Use sub-menus and also move to a more fine-grained SoC
-> >     selection, similar to what we have on 32-bit arm.
-> >
-> > I would not really want to go to c), but a) and b) both make sense to
-> > me as long as do it consistently across all platforms.
-> >
-> > Any other ideas or opinions?
->
-> Whatever we decide here, the SoC can override in drivers/soc, just like
-> Renesas did. I think Renesas chose option c), but made it in
-> drivers/soc. I would vote to have consistent policy, so if arch/arm64 is
-> a) or b), sub-archs should not redefine it in drivers/soc.
 
-We did so because of the "only a single symbol in
-arch/arm64/Kconfig.platforms"-policy.
+On 7/12/2022 2:08 PM, kernel test robot wrote:
+> 
+> 
+> Greeting,
+> 
+> FYI, we noticed the following commit (built with gcc-11):
+> 
+> commit: 0bf5cdf08f32bbb2d5dbc794fe609e1d97ca5257 ("[RFC PATCH v2 3/3] mm: Add kernel PTE level pagetable pages account")
+> url: https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/Add-PUD-and-kernel-PTE-level-pagetable-account/20220622-170051
+> base: https://git.kernel.org/cgit/linux/kernel/git/arnd/asm-generic.git master
+> patch link: https://lore.kernel.org/linux-mm/7882bbf467440f9a3ebe41d96ba5b6f384081bb7.1655887440.git.baolin.wang@linux.alibaba.com
+> 
+> in testcase: stress-ng
+> version: stress-ng-x86_64-0.11-06_20220709
+> with following parameters:
+> 
+> 	nr_threads: 10%
+> 	disk: 1HDD
+> 	testtime: 60s
+> 	fs: xfs
+> 	class: filesystem
+> 	test: dnotify
+> 	cpufreq_governor: performance
+> 	ucode: 0xb000280
+> 
+> 
+> 
+> on test machine: 96 threads 2 sockets Ice Lake with 256G memory
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
 
-> Or we could choose d)
-> d) keep arch/arm64 list of platforms as short as possible, but sub-archs
-> can do whatever they like on drivers/soc.
->
-> Personally, I find fine-grained SoC selection a bit ridiculous
-> optimization, like compiling kernel, Glibc and userspace with -O3,
-> -funroll-loops and many other flags. One gets smaller size but looses
-> multi-platform and ability to test one kernel on different boards.
-> Therefore I would vote for b) with disallowing drivers/soc defining more
-> ARCH_ and more SOC_.
+Thanks for reporting. I think I missed the changes in 
+pud_free_pmd_page(), which also can free a kernel pte page table.
 
-No one prevents you from selecting multiple SoCs, they are not
-mutually-exclusive...
+And I will use pte_free_kernel() instead in new version patch set.
 
-With arm64 (or risc-v ;-) instead of arm32 being used for all new
-SoCs,  I expect the real small ones (with a few MiB of embedded
-SRAM) to enter the arm64 realm soon.  No point in including e.g. all
-pinctrl drivers from the vendor if you have barely enough RAM to run
-Linux and your app...
+diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+index 20f30762d618..f961578e2a54 100644
+--- a/arch/x86/mm/pgtable.c
++++ b/arch/x86/mm/pgtable.c
+@@ -828,6 +828,7 @@ int pud_free_pmd_page(pud_t *pud, unsigned long addr)
+         for (i = 0; i < PTRS_PER_PMD; i++) {
+                 if (!pmd_none(pmd_sv[i])) {
+                         pte = (pte_t *)pmd_page_vaddr(pmd_sv[i]);
++                       pgtable_clear_and_dec(virt_to_page(pte));
+                         free_page((unsigned long)pte);
+                 }
+         }
 
-Gr{oetje,eeting}s,
 
-                        Geert
+> 
+> 
+> [   36.465236][ T1887] BUG: Bad page state in process ucfr  pfn:1ed9a9
+> [   36.465238][ T1887] page:00000000c52990fe refcount:0 mapcount:-512 mapping:0000000000000000 index:0x0 pfn:0x1ed9a9
+> [   36.465244][ T1887] flags: 0x17ffffc0000000(node=0|zone=2|lastcpupid=0x1fffff)
+> [   36.465248][ T1887] raw: 0017ffffc0000000 dead000000000100 dead000000000122 0000000000000000
+> [   36.465249][ T1887] raw: 0000000000000000 0000000000000000 00000000fffffdff 0000000000000000
+> [   36.465249][ T1887] page dumped because: nonzero mapcount
+> [   36.465250][ T1887] Modules linked in: acpi_cpufreq(-) device_dax(+) nd_pmem nd_btt dax_pmem intel_rapl_msr intel_rapl_common btrfs ipmi_ssif x86_pkg_temp_thermal blake2b_generic intel_powerclamp xor raid6_pq coretemp zstd_compress libcrc32c nvme sd_mod ast drm_vram_helper sg drm_ttm_helper nvme_core kvm_intel kvm irqbypass crct10dif_pclmul crc32_pclmul crc32c_intel t10_pi ghash_clmulni_intel ttm rapl drm_kms_helper crc64_rocksoft_generic ahci intel_cstate syscopyarea crc64_rocksoft libahci intel_uncore crc64 sysfillrect ioatdma sysimgblt joydev fb_sys_fops libata dca wmi acpi_ipmi ipmi_si ipmi_devintf ipmi_msghandler nfit libnvdimm acpi_pad acpi_power_meter drm fuse ip_tables
+> [   36.465278][ T1887] CPU: 8 PID: 1887 Comm: ucfr Tainted: G S                5.19.0-rc2-00013-g0bf5cdf08f32 #1
+> [   36.465280][ T1887] Call Trace:
+> [   36.465283][ T1887]  <TASK>
+> [ 36.465285][ T1887] dump_stack_lvl (lib/dump_stack.c:107 (discriminator 1))
+> [ 36.465292][ T1887] bad_page.cold (mm/page_alloc.c:642)
+> [ 36.465296][ T1887] free_pcppages_bulk (mm/page_alloc.c:1526)
+> [ 36.465302][ T1887] free_unref_page (arch/x86/include/asm/irqflags.h:137 mm/page_alloc.c:3459)
+> [ 36.465304][ T1887] __mmdrop (arch/x86/include/asm/mmu_context.h:125 (discriminator 3) kernel/fork.c:789 (discriminator 3))
+> [ 36.465307][ T1887] finish_task_switch+0x200/0x2c0
+> [ 36.465312][ T1887] schedule_tail (arch/x86/include/asm/preempt.h:85 kernel/sched/core.c:5053)
+> [ 36.465315][ T1887] ret_from_fork (arch/x86/entry/entry_64.S:289)
+> [   36.465320][ T1887]  </TASK>
+> [   36.465320][ T1887] Disabling lock debugging due to kernel taint
+> [   37.204107][  T656] BUG: Bad page state in process kworker/7:1  pfn:4067654
+> [   37.204114][  T656] page:0000000017c1d009 refcount:0 mapcount:-512 mapping:0000000000000000 index:0x0 pfn:0x4067654
+> [   37.204120][  T656] flags: 0x57ffffc0000000(node=1|zone=2|lastcpupid=0x1fffff)
+> [   37.204126][  T656] raw: 0057ffffc0000000 dead000000000100 dead000000000122 0000000000000000
+> [   37.204128][  T656] raw: 0000000000000000 0000000000000000 00000000fffffdff 0000000000000000
+> [   37.204128][  T656] page dumped because: nonzero mapcount
+> [   37.204129][  T656] Modules linked in: acpi_cpufreq(-) device_dax(+) nd_pmem nd_btt dax_pmem intel_rapl_msr intel_rapl_common btrfs ipmi_ssif x86_pkg_temp_thermal blake2b_generic intel_powerclamp xor raid6_pq coretemp zstd_compress libcrc32c nvme sd_mod ast drm_vram_helper sg drm_ttm_helper nvme_core kvm_intel kvm irqbypass crct10dif_pclmul crc32_pclmul crc32c_intel t10_pi ghash_clmulni_intel ttm rapl drm_kms_helper crc64_rocksoft_generic ahci intel_cstate syscopyarea crc64_rocksoft libahci intel_uncore crc64 sysfillrect ioatdma sysimgblt joydev fb_sys_fops libata dca wmi acpi_ipmi ipmi_si ipmi_devintf ipmi_msghandler nfit libnvdimm acpi_pad acpi_power_meter drm fuse ip_tables
+> [   37.204165][  T656] CPU: 7 PID: 656 Comm: kworker/7:1 Tainted: G S  B             5.19.0-rc2-00013-g0bf5cdf08f32 #1
+> [   37.204168][  T656] Workqueue: mm_percpu_wq vmstat_update
+> [   37.204181][  T656] Call Trace:
+> [   37.204184][  T656]  <TASK>
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+snip.

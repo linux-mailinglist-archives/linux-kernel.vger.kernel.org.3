@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883DF572F22
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8076F572F25
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbiGMHYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
+        id S231600AbiGMHY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234158AbiGMHYP (ORCPT
+        with ESMTP id S232249AbiGMHYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:24:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BDFA58FE
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:24:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AE85B81D53
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:24:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 937B1C3411E;
-        Wed, 13 Jul 2022 07:24:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657697052;
-        bh=Jfaqpz4SNBajpuUinidVA+7dT+UHlgGv8dACmnXz688=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KsMHKPnDhC6PLCFiJH0tdMMg65Eoo0Pqmsj7JTTD+Cigi52kNO+0b9ykySa87dxLy
-         VYghbmZBsY2+UNI5UN86QI3hprEGy5ooh5zkFOm+4Lzex+AUVUkgX7pbZZBSnnT/nt
-         KWiT27nn6X40FfEg5D2vsjvjf9GWL6J9FF67slUY=
-Date:   Wed, 13 Jul 2022 09:24:09 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Ben Hutchings <bwh@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [linux-stable-rc:linux-5.10.y 7109/7120]
- arch/x86/kernel/cpu/bugs.c:57:21: warning: section attribute is specified on
- redeclared variable
-Message-ID: <Ys5zGYxqsZvmwCsR@kroah.com>
-References: <202207130344.AUqExE4E-lkp@intel.com>
- <Ys3Xu+Vikf9WgIgz@dev-arch.thelio-3990X>
- <Ys3Ye7OR+5IpUoTv@dev-arch.thelio-3990X>
+        Wed, 13 Jul 2022 03:24:47 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4A3AE2A14;
+        Wed, 13 Jul 2022 00:24:46 -0700 (PDT)
+Received: from [192.168.87.140] (unknown [50.47.106.71])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0F8E2204DE8D;
+        Wed, 13 Jul 2022 00:24:46 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0F8E2204DE8D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1657697086;
+        bh=xyfcr3sQR84Ly/nvTJHG4HPfK1atahpyAidjxl2yWkE=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=XcZ097XeO7xeC7v5XUwwOFRNJp/3SfBdVsO4i5/EqL5rXYOykkBQcQFZrH5eUk+fH
+         GdHfinkZgeYf9WzJKRJWvBSVXhqwf+/+rj3ay/Dezbp07FtUsA2j0v1iYW0PJpX9OH
+         A6X9pNBzG17b2c4tBFt454w2F+v173E39Qb6miLI=
+Message-ID: <7041bf01-d91f-3149-e8ba-5db4ba59f9bb@linux.microsoft.com>
+Date:   Wed, 13 Jul 2022 00:24:45 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys3Ye7OR+5IpUoTv@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v7 1/5] crypto: aspeed: Add HACE hash driver
+Content-Language: en-US
+From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Dhananjay Phadke <dhphadke@microsoft.com>,
+        Johnny Huang <johnny_huang@aspeedtech.com>
+Cc:     linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
+References: <20220705020936.1751771-1-neal_liu@aspeedtech.com>
+ <20220705020936.1751771-2-neal_liu@aspeedtech.com>
+ <45058512-0661-5d34-7faf-ddf3eb6142ec@linux.microsoft.com>
+In-Reply-To: <45058512-0661-5d34-7faf-ddf3eb6142ec@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,72 +66,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 01:24:27PM -0700, Nathan Chancellor wrote:
-> On Tue, Jul 12, 2022 at 01:21:15PM -0700, Nathan Chancellor wrote:
-> > On Wed, Jul 13, 2022 at 04:07:25AM +0800, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> > > head:   ba398a0e54049bb6a1c102245ae84103f103ff2c
-> > > commit: 855b78ccf1c8c952e148bdbd234cde117b098060 [7109/7120] KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS
-> > > config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220713/202207130344.AUqExE4E-lkp@intel.com/config)
-> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
-> > > reproduce (this is a W=1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=855b78ccf1c8c952e148bdbd234cde117b098060
-> > >         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-> > >         git fetch --no-tags linux-stable-rc linux-5.10.y
-> > >         git checkout 855b78ccf1c8c952e148bdbd234cde117b098060
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
-> > > 
-> > > If you fix the issue, kindly add following tag where applicable
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > 
-> > > All warnings (new ones prefixed by >>):
-> > > 
-> > > >> arch/x86/kernel/cpu/bugs.c:57:21: warning: section attribute is specified on redeclared variable [-Wsection]
-> > >    DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
-> > >                        ^
-> > >    arch/x86/include/asm/nospec-branch.h:278:12: note: previous declaration is here
-> > >    extern u64 x86_spec_ctrl_current;
-> > >               ^
-> > >    1 warning generated.
-> > > 
-> > > 
-> > > vim +57 arch/x86/kernel/cpu/bugs.c
-> > > 
-> > > c40221c4c496c5 Peter Zijlstra 2022-06-14  55  
-> > > c40221c4c496c5 Peter Zijlstra 2022-06-14  56  /* The current value of the SPEC_CTRL MSR with task-specific bits set */
-> > > c40221c4c496c5 Peter Zijlstra 2022-06-14 @57  DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
-> > > c40221c4c496c5 Peter Zijlstra 2022-06-14  58  EXPORT_SYMBOL_GPL(x86_spec_ctrl_current);
-> > > c40221c4c496c5 Peter Zijlstra 2022-06-14  59  
-> > > 
-> > > :::::: The code at line 57 was first introduced by commit
-> > > :::::: c40221c4c496c5c026ede111094a96f292875d88 x86/bugs: Keep a per-CPU IA32_SPEC_CTRL value
-> > > 
-> > > :::::: TO: Peter Zijlstra <peterz@infradead.org>
-> > > :::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > 
-> > > -- 
-> > > 0-DAY CI Kernel Test Service
-> > > https://01.org/lkp
-> > > 
-> > 
-> > Looks like that declaration should be using DECLARE_PER_CPU?
+On 7/12/2022 10:32 PM, Dhananjay Phadke wrote:
+>> +static void aspeed_ahash_iV(struct aspeed_sham_reqctx *rctx)
+>> +{
+>> +    if (rctx->flags & SHA_FLAGS_SHA1)
+>> +        memcpy(rctx->digest, sha1_iv, 32);
+>> +    else if (rctx->flags & SHA_FLAGS_SHA224)
+>> +        memcpy(rctx->digest, sha224_iv, 32);
+>> +    else if (rctx->flags & SHA_FLAGS_SHA256)
+>> +        memcpy(rctx->digest, sha256_iv, 32);
+>> +    else if (rctx->flags & SHA_FLAGS_SHA384)
+>> +        memcpy(rctx->digest, sha384_iv, 64);
+>> +    else if (rctx->flags & SHA_FLAGS_SHA512)
+>> +        memcpy(rctx->digest, sha512_iv, 64);
+>> +    else if (rctx->flags & SHA_FLAGS_SHA512_224)
+>> +        memcpy(rctx->digest, sha512_224_iv, 64);
+>> +    else if (rctx->flags & SHA_FLAGS_SHA512_256)
+>> +        memcpy(rctx->digest, sha512_256_iv, 64);
+>> +}
 > 
-> Additionally, this appears to be an issue on mainline, our CI is
-> starting to roll in with these patches (clang-13 + x86_64 allmodconfig):
-> 
-> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/2658541992
-> 
-> https://builds.tuxbuild.com/2Br2Q4juY6VKxbmgzULKe5C3pGq/build.log
-> 
-> I am happy to send a patch if this is correct, unless someone else wants
-> to.
+> Can use the "digsize" from reqctx to memcpy() instead lots of if..else
+> conditionals for every request?
 
-Please do so.
+Sorry, meant pre-initialized ivsize not digsize, which could be
+in alg wrapper structure (aspeed_hace_alg).
 
-thanks,
-
-greg k-h
+Thanks,
+Dhananjay

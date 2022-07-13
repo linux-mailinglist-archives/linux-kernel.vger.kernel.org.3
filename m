@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98D9573710
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0A1573714
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235882AbiGMNOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
+        id S236218AbiGMNPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiGMNOq (ORCPT
+        with ESMTP id S236161AbiGMNO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:14:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01A426EF;
-        Wed, 13 Jul 2022 06:14:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 13 Jul 2022 09:14:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D95BE12629
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:14:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657718097;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3Awwz27tJpceArcxUQo9spBIymSTuEIsUyVVbtXUALs=;
+        b=ez7HS2BFE3vTkAi6OseJvhZt1Ikpm5v/D/80ck7sU1x53pThrWDuAxxSaly8fWvJ+EWMIH
+        rvjtzB0UPAlcdI+si2zqjNq6ulb7UaAxrUZvZvZEWYHM/JG0HKHdxjVgC/PRqGwEqCEoZ7
+        KB5qF9NjzFBOhsiKo/vfVvHwor9amho=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-411-ohhid9sgPHKcx4Tpzm6sHg-1; Wed, 13 Jul 2022 09:14:50 -0400
+X-MC-Unique: ohhid9sgPHKcx4Tpzm6sHg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A3FF61C0C;
-        Wed, 13 Jul 2022 13:14:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69EACC3411E;
-        Wed, 13 Jul 2022 13:14:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657718083;
-        bh=oYk6PAgMGiWtXcXkOteGGgjoV/CevK+hQrC/zso1/ho=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c7s3VQUaUTgBEpZbTYQ/g9id58XYAj62kISYhHz4P0BPSxl+KoceK/qbP/KRdHrXF
-         UocQcai75ia/i/SIPs5wsUmzWCz7zrc6qkF6BZn1RaCPhjg480pMf6rEl/gw1qGKKY
-         J/3Xr3cpMqD0aA7RrIP1qOSUwPXcrrGyawWujdOsijq0OltFskrib24nNh8QWvfcZN
-         pX8DWwedxRtHSQ10uVDWORCZgOISyjl/+egESBQDA4IIhBc7X6uVXfeajah8hH7PlH
-         SRsGJxS9IeOOehA0udENI66mtj4fx4vIlp6s69RPnMRbujePKsQeQ0p2UTSE2NN8o0
-         5W0e3YNmi2xtA==
-Date:   Wed, 13 Jul 2022 14:14:38 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
-        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
-Subject: Re: [PATCH V15 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
-Message-ID: <Ys7FPt/KfRjgj3nL@sirena.org.uk>
-References: <Yr18M9dzTOWL0m2c@google.com>
- <de1f3f33-0a8c-eb87-694c-16ebf2835720@quicinc.com>
- <Yr6oLlmfWRkiAZG7@google.com>
- <52c6ab15-1cd8-324e-4bcc-c449d8bceb19@quicinc.com>
- <Yr66ZZqEnBApHYMA@google.com>
- <0481d3cc-4bb9-4969-0232-76ba57ff260d@quicinc.com>
- <YsLhxx+L3+GJDRyO@google.com>
- <bcc5f059-b991-296a-bba6-9cb1236097f2@quicinc.com>
- <Ys1tYAO39LKzEAOE@google.com>
- <08460c2a-8e21-f149-edec-ee3523f1b727@quicinc.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CEAFF3C11052;
+        Wed, 13 Jul 2022 13:14:49 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.32.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 95D21C28100;
+        Wed, 13 Jul 2022 13:14:49 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 09:14:48 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Tian Tao <tiantao6@hisilicon.com>
+Subject: Re: [PATCH] drivers/base/node.c: fix userspace break from using
+ bin_attributes for cpumap and cpulist
+Message-ID: <Ys7FSCAYOQH+YLbS@lorien.usersys.redhat.com>
+References: <20220712214301.809967-1-pauld@redhat.com>
+ <Ys5gyqMqB/TW6ftv@kroah.com>
+ <Ys6w7pqQdlaHoiIG@lorien.usersys.redhat.com>
+ <Ys7DMC66cUWUcvtu@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fME9Yj+i5Rh9lYLw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <08460c2a-8e21-f149-edec-ee3523f1b727@quicinc.com>
-X-Cookie: Positively no smoking.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Ys7DMC66cUWUcvtu@kroah.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,68 +65,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 13, 2022 at 03:05:52PM +0200 Greg Kroah-Hartman wrote:
+> On Wed, Jul 13, 2022 at 07:47:58AM -0400, Phil Auld wrote:
+> > Hi Greg,
+> > 
+> > On Wed, Jul 13, 2022 at 08:06:02AM +0200 Greg Kroah-Hartman wrote:
+> > > On Tue, Jul 12, 2022 at 05:43:01PM -0400, Phil Auld wrote:
+> > > > Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
+> > > > This breaks userspace code that retrieves the size before reading the file. Rather
+> > > > than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
+> > > > limitation of cpumap ABI") let's put in a size value at compile time. Use direct
+> > > > comparison and a worst-case maximum to ensure compile time constants. For cpulist the 
+> > > > max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960. 
+> > > > In order to get near that you'd need a system with every other CPU on one node or 
+> > > > something similar. e.g. (0,2,4,... 1024,1026...). We set it to a min of PAGE_SIZE 
+> > > > to retain the older behavior. For cpumap, PAGE_SIZE is plenty big.
+> > > 
+> > > Does userspace care about that size, or can we just put any value in
+> > > there and it will be ok?  How about just returning to the original
+> > > PAGE_SIZE value to keep things looking identical, will userspace not
+> > > read more than that size from the file then?
+> > >
+> > 
+> > I'll go look. But I think the point of pre-reading the size with fstat is to allocate
+> > a buffer to read into. So that may be a problem. 
+> > 
+> > That said, I believe in this case it's the cpulist file which given the use of ranges
+> > is very unlikely to actually get that big. 
+> 
+> That is why we had to change this to a binary file.  Think about
+> every-other CPU being there, that's a huge list.  This already was
+> broken on some systems which is why it had to be changed (i.e. we didn't
+> change it for no reason at all.)
+>
 
---fME9Yj+i5Rh9lYLw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I didn't think you did and the change made sense. I did not expect this to
+cause problems either when I backported it... :)
 
-On Wed, Jul 13, 2022 at 11:20:43AM +0530, Satya Priya Kakitapalli (Temp) wr=
-ote:
-> On 7/12/2022 6:17 PM, Lee Jones wrote:
-> > On Mon, 11 Jul 2022, Satya Priya Kakitapalli (Temp) wrote:
-> >=20
-> > > On 7/4/2022 6:19 PM, Lee Jones wrote:
-> > > > On Mon, 04 Jul 2022, Satya Priya Kakitapalli (Temp) wrote:
-> > > >=20
-> > > > > On 7/1/2022 2:42 PM, Lee Jones wrote:
-> > > > > > On Fri, 01 Jul 2022, Satya Priya Kakitapalli (Temp) wrote:
-> > > > > >=20
-> > > > > > > On 7/1/2022 1:24 PM, Lee Jones wrote:
-> > > > > > > > On Fri, 01 Jul 2022, Satya Priya Kakitapalli (Temp) wrote:
-> > > > > > > >=20
-> > > > > > > > > On 6/30/2022 4:04 PM, Lee Jones wrote:
-> > > > > > > > > > On Thu, 30 Jun 2022, Satya Priya Kakitapalli (Temp) wro=
-te:
-> > > > > > > > > >=20
-> > > > > > > > > > > On 6/29/2022 8:48 PM, Lee Jones wrote:
-> > > > > > > > > > > > On Wed, 29 Jun 2022, Satya Priya Kakitapalli (Temp)=
- wrote:
+> > > > On an 80 cpu 4-node sytem (NR_CPUS == 8192)
+> > > 
+> > > We have systems running Linux with many more cpus than that, and your
+> > > company knows this :)
+> > 
+> > The 80 cpus here don't matter and we only build with NR_CPUS = 8192 :)
+> > 
+> > But yes, I realize now that the cpumap part I posted is broken for larger
+> > NR_CPUS.  I originally had it as NR_CPUS, but as I said in my reply to Barry,
+> > it wants to be ~= NR_CPUS/4 + NR_CPUS/32. I'll change that.  
+> > 
+> > I think we should decide on a max for each and use that. 
+> 
+> Sure, pick a max size please, that's fine with me.
 
-Please delete unneeded context from mails when replying.  Doing this
-makes it much easier to find your reply in the message, helping ensure
-it won't be missed by people scrolling through the irrelevant quoted
-material.
+Right. I had another reply that crossed in the ether.
 
-> > That's not to say that the v9 submission was the right way to go
-> > either.  Everything in relation to:
-> >=20
-> >    i2c_add_driver(&pm8008_regulators_driver);
-> >=20
-> > ... should be moved into the Regulator driver itself.
+I can repost with the new version shortly.
 
-> Mark/Stephen,
->=20
->=20
-> Could you please share your inputs on this approach?
+It's using cpumap at NR_CPUS/2 and cpulist at NR_CPUS*6. 
 
-I don't have particularly strong opinions.  It does seem like the chip
-should be visible as being a single entity in DT if it's a single
-physical thing in the schematic and board.
 
---fME9Yj+i5Rh9lYLw
-Content-Type: application/pgp-signature; name="signature.asc"
+Cheers,
+Phil
 
------BEGIN PGP SIGNATURE-----
+> 
+> greg k-h
+> 
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLOxT0ACgkQJNaLcl1U
-h9AIqwf/c822cuT8MEVNWVx2rTUwfteCeDrmeqoF8J1KMp7PSj/eyNcgDapREaTu
-09uM6kYsnXaAhJp/beBtFFlkSsxthl5nNdD02+VV1Ynu7UQXzWqCJAls9CpQPYAk
-dW2eSlhQfq2lgvWgJ+C821TpHEX1zTGPC1AnsntOxErTa/ojQeC4wtpW6gIC7qM6
-nJpy2Uayl4VD0Ll02U//WYvXbHoaPK0k+6DMUIevfZLqHUDozfaszoUxN26oh6jl
-94RVzmPA2WjC1E6NM2cTE9sRaBJOY6XGhCmT/YhrpfZh4yXXtb9UJVlU95PZjsVy
-1Gc/djp0iZWyHhChDWnXt3S4khRFvw==
-=Sr/t
------END PGP SIGNATURE-----
+-- 
 
---fME9Yj+i5Rh9lYLw--

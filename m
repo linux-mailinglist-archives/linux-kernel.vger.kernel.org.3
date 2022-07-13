@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D56C572AC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C51A572AC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233127AbiGMBZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 21:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S233466AbiGMBZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 21:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiGMBZN (ORCPT
+        with ESMTP id S233270AbiGMBZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 21:25:13 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DC3A9E4D;
-        Tue, 12 Jul 2022 18:25:10 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id o12so8940752pfp.5;
-        Tue, 12 Jul 2022 18:25:10 -0700 (PDT)
+        Tue, 12 Jul 2022 21:25:42 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAABAF740;
+        Tue, 12 Jul 2022 18:25:40 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id n18so15053011lfq.1;
+        Tue, 12 Jul 2022 18:25:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lLVPqkAosf4PMRQEQYaadoJXwt8EeuULJlkcdFwNO5I=;
-        b=B3q76OKlJH/WK2kX1d1ivrevP1y7t/dh0/y25Dc29gwW7fWS7lUnEYhVxiSZTcE3Qr
-         mPM/Wnd3Oidsct+y7iaIdTpms3azEN/j0kJ8WVkcXShAgz5EG2gvBuvaMHMaoXKqMD4P
-         xDDymwv2f9xKMsgJJtoGg7xBBrGvebN3lwrkVFEIOfmcA3VKLPUcWD3lygcJ6ZbKZIbE
-         iavoSG2WK5wZ5wNjz23rB0TaEPITJAdvUA8y/ewC7B02GE0/z2dvDhJHgMKX2P9BC34B
-         QFviBH/M7eISgtNoiT/MYeGxLniFcR9SzxFzWd2uo75HXdDgLkM3ZA9Dzxctcl/xFJw6
-         noiA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kWrmSNqw7RNUpJXET/KeaD+M/fKJ2fs4iPsVi56Xzlc=;
+        b=KJ3WTtZWy/gaqWn5D68477Fqo5MTFflVAPExDGJhWAAeEJMYFNc2SyuM0LGzFB/cLO
+         0vjPZ6x6LzBaY/dZgdEMDDqbsdh9TAmR+HpPDzdZ1NqUlbKJF7lsDIDe3LSKpzg6ahXI
+         exkNkhZxFM8EiZCBA0+pbOXL3XiG/3FiJFdZH1ZBuoot1+osh5ZOUoMa42Q8i1JL5GPg
+         yufCSzOk7sgthAFQERz2yIRBc7ta1U3r9a1XpfY9AUruOk1PWPgTAcHCKQaHEbNhd8JA
+         MGC+lPnA9pSD5g4B6Nkp61nZ7+8MJ4cjp05K2I4tv2I/JyZkrzsf+ALiCZJjJAd24lvo
+         ygow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lLVPqkAosf4PMRQEQYaadoJXwt8EeuULJlkcdFwNO5I=;
-        b=ldm1zUi94QmsVsOpGDhokkNmsit7rqtfs35FHlhqxWf8bE5OghILaYQtsbVJLrOwQu
-         8S0yPYlDaP0skes5fTSFGrFDy1n6vSM+Z95y1JDw3NC39J8z+kYlD+C0okCPW9ndQbfN
-         r5ow0VApkUPtmbey6dZPXIROOWRfUjYbW3GT7/xzcRpeIcducPV0FGf0WWvNsa698w4G
-         jL4xLCMw96pJ9krWsXsw3MWQdmPpNa/E25WaYVAqU0+7J1i6DP2BiKpgKSu4nVw7Ayny
-         lZBlEK6WAQ/G+xIqtQQeLoPUYZzmbw9K5cc5JaR22NOVBxIf6y7764v5tRSQq+aBM1yU
-         6y5A==
-X-Gm-Message-State: AJIora/rkWRQUh2o/8EbuxzTRAWpee4Ppgann61QBH+W98TmmE4h/Ntj
-        ZTK0mbavrzDWDz7F4aodKqM=
-X-Google-Smtp-Source: AGRyM1t/PvoUPzuwOuxtxCDO8hbxX2kEiwxedN3AAuJIdQYri7xRyqf6eMPlveI5NwPf0B5EtA+ojw==
-X-Received: by 2002:aa7:93a5:0:b0:51b:e0f8:97a6 with SMTP id x5-20020aa793a5000000b0051be0f897a6mr945321pff.44.1657675510216;
-        Tue, 12 Jul 2022 18:25:10 -0700 (PDT)
-Received: from localhost (fmdmzpr02-ext.fm.intel.com. [192.55.54.37])
-        by smtp.gmail.com with ESMTPSA id w19-20020a63af13000000b0041562fd3c13sm6748931pge.4.2022.07.12.18.25.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 18:25:09 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 18:25:07 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v7 032/102] KVM: x86/mmu: introduce config for PRIVATE
- KVM MMU
-Message-ID: <20220713012507.GO1379820@ls.amr.corp.intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
- <fa5a472216f0394fab06e2fee29d42fdc1ed33af.1656366338.git.isaku.yamahata@intel.com>
- <873d12c1ebe3a64e3f11133308df064f2b581d8e.camel@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kWrmSNqw7RNUpJXET/KeaD+M/fKJ2fs4iPsVi56Xzlc=;
+        b=MNuwSCDAFB5xC+LpbntzfFyV6wN9z6BrYTn9eb8SHZkf0rShsMibl1wO6+hrtJXbR1
+         Nw+yJ+5UzOMxkZpsBwfgEv3owO4519IDR4+SfNSvDNDr+XkVl7+TGw6zQ8LLngmVAdCM
+         Dg1N9mBEg6pzYQe2JIOH3fiaeM36zylnjkN8c1Cm2l29zrjE6+xI9u1l+4GHab8E0ISz
+         D8FOs984bn6w23mgT55wvDgw09gcirnr0/vuZ0QfkU4AaS9AJSqjhHCRK3KscP6TLDtQ
+         wL2C1CbBH0fKABYRqZpYJirMhWH3YchTXPVTRBW42inBOiGEx4C2z7bhBu+tmAfamWL1
+         VaUQ==
+X-Gm-Message-State: AJIora8WWiOm4Bq+DAaPNnFs6PyAExtKmx9vlQi5flI0XrlrseGVHt2S
+        CeINbsvd4WhuxZYGz+LDheyieuqp/KF1ey13Pjt5n+/NAQWxuAaU
+X-Google-Smtp-Source: AGRyM1v5acsNboqgbK0uyTTlYszlcwZd4ryktxElVqCtXMMl6OJMeNv1mTDGlBeanoLf1mqWAwLyRJRsTHm2/WJJWQw=
+X-Received: by 2002:a05:6512:398e:b0:481:154b:a92 with SMTP id
+ j14-20020a056512398e00b00481154b0a92mr564768lfu.110.1657675538590; Tue, 12
+ Jul 2022 18:25:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <873d12c1ebe3a64e3f11133308df064f2b581d8e.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220712145139.9473-1-mollysophia379@gmail.com> <3a0d3e52-a403-36c5-fc39-f45dce94c1f8@linaro.org>
+In-Reply-To: <3a0d3e52-a403-36c5-fc39-f45dce94c1f8@linaro.org>
+From:   Molly Sophia <mollysophia379@gmail.com>
+Date:   Wed, 13 Jul 2022 09:25:26 +0800
+Message-ID: <CAK0UmJAdiSER0qUj3162ys4nxnni+6onY9-uVaq_=EdSnaC=CA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] dt-bindings: arm: qcom: Add Xiaomi Mi Mix2s bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 01:53:48PM +1200,
-Kai Huang <kai.huang@intel.com> wrote:
+Hi Krzysztof,
+I will read that carefully. Sincerely apologize for the mistakes I have made.
 
-> On Mon, 2022-06-27 at 14:53 -0700, isaku.yamahata@intel.com wrote:
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > 
-> > To Keep the case of non TDX intact, introduce a new config option for
-> > private KVM MMU support.  At the moment, this is synonym for
-> > CONFIG_INTEL_TDX_HOST && CONFIG_KVM_INTEL.  The new flag make it clear
-> > that the config is only for x86 KVM MMU.
-> 
-> What is the "new flag"?
+Molly
 
-Oops. flags should be "config". Will fix it. Thanks for pointing it out.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+On Tue, Jul 12, 2022 at 11:05 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 12/07/2022 16:51, Molly Sophia wrote:
+> > Add documentation for "xiaomi,polaris" device.
+> >
+> > Signed-off-by: Molly Sophia <mollysophia379@gmail.com>
+>
+> This is v6 and still not changelog. No cover letter either, which would
+>  describe any dependencies.
+>
+> Sorry, you need to follow our process:
+> https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst
+>
+>
+> Best regards,
+> Krzysztof

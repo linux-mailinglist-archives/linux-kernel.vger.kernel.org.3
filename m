@@ -2,102 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2476E573CC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 20:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EAE573CC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 20:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236538AbiGMSvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 14:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        id S236823AbiGMSvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 14:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiGMSvU (ORCPT
+        with ESMTP id S229772AbiGMSvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 14:51:20 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD8C27161;
-        Wed, 13 Jul 2022 11:51:16 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 8ed8ddcc99617fa5; Wed, 13 Jul 2022 20:51:14 +0200
-Received: from kreacher.localnet (unknown [213.134.162.15])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 13 Jul 2022 14:51:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52D227161;
+        Wed, 13 Jul 2022 11:51:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 9A00D66CC02;
-        Wed, 13 Jul 2022 20:51:13 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH] ACPI: PM: s2idle: Use LPS0 idle if ACPI_FADT_LOW_POWER_S0 is unset
-Date:   Wed, 13 Jul 2022 20:51:13 +0200
-Message-ID: <12037674.O9o76ZdvQC@kreacher>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F6E2B82120;
+        Wed, 13 Jul 2022 18:51:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB0D3C34114;
+        Wed, 13 Jul 2022 18:51:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657738310;
+        bh=fZwxSrYskCEjj1E8KXTDQqSd/pffTu/D+tBRTXDP2SU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MCyF9KHux3jcz94+nPSeBlKzrBtTaVSEE3pZx/ALCl+yLYg92juWEtxzUs0XDdnmF
+         PDs1VPM4n/y2u+kCq8v0hk9nCLSJbHlBpt6Ca3hk7zcv0v6ZFy9wNW1xhtAOlmi5jb
+         vLrOCJtPpRvcv9cEvf0ROFpGgswvoqdZSl4PWKEcwU7eOQvkKimqPzMVjQ3TYZU98k
+         TRkZXIWnnP4fX9gO0SoPTgBj1/Mly3ydQP+A5pxbnNvPIDsAYC3N23t+0KJ/SU1r2L
+         RGtCKXUwvuWrlpnX3Jct2rkF7OA8oMup6uxzyyU79+qBkG/yc6XSbd9wLuV/gtJbWo
+         gXuKZFnAFEIAQ==
+Message-ID: <0b59de96-a800-7018-5bf8-7dfa749fab61@kernel.org>
+Date:   Wed, 13 Jul 2022 20:51:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.162.15
-X-CLIENT-HOSTNAME: 213.134.162.15
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudejjedguddvlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudeivddrudehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeivddrudehpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhn
- thgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepmhgrrhhiohdrlhhimhhonhgtihgvlhhlohesrghmugdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V4 20/20] Documentation/rv: Add watchdog-monitor
+ documentation
+Content-Language: en-US
+To:     Tao Zhou <tao.zhou@linux.dev>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+References: <cover.1655368610.git.bristot@kernel.org>
+ <129a431c1a12610fa7b44f76ce73aa8058f55bc6.1655368610.git.bristot@kernel.org>
+ <YsbUh8R0wfqTO+Un@geo.homenetwork>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <YsbUh8R0wfqTO+Un@geo.homenetwork>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 7/7/22 14:41, Tao Zhou wrote:
+> So I must check the model matrix in patch18 and the above graph to
+> check if the matrix have the not right value or something in this
+> graph go wrong.
 
-If the PNP0D80 device is present and its _DSM appears to be valid,
-there is no reason to avoid using it even if ACPI_FADT_LOW_POWER_S0
-is unset in the FADT, because suspend-to-idle may be the only way to
-suspend the system if S3 is not supported by the platform, so do not
-return early from lps0_device_attach() in that case.
+It was my fault, the ASCII art generated by graph-easy was too wide, so I had to manually
+change it... and so I broke it.
 
-However, still check ACPI_FADT_LOW_POWER_S0 when deciding whether or
-not suspend-to-idle should be the default system suspend method.
+At least this validates that it is better to have it automatically generated :-)
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/x86/s2idle.c |   11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+Thanks for reviewing it Tao, I do appreciate these kind of reviews!!!!
 
-Index: linux-pm/drivers/acpi/x86/s2idle.c
-===================================================================
---- linux-pm.orig/drivers/acpi/x86/s2idle.c
-+++ linux-pm/drivers/acpi/x86/s2idle.c
-@@ -369,9 +369,6 @@ static int lps0_device_attach(struct acp
- 	if (lps0_device_handle)
- 		return 0;
- 
--	if (!(acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0))
--		return 0;
--
- 	if (acpi_s2idle_vendor_amd()) {
- 		/* AMD0004, AMD0005, AMDI0005:
- 		 * - Should use rev_id 0x0
-@@ -421,10 +418,12 @@ static int lps0_device_attach(struct acp
- 		lpi_device_get_constraints();
- 
- 	/*
--	 * Use suspend-to-idle by default if the default suspend mode was not
--	 * set from the command line.
-+	 * Use suspend-to-idle by default if ACPI_FADT_LOW_POWER_S0 is set in
-+	 * the FADT and the default suspend mode was not set from the command
-+	 * line.
- 	 */
--	if (mem_sleep_default > PM_SUSPEND_MEM && !acpi_sleep_default_s3)
-+	if ((acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0) &&
-+	    mem_sleep_default > PM_SUSPEND_MEM && !acpi_sleep_default_s3)
- 		mem_sleep_current = PM_SUSPEND_TO_IDLE;
- 
- 	/*
-
-
-
+-- Daniel

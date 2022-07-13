@@ -2,62 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3588573170
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFB9573175
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235378AbiGMIrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
+        id S235732AbiGMIru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234639AbiGMIrA (ORCPT
+        with ESMTP id S231410AbiGMIrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:47:00 -0400
+        Wed, 13 Jul 2022 04:47:48 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B15BCAF22
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:46:58 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06FBCAF32
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:47:47 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oBY1E-0005PI-Sh; Wed, 13 Jul 2022 10:46:52 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oBY1D-0005lt-Q4; Wed, 13 Jul 2022 10:46:51 +0200
-Date:   Wed, 13 Jul 2022 10:46:51 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc:     Frieder Schrempf <frieder@fris.de>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Marek Vasut <marex@denx.de>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Reinhold Mueller <reinhold.mueller@emtrion.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Heiko Thiery <heiko.thiery@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH 5/6] arm64: dts: Add support for Kontron SL/BL i.MX8MM
- OSM-S
-Message-ID: <20220713084651.kf5f63xidhpbov5c@pengutronix.de>
-References: <20220713074118.14733-1-frieder@fris.de>
- <20220713074118.14733-6-frieder@fris.de>
- <20220713083603.wjb3znctugrerep5@pengutronix.de>
- <5cd2bd6b-30e9-582f-5e28-74b49429103c@kontron.de>
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oBY24-0005VK-2O; Wed, 13 Jul 2022 10:47:44 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oBY23-000fwn-C7; Wed, 13 Jul 2022 10:47:43 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oBY22-004tkv-Pc; Wed, 13 Jul 2022 10:47:42 +0200
+Date:   Wed, 13 Jul 2022 10:47:39 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: pm_runtime_resume_and_get in .remove callbacks
+Message-ID: <20220713084739.j4cqab6rfz22nlko@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sljz5pfr44yhpo7a"
 Content-Disposition: inline
-In-Reply-To: <5cd2bd6b-30e9-582f-5e28-74b49429103c@kontron.de>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -69,28 +50,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-07-13, Frieder Schrempf wrote:
-> Hi Marco,
-> 
-> Am 13.07.22 um 10:36 schrieb Marco Felsch:
-> > Hi Frieder,
-> > 
-> > On 22-07-13, Frieder Schrempf wrote:
-> > 
-> > 
-> >> +	aliases {
-> >> +		ethernet1 = &usbnet;
-> >> +	};
-> > 
-> > Out of curiosity, why do you prefer usbnet instead of the fec?
-> 
-> We don't. In imx8mm.dtsi there is:
-> 
-> ethernet0 = &fec1;
-> 
-> We only assign the alias for the second ethernet, which is the USB adapter.
 
-Ah.. I see, thanks :)
+--sljz5pfr44yhpo7a
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Regards,
-  Marco
+Hello,
+
+there is a big bunch of kernel drivers (here:
+drivers/i2c/busses/i2c-sprd.c) that have a remove callback that looks as
+follows:
+
+	static int sprd_i2c_remove(struct platform_device *pdev)
+	{
+		struct sprd_i2c *i2c_dev =3D platform_get_drvdata(pdev);
+		int ret;
+
+		ret =3D pm_runtime_resume_and_get(i2c_dev->dev);
+		if (ret < 0)
+			return ret;
+
+		i2c_del_adapter(&i2c_dev->adap);
+		clk_disable_unprepare(i2c_dev->clk);
+
+		pm_runtime_put_noidle(i2c_dev->dev);
+		pm_runtime_disable(i2c_dev->dev);
+
+		return 0;
+	}
+
+If pm_runtime_resume_and_get fails, the i2c adapter isn't removed, but
+as the memory backing i2c_dev goes away---it was allocated using
+devm_kzalloc in .probe()---the next i2c action will probably access
+freed memory.
+
+I'm not familiar enough with pm-runtime stuff, but wonder what
+can/should be done about that. The obvious (to me) candidates are:
+
+ - log an error if pm_runtime_resume_and_get() fails, but continue to
+   clean up
+ - don't check the return value at all
+
+What do you think?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--sljz5pfr44yhpo7a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLOhqkACgkQwfwUeK3K
+7AmBHgf9FxMDSG2bONpQJNckJV1EyE8zqwOj8gHt7bZBKlSakCbbiSvXBnDX3InL
+au2oWAXwuXzdtwH1XmzUhTi5SGaGMWBlHbb491ul++FV2OAaok68mLb35MJ2UMWL
+mPk7lU7HHRwQEEnRzhvPuD43b7sPhR95KaJiDMLnCmSwxZdv0mCg9V+A+/0uedy3
+EmB5w3BwRwCIHdoQbCT8J7SxccaKxxt6hQIX5rzTjaXgDUL9mxLLb1J86l4J2c1u
+tk6EEs+yxZHYVPKaB7cXEx4PfjuKrOfeYaoNK/BsF+ND7ngqiab1Gi9tStHhe7D+
+ZEulW9z7Yi/Vn4xLroUohv7V5s+r/A==
+=jlTd
+-----END PGP SIGNATURE-----
+
+--sljz5pfr44yhpo7a--

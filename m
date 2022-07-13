@@ -2,143 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E665738C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D515738CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236466AbiGMO0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
+        id S236438AbiGMO1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236195AbiGMO00 (ORCPT
+        with ESMTP id S236543AbiGMO05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:26:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692FA2F390;
-        Wed, 13 Jul 2022 07:26:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0682261DBD;
-        Wed, 13 Jul 2022 14:26:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 255FCC34114;
-        Wed, 13 Jul 2022 14:26:23 +0000 (UTC)
-Subject: [PATCH v1] net: Add distinct sk_psock field
-From:   Chuck Lever <chuck.lever@oracle.com>
-To:     john.fastabend@gmail.com, daniel@iogearbox.net,
-        jakub@cloudflare.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org
-Cc:     chuck.lever@oracle.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 13 Jul 2022 10:26:21 -0400
-Message-ID: <165772238175.1757.4978340330606055982.stgit@oracle-102.nfsv4.dev>
-User-Agent: StGit/1.5
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 13 Jul 2022 10:26:57 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A63933E33;
+        Wed, 13 Jul 2022 07:26:57 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id n9so6757099ilq.12;
+        Wed, 13 Jul 2022 07:26:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=QKgI9ZpnX7ox+lTRdDiK7O4AjR5dZXb8A4bq5EkelDc=;
+        b=QxJRsMT84Kh06eDzim99tGoS++WCq0BVYs7kqkiZFpMDPIx1IHeTs7fZrkTuGD4qTg
+         +LuhnQ4NpU4yrMeJ+Znm2FuiN8XF3QRPPvfxJCAQ5H2j1bRN481HZ0XbgDl3PJgl40YV
+         WWr7cUr835TruulK5y5ezGvxPOr5qAM7iiYZNiDaKcKgJ4hN1xWSbLyVYVOoBuT/c5NQ
+         eLIrmsO4+edqB3201TYkWLpxSL7h5Ga9r6PgMM/ZXN6uV0v8gmMDm+c2EHgqDQ8aR87N
+         i8/F9dhDJJphb+YhdKXPW8Ym0vpNJ65tF9AiHsW+DYL101N9UUNMWHXwuDYxGPyp9Fg8
+         h7FQ==
+X-Gm-Message-State: AJIora/v60P/m7JoNhtLKib1wpuNqdHaZxBqtbH6WzHCDdoCESF89nyr
+        7iN+rxkMKW3HvsOPmzehqA==
+X-Google-Smtp-Source: AGRyM1vBg90EZr6PLBg3MqzFgvAbq8xWowl++SsqRRwnw8yerxpLhSKPtrsOIet+Y/fUOMaMYj56vQ==
+X-Received: by 2002:a05:6e02:2163:b0:2dc:3d9f:7723 with SMTP id s3-20020a056e02216300b002dc3d9f7723mr1951134ilv.1.1657722416042;
+        Wed, 13 Jul 2022 07:26:56 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id y4-20020a920904000000b002cc20b48163sm616953ilg.3.2022.07.13.07.26.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 07:26:55 -0700 (PDT)
+Received: (nullmailer pid 3904431 invoked by uid 1000);
+        Wed, 13 Jul 2022 14:26:54 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Dongjin Yang <dj76.yang@samsung.com>
+Cc:     "lars.persson@axis.com" <lars.persson@axis.com>,
+        Sang Min Kim <hypmean.kim@samsung.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Wangseok Lee <wangseok.lee@samsung.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        Moon-Ki Jun <moonki.jun@samsung.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "javierm@redhat.com" <javierm@redhat.com>
+In-Reply-To: <20220713045628epcms1p3b5b195e2f1adf6be2a5fbeb90e567fef@epcms1p3>
+References: <CGME20220713045628epcms1p3b5b195e2f1adf6be2a5fbeb90e567fef@epcms1p3> <20220713045628epcms1p3b5b195e2f1adf6be2a5fbeb90e567fef@epcms1p3>
+Subject: Re: [PATCH 3/4] dt-bindings: mfd: Add bindings for Samsung SysMgr
+Date:   Wed, 13 Jul 2022 08:26:54 -0600
+Message-Id: <1657722414.259495.3904430.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sk_psock facility populates the sk_user_data field with the
-address of an extra bit of metadata. User space sockets never
-populate the sk_user_data field, so this has worked out fine.
+On Wed, 13 Jul 2022 13:56:28 +0900, Dongjin Yang wrote:
+> Add an devicetree binding for Samsung system manager.
+> This driver is used for SoCs produced by Samsung Foundry to provide
+> Samsung sysmgr API. The read/write request of sysmgr is delivered to
+> Samsung secure monitor call.
+> 
+> Signed-off-by: Dongjin Yang <dj76.yang@samsung.com>
+> ---
+>  .../devicetree/bindings/mfd/samsung,sys-mgr.yaml   | 42 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 43 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/samsung,sys-mgr.yaml
+> 
 
-However, kernel socket consumers such as the RPC client and server
-do populate the sk_user_data field. The sk_psock() function cannot
-tell that the content of sk_user_data does not point to psock
-metadata, so it will happily return a pointer to something else,
-cast to a struct sk_psock.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Thus kernel socket consumers and psock currently cannot co-exist.
+yamllint warnings/errors:
 
-We could educate sk_psock() to return NULL if sk_user_data does
-not point to a struct sk_psock. However, a more general solution
-that enables full co-existence psock and other uses of sk_user_data
-might be more interesting.
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/mfd/samsung,sys-mgr.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/mfd/samsung,sys-mgr.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/samsung,sys-mgr.example.dtb: syscon_imem@10020000: reg: [[0, 268566528], [0, 4096]] is too long
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/samsung,sys-mgr.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/samsung,sys-mgr.example.dtb: syscon@16c20000: reg: [[0, 381812736], [0, 4096]] is too long
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/samsung,sys-mgr.yaml
 
-Move the struct sk_psock address to its own pointer field so that
-the contents of the sk_user_data field is preserved.
+doc reference errors (make refcheckdocs):
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
----
- include/linux/skmsg.h |    2 +-
- include/net/sock.h    |    4 +++-
- net/core/skmsg.c      |    6 +++---
- 3 files changed, 7 insertions(+), 5 deletions(-)
+See https://patchwork.ozlabs.org/patch/
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index c5a2d6f50f25..5ef3a07c5b6c 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -277,7 +277,7 @@ static inline void sk_msg_sg_copy_clear(struct sk_msg *msg, u32 start)
- 
- static inline struct sk_psock *sk_psock(const struct sock *sk)
- {
--	return rcu_dereference_sk_user_data(sk);
-+	return rcu_dereference(sk->sk_psock);
- }
- 
- static inline void sk_psock_set_state(struct sk_psock *psock,
-diff --git a/include/net/sock.h b/include/net/sock.h
-index c4b91fc19b9c..d2a513169527 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -327,7 +327,8 @@ struct sk_filter;
-   *	@sk_tskey: counter to disambiguate concurrent tstamp requests
-   *	@sk_zckey: counter to order MSG_ZEROCOPY notifications
-   *	@sk_socket: Identd and reporting IO signals
--  *	@sk_user_data: RPC layer private data
-+  *	@sk_user_data: Upper layer private data
-+  *	@sk_psock: socket policy data (bpf)
-   *	@sk_frag: cached page frag
-   *	@sk_peek_off: current peek_offset value
-   *	@sk_send_head: front of stuff to transmit
-@@ -519,6 +520,7 @@ struct sock {
- 
- 	struct socket		*sk_socket;
- 	void			*sk_user_data;
-+	struct sk_psock	__rcu	*sk_psock;
- #ifdef CONFIG_SECURITY
- 	void			*sk_security;
- #endif
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index cc381165ea08..2b3d01d92790 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -695,7 +695,7 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
- 
- 	write_lock_bh(&sk->sk_callback_lock);
- 
--	if (sk->sk_user_data) {
-+	if (sk->sk_psock) {
- 		psock = ERR_PTR(-EBUSY);
- 		goto out;
- 	}
-@@ -726,7 +726,7 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
- 	sk_psock_set_state(psock, SK_PSOCK_TX_ENABLED);
- 	refcount_set(&psock->refcnt, 1);
- 
--	rcu_assign_sk_user_data_nocopy(sk, psock);
-+	rcu_assign_pointer(sk->sk_psock, psock);
- 	sock_hold(sk);
- 
- out:
-@@ -825,7 +825,7 @@ void sk_psock_drop(struct sock *sk, struct sk_psock *psock)
- {
- 	write_lock_bh(&sk->sk_callback_lock);
- 	sk_psock_restore_proto(sk, psock);
--	rcu_assign_sk_user_data(sk, NULL);
-+	rcu_assign_pointer(sk->sk_psock, NULL);
- 	if (psock->progs.stream_parser)
- 		sk_psock_stop_strp(sk, psock);
- 	else if (psock->progs.stream_verdict || psock->progs.skb_verdict)
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

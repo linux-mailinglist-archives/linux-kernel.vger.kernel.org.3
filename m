@@ -2,104 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A73572BF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 05:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D03E2572BE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 05:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbiGMDds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 23:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S231539AbiGMDbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 23:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232693AbiGMDdl (ORCPT
+        with ESMTP id S230003AbiGMDbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 23:33:41 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE8E2672;
-        Tue, 12 Jul 2022 20:33:35 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id t5-20020a17090a6a0500b001ef965b262eso1457428pjj.5;
-        Tue, 12 Jul 2022 20:33:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=iRBwqOO6cKGAh5e+2I9BxcznEBEGg6GBtbTmrmZAD5s=;
-        b=m/9mOSPBXNMkaE1X0mHG4cbeDfBiVmCdjCqVPr0gxgae4rsPPH5ZsGmelWEsO9pvyk
-         JYMbWC60s74OqbY/ftiH11cWhoVlhqEG9CsMxuBw091hGfMZQ2NoJM+1OKwG9+GlBvkF
-         /jrLizyswJWILyj+5WQqn3lPl0cmJaaTlnNlTJCBoz9bwDAgr3MAwMkHcKnqrkLjPVr+
-         lM6HXuQSe5saGzMFNmenltA53yQ689Yh+3DdZrEfuEMB2Pfy2cS2bc7h6Wi7+bAcEl1l
-         W+sMUcccr4pvX/J+8cCNUcrwVLVHGroO1e0JSkxoWCVwIXaOe2neW62B6q7/e6Lkhmir
-         D9Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=iRBwqOO6cKGAh5e+2I9BxcznEBEGg6GBtbTmrmZAD5s=;
-        b=bdx2bT7QQl3J2brDMyaXBOjX/HQSXqhs5wlkqJQ8Tchmxb6MgsvwBkGTqdL60W0GFX
-         Hs1vemirlg4D7fAPsT+vvVhg2M4HWMFPUr81Tw/xwvJfNWwZoHZCbxP0oPKqC/+72gL/
-         /i8MTWN7fFclKdZCQjpqtBkkPT6GiuQflcvXNVDLivE3zZxEU54xAlwbKNlNysvm/dtr
-         jZRK82ddoQUvHXp9EHtYAF9cZGCLePsHtT51jW16zCw0Dvwx9diUaEVZgYhiX+KB2jnP
-         HHmDLRj5wLE6NHSTnD0fsxosbav7NT4Q9ldTQDfz3Pg6kQn3R4t5WfMCSFAFRxqk4Fh2
-         4mtA==
-X-Gm-Message-State: AJIora+ZFHTyfJUv5OzZ/UEznC+TocJeoqg84l8J3XhrZDjLuRjcn8SB
-        a0juTHDaUbd5hVuvGs13Hjk=
-X-Google-Smtp-Source: AGRyM1t/+ymA6+67OQC06ND+tMlzHGyAwOtEuhA4dqJg6WYDjadEgMx7jMvxfW/9+kAbccBiHG9jRA==
-X-Received: by 2002:a17:902:e952:b0:16a:74b7:57eb with SMTP id b18-20020a170902e95200b0016a74b757ebmr1146350pll.13.1657683214592;
-        Tue, 12 Jul 2022 20:33:34 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:9b46])
-        by smtp.gmail.com with ESMTPSA id s16-20020a170902ea1000b0016c1efb9195sm7662055plg.298.2022.07.12.20.33.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 20:33:33 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 12 Jul 2022 17:33:31 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Subject: [GIT PULL] cgroup fixes for v5.19-rc6
-Message-ID: <Ys49Cxqd1YOHpipB@slm.duckdns.org>
+        Tue, 12 Jul 2022 23:31:19 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E2ABD6A6;
+        Tue, 12 Jul 2022 20:31:18 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LjNNQ3K11zVfc3;
+        Wed, 13 Jul 2022 11:27:34 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Jul
+ 2022 11:31:15 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+CC:     <javier.martin@vista-silicon.com>, <weiyongjun1@huawei.com>,
+        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
+Subject: [PATCH] crypto: sahara - don't sleep when in softirq
+Date:   Wed, 13 Jul 2022 11:35:50 +0800
+Message-ID: <20220713033550.118409-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 48a23ec6ff2b2a5effe8d3ae5f17fc6b7f35df65:
+Function of sahara_aes_crypt maybe could be called by function
+of crypto_skcipher_encrypt during the rx softirq, so it is not
+allowed to use mutex lock. This patch is not yet tested.
 
-  Merge tag 'net-5.19-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-06-16 11:51:32 -0700)
+Fixes: c0c3c89ae347 ("crypto: sahara - replace tasklets with kthread")
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ drivers/crypto/sahara.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-5.19-rc6-fixes
-
-for you to fetch changes up to 07fd5b6cdf3cc30bfde8fe0f644771688be04447:
-
-  cgroup: Use separate src/dst nodes when preloading css_sets for migration (2022-06-16 09:37:02 -1000)
-
-----------------------------------------------------------------
-cgroup fixes for v5.19-rc6
-
-This pull request contains the fix for an old and subtle bug in the
-migration path. css_sets are used to track tasks and migrations are tasks
-moving from a group of css_sets to another group of css_sets. The migration
-path pins all source and destination css_sets in the prep stage.
-Unfortunately, it was overloading the same list_head entry to track sources
-and destinations, which got confused for migrations which are partially
-identity leading to use-after-frees. Fixed by using dedicated list_heads for
-tracking sources and destinations.
-
-----------------------------------------------------------------
-Tejun Heo (1):
-      cgroup: Use separate src/dst nodes when preloading css_sets for migration
-
- include/linux/cgroup-defs.h |  3 ++-
- kernel/cgroup/cgroup.c      | 37 +++++++++++++++++++++++--------------
- 2 files changed, 25 insertions(+), 15 deletions(-)
-
+diff --git a/drivers/crypto/sahara.c b/drivers/crypto/sahara.c
+index 457084b344c1..867107b4ed30 100644
+--- a/drivers/crypto/sahara.c
++++ b/drivers/crypto/sahara.c
+@@ -26,7 +26,6 @@
+ #include <linux/kernel.h>
+ #include <linux/kthread.h>
+ #include <linux/module.h>
+-#include <linux/mutex.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+@@ -196,7 +195,7 @@ struct sahara_dev {
+ 	void __iomem		*regs_base;
+ 	struct clk		*clk_ipg;
+ 	struct clk		*clk_ahb;
+-	struct mutex		queue_mutex;
++	spinlock_t		queue_spinlock;
+ 	struct task_struct	*kthread;
+ 	struct completion	dma_completion;
+ 
+@@ -642,9 +641,9 @@ static int sahara_aes_crypt(struct skcipher_request *req, unsigned long mode)
+ 
+ 	rctx->mode = mode;
+ 
+-	mutex_lock(&dev->queue_mutex);
++	spin_lock_bh(&dev->queue_spinlock);
+ 	err = crypto_enqueue_request(&dev->queue, &req->base);
+-	mutex_unlock(&dev->queue_mutex);
++	spin_unlock_bh(&dev->queue_spinlock);
+ 
+ 	wake_up_process(dev->kthread);
+ 
+@@ -1043,10 +1042,10 @@ static int sahara_queue_manage(void *data)
+ 	do {
+ 		__set_current_state(TASK_INTERRUPTIBLE);
+ 
+-		mutex_lock(&dev->queue_mutex);
++		spin_lock_bh(&dev->queue_spinlock);
+ 		backlog = crypto_get_backlog(&dev->queue);
+ 		async_req = crypto_dequeue_request(&dev->queue);
+-		mutex_unlock(&dev->queue_mutex);
++		spin_unlock_bh(&dev->queue_spinlock);
+ 
+ 		if (backlog)
+ 			backlog->complete(backlog, -EINPROGRESS);
+@@ -1092,9 +1091,9 @@ static int sahara_sha_enqueue(struct ahash_request *req, int last)
+ 		rctx->first = 1;
+ 	}
+ 
+-	mutex_lock(&dev->queue_mutex);
++	spin_lock_bh(&dev->queue_spinlock);
+ 	ret = crypto_enqueue_request(&dev->queue, &req->base);
+-	mutex_unlock(&dev->queue_mutex);
++	spin_unlock_bh(&dev->queue_spinlock);
+ 
+ 	wake_up_process(dev->kthread);
+ 
+@@ -1449,7 +1448,7 @@ static int sahara_probe(struct platform_device *pdev)
+ 
+ 	crypto_init_queue(&dev->queue, SAHARA_QUEUE_LENGTH);
+ 
+-	mutex_init(&dev->queue_mutex);
++	spin_lock_init(&dev->queue_spinlock);
+ 
+ 	dev_ptr = dev;
+ 
 -- 
-tejun
+2.17.1
+

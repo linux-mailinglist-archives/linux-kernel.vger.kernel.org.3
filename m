@@ -2,90 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4469B572B4A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 04:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205EC572B4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 04:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234000AbiGMC1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 22:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
+        id S233846AbiGMC1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 22:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiGMC1j (ORCPT
+        with ESMTP id S234060AbiGMC1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 22:27:39 -0400
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA68C8E95
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 19:27:37 -0700 (PDT)
-Received: from localhost (36-226-173-138.dynamic-ip.hinet.net [36.226.173.138])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id B2D6B3F1AC;
-        Wed, 13 Jul 2022 02:27:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1657679255;
-        bh=6wuZ+KJ616kYQkmRxbOA3+CCdrb1zXoGEni8dF7l4O4=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=mL8hyRcyidq5YODYmV9SELRw2Ols5ehCwaQVqqTX2IAQQxTdlLPd0X/MXU9R9W9CG
-         R+qeenl11EtvGBCmJam59OkCsJtZCambyMUPn1DOOJbJ/6W3u9RhZ9p3ynm2SsQofm
-         K4TYb2JNDhT3zPtXOI+1sLI6UjJY5DOutrn4OcOHLpu+rruKnOaAOvdWZkKELFkCBb
-         53WOx0V7wxfB3kTNNVhDmgcJ40yP98szoI/O+WE7VvsL2FqmoWrgh14g7mjz61n6Kn
-         WWzaw7wPNI71Fr9Bl0J6JlyMWGa+OiiAUlD8Ve0x1Z2oZGNwggIEWxY3qAKVxyvy+O
-         cSMOpyiBCwAew==
-From:   Jeremy Szu <jeremy.szu@canonical.com>
-To:     tiwai@suse.com
-Cc:     Jeremy Szu <jeremy.szu@canonical.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Tim Crawford <tcrawford@system76.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Cameron Berkenpas <cam@neo-zeon.de>,
-        Kailang Yang <kailang@realtek.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Andy Chi <andy.chi@canonical.com>,
-        Yong Wu <yong.wu@mediatek.com>,
-        alsa-devel@alsa-project.org (moderated list:SOUND),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] ALSA: hda/realtek: fix mute/micmute LEDs for HP machines
-Date:   Wed, 13 Jul 2022 10:27:04 +0800
-Message-Id: <20220713022706.22892-1-jeremy.szu@canonical.com>
-X-Mailer: git-send-email 2.36.0
+        Tue, 12 Jul 2022 22:27:48 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA00D4BDD
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 19:27:46 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id a20so5951547ilk.9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 19:27:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cbU9v9plTYYPMcnTfIcPSWQX14jbm9qmi2G0XnJwWTY=;
+        b=anrpZgaBstbJa6blUFrbmicw8U+lvjVWjxgyaFoJUb/SK0I+8SVHOR7jSiZEuH/anv
+         PuyQ7MPwUAfShDlCubNl5nDfa2YLnniS/pZudvQ3Jfji9NXZJan4ISupAjqe2GYgyW8C
+         lXN+D2fhBo+1EMjW/Vtx7bx2QTv38AmHpl8+Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cbU9v9plTYYPMcnTfIcPSWQX14jbm9qmi2G0XnJwWTY=;
+        b=THbtbWBHL5nbvAWehs6TWNFZ0NEXv7G59BFBk8q/b44frTWkH2bhV0FBYezO+mDl3K
+         DZlQNM9wLmhGhkhUMYIm87MNQacRZBmws31uP+OUOdQglVOmGfbHsFoQGBGJz0bGRq3/
+         5ZJK52tSzQWYeu2hH5fMaV5wVRBbQlqAWDcvGICX3YPIT0lhg6COjZqXBeeKy+fzQ0fM
+         ETYslHLblfwCMxNeuWqW3zw3jdShG5FofBv7ERVoOqrkAQNqRJrcpAHg0CdohTP21WVF
+         GshLAdgKm5urISPcx5oOPJcI/afNwO6/1NP/5GNumBPy7O47YZXg04Ma5d/5a4uaNzI4
+         g69w==
+X-Gm-Message-State: AJIora9Rz0adi1/2TU7+KdqSnWFHALVo0IbuE8iAb2jKYH6Dw48d0A7a
+        SE9cTWcSrcZ/BCrZ26ocR/wCAg==
+X-Google-Smtp-Source: AGRyM1tUzfKEKaDtA1v9zPGEc9cgjFX1o/mNb41jX7SEWnUF5U4pB4WVjzW2q1/WQhvUpcj5pfrXVg==
+X-Received: by 2002:a05:6e02:184c:b0:2dc:52ef:24cd with SMTP id b12-20020a056e02184c00b002dc52ef24cdmr648158ilv.173.1657679265864;
+        Tue, 12 Jul 2022 19:27:45 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id cs16-20020a056638471000b0033f0e12b862sm4715552jab.172.2022.07.12.19.27.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 19:27:45 -0700 (PDT)
+Subject: Re: [PATCH v2 0/4] Fix kselftest build with sub-directory
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
+        kernel@collabora.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1657614127.git.guillaume.tucker@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <d32187ae-8e8a-72ad-d422-3d3b47101160@linuxfoundation.org>
+Date:   Tue, 12 Jul 2022 20:27:44 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1657614127.git.guillaume.tucker@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- * The HP ProBook 440/450 G9 and EliteBook 640/650 G9 have multiple
- motherboard design and they are using different subsystem ID of audio
- codec. Add the same quirk for other MBs.
+On 7/12/22 2:29 AM, Guillaume Tucker wrote:
+> Earlier attempts to get "make O=build kselftest-all" to work were
+> not successful as they made undesirable changes to some functions
+> in the top-level Makefile.  This series takes a different
+> approach by removing the root cause of the problem within
+> kselftest, which is when the sub-Makefile tries to install kernel
+> headers "backwards" by calling make with the top-level Makefile.
+> The actual issue comes from the fact that $(srctree) is ".." when
+> building in a sub-directory with "O=build" which then obviously
+> makes "-C $(top_srcdir)" point outside of the real source tree.
+> 
+> With this series, the generic kselftest targets work as expected
+> from the top level with or without a build directory e.g.:
+> 
+>    $ make kselftest-all
+> 
+>    $ make O=build kselftest-all
+> 
+> Then in order to build using the sub-Makefile explicitly, the
+> headers have to be installed first.  This is arguably a valid
+> requirement to have when building a tool from a sub-Makefile.
+> For example, "make -C tools/testing/nvdimm/" fails in a similar
+> way until <asm/rwonce.h> has been generated by a kernel build.
+> 
+> v2: replace headers_install with headers
+> 
 
-Signed-off-by: Jeremy Szu <jeremy.szu@canonical.com>
----
- sound/pci/hda/patch_realtek.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I already applied the series. Please send me patches I can apply
+on top of the ones in linux-kselftest next branch.
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 007dd8b5e1f2..483c5f49af5d 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9096,6 +9096,10 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x103c, 0x89c6, "Zbook Fury 17 G9", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x89ca, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
- 	SND_PCI_QUIRK(0x103c, 0x8a78, "HP Dev One", ALC285_FIXUP_HP_LIMIT_INT_MIC_BOOST),
-+	SND_PCI_QUIRK(0x103c, 0x8aa0, "HP ProBook 440 G9 (MB 8A9E)", ALC236_FIXUP_HP_GPIO_LED),
-+	SND_PCI_QUIRK(0x103c, 0x8aa3, "HP ProBook 450 G9 (MB 8AA1)", ALC236_FIXUP_HP_GPIO_LED),
-+	SND_PCI_QUIRK(0x103c, 0x8aa8, "HP EliteBook 640 G9 (MB 8AA6)", ALC236_FIXUP_HP_GPIO_LED),
-+	SND_PCI_QUIRK(0x103c, 0x8aab, "HP EliteBook 650 G9 (MB 8AA9)", ALC236_FIXUP_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x1043, 0x103e, "ASUS X540SA", ALC256_FIXUP_ASUS_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x103f, "ASUS TX300", ALC282_FIXUP_ASUS_TX300),
- 	SND_PCI_QUIRK(0x1043, 0x106d, "Asus K53BE", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
--- 
-2.25.1
-
+thanks,
+-- Shuah

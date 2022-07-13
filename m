@@ -2,180 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7985738C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E665738C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236162AbiGMO00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        id S236466AbiGMO0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236363AbiGMO0U (ORCPT
+        with ESMTP id S236195AbiGMO00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:26:20 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB862F390
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:26:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657722379; x=1689258379;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IbkCpoIFWPuvJKPjB7KPAEmXFH8RPqCr5C0gR2+GG2M=;
-  b=PRFddPwDkS+FOJhUCvjBAJ5JtDSxtjbU4DB5ibaYGdnyBUBilmVjuuTN
-   J4qZnNvgS03+GK2/jq9/6u9acHPHAgwbsijrtCwgw2sE03VB7IJadOrHg
-   oYnTfs9xVpgzlbFk635s2UimbYEUjagZCwJ9KYIuXvDWuWkvL67iJBPEW
-   0=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Jul 2022 07:26:18 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:26:18 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Jul 2022 07:26:18 -0700
-Received: from [10.110.120.249] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Jul
- 2022 07:26:17 -0700
-Message-ID: <a42fbef2-3eff-9e88-233e-a805cfbe2376@quicinc.com>
-Date:   Wed, 13 Jul 2022 07:26:12 -0700
+        Wed, 13 Jul 2022 10:26:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692FA2F390;
+        Wed, 13 Jul 2022 07:26:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0682261DBD;
+        Wed, 13 Jul 2022 14:26:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 255FCC34114;
+        Wed, 13 Jul 2022 14:26:23 +0000 (UTC)
+Subject: [PATCH v1] net: Add distinct sk_psock field
+From:   Chuck Lever <chuck.lever@oracle.com>
+To:     john.fastabend@gmail.com, daniel@iogearbox.net,
+        jakub@cloudflare.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        kpsingh@kernel.org
+Cc:     chuck.lever@oracle.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 13 Jul 2022 10:26:21 -0400
+Message-ID: <165772238175.1757.4978340330606055982.stgit@oracle-102.nfsv4.dev>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mtd: spi-nor: winbond: add support for W25Q512NW-IQ/IN
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-CC:     <clg@kaod.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <p.yadav@ti.com>,
-        <quic_ggregory@quicinc.com>, <quic_jiles@quicinc.com>,
-        <tudor.ambarus@microchip.com>
-References: <20220710145721.1207157-1-quic_jaehyoo@quicinc.com>
- <20220711095042.2095360-1-michael@walle.cc>
-From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-In-Reply-To: <20220711095042.2095360-1-michael@walle.cc>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+The sk_psock facility populates the sk_user_data field with the
+address of an extra bit of metadata. User space sockets never
+populate the sk_user_data field, so this has worked out fine.
 
-On 7/11/2022 2:50 AM, Michael Walle wrote:
-> Hi,
-> 
->> Add support for Winbond W25Q512NW-IQ/IN
->>
->> datasheet:
->> https://www.winbond.com/resource-files/W25Q512NW%20RevB%2007192021.pdf
-> 
-> Please add that as a Link: tag before your SoB tag.
+However, kernel socket consumers such as the RPC client and server
+do populate the sk_user_data field. The sk_psock() function cannot
+tell that the content of sk_user_data does not point to psock
+metadata, so it will happily return a pointer to something else,
+cast to a struct sk_psock.
 
-Sure, I'll move it using the Link: tag in v2.
+Thus kernel socket consumers and psock currently cannot co-exist.
 
->> Test result on AST2600 SoC's SPI controller:
->> $ cat /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/jedec_id
->> ef6020
->>
->> $ cat /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/manufacturer
->> winbond
->>
->> $ cat /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/partname
->> w25q512nwq
->>
->> $ hexdump /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/sfdp
->> 0000000 4653 5044 0106 ff01 0600 1001 0080 ff00
->> 0000010 0084 0201 00d0 ff00 ffff ffff ffff ffff
->> 0000020 ffff ffff ffff ffff ffff ffff ffff ffff
->> *
->> 0000080 20e5 fffb ffff 1fff eb44 6b08 3b08 bb42
->> 0000090 fffe ffff ffff 0000 ffff eb40 200c 520f
->> 00000a0 d810 0000 0233 00a6 e781 d914 63e9 3376
->> 00000b0 757a 757a bdf7 5cd5 f719 ff5d 70e9 a5f9
->> 00000c0 ffff ffff ffff ffff ffff ffff ffff ffff
->> 00000d0 0aff fff0 ff21 ffdc
->> 00000d8
-> 
-> This information goes below the --- line
+We could educate sk_psock() to return NULL if sk_user_data does
+not point to a struct sk_psock. However, a more general solution
+that enables full co-existence psock and other uses of sk_user_data
+might be more interesting.
 
-I followed the commit 89051ff5dd3bfbdc95c315dc3377fc46dadddc7c but yes,
-I'll move this information into the comment section.
+Move the struct sk_psock address to its own pointer field so that
+the contents of the sk_user_data field is preserved.
 
->> Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
->> ---
->>   drivers/mtd/spi-nor/winbond.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
->> index ffaa24055259..d6f1a3b7267e 100644
->> --- a/drivers/mtd/spi-nor/winbond.c
->> +++ b/drivers/mtd/spi-nor/winbond.c
->> @@ -133,6 +133,9 @@ static const struct flash_info winbond_nor_parts[] = {
->>   	{ "w25m512jv", INFO(0xef7119, 0, 64 * 1024, 1024)
->>   		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ |
->>   			      SPI_NOR_DUAL_READ) },
->> +	{ "w25q512nwq", INFO(0xef6020, 0, 64 * 1024, 1024)
-> 
-> Please use INFO(0xef6020, 0, 0, 0) and test wether it will still
-> work correctly. We will then be able to convert it to SNOR_ID3()
-> later.
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+---
+ include/linux/skmsg.h |    2 +-
+ include/net/sock.h    |    4 +++-
+ net/core/skmsg.c      |    6 +++---
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-Tested it but it doesn't work with INFO(0xef6020, 0, 0, 0). I'll keep
-it as is.
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index c5a2d6f50f25..5ef3a07c5b6c 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -277,7 +277,7 @@ static inline void sk_msg_sg_copy_clear(struct sk_msg *msg, u32 start)
+ 
+ static inline struct sk_psock *sk_psock(const struct sock *sk)
+ {
+-	return rcu_dereference_sk_user_data(sk);
++	return rcu_dereference(sk->sk_psock);
+ }
+ 
+ static inline void sk_psock_set_state(struct sk_psock *psock,
+diff --git a/include/net/sock.h b/include/net/sock.h
+index c4b91fc19b9c..d2a513169527 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -327,7 +327,8 @@ struct sk_filter;
+   *	@sk_tskey: counter to disambiguate concurrent tstamp requests
+   *	@sk_zckey: counter to order MSG_ZEROCOPY notifications
+   *	@sk_socket: Identd and reporting IO signals
+-  *	@sk_user_data: RPC layer private data
++  *	@sk_user_data: Upper layer private data
++  *	@sk_psock: socket policy data (bpf)
+   *	@sk_frag: cached page frag
+   *	@sk_peek_off: current peek_offset value
+   *	@sk_send_head: front of stuff to transmit
+@@ -519,6 +520,7 @@ struct sock {
+ 
+ 	struct socket		*sk_socket;
+ 	void			*sk_user_data;
++	struct sk_psock	__rcu	*sk_psock;
+ #ifdef CONFIG_SECURITY
+ 	void			*sk_security;
+ #endif
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index cc381165ea08..2b3d01d92790 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -695,7 +695,7 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
+ 
+ 	write_lock_bh(&sk->sk_callback_lock);
+ 
+-	if (sk->sk_user_data) {
++	if (sk->sk_psock) {
+ 		psock = ERR_PTR(-EBUSY);
+ 		goto out;
+ 	}
+@@ -726,7 +726,7 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
+ 	sk_psock_set_state(psock, SK_PSOCK_TX_ENABLED);
+ 	refcount_set(&psock->refcnt, 1);
+ 
+-	rcu_assign_sk_user_data_nocopy(sk, psock);
++	rcu_assign_pointer(sk->sk_psock, psock);
+ 	sock_hold(sk);
+ 
+ out:
+@@ -825,7 +825,7 @@ void sk_psock_drop(struct sock *sk, struct sk_psock *psock)
+ {
+ 	write_lock_bh(&sk->sk_callback_lock);
+ 	sk_psock_restore_proto(sk, psock);
+-	rcu_assign_sk_user_data(sk, NULL);
++	rcu_assign_pointer(sk->sk_psock, NULL);
+ 	if (psock->progs.stream_parser)
+ 		sk_psock_stop_strp(sk, psock);
+ 	else if (psock->progs.stream_verdict || psock->progs.skb_verdict)
 
->> +		PARSE_SFDP
->> +		OTP_INFO(256, 3, 0x1000, 0x1000) },
-> 
-> Did you test OTP?
 
-Yes.
-
-$ flash_otp_info -u /dev/mtd0
-Number of OTP user blocks on /dev/mtd0: 3
-block  0:  offset = 0x0000  size = 256 bytes  [unlocked]
-block  1:  offset = 0x0100  size = 256 bytes  [unlocked]
-block  2:  offset = 0x0200  size = 256 bytes  [unlocked]
-$ flash_otp_dump -u /dev/mtd0 0x2d0
-OTP user data for /dev/mtd0
-0x02d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-0x02e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-0x02f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-$ echo -n otp test | flash_otp_write -u /dev/mtd0 0x2d0
-Writing OTP user data on /dev/mtd0 at offset 0x2d0
-Wrote 8 bytes of OTP user data
-$ flash_otp_dump -u /dev/mtd0 0x2d0
-OTP user data for /dev/mtd0
-0x02d0: 6f 74 70 20 74 65 73 74 ff ff ff ff ff ff ff ff
-0x02e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-0x02f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-$ flash_otp_erase -u /dev/mtd0 0x200 0x100
-$ flash_otp_dump -u /dev/mtd0 0x2d0
-OTP user data for /dev/mtd0
-0x02d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-0x02e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-0x02f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-
-I'll add it to commit comment section too.
-
-Thanks,
-
-Jae
-
-> -michael
-> 
->>   	{ "w25q512nwm", INFO(0xef8020, 0, 64 * 1024, 1024)
->>   		PARSE_SFDP
->>   		OTP_INFO(256, 3, 0x1000, 0x1000) },
->> -- 
->> 2.25.1
-> 

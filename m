@@ -2,96 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3C0573400
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178E8573403
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbiGMKTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 06:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44130 "EHLO
+        id S235808AbiGMKUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234934AbiGMKTl (ORCPT
+        with ESMTP id S235731AbiGMKUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 06:19:41 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEE6E0251;
-        Wed, 13 Jul 2022 03:19:40 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31c86fe1dddso107723397b3.1;
-        Wed, 13 Jul 2022 03:19:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K7K9RIsTB7qhaxVyNzqwwrUpbCvrSnTsy4cv/fUmIs4=;
-        b=Y/0nPTRgiekpHs3vqhMQjlZgVGd/asaU6Il9ZzErijaqBx9WUk+ztSFtsEEd1fNq24
-         AA5nRZBeFv1iFSHAQDbQdi5BSyxVcn3lh+kAPIJN02uCmNMmb5/AXb+doaHQ6BfCp50L
-         YXtySiaZpEDiHYmg7eVbXusE4nFjqAJ380bqEUCSyPRR6nDz5jXIQED2tUE5KASivuN0
-         IqVZSYbj5NEN8D95h5Y3FWQTlYvl8hjAg02J++JSSNW/lNVaHhulRO7yy8SR+A6t5GM3
-         zHhr6okuiw5f5OInU7dkA2rQdsKNAZrtEJGuN54vUB6OkldnkU+lhtgGhoFGj0Rp+QYX
-         Dk9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K7K9RIsTB7qhaxVyNzqwwrUpbCvrSnTsy4cv/fUmIs4=;
-        b=dzfnqvVqwKF+LE9abWy4qdXTngOwcnFD1bDOfriGxxZBe9TdZPRWxS6C1wvUHDCfhT
-         gcCFDJ7Y97sbt9mY+Ft69YrNjoAstXs5tmGzsMGYSVxMCRCCrVt1UFzAjEe6PV3UmxgC
-         mUWxZwAOuJuK/pupI4Nqk9tJUhlzy0bspmr15bS3JVEUJTd13WHgDwe8LmarYRPv+dky
-         ok9sMNWtgWX01FKT/U+vvqNGfk9BN63iKu9jvbC3PjAqtdd9yu9DVBqjsGoXIwysRpAF
-         bJ3X6a+vRVarR9fnXEmfqCF8rhi44R/mguepZMatdscxSbt5QV3bZbMDAABxpOqn8xGE
-         aYlw==
-X-Gm-Message-State: AJIora/uRO7tJIq794AlMxO3oR5gjCcmamHzcPckngsN/FzJiH/d4tQe
-        mwvxebhvlITIg7j0rsofdyc8Czs5chdeVsDvA24SeELm9/VEVg==
-X-Google-Smtp-Source: AGRyM1uwaHf3qYYg6VKkIaiqRo1dXuxB06b+DzNgeG9a2XCfGxbs/vPoG2fMw5wXZkoizyNIPRY6kch9+bA1ZEZtx3Y=
-X-Received: by 2002:a81:72c4:0:b0:31c:b309:c4e8 with SMTP id
- n187-20020a8172c4000000b0031cb309c4e8mr3318340ywc.520.1657707579858; Wed, 13
- Jul 2022 03:19:39 -0700 (PDT)
+        Wed, 13 Jul 2022 06:20:49 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94484F8949;
+        Wed, 13 Jul 2022 03:20:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/Nrcb7dNYzFUnnxmjdCVTUYMGO8OqXjL/KRXcg2glXY=; b=MA+NUFrq3VNDeScIS3LYDn8cFS
+        bSOgVktnX26ZmRbXQxLiIGpUq4prnfK8Na3xUPVgBCQJ+Frxe81tSmKWQs1pfkUeH7F4SCI7EAxcm
+        OPvf0/Rewro7fXY0g7qQcncacQZ1HWu8IBs2zwh9rUwt4aWtfBGJRRcjaxTCwNA5uJQpZ6kUyFuc7
+        XPF9NB3gtelVmmZK8lZImUV/QEMQKlQs2GdlSrluXAgQPTnMLbYlBjD12v+qRctmH++UAQEvaPtBj
+        TmbycN5NxOwPKKbHXngtmqerNV1i2OzxxovzHEOnFWYoqjDBWQYAoilIHjTJiC5zcCE1IKqiYnN4V
+        WZIa5t+w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBZTW-0083EO-UP; Wed, 13 Jul 2022 10:20:11 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AF12F30041D;
+        Wed, 13 Jul 2022 12:20:09 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9888D201ECFBD; Wed, 13 Jul 2022 12:20:09 +0200 (CEST)
+Date:   Wed, 13 Jul 2022 12:20:09 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Song Liu <song@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        mcgrof@kernel.org, rostedt@goodmis.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, mhiramat@kernel.org,
+        naveen.n.rao@linux.ibm.com, davem@davemloft.net,
+        anil.s.keshavamurthy@intel.com, keescook@chromium.org,
+        hch@infradead.org, dave@stgolabs.net, daniel@iogearbox.net,
+        kernel-team@fb.com, x86@kernel.org, dave.hansen@linux.intel.com,
+        rick.p.edgecombe@intel.com, akpm@linux-foundation.org
+Subject: Re: [PATCH bpf-next 1/3] mm/vmalloc: introduce vmalloc_exec which
+ allocates RO+X memory
+Message-ID: <Ys6cWUMHO8XwyYgr@hirez.programming.kicks-ass.net>
+References: <20220713071846.3286727-1-song@kernel.org>
+ <20220713071846.3286727-2-song@kernel.org>
 MIME-Version: 1.0
-References: <20220712131523.1874428-1-vamshigajjela@google.com>
- <CAHp75VecnJSv9P4ZXf5g4Yi7rYySRN=73KwZ_OBFUyFtaSq00w@mail.gmail.com> <CAMTSyjrhSSYVEBq=bdu9wBCcuPdrkmxS4jszOgOQBBvSKyaa_g@mail.gmail.com>
-In-Reply-To: <CAMTSyjrhSSYVEBq=bdu9wBCcuPdrkmxS4jszOgOQBBvSKyaa_g@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 13 Jul 2022 12:19:03 +0200
-Message-ID: <CAHp75VffbgrMq1ozyvci9MMed=MP2OadujCzXz8PTUCwnmY1Jw@mail.gmail.com>
-Subject: Re: [PATCH] serial: 8250_dw: Avoid pslverr on reading empty receiver fifo
-To:     VAMSHI GAJJELA <vamshigajjela@google.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Manu Gautam <manugautam@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713071846.3286727-2-song@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 10:13 AM VAMSHI GAJJELA
-<vamshigajjela@google.com> wrote:
-> On Tue, Jul 12, 2022 at 6:56 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Tue, Jul 12, 2022 at 3:16 PM Vamshi Gajjela <vamshigajjela@google.com> wrote:
+On Wed, Jul 13, 2022 at 12:18:44AM -0700, Song Liu wrote:
+> Dynamically allocated kernel texts, such as module texts, bpf programs,
+> and ftrace trampolines, are used in more and more scenarios. Currently,
+> these users allocate meory with module_alloc, fill the memory with text,
+> and then use set_memory_[ro|x] to protect the memory.
+> 
+> This approach has two issues:
+>  1) each of these user occupies one or more RO+X page, and thus one or
+>     more entry in the page table and the iTLB;
+>  2) frequent allocate/free of RO+X pages causes fragmentation of kernel
+>     direct map [1].
+> 
+> BPF prog pack [2] addresses this from the BPF side. Now, make the same
+> logic available to other users of dynamic kernel text.
+> 
+> The new API is like:
+> 
+>   void *vmalloc_exec(size_t size);
+>   void vfree_exec(void *addr, size_t size);
+> 
+> vmalloc_exec has different handling for small and big allocations
+> (> PMD_SIZE * num_possible_nodes). bigger allocations have dedicated
+> vmalloc allocation; while small allocations share a vmalloc_exec_pack
+> with other allocations.
+> 
+> Once allocated, the vmalloc_exec_pack is filled with invalid instructions
 
-...
+*sigh*, again, INT3 is a *VALID* instruction.
 
-> > > +       lsr = p->serial_in(p, UART_LSR);
-> >
-> > The only caller of this function already has the lsr value, why you
-> > can't (re)use it?
-> lsr is not read before, caller function (dw8250_check_lcr) reads lcr.
+> and protected with RO+X. Some text_poke feature is required to make
+> changes to the vmalloc_exec_pack. Therefore, vmalloc_exec requires changes
+> from the arch (to provide text_poke family APIs), and the user (to use
+> text poke APIs to make any changes to the memory).
 
-I see, thanks for elaboration.
+I hate the naming; this isn't just vmalloc, this is a whole different
+allocator build on top of things.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I'm also not convinced this is the right way to go about doing this;
+much of the design here is because of how the module range is mixing
+text and data and working around that.
+
+So how about instead we separate them? Then much of the problem goes
+away, you don't need to track these 2M chunks at all.
+
+Start by adding VM_TOPDOWN_VMAP, which instead of returning the lowest
+(leftmost) vmap_area that fits, picks the higests (rightmost).
+
+Then add module_alloc_data() that uses VM_TOPDOWN_VMAP and make
+ARCH_WANTS_MODULE_DATA_IN_VMALLOC use that instead of vmalloc (with a
+weak function doing the vmalloc).
+
+This gets you bottom of module range is RO+X only, top is shattered
+between different !X types.
+
+Then track the boundary between X and !X and ensure module_alloc_data()
+and module_alloc() never cross over and stay strictly separated.
+
+Then change all module_alloc() users to expect RO+X memory, instead of
+RW.
+
+Then make sure any extention of the X range is 2M aligned.
+
+And presto, *everybody* always uses 2M TLB for text, modules, bpf,
+ftrace, the lot and nobody is tracking chunks.
+
+Maybe migration can be eased by instead providing module_alloc_text()
+and ARCH_WANTS_MODULE_ALLOC_TEXT.

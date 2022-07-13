@@ -2,71 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0A9573EE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D50D573EED
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237513AbiGMVVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 17:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
+        id S237401AbiGMVYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 17:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237335AbiGMVVW (ORCPT
+        with ESMTP id S231869AbiGMVYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 17:21:22 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50833B1D3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:20:47 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-10c0e6dd55eso141244fac.7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:20:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jDIsFRxXwtCqxyONdxF5c1K9paBtFr3+08L7z2qU5vA=;
-        b=j6cOJrctkCf7KseVBRdjSV7xlcfNt+7koxFBfEzD+TqfkyzpEbWiMDN5+d1JFAlUR1
-         4UWAlA7Y7QVimCdgfMGCV5T5leqdGRaLoe8ws+Uj9fgqQwS4b8SOpsIZtuehvXuI+xQo
-         UFJKWvgemXRzSTOEgy/A+jHJpgXoPOrnxi+IEalxaNKcrp0DgtDTmzaU9N6aQ+abSW1S
-         IilnnvVXk0xNL9DD52vVgrih36f14uWbKP9rFimyB5zdAH32DVassCoYu35wrNoqLNi7
-         lk9demUWCLl4bQ8ke7GM5ZQOmqIJbWNNbduoF8eLZRDgNLeyQB3Ohsx8x5GSTbEkfbnL
-         uufw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jDIsFRxXwtCqxyONdxF5c1K9paBtFr3+08L7z2qU5vA=;
-        b=CRs9mxDIO7TaoqnXV0bIhDnr8vqlqUN+yUr9tX1SgeIx0XzrdK9ptZxU6KqU8mezLC
-         bRS0fSd5tnmSGOuit6EV5M8Mn6kFbCicLOA2Hudatw/x3md19C9nzIKWLHWx4A10uAcD
-         svl1ctt/zbXHyp34z8F5G4444rYJ3vbPptbDYMRzkICukPRYgae66pvAjIN4OzmoseVb
-         6o0yKzjg8dMdHefpU5PgrXKwfnnYUFA80aJsUPnvJFW7tAviAuco6dXXqWxxh5uHR9dr
-         GQ72RnADg6VBzF2Kc9hF0aijl3ES7aGkZWN0i42EURCRxgl3wQMlFZnzsYsQzAUd2CSe
-         lhWQ==
-X-Gm-Message-State: AJIora9b4Y2KWOc3qzOpU5+NoAGnih2E3IY8OhZcvO0XB7H8BDLuFZxi
-        tIj8Kwn2g777avwNfZ1PsSPrdA==
-X-Google-Smtp-Source: AGRyM1tJqqpZcbdmf0IjLs3JPzHYVSJn1XpT0FPSi1cB/Be9qVNnpyy+gRwJUYwTuBP+IukgYZYe8w==
-X-Received: by 2002:a05:6870:41ca:b0:101:d588:6241 with SMTP id z10-20020a05687041ca00b00101d5886241mr5611485oac.175.1657747246489;
-        Wed, 13 Jul 2022 14:20:46 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id i19-20020a056871029300b0010c17e6c699sm6647897oae.47.2022.07.13.14.20.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 14:20:45 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Luca Weiss <luca@z3ntu.xyz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] ARM: dts: qcom: msm8974-sony: Enable LPG
-Date:   Wed, 13 Jul 2022 14:23:09 -0700
-Message-Id: <20220713212309.130230-3-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220713212309.130230-1-bjorn.andersson@linaro.org>
-References: <20220713212309.130230-1-bjorn.andersson@linaro.org>
+        Wed, 13 Jul 2022 17:24:15 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553D417042
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:24:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657747453; x=1689283453;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZjNuLmEBIpyPWeqBgSLkZ8uIlUIyFUsBrdtkJqNV6vo=;
+  b=LMDaZraAPJsxOlutyfqLoS0Ue3E2PDkLEf2qINyO8wFk4TjxvyBVLP0a
+   n3YMZ2vtOIzWspncP8AgdV3aGM3UyMkubTGRcP1znDt+IdaaSwYlClrhE
+   adL61mmTNNMmWY4UyDbmiTTzGQVFswspY8/Vzvf2B3EdIu/Q9inPzSImL
+   F7u1f8/AcfNNTr+wPfhiq/OuB2i1oOhLQZ+d+IIE8OxAjoynevoy8xNmH
+   7lIIiWLduJHP3XCdpYQMtFMmlZsKtSWe7KH+zsczqswbP+JfNrmNISdNC
+   lODVFv3Dse++iqeW4kTd0oAudCmU/xBj+DIOMpTb/1OgDYAbevB1fJPex
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="282902551"
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="282902551"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 14:24:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="623134087"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 13 Jul 2022 14:24:11 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBjq6-0003nm-N6;
+        Wed, 13 Jul 2022 21:24:10 +0000
+Date:   Thu, 14 Jul 2022 05:23:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [toke:xdp-queueing-06 11/17] net/core/dev.c:5038: undefined
+ reference to `dev_run_xdp_dequeue'
+Message-ID: <202207140528.8qEWv6Hl-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,115 +61,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both Castor and Honami has RGB LEDs driven by the PM8941 LPG, define
-these.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-06
+head:   eb15b48f1b85d5986f1c2dbaf68c3c27e93f0c0c
+commit: 0fb9291256bd9a2e0b9a58ce6755891bcdf21938 [11/17] dev: Add XDP dequeue hook
+config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220714/202207140528.8qEWv6Hl-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=0fb9291256bd9a2e0b9a58ce6755891bcdf21938
+        git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
+        git fetch --no-tags toke xdp-queueing-06
+        git checkout 0fb9291256bd9a2e0b9a58ce6755891bcdf21938
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Changes since v1:
-- Corrected unit addresses and sort order of channels
+All errors (new ones prefixed by >>):
 
- .../dts/qcom-msm8974-sony-xperia-rhine.dtsi   | 30 +++++++++++++++++++
- ...-msm8974pro-sony-xperia-shinano-castor.dts | 30 +++++++++++++++++++
- 2 files changed, 60 insertions(+)
+   ld: net/core/dev.o: in function `net_tx_action':
+>> net/core/dev.c:5038: undefined reference to `dev_run_xdp_dequeue'
 
-diff --git a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-index d42b85bda33a..5a70683d9103 100644
---- a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-@@ -3,6 +3,7 @@
- #include "qcom-pm8841.dtsi"
- #include "qcom-pm8941.dtsi"
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
- #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
- 
- / {
-@@ -172,6 +173,35 @@ gpio_keys_pin_a: gpio-keys-active-state {
- 	};
- };
- 
-+&pm8941_lpg {
-+	status = "okay";
-+
-+	qcom,power-source = <1>;
-+
-+	rgb-led {
-+		color = <LED_COLOR_ID_RGB>;
-+		function = LED_FUNCTION_STATUS;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		led@5 {
-+			reg = <5>;
-+			color = <LED_COLOR_ID_BLUE>;
-+		};
-+
-+		led@6 {
-+			reg = <6>;
-+			color = <LED_COLOR_ID_GREEN>;
-+		};
-+
-+		led@7 {
-+			reg = <7>;
-+			color = <LED_COLOR_ID_RED>;
-+		};
-+	};
-+};
-+
- &pm8941_wled {
- 	status = "okay";
- 
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-index 9fc696a7399a..3f45f5c5d37b 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-@@ -3,6 +3,7 @@
- #include "qcom-pm8841.dtsi"
- #include "qcom-pm8941.dtsi"
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
- #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
- 
- / {
-@@ -288,6 +289,35 @@ lcd_dcdc_en_pin_a: lcd-dcdc-en-active-state {
- 
- };
- 
-+&pm8941_lpg {
-+	status = "okay";
-+
-+	qcom,power-source = <1>;
-+
-+	rgb-led {
-+		color = <LED_COLOR_ID_RGB>;
-+		function = LED_FUNCTION_STATUS;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		led@5 {
-+			reg = <5>;
-+			color = <LED_COLOR_ID_BLUE>;
-+		};
-+
-+		led@6 {
-+			reg = <6>;
-+			color = <LED_COLOR_ID_GREEN>;
-+		};
-+
-+		led@7 {
-+			reg = <7>;
-+			color = <LED_COLOR_ID_RED>;
-+		};
-+	};
-+};
-+
- &rpm_requests {
- 	pm8941-regulators {
- 		compatible = "qcom,rpm-pm8941-regulators";
+
+vim +5038 net/core/dev.c
+
+  5025	
+  5026	static __latent_entropy void net_tx_action(struct softirq_action *h)
+  5027	{
+  5028		struct softnet_data *sd = this_cpu_ptr(&softnet_data);
+  5029	
+  5030		if (sd->xdp_dequeue) {
+  5031			struct xdp_dequeue *deq;
+  5032	
+  5033			local_irq_disable();
+  5034			deq = sd->xdp_dequeue;
+  5035			sd->xdp_dequeue = NULL;
+  5036			local_irq_enable();
+  5037	
+> 5038			dev_run_xdp_dequeue(deq);
+  5039		}
+  5040	
+  5041		if (sd->completion_queue) {
+  5042			struct sk_buff *clist;
+  5043	
+  5044			local_irq_disable();
+  5045			clist = sd->completion_queue;
+  5046			sd->completion_queue = NULL;
+  5047			local_irq_enable();
+  5048	
+  5049			while (clist) {
+  5050				struct sk_buff *skb = clist;
+  5051	
+  5052				clist = clist->next;
+  5053	
+  5054				WARN_ON(refcount_read(&skb->users));
+  5055				if (likely(get_kfree_skb_cb(skb)->reason == SKB_REASON_CONSUMED))
+  5056					trace_consume_skb(skb);
+  5057				else
+  5058					trace_kfree_skb(skb, net_tx_action,
+  5059							SKB_DROP_REASON_NOT_SPECIFIED);
+  5060	
+  5061				if (skb->fclone != SKB_FCLONE_UNAVAILABLE)
+  5062					__kfree_skb(skb);
+  5063				else
+  5064					__kfree_skb_defer(skb);
+  5065			}
+  5066		}
+  5067	
+  5068		if (sd->output_queue) {
+  5069			struct Qdisc *head;
+  5070	
+  5071			local_irq_disable();
+  5072			head = sd->output_queue;
+  5073			sd->output_queue = NULL;
+  5074			sd->output_queue_tailp = &sd->output_queue;
+  5075			local_irq_enable();
+  5076	
+  5077			rcu_read_lock();
+  5078	
+  5079			while (head) {
+  5080				struct Qdisc *q = head;
+  5081				spinlock_t *root_lock = NULL;
+  5082	
+  5083				head = head->next_sched;
+  5084	
+  5085				/* We need to make sure head->next_sched is read
+  5086				 * before clearing __QDISC_STATE_SCHED
+  5087				 */
+  5088				smp_mb__before_atomic();
+  5089	
+  5090				if (!(q->flags & TCQ_F_NOLOCK)) {
+  5091					root_lock = qdisc_lock(q);
+  5092					spin_lock(root_lock);
+  5093				} else if (unlikely(test_bit(__QDISC_STATE_DEACTIVATED,
+  5094							     &q->state))) {
+  5095					/* There is a synchronize_net() between
+  5096					 * STATE_DEACTIVATED flag being set and
+  5097					 * qdisc_reset()/some_qdisc_is_busy() in
+  5098					 * dev_deactivate(), so we can safely bail out
+  5099					 * early here to avoid data race between
+  5100					 * qdisc_deactivate() and some_qdisc_is_busy()
+  5101					 * for lockless qdisc.
+  5102					 */
+  5103					clear_bit(__QDISC_STATE_SCHED, &q->state);
+  5104					continue;
+  5105				}
+  5106	
+  5107				clear_bit(__QDISC_STATE_SCHED, &q->state);
+  5108				qdisc_run(q);
+  5109				if (root_lock)
+  5110					spin_unlock(root_lock);
+  5111			}
+  5112	
+  5113			rcu_read_unlock();
+  5114		}
+  5115	
+  5116		xfrm_dev_backlog(sd);
+  5117	}
+  5118	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

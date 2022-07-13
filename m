@@ -2,169 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2715E573C77
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 20:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2C0573C78
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 20:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236640AbiGMSYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 14:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        id S236656AbiGMSYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 14:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiGMSYA (ORCPT
+        with ESMTP id S236669AbiGMSYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 14:24:00 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8E3183A9;
-        Wed, 13 Jul 2022 11:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657736639; x=1689272639;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/GFwjk0WDlWHLT5scE0PrSHapMgZnVgphn1v3cLSw9A=;
-  b=cI/2c4443pjmTyyFEGXDlkXtjTN4oJI/qkUqbOFgvjJzMlX4kL4De6t5
-   kGNhZD+mnTeXs+hTWFU4mkHOmI0hNG4tVe+51ChrRGaFZZMks7NSuNfMI
-   BMFrZvzZxqCyUNIfFkSlbbT4JhlezgUpDxvAvfPbn66Z1ciyl9TABTCez
-   E/PTYIaz6yuJ2TcjzUUEt5WdhY+U/LiOMdWK0yGm8oDnSSqUmoVExvXeR
-   lcd7/YEG1I3r/NhLbIvak9K8Vyu1jZ5V6+Vrj1CvX6Zn6e/W7Lpnz/RI5
-   +woQVMAhRGSlwm5NH3sq/tb70R7IMJtjTyiiX0H4cha7JhP2VGZ7rMUU/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="310955144"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="310955144"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 11:23:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="623074034"
-Received: from wopr.jf.intel.com ([10.54.75.125])
-  by orsmga008.jf.intel.com with ESMTP; 13 Jul 2022 11:23:58 -0700
-Message-ID: <7d79e9877d63cdb74144f38d8736959281b562cc.camel@linux.intel.com>
-Subject: Re: PNP0501 serial driver takes almost 2 seconds to suspend/resume
- (printk issue)
-From:   Todd Brandt <todd.e.brandt@linux.intel.com>
-Reply-To: todd.e.brandt@linux.intel.com
-To:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Petr Mladek <pmladek@suse.com>, rafael.j.wysocki@intel.com,
-        len.brown@intel.com
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
+        Wed, 13 Jul 2022 14:24:12 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7D718B22
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 11:24:11 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id r18so15162610edb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 11:24:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aIstVleI5wOdnOiH/laD0icGVhvC0xTlsJeuVPlERzc=;
+        b=eJtnAfCBo1bvcrDYMRslDTvpifIcKxQpQDw1j1O+JAPa0g4MuUPseIE0mzfD/lAX4B
+         gBKJTam4L3/43Umw6PpQvgLQrPEo7CWDkcVRg0M+Pr0J4BvzNg8h/cqCnAzTlWijKyfx
+         HRlV7MgVXQWviTwYkaK4JnvgiRQVFt32LZGxkPqq59/5XAGC1ivf1GWCRk/XP8Nfm6Fk
+         /h5VTB9XJRIGXcHuRVYBP7FeLM8pl2ryP19MsI4VK/AW5HowltRFCerqEDiK928SB9Z3
+         pOIDl3eTqN2s2RGwGgHH6t6qvleuNrXSbZi/J8B/qf2vZ2RKMZ+GU2o0lZtZmjEu2NcN
+         oEQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aIstVleI5wOdnOiH/laD0icGVhvC0xTlsJeuVPlERzc=;
+        b=C0PBNxSdYDCzmu6ZJ8dGyMMEqBm+ch9veUlB0kccw2WeYP5wRunLepRldiefawFtEb
+         VpU4Z3Kbp3kUUMAIY+Rl4JhcKtcEWm9DGCd3+JYEpoULv5sTuI5fODkGSD58GCkh7LQC
+         JKE3jKc7ZDivx40S5GrMUmbHFHJCrYGkZCJwopTXxdiZrtX3ACWaKUDbB4awr+vlAy2m
+         pY12qZKOzbPc6L1zEnldg5CzQx305SsETCtdopDZLTqRV6r96C1KURPLGOrA3+BwJgC/
+         KDURSA1ihlzA7JtOyc/CX6tqOz6DqsF9SvjdsnX4zZDel7laiY0Qy+Jd6yuFAnugD333
+         WaZA==
+X-Gm-Message-State: AJIora99iEYRhQCbGB5cd9439EqlR8Ph7GcJnWyzJx8ks1pfGfNMYgMm
+        WMXK7VbVs5mX/dd7i7IO0Lt5qJnPapjGVdmUqRqFgw==
+X-Google-Smtp-Source: AGRyM1v7XZi2EVvKT8MqJNjBZh774qZrYgHjj7ePEk9gcG/l1sBN8cEdgRGM0cdSU6c9mRtKCBB7jSyxL5xGE0jICIw=
+X-Received: by 2002:a05:6402:50d0:b0:43a:df6d:6f4d with SMTP id
+ h16-20020a05640250d000b0043adf6d6f4dmr6757899edb.72.1657736649926; Wed, 13
+ Jul 2022 11:24:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220628024913.1755292-1-tzungbi@kernel.org> <20220628024913.1755292-10-tzungbi@kernel.org>
+In-Reply-To: <20220628024913.1755292-10-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
 Date:   Wed, 13 Jul 2022 11:23:58 -0700
-In-Reply-To: <c60f5634e8605cb4c2ef4646b6e511e6135bea48.camel@linux.intel.com>
-References: <12fb98fe27e23e3f74a139e5e8eb83a97a343372.camel@linux.intel.com>
-         <51b9e2cc3baf61a604bd239b736ec2d12f1f6695.camel@linux.intel.com>
-         <87czegxccb.fsf@jogness.linutronix.de>
-         <045ebee30af2b80aaeace1dab18ecd113e3f17c7.camel@linux.intel.com>
-         <87tu7qvx1q.fsf@jogness.linutronix.de>
-         <CAHp75VfyzMNMO2NRwXwSjAmQqBbdRG3+SzyFDG+90dmvmg1xLQ@mail.gmail.com>
-         <87o7xwbuoy.fsf@jogness.linutronix.de> <Ysvbp8vz7R9hDNqx@alley>
-         <Ysv3JNs4RwE7kAou@google.com> <87ilo1wdac.fsf@jogness.linutronix.de>
-         <c60f5634e8605cb4c2ef4646b6e511e6135bea48.camel@linux.intel.com>
+Message-ID: <CABXOdTeCFsXYdd6uVDYkOY-tGno_wW-ZyuMb44a63tFABic+NA@mail.gmail.com>
+Subject: Re: [RESEND PATCH 09/11] platform/chrome: cros_ec_proto: return
+ standard error codes for EC errors
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
+        <chrome-platform@lists.linux.dev>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-URGENT: Removing the commit FIXES the issue.
+On Mon, Jun 27, 2022 at 7:49 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> cros_ec_wait_until_complete() checks `msg->result` for
+> EC_CMD_GET_COMMS_STATUS.  However, it doesn't return standard error codes
+> like most of others.
 
-I just ran a 5.19.0-rc6 kernel with the offending commit removed and it
-fixed the problem completely on all 3 machines. To be clear the
-offending commit is:
+The callers of cros_ec_send_command() do the mapping. I am not sure if
+it is a good idea to change that; it may have undesired side effects
+(such as changing the userspace ABI) for callers of
+cros_ec_send_command() not expecting this change. It would also result
+in double mapping in some situations.
 
-commit 3b604ca81202eea2a917eb6491e90f610fba0ec7
+Guenter
 
-I strongly recommend that this commit be pulled (or fixed very quickly)
-before the 5.19 release or 1 in 10 linux machines running 5.19 will
-take up to 2 seconds longer in suspend/resume.
-
-commit 3b604ca81202eea2a917eb6491e90f610fba0ec7
-Author: John Ogness <john.ogness@linutronix.de>
-Date:   Thu Apr 21 23:28:46 2022 +0206
-
-    printk: add pr_flush()
-
-    Provide a might-sleep function to allow waiting for console
-printers
-    to catch up to the latest logged message.
-
-    Use pr_flush() whenever it is desirable to get buffered messages
-    printed before continuing: suspend_console(), resume_console(),
-    console_stop(), console_start(), console_unblank().
-
-    Signed-off-by: John Ogness <john.ogness@linutronix.de>
-    Reviewed-by: Petr Mladek <pmladek@suse.com>
-    Signed-off-by: Petr Mladek <pmladek@suse.com>
-    Link: 
-https://lore.kernel.org/r/20220421212250.565456-12-john.ogness@linutronix.de
-
- include/linux/printk.h |  7 +++++
- kernel/printk/printk.c | 83
-++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 90 insertions(+)
-
-
-
-On Wed, 2022-07-13 at 10:11 -0700, Todd Brandt wrote:
-> I've updated the bugzilla entry with new data:
-> https://bugzilla.kernel.org/show_bug.cgi?id=216216
-> 
-> I just added 3 new tests for 5.19.0-rc6 on 3 machines that see this
-> issue: otcpl-asus-e200-cht (cherry trail), otcpl-aml-y (amber lake),
-> and otcpl-whl-u (whiskey lake). The kernel has the
-> CONFIG_PRINTK_CALLER
-> option enabled.
-> 
-> The test is a S2idle and is run thusly:
-> %> sleepgraph -dev -m freeze -rtcwake 15
-> 
-> I've included the dmesg boot logs for all three. The dmesg
-> suspend/resume logs are included in the html timelines by clicking
-> the
-> "dmesg" button in the upper right hand corner of the timeline.
-> There's
-> a "log" button as well that shows other system into.
-> 
-> These files are attached to the bugzilla entry.
-> otcpl-aml-y-5.19.0-rc6-boot-dmesg.txt
-> otcpl-aml-y-5.19.0-rc6-freeze.html
-> otcpl-asus-e200-cht-5.19.0-rc6-boot-dmesg.txt
-> otcpl-asus-e200-cht-5.19.0-rc6-freeze.html
-> otcpl-whl-u-5.19.0-rc6-boot-dmesg.txt
-> otcpl-whl-u-5.19.0-rc6-freeze.html
-> 
-> If possible can we move this thread to the bugzilla comment section?
-> 
-> 
-> On Wed, 2022-07-13 at 11:57 +0206, John Ogness wrote:
-> > On 2022-07-11, Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
-> > > > It seems that __pr_flush() does not check whether all consoles
-> > > > are
-> > > > suspended. In this case the progress is not possible and it has
-> > > > to
-> > > > wait the entire timeout.
-> > > 
-> > > But isn't console_suspended set after pr_flush() call?
-> > 
-> > There should not be any printing after the suspend_console()
-> > message.
-> > If
-> > Todd's report is coming from 5.19-rc1, then it is likely a kthread
-> > issue, where the kthread is not respecting @console_suspended.
-> > (This
-> > would still need to be fixed for the kthreads, but would not be
-> > relevant
-> > for 5.19.)
-> > 
-> > John
-
+>
+> Use cros_ec_map_error() to align them.
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> ---
+>  drivers/platform/chrome/cros_ec_proto.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+> index 49772a4c5353..5323edddb540 100644
+> --- a/drivers/platform/chrome/cros_ec_proto.c
+> +++ b/drivers/platform/chrome/cros_ec_proto.c
+> @@ -138,7 +138,7 @@ static int cros_ec_wait_until_complete(struct cros_ec_device *ec_dev, uint32_t *
+>  {
+>         struct cros_ec_command *msg;
+>         struct ec_response_get_comms_status *status;
+> -       int ret = 0, i;
+> +       int ret = 0, i, mapped;
+>
+>         msg = kzalloc(sizeof(*msg) + sizeof(*status), GFP_KERNEL);
+>         if (!msg)
+> @@ -160,8 +160,11 @@ static int cros_ec_wait_until_complete(struct cros_ec_device *ec_dev, uint32_t *
+>                         break;
+>
+>                 *result = msg->result;
+> -               if (msg->result != EC_RES_SUCCESS)
+> +               mapped = cros_ec_map_error(msg->result);
+> +               if (mapped) {
+> +                       ret = mapped;
+>                         break;
+> +               }
+>
+>                 if (!(status->flags & EC_COMMS_STATUS_PROCESSING))
+>                         break;
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>

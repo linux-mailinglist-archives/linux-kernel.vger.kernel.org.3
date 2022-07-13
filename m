@@ -2,345 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B908572A5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 02:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1AC572A5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 02:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbiGMApx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 20:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
+        id S231438AbiGMAs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 20:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiGMApp (ORCPT
+        with ESMTP id S229599AbiGMAsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 20:45:45 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87E3B1845
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:45:43 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id h62so14188604ybb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:45:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9w2PkwLHF/08wtsAJ7I6PZBKmcmAg2RQZ0OteJUpSic=;
-        b=lsycYUxs1WYSnFnFNVlVXpa35lIdYzhhMpQtyvF0yI1uUDExTBjqinNn9ZXctI0z5j
-         h4JpxqTM87DFsR/ZIgvyBkADz8eE8TaQRLS+NQDTbCmKPYHmP72vF5ivc7TgHFIvQw3i
-         5RX7/S3zX4J8zpkL50iIshLyaGuO/abxs2C8wFtvyyYbLHt1xj2H1gUt5j3OrZXhlaj2
-         PwI0Uw8BhGp/xeotIcLPhiLs13M8RkK5Y+BFPgoO/1d61JqpOiUmUeknWeUXg7Z6uO0K
-         94CvzXIOwfhpASm4VyF58JFOWUKOfjj6Q66Y2nH6oj5ivKw76jHQGb1QpRiYYUpXmHq3
-         uv6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9w2PkwLHF/08wtsAJ7I6PZBKmcmAg2RQZ0OteJUpSic=;
-        b=dQFJoBS7Efa9Fkag6WuCrh+NYysBpwHtigDakLRBebcgJHOD35hBxYXv6ROAYAmHea
-         ciqCzZLLio0I7RVT9/2oiD2D2kX4lImk6cNEsn9DnL6ArCifJSJ5TqrH2Jso2Nrl6Ge/
-         8IDT8rGVKQWkJXp3spLupOUknqbWAjbYGcm9eRoWTfQaDXMAL5mLRiF+yxM6xLqCdPCo
-         PznihQIqa5Fcg0kVoYsf6PfH60cP/arEwcQ59moQ0JMMTAdDtAJDBTH6LLDp63xqIJBJ
-         dxcLK4M300cUeuMAeLaOMaNUJkpU0lu1f/ksdhmyJ4dJnfCyyVRGEnRkQ1Uc39Cm3BLj
-         zgOA==
-X-Gm-Message-State: AJIora9uxvQkwR0o6iY+mxpj/0V98oUz3NW8r5upmuVPOEPjtginOXhA
-        dj1lFeax4lEaeLQLivKZdshHAgshYfpvTJwm2wj5Qw==
-X-Google-Smtp-Source: AGRyM1tKvyb0ypecZ0+E/rJKzyTbV866gDM48D4UxVWGjlk7jk17VPfvqKXOEYYAY5mXr1pCuFz3Quc6/XPqKxgqksQ=
-X-Received: by 2002:a25:9b88:0:b0:66d:b166:a430 with SMTP id
- v8-20020a259b88000000b0066db166a430mr1165824ybo.80.1657673142734; Tue, 12 Jul
- 2022 17:45:42 -0700 (PDT)
+        Tue, 12 Jul 2022 20:48:24 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4712AEF60
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657673302; x=1689209302;
+  h=date:from:to:subject:message-id:references:in-reply-to:
+   mime-version;
+  bh=9VkG19+im7+GASEzfadZHpDRffIOZJMivA6iwyRe5S0=;
+  b=RFSg+QDLdGpkvoYij1Zc+TSF0zDAz9qoSg1IN0cZklYaq1A6R0MiPvVD
+   z189LLilfnB4qrsZT9taHzAL6DjubTrgn2+JwL4IJuifJXSgHGk0jL23Y
+   BPEvnWI3bWXTOZgfmkjSiLTT5IY4SmH+WvoBafoJK6C5OHhbU3SnhWOiK
+   QRp1d2GgFih6Mnh0oDim3KNHHFi6/TYSlMUhFcWoBFfxBKN6qyUKWJSjw
+   nt8tsFm/2wkWPLET9ImJgvgPgdP+bcU7tkDkMmUyXAa3PvLlvSQnQB1lA
+   ITJqPxV4J1Ap0aWUCPfJv4B4ApdVaa2sRJRauOuCkDAlAKQYUfLMOV85V
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="268113367"
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="268113367"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 17:48:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="653137328"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Jul 2022 17:48:22 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Tue, 12 Jul 2022 17:48:21 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Tue, 12 Jul 2022 17:48:21 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Tue, 12 Jul 2022 17:48:21 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CfY53uC71AhH1w48lTS6SORqjbv6xDxWYRMLFlcpuSFTc0IMSdT1suymXHrghiOsa5hwu+lLKTzNktTXAgqU728qIhTM2YQnVBRhhG80My7sqx9Mx2WIsin+YrONk16Iug3DlP2I+7Luth+v0KlYcisVQvIMXNj1KT1epohDzdggvYH7QImlzqYsgTxE84kMNwEnBjEnMoLMKIDgsczjpQN0rLxtZ+gL/8jo/ZOnfc05wgMupccHWkhV+hF+7gVELEqMr3wyi9Wk0LfNN5c9+7aCNBreZV+NQEWIKHaMLXDwljNNk6JBD3C8z8ZbSfLJm/jNy7HAm2ESzjqn74SuHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lAxxsPLKB7BpvrQunlcOuTbpRzlKFEDjzYmHN+8OYic=;
+ b=XhCO3p41UnvclmqmvcZROEjoZ620xrKpfy/WCZNG2d5AIEqIM064xu13Swm23Qm+utPhzXKRME8TRPWXT1r2G1hCPLggLHYEDUlQOjde9X7qVhiy6n0M18aGwqhfR2ZgdSF8w2oKiJorTZCIpq27qswqBo9wQF/w19dAjFIWUVMFGE/vJ5zQFhRALfxzZ4DBujLKEgmwEDlsT2cEOd/ZIuUi2dc3MaToVaoTy1+jP0vPzSEQacVtFHjP6tQxXPSxxCvIO7cO9j/NgNXL38Xz5nZB9gTRImtNZ3LX0L1KmCwtpa6E5dVkCRws5CBwSVc42lKgAW1tSvfzsgDB+hezfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20) by CH2PR11MB4456.namprd11.prod.outlook.com
+ (2603:10b6:610:48::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25; Wed, 13 Jul
+ 2022 00:48:19 +0000
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::6466:20a6:57b4:1edf]) by MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::6466:20a6:57b4:1edf%11]) with mapi id 15.20.5417.026; Wed, 13 Jul
+ 2022 00:48:19 +0000
+Date:   Tue, 12 Jul 2022 17:48:17 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Jane Chu <jane.chu@oracle.com>, <dan.j.williams@intel.com>,
+        <hch@infradead.org>, <vishal.l.verma@intel.com>,
+        <dave.jiang@intel.com>, <ira.weiny@intel.com>,
+        <nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] acpi/nfit: badrange report spill over to clean range
+Message-ID: <62ce16518e7d3_6070c29447@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20220711232658.536064-1-jane.chu@oracle.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220711232658.536064-1-jane.chu@oracle.com>
+X-ClientProxiedBy: SJ0PR05CA0030.namprd05.prod.outlook.com
+ (2603:10b6:a03:33b::35) To MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20)
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <5717577.DvuYhMxLoT@steina-w> <CAGETcx8KGOTanmnVTLJ=SSDgv71ofhUcRxXRiqnUBNB3RZsY=A@mail.gmail.com>
- <6079032.MhkbZ0Pkbq@steina-w>
-In-Reply-To: <6079032.MhkbZ0Pkbq@steina-w>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 12 Jul 2022 17:45:06 -0700
-Message-ID: <CAGETcx8-kx7RGTPhdyEHfFoxCyaojn5BnAr_f1==b=qeWZ6itQ@mail.gmail.com>
-Subject: Re: Re: Re: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c2ff655f-8418-4202-fd2c-08da64696165
+X-MS-TrafficTypeDiagnostic: CH2PR11MB4456:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: puXcqocNBpgPFa6PB/3E8H0s6WBB0eub84mI1DHNIdTRzr+cGEYlSOWPGTWudk+RS4bT+Ru8YZZ3l6ScBLWmCHFCI8I3byShTV0qob6rbEDmnQKjFX3NQ4vajBeBj36KRP3EF05VGkw/7kAh0iXRbKOfl8dQRYbPiSOVEwWUwjVW+Bz3WjuVqAwm3L6/HVp/lDShQqiloVWtkfkNq3wXtMxLnbfvc3I56drIlgOjw9iqQhglb3NNduFIaiUjamkAGISdFmqciuMLRgJ5XcBbrGzYE7V7NbuT0rIwUzjTSNP4zMGg8ScQgiAly1s+r3s90eltESm+zyf0rT9dgf03gn7O+XCYPDxaafbrEH4txsRlAE36QzALR+2LJGwE75ZMOH9HIDToi98LowN5W76zFNuwX6Khff2k9ScwxUGjarl03u4iNpQQ0teL86nQrEM+W9fRhre6NRLBFfpDlLDrmBK3h500qCBnfKMKGAQCkj8ynr+VfFcDtvbdIAFWj3iYRU2Twf/9uLHC2BiCqAnqAxbgierqGPqrR/ZsUBlnsaLgoZ2SGKMeKufCoEL9mefaUCVNDdzKlPZsxiNymdgTmwfoVQQRBEUJ+ZxtOZf4ZhoQEQqK/8H2ifB9/KR+CEtysKaleTiObxlmCV/ky8J+ON1r4FHovrCietv6wRL7Kw69rU1vRxeWmNAUsgctA+gXE/p14covJRJHjSxKfqhBJcTAkATgJw/Lx5wFpmGjgtywzMV0ynbGDmMPGsz054jnOjej9i/9kgm3RfN7AYMoy70N+o5pX49dPopPgMDTl7Z8hi6pWPt6KhCkQs1XzcbT
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(396003)(136003)(346002)(366004)(39860400002)(41300700001)(316002)(5660300002)(8936002)(83380400001)(38100700002)(2906002)(66476007)(26005)(6506007)(6512007)(86362001)(186003)(8676002)(66556008)(82960400001)(6486002)(478600001)(66946007)(9686003)(21314003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hIDSuZEONUUNAY/kciutLDbCA54GzA2kubEOwSqRhohW9PE5NEvfan2FMnk6?=
+ =?us-ascii?Q?pTBLV4yGrSZ3km8nCzjQxXfbnIWzkD6PBabI85ZrpWIpMwUIEhkSnLVACwJ0?=
+ =?us-ascii?Q?zvnplBLOGIUntGYsFICBR1u5ASLXD7QpXTUjhEyqo4C1EvW45X1hULQbo/z1?=
+ =?us-ascii?Q?2uzD3ni0SFJks/J2A3ameEPNoSi7furjHmIyb7kSa0cz0KVyJ7HiXEgI+H2/?=
+ =?us-ascii?Q?S5uhxkYiyOqGUPkhRU8SrVNtX3sMXO/oQk0oFhjHQntlWOryV6GNUaR+PVxL?=
+ =?us-ascii?Q?mpGr3huvgwU5tSNp3LxJx1qQlAEK10hP1rnwhirE+3azBv+lt7pydVQswR+T?=
+ =?us-ascii?Q?MTll6ntV/ySKI0mOpuyRZWVDv73wMhIb9xII5WWLPXmb2yzZXVLVb4macpur?=
+ =?us-ascii?Q?qFC8Sq4lSC5SDdwuPUqXXebicvoQU5Kx+HkZyjWCperRRiHRjuFz3+5RmU81?=
+ =?us-ascii?Q?BRcWFnWh2dxacQqa+YOUQ5Fkr2r23NLoK/Y7IFGCkvwTDAOTKbQpT4kwkdxZ?=
+ =?us-ascii?Q?5g6DOyRY6BTUVh6TzR7OtI5cItgKB0UjxpdrU98Kb4OAmZ3tua7/vUUnR2XZ?=
+ =?us-ascii?Q?U02V1DbehvrRjdIPWDn/YrMoNyqZ7XhAFt2iAWI8ltIEz74jTbUWHrrkzTgV?=
+ =?us-ascii?Q?zcEmPyuRSi7fXLocl/yETe78zZ3O2QeboiA1ZJi+B8CHqA3i9I0XEV6/CaPb?=
+ =?us-ascii?Q?7KaULvtBotRFD1x3G014xkwAKDVZDplxZ9uISS3fK9fyNh68z2T+Wtq9Q8HU?=
+ =?us-ascii?Q?PZljWJdHA4mCRFBNRWUsx6xlfp1DwlJp3He0rQezfgAZbGBDo5fIZcvyU1f6?=
+ =?us-ascii?Q?peeDigi0WN/JzMeoAq7igPxjaAAA+bzCNzHyqEk7fNKLImdMvfzcPHFViDQi?=
+ =?us-ascii?Q?trdQaWUP+DoPc/DYkztJ/0FD25u3iNZcpxOJzcK69BRtxmE1zC+r0z9t4Oga?=
+ =?us-ascii?Q?/HZGE3zX4MpaZtXK7404inrXU5KXU4FwcL/3PqytvStM+wKuQre66KFMT1W8?=
+ =?us-ascii?Q?zpFdt3cMWBzTMm+U598899VO0JKlsSo+VA0982ddG2YJLI23YRqtZ9aMBVTG?=
+ =?us-ascii?Q?8m9zs+ezf2MLp/TTtonc7roakSKNFNMOYCpxSJ224MaGh74a5fmewpBQeaLh?=
+ =?us-ascii?Q?ZpK4R6U1v05BNO/yz0KVy9PBKCrn+EvJ6VDJyNgT7BL+XwtwkeS+sGvwOyod?=
+ =?us-ascii?Q?jt7SfwQ6RZjzyb3tYmLglGdaXE7vLr6QrOjlby5kVbMTgHRt/hflnYbaa9uH?=
+ =?us-ascii?Q?vbOGxKUBETczxc4om7duBHZbZkRx0f4nVtCWBGOu8fQSFoujwF1J5EpDBqx+?=
+ =?us-ascii?Q?fiXcaYPqerP71Z2P8Z7nZCRLR/2yRFeQ3SANDol0if2TKODnOshNjbyVpYm7?=
+ =?us-ascii?Q?uiqJrbbicBlMiA9396Iy9yK9e7zK7bXpYqWb7WC6DnlfD5An26297TBQgaxw?=
+ =?us-ascii?Q?IHixMUEsc80YSf7af3OeEP6lV/pKeT5pf79EIcyOW+VdRgV2UwKBbwVfKRZ6?=
+ =?us-ascii?Q?aM8VAS1Ui1rtAvQc8NdVVmvwKlAKKSHvIr6Yh/gvVEsVEzUkQ6BFLaLN7bSV?=
+ =?us-ascii?Q?FmlFitCqznjz9g4q8F17A4mriHN9B8aKJ/MaoBWaktD5KfCEnsHhPO0MS36O?=
+ =?us-ascii?Q?dA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2ff655f-8418-4202-fd2c-08da64696165
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 00:48:19.6170
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: z/wEXRPZyKzDipsfcIJu2015XNesTFTXvUAmIhk0/mDUVbu+1B97ldeBGjyl2kXnhTly+G6Tm48x8WVQwMLsVslt/HmjoVWxtW+KGMLsJY0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR11MB4456
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 6:02 AM Alexander Stein
-<alexander.stein@ew.tq-group.com> wrote:
->
+Jane Chu wrote:
+> Commit 7917f9cdb503 ("acpi/nfit: rely on mce->misc to determine poison
+> granularity") changed nfit_handle_mce() callback to report badrange for
+> each poison at an alignment indicated by 1ULL << MCI_MISC_ADDR_LSB(mce->misc)
+> instead of the hardcoded L1_CACHE_BYTES. However recently on a server
+> populated with Intel DCPMEM v2 dimms, it appears that
+> 1UL << MCI_MISC_ADDR_LSB(mce->misc) turns out is 4KiB, or 8 512-byte blocks.
+> Consequently, injecting 2 back-to-back poisons via ndctl, and it reports
+> 8 poisons.
+> 
+> [29076.590281] {3}[Hardware Error]:   physical_address: 0x00000040a0602400
+> [..]
+> [29076.619447] Memory failure: 0x40a0602: recovery action for dax page: Recovered
+> [29076.627519] mce: [Hardware Error]: Machine check events logged
+> [29076.634033] nfit ACPI0012:00: addr in SPA 1 (0x4080000000, 0x1f80000000)
+> [29076.648805] nd_bus ndbus0: XXX nvdimm_bus_add_badrange: (0x40a0602000, 0x1000)
+> [..]
+> [29078.634817] {4}[Hardware Error]:   physical_address: 0x00000040a0602600
+> [..]
+> [29079.595327] nfit ACPI0012:00: addr in SPA 1 (0x4080000000, 0x1f80000000)
+> [29079.610106] nd_bus ndbus0: XXX nvdimm_bus_add_badrange: (0x40a0602000, 0x1000)
+> [..]
+> {
+>   "dev":"namespace0.0",
+>   "mode":"fsdax",
+>   "map":"dev",
+>   "size":33820770304,
+>   "uuid":"a1b0f07f-747f-40a8-bcd4-de1560a1ef75",
+>   "sector_size":512,
+>   "align":2097152,
+>   "blockdev":"pmem0",
+>   "badblock_count":8,
+>   "badblocks":[
+>     {
+>       "offset":8208,
+>       "length":8,
+>       "dimms":[
+>         "nmem0"
+>       ]
+>     }
+>   ]
+> }
+> 
+> So, 1UL << MCI_MISC_ADDR_LSB(mce->misc) is an unreliable indicator for poison
+> radius and shouldn't be used.  More over, as each injected poison is being
+> reported independently, any alignment under 512-byte appear works:
+> L1_CACHE_BYTES (though inaccurate), or 256-bytes (as ars->length reports),
+> or 512-byte.
+> 
+> To get around this issue, 512-bytes is chosen as the alignment because
+>   a. it happens to be the badblock granularity,
+>   b. ndctl inject-error cannot inject more than one poison to a 512-byte block,
+>   c. architecture agnostic
 
-Thanks for testing all my patches and helping me debug this.
+I am failing to see the kernel bug? Yes, you injected less than 8
+"badblocks" of poison and the hardware reported 8 blocks of poison, but
+that's not the kernel's fault, that's the hardware. What happens when
+hardware really does detect 8 blocks of consective poison and this
+implementation decides to only record 1 at a time?
 
-Btw, can you try to keep the subject the same please? Looks like
-somewhere in your path [EXT] is added sometimes. lore.kernel.org keeps
-the thread together, but my email client (gmail) gets confused.
+It seems the fix you want is for the hardware to report the precise
+error bounds and that 1UL << MCI_MISC_ADDR_LSB(mce->misc) does not have
+that precision in this case.
 
-> Am Dienstag, 5. Juli 2022, 03:24:33 CEST schrieb Saravana Kannan:
-> > On Mon, Jul 4, 2022 at 12:07 AM Alexander Stein
-> >
-> > <alexander.stein@ew.tq-group.com> wrote:
-> > > Am Freitag, 1. Juli 2022, 09:02:22 CEST schrieb Saravana Kannan:
-> > > > On Thu, Jun 30, 2022 at 11:02 PM Alexander Stein
-> > > >
-> > > > <alexander.stein@ew.tq-group.com> wrote:
-> > > > > Hi Saravana,
-> > > > >
-> > > > > Am Freitag, 1. Juli 2022, 02:37:14 CEST schrieb Saravana Kannan:
-> > > > > > On Thu, Jun 23, 2022 at 5:08 AM Alexander Stein
-> > > > > >
-> > > > > > <alexander.stein@ew.tq-group.com> wrote:
-> > > > > > > Hi,
-> > > > > > >
-> > > > > > > Am Dienstag, 21. Juni 2022, 09:28:43 CEST schrieb Tony Lindgren:
-> > > > > > > > Hi,
-> > > > > > > >
-> > > > > > > > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> > > > > > > > > Now that fw_devlink=on by default and fw_devlink supports
-> > > > > > > > > "power-domains" property, the execution will never get to the
-> > > > > > > > > point
-> > > > > > > > > where driver_deferred_probe_check_state() is called before the
-> > > > > > > > > supplier
-> > > > > > > > > has probed successfully or before deferred probe timeout has
-> > > > > > > > > expired.
-> > > > > > > > >
-> > > > > > > > > So, delete the call and replace it with -ENODEV.
-> > > > > > > >
-> > > > > > > > Looks like this causes omaps to not boot in Linux next. With
-> > > > > > > > this
-> > > > > > > > simple-pm-bus fails to probe initially as the power-domain is
-> > > > > > > > not
-> > > > > > > > yet available. On platform_probe() genpd_get_from_provider()
-> > > > > > > > returns
-> > > > > > > > -ENOENT.
-> > > > > > > >
-> > > > > > > > Seems like other stuff is potentially broken too, any ideas on
-> > > > > > > > how to fix this?
-> > > > > > >
-> > > > > > > I think I'm hit by this as well, although I do not get a lockup.
-> > > > > > > In my case I'm using
-> > > > > > > arch/arm64/boot/dts/freescale/imx8mq-tqma8mq-mba8mx.dts and
-> > > > > > > probing of
-> > > > > > > 38320000.blk-ctrl fails as the power-domain is not (yet) registed.
-> > > > > >
-> > > > > > Ok, took a look.
-> > > > > >
-> > > > > > The problem is that there are two drivers for the same device and
-> > > > > > they
-> > > > > > both initialize this device.
-> > > > > >
-> > > > > >     gpc: gpc@303a0000 {
-> > > > > >
-> > > > > >         compatible = "fsl,imx8mq-gpc";
-> > > > > >
-> > > > > >     }
-> > > > > >
-> > > > > > $ git grep -l "fsl,imx7d-gpc" -- drivers/
-> > > > > > drivers/irqchip/irq-imx-gpcv2.c
-> > > > > > drivers/soc/imx/gpcv2.c
-> > > > > >
-> > > > > > IMHO, this is a bad/broken design.
-> > > > > >
-> > > > > > So what's happening is that fw_devlink will block the probe of
-> > > > > > 38320000.blk-ctrl until 303a0000.gpc is initialized. And it stops
-> > > > > > blocking the probe of 38320000.blk-ctrl as soon as the first driver
-> > > > > > initializes the device. In this case, it's the irqchip driver.
-> > > > > >
-> > > > > > I'd recommend combining these drivers into one. Something like the
-> > > > > > patch I'm attaching (sorry for the attachment, copy-paste is
-> > > > > > mangling
-> > > > > > the tabs). Can you give it a shot please?
-> > > > >
-> > > > > I tried this patch and it delayed the driver initialization (those of
-> > > > > UART
-> > > > > as
-> > > >
-> > > > > well BTW). Unfortunately the driver fails the same way:
-> > > > Thanks for testing the patch!
-> > > >
-> > > > > > [    1.125253] imx8m-blk-ctrl 38320000.blk-ctrl: error -ENODEV:
-> > > > > > failed
-> > > > > > to
-> > > > >
-> > > > > attach power domain "bus"
-> > > > >
-> > > > > More than that it even introduced some more errors:
-> > > > > > [    0.008160] irq: no irq domain found for gpc@303a0000 !
-> > > >
-> > > > So the idea behind my change was that as long as the irqchip isn't the
-> > > > root of the irqdomain (might be using the terms incorrectly) like the
-> > > > gic, you can make it a platform driver. And I was trying to hack up a
-> > > > patch that's the equivalent of platform_irqchip_probe() (which just
-> > > > ends up eventually calling the callback you use in IRQCHIP_DECLARE().
-> > > > I probably made some mistake in the quick hack that I'm sure if
-> > > > fixable.
-> > > >
-> > > > > > [    0.013251] Failed to map interrupt for
-> > > > > > /soc@0/bus@30400000/timer@306a0000
-> > > >
-> > > > However, this timer driver also uses TIMER_OF_DECLARE() which can't
-> > > > handle failure to get the IRQ (because it's can't -EPROBE_DEFER). So,
-> > > > this means, the timer driver inturn needs to be converted to a
-> > > > platform driver if it's supposed to work with the IRQCHIP_DECLARE()
-> > > > being converted to a platform driver.
-> > > >
-> > > > But that's a can of worms not worth opening. But then I remembered
-> > > > this simpler workaround will work and it is pretty much a variant of
-> > > > the workaround that's already in the gpc's irqchip driver to allow two
-> > > > drivers to probe the same device (people really should stop doing
-> > > > that).
-> > > >
-> > > > Can you drop my previous hack patch and try this instead please? I'm
-> > > > 99% sure this will work.
-> > > >
-> > > > diff --git a/drivers/irqchip/irq-imx-gpcv2.c
-> > > > b/drivers/irqchip/irq-imx-gpcv2.c index b9c22f764b4d..8a0e82067924
-> > > > 100644
-> > > > --- a/drivers/irqchip/irq-imx-gpcv2.c
-> > > > +++ b/drivers/irqchip/irq-imx-gpcv2.c
-> > > > @@ -283,6 +283,7 @@ static int __init imx_gpcv2_irqchip_init(struct
-> > > > device_node *node,
-> > > >
-> > > >          * later the GPC power domain driver will not be skipped.
-> > > >          */
-> > > >
-> > > >         of_node_clear_flag(node, OF_POPULATED);
-> > > >
-> > > > +       fwnode_dev_initialized(domain->fwnode, false);
-> > > >
-> > > >         return 0;
-> > > >
-> > > >  }
-> > >
-> > > Just to be sure here, I tried this patch on top of next-20220701 but
-> > > unfortunately this doesn't fix the original problem either. The timer
-> > > errors are gone though.
-> >
-> > To clarify, you had the timer issue only with my "combine drivers" patch,
-> > right?
->
-> That's correct.
->
-> > > The probe of imx8m-blk-ctrl got slightly delayed (from 0.74 to 0.90s
-> > > printk
-> > > time) but results in the identical error message.
-> >
-> > My guess is that the probe attempt of blk-ctrl is delayed now till gpc
-> > probes (because of the device links getting created with the
-> > fwnode_dev_initialized() fix), but by the time gpc probe finishes, the
-> > power domains aren't registered yet because of the additional level of
-> > device addition and probing.
-> >
-> > Can you try the attached patch please?
->
-> Sure, it needed some small fixes though. But the error still is present.
->
-> > And if that doesn't fix the issues, then enable the debug logs in the
-> > following functions please and share the logs from boot till the
-> > failure? If you can enable CONFIG_PRINTK_CALLER, that'd help too.
-> > device_link_add()
-> > fwnode_link_add()
-> > fw_devlink_relax_cycle()
->
-> I switched fw_devlink_relax_cycle() for fw_devlink_relax_link() as the former
-> has no debug output here.
->
-> For the record I added the following line to my kernel command line:
-> > dyndbg="func device_link_add +p; func fwnode_link_add +p; func
-> fw_devlink_relax_link +p"
->
-> I attached the dmesg until the probe error to this mail. But I noticed the
-> following lines which seem interesting:
-> > [    1.466620][    T8] imx-pgc imx-pgc-domain.5: Linked as a consumer to
-> > regulator.8
-> > [    1.466743][    T8] imx-pgc imx-pgc-domain.5: imx_pgc_domain_probe: Probe
-> succeeded
-> > [    1.474733][    T8] imx-pgc imx-pgc-domain.6: Linked as a consumer to
-> regulator.9
-> > [    1.474774][    T8] imx-pgc imx-pgc-domain.6: imx_pgc_domain_probe: Probe
-> succeeded
-
-I'm guessing this happens after the probe error.
-
-Ok, I looked at the dmesg logs and this pretty much confirms my
-thought on why the probe ordering wasn't maintained.
-
-The power domains lack a compatible property, so the blk-ctrl is
-linked as a consumer of the gpc instead:
-[    0.343905][    T1] blk-ctrl@38320000 Linked as a fwnode consumer
-to gpc@303a0000
-[    0.343943][    T1] blk-ctrl@38320000 Linked as a fwnode consumer
-to clock-controller@30380000
-This ^^ is the device tree parsing figuring out the dependencies
-between the DT nodes.
-
-[    0.368462][    T1] platform 38320000.blk-ctrl: Linked as a
-consumer to 30380000.clock-controller
-[    0.368542][    T1] platform 38320000.blk-ctrl: Linked as a
-consumer to 303a0000.gpc
-This ^^ is converting the DT node dependencies into device links.
-
-So, the only real options are:
-1. Fix DT and add a compatible string to the DT nodes.
-2. Move the initcall level of the regulator driver so the powerdomain
-probe doesn't get deferred. Not ideal that we are playing initcall
-chicken to handle the feature meant to remove the need for initcall
-chicken. But I see these "device, but won't have a compatible
-property" as exceptions and feel it's okay to have to play with
-initcall levels to handle those.
-3. Provide a helper function that driver that do this (creating
-devices for child DT nodes without compatible property) can use to
-move/copy their consumer device links to the child devices they add.
-And then fix up the gpc driver so that it copies the gpc -- blk-ctrl
-device link to the proper power domain.
-4. I have another idea for how I could fix that at a driver core
-level, but I'm not sure it'll work yet and its definitely not
-something I want to try and get in for 5.19 -- too late for that IMHO.
-
-Want to give (2) a shot so that I can still try to keep the cleanup
-series that caused this problem (that's the long term goal) while I
-give (3) and (4) a shot for 5.20?
-
-> regulator.8 and regulator.9 is the power sequencer, attached on I2C. This also
-> makes perfectly sense if you look at [1]ff. These power domains are supplied
-> by specific power supply rails. Several, if not all, imx8mq boards have this
-> kind of setting.
-
-Yeah, makes sense in terms of what's going on.
-
--Saravana
-
->
-> > Btw, part of the reason I'm trying to make sure we fix it the right
-> > way is that when we try to enable async boot by default, we don't run
-> > into issues.
->
-> Sounds resonable.
->
-> Best regards,
-> Alexander
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/
-> arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi#n84
+However, the ARS engine likely can return the precise error ranges so I
+think the fix is to just use the address range indicated by 1UL <<
+MCI_MISC_ADDR_LSB(mce->misc) to filter the results from a short ARS
+scrub request to ask the device for the precise error list.

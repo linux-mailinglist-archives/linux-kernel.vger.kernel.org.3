@@ -2,152 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30843573279
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A60DE573270
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235188AbiGMJ2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S234664AbiGMJ2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235422AbiGMJ2n (ORCPT
+        with ESMTP id S230442AbiGMJ2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:28:43 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B7515FE9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:28:41 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2ef5380669cso106187187b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:28:41 -0700 (PDT)
+        Wed, 13 Jul 2022 05:28:22 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B057F2E27
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:28:21 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id u15so1883493lji.10
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:28:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YLa+B7g0k4vjWxV/5/J/yQw4cNuAt3dnRpzqWxr+dBM=;
-        b=WCXPC3m3TqqYyHJ+uDfaD+33LK+kR0QTRuUNWFbQ/yiL1aUJNetddXLM+3nxPGejsh
-         Ls/9+uJ8DBwyNtwZzS2bmCqOgmd64HDETf5lolZIerFBDUMyM10UXHSgqJRlGnaP6+Sr
-         7WQw0xRdGLsRdqbYhZtYiXHgC+f9Xsu3UhqrEzWn4Z1/CSbfHNbd8LkOBe5qRW4ixNbs
-         KyQ5sqcw9dz3EgF4DFFiG0BAHXiangGWZsG4iVmPViGONkbOq3wcpVyCIXBH+7zZmcO/
-         M08jelPQe0TpKZi1+GOuZgf4DLn4ormxvV2r8Qjs/MYHhlBjn3biZ9auY1KBNWeaQ5Ps
-         V8wg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=geaCj81ycceeJeyXEXcktsHsVE7AX6bBBwQNAJ0pr/A=;
+        b=S9UUOPTrazzxnheUfpX3I67Pd3ngtwGlwrZqkw4oH5mr1bKsYmCavkQel245szv62F
+         s4arzlvdOfTd1dbMTCq83Gkjozr6T/gW6c0Bw5IlktPUIaZ7rI1iPokcIVeMXPtWiwIR
+         VmTAC+OAIG/RcV9mR2slJm3AIYbKkL/ZsBD71sNqogZsTllb67OPGdJuu2OGH92Omn80
+         koRg5l6IlJB15f5Sr9jDO6nbOgMlNZnzMBTC/InVB3RLWD657uZgiQUPbTUIfRZMZVpu
+         BbOdV+n0fXDsbdzy89aVce+EJ6IdssfNbrzuK0kDY5q0+Jyzgap+HKZ9CnKNT2BVVstG
+         091w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YLa+B7g0k4vjWxV/5/J/yQw4cNuAt3dnRpzqWxr+dBM=;
-        b=Qt3ZLVygtFkcWbCVAKxgWsP9URk70VvxQkghKxqCUvva0+wce4aX/IYW0Wr5HFsco3
-         vdXnHHiiRJugxgNWnHLFvQqEQNklaFWGSmBvgrOoNkxQvqZUEqH2Y8JEE28k58FcNLT7
-         JQTsVevciyYQ+g9OiqZo0PMLVvWEV9jmnxWhDdC4SGPjCdvQko7eb2OrglaRrSSy0bcE
-         yLyUWiekIWaO/b54oGc18VvvuM2p3YzVabpU+/UAPL0cwODdeTRN1YFziMEcR1IShMNw
-         Kke6dmWj/oMKen1G1z7pMmA3IwIOIEI0yY02K/08Hkd7qpA0OOmBPz9cIgfqE7toWCW3
-         rcqA==
-X-Gm-Message-State: AJIora+JrqoB0jf0nRT/havm2XAuajJkYbaQP2Rpjt5eakCPfOJgtew8
-        3uDj9wU0tU5AeRk7zxOsxxnFCZJtb39x+9emKCzNhA==
-X-Google-Smtp-Source: AGRyM1uhGuFtib7Qkw+eg+f4MeHVwIDAHRzhZCC99tpjAc0xrKFlrRMHg2i9KL2/AC4ul/k3MxgtlGExoxaQBzv8w5I=
-X-Received: by 2002:a81:5dd5:0:b0:31d:c5ac:e3c0 with SMTP id
- r204-20020a815dd5000000b0031dc5ace3c0mr667093ywb.264.1657704520206; Wed, 13
- Jul 2022 02:28:40 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=geaCj81ycceeJeyXEXcktsHsVE7AX6bBBwQNAJ0pr/A=;
+        b=sQGbrhPREdb88xo544JtlIpQRIezP8DpXj5eZgDyFklQ+XgolxA8MSb63hQUsUnmFI
+         FtCGui3AiMqI5aJZvYhsl44dCEOZWSnHw3nRw7YihrjIqT17iJtFYBf/iiMFAM00X7EZ
+         yZ4DE/6xo7LjNHOUGwbXNWaNd8mZYCq1n3rADmPU3x0QHv8Ld+Z4uTIelgHuAi/glx6o
+         PJokTxMoD9Cxtjt0DC9oLnunXjO1pZbEUS2FKsfSESwp1yLGJMcKBpt3pHsyDbeFrd+I
+         2vsB0vFMzyiiWhgBzwq2OPBcuUPiL/Xyq8vj/NidDoDE3PtbqE5rvpc0PoCSVibhNXRj
+         GboQ==
+X-Gm-Message-State: AJIora+s5bdnygGr4n0gbfpZlZMxkYXja9OyiFFtAQWYjfAgYJcFb32z
+        ipD//s9hCJXP82JTuvr3VOJASQ==
+X-Google-Smtp-Source: AGRyM1stmOMnrs7WjrVZAWSyI7MmKoT76g3H1/dYirwNw8pzpVrkFiBFzsSgP1oFmVuQx70bMEdPPw==
+X-Received: by 2002:a2e:a9a6:0:b0:25d:6062:91af with SMTP id x38-20020a2ea9a6000000b0025d606291afmr1187100ljq.144.1657704499441;
+        Wed, 13 Jul 2022 02:28:19 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id l26-20020a2e909a000000b0025d4d4b4edbsm2990436ljg.34.2022.07.13.02.28.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 02:28:18 -0700 (PDT)
+Message-ID: <f9e1ad3b-d6ed-7392-2fd9-ca6ff0417b16@linaro.org>
+Date:   Wed, 13 Jul 2022 11:28:16 +0200
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-20-glider@google.com>
-In-Reply-To: <20220701142310.2188015-20-glider@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 13 Jul 2022 11:28:04 +0200
-Message-ID: <CANpmjNNmZpw5P4y9XLT-GsfNOegNcQD=fZLFagHW=XsDqF2fxQ@mail.gmail.com>
-Subject: Re: [PATCH v4 19/45] kmsan: unpoison @tlb in arch_tlb_gather_mmu()
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v18 1/2] dt-bindings: usb: Add analogix anx7411 PD binding
+Content-Language: en-US
+To:     Xin Ji <xji@analogixsemi.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, Rob Herring <robh@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220713084139.2810115-1-xji@analogixsemi.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220713084139.2810115-1-xji@analogixsemi.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Jul 2022 at 16:24, Alexander Potapenko <glider@google.com> wrote:
->
-> This is a hack to reduce stackdepot pressure.
-
-Will it cause false negatives or other issues? If not, I'd just call
-it an optimization and not a hack.
-
-> struct mmu_gather contains 7 1-bit fields packed into a 32-bit unsigned
-> int value. The remaining 25 bits remain uninitialized and are never used,
-> but KMSAN updates the origin for them in zap_pXX_range() in mm/memory.c,
-> thus creating very long origin chains. This is technically correct, but
-> consumes too much memory.
->
-> Unpoisoning the whole structure will prevent creating such chains.
->
-> Signed-off-by: Alexander Potapenko <glider@google.com>
-
-Acked-by: Marco Elver <elver@google.com>
-
+On 13/07/2022 10:41, Xin Ji wrote:
+> Add analogix PD chip anx7411 device binding
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> 
 > ---
-> Link: https://linux-review.googlesource.com/id/I76abee411b8323acfdbc29bc3a60dca8cff2de77
-> ---
->  mm/mmu_gather.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
-> index a71924bd38c0d..add4244e5790d 100644
-> --- a/mm/mmu_gather.c
-> +++ b/mm/mmu_gather.c
-> @@ -1,6 +1,7 @@
->  #include <linux/gfp.h>
->  #include <linux/highmem.h>
->  #include <linux/kernel.h>
-> +#include <linux/kmsan-checks.h>
->  #include <linux/mmdebug.h>
->  #include <linux/mm_types.h>
->  #include <linux/mm_inline.h>
-> @@ -265,6 +266,15 @@ void tlb_flush_mmu(struct mmu_gather *tlb)
->  static void __tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm,
->                              bool fullmm)
->  {
-> +       /*
-> +        * struct mmu_gather contains 7 1-bit fields packed into a 32-bit
-> +        * unsigned int value. The remaining 25 bits remain uninitialized
-> +        * and are never used, but KMSAN updates the origin for them in
-> +        * zap_pXX_range() in mm/memory.c, thus creating very long origin
-> +        * chains. This is technically correct, but consumes too much memory.
-> +        * Unpoisoning the whole structure will prevent creating such chains.
-> +        */
-> +       kmsan_unpoison_memory(tlb, sizeof(*tlb));
->         tlb->mm = mm;
->         tlb->fullmm = fullmm;
->
-> --
-> 2.37.0.rc0.161.g10f37bed90-goog
->
+> v17 -> v18 : Change node name from "usb_typec" to "typec"
+
+Node name was anx7411, not usb_typec. What are you changing here? The label?
+
+Best regards,
+Krzysztof

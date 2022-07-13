@@ -2,95 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8485F573213
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D361C57321F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbiGMJIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S235121AbiGMJKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbiGMJIJ (ORCPT
+        with ESMTP id S231801AbiGMJKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:08:09 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9672E7AFA
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:08:08 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id i8-20020a056e02152800b002dc3cddda9cso6068312ilu.16
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:08:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=IjUx3jvjrE3LSejVCszDwxlxPoVo6L4bZafVfTgekgo=;
-        b=Zhck9JKK1F4YeRqaw3id3YahwAbjy89dcqXHu0uUI7He+Ukia+PMwzk/mUWxor8+fm
-         vbjoTnEtCcOcP9TufKENQSTOVgq4gg5vZCKb1Qtp4i7h+O8TzHyTmE5Z18HDOGx63TS3
-         A7URhdLAYFDtmLRYZ18A6gf4reQcI/mzEQqx+5waLctogVKjAlCcabDHd9EGJhD4McFF
-         ZqW5T2onMRyMG+9mLTxOD29n97Cm2MfMTAKUnOaOUnLvitb9AnzeNyf+ka67eLpEbTL2
-         bbz818/3cx6jlAth5JsVnwqD7sgNaK+zYLCYwCEHhBcBCNkgIZ0D/72aC06JaKVPyzJe
-         /nkA==
-X-Gm-Message-State: AJIora8CCgti23qKb0Yz0tQc+jGbr+xMJ1hYmpQoXcL2G9DF2HGXQoen
-        LBC1t7XUp51SaDoLg/5VX3lzTsBC61rz/AbOebxVDNA6rtkF
-X-Google-Smtp-Source: AGRyM1sRr07Kgyknni0yh+KomEWofavQWWh71RoatCmXTlY9LIWi0y/klNu3SnXwp1O1Wel8ZK1E+uD1bDxKjrRJW1BO6Ic3Mg5K
+        Wed, 13 Jul 2022 05:10:06 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144C3DA0FC;
+        Wed, 13 Jul 2022 02:09:57 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.97.215]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MSLhm-1o0eHI3HDM-00SdqD; Wed, 13 Jul 2022 11:09:12 +0200
+Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by leknes.fjasle.eu (Postfix) with ESMTPS id A2AC83C09F;
+        Wed, 13 Jul 2022 11:09:10 +0200 (CEST)
+Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+        id 50C39ACD; Wed, 13 Jul 2022 11:09:06 +0200 (CEST)
+Date:   Wed, 13 Jul 2022 11:09:06 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
+        kernel@collabora.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] Makefile: add headers to kselftest targets
+Message-ID: <Ys6LsqvQC+h3eM46@bergen.fjasle.eu>
+References: <cover.1657614127.git.guillaume.tucker@collabora.com>
+ <745d1921a4d048ea25d262e33b40aad5ee470614.1657614127.git.guillaume.tucker@collabora.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1069:b0:2dc:7233:740b with SMTP id
- q9-20020a056e02106900b002dc7233740bmr1253741ilj.229.1657703288282; Wed, 13
- Jul 2022 02:08:08 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 02:08:08 -0700
-In-Reply-To: <181f6c7ee61.6fd1462c198214.9029235269763018181@siddh.me>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a4271f05e3ac1ff8@google.com>
-Subject: Re: [syzbot] memory leak in cfg80211_inform_single_bss_frame_data
-From:   syzbot <syzbot+7a942657a255a9d9b18a@syzkaller.appspotmail.com>
-To:     code@siddh.me, davem@davemloft.net, johannes@sipsolutions.net,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <745d1921a4d048ea25d262e33b40aad5ee470614.1657614127.git.guillaume.tucker@collabora.com>
+Jabber-ID: nicolas@jabber.no
+X-Operating-System: Debian GNU/Linux bookworm/sid
+X-Provags-ID: V03:K1:623t/4l5SVDnwrpO8+8WDgkZZ9iYHqLEZ8zhDzgcMHqriwXRBjl
+ 7NRW/7Rv9O9PM8fsCx+g7OAVRNEds0IbN1WusDd1xO+VaRd8obo34+XhLlYpMe9PQHxWAGR
+ wsA1qRPteXpxNlKSS7drRd0srLu0ZlPsbFIJ+mTduY8VOdrP8Bory9TWDOaETZwDTZ+h7tl
+ kmMcAr/CVy6KBb3MqtHbQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:G904bOaoY5I=:CzHp39EbGa7Vw0N21TnTPF
+ 6Zl+4CLeQ7dWBN2Gz5yKj+y46R7wilWqZtojOH60AUjAyVFSGXx18rv8MERDEAOJARtegpli4
+ tHQ/k2x67gefPxSNlQKrHiuMO2Zeu/Isc3hB6J6u3/iPq0nHTHdx8Dh/xPBhl2o2lSutQZ/yD
+ n094Y32TghARn7ZvPMQPlmwsN0Nixo5050ptHukFB1ZZMRFSSF6zb0vLUMiVuxzvnF70OhQZF
+ mHLUAUNLNUAOIuK4mxS5ReAcQax4x4e1OzLdyro1Ng5/NXM/CjmchdsC2WGKwg0Zu9VXHG+np
+ /TH11Ipvu3X6Kgcrq1Gyr34Ydez6WMe05IZkDWP57nnaa1OVFcRMP0DWXpTa2+paDv4nM+Tjb
+ CmhiUkStRLJC/6PrDT0Yd7rH3bYlPpwXYQAMBOwO9/Qq9T7uED/l1Dp7bCGIjsEKR7l57/nX5
+ MCF9BZlPufJ3Hxj78wJIe5URNNdYxFWsMn2veCHTyv8fAZwg/11I97iTMyC2JPfM+RXuzjsDL
+ 47tvLfzxg4MSYI5p2a3w5snqxcBP7tNCRlukhZr/6vTwy3wWb5AwfD3ywT7IyAFi94ONAsWW3
+ OFaxCnx6aJj1HECATsKxDLCQyDKKo9P4z921sJZuhCK80Sbtui0VZ8jZToApLWMHzE1FEtnIL
+ rQX82merJpt+sLOJRnyqasyFfXL3l3R4bSl6/SkyadPZihUffslW/hB1F/nEOzXGdAemg6h2k
+ /sN2TTqcAyidCemm1BQssHPPiF7EPMpGPKG+8A==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 12 Jul 2022 09:29 +0100 Guillaume Tucker wrote:
+> Add headers as a dependency to kselftest targets so that they can be
+> run directly from the top of the tree.  The kselftest Makefile used to
+> try to call headers_install "backwards" but failed due to the relative
+> path not being consistent.
+> 
+> Now we can either run this directly:
+> 
+>   $ make O=build kselftest-all
+> 
+> or this:
+> 
+>   $ make O=build headers
+>   $ make O=build -C tools/testing/selftests all
+> 
+> The same commands work as well when building directly in the source
+> tree (no O=) or any arbitrary path (relative or absolute).
+> 
+> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> ---
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-memory leak in regulatory_init_db
+You might want to add the 'Reported-by: as you did in 
+https://lore.kernel.org/linux-kbuild/a7af58feaa6ae6d3b0c8c55972a470cec62341e5.1657693952.git.guillaume.tucker@collabora.com/ 
+?
 
-BUG: memory leak
-unreferenced object 0xffff8881450dc880 (size 64):
-  comm "swapper/0", pid 1, jiffies 4294937974 (age 80.900s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    ff ff ff ff 00 00 00 00 00 00 00 00 30 30 00 00  ............00..
-  backtrace:
-    [<ffffffff86ff026b>] kmalloc include/linux/slab.h:600 [inline]
-    [<ffffffff86ff026b>] kzalloc include/linux/slab.h:733 [inline]
-    [<ffffffff86ff026b>] regulatory_hint_core net/wireless/reg.c:3216 [inline]
-    [<ffffffff86ff026b>] regulatory_init_db+0x22f/0x2de net/wireless/reg.c:4277
-    [<ffffffff81000fe3>] do_one_initcall+0x63/0x2e0 init/main.c:1295
-    [<ffffffff86f4eb10>] do_initcall_level init/main.c:1368 [inline]
-    [<ffffffff86f4eb10>] do_initcalls init/main.c:1384 [inline]
-    [<ffffffff86f4eb10>] do_basic_setup init/main.c:1403 [inline]
-    [<ffffffff86f4eb10>] kernel_init_freeable+0x255/0x2cf init/main.c:1610
-    [<ffffffff845b427a>] kernel_init+0x1a/0x1c0 init/main.c:1499
-    [<ffffffff8100225f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+Tested-by: Nicolas Schier <nicolas@fjasle.eu>
 
-[   88.
+> 
+> Notes:
+>     v2: replace headers_install with headers
+> 
+>  Makefile | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 1a6678d817bd..02502cc4ced5 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1347,10 +1347,10 @@ tools/%: FORCE
+>  # Kernel selftest
+>  
+>  PHONY += kselftest
+> -kselftest:
+> +kselftest: headers
+>  	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+>  
+> -kselftest-%: FORCE
+> +kselftest-%: headers FORCE
+>  	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
+>  
+>  PHONY += kselftest-merge
+> -- 
+> 2.30.2
 
-
-Tested on:
-
-commit:         b047602d Merge tag 'trace-v5.19-rc5' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13d4252a080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=689b5fe7168a1260
-dashboard link: https://syzkaller.appspot.com/bug?extid=7a942657a255a9d9b18a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
+-- 
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --

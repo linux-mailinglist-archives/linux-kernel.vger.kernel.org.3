@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6BE573783
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E8D573780
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234097AbiGMNfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S233987AbiGMNfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234201AbiGMNfQ (ORCPT
+        with ESMTP id S233976AbiGMNfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:35:16 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A085201A1;
-        Wed, 13 Jul 2022 06:35:12 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id p129so19293515yba.7;
-        Wed, 13 Jul 2022 06:35:12 -0700 (PDT)
+        Wed, 13 Jul 2022 09:35:00 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF75DF35;
+        Wed, 13 Jul 2022 06:34:58 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id o26so8577774qkl.6;
+        Wed, 13 Jul 2022 06:34:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1jAT5Y354YkJw84h1P0PI0w1TxH9IevY3/tBtyCFWjk=;
-        b=dh9XjpuO88cns/3aH1EgOF6kUYXzevYwYmFDL8w5uEnW8xDaPfFc6Xu8O9sxqU82Qi
-         kWy0JdOcV6yWAeOc2QNAf7pp6Axw14QrJNcSk7EE/7EzZZgMpSLOTfoWziLJVSiECZpG
-         YJFRa4r+EIOZR3oG+RyHyK4nqDtj+f2vYUSoNzQrrdpNKZsPKFL6uQmuhDYkmj5Jkq7i
-         t/hslzaJY/qS3jEJF6XUU5QlmlvDXiPyKo/NN+gQdfFdzCCLm44+A+1f+rddJ1Fe40HZ
-         qyV7QyWlCgnstQDoeZ4VKJAopbghBJ/Zf7hXGHIe3ciGY2nbIo7INSXG0tTZWV4FHkkO
-         TTIg==
+        bh=0zNovvnxCNltl7nyjpskv1bB6kdfvO0KEYNKQKCXFpg=;
+        b=BRJedK9Dm0ysBh2ysd8qA02jK/r4tE7oohouS0ATC1cZ54BWUlj7IbOtdUBSyUKhRZ
+         ZP3a0P3VMwNVCkuRG+sSNo012rQndOMPw79APKXM+aKY9XEOs3tdwis3lB8p9gELuC2N
+         J90a51xczKganDu0vuoADeholu7dvtPR9VxvRqQEcuDQLu58WyS1sGvb4DBRn25xJDmp
+         GU+/jBq5/F7bJVhTZa6oPew3PaK2mfX7Lmx5EUYI1jVFjh4PwPFMnUHO3ptKLpC/Kwve
+         gNxGOZLMROO4iHGx1117HIvj53pycNxnXy/wm3rR2T95kcYKhf7hq468QoGFeZL8eZ+k
+         eCXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1jAT5Y354YkJw84h1P0PI0w1TxH9IevY3/tBtyCFWjk=;
-        b=735QOxrSR2N+hdLt8O6yBMkAypFhmXBc2Sci2J4njAnsszpD95DxxblBwEoYzqbN6F
-         yoniLuOfoD4pN5yebQ5joqqJreAOIC5xgty1wGATQ7XUS8XHrJ2LcYsc1oNnzic4Apx2
-         jyegvy/9sA8VfMHJvXq0QEBHVqIfEETbKkPY4rqO/3XGAiMzpCJcOFQz+VPpdoc8FNRL
-         gEFWhtqsn9y3digeGKWmxt8+Zr40L1y0VWU8VkURuRfSuKH5GNcv2xf5lyP8cFxzCcVA
-         9LjzCbRpytgDAVXHJRtXAQGb0XTLrNrJ0YXf2NzRwJGchYJPyrxByg7pqlELnYVWIiYd
-         yQbg==
-X-Gm-Message-State: AJIora8bgFQXa+bbi0hRgMSkqIZ7bFS2KBvOEreoIGPCVbxX7xHgINjP
-        InNSy28v0U0H2AX0t7tOdXBEZfw1KvgiIvLKt7FJGdi6gYE=
-X-Google-Smtp-Source: AGRyM1sjtw6rsqcZfxRlukEyESkBV6p43H1uEV0wEVveC9SL7eaF9iF/13N3A+SMwKPorR+oCRgpL1D5uQIOzsD4GUM=
-X-Received: by 2002:a5b:20d:0:b0:66e:3b19:82c5 with SMTP id
- z13-20020a5b020d000000b0066e3b1982c5mr3819369ybl.517.1657719311574; Wed, 13
- Jul 2022 06:35:11 -0700 (PDT)
+        bh=0zNovvnxCNltl7nyjpskv1bB6kdfvO0KEYNKQKCXFpg=;
+        b=wqgICEEyH2iROvmWUhVlLCynPucFPrqlP46v2T7mbZ/OFaGUghTSW04FH/0puZOIbL
+         Ew7VJ2YZZFRRI6oFhSrnZ+HNu79AjYqC9Qb2dJ5Kqw9yXHd8Kb93lAFH9uWzwEUl5+O8
+         UFanr/1W8IdIdB7HnsGUUArSo1C40AzBJRQVrjCzMxWAInGaVj+12U0jKgf3aox/6Jgn
+         Ll/DWzSyJWJ7i4aXZdMwZXb8nDtDrcveoLa+gs6r0j9vDYarz+A3uf9MFBfxZxuWBwCt
+         7UdTKDXHU+gp6T7aWONjHEZ/PUAZ/39VRBL4a6qs2AVpgpsRAT5BwgsjsEFx001vih6a
+         j+Rg==
+X-Gm-Message-State: AJIora9aP7Ggy3lyH8F3jdDvuIIE7BgM9g4XusblzO2zIqMYgD06PL2d
+        0e4doLqrkUEChOdPm6L7NljVWDAvNgU2T/5eHoZAkxAvfQ2zwA==
+X-Google-Smtp-Source: AGRyM1v4o77MegwM8Z9AGbWOV3bLqRh6kQdITYwW4l4rpbhrZdNBHCS2h7p+Jxbq3BicOS5iwaZfxDSTxZNHQIBTcy0=
+X-Received: by 2002:a05:620a:1a2a:b0:6b5:93bd:b662 with SMTP id
+ bk42-20020a05620a1a2a00b006b593bdb662mr2364604qkb.522.1657719297138; Wed, 13
+ Jul 2022 06:34:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <Ys6sZj6KYthnDppq@debian> <Ys6t+q4/y4DTjLQh@hirez.programming.kicks-ass.net>
- <Ys646XwC8SorCogQ@hirez.programming.kicks-ass.net>
-In-Reply-To: <Ys646XwC8SorCogQ@hirez.programming.kicks-ass.net>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Wed, 13 Jul 2022 14:34:35 +0100
-Message-ID: <CADVatmNrdRJB+xcGSOdCf86ZuTrUATnpOhxSeA5HkUR9RT89+A@mail.gmail.com>
-Subject: Re: mainline build failure due to fc02735b14ff ("KVM: VMX: Prevent
- guest RSB poisoning attacks with eIBRS")
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220624195112.894916-1-robimarko@gmail.com> <87edyq1ujr.wl-maz@kernel.org>
+ <20220712124445.GC21746@workstation> <87czea1i2f.wl-maz@kernel.org>
+ <CAOX2RU5RX+H=omuKGye2fBy9dOFmfC9HC_3pekeGMxDJuReCUw@mail.gmail.com>
+ <d8912a0d811b5eb924b8c4136b099f72@kernel.org> <CAOX2RU4MpyEQ0RtcrZ07VXRbB+SWWU=1zWfYUXhQFtvh=MCiDw@mail.gmail.com>
+ <874jzl17lc.wl-maz@kernel.org>
+In-Reply-To: <874jzl17lc.wl-maz@kernel.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Wed, 13 Jul 2022 15:34:46 +0200
+Message-ID: <CAOX2RU5k0UJiJ7o3ULjLVLUO=cchT_Azdvzs5FKdjXLX1_muOQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: qcom: spmi-gpio: make the irqchip immutable
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-gpio@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -79,56 +75,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 1:22 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Wed, 13 Jul 2022 at 15:10, Marc Zyngier <maz@kernel.org> wrote:
 >
-> On Wed, Jul 13, 2022 at 01:35:22PM +0200, Peter Zijlstra wrote:
-> > On Wed, Jul 13, 2022 at 12:28:38PM +0100, Sudip Mukherjee (Codethink) wrote:
-> > > Hi All,
-> > >
-> > > The latest mainline kernel branch fails to build for x86_64 allmodconfig
-> > > with clang and the error is:
-> > >
-
-<snip>
-
-> >  extern u64 spec_ctrl_current(void);
+> On Wed, 13 Jul 2022 13:33:32 +0100,
+> Robert Marko <robimarko@gmail.com> wrote:
 > >
+> > On Wed, 13 Jul 2022 at 13:47, Marc Zyngier <maz@kernel.org> wrote:
+> > >
+> > > On 2022-07-13 12:08, Robert Marko wrote:
+> > > > I will look at IRQ GPIO docs, but in this case, then we have more
+> > > > conversions that
+> > > > are not correct.
+> > >
+> > > Then please point them out.
+> >
+> > Oh, now I get the issue, I was misunderstanding it completely.
+> > gpiochip_enable_irq and gpiochip_disable_irq are not being called
+> > at all.
+> >
+> > However, I dont see them being called before the conversion as well.
+> > I am not really familiar with the PMIC IRQ-s, looked like an easy conversion
+> > to get rid of the warning.
 >
-> I hate headers...
+> They definitely were. Look at how gpiochip_add_data() eventually ends
+> up calling gpiochip_set_irq_hooks((), which hijacks the irq_chip
+> function pointers to insert the calls to these helpers.
 
-very short commit message :D
+Well, that is the thing, since irqchip->irq_enable and
+irqchip->irq_disable were never
+populated in the SPMI GPIO driver, gpiochip_set_irq_hooks then does
+not insert them.
+During runtime, gpiochip_irq_enable and gpiochip_irq_disable are never
+used even before
+the conversion, that is what I am trying to convey.
 
 >
-> ---
-> diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-> index bb05ed4f46bd..cbc3b8348939 100644
-> --- a/arch/x86/include/asm/nospec-branch.h
-> +++ b/arch/x86/include/asm/nospec-branch.h
-> @@ -280,7 +280,6 @@ static inline void indirect_branch_prediction_barrier(void)
->
->  /* The Intel SPEC CTRL MSR base value cache */
->  extern u64 x86_spec_ctrl_base;
-> -extern u64 x86_spec_ctrl_current;
->  extern void write_spec_ctrl_current(u64 val, bool force);
->  extern u64 spec_ctrl_current(void);
->
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index be7c19374fdd..b64512978534 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -6831,6 +6831,8 @@ void noinstr vmx_update_host_rsp(struct vcpu_vmx *vmx, unsigned long host_rsp)
->         }
->  }
->
-> +DECLARE_PER_CPU(u64, x86_spec_ctrl_current);
-> +
->  void noinstr vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx,
->                                         unsigned int flags)
->  {
+> This is what this conversion process is all about, and you absolutely
+> need to understand that code before blindly changing drivers to squash
+> a run-time warning.
 
-The build failure is fixed with this change. Thanks.
+Yeah, I agree, hopefully, I am not annoying.
 
-
--- 
-Regards
-Sudip
+Regards,
+Robert
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

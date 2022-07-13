@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFB9573175
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EE8573177
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235732AbiGMIru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
+        id S235739AbiGMIsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbiGMIrs (ORCPT
+        with ESMTP id S235736AbiGMIsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:47:48 -0400
+        Wed, 13 Jul 2022 04:48:05 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06FBCAF32
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:47:47 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D44EA179
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:48:05 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oBY24-0005VK-2O; Wed, 13 Jul 2022 10:47:44 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oBY23-000fwn-C7; Wed, 13 Jul 2022 10:47:43 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oBY22-004tkv-Pc; Wed, 13 Jul 2022 10:47:42 +0200
-Date:   Wed, 13 Jul 2022 10:47:39 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: pm_runtime_resume_and_get in .remove callbacks
-Message-ID: <20220713084739.j4cqab6rfz22nlko@pengutronix.de>
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1oBY2F-0005W2-6u; Wed, 13 Jul 2022 10:47:55 +0200
+Message-ID: <26d5e056c4b4779293b79012468f2ac821f4c06c.camel@pengutronix.de>
+Subject: Re: [PATCH v14 13/17] PCI: imx6: Reduce resume time by only
+ starting link if it was up before suspend
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Richard Zhu <hongxing.zhu@nxp.com>, bhelgaas@google.com,
+        robh+dt@kernel.org, broonie@kernel.org, lorenzo.pieralisi@arm.com,
+        festevam@gmail.com, francesco.dolcini@toradex.com
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Date:   Wed, 13 Jul 2022 10:47:54 +0200
+In-Reply-To: <1656645935-1370-14-git-send-email-hongxing.zhu@nxp.com>
+References: <1656645935-1370-1-git-send-email-hongxing.zhu@nxp.com>
+         <1656645935-1370-14-git-send-email-hongxing.zhu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sljz5pfr44yhpo7a"
-Content-Disposition: inline
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -50,70 +51,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Freitag, dem 01.07.2022 um 11:25 +0800 schrieb Richard Zhu:
+> Because i.MX PCIe doesn't support hot-plug feature.  In the link down
+> scenario, only start the PCIe link training in resume when the link is up
+> before system suspend to avoid the long latency in the link training
+> period.
+> 
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/pci/controller/dwc/pci-imx6.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+> index e236f824c808..5a06fbca82d6 100644
+> --- a/drivers/pci/controller/dwc/pci-imx6.c
+> +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> @@ -67,6 +67,7 @@ struct imx6_pcie {
+>  	struct dw_pcie		*pci;
+>  	int			reset_gpio;
+>  	bool			gpio_active_high;
+> +	bool			link_is_up;
+>  	struct clk		*pcie_bus;
+>  	struct clk		*pcie_phy;
+>  	struct clk		*pcie_inbound_axi;
+> @@ -881,11 +882,13 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
+>  		dev_info(dev, "Link: Gen2 disabled\n");
+>  	}
+>  
+> +	imx6_pcie->link_is_up = true;
+>  	tmp = dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKSTA);
+>  	dev_info(dev, "Link up, Gen%i\n", tmp & PCI_EXP_LNKSTA_CLS);
+>  	return 0;
+>  
+>  err_reset_phy:
+> +	imx6_pcie->link_is_up = false;
+>  	dev_dbg(dev, "PHY DEBUG_R0=0x%08x DEBUG_R1=0x%08x\n",
+>  		dw_pcie_readl_dbi(pci, PCIE_PORT_DEBUG0),
+>  		dw_pcie_readl_dbi(pci, PCIE_PORT_DEBUG1));
+> @@ -1032,9 +1035,8 @@ static int imx6_pcie_resume_noirq(struct device *dev)
+>  		return ret;
+>  	dw_pcie_setup_rc(pp);
+>  
+> -	ret = imx6_pcie_start_link(imx6_pcie->pci);
+> -	if (ret < 0)
+> -		dev_info(dev, "pcie link is down after resume.\n");
+> +	if (imx6_pcie->link_is_up)
+> +		imx6_pcie_start_link(imx6_pcie->pci);
 
---sljz5pfr44yhpo7a
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+While the change itself is correct, the removal of the return value
+check should be added to the previous patch, as that's the point where
+you change this function to always return 0, rendering this check
+pointless.
 
-Hello,
+Regards,
+Lucas
 
-there is a big bunch of kernel drivers (here:
-drivers/i2c/busses/i2c-sprd.c) that have a remove callback that looks as
-follows:
+>  
+>  	return 0;
+>  }
 
-	static int sprd_i2c_remove(struct platform_device *pdev)
-	{
-		struct sprd_i2c *i2c_dev =3D platform_get_drvdata(pdev);
-		int ret;
 
-		ret =3D pm_runtime_resume_and_get(i2c_dev->dev);
-		if (ret < 0)
-			return ret;
-
-		i2c_del_adapter(&i2c_dev->adap);
-		clk_disable_unprepare(i2c_dev->clk);
-
-		pm_runtime_put_noidle(i2c_dev->dev);
-		pm_runtime_disable(i2c_dev->dev);
-
-		return 0;
-	}
-
-If pm_runtime_resume_and_get fails, the i2c adapter isn't removed, but
-as the memory backing i2c_dev goes away---it was allocated using
-devm_kzalloc in .probe()---the next i2c action will probably access
-freed memory.
-
-I'm not familiar enough with pm-runtime stuff, but wonder what
-can/should be done about that. The obvious (to me) candidates are:
-
- - log an error if pm_runtime_resume_and_get() fails, but continue to
-   clean up
- - don't check the return value at all
-
-What do you think?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---sljz5pfr44yhpo7a
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLOhqkACgkQwfwUeK3K
-7AmBHgf9FxMDSG2bONpQJNckJV1EyE8zqwOj8gHt7bZBKlSakCbbiSvXBnDX3InL
-au2oWAXwuXzdtwH1XmzUhTi5SGaGMWBlHbb491ul++FV2OAaok68mLb35MJ2UMWL
-mPk7lU7HHRwQEEnRzhvPuD43b7sPhR95KaJiDMLnCmSwxZdv0mCg9V+A+/0uedy3
-EmB5w3BwRwCIHdoQbCT8J7SxccaKxxt6hQIX5rzTjaXgDUL9mxLLb1J86l4J2c1u
-tk6EEs+yxZHYVPKaB7cXEx4PfjuKrOfeYaoNK/BsF+ND7ngqiab1Gi9tStHhe7D+
-ZEulW9z7Yi/Vn4xLroUohv7V5s+r/A==
-=jlTd
------END PGP SIGNATURE-----
-
---sljz5pfr44yhpo7a--

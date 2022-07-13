@@ -2,144 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA42573DE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF29573DF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbiGMUmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 16:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
+        id S237141AbiGMUns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 16:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbiGMUmU (ORCPT
+        with ESMTP id S229959AbiGMUnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 16:42:20 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE29D3121C;
-        Wed, 13 Jul 2022 13:42:19 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id f14so9576126qkm.0;
-        Wed, 13 Jul 2022 13:42:19 -0700 (PDT)
+        Wed, 13 Jul 2022 16:43:43 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4207565E2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:43:40 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id bb16so1021357oib.11
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:43:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=EgA3xZH3t9Zi9zRLOrZeaQRW5jyanhvvZI8yTDXgSs4=;
-        b=e3pT9sVk4ebu5rxOkVvi3A5vzXF3/bx9rOT9OycSA2cJYBt0jTTnMtcmx66L1h8f3K
-         HgERgnUfpUdtrTCrL5qNcQm2LccwN85lIvfgA0H8jmjV9qPJlelJn995PeGUUNhZLHbV
-         yAZ5NMYOrjY73ZZwlPTBbuw/49518KwjQx1mwAVnBgVR5uZi6w8RRD3RKnXlSjSJoxbZ
-         PdYzpYTrxHm3q7zwOiSFisCq4AIuWwktIaZFDkXHaZO/YvcLaBjFiqtcEBxanSMt4h9s
-         UK9CvmS6OOZNcnJPNFpXhtKERK1US62God8WWgp294lvESo3sP+0hEpqkdnLot/0KZtp
-         g8jQ==
+        bh=KyGgu7C9+fRm2ADCAgt+Fbwrs6cnQcRAcXl1tzTw7kU=;
+        b=zf1H/tMruuyBeuv7h7OXqeAxgPP4r+iHG75l/BPPZFfh8inX46JOM10fCkKKhTSck3
+         ZXbXms33ifDCmgSAh7uFtobu0BZYnWA8V6Ae450q4kpbI5+z7fuM8SDS/FlC8t8l4/bo
+         n2HIk/Ywfs+ZCAYMV4b6kAIywECnydhEc1ExX4/OHtXV/IEzW8gab+W459UYcdgZV2da
+         vbrvN83OLXFch+16Tf0AM08lykoixTZ+W1SNq+aeCOC+7JDAWEWp7wTxacpz+Ug8cXSa
+         hqN1pJc7VMty6v0Jv3X8Ij1IlBug6Tn9PFwLrjN3lrNKEhoraoCzzEmwekFyHYvUOhiq
+         SV1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=EgA3xZH3t9Zi9zRLOrZeaQRW5jyanhvvZI8yTDXgSs4=;
-        b=GgAVxYJKH7pnTeu1Ugd4jtCVORCGzxhBN1ME9l45VyzvTMdGRGZRbq/pRe5Cs9U1ds
-         7+Kdfqx00QVvl7eQFs3PXiOTlg68oiBekpc2ThAwqHpw6zEiEEW7/z1gL+5i4Ra/aGwl
-         zy+VepSvAM75iA8p7H9afZMxqF+id2socF9mQzFSHhUAFd6lWT7T/iSWTkYOJnjGFaXK
-         jVLYhd1GBTb4PqWyLCCtfNfCZe8szfqW/fkkwg7+2S13gF/ubO3zAFC9rFk8ImT4tx8W
-         wPFFF8xOOWbCqDdWv5waxrvCUkrclCfcQhmkOSe/HoD++w+WhQ7quWSvbukiNHNCUleh
-         6tvw==
-X-Gm-Message-State: AJIora9lBstuyyvkuXEbOjZkNL8Xq0MGCwe2aTglgHnQqAN8488O3nJk
-        37VtzqmPVQPEsHb3aXMpeRw=
-X-Google-Smtp-Source: AGRyM1v52gaCFcbVPmIqwbN58q5YtVm3AqVJBDc6aU4aFpenuHjRPorXmWi30FmHMGI23odMN4w6eQ==
-X-Received: by 2002:a37:806:0:b0:6b5:c19d:bbfc with SMTP id 6-20020a370806000000b006b5c19dbbfcmr90053qki.155.1657744938660;
-        Wed, 13 Jul 2022 13:42:18 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:1230:7360:5d5d:6684:e04b])
-        by smtp.gmail.com with ESMTPSA id m6-20020ac807c6000000b00315a5fa4bf6sm10194336qth.7.2022.07.13.13.42.18
+        bh=KyGgu7C9+fRm2ADCAgt+Fbwrs6cnQcRAcXl1tzTw7kU=;
+        b=XZv1KhSPs8444k57pUgS3du0lfixM6vW5vqC1jNbDn+3Ry9pfLRRUSQUaq/7LClH3c
+         oH0JHkTtVJNyzZBIZ1HZmrZFj5U1BBlVKzjLOnQrNt0DJBFCM7mBA0EarnEuf0/KQLaY
+         rNzHWyPgSYeinS1RaFmUNQewupqxnGkCl2AnnWB2ISni6X81YbINi5nC0IwtyYGgB/XT
+         6JrAZTxIaYNJdi2YxuBpVkR73TrRlMT+Jsy5fET+fhhdzG8SM+qutWIOv03qbd6/xoRA
+         tctBFvAtJZe94ZllIhxwEIf2wO1v75x712p5aY5L7z/evqngDE7jHYT/eiSlDJ7bWnbs
+         qLig==
+X-Gm-Message-State: AJIora9dmS/Que0pF4Ydu3KCquCkuT9j1GMK1XiTeIV+HcGE33OZB5R4
+        EkvrrIMkinUARlLiQWG91qSunQ==
+X-Google-Smtp-Source: AGRyM1tw2waAcoFmFyUJZc6NQdSIgEH/42t01G/WXEaFODPCZP9fl8aD/XxkiU0xnxwFtBvESa3lmQ==
+X-Received: by 2002:a05:6808:1444:b0:335:be7f:3466 with SMTP id x4-20020a056808144400b00335be7f3466mr6015025oiv.24.1657745019644;
+        Wed, 13 Jul 2022 13:43:39 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id w65-20020aca6244000000b00325cda1ff99sm5698831oib.24.2022.07.13.13.43.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 13:42:18 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 13:42:17 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>, knaerzche@gmail.com,
-        Collabora Kernel ML <kernel@collabora.com>,
-        bob.beckett@collabora.com,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        linux-staging@lists.linux.dev, nicolas.dufresne@collabora.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH 3/6] bitops: bitmap helper to set variable length values
-Message-ID: <Ys8uKUKErpoWL873@yury-laptop>
-References: <20220713163201.136202-1-sebastian.fricke@collabora.com>
- <Ys8Txuq9/u/EL6sj@yury-laptop>
- <CAHp75VeOLfKw4-+Dpn54yy6j=tdiBNA_2Kvhj7mUUjTD-M_vYA@mail.gmail.com>
- <Ys8gpl3m+vvEM7Sy@yury-laptop>
- <CAHp75VeGSWoq-a10nA9NLKBEX7L_eiL0zPMJHUbX=c64wG8hkg@mail.gmail.com>
+        Wed, 13 Jul 2022 13:43:38 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 15:43:37 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     agross@kernel.org, konrad.dybcio@somainline.org,
+        jassisinghbrar@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH v6 1/4] mailbox: qcom-apcs-ipc: make regmap max_register
+ configurable
+Message-ID: <Ys8ueXn77ZjRTt25@builder.lan>
+References: <20220707173733.404947-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHp75VeGSWoq-a10nA9NLKBEX7L_eiL0zPMJHUbX=c64wG8hkg@mail.gmail.com>
+In-Reply-To: <20220707173733.404947-1-robimarko@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 10:14:24PM +0200, Andy Shevchenko wrote:
-> On Wed, Jul 13, 2022 at 9:44 PM Yury Norov <yury.norov@gmail.com> wrote:
-> > On Wed, Jul 13, 2022 at 09:10:33PM +0200, Andy Shevchenko wrote:
-> > > On Wed, Jul 13, 2022 at 8:56 PM Yury Norov <yury.norov@gmail.com> wrote:
-> > > > On Wed, Jul 13, 2022 at 06:31:59PM +0200, Sebastian Fricke wrote:
-> > >
-> > > ...
-> > >
-> > > > I'd suggest you to try implementing
-> > > >         bitmap_copy_from(dst, src, dst_off, len)
-> > > > or even
-> > > >         bitmap_copy_from(dst, dst_off, src, src_off, len)
-> > > > if you expect that you'll need more flexibility in the future.
-> > >
-> > > Do you think it would be useful?
-> > >
-> > > We have bitmap_replace() & bitmap_remap(). Wouldn't that be enough?
-> >
-> > bitmap_replace and bitmap_remap have no an 'offset' parameter.
+On Thu 07 Jul 12:37 CDT 2022, Robert Marko wrote:
+
+> APCS register space in IPQ8074 is 0x6000 so regmap max_register needs to
+> be 0x5ffc.
 > 
-> True.
+> Instead of making it global, make max_register configurable via match data.
 > 
-> But then it's a bit too generic to have this src_off, no?
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 
-That's why I said:
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-> > > > if you expect that you'll need more flexibility in the future.
+Regards,
+Bjorn
 
-My preferred option is bitmap_copy_from(dst, src, dst_off, len).
-
-> I would rather expect for asymmetrical bitmaps that the other side
-> will be either one of the fixed width types (it makes sense to have
-> for 32- or 64-bit arguments.
-
-Look at patch #6 - it copies 1,4,5,9,10,32,37... - pretty much a random
-number number of bits.
- 
-> When you have a source bitmap of x bits and  you would like to copy it
-> into a y-bit one, I would think that either you have a small amount of
-> bits in x anyway, or x is a full-sized bitmap (same order as y).
-
-It sounds like a speculation to me. Why shouldn't we let people to
-copy with an offset any number of bits? 
-
-> Also
-> keep in mind that granularity is long, so less than long it makes no
-> sense.
+> ---
+>  drivers/mailbox/qcom-apcs-ipc-mailbox.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 > 
->   bitmap_copy_from_T(unsigned long *map, start, len, T src),
+> diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
+> index 80a54d81412e..c05f3276d02c 100644
+> --- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
+> +++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
+> @@ -27,6 +27,7 @@ struct qcom_apcs_ipc {
+>  struct qcom_apcs_ipc_data {
+>  	int offset;
+>  	char *clk_name;
+> +	unsigned int max_register;
+>  };
+>  
+>  static const struct qcom_apcs_ipc_data ipq6018_apcs_data = {
+> @@ -53,7 +54,7 @@ static const struct qcom_apcs_ipc_data sdx55_apcs_data = {
+>  	.offset = 0x1008, .clk_name = "qcom-sdx55-acps-clk"
+>  };
+>  
+> -static const struct regmap_config apcs_regmap_config = {
+> +static struct regmap_config apcs_regmap_config = {
+>  	.reg_bits = 32,
+>  	.reg_stride = 4,
+>  	.val_bits = 32,
+> @@ -91,12 +92,17 @@ static int qcom_apcs_ipc_probe(struct platform_device *pdev)
+>  	if (IS_ERR(base))
+>  		return PTR_ERR(base);
+>  
+> +	apcs_data = of_device_get_match_data(&pdev->dev);
+> +	if (!apcs_data)
+> +		return -ENODATA;
+> +
+> +	if (apcs_data->max_register)
+> +		apcs_regmap_config.max_register = apcs_data->max_register;
+> +
+>  	regmap = devm_regmap_init_mmio(&pdev->dev, base, &apcs_regmap_config);
+>  	if (IS_ERR(regmap))
+>  		return PTR_ERR(regmap);
+>  
+> -	apcs_data = of_device_get_match_data(&pdev->dev);
+> -
+>  	apcs->regmap = regmap;
+>  	apcs->offset = apcs_data->offset;
+>  
+> -- 
+> 2.36.1
 > 
-> where T is type, start is the offset in map, len is the amount of bits
-> from src starting from 0. That's what is required in most of the cases
-> I believe.
-
-But not in Sebastian's case, according to patch #6.
-
-Thanks,
-Yury

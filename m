@@ -2,187 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C58573D49
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 21:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEA2573D4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 21:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236412AbiGMTiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 15:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
+        id S236735AbiGMTln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 15:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236763AbiGMTiW (ORCPT
+        with ESMTP id S229604AbiGMTll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 15:38:22 -0400
-Received: from sonic306-20.consmr.mail.gq1.yahoo.com (sonic306-20.consmr.mail.gq1.yahoo.com [98.137.68.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A222B1AA
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:38:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1657741101; bh=gvegsbKA0Ugq9G0OL2YHhHKrmsIiT+j/cAd/AQ6k6Xs=; h=Date:Subject:From:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=MZQFw9/JPmpuroD8LpVy2xa3dQDRMBFdA1RTqyTtfXGmJdjhwswFVzyIiTtrjeVLke4h9R6vpbhZrwclrfloBGOp2L+wHCFozHHxshm96MpC8KnvxjrbCxDHjQlpRIUpJr3OANhsOqTkaEeDDjVqPyjjcXAeyvNV5NU3tZXVKTLiEK/0j7m1/p13hezk70gaMuusWCA4JRaa2p0Jzse6r7VoUMRvivNOpBOcUWfv/kgTPfpCaZHSyerdo5KS/z7T6qpy9go7S/K1gkEUopfNCmdCWHS4IDEM6Mgm4KYZ0+hLIe52QXhqSu9Uw1QPPkIk8YBYeUMNc2FU2q5el6C0KQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1657741101; bh=gZ+FnmKOj2zVRAIddN3HlDPLO1hF3KTuu1g/XWWOSUs=; h=X-Sonic-MF:Date:Subject:From:To:From:Subject; b=a2pkxJoMqAMjHRNepy+Lww/IxC/RE0FTJRCwDDn/wY4E0LE8qCmiLkebT84SXNo+TlgHg11MluHHmltYfW7+EFlikPZ0urlzkyhtpPIYnT6NBiEKkEIrkJ5o2w4NJKVADJI7/18sg/UjKFESFH+RP6AYTYe1iExKtTUIDxtME5cTWF1ITBkUd+qnpyaT8NMqsZHgdMNbLrpBrJDldNKFgg9Zzpn0s/q6EMtoxgdHUy+mvasB13AiPzduJ9m04jq7bK/mbIgapg9+LTqtVnZf/Vhl5Gjt/5aLDz9bMDVv/+DDIUctfWPI3NckNk1ChAZ+i9BgzS9+VYZuS4pRfNSbeg==
-X-YMail-OSG: 6luG7AYVM1ncjX7nkCvm9bLVe10whawpCglcbiYMUxQ2vlNaWqmz.Z9bEDOn_49
- iRTUpxQz7K2qvaNS2J2y8psq2P0rEXp5vqGKyN11aM77RStL50FoqtrPJ6j0bdro7hg3IcsH09JN
- ne3T8aDhdkdYjDnOAxG0TmPRA4l7CQlxppszvaPxaSWGEXoEQydR9VpICDcRUf7Q6fDXGSbrNB_0
- Q572vxdxIFATyMSkoluEbUneSV3IRw.dOKEdOVreZTJOYaWtmd6mp8juh1i6BTSAU6HhiNGAlCOY
- UJnkfjbe5CWsZ5zDBlI8Qvhp8HKy0d9SEZZrNp4ZbtrWZEzaDi.o3Ij7rkk9ADsdFrVldnY.psmh
- knlFFmuqF6mXn_04ZRXKcTCX8829w.r.ah1gNITohjd8JqSnEEgfuqI2rnDOSogBGCGR.ojSthf1
- 9cwixTxmGffEbuyyKVnf0x1MvLirnTSUrVAeWE2CL7louDYGEpd03wPfoAbs4rnb4l11Y3k21XcW
- Lbt1W2p4yGRVwKOIwthaq12o74hdGxUinST.2p4ZS2HgDgeQhMWD2SB7vFCrR.ZyWhmG0juDZr_y
- lFueayb9GF8.WkWzvPIeV7T6lfG73MnfrhAbz.PTbByim89nFkpHGRB46D_LIGQPYBk4gIsgml5F
- UaCBrtqWwDjWaRyxNqlCr7SfT5XlP7Xoyqgiqqq7LBD2f6fOD0qHtebvJGZccgMk8eOd0ECXRRPa
- 7l7rNL5juqI99YtXBU4dRG.uP_Tw_T3R20JxGBs.2HXiMA3GB8f16_9rZdCk86nBXJqcGwa2VJV6
- yRjwbC7UHKGmlkqDcWYRIqYrj_aaeokYD7yAwntlrAkjo1HLlcIvyT2uQOQS6wSKfB5HjgpRGS0R
- 9UhoLIsYxVvpwC6v2HWTOvlHC70DFJyk04G69oizXdeBicJGz_eH.InuYvclXJQcX44_EYXtSF80
- Xmc5ReIFPw6o4Nvw2a0nmOkwNd67hhv_6vcyGfURwyUHsuys17jHmXyKDsKkY.Bonqyx2H15AQ9b
- 3tokiGn3Y4nPWzGgnviaD6LXI3DyRu00uv8oB.gzfDuHeDhSETaPelKXMmF2nImaT.tKktPDAocD
- 4zNoYSG_xPqWm5cksbgvpXA5tR8OqpcZN6djOiIKVLu5Dyx4H6rI0Pu3oOFE17HmEZdZVmVk9lUG
- rgNtz52CKxTbNdgMmTLJBehtHFw6pansJH296wx0y26C8wZkjpFAU1J8BtiYqjNbTjOX6qNfASio
- chc.zRQCDGkLV78hS9Z4Jp9fByWtFyJ3DEhF.tco3rXB9la83ONyM2dklm9YQtcofpccVVtMZf6M
- rFuSmRQVxGQ7mpRiScTlS2dM_PU7XQO3crjWzhZAPSKYnHKwUvDse4tBUGqkgTyv2LxlEtF2p1rE
- nXzD4O54dQAj7GOH7LZJBB4y.N4VJD0c71jg_zfwoT8PIdvByLHQ2Q1J6CiGDBItchWsci_mkpsZ
- F.BvZUFLlmGv5SE2r0wFRAIRedSB1LcaiF2w.5T2dDq6c8ntVjv7WJdyViKxF4PoXjQM0MGv.zPt
- IVFuiiRtW3OxU15KT2btrB7iriw17eCDKzd7JaqBvZujjeCV05DkTGEyVqYDJdN9Z.oCduNyunYC
- LyW2kuwf0w.KJPt6J2_8s0aQzv11v76SuPMMhUMpPRWFVRnxEDeCTWiVuF4m.XqaRAonA7idjTMk
- 54s80Vdyra0rFJylo9njYUS7qP4Y.2gdNBO6WXa7w8lh3bNZDsRHChZQPMRPgE48w7zAE9lzrVoY
- 2vcFB__DJE.MEB8_a43uDr1Wd4HaM8FYe0RCu7YgdcCzjYdmZkKNkQofUpvhtMtN6E_SRxrrtOpr
- 5OURJ9WfoKOATbcUcbSSOcOrExivbbAGtL0JiQEqYJ47Qlu5QF.WhGdXRUCslRUGq7c9U3Ai_oHo
- FYRfLsYLhqfxSEzuq6g3.1FFZHFypkQhNncDQ4gU.UZIKvUyFWGBTbjYrV5qS8Wk.qyU1Q1Vedfv
- umnFJk_NU1qEn.aUiv_.fihm.ivkRppWG0H_a.yp0cuWcELo1hd.W6jKtaIAToVmuxLc.PjczmGD
- _9tuqHljtG6g92DYqhD.6WkVzlar2mMaD0RmSt3MQvM1eUp6vZ7m1AkYrquTAHudbRlCVO.AIvWI
- dnc_HFSnf6_NX0xYI.hq.laqyMvQ99CXMuLBFAlCoIczXGGRgwwRynI4OedIYZj95bLfbVasiHgZ
- WNt2WUQ--
-X-Sonic-MF: <brchuckz@aim.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.gq1.yahoo.com with HTTP; Wed, 13 Jul 2022 19:38:21 +0000
-Received: by hermes--production-bf1-58957fb66f-p6kcj (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 564882263554cd3ca01f52971e669fd2;
-          Wed, 13 Jul 2022 19:38:17 +0000 (UTC)
-Message-ID: <9c97d8b4-ae1d-efd0-8414-91a50d22cf12@netscape.net>
-Date:   Wed, 13 Jul 2022 15:38:16 -0400
+        Wed, 13 Jul 2022 15:41:41 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F005193C3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:41:40 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id x91so15453463ede.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:41:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JlnibxcVeuTrhNTEEnDRxSqv9Basa+SCy0cDueYCtlc=;
+        b=jBAPtS4Ht/YA1HgAGo6nJNH/Chk8wnobIGUV0wDT+rB+LpKCbeju35dcl6+RhymLiV
+         GFi7Zn+xCibhgRWe6lKi+ZLx21m3/yO3hBHrFmpQ/eO4Cv9pwmML8RyqfMaGLZgOWckx
+         yeswEmcWlkDjU4cTrCYv6KkfuEBLS+Q+zyu2Zo9QYMSiZzdaDZIE0fXi4ly7g6l5ewdd
+         KRIH9eFv7yfvm06lxENNAW2jjMPdpEuR5t3zrF2AdWl4wN9k00x+c7FaauDrfOn1f7++
+         GzhIwJ/NPXOqTFuwhcuaKCX8Lcgb5FmsvMuaLxtin630rcd2NFEQcrY1nMH1yuzmwTx+
+         AkFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JlnibxcVeuTrhNTEEnDRxSqv9Basa+SCy0cDueYCtlc=;
+        b=1eP8DLqTrvOAfuifkkn5yznlPfkIqNgLG5Omn2ckngjy/B0FZC3R5j48s+Nxyf4afV
+         JckeiibTqR6xkKdvQyDTVojndHaG7sclhAtG61XZ5b1taFM/JF5yOp81cTxrKfigQTU2
+         foWRSnsChVKcCnFhMFlAdoSiMxvasF9cuq4fRkMVHYJ6vG+leFLNPrPR3jML/eEnboGL
+         kcaEMLvTtKEPzOIXu7CZZIekNVzd84jMQ/60nS8VgFroqDcPNYF4rvC9ys6e36SPk03y
+         bqnOFXEZgJ4n1pWxXD4/YnU8V43bWiVsWFfjAyzJ2weWr96iQSq6zghfK8XTGSWcZp/u
+         j84Q==
+X-Gm-Message-State: AJIora89t3RovfpwNI/s18GRY153JU0T3mEDO9vJNuTq1eizR2VIKeA9
+        yahDHBA4s+4uTQ7Aw+VMq6Y=
+X-Google-Smtp-Source: AGRyM1uSW0QI8pe9PbQC9T7YLuAeVqej2y5W9kIfl+NR68Fq3mFmeO9Fbwt/6+LesiTSKdhmzI1ZWg==
+X-Received: by 2002:a05:6402:2802:b0:43a:9098:55a0 with SMTP id h2-20020a056402280200b0043a909855a0mr6995944ede.179.1657741298988;
+        Wed, 13 Jul 2022 12:41:38 -0700 (PDT)
+Received: from bhl6zntu.conti.de ([2a02:908:2525:6ea0:46bb:cacc:f548:7466])
+        by smtp.gmail.com with ESMTPSA id i20-20020a170906a29400b0072a881b21d8sm5294390ejz.119.2022.07.13.12.41.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 12:41:38 -0700 (PDT)
+From:   Wadim Mueller <wafgo01@gmail.com>
+Cc:     Wadim Mueller <wafgo01@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH] checkstack: add riscv support for scripts/checkstack.pl
+Date:   Wed, 13 Jul 2022 21:41:10 +0200
+Message-Id: <20220713194112.15557-1-wafgo01@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] Subject: x86/PAT: Report PAT on CPUs that support PAT
- without MTRR
-Content-Language: en-US
-From:   Chuck Zmudzinski <brchuckz@netscape.net>
-To:     Juergen Gross <jgross@suse.com>, Jan Beulich <jbeulich@suse.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Jane Chu <jane.chu@oracle.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        xen-devel@lists.xenproject.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-References: <9d5070ae4f3e956a95d3f50e24f1a93488b9ff52.1657671676.git.brchuckz.ref@aol.com>
- <9d5070ae4f3e956a95d3f50e24f1a93488b9ff52.1657671676.git.brchuckz@aol.com>
- <e0faeb99-6c32-a836-3f6b-269318a6b5a6@suse.com>
- <3d3f0766-2e06-428b-65bb-5d9f778a2baf@netscape.net>
- <e15c0030-3270-f524-17e4-c482e971eb88@suse.com>
- <775493aa-618c-676f-8aa4-d1667cf2ca78@netscape.net>
- <c2ead659-d0aa-5b1f-0079-ce7c02970b35@netscape.net>
- <1d06203b-97ff-e7eb-28ae-4cdbc7569218@suse.com>
- <a8d0763f-7757-38ec-f9c1-5be6629ee6b2@suse.com>
- <56a304ad-606f-6d33-bd2b-8c614fcdb666@netscape.net>
- <4e74aae6-7d8c-15ed-c571-b797239374cb@netscape.net>
-In-Reply-To: <4e74aae6-7d8c-15ed-c571-b797239374cb@netscape.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20407 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/13/2022 3:22 PM, Chuck Zmudzinski wrote:
-> On 7/13/2022 3:07 PM, Chuck Zmudzinski wrote:
-> > On 7/13/2022 9:45 AM, Juergen Gross wrote:
-> > > >> On 7/13/2022 6:36 AM, Chuck Zmudzinski wrote:
-> > > >> And in addition, if we are going to backport this patch to
-> > > >> all current stable branches, we better have a really, really,
-> > > >> good reason for changing the behavior of "nopat" on Xen.
-> > > >>
-> > > >> Does such a reason exist?
-> > > > 
-> > > > Well, the simple reason is: It doesn't work the same way under Xen
-> > > > and non-Xen (in turn because, before my patch or whatever equivalent
-> > > > work, things don't work properly anyway, PAT-wise). Yet it definitely
-> > > > ought to behave the same everywhere, imo.
-> > >
-> > > There is Documentation/x86/pat.rst which rather clearly states, how
-> > > "nopat" is meant to work. It should not change the contents of the
-> > > PAT MSR and keep it just as it was set at boot time (the doc talks
-> > > about the "BIOS" setting of the MSR, and I guess in the Xen case
-> > > the hypervisor is kind of acting as the BIOS).
-> > >
-> > > The question is, whether "nopat" needs to be translated to
-> > > pat_enabled() returning "false".
-> >
-> > When I started working on a re-factoring effort of the logic
-> > surrounding pat_enabled(), I noticed there are five different
-> > reasons in the current code for setting pat_disabled to true,
-> > which IMO is what should be a redundant variable that should
-> > always be equal !pat_enabled() and !pat_bp_enabled, but that
-> > unfortunately is not the case. The five reasons for setting
-> > pat_disabled to true are given as message strings:
-> >
-> > 1. "MTRRs disabled, skipping PAT initialization too."
-> > 2. "PAT support disabled because CONFIG_MTRR is disabled in the kernel."
-> > 3. "PAT support disabled via boot option."
-> > 4. "PAT not supported by the CPU."
-> > 5. "PAT support disabled by the firmware."
-> >
-> > The only effect of setting pat_disabled to true is to inhibit
-> > the execution of pat_init(), but it does not inhibit the execution
-> > of init_cache_modes(), which is for handling all these cases
-> > when pat_init() was skipped. The Xen case is one of those
-> > cases, so in the Xen case, pat_disabled will be true yet the
-> > only way to fix the current regression and the five-year-old
-> > commit is by setting pat_bp_enabled to true so pat_enabled()
-> > will return true. So to fix the five-year-old commit, we must have
-> >
-> > pat_enabled() != pat_disabled
-> >
-> > Something is wrong with this logic, that is why I wanted to precede
-> > my fix with some re-factoring that will change some variable
-> > and function names and modify some comments before trying
-> > to fix the five-year-old commit, so that we will never have a situation
-> > when pat_enabled() != pat_disabled.
-> >
-> > Chuck
-> Sorry, I meant to say,
->
-> To fix the five-year-old commit, we must have
->
-> pat_enabled() != !pat_disabled or pat_enabled() == pat_disabled,
->
-> and there is something wrong with that logic.
->
-> Chuck
+scripts/checkstack.pl lacks support for the riscv architecture. Add
+support to detect "addi sp,sp,-FRAME_SIZE" stack frame generation instruction
 
-So to summarize, I think this means that to be comfortable
-fixing the five-year-old commit and the current regression
-by artificially setting pat_bp_enabled and pat_enabled() to
-true, something which both my patch and Jan's patch does,
-we need to come to a new understanding of what the
-static boolean variable pat_disabled in
-arch/x86/mm/pat/memtype.c in the code really means.
+Signed-off-by: Wadim Mueller <wafgo01@gmail.com>
+---
+ scripts/checkstack.pl | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-The fact is, we have a regression and the only fix we
-can find is to try to make pat_enabled() == pat_disabled
+diff --git a/scripts/checkstack.pl b/scripts/checkstack.pl
+index d2c38584ece6..d48dfed6d3db 100755
+--- a/scripts/checkstack.pl
++++ b/scripts/checkstack.pl
+@@ -16,6 +16,7 @@
+ #	AArch64, PARISC ports by Kyle McMartin
+ #	sparc port by Martin Habets <errandir_news@mph.eclipse.co.uk>
+ #	ppc64le port by Breno Leitao <leitao@debian.org>
++#	riscv port by Wadim Mueller <wafgo01@gmail.com>
+ #
+ #	Usage:
+ #	objdump -d vmlinux | scripts/checkstack.pl [arch]
+@@ -108,6 +109,9 @@ my (@stack, $re, $dre, $sub, $x, $xs, $funcre, $min_stack);
+ 	} elsif ($arch eq 'sparc' || $arch eq 'sparc64') {
+ 		# f0019d10:       9d e3 bf 90     save  %sp, -112, %sp
+ 		$re = qr/.*save.*%sp, -(([0-9]{2}|[3-9])[0-9]{2}), %sp/o;
++	} elsif ($arch =~ /^riscv(64)?$/) {
++		#ffffffff8036e868:	c2010113          	addi	sp,sp,-992
++		$re = qr/.*addi.*sp,sp,-(([0-9]{2}|[3-9])[0-9]{2})/o;
+ 	} else {
+ 		print("wrong or unknown architecture \"$arch\"\n");
+ 		exit
+-- 
+2.25.1
 
-I need to stop thinking about this for a while. It is time
-for those who have authority to fix this regression to
-make some comments about how they think this should
-be fixed.
-
-Chuck

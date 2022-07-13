@@ -2,586 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B547B57323B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9B3573237
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235520AbiGMJQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
+        id S234512AbiGMJPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiGMJQQ (ORCPT
+        with ESMTP id S231555AbiGMJPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:16:16 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB2FE0F4F;
-        Wed, 13 Jul 2022 02:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=06OoC9oCRVg+6WOjs+yPs8q4fok70GgfrEc5ex8uQ74=; b=BpPkzSU4s2rxAkt3UlVuboyBuA
-        M00NOV5gQdzwfIRpOIOgplPbowQR7aRZAx/ZfJe0nRytzm3py0NN1S4/FP5gcL/YWwGyu/ZtgPsyM
-        JzE4NWPQfEMn2nA9Kc+x2Uv32rFkUcplIpeb8ZjYC5GvyR4R6EPVA2cxF5Za0SNIkuCgUYMpYhCeh
-        7pgKWzqd+FZoTk0j111rpjeJamZ76pf2N9AX1wAlartUh56nAEeq0s0ffVi7VbwV7fpLTCTIn+g84
-        Ob5snDQVloFLio7dZI1LaPd4NwtPthPfUI8r6PUHgWezZJ2nrLLhxWzOmnNU3c4uFeaI5vVPxfwt1
-        KhGMVdXLr20w2HpNGPltgbsdKhtXoDiv80DGzC4XPpvdMyKt6XfAUk0EL470vE/V2Xdd7iq6Uj/TX
-        RZCJW/kfKa+SZTCtcQGrdUt3dUZc3YVbbY09+ggegZ+TAzLKduX4wEpSDt3xRorQCbIcRcrFPfzue
-        6iyEy9K58j4GqHfGNxSDQHgXOPGilyi/N1s7jsJ6CjfXQCmsjzRdywawMvGN+ioQ7DrjBQQ7IYUTv
-        0pgCFiJ1NcypvGIhq9oulQORqgRoySktmyDMgxFXdg/8UVBze94AIJqSonOrAkidsqU2WyTsB/THB
-        j11N/lF1PfDxRkHWVBu8/qnClqbBuG/NWKL0wLhw0=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Nikolay Kichukov <nikolay@oldum.net>
-Subject: Re: [PATCH v5 03/11] 9p/trans_virtio: introduce struct virtqueue_sg
-Date:   Wed, 13 Jul 2022 11:14:42 +0200
-Message-ID: <15494041.V0O07oc0Fd@silver>
-In-Reply-To: <Ys3antr+zrP5eQ1Z@codewreck.org>
-References: <cover.1657636554.git.linux_oss@crudebyte.com>
- <862eef0d6d4b14faaea0d2aab982a3c8dfd8056b.1657636554.git.linux_oss@crudebyte.com>
- <Ys3antr+zrP5eQ1Z@codewreck.org>
+        Wed, 13 Jul 2022 05:15:39 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2056.outbound.protection.outlook.com [40.107.22.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4912FE0F4A;
+        Wed, 13 Jul 2022 02:15:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ChFuJkzmYTGbPqdaMsD2bnKlG/R+zsz4uCYxEfvTQN3Nec7ZG7k2iFh8jt7oxH5bB0aJsuGDA2GUDO/LzOPxbxH90lB4gSBPxPU0u3euG0ptXsno7VPb+xFgivKYC0uesd9ue5PlkLPBVHEEL4d0nlcHr0LClUt0mqUuJDr7LIPiHuRbSzOWF6tfZim7Utth9VcMnTwH+2f/4dvUvKAlF419PMRGVJI63NcCzhi96iMGF+V29zXBWkjgNkeaYJ3nS/AL4fALpY2dmGQTHuFikVgyRTZeHflqOoSquHCsiWR9ytsfCNGf17ZCYVci5hls/eDZ6eZJxETxb8pIjAUC1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CwhP8Yt+6aL2d7xq2W7/dyMtN1P6qkMvsQ+b9tZmX0w=;
+ b=G+uoORkmoJwnAUX34Yc4kurx+EsF399OnaKTxYUOQdLYZNN/QYUaKDPnc9N6GwSqYsik/e137F+XUuDdinyeIGe+bBeoZ4adtZqM1OJ5hq0AQ7GT0Axj8NN1ezRR69CggbjX7J2xDOExSUPdTsADu/w+scafvCqyn7ztERmtcRemcLVvFZ89zK8/cwDtmaPE2lph+IMSapcPch31waRbJtpMZX1KNdF5ji/1yWTuRapMBJCBYMeBXjq3uHfAZFtmBABaus23LGOKzE/H3TBFDLe28yeTMfz0SlJkADTYV4akijxV5lpDk4zW8h+/6J63eff02eAh4bKNKJ83tp/10Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CwhP8Yt+6aL2d7xq2W7/dyMtN1P6qkMvsQ+b9tZmX0w=;
+ b=RLOmoaMJrfNzGPsdz6nJigG+yWyAn/21LiOBd5z2j2AZF/06BGXhidOgsWSbYh1+WPBw/ewvbjTunGt2a6VSpwmgxKk7bpzNETMgoyBYIIIAqn/5HX7pUrnZKUK76l2JCa1HlDSpVJ0v8ySbYwJgFXmCNqLgkbEi0tCzvwgmucU=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM6PR04MB4552.eurprd04.prod.outlook.com (2603:10a6:20b:1b::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Wed, 13 Jul
+ 2022 09:15:35 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::fdd4:8557:334b:180d]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::fdd4:8557:334b:180d%7]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
+ 09:15:35 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "marex@denx.de" <marex@denx.de>,
+        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
+        "aford173@gmail.com" <aford173@gmail.com>,
+        "Markus.Niebel@ew.tq-group.com" <Markus.Niebel@ew.tq-group.com>,
+        "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>
+Subject: RE: [PATCH V2 2/6] dt-bindings: soc: imx: add i.MX8MP vpu blk ctrl
+Thread-Topic: [PATCH V2 2/6] dt-bindings: soc: imx: add i.MX8MP vpu blk ctrl
+Thread-Index: AQHYloK947kv/SqebUO7q2Flj5l6V617+EgAgAAIoDCAAAM+AIAAAGgQ
+Date:   Wed, 13 Jul 2022 09:15:35 +0000
+Message-ID: <DU0PR04MB9417373C67EA8CF87E3D985788899@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220713063653.2584488-1-peng.fan@oss.nxp.com>
+ <20220713063653.2584488-3-peng.fan@oss.nxp.com>
+ <52c0d236-49c6-7c31-abd8-2a083ca7ef8c@linaro.org>
+ <DU0PR04MB9417D42EDC6FD08C10C164CB88899@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <9ed772a9-ad01-55c9-fda5-5b3f8082bc7e@linaro.org>
+In-Reply-To: <9ed772a9-ad01-55c9-fda5-5b3f8082bc7e@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bfbf34dc-55f8-453e-84d7-08da64b03eb7
+x-ms-traffictypediagnostic: AM6PR04MB4552:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KAujo/oRL217dGYw8Pv5x0jQ4O5GJg5kpO10/Rm5Ray5WD4YbOB8BRLyqCZwbHjlUVrHzwvPqPbJMUcaUhChdSrsMDTpPFimtupYOMprooyuPmtxwjHxe9Ww/rETf96TtiT3IhekbWTx9CGp+xv3bpnMS7j9/iT9kHU33ixi2VmKPMylDSE/AQ/oRo/dQugNuTVlKUiaCFfA9H/dilncsTQUudA3zS0cTCEJOd9TOtEz5IobvMSwn9NmEnYfDRgTqBB0/xIapSBihKa4l9ESXc78StbFgUUHVfHKFKjlrziGBF2BLdMbV0GHC641Yjc4pHFtzin+9OAj+FPVLrEq5sRBa/ofZiVNKozzW+jrVqmW1Us2owSO1jMU5jpW7w/ztFR4IwhSqh1BLBc+M28WRj97xjXYzOn4w6eOQQLCO4UNvzgVse/RlZ0ZU3Yu/e83VxCUzjQ1lJfbf7Z1CM1IDznc4PSzw/gctlhUaFv/RQWClq0CQuFP4uZ+CTh+Mhk2AqGSE3EL9vHV9TuSg0gqfTCZrlgbTemaImNtvXW50t9Vc4zS06i0y3qJzepoYcFFIIhYbLI0tbl0fxHIOMU+iOyho6C7X0RAO0EJ7ZCdf06wQXoK7o3W/KMra4ZsXswF+A9Jy2qsOUoVwr3jvGYL3tB+LDMPLv13ahMiRPX3tuLItwLj3ZQKuNG7LU7nlUJ8RCT359xHhIMpSX2TRZ13s/JKARPXNjOS6t3KwC1nzvDu9D8BMydWU7+6inIhKzbuXcMoNZaDUwYpRP7jdrxD2Z3NXfV5MM0SYrGM3DrILJV79HJG6KsWbgcIh4DYyloX
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(396003)(39860400002)(376002)(366004)(38070700005)(186003)(38100700002)(7416002)(2906002)(44832011)(55016003)(8936002)(5660300002)(33656002)(52536014)(71200400001)(8676002)(76116006)(66476007)(66446008)(66556008)(64756008)(41300700001)(7696005)(6506007)(9686003)(26005)(478600001)(53546011)(4326008)(83380400001)(122000001)(66946007)(86362001)(110136005)(54906003)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Um94T1VtUHhxdGl2Zy8vWFUyanpaUUVUTHMyTkI1dmhiVkthcU0xQTdTeGNS?=
+ =?utf-8?B?am9zYk5xZmlpMmJQSGxuYk5uSUZ4dnVxL3dLSjJhWXFQRWJkOTEyeWpPMlBz?=
+ =?utf-8?B?QjdKV25DUHZQejlGRWFLd3BVZnlsbGlrZGJma1oxSHV4MTVuYTJHSjVUWVc1?=
+ =?utf-8?B?QmkwSzVQYkxYVDFHZWVoTkZtVkpMZ2tTUmdNSU1YUEZNb0xXV1V1eFpQWmNr?=
+ =?utf-8?B?SUhMU0doaWp3RUN5QTB3SG1MdmNIUm9uK3ZlN2R6NGR6MVI3SlNaR3FqZFdE?=
+ =?utf-8?B?NEQ0WTFnZllpRzZGOEduTEV3eTFhMW9xRnRPdVVWL1hQV3NCMjQ0ZnpxRUNx?=
+ =?utf-8?B?enI3ejZoT1F2SEQ3aUpxQ0oySzc5MUsxUVMreUZKR05zUXh0OVVQeG43LzJ0?=
+ =?utf-8?B?c0MxMGgrWVFWN0swY2szTUlCekNiSGFjNHh0TlBFVGNSb2tPRGxHUlhjVXpv?=
+ =?utf-8?B?dzZFZXl5MmkvZEV3OEtkRnNPaXhkRzlUUjgwK05XRlk0Tmpvd0k1OEk2NEhL?=
+ =?utf-8?B?Z3B5YVNnMUs3a0xIYzNteUUvVnNqZDhBbFVEK3Zqc3I1Sm1CdVJjVkZvTnZQ?=
+ =?utf-8?B?bUNDVHVlZmp4aXFiWWJ2bDlNbms4M2RJTkFkdHdrK0NReElWRk9SRENVbGRo?=
+ =?utf-8?B?dHZJRnNwbW11eFBQZWJWbzdoUVV2RVgrWitWcWgvblM2TXdRdTNsYTRNT1Ji?=
+ =?utf-8?B?VlZwV0JTeHZPZjlacEczWGxXY0dtemNNS0VMbDJlZHoyTXFteEVxY2lYQWIy?=
+ =?utf-8?B?VGU1K3ZjRlA4OHlTTm1CRyt4dFBNMWlNVXg1eWJPRDNUcStoZjJMdnplNjQy?=
+ =?utf-8?B?QnhjcFJ6M2dBRG91VWUvSzVGNG9vMVNiVUY3bmxWbTdrTzcvMjkzQ2NBWk1M?=
+ =?utf-8?B?OEhPNHhoaU1yYzJTMVpVbDk3YlM0UjRpaG85ZWlNUC91RTMrMUVMTEh3cWcz?=
+ =?utf-8?B?S1J3L3hVcGJZOEg0MUtVbjltcU9EUFdMN0FzZjliNko0Y3Raajg2ZTAxMmRF?=
+ =?utf-8?B?ODNkblV0c0Zjc1NzN1YxbXhId1l1UVlseDU4NlhQa1k3ZDhkOXRkM0NoMHVV?=
+ =?utf-8?B?L3NncUVIckN5RmJsOHI5NFFNYWFHb0p2Y2tOVnZJeUZXRTVRQXVIL0hVdlBC?=
+ =?utf-8?B?VmRCVGNCSkJzaXBHV2J0cnJNc1RWTWQ2QnlnS0tjSGZpMFlwZFp2UHhuN3lG?=
+ =?utf-8?B?cGxMN2VRKzNBSjJVd05XaG1aQXJJK3h3OVlUM1l4ZUZMNDF5U2xtZFlvbko4?=
+ =?utf-8?B?ZU1lbzlEOWxYamhXSGtrRWQvSGZVa091NnM3UnRac3R4YVlCWVhHS2dLUlFT?=
+ =?utf-8?B?UHIrRGxwRGx5YTY5OThEaXBieGRuZlBONVFiYmhBTm4vdUNnWkxpMnlEUDAy?=
+ =?utf-8?B?cEFGbUtFYUpoeFRpNngvRk8zOEw4NHpKc1FBZmdvSlNQSC9CWGd0UHZ2bE14?=
+ =?utf-8?B?RGk5Wm9jUEJ0SFJ2OEFRMUNOMFgzcHF5eW81MmRCMno4dzB0NndpTlFGUVh0?=
+ =?utf-8?B?QWhEUklzSEpnVzJxeE1vblE0ekdjL1YyRWZFQ1RwMlgrQnNvZHlKT3lJQ1Nn?=
+ =?utf-8?B?OHdpam8xcHpKWi8xRmVGVW8rY0RIQ2tndStCaDE0dTJkUkpFOHNuek5aVFls?=
+ =?utf-8?B?b3l1WXpGTlBFYTJ4TXVtQnZkUUtwbkpvRUlWM0x2Y3dYZUpiTUxMRXA4MkZW?=
+ =?utf-8?B?NUQvNlVoOE9hZWtjeXJWekJaQVpZQ1F4d2pOSVdzYmVKNnBteHhpVitlWFc1?=
+ =?utf-8?B?d3dqWmg2RmlWQllncTRBQ3lvaTJRcTFxaGV0SldKTUtGdDM3T3NUdjd6dTdT?=
+ =?utf-8?B?QUNOWXcvQXBqaFA0dzU0NlJCcDB3blQyMWk5bmF2QUNneUkxeHErTzBxdFpj?=
+ =?utf-8?B?Vi9wVTcxVm1abDZoZlBXdWNaY09vN0U3YThocXZQQlJJRVptTEQ5NWJiVVda?=
+ =?utf-8?B?dE9FNUtMUXpqSmQrK09pLzF0VWxFSnVWclJFOWJ6YnF2cVdkTitEOWFMNkFV?=
+ =?utf-8?B?V2IxczJ4MWF5NDUxemRBSzJpOExENkNyZjMxVjVlSk9FUmZvNHpLUkNyM3JB?=
+ =?utf-8?B?Q2NJaHFVS0ZEbDF3OUZVQkN2MFUvNFU3SlhtTExwMXMvbXg5QTg3ZWpPODc1?=
+ =?utf-8?Q?2nOk=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bfbf34dc-55f8-453e-84d7-08da64b03eb7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2022 09:15:35.4957
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ItpHuacKuwUNFW0Hb9kJG1IgUUq98OlzqxPT4F0jSQtY3vxHf1sLBaf8sn0t8uZEiok3pdYQvJQGJmqKJ4AK3w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4552
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dienstag, 12. Juli 2022 22:33:34 CEST Dominique Martinet wrote:
-> Christian Schoenebeck wrote on Tue, Jul 12, 2022 at 04:31:16PM +0200:
-> > The amount of elements in a scatter/gather list is limited to
-> > approximately 128 elements. To allow going beyond that limit
-> > with subsequent patches, pave the way by turning the one-
-> > 
-> > dimensional sg list array into a two-dimensional array, i.e:
-> >   sg[128]
-> > 
-> > becomes
-> > 
-> >   sgl[nsgl][SG_MAX_SINGLE_ALLOC]
-> > 
-> > As the value of 'nsgl' is exactly (still) 1 in this commit
-> > and the compile-time (compiler and architecture dependent)
-> > value of 'SG_MAX_SINGLE_ALLOC' equals approximately the
-> > previous hard coded 128 elements, this commit is therefore
-> > more of a preparatory refactoring then actual behaviour
-> > change.
-> > 
-> > A custom struct virtqueue_sg is defined instead of using
-> > shared API struct sg_table, because the latter would not
-> > allow to resize the table after allocation. sg_append_table
-> > API OTOH would not fit either, because it requires a list
-> > of pages beforehand upon allocation. And both APIs only
-> > support all-or-nothing allocation.
-> > 
-> > Signed-off-by: Christian Schoenebeck <linux_oss@crudebyte.com>
-> > ---
-> > 
-> > The question is whether that should really become 9p specifc SG list
-> > code, or whether it should rather be squeezed into shared SG list code
-> > base. Opinions by maintainers needed.
-> 
-> hmm from the 9p side I'd say the type is simple enough that we can just
-> keep it here; most people don't want to resize these lists...
-
-OK, then I retain it as 9p-specific SG struct then.
-
-> How much do you care about the all-or-nothing case you described in this
-> commit message? From the look of it, patch 6 -- at what point did you
-> actually see this being useful?
-
-Patch 6 is probably a case of over-engineering, so if you want I can also drop 
-patch 6 now or retain it and you'll just eventually ignore it. Because when 
-someone comes into the situation having trouble to allocate the SG lists 
-already, then allocation of their actual bulk date pages is likely to become 
-much more troublesome.
-
-> >  net/9p/trans_virtio.c | 193 ++++++++++++++++++++++++++++++++----------
-> >  1 file changed, 147 insertions(+), 46 deletions(-)
-> > 
-> > diff --git a/net/9p/trans_virtio.c b/net/9p/trans_virtio.c
-> > index 18bdfa64b934..f63cd1b08bca 100644
-> > --- a/net/9p/trans_virtio.c
-> > +++ b/net/9p/trans_virtio.c
-> > @@ -36,7 +36,31 @@
-> > 
-> >  #include <linux/virtio_9p.h>
-> >  #include "trans_common.h"
-> > 
-> > -#define VIRTQUEUE_DEFAULT_NUM	128
-> > +/**
-> > + * struct virtqueue_sg - (chained) scatter gather lists for virtqueue
-> > data
-> > + * transmission
-> > + * @nsgl: amount of elements (in first dimension) of array field @sgl
-> > + * @sgl: two-dimensional array, i.e. sgl[nsgl][SG_MAX_SINGLE_ALLOC]
-> > + */
-> > +struct virtqueue_sg {
-> > +	unsigned int nsgl;
-> > +	struct scatterlist *sgl[];
-> > +};
-> > +
-> > +/*
-> > + * Default value for field nsgl in struct virtqueue_sg, which defines the
-> > + * initial virtio data transmission capacity when this virtio transport
-> > is
-> > + * probed.
-> > + */
-> > +#define VIRTQUEUE_SG_NSGL_DEFAULT 1
-> > +
-> > +/* maximum value for field nsgl in struct virtqueue_sg */
-> > +#define VIRTQUEUE_SG_NSGL_MAX					
-	\
-> > +	((PAGE_SIZE - sizeof(struct virtqueue_sg)) /			
-\
-> > +	sizeof(struct scatterlist *))					
-\
-> > +
-> > +/* last entry per sg list is used for chaining (pointer to next list) */
-> > +#define SG_USER_PAGES_PER_LIST	(SG_MAX_SINGLE_ALLOC - 1)
-> > 
-> >  /* a single mutex to manage channel initialization and attachment */
-> >  static DEFINE_MUTEX(virtio_9p_lock);
-> > 
-> > @@ -53,8 +77,7 @@ static atomic_t vp_pinned = ATOMIC_INIT(0);
-> > 
-> >   * @ring_bufs_avail: flag to indicate there is some available in the ring
-> >   buf * @vc_wq: wait queue for waiting for thing to be added to ring buf
-> >   * @p9_max_pages: maximum number of pinned pages
-> > 
-> > - * @sg: scatter gather list which is used to pack a request (protected?)
-> > - * @sg_n: amount of elements in sg array
-> > + * @vq_sg: table of scatter gather lists, which are used to pack a
-> > request
-> > 
-> >   * @chan_list: linked list of channels
-> >   *
-> >   * We keep all per-channel information in a structure.
-> > 
-> > @@ -77,9 +100,7 @@ struct virtio_chan {
-> > 
-> >  	 * will be placing it in each channel.
-> >  	 */
-> >  	
-> >  	unsigned long p9_max_pages;
-> > 
-> > -	/* Scatterlist: can be too big for stack. */
-> > -	struct scatterlist *sg;
-> > -	size_t sg_n;
-> > +	struct virtqueue_sg *vq_sg;
-> > 
-> >  	/**
-> >  	
-> >  	 * @tag: name to identify a mount null terminated
-> >  	 */
-> > 
-> > @@ -96,6 +117,92 @@ static unsigned int rest_of_page(void *data)
-> > 
-> >  	return PAGE_SIZE - offset_in_page(data);
-> >  
-> >  }
-> > 
-> > +/**
-> > + * vq_sg_page - returns user page for given page index
-> > + * @vq_sg: scatter gather lists used by this transport
-> > + * @page: user page index across all scatter gather lists
-> > + */
-> > +static struct scatterlist *vq_sg_page(struct virtqueue_sg *vq_sg, size_t
-> > page) +{
-> > +	unsigned int node = page / SG_USER_PAGES_PER_LIST;
-> > +	unsigned int leaf = page % SG_USER_PAGES_PER_LIST;
-> > +	BUG_ON(node >= VIRTQUEUE_SG_NSGL_MAX);
-> 
-> probably awnt to check with vq_sg->sg_n instead?
-> (we already check sg_n <= MAX on alloc)
-
-Right, that makes sense!
-
-> > +	return &vq_sg->sgl[node][leaf];
-> > +}
-> > +
-> > +/**
-> > + * vq_sg_npages - returns total number of individual user pages in passed
-> > + * scatter gather lists
-> > + * @vq_sg: scatter gather lists to be counted
-> > + */
-> > +static size_t vq_sg_npages(struct virtqueue_sg *vq_sg)
-> > +{
-> > +	return vq_sg->nsgl * SG_USER_PAGES_PER_LIST;
-> > +}
-> > +
-> > +/**
-> > + * vq_sg_free - free all memory previously allocated for @vq_sg
-> > + * @vq_sg: scatter gather lists to be freed
-> > + */
-> > +static void vq_sg_free(struct virtqueue_sg *vq_sg)
-> > +{
-> > +	unsigned int i;
-> > +
-> > +	if (!vq_sg)
-> > +		return;
-> > +
-> > +	for (i = 0; i < vq_sg->nsgl; ++i) {
-> > +		kfree(vq_sg->sgl[i]);
-> > +	}
-> > +	kfree(vq_sg);
-> > +}
-> > +
-> > +/**
-> > + * vq_sg_alloc - allocates and returns @nsgl scatter gather lists
-> > + * @nsgl: amount of scatter gather lists to be allocated
-> > + * If @nsgl is larger than one then chained lists are used if supported
-> > by
-> > + * architecture.
-> > + */
-> > +static struct virtqueue_sg *vq_sg_alloc(unsigned int nsgl)
-> > +{
-> > +	struct virtqueue_sg *vq_sg;
-> > +	unsigned int i;
-> > +
-> > +	BUG_ON(!nsgl || nsgl > VIRTQUEUE_SG_NSGL_MAX);
-> > +#ifdef CONFIG_ARCH_NO_SG_CHAIN
-> > +	if (WARN_ON_ONCE(nsgl > 1))
-> > +		return NULL;
-> > +#endif
-> > +
-> > +	vq_sg = kzalloc(sizeof(struct virtqueue_sg) +
-> > +			nsgl * sizeof(struct scatterlist *),
-> > +			GFP_KERNEL);
-> > +
-> > +	if (!vq_sg)
-> > +		return NULL;
-> > +
-> > +	vq_sg->nsgl = nsgl;
-> > +
-> > +	for (i = 0; i < nsgl; ++i) {
-> > +		vq_sg->sgl[i] = kmalloc_array(
-> > +			SG_MAX_SINGLE_ALLOC, sizeof(struct scatterlist),
-> > +			GFP_KERNEL
-> > +		);
-> > +		if (!vq_sg->sgl[i]) {
-> > +			vq_sg_free(vq_sg);
-> > +			return NULL;
-> > +		}
-> > +		sg_init_table(vq_sg->sgl[i], SG_MAX_SINGLE_ALLOC);
-> > +		if (i) {
-> > +			/* chain the lists */
-> > +			sg_chain(vq_sg->sgl[i - 1], SG_MAX_SINGLE_ALLOC,
-> > +				 vq_sg->sgl[i]);
-> > +		}
-> > +	}
-> > +	sg_mark_end(&vq_sg->sgl[nsgl - 1][SG_MAX_SINGLE_ALLOC - 1]);
-> > +	return vq_sg;
-> > +}
-> > +
-> > 
-> >  /**
-> >  
-> >   * p9_virtio_close - reclaim resources of a channel
-> >   * @client: client instance
-> > 
-> > @@ -158,9 +265,8 @@ static void req_done(struct virtqueue *vq)
-> > 
-> >  /**
-> >  
-> >   * pack_sg_list - pack a scatter gather list from a linear buffer
-> > 
-> > - * @sg: scatter/gather list to pack into
-> > + * @vq_sg: scatter/gather lists to pack into
-> > 
-> >   * @start: which segment of the sg_list to start at
-> > 
-> > - * @limit: maximum segment to pack data to
-> > 
-> >   * @data: data to pack into scatter/gather list
-> >   * @count: amount of data to pack into the scatter/gather list
-> >   *
-> > 
-> > @@ -170,11 +276,12 @@ static void req_done(struct virtqueue *vq)
-> > 
-> >   *
-> >   */
-> > 
-> > -static int pack_sg_list(struct scatterlist *sg, int start,
-> > -			int limit, char *data, int count)
-> > +static int pack_sg_list(struct virtqueue_sg *vq_sg, int start,
-> > +			char *data, int count)
-> > 
-> >  {
-> >  
-> >  	int s;
-> >  	int index = start;
-> > 
-> > +	size_t limit = vq_sg_npages(vq_sg);
-> > 
-> >  	while (count) {
-> >  	
-> >  		s = rest_of_page(data);
-> > 
-> > @@ -182,13 +289,13 @@ static int pack_sg_list(struct scatterlist *sg, int
-> > start,> 
-> >  			s = count;
-> >  		
-> >  		BUG_ON(index >= limit);
-> >  		/* Make sure we don't terminate early. */
-> > 
-> > -		sg_unmark_end(&sg[index]);
-> > -		sg_set_buf(&sg[index++], data, s);
-> > +		sg_unmark_end(vq_sg_page(vq_sg, index));
-> > +		sg_set_buf(vq_sg_page(vq_sg, index++), data, s);
-> > 
-> >  		count -= s;
-> >  		data += s;
-> >  	
-> >  	}
-> >  	if (index-start)
-> > 
-> > -		sg_mark_end(&sg[index - 1]);
-> > +		sg_mark_end(vq_sg_page(vq_sg, index - 1));
-> > 
-> >  	return index-start;
-> >  
-> >  }
-> > 
-> > @@ -208,21 +315,21 @@ static int p9_virtio_cancelled(struct p9_client
-> > *client, struct p9_req_t *req)> 
-> >  /**
-> >  
-> >   * pack_sg_list_p - Just like pack_sg_list. Instead of taking a buffer,
-> >   * this takes a list of pages.
-> > 
-> > - * @sg: scatter/gather list to pack into
-> > + * @vq_sg: scatter/gather lists to pack into
-> > 
-> >   * @start: which segment of the sg_list to start at
-> > 
-> > - * @limit: maximum number of pages in sg list.
-> > 
-> >   * @pdata: a list of pages to add into sg.
-> >   * @nr_pages: number of pages to pack into the scatter/gather list
-> >   * @offs: amount of data in the beginning of first page _not_ to pack
-> >   * @count: amount of data to pack into the scatter/gather list
-> >   */
-> >  
-> >  static int
-> > 
-> > -pack_sg_list_p(struct scatterlist *sg, int start, int limit,
-> > +pack_sg_list_p(struct virtqueue_sg *vq_sg, int start,
-> > 
-> >  	       struct page **pdata, int nr_pages, size_t offs, int count)
-> >  
-> >  {
-> >  
-> >  	int i = 0, s;
-> >  	int data_off = offs;
-> >  	int index = start;
-> > 
-> > +	size_t limit = vq_sg_npages(vq_sg);
-> > 
-> >  	BUG_ON(nr_pages > (limit - start));
-> >  	/*
-> > 
-> > @@ -235,15 +342,16 @@ pack_sg_list_p(struct scatterlist *sg, int start,
-> > int limit,> 
-> >  			s = count;
-> >  		
-> >  		BUG_ON(index >= limit);
-> >  		/* Make sure we don't terminate early. */
-> > 
-> > -		sg_unmark_end(&sg[index]);
-> > -		sg_set_page(&sg[index++], pdata[i++], s, data_off);
-> > +		sg_unmark_end(vq_sg_page(vq_sg, index));
-> > +		sg_set_page(vq_sg_page(vq_sg, index++), pdata[i++], s,
-> > +			    data_off);
-> > 
-> >  		data_off = 0;
-> >  		count -= s;
-> >  		nr_pages--;
-> >  	
-> >  	}
-> >  	
-> >  	if (index-start)
-> > 
-> > -		sg_mark_end(&sg[index - 1]);
-> > +		sg_mark_end(vq_sg_page(vq_sg, index - 1));
-> > 
-> >  	return index - start;
-> >  
-> >  }
-> > 
-> > @@ -271,15 +379,13 @@ p9_virtio_request(struct p9_client *client, struct
-> > p9_req_t *req)> 
-> >  	out_sgs = in_sgs = 0;
-> >  	/* Handle out VirtIO ring buffers */
-> > 
-> > -	out = pack_sg_list(chan->sg, 0,
-> > -			   chan->sg_n, req->tc.sdata, req->tc.size);
-> > +	out = pack_sg_list(chan->vq_sg, 0, req->tc.sdata, req->tc.size);
-> > 
-> >  	if (out)
-> > 
-> > -		sgs[out_sgs++] = chan->sg;
-> > +		sgs[out_sgs++] = vq_sg_page(chan->vq_sg, 0);
-> > 
-> > -	in = pack_sg_list(chan->sg, out,
-> > -			  chan->sg_n, req->rc.sdata, req->rc.capacity);
-> > +	in = pack_sg_list(chan->vq_sg, out, req->rc.sdata, req-
->rc.capacity);
-> > 
-> >  	if (in)
-> > 
-> > -		sgs[out_sgs + in_sgs++] = chan->sg + out;
-> > +		sgs[out_sgs + in_sgs++] = vq_sg_page(chan->vq_sg, out);
-> > 
-> >  	err = virtqueue_add_sgs(chan->vq, sgs, out_sgs, in_sgs, req,
-> >  	
-> >  				GFP_ATOMIC);
-> > 
-> > @@ -448,16 +554,15 @@ p9_virtio_zc_request(struct p9_client *client,
-> > struct p9_req_t *req,> 
-> >  	out_sgs = in_sgs = 0;
-> >  	
-> >  	/* out data */
-> > 
-> > -	out = pack_sg_list(chan->sg, 0,
-> > -			   chan->sg_n, req->tc.sdata, req->tc.size);
-> > +	out = pack_sg_list(chan->vq_sg, 0, req->tc.sdata, req->tc.size);
-> > 
-> >  	if (out)
-> > 
-> > -		sgs[out_sgs++] = chan->sg;
-> > +		sgs[out_sgs++] = vq_sg_page(chan->vq_sg, 0);
-> > 
-> >  	if (out_pages) {
-> > 
-> > -		sgs[out_sgs++] = chan->sg + out;
-> > -		out += pack_sg_list_p(chan->sg, out, chan->sg_n,
-> > -				      out_pages, out_nr_pages, offs, 
-outlen);
-> > +		sgs[out_sgs++] = vq_sg_page(chan->vq_sg, out);
-> > +		out += pack_sg_list_p(chan->vq_sg, out, out_pages,
-> > +				      out_nr_pages, offs, outlen);
-> > 
-> >  	}
-> >  	
-> >  	/*
-> > 
-> > @@ -467,15 +572,14 @@ p9_virtio_zc_request(struct p9_client *client,
-> > struct p9_req_t *req,> 
-> >  	 * Arrange in such a way that server places header in the
-> >  	 * allocated memory and payload onto the user buffer.
-> >  	 */
-> > 
-> > -	in = pack_sg_list(chan->sg, out,
-> > -			  chan->sg_n, req->rc.sdata, in_hdr_len);
-> > +	in = pack_sg_list(chan->vq_sg, out, req->rc.sdata, in_hdr_len);
-> > 
-> >  	if (in)
-> > 
-> > -		sgs[out_sgs + in_sgs++] = chan->sg + out;
-> > +		sgs[out_sgs + in_sgs++] = vq_sg_page(chan->vq_sg, out);
-> > 
-> >  	if (in_pages) {
-> > 
-> > -		sgs[out_sgs + in_sgs++] = chan->sg + out + in;
-> > -		in += pack_sg_list_p(chan->sg, out + in, chan->sg_n,
-> > -				     in_pages, in_nr_pages, offs, 
-inlen);
-> > +		sgs[out_sgs + in_sgs++] = vq_sg_page(chan->vq_sg, out + 
-in);
-> > +		in += pack_sg_list_p(chan->vq_sg, out + in, in_pages,
-> > +				     in_nr_pages, offs, inlen);
-> > 
-> >  	}
-> >  	
-> >  	BUG_ON(out_sgs + in_sgs > ARRAY_SIZE(sgs));
-> > 
-> > @@ -576,14 +680,12 @@ static int p9_virtio_probe(struct virtio_device
-> > *vdev)> 
-> >  		goto fail;
-> >  	
-> >  	}
-> > 
-> > -	chan->sg = kmalloc_array(VIRTQUEUE_DEFAULT_NUM,
-> > -				 sizeof(struct scatterlist), 
-GFP_KERNEL);
-> > -	if (!chan->sg) {
-> > +	chan->vq_sg = vq_sg_alloc(VIRTQUEUE_SG_NSGL_DEFAULT);
-> > +	if (!chan->vq_sg) {
-> > 
-> >  		pr_err("Failed to allocate virtio 9P channel\n");
-> >  		err = -ENOMEM;
-> >  		goto out_free_chan_shallow;
-> >  	
-> >  	}
-> > 
-> > -	chan->sg_n = VIRTQUEUE_DEFAULT_NUM;
-> > 
-> >  	chan->vdev = vdev;
-> > 
-> > @@ -596,8 +698,6 @@ static int p9_virtio_probe(struct virtio_device *vdev)
-> > 
-> >  	chan->vq->vdev->priv = chan;
-> >  	spin_lock_init(&chan->lock);
-> > 
-> > -	sg_init_table(chan->sg, chan->sg_n);
-> > -
-> > 
-> >  	chan->inuse = false;
-> >  	if (virtio_has_feature(vdev, VIRTIO_9P_MOUNT_TAG)) {
-> >  	
-> >  		virtio_cread(vdev, struct virtio_9p_config, tag_len, 
-&tag_len);
-> > 
-> > @@ -646,7 +746,7 @@ static int p9_virtio_probe(struct virtio_device *vdev)
-> > 
-> >  out_free_vq:
-> >  	vdev->config->del_vqs(vdev);
-> >  
-> >  out_free_chan:
-> > -	kfree(chan->sg);
-> > +	vq_sg_free(chan->vq_sg);
-> > 
-> >  out_free_chan_shallow:
-> >  	kfree(chan);
-> >  
-> >  fail:
-> > @@ -741,7 +841,7 @@ static void p9_virtio_remove(struct virtio_device
-> > *vdev)> 
-> >  	kobject_uevent(&(vdev->dev.kobj), KOBJ_CHANGE);
-> >  	kfree(chan->tag);
-> >  	kfree(chan->vc_wq);
-> > 
-> > -	kfree(chan->sg);
-> > +	vq_sg_free(chan->vq_sg);
-> > 
-> >  	kfree(chan);
-> >  
-> >  }
-> > 
-> > @@ -780,7 +880,8 @@ static struct p9_trans_module p9_virtio_trans = {
-> > 
-> >  	 * that are not at page boundary, that can result in an extra
-> >  	 * page in zero copy.
-> >  	 */
-> > 
-> > -	.maxsize = PAGE_SIZE * (VIRTQUEUE_DEFAULT_NUM - 3),
-> > +	.maxsize = PAGE_SIZE *
-> > +		((VIRTQUEUE_SG_NSGL_DEFAULT * SG_USER_PAGES_PER_LIST) - 
-3),
-> > 
-> >  	.def = 1,
-> >  	.owner = THIS_MODULE,
-> >  
-> >  };
-
-
-
-
+PiBTdWJqZWN0OiBSZTogW1BBVENIIFYyIDIvNl0gZHQtYmluZGluZ3M6IHNvYzogaW14OiBhZGQg
+aS5NWDhNUCB2cHUgYmxrIGN0cmwNCj4gDQo+IE9uIDEzLzA3LzIwMjIgMTE6MDMsIFBlbmcgRmFu
+IHdyb3RlOg0KPiA+IEhpIEtyenlzenRvZiwNCj4gPg0KPiA+PiBTdWJqZWN0OiBSZTogW1BBVENI
+IFYyIDIvNl0gZHQtYmluZGluZ3M6IHNvYzogaW14OiBhZGQgaS5NWDhNUCB2cHUNCj4gPj4gYmxr
+IGN0cmwNCj4gPj4NCj4gPj4gT24gMTMvMDcvMjAyMiAwODozNiwgUGVuZyBGYW4gKE9TUykgd3Jv
+dGU6DQo+ID4+PiBGcm9tOiBQZW5nIEZhbiA8cGVuZy5mYW5AbnhwLmNvbT4NCj4gPj4+DQo+ID4+
+PiBpLk1YOE1QIFZQVSBibGsgY3RybCBtb2R1bGUgaGFzIHNpbWlsYXIgZGVzaWduIGFzIGkuTVg4
+TU0sIHNvIHJldXNlDQo+ID4+PiB0aGUgaS5NWDhNTSBWUFUgYmxrIGN0cmwgeWFtbCBmaWxlLiBB
+bmQgYWRkIGRlc2NyaXB0aW9uIGZvciB0aGUgaXRlbXMuDQo+ID4+Pg0KPiA+Pj4gU2lnbmVkLW9m
+Zi1ieTogUGVuZyBGYW4gPHBlbmcuZmFuQG54cC5jb20+DQo+ID4+PiAtLS0NCj4gPj4+ICAuLi4v
+c29jL2lteC9mc2wsaW14OG1tLXZwdS1ibGstY3RybC55YW1sICAgICAgfCA5MyArKysrKysrKysr
+KysrKysrLS0tDQo+ID4+PiAgaW5jbHVkZS9kdC1iaW5kaW5ncy9wb3dlci9pbXg4bXAtcG93ZXIu
+aCAgICAgIHwgIDQgKw0KPiA+Pj4gIDIgZmlsZXMgY2hhbmdlZCwgODYgaW5zZXJ0aW9ucygrKSwg
+MTEgZGVsZXRpb25zKC0pDQo+ID4+Pg0KPiA+Pj4gZGlmZiAtLWdpdA0KPiA+Pj4gYS9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc29jL2lteC9mc2wsaW14OG1tLXZwdS1ibGstDQo+
+ID4+IGN0cmwueWENCj4gPj4+IG1sDQo+ID4+PiBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
+aW5kaW5ncy9zb2MvaW14L2ZzbCxpbXg4bW0tdnB1LWJsay0NCj4gPj4gY3RybC55YQ0KPiA+Pj4g
+bWwgaW5kZXggMjY0ODdkYWE2NGQ5Li5kMDU5MzBmNjFmOTUgMTAwNjQ0DQo+ID4+PiAtLS0NCj4g
+Pj4+IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NvYy9pbXgvZnNsLGlteDht
+bS12cHUtYmxrLQ0KPiA+PiBjdHJsLnlhDQo+ID4+PiBtbA0KPiA+Pj4gKysrIGIvRG9jdW1lbnRh
+dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NvYy9pbXgvZnNsLGlteDhtbS12cHUtDQo+IGJsay0N
+Cj4gPj4gY3RyDQo+ID4+PiArKysgbC55YW1sDQo+ID4+PiBAQCAtMjgsMjQgKzI4LDE1IEBAIHBy
+b3BlcnRpZXM6DQo+ID4+Pg0KPiA+Pj4gICAgcG93ZXItZG9tYWluczoNCj4gPj4+ICAgICAgbWlu
+SXRlbXM6IDQNCj4gPj4+IC0gICAgbWF4SXRlbXM6IDQNCj4gPj4NCj4gPj4gVGhpcyBpcyBub3Qg
+Y29ycmVjdC4gbWF4SXRlbXMgbXVzdCBzdGF5LCBidXQgeW91IGNvdWxkIGRyb3AgbWluSXRlbXMs
+DQo+ID4+IHByZWZmZXJyYWJseSBpbiBzZXBhcmF0ZSBwYXRjaC4NCj4gPiBbUGVuZyBGYW5dDQo+
+ID4NCj4gPiBPaywgSSB3aWxsIG9ubHkga2VlcCBtYXhJdGVtcy4gRm9yIHNlcGFyYXRlIHBhdGNo
+LCB5b3UgbWVhbiBzZXBhcmF0ZQ0KPiA+IGFkZGluZyBkZXNjcmlwdGlvbiBmb3IgaS5NWDhNTSB0
+byBvbmUgcGF0Y2gsIHJpZ2h0Pw0KPiANCj4gSSBtZWFuLCBhIG5ldyBwYXRjaCBkb2luZyBjbGVh
+bnVwLiBZb3UgY3VycmVudGx5IGhhdmUgbWluSXRlbXMgYW5kDQo+IG1heEl0ZW1zIHNldCBhcyB0
+aGUgc2FtZSB2YWx1ZS4gSW4gc3VjaCBjYXNlIG1pbkl0ZW1zIGlzIG5vdCBuZWNlc3NhcnkuDQo+
+IFlvdSBjb3VsZCByZW1vdmUgYWxsIG9mIG1pbkl0ZW1zICh3aGVuIGVxdWFsIHRvIG1heEl0ZW1z
+KSBiZWZvcmUgYWRkaW5nDQo+IG5ldyBkZXZpY2Ugc3VwcG9ydC4NCg0KVGhhbmtzLCBnb3QgaXQu
+IEkgd2lsbCB3YWl0IGZvciBhIGZldyBkYXlzIHRvIGNvbGxlY3QgY29tbWVudHMgb24gb3RoZXIN
+CnBhcnRzIGJlZm9yZSBWMy4NCg0KVGhhbmtzLA0KUGVuZy4NCj4gDQo+IA0KPiBCZXN0IHJlZ2Fy
+ZHMsDQo+IEtyenlzenRvZg0K

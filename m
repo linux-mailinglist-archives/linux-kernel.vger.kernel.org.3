@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0B5573835
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4517857382C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236476AbiGMOAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
+        id S236454AbiGMOAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235362AbiGMOAQ (ORCPT
+        with ESMTP id S236463AbiGMOAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:00:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74722CE22;
-        Wed, 13 Jul 2022 07:00:15 -0700 (PDT)
+        Wed, 13 Jul 2022 10:00:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EB72CCB4;
+        Wed, 13 Jul 2022 07:00:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6635D61D07;
+        by ams.source.kernel.org (Postfix) with ESMTPS id F31A4B81FE8;
+        Wed, 13 Jul 2022 14:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A286FC341C6;
         Wed, 13 Jul 2022 14:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C940AC341C6;
-        Wed, 13 Jul 2022 14:00:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657720814;
-        bh=jfilC1VNUmruSbGkjrBE30vAhFqdqN43Wtm9py6OQbA=;
+        s=k20201202; t=1657720815;
+        bh=z3m7WKJkw2LX/rJrpJTb7cBVDXPsvYOEJCXBlGdMguw=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JEO4n3+//ibStF4eFaGgddKx4JNWa04MUgkaHN0Wdsz8ttTBJ0CDSum0SxkHudysD
-         f3brtvSjU3WZ872U04EFr3dAV566MG4F/Clw6xmF8aIX0E37N+MdVWxDni2zFVus4d
-         lzCJAkoHs7juBLX7iyukNiCYwwfdSfoAUP7h2uyekkibSNkxLYaVUB9WC7zeGSLtVo
-         4lzsLARMsvwi0YkrQNpwEkVvtiiX9//Zs+SQopZ/Lw0FcixeEosTGWM3d9tY2NmtEl
-         U0FqB/hXxt0w+emXWBuUYA8ZZBVnEdDuciwu2XXCS0nG2cz2v2TEUqr+p1QE/I2CnC
-         FBOf10faYUtKg==
+        b=V/gooNRD7NU68XPkOhWqS8WJ2VdGxh+PkAIEaCCSDwTHWmB22Xe+uqEVKW83QwII2
+         eN2ZcCFCq/Yn5csOGrIfZFkyEx+asqWAxsyj3eDtHBX6AoSRVje16inIAax84zWWL8
+         KpytrmG3RzT1Koqa9dN1PVThAk9qJ3lho6qTpN1JPbuHFfcU7w+Wtd96oLjajK/AAq
+         wlY1LFOirHwlRTIdqlvI263+fHZ6Wd4/sMeREVmy60Kh6tci1lrYxTqTFaP7PsWQwd
+         FIya3M1tNL/bnu/tCdZ66VxnGegR8UiFlP+JoT609vliTmywcDXIGkbPjBhUtjZbV5
+         1ipj3XlC7fG0A==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A537AE4522E;
-        Wed, 13 Jul 2022 14:00:14 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 869DEE45223;
+        Wed, 13 Jul 2022 14:00:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: sunhme: output link status with a single print.
+Subject: Re: [PATCH -next] octeontx2-af: returning uninitialized variable
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165772081466.13863.8313977574853526275.git-patchwork-notify@kernel.org>
-Date:   Wed, 13 Jul 2022 14:00:14 +0000
-References: <20220713015835.23580-1-nbowler@draconx.ca>
-In-Reply-To: <20220713015835.23580-1-nbowler@draconx.ca>
-To:     Nick Bowler <nbowler@draconx.ca>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <165772081554.13863.1993473674203093729.git-patchwork-notify@kernel.org>
+Date:   Wed, 13 Jul 2022 14:00:15 +0000
+References: <20220713073858.42015-1-mailmesebin00@gmail.com>
+In-Reply-To: <20220713073858.42015-1-mailmesebin00@gmail.com>
+To:     Sebin Sebastian <mailmesebin00@gmail.com>
+Cc:     sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
+        jerinj@marvell.com, hkelam@marvell.com, sbhatta@marvell.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,24 +62,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (master)
+This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Tue, 12 Jul 2022 21:58:35 -0400 you wrote:
-> This driver currently prints the link status using four separate
-> printk calls, which these days gets presented to the user as four
-> distinct messages, not exactly ideal:
+On Wed, 13 Jul 2022 13:08:58 +0530 you wrote:
+> Fix coverity error 'use of uninitialized variable'. err is uninitialized
+> and is returned which can lead to unintended results. err has been replaced
+> with -einval.
+> Coverity issue: 1518921 (uninitialized scalar variable)
 > 
->   [   32.582778] eth0: Link is up using
->   [   32.582828] internal
->   [   32.582837] transceiver at
->   [   32.582888] 100Mb/s, Full Duplex.
+> Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - net: sunhme: output link status with a single print.
-    https://git.kernel.org/netdev/net/c/b11e5f6a3a5c
+  - [-next] octeontx2-af: returning uninitialized variable
+    https://git.kernel.org/netdev/net-next/c/6a605eb1d71e
 
 You are awesome, thank you!
 -- 

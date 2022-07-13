@@ -2,103 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 749A95736DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49635736EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235836AbiGMNHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
+        id S235261AbiGMNKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235051AbiGMNHr (ORCPT
+        with ESMTP id S229607AbiGMNKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:07:47 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4D6637D
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:07:40 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id q9so15431537wrd.8
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:07:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ZDp5NtLIxNT/y/y4TV28JKQZE5KPsmeDwau7U2nvfbI=;
-        b=ykcE/L76OyKjfmB6gW/9PEIXPb7KX9wbY5QZt6rzoJ7cx+NshQnf3zYFk9CJJmZ/WM
-         Yjn5tpbDrFkjNkWS+WFrkqjSfGYuauzrhkLnPgPWJ+ijDPIFajS1TTDtmC2uQEI2eXJq
-         v/PjSpgG/525Lm1jJ94ez4EFFEytapEdMWKLq79xQRBWSawK2YgrGJjhf+6mviSVU3q3
-         kOx9C54FFQzStrBSdTBuFlQdgkenCIZH2XWgb8DLkaqKQZ3XbPUtvaJN7A3d1aNdPv+L
-         MOY47XiJ+MoxEz7XvBmRhEiBH0MhBUFHBMZQFzRyd4+1IQ/e0LRFMgzPqoPQQ++2EeCE
-         bFRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ZDp5NtLIxNT/y/y4TV28JKQZE5KPsmeDwau7U2nvfbI=;
-        b=6EsJQZRYVT7eM2qSK4S3Q0/W/FqkvjrDJrbYy4aTsoAXgFLQOGxr5OOdGfV1PtQKyP
-         PFEhvtvmoGQx9TA8GAwSNzzbRcr/xQGTLqvg0lTuu4WyLINd7qyHklkBI2LtbkK2SlNI
-         4CkQUGwZqUp+A5UHFA2TsAYHvAHdcffTpTCqUg3RqbDjhU/Zr6EuU847DO6g0iQw6ihk
-         F0qZVGaKWjsNYylDBzG69htZR4A8Jwl5ABgpCDeYaYKMbiHsJ4ELBxqRZqXhozBygvAi
-         mv+9+5OBsmfv/gOW+JWr48yloPneh7rvrQkPE1ZGpBNleuZ+Fw6Z0VFKfN6IWHHeUblt
-         kh4g==
-X-Gm-Message-State: AJIora9+eemf7YoR6zmBo6sb6SDnP1uadnbtNvx36bCZPDfbSwqElPps
-        5a5doSl33hQOHvy530qhFWQ6Eg==
-X-Google-Smtp-Source: AGRyM1v3Wejcmcef1+JLx2OGnt8FIDdBIQxbNYoMtF21Qn+Urzq7T2tg4YCX+P2hq8vPNX2sKjEQ7Q==
-X-Received: by 2002:a5d:5747:0:b0:21d:65e9:be07 with SMTP id q7-20020a5d5747000000b0021d65e9be07mr3162978wrw.215.1657717658781;
-        Wed, 13 Jul 2022 06:07:38 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id l29-20020a05600c1d1d00b0039749b01ea7sm2628398wms.32.2022.07.13.06.07.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 06:07:38 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 14:07:35 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Subject: Re: [PATCH v4 13/13] video: backlight: mt6370: Add Mediatek MT6370
- support
-Message-ID: <Ys7Dl1oApfww27MJ@google.com>
-References: <20220704053901.728-1-peterwu.pub@gmail.com>
- <20220704053901.728-14-peterwu.pub@gmail.com>
- <CAHp75VdwEc9AW1w8ejsxkw+sBTF1dumd99QyzTY9BZaXiViRWQ@mail.gmail.com>
- <CABtFH5K-2+2hbpvpq2nPE5AsznkQxZF2r3MVC64Q39DJhVuUtA@mail.gmail.com>
- <CAHp75VevDwdAKLYEWJgnMDvzuPuFibLuVqH-GKazEOT76wM6_A@mail.gmail.com>
+        Wed, 13 Jul 2022 09:10:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DBE5D59
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:10:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657717808;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NtlaKy/Pi7fFkMlw5/xShDsKILPGpTf38KvCH4G4WHI=;
+        b=DvDozQ8o5yskTULH2U4SfAcpd0QEtJhPTSRtpS5VqLjXWY4hgD9ljlekwYP5IGrmTBQAM+
+        x4BbSyCMv4i3zaP0SDm0vwfgwlEwdWMLWv7fg62iJ5HNqZMjOB4Xvhos6jtbxJWV+VBftO
+        nn/KCifcKj6T/dqEcigSTNoyZRnWMP4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-65NjDsgYNpWr6p8by5j2Dg-1; Wed, 13 Jul 2022 09:10:04 -0400
+X-MC-Unique: 65NjDsgYNpWr6p8by5j2Dg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5707E803301;
+        Wed, 13 Jul 2022 13:10:04 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.32.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8D7382026D64;
+        Wed, 13 Jul 2022 13:10:03 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 09:10:02 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Barry Song <song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH] drivers/base/node.c: fix userspace break from using
+ bin_attributes for cpumap and cpulist
+Message-ID: <Ys7EKngGeFP0eiXt@lorien.usersys.redhat.com>
+References: <20220712214301.809967-1-pauld@redhat.com>
+ <Ys5gyqMqB/TW6ftv@kroah.com>
+ <Ys6w7pqQdlaHoiIG@lorien.usersys.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VevDwdAKLYEWJgnMDvzuPuFibLuVqH-GKazEOT76wM6_A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <Ys6w7pqQdlaHoiIG@lorien.usersys.redhat.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,32 +65,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022, Andy Shevchenko wrote:
-
-> On Wed, Jul 13, 2022 at 12:53 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> > Andy Shevchenko <andy.shevchenko@gmail.com> 於 2022年7月5日 週二 清晨5:14寫道：
-> > > On Mon, Jul 4, 2022 at 7:43 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+On Wed, Jul 13, 2022 at 07:48:00AM -0400 Phil Auld wrote:
+> Hi Greg,
 > 
-> Please, remove unneeded context when replying!
-> 
-> ...
-> 
-> > > > +               brightness_val[0] = (brightness - 1) & MT6370_BL_DIM2_MASK;
-> > > > +               brightness_val[1] = (brightness - 1)
-> > > > +                                   >> fls(MT6370_BL_DIM2_MASK);
-> > >
-> > > Bad indentation. One line?
+> On Wed, Jul 13, 2022 at 08:06:02AM +0200 Greg Kroah-Hartman wrote:
+> > On Tue, Jul 12, 2022 at 05:43:01PM -0400, Phil Auld wrote:
+> > > Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
+> > > This breaks userspace code that retrieves the size before reading the file. Rather
+> > > than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
+> > > limitation of cpumap ABI") let's put in a size value at compile time. Use direct
+> > > comparison and a worst-case maximum to ensure compile time constants. For cpulist the 
+> > > max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960. 
+> > > In order to get near that you'd need a system with every other CPU on one node or 
+> > > something similar. e.g. (0,2,4,... 1024,1026...). We set it to a min of PAGE_SIZE 
+> > > to retain the older behavior. For cpumap, PAGE_SIZE is plenty big.
+> > 
+> > Does userspace care about that size, or can we just put any value in
+> > there and it will be ok?  How about just returning to the original
+> > PAGE_SIZE value to keep things looking identical, will userspace not
+> > read more than that size from the file then?
 > >
-> > Well... if indent to one line, it will be over 80 characters(or called columns?)
-> > From my understanding, it is not allowed, right??
 > 
-> It's allowed to some extent.Use your common sense.
-> Here it's obviously broken indentation.
+> I'll go look. But I think the point of pre-reading the size with fstat is to allocate
+> a buffer to read into. So that may be a problem. 
+>
 
-Refrain from going crazy though - hard limit is 100 chars.
+From what I understand the app does use the size from fstat to allocate a buffer.
+
+It also does a lseek to the end and back. This is actaully where it breaks when it gets a 0.
+
+This is before:
+8747  10:20:32.584460 fstat(6</sys/devices/system/node/node0/cpulist>, {..., st_size=4096, ...}) = 0 <0.000006>
+8747  10:20:32.584502 fstat(6</sys/devices/system/node/node0/cpulist>, {..., st_size=4096, ...}) = 0 <0.000005>
+8747  10:20:32.584537 lseek(6</sys/devices/system/node/node0/cpulist>, 4096, SEEK_SET) = 4096 <0.000005>
+8747  10:20:32.584560 lseek(6</sys/devices/system/node/node0/cpulist>, 0, SEEK_SET) = 0 <0.000005>
+8747  10:20:32.584585 read(6</sys/devices/system/node/node0/cpulist>, "0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46\n", 4096) = 67 <0.000008>
+8747  10:20:32.584617 read(6</sys/devices/system/node/node0/cpulist>, "", 4096) = 0 <0.000005>
+
+(I'll note here their system does seem to have a worst case cpu to node list too)
+
+And with the bin_attr change:
+8871  09:27:41.034279 fstat(6</sys/devices/system/node/node0/cpulist>, {..., st_size=0, ...}) = 0 <0.000009>
+8871  09:27:41.034330 fstat(6</sys/devices/system/node/node0/cpulist>, {..., st_size=0, ...}) = 0 <0.000010>
+8871  09:27:41.034377 lseek(6</sys/devices/system/node/node0/cpulist>, 0, SEEK_SET) = 0 <0.000008>
+8871  09:27:41.034410 lseek(6</sys/devices/system/node/node0/cpulist>, 0, SEEK_SET) = 0 <0.000008>
+And here it spins in a loop. 
+
+
+> That said, I believe in this case it's the cpulist file which given the use of ranges
+> is very unlikely to actually get that big. 
+> 
+> > > On an 80 cpu 4-node sytem (NR_CPUS == 8192)
+> > 
+> > We have systems running Linux with many more cpus than that, and your
+> > company knows this :)
+> 
+> The 80 cpus here don't matter and we only build with NR_CPUS = 8192 :)
+> 
+> But yes, I realize now that the cpumap part I posted is broken for larger
+> NR_CPUS.  I originally had it as NR_CPUS, but as I said in my reply to Barry,
+> it wants to be ~= NR_CPUS/4 + NR_CPUS/32. I'll change that.  
+> 
+> I think we should decide on a max for each and use that. 
+>
+
+What values of NR_CPUS are people actually using when they build kernels? Barry mentioned cpuid 100000 for
+example. I'm not sure if that was real or just illustrating the need for more characters.
+
+I've modified my patch to use NR_CPUS/2 for the cpumap which should be plenty. And to use NR_CPUS*6 for
+the cpulist, which covers up to 99999 cpus safely.
+
+
+Cheers,
+Phil
+
+
+> Cheers,
+> Phil
+> 
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
+> 
+> -- 
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+

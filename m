@@ -2,180 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE20572ECF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24FE572ED4
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234762AbiGMHIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
+        id S234517AbiGMHKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234652AbiGMHIR (ORCPT
+        with ESMTP id S234576AbiGMHKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:08:17 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39FBE3040
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:07:57 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id bh13so9676972pgb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:07:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KnPsdcwpQ6/HQ7udB+nfFkQyTndFGEtXQDYIXdw9bEk=;
-        b=PLK7bYe85Cz+0uz8atHvvMpo9qGTWHUXGvGGlyMJo31WZFkqhtWTOXNSWXKjq6Ce2/
-         vQ3OrCVv1GKVRnMViqSVhjttJnmif33+dTNDBjOmiWvjzmNhwkRejjtg9IW4mXhH50kT
-         KXSoX8XBgZhvu1eJu25dbPck28ETryRCX1GICM2cLjG53X7Hmd1dpaae3065E9AFt0J2
-         egCs5Uxfxngncyv1GmD4bset3emzypyEHATQyZQPHLmRpf1PC8MyJae3BbsvLELPrkLr
-         X0I0mOxPH9OwNeTO3QY327VjgphadnVM2Au2cFu2L9xgLDzk2d4ntbRZb6cCVKc9kBIg
-         9oEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KnPsdcwpQ6/HQ7udB+nfFkQyTndFGEtXQDYIXdw9bEk=;
-        b=cAFmDDcFxErvfNavi5XFkhXtMvG7wZ8J/hHMGvZuGI0LcgU5YeUsvEWNhkErZhmkVc
-         igSpdoGPwuMztnyJw2SCur89YjfdDOcEeqjp7gQYjXkjjxLqFpSHvFfHvkZjEnMRSlU8
-         tDKLByt8gH+6+rAoZmwHB+O3a+7ppE6G9ma3A97yrHYHDXuLeU/JcDDy70PUe5uRB2LA
-         YpAEzIWd5p0QhOQD5VmeTZt7C9Uw2k4aZf2a3E0F6XVBU6GN3iE6JgtDpv3mQUCvZ62v
-         8FMzcZEWH9s2Pv6FoWnAgnE9bLggOkrzLU7hFZ2BabGhwermJzpO2fC49gQfnN8QVmOj
-         eeUg==
-X-Gm-Message-State: AJIora+h1pIWanhOjBzk3HhJA7RJzGK3Z5AMH2R134IhWP7ihdXqiSlX
-        uMB9OIRC6h0NUJGr09Jrx0w=
-X-Google-Smtp-Source: AGRyM1v85scKwcrTA7w9VhbsWNy4SnwwYrtxNZ9GzmAAXjSEmP85SYKD7FToZencVhaEeh+MLZPKdA==
-X-Received: by 2002:a63:d341:0:b0:412:ace8:b0ed with SMTP id u1-20020a63d341000000b00412ace8b0edmr1770283pgi.169.1657696077187;
-        Wed, 13 Jul 2022 00:07:57 -0700 (PDT)
-Received: from bobo.ozlabs.ibm.com (193-116-203-247.tpgi.com.au. [193.116.203.247])
-        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b0016bd5da20casm8099061plg.134.2022.07.13.00.07.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 00:07:56 -0700 (PDT)
-From:   Nicholas Piggin <npiggin@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "linux-kernel @ vger . kernel . org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 12/12] locking/qspinlock: simplify pv_wait_head_or_lock calling scheme
-Date:   Wed, 13 Jul 2022 17:07:04 +1000
-Message-Id: <20220713070704.308394-13-npiggin@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220713070704.308394-1-npiggin@gmail.com>
-References: <20220713070704.308394-1-npiggin@gmail.com>
+        Wed, 13 Jul 2022 03:10:04 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEC212097;
+        Wed, 13 Jul 2022 00:10:01 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 68F651886A00;
+        Wed, 13 Jul 2022 07:09:59 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 618F625032B7;
+        Wed, 13 Jul 2022 07:09:59 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 4745DA1E0083; Wed, 13 Jul 2022 07:09:59 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 13 Jul 2022 09:09:58 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+In-Reply-To: <YsqPWK67U0+Iw2Ru@shredder>
+References: <20220707152930.1789437-1-netdev@kapio-technology.com>
+ <20220707152930.1789437-4-netdev@kapio-technology.com>
+ <20220708084904.33otb6x256huddps@skbuf>
+ <e6f418705e19df370c8d644993aa9a6f@kapio-technology.com>
+ <20220708091550.2qcu3tyqkhgiudjg@skbuf>
+ <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
+ <20220708115624.rrjzjtidlhcqczjv@skbuf>
+ <723e2995314b41ff323272536ef27341@kapio-technology.com>
+ <YsqPWK67U0+Iw2Ru@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM14,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pv_wait_head_or_lock returns the lock word value ORed with a constant,
-which was done to achieve a constant folding compiler optimisation
-when the code was generated for both pv and !pv cases. This is no
-longer necessary with the explicit paravirt test, so make the calling
-convention simpler.
+On 2022-07-10 10:35, Ido Schimmel wrote:
+> On Fri, Jul 08, 2022 at 02:34:25PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-07-08 13:56, Vladimir Oltean wrote:
+>> > On Fri, Jul 08, 2022 at 11:50:33AM +0200, netdev@kapio-technology.com
+>> > wrote:
+>> > > On 2022-07-08 11:15, Vladimir Oltean wrote:
+>> > > > When the possibility for it to be true will exist, _all_ switchdev
+>> > > > drivers will need to be updated to ignore that (mlxsw, cpss, ocelot,
+>> > > > rocker, prestera, etc etc), not just DSA. And you don't need to
+>> > > > propagate the is_locked flag to all individual DSA sub-drivers when none
+>> > > > care about is_locked in the ADD_TO_DEVICE direction, you can just ignore
+>> > > > within DSA until needed otherwise.
+>> > > >
+>> > >
+>> > > Maybe I have it wrong, but I think that Ido requested me to send it
+>> > > to all
+>> > > the drivers, and have them ignore entries with is_locked=true ...
+>> >
+>> > I don't think Ido requested you to ignore is_locked from all DSA
+>> > drivers, but instead from all switchdev drivers maybe. Quite different.
+>> 
+>> So without changing the signature on port_fdb_add(). If that is to 
+>> avoid
+>> changing that signature, which needs to be changed anyhow for any 
+>> switchcore
+>> driver to act on it, then my next patch set will change the signarure 
+>> also
+>> as it is needed for creating dynamic ATU entries from userspace, which 
+>> is
+>> needed to make the whole thing complete.
+>> 
+>> As it is already done (with the is_locked to the drivers) and needed 
+>> for
+>> future application, I would like Ido to comment on it before I take 
+>> action.
+> 
+> It's related to my reply here [1]. AFAICT, we have two classes of 
+> device
+> drivers:
+> 
+> 1. Drivers like mv88e6xxx that report locked entries to the bridge
+> driver via 'SWITCHDEV_FDB_ADD_TO_BRIDGE'.
+> 
+> 2. Drivers like mlxsw that trap packets that incurred an FDB miss to 
+> the
+> bridge driver. These packets will cause the bridge driver to emit
+> 'SWITCHDEV_FDB_ADD_TO_DEVICE' notifications with the locked flag.
+> 
+> If we can agree that locked entries are only meant to signal to user
+> space that a certain MAC tried to gain authorization and that the 
+> bridge
+> should ignore them while forwarding, then there is no point in
+> generating the 'SWITCHDEV_FDB_ADD_TO_DEVICE' notifications. We should
+> teach the bridge driver to suppress these so that there is no need to
+> patch all the device drivers.
 
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
----
- kernel/locking/qspinlock.c | 37 +++++++++++++++----------------------
- 1 file changed, 15 insertions(+), 22 deletions(-)
+I do not know of all about what other switchcores there are and how they 
+work, but those that I have knowledge of, it has been prudent in 
+connection with the locked port feature to install Storm Prevention or 
+zero-DPV (Destination Port Vector) FDB entries. I would think that that 
+should be the case for other switchcores too.
+Those entries cannot normally be installed from userspace (of course 
+special tools can do anything).
 
-diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-index 3255e7804842..251980783079 100644
---- a/kernel/locking/qspinlock.c
-+++ b/kernel/locking/qspinlock.c
-@@ -608,8 +608,7 @@ static void pv_kick_node(struct qspinlock *lock, struct qnode *node)
-  *
-  * The current value of the lock will be returned for additional processing.
-  */
--static u32
--pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
-+static void pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
- {
- 	struct qspinlock **lp = NULL;
- 	int waitcnt = 0;
-@@ -641,7 +640,7 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
- 		set_pending(lock);
- 		for (loop = SPIN_THRESHOLD; loop; loop--) {
- 			if (trylock_clear_pending(lock))
--				goto gotlock;
-+				return; /* got lock */
- 			cpu_relax();
- 		}
- 		clear_pending(lock);
-@@ -669,7 +668,7 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
- 				 */
- 				WRITE_ONCE(lock->locked, _Q_LOCKED_VAL);
- 				WRITE_ONCE(*lp, NULL);
--				goto gotlock;
-+				return; /* got lock */
- 			}
- 		}
- 		WRITE_ONCE(node->state, vcpu_hashed);
-@@ -685,12 +684,8 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
- 
- 	/*
- 	 * The cmpxchg() or xchg() call before coming here provides the
--	 * acquire semantics for locking. The dummy ORing of _Q_LOCKED_VAL
--	 * here is to indicate to the compiler that the value will always
--	 * be nozero to enable better code optimization.
-+	 * acquire semantics for locking.
- 	 */
--gotlock:
--	return (u32)(atomic_read(&lock->val) | _Q_LOCKED_VAL);
- }
- 
- /*
-@@ -766,9 +761,8 @@ static __always_inline void pv_wait_node_acquire(struct qnode *node,
- 						 struct qnode *prev) { }
- static __always_inline void pv_kick_node(struct qspinlock *lock,
- 					 struct qnode *node) { }
--static __always_inline u32  pv_wait_head_or_lock(struct qspinlock *lock,
--						 struct qnode *node)
--						   { return 0; }
-+static __always_inline void pv_wait_head_or_lock(struct qspinlock *lock,
-+						 struct qnode *node) { }
- static __always_inline bool pv_hybrid_queued_unfair_trylock(struct qspinlock *lock) { BUILD_BUG(); }
- #endif /* CONFIG_PARAVIRT_SPINLOCKS */
- 
-@@ -889,24 +883,23 @@ static __always_inline void queued_spin_lock_mcs_queue(struct qspinlock *lock, b
- 	 * sequentiality; this is because the set_locked() function below
- 	 * does not imply a full barrier.
- 	 *
--	 * The PV pv_wait_head_or_lock function, if active, will acquire
--	 * the lock and return a non-zero value. So we have to skip the
--	 * atomic_cond_read_acquire() call. As the next PV queue head hasn't
--	 * been designated yet, there is no way for the locked value to become
--	 * _Q_SLOW_VAL. So both the set_locked() and the
-+	 * The PV pv_wait_head_or_lock function will acquire the lock, so
-+	 * skip the atomic_cond_read_acquire() call. As the next PV queue head
-+	 * hasn't been designated yet, there is no way for the locked value to
-+	 * become _Q_SLOW_VAL. So both the set_locked() and the
- 	 * atomic_cmpxchg_relaxed() calls will be safe.
- 	 *
- 	 * If PV isn't active, 0 will be returned instead.
- 	 *
- 	 */
- 	if (paravirt) {
--		if ((val = pv_wait_head_or_lock(lock, node)))
--			goto locked;
-+		pv_wait_head_or_lock(lock, node);
-+		val = atomic_read(&lock->val);
-+	} else {
-+		val = atomic_cond_read_acquire(&lock->val,
-+				!(VAL & _Q_LOCKED_PENDING_MASK));
- 	}
- 
--	val = atomic_cond_read_acquire(&lock->val, !(VAL & _Q_LOCKED_PENDING_MASK));
--
--locked:
- 	/*
- 	 * claim the lock:
- 	 *
--- 
-2.35.1
+But if the decision is to drop locked entries at the DSA layer, I can do 
+that. I just want to ensure that all considerations have been taken.
 
+> 
+> [1] https://lore.kernel.org/netdev/YsqLyxTRtUjzDj6D@shredder/
+> 
+>> 
+>> >
+>> > In any case I'm going to take a look at this patch set more closely and
+>> > run the selftest on my Marvell switch, but I can't do this today
+>> > unfortunately. I'll return with more comments.
+>> 
+>> Yes :-)

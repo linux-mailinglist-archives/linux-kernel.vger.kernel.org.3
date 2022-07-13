@@ -2,267 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698D857385E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8CA573872
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236535AbiGMOHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
+        id S236366AbiGMOKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236482AbiGMOHt (ORCPT
+        with ESMTP id S236277AbiGMOKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:07:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 133823245A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657721250;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VlxBh0eWzwPuhW8SmhdFQ+cC0txRQjD8/hmG+KuMxZk=;
-        b=XPBJ3AP0+HKy++NKAYLsI4XQv8+WrL49CxzjWgMjCVDRyE3PMYe9+HRLDk4R4k8u70kHQT
-        0POVGJDI0KDiWynGuYJlVAWMfWzsBMC/EibHCpTvzbCgK6ZDAKdIEgy9o9dvxkvU6gVimv
-        xBatv/YjwheZDaDqgkRLYVBNX24vZkw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-597-byureFMnPOi2WDZmq6Itug-1; Wed, 13 Jul 2022 10:07:27 -0400
-X-MC-Unique: byureFMnPOi2WDZmq6Itug-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFD0C802D2C;
-        Wed, 13 Jul 2022 14:07:26 +0000 (UTC)
-Received: from localhost (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BDC2B1121314;
-        Wed, 13 Jul 2022 14:07:25 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V5 2/2] ublk_drv: support to complete io command via task_work_add
-Date:   Wed, 13 Jul 2022 22:07:11 +0800
-Message-Id: <20220713140711.97356-3-ming.lei@redhat.com>
-In-Reply-To: <20220713140711.97356-1-ming.lei@redhat.com>
-References: <20220713140711.97356-1-ming.lei@redhat.com>
+        Wed, 13 Jul 2022 10:10:12 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2080.outbound.protection.outlook.com [40.107.92.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03B238A;
+        Wed, 13 Jul 2022 07:10:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KkXJ3lNo1XK0b7X1eJJ+0/kCNju5hxpguyTwv9EraA948/SUt4Fnz4O8dCodJaUqxRiT6GxBIObOxU+0E0hhTIkGm2iTAoQPUbawcdxR/lrIVQZyw26eVTOItM0Zz0eQNJL8FZngsyuOkAoF2XhR6C/BEFWoA5qjxLN+Gvpp3GPP0cm6lZnhCrbP8gCrhVMT1VxAhc5XqTFByaZ6tSnWM12hktCoZJ8Fikrk4eUxoaRqUVrJOqDbdE0AUJaeq82/rE3gz3B15mgKgV/t5oF9stxxVWkERh2+d3V5J0VYvCRr60f+n6s3SGg7aqDZe+j7wQEm79tgMv3BuIZPKTAvjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RBzVmXC/HE4vSPWSDhCPegBWNN1x5rhrS8A7TYMnLXI=;
+ b=nfXivNMUZQmZxwRxuZ3NMCvVqPIvk2yjm6GiQw9F0BzMbjNxwiDZO4CQq1YWXcf/ZdbdsGiiZTnuHa5whd7DX7qRPKwCEqITyV/APGDwgGEyHXSdmvjH1hbfz2gRPzlyKelSKgDh1LZtGMQHk+4RCmlfBXxZ7awmJVTXLptvy7uHVAyzrkyWfR2BG3pLxXWo36d0ZHaSZSmXG+sueJSfIEZ7mC1bFnUAzmLh8fpa8W0PKETcFRODv2GwLQDSjg5GmUQhqTDlSz6U2qT0Pgf4MWWXmk+pVR/mpqUWkJcsgHrvjqe5QuPrPfWggA0RwjzWVUmey8mJP5ZNmFwwr1X3+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RBzVmXC/HE4vSPWSDhCPegBWNN1x5rhrS8A7TYMnLXI=;
+ b=ZIy3w31Cb6TkGinMZnh3+n180b5GQtPBT82dTxg+i13OgdzzU1ZwdFgRaym5sZQ+CX8tZEAXdUN9nfpOrpCEKdnwTEE3SN/ab7H7/gAaXL7aioe1a1Wfi+dA+ooXedwyjJL7/TukkGPC2Pf1ttF11aFd9HMJb4o4LgWhuJdMUFQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
+ by BL0PR12MB2417.namprd12.prod.outlook.com (2603:10b6:207:45::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Wed, 13 Jul
+ 2022 14:10:08 +0000
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::c96b:6385:264b:b92d]) by BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::c96b:6385:264b:b92d%4]) with mapi id 15.20.5438.012; Wed, 13 Jul 2022
+ 14:10:08 +0000
+Message-ID: <e871f27d-2bfe-62e3-a5fa-8e1fe52e856a@amd.com>
+Date:   Wed, 13 Jul 2022 09:10:05 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] thermal/drivers/qcom: Code refactoring
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
+        david.brown@linaro.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bilbao@vt.edu, konrad.dybcio@somainline.org
+References: <20220712173127.3677491-1-carlos.bilbao@amd.com>
+ <Ys5KdVQmA9YTmfCT@builder.lan>
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+In-Reply-To: <Ys5KdVQmA9YTmfCT@builder.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR03CA0241.namprd03.prod.outlook.com
+ (2603:10b6:610:e5::6) To BL1PR12MB5874.namprd12.prod.outlook.com
+ (2603:10b6:208:396::17)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e8da781c-c4cd-468a-3d6a-08da64d96467
+X-MS-TrafficTypeDiagnostic: BL0PR12MB2417:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aJvfHngJGTD5Vrggr6/v15/okODmm11WmilJxw/SU1ZypP+koiEg6VQ+QvBIZIUemUHTQmDCJ1YIEKsmbCgMc3kverjFPsjH/uiPJx1jFnhP+D/2nOAi/j27XVUOImmh1UtbzQAwy0+Bi6/4LilN2IGzGIX7tbee+UGhNtB7wB33BJFDVKuv8KNS2yb6z0NlAGIMJHx78Y9i1jKeYjCffkjuZASHYQMh+eRaMKZdxIEwjb2FncGsNrspFDxK9yRar63XolTIrwmbysVHbog9cO7aDgMR2e7uc1NkvrEecjNxdVVB2IliUWdVLPX2Orb93759shJ+pF8PuWPo72ua5svSMl06YlSNEXEYqg8ShgwG5YaQ7CJuXX/s8bw4JYPUXU+5cfhyTxi0OzdtAGsinxcmLy1b9TIpRE/KyvdUOlX6xgoOxlWLG8wSORJQQy4PG2265cv/VPHGtBtigApaekQOHKYxZor4ynPkem2K5BhjGLHE4f8LyMDaebX6u9y2NffWZSBKHOKtpsdl26oXMCFVTZV0Ui/UX6WVtqtsiPYXTgxLA2HUjKZjK402ZjdZhGtHe7GkwgyZSR/s5OnJntFYpWzH6JgEM1q+gd4Dd8LKOfYrPNlvVT24zrFVNBblewexDZrNCvkGTKpWFwIM6OEszYK1zwTB2FCxwDw/rDMIymPoZaZW7k07ytFNKSnBDSxD8t/VgEr1Dr12PTPbQ0y0xrccJL60DqdTdkTt2HIwlzaFuv3bFfKtPnDeHfkKs/gXWdXhA+NPlukQsP634oPxe4odsC0iZvtyhQZQAhwgMczFHeZuetXqIqafIFEntI+MmZGbac5P1t/EPk4VvRYr1tJL5lPUxCl0+YCWQeE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(39860400002)(396003)(136003)(346002)(366004)(6512007)(41300700001)(53546011)(6666004)(2906002)(26005)(86362001)(6486002)(478600001)(8936002)(6506007)(44832011)(38100700002)(5660300002)(2616005)(7416002)(36756003)(31696002)(83380400001)(316002)(6916009)(4326008)(66946007)(31686004)(66556008)(8676002)(186003)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bWdjaE1UMmpRYXhqaTVTWC9BckJzMVBzV28zUHZzdGhDaU5IemlXSW92dHhv?=
+ =?utf-8?B?bFJmN01yRXVER3YwWU8zSlo1NzhGOXJBZXBHY3dleVBYQVRuZFhRV3lMS0xq?=
+ =?utf-8?B?QlRWc3RSblpLUHhLK0tna2V3Z1JCUHFGb0laTlQ0b1MrMklIeGpsWm1aZVZN?=
+ =?utf-8?B?cWxtSFd1M1FwRFlpYldxQ0k3Um5ZMm5LK0VkSU1VWHFEc0ZQUURORjB4bkVO?=
+ =?utf-8?B?SWErQWtGMDRzZDhCOWJPbTFtYVV3aG54YmxDOVVpQlkwZkxhd1ZxUTA0VHR4?=
+ =?utf-8?B?eEE0NzJITmMwcTFmTEhPYXFiZEtDbFh0YldoTHArTnV5TVp2em9aSHdMYktC?=
+ =?utf-8?B?ZmxFM2tkalc0L3J2M2FMNlFma0FpbFI5enZHNjA2b1dHKzU3SmFWdS9vem9j?=
+ =?utf-8?B?dVVoZGhwODJvYlNRR25VNjlhY2JQNHVYdUNjQUlNLzQweGlyMmtEWUNZYkJB?=
+ =?utf-8?B?S3ptVXlRYUkxVkFKT0tTVWg0WnJjUFFrNEZEL09lc3RyMTVBaFRuWFk5V1J3?=
+ =?utf-8?B?dXBqd0dNYVZjVjRkOXgrQnNUVG5jZTk0aVdqK3VhbGJMcnBvVndwR0h3VGRv?=
+ =?utf-8?B?dWJaSkxobGZ0NDhuY01nY2VYK1BhaEV3QmxnRGp2ZUlyMHFwWmlUQjhRUG95?=
+ =?utf-8?B?MGJHQ2MxWjlJVzh4M29GZFYrelZhZ3IybitxWERSRlg4TnNBU2R5bENWR1JV?=
+ =?utf-8?B?MElwdWc2SzdiUkFYTHYrTU44a2QvTmpWWHdldHViY1VQeHNXSWNndkYwbXE4?=
+ =?utf-8?B?SkRuak4zaTlPRGZ5bmRnbXVGTGFyRTVsV0tpT3NvNkJrWmlrTUVIcnFKWkNh?=
+ =?utf-8?B?RHYvdWUvV1ppRmRPYndVN3VPbWpyN2NGYW9oUiswVE1nUy9WcUgyTFdxdDVF?=
+ =?utf-8?B?NFdza0FkVmJJa01MTjROVjhHRjZRVUI5eitWSGVxNGVDRjVUMTVETEJyZzQz?=
+ =?utf-8?B?dWxvT2tJY0FLM1JpMkIzMkp5REdBaTh6Z3Njd2I0b0REcFF3amgrL2k3eFpo?=
+ =?utf-8?B?aTdFZ0JOMnBuMUlaWkgyb1VIWnZpWUxZRWZWRUxWM0lTVEd3VWJtRFZ5L0tj?=
+ =?utf-8?B?SE1yT2pEeGpZNW13VGRySW9nNGEwWEtYUjB2eW5hRXNIKzB6YTFVcDROaUJI?=
+ =?utf-8?B?ZWZsWUlLWnRxSi9Lc29hM3BoMFFISSs1TG1ETUVhakFIajNyRUdFOUU3K2Q2?=
+ =?utf-8?B?YmhDNFYrcnNRcldVMkxPZUtJN3QwU0lOaUN0T0JJSWtQNmRNdW9lVmh3ZFV4?=
+ =?utf-8?B?a2RJMXd4bEFnWFFpN25BendCWmtjOEFrVktycmdBaEROUDJCZW1RSERJSnV2?=
+ =?utf-8?B?eSt1NjBIVGFJanduMHlSVHdhK3NGdk4weW5wa3pubkFKSm9OUkFhWVd1c2Ur?=
+ =?utf-8?B?SktVWDFTRngzTFZVdDRqeXdiazRJUTFXWXhMdVo2cjNkN2hESXFNS0hja0dJ?=
+ =?utf-8?B?VlhnKzFkMUR6WWhhSG1TbTZqbG9BUlp1SHE4b29nYW9KcExLUjNpTHBGaTJ6?=
+ =?utf-8?B?MXlvZ3V2MmZtNTE5M3VQdUQ5aGxyTTRIdCtJQ1YyakdiRURUOFVUNXNVNkdi?=
+ =?utf-8?B?MVNuSHRqdEVFTkJRK2kxek9qM1pZSE5LU1FEc0xEaHQ1Tnl5M2ZZWGYzMWM2?=
+ =?utf-8?B?TXBqVjRXV2pzbU9ZK3d2blJ1Zkt4bGVrdEllTGhNL0lTUjhuSEpMV0dvVWgv?=
+ =?utf-8?B?aW1HYUhGL2Z5dG4vMGI4ZlJYOVBOZlFrV3NlV2kzUEx2SUNHWGFRbXNYMUMx?=
+ =?utf-8?B?cUROMGVhd1ZhN2pRTVBSR0ZaMnN5czlNaHNyZFNCdXRuMFFPUXljc0d5TDNv?=
+ =?utf-8?B?VGpVY3dWU2tiQ2VuODNFM3k0RHdHWkhpRzVKcEhkSHg0ZGRaUDIvbmtEYUti?=
+ =?utf-8?B?UWJPVEROWXYzeWRNZ2xSTDVLejVMMi81TWs4dGZ0MjEwU1M5N3gxTC9QUTda?=
+ =?utf-8?B?QmhudncwU0tTNW9CSFpPM2E3Nnpua1pKV1JhaytWR003SHd0cHFQdVM5Z0g3?=
+ =?utf-8?B?cjFGR0dCMFBjcit0ZnRxTG50VVdkMWo5VWhtUUVBRzZSTHRoVlhUVkY4c1VV?=
+ =?utf-8?B?Sm84N2dkSnhLUG9tUy9RTFkvQmJNaFYrWFlUelc5NFVqQm53Vm5mUlg2T2o0?=
+ =?utf-8?Q?AvEUjXPzoobOzIqOKm+Ky+vV7?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8da781c-c4cd-468a-3d6a-08da64d96467
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 14:10:08.3233
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cSn2PLNnxZq8J6yEsLtNVmJZa4/0omj9QBYdKrK5qJwo5Z3hBQ2etpSXX8eNima1YuHBl2Negx9UNtBDumOXBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2417
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use task_work_add if it is available, since task_work_add can bring
-up better performance, especially batching signaling ->ubq_daemon can
-be done.
+On 7/12/22 23:30, Bjorn Andersson wrote:
 
-It is observed that task_work_add() can boost iops by +4% on random
-4k io test. Also except for completing io command, all other code
-paths are same with completing io command via
-io_uring_cmd_complete_in_task.
+> On Tue 12 Jul 12:31 CDT 2022, Carlos Bilbao wrote:
+>
+>> Some functions in tsens-8960.c can directly return ret instead of doing an
+>> extra check. In function calibrate_8960(), a second check for IS_ERR(data)
+>> can also be avoided in some cases. A constant could be used to represent
+>> the maximum number of sensors (11). Finally, function code_to_degc() can be
+>> simplified, avoiding using an extra variable.
+>>
+> Thanks for the patch Carlos. These are rather small fixes, but it would
+> still be nice to keep them separate, so that in the even of there being
+> some unforseen regression it would be easy to track down and fix the
+> relevant patch.
+Thanks for your comments Bjorn and Konrad. From what you say, I believe it
+would be good to have this as a small refactoring patchset that includes:
 
-Meantime add one flag of UBLK_F_URING_CMD_COMP_IN_TASK for comparing
-the mode easily.
+1/4 Simplify return values.
+2/4 Simplify function code_to_degc().
+3/4 Simplify function calibrate_8960().
+4/4 Create array MAX_NUM_SENSORS[] for maximum number of sensors per
+version (v0.1, v1, v2), that can be further populated when future versions
+appear.
+>> Include these small refactoring changes.
+>>
+>> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+>> ---
+>>   drivers/thermal/qcom/tsens-8960.c   | 25 +++++++++----------------
+>>   drivers/thermal/qcom/tsens-common.c | 18 ++++++++----------
+>>   drivers/thermal/qcom/tsens-v0_1.c   |  6 +++---
+>>   drivers/thermal/qcom/tsens-v1.c     |  2 +-
+>>   drivers/thermal/qcom/tsens.h        |  1 +
+>>   5 files changed, 22 insertions(+), 30 deletions(-)
+>>
+>> diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
+>> index 8d9b721dadb6..576bca871655 100644
+>> --- a/drivers/thermal/qcom/tsens-8960.c
+>> +++ b/drivers/thermal/qcom/tsens-8960.c
+>> @@ -76,10 +76,8 @@ static int suspend_8960(struct tsens_priv *priv)
+>>   		mask = SLP_CLK_ENA_8660 | EN;
+>>   
+>>   	ret = regmap_update_bits(map, CNTL_ADDR, mask, 0);
+> Why not just do:
+>
+> 	return regmap_writen(...);
 
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
----
- drivers/block/ublk_drv.c      | 75 +++++++++++++++++++++++++++++++----
- include/uapi/linux/ublk_cmd.h |  6 +++
- 2 files changed, 73 insertions(+), 8 deletions(-)
+Yep, should be part of patch 1/4.
 
-diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index 922a84c86fc6..35fa06ee70ff 100644
---- a/drivers/block/ublk_drv.c
-+++ b/drivers/block/ublk_drv.c
-@@ -41,10 +41,15 @@
- #include <linux/delay.h>
- #include <linux/mm.h>
- #include <asm/page.h>
-+#include <linux/task_work.h>
- #include <uapi/linux/ublk_cmd.h>
- 
- #define UBLK_MINORS		(1U << MINORBITS)
- 
-+struct ublk_rq_data {
-+	struct callback_head work;
-+};
-+
- struct ublk_uring_cmd_pdu {
- 	struct request *req;
- };
-@@ -91,6 +96,7 @@ struct ublk_queue {
- 	int q_id;
- 	int q_depth;
- 
-+	unsigned long flags;
- 	struct task_struct	*ubq_daemon;
- 	char *io_cmd_buf;
- 
-@@ -149,6 +155,14 @@ static DEFINE_MUTEX(ublk_ctl_mutex);
- 
- static struct miscdevice ublk_misc;
- 
-+static inline bool ublk_can_use_task_work(const struct ublk_queue *ubq)
-+{
-+	if (IS_BUILTIN(CONFIG_BLK_DEV_UBLK) &&
-+			!(ubq->flags & UBLK_F_URING_CMD_COMP_IN_TASK))
-+		return true;
-+	return false;
-+}
-+
- static struct ublk_device *ublk_get_device(struct ublk_device *ub)
- {
- 	if (kobject_get_unless_zero(&ub->cdev_dev.kobj))
-@@ -500,12 +514,10 @@ static void __ublk_fail_req(struct ublk_io *io, struct request *req)
- 
- #define UBLK_REQUEUE_DELAY_MS	3
- 
--static void ublk_rq_task_work_cb(struct io_uring_cmd *cmd)
-+static inline void __ublk_rq_task_work(struct request *req)
- {
--	struct ublk_uring_cmd_pdu *pdu = ublk_get_uring_cmd_pdu(cmd);
--	struct ublk_device *ub = cmd->file->private_data;
--	struct request *req = pdu->req;
- 	struct ublk_queue *ubq = req->mq_hctx->driver_data;
-+	struct ublk_device *ub = ubq->dev;
- 	int tag = req->tag;
- 	struct ublk_io *io = &ubq->ios[tag];
- 	bool task_exiting = current != ubq->ubq_daemon ||
-@@ -557,13 +569,27 @@ static void ublk_rq_task_work_cb(struct io_uring_cmd *cmd)
- 	io_uring_cmd_done(io->cmd, UBLK_IO_RES_OK, 0);
- }
- 
-+static void ublk_rq_task_work_cb(struct io_uring_cmd *cmd)
-+{
-+	struct ublk_uring_cmd_pdu *pdu = ublk_get_uring_cmd_pdu(cmd);
-+
-+	__ublk_rq_task_work(pdu->req);
-+}
-+
-+static void ublk_rq_task_work_fn(struct callback_head *work)
-+{
-+	struct ublk_rq_data *data = container_of(work,
-+			struct ublk_rq_data, work);
-+	struct request *req = blk_mq_rq_from_pdu(data);
-+
-+	__ublk_rq_task_work(req);
-+}
-+
- static blk_status_t ublk_queue_rq(struct blk_mq_hw_ctx *hctx,
- 		const struct blk_mq_queue_data *bd)
- {
- 	struct ublk_queue *ubq = hctx->driver_data;
- 	struct request *rq = bd->rq;
--	struct io_uring_cmd *cmd = ubq->ios[rq->tag].cmd;
--	struct ublk_uring_cmd_pdu *pdu = ublk_get_uring_cmd_pdu(cmd);
- 	blk_status_t res;
- 
- 	/* fill iod to slot in io cmd buffer */
-@@ -574,16 +600,36 @@ static blk_status_t ublk_queue_rq(struct blk_mq_hw_ctx *hctx,
- 	blk_mq_start_request(bd->rq);
- 
- 	if (unlikely(ubq_daemon_is_dying(ubq))) {
-+ fail:
- 		mod_delayed_work(system_wq, &ubq->dev->monitor_work, 0);
- 		return BLK_STS_IOERR;
- 	}
- 
--	pdu->req = rq;
--	io_uring_cmd_complete_in_task(cmd, ublk_rq_task_work_cb);
-+	if (ublk_can_use_task_work(ubq)) {
-+		struct ublk_rq_data *data = blk_mq_rq_to_pdu(rq);
-+		enum task_work_notify_mode notify_mode = bd->last ?
-+			TWA_SIGNAL_NO_IPI : TWA_NONE;
-+
-+		if (task_work_add(ubq->ubq_daemon, &data->work, notify_mode))
-+			goto fail;
-+	} else {
-+		struct io_uring_cmd *cmd = ubq->ios[rq->tag].cmd;
-+		struct ublk_uring_cmd_pdu *pdu = ublk_get_uring_cmd_pdu(cmd);
-+
-+		pdu->req = rq;
-+		io_uring_cmd_complete_in_task(cmd, ublk_rq_task_work_cb);
-+	}
- 
- 	return BLK_STS_OK;
- }
- 
-+static void ublk_commit_rqs(struct blk_mq_hw_ctx *hctx)
-+{
-+	struct ublk_queue *ubq = hctx->driver_data;
-+
-+	if (ublk_can_use_task_work(ubq))
-+		__set_notify_signal(ubq->ubq_daemon);
-+}
- 
- static int ublk_init_hctx(struct blk_mq_hw_ctx *hctx, void *driver_data,
- 		unsigned int hctx_idx)
-@@ -595,9 +641,20 @@ static int ublk_init_hctx(struct blk_mq_hw_ctx *hctx, void *driver_data,
- 	return 0;
- }
- 
-+static int ublk_init_rq(struct blk_mq_tag_set *set, struct request *req,
-+		unsigned int hctx_idx, unsigned int numa_node)
-+{
-+	struct ublk_rq_data *data = blk_mq_rq_to_pdu(req);
-+
-+	init_task_work(&data->work, ublk_rq_task_work_fn);
-+	return 0;
-+}
-+
- static const struct blk_mq_ops ublk_mq_ops = {
- 	.queue_rq       = ublk_queue_rq,
-+	.commit_rqs     = ublk_commit_rqs,
- 	.init_hctx	= ublk_init_hctx,
-+	.init_request   = ublk_init_rq,
- };
- 
- static int ublk_ch_open(struct inode *inode, struct file *filp)
-@@ -912,6 +969,7 @@ static int ublk_init_queue(struct ublk_device *ub, int q_id)
- 	void *ptr;
- 	int size;
- 
-+	ubq->flags = ub->dev_info.flags[0];
- 	ubq->q_id = q_id;
- 	ubq->q_depth = ub->dev_info.queue_depth;
- 	size = ublk_queue_cmd_buf_size(ub, q_id);
-@@ -1099,6 +1157,7 @@ static int ublk_add_dev(struct ublk_device *ub)
- 	ub->tag_set.nr_hw_queues = ub->dev_info.nr_hw_queues;
- 	ub->tag_set.queue_depth = ub->dev_info.queue_depth;
- 	ub->tag_set.numa_node = NUMA_NO_NODE;
-+	ub->tag_set.cmd_size = sizeof(struct ublk_rq_data);
- 	ub->tag_set.flags = BLK_MQ_F_SHOULD_MERGE;
- 	ub->tag_set.driver_data = ub;
- 
-diff --git a/include/uapi/linux/ublk_cmd.h b/include/uapi/linux/ublk_cmd.h
-index 4f0c16ec875e..a3f5e7c21807 100644
---- a/include/uapi/linux/ublk_cmd.h
-+++ b/include/uapi/linux/ublk_cmd.h
-@@ -48,6 +48,12 @@
-  */
- #define UBLK_F_SUPPORT_ZERO_COPY	(1UL << 0)
- 
-+/*
-+ * Force to complete io cmd via io_uring_cmd_complete_in_task so that
-+ * performance comparison is done easily with using task_work_add
-+ */
-+#define UBLK_F_URING_CMD_COMP_IN_TASK	(1UL << 1)
-+
- /* device state */
- #define UBLK_S_DEV_DEAD	0
- #define UBLK_S_DEV_LIVE	1
--- 
-2.31.1
+>> -	if (ret)
+>> -		return ret;
+>>   
+>> -	return 0;
+>> +	return ret;
+>>   }
+>>   
+>>   static int resume_8960(struct tsens_priv *priv)
+>> @@ -106,10 +104,8 @@ static int resume_8960(struct tsens_priv *priv)
+>>   		return ret;
+>>   
+>>   	ret = regmap_write(map, CNTL_ADDR, priv->ctx.control);
+>> -	if (ret)
+>> -		return ret;
+>>   
+>> -	return 0;
+>> +	return ret;
+>>   }
+>>   
+>>   static int enable_8960(struct tsens_priv *priv, int id)
+>> @@ -132,10 +128,8 @@ static int enable_8960(struct tsens_priv *priv, int id)
+>>   		reg |= mask | SLP_CLK_ENA_8660 | EN;
+>>   
+>>   	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg);
+>> -	if (ret)
+>> -		return ret;
+>>   
+>> -	return 0;
+>> +	return ret;
+>>   }
+>>   
+>>   static void disable_8960(struct tsens_priv *priv)
+>> @@ -206,10 +200,8 @@ static int init_8960(struct tsens_priv *priv)
+>>   
+>>   	reg_cntl |= EN;
+>>   	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg_cntl);
+>> -	if (ret)
+>> -		return ret;
+>>   
+>> -	return 0;
+>> +	return ret;
+>>   }
+>>   
+>>   static int calibrate_8960(struct tsens_priv *priv)
+>> @@ -221,10 +213,11 @@ static int calibrate_8960(struct tsens_priv *priv)
+>>   	struct tsens_sensor *s = priv->sensor;
+>>   
+>>   	data = qfprom_read(priv->dev, "calib");
+>> -	if (IS_ERR(data))
+>> +	if (IS_ERR(data)) {
+>>   		data = qfprom_read(priv->dev, "calib_backup");
+>> -	if (IS_ERR(data))
+>> -		return PTR_ERR(data);
+>> +		if (IS_ERR(data))
+>> +			return PTR_ERR(data);
+>> +	}
+>>   
+>>   	for (i = 0; i < num_read; i++, s++)
+>>   		s->offset = data[i];
+>> @@ -278,6 +271,6 @@ static const struct tsens_ops ops_8960 = {
+>>   };
+>>   
+>>   const struct tsens_plat_data data_8960 = {
+>> -	.num_sensors	= 11,
+>> +	.num_sensors	= MAX_NUM_SENSORS,
+>>   	.ops		= &ops_8960,
+>>   };
+>> diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+>> index 528df8801254..fe5f4459e1cc 100644
+>> --- a/drivers/thermal/qcom/tsens-common.c
+>> +++ b/drivers/thermal/qcom/tsens-common.c
+>> @@ -66,19 +66,17 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
+>>   
+>>   static inline int code_to_degc(u32 adc_code, const struct tsens_sensor *s)
+>>   {
+>> -	int degc, num, den;
+>> +	int degc, den;
+>>   
+>> -	num = (adc_code * SLOPE_FACTOR) - s->offset;
+>> +	degc = (adc_code * SLOPE_FACTOR) - s->offset;
+> At this point the variable name is misleading, it's not until you have
+> reassigned degc below that it's value represent the temperature.
+>
+Sure, will rename.
+>>   	den = s->slope;
+>>   
+>> -	if (num > 0)
+>> -		degc = num + (den / 2);
+>> -	else if (num < 0)
+>> -		degc = num - (den / 2);
+>> -	else
+>> -		degc = num;
+> So the main part of this change is to rework the else case, how about
+> just starting with:
+>
+> 	if (!num)
+> 		return 0;
+Makes sense.
+>
+>> -
+>> -	degc /= den;
+>> +	if (degc != 0) {
+>> +		if (degc > 0)
+>> +			degc = (degc + (den / 2)) / den;
+>> +		else
+>> +			degc = (degc - (den / 2)) / den;
+>> +	}
+>>   
+>>   	return degc;
+>>   }
+>> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+>> index 6f26fadf4c27..42e897526345 100644
+>> --- a/drivers/thermal/qcom/tsens-v0_1.c
+>> +++ b/drivers/thermal/qcom/tsens-v0_1.c
+>> @@ -188,7 +188,7 @@ static int calibrate_8916(struct tsens_priv *priv)
+>>   static int calibrate_8974(struct tsens_priv *priv)
+>>   {
+>>   	int base1 = 0, base2 = 0, i;
+>> -	u32 p1[11], p2[11];
+>> +	u32 p1[MAX_NUM_SENSORS], p2[MAX_NUM_SENSORS];
+>>   	int mode = 0;
+>>   	u32 *calib, *bkp;
+>>   	u32 calib_redun_sel;
+>> @@ -324,7 +324,7 @@ static const struct tsens_features tsens_v0_1_feat = {
+>>   	.crit_int	= 0,
+>>   	.adc		= 1,
+>>   	.srot_split	= 1,
+>> -	.max_sensors	= 11,
+>> +	.max_sensors	= MAX_NUM_SENSORS,
+>>   };
+>>   
+>>   static const struct reg_field tsens_v0_1_regfields[MAX_REGFIELDS] = {
+>> @@ -374,7 +374,7 @@ static const struct tsens_ops ops_8974 = {
+>>   };
+>>   
+>>   const struct tsens_plat_data data_8974 = {
+>> -	.num_sensors	= 11,
+>> +	.num_sensors	= MAX_NUM_SENSORS,
+>>   	.ops		= &ops_8974,
+>>   	.feat		= &tsens_v0_1_feat,
+>>   	.fields	= tsens_v0_1_regfields,
+>> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+>> index 10b595d4f619..98acc9b64555 100644
+>> --- a/drivers/thermal/qcom/tsens-v1.c
+>> +++ b/drivers/thermal/qcom/tsens-v1.c
+>> @@ -149,7 +149,7 @@ static const struct tsens_features tsens_v1_feat = {
+>>   	.crit_int	= 0,
+>>   	.adc		= 1,
+>>   	.srot_split	= 1,
+>> -	.max_sensors	= 11,
+>> +	.max_sensors	= MAX_NUM_SENSORS,
+>>   };
+>>   
+>>   static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
+>> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+>> index 2fd94997245b..d2d78c7e20c8 100644
+>> --- a/drivers/thermal/qcom/tsens.h
+>> +++ b/drivers/thermal/qcom/tsens.h
+>> @@ -6,6 +6,7 @@
+>>   #ifndef __QCOM_TSENS_H__
+>>   #define __QCOM_TSENS_H__
+>>   
+>> +#define MAX_NUM_SENSORS		11
+> This only seems to apply for the three cases you have listed here, e.g.
+> tsens-v2 (which also includes tsens.h) has max_sensors = 16.
+
+This should be an array with an enum for the versions.
+
+> Regards,
+> Bjorn
+>
+>>   #define ONE_PT_CALIB		0x1
+>>   #define ONE_PT_CALIB2		0x2
+>>   #define TWO_PT_CALIB		0x3
+>> -- 
+>> 2.31.1
+>>
+
+Thanks,
+
+Carlos.
 

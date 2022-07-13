@@ -2,132 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE773573FF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD40A573FF7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbiGMXMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 19:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
+        id S230402AbiGMXNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 19:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiGMXMR (ORCPT
+        with ESMTP id S230234AbiGMXNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 19:12:17 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CFA5070A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:12:16 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so6189407pjl.5
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pjvd38sMQ0s3XmHKT3cdWb0EkqYt/fWbMQjoxI+K9uc=;
-        b=W6tKMLRIBvc6bvqVQFAHIge/0Ft/PiMVC0pIdzLaYsiLwrxDBGrm4gSwcJ/RAm1Bmx
-         RkfHRmutCtraFJYBEeG683xsTgMHIhoJAA3KKsxgC7Lqz+Hiha5QEppoDtCnwND2ntv2
-         pga2kH8CNoBqOJxIzsuepklAU7HIZXCM3KAZqPIpFCRl7AdGA+HhsDCxhFPbIfm/oFez
-         8u+vZYdSI7OVGBfeFMsaUxcDkrDSPIlW3sBMd1xesuhjhs2L4b+kISqQJvz0Ckrabku7
-         /+/uU3JH8tjEEXHS7eyym6tlwI4QKho1Rd7G2kqtppxzUzN/jxTvLMJEjFue6eWdGevn
-         6niQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=pjvd38sMQ0s3XmHKT3cdWb0EkqYt/fWbMQjoxI+K9uc=;
-        b=H5/bnGcv9Dr36GiJzwpeTaNeSk54untNkSWbVInQLxIvrOlMCPFz4VvQZAecnww5A/
-         Vyj0VGtlm6XCf+qDvBN5WvNuWumMOJiG/PX1j7iHfeThRqF21TZ1Lq8ISGouD+lzckVh
-         1om6sEMJvZXk3EU7gou2yAthJdVbtfPMAEvb/kRg6GTlM/hDVSDu3XNLuwhbq+U2hJUy
-         KcRguS4dSYb6I4e53gvk8hqQ8E09fxZjbVqZtSg1yvdfw01wP9Xrl6bnTMmKMQFkVIDw
-         D37ZTr3P2UOs8Nm5cq5BpakrngKPJDZkvgfrzX7JZzm8H2RTWmen+z8Q94O4UtxNMY1U
-         obJQ==
-X-Gm-Message-State: AJIora8ASStXG5kLg9vB9PM421+0d3xVm6/0DoOn/IEWISSeyT9vaYV0
-        mTyLkHre4bn3VoBgd8IsbAY=
-X-Google-Smtp-Source: AGRyM1u/CjJvF4vni4UIvSLlxLYhxu00JSEBts6bQ8UdOb4GRNyhtdb+lRlBjvTI+kX84b9MLYyFyQ==
-X-Received: by 2002:a17:90a:e00c:b0:1ef:81e6:9044 with SMTP id u12-20020a17090ae00c00b001ef81e69044mr12664161pjy.169.1657753936028;
-        Wed, 13 Jul 2022 16:12:16 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b30-20020aa78ede000000b005289eafbd08sm96382pfr.18.2022.07.13.16.12.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 16:12:12 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 13 Jul 2022 16:12:11 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Wed, 13 Jul 2022 19:13:30 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC544B4BB;
+        Wed, 13 Jul 2022 16:13:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ljthf4MRTz4xZB;
+        Thu, 14 Jul 2022 09:13:22 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657754005;
+        bh=8QDhy/yafq+zddNmXsnWB3SOgiThHS2yHFHT/LoOpPE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rhhdHVpJFja5h2fSgLdZya6P+U7TbBDSn6rRH4VHqMSUaB3LGcs5Hmh3RdvubQru9
+         LdzS+/GJIrXRwyAKvmvxb5af9C6RrpugtIqakDrK+uxEgZOJgvSNhAwEHDYv4YFJ6X
+         yGBLHCPRC9TX3wfFJZ9NwVj6n4w8Sx0wcR3lARL2DL0C/0JRgxTNrEefXNR4R45pXK
+         /4rEEzwDSzPP9MwJhISz0/XcgksoVoMYg2UDRM9PnD02nzdRt/dyPd/sm0Dw42Ge22
+         PyvfWTurVrmfv1oMugdeg5/mfbJrFKh/Esq+3BghM+tL6K1pTGtoWNg+vMIm9f61QL
+         lu8p/nFB9bEUQ==
+Date:   Thu, 14 Jul 2022 09:13:21 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
-Subject: Re: Linux 5.19-rc6
-Message-ID: <20220713231211.GF32544@roeck-us.net>
-References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
- <20220713050724.GA2471738@roeck-us.net>
- <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
- <Ys8hqoiN5iWbslsM@shell.armlinux.org.uk>
- <CAHk-=wjNxyXQqn=k0KipzUPoBYWQhUwybxee8GTkF_Oz6RPVFw@mail.gmail.com>
- <CADVatmMJ4f+3-z1SWOSXuygee3fMsLqjcWhEY=NLhSCj61OB5Q@mail.gmail.com>
- <CAHk-=wgUGp96_Wup3=Utws=Mn+07vi7ZXknv4nKZkAJv8Ezhnw@mail.gmail.com>
- <CADVatmPx=T_i1oaX2i_d5crbWkixFZU7s-_wky_kz58wDgwGDQ@mail.gmail.com>
- <20220713225627.GC32544@roeck-us.net>
- <CADVatmM=JR4d4WU_53PtA6g-y40qc=CbHL9uhsJc2cSW=uoOXA@mail.gmail.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        William Zhang <william.zhang@broadcom.com>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: linux-next: manual merge of the broadcom tree with the spdx
+ tree
+Message-ID: <20220714091321.4ecfe830@canb.auug.org.au>
+In-Reply-To: <20220711095520.4fad4c97@canb.auug.org.au>
+References: <20220711095520.4fad4c97@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADVatmM=JR4d4WU_53PtA6g-y40qc=CbHL9uhsJc2cSW=uoOXA@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ekux/TwU2iZousa/RrxmrUB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 12:09:24AM +0100, Sudip Mukherjee wrote:
-> On Wed, Jul 13, 2022 at 11:56 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On Wed, Jul 13, 2022 at 10:50:06PM +0100, Sudip Mukherjee wrote:
-> > > On Wed, Jul 13, 2022 at 10:45 PM Linus Torvalds
-> > > <torvalds@linux-foundation.org> wrote:
-> > > >
-> > > > On Wed, Jul 13, 2022 at 2:36 PM Sudip Mukherjee
-> > > > <sudipm.mukherjee@gmail.com> wrote:
-> > > > >
-> > > > > > >
-> > > > > > > https://lore.kernel.org/all/20220524025139.40212-1-wangkefeng.wang@huawei.com/
-> > > > > >
-> > > > > > That patch looks sane to me, but I guess Guenter would need to check
-> > > > >
-> > > > > I still see the failure in my builds with this patch. But surprisingly
-> > > > > I dont see the build failure (with or without this patch) with gcc-12,
-> > > > > only with gcc-11.
-> > > >
-> > > > Arrghs. "build failure"?
-> > >
-> > > Uhh.. no, sorry.. I meant the same problem which Guenter reported with
-> > > powerpc64-linux-ld, hard float and soft float.
-> > > But I dont see this problem with gcc-12, only with gcc-11.
-> > >
-> >
-> > Weird. It works for me with gcc 11.3.0 / binutils 2.38 as well as with
-> > gcc 11.2.0 / binutils 2.36.1.
-> 
-> Its entirely possible that I have messed up, there are references to
-> many patches in this thread. :)
-> Can you please paste the link of the patch that you say is working for
-> you. I will try a clean build with that.
-> 
+--Sig_/ekux/TwU2iZousa/RrxmrUB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The patch is at:
+Hi all,
 
-https://lore.kernel.org/lkml/20220618232737.2036722-1-linux@roeck-us.net/raw
+On Mon, 11 Jul 2022 09:55:20 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> Today's linux-next merge of the broadcom tree got a conflict in:
+>=20
+>   arch/arm/mach-bcm/bcm63xx.c
+>=20
+> between commit:
+>=20
+>   52e6676ef56f ("treewide: Replace GPLv2 boilerplate/reference with SPDX =
+- gpl-2.0_30.RULE (part 1)")
+>=20
+> from the spdx tree and commit:
+>=20
+>   889390f83d4e ("arm: bcmbca: Move BCM63138 ARCH_BCM_63XX to ARCH_BCMBCA")
+>=20
+> from the broadcom tree.
+>=20
+> I fixed it up (I just removed the file) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-Guenter
+This is now a conflict between the arm-soc tree and the spdx tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ekux/TwU2iZousa/RrxmrUB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLPUZEACgkQAVBC80lX
+0Gy92gf8C1qZ21pWn3/VKWtP0JOV2I9uvqpJH4DWoDDbfqOpINgqTBEn2Gvqk9b1
+6N7fK+C71ZZl99pkNgAM7o5pHPEFqhiVTX2M5VXCCNjqxfJCN40NY7L5OAS7TA9e
+rkHsyUywQexnADKUKuhtjwR5ebH5peteu32xsXOE/D7rmrbCunvWt34HkEWliCNH
+3OhVZ4K6lhe9JDPYA4Mb5qf/5BDsdNx+NLuP6sPi8QJ3BM6lk2fTTvzGW0ynhAJI
+zyguUGi/j0Oa58N8RB1G+0OGWIcHTvs6ar+r7neGdmG+sH7upnsY3saVZC2F0zuw
+gbsxc89VGhNA1vb3Tu4GqXcTGIYpkA==
+=RNOJ
+-----END PGP SIGNATURE-----
+
+--Sig_/ekux/TwU2iZousa/RrxmrUB--

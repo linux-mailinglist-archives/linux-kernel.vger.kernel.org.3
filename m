@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6171D57372F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54C557373A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236330AbiGMNSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S236313AbiGMNSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236200AbiGMNSA (ORCPT
+        with ESMTP id S236169AbiGMNR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:18:00 -0400
+        Wed, 13 Jul 2022 09:17:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DA52BC6;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472AC219A;
         Wed, 13 Jul 2022 06:17:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD62D61CBF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8AE361CB7;
         Wed, 13 Jul 2022 13:17:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A40C341C6;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96693C341C8;
         Wed, 13 Jul 2022 13:17:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1657718277;
-        bh=IMphhiSYM6JhBFzADUzsR3qJaXb7aQt8roj9nMxUDss=;
+        bh=sfOPeQLpvb50JpTI/njvrEwkjhOXPUdfT53axlc0qnM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TpoZlDPYZZpu1ynUMmTH+S92HXAVhfdIi/djW66irciGyl3p1tnOxLSTzUUVBHSj1
-         bRkf8E5Az2+yDU4ver3ocfp2jjqNzumoBG54gWQ3IOlUW2//i6HV0UGrQAVnbrTuWW
-         SsjqBKT20j8EwQy+R3IoAKKEdR/xc6bgHk8PYLIW/wtft7PToEzYgMqjHJA5ozI0pv
-         aalTQA6VxUNJtTG/4z6FOH7l8v3fqYbTDFT0qrc4r/xeCkezsnrDhJnofgVrHeJQHa
-         OiBmbAEl3wCGEsVviZSeD9Qi7DpcaAtstR3PmYVTRSzLqrtsGY3xupPKAQcxkAWb1J
-         z57BGNaIS49dQ==
+        b=ttijnUf2VtD/q7DFIXUCRX9qRFhTvG8F+9a05gi0jyCm77vuBQhHjm+2lfQxIPjrA
+         DQ0EGXSEwLCXAS/e+L2bdcbqD6vsw7sqPqdqYkGk8SofssDux4OOhb74pFPXRUjNi/
+         P/pKVNRC5/4aMGLlRM6+3WOEI3OOme66vzIz8O19kj1xIIDHEZzockmSXoiYcbmeul
+         /uz7zD45oCR+H/ciXWBhmViy3Wb510sxyvDnS6/xy57kDw5lXogdArL+4ADAxBuoKh
+         VioBFK5BcZHURVNQ8SaqFjxlsbrVVrfs4IaMHt2TE/9OvzejPsSzC/ZuNdLay0M06i
+         xI5Bg4o/qCS7g==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oBcFd-0007gG-2f; Wed, 13 Jul 2022 15:18:01 +0200
+        id 1oBcFd-0007gI-5g; Wed, 13 Jul 2022 15:18:01 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 1/7] dt-bindings: usb: qcom,dwc3: add SC8280XP binding
-Date:   Wed, 13 Jul 2022 15:13:34 +0200
-Message-Id: <20220713131340.29401-2-johan+linaro@kernel.org>
+Subject: [PATCH 2/7] dt-bindings: usb: qcom,dwc3: refine interrupt requirements
+Date:   Wed, 13 Jul 2022 15:13:35 +0200
+Message-Id: <20220713131340.29401-3-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220713131340.29401-1-johan+linaro@kernel.org>
 References: <20220713131340.29401-1-johan+linaro@kernel.org>
@@ -65,165 +65,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SC8280XP to the DT schema.
+Not all platforms have all of the four wakeup interrupts currently
+described by the bindings.
 
-Note that the SC8280XP controllers use the common set of five clocks and
-an additional set of four interconnect clocks whose purpose is not
-entirely clear at this point.
+Specifically, MSM8953/6/8 and SDM660 do not use the DP/DM interrupts,
+while the SS PHY interrupt is optional on SDM660 and SC7280.
 
-The set of wakeup interrupts is also different for SC8280XP.
+Note that no devicetree in mainline specify any wakeup interrupts for
+
+  - qcom,ipq4019-dwc3
+  - qcom,ipq6018-dwc3
+  - qcom,ipq8064-dwc3
+  - qcom,ipq8074-dwc3
+  - qcom,msm8994-dwc3
+  - qcom,qcs404-dwc3
+
+but let's keep the schema warnings about that for now.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- .../devicetree/bindings/usb/qcom,dwc3.yaml    | 102 +++++++++++++++---
- 1 file changed, 88 insertions(+), 14 deletions(-)
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    | 60 +++++++++++++++++--
+ 1 file changed, 55 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index 749e1963ddbb..c991d9103f87 100644
+index c991d9103f87..fea3e7092ace 100644
 --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
 +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -24,6 +24,7 @@ properties:
-           - qcom,qcs404-dwc3
-           - qcom,sc7180-dwc3
-           - qcom,sc7280-dwc3
-+          - qcom,sc8280xp-dwc3
-           - qcom,sdm660-dwc3
-           - qcom,sdm845-dwc3
-           - qcom,sdx55-dwc3
-@@ -66,11 +67,11 @@ properties:
-        - mock_utmi:: Mock utmi clock needed for ITP/SOF generation in host
-                      mode. Its frequency should be 19.2MHz.
-     minItems: 1
--    maxItems: 6
-+    maxItems: 9
- 
-   clock-names:
-     minItems: 1
--    maxItems: 6
-+    maxItems: 9
- 
-   assigned-clocks:
-     items:
-@@ -93,20 +94,10 @@ properties:
+@@ -94,9 +94,11 @@ properties:
        - const: apps-usb
  
    interrupts:
--    items:
--      - description: The interrupt that is asserted
--          when a wakeup event is received on USB2 bus.
--      - description: The interrupt that is asserted
--          when a wakeup event is received on USB3 bus.
--      - description: Wakeup event on DM line.
--      - description: Wakeup event on DP line.
-+    maxItems: 4
++    minItems: 1
+     maxItems: 4
  
    interrupt-names:
--    items:
--      - const: hs_phy_irq
--      - const: ss_phy_irq
--      - const: dm_hs_phy_irq
--      - const: dp_hs_phy_irq
-+    maxItems: 4
++    minItems: 1
+     maxItems: 4
  
    qcom,select-utmi-as-pipe-clk:
-     description:
-@@ -249,6 +240,28 @@ allOf:
-             - const: sleep
-             - const: mock_utmi
+@@ -333,14 +335,9 @@ allOf:
+               - qcom,ipq6018-dwc3
+               - qcom,ipq8064-dwc3
+               - qcom,ipq8074-dwc3
+-              - qcom,msm8953-dwc3
+               - qcom,msm8994-dwc3
+-              - qcom,msm8996-dwc3
+-              - qcom,msm8998-dwc3
+               - qcom,qcs404-dwc3
+               - qcom,sc7180-dwc3
+-              - qcom,sc7280-dwc3
+-              - qcom,sdm660-dwc3
+               - qcom,sdm845-dwc3
+               - qcom,sdx55-dwc3
+               - qcom,sdx65-dwc3
+@@ -369,6 +366,59 @@ allOf:
+             - const: dm_hs_phy_irq
+             - const: dp_hs_phy_irq
  
 +  - if:
 +      properties:
 +        compatible:
 +          contains:
 +            enum:
-+              - qcom,sc8280xp-dwc3
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 9
-+        clock-names:
-+          items:
-+            - const: cfg_noc
-+            - const: core
-+            - const: iface
-+            - const: sleep
-+            - const: mock_utmi
-+            - const: noc_aggr
-+            - const: noc_aggr_north
-+            - const: noc_aggr_south
-+            - const: noc_sys
-+
-   - if:
-       properties:
-         compatible:
-@@ -311,6 +324,67 @@ allOf:
-             - const: mock_utmi
-             - const: xo
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,ipq4019-dwc3
-+              - qcom,ipq6018-dwc3
-+              - qcom,ipq8064-dwc3
-+              - qcom,ipq8074-dwc3
 +              - qcom,msm8953-dwc3
-+              - qcom,msm8994-dwc3
 +              - qcom,msm8996-dwc3
 +              - qcom,msm8998-dwc3
-+              - qcom,qcs404-dwc3
-+              - qcom,sc7180-dwc3
-+              - qcom,sc7280-dwc3
-+              - qcom,sdm660-dwc3
-+              - qcom,sdm845-dwc3
-+              - qcom,sdx55-dwc3
-+              - qcom,sdx65-dwc3
-+              - qcom,sm4250-dwc3
-+              - qcom,sm6115-dwc3
-+              - qcom,sm6125-dwc3
-+              - qcom,sm6350-dwc3
-+              - qcom,sm8150-dwc3
-+              - qcom,sm8250-dwc3
-+              - qcom,sm8350-dwc3
-+              - qcom,sm8450-dwc3
 +    then:
 +      properties:
 +        interrupts:
-+          items:
-+            - description: The interrupt that is asserted
-+                when a wakeup event is received on USB2 bus.
-+            - description: The interrupt that is asserted
-+                when a wakeup event is received on USB3 bus.
-+            - description: Wakeup event on DM line.
-+            - description: Wakeup event on DP line.
++          maxItems: 2
 +        interrupt-names:
 +          items:
 +            - const: hs_phy_irq
 +            - const: ss_phy_irq
-+            - const: dm_hs_phy_irq
-+            - const: dp_hs_phy_irq
 +
 +  - if:
 +      properties:
 +        compatible:
 +          contains:
 +            enum:
-+              - qcom,sc8280xp-dwc3
++              - qcom,sdm660-dwc3
 +    then:
 +      properties:
 +        interrupts:
++          minItems: 1
++          maxItems: 2
++        interrupt-names:
++          minItems: 1
++          items:
++            - const: hs_phy_irq
++            - const: ss_phy_irq
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,sc7280-dwc3
++    then:
++      properties:
++        interrupts:
++          minItems: 3
 +          maxItems: 4
 +        interrupt-names:
++          minItems: 3
 +          items:
-+            - const: pwr_event
++            - const: hs_phy_irq
 +            - const: dp_hs_phy_irq
 +            - const: dm_hs_phy_irq
 +            - const: ss_phy_irq
- 
- additionalProperties: false
- 
++
+   - if:
+       properties:
+         compatible:
 -- 
 2.35.1
 

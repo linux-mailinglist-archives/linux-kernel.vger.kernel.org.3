@@ -2,82 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D78B1573CE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 21:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D76573CE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 21:05:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236663AbiGMTD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 15:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
+        id S236849AbiGMTE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 15:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiGMTDz (ORCPT
+        with ESMTP id S230169AbiGMTEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 15:03:55 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BB51116E
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:03:53 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 9-20020a1c0209000000b003a2dfdebe47so1753719wmc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:03:53 -0700 (PDT)
+        Wed, 13 Jul 2022 15:04:55 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849C9237FE
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:04:54 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so5344725pjn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:04:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GgWRzuR7K/JM+T/DhfougYNCN+Ei/e3TSwLryof3+SU=;
-        b=xjmR4PktYkcZtxmm4Bxud6e1aFZ3icNzqrxGwpsyvSP+iki6V1kc7Rk+QMVAugghKs
-         iy7l2DXORV/J357l07me+d7VqA7/HL2x2vHWNoMi+5mYTt8WGp4FQPtVI+2pqF64cTtA
-         72/E72qCLviSjQ3n7SaazKsHHso9wazLcrSWjeyWZaRt+N37dRw0W8REriGXdGCbv3GZ
-         eDpk4Xk1iWRO/CyvBhTcSUzYtR0k1b+8SROjZcAnrCcKt+iODYoqNFmQeZA9KLa87osf
-         jrKVnFZ29iOIttvTcm0VWLFjGFE28pZR09hVfbbVPeOexxxSpfWMMiby4vFEeVmqVSTd
-         teQQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q1orxwhYNH5PiwyrYB0jyJkSIuY50nnqFfbHuh/ZL7I=;
+        b=avb4PGJ1zBsFoRe1sUbNQUk/5H40v79kEO41b/cB8Y3KDaw0uoWwdHSxo8foiAqSyF
+         c3nd6rgs1AtHaBeTbLVrqgMhuedITlxZ/3CDrPHRXwvwh+NSsPilGM3Y+i5cOA3izKlb
+         L0pwabVVZfAIZzHmYYB/C54/gjBO6Fc5ky2l/NtJIyleXHl/8uVuSAQkQlTfFYaQ5HHq
+         YON5CcFCNXpU9YEPjpg2K68LF3fnK9RQ0+kuSWFFb3V5gQCbQremwHcMisF6PWYI70+I
+         Z99mJt5L5eyVzLKWRcD0DyITR6ESuePoIXny2YcZF67zmzGUisVvKou+VrewOW5NjQuI
+         2OGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GgWRzuR7K/JM+T/DhfougYNCN+Ei/e3TSwLryof3+SU=;
-        b=hh0iP9h5qFdYmlP885Z8fJCjoHwti5vpS9k6n0hFgtfBZRXpf3/gc+rAXtRXaJWTEk
-         qgW8rvBZXoKm+102wVWO2E0yZi5fruar4ve2krmgZzbTof0AdVkKKOb3fXZYPs5tjHkT
-         lQimXoJ9YStI87Jpo0WLg97QvERUsM6i6c8wvVE/oaoPia/DVOxwDA18FG4q9L/hev4+
-         qm+MxybUVyvHWZQKa+JqRjhH2ChkTtpuSvuigLFTejLIv800FDrd1YXG7kUcDm55beLj
-         wUkXimOLQjUpwO+OuC4jEYCcjmW6DdYATKXq4hxFvzFbftYHtLGcI3heeMcMPRIdrNxP
-         a8Lg==
-X-Gm-Message-State: AJIora96quwWlmglxcrRTyV1dCi8H8WGYBbqZYU9xL7UMZJIPpoAgZjg
-        3510+ulaDZ+omUrPvX3RW1Waig==
-X-Google-Smtp-Source: AGRyM1v6OHDPNsuQGBaw1nVibAaCboV5t8oVecRp/qoC5aWo4oFLZyMC2kuFeNcml66hBnqpZnsTqQ==
-X-Received: by 2002:a05:600c:4f11:b0:3a1:8631:b6b4 with SMTP id l17-20020a05600c4f1100b003a18631b6b4mr4988643wmq.94.1657739031768;
-        Wed, 13 Jul 2022 12:03:51 -0700 (PDT)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id p2-20020a1c7402000000b003a2fdde48d1sm1768396wmc.25.2022.07.13.12.03.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 12:03:51 -0700 (PDT)
-Message-ID: <40315ef2-e2e0-cb2b-becc-e1ba5a4826ff@isovalent.com>
-Date:   Wed, 13 Jul 2022 20:03:50 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q1orxwhYNH5PiwyrYB0jyJkSIuY50nnqFfbHuh/ZL7I=;
+        b=XtWQmrcT/YWWW7S0dWUJ0eZxenOYllHcvpz5lIpN07eSWTGWNDsmuHLGp+I11id2MB
+         nbG1hU7xNzzPQbKnf6nUsSEGHyD3lIIcO5ugPqZhDSRi4wrIFwY+1xYu7qdujk8PHffY
+         iNifyULjYP2MpnD0DMalHODWFZSAAf3ZXHh2+VoNYiM5uiZVSMqbTjxlXAx7+CPUrloF
+         bDjq9Ytx8dkFsT2tVfDNThtXRzgMoQwViBfony4h4bcY0LterKTy/lPXzEFWUE+7NQYj
+         Qxy8dMk2WDnpN4f+G7e0QhXRegvH6IXh/JgxZWFa+ka8n9AqKQZJorQUIhYdKy43vyDq
+         kCjg==
+X-Gm-Message-State: AJIora8CAUx1cgsL5HBl8lVmDH7w7AnIrybo3o0oj4q7W4ZtHQXlpZKA
+        So93j+3675s9aPi4nla/LdQYNuAWUbq3/jc3BEs=
+X-Google-Smtp-Source: AGRyM1t1jNZ022cdlgbDx+/v4pQmnO3rHve+6Eq+6Dvus6xTKagAqGsmxS1nUlYMnWRogKMt/6UHg+YFTA6fzL+U3hU=
+X-Received: by 2002:a17:903:2405:b0:16a:8010:1e16 with SMTP id
+ e5-20020a170903240500b0016a80101e16mr4544761plo.87.1657739094012; Wed, 13 Jul
+ 2022 12:04:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH bpf-next 3/3] bpf: iterators: build and use lightweight
- bootstrap version of bpftool
-Content-Language: en-GB
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Pu Lehui <pulehui@huawei.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20220712030813.865410-1-pulehui@huawei.com>
- <20220712030813.865410-4-pulehui@huawei.com>
- <CAEf4Bza15HfVKDrA8dV+U5GJiDcPS0bnV81rmdxuFn0+_2hrXw@mail.gmail.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <CAEf4Bza15HfVKDrA8dV+U5GJiDcPS0bnV81rmdxuFn0+_2hrXw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <202207100715.TBIYQ4fc-lkp@intel.com> <CAHbLzkoFjZoX0WFy9YaOO1rEC+=yyytgDimapeTEyuNyMNTHLg@mail.gmail.com>
+ <Ys7Vjt5QXz8XK1LZ@google.com>
+In-Reply-To: <Ys7Vjt5QXz8XK1LZ@google.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 13 Jul 2022 12:04:41 -0700
+Message-ID: <CAHbLzkq4QJ0exWDxaSfAJ0sW0GmrwbDg1w1oEi00i9rKa8UZQA@mail.gmail.com>
+Subject: Re: [akpm-mm:mm-unstable 284/293] mm/khugepaged.c:2409
+ madvise_collapse() warn: possible memory leak of 'cc'
+To:     "Zach O'Keefe" <zokeefe@google.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
+        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,61 +71,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/07/2022 19:55, Andrii Nakryiko wrote:
-> On Mon, Jul 11, 2022 at 7:37 PM Pu Lehui <pulehui@huawei.com> wrote:
->>
->> kernel/bpf/preload/iterators use bpftool for vmlinux.h, skeleton, and
->> static linking only. So we can use lightweight bootstrap version of
->> bpftool to handle these, and it will be faster.
->>
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
->> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
->> ---
->>  kernel/bpf/preload/iterators/Makefile | 13 +++++++++----
->>  1 file changed, 9 insertions(+), 4 deletions(-)
->>
->> diff --git a/kernel/bpf/preload/iterators/Makefile b/kernel/bpf/preload/iterators/Makefile
->> index bfe24f8c5a20..cf5f39f95fed 100644
->> --- a/kernel/bpf/preload/iterators/Makefile
->> +++ b/kernel/bpf/preload/iterators/Makefile
->> @@ -9,7 +9,7 @@ LLVM_STRIP ?= llvm-strip
->>  TOOLS_PATH := $(abspath ../../../../tools)
->>  BPFTOOL_SRC := $(TOOLS_PATH)/bpf/bpftool
->>  BPFTOOL_OUTPUT := $(abs_out)/bpftool
->> -DEFAULT_BPFTOOL := $(OUTPUT)/sbin/bpftool
->> +DEFAULT_BPFTOOL := $(BPFTOOL_OUTPUT)/bootstrap/bpftool
->>  BPFTOOL ?= $(DEFAULT_BPFTOOL)
->>
->>  LIBBPF_SRC := $(TOOLS_PATH)/lib/bpf
->> @@ -61,9 +61,14 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
->>                     OUTPUT=$(abspath $(dir $@))/ prefix=                       \
->>                     DESTDIR=$(LIBBPF_DESTDIR) $(abspath $@) install_headers
->>
->> +ifeq ($(CROSS_COMPILE),)
->>  $(DEFAULT_BPFTOOL): $(BPFOBJ) | $(BPFTOOL_OUTPUT)
->>         $(Q)$(MAKE) $(submake_extras) -C $(BPFTOOL_SRC)                        \
->>                     OUTPUT=$(BPFTOOL_OUTPUT)/                                  \
->> -                   LIBBPF_OUTPUT=$(LIBBPF_OUTPUT)/                            \
->> -                   LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/                          \
->> -                   prefix= DESTDIR=$(abs_out)/ install-bin
->> +                   LIBBPF_BOOTSTRAP_OUTPUT=$(LIBBPF_OUTPUT)/                  \
->> +                   LIBBPF_BOOTSTRAP_DESTDIR=$(LIBBPF_DESTDIR)/ bootstrap
->> +else
->> +$(DEFAULT_BPFTOOL): | $(BPFTOOL_OUTPUT)
->> +       $(Q)$(MAKE) $(submake_extras) -C $(BPFTOOL_SRC)                        \
->> +                   OUTPUT=$(BPFTOOL_OUTPUT)/ bootstrap
->> +endif
-> 
-> another idea (related to my two previous comments for this patch set),
-> maybe we can teach bpftool's Makefile to reuse LIBBPF_OUTPUT as
-> LIBBPF_BOOTSTRAP_OUTPUT, if there is no CROSS_COMPILE? Then we can
-> keep iterators/Makefile, samples/bpf/Makefile and runqslower/Makefile
-> simpler and ignorant of CROSS_COMPILE, but still get the benefit of
-> not rebuilding libbpf unnecessarily in non-cross-compile mode?
+On Wed, Jul 13, 2022 at 7:24 AM Zach O'Keefe <zokeefe@google.com> wrote:
+>
+> On Jul 12 10:02, Yang Shi wrote:
+> > On Tue, Jul 12, 2022 at 5:36 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> > >
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> > > head:   0e9f775fb0b4adf1a4ef50ea156ead09a0fc5194
+> > > commit: 9f626ffb1d1c5c26b4a8e0fdffec784a5f773274 [284/293] mm/madvise: introduce MADV_COLLAPSE sync hugepage collapse
+> > > config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220710/202207100715.TBIYQ4fc-lkp@intel.com/config)
+> > > compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> > >
+> > > If you fix the issue, kindly add following tag where applicable
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > >
+> > > smatch warnings:
+> > > mm/khugepaged.c:2409 madvise_collapse() warn: possible memory leak of 'cc'
+> > >
+> > > vim +/cc +2409 mm/khugepaged.c
+> > >
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2387  int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2388                 unsigned long start, unsigned long end)
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2389  {
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2390    struct collapse_control *cc;
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2391    struct mm_struct *mm = vma->vm_mm;
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2392    unsigned long hstart, hend, addr;
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2393    int thps = 0, last_fail = SCAN_FAIL;
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2394    bool mmap_locked = true;
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2395
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2396    BUG_ON(vma->vm_start > start);
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2397    BUG_ON(vma->vm_end < end);
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2398
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2399    cc = kmalloc(sizeof(*cc), GFP_KERNEL);
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2400    if (!cc)
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2401            return -ENOMEM;
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2402    cc->is_khugepaged = false;
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2403    cc->last_target_node = NUMA_NO_NODE;
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2404
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2405    *prev = vma;
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2406
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2407    /* TODO: Support file/shmem */
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06  2408    if (!vma->anon_vma || !vma_is_anonymous(vma))
+> > > 9f626ffb1d1c5c Zach O'Keefe 2022-07-06 @2409            return -EINVAL;
+> >
+> > It seems better to move the cc kmalloc after the anonymous vma check?
+> >
+>
+> Agreed - something I only noticed when fixing this. I've cleaned up some
+> ordering here, now looks like:
+>
+> ---8<---
+>         BUG_ON(vma->vm_start > start);
+>         BUG_ON(vma->vm_end < end);
+>
+>         *prev = vma;
+>
+>         /* TODO: Support file/shmem */
+>         if (!vma->anon_vma || !vma_is_anonymous(vma))
+>                 return -EINVAL;
+>
+>         if (!hugepage_vma_check(vma, vma->vm_flags, false, false, false))
+>                 return -EINVAL;
+>
+>         cc = kmalloc(sizeof(*cc), GFP_KERNEL);
+>         if (!cc)
+>                 return -ENOMEM;
+>         cc->is_khugepaged = false;
+>         cc->last_target_node = NUMA_NO_NODE;
+>
+>         mmgrab(mm);
+>         lru_add_drain_all();
+>
+>         hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
+>         hend = end & HPAGE_PMD_MASK;
+>
+>         for (addr = hstart; addr < hend; addr += HPAGE_PMD_SIZE) {
+> ---8<---
+> out_nolock:
+>         mmap_assert_locked(mm);
+>         mmdrop(mm);
+>         kfree(cc);
+> ---8<---
 
-Could be a good idea. Seeing how the HID BPF patches add BTF/skeletons
-generation at new locations, I'm also starting to wonder if it would be
-worth having a Makefile.bpftool.include of some sort to harmonise the
-way we compile the bootstrap bpftool as a dependency, and make it easier
-to maintain. I haven't looked at how feasible that would be, yet.
+Looks good to me.
 
+>
+> > >
+> > > kfree(cc);?
+> > >
+> > >
+> > > --
+> > > 0-DAY CI Kernel Test Service
+> > > https://01.org/lkp
+> > >
+> > >

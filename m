@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E6A572E4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD4E572E50
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbiGMGhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 02:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        id S232037AbiGMGiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 02:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiGMGhT (ORCPT
+        with ESMTP id S229599AbiGMGiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 02:37:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DFCCA6E0;
-        Tue, 12 Jul 2022 23:37:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 13 Jul 2022 02:38:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06904D5167;
+        Tue, 12 Jul 2022 23:38:19 -0700 (PDT)
+Received: from [192.168.0.24] (86.166.5.84.rev.sfr.net [84.5.166.86])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3FE361C3C;
-        Wed, 13 Jul 2022 06:37:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABE27C34114;
-        Wed, 13 Jul 2022 06:37:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657694237;
-        bh=Pw1I724OC/j5jlM0PCtT/WmkZp+NkEnzCWrfGr+EzVQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CrkiyJKL4LZ8Ull6nLdOM6zNZRpI27n7U3K5sErFqSQgtTrC/wXzx5+V67pB7Pv1B
-         7DhE7DbRzjgMrjfy7JXV2Sodkh8EjbO6Wt9l7u39tSLvSNDJfk1HA5HMIZxINOTaRM
-         yfE1PPjd2yttQVx+FHZm31Kl6eeBrx0pnpstymrg=
-Date:   Wed, 13 Jul 2022 08:37:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        syzbot+1fa91bcd05206ff8cbb5@syzkaller.appspotmail.com
-Subject: Re: [RFC PATCH 1/1] net: kcm: Use sk_psock size for kcm_psock_cache
-Message-ID: <Ys5oGuh2WCgEG5Js@kroah.com>
-References: <20220713063204.6294-1-khalid.masum.92@gmail.com>
- <20220713063204.6294-2-khalid.masum.92@gmail.com>
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 254F166015B8;
+        Wed, 13 Jul 2022 07:38:18 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657694298;
+        bh=JeMidlcjsMt2NttqZPspM91gWwt1ujhVbq5qh8dmUQQ=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=gIWYNlnmQZZ3N4WcTGpDAgR7IM1S5P5eavZ4S1331HQNTJ2Txs6276tbW6uFJKlxa
+         NE6oFGeYwMbjpr6oq4osxylO5EH0PxNsl5r+AWzxvx+JiqfY1sv8hT8x0d0Fh3ONyd
+         OBYbeF6wYKXNEDwV43XWQGQLOfY1jycnRK/ujuh6NE2v6kwiEjTPo7w+Zi/31j7UcQ
+         Sd1QDAu4tsludW1wjMaEdY7l/y6Z5hi44OsM7ij5xEfmsE2IKZCRs90x6sUIR/NsE6
+         sbfCv5lOW679WMBHdUnSGNrSbz3Gyf8kKHHaf+MjMmLqOlBGg/HPIHSACN3qkRRvEt
+         2qRlGNqkrrDdg==
+Message-ID: <168ede35-12e0-c535-9d94-23b65a1beb28@collabora.com>
+Date:   Wed, 13 Jul 2022 08:38:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713063204.6294-2-khalid.masum.92@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 4/4] Makefile: add headers_install to kselftest targets
+Content-Language: en-US
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     kernel@collabora.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <cover.1657296695.git.guillaume.tucker@collabora.com>
+ <4d34d06baf945dc31c78f873771cef3a75b60067.1657296695.git.guillaume.tucker@collabora.com>
+In-Reply-To: <4d34d06baf945dc31c78f873771cef3a75b60067.1657296695.git.guillaume.tucker@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 12:32:04PM +0600, Khalid Masum wrote:
-> `struct sock` has a member `sk_user_data`, which got its memory allocated
-> in `kcm_attach` by `kcm_psock_cache` with the size of `kcm_psock`. Which
-> is not enough when the member is used as `sk_psock` causing out of bound
-> read.
+On 08/07/2022 18:23, Guillaume Tucker wrote:
 > 
-> Use `sk_psock` size to allocate memory instead for `sk_user_data`.
-> 
-> Reported-by: syzbot+1fa91bcd05206ff8cbb5@syzkaller.appspotmail.com
-> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> ---
->  net/kcm/kcmsock.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>   $ make O=build headers_install
+>   $ make O=build -C tools/testing/selftest all
 
-What commit id does this fix?
+Typo, it should be selftests:
 
-thanks,
+    $ make O=build -C tools/testing/selftests all
 
-greg k-h
+Thanks,
+Guillaume

@@ -2,113 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD13057354B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC7F573552
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235996AbiGMLZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 07:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
+        id S235358AbiGMLZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 07:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbiGMLY6 (ORCPT
+        with ESMTP id S229724AbiGMLZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:24:58 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA47E7CCE
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657711497; x=1689247497;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=x2z96YWffgva57e/5SCnO/eg4fgCYmVKHGKY6tfFCw8=;
-  b=FbMufuyRf04N4dP5XOEb3Ut4dngu7WWf3eiVsbk1FFIIkhvhSf21o+gy
-   ig2NmDMgZonkyh+c8lQ8MpWux42MV2uva32cHeiAy2rHNKvAayJWaXw9m
-   y5JPiwY4zFhpoUSMihzPJwsThmpi+blQBvOUIRaG9Dv/n7nQ9+czON1yP
-   Nwc9VGLZDS6aTW5B5CfU3zAWha6j6NtnFCZIFez3xE4WUABw6TqTeAGzS
-   rc397h9UXmAXo+FAGy+XeX+8SE++scOGmUYxDT9FU/7JfL0UEnybvyIuM
-   qseolRw14fSRRS+3E0Cp5z1pVzN0HGbmVrFSVRDHykevP4Q3wMNDsVp1u
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="283939006"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="283939006"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 04:24:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="663322624"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Jul 2022 04:24:56 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oBaUB-0003Pj-PA;
-        Wed, 13 Jul 2022 11:24:55 +0000
-Date:   Wed, 13 Jul 2022 19:24:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kbuild-all@lists.01.org, Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org
-Subject: [cilium:pr/meta5 4/4] include/net/sch_generic.h:819: undefined
- reference to `__qdisc_calculate_pkt_len'
-Message-ID: <202207131955.CE8BXrij-lkp@intel.com>
+        Wed, 13 Jul 2022 07:25:44 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903F91014AC
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:25:43 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 457D520021;
+        Wed, 13 Jul 2022 11:25:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1657711542; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2hCUwWlyM97iRIwu5t9bviH/71g+A0D69fnhpOcSMiY=;
+        b=BDyRyl3OUksILIGlSSVz+Rb34SY1wq1zsplYzhIIXijI5jBY+N3G1ZCRQ3Ah/Strt8gqCD
+        7oSaaopLIkiXnbpon5aQ7OdhK9bkxnfIcBeNN/z30+YUdn/tncux7+xjx+i6yingPHFLGf
+        Vwk72Csx3gXowEOm77YhMTC3J9A87q0=
+Received: from suse.cz (pathway.suse.cz [10.100.12.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id AA0532C145;
+        Wed, 13 Jul 2022 11:25:41 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 13:25:41 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Marco Elver <elver@google.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+Subject: Re: [PATCH -printk] printk, tracing: fix console tracepoint
+Message-ID: <20220713112541.GB2737@pathway.suse.cz>
+References: <20220503073844.4148944-1-elver@google.com>
+ <20220711182918.338f000f@gandalf.local.home>
+ <20220712002128.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220711205319.1aa0d875@gandalf.local.home>
+ <20220712025701.GS1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220712114954.GA3870114@paulmck-ThinkPad-P17-Gen-1>
+ <20220712093940.45012e47@gandalf.local.home>
+ <20220712134916.GT1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220712105353.08358450@gandalf.local.home>
+ <20220712151655.GU1790663@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220712151655.GU1790663@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/cilium/linux.git pr/meta5
-head:   3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
-commit: 3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5 [4/4] bpf: Add fd-based API to attach tc BPF programs
-config: arc-buildonly-randconfig-r005-20220712 (https://download.01.org/0day-ci/archive/20220713/202207131955.CE8BXrij-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/cilium/linux/commit/3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
-        git remote add cilium https://github.com/cilium/linux.git
-        git fetch --no-tags cilium pr/meta5
-        git checkout 3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+On Tue 2022-07-12 08:16:55, Paul E. McKenney wrote:
+> On Tue, Jul 12, 2022 at 10:53:53AM -0400, Steven Rostedt wrote:
+> > On Tue, 12 Jul 2022 06:49:16 -0700
+> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > 
+> > > > I guess the question is, can we have printk() in such a place? Because this
+> > > > tracepoint is attached to printk and where ever printk is done so is this
+> > > > tracepoint.  
+> > > 
+> > > As I understand it, code in such a place should be labeled noinstr.
+> > > Then the call to printk() would be complained about as an illegal
+> > > noinstr-to-non-noinstr call.
+> > > 
+> > > But where exactly is that printk()?
+> > 
+> > Perhaps the fix is to remove the _rcuidle() from trace_console_rcuidle().
+> > If printk() can never be called from noinstr (aka RCU not watching).
+> 
+> Maybe printk() is supposed to be invoked from noinstr.  It might be a
+> special case in the tooling.  I have no idea.  ;-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I think that it is ok to do _not_ support printk() in noinstr parts.
 
-All errors (new ones prefixed by >>):
+> However, the current SRCU read-side algorithm will tolerate being invoked
+> from noinstr as long as it is not also an NMI handler.  Much though
+> debugging tools might (or might not) complain.
+> 
+> Don't get me wrong, I can make SRCU tolerate being called while RCU is
+> not watching.  It is not even all that complicated.  The cost is that
+> architectures that have NMIs but do not have NMI-safe this_cpu*()
+> operations have an SRCU reader switch from explicit smp_mb() and
+> interrupt disabling to a cmpxchg() loop relying on the implicit barriers
+> in cmpxchg().
+> 
+> For arm64, this was reportedly a win.
 
-   arc-elf-ld: net/core/dev.o: in function `__dev_xmit_skb':
->> include/net/sch_generic.h:819: undefined reference to `__qdisc_calculate_pkt_len'
->> arc-elf-ld: include/net/sch_generic.h:819: undefined reference to `__qdisc_calculate_pkt_len'
+IMHO, the tracepoint in printk() is not worth slowing down other
+important fast paths.
 
+The tracepoint was moved into vprintk_store() in 5.19-rc1. It used
+to be in console_unlock() before. The previous location was not
+reliable by definition. Old messages might be overridden by new
+ones before they reach console. Also messages in NMI context
+used to be stored in per-CPU buffers. There was even bigger
+risk that they would not reach the console.
 
-vim +819 include/net/sch_generic.h
-
-378a2f090f7a47 Jarek Poplawski 2008-08-04  811  
-a2da570d62fcb9 Eric Dumazet    2011-01-20  812  static inline void qdisc_calculate_pkt_len(struct sk_buff *skb,
-a2da570d62fcb9 Eric Dumazet    2011-01-20  813  					   const struct Qdisc *sch)
-5f86173bdf1598 Jussi Kivilinna 2008-07-20  814  {
-3dd186e5096ad4 Daniel Borkmann 2022-06-13  815  #ifdef CONFIG_NET_XGRESS
-a2da570d62fcb9 Eric Dumazet    2011-01-20  816  	struct qdisc_size_table *stab = rcu_dereference_bh(sch->stab);
-a2da570d62fcb9 Eric Dumazet    2011-01-20  817  
-a2da570d62fcb9 Eric Dumazet    2011-01-20  818  	if (stab)
-a2da570d62fcb9 Eric Dumazet    2011-01-20 @819  		__qdisc_calculate_pkt_len(skb, stab);
-3a682fbd732d3d David S. Miller 2008-07-20  820  #endif
-a2da570d62fcb9 Eric Dumazet    2011-01-20  821  }
-a2da570d62fcb9 Eric Dumazet    2011-01-20  822  
-
-:::::: The code at line 819 was first introduced by commit
-:::::: a2da570d62fcb9e8816f6920e1ec02c706b289fa net_sched: RCU conversion of stab
-
-:::::: TO: Eric Dumazet <eric.dumazet@gmail.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards,
+Petr

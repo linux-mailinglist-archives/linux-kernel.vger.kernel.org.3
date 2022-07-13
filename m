@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF8E573968
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB3857396E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236645AbiGMO6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60648 "EHLO
+        id S236693AbiGMO6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236640AbiGMO57 (ORCPT
+        with ESMTP id S236660AbiGMO6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:57:59 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2061.outbound.protection.outlook.com [40.107.244.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7537E3ED56;
-        Wed, 13 Jul 2022 07:57:58 -0700 (PDT)
+        Wed, 13 Jul 2022 10:58:16 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2089.outbound.protection.outlook.com [40.107.223.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE953ED6C;
+        Wed, 13 Jul 2022 07:58:09 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WitwXtGDwviL5qwCjyCNhKLWzUsn37z0W9773db55Y0+HuPzq+VtDNRe03jv9aT4SyzgwJf6A0tmKyxLW+qM5Zm1bzQ9MLhCbnWFCnZW5Hn4LSB5amPLg5rqbsIXUNzTMxR3wuKomGxF8nVNuPrR7o+x7Y1Kcaon0Q7Mo1/p8A3LV4YsEAHvaOO+xub49wawgrW3vuKXlJo9X7SXPKsFdxeRl4xnYexb753vQvb+tgni8q6x9Hoif49d1RgSidYCmWr15B2/Mb9VpGoH0qg/VguygZIZglgtVx0Imv3mEvp6C9nzXO/LQ4+yQ0uqCYbYvzaq3hpKrwkkCQLNdrNW0g==
+ b=kEdSssu+hwuZWem6NAbds1rweQ8IHuYgLi3pgTp/syhzmr2AZBbTWYAi/qE3ufStTeiwy8g81CUYzUO68SvGX+EUyKhQzuLDvR46atedeTKJ6Mhn3YqOvzgCcvCmVLkt6xM94cAVlaIRnla0FK840vaHYA+GH4L3g9CkQ8qekR89dpC7NnJS7pPXeDZMyiaP2Tt5TZOdseDfI3I2jb6TXoKh43Z2k6I4V++csM1mHXxFPKNgYubUad3kO0TPYMyWm+l38ODhVbf2cUycHUqz4V5ZUvuiPfhtRDd0/0WAjgUW3VTonwD/1AHhivBOtYAbUQkUdZ9iwUik/SoRVB16MA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Es89HGwt+uihZ4zm0WLrkQ4yN5Eo/iXCgmqy3hdJmMc=;
- b=em8azqmFu0TS4rUkIXkoFToR8SpoA5oB+IbIPFz2zHEKeqZ+1tHD8LkALHXxE4BUQamfynHfjsoPWVGF3Qg/g3nQATV5aXw6+fAC2UcDRkCdCYXxFv/dhldCakRp4tSG+imYDQ8JoCIaUostVG1p1B1+4MNOFu+jGIdfWO04YtxqlYwIOcWDJHRq/Lzfu+t9SGeEp+H7jc+on21W2qWUCz9kSLA9s+TW8IYrvnrd723xo6gQIYTaxGzx7UUacW2y0MFqc90I04DaybYP048PXvW3r2wwE33GIMM6cw3/lmj/sSol9WKpo8GRbP56lYY84rGsAYp/hKTLs6WVu5ktsw==
+ bh=vsMYZT9ZGage1XOGx8Qbmm4a9oY0jhH71JzfXIWycu8=;
+ b=bCFx5xs+T3a1UeE+IHw0WSzG1UWmf2+I7etFYOU80vU+CyaeIdqdy0ZhUOQYO0KawwuUffyRKgJonQAB/o0N75wJIKN8TizLIEQ7LjyVGVo5OS9yQcajBduYuuo49IKIE8NNwHRo2kqSNCkMkaqkbJ6tRm4/uoxWg4gzjJLkIMEABxBjkcMbpyHCPEJCKlyyF/+6YaFrdwsnSeVMUKVJAr7vzJjrLH546vnSS66EKYI4hMydCs7F4AfJbcLkMHEz6awG5LZL3Rgu6o/asMXBOkmJZOPfUIIcuT9e6VFXKyCtJsOvxBEJ+gkKRfOJZYm7n2nlx+/m/A3w0Be7e5zXxA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Es89HGwt+uihZ4zm0WLrkQ4yN5Eo/iXCgmqy3hdJmMc=;
- b=tz+OqteQVJwlHlA73iNWBc8x9vBs+ZIYuTf2PT6ca1LRvGyBjnseb8ToHJqvxzN/QfedXg6w+bQQm5khNq/WfdEIs81N+O9GXJIE19jmgiQiqRPj02HVgIN9J+WYYgttpALYTYmBvXNw9KrAGMiW3ScggUPEvL1YD8DTWSrJUbo=
-Received: from DS7PR03CA0024.namprd03.prod.outlook.com (2603:10b6:5:3b8::29)
- by MW4PR12MB5625.namprd12.prod.outlook.com (2603:10b6:303:168::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Wed, 13 Jul
- 2022 14:57:56 +0000
-Received: from DM6NAM11FT020.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b8:cafe::f3) by DS7PR03CA0024.outlook.office365.com
- (2603:10b6:5:3b8::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12 via Frontend
- Transport; Wed, 13 Jul 2022 14:57:56 +0000
+ bh=vsMYZT9ZGage1XOGx8Qbmm4a9oY0jhH71JzfXIWycu8=;
+ b=WnjPomL7v+3Upfn16hmFAiEDZHYvzxcPnOq0ngOScroKn6HU7MdZGkD2hqw58snIY0JYenB4FPXPN0VuEnSCo2SLGolSwZbaxF2AU29Bol2SXpcprMzsIV2FWRGWLPdfJQ4iCgG4F9BJvwycvHzXHZemRJ1aHzZYWGMNz8BbZwQ=
+Received: from DS7PR03CA0185.namprd03.prod.outlook.com (2603:10b6:5:3b6::10)
+ by DS7PR12MB6119.namprd12.prod.outlook.com (2603:10b6:8:99::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5417.25; Wed, 13 Jul 2022 14:58:07 +0000
+Received: from DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b6:cafe::61) by DS7PR03CA0185.outlook.office365.com
+ (2603:10b6:5:3b6::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20 via Frontend
+ Transport; Wed, 13 Jul 2022 14:58:07 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +46,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT020.mail.protection.outlook.com (10.13.172.224) with Microsoft SMTP
+ DM6NAM11FT036.mail.protection.outlook.com (10.13.172.64) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5438.12 via Frontend Transport; Wed, 13 Jul 2022 14:57:56 +0000
+ 15.20.5438.12 via Frontend Transport; Wed, 13 Jul 2022 14:58:07 +0000
 Received: from ethanolx1ade-milan-genesis.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 13 Jul 2022 09:57:55 -0500
+ 15.1.2375.28; Wed, 13 Jul 2022 09:58:06 -0500
 From:   Carlos Bilbao <carlos.bilbao@amd.com>
 To:     <bjorn.andersson@linaro.org>, <amitk@kernel.org>,
         <thara.gopinath@gmail.com>, <konrad.dybcio@somainline.org>
@@ -61,9 +60,9 @@ CC:     <agross@kernel.org>, <david.brown@linaro.org>,
         <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <bilbao@vt.edu>,
         Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: [PATCH 2/4] thermal/drivers/qcom: Simplify function code_to_degc()
-Date:   Wed, 13 Jul 2022 09:56:56 -0500
-Message-ID: <20220713145655.3844109-3-carlos.bilbao@amd.com>
+Subject: [PATCH 3/4] thermal/drivers/qcom: Simplify function calibrate_8960()
+Date:   Wed, 13 Jul 2022 09:56:58 -0500
+Message-ID: <20220713145655.3844109-4-carlos.bilbao@amd.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220713145655.3844109-1-carlos.bilbao@amd.com>
 References: <20220713145655.3844109-1-carlos.bilbao@amd.com>
@@ -75,23 +74,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b2a09859-e9c9-41d7-2512-08da64e01212
-X-MS-TrafficTypeDiagnostic: MW4PR12MB5625:EE_
+X-MS-Office365-Filtering-Correlation-Id: dbe2d4d9-4791-436e-0f81-08da64e018cf
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6119:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: m30Y1xiU2SgvXJFie4Osi7N0LpHqiGgMASATh/vyMGf+1pt84QcTKl5IiTRyg+FRpkCoA72qD+ZoDSRcx5D0HfHR1kLguWDvyb8RPgJu5h4XwQSB3ln4Jr3IaJ7mPvtGOWgDkfv7LAmgBWVW5omB/2QJmZNW/miVuXCcfsG/lUfiIEXhOpqnirhM5OFWgx3EdewS7uEaRzxqWVVIpWFJCBZaUNrOr/A3LZ6dTNJnX3EuRPDqEHYOaStXQWRiIvITMZ9tT+0LlqCkGLjwo4ze2C7D3xhbfnFObX8Gv3MrKxeH+AN08KvUIMxpm+TC7znHRublCqlB0lS+8WQbzNZBM6i9cFUO2AwU3HMQ56tGMG7IwHAc9C4UtKga59l5BFdKYiEZFyV99bV5YKgSTUfRz5kpNw/M8IDAH0sAGe313HkBTmMZVZPA2N4/by9hGKlcJYUr79CNVGuzPJftV/OjUfUhlFKVNL5Iagk4Vz1r7W/ttgXxchz0GV6RF5ZUI1obpNo918SgPzeKEBY1142NSrKSQ2WAdsaJcEwS5slXwHmGbgsWZurNk5e6FXszkJYubbB4iZLu5kXdoWaJuW/NiUBrt+5sMQxYI6Ktv1wn7Cg7cfvVWFS/SB9HNSHONnHRv88Fr4AHZV0gRWoDic7mpnHuBmYXc0yqETJsrDB4kD2inN1YaYB68IMurwi7y9TAQK0C7fbNwI7vzhC6BQ6nBzqsveIvsE0KE54tGTReCvYSL/WP8idw8u4uiby7eF9agZhG0i2ybLIR8/6GFPKygjuyA3605/SrpodUk0694+590ZijVBnMJk0D8qrQ87N12l2j+vjEYmNJI+RDfjP1If5LTNmWh+yPZmtV4byx+y4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(376002)(39860400002)(346002)(46966006)(36840700001)(40470700004)(26005)(70206006)(1076003)(186003)(4326008)(8676002)(7696005)(5660300002)(70586007)(82310400005)(7416002)(356005)(8936002)(316002)(2616005)(478600001)(40460700003)(16526019)(336012)(83380400001)(81166007)(2906002)(110136005)(36860700001)(44832011)(41300700001)(36756003)(40480700001)(82740400003)(426003)(86362001)(54906003)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Mp5DqeG5H8XYu+qtcEvTXWadadC2AIrfiU0zv8D+MOx8PYvaTxBfnVaFhMjLlVXWSR83MB+ZRiiqC4RU6t1ZhVBapvMGUXs11DDlkyxCVZUO5LRBs40StZBOrewO/Z9gE0Q0on8+s0Aa67M7CMexm/2JnaSI+8DQ39kFiKSTq3nLULbftQM7kSuPdIvc+lh/POmvZ8E9a924xDBQvSpbSTBGQB0GfwuzcgofSkP/b/uofFIWJ9d53gNcvqrKML2g1dTASLseoW97e33fy0ii+PldikowaiwBBy6eFmuJ/KZqK/woHz9SWlEF3CZkt2GpLgX0DYBuhAuIJQp6IVNhik4rIxul5nb5slD04wMlHRRGnhoQgU9vGHJY4qKoEU0IefZYYW6XLRDqSvWWFXRxJNHDDFFlpOdhlTwVnekKOVU3Z6G/kWayE9PARL2HaV3HFh3S9s7SX5oM6GjDAoh/0JsPVqoWDvkBpVw/3ANCU6PfhGeulkE2dfmWL9vXK55AatZk3mLEO+jYsED4p1+LKHcsQVDynG7FyUP8lrfDEuyn0wQHEi1bTtvTrHdnoFTRoftIwjaDpUmgPSagqq+DHrBYNx1NL6lGAaQrHTOyp8yzQFGnxjHtLzIK++Mwg2+gPBqNa2/dC0ktydXlrKK26Vh0RiLGEG4AB3FDYd124HJ2TQERElfhjGSjT4sfxEuB3t2Yki4W6aC8PZZDzMWZvECphUEkraJusoa42wZgmpIZpW6b3vlRm7MHbIDYI0fYkvMm4I4srLooLF4wEny+ZaXst23qkQix0aN2G3x07QhXeI3xFyo4Jp1iwrXcCBCZWvly/U5VP2fhv0qFA4q/N3japuLjVbFq/hV90L5X4r0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(346002)(136003)(39860400002)(46966006)(36840700001)(40470700004)(83380400001)(478600001)(4744005)(86362001)(16526019)(356005)(36756003)(44832011)(336012)(2616005)(70206006)(4326008)(54906003)(82740400003)(316002)(8676002)(70586007)(47076005)(426003)(186003)(36860700001)(82310400005)(81166007)(110136005)(41300700001)(2906002)(26005)(40480700001)(8936002)(1076003)(5660300002)(40460700003)(7416002)(7696005)(6666004)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 14:57:56.3883
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 14:58:07.6927
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2a09859-e9c9-41d7-2512-08da64e01212
+X-MS-Exchange-CrossTenant-Network-Message-Id: dbe2d4d9-4791-436e-0f81-08da64e018cf
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT020.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5625
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6119
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -102,45 +101,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify code_to_degc() so we don't need a third variable.
+Simply function calibrate_8960() so a second check to IS_ERR(data) may be
+avoided.
 
 Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
 ---
- drivers/thermal/qcom/tsens-common.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ drivers/thermal/qcom/tsens-8960.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-index 528df8801254..492b0e9cc2a2 100644
---- a/drivers/thermal/qcom/tsens-common.c
-+++ b/drivers/thermal/qcom/tsens-common.c
-@@ -66,21 +66,18 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
+diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
+index f4fc8a1c161e..b41ff164e67a 100644
+--- a/drivers/thermal/qcom/tsens-8960.c
++++ b/drivers/thermal/qcom/tsens-8960.c
+@@ -205,10 +205,11 @@ static int calibrate_8960(struct tsens_priv *priv)
+ 	struct tsens_sensor *s = priv->sensor;
  
- static inline int code_to_degc(u32 adc_code, const struct tsens_sensor *s)
- {
--	int degc, num, den;
-+	int num, den;
+ 	data = qfprom_read(priv->dev, "calib");
+-	if (IS_ERR(data))
++	if (IS_ERR(data)) {
+ 		data = qfprom_read(priv->dev, "calib_backup");
+-	if (IS_ERR(data))
+-		return PTR_ERR(data);
++		if (IS_ERR(data))
++			return PTR_ERR(data);
++	}
  
- 	num = (adc_code * SLOPE_FACTOR) - s->offset;
- 	den = s->slope;
- 
-+	if (!num)
-+		return 0;
-+
- 	if (num > 0)
--		degc = num + (den / 2);
--	else if (num < 0)
--		degc = num - (den / 2);
-+		return (num + (den / 2)) / den;
- 	else
--		degc = num;
--
--	degc /= den;
--
--	return degc;
-+		return (num - (den / 2)) / den;
- }
- 
- int get_temp_tsens_valid(struct tsens_priv *priv, int i, int *temp)
+ 	for (i = 0; i < num_read; i++, s++)
+ 		s->offset = data[i];
 -- 
 2.31.1
 

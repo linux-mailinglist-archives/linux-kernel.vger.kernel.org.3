@@ -2,91 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C039E574040
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA57574042
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbiGMX4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 19:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        id S231161AbiGMX40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 19:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbiGMX4J (ORCPT
+        with ESMTP id S230505AbiGMX4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 19:56:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF1D25C68;
-        Wed, 13 Jul 2022 16:56:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B77061B9F;
-        Wed, 13 Jul 2022 23:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B93C34114;
-        Wed, 13 Jul 2022 23:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657756567;
-        bh=w9QDpjFt83SVkoNzE3l0IoLYZGIJ/X2ZtHlBTIBu8Z0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jRi9OIcKQZDIv4bg9ROG7Gk+uipvkviz+N2F5AeEN6E7sWSiLVn0m122+TL2jL66C
-         9js1R0g/eFgVsIlOCFCtFunJW+52xs3cXL7yKUT4bIUWi8zoXV3mUGSyTycRsfflRS
-         OMsvHO8RSZiEzq3++c7SOq1YTAXykY4FsJSFQDc12IVNvFR/Jppbb9Jji90fOwEYEv
-         iPVfg3QUorhkaiw4LWmRgXndKqM/qtAyisTa6M9VgWUG91jAyDQMUm3DhPsu1ecxnd
-         WZHDJljmQW87pJmoPI8A3cJA0pd3rZi4pmTUwEagzBmcTCk60hzuXMcxNuMHE+yHMm
-         WUMljUgRL1utQ==
-Date:   Wed, 13 Jul 2022 16:56:05 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] x86/alternative: Report missing return thunk details
-Message-ID: <20220713235605.k5gblq46okdyl6eg@treble>
-References: <20220713213819.460771-1-keescook@chromium.org>
+        Wed, 13 Jul 2022 19:56:23 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E669153D35
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:56:22 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id u6so86687iop.5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=rarUSimJ/mF7K9bs7wxGLHGhk7WrwOrmEcUJgpe0So4=;
+        b=Xjafh2rCMqjqvg4Flqn/y5Es1fMG2tQTw6i/+6MTtWaHLJtknbNcB6olg2AjMN2ogy
+         mhMd67IzAnbVqX4ZjklB8FvehIWINsuuLSgU1xXnnglK3Ah6YYTKPZoFIb2UqzUZnRw5
+         LCXv41FJtN3tjoCeTTCi6ttIM5jaT7OuqmIe0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=rarUSimJ/mF7K9bs7wxGLHGhk7WrwOrmEcUJgpe0So4=;
+        b=gCe+uNpy1W7zrOWmiCUTUAz0B1UQ5fRkE0crsXZyZBSszRyPvVrHfTbjX7WoAlyv6R
+         BY2Hn46Kcz/vMYiF1vHFLdCqP2XFo34Ok9gxggvHOZrUzoi6U2CxMPgUhdD39AlieX5/
+         SHa8vyqf9IBfDRme4JkvEzPGOQnRXSboWtNXZskPuD6uMPvzQe5ZDLKFTXcxTwB2kJyh
+         R4M+h1LkqpPT30WBemM90xDs4xjnAYvfeEImqAfQ1tq+UtfjAo6vqdXeEWgmxUhNfaEV
+         kRJM6STmsFjJvBHK/0MhYadVBiKeOdIwbLDZghMrgnKa9/b78g5La1FzEu1oE/pUkBNn
+         qJKg==
+X-Gm-Message-State: AJIora+je3XFvdX1ECLj5gfprhnAPyHzmbzX9ZsQr0gV8URplt8DxF4B
+        VS20oO+zO8bfNE8Wh3NNYXwwtWXsLlMtzQ==
+X-Google-Smtp-Source: AGRyM1vG6hbHN5JsMKBeeBd/CGfxpiHFcReOPVuojm+Qcl6rCFmIIiHk7QZc55gzMegVelUiiW4yxw==
+X-Received: by 2002:a05:6638:d0f:b0:33c:cab4:e9c2 with SMTP id q15-20020a0566380d0f00b0033ccab4e9c2mr3452706jaj.226.1657756582162;
+        Wed, 13 Jul 2022 16:56:22 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x6-20020a056638034600b0033ea1d9858bsm79328jap.36.2022.07.13.16.56.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 16:56:21 -0700 (PDT)
+Subject: Re: [PATCH 0/9] selftests: timers: fixes and improvements
+To:     John Stultz <jstultz@google.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
+ <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <dbe428f6-37fd-cba7-2947-e042585d3a42@linuxfoundation.org>
+Date:   Wed, 13 Jul 2022 17:56:21 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220713213819.460771-1-keescook@chromium.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 02:38:19PM -0700, Kees Cook wrote:
-> Debugging missing return thunks is easier if we can see where they're
-> happening.
+On 7/13/22 3:02 PM, John Stultz wrote:
+> On Wed, Jul 13, 2022 at 1:46 PM Wolfram Sang
+> <wsa+renesas@sang-engineering.com> wrote:
+>>
+>> The timer selftests are quite useful for me when enabling timers on new
+>> SoCs, e.g. like now with the CMT timer on a Renesas R-Car S4-8. During
+>> development, I needed these fixes and additions to make full use of
+>> the tests. I think they make all sense upstream, so here they are.
+>>
+>> Patches are based on v5.19-rc1. Looking forward to comments.
+>>
 > 
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Link: https://lore.kernel.org/lkml/Ys66hwtFcGbYmoiZ@hirez.programming.kicks-ass.net/
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: x86@kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  arch/x86/kernel/alternative.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> Hey!
+>    Thanks so much I really appreciate the effort to make and send out
+> these cleanups. From the initial skim it all looks great (though, some
+> are slightly embarrassing :), and I think some of the extra config
+> args will be quite nice for others to use as well.
 > 
-> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-> index d6858533e6e5..62f6b8b7c4a5 100644
-> --- a/arch/x86/kernel/alternative.c
-> +++ b/arch/x86/kernel/alternative.c
-> @@ -555,7 +555,9 @@ void __init_or_module noinline apply_returns(s32 *start, s32 *end)
->  			dest = addr + insn.length + insn.immediate.value;
->  
->  		if (__static_call_fixup(addr, op, dest) ||
-> -		    WARN_ON_ONCE(dest != &__x86_return_thunk))
-> +		    WARN_ONCE(dest != &__x86_return_thunk,
-> +			      "missing return thunk: %pS-%pS: %*ph",
-> +			      addr, dest, 5, addr))
+> Acked-by: John Stultz <jstultz@google.com>
+> 
+> Thanks so much for submitting these.
+> -john
+> 
 
-String needs a newline?
+Thank you both. I can queue these for 5.20-rc1
 
--- 
-Josh
+Wolfram, are you going to send v2 to address John's comment on
+8/9?
+
+thanks,
+-- Shuah

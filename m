@@ -2,119 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106885732F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D065732F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235577AbiGMJhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
+        id S236047AbiGMJhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236234AbiGMJhE (ORCPT
+        with ESMTP id S234835AbiGMJhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:37:04 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA6FF32D5;
-        Wed, 13 Jul 2022 02:36:56 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id y3so11382795qtv.5;
-        Wed, 13 Jul 2022 02:36:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xQ7N/fYLlysLbE4zdECWnWy27WreI9oEQxiTnGoMGOc=;
-        b=HYys9IgnJCWNzM+6vk+2H14DanpEbL6+ZOHdTpD4Nq7XHO8Qefix1pCCvI1CXxzRxd
-         MFyLQonCez/l/90P4l64znB9efd0dxbcP3yLNkgZrTdR8e/wUVPPemgyyOPfO7SYD9Fj
-         /CJ+5Y2DM8uE6qEGMT62w6ST2bk1RXiL2wQwdJFhKi8JrmCglIEovmXv35NfuOMi03R5
-         JsHO6+4rS5vbuyuEgXFzSr8G3xk6JpzYhnSKsKbQNmat32yRpZMQdn8HttGiYGDNFQ5u
-         iZlM3P8W5DRq/uTu1PuhHEpHiY76UFUtm+ybgbA7jml2pUAOCucCQ4+AMNhvDnLzOFD9
-         uAVQ==
-X-Gm-Message-State: AJIora+Yim3pUifcYfeckLa3ke7u5knohP5HPIMrOewM+20w7zMKNePJ
-        X1cTOXwcHIyatnkHr4srx8bcHhXDV/QLLA==
-X-Google-Smtp-Source: AGRyM1u+12N7nN4GfKQcL+35Ef6Dp/u7kPvbDN7fGktpzs00FWDntqb2C1Wuf6kay8EK9KwNILzECw==
-X-Received: by 2002:ac8:5c94:0:b0:31b:899:3063 with SMTP id r20-20020ac85c94000000b0031b08993063mr1988143qta.153.1657705014171;
-        Wed, 13 Jul 2022 02:36:54 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id fp6-20020a05622a508600b0031eb0bb5c3csm7823150qtb.28.2022.07.13.02.36.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 02:36:53 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id g4so18314343ybg.9;
-        Wed, 13 Jul 2022 02:36:53 -0700 (PDT)
-X-Received: by 2002:a05:6902:1246:b0:66e:ea31:8d05 with SMTP id
- t6-20020a056902124600b0066eea318d05mr2830637ybu.89.1657705013318; Wed, 13 Jul
- 2022 02:36:53 -0700 (PDT)
+        Wed, 13 Jul 2022 05:37:14 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8996C11837;
+        Wed, 13 Jul 2022 02:37:13 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 23C963200A17;
+        Wed, 13 Jul 2022 05:37:12 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 13 Jul 2022 05:37:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1657705031; x=1657791431; bh=/d4IjXjSux
+        tGdLJBbQdN/ZhVrhONcOUztD4n0X+bpf4=; b=SK8VcU5VCrf3uUICQJVJY8pQvL
+        k6sfCKd+DtadU7hOrWq1LE0LNFl4F0vFjmBVW98ZZGQUardkAozVkLvTaF0pqujN
+        xVbICiDYToWi9AnM8M2vS4KAH7GHWcnWV6qcxiqoqcceSFOq7CuEp+/FJUZsBwE+
+        G61LEIWSrw8x0/32dgsI5ZCVNFpNz5aYWy2g2XfDmGpV/2Cq7Io2iEbRxMDYVUiV
+        okyPW3dVv/BSQRHWZ6kVL1xdYt0PN9l3XwcgCqH+e5gmpv+xab3qQrEiTO/ZMJa4
+        qN6+zPEqz/4IISpH+wsgL6+29Uj4vL9tBuhKp4jm/f2SNfI15Y3RhD9SD1xA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1657705031; x=1657791431; bh=/d4IjXjSuxtGdLJBbQdN/ZhVrhON
+        cOUztD4n0X+bpf4=; b=YQyIJrO8bncgi71trGSfZ+2U2Gu8xsAS8Qz52a7+PcCy
+        0nTHrDaw8eOQQqVrQ+NODY5prB1YM1BT/4bb7m+a8i8dkIcdmDpxNTMg4b5lcb1n
+        pv65ZAJQymjkB+ZNaEDCDppRhTJeDiF7FPJFCt3hQa+gv1q6wnU9CtawrNeQoP9T
+        0qTND/A0wo1Yk8EJKIn+S1U5ktwP8Y5dc2coI4iKrhMinegOdDe2Jgl9dZBmpETi
+        jLjXbx3lr7FQQrKr20AyPVOcwWlbGEcRS469Wfwt+MxkBbMm9tyRTZld/9sXMbpe
+        Fgv478zya4yXAP9HHBXnAmS1akG7ScaBoRNti7DL9A==
+X-ME-Sender: <xms:R5LOYkemlrv4iwO-SIy8cbnyNwhBoTH4HvBHDfBuKZ_Q2nAepM85GQ>
+    <xme:R5LOYmOy8ltauW4S_l-yDXDFpe3dKk2ffjrnRypHosnpT5jihGlg5JCdoPCHkJEOy
+    kn8aZeM_eKXQNbe7Ls>
+X-ME-Received: <xmr:R5LOYlg-P3fqwXHWLhrlM9lMgax-E5wSdgIbx5I1UTIHDIlt8-YnBVzxeg4txkkrJuDuHQHigB5yJrPl9LwPd7-eLSNFDmNuJq_WTFU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejjedgudeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeftefggedutedvgeelheekudevkefhhedvgefgteffleeuvdfggfduudff
+    leekheenucffohhmrghinhepsghoohhtlhhinhdrtghomhdpfihikhhiphgvughirgdroh
+    hrghdpkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
+    pehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:R5LOYp8H9KXg9uB6egZ1vCYTwiMQV_CQiqRR316Mr6XDGxa6ZeyLkA>
+    <xmx:R5LOYgvdlwzQteayLMRIkoEkapqNdXKwaaK8AeAz0PSrhFD5MDXsDA>
+    <xmx:R5LOYgGcS56CXBJ-h0Fomyu94u_81j8s0rr7DiE3FGBxVWgPBAU6bg>
+    <xmx:R5LOYuBsGj2wLZd5-6WUHTSqRGsv_XRzy47wtr4Mtc7ue0Io6VcJoA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 13 Jul 2022 05:37:10 -0400 (EDT)
+Date:   Wed, 13 Jul 2022 11:37:08 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/5] drm/modes: Add support for driver-specific named
+ modes
+Message-ID: <20220713093708.jaa3og2fablqr723@houat>
+References: <cover.1657301107.git.geert@linux-m68k.org>
+ <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
+ <ef2aada2-96e4-c2e4-645f-39bc9094e93a@suse.de>
+ <20220711093513.wilv6e6aqcuyg52w@houat>
+ <43d75dce-988a-0a95-cb0a-0d0a7c81ca63@suse.de>
+ <20220711114206.sawqdl54ibuxsxp4@houat>
+ <CAMuHMdXbFHWWQoryXihVsSrC5ZzHEV-YYR_eLvNmSAw8Y61TQg@mail.gmail.com>
+ <20220711120243.v6lwoynqigle2aot@houat>
+ <CAMuHMdXhmf5TudQ6a1PUVV8KXff6JjgMmZOmOWVb2qW6eXF7Ow@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210713075726.1232938-1-kai.heng.feng@canonical.com>
- <20210713125007.1260304-1-kai.heng.feng@canonical.com> <5331e942ff28bb191d62bb403b03ceb7d750856c.camel@sipsolutions.net>
-In-Reply-To: <5331e942ff28bb191d62bb403b03ceb7d750856c.camel@sipsolutions.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 13 Jul 2022 11:36:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWrLxHi6x0VKeB3emHYkDcVmAm=u4K2xzPqKOQ9znvuNg@mail.gmail.com>
-Message-ID: <CAMuHMdWrLxHi6x0VKeB3emHYkDcVmAm=u4K2xzPqKOQ9znvuNg@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: Reinstate "PCI: Coalesce host bridge contiguous apertures"
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="awtk4wasf5vxs4te"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXhmf5TudQ6a1PUVV8KXff6JjgMmZOmOWVb2qW6eXF7Ow@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johannes,
 
-On Wed, Nov 17, 2021 at 6:41 PM Johannes Berg <johannes@sipsolutions.net> wrote:
-> So this patch landed now ... :)
->
-> > +     /* Coalesce contiguous windows */
-> > +     resource_list_for_each_entry_safe(window, n, &resources) {
-> > +             if (list_is_last(&window->node, &resources))
-> > +                     break;
-> > +
-> > +             next = list_next_entry(window, node);
-> > +             offset = window->offset;
-> > +             res = window->res;
-> > +             next_offset = next->offset;
-> > +             next_res = next->res;
-> > +
-> > +             if (res->flags != next_res->flags || offset != next_offset)
-> > +                     continue;
-> > +
-> > +             if (res->end + 1 == next_res->start) {
-> > +                     next_res->start = res->start;
-> > +                     res->flags = res->start = res->end = 0;
-> > +             }
-> > +     }
+--awtk4wasf5vxs4te
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Geert,
+
+On Mon, Jul 11, 2022 at 02:08:06PM +0200, Geert Uytterhoeven wrote:
+> On Mon, Jul 11, 2022 at 2:02 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > On Mon, Jul 11, 2022 at 01:59:28PM +0200, Geert Uytterhoeven wrote:
+> > > On Mon, Jul 11, 2022 at 1:42 PM Maxime Ripard <maxime@cerno.tech> wro=
+te:
+> > > > On Mon, Jul 11, 2022 at 01:11:14PM +0200, Thomas Zimmermann wrote:
+> > > > > Am 11.07.22 um 11:35 schrieb Maxime Ripard:
+> > > > > > On Mon, Jul 11, 2022 at 11:03:38AM +0200, Thomas Zimmermann wro=
+te:
+> > > > > > > Am 08.07.22 um 20:21 schrieb Geert Uytterhoeven:
+> > > > > > > > The mode parsing code recognizes named modes only if they a=
+re explicitly
+> > > > > > > > listed in the internal whitelist, which is currently limite=
+d to "NTSC"
+> > > > > > > > and "PAL".
+> > > > > > > >
+> > > > > > > > Provide a mechanism for drivers to override this list to su=
+pport custom
+> > > > > > > > mode names.
+> > > > > > > >
+> > > > > > > > Ideally, this list should just come from the driver's actua=
+l list of
+> > > > > > > > modes, but connector->probed_modes is not yet populated at =
+the time of
+> > > > > > > > parsing.
+> > > > > > >
+> > > > > > > I've looked for code that uses these names, couldn't find any=
+=2E How is this
+> > > > > > > being used in practice? For example, if I say "PAL" on the co=
+mmand line, is
+> > > > > > > there DRM code that fills in the PAL mode parameters?
+> > > > > >
+> > > > > > We have some code to deal with this in sun4i:
+> > > > > > https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/=
+sun4i/sun4i_tv.c#L292
+> > > > > >
+> > > > > > It's a bit off topic, but for TV standards, I'm still not sure =
+what the
+> > > > > > best course of action is. There's several interactions that mak=
+e this a
+> > > > > > bit troublesome:
+> > > > > >
+> > > > > >    * Some TV standards differ by their mode (ie, PAL vs NSTC), =
+but some
+> > > > > >      other differ by parameters that are not part of drm_displa=
+y_mode
+> > > > > >      (NTSC vs NSTC-J where the only difference is the black and=
+ blanking
+> > > > > >      signal levels for example).
+> > > > > >
+> > > > > >    * The mode names allow to provide a fairly convenient way to=
+ add that
+> > > > > >      extra information, but the userspace is free to create its=
+ own mode
+> > > > > >      and might omit the mode name entirely.
+> > > > > >
+> > > > > > So in the code above, if the name has been preserved we match b=
+y name,
+> > > > > > but we fall back to matching by mode if it hasn't been, which i=
+n this
+> > > > > > case means that we have no way to differentiate between NTSC, N=
+TSC-J,
+> > > > > > PAL-M in this case.
+> > > > > >
+> > > > > > We have some patches downstream for the RaspberryPi that has th=
+e TV
+> > > > > > standard as a property. There's a few extra logic required for =
+the
+> > > > > > userspace (like setting the PAL property, with the NTSC mode) s=
+o I'm not
+> > > > > > sure it's preferable.
+> > > > > >
+> > > > > > Or we could do something like a property to try that standard, =
+and
+> > > > > > another that reports the one we actually chose.
+> > > > > >
+> > > > > > > And another question I have is whether this whitelist belongs=
+ into the
+> > > > > > > driver at all. Standard modes exist independent from drivers =
+or hardware.
+> > > > > > > Shouldn't there simply be a global list of all possible mode =
+names? Drivers
+> > > > > > > would filter out the unsupported modes anyway.
+> > > > > >
+> > > > > > We should totally do something like that, yeah
+> > > > >
+> > > > > That sun code already looks like sometihng the DRM core/helpers s=
+hould be
+> > > > > doing. And if we want to support named modes well, there's a long=
+ list of
+> > > > > modes in Wikipedia.
+> > > > >
+> > > > > https://en.wikipedia.org/wiki/Video_Graphics_Array#/media/File:Ve=
+ctor_Video_Standards2.svg
+> > > >
+> > > > Yeah, and NTSC is missing :)
+> > >
+> > > And that diagram is about the "digital" variant of PAL.
+> > > If you go the analog route, the only fixed parts are vfreq/hfreq,
+> > > number of lines, and synchronization. Other parameters like overscan
+> > > can vary.  The actual dot clock can vary wildly: while there is an
+> > > upper limit due to bandwidth limitations, you can come up with an
+> > > almost infinite number of video modes that can be called PAL, which
+> > > is one of the reasons why I don't want hardware-specific variants to
+> > > end up in a global video mode database.
 > >
->
-> Maybe this was already a problem before - but I had a stupid thing in
-> arch/um/drivers/virt-pci.c (busn_resource has start == end == 0), and
-> your changes here caused that resource to be dropped off the list.
->
-> Now this wouldn't be a problem, but we add it using pci_add_resource()
-> and then that does a memory allocation, but you don't free it here? I'm
-> not sure it'd even be safe to free it here and I'll just set
-> busn_resource to have end==1 instead (it's all kind of virtual).
->
-> But I still wanted to ask if this might be a problem here for others.
+> > Do you have an example of what that would look like?
+>=20
+> You mean a PAL mode that does not use 768x576?
 
-Yes it is.  I've sent a fix
-https://lore.kernel.org/r/9c41a4372b27420c732ff5599d823e363de00c6d.1657704829.git.geert+renesas@glider.be
+I meant what the almost infinite number of video modes that can be
+called PAL and would have to be defined in drivers
 
-Gr{oetje,eeting}s,
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/d=
+rivers/video/fbdev/amifb.c#n834
 
-                        Geert
+But that works :)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+I don't see what really is troublesome if we go with the mode + property
+setup here.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+We can deal easily with the interlaced vs non-interlaced variants
+already with DRM_MODE_FLAG_INTERLACE, and the ff variants can be dealt
+with DRM_MODE_FLAG_DBLCLK.
+
+We still need something to differentiate between, say, PAL-M and NTSC-J
+where the differences are between things not exposed by the mode itself
+(black and blanking levels differ from NSTC for NTSC-J, and the color
+carrier frequency is PAL's for PAL-M)
+
+Am I missing something?
+
+> (TAG_HIRES is replaced by the actual dot clock at runtime, as it
+>  depends on the crystal present on the mainboard).
+
+If we have the crystal frequency in the kernel somehow, we could filter
+them out from the driver (or fill them in) depending on that frequency.
+
+I still think the mode + property is the way to go, possibly with some
+generic component that would take the mode name from the command line
+and create that initial state depending on the value for backward
+compatibility.
+
+What do you think?
+
+Maxime
+
+--awtk4wasf5vxs4te
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYs6SRAAKCRDj7w1vZxhR
+xVOqAQCg8vTs8wjnkjxq9f7GbLL1CPsCzmkp+121iy7WWZO0jgD/fo4NskitaI9Y
++N28obtx7F+LsKeaMFth1fzu0FdT7gk=
+=UWV0
+-----END PGP SIGNATURE-----
+
+--awtk4wasf5vxs4te--

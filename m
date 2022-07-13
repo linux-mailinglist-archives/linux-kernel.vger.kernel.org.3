@@ -2,54 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4C05735B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1AE95735B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236145AbiGMLlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 07:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
+        id S236283AbiGMLlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 07:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236224AbiGMLlL (ORCPT
+        with ESMTP id S236087AbiGMLlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:41:11 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143251034C1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:41:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=8ZCq1iSnvi0O00uuBMOScdqdbc5RwcoliWQLs0MPRVc=; b=Z9D/0
-        zOzvVLXlw6ceawn/Xw117z0+LKbgtLfyrEvGdT6jyR8dShVBR+WgO+uUDpbj6SVT7ZeUTxVJi4E8V
-        87giNudYKUWDUv0T3dsns+zIc7IAnp80gcZZahgyabAr573IpNnS1OCB/zzcXR9WpbaKrsC9WvZSp
-        NvKVmNdCDjUSBl404vNSUsvUOeu6I4U6OY22eCrfe2ny7hyjjWP8T4s279+Sqg7DTeHsDg26FxTq/
-        xObn/LVI471dwKJebtiU6b8sR7meDZxCUn87d3r+xakk9LvfOFs/eKlb0sAXF8TjVsDM9CNyF7oup
-        7XH/314jjoKDaI9xplhJuxZA9o2tA==;
-Received: from dougal.metanate.com ([192.168.88.1] helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1oBaji-00075W-1G;
-        Wed, 13 Jul 2022 12:40:59 +0100
-Date:   Wed, 13 Jul 2022 12:40:53 +0100
-From:   John Keeping <john@metanate.com>
-To:     Jack Pham <quic_jackp@quicinc.com>
-Cc:     Wesley Cheng <quic_wcheng@quicinc.com>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Thinh.Nguyen@synopsys.com
-Subject: Re: [PATCH v2 5/5] usb: dwc3: gadget: Increase DWC3 controller halt
- timeout
-Message-ID: <Ys6vReAwrYbEavob@donbot>
-References: <20220713003523.29309-1-quic_wcheng@quicinc.com>
- <20220713003523.29309-6-quic_wcheng@quicinc.com>
- <20220713025643.GC8200@jackp-linux.qualcomm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713025643.GC8200@jackp-linux.qualcomm.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        Wed, 13 Jul 2022 07:41:44 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF31102939
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:41:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9CBF520057;
+        Wed, 13 Jul 2022 11:41:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657712501; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ujwOx2hqDzY3hrakwFes5m5ALboygngn5vVghCM6tgM=;
+        b=SiJzt8zqxRBO/tB1CY7IB93bVY3hgEg7/ifVEH/j4/8r3lt2l9OBqV84RkV4wFoe4e84ex
+        k7yI+XbONhvR426u53u/8EBDg69RBFSVkbaHxwuqbf9U6JqkLxAAsu52s5+I5vo91JvfOp
+        1XUDUh5WLoXS1ygkfI/gUW/wtjq84EI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657712501;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ujwOx2hqDzY3hrakwFes5m5ALboygngn5vVghCM6tgM=;
+        b=5yiu7uSPy0mZrYv2wNJ3UtMfptv7vblJSfnBRjy2le5og3ZssQXP7Gi5P5ePwNp5r+xrvx
+        /Xdfs4BbUrVSlpBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 74A6213754;
+        Wed, 13 Jul 2022 11:41:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mOqSG3WvzmIDEwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 13 Jul 2022 11:41:41 +0000
+Date:   Wed, 13 Jul 2022 13:41:41 +0200
+Message-ID: <87mtddxmru.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 00/14] ALSA: hda: cirrus: Add initial DSP support and firmware loading
+In-Reply-To: <87a69ii749.wl-tiwai@suse.de>
+References: <20220630002335.366545-1-vitalyr@opensource.cirrus.com>
+        <87zghpxcsh.wl-tiwai@suse.de>
+        <87a69ii749.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,56 +73,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 07:56:43PM -0700, Jack Pham wrote:
-> Hi Wesley,
+On Sat, 09 Jul 2022 18:27:34 +0200,
+Takashi Iwai wrote:
 > 
-> On Tue, Jul 12, 2022 at 05:35:23PM -0700, Wesley Cheng wrote:
-> > Since EP0 transactions need to be completed before the controller halt
-> > sequence is finished, this may take some time depending on the host and the
-> > enabled functions.  Increase the controller halt timeout, so that we give
-> > the controller sufficient time to handle EP0 transfers.
+> On Mon, 04 Jul 2022 14:50:06 +0200,
+> Takashi Iwai wrote:
 > > 
-> > Fixes: 861c010a2ee1 ("usb: dwc3: gadget: Refactor pullup()")
-> > Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> > ---
-> > Link:
-> >   https://lore.kernel.org/linux-usb/4988ed34-04a4-060a-ccef-f57790f76a2b@synopsys.com/
+> > On Thu, 30 Jun 2022 02:23:21 +0200,
+> > Vitaly Rodionov wrote:
+> > > 
+> > > The CS35L41 Amplifier contains a DSP, capable of running firmware.
+> > > The firmware can run algorithms such as Speaker Protection, to ensure
+> > > that playback at high gains do not harm the speakers.
+> > > Adding support for CS35L41 firmware into the CS35L41 HDA driver also
+> > > allows us to support several extra features, such as hiberation 
+> > > and interrupts.
+> > > 
+> > > The chain adds support in stages:
+> > > - General fixes to improve generalization and code re-use inside
+> > >   the CS35L41 HDA driver.
+> > > - Add support for interrupts into the driver, which is required
+> > >   for complete support of the firmware.
+> > > - Refactor ASoC CS35L41 code which deals with firmware to allow
+> > >   for code re-use inside the CS35L41 HDA driver.
+> > > - Add support for loading firmware and tuning files from file system,
+> > >   and creating alsa controls to control it.
+> > > - Support firmware load paths for different hardware systems.
+> > > - Support suspend/resume in the driver when using firmware. The firmware
+> > >   supports hibernation, which allows the CS35L41 to drop into a low
+> > >   power mode during suspend.
+> > > - Support the ability to unload firmware, swap and reload the firmware.
+> > >   This is to allow different firmware to run during calibration.
+> > > 
+> > > The intended use-case is to load the firmware once on boot, and the driver
+> > > autmatically tries to load the firmware after it binds to the HDA driver.
+> > > This behaviour can be switched off using a kconfig, if desired.
+> > > 
+> > > changes since v7:
+> > >  - Use private_data rather than private_value to save control info
+> > >  - Clean up alsa control memory allocation/deallocation
+> > >  - Remove unnecessary whitespace
+> > >  - Get subsystem id from codec, rather than saving it separately
+> > > 
+> > > changes since v6:
+> > >  - Fix warning by kernel test robot <lkp@intel.com>
+> > >  
+> > > changes since v5:
+> > >  - Fix warning by kernel test robot <lkp@intel.com>
+> > >  
+> > > changes since v4:
+> > > - Fully remove tlv remnants from control add apis
+> > > - Remove unnecessary debug
+> > > - Rename variable to be more generic
+> > > - Remove redundent length check from read/write control apis
+> > > 
+> > > 
+> > > - Use SNDRV_CTL_ELEM_IFACE_CARD for firmware load controls
+> > > - Make kcontrol add/remove synchronous
+> > > - Load firmware asynchronous when loading via control
+> > > - Used cached controls when reloading firmware; only delete
+> > > controls when removing the driver itself
+> > > 
+> > > 
+> > > - Improve kcontrol remove
+> > > - Fix control write + notify
+> > > - Cleanup of unnecessary code
+> > > - Fix race condition when loading firmware before playback
+> > > - Ensure errors are properly propogated
+> > > - Fix include for Module parameters
+> > > 
+> > > Stefan Binding (13):
+> > >   ALSA: hda: hda_cs_dsp_ctl: Add Library to support CS_DSP ALSA controls
+> > >   ALSA: hda: hda_cs_dsp_ctl: Add apis to write the controls directly
+> > >   ALSA: hda: cs35l41: Save codec object inside component struct
+> > >   ALSA: hda: cs35l41: Save Subsystem ID inside CS35L41 Driver
+> > >   ALSA: hda: cs35l41: Support reading subsystem id from ACPI
+> > >   ALSA: hda: cs35l41: Support multiple load paths for firmware
+> > >   ALSA: hda: cs35l41: Support Speaker ID for laptops
+> > >   ALSA: hda: cs35l41: Support Hibernation during Suspend
+> > >   ALSA: hda: cs35l41: Read Speaker Calibration data from UEFI variables
+> > >   ALSA: hda: hda_cs_dsp_ctl: Add fw id strings
+> > >   ALSA: hda: cs35l41: Add defaulted values into dsp bypass config
+> > >     sequence
+> > >   ALSA: hda: cs35l41: Support Firmware switching and reloading
+> > >   ALSA: hda: cs35l41: Add module parameter to control firmware load
+> > > 
+> > > Vitaly Rodionov (1):
+> > >   ALSA: hda: cs35l41: Add initial DSP support and firmware loading
 > > 
-> >  drivers/usb/dwc3/gadget.c | 1 +
-> >  1 file changed, 1 insertion(+)
+> > Thanks, this version looks better than previous ones, and I'm fine to
+> > apply as is, to make things going forward.  But this seems requiring
+> > the prerequisite in ASoC codec side.
 > > 
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index 41b7007358de..e32d7293c447 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -2476,6 +2476,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
-> >  	dwc3_gadget_dctl_write_safe(dwc, reg);
-> >  
-> >  	do {
-> > +		msleep(1);
+> > Mark, could you send a PR to merge into my tree so that I can apply
+> > those series?
 > 
-> Be aware that this probably won't sleep for *just* 1ms.  From
-> Documentation/timers/timers-howto.rst:
+> Mark?
 > 
-> 	msleep(1~20) may not do what the caller intends, and
-> 	will often sleep longer (~20 ms actual sleep for any
-> 	value given in the 1~20ms range). In many cases this
-> 	is not the desired behavior.
-> 
-> So with timeout==500 this loop could very well end up iterating for up
-> to 10 seconds.  Granted this shouldn't be called from any atomic context
-> but just wanted to make sure that the effective increase in timeout as
-> $SUBJECT intends is made clear here and that it's not overly generous.
-> 
-> >  		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-> >  		reg &= DWC3_DSTS_DEVCTRLHLT;
-> >  	} while (--timeout && !(!is_on ^ !reg));
+> This series need the ASoC for-next change as prerequisite.
 
-Does it make sense to convert this loop to use read_poll_timeout() and
-make the timeout explicit, something like:
+Mark?  It's been preventing the merge.
 
-	ret = read_poll_timeout(dwc3_readl, reg, !(!is_on ^ !(reg & DWC3_DSTS_DEVCTRLHLT)),
-				100, timeout * USEC_PER_MSEC, true, dwc->regs, DWC3_DSTS);
 
-?
+Takashi

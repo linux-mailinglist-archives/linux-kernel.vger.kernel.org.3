@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D32572A4A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 02:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B5D572A44
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 02:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiGMAf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 20:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
+        id S231468AbiGMAgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 20:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiGMAf4 (ORCPT
+        with ESMTP id S230267AbiGMAf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Jul 2022 20:35:56 -0400
 Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58528D5C7;
-        Tue, 12 Jul 2022 17:35:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFE08688A;
+        Tue, 12 Jul 2022 17:35:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657672554; x=1689208554;
+  t=1657672556; x=1689208556;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=kRQQcr5nf/l/o/aOOg0X2bOqskjPesWaQ3V0BgVyFiA=;
-  b=y7Yx3wRpE+9lyB8w39fO8CuzjL6pBze8KPDB5FN01RM4sXtWbtH6NLZp
-   CqgJbtPjimLPhpyEREO3JzShC5foOWRrWONAbf20rpZi+Zrti0pjtFq2p
-   X8LlbytyyDQP3c2Wy4Ck8bIk2GTFxOaHfHWZRski23WG8hD7RdBcls0sy
-   k=;
+  bh=06da9X7+m+TDCiEIV3UKU+3nqoKScVbFtv+cZmNJDsQ=;
+  b=ApjDYBMq08mQ1LMCIU9L4fFOqsSJtY1QowXsLIhgHMkK/RvCm9zzDrYC
+   WhQP1BnwvJMGKEVRT4EFquPQYJdMkcDHw1yXrF++jmeIFdEbnxWu2geo2
+   /q7pFpJq9InKRC8v/A4F2QUQTnbQ7j8gJquKyXRYHDKGu83QyHoqD3PMk
+   w=;
 Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 Jul 2022 17:35:53 -0700
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 Jul 2022 17:35:54 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
   by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 17:35:53 -0700
 Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Jul 2022 17:35:36 -0700
+ 15.2.986.22; Tue, 12 Jul 2022 17:35:37 -0700
 Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -43,9 +43,9 @@ To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
 CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
         <quic_jackp@quicinc.com>, <Thinh.Nguyen@synopsys.com>,
         Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v2 1/5] usb: dwc3: Do not service EP0 and conndone events if soft disconnected
-Date:   Tue, 12 Jul 2022 17:35:19 -0700
-Message-ID: <20220713003523.29309-2-quic_wcheng@quicinc.com>
+Subject: [PATCH v2 2/5] usb: dwc3: gadget: Force sending delayed status during soft disconnect
+Date:   Tue, 12 Jul 2022 17:35:20 -0700
+Message-ID: <20220713003523.29309-3-quic_wcheng@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220713003523.29309-1-quic_wcheng@quicinc.com>
 References: <20220713003523.29309-1-quic_wcheng@quicinc.com>
@@ -64,87 +64,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are some operations that need to be ignored if there is a soft
-disconnect in progress.  This is to avoid having a pending EP0 transfer in
-progress while attempting to stop active transfers and halting the
-controller.
-
-There were several instances seen where a soft disconnect was able to occur
-during early link negotiation, i.e. bus reset/conndone, which leads to the
-conndone handler re-configuring EPs while attempting to halt the
-controller, as DEP flags are cleared as part of the soft disconnect path.
-
-ep0out: cmd 'Start New Configuration'
-ep0out: cmd 'Set Endpoint Transfer Resource'
-ep0in: cmd 'Set Endpoint Transfer Resource'
-ep1out: cmd 'Set Endpoint Transfer Resource'
-...
-event (00030601): Suspend [U3]
-event (00000101): Reset [U0]
-ep0out: req ffffff87e5c9e100 length 0/0 zsI ==> 0
-event (00000201): Connection Done [U0]
-ep0out: cmd 'Start New Configuration'
-ep0out: cmd 'Set Endpoint Transfer Resource'
-
-In addition, if a soft disconnect occurs, EP0 events are still allowed to
-process, however, it will stall/restart during the SETUP phase.  The
-host is still able to query for the DATA phase, leading to a
-xfernotready(DATA) event.  Since none of the SETUP transfer parameters are
-populated, the xfernotready is treated as a "wrong direction" error,
-leading to a duplicate stall/restart routine.
-
-Add the proper softconnect/connected checks in sequences that are
-potentially involved during soft disconnect processing.
+If any function drivers request for a delayed status phase, this leads to a
+SETUP transfer timeout error, since the function may take longer to process
+the DATA stage.  This eventually results in end transfer timeouts, as there
+is a pending SETUP transaction.
 
 Fixes: 861c010a2ee1 ("usb: dwc3: gadget: Refactor pullup()")
 Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 ---
- drivers/usb/dwc3/ep0.c    | 6 ++++--
  drivers/usb/dwc3/gadget.c | 3 +++
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index 2a510e84eef4..506ef717fdc0 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
- 	int				ret;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
--	if (!dep->endpoint.desc || !dwc->pullups_connected) {
-+	if (!dep->endpoint.desc || !dwc->pullups_connected || !dwc->connected) {
- 		dev_err(dwc->dev, "%s: can't queue to disabled endpoint\n",
- 				dep->name);
- 		ret = -ESHUTDOWN;
-@@ -813,7 +813,7 @@ static void dwc3_ep0_inspect_setup(struct dwc3 *dwc,
- 	int ret = -EINVAL;
- 	u32 len;
- 
--	if (!dwc->gadget_driver || !dwc->connected)
-+	if (!dwc->gadget_driver || !dwc->softconnect || !dwc->connected)
- 		goto out;
- 
- 	trace_dwc3_ctrl_req(ctrl);
-@@ -1116,6 +1116,8 @@ static void dwc3_ep0_xfernotready(struct dwc3 *dwc,
- {
- 	switch (event->status) {
- 	case DEPEVT_STATUS_CONTROL_DATA:
-+		if (!dwc->softconnect || !dwc->connected)
-+			return;
- 		/*
- 		 * We already have a DATA transfer in the controller's cache,
- 		 * if we receive a XferNotReady(DATA) we will ignore it, unless
 diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 4366c45c28cf..d1d7a5e5bd7c 100644
+index d1d7a5e5bd7c..a455f8d4631d 100644
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -3865,6 +3865,9 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
- 	u8			lanes = 1;
- 	u8			speed;
+@@ -2501,6 +2501,9 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+ 	if (dwc->ep0state != EP0_SETUP_PHASE) {
+ 		int ret;
  
-+	if (!dwc->softconnect)
-+		return;
++		if (dwc->delayed_status)
++			dwc3_ep0_send_delayed_status(dwc);
 +
- 	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
- 	speed = reg & DWC3_DSTS_CONNECTSPD;
- 	dwc->speed = speed;
+ 		reinit_completion(&dwc->ep0_in_setup);
+ 
+ 		spin_unlock_irqrestore(&dwc->lock, flags);

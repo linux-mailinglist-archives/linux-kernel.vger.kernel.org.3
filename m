@@ -2,93 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F388F572B03
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777EA572B05
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233829AbiGMBnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 21:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S233795AbiGMBoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 21:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiGMBnM (ORCPT
+        with ESMTP id S233868AbiGMBoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 21:43:12 -0400
-Received: from mail-ot1-f68.google.com (mail-ot1-f68.google.com [209.85.210.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6535F32EEA;
-        Tue, 12 Jul 2022 18:43:11 -0700 (PDT)
-Received: by mail-ot1-f68.google.com with SMTP id by10-20020a056830608a00b0061c1ac80e1dso7378760otb.13;
-        Tue, 12 Jul 2022 18:43:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oUKpzDsdXkSvS+VF8FDte+ED11p+mInw/DC/Lpc79ZE=;
-        b=rzGDSUjDvArCL9cKJMJc7rN6foJ6XhScscVbT/2YMYoMWUGzx0aGPr9zIgS2MSMss0
-         0Lw/j5DdeN7MyKNsauy7J8u8TX//7fxc+fZI08Gt0YbUrcp6GpMSRq7xC0LQRjsPaVv1
-         qnsTeGTfzV/XRQQdFkSZ2cR6X+Ctno1eYYXCESuEVu83Ro6G3DFUDmuEqBhWVNSFrCsn
-         varae9yTDgQu+puSp84N5QnmQ1AAYkSg9Q/BYA4mzpREJa4ynxHUkB2iy1yNIS3LrWIq
-         XzDQBiZrFl7mFU+b4KdtFYW4KNKECSC0AAmnSR6Mddccs6rMkbJ4pcBKX8L5SsCN3jxF
-         IXQA==
-X-Gm-Message-State: AJIora+mLNmWW07vTpywNEp68X/wXPFmW0V0fIL3DuLqDqjbMgRfNWAR
-        /ZhnUCyhwEOuciSvk4exbw==
-X-Google-Smtp-Source: AGRyM1s/Ox9kMv8DzxDTlYWEHEro97vlK3KKzUNmSJi9EczaBh+v/YioqYWtLNYPNCCo6OhDquMxLg==
-X-Received: by 2002:a9d:60d:0:b0:61c:4462:1ae1 with SMTP id 13-20020a9d060d000000b0061c44621ae1mr406309otn.363.1657676590738;
-        Tue, 12 Jul 2022 18:43:10 -0700 (PDT)
-Received: from localhost.localdomain ([156.146.53.107])
-        by smtp.gmail.com with ESMTPSA id d8-20020a056870e24800b0010490c6b552sm5523905oac.35.2022.07.12.18.43.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 18:43:10 -0700 (PDT)
-From:   sunliming <sunliming@kylinos.cn>
-To:     hch@lst.de, djwong@kernel.org, dchinner@redhat.com
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sunliming@kylinos.cn, kelulanainsley@gmail.com,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH RESEND] xfs: fix for variable set but not used warning
-Date:   Wed, 13 Jul 2022 09:43:00 +0800
-Message-Id: <20220713014300.5108-1-sunliming@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 12 Jul 2022 21:44:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBD42872E;
+        Tue, 12 Jul 2022 18:44:13 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LjL0s3cYyzVfc3;
+        Wed, 13 Jul 2022 09:40:29 +0800 (CST)
+Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Jul 2022 09:44:11 +0800
+Received: from [127.0.0.1] (10.67.111.83) by dggpeml500008.china.huawei.com
+ (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Jul
+ 2022 09:44:10 +0800
+Message-ID: <df9909dc-3303-808e-575a-47190f636279@huawei.com>
+Date:   Wed, 13 Jul 2022 09:44:10 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next] scsi: ufs: ufs-mediatek: Fix build error
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     <stanley.chu@mediatek.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20220704025632.235968-1-renzhijie2@huawei.com>
+ <CAK8P3a07jGCuAVQAZgpENRP_xFLiogU9W1Uze+n21h7TdOZhog@mail.gmail.com>
+From:   Ren Zhijie <renzhijie2@huawei.com>
+In-Reply-To: <CAK8P3a07jGCuAVQAZgpENRP_xFLiogU9W1Uze+n21h7TdOZhog@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.67.111.83]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500008.china.huawei.com (7.185.36.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix below kernel warning:
+在 2022/7/12 16:27, Arnd Bergmann 写道:
+> On Mon, Jul 4, 2022 at 4:56 AM Ren Zhijie <renzhijie2@huawei.com> wrote:
+>> diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
+>> index c958279bdd8f..e006c2528a3a 100644
+>> --- a/drivers/ufs/host/ufs-mediatek.c
+>> +++ b/drivers/ufs/host/ufs-mediatek.c
+>> @@ -1427,6 +1427,7 @@ static int ufs_mtk_system_resume(struct device *dev)
+>>   }
+>>   #endif
+>>
+>> +#ifdef CONFIG_PM
+>>   static int ufs_mtk_runtime_suspend(struct device *dev)
+>>   {
+>>          struct ufs_hba *hba = dev_get_drvdata(dev);
+>> @@ -1449,6 +1450,7 @@ static int ufs_mtk_runtime_resume(struct device *dev)
+>>
+>>          return ufshcd_runtime_resume(dev);
+>>   }
+>> +#endif
+>>
+>>   static const struct dev_pm_ops ufs_mtk_pm_ops = {
+>>          SET_SYSTEM_SLEEP_PM_OPS(ufs_mtk_system_suspend,
+> This change works, but it's not great. It's better to change the
+> SET_SYSTEM_SLEEP_PM_OPS() to the new SYSTEM_SLEEP_PM_OPS()
+> that works without the #ifdef.
+>
+>           Arnd
 
-fs/xfs/scrub/repair.c:539:19: warning: variable 'agno' set but not used [-Wunused-but-set-variable]
+Hi Arnd,
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: sunliming <sunliming@kylinos.cn>
----
- fs/xfs/scrub/repair.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Thanks for your suggestion.
 
-diff --git a/fs/xfs/scrub/repair.c b/fs/xfs/scrub/repair.c
-index a02ec8fbc8ac..032de115e373 100644
---- a/fs/xfs/scrub/repair.c
-+++ b/fs/xfs/scrub/repair.c
-@@ -533,14 +533,12 @@ xrep_reap_block(
- {
- 	struct xfs_btree_cur		*cur;
- 	struct xfs_buf			*agf_bp = NULL;
--	xfs_agnumber_t			agno;
- 	xfs_agblock_t			agbno;
- 	bool				has_other_rmap;
- 	int				error;
- 
--	agno = XFS_FSB_TO_AGNO(sc->mp, fsbno);
- 	agbno = XFS_FSB_TO_AGBNO(sc->mp, fsbno);
--	ASSERT(agno == sc->sa.pag->pag_agno);
-+	ASSERT(XFS_FSB_TO_AGNO(sc->mp, fsbno) == sc->sa.pag->pag_agno);
- 
- 	/*
- 	 * If we are repairing per-inode metadata, we need to read in the AGF
--- 
-2.25.1
+How does it to fix the implicit-function-declaration error?
+
+Thanks,
+
+Ren Zhijie
+
+> .
 

@@ -2,171 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5379573918
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2103957391D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236605AbiGMOn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
+        id S233976AbiGMOoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236587AbiGMOn0 (ORCPT
+        with ESMTP id S236093AbiGMOoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:43:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 381CA33343
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:43:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657723400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H4v+SMT4YyFBFqIk3h1YXOzJcv6SHCw5As/1u7zBjaA=;
-        b=FFpzGyVwt5+DskAFB/QtSuLs9eEAhGdnUI13lrx9TXTcBtNpHYDooOx0YqFyhDz4iuRx5O
-        Ee6xFwsua5yijm6FQOBB5zDj1yO8nprFpv/skAcDHC+wny/2gC/4LqGMLsUhGwGqkNjyiH
-        Ni22B3CY5JkYZBppHem9fbhGG83e2Zw=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-30-uaP_jI4XOXi1HKgeVXGxAQ-1; Wed, 13 Jul 2022 10:43:18 -0400
-X-MC-Unique: uaP_jI4XOXi1HKgeVXGxAQ-1
-Received: by mail-qv1-f70.google.com with SMTP id e1-20020ad44181000000b00472f8ad6e71so3930126qvp.20
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:43:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=H4v+SMT4YyFBFqIk3h1YXOzJcv6SHCw5As/1u7zBjaA=;
-        b=TYswQo8MBKgXU6sxuabKSEMY/UNTQ5eJLgTRfpWWVndMtx/QLLT4dErQMzViSOZoI+
-         4nWbt8mhug9Sdl4t8TKAd0yrv2Rh/+UDvUV1A8X0tmxWNbxaUL6w82lytgasGPzyBa3m
-         pPjsvRxlkFJvLwy/6SqsWkbUp7paRcxYQC9bmEWu0v/7PAKtLVXBFdVMbEulnVB2NoRc
-         zISYbk7+7PeS4Ltemh64PZNHkYkyPKUgNxA17XjqlgQROzfd6zZlhBvm+lPFGO56Jg4U
-         RteHPXxKcLbVNLRyvfsP2BCNLXzItp1Ww8pBvnk2+yMqPN8ZK+yMny9vtK56Uz9t5iR0
-         5nRA==
-X-Gm-Message-State: AJIora9FHYACMg3de8KjUSXPVZGLcbSQP8ZXGADdl/BP9bEhNOyEdPDq
-        HLEf8LkIqi2rhJ2m1ifkj5EOFP/yOaPaq+s9IyooiG5L/7IbOV1iZw0UJJWKlHGSa7nXmTt6SUs
-        YkWZxrJuLxkuKak2ck2EKFArs
-X-Received: by 2002:a05:6214:d0a:b0:473:584f:273d with SMTP id 10-20020a0562140d0a00b00473584f273dmr3178898qvh.127.1657723398343;
-        Wed, 13 Jul 2022 07:43:18 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vVehCzGhVquOdqnAhdxWfZLL8LwuEOx6uq5tz/bi4ruQ+Vc8Bgb4U7OGBQUaph9+ojKaRgbw==
-X-Received: by 2002:a05:6214:d0a:b0:473:584f:273d with SMTP id 10-20020a0562140d0a00b00473584f273dmr3178858qvh.127.1657723397983;
-        Wed, 13 Jul 2022 07:43:17 -0700 (PDT)
-Received: from halaneylaptop ([2600:1700:1ff0:d0e0::2e])
-        by smtp.gmail.com with ESMTPSA id s7-20020a05620a254700b006a6b374d8bbsm12386760qko.69.2022.07.13.07.43.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 07:43:17 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 09:43:10 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/7] arm64: dts: qcom: sc8280xp: fix USB interrupts
-Message-ID: <20220713144310.kehfuqvfhsjb36ri@halaneylaptop>
-References: <20220713131340.29401-1-johan+linaro@kernel.org>
- <20220713131340.29401-6-johan+linaro@kernel.org>
- <20220713141228.5z5rmgepj6mepjyp@halaneylaptop>
- <Ys7YKkRAAI0Vbseh@hovoldconsulting.com>
+        Wed, 13 Jul 2022 10:44:16 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E40EF1FCEC;
+        Wed, 13 Jul 2022 07:44:15 -0700 (PDT)
+Received: from pwmachine.localnet (240.119.92.79.rev.sfr.net [79.92.119.240])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 2EBE6204DE98;
+        Wed, 13 Jul 2022 07:44:13 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2EBE6204DE98
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1657723455;
+        bh=nVPYGVEqgFvdgKTCaucYk9KATG8V1rjN5GDIXGgYphk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cihL9RYMaV7+hjbuk+5xX8Cz/Htlqhku1rxIZ1aPvwJ9BJZJUmTmcybPWc6ftU6aK
+         dUyGkSh3cTi3+GKXNR6JtJjfeygBxqnUpE9xx5+7pvso4aZQqGaGql4+GgUcTR3g8u
+         0/w0KyRWUbgYqvD6Kd7DH2HPzbDjhYvYpHStPTDQ=
+From:   Francis Laniel <flaniel@linux.microsoft.com>
+To:     bpf@vger.kernel.org, Quentin Monnet <quentin@isovalent.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 1/1] bpftool: Align dumped file headers with skeletons.
+Date:   Wed, 13 Jul 2022 16:44:10 +0200
+Message-ID: <5839621.lOV4Wx5bFT@pwmachine>
+Organization: Microsoft
+In-Reply-To: <e1b00ebf-fb06-6eb3-2fa2-7e7155594626@isovalent.com>
+References: <20220713134046.15020-1-flaniel@linux.microsoft.com> <20220713134046.15020-2-flaniel@linux.microsoft.com> <e1b00ebf-fb06-6eb3-2fa2-7e7155594626@isovalent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys7YKkRAAI0Vbseh@hovoldconsulting.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 04:35:22PM +0200, Johan Hovold wrote:
-> On Wed, Jul 13, 2022 at 09:12:28AM -0500, Andrew Halaney wrote:
-> > On Wed, Jul 13, 2022 at 03:13:38PM +0200, Johan Hovold wrote:
-> > > The two single-port SC8280XP USB controllers do not have an hs_phy_irq
-> > > interrupt. Instead they have a pwr_event interrupt which is distinct
-> > > from the former and not yet supported by the driver.
-> > > 
-> > > Fix the USB node interrupt names so that they match the devicetree
-> > > binding.
-> > > 
-> > > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 12 ++++++++----
-> > >  1 file changed, 8 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > > index 45cc7d714fd2..4a7aa9992f3a 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > > @@ -1875,8 +1875,10 @@ usb_0: usb@a6f8800 {
-> > >  					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
-> > >  					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
-> > >  					      <&pdc 138 IRQ_TYPE_LEVEL_HIGH>;
-> > > -			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
-> > > -					  "dm_hs_phy_irq", "ss_phy_irq";
-> > > +			interrupt-names = "pwr_event",
-> > > +					  "dp_hs_phy_irq",
-> > > +					  "dm_hs_phy_irq",
-> > > +					  "ss_phy_irq";
-> > >  
-> > >  			power-domains = <&gcc USB30_PRIM_GDSC>;
-> > >  
-> > > @@ -1925,8 +1927,10 @@ usb_1: usb@a8f8800 {
-> > >  					      <&pdc 12 IRQ_TYPE_EDGE_BOTH>,
-> > >  					      <&pdc 13 IRQ_TYPE_EDGE_BOTH>,
-> > >  					      <&pdc 136 IRQ_TYPE_LEVEL_HIGH>;
-> > > -			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
-> > > -					  "dm_hs_phy_irq", "ss_phy_irq";
-> > > +			interrupt-names = "pwr_event",
-> > > +					  "dp_hs_phy_irq",
-> > > +					  "dm_hs_phy_irq",
-> > > +					  "ss_phy_irq";
-> > 
-> > For this specific change to pwr_event:
-> > 
-> >     Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
-> > 
-> > That being said, I was reviewing this against the (fairly old)
-> > downstream release I have, and the IRQs defined there look like this:
-> > 
-> > 		interrupts-extended = <&pdc 12 IRQ_TYPE_EDGE_RISING>,
-> > 				<&intc GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
-> > 				<&pdc 136 IRQ_TYPE_LEVEL_HIGH>,
-> > 				<&pdc 13 IRQ_TYPE_EDGE_RISING>;
-> > 		interrupt-names = "dp_hs_phy_irq", "pwr_event_irq",
-> > 				"ss_phy_irq", "dm_hs_phy_irq";
-> > 
-> > The part I want to highlight is that the "pwr_event" irq downstream maps
-> > to <&intc GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>, but the current upstream
-> > devicetree I'm looking at has it mapped to <&intc GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>
-> > 
-> > Do you happen to have any source you can also check to confirm if this
-> > is a bug or not?
-> 
-> Good catch! I believe this is another copy-paste error when creating
-> base dtsi based on some vendor source (or perhaps an error carried over
-> from an earlier version).
-> 
-> The vendor devicetree I have access to also has 811 here, which matches
-> the pattern for usb_0 (dwc3 interrupt + 1).
-> 
-> Do you mind if I fold a fix for that into a v2 of this patch?
-> 
-> Thanks for reviewing!
+Le mercredi 13 juillet 2022, 15:57:13 CEST Quentin Monnet a =E9crit :
+> On 13/07/2022 14:40, Francis Laniel wrote:
+> > This commit adds the following lines to file generated by dump:
+> > /* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
+> > /* THIS FILE IS AUTOGENERATED BY BPFTOOL! */
+> > Hence, the dumped file headers follows that of skeletons.
+> >=20
+> > Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> > ---
+> >=20
+> >  tools/bpf/bpftool/btf.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >=20
+> > diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> > index 7e6accb9d9f7..066a0acd0ecd 100644
+> > --- a/tools/bpf/bpftool/btf.c
+> > +++ b/tools/bpf/bpftool/btf.c
+> > @@ -425,6 +425,8 @@ static int dump_btf_c(const struct btf *btf,
+> >=20
+> >  	if (err)
+> >  =09
+> >  		return err;
+> >=20
+> > +	printf("/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */\n");
+> > +	printf("/* THIS FILE IS AUTOGENERATED BY BPFTOOL! */\n");
+> >=20
+> >  	printf("#ifndef __VMLINUX_H__\n");
+> >  	printf("#define __VMLINUX_H__\n");
+> >  	printf("\n");
+>=20
+> Looks good, simpler than v1, thank you!
+>=20
+> Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 
-Sounds good, feel free to add my R-B with that change as well!
+Thank you for the review!
 
-> 
-> Johan
-> 
+
 

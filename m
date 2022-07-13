@@ -2,117 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9182F573A9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313B6573AA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237073AbiGMPy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        id S236668AbiGMPzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236837AbiGMPyW (ORCPT
+        with ESMTP id S235766AbiGMPzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:54:22 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4C62A717
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:54:21 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id j22so20636960ejs.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:54:21 -0700 (PDT)
+        Wed, 13 Jul 2022 11:55:48 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BC04E852
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:55:47 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id o10-20020a655bca000000b00412787983b3so5433887pgr.12
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:55:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ijboKzjTSzsd+bJY8ZcuFW/Xbsztbht17nmFPJI6drg=;
-        b=BAIUjy11tSgwstQ6yLGA9n142er4g913SnNJP7srr8eNQuI5Syjw4vBaYQ3DPcV0S9
-         ZMFoSB9cQeO+Q8HUEUWWxOMpDv2x4HKLnc1U2DhzE+S7AGsI86d3PJRfM6fU2Imm2O3h
-         azTlWaUG47LcDLgRILUq0aSU1jcIjCwpwJGTJ3f43luwnKc1ndMHdDhhjp/O5zr0+Z3+
-         9QVKufP4jfnR9gsXnaE79hesIub45kOKPoofUhpfoKCesv1T9NFAMqgu0dGxD43wyohR
-         vJRBth3JGyq8TWcpIEkKeMjLxRmO4aaTMA+2pm7DP1YbphJSLYuzHdIBPfC9lR/4wozk
-         AI8Q==
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=piRb7uQECeW9RYchBFA8MO5mKI1hZWhBSuPsCcsEFoc=;
+        b=TjHjMkxHdrjtTtLaLLkPMs792kod3mIYtSimCy6NVweAsJU75rtvhot4VpXsblBqly
+         qHRf5/L3tn7yMu364MBoudvFOE15V1qz4sWU7IX1ZmSnyAtwoN3kNYw02DuKnsDO5gjp
+         M7RQmANYsVuNDbgNtkXvd3a8DnuUQH+hZV3ikimvffMZd8joeIgwo7GaoFBX8DFrddDF
+         llsAFJQV9aU6qv7H1VvM3a3PUKiZyeNUhvRUKDT5CnUoj9OxYRKgWhY0+MNYPlyo3vp0
+         JKfjLrkj60y7DnOnKgIUy/4L8UmsN/TA25iA1sJPVSruP4sBdSbj5QDwOKoVzrQcwL4a
+         C7Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ijboKzjTSzsd+bJY8ZcuFW/Xbsztbht17nmFPJI6drg=;
-        b=ZwO0IbYA0+bP28sdJxiHM0t99JlkeEdvnUkvm0EfAZlnSvgHBCfm4TKDD/Q+XfF6ev
-         1FjtSULLZvVFH87Y/SD12zUqvH5k0N15Xq+M0oePIFOwWTwm8WBqajjkzbFLBrZLnrP+
-         L+dX4YnNwFspK+WYfIGCDQrZZgMcBdiDxriAac+MhLewBXt0FoDwobIi+yD9uEuCawqN
-         NdEk0VTUk2dDBHKCzKPgyAI108h+XMqAVoVduvKLawEv3bAfgv4i5rzM6G8xaQYY2K2L
-         pgG43wxPcxwOulxMOCCBNvue9ItXNNYsN9gFR7aeiN/q5iFI6qOjLlbofsNtMx5u0VAw
-         IV6A==
-X-Gm-Message-State: AJIora/Of8xhOcgg2ZjGQqmMqnr8Sy/K+6oeBvjAUXCYdjprK5p8zDoS
-        m1CUOahuO0ZMkVqZAzv8crW7Z+AS+P0=
-X-Google-Smtp-Source: AGRyM1v+EgyXmm+WIrwhqUTLys0FStOlDDH9tqmrDCD2QlygO0YDrLJOW0xQwcLtW4iugGwmqF1VrA==
-X-Received: by 2002:a17:906:8459:b0:72b:60c8:107d with SMTP id e25-20020a170906845900b0072b60c8107dmr4300159ejy.142.1657727660065;
-        Wed, 13 Jul 2022 08:54:20 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id n2-20020a17090695c200b0072b21cab5a5sm5073688ejy.133.2022.07.13.08.54.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 08:54:19 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 2/2] ucount: Use atomic_long_try_cmpxchg in atomic_long_inc_below
-Date:   Wed, 13 Jul 2022 17:54:05 +0200
-Message-Id: <20220713155405.80663-3-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220713155405.80663-1-ubizjak@gmail.com>
-References: <20220713155405.80663-1-ubizjak@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=piRb7uQECeW9RYchBFA8MO5mKI1hZWhBSuPsCcsEFoc=;
+        b=6xpwqTiVy4x4Y05AFn1ILHGNMOg6MA3CciQcAaQJpibyhUgJ2NJJdJizFPUbnYJmsH
+         Qle4x69KnnSHx3RP/UiMZiuU7rIOOWDRlRLRvVUJFic4V8fqBCm8vJ+BQBCoXjgqTHGh
+         lpAmBquxyI1k01K3CHRBkn2tIFr7Ayk1t7XQnAP8p1F1dX0Un4y628NB9hx8ApoqCdRC
+         itqVTrotHHmzJAKETGDFzPDpWe9xoUP04uBwsVbIki7ZkfdXWoCUXt4+DWh3Cta0DNet
+         DrO8r/qce2e5SxQ+Uwczmv082EUbDovCF4eyPW0zyN0DWKeoYVxa9qDCICy2dhUQgBWw
+         1Qmw==
+X-Gm-Message-State: AJIora+2QQHenyNA2Za5OIyQkVXMTl/6ryfrz2keAWQuNlnuVJe9y6Zg
+        2oWH/xF5AW0jrAHbvX4lI3bHz80=
+X-Google-Smtp-Source: AGRyM1vCSrU7O6O9FOIV8kUv1lP2Lkoiv9Ln98VM/44THqm2zXjHACWzfrfMXWhmXMTgZeZAsBg2f70=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:902:db02:b0:16c:5568:d740 with SMTP id
+ m2-20020a170902db0200b0016c5568d740mr3785558plx.100.1657727746774; Wed, 13
+ Jul 2022 08:55:46 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 08:55:45 -0700
+In-Reply-To: <20220713011000.29090-1-xiaolinkui@kylinos.cn>
+Message-Id: <Ys7rAaRKbTEzvjFY@google.com>
+Mime-Version: 1.0
+References: <20220713011000.29090-1-xiaolinkui@kylinos.cn>
+Subject: Re: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool functions
+From:   sdf@google.com
+To:     xiaolinkui <xiaolinkui@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        xiaolinkui@kylinos.cn, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use atomic_long_try_cmpxchg instead of
-atomic_long_cmpxchg (*ptr, old, new) == old in atomic_long_inc_below.
-x86 CMPXCHG instruction returns success in ZF flag, so this change saves
-a compare after cmpxchg (and related move instruction in front of cmpxchg).
+On 07/13, xiaolinkui wrote:
+> From: Linkui Xiao<xiaolinkui@kylinos.cn>
+                    ^ space here?
 
-Also, atomic_long_try_cmpxchg implicitly assigns old *ptr value to "old"
-when cmpxchg fails, enabling further code simplifications.
+> Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> functions.  This fixes the following warnings from coccicheck:
 
-No functional change intended.
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
+> return of 0/1 in function 'decap_v4' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
+> return of 0/1 in function 'decap_v6' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
+> return of 0/1 in function 'encap_v6' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
+> return of 0/1 in function 'parse_tcp' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
+> return of 0/1 in function 'parse_udp' with return type bool
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: "Eric W. Biederman" <ebiederm@xmission.com>
----
- kernel/ucount.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+> Generated by: scripts/coccinelle/misc/boolreturn.cocci
 
-diff --git a/kernel/ucount.c b/kernel/ucount.c
-index 974ac1585009..5d980460104e 100644
---- a/kernel/ucount.c
-+++ b/kernel/ucount.c
-@@ -218,16 +218,14 @@ void put_ucounts(struct ucounts *ucounts)
- 
- static inline bool atomic_long_inc_below(atomic_long_t *v, long u)
- {
--	long c, old;
--	c = atomic_long_read(v);
--	for (;;) {
-+	long c = atomic_long_read(v);
-+
-+	do {
- 		if (unlikely(c >= u))
- 			return false;
--		old = atomic_long_cmpxchg(v, c, c+1);
--		if (likely(old == c))
--			return true;
--		c = old;
--	}
-+	} while (!atomic_long_try_cmpxchg(v, &c, c+1));
-+
-+	return true;
- }
- 
- struct ucounts *inc_ucount(struct user_namespace *ns, kuid_t uid,
--- 
-2.35.3
+> Signed-off-by: Linkui Xiao<xiaolinkui@kylinos.cn>
+
+This patch likely needs a resend with proper [PATCH bpf] or
+[PATCH bpf-next] subject to end up in patchwork and to be picked up.
+
+Take a look at Documentation/bpf/bpf_devel_QA.rst section "Q: How do I
+indicate which tree (bpf vs. bpf-next) my patch should be applied to?".
+
+Since that's a cleanup, you most likely want to target bpf-next.
+
+> ---
+>   .../selftests/bpf/progs/test_xdp_noinline.c   | 30 +++++++++----------
+>   1 file changed, 15 insertions(+), 15 deletions(-)
+
+> diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c  
+> b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+> index 125d872d7981..ba48fcb98ab2 100644
+> --- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+> +++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+> @@ -239,7 +239,7 @@ bool parse_udp(void *data, void *data_end,
+>   	udp = data + off;
+
+>   	if (udp + 1 > data_end)
+> -		return 0;
+> +		return false;
+>   	if (!is_icmp) {
+>   		pckt->flow.port16[0] = udp->source;
+>   		pckt->flow.port16[1] = udp->dest;
+> @@ -247,7 +247,7 @@ bool parse_udp(void *data, void *data_end,
+>   		pckt->flow.port16[0] = udp->dest;
+>   		pckt->flow.port16[1] = udp->source;
+>   	}
+> -	return 1;
+> +	return true;
+>   }
+
+>   static __attribute__ ((noinline))
+> @@ -261,7 +261,7 @@ bool parse_tcp(void *data, void *data_end,
+
+>   	tcp = data + off;
+>   	if (tcp + 1 > data_end)
+> -		return 0;
+> +		return false;
+>   	if (tcp->syn)
+>   		pckt->flags |= (1 << 1);
+>   	if (!is_icmp) {
+> @@ -271,7 +271,7 @@ bool parse_tcp(void *data, void *data_end,
+>   		pckt->flow.port16[0] = tcp->dest;
+>   		pckt->flow.port16[1] = tcp->source;
+>   	}
+> -	return 1;
+> +	return true;
+>   }
+
+>   static __attribute__ ((noinline))
+> @@ -287,7 +287,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
+> *cval,
+>   	void *data;
+
+>   	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct ipv6hdr)))
+> -		return 0;
+> +		return false;
+>   	data = (void *)(long)xdp->data;
+>   	data_end = (void *)(long)xdp->data_end;
+>   	new_eth = data;
+> @@ -295,7 +295,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
+> *cval,
+>   	old_eth = data + sizeof(struct ipv6hdr);
+>   	if (new_eth + 1 > data_end ||
+>   	    old_eth + 1 > data_end || ip6h + 1 > data_end)
+> -		return 0;
+> +		return false;
+>   	memcpy(new_eth->eth_dest, cval->mac, 6);
+>   	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
+>   	new_eth->eth_proto = 56710;
+> @@ -314,7 +314,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
+> *cval,
+>   	ip6h->saddr.in6_u.u6_addr32[2] = 3;
+>   	ip6h->saddr.in6_u.u6_addr32[3] = ip_suffix;
+>   	memcpy(ip6h->daddr.in6_u.u6_addr32, dst->dstv6, 16);
+> -	return 1;
+> +	return true;
+>   }
+
+>   static __attribute__ ((noinline))
+> @@ -335,7 +335,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
+> *cval,
+>   	ip_suffix <<= 15;
+>   	ip_suffix ^= pckt->flow.src;
+>   	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct iphdr)))
+> -		return 0;
+> +		return false;
+>   	data = (void *)(long)xdp->data;
+>   	data_end = (void *)(long)xdp->data_end;
+>   	new_eth = data;
+> @@ -343,7 +343,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
+> *cval,
+>   	old_eth = data + sizeof(struct iphdr);
+>   	if (new_eth + 1 > data_end ||
+>   	    old_eth + 1 > data_end || iph + 1 > data_end)
+> -		return 0;
+> +		return false;
+>   	memcpy(new_eth->eth_dest, cval->mac, 6);
+>   	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
+>   	new_eth->eth_proto = 8;
+> @@ -367,8 +367,8 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
+> *cval,
+>   		csum += *next_iph_u16++;
+>   	iph->check = ~((csum & 0xffff) + (csum >> 16));
+>   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
+> -		return 0;
+> -	return 1;
+> +		return false;
+> +	return true;
+>   }
+
+>   static __attribute__ ((noinline))
+> @@ -386,10 +386,10 @@ bool decap_v6(struct xdp_md *xdp, void **data, void  
+> **data_end, bool inner_v4)
+>   	else
+>   		new_eth->eth_proto = 56710;
+>   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct ipv6hdr)))
+> -		return 0;
+> +		return false;
+>   	*data = (void *)(long)xdp->data;
+>   	*data_end = (void *)(long)xdp->data_end;
+> -	return 1;
+> +	return true;
+>   }
+
+>   static __attribute__ ((noinline))
+> @@ -404,10 +404,10 @@ bool decap_v4(struct xdp_md *xdp, void **data, void  
+> **data_end)
+>   	memcpy(new_eth->eth_dest, old_eth->eth_dest, 6);
+>   	new_eth->eth_proto = 8;
+>   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
+> -		return 0;
+> +		return false;
+>   	*data = (void *)(long)xdp->data;
+>   	*data_end = (void *)(long)xdp->data_end;
+> -	return 1;
+> +	return true;
+>   }
+
+>   static __attribute__ ((noinline))
+> --
+> 2.17.1
 

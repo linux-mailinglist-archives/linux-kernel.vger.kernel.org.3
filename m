@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FEC2572B71
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 04:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D55572B9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 04:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbiGMCsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 22:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
+        id S233868AbiGMC6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 22:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiGMCsB (ORCPT
+        with ESMTP id S231149AbiGMC6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 22:48:01 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E755D4BD6;
-        Tue, 12 Jul 2022 19:48:00 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LjMQR5502zVfn4;
-        Wed, 13 Jul 2022 10:44:15 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Jul 2022 10:47:35 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Jul
- 2022 10:47:34 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-CC:     <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
-        <broonie@kernel.org>
-Subject: [PATCH -next v2 3/3] spi: microchip-core: switch to use dev_err_probe()
-Date:   Wed, 13 Jul 2022 10:56:57 +0800
-Message-ID: <20220713025657.3524506-4-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220713025657.3524506-1-yangyingliang@huawei.com>
-References: <20220713025657.3524506-1-yangyingliang@huawei.com>
+        Tue, 12 Jul 2022 22:58:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1334B23F9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 19:58:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CC53619E9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:58:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3E3CC3411C;
+        Wed, 13 Jul 2022 02:58:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657681086;
+        bh=ppGPQRz71SyIIbpVVd2z7ECwSLRj01ZGyLWURlj+GMk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eteu4NCCWfn+jiUzOIs19qru53PJJ87Bxq+f2JvAP/5JrNd9VG2tONn7NsH6d/WpZ
+         G1oEWQOFSwV4KuhaKZiEgkhUerBhycdNCuwO9faN2XpUm5WIE8HkOnbpmVc/HnL16Q
+         7G9Ma7xtC3pJhhCEG2l3t6u8He3TqCgu3bGciGhWV9Auia7N5XG1x0ZRddUqnfhayW
+         wvBSpZMiDl0F8uymLhgiL60tFA8TwvClk4MRVuVieTUBwkynEo09jWpV37/fluQMYe
+         sDa/yAMnGFJnF22ok3ZWdFAeW+4HtxcOPu4TKqkJwj8MW9kDnCzH+O6ImeUWfwwQ/u
+         hVagCi1Dg+DFg==
+Date:   Wed, 13 Jul 2022 02:58:03 +0000
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Tim Van Patten <timvp@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, rrangel@chromium.org,
+        robbarnes@google.com, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v2] platform/chrome: cros_ec: Send host event for
+ prepare/complete
+Message-ID: <Ys40uw4QIe4fQKA/@google.com>
+References: <20220706205136.v2.1.Ic7a7c81f880ab31533652e0928aa6e687bb268b5@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706205136.v2.1.Ic7a7c81f880ab31533652e0928aa6e687bb268b5@changeid>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,83 +57,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch to use dev_err_probe() to simpify error path.
+On Wed, Jul 06, 2022 at 08:51:39PM -0600, Tim Van Patten wrote:
+> Update cros_ec_lpc_pm_ops to call cros_ec_lpc_suspend() during PM
+> .prepare() and cros_ec_lpc_resume() during .complete. This allows the
+> EC to log entry/exit of AP's suspend/resume more accurately.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/spi/spi-microchip-core.c | 42 +++++++++++++-------------------
- 1 file changed, 17 insertions(+), 25 deletions(-)
+Please be consistent.  Either way:
+- .prepare and .complete.
+- .prepare() and .complete().
 
-diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
-index 1a24e47f8305..ce4385330b19 100644
---- a/drivers/spi/spi-microchip-core.c
-+++ b/drivers/spi/spi-microchip-core.c
-@@ -539,48 +539,40 @@ static int mchp_corespi_probe(struct platform_device *pdev)
- 		return PTR_ERR(spi->regs);
- 
- 	spi->irq = platform_get_irq(pdev, 0);
--	if (spi->irq <= 0) {
--		dev_err(&pdev->dev, "invalid IRQ %d for SPI controller\n", spi->irq);
--		return -ENXIO;
--	}
-+	if (spi->irq <= 0)
-+		return dev_err_probe(&pdev->dev, -ENXIO,
-+				     "invalid IRQ %d for SPI controller\n",
-+				     spi->irq);
- 
- 	ret = devm_request_irq(&pdev->dev, spi->irq, mchp_corespi_interrupt,
- 			       IRQF_SHARED, dev_name(&pdev->dev), master);
--	if (ret) {
--		dev_err(&pdev->dev, "could not request irq: %d\n", ret);
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "could not request irq: %d\n", ret);
- 
- 	spi->clk = devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(spi->clk)) {
--		dev_err(&pdev->dev, "could not get clk: %d\n", ret);
--		return PTR_ERR(spi->clk);
--	}
-+	if (IS_ERR(spi->clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(spi->clk),
-+				     "could not get clk: %d\n", ret);
- 
- 	ret = clk_prepare_enable(spi->clk);
--	if (ret) {
--		dev_err(&pdev->dev, "failed to enable clock\n");
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "failed to enable clock\n");
- 
- 	mchp_corespi_init(master, spi);
- 
- 	ret = devm_spi_register_master(&pdev->dev, master);
- 	if (ret) {
--		dev_err(&pdev->dev,
--			"unable to register master for SPI controller\n");
--		goto error_release_hardware;
-+		mchp_corespi_disable(spi);
-+		clk_disable_unprepare(spi->clk);
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "unable to register master for SPI controller\n");
- 	}
- 
- 	dev_info(&pdev->dev, "Registered SPI controller %d\n", master->bus_num);
- 
- 	return 0;
--
--error_release_hardware:
--	mchp_corespi_disable(spi);
--	clk_disable_unprepare(spi->clk);
--
--	return ret;
- }
- 
- static int mchp_corespi_remove(struct platform_device *pdev)
--- 
-2.25.1
+The patch doesn't allow EC to log anything.  It makes AP emit more logs.
 
+On the related note, the commit subject is confusing.  The patch doesn't
+send "host event".  "host event" is a terminology when EC wants to notify
+AP something.  Also, s/cros_ec/cros_ec_lpcs/.
+
+> Changes in v2:
+> - Include cros_ec_resume() return value in dev_info() output.
+> - Guard setting .prepare/.complete with #ifdef CONFIG_PM_SLEEP.
+
+I didn't see concerns in [1] have been addressed.
+
+[1]: https://patchwork.kernel.org/project/chrome-platform/patch/20220701095421.1.I78ded92e416b55de31975686d34b2058d4761c07@changeid/#24920824

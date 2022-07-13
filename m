@@ -2,159 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672235730FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2116557313C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235139AbiGMIZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S235643AbiGMIfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235672AbiGMIYj (ORCPT
+        with ESMTP id S235582AbiGMIfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:24:39 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AC8E9217;
-        Wed, 13 Jul 2022 01:22:20 -0700 (PDT)
-X-UUID: a43b601f061e426a85f8b533d8140218-20220713
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:60600421-3364-45f5-a5f9-953964b8a25a,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:54
-X-CID-INFO: VERSION:1.1.8,REQID:60600421-3364-45f5-a5f9-953964b8a25a,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_HamU,ACTI
-        ON:release,TS:54
-X-CID-META: VersionHash:0f94e32,CLOUDID:850e5dd7-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:1182dfb5da53,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: a43b601f061e426a85f8b533d8140218-20220713
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 253897115; Wed, 13 Jul 2022 16:22:16 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 13 Jul 2022 16:22:15 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 13 Jul 2022 16:22:15 +0800
-Message-ID: <6ba15d8532b726bd1a16cf2956140b2cba5d74f7.camel@mediatek.com>
-Subject: Re: [PATCH v14 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 13 Jul 2022 16:22:15 +0800
-In-Reply-To: <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
-         <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 13 Jul 2022 04:35:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B51DA58D0;
+        Wed, 13 Jul 2022 01:35:37 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 4B64B1FD4C;
+        Wed, 13 Jul 2022 08:35:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657701334;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CcsBBbemJwPnREj8tUcGtqYBeLDK85WV0Rb0buPzp3s=;
+        b=BJ/2pHkXbNnHfTFeBIIZK9+C7zTuLNqlfrU5AON0AgJDEBieZg/cptr5j4lSS/Tth2GZh5
+        uTTDK6JayWctFwZVWdAzcIMoe1cRbOEyqznFtt3Io4SkUf29BmMApL/9YZ4yawoXTVuWCf
+        erYJs5aGcZo5a/6X98xFnRLAQa4ADEA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657701334;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CcsBBbemJwPnREj8tUcGtqYBeLDK85WV0Rb0buPzp3s=;
+        b=29egoYKkhz8DyFsT88GI2fB5xWVcR3WZlWzZxkJDRz32bg0P8E5Vfsut9piqSGhsjFOuvx
+        Z82YwHDwj+9CZZBQ==
+Received: from g78 (unknown [10.163.24.226])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4DBB22C141;
+        Wed, 13 Jul 2022 08:35:33 +0000 (UTC)
+References: <Ysrf1Yc5DaRGN1WE@xsang-OptiPlex-9020> <87wncknkfe.fsf@suse.de>
+ <CABGWkvqF9f4vOYUQeYuaDGT7yuB=8=h=yPpuG04VwicNP=wgMA@mail.gmail.com>
+User-agent: mu4e 1.6.10; emacs 28.1
+From:   Richard Palethorpe <rpalethorpe@suse.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     kernel test robot <oliver.sang@intel.com>, lkp@intel.com,
+        lkp@lists.01.org, Jeroen Hofstee <jhofstee@victronenergy.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-can@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>, ltp@lists.linux.it
+Subject: Re: [LTP] [can] c4e54b063f:
+ BUG:sleeping_function_called_from_invalid_context_at_kernel/workqueue.c
+Date:   Wed, 13 Jul 2022 09:23:28 +0100
+Reply-To: rpalethorpe@suse.de
+In-reply-to: <CABGWkvqF9f4vOYUQeYuaDGT7yuB=8=h=yPpuG04VwicNP=wgMA@mail.gmail.com>
+Message-ID: <87v8s1l8a3.fsf@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+Hello,
 
-On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
+Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
 
-[snip]
+> Hello,
+>
+> On Mon, Jul 11, 2022 at 10:05 AM Richard Palethorpe <rpalethorpe@suse.de> wrote:
+>>
+>> Hello,
+>>
+>> kernel test robot <oliver.sang@intel.com> writes:
+>>
+>> > Greeting,
+>> >
+>> > FYI, we noticed the following commit (built with gcc-11):
+>> >
+>> > commit: c4e54b063f42f20a6b3ad1ffa61c574e631e0216 ("can: slcan: use CAN network device driver API")
+>> > https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git
+>> > master
+>>
+>> I guess the problem is this may sleep with soft irqs disabled.
+>>
+>> static int slc_close(struct net_device *dev)
+>> {
+>>         struct slcan *sl = netdev_priv(dev);
+>>         int err;
+>>
+>>         spin_lock_bh(&sl->lock); <-- takes lock
+>>         if (sl->tty) {
+>>                 if (sl->can.bittiming.bitrate &&
+>>                     sl->can.bittiming.bitrate != CAN_BITRATE_UNKNOWN) {
+>>                         spin_unlock_bh(&sl->lock);
+>>                         err = slcan_transmit_cmd(sl, "C\r");
+>>                         spin_lock_bh(&sl->lock);
+>>                         if (err)
+>>                                 netdev_warn(dev,
+>>                                             "failed to send close command 'C\\r'\n");
+>>                 }
+>>
+>>                 /* TTY discipline is running. */
+>>                 clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
+>>         }
+>>         netif_stop_queue(dev);
+>>         close_candev(dev); <-- calls cancel_delayed_work_sync()
+>>
+>
+> I would try (since I am unable to replicate the test) to move the
+> spin_unlock_bh()
+> before calling close_candev().
 
-> +
-> +static int mtk_dp_bridge_atomic_check(struct drm_bridge *bridge,
-> +				      struct drm_bridge_state
-> *bridge_state,
-> +				      struct drm_crtc_state
-> *crtc_state,
-> +				      struct drm_connector_state
-> *conn_state)
-> +{
-> +	struct mtk_dp *mtk_dp = mtk_dp_from_bridge(bridge);
-> +	struct drm_crtc *crtc = conn_state->crtc;
-> +	unsigned int input_bus_format;
-> +
-> +	input_bus_format = bridge_state->input_bus_cfg.format;
-> +
-> +	dev_dbg(mtk_dp->dev, "input format 0x%04x, output format
-> 0x%04x\n",
-> +		bridge_state->input_bus_cfg.format,
-> +		 bridge_state->output_bus_cfg.format);
-> +
-> +	if (input_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
-> +		mtk_dp->info.format = DP_PIXELFORMAT_YUV422;
-> +	else
-> +		mtk_dp->info.format = DP_PIXELFORMAT_RGB;
-> +
-> +	if (!crtc) {
-> +		drm_err(mtk_dp->drm_dev,
-> +			"Can't enable bridge as connector state doesn't
-> have a crtc\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	mtk_dp_parse_drm_mode_timings(mtk_dp, &crtc_state-
-> >adjusted_mode);
-> +	if (mtk_dp_parse_capabilities(mtk_dp)) {
+I haven't tried, but I think it should replicate every time with
+lockdep/lock debugging enabled.
 
-mtk_dp_bridge_atomic_enable() would call mtk_dp_parse_capabilities(),
-so this is redundant.
+> Can the patch be sent now or do I have to wait until the code is in
+> mainline?
 
-Regards,
-CK
+IMO it *has* to be fixed before going into mainline :-p. I can't comment on
+the correctness of the proposed fix though.
 
-> +		drm_err(mtk_dp->drm_dev,
-> +			"Can't enable bridge as nothing is plugged
-> in\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-
+-- 
+Thank you,
+Richard.

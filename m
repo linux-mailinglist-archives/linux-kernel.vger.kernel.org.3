@@ -2,183 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8273B572AB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A11572ABA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbiGMBS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 21:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
+        id S232834AbiGMBVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 21:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiGMBS5 (ORCPT
+        with ESMTP id S229877AbiGMBVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 21:18:57 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498802251A;
-        Tue, 12 Jul 2022 18:18:56 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso1105164pjk.3;
-        Tue, 12 Jul 2022 18:18:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=i4p6sm+Eaw9H7Av5dxRsvpT90Zq1tawHBOllyyWvACc=;
-        b=OLRPCA998W2mo1p8Be6KjHk7nFx2CLbdGrEeS0v29zc77Y1qCAjdoEZgP2/WhRwCzJ
-         KTwIFCXaJ4HSojneMaX2p9Agmu70nr1IdUWo7SGn5cfKEaDJMa6jP/Qj53GVCH7Ofiry
-         NXsdsAGTogVQzlCX7YxhxAoWhsXR27znvdS3qoDF0Lc010cUX3/RQUqRlpTbBTd535qb
-         jnccZRO9MdwdQE4CL6ypDJn+hUTUGuy9Z1mUVtINPzdg1Ks7j4pDaMaYg9RowIu+NLOs
-         fs2YESYSZB6YT23o0tPkakwwc6xbK7MYY/MHmkm7IuokJDQBxLEDGFH8cCykymnJOoD4
-         m5Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i4p6sm+Eaw9H7Av5dxRsvpT90Zq1tawHBOllyyWvACc=;
-        b=fAgQFVxfKaLqZkem5WHRnoFx01JdwRfUN4B1ineEKv8eTJIo5cxMgLwcThBPm1r+ig
-         LV0I60zTVLCrO9G0bdHhqMu2SVLcZdIKJbe7Xah9e4uBAF8gtFmmaJfvHcGZQjh5dkEg
-         EbtdE75hdNvJUcR93XEF/B4iEffCbqXIpvt9HM31G6TLdIS9DPkEw6efVBe8jRVD/dFf
-         MAYIBRZArqKVl2sZFibQPWSkONHEkjsbyS4ox5HBU8D6RgoJ0+yjo3xqsNQoZgs8I1uG
-         OZS8CEUqMuX0pI0FprSLTOKTW8WgEAr8PTAJNRhE7zp10iUgQP5zIUah2o4zmSyZ/YbA
-         Y2xA==
-X-Gm-Message-State: AJIora87DCaEkd3QgaokbGoPK76XuUonEGC47+QnoLB+gZcxZYCHkgN2
-        xGVerzBMmZxrHQZt5HH9v24=
-X-Google-Smtp-Source: AGRyM1s8e7UcOBYXjxFH2HF0arrPOwvEfqutFDCXqptOH9tFr1rcvXYFHeqFmW2NSPgrDSVLE3th6w==
-X-Received: by 2002:a17:90b:4a04:b0:1ef:c318:ef9c with SMTP id kk4-20020a17090b4a0400b001efc318ef9cmr7313697pjb.67.1657675135536;
-        Tue, 12 Jul 2022 18:18:55 -0700 (PDT)
-Received: from macbook-pro-3.dhcp.thefacebook.com ([2620:10d:c090:400::5:580c])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170902c3c400b0016bf24611e7sm7478169plj.5.2022.07.12.18.18.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 18:18:55 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 18:18:51 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     James Hilliard <james.hilliard1@gmail.com>
-Cc:     "Jose E. Marchesi" <jose.marchesi@oracle.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v2] bpf/scripts: Generate GCC compatible helpers
-Message-ID: <20220713011851.4a2tnqhdd5f5iwak@macbook-pro-3.dhcp.thefacebook.com>
-References: <20220706172814.169274-1-james.hilliard1@gmail.com>
- <a0bddf0b-e8c4-46ce-b7c6-a22809af1677@fb.com>
- <CADvTj4ovwExtM-bWUpJELy-OqsT=J9stmqbAXto8ds2n+G8mfw@mail.gmail.com>
- <CAEf4BzYwRyXG1zE5BK1ZXmxLh+ZPU0=yQhNhpqr0JmfNA30tdQ@mail.gmail.com>
- <87v8s260j1.fsf@oracle.com>
- <CAADnVQLQGHoj_gCOvdFFw2pRxgMubPSp+bRpFeCSa5zvcK2qRQ@mail.gmail.com>
- <CADvTj4qqxckZmxvL=97e-2W5M4DgCCMDV8RCFDg23+cY2URjTA@mail.gmail.com>
+        Tue, 12 Jul 2022 21:21:43 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06D657260
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657675302; x=1689211302;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kmvMLS/LL4cqnso4j5W94X1i3xyjPavi0Ddm8lsIVCU=;
+  b=beh0CLKTPVamqTm8H6JqjW/09hGucMz7pJ+NqJzEoATy6t/iPUCnLbIW
+   bU4j25b6612eGR4gZ9jw0cBhHxrDZ5bBcdJTeQHrmf9Oo8iiRtZ6D7hGU
+   FSmAS1GR1o0i6e6WnVDTVRPqMMcs0HR5/i2TtAQMtCIakAJD+6AfXhMI7
+   Rjg09m3bhPvBOisegyih5YodgwM3cDvNJnZZ2ry5UXPR8QAqv7mWB/gRx
+   4aaz22gmdnh7cO17pRgUORRpUFvs+BcnxHDsI4qJnNz5yOynrWl5VQzPr
+   HxN7jxQlv5GbIClc3zLEn1Ja92+6mz3EAhUcmA2mq4GQ6ZK4rrNUNaXaq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="282634062"
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="282634062"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 18:21:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="545646122"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 12 Jul 2022 18:21:40 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBR4N-0002up-St;
+        Wed, 13 Jul 2022 01:21:39 +0000
+Date:   Wed, 13 Jul 2022 09:21:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Raphael-Xu <13691752556@139.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [ammarfaizi2-block:broonie/sound/for-next 368/430]
+ sound/soc/codecs/tas2780.c:160:14: sparse: sparse: restricted
+ snd_pcm_format_t degrades to integer
+Message-ID: <202207130922.q9gFKYnC-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CADvTj4qqxckZmxvL=97e-2W5M4DgCCMDV8RCFDg23+cY2URjTA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 07:10:27PM -0600, James Hilliard wrote:
-> On Tue, Jul 12, 2022 at 10:48 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Tue, Jul 12, 2022 at 4:20 AM Jose E. Marchesi
-> > <jose.marchesi@oracle.com> wrote:
-> > >
-> > >
-> > > > CC Quentin as well
-> > > >
-> > > > On Mon, Jul 11, 2022 at 5:11 PM James Hilliard
-> > > > <james.hilliard1@gmail.com> wrote:
-> > > >>
-> > > >> On Mon, Jul 11, 2022 at 5:36 PM Yonghong Song <yhs@fb.com> wrote:
-> > > >> >
-> > > >> >
-> > > >> >
-> > > >> > On 7/6/22 10:28 AM, James Hilliard wrote:
-> > > >> > > The current bpf_helper_defs.h helpers are llvm specific and don't work
-> > > >> > > correctly with gcc.
-> > > >> > >
-> > > >> > > GCC appears to required kernel helper funcs to have the following
-> > > >> > > attribute set: __attribute__((kernel_helper(NUM)))
-> > > >> > >
-> > > >> > > Generate gcc compatible headers based on the format in bpf-helpers.h.
-> > > >> > >
-> > > >> > > This adds conditional blocks for GCC while leaving clang codepaths
-> > > >> > > unchanged, for example:
-> > > >> > >       #if __GNUC__ && !__clang__
-> > > >> > >       void *bpf_map_lookup_elem(void *map, const void *key)
-> > > >> > > __attribute__((kernel_helper(1)));
-> > > >> > >       #else
-> > > >> > >       static void *(*bpf_map_lookup_elem)(void *map, const void *key) = (void *) 1;
-> > > >> > >       #endif
-> > > >> >
-> > > >> > It does look like that gcc kernel_helper attribute is better than
-> > > >> > '(void *) 1' style. The original clang uses '(void *) 1' style is
-> > > >> > just for simplicity.
-> > > >>
-> > > >> Isn't the original style going to be needed for backwards compatibility with
-> > > >> older clang versions for a while?
-> > > >
-> > > > I'm curious, is there any added benefit to having this special
-> > > > kernel_helper attribute vs what we did in Clang for a long time?
-> > > > Did GCC do it just to be different and require workarounds like this
-> > > > or there was some technical benefit to this?
-> > >
-> > > We did it that way so we could make trouble and piss you off.
-> > >
-> > > Nah :)
-> > >
-> > > We did it that way because technically speaking the clang construction
-> > > works relying on particular optimizations to happen to get correct
-> > > compiled programs, which is not guaranteed to happen and _may_ break in
-> > > the future.
-> > >
-> > > In fact, if you compile a call to such a function prototype with clang
-> > > with -O0 the compiler will try to load the function's address in a
-> > > register and then emit an invalid BPF instruction:
-> > >
-> > >   28:   8d 00 00 00 03 00 00 00         *unknown*
-> > >
-> > > On the other hand the kernel_helper attribute is bullet-proof: will work
-> > > with any optimization level, with any version of the compiler, and in
-> > > our opinion it is also more readable, more tidy and more correct.
-> > >
-> > > Note I'm not saying what you do in clang is not reasonable; it may be,
-> > > obviously it works well enough for you in practice.  Only that we have
-> > > good reasons for doing it differently in GCC.
-> >
-> > Not questioning the validity of the reasons, but they created
-> > the unnecessary difference between compilers.
-> 
-> Sounds to me like clang is relying on an unreliable hack that may
-> be difficult to implement in GCC, so let's see what's the best option
-> moving forwards in terms of a migration path for both GCC and clang.
+tree:   https://github.com/ammarfaizi2/linux-block broonie/sound/for-next
+head:   f1416233aa125b29375bc2980e225e77b11d79f4
+commit: eae9f9ce181be4f47dcba1ee93185b71cac3f312 [368/430] ASoC: add tas2780 driver
+config: arm-randconfig-s031-20220712 (https://download.01.org/0day-ci/archive/20220713/202207130922.q9gFKYnC-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/eae9f9ce181be4f47dcba1ee93185b71cac3f312
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block broonie/sound/for-next
+        git checkout eae9f9ce181be4f47dcba1ee93185b71cac3f312
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/
 
-The following is a valid C code:
-static long (*foo) (void) = (void *) 1234;
-foo();
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-and GCC has to generate correct assembly assuming it runs at -O1 or higher.
-There is no indirect call insn defined in BPF ISA yet,
-so the -O0 behavior is undefined.
 
-> Or we can just feature detect kernel_helper and leave the (void *)1 style
-> fallback in place until we drop support for clang variants that don't support
-> kernel_helper. This would provide GCC compatibility and a better migration
-> path for clang as well as clang will then automatically use the new variant
-> whenever support for kernel_helper is introduced.
+sparse warnings: (new ones prefixed by >>)
+>> sound/soc/codecs/tas2780.c:160:14: sparse: sparse: restricted snd_pcm_format_t degrades to integer
+   sound/soc/codecs/tas2780.c:167:14: sparse: sparse: restricted snd_pcm_format_t degrades to integer
+   sound/soc/codecs/tas2780.c:174:14: sparse: sparse: restricted snd_pcm_format_t degrades to integer
+>> sound/soc/codecs/tas2780.c:288:58: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int bitwidth @@     got restricted snd_pcm_format_t @@
+   sound/soc/codecs/tas2780.c:288:58: sparse:     expected int bitwidth
+   sound/soc/codecs/tas2780.c:288:58: sparse:     got restricted snd_pcm_format_t
 
-Support for valid C code will not be dropped from clang.
+vim +160 sound/soc/codecs/tas2780.c
+
+   150	
+   151	static int tas2780_set_bitwidth(struct tas2780_priv *tas2780, int bitwidth)
+   152	{
+   153		struct snd_soc_component *component = tas2780->component;
+   154		int sense_en;
+   155		int val;
+   156		int ret;
+   157		int slot_size;
+   158	
+   159		switch (bitwidth) {
+ > 160		case SNDRV_PCM_FORMAT_S16_LE:
+   161			ret = snd_soc_component_update_bits(component,
+   162				TAS2780_TDM_CFG2,
+   163				TAS2780_TDM_CFG2_RXW_MASK,
+   164				TAS2780_TDM_CFG2_RXW_16BITS);
+   165			slot_size = TAS2780_TDM_CFG2_RXS_16BITS;
+   166			break;
+   167		case SNDRV_PCM_FORMAT_S24_LE:
+   168			ret = snd_soc_component_update_bits(component,
+   169				TAS2780_TDM_CFG2,
+   170				TAS2780_TDM_CFG2_RXW_MASK,
+   171				TAS2780_TDM_CFG2_RXW_24BITS);
+   172			slot_size = TAS2780_TDM_CFG2_RXS_24BITS;
+   173			break;
+   174		case SNDRV_PCM_FORMAT_S32_LE:
+   175			ret = snd_soc_component_update_bits(component,
+   176				TAS2780_TDM_CFG2,
+   177				TAS2780_TDM_CFG2_RXW_MASK,
+   178				TAS2780_TDM_CFG2_RXW_32BITS);
+   179			slot_size = TAS2780_TDM_CFG2_RXS_32BITS;
+   180			break;
+   181	
+   182		default:
+   183			ret = -EINVAL;
+   184		}
+   185	
+   186		if (ret < 0) {
+   187			dev_err(tas2780->dev, "%s:errCode:0x%x set bitwidth error\n",
+   188				__func__, ret);
+   189			goto err;
+   190		}
+   191	
+   192		ret = snd_soc_component_update_bits(component, TAS2780_TDM_CFG2,
+   193			TAS2780_TDM_CFG2_RXS_MASK, slot_size);
+   194		if (ret < 0) {
+   195			dev_err(tas2780->dev,
+   196				"%s:errCode:0x%x set RX slot size error\n",
+   197				__func__, ret);
+   198			goto err;
+   199		}
+   200	
+   201		val = snd_soc_component_read(tas2780->component, TAS2780_PWR_CTRL);
+   202		if (val < 0) {
+   203			dev_err(tas2780->dev, "%s:errCode:0x%x read PWR_CTRL error\n",
+   204				__func__, val);
+   205			ret = val;
+   206			goto err;
+   207		}
+   208	
+   209		if (val & (1 << TAS2780_VSENSE_POWER_EN))
+   210			sense_en = 0;
+   211		else
+   212			sense_en = TAS2780_TDM_CFG5_VSNS_ENABLE;
+   213	
+   214		ret = snd_soc_component_update_bits(tas2780->component,
+   215			TAS2780_TDM_CFG5, TAS2780_TDM_CFG5_VSNS_ENABLE, sense_en);
+   216		if (ret < 0) {
+   217			dev_err(tas2780->dev, "%s:errCode:0x%x enable vSNS error\n",
+   218				__func__, ret);
+   219			goto err;
+   220		}
+   221	
+   222		if (val & (1 << TAS2780_ISENSE_POWER_EN))
+   223			sense_en = 0;
+   224		else
+   225			sense_en = TAS2780_TDM_CFG6_ISNS_ENABLE;
+   226	
+   227		ret = snd_soc_component_update_bits(tas2780->component,
+   228			TAS2780_TDM_CFG6, TAS2780_TDM_CFG6_ISNS_ENABLE, sense_en);
+   229		if (ret < 0) {
+   230			dev_err(tas2780->dev, "%s:errCode:0x%x enable iSNS error\n",
+   231				__func__, ret);
+   232			goto err;
+   233		}
+   234		ret = 0;
+   235	err:
+   236		return ret;
+   237	}
+   238	
+   239	static int tas2780_set_samplerate(
+   240		struct tas2780_priv *tas2780, int samplerate)
+   241	{
+   242		struct snd_soc_component *component = tas2780->component;
+   243		int ramp_rate_val;
+   244		int ret;
+   245	
+   246		switch (samplerate) {
+   247		case 48000:
+   248			ramp_rate_val = TAS2780_TDM_CFG0_SMP_48KHZ |
+   249					TAS2780_TDM_CFG0_44_1_48KHZ;
+   250			break;
+   251		case 44100:
+   252			ramp_rate_val = TAS2780_TDM_CFG0_SMP_44_1KHZ |
+   253					TAS2780_TDM_CFG0_44_1_48KHZ;
+   254			break;
+   255		case 96000:
+   256			ramp_rate_val = TAS2780_TDM_CFG0_SMP_48KHZ |
+   257					TAS2780_TDM_CFG0_88_2_96KHZ;
+   258			break;
+   259		case 88200:
+   260			ramp_rate_val = TAS2780_TDM_CFG0_SMP_44_1KHZ |
+   261					TAS2780_TDM_CFG0_88_2_96KHZ;
+   262			break;
+   263		default:
+   264			return -EINVAL;
+   265		}
+   266		ret = snd_soc_component_update_bits(component, TAS2780_TDM_CFG0,
+   267			TAS2780_TDM_CFG0_SMP_MASK | TAS2780_TDM_CFG0_MASK,
+   268			ramp_rate_val);
+   269		if (ret < 0) {
+   270			dev_err(tas2780->dev,
+   271				"%s:errCode:0x%x Failed to set ramp_rate_val\n",
+   272				__func__, ret);
+   273			goto err;
+   274		}
+   275		ret = 0;
+   276	err:
+   277		return ret;
+   278	}
+   279	
+   280	static int tas2780_hw_params(struct snd_pcm_substream *substream,
+   281		struct snd_pcm_hw_params *params, struct snd_soc_dai *dai)
+   282	{
+   283		struct snd_soc_component *component = dai->component;
+   284		struct tas2780_priv *tas2780 =
+   285			snd_soc_component_get_drvdata(component);
+   286		int ret;
+   287	
+ > 288		ret = tas2780_set_bitwidth(tas2780, params_format(params));
+   289		if (ret < 0)
+   290			return ret;
+   291	
+   292		return tas2780_set_samplerate(tas2780, params_rate(params));
+   293	}
+   294	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

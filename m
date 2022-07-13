@@ -2,91 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A81573E77
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9A3573E7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237240AbiGMVC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 17:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
+        id S236814AbiGMVDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 17:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiGMVC4 (ORCPT
+        with ESMTP id S237258AbiGMVDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 17:02:56 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E212732B97
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:02:55 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-10bd4812c29so58152fac.11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:02:55 -0700 (PDT)
+        Wed, 13 Jul 2022 17:03:07 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0346132D9C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:03:06 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id l22-20020a05600c4f1600b003a2e10c8cdeso2616988wmq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:03:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IK7HzOOjB/YRFSR7VtNB/n1Tcb53AZBNpdOAwR1E0eE=;
-        b=n/06Hkl30Gvy7TKjCGQan1GIKtORgd1KXX1HcjZ6llewGOvbkjS1MGOvilFTZh3kMO
-         RAQ2vRNRynCmaKT5+s9DdytQf0ZbI6uJ+Za7Vev1VqOoemL9A/RlV1TsvqX4b42ncu+0
-         pGUaxcb2ALQS3cy4RfL3kI77J0P+DErzEe9sSs1BMEPeakBV+UCg8crfcrpLqKd7X+tl
-         0AUmmaimfftnv2UxndJVwT3WFCcE1rufdCYHYPwaWZdM8C9C85kHW6WigKZNx4wuc/Zx
-         7yld8N25N9FQ5fC+o8NmItuSxHjNR8/b9bdK05x8Chmwdz77yOc1VnIzhoaN0Z2+p558
-         ngSw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3RE8IpT0EbD+zikgdgGwj/YsTGC42mNfwGCljsqFQGQ=;
+        b=p8UcNprSsjajY/y467Cc7+NJUUdV0ERBggqcph9FOEfVNFHl4H+H8vxqXR3v1xZzjt
+         pK6W16sAreb75A9vaznnnvu93IANTnp33ZNAA1zwX6O3cCRKLMgvLMOdDCftMz+OH9uM
+         ehflCksWAbFZcQRfcR6Trv/6C0YyOHxLhJx2qD30/txfFtNzpx0jiaLOz1scyc1tTPke
+         seTQB5v/7o3XF6f8wmqMXxEjyUFEV3+KwiTAM+vNn5TsacfEoQCFmG0BcoWpH/NqfaN9
+         BFIKF1O3xtchPogBDLwXk2UswASkuQzyDgh8ZP37XR183L/VvOzkEz6ompKwojJw2H0j
+         0r/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IK7HzOOjB/YRFSR7VtNB/n1Tcb53AZBNpdOAwR1E0eE=;
-        b=A3PVq/Ol00TCWGGsYdhUcPBp2KkpDDQnKoJ0hq+2Q8+LXdHRg3DqbptyvF0oL9bYo+
-         45aYaFLLt3XokzGDxvk6mz8q5fIGi0UkVDkSN0waHD6rhkr+jNi0Ojed//RwV3bh84z4
-         EQCLlC3yHWVJ1RG4efMDkIM+PMjvbrId+GcnI9bylEZX6Th17rn6MAudCZj8SoHK51Zl
-         GPD5D2+PQRTkIR92eB1PMm0Q1zujmjfL7PcQRDJpk5Hxm78nox+gcOzH+K0BTPqteezx
-         u3/ttbIIa0/qM0dEtAMYY7HG+4WsRqdklXyudBYGxsTniYIllT86knyoYIiGI+QOWnqN
-         wMiQ==
-X-Gm-Message-State: AJIora8699vXlWsRn/X3OECoft/jynDafUADrwbmXdXvTKYHa197NYLV
-        pfexeQfdbecUHXJbyYVVsaStQw==
-X-Google-Smtp-Source: AGRyM1uAB82b7HJZhMHsI15ICK/mZgZgMu+xab6E2swRNoGW92ufBzJOT+w8X4NyhfNKiAdV3gkmfw==
-X-Received: by 2002:a05:6870:558b:b0:101:d77c:3369 with SMTP id n11-20020a056870558b00b00101d77c3369mr2932757oao.213.1657746175273;
-        Wed, 13 Jul 2022 14:02:55 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id r13-20020a056870438d00b0010c33621645sm6413069oah.55.2022.07.13.14.02.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 14:02:54 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 16:02:52 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     agross@kernel.org, konrad.dybcio@somainline.org, amitk@kernel.org,
-        thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/5] drivers: thermal: tsens: allow configuring min
- and max trips
-Message-ID: <Ys8y/HRtdgD1f3uH@builder.lan>
-References: <20220708132930.595897-1-robimarko@gmail.com>
- <20220708132930.595897-3-robimarko@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3RE8IpT0EbD+zikgdgGwj/YsTGC42mNfwGCljsqFQGQ=;
+        b=Pv1GrTG1WryRET1G8i25RG+vBVaOklszxAVECgBDTvSA8xprW/3q+CR3GfzwpxR30J
+         jc34ZbXebhGeyTY8da1JEqf6qddM7UIsTO5BjTIhur3luhtCAkH92y43vOXe2xgdH+LK
+         SF4+b5yYEwODQVrLhPEwJrTyEcSpFx18IzIeZDOwmEVTLyRQz/oxEtLYfRWFu38hmMlR
+         AqnlGaLyQKjrTLxhcOvIwlFDzFBgWeCwcN/PMK22b/y2PFFmn6DzAyNoiGJXyUGew6Ds
+         unYd5lLh9gI8Gl25Y7/5CaH4YFRSJ63WIic2J8X4o8q+tRYqrN3wWVhwJT28zhxWLZqp
+         t/BA==
+X-Gm-Message-State: AJIora8755ro+cmfhQP1noeAfBXFRc0Ufa4LouBfjOolePyXq82kWhLw
+        oZIKkDcsaoaWUbnggMWPi7AjGkqXdWMm8qfqsZS1
+X-Google-Smtp-Source: AGRyM1vejqT/tSdioS1eQS86Ms9UekbxWVJYvavZtfgP/tqiiD3MrMqFpuWjFXK6vEArUHpSe2aruoP8qUv8kHn0unM=
+X-Received: by 2002:a7b:cd0c:0:b0:3a2:e864:98b8 with SMTP id
+ f12-20020a7bcd0c000000b003a2e86498b8mr11477902wmj.200.1657746184461; Wed, 13
+ Jul 2022 14:03:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220708132930.595897-3-robimarko@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Wed, 13 Jul 2022 14:02:53 -0700
+Message-ID: <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
+Subject: Re: [PATCH 0/9] selftests: timers: fixes and improvements
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 08 Jul 08:29 CDT 2022, Robert Marko wrote:
+On Wed, Jul 13, 2022 at 1:46 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> The timer selftests are quite useful for me when enabling timers on new
+> SoCs, e.g. like now with the CMT timer on a Renesas R-Car S4-8. During
+> development, I needed these fixes and additions to make full use of
+> the tests. I think they make all sense upstream, so here they are.
+>
+> Patches are based on v5.19-rc1. Looking forward to comments.
+>
 
-> IPQ8074 and IPQ6018 dont support negative trip temperatures and support
-> up to 204 degrees C as the max trip temperature.
-> 
-> So, instead of always setting the -40 as min and 120 degrees C as max
-> allow it to be configured as part of the features.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
+Hey!
+  Thanks so much I really appreciate the effort to make and send out
+these cleanups. From the initial skim it all looks great (though, some
+are slightly embarrassing :), and I think some of the extra config
+args will be quite nice for others to use as well.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Acked-by: John Stultz <jstultz@google.com>
 
-Regards,
-Bjorn
+Thanks so much for submitting these.
+-john

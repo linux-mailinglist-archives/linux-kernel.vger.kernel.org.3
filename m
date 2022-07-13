@@ -2,68 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42C9572E25
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA77E572E27
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbiGMG3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 02:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S232913AbiGMGaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 02:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiGMG3l (ORCPT
+        with ESMTP id S229487AbiGMGaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 02:29:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123F127B03;
-        Tue, 12 Jul 2022 23:29:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 13 Jul 2022 02:30:19 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B57232BB0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:30:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B87F9B81A5E;
-        Wed, 13 Jul 2022 06:29:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B5D9C34114;
-        Wed, 13 Jul 2022 06:29:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657693777;
-        bh=ab1/DOuvFaeHqxdg5cBmKxgsrk5XBOsxMr01sjJKmY0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oyfznCEbqnfpGih3owDDktOXmpIZCzRYM+qF6sGOW6sin62dKBNjkqwF3k1l19spO
-         2wyOssQ1GZB1/us/efbFTt85UDKfYFfT6KlWa2mv+/hyB7syVWCspHGBzblFEsus5I
-         5dE3DzhGssL3lsnWAwt6qz60kO8XuKuOCf2NphAOaHonxPf5bLTThaYF2ORuOMOmgu
-         8GIjNzibi5pWAN6ceqfSB857tOABhbpBP1P1Yx/Q6lzRBY+oOTfPqsR6/8jzUWTXXI
-         NpyWtaA7RnX2U0zl9WSx6XswdykDPr+RSpAu24rd1/XQ0fNCw6xCxLJuZIyBtEzhzL
-         lieTZouGk5Oww==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oBVsS-00035V-Da; Wed, 13 Jul 2022 08:29:40 +0200
-Date:   Wed, 13 Jul 2022 08:29:40 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Zhang Jiaming <jiaming@nfschina.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-        renyu@nfschina.com
-Subject: Re: [PATCH] USB: serial: io_edgeport: Fix spelling mistake
-Message-ID: <Ys5mVIsu8O5Beh9a@hovoldconsulting.com>
-References: <20220629064153.23476-1-jiaming@nfschina.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629064153.23476-1-jiaming@nfschina.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 284261FD05;
+        Wed, 13 Jul 2022 06:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657693817; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pQ3H8I8VayUQxqAMQOcRZMloSSDhl1PNudxqD/P/wPY=;
+        b=l7gDloFi+7E8aMrBdMD5n7AiS8Rd7kRxPEXYRVjqKKxfKB4uJBGPIMU6IsPBXstiC/gNsz
+        c9cDxbtCOTlybNCxEPel8cWL4jqzuckDDtyPIaaEZKWFFA2avhgxKMfWO4ZVVXLa9qqauC
+        PBOGVlFi8u/M4zQKiGF00Z2lfc3wWVU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657693817;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pQ3H8I8VayUQxqAMQOcRZMloSSDhl1PNudxqD/P/wPY=;
+        b=Rt5u5Bi8J+vVqkfTgWwF3g4+XwsxyL2RgXGoM1p14QVtp04iWCq5WusSddq/te2s6Mor07
+        dAvieLr1xteSiKBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DEA2813754;
+        Wed, 13 Jul 2022 06:30:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bnGFNXhmzmJ7BwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 13 Jul 2022 06:30:16 +0000
+Date:   Wed, 13 Jul 2022 08:30:16 +0200
+Message-ID: <87tu7lpls7.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jeremy Szu <jeremy.szu@canonical.com>
+Cc:     tiwai@suse.com, Jaroslav Kysela <perex@perex.cz>,
+        Tim Crawford <tcrawford@system76.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Andy Chi <andy.chi@canonical.com>,
+        Yong Wu <yong.wu@mediatek.com>,
+        alsa-devel@alsa-project.org (moderated list:SOUND),
+        linux-kernel@vger.kernel.org (open list)
+Subject: Re: [PATCH] ALSA: hda/realtek: fix mute/micmute LEDs for HP machines
+In-Reply-To: <20220713022706.22892-1-jeremy.szu@canonical.com>
+References: <20220713022706.22892-1-jeremy.szu@canonical.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 02:41:53PM +0800, Zhang Jiaming wrote:
-> Change 'paramater' to 'parameter'.
-> Change 'timedout' to 'timeout'.
+On Wed, 13 Jul 2022 04:27:04 +0200,
+Jeremy Szu wrote:
 > 
-> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+>  * The HP ProBook 440/450 G9 and EliteBook 640/650 G9 have multiple
+>  motherboard design and they are using different subsystem ID of audio
+>  codec. Add the same quirk for other MBs.
+> 
+> Signed-off-by: Jeremy Szu <jeremy.szu@canonical.com>
 
-Applied, thanks.
+Thanks, applied now.
 
-Johan
+
+Takashi

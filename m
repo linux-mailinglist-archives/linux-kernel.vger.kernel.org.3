@@ -2,49 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048345738C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3CC5738C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235690AbiGMOZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
+        id S236308AbiGMOZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234245AbiGMOZj (ORCPT
+        with ESMTP id S229497AbiGMOZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:25:39 -0400
+        Wed, 13 Jul 2022 10:25:41 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE8333341
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:25:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84FF33341
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:25:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657722339; x=1689258339;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=2Y8BF1Rg345QyJ8e8eE55+o9RRvwy3FhDzVO20P6JmI=;
-  b=NxI4/4qJH8SoAawKMkknSSJu4cXYAQlkLQrdOzIp9WATE4Z/tgc5voI8
-   oQC4TNv4IHvC+nD1u3BHng8YwYtCaUoXhNAj8PuZcQD6yBE1dK/ztn/u5
-   6OyiLs0QQ5hUkZ4cwTPk/LIN9Bj5ETHtdl2Z2xQIl25kfmQV+hTK54wFF
-   W8trJBGM2oUp9YuvMOo1Ywr1t0xaW/fxSEf9rK0zwmMsKEHMDuR2aFfA/
-   Pq55ta+QMJ2Y231vLzwR+OzabeOZ3sDPafPBibjQApjs/9klIv8/puhiz
-   uxgT83n4qs119d6bBhuIpwVePYraKxD8R12nVkUs67YlU8Nn3DmTSSi91
+  t=1657722340; x=1689258340;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=IPnnb0fU/qVJlOwgD1izgy0CaO2aldoMjVq4ZHg4Azw=;
+  b=mqytc9ks9JCBEX5f2+FE1WX11Wjwu3IKHDSNrNv8c8joZGhkwRJxjp7B
+   d8lxex7uc3taQJw6H/OvNeKRqjP2BJuwoTyE1Z923sWq0sXSrmi1dFGUY
+   h86spSK6ths3QjwGg1nqsmGexUE8hvyeBnUXYIxjJDTgpGfGKFxBes4Jk
+   pFD/+Y55I6IvOyxG5dG4VfeRjYEfEP41FEwq0uwRUhvUTfDRR0RYtASiY
+   qIfNUu34afPKx4tQ7EOec4I6dbLy8dyO8Xx9AsIaO/7PA+2I4NvjWNu7n
+   dL3s4QNG+O8W7/q0Cj/YmyK+Bg/Znhc/UKI3IftWFLdwep5D4S1MOotLM
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="285968182"
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="285968186"
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="285968182"
+   d="scan'208";a="285968186"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:25:38 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:25:40 -0700
 X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="570643748"
+   d="scan'208";a="570643753"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:25:37 -0700
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:25:38 -0700
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org
 Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
         pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH 0/3] soundwire: allocate device_number with IDA
-Date:   Wed, 13 Jul 2022 22:25:26 +0800
-Message-Id: <20220713142529.17323-1-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH 1/3] soundwire: bus: rename sdw_ida as sdw_bus_ida
+Date:   Wed, 13 Jul 2022 22:25:27 +0800
+Message-Id: <20220713142529.17323-2-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220713142529.17323-1-yung-chuan.liao@linux.intel.com>
+References: <20220713142529.17323-1-yung-chuan.liao@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -57,23 +59,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device_number is currently allocated in the scope of each bus and does
-not need to be unique at the system level.
-This leads e.g. on Dell devices with three or four Device1 on different
-bus segments. To make the device_number unique at the system level, and
-unified with the HDaudio/iDISP SDI values, this PRs allocates the
-dev_number with an IDA restricted between 4 and 11 (inclusive).
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-Pierre-Louis Bossart (3):
-  soundwire: bus: rename sdw_ida as sdw_bus_ida
-  soundwire: bus: allow device number to be unique at system level
-  soundwire: intel: set dev_num_ida_min
+To avoid confusions with follow-up patches using a IDA mechanism for
+peripheral 'device number' allocation, rename sdw_ida as sdw_bus_ida.
 
- drivers/soundwire/bus.c       | 29 ++++++++++++++++++++---------
- drivers/soundwire/intel.c     |  4 ++++
- include/linux/soundwire/sdw.h |  4 ++++
- 3 files changed, 28 insertions(+), 9 deletions(-)
+Pure rename, no functionality change.
 
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+---
+ drivers/soundwire/bus.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+index 8d4000664fa3..37638c20c804 100644
+--- a/drivers/soundwire/bus.c
++++ b/drivers/soundwire/bus.c
+@@ -11,11 +11,11 @@
+ #include "bus.h"
+ #include "sysfs_local.h"
+ 
+-static DEFINE_IDA(sdw_ida);
++static DEFINE_IDA(sdw_bus_ida);
+ 
+ static int sdw_get_id(struct sdw_bus *bus)
+ {
+-	int rc = ida_alloc(&sdw_ida, GFP_KERNEL);
++	int rc = ida_alloc(&sdw_bus_ida, GFP_KERNEL);
+ 
+ 	if (rc < 0)
+ 		return rc;
+@@ -179,7 +179,7 @@ void sdw_bus_master_delete(struct sdw_bus *bus)
+ 	sdw_master_device_del(bus);
+ 
+ 	sdw_bus_debugfs_exit(bus);
+-	ida_free(&sdw_ida, bus->id);
++	ida_free(&sdw_bus_ida, bus->id);
+ }
+ EXPORT_SYMBOL(sdw_bus_master_delete);
+ 
 -- 
 2.25.1
 

@@ -2,273 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D038573408
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E21573406
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235852AbiGMKWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 06:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        id S235813AbiGMKWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiGMKWk (ORCPT
+        with ESMTP id S230472AbiGMKWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 06:22:40 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE88F6B93;
-        Wed, 13 Jul 2022 03:22:39 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LjYXn1BjJzkWfV;
-        Wed, 13 Jul 2022 18:20:25 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Jul 2022 18:22:37 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.66) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Jul 2022 18:22:37 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <stable@vger.kernel.org>
-CC:     <paulmck@linux.vnet.ibm.com>, <josh@joshtriplett.org>,
-        <rostedt@goodmis.org>, <mathieu.desnoyers@efficios.com>,
-        <jiangshanlai@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <peterz@infradead.org>, <xukuohai@huawei.com>
-Subject: [PATCH 4.19] rcu/tree: Mark functions as notrace
-Date:   Wed, 13 Jul 2022 18:20:09 +0800
-Message-ID: <20220713102009.126339-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 13 Jul 2022 06:22:10 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5CAF6B93
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:22:08 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso2831283pjk.3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:22:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=b5jq6UrVYBVqTLSb/d0xvUYQZH0h9wR5dakglSUgaZ8=;
+        b=g5alBPtl1kiyK40iPkwyzCu6yFxh7PyJi6pFAkN61ulSqzjmelFtm6FtAkcCHes8kr
+         daHxnuWSUSt12V/BhanrKNNmulx6+YXEgoQ2xxvvtaSWTlyhAqPR6mDbWMdWsFmDi9ee
+         XuIhEH2ImnQ3v86iRJJLk+NzMej2G5icsNTuyxklpvTzxh6n6M4zzyAV7ydjNxufDRCy
+         LvuHJu+aK8xB5AoXBTLUf9HBRmBwnglYQ/WMXHBxpWFcetDRVDDFUowrBZYqpRUN46px
+         +h6hZOtJIv43kaBPGAd5+Eq9FCgkOXlmsWJyoU+sj0cvlvJ+Tpg3kalj2gUJLRpiXIUe
+         hkQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=b5jq6UrVYBVqTLSb/d0xvUYQZH0h9wR5dakglSUgaZ8=;
+        b=wU0m6JfI4b1xfvFnF3pjMj7BdGNI6BBv6GcSdGSWvHcwd4SB1oNkOrUwvLekbiO9Bm
+         TDLn9yOSA3UaztPS7ujdIMxUcgcPvrjj8j4z85fJJ8nIwzi8lwSX+sXYMKaUpELUHjbL
+         qek+S6BFS6LA5/GCxNzKO01tyOWBRwT1ezE+zwov8Ou15kn6z2/dUtaBnSZv1RqOJ4yd
+         Tqfmy0MPF1Z1l8K+iOMZR7RtRxSByAQh7o0LveJtAD4KBuqHNnN+qpgS57kqdHEc6XEV
+         /ALeX/CCa93z3ZEOrET/eNUy5C8D0q1HfBcVTCzSSnAKz8kC4w3GMbQG3wIzL9Paaebj
+         6g6w==
+X-Gm-Message-State: AJIora8zZ9ujZaJSAGt9kXxp39tl03HOjOIbii9zOrv2UIrSlNgKugKh
+        2N+WXkBzps32ZY8R2ytEnbk=
+X-Google-Smtp-Source: AGRyM1sPq8ed9TwVbIZY8O2QeLWLmXL4AdxvDg5qyTxSxy5AwpGCuydUo80OlrN8cbqH0AwqqhUH4g==
+X-Received: by 2002:a17:902:e842:b0:16c:5639:eb3e with SMTP id t2-20020a170902e84200b0016c5639eb3emr2846227plg.119.1657707727826;
+        Wed, 13 Jul 2022 03:22:07 -0700 (PDT)
+Received: from ip-172-31-24-42.ap-northeast-1.compute.internal (ec2-35-77-58-189.ap-northeast-1.compute.amazonaws.com. [35.77.58.189])
+        by smtp.gmail.com with ESMTPSA id pi4-20020a17090b1e4400b001df264610c4sm6129791pjb.0.2022.07.13.03.22.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 03:22:06 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 10:22:02 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, iamjoonsoo.kim@lge.com,
+        rientjes@google.com, penberg@kernel.org, cl@gentwo.de,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Feng Tang <feng.tang@intel.com>
+Subject: Re: [PATCH v2 1/3] mm/slub: fix the race between validate_slab and
+ slab_free
+Message-ID: <Ys6cymrtnHNlCDG9@ip-172-31-24-42.ap-northeast-1.compute.internal>
+References: <20220712022807.44113-1-rongwei.wang@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.66]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712022807.44113-1-rongwei.wang@linux.alibaba.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch and problem analysis is based on v4.19 LTS, but v5.4 LTS
-and below seem to be involved.
+On Tue, Jul 12, 2022 at 10:28:05AM +0800, Rongwei Wang wrote:
+> In use cases where allocating and freeing slab frequently, some
+> error messages, such as "Left Redzone overwritten", "First byte
+> 0xbb instead of 0xcc" would be printed when validating slabs.
+> That's because an object has been filled with SLAB_RED_INACTIVE,
+> but has not been added to slab's freelist. And between these
+> two states, the behaviour of validating slab is likely to occur.
+> 
+> Actually, it doesn't mean the slab can not work stably. But, these
+> confusing messages will disturb slab debugging more or less.
+> 
+> Signed-off-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
+> ---
+>  mm/slub.c | 43 +++++++++++++++++++++++++------------------
+>  1 file changed, 25 insertions(+), 18 deletions(-)
+>
 
-Hulk Robot reports a softlockup problem, see following logs:
-  [   41.463870] watchdog: BUG: soft lockup - CPU#0 stuck for 22s!  [ksoftirqd/0:9]
-  [   41.509763] Modules linked in:
-  [   41.512295] CPU: 0 PID: 9 Comm: ksoftirqd/0 Not tainted 4.19.90 #13
-  [   41.516134] Hardware name: linux,dummy-virt (DT)
-  [   41.519182] pstate: 80c00005 (Nzcv daif +PAN +UAO)
-  [   41.522415] pc : perf_trace_buf_alloc+0x138/0x238
-  [   41.525583] lr : perf_trace_buf_alloc+0x138/0x238
-  [   41.528656] sp : ffff8000c137e880
-  [   41.531050] x29: ffff8000c137e880 x28: ffff20000850ced0
-  [   41.534759] x27: 0000000000000000 x26: ffff8000c137e9c0
-  [   41.538456] x25: ffff8000ce5c2ae0 x24: ffff200008358b08
-  [   41.542151] x23: 0000000000000000 x22: ffff2000084a50ac
-  [   41.545834] x21: ffff8000c137e880 x20: 000000000000001c
-  [   41.549516] x19: ffff7dffbfdf88e8 x18: 0000000000000000
-  [   41.553202] x17: 0000000000000000 x16: 0000000000000000
-  [   41.556892] x15: 1ffff00036e07805 x14: 0000000000000000
-  [   41.560592] x13: 0000000000000004 x12: 0000000000000000
-  [   41.564315] x11: 1fffefbff7fbf120 x10: ffff0fbff7fbf120
-  [   41.568003] x9 : dfff200000000000 x8 : ffff7dffbfdf8904
-  [   41.571699] x7 : 0000000000000000 x6 : ffff0fbff7fbf121
-  [   41.575398] x5 : ffff0fbff7fbf121 x4 : ffff0fbff7fbf121
-  [   41.579086] x3 : ffff20000850cdc8 x2 : 0000000000000008
-  [   41.582773] x1 : ffff8000c1376000 x0 : 0000000000000100
-  [   41.586495] Call trace:
-  [   41.588922]  perf_trace_buf_alloc+0x138/0x238
-  [   41.591912]  perf_ftrace_function_call+0x1ac/0x248
-  [   41.595123]  ftrace_ops_no_ops+0x3a4/0x488
-  [   41.597998]  ftrace_graph_call+0x0/0xc
-  [   41.600715]  rcu_dynticks_curr_cpu_in_eqs+0x14/0x70
-  [   41.603962]  rcu_is_watching+0xc/0x20
-  [   41.606635]  ftrace_ops_no_ops+0x240/0x488
-  [   41.609530]  ftrace_graph_call+0x0/0xc
-  [   41.612249]  __read_once_size_nocheck.constprop.0+0x1c/0x38
-  [   41.615905]  unwind_frame+0x140/0x358
-  [   41.618597]  walk_stackframe+0x34/0x60
-  [   41.621359]  __save_stack_trace+0x204/0x3b8
-  [   41.624328]  save_stack_trace+0x2c/0x38
-  [   41.627112]  __kasan_slab_free+0x120/0x228
-  [   41.630018]  kasan_slab_free+0x10/0x18
-  [   41.632752]  kfree+0x84/0x250
-  [   41.635107]  skb_free_head+0x70/0xb0
-  [   41.637772]  skb_release_data+0x3f8/0x730
-  [   41.640626]  skb_release_all+0x50/0x68
-  [   41.643350]  kfree_skb+0x84/0x278
-  [   41.645890]  kfree_skb_list+0x4c/0x78
-  [   41.648595]  __dev_queue_xmit+0x1a4c/0x23a0
-  [   41.651541]  dev_queue_xmit+0x28/0x38
-  [   41.654254]  ip6_finish_output2+0xeb0/0x1630
-  [   41.657261]  ip6_finish_output+0x2d8/0x7f8
-  [   41.660174]  ip6_output+0x19c/0x348
-  [   41.663850]  mld_sendpack+0x560/0x9e0
-  [   41.666564]  mld_ifc_timer_expire+0x484/0x8a8
-  [   41.669624]  call_timer_fn+0x68/0x4b0
-  [   41.672355]  expire_timers+0x168/0x498
-  [   41.675126]  run_timer_softirq+0x230/0x7a8
-  [   41.678052]  __do_softirq+0x2d0/0xba0
-  [   41.680763]  run_ksoftirqd+0x110/0x1a0
-  [   41.683512]  smpboot_thread_fn+0x31c/0x620
-  [   41.686429]  kthread+0x2c8/0x348
-  [   41.688927]  ret_from_fork+0x10/0x18
+This makes the code more complex.
 
-Look into above call stack, there is a recursive call in
-'ftrace_graph_call', and the direct cause of above recursion is that
-'rcu_dynticks_curr_cpu_in_eqs' is traced, see following snippet:
-    __read_once_size_nocheck.constprop.0
-      ftrace_graph_call    <-- 1. first call
-        ......
-          rcu_dynticks_curr_cpu_in_eqs
-            ftrace_graph_call    <-- 2. recursive call here!!!
+A part of me says it may be more pleasant to split implementation
+allocating from caches for debugging. That would make it simpler.
 
-Comparing with mainline kernel, commit ff5c4f5cad33 ("rcu/tree:
-Mark the idle relevant functions noinstr") mark related functions as
-'noinstr' which implies notrace, noinline and sticks things in the
-.noinstr.text section.
-Link: https://lore.kernel.org/all/20200416114706.625340212@infradead.org/
+something like:
 
-But we cannot directly backport that commit, because there seems to be
-many prepatches. Instead, marking the functions as 'notrace' where it is
-'noinstr' in that commit and mark 'rcu_dynticks_curr_cpu_in_eqs' as
-inline look like it resolves the problem.
+__slab_alloc() {
+	if (kmem_cache_debug(s))
+		slab_alloc_debug()
+	else
+		___slab_alloc()
+}
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
----
- kernel/rcu/tree.c        | 22 +++++++++++-----------
- kernel/rcu/tree_plugin.h |  4 ++--
- 2 files changed, 13 insertions(+), 13 deletions(-)
+slab_free() {
+	if (kmem_cache_debug(s))
+		slab_free_debug()
+	else
+		__do_slab_free()
+}
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index f7e89c989df7..01bc3c1f93f9 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -275,7 +275,7 @@ static DEFINE_PER_CPU(struct rcu_dynticks, rcu_dynticks) = {
-  * Record entry into an extended quiescent state.  This is only to be
-  * called when not already in an extended quiescent state.
-  */
--static void rcu_dynticks_eqs_enter(void)
-+static notrace void rcu_dynticks_eqs_enter(void)
- {
- 	struct rcu_dynticks *rdtp = this_cpu_ptr(&rcu_dynticks);
- 	int seq;
-@@ -298,7 +298,7 @@ static void rcu_dynticks_eqs_enter(void)
-  * Record exit from an extended quiescent state.  This is only to be
-  * called from an extended quiescent state.
-  */
--static void rcu_dynticks_eqs_exit(void)
-+static notrace void rcu_dynticks_eqs_exit(void)
- {
- 	struct rcu_dynticks *rdtp = this_cpu_ptr(&rcu_dynticks);
- 	int seq;
-@@ -343,7 +343,7 @@ static void rcu_dynticks_eqs_online(void)
-  *
-  * No ordering, as we are sampling CPU-local information.
-  */
--bool rcu_dynticks_curr_cpu_in_eqs(void)
-+static __always_inline bool rcu_dynticks_curr_cpu_in_eqs(void)
- {
- 	struct rcu_dynticks *rdtp = this_cpu_ptr(&rcu_dynticks);
- 
-@@ -706,7 +706,7 @@ static struct rcu_node *rcu_get_root(struct rcu_state *rsp)
-  * the possibility of usermode upcalls having messed up our count
-  * of interrupt nesting level during the prior busy period.
-  */
--static void rcu_eqs_enter(bool user)
-+static notrace void rcu_eqs_enter(bool user)
- {
- 	struct rcu_state *rsp;
- 	struct rcu_data *rdp;
-@@ -763,7 +763,7 @@ void rcu_idle_enter(void)
-  * If you add or remove a call to rcu_user_enter(), be sure to test with
-  * CONFIG_RCU_EQS_DEBUG=y.
-  */
--void rcu_user_enter(void)
-+notrace void rcu_user_enter(void)
- {
- 	lockdep_assert_irqs_disabled();
- 	rcu_eqs_enter(true);
-@@ -781,7 +781,7 @@ void rcu_user_enter(void)
-  * If you add or remove a call to rcu_nmi_exit(), be sure to test
-  * with CONFIG_RCU_EQS_DEBUG=y.
-  */
--void rcu_nmi_exit(void)
-+notrace void rcu_nmi_exit(void)
- {
- 	struct rcu_dynticks *rdtp = this_cpu_ptr(&rcu_dynticks);
- 
-@@ -829,7 +829,7 @@ void rcu_nmi_exit(void)
-  * If you add or remove a call to rcu_irq_exit(), be sure to test with
-  * CONFIG_RCU_EQS_DEBUG=y.
-  */
--void rcu_irq_exit(void)
-+notrace void rcu_irq_exit(void)
- {
- 	struct rcu_dynticks *rdtp = this_cpu_ptr(&rcu_dynticks);
- 
-@@ -864,7 +864,7 @@ void rcu_irq_exit_irqson(void)
-  * allow for the possibility of usermode upcalls messing up our count of
-  * interrupt nesting level during the busy period that is just now starting.
-  */
--static void rcu_eqs_exit(bool user)
-+static notrace void rcu_eqs_exit(bool user)
- {
- 	struct rcu_dynticks *rdtp;
- 	long oldval;
-@@ -914,7 +914,7 @@ void rcu_idle_exit(void)
-  * If you add or remove a call to rcu_user_exit(), be sure to test with
-  * CONFIG_RCU_EQS_DEBUG=y.
-  */
--void rcu_user_exit(void)
-+void notrace rcu_user_exit(void)
- {
- 	rcu_eqs_exit(1);
- }
-@@ -932,7 +932,7 @@ void rcu_user_exit(void)
-  * If you add or remove a call to rcu_nmi_enter(), be sure to test
-  * with CONFIG_RCU_EQS_DEBUG=y.
-  */
--void rcu_nmi_enter(void)
-+notrace void rcu_nmi_enter(void)
- {
- 	struct rcu_dynticks *rdtp = this_cpu_ptr(&rcu_dynticks);
- 	long incby = 2;
-@@ -982,7 +982,7 @@ void rcu_nmi_enter(void)
-  * If you add or remove a call to rcu_irq_enter(), be sure to test with
-  * CONFIG_RCU_EQS_DEBUG=y.
-  */
--void rcu_irq_enter(void)
-+notrace void rcu_irq_enter(void)
- {
- 	struct rcu_dynticks *rdtp = this_cpu_ptr(&rcu_dynticks);
- 
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index 5f6de49dc78e..568818bef28f 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -2677,7 +2677,7 @@ static void rcu_bind_gp_kthread(void)
- }
- 
- /* Record the current task on dyntick-idle entry. */
--static void rcu_dynticks_task_enter(void)
-+static notrace void rcu_dynticks_task_enter(void)
- {
- #if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL)
- 	WRITE_ONCE(current->rcu_tasks_idle_cpu, smp_processor_id());
-@@ -2685,7 +2685,7 @@ static void rcu_dynticks_task_enter(void)
- }
- 
- /* Record no current task on dyntick-idle exit. */
--static void rcu_dynticks_task_exit(void)
-+static notrace void rcu_dynticks_task_exit(void)
- {
- #if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL)
- 	WRITE_ONCE(current->rcu_tasks_idle_cpu, -1);
--- 
-2.32.0
+See also:
+	https://lore.kernel.org/lkml/faf416b9-f46c-8534-7fb7-557c046a564d@suse.cz/
 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index b1281b8654bd..e950d8df8380 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -1391,18 +1391,16 @@ static noinline int free_debug_processing(
+>  	void *head, void *tail, int bulk_cnt,
+>  	unsigned long addr)
+>  {
+> -	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+>  	void *object = head;
+>  	int cnt = 0;
+> -	unsigned long flags, flags2;
+> +	unsigned long flags;
+>  	int ret = 0;
+>  	depot_stack_handle_t handle = 0;
+>  
+>  	if (s->flags & SLAB_STORE_USER)
+>  		handle = set_track_prepare();
+>  
+> -	spin_lock_irqsave(&n->list_lock, flags);
+> -	slab_lock(slab, &flags2);
+> +	slab_lock(slab, &flags);
+>  
+>  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+>  		if (!check_slab(s, slab))
+> @@ -1435,8 +1433,7 @@ static noinline int free_debug_processing(
+>  		slab_err(s, slab, "Bulk freelist count(%d) invalid(%d)\n",
+>  			 bulk_cnt, cnt);
+>  
+> -	slab_unlock(slab, &flags2);
+> -	spin_unlock_irqrestore(&n->list_lock, flags);
+> +	slab_unlock(slab, &flags);
+>  	if (!ret)
+>  		slab_fix(s, "Object at 0x%p not freed", object);
+>  	return ret;
+> @@ -3330,7 +3327,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>  
+>  {
+>  	void *prior;
+> -	int was_frozen;
+> +	int was_frozen, to_take_off = 0;
+>  	struct slab new;
+>  	unsigned long counters;
+>  	struct kmem_cache_node *n = NULL;
+> @@ -3341,14 +3338,23 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>  	if (kfence_free(head))
+>  		return;
+>  
+> -	if (kmem_cache_debug(s) &&
+> -	    !free_debug_processing(s, slab, head, tail, cnt, addr))
+> -		return;
+> +	n = get_node(s, slab_nid(slab));
+> +	if (kmem_cache_debug(s)) {
+> +		int ret;
+>  
+> -	do {
+> -		if (unlikely(n)) {
+> +		spin_lock_irqsave(&n->list_lock, flags);
+> +		ret = free_debug_processing(s, slab, head, tail, cnt, addr);
+> +		if (!ret) {
+>  			spin_unlock_irqrestore(&n->list_lock, flags);
+> -			n = NULL;
+> +			return;
+> +		}
+> +	}
+> +
+> +	do {
+> +		if (unlikely(to_take_off)) {
+> +			if (!kmem_cache_debug(s))
+> +				spin_unlock_irqrestore(&n->list_lock, flags);
+> +			to_take_off = 0;
+>  		}
+>  		prior = slab->freelist;
+>  		counters = slab->counters;
+> @@ -3369,8 +3375,6 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>  				new.frozen = 1;
+>  
+>  			} else { /* Needs to be taken off a list */
+> -
+> -				n = get_node(s, slab_nid(slab));
+>  				/*
+>  				 * Speculatively acquire the list_lock.
+>  				 * If the cmpxchg does not succeed then we may
+> @@ -3379,8 +3383,10 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>  				 * Otherwise the list_lock will synchronize with
+>  				 * other processors updating the list of slabs.
+>  				 */
+> -				spin_lock_irqsave(&n->list_lock, flags);
+> +				if (!kmem_cache_debug(s))
+> +					spin_lock_irqsave(&n->list_lock, flags);
+>  
+> +				to_take_off = 1;
+>  			}
+>  		}
+>  
+> @@ -3389,8 +3395,9 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>  		head, new.counters,
+>  		"__slab_free"));
+>  
+> -	if (likely(!n)) {
+> -
+> +	if (likely(!to_take_off)) {
+> +		if (kmem_cache_debug(s))
+> +			spin_unlock_irqrestore(&n->list_lock, flags);
+>  		if (likely(was_frozen)) {
+>  			/*
+>  			 * The list lock was not taken therefore no list
+> -- 
+> 2.27.0
+> 

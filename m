@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B88574BF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39103574BFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238792AbiGNL0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S238769AbiGNL07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238813AbiGNL0c (ORCPT
+        with ESMTP id S238636AbiGNL0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:26:32 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F17D5885A;
-        Thu, 14 Jul 2022 04:26:29 -0700 (PDT)
+        Thu, 14 Jul 2022 07:26:33 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD01F58864;
+        Thu, 14 Jul 2022 04:26:32 -0700 (PDT)
 Received: from pyrite.rasen.tech (softbank036240121080.bbtec.net [36.240.121.80])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3AEE8A1D;
-        Thu, 14 Jul 2022 13:26:23 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 39A94B6D;
+        Thu, 14 Jul 2022 13:26:27 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1657797987;
-        bh=ugkBqo38wIBxdX9iPYWMjbhexB/lDWFHBogAakQ2yC0=;
+        s=mail; t=1657797991;
+        bh=ZxTbxnlie+Wlyg8T6x/3ntfPeyG9Qg5LqofNnNl8uLc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NLHuYk25JC2deaK7qP+Y/X0e8k3ILzD6SvW40lxguUvUoUy24l4StKtWTF63t4Cjj
-         X8joqb8EDvGblHyzOr4n/A28LY65R6DOonocOlX4S41nAzvZnsm1bRioX6s0v6IgrV
-         Z448zA2rbvZU6LNTIvZ9XykgRoOKOKp9bso1OXAU=
+        b=Ebq2o46Or9cio8SAL7Ul1WEgfflrHat6S+feUbDD0wjjUU1FiJSpoEoizeggJUbUs
+         S3XRLU09GbP4hcj0iQX3HC/mBctGCvqco/wgp36mVRGMGy8687ynUhzIlnkkqViW/H
+         XzAD/Q34iQWpmx+mgHTt62h59u2ptTRlth7enIo4=
 From:   Paul Elder <paul.elder@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Paul Elder <paul.elder@ideasonboard.com>,
@@ -34,9 +34,9 @@ Cc:     Paul Elder <paul.elder@ideasonboard.com>,
         laurent.pinchart@ideasonboard.com,
         linux-rockchip@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] media: rkisp1: Add YC swap capability
-Date:   Thu, 14 Jul 2022 20:26:02 +0900
-Message-Id: <20220714112603.1117335-2-paul.elder@ideasonboard.com>
+Subject: [PATCH 2/2] media: rkisp1: Add UYVY as an output format
+Date:   Thu, 14 Jul 2022 20:26:03 +0900
+Message-Id: <20220714112603.1117335-3-paul.elder@ideasonboard.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220714112603.1117335-1-paul.elder@ideasonboard.com>
 References: <20220714112603.1117335-1-paul.elder@ideasonboard.com>
@@ -51,119 +51,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ISP version in the i.MX8MP has an MI_OUTPUT_ALIGN_FORMAT register
-that the rk3399 does not have. This register allows swapping bytes,
-which can be used to implement UYVY from YUYV.
-
-Add a feature flag to signify the presence of this feature, and add it
-to the i.MX8MP match data. Also add it as a flag to the format info in
-the list of supported formats by the capture v4l2 devices, and update
-enum_fmt and s_fmt to take it into account.
+Add support for UYVY as an output format. The uv_swap bit in the
+MI_XTD_FORMAT_CTRL register that is used for the NV formats does not
+work for packed YUV formats. Thus, UYVY support is implemented via
+byte-swapping. This method clearly does not work for implementing
+support for YVYU and VYUY.
 
 Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+
 ---
- .../platform/rockchip/rkisp1/rkisp1-capture.c | 27 ++++++++++++++-----
- .../platform/rockchip/rkisp1/rkisp1-common.h  |  1 +
- .../platform/rockchip/rkisp1/rkisp1-dev.c     |  3 ++-
- 3 files changed, 23 insertions(+), 8 deletions(-)
+UYVY for the self path has not been tested because no device supports
+it. The rk3399 has a self path, but does not have the
+MI_OUTPUT_ALIGN_FORMAT register and thus does not support UYVY. The
+i.MX8MP does support UYVY, but does not have a self path.
+---
+ .../platform/rockchip/rkisp1/rkisp1-capture.c | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
 diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-index c494afbc21b4..85fd85fe208c 100644
+index 85fd85fe208c..77496ccef7ec 100644
 --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
 +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-@@ -47,13 +47,15 @@ enum rkisp1_plane {
-  * @fourcc: pixel format
-  * @fmt_type: helper filed for pixel format
-  * @uv_swap: if cb cr swapped, for yuv
-+ * @yc_swap: if y and cb/cr swapped, for yuv
-  * @write_format: defines how YCbCr self picture data is written to memory
-  * @output_format: defines sp output format
-  * @mbus: the mbus code on the src resizer pad that matches the pixel format
-  */
- struct rkisp1_capture_fmt_cfg {
- 	u32 fourcc;
--	u8 uv_swap;
-+	u32 uv_swap : 1;
-+	u32 yc_swap : 1;
- 	u32 write_format;
- 	u32 output_format;
- 	u32 mbus;
-@@ -1150,9 +1152,13 @@ static const struct rkisp1_capture_fmt_cfg *
- rkisp1_find_fmt_cfg(const struct rkisp1_capture *cap, const u32 pixelfmt)
- {
- 	unsigned int i;
-+	bool yc_swap_support =
-+		cap->rkisp1->info->features & RKISP1_FEATURE_MI_OUTPUT_ALIGN;
- 
- 	for (i = 0; i < cap->config->fmt_size; i++) {
--		if (cap->config->fmts[i].fourcc == pixelfmt)
-+		const struct rkisp1_capture_fmt_cfg *fmt = &cap->config->fmts[i];
-+		if (fmt->fourcc == pixelfmt &&
-+		    (!fmt->yc_swap || yc_swap_support))
- 			return &cap->config->fmts[i];
- 	}
- 	return NULL;
-@@ -1223,22 +1229,29 @@ static int rkisp1_enum_fmt_vid_cap_mplane(struct file *file, void *priv,
- 	struct rkisp1_capture *cap = video_drvdata(file);
- 	const struct rkisp1_capture_fmt_cfg *fmt = NULL;
- 	unsigned int i, n = 0;
-+	bool yc_swap_support =
-+		cap->rkisp1->info->features & RKISP1_FEATURE_MI_OUTPUT_ALIGN;
- 
--	if (!f->mbus_code) {
--		if (f->index >= cap->config->fmt_size)
--			return -EINVAL;
-+	if (f->index >= cap->config->fmt_size)
-+		return -EINVAL;
- 
-+	if (!f->mbus_code && yc_swap_support) {
- 		fmt = &cap->config->fmts[f->index];
- 		f->pixelformat = fmt->fourcc;
- 		return 0;
+@@ -97,6 +97,12 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_mp_fmts[] = {
+ 		.uv_swap = 0,
+ 		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
+ 		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
++	}, {
++		.fourcc = V4L2_PIX_FMT_UYVY,
++		.uv_swap = 0,
++		.yc_swap = 1,
++		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
++		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_YUV422P,
+ 		.uv_swap = 0,
+@@ -231,6 +237,13 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
+ 		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
+ 		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
+ 		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
++	}, {
++		.fourcc = V4L2_PIX_FMT_UYVY,
++		.uv_swap = 0,
++		.yc_swap = 1,
++		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
++		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
++		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+ 	}, {
+ 		.fourcc = V4L2_PIX_FMT_YUV422P,
+ 		.uv_swap = 0,
+@@ -464,6 +477,20 @@ static void rkisp1_mp_config(struct rkisp1_capture *cap)
+ 		rkisp1_write(rkisp1, RKISP1_CIF_MI_XTD_FORMAT_CTRL, reg);
  	}
  
- 	for (i = 0; i < cap->config->fmt_size; i++) {
--		if (cap->config->fmts[i].mbus != f->mbus_code)
-+		fmt = &cap->config->fmts[i];
++	/*
++	 * uv swapping with the MI_XTD_FORMAT_CTRL register only works for
++	 * NV12/NV21 and NV16/NV61, so instead use byte swap to support UYVY.
++	 * YVYU and VYUY cannot be supported with this method.
++	 */
++	if (rkisp1->info->features & RKISP1_FEATURE_MI_OUTPUT_ALIGN) {
++		reg = rkisp1_read(rkisp1, RKISP1_CIF_MI_OUTPUT_ALIGN_FORMAT);
++		if (cap->pix.cfg->yc_swap)
++			reg |= RKISP1_CIF_OUTPUT_ALIGN_FORMAT_MP_BYTE_SWAP_BYTES;
++		else
++			reg &= ~RKISP1_CIF_OUTPUT_ALIGN_FORMAT_MP_BYTE_SWAP_BYTES;
++		rkisp1_write(rkisp1, RKISP1_CIF_MI_OUTPUT_ALIGN_FORMAT, reg);
++	}
 +
-+		if (!!f->mbus_code && fmt->mbus != f->mbus_code)
-+			continue;
-+
-+		if (!yc_swap_support && fmt->yc_swap)
- 			continue;
+ 	rkisp1_mi_config_ctrl(cap);
  
- 		if (n++ == f->index) {
--			f->pixelformat = cap->config->fmts[i].fourcc;
-+			f->pixelformat = fmt->fourcc;
- 			return 0;
- 		}
+ 	reg = rkisp1_read(rkisp1, RKISP1_CIF_MI_CTRL);
+@@ -505,6 +532,19 @@ static void rkisp1_sp_config(struct rkisp1_capture *cap)
+ 		rkisp1_write(rkisp1, RKISP1_CIF_MI_XTD_FORMAT_CTRL, reg);
  	}
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-index 38be565341d6..b0f9221a1922 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-@@ -119,6 +119,7 @@ enum rkisp1_feature {
- 	RKISP1_FEATURE_MAIN_STRIDE = BIT(3),
- 	RKISP1_FEATURE_DMA_34BIT = BIT(4),
- 	RKISP1_FEATURE_SELF_PATH = BIT(5),
-+	RKISP1_FEATURE_MI_OUTPUT_ALIGN = BIT(6),
- };
  
- /*
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-index 3b549c07a9bb..a475933820fd 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-@@ -520,7 +520,8 @@ static const struct rkisp1_info imx8mp_isp_info = {
- 	.isp_ver = IMX8MP_V10,
- 	.features = RKISP1_FEATURE_RSZ_CROP
- 		  | RKISP1_FEATURE_MAIN_STRIDE
--		  | RKISP1_FEATURE_DMA_34BIT,
-+		  | RKISP1_FEATURE_DMA_34BIT
-+		  | RKISP1_FEATURE_MI_OUTPUT_ALIGN,
- };
++	/*
++	 * uv swapping with the MI_XTD_FORMAT_CTRL register only works for
++	 * NV12/NV21 and NV16/NV61, so instead use byte swap to support UYVY.
++	 * YVYU and VYUY cannot be supported with this method.
++	 */
++	if (rkisp1->info->features & RKISP1_FEATURE_MI_OUTPUT_ALIGN) {
++		reg = rkisp1_read(rkisp1, RKISP1_CIF_MI_OUTPUT_ALIGN_FORMAT);
++		if (cap->pix.cfg->yc_swap)
++			reg |= RKISP1_CIF_OUTPUT_ALIGN_FORMAT_SP_BYTE_SWAP_BYTES;
++		else
++			reg &= ~RKISP1_CIF_OUTPUT_ALIGN_FORMAT_SP_BYTE_SWAP_BYTES;
++		rkisp1_write(rkisp1, RKISP1_CIF_MI_OUTPUT_ALIGN_FORMAT, reg);
++	}
+ 	rkisp1_mi_config_ctrl(cap);
  
- static const struct of_device_id rkisp1_of_match[] = {
+ 	mi_ctrl = rkisp1_read(rkisp1, RKISP1_CIF_MI_CTRL);
 -- 
 2.30.2
 

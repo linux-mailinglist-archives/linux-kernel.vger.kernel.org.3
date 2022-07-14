@@ -2,127 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 838A45745C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40B95745C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237451AbiGNHPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 03:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        id S236288AbiGNHR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 03:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237430AbiGNHPI (ORCPT
+        with ESMTP id S231887AbiGNHR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 03:15:08 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD2F13F2F
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:15:06 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Lk5KS64QBz1L8mV;
-        Thu, 14 Jul 2022 15:12:28 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 14 Jul 2022 15:15:04 +0800
-CC:     <yangyicong@hisilicon.com>, Josh Don <joshdon@google.com>,
-        Chen Yu <yu.c.chen@intel.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/5] sched/fair: ignore SIS_UTIL when has idle core
-To:     Abel Wu <wuyun.abel@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-References: <20220712082036.5130-1-wuyun.abel@bytedance.com>
- <20220712082036.5130-2-wuyun.abel@bytedance.com>
- <8e7d75d4-613e-f35e-e932-323789666fb1@huawei.com>
- <4dde05be-8470-5984-0a30-ba077b9fe6bd@bytedance.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <e8a59a8f-1e0c-2bb6-2d1b-4e76f5c511f5@huawei.com>
-Date:   Thu, 14 Jul 2022 15:15:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Thu, 14 Jul 2022 03:17:26 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1421913E38;
+        Thu, 14 Jul 2022 00:17:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657783046; x=1689319046;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lVDa0Ra8BPX8SfKu3uDgPJAJ7DsotlSCQsd1gi3W+Ro=;
+  b=ESfK9u3aqQH6HJzrgGuyeg9MQkOPlCxfqNunMNvYBZTUv9USM6AnzQMB
+   GlKo6oiX/WjVTHSywIABfgiNOBdtxjkTN8doU+pDL5FR+x473+pv7CWUo
+   WEfnXQU/ABwKokPC95EYRGnf4AmcMLaGw9All/3AwV0XzVJdn4oNAwoWg
+   8=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Jul 2022 00:17:25 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 00:17:25 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 14 Jul 2022 00:17:24 -0700
+Received: from [10.50.55.40] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 14 Jul
+ 2022 00:17:21 -0700
+Message-ID: <27007c45-1dbb-2c35-b1a8-eb2b2a6c9512@quicinc.com>
+Date:   Thu, 14 Jul 2022 12:47:17 +0530
 MIME-Version: 1.0
-In-Reply-To: <4dde05be-8470-5984-0a30-ba077b9fe6bd@bytedance.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc8280xp: fix apps_smmu irq
+Content-Language: en-US
+To:     Parikshit Pareek <quic_ppareek@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Prasanna Kumar <quic_kprasan@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+References: <20220712140009.20765-1-quic_ppareek@quicinc.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <20220712140009.20765-1-quic_ppareek@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/14 14:58, Abel Wu wrote:
-> 
-> On 7/14/22 2:19 PM, Yicong Yang Wrote:
->> On 2022/7/12 16:20, Abel Wu wrote:
->>> When SIS_UTIL is enabled, SIS domain scan will be skipped if
->>> the LLC is overloaded. Since the overloaded status is checked
->>> in the load balancing at LLC level, the interval is llc_size
->>> miliseconds. The duration might be long enough to affect the
->>> overall system throughput if idle cores are out of reach in
->>> SIS domain scan.
->>>
->>> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
->>> ---
->>>   kernel/sched/fair.c | 15 +++++++++------
->>>   1 file changed, 9 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>> index a78d2e3b9d49..cd758b3616bd 100644
->>> --- a/kernel/sched/fair.c
->>> +++ b/kernel/sched/fair.c
->>> @@ -6392,16 +6392,19 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->>>       struct sched_domain *this_sd;
->>>       u64 time = 0;
->>>   -    this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
->>> -    if (!this_sd)
->>> -        return -1;
->>> -
->>>       cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
->>>   -    if (sched_feat(SIS_PROP) && !has_idle_core) {
->>> +    if (has_idle_core)
->>> +        goto scan;
->>> +
->>> +    if (sched_feat(SIS_PROP)) {
->>>           u64 avg_cost, avg_idle, span_avg;
->>>           unsigned long now = jiffies;
->>>   +        this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
->>> +        if (!this_sd)
->>> +            return -1;
->>> +
->>
->> I don't follow the change here. True that this_sd is used only in SIS_PROP, but it seems irrelevant with your
->> commit. Does the position of this make any performance difference?
-> 
-> No, this change doesn't make much difference to performance. Are
-> you suggesting that I should make this a separate patch?
-> 
+Hi Parikshit,
 
-It just makes me think that dereference is unnecessary if this_cpu and target locates in
-the same LLC, since it's already been passed. But since you noticed no difference it may
-have little effect. :)
+On 7/12/2022 7:30 PM, Parikshit Pareek wrote:
+> Wrong values have been introduced for interrupts property. Fix those
+> ones, and correct the mapping of context banks to irq number.
+>
+> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> ---
+>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 7945cbb57bb4..1276a833251e 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -1580,7 +1580,6 @@
+>   				     <GIC_SPI 412 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 706 IRQ_TYPE_LEVEL_HIGH>,
+> -				     <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
+> @@ -1591,6 +1590,7 @@
+>   				     <GIC_SPI 693 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 694 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 695 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 696 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 410 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 411 IRQ_TYPE_LEVEL_HIGH>,
+>   				     <GIC_SPI 420 IRQ_TYPE_LEVEL_HIGH>,
 
-> Thanks,
-> Abel
-> 
->>
->> Thanks.
->>
->>>           /*
->>>            * If we're busy, the assumption that the last idle period
->>>            * predicts the future is flawed; age away the remaining
->>> @@ -6436,7 +6439,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->>>                   return -1;
->>>           }
->>>       }
->>> -
->>> +scan:
->>>       for_each_cpu_wrap(cpu, cpus, target + 1) {
->>>           if (has_idle_core) {
->>>               i = select_idle_core(p, cpu, cpus, &idle_cpu);
->>>
-> .
+Cross checking with the IP doc, 696 is not the only one missing, couple of other interrupts are also missing, below is the list.
+
+Interrupt 689 and 706 are not present in the IP doc, remove it.
+Interrupts 696, 697, 716, 913 are missing, I see this patch adds 696, add 697 as well.
+Interrupt 890 is not a context interrupt, remove it.
+
+
+Thanks,
+Sai

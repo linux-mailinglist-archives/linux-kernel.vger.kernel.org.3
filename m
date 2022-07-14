@@ -2,97 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0525751FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC6E5751FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238946AbiGNPiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        id S239651AbiGNPi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231968AbiGNPiN (ORCPT
+        with ESMTP id S239327AbiGNPiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:38:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818C0481D0;
-        Thu, 14 Jul 2022 08:38:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F969B823DE;
-        Thu, 14 Jul 2022 15:38:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A856CC3411C;
-        Thu, 14 Jul 2022 15:38:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657813089;
-        bh=U9G5H+F5ke4Ig1zhCGdP+JXYur2miSUshKx7+9DJkZk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ntY6kk5rfRV/jplMtoO0VwrEPFtoYYymHPd19E+KscZ4zy+/+P+t9mZYZEf9XC2DC
-         bhYylukM6lpZwkEwUgC9UdUJliEBYkJQ4g/4soxJmsjapha3zIDibt9L/oBuv0g68M
-         redoVX+gBo2DDaV2XvKK4Kt7sGYWdxiWFm8Nn2U4xiJXLXat/FfzWN0WagJcrKbJM6
-         P0AEstXeJfYTDI7D0UfxoP7Jps1ciz97fusNVpTfCRRU5ExLryBTL4cTyuyWhEqcto
-         u9wprbirqr0GcN/ny3jsWZc5g6opGKzmcaxd+QywRP7Z4Wc7QLPkM7tsN2DrLSKQHk
-         +xo8rO5Ua7BDw==
-Received: by mail-vk1-f172.google.com with SMTP id m188so983298vkm.3;
-        Thu, 14 Jul 2022 08:38:09 -0700 (PDT)
-X-Gm-Message-State: AJIora/IhV7sWcsfkG6T8ozxIoEBvDVRlcP9dMlxHGasYRAvLy7pNCTx
-        nq5NxCxRbzuLR4DgowYbVlt8TYikv0XE47tobQ==
-X-Google-Smtp-Source: AGRyM1ueakcaqefdrg7VLkKXk8mWYborOH3gMs/rbv3OLb8P/RdVgXMatAj03gLpnDmmrBTDHwqD6nygYxHFXTW2Wnk=
-X-Received: by 2002:a1f:2049:0:b0:374:866b:6dd8 with SMTP id
- g70-20020a1f2049000000b00374866b6dd8mr3907873vkg.15.1657813088619; Thu, 14
- Jul 2022 08:38:08 -0700 (PDT)
+        Thu, 14 Jul 2022 11:38:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1CFA16069C
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:38:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657813101;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P5Z13oVcpp8qclm0mCwL8Kzfkdtg4fQqLSWyr/f5fA0=;
+        b=YMA54hyqurxvwlEq7MZBgN/kmr10EvpacYmCAG9uVF/S1tj4xknEPI9RF3zRaiUCuwAfx+
+        v1kp4UpRQ+LWYF7xOw0R6vsa5avD3a0jiZboFArHV+31S8L7bpYrIT/Vp8perCllYqkGxn
+        sISBAlUgo1NiFRzGaThiLDSA3fjQccQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-253-6DJB1ihNNSG6dnvSCDkShA-1; Thu, 14 Jul 2022 11:38:19 -0400
+X-MC-Unique: 6DJB1ihNNSG6dnvSCDkShA-1
+Received: by mail-ed1-f71.google.com with SMTP id b15-20020a056402278f00b0043acaf76f8dso1708729ede.21
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:38:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=P5Z13oVcpp8qclm0mCwL8Kzfkdtg4fQqLSWyr/f5fA0=;
+        b=K5EUiDw5wqLJtRSvgzmcygKgAYlqsnJuOIQDaMEYAPtFBilvYDblwVsfRH44ngSPZ0
+         tsawpkBfZzXs3DhFaKv11/BWnSFfvLkAw+TC1yJqGTK2H9Hxx65xVY+joMCZOmDfnj6O
+         u9uHGczSTDuHU2alAIM3J5tseG8/nRSRZUPBSTKm6IdQ5lu+Owksf85cl5UgtseVqAaX
+         5zzIIJLpsrkU852kwTjazDeYlUKn4zh9G39Ow5jyqaCw221UOAwgjE3UPY2rvc+/WvvR
+         LV2P6BzYXE4hZIIp0luIQb0e3Pf8zrSQHYXvLoF4Pu8mtscrE8UAoHRuY+wb2fdpithc
+         wjlQ==
+X-Gm-Message-State: AJIora9auOCDlGg9NPwLil1GOpWq/VGMqfIbY9a9Vtq29ZxhIWeVIZTT
+        3hagDNmKlimN0camg2WIpIb+ZZhcIuKoOIHke5TREpRKZr/L7calMBiXFoC9HX307ocIDyUHyp6
+        PxRHPRzypPTmKOWtYhYp+A5CJ
+X-Received: by 2002:a05:6402:228f:b0:43a:896:e4f0 with SMTP id cw15-20020a056402228f00b0043a0896e4f0mr12803953edb.81.1657813098561;
+        Thu, 14 Jul 2022 08:38:18 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1snZBx2XNszb4BuZBM78HEgBogAgCQ6gRW/x0MeMQhgt7EzwojStlVPIYxjVhTfL3dfr64PNg==
+X-Received: by 2002:a05:6402:228f:b0:43a:896:e4f0 with SMTP id cw15-20020a056402228f00b0043a0896e4f0mr12803929edb.81.1657813098348;
+        Thu, 14 Jul 2022 08:38:18 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id sa42-20020a1709076d2a00b007081282cbd8sm821831ejc.76.2022.07.14.08.38.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 08:38:17 -0700 (PDT)
+Message-ID: <dbce7bba-12ac-1df5-c81b-32392830f77d@redhat.com>
+Date:   Thu, 14 Jul 2022 17:38:16 +0200
 MIME-Version: 1.0
-References: <20220630131543.225554-1-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220630131543.225554-1-angelogioacchino.delregno@collabora.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 14 Jul 2022 09:37:57 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLY7eSLKhRrL7hx9jFxTm-s=MmdXOVVJv3667fSoeSvSQ@mail.gmail.com>
-Message-ID: <CAL_JsqLY7eSLKhRrL7hx9jFxTm-s=MmdXOVVJv3667fSoeSvSQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: pinctrl: mt8195: Add and use drive-strength-microamp
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] KVM: x86: Add dedicated helper to get CPUID entry with
+ significant index
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220712000645.1144186-1-seanjc@google.com>
+ <8a1ff7338f1252d75ff96c3518f16742919f92d7.camel@redhat.com>
+ <Ys2i2B/jt5yDsAKj@google.com> <Ys2qwUmEJaJnsj6r@google.com>
+ <087db845684c18af112e396172598172c7cc9980.camel@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <087db845684c18af112e396172598172c7cc9980.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 7:15 AM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> As was already done for MT8192 in commit b52e695324bb ("dt-bindings:
-> pinctrl: mt8192: Add drive-strength-microamp"), replace the custom
-> mediatek,drive-strength-adv property with the standardized pinconf
-> 'drive-strength-microamp' one.
->
-> Similarly to the mt8192 counterpart, there's no user of property
-> 'mediatek,drive-strength-adv', hence removing it is safe.
->
-> Fixes: 69c3d58dc187 ("dt-bindings: pinctrl: mt8195: Add mediatek,drive-strength-adv property")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../bindings/pinctrl/pinctrl-mt8195.yaml      | 27 ++-----------------
->  1 file changed, 2 insertions(+), 25 deletions(-)
+On 7/14/22 12:58, Maxim Levitsky wrote:
+> On Tue, 2022-07-12 at 17:09 +0000, Sean Christopherson wrote:
+>> On Tue, Jul 12, 2022, Sean Christopherson wrote:
+>>> On Tue, Jul 12, 2022, Maxim Levitsky wrote:
+>>>> On Tue, 2022-07-12 at 00:06 +0000, Sean Christopherson wrote:
+>>>>> +               /*
+>>>>> +                * Function matches and index is significant; not specifying an
+>>>>> +                * exact index in this case is a KVM bug.
+>>>>> +                */
+>>>> Nitpick: Why KVM bug? Bad userspace can also provide a index-significant entry for cpuid
+>>>> leaf for which index is not significant in the x86 spec.
+>>>
+>>> Ugh, you're right.
+>>>
+>>>> We could arrange a table of all known leaves and for each leaf if it has an index
+>>>> in the x86 spec, and warn/reject the userspace CPUID info if it doesn't match.
+>>>
+>>> We have such a table, cpuid_function_is_indexed().  The alternative would be to
+>>> do:
+>>>
+>>>                  WARN_ON_ONCE(index == KVM_CPUID_INDEX_NOT_SIGNIFICANT &&
+>>>                               cpuid_function_is_indexed(function));
+>>>
+>>> The problem with rejecting userspace CPUID on mismatch is that it could break
+>>> userspace :-/  Of course, this entire patch would also break userspace to some
+>>> extent, e.g. if userspace is relying on an exact match on index==0.  The only
+>>> difference being the guest lookups with an exact index would still work.
+>>>
+>>> I think the restriction we could put in place would be that userspace can make
+>>> a leaf more relaxed, e.g. to play nice if userspace forgets to set the SIGNFICANT
+>>> flag, but rejects attempts to make guest CPUID more restrictive, i.e. disallow
+>>> setting the SIGNFICANT flag on leafs that KVM doesn't enumerate as significant.
+>>>
+>>>>> +               WARN_ON_ONCE(index == KVM_CPUID_INDEX_NOT_SIGNIFICANT);
+>>
+>> Actually, better idea.  Let userspace do whatever, and have direct KVM lookups
+>> for functions that architecturally don't have a significant index use the first
+>> entry even if userspace set the SIGNIFICANT flag.  That will mostly maintain
+>> backwards compatibility, the only thing that would break is if userspace set the
+>> SIGNIFICANT flag _and_ provided a non-zero index _and_ relied on KVM to not match
+>> the entry.
+> 
+> Makes sense as well.
 
-Now failing in linux-next. Looks like the example needs updating:
+Squashed and queued, thanks.
 
-Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.example.dtb:
-pinctrl@10005000: i2c0-pins:pins: 'mediatek,drive-strength-adv' does
-not match any of the regexes: 'pinctrl-[0-9]+'
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
+Regarding function and index, I never remember the "function" name, but 
+it's pretty obvious that the index is ecx so there's no ambiguity.  And 
+using different names for inputs and outputs makes it clear that there 
+are no games with in/out parameters.
+
+Paolo
+Paolo
+

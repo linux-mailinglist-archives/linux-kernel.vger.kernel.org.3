@@ -2,133 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D28574C59
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC17574C5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239035AbiGNLlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
+        id S239043AbiGNLmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiGNLlM (ORCPT
+        with ESMTP id S238003AbiGNLmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:41:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA4BE5B075
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:41:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D0E2613D5;
-        Thu, 14 Jul 2022 04:41:10 -0700 (PDT)
-Received: from [10.57.86.49] (unknown [10.57.86.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 685453F792;
-        Thu, 14 Jul 2022 04:41:09 -0700 (PDT)
-Message-ID: <103b714c-b07c-f016-1062-84bd94786b22@arm.com>
-Date:   Thu, 14 Jul 2022 12:41:04 +0100
+        Thu, 14 Jul 2022 07:42:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7E65B782;
+        Thu, 14 Jul 2022 04:42:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D29FB824D2;
+        Thu, 14 Jul 2022 11:42:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4593C34114;
+        Thu, 14 Jul 2022 11:42:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657798935;
+        bh=451mWwuI9AcPCzu1ImZErrLyn7VNOtMxUA6oD0ptuxk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=US1VNGygEHXBSUfDyO21KxZpT3Cj3CzXEVksTUgh4WZLXPLN4nQFG3kDu1GBmMDrj
+         4Ak4s3uspIXlqoDyFVvEkRz/hXgE072CYbST+tJCI3niYz6+OZjwQ5laxJUVz1gSlO
+         /JPZa14rBbWk3SnCZGVLWkru/U3WmVselAclZ4Veo/KBL/ooVSGgJPiZttPY/OJfxj
+         wnq9B9Mkyl+R0c9Qtd7pJS1hAcFodCCCMZXyfadfVz4qRFMT62BYC65mT6XmnTVfZ5
+         5nJwDnGfbqrlAoTsBKJr8JUS10WJyj5JiBA8Zfu0mr4BtVB759K5bg4rwJ7NNYLayx
+         rXXYpf8L2T1Jg==
+Date:   Thu, 14 Jul 2022 12:42:08 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Aishwarya TCV <Aishwarya.TCV@arm.com>
+Subject: Re: FVP: kernel BUG at arch/arm64/kernel/traps.c:497 - Internal
+ error: Oops - BUG: 0
+Message-ID: <YtABEDylGJkYLXrJ@sirena.org.uk>
+References: <CA+G9fYtOX-6=f70FA5PuDVA=kX=2L4spXKXS8=LHkUphafXowg@mail.gmail.com>
+ <Ys1g8PH4M2W7Z50U@sirena.org.uk>
+ <CA+G9fYu7mJ6X3_xhboODP_cjABE4QTJCON_NMduQ60x4Z7N78Q@mail.gmail.com>
+ <Ys/9TSV5muvKXN6W@FVFF77S0Q05N>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] arm64: dts: rockchip: Fix SD card init on rk3399-nanopi4
-Content-Language: en-GB
-To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Christian_Kohlsch=c3=bctter?= 
-        <christian@kohlschutter.com>
-References: <C639AD88-77A1-4485-BAEA-2FF8FC15A844@kohlschutter.com>
- <12878108.O9o76ZdvQC@diego>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <12878108.O9o76ZdvQC@diego>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="v0q6NINr4Hz+BhXJ"
+Content-Disposition: inline
+In-Reply-To: <Ys/9TSV5muvKXN6W@FVFF77S0Q05N>
+X-Cookie: The devil finds work for idle glands.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-14 00:41, Heiko Stübner wrote:
-> Hi Christian,
-> 
-> Am Donnerstag, 14. Juli 2022, 00:22:23 CEST schrieb Christian Kohlschütter:
->> mmc/SD-card initialization may sometimes fail on NanoPi r4s with
->> "mmc1: problem reading SD Status register" /
->> "mmc1: error -110 whilst initialising SD card"
->>
->> Moreover, rebooting would also sometimes hang.
->>
-> 
-> Nit: here the commit message should continue with something like:
-> -----
-> This is caused by the vcc3v0-sd regulator referencing the wrong gpio.
-> 
-> Fix the regulator to use the correct pin and drop the always-on property.
-> -----
->> Signed-off-by: Christian Kohlschütter <christian@kohlschutter.com>
->> ---
->>   arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
->> index 8c0ff6c96e03..91789801ab03 100644
->> --- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
->> +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
->> @@ -67,10 +67,10 @@ vcc1v8_s3: vcc1v8-s3 {
->>   	vcc3v0_sd: vcc3v0-sd {
->>   		compatible = "regulator-fixed";
->>   		enable-active-high;
->> -		gpio = <&gpio0 RK_PA1 GPIO_ACTIVE_HIGH>;
->> +		gpio = <&gpio0 RK_PD6 GPIO_ACTIVE_HIGH>;
-> 
-> The interesting question would be how nano-pi-specific that gpio is.
-> 
-> I.e. this is the rk3399-nanopi4.dtsi that is shared by multiple board types,
-> so can you check in schematics if gpio0-d6 is always used on all of them?
 
-On the R4S schematic, this is GPIO0_A1 same as the others. GPIO0 doesn't 
-even have a bank D on RK3399, it only goes up to B5 :/
+--v0q6NINr4Hz+BhXJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Thanks
-> Heiko
-> 
->>   		pinctrl-names = "default";
->>   		pinctrl-0 = <&sdmmc0_pwr_h>;
->> -		regulator-always-on;
->> +		regulator-boot-on;
->>   		regulator-min-microvolt = <3000000>;
->>   		regulator-max-microvolt = <3000000>;
->>   		regulator-name = "vcc3v0_sd";
->> @@ -580,7 +580,7 @@ wifi_reg_on_h: wifi-reg_on-h {
->>   
->>   	sdmmc {
->>   		sdmmc0_det_l: sdmmc0-det-l {
->> -			rockchip,pins = <0 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>;
->> +			rockchip,pins = <0 RK_PD6 RK_FUNC_GPIO &pcfg_pull_up>;
+On Thu, Jul 14, 2022 at 12:26:05PM +0100, Mark Rutland wrote:
 
-...and claiming the card detect is on the same non-existent pin as the 
-regulator enable is clearly even more wrong.
+> I note that your log has:
 
-Is this another case where a UHS card is involved, such that VCC_SDIO 
-gets left at 1.8V after a reboot, so subsequent attempts to do the 
-initial handshake where the card is expecting 3V logic levels fail? (AKA 
-the Tinkerboard problem). Hobbling the regulator such that Linux can 
-never actually turn VCC3V0_SD off, thus the card never gets reset, might 
-appear to "work", but isn't the right thing to do.
+> | Hit any key to stop autoboot:  1  0=20
+> | smh_open: ERROR fd -1 for file 'boot.img'
+> | smh_open: ERROR fd -1 for file 'Image'
+> | smh_open: ERROR fd -1 for file 'devtree.dtb'
+> | smh_open: ERROR fd -1 for file 'ramdisk.img'
 
-Robin.
+=2E..
 
->>   		};
->>   
->>   		sdmmc0_pwr_h: sdmmc0-pwr-h {
->>
-> 
-> 
-> 
-> 
-> 
-> _______________________________________________
-> Linux-rockchip mailing list
-> Linux-rockchip@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-rockchip
+> | Hit any key to stop autoboot:  0  =20
+> | smh_open: ERROR fd -1 for file 'boot.img'
+> | loaded file Image from 80080000 to 82F299FF, 02EA9A00 bytes
+> | smh_open: ERROR fd -1 for file 'devtree.dtb'
+> | smh_open: ERROR fd -1 for file 'ramdisk.img'
+> | fdt - flattened device tree utility commands
+
+> ... and I wonder if that has something to do with it, given it appears th=
+at
+> your Image is corrupted somehow.
+
+Naresh's command line is putting Image directly into RAM with
+
+    --data cluster0.cpu0=3D/tuxrun-r4_1075p-lava-1/Image@0x80080000
+
+--v0q6NINr4Hz+BhXJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLQARAACgkQJNaLcl1U
+h9D2zwf+N2o/jcPsfrNlnvFCPpVpPafkerd8QYDMB56/fvTZqGJNUs1iMPbXkUvf
+dpYghnZZCTTCVpNJyYe8qVeZIbpItGPabW8+CfQgVcKqUeNM3OrcOMZbu6GreTa7
+Cmmcz58RyqC/KQFvNIuANf5h3dbcM4RdWqgo4lh8zwfXO1a/pFbPp+apu4akAopi
+Cg86TOKBETletb+YaZUAR+6aU5Evzi4eaDC565SPytiA/GCjmj8X62HmKWgS4Rvm
+4xHGXXFdDWmlaXtpL0dz/2FP9akc6mnkS87BcxQdDz6D80mvkN8pkQ8z+5GhJjAJ
+mycFQ8JUgg0sPDpdoLxe+iuNEhATlw==
+=DdaV
+-----END PGP SIGNATURE-----
+
+--v0q6NINr4Hz+BhXJ--

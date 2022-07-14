@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4471575241
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96684575244
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239629AbiGNP4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
+        id S240025AbiGNP4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiGNP4d (ORCPT
+        with ESMTP id S239735AbiGNP4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:56:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9154598F
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:56:32 -0700 (PDT)
+        Thu, 14 Jul 2022 11:56:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC05D4598F
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:56:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 075CCB8272B
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 15:56:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE719C3411C;
-        Thu, 14 Jul 2022 15:56:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71ECEB82730
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 15:56:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2639AC341CA;
+        Thu, 14 Jul 2022 15:56:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657814189;
-        bh=l/7hRN4WBQbSvci6mqULbBaU902KAwpVi4j/fQvDzlw=;
+        s=k20201202; t=1657814191;
+        bh=M8ftTXABzDvKMG0XKIyxzF3NtJtmh1Tp0FznAxl/zQU=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Ox4wpyWy2PvpTfJ+HDniKnCVAg6Y9hFPbO5mxH7hNIYgoduJlwiPYoCCmPLHoF5+g
-         UiMFvV6bxdGjtOsU+c7P1dIpTj0lVB4GQwknht/Dtue5eLHy9ZZ7XXCTJm1n7pEA+L
-         rJjreoXazdQx+VnZJ1SoV4+2yuflW4KaVmItM/agHcC8vmi1OOffEDd5cacZ8IGWsq
-         /UnxsciYR3JAurxI8DFCBqzhiu1OQJ6m/X7LIj58wTRb2l9swQ6aTHLAGps6BSgQOi
-         Q89yFmXCtoYJrtqWm4QawSxFYBllkJLoj1haoqbKHgKJ/9e+TrX9bJSXOOde/FgGkE
-         v0fS091emYCsg==
+        b=ugh1PoSgziTvmmdjKZyu5ut01qdqJVisNBA89EdFIq37PtAOXESE94LVA8/FxuONS
+         oxxJtUGhQAE4q0gK+jEEvsxWSK5pXIZtIOv1hqmZfba9D23YSkcaRhtV3opSvLFbo3
+         /JIFTCTsc3o6500Mn2v3koO2wD3/TEGTXszWHRIHKXf68yBRk6F+08fCpALuUnrjl5
+         zz9C8XosamBQm4xdcN3OTdajM1K5rBAmf2iRSwGrWks01WqLV9DYi7M52G7lL0eGMu
+         njFEWdhYhgGHfXuTt37La6GhNGNGVG9AZnA5fU6odF9E0O4RSCN6cUzvlFn+61hZga
+         AngSAyMjEDd8g==
 From:   Mark Brown <broonie@kernel.org>
-To:     lee.jones@linaro.org, lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <20220714112533.539910-1-lee@kernel.org>
-References: <20220714112533.539910-1-lee@kernel.org>
-Subject: Re: (subset) [PATCH 0/8] MAINTAINERS and Docs: Use Lee Jones' kernel.org address going forward
-Message-Id: <165781418870.107719.11036926748201645413.b4-ty@kernel.org>
-Date:   Thu, 14 Jul 2022 16:56:28 +0100
+To:     axel.lin@ingics.com
+Cc:     linux-kernel@vger.kernel.org, patrick.rudolph@9elements.com,
+        lgirdwood@gmail.com
+In-Reply-To: <20220714101212.502824-1-axel.lin@ingics.com>
+References: <20220714101212.502824-1-axel.lin@ingics.com>
+Subject: Re: [PATCH] regulator: max597x: Don't return uninitialized variable in .probe
+Message-Id: <165781418986.107719.7474087128436200879.b4-ty@kernel.org>
+Date:   Thu, 14 Jul 2022 16:56:29 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,22 +54,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Jul 2022 12:25:25 +0100, Lee Jones wrote:
-> Moving over to my kernel.org address for upstream work.
+On Thu, 14 Jul 2022 18:12:12 +0800, Axel Lin wrote:
+> Remove the code checking and returning uninitialized variable.
 > 
-> Also remove myself from PWM.  Nothing left to do here.
 > 
-> Lee Jones (8):
->   MAINTAINERS: Use Lee Jones' kernel.org address for MFD submissions
->   MAINTAINERS: Use Lee Jones' kernel.org address for Syscon submissions
->   MAINTAINERS: Remove myself as PWM maintainer
->   docs: ABI: sysfs-class-pwm: Update Lee Jones' email address
->   docs: ABI: sysfs-devices-soc: Update Lee Jones' email address
->   dt-bindings: backlight: Update Lee Jones' email address
->   dt-bindings: mfd: syscon: Update Lee Jones' email address
->   dt-bindings: regulator: pwm: Update Lee Jones' email address
-> 
-> [...]
 
 Applied to
 
@@ -76,8 +65,8 @@ Applied to
 
 Thanks!
 
-[8/8] dt-bindings: regulator: pwm: Update Lee Jones' email address
-      commit: 2f3d2e96b8ea34f21989b75f28d8a6a0e6e6c756
+[1/1] regulator: max597x: Don't return uninitialized variable in .probe
+      commit: d1d9d40891f92573ab2aff9bed9293be9b667067
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

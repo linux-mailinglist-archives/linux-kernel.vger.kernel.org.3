@@ -2,60 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2354B574EE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C6F574EC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239224AbiGNNTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
+        id S239688AbiGNNOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239609AbiGNNTo (ORCPT
+        with ESMTP id S231989AbiGNNOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:19:44 -0400
-Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C615D0C6;
-        Thu, 14 Jul 2022 06:19:43 -0700 (PDT)
-Received: from tarshish (unknown [10.0.8.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.tkos.co.il (Postfix) with ESMTPS id AB87F440F68;
-        Thu, 14 Jul 2022 16:19:20 +0300 (IDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
-        s=default; t=1657804761;
-        bh=rC0OqKZ10lqLln3fBLyz//cFKspAfwxL4UXaVjVi8XU=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=MrTieGt7XR0JWNrlhEggY6RFpCNTkj4S/I29D/r7E9iLRoiiNEjgQw8yvijyGUY18
-         USwelBx/a/W0eH1BaP1mzhtFoM9EGuDIkyQdwKwH7qQFtHooAFVTAkQSU6Nc+jVVkM
-         XTerN+TiDMSh98lyFqFChgc5phW+3acfas1dwnG8BDaaQsH0Y6dVmCULYnlDgSSUGF
-         n70TM89gabXhe2/ccNloA4yxCXHBI7WYa/82TCDja8IbKO+p3UOwH50XvzjcbJeL1c
-         xtOXwehx2xeSIwpMNT+0h9FfXyONjU4gbsY8wNl8dUO7GlHNyoaFZurmpxRm0YhQcW
-         WuYOR6YQikoEQ==
-References: <20220714115515.5748-1-pali@kernel.org>
-User-agent: mu4e 1.8.2; emacs 27.1
-From:   Baruch Siach <baruch@tkos.co.il>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K?= =?utf-8?Q?=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
-        linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/4] gpio: mvebu: Fix check for pwm support on non-A8K
- platforms
-Date:   Thu, 14 Jul 2022 16:14:27 +0300
-In-reply-to: <20220714115515.5748-1-pali@kernel.org>
-Message-ID: <87lesvde6s.fsf@tarshish>
+        Thu, 14 Jul 2022 09:14:42 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726CF46D9C;
+        Thu, 14 Jul 2022 06:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=XhHZFllZttK/nD0DghuHkAh2pYiQ6FVFXSwybTv29+M=; b=qMmQN49rflM5nNAbrtDJndAePo
+        JkZBQa4twrJ30algsJoMebfheMEDj3dvPEMTjEs61ybh448PVs7S0+evyXujJGkfhp7wgK79OppbE
+        cCooS75r3gjqj/ZScAe2awt8ja6AKbOT4KewCHmroR/G1/ijtcEN72ocsBK9ST6g7z/N825vnPwzc
+        JOYlQY25cgg9yjfCbNn6Uq0ubwzMRXNUQS+QkE7WRJBB+X5wnhUASoqG4zGCxgillM9vUW+FsdPOQ
+        CHM9C/bOghoqyPT+jjqxBWQ2cW5xzxp2tqHjc3ujH4SxkkQbk+ad6JzrWibSHcYDYN9BWQtXqB3P8
+        m41ydZB/IdGkY+6AIu7TaMMKeDn+CSbJhCW0MpdZ0F/GbPv+Nk0jRny1sYD5T16Owx14keLT2KYZA
+        plnf9k103TAWyYqoAm+NvkZ8XBNU8U+x5pnsLR1dX157HFtvGhuk3UqC7jet6yMfQ47VhizhWY6FJ
+        VYCpzwf6nnyFzsuk7aXNhqaaq/eQgw2CrSGCP/UUcIrsVBnq/P/RhsAknlBv6SAtJxYJO/uIxLkaz
+        rqxQhYNl/QKeGbgPZqjbxVIbASa5vd4SVYqAIq5zWFH7Th28K90znIIM/IzQF4uiee/j3MWXgba0E
+        O6Xoocfx3t4MpX4rpyWgt8jiXFYI/Cf6unHSMamZE=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Nikolay Kichukov <nikolay@oldum.net>
+Subject: Re: [PATCH v5 10/11] net/9p: add p9_msg_buf_size()
+Date:   Thu, 14 Jul 2022 15:14:31 +0200
+Message-ID: <1784081.3E5Dq0oo6N@silver>
+In-Reply-To: <Ys8wqPbA5eogtvmG@codewreck.org>
+References: <cover.1657636554.git.linux_oss@crudebyte.com> <5564296.oo812IJUPE@silver>
+ <Ys8wqPbA5eogtvmG@codewreck.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -65,50 +53,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pali,
+On Mittwoch, 13. Juli 2022 22:52:56 CEST Dominique Martinet wrote:
+> Christian Schoenebeck wrote on Wed, Jul 13, 2022 at 03:06:01PM +0200:
+> > > > +	case P9_TWALK:
+> > > > +		BUG_ON(strcmp("ddT", fmt));
+> > > > +		va_arg(ap, int32_t);
+> > > > +		va_arg(ap, int32_t);
+> > > > +		{
+> > > > +			uint i, nwname = max(va_arg(ap, int), 0);
+> > > 
+> > > I was about to say that the max is useless as for loop would be cut
+> > > short, but these are unsigned... So the code in protocol.c p9pdu_vwritef
+> > > 'T' has a bug (int cast directly to uint16): do you want to fix it or
+> > > shall I go ahead?
+> > 
+> > I'd either send a separate patch today for fixing 'T', or if you want
+> > to handle it by yourself, then just go ahead.
+> 
+> I'd appreciate if you have time, doesn't make much difference though
 
-On Thu, Jul 14 2022, Pali Roh=C3=A1r wrote:
-> pwm support incompatible with Armada 80x0/70x0 API is not only in
-> Armada 370, but also in Armada XP, 38x and 39x. So basically every non-A8K
-> platform. Fix check for pwm support appropriately.
->
-> Fixes: 85b7d8abfec7 ("gpio: mvebu: add pwm support for Armada 8K/7K")
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
-> ---
->  drivers/gpio/gpio-mvebu.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-mvebu.c b/drivers/gpio/gpio-mvebu.c
-> index 2db19cd640a4..70a22b68c034 100644
-> --- a/drivers/gpio/gpio-mvebu.c
-> +++ b/drivers/gpio/gpio-mvebu.c
-> @@ -793,8 +793,7 @@ static int mvebu_pwm_probe(struct platform_device *pd=
-ev,
->  	u32 offset;
->  	u32 set;
->=20=20
-> -	if (of_device_is_compatible(mvchip->chip.of_node,
-> -				    "marvell,armada-370-gpio")) {
-> +	if (mvchip->soc_variant !=3D MVEBU_GPIO_SOC_VARIANT_A8K) {
+Looking closer at this separate issue; there is probably nothing to fix. 'T'
+(and 'R') in p9pdu_vwritef() pulls an 'int' argument from the stack. But the
+actual variable is passed here:
 
-The 'if' condition that follow the 'else' below become always true:
+struct p9_fid *p9_client_walk(struct p9_fid *oldfid, uint16_t nwname,
+			      const unsigned char * const *wnames, int clone)
+{
+    ...
+    req = p9_client_rpc(clnt, P9_TWALK, "ddT", oldfid->fid, fid->fid,
+                        nwname, wnames);
+    ...
+}
 
-       } else if (mvchip->soc_variant =3D=3D MVEBU_GPIO_SOC_VARIANT_A8K) {
+So the variable being passed was already uint16_t, which made me re-aware why
+this is working anyway: Because C and C++ have this nice language hack that
+any variadic integer variable smaller than 'int' is automatically casted to
+'int' before being passed.
 
-I would suggest to keep the '=3D=3D MVEBU_GPIO_SOC_VARIANT_A8K' condition,
-and reverse the if/else order, because positive logic is more readable.
+I mean I could clamp the pulled argument like:
 
-There is also another 'else' below that is dead code with this patch.
+diff --git a/net/9p/protocol.c b/net/9p/protocol.c
+index 3754c33e2974..5fd1e948c86a 100644
+--- a/net/9p/protocol.c
++++ b/net/9p/protocol.c
+@@ -441,7 +441,7 @@ p9pdu_vwritef(struct p9_fcall *pdu, int proto_version, const char *fmt,
+                        }
+                        break;
+                case 'T':{
+-                               uint16_t nwname = va_arg(ap, int);
++                               uint16_t nwname = clamp_t(int, va_arg(ap, int), 0, USHRT_MAX);
+                                const char **wnames = va_arg(ap, const char **);
+ 
+                                errcode = p9pdu_writef(pdu, proto_version, "w",
+@@ -462,7 +462,7 @@ p9pdu_vwritef(struct p9_fcall *pdu, int proto_version, const char *fmt,
+                        }
+                        break;
+                case 'R':{
+-                               uint16_t nwqid = va_arg(ap, int);
++                               uint16_t nwqid = clamp_t(int, va_arg(ap, int), 0, USHRT_MAX);
+                                struct p9_qid *wqids =
+                                    va_arg(ap, struct p9_qid *);
 
-baruch
+But it's pretty much pointless overhead. Another option would be to change
+va_arg(ap, int) -> va_arg(ap, uint16_t), just to make it more clear what was
+pushed from the other side.
 
->  		/*
->  		 * There are only two sets of PWM configuration registers for
->  		 * all the GPIO lines on those SoCs which this driver reserves
+Which probably also means I can simply drop the max() call in this patch 10
+here as well.
+
+For the 'R' case: I haven't found the spot where this is actually used.
+
+> > > > +	case P9_TCREATE:
+> > > > +		BUG_ON(strcmp("dsdb?s", fmt));
+> > > > +		va_arg(ap, int32_t);
+> > > > +		{
+> > > > +			const char *name = va_arg(ap, const char *);
+> > > > +			if ((c->proto_version != p9_proto_2000u) &&
+> > > > +			    (c->proto_version != p9_proto_2000L))
+> > > 
+> > > (I don't think 9p2000.L can call TCREATE, but it doesn't really hurt
+> > > either)
+> > 
+> > Yes, Tcreate is only 9p2000 and 9p2000.u. Semantically this particular
+> > check here means "if proto == 9p.2000". I can't remember anymore why I
+> > came up with this inverted form here. I'll change it to "if
+> > (c->proto_version == p9_proto_legacy)".
+> 
+> Sounds good.
+> 
+> > > > +	case P9_TRENAMEAT:
+> > > if we have trenameat we probably want trename, tunlinkat as well?
+> > > What's your criteria for counting individually vs slapping 8k at it?
+> > > 
+> > > In this particular case, oldname/newname are single component names
+> > > within a directory so this is capped at 2*(4+256), that could easily fit
+> > > in 4k without bothering.
+> > 
+> > I have not taken the Linux kernel's current filename limit NAME_MAX
+> > (255) as basis, in that case you would be right. Instead I looked up
+> > what the maximum filename length among file systems in general was,
+> > and saw that ReiserFS supports up to slightly below 4k? So I took 4k
+> > as basis for the calculation used here, and the intention was to make
+> > this code more future proof. Because revisiting this code later on
+> > always takes quite some time and always has this certain potential to
+> > miss out details.
+> 
+> hmm, that's pretty deeply engrained into the VFS but I guess it might
+> change eventually, yes.
+> 
+> I don't mind as long as we're consistent (cf. unlink/mkdir below), in
+> practice measuring doesn't cost much.
+
+OK, I also make that more clear from the commit log then that 4k was taken as
+basis and why.
+
+> > Independent of the decision; additionally it might make sense to add
+> > something like:
+> > 
+> > #if NAME_MAX > 255
+> > # error p9_msg_buf_size() needs adjustments
+> > #endif
+> 
+> That's probably an understatement but I don't mind either way, it
+> doesn't hurt.
+> 
+> > > > +		BUG_ON(strcmp("dsds", fmt));
+> > > > +		va_arg(ap, int32_t);
+> > > > +		{
+> > > > +			const char *oldname = va_arg(ap, const char *);
+> > > > +			va_arg(ap, int32_t);
+> > > > +			{
+> > > > +				const char *newname = va_arg(ap, const char *);
+> > > 
+> > > (style nitpick) I don't see the point of nesting another level of
+> > > indentation here, it feels cleaner to declare oldname/newname at the
+> > > start of the block and be done with it.
+> > 
+> > Because  va_arg(ap, int32_t);  must remain between those two
+> > declarations, and I think either the compiler or style check script
+> > was barking at me. But I will recheck, if possible I will remove the
+> > additional block scope here.
+> 
+> Yes, I think it'd need to look like this:
+> 
+> 	case foo:
+> 		BUG_ON(...)
+> 		va_arg(ap, int32_t);
+> 		{
+> 			const char *oldname = va_arg(ap, const char *);
+> 			const char *newname;
+> 			va_arg(ap, int32_t);
+> 			newname = va_arg(ap, const_char *);
+> 			...
+> 		}
+> or
+> 		{
+> 			const char *oldname, *newname;
+> 			oldname = va_arg(ap, const char *);
+> 			va_arg(ap, int32_t)
+> 			newname = va_arg(ap, const char *);
+> 			...
+> 		}
+> 
+> I guess the later is slightly easier on the eyes
+
+Ah yes, that's your win there.
+
+> > > > +	/* small message types */
+> > > 
+> > > ditto: what's your criteria for 4k vs 8k?
+> > 
+> > As above, 4k being the basis for directory entry names, plus PATH_MAX
+> > (4k) as basis for maximum path length.
+> > 
+> > However looking at it again, if NAME_MAX == 4k was assumed exactly,
+> > then Tsymlink would have the potential to exceed 8k, as it has name[s]
+> > and symtgt[s] plus the other fields.
+> 
+> yes.
+> 
+> > > > +	case P9_TSTAT:
+> > > this is just fid[4], so 4k is more than enough
+> > 
+> > I guess that was a typo and should have been Twstat instead?
+> 
+> Ah, had missed this because 9p2000.L's version of stat[n] is fixed size.
+> Sounds good.
+> 
+> > > > +	case P9_RSTAT:
+> > > also fixed size 4+4+8+8+8+8+8+8+4 -- fits in 4k.
+> > 
+> > Rstat contains stat[n] which in turn contains variable-length string
+> > fields (filename, owner name, group name)
+> 
+> Right, same mistake.
+> 
+> > > > +	case P9_TSYMLINK:
+> > > that one has symlink target which can be arbitrarily long (filesystem
+> > > specific, 4k is the usual limit for linux but some filesystem I don't
+> > > know might handle more -- it might be worth going through the trouble of
+> > > going through it.
+> > 
+> > Like mentioned above, if exactly NAME_MAX == 4k was assumed, then
+> > Tsymlink may even be >8k.
+> 
+> And all the other remarks are 'yes if we assume bigger NAME_MAX' -- I'm
+> happy either way.
+> 
+> > > rest all looks ok to me.
+> > 
+> > Thanks for the review! I know, that's really a dry patch to look
+> > at. :)
+> 
+> Thanks for writing it in the first place ;)
+> 
+> --
+> Dominique
 
 
---=20
-                                                     ~. .~   Tk Open Systems
-=3D}------------------------------------------------ooO--U--Ooo------------=
-{=3D
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+
+

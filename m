@@ -2,91 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3B95753F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277E6575406
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237573AbiGNRY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 13:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
+        id S238895AbiGNR1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 13:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiGNRY1 (ORCPT
+        with ESMTP id S229496AbiGNR12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 13:24:27 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9823599C5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 10:24:25 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so9281786pjm.2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 10:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=Gbjcd2IgrO6L9fc9+WkTPZv76RZzps8wedDsg5wGKeY=;
-        b=CCb+r6CxQcpbkaIIPO2+OFKrJm34bemuloqAiWccmWzW0dxE0dhcDaVN86XyANf2cf
-         kv8i80/zkbjcsK8DcFaJO8ls4IkCCHuyokBkwaZWpQ53mnTleKA3g+pH05/wxT182Hdf
-         ec0rhNnhkAEJa9wgmReQTy2uZknsTV3T16Wje1MtaxZ6TjIzeLIcKBVA4Q2ULKAlgO/S
-         4MVc4nKI1aMgWpQrzmygW997CXLU2ouWUG4R41wrQS4oZUlf51zyRL+Z1U1nLE2tJN9c
-         ycjfL/lSIvmuKM3wP+FzpuT5bA6CfjfykUgHHvASyTFEkMSZQvp9PLTL+FR5DXg6tlpO
-         qBXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=Gbjcd2IgrO6L9fc9+WkTPZv76RZzps8wedDsg5wGKeY=;
-        b=pBmMjc9Y+Q90ytpjvm1Xp4ojarYU4aMiJpCCi030ppi3gk/MsrkBivNabmtqsrguo9
-         wwYwgw4bBy3j6yuqcCALbeFTgS37MGUdI3BCyyiKjrxLG3qo4/iLTXUVhHOsnzCYBUgl
-         HAaJpnflnvq6wKObRoBG+FVK777a1um8wehq4LKNehe+2z79qzrGhIeVyzC0FnSoYEqM
-         ZdrASGU2fcG92nv7LwWjOAwkFZSw3JAO7hV6GcyhFQlqJay1DeoVAMavtCSP44ujzJgS
-         hRy1JA3fuFg+m+ZtR9/zSKSDKGA41xEesrj7tdCG07NZ+MmO+H0+CULXGyTEVvnazFwk
-         3WtA==
-X-Gm-Message-State: AJIora+fU0acZAnwsN/xum5NWDzUzPWk5fX3fluVlgLs7jdlXKiUhES+
-        Pnc5GwK35bQEtJGRo4Wsras=
-X-Google-Smtp-Source: AGRyM1tMVmyK0B4PbANNEWw/DijnhfMre9NNZlC+bo9z31UxrNhAtoLWLzQrgiPEMW7DwZqkyO6HDg==
-X-Received: by 2002:a17:902:7209:b0:16b:fa09:5d6 with SMTP id ba9-20020a170902720900b0016bfa0905d6mr9325521plb.120.1657819465381;
-        Thu, 14 Jul 2022 10:24:25 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n8-20020a17090a160800b001ef869aa755sm3909452pja.15.2022.07.14.10.24.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 10:24:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6d5ac61b-b490-4f9d-6521-a4b7477d6fd2@roeck-us.net>
-Date:   Thu, 14 Jul 2022 10:24:22 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
+        Thu, 14 Jul 2022 13:27:28 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10olkn2042.outbound.protection.outlook.com [40.92.42.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79573599D9;
+        Thu, 14 Jul 2022 10:27:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JZXkdJOubdXjG21vwIDQx+4UYSmM+8Wzq1NvZM1hSTFgrm+PsG1EKKSa0jPKsDjZTc0rSW9Eb9Qu+7oF0eDOS/59QrFMPDwF/zgcqAY+ixLHucwyedO3r41meVwHfgPRE0iAJvdktQpuHNIMfEFSyaf4nkzMRdXri9AwnUHnLiWUS5mj7fKf9w8YxP7R0LOVXKVDH9mFUfubZjwSKeZRa5lskZT9Ro1SDIyXA45kx83F+9/vdmKhX5lYCHSoCS+Isrva3x4c9OGvb0RI6eFPG/pH9wGSVXj7zUWruB7lbnYlNHILyBjn8M3C2K6zvf4TQlLteYwh6Ge23Jk3OdnPkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fMsqdZGWtNHrJ7HAQ7/OXzWTZfzSCEnbXJKz/b5LFTA=;
+ b=mV50t43K50pI+KfbyAjxADDG6qwxukrrlYdMaeaAxSmSwTUEVzqkJwQt+KcUOnOgiUfMyGvxNw/qb75ivXFAnDLJOgisfDTkyZUOuZxwiJyuOXrbo0CbgLPaJl+Ydowa1Lmxvrv+4rbnTepPRyomAl6HTehTOhnhg2G5s4CNXBElhoz75ijLz77yOo11oJsDe+T5imTio6/+4Jr/0JQKaxbzX3l/RdWQA+xaeP56RakEHCN8EiASI26MYns44ggkWEfjcCC3P0UiDs9TegZ2anDTD4rSXxblY/ylPHDNX6lbaAefAN0OJi63mjiF0LkXd7j/B2sUeh43TKE823UP+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fMsqdZGWtNHrJ7HAQ7/OXzWTZfzSCEnbXJKz/b5LFTA=;
+ b=c1QNgHkQrxo2i2PIySrAzudSoT8gZg/JQ3c61FB2xnEHDxEOZJePlcDhHYTXNdaYFF76p9sPUWHrIZvm8xtQ1uETTxQj5VKsV0VYVx6igCGxLWtiCBQnAElvVUG7lV7wnOSuGoXwv+2Lg7/6D15d1CxNKj2TPKcgx3epirhM+Zqp0UqT0dtgB65/GgX0vS+E1lWe5ESCQaxwhRnL5n6dy5CxjVfR+GSMyatgJvqmOXO37alv3MHIt5HckuBuNwpXhlB5w7uW1TS8qisNgR2Igc9GvcBFiuiYZv5f6pP7+TxrQdG96E5Jevdhe6A7aBpkOXXudcqk9BwpusHxCdOizg==
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
+ by BL0PR02MB3891.namprd02.prod.outlook.com (2603:10b6:207:49::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.21; Thu, 14 Jul
+ 2022 17:27:20 +0000
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::e080:d670:29c7:9180]) by BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::e080:d670:29c7:9180%7]) with mapi id 15.20.5417.026; Thu, 14 Jul 2022
+ 17:27:20 +0000
+Message-ID: <BY5PR02MB7009FC653B20D32E8A17C3C1EA889@BY5PR02MB7009.namprd02.prod.outlook.com>
+Date:   Thu, 14 Jul 2022 22:57:10 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH 1/5] arm64: dts: sdm845-xiaomi-beryllium: rename
+ beryllium.dts into beryllium-common.dtsi
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Joel Selvaraj <jo@jsfamily.in>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20220708111207.85249-1-jo@jsfamily.in>
+ <MN2PR02MB7024359650A02554EF6ABEA5D9829@MN2PR02MB7024.namprd02.prod.outlook.com>
+ <Ys8wmeMYnKFa9Iqv@builder.lan>
 Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
-References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
- <20220713050724.GA2471738@roeck-us.net>
- <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
- <a804b76e-159f-dbc2-f8dc-62a58552e88d@roeck-us.net>
- <CADnq5_O6Tp2QPXyDCvpWuRXhDr6H1PM50Ow5YG2WeukqUd-GnQ@mail.gmail.com>
- <CAHk-=wj4+BSj2SPMRUr-TZ4Qg2o9HGOBWiJQE336YcF_U1sVNQ@mail.gmail.com>
- <CAMuHMdV9Pj9V-ZPpu=BMSkPt1uA_eCvU4+bxF8ZfHjteRk2CAg@mail.gmail.com>
- <CAHk-=wgnmaTVigBc02tjqgcZaNJiYz8Xw77P+ERAXhcYjkwd=Q@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: Linux 5.19-rc6
-In-Reply-To: <CAHk-=wgnmaTVigBc02tjqgcZaNJiYz8Xw77P+ERAXhcYjkwd=Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Joel Selvaraj <joel.selvaraj@outlook.com>
+In-Reply-To: <Ys8wmeMYnKFa9Iqv@builder.lan>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-TMN:  [Yxp5tcZ1U60EsGVGHEgLJy8dgLVHpVfg51of2BknxxjkHB7p6dt2PLOBxLMRZGXV]
+X-ClientProxiedBy: PN0PR01CA0009.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:4f::14) To BY5PR02MB7009.namprd02.prod.outlook.com
+ (2603:10b6:a03:236::13)
+X-Microsoft-Original-Message-ID: <029325b3-59c2-9f64-ae99-08b7a3dd8fb0@outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7d393cc1-e3a8-4544-850c-08da65be1b27
+X-MS-TrafficTypeDiagnostic: BL0PR02MB3891:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V80pDeSXDaBJaO5xlV+JSgL+69dZ1/7L1TIBvDjd0ShB+CCOv+oPQrkTz/0v11JArQuVm/d4nqkyC2KOosSeNblcCyt3KWEiUfrVjnU9YLZHakDvff4ha/i7JbJwHlzGg8g8SXNVsok3oEpFxBXwXPp7ItzcyEnkWE1ymu6kVpwFSG02/VCBY56zaynRO4B3Konu14N1tho/mDpyeju44GOssG5ls0alq7Uf5YYT2aCAlQXbnjvMkuXlsTEadndViIRHN/LVWsJJlWk5prOP1CN/STdlQAzNiBDsbgmtWSEwSpAiz5j+1dcQ6XPbNYIgln819qaObQCbHeNMns01sJ15bl3cMGauC3dE3ocPbUHpq0yFMC4hybjkz7yPdhweAiW2SBS8MEWSNuANJVklfWzNqri2JohdFRzbzk0VbEAZpgKlYJGcMwONPyIEI/CpXjeTTTFSYZ7IIcqXn5Vj+4SQPunTHJW6lqMbiGkqSNSlA3WiwhOy7LwM2THT3Q3B83iBQrqERCTcLfRCQuXQ7aucyCLVXSTmxFeinJDIrxqzznA5IG917J9zFFMEQ+r+59ffi8YLh0e3DkyFOlYTEF1OTtSlLPzHbUF5e1aYDIOrew03Npq4YaT+v0gnvE4W0B/llLudhbkSbmlno4uNxYyilihE8KpPVVbGsUNbwAlJORMdI3UvT0Ww0QExiOvncbueo6dJooA1ZUn38txJSEQ90HlG9x0SNr7hkzsl/3Q=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UDlLTW1VdDJHbWpja04xNEQ4cm94TU1tcXpOSDR1OXM2bTF6aWYzVGZzTHBR?=
+ =?utf-8?B?U0dFN2lZb3hmdFZQdVBlNCsvUVNITXhlMHN3d1hBQjdmSkNlRXNiWEx2UjdV?=
+ =?utf-8?B?c3Y4WE1OZXYrWXU5cnZrK1ordnZuVWY4MVdPcDBSOUQ3bUs0WnNYd3VubTk3?=
+ =?utf-8?B?b0tuSVIwVTR2cDd2VG13akE2bHM0aDUxYk1XOGxDRUZvc2dsTk82TGJEN20v?=
+ =?utf-8?B?c3ZHbGdRWVFNYXJXZVZKM0liYTJzNldaUVF5SW02bVJvaW1iMHZ2Q1MyRU0v?=
+ =?utf-8?B?bnNZYnBBUmdkbXRsaWFTckZlUDZSMUNYdFlWM3BISUNxbVlWMWs3RUFRMUxQ?=
+ =?utf-8?B?S2J6V0I2VkJFTFZrZm4vRHhXdU9IL2ZxcGpQOFVyY3BkVHVSZ1dkc2RpbmE5?=
+ =?utf-8?B?K1lLMk1naDAyOVNybm9VWnVJTDVUMDZTQ2dveXZNUXRMd1VVdXg1QzNkdEVQ?=
+ =?utf-8?B?TW5LOHMwTStTdjdJSDdGWHRCaXhobkxqeE96R3lCYjhOZ0NIc0EyNlpjRUta?=
+ =?utf-8?B?ajJGUTJkVXdhYzNQWjRPejU0QjhwZHNGUitHWnAzNTVjRXJMWG9zOC94Z3h6?=
+ =?utf-8?B?TSs0aklVYVFQYit5cjhlUENCc24wYWlyOEt5Q1p1Qjd3b0FkS1BOWjUwQTZ1?=
+ =?utf-8?B?VWxXSFM0bExYcGxkWFFycW5PclE2SzBoVURYcXA3UGV3bUxYWFdYQTh3OGpQ?=
+ =?utf-8?B?SU45Rks0MkVDVkdtbG5KYVVwVnRSM3o2WUs3bC9qaU94Z00vYlhKVHlqUzhp?=
+ =?utf-8?B?ekpzLzNrcHhWNjBROTZScWJyM1ByS2daa0dYNVg1LzVqeUhudmFtUTg3aTBP?=
+ =?utf-8?B?Q3oyK0IvRElubjJZSWVueW9OUStGRUF2U1V2VmJ5Z1RPNDJObjhBSG02dVht?=
+ =?utf-8?B?VmxYMy9mQWpOaGdiQmZTTDhEdWFDOUxFakFReGpmOVI4S3FSQkh1UnRlQjk1?=
+ =?utf-8?B?cE5TRlJoYVVvYUw0SHAxcVZrV0xuNzh4eGozeUN1ODdiM1RLVWxmSWJIRGVC?=
+ =?utf-8?B?VkhSRjhrNm5ZNXlSeTIvbWtpbFJqWHZwekFSNURienpicTBRNG1wbjhoYnAx?=
+ =?utf-8?B?aFlucTZ6VnBqRWNMbS9XekpXaDEwLzF4S2xobWxOak5sMExsclpiNnRlMURo?=
+ =?utf-8?B?NEtvMGNVZEZGbVJrTUdUZ2h0U29LMHhGbG11TTRZWnBVWUtabmExcjVwSFdm?=
+ =?utf-8?B?T3NZeWxVZmp0WmFKemVMRlFjZ2dLYlY3Qy9VbUdMMXViUG9TWUoyMHNzS005?=
+ =?utf-8?B?SjR6SEZRZnNhUTRRYlorWHdFbXhrbGx0T2pOSjZ3cUx1OUZzeURwL1ZlR1Ft?=
+ =?utf-8?B?L0hSK1F0bFFNZWZEUFJOcVJyUWpSNDJHdnBydWdGMEhtSkx4ampocjF0dHBx?=
+ =?utf-8?B?bDJlaWZ6RlFxeU90V3FhemczcTVhY0hXSUljMGJibDFrUmR0Q2kyUldRRGxy?=
+ =?utf-8?B?ZkN5VTlXQ0RvOXNaYU5SanVaWktwaU1NOVNSWnIrMldST2RkVEZwemJTM0ZK?=
+ =?utf-8?B?Y1FieUFTVHh6L0o5RFAzYnRSZTNnRld5VWNnbUhMcDl3L0FrdkhqREFGc1Yr?=
+ =?utf-8?B?Y2QrWlNmMFlpOUc2aVJ6aUZHL1E4SUg1T0NNeER1K05rcjBOZjJUaVFUV0Qw?=
+ =?utf-8?B?Q1VNUk5HdW1rc1crczF5dE1KM292T2I2YXJwK3E4QXJtQXpqSUI1REY3UE4x?=
+ =?utf-8?B?TnlaMll1VjAvWjFvQnNHSE5Oa0t2UU1ZZCtyRUJtemp5UkFuOVF3ZkdBTEpK?=
+ =?utf-8?B?ZDRaL2hUS2gvaDJQUDZEYU8vWDVzOEVYWkh5RkdOU1FUc1c1ejRteEhObEFI?=
+ =?utf-8?B?aUR4OWJNM25tWmd1blR1UT09?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d393cc1-e3a8-4544-850c-08da65be1b27
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2022 17:27:20.6204
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB3891
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,54 +123,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/14/22 09:48, Linus Torvalds wrote:
-> On Thu, Jul 14, 2022 at 12:23 AM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
->>
->> Oh, it's not just this one. The lists of build regressions between v5.18
->> and v5.19-rc1 [1] resp. v5.19-rc6 [2] look surprisingly similar :-(
->>
->> [1] https://lore.kernel.org/all/20220606082201.2792145-1-geert@linux-m68k.org
->> [2] https://lore.kernel.org/all/20220711064425.3084093-1-geert@linux-m68k.org
-> 
-> Hmm.
-> 
-> Some of them are because UM ends up defining and exposing helper
-> functions like "to_phys()", which it just shouldn't do. Very generic
-> name - so when some driver ends up using the same name, you get those
-> errors.
+Hi Bjorn Andersson
 
-We can't use virt_to_phys() and phys_to_virt() because they are defined for
-the underlying architecture. Would uml_to_phys() and uml_to_virt() be
-acceptable ? If so, I'll submit a patch.
+On 14/07/22 02:22, Bjorn Andersson wrote:
+> Applying this patch would cause the tree to fail to build until the last
+> patch is introduced. This would cause problems for people trying to use
+> git bisect to find regressions in the git history.
+> 
+> Could you please respin this patch such that it continues to build the
+> currently supported board and then you could add the new board/variant
+> in a separate commit.
 
-> 
-> And some look positively strange. Like that
-> 
->    drivers/mfd/asic3.c: error: unused variable 'asic'
-> [-Werror=unused-variable]:  => 941:23
-> 
-> which is clearly used three lines later by
-> 
->          iounmap(asic->tmio_cnf);
-> 
-> and I can't find any case of 'iounmap()' having been defined to an
-> empty macro or anything like that to explain it. The error in
-> drivers/tty/serial/sh-sci.c looks to be exactly the same issue, just
-> with ioremap() instead of iounmap().
-> 
-> It would be good to have some way to find which build/architecture it
-> is, because right now it just looks bogus.
-> 
-> Do you perhaps use some broken compiler that complains when the empty
-> inline functions don't use their arguments? Because that's what those
-> ioremap/iounmap() ones look like to me, but there might be some
-> magical architecture / config that has issues that aren't obvious.
-> 
-> IOW, I'd love to get those fixed, but I would also want a little bit more info.
-> 
-Geert gave the necessary hint - it looks like sh-nommu used defines
-for iomap() and iounmap(), which made the variable unused. According
-to Geert that was fixed a couple of days ago.
+Ok. Understood. But I am not entirely sure how I implement this? Since
+except for display and touchscreen, everything is almost the same. So I
+wanted to move the common bits to a common dtsi. Here is the cover
+letter where I explain a bit on the situation, if it's missed and not
+noticed.
 
-Guenter
+Link:
+https://lore.kernel.org/r/MN2PR02MB702415D7BF12B7B7A41B2D38D9829@MN2PR02MB7024.namprd02.prod.outlook.com/
+
+Here are few things I think I can do, kindly let me know which seems
+more ideal.
+
+1. Don't create a common dtsi and leave the existing dts as it is and
+just create a new dts for the new variant.
+sdm845-xiaomi-beryllium.dts - untouched. represents tianma variant.
+sdm845-xiaomi-beryllium-ebbg.dts - new dts, represents ebbg variant.
+
+2. Create new common dtsi file and move all the common bits to it. Then
+create new dts for ebbg variant.
+sdm845-xiaomi-beryllium-common.dtsi - new, has the common bits
+sdm845-xiaomi-beryllium.dts - use common dtsi, represent tianma model
+sdm845-xiaomi-beryllium-ebbg.dts - new, use common dtsi, represent ebbg
+variant.
+
+These two approaches keep the existing dts valid even after the patch
+and doesn't break build. But I wish I could rename the existing dts to
+sdm845-xiaomi-beryllium-tianma.dts as its more appropriate. So I can do
+something like:
+
+3. Create new common dtsi, create new tianma variant dts, create new
+ebbg variant dts. Finally, when changing the Makefile, delete the old
+sdm845-xiaomi-beryllium.dts. We can explain in this commit, that it has
+been renamed. This way, if someone git bisect, it can point to this
+exact commit where it breaks and know that a rename has happened.
+
+Kindly help me choosing an ideal approach or suggest a better approach.
+
+> Regards,
+> Bjorn
+
+Regards,
+Joel Selvaraj

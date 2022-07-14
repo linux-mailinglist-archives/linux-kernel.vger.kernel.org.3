@@ -2,112 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68FB5740B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4E25740BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiGNBBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 21:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S229735AbiGNBDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 21:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiGNBBs (ORCPT
+        with ESMTP id S229492AbiGNBDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 21:01:48 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BCA1CB02
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:01:45 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id r9so312359lfp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:01:45 -0700 (PDT)
+        Wed, 13 Jul 2022 21:03:52 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A9D11C2F
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:03:51 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id a15so467059pfv.13
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:03:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lWF1kWcT9wxBz0pCIKCeMgLRCPWsycB4mMPiKfgQZvo=;
-        b=RsxtLdL6XVjF/9EvPZ/q0ijYIEgUeq6CSqaM6RM50MPare6FTYgLCNypHYoQMCksqS
-         ajP6GHw7pWI0gRxfVZQ9jfxqnLNSCBnIU3olfZziYqOHS8ySWMxv7E3qr/5D1zI1uH00
-         Q3aVHYaGEgpJnnqvk9FgJnibN2Pma6vkRwp18H+AJujauLWyH5a2qXqlEECFM/RIkYw6
-         44z7lw1C5e0oz5dpQpsdb4wO08TmlZFymN+CuhtaLCSr5cZIoULXqM6AwKfuGe/leqQi
-         qMTJieSfYKsy1+e5svV03ptxhzzD7hs8u9wZ3m9Vn8kDCKjXpjzN78aAprzDVvKHA7y4
-         Agew==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iYjvT9/K+PJOYO+PKYqApFIeqrzKMwdmFTyx44M/bUw=;
+        b=s9pNVCwJpiRtqZOHmC9JoqSbIHVFh0WcP6GlOiQEvWpNg9ctAYIL9TC74ZHJwDmQbr
+         ujX1YfT+IVTqR8HVG+hTZliHN024gh9S9Pg203g/w/Bao0+j+IoHioLNgvk11I+ChPBk
+         HBHnskhUnzqC/Gn8ign5LtntTGXrnDE107IPN5/vDkLHTKg5XJ/pfYVAF5ISWRKbRMkD
+         b4xbcglZ2QBxniVLRlcKW864QEwH+3hXRWfFtaWOj9jOLSfGgLSTEhToYfsI6cPh/sfk
+         HO7/3PgNobJRxm1haK+WNfLJm+yjw8/yi9baTclGMlllGg2hKHJB+0zk4WjqcoAqIKYT
+         UlOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lWF1kWcT9wxBz0pCIKCeMgLRCPWsycB4mMPiKfgQZvo=;
-        b=1LUS4OutfcdWdxqTz96mzKUDOfEazJOTADXuDKeDR0hY2kLaQkNl6WQ0rrnPbzXVHu
-         sGCcKiLArq+Wi1GaZl3PwzBU36Dzbo/oZ696rYB2mpKUGzN83RcGDkBJrQiB9bWU9uVC
-         cjjiBAupTkaYB3iX1kvIw0nhqC1kOx7QArY6xyoKH2V1T1Zh1wY4PSOGxwDIWXso5jHT
-         cXBcYzW308FC/rufJ5DCrgWUyQQMb4d1KA8a7rqYsf6vEuk3X+XR+tZvBnzAiW41qVGS
-         6AV19yOxur7+R05LVe3RBVRXkUgzt3/lAjKwuQKp4VqlyhbXgGhYFEsmVoW0LC0ciTAB
-         6CHA==
-X-Gm-Message-State: AJIora8T47RZ0c93AejFWyop37Bi4/oXTnNe7MfnIv5XY2P1Z+cvfFkD
-        WOqJUfONDmZ4pKYy8qAH/qZdvJMIge6OPg==
-X-Google-Smtp-Source: AGRyM1suYNn2OTqVyN0AoIxFKs9vGbir5E6Hv14lYeggSk5ewWKh62mMJODbZHHO4oaig2eaC3PzXQ==
-X-Received: by 2002:a05:6512:2296:b0:489:d318:8849 with SMTP id f22-20020a056512229600b00489d3188849mr3494930lfu.69.1657760504227;
-        Wed, 13 Jul 2022 18:01:44 -0700 (PDT)
-Received: from gilgamesh.lab.semihalf.net ([83.142.187.85])
-        by smtp.gmail.com with ESMTPSA id m14-20020a056512358e00b00489c59819ebsm58169lfr.66.2022.07.13.18.01.43
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iYjvT9/K+PJOYO+PKYqApFIeqrzKMwdmFTyx44M/bUw=;
+        b=xUb7ec2ImRoZ8/9NuYjdu/0Ui4HKSpaxYC2VnaZXB1lCRa3Qm+a0AnRm8m9V76lfYS
+         /ct6fDWfMGvZ192sYAwE5dGmPrqgfZZKehht0pktkJCgU/kHHqRezy0Et+B1PQc7FMAT
+         abIYsE+SMOO2PGVNA1U9YT8GdmYW2q9poGsWDyyUT6QKTJW4Up3p/gzK1nAjUTls0xAo
+         UD8IewCN8rBuTwLT8ymqr0cL24NVpMYwxtU6ktQyu+Oo/w40Hfr2mOioH7TZ5kpvRIb/
+         hfbjQEJschZ/gFe3DvfN7/EAMzm6z8v9Cuy0g6SprGWJphh9uFLez4fbSgjvSpPdvvtZ
+         tgNg==
+X-Gm-Message-State: AJIora/62Yv05ArA688cNb664n2Usjza4Odkiy4OkHDK6AhCKkerKAkE
+        cfXV+OnUKpV8XdlOiXGvzQWBsA==
+X-Google-Smtp-Source: AGRyM1uX6QB+BfDKrubdH5R5fP1CmDIQfDrAae3pIvHrIcWjLL7rkJKM2XvtWMxxzpr6bK6W8KlqTA==
+X-Received: by 2002:a62:e10d:0:b0:52a:b77e:8bd3 with SMTP id q13-20020a62e10d000000b0052ab77e8bd3mr5810419pfh.66.1657760630794;
+        Wed, 13 Jul 2022 18:03:50 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id g21-20020aa796b5000000b005289cade5b0sm170538pfk.124.2022.07.13.18.03.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 18:01:43 -0700 (PDT)
-From:   Marcin Wojtas <mw@semihalf.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        mw@semihalf.com, jaz@semihalf.com, tn@semihalf.com
-Subject: [net-next: PATCH] net: dsa: mv88e6xxx: fix speed setting for CPU/DSA ports
-Date:   Thu, 14 Jul 2022 03:00:21 +0200
-Message-Id: <20220714010021.1786616-1-mw@semihalf.com>
-X-Mailer: git-send-email 2.29.0
+        Wed, 13 Jul 2022 18:03:49 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 01:03:46 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v7 000/102] KVM TDX basic feature support
+Message-ID: <Ys9rcnyIZlUc76iG@google.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1656366337.git.isaku.yamahata@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 3c783b83bd0f ("net: dsa: mv88e6xxx: get rid of SPEED_MAX setting")
-stopped relying on SPEED_MAX constant and hardcoded speed settings
-for the switch ports and rely on phylink configuration.
+On Mon, Jun 27, 2022, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> 
+> KVM TDX basic feature support
+> 
+> Hello.  This is v7 the patch series vof KVM TDX support.
+> This is based on v5.19-rc1 + kvm/queue branch + TDX HOST patch series.
+> The tree can be found at https://github.com/intel/tdx/tree/kvm-upstream
+> How to run/test: It's describe at https://github.com/intel/tdx/wiki/TDX-KVM
+> 
+> Major changes from v6:
+> - rebased to v5.19 base
+> 
+> TODO:
+> - integrate fd-based guest memory. As the discussion is still on-going, I
+>   intentionally dropped fd-based guest memory support yet.  The integration can
+>   be found at https://github.com/intel/tdx/tree/kvm-upstream-workaround.
+> - 2M large page support. It's work-in-progress.
+> For large page support, there are several design choices. Here is the design options.
+> Any thoughts/feedback?
 
-It turned out, however, that when the relevant code is called,
-the mac_capabilites of CPU/DSA port remain unset.
-mv88e6xxx_setup_port() is called via mv88e6xxx_setup() in
-dsa_tree_setup_switches(), which precedes setting the caps in
-phylink_get_caps down in the chain of dsa_tree_setup_ports().
+Apologies, I didn't read beyond the intro paragraph.  In case something like this
+comes up again, it's probably best to send a standalone email tagged RFC, I doubt
+I'm the only one that missed this embedded RFC.
 
-As a result the mac_capabilites are 0 and the default speed for CPU/DSA
-port is 10M at the start. To fix that execute phylink_get_caps() callback
-which fills port's mac_capabilities before they are processed.
-
-Fixes: 3c783b83bd0f ("net: dsa: mv88e6xxx: get rid of SPEED_MAX setting")
-Signed-off-by: Marcin Wojtas <mw@semihalf.com>
----
- drivers/net/dsa/mv88e6xxx/chip.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 37b649501500..9fab76f256bb 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -3293,7 +3293,12 @@ static int mv88e6xxx_setup_port(struct mv88e6xxx_chip *chip, int port)
- 	 * port and all DSA ports to their maximum bandwidth and full duplex.
- 	 */
- 	if (dsa_is_cpu_port(ds, port) || dsa_is_dsa_port(ds, port)) {
--		unsigned long caps = dp->pl_config.mac_capabilities;
-+		unsigned long caps;
-+
-+		if (ds->ops->phylink_get_caps)
-+			ds->ops->phylink_get_caps(ds, port, &dp->pl_config);
-+
-+		caps = dp->pl_config.mac_capabilities;
+> KVM MMU Large page support for TDX
  
- 		if (chip->info->ops->port_max_speed_mode)
- 			mode = chip->info->ops->port_max_speed_mode(port);
--- 
-2.29.0
+...
 
+> * options to track private or shared
+> At each page size (4KB, 2MB, and 1GB), track private, shared, or mixed (2MB and
+> 1GB case). For 4KB each page, 1 bit per page is needed. private or shared.  For
+> large pages (2MB and 1GB), 2 bits per large page is needed. (private, shared, or
+> mixed).  When resolving KVM page fault, we don't want to check the lower-size
+> pages to check if the given GPA can be a large for performance.  On MapGPA check
+> it instead.
+> 
+> Option A). enhance kvm_arch_memory_slot
+>   enum kvm_page_type {
+>        KVM_PAGE_TYPE_INVALID,
+>        KVM_PAGE_TYPE_SHARED,
+>        KVM_PAGE_TYPE_PRIVATE,
+>        KVM_PAGE_TYPE_MIXED,
+>   };
+> 
+>   struct kvm_page_attr {
+>        enum kvm_page_type type;
+>   };
+> 
+>  struct kvm_arch_memory_slot {
+>  +      struct kvm_page_attr *page_attr[KVM_NR_PAGE_SIZES];
+> 
+> Option B). steal one more bit SPTE_MIXED_MASK in addition to SPTE_SHARED_MASK
+> If !SPTE_MIXED_MASK, it can be large page.
+> 
+> Option C). use SPTE_SHARED_MASK and kvm_mmu_page::mixed bitmap
+> kvm_mmu_page::mixed bitmap of 1GB, root indicates mixed for 2MB, 1GB.
+> 
+> 
+> * comparison
+> A).
+> + straightforward to implement
+> + SPTE_SHARED_MASK isn't needed
+> - memory overhead compared to B). or C).
+> - more memory reference on KVM page fault
+> 
+> B).
+> + simpler than C) (complex than A)?)
+> + efficient on KVM page fault. (only SPTE reference)
+> + low memory overhead
+> - Waste precious SPTE bits.
+> 
+> C).
+> + efficient on KVM page fault. (only SPTE reference)
+> + low memory overhead
+> - complicates MapGPA
+> - scattered data structure
+
+Option D). track shared regions in an Xarray, update kvm_arch_memory_slot.lpage_info
+on insertion/removal to (dis)allow hugepages as needed.
+
+  + efficient on KVM page fault (no new lookups)
+  + zero memory overhead (assuming KVM has to eat the cost of the Xarray anyways)
+  + straightforward to implement
+  + can (and should) be merged as part of the UPM series
+
+I believe xa_for_each_range() can be used to see if a given 2mb/1gb range is
+completely covered (fully shared) or not covered at all (fully private), but I'm
+not 100% certain that xa_for_each_range() works the way I think it does.

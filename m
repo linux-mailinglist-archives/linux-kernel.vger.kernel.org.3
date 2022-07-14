@@ -2,135 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70297575796
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 00:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA69B5757AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 00:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232572AbiGNWZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 18:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
+        id S238023AbiGNWcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 18:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbiGNWZT (ORCPT
+        with ESMTP id S229984AbiGNWcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 18:25:19 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EFC71BCD;
-        Thu, 14 Jul 2022 15:25:18 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y9so3073795pff.12;
-        Thu, 14 Jul 2022 15:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aTK/b0TZUnjxfiXeLcvVZOBgrnSM2TtxUMit8G0GiSg=;
-        b=oXYl1Qz3/VkWuxcnuGS27g3Iu7/8VlpA/kOSL6MjrQcKCWf0qXB0ioPA9LXniO/p34
-         5vogGLlDyEnMLLq6+H0u89OmTzNGJeDQbiA7UF8o53p9ptUlQNyyolSzIfX0dj6S/xq2
-         AcrsGoCB0/DFwhczh7EFAuPg/HKllUvV5SrU6nUAf2EzZwbPGUlDA9Idl+wyuzdlaqGK
-         VaEh8yDDy/plPrstQs9ru9gXSJJo1N1oTuQyfhnPVBR88mbWTgtu4YmKgWkZLwq8HKeL
-         6Gd60vobSX4tEHTrYaTTMYgDu2UYUyVlsBmA/LO1GM3P9wsGqyys1RWzcu4bJUmwmZGw
-         GWdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aTK/b0TZUnjxfiXeLcvVZOBgrnSM2TtxUMit8G0GiSg=;
-        b=KfWM4sPVM8LFl6Ic95spUGG1XRgo642VJK1oCoyw0QAMjlibH5tRDFJ1hPG2A4DwY5
-         asTuZfHrKG9PwHGt7NzcpiT3YyoRfK/HFvqekqg6/CtHlTlqaxuF1utttjIrRPXWd45p
-         LuLfpexUy+VNA+VQMGEfddhb0Xx3jVwXGuDhCcoNNqfrwAijesWZDGTAlE5saIg+FTws
-         7r/dItc1fQwlhl7jNZWx3YlqNZnp9+1v97Zt2+hHnAqmD4pTJ40cUOWYUJijyEbEGsA+
-         rYc9rhoMV94iPuMlcs5mVbVneVeF5Z57I86JNt4g3Pv0qtQ8f389rTzvPMwNA/lJBU1K
-         puHQ==
-X-Gm-Message-State: AJIora9OVzatJW87O25PnM/xL6QwktvB/YplKTBNKwm3Q7hE7FDFeMXx
-        KlqVb8hDUCSf9o14pEaIiKCJLU8b9hY=
-X-Google-Smtp-Source: AGRyM1vckNO4CUGve+xKik7rJa4yNPY5J3qV5IEI/L5fti6W+LPNDORSzJ+9a9+e4TX/k0Q1IuDx4w==
-X-Received: by 2002:a05:6a00:1a0e:b0:52a:cef3:b4a1 with SMTP id g14-20020a056a001a0e00b0052acef3b4a1mr10240441pfv.23.1657837517650;
-        Thu, 14 Jul 2022 15:25:17 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k6-20020aa79986000000b00528c22038f5sm2326613pfh.14.2022.07.14.15.25.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 15:25:17 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     fancer.lancer@gmail.com, gerg@kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] MIPS: Fixed __debug_virt_addr_valid()
-Date:   Thu, 14 Jul 2022 15:25:12 -0700
-Message-Id: <20220714222514.1570617-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 14 Jul 2022 18:32:24 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CEA5466D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 15:32:22 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 22B79C01F; Fri, 15 Jul 2022 00:32:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657837941; bh=WLDYnTfO5crNPxdekrA0P8cZ4q/DgWrOCGaTfNq2fqc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZwQHzhxDxF+KCjSpVURXTpOllbAZOCpLct1byIyL8ceiWJ76/8t3DW+y3kZ/s1ph/
+         Rar0jhl5wHx9byVefUyhER/eZhrVJCnoeZO/IdlyT+y/yAEtzInsmm9n9/vLzaPNwN
+         LMFdJUh8GJEsT0D2uZYTR2GM67futNnWrmpLF0Rco86ACuEYyKzBJ7gTX25Yv/V/fP
+         aHInE1z09DRSKQUA1jo05amh+9ADickzhPtW97byGBgAPkx9r6SNOj9h0AwL3mp8lR
+         50goqOQ1jDnRR4CQ0/qdPfBNtfcFXJ2pcOvaeI+DoEDVQIBu/ymMfd0JiQm8TuYtyL
+         +/r+BmBq1o6jw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 1EB42C009;
+        Fri, 15 Jul 2022 00:32:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657837939; bh=WLDYnTfO5crNPxdekrA0P8cZ4q/DgWrOCGaTfNq2fqc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HjGgQf4Ou6wqyh736OABE7GrwK2vfJSQggtyMGE5c8WPegW/mzTa/mV8r3TcXJMp1
+         /TtlQdtHYKXMqg302hRnlKlVsAKhIjvrDICtDuJGYujUG3YuWk6IvomWhaE7Mao0Hk
+         ruf/fN/hzlWGDtC+KtbEP4uJA+W2wx9ww0Gh0tCoxCA08fxBl/71aWrT2EDDJKnDCg
+         hofVK2lVrSMo9/SWiM2vLd2lNed19+tL3KYFspw4y3mTjBOCIGrdGzDTwZCqb2aOTL
+         Egvq1WHtvR+izJ4m0wTeSPBHCm7atu/uElSgTS3Wv2xOoDkfRC38RACM8y/s14OsPC
+         yIK/TXEP36EYQ==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id a6492704;
+        Thu, 14 Jul 2022 22:32:09 +0000 (UTC)
+Date:   Fri, 15 Jul 2022 07:31:54 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        Greg Kurz <groug@kaod.org>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>
+Subject: Re: [RFC PATCH] 9p: forbid use of mempool for TFLUSH
+Message-ID: <YtCZWmPxqbL8VlTl@codewreck.org>
+References: <12950409.o0bIpVV1Ut@silver>
+ <20220713041700.2502404-1-asmadeus@codewreck.org>
+ <2229731.hRsvSkCM7u@silver>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2229731.hRsvSkCM7u@silver>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is permissible for kernel code to call virt_to_phys() against virtual
-addresses that are in KSEG0 or KSEG1 and we need to be dealing with both
-types. Rewrite the test condition to ensure that the kernel virtual
-addresses are above PAGE_OFFSET which they must be, and below KSEG2
-where the non-linear mapping starts.
+Christian Schoenebeck wrote on Thu, Jul 14, 2022 at 09:16:14PM +0200:
+> Patch looks fine on first impression, but I'll postpone testing this. And yes, 
+> I also think that exempting Tflush should be fair. If 4k (soon) cannot be 
+> allocated, then you probably have worse problems than that.
 
-For EVA, there is not much that we can do given the linear address range
-that is offered, so just return any virtual address as being valid.
+Yes, would be for a later cycle anyway -- no hurry.
 
-Finally, when HIGHMEM is not enabled, all virtual addresses are assumed
-to be valid as well.
+> > Here's a concrete version of what I had in mind: literally just make
+> > allocation fail if the initial alloc failed.
+> > 
+> > I can't reproduce any bad hang with a sane server here, but we still
+> > risk hanging with a bad server that ignores flushes as these are still
+> > unkillable (someday I'll finish my async requests work...)
+> > 
+> > So ultimately there are two things I'm not so happy about with mempools:
+> >  - this real possibility of client hangs if a server mishandles some
+> > replies -- this might make fuzzing difficult in particular, I think it's
+> 
+> Concrete example of such a mishap?
 
-Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
-Changes in v2:
+The example I gave Kent in another reply is just server misbehaving -- I
+have had histories of troubles with ganesha in the past -- but even with
+low memory qemu and fio and ^C it felt more likely to get stuck? it
+looked killable e.g. pkill -9 fio would get me out of it with this
+patch, but ^C ought to work in my opinion.
 
-- handle lack of HIGHMEM and EVA
+In particular with the io_uring engine some of the workers aren't
+visible at all from userspace (I only found out about them through
+qemu's gdb and lx-ps), so it's really hard to see we're stuck on an
+allocation if that ever happens...
 
- arch/mips/mm/physaddr.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+Ultimately I think mempool is great for short-lived allocations
+e.g. temporary buffers, where we can be sure the memory will be freed up
+after a short bounded time, but it might just not be a great fit for 9p.
+I'm not sure what to suggest instead, though; this is really worst-case
+thinking and just having ^c work e.g. make mempool_alloc interruptible
+and failible would probably be enough to convince me.
 
-diff --git a/arch/mips/mm/physaddr.c b/arch/mips/mm/physaddr.c
-index a1ced5e44951..f9b8c85e9843 100644
---- a/arch/mips/mm/physaddr.c
-+++ b/arch/mips/mm/physaddr.c
-@@ -5,6 +5,7 @@
- #include <linux/mmdebug.h>
- #include <linux/mm.h>
- 
-+#include <asm/addrspace.h>
- #include <asm/sections.h>
- #include <asm/io.h>
- #include <asm/page.h>
-@@ -12,15 +13,6 @@
- 
- static inline bool __debug_virt_addr_valid(unsigned long x)
- {
--	/* high_memory does not get immediately defined, and there
--	 * are early callers of __pa() against PAGE_OFFSET
--	 */
--	if (!high_memory && x >= PAGE_OFFSET)
--		return true;
--
--	if (high_memory && x >= PAGE_OFFSET && x < (unsigned long)high_memory)
--		return true;
--
- 	/*
- 	 * MAX_DMA_ADDRESS is a virtual address that may not correspond to an
- 	 * actual physical address. Enough code relies on
-@@ -30,7 +22,9 @@ static inline bool __debug_virt_addr_valid(unsigned long x)
- 	if (x == MAX_DMA_ADDRESS)
- 		return true;
- 
--	return false;
-+	return x >= PAGE_OFFSET && (KSEGX(x) < KSEG2 ||
-+	       IS_ENABLED(CONFIG_EVA) ||
-+	       !IS_ENABLED(CONFIG_HIGHMEM));
- }
- 
- phys_addr_t __virt_to_phys(volatile const void *x)
--- 
-2.25.1
 
+> > easier to deal with failed IO (as long as it fails all the way back to
+> > userspace) than to hang forever.
+> > I'm sure there are others who prefer to wait instead, but I think this
+> > should at least have a timeout or something.
+> 
+> Not sure if it was easy to pick an appropriate timeout value. I've seen things 
+> slowing down extremely with 9p after a while. But to be fair, these were on 
+> production machines with ancient kernel versions, so maybe already fixed.
+
+I'm not sure what kind of timeframe you're thinking of, for exmple
+lustre has 5 minutes timeouts in some places -- although depending on
+the failure some things will also wait forever.
+I was thining something similar, but realistically this isn't going to
+happen anyway, at least not here, so let's not waste too much time on
+this point...
+
+> A proc interface would be useful though to be able to identify things like 
+> piling up too many fids and other performance related numbers.
+
+That would be nice, yes.
+We can probably pull in some stats from either idr (requests for tags
+and fids) quite easily -- that might be a nice side project if someone
+wants to do this.
+
+> >  - One of the reasons I wanted to drop the old request cache before is
+> > that these caches are per mount/connection. If you have a dozen of
+> > mounts that each cache 4 requests worth as here, with msize=1MB and two
+> > buffers per request we're locking down 8 * 12 = 96 MB of ram just for
+> > mounting.
+> > That being said, as long as hanging is a real risk I'm not comfortable
+> > sharing the mempools between all the clients either, so I'm not sure
+> > what to suggest.
+> 
+> Why would a shared mempool increase the chance of a hang or worsen its 
+> outcome?
+
+In the tcp/really remote server case, if a server stops responding
+that'll get these requests not freed for a while (until the user gives
+up, possibly never); if the client also is under enough memory pressure
+to just fail a single alloc then on a still working mount we'll
+potentially have no buffer to give it and get that other working mount
+stuck.
+
+Another example would be re-exporting a network filesystem, e.g. at
+previous job we'd run a 9p server re-exporting multiple lustre
+mountpoints on different servers, so one could get stuck while others
+still work. That this would impact the 9p client on different mounts on
+the client side is a bit of a bummer.
+
+
+Anyway, this is just looking for trouble and I'm sure most users would
+only see improvements with this -- we're talking about some allocations
+that would have failed anyway which should be rare enough in the first
+place, and in the nominal case we'd get this to work when it doesn't.
+I'm just not fully comfortable with the failure mode at this point.
+--
+Dominique

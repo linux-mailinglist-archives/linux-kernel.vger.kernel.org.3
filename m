@@ -2,155 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72015754CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221A75754CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240583AbiGNSSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 14:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        id S240587AbiGNST2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 14:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239483AbiGNSSu (ORCPT
+        with ESMTP id S239042AbiGNSTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 14:18:50 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92212120BF
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:18:48 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26EFrJoM000875;
-        Thu, 14 Jul 2022 18:18:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=jdsbbH+N+ZhZlBAnsGwWpo7o4JzFCsDXhYIIFwCJz/Y=;
- b=CpVDuuhSqPH1z11IzeN39z3lQ4UAYbNhG+rste9sCkCR0zzCWY+8O6RmfFHPQE5/8Uqp
- A/Jnun/MhbOQu9tT5v41yxXUlR27BKklYJh573ereubVYQbndxe2FLSQ30OCqNoAWTFO
- 6sP4f4Nzf4ezg3z6tuyXeY2D/G/yaGpENlqJZKiwBo1DJD+/zt4eRBtqtcIi7zTlz32M
- Bv+1ay+I/9KRgjog3JqZ2jCleEXz940QFedRIlu2RgeFBGbYuZ7KXXx+nUNLiWc/IUDX
- 3QI7d/PZ1XK+O0Xz2vxbnfaXTW2D/G8sMDvFLTxLf3h0AYQDQQLt10YOrTkIeHMrAnKv NQ== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h71xrp085-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Jul 2022 18:18:31 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26EIFfpw019757;
-        Thu, 14 Jul 2022 18:18:30 GMT
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2046.outbound.protection.outlook.com [104.47.56.46])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3h7046mq9c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Jul 2022 18:18:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VzxuU3oTq057QSJiLuQ5QYGnBXPPKp5SxNnBb33CKhqBRd6Ab9srETPcQo06DRWTM4ICM6DlxPjbZ5d0Dwvou+7JnY2jeIoWJiQOBT35jrcnagenlOOqSW8prrAp7yXQyKCWMOdPLBNi//k6eP4cr5wOKrNfmnGhBw/4nJH6N9qNxmdN51XUCywEfkZp+ABYDlCS6YQqh6ANB0LjaX9ojzY8+EU+/50HpJ1uzhO+9kyga7Gp9D9NAc0+NpGu1ZTFlfAooVOyIU10uE0sB6BdAIQUbF8jM3RC+RfIbRCgQ5bHt0fBvgLn+mPMAoZnrcb2OGvLpgSFBXsvZq+b1WJsoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jdsbbH+N+ZhZlBAnsGwWpo7o4JzFCsDXhYIIFwCJz/Y=;
- b=Bqv+PCFmzJATm/ye9j5x8hMInWrYUyEO4x4Vf8NUvAKVYcPB0u40f+SZWRqDicIpf1Ab2oG6nwp0FBrGTYgFSyqdXthED0e86m00kco5vRpAbQnnspApScwzuJI30DNY31hxaSxflrE8Z7TkRwrx9S02ZzA3/eVp+nOBhB2R/5ysp6lkKHCylugwbfdz+vsRy1ceeMFf4GUl3W2QQoaei2ipee57aC/l84YMgoFnDdsp6qc1k6xPa1jod+stB2aowYhFBkwaIrVdstlhv7sEbgE7j0wBXrN1h+y/gNjNR9r2SmAdzP5V6lQioHk/MvNcigytn++gU/dKrSvt86sgdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 14 Jul 2022 14:19:25 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9E912AB9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:19:24 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-31cf1adbf92so25599687b3.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:19:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jdsbbH+N+ZhZlBAnsGwWpo7o4JzFCsDXhYIIFwCJz/Y=;
- b=DO+oXFL5f6m/MI+9vPenCHZT955C12LeCY0ByHEfUTVMk7tWaADQirw1vbcJOLYv8OAQcKh5Yss14kjoY3ey4Z/eetsQDSA2sGTFU9ttKzOdnMI8kU0WnNV0DORntAPbocIHG+yvwu6/jtwBcxrHKYe59eaT7S+F6WD37tjTSgg=
-Received: from SJ0PR10MB4576.namprd10.prod.outlook.com (2603:10b6:a03:2ae::5)
- by CO1PR10MB4484.namprd10.prod.outlook.com (2603:10b6:303:90::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Thu, 14 Jul
- 2022 18:18:28 +0000
-Received: from SJ0PR10MB4576.namprd10.prod.outlook.com
- ([fe80::2913:8783:edc2:af11]) by SJ0PR10MB4576.namprd10.prod.outlook.com
- ([fe80::2913:8783:edc2:af11%7]) with mapi id 15.20.5417.033; Thu, 14 Jul 2022
- 18:18:28 +0000
-Message-ID: <5516b436-1938-61f8-8e15-a11195329c40@oracle.com>
-Date:   Thu, 14 Jul 2022 11:18:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] sched/fair: no sync wakeup from interrupt context
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     vincent.guittot@linaro.org, mgorman@suse.de,
-        tim.c.chen@linux.intel.com, 21cnbao@gmail.com,
-        dietmar.eggemann@arm.com, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de
-References: <20220711224704.1672831-1-libo.chen@oracle.com>
- <Ys//ktD6VYE2uGpw@worktop.programming.kicks-ass.net>
-From:   Libo Chen <libo.chen@oracle.com>
-In-Reply-To: <Ys//ktD6VYE2uGpw@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN4PR0501CA0013.namprd05.prod.outlook.com
- (2603:10b6:803:40::26) To SJ0PR10MB4576.namprd10.prod.outlook.com
- (2603:10b6:a03:2ae::5)
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=UalPu2ksuWmPhMJk6j/nedFQH4vb0HRRAL+Epn4qbZ8=;
+        b=j4dwcaQHxccsYOFZrXtomfe9hOl6BlVc4DQKsraUI3MJvpEoX61FMcb4nxyZRbRD+y
+         SS1TtWDZUdJE1B+TtUsKSI1GUNUMmsL0zWNYoVVMksVTckyC1IYa0j6SdesEOJHPmkl1
+         KyDzM+uxVRocoJ+TKjPx5nsaU32fQyQrJp+BGkwL6V5QyOccv1GCuQ8REo4/GYhuh0+P
+         KGQxPNRaZzbCGKpY51IBbk0O/s7k931S2m6nM2CVV6ZYSG2TQfWxoKTZjSVLdZ2ydhyP
+         To2+Hn+xOGUPAGEHyAAzB4wlp2oUgyRFggJtIs8CeZjVagrVXZRaQNI+c5LIevh68Vjf
+         M9YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=UalPu2ksuWmPhMJk6j/nedFQH4vb0HRRAL+Epn4qbZ8=;
+        b=UXxrxwpWxiAQSWsVIL5sGsuznYt9khLLpt4wmzaogEzJm3wJopwrbyw1lWjgDmc8In
+         bDRmu7QxeFVuKn3gmRo/FvvrgLy8XMsdaZ/ouIiJbpJm4wp7YTDrQP/SSAKwOgu1rnHx
+         d6ItzWPJyOl8+kTUnv9ChchO+2yxfc4s/enKPof6G5wYOdf2QnSCzwtB34YkK+F7s6f/
+         aft1g3SJd1zNcvsfvKO7nhCnFLungX7bxMTx59U4EMiumkSsIcTb8SV3tcTg5h5nrhYt
+         Ih0lNMRQUaERgUnyzzxJsY0LDvLfIWoh0lpp1H2xt8ZBoN+7Uh/bhy89jsF2obOA+qgf
+         CPvg==
+X-Gm-Message-State: AJIora/Upgj3qZ3V6p9V4z1egZ+yn+XHWIp3PrZOaDk60IRYv+tTMBB5
+        eJ5ddA/oIbrFtwxirEnfudCtb8jkW7JfQtJdllkN2g==
+X-Google-Smtp-Source: AGRyM1tyJfI1/uNHge25px5/PLanVAieHbxdM60iopHkkljV0nkYyMuYqzY2eroNzQHCTe3fJ7VxxB7ATKaOGnnw3vY=
+X-Received: by 2002:a81:4427:0:b0:31d:b9ad:4a7c with SMTP id
+ r39-20020a814427000000b0031db9ad4a7cmr10743607ywa.396.1657822763794; Thu, 14
+ Jul 2022 11:19:23 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2a50cfb1-28c5-4060-1fab-08da65c53fc8
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4484:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OG4IUSnPBlLoP7CBjPrkEF8560j0zQt6alVC36sMmH/FhPb9axo1+Rseu/9MIJH7QjXh+s+CpuLYO+son4s2vCeEsj9FBSqCjDAzgXFE53oPpbbVgtdr0cR5XQ1I9O5vrUKs3hazxC6MXIZa1BdFKrFbG8F6SvUKTM6Apq3VgrHOuSTytbQBq4iDT+x9zIyMbvLNSzt78CAUJX3oBfpeJxYaBlKRHxwCylf3ZIBsHWAjVbknd3cPlCj1E82iOh01qFqyIYcankWX4Z9LxAJ3IinssObX2tXgHrRV6W8opF/rjoarWLXSLNZD18X9OB+kpHzztPE0KJcvH8yUEE0b8AA+EKam9MB63xIrALoqVPMY5OM+q+YIZJU8XD9ZEQZfvgmU2Yq4SAHE0s/x5SXg3GoHmVxB6/pmRRbodYNkurvEZCpT4i02ksoWzUvrAXFohzK6SajDMY94KA4F0VdQ0NYLaJ9LDOWnGaNucgMe097t97RA6NctNRQMhdMiCGXVvX4CLuLieG1cXtZuvlFu9hiEVpD9Xi+BJo36B/fDEPBcdcQBO36ybzRV+Gq6lzeCVEdvCJCFyYzXDLwoWH52Rtka+t8luXokRh2AzSImHSkBqeShRFp+D8hQ0+ed9e9f23tkeL+zMKVTqoG63extvliir/WBq49mTVoH8+eRVTMVvQ2IgvuhUaJzpdg4gJM2Aqghm9MkmIvh9HagmHdTwMBIXjY7VDiIg2h5IqiMuJHKaZGr3tgbO3yvxpUnODHSexG0z1al9bA46Jc9jGrSkihGZLEkhYd1KytwCBWVukz6LqDZil9c+VfnkIGO5mivQrGj6t18S+gPyTRhU+cf1kGGTGk2Dw9EIMOJPGB4+m3H1f/eEfBudsMAJ7fpk6rthASipa0vGDM8HOoKfcWznthL6HRs3+IVDPg4/Q9F8es=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4576.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(396003)(346002)(136003)(39860400002)(366004)(6916009)(316002)(186003)(86362001)(2616005)(966005)(6666004)(41300700001)(478600001)(6486002)(31696002)(52116002)(6512007)(6506007)(53546011)(44832011)(2906002)(8936002)(5660300002)(36756003)(38100700002)(66476007)(66946007)(4744005)(66556008)(8676002)(31686004)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?LzJSOHBLbzVzVENoQlpxZHJpNG9mKzZpZUVJUUJGbnNLbDBaWUJ0ZnhQbDVG?=
- =?utf-8?B?bDJrcndwWXFLSzhkRUd2UEc2cytNR1VUM1lyajFrMFovTUZMNmlSZnRlTHVI?=
- =?utf-8?B?Z09LbXhHRVdveUJnTmZHWVBwdjZEbG1qb3FZZTc2Z3BZOG9iWjRHUUVES0Ix?=
- =?utf-8?B?RmNKZjh0UTlML1c5em9CKzRsY0xxZVRDSWRaLytBOXd4dU8rbXorOEM4U0Zo?=
- =?utf-8?B?bzZqK0d6STNLSFZLbVI5c291aWZhUUY1L3VoUDl4REMwTXN5ajdpL1I2T2th?=
- =?utf-8?B?SkRVTmZ5NENPUUYxSUFDNXA5NWlBU091aHZXb3FNa1M2dllOaE1kT2l3b0h6?=
- =?utf-8?B?Zmp6Y3BnVTVZR0lldmhteUZRZkFHYUpTWXhwRTlENmk4RUZKVTR3TlBYVW1Z?=
- =?utf-8?B?ekVTYXlpTXo4RjBRWjkyOGZjMXJxbEFTYWc2MngxWDFJdEdzcERGb3E1QzQz?=
- =?utf-8?B?cGdoeHNINlpFMlJhemxGTWpRVDRhaWZDN1BRMU1NRERpZlRIK1BJY1dkd2Jp?=
- =?utf-8?B?dTBLTWphdGhPY1lUU2ZjZStJak5lelNDS3A0cVBQUU9VcHZaeGhFNVhHVUVR?=
- =?utf-8?B?WFQwa09vMFZYb0hZdEJMcmo1WWVPelNacU5xRGJNT3UxYm8vQ2MrcjEyM1ln?=
- =?utf-8?B?S0ZZdkg3bDV2YXpCWlZSMFNhdW1VWUYxUktLQTBaZDZ0RzZSeFRlWkxGQURq?=
- =?utf-8?B?Wmp3UVFjYUgrYTVVdXRBdC8vM29WMlFIVnFSS1Y0cEl6a1dPRE1IL3pMZjRJ?=
- =?utf-8?B?TEJieWVrUHdTQVc0azgxbnBkUi9HRldTS0JKbExkY2pQY0JlTXhLaXRmaXBT?=
- =?utf-8?B?N0pQR3VobVVkd3VFM3ZqSHArcnh2eHNyU1BaSy9QSEN5d2hMNU91Z3ViTCt0?=
- =?utf-8?B?L0VpNHBQczFKdERkTXhhMWZwQnE2aVVLUS84aUpKekZJSnhDL0ZmemJ3S1pP?=
- =?utf-8?B?aU0vbFpESWh0MGdIZHBJSytJZ0hKUkUxSlRlbUIyeTNIL2w4TUUzbHBaR1pa?=
- =?utf-8?B?RC9WRUR3VnNHeFVDNmRzOS9iclUxeHd5ZlY0cmFFQ3BqZnlEcUcrSStrZk8w?=
- =?utf-8?B?cXQxdklpMHBxcUdBWG5pc3pyM25KSmM1U0t1S2k3T255aXBacW41eG5HdDRN?=
- =?utf-8?B?MEsvMFdHdHZ6Q3ZlTE9lQUJqSEkzYWc2L0ZVQmJYWUNBQW1BL1pBNHB1YTdE?=
- =?utf-8?B?R09rTmJlL1dFMTdlZzUrNkRYdDdaSjk5b0orakZtOU5MVS9UcmpudUZzcFdN?=
- =?utf-8?B?L2JVd0NjNTMzNGR3dTk1UGhWa1c2UE1rK3hRaGh2dHVCWDFvVThwVUZ1WmVF?=
- =?utf-8?B?SStIRlBFS0txL0QvSTVxNEFpTU1lM05Pak4zM3doZUpCd284MUsxNDlZR2xa?=
- =?utf-8?B?U2VUcXc2QjcrQUZIbmpJbURXRWVyRDN0UDdZNW44TFVwVU9Mc0NjUmtUTmwz?=
- =?utf-8?B?VjZXRENXL3hNa3Q1dnp2TlFhZTZManMrMjlJVlRmUk9IMm1TelhtdHB5UTNL?=
- =?utf-8?B?eGxKdnV6SU0yL0pDNFE3S2lKYlJnNDc1VGFQLzdteE9YNW5GT3YwRU10QTY2?=
- =?utf-8?B?UnorRU5wem0yWkZwRndqdGZ0cXhCV0hadzRLUXJjMzFPWVR6S1lZMFduODdh?=
- =?utf-8?B?cDkySVhJMjlwVnk2blhZbUFINDNsUkMzdVQ4bmJBWkYybnFTR3ZkNGFoYktJ?=
- =?utf-8?B?SHdySmRiWkVtU0w2aWhOTUpMZi9QZHRYYUw3REdDVTRWSHRmVG1sVzV0SFBy?=
- =?utf-8?B?YzdpM3dKalZHdk5UUFY4MExNUDRwM0hBUDk1eG9OSzcwRWMxYmFpUDlOWVFh?=
- =?utf-8?B?RVU1UjczbkRoQjliWU5iS1VSQk45a3JndlpnaHhmNGJSMWhjMHg4SlQ4Q2ZF?=
- =?utf-8?B?U3VYK2JGL3V3M2RvOUNXd3NYSzZnb0hhYmR4aDBIb2lPOGtXS2krYlNtWUIx?=
- =?utf-8?B?RVNndmJmbFZkcjlHVTJUcU9CR0hWc254c0lUeUszVDhnY0Y3TmZrenZNam5P?=
- =?utf-8?B?a0NMdHUyWWpsNkJzdmdDakMyWklGZEx0VlRBLytlQmVaRldaRWttSnp0VUNr?=
- =?utf-8?B?dVVYYU03UkovMCtwZHAvTWErVUZ5OHpNcGtCSmRNOG1OOTFXMENtYlkrZ3JU?=
- =?utf-8?B?YzBpcVdlUEx2ZmFqZjJrQ2NRK3c2Q0x4S1VKQU5XV1pyaGh4RXlaOERUYnUr?=
- =?utf-8?B?ZWc9PQ==?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a50cfb1-28c5-4060-1fab-08da65c53fc8
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4576.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2022 18:18:28.1576
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 49WfCk4VXLqu6nM19Rf+4n/H+NFCK+n+TmoNppNLc5Qry6d0LSla+wH2Rj/GqNGGW2ObWZMjKoQnzA7GA/buSw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4484
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-07-14_15:2022-07-14,2022-07-14 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0 spamscore=0
- adultscore=0 suspectscore=0 bulkscore=0 mlxlogscore=981 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207140080
-X-Proofpoint-GUID: kwGl7wm4YTgtwGL4HD_Pl60tPQWHuY7B
-X-Proofpoint-ORIG-GUID: kwGl7wm4YTgtwGL4HD_Pl60tPQWHuY7B
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220706205136.v2.1.Ic7a7c81f880ab31533652e0928aa6e687bb268b5@changeid>
+ <Ys40uw4QIe4fQKA/@google.com> <CANkg5eyehcECGeDHBEsxR=iOoyMwzkcpvX+oRxy7PJPYLD=VuQ@mail.gmail.com>
+In-Reply-To: <CANkg5eyehcECGeDHBEsxR=iOoyMwzkcpvX+oRxy7PJPYLD=VuQ@mail.gmail.com>
+From:   Tim Van Patten <timvp@google.com>
+Date:   Thu, 14 Jul 2022 12:19:12 -0600
+Message-ID: <CANkg5exT1kFr9WBQEGD0=ndH1aJMD3OXmuZ4Obx9JtVDgKS6ow@mail.gmail.com>
+Subject: Re: [PATCH v2] platform/chrome: cros_ec: Send host event for prepare/complete
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, rrangel@chromium.org,
+        robbarnes@google.com, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -158,17 +71,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[Resending in plain text mode]
 
+Hi,
 
-On 7/14/22 04:35, Peter Zijlstra wrote:
-> On Mon, Jul 11, 2022 at 03:47:04PM -0700, Libo Chen wrote:
->> [1]: https://urldefense.com/v3/__https://lkml.org/lkml/2021/11/5/234__;!!ACWV5N9M2RV99hQ!IwoFmg5mL051R93PCGfCs27IaZENjt_CV7Rp7RCZCGsuNi9gbcMOlNwOCkCosXNX94ZRzMjAuU9khXfg7A$
-> Please use lore.kernel.org based links that contain the MsgID of the
-> email in question, I think this wants to be:
+> Please be consistent.  Either way:
+> - .prepare and .complete.
+> - .prepare() and .complete().
+
+I'll address this in the next version.
+
+> The patch doesn't allow EC to log anything.  It makes AP emit more logs.
+
+This patch changes when the EC outputs the host command that indicates
+the AP is starting suspend and finishing resume, due to the change (in
+this patch) when the AP sends that host command.   This makes the EC's
+logs more accurate when correlating them with the AP's logs in regards
+to when suspend is started and resume is completed.   Previously,
+those events were sent when suspend/resume were already in progress.
+
+We'd also like to keep the new logs emitted by the AP to make it
+clearer when the AP is starting suspend and completing resume, so we
+can correlate it with the EC logs more easily.   This should aid
+debugging and timing analysis.   Since it only occurs during
+suspend/resume, it shouldn't flood the logs and follows the logging of
+other driver PM functions.
+
+> I didn't see concerns in [1] have been addressed.
+
+I replied to the first email stating why we want to keep the log
+message (and reiterated it above).   What's the correct process to
+indicate we don't want to make the change requested in [1]?
+
+On Wed, Jul 13, 2022 at 12:05 PM Tim Van Patten <timvp@google.com> wrote:
 >
-> https://urldefense.com/v3/__https://lkml.kernel.org/r/20211105105136.12137-1-21cnbao@gmail.com__;!!ACWV5N9M2RV99hQ!IwoFmg5mL051R93PCGfCs27IaZENjt_CV7Rp7RCZCGsuNi9gbcMOlNwOCkCosXNX94ZRzMjAuU9Kr4MkBg$
+> Hi,
 >
-> Right?
-Oh yes, thanks.
+>> Please be consistent.  Either way:
+>> - .prepare and .complete.
+>> - .prepare() and .complete().
+>
+>
+> I'll address this in the next version.
+>
+>> The patch doesn't allow EC to log anything.  It makes AP emit more logs.
+>
+>
+> This patch changes when the EC outputs the host command that indicates th=
+e AP is starting suspend and finishing resume, due to the change (in this p=
+atch) when the AP sends that host command.   This makes the EC's logs more =
+accurate when correlating them with the AP's logs in regards to when suspen=
+d is started and resume is completed.   Previously, those events were sent =
+when suspend/resume were already in progress.
+>
+> We'd also like to keep the new logs emitted by the AP to make it clearer =
+when the AP is starting suspend and completing resume, so we can correlate =
+it with the EC logs more easily.   This should aid debugging and timing ana=
+lysis.   Since it only occurs during suspend/resume, it shouldn't flood the=
+ logs and follows the logging of other driver PM functions.
+>
+>> I didn't see concerns in [1] have been addressed.
+>
+>
+> I replied to the first email stating why we want to keep the log message =
+(and reiterated it above).   What's the correct process to indicate we don'=
+t want to make the change requested in [1]?
+>
+>
+> On Tue, Jul 12, 2022 at 8:58 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>>
+>> On Wed, Jul 06, 2022 at 08:51:39PM -0600, Tim Van Patten wrote:
+>> > Update cros_ec_lpc_pm_ops to call cros_ec_lpc_suspend() during PM
+>> > .prepare() and cros_ec_lpc_resume() during .complete. This allows the
+>> > EC to log entry/exit of AP's suspend/resume more accurately.
+>>
+>> Please be consistent.  Either way:
+>> - .prepare and .complete.
+>> - .prepare() and .complete().
+>>
+>> The patch doesn't allow EC to log anything.  It makes AP emit more logs.
+>>
+>> On the related note, the commit subject is confusing.  The patch doesn't
+>> send "host event".  "host event" is a terminology when EC wants to notif=
+y
+>> AP something.  Also, s/cros_ec/cros_ec_lpcs/.
+>>
+>> > Changes in v2:
+>> > - Include cros_ec_resume() return value in dev_info() output.
+>> > - Guard setting .prepare/.complete with #ifdef CONFIG_PM_SLEEP.
+>>
+>> I didn't see concerns in [1] have been addressed.
+>>
+>> [1]: https://patchwork.kernel.org/project/chrome-platform/patch/20220701=
+095421.1.I78ded92e416b55de31975686d34b2058d4761c07@changeid/#24920824
+>
+>
+>
+> --
+>
+> Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997
 
-Libo
+
+
+--=20
+
+Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997

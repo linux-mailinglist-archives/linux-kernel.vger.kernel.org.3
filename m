@@ -2,290 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD54B575344
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF38C575302
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240474AbiGNQpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
+        id S234480AbiGNQmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240144AbiGNQoV (ORCPT
+        with ESMTP id S229608AbiGNQmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:44:21 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBECDCDE
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:43:45 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5aeb82.dynamic.kabel-deutschland.de [95.90.235.130])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D21D361EA192D;
-        Thu, 14 Jul 2022 18:43:42 +0200 (CEST)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] lib/bitmap: Make count and length parameters unsigned
-Date:   Thu, 14 Jul 2022 18:42:07 +0200
-Message-Id: <20220714164207.52410-1-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.36.1
+        Thu, 14 Jul 2022 12:42:21 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAACA4A83C
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:42:19 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id fy29so3301384ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:42:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=x4AugeXSCRuPAtvlRBrwestY1qbTUTFaUEkz9JRRq9Q=;
+        b=kzbJYz8gFAAT860gmXSmwM3Hxhb8XIRl5DSfP03ZfLvzBOxeICJpJf243fCimnF4cJ
+         we5Mup3nU0svqCyfxv3qFuMm2HP1XUCEd6dE7PBkkBTy36pclRIY639hqXeVsCY2MDGo
+         DAY8Bl+TQHwS9GqM7Pr+C0O8mOQ1nO9EQqaFSOlX6edk1UyYm8JZiHQAnw8LhYLh87pa
+         wkMWq8KR0VfEjg7fdjc4Sy76XhA0NdTDffYNTc4f7vDTsQf+pXlmboUK2NF95vee7k0B
+         DddM3DZEz97zS1koh7o7Sj7HJzE1HjgoZjp7xBpCIupVdecxYyqVHkzCclPl9Zly2jCi
+         pudA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=x4AugeXSCRuPAtvlRBrwestY1qbTUTFaUEkz9JRRq9Q=;
+        b=dNsfhR+f7joCGoSeTYHEspHou3L8AURw0WS9Y157Ih0RF2TrmEdgXncGnal0qsqivp
+         TVKUmJ8nEsw1PFITX/FxGoM+83zp0uXLdkmxd1KXpgPHLw7lt+aT/tvIKjcpwacvwHz+
+         H+dFuOVW7jx1qBoZFFNrba1aA8BrxBRYg5uIzOR1BRCgbs8SDzC+HumhfrYKUpVWG/Ye
+         AuViP61zu+dwlrv1sYUjy9D90UnbL5RJVotbfX4g0F4UW7X4U2vmwAVEx1+CYUhnDdca
+         adHi+oDfkjto7R1KomDHsFzrFHiKbp81etb8dDkukyaE/t6vf2/KuwBDqUiFjduF0xMF
+         F3dw==
+X-Gm-Message-State: AJIora8LQQj20MaARxwTzZHaTn5/SA38kcoiAb2D1iOYd6wRmg7VcT3F
+        N1Abh0Y3VjAMKBUom8xAXTvN7kzpGlTx7p5fClL5TKva07o=
+X-Google-Smtp-Source: AGRyM1s+Mc89SMQKoHos9ZPccAugp4wweirStTpTkRhtA/tM5Y1Q4TJwHHRF2Hxi0vVkLIGbBFRQSHAyD0iQi5FCERw=
+X-Received: by 2002:a17:907:2702:b0:72b:307b:98e6 with SMTP id
+ w2-20020a170907270200b0072b307b98e6mr9658843ejk.658.1657816938448; Thu, 14
+ Jul 2022 09:42:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220713151504.7521-1-andrealmeid@igalia.com>
+In-Reply-To: <20220713151504.7521-1-andrealmeid@igalia.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 14 Jul 2022 12:42:07 -0400
+Message-ID: <CADnq5_NASpkVUpPa=CPad39AYvzueGx9vsNbUcSgqzQhh+0Lzg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/debugfs: Expose GFXOFF state to userspace
+To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Tom St Denis <tom.stdenis@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        kernel-dev@igalia.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Counts and the length are non-negative, so make them unsigned, and adapt the
-while condition in `__bitmap_set()` and `__bitmap_clear()` accordingly.
+On Wed, Jul 13, 2022 at 11:15 AM Andr=C3=A9 Almeida <andrealmeid@igalia.com=
+> wrote:
+>
+> GFXOFF has two different "state" values: one to define if the GPU is
+> allowed/disallowed to enter GFXOFF, usually called state; and another
+> one to define if currently GFXOFF is being used, usually called status.
+> Even when GFXOFF is allowed, GPU firmware can decide to not used it
+> accordingly to the GPU load.
+>
+> Userspace can allow/disallow GPUs to enter into GFXOFF via debugfs. The
+> kernel maintains a counter of requests for GFXOFF (gfx_off_req_count)
+> that should be decreased to allow GFXOFF and increased to disallow.
+>
+> The issue with this interface is that userspace can't be sure if GFXOFF
+> is currently allowed. Even by checking amdgpu_gfxoff file, one might get
+> an ambiguous 2, that means that GPU is currently out of GFXOFF, but that
+> can be either because it's currently disallowed or because it's allowed
+> but given the current GPU load it's enabled. Then, userspace needs to
+> rely on the fact that GFXOFF is enabled by default on boot and to track
+> this information.
+>
+> To make userspace life easier and GFXOFF more reliable, return the
+> current state of GFXOFF to userspace when reading amdgpu_gfxoff with the
+> same semantics of writing: 0 means not allowed, not 0 means allowed.
+>
 
-For `__bitmap_set()` six less intstructions are used as a result:
+This looks good. Can you document this in the amdgpu kerneldoc?
 
-```
-__bitmap_set: __bitmap_set:
-        movl    %esi, %eax movl    %esi, %eax
-        movq    %rdi, %r8                                     <
-        movl    %esi, %ecx movl    %esi, %ecx
-        movl    %edx, %edi                                    | movl    %esi, %r8d
-                                                              > movl    $64, %esi
-                                                              > andl    $63, %ecx
-        shrl    $6, %eax shrl    $6, %eax
-        andl    $63, %esi                                     | movl    %edx, %r9d
-        movq    $-1, %rdx                                     | leaq    (%rdi,%rax,8), %rax
-        leaq    (%r8,%rax,8), %rax                            | subl    %ecx, %esi
-        leal    -64(%rsi,%rdi), %r8d                          | movq    $-1, %rdi
-        salq    %cl, %rdx                                     | salq    %cl, %rdi
-        testl   %r8d, %r8d                                    | cmpl    %edx, %esi
-        js      .L88                                          | ja      .L85
-        movl    %r8d, %r9d                                    <
-        shrl    $6, %r9d                                      <
-        leal    1(%r9), %esi                                  <
-        leaq    (%rax,%rsi,8), %rsi                           <
-.L86:                                                           .L86:
-        orq     %rdx, (%rax)                                  | subl    %esi, %edx
-                                                              > orq     %rdi, (%rax)
-                                                              > movl    $64, %esi
-        addq    $8, %rax addq    $8, %rax
-        movq    $-1, %rdx                                     | movq    $-1, %rdi
-        cmpq    %rsi, %rax                                    | cmpl    $63, %edx
-        jne     .L86                                          | ja      .L86
-        sall    $6, %r9d                                      <
-        subl    %r9d, %r8d                                    <
-.L85:                                                           .L85:
-        testl   %r8d, %r8d                                    | testl   %edx, %edx
-        je      .L84 je      .L84
-        addl    %edi, %ecx                                    | leal    (%r8,%r9), %ecx
-        movq    $-1, %rax                                     | movq    $-1, %rdx
-        negl    %ecx negl    %ecx
-        shrq    %cl, %rax                                     | shrq    %cl, %rdx
-        andq    %rax, %rdx                                    | andq    %rdx, %rdi
-        orq     %rdx, (%rsi)                                  | orq     %rdi, (%rax)
-.L84:                                                           .L84:
-        ret                                                             ret
-.L88:                                                         <
-        movq    %rax, %rsi                                    <
-        movl    %edi, %r8d                                    <
-        jmp     .L85                                          <
-        .size   __bitmap_set, .-__bitmap_set .size   __bitmap_set, .-__bitmap_set
-        .p2align 4 .p2align 4
-        .globl  __bitmap_clear .globl  __bitmap_clear
-        .type   __bitmap_clear, @function .type   __bitmap_clear, @function
-```
+Alex
 
-    $ diff lib/bitmap.1.S lib/bitmap.2.S | diffstat
-     unknown |   55 ++++++++++++++++++++++++-------------------------------
-     1 file changed, 24 insertions(+), 31 deletions(-)
-
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
----
-v2: Update signature in header file
-v3: Adapt more functions to use unsigned int
-
- include/linux/bitmap.h | 20 ++++++++++----------
- lib/bitmap.c           | 26 +++++++++++++-------------
- 2 files changed, 23 insertions(+), 23 deletions(-)
-
-diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-index 2e6cd5681040..9f1a097cd5d4 100644
---- a/include/linux/bitmap.h
-+++ b/include/linux/bitmap.h
-@@ -164,8 +164,8 @@ bool __bitmap_intersects(const unsigned long *bitmap1,
- bool __bitmap_subset(const unsigned long *bitmap1,
- 		     const unsigned long *bitmap2, unsigned int nbits);
- int __bitmap_weight(const unsigned long *bitmap, unsigned int nbits);
--void __bitmap_set(unsigned long *map, unsigned int start, int len);
--void __bitmap_clear(unsigned long *map, unsigned int start, int len);
-+void __bitmap_set(unsigned long *map, unsigned int start, unsigned int len);
-+void __bitmap_clear(unsigned long *map, unsigned int start, unsigned int len);
- 
- unsigned long bitmap_find_next_zero_area_off(unsigned long *map,
- 					     unsigned long size,
-@@ -198,17 +198,17 @@ bitmap_find_next_zero_area(unsigned long *map,
- }
- 
- int bitmap_parse(const char *buf, unsigned int buflen,
--			unsigned long *dst, int nbits);
-+			unsigned long *dst, unsigned int nbits);
- int bitmap_parse_user(const char __user *ubuf, unsigned int ulen,
--			unsigned long *dst, int nbits);
-+			unsigned long *dst, unsigned int nbits);
- int bitmap_parselist(const char *buf, unsigned long *maskp,
--			int nmaskbits);
-+			unsigned int nmaskbits);
- int bitmap_parselist_user(const char __user *ubuf, unsigned int ulen,
--			unsigned long *dst, int nbits);
-+			unsigned long *dst, unsigned int nbits);
- void bitmap_remap(unsigned long *dst, const unsigned long *src,
- 		const unsigned long *old, const unsigned long *new, unsigned int nbits);
- int bitmap_bitremap(int oldbit,
--		const unsigned long *old, const unsigned long *new, int bits);
-+		const unsigned long *old, const unsigned long *new, unsigned int bits);
- void bitmap_onto(unsigned long *dst, const unsigned long *orig,
- 		const unsigned long *relmap, unsigned int bits);
- void bitmap_fold(unsigned long *dst, const unsigned long *orig,
-@@ -224,13 +224,13 @@ void bitmap_copy_le(unsigned long *dst, const unsigned long *src, unsigned int n
- #endif
- unsigned int bitmap_ord_to_pos(const unsigned long *bitmap, unsigned int ord, unsigned int nbits);
- int bitmap_print_to_pagebuf(bool list, char *buf,
--				   const unsigned long *maskp, int nmaskbits);
-+				   const unsigned long *maskp, unsigned int nmaskbits);
- 
- extern int bitmap_print_bitmask_to_buf(char *buf, const unsigned long *maskp,
--				      int nmaskbits, loff_t off, size_t count);
-+				      unsigned int nmaskbits, loff_t off, size_t count);
- 
- extern int bitmap_print_list_to_buf(char *buf, const unsigned long *maskp,
--				      int nmaskbits, loff_t off, size_t count);
-+				      unsigned int nmaskbits, loff_t off, size_t count);
- 
- #define BITMAP_FIRST_WORD_MASK(start) (~0UL << ((start) & (BITS_PER_LONG - 1)))
- #define BITMAP_LAST_WORD_MASK(nbits) (~0UL >> (-(nbits) & (BITS_PER_LONG - 1)))
-diff --git a/lib/bitmap.c b/lib/bitmap.c
-index b18e31ea6e66..d529f7dffc48 100644
---- a/lib/bitmap.c
-+++ b/lib/bitmap.c
-@@ -348,14 +348,14 @@ int __bitmap_weight(const unsigned long *bitmap, unsigned int bits)
- }
- EXPORT_SYMBOL(__bitmap_weight);
- 
--void __bitmap_set(unsigned long *map, unsigned int start, int len)
-+void __bitmap_set(unsigned long *map, unsigned int start, unsigned int len)
- {
- 	unsigned long *p = map + BIT_WORD(start);
- 	const unsigned int size = start + len;
- 	int bits_to_set = BITS_PER_LONG - (start % BITS_PER_LONG);
- 	unsigned long mask_to_set = BITMAP_FIRST_WORD_MASK(start);
- 
--	while (len - bits_to_set >= 0) {
-+	while (len >= bits_to_set) {
- 		*p |= mask_to_set;
- 		len -= bits_to_set;
- 		bits_to_set = BITS_PER_LONG;
-@@ -369,7 +369,7 @@ void __bitmap_set(unsigned long *map, unsigned int start, int len)
- }
- EXPORT_SYMBOL(__bitmap_set);
- 
--void __bitmap_clear(unsigned long *map, unsigned int start, int len)
-+void __bitmap_clear(unsigned long *map, unsigned int start, unsigned int len)
- {
- 	unsigned long *p = map + BIT_WORD(start);
- 	const unsigned int size = start + len;
-@@ -445,7 +445,7 @@ EXPORT_SYMBOL(bitmap_find_next_zero_area_off);
-  */
- int bitmap_parse_user(const char __user *ubuf,
- 			unsigned int ulen, unsigned long *maskp,
--			int nmaskbits)
-+			unsigned int nmaskbits)
- {
- 	char *buf;
- 	int ret;
-@@ -478,7 +478,7 @@ EXPORT_SYMBOL(bitmap_parse_user);
-  * actually printed to @buf, excluding terminating '\0'.
-  */
- int bitmap_print_to_pagebuf(bool list, char *buf, const unsigned long *maskp,
--			    int nmaskbits)
-+			    unsigned int nmaskbits)
- {
- 	ptrdiff_t len = PAGE_SIZE - offset_in_page(buf);
- 
-@@ -499,7 +499,7 @@ EXPORT_SYMBOL(bitmap_print_to_pagebuf);
-  * @count: the maximum number of bytes to print
-  */
- static int bitmap_print_to_buf(bool list, char *buf, const unsigned long *maskp,
--		int nmaskbits, loff_t off, size_t count)
-+		unsigned int nmaskbits, loff_t off, size_t count)
- {
- 	const char *fmt = list ? "%*pbl\n" : "%*pb\n";
- 	ssize_t size;
-@@ -542,7 +542,7 @@ static int bitmap_print_to_buf(bool list, char *buf, const unsigned long *maskp,
-  * normal attribute with buf parameter and without offset, count::
-  *
-  *   bitmap_print_to_pagebuf(bool list, char *buf, const unsigned long *maskp,
-- * 			   int nmaskbits)
-+ * 			   unsigned int nmaskbits)
-  *   {
-  *   }
-  *
-@@ -600,7 +600,7 @@ static int bitmap_print_to_buf(bool list, char *buf, const unsigned long *maskp,
-  * Returns the number of characters actually printed to @buf
-  */
- int bitmap_print_bitmask_to_buf(char *buf, const unsigned long *maskp,
--				int nmaskbits, loff_t off, size_t count)
-+				unsigned int nmaskbits, loff_t off, size_t count)
- {
- 	return bitmap_print_to_buf(false, buf, maskp, nmaskbits, off, count);
- }
-@@ -618,7 +618,7 @@ EXPORT_SYMBOL(bitmap_print_bitmask_to_buf);
-  * the print format.
-  */
- int bitmap_print_list_to_buf(char *buf, const unsigned long *maskp,
--			     int nmaskbits, loff_t off, size_t count)
-+			     unsigned int nmaskbits, loff_t off, size_t count)
- {
- 	return bitmap_print_to_buf(true, buf, maskp, nmaskbits, off, count);
- }
-@@ -793,7 +793,7 @@ static const char *bitmap_parse_region(const char *str, struct region *r)
-  *   - ``-ERANGE``: bit number specified too large for mask
-  *   - ``-EOVERFLOW``: integer overflow in the input parameters
-  */
--int bitmap_parselist(const char *buf, unsigned long *maskp, int nmaskbits)
-+int bitmap_parselist(const char *buf, unsigned long *maskp, unsigned int nmaskbits)
- {
- 	struct region r;
- 	long ret;
-@@ -836,7 +836,7 @@ EXPORT_SYMBOL(bitmap_parselist);
-  */
- int bitmap_parselist_user(const char __user *ubuf,
- 			unsigned int ulen, unsigned long *maskp,
--			int nmaskbits)
-+			unsigned int nmaskbits)
- {
- 	char *buf;
- 	int ret;
-@@ -893,7 +893,7 @@ static const char *bitmap_get_x32_reverse(const char *start,
-  * Leading, embedded and trailing whitespace accepted.
-  */
- int bitmap_parse(const char *start, unsigned int buflen,
--		unsigned long *maskp, int nmaskbits)
-+		unsigned long *maskp, unsigned int nmaskbits)
- {
- 	const char *end = strnchrnul(start, buflen, '\n') - 1;
- 	int chunks = BITS_TO_U32(nmaskbits);
-@@ -1068,7 +1068,7 @@ EXPORT_SYMBOL(bitmap_remap);
-  * returns 13.
-  */
- int bitmap_bitremap(int oldbit, const unsigned long *old,
--				const unsigned long *new, int bits)
-+				const unsigned long *new, unsigned int bits)
- {
- 	int w = bitmap_weight(new, bits);
- 	int n = bitmap_pos_to_ord(old, oldbit, bits);
--- 
-2.36.1
-
+> Expose the current status of GFXOFF through a new file,
+> amdgpu_gfxoff_status.
+>
+> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 49 ++++++++++++++++++++-
+>  1 file changed, 47 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/dr=
+m/amd/amdgpu/amdgpu_debugfs.c
+> index f3b3c688e4e7..e2eec985adb3 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> @@ -1117,13 +1117,50 @@ static ssize_t amdgpu_debugfs_gfxoff_read(struct =
+file *f, char __user *buf,
+>         }
+>
+>         while (size) {
+> -               uint32_t value;
+> +               u32 value =3D adev->gfx.gfx_off_state;
+> +
+> +               r =3D put_user(value, (u32 *)buf);
+> +               if (r)
+> +                       goto out;
+> +
+> +               result +=3D 4;
+> +               buf +=3D 4;
+> +               *pos +=3D 4;
+> +               size -=3D 4;
+> +       }
+> +
+> +       r =3D result;
+> +out:
+> +       pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
+> +       pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+> +
+> +       return r;
+> +}
+> +
+> +static ssize_t amdgpu_debugfs_gfxoff_status_read(struct file *f, char __=
+user *buf,
+> +                                                size_t size, loff_t *pos=
+)
+> +{
+> +       struct amdgpu_device *adev =3D file_inode(f)->i_private;
+> +       ssize_t result =3D 0;
+> +       int r;
+> +
+> +       if (size & 0x3 || *pos & 0x3)
+> +               return -EINVAL;
+> +
+> +       r =3D pm_runtime_get_sync(adev_to_drm(adev)->dev);
+> +       if (r < 0) {
+> +               pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+> +               return r;
+> +       }
+> +
+> +       while (size) {
+> +               u32 value;
+>
+>                 r =3D amdgpu_get_gfx_off_status(adev, &value);
+>                 if (r)
+>                         goto out;
+>
+> -               r =3D put_user(value, (uint32_t *)buf);
+> +               r =3D put_user(value, (u32 *)buf);
+>                 if (r)
+>                         goto out;
+>
+> @@ -1206,6 +1243,12 @@ static const struct file_operations amdgpu_debugfs=
+_gfxoff_fops =3D {
+>         .llseek =3D default_llseek
+>  };
+>
+> +static const struct file_operations amdgpu_debugfs_gfxoff_status_fops =
+=3D {
+> +       .owner =3D THIS_MODULE,
+> +       .read =3D amdgpu_debugfs_gfxoff_status_read,
+> +       .llseek =3D default_llseek
+> +};
+> +
+>  static const struct file_operations *debugfs_regs[] =3D {
+>         &amdgpu_debugfs_regs_fops,
+>         &amdgpu_debugfs_regs2_fops,
+> @@ -1217,6 +1260,7 @@ static const struct file_operations *debugfs_regs[]=
+ =3D {
+>         &amdgpu_debugfs_wave_fops,
+>         &amdgpu_debugfs_gpr_fops,
+>         &amdgpu_debugfs_gfxoff_fops,
+> +       &amdgpu_debugfs_gfxoff_status_fops,
+>  };
+>
+>  static const char *debugfs_regs_names[] =3D {
+> @@ -1230,6 +1274,7 @@ static const char *debugfs_regs_names[] =3D {
+>         "amdgpu_wave",
+>         "amdgpu_gpr",
+>         "amdgpu_gfxoff",
+> +       "amdgpu_gfxoff_status",
+>  };
+>
+>  /**
+> --
+> 2.37.0
+>

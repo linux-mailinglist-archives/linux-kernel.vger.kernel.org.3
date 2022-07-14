@@ -2,124 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7B357501A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6EF574FD6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240394AbiGNNxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
+        id S240001AbiGNNu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240306AbiGNNxI (ORCPT
+        with ESMTP id S240062AbiGNNuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:53:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB0EE6557F
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657806673;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IBINJ5i4lgV6BGGi1+B8SsQ6g/aePUpoS3VvJcXWVUE=;
-        b=DDM+OPG3vPei/16bRI4pqymhiRhVVttpAEdq4S5Bze3SZ6lUZ840c3/mfkGWH/Hqam82L0
-        7vmgJD3fdRVAowdY624MYXIzQKbBG91MgQkQLY7q9ooo5TOs7gdgUsmqJ1ar1ljHCfJE0g
-        FpzBTtufOfZNm4lTIsndhQ3CCQxc1no=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-58-hFUH_YYyM4CLE7VLt-ODhg-1; Thu, 14 Jul 2022 09:51:04 -0400
-X-MC-Unique: hFUH_YYyM4CLE7VLt-ODhg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EAB86804191;
-        Thu, 14 Jul 2022 13:51:03 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.135])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0DCF22166B26;
-        Thu, 14 Jul 2022 13:51:01 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v8 39/39] KVM: selftests: Rename 'evmcs_test' to 'hyperv_evmcs'
-Date:   Thu, 14 Jul 2022 15:49:29 +0200
-Message-Id: <20220714134929.1125828-40-vkuznets@redhat.com>
-In-Reply-To: <20220714134929.1125828-1-vkuznets@redhat.com>
-References: <20220714134929.1125828-1-vkuznets@redhat.com>
+        Thu, 14 Jul 2022 09:50:25 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3511261734
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:50:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
+        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=LBBAH8XdZRmaTV7zM6ta6Rvn55sV/KRTIAedB2vOTEM=; b=RhwQHoUYE9gZWHnvUkGvmtvFal
+        gFg6JrNCgbyTmPYFF9ZSfeYGXpZKKBKr4Wu2qFzVKcjVsMomKNG04FER2FN0grjtDxMs3BxuV/M6E
+        Dk65SFGsqjvMwIGV3FVYU5ReG6hDR7IPvwQ7Yo6miKha1LHsNUlp4e0h3LFIX9FgvHnYaxfHR+SE8
+        9yXiW7rjeUSH6qFes+6+FePHtMzzx5+v86lylV+10/Z2RUzUyYvOgkAcpg7t1/uby9b4LZLXVgHUp
+        VwzL0KahmTJN0L6xktbavY4vRs1XnmuWcViJrP3026pE+62KnwexusCleckmDr5etzQk1/7vTkCEE
+        8XiHv01w==;
+Received: from [177.139.47.106] (helo=localhost.localdomain)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1oBzEL-00GQUY-WE; Thu, 14 Jul 2022 15:50:14 +0200
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?=27Christian=20K=C3=B6nig=27?= <christian.koenig@amd.com>,
+        'Pan Xinhui' <Xinhui.Pan@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     kernel-dev@igalia.com,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+Subject: [PATCH] drm/amdgpu: Clarify asics naming in Kconfig options
+Date:   Thu, 14 Jul 2022 10:49:50 -0300
+Message-Id: <20220714134950.9564-1-andrealmeid@igalia.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conform to the rest of Hyper-V emulation selftests which have 'hyperv'
-prefix. Get rid of '_test' suffix as well as the purpose of this code
-is fairly obvious.
+Clarify which architecture those asics acronyms refers to.
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: André Almeida <andrealmeid@igalia.com>
 ---
- tools/testing/selftests/kvm/.gitignore                          | 2 +-
- tools/testing/selftests/kvm/Makefile                            | 2 +-
- .../selftests/kvm/x86_64/{evmcs_test.c => hyperv_evmcs.c}       | 0
- 3 files changed, 2 insertions(+), 2 deletions(-)
- rename tools/testing/selftests/kvm/x86_64/{evmcs_test.c => hyperv_evmcs.c} (100%)
+ drivers/gpu/drm/amd/amdgpu/Kconfig | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 6d0810c791f2..df9445a379e1 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -15,7 +15,6 @@
- /x86_64/cpuid_test
- /x86_64/cr4_cpuid_sync_test
- /x86_64/debug_regs
--/x86_64/evmcs_test
- /x86_64/emulator_error_test
- /x86_64/fix_hypercall_test
- /x86_64/get_msr_index_features
-@@ -23,6 +22,7 @@
- /x86_64/kvm_pv_test
- /x86_64/hyperv_clock
- /x86_64/hyperv_cpuid
-+/x86_64/hyperv_evmcs
- /x86_64/hyperv_features
- /x86_64/hyperv_ipi
- /x86_64/hyperv_svm_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 9f2c1b988f63..9eaa120cf6de 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -78,11 +78,11 @@ TEST_PROGS_x86_64 += x86_64/nx_huge_pages_test.sh
- TEST_GEN_PROGS_x86_64 = x86_64/cpuid_test
- TEST_GEN_PROGS_x86_64 += x86_64/cr4_cpuid_sync_test
- TEST_GEN_PROGS_x86_64 += x86_64/get_msr_index_features
--TEST_GEN_PROGS_x86_64 += x86_64/evmcs_test
- TEST_GEN_PROGS_x86_64 += x86_64/emulator_error_test
- TEST_GEN_PROGS_x86_64 += x86_64/fix_hypercall_test
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_clock
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_cpuid
-+TEST_GEN_PROGS_x86_64 += x86_64/hyperv_evmcs
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_features
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_ipi
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_svm_test
-diff --git a/tools/testing/selftests/kvm/x86_64/evmcs_test.c b/tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c
-similarity index 100%
-rename from tools/testing/selftests/kvm/x86_64/evmcs_test.c
-rename to tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c
+diff --git a/drivers/gpu/drm/amd/amdgpu/Kconfig b/drivers/gpu/drm/amd/amdgpu/Kconfig
+index 74a8105fd2c0..7777d55275de 100644
+--- a/drivers/gpu/drm/amd/amdgpu/Kconfig
++++ b/drivers/gpu/drm/amd/amdgpu/Kconfig
+@@ -4,7 +4,7 @@ config DRM_AMDGPU_SI
+ 	depends on DRM_AMDGPU
+ 	help
+ 	  Choose this option if you want to enable experimental support
+-	  for SI asics.
++	  for SI (Southern Islands) asics.
+ 
+ 	  SI is already supported in radeon. Experimental support for SI
+ 	  in amdgpu will be disabled by default and is still provided by
+@@ -16,7 +16,8 @@ config DRM_AMDGPU_CIK
+ 	bool "Enable amdgpu support for CIK parts"
+ 	depends on DRM_AMDGPU
+ 	help
+-	  Choose this option if you want to enable support for CIK asics.
++	  Choose this option if you want to enable support for CIK (Sea
++	  Islands) asics.
+ 
+ 	  CIK is already supported in radeon. Support for CIK in amdgpu
+ 	  will be disabled by default and is still provided by radeon.
 -- 
-2.35.3
+2.37.0
 

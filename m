@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABE85753BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407535753BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240203AbiGNRFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 13:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
+        id S240381AbiGNRFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 13:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232398AbiGNRFL (ORCPT
+        with ESMTP id S240146AbiGNRFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 13:05:11 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2C028711
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 10:05:10 -0700 (PDT)
+        Thu, 14 Jul 2022 13:05:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CE15B7B5;
+        Thu, 14 Jul 2022 10:05:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 64734CE2978
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 17:05:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDBF4C34114;
-        Thu, 14 Jul 2022 17:05:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BED7AB8273C;
+        Thu, 14 Jul 2022 17:05:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A90BC34114;
+        Thu, 14 Jul 2022 17:05:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657818307;
-        bh=WadMQH2Ma9dG1nxvj1p2IIitBxICYq77zOLfBOTGYgg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PUls/OjFdJhBE9Z5qItunWM8OW6ncv/3+aGrs4HWLkdPET+VLoDMqrN3Sum6FT/+5
-         MspF7aN9T1FuLVK6eRspz8G7Bgh8JkXhjKFmWrQK59zNI5eZMfzwcQFKXInGMZ71w8
-         2W0xlW6yJCK/7yBRVHQ87I+RSJZoq8D1K+7jYP03IpHi5TBz3mTZWzh7b7cHcJxZHi
-         tkQWPniVzUu0aEkTeeA6hnidQJ+bnBgJost+W+eOJWKPHTXow6bXEQmr+sPas60/YS
-         oH6tHa32H7doMnvtlZ53DZPjwmLbzY7AlzviaMeWgvMsfIT903nhKesEKZwQeQHBA6
-         3FCocgCOX3/5A==
-From:   SeongJae Park <sj@kernel.org>
-To:     akpm@linux-foundation.org
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH for mm-stable] mm/damon/lru_sort: fix potential memory leak in damon_lru_sort_init()
-Date:   Thu, 14 Jul 2022 17:04:58 +0000
-Message-Id: <20220714170458.49727-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        s=k20201202; t=1657818317;
+        bh=E0yJpZQiUtD20XD8skWR9KtBTUcV55d70ecE5Hfw3fY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PdzniX5Am+CchIX9gsIHWectuYpCdPDT31fy1TC+PTYbVhgyJbCAumWhjxw8fVAPE
+         fy02Zra5WJvcb+XK7IHoqT0nskugLIgYKtH3FPj1hOOoNVV074E39Mk5kl9iftKbjP
+         EHCJEUW2aT4oBQyFJA+XtjQ9M9imhX+fLP/sb0PzTbKRy/FcyX20Zi/84H6R52MayD
+         ecYIdfE5kzV7WklEa6Teb9rnCh43jqZ8DMrJYtq0Fx1cufDp/ldPqlIYGrivsHAEFS
+         ijncbsLvj6AxDiTojAlnJdxGQ+VAqC+573gr2Y9NtFulcfnw8ufBi4KbKZTb5cZfGY
+         L4c5GFcTEq2rA==
+Date:   Thu, 14 Jul 2022 10:05:16 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        yevhen.orlov@plvision.eu, taras.chornyi@plvision.eu,
+        linux@armlinux.org.uk, andrew@lunn.ch
+Subject: Re: [PATCH V3 net-next] net: marvell: prestera: add phylink support
+Message-ID: <20220714100516.61054163@kernel.org>
+In-Reply-To: <20220714105516.14291-1-oleksandr.mazur@plvision.eu>
+References: <20220714105516.14291-1-oleksandr.mazur@plvision.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,36 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'damon_lru_sort_init()' returns an error when 'damon_select_ops()' fails
-without freeing 'ctx' which allocated before.  This commit fixes the
-potential memory leak by freeing 'ctx' under the situation.
+On Thu, 14 Jul 2022 13:55:16 +0300 Oleksandr Mazur wrote:
+> For SFP port prestera driver will use kernel
+> phylink infrastucture to configure port mode based on
+> the module that has beed inserted
+> 
+> Co-developed-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
+> Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
+> Co-developed-by: Taras Chornyi <taras.chornyi@plvision.eu>
+> Signed-off-by: Taras Chornyi <taras.chornyi@plvision.eu>
+> Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+> 
+> PATCH V3:
+>   - force inband mode for SGMII
+>   - fix >80 chars warning of checkpatch where possible (2/5)
+>   - structure phylink_mac_change alongside phylink-related if-clause;
+> PATCH V2:
+>   - fix mistreat of bitfield values as if they were bools.
+>   - remove phylink_config ifdefs.
+>   - remove obsolete phylink pcs / mac callbacks;
+>   - rework mac (/pcs) config to not look for speed / duplex
+>     parameters while link is not yet set up.
+>   - remove unused functions.
+>   - add phylink select cfg to prestera Kconfig.
+> ---
 
-Commit 40e983cca927 ("mm/damon: introduce DAMON-based LRU-lists
-Sorting"), which caused the problem is not in the mainline but
-mm-stable.  Please meld this into the commit.
-
-Fixes: 40e983cca927 ("mm/damon: introduce DAMON-based LRU-lists Sorting")
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- mm/damon/lru_sort.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
-index c276736a071c..9de6f00a71c5 100644
---- a/mm/damon/lru_sort.c
-+++ b/mm/damon/lru_sort.c
-@@ -524,8 +524,10 @@ static int __init damon_lru_sort_init(void)
- 	if (!ctx)
- 		return -ENOMEM;
- 
--	if (damon_select_ops(ctx, DAMON_OPS_PADDR))
-+	if (damon_select_ops(ctx, DAMON_OPS_PADDR)) {
-+		damon_destroy_ctx(ctx);
- 		return -EINVAL;
-+	}
- 
- 	ctx->callback.after_wmarks_check = damon_lru_sort_after_wmarks_check;
- 	ctx->callback.after_aggregation = damon_lru_sort_after_aggregation;
--- 
-2.25.1
-
+Please put the changelog under the --- separator, otherwise when 
+I apply it my tag will get added at the end, after the changelog.
+Since we add links to the commits now it's okay to put the changelog
+after the --- and not keep it in the tree.

@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDE1575634
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 22:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D9C575636
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 22:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbiGNUMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 16:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
+        id S235488AbiGNUNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 16:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiGNUMp (ORCPT
+        with ESMTP id S229458AbiGNUN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 16:12:45 -0400
-Received: from www.kot-begemot.co.uk (ivanoab7.miniserver.com [37.128.132.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B8E40BFB
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 13:12:42 -0700 (PDT)
-Received: from [192.168.18.6] (helo=jain.kot-begemot.co.uk)
-        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1oC5C4-0009zM-Sz; Thu, 14 Jul 2022 20:12:21 +0000
-Received: from madding.kot-begemot.co.uk ([192.168.3.98])
-        by jain.kot-begemot.co.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1oC5Bx-006COF-6k; Thu, 14 Jul 2022 21:12:14 +0100
-Message-ID: <3e1e7b85-f868-3f7b-6b31-2cdd0330eea1@cambridgegreys.com>
-Date:   Thu, 14 Jul 2022 21:12:08 +0100
+        Thu, 14 Jul 2022 16:13:29 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7695640BFB
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 13:13:27 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id o1so2083004qkg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 13:13:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QIFnewSJO5RPRbFfQGBESkxwcHJHTZrd3ulxj1Uol1U=;
+        b=BTrFaJv7gF3FPkERKkD3gOFGUD0mBsIzV3jvWCFg0mh8gh9tDvABBVKW7C6CSWs1RX
+         hNZroabT7L+x3JaDuZAtvVYqLjUABU6kPHy4s/7CCpeTGVBxPRtjmXt9mtXDj95cA82H
+         2YflnjqZEY37UjTJxOidi4lAjCZ+myuhcB/2FQnBfo3cGbDNc9v1pU05f6nyjmIAS6eh
+         nOrV8poFFpmp9D0loQQrzgf9pH5FR/lO9De5/tgGMJa9d3eI1dmIxV2t5eX9xupksC0A
+         /UP8pOS2kRZOEgL0JY9+k6cnd8iQM4vgujmm7RGAi6LnceZXYtPUchNnreGuXDVlVqGM
+         BVlA==
+X-Gm-Message-State: AJIora/ovqTHqdnpPSB0q/ZkavzbygXWVLjeOuD8wU2XckBjqFcicijt
+        taiqTh6n1ce+FBWcatFzQwTH
+X-Google-Smtp-Source: AGRyM1szLUsAmGiDNl1c+GrlTpqZOEE+Fxs3qZG9HecTAWZ2su5al2HKJq3yE3EQOyzVrXdCf/lseQ==
+X-Received: by 2002:a05:620a:2724:b0:6b5:cd4d:c6e8 with SMTP id b36-20020a05620a272400b006b5cd4dc6e8mr350262qkp.116.1657829606439;
+        Thu, 14 Jul 2022 13:13:26 -0700 (PDT)
+Received: from localhost (pool-68-160-176-52.bstnma.fios.verizon.net. [68.160.176.52])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05620a0c4c00b006a6ebde4799sm2186001qki.90.2022.07.14.13.13.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 13:13:25 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 16:13:24 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Daniil Lunev <dlunev@chromium.org>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Brian Geffon <bgeffon@google.com>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] dm: add message command to disallow device open
+Message-ID: <YtB45Lte5UhlEE6y@redhat.com>
+References: <20220704000225.345536-1-dlunev@chromium.org>
+ <20220704100221.1.I15b3f7a84ba5a97fde9276648e391b54957103ff@changeid>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] um: Replace to_phys() and to_virt() with less generic
- function names
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Richard Weinberger <richard@nod.at>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <20220714184600.3981953-1-linux@roeck-us.net>
-From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Organization: Cambridge Greys
-In-Reply-To: <20220714184600.3981953-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -2.0
-X-Spam-Score: -0.9
-X-Clacks-Overhead: GNU Terry Pratchett
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704100221.1.I15b3f7a84ba5a97fde9276648e391b54957103ff@changeid>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,100 +61,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/07/2022 19:46, Guenter Roeck wrote:
-> to_virt() and to_phys() are very generic and may be defined by drivers.
-> As it turns out, commit 9409c9b6709e ("pmem: refactor pmem_clear_poison()")
-> did exactly that. This results in build errors such as the following
-> when trying to build um:allmodconfig.
+On Sun, Jul 03 2022 at  8:02P -0400,
+Daniil Lunev <dlunev@chromium.org> wrote:
+
+> A message can be passed to device mapper to prohibit open on a certain
+> mapped device. This makes possible to disallow userspace access to
+> raw swapped data if the system uses device mapper to encrypt it at rest.
 > 
-> drivers/nvdimm/pmem.c: In function ‘pmem_dax_zero_page_range’:
-> ./arch/um/include/asm/page.h:105:20: error:
-> 			too few arguments to function ‘to_phys’
->    105 | #define __pa(virt) to_phys((void *) (unsigned long) (virt))
->        |                    ^~~~~~~
-> 
-> Use less generic function names for the um specific to_phys() and to_virt()
-> functions to fix the problem and to avoid similar problems in the future.
-> 
-> Fixes: 9409c9b6709e ("pmem: refactor pmem_clear_poison()")
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Daniil Lunev <dlunev@chromium.org>
+
+This commit header and patch make little sense to me.
+
+If you're concerned about a normal (non-root) user having read access
+to the swap device then disallow non-root user access permissions on
+the swap device.
+
+Why is an encrypted swap device any different than any other encrypted
+device?
+
+As is, this patch seems to be the wrong way to achieve your desired
+result.  If you or someone else on the chromium team can better
+defend/explain the need for this change please do so.
+
+Thanks,
+Mike
+
+
 > ---
->   arch/um/include/asm/page.h      | 4 ++--
->   arch/um/include/shared/mem.h    | 4 ++--
->   arch/um/os-Linux/skas/process.c | 6 +++---
->   3 files changed, 7 insertions(+), 7 deletions(-)
 > 
-> diff --git a/arch/um/include/asm/page.h b/arch/um/include/asm/page.h
-> index 95af12e82a32..cdbd9653aa14 100644
-> --- a/arch/um/include/asm/page.h
-> +++ b/arch/um/include/asm/page.h
-> @@ -102,8 +102,8 @@ extern unsigned long uml_physmem;
->    * casting is the right thing, but 32-bit UML can't have 64-bit virtual
->    * addresses
->    */
-> -#define __pa(virt) to_phys((void *) (unsigned long) (virt))
-> -#define __va(phys) to_virt((unsigned long) (phys))
-> +#define __pa(virt) uml_to_phys((void *) (unsigned long) (virt))
-> +#define __va(phys) uml_to_virt((unsigned long) (phys))
->   
->   #define phys_to_pfn(p) ((p) >> PAGE_SHIFT)
->   #define pfn_to_phys(pfn) PFN_PHYS(pfn)
-> diff --git a/arch/um/include/shared/mem.h b/arch/um/include/shared/mem.h
-> index 4862c91d4213..98aacd544108 100644
-> --- a/arch/um/include/shared/mem.h
-> +++ b/arch/um/include/shared/mem.h
-> @@ -9,12 +9,12 @@
->   extern int phys_mapping(unsigned long phys, unsigned long long *offset_out);
->   
->   extern unsigned long uml_physmem;
-> -static inline unsigned long to_phys(void *virt)
-> +static inline unsigned long uml_to_phys(void *virt)
->   {
->   	return(((unsigned long) virt) - uml_physmem);
->   }
->   
-> -static inline void *to_virt(unsigned long phys)
-> +static inline void *uml_to_virt(unsigned long phys)
->   {
->   	return((void *) uml_physmem + phys);
->   }
-> diff --git a/arch/um/os-Linux/skas/process.c b/arch/um/os-Linux/skas/process.c
-> index 87d3129e7362..c316c993a949 100644
-> --- a/arch/um/os-Linux/skas/process.c
-> +++ b/arch/um/os-Linux/skas/process.c
-> @@ -251,7 +251,7 @@ static int userspace_tramp(void *stack)
->   	signal(SIGTERM, SIG_DFL);
->   	signal(SIGWINCH, SIG_IGN);
->   
-> -	fd = phys_mapping(to_phys(__syscall_stub_start), &offset);
-> +	fd = phys_mapping(uml_to_phys(__syscall_stub_start), &offset);
->   	addr = mmap64((void *) STUB_CODE, UM_KERN_PAGE_SIZE,
->   		      PROT_EXEC, MAP_FIXED | MAP_PRIVATE, fd, offset);
->   	if (addr == MAP_FAILED) {
-> @@ -261,7 +261,7 @@ static int userspace_tramp(void *stack)
->   	}
->   
->   	if (stack != NULL) {
-> -		fd = phys_mapping(to_phys(stack), &offset);
-> +		fd = phys_mapping(uml_to_phys(stack), &offset);
->   		addr = mmap((void *) STUB_DATA,
->   			    UM_KERN_PAGE_SIZE, PROT_READ | PROT_WRITE,
->   			    MAP_FIXED | MAP_SHARED, fd, offset);
-> @@ -534,7 +534,7 @@ int copy_context_skas0(unsigned long new_stack, int pid)
->   	struct stub_data *data = (struct stub_data *) current_stack;
->   	struct stub_data *child_data = (struct stub_data *) new_stack;
->   	unsigned long long new_offset;
-> -	int new_fd = phys_mapping(to_phys((void *)new_stack), &new_offset);
-> +	int new_fd = phys_mapping(uml_to_phys((void *)new_stack), &new_offset);
->   
->   	/*
->   	 * prepare offset and fd of child's stack as argument for parent's
-
-Acked-By: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-
--- 
-Anton R. Ivanov
-Cambridgegreys Limited. Registered in England. Company Number 10273661
-https://www.cambridgegreys.com/
+>  drivers/md/dm-core.h          |  1 +
+>  drivers/md/dm-ioctl.c         | 10 ++++++++++
+>  drivers/md/dm.c               | 12 ++++++++++++
+>  drivers/md/dm.h               | 10 ++++++++++
+>  include/uapi/linux/dm-ioctl.h |  5 +++++
+>  5 files changed, 38 insertions(+)
+> 
+> diff --git a/drivers/md/dm-core.h b/drivers/md/dm-core.h
+> index 4277853c75351..37529b605b7c4 100644
+> --- a/drivers/md/dm-core.h
+> +++ b/drivers/md/dm-core.h
+> @@ -140,6 +140,7 @@ struct mapped_device {
+>  #define DMF_SUSPENDED_INTERNALLY 7
+>  #define DMF_POST_SUSPENDING 8
+>  #define DMF_EMULATE_ZONE_APPEND 9
+> +#define DMF_DISALLOW_OPEN 10
+>  
+>  void disable_discard(struct mapped_device *md);
+>  void disable_write_zeroes(struct mapped_device *md);
+> diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+> index 87310fceb0d86..e35d560aa2ff3 100644
+> --- a/drivers/md/dm-ioctl.c
+> +++ b/drivers/md/dm-ioctl.c
+> @@ -815,6 +815,9 @@ static void __dev_status(struct mapped_device *md, struct dm_ioctl *param)
+>  	if (dm_test_deferred_remove_flag(md))
+>  		param->flags |= DM_DEFERRED_REMOVE;
+>  
+> +	if (dm_test_disallow_open_flag(md))
+> +		param->flags |= DM_DISALLOWED_OPEN;
+> +
+>  	param->dev = huge_encode_dev(disk_devt(disk));
+>  
+>  	/*
+> @@ -1656,6 +1659,13 @@ static int message_for_md(struct mapped_device *md, unsigned argc, char **argv,
+>  		}
+>  		return dm_cancel_deferred_remove(md);
+>  	}
+> +	if (!strcasecmp(argv[0], "@disallow_open")) {
+> +		if (argc != 1) {
+> +			DMERR("Invalid arguments for @disallow_open");
+> +			return -EINVAL;
+> +		}
+> +		return dm_disallow_open(md);
+> +	}
+>  
+>  	r = dm_stats_message(md, argc, argv, result, maxlen);
+>  	if (r < 2)
+> diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+> index 82957bd460e89..3e53d1bd40f0c 100644
+> --- a/drivers/md/dm.c
+> +++ b/drivers/md/dm.c
+> @@ -327,6 +327,7 @@ static int dm_blk_open(struct block_device *bdev, fmode_t mode)
+>  		goto out;
+>  
+>  	if (test_bit(DMF_FREEING, &md->flags) ||
+> +	    test_bit(DMF_DISALLOW_OPEN, &md->flags) ||
+>  	    dm_deleting_md(md)) {
+>  		md = NULL;
+>  		goto out;
+> @@ -403,6 +404,12 @@ int dm_cancel_deferred_remove(struct mapped_device *md)
+>  	return r;
+>  }
+>  
+> +int dm_disallow_open(struct mapped_device *md)
+> +{
+> +	set_bit(DMF_DISALLOW_OPEN, &md->flags);
+> +	return 0;
+> +}
+> +
+>  static void do_deferred_remove(struct work_struct *w)
+>  {
+>  	dm_deferred_remove();
+> @@ -2883,6 +2890,11 @@ int dm_test_deferred_remove_flag(struct mapped_device *md)
+>  	return test_bit(DMF_DEFERRED_REMOVE, &md->flags);
+>  }
+>  
+> +int dm_test_disallow_open_flag(struct mapped_device *md)
+> +{
+> +	return test_bit(DMF_DISALLOW_OPEN, &md->flags);
+> +}
+> +
+>  int dm_suspended(struct dm_target *ti)
+>  {
+>  	return dm_suspended_md(ti->table->md);
+> diff --git a/drivers/md/dm.h b/drivers/md/dm.h
+> index 9013dc1a7b002..da27f9dfe1413 100644
+> --- a/drivers/md/dm.h
+> +++ b/drivers/md/dm.h
+> @@ -163,6 +163,16 @@ int dm_test_deferred_remove_flag(struct mapped_device *md);
+>   */
+>  void dm_deferred_remove(void);
+>  
+> +/*
+> + * Test if the device is openable.
+> + */
+> +int dm_test_disallow_open_flag(struct mapped_device *md);
+> +
+> +/*
+> + * Prevent new open request on the device.
+> + */
+> +int dm_disallow_open(struct mapped_device *md);
+> +
+>  /*
+>   * The device-mapper can be driven through one of two interfaces;
+>   * ioctl or filesystem, depending which patch you have applied.
+> diff --git a/include/uapi/linux/dm-ioctl.h b/include/uapi/linux/dm-ioctl.h
+> index 2e9550fef90fa..3b4d12d09c005 100644
+> --- a/include/uapi/linux/dm-ioctl.h
+> +++ b/include/uapi/linux/dm-ioctl.h
+> @@ -382,4 +382,9 @@ enum {
+>   */
+>  #define DM_IMA_MEASUREMENT_FLAG	(1 << 19) /* In */
+>  
+> +/*
+> + * If set, the device can not be opened.
+> + */
+> +#define DM_DISALLOWED_OPEN	(1 << 20) /* Out */
+> +
+>  #endif				/* _LINUX_DM_IOCTL_H */
+> -- 
+> 2.31.0
+> 

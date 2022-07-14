@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEF2575105
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C9D575079
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239189AbiGNOnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
+        id S240432AbiGNOMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239171AbiGNOnK (ORCPT
+        with ESMTP id S232304AbiGNOM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:43:10 -0400
-X-Greylist: delayed 1798 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Jul 2022 07:43:07 PDT
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1492458870;
-        Thu, 14 Jul 2022 07:43:07 -0700 (PDT)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1oBzEp-0000eY-FW; Thu, 14 Jul 2022 15:50:43 +0200
-Message-ID: <52d44630-21ad-1291-4185-40d5728eaea6@maciej.szmigiero.name>
-Date:   Thu, 14 Jul 2022 15:50:37 +0200
+        Thu, 14 Jul 2022 10:12:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A084D82D;
+        Thu, 14 Jul 2022 07:12:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 067A7B823A9;
+        Thu, 14 Jul 2022 14:12:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE83C34114;
+        Thu, 14 Jul 2022 14:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657807938;
+        bh=mvlJ0wufsEtTo9Dxhf5723LkQmjzyNDzx5teMH2feS4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fIGl/Cm8qgB4JLLdsP8ojS41VS2bqdX3a1mPi6QqeLmVXUo/qWZeFMjdB93qjxr05
+         6i0JdXmd5WGoKQQ+ihQgQRIYqzeOCA0q53C8VqEOC71H83ChLM7GYGmk6SpPMEbHIR
+         2jor24XWNoMEprj+483v8ZXQ2MJfKRGA4SniilZs=
+Date:   Thu, 14 Jul 2022 16:01:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     pawell@cadence.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: cdnsp: Fix potential memory leak in
+ cdnsp_alloc_stream_info()
+Message-ID: <YtAhzxPihYcqrs1e@kroah.com>
+References: <20220630005148.2166473-1-niejianglei2021@163.com>
+ <Yr1IpjRbxNpvpGbR@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] KVM: SVM: fix task switch emulation on INTn instruction.
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        kvm@vger.kernel.org
-References: <20220714124453.188655-1-mlevitsk@redhat.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-In-Reply-To: <20220714124453.188655-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yr1IpjRbxNpvpGbR@kroah.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,28 +53,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.07.2022 14:44, Maxim Levitsky wrote:
-> Recently KVM's SVM code switched to re-injecting software interrupt events,
-> if something prevented their delivery.
+On Thu, Jun 30, 2022 at 08:54:30AM +0200, Greg KH wrote:
+> On Thu, Jun 30, 2022 at 08:51:48AM +0800, Jianglei Nie wrote:
+> > cdnsp_alloc_stream_info() allocates stream context array for stream_info
+> > ->stream_ctx_array with cdnsp_alloc_stream_ctx(). When some error occurs,
+> > stream_info->stream_ctx_array is not released, which will lead to a
+> > memory leak.
+> > 
+> > We can fix it by releasing the stream_info->stream_ctx_array with
+> > cdnsp_free_stream_ctx() on the error path to avoid the potential memory
+> > leak.
+> > 
+> > Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> > ---
+> >  drivers/usb/cdns3/cdnsp-mem.c | 1 +
+> >  1 file changed, 1 insertion(+)
 > 
-> Task switch due to task gate in the IDT, however is an exception
-> to this rule, because in this case, INTn instruction causes
-> a task switch intercept and its emulation completes the INTn
-> emulation as well.
-> 
-> Add a missing case to task_switch_interception for that.
-> 
-> This fixes 32 bit kvm unit test taskswitch2.
-> 
-> Fixes: 7e5b5ef8dca322 ("KVM: SVM: Re-inject INTn instead of retrying the insn on "failure"")
-> 
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
+> What commit id does this fix?
 
-That's a good catch, your patch looks totally sensible to me.
-People running Win 3.x or OS/2 on top of KVM will surely be grateful for it :)
+Dropped due to lack of response.
 
-Reviewed-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-
-Thanks,
-Maciej
+greg k-h

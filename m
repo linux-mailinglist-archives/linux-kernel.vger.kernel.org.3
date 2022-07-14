@@ -2,108 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B57575523
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997E557552A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240779AbiGNSfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 14:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
+        id S240426AbiGNSks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 14:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232538AbiGNSfw (ORCPT
+        with ESMTP id S232538AbiGNSkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 14:35:52 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15598FD34;
-        Thu, 14 Jul 2022 11:35:51 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-31d7db3e6e5so25753677b3.11;
-        Thu, 14 Jul 2022 11:35:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kHq4FivBRDqio2MK2JR/7z4GELOdE0oSwokqcIS93UU=;
-        b=ze+6RZc7OknrWPNCznO6jNKXYQX8fppVp3XBvTYRGVjx24+eUWJJU8gTlHjKG9VHSO
-         Nom5FfVOXx40AbVhhZ2/Uo1rK2B/fG+q1Abx9LCe/wVdg8+s0ec+M3cfPZAbH3im+L7a
-         YqC7fKxsdUi+iH8RleUGUiHC3C/vdDD9HgL7Ep/0u0u4Hch8AAglaSSyK5hGitY5tOmF
-         NcDiNszUTSZI0/fHg045LfzgxzC2whpEM4X92aBmp6Q9Db83BokcPZ/xE8LeMynhVnCY
-         3Y0F6A0B5H0URX09plOzhtbRC405tS5z/sVALCG8mtBfmBoxUHfAB3jQV994k9A3e/6l
-         uzpQ==
-X-Gm-Message-State: AJIora9Mlc6XKR+Bkgx1E3pTdflccysF6GNzTgh4B/hp4h3cyYGzIE+I
-        XQcU1gN07EBQS6ITszxHEE+j2tdfRVhgKRMWWxE=
-X-Google-Smtp-Source: AGRyM1uqMjbspLYzydo7ah0VRMq5a3BBd59Xj2U/uwoJAcUZZi3BSYXnXKX+tBStevaZPedkbLqj9wbbCO8hdlXm+sM=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr10983181ywb.326.1657823750063; Thu, 14
- Jul 2022 11:35:50 -0700 (PDT)
+        Thu, 14 Jul 2022 14:40:47 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7D357E15;
+        Thu, 14 Jul 2022 11:40:47 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 9667F320091E;
+        Thu, 14 Jul 2022 14:40:45 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 14 Jul 2022 14:40:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1657824045; x=1657910445; bh=cfh5Vbt0d0CpHZj8hmg30dluCeWX
+        m83Q5tUEhlXXfjA=; b=NIsJT87TzT6dcAX1hLo/v8joJpm9ycU1GQ7wSl/SPX2F
+        m5PZVjpsK/l6hwc8KWiD2K5G9lnyau33Q8LGi5WPsrKgzVfz6QdLZQEbtnT9fNmY
+        zkE6iIGyWJFIbz7qFOh+znWQ8pamekNw/c30wCISsEuhJMG4BGIL8XpwSCuD6lwj
+        lZpQD1+s0QwaWHZJeBWCBiHkCaq/5k8Mt3n8xUfsIPFtxQ1nF8pZBUDsM2S/odt9
+        +1PSDSLS9Vz7YCf0e2e+gbMM1dVcPxSez4FnGzysk6Kn/dfll5IV/R7T1mYj5B/a
+        VhLzO9jZtlCgt/gZgY/kzAZGmzprpPrGaNb9LE6hVQ==
+X-ME-Sender: <xms:LGPQYnLwmdh3CwTzIWMz7YrzmmxORq9JK-_zfOHohZsGgEhkVzUt-Q>
+    <xme:LGPQYrLon1Tlyu1Iytp_RKaWCS7S89w64YSin8L_G-6QjNJAYvUhrP0zLpO5PMbuU
+    NIGPadJKwzOUiw>
+X-ME-Received: <xmr:LGPQYvtXnor8p8zZSnfOvAyZ4mctjlmTKL9OtDrqlybAgAgheIuoilSLujzHJti9bUXUq1aOvBMaLQarkdk2nTLoD3SmLQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejledgudeftdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkugho
+    ucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeehhfdtjedviefffeduuddvffegteeiieeguefgudffvdfftdefheeijedt
+    hfejkeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhr
+    gh
+X-ME-Proxy: <xmx:LGPQYgZkvlKo1CkJw56GB2UUZSSo7Uat0kkx_h-TbeZIP7xoTvEu6w>
+    <xmx:LGPQYua-ue4hKZsHYJJGXa_37l72-7ytAb36PbxMnBekTgDWNqY7iQ>
+    <xmx:LGPQYkCIh3eJ_LxQ8hweM41AtJIKf2ZJ_Tl7tHR0bJo0fYhtkhZHUA>
+    <xmx:LWPQYkM1T6SxUOsnEPAI2o5jnc1fF2dbzZocedGotRbZZaD6yDD6Fg>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 14 Jul 2022 14:40:43 -0400 (EDT)
+Date:   Thu, 14 Jul 2022 21:40:40 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [for-next][PATCH 03/23] tracing: devlink: Use static array for
+ string in devlink_trap_report even
+Message-ID: <YtBjKLsoB4e+hSB5@shredder>
+References: <20220714164256.403842845@goodmis.org>
+ <20220714164328.461963902@goodmis.org>
 MIME-Version: 1.0
-References: <20220712020058.90374-1-gch981213@gmail.com>
-In-Reply-To: <20220712020058.90374-1-gch981213@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 14 Jul 2022 20:35:39 +0200
-Message-ID: <CAJZ5v0jjyvWniC8ReZqAgnaoaRm4cr_Vs3pXhddKf9B6+zONLw@mail.gmail.com>
-Subject: Re: [PATCH v6] ACPI: skip IRQ override on AMD Zen platforms
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Tighe Donnelly <tighe.donnelly@protonmail.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714164328.461963902@goodmis.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 4:01 AM Chuanhong Guo <gch981213@gmail.com> wrote:
->
-> IRQ override isn't needed on modern AMD Zen systems.
-> There's an active low keyboard IRQ on AMD Ryzen 6000 and it will stay
-> this way on newer platforms. This IRQ override breaks keyboards for
-> almost all Ryzen 6000 laptops currently on the market.
->
-> Skip this IRQ override for all AMD Zen platforms because this IRQ
-> override is supposed to be a workaround for buggy ACPI DSDT and we can't
-> have a long list of all future AMD CPUs/Laptops in the kernel code.
-> If a device with buggy ACPI DSDT shows up, a separated list containing
-> just them should be created.
->
-> Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+On Thu, Jul 14, 2022 at 12:42:59PM -0400, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> The trace event devlink_trap_report uses the __dynamic_array() macro to
+> determine the size of the input_dev_name field. This is because it needs
+> to test the dev field for NULL, and will use "NULL" if it is. But it also
+> has the size of the dynamic array as a fixed IFNAMSIZ bytes. This defeats
+> the purpose of the dynamic array, as this will reserve that amount of
+> bytes on the ring buffer, and to make matters worse, it will even save
+> that size in the event as the event expects it to be dynamic (for which it
+> is not).
+> 
+> Since IFNAMSIZ is just 16 bytes, just make it a static array and this will
+> remove the meta data from the event that records the size.
+> 
+> Link: https://lkml.kernel.org/r/20220712185820.002d9fb5@gandalf.local.home
+> 
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: Jiri Pirko <jiri@nvidia.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: netdev@vger.kernel.org
+> Acked-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-I need an ACK from Mario here.
+On the off chance that my tags weren't omitted on purpose:
 
-> ---
-> Change sice v5: reworked
->
->  drivers/acpi/resource.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
-> index c2d494784425..510cdec375c4 100644
-> --- a/drivers/acpi/resource.c
-> +++ b/drivers/acpi/resource.c
-> @@ -416,6 +416,16 @@ static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
->  {
->         int i;
->
-> +#ifdef CONFIG_X86
-> +       /*
-> +        * IRQ override isn't needed on modern AMD Zen systems and
-> +        * this override breaks active low IRQs on AMD Ryzen 6000 and
-> +        * newer systems. Skip it.
-> +        */
-> +       if (boot_cpu_has(X86_FEATURE_ZEN))
-> +               return false;
-> +#endif
-> +
->         for (i = 0; i < ARRAY_SIZE(skip_override_table); i++) {
->                 const struct irq_override_cmp *entry = &skip_override_table[i];
->
-> --
-> 2.36.1
->
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Tested-by: Ido Schimmel <idosch@nvidia.com>
+
+s/even/event/ in subject

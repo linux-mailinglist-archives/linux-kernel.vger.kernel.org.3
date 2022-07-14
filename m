@@ -2,87 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 819BE57493E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D745057493D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238381AbiGNJlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
+        id S238358AbiGNJlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbiGNJlI (ORCPT
+        with ESMTP id S230443AbiGNJlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Jul 2022 05:41:08 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F4946DA0
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D1D46D9A
         for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:41:06 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id j29-20020a05600c1c1d00b003a2fdafdefbso866583wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding;
-        bh=7ITMCkMys6kS4GnXThXCrFzJ+x2vhA9RLy8nRC7h2Ps=;
-        b=Gw9dcPoI0AL9EIzTPqcn/DgkG46lOCjZSI+d228Po8/eSLZq1aFCIFSRsKmoXtVQYE
-         4eYsxmidFPWa0stqbEZ+FDPYK5lQ4CFlOgkjSDGStJemY8WBzQDgb+Lnkqh6e1SS/PYM
-         XCR4iM1wN2NZOToZvzsH+VCSdTT8V+yOK431BOA9ZWmArvc7wFoYN1vzr4X1yGX93fHU
-         KSkHNk9DkkAzhlYjVQxU5EdiixnM7VTs6YDfQSjrGlmIYpoKIajENRZwKubr7EbELYa3
-         MgOeUfFhBHB+kJSS642sqGcWkp/9Pu4iiBJh2SCuNOEKt2tKiBU9WutNQvdZOs3Iuk7A
-         UR5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=7ITMCkMys6kS4GnXThXCrFzJ+x2vhA9RLy8nRC7h2Ps=;
-        b=dIBUuRnNCVl+TanELXFDUB1VH0qd8gZ120pmWYAuaJbEBECTly7sYuhuIdRqq+xbJQ
-         PCM8iKJFV3xE8E/RJcygeSKfBMM0Apc0qu3skppt2oHls46T/XPN9lNhkrFBOM99LwtC
-         ywDVCp7iskXSE7D9/UodQ91hNuZLE1vl3XsH7shRmVtVev93qG/UWedHLBciVWIVuSj/
-         BLbXSpzHFAfg2H5Z68Xt0lJT/9LARKvYR0aozGqwiNs19EDPnaaJna5gx4KQsuEZcctn
-         rxVJD/0hvLkSYv/HP2ugddv4+16Jj3rBUnxzrZR7+HEhVDXJ6x+7Ox4Z4VPqJo+yl8uR
-         a6Dw==
-X-Gm-Message-State: AJIora8+f+HzKlYxUw9n3lI69KL66uSK9vUtY2AxDMQDeUNVYziEKFuh
-        jbM+aBTiNHl59FgyCl7tNF1KRQ==
-X-Google-Smtp-Source: AGRyM1uvvCgbY/zqupYYF5H/QLQQ666JHCfrYo6l6n0KvQHoHbigrzbYsCrsDByVcOr+YUriQDyvTA==
-X-Received: by 2002:a05:600c:3ac6:b0:3a2:ce07:d011 with SMTP id d6-20020a05600c3ac600b003a2ce07d011mr13688557wms.99.1657791665264;
-        Thu, 14 Jul 2022 02:41:05 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id u18-20020a05600c19d200b003973c54bd69sm4766784wmq.1.2022.07.14.02.41.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 02:41:04 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 10:41:02 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     linux-leds@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: LED Maintainership
-Message-ID: <Ys/kruf8DE4ISo8M@google.com>
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lk8Xd5XqRzVfwp;
+        Thu, 14 Jul 2022 17:37:21 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 14 Jul 2022 17:41:04 +0800
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <bristot@redhat.com>,
+        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
+        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
+        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
+        <guodong.xu@linaro.org>, <hesham.almatary@huawei.com>,
+        <john.garry@huawei.com>, <shenyang39@huawei.com>,
+        <kprateek.nayak@amd.com>, <yu.c.chen@intel.com>,
+        <wuyun.abel@bytedance.com>, Yicong Yang <yangyicong@hisilicon.com>
+Subject: Re: [PATCH v5 2/2] sched/fair: Scan cluster before scanning LLC in
+ wake-up path
+To:     <peterz@infradead.org>, <mingo@redhat.com>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <tim.c.chen@linux.intel.com>, <gautham.shenoy@amd.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220630065527.38544-1-yangyicong@hisilicon.com>
+ <20220630065527.38544-3-yangyicong@hisilicon.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <3d612766-592f-760f-ca43-4ea2257a8bb2@huawei.com>
+Date:   Thu, 14 Jul 2022 17:41:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220630065527.38544-3-yangyicong@hisilicon.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pavel, et al.,
+Hi,
 
-Not sure what's going on behind the scenes, but it looks as though the
-LED subsystem has been left unmaintained for at least 2 months now.
+a friendly ping..
 
-Does anyone have any objection to me stepping in as temporary
-maintainer until the situation is resolved?
-
-Kind regards,
-Lee
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+On 2022/6/30 14:55, Yicong Yang wrote:
+> From: Barry Song <song.bao.hua@hisilicon.com>
+> 
+> For platforms having clusters like Kunpeng920, CPUs within the same cluster
+> have lower latency when synchronizing and accessing shared resources like
+> cache. Thus, this patch tries to find an idle cpu within the cluster of the
+> target CPU before scanning the whole LLC to gain lower latency.
+> 
+> Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so this patch
+> doesn't consider SMT for this moment.
+> 
+> Testing has been done on Kunpeng920 by pinning tasks to one numa and two
+> numa. On Kunpeng920, Each numa has 8 clusters and each cluster has 4 CPUs.
+> 
+> With this patch, We noticed enhancement on tbench within one numa or cross
+> two numa.
+> 
+> On numa 0:
+>                            tip/core                 patched
+> Hmean     1        345.89 (   0.00%)      393.96 *  13.90%*
+> Hmean     2        697.77 (   0.00%)      786.04 *  12.65%*
+> Hmean     4       1392.51 (   0.00%)     1570.26 *  12.76%*
+> Hmean     8       2800.61 (   0.00%)     3083.98 *  10.12%*
+> Hmean     16      5514.27 (   0.00%)     6116.00 *  10.91%*
+> Hmean     32     10869.81 (   0.00%)    10782.98 *  -0.80%*
+> Hmean     64      8315.22 (   0.00%)     8519.84 *   2.46%*
+> Hmean     128     6324.47 (   0.00%)     7159.35 *  13.20%*
+> 
+> On numa 0-1:
+>                            tip/core                 patched
+> Hmean     1        348.68 (   0.00%)      387.91 *  11.25%*
+> Hmean     2        693.57 (   0.00%)      774.91 *  11.73%*
+> Hmean     4       1369.26 (   0.00%)     1475.48 *   7.76%*
+> Hmean     8       2772.99 (   0.00%)     2984.61 *   7.63%*
+> Hmean     16      4825.83 (   0.00%)     5873.13 *  21.70%*
+> Hmean     32     10250.32 (   0.00%)    11688.06 *  14.03%*
+> Hmean     64     16309.51 (   0.00%)    19889.48 *  21.95%*
+> Hmean     128    13022.32 (   0.00%)    16005.64 *  22.91%*
+> Hmean     256    11335.79 (   0.00%)    13821.74 *  21.93%*
+> 
+> Tested-by: Yicong Yang <yangyicong@hisilicon.com>
+> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
+> ---
+>  kernel/sched/fair.c | 44 +++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 41 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index f80ae86bb404..dff5dec0d792 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6323,6 +6323,40 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
+>  
+>  #endif /* CONFIG_SCHED_SMT */
+>  
+> +#ifdef CONFIG_SCHED_CLUSTER
+> +/*
+> + * Scan the cluster domain for idle CPUs and clear cluster cpumask after scanning
+> + */
+> +static inline int scan_cluster(struct task_struct *p, struct cpumask *cpus,
+> +			       int target, int *nr)
+> +{
+> +	struct sched_domain *sd = rcu_dereference(per_cpu(sd_cluster, target));
+> +	int cpu, idle_cpu;
+> +
+> +	/* TODO: Support SMT system with cluster topology */
+> +	if (!sched_smt_active() && sd) {
+> +		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
+> +			if (!--*nr)
+> +				return -1;
+> +
+> +			idle_cpu = __select_idle_cpu(cpu, p);
+> +			if ((unsigned int)idle_cpu < nr_cpumask_bits)
+> +				return idle_cpu;
+> +		}
+> +
+> +		cpumask_andnot(cpus, cpus, sched_domain_span(sd));
+> +	}
+> +
+> +	return -1;
+> +}
+> +#else
+> +static inline int scan_cluster(struct task_struct *p, struct cpumask *cpus,
+> +			       int target, int *nr)
+> +{
+> +	return -1;
+> +}
+> +#endif
+> +
+>  /*
+>   * Scan the LLC domain for idle CPUs; this is dynamically regulated by
+>   * comparing the average scan cost (tracked in sd->avg_scan_cost) against the
+> @@ -6383,6 +6417,10 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>  		}
+>  	}
+>  
+> +	idle_cpu = scan_cluster(p, cpus, target, &nr);
+> +	if ((unsigned int)idle_cpu < nr_cpumask_bits)
+> +		return idle_cpu;
+> +
+>  	for_each_cpu_wrap(cpu, cpus, target + 1) {
+>  		if (has_idle_core) {
+>  			i = select_idle_core(p, cpu, cpus, &idle_cpu);
+> @@ -6390,7 +6428,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>  				return i;
+>  
+>  		} else {
+> -			if (!--nr)
+> +			if (--nr <= 0)
+>  				return -1;
+>  			idle_cpu = __select_idle_cpu(cpu, p);
+>  			if ((unsigned int)idle_cpu < nr_cpumask_bits)
+> @@ -6489,7 +6527,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+>  	/*
+>  	 * If the previous CPU is cache affine and idle, don't be stupid:
+>  	 */
+> -	if (prev != target && cpus_share_cache(prev, target) &&
+> +	if (prev != target && cpus_share_lowest_cache(prev, target) &&
+>  	    (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
+>  	    asym_fits_capacity(task_util, prev))
+>  		return prev;
+> @@ -6515,7 +6553,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+>  	p->recent_used_cpu = prev;
+>  	if (recent_used_cpu != prev &&
+>  	    recent_used_cpu != target &&
+> -	    cpus_share_cache(recent_used_cpu, target) &&
+> +	    cpus_share_lowest_cache(recent_used_cpu, target) &&
+>  	    (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
+>  	    cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
+>  	    asym_fits_capacity(task_util, recent_used_cpu)) {
+> 

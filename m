@@ -2,55 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668015747DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0688B5747DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbiGNJKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
+        id S237631AbiGNJKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiGNJKb (ORCPT
+        with ESMTP id S235728AbiGNJKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:10:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241321EEC4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:10:30 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oBurc-00017G-F1; Thu, 14 Jul 2022 11:10:28 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oBura-0007zV-O5; Thu, 14 Jul 2022 11:10:26 +0200
-Date:   Thu, 14 Jul 2022 11:10:26 +0200
-From:   Sascha Hauer <sha@pengutronix.de>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Ingo Molnar <mingo@redhat.com>, kernel@pengutronix.de
-Subject: Re: Performance impact of CONFIG_FUNCTION_TRACER
-Message-ID: <20220714091026.GM2387@pengutronix.de>
-References: <20220705105416.GE5208@pengutronix.de>
- <20220705103901.41a70cf0@rorschach.local.home>
- <20220705215948.GK5208@pengutronix.de>
- <20220705182746.4ce53681@rorschach.local.home>
+        Thu, 14 Jul 2022 05:10:36 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081C023157
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:10:35 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id z25so1790433lfr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=T5OfZ3+PK9xXcnfzvOc+1s4iD7Hhfzcgc3sJb8baShU=;
+        b=qAz4zkT3+B2hVfgd6m9jYDRM0x285oOBdYO36ZemeNLxHWLRBilmSLmZ1dTv5XGVni
+         Wk2WCj6nr2JiSKcxXIiCrbUt9rY3RjLOW1+LhAj2w8vSyy8/6+zDI45Do4nZEcNbo6Ig
+         d99Ki/INtDCdnWKoYry3+LtMgdWKTv4LmqyncFonUvehn2TghuvxQ/0sMkT/wqRxRnIN
+         VCbV3sz/5SzK/jLTkr/r+sKNDdlZT+69pFzrV6iIz/wFCoB2aysGQ24qgBwpUnNLq26P
+         0swiYm3jU+Ty6B93nXusVfXPoAkvajR9uUFEvh8YWvhde3MM3/Sk8MeRKGEGkGxfQ/rp
+         gKYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T5OfZ3+PK9xXcnfzvOc+1s4iD7Hhfzcgc3sJb8baShU=;
+        b=DAUxKbS/OldRpOhYatdmzLy2EiM2jhIMnTXQ2U9pSjqGmfTkCZDIooJS61TptitVT1
+         3eKGnFmYgzB4lmJGyHpEJtSf2H3AFC7T3kRYvRjdGhO7u4Etru801XAr4KZpubFTIFHy
+         UWj1kxxCJAQ6FHy40xvITXlxFvSd4Gja92rsT20rjuXSUrcbJ8Gld6HbtW77WzxUYSQA
+         UMuPjDe0lRnIw+OpLJB5hYRUINROddmbu1DXYn5czop+bpz2OUMSeggF3So6D4EhdiJ8
+         oE4KMl8Pes0YZAO5CkS6JKDWk5IRUCzdWA2kXa9X95k5jEqHCzW1bFAzqLca6VVa5uyV
+         jNHQ==
+X-Gm-Message-State: AJIora9Dl97v9vovSW5Bc1BT8oDiE6+kjMEZGeSfZ6BO6++ymB9zDeF1
+        JAqK9a5WH9QFgwZwpzRvcG9G6A==
+X-Google-Smtp-Source: AGRyM1s8EmgOtkxZ0CcEKsdSJlgZWiaDLGQME86g+5SP1B6+Og/s3pUx+W+IypC1jLkq/Y5eV12IiQ==
+X-Received: by 2002:a05:6512:3103:b0:489:cdd7:b360 with SMTP id n3-20020a056512310300b00489cdd7b360mr4700025lfb.111.1657789833411;
+        Thu, 14 Jul 2022 02:10:33 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id f5-20020a05651c03c500b0025a724f2935sm174964ljp.137.2022.07.14.02.10.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 02:10:32 -0700 (PDT)
+Message-ID: <1b13f115-381d-9d50-d3da-590cebf68ca4@linaro.org>
+Date:   Thu, 14 Jul 2022 11:10:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705182746.4ce53681@rorschach.local.home>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 11:06:53 up 105 days, 21:36, 81 users,  load average: 0.15, 0.38,
- 0.40
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 09/30] dt-bindings: phy: qcom,msm8996-qmp-pcie: add
+ missing child node schema
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220707134725.3512-1-johan+linaro@kernel.org>
+ <20220707134725.3512-10-johan+linaro@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220707134725.3512-10-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,51 +83,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 06:27:46PM -0400, Steven Rostedt wrote:
-> On Tue, 5 Jul 2022 23:59:48 +0200
-> Sascha Hauer <sha@pengutronix.de> wrote:
+On 07/07/2022 15:47, Johan Hovold wrote:
+> Add the missing the description of the PHY-provider child nodes which
+> were ignored when converting to DT schema.
 > 
-> > > 
-> > > As I believe due to using a link register for function calls, ARM
-> > > requires adding two 4 byte nops to every function where as x86 only
-> > > adds a single 5 byte nop.
-> > > 
-> > > Although nops are very fast (they should not be processed in the CPU's
-> > > pipe line, but I don't know if that's true for every arch). It also
-> > > affects instruction cache misses, as adding 8 bytes around the code
-> > > will cause more cache misses than when they do not exist.  
-> > 
-> > Just digged around a bit and saw that on ARM it's not even a real nop.
-> > The compiler emits:
-> > 
-> > 	push    {lr}
-> > 	bl      8010e7c0 <__gnu_mcount_nc>
-> > 
-> > Which is then turned into a nop by replacing the second instruction with
-> > 
-> > 	add   sp, sp, #4
-> > 
-> > to bring the stack pointer back to its original value. This indeed must
-> > be processed by the CPU pipeline. I wonder if that could be optimized by
-> > replacing both instructions with a nop. I have no idea though if that's
-> > feasible at all or if the overhead would even get smaller by that.
-> 
-> The problem is that there's no easy way to do that, because a task
-> could have been preempted after doing the 'push {lr}' and before the
-> 'bl'. Thus, you create a race by changing either one to a nop first.
-> 
-> I wonder if it would have been better to change the first one to a jump
-> passed the second :-/
+> Fixes: ccf51c1cedfd ("dt-bindings: phy: qcom,qmp: Convert QMP PHY bindings to yaml")
 
-I gave this a try, but the performance was not better compared to the
-stack push/pop operations we have now. I also tried to replace both
-instructions with nops (mov r0, r0), still no better performance. I
-guess we have to live with it then.
+To ease the backport all of fixes should either be independent
+(preferred by some maintainers) or go to the beginning of the patchset.
+I am fine with both.
 
-Sascha
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+Best regards,
+Krzysztof

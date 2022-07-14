@@ -2,165 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E797574426
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D7457443A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbiGNFCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 01:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
+        id S235691AbiGNFIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 01:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiGNFAW (ORCPT
+        with ESMTP id S232198AbiGNFHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 01:00:22 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A2325E94
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 21:57:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657774637; x=1689310637;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=lwQnOGjgivQ5p2oJYc4Kbap67iNh8bkmNF0iKNVM8Oo=;
-  b=GtPSE7cV+cUQQj2ay8gZSqzTOaSta9qsTh+r0Jg7W+nS4BwjVqHY1kL+
-   tpXxKXIcwPjEZsuU4/9SSWhfEdThoMdzxBkOpQjBn9jfkgOGs7Bvbgaiw
-   2Twjnu/eoQOx6UGu/xItgsHEQTiJ4tZpBvYGTdPQVQ+sVjkmVKXz0xFfK
-   YXAi2JBGqMJQhvSagcz31cOL9e9WzMjpay+MJxYCm5rDqJzQbzS+r+QkZ
-   /t0s3xZJpkcTS18hLQfE1yPJnRdqIJ0tfVqP/Rd6magt4nmA1Je+xT/9D
-   aZ2FWY/Fz7Pmb9IThkvf9nc2dNlc/vtqVe+kigyT6mUlVtYtIQBQTBogf
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="286554359"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="286554359"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 21:57:16 -0700
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="546128526"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 21:57:13 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>, linux-mm@kvack.org,
-        akpm@linux-foundation.org, Wei Xu <weixugc@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>, jvgediya.oss@gmail.com
-Subject: Re: [PATCH v8 00/12] mm/demotion: Memory tiers and demotion
-References: <20220704070612.299585-1-aneesh.kumar@linux.ibm.com>
-        <87r130b2rh.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <60e97fa2-0b89-cf42-5307-5a57c956f741@linux.ibm.com>
-        <87r12r5dwu.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <0a55e48a-b4b7-4477-a72f-73644b5fc4cb@linux.ibm.com>
-        <87mtde6cla.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <fef35622-0bd4-f220-26bd-37d8e0112c4d@linux.ibm.com>
-        <87ilo267jl.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <ad4b095b-bb85-b01f-5d69-383219384c29@linux.ibm.com>
-        <87edyp67m1.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <878roxuz9l.fsf@linux.ibm.com>
-Date:   Thu, 14 Jul 2022 12:56:55 +0800
-In-Reply-To: <878roxuz9l.fsf@linux.ibm.com> (Aneesh Kumar K. V.'s message of
-        "Wed, 13 Jul 2022 15:10:06 +0530")
-Message-ID: <87o7xs47hk.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 14 Jul 2022 01:07:19 -0400
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CEF1A390;
+        Wed, 13 Jul 2022 22:03:58 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-07.nifty.com with ESMTP id 26E52j5D024585;
+        Thu, 14 Jul 2022 14:02:45 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 26E52j5D024585
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1657774966;
+        bh=Jr7tDxJGBjHD4R2T6y2BGZyaLDORK8ue4Iw5NULwlPw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KD4/RiZBeLgrfUJnF4tmVDZ7vhdwFi4kzqb838JEmg77VoHeijXW3pOK+9+U8r3JC
+         05elbRclIpZuBE/OKG6M3hC12hHI2b2Uhn7iqWQF09u57299NhdR8Su8hcuFILDWO9
+         lZ/daEKJJPssyU+W1ens3ERZ16LwwENlDNMw0piUc/R5V1rCo+rbbVavwSAbxDYLcB
+         iryf7Qejyzc6K/3K2EZpu6F/mwGDIP8Nac1bJVA1j90PSUBUCtH6Cxe7IkHWkuxw6r
+         dvEKNmMs9/grc5RQcD85BU1PNDSepbmlvzWtC5M/wq1RzBJgXJDN5Z4O1DDDA2bW1M
+         p/MdB1GpqUF5w==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Jason Self <jason@bluehome.net>, Guo Ren <guoren@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] kbuild: rpm-pkg: fix build error when _arch is undefined
+Date:   Thu, 14 Jul 2022 14:02:40 +0900
+Message-Id: <20220714050243.16411-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+Cross-building (bin)rpm-pkg fails on several architectures.
 
-> "Huang, Ying" <ying.huang@intel.com> writes:
+For example, 'make ARCH=arm binrpm-pkg' fails like follows:
 
-[snip]
+  sh ./scripts/package/mkspec prebuilt > ./binkernel.spec
+  rpmbuild  --define "_builddir ." --target \
+          arm -bb ./binkernel.spec
+  Building target platforms: arm
+  Building for target arm
+  warning: line 19: It's not recommended to have unversioned Obsoletes: Obsoletes: kernel-headers
+  Executing(%install): /bin/sh -e /var/tmp/rpm-tmp.0S8t2F
+  + umask 022
+  + cd .
+  + mkdir -p /home/masahiro/rpmbuild/BUILDROOT/kernel-5.19.0_rc6-19.%{_arch}/boot
+  + make -f ./Makefile image_name
+  + cp arch/arm/boot/zImage /home/masahiro/rpmbuild/BUILDROOT/kernel-5.19.0_rc6-19.%{_arch}/boot/vmlinuz-5.19.0-rc6
+  + make -f ./Makefile INSTALL_MOD_PATH=/home/masahiro/rpmbuild/BUILDROOT/kernel-5.19.0_rc6-19.%{_arch} modules_install
+  make[3]: *** No rule to make target '/home/masahiro/rpmbuild/BUILDROOT/kernel-5.19.0_rc6-19.arch/arm/crypto/aes-arm-bs.ko{_arch}/lib/modules/5.19.0-rc6/kernel/%', needed by '__modinst'.  Stop.
+  make[2]: *** [Makefile:1768: modules_install] Error 2
+  error: Bad exit status from /var/tmp/rpm-tmp.0S8t2F (%install)
 
->>
->> I believe that sparse memory tier IDs can make memory tier more stable
->> in some cases.  But this is different from the system suggested by
->> Johannes.  Per my understanding, with Johannes' system, we will
->>
->> - one driver may online different memory types (such as kmem_dax may
->>   online HBM, PMEM, etc.)
->>
->> - one memory type manages several memory nodes (NUMA nodes)
->>
->> - one "abstract distance" for each memory type
->>
->> - the "abstract distance" can be offset by user space override knob
->>
->> - memory tiers generated dynamic from different memory types according
->>   "abstract distance" and overridden "offset"
->>
->> - the granularity to group several memory types into one memory tier can
->>   be overridden via user space knob
->>
->> In this way, the memory tiers may be changed totally after user space
->> overridden.  It may be hard to link memory tiers before/after the
->> overridden.  So we may need to reset all per-memory-tier configuration,
->> such as cgroup paritation limit or interleave weight, etc.
->
-> Making sure we all agree on the details.
->
-> In the proposal https://lore.kernel.org/linux-mm/7b72ccf4-f4ae-cb4e-f411-74d055482026@linux.ibm.com
-> instead of calling it "abstract distance" I was referring it as device
-> attributes.
->
-> Johannes also suggested these device attributes/"abstract distance"
-> to be used to derive the memory tier to which the memory type/memory
-> device will be assigned.
->
-> So dax kmem would manage different types of memory and based on the device
-> attributes, we would assign them to different memory tiers (memory tiers
-> in the range [0-200)).
->
-> Now the additional detail here is that we might add knobs that will be
-> used by dax kmem to fine-tune memory types to memory tiers assignment.
-> On updating these knob values, the kernel should rebuild the entire
-> memory tier hierarchy. (earlier I was considering only newly added
-> memory devices will get impacted by such a change. But I agree it
-> makes sense to rebuild the entire hierarchy again) But that rebuilding
-> will be restricted to dax kmem driver.
->
+By default, 'buildroot' contains %{_arch} (see /usr/lib/rpm/macros).
 
-Thanks for explanation and pointer.  Per my understanding, memory
-types and memory devices including abstract distances are used to
-describe the *physical* memory devices, not *policy*.  We may add more
-physical attributes to these memory devices, such as, latency,
-throughput, etc.  I think we can reach consensus on this point?
+_arch is generally defined in /usr/lib/rpm/platforms/*/macros, where
+the platform sub-directory is specified by --target= option for cross
+builds.
 
-In contrast, memory tiers are more about policy, such as
-demotion/promotion, interleaving and possible partition among cgroups.
-How to derive memory tiers from memory types (or devices)?  We have
-multiple choices.
+If the given arch does not exist, %{_arch} is not expanded.
+In the example above, --target=arm is passed to rpmbuild, but
+/usr/lib/rpm/platforms/arm-linux/ does not exist.
 
-Per my understanding, Johannes suggested to use some policy parameters
-such as distance granularity (e.g., if granularity is 100, then memory
-devices with abstract distance 0-100, 100-200, 200-300, ... will be put
-to memory tier 0, 1, 2, ...) to build the memory tiers.  Distance
-granularity may be not flexible enough, we may need something like a set
-of cutoffs or range, e.g., 50, 100, 200, 500, or 0-50, 50-100, 100-200,
-200-500, >500.  These policy parameters should be overridable from user
-space.
+The '%' character in the path confuses GNU make and rpmbuild.
 
-And per my understanding, you suggested to place memory devices to
-memory tiers directly via a knob of memory types (or memory devices).
-e.g., memory_type/memtier can be written to place the memory devices of
-the memory_type to the specified memtier.  Or via
-memorty_type/distance_offset to do that.
+The same occurs for such architectures as csky, microblaze, nios2, etc.
 
-Best Regards,
-Huang, Ying
+Define _arch if it has not been defined.
 
-[snip]
+Reported-by: Jason Self <jason@bluehome.net>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ scripts/package/mkspec | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+index 7c477ca7dc98..8fa7c5b8a1a1 100755
+--- a/scripts/package/mkspec
++++ b/scripts/package/mkspec
+@@ -49,6 +49,9 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
+ 	URL: https://www.kernel.org
+ $S	Source: kernel-$__KERNELRELEASE.tar.gz
+ 	Provides: $PROVIDES
++	# $UTS_MACHINE as a fallback of _arch in case
++	# /usr/lib/rpm/platform/*/macros was not included.
++	%define _arch %{?_arch:$UTS_MACHINE}
+ 	%define __spec_install_post /usr/lib/rpm/brp-compress || :
+ 	%define debug_package %{nil}
+ 
+-- 
+2.34.1
+

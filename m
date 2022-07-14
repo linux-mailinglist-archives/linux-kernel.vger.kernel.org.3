@@ -2,92 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E359E575541
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E22575543
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240800AbiGNSn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 14:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        id S240541AbiGNSoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 14:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240793AbiGNSnz (ORCPT
+        with ESMTP id S240795AbiGNSn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 14:43:55 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E17DB87B
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:43:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=Z3n+zODRwFKSwjVwTpt8yZm8eusF
-        qehhdu97RT4GPSI=; b=qEd/asnacONrIi2onhzA925Ih+adr6ph0UzzSkTwbpJb
-        idxbc/BNyz/ucQ9gNO7DAdILKHt1d3kFUn9CLL+LHtCDxpR1yYVoqJuuVbc0Br2d
-        CsZX1/huquVdY9VlRxb5gqOiRAJsW26rfMLlFMRkUpOxsFfXpf+Cw5z59Tpr4/o=
-Received: (qmail 701733 invoked from network); 14 Jul 2022 20:43:49 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jul 2022 20:43:49 +0200
-X-UD-Smtp-Session: l3s3148p1@5X4/SMjjZoggAwDtxwdRAEXXn+yo/Rze
-Date:   Thu, 14 Jul 2022 20:43:48 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     John Stultz <jstultz@google.com>,
-        linux-renesas-soc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 0/9] selftests: timers: fixes and improvements
-Message-ID: <YtBj5NPGi5MUKuvP@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        John Stultz <jstultz@google.com>, linux-renesas-soc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
- <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
- <dbe428f6-37fd-cba7-2947-e042585d3a42@linuxfoundation.org>
+        Thu, 14 Jul 2022 14:43:56 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D555B856
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:43:54 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id o12so2632474pfp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:43:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NM1N+SJFgizKrF/VDg0MKydtM78EiQvOFsnpZnvX3qg=;
+        b=oh5g80uM7crOAblJXnNWoNPT3HtxmbTitG9x4iY+K+V+9OTCUwiY5ZA6pbiBe3g3fz
+         +urKkk58m9ilC4O0qSuUYQ4V/VuFAu0ryvw/FGyGryuiVgrAYOqpJpwT/HEJ9XW+tOJG
+         7qqI0fpElAq1rpZqKYG76TiJDDBebduoxY/ywpEdQD1zHvVO/lasKi9skCWOgeMCq/P4
+         aOds+CB+12RlAQpqeSL28wghjugi48HENwgTX6tTNX/85ZcCu/V/dfPS5G+tlHWdVOGW
+         eOiHCNxK1OecQGfJm5DGRLp89HM7oWbwT23oyfb0dlZtq6FDCaCkF9+tamb1OJ+87a+t
+         CkrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NM1N+SJFgizKrF/VDg0MKydtM78EiQvOFsnpZnvX3qg=;
+        b=fm18C7YyQFWKQZYN7bkiaydCV5fDn6wcX53ix66PGeQB4FZg/wbuTbOjozQycOAnHh
+         QNXYtCFnvCCEqaDz9A1G8nO++kJwgKTILQMDp2Dvk627UE7bMdr6Gm8luERwO3pIbrqE
+         o9Y7RhK+DMgMgI68xVTpEF9KLMDbxllXSzpvz+mm1tryRpvbyeRkTUEF4y/XXc0KxP8a
+         nUYPL5xKeBZ0QPBtr6gX2djN188NMhikVJlBYi45csoibkPggH9aNj5SLkisP6LhDciy
+         QTiPI4rswaZ/6nXygpPl6eWoMWZ9DFTUXUeY7OaMuAOeBhgxhMeUCsSPRrdNNjK1tQZg
+         r3LA==
+X-Gm-Message-State: AJIora+Gxypuqp7X1vED7Db+IwzFI3evJA4RtxLsFRZZbdP09h+Pyeeb
+        C4dZJkl7CQU8FzHi8AiYUGwaYiYy++UI1g==
+X-Google-Smtp-Source: AGRyM1tJHk2vdawvBGjykM6agl14tlz78HVXz2hLMb3XQ16iJitcC29Z3972WLVMDJB2B9YK8kI/BA==
+X-Received: by 2002:a63:dd43:0:b0:416:8be5:94d6 with SMTP id g3-20020a63dd43000000b004168be594d6mr8980723pgj.450.1657824234247;
+        Thu, 14 Jul 2022 11:43:54 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id 64-20020a620443000000b005289a50e4c2sm2049045pfe.23.2022.07.14.11.43.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 11:43:53 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 18:43:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] KVM: x86/mmu: Shrink pte_list_desc size when KVM is
+ using TDP
+Message-ID: <YtBj5noXqagqYBVs@google.com>
+References: <20220624232735.3090056-1-seanjc@google.com>
+ <20220624232735.3090056-4-seanjc@google.com>
+ <Ys33RtxeDz0egEM0@xz-m1.local>
+ <Ys37fNK6uQ+YTcBh@google.com>
+ <Ys4Qx1RxmWrtQ8it@xz-m1.local>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xtPIlBNOCe85Vi7+"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dbe428f6-37fd-cba7-2947-e042585d3a42@linuxfoundation.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Ys4Qx1RxmWrtQ8it@xz-m1.local>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 12, 2022, Peter Xu wrote:
+> On Tue, Jul 12, 2022 at 10:53:48PM +0000, Sean Christopherson wrote:
+> > On Tue, Jul 12, 2022, Peter Xu wrote:
+> > > On Fri, Jun 24, 2022 at 11:27:34PM +0000, Sean Christopherson wrote:
+> > > Sorry to start with asking questions, it's just that if we know that
+> > > pte_list_desc is probably not gonna be used then could we simply skip the
+> > > cache layer as a whole?  IOW, we don't make the "array size of pte list
+> > > desc" dynamic, instead we make the whole "pte list desc cache layer"
+> > > dynamic.  Is it possible?
+> > 
+> > Not really?  It's theoretically possible, but it'd require pre-checking that aren't
+> > aliases, and to do that race free we'd have to do it under mmu_lock, which means
+> > having to support bailing from the page fault to topup the cache.  The memory
+> > overhead for the cache isn't so significant that it's worth that level of complexity.
+> 
+> Ah, okay..
+> 
+> So the other question is I'm curious how fundamentally this extra
+> complexity could help us to save spaces.
+> 
+> The thing is IIUC slub works in page sizes, so at least one slub cache eats
+> one page which is 4096 anyway.  In our case if there was 40 objects
+> allocated for 14 entries array, are you sure it'll still be 40 objects but
+> only smaller?
 
---xtPIlBNOCe85Vi7+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Definitely not 100% positive.
+
+> I'd thought after the change each obj is smaller but slub could have cached
+> more objects since min slub size is 4k for x86.
 
 
-> Wolfram, are you going to send v2 to address John's comment on
-> 8/9?
+> I don't remember the details of the eager split work on having per-vcpu
 
-Yes, will do!
+The eager split logic uses a single per-VM cache, but it's large (513 entries).
 
+> caches, but I'm also wondering if we cannot drop the whole cache layer
+> whether we can selectively use slub in this case, then we can cache much
+> less assuming we will use just less too.
+> 
+> Currently:
+> 
+> 	r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
+> 				       1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM);
+> 
+> We could have the pte list desc cache layer to be managed manually
+> (e.g. using kmalloc()?) for tdp=1, then we'll at least in control of how
+> many objects we cache?  Then with a limited number of objects, the wasted
+> memory is much reduced too.
 
---xtPIlBNOCe85Vi7+
-Content-Type: application/pgp-signature; name="signature.asc"
+I suspect that, without implementing something that looks an awful lot like the
+kmem caches, manually handling allocations would degrade performance for shadow
+paging and nested MMUs.
 
------BEGIN PGP SIGNATURE-----
+> I think I'm fine with current approach too, but only if it really helps
+> reduce memory footprint as we expected.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLQY+QACgkQFA3kzBSg
-KbYx4g//bznmWkrsUuC9E6fK8a7G95+jel2Y8vlStije/5AAyNGlT8+uphWGEPMu
-uM0dTho0woXCY9hi9E1CMrUoFP7JRa1eGcu0qcJJ/tDhbf1CsP5h6r717++mif+r
-omwZkcPh1eZOApZ+a+BO4uOnUSyMwVRNXUHGf4Jfqd1vl6CdEoCtQmlSFNDmb/CC
-LxCJnUfrtMjuIS83gIBF44/Pfm5ERJs/3KUE2uLTwMBAzkqGmdjy7WVyHRmWpga4
-ms0FIae0N4FjNQaIR94uUGVCn/ghyGmTjU+DZ/tbgueOhoi94ZWIERt993UU+u5B
-IGbZFBAXfRy8alNeX/g6qv7E2pfTAiLG0aAyi17uF93E2BE3RWVrLHSYI+Zlhz20
-m8jkWQ7Bn1nScfIIOeMw3KGddb9kkfzAzc4gnAQp/faik2YCCEfkfARfhR1rdb25
-Sj8hjvv6d93IixgnmSoJmmaLolXQIXUzYlqU/FaAMvTuk8k040BU1U3YaRyVqipF
-L7rDOvNlkFzVg70RioEPgoZkFhIP+DrneIf4VM0MxeGlyxMMorgpT/8u9IOTs2JF
-zJKO10UZiH90ha7D/RcsSm5NDh76Rba6BUFTqDa1nV/d9EBa956wjwn/QORyhvjJ
-dT84TVYNK7kdaX9tIonRK+MmPU4D7BzO2xuKnF+kLvE5fyekrso=
-=LxN/
------END PGP SIGNATURE-----
-
---xtPIlBNOCe85Vi7+--
+Yeah, I'll get numbers before sending v2 (which will be quite some time at this
+point).

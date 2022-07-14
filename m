@@ -2,108 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D531857430A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0428574256
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236654AbiGNE3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 00:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
+        id S234513AbiGNEX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 00:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235888AbiGNE1t (ORCPT
+        with ESMTP id S234025AbiGNEWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 00:27:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1B22DA90;
-        Wed, 13 Jul 2022 21:24:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D48561E4E;
-        Thu, 14 Jul 2022 04:24:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD70EC3411C;
-        Thu, 14 Jul 2022 04:24:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657772668;
-        bh=/2pmWpsVb3YISeukyVRtCFdnmizGRc8cLQqLOLoJegU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=exPvIyuvexfeDpqxyBknko09u53Oug8CYeG8lmH20Y+GyVVJrkzER7RMEVL50xR0I
-         j/mVIwaS4dq/3JlnBP5CLvXisbe8KxubD4B8oh8ApyE6F5gW3xKJj3d4N6sDHVnu3j
-         Z/vrem31VjU9Mc+gLLasD+/rgZKRNoyjcV5ljtNu9PIHpkco5jwYmnwD005NSj/Opp
-         p9q+bvKG+9ZkbzaPzMvFJLeOMw9ZrewXSba9Hc0sCi5VTCS3F+Q7speg4wQ/4XQHJ6
-         VHl1HvRFFa0vMSZG2ugR3krK8Rq66B7hocOLXuqF0iKFXJ7Z3Lm6YHE+v+/QkxLcpR
-         m8cqRDILR5A3Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, ebiederm@xmission.com,
-        keescook@chromium.org, oleg@redhat.com, tglx@linutronix.de,
-        peterz@infradead.org
-Subject: [PATCH AUTOSEL 5.18 41/41] signal handling: don't use BUG_ON() for debugging
-Date:   Thu, 14 Jul 2022 00:22:21 -0400
-Message-Id: <20220714042221.281187-41-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220714042221.281187-1-sashal@kernel.org>
-References: <20220714042221.281187-1-sashal@kernel.org>
+        Thu, 14 Jul 2022 00:22:54 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E11A27FD6;
+        Wed, 13 Jul 2022 21:22:43 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E3nC8E031560;
+        Thu, 14 Jul 2022 04:22:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=oc7DODaeMYfYgN8sRoftnKbUEW5IoAXyOTF7b89UI8Y=;
+ b=gXEtEJJXmVKSN/La/mLjd2HoivD5OLkcnO9Sd+bJ3RUBXOUZizZXiwpOb55IfoC/hSfL
+ JAwUezS2Lsy2tRG+j4TL5iWcufiC2UEMzP3veCgClDY8FWyIfk6u1K95JfO5jtldFZXg
+ nAXKYh0CbHshqtQXQT+vISImHjnJ/xXj5xbGym+DHCV086F8nFuvvvKlExzFvXIz9U0C
+ 1/LFXKq8PenokpTVniEZu/ssQGmbPbMB5nLNxqICriry3tF/9slqciYzOAkxu0N32NFm
+ +JiTxStAp+cWOt6ALH7iBBADpAPI/vKYqf/orHPOROMx41LitDZ53W7wBp7dlj4jI3kg Cw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h71r1bje8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Jul 2022 04:22:35 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26E4ApYm040463;
+        Thu, 14 Jul 2022 04:22:35 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h70451jpd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Jul 2022 04:22:35 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 26E4MWBl023864;
+        Thu, 14 Jul 2022 04:22:34 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h70451jnc-4;
+        Thu, 14 Jul 2022 04:22:34 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Daniil Lunev <dlunev@chromium.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-scsi@vger.kernel.org, Avri Altman <avri.altman@wdc.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Bean Huo <beanhuo@micron.com>
+Subject: Re: [PATCH v2] scsi: ufs: ufs-pci: Enable WriteBooster capability on ADL
+Date:   Thu, 14 Jul 2022 00:22:24 -0400
+Message-Id: <165777182484.7272.12896788838326615430.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220705165316.v2.1.Ib5ebec952d9a59f5c69c89b694777f517d22466d@changeid>
+References: <20220705165316.v2.1.Ib5ebec952d9a59f5c69c89b694777f517d22466d@changeid>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: DwV263lcnkIDVk_bpc2GLkc5PSevAd9j
+X-Proofpoint-GUID: DwV263lcnkIDVk_bpc2GLkc5PSevAd9j
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+On Tue, 5 Jul 2022 16:53:26 +1000, Daniil Lunev wrote:
 
-[ Upstream commit a382f8fee42ca10c9bfce0d2352d4153f931f5dc ]
+> Sets the WriteBooster capability flag when ADL's UFS controller is used.
+> 
+> 
 
-These are indeed "should not happen" situations, but it turns out recent
-changes made the 'task_is_stopped_or_trace()' case trigger (fix for that
-exists, is pending more testing), and the BUG_ON() makes it
-unnecessarily hard to actually debug for no good reason.
+Applied to 5.20/scsi-queue, thanks!
 
-It's been that way for a long time, but let's make it clear: BUG_ON() is
-not good for debugging, and should never be used in situations where you
-could just say "this shouldn't happen, but we can continue".
+[1/1] scsi: ufs: ufs-pci: Enable WriteBooster capability on ADL
+      https://git.kernel.org/mkp/scsi/c/1466b3bc456a
 
-Use WARN_ON_ONCE() instead to make sure it gets logged, and then just
-continue running.  Instead of making the system basically unusuable
-because you crashed the machine while potentially holding some very core
-locks (eg this function is commonly called while holding 'tasklist_lock'
-for writing).
-
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- kernel/signal.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/signal.c b/kernel/signal.c
-index e43bc2a692f5..75cc2339d83e 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2031,12 +2031,12 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
- 	bool autoreap = false;
- 	u64 utime, stime;
- 
--	BUG_ON(sig == -1);
-+	WARN_ON_ONCE(sig == -1);
- 
-- 	/* do_notify_parent_cldstop should have been called instead.  */
-- 	BUG_ON(task_is_stopped_or_traced(tsk));
-+	/* do_notify_parent_cldstop should have been called instead.  */
-+	WARN_ON_ONCE(task_is_stopped_or_traced(tsk));
- 
--	BUG_ON(!tsk->ptrace &&
-+	WARN_ON_ONCE(!tsk->ptrace &&
- 	       (tsk->group_leader != tsk || !thread_group_empty(tsk)));
- 
- 	/* Wake up all pidfd waiters */
 -- 
-2.35.1
-
+Martin K. Petersen	Oracle Linux Engineering

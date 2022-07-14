@@ -2,61 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AB4574A0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8382574A13
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237926AbiGNKEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
+        id S237793AbiGNKFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237673AbiGNKEU (ORCPT
+        with ESMTP id S237957AbiGNKEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:04:20 -0400
+        Thu, 14 Jul 2022 06:04:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F431DFFC;
-        Thu, 14 Jul 2022 03:04:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC4512A84;
+        Thu, 14 Jul 2022 03:04:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA07161FC9;
-        Thu, 14 Jul 2022 10:04:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB804C34114;
-        Thu, 14 Jul 2022 10:04:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27A8661FC5;
+        Thu, 14 Jul 2022 10:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E478C34114;
+        Thu, 14 Jul 2022 10:04:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657793058;
-        bh=XV+fvidSE85iVWA39bDNH9XKnV+Mg+AU/aBFdWrQP6U=;
+        s=korg; t=1657793090;
+        bh=6Wo2lauWSqSzZPuEfigVqWFvR1npFnzL7C4Q4ThZpXQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GHlKKvxhKp92LpsmEhGWbxA+YNanFCYGwblEx8EnCl0B6TSwCkui+2/e1X5FwT9RS
-         VJfNrvvvRd3vZwghSZeH6UjGSx1+MHncMhQ0pl1rjUt86PiNurIhu7w/cdcqOlnL7N
-         1EHQUaTMKAVnvi8VPw3SmSLn0UPQCp/HDLzMws1k=
-Date:   Thu, 14 Jul 2022 12:04:15 +0200
+        b=cx9t63is/MGqRmMLHXQzImt2jC0BFgtDzUC5F4INwef6dT20K9pKUYOGn5GTAf5MO
+         k9zfGrttf8mCXF2X63TM++Ttvf7H9wbXqpYRyLg4qG1F4TP9XLTudmKigJb1ym1jMI
+         8twNrtCEjb9xYSQcxc6Xx1VSdU0rJoAhcua5l80g=
+Date:   Thu, 14 Jul 2022 12:04:47 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        kvm list <kvm@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH 5.15 00/78] 5.15.55-rc1 review
-Message-ID: <Ys/qHw7E/6gWqEbN@kroah.com>
-References: <20220712183238.844813653@linuxfoundation.org>
- <CA+G9fYtntg7=zWSs-dm+n_AUr_u0eBOU0zrwWqMeXZ+SF6_bLw@mail.gmail.com>
- <1a143d949dc333666374cf14fae4496045f77db4.camel@redhat.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        linux-kernel@vger.kernel.org
+Subject: Re: LED Maintainership
+Message-ID: <Ys/qP2y1oj1nFOkq@kroah.com>
+References: <Ys/kruf8DE4ISo8M@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1a143d949dc333666374cf14fae4496045f77db4.camel@redhat.com>
+In-Reply-To: <Ys/kruf8DE4ISo8M@google.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,51 +51,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 12:50:10PM +0300, Maxim Levitsky wrote:
-> On Wed, 2022-07-13 at 18:22 +0530, Naresh Kamboju wrote:
-> > On Wed, 13 Jul 2022 at 00:17, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > > 
-> > > This is the start of the stable review cycle for the 5.15.55 release.
-> > > There are 78 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > > 
-> > > Responses should be made by Thu, 14 Jul 2022 18:32:19 +0000.
-> > > Anything received after that time might be too late.
-> > > 
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.55-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> > > and the diffstat can be found below.
-> > > 
-> > > thanks,
-> > > 
-> > > greg k-h
-> > 
-> > Results from Linaro’s test farm.
-> > Regressions on x86_64.
-> > 
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > 
-> > 1) Kernel panic noticed on device x86_6 while running kvm-unit-tests.
-> >    - APIC base relocation is unsupported by KVM
+On Thu, Jul 14, 2022 at 10:41:02AM +0100, Lee Jones wrote:
+> Pavel, et al.,
 > 
-> My 0.2 cent:
+> Not sure what's going on behind the scenes, but it looks as though the
+> LED subsystem has been left unmaintained for at least 2 months now.
 > 
-> APIC base relocation warning is harmless, and I removed it 5.19 kernel:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v5.19-rc6&id=3743c2f0251743b8ae968329708bbbeefff244cf
+> Does anyone have any objection to me stepping in as temporary
+> maintainer until the situation is resolved?
 
-Nice, but doesn't look relevant for stable trees.
+No objection from me, it would be nice to see LED patches flowing again
+into the tree.
 
-> The 'emulating exchange as write' is also something that KVM unit tests trigger
-> normally although this warning recently did signal a real and very nasty bug, which I fixed in this commit:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v5.19-rc6&id=33fbe6befa622c082f7d417896832856814bdde0
-
-Already in the 5.18.2 release, doesn't look all that relevant for 5.15,
-odd that it is showing up on 5.15.
-
-thanks,
+Pavel, any objections?
 
 greg k-h

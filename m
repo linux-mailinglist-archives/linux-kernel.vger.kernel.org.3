@@ -2,131 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CBB57433A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A78757433B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237232AbiGNEbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 00:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
+        id S237465AbiGNEby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 00:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237227AbiGNE3w (ORCPT
+        with ESMTP id S235609AbiGNEbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 00:29:52 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E084F31DFF
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 21:25:07 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1657772706;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XRf9R0o+fSMZ5LBdaxhYZP7PNoN9BepwjSvwbf2mACk=;
-        b=wzJaSUq+cq2c/g7wOTMheofahuoQLC/lJySne8NngV8YOHuAPY31JeADHfGWPWMqTm3wQA
-        Ixki1i7UdSNcr2KkhLOOeoxTZb5F6aIR/JB0CyUkd7X0prMPH9JnaSQZ5eDKI2qJoIjNJ5
-        FqdNfTOfdndIk0HbG8CCQgtT31c9cuI=
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: [mm-unstable PATCH v7 8/8] mm, hwpoison: enable memory error handling on 1GB hugepage
-Date:   Thu, 14 Jul 2022 13:24:20 +0900
-Message-Id: <20220714042420.1847125-9-naoya.horiguchi@linux.dev>
-In-Reply-To: <20220714042420.1847125-1-naoya.horiguchi@linux.dev>
-References: <20220714042420.1847125-1-naoya.horiguchi@linux.dev>
+        Thu, 14 Jul 2022 00:31:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F17326FC;
+        Wed, 13 Jul 2022 21:25:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8970461E51;
+        Thu, 14 Jul 2022 04:25:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73136C385A2;
+        Thu, 14 Jul 2022 04:25:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657772716;
+        bh=GfEQxJNjjHPalvfvVNCj9R5BmsifevUz1PfOtOY//7E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pZeFwsauWXf1nKyRqjdtt9MoA7/Ryw2PbQ6C/8Nq3QCBH4cvd5Wh7hVtQs5ky4VPS
+         cib4D+MonmxpPm5QIBf9zF5FCRYmVVQ2u1wHnG7LTory5b3m/996cY3xKmX4n2OZ0W
+         zBuSz6+K84bHPjavlyhkH1fYxNzTVIWKmTnQys2euCWRyGBvdpSNsBYa+M4uPA6lTo
+         2Irq6sQczA1ZPyM24f3qo1eQTo/QIZO9fSCQIxOy/FZHfD+XJa0jrQH/4xNwf9w0Y/
+         qVtDZ5OKZj/bwUkqBqD8rd7tnuHpydBcaMkKU9XdzvhgK0Ay7rbzC7p0bVIcHczRpp
+         SHT8I+8RHGNdQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>, Borislav Petkov <bp@suse.de>,
+        Sasha Levin <sashal@kernel.org>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, brijesh.singh@amd.com, ak@linux.intel.com,
+        michael.roth@amd.com, marco@mebeim.net, thomas.lendacky@amd.com
+Subject: [PATCH AUTOSEL 5.15 20/28] x86: Clear .brk area at early boot
+Date:   Thu, 14 Jul 2022 00:24:21 -0400
+Message-Id: <20220714042429.281816-20-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220714042429.281816-1-sashal@kernel.org>
+References: <20220714042429.281816-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+From: Juergen Gross <jgross@suse.com>
 
-Now error handling code is prepared, so remove the blocking code and
-enable memory error handling on 1GB hugepage.
+[ Upstream commit 38fa5479b41376dc9d7f57e71c83514285a25ca0 ]
 
-Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+The .brk section has the same properties as .bss: it is an alloc-only
+section and should be cleared before being used.
+
+Not doing so is especially a problem for Xen PV guests, as the
+hypervisor will validate page tables (check for writable page tables
+and hypervisor private bits) before accepting them to be used.
+
+Make sure .brk is initially zero by letting clear_bss() clear the brk
+area, too.
+
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220630071441.28576-3-jgross@suse.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/mm.h      |  1 -
- include/ras/ras_event.h |  1 -
- mm/memory-failure.c     | 16 ----------------
- 3 files changed, 18 deletions(-)
+ arch/x86/kernel/head64.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 7668831c919f..b0e83835184e 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3241,7 +3241,6 @@ enum mf_action_page_type {
- 	MF_MSG_DIFFERENT_COMPOUND,
- 	MF_MSG_HUGE,
- 	MF_MSG_FREE_HUGE,
--	MF_MSG_NON_PMD_HUGE,
- 	MF_MSG_UNMAP_FAILED,
- 	MF_MSG_DIRTY_SWAPCACHE,
- 	MF_MSG_CLEAN_SWAPCACHE,
-diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
-index d0337a41141c..cbd3ddd7c33d 100644
---- a/include/ras/ras_event.h
-+++ b/include/ras/ras_event.h
-@@ -360,7 +360,6 @@ TRACE_EVENT(aer_event,
- 	EM ( MF_MSG_DIFFERENT_COMPOUND, "different compound page after locking" ) \
- 	EM ( MF_MSG_HUGE, "huge page" )					\
- 	EM ( MF_MSG_FREE_HUGE, "free huge page" )			\
--	EM ( MF_MSG_NON_PMD_HUGE, "non-pmd-sized huge page" )		\
- 	EM ( MF_MSG_UNMAP_FAILED, "unmapping failed page" )		\
- 	EM ( MF_MSG_DIRTY_SWAPCACHE, "dirty swapcache page" )		\
- 	EM ( MF_MSG_CLEAN_SWAPCACHE, "clean swapcache page" )		\
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 3721de624b98..d86b5acd5754 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -765,7 +765,6 @@ static const char * const action_page_types[] = {
- 	[MF_MSG_DIFFERENT_COMPOUND]	= "different compound page after locking",
- 	[MF_MSG_HUGE]			= "huge page",
- 	[MF_MSG_FREE_HUGE]		= "free huge page",
--	[MF_MSG_NON_PMD_HUGE]		= "non-pmd-sized huge page",
- 	[MF_MSG_UNMAP_FAILED]		= "unmapping failed page",
- 	[MF_MSG_DIRTY_SWAPCACHE]	= "dirty swapcache page",
- 	[MF_MSG_CLEAN_SWAPCACHE]	= "clean swapcache page",
-@@ -1887,21 +1886,6 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index de01903c3735..5036104d5470 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -418,6 +418,8 @@ static void __init clear_bss(void)
+ {
+ 	memset(__bss_start, 0,
+ 	       (unsigned long) __bss_stop - (unsigned long) __bss_start);
++	memset(__brk_base, 0,
++	       (unsigned long) __brk_limit - (unsigned long) __brk_base);
+ }
  
- 	page_flags = head->flags;
- 
--	/*
--	 * TODO: hwpoison for pud-sized hugetlb doesn't work right now, so
--	 * simply disable it. In order to make it work properly, we need
--	 * make sure that:
--	 *  - conversion of a pud that maps an error hugetlb into hwpoison
--	 *    entry properly works, and
--	 *  - other mm code walking over page table is aware of pud-aligned
--	 *    hwpoison entries.
--	 */
--	if (huge_page_size(page_hstate(head)) > PMD_SIZE) {
--		action_result(pfn, MF_MSG_NON_PMD_HUGE, MF_IGNORED);
--		res = -EBUSY;
--		goto out;
--	}
--
- 	if (!hwpoison_user_mappings(p, pfn, flags, head)) {
- 		action_result(pfn, MF_MSG_UNMAP_FAILED, MF_IGNORED);
- 		res = -EBUSY;
+ static unsigned long get_cmd_line_ptr(void)
 -- 
-2.25.1
+2.35.1
 

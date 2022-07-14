@@ -2,106 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBB3574ED1
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4FA574ED3
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238166AbiGNNPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
+        id S238918AbiGNNSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239387AbiGNNPs (ORCPT
+        with ESMTP id S231440AbiGNNSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:15:48 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363A1545F1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:15:46 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id o7so2731709lfq.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:15:46 -0700 (PDT)
+        Thu, 14 Jul 2022 09:18:37 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEDC2723
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:18:36 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id p9so2842984pjd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y48E6PDFxhOGhAYVKqWlob2V1GffQky6+hara5tcdLo=;
-        b=x9Hqw1BTgXzHKBiG2OLYcS2qRp7Sz3flmFvjdYEncU8GDBZQGFzRHDqWvl2GZEQzWs
-         FsmPaPtuFGaiqKXQ0rgYuY1IJvGT9XHaKIiGie3uBqCYb5yZUxsGKCGerqVb/EDy2MQy
-         BrkIPlpMjIIODx0OZIpPfuVTK/CPTmssfDzD87fRsv5/iF7Rkgzt3wvFTahxaqIGZ+wF
-         b0LxvmpRxROYRG7PvrgPGM3wSIagrIcIKwRXmd8quwYVM2XgRpqq7+pGhei6aj5AEZ1a
-         ZxtNyfAEF5Qg5TkVb401bU9vk1vAqt7Jy4UkztS6JIJpbx4jaxv5mhURfqXHgOZyi+xk
-         gVtQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FICPOvskNZaVS6/YR3ZJCLElglUVHG4aUM/j9Ly4324=;
+        b=ooP01MEqxBoJ6U5T/WcpBN+kmFOvE889VGqCywIGW92yZMj/tMHwMp6z6X+qBhSxhC
+         /ZXjM3V3lGjRLGvunCkCSEAKBaTK7gGR0FNmTYEg871ZdLUVUYAzi0v/CrqtWubqr94w
+         LUPJP23Wz9OQBRgJ1gJWSmPgvZMC0Gt07jR1LW3hT/MRhse+tXwoMMW6VzhpWz7DrWLX
+         CRMrpHtfG22WVR/7YoPTfFSi7STDVIqt0MMk6Sw1HYvr1cAE+mhO29U0MbznaePoVYsG
+         HSoCwV1PzTXD59wkE+RU82tTnZ5thvHXP3e/PaMjyBPpsUkgnPLWwsf9FQs4sjmkKsKb
+         4xCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y48E6PDFxhOGhAYVKqWlob2V1GffQky6+hara5tcdLo=;
-        b=ldaLjWBVlmGo/OQWY22vF/X3BmAyNQyVIvf8ZMxnG2YiSW/FncRg+km6q7kk9xnHJB
-         8tpS64PYChQaemnrFcBJ2Arq3hqJIMGRXEM5gP6op+Fz4ahBGFvprykHBdSRWl1+nYq4
-         3gYsVNSL1vsdAdcD9I+gFA7HjuNZd84GBOFTI3eLyg7I15bj6xLFcf8H7leOUNueaJIj
-         ULjlecLs+Ll4uhiq6KtNjLvTPjphu8Q/GzwKzcJtDm0xcktYanNo8WQr19vIIf5rBNKe
-         gNaV6WFtQMQWh0A4DcJuuOY4isCpyxtJTUG3Z9yJLJ+Q7wxeiKk4IzxA2GvhddxeaYdL
-         UZVA==
-X-Gm-Message-State: AJIora/4kHP4fH+F5oktqhZxb1FKjMsiCpc9EsJ1qPGk1/73OvWdnkcQ
-        pPYktOMA5v9R0k79XYczAZez9tPpLro+2EWcqoHGCQ==
-X-Google-Smtp-Source: AGRyM1umM56+JO1HV8nicFnjzJ1pyPk04eb7pywiBmEsbAuvhiuDTIjoJzE4r2MPwg7ysTsXe877jrrGJ/WnekYwUVQ=
-X-Received: by 2002:a05:6512:139a:b0:48a:1a73:8adc with SMTP id
- p26-20020a056512139a00b0048a1a738adcmr1218415lfa.226.1657804544526; Thu, 14
- Jul 2022 06:15:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FICPOvskNZaVS6/YR3ZJCLElglUVHG4aUM/j9Ly4324=;
+        b=BHHsBT3kp8guyMPKb5l97CbRDwdWlE8W6zbssNUv4s1Rxw1q9tVd1a99pHqXhylVsZ
+         pDdie7O8V8pXV1diqnSJ9gN/wDZgW+Ur3cCLJjvUnVbC5j+dd0YCiCprUcR1nS28lSNs
+         BwdLY3jCC32RcEP2GNYY03iAO39N2YK4NOqhWOLlQS25Lkwuqr/PWOkmV2JOWldY3yHo
+         f+60zPoLkyArxo9RXRW/mgCEqI0sVX8obTXleZ3GQ6IpmMKnIae3zlkV6cASAnlXcYxA
+         1iuXiY9HWmTZT9ndKoXZzSHfvmxPYUAbJbEK5zqL+4ZY3CW2hZ/zz+WR3aGI5AdT8UzG
+         RuDA==
+X-Gm-Message-State: AJIora+KcgUkU2BvM4/T9/ecMtK2VcZ0aYQSTVm9RpuPE1VZQZc436rF
+        PncJ2/q6Ch2TbD9NUxxfWyQTeN0tCUH2RQ0=
+X-Google-Smtp-Source: AGRyM1uAw2M8wcHabu7VBgr4Scn4GmEmyZCmDrjmoyrcS84dkCO6AijkpeVD5EJaAuvSiKtlKGjaJQ==
+X-Received: by 2002:a17:90a:b117:b0:1ef:958f:e5b7 with SMTP id z23-20020a17090ab11700b001ef958fe5b7mr15947591pjq.107.1657804716264;
+        Thu, 14 Jul 2022 06:18:36 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id c6-20020a63d146000000b0040d75537824sm1297573pgj.86.2022.07.14.06.18.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 06:18:35 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     eli.billauer@gmail.com, arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH v5 RESEND] char: xillybus: Check endpoint type at probe time
+Date:   Thu, 14 Jul 2022 21:18:24 +0800
+Message-Id: <20220714131824.919052-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220710230603.13526-1-semen.protsenko@linaro.org>
- <20220710230603.13526-5-semen.protsenko@linaro.org> <4d198463-fedc-a5d9-6804-63c134da76e7@linaro.org>
-In-Reply-To: <4d198463-fedc-a5d9-6804-63c134da76e7@linaro.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Thu, 14 Jul 2022 16:15:33 +0300
-Message-ID: <CAPLW+4ktP0_W_OgjAoK3BXOFaEiXvP1qNGCc-iQyr2fNL1srug@mail.gmail.com>
-Subject: Re: [PATCH v2 4/7] iommu/exynos: Use lookup based approach to access registers
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        David Virag <virag.david003@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 at 19:52, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+The driver submits bulk urb without checking the endpoint type is
+actually bulk.
 
-[snip]
+[    3.108690] usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+[    3.108983] WARNING: CPU: 0 PID: 211 at drivers/usb/core/urb.c:503 usb_submit_urb+0xcd9/0x18b0
+[    3.110976] RIP: 0010:usb_submit_urb+0xcd9/0x18b0
+[    3.115318] Call Trace:
+[    3.115452]  <TASK>
+[    3.115570]  try_queue_bulk_in+0x43c/0x6e0 [xillyusb]
+[    3.115838]  xillyusb_probe+0x488/0x1230 [xillyusb]
 
-> > +static void sysmmu_write(struct sysmmu_drvdata *data, size_t idx, u32 val)
-> > +{
-> > +     writel(val, data->sfrbase + data->regs[idx]);
->
-> Beside what Robin wrote, I also don't think these wrappers actually
-> help, because you reverse arguments comparing to writel.
->
-> How about having a per-variant structure with offsets and using it like:
->
-> #define SYSMMU_REG(data, reg) ((data)->sfrbase + (data)->variant->reg)
-> writel(CTRL_ENABLE, SYSMMU_REG(data, mmu_ctrl_reg))
->
-> Would that be more readable?
->
+Add a check at probe time to fix the bug.
 
-Yes, this looks better for my taste too. I tend to get a tunnel vision
-when working with downstream code for a while. But I noticed that that
-approach is used sometimes as well, e.g. in
-drivers/pinctrl/samsung/pinctrl-exynos-arm64.c (in struct
-samsung_pin_bank_type). Anyway, I've reworked it exactly as you
-suggested, will send v2 soon. Thanks!
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+ drivers/char/xillybus/xillyusb.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
->
-> Best regards,
-> Krzysztof
+diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
+index 39bcbfd908b4..b1bac2fdb42a 100644
+--- a/drivers/char/xillybus/xillyusb.c
++++ b/drivers/char/xillybus/xillyusb.c
+@@ -167,6 +167,7 @@ struct xillyusb_dev {
+ 	struct device		*dev; /* For dev_err() and such */
+ 	struct kref		kref;
+ 	struct workqueue_struct	*workq;
++	struct usb_interface *intf;
+ 
+ 	int error;
+ 	spinlock_t error_lock; /* protect @error */
+@@ -1890,8 +1891,31 @@ static const struct file_operations xillyusb_fops = {
+ 	.poll       = xillyusb_poll,
+ };
+ 
++static int xillyusb_check_endpoint(struct xillyusb_dev *xdev, u8 addr)
++{
++	int i;
++	struct usb_host_interface *if_desc = xdev->intf->altsetting;
++
++	for (i = 0; i < if_desc->desc.bNumEndpoints; i++) {
++		struct usb_endpoint_descriptor *ep = &if_desc->endpoint[i].desc;
++
++		if (ep->bEndpointAddress != addr)
++			continue;
++
++		if ((usb_pipein(addr) && usb_endpoint_is_bulk_in(ep)) ||
++			(usb_pipeout(addr) && usb_endpoint_is_bulk_out(ep)))
++			return 0;
++	}
++
++	return -EINVAL;
++}
++
+ static int xillyusb_setup_base_eps(struct xillyusb_dev *xdev)
+ {
++	if (xillyusb_check_endpoint(xdev, IN_EP_NUM | USB_DIR_IN) ||
++		xillyusb_check_endpoint(xdev, MSG_EP_NUM | USB_DIR_OUT))
++		return -EINVAL;
++
+ 	xdev->msg_ep = endpoint_alloc(xdev, MSG_EP_NUM | USB_DIR_OUT,
+ 				      bulk_out_work, 1, 2);
+ 	if (!xdev->msg_ep)
+@@ -1963,6 +1987,8 @@ static int setup_channels(struct xillyusb_dev *xdev,
+ 			chan->out_log2_element_size = out_desc & 0x0f;
+ 			chan->out_log2_fifo_size =
+ 				((out_desc >> 8) & 0x1f) + 16;
++			if (xillyusb_check_endpoint(xdev, (i+2) | USB_DIR_OUT))
++				return -EINVAL;
+ 		}
+ 	}
+ 
+@@ -2126,6 +2152,7 @@ static int xillyusb_probe(struct usb_interface *interface,
+ 	mutex_init(&xdev->process_in_mutex);
+ 	mutex_init(&xdev->msg_mutex);
+ 
++	xdev->intf = interface;
+ 	xdev->udev = usb_get_dev(interface_to_usbdev(interface));
+ 	xdev->dev = &interface->dev;
+ 	xdev->error = 0;
+-- 
+2.25.1
+

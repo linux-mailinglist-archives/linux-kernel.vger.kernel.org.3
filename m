@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60516574494
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CA457449C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234693AbiGNFhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 01:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S234747AbiGNFiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 01:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233559AbiGNFhs (ORCPT
+        with ESMTP id S231601AbiGNFiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 01:37:48 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFA222B08;
-        Wed, 13 Jul 2022 22:37:39 -0700 (PDT)
-X-UUID: a829b66066ab4fe5a0dfb8632003a6d2-20220714
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:35acadad-c735-4ee9-9101-ce7f9dbbaa1c,OB:0,LO
-        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:51
-X-CID-INFO: VERSION:1.1.8,REQID:35acadad-c735-4ee9-9101-ce7f9dbbaa1c,OB:0,LOB:
-        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:51
-X-CID-META: VersionHash:0f94e32,CLOUDID:604575d7-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:7f55e8085048,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: a829b66066ab4fe5a0dfb8632003a6d2-20220714
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2048630554; Thu, 14 Jul 2022 13:37:34 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 14 Jul 2022 13:37:32 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 14 Jul 2022 13:37:31 +0800
-Message-ID: <9a7fd7770b013c95983e700d2f1e132fbf5429a6.camel@mediatek.com>
-Subject: Re: [PATCH net v4 3/3] net: stmmac: fix unbalanced ptp clock issue
- in suspend/resume flow
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     David Miller <davem@davemloft.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <netdev@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <macpaul.lin@mediatek.com>,
-        "Jisheng Zhang" <jszhang@kernel.org>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
-Date:   Thu, 14 Jul 2022 13:37:31 +0800
-In-Reply-To: <20220713203910.74d36732@kernel.org>
-References: <20220713101002.10970-1-biao.huang@mediatek.com>
-         <20220713101002.10970-4-biao.huang@mediatek.com>
-         <20220713203910.74d36732@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 14 Jul 2022 01:38:16 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916EC22B08;
+        Wed, 13 Jul 2022 22:38:15 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso1691560pjo.0;
+        Wed, 13 Jul 2022 22:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GYTIDfJ9CTPntddkM4o61xxVIDzdsIEr5Pg/XtUXnjY=;
+        b=cMPziWUD9Cfguc8aD8iHHsqy1MJTi+grGGpTHvCXEf5vGGugdhdKWn8PHezuv0OhmE
+         FJ5NRarZtcGfB5qlUbwTwDoA4Ef7d0H9Ad0OFBy6U6ls8xq++LTRNyRSN05Bon6vRpVK
+         7onQMUcIs8hPCKtx8dyCOlW2b1w47OSmHcaQyXH3QEfPc0H/9WmSQbDcI+SxNxKlHjeQ
+         pznW7HAkdFGxkRwG/lh1Hpf1C8NbYT6OCPqzdkwMbeoAlHzM3PTmfPiSQ+l5jJHsJ2P+
+         1PBnG9ulLucsDQ78Q0dYWOrK5RVXeIKR81fR/YV4G1vj19CwREDTm2k3wjNVAJBdN7/b
+         o1/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GYTIDfJ9CTPntddkM4o61xxVIDzdsIEr5Pg/XtUXnjY=;
+        b=JpNT9ZqJ6PlxOg7+Wqaw9yeGRjdHwilRBqn1UbZKe5V3mAvOGg8U6W5SuFupQCHiF4
+         5dzq/6RcmRZxUmbN+L99ovWMNBjb/vdRKC9Wg+MbLZevuXhyh88KX0u10D2CnJTWlebK
+         StdDcea9vATERudWMFnJs9c8PSNzaGXhSHnKY0QLL3nYS+daOBkaQr0q+9tjFqvh3m7l
+         69rZ2cj5KnosCVTZ6J3oKajGiOrGKCXpWp9yPzNq7SGtco8Hqft13QfBpx99ygMdfF/O
+         Ha9uDtDUeaE2WK0xzzcsoFnm37HzlJ0BZZxGq8zPGrORZ9j1+JYVXixYDOt5GasqdZ62
+         shqQ==
+X-Gm-Message-State: AJIora+aKJSrjuqcjsVnl7byVnrjxZsQoLdm1HggXD770QRCieI7u8Nq
+        R9cabYI/pMFEUTnc25HOD5c=
+X-Google-Smtp-Source: AGRyM1vmWRfUIu4zqmb40XgIcl7V20oFXgFowpLxMiDSKFUt+IMKH6vhM6DX2zsHIJF3AzFIYKpQPw==
+X-Received: by 2002:a17:90b:1b0d:b0:1f0:50bd:885 with SMTP id nu13-20020a17090b1b0d00b001f050bd0885mr14355865pjb.234.1657777095117;
+        Wed, 13 Jul 2022 22:38:15 -0700 (PDT)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id t12-20020a170902e84c00b0016a111c83cdsm434402plg.119.2022.07.13.22.38.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 22:38:14 -0700 (PDT)
+From:   Akihiko Odaki <akihiko.odaki@gmail.com>
+Cc:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v2] AMD_SFH: Add a DMI quirk entry for Chromebooks
+Date:   Thu, 14 Jul 2022 14:37:52 +0900
+Message-Id: <20220714053752.5124-1-akihiko.odaki@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Jakub,
-	Thanks for your comments~
+Google Chromebooks use Chrome OS Embedded Controller Sensor Hub instead
+of Sensor Hub Fusion and leaves MP2 uninitialized, which disables all
+functionalities, even including the registers necessary for feature
+detections.
 
-On Wed, 2022-07-13 at 20:39 -0700, Jakub Kicinski wrote:
-> On Wed, 13 Jul 2022 18:10:02 +0800 Biao Huang wrote:
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > index 197fac587ad5..c230b8b9aab1 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > @@ -839,14 +839,6 @@ int stmmac_init_tstamp_counter(struct
-> > stmmac_priv *priv, u32 systime_flags)
-> >  	if (!(priv->dma_cap.time_stamp || priv->dma_cap.atime_stamp))
-> >  		return -EOPNOTSUPP;
-> >  
-> > -	ret = clk_prepare_enable(priv->plat->clk_ptp_ref);
-> > -	if (ret < 0) {
-> > -		netdev_warn(priv->dev,
-> > -			    "failed to enable PTP reference clock:
-> > %pe\n",
-> > -			    ERR_PTR(ret));
-> > -		return ret;
-> > -	}
-> > -
-> >  	stmmac_config_hw_tstamping(priv, priv->ptpaddr, systime_flags);
-> >  	priv->systime_flags = systime_flags;
-> >  
-> 
-> 
-> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:837:6: warning:
-> unused variable 'ret' [-Wunused-variable]
->         int ret;
->             ^
-OK, I'll fix it in next send.
+The behavior was observed with Lenovo ThinkPad C13 Yoga.
 
-Best Regards!
-Biao
+Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/hid/amd-sfh-hid/amd_sfh_pcie.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+index dadc491bbf6b..b91e1c95e543 100644
+--- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
++++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+@@ -197,6 +197,18 @@ static const struct dmi_system_id dmi_sensor_mask_overrides[] = {
+ 		},
+ 		.driver_data = (void *)(ACEL_EN | MAGNO_EN),
+ 	},
++	{
++		/*
++		 * Google Chromebooks use Chrome OS Embedded Controller Sensor
++		 * Hub instead of Sensor Hub Fusion and leaves MP2
++		 * uninitialized, which disables all functionalities, even
++		 * including the registers necessary for feature detections.
++		 */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Google"),
++		},
++		.driver_data = (void *)0,
++	},
+ 	{ }
+ };
+ 
+-- 
+2.36.1
 

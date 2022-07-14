@@ -2,157 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B02A5741A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 04:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2655741AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 04:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232499AbiGNC72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 22:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
+        id S232609AbiGNC7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 22:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbiGNC7U (ORCPT
+        with ESMTP id S232671AbiGNC7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 22:59:20 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45AB22538
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 19:59:18 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id h132so323652pgc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 19:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=1KjU3PLDicyTH9daCuPh3Hm/2NYtDhdcfpWa369op3Q=;
-        b=P5iQCyYlTsWtVPtEI0II+heIZcCoqfKjjY/xe4s2LceVtVDAHq00Lu3V671XO9gku7
-         ZEg3PGC9W0VsHuaUE2hYzV8yIXcus0U8vDn1HaqzvGhE2W22MedVCuSOF85jx5sU52dB
-         A8UAGW6WZOBAcL93zXURNqLAj+/ANC2GyBz5gQvc2iFNY5ISoR4gtHgp4XDR9TtSmSJR
-         EZ+41S8nT6NSsH8Hw9YJwWqQiX9ufJg6fWnRrTLEAYf2emokOZJEaWkELyrFcQNVDg+l
-         +OUO98q768NrpGwYzL1TzVZBV7Ox2AcDg4Pj96PcLZweruJGqrU/3VYyr9nxbaOVdxWJ
-         aYhw==
+        Wed, 13 Jul 2022 22:59:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF718255AC
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 19:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657767568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vljCPqfS4JXAdqfuKpPVeX86cFMumauaVcfGL80nUUY=;
+        b=ZPdBsENVBL4XMA3LEXNS2UAZgu9/H5AcR/MmfPG5g6cM4UMBu0c3mtWQWJwkESAxM4xKJe
+        4mzIaSoMlPQ8pwn2tiTac6vSgofH00c6V0hByj8V0yjaH1nUuYm+YCPJGc6wLmXRd/YG7S
+        m55ojJNTtFGJe8ryCOatxpYhPNgErEQ=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-382-KMJahnqINc2MM3HZbHXJlg-1; Wed, 13 Jul 2022 22:59:27 -0400
+X-MC-Unique: KMJahnqINc2MM3HZbHXJlg-1
+Received: by mail-pj1-f69.google.com with SMTP id x16-20020a17090ab01000b001f06332d7cfso2786061pjq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 19:59:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=1KjU3PLDicyTH9daCuPh3Hm/2NYtDhdcfpWa369op3Q=;
-        b=uYGeh+zlCR6aNtxeLK0VjTj5F+ePpRkKDj9IXRPOqqi8iEKDMn1qvkIQ2XR3EoK8jZ
-         d2O4hp1H9L5Wj/+zCfmm1rnWsZJWdmJdTyum0SAB62vZQgwl8nuTSg820QukcybFYtXj
-         /ddE9GuR+mAqEGqSTNDGysnQ+jAZzd8oGb2j41omUicWfcrLfNRO1A03/o7vae4Sq0Jm
-         Na6tozMkotQCVk0p5/Gxdd0AHd5d4gUFDP6/5MB3iwv4W25V4y1+BHclTeSmpKsdy8Y5
-         /NRYyIrs6NpTIL8IpBQzst+F40uMq/i2oqaM6LD3TdxWNrbasTeN2bNeW9F+XDUTnfQX
-         DUWg==
-X-Gm-Message-State: AJIora84Y2ws36SJWQAIHJMQYJfaZVpQb3EDCnwl/OMVUxeTLF5l6hbo
-        p3yVqUPdi9k5p3e0a6JFH7EdCVAy2ss1Kg==
-X-Google-Smtp-Source: AGRyM1tEmFHfcBWA2ZOuLTAe6QSvtuq1xH6f410WpSbSCppUsKGCEnMcfChAcS4BhJ7h2U4zEo2wrA==
-X-Received: by 2002:a63:460f:0:b0:412:7a8b:128c with SMTP id t15-20020a63460f000000b004127a8b128cmr5833883pga.270.1657767558145;
-        Wed, 13 Jul 2022 19:59:18 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id e29-20020aa7981d000000b0052ab54a4711sm271471pfl.150.2022.07.13.19.59.17
+        bh=vljCPqfS4JXAdqfuKpPVeX86cFMumauaVcfGL80nUUY=;
+        b=ciJK/4hwGE2bypuAGCMK91h9P2oecyOhumtfgUZkJioCVe+Oz/ZcxnYxVIFzYjkKyR
+         +zwojRYCNNPXAzpgt2D7bTrdVzXtGzmJjF17HzBpnHWNmbBFGuUFa2O0hnbS0/VJwxUF
+         GUI8+0xDpF+iSccX18HFNhhzlXWQSLw6hopvDRTFvXi2coR4XRb2J0uNWagFqlGu9LpL
+         8P/IhtRb8UL7APij/7gHqR+/Hp1dRgywdExkk2rxYI5fDtfcSRAx7QTYqGLAQazZJOf5
+         9Vei12GD7DBuZ+13u3ADuZcbm2fuRlLAx8ICExNOHXFe8sXOSRH+X3VgyKgXGD6sQYfG
+         Emrw==
+X-Gm-Message-State: AJIora/8eWLSGOeR7UY9GHofOX0i396hMNH+Nx0RttxGs3SKOr+nPvN8
+        MJ9X7fzxrAaT1PxbLR/vWGNwEgY5nmg8MRArTOyLVl0JBlNn2KgG6cgaKFT9l6Oa+u2+GnujORz
+        Awd4jDadyUmBqBfNt/3grZUhp
+X-Received: by 2002:a17:903:22c4:b0:16c:6a72:12b7 with SMTP id y4-20020a17090322c400b0016c6a7212b7mr6303409plg.10.1657767566431;
+        Wed, 13 Jul 2022 19:59:26 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uK4DAlZpD0zNK9Y+KrDKvumOJ7i3EGJ+/6C3HLY/3v2p4iYXHOzlayl5RJDUAfh2Tq370tKg==
+X-Received: by 2002:a17:903:22c4:b0:16c:6a72:12b7 with SMTP id y4-20020a17090322c400b0016c6a7212b7mr6303385plg.10.1657767566196;
+        Wed, 13 Jul 2022 19:59:26 -0700 (PDT)
+Received: from [10.72.12.153] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id i11-20020a170902cf0b00b0016c06a10861sm161638plg.74.2022.07.13.19.59.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 19:59:17 -0700 (PDT)
-Message-ID: <38b6e5f5-247a-bd44-061d-f492e7d47b99@kernel.dk>
-Date:   Wed, 13 Jul 2022 20:59:16 -0600
+        Wed, 13 Jul 2022 19:59:25 -0700 (PDT)
+Message-ID: <07a8e952-1347-8920-3a78-0200b865e0e9@redhat.com>
+Date:   Thu, 14 Jul 2022 10:59:17 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V5 0/2] ublk: add io_uring based userspace block driver
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 0/5] VDUSE: Support registering userspace memory as
+ bounce buffer
 Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-References: <20220713140711.97356-1-ming.lei@redhat.com>
- <6e5d590b-448d-ea75-f29d-877a2cd6413b@kernel.dk> <Ys9g9RhZX5uwa9Ib@T590>
- <94289486-a7fa-1801-3c67-717e0392f374@kernel.dk>
-In-Reply-To: <94289486-a7fa-1801-3c67-717e0392f374@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Yongji Xie <xieyongji@bytedance.com>
+Cc:     mst <mst@redhat.com>, Liu Xiaodong <xiaodong.liu@intel.com>,
+        Maxime Coquelin <maxime.coquelin@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        songmuchun@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220706050503.171-1-xieyongji@bytedance.com>
+ <CACGkMEv1tzenaGSUvYXEuxdmXyaZxQ24QspXRRA_95mMp4PWSg@mail.gmail.com>
+ <CACycT3u3kOzzQjKBYNAB5vtpgcmPg7FjJ5yTYMtQo0SJVrBmZg@mail.gmail.com>
+ <CACGkMEvtC1VmGjhV6QpEeu+nUikGj5eT79hhyS59rpK1s31TUg@mail.gmail.com>
+ <CACycT3sNnmV8jrnjFkft6oST_6SGLc43f8Y4ZpomkPeOsvsorQ@mail.gmail.com>
+ <CACGkMEsuGif+X4Maa-qSNYLzfkvBKV9ZkVEUFgYnjsUUwS4Dkw@mail.gmail.com>
+ <CACycT3vgaOrLVq+GDRK1PqqBRCkUAU0bYH=2CDvudsX0F9FBDA@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <CACycT3vgaOrLVq+GDRK1PqqBRCkUAU0bYH=2CDvudsX0F9FBDA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/13/22 8:54 PM, Jens Axboe wrote:
-> On 7/13/22 6:19 PM, Ming Lei wrote:
->> On Wed, Jul 13, 2022 at 02:25:25PM -0600, Jens Axboe wrote:
->>> On 7/13/22 8:07 AM, Ming Lei wrote:
->>>> Hello Guys,
+
+在 2022/7/11 15:24, Yongji Xie 写道:
+> On Mon, Jul 11, 2022 at 2:02 PM Jason Wang <jasowang@redhat.com> wrote:
+>> On Fri, Jul 8, 2022 at 5:53 PM Yongji Xie <xieyongji@bytedance.com> wrote:
+>>> On Fri, Jul 8, 2022 at 4:38 PM Jason Wang <jasowang@redhat.com> wrote:
+>>>> On Wed, Jul 6, 2022 at 6:16 PM Yongji Xie <xieyongji@bytedance.com> wrote:
+>>>>> On Wed, Jul 6, 2022 at 5:30 PM Jason Wang <jasowang@redhat.com> wrote:
+>>>>>> On Wed, Jul 6, 2022 at 1:05 PM Xie Yongji <xieyongji@bytedance.com> wrote:
+>>>>>>> Hi all,
+>>>>>>>
+>>>>>>> This series introduces some new ioctls: VDUSE_IOTLB_GET_INFO,
+>>>>>>> VDUSE_IOTLB_REG_UMEM and VDUSE_IOTLB_DEREG_UMEM to support
+>>>>>>> registering and de-registering userspace memory for IOTLB
+>>>>>>> as bounce buffer in virtio-vdpa case.
+>>>>>>>
+>>>>>>> The VDUSE_IOTLB_GET_INFO ioctl can help user to query IOLTB
+>>>>>>> information such as bounce buffer size. Then user can use
+>>>>>>> those information on VDUSE_IOTLB_REG_UMEM and
+>>>>>>> VDUSE_IOTLB_DEREG_UMEM ioctls to register and de-register
+>>>>>>> userspace memory for IOTLB.
+>>>>>>>
+>>>>>>> During registering and de-registering, the DMA data in use
+>>>>>>> would be copied from kernel bounce pages to userspace bounce
+>>>>>>> pages and back.
+>>>>>>>
+>>>>>>> With this feature, some existing application such as SPDK
+>>>>>>> and DPDK can leverage the datapath of VDUSE directly and
+>>>>>>> efficiently as discussed before [1][2]. They can register
+>>>>>>> some preallocated hugepages to VDUSE to avoid an extra
+>>>>>>> memcpy from bounce-buffer to hugepages.
+>>>>>> This is really interesting.
+>>>>>>
+>>>>>> But a small concern on uAPI is that this seems to expose the VDUSE
+>>>>>> internal implementation (bounce buffer) to userspace. We tried hard to
+>>>>>> hide it via the GET_FD before. Anyway can we keep it?
+>>>>>>
+>>>>> Another way is changing GET_FD ioctl to add a flag or reuse 'perm'
+>>>>> field to indicate whether a IOVA region supports userspace memory
+>>>>> registration. Then userspace can use
+>>>>> VDUSE_IOTLB_REG_UMEM/VDUSE_IOTLB_DEREG_UMEM to register/deregister
+>>>>> userspace memory for this IOVA region.
+>>>> Looks better.
 >>>>
->>>> ublk driver is one kernel driver for implementing generic userspace block
->>>> device/driver, which delivers io request from ublk block device(/dev/ublkbN) into
->>>> ublk server[1] which is the userspace part of ublk for communicating
->>>> with ublk driver and handling specific io logic by its target module.
+>>> OK.
 >>>
->>> Ming, is this ready to get merged in an experimental state?
+>>>>> Any suggestions?
+>>>> I wonder what's the value of keeping the compatibility with the kernel
+>>>> mmaped bounce buffer. It means we need to take extra care on e.g data
+>>>> copying when reg/reg user space memory.
+>>>>
+>>> I'm not sure I get your point on the compatibility with the kernel
+>>> bounce buffer. Do you mean they use the same iova region?
+>> Yes.
 >>
->> Hi Jens,
+>>> The userspace daemon might crash or reboot. In those cases, we still
+>>> need a kernel buffer to store/recover the data.
+>> Yes, this should be a good point.
 >>
->> Yeah, I think so.
+>>>> Can we simply allow the third kind of fd that only works for umem registration?
+>>>>
+>>> Do you mean using another iova region for umem?
+>> I meant having a new kind of fd that only allows umem registration.
 >>
->> IO path can survive in xfstests(-g auto), and control path works
->> well in ublksrv builtin hotplug & 'kill -9' daemon test.
+> OK. It seems to be a little complicated to allow mapping a registered
+> user memory via a new fd, e.g. how to handle the mapping if the
+> userspace daemon exits but the fd is already passed to another
+> process.
+>
+>>> I think we don't need
+>>> a fd in umem case since the userspace daemon can access the memory
+>>> directly without using mmap() to map it into the address space in
+>>> advance.
+>> Ok, I will have a look at the code and get back.
 >>
->> The UAPI data size should be good, but definition may change per
->> future requirement change, so I think it is ready to go as
->> experimental.
-> 
-> OK let's give it a go then. I tried it out and it seems to work for me,
-> even if the shutdown-while-busy is something I'd to look into a bit
-> more.
-> 
-> BTW, did notice a typo on the github page:
-> 
-> 2) dependency
-> - liburing with IORING_SETUP_SQE128 support
-> 
-> - linux kernel 5.9(IORING_SETUP_SQE128 support)
-> 
-> that should be 5.19, typo.
-
-I tried this:
-
-axboe@m1pro-kvm ~/g/ubdsrv (master)> sudo ./ublk add -t loop /dev/nvme0n1
-axboe@m1pro-kvm ~/g/ubdsrv (master) [255]> 
-
-and got this dump:
-
-[   34.041647] WARNING: CPU: 3 PID: 60 at block/blk-mq.c:3880 blk_mq_release+0xa4/0xf0
-[   34.043858] Modules linked in:
-[   34.044911] CPU: 3 PID: 60 Comm: kworker/3:1 Not tainted 5.19.0-rc6-00320-g5c37a506da31 #1608
-[   34.047689] Hardware name: linux,dummy-virt (DT)
-[   34.049207] Workqueue: events blkg_free_workfn
-[   34.050731] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   34.053026] pc : blk_mq_release+0xa4/0xf0
-[   34.054360] lr : blk_mq_release+0x44/0xf0
-[   34.055694] sp : ffff80000b16bcb0
-[   34.056804] x29: ffff80000b16bcb0 x28: 0000000000000000 x27: 0000000000000000
-[   34.059135] x26: 0000000000000000 x25: ffff00001fe9bb05 x24: 0000000000000000
-[   34.061454] x23: ffff000005062eb8 x22: ffff000004608998 x21: 0000000000000000
-[   34.063775] x20: ffff000004608a50 x19: ffff000004608950 x18: ffff80000b7b3c88
-[   34.066085] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-[   34.068410] x14: 0000000000000002 x13: 0000000000013638 x12: 0000000000000000
-[   34.070715] x11: ffff80000945b7e8 x10: 0000000000006f2e x9 : 00000000ffffffff
-[   34.073037] x8 : ffff800008fb5000 x7 : ffff80000860cf28 x6 : 0000000000000000
-[   34.075334] x5 : 0000000000000000 x4 : 0000000000000028 x3 : ffff80000b16bc14
-[   34.077650] x2 : ffff0000086d66a8 x1 : ffff0000086d66a8 x0 : ffff0000086d6400
-[   34.079966] Call trace:
-[   34.080789]  blk_mq_release+0xa4/0xf0
-[   34.081811]  blk_release_queue+0x58/0xa0
-[   34.082758]  kobject_put+0x84/0xe0
-[   34.083590]  blk_put_queue+0x10/0x18
-[   34.084468]  blkg_free_workfn+0x58/0x84
-[   34.085511]  process_one_work+0x2ac/0x438
-[   34.086449]  worker_thread+0x1cc/0x264
-[   34.087322]  kthread+0xd0/0xe0
-[   34.088053]  ret_from_fork+0x10/0x20
+> OK. Looking forward to your reply.
 
 
--- 
-Jens Axboe
+Looks good overall.
+
+Just few comments.
+
+Thanks
+
+
+>
+> Thanks,
+> Yongji
+>
 

@@ -2,94 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B410574B58
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E24574B5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238526AbiGNLAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S238566AbiGNLBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237669AbiGNLAV (ORCPT
+        with ESMTP id S237030AbiGNLBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:00:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C506F564EE;
-        Thu, 14 Jul 2022 04:00:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6401560C1C;
-        Thu, 14 Jul 2022 11:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD83C34114;
-        Thu, 14 Jul 2022 11:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657796419;
-        bh=d7dJzHy3R4d3efKnyqF1Bs4i3d1AFlB+D2NT0p1gevU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mIMm8UuymYGzasiWrapSwDV3BiJoF1yRtWQMqJJ5cqYVEOqF2xjIzfbD36CAzxyYt
-         NrEDpwQNhh9tbxqYRMu887wgzprhX8SwYgd2tt6B9C5bo77b+ybDEUwI7uuweLVQTO
-         tVhJSf7tsinQEcd+Rj+D6xELXiQSnnCB2pHqVejQ5jvmLvuxD1aTKqgK1IwBWzm5dx
-         bbhEyMf3pmi25tCnuC8MpjBUjgdMuvqw6SCv7xbfE8CxGnTyLZRScWjQas7togxw+k
-         a8Vw4WNL/7qBewkR0iP157GyKKBP7UK+Wku44rHE9Hz7/5NXaf/tF+lGwiAQJMR0zT
-         lvmkuBLic7Q7w==
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-31caffa4a45so13150227b3.3;
-        Thu, 14 Jul 2022 04:00:19 -0700 (PDT)
-X-Gm-Message-State: AJIora8X0M6GQJew/D9SnxKql0w+vaqAHCbTrAiLf3NVlwB8NYmgLk+c
-        6c7sC66veykK9EPU9kegnfMS6WHmgrlzxMEx+lE=
-X-Google-Smtp-Source: AGRyM1v8B84SNAdGfOI4zRumWOHG4tF3fWc5HBtUKpdHnhrTodjFGxXFqWCe2mA6l8aeAzCy9c7C96Np8oZnHoxYPK4=
-X-Received: by 2002:a81:1608:0:b0:31c:925f:c52c with SMTP id
- 8-20020a811608000000b0031c925fc52cmr9171091yww.93.1657796418888; Thu, 14 Jul
- 2022 04:00:18 -0700 (PDT)
+        Thu, 14 Jul 2022 07:01:08 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77055564EF;
+        Thu, 14 Jul 2022 04:01:07 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id w2so1721646ljj.7;
+        Thu, 14 Jul 2022 04:01:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bRaGXzVsvXrp9o5BPxAa6QcDd4JsOvIWMxX4WmnVZY4=;
+        b=U7kw7ZYsgQjQ8Dj5Ii7ZALQ4i0Ay6GsdAT3jLgvD0oXeJzMIIgwqmDug0QeoD5EMhC
+         lkUaRsQjGoq6Hb2+NQilhFrQRSp6AxR4WJnH4FrNrHi8j2/XiE4YwoQSaOIsPtQmgB+L
+         QW7/VNyjHxGKzYXXnX15Knfgl+dP2xyvKCXPAms2BA/XHGVkhEGuG2xHK4ZEavFl0OKO
+         DdyvT8Txo2pITpMnqqUhf1taDfAt/Z+XVOslk35y4tWkG4hZyGR1rUG5uIZhiIsCN7tE
+         h5/axgSTLvEYBe1WlWCNwtStaVTZ+I9A1/ZndvQY/WEAjHFqpVhUfu/bR/gnwhOddpP8
+         v0Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bRaGXzVsvXrp9o5BPxAa6QcDd4JsOvIWMxX4WmnVZY4=;
+        b=4jyYpPd3FOaBUs2bN0FJD0TSNQYQAOG3QvEWCLUL+Baq2WE7XAThTZsTEXOZ/ptjno
+         xKS8iDC3/JF9oOSbIEHZ/6mVlUMTqaMlKryxOx/Kd4OZkv+xGFxhOZLY1+nu2Zu2FTpt
+         06vMjw302MimkiSsny7MVrRoAjq3WllnKAHgSvNokfg3XmNuavVSGXw/mCCsF+VWcrh6
+         ipZk/rbLPZkfshBwz44w1vDqQLmPpk51bVojl33vWFipGlHlMvm9WGDc75hnTW6W9YmO
+         C2dog36vyZ4/LrW7k8NqE1lTqxju8wMeMyl28ppSCaJKY6whPAOPkXqLOvpeTwAhvioO
+         yT7Q==
+X-Gm-Message-State: AJIora9X9IfIRBVova4X3DhppRpzskQld4Wc5Zh6bMEV5OZmeis12pa4
+        L3CFrF+0WZpSylu34QLXBxc=
+X-Google-Smtp-Source: AGRyM1uSKOlQOCjmCNWVBaZdNHAasytESWuj89vkdO3z3UYcRr2rkd5t7vGNvPhyQBxNsucZD+dRSw==
+X-Received: by 2002:a2e:98da:0:b0:25d:91a7:22eb with SMTP id s26-20020a2e98da000000b0025d91a722ebmr3037580ljj.46.1657796465704;
+        Thu, 14 Jul 2022 04:01:05 -0700 (PDT)
+Received: from [192.168.1.2] (broadband-188-32-106-30.ip.moscow.rt.ru. [188.32.106.30])
+        by smtp.gmail.com with ESMTPSA id e2-20020a2e9842000000b00258fd1ba2e7sm224521ljj.84.2022.07.14.04.01.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 04:01:05 -0700 (PDT)
+Message-ID: <74ba5239-27b0-299e-717c-595680cd52f9@gmail.com>
+Date:   Thu, 14 Jul 2022 14:01:04 +0300
 MIME-Version: 1.0
-References: <20220714103119.22927-1-colin.i.king@gmail.com>
-In-Reply-To: <20220714103119.22927-1-colin.i.king@gmail.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Thu, 14 Jul 2022 13:59:52 +0300
-X-Gmail-Original-Message-ID: <CAFCwf13ppoKUGtVRUc93EySHOVsXF-3XkfHUvC0K1O2adVDpFQ@mail.gmail.com>
-Message-ID: <CAFCwf13ppoKUGtVRUc93EySHOVsXF-3XkfHUvC0K1O2adVDpFQ@mail.gmail.com>
-Subject: Re: [PATCH][next] habanalabs: Fix spelling mistake "Scrubing" -> "Scrubbing"
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-janitors@vger.kernel.org,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC] futex2: add NUMA awareness
+Content-Language: en-US
+To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-api@vger.kernel.org, fweimer@redhat.com,
+        libc-alpha@sourceware.org, Davidlohr Bueso <dave@stgolabs.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+References: <36a8f60a-69b2-4586-434e-29820a64cd88@igalia.com>
+From:   Andrey Semashev <andrey.semashev@gmail.com>
+In-Reply-To: <36a8f60a-69b2-4586-434e-29820a64cd88@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 1:31 PM Colin Ian King <colin.i.king@gmail.com> wrote:
->
-> There is a spelling mistake in a dev_dbg message. Fix it.
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/misc/habanalabs/gaudi/gaudi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-> index cb2988e2c7a8..05dd5e13f13e 100644
-> --- a/drivers/misc/habanalabs/gaudi/gaudi.c
-> +++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-> @@ -4723,7 +4723,7 @@ static int gaudi_scrub_device_mem(struct hl_device *hdev)
->         addr = prop->sram_user_base_address;
->         size = hdev->pldm ? 0x10000 : prop->sram_size - SRAM_USER_BASE_OFFSET;
->
-> -       dev_dbg(hdev->dev, "Scrubing SRAM: 0x%09llx - 0x%09llx val: 0x%llx\n",
-> +       dev_dbg(hdev->dev, "Scrubbing SRAM: 0x%09llx - 0x%09llx val: 0x%llx\n",
->                         addr, addr + size, val);
->         rc = gaudi_memset_device_memory(hdev, addr, size, val);
->         if (rc) {
-> --
-> 2.35.3
->
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Applied to -next.
-Thanks,
-Oded
+On 7/14/22 06:18, André Almeida wrote:
+> Hi,
+> 
+> futex2 is an ongoing project with the goal to create a new interface for
+> futex that solves ongoing issues with the current syscall.
+> 
+> One of this problems is the lack of NUMA awareness for futex operations.
+> This RFC is aimed to gather feedback around the a NUMA interface proposal.
+> 
+>  * The problem
+> 
+> futex has a single, global hash table to store information of current
+> waiters to be queried by wakers. This hash table is stored in a single
+> node in non-uniform machines. This means that a process running in other
+> nodes will have some overhead using futex, given that it will need to
+> access the table in a different node.
+> 
+>  * A solution
+> 
+> For NUMA machines, it would be allocated a table per node. Processes
+> then would be able to use the local table to avoid sharing data with
+> other nodes.
+> 
+>  * The interface
+> 
+> Userspace needs to specify which node would like to use to store/query
+> the futex table. The common case would be to operate on the current
+> node, but some cases could required to operate in another one.
+> 
+> Before getting to the NUMA part, a quick recap of the syscalls interface
+> of futex2:
+> 
+> futex_wait(void *uaddr, unsigned int val, unsigned int flags,
+>            struct timespec *timo)
+> 
+> futex_wake(void *uaddr, unsigned long nr_wake, unsigned int flags)
+> 
+> struct futex_requeue {
+> 	void *uaddr;
+> 	unsigned int flags;
+> };
+> 
+> futex_requeue(struct futex_requeue *rq1, struct futex_requeue *rq2,
+> 	      unsigned int nr_wake, unsigned int nr_requeue,
+> 	      u64 cmpval, unsigned int flags)
+> 
+> 
+> As requeue already has 6 arguments, we can't add an argument for the
+> node ID, we need to pack it in a struct. So then we have
+> 
+> struct futexX_numa {
+>         __uX value;
+>         __sX hint;
+> };
+> 
+> Where X can be 8, 16, 32 or 64 (futex2 supports variable sized futexes).
+> `value` is the futex value and `hint` can be -1 for the current node, or
+> [0, MAX_NUMA_NODES) to specify a node. Example:
+> 
+> struct futex32_numa f = {.value = 0, hint = -1};
+> 
+> ...
+> 
+> futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
+> 
+> Then &f would be used as the futex address, as expected, and this would
+> be used for the current node. If an app is expecting to have calls from
+> different nodes then it should do for instance:
+> 
+> struct futex32_numa f = {.value = 0, hint = 2};
+> 
+> For non-NUMA apps, a call without FUTEX_NUMA flag would just use the
+> first node as default.
+> 
+> Feedback? Who else should I CC?
+
+Just a few questions:
+
+Do I understand correctly that notifiers won't be able to wake up
+waiters unless they know on which node they are waiting?
+
+Is it possible to wait on a futex on different nodes?
+
+Is it possible to wake waiters on a futex on all nodes? When a single
+(or N, where N is not "all") waiter is woken, which node is selected? Is
+there a rotation of nodes, so that nodes are not skewed in terms of
+notified waiters?

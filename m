@@ -2,94 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3362575665
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 22:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DCB57566A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 22:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239448AbiGNUhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 16:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
+        id S240422AbiGNUig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 16:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiGNUhF (ORCPT
+        with ESMTP id S229984AbiGNUif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 16:37:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35893ED42;
-        Thu, 14 Jul 2022 13:37:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=r34t2dkJs6BauaDSmiqcG3RpPOCpjuABQcyajNTUCZ0=; b=sS+ulQPK+Ee7+6p6UIG+7ZxPAZ
-        fOHqIKnCg5qMLRZqlTpV1Wld0tGXRiMnnNWu7ceI2eMXiP5czu0S83NlYGlbVAQKZIU0J9sYI5k+Z
-        dEtEjOjAeBQZhTTLcXJikMreAUzuFHPfp44MvS9T/p36cUCame835KosMovzg/un43VzL+d9ZKLN3
-        WshYLFEHZHiIOL/p3z1Ui7HeXONOIr9zXXpQnUJRNKVgKc1XRvrdz4TCrDekwbOS3g4KO5XpRe1zc
-        8UNimPSm+H3pJwZxtMX3k07fKtr4GBwFW1GBJiRTX/o4hfsNIhpf87R5Eoeh2niSeP5R7ZEdLnXT4
-        T+eeKxMQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oC5Zp-001Vr8-Cg; Thu, 14 Jul 2022 20:36:49 +0000
-Date:   Thu, 14 Jul 2022 13:36:49 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     keescook@chromium.org, songmuchun@bytedance.com,
-        yzaikin@google.com, mhocko@suse.com, mgorman@techsingularity.net,
-        Kuniyuki Iwashima <kuniyu@amazon.com>, davem@davemloft.net,
-        kuba@kernel.org, patches@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mcgrof@kernel.org
-Subject: [GIT PULL] sysctl fixes for v5.19-rc7
-Message-ID: <YtB+YayGeq/KgOqK@bombadil.infradead.org>
+        Thu, 14 Jul 2022 16:38:35 -0400
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6872E4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 13:38:33 -0700 (PDT)
+Received: from localhost.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 84FC61F960;
+        Thu, 14 Jul 2022 22:38:31 +0200 (CEST)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        Rob Herring <robh@kernel.org>,
+        Craig Tatlor <ctatlor97@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: qcom: gcc-sdm660: Use floor ops for SDCC1 clock
+Date:   Thu, 14 Jul 2022 22:38:22 +0200
+Message-Id: <20220714203822.186448-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+In commit 3f905469c8ce ("clk: qcom: gcc: Use floor ops for SDCC clocks")
+floor ops were applied to SDCC2 only, but flooring is also required on
+the SDCC1 apps clock which is used by the eMMC card on Sony's Nile
+platform, and otherwise result in the typicial "Card appears
+overclocked" warnings observed on many other platforms before:
 
-I've only received one fix for sysctls for v5.19-rc cycle. It's perhaps
-silly to send a pull request for just one patch but oh well.
+    mmc0: Card appears overclocked; req 52000000 Hz, actual 100000000 Hz
+    mmc0: Card appears overclocked; req 52000000 Hz, actual 100000000 Hz
+    mmc0: Card appears overclocked; req 104000000 Hz, actual 192000000 Hz
 
-I'll take that time given I am sending a pull request to note that
-Kuniyuki Iwashima has posted a trove of fixes with races for when a
-subsystem does not do proper locking for read/write to the variables and
-so has put effort to do this where applicable by ensuring the sysctl
-proc stuff uses READ_ONCE/WRITE_ONCE helpers. Since most of the issues
-there have been identified on networking side Dave has picked all that
-up. I'll let him decide if he wants that on the rc or not.
+Fixes: f2a76a2955c0 ("clk: qcom: Add Global Clock controller (GCC) driver for SDM660")
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+---
+ drivers/clk/qcom/gcc-sdm660.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I figured I'd mention I don't have much cleanups for kernel/sysctl.c queued up
-for v5.20 so expect little work there later for the next cycle. That
-should also help with deciding if Kuniyuki's fixes get merged on v5.19
-or v5.20 as there shouldn't be any expected conflicts either way.
+diff --git a/drivers/clk/qcom/gcc-sdm660.c b/drivers/clk/qcom/gcc-sdm660.c
+index 429d12193146..04b427b577a1 100644
+--- a/drivers/clk/qcom/gcc-sdm660.c
++++ b/drivers/clk/qcom/gcc-sdm660.c
+@@ -743,7 +743,7 @@ static struct clk_rcg2 sdcc1_apps_clk_src = {
+ 		.name = "sdcc1_apps_clk_src",
+ 		.parent_data = gcc_parent_data_xo_gpll0_gpll4_gpll0_early_div,
+ 		.num_parents = ARRAY_SIZE(gcc_parent_data_xo_gpll0_gpll4_gpll0_early_div),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_floor_ops,
+ 	},
+ };
+ 
+-- 
+2.37.1
 
-  Luis
-
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/sysctl-fixes-5.19-rc7
-
-for you to fetch changes up to 43b5240ca6b33108998810593248186b1e3ae34a:
-
-  mm: sysctl: fix missing numa_stat when !CONFIG_HUGETLB_PAGE (2022-07-14 13:13:49 -0700)
-
-----------------------------------------------------------------
-Only one fix for sysctl
-
-----------------------------------------------------------------
-Muchun Song (1):
-      mm: sysctl: fix missing numa_stat when !CONFIG_HUGETLB_PAGE
-
- kernel/sysctl.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)

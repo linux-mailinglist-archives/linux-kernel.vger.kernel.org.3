@@ -2,112 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42B957455D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 08:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE093574564
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 08:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235356AbiGNG4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 02:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
+        id S233391AbiGNG71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 02:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbiGNG4T (ORCPT
+        with ESMTP id S229686AbiGNG7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 02:56:19 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBCA2AC5D
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 23:56:17 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id o12so1081947ljc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 23:56:17 -0700 (PDT)
+        Thu, 14 Jul 2022 02:59:10 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EB32B18E
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 23:59:05 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id p9so1789509pjd.3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 23:59:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ygGDwyimlIf6c05yh3mozG3M0LF6/sjmmvfiI7zgyuU=;
-        b=d8DEnAboI1y3aR3jhMI4/YzqBvZ9o9rjL4KyTI7+7E25Yr5BaIYHmgBDBLi3n2sH12
-         MSZmpn6S1WEVuE9A+UlpxHTuzdZI+9Rjp1/JWGd+9or1PyTRaEY068QBl/qwNYXjZG29
-         PJLGB8XR+gHnX+OmANqWCTJNHBkCxcbufkWL9s3a8LikGP5d9FxFk2vv8jEIXxP24dgE
-         s2lZBW0H/NO9Ahf+DHtnPnyolDJBgH2QJD1yX4VvJPAybDQ7lPUMWg/FHA+rTv1ajTP2
-         W4oWsHA/z/RsLXl27xHxbl8f8jMEryw9/aXWEXnaOhBGfB8t7p9IZ/MPr7dlq2W7tS3t
-         K8rA==
+        bh=Ow4XbAB1kGJrqkjsozYWdg/Tqr2cl2cAwtPRj5iANg0=;
+        b=e49Dx/FgmmC+u0cLfWEccN+STzae4HNxpR12zfpRrKatQl+teVi5WpoTNVO21UMmGH
+         xHRWi9659SKfCisk8E6rbyvNAHcdP5Xslm+djwK7ibmtNwO1NIKU5eF20IwueieZ9D0T
+         M/Jn0KkrcRWUb9b29bS+UEe5JJjVwmnYymKoQM3Ytt6QiFxyrlbaWIMTuSUk7ppYAPcC
+         bMtXZUMtAg3yKpHZaAW43CXWLShmAmsLwe9KC6QSgyHl0crTRhaRiucm2UJbd5NWXFUS
+         si1uopG+eL1Mj8J8a6/Vt+rG5LSLCzw+lVrC/tyNkZVpXgGyLPQs3C00Tnfs91/3L3xH
+         OaLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ygGDwyimlIf6c05yh3mozG3M0LF6/sjmmvfiI7zgyuU=;
-        b=s2fqJXVaTHyfk/9t224mmqGZsinpSFYEKg69hYJab7+ltWGINVwjyeTglCpJQH36FQ
-         ny7uT1gZNjTPhSM0OBXFkO5ofbxZqUoEX1aEL5zEiXlWJBZ2OfmZFO6q9ibqQvHPPneg
-         QA+OqfLg9mUBOy2tHBmQX80V1T7PUfPYbAvF5FUWP3q2wuiFw7y5CDfAdcaYH7qWPhgr
-         XYi89p5a/BAFtvnLCGLijUc0nCDDDFljTUcr+1El2183NEl6qcRKL32zHZPJRK+fFqLS
-         FU514Gzs4krMKTSBUYnJR8+EuqsJCGqS6gvBJWBNKn+VeowouQqLhp1EcweS3DcIcX5h
-         lsHg==
-X-Gm-Message-State: AJIora/Dy7rC4YzijhmpKvSNPufxtUQjtnq+DLScxHqr6hzQ0kx+Mc6B
-        660v3MZyscwdgddpMXbArcUyag==
-X-Google-Smtp-Source: AGRyM1u9SaJfjTEEpazUdRmvnE17TWyJfAUNVJCvIoNGh9kZrSYvFpaFiEtk2B03nsKGZXM2OuktKA==
-X-Received: by 2002:a2e:92c6:0:b0:255:84cb:4eea with SMTP id k6-20020a2e92c6000000b0025584cb4eeamr3703749ljh.204.1657781775995;
-        Wed, 13 Jul 2022 23:56:15 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id k6-20020ac257c6000000b00489cd8ee61asm194547lfo.275.2022.07.13.23.56.13
+        bh=Ow4XbAB1kGJrqkjsozYWdg/Tqr2cl2cAwtPRj5iANg0=;
+        b=e9zSvoqnpJrYICLMA3RL256XFw6FUPXKppKdnGazu3bdZCPbBS+nBLIZV7iYGyb4Vr
+         dTfSYdbNEf2Poxj4Ni/MvZZAEdWB7Sx19lh1ecyRMklMdGK6tE5H0wQ9y+JRXAp0hCJf
+         O3gcvN95bcArH+uNsOEkN95wYHr97XuEEUQqYQZ4dpsr+8mB1OccOtlIa1yO9LX5oQvm
+         KT0HY0IWZaP1mc0RV+isVQbNPe2/a4a7Xj59LGBCPLtdoQp4HLdLwuv40b/jqK20QPri
+         i9kkshv4vQwSdP9ly4IPkcViop5ZQQ25twMJou7aAAkZJvMHyU9uHfHyi340Nx9ht3Vh
+         SPrA==
+X-Gm-Message-State: AJIora889cZWBJfW91tUcT20HbvO+bn0lVdW3lvyr5QHqv50obdy6HDs
+        YLeG+24iOxh1Dzkti8YZCGe4iw==
+X-Google-Smtp-Source: AGRyM1u+gj9QBnJGI7/EAHFZOzjWarTZdvd5rjA0Jt4p+UND+USOG0cyqCXj3ZER6khMHYSjmZmCxw==
+X-Received: by 2002:a17:90a:bc95:b0:1ef:8b48:fa0b with SMTP id x21-20020a17090abc9500b001ef8b48fa0bmr14273066pjr.189.1657781945443;
+        Wed, 13 Jul 2022 23:59:05 -0700 (PDT)
+Received: from [10.94.58.189] ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id h19-20020a631213000000b003fcf1279c84sm522567pgl.33.2022.07.13.23.59.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 23:56:14 -0700 (PDT)
-Message-ID: <7a4fba17-9c71-a4e6-643a-62aa0dfd4774@linaro.org>
-Date:   Thu, 14 Jul 2022 08:56:12 +0200
+        Wed, 13 Jul 2022 23:59:05 -0700 (PDT)
+Message-ID: <4dde05be-8470-5984-0a30-ba077b9fe6bd@bytedance.com>
+Date:   Thu, 14 Jul 2022 14:58:59 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] arm64: dts: marvell: Fix compatible strings for Armada
- 3720 boards
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH 1/5] sched/fair: ignore SIS_UTIL when has idle core
 Content-Language: en-US
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220713125644.3117-1-pali@kernel.org>
- <a9e1ccb7-6caa-2f7c-b879-b3ff4945794c@linaro.org>
- <20220713200336.addvyfjhakrx72am@pali>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220713200336.addvyfjhakrx72am@pali>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Yicong Yang <yangyicong@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     yangyicong@hisilicon.com, Josh Don <joshdon@google.com>,
+        Chen Yu <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
+References: <20220712082036.5130-1-wuyun.abel@bytedance.com>
+ <20220712082036.5130-2-wuyun.abel@bytedance.com>
+ <8e7d75d4-613e-f35e-e932-323789666fb1@huawei.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <8e7d75d4-613e-f35e-e932-323789666fb1@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/07/2022 22:03, Pali Rohár wrote:
-> On Wednesday 13 July 2022 21:42:43 Krzysztof Kozlowski wrote:
->> On 13/07/2022 14:56, Pali Rohár wrote:
->>> All Armada 3720 boards have Armada 3720 processor which is of Armada 3700
->>> family and do not have Armada 3710 processor. So none of them should have
->>> compatible string for Armada 3710 processor.
->>>
->>> Fix compatible string for all these boards by removing wrong processor
->>> string "marvell,armada3710" and adding family string "marvell,armada3700"
->>> as the last one. (Note that this is same way how are defined Armada 3710
->>> DTS files).
+
+On 7/14/22 2:19 PM, Yicong Yang Wrote:
+> On 2022/7/12 16:20, Abel Wu wrote:
+>> When SIS_UTIL is enabled, SIS domain scan will be skipped if
+>> the LLC is overloaded. Since the overloaded status is checked
+>> in the load balancing at LLC level, the interval is llc_size
+>> miliseconds. The duration might be long enough to affect the
+>> overall system throughput if idle cores are out of reach in
+>> SIS domain scan.
 >>
->> Please do not introduce some changes just in DTS, but start from the
->> bindings. Someone wrote the bindings like that and expected to be that
->> way, so first change the bindings with proper rationale. Then change the
->> DTS files.
+>> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+>> ---
+>>   kernel/sched/fair.c | 15 +++++++++------
+>>   1 file changed, 9 insertions(+), 6 deletions(-)
 >>
->>
->> Best regards,
->> Krzysztof
+>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> index a78d2e3b9d49..cd758b3616bd 100644
+>> --- a/kernel/sched/fair.c
+>> +++ b/kernel/sched/fair.c
+>> @@ -6392,16 +6392,19 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>>   	struct sched_domain *this_sd;
+>>   	u64 time = 0;
+>>   
+>> -	this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
+>> -	if (!this_sd)
+>> -		return -1;
+>> -
+>>   	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
+>>   
+>> -	if (sched_feat(SIS_PROP) && !has_idle_core) {
+>> +	if (has_idle_core)
+>> +		goto scan;
+>> +
+>> +	if (sched_feat(SIS_PROP)) {
+>>   		u64 avg_cost, avg_idle, span_avg;
+>>   		unsigned long now = jiffies;
+>>   
+>> +		this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
+>> +		if (!this_sd)
+>> +			return -1;
+>> +
 > 
-> Ok, I tried to update bindings and fix example in it, see patch:
-> https://lore.kernel.org/linux-devicetree/20220713200123.22612-1-pali@kernel.org/
+> I don't follow the change here. True that this_sd is used only in SIS_PROP, but it seems irrelevant with your
+> commit. Does the position of this make any performance difference?
 
-The reason you used here should be expressed in that commit as well
-because you change the ABI and affect other users (projects, systems).
+No, this change doesn't make much difference to performance. Are
+you suggesting that I should make this a separate patch?
 
-Best regards,
-Krzysztof
+Thanks,
+Abel
+
+> 
+> Thanks.
+> 
+>>   		/*
+>>   		 * If we're busy, the assumption that the last idle period
+>>   		 * predicts the future is flawed; age away the remaining
+>> @@ -6436,7 +6439,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>>   				return -1;
+>>   		}
+>>   	}
+>> -
+>> +scan:
+>>   	for_each_cpu_wrap(cpu, cpus, target + 1) {
+>>   		if (has_idle_core) {
+>>   			i = select_idle_core(p, cpu, cpus, &idle_cpu);
+>>

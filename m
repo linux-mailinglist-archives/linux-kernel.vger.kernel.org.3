@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03835747A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA585747B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237541AbiGNJDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
+        id S233738AbiGNJGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiGNJDT (ORCPT
+        with ESMTP id S229555AbiGNJGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:03:19 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D4A42AFE
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:03:18 -0700 (PDT)
+        Thu, 14 Jul 2022 05:06:19 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F3910FEE
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:06:18 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 728B41FA4C;
-        Thu, 14 Jul 2022 09:03:17 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B491B34B36;
+        Thu, 14 Jul 2022 09:06:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1657789397; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1657789576; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Z7Ms0VwrdnBZu0MBDaEoQImBZ8BRNjuXexveGAU2nAY=;
-        b=AT7/AeaR8/9/wos+JCmbFOAR9SK3sWhuD8Jj/o09c0DYb/ZkcP/GvBL1fbcry/B3/9w5Re
-        /BjnF83wsOMcxd9K/cuNwYsTY+7tnWqIM0D6+aDBaMnBjHy2VTwzjjMxI5KFUrfk/6vYq3
-        4mAgj9jif6aiDuzpQy8fvnNxyNMHfN0=
+        bh=fY5PuKc7+fso/B1Mtp/dKY37K4gSKnVfZnobpSyBJ80=;
+        b=bXsocT88pxEdhutkWsCRZpCrq2B90GCKFx/fyCvxgZKwPwEWFM6uDw2sx+9JAcnixmlJt7
+        70iO9xwaxNnSMfBilqhiSe/ZFGs0F0USURDQkHYbXdK4PFv1NEnz7LnyHV6sJSwYaEAgaG
+        /TpoG/A3N1qplFSeGPgKo/4JFe9bLjE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1657789397;
+        s=susede2_ed25519; t=1657789576;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Z7Ms0VwrdnBZu0MBDaEoQImBZ8BRNjuXexveGAU2nAY=;
-        b=VJuORmy8lfDrwY5RvLt19qWeQgrV7U0QaXeUr9wArz46lAX0xoewSXTcKpq/2udoc04BXy
-        dGa379dqpK9whiAA==
+        bh=fY5PuKc7+fso/B1Mtp/dKY37K4gSKnVfZnobpSyBJ80=;
+        b=JD5lAmDyQpB7F0iFuhcuMvehrJhxHFBOIQg8prV79eG4N7BlYc9BQ3tMyasMcSLcWBdRGb
+        zy6mlIK8X5fNe5Aw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3870913A61;
-        Thu, 14 Jul 2022 09:03:17 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8341B13A61;
+        Thu, 14 Jul 2022 09:06:16 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id XjcHDdXbz2JmHwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Thu, 14 Jul 2022 09:03:17 +0000
-Date:   Thu, 14 Jul 2022 11:03:16 +0200
-Message-ID: <87v8s0vzfv.wl-tiwai@suse.de>
+        id V2lVH4jcz2LSIAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 14 Jul 2022 09:06:16 +0000
+Date:   Thu, 14 Jul 2022 11:06:16 +0200
+Message-ID: <87tu7kvzav.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>
 Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
@@ -56,55 +56,63 @@ Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
         Stefan Binding <sbinding@opensource.cirrus.com>
 Subject: Re: [PATCH v8 01/14] ALSA: hda: hda_cs_dsp_ctl: Add Library to support CS_DSP ALSA controls
-In-Reply-To: <20220630002335.366545-2-vitalyr@opensource.cirrus.com>
+In-Reply-To: <87v8s0vzfv.wl-tiwai@suse.de>
 References: <20220630002335.366545-1-vitalyr@opensource.cirrus.com>
         <20220630002335.366545-2-vitalyr@opensource.cirrus.com>
+        <87v8s0vzfv.wl-tiwai@suse.de>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Jun 2022 02:23:22 +0200,
-Vitaly Rodionov wrote:
-> --- a/sound/pci/hda/Kconfig
-> +++ b/sound/pci/hda/Kconfig
-> @@ -94,6 +94,10 @@ config SND_HDA_PATCH_LOADER
->  config SND_HDA_SCODEC_CS35L41
->  	tristate
->  
-> +config SND_HDA_CS_DSP_CONTROLS
-> +	tristate
-> +	depends on CS_DSP
-> +
->  config SND_HDA_SCODEC_CS35L41_I2C
->  	tristate "Build CS35L41 HD-audio side codec support for I2C Bus"
->  	depends on I2C
+On Thu, 14 Jul 2022 11:03:16 +0200,
+Takashi Iwai wrote:
+> 
+> On Thu, 30 Jun 2022 02:23:22 +0200,
+> Vitaly Rodionov wrote:
+> > --- a/sound/pci/hda/Kconfig
+> > +++ b/sound/pci/hda/Kconfig
+> > @@ -94,6 +94,10 @@ config SND_HDA_PATCH_LOADER
+> >  config SND_HDA_SCODEC_CS35L41
+> >  	tristate
+> >  
+> > +config SND_HDA_CS_DSP_CONTROLS
+> > +	tristate
+> > +	depends on CS_DSP
+> > +
+> >  config SND_HDA_SCODEC_CS35L41_I2C
+> >  	tristate "Build CS35L41 HD-audio side codec support for I2C Bus"
+> >  	depends on I2C
+> 
+> This change alone doesn't give anything useful, unfortunately.
+> 
+> The above form (without prompt) is basically only to be "selected" by
+> others.  And when selected, the "depends" there is just ignored, so
+> it's useless.
+> 
+> That is, a proper way would be something like:
+> 
+> config SND_HDA_CS_DSP_CONTROLS
+> 	tristate
+> 
+> config SND_HDA_SCODEC_CS35L41
+> 	....
+> 	select SND_HDA_CS_DSP_CONTROLS if CS_DSP
+> 
+> ... if you want / need to enable CONFIG_SND_HDA_CS_DSP_CONTROLS
+> conditionally.
 
-This change alone doesn't give anything useful, unfortunately.
-
-The above form (without prompt) is basically only to be "selected" by
-others.  And when selected, the "depends" there is just ignored, so
-it's useless.
-
-That is, a proper way would be something like:
-
-config SND_HDA_CS_DSP_CONTROLS
-	tristate
-
-config SND_HDA_SCODEC_CS35L41
-	....
-	select SND_HDA_CS_DSP_CONTROLS if CS_DSP
-
-... if you want / need to enable CONFIG_SND_HDA_CS_DSP_CONTROLS
-conditionally.
+And now I see that the patch 4 has those selects (but select both
+SND_HDA_CS_DSP_CONTROLS and CS_DSP).  So what we need here is to drop
+the superfluous "depends on CS_DSP" and mention in the description
+that the Kconfig will be actually enabled in the later patch.
 
 
 thanks,

@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F89574463
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A71F57446D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233317AbiGNFN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 01:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
+        id S233478AbiGNFQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 01:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232656AbiGNFNy (ORCPT
+        with ESMTP id S229606AbiGNFQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 01:13:54 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4279D193C7;
-        Wed, 13 Jul 2022 22:13:53 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 072FB67373; Thu, 14 Jul 2022 07:13:50 +0200 (CEST)
-Date:   Thu, 14 Jul 2022 07:13:49 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        iommu@lists.linux.dev, Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>
-Subject: Re: [PATCH v8 00/13] DMA Mapping P2PDMA Pages
-Message-ID: <20220714051349.GB23381@lst.de>
-References: <20220708165104.5005-1-logang@deltatee.com>
+        Thu, 14 Jul 2022 01:16:44 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEAB19C17;
+        Wed, 13 Jul 2022 22:16:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kfxG0GflTYK2rVDQ1Eftf+2+9iqqtquaqgZinGYsuok=; b=I/L/E3pi70OErlf0Jgz2lxTbMU
+        eKylmmT8hh7AfPHIvrWAIlYnG4rMvx+s/LGYVujwy+smLPeO/GqDrzp1t2ZNv/mGaUVLxHj6J8RWc
+        iCwq/UAS/wdzlaW0XcvzlhPSKMh6i5Z4dQ9bQFR0rvV3AyXHyX2vfuoiLfu+oUVyipSVfsrRMuMfW
+        IIyolFHrH6bytSUI2SgfaaVBtPpgd1lZitsLNF0qaStPZJfQaFQ4FbFO532OicmE8bdnSC0BB+a8Y
+        AWEGtxQz7qx8ONl1OSiZXBKvfoxyOeUvj86zrp7Bbwa0Sp4KyOk+VJBVPZxiUfqCgaJmRWG7NBz46
+        ki4SqDTA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBrDI-00Azuv-OK; Thu, 14 Jul 2022 05:16:36 +0000
+Date:   Wed, 13 Jul 2022 22:16:36 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-modules@vger.kernel.org, mcgrof@kernel.org,
+        rostedt@goodmis.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, mhiramat@kernel.org, naveen.n.rao@linux.ibm.com,
+        davem@davemloft.net, anil.s.keshavamurthy@intel.com,
+        keescook@chromium.org, hch@infradead.org, dave@stgolabs.net,
+        daniel@iogearbox.net, kernel-team@fb.com, x86@kernel.org,
+        dave.hansen@linux.intel.com, rick.p.edgecombe@intel.com,
+        akpm@linux-foundation.org
+Subject: Re: [PATCH bpf-next 1/3] mm/vmalloc: introduce vmalloc_exec which
+ allocates RO+X memory
+Message-ID: <Ys+mtMUb7lXZ/GaS@infradead.org>
+References: <20220713071846.3286727-1-song@kernel.org>
+ <20220713071846.3286727-2-song@kernel.org>
+ <Ys6cWUMHO8XwyYgr@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220708165104.5005-1-logang@deltatee.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+In-Reply-To: <Ys6cWUMHO8XwyYgr@hirez.programming.kicks-ass.net>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,7 +61,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'd like to hear from Robin on the dma-iommu parts, but otherwise
-this looks fine to me modulo a little filed naming change I could
-handle when applying this.
+On Wed, Jul 13, 2022 at 12:20:09PM +0200, Peter Zijlstra wrote:
+> Start by adding VM_TOPDOWN_VMAP, which instead of returning the lowest
+> (leftmost) vmap_area that fits, picks the higests (rightmost).
+> 
+> Then add module_alloc_data() that uses VM_TOPDOWN_VMAP and make
+> ARCH_WANTS_MODULE_DATA_IN_VMALLOC use that instead of vmalloc (with a
+> weak function doing the vmalloc).
+> 
+> This gets you bottom of module range is RO+X only, top is shattered
+> between different !X types.
+> 
+> Then track the boundary between X and !X and ensure module_alloc_data()
+> and module_alloc() never cross over and stay strictly separated.
+> 
+> Then change all module_alloc() users to expect RO+X memory, instead of
+> RW.
+> 
+> Then make sure any extention of the X range is 2M aligned.
+> 
+> And presto, *everybody* always uses 2M TLB for text, modules, bpf,
+> ftrace, the lot and nobody is tracking chunks.
+> 
+> Maybe migration can be eased by instead providing module_alloc_text()
+> and ARCH_WANTS_MODULE_ALLOC_TEXT.
 
+This all looks pretty sensible.  How are we going to do the initial
+write to the executable memory, though?

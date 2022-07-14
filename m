@@ -2,87 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FC5575095
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDF7575097
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239247AbiGNOQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S238924AbiGNORR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238924AbiGNOQm (ORCPT
+        with ESMTP id S230250AbiGNORP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:16:42 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50AE6393A
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:16:41 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 5A75722238;
-        Thu, 14 Jul 2022 16:16:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657808199;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i4hkXMmFP+CHQ05L6lGn9y6aeHyZZDWO3dv2qnfJNbI=;
-        b=nNAGnq+MNxIYaLLhUxVHcQUBPZA+T0V9Z/XOTnEAh5DWVO8Q/dLrTgswYOd1d5GoQ/PaIE
-        sGh1JnJBKdPlXfkYG0abvN/nb3jzF8h/MWvYwtO5Ifoh4IbuTp3Ee0F8nHI5yv8hWlYezg
-        htvnggQyWQfOyolVvfUDhr5/ioYuuJw=
+        Thu, 14 Jul 2022 10:17:15 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705AB63905
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:17:14 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id v185so1480788ioe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:17:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AFGlUqxb7cc+5gWDCoJrXqS9wTvSC/PjQSRqProZaOw=;
+        b=4efXs9vVW/HaB/zRGA8btwmAmyGBMvL8owjdc6o0wWyNJKUojLGlb7w2iJOtiuDkgy
+         qaWdSPamfqtxJPQIaeeqe5/iaeHh8cH9owPVPoItRwD8xAVJZoGkfWVRA9K0ZKMA5UDt
+         dp4WomcUmUbpCt/VZKhvDip0nHXi54QiXnPPxD5uTOzc7jKLSotswFc2t5Ln9vtiBXBZ
+         SpZfDZgTbmr40O/ACyk0akyCOlPZba61scIdGWMSXVfpRR5v3JxTNzKQIGyqr93ISO3X
+         r2DrfepSR6A24Q8QvAp83eDG2yTQfPKh/Fet/VARL40XyuXjeph5Ja5WbGeZd4OmjU0H
+         EfIg==
+X-Gm-Message-State: AJIora9BiIcAX1v+ocgrRRYR/UpnSvC79vxHle/OfhoMPx1g1xXFK4G2
+        3BqG9NDCNhQfd8YxlcM0rg==
+X-Google-Smtp-Source: AGRyM1ssrbSinGZBrix/SHFMuWMfClpfn4fy+Qr7EU6nKH9Tg0tC5DxxD1Z4pjX7E7BrAruoXRex1w==
+X-Received: by 2002:a6b:c30c:0:b0:67b:963a:c6ef with SMTP id t12-20020a6bc30c000000b0067b963ac6efmr4684788iof.137.1657808233649;
+        Thu, 14 Jul 2022 07:17:13 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id cd8-20020a0566381a0800b0033e72ec9d93sm757191jab.145.2022.07.14.07.17.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 07:17:13 -0700 (PDT)
+Received: (nullmailer pid 2258307 invoked by uid 1000);
+        Thu, 14 Jul 2022 14:17:12 -0000
+Date:   Thu, 14 Jul 2022 08:17:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     naresh.solanki@9elements.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] regulator: output-supply DT support
+Message-ID: <20220714141712.GC2229197-robh@kernel.org>
+References: <20220707081826.953449-1-Naresh.Solanki@9elements.com>
+ <165756666221.1166849.17586001373716391631.b4-ty@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 14 Jul 2022 16:16:39 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Cc:     clg@kaod.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, p.yadav@ti.com,
-        quic_ggregory@quicinc.com, quic_jiles@quicinc.com,
-        tudor.ambarus@microchip.com
-Subject: Re: [PATCH] mtd: spi-nor: winbond: add support for W25Q512NW-IQ/IN
-In-Reply-To: <63cedfce-34bb-ed63-3871-75a6c3dd5d73@quicinc.com>
-References: <20220710145721.1207157-1-quic_jaehyoo@quicinc.com>
- <20220711095042.2095360-1-michael@walle.cc>
- <a42fbef2-3eff-9e88-233e-a805cfbe2376@quicinc.com>
- <4972a85d04e39ebb7b4a5872f6632c45@walle.cc>
- <2260955b-354d-ceda-cadc-49453bfca3e4@quicinc.com>
- <00f0c9d480ef5a414f1c34492661bd9e@walle.cc>
- <63cedfce-34bb-ed63-3871-75a6c3dd5d73@quicinc.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <6be710bb5c1bf0449e54a54b78f6f7a0@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <165756666221.1166849.17586001373716391631.b4-ty@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Am 2022-07-14 15:47, schrieb Jae Hyun Yoo:
-> On 7/14/2022 12:41 AM, Michael Walle wrote:
->> What does "doesn't boot at all" mean? Are there any kernel startup
->> messages?
+On Mon, Jul 11, 2022 at 08:11:02PM +0100, Mark Brown wrote:
+> On Thu, 7 Jul 2022 10:18:22 +0200, Naresh Solanki wrote:
+> > v4:
+> >  - Add 9elements as vendor.
+> >  - Update dt binding.
+> > 
+> > Add devicetree support of the output-supply driver.
+> > The supply names for this driver is provided through DT
+> > regulator-names & regulator handle can be acquired.
+> > Driver events can be received from sysfs.
+> > 
+> > [...]
 > 
-> I'm sharing the error messages below.
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+> 
+> Thanks!
+> 
+> [1/4] dt-bindings: vendor-prefixes: add 9elements
+>       commit: bd9b7998b4816b3d604253a774d83b6736474283
+> [2/4] dt-bindings: regulator: add bindings for output-supply
+>       commit: df9c96b69a1d2629519a5d8a9dc4b39f775ebe2d
+> [3/4] regulator: output-supply: Add devicetree support
+>       commit: 34e5700e1e64077ede50eb60d04e7604dc4f508a
+> [4/4] regulator: output-supply: Add Notification support
+>       commit: 490a15324ce6d55b950fce0eb9e95c793fac0dff
 
-Thanks.
+Please revert this. The vendor prefix is not even appropriate here and 
+the binding has lots of issues. The first being whether it should even 
+be in DT. It's not been reviewed as none of it has gone to the DT list 
+and the only thing I got was '[PATCH v4 1/4] dt-bindings: 
+vendor-prefixes: add 9elements'.
 
-> [    0.748594] spi-nor spi0.0: w25q512nwq (65536 Kbytes)
-> [    0.865216] spi-aspeed-smc 1e620000.spi: CE0 read buswidth:4 
-> [0x406c0741]
-> [    0.872833] ------------[ cut here ]------------
-> [    0.877984] WARNING: CPU: 1 PID: 1 at drivers/mtd/mtdcore.c:583
-> add_mtd_device+0x28c/0x53c
-> [    0.887237] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
-> 5.15.43-AUTOINC-dirty-23801a6 #1
-
-Could you please try it on the latest (vanilla) linux-next?
-
--michael
+Rob

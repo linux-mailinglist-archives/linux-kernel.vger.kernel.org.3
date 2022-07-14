@@ -2,161 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4E25740BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6E95740BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiGNBDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 21:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S229598AbiGNBEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 21:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiGNBDw (ORCPT
+        with ESMTP id S231342AbiGNBEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 21:03:52 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A9D11C2F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:03:51 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id a15so467059pfv.13
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:03:51 -0700 (PDT)
+        Wed, 13 Jul 2022 21:04:11 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CC31758E;
+        Wed, 13 Jul 2022 18:04:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iYjvT9/K+PJOYO+PKYqApFIeqrzKMwdmFTyx44M/bUw=;
-        b=s9pNVCwJpiRtqZOHmC9JoqSbIHVFh0WcP6GlOiQEvWpNg9ctAYIL9TC74ZHJwDmQbr
-         ujX1YfT+IVTqR8HVG+hTZliHN024gh9S9Pg203g/w/Bao0+j+IoHioLNgvk11I+ChPBk
-         HBHnskhUnzqC/Gn8ign5LtntTGXrnDE107IPN5/vDkLHTKg5XJ/pfYVAF5ISWRKbRMkD
-         b4xbcglZ2QBxniVLRlcKW864QEwH+3hXRWfFtaWOj9jOLSfGgLSTEhToYfsI6cPh/sfk
-         HO7/3PgNobJRxm1haK+WNfLJm+yjw8/yi9baTclGMlllGg2hKHJB+0zk4WjqcoAqIKYT
-         UlOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iYjvT9/K+PJOYO+PKYqApFIeqrzKMwdmFTyx44M/bUw=;
-        b=xUb7ec2ImRoZ8/9NuYjdu/0Ui4HKSpaxYC2VnaZXB1lCRa3Qm+a0AnRm8m9V76lfYS
-         /ct6fDWfMGvZ192sYAwE5dGmPrqgfZZKehht0pktkJCgU/kHHqRezy0Et+B1PQc7FMAT
-         abIYsE+SMOO2PGVNA1U9YT8GdmYW2q9poGsWDyyUT6QKTJW4Up3p/gzK1nAjUTls0xAo
-         UD8IewCN8rBuTwLT8ymqr0cL24NVpMYwxtU6ktQyu+Oo/w40Hfr2mOioH7TZ5kpvRIb/
-         hfbjQEJschZ/gFe3DvfN7/EAMzm6z8v9Cuy0g6SprGWJphh9uFLez4fbSgjvSpPdvvtZ
-         tgNg==
-X-Gm-Message-State: AJIora/62Yv05ArA688cNb664n2Usjza4Odkiy4OkHDK6AhCKkerKAkE
-        cfXV+OnUKpV8XdlOiXGvzQWBsA==
-X-Google-Smtp-Source: AGRyM1uX6QB+BfDKrubdH5R5fP1CmDIQfDrAae3pIvHrIcWjLL7rkJKM2XvtWMxxzpr6bK6W8KlqTA==
-X-Received: by 2002:a62:e10d:0:b0:52a:b77e:8bd3 with SMTP id q13-20020a62e10d000000b0052ab77e8bd3mr5810419pfh.66.1657760630794;
-        Wed, 13 Jul 2022 18:03:50 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id g21-20020aa796b5000000b005289cade5b0sm170538pfk.124.2022.07.13.18.03.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 18:03:49 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 01:03:46 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v7 000/102] KVM TDX basic feature support
-Message-ID: <Ys9rcnyIZlUc76iG@google.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657760647; x=1689296647;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hlc/D0oD3bwnMh5O2RFhSO7vCAqJUs807PtajVeEH9A=;
+  b=xTkVvvoxVT8ow2WTfjpxgAFv4JLJzZlrDC5A3Q5mGf7Q2GK9n8ySUOAD
+   STycw9jF/4jpNH97Td65FNsj/FKmLQXE9L8Ke+z8ztGdJuKY8oAuGAL/o
+   5CRnlsVFRKCeJpEvpl+HjxQU+Cp8sC/jHMXmKCJX2GDSEpUFt4JZE8VnV
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jul 2022 18:04:07 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 18:04:07 -0700
+Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Jul
+ 2022 18:04:06 -0700
+Date:   Wed, 13 Jul 2022 18:04:05 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David Heidelberg" <david@ixit.cz>,
+        Robert Marko <robimarko@gmail.com>,
+        Elliot Berman <quic_eberman@quicinc.com>
+Subject: Re: [PATCH 4/5] firmware: qcom: scm: Add wait-queue helper functions
+Message-ID: <20220714010405.GB22183@quicinc.com>
+References: <1656359076-13018-1-git-send-email-quic_gurus@quicinc.com>
+ <1656359076-13018-5-git-send-email-quic_gurus@quicinc.com>
+ <aa754d43-ec58-97c7-e50b-0459a850e302@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <cover.1656366337.git.isaku.yamahata@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <aa754d43-ec58-97c7-e50b-0459a850e302@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Jul 01 2022 16:29, Rajendra Nayak wrote:
 > 
-> KVM TDX basic feature support
+> On 6/28/2022 1:14 AM, Guru Das Srinagesh wrote:
+> >When the firmware (FW) supports multiple requests per VM, and the VM also
+> >supports it via the `enable-multi-call` device tree flag, the floodgates
+> >are thrown open for them to all reach the firmware at the same time.
+> >
+> >Since the firmware currently being used has limited resources, it guards
+> >them with a resource lock and puts requests on a wait-queue internally
+> >and signals to HLOS that it is doing so. It does this by returning two
+> >new return values in addition to success or error: SCM_WAITQ_SLEEP and
+> >SCM_WAITQ_WAKE.
+> >
+> >   1) SCM_WAITQ_SLEEP:
+> >
+> >   	When an SCM call receives this return value instead of success
+> >   	or error, FW has placed this call on a wait-queue and
+> >   	has signalled HLOS to put it to non-interruptible sleep. (The
+> >	mechanism to wake it back up will be described in detail in the
+> >	next patch for the sake of simplicity.)
+> >
+> >	Along with this return value, FW also passes to HLOS `wq_ctx` -
+> >	a unique number (UID) identifying the wait-queue that it has put
+> >	the call on, internally. This is to help HLOS with its own
+> >	bookkeeping to wake this sleeping call later.
+> >
+> >	Additionally, FW also passes to HLOS `smc_call_ctx` - a UID
+> >	identifying the SCM call thus being put to sleep. This is also
+> >	for HLOS' bookkeeping to wake this call up later.
+> >
+> >	These two additional values are passed via the a1 and a2
+> >	registers.
+> >
+> >	N.B.: The "ctx" in the above UID names = "context".
+> >
+> >   2) SCM_WAITQ_WAKE:
+> >
+> >   	When an SCM call receives this return value instead of success
+> >   	or error, FW wishes to signal HLOS to wake up a (different)
+> >   	previously sleeping call.
 > 
-> Hello.  This is v7 the patch series vof KVM TDX support.
-> This is based on v5.19-rc1 + kvm/queue branch + TDX HOST patch series.
-> The tree can be found at https://github.com/intel/tdx/tree/kvm-upstream
-> How to run/test: It's describe at https://github.com/intel/tdx/wiki/TDX-KVM
-> 
-> Major changes from v6:
-> - rebased to v5.19 base
-> 
-> TODO:
-> - integrate fd-based guest memory. As the discussion is still on-going, I
->   intentionally dropped fd-based guest memory support yet.  The integration can
->   be found at https://github.com/intel/tdx/tree/kvm-upstream-workaround.
-> - 2M large page support. It's work-in-progress.
-> For large page support, there are several design choices. Here is the design options.
-> Any thoughts/feedback?
+> What happens to this SCM call itself (The one which gets an SCM_WAITQ_WAKE returned
+> instead of a success or failure)?
+> is it processed? how does the firmware in that case return a success or error?
 
-Apologies, I didn't read beyond the intro paragraph.  In case something like this
-comes up again, it's probably best to send a standalone email tagged RFC, I doubt
-I'm the only one that missed this embedded RFC.
+Hopefully, with the clarificatory note posted in response to your query on the
+other patch, this is clear. To answer your question:
 
-> KVM MMU Large page support for TDX
- 
+Let's refer to the SCM call that received an SCM_WAITQ_WAKE as the parent call.
+The parent call's success or failure depends on the result of the wq_wake_ack()
+call defined below.
+
+> 
 ...
 
-> * options to track private or shared
-> At each page size (4KB, 2MB, and 1GB), track private, shared, or mixed (2MB and
-> 1GB case). For 4KB each page, 1 bit per page is needed. private or shared.  For
-> large pages (2MB and 1GB), 2 bits per large page is needed. (private, shared, or
-> mixed).  When resolving KVM page fault, we don't want to check the lower-size
-> pages to check if the given GPA can be a large for performance.  On MapGPA check
-> it instead.
-> 
-> Option A). enhance kvm_arch_memory_slot
->   enum kvm_page_type {
->        KVM_PAGE_TYPE_INVALID,
->        KVM_PAGE_TYPE_SHARED,
->        KVM_PAGE_TYPE_PRIVATE,
->        KVM_PAGE_TYPE_MIXED,
->   };
-> 
->   struct kvm_page_attr {
->        enum kvm_page_type type;
->   };
-> 
->  struct kvm_arch_memory_slot {
->  +      struct kvm_page_attr *page_attr[KVM_NR_PAGE_SIZES];
-> 
-> Option B). steal one more bit SPTE_MIXED_MASK in addition to SPTE_SHARED_MASK
-> If !SPTE_MIXED_MASK, it can be large page.
-> 
-> Option C). use SPTE_SHARED_MASK and kvm_mmu_page::mixed bitmap
-> kvm_mmu_page::mixed bitmap of 1GB, root indicates mixed for 2MB, 1GB.
-> 
-> 
-> * comparison
-> A).
-> + straightforward to implement
-> + SPTE_SHARED_MASK isn't needed
-> - memory overhead compared to B). or C).
-> - more memory reference on KVM page fault
-> 
-> B).
-> + simpler than C) (complex than A)?)
-> + efficient on KVM page fault. (only SPTE reference)
-> + low memory overhead
-> - Waste precious SPTE bits.
-> 
-> C).
-> + efficient on KVM page fault. (only SPTE reference)
-> + low memory overhead
-> - complicates MapGPA
-> - scattered data structure
+> >   3) wq_wake_ack(smc_call_ctx):
+> >
+> >   	Arguments:	smc_call_ctx
+> >
+> >   	HLOS needs to issue this in response to receiving an
+> >   	SCM_WAITQ_WAKE, passing to FW the same smc_call_ctx that FW
+> >   	passed to HLOS via the SMC_WAITQ_WAKE call.
 
-Option D). track shared regions in an Xarray, update kvm_arch_memory_slot.lpage_info
-on insertion/removal to (dis)allow hugepages as needed.
+...
 
-  + efficient on KVM page fault (no new lookups)
-  + zero memory overhead (assuming KVM has to eat the cost of the Xarray anyways)
-  + straightforward to implement
-  + can (and should) be merged as part of the UPM series
+> >+
+> >  static int qcom_scm_probe(struct platform_device *pdev)
+> >  {
+> >  	struct qcom_scm *scm;
+> >  	unsigned long clks;
+> >-	int ret;
+> >+	int irq, ret;
+> >  	scm = devm_kzalloc(&pdev->dev, sizeof(*scm), GFP_KERNEL);
+> >  	if (!scm)
+> >@@ -1333,12 +1432,28 @@ static int qcom_scm_probe(struct platform_device *pdev)
+> >  	if (ret)
+> >  		return ret;
+> >+	platform_set_drvdata(pdev, scm);
+> >+
+> >  	__scm = scm;
+> >  	__scm->dev = &pdev->dev;
+> >+	spin_lock_init(&__scm->waitq.idr_lock);
+> >+	idr_init(&__scm->waitq.idr);
+> >  	qcom_scm_allow_multicall = of_property_read_bool(__scm->dev->of_node,
+> >  							"allow-multi-call");
+> >+	INIT_WORK(&__scm->waitq.scm_irq_work, scm_irq_work);
+> >+
+> >+	irq = platform_get_irq(pdev, 0);
+> >+	if (irq) {
+> >+		ret = devm_request_threaded_irq(__scm->dev, irq, NULL,
+> >+			qcom_scm_irq_handler, IRQF_ONESHOT, "qcom-scm", __scm);
+> >+		if (ret < 0) {
+> >+			pr_err("Failed to request qcom-scm irq: %d\n", ret);
+> 
+> idr_destroy()?
 
-I believe xa_for_each_range() can be used to see if a given 2mb/1gb range is
-completely covered (fully shared) or not covered at all (fully private), but I'm
-not 100% certain that xa_for_each_range() works the way I think it does.
+Yes, will add in next patchset.

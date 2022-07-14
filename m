@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC41257477E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E1B574781
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237463AbiGNIpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 04:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S237407AbiGNIqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 04:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237479AbiGNIp3 (ORCPT
+        with ESMTP id S237486AbiGNIqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 04:45:29 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A90540BE3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:45:21 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id l23so2158674ejr.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:45:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=DCSvqcav6l8eJQqjYpF2DaiSo2frXUVuTNeqvYGx9c4=;
-        b=Y0HLr3Jrkb2BkndbxJvh4HAc6m6j8GShL3F0YYnXwBmhROpgOg7sT8uX4/7/wgJ+f1
-         7RhYPoxXn8Yftbqtz3Lk6446MLrhopvqxJBNUV9+lQSv34hh9yprRR3l8wIQak9sSM11
-         HGNfWFkwd9belk35C8gzydc4h4jmlNGAJwvgjgS22UL3GyGhKtI+2EGtY0fMdnG75ZtN
-         +xAAP1QREWz/d8vKTAsGctxsDM6cQywYrtvujNiI+Wk4GnhoS2rpJUuYiLrGPip8RTnr
-         MiQ4moMZeume3nxa1gM5l1uCtGwoLXoFv8tkpnMsdFLOkIesEgbRcaona3ljIwb68IXZ
-         X2Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=DCSvqcav6l8eJQqjYpF2DaiSo2frXUVuTNeqvYGx9c4=;
-        b=I8MqtMzKqjQuoFcpcEmEbv1ruR4aF01Of38uLDUuSjPhr8axaCpjaioe/Y/is4zHVK
-         gPLse6x5VABNyIv/8KpH8bid58fFM6PVJ2BCzZVk2jBEDj0m0qgdLghrIjdwtqg1HFsb
-         yGWwnPmUUsG894jQ0i5SU3NPTwOW0XsiTyi+VQZXi/mf+2aSoY5AlRdpBGSqiXMHXE7i
-         LPSt3oJAX6DKICPOOa2/0aCJjpuVL22wTpIxPnB5LFeYJgqhWxN5CgW7LP9WG9gu86Hh
-         aMf4o3su9eVpmwGTOHmEZdMj8m7eHUC6u4uXNs1gF/eFtcmBmsLeQKq8N7dGGufl8zE8
-         a2jg==
-X-Gm-Message-State: AJIora8ylF9DcRJm36Pgg30kiLvxPBbA/5N1tpFWeT/P5tdtXFeB0Qyn
-        Whip4i5J9w0uIDQUUgc4MLYpT15NX2UibRYIb+PWZZqfv9i5Ig==
-X-Google-Smtp-Source: AGRyM1tGSWZeAf/bcOSZSnUFtmu/Ol3Pw434l46o5MWH60pWrYtA9fX6Dz2r/yt6iRLOqsDbpnjg95nZ2ZT5oTR3dwY=
-X-Received: by 2002:a17:907:b0a:b0:72b:3176:3fe5 with SMTP id
- h10-20020a1709070b0a00b0072b31763fe5mr7622175ejl.48.1657788318691; Thu, 14
- Jul 2022 01:45:18 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 14 Jul 2022 14:15:07 +0530
-Message-ID: <CA+G9fYv0N0FcYRp5irO_7TpheLcUY8LRMQbcZqwEmiRTEccEjA@mail.gmail.com>
-Subject: RETBleed: WARNING: Spectre v2 mitigation leaves CPU vulnerable to
- RETBleed attacks, data leaks possible!
-To:     open list <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Borislav Petkov <bp@suse.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Thu, 14 Jul 2022 04:46:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF8A402FA;
+        Thu, 14 Jul 2022 01:46:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D28DCB823C0;
+        Thu, 14 Jul 2022 08:46:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 887C1C34114;
+        Thu, 14 Jul 2022 08:46:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657788361;
+        bh=YvDXaxqtI1ZaBSWpwefeqgjLcPs3Jqvc4sIJBv80ws8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RBlFHN9Mkp0dnvOPW0m8j+KUxMrvjgdrcd7Y8kOhQBEa+5PBoJ9F7gsLXixpwyrSl
+         032eMu3WtEC35FgcQu6tlKYhSeLPLU5f+dOAbz6tQHNkG7XaBWIAdOvYbtPvQF2Ids
+         AmhfrzMs27LV4x6qnmxvFJMVVKVB6D/a0FjPyyWc=
+Date:   Thu, 14 Jul 2022 10:45:57 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ben Hutchings <ben@decadent.org.uk>
+Cc:     kernel test robot <lkp@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        stable@vger.kernel.org
+Subject: Re: [linux-stable-rc:linux-5.10.y 7082/7120]
+ arch/x86/kernel/head_64.o: warning: objtool: xen_hypercall_mmu_update():
+ can't find starting instruction
+Message-ID: <Ys/XxcHvpgd3MbzH@kroah.com>
+References: <202207130531.SkRjrrn8-lkp@intel.com>
+ <Ys9MKAriCchlEO8S@decadent.org.uk>
+ <Ys+8ZYxkDmSCcDWv@kroah.com>
+ <Ys/TxoePQHvaYWcs@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys/TxoePQHvaYWcs@kroah.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,74 +60,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Results from Linaro=E2=80=99s test farm.
+On Thu, Jul 14, 2022 at 10:28:54AM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Jul 14, 2022 at 08:49:09AM +0200, Greg Kroah-Hartman wrote:
+> > On Thu, Jul 14, 2022 at 12:50:16AM +0200, Ben Hutchings wrote:
+> > > On Wed, Jul 13, 2022 at 05:38:47AM +0800, kernel test robot wrote:
+> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> > > > head:   53b881e19526bcc3e51d9668cab955c80dcf584c
+> > > > commit: 7575d3f3bbd1c68d6833b45d1b98ed182832bd44 [7082/7120] x86: Use return-thunk in asm code
+> > > > config: x86_64-rhel-8.3-syz (https://download.01.org/0day-ci/archive/20220713/202207130531.SkRjrrn8-lkp@intel.com/config)
+> > > > compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> > > > reproduce (this is a W=1 build):
+> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=7575d3f3bbd1c68d6833b45d1b98ed182832bd44
+> > > >         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+> > > >         git fetch --no-tags linux-stable-rc linux-5.10.y
+> > > >         git checkout 7575d3f3bbd1c68d6833b45d1b98ed182832bd44
+> > > >         # save the config file
+> > > >         mkdir build_dir && cp config build_dir/.config
+> > > >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+> > > > 
+> > > > If you fix the issue, kindly add following tag where applicable
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > 
+> > > > All warnings (new ones prefixed by >>):
+> > > > 
+> > > > >> arch/x86/kernel/head_64.o: warning: objtool: xen_hypercall_mmu_update(): can't find starting instruction
+> > > > 
+> > > > -- 
+> > > > 0-DAY CI Kernel Test Service
+> > > > https://01.org/lkp
+> > > 
+> > > Please add the following patch to fix this.  This would also be
+> > > needed for 5.15-stable.
+> > > 
+> > > Ben.
+> > > 
+> > > From: Ben Hutchings <ben@decadent.org.uk>
+> > > Date: Thu, 14 Jul 2022 00:39:33 +0200
+> > > Subject: [PATCH] x86/xen: Fix initialisation in hypercall_page after rethunk
+> > > 
+> > > The hypercall_page is special and the RETs there should not be changed
+> > > into rethunk calls (but can have SLS mitigation).  Change the initial
+> > > instructions to ret + int3 padding, as was done in upstream commit
+> > > 5b2fc51576ef "x86/ibt,xen: Sprinkle the ENDBR".
+> > > 
+> > > Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+> > > ---
+> > >  arch/x86/xen/xen-head.S | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
+> > > index 38b73e7e54ba..2a3ef5fcba34 100644
+> > > --- a/arch/x86/xen/xen-head.S
+> > > +++ b/arch/x86/xen/xen-head.S
+> > > @@ -69,9 +69,9 @@ SYM_CODE_END(asm_cpu_bringup_and_idle)
+> > >  SYM_CODE_START(hypercall_page)
+> > >  	.rept (PAGE_SIZE / 32)
+> > >  		UNWIND_HINT_FUNC
+> > > -		.skip 31, 0x90
+> > >  		ANNOTATE_UNRET_SAFE
+> > > -		RET
+> > > +		ret
+> > > +		.skip 31, 0xcc
+> > >  	.endr
+> > >  
+> > >  #define HYPERCALL(n) \
+> > > 
+> > > 
+> > 
+> > That's really odd, I swear I tried this myself:
+> > 	https://lore.kernel.org/r/Ys2jlGMqAe6+h1SX@kroah.com
+> > 
+> > I'll go queue this up and see if that solves the issue on my side.  But
+> > see Boris's comment about how this shouldn't be an issue in the end.
+> 
+> Ah, yes, it does fix that warning, but causes this new one:
+> 	arch/x86/kernel/head_64.o: warning: objtool: .text+0x5: unreachable instruction
+> 
+> I'll keep your patch here, as it makes sense, but it does just exchange
+> one warning for another one...
 
-We are booting the i386 kernel on an x86 machine.
-With Spectre V2 patches merged into Linux mainline we have been noticing
-RETBleed: WARNING: Spectre v2 mitigation leaves CPU vulnerable to
-RETBleed attacks, data leaks possible!
-Please find the detailed boot log in the below link [1] and [2].
+Odd, I get the build warning when I build locally, but on my build
+server, that does this as a clean build, no warnings at all.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Let's see what the build systems say...
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
-  git_sha: 4a57a8400075bc5287c5c877702c68aeae2a033d
-  git_describe: v5.19-rc6-115-g4a57a8400075
-  kernel_version: 5.19.0-rc6
-  kernel-config: https://builds.tuxbuild.com/2Bu6unA4pJ0TotIOQ6jcNKfhmew/co=
-nfig
-  build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline=
-/-/pipelines/587353280
-  artifact-location: https://builds.tuxbuild.com/2Bu6unA4pJ0TotIOQ6jcNKfhme=
-w
-  toolchain: gcc-11
-
-boot log:
----------
-[    0.000000] Linux version 5.19.0-rc6 (tuxmake@tuxmake)
-(i686-linux-gnu-gcc (Debian 11.3.0-3) 11.3.0, GNU ld (GNU Binutils for
-Debian) 2.38) #1 SMP PREEMPT_DYNAMIC @1657744061
-[    0.000000] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating
-point registers'
-
-<trim>
-
-[    1.275957] LSM: Security Framework initializing
-[    1.275957] SELinux:  Initializing.
-[    1.275957] Mount-cache hash table entries: 2048 (order: 1, 8192
-bytes, linear)
-[    1.275957] Mountpoint-cache hash table entries: 2048 (order: 1,
-8192 bytes, linear)
-[    1.275957] CPU0: Thermal monitoring enabled (TM1)
-[    1.275957] process: using mwait in idle threads
-[    1.275957] Last level iTLB entries: 4KB 128, 2MB 8, 4MB 8
-[    1.275957] Last level dTLB entries: 4KB 64, 2MB 0, 4MB 0, 1GB 4
-[    1.275957] Spectre V1 : Mitigation: usercopy/swapgs barriers and
-__user pointer sanitization
-[    1.275957] Spectre V2 : Mitigation: Retpolines
-[    1.275957] Spectre V2 : Spectre v2 / SpectreRSB mitigation:
-Filling RSB on context switch
-[    1.275957] RETBleed: WARNING: Spectre v2 mitigation leaves CPU
-vulnerable to RETBleed attacks, data leaks possible!
-[    1.275957] RETBleed: Vulnerable
-[    1.275957] Speculative Store Bypass: Vulnerable
-[    1.275957] L1TF: Kernel not compiled for PAE. No mitigation for L1TF
-[    1.275957] MDS: Vulnerable: Clear CPU buffers attempted, no microcode
-[    1.275957] TAA: Vulnerable: Clear CPU buffers attempted, no microcode
-[    1.275957] MMIO Stale Data: Vulnerable: Clear CPU buffers
-attempted, no microcode
-[    1.275957] SRBDS: Vulnerable: No microcode
-
-Full test log link,
-[1] https://lkft.validation.linaro.org/scheduler/job/5282509#L490
-[2] https://qa-reports.linaro.org/lkft/linux-mainline-master-sanity/build/v=
-5.19-rc6-115-g4a57a8400075/testrun/10817056/suite/log-parser-boot/tests/
-
-Best regards
-Naresh Kamboju
-
---
-Linaro LKFT
-https://lkft.linaro.org
+greg k-h

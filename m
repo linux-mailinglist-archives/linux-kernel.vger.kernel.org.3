@@ -2,96 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038765747A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03835747A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237524AbiGNJCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
+        id S237541AbiGNJDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiGNJCX (ORCPT
+        with ESMTP id S229555AbiGNJDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:02:23 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FAC42AFE;
-        Thu, 14 Jul 2022 02:02:20 -0700 (PDT)
-Received: from nazgul.tnic (unknown [193.86.92.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 14 Jul 2022 05:03:19 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D4A42AFE
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:03:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4BEC71EC0441;
-        Thu, 14 Jul 2022 11:02:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1657789334;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Xf9/SHcY0J8Gahz0C+2tRg8fDa1mCoqGtP9Fi6/j8GY=;
-        b=bRBjyaejPCWt1V01aLc3bIkqbaBfBTQzioRpL9K4fyZCTcisYVAdedK/f+hx35zRCkpqr/
-        OCExwW3J9UIGkZPji2NxbacZCmzSM831s2F2oxyGRwxzoQS3MEVNgNJkjts5WCAxMG8a79
-        XmdYu0wP/WHK9eIZvyp4e+/OYienl+c=
-Date:   Thu, 14 Jul 2022 11:01:30 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Slade Watkins <slade@sladewatkins.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH 5.15 00/78] 5.15.55-rc1 review
-Message-ID: <Ys/bYJ2bLVfNBjFI@nazgul.tnic>
-References: <20220712183238.844813653@linuxfoundation.org>
- <CA+G9fYtntg7=zWSs-dm+n_AUr_u0eBOU0zrwWqMeXZ+SF6_bLw@mail.gmail.com>
- <eb63e4ce-843f-c840-060e-6e15defd3c4d@roeck-us.net>
- <CAHk-=wj5cOA+fbGeV15kvwe6YGT54Wsk8F2UGoekVQLTPJz_pw@mail.gmail.com>
- <CAHk-=wgq1soM4gudypWLVQdYuvJbXn38LtvJMtnLZX+RTypqLg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgq1soM4gudypWLVQdYuvJbXn38LtvJMtnLZX+RTypqLg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 728B41FA4C;
+        Thu, 14 Jul 2022 09:03:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657789397; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z7Ms0VwrdnBZu0MBDaEoQImBZ8BRNjuXexveGAU2nAY=;
+        b=AT7/AeaR8/9/wos+JCmbFOAR9SK3sWhuD8Jj/o09c0DYb/ZkcP/GvBL1fbcry/B3/9w5Re
+        /BjnF83wsOMcxd9K/cuNwYsTY+7tnWqIM0D6+aDBaMnBjHy2VTwzjjMxI5KFUrfk/6vYq3
+        4mAgj9jif6aiDuzpQy8fvnNxyNMHfN0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657789397;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z7Ms0VwrdnBZu0MBDaEoQImBZ8BRNjuXexveGAU2nAY=;
+        b=VJuORmy8lfDrwY5RvLt19qWeQgrV7U0QaXeUr9wArz46lAX0xoewSXTcKpq/2udoc04BXy
+        dGa379dqpK9whiAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3870913A61;
+        Thu, 14 Jul 2022 09:03:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XjcHDdXbz2JmHwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 14 Jul 2022 09:03:17 +0000
+Date:   Thu, 14 Jul 2022 11:03:16 +0200
+Message-ID: <87v8s0vzfv.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Mark Brown <broonie@kernel.org>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: Re: [PATCH v8 01/14] ALSA: hda: hda_cs_dsp_ctl: Add Library to support CS_DSP ALSA controls
+In-Reply-To: <20220630002335.366545-2-vitalyr@opensource.cirrus.com>
+References: <20220630002335.366545-1-vitalyr@opensource.cirrus.com>
+        <20220630002335.366545-2-vitalyr@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 11:40:03AM -0700, Linus Torvalds wrote:
-> And I see that Thadeau already figured it out:
-> 
->   https://lore.kernel.org/all/20220713171241.184026-1-cascardo@canonical.com/
-> 
-> So presumably we need that patch everywhere.
+On Thu, 30 Jun 2022 02:23:22 +0200,
+Vitaly Rodionov wrote:
+> --- a/sound/pci/hda/Kconfig
+> +++ b/sound/pci/hda/Kconfig
+> @@ -94,6 +94,10 @@ config SND_HDA_PATCH_LOADER
+>  config SND_HDA_SCODEC_CS35L41
+>  	tristate
+>  
+> +config SND_HDA_CS_DSP_CONTROLS
+> +	tristate
+> +	depends on CS_DSP
+> +
+>  config SND_HDA_SCODEC_CS35L41_I2C
+>  	tristate "Build CS35L41 HD-audio side codec support for I2C Bus"
+>  	depends on I2C
 
-Right, I've queued it along with other fallout fixes. Will do some
-testing before I send them to you on Sunday.
+This change alone doesn't give anything useful, unfortunately.
 
-I'm guessing you're thinking of cutting an -rc7 so that people can test
-the whole retbleed mitigation disaster an additional week?
+The above form (without prompt) is basically only to be "selected" by
+others.  And when selected, the "depends" there is just ignored, so
+it's useless.
 
-Thx.
+That is, a proper way would be something like:
 
--- 
-Regards/Gruss,
-    Boris.
+config SND_HDA_CS_DSP_CONTROLS
+	tristate
 
-https://people.kernel.org/tglx/notes-about-netiquette
+config SND_HDA_SCODEC_CS35L41
+	....
+	select SND_HDA_CS_DSP_CONTROLS if CS_DSP
+
+... if you want / need to enable CONFIG_SND_HDA_CS_DSP_CONTROLS
+conditionally.
+
+
+thanks,
+
+Takashi

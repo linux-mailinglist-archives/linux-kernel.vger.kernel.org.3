@@ -2,122 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B0D575819
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D2657581D
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232681AbiGNXhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 19:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
+        id S232842AbiGNXmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 19:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiGNXhL (ORCPT
+        with ESMTP id S229556AbiGNXmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 19:37:11 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4DA67C8E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:37:10 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id y10-20020a9d634a000000b006167f7ce0c5so2402298otk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:37:10 -0700 (PDT)
+        Thu, 14 Jul 2022 19:42:53 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC0D11C37
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:42:51 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-31d85f82f0bso32315657b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:42:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=WUad+Xw6PKcQuVvg0NVjHjZrXjvIwRxx7gYLjE8eWlc=;
-        b=Jm7C2LQZsxxWNagj8GABg7+kKx3vxX4cfGi8JP0PEmKJnaWG80wpBD0RfgEHAy99J/
-         PX/JxovHwJGAE8KF5hXaLLZ7WAISNUTcDONyADJzadN8H7pvhuKxj4Mx5uVfFDlGiDZG
-         +sLN0+Wf9UMEsTLxdFxa/Y3KtZMGQQcfOt4vWnSwuBDyfzXCKrk6moO1kYon0HCBBAKU
-         uSbf0EJn6e4rU89jyAnOQ3H8oS9/5Dj1lm8gwvqx5vEpym8X2BNKZtYb33MpRuCsJlwF
-         ygtVw1fLLIzyrhcjfGAyU81UMZnuBXYLrqvvZL0oeEtD8gYdyELZk+B8DMwj4pn//G07
-         ouvw==
+        bh=hrcyqVkvy4izwFpTLzF8br5+AKNersnOh/LCuMYgV0U=;
+        b=krFYEnJYL0KRGD9bGZMA+2mzLrUX+/bHrobwdwcvzV9kfqgfyi75TUDf9zdeU1qqWR
+         AJA2DFnEXbJ1ngAXsCuziCfL2hI53zvUf3yPlrviGOA6YsHuGlfQnFq68atNlQ5cou+k
+         dqtIMqB9wvNVsxfSwFl7Qoc3ECy+jenTAIBF8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=WUad+Xw6PKcQuVvg0NVjHjZrXjvIwRxx7gYLjE8eWlc=;
-        b=iMWOl+BjE3/DwJ6/sPGittbg5iVMZe/7agGfQ6NEC++Bf1cFlWW10vYBznmAFzUFFX
-         MWsGoStUpH14XqF9fe3UEIgCUdKMJFJMnQtw/FiaiHNhkFZL/d6zb7TvncKJ1Ea0Ge7O
-         bmWLZ4Lm4NzBB6gPxizUpjx7LE1n+YPvHrZtDJnFgBMkhQ5br5Oaz5u+zGphWx6ui4SL
-         iiGs/EsaqdTdi6kD+Z4/4ksU4ZsPWHgyuoJQqRpTTOzZhJE4c4+ve6sK5egcUbPuRnkT
-         nL3fWmnEkPjaD1W3hvdOTRxasbgsRNakK5BoyE2pUooe8G3qASyYLP2o6bHeAe1ZUQRd
-         MhGA==
-X-Gm-Message-State: AJIora/YlkRpBbQJRAQ97/vZjpBrJfBpurAf8tE64Esv+i6Q+r87QLwv
-        ZqJuMJqVURJwF06pqys4EOnaG/ZezlMaNN1XW21EHQ==
-X-Google-Smtp-Source: AGRyM1sUROAf9QyU+AFTIJCy6BluDnqfq3lABw9U4DwUPLxmEQKBocONTlXWtlJxc7cu/XPd+ot8oXrqSV43LUWx7Yo=
-X-Received: by 2002:a05:6830:2331:b0:61c:2c18:555 with SMTP id
- q17-20020a056830233100b0061c2c180555mr4590577otg.367.1657841830085; Thu, 14
- Jul 2022 16:37:10 -0700 (PDT)
+        bh=hrcyqVkvy4izwFpTLzF8br5+AKNersnOh/LCuMYgV0U=;
+        b=SCErADFcXUZq1XVE2zrbqHceRmXLuYh4466rViln/FUK5CqAO6qj7P/7bZXFdC7Ufv
+         FKqZI7bbDd79r+X2//T9eB0Ec0cCe/hZQoCH3hDEZPb/fbvpGZvPTXJ4xfUsiv2oiU0q
+         gdc6o6Uu7ggbv1Gb0tbPPLrM222x5QUjY5bRp7S3JUcGr14a+9j4HZIR1zYTNZCFxVJS
+         UsoSSeN6QR56PZe3Su2aYRSH4RfTN6HWo15R4oLjigE0q7J1akN5Mv7YbK6xcgx19Z0H
+         DHf3N4szyn/2L26cPzat+Z5EoJXRogNtU1YFsEntBm0JqjeLqgVfweRPf4koQeqkTOle
+         qgGw==
+X-Gm-Message-State: AJIora82/oQskL6o1KGs5yrc3spzG/z/atWZeNKLjz6dxM6wCv0tSS3A
+        ZQlB3/ryqyPDZaIK7eo8wvF15oju1/oxu+w800OcPA==
+X-Google-Smtp-Source: AGRyM1swk3ZebWHTl5akundABJu3szM9NM1kLcNezSZ8tPiefLK5HQYfShJehVqnXx5XxLK+oiQC7CJN42AWYT7KO+M=
+X-Received: by 2002:a0d:f147:0:b0:31c:c8fd:7160 with SMTP id
+ a68-20020a0df147000000b0031cc8fd7160mr12868565ywf.420.1657842170848; Thu, 14
+ Jul 2022 16:42:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220714124453.188655-1-mlevitsk@redhat.com> <52d44630-21ad-1291-4185-40d5728eaea6@maciej.szmigiero.name>
- <034401953bc935d997c143153938edb1034b52cd.camel@redhat.com>
- <84646f56-dcb0-b0f8-f485-eb0d69a84c9c@maciej.szmigiero.name> <YtClmOgBV8j3eDkG@google.com>
-In-Reply-To: <YtClmOgBV8j3eDkG@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 14 Jul 2022 16:36:59 -0700
-Message-ID: <CALMp9eTZKyFM4oFNJbDDe69xfqtSmj5jZnPbe0aQaxxCvqdFTA@mail.gmail.com>
-Subject: Re: [PATCH] KVM: SVM: fix task switch emulation on INTn instruction.
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220704000225.345536-1-dlunev@chromium.org> <20220704100221.1.I15b3f7a84ba5a97fde9276648e391b54957103ff@changeid>
+ <YtB45Lte5UhlEE6y@redhat.com>
+In-Reply-To: <YtB45Lte5UhlEE6y@redhat.com>
+From:   Daniil Lunev <dlunev@chromium.org>
+Date:   Fri, 15 Jul 2022 09:42:39 +1000
+Message-ID: <CAONX=-dEG121RQ6L-4fPMXrLXb3JeYNVNiPzHXNaRLbwRzb3bw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] dm: add message command to disallow device open
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Brian Geffon <bgeffon@google.com>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 4:24 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Fri, Jul 15, 2022, Maciej S. Szmigiero wrote:
-> > On 14.07.2022 15:57, Maxim Levitsky wrote:
-> > > On Thu, 2022-07-14 at 15:50 +0200, Maciej S. Szmigiero wrote:
-> > > > On 14.07.2022 14:44, Maxim Levitsky wrote:
-> > > > > Recently KVM's SVM code switched to re-injecting software interrupt events,
-> > > > > if something prevented their delivery.
-> > > > >
-> > > > > Task switch due to task gate in the IDT, however is an exception
-> > > > > to this rule, because in this case, INTn instruction causes
-> > > > > a task switch intercept and its emulation completes the INTn
-> > > > > emulation as well.
-> > > > >
-> > > > > Add a missing case to task_switch_interception for that.
-> > > > >
-> > > > > This fixes 32 bit kvm unit test taskswitch2.
-> > > > >
-> > > > > Fixes: 7e5b5ef8dca322 ("KVM: SVM: Re-inject INTn instead of retrying the insn on "failure"")
-> > > > >
-> > > > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > > > > ---
-> > > >
-> > > > That's a good catch, your patch looks totally sensible to me.
-> > > > People running Win 3.x or OS/2 on top of KVM will surely be grateful for it :)
-> > >
-> > > Yes and also people who run 32 bit kvm unit tests :)
-> >
-> > It looks like more people need to do this regularly :)
->
-> I do run KUT on 32-bit KVM, but until I hadn't done so on AMD for a long time and
-> so didn't realize the taskswitch2 failure was a regression.  My goal/hope is to
-> we'll get to a state where we're able to run the full gamut of tests before things
-> hit kvm/queue, but the number of permutations of configs and module params means
-> that's easier said than done.
->
-> Honestly, it'd be a waste of people's time to expect anyone else beyond us few
-> (and CI if we can get there) to test 32-bit KVM.  We do want to keep it healthy
-> for a variety of reasons, but I'm quite convinced that outside of us developers,
-> there's literally no one running 32-bit KVM.
+Hi Mike,
+Thank you for your response. I should have probably added more context
+to the commit message that I specified in the cover letter. The idea is to
+prohibit access of all userspace, including the root. The main concern here
+is potential system applications' vulnerabilities that can trick the system to
+operate on non-intended files with elevated permissions. While those could
+also be exploited to get more access to the regular file systems, those firstly
+has to be useable by userspace for normal system operation (e.g. to store
+user data), secondly, never contain plain text secrets. Swap content is a
+different story - access to it can leak very sensitive information, which
+otherwise is never available as plaintext on any persistent media - e.g. raw
+user secrets, raw disk encryption keys etc, other security related tokens.
+Thus we propose a mechanism to enable such a lockdown after necessary
+configuration has been done to the device at boot time.
+--Daniil
 
-It shouldn't be necessary to run 32-bit KVM to run 32-bit guests! Or
-am I not understanding the issue that was fixed here?
+On Fri, Jul 15, 2022 at 6:13 AM Mike Snitzer <snitzer@kernel.org> wrote:
+>
+> On Sun, Jul 03 2022 at  8:02P -0400,
+> Daniil Lunev <dlunev@chromium.org> wrote:
+>
+> > A message can be passed to device mapper to prohibit open on a certain
+> > mapped device. This makes possible to disallow userspace access to
+> > raw swapped data if the system uses device mapper to encrypt it at rest.
+> >
+> > Signed-off-by: Daniil Lunev <dlunev@chromium.org>
+>
+> This commit header and patch make little sense to me.
+>
+> If you're concerned about a normal (non-root) user having read access
+> to the swap device then disallow non-root user access permissions on
+> the swap device.
+>
+> Why is an encrypted swap device any different than any other encrypted
+> device?
+>
+> As is, this patch seems to be the wrong way to achieve your desired
+> result.  If you or someone else on the chromium team can better
+> defend/explain the need for this change please do so.
+>
+> Thanks,
+> Mike
+>
+>
+> > ---
+> >
+> >  drivers/md/dm-core.h          |  1 +
+> >  drivers/md/dm-ioctl.c         | 10 ++++++++++
+> >  drivers/md/dm.c               | 12 ++++++++++++
+> >  drivers/md/dm.h               | 10 ++++++++++
+> >  include/uapi/linux/dm-ioctl.h |  5 +++++
+> >  5 files changed, 38 insertions(+)
+> >
+> > diff --git a/drivers/md/dm-core.h b/drivers/md/dm-core.h
+> > index 4277853c75351..37529b605b7c4 100644
+> > --- a/drivers/md/dm-core.h
+> > +++ b/drivers/md/dm-core.h
+> > @@ -140,6 +140,7 @@ struct mapped_device {
+> >  #define DMF_SUSPENDED_INTERNALLY 7
+> >  #define DMF_POST_SUSPENDING 8
+> >  #define DMF_EMULATE_ZONE_APPEND 9
+> > +#define DMF_DISALLOW_OPEN 10
+> >
+> >  void disable_discard(struct mapped_device *md);
+> >  void disable_write_zeroes(struct mapped_device *md);
+> > diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+> > index 87310fceb0d86..e35d560aa2ff3 100644
+> > --- a/drivers/md/dm-ioctl.c
+> > +++ b/drivers/md/dm-ioctl.c
+> > @@ -815,6 +815,9 @@ static void __dev_status(struct mapped_device *md, struct dm_ioctl *param)
+> >       if (dm_test_deferred_remove_flag(md))
+> >               param->flags |= DM_DEFERRED_REMOVE;
+> >
+> > +     if (dm_test_disallow_open_flag(md))
+> > +             param->flags |= DM_DISALLOWED_OPEN;
+> > +
+> >       param->dev = huge_encode_dev(disk_devt(disk));
+> >
+> >       /*
+> > @@ -1656,6 +1659,13 @@ static int message_for_md(struct mapped_device *md, unsigned argc, char **argv,
+> >               }
+> >               return dm_cancel_deferred_remove(md);
+> >       }
+> > +     if (!strcasecmp(argv[0], "@disallow_open")) {
+> > +             if (argc != 1) {
+> > +                     DMERR("Invalid arguments for @disallow_open");
+> > +                     return -EINVAL;
+> > +             }
+> > +             return dm_disallow_open(md);
+> > +     }
+> >
+> >       r = dm_stats_message(md, argc, argv, result, maxlen);
+> >       if (r < 2)
+> > diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+> > index 82957bd460e89..3e53d1bd40f0c 100644
+> > --- a/drivers/md/dm.c
+> > +++ b/drivers/md/dm.c
+> > @@ -327,6 +327,7 @@ static int dm_blk_open(struct block_device *bdev, fmode_t mode)
+> >               goto out;
+> >
+> >       if (test_bit(DMF_FREEING, &md->flags) ||
+> > +         test_bit(DMF_DISALLOW_OPEN, &md->flags) ||
+> >           dm_deleting_md(md)) {
+> >               md = NULL;
+> >               goto out;
+> > @@ -403,6 +404,12 @@ int dm_cancel_deferred_remove(struct mapped_device *md)
+> >       return r;
+> >  }
+> >
+> > +int dm_disallow_open(struct mapped_device *md)
+> > +{
+> > +     set_bit(DMF_DISALLOW_OPEN, &md->flags);
+> > +     return 0;
+> > +}
+> > +
+> >  static void do_deferred_remove(struct work_struct *w)
+> >  {
+> >       dm_deferred_remove();
+> > @@ -2883,6 +2890,11 @@ int dm_test_deferred_remove_flag(struct mapped_device *md)
+> >       return test_bit(DMF_DEFERRED_REMOVE, &md->flags);
+> >  }
+> >
+> > +int dm_test_disallow_open_flag(struct mapped_device *md)
+> > +{
+> > +     return test_bit(DMF_DISALLOW_OPEN, &md->flags);
+> > +}
+> > +
+> >  int dm_suspended(struct dm_target *ti)
+> >  {
+> >       return dm_suspended_md(ti->table->md);
+> > diff --git a/drivers/md/dm.h b/drivers/md/dm.h
+> > index 9013dc1a7b002..da27f9dfe1413 100644
+> > --- a/drivers/md/dm.h
+> > +++ b/drivers/md/dm.h
+> > @@ -163,6 +163,16 @@ int dm_test_deferred_remove_flag(struct mapped_device *md);
+> >   */
+> >  void dm_deferred_remove(void);
+> >
+> > +/*
+> > + * Test if the device is openable.
+> > + */
+> > +int dm_test_disallow_open_flag(struct mapped_device *md);
+> > +
+> > +/*
+> > + * Prevent new open request on the device.
+> > + */
+> > +int dm_disallow_open(struct mapped_device *md);
+> > +
+> >  /*
+> >   * The device-mapper can be driven through one of two interfaces;
+> >   * ioctl or filesystem, depending which patch you have applied.
+> > diff --git a/include/uapi/linux/dm-ioctl.h b/include/uapi/linux/dm-ioctl.h
+> > index 2e9550fef90fa..3b4d12d09c005 100644
+> > --- a/include/uapi/linux/dm-ioctl.h
+> > +++ b/include/uapi/linux/dm-ioctl.h
+> > @@ -382,4 +382,9 @@ enum {
+> >   */
+> >  #define DM_IMA_MEASUREMENT_FLAG      (1 << 19) /* In */
+> >
+> > +/*
+> > + * If set, the device can not be opened.
+> > + */
+> > +#define DM_DISALLOWED_OPEN   (1 << 20) /* Out */
+> > +
+> >  #endif                               /* _LINUX_DM_IOCTL_H */
+> > --
+> > 2.31.0
+> >

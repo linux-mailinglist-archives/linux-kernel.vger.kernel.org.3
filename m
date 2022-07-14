@@ -2,46 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD91857415B
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 04:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EAFB57416C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 04:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbiGNCK7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 13 Jul 2022 22:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
+        id S230353AbiGNCXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 22:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiGNCK5 (ORCPT
+        with ESMTP id S229531AbiGNCXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 22:10:57 -0400
-Received: from elephants.elehost.com (elephants.elehost.com [216.66.27.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427772BEE;
-        Wed, 13 Jul 2022 19:10:56 -0700 (PDT)
-Received: from Mazikeen (cpe00fc8d49d843-cm00fc8d49d840.cpe.net.cable.rogers.com [174.119.96.21] (may be forged))
-        (authenticated bits=0)
-        by elephants.elehost.com (8.16.1/8.16.1) with ESMTPSA id 26E2AkUH048754
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 13 Jul 2022 22:10:46 -0400 (EDT)
-        (envelope-from rsbecker@nexbridge.com)
-Reply-To: <rsbecker@nexbridge.com>
-From:   <rsbecker@nexbridge.com>
-To:     <rsbecker@nexbridge.com>, "'Junio C Hamano'" <gitster@pobox.com>,
-        <git@vger.kernel.org>
-Cc:     "'Linux Kernel'" <linux-kernel@vger.kernel.org>,
-        <git-packagers@googlegroups.com>
-References: <xmqqv8s2fefi.fsf@gitster.g> <01af01d896b1$a48e32f0$edaa98d0$@nexbridge.com> <01b101d896c4$31761bd0$94625370$@nexbridge.com>
-In-Reply-To: <01b101d896c4$31761bd0$94625370$@nexbridge.com>
-Subject: RE: [Test Failures] Git v2.37.1 (was RE: [ANNOUNCE] Git v2.37.1 and others)
-Date:   Wed, 13 Jul 2022 22:10:39 -0400
-Organization: Nexbridge Inc.
-Message-ID: <021701d89726$ed4d09b0$c7e71d10$@nexbridge.com>
+        Wed, 13 Jul 2022 22:23:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C57D1F2C6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 19:22:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EAA4661DA7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:22:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B594C3411E;
+        Thu, 14 Jul 2022 02:22:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657765378;
+        bh=ItcGA7/dhxXIJq7TylmxzfE+dFvsuHcRuQOMvhzSjto=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n/9/io+1zJwADGP14tDvnzZsbia2PEvU5OUMCF/j5g+TAapI8JnkPuKQZwO8NGOgk
+         lPn4fc7hY6HQjwlz2YdBbq1zuuXaC0Wd9wxOpej7aRgRRZ6dg56KR+42bVDS/naThM
+         yy9WMQ4cE/yftvcVpduyOxXiLYLVYCLW5diRIIj9pt9KYdU2eSxsmE7aQbS8lxuEWR
+         Np7R1/kvH/WdwXqSDuPk3PSnrMH5eCdiIfUUyqP/hzGXk7cDQV1tXFpLav81yf7NHe
+         o4X9xTPBunZ3iP0l+SjyI4lyp302s07xNlw/hOumkzZELdWiQJlaH03y1KPT/HEHWw
+         5SOp7JrSO7N4A==
+Date:   Thu, 14 Jul 2022 02:22:54 +0000
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Tim Van Patten <timvp@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, rrangel@chromium.org,
+        robbarnes@google.com, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v2] platform/chrome: cros_ec: Send host event for
+ prepare/complete
+Message-ID: <Ys99/jJW8hzXOqg1@google.com>
+References: <20220706205136.v2.1.Ic7a7c81f880ab31533652e0928aa6e687bb268b5@changeid>
+ <Ys40uw4QIe4fQKA/@google.com>
+ <CANkg5eyehcECGeDHBEsxR=iOoyMwzkcpvX+oRxy7PJPYLD=VuQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQOax8rq/kYLSctl3duwOPHxjLu0zAJkQfEUAKRaJqep4HjDUA==
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANkg5eyehcECGeDHBEsxR=iOoyMwzkcpvX+oRxy7PJPYLD=VuQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,45 +59,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On July 13, 2022 10:24 AM, I wrote:
->On July 13, 2022 8:11 AM, I wrote:
->>On July 12, 2022 1:07 PM, Junio C Hamano wrote:
->>>Git v2.37.1, together with v2.30.5, v2.31.4, v2.32.3, v2.33.4,
->>>v2.34.4, v2.35.4, and
->>>v2.36.2 for older maintenance tracks, are now available at the usual places.
->>>
->>>These are to address CVE-2022-29187, where the fixes in v2.36.1 and
->>>below to address CVE-2022-24765 released earlier may not have been
->complete.
->>
->>Following are net new test failures with 2.37.1 compared with 2.37.0
->>are as follows on NonStop ia64 and x86 platforms:
->>
->>t5516-fetch-push subtests 53, 113
->>
->>t5545-push-options subtest 9
->
->Test passes when not run in Jenkins CI/CD
->
->>t5601-clone subtest 8
->
->Test passes when not run in Jenkins CI/CD
->
->>t7502-commit-porcelain subtests 20-26, 29-33, 42-47
->
->Test passes when not run in Jenkins CI/CD
->
->>t7528-signed-commit-ssh subtests 4, 5
->
->Test passes when not run in Jenkins CI/CD
->
->So it looks like a Jenkins/git test interaction is the issue here. I'm wondering
->whether running the test with </dev/null and 2>/dev/null might make a
->difference when running in Jenkins. The tty where Jenkins was started is in a
->permanently disconnected state.
->
->Mostly ignore the subtest failures, but still, would like to know why these subtests
->in particular.
+On Wed, Jul 13, 2022 at 12:05:14PM -0600, Tim Van Patten wrote:
+> This patch changes *when* the EC outputs the host command that indicates
+> the AP is starting suspend and finishing resume, due to the change (in this
+> patch) when the AP sends that host command.   This makes the EC's logs more
+> accurate when correlating them with the AP's logs in regards to when
+> suspend is started and resume is completed.   Previously, those events were
+> sent when suspend/resume were already in progress.
 
-Strangely, setting stdin to /dev/null and stderr to /dev/null makes no difference in the test results. stdout is the Jenkins pipe, which is Java of course, but roughly a popen(x, "r"). I have no explanation at this point why specific tests fail - other than OpenSSH, which I know attempts to prompt if it thinks the tty is even remotely reasonable.
+I see.
 
+> We'd also like to keep the new logs emitted by the AP to make it clearer
+> when the AP is starting suspend and completing resume, so we can correlate
+> it with the EC logs more easily.   This should aid debugging and timing
+> analysis.   Since it only occurs during suspend/resume, it shouldn't flood
+> the logs and follows the logging of other driver PM functions.
+> 
+> I didn't see concerns in [1] have been addressed.
+> 
+> 
+> I replied to the first email stating why we want to keep the log message
+> (and reiterated it above).   What's the correct process to indicate we
+> don't want to make the change requested in [1]?
+
+I didn't see the message in the v1 thread[2].  What did you mean by
+"first email"?  Checked my mbox but got nothing.
+
+Also, I found the message didn't show in [3].  I'm not sure what happened
+but perhaps you should use plain text next time (see [4])?
+
+[2]: https://patchwork.kernel.org/project/chrome-platform/patch/20220701095421.1.I78ded92e416b55de31975686d34b2058d4761c07@changeid/
+[3]: https://patchwork.kernel.org/project/chrome-platform/patch/20220706205136.v2.1.Ic7a7c81f880ab31533652e0928aa6e687bb268b5@changeid/
+[4]: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#no-mime-no-links-no-compression-no-attachments-just-plain-text

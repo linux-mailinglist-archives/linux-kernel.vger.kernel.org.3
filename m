@@ -2,344 +2,526 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BB6575603
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6F9575606
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240532AbiGNTwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 15:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
+        id S240676AbiGNTzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 15:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiGNTwo (ORCPT
+        with ESMTP id S232596AbiGNTzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 15:52:44 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACED52894;
-        Thu, 14 Jul 2022 12:52:43 -0700 (PDT)
+        Thu, 14 Jul 2022 15:55:15 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93879599D9;
+        Thu, 14 Jul 2022 12:55:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657828363; x=1689364363;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8zvHnrEhJCvm8EcU2wOLPua+0Ne80byROhMMiOLNSEc=;
-  b=fAYg5QY8NaFXNXQWDCvYs52xXb90RWlWN8TkoQ7texZuZoRRCtM5Ib/z
-   KxkigdUID3Sva49wBdmMO2fPdcs4HKoR+IHJhfpsuwIJ5kmyBIv3rn5r8
-   zRkex9kToI1UbBo+AuZqZ2qb3NcHny43BFx7ukd2AlBSHfqcizFidc93C
-   AkYXFUD0POOsc0PTy/iYzYxByE4SrxOdz3lAef5IAbSbQG7mlN2dKIiFs
-   ErUPLlsJl0vfrUPwtzew5Vu0zNdlb0o17x4p/53pLpvzRaJs3G4NQ9oSY
-   4LHKlmvHg72Wx6uxjT/6tdlWQUULjYftUqOs0hqWwcK+2Z6qTvgs+of7t
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="285639553"
+  t=1657828514; x=1689364514;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=iGRlzyZA3o1uqOwhiiluYWgU3+ATCYeecoqiLYyNmzo=;
+  b=gn9o43gInE+KTENkws12/UGt/ezQF9avhvUJc7an/JfS+ksiBLap0733
+   g94w1ZCVYBqlRxAwmu7lb4r1ztVhhPhFu+E1PcOqUoUAoIp4YwMAb+pSh
+   28O8zlOXxQ/3gDnTZACwN6QgU0xWwGOwurKiHY/0YbxApenOioUY6sbai
+   Zv6eS0mOD1iKDh3FlxBFVlLMrZVNwxcwF2gOuaiLGf6FPKwoXA46G9rOw
+   iYJysWUn60kjaYoiRyQvdzVd6k5vNsNQfZ+I1GJUiD6Kc/jU9u19mqrmq
+   xmXJ170LdvnFBmkJMsgU5Ahm9zmuHv+mXZO5UPs9MaelVaVZJPR13nm3b
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="311274517"
 X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="285639553"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 12:52:43 -0700
+   d="scan'208";a="311274517"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 12:55:14 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="663916188"
-Received: from vyvo-mobl2.amr.corp.intel.com (HELO dsneddon-desk.sneddon.lan) ([10.254.65.221])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 12:52:42 -0700
-From:   Daniel Sneddon <daniel.sneddon@linux.intel.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT))
-Cc:     pawan.kumar.gupta@linux.intel.com,
-        antonio.gomez.iglesias@linux.intel.com,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] x86/speculation: Add BHI_DIS support
-Date:   Thu, 14 Jul 2022 12:52:35 -0700
-Message-Id: <20220714195236.9311-1-daniel.sneddon@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+   d="scan'208";a="628834605"
+Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
+  by orsmga001.jf.intel.com with ESMTP; 14 Jul 2022 12:55:13 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 14 Jul 2022 12:55:13 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 14 Jul 2022 12:55:12 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 14 Jul 2022 12:55:12 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 14 Jul 2022 12:55:12 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BE+OJiNhxr5kvzvcPsIoEZvyBQdf2QhuLNBuRxAth1qot4d5vMrPMbAIkvcZz5T17C01TEj7xNf6VK3rH9lze3hc8BM4DUyyhcGrek8lzIKfrQjVrGXanmME4bKaHu01wEo2VzNUnAGm1QvdrjCpbdNRZCFNzB96cso+E25SAkfPIBOESj+iahDEG2hNq+xK5YlR7xHiTffOJku72OQsJwlZ4tncFXJkJ+Had4bs1BEdm80gkGHbR7MoibnbZ7zTRY4d+V3RayAvCZeCm+PE0t2A0kVnxc2Ke7vfiiKsnZ18hE851AGt22iptCECwyzmAFoB4el08lWuMWY7WmmR5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V+bwmOIj6D+Ii+doy51oREOicXf/4Kcnxf105ivVJFU=;
+ b=J8kwmLrRGsNyrGtpKsoUo7X0p1PsEIv0km1M0uqTgeWYa7a/8mZddRnrOn0TcRm3YncTi5RN8j9x9YypiGaVs2lwICYBMR9TK0bSx4c33YGrYQ7qyVmMl7dJlzCet8sFXOMPK1rLNbNE9uw/W58KAstt9vUoG8kA4ddMH0/UBNoHd7e3B21bvrKOhaMkWP1YOC74vdayLt+cpuM3U6R5DX06EeRaUKPF6LVZ36iT5RyVC+1OUcK6eKrmOL36ZsloCdAIWLaJuI+hVB63fBQZ55K/+hNNbppIxizza59eCAUVVyGrcgEbXadD2ibAPRB1Fl6d3NnIJsj4IkqDDFINTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
+ BN6PR1101MB2145.namprd11.prod.outlook.com (2603:10b6:405:51::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Thu, 14 Jul
+ 2022 19:55:10 +0000
+Received: from DM4PR11MB6311.namprd11.prod.outlook.com
+ ([fe80::3154:e32f:e50c:4fa6]) by DM4PR11MB6311.namprd11.prod.outlook.com
+ ([fe80::3154:e32f:e50c:4fa6%5]) with mapi id 15.20.5417.026; Thu, 14 Jul 2022
+ 19:55:10 +0000
+Date:   Thu, 14 Jul 2022 12:55:02 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+CC:     Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Alison Schofield" <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH V13 6/9] cxl/port: Read CDAT table
+Message-ID: <YtB0loLvlKbgcA43@iweiny-desk3>
+References: <20220705154932.2141021-1-ira.weiny@intel.com>
+ <20220705154932.2141021-7-ira.weiny@intel.com>
+ <62d0387522e5b_16fb9729432@dwillia2-xfh.jf.intel.com.notmuch>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <62d0387522e5b_16fb9729432@dwillia2-xfh.jf.intel.com.notmuch>
+X-ClientProxiedBy: BYAPR05CA0032.namprd05.prod.outlook.com
+ (2603:10b6:a03:c0::45) To DM4PR11MB6311.namprd11.prod.outlook.com
+ (2603:10b6:8:a6::21)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 695cb428-ba55-4d48-6086-08da65d2c22c
+X-MS-TrafficTypeDiagnostic: BN6PR1101MB2145:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0+HfaS4neHJhUjrKoXPOheYNbW5m789CHYUqaazf1CV5wEZggoRBE/2VRPBMwAuZ3b6mlt59Ez9SGOzf3+T3bHXWdXfG6XtY9CUjZtz7a0r8xJ9/dGBt0LDYc8aIkrqbEPHxBngYHmd5ppvee9wHbhnqjAOC3cqJKS+Sx0lmqLFJjf++JQ9gRRveso611zQR3FHEHf6obYhah5bNT1AbLDBNk/6C9VXEGL9MSssICr76KrnLeupnPdtSagUV78Q/JYmkLHkIgO1rtZd4PnXBtG8TcUWpG437IlIavR4+aRYw/frhZKHNeC1wc5YQQD8RPrrg2SjC1v1IWE1ct//ETyz+2SU6hxhqMEahT8rRmKMHy59muoEE3XIh7oiohrrt8p0U9cO6Iy5dYuc/yi767VW1sHxZneEWE605YupUTgy1ybUr2yJUg7tyytQZDU3VhF0MNRZAxqafgOUFMzTnJgg3EHeff7W4bQTSEbUUr0tVZMTM3gZW4n/tKWjBSgvN51ATcqSMUIb5lVkLjN8SbOzUtxFX23G/QZcWazql4yCH9CZQXQvaV6mjL8NV5/WYnagfTaA61BOjCqo7m4u1PdiS9eEIURvPGeKvBf85Wp9FHdgzeHUUa0GBMDkS8yFVWdB6z0Ebtj9POD39Bl7PC/dXfNWcnowWlmNc07BznVwcaF5EpEy+2N6JQi5wilCnfA8Gbb/E7pGjh7cwg0j4d4wv9QYvwpscn/JeuNvOtukpXZFoMVxXsjssal0f3h8wX8WPvHRb8J9v6xfSPc+OvA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(346002)(136003)(366004)(396003)(39860400002)(83380400001)(316002)(82960400001)(8936002)(86362001)(33716001)(6486002)(5660300002)(44832011)(41300700001)(6636002)(2906002)(6862004)(66556008)(9686003)(54906003)(6666004)(30864003)(66946007)(6512007)(4326008)(38100700002)(66476007)(478600001)(8676002)(186003)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nYzVCu8eTeBmiITM5/P8NBbYKwofFK7t7cBHeUEE7B8zF2wmdsqjmSg/Oppu?=
+ =?us-ascii?Q?wQ8IG0CeMgo02iqYdBxGi6HWQ5GaAkr9xshAwTWssyxDRsxuRp5ETtjnwjFO?=
+ =?us-ascii?Q?0lI6gMQsFVlFLoL5z4ucIBgyArtKDrf/yhm3bIu9L8rF9CR0jXpyZ5BFfpwp?=
+ =?us-ascii?Q?jca2ILjruUYRVDXxQZJDjAVVnn6OpxhgzrrRcPm0hrQs09t5dMkdrU9FHHnw?=
+ =?us-ascii?Q?iBL3MFZdk9RO4arDCWpl17fTQjhlNNN02xPPFNe8QETTaPCEsky6grL3zAK+?=
+ =?us-ascii?Q?eMRrynOHmj5uYx1itREkkxEbp3qWw9BVicJ01HEgjSWEcu2ITPvx9wPLAe0V?=
+ =?us-ascii?Q?upU8AgZbzbBeV2APVXv/yOhsRTf0sL5rotB+OCJliJn7ockTc61QoTOfFXdx?=
+ =?us-ascii?Q?381U4Ec97xgtaLqgG/6eLiayc/EejGA4AqtiVoWYHugcHwipwkjuRt4fU5Mf?=
+ =?us-ascii?Q?mTDQW/iP1inWhUJ3OwH+vTCc1kKSxrN8tjqPrwBXdw3FK7+X+eTVt9wTGKjG?=
+ =?us-ascii?Q?q6M0iBtIismybBLmQ6+SjP3vN0uM3vk90VmrF/5puG6O4LXOGIwSduMeabTU?=
+ =?us-ascii?Q?am7v3YEaO/ARNEItmTDyj3Oiwi6K74uWcpBUQ00by8H4GznGfXJgP4AlHvJF?=
+ =?us-ascii?Q?TurUqJy2urdGyLUI0jMAB4xNseG3cRVJ0470bGmUXaxVOY5pSyTO7plwozoZ?=
+ =?us-ascii?Q?ybatQYm9yVNYJGkKXhIfZcEUG6kn7NDKTpbyHNgVQQwo+wshi9BaeZ2QT9VK?=
+ =?us-ascii?Q?Ipd7z+2d9eHdAYje13XM0IJ7KpAho4bS7xPBR+tzP9T7+yVfPeV1ZixSvknh?=
+ =?us-ascii?Q?4EstoKlsisEKlyOCWg+6BJWIgYAh44IEPnSklMCO+G2AgzM+vGrMTk71p1kn?=
+ =?us-ascii?Q?wqcvMpoITgUATWpMebMpXNrT+zFbav7mCKNhClWZUO41lfIlPkYSVN9jfaFm?=
+ =?us-ascii?Q?s8FJ9P/l3nn4hqz2EdDTmSZ1ELbRVUGpRJzkcZvge5ACoBVyvJqRTt57NnfP?=
+ =?us-ascii?Q?tOaJ8AsOqDNC4foB+yl4L2pdk5Jxx+sWDSE3eTBYuDOa8nLlGNlGmDJkpTNu?=
+ =?us-ascii?Q?GEvPpK2EqTv6AzaqhpJpYnPccEgDgkIt7y+OPcd6mpcMuXkTEClCxBq5qIfh?=
+ =?us-ascii?Q?pVYKHwFpAZnDZyWwcu0lz51gaLzp0pAWFQfL4U87eqfhOMk9W5t5ZgVmfUK+?=
+ =?us-ascii?Q?uz6ZQQ/LGbNLLgrgU6oUNsl/vz6tmW8xusuGlZuQv672LlnN6E+ww6IunJeW?=
+ =?us-ascii?Q?qXvWjHZN30WmH7RzOMVItWwDjGMIKa4vcYIy1DJmm8M1XleSsSjpAfIs86qJ?=
+ =?us-ascii?Q?N6wy7CT//6VQYu1j385C1XfLr02zwklqTFN4jE8k9qwbd8WDughhRNLhmwmT?=
+ =?us-ascii?Q?rvJRqCTdb+woTbVjsfO5p6gzl2uyNX41JgBz9/k2lpRdxNkYJW2zVzGZPStu?=
+ =?us-ascii?Q?A90OmjZ9/yWJAcZSYztSVqKXGYeg5PYAYJq82Ep3QJgfpUCmBITMU5YAglvH?=
+ =?us-ascii?Q?TeBxS4S2pYwKweMlTdrruigm/FvDVRNFguIhibqWNGmpuR9MvLdEsqSETjlR?=
+ =?us-ascii?Q?hE3BjNPuqdbuMTVUixbfL5U+1tS0HSuT2U9rsxvv4im8Wewu9oJP0RNwrY+K?=
+ =?us-ascii?Q?TvXEizDlUpBNztSP/ZbQmx8phiYy8uokPqI4S4TkjdFo?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 695cb428-ba55-4d48-6086-08da65d2c22c
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2022 19:55:10.2509
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dY9d0nE6kjMFEgNZNqat7Z20RnwNeRjxzGUq+BM3oBFNxmaB4YCUl0Hs5PPLR2V4d0KL1TecBdOT3H8zEVCT6w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1101MB2145
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Branch History Injection (BHI) attacks can be mitigated using the
-BHI_DIS_S indirect predictor control bit located in MSR_IA32_SPEC_CTRL
-register. Set BHI_DIS in MSR_IA32_SPC_CTRL to prevent predicted
-targets of indirect branches executed in CPL0, CPL1, or CPL2 from
-being selected based on branch history from branches executed in CPL3.
-Support for this feature is enumerated by CPUID.7.2.EDX[BHI_CTRL] (bit 4).
+On Thu, Jul 14, 2022 at 08:38:29AM -0700, Dan Williams wrote:
+> ira.weiny@ wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
 
-Users wanting BHI protection can specify spectre_v2=eibrs,bhi_dis to
-enable hardware BHI protections.  On platforms where BHI protections
-are not available in the hardware revert to eibrs,retpoline
-mitigations.
+[snip]
 
-Signed-off-by: Daniel Sneddon <daniel.sneddon@linux.intel.com>
----
- Documentation/admin-guide/hw-vuln/spectre.rst |  5 ++
- .../admin-guide/kernel-parameters.txt         |  2 +
- arch/x86/include/asm/cpufeatures.h            |  1 +
- arch/x86/include/asm/msr-index.h              |  8 +++
- arch/x86/include/asm/nospec-branch.h          |  1 +
- arch/x86/kernel/cpu/bugs.c                    | 53 +++++++++++++++++--
- arch/x86/kernel/cpu/scattered.c               |  1 +
- tools/arch/x86/include/asm/msr-index.h        |  8 +++
- 8 files changed, 76 insertions(+), 3 deletions(-)
+> > ---
+> >  drivers/cxl/cdat.h     | 100 ++++++++++++++++++++++++
+> >  drivers/cxl/core/pci.c | 170 +++++++++++++++++++++++++++++++++++++++++
+> >  drivers/cxl/cxl.h      |   5 ++
+> >  drivers/cxl/cxlpci.h   |   1 +
+> >  drivers/cxl/port.c     |  51 +++++++++++++
+> >  5 files changed, 327 insertions(+)
+> >  create mode 100644 drivers/cxl/cdat.h
+> 
+> The bin_attr additions to CXL sysfs need to be added to
+> Documentation/ABI/testing/sysfs-bus-cxl.
 
-diff --git a/Documentation/admin-guide/hw-vuln/spectre.rst b/Documentation/admin-guide/hw-vuln/spectre.rst
-index 9e9556826450..cde2f860a7b7 100644
---- a/Documentation/admin-guide/hw-vuln/spectre.rst
-+++ b/Documentation/admin-guide/hw-vuln/spectre.rst
-@@ -605,6 +605,11 @@ kernel command line.
-                 eibrs                   enhanced IBRS
-                 eibrs,retpoline         enhanced IBRS + Retpolines
-                 eibrs,lfence            enhanced IBRS + LFENCE
-+                eibrs,bhi_dis		enhanced IBRS + Hardware BHI prevention
-+
-+                Specifying eibrs,bhi_dis on hardware that is missing that
-+                feature will cause the software to fall back to
-+                "eibrs,retpoline" mode.
- 
- 		Not specifying this option is equivalent to
- 		spectre_v2=auto.
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index f2d26cb7e853..e0cb07b3f388 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5592,6 +5592,8 @@
- 			eibrs		  - enhanced IBRS
- 			eibrs,retpoline   - enhanced IBRS + Retpolines
- 			eibrs,lfence      - enhanced IBRS + LFENCE
-+			eibrs,bhi_dis	  - enhanced IBRS + Hardware BHI
-+					    prevention
- 			ibrs		  - use IBRS to protect kernel
- 
- 			Not specifying this option is equivalent to
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 00f5227c8459..eab1baa8036f 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -302,6 +302,7 @@
- #define X86_FEATURE_RETPOLINE_LFENCE	(11*32+13) /* "" Use LFENCE for Spectre variant 2 */
- #define X86_FEATURE_RETHUNK		(11*32+14) /* "" Use REturn THUNK */
- #define X86_FEATURE_UNRET		(11*32+15) /* "" AMD BTB untrain return */
-+#define X86_FEATURE_BHI_CTRL		(11*32+16) /* "" Branch History Injection control */
- 
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index cc615be27a54..55bfa2764033 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -53,6 +53,8 @@
- #define SPEC_CTRL_SSBD			BIT(SPEC_CTRL_SSBD_SHIFT)	/* Speculative Store Bypass Disable */
- #define SPEC_CTRL_RRSBA_DIS_S_SHIFT	6	   /* Disable RRSBA behavior */
- #define SPEC_CTRL_RRSBA_DIS_S		BIT(SPEC_CTRL_RRSBA_DIS_S_SHIFT)
-+#define SPEC_CTRL_BHI_DIS_S_SHIFT	10	   /* Disable Branch History Injection behavior */
-+#define SPEC_CTRL_BHI_DIS_S		BIT(SPEC_CTRL_BHI_DIS_S_SHIFT)
- 
- #define MSR_IA32_PRED_CMD		0x00000049 /* Prediction Command */
- #define PRED_CMD_IBPB			BIT(0)	   /* Indirect Branch Prediction Barrier */
-@@ -150,6 +152,12 @@
- 						 * are restricted to targets in
- 						 * kernel.
- 						 */
-+#define ARCH_CAP_BHI_NO			BIT(20)	/*
-+						 * Predicted targets of CPL0
-+						 * indirect branches are not
-+						 * based on branch history from
-+						 * CPL3.
-+						 */
- 
- #define MSR_IA32_FLUSH_CMD		0x0000010b
- #define L1D_FLUSH			BIT(0)	/*
-diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-index bb05ed4f46bd..57c6fbf15579 100644
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -237,6 +237,7 @@ enum spectre_v2_mitigation {
- 	SPECTRE_V2_EIBRS,
- 	SPECTRE_V2_EIBRS_RETPOLINE,
- 	SPECTRE_V2_EIBRS_LFENCE,
-+	SPECTRE_V2_EIBRS_BHI,
- 	SPECTRE_V2_IBRS,
- };
- 
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 0dd04713434b..16e448f141e4 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -933,6 +933,7 @@ static void __init retbleed_select_mitigation(void)
- 		case SPECTRE_V2_EIBRS:
- 		case SPECTRE_V2_EIBRS_RETPOLINE:
- 		case SPECTRE_V2_EIBRS_LFENCE:
-+		case SPECTRE_V2_EIBRS_BHI:
- 			retbleed_mitigation = RETBLEED_MITIGATION_EIBRS;
- 			break;
- 		default:
-@@ -1016,6 +1017,7 @@ enum spectre_v2_mitigation_cmd {
- 	SPECTRE_V2_CMD_EIBRS,
- 	SPECTRE_V2_CMD_EIBRS_RETPOLINE,
- 	SPECTRE_V2_CMD_EIBRS_LFENCE,
-+	SPECTRE_V2_CMD_EIBRS_BHI,
- 	SPECTRE_V2_CMD_IBRS,
- };
- 
-@@ -1096,7 +1098,8 @@ static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mode)
- 	return mode == SPECTRE_V2_IBRS ||
- 	       mode == SPECTRE_V2_EIBRS ||
- 	       mode == SPECTRE_V2_EIBRS_RETPOLINE ||
--	       mode == SPECTRE_V2_EIBRS_LFENCE;
-+	       mode == SPECTRE_V2_EIBRS_LFENCE ||
-+	       mode == SPECTRE_V2_EIBRS_BHI;
- }
- 
- static void __init
-@@ -1198,6 +1201,7 @@ static const char * const spectre_v2_strings[] = {
- 	[SPECTRE_V2_EIBRS]			= "Mitigation: Enhanced IBRS",
- 	[SPECTRE_V2_EIBRS_LFENCE]		= "Mitigation: Enhanced IBRS + LFENCE",
- 	[SPECTRE_V2_EIBRS_RETPOLINE]		= "Mitigation: Enhanced IBRS + Retpolines",
-+	[SPECTRE_V2_EIBRS_BHI]			= "Mitigation: Enhanced IBRS + BHI disabled",
- 	[SPECTRE_V2_IBRS]			= "Mitigation: IBRS",
- };
- 
-@@ -1215,6 +1219,7 @@ static const struct {
- 	{ "eibrs",		SPECTRE_V2_CMD_EIBRS,		  false },
- 	{ "eibrs,lfence",	SPECTRE_V2_CMD_EIBRS_LFENCE,	  false },
- 	{ "eibrs,retpoline",	SPECTRE_V2_CMD_EIBRS_RETPOLINE,	  false },
-+	{ "eibrs,bhi_dis",	SPECTRE_V2_CMD_EIBRS_BHI,	  false },
- 	{ "auto",		SPECTRE_V2_CMD_AUTO,		  false },
- 	{ "ibrs",		SPECTRE_V2_CMD_IBRS,              false },
- };
-@@ -1251,6 +1256,13 @@ static enum spectre_v2_mitigation_cmd __init spectre_v2_parse_cmdline(void)
- 		return SPECTRE_V2_CMD_AUTO;
- 	}
- 
-+	if (cmd == SPECTRE_V2_CMD_EIBRS_BHI &&
-+	    !boot_cpu_has(X86_FEATURE_BHI_CTRL)) {
-+		pr_err("%s selected but BHI not available. Switching to EIBRS_RETPOLINE\n",
-+		       mitigation_options[i].option);
-+		cmd = SPECTRE_V2_CMD_EIBRS_RETPOLINE;
-+	}
-+
- 	if ((cmd == SPECTRE_V2_CMD_RETPOLINE ||
- 	     cmd == SPECTRE_V2_CMD_RETPOLINE_LFENCE ||
- 	     cmd == SPECTRE_V2_CMD_RETPOLINE_GENERIC ||
-@@ -1264,7 +1276,8 @@ static enum spectre_v2_mitigation_cmd __init spectre_v2_parse_cmdline(void)
- 
- 	if ((cmd == SPECTRE_V2_CMD_EIBRS ||
- 	     cmd == SPECTRE_V2_CMD_EIBRS_LFENCE ||
--	     cmd == SPECTRE_V2_CMD_EIBRS_RETPOLINE) &&
-+	     cmd == SPECTRE_V2_CMD_EIBRS_RETPOLINE ||
-+	     cmd == SPECTRE_V2_CMD_EIBRS_BHI) &&
- 	    !boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
- 		pr_err("%s selected but CPU doesn't have eIBRS. Switching to AUTO select\n",
- 		       mitigation_options[i].option);
-@@ -1334,6 +1347,31 @@ static void __init spec_ctrl_disable_kernel_rrsba(void)
- 	}
- }
- 
-+/*
-+ * This prevents predicted targets of indirect branches executed in CPL0, CPL1,
-+ * or CPL2 from being selected based on branch history from branches executed in
-+ * CPL3.
-+ */
-+static void __init spec_ctrl_bhi_dis(void)
-+{
-+	u64 ia32_cap;
-+
-+	if (!boot_cpu_has(X86_FEATURE_BHI_CTRL))
-+		return;
-+
-+	ia32_cap = x86_read_arch_cap_msr();
-+
-+	/*
-+	 * On certain hardware there is no reason to set this bit in the MSR
-+	 * since it's ignored and BHI protections are always enabled anyway.
-+	 */
-+	if (ia32_cap & ARCH_CAP_BHI_NO)
-+		return;
-+
-+	x86_spec_ctrl_base |= SPEC_CTRL_BHI_DIS_S;
-+	write_spec_ctrl_current(x86_spec_ctrl_base, true);
-+}
-+
- static void __init spectre_v2_select_mitigation(void)
- {
- 	enum spectre_v2_mitigation_cmd cmd = spectre_v2_parse_cmdline();
-@@ -1398,6 +1436,10 @@ static void __init spectre_v2_select_mitigation(void)
- 	case SPECTRE_V2_CMD_EIBRS_RETPOLINE:
- 		mode = SPECTRE_V2_EIBRS_RETPOLINE;
- 		break;
-+
-+	case SPECTRE_V2_CMD_EIBRS_BHI:
-+		mode = SPECTRE_V2_EIBRS_BHI;
-+		break;
- 	}
- 
- 	if (mode == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
-@@ -1426,6 +1468,10 @@ static void __init spectre_v2_select_mitigation(void)
- 	case SPECTRE_V2_EIBRS_RETPOLINE:
- 		setup_force_cpu_cap(X86_FEATURE_RETPOLINE);
- 		break;
-+
-+	case SPECTRE_V2_EIBRS_BHI:
-+		spec_ctrl_bhi_dis();
-+		break;
- 	}
- 
- 	/*
-@@ -1435,7 +1481,8 @@ static void __init spectre_v2_select_mitigation(void)
- 	 */
- 	if (mode == SPECTRE_V2_EIBRS_LFENCE ||
- 	    mode == SPECTRE_V2_EIBRS_RETPOLINE ||
--	    mode == SPECTRE_V2_RETPOLINE)
-+	    mode == SPECTRE_V2_RETPOLINE ||
-+	    mode == SPECTRE_V2_EIBRS_BHI)
- 		spec_ctrl_disable_kernel_rrsba();
- 
- 	spectre_v2_enabled = mode;
-diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
-index fd44b54c90d5..9a8f0c086859 100644
---- a/arch/x86/kernel/cpu/scattered.c
-+++ b/arch/x86/kernel/cpu/scattered.c
-@@ -28,6 +28,7 @@ static const struct cpuid_bit cpuid_bits[] = {
- 	{ X86_FEATURE_EPB,		CPUID_ECX,  3, 0x00000006, 0 },
- 	{ X86_FEATURE_INTEL_PPIN,	CPUID_EBX,  0, 0x00000007, 1 },
- 	{ X86_FEATURE_RRSBA_CTRL,	CPUID_EDX,  2, 0x00000007, 2 },
-+	{ X86_FEATURE_BHI_CTRL,		CPUID_EDX,  4, 0x00000007, 2 },
- 	{ X86_FEATURE_CQM_LLC,		CPUID_EDX,  1, 0x0000000f, 0 },
- 	{ X86_FEATURE_CQM_OCCUP_LLC,	CPUID_EDX,  0, 0x0000000f, 1 },
- 	{ X86_FEATURE_CQM_MBM_TOTAL,	CPUID_EDX,  1, 0x0000000f, 1 },
-diff --git a/tools/arch/x86/include/asm/msr-index.h b/tools/arch/x86/include/asm/msr-index.h
-index 2eab6a3a8a8c..63f227aa9bf6 100644
---- a/tools/arch/x86/include/asm/msr-index.h
-+++ b/tools/arch/x86/include/asm/msr-index.h
-@@ -53,6 +53,8 @@
- #define SPEC_CTRL_SSBD			BIT(SPEC_CTRL_SSBD_SHIFT)	/* Speculative Store Bypass Disable */
- #define SPEC_CTRL_RRSBA_DIS_S_SHIFT	6	   /* Disable RRSBA behavior */
- #define SPEC_CTRL_RRSBA_DIS_S		BIT(SPEC_CTRL_RRSBA_DIS_S_SHIFT)
-+#define SPEC_CTRL_BHI_DIS_S_SHIFT	10	   /* Disable Branch History Injection behavior */
-+#define SPEC_CTRL_BHI_DIS_S		BIT(SPEC_CTRL_BHI_DIS_S_SHIFT)
- 
- #define MSR_IA32_PRED_CMD		0x00000049 /* Prediction Command */
- #define PRED_CMD_IBPB			BIT(0)	   /* Indirect Branch Prediction Barrier */
-@@ -149,6 +151,12 @@
- 						 * are restricted to targets in
- 						 * kernel.
- 						 */
-+#define ARCH_CAP_BHI_NO			BIT(20)	/*
-+						 * Predicted targets of CPL0
-+						 * indirect branches are not
-+						 * based on branch history from
-+						 * CPL3.
-+						 */
- 
- #define MSR_IA32_FLUSH_CMD		0x0000010b
- #define L1D_FLUSH			BIT(0)	/*
--- 
-2.25.1
+Done.  But with a very simple text:
 
+What:           /sys/bus/cxl/devices/endpointX/CDAT/cdat
+Date:           July, 2022
+KernelVersion:  v5.19
+Contact:        linux-cxl@vger.kernel.org
+Description:
+                (RO) Raw binary CDAT data.
+
+Is this enough?
+
+[snip]
+
+> > +
+> > +/* Device Scoped Memory Side Cache Information Structure */
+> > +#define CDAT_DSMSCIS_DW1_HANDLE		0x000000ff
+> > +#define CDAT_DSMSCIS_MEMORY_SIDE_CACHE_SIZE(entry) \
+> > +	((u64)((entry)[3]) << 32 | (entry)[2])
+> 
+> This looks sketchy for 2 reasons, there is no type safety on @entry, so
+> it could be anything, and it is referenced twice which is a bug waiting
+> to happen if this or any of the other macros that copy this pattern pass
+> a statement argument with side-effects like:
+> CDAT_DSMSCIS_MEMORY_SIDE_CACHE_SIZE(entry++).
+> 
+> > +#define CDAT_DSMSCIS_DW4_MEMORY_SIDE_CACHE_ATTRS 0xffffffff
+> > +
+> > +/* Device Scoped Initiator Structure */
+> > +#define CDAT_DSIS_DW1_FLAGS		0x000000ff
+> > +#define CDAT_DSIS_DW1_HANDLE		0x0000ff00
+> > +
+> > +/* Device Scoped EFI Memory Type Structure */
+> > +#define CDAT_DSEMTS_DW1_HANDLE		0x000000ff
+> > +#define CDAT_DSEMTS_DW1_EFI_MEMORY_TYPE_ATTR	0x0000ff00
+> > +#define CDAT_DSEMTS_DPA_OFFSET(entry)	((u64)((entry)[3]) << 32 | (entry)[2])
+> > +#define CDAT_DSEMTS_DPA_LENGTH(entry)	((u64)((entry)[5]) << 32 | (entry)[4])
+> 
+> More sketchy double array derefernces against an unspecified type. No
+> need to invent a new way to parse ACPI-like table data. CDAT parsing
+> should end up looking a lot like: drivers/acpi/numa/hmat.c. I.e. I would
+> expect the helpers in drivers/acpi/tables.c are repurposed to parse a
+> passed in CDAT data buffer rather than using acpi_get_table()
+> internally.
+> 
+> Lets drop patch 9 for now and all of these definitions. Leave all the
+> parsing to userspace via the bin_attr. Then we can circle back and build
+> up the CDAT parsing code when its ready to consume the data for QTG
+> assignment, and reuse the ACPI parsing code.
+> 
+> > +
+> > +/* Switch Scoped Latency and Bandwidth Information Structure */
+> > +#define CDAT_SSLBIS_DW1_DATA_TYPE	0x000000ff
+> > +#define CDAT_SSLBIS_BASE_UNIT(entry)	((u64)((entry)[3]) << 32 | (entry)[2])
+> > +#define CDAT_SSLBIS_ENTRY_PORT_X(entry, i) ((entry)[4 + (i) * 2] & 0x0000ffff)
+> > +#define CDAT_SSLBIS_ENTRY_PORT_Y(entry, i) (((entry)[4 + (i) * 2] & 0xffff0000) >> 16)
+> > +#define CDAT_SSLBIS_ENTRY_LAT_OR_BW(entry, i) ((entry)[4 + (i) * 2 + 1] & 0x0000ffff)
+> 
+> Yeah, all of these unused CDAT defintions can be deleted from this
+> patch.
+> 
+
+Done and patch 9 dropped.
+
+> > +
+> > +#define CXL_DOE_PROTOCOL_TABLE_ACCESS 2
+> > +
+> > +/**
+> > + * struct cxl_cdat - CXL CDAT data
+> > + *
+> > + * @table: cache of CDAT table
+> > + * @length: length of cached CDAT table
+> > + */
+> > +struct cxl_cdat {
+> > +	void *table;
+> > +	size_t length;
+> > +};
+> > +
+> > +#endif /* !__CXL_CDAT_H__ */
+> > diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+> > index c4c99ff7b55e..9232b806d051 100644
+> > --- a/drivers/cxl/core/pci.c
+> > +++ b/drivers/cxl/core/pci.c
+> > @@ -4,10 +4,12 @@
+> >  #include <linux/device.h>
+> >  #include <linux/delay.h>
+> >  #include <linux/pci.h>
+> > +#include <linux/pci-doe.h>
+> >  #include <cxlpci.h>
+> >  #include <cxlmem.h>
+> >  #include <cxl.h>
+> >  #include "core.h"
+> > +#include "cdat.h"
+> >  
+> >  /**
+> >   * DOC: cxl core pci
+> > @@ -458,3 +460,171 @@ int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm)
+> >  	return 0;
+> >  }
+> >  EXPORT_SYMBOL_NS_GPL(cxl_hdm_decode_init, CXL);
+> > +
+> > +static struct pci_doe_mb *find_cdat_mb(struct device *uport)
+> 
+> small naming nit, probably more places than this, but
+> s/find_cdat_mb/find_cdat_doe/ to make it clearly distinct from the
+> drivers/cxl/core/mbox.c infrastructure. I.e. I think "mailbox" is
+> implied by "doe".
+
+Good idea, mailbox (and mb) is overloaded.
+
+> 
+> > +{
+> > +	struct cxl_memdev *cxlmd;
+> > +	struct cxl_dev_state *cxlds;
+> > +	unsigned long index;
+> > +	void *entry;
+> > +
+> > +	if (!is_cxl_memdev(uport))
+> > +		return NULL;
+> 
+> If this only supports endpoints just call this from the part of
+> cxl_port_probe() that does:
+> 
+>   	if (is_cxl_endpoint(port)) {
+>   		struct cxl_memdev *cxlmd = to_cxl_memdev(port->uport);
+> 		...
+> 
+> ...and let the person who adds CDAT support for switches refactor it
+> later. I.e. find_cdat_doe() can just take a @cxlmd arg directly.
+>
+
+I was trying to make this generic for all ports originally.  But in the end we
+punted and said end points only since we don't have the plumbing for PCI port
+driver yet.  Won't I have to move this back when that comes online?
+
+>
+> It's
+> enough that this patch located the cdat cached buffer on 'struct
+> cxl_port' and the 'CDAT' sysfs attribute under
+> /sys/bus/cxl/device/cxl_portX.
+
+I'm not parsing this sentence?
+
+.../cxl_portX/...
+
+does not exist?
+
+root fedora /sys/bus/cxl/drivers
+12:46:39 > ll
+total 0
+drwxr-xr-x 2 root root 0 Jul 14 12:44 cxl_mem
+drwxr-xr-x 2 root root 0 Jul 14 12:44 cxl_nvdimm
+drwxr-xr-x 2 root root 0 Jul 14 12:44 cxl_nvdimm_bridge
+drwxr-xr-x 2 root root 0 Jul 14 12:44 cxl_port
+
+endpointX points back to the same place as /sys/bus/cxl/devices/endpointX
+
+root fedora /sys/bus/cxl/drivers/cxl_port
+12:47:03 > ll
+total 0
+...
+lrwxrwxrwx 1 root root    0 Jul 14 12:44 endpoint3 -> ../../../../devices/platform/ACPI0017:00/root0/port1/endpoint3
+...
+
+root fedora /sys/bus/cxl/devices
+12:47:59 > ll
+total 0
+...
+lrwxrwxrwx 1 root root 0 Jul 14 12:44 endpoint3 -> ../../../devices/platform/ACPI0017:00/root0/port1/endpoint3
+
+So what is different from what I'm doing?
+
+> 
+> > +
+> > +	cxlmd = to_cxl_memdev(uport);
+> > +	cxlds = cxlmd->cxlds;
+> > +
+> > +	xa_for_each(&cxlds->doe_mbs, index, entry) {
+> > +		struct pci_doe_mb *cur = entry;
+> > +
+> > +		if (pci_doe_supports_prot(cur, PCI_DVSEC_VENDOR_ID_CXL,
+> > +					  CXL_DOE_PROTOCOL_TABLE_ACCESS))
+> > +			return cur;
+> 
+> This has me thinking the doe_mbs xarray is overkill if all the other
+> DOEs are just enumerated and then ignored. When / if more DOEs need to
+> be handled then we can think about instantiating all of them and keeping
+> them aruond.  Otherwise, just do this pci_doe_supports_prot() check in
+> cxl_pci and throw away the rest. Then cxlds would just carry a single
+> @cdat_doe attribute for this first use of DOE capabilities in the
+> kernel.
+
+I was hoping that code could be lifted to the PCI side later.  For now CXL
+could handle all DOE's.
+
+At this point CXL devices are the only one using DOE in the kernel.  I know
+there are other PCI uses coming but for any 1 device only one mailbox object
+should be created or we are going to have the kernel drivers conflicting with
+each other.
+
+So I'd rather leave this series with CXL controlling the DOE mailboxes.  I
+think later we will need to lift the mailbox objects to PCI and CXL drivers
+will need to query into that side as needed.  There was a version like this
+before (Probably Jonathan's) and I think the aux bus moved it all over here.
+<sigh>  Sorry getting pretty confused myself at this point.
+
+The code change you suggest is easy to do but I think it would be better to
+land this and then lift all of the mailboxes to PCI in a follow on series.
+
+> 
+> > +	}
+> > +
+> > +	return NULL;
+> > +}
+> > +
+> > +#define CDAT_DOE_REQ(entry_handle)					\
+> > +	(FIELD_PREP(CXL_DOE_TABLE_ACCESS_REQ_CODE,			\
+> > +		    CXL_DOE_TABLE_ACCESS_REQ_CODE_READ) |		\
+> > +	 FIELD_PREP(CXL_DOE_TABLE_ACCESS_TABLE_TYPE,			\
+> > +		    CXL_DOE_TABLE_ACCESS_TABLE_TYPE_CDATA) |		\
+> > +	 FIELD_PREP(CXL_DOE_TABLE_ACCESS_ENTRY_HANDLE, (entry_handle)))
+> > +
+> > +static void cxl_doe_task_complete(struct pci_doe_task *task)
+> > +{
+> > +	complete(task->private);
+> > +}
+> > +
+> > +static int cxl_cdat_get_length(struct device *dev,
+> > +			       struct pci_doe_mb *cdat_mb,
+> > +			       size_t *length)
+> > +{
+> > +	u32 cdat_request_pl = CDAT_DOE_REQ(0);
+> > +	u32 cdat_response_pl[32];
+> > +	DECLARE_COMPLETION_ONSTACK(c);
+> > +	struct pci_doe_task task = {
+> > +		.prot.vid = PCI_DVSEC_VENDOR_ID_CXL,
+> > +		.prot.type = CXL_DOE_PROTOCOL_TABLE_ACCESS,
+> > +		.request_pl = &cdat_request_pl,
+> > +		.request_pl_sz = sizeof(cdat_request_pl),
+> > +		.response_pl = cdat_response_pl,
+> > +		.response_pl_sz = sizeof(cdat_response_pl),
+> > +		.complete = cxl_doe_task_complete,
+> > +		.private = &c,
+> > +	};
+> 
+> I think this wants to be macro'ized to something like:
+> 
+> #define DECLARE_PCI_DOE_TASK(vid, type, req, rsp, priv)
+
+I was thinking the same thing after you wanted the task init here too.
+
+Can I follow on with that work?  I think the following members need to be
+wrapped and hidden from the caller API.
+
+struct pci_doe_task {
+...
+        /* No need for the user to initialize these fields */
+        struct work_struct work;
+	struct pci_doe_mb *doe_mb;
+};
+
+Reworking that structure goes hand in hand with said macro.
+
+[snip]
+
+> >  
+> >  /**
+> >   * DOC: cxl objects
+> > @@ -267,6 +268,8 @@ struct cxl_nvdimm {
+> >   * @component_reg_phys: component register capability base address (optional)
+> >   * @dead: last ep has been removed, force port re-creation
+> >   * @depth: How deep this port is relative to the root. depth 0 is the root.
+> > + * @cdat: Cached CDAT data
+> > + * @cdat_sup: Is CDAT supported
+> 
+> That does not provide more information than the member name, how about?
+> 
+> "should a CDAT attribute be published in sysfs"
+
+Sounds good.
+
+But re-reading this 'cdat_available' seems like a better name all around.
+
+> 
+> >   */
+> >  struct cxl_port {
+> >  	struct device dev;
+> > @@ -278,6 +281,8 @@ struct cxl_port {
+> >  	resource_size_t component_reg_phys;
+> >  	bool dead;
+> >  	unsigned int depth;
+> > +	struct cxl_cdat cdat;
+> > +	bool cdat_sup;
+> 
+> Just spell out "supported", no need to save characters on this used once
+> attribute.
+
+ok.
+
+cdat_available?
+
+> 
+> >  };
+> >  
+> >  /**
+> > diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
+> > index fce1c11729c2..eec597dbe763 100644
+> > --- a/drivers/cxl/cxlpci.h
+> > +++ b/drivers/cxl/cxlpci.h
+> > @@ -74,4 +74,5 @@ static inline resource_size_t cxl_regmap_to_base(struct pci_dev *pdev,
+> >  int devm_cxl_port_enumerate_dports(struct cxl_port *port);
+> >  struct cxl_dev_state;
+> >  int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm);
+> > +void read_cdat_data(struct cxl_port *port);
+> >  #endif /* __CXL_PCI_H__ */
+> > diff --git a/drivers/cxl/port.c b/drivers/cxl/port.c
+> > index 3cf308f114c4..1ec34a159657 100644
+> > --- a/drivers/cxl/port.c
+> > +++ b/drivers/cxl/port.c
+> > @@ -49,6 +49,9 @@ static int cxl_port_probe(struct device *dev)
+> >  	if (IS_ERR(cxlhdm))
+> >  		return PTR_ERR(cxlhdm);
+> >  
+> > +	/* Cache the data early to ensure is_visible() works */
+> > +	read_cdat_data(port);
+> > +
+> >  	if (is_cxl_endpoint(port)) {
+> >  		struct cxl_memdev *cxlmd = to_cxl_memdev(port->uport);
+> >  		struct cxl_dev_state *cxlds = cxlmd->cxlds;
+> > @@ -78,10 +81,58 @@ static int cxl_port_probe(struct device *dev)
+> >  	return 0;
+> >  }
+> >  
+> > +static ssize_t cdat_read(struct file *filp, struct kobject *kobj,
+> > +			 struct bin_attribute *bin_attr, char *buf,
+> > +			 loff_t offset, size_t count)
+> > +{
+> > +	struct device *dev = kobj_to_dev(kobj);
+> > +	struct cxl_port *port = to_cxl_port(dev);
+> 
+> Just for completeness you can have an:
+> 
+>     if (!port->cdat_supported)
+> 	return -ENXIO;
+> 
+> ...to document expectations / backstop the is_bin_visible().
+
+Sure.
+
+Ira

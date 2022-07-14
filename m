@@ -2,62 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C01574814
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECEE5747FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237828AbiGNJN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35846 "EHLO
+        id S231131AbiGNJNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237769AbiGNJNp (ORCPT
+        with ESMTP id S229835AbiGNJNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:13:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9221BDEFA
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:13:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657790021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vFEqPGp+NKxYVquxWe+WRopSOG+4VsXY2hnw4jRQ99A=;
-        b=e/7pwKz0X18BnTra4lN8d7HIKKWPEmVzbDefghh/5smGUOVdQfqUVboyG4PcbQVyASlIea
-        MBsvVNsbE5XbKsN2mXldrDFqPDYx13itabdLDu99z84WneqmxXT086/AiNivLwziXLn8XO
-        F/Isxq/jrNTXdinF2oPlTfBDmZuMA5A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-3-bAGDFGcAMtSAtnM-GbzvkQ-1; Thu, 14 Jul 2022 05:13:38 -0400
-X-MC-Unique: bAGDFGcAMtSAtnM-GbzvkQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EBB8A85A581;
-        Thu, 14 Jul 2022 09:13:37 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.135])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AB7442166B26;
-        Thu, 14 Jul 2022 09:13:35 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 03/25] x86/hyperv: Update 'struct hv_enlightened_vmcs' definition
-Date:   Thu, 14 Jul 2022 11:13:05 +0200
-Message-Id: <20220714091327.1085353-4-vkuznets@redhat.com>
-In-Reply-To: <20220714091327.1085353-1-vkuznets@redhat.com>
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
+        Thu, 14 Jul 2022 05:13:09 -0400
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACF322B34;
+        Thu, 14 Jul 2022 02:13:08 -0700 (PDT)
+Received: from [10.88.19.41] (10.88.19.41) by mail-sz.amlogic.com (10.28.11.5)
+ with Microsoft SMTP Server id 15.1.2176.2; Thu, 14 Jul 2022 17:13:06 +0800
+Message-ID: <79ff63fc-dbd7-bc31-ebe7-7d15d121add1@amlogic.com>
+Date:   Thu, 14 Jul 2022 17:13:06 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH 4/4] dt-binding:perf: Add Amlogic DDR PMU
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chris Healy <cphealy@gmail.com>
+References: <20220712063641.2790997-1-jiucheng.xu@amlogic.com>
+ <20220712063641.2790997-4-jiucheng.xu@amlogic.com>
+ <94ab770b-8a8a-4299-a54e-2ff77afb9e04@arm.com>
+From:   Jiucheng Xu <jiucheng.xu@amlogic.com>
+In-Reply-To: <94ab770b-8a8a-4299-a54e-2ff77afb9e04@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Originating-IP: [10.88.19.41]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,72 +54,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Updated Hyper-V Enlightened VMCS specification lists several new
-fields for the following features:
 
-- PerfGlobalCtrl
-- EnclsExitingBitmap
-- Tsc Scaling
-- GuestLbrCtl
-- CET
-- SSP
-
-Update the definition. The updated definition is available only when
-CPUID.0x4000000A.EBX BIT(0) is '1'. Add a define for it as well.
-
-Note: The latest TLFS is available at
-https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/tlfs
-
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- arch/x86/include/asm/hyperv-tlfs.h | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index 6f0acc45e67a..ebc27017fa48 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -138,6 +138,17 @@
- #define HV_X64_NESTED_GUEST_MAPPING_FLUSH		BIT(18)
- #define HV_X64_NESTED_MSR_BITMAP			BIT(19)
- 
-+/*
-+ * Nested quirks. These are HYPERV_CPUID_NESTED_FEATURES.EBX bits.
-+ *
-+ * Note: HV_X64_NESTED_EVMCS1_2022_UPDATE is not currently documented in any
-+ * published TLFS version. When the bit is set, nested hypervisor can use
-+ * 'updated' eVMCSv1 specification (perf_global_ctrl, s_cet, ssp, lbr_ctl,
-+ * encls_exiting_bitmap, tsc_multiplier fields which were missing in 2016
-+ * specification).
-+ */
-+#define HV_X64_NESTED_EVMCS1_2022_UPDATE		BIT(0)
-+
- /*
-  * This is specific to AMD and specifies that enlightened TLB flush is
-  * supported. If guest opts in to this feature, ASID invalidations only
-@@ -559,9 +570,20 @@ struct hv_enlightened_vmcs {
- 	u64 partition_assist_page;
- 	u64 padding64_4[4];
- 	u64 guest_bndcfgs;
--	u64 padding64_5[7];
-+	u64 guest_ia32_perf_global_ctrl;
-+	u64 guest_ia32_s_cet;
-+	u64 guest_ssp;
-+	u64 guest_ia32_int_ssp_table_addr;
-+	u64 guest_ia32_lbr_ctl;
-+	u64 padding64_5[2];
- 	u64 xss_exit_bitmap;
--	u64 padding64_6[7];
-+	u64 encls_exiting_bitmap;
-+	u64 host_ia32_perf_global_ctrl;
-+	u64 tsc_multiplier;
-+	u64 host_ia32_s_cet;
-+	u64 host_ssp;
-+	u64 host_ia32_int_ssp_table_addr;
-+	u64 padding64_6;
- } __packed;
- 
- #define HV_VMX_ENLIGHTENED_CLEAN_FIELD_NONE			0
--- 
-2.35.3
-
+On 7/12/2022 8:54 PM, Robin Murphy wrote:
+> [ EXTERNAL EMAIL ]
+>
+> On 2022-07-12 07:36, Jiucheng Xu wrote:
+>> Add binding documentation for the Amlogic G12 series DDR
+>> performance monitor unit.
+>>
+>> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
+>> ---
+>>   .../devicetree/bindings/perf/aml-ddr-pmu.yaml | 51 +++++++++++++++++++
+>>   MAINTAINERS                                   |  1 +
+>>   2 files changed, 52 insertions(+)
+>>   create mode 100644 
+>> Documentation/devicetree/bindings/perf/aml-ddr-pmu.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/perf/aml-ddr-pmu.yaml 
+>> b/Documentation/devicetree/bindings/perf/aml-ddr-pmu.yaml
+>> new file mode 100644
+>> index 000000000000..c586b4ab4009
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/perf/aml-ddr-pmu.yaml
+>> @@ -0,0 +1,51 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/perf/aml-ddr-pmu.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Amlogic G12 DDR performance monitor
+>> +
+>> +maintainers:
+>> +  - Jiucheng Xu <jiucheng.xu@amlogic.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    oneOf:
+>> +      - enum:
+>> +          - aml,g12-ddr-pmu
+>> +      - items:
+>> +          - enum:
+>> +              - aml,g12-ddr-pmu
+>> +          - const: aml,g12-ddr-pmu
+>
+> Judging by what the driver actually implements, this should probably be:
+>
+>   compatible:
+>     items:
+>       - enum:
+>         - amlogic,g12a-ddr-pmu
+>         - amlogic,g12b-ddr-pmu
+>         - amlogic,sm1-ddr-pmu
+>       - const: amlogic,g12-ddr-pmu
+>
+> There doesn't seem much point in allowing only the common compatible 
+> without a SoC-specific identifier. Note also that "aml," is not the 
+> documented vendor prefix.
+Okay, I finally know what you mean.
+>
+>> +
+>> +  reg:
+>> +    maxItems: 2
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - model
+>
+> Remove this, and use the compatible strings properly as above.
+Okay. I will make the change.
+>
+>> +  - dmc_nr
+>> +  - chann_nr
+>
+> I suspect those could probably be inferred from the correct compatible 
+> string, but if not (i.e. within one SoC you have multiple PMUs 
+> supporting the same events but with different numbers of usable 
+> channels), then document what exactly they mean.
+>
+Yes, as you mentioned, these could be inferred from the compatible 
+string. I will make the change.
+>> +  - reg
+>> +  - interrupts
+>> +  - interrupt-names
+>
+> As mentioned in the driver review, if you really want to use a named 
+> interrupt (which should usually be unnecessary when there's only one), 
+> it has to be a defined name. DT is not a mechanism for overriding what 
+> Linux shows in /proc/interrupts.
+>
+> Thanks,
+> Robin.
+>
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +          ddr_pmu: ddr_pmu {
+>> +                  compatible = "amlogic,g12-ddr-pmu";
+>> +                  model = "g12a";
+>> +                  dmc_nr = <1>;
+>> +                  chann_nr = <4>;
+>> +                  reg = <0x0 0xff638000 0x0 0x100
+>> +                         0x0 0xff638c00 0x0 0x100>;
+>> +                  interrupts = <GIC_SPI 52 IRQ_TYPE_EDGE_RISING>;
+>> +                  interrupt-names = "ddr_pmu";
+>> +          };
+>> +    };
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index fd2a56a339b4..ac0a1df4622d 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -1055,6 +1055,7 @@ M:    Jiucheng Xu <jiucheng.xu@amlogic.com>
+>>   S:    Supported
+>>   W:    http://www.amlogic.com
+>>   F:    Documentation/admin-guide/perf/aml-ddr-pmu.rst
+>> +F:    Documentation/devicetree/bindings/perf/aml-ddr-pmu.yaml
+>>   F:    drivers/perf/amlogic/
+>>   F:    include/soc/amlogic/
+>

@@ -2,231 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84304574C3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 588F3574C3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238962AbiGNLf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
+        id S238972AbiGNLfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238263AbiGNLf0 (ORCPT
+        with ESMTP id S238965AbiGNLfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:35:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BDA5927B;
-        Thu, 14 Jul 2022 04:35:25 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 11:35:22 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657798524;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lyytb82cHSEU/hH2o7kuQh+9vqNnK4SAy+yvsPV+az0=;
-        b=iTGSL+9xwc6aL0eS1hwCak4RHxJhAuVN8Wezxu29a0SlZhka16ZOsRjqoLBaTfRdzFS7Fp
-        Aral1A7AWILCfAINjFwyWtjeQ4+Em6jnT/iPqirpYztKUmoXOL+MUPOLnZPQIY1+c5v3Tf
-        pGRGfrCc+FyVfkLFWziZWL/v1LzHwMOjqAJAHh3DX60ugoMAwzWs8YBTx/0+iXL9ilyIm2
-        jZ9sGZgxnYI7NJg2uVpZMFE/V6nFeajheKI8y+TtshzNYSDyydcy/F4r6LHi5cU9F/9LNq
-        2MXALdD+KARM+m2vxDeE+Xmk4AA/l0huVfo6BNxwyYPVFHvfD6pMPiauoVvafQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657798524;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lyytb82cHSEU/hH2o7kuQh+9vqNnK4SAy+yvsPV+az0=;
-        b=daldFeg1uz1U5BMf1uMc8qCvR8VzBhVlL6/NiYDVykgtWi2LjZ7dCXnGw2UbNr25lQmwCA
-        FVxOprLuHbpSJrCg==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] perf/core: Fix data race between
- perf_event_set_output() and perf_mmap_close()
-Cc:     Yang Jihong <yangjihong1@huawei.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <YsQ3jm2GR38SW7uD@worktop.programming.kicks-ass.net>
-References: <YsQ3jm2GR38SW7uD@worktop.programming.kicks-ass.net>
+        Thu, 14 Jul 2022 07:35:34 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B62599FE;
+        Thu, 14 Jul 2022 04:35:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657798533; x=1689334533;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DyXB1n5qWup8pCu/YKdjbcr2alBTXtII9082twyRCsM=;
+  b=hDdb4nrQEOYt24tjOm6zXRRmcqoFWdkQv/27gmGsSw2RrfyZ3FAR0wCj
+   nmf7/EBWvkhWJSXqRkNB70Uqkv+TdswYH8NXnE5UjZQX6UBqZ9G2ZxzqE
+   8pf5+34k+5PQl2RlcHgByN3VhxzqqsQWSQ4rdzjnZqIi5gnGlGP0aBLhU
+   06jiy6vPEd0uCqxFJm/xey/HlVfht8VwvgY8xoU7IeEGxUzKyaKggtQRu
+   QXrwKr4inzAEd893ot42PcsP/nOqBEJhpdjNYEJbPVZs8k0ApNNiETEer
+   a9HP3L+y24oVYVUmMhwKJxojRce9VnRiIXk2yK5jBJT5DZcKoHjaH6c6y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="286229716"
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="286229716"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 04:35:32 -0700
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="546233797"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 04:35:29 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oBx7u-001DCM-2S;
+        Thu, 14 Jul 2022 14:35:26 +0300
+Date:   Thu, 14 Jul 2022 14:35:26 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Luca Ellero <luca.ellero@brickedbrain.com>
+Cc:     dmitry.torokhov@gmail.com, daniel@zonque.org,
+        m.felsch@pengutronix.de, u.kleine-koenig@pengutronix.de,
+        mkl@pengutronix.de, miquel.raynal@bootlin.com, imre.deak@nokia.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luca Ellero <l.ellero@asem.it>
+Subject: Re: [PATCH 3/3] ads7846: don't check penirq immediately for 7845
+Message-ID: <Ys//fqwvh9hjP0RZ@smile.fi.intel.com>
+References: <20220714084319.107334-1-luca.ellero@brickedbrain.com>
+ <20220714084319.107334-4-luca.ellero@brickedbrain.com>
 MIME-Version: 1.0
-Message-ID: <165779852269.15455.12378628877885813176.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714084319.107334-4-luca.ellero@brickedbrain.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/urgent branch of tip:
+On Thu, Jul 14, 2022 at 10:43:19AM +0200, Luca Ellero wrote:
+> From: Luca Ellero <l.ellero@asem.it>
+> 
+> To discard false readings, one should use "ti,penirq-recheck-delay-usecs".
+> Checking get_pendown_state() at the beginning, most of the time fails
+> causing malfunctioning.
 
-Commit-ID:     68e3c69803dada336893640110cb87221bb01dcf
-Gitweb:        https://git.kernel.org/tip/68e3c69803dada336893640110cb87221bb01dcf
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 05 Jul 2022 15:07:26 +02:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 13 Jul 2022 11:29:12 +02:00
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-perf/core: Fix data race between perf_event_set_output() and perf_mmap_close()
+> Signed-off-by: Luca Ellero <l.ellero@asem.it>
+> ---
+>  drivers/input/touchscreen/ads7846.c | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
+> 
+> diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
+> index 9e15cdf6faa0..122d3a13b7c5 100644
+> --- a/drivers/input/touchscreen/ads7846.c
+> +++ b/drivers/input/touchscreen/ads7846.c
+> @@ -843,14 +843,8 @@ static void ads7846_report_state(struct ads7846 *ts)
+>  	if (x == MAX_12BIT)
+>  		x = 0;
+>  
+> -	if (ts->model == 7843) {
+> +	if (ts->model == 7843 || ts->model == 7845) {
+>  		Rt = ts->pressure_max / 2;
+> -	} else if (ts->model == 7845) {
+> -		if (get_pendown_state(ts))
+> -			Rt = ts->pressure_max / 2;
+> -		else
+> -			Rt = 0;
+> -		dev_vdbg(&ts->spi->dev, "x/y: %d/%d, PD %d\n", x, y, Rt);
+>  	} else if (likely(x && z1)) {
+>  		/* compute touch pressure resistance using equation #2 */
+>  		Rt = z2;
+> -- 
+> 2.25.1
+> 
 
-Yang Jihing reported a race between perf_event_set_output() and
-perf_mmap_close():
+-- 
+With Best Regards,
+Andy Shevchenko
 
-	CPU1					CPU2
 
-	perf_mmap_close(e2)
-	  if (atomic_dec_and_test(&e2->rb->mmap_count)) // 1 - > 0
-	    detach_rest = true
-
-						ioctl(e1, IOC_SET_OUTPUT, e2)
-						  perf_event_set_output(e1, e2)
-
-	  ...
-	  list_for_each_entry_rcu(e, &e2->rb->event_list, rb_entry)
-	    ring_buffer_attach(e, NULL);
-	    // e1 isn't yet added and
-	    // therefore not detached
-
-						    ring_buffer_attach(e1, e2->rb)
-						      list_add_rcu(&e1->rb_entry,
-								   &e2->rb->event_list)
-
-After this; e1 is attached to an unmapped rb and a subsequent
-perf_mmap() will loop forever more:
-
-	again:
-		mutex_lock(&e->mmap_mutex);
-		if (event->rb) {
-			...
-			if (!atomic_inc_not_zero(&e->rb->mmap_count)) {
-				...
-				mutex_unlock(&e->mmap_mutex);
-				goto again;
-			}
-		}
-
-The loop in perf_mmap_close() holds e2->mmap_mutex, while the attach
-in perf_event_set_output() holds e1->mmap_mutex. As such there is no
-serialization to avoid this race.
-
-Change perf_event_set_output() to take both e1->mmap_mutex and
-e2->mmap_mutex to alleviate that problem. Additionally, have the loop
-in perf_mmap() detach the rb directly, this avoids having to wait for
-the concurrent perf_mmap_close() to get around to doing it to make
-progress.
-
-Fixes: 9bb5d40cd93c ("perf: Fix mmap() accounting hole")
-Reported-by: Yang Jihong <yangjihong1@huawei.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Yang Jihong <yangjihong1@huawei.com>
-Link: https://lkml.kernel.org/r/YsQ3jm2GR38SW7uD@worktop.programming.kicks-ass.net
----
- kernel/events/core.c | 45 +++++++++++++++++++++++++++++--------------
- 1 file changed, 31 insertions(+), 14 deletions(-)
-
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 80782cd..d2b3549 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -6253,10 +6253,10 @@ again:
- 
- 		if (!atomic_inc_not_zero(&event->rb->mmap_count)) {
- 			/*
--			 * Raced against perf_mmap_close() through
--			 * perf_event_set_output(). Try again, hope for better
--			 * luck.
-+			 * Raced against perf_mmap_close(); remove the
-+			 * event and try again.
- 			 */
-+			ring_buffer_attach(event, NULL);
- 			mutex_unlock(&event->mmap_mutex);
- 			goto again;
- 		}
-@@ -11825,14 +11825,25 @@ err_size:
- 	goto out;
- }
- 
-+static void mutex_lock_double(struct mutex *a, struct mutex *b)
-+{
-+	if (b < a)
-+		swap(a, b);
-+
-+	mutex_lock(a);
-+	mutex_lock_nested(b, SINGLE_DEPTH_NESTING);
-+}
-+
- static int
- perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
- {
- 	struct perf_buffer *rb = NULL;
- 	int ret = -EINVAL;
- 
--	if (!output_event)
-+	if (!output_event) {
-+		mutex_lock(&event->mmap_mutex);
- 		goto set;
-+	}
- 
- 	/* don't allow circular references */
- 	if (event == output_event)
-@@ -11870,8 +11881,15 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
- 	    event->pmu != output_event->pmu)
- 		goto out;
- 
-+	/*
-+	 * Hold both mmap_mutex to serialize against perf_mmap_close().  Since
-+	 * output_event is already on rb->event_list, and the list iteration
-+	 * restarts after every removal, it is guaranteed this new event is
-+	 * observed *OR* if output_event is already removed, it's guaranteed we
-+	 * observe !rb->mmap_count.
-+	 */
-+	mutex_lock_double(&event->mmap_mutex, &output_event->mmap_mutex);
- set:
--	mutex_lock(&event->mmap_mutex);
- 	/* Can't redirect output if we've got an active mmap() */
- 	if (atomic_read(&event->mmap_count))
- 		goto unlock;
-@@ -11881,6 +11899,12 @@ set:
- 		rb = ring_buffer_get(output_event);
- 		if (!rb)
- 			goto unlock;
-+
-+		/* did we race against perf_mmap_close() */
-+		if (!atomic_read(&rb->mmap_count)) {
-+			ring_buffer_put(rb);
-+			goto unlock;
-+		}
- 	}
- 
- 	ring_buffer_attach(event, rb);
-@@ -11888,20 +11912,13 @@ set:
- 	ret = 0;
- unlock:
- 	mutex_unlock(&event->mmap_mutex);
-+	if (output_event)
-+		mutex_unlock(&output_event->mmap_mutex);
- 
- out:
- 	return ret;
- }
- 
--static void mutex_lock_double(struct mutex *a, struct mutex *b)
--{
--	if (b < a)
--		swap(a, b);
--
--	mutex_lock(a);
--	mutex_lock_nested(b, SINGLE_DEPTH_NESTING);
--}
--
- static int perf_event_set_clock(struct perf_event *event, clockid_t clk_id)
- {
- 	bool nmi_safe = false;

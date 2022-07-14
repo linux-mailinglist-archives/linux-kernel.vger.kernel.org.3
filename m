@@ -2,50 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DB257504C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1E457504E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239459AbiGNOFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
+        id S238713AbiGNOGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbiGNOFn (ORCPT
+        with ESMTP id S231844AbiGNOGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:05:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2A5382;
-        Thu, 14 Jul 2022 07:05:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0402EB8259F;
-        Thu, 14 Jul 2022 14:05:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92FCFC34114;
-        Thu, 14 Jul 2022 14:05:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657807535;
-        bh=D5GgF02NPdE9LjaZDIxMtrmQj0pAf83Dl48OJxwjnTU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mWU3J659D19e9YIWg5I+0qFf1bBw1wGqqd5y/M9yVoW5a4OGi4ZJ9Ojz24qMTq+Ok
-         V7/5H+zN0hGakxWi4FY9FekRrtApFVryRLB7novLvm/SvxjwNDQY3XhaT+X8Z2yPWK
-         tlbIUFanj6nrRUEkdR+1hm6WEoTs17i3Jyi+8DPAdycb690evsjOYbxve7lUFOaXuz
-         TBFvdoJGgjuH4MKhxliNEugBEeNI7CjSSSeQJTelegaKl86JVx91QADcYlsvTVrrYL
-         DXMUhh19PhlCNs0d9NN1lDqtdOkSTexFLHR507pbMuA/gGnhU7gqj2o/gGQN2sSuAx
-         bsTO0200PsvjQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oBzTI-0007zu-Ul; Thu, 14 Jul 2022 16:05:41 +0200
-Date:   Thu, 14 Jul 2022 16:05:40 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial fixes for 5.19-rc7
-Message-ID: <YtAitIrTRRVkaUKJ@hovoldconsulting.com>
+        Thu, 14 Jul 2022 10:06:04 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B927388
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:06:03 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id m16so2532753edb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dsg8YYc09ufj/733yPHJPZ/Qpv37mtovDB2OzYPiOCE=;
+        b=iyA5BWSyZmGW4efDa6L9cV0aNwgKlR+5yS7SzaiI9KYAEnIuWEyZXLb7TSJvCHKTTu
+         EzyMVH+I+dhprih3HMM+Hh2bJ+uh9pi1OuSVBXLvVHU1Qn+0MqxUiXL2Z+otHuexdKzr
+         k4CscznuGXiGQWNNKzf3DZ/VSTXcuboA2aCNYRoVnN4zLbOO+5kwVqFB4bIXk7mobSfk
+         l4UTmYdXVO4r0KKxVQyqUgMaRkk7rnFqk6lB7vQOBLWdnU2hEevkbfockM/5TtEBGvg0
+         OcjS+oX7HD1V1v5vYkVDoer7flIyGJR3QpzXsn3DlY1/gjscA4nkX2YtM+uYz2Z9YOPh
+         HHrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dsg8YYc09ufj/733yPHJPZ/Qpv37mtovDB2OzYPiOCE=;
+        b=gwXXdjwgPiReqV2f1Sh43Imiuq6ol7BW35AaoTx1qaoEbwZwA1n+25UxC/PH9Of/WJ
+         dzr1VXft/etr+VsiArDwSGRdmS7UgV5MM1M31nU9rrvejkhkD1rbXwonMUwGO2Wfyvkh
+         jGPnJPssCjfYYMKgE4Va8KhiKnD+ljrNfDx+giDZb0KizYyMvOiP6UVP9xAuySAaaldS
+         vGOT7jEUrIyWCdJbMC2eOD4CosfxElrDYWSTEcm4j9NfGNfYxtMLD/Eho4tHxUH8h8eY
+         u1OVzUX1qXi49ahEMJazxCa5KmhbqNuCvCNJEuxAh4gig/p4dChOBGUmPLgya2jERAS2
+         z3sw==
+X-Gm-Message-State: AJIora/cliJAtTx3au47CWnGlApk/Kf/QFc2rhTa2apsMcNpCv+hBtoX
+        PK0eBVTczfZCQIixzwoXBK5ipJotl5Wmq0YLunEIrQ==
+X-Google-Smtp-Source: AGRyM1vX01PFbMINeoOPTOuuGCFZGYjM8LyoidrJ7hG1Tp+ZGVJW1QxJ9117n1TmMCi2JTzT4+sr76nJbMp6U7tiyLM=
+X-Received: by 2002:a05:6402:1d53:b0:43a:9ba7:315b with SMTP id
+ dz19-20020a0564021d5300b0043a9ba7315bmr12606977edb.350.1657807561607; Thu, 14
+ Jul 2022 07:06:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <CA+G9fYtOX-6=f70FA5PuDVA=kX=2L4spXKXS8=LHkUphafXowg@mail.gmail.com>
+ <Ys1g8PH4M2W7Z50U@sirena.org.uk> <CA+G9fYu7mJ6X3_xhboODP_cjABE4QTJCON_NMduQ60x4Z7N78Q@mail.gmail.com>
+ <Ys/9TSV5muvKXN6W@FVFF77S0Q05N> <YtABEDylGJkYLXrJ@sirena.org.uk>
+ <YtASzuHo1MXe5LJH@FVFF77S0Q05N.cambridge.arm.com> <YtAU1AHLLgK/v7RP@FVFF77S0Q05N.cambridge.arm.com>
+ <YtAcW9DRrdun/pW9@FVFF77S0Q05N.cambridge.arm.com>
+In-Reply-To: <YtAcW9DRrdun/pW9@FVFF77S0Q05N.cambridge.arm.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 14 Jul 2022 19:35:50 +0530
+Message-ID: <CA+G9fYvmrraS7ANdRA0XDoM-u-oVvcHFWsrFuBya9Es_WN3fkw@mail.gmail.com>
+Subject: Re: FVP: kernel BUG at arch/arm64/kernel/traps.c:497 - Internal
+ error: Oops - BUG: 0
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Aishwarya TCV <Aishwarya.TCV@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,29 +78,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
+Hi Mark,
 
-  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
+On Thu, 14 Jul 2022 at 19:09, Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Thu, Jul 14, 2022 at 02:06:28PM +0100, Mark Rutland wrote:
+>
+> > ... and I've just reproduced the issue by running the script from a different
+> > directory, since apprarently the semihosting interface just grabs the file from
+> > the current directory.
+> >
+> > I'm pretty sure this means that *something* is clobbering the Image early on
+> > during boot, and the semihisting loading happens to refresh it.
+>
+> I had a go with my own kernel built from my arm64/traps/rework branch:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/traps/rework
+>
+> ... and Naresh's config:
+>
+>   https://builds.tuxbuild.com/2BnQMpJj3kDTJXoCwd2pY5gW9CN/config
+>
+> When *only* using the initial loading into memory, that blows up in stackdepot
+> and with a subsequent bogus pointer dereference (full log below), and when
+> loaded via semihosting that just works. Note that my kernel is based on the
+> arm64 for-next/core branch, which itself is based on v5.19-rc3.
+>
+> My failing kernel Image is ~47M, as is Naresh's original Image. When using
+> smaller Images (as large as 43M so far), I don't see any issues.
+>
+> I also note that if I enable KASAN_OUTLINE, the kernel is so big that it
+> clobbers the DTB, and cannot be booted. So this looks liek a problem with tha
+> arbitrary placement / limits chosen for U-Boot being too small, and this is not
+> a kernel bug.
 
-are available in the Git repository at:
+Now I have understood the reason.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.19-rc7
+> Naresh, please can you fix your boot flow before reporting any further issues?
 
-for you to fetch changes up to 7c239a071d1f04b7137789810807b4108d475c72:
+Yes.
 
-  USB: serial: ftdi_sio: add Belimo device ids (2022-07-13 08:20:32 +0200)
+> This sort of corruption will manifest in a number of ways, and we need to rule
+> that out for any other bug reports.
 
-----------------------------------------------------------------
-USB-serial fixes for 5.19-rc7
+Any further reports I will do needful initial investigation.
 
-Here are a couple of new device ids for ftdi_sio.
-
-Everything has been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Lucien Buchmann (1):
-      USB: serial: ftdi_sio: add Belimo device ids
-
- drivers/usb/serial/ftdi_sio.c     | 3 +++
- drivers/usb/serial/ftdi_sio_ids.h | 6 ++++++
- 2 files changed, 9 insertions(+)
+- Naresh

@@ -2,165 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D4D575227
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F32C575228
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbiGNPo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
+        id S239169AbiGNPph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiGNPo4 (ORCPT
+        with ESMTP id S229498AbiGNPpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:44:56 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A982AE4E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:44:55 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 8AD5D34825;
-        Thu, 14 Jul 2022 15:44:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1657813492; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 14 Jul 2022 11:45:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 031BEAE4E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:45:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657813533;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=XQWaVdLD70toOI+SR3wOUg+mBWXwEMBEZLfRcTC1fD4=;
-        b=eSEpnnGxLoQoppy4ZF4AWBkl01L7v147/n6GDqO20lzvHFLaw0Cq9Ii88MkiKJN333Pfud
-        B8mQQnffJ/UJoZ2iSs4jbM267vhxBEIM5BPZxIZ379oCAoFLiDGJEA8G7VQ35+z79SqnXL
-        mHxg1642pmQlZ1aqcHrqJ4yX1rTrq4w=
-Received: from suse.cz (pathway.suse.cz [10.100.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3FDCA2C141;
-        Thu, 14 Jul 2022 15:44:52 +0000 (UTC)
-Date:   Thu, 14 Jul 2022 17:44:52 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Chris Down <chris@chrisdown.name>
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: Re: design: was: Re: [RFC PATCH v2] printk: console: Allow each
- console to have its own loglevel
-Message-ID: <20220714154452.GB24338@pathway.suse.cz>
-References: <YoeQLxhDeIk4VSmx@chrisdown.name>
- <YshL2M8VdIEONDdc@alley>
- <Ys7bb8+/G0iMWfzb@chrisdown.name>
+        bh=/dzIwA4vz64Fdq+Tec7zAI7IQ5K1OCYtjvQ2rzb36hs=;
+        b=DsYEujlzYulUcmYfnNdw8LLUx8anYfvcgDzGMYpKssrYQHIRbaNWdoyTEQFK5KSOpIaqSv
+        b79LqTfdSYdImb/8pX0oeavQFWUJcWAGwoU8JLP73oV9hYKPVsUbbhu+BEQrNuR69KrBqt
+        PA30BqDMYq2oIbVAJVGXAt7sgytb39A=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-265-yAej7VN4OSKnoci9ODsLlg-1; Thu, 14 Jul 2022 11:45:32 -0400
+X-MC-Unique: yAej7VN4OSKnoci9ODsLlg-1
+Received: by mail-qv1-f70.google.com with SMTP id li2-20020a0562145e0200b0047350bbed70so1448513qvb.19
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:45:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/dzIwA4vz64Fdq+Tec7zAI7IQ5K1OCYtjvQ2rzb36hs=;
+        b=vxvAbUkq5hBqJs+mfT905dzFEJsXVJ0EoBJ7ntTKzAGJyKRW1cQ/u66LNuiEKky96d
+         BK5eaWBoyjf+1rZmoJQeBXldJIWYI7ZTrKkKrBDVRj6NzpkpBaeo+bVMrXMqAkMKIxPq
+         2EAFMvVBYt9kz2tRETyB6onHHCDq+fyY8OCk6krIu28kBrRkA6R1IRifoXvUQLS+bTVh
+         7oRN293dlTq0V8dex+4JJ8QL/uH2DixtzA6Bn4/sLZz5JKKWX5C8OA1XGJDcqH+ZN3g9
+         DW4pnqRPQHHHlfw/1Lxl7mKdf9UlrPTiIp/duUH1JES9OiLA33fnNjjtet1+DUoDwNy6
+         jqhw==
+X-Gm-Message-State: AJIora8eCQQK/HoE3r3aU3rMCysAX1oBdihKQ/FySjF+SHwBi7AXDjNU
+        uolv8sKdSJZn//bZ2A2Qfx34w23lm7SW4lHh57r8XJU2x6cRueKCDqtJYsAoKgyklpooDzZlqJ0
+        zZOpG6zTkQ+QSJ3JJ8H7csuf9
+X-Received: by 2002:a0c:8084:0:b0:472:f26b:59f7 with SMTP id 4-20020a0c8084000000b00472f26b59f7mr8127384qvb.62.1657813531942;
+        Thu, 14 Jul 2022 08:45:31 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t6oEt31b5+FHGmtHxJUjLrXvN2EA7KeRUBkXyvC1Ec9eZLkht9J5r7hUNUwO6xniY/dDBq8Q==
+X-Received: by 2002:a0c:8084:0:b0:472:f26b:59f7 with SMTP id 4-20020a0c8084000000b00472f26b59f7mr8127369qvb.62.1657813531765;
+        Thu, 14 Jul 2022 08:45:31 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
+        by smtp.gmail.com with ESMTPSA id w22-20020ac843d6000000b0031eb02307a9sm1708746qtn.80.2022.07.14.08.45.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 08:45:31 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 11:45:29 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm/hugetlb: avoid corrupting page->mapping in
+ hugetlb_mcopy_atomic_pte
+Message-ID: <YtA6GcRwP7iiJScG@xz-m1.local>
+References: <20220712130542.18836-1-linmiaohe@huawei.com>
+ <Ys2xyCUnqpJt0eIo@monkey>
+ <Ys7ViSsOxLaQJIfy@xz-m1.local>
+ <Ys7uXHdzzFezUub5@xz-m1.local>
+ <CAJHvVcgqb6R6ePMbgmA8LpMpMgrGWie9ZCTuR4MA77GTvi4XAw@mail.gmail.com>
+ <Ys9XAbuxkDUlnmv0@monkey>
+ <CAJHvVci9iij+eDV-EWDOtjmWFYo0H+1LkzKBp6=XOpwDA4Jh-g@mail.gmail.com>
+ <1a27f20c-ed69-398a-5e6d-bb7ec5f14f5f@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Ys7bb8+/G0iMWfzb@chrisdown.name>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1a27f20c-ed69-398a-5e6d-bb7ec5f14f5f@huawei.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-07-13 15:49:19, Chris Down wrote:
-> Petr Mladek writes:
-> > IMHO, this makes things too complicated. A better solution is to do
-> > not allow to set any log level below this limit in the first place.
-> 
-> Hmm, how should we then handle the case that you have set the per-console
-> loglevel to 3 and minimum_console_loglevel later gets changed to 5?
-> 
-> We had this problem when designing cgroup v2 as well, for example in cases
-> where a child requests a higher memory protection than can be afforded by
-> the parent, or where a child sets a higher memory limit than a parent
-> specifies. We went back and forth and eventually settled on allowing these,
-> because the alternatives seemed difficult to reason about or unnecessarily
-> inflexible.
+On Thu, Jul 14, 2022 at 06:09:49PM +0800, Miaohe Lin wrote:
+> As discussed in another thread, we might call page_dup_file_rmap for newly
+> allocated page (regardless of this patch). So should we come up a seperate
+> patch to call page_add_file_rmap here instead?
 
-I see.
+Hmm, why we need page_add_file_rmap() even if a new page allocated?  Say,
+we're at least also using page_dup_file_rmap() in hugetlb_no_page().
 
-> From the per-console loglevel side, one option is to return ERANGE or EINVAL
-> on values we know won't be honoured when setting the per-console loglevel.
-> The problem with that is that it doesn't allow to specify a "desired" limit
-> in case the external factors (in this case, the minimum loglevel) change.
-> This is even more difficult to reason about in our case because the minimum
-> loglevel may be changed dynamically outside of user control.
->
-> Another is to disallow setting the minimum loglevel without first resetting
-> consoles which are above the value that is desired to be set, but this seems
-> really cumbersome, and again it doesn't account for cases like panic() and
-> elsewhere where we blindly change it anyway.
->
-> Maybe you have another idea about how it should work in the case that the
-> minimum loglevel would take precedence over an existing loglevel?
+I see majorly two things extra there: memcg accounts on NR_FILE_MAPPED, and
+mlock.  But I assume both of them will not apply to hugetlb pages?
 
-minimum_console_loglevel is currently used only in syslog interface.
-It is ignored when the levels are set using sysctl.
+-- 
+Peter Xu
 
-IMHO, the reason is that sysctl might eventually get called even with
- less privileged user.
-
-I would keep this behavior. I mean that a change of
-minimum_console_loglevel would not affect other values immediately.
-It will be used to crop the value when anyone wants to change
-the global loglevel via syslog later.
-
-Well, it would make sense to crop the global or per-console
-loglevels even when they are later changed via the new sysctl
-or sysfs interface. It would be a limit for less privileged
-users.
-
-Maybe, it is over-engineered. I wonder if anyone really uses
-the minimum level in practice.
-
-> > > +    * ``ignore_loglevel``: ``ignore_loglevel`` was specified on the kernel
-> > > +      command line. Restart without it to use other controls.
-> > > +
-> > > +* ``enabled`` (r): Whether the console is enabled.
-> > > +* ``loglevel`` (rw): The local loglevel for this console. This will be in
-> > > +  effect if no other global control overrides it. Look at
-> > > +  ``effective_loglevel`` and ``effective_loglevel_source`` to verify that.
-> > > 
-> > > +Deprecated
-> > > +~~~~~~~~~~
-> > > +
-> > > +* ``syslog(SYSLOG_ACTION_CONSOLE_*)``: This sets
-> > 
-> > Why does it use "_*"? It looks like the entire syslog interface is
-> > obsolete. But this patch affects only three actions: ON, OFF, LEVEL.
-> 
-> Not totally sure I know what you mean -- SYSLOG_ACTION_CONSOLE_* limits it
-> to those, no?
-> 
->     % git grep -ho 'SYSLOG_ACTION_CONSOLE_[A-Z0-9]\+' | sort -u
->     SYSLOG_ACTION_CONSOLE_LEVEL
->     SYSLOG_ACTION_CONSOLE_OFF
->     SYSLOG_ACTION_CONSOLE_ON
-
-I see. I missed that the other SYSLOG_ACTIONs do not have the
-"_CONSOLE". Forget about it.
-
-> > > +  ``kernel.force_console_loglevel``. It is unaware of per-console loglevel
-> > > +  semantics and is not recommended. A warning will be emitted if it is used
-> > > +  while local loglevels are in effect.
-> > 
-> > Do we really want to obsolete it? It might be enough to say
-> > that it works as force_console_loglevel.
-> 
-> That's also fine -- my only concern with syslog() is that it's not very
-> explicit about what will happen to consoles with a per-console loglevel set.
-> 
-> That said, once this is merged I suppose we can make it more clear in
-> downstream consumers like `dmesg -n`, so not a big issue either way. :-)
-
-Honestly, I consider syslog as a legacy code. It supports only one
-reader. A better way to read the messages is /dev/kmsg and dmesg
-uses it be default now.
-
-I am not sure if people/admins really use dmesg to change the console
-loglevel. IMHO, sysctl or sysfs should be the preferred way.
-
-I think that it is enough to make the behavior clear in
-the documentation.
-
-Best Regards,
-Petr

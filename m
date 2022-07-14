@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B61B57575D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 00:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F8C575761
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 00:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239883AbiGNWEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 18:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
+        id S240529AbiGNWHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 18:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240037AbiGNWEL (ORCPT
+        with ESMTP id S232678AbiGNWHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 18:04:11 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED0D4599E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 15:04:08 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id e16so3042670pfm.11
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 15:04:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8PAchEXjU/hpKREmMLz/eNhHJ5OIRwF0hugCxV08cb8=;
-        b=jvbJ4JpBQsHmD4/EIg81fsqcAB85ED0GPvthGUEz8yEFX3y/GzdRGeLqbl80N410j4
-         taurkoZFYu+OyFw0WlUzU4PQjp0mizVPNPuL+Lx2bw6aAE6frJ+tKOUPh59CiYVBCveQ
-         UKadKyjkBsaggdv/7xVNFktE5PFWF06kcqSo2JQIeJ0lNXana4QZIpZIhPbmR4b9HzKW
-         t5o1wx3DW7pbA/RO1ybpmnosuzneJnshWaJ/oRt7jGe5eVIwoZWqvHlSjLadZCVjXBcz
-         b0CvjBdIZd0slBHZ9m1bsPqM8BFJuGuE8unE5L+mr84Niu9gKe6xCStd3Y7mFhCQS5mO
-         PtyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=8PAchEXjU/hpKREmMLz/eNhHJ5OIRwF0hugCxV08cb8=;
-        b=kTmMdNYrRVo0xXW2KB54GxG4atfbBzPRQ1ixKiItj5kWMPLib4VCibiVJObJ+uCNo7
-         opJeiDWA09NAk1thaT/jYO68y4PzErOzc6378/yIRgUFPl5RTkvayzbu5UEPFAB12YxQ
-         veWnfAt9DenBCzUzYIJj4j5l52nXuabONyn4NXWHYULHKa2qzRFiwxD2UaST0+TWLVoV
-         4jsYlXw0Rbpadc/mmwIG1axhi46p5CqyyDi8OVLEpsBygKo4GAst2mI2ZQ6B1zsZpJS5
-         S4UCelmvPfSCokMWTvyoyFp3woihr37EBZZLxv8MjPQZJRgKBMkDnIcDlZeDJT7SemPp
-         nshA==
-X-Gm-Message-State: AJIora/45CLbNL0LXCLdB45iGahQKMvAp31Na3fDFps2b2XaJJ8Finfh
-        HrieOa0zFIsawE6gl6UjvdhiKA==
-X-Google-Smtp-Source: AGRyM1t7Xans7iI60RVbBY+W2WdNd4P9acnFda4kCQfiulDuJ6jzcy+AALghFtn/Vk8z0eOi6QXisA==
-X-Received: by 2002:a63:ff66:0:b0:412:6f4c:1e11 with SMTP id s38-20020a63ff66000000b004126f4c1e11mr9323094pgk.396.1657836248087;
-        Thu, 14 Jul 2022 15:04:08 -0700 (PDT)
-Received: from localhost ([50.221.140.186])
-        by smtp.gmail.com with ESMTPSA id c4-20020a170902d48400b0016ca0fe6df5sm1957872plg.273.2022.07.14.15.04.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 15:04:07 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 15:04:07 -0700 (PDT)
-X-Google-Original-Date: Thu, 14 Jul 2022 15:01:38 PDT (-0700)
-Subject:     Re: [PATCH v5 00/13] Canaan devicetree fixes
-In-Reply-To: <20220705215213.1802496-1-mail@conchuod.ie>
-CC:     airlied@linux.ie, daniel@ffwll.ch, thierry.reding@gmail.com,
-        sam@ravnborg.org, Eugeniy.Paltsev@synopsys.com,
-        fancer.lancer@gmail.com, daniel.lezcano@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, conor.dooley@microchip.com,
-        masahiroy@kernel.org, damien.lemoal@opensource.wdc.com,
-        geert@linux-m68k.org, niklas.cassel@wdc.com,
-        dillon.minfei@gmail.com, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     mail@conchuod.ie, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org
-Message-ID: <mhng-85044754-c361-40bc-a6a2-7082f35930bb@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Thu, 14 Jul 2022 18:07:50 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED866A9D1;
+        Thu, 14 Jul 2022 15:07:49 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id ABCAD1F944;
+        Thu, 14 Jul 2022 22:07:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657836466; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rxL2Skx8UbFEzQGYad/BuKmDMwwk8ncManhq+noClII=;
+        b=nxO/VsiByIQUvVw8J3ec8bA9Eu0GqyfKAIeitip/+JUq3wxLXLPc3ZEP0m4Y0l2sN+FfFY
+        2mbmtaRnK98LtjaY5ZMVb38Luz5E/d25hhVK0JUJJd1DJQXRo5L8nkqORD4WoZ18GrHsq+
+        ZSM//84UURlzTy+CWZ12ZyXCHYIeZEI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657836466;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rxL2Skx8UbFEzQGYad/BuKmDMwwk8ncManhq+noClII=;
+        b=1oHnFx62By/T3EA1ZD0f6lyFebUWlXX0tED1o5Z6GDaSWFHJ9N8iImlQQ6/zhyj++TDBQz
+        +2qz/Orr3TcT/+Cg==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D3E4C2C141;
+        Thu, 14 Jul 2022 22:07:45 +0000 (UTC)
+Date:   Fri, 15 Jul 2022 00:07:44 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 1/2] mtd: spi-nor: When a flash memory is missing do not
+ report an error
+Message-ID: <20220714220744.GF17705@kitsune.suse.cz>
+References: <701967b0c418db333c66b48d225df60aa9d03ead.1657826188.git.msuchanek@suse.de>
+ <d8de86aa0331be697fbef33d5ab2c57a@walle.cc>
+ <20220714205529.GE17705@kitsune.suse.cz>
+ <33abf7b84860049c4a22605578303ff2@walle.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <33abf7b84860049c4a22605578303ff2@walle.cc>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,89 +78,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Jul 2022 14:52:01 PDT (-0700), mail@conchuod.ie wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> Hey all,
-> This series should rid us of dtbs_check errors for the RISC-V Canaan k210
-> based boards. To make keeping it that way a little easier, I changed the
-> Canaan devicetree Makefile so that it would build all of the devicetrees
-> in the directory if SOC_CANAAN.
->
-> I *DO NOT* have any Canaan hardware so I have not tested any of this in
-> action. Since I sent v1, I tried to buy some since it's cheap - but could
-> out of the limited stockists none seemed to want to deliver to Ireland :(
-> I based the series on next-20220617.
->
-> Thanks,
-> Conor.
->
-> Changes since v4:
-> - add Rob's tags from v3
-> - sram: rephrase the binding description
-> - ASoC: dropped the applied binding
->
-> Changes since v3:
-> - dts: drop the bogus "regs" property pointed out by Niklas
-> - dma/timer: add Serge's reviews (and expand on the dma interrupt
->   description)
-> - dts: add Niklas' T-b where I felt it was suitable. lmk if you think it
->   applies more broadly
-> - spi: drop the applied spi dt-binding change. Thanks Mark.
->
-> Changes since v2:
-> - i2s: added clocks maxItems
-> - dma: unconditionally extended the interrupts & dropped canaan
->   compatible
-> - timer: as per Sergey, split the timer dts nodes in 2 & drop the
->   binding patch
-> - ili9341: add a canaan specific compatible to the binding and dts
->
-> Changes since v1:
-> - I added a new dt node & compatible for the SRAM memory controller due
->   Damien's wish to preserve the inter-op with U-Boot.
-> - The dw-apb-ssi binding now uses the default rx/tx widths
-> - A new patch fixes bus {ranges,reg} warnings
-> - Rearranged the patches in a slightly more logical order
->
-> Conor Dooley (13):
->   dt-bindings: display: convert ilitek,ili9341.txt to dt-schema
->   dt-bindings: display: ili9341: document canaan kd233's lcd
->   dt-bindings: dma: dw-axi-dmac: extend the number of interrupts
->   dt-bindings: memory-controllers: add canaan k210 sram controller
->   riscv: dts: canaan: fix the k210's memory node
->   riscv: dts: canaan: fix the k210's timer nodes
->   riscv: dts: canaan: fix mmc node names
->   riscv: dts: canaan: fix kd233 display spi frequency
->   riscv: dts: canaan: use custom compatible for k210 i2s
->   riscv: dts: canaan: remove spi-max-frequency from controllers
->   riscv: dts: canaan: fix bus {ranges,reg} warnings
->   riscv: dts: canaan: add specific compatible for kd233's LCD
->   riscv: dts: canaan: build all devicetress if SOC_CANAAN
->
->  .../bindings/display/ilitek,ili9341.txt       | 27 -------
->  .../display/panel/ilitek,ili9341.yaml         | 49 +++++++++----
->  .../bindings/dma/snps,dw-axi-dmac.yaml        |  7 +-
->  .../memory-controllers/canaan,k210-sram.yaml  | 52 +++++++++++++
->  arch/riscv/boot/dts/canaan/Makefile           | 10 ++-
->  arch/riscv/boot/dts/canaan/canaan_kd233.dts   |  6 +-
->  arch/riscv/boot/dts/canaan/k210.dtsi          | 73 +++++++++++++------
->  .../riscv/boot/dts/canaan/sipeed_maix_bit.dts |  2 +-
->  .../boot/dts/canaan/sipeed_maix_dock.dts      |  2 +-
->  arch/riscv/boot/dts/canaan/sipeed_maix_go.dts |  2 +-
->  .../boot/dts/canaan/sipeed_maixduino.dts      |  2 +-
->  11 files changed, 159 insertions(+), 73 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/ilitek,ili9341.txt
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
+On Thu, Jul 14, 2022 at 11:51:56PM +0200, Michael Walle wrote:
+> Am 2022-07-14 22:55, schrieb Michal Suchánek:
+> > On Thu, Jul 14, 2022 at 09:41:48PM +0200, Michael Walle wrote:
+> > > Hi,
+> > > 
+> > > Am 2022-07-14 21:19, schrieb Michal Suchanek:
+> > > > It is normal that devices are designed with multiple types of storage,
+> > > > and only some types of storage are present.
+> > > >
+> > > > The kernel can handle this situation gracefully for many types of
+> > > > storage devices such as mmc or ata but it reports and error when spi
+> > > > flash is not present.
+> > > >
+> > > > Only print a notice that the storage device is missing when no response
+> > > > to the identify command is received.
+> > > >
+> > > > Consider reply buffers with all bits set to the same value no response.
+> > > 
+> > > I'm not sure you can compare SPI with ATA and MMC. I'm just speaking
+> > > of
+> > > DT now, but there, for ATA and MMC you just describe the controller
+> > > and
+> > > it will auto-detect the connected storage. Whereas with SPI you
+> > > describe
+> > 
+> > Why does mmc assume storage and SDIO must be descibed? Why the special
+> > casing?
+> 
+> I can't follow you here. My SDIO wireless card just works in an SD
+> slot and doesn't have to be described.
+> 
+> > > both the controller and the flash. So I'd argue that your hardware
+> > > description is wrong if it describes a flash which is not present.
+> > 
+> > At any rate the situation is the same - the storage may be present
+> > sometimes. I don't think assuming some kind of device by defualt is a
+> > sound practice.
+> 
+> Where is the assumption when the DT tells you there is a flash
+> on a specific chip select but actually there it isn't. Shouldn't
+> the DT then be fixed?
 
-I'm trying to sort out how to merge this one.  I'm not opposed to taking 
-it through the RISC-V tree as Rob's reviewed/acked the bindings, but 
-just figured I'd say something before putting anything on for-next to 
-try and minimize confusion.
+The DT says there isn't a flash on a specific chip select when there is.
+Shouldn't that be fixed?
 
-Unless I'm missing something it's just patch 3 that's been taken so far, 
-via Vinod's tree.  I've dropped that one and put the rest on 
-palmer/riscv-canaan_dt_schema, if that looks good then I'll take it into 
-riscv/for-next when this loops back to the top of my queue.
+> Maybe I don't understand your problem. What are you trying to
+> solve? I mean this just demotes an error to an info message.
 
-Thanks!
+Many boards provide multiple storage options - you get a PCB designed to
+carry different kinds of storage, some may be socketed, some can be
+soldered on in some production batches and not others.
+
+The kernel can handle this for many kinds of storage but not SPI flash.
+
+I don't see any reason why SPI flash should be a second class storage.
+
+> > However, when the board is designed for a specific kind of device which
+> > is not always present, and the kernel can detect the device, it is
+> > perfectly fine to describe it.
+> > 
+> > The alternative is to not use the device at all, even when present,
+> > which is kind of useless.
+> 
+> Or let the bootloader update your device tree and disable the device
+> if it's not there?
+
+But then it must be in the device tree?
+
+And then people will complain that if the bootloader does not have this
+feature then the kernel prints an error message?
+
+> Or load an overlay if it is there?
+
+Or maybe the kernel could just detect if the storage is present?
+
+It's not like we don't have an identify command.
+
+Thanks
+
+Michal

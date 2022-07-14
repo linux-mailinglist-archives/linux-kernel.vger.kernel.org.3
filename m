@@ -2,133 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9F8575250
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EBE575253
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239895AbiGNP6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S238576AbiGNP6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239685AbiGNP6b (ORCPT
+        with ESMTP id S238278AbiGNP6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:58:31 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EBA47B89;
-        Thu, 14 Jul 2022 08:58:30 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26EFlm7k028943;
-        Thu, 14 Jul 2022 15:58:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=kXmdXReKKdFW2AYraqhD9Yzbo4c8roWakTadJ/BDm6E=;
- b=lCvUHziePSEmCW595qAtJHRxBSL8RXXYnQ43T5il0j2qB9WKCQg3QuJLtu4Xw8wHS0ZH
- QEQvbaLNMafreUnc56056nQoAajQ8VsoG7FvJoLWpxni0k903dpspwOoJ7E1XAo0aruH
- 2Yu7FpM1Nkvq7c2C19e8y8SEZu/H48FvOlenSB+e5FaDPUYdxzVL0OifquiZi+iyxl66
- 7xrgYxOi7Nyh4DUvR8MVAWAR12Q77DOntHtve0Fe3FkDK4E6scpvgeTAJ7zENWdHJ1CR
- YhRBhquwFfRzYH3UxWP927Azm9Z7jjpGWVZVAk5ahtNJDY657lHZlk2OHck8Is4xaRPV sQ== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hanyegbaf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jul 2022 15:58:29 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26EFpP9e016203;
-        Thu, 14 Jul 2022 15:58:27 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3h71a8xnn3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jul 2022 15:58:27 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26EFwOps23003606
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Jul 2022 15:58:24 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1CDE42041;
-        Thu, 14 Jul 2022 15:58:24 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BAC3B4203F;
-        Thu, 14 Jul 2022 15:58:23 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.122.174])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 14 Jul 2022 15:58:23 +0000 (GMT)
-Message-ID: <32baeee1b12e620693c10d89dac5a8c1de6d61a2.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity: subsystem fixes for v5.19
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Thu, 14 Jul 2022 11:58:22 -0400
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: CCHDKBfU3wm6pauBu8fIPHjR2HPp9sYb
-X-Proofpoint-ORIG-GUID: CCHDKBfU3wm6pauBu8fIPHjR2HPp9sYb
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 14 Jul 2022 11:58:41 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EEFBC98;
+        Thu, 14 Jul 2022 08:58:37 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id E52801C0002;
+        Thu, 14 Jul 2022 15:58:32 +0000 (UTC)
+Date:   Thu, 14 Jul 2022 17:58:31 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Lee Jackson <info@arducam.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] media: i2c: ak7375: Add regulator management
+Message-ID: <20220714155831.c2nzbimf5oyndtdn@uno.localdomain>
+References: <20220711144039.232196-1-y.oudjana@protonmail.com>
+ <20220711144039.232196-4-y.oudjana@protonmail.com>
+ <20220713073951.qrg3slmvqbibwc5o@uno.localdomain>
+ <WIK0FR.TSG3JTBEBBDN@gmail.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-14_12,2022-07-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- impostorscore=0 suspectscore=0 lowpriorityscore=0 priorityscore=1501
- mlxlogscore=999 clxscore=1011 phishscore=0 mlxscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207140067
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <WIK0FR.TSG3JTBEBBDN@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hello Yassine
 
-Here are a number of fixes for recently found bugs.  Only "ima: fix
-violation measurement list record" was introduced in the current
-release.  The rest address existing bugs.
+On Thu, Jul 14, 2022 at 06:06:32PM +0400, Yassine Oudjana wrote:
+>
+> On Wed, Jul 13 2022 at 09:39:51 +0200, Jacopo Mondi <jacopo@jmondi.org>
+> wrote:
+> > Hi Yassine
+> >
+> > On Mon, Jul 11, 2022 at 06:40:39PM +0400, Yassine Oudjana wrote:
+> > >  From: Yassine Oudjana <y.oudjana@protonmail.com>
+> > >
+> > >  Make the driver get needed regulators on probe and enable/disable
+> > >  them on runtime PM callbacks.
+> > >
+> > >  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> >
+> > Have you seen this ?
+> > https://github.com/ArduCAM/IMX519_AK7375/blob/main/AK7375/0002-media-i2c-ak7375-driver-add-optional-regulator-suppo.patch#L172
+> >
+> > It claims
+> > +	* Initialisation delay between VDD low->high and the moment
+> > +	* when the i2c command is available.
+> > +	* From the datasheet, it should be 10ms + 2ms (max power
+> > +	* up sequence duration)
+> >
+> > 10ms seems like a long time, it would be nice to have the datasheet to
+> > cross-check.
+>
+> It does seem quite long. I couldn't find a datasheet anywhere
+> so the value I discovered is the best I have. I've added the
+> author of that patch to CC; maybe they have some info to
+> contribute.
+>
 
-thanks,
+I have now tested these patches with an Arducam IMX519 camera.
+Using a 3msec delay I get failures in the establishing i2c
+communications (I only tested 2 times though).
 
-Mimi
+With 10milliseconds (which I concur is a lot) I get stable results.
+Let's see if we can get more info from who has the manual.
 
-The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
+Thanks
+  j
 
-  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.19-fix
-
-for you to fetch changes up to 067d2521874135267e681c19d42761c601d503d6:
-
-  ima: Fix potential memory leak in ima_init_crypto() (2022-07-13 10:13:58 -0400)
-
-----------------------------------------------------------------
-integrity-v5.19-fix
-
-----------------------------------------------------------------
-Coiby Xu (1):
-      ima: force signature verification when CONFIG_KEXEC_SIG is configured
-
-Huaxin Lu (1):
-      ima: Fix a potential integer overflow in ima_appraise_measurement
-
-Jianglei Nie (1):
-      ima: Fix potential memory leak in ima_init_crypto()
-
-Mimi Zohar (1):
-      ima: fix violation measurement list record
-
-Xiu Jianfeng (1):
-      Revert "evm: Fix memleak in init_desc"
-
- include/linux/kexec.h                     |  6 ++++++
- kernel/kexec_file.c                       | 11 ++++++++++-
- security/integrity/evm/evm_crypto.c       |  7 ++-----
- security/integrity/ima/ima_appraise.c     |  3 ++-
- security/integrity/ima/ima_crypto.c       |  1 +
- security/integrity/ima/ima_efi.c          |  2 ++
- security/integrity/ima/ima_template_lib.c |  6 +++---
- 7 files changed, 26 insertions(+), 10 deletions(-)
-
+> >
+> > Thanks
+> >    j
+> >
+> > >  ---
+> > >  Changes since v1:
+> > >    - Reorganize variable declaration
+> > >    - Change the power-on delay range to 3000-3500 microseconds.
+> > >
+> > >   drivers/media/i2c/ak7375.c | 39
+> > > ++++++++++++++++++++++++++++++++++++++
+> > >   1 file changed, 39 insertions(+)
+> > >
+> > >  diff --git a/drivers/media/i2c/ak7375.c b/drivers/media/i2c/ak7375.c
+> > >  index 40b1a4aa846c..c2b2542a0056 100644
+> > >  --- a/drivers/media/i2c/ak7375.c
+> > >  +++ b/drivers/media/i2c/ak7375.c
+> > >  @@ -6,6 +6,7 @@
+> > >   #include <linux/i2c.h>
+> > >   #include <linux/module.h>
+> > >   #include <linux/pm_runtime.h>
+> > >  +#include <linux/regulator/consumer.h>
+> > >   #include <media/v4l2-ctrls.h>
+> > >   #include <media/v4l2-device.h>
+> > >
+> > >  @@ -23,17 +24,32 @@
+> > >    */
+> > >   #define AK7375_CTRL_STEPS	64
+> > >   #define AK7375_CTRL_DELAY_US	1000
+> > >  +/*
+> > >  + * The vcm takes around 3 ms to power on and start taking
+> > >  + * I2C messages. This value was found experimentally due to
+> > >  + * lack of documentation.
+> > >  + */
+> > >  +#define AK7375_POWER_DELAY_US	3000
+> > >
+> > >   #define AK7375_REG_POSITION	0x0
+> > >   #define AK7375_REG_CONT		0x2
+> > >   #define AK7375_MODE_ACTIVE	0x0
+> > >   #define AK7375_MODE_STANDBY	0x40
+> > >
+> > >  +static const char * const ak7375_supply_names[] = {
+> > >  +	"vdd",
+> > >  +	"vio",
+> > >  +};
+> > >  +
+> > >  +#define AK7375_NUM_SUPPLIES ARRAY_SIZE(ak7375_supply_names)
+> > >  +
+> > >   /* ak7375 device structure */
+> > >   struct ak7375_device {
+> > >   	struct v4l2_ctrl_handler ctrls_vcm;
+> > >   	struct v4l2_subdev sd;
+> > >   	struct v4l2_ctrl *focus;
+> > >  +	struct regulator_bulk_data supplies[AK7375_NUM_SUPPLIES];
+> > >  +
+> > >   	/* active or standby mode */
+> > >   	bool active;
+> > >   };
+> > >  @@ -133,12 +149,24 @@ static int ak7375_probe(struct i2c_client
+> > > *client)
+> > >   {
+> > >   	struct ak7375_device *ak7375_dev;
+> > >   	int ret;
+> > >  +	int i;
+> > >
+> > >   	ak7375_dev = devm_kzalloc(&client->dev, sizeof(*ak7375_dev),
+> > >   				  GFP_KERNEL);
+> > >   	if (!ak7375_dev)
+> > >   		return -ENOMEM;
+> > >
+> > >  +	for (i = 0; i < AK7375_NUM_SUPPLIES; i++)
+> > >  +		ak7375_dev->supplies[i].supply = ak7375_supply_names[i];
+> > >  +
+> > >  +	ret = devm_regulator_bulk_get(&client->dev, AK7375_NUM_SUPPLIES,
+> > >  +				      ak7375_dev->supplies);
+> > >  +	if (ret) {
+> > >  +		dev_err(&client->dev, "Failed to get regulators: %pe",
+> > >  +			ERR_PTR(ret));
+> > >  +		return ret;
+> > >  +	}
+> > >  +
+> > >   	v4l2_i2c_subdev_init(&ak7375_dev->sd, client, &ak7375_ops);
+> > >   	ak7375_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> > >   	ak7375_dev->sd.internal_ops = &ak7375_int_ops;
+> > >  @@ -210,6 +238,10 @@ static int __maybe_unused
+> > > ak7375_vcm_suspend(struct device *dev)
+> > >   	if (ret)
+> > >   		dev_err(dev, "%s I2C failure: %d\n", __func__, ret);
+> > >
+> > >  +	ret = regulator_bulk_disable(AK7375_NUM_SUPPLIES,
+> > > ak7375_dev->supplies);
+> > >  +	if (ret)
+> > >  +		return ret;
+> > >  +
+> > >   	ak7375_dev->active = false;
+> > >
+> > >   	return 0;
+> > >  @@ -230,6 +262,13 @@ static int __maybe_unused
+> > > ak7375_vcm_resume(struct device *dev)
+> > >   	if (ak7375_dev->active)
+> > >   		return 0;
+> > >
+> > >  +	ret = regulator_bulk_enable(AK7375_NUM_SUPPLIES,
+> > > ak7375_dev->supplies);
+> > >  +	if (ret)
+> > >  +		return ret;
+> > >  +
+> > >  +	/* Wait for vcm to become ready */
+> > >  +	usleep_range(AK7375_POWER_DELAY_US, AK7375_POWER_DELAY_US + 500);
+> > >  +
+> > >   	ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_CONT,
+> > >   		AK7375_MODE_ACTIVE, 1);
+> > >   	if (ret) {
+> > >  --
+> > >  2.37.0
+> > >
+>
+>

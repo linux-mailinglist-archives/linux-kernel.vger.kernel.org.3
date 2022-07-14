@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E94574BE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3D5574BE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238686AbiGNLZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
+        id S238739AbiGNLZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbiGNLZk (ORCPT
+        with ESMTP id S238442AbiGNLZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:25:40 -0400
+        Thu, 14 Jul 2022 07:25:41 -0400
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 687DFDEBA;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68CFD52DCF;
         Thu, 14 Jul 2022 04:25:38 -0700 (PDT)
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26EBPR7d8023296, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26EBPR7d8023296
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26EBPRVt8023300, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26EBPRVt8023300
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
         Thu, 14 Jul 2022 19:25:27 +0800
 Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 14 Jul 2022 19:25:30 +0800
+ 15.1.2375.28; Thu, 14 Jul 2022 19:25:30 +0800
 Received: from localhost.localdomain (172.21.132.192) by
  RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -35,9 +35,9 @@ CC:     <johan.hedberg@gmail.com>, <luiz.dentz@gmail.com>,
         <linux-bluetooth@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <max.chou@realtek.com>, <alex_lu@realsil.com.cn>,
         <kidman@realtek.com>
-Subject: [PATCH v2 1/5] Bluetooth: btusb: Add Realtek RTL8852C support ID 0x04CA:0x4007
-Date:   Thu, 14 Jul 2022 19:25:19 +0800
-Message-ID: <20220714112523.13242-2-hildawu@realtek.com>
+Subject: [PATCH v2 2/5] Bluetooth: btusb: Add Realtek RTL8852C support ID 0x04C5:0x1675
+Date:   Thu, 14 Jul 2022 19:25:20 +0800
+Message-ID: <20220714112523.13242-3-hildawu@realtek.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220714112523.13242-1-hildawu@realtek.com>
 References: <20220714112523.13242-1-hildawu@realtek.com>
@@ -57,10 +57,10 @@ X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
 X-KSE-Antivirus-Interceptor-Info: scan successful
 X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzcvMTQgpFekyCAwOTowNTowMA==?=
 X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -72,14 +72,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Hilda Wu <hildawu@realtek.com>
 
-Add the support ID(0x04CA, 0x4007) to usb_device_id table for
+Add the support ID(0x04c5, 0x1675) to usb_device_id table for
 Realtek RTL8852C.
 
 The device info from /sys/kernel/debug/usb/devices as below.
 
 T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=12   MxCh= 0
 D:  Ver= 1.00 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=04ca ProdID=4007 Rev= 0.00
+P:  Vendor=04c5 ProdID=1675 Rev= 0.00
 S:  Manufacturer=Realtek
 S:  Product=Bluetooth Radio
 S:  SerialNumber=00e04c000001
@@ -109,24 +109,22 @@ E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
 
 Signed-off-by: Hilda Wu <hildawu@realtek.com>
 ---
- drivers/bluetooth/btusb.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/bluetooth/btusb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index fb1a67189412..f3a68d755099 100644
+index f3a68d755099..fe0434eeac78 100644
 --- a/drivers/bluetooth/btusb.c
 +++ b/drivers/bluetooth/btusb.c
-@@ -427,6 +427,10 @@ static const struct usb_device_id blacklist_table[] = {
- 	{ USB_DEVICE(0x04ca, 0x4006), .driver_info = BTUSB_REALTEK |
+@@ -430,6 +430,8 @@ static const struct usb_device_id blacklist_table[] = {
+ 	/* Realtek 8852CE Bluetooth devices */
+ 	{ USB_DEVICE(0x04ca, 0x4007), .driver_info = BTUSB_REALTEK |
  						     BTUSB_WIDEBAND_SPEECH },
- 
-+	/* Realtek 8852CE Bluetooth devices */
-+	{ USB_DEVICE(0x04ca, 0x4007), .driver_info = BTUSB_REALTEK |
++	{ USB_DEVICE(0x04c5, 0x1675), .driver_info = BTUSB_REALTEK |
 +						     BTUSB_WIDEBAND_SPEECH },
-+
+ 
  	/* Realtek Bluetooth devices */
  	{ USB_VENDOR_AND_INTERFACE_INFO(0x0bda, 0xe0, 0x01, 0x01),
- 	  .driver_info = BTUSB_REALTEK },
 -- 
 2.17.1
 

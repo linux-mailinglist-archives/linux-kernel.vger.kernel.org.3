@@ -2,119 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C5A5751B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C905751B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240096AbiGNPVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
+        id S240111AbiGNPV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239993AbiGNPVs (ORCPT
+        with ESMTP id S239993AbiGNPVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:21:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8856057E05
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:21:47 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1oC0ef-0004Q5-Lq; Thu, 14 Jul 2022 17:21:29 +0200
-Message-ID: <1ba2b493-2ee2-e4b9-b11f-4fbb48473531@pengutronix.de>
-Date:   Thu, 14 Jul 2022 17:21:25 +0200
+        Thu, 14 Jul 2022 11:21:51 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E935F11D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:21:50 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id z12so3014847wrq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ZP/v8ROQZNe9hsHPJL6oKnTbTJZCrCGkGnLFioI+Fvs=;
+        b=zc2ivyoCK+kvXMBo3qql0SaINu+scvSM1y/gvVJyFuR1GqvOzSBZogRXLMScFaMc8c
+         SXG2U8mBibMgF8MEhMFkA1kTlqBRXIhC++X+pWLmIXYmZRqNt98CCvB2/puY0+nioEol
+         /BBPAXE+K/zudc6GflSzpKUED0/ieie6CjJ3ugmmzPO1EOFBtVK3ni5cpug6Iv1SKAQ3
+         kYkY9G3eq9PwPGAz81k+Bfsu/FJivMtOFFtHLSk93GnxjJH6jBxhYpeLCTJvsmn1yMNL
+         1/AKiLX7/x1hHDmUUxfUpZipubOako9kalXK+0jCiDmbPLFuZr/MFmb+cYACz8N6vxF2
+         iepw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ZP/v8ROQZNe9hsHPJL6oKnTbTJZCrCGkGnLFioI+Fvs=;
+        b=xJtJPC20ch0LlkRi5ZSyUUwqejPSDW228iQ9a306cG3Uovib4Xkr/axl6uN3n+i19U
+         zdv91nZbWrk1Tcz+Nzqc9vhPGC1KNGMNoAG74+4BeFb4DZEqm/Rb/uvnTH2qENwvTMq8
+         kde7QKu3n2nYBc4AAS+VDDgiCsoQiW2xhyDcKAOyrBZAenOEe111hEfz9l4CCW/cOl8l
+         q3rI40MafmwkoaVLSkyrm4fvQIKsMbhTDBjMY4H8GPekVazgzzfzZsZ+FL+O08uQuFbT
+         QC39DOAEs1BXHuZ5iDBM8hqFCLrUU1mJrNN1y72s84oiQmeOGEmbWOLZbsQhCsWC/M+H
+         PIcw==
+X-Gm-Message-State: AJIora/ljuxOd1M6iwQhlLvs86Cq5TMiNJPMnzw2qTd4MMGLheGIsrQ5
+        QEPAqV9hgiS56HfZnXwigsSCiw==
+X-Google-Smtp-Source: AGRyM1tIhk9hLd6ozum0NBKrIshtJMT72+PlUC63cQOXl5f8uXly4TBxvlVhx7heX8RQf1fh0eiq3g==
+X-Received: by 2002:a5d:5444:0:b0:21d:6497:3210 with SMTP id w4-20020a5d5444000000b0021d64973210mr8558449wrv.587.1657812109173;
+        Thu, 14 Jul 2022 08:21:49 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id c12-20020a5d4ccc000000b0021d6e758752sm1731229wrt.24.2022.07.14.08.21.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 08:21:48 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 16:21:46 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-pwm@vger.kernel.org
+Subject: Re: [PATCH 3/8] MAINTAINERS: Remove myself as PWM maintainer
+Message-ID: <YtA0ikPPMuvPNGxs@google.com>
+References: <20220714112533.539910-1-lee@kernel.org>
+ <20220714112533.539910-4-lee@kernel.org>
+ <20220714151305.ridfaom2l4qaao4t@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: bcm4329-fmac: add optional
- brcm,ccode-map-trivial
-Content-Language: en-US
-To:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alvin@pqrs.dk>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        van Spriel <arend@broadcom.com>
-Cc:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <20220711123005.3055300-1-alvin@pqrs.dk>
- <20220711123005.3055300-2-alvin@pqrs.dk>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20220711123005.3055300-2-alvin@pqrs.dk>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220714151305.ridfaom2l4qaao4t@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.07.22 14:30, Alvin Šipraga wrote:
-> From: Alvin Šipraga <alsi@bang-olufsen.dk>
-> 
-> The bindings already offer a brcm,ccode-map property to describe the
-> mapping between the kernel's ISO3166 alpha 2 country code string and the
-> firmware's country code string and revision number. This is a
-> board-specific property and determined by the CLM blob firmware provided
-> by the hardware vendor.
-> 
-> However, in some cases the firmware will also use ISO3166 country codes
-> internally, and the revision will always be zero. This implies a trivial
-> mapping: cc -> { cc, 0 }.
-> 
-> For such cases, add an optional property brcm,ccode-map-trivial which
-> obviates the need to describe every trivial country code mapping in the
-> device tree with the existing brcm,ccode-map property. The new property
-> is subordinate to the more explicit brcm,ccode-map property.
-> 
-> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+On Thu, 14 Jul 2022, Uwe Kleine-König wrote:
 
-Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-
-> ---
->  .../bindings/net/wireless/brcm,bcm4329-fmac.yaml       | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> Hello Lee,
 > 
-> diff --git a/Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml b/Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml
-> index c11f23b20c4c..53b4153d9bfc 100644
-> --- a/Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml
-> +++ b/Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml
-> @@ -75,6 +75,16 @@ properties:
->      items:
->        pattern: '^[A-Z][A-Z]-[A-Z][0-9A-Z]-[0-9]+$'
->  
-> +  brcm,ccode-map-trivial:
-> +    description: |
-> +      Use a trivial mapping of ISO3166 country codes to brcmfmac firmware
-> +      country code and revision: cc -> { cc, 0 }. In other words, assume that
-> +      the CLM blob firmware uses ISO3166 country codes as well, and that all
-> +      revisions are zero. This property is mutually exclusive with
-> +      brcm,ccode-map. If both properties are specified, then brcm,ccode-map
-> +      takes precedence.
-> +    type: boolean
-> +
->  required:
->    - compatible
->    - reg
+> On Thu, Jul 14, 2022 at 12:25:28PM +0100, Lee Jones wrote:
+> > Thierry and Uwe are doing a fine job, leaving me surplus to requirement.
+> > 
+> > Happy to pop back on-board if anything changes in the future.
+> 
+> Thanks for your efforts in the team. I don't know your plans for the
+> future, but I wish you the luck you need and the strength to decide the
+> necessary choices on your path forward.
 
+Thanks buddy.  Nothing drastic happening with respect to upstream.
+
+> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+
+Cheers.  Keep up the good work!
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

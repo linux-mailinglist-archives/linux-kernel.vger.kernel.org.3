@@ -2,45 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D55575442
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D67C575448
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240458AbiGNRwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 13:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
+        id S240476AbiGNRyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 13:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiGNRww (ORCPT
+        with ESMTP id S230514AbiGNRyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 13:52:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13669491D1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 10:52:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4062C1D13;
-        Thu, 14 Jul 2022 10:52:52 -0700 (PDT)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6883F3F70D;
-        Thu, 14 Jul 2022 10:52:51 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 18:52:49 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, conor.dooley@microchip.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH -next] arch_topology: Fix cache attributes detection in
- the CPU hotplug path
-Message-ID: <YtBX8WX+oyPww/m+@arm.com>
-References: <20220713133344.1201247-1-sudeep.holla@arm.com>
+        Thu, 14 Jul 2022 13:54:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2132F27177;
+        Thu, 14 Jul 2022 10:54:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBDCAB82779;
+        Thu, 14 Jul 2022 17:54:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AEAAC34114;
+        Thu, 14 Jul 2022 17:54:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657821255;
+        bh=LgU+sYC6IUyCyX2o7fwrVIJ7cvKYLuT2/55WRReuVuk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=miK77TVEWJzTCgxOunLKwtg+bA4M2rbSH6kRxi8PeaYxE7T8a2fQkRJDBoyTOQjZ+
+         P39e07+GfiM2KD0lvYiJd7QQNy6dpTtGIa9KUi8/E/0iSLcQ7JkUECWw1g4A6N71OO
+         vv6++OCRidDQp0ekvihKIjwcgtB2DJ0URyILgMWdcpEwdnMZEGlwhkInw+RBelqDba
+         soOqdmPgEN1XHEVM28Oln3izsHpXswM711d3W9X6m5wyEtnESil+ozOdJKGo27IykI
+         nMU+ORrvI3wjsw+mC5KORWbTjzq7Au2FR7PlORe/B75JNMKd39FfyoIPGpzEX6SY7T
+         lIHJXqNKwc21w==
+Date:   Thu, 14 Jul 2022 10:54:14 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     "ruansy.fnst@fujitsu.com" <ruansy.fnst@fujitsu.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>
+Subject: Re: [RFC PATCH v6] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+Message-ID: <YtBYRrkSkuF4VU5e@magnolia>
+References: <20220410171623.3788004-1-ruansy.fnst@fujitsu.com>
+ <20220714103421.1988696-1-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220713133344.1201247-1-sudeep.holla@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220714103421.1988696-1-ruansy.fnst@fujitsu.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,90 +62,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudeep,
-
-Thank you for the fix!
-
-On Wednesday 13 Jul 2022 at 14:33:44 (+0100), Sudeep Holla wrote:
-> init_cpu_topology() is called only once at the boot and all the cache
-> attributes are detected early for all the possible CPUs. However when
-> the CPUs are hotplugged out, the cacheinfo gets removed. While the
-> attributes are added back when the CPUs are hotplugged back in as part
-> of CPU hotplug state machine, it ends up called quite late after the
-> update_siblings_masks() are called in the secondary_start_kernel()
-> resulting in wrong llc_sibling_masks.
+On Thu, Jul 14, 2022 at 10:34:29AM +0000, ruansy.fnst@fujitsu.com wrote:
+> This patch is inspired by Dan's "mm, dax, pmem: Introduce
+> dev_pagemap_failure()"[1].  With the help of dax_holder and
+> ->notify_failure() mechanism, the pmem driver is able to ask filesystem
+> (or mapped device) on it to unmap all files in use and notify processes
+> who are using those files.
 > 
-> Move the call to detect_cache_attributes() inside update_siblings_masks()
-> to ensure the cacheinfo is updated before the LLC sibling masks are
-> updated. This will fix the incorrect LLC sibling masks generated when
-> the CPUs are hotplugged out and hotplugged back in again.
+> Call trace:
+> trigger unbind
+>  -> unbind_store()
+>   -> ... (skip)
+>    -> devres_release_all()   # was pmem driver ->remove() in v1
+>     -> kill_dax()
+>      -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_PRE_REMOVE)
+>       -> xfs_dax_notify_failure()
 > 
-> Reported-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> Introduce MF_MEM_PRE_REMOVE to let filesystem know this is a remove
+> event.  So do not shutdown filesystem directly if something not
+> supported, or if failure range includes metadata area.  Make sure all
+> files and processes are handled correctly.
+> 
+> ==
+> Changes since v5:
+>   1. Renamed MF_MEM_REMOVE to MF_MEM_PRE_REMOVE
+>   2. hold s_umount before sync_filesystem()
+>   3. move sync_filesystem() after SB_BORN check
+>   4. Rebased on next-20220714
+> 
+> Changes since v4:
+>   1. sync_filesystem() at the beginning when MF_MEM_REMOVE
+>   2. Rebased on next-20220706
+> 
+> [1]: https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
+> 
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+
+Looks reasonable to me now,
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+
+--D
+
 > ---
->  drivers/base/arch_topology.c | 16 ++++++----------
->  1 file changed, 6 insertions(+), 10 deletions(-)
+>  drivers/dax/super.c         |  3 ++-
+>  fs/xfs/xfs_notify_failure.c | 15 +++++++++++++++
+>  include/linux/mm.h          |  1 +
+>  3 files changed, 18 insertions(+), 1 deletion(-)
 > 
-> Hi Conor,
-> 
-> Ionela reported an issue with the CPU hotplug and as a fix I need to
-> move the call to detect_cache_attributes() which I had thought to keep
-> it there from first but for no reason had moved it to init_cpu_topology().
-> 
-> Wonder if this fixes the -ENOMEM on RISC-V as this one is called on the
-> cpu in the secondary CPUs init path while init_cpu_topology executed
-> detect_cache_attributes() for all possible CPUs much earlier. I think
-> this might help as the percpu memory might be initialised in this case.
-> 
-> Anyways give this a try, also test the CPU hotplug and check if nothing
-> is broken on RISC-V. We noticed this bug only on one platform while
-> 
-> Regards,
-> Sudeep
-> 
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 441e14ac33a4..0424b59b695e 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -732,7 +732,11 @@ const struct cpumask *cpu_clustergroup_mask(int cpu)
->  void update_siblings_masks(unsigned int cpuid)
->  {
->  	struct cpu_topology *cpu_topo, *cpuid_topo = &cpu_topology[cpuid];
-> -	int cpu;
-> +	int cpu, ret;
-> +
-> +	ret = detect_cache_attributes(cpuid);
-> +	if (ret)
-> +		pr_info("Early cacheinfo failed, ret = %d\n", ret);
->  	/* update core and thread sibling masks */
->  	for_each_online_cpu(cpu) {
-> @@ -821,7 +825,7 @@ __weak int __init parse_acpi_topology(void)
->  #if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
->  void __init init_cpu_topology(void)
->  {
-> -	int ret, cpu;
-> +	int ret;
->  	reset_cpu_topology();
->  	ret = parse_acpi_topology();
-> @@ -836,13 +840,5 @@ void __init init_cpu_topology(void)
->  		reset_cpu_topology();
+> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+> index 9b5e2a5eb0ae..cf9a64563fbe 100644
+> --- a/drivers/dax/super.c
+> +++ b/drivers/dax/super.c
+> @@ -323,7 +323,8 @@ void kill_dax(struct dax_device *dax_dev)
 >  		return;
+>  
+>  	if (dax_dev->holder_data != NULL)
+> -		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
+> +		dax_holder_notify_failure(dax_dev, 0, U64_MAX,
+> +				MF_MEM_PRE_REMOVE);
+>  
+>  	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
+>  	synchronize_srcu(&dax_srcu);
+> diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
+> index 69d9c83ea4b2..6da6747435eb 100644
+> --- a/fs/xfs/xfs_notify_failure.c
+> +++ b/fs/xfs/xfs_notify_failure.c
+> @@ -76,6 +76,9 @@ xfs_dax_failure_fn(
+>  
+>  	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
+>  	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
+> +		/* Do not shutdown so early when device is to be removed */
+> +		if (notify->mf_flags & MF_MEM_PRE_REMOVE)
+> +			return 0;
+>  		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+>  		return -EFSCORRUPTED;
 >  	}
-> -
-> -	for_each_possible_cpu(cpu) {
-> -		ret = detect_cache_attributes(cpu);
-> -		if (ret) {
-> -			pr_info("Early cacheinfo failed, ret = %d\n", ret);
-> -			break;
-> -		}
-> -	}
->  }
->  #endif
-> --2.37.1
-> 
-
-Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Tested-by:  Ionela Voinescu <ionela.voinescu@arm.com>
-
-Kind regards,
-Ionela.
+> @@ -174,12 +177,22 @@ xfs_dax_notify_failure(
+>  	struct xfs_mount	*mp = dax_holder(dax_dev);
+>  	u64			ddev_start;
+>  	u64			ddev_end;
+> +	int			error;
+>  
+>  	if (!(mp->m_sb.sb_flags & SB_BORN)) {
+>  		xfs_warn(mp, "filesystem is not ready for notify_failure()!");
+>  		return -EIO;
+>  	}
+>  
+> +	if (mf_flags & MF_MEM_PRE_REMOVE) {
+> +		xfs_info(mp, "device is about to be removed!");
+> +		down_write(&mp->m_super->s_umount);
+> +		error = sync_filesystem(mp->m_super);
+> +		up_write(&mp->m_super->s_umount);
+> +		if (error)
+> +			return error;
+> +	}
+> +
+>  	if (mp->m_rtdev_targp && mp->m_rtdev_targp->bt_daxdev == dax_dev) {
+>  		xfs_warn(mp,
+>  			 "notify_failure() not supported on realtime device!");
+> @@ -188,6 +201,8 @@ xfs_dax_notify_failure(
+>  
+>  	if (mp->m_logdev_targp && mp->m_logdev_targp->bt_daxdev == dax_dev &&
+>  	    mp->m_logdev_targp != mp->m_ddev_targp) {
+> +		if (mf_flags & MF_MEM_PRE_REMOVE)
+> +			return 0;
+>  		xfs_err(mp, "ondisk log corrupt, shutting down fs!");
+>  		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+>  		return -EFSCORRUPTED;
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 4287bec50c28..2ddfb76c8a83 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3188,6 +3188,7 @@ enum mf_flags {
+>  	MF_SOFT_OFFLINE = 1 << 3,
+>  	MF_UNPOISON = 1 << 4,
+>  	MF_SW_SIMULATED = 1 << 5,
+> +	MF_MEM_PRE_REMOVE = 1 << 6,
+>  };
+>  int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+>  		      unsigned long count, int mf_flags);
+> -- 
+> 2.37.0

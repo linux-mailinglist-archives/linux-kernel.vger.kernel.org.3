@@ -2,149 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3925749B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF685749B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237924AbiGNJxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S237849AbiGNJyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237741AbiGNJxJ (ORCPT
+        with ESMTP id S230233AbiGNJyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:53:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A59BA65B1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657792387;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=80l7CIgZI7WVIfB+WzdMnlXN0gnsDQBvNb7GorZ9Juo=;
-        b=ELeqXRHVK9g1UL1e6momKpXExBI8ADYjw3kDSQ42+KTxCcJdZ1VbXlSU3ilMIA+huxEAHg
-        s3kyqK5woqk0BYePOC5J4jHG4t/bZcgAfMCmaX9wUeBkBfFJSgmYRIkam3pDloJiP2w2Wy
-        1XopA1cE2yReyyHLbAuNOxbMrMuf+t8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-495-_pwIHv9MO22bLjd7RabhyA-1; Thu, 14 Jul 2022 05:53:04 -0400
-X-MC-Unique: _pwIHv9MO22bLjd7RabhyA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8FCD8037A9;
-        Thu, 14 Jul 2022 09:53:03 +0000 (UTC)
-Received: from fedora (unknown [10.40.193.131])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B7D1440CF8EE;
-        Thu, 14 Jul 2022 09:53:02 +0000 (UTC)
-Date:   Thu, 14 Jul 2022 11:53:00 +0200
-From:   Lukas Czerner <lczerner@redhat.com>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com
-Subject: Re: [PATCH] ext4: fix kernel BUG in ext4_free_blocks
-Message-ID: <20220714095300.ffij7re6l5n6ixlg@fedora>
-References: <20220713185904.64138-1-tadeusz.struk@linaro.org>
+        Thu, 14 Jul 2022 05:54:31 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1666D474D6;
+        Thu, 14 Jul 2022 02:54:29 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id n12-20020a9d64cc000000b00616ebd87fc4so812529otl.7;
+        Thu, 14 Jul 2022 02:54:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=X6mRQhVSO5biAw/mXo/QUbT/IuLAZ3fsxf8wWVobTxs=;
+        b=AQnv6bm+0RwEPxeMJug4uEWaTRQiB0TwNLNvn064FDpcLOaCD7gKOtUp2lGAUZ8ovR
+         8+nyQ4Wpoh8hX89wInzJ/Ngb3qpI8TFVg/00WU5gkOmP2pFKtT5xH1ON+91sMuY1YJ6A
+         MBIXVvbH1piz14eP0epeaRwlmHnxnrBxhZyy+uIDP9jtcgKXXZo2f/1tkqkjWGUN2SPm
+         GD8VGIP4mpyKeSXaWnh07C6PqEeaCoaZfyiDKNcvijDGN+H3PlKnVWnkeoRKJTHxUc70
+         0e/h59bCxQs1fXsMnMzCtI6xlaESD7rBWwx9ppLsj17AniqJci633w87ueJIyo/nFG2V
+         jRAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=X6mRQhVSO5biAw/mXo/QUbT/IuLAZ3fsxf8wWVobTxs=;
+        b=ZP/agJIPxUG2WzzCTzxpnwF+ew6s/MSJSsujxxTXYQ53BC14Kp+gfRyMKet/D9jLr+
+         rfiROI5TyC+uDQMKnb07qLvlSxxfXOQ02Mzwo7Cxc9C2hPI56NhLsWAol4loCRXB5mvw
+         GmCCOEApHWu0dJ7hCLjqchqN4Re2zseAMcHZikJ1oRo4OxwCcNCQcTd5I7gwtZ+SSM3h
+         aKPqtbpobvSlgkdxk2+SG3TWIULC3doigPsvLwOgrBW+0V9o6Zau37ktaBgyoPB+DWDS
+         DPPDa1ZsuOpKh+sLQayfaYKW8LK2jJTrfOCA7sbpUqZsygd4HX5y2yqsSx5L1zt0FeoH
+         w1Og==
+X-Gm-Message-State: AJIora8tifyIFmMCxjIp/xpoVIeFxsaLmuKL1H27RlW/QevAFfDqf5r9
+        /quwEhZJX6lMMNInZ1ylUhW6wsaqDUXunC8HLWjUIFE7WWOW/g==
+X-Google-Smtp-Source: AGRyM1utmP+baueRn1lT4LhqU3E8OboEVfz6YBmgkFA8G1Zd84Uk0LA58rQYSV95jQlLMcw/nSe6HR4Z95muJowDzdI=
+X-Received: by 2002:a05:6830:3686:b0:61c:4a56:5c8b with SMTP id
+ bk6-20020a056830368600b0061c4a565c8bmr3111730otb.49.1657792468382; Thu, 14
+ Jul 2022 02:54:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713185904.64138-1-tadeusz.struk@linaro.org>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <870c02d4d97a921f02a31fa3b229fc549af61a20.1657747763.git.bristot@kernel.org>
+ <CA+icZUVbQNM+MkMCQik83FoiWF_a1v7Mb-4hZX6SZgNcp2x5SA@mail.gmail.com>
+In-Reply-To: <CA+icZUVbQNM+MkMCQik83FoiWF_a1v7Mb-4hZX6SZgNcp2x5SA@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 14 Jul 2022 11:53:52 +0200
+Message-ID: <CA+icZUW-Mu-Cak481yrE9f6PvGcfaDN7ZPLhrtX6L7zOPU73Zg@mail.gmail.com>
+Subject: Re: [PATCH V2] rtla: Fix Makefile when called from -C tools/
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 11:59:04AM -0700, Tadeusz Struk wrote:
-> Syzbot reported a BUG in ext4_free_blocks.
-> The issue is triggered from ext4_mb_clear_bb(). What happens is the
-> block number passed to ext4_get_group_no_and_offset() is 0 and the
-> es->s_first_data_block is 1. This makes block group number returned
-> from ext4_get_group_no_and_offset equal to -1. This is then passed to
-> ext4_get_group_info() and hits a BUG:
-> BUG_ON(group >= EXT4_SB(sb)->s_groups_count),
-> what can be seen in the trace below.
-> This patch adds an assertion to ext4_get_group_no_and_offset() that
-> checks if block number is not smaller than es->s_first_data_block.
-> 
-> kernel BUG at fs/ext4/ext4.h:3319!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 337 Comm: repro Not tainted 5.19.0-rc6-00105-g4e8e898e4107-dirty #14
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-1.fc36 04/01/2014
-> RIP: 0010:ext4_mb_clear_bb+0x1bd6/0x1be0
-> Call Trace:
->  <TASK>
->  ext4_free_blocks+0x9b3/0xc90
->  ext4_clear_blocks+0x344/0x3b0
->  ext4_ind_truncate+0x967/0x1050
->  ext4_truncate+0xb1b/0x1210
->  ext4_evict_inode+0xf06/0x16f0
->  evict+0x2a3/0x630
->  iput+0x618/0x850
->  ext4_enable_quotas+0x578/0x920
->  ext4_orphan_cleanup+0x539/0x1200
->  ext4_fill_super+0x94d8/0x9bc0
->  get_tree_bdev+0x40c/0x630
->  ext4_get_tree+0x1c/0x20
->  vfs_get_tree+0x88/0x290
->  do_new_mount+0x289/0xac0
->  path_mount+0x607/0xfd0
->  __se_sys_mount+0x2c4/0x3b0
->  __x64_sys_mount+0xbf/0xd0
->  do_syscall_64+0x3d/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->  </TASK>
-> 
-> Link: https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c
-> Reported-by: syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com
-> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-> ---
->  fs/ext4/balloc.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/fs/ext4/balloc.c b/fs/ext4/balloc.c
-> index 78ee3ef795ae..1175750ad05f 100644
-> --- a/fs/ext4/balloc.c
-> +++ b/fs/ext4/balloc.c
-> @@ -56,6 +56,9 @@ void ext4_get_group_no_and_offset(struct super_block *sb, ext4_fsblk_t blocknr,
->  	struct ext4_super_block *es = EXT4_SB(sb)->s_es;
->  	ext4_grpblk_t offset;
->  
-> +	if (blocknr < le32_to_cpu(es->s_first_data_block))
-> +		blocknr = le32_to_cpu(es->s_first_data_block);
-> +
+On Thu, Jul 14, 2022 at 11:07 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Wed, Jul 13, 2022 at 11:32 PM Daniel Bristot de Oliveira
+> <bristot@kernel.org> wrote:
+> >
+> > Sedat Dilek reported an error on rtla Makefile when running:
+> >
+> >     $ make -C tools/ clean
+> >     [...]
+> >     make[2]: Entering directory
+> >     '/home/dileks/src/linux-kernel/git/tools/tracing/rtla'
+> >     [...]
+> >     '/home/dileks/src/linux-kernel/git/Documentation/tools/rtla'
+> >     /bin/sh: 1: test: rtla-make[2]:: unexpected operator    <------ The problem
+> >     rm: cannot remove '/home/dileks/src/linux-kernel/git': Is a directory
+> >     make[2]: *** [Makefile:120: clean] Error 1
+> >     make[2]: Leaving directory
+> >
+> > This occurred because the rtla calls kernel's Makefile to get the
+> > version in silence mode, e.g.,
+> >
+> >     $ make -sC ../../.. kernelversion
+> >     5.19.0-rc4
+> >
+> > But the -s is being ignored when rtla's makefile is called indirectly,
+> > so the output looks like this:
+> >
+> >     $ make -C ../../.. kernelversion
+> >     make: Entering directory '/root/linux'
+> >     5.19.0-rc4
+> >     make: Leaving directory '/root/linux'
+> >
+> > Using 'grep -v make' avoids this problem, e.g.,
+> >
+> >     $ make -C ../../.. kernelversion | grep -v make
+> >     5.19.0-rc4
+> >
+> > Thus, add | grep -v make.
+> >
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Fixes: 8619e32825fd ("rtla: Follow kernel version")
+> > Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> > Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> > Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+> > ---
+>
+> Thanks for v2.
+> That looks good to me.
+>
+> Daniel, you are right that not passing -s to make-line will not show
+> the grep output.
+>
+> Formally and again my...
+>
+> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+>
 
-This does not seem right. we should never work with block number smaller
-than s_first_data_block. The first 1024 bytes of the file system are
-unused and in case we have 1k block size, the entire first block is
-unused.
+Addendum:
 
-I guess the image we work here with is corrupted, from the log it seems
-that it was noticed correctly so the question is why did we still ended
-up calling ext4_free_blocks() ? Seems like this should have been stopped
-earlier by ext4_clear_blocks() ?
+Subject?
 
-I did notice that in ext4_mb_clear_bb() we call
-ext4_get_group_no_and_offset() before ext4_inode_block_valid() but
-again we should have caught this problem earlier.
+[PATCH V2] rtla: Fix Makefile when called from -C tools/
 
-Can you link me the file system image that generated this problem?
+...called from -C tools/ clean?
 
-Thanks!
--Lukas
+ -Sedat-
 
-
->  	blocknr = blocknr - le32_to_cpu(es->s_first_data_block);
->  	offset = do_div(blocknr, EXT4_BLOCKS_PER_GROUP(sb)) >>
->  		EXT4_SB(sb)->s_cluster_bits;
-> -- 
-> 2.36.1
-> 
-
+>
+> >  tools/tracing/rtla/Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
+> > index 3822f4ea5f49..1bea2d16d4c1 100644
+> > --- a/tools/tracing/rtla/Makefile
+> > +++ b/tools/tracing/rtla/Makefile
+> > @@ -1,6 +1,6 @@
+> >  NAME   :=      rtla
+> >  # Follow the kernel version
+> > -VERSION :=     $(shell cat VERSION 2> /dev/null || make -sC ../../.. kernelversion)
+> > +VERSION :=     $(shell cat VERSION 2> /dev/null || make -sC ../../.. kernelversion | grep -v make)
+> >
+> >  # From libtracefs:
+> >  # Makefiles suck: This macro sets a default value of $(2) for the
+> > --
+> > 2.32.0
+> >

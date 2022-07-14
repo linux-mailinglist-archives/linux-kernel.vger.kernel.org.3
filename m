@@ -2,54 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480F65741FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 05:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12094574201
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 05:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbiGNDl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 23:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
+        id S231839AbiGNDma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 23:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiGNDl5 (ORCPT
+        with ESMTP id S232130AbiGNDm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 23:41:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5322124D
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 20:41:57 -0700 (PDT)
+        Wed, 13 Jul 2022 23:42:27 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684EF2124D;
+        Wed, 13 Jul 2022 20:42:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAF7661E19
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:41:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5130DC341C6;
-        Thu, 14 Jul 2022 03:41:55 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E1062CE24A3;
+        Thu, 14 Jul 2022 03:42:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8F51C34115;
+        Thu, 14 Jul 2022 03:42:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657770116;
-        bh=eT9omIn4kKWdfUlUaQXR2a5ggi02sLElztkOMF5CfQs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U/svTuRMpeD2b+EYgWTK+toxwaKs0RsuIEf9qV2MoOBLZ/7VAyvqp1VtLYuN4R0AS
-         lwWJG/YbXw9Ua9SdDXGGdp3zoDLqcrQJc8iOKQrw8h/azhSceACMEYuPLp5JiD1Y4M
-         LbXH1PSugsDaiVbzinTvkOLa8xUFDMcD+muezCvBvh7Yb17OUHwefVBZDsWTiGZl/f
-         mjN9oVONMzJoX8cPSC8J5CPO6ykjVz5ux/ROH8ihl86H4VwBeFpmwMROBqJ1vHXz6G
-         K1JrrTXqeuG6CT8iuqeYlbemy0Z1FKJtAU4ZuomIgA7s0rZ3OG+24B7rHhNta7rJB1
-         FBsHX5OZN9S6A==
-Date:   Thu, 14 Jul 2022 03:41:53 +0000
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Guenter Roeck <groeck@google.com>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH 09/11] platform/chrome: cros_ec_proto: return
- standard error codes for EC errors
-Message-ID: <Ys+Qga+5B0150BwY@google.com>
-References: <20220628024913.1755292-1-tzungbi@kernel.org>
- <20220628024913.1755292-10-tzungbi@kernel.org>
- <CABXOdTeCFsXYdd6uVDYkOY-tGno_wW-ZyuMb44a63tFABic+NA@mail.gmail.com>
+        s=k20201202; t=1657770142;
+        bh=OrvBccMSR2X7nBQCDDbMH6Xr05TMrt2n9YeysFTvblM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mXkSjw0ls1Zs1ArCL0tjVhY0NV8/5l1OcxM+T0QKZYMBqrAdoGzPE7zsfcuY3JQit
+         KyYafjwc7CcFN+jZ6ul165QtlrVbQjdKmorT5RfU3jSotfi3McJ9/zws7peCvyUwms
+         0WwaW+oBvtoTyUlSFaDl+EFRTwREee4jHAHljfaTgToSTKJpos789seusV5qZJhofU
+         uVlZ5aPhKEfccpAGuq8whPCEQl5sgJndww6xNVOMQsHfeEn7oCsOE7T12GgBN9xhL1
+         61ngj6+e4NT589eqQRyq0mAiDSC09+gfuVnmqQfdm0n1Bfqy5JFLyOy+1XouT5G3Ka
+         UbHGwGlAPAVgQ==
+Date:   Wed, 13 Jul 2022 20:42:20 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     iamwjia@163.com
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rajur@chelsio.com
+Subject: Re: [PATCH -next] cxgb4: cleanup double word in comment
+Message-ID: <20220713204220.45cf3904@kernel.org>
+In-Reply-To: <20220713150934.49166-1-iamwjia@163.com>
+References: <20220713150934.49166-1-iamwjia@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABXOdTeCFsXYdd6uVDYkOY-tGno_wW-ZyuMb44a63tFABic+NA@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,17 +55,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 11:23:58AM -0700, Guenter Roeck wrote:
-> On Mon, Jun 27, 2022 at 7:49 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> >
-> > cros_ec_wait_until_complete() checks `msg->result` for
-> > EC_CMD_GET_COMMS_STATUS.  However, it doesn't return standard error codes
-> > like most of others.
+On Wed, 13 Jul 2022 23:09:34 +0800 iamwjia@163.com wrote:
+> From: Wang Jia <iamwjia@163.com>
 > 
-> The callers of cros_ec_send_command() do the mapping. I am not sure if
-> it is a good idea to change that; it may have undesired side effects
-> (such as changing the userspace ABI) for callers of
-> cros_ec_send_command() not expecting this change. It would also result
-> in double mapping in some situations.
+> Remove the second 'to'.
+> 
+> Fixes: c6e0d91464da2 ("cxgb4vf: Add T4 Virtual Function Scatter-Gather Engine DMA code")
+> Fixes: b5e281ab5a96e ("cxgb4: when max_tx_rate is 0 disable tx rate limiting")
 
-Agreed.  Let's drop the change.
+Please drop the Fixes tags, it's a cleanup not a fix.

@@ -2,64 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC315574A96
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB6D574A99
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237906AbiGNK0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S238136AbiGNK3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbiGNK0i (ORCPT
+        with ESMTP id S229768AbiGNK27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:26:38 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECC247B8A;
-        Thu, 14 Jul 2022 03:26:37 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id r10so1948622wrv.4;
-        Thu, 14 Jul 2022 03:26:37 -0700 (PDT)
+        Thu, 14 Jul 2022 06:28:59 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0181FCCD;
+        Thu, 14 Jul 2022 03:28:59 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id ay11-20020a05600c1e0b00b003a3013da120so853680wmb.5;
+        Thu, 14 Jul 2022 03:28:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=RFrMj3I9fEKLl5pZ59KkM7PDh3+un+j2V5sd8WHdwXA=;
-        b=Cr7goEIzRVsjKcdhoo6Jhcyv8MieqHS3qgbivPcK2pdzkUesVqq29HIfjOz44xNVa7
-         bU0Toe0+X6JLI8gAahikvmEK0C3D1lsj9h4MLBLE8/8SMEK0dX8SAKxN5MZ7nyTNJG51
-         JMAbBqq21z7iyJVTH81gtPkTvymsFiZOIo4aD0KAwU9Ji0nrM4FI5yA/l/9opNiPUyUE
-         iikQdJlUZL09//UQahetomPutOzgyR2zxHcU2lhYWNnkAiDEvJPo7Az2VATbakvFsz5k
-         n7M53i/9YHkEFRyKz0Hao6EpsCerXiyfXZ4yA9wU4eY2y/RJzbbRdiOAMeSQ3xp/MXJc
-         lQqQ==
+        bh=LVJDeNcmLTR0pKJp80+1GOaB0lAbzqkpNjo8v/w+pkw=;
+        b=eWZRkiDpsUktKdd8Flf7wZaQsYj/OyasppqN0M71slzoLAYC4ZkrqvSJB0vT9IBnU/
+         KQA2YIb8R6C/xgeWqQYq81l7oKZwKrZf7cbzOJUgWPTHOeRZc24SGw2aWYPeS3UFF7qc
+         VaDVuQA5l22Y0eDOeVWj90wWGeyvX0qXg2Xf0AINhwozb46ZKTxo5/5yUahYkSqR9p9Z
+         NfzpPNeYtepL05B4+SXfydOZbHXIbz2/hS4kzZCgoIk/1rYogCU948/WSEqDYtyJ7onF
+         tEx0YQEzTxLIO8oeuQ9JqkzETAxBlNCLusmXVXa8m3w+UdsXEtmU7HjWX6rbxbyuk1tk
+         1SGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=RFrMj3I9fEKLl5pZ59KkM7PDh3+un+j2V5sd8WHdwXA=;
-        b=52UY8YPQIKVIOrNajrRSUwDBUO+Ud7GGHUs2DZ3D498lluoXRknyALW0h9vPsVxRBS
-         lQPwXMQWSBlMHUkq89AA6/G86iqidcViS217siLeE6c4BeKDjs5x5BHRzISZNSicH6Qg
-         3bf/Fl73ReWmlo+0QNF7o/Ohj1h+rZzwjtGZlVzby2s4EeFEYvIKM/qDfffO5pvRPLgD
-         OUvczp/A2TI9ZLwa8Sod0B6AP/Bo+q8Fo7jlgPDHb4SjW021+TtiiO21RQ+oIWmRdDCR
-         pNMQ0Np++YVoc2Ox8r/mjKP/ZkFxmBqJbg2sNs5JQTLfrDTPfgiUbGOJGECqhKf8OoPw
-         ql2A==
-X-Gm-Message-State: AJIora+ELV59WjY4hUq7J6WQDYtuHmAbD+9mFqV7hTCHeifjOLdd8Wqu
-        mtykPauIO95zx33K+ifcS7g=
-X-Google-Smtp-Source: AGRyM1t6IHbW5cOG4J3Y5OSrq8ocfoOIrKcBW9byPXKZ6lAdeOX4taN+i6aFg+nQcHbbF2VdfLeK8g==
-X-Received: by 2002:a5d:6da4:0:b0:21d:7e96:c040 with SMTP id u4-20020a5d6da4000000b0021d7e96c040mr7670447wrs.417.1657794396367;
-        Thu, 14 Jul 2022 03:26:36 -0700 (PDT)
+        bh=LVJDeNcmLTR0pKJp80+1GOaB0lAbzqkpNjo8v/w+pkw=;
+        b=Q1ua6tcBJhs0AbBTAUmKss2sWJAOcBAu3FV4xTPlirTlDZN2bE7zALgoU0zzK+z2h3
+         uzO2oeLLLXQmcgMRS8iZEAiKYOZEeLCH14Gg6il0Yugh+lMPa33KeGs/qD3j64kwUa1Y
+         nKuSVYaejAFIsVifovBbBb8hFsvsiZrgRPb8yo0jJwQsDajIFQzq6dKIqoOqMIqFQFre
+         NGvin5+yw8hylknwLMW8s5BcmGyzbhRXJ2YS4bup66Nme49Qw5sHiD7oOVQvXg75VBFL
+         xsZ5qb7TT3L8njNazi7EPaPipDzHPEhX9oJQ6DSForkjVkfeTkdnpLMHT8W4gdrb9fZC
+         Pvqw==
+X-Gm-Message-State: AJIora9FhCkXxU3WFKcNH9b+ZTdrO5S5ii8B+IZbsPjCKRCL9uqEZZ7b
+        gXdZT0Wv0211M5QmvOi/kog=
+X-Google-Smtp-Source: AGRyM1viipMxqU52bWVbMBYYUeNF4PaQiBJUBTEAbrux8DrBZOZMtCgDipZpJVWPyuwRO+m0iU6QRw==
+X-Received: by 2002:a05:600c:219a:b0:3a2:e4b0:4cfb with SMTP id e26-20020a05600c219a00b003a2e4b04cfbmr14612090wme.2.1657794537714;
+        Thu, 14 Jul 2022 03:28:57 -0700 (PDT)
 Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id h26-20020a05600c2cba00b003a2e5f536b3sm5402213wmc.24.2022.07.14.03.26.35
+        by smtp.gmail.com with ESMTPSA id v1-20020adfebc1000000b0021b98d73a4esm1102978wrn.114.2022.07.14.03.28.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 03:26:35 -0700 (PDT)
+        Thu, 14 Jul 2022 03:28:57 -0700 (PDT)
 From:   Colin Ian King <colin.i.king@gmail.com>
-To:     "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        linux-hyperv@vger.kernel.org
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] Drivers: hv: Fix spelling mistake "total_pages_commited" -> "total_pages_committed"
-Date:   Thu, 14 Jul 2022 11:26:34 +0100
-Message-Id: <20220714102634.22184-1-colin.i.king@gmail.com>
+Subject: [PATCH] objtool: Fix spelling mistake "teh " -> "the"
+Date:   Thu, 14 Jul 2022 11:28:56 +0100
+Message-Id: <20220714102856.22512-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -74,27 +69,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a seq_printf message. Fix it.
+There is a spelling mistake in a WARN_FUNC message. Fix it.
 
-Fixes: e237eed373cc ("Drivers: hv: Create debugfs file with hyper-v balloon usage information")
 Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/hv/hv_balloon.c | 2 +-
+ tools/objtool/check.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index ba52d3a3e3e3..fdf6decacf06 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -1892,7 +1892,7 @@ static int hv_balloon_debug_show(struct seq_file *f, void *offset)
- 	/* pages we have given back to host */
- 	seq_printf(f, "%-22s: %u\n", "pages_ballooned", dm->num_pages_ballooned);
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 0cec74da7ffe..8a3c4c1d1958 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -3675,7 +3675,7 @@ static int validate_entry(struct objtool_file *file, struct instruction *insn)
+ 		}
  
--	seq_printf(f, "%-22s: %lu\n", "total_pages_commited",
-+	seq_printf(f, "%-22s: %lu\n", "total_pages_committed",
- 				get_pages_committed(dm));
- 
- 	seq_printf(f, "%-22s: %llu\n", "max_dynamic_page_count",
+ 		if (!next) {
+-			WARN_FUNC("teh end!", insn->sec, insn->offset);
++			WARN_FUNC("the end!", insn->sec, insn->offset);
+ 			return -1;
+ 		}
+ 		insn = next;
 -- 
 2.35.3
 

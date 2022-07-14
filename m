@@ -2,81 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34095756CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7AA5756D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232236AbiGNVRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 17:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
+        id S234864AbiGNVTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 17:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiGNVRL (ORCPT
+        with ESMTP id S229458AbiGNVTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 17:17:11 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133E121E39
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:17:10 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id z23so5646071eju.8
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:17:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VLxamuVHzbCVq4kaO70LC5FKC4nD+QqWmnlRgBc59/o=;
-        b=XS+oJ+zFohj9Q1Sgzf8zCga5OG0fBGrBNHDpPjIG7kMOQzPA5trlg0GnXcvk7fPd18
-         ENTT+lvHyCPtvACQ26CGyeQpHQr2T5AURNNsFKf/ggcEF92Cewkp2UnDi6z0OE5ofiOU
-         857HiU47EDLiE6rNDEq7nDwc82etXZnWFP3MUvQ5t5GLPcaylidQJqxyf6I/wbET+KzT
-         qRNRvRYu4CPVry+u10g3DcLUWihrESUMSsX6bkauSVQo1VgXIUu4TcVF6ebD0NRQwa2Q
-         GgUyjvxGHHfjJHADHEd8Tr00+GcM2K6UcOPsNV5y+Dht9UyD8/qL185q4tqsIIJEW+f5
-         b7cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VLxamuVHzbCVq4kaO70LC5FKC4nD+QqWmnlRgBc59/o=;
-        b=RjA48cLDeOELFEKrULa0y8RK6X1E4Y8Am597T3uKDgGEWVFzoZfLolYzhM4LTvDmkv
-         pzZttyIX6Pr8D0sGIaqEn2DRWma10n41eFsqPgHUxXwR8hAS1KAE7p9cqHGkB5DysU4c
-         rpHRLn1MsUxBw0w7Tf/QHTROdh55OFjsEXNGiR3TJr/X0gaaRcivYFg407QFFBEjGsmX
-         YKrplFK8qmWCzYqjt0bD+UYzM2VKI4hZSzG5OHqsTX3lnkEU9+YmstxEsPjc9wZX+CuQ
-         uLoVHqDLgc/nepSmpmr7lJthUpglPjWO3hFvQ11r1KNC89zCGcUn2AYy4RShnGtJwzjX
-         /4GQ==
-X-Gm-Message-State: AJIora/qE4BcRMxRsj/4ceK2FzMNlKSIbRtv+dplxT6Q1E+4Jp6+fFQc
-        Rvc8FLbH6qk+Xs2GI4VSM9oQB2TxgbC+PeXr7yE=
-X-Google-Smtp-Source: AGRyM1sG1bSb5jFfp0h+4Zx0OojqNsTAaxrusUnLj5DeQbvjg/hOVgzg7dmrwV2rzli60mM+nlPcvINeNwe/Fvv9bn4=
-X-Received: by 2002:a17:907:2702:b0:72b:307b:98e6 with SMTP id
- w2-20020a170907270200b0072b307b98e6mr10660524ejk.658.1657833428627; Thu, 14
- Jul 2022 14:17:08 -0700 (PDT)
+        Thu, 14 Jul 2022 17:19:45 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C69113CF9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:19:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657833582; x=1689369582;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hBJ3M0nsHX8Turu4kfaB9l5SbtZW0jgibEdxujmYpCQ=;
+  b=jP81WxkSkgjVByuUpIdEcUJb/jAodImU1/TyGILoO0S+76Lv8V6dQOMX
+   VdjYU2HeLfy5tY4EVVyFqx6qaLeAgEJeEHpRH9MVIhq4FJ4pgD//bYRMr
+   1RbPL+kkZB8lNveFE3LscR/1NLKS+k/qpq/h+Vm66V3rJi2GrfX/CsjoD
+   hR19jBTGmZbNo4zMTsO6LSQR4jhtj9P4g6AXbg2f4xRF3N4MILFuUugb4
+   F1XnuH3tm4jpZCl7ryJ3XakNcK2wuajeBWRhBczBNZM1DG5JvujO767AC
+   ChFr/j/+JFcjdDJQf/Ntggz+bklRKTMd1RBLLaA4IpW34+EqP3FITNXNZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="284387967"
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="284387967"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 14:19:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="623586041"
+Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 14 Jul 2022 14:19:40 -0700
+Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oC6FH-0001AT-CS;
+        Thu, 14 Jul 2022 21:19:39 +0000
+Date:   Fri, 15 Jul 2022 05:19:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Evan Quan <evan.quan@amd.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17:
+ warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less
+ aligned than 'PPTable_t' and is usually due to 'struct
+ smu_11_0_powerplay_table' being packed, which can lea...
+Message-ID: <202207150552.eYsCNEle-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220411221536.283312-1-dmitry.osipenko@collabora.com>
- <a78343c8-2a6d-b223-4219-6b6b0a4fcb1f@arm.com> <CAK4VdL2hCEoshWZbCh5mkHuS6wYMiPFR3v4MWTnrEKM9zyv6Mw@mail.gmail.com>
- <ef88ec2c-77b5-fa0d-49d1-fdd2451713b7@collabora.com> <573fae0d-c9ab-98b0-c6f1-5b0d4e52dd01@amd.com>
- <a33ab7b9-738f-db91-f6ba-78a9641365e8@amd.com> <b05f9861-1966-72f5-132b-aebb4b6e0c6b@collabora.com>
- <107fe968-8311-0511-cc31-22feb994a6d7@collabora.com> <3e07a8d0-2cbc-8f3e-8f9f-5b73fb82028b@amd.com>
- <CADnq5_MMmeWkiMxjYfrG7pip8BEkbkRc8ADUDLEi++kRF76sqg@mail.gmail.com>
- <bff42c98-045d-2e5a-2cf9-eb563425375e@collabora.com> <6e0c7590-6ffb-162b-a98d-0a39333453f6@collabora.com>
- <4ca27cee-eda0-0a65-f972-c69cc3b3e53e@amd.com> <CADnq5_Mms=UbPc7D0-Z-HNUHfCHVWMO82NO+jh5Yg8DmkKwH3A@mail.gmail.com>
- <4c7e7b6d-8dcf-41ae-c853-b95e6efd9c32@amd.com>
-In-Reply-To: <4c7e7b6d-8dcf-41ae-c853-b95e6efd9c32@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 14 Jul 2022 17:16:56 -0400
-Message-ID: <CADnq5_NQ+BCQKt1cJX_V0ZmLE6O2ve5UwSxCzXbDrtkcig4=9Q@mail.gmail.com>
-Subject: Re: [PATCH v1] drm/scheduler: Don't kill jobs in interrupt context
-To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Erico Nunes <nunes.erico@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,95 +66,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 1:58 PM Andrey Grodzovsky
-<andrey.grodzovsky@amd.com> wrote:
->
-> On 2022-07-14 12:22, Alex Deucher wrote:
->
-> > On Thu, Jul 14, 2022 at 10:14 AM Andrey Grodzovsky
-> > <andrey.grodzovsky@amd.com> wrote:
-> >>
-> >> On 2022-07-14 05:57, Dmitry Osipenko wrote:
-> >>> On 7/12/22 11:56, Dmitry Osipenko wrote:
-> >>>> On 7/6/22 18:46, Alex Deucher wrote:
-> >>>>> On Wed, Jul 6, 2022 at 9:49 AM Andrey Grodzovsky
-> >>>>> <andrey.grodzovsky@amd.com> wrote:
-> >>>>>> On 2022-07-06 03:07, Dmitry Osipenko wrote:
-> >>>>>>
-> >>>>>>> Hello Andrey,
-> >>>>>>>
-> >>>>>>> On 5/17/22 17:48, Dmitry Osipenko wrote:
-> >>>>>>>> On 5/17/22 17:13, Andrey Grodzovsky wrote:
-> >>>>>>>>> Done.
-> >>>>>>>>>
-> >>>>>>>>> Andrey
-> >>>>>>>> Awesome, thank you!
-> >>>>>>>>
-> >>>>>>> Given that this drm-scheduler issue needs to be fixed in the 5.19=
--RC and
-> >>>>>>> earlier, shouldn't it be in the drm-fixes and not in drm-next?
-> >>>>>> I pushed it into drm-misc from where it got into drm-next. I don't=
- have
-> >>>>>> permission for drm-fixes.
-> >>>>> The -fixes branch of drm-misc.
-> >>>> Now I don't see the scheduler bugfix neither in the -fixes branch no=
-r in
-> >>>> the -next and today Dave sent out 5.19-rc7 pull request without the
-> >>>> scheduler fix. Could anyone please check what is going on with the D=
-RM
-> >>>> patches? Thanks!
-> >>>>
-> >>>> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2F=
-github.com%2Ffreedesktop%2Fdrm-misc%2Fcommits%2Fdrm-misc-fixes&amp;data=3D0=
-5%7C01%7Candrey.grodzovsky%40amd.com%7Cd62c2e6d3ec748cd639608da65b52548%7C3=
-dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637934125954377887%7CUnknown%7CTW=
-FpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3=
-D%7C3000%7C%7C%7C&amp;sdata=3DWPmMC%2B%2Fy83cUctuF%2FLNo9VhWnB%2FkpUVQotMh7=
-4VshB8%3D&amp;reserved=3D0
-> >>>> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2F=
-cgit.freedesktop.org%2Fdrm%2Fdrm-misc%2Flog%2F%3Fh%3Ddrm-misc-fixes&amp;dat=
-a=3D05%7C01%7Candrey.grodzovsky%40amd.com%7Cd62c2e6d3ec748cd639608da65b5254=
-8%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637934125954377887%7CUnknown=
-%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6=
-Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DRzCMLUYLmUjSmvDm4E%2FJr%2B5rp7E8UvjFt1tm=
-wBoBiVc%3D&amp;reserved=3D0
-> >>> The patch is in the drm-misc-next-fixes, so it wasn't moved to the
-> >>> drm-misc-fixes.
-> >>>
-> >>> Andrey, don't you have access to drm-misc-fixes? Or you meant
-> >>> drm-fixes=3Ddrm-misc-fixes?
-> >>
-> >> I have only accesses to drm-misc-next to which I pushed this patch.
-> > anyone with drm-misc rights can commit to any of the branches in the
-> > drm-misc tree.  You just need to check out and push the appropriate
-> > branch.  then push the changes.  E.g.,
-> > dim push-branch drm-misc-next
-> > vs
-> > dim push-branch drm-misc-next-fixes
-> > etc.
-> >
-> > Alex
->
->
-> I see, but what  is the reason then that Dave sent out 5.19-rc7 pull
-> request without the
-> scheduler fix if the patch was merged into drm-misc-next long ago ? All
-> the changes from
-> there are usually picked up for pull requests, no ?
+Hi Evan,
 
-drm-misc-next is for new stuff for the next kernel (e.g., 5.20).
-drm-misc-fixes is for fixes for the current kernel cycle (e.g., 5.19).
-See:
-https://drm.pages.freedesktop.org/maintainer-tools/drm-misc.html
+FYI, the error/warning still remains.
 
-Alex
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4a57a8400075bc5287c5c877702c68aeae2a033d
+commit: 837d542a09cd533055423dfca7e621a9c1d13c5b drm/amd/pm: relocate the power related headers
+date:   6 months ago
+config: arm-randconfig-r016-20220714 (https://download.01.org/0day-ci/archive/20220715/202207150552.eYsCNEle-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=837d542a09cd533055423dfca7e621a9c1d13c5b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 837d542a09cd533055423dfca7e621a9c1d13c5b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
->
-> Andrey
->
->
-> >
-> >
-> >> Andrey
-> >>
-> >>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/arcturus_ppt.c:37:
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17: warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
+                   ^
+   1 warning generated.
+--
+   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:39:
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_7_pptable.h:193:17: warning: field smc_pptable within 'struct smu_11_0_7_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_7_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
+                   ^
+   1 warning generated.
+--
+   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/aldebaran_ppt.c:37:
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v13_0_pptable.h:161:12: warning: field smc_pptable within 'struct smu_13_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_13_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           PPTable_t smc_pptable;                        //PPTable_t in driver_if.h
+                     ^
+   1 warning generated.
+
+
+vim +163 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h
+
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  137  
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  138  struct smu_11_0_powerplay_table
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  139  {
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  140        struct atom_common_table_header header;
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  141        uint8_t  table_revision;
+4b2bb705a0b72fb drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Kenneth Feng 2019-04-04  142        uint16_t table_size;                          //Driver portion table size. The offset to smc_pptable including header size
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  143        uint32_t golden_pp_id;
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  144        uint32_t golden_revision;
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  145        uint16_t format_id;
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  146        uint32_t platform_caps;                       //POWERPLAYABLE::ulPlatformCaps
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  147                                                      
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  148        uint8_t  thermal_controller_type;             //one of SMU_11_0_PP_THERMALCONTROLLER
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  149  
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  150        uint16_t small_power_limit1;
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  151        uint16_t small_power_limit2;
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  152        uint16_t boost_power_limit;
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  153        uint16_t od_turbo_power_limit;                //Power limit setting for Turbo mode in Performance UI Tuning. 
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  154        uint16_t od_power_save_power_limit;           //Power limit setting for PowerSave/Optimal mode in Performance UI Tuning. 
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  155        uint16_t software_shutdown_temp;
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  156  
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  157        uint16_t reserve[6];                          //Zero filled field reserved for future use
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  158  
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  159        struct smu_11_0_power_saving_clock_table      power_saving_clock;
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  160        struct smu_11_0_overdrive_table               overdrive_table;
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  161  
+73abde4d864b381 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  162  #ifndef SMU_11_0_PARTIAL_PPTABLE
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12 @163        PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
+73abde4d864b381 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  164  #endif
+2dd1209e5760686 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2019-02-12  165  } __attribute__((packed));
+ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  166  
+
+:::::: The code at line 163 was first introduced by commit
+:::::: ae35cd6a480f9c2ac356f792c9a9321a5863776a drm/amd/powerplay: add pptable header for smu11
+
+:::::: TO: Huang Rui <ray.huang@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

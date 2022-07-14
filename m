@@ -2,79 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABE5575215
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C1157521B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240256AbiGNPmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
+        id S240413AbiGNPnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239891AbiGNPm2 (ORCPT
+        with ESMTP id S240404AbiGNPnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:42:28 -0400
+        Thu, 14 Jul 2022 11:43:15 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B81CF528AC
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:42:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCA21550BA
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:43:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657813346;
+        s=mimecast20190719; t=1657813392;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VOgvUYIncXWnFhKR1hAi50QlDyggks7WiA8ZUF17MI0=;
-        b=fg9Up3dG5BJ1rBLTfg42pxeIH9RhD5efYv7NVENMK3zOs3Cf/ibQ3VpTheIsbc4qr132GP
-        XfYmmGzXhKxMQdxftaM7hzqv9j+DztAyLD4Bxv3MvZ2nrDEQQcSCcIuhXNDhjux03p3YFN
-        dK9fZOaxWVNqdiQmyn4naGlB4CT0j0A=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=z7W6YU0Nb2M09QTorgpdGUCXAXIfeENdniIao9kV1cw=;
+        b=fAOR9lx/l/V2EgnB8/ifVW32qNRPV+iOFbjOH1sYRZ50kfwX7x8gGSrxIevHpHqrIccy0c
+        xxA7sTSs4u1QB6ZB+9rpPsaWIZb8MEAW9R8vywGyS1ydThpgYxQwWn5jGRrw3EX4I7q8VQ
+        8VkrJ2v+NwBVlKnxQt/C3YKBB1FyPs4=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-103-dw5EjQU3OO2EKi5QNTocuw-1; Thu, 14 Jul 2022 11:42:25 -0400
-X-MC-Unique: dw5EjQU3OO2EKi5QNTocuw-1
-Received: by mail-ej1-f69.google.com with SMTP id hr24-20020a1709073f9800b0072b57c28438so896640ejc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:42:25 -0700 (PDT)
+ us-mta-541-rSwIzNxaOnqEb-oUq1P7Og-1; Thu, 14 Jul 2022 11:43:11 -0400
+X-MC-Unique: rSwIzNxaOnqEb-oUq1P7Og-1
+Received: by mail-ed1-f71.google.com with SMTP id m13-20020a056402430d00b0043ac2f27d83so1740155edc.20
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:43:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=VOgvUYIncXWnFhKR1hAi50QlDyggks7WiA8ZUF17MI0=;
-        b=NTAqcK9A80FduUYbrmsXGyFZsqq4e26R+vgRg0MFoaub9matyN+xXB2WSVcuz3S1Kg
-         hOrZPBJ9VNVsY6tE0SiT9+YLCEeEjU1CW8Szcaz3aCgHCOJON0JkUXg1pq4OPRl8NWJc
-         449Jw+yNUUM7F1IObzcHgGd6VvGcNlpoWsNqYnqrIwID320KyRFrzmud6eNf/HdOkTSN
-         Yv2g90/D3g2i9Gmd1eiIvtIpEAgobEOIYrWfv9Jyw2xByoetGt6Rus8hP7xAzkTg60BC
-         SFq+YNWd8AY99LdPAgsuBIY/bsrojM7F0Ys1V10xocNOd1QhinPT/7J2Ir+3/Zk0ZoKu
-         X0jQ==
-X-Gm-Message-State: AJIora8UxEi1oLMDqG0JIOPtVdyA0libbMRBFGJtvQx/pjnbcoCTVBxg
-        KT/tBlOhaWmAxqexIgwIg8B4LjQW9uWQ7B3I679lBBOM/iKZJ83cAleNXlDZHj8AbK1iGRCrWQU
-        yWgdf/854nGxVaRPr6ZCOjTci
-X-Received: by 2002:aa7:d155:0:b0:43a:bc8d:8d75 with SMTP id r21-20020aa7d155000000b0043abc8d8d75mr13060083edo.322.1657813344365;
-        Thu, 14 Jul 2022 08:42:24 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1s7gve3iab4X/ADupNn/dQIy8nWtHC/Qs9AINATQpnZItpmwgA4FIBPCDi8iL7P+4KWrXVlCg==
-X-Received: by 2002:aa7:d155:0:b0:43a:bc8d:8d75 with SMTP id r21-20020aa7d155000000b0043abc8d8d75mr13060048edo.322.1657813344150;
-        Thu, 14 Jul 2022 08:42:24 -0700 (PDT)
+        bh=z7W6YU0Nb2M09QTorgpdGUCXAXIfeENdniIao9kV1cw=;
+        b=SGSUt4mnpI7vJDy957b739VF73sECyZBFedKtHfqLjxMn0ABOyvq/E0OszQtUK5KoU
+         g8NAY0NkHepKiqwPOHC28VP0K3mqfVvEDA78gOc7EtsJe77kTidbenn+b7aGIT8Hdmzj
+         4Qh8YP0zfjw64gb4IgpJ5uMPOvP7B1nTmM+TzhlVx5pptypnYOo7TVVfHod+Muyjfb64
+         pYNukV7fKrgKftRYN11Wzk+lEgnoNG/VP7RruFdMQZksQH5Pl0j4FVkMnAUY7q8Ky5oE
+         4TSXBjdc/ONIGPxbyV8eantM0vWvGa7Dx7m4SPdzWYTo1COvS7mubgzBEkAU0jYKmtZp
+         7NPQ==
+X-Gm-Message-State: AJIora9DBrHjrly+/bsl1zFKCEvkc24bd1l3167cMWxRlPfQw+w3I3Ln
+        QTMIjNqpmIeFkrQD3Ijt2zEnIq/bcLQnwk+wa9TMCVJksiK6Qx6eriVKrRSFD+2iowUi4SvGcwx
+        hrwE2e3gbdQBi3gIbabIRCcOL
+X-Received: by 2002:a05:6402:27cf:b0:43a:de0b:9a82 with SMTP id c15-20020a05640227cf00b0043ade0b9a82mr12999087ede.427.1657813390003;
+        Thu, 14 Jul 2022 08:43:10 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sHi6lrpW1J6cgagkq6CrQc4KL2oMqOpxrMUFHeM0Ogknu3QviU02RZ1dI7cYioGxaZh6C1yw==
+X-Received: by 2002:a05:6402:27cf:b0:43a:de0b:9a82 with SMTP id c15-20020a05640227cf00b0043ade0b9a82mr12999074ede.427.1657813389810;
+        Thu, 14 Jul 2022 08:43:09 -0700 (PDT)
 Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id v6-20020aa7d806000000b0043a754d53e5sm1231016edq.78.2022.07.14.08.42.22
+        by smtp.googlemail.com with ESMTPSA id fq37-20020a1709069da500b0072b55713daesm827057ejc.56.2022.07.14.08.43.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 08:42:23 -0700 (PDT)
-Message-ID: <a2ade925-89db-5d05-ba44-e3b77125032e@redhat.com>
-Date:   Thu, 14 Jul 2022 17:42:22 +0200
+        Thu, 14 Jul 2022 08:43:09 -0700 (PDT)
+Message-ID: <aa86054b-91ac-b321-37d6-88d483758be4@redhat.com>
+Date:   Thu, 14 Jul 2022 17:43:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH] KVM: selftests: Double check on the current CPU in
- rseq_test
+Subject: Re: [PATCH] KVM: x86: Restrict get_mt_mask() to a u8, use
+ KVM_X86_OP_OPTIONAL_RET0
 Content-Language: en-US
 To:     Sean Christopherson <seanjc@google.com>
-Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
-        shuah@kernel.org, maz@kernel.org, oliver.upton@linux.dev,
-        shan.gavin@gmail.com
-References: <20220714080642.3376618-1-gshan@redhat.com>
- <cd5d029c-b396-45ef-917b-92e054659623@redhat.com>
- <YtA3s0VRj3x7vO7B@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220714153707.3239119-1-seanjc@google.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YtA3s0VRj3x7vO7B@google.com>
+In-Reply-To: <20220714153707.3239119-1-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -87,16 +81,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/14/22 17:35, Sean Christopherson wrote:
->> Can you check that smp_rmb() and smp_wmb() generate correct instructions on
->> arm64?
+On 7/14/22 17:37, Sean Christopherson wrote:
+> Restrict get_mt_mask() to a u8 and reintroduce using a RET0 static_call
+> for the SVM implementation.  EPT stores the memtype information in the
+> lower 8 bits (bits 6:3 to be precise), and even returns a shifted u8
+> without an explicit cast to a larger type; there's no need to return a
+> full u64.
 > 
-> That seems like the most likely scenario (or a kernel bug), I distinctly remember
-> the barriers provided by tools/ being rather bizarre.
+> Note, RET0 doesn't play nice with a u64 return on 32-bit kernels, see
+> commit bf07be36cd88 ("KVM: x86: do not use KVM_X86_OP_OPTIONAL_RET0 for
+> get_mt_mask").
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Maybe we should bite the bait and use C11 atomics in tools/.  I've long 
-planned an article "C11 atomics for kernel programmers", especially 
-because this will also be an issue when Rust gets into the mix...
+Doh, that's obvious.  Queued, thanks.
 
 Paolo
+
+> ---
+>   arch/x86/include/asm/kvm-x86-ops.h | 2 +-
+>   arch/x86/include/asm/kvm_host.h    | 2 +-
+>   arch/x86/kvm/svm/svm.c             | 6 ------
+>   arch/x86/kvm/vmx/vmx.c             | 2 +-
+>   4 files changed, 3 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index 6f2f1affbb78..51f777071584 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -88,7 +88,7 @@ KVM_X86_OP(deliver_interrupt)
+>   KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
+>   KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
+>   KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
+> -KVM_X86_OP(get_mt_mask)
+> +KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
+>   KVM_X86_OP(load_mmu_pgd)
+>   KVM_X86_OP(has_wbinvd_exit)
+>   KVM_X86_OP(get_l2_tsc_offset)
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index de5a149d0971..fa4b2392fba0 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1546,7 +1546,7 @@ struct kvm_x86_ops {
+>   	int (*sync_pir_to_irr)(struct kvm_vcpu *vcpu);
+>   	int (*set_tss_addr)(struct kvm *kvm, unsigned int addr);
+>   	int (*set_identity_map_addr)(struct kvm *kvm, u64 ident_addr);
+> -	u64 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
+> +	u8 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
+>   
+>   	void (*load_mmu_pgd)(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+>   			     int root_level);
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 37ce061dfc76..19af6dacfc5b 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4158,11 +4158,6 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
+>   	return true;
+>   }
+>   
+> -static u64 svm_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> -{
+> -	return 0;
+> -}
+> -
+>   static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+>   {
+>   	struct vcpu_svm *svm = to_svm(vcpu);
+> @@ -4814,7 +4809,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>   	.check_apicv_inhibit_reasons = avic_check_apicv_inhibit_reasons,
+>   	.apicv_post_state_restore = avic_apicv_post_state_restore,
+>   
+> -	.get_mt_mask = svm_get_mt_mask,
+>   	.get_exit_info = svm_get_exit_info,
+>   
+>   	.vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index c30115b9cb33..c895a3b6824d 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7352,7 +7352,7 @@ static int __init vmx_check_processor_compat(void)
+>   	return 0;
+>   }
+>   
+> -static u64 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> +static u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+>   {
+>   	u8 cache;
+>   
+> 
+> base-commit: b9b71f43683ae9d76b0989249607bbe8c9eb6c5c
 

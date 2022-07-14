@@ -2,49 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43097574D38
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13285574D31
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238708AbiGNMNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S232033AbiGNMNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238644AbiGNMNt (ORCPT
+        with ESMTP id S229923AbiGNMNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:13:49 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4993FDFCE;
-        Thu, 14 Jul 2022 05:13:45 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LkCzy3k91zFq24;
-        Thu, 14 Jul 2022 20:12:46 +0800 (CST)
-Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 14 Jul 2022 20:13:43 +0800
-Received: from huawei.com (10.67.175.34) by dggpeml500008.china.huawei.com
- (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 14 Jul
- 2022 20:13:42 +0800
-From:   Ren Zhijie <renzhijie2@huawei.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <jonathan@marek.ca>, <robert.foss@linaro.org>,
-        <vkoul@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Ren Zhijie <renzhijie2@huawei.com>
-Subject: [PATCH -next] clk: qcom: fix build error initializer element is not constant
-Date:   Thu, 14 Jul 2022 20:11:44 +0800
-Message-ID: <20220714121144.71062-1-renzhijie2@huawei.com>
+        Thu, 14 Jul 2022 08:13:12 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0151A6
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:13:12 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E3duVu018136;
+        Thu, 14 Jul 2022 05:13:10 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=dRuLtSGJoQSVRfDNoSBClXepVJNHQ59wCDUFMOuKg0w=;
+ b=bThDXqKyTI//EopbKzDTJxkVK2QrRNIYiZmJmoe9Sa5PiqE4qB9W56BwxxpLeIATHTgB
+ 9O3BFQyTb1K/7t1xdGITg3so7m6sXN3R07XTvHIF+nrErnbnGM5riu14MSLrXY2tYwG9
+ 3J5CHlZasFcHeGuIlh5OklDWfJRAuxIM9+ipxmHGVJxUJSpKSeupKUk/y3n5St2IQQbH
+ NJQv69vbreGa0RvhE9X/b592gNhvtuzzRze9gmiKzqw0va5vS2xiCNRkDk4VBCM2TKuO
+ FocFWnLef0mBuAY11xE9hzX0rOmQHqT/In5MhuakI2oNzkYVwh97IDuOTVGAUWBI9fT/ gg== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3habegsk39-15
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 14 Jul 2022 05:13:10 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 14 Jul
+ 2022 05:12:21 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Thu, 14 Jul 2022 05:12:21 -0700
+Received: from localhost.localdomain (unknown [10.110.150.170])
+        by maili.marvell.com (Postfix) with ESMTP id EBF423F704D;
+        Thu, 14 Jul 2022 05:12:20 -0700 (PDT)
+From:   Wojciech Bartczak <wbartczak@marvell.com>
+To:     <wbartczak@marvell.com>, <linux-kernel@vger.kernel.org>
+CC:     <wbartczak@gmail.com>, Jassi Brar <jassisinghbrar@gmail.com>,
+        "Piyush Malgujar" <pmalgujar@marvell.com>,
+        Sunil Goutham <sgoutham@marvell.com>
+Subject: [PATCH 0/2] Add support for Marvell MHU on CN9x and CN10x SoC
+Date:   Thu, 14 Jul 2022 05:12:11 -0700
+Message-ID: <20220714121215.22931-1-wbartczak@marvell.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.175.34]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500008.china.huawei.com (7.185.36.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain
+X-Proofpoint-GUID: nz8yssWuLm-yU06BzGF4yuW0f1vT67Mr
+X-Proofpoint-ORIG-GUID: nz8yssWuLm-yU06BzGF4yuW0f1vT67Mr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-14_10,2022-07-14_01,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,50 +66,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_CC_VERSION_TEXT="x86_64-linux-gnu-gcc (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0"
-make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-, will be failed, like this:
+In order to support ARM SCMI for the Marvell CN9x, CN10x SoC, add a
+generic platform MHU driver based loosely on arm_mhu.c and pcc.c.
 
-drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is not constant
-  gpu_cc_parent,
-  ^~~~~~~~~~~~~
-drivers/clk/qcom/gpucc-sm8350.c:111:2: note: (near initialization for ‘gpu_cc_parent_data_0[0]’)
-drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is not constant
-  gpu_cc_parent,
-  ^~~~~~~~~~~~~
-drivers/clk/qcom/gpucc-sm8350.c:126:2: note: (near initialization for ‘gpu_cc_parent_data_1[0]’)
-make[3]: *** [drivers/clk/qcom/gpucc-sm8350.o] Error 1
+Wojciech Bartczak (2):
+  dt-bindings: mailbox : marvell,mbox: Add bindings
+  mailbox: mvl_mhu: Add support for Marvell Message Handling Unit
 
-It seems that nested constant initializer is not supported in GCC 7.4.0. For portability resons, we should fix it.
+ .../mailbox/marvell,mbox-mailbox.yaml         | 112 +++++
+ MAINTAINERS                                   |   9 +
+ drivers/mailbox/Kconfig                       |  10 +
+ drivers/mailbox/Makefile                      |   2 +
+ drivers/mailbox/mvl_mhu.c                     | 473 ++++++++++++++++++
+ 5 files changed, 606 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mailbox/marvell,mbox-mailbox.yaml
+ create mode 100644 drivers/mailbox/mvl_mhu.c
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Fixes: 160758b05ab1 ("clk: qcom: add support for SM8350 GPUCC")
-Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
----
- drivers/clk/qcom/gpucc-sm8350.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/clk/qcom/gpucc-sm8350.c b/drivers/clk/qcom/gpucc-sm8350.c
-index d13fa813d190..5367ce654ac9 100644
---- a/drivers/clk/qcom/gpucc-sm8350.c
-+++ b/drivers/clk/qcom/gpucc-sm8350.c
-@@ -108,7 +108,7 @@ static const struct parent_map gpu_cc_parent_map_0[] = {
- };
- 
- static const struct clk_parent_data gpu_cc_parent_data_0[] = {
--	gpu_cc_parent,
-+	{ .fw_name = "bi_tcxo" },
- 	{ .hw = &gpu_cc_pll0.clkr.hw },
- 	{ .hw = &gpu_cc_pll1.clkr.hw },
- 	{ .fw_name = "gcc_gpu_gpll0_clk_src" },
-@@ -123,7 +123,7 @@ static const struct parent_map gpu_cc_parent_map_1[] = {
- };
- 
- static const struct clk_parent_data gpu_cc_parent_data_1[] = {
--	gpu_cc_parent,
-+	{ .fw_name = "bi_tcxo" },
- 	{ .hw = &gpu_cc_pll1.clkr.hw },
- 	{ .fw_name = "gcc_gpu_gpll0_clk_src" },
- 	{ .fw_name = "gcc_gpu_gpll0_div_clk_src" },
 -- 
 2.17.1
 

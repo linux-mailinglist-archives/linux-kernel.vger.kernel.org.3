@@ -2,208 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCF6574607
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92BAE574623
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbiGNHrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 03:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S237748AbiGNHtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 03:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234625AbiGNHq7 (ORCPT
+        with ESMTP id S237797AbiGNHtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 03:46:59 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAD337196;
-        Thu, 14 Jul 2022 00:46:57 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 15:46:45 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1657784816;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1TJviPunlwH7RxQV4jVLO1pPXI9F2og9+lwfZ75k6+g=;
-        b=OKMxJzzUX/eSiaPlxOT6jOv1GE3aUntvTUhYa/zLy2CJbOPuL7nAwGJXJ8p5NWffeqB118
-        YTbQyjLtSsm/NH6anB6VLWIOm/CcVlhhocIHHlNwmTBehCgatSEn1F4yO/M8UNl/aXO16n
-        reyCtQJBf8EZKXDfUHbKAMrUCx3bEwQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
-Subject: Re: [PATCH V5 01/16] rv: Add Runtime Verification (RV) interface
-Message-ID: <Ys/J5fLaojYeiVzL@geo.homenetwork>
-References: <cover.1657745645.git.bristot@kernel.org>
- <442b03c687c298b25c79aa5a16ec7fb2aef0f2c9.1657745645.git.bristot@kernel.org>
+        Thu, 14 Jul 2022 03:49:11 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEF63D5BD
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:47:49 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w12so1294678edd.13
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:47:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=j4QfK2iQAnum2nLeQTWlegafxzZD5NZOg4pgJLg01dE=;
+        b=Ob/iDl7slzxs6s1Nb24Ut1I908w4BBEZs3y45dQIbbgQRW2Bchged3fvN70UJ+fyWa
+         VI7tpv0BXfNCh4vxB8vUl++0/hQclfaaGz6EZN71BRZam77903CT2hFzVAJ0yRN3mhJW
+         O32U9HZ+kpLGobXtM3iBZgHBIAl0ME2xRb9uaNjN7UmxuBSbylu2heXjW2zF6ZUjw/b1
+         wCfHNXH9+Fl2Ub65sYkqbFd32O8V2UX26XELw47ntiFYJN4/kV1FsaHBJoRLtwPbyH00
+         CIG5gPaobIxJR9q7lzP+He4mAC2SQbJ/fmC/Guau+FgzWfunLqMXAZ/yw4X7H1sM97Tz
+         QNiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=j4QfK2iQAnum2nLeQTWlegafxzZD5NZOg4pgJLg01dE=;
+        b=TLk7cKo5NQzBsMIOYFiXViPLXxm28rELIMo5UNvKVYw6RnRwr2H2mHs038RIm8J4/z
+         M5KT5G8pCLrZCKW35Px1W18vdlgCyEwHGXNY5nKK2a1GQvEyGyd2tt8ymMdcs0lDCAxK
+         Ugr+6wk4VM5sVnSV5RQSeRkzL7dbpAPJV06A43J+bd76u9EcQbuksWc+NoWnbLHWo6WT
+         H5UBQZrlx4FFUozaKcRzPNHzQY87jY1T/sxNuuhz6jdkR9SmmULX4x7XLz7tkX+wMxsa
+         /5cZSI0KEs8AZdyzAqeK1ceP1O70fRoT1vuFJ/yY2eYsYq8P/2Frei/5fHu4hEW3VqMg
+         l32w==
+X-Gm-Message-State: AJIora8lCXa5q0RQx45QT+JnjzTnESzsHOus9gHu2bShQlgU7SFs4fZ+
+        E+rh8zhqtxNC+PhhC0LnY05jN9zDesTrKsW+/jpGkQ==
+X-Google-Smtp-Source: AGRyM1tMHx1easLYFa9xYvefclce1EiBewHWg20ENwcZg56sE6aT7znvw62lycVMsNnzxTeLelmexmFPGb0ofeGxrV8=
+X-Received: by 2002:a05:6402:2812:b0:43a:9041:d5db with SMTP id
+ h18-20020a056402281200b0043a9041d5dbmr10342886ede.208.1657784867856; Thu, 14
+ Jul 2022 00:47:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <442b03c687c298b25c79aa5a16ec7fb2aef0f2c9.1657745645.git.bristot@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 14 Jul 2022 13:17:36 +0530
+Message-ID: <CA+G9fYuxp2Ge1JGwuXase633r8_7zPZkxrD6doCKi6aYY3mfPw@mail.gmail.com>
+Subject: [next] Kernel panic - not syncing: swiotlb_init_remap: nslabs = 0 too small
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        linux-mm <linux-mm@kvack.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christoph Hellwig <hch@lst.de>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, conor@kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 11:17:17PM +0200,
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
+[Please ignore this email if it is already reported]
 
-[...]
+Linux next-20220713 boot failed on arm, arm64, x86_64 and i386 [1].
 
-> +void put_task_monitor_slot(int slot)
-> +{
-> +	lockdep_assert_held(&rv_interface_lock);
-> +
-> +	if (slot < 0 || slot > RV_PER_TASK_MONITORS) {
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-slot is the array index that should be 0 here. The up bound is not bigger
-than 0 because the element of array now is RV_PER_TASK_MONITORS. 
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: 4662b7adea50bb62e993a67f611f3be625d3df0d
+  git_describe: next-20220713
+  kernel_version: 5.19.0-rc6
+  kernel-config: https://builds.tuxbuild.com/2BtFIR2DegCrbRCCTSZF93YVeiO/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/586982028
+  artifact-location: https://builds.tuxbuild.com/2BtFIR2DegCrbRCCTSZF93YVeiO
+  vmlinux.xz: https://builds.tuxbuild.com/2BtFIR2DegCrbRCCTSZF93YVeiO/vmlinux.xz
+  System.map: https://builds.tuxbuild.com/2BtFIR2DegCrbRCCTSZF93YVeiO/System.map
+  toolchain: gcc-11
 
-So up bound check is 'slot > RV_PER_TASK_MONITORS-1'.
+Here is the boot log output from arm64 juno-r2 device.
 
-[...]
+[    0.000000] Booting Linux on physical CPU 0x0000000100 [0x410fd033]
+[    0.000000] Linux version 5.19.0-rc6-next-20220713
+(tuxmake@tuxmake) (aarch64-linux-gnu-gcc (Debian 11.3.0-3) 11.3.0, GNU
+ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT @1657717522
+[    0.000000] Machine model: ARM Juno development board (r2)
+[    0.000000] earlycon: pl11 at MMIO 0x000000007ff80000 (options '')
+[    0.000000] printk: bootconsole [pl11] enabled
+[    0.000000] efi: UEFI not found.
+[    0.000000] NUMA: No NUMA configuration found
+[    0.000000] NUMA: Faking a node at [mem
+0x0000000080000000-0x00000009ffffffff]
+[    0.000000] NUMA: NODE_DATA [mem 0x9fefd1b40-0x9fefd3fff]
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000080000000-0x00000000ffffffff]
+[    0.000000]   DMA32    empty
+[    0.000000]   Normal   [mem 0x0000000100000000-0x00000009ffffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080000000-0x00000000feffffff]
+[    0.000000]   node   0: [mem 0x0000000880000000-0x00000009ffffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000009ffffffff]
+[    0.000000] On node 0, zone Normal: 4096 pages in unavailable ranges
+[    0.000000] cma: Reserved 32 MiB at 0x00000000fd000000
+[    0.000000] psci: probing for conduit method from DT.
+[    0.000000] psci: PSCIv1.1 detected in firmware.
+[    0.000000] psci: Using standard PSCI v0.2 function IDs
+[    0.000000] psci: Trusted OS migration not required
+[    0.000000] psci: SMC Calling Convention v1.0
+[    0.000000] percpu: Embedded 30 pages/cpu s82856 r8192 d31832 u122880
+[    0.000000] Detected VIPT I-cache on CPU0
+[    0.000000] CPU features: detected: ARM erratum 843419
+[    0.000000] CPU features: detected: ARM erratum 845719
+[    0.000000] Fallback order for Node 0: 0
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 2060288
+[    0.000000] Policy zone: Normal
+[    0.000000] Kernel command line: console=ttyAMA0,115200n8
+root=/dev/nfs rw
+nfsroot=10.66.16.120:/var/lib/lava/dispatcher/tmp/5283518/extract-nfsrootfs-ulkeoqdy,tcp,hard,vers=3,wsize=65536
+earlycon=pl011,0x7ff80000 console_msg_format=syslog earlycon
+default_hugepagesz=2M hugepages=256
+sky2.mac_address=0x00,0x02,0xF7,0x00,0x68,0x51 ip=dhcp
+<6>[    0.000000] Dentry cache hash table entries: 1048576 (order: 11,
+8388608 bytes, linear)
+<6>[    0.000000] Inode-cache hash table entries: 524288 (order: 10,
+4194304 bytes, linear)
+<6>[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+<0>[    0.000000] Kernel panic - not syncing: swiotlb_init_remap:
+nslabs = 0 too small
+<4>[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted
+5.19.0-rc6-next-20220713 #1
+<4>[    0.000000] Hardware name: ARM Juno development board (r2) (DT)
+<4>[    0.000000] Call trace:
+<4>[    0.000000]  dump_backtrace+0xe8/0x130
+<4>[    0.000000]  show_stack+0x24/0x60
+<4>[    0.000000]  dump_stack_lvl+0x8c/0xb8
+<4>[    0.000000]  dump_stack+0x18/0x34
+<4>[    0.000000]  panic+0x188/0x38c
+<4>[    0.000000]  swiotlb_init_remap+0x50/0x54
+<4>[    0.000000]  swiotlb_init+0x20/0x2c
+<4>[    0.000000]  mem_init+0x38/0x48
+<4>[    0.000000]  start_kernel+0x448/0x738
+<4>[    0.000000]  __primary_switched+0xb8/0xc0
+<0>[    0.000000] ---[ end Kernel panic - not syncing:
+swiotlb_init_remap: nslabs = 0 too small ]---
 
-> +/*
-> + * interface for enabling/disabling a monitor.
-> + */
-> +static ssize_t monitor_enable_write_data(struct file *filp, const char __user *user_buf,
-> +					 size_t count, loff_t *ppos)
-> +{
-> +	struct rv_monitor_def *mdef = filp->private_data;
-> +	int retval;
-> +	bool val;
-> +
-> +	retval = kstrtobool_from_user(user_buf, count, &val);
-> +	if (retval)
-> +		return retval;
-> +
-> +	retval = count;
-> +
-> +	mutex_lock(&rv_interface_lock);
-> +
-> +	if (val)
-> +		retval = enable_monitor(mdef);
-> +	else
-> +		retval = disable_monitor(mdef);
-> +
-> +	mutex_unlock(&rv_interface_lock);
-> +
-> +	return retval ? retval : count;
+Full test log link,
+[1] https://lkft.validation.linaro.org/scheduler/job/5283518#L582
 
-Feel that this can be written `return retval ? : count;`
+Best regards
+Naresh Kamboju
 
-[...]
 
-> +static void *enabled_monitors_start(struct seq_file *m, loff_t *pos)
-> +{
-> +	struct rv_monitor_def *m_def;
-> +	loff_t l;
-> +
-> +	mutex_lock(&rv_interface_lock);
-> +
-> +	if (list_empty(&rv_monitors_list))
-> +		return NULL;
-> +
-> +	m_def = list_entry(&rv_monitors_list, struct rv_monitor_def, list);
-> +
-> +	for (l = 0; l <= *pos; ) {
-> +		m_def = enabled_monitors_next(m, m_def, &l);
-> +		if (!m_def)
-> +			break;
-
-Is this check is inversed. enabled_monitors_start() will stop at first
-enabled monitor, then enabled_monitors_next() do loop to next. Check
-like the above, enabled_monitors_start() will loop to the last monitor.
-But I doubt myself I do not mention/see it. Sorry for these.
-
-the check is:
-
-  if (m_def)
-     break;
-
-[...]
-
-> +static ssize_t
-> +enabled_monitors_write(struct file *filp, const char __user *user_buf,
-> +		      size_t count, loff_t *ppos)
-> +{
-> +	char buff[MAX_RV_MONITOR_NAME_SIZE + 2];
-> +	struct rv_monitor_def *mdef;
-> +	int retval = -EINVAL;
-> +	bool enable = true;
-> +	char *ptr = buff;
-> +	int len;
-> +
-> +	if (count < 1 || count > MAX_RV_MONITOR_NAME_SIZE + 2)
-
-@count would not include '\0'. That the max val of @count is
-MAX_RV_MONITOR_NAME_SIZE+1. So the up bound check of @count is
-`count > MAX_RV_MONITOR_NAME_SIZE + 1`.
-
-Thanks,
-Tao
-> +		return -EINVAL;
-> +
-> +	memset(buff, 0, sizeof(buff));
-> +
-> +	retval = simple_write_to_buffer(buff, sizeof(buff) - 1, ppos, user_buf, count);
-> +	if (!retval)
-> +		return -EFAULT;
-> +
-> +	ptr = strim(buff);
-> +
-> +	if (ptr[0] == '!') {
-> +		enable = false;
-> +		ptr++;
-> +	}
-> +
-> +	len = strlen(ptr);
-> +	if (!len)
-> +		return count;
-> +
-> +	mutex_lock(&rv_interface_lock);
-> +
-> +	retval = -EINVAL;
-> +
-> +	list_for_each_entry(mdef, &rv_monitors_list, list) {
-> +		if (strcmp(ptr, mdef->monitor->name) != 0)
-> +			continue;
-> +
-> +		/*
-> +		 * Monitor found!
-> +		 */
-> +		if (enable)
-> +			retval = enable_monitor(mdef);
-> +		else
-> +			retval = disable_monitor(mdef);
-> +
-> +		if (!retval)
-> +			retval = count;
-> +
-> +		break;
-> +	}
-> +
-> +	mutex_unlock(&rv_interface_lock);
-> +	return retval;
-> +}
+--
+Linaro LKFT
+https://lkft.linaro.org

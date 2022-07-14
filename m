@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048FC574E06
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506A0574E37
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239456AbiGNMoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
+        id S239560AbiGNMpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238942AbiGNMoG (ORCPT
+        with ESMTP id S238816AbiGNMoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:44:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C2D1FCC5;
-        Thu, 14 Jul 2022 05:44:05 -0700 (PDT)
+        Thu, 14 Jul 2022 08:44:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49B84599D;
+        Thu, 14 Jul 2022 05:44:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADBA361F73;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25259B824EF;
+        Thu, 14 Jul 2022 12:44:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD12C341CD;
         Thu, 14 Jul 2022 12:44:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 071EFC341C8;
-        Thu, 14 Jul 2022 12:44:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1657802644;
-        bh=QHwAddHD+o4YxO5fPQSFi9XnW6UkKE5vsIk/KhPzzLA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Q9uRBvGUgpgtTAHKFRXMYMkj30Mqice1ld3NADNMzlptVtV737ILZ/ImXwVblxgIA
-         rv+PPI5HaOxNhDgU8LV9DgZv1JGDm8rqgPulMslpPSKjep/29tsS6MHDYstp1U64ck
-         N8M00Go1CsENReeNJNFE5iTh5JalID16eslk42C+i/qwuZy+TqKeg3Jno7g2aydOJo
-         WuhkYplxSlfFaz/E4I50p2NjORflqgWeZ+NwF1H5ZhWwsGoZbxsxk0QO6YjHBCS23E
-         CtRZ1B6kcJWqDstrTApqhI7TeB6sAF1Qkk3wvtGOvOxen7UV2XUdGOBfh5w3KwZdl4
-         ETCZxmLWrZ3Ow==
+        bh=fg4WYzPGHNf8pxJrAgcg4kI8j5wSHuXlk5XjlJZqoPw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pw5GOghw/+kCODKKvxAiv2av4w4eg0S7fAeNlzBzmShU6mPJvBUv93/KtcPM6mx3f
+         zWjBsbPHaFmsBUEG673xMlW3QRG4eJC5TvUNqXvTjA+tKhtxdcqXjwFKifwn6y6DAT
+         5J8clNLQkQrhqblEClTKq3jjFEpYYIuOP63lzGlk2RwMt35qzJK1o1U1FZg8eh8+Hp
+         u44qAiRmRKfHP1SJ9e5cDGedyevN70ZoRMKifm1KV9As0pZjj67M9/JquFEJEStX7l
+         8/RSehs6qDXcm6FToSyysEver/m8l35HkrgKAS2FMYzMMePWTzzl/u6uUjvHoW0AO9
+         dWeheoNxMIZpQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oByCO-0007D5-M9; Thu, 14 Jul 2022 14:44:08 +0200
+        id 1oByCO-0007D7-QK; Thu, 14 Jul 2022 14:44:08 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
@@ -45,11 +45,14 @@ Cc:     Andy Gross <agross@kernel.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v3 00/30] phy: qcom,qmp: fix dt-bindings and deprecate lane suffix
-Date:   Thu, 14 Jul 2022 14:43:03 +0200
-Message-Id: <20220714124333.27643-1-johan+linaro@kernel.org>
+        Johan Hovold <johan+linaro@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 01/30] dt-bindings: phy: qcom,qmp: fix bogus clock-cells property
+Date:   Thu, 14 Jul 2022 14:43:04 +0200
+Message-Id: <20220714124333.27643-2-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220714124333.27643-1-johan+linaro@kernel.org>
+References: <20220714124333.27643-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -62,107 +65,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When adding support for SC8280XP to the QMP PHY driver I noticed that
-the PHY provider child node was not described by the current DT schema.
+The QMP PHY wrapper node is not a clock provider so drop the bogus
+'#clock-cells' property that was added when converting to DT schema.
 
-The SC8280XP PHYs also need a second fixed-divider PIPE clock
-("pipediv2") and I didn't want to have to add a bogus "lane" suffix to
-the clock name just to match the current "pipe0" name so I decided to
-deprecate the unnecessary suffix in the current binding instead.
+Fixes: ccf51c1cedfd ("dt-bindings: phy: qcom,qmp: Convert QMP PHY bindings to yaml")
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 5 -----
+ 1 file changed, 5 deletions(-)
 
-To be able to add the missing child-node schema and handle device
-specifics like additional PIPE clocks, it quickly became obvious that
-the binding needs to be split up.
-
-This series clean up and fixes some issue with the current schema before
-splitting it up in separate schemas for PCIe, UFS and USB and adding
-missing parts like the child PHY provider nodes.
-
-The MSM8996 PCIe PHY gets its own schema as this is the only non-combo
-PHY that actually provides more than one PHY per IP block. Note that the
-"lane" suffix is still unnecessary and misleading.
-
-The final patches add support for the updated binding to the (recently
-split up) PHY drivers. Included is also a related combo PHY cleanup.
-
-Johan
-
-
-Changes in v3
- - rebase on linux-next which has a new binding for IPQ8074
- - fix git-bisect breakage due to removal of an unused variable one
-   patch too soon (Krzysztof)
- - replace one Fixes tag with reference in commit message (Krzysztof)
- - drop two redundant minItems (Krzysztof)
- - fix two Fixes tags that lacked the actual tag
- - add more ack and review tags from Krzysztof
-
-Changes in v2
- - squash split + cleanup + example patches (Krzysztof)
- - deprecate clock-names instead of dropping suffix (Krzysztof)
- - deprecate reset-names instead of dropping suffix (Krzysztof)
- - flatten child reg if/then schemas (Krzysztof)
- - add back optional vddp-ref-clk to all bindings even though it likely
-   only applies to MSM8996/98 UFS (Krzysztof)
- - add missing sc7180 schema to USB binding
- - misc clean ups
-   - shorten or drop descriptions
-   - drop quotes around $id and $schema (Krzysztof)
-   - use maxItems with clock-output-names
-   - combine two USB clock+reset schemas
- - add Reviewed-by/Acked-by tags
-
-
-Johan Hovold (30):
-  dt-bindings: phy: qcom,qmp: fix bogus clock-cells property
-  dt-bindings: phy: qcom,qmp: sort compatible strings
-  dt-bindings: phy: qcom,qmp: drop redundant descriptions
-  dt-bindings: phy: qcom,qmp: fix child node description
-  dt-bindings: phy: qcom,qmp: clean up descriptions
-  dt-bindings: phy: qcom,qmp: clean up example
-  dt-bindings: phy: qcom,qmp: drop child-node comment
-  dt-bindings: phy: add qcom,msm8996-qmp-pcie-phy schema
-  dt-bindings: phy: qcom,msm8996-qmp-pcie: add missing child node schema
-  dt-bindings: phy: qcom,msm8996-qmp-pcie: deprecate PIPE clock names
-  dt-bindings: phy: qcom,msm8996-qmp-pcie: deprecate reset names
-  dt-bindings: phy: add QMP PCIe PHY schema
-  dt-bindings: phy: qcom,qmp-pcie: add missing child node schema
-  dt-bindings: phy: qcom,qmp-pcie: deprecate PIPE clock name
-  dt-bindings: phy: add QMP UFS PHY schema
-  dt-bindings: phy: qcom,qmp-ufs: add missing SM8450 clock
-  dt-bindings: phy: qcom,qmp-ufs: add missing SM8150 power domain
-  dt-bindings: phy: qcom,qmp-ufs: add missing child node schema
-  dt-bindings: phy: add QMP USB PHY schema
-  dt-bindings: phy: qcom,qmp-usb: add missing child node schema
-  dt-bindings: phy: qcom,qmp-usb: deprecate PIPE clock name
-  dt-bindings: phy: qcom,qmp-usb: add missing qcom,sc7180-qmp-usb3-phy
-    schema
-  dt-bindings: phy: qcom,qmp-usb3-dp: fix bogus clock-cells property
-  dt-bindings: phy: qcom,qmp-usb3-dp: deprecate USB PIPE clock name
-  phy: qcom-qmp-pcie: drop pipe clock lane suffix
-  phy: qcom-qmp-combo: drop unused lane reset
-  phy: qcom-qmp-combo: drop pipe clock lane suffix
-  phy: qcom-qmp-pcie-msm8996: drop pipe clock lane suffix
-  phy: qcom-qmp-pcie-msm8996: drop reset lane suffix
-  phy: qcom-qmp-usb: drop pipe clock lane suffix
-
- .../phy/qcom,msm8996-qmp-pcie-phy.yaml        | 189 +++++++
- .../bindings/phy/qcom,qmp-pcie-phy.yaml       | 296 +++++++++++
- .../devicetree/bindings/phy/qcom,qmp-phy.yaml | 502 ------------------
- .../bindings/phy/qcom,qmp-ufs-phy.yaml        | 239 +++++++++
- .../bindings/phy/qcom,qmp-usb-phy.yaml        | 385 ++++++++++++++
- .../bindings/phy/qcom,qmp-usb3-dp-phy.yaml    |   8 +-
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c     |   6 +-
- .../phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c  |   8 +-
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      |   4 +-
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c       |   4 +-
- 10 files changed, 1115 insertions(+), 526 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-pcie-phy.yaml
- create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
- delete mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
- create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-ufs-phy.yaml
- create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-usb-phy.yaml
-
+diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+index 220788ce215f..120da190cb18 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+@@ -67,9 +67,6 @@ properties:
+       - description: Address and length of PHY's common serdes block.
+       - description: Address and length of PHY's DP_COM control block.
+ 
+-  "#clock-cells":
+-    enum: [ 1, 2 ]
+-
+   "#address-cells":
+     enum: [ 1, 2 ]
+ 
+@@ -117,7 +114,6 @@ patternProperties:
+ required:
+   - compatible
+   - reg
+-  - "#clock-cells"
+   - "#address-cells"
+   - "#size-cells"
+   - ranges
+@@ -470,7 +466,6 @@ examples:
+     usb_2_qmpphy: phy-wrapper@88eb000 {
+         compatible = "qcom,sdm845-qmp-usb3-uni-phy";
+         reg = <0x088eb000 0x18c>;
+-        #clock-cells = <1>;
+         #address-cells = <1>;
+         #size-cells = <1>;
+         ranges = <0x0 0x088eb000 0x2000>;
 -- 
 2.35.1
 

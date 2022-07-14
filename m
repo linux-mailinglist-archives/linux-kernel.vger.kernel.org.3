@@ -2,67 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8382574A13
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11449574A16
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237793AbiGNKFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
+        id S237985AbiGNKFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237957AbiGNKEw (ORCPT
+        with ESMTP id S237972AbiGNKE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:04:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC4512A84;
-        Thu, 14 Jul 2022 03:04:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 14 Jul 2022 06:04:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D124C628;
+        Thu, 14 Jul 2022 03:04:57 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 997261FAAE;
+        Thu, 14 Jul 2022 10:04:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1657793096; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Op6Yqxo0eUA3M0cvIstD63tWZwIIC5z/12lqmDQcqw=;
+        b=puLzZmrKBUI21sM3c6r7C+q/p2ShjcDYpI2ToKWo4rWtQvjheqj822NTr4JsRFT/c7oZh2
+        +vm/i8yZeJ0hALXMKc+HVjfcd/ynm/XaKTE6PgW1JM9J21GBdW9ARXGwNhr7bxDrt1kHF/
+        vZZEK6f22YF93cl4l2mFhro2lCI2S1M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1657793096;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Op6Yqxo0eUA3M0cvIstD63tWZwIIC5z/12lqmDQcqw=;
+        b=HXwu2FKVBRKBIkzyo5zkxg7DPBSfcULECIKbZTGYCahKLmQJcoEgGxia25epKV8YSEEUH6
+        S58h4ewdFFxhraDg==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27A8661FC5;
-        Thu, 14 Jul 2022 10:04:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E478C34114;
-        Thu, 14 Jul 2022 10:04:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657793090;
-        bh=6Wo2lauWSqSzZPuEfigVqWFvR1npFnzL7C4Q4ThZpXQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cx9t63is/MGqRmMLHXQzImt2jC0BFgtDzUC5F4INwef6dT20K9pKUYOGn5GTAf5MO
-         k9zfGrttf8mCXF2X63TM++Ttvf7H9wbXqpYRyLg4qG1F4TP9XLTudmKigJb1ym1jMI
-         8twNrtCEjb9xYSQcxc6Xx1VSdU0rJoAhcua5l80g=
-Date:   Thu, 14 Jul 2022 12:04:47 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org
-Subject: Re: LED Maintainership
-Message-ID: <Ys/qP2y1oj1nFOkq@kroah.com>
-References: <Ys/kruf8DE4ISo8M@google.com>
+        by relay2.suse.de (Postfix) with ESMTPS id 1D6372C141;
+        Thu, 14 Jul 2022 10:04:55 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 803BCA05FB; Thu, 14 Jul 2022 12:04:54 +0200 (CEST)
+Date:   Thu, 14 Jul 2022 12:04:54 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jiangshan Yi <13667453960@163.com>
+Cc:     jack@suse.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiangshan Yi <yijiangshan@kylinos.cn>
+Subject: Re: [PATCH] fs/ext2: replace ternary operator with min_t()
+Message-ID: <20220714100454.zjcm4bnmygq3ryqb@quack3>
+References: <20220714063318.1777139-1-13667453960@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ys/kruf8DE4ISo8M@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220714063318.1777139-1-13667453960@163.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 10:41:02AM +0100, Lee Jones wrote:
-> Pavel, et al.,
+On Thu 14-07-22 14:33:18, Jiangshan Yi wrote:
+> From: Jiangshan Yi <yijiangshan@kylinos.cn>
 > 
-> Not sure what's going on behind the scenes, but it looks as though the
-> LED subsystem has been left unmaintained for at least 2 months now.
+> Fix the following coccicheck warning:
 > 
-> Does anyone have any objection to me stepping in as temporary
-> maintainer until the situation is resolved?
+> fs/ext2/super.c:1494: WARNING opportunity for min().
+> fs/ext2/super.c:1533: WARNING opportunity for min().
+> 
+> min_t() macro is defined in include/linux/minmax.h. It avoids
+> multiple evaluations of the arguments when non-constant and performs
+> strict type-checking.
+> 
+> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-No objection from me, it would be nice to see LED patches flowing again
-into the tree.
+Yeah, looks like a good cleanup. Merged to my tree. Thanks!
 
-Pavel, any objections?
+								Honza
 
-greg k-h
+> ---
+>  fs/ext2/super.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/ext2/super.c b/fs/ext2/super.c
+> index f6a19f6d9f6d..300f2f0cf566 100644
+> --- a/fs/ext2/super.c
+> +++ b/fs/ext2/super.c
+> @@ -1490,8 +1490,7 @@ static ssize_t ext2_quota_read(struct super_block *sb, int type, char *data,
+>  		len = i_size-off;
+>  	toread = len;
+>  	while (toread > 0) {
+> -		tocopy = sb->s_blocksize - offset < toread ?
+> -				sb->s_blocksize - offset : toread;
+> +		tocopy = min_t(size_t, sb->s_blocksize - offset, toread);
+>  
+>  		tmp_bh.b_state = 0;
+>  		tmp_bh.b_size = sb->s_blocksize;
+> @@ -1529,8 +1528,7 @@ static ssize_t ext2_quota_write(struct super_block *sb, int type,
+>  	struct buffer_head *bh;
+>  
+>  	while (towrite > 0) {
+> -		tocopy = sb->s_blocksize - offset < towrite ?
+> -				sb->s_blocksize - offset : towrite;
+> +		tocopy = min_t(size_t, sb->s_blocksize - offset, towrite);
+>  
+>  		tmp_bh.b_state = 0;
+>  		tmp_bh.b_size = sb->s_blocksize;
+> -- 
+> 2.25.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

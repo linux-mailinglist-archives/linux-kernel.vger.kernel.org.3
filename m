@@ -2,133 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A4257453F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 08:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF48574541
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 08:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbiGNGtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 02:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
+        id S234463AbiGNGt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 02:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234900AbiGNGtO (ORCPT
+        with ESMTP id S232322AbiGNGtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 02:49:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467E423BCC;
-        Wed, 13 Jul 2022 23:49:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6DDF617B2;
-        Thu, 14 Jul 2022 06:49:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9223DC34114;
-        Thu, 14 Jul 2022 06:49:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657781352;
-        bh=9vH50zW2xqZ6A/9SwqfeD2cBwXwlnHgsNTuzRfY6drk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k/QXTDoJwMBA2IlBGuPt+/6msjZNKIFov/Y2ULr048SZcgTXrulAczbSVptjUO+lR
-         xNHBujDfU9h2unHwXbrSPMjFGhhtwFu0WX8pCaV4Tx+OS5HPEuxQM2tUZSC7Lxcqol
-         l3BypmxlvaLZ/Cto66vg9DqEdtt6AeqCduTiTO3Y=
-Date:   Thu, 14 Jul 2022 08:49:09 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ben Hutchings <ben@decadent.org.uk>
-Cc:     kernel test robot <lkp@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        stable@vger.kernel.org
-Subject: Re: [linux-stable-rc:linux-5.10.y 7082/7120]
- arch/x86/kernel/head_64.o: warning: objtool: xen_hypercall_mmu_update():
- can't find starting instruction
-Message-ID: <Ys+8ZYxkDmSCcDWv@kroah.com>
-References: <202207130531.SkRjrrn8-lkp@intel.com>
- <Ys9MKAriCchlEO8S@decadent.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys9MKAriCchlEO8S@decadent.org.uk>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 14 Jul 2022 02:49:24 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2C223BF7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 23:49:23 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31c9d560435so7737197b3.21
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 23:49:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=OWO7azjUaMs5aX9KKa+l/Q7z/45AbzWJxqiXiv/5VIU=;
+        b=haGNeiKz2kRNng6AUosqHR6JF78x1FLSdCVHlrlH10qcMkjhiIPZF9S02ryBUY7FXP
+         OTVSF3ccuWZJQS8Rxj/TdSCex2uRmB7BwCCZjAz39OAJ9VW4YkMjnPhyubNmaKqh2HbN
+         pgp65382e8ExXlsqcajmFZBt8S7u5uF4QgFIA97FHGu4g9jVxZx0RavJCpARNopbcKHM
+         sOrIGrmktyTV2eCBOyIhOcYreiwz4dUW22a1q/8kBSNMbNF4AyiNqXQYLcfh6Ujt1pvt
+         CjB5UNYRhx/eG96BkxJ6MsUCrLcD1UHunMNawVGeShicrq9n5m/KPg95Z3yXvXcn+yGQ
+         Nsdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=OWO7azjUaMs5aX9KKa+l/Q7z/45AbzWJxqiXiv/5VIU=;
+        b=d61kolYUQq7XXM/hWYB1VMEUg6F9EyA0/ZNIz+r603u0yEMo34oit2vAj5JkO1FMyv
+         mIhNURDtGrJVNrXthbAt01l0xGOXj1fyW6nNwQZIRFRkoKcICWimfsizXdgsRratq6/e
+         lPfN5myjN/s6aSyn3TuewqDhpAPdEvA3GQAV4xMOkesWvJ7f0DD5fFrk8A5nomQrfo7Y
+         jQLit7ljP03PUyq2dd5I9StgljH9pCtK1rybl6LoGdShiGOZDRSKZIWuv4U2kmC5Tcnb
+         PrnjXBdk3kctCy3O6cHRXHKIfhA+zVhxZQIrbES/RwZNL6S2X91fuwHgUuClXEjQ0XH0
+         ug1A==
+X-Gm-Message-State: AJIora/rZ5K8cww98f/gMBq0f6kZwFxlc2lBB3fyMg3r92+QFbUvFBHD
+        ORLxkLh/fDqVaxWP8JDPPZWu6YtBtIPRK/Q4
+X-Google-Smtp-Source: AGRyM1u6B/wHfl+IQRGW5yeE9E+fRV09NHiNSnERTgi/Lyj3e6bPqXEu9iK84kwS0wwLfm65Xnvc0vlUeR+yFgUB
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a0d:e882:0:b0:31d:5aa3:2cbd with SMTP
+ id r124-20020a0de882000000b0031d5aa32cbdmr8449855ywe.52.1657781362316; Wed,
+ 13 Jul 2022 23:49:22 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 06:49:18 +0000
+Message-Id: <20220714064918.2576464-1-yosryahmed@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH v4] mm: vmpressure: don't count proactive reclaim in vmpressure
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 12:50:16AM +0200, Ben Hutchings wrote:
-> On Wed, Jul 13, 2022 at 05:38:47AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> > head:   53b881e19526bcc3e51d9668cab955c80dcf584c
-> > commit: 7575d3f3bbd1c68d6833b45d1b98ed182832bd44 [7082/7120] x86: Use return-thunk in asm code
-> > config: x86_64-rhel-8.3-syz (https://download.01.org/0day-ci/archive/20220713/202207130531.SkRjrrn8-lkp@intel.com/config)
-> > compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-> > reproduce (this is a W=1 build):
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=7575d3f3bbd1c68d6833b45d1b98ed182832bd44
-> >         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-> >         git fetch --no-tags linux-stable-rc linux-5.10.y
-> >         git checkout 7575d3f3bbd1c68d6833b45d1b98ed182832bd44
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> arch/x86/kernel/head_64.o: warning: objtool: xen_hypercall_mmu_update(): can't find starting instruction
-> > 
-> > -- 
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
-> 
-> Please add the following patch to fix this.  This would also be
-> needed for 5.15-stable.
-> 
-> Ben.
-> 
-> From: Ben Hutchings <ben@decadent.org.uk>
-> Date: Thu, 14 Jul 2022 00:39:33 +0200
-> Subject: [PATCH] x86/xen: Fix initialisation in hypercall_page after rethunk
-> 
-> The hypercall_page is special and the RETs there should not be changed
-> into rethunk calls (but can have SLS mitigation).  Change the initial
-> instructions to ret + int3 padding, as was done in upstream commit
-> 5b2fc51576ef "x86/ibt,xen: Sprinkle the ENDBR".
-> 
-> Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-> ---
->  arch/x86/xen/xen-head.S | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
-> index 38b73e7e54ba..2a3ef5fcba34 100644
-> --- a/arch/x86/xen/xen-head.S
-> +++ b/arch/x86/xen/xen-head.S
-> @@ -69,9 +69,9 @@ SYM_CODE_END(asm_cpu_bringup_and_idle)
->  SYM_CODE_START(hypercall_page)
->  	.rept (PAGE_SIZE / 32)
->  		UNWIND_HINT_FUNC
-> -		.skip 31, 0x90
->  		ANNOTATE_UNRET_SAFE
-> -		RET
-> +		ret
-> +		.skip 31, 0xcc
->  	.endr
->  
->  #define HYPERCALL(n) \
-> 
-> 
+vmpressure is used in cgroup v1 to notify userspace of reclaim
+efficiency events, and is also used in both cgroup v1 and v2 as a signal
+for memory pressure for networking, see
+mem_cgroup_under_socket_pressure().
 
-That's really odd, I swear I tried this myself:
-	https://lore.kernel.org/r/Ys2jlGMqAe6+h1SX@kroah.com
+Proactive reclaim intends to probe memcgs for cold memory, without
+affecting their performance. Hence, reclaim caused by writing to
+memory.reclaim should not trigger vmpressure.
 
-I'll go queue this up and see if that solves the issue on my side.  But
-see Boris's comment about how this shouldn't be an issue in the end.
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+Acked-by: Shakeel Butt <shakeelb@google.com>
+---
+Changes in v4:
+- Removed unneeded reclaim_options local variables (Andrew).
 
-thanks,
+Changes in v3:
+- Limited the vmpressure change to memory.reclaim, dropped psi changes,
+  updated changelog to reflect new behavior (Michal, Shakeel)
 
-greg k-h
+Changes in v2:
+- Removed unnecessary initializations to zero (Andrew).
+- Separate declarations and initializations when it causes line wrapping
+  (Andrew).
+
+---
+ include/linux/swap.h |  5 ++++-
+ mm/memcontrol.c      | 24 ++++++++++++++----------
+ mm/vmscan.c          | 27 +++++++++++++++++----------
+ 3 files changed, 35 insertions(+), 21 deletions(-)
+
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index 0c0fed1b348f..f6e9eaa2339f 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -411,10 +411,13 @@ extern void lru_cache_add_inactive_or_unevictable(struct page *page,
+ extern unsigned long zone_reclaimable_pages(struct zone *zone);
+ extern unsigned long try_to_free_pages(struct zonelist *zonelist, int order,
+ 					gfp_t gfp_mask, nodemask_t *mask);
++
++#define MEMCG_RECLAIM_MAY_SWAP (1 << 1)
++#define MEMCG_RECLAIM_PROACTIVE (1 << 2)
+ extern unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 						  unsigned long nr_pages,
+ 						  gfp_t gfp_mask,
+-						  bool may_swap);
++						  unsigned int reclaim_options);
+ extern unsigned long mem_cgroup_shrink_node(struct mem_cgroup *mem,
+ 						gfp_t gfp_mask, bool noswap,
+ 						pg_data_t *pgdat,
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index a550042d88c3..b668224142c7 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2331,7 +2331,8 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
+ 
+ 		psi_memstall_enter(&pflags);
+ 		nr_reclaimed += try_to_free_mem_cgroup_pages(memcg, nr_pages,
+-							     gfp_mask, true);
++							gfp_mask,
++							MEMCG_RECLAIM_MAY_SWAP);
+ 		psi_memstall_leave(&pflags);
+ 	} while ((memcg = parent_mem_cgroup(memcg)) &&
+ 		 !mem_cgroup_is_root(memcg));
+@@ -2576,7 +2577,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 	struct page_counter *counter;
+ 	unsigned long nr_reclaimed;
+ 	bool passed_oom = false;
+-	bool may_swap = true;
++	unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP;
+ 	bool drained = false;
+ 	unsigned long pflags;
+ 
+@@ -2593,7 +2594,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 		mem_over_limit = mem_cgroup_from_counter(counter, memory);
+ 	} else {
+ 		mem_over_limit = mem_cgroup_from_counter(counter, memsw);
+-		may_swap = false;
++		reclaim_options &= ~MEMCG_RECLAIM_MAY_SWAP;
+ 	}
+ 
+ 	if (batch > nr_pages) {
+@@ -2620,7 +2621,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 
+ 	psi_memstall_enter(&pflags);
+ 	nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_pages,
+-						    gfp_mask, may_swap);
++						    gfp_mask, reclaim_options);
+ 	psi_memstall_leave(&pflags);
+ 
+ 	if (mem_cgroup_margin(mem_over_limit) >= nr_pages)
+@@ -3402,8 +3403,8 @@ static int mem_cgroup_resize_max(struct mem_cgroup *memcg,
+ 			continue;
+ 		}
+ 
+-		if (!try_to_free_mem_cgroup_pages(memcg, 1,
+-					GFP_KERNEL, !memsw)) {
++		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
++					memsw ? 0 : MEMCG_RECLAIM_MAY_SWAP)) {
+ 			ret = -EBUSY;
+ 			break;
+ 		}
+@@ -3513,7 +3514,8 @@ static int mem_cgroup_force_empty(struct mem_cgroup *memcg)
+ 		if (signal_pending(current))
+ 			return -EINTR;
+ 
+-		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL, true))
++		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
++						  MEMCG_RECLAIM_MAY_SWAP))
+ 			nr_retries--;
+ 	}
+ 
+@@ -6248,7 +6250,7 @@ static ssize_t memory_high_write(struct kernfs_open_file *of,
+ 		}
+ 
+ 		reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages - high,
+-							 GFP_KERNEL, true);
++					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP);
+ 
+ 		if (!reclaimed && !nr_retries--)
+ 			break;
+@@ -6297,7 +6299,7 @@ static ssize_t memory_max_write(struct kernfs_open_file *of,
+ 
+ 		if (nr_reclaims) {
+ 			if (!try_to_free_mem_cgroup_pages(memcg, nr_pages - max,
+-							  GFP_KERNEL, true))
++					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP))
+ 				nr_reclaims--;
+ 			continue;
+ 		}
+@@ -6426,6 +6428,7 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+ 	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
+ 	unsigned int nr_retries = MAX_RECLAIM_RETRIES;
+ 	unsigned long nr_to_reclaim, nr_reclaimed = 0;
++	unsigned int reclaim_options;
+ 	int err;
+ 
+ 	buf = strstrip(buf);
+@@ -6433,6 +6436,7 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+ 	if (err)
+ 		return err;
+ 
++	reclaim_options	= MEMCG_RECLAIM_MAY_SWAP | MEMCG_RECLAIM_PROACTIVE;
+ 	while (nr_reclaimed < nr_to_reclaim) {
+ 		unsigned long reclaimed;
+ 
+@@ -6449,7 +6453,7 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+ 
+ 		reclaimed = try_to_free_mem_cgroup_pages(memcg,
+ 						nr_to_reclaim - nr_reclaimed,
+-						GFP_KERNEL, true);
++						GFP_KERNEL, reclaim_options);
+ 
+ 		if (!reclaimed && !nr_retries--)
+ 			return -EAGAIN;
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index f7d9a683e3a7..0969e6408a53 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -102,6 +102,9 @@ struct scan_control {
+ 	/* Can pages be swapped as part of reclaim? */
+ 	unsigned int may_swap:1;
+ 
++	/* Proactive reclaim invoked by userspace through memory.reclaim */
++	unsigned int proactive:1;
++
+ 	/*
+ 	 * Cgroup memory below memory.low is protected as long as we
+ 	 * don't threaten to OOM. If any cgroup is reclaimed at
+@@ -3125,9 +3128,10 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
+ 			    sc->priority);
+ 
+ 		/* Record the group's reclaim efficiency */
+-		vmpressure(sc->gfp_mask, memcg, false,
+-			   sc->nr_scanned - scanned,
+-			   sc->nr_reclaimed - reclaimed);
++		if (!sc->proactive)
++			vmpressure(sc->gfp_mask, memcg, false,
++				   sc->nr_scanned - scanned,
++				   sc->nr_reclaimed - reclaimed);
+ 
+ 	} while ((memcg = mem_cgroup_iter(target_memcg, memcg, NULL)));
+ }
+@@ -3250,9 +3254,10 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+ 	}
+ 
+ 	/* Record the subtree's reclaim efficiency */
+-	vmpressure(sc->gfp_mask, sc->target_mem_cgroup, true,
+-		   sc->nr_scanned - nr_scanned,
+-		   sc->nr_reclaimed - nr_reclaimed);
++	if (!sc->proactive)
++		vmpressure(sc->gfp_mask, sc->target_mem_cgroup, true,
++			   sc->nr_scanned - nr_scanned,
++			   sc->nr_reclaimed - nr_reclaimed);
+ 
+ 	if (sc->nr_reclaimed - nr_reclaimed)
+ 		reclaimable = true;
+@@ -3534,8 +3539,9 @@ static unsigned long do_try_to_free_pages(struct zonelist *zonelist,
+ 		__count_zid_vm_events(ALLOCSTALL, sc->reclaim_idx, 1);
+ 
+ 	do {
+-		vmpressure_prio(sc->gfp_mask, sc->target_mem_cgroup,
+-				sc->priority);
++		if (!sc->proactive)
++			vmpressure_prio(sc->gfp_mask, sc->target_mem_cgroup,
++					sc->priority);
+ 		sc->nr_scanned = 0;
+ 		shrink_zones(zonelist, sc);
+ 
+@@ -3825,7 +3831,7 @@ unsigned long mem_cgroup_shrink_node(struct mem_cgroup *memcg,
+ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 					   unsigned long nr_pages,
+ 					   gfp_t gfp_mask,
+-					   bool may_swap)
++					   unsigned int reclaim_options)
+ {
+ 	unsigned long nr_reclaimed;
+ 	unsigned int noreclaim_flag;
+@@ -3838,7 +3844,8 @@ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 		.priority = DEF_PRIORITY,
+ 		.may_writepage = !laptop_mode,
+ 		.may_unmap = 1,
+-		.may_swap = may_swap,
++		.may_swap = !!(reclaim_options & MEMCG_RECLAIM_MAY_SWAP),
++		.proactive = !!(reclaim_options & MEMCG_RECLAIM_PROACTIVE),
+ 	};
+ 	/*
+ 	 * Traverse the ZONELIST_FALLBACK zonelist of the current node to put
+-- 
+2.37.0.144.g8ac04bfd2-goog
+

@@ -2,195 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C2B574475
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F01957447F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233897AbiGNFYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 01:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S232019AbiGNF3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 01:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbiGNFYO (ORCPT
+        with ESMTP id S231150AbiGNF3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 01:24:14 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A81B863;
-        Wed, 13 Jul 2022 22:24:13 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id y4so991598edc.4;
-        Wed, 13 Jul 2022 22:24:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8jR4w3foBIfwhXpMfecmUsdb0NEz+AG5RBtyTM8Ba6I=;
-        b=lJw33/RgWTAnQsn6ke/Dq0bb5lWGWWtszw1wVY596NJuORD+vgks4YHDnJCTjpgyNi
-         yX69SFQO5O8NVq55A2pR+Lh2bAIu+YOz4HV1fOMLCOc4Ua7MCYFk2zy/cM9FbOMLiLmN
-         bpz25dmpG23dbvNeay8kNVQ8UyHWZGE95nTeRN8bA8xXjswy+2+bGU/VvFaf1boiIC2e
-         hmRgyoWAyz0LME83euDf2o3z78m2YGQ7//i37TsCUcbP9ymQYT0F1JyEjUmAiwqUXGaa
-         43v1IJjp+LgEx7X/5fOhv4k8CIvIv3n47M5bw6BdOqNJXHZ5TnTrhZrXPDhzDbF99ye/
-         e61w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8jR4w3foBIfwhXpMfecmUsdb0NEz+AG5RBtyTM8Ba6I=;
-        b=XejWOOUGju5Epx42K2uQbOYvdbZjli80sJvvnzRSJG7vL1Ea5LY/2wVim0/9uCE8RU
-         owkUm8R9h2ls+FsulevFROL9Nz3YEnW3Vio8UnIEU/lD6csZC1he2F9GTHQcq1rb2vfe
-         vBaDwvaqAKu8Y4QFUE0RH4I9RYFqyV8fi8P4hsO7hByiJaPXdaDL2i+MC25+yQbHtkzh
-         W+6aGuLxJAjH4guDIkTP+eJFAYxcAx3bqul1OgnqI81cHCJ4IrY1XhfmUx8WpUPPvuaL
-         iZhluBWQavuLFNIzuuAl8wACAil99JELOCCnBpCmfVBdKJTGzzB5vmdoqghJfBhSniD0
-         k/sA==
-X-Gm-Message-State: AJIora9rsifm/43k1jl6rg4cLjZPuPaWsHv47+2BtCkI9EVpc1EneEQM
-        8125+iLgiIK5aPc2de0+nWlN8jSGsI2AePdiTic=
-X-Google-Smtp-Source: AGRyM1vsdHBBKZSXSs85DZOHy8qKdsYjKliFn+rfLCRv8JkWQ9ubT7CSkIdgK2APiAjmzLQxvs5Yq6P8hfwzltTUAPY=
-X-Received: by 2002:a05:6402:1c01:b0:43a:f714:bcbe with SMTP id
- ck1-20020a0564021c0100b0043af714bcbemr10167036edb.14.1657776251991; Wed, 13
- Jul 2022 22:24:11 -0700 (PDT)
+        Thu, 14 Jul 2022 01:29:47 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6965717A8C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 22:29:46 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E4gJFT029207;
+        Thu, 14 Jul 2022 05:29:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=we5m36/LXg0P96+74TS+EpPM4gc2HjLquDTpQ818IRw=;
+ b=EbQh/pEPi6+Y59+GBHm1zEAWHGV2lyRMo0oXXIbDsL1v7Vh6KlvWkhxzg8/LzTMNwsoN
+ idThS37OxFXa9IqGBEDNufKHMjiYgR7kpDb8nCfx/l/oyF7xQJMA67BIMhB27WclR6bR
+ 5v+Awp8Dt+oiyKpXxmL69SaAoFzg036BT44qgMCJc9j/KiaP7vBYCdKcoFR68Od1Q5Zv
+ kZfjDSIoEiJuehrWTuvHMA1EOjOE5m+qTHAEaZ01WO/6wynvZV/s9omkfM4j+3T0AEaN
+ cIoP4gT6iQVoGfd7HYUT6KE686/Czh/PpKEdZjJ5Yq96FbIPvryDMjj5koZbw0xbU32p ZA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hacbg0y74-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Jul 2022 05:29:34 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26E5Qugv020279;
+        Thu, 14 Jul 2022 05:29:33 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hacbg0y6p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Jul 2022 05:29:33 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26E5Lulp032192;
+        Thu, 14 Jul 2022 05:29:30 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3h99s79smu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Jul 2022 05:29:30 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26E5TSZj24445338
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Jul 2022 05:29:28 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B29F11C04A;
+        Thu, 14 Jul 2022 05:29:28 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 54C1F11C052;
+        Thu, 14 Jul 2022 05:29:24 +0000 (GMT)
+Received: from [9.43.119.34] (unknown [9.43.119.34])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 14 Jul 2022 05:29:24 +0000 (GMT)
+Message-ID: <1c4bfd5d-80ac-6fc7-80aa-89aaad5cd73a@linux.ibm.com>
+Date:   Thu, 14 Jul 2022 10:59:23 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8 00/12] mm/demotion: Memory tiers and demotion
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>, jvgediya.oss@gmail.com
+References: <20220704070612.299585-1-aneesh.kumar@linux.ibm.com>
+ <87r130b2rh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <60e97fa2-0b89-cf42-5307-5a57c956f741@linux.ibm.com>
+ <87r12r5dwu.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <0a55e48a-b4b7-4477-a72f-73644b5fc4cb@linux.ibm.com>
+ <87mtde6cla.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <fef35622-0bd4-f220-26bd-37d8e0112c4d@linux.ibm.com>
+ <87ilo267jl.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <ad4b095b-bb85-b01f-5d69-383219384c29@linux.ibm.com>
+ <87edyp67m1.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <878roxuz9l.fsf@linux.ibm.com>
+ <87o7xs47hk.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <87o7xs47hk.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rLsLoEBidXnbP1GZF5y6PSnPEy9fKIRP
+X-Proofpoint-GUID: yPT6qeX1jwUO_xPyhSp5VNaYb0s6_e3t
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <OSZP286MB1725CEA1C95C5CB8E7CCC53FB8869@OSZP286MB1725.JPNP286.PROD.OUTLOOK.COM>
- <Ys0xcf2yRG4fjkBY@krava> <OSZP286MB1725CD3371AEC94272D9CD48B8899@OSZP286MB1725.JPNP286.PROD.OUTLOOK.COM>
-In-Reply-To: <OSZP286MB1725CD3371AEC94272D9CD48B8899@OSZP286MB1725.JPNP286.PROD.OUTLOOK.COM>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 13 Jul 2022 22:24:00 -0700
-Message-ID: <CAEf4Bza2N=1-miBPAeFC1tqVfsw2+muTSzzpUrFMRY2GTuZQFQ@mail.gmail.com>
-Subject: Re: [PATCH v2] libbpf: fix the name of a reused map
-To:     Anquan Wu <leiqi96@hotmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-14_03,2022-07-13_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
+ clxscore=1015 priorityscore=1501 adultscore=0 phishscore=0 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207140022
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 10:59 PM Anquan Wu <leiqi96@hotmail.com> wrote:
->
-> On Tue, 2022-07-12 at 10:31 +0200, Jiri Olsa wrote:
-> > On Tue, Jul 12, 2022 at 11:15:40AM +0800, Anquan Wu wrote:
-> > > BPF map name is limited to BPF_OBJ_NAME_LEN.
-> > > A map name is defined as being longer than BPF_OBJ_NAME_LEN,
-> > > it will be truncated to BPF_OBJ_NAME_LEN when a userspace program
-> > > calls libbpf to create the map. A pinned map also generates a path
-> > > in the /sys. If the previous program wanted to reuse the map=EF=BC=8C
-> > > it can not get bpf_map by name, because the name of the map is only
-> > > partially the same as the name which get from pinned path.
-> > >
-> > > The syscall information below show that map name
-> > > "process_pinned_map"
-> > > is truncated to "process_pinned_".
-> > >
-> > >     bpf(BPF_OBJ_GET, {pathname=3D"/sys/fs/bpf/process_pinned_map",
-> > >     bpf_fd=3D0, file_flags=3D0}, 144) =3D -1 ENOENT (No such file or
-> > > directory)
-> > >
-> > >     bpf(BPF_MAP_CREATE, {map_type=3DBPF_MAP_TYPE_HASH, key_size=3D4,
-> > >     value_size=3D4,max_entries=3D1024, map_flags=3D0, inner_map_fd=3D=
-0,
-> > >     map_name=3D"process_pinned_",map_ifindex=3D0, btf_fd=3D3,
-> > > btf_key_type_id=3D6,
-> > >     btf_value_type_id=3D10,btf_vmlinux_value_type_id=3D0}, 72) =3D 4
-> > >
-> > > This patch check that if the name of pinned map are the same as the
-> > > actual name for the first (BPF_OBJ_NAME_LEN - 1),
-> > > bpf map still uses the name which is included in bpf object.
-> > >
-> > > Signed-off-by: Anquan Wu <leiqi96@hotmail.com>
-> > > ---
-> > >
-> > > v2: compare against zero explicitly
-> > >
-> > > v1:
-> > > https://lore.kernel.org/linux-kernel/OSZP286MB1725A2361FA2EE8432C4D5F=
-4B8879@OSZP286MB1725.JPNP286.PROD.OUTLOOK.COM/
-> > > ---
-> > >  tools/lib/bpf/libbpf.c | 8 +++++++-
-> > >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > > index e89cc9c885b3..7b4d3604dfb4 100644
-> > > --- a/tools/lib/bpf/libbpf.c
-> > > +++ b/tools/lib/bpf/libbpf.c
-> > > @@ -4328,6 +4328,7 @@ int bpf_map__reuse_fd(struct bpf_map *map,
-> > > int
-> > > fd)
-> > >  {
-> > >         struct bpf_map_info info =3D {};
-> > >         __u32 len =3D sizeof(info);
-> > > +       __u32 name_len;
-> > >         int new_fd, err;
-> > >         char *new_name;
-> > >
-> > > @@ -4337,7 +4338,12 @@ int bpf_map__reuse_fd(struct bpf_map *map,
-> > > int
-> > > fd)
-> > >         if (err)
-> > >                 return libbpf_err(err);
-> > >
-> > > -       new_name =3D strdup(info.name);
-> > > +       name_len =3D strlen(info.name);
-> > > +       if (name_len =3D=3D BPF_OBJ_NAME_LEN - 1 && strncmp(map->name=
-,
-> > > info.name, name_len) =3D=3D 0)
-> >
-> > so what if the map->name is different after 'name_len' ?
-> >
-> > jirka
-> >
->
-> If  A map name is defined as being longer than name_len (name_len is
-> "BPF_OBJ_NAME_LEN - 1" in this context), a program will fail to get a
-> reused bpf_map by bpf_object__find_map_by_name().
->
->    fromhttps://github.com/libbpf/libbpf/blob/master/src/libbpf.c#L9295,
->    pos->name in bpf_object__find_map_by_name() is from  new_name
-> in
->    bpf_map_reuse_fd(). It can not find map by the name which is defined
->    in bpf object.
->
-> I wrote some code to verify this problem and test the solution
-> mentioned above.
-> Link: https://github.com/leiqi96/libbpf-fix
->
+On 7/14/22 10:26 AM, Huang, Ying wrote:
+> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+> 
+>> "Huang, Ying" <ying.huang@intel.com> writes:
+> 
+> [snip]
+> 
+>>>
+>>> I believe that sparse memory tier IDs can make memory tier more stable
+>>> in some cases.  But this is different from the system suggested by
+>>> Johannes.  Per my understanding, with Johannes' system, we will
+>>>
+>>> - one driver may online different memory types (such as kmem_dax may
+>>>   online HBM, PMEM, etc.)
+>>>
+>>> - one memory type manages several memory nodes (NUMA nodes)
+>>>
+>>> - one "abstract distance" for each memory type
+>>>
+>>> - the "abstract distance" can be offset by user space override knob
+>>>
+>>> - memory tiers generated dynamic from different memory types according
+>>>   "abstract distance" and overridden "offset"
+>>>
+>>> - the granularity to group several memory types into one memory tier can
+>>>   be overridden via user space knob
+>>>
+>>> In this way, the memory tiers may be changed totally after user space
+>>> overridden.  It may be hard to link memory tiers before/after the
+>>> overridden.  So we may need to reset all per-memory-tier configuration,
+>>> such as cgroup paritation limit or interleave weight, etc.
+>>
+>> Making sure we all agree on the details.
+>>
+>> In the proposal https://lore.kernel.org/linux-mm/7b72ccf4-f4ae-cb4e-f411-74d055482026@linux.ibm.com
+>> instead of calling it "abstract distance" I was referring it as device
+>> attributes.
+>>
+>> Johannes also suggested these device attributes/"abstract distance"
+>> to be used to derive the memory tier to which the memory type/memory
+>> device will be assigned.
+>>
+>> So dax kmem would manage different types of memory and based on the device
+>> attributes, we would assign them to different memory tiers (memory tiers
+>> in the range [0-200)).
+>>
+>> Now the additional detail here is that we might add knobs that will be
+>> used by dax kmem to fine-tune memory types to memory tiers assignment.
+>> On updating these knob values, the kernel should rebuild the entire
+>> memory tier hierarchy. (earlier I was considering only newly added
+>> memory devices will get impacted by such a change. But I agree it
+>> makes sense to rebuild the entire hierarchy again) But that rebuilding
+>> will be restricted to dax kmem driver.
+>>
+> 
+> Thanks for explanation and pointer.  Per my understanding, memory
+> types and memory devices including abstract distances are used to
+> describe the *physical* memory devices, not *policy*.  We may add more
+> physical attributes to these memory devices, such as, latency,
+> throughput, etc.  I think we can reach consensus on this point?
+> 
+> In contrast, memory tiers are more about policy, such as
+> demotion/promotion, interleaving and possible partition among cgroups.
+> How to derive memory tiers from memory types (or devices)?  We have
+> multiple choices.
+> 
 
-It would be great to have something like this as a selftest, please
-send a follow up patch adding a test under selftests/bpf for map
-reuse. See prog_tests/pinning.c, this might belong there.
+agreed to the above.
 
-To also answer Jiri's question. This is not an ideal solution, but it
-improves the current situation. And while potentially it's not 100%
-correct (because only checks first 15 characters), user normally would
-use bpf_map__reuse_fd() on well-known and presumably correct map, so
-chance of misuse here are pretty minimal.
+> Per my understanding, Johannes suggested to use some policy parameters
+> such as distance granularity (e.g., if granularity is 100, then memory
+> devices with abstract distance 0-100, 100-200, 200-300, ... will be put
+> to memory tier 0, 1, 2, ...) to build the memory tiers.  Distance
+> granularity may be not flexible enough, we may need something like a set
+> of cutoffs or range, e.g., 50, 100, 200, 500, or 0-50, 50-100, 100-200,
+> 200-500, >500.  These policy parameters should be overridable from user
+> space.
+> 
 
-So I added
+The term distance was always confusing to me. Instead, I was generalizing it as an attribute.
+The challenge with the term distance for me was in clarifying the distance of this memory device from
+where? Instead, it is much simpler to group devices based on device attributes such as write latency.
 
-Fixes: 26736eb9a483 ("tools: libbpf: allow map reuse")
+So everything you explained above is correct, except we describe it in terms of a
+single device attribute or a combination of multiple device attributes. We could convert
+a combination of multiple device attribute to an "abstract distance". Such an
+"abstract distance" is derived based on different device attribute values with
+policy parameters overridable from userspace.
 
-and applied to bpf-next, thanks.
 
-> Anquan
->
->
-> > > +               new_name =3D strdup(map->name);
-> > > +       else
-> > > +               new_name =3D strdup(info.name);
-> > > +
-> > >         if (!new_name)
-> > >                 return libbpf_err(-errno);
-> > >
-> > > --
-> > > 2.32.0
-> > >
->
->
->
+> And per my understanding, you suggested to place memory devices to
+> memory tiers directly via a knob of memory types (or memory devices).
+> e.g., memory_type/memtier can be written to place the memory devices of
+> the memory_type to the specified memtier.  Or via
+> memorty_type/distance_offset to do that.
+> 
+
+What I explained above is what I would expect the kernel to do by default. Before we can
+reach there we need to get a better understanding of which device attribute describes
+the grouping of memory devices to a memory tier. Do we need latency-based grouping
+or bandwidth-based grouping? Till then userspace can place these devices to different
+memory tiers. Hence the addition of /sys/devices/system/node/nodeN/memtier write feature
+which moves a memory node to a specific memory tier. 
+
+I am not suggesting we override the memory types from userspace.
+
+-aneesh

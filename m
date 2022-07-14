@@ -2,179 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AB2574F51
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4640574F53
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239425AbiGNNiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
+        id S239490AbiGNNiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239240AbiGNNiI (ORCPT
+        with ESMTP id S239431AbiGNNiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:38:08 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9640054CAE;
-        Thu, 14 Jul 2022 06:38:07 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y9so1849148pff.12;
-        Thu, 14 Jul 2022 06:38:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OpmfwN/J8ZTICSzccrhBIpc9ZkfZKVmS0yTPE9OckSU=;
-        b=P8JDkffPEQJ+0PZuxarOGUq/HuVCJaA++tVCBZCJfVuhM8VTaal2y1cnCnHMW4FqPN
-         IDdiIJwCf2/IOvb8PAKpL4Cv1H/hWcMU84KYyFSj8TL8wBeSYxIov1xyLjuIx5cY1r75
-         2m6MO5Z+H6sN5VqelhgzaGIsKPkbkiwkRnX3ULDmhUo40oKKPy7XqGDCu0ux1uGUJSQR
-         aZXfZT8kv2TxP8rzFXKld5bpREnpphvTQBns6gBXF4C515nnfR1IJ5KEeIXv1BptB925
-         N2bHYmilJTyYuH8qSwkmrRaRFbQ3Py6JMtRMFI8MjU0BOROgkj5MGOOBk4WHJA0ewLcI
-         USPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=OpmfwN/J8ZTICSzccrhBIpc9ZkfZKVmS0yTPE9OckSU=;
-        b=hL9Vk7Wt3p1Hh9mWNj0or0/TGrncS6O3kcIPpzw7ouGdnVXPbFXn+41HLab1K4p/o0
-         9l2/VC/yjOQ103MTl72Fc3fkvU9ItDoj65KQgJUyw8tLsYjmT4SrwB1Gw8IMRxhLq5Z1
-         PqEPndQYo7F0BZ/4BVBhW8zHV1+fTAC1v2NW/6lAqgFUODWJbt00OoYdk5OcZ/AxY3f8
-         41mYUOg1uL5mxZihS/kQVg+gvuqis4sDM/B11xvsMMSe/22Fqd4QoMGCobSZGtgduB1y
-         9eYOG4XeZRlh/AjSSVI/LQOQtuJGrPGtg/r4pJ7LJE+pUy3dtRg34GJ3Vjcn6TltBsHi
-         0DUA==
-X-Gm-Message-State: AJIora8CBiaT1F9fONeY3c0BRrS9SYBS9hdu+KWMdLT8BQka3g41TE6t
-        VAV0lbyhXrmbk6ejFPz2ONA=
-X-Google-Smtp-Source: AGRyM1vCtckFmC3nc6mMaAk1y5t2v7Ybn8SDjp47SI6V+JOzOavjkwqLvW+ropO8RiT8WLqz/VLpgg==
-X-Received: by 2002:a63:3181:0:b0:417:b4b5:df09 with SMTP id x123-20020a633181000000b00417b4b5df09mr7803649pgx.398.1657805887022;
-        Thu, 14 Jul 2022 06:38:07 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s7-20020a63ff47000000b0041981461f5dsm1286244pgk.90.2022.07.14.06.38.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 06:38:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 14 Jul 2022 06:38:00 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Kallas, Pawel" <pawel.kallas@intel.com>
-Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        iwona.winiarska@intel.com
-Subject: Re: [PATCH 0/3] hwmon: (pmbus) add power from energy readings
-Message-ID: <20220714133800.GA3916254@roeck-us.net>
-References: <20220706104024.3118590-1-pawel.kallas@intel.com>
- <20220706131758.GA652205@roeck-us.net>
- <dc8771ad-b48b-317d-b132-47208ef58710@intel.com>
- <20220707140952.GB3492673@roeck-us.net>
- <0b776040-c3bd-034f-bbcd-b929f1a4d19a@intel.com>
+        Thu, 14 Jul 2022 09:38:12 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1395F999
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:38:10 -0700 (PDT)
+Received: from [192.168.1.101] (abxj14.neoplus.adsl.tpnet.pl [83.9.3.14])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id E05CD1F68B;
+        Thu, 14 Jul 2022 15:38:06 +0200 (CEST)
+Message-ID: <8d738cad-e6c8-90e0-ffa2-ecf3fbe8dd59@somainline.org>
+Date:   Thu, 14 Jul 2022 15:38:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0b776040-c3bd-034f-bbcd-b929f1a4d19a@intel.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 5/5] arm64: dts: qcom: Add device tree for Sony Xperia
+ 1 IV
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220714123406.1919836-1-konrad.dybcio@somainline.org>
+ <20220714123406.1919836-5-konrad.dybcio@somainline.org>
+ <ef935a6f-77a2-5c9a-2cbc-0b0192aee56b@collabora.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <ef935a6f-77a2-5c9a-2cbc-0b0192aee56b@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 06:00:45PM +0200, Kallas, Pawel wrote:
+
+
+On 14.07.2022 14:51, AngeloGioacchino Del Regno wrote:
+> Il 14/07/22 14:34, Konrad Dybcio ha scritto:
+>> Add support for Sony Xperia 1 IV, a.k.a PDX223. This device is a part
+>> of the SoMC SM8450 Nagara platform and currently it is the only
+>> device based on that board, so no -common DTSI is created until (if?)
+>> other Nagara devices appear.
+>>
+>> This commit brings support for:
+>> * SD Card
+>> * USB (*including SuperSpeed*)
+>> * ADSP/CDSP/SLPI (modem remains untested for now)
+>> * Most regulators (some GPIO-enabled ones require PMIC GPIOs but
+>> trying to access any SPMI device crashes the device..)
+>> * Part of I2C-connected peripherals (notably no touch due to a
+>> driver bug)
+>> * PCIe0 (PCIe1 is unused)
+>>
+>> Do note display via simplefb is not supported, as the display is blanked
+>> upon exiting XBL.
+>>
+>> To create a working boot image, you need to run:
+>> cat arch/arm64/boot/Image.gz arch/arm64/boot/dts/qcom/sm8450-sony-xperia-\
+>> nagara-pdx223.dtb > .Image.gz-dtb
+>>
+>> mkbootimg \
+>> --kernel .Image.gz-dtb \
+>> --ramdisk some_initrd.img \
+>> --pagesize 4096 \
+>> --base 0x0 \
+>> --kernel_offset 0x8000 \
+>> --ramdisk_offset 0x1000000 \
+>> --tags_offset 0x100 \
+>> --cmdline "SOME_CMDLINE" \
+>> --dtb_offset 0x1f00000 \
+>> --header_version 1 \
+>> --os_version 12 \
+>> --os_patch_level 2022-06 \ # or newer
+>> -o boot.img-sony-xperia-pdx223
+>>
+>> Then, you need to flash it on the device and get rid of all the
+>> vendor_boot/dtbo mess:
+>>
+>> // You have to either pull vbmeta{"","_system"} from
+>> // /dev/block/bootdevice/by-name/ or build one as a part of AOSP build process
+>> fastboot --disable-verity --disable-verification flash vbmeta vbmeta.img
+>> fastboot --disable-verity --disable-verification flash vbmeta_system \
+>> vbmeta_system.img
+>>
+>> fastboot flash boot boot.img-sony-xperia-pdx223
+>> fastboot erase vendor_boot
+>> fastboot erase recovery
+>> fastboot flash dtbo emptydtbo.img
+>> fastboot reboot
+>>
+>> Where emptydtbo.img is a tiny file that consists of 2 bytes (all zeroes), doing
+>> a "fastboot erase" won't cut it, the bootloader will go crazy and things will
+>> fall apart when it tries to overlay random bytes from an empty partition onto a
+>> perfectly good appended DTB.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> ---
+>> Changes since v1:
+>> - remove a stray blank line
+>> - use generic node names for CS35L41
+>> - fix up indentation for sdhci-caps-mask
+>>
+>>   arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>>   .../qcom/sm8450-sony-xperia-nagara-pdx223.dts | 634 ++++++++++++++++++
+>>   2 files changed, 635 insertions(+)
+>>   create mode 100644 arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>> index 01773f3ce57f..157ef6958e1f 100644
+>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>> @@ -126,3 +126,4 @@ dtb-$(CONFIG_ARCH_QCOM)    += sm8350-sony-xperia-sagami-pdx214.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)    += sm8350-sony-xperia-sagami-pdx215.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)    += sm8450-hdk.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)    += sm8450-qrd.dtb
+>> +dtb-$(CONFIG_ARCH_QCOM)    += sm8450-sony-xperia-nagara-pdx223.dtb
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
+>> new file mode 100644
+>> index 000000000000..7fe582b92a61
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
+>> @@ -0,0 +1,634 @@
+>> +// SPDX-License-Identifier: BSD-3-Clause
+>> +/*
+>> + * Copyright (c) 2022, Konrad Dybcio <konrad.dybcio@somainline.org>
+>> + */
+>> +
+>> +/dts-v1/;
+>> +
+>> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+>> +#include "sm8450.dtsi"
+>> +
+>> +/delete-node/ &adsp_mem;
+>> +/delete-node/ &rmtfs_mem;
+>> +/delete-node/ &video_mem;
+>> +
+>> +/ {
+>> +    model = "Sony Xperia 1 IV";
+>> +    compatible = "sony,pdx223", "qcom,sm8450";
+>> +    chassis-type = "handset";
+>> +
 > 
-> On 07-Jul-22 4:09 PM, Guenter Roeck wrote:
-> > On Thu, Jul 07, 2022 at 04:01:54PM +0200, Kallas, Pawel wrote:
-> > > On 06-Jul-22 3:17 PM, Guenter Roeck wrote:
-> > > > On Wed, Jul 06, 2022 at 12:40:21PM +0200, Kallas, Pawel wrote:
-> > > > > Add support for reading EIN or EOUT registers and expose power calculated
-> > > > > from energy. This is more accurate than PIN and POUT power readings.
-> > > > > Readings are exposed in new hwmon files power1_average and power2_average.
-> > > > > Also add support for QUERY command that is needed to check availability
-> > > > > of EIN and EOUT reads and its data format. Only direct data format is
-> > > > > supported due to lack of test devices supporting other formats.
-> > > > > 
-> > > > I don't think this is a good idea. EIN/EOUT report energy consumption,
-> > > > not power.
-> > > According to PMBus-Specification-Rev-1-3-1-Part-II-20150313 "READ_EIN and
-> > > READ_EOUT commands provide information that can be used to calculate power
-> > > consumption". That is accumulator summing instantaneous input power
-> > > expressed in "watt-samples" and counter indicating number of samples.
-> > > The only reasonable thing that can be done with those values is calculating
-> > > power.
-> > Yes, but that is not the responsibility of the kernel. Just like we don't add
-> > up power measurements to calculate energy, we don't take energy measurements
-> > and calculate power consumption. Similar, we don't take voltage and current
-> > measurements and report power consumption from it either.
-> > 
-> > > > The "average" attributes as implemented don't really report
-> > > > a reliable number since the averaging period is not defined.
-> > > Agree, it is calculating average power since last read, which could be
-> > > incorrect with multiple consumers. However, this is the only possibility
-> > > without adding some timer logic.
-> > Another reason for doing it in userspace. Read energy every N seconds, and use
-> > the difference to calculate average power consumption average over that time
-> > period.
-> We cannot "read energy". Raw value from READ_EIN and READ_EOUT is not
-> energy.
+> ..snip..
+> 
+>> +
+>> +&gpi_dma0 {
+>> +    status = "okay";
+>> +};
+>> +
+>> +&gpi_dma1 {
+>> +    status = "okay";
+>> +};
+>> +
+>> +&gpi_dma2 {
+>> +    status = "okay";
+>> +};
+>> +
+>> +/* I2C4 is used, it hosts a Samsung touchscreen, but GPI DMA is broken.. */
+> 
+> Why aren't you enabling i2c4 like you did with i2c 5/9/13?
+> 
+> If enabling that produces any side effect you should advertise that.
+The comment explains it, no point in enabling it if not even the dma engine
+behind it is functioning properly and you can't interact with the bus, waste
+of power and cpu cycles.
 
-Sure, it is an accumulation of power reading samples over time. as such,
-it doesn't really even report a power average. Either case, any value
-derived from it is all but worthless unless a well defined time interval
-is available.  Unfortunately, such a time interval would require a kernel
-timer, which would, at least in low power situations, have impact on the
-power readings and is thus unacceptable. Maybe that is why later PMBus
-specification introduced explicit READ_KWH_IN and READ_KWH_OUT commands.
 
-> > > > Also, kernel
-> > > > drivers should not make up such numbers. I don't mind adding energy
-> > > > attribute support, but that should be reported as what it is, energy.
-> > > > What userspace does with it would then be a userspace concern; it can
-> > > > calculate all kinds of averages from it as much as it wants.
-> > > Returning direct value of read registers would also work for our use case,
-> > > but it is not in line with sysfs interface.
-> > I did not suggest that. Just use the "energyX_in" attributes.
-> Expressing raw value from READ_EIN or READ_EOUT is not in line with
-> sysfs interface, because "energyX_in" should have microJoules as unit.
-> Those commands have very specific format that is not actually energy.
-> Since the only sensible use case for those raw values is calculating power
-> we figured it would be better (and more accurate) to do it in kernel.
-> Also, if we just express raw value, the user would have to know data format
-> of the values for the device and know register format to decode the data.
+> 
+>> +
+>> +&i2c5 {
+>> +    clock-frequency = <400000>;
+>> +    status = "okay";
+>> +
+>> +    /* Dialog SLG51000 CMIC @ 75 */
+>> +};
+>> +
+>> +&i2c9 {
+>> +    clock-frequency = <400000>;
+>> +    status = "okay";
+>> +
+>> +    /* NXP SN1X0 NFC @ 28 */
+>> +};
+>> +
+>> +&i2c13 {
+>> +    clock-frequency = <400000>;
+>> +    status = "okay";
+>> +
+>> +    /* Richwave RTC6226 FM Radio Receiver @ 64 */
+>> +};
+>> +
+>> +&i2c14 {
+>> +    clock-frequency = <1000000>;
+>> +    status = "okay";
+>> +
+>> +    cs35l41_l: speaker-amp@40 {
+> 
+> What about an even more generic audio-amplifier@40 ?
+That's really an arbitrary barrier to decide when it's "generic enough", I'll
+leave that up to the maintainers to decide.
 
-A joule is one watt-second, and the registers accumulate power samples over
-a period of time. Sure, dividing the reported values by the time interval
-results in the average power consumption over that time interval. Just like
-multiplying the average power consumption with the time interval results in
-the energy consumption over that timer interval. If we say we can't
-determine the energy because the accumulated values are just snapshots in
-time, we just as well can't trust the average power calculated from it.
 
-Anyway, I don't really see an acceptable solution. Reporting the average
-power would require a periodic function running every second or so which
-would at least potentially falsify the reported values, and if you say that
-reporting the energy (which might still require a timer function, but less
-frequently) isn't feasible I take you by your word.
+> 
+>> +        compatible = "cirrus,cs35l41";
+>> +        reg = <0x40>;
+>> +        interrupt-parent = <&tlmm>;
+>> +        interrupts = <182 IRQ_TYPE_LEVEL_LOW>;
+>> +        reset-gpios = <&tlmm 183 GPIO_ACTIVE_HIGH>;
+>> +        cirrus,boost-peak-milliamp = <4000>;
+>> +        cirrus,boost-ind-nanohenry = <1000>;
+>> +        cirrus,boost-cap-microfarad = <15>;
+>> +        cirrus,gpio2-src-select = <2>;
+>> +        cirrus,gpio2-output-enable;
+>> +        cirrus,asp-sdout-hiz = <3>;
+>> +        #sound-dai-cells = <1>;
+>> +    };
+>> +
+>> +    cs35l41_r: speaker-amp@41 {
+>> +        compatible = "cirrus,cs35l41";
+>> +        reg = <0x41>;
+>> +        interrupt-parent = <&tlmm>;
+>> +        interrupts = <182 IRQ_TYPE_LEVEL_LOW>;
+>> +        reset-gpios = <&tlmm 183 GPIO_ACTIVE_HIGH>;
+>> +        cirrus,boost-peak-milliamp = <4000>;
+>> +        cirrus,boost-ind-nanohenry = <1000>;
+>> +        cirrus,boost-cap-microfarad = <15>;
+>> +        cirrus,gpio2-src-select = <2>;
+>> +        cirrus,gpio2-output-enable;
+>> +        cirrus,asp-sdout-hiz = <3>;
+>> +        #sound-dai-cells = <1>;
+>> +    };
+>> +};
+>> +
+> 
+> ..snip..
+> 
+>> +
+>> +&sdhc_2 {
+>> +    cd-gpios = <&tlmm 92 GPIO_ACTIVE_HIGH>;
+>> +    pinctrl-names = "default", "sleep";
+>> +    pinctrl-0 = <&sdc2_default_state &sdc2_card_det_n>;
+>> +    pinctrl-1 = <&sdc2_sleep_state &sdc2_card_det_n>;
+>> +    vmmc-supply = <&pm8350c_l9>;
+>> +    vqmmc-supply = <&pm8350c_l6>;
+> 
+>> +    /* Forbid SDR104/SDR50 - broken hw! */
+>> +    sdhci-caps-mask = <0x3 0x0>;
+> 
+> Is this a device-specific quirk? Is Sony hardware broken, or is it a SoC
+> (or SoC version-specific) issue?
+> 
+> If this is a SoC-specific issue, that should be rectified in sdhci-msm instead.
+If it was a SoC-specific issue, it would land in the SoC-specific DTSI. This is the
+PDX223-specific DTSI, so I think it's pretty clear..
 
-Guenter
 
-> > 
-> > Thanks,
-> > Guenter
-> > 
-> > > > Also, new attributes should not depend on query command support.
-> > > > I don't mind adding support for that, but it would have to be independent
-> > > > of energy attribute support.
-> > > > 
-> > > > Thanks,
-> > > > Guenter
-> > > > 
-> > > > > Kallas, Pawel (3):
-> > > > >     hwmon: (pmbus) add support for QUERY command
-> > > > >     hwmon: (pmbus) refactor sensor initialization
-> > > > >     hwmon: (pmbus) add EIN and EOUT readings
-> > > > > 
-> > > > >    Documentation/hwmon/pmbus-core.rst |   7 +
-> > > > >    drivers/hwmon/pmbus/pmbus.c        |  20 +++
-> > > > >    drivers/hwmon/pmbus/pmbus.h        |  19 +++
-> > > > >    drivers/hwmon/pmbus/pmbus_core.c   | 261 +++++++++++++++++++++++++++--
-> > > > >    4 files changed, 291 insertions(+), 16 deletions(-)
-> > > > > 
-> > > > > 
-> > > > > base-commit: 7c1de25c06f31b04744beae891baf147af9ba0cb
+Konrad
+> 
+>> +    no-sdio;
+>> +    no-mmc;
+>> +    status = "okay";
+>> +};
+>> +
+> 
+> Regards,
+> Angelo

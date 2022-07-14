@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB0757516A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6B3575172
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239948AbiGNPIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
+        id S239967AbiGNPJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237665AbiGNPIG (ORCPT
+        with ESMTP id S229690AbiGNPJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:08:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780AC63930
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:08:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27DD3B82719
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 15:08:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5D73C34115
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 15:08:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657811282;
-        bh=UYQ9+te4KDbPDNm5NrYTytFuP7/GJGGzIOgSc/+8ZsI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KhMRx7tqN33q2uG5HrkHTWvLzVM9ps8ZX0Ldqu51zPMfkvyjO+lE0dPXBMC6xoIIy
-         MK4dV7LlFmaroBTM3eOOvx4ymLGFlsdaCrW8FD6dK4vtMHOXvoj2gt0kr2jah/FRIv
-         Po6ZdVnwi3XWxJ8uwaSGNaBN6v0f5Z0DeAo8eUTDairbAq5oNS++TLOSTZOeDnFwmX
-         tW2YCvrB7GceKfjczRP4wMWpfj/B8SguBXAIw3yr/KTxyfL/gxLeeqkdaPuDPnkwtH
-         VPrE7BM0lwLHbLm+hlZhPpmFu2u61U1LBXboE/2ZwAPi0cA+uBv55xZ6L71MU9bOcZ
-         TEBH3eAB5FZsw==
-Received: by mail-vs1-f46.google.com with SMTP id x125so1699005vsb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:08:02 -0700 (PDT)
-X-Gm-Message-State: AJIora+ol63qAeh21ZpATJMeemmn+JQI42xyRKUzSuXjUp13SYkxCCkn
-        U096HmNYg7iw/SxoT7neLn4aJqUr3WjcFCUvow==
-X-Google-Smtp-Source: AGRyM1sMZdbvA4+pTgknoI8ZibnawDLOfix1bfiq0ksSqXAK8yzjMR/zqB9nsiSjNS+lfjR4Zg4dM4gmrL+nMbRX5w0=
-X-Received: by 2002:a67:d194:0:b0:357:8ea:5554 with SMTP id
- w20-20020a67d194000000b0035708ea5554mr3707059vsi.0.1657811281644; Thu, 14 Jul
- 2022 08:08:01 -0700 (PDT)
+        Thu, 14 Jul 2022 11:09:39 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBC92981F;
+        Thu, 14 Jul 2022 08:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657811378; x=1689347378;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ySITWGdTdHqE+HMwzETa1LVQtsm5GALRydsd94U9OFU=;
+  b=UTtQeHsKCpYJhWgzTg5CtwfVyYApnxZQyT7J0Kj2/hlJ3oKhdQShLWjy
+   J3fUbfHRZ4+aRexmi17tRtCjFE0baM1iUVgxms8m1E0JDqkp0cr9w2iqZ
+   OPVSGSwpvpcgZY6dlUzN5MwQTfSZdNrKXpgqq0Lhj6y+m/bkFO4J8eDfe
+   A=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Jul 2022 08:09:38 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 08:09:37 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 14 Jul 2022 08:09:37 -0700
+Received: from [10.216.25.106] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 14 Jul
+ 2022 08:09:34 -0700
+Message-ID: <2938c8ff-ecc6-0a6e-6011-f83f3e3fbaa1@quicinc.com>
+Date:   Thu, 14 Jul 2022 20:39:31 +0530
 MIME-Version: 1.0
-References: <20220707081826.953449-1-Naresh.Solanki@9elements.com>
- <20220707081826.953449-3-Naresh.Solanki@9elements.com> <20220714141041.GB2229197-robh@kernel.org>
- <YtAkwcwXaQqZV75d@sirena.org.uk> <CAL_JsqKu_HCDoPBTcVdVV2JyD_8p3+cbrNC0u6VrK85vWZmt3Q@mail.gmail.com>
- <YtArbh4a40cACRMt@sirena.org.uk>
-In-Reply-To: <YtArbh4a40cACRMt@sirena.org.uk>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 14 Jul 2022 09:07:49 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+KRyE3i3CkPKopGgFvL+h0pT3R-d3aZNgVmKyiTy3gjw@mail.gmail.com>
-Message-ID: <CAL_Jsq+KRyE3i3CkPKopGgFvL+h0pT3R-d3aZNgVmKyiTy3gjw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] dt-bindings: regulator: add bindings for output-supply
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Naresh Solanki <naresh.solanki@9elements.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
+ probed properly
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1657810516-31143-1-git-send-email-quic_kriskura@quicinc.com>
+ <YtAv8R7QlTZCjvRO@kroah.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <YtAv8R7QlTZCjvRO@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,32 +72,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 8:43 AM Mark Brown <broonie@kernel.org> wrote:
->
-> On Thu, Jul 14, 2022 at 08:23:39AM -0600, Rob Herring wrote:
-> > On Thu, Jul 14, 2022 at 8:14 AM Mark Brown <broonie@kernel.org> wrote:
->
-> > > It's a description of a power supply output from their system (system as
-> > > a whole, not power provisioned within the system).
->
-> > Well, that's a better commit message than the original, but I still
-> > don't understand.
->
-> Consider for example a BMC (IIRC that's what their specific product is),
-> a bench supply or some automated test equipment.  Part of the function
-> for these systems is to provide power to other systems which would be
-> represented as a root or wall supply in the description of the system
-> that actually uses the supply if it were described using DT.
 
-Didn't someone else have a similar use recently? Controlling some
-supply external to the system. I can't seem to find it now.
+On 7/14/2022 8:32 PM, Greg Kroah-Hartman wrote:
+> On Thu, Jul 14, 2022 at 08:25:16PM +0530, Krishna Kurapati wrote:
+>> On SC7180 devices, it is observed that dwc3 probing is deferred
+>> because device_links_check_suppliers() finds that '88e3000.phy'
+>> isn't ready yet.
+>>
+>> As a part of its probe call, dwc3-qcom driver checks if dwc3 core
+>> is wakeup capable or not. If the dwc3 core is wakeup capable, driver
+>> configures dwc-qcom's power domain to be always ON. Also it configures
+>> dp/dm interrupts accordingly to support wakeup from system suspend.
+>>
+>> More info regarding the same can be found at:
+>> commit d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller status"
+>> commit 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
+>>
+>> In the event, dwc3 probe gets deferred and is processed after dwc3-qcom
+>> probe, driver ends up reading the wakeup capability of dwc3 core as false
+>> leading to instability in suspend/resume path.
+>>
+>> To avoid this scenario, ensure dwc3_probe is successful by checking
+>> if appropriate driver is assigned to it or not after the of_platform_populate
+>> call. If it isn't then defer dwc3-qcom probe as well.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/dwc3-qcom.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+>> index 7703655..096d1414 100644
+>> --- a/drivers/usb/dwc3/dwc3-qcom.c
+>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+>> @@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
+>>   		dev_err(dev, "failed to get dwc3 platform device\n");
+>>   	}
+>>   
+>> +	if (!qcom->dwc3->dev.driver)
+>> +		return -EPROBE_DEFER;
+>> +
+> Why not limit this check to a device type like your changelog mentions?
+>
+> thanks,
+>
+> greg k-h
+Hi Greg,
 
-In any case, it's not for you to describe, but Naresh, and in the
-binding and commit messages. But first we need to overcome proper
-usage of get_maintainers.pl. In response, to my first reply on v4, I
-have a second v4 sent privately today (and still only the vendor
-prefix). Sigh. AFAICT, for v1-v3, the only thing that made it to the
-list was the cover letters. Bottom line is this series has multiple
-problems and shouldn't have been applied yet.
+I wanted to make it common to any device using this driver. Although on 
+devices
+ike SC7280,this issue is not seen but the code would hold good. Do you 
+see any
+concerns if we do it this way ?
 
-Rob
+Thanks,
+Krishna,

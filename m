@@ -2,42 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540695740F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617505740EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbiGNB11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 21:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
+        id S231736AbiGNBY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 21:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiGNB10 (ORCPT
+        with ESMTP id S229844AbiGNBYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 21:27:26 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FCE20F77;
-        Wed, 13 Jul 2022 18:27:23 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LjxcF2fnvz1L95n;
-        Thu, 14 Jul 2022 09:24:45 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 14 Jul 2022 09:26:58 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
-CC:     <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND -next] lsm_audit: Clean up redundant NULL pointer check
-Date:   Thu, 14 Jul 2022 09:24:21 +0800
-Message-ID: <20220714012421.55627-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 13 Jul 2022 21:24:25 -0400
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFA28205D6;
+        Wed, 13 Jul 2022 18:24:24 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 8827310E976F;
+        Thu, 14 Jul 2022 11:24:23 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oBnaX-000bgE-9j; Thu, 14 Jul 2022 11:24:21 +1000
+Date:   Thu, 14 Jul 2022 11:24:21 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Oliver Sang <oliver.sang@intel.com>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-xfs@vger.kernel.org,
+        lkp@lists.01.org, lkp@intel.com
+Subject: Re: [xfs]  47a6df7cd3: Assertion_failed
+Message-ID: <20220714012421.GO3861211@dread.disaster.area>
+References: <Ys0gqOUcLr+2dle5@xsang-OptiPlex-9020>
+ <20220712214745.GL3861211@dread.disaster.area>
+ <Ys5lVZF3V53LQ+Ty@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys5lVZF3V53LQ+Ty@xsang-OptiPlex-9020>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=62cf7048
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=kj9zAlcOel0A:10 a=RgO8CyIxsXoA:10 a=QyXUC8HyAAAA:8 a=7-415B0cAAAA:8
+        a=Nusv4dcQFhBjhKgVRc0A:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,75 +51,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The implements of {ip,tcp,udp,dccp,sctp,ipv6}_hdr(skb) guarantee that
-they will never return NULL, and elsewhere users don't do the check
-as well, so remove the check here.
+On Wed, Jul 13, 2022 at 02:25:25PM +0800, Oliver Sang wrote:
+> hi Dave,
+> 
+> On Wed, Jul 13, 2022 at 07:47:45AM +1000, Dave Chinner wrote:
+> > > 
+> > > If you fix the issue, kindly add following tag
+> > > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > > 
+> > > 
+> > > [   94.271323][ T9089] XFS (sda5): Mounting V5 Filesystem
+> > > [   94.369992][ T9089] XFS (sda5): Ending clean mount
+> > > [   94.376046][ T9089] xfs filesystem being mounted at /fs/scratch supports timestamps until 2038 (0x7fffffff)
+> > > [  112.154792][  T311] xfs/076       IPMI BMC is not supported on this machine, skip bmc-watchdog setup!
+> > > [  112.154805][  T311]
+> > > [  161.426026][T29384] XFS: Assertion failed: xfs_is_shutdown(mp) || list_empty(&tp->t_dfops), file: fs/xfs/xfs_trans.c, line: 951
+> > > [  161.437713][T29384] ------------[ cut here ]------------
+> > > [  161.443155][T29384] kernel BUG at fs/xfs/xfs_message.c:110!
+> > > [  161.448854][T29384] invalid opcode: 0000 [#1] SMP KASAN PTI
+> > > [  161.454536][T29384] CPU: 1 PID: 29384 Comm: touch Not tainted 5.16.0-rc5-00001-g47a6df7cd317 #1
+> > 
+> > 5.16-rc5? Seems like a really old kernel to be testing....
+> > 
+> > Does this reproduce on a current 5.19-rc6 kernel?
+> 
+> yes, it's still reproducible. however, it's actually random on both 47a6df7cd3
+> and 5.19-rc6, as below.
+> it's clean on 40 runs of v5.16-rc5,
+> on 47a6df7cd3, it's reproduced 9 times out of 40 runs,
 
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- security/lsm_audit.c | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+Of course, 47a6df7cd3 introduced the ASSERT that is firing. You'll
+never see the failure on kernels before this, even if the issue is
+occurring. It also points out this isn't a new issue, it's been
+around since before we added detection of it.
 
-diff --git a/security/lsm_audit.c b/security/lsm_audit.c
-index 78a278f28e49..75cc3f8d2a42 100644
---- a/security/lsm_audit.c
-+++ b/security/lsm_audit.c
-@@ -44,9 +44,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	struct iphdr *ih;
- 
- 	ih = ip_hdr(skb);
--	if (ih == NULL)
--		return -EINVAL;
--
- 	ad->u.net->v4info.saddr = ih->saddr;
- 	ad->u.net->v4info.daddr = ih->daddr;
- 
-@@ -59,8 +56,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	switch (ih->protocol) {
- 	case IPPROTO_TCP: {
- 		struct tcphdr *th = tcp_hdr(skb);
--		if (th == NULL)
--			break;
- 
- 		ad->u.net->sport = th->source;
- 		ad->u.net->dport = th->dest;
-@@ -68,8 +63,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	}
- 	case IPPROTO_UDP: {
- 		struct udphdr *uh = udp_hdr(skb);
--		if (uh == NULL)
--			break;
- 
- 		ad->u.net->sport = uh->source;
- 		ad->u.net->dport = uh->dest;
-@@ -77,8 +70,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	}
- 	case IPPROTO_DCCP: {
- 		struct dccp_hdr *dh = dccp_hdr(skb);
--		if (dh == NULL)
--			break;
- 
- 		ad->u.net->sport = dh->dccph_sport;
- 		ad->u.net->dport = dh->dccph_dport;
-@@ -86,8 +77,7 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	}
- 	case IPPROTO_SCTP: {
- 		struct sctphdr *sh = sctp_hdr(skb);
--		if (sh == NULL)
--			break;
-+
- 		ad->u.net->sport = sh->source;
- 		ad->u.net->dport = sh->dest;
- 		break;
-@@ -115,8 +105,6 @@ int ipv6_skb_to_auditdata(struct sk_buff *skb,
- 	__be16 frag_off;
- 
- 	ip6 = ipv6_hdr(skb);
--	if (ip6 == NULL)
--		return -EINVAL;
- 	ad->u.net->v6info.saddr = ip6->saddr;
- 	ad->u.net->v6info.daddr = ip6->daddr;
- 	/* IPv6 can have several extension header before the Transport header
+> on v5.19-rc6, it's reprodced 7 times out of 20 runs.
+
+Hmmm. I've just run 50 iterations here on my 5.19-rc6 based VMs
+and I haven't seen a single failure. So it's not failing regularly
+here which means it is influenced by environmental factors.
+
+How big are the disks you are testing with?
+
+Cheers,
+
+Dave.
 -- 
-2.17.1
-
+Dave Chinner
+david@fromorbit.com

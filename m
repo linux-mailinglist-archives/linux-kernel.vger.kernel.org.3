@@ -2,111 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779085757E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A575757EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240678AbiGNXPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 19:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        id S232489AbiGNXPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 19:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiGNXPh (ORCPT
+        with ESMTP id S240790AbiGNXPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 19:15:37 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937AD70E52;
-        Thu, 14 Jul 2022 16:15:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657840536; x=1689376536;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H72vDAfPb/FZ8kn2h1SLYLPaWmLyKQvlwofVuzFDncI=;
-  b=V90tkd6ftmY8KikbwIimUrh8Q0SqrRur5Nr8gQD3gG0fnbIhEv4UaYxQ
-   nNM0eZDHHQ4vFqC7aFZFa3j02F7VJIRsubh3Or2/deTgQBcB+hCNDafgL
-   TTd6qNg+h5kHlutl99rlvB5iNx3Gkq/KUkb3Yi2hKjjBmxFXR7sKOkcgh
-   zyRNSTA+0NnMnS82/yz+zk5pvOQ6SNG0VEW04Gr8NvLtpouMjWDUAyHk1
-   3fP6zs3RkVijNuMS3UcEzE4nwW/gI7F+PFYiXGoxNz39kvLkZGC7uJUCK
-   gFOdszqyD/rgWuhG/yExcgNVmCHnq9jNNA28W0kJVkmmltvyIS8/1fFn9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="286390807"
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="286390807"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 16:15:36 -0700
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="546446644"
-Received: from jacobode-mobl.amr.corp.intel.com (HELO desk) ([10.212.243.89])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 16:15:35 -0700
-Date:   Thu, 14 Jul 2022 16:15:35 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        antonio.gomez.iglesias@linux.intel.com,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: [PATCH v2] x86/bugs: Warn when "ibrs" mitigation is selected on
- Enhanced IBRS parts
-Message-ID: <2a5eaf54583c2bfe0edc4fea64006656256cca17.1657814857.git.pawan.kumar.gupta@linux.intel.com>
-References: <0456b35fb9ef957d9a9138e0913fb1a3fd445dff.1657747493.git.pawan.kumar.gupta@linux.intel.com>
+        Thu, 14 Jul 2022 19:15:49 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6179570E5A
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:15:48 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id k19so1740208pll.5
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:15:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1uA4mMpLpcRR07bw1byaro66HK9+gzc14ZtiPZ8jfjA=;
+        b=As7pQ8CUT32Bd1LIq4AKb1ELuwXk+Tg1MdC1AUysMK9njWTOlc0OAsXlYWtrr15WJk
+         t5DF7RJsJdX2IR1vzbg0HicaP5A2owgtHNkeSnINSoyTDbi8Ql5QDPkxKyD4dfoUrGJo
+         tRetXkr7kWDTsVcYinNmDFQ39nrnuRrxNd5E4wCVyv1itFi0ABg2+6qKEqwMEprgc893
+         TSEFRiVf74mGYfN6ZZqIzL20etl7QHWiX4IciOkajGrieYbSwPZ+5UYHPMkPzIMhAkbL
+         PcIKqJiZwDSy4YkQnQ7E94tuNJCizdBQWm0M7qr2DoUzRPC9iCHDUTY0QU51B8YEZlMw
+         S2RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1uA4mMpLpcRR07bw1byaro66HK9+gzc14ZtiPZ8jfjA=;
+        b=IyOuBUDpXzV5pkJzCHEArol9wh0nunAtW0dRK7/3BlebI7RGch0i1H8j6oTpbKrZX7
+         c8UUrtiwXSe8opnYXysOOEEa3gVquvO+R4JWozPPJBtprh2IINobbSyxkidHrLXQqO4m
+         KBZRInIy9gKDbYulrLPB/EyBJSSMwtxhSzQJhWg5wc587H37TIQZbbSRtnVdVRwUSfnr
+         UOFra2zJtvyrtjaJ6B086L1IddSzS9mwtEAFKDli0SuuwZPHtY1AmwejjnEpwEDVkoaS
+         IgaJLbGb3w6T9MzHfWJaMWiPzoSZHxySz0DsbNhzgenJHG2A3TkeG5AonR+ttXBEG5o3
+         2Bkw==
+X-Gm-Message-State: AJIora9EWeu8D0lOT60RCVhTp0FPXo7XDjvEJBZsn0t9ETcmZcdutdBi
+        0zJMuUihDtoSA3XZb/eDM8uBK+4iYgMRvg==
+X-Google-Smtp-Source: AGRyM1uZbC7z2IBVQIZHYd+INOO841VeEdfsy+WMFnXkM1+47oPPD8//WDi92rKva1HNS7Gb3v0yVQ==
+X-Received: by 2002:a17:90a:c4f:b0:1df:a178:897f with SMTP id u15-20020a17090a0c4f00b001dfa178897fmr12107587pje.19.1657840547725;
+        Thu, 14 Jul 2022 16:15:47 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id m5-20020a170902db0500b001677d4a9654sm2016703plx.265.2022.07.14.16.15.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 16:15:47 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 23:15:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: Re: [PATCH 04/12] KVM: X86/MMU: Remove mmu_pages_clear_parents()
+Message-ID: <YtCjnvTkx1wtsuLn@google.com>
+References: <20220605064342.309219-1-jiangshanlai@gmail.com>
+ <20220605064342.309219-5-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0456b35fb9ef957d9a9138e0913fb1a3fd445dff.1657747493.git.pawan.kumar.gupta@linux.intel.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220605064342.309219-5-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IBRS mitigation for spectre_v2 forces write to MSR_IA32_SPEC_CTRL at
-every kernel entry/exit. On Enhanced IBRS parts setting
-MSR_IA32_SPEC_CTRL[IBRS] only once at boot is sufficient. MSR writes at
-every kernel entry/exit incur unnecessary performance loss.
+For the shortlog, I really want to capture the net effect.  It took me a lot of
+staring and reading (and hopefully not misreading) to figure out that this is a
+glorified nop.
 
-When Enhanced IBRS feature is present, print a warning about this
-unnecessary performance loss.
+  KVM: x86/mmu: Update unsync children metadata via recursion, not bottom-up walk
 
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
----
-v1->v2: Instead of changing the mitigation, print a warning about the
-        perf loss.
+On Sun, Jun 05, 2022, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> mmu_unsync_walk() is designed to be workable in a pagetable which has
+> unsync child bits set in the shadow pages in the pagetable but without
+> any unsync shadow pages.
+> 
+> This can be resulted when the unsync shadow pages of a pagetable
+> can be walked from other pagetables and have been synced or zapped
+> when other pagetables are synced or zapped.
+>
+> So mmu_pages_clear_parents() is not required even when the callers of
+> mmu_unsync_walk() zap or sync the pagetable.
 
-v1: https://lore.kernel.org/lkml/0456b35fb9ef957d9a9138e0913fb1a3fd445dff.1657747493.git.pawan.kumar.gupta@linux.intel.com/
+There's one other critical piece that it took me a quite some time to suss out
+from the code: the @parent passed to mmu_sync_children() _is_ updated because
+mmu_sync_children() loops on mmu_unsync_walk().  It's only the parents of @parent
+that are not updated, but they weren't updated anyways because mmu_pages_clear_parents()
+doesn't operate on the parents of @parent.
 
- arch/x86/kernel/cpu/bugs.c | 3 +++
- 1 file changed, 3 insertions(+)
+> So remove mmu_pages_clear_parents() and the child bits can be cleared in
+> the next call of mmu_unsync_walk() in one go.
 
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 0dd04713434b..1c54fad3c54b 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -975,6 +975,7 @@ static inline const char *spectre_v2_module_string(void) { return ""; }
- #define SPECTRE_V2_LFENCE_MSG "WARNING: LFENCE mitigation is not recommended for this CPU, data leaks possible!\n"
- #define SPECTRE_V2_EIBRS_EBPF_MSG "WARNING: Unprivileged eBPF is enabled with eIBRS on, data leaks possible via Spectre v2 BHB attacks!\n"
- #define SPECTRE_V2_EIBRS_LFENCE_EBPF_SMT_MSG "WARNING: Unprivileged eBPF is enabled with eIBRS+LFENCE mitigation and SMT, data leaks possible via Spectre v2 BHB attacks!\n"
-+#define SPECTRE_V2_IBRS_PERF_MSG "WARNING: IBRS mitigation selected on Enhanced IBRS CPU, this may cause unnecessary performance loss\n"
- 
- #ifdef CONFIG_BPF_SYSCALL
- void unpriv_ebpf_notify(int new_state)
-@@ -1415,6 +1416,8 @@ static void __init spectre_v2_select_mitigation(void)
- 
- 	case SPECTRE_V2_IBRS:
- 		setup_force_cpu_cap(X86_FEATURE_KERNEL_IBRS);
-+		if (boot_cpu_has(X86_FEATURE_IBRS_ENHANCED))
-+			pr_warn(SPECTRE_V2_IBRS_PERF_MSG);
- 		break;
- 
- 	case SPECTRE_V2_LFENCE:
+Ah, I missed (over and over) that the "next call" is the one right mmu_sync_children()
+and mmu_unsync_walk(), not a future call.
 
-base-commit: 4a57a8400075bc5287c5c877702c68aeae2a033d
--- 
-2.35.3
+Because I kept losing track of which pagetable was which, how about this for
+a changelog?
 
+  When syncing a shadow page with unsync children, do not update the
+  "unsync children" metadata from the bottom up, and instead defer the
+  update to the next "iteration" of mmu_unsync_walk() (all users of
+  mmu_unsync_walk() loop until it returns "no unsync children").
 
+  mmu_unsync_walk() is designed to handle the scenario where a shadow page
+  has a false positive on having unsync children, i.e. unsync_children can
+  be elevated without any child shadow pages actually being unsync.
+
+  Such a scenario already occurs when a child is synced or zapped by a
+  different walk of the page tables, i.e. with a different set of parents,
+  as unmarking parents is done only for the current walk.
+
+  Note, mmu_pages_clear_parents() doesn't update parents of @parent, so
+  there's no change in functionality from that perspective.
+
+  Removing mmu_pages_clear_parents() allows for further simplifying
+  mmu_unsync_walk(), including removing the struct mmu_page_path since
+  mmu_pages_clear_parents() was the only the function is the only user of it.
+
+With a cleaned up shortlog+changelog, and assuming I didn't misread everything...
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+
+> 
+> Removing mmu_pages_clear_parents() allows for further simplifying
+> mmu_unsync_walk() including removing the struct mmu_page_path since
+> the function is the only user of it.
+> 
+> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> ---

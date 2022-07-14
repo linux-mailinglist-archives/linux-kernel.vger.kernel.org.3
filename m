@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D25575530
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDC7575534
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240784AbiGNSmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 14:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
+        id S240789AbiGNSmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 14:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232093AbiGNSmG (ORCPT
+        with ESMTP id S232093AbiGNSmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 14:42:06 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E758E59250;
-        Thu, 14 Jul 2022 11:42:05 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id q194so1202318vkb.6;
-        Thu, 14 Jul 2022 11:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=5pM5OZFXT7eT1MtTENfYQDWXBwkREE44lbPNJ/oT6+o=;
-        b=E7sQa10BwPnGCB04/oDM8crFqI4vnHr46XcNYRqYxPRB5wPV3MLJHqxVpn+Dj3ljLw
-         2zaUbjeD89aUtJI3MuKq+UNnxB1G2w+C9wdOYdHQGRzqIsKyH8blgmyGLp2faTzhzf/M
-         NSQ7UMb4prgqIxfTlgDv5S6oHHSAVIGycGS9C9d6jE/h5PdRylXyl6J0/RYyV3p0M18E
-         yYQzzhJ+P9iAOWbYMS/99cb15TMdfaVRLBPTb5AnnYEQdiS8FAOskq9OKt+hSzzuiJWF
-         42g0clRcQ5PWi02lsPVqU5lETKtOkZB9oNoXTZBNdHukhF/FJZnnQOU+/thfk63sdZhN
-         UM7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=5pM5OZFXT7eT1MtTENfYQDWXBwkREE44lbPNJ/oT6+o=;
-        b=BxDcJBok5fGLAsilPF1dwk+djDoBMbxPTVp486uURnqQ9OyretZIU4fFNz1yIcMBzt
-         +kzg7nJoGkNc2li7ZVJre5zM3/BwUMuofJpz/9PXKI/GL+DE8W4J74ICajkXH1DxhTSd
-         10xYo1wKAIww72BxV2HKBFOhv+zk9Zk8+89GZqn76hJEgywpV+AeYv5w96uhjnkc231Z
-         1KT0+JzRT1mwlpphCAxHId5tVpfi/CslnI1f391GMWic8bmKskQjRDROgXMWpq8ADu5h
-         egY+MDHNJHyWWF7VBSWQ5WzfAlPnkziSU3tVlGunFRlLPhrpzzaOjtPaYR6Z0po8HxG6
-         v88g==
-X-Gm-Message-State: AJIora+ehROFWbcJtsn6WLFa7XSsDPrAYvpTrjbOfiVR2QcqcxfnqNxs
-        9h0VJER3V7CDHs/AGTvHKgRAY1+eiJimerFCXIBfXMKbotB7UQ==
-X-Google-Smtp-Source: AGRyM1vdsie2DfOySX22WISVuGQt1xoE2iHu1Uv1TBIsysTY5Kobk6zuYMoLDtO+nuY13g4AoO5RfKC294PUP4AaUe8=
-X-Received: by 2002:a1f:2997:0:b0:374:4bca:e8da with SMTP id
- p145-20020a1f2997000000b003744bcae8damr4523986vkp.4.1657824124883; Thu, 14
- Jul 2022 11:42:04 -0700 (PDT)
+        Thu, 14 Jul 2022 14:42:35 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AE8599F6;
+        Thu, 14 Jul 2022 11:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657824154; x=1689360154;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VLaGZ0CFcCMDw4sKrezyshgqgNu52lSz3UC7gONrKKM=;
+  b=C1t1w87kosiH+02dpsYA7EXoIhh+dyMdmaohh+fxi9i7vA0UQPR/MXKM
+   U+YzajLc0RLDtloH55IgBTBtsdbXoXHaUrFEl05mYJFPxX4yKueFm8XDO
+   D7bU6aCGotngx6FH33grnmaUAR0gZaCViRTXri5OzO4UjfvraUBfUfqlj
+   7P+XWYI36Rs++EOliz36zag8PV/2AOjkNavpPnkwrYnpNTtaFeczy481U
+   lzFZKEmucL8SUCswwwr5ZkSPBYt0svtIoJB/5xeSDfhgQO64o7ac1g9m9
+   p45ELtSi4rjxsUhXSmtgc5ceUmoaJRRkNiL+xc4g+i8htIhndhJ19rB9d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="268629871"
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="268629871"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 11:42:33 -0700
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="653996066"
+Received: from pravinpa-mobl.amr.corp.intel.com (HELO desk) ([10.212.243.89])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 11:42:32 -0700
+Date:   Thu, 14 Jul 2022 11:42:29 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        antonio.gomez.iglesias@linux.intel.com
+Subject: Re: [PATCH] x86/bugs: Switch to "auto" when "ibrs" selected on
+ Enhanced IBRS parts
+Message-ID: <20220714184229.lw24xiqzwlcxjnaq@desk>
+References: <0456b35fb9ef957d9a9138e0913fb1a3fd445dff.1657747493.git.pawan.kumar.gupta@linux.intel.com>
+ <Ys/7RiC9Z++38tzq@quatroqueijos>
+ <YtABEwRnWrJyIKTY@worktop.programming.kicks-ass.net>
+ <20220714160106.c6efowo6ptsu72ne@treble>
+ <YtBMZMaOnA8g8m0a@worktop.programming.kicks-ass.net>
+ <20220714173814.p5kdyimu6ho7zjt5@treble>
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 14 Jul 2022 13:41:54 -0500
-Message-ID: <CAH2r5mtdGBeQK+nVg_9QS5CXWoKM=f=9vbau8Cv6+vcN6DMikA@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220714173814.p5kdyimu6ho7zjt5@treble>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-32346491ddf24599decca06190ebca03ff9de7f8:
+On Thu, Jul 14, 2022 at 10:38:14AM -0700, Josh Poimboeuf wrote:
+>On Thu, Jul 14, 2022 at 07:03:32PM +0200, Peter Zijlstra wrote:
+>> On Thu, Jul 14, 2022 at 09:01:06AM -0700, Josh Poimboeuf wrote:
+>>
+>> > > Yeah this; if the user asks for IBRS, we should give him IBRS. I hate
+>> > > the 'I know better, let me change that for you' mentality.
+>> >
+>> > eIBRS CPUs don't even have legacy IBRS so I don't see how this is even
+>> > possible.
+>>
+>> You can still WRMSR a lot on them. Might not make sense but it 'works'.
+>
+>Even in Intel documentation, eIBRS is often referred to as IBRS. It
+>wouldn't be surprising for a user to consider spectre_v2=ibrs to mean
+>"use eIBRS".
+>
+>I'm pretty sure there's nobody out there that wants spectre_v2=ibrs to
+>mean "make it slower and possibly less secure because it's being used
+>contrary to the spec".
 
-  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
+Apart from testing, I don't see a reason for a user to deliberately
+choose =ibrs on Enhanced IBRS parts. But, I am guessing most users would
+just rely on "=auto" mode.
 
-are available in the Git repository at:
+So honoring what the user asked and printing a warning may be fine. And
+hope they would see the warning if they unintentionally chose "=ibrs" on
+an eIBRS part.
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.19-rc6-smb3-client-fixes
-
-for you to fetch changes up to 32f319183c439b239294cb2d70ada3564c4c7c39:
-
-  smb3: workaround negprot bug in some Samba servers (2022-07-13 19:59:47 -0500)
-----------------------------------------------------------------
-[resending due to cut-n-paste error in earlier P/R]
-
-Three smb3 client fixes:
-- 2 related to multichannel, one fixes a potential deadlock freeing a channel,
-  and the other fixing race condition on failed creation of new channel
-- one fixes a mount failure, working around a server bug in some
-  common older Samba servers by avoiding padding at the end of the
-  negotiate protocol request
-
-----------------------------------------------------------------
-Shyam Prasad N (2):
-      cifs: fix race condition with delayed threads
-      cifs: remove unnecessary locking of chan_lock while freeing session
-
-Steve French (1):
-      smb3: workaround negprot bug in some Samba servers
-
- fs/cifs/connect.c |  2 --
- fs/cifs/sess.c    | 11 +++++++++--
- fs/cifs/smb2pdu.c | 13 +++++++------
- 3 files changed, 16 insertions(+), 10 deletions(-)
-
--- 
 Thanks,
-
-Steve
+Pawan

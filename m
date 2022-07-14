@@ -2,128 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9368575195
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FAF575198
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239982AbiGNPTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
+        id S240007AbiGNPUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbiGNPTc (ORCPT
+        with ESMTP id S231937AbiGNPUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:19:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A96B549B6B
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657811970;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3g/51Am7hhNBKok4aSvT7atGRsltefp8gJyPRmGJItU=;
-        b=dcUOHmY3KxPpmQVG+FCtYGyg1BKLxbSKaC3YkjTqqXKZQ71HT3LogZ/pm/i0EggI/KPE5r
-        /bBjcg69wEq9nYVnZYSczTXWjv6dwPx6Il8Xf3QyHo9DHee+DI/TI27AMIv4vMD7WBZXH4
-        r9FH0qI7xTdmzRX1Sr6iMjkLOWomZKY=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-90-z6B5SIm8O6SKKzT3LCs7Dg-1; Thu, 14 Jul 2022 11:19:23 -0400
-X-MC-Unique: z6B5SIm8O6SKKzT3LCs7Dg-1
-Received: by mail-qk1-f197.google.com with SMTP id bm38-20020a05620a19a600b006b5bbb087b6so1355507qkb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:19:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3g/51Am7hhNBKok4aSvT7atGRsltefp8gJyPRmGJItU=;
-        b=B4gaWmIrHvsHAeYP/vhljxW3nkH4QvV4++bJboHbRZn12CXZwP1YMwftm5sj4An/Lt
-         Au6FxVyHx+29mrwTlE4W03gR0/lLCZzKI2QSJWP9BgLx3Ys/s6YQYQwG1VHtrUHBdZoC
-         YshFtmUXTd2HDZGp4d9vgRX7ABa3Yx0QJRXzpVIjCsE7kN38mXy4N1EvhMR5UmFiUSVN
-         5Ufq1UsiGv7PNIxlcic/Dr0JYf58i/xYIdj5n7sBiIci1JxEhcwNgwmYhfHGBdhqK0WZ
-         sNJTK4oJAALFmNbViuXFQKXLuANhT320+AqK6gzfvxJYcauLoag7we2Cv4CW9+uEnBjc
-         yv2A==
-X-Gm-Message-State: AJIora/qsPc+iwMVoo3hXIQPA7Jb6r1cRw+M1m3Idsmx+bHYAD/xvkAP
-        5USyCO+e8pOq+Ao3GaZ0hmv2WwDyH5Ap1WE84nwpyYS+lOcOzq3odWGmrGu97br0vZv5IB7MzAp
-        xiOF6uMVsr8vFCeXgdbJIG5rrb6ib4102mDWBjiA7bQNqzZi0AYEiWAXYhr6Rnu43VDo5uL7kuN
-        C9tO4=
-X-Received: by 2002:ac8:7fcf:0:b0:31e:cb6f:2487 with SMTP id b15-20020ac87fcf000000b0031ecb6f2487mr7776909qtk.528.1657811961241;
-        Thu, 14 Jul 2022 08:19:21 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vuDG1f+p3VMd/jpv+jcJjxRHrYm4T6wO2lWr00narn1rhXbhrgFy56BIisbhuc7XIW2VKVrw==
-X-Received: by 2002:ac8:7fcf:0:b0:31e:cb6f:2487 with SMTP id b15-20020ac87fcf000000b0031ecb6f2487mr7776859qtk.528.1657811960888;
-        Thu, 14 Jul 2022 08:19:20 -0700 (PDT)
-Received: from localhost.localdomain.com ([151.29.62.255])
-        by smtp.gmail.com with ESMTPSA id w18-20020a05620a445200b006a37c908d33sm1662031qkp.28.2022.07.14.08.19.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 08:19:20 -0700 (PDT)
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>
-Cc:     "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>,
-        Juri Lelli <juri.lelli@redhat.com>, stable@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: [PATCH v2] sched/deadline: Fix BUG_ON condition for deboosted tasks
-Date:   Thu, 14 Jul 2022 17:19:08 +0200
-Message-Id: <20220714151908.533052-1-juri.lelli@redhat.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 14 Jul 2022 11:20:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A7E481C2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657812022; x=1689348022;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sbZhaT5tdicd4HOKbtLgjSP8ggs3tLu6dffAfZ7Zzk0=;
+  b=LyPChm5BH+ib5lg/4gVRjJX4ZThdLQOtnIatkYXN76peOuQhCEyl5CKL
+   AxSMy+a6/AK5uZzxYhxWA8a3Bkm90sw3XPzqIjTaY3dICBHpdG5wmbS1+
+   S0OKZdr5qYa9o1hZHhA37kqquEXBjqo2ojiYW894uol7V6KlId9wG8tOH
+   Y7gmwJO8hQ7I9pxY5vaFhoPTTPvtXvclp5CC2IdIkgQovWzFrFYNV8AM+
+   DiWnttUoRgpVJk+TuBFPULM4/BCTAQCX2WXyXMcJtiByT1Lb6SFjWWHjs
+   afTK7poU5CzMi0Qooo2PiavDSIFPFVIfeOmPtHqGmRZxx7K/axBuLw6Nx
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="285564040"
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="285564040"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 08:20:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="923107992"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga005.fm.intel.com with ESMTP; 14 Jul 2022 08:20:18 -0700
+Received: from [10.249.147.144] (mwajdecz-MOBL.ger.corp.intel.com [10.249.147.144])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 26EFKGKA026921;
+        Thu, 14 Jul 2022 16:20:16 +0100
+Message-ID: <a85f4b50-aba7-3a43-b8c3-5fed4217b0d9@intel.com>
+Date:   Thu, 14 Jul 2022 17:20:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 16/21] drm/i915: Define GuC Based TLB invalidation
+ routines
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Prathap Kumar Valsan <prathap.kumar.valsan@intel.com>,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        Borislav Petkov <bp@suse.de>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        John Harrison <John.C.Harrison@Intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
+        Vinay Belgaumkar <vinay.belgaumkar@intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1657800199.git.mchehab@kernel.org>
+ <335645ebfde73421a506d6df72e78d370805aa9c.1657800199.git.mchehab@kernel.org>
+From:   Michal Wajdeczko <michal.wajdeczko@intel.com>
+In-Reply-To: <335645ebfde73421a506d6df72e78d370805aa9c.1657800199.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tasks the are being deboosted from SCHED_DEADLINE might enter
-enqueue_task_dl() one last time and hit an erroneous BUG_ON condition:
-since they are not boosted anymore, the if (is_dl_boosted()) branch is
-not taken, but the else if (!dl_prio) is and inside this one we
-BUG_ON(!is_dl_boosted), which is of course false (BUG_ON triggered)
-otherwise we had entered the if branch above. Long story short, the
-current condition doesn't make sense and always leads to triggering of a
-BUG.
 
-Fix this by only checking enqueue flags, properly: ENQUEUE_REPLENISH has
-to be present, but additional flags are not a problem.
 
-Fixes: 64be6f1f5f71 ("sched/deadline: Don't replenish from a !SCHED_DEADLINE entity")
-Cc: stable@vger.kernel.org
-Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
+On 14.07.2022 14:06, Mauro Carvalho Chehab wrote:
+> From: Prathap Kumar Valsan <prathap.kumar.valsan@intel.com>
+> 
+> Add routines to interface with GuC firmware for selective TLB invalidation
+> supported on XeHP.
+> 
+> Signed-off-by: Prathap Kumar Valsan <prathap.kumar.valsan@intel.com>
+> Cc: Matthew Brost <matthew.brost@intel.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v2 00/21] at: https://lore.kernel.org/all/cover.1657800199.git.mchehab@kernel.org/
+> 
+>  .../gpu/drm/i915/gt/uc/abi/guc_actions_abi.h  |  3 +
+>  drivers/gpu/drm/i915/gt/uc/intel_guc.c        | 90 +++++++++++++++++++
+>  drivers/gpu/drm/i915/gt/uc/intel_guc.h        | 10 +++
+>  drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h   |  3 +
+>  4 files changed, 106 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
+> index fb0af33e43cc..5c019856a269 100644
+> --- a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
+> +++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
+> @@ -188,6 +188,9 @@ enum intel_guc_state_capture_event_status {
+>  #define INTEL_GUC_TLB_INVAL_FLUSH_CACHE (1 << 31)
+>  
+>  enum intel_guc_tlb_invalidation_type {
+> +	INTEL_GUC_TLB_INVAL_FULL = 0x0,
+> +	INTEL_GUC_TLB_INVAL_PAGE_SELECTIVE = 0x1,
+> +	INTEL_GUC_TLB_INVAL_PAGE_SELECTIVE_CTX = 0x2,
+>  	INTEL_GUC_TLB_INVAL_GUC = 0x3,
+>  };
+>  
+> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc.c b/drivers/gpu/drm/i915/gt/uc/intel_guc.c
+> index 8a104a292598..98260a7bc90b 100644
+> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc.c
+> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc.c
+> @@ -923,6 +923,96 @@ static int guc_send_invalidate_tlb(struct intel_guc *guc, u32 *action, u32 size)
+>  	return err;
+>  }
+>  
+> + /* Full TLB invalidation */
+> +int intel_guc_invalidate_tlb_full(struct intel_guc *guc,
+> +				  enum intel_guc_tlb_inval_mode mode)
+> +{
+> +	u32 action[] = {
+> +		INTEL_GUC_ACTION_TLB_INVALIDATION,
+> +		0,
+> +		INTEL_GUC_TLB_INVAL_FULL << INTEL_GUC_TLB_INVAL_TYPE_SHIFT |
+> +			mode << INTEL_GUC_TLB_INVAL_MODE_SHIFT |
+> +			INTEL_GUC_TLB_INVAL_FLUSH_CACHE,
+> +	};
+> +
+> +	if (!INTEL_GUC_SUPPORTS_TLB_INVALIDATION(guc)) {
+> +		DRM_ERROR("Tlb invalidation: Operation not supported in this platform!\n");
 
----
-v1->v2
- - Make detection of faulty condition less fatal [Peter Zijlstra]
- - Cc stable and update fixes tag [Srivatsa S. Bhat]
----
- kernel/sched/deadline.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+s/Tlb/TLB
 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 5867e186c39a..0ab79d819a0d 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -1703,7 +1703,10 @@ static void enqueue_task_dl(struct rq *rq, struct task_struct *p, int flags)
- 		 * the throttle.
- 		 */
- 		p->dl.dl_throttled = 0;
--		BUG_ON(!is_dl_boosted(&p->dl) || flags != ENQUEUE_REPLENISH);
-+		if (!(flags & ENQUEUE_REPLENISH))
-+			printk_deferred_once("sched: DL de-boosted task PID %d: REPLENISH flag missing\n",
-+					     task_pid_nr(p));
-+
- 		return;
- 	}
- 
--- 
-2.36.1
+and use drm_err() or even consider GEM_BUG_ON() as this looks more like
+a coding mistake if we will be here, no ?
 
+> +		return 0;
+> +	}
+> +
+> +	return guc_send_invalidate_tlb(guc, action, ARRAY_SIZE(action));
+> +}
+> +
+> +/*
+> + * Selective TLB Invalidation for Address Range:
+> + * TLB's in the Address Range is Invalidated across all engines.
+> + */
+> +int intel_guc_invalidate_tlb_page_selective(struct intel_guc *guc,
+> +					    enum intel_guc_tlb_inval_mode mode,
+> +					    u64 start, u64 length)
+> +{
+> +	u64 vm_total = BIT_ULL(INTEL_INFO(guc_to_gt(guc)->i915)->ppgtt_size);
+> +	u32 address_mask = (ilog2(length) - ilog2(I915_GTT_PAGE_SIZE_4K));
+
+drop extra ( )
+
+> +	u32 full_range = vm_total == length;
+
+bool ?
+
+> +	u32 action[] = {
+> +		INTEL_GUC_ACTION_TLB_INVALIDATION,
+> +		0,
+> +		INTEL_GUC_TLB_INVAL_PAGE_SELECTIVE << INTEL_GUC_TLB_INVAL_TYPE_SHIFT |
+> +			mode << INTEL_GUC_TLB_INVAL_MODE_SHIFT |
+> +			INTEL_GUC_TLB_INVAL_FLUSH_CACHE,
+> +		0,
+> +		full_range ? full_range : lower_32_bits(start),
+> +		full_range ? 0 : upper_32_bits(start),
+> +		full_range ? 0 : address_mask,
+> +	};
+> +
+> +	if (!INTEL_GUC_SUPPORTS_TLB_INVALIDATION_SELECTIVE(guc)) {
+> +		DRM_ERROR("Tlb invalidation: Operation not supported in this platform!\n");
+
+as above
+
+> +		return 0;
+> +	}
+> +
+> +	GEM_BUG_ON(!IS_ALIGNED(start, I915_GTT_PAGE_SIZE_4K));
+> +	GEM_BUG_ON(!IS_ALIGNED(length, I915_GTT_PAGE_SIZE_4K));
+> +	GEM_BUG_ON(range_overflows(start, length, vm_total));
+> +
+> +	return guc_send_invalidate_tlb(guc, action, ARRAY_SIZE(action));
+> +}
+> +
+> +/*
+> + * Selective TLB Invalidation for Context:
+> + * Invalidates all TLB's for a specific context across all engines.
+> + */
+> +int intel_guc_invalidate_tlb_page_selective_ctx(struct intel_guc *guc,
+> +						enum intel_guc_tlb_inval_mode mode,
+> +						u64 start, u64 length, u32 ctxid)
+> +{
+> +	u64 vm_total = BIT_ULL(INTEL_INFO(guc_to_gt(guc)->i915)->ppgtt_size);
+> +	u32 address_mask = (ilog2(length) - ilog2(I915_GTT_PAGE_SIZE_4K));
+
+drop ( )
+
+> +	u32 full_range = vm_total == length;
+
+bool
+
+> +	u32 action[] = {
+> +		INTEL_GUC_ACTION_TLB_INVALIDATION,
+> +		0,
+> +		INTEL_GUC_TLB_INVAL_PAGE_SELECTIVE_CTX << INTEL_GUC_TLB_INVAL_TYPE_SHIFT |
+> +			mode << INTEL_GUC_TLB_INVAL_MODE_SHIFT |
+> +			INTEL_GUC_TLB_INVAL_FLUSH_CACHE,
+> +		ctxid,
+> +		full_range ? full_range : lower_32_bits(start),
+> +		full_range ? 0 : upper_32_bits(start),
+> +		full_range ? 0 : address_mask,
+> +	};
+> +
+> +	if (!INTEL_GUC_SUPPORTS_TLB_INVALIDATION_SELECTIVE(guc)) {
+> +		DRM_ERROR("Tlb invalidation: Operation not supported in this platform!\n");
+
+as above
+
+> +		return 0;
+> +	}
+> +
+> +	GEM_BUG_ON(!IS_ALIGNED(start, I915_GTT_PAGE_SIZE_4K));
+> +	GEM_BUG_ON(!IS_ALIGNED(length, I915_GTT_PAGE_SIZE_4K));
+> +	GEM_BUG_ON(range_overflows(start, length, vm_total));
+> +
+> +	return guc_send_invalidate_tlb(guc, action, ARRAY_SIZE(action));
+> +}
+> +
+>  /*
+>   * Guc TLB Invalidation: Invalidate the TLB's of GuC itself.
+>   */
+> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc.h b/drivers/gpu/drm/i915/gt/uc/intel_guc.h
+> index 01c6478451cc..df6ba1c32808 100644
+> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc.h
+> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc.h
+> @@ -384,6 +384,16 @@ int intel_guc_allocate_and_map_vma(struct intel_guc *guc, u32 size,
+>  int intel_guc_self_cfg32(struct intel_guc *guc, u16 key, u32 value);
+>  int intel_guc_self_cfg64(struct intel_guc *guc, u16 key, u64 value);
+>  
+> +int intel_guc_g2g_register(struct intel_guc *guc);
+
+drop this, not part of this series
+
+> +
+> +int intel_guc_invalidate_tlb_full(struct intel_guc *guc,
+> +				  enum intel_guc_tlb_inval_mode mode);
+> +int intel_guc_invalidate_tlb_page_selective(struct intel_guc *guc,
+> +					    enum intel_guc_tlb_inval_mode mode,
+> +					    u64 start, u64 length);
+> +int intel_guc_invalidate_tlb_page_selective_ctx(struct intel_guc *guc,
+> +						  enum intel_guc_tlb_inval_mode mode,
+> +						  u64 start, u64 length, u32 ctxid);
+>  int intel_guc_invalidate_tlb_guc(struct intel_guc *guc,
+>  				 enum intel_guc_tlb_inval_mode mode);
+>  int intel_guc_invalidate_tlb_all(struct intel_guc *guc);
+> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h b/drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h
+> index 3edf567b3f65..29e402f70a94 100644
+> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h
+> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h
+> @@ -436,5 +436,8 @@ enum intel_guc_recv_message {
+>  	((intel_guc_ct_enabled(&(guc)->ct)) && \
+>  	 (intel_guc_submission_is_used(guc)) && \
+>  	 (GRAPHICS_VER(guc_to_gt((guc))->i915) >= 12))
+> +#define INTEL_GUC_SUPPORTS_TLB_INVALIDATION_SELECTIVE(guc) \
+> +	(INTEL_GUC_SUPPORTS_TLB_INVALIDATION(guc) && \
+> +	HAS_SELECTIVE_TLB_INVALIDATION(guc_to_gt(guc)->i915))
+>  
+>  #endif
+
+,Michal

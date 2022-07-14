@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C179574130
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 04:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FDA574132
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 04:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbiGNCDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 22:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
+        id S232392AbiGNCDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 22:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiGNCDl (ORCPT
+        with ESMTP id S232382AbiGNCDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 22:03:41 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468C15F51;
-        Wed, 13 Jul 2022 19:03:40 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso1089823pjo.0;
-        Wed, 13 Jul 2022 19:03:40 -0700 (PDT)
+        Wed, 13 Jul 2022 22:03:51 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA1BBC36;
+        Wed, 13 Jul 2022 19:03:50 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d10so578233pfd.9;
+        Wed, 13 Jul 2022 19:03:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KbXWRxkBF4v4bahA1QQdo+LHzdrxElL+2e0ry4cAShE=;
-        b=ZRXUZjNwJF02iqB+QYx3KKKBSUmaAYDvKv3WDoXuqEsf7/r7wHWCh/pjHE/1/cQfyb
-         SIlfjMxT+QX922D0YdBWjdJbdo/QQlAss9ZqfS1A9aIh9/8A8wsY0t8uN6o6vKmNsxEm
-         ueGsDp/LMhzEfxf3regO105BaZyTeC4XOrZG8IJxRzQM5m6DkMGGiToUOEF5o2qlbygc
-         gWAeDJjJKDCdiLcrLzKdrurhbScBQEgR7s09p+4Ynif7z78xYkywL6HArsEEEQjobLZ7
-         RL/yI296SdOFN0diRQbCilPctIJcDMDS5SEoS1x+gHWZv9Ria9LbpzWMx7pj5h98BG6h
-         hBlQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=u8xyMNAQAMH3dB784aVpeEcj3aQzHocuPU4wVMMpJ6Q=;
+        b=d4rOOUSZiipBq/BDH0r4CmgTwGh9cgOjb8JEnDjh45dymPaVcsge8LF8qAO/WizEGj
+         NBGkyo2TNgAVIXYs0A2akgs7cfvUWXiu6eKuIYQtvLlfDeYJroIJb2AGhplFNeh17kMG
+         hsKtftI8EA1fnJacwLFsoNCy0jgh2C4szjBdfJ0RbP42h5r9sVNnDbTzvMdwAe0l8A/B
+         Vr+V9G/+f/v7phBoClB8MrjMAkuSdY23ao6Q1zPfK1YzcBA+A5jPpFNlJX+KnY7CJBUx
+         ZmJTs8USACLpfeOxrc8RfG58JYHqziaLlwzUVks5GTIPP2wzPQIZT0l2LpyeiCX8OB4C
+         UJ+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KbXWRxkBF4v4bahA1QQdo+LHzdrxElL+2e0ry4cAShE=;
-        b=XsfzOTeMSzAAgyqyvTvfI8nOIow1KYrKMw8CN10ZmViP3CEi/2JRd8bttNf6Dku+JO
-         NV2vzrWB/g7PO5dzQxED/7Ao0WnmEdl+gjBfcQhmPfru+dylX4pkqK/Vi4DKkW0i4MPz
-         lq30Q1dRdDvpumSisXVXg0zGQYJGKI20Jzo1NpVWNrVHmsvShglqJWW1FiWkNk5+nJyf
-         L3aXRG9r2N3Nf4OfLSfpn3wAxKdOKSSiK/IJbIgb8MnxxZubVi2Ple0j2saSUvxBfV1n
-         4RtaH4hfsvOcqwBu0IGRceYxYQTh1TMCcN47TsdP7u9ZRaHt5Uk+l6jNCWRe+QP/07Bh
-         UvRg==
-X-Gm-Message-State: AJIora8xUECoHUY26iRCSTmc3p33z34ULWoBmTzm0XIjS20AiEksCGFf
-        4Zd76CYCxYCfgVe6VDEfimHd2vzgaMg=
-X-Google-Smtp-Source: AGRyM1sZO7MsTMaKbjcD5sn5BbFq049du3/CqLIxnCLFf10yICu7IDGGOaiJNsW3udx9kQUghOqs9Q==
-X-Received: by 2002:a17:902:ce88:b0:16c:1b1e:71b4 with SMTP id f8-20020a170902ce8800b0016c1b1e71b4mr6148710plg.153.1657764219481;
-        Wed, 13 Jul 2022 19:03:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=u8xyMNAQAMH3dB784aVpeEcj3aQzHocuPU4wVMMpJ6Q=;
+        b=uo6ZWe3axYoEehVCe46AaRJCNngUEMtDAqwbkdKGizru2xc6lS3vY2JquyTRojflSy
+         aJR1uU189hkzF+Y6BUYtRHko7CYbjOi0asF2OoXj6x/Y3lm8LCr5M+EXb4jQ5rx/v/jD
+         OOzj6y3L4Ml4OOl4kTL/JPOWisYnHbQYP9z14peXS6SnonYIR2gzrg+dYrCX7qxSBNC7
+         0uGh5XbmF90JtakXR+5QmlOdoRExWUFMTYudAx+dFBFcvLbMPdg1bX2LEX+w2L3tTYXz
+         0JFreucPB4IbVIQv24S654qUxxUhqqb7mNEUyBgHd+fKP4jU9jqfEpHVzjO4P62Ohypz
+         8zqQ==
+X-Gm-Message-State: AJIora9ff+8KUdcnPkzDloW5/f4IpDpqb8epPiONVRVoRQfAb/fHvhFD
+        iLUGAigdq+DQHtWcOsjesS8vJTbsZBs=
+X-Google-Smtp-Source: AGRyM1vq4JVqL88Py4pPgg2Yg8K7hyc1Yf5ujqS/sJiVnJOM/veU7WzKi15WuVQs30QRD1f8quu2fA==
+X-Received: by 2002:a65:5381:0:b0:415:f0ec:ac70 with SMTP id x1-20020a655381000000b00415f0ecac70mr5517289pgq.473.1657764229416;
+        Wed, 13 Jul 2022 19:03:49 -0700 (PDT)
 Received: from sol.home.arpa (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
-        by smtp.gmail.com with ESMTPSA id i137-20020a62878f000000b0052542cbff9dsm230886pfe.99.2022.07.13.19.03.35
+        by smtp.gmail.com with ESMTPSA id i137-20020a62878f000000b0052542cbff9dsm230886pfe.99.2022.07.13.19.03.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 19:03:38 -0700 (PDT)
+        Wed, 13 Jul 2022 19:03:48 -0700 (PDT)
 From:   Kent Gibson <warthog618@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         brgl@bgdev.pl, linus.walleij@linaro.org, dipenp@nvidia.com,
         andy.shevchenko@gmail.com
 Cc:     Kent Gibson <warthog618@gmail.com>
-Subject: [PATCH v2 0/6] gpiolib: cdev: code cleanup following hte integration
-Date:   Thu, 14 Jul 2022 10:03:13 +0800
-Message-Id: <20220714020319.72952-1-warthog618@gmail.com>
+Subject: [PATCH v2 1/6] gpiolib: cdev: simplify linereq_free
+Date:   Thu, 14 Jul 2022 10:03:14 +0800
+Message-Id: <20220714020319.72952-2-warthog618@gmail.com>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220714020319.72952-1-warthog618@gmail.com>
+References: <20220714020319.72952-1-warthog618@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,58 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series is a collection of improvements to simplify the
-code, improve readability, and compile out unused code.
-There are no functional changes.
+The edge detector is only ever started after the line desc has been
+determined, so move edge_detector_stop() inside the line desc check,
+and merge the two checked regions into one.
 
-The first patch is a cleanup for my recent linereq_free() fix. I
-noted then that the edge_detector_stop() could probably be safely
-moved inside the line desc check block, but wanted to keep that
-change minimal just in case.  It can be safely moved, and so here
-it is.
+Signed-off-by: Kent Gibson <warthog618@gmail.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+---
+ drivers/gpio/gpiolib-cdev.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Patch 2 makes use of an existing macro to simplify a call.
-
-Patch 3 replaces some more if-else chains with switches, which is
-more readable (YMMV).
-
-Patch 4 reorganizes the line identification code to share code
-common to alternate paths.
-
-Patch 5 consolidates a number of separate flags into one.  This
-reduces code complexity, simplifies any future edge source additions,
-and makes patch 6 significantly simpler.
-
-Patch 6 totally compiles out the hte specific code when CONFIG_HTE
-is not selected.
-
-I've based this series on gpio/for-current, as it requires the fix
-patch -
-commit c8e27a4a5136 ("gpiolib: cdev: fix null pointer dereference in linereq_free()")
-Happy to rebase if that doesn't suit.
-
-Dipen, I don't have any HTE compatible hardware to test with, so
-could you check that this still works for you?
-
-Changes v1 -> v2:
- Address Andy's review comments, specifically
-  - Patch 4 move ternary initializer into a helper function.
-  - Patch 5 variable declaration ordering.
-  - Patch 6 remove obsoleted comment and tidy some if expressions.
-
-Kent Gibson (6):
-  gpiolib: cdev: simplify linereq_free
-  gpiolib: cdev: simplify parameter in call to hte_edge_setup
-  gpiolib: cdev: replace if-else chains with switches
-  gpiolib: cdev: simplify line event identification
-  gpiolib: cdev: consolidate edge detector configuration flags
-  gpiolib: cdev: compile out HTE unless CONFIG_HTE selected
-
- drivers/gpio/gpiolib-cdev.c | 291 +++++++++++++++++++-----------------
- 1 file changed, 151 insertions(+), 140 deletions(-)
-
-
-base-commit: 7329b071729645e243b6207e76bca2f4951c991b
+diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+index 0c9a63becfef..b44526e3630e 100644
+--- a/drivers/gpio/gpiolib-cdev.c
++++ b/drivers/gpio/gpiolib-cdev.c
+@@ -1460,15 +1460,15 @@ static ssize_t linereq_read(struct file *file,
+ static void linereq_free(struct linereq *lr)
+ {
+ 	unsigned int i;
+-	bool hte = false;
++	bool hte;
+ 
+ 	for (i = 0; i < lr->num_lines; i++) {
+-		if (lr->lines[i].desc)
++		if (lr->lines[i].desc) {
+ 			hte = !!test_bit(FLAG_EVENT_CLOCK_HTE,
+ 					 &lr->lines[i].desc->flags);
+-		edge_detector_stop(&lr->lines[i], hte);
+-		if (lr->lines[i].desc)
++			edge_detector_stop(&lr->lines[i], hte);
+ 			gpiod_free(lr->lines[i].desc);
++		}
+ 	}
+ 	kfifo_free(&lr->events);
+ 	kfree(lr->label);
 -- 
 2.37.1
 

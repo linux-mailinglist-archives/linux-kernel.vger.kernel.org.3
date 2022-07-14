@@ -2,132 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3115752C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1715752C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239329AbiGNQ3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
+        id S239374AbiGNQaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237459AbiGNQ3V (ORCPT
+        with ESMTP id S237459AbiGNQ37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:29:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A626576;
-        Thu, 14 Jul 2022 09:29:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D5BA61FB9;
-        Thu, 14 Jul 2022 16:29:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80A34C34114;
-        Thu, 14 Jul 2022 16:29:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657816159;
-        bh=SnQc6p3PeqS1n3VRIcugq60v7kSKmJEFyoz8QtpbexQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JjRz+faWGfxgMxT7jllxUWJWqUPhg+FB4QKsQrOiXTNOLgxrmCXGGrSneo++XwKZd
-         1aLi9Q1BAvF9QU3pSooD2HTnG5Y5SSF+ZTDfmz5J7sFFyTPIiuOVAd5A0ThQ2QF/Dc
-         YkwawbPoK0l6BmHreuiMx/f0+0NmzXKn4eWpA2+oX5WaS6o67+tCqBSjYvsL9ekp8Z
-         /JudLDyKoQyHGVsLrSTJE+0ca3CkzZFm5gVAAsCr8O4vaYMxFTaIXQwXDWXgHhrj5/
-         kYpA7Fr/K/mkIFnFDUwGTacMwfb52m89oK4fcsZ9S6i7AHoSwrCqtDrJjqkVaGJgop
-         AwK7mtfRI80ag==
-Date:   Thu, 14 Jul 2022 09:29:17 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Subject: Re: linux-next: Tree for Jul 14
-Message-ID: <YtBEXdrsthFamQs8@dev-arch.thelio-3990X>
-References: <20220714185514.7d1a2ac9@canb.auug.org.au>
- <Ys/42uMzQy+CFTGI@debian>
- <YtA+127QgRifnRBZ@dev-arch.thelio-3990X>
- <CADVatmOTNA8uVqDEx6kp=+_O=wEhV2jbS9-frct-c4ZqBxcspg@mail.gmail.com>
+        Thu, 14 Jul 2022 12:29:59 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DE733410
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:29:58 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id eq6so3106175edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZI0YHVo/gtkOB8tgyDWcbFNn6KxRA45rOQ9nm1YXK/Q=;
+        b=qDcqaSAhw+hlOV5MLaMQb3gYMlJSXY1JVhNzIBNLgXH/Azc2KW0WxR+hxUZcNtDxm6
+         InWFK4mBuPj0hpBt3PvwutZW5wUJKMYCh0SPUqO4ZXY8DZB7dVBAr/e2/bq6FEbr7j8a
+         igiR4rkthJIEYAAJHPMok4ww9tD869WwPg8aAOKwa0/tachtsAIUBYQNJu2lL7dSTuFm
+         bFNhX6QVDJRJBWkwMrW/0pxO6DFhcWycipykiOhv48CW/jjT0SmOfSn2DaggW8swX/WL
+         s/UNX/NjcUc71qQNPXWtJfbQPctemAAkIZMZhE6w1fxcaNdrj5q5UAAKsh+KhhdrYB29
+         25Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZI0YHVo/gtkOB8tgyDWcbFNn6KxRA45rOQ9nm1YXK/Q=;
+        b=Z2HlDNEZRG11NRTPrwcSzo1hTkI1a/UPV0qzWRIj310CsAzhjPJnZjOv98XYvgCEWB
+         3wWJWUQrFQfcKcf+1CDcvHRLK33dA9Ai1VOcGV7h6uZjJBNmYljNCardB1Zs+SAd25uW
+         TUBeoqwAbpAkJS+c7sENYmScE3p+P0iOhEo1WZ+pfKYyOg1Qu7ImiyLGQeCWkAxSh3Wp
+         72zozVBlavwL0wdpr/EVfY8NKKO4e98Bp0sZ7hD5kYXSJ6K7JA/zGJApjrk1SqyJPkwy
+         gYAfSIcvFWnVdHSmx4EiUZt1YCFzteA9G1HT6zpOfG+JYHY2zagv69W8XUvALwoe5bqa
+         Q8AA==
+X-Gm-Message-State: AJIora+WJM50dR33dvLXF7f2pTBbaLxfMeyv0gV/zXEzQMWmWwxv+Wal
+        voHWbmEU1jImNTmw7i+y/NNstFD23gV8pnsa/P5uqyhm
+X-Google-Smtp-Source: AGRyM1v1rUkvs34Q+Hk692TjKXzRoe56b59xLKpN80MV6b/Wor2PR/mwxiLwKJwHkkS8wmVStWlwlpJkBoau4i75WJc=
+X-Received: by 2002:a05:6402:13:b0:439:ffe8:bec9 with SMTP id
+ d19-20020a056402001300b00439ffe8bec9mr13648034edu.297.1657816196801; Thu, 14
+ Jul 2022 09:29:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADVatmOTNA8uVqDEx6kp=+_O=wEhV2jbS9-frct-c4ZqBxcspg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220712224247.1950273-1-linux@roeck-us.net> <98b656f3-e506-90be-ebcc-898813051e74@amd.com>
+In-Reply-To: <98b656f3-e506-90be-ebcc-898813051e74@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 14 Jul 2022 12:29:45 -0400
+Message-ID: <CADnq5_OMayFN52hr7ZWFqMHPaV5_q7Hi+4LEbNMgfTPqo3__=w@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: Enable building new display engine with
+ KCOV enabled
+To:     Harry Wentland <harry.wentland@amd.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Arnd Bergmann <arnd@arndb.de>,
+        Leo Li <sunpeng.li@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 05:21:32PM +0100, Sudip Mukherjee wrote:
-> Hi Nathan,
-> 
-> On Thu, Jul 14, 2022 at 5:05 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Hi Sudip,
-> >
-> > On Thu, Jul 14, 2022 at 12:07:06PM +0100, Sudip Mukherjee (Codethink) wrote:
-> > > Hi Stephen,
-> > >
-> > > On Thu, Jul 14, 2022 at 06:55:14PM +1000, Stephen Rothwell wrote:
-> > > > Hi all,
-> > > >
-> > > > Changes since 20220713:
-> > >
-> > > Build failures on next-20220714:
-> >
-> > <snip>
-> >
-> > > x86_64 allmodconfig with clang fails with:
-> > >
-> > > drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is not a compile-time constant
-> > >         gpu_cc_parent,
-> > >         ^~~~~~~~~~~~~
-> > > drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is not a compile-time constant
-> > >         gpu_cc_parent,
-> > >         ^~~~~~~~~~~~~
-> >
-> > I sent https://lore.kernel.org/20220711174004.3047516-1-nathan@kernel.org/
-> > for this a few days ago, it just needs to be picked up.
-> >
-> > > arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
-> > > DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
-> > >                     ^
-> > > ./arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
-> > > extern u64 x86_spec_ctrl_current;
-> >
-> > This is now fixed in -tip so it should be fixed in -next tomorrorow:
-> >
-> > https://git.kernel.org/tip/db866d3352ec85e821e730e191481cba3a2bfa6e
-> 
-> This should also go to Linus. This failure is in the mainline also.
-> https://lore.kernel.org/lkml/Ys6sZj6KYthnDppq@debian/
+Applied.  Thanks!
 
-Yes, it is in the x86/urgent branch so it should get there by -rc7. Our
-CI is red too :(
-
-> > In the future, consider CC'ing our mailing list (llvm@lists.linux.dev)
-> > for any clang related issues so that we can get them taken care of ASAP,
-> > we have a MAINTAINERS entry for a reason :) thank you for testing with
-> > clang; the more people that use it, hopefully the easier it will be to
-> > get things unbroken.
-> 
-> Sure. I run arm, arm64, powerpc and x86_64 allmodconfigs with clang
-> (along with gcc) every night for mainline, started with linux-next
-> from today. Trying to setup the mips build also, I will mail llvm list
-> asking for help with the mips build.
-> Currently I only monitor the clang output from x86_64 as thats the one
-> which builds. If you want I can send the other reports also.
-
-Sure! I am not sure that we have tested mips or powerpc allmodconfig now
-that I am thinking about it but we'll certainly take a look at any
-issues that come from them and see what we can do.
-
-arm and arm64 are not warning free so disabling CONFIG_WERROR will help
-out there (arm64 is a recent failure that I have not been able to
-entirely figure out: https://github.com/ClangBuiltLinux/linux/issues/1642)
-but I do want to get those warning clean soon so they just build out of
-the box.
-
-Cheers,
-Nathan
+On Wed, Jul 13, 2022 at 4:03 PM Harry Wentland <harry.wentland@amd.com> wrote:
+>
+> On 2022-07-12 18:42, Guenter Roeck wrote:
+> > The new display engine uses floating point math, which is not supported
+> > by KCOV. Commit 9d1d02ff3678 ("drm/amd/display: Don't build DCN1 when kcov
+> > is enabled") tried to work around the problem by disabling
+> > CONFIG_DRM_AMD_DC_DCN if KCOV_INSTRUMENT_ALL and KCOV_ENABLE_COMPARISONS
+> > are enabled. The result is that KCOV can not be enabled on systems which
+> > require this display engine. A much simpler and less invasive solution is
+> > to disable KCOV selectively when compiling the display enagine while
+> > keeping it enabled for the rest of the kernel.
+> >
+> > Fixes: 9d1d02ff3678 ("drm/amd/display: Don't build DCN1 when kcov is enabled")
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Leo Li <sunpeng.li@amd.com>
+> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>
+> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+>
+> Harry
+>
+> > ---
+> >  drivers/gpu/drm/amd/display/Kconfig     | 2 +-
+> >  drivers/gpu/drm/amd/display/dc/Makefile | 3 +++
+> >  2 files changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
+> > index b4029c0d5d8c..96cbc87f7b6b 100644
+> > --- a/drivers/gpu/drm/amd/display/Kconfig
+> > +++ b/drivers/gpu/drm/amd/display/Kconfig
+> > @@ -6,7 +6,7 @@ config DRM_AMD_DC
+> >       bool "AMD DC - Enable new display engine"
+> >       default y
+> >       select SND_HDA_COMPONENT if SND_HDA_CORE
+> > -     select DRM_AMD_DC_DCN if (X86 || PPC64) && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
+> > +     select DRM_AMD_DC_DCN if (X86 || PPC64)
+> >       help
+> >         Choose this option if you want to use the new display engine
+> >         support for AMDGPU. This adds required support for Vega and
+> > diff --git a/drivers/gpu/drm/amd/display/dc/Makefile b/drivers/gpu/drm/amd/display/dc/Makefile
+> > index b4eca0236435..b801973749d2 100644
+> > --- a/drivers/gpu/drm/amd/display/dc/Makefile
+> > +++ b/drivers/gpu/drm/amd/display/dc/Makefile
+> > @@ -26,6 +26,9 @@
+> >  DC_LIBS = basics bios dml clk_mgr dce gpio irq link virtual
+> >
+> >  ifdef CONFIG_DRM_AMD_DC_DCN
+> > +
+> > +KCOV_INSTRUMENT := n
+> > +
+> >  DC_LIBS += dcn20
+> >  DC_LIBS += dsc
+> >  DC_LIBS += dcn10
+>

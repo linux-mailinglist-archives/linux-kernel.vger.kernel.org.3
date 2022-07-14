@@ -2,93 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B173574A9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EB1574AA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237878AbiGNKbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S230379AbiGNKcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiGNKbX (ORCPT
+        with ESMTP id S229981AbiGNKcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:31:23 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5310B47B9B;
-        Thu, 14 Jul 2022 03:31:22 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id v16so1919180wrd.13;
-        Thu, 14 Jul 2022 03:31:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8EOlh3v/6xBJDZv6ZGOpt/dvzibJ1078WTnbe9Z7a3s=;
-        b=l4/H1maNxLSK6atZSaqo6hrRGoHzgnLUji0fudW+DyAgJ8cecLEgzj4Zw6ef+HPhC8
-         9YB9FwRjVuAz1IE9NLY5Cz1smNkrCmHRw1cygKimrKhxNmg0XAFeh5yUp8cvb3rxnRqS
-         zdE0K1aIrp1aLRSL1AMuaqo9rhM6D4WbA1H0/YbHyq+gLU3PsqyVIttm42N7sqLn+MKV
-         NUnS7Jrqt3udztLKS23XMZP1pNYlb+Y6TxAkvn4mcCOAIYvyAA+edqukgJr2ClG2qlIy
-         JomiyuwXe+cGIvsgt0hYh+7c+EB4Fk/9nIz5lxorZUtwE5rRlMy4sH0WI7u9AWXhTRYy
-         ZAiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8EOlh3v/6xBJDZv6ZGOpt/dvzibJ1078WTnbe9Z7a3s=;
-        b=yjfa8w3WPZLRkvB8YIUx0/4bh1bnoiva5xwBNNG6i2jEKxD8tqJ1XGlNlDzAhiwbQx
-         u1zeiUU9X9wAqS5D1oaWSRv9Q71w1cuXhKI12GZQDRhu7XYyRgxg/I55SydXTaXWR0Y1
-         dSJKX6rz8Nv040N8tSCzej0u7Yvm5LFxr6yTyeRvgHaPtzPwIf8aIh3wCCSTlT2NXj2A
-         uzACB/8+po27bfg8LekXxH/8w6Deta+Rz40JIi1n1KrP3XIdDaXshlqaIEC3tUasH44N
-         cYiDl3EoCVGl9r5xwyy9pv0IShrOx7TEqwEnNxtnLG0gJ6Ec6NdIL26aWaHGaSo01yvu
-         kS+g==
-X-Gm-Message-State: AJIora/r/lQqWSmWoQCgtjQHqSwCzfeQBOcrQt23DnDbKRH7f4nxdpQY
-        h34BmoR86Lp/cQSE3zq8dNIobYiLxOzqzA==
-X-Google-Smtp-Source: AGRyM1vnKESpQu4b4WNRNs2rw6wijJCfL2aCPeDMXT676QjKQeC/CpvLv4w0DYo0UZjP/38xo+75zQ==
-X-Received: by 2002:a05:6000:178c:b0:21d:b6d0:11a8 with SMTP id e12-20020a056000178c00b0021db6d011a8mr7445192wrg.547.1657794680941;
-        Thu, 14 Jul 2022 03:31:20 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id d20-20020a05600c34d400b003a18de85a64sm1591785wmq.24.2022.07.14.03.31.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 03:31:20 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] habanalabs: Fix spelling mistake "Scrubing" -> "Scrubbing"
-Date:   Thu, 14 Jul 2022 11:31:19 +0100
-Message-Id: <20220714103119.22927-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Thu, 14 Jul 2022 06:32:12 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BCD4B0C2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:32:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657794731; x=1689330731;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Yo7mHXa8ACWejIPnoJF/sf4fb1keyZ0xdJia58Ph6xQ=;
+  b=VfvvJuu+Wekydaz4KHzK6d+gE0bYTgMQqoJKePQXjzSecJDpxuHbpagf
+   9uulJnZ0P1Ttzb+auUOXapjrE+TMrVpcJGX71reSwSS1j5sq3RJrTsXhT
+   NwJHxPolXmV3wajuVXpIW9WaL542CNZtwxtEWryvWRKm3gd+s6oED6YxD
+   ZM7/pf7u62QCxEPgyAGCMIJitkyjmuRtzumFB/zR4zdE/UAJxaIsrnpRH
+   hMjBEWggsv0yaj/94pTTeZ/iX5Xo5t91j8ACSsTAeBh4kUtgXEac194iD
+   qp3WLqdVsehUZBsChoVwrP67ARi8TT9UG4LPVxfba6fTD1liNWQ7E0I6v
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265887086"
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="265887086"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 03:32:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="571022391"
+Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 14 Jul 2022 03:32:09 -0700
+Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBw8e-0000S7-GY;
+        Thu, 14 Jul 2022 10:32:08 +0000
+Date:   Thu, 14 Jul 2022 18:31:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [morimoto:sound-2022-07-04-v1 15/23]
+ sound/soc/intel/avs/boards/nau8825.c:279:17: error: no member named
+ 'stream_active' in 'struct snd_soc_dai'
+Message-ID: <202207141847.favaONji-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a dev_dbg message. Fix it.
+tree:   https://github.com/morimoto/linux sound-2022-07-04-v1
+head:   e9efd77b37adcddf8f910f34dd0df06be9d896cb
+commit: 2aa8bfec7e0ff4ab531a688f8fd43150ad78ae23 [15/23] ASoC: count activity via TX/RX base instead of Playback/Capture.
+config: mips-randconfig-r011-20220714 (https://download.01.org/0day-ci/archive/20220714/202207141847.favaONji-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/morimoto/linux/commit/2aa8bfec7e0ff4ab531a688f8fd43150ad78ae23
+        git remote add morimoto https://github.com/morimoto/linux
+        git fetch --no-tags morimoto sound-2022-07-04-v1
+        git checkout 2aa8bfec7e0ff4ab531a688f8fd43150ad78ae23
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash sound/soc/atmel/ sound/soc/codecs/ sound/soc/fsl/ sound/soc/intel/avs/ sound/soc/mxs/ sound/soc/qcom/qdsp6/ sound/soc/samsung/ sound/soc/ti/
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/misc/habanalabs/gaudi/gaudi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index cb2988e2c7a8..05dd5e13f13e 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -4723,7 +4723,7 @@ static int gaudi_scrub_device_mem(struct hl_device *hdev)
- 	addr = prop->sram_user_base_address;
- 	size = hdev->pldm ? 0x10000 : prop->sram_size - SRAM_USER_BASE_OFFSET;
- 
--	dev_dbg(hdev->dev, "Scrubing SRAM: 0x%09llx - 0x%09llx val: 0x%llx\n",
-+	dev_dbg(hdev->dev, "Scrubbing SRAM: 0x%09llx - 0x%09llx val: 0x%llx\n",
- 			addr, addr + size, val);
- 	rc = gaudi_memset_device_memory(hdev, addr, size, val);
- 	if (rc) {
+All errors (new ones prefixed by >>):
+
+>> sound/soc/intel/avs/boards/nau8825.c:279:17: error: no member named 'stream_active' in 'struct snd_soc_dai'
+           if (codec_dai->stream_active[SNDRV_PCM_STREAM_PLAYBACK] &&
+               ~~~~~~~~~  ^
+   1 error generated.
+
+
+vim +279 sound/soc/intel/avs/boards/nau8825.c
+
+32ee40b5590081 Cezary Rojewski 2022-05-11  268  
+32ee40b5590081 Cezary Rojewski 2022-05-11  269  static int avs_card_resume_post(struct snd_soc_card *card)
+32ee40b5590081 Cezary Rojewski 2022-05-11  270  {
+32ee40b5590081 Cezary Rojewski 2022-05-11  271  	struct snd_soc_dai *codec_dai = snd_soc_card_get_codec_dai(card, SKL_NUVOTON_CODEC_DAI);
+32ee40b5590081 Cezary Rojewski 2022-05-11  272  	struct snd_soc_jack *jack = snd_soc_card_get_drvdata(card);
+32ee40b5590081 Cezary Rojewski 2022-05-11  273  
+32ee40b5590081 Cezary Rojewski 2022-05-11  274  	if (!codec_dai) {
+32ee40b5590081 Cezary Rojewski 2022-05-11  275  		dev_err(card->dev, "Codec dai not found\n");
+32ee40b5590081 Cezary Rojewski 2022-05-11  276  		return -EINVAL;
+32ee40b5590081 Cezary Rojewski 2022-05-11  277  	}
+32ee40b5590081 Cezary Rojewski 2022-05-11  278  
+32ee40b5590081 Cezary Rojewski 2022-05-11 @279  	if (codec_dai->stream_active[SNDRV_PCM_STREAM_PLAYBACK] &&
+32ee40b5590081 Cezary Rojewski 2022-05-11  280  	    codec_dai->playback_widget->active)
+32ee40b5590081 Cezary Rojewski 2022-05-11  281  		snd_soc_dai_set_sysclk(codec_dai, NAU8825_CLK_FLL_FS, 0, SND_SOC_CLOCK_IN);
+32ee40b5590081 Cezary Rojewski 2022-05-11  282  
+32ee40b5590081 Cezary Rojewski 2022-05-11  283  	return avs_card_set_jack(card, jack);
+32ee40b5590081 Cezary Rojewski 2022-05-11  284  }
+32ee40b5590081 Cezary Rojewski 2022-05-11  285  
+
+:::::: The code at line 279 was first introduced by commit
+:::::: 32ee40b5590081a6b38a55e4ab16b47085f93afe ASoC: Intel: avs: Add nau8825 machine board
+
+:::::: TO: Cezary Rojewski <cezary.rojewski@intel.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
 -- 
-2.35.3
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

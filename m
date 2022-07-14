@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC14574C28
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308C8574C2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238857AbiGNLcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
+        id S238909AbiGNLc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238846AbiGNLci (ORCPT
+        with ESMTP id S238881AbiGNLc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:32:38 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5AA1ADA2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:32:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=QF7MlNUqjT2UfEW9YfPAvRYW4tsr
-        xdKIhmgnJ6AkEkI=; b=HKqMpM1AKn0Tjl/qDOcLHPQOUidWaHe+loZMDcxOQeX+
-        Wh39vQfXsMS7VYRoizVYeD//Y4Ncuxn466bnL7pCYxwA1uwDqAOhGwg4uonMMxfC
-        MvNh5oed9JluTbYfh3oYmIE6CO08IIjnp8xVWiecPo5vroo9zhhTVCZ4BP/0eeM=
-Received: (qmail 578448 invoked from network); 14 Jul 2022 13:32:33 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jul 2022 13:32:33 +0200
-X-UD-Smtp-Session: l3s3148p1@QgjvQcLjvKQgAwDtxwdRAEXXn+yo/Rze
-Date:   Thu, 14 Jul 2022 13:32:32 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     John Stultz <jstultz@google.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 0/9] selftests: timers: fixes and improvements
-Message-ID: <Ys/+0CVwtTpBNfws@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        John Stultz <jstultz@google.com>, linux-renesas-soc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
- <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
+        Thu, 14 Jul 2022 07:32:56 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794F32DD3;
+        Thu, 14 Jul 2022 04:32:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657798374; x=1689334374;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WtBev9dHMwuukNjd40pA16rIrhzGg5WZruaX/rRQtr4=;
+  b=SdYBnnIRNt5+zeZfIl1/br5o78Qce+7WsUE8Es6PdhbsQu6+Ha5Z0sLb
+   Fq9Hw8ojxyWICYawYLlRh0JDHgYoKl9uIXPLQFCAb2ktL4sgnAFOD2b1U
+   4uRdNYUGg+dYPxvSSpDet7c/1blGabS1zlUKXkv4twPJpiOcj51ZERItq
+   hWABd67Leio3AhGbKqqCfS37AorOOlhcO2GkoN8F7zr+Ajn0W5blQO7F0
+   so5JZr5uF9afFnq4szyk5EnOR1D2fcu9UexMiiXMPigQ14EeOB5K560uN
+   X4HgoC/cXpIlQC3GpWEl51ew6VfzcJkGnKVYL8fNFmcdZu1kx9z7LMRSz
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="349454318"
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="349454318"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 04:32:53 -0700
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="842112922"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 04:32:51 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oBx5M-001DC3-0A;
+        Thu, 14 Jul 2022 14:32:48 +0300
+Date:   Thu, 14 Jul 2022 14:32:47 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Luca Ellero <luca.ellero@brickedbrain.com>
+Cc:     dmitry.torokhov@gmail.com, daniel@zonque.org,
+        m.felsch@pengutronix.de, u.kleine-koenig@pengutronix.de,
+        mkl@pengutronix.de, miquel.raynal@bootlin.com, imre.deak@nokia.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luca Ellero <l.ellero@asem.it>
+Subject: Re: [PATCH 1/3] ads7846: don't report pressure for ads7845
+Message-ID: <Ys/+37mzoi++8MDW@smile.fi.intel.com>
+References: <20220714084319.107334-1-luca.ellero@brickedbrain.com>
+ <20220714084319.107334-2-luca.ellero@brickedbrain.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="en0QinxNUHwiuF7U"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220714084319.107334-2-luca.ellero@brickedbrain.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 14, 2022 at 10:43:17AM +0200, Luca Ellero wrote:
+> From: Luca Ellero <l.ellero@asem.it>
+> 
+> ADS7845 doesn't support pressure.
+> This patch avoids the following error reported by libinput-list-devices:
+> "ADS7845 Touchscreen: kernel bug: device has min == max on ABS_PRESSURE"
 
---en0QinxNUHwiuF7U
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Missed period, otherwise looks good.
 
-Hey John,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> Acked-by: John Stultz <jstultz@google.com>
->=20
-> Thanks so much for submitting these.
+> Signed-off-by: Luca Ellero <l.ellero@asem.it>
+> ---
+>  drivers/input/touchscreen/ads7846.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
+> index bed68a68f330..24605c40d039 100644
+> --- a/drivers/input/touchscreen/ads7846.c
+> +++ b/drivers/input/touchscreen/ads7846.c
+> @@ -1316,8 +1316,9 @@ static int ads7846_probe(struct spi_device *spi)
+>  			pdata->y_min ? : 0,
+>  			pdata->y_max ? : MAX_12BIT,
+>  			0, 0);
+> -	input_set_abs_params(input_dev, ABS_PRESSURE,
+> -			pdata->pressure_min, pdata->pressure_max, 0, 0);
+> +	if (ts->model != 7845)
+> +		input_set_abs_params(input_dev, ABS_PRESSURE,
+> +				pdata->pressure_min, pdata->pressure_max, 0, 0);
+>  
+>  	/*
+>  	 * Parse common framework properties. Must be done here to ensure the
+> -- 
+> 2.25.1
+> 
 
-Glad you like this series. I will wait some more to see if there are
-further review comments. But surely, I will add the missing parameter to
-the help output and add your tags to v2.
-
-Thank you for doing these tools :)
-
-   Wolfram
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---en0QinxNUHwiuF7U
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLP/tAACgkQFA3kzBSg
-KbZgqBAAl9r+En2Z/stzjSCSrZw83Tb7y+Kjgj2SlsEp37lxn5mIS1nAQa0N+yvL
-3S5zkE1Hj9yJagC7eIcDEv/oFX8zf3SJIAfJQ4NkfDO5ZhRUsiOyUhm81ywgbBCB
-xF4t5upcE7iJ7oeaxqaMEW26eQJOz7bRNec1SzX/jz3mZazfua+PD4ShhyTAaXzn
-xNJn7C3um2ySdmOS8wiLrFLVKqm7LIXmQy9eYzNnbfVf27n8/kM17co7xvYjeARG
-JxBGfhuMBBcayAVeTr2PlTtWzbSkaZkz1S+38KAeQDsJaPJbi8DcHxfBfnPgE88N
-1OabM1TUhN7qohy7VaAooWBL7JJt92aQkB5c0Os2ftHoCmmSELXEgQZz5clnsMD5
-+OWzNxOgCX1YNb6aVufraIUxtJhql1HveE84Q014uAUYob+HnY39bGFyruqc7EK2
-QCXCrqjzV0wJjxjxZ8b4Gpo6nIrei9PgxU6TFy1pDvJ6HJypQz2YnbJ5Tx5IXuc3
-c1EIjYfQlODtryWANoqhvyaUQZy4L1Is7UM5iuVXsYhzL/DazqItoBl5dQf5+pmu
-n7h3lNVKThnYUJdXzEujtuMITFTfWW1Y/cyLhthdTnhiBbmFlKktc/9nOf3ykMD6
-1xF7ilgQYOGnyk3VD36Ov7ZtPtYXh2eTyezgquP9+EMsMmYSS7I=
-=ZXu/
------END PGP SIGNATURE-----
-
---en0QinxNUHwiuF7U--

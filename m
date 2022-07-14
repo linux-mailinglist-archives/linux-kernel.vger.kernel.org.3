@@ -2,155 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BAA575121
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49345575122
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239161AbiGNOyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S239541AbiGNOyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiGNOyN (ORCPT
+        with ESMTP id S238940AbiGNOyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:54:13 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04D1D79;
-        Thu, 14 Jul 2022 07:54:11 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so8856159pjl.5;
-        Thu, 14 Jul 2022 07:54:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1f7yVekuROTEUGgx6GsaKGUVoDNAizXJ+17gsqlYs7k=;
-        b=g60MPCQ5/QBCBBCFcsLOf2L0Rwz2uZJOS8KrMBK0zcQMMnncsQJ/zw8xWB7P+bfc3I
-         pJ/rjUFfRZMrWGru0g+bVZOE5AnSG/z4IP8yJpfRkAcUkeu5+whQS2hnRnBi9AYnzt5Y
-         2gR/dhQw1kxQzH9uVQvU7TOfS+079pa4BRq8Q+hAFHmu6wsvLjmDslZshF9Kf9+cdcbV
-         Q+fLbFZIvrxxZATVG7redWJFilHcX8I04GCbNiaZhpAc23pCuH07Wak3KYmK2xuy663J
-         XSlskJCzEYXBIi9fOjyPZp2J+lgzrQBi36bAtGO7JyMf6p2ZiqrnNWAB/5KA0vBYtnpw
-         w9XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1f7yVekuROTEUGgx6GsaKGUVoDNAizXJ+17gsqlYs7k=;
-        b=cL4TcDVNfH3rQyHDOP7nGRmbQRu8uUvpTtgaHChWjgVonMn4/ETihd5g4dxlwG6GQr
-         CEPGnVC31GhvxoCqMuqt89iaYNbfd+nrw+YrRTec96GHTfFFHe6MJrBw/c6wlrDnwizA
-         i3S1QtlIHz0NRvS2RpcaZvANlgwlEM+MxC8r8KLnwQO8UhzsZOPx6wh+crmVqV350V28
-         TPLhzuEuoFVOKUeH4V9nmJFn3qoucWnlSxvA8S7uqtcPTu7/YyoWOb23NTC0oPljdBSK
-         6NF3D3f7lvfGKKA3EofOPMv9Cp+OQo448os77ceFSl8GEy1Pw64wNe5AfJx8o4aPZ7OZ
-         f5iQ==
-X-Gm-Message-State: AJIora8zH7+cBTpVtY0b0FQ1lIMSbt0ts/5SubupCVhpOhfZ1q9B2S6D
-        U9vXQDQ7Yf37HiPn6bCzHvI2l5lfeyuOnAQHw58=
-X-Google-Smtp-Source: AGRyM1s2q9mZDD+r6Olh7IzCB74jFksokOGlfbu2QutJJGJzLfBBQtDTN055JK7KtQ+Kv63FsA8J2MhPMwb82dafE/0=
-X-Received: by 2002:a17:90b:1c07:b0:1f0:2077:6a9 with SMTP id
- oc7-20020a17090b1c0700b001f0207706a9mr17088428pjb.90.1657810451096; Thu, 14
- Jul 2022 07:54:11 -0700 (PDT)
+        Thu, 14 Jul 2022 10:54:14 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4824D79;
+        Thu, 14 Jul 2022 07:54:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657810453; x=1689346453;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=R0MQY+TsU/R7528c92SinEiSabQEJF7WNeNLyUIcjX0=;
+  b=LgFTxPTuEOLkJzC5r/LbMcQD/4HYVYpRbXl8MbGZUMDc6J8F6llqSKgR
+   M0kMpwgLU6U9LrQqq4bN2Q5wGiWDQZrf+TK9Z7u91oppqNSofMRVmfsC+
+   0Ck6NXtPwrON0E2coDra68uvzXx2xb1rtHMAIABZSFi819mpn6K1npxND
+   bQ54GJJEZ63l6Kjt54NC6tZwqEEIpFI2yomEnCKkmQVtbE3Z1RFC/f0Q8
+   BGCbMZedcOGwOPSh+jDPqvUeGLtIugs82tb1CcBUhAlnZJTqNukqgrREx
+   mLWddmKcaMOD1CDI3CpDmWRwDgGO0qypyNGl35u8G4YcUkFfuGPNmT/j0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="311185780"
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="311185780"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 07:54:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="653901696"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by fmsmga008.fm.intel.com with ESMTP; 14 Jul 2022 07:54:12 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 14 Jul 2022 07:54:11 -0700
+Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 14 Jul 2022 07:54:11 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 14 Jul 2022 07:54:11 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 14 Jul 2022 07:54:10 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mOWL4TS6KiO8LgwU3I+f9u5xxPrj78/5PFlFaAAC/J8xig69GOCfEvg70Jl1VFYJ9uxYyJQJWTm5ISKQOP2Bk31F9qsGHJ0mc1VzegZIZmlbpxWixOloFRy3LJassBBRP9ou3VlazhTInFL8pmFhz2OaOTyqMFZgz6ztD8Goox6ywaA+v04GiLOA2BhlhRrByy2pZ2iCHkmzI8A97C3oliGEJqwpLU5k0qtDflJX9Qu+pTw/WdVTSiMH5132YtHygMjBvLEsFe3PCCUuD9ZekAtnrp5Oveb/V7pnTgRUWJ1CzPlYqFLagWhQrprx6m0Qfu9/VMb6/XTsiMu/ownjhQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M8lNeWhSZHlOPpGI8Lr6Amj0Q92cFUk9CnGC0extYqA=;
+ b=idspYoc7OB0p6IMrbaeMJpYX4Jbr9JrzaB94FFmJPi5SSG3m04DSTz2UlOyRusrLXPxw99Ula/P0ZVHhkJHOskBIuA/QsFySuQnjIvvTqLVSNR/QYChy3WawTlF4hVeJ9sTSLfLFQCemy0JdAX+Ll0u9YX6LmZvZ7jZsAF//FPB4eSQVVNZCJxU+rqB5COw4/QFrUqOVYg1Pa5eYBvAG1XwLfeyjvxkKQUWmL3pXnufHJ1no5tQsVSb60+LMgnu4plUE+lXDwSPrZ4btJD1sYz4hL0wXDMuia0p6IQbk9rwg5U2SV/NNA06jyNyK6Q4cI1F2J684LoLEUGQupim3BQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
+ CY4PR11MB1718.namprd11.prod.outlook.com (2603:10b6:903:2c::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5417.23; Thu, 14 Jul 2022 14:54:09 +0000
+Received: from DM4PR11MB6311.namprd11.prod.outlook.com
+ ([fe80::3154:e32f:e50c:4fa6]) by DM4PR11MB6311.namprd11.prod.outlook.com
+ ([fe80::3154:e32f:e50c:4fa6%5]) with mapi id 15.20.5417.026; Thu, 14 Jul 2022
+ 14:54:08 +0000
+Date:   Thu, 14 Jul 2022 07:54:00 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        "Li, Ming" <ming4.li@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alison Schofield <alison.schofield@intel.com>,
+        "Vishal Verma" <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH V13.1] PCI/DOE: Add DOE mailbox support functions
+Message-ID: <YtAuCLg2iEePyK9q@iweiny-desk3>
+References: <20220705154932.2141021-4-ira.weiny@intel.com>
+ <20220711222748.470340-1-ira.weiny@intel.com>
+ <Ysyog0OFUu+5MIxT@casper.infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Ysyog0OFUu+5MIxT@casper.infradead.org>
+X-ClientProxiedBy: SJ0PR05CA0126.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::11) To DM4PR11MB6311.namprd11.prod.outlook.com
+ (2603:10b6:8:a6::21)
 MIME-Version: 1.0
-References: <20220713074118.14733-1-frieder@fris.de> <20220713074118.14733-3-frieder@fris.de>
-In-Reply-To: <20220713074118.14733-3-frieder@fris.de>
-From:   Heiko Thiery <heiko.thiery@gmail.com>
-Date:   Thu, 14 Jul 2022 16:53:58 +0200
-Message-ID: <CAEyMn7bzfThcC9oZyTsu9QSbete-G-n=YWtj510NP5w3AXV7jw@mail.gmail.com>
-Subject: Re: [PATCH 2/6] arm64: dts: imx8mm-kontron: Use the VSELECT signal to
- switch SD card IO voltage
-To:     Frieder Schrempf <frieder@fris.de>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 25bf0d3e-c7ab-4856-7f6b-08da65a8b489
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1718:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: znvRkcstGWZik0+tVCzyVAzG3it52wntXF4ckepBZXHAV9Xh61S/lDykVDkdkL0EBqHBzgy2y6U61ZHwqU/g7xwZLB13yECa/BDqRQneKXCER9ZJhvyadVpaI0D1ox7NBrBpi+9TTLTVmgScO+OBAzM3z/27IL3GBCXPlpyJFpHl+WvlEmPhJEmFxCtrf/lBSRUv8SSOoGTOfMAsIARWIVHW9hoJGB/WJsKXtva0erByBkgIM4JYO599GPYMcUUMsXY4bkWtIiv3W2CmsQpJFxDPxTHmuI7DmBYzCnIpk2ziEo9Ze+4yuxO+ikWdtElxCKM3vmXaVmsuw/L16EkIXdxfKQZSpbi648nm8/z8BuOLe60ZOt9miHsIoQEuhIYbs2zdAD1657PVRQcq8wOxRXpgqpx4Z1ojV+6GvuHia53+xboDqnvZMGPydBNXBlh+A+xS3yA+W1KMU5ImN5mH9ZOqcIv9yQowLFO4gDyzCB6QEwv6I2Lzoj0lFnRDPS2rBEFncKKnGXkwnJ5ypjiKpl1E2f18d18EyQNfSjfinmTaTXucSzj4Sf1NSCFWQvhU9RtF5XqNC7DxZbUn+b3vAm2iQiLajHahqHn+gJMkXalm+njTU6YFjnZpxVmkO822o+WSNTu6t12HoSbAnYylQbM1AlHH0WJBr3jYK67OKfTmqTeEPqLGi9WglNi4dGp6VM2rel6b09bR3kY3aDBIHhDDrqM+syPs/3TEsElcp3vHQiTRGbLeiR0ry0O0AOzu9X7gZe/DDGbPF884trKKiQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(136003)(346002)(39860400002)(396003)(376002)(2906002)(15650500001)(66476007)(5660300002)(44832011)(8936002)(66946007)(4326008)(8676002)(66556008)(54906003)(33716001)(6916009)(316002)(6512007)(86362001)(9686003)(6506007)(6666004)(6486002)(186003)(41300700001)(82960400001)(38100700002)(478600001)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fhezgeJy1ai6GmsCAbO2VPoW+ss1ycZ33/k+ekG6IwyygPJc9tZJOf7u54oc?=
+ =?us-ascii?Q?P+6MtLYAQaa6/NYGeLGgCoepn7wRfvUFxHqma3LzzH7bXJclSeZFXc1u2C0T?=
+ =?us-ascii?Q?fd0Nkewqib99QmTGDPNQgckIOn8smCNqX/wYTFHqtfutjHGNViVqm2oQ2Idv?=
+ =?us-ascii?Q?fxoaxEhNjE3DItaf347BKukTEc+sLi9nIUA+zEsmCjj13W8NidO9SUuzESIE?=
+ =?us-ascii?Q?Ox6ZW6+zvA/MvAeO6bfWNijWQV+i7fXv5WqyZ+kZmo1RO5te5DFmgolcpWqz?=
+ =?us-ascii?Q?O5QhIeJF6Jp3BwjZT5GeiEqwSEYcQn0Uv5BRr/h17gcHrenBdx6kx65sOxvN?=
+ =?us-ascii?Q?5pOC7gyZJNvq0veR+08RlKr4Z9UmSH+KPHY7xIBnCKDSEtDiIo4zqd/Nu3GK?=
+ =?us-ascii?Q?3i/Yoeus7WpHIWNRoc7UnM1b97l1Lq5BNTCWBZ+LoyuHB4glG0IloLWbLE9/?=
+ =?us-ascii?Q?Ub/I5gpkitPe52DgBmSehES9Q+7DnQ8QETBmbXp9T02XoJgUTMGZhIt4+w+m?=
+ =?us-ascii?Q?/KDo09GL1IisLVedHPl7AKm28o/6wwMveVUKQsTBo+56sIqBbYyshj/aJ9Nv?=
+ =?us-ascii?Q?734kgImMzSjz6Vz64qVyiAjD2v7L62Rm+o8gafvNB1wwlmp8DrPG+qwc5uuO?=
+ =?us-ascii?Q?M/W8wK1ilm31cg+oeWprJcjR0V6ReBPjPIwODNMK4dqmguAhGPzXhHeCSdJ5?=
+ =?us-ascii?Q?nR/QCeo0ncGwU+tPOL8BKeDdE5/7OAxFI5HOK2fWfs5qoL8H66Dr8bp6yRfH?=
+ =?us-ascii?Q?pvlemaCvMiR+Q37O3nfC1tDxHuhIOxHDmoS+auoO8rsAz75xXzQXzxtqjWaU?=
+ =?us-ascii?Q?DFO4wsPqyLjmtLss4nO62wMbAvmGeUazHakl1B3mUCZ2TtRZUokmVNS7aEnV?=
+ =?us-ascii?Q?NCHo9T/9a/A3Ig8Ps0JV55Xh8DOSNqQ21U7uvWXGaYtGYt7cOeebUKuShvZ+?=
+ =?us-ascii?Q?mMSPsr9XPoj8/yv/Chg6NxVBRX1O1mkEgrnTFdYETTIztA2onjYgpJclUM4W?=
+ =?us-ascii?Q?fZDWjtRLTccVsqGKiX3Ga8dJJoUjAinnteqGldU61qGpDyfNYjxh5eSzhhKe?=
+ =?us-ascii?Q?zk0I0WYTjRMciLwFT2FtbBjJpU1DzAQk/ATS0plCL1GOUwqHkHPGjSb3XAYQ?=
+ =?us-ascii?Q?a38s3dapJwtT6Fdens5yxux/u6Canrev2paRJr4VhTmzkVEUlk+d1f/C1G25?=
+ =?us-ascii?Q?7ZBqHzPY+OsdJ7uN0Rq7zkcxwbD0s/pIsrmgrxxM1Da/Gw5JNx2rAbSn181N?=
+ =?us-ascii?Q?0Cmgjho87SgqjDRqmJal937XFueP0Rn/jfpCMEHxGp/YEajRsWKjgLbZNOmd?=
+ =?us-ascii?Q?UWx0QNm3O4ZnLA7abxAv9iW1ztjmtjvGBIvF8n+b/zoWJEot+BAIVc4VZJLR?=
+ =?us-ascii?Q?JF4nMnM7bLo6126isjHTTcxPf8VuAWsvR2ygccZeq+QMBsbHgX58isP5gfkn?=
+ =?us-ascii?Q?/K+F6NGzwt3/X3GvLGpZfA+J6tQ9uv1472RUSWmu9S8XseTygL3oYXalYDoJ?=
+ =?us-ascii?Q?ZuejmLd2PxhCQiel5H+wgLGCUP8kOK03p3VtHCHzexwPJm4jUKRIhAQhPdSS?=
+ =?us-ascii?Q?sP3vIUw2njlpsInzduen7r9nfZ55MYLtwNeP9ATVDyEc1R5noWoPzxiOTQNP?=
+ =?us-ascii?Q?n26M5W6sYRVsPDH0qthTpr0+HtD/dJ/A1xX81yrdl0yw?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25bf0d3e-c7ab-4856-7f6b-08da65a8b489
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2022 14:54:08.6835
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kxWTIyAFLM1ptpKtzZJjEiN1j4lP3wbeKA0pgsuXlNW612u8Sk+enHK1r1XU1LaT8VKymCRzbU+IcFPEe/G8zw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1718
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Jul 11, 2022 at 11:47:31PM +0100, Matthew Wilcox wrote:
+> On Mon, Jul 11, 2022 at 03:27:48PM -0700, ira.weiny@intel.com wrote:
+> > +/**
+> > + * struct pci_doe_mb - State for a single DOE mailbox
+> > + *
+> > + * This state is used to manage a single DOE mailbox capability.  All fields
+> > + * should be considered opaque to the consumers and the structure passed into
+> > + * the helpers below after being created by devm_pci_doe_create()
+> > + *
+> > + * @pdev: PCI device this mailbox belongs to
+> > + * @cap_offset: Capability offset
+> > + * @prots: Array of protocols supported (encoded as long values)
+> > + * @wq: Wait queue for work item
+> > + * @work_queue: Queue of pci_doe_work items
+> > + * @flags: Bit array of PCI_DOE_FLAG_* flags
+> > + *
+> > + * Note: @prots can't be allocated with struct size because the number of
+> > + * protocols is not known until after this structure is in use.  However, the
+> > + * single discovery protocol is always required to query for the number of
+> > + * protocols.
+> > + */
+> 
+> Can you add at least stub documentation in Documentation/PCI/doe.rst
+> and include the kernel-doc from both pci-doe.c and pci-doe.h?
 
-Am Mi., 13. Juli 2022 um 09:41 Uhr schrieb Frieder Schrempf <frieder@fris.de>:
->
-> From: Frieder Schrempf <frieder.schrempf@kontron.de>
->
-> It turns out that it is not necessary to declare the VSELECT signal as
-> GPIO and let the PMIC driver set it to a fixed high level. This switches
-> the voltage between 3.3V and 1.8V by setting the PMIC register for LDO5
-> accordingly.
->
-> Instead we can do it like other boards already do and simply mux the
-> VSELECT signal of the USDHC interface to the pin. This makes sure that
-> the correct voltage is selected by setting the PMIC's SD_VSEL input
-> to high or low accordingly.
->
-> Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
-> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Yes that is a good idea, thanks.
 
-Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
+> 
+> > +static int pci_doe_abort(struct pci_doe_mb *doe_mb)
+> > +{
+> > +	struct pci_dev *pdev = doe_mb->pdev;
+> > +	int offset = doe_mb->cap_offset;
+> > +	unsigned long timeout_jiffies;
+> > +
+> > +	pci_dbg(pdev, "[%x] Issuing Abort\n", offset);
+> 
+> "Issuing DOE abort", perhaps?
 
-> ---
->  arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts    | 3 +++
->  arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi | 2 --
->  2 files changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
-> index cb8102bb8db5..bc46426ad8f6 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
-> @@ -321,6 +321,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1         0x1d0
->                         MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2             0x1d0
->                         MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3             0x1d0
->                         MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12                0x019
-> +                       MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT          0x1d0
->                 >;
->         };
->
-> @@ -333,6 +334,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1         0x1d4
->                         MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2             0x1d4
->                         MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3             0x1d4
->                         MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12                0x019
-> +                       MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT          0x1d0
->                 >;
->         };
->
-> @@ -345,6 +347,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1         0x1d6
->                         MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2             0x1d6
->                         MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3             0x1d6
->                         MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12                0x019
-> +                       MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT          0x1d0
->                 >;
->         };
->  };
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi
-> index b6d90d646a5f..77c074b491a6 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi
-> @@ -86,7 +86,6 @@ pca9450: pmic@25 {
->                 pinctrl-0 = <&pinctrl_pmic>;
->                 interrupt-parent = <&gpio1>;
->                 interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
-> -               sd-vsel-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
->
->                 regulators {
->                         reg_vdd_soc: BUCK1 {
-> @@ -229,7 +228,6 @@ MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA                      0x400001c3
->         pinctrl_pmic: pmicgrp {
->                 fsl,pins = <
->                         MX8MM_IOMUXC_GPIO1_IO00_GPIO1_IO0               0x141
-> -                       MX8MM_IOMUXC_GPIO1_IO04_GPIO1_IO4               0x141
->                 >;
->         };
->
-> --
-> 2.37.0
->
+I've set dev_fmt to prefix with "DOE: ".  So I think that should be ok.
+
+Thanks for the review!
+Ira
+

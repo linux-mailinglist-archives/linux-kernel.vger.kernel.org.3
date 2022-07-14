@@ -2,71 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93171574775
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB865574777
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235942AbiGNIov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 04:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
+        id S235867AbiGNIpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 04:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231504AbiGNIou (ORCPT
+        with ESMTP id S236882AbiGNIpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 04:44:50 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Jul 2022 01:44:46 PDT
+        Thu, 14 Jul 2022 04:45:04 -0400
 Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A359140BC
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:44:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 817173FA32
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:45:03 -0700 (PDT)
 Received: from asem-TANK-H61.asem.intra ([151.1.184.193])
         by Aruba Outgoing Smtp  with ESMTPSA
-        id BuRhoA7r5bvrcBuRhoFpeR; Thu, 14 Jul 2022 10:43:43 +0200
+        id BuRhoA7r5bvrcBuS2oFpka; Thu, 14 Jul 2022 10:44:03 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1657788223; bh=un5pkqfd2ZfN3kAgLbVdkbNuttBIuRIZqLiIVNxtmm0=;
+        t=1657788243; bh=82V/BwzKSn3pPk/IVOhT7YMBofgVkaQwuuRmgiOZ8AI=;
         h=From:To:Subject:Date:MIME-Version;
-        b=VcKVUrh9ALrfwKAd1fyn+xZ86elbjwsChsz6IA1WNykRl8ShfTJyq3J6Hr0AQP+Uw
-         PZqSL4uMz1YUy2RPEhsYPLcCrnxHciTazcVbmZclEkQc3oyjvxKqDrDK6XlOLOkwEW
-         oAANdsVYeSfLTWPNAVgh8gy7ZVt53xOnKNcqmYEbcD+VbZdd9/Jkw3l/bufTpSqMmy
-         l0UQK4o7dJtCOXbnX66HvxuPRW6953oThMVgqI5cdoZXh5KS9pfiXm5YljL+OpNlB+
-         f8lt/CgEP5Jra9WfHYGH1r42UAAzTuyavRCYNZPANVg4pHOt6yYaSwL8729WUGcSiD
-         dAr/v/XPS0lGw==
+        b=fCgG3z87lo5hPrXnZqGmrXMcSMwVvR/zGqfkug8Rb5VPpn50/wx5WvhXJEdM2GyjV
+         HdVtKuvPtx0g5utOsWPF6vkw7KooBIvrZ2d2z5xRrYyH23wwPLTLAXQCEay2zSg2Lr
+         aZ0onVr7fSblVMpEH6TVWKbbeMjliaB3ZuvK0sp2Umv/YPcWqipuivtvx0LdNeSrZX
+         /AOQm+CnHxZuuASbxDVfvVckAspYMqhq1aB3jUjUDXnwLcwl5vvExV0Do30Lpy/uCW
+         pVMHIkroPOlarPqDK7zvAJYpJ1UXzGLs4cANlHs0R5h3EQEvcM/807GUUW+ZAEqlQy
+         uMSajsQffzXng==
 From:   Luca Ellero <luca.ellero@brickedbrain.com>
 To:     dmitry.torokhov@gmail.com, daniel@zonque.org,
         m.felsch@pengutronix.de, andriy.shevchenko@linux.intel.com,
         u.kleine-koenig@pengutronix.de, mkl@pengutronix.de,
         miquel.raynal@bootlin.com, imre.deak@nokia.com
 Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luca Ellero <luca.ellero@brickedbrain.com>
-Subject: [PATCH 0/3] ads7846: fix support for ADS7845
-Date:   Thu, 14 Jul 2022 10:43:16 +0200
-Message-Id: <20220714084319.107334-1-luca.ellero@brickedbrain.com>
+        Luca Ellero <l.ellero@asem.it>
+Subject: [PATCH 1/3] ads7846: don't report pressure for ads7845
+Date:   Thu, 14 Jul 2022 10:43:17 +0200
+Message-Id: <20220714084319.107334-2-luca.ellero@brickedbrain.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220714084319.107334-1-luca.ellero@brickedbrain.com>
+References: <20220714084319.107334-1-luca.ellero@brickedbrain.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfJnqr8V9hEAPp0TQjknV0VYIUN0jcm5nlRIOl5/wxcXF4/OLMi5z9dAF1ZXNIlF2XJmasse8Z9TFU47LOS9Fayaq4aOUj66YbXyrCFAc3xNWNbnsX/6Q
- Baw2qTeAQ82KlwlNTok36NShF7GQkOcYFGgq74p9KXCl+s/yf/97D7KmNBJaFBFiQyrpmh6+nyuaoHuuIRW9P/Kcq/6um2HAaFTrE7IgrapKSThbgFZz6/Of
- ROT7kSwzfpNDEHAIr2yEygSOFn27d9hGJThkKcQm4/uc8LvuJnVnlPh9suS2WCLm/ttBtU9yzZxoaSD3B7JhXwEWKnMvVSMbSkaXCidiRVOF3vm+g3t/mwRO
- 935XtkrAfdqV6TCTdmKsNFJoPspw+kAQCWi6s2oE5UgJK3Ww25NxPUbkoJMlhDnRaJISlRDe9JHEsc9NzGpLCx8PTDXSaS9APBAIRX1aWcBMMwG3IOl5koVg
- ornOlIEvSsuDzeExTlUfCBds4q9v293b7K/U3i5uNZuKdujtlt/IOyJi7V3oRuYuhqDZaZ62LelGKvJrmSrto6LqEIqk1/qWjeXk7+A9fobp0zDMVPKb/TA5
- OkH4AZ81FaNyWU6cL6Gi5oeW
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_05,DKIMWL_WL_MED,
+X-CMAE-Envelope: MS4xfP/NCL/d34WAYZfIx8PIc1a46cfqL0txdrtSAjzBLOqzYJz9dGtL7B6qA/P+bWEXxldcT2EybS7VBymHJAO/hPClUUKZlgQFyOghGUtzTY5FWgvRsNIo
+ MP9xARjbbtIHXtJug3VSCdXWc3r7M/au4SpW9ACUNoo5RR25R8XQN7aAIuk2pzxBCcmwAzgYpDMPalqtDBLTbWuXvteyHcQxw/OsBxxxYkhnnxqeekOv7F5B
+ Puz22GTennozlkfw6NTpwGw1Pq4Rx1lmQzhgIz95HIMb6VHkekvW/Vu1e9LAGodO5m2vImirxyrH8tu5c4Fcj0rlLVySkxFalSFacoI/zc3XoyDGkI61XEt+
+ sEVX8phtWtEyyXYObN95pRC66VaoKs0tjcOgpfE5ChgiQWKCY9R6BL50XKtDvknhTK/aa7UqnJTKEc4gYYLyqyPOBJ5ZwhPBS+54ZcsRgrMouRedqj89o3v4
+ eL0Dfp5SjDXiW3g7TrLV+WHBBFRqw81JtxmlyJVRmeVjPexLo4i/FUXBDHv7CuyAGhoowcdt8V1fh8D6bBRzCyJOUlnrVOyFacl346oiU4sJA7lUFagMdfW7
+ Izs=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ADS7845 support is buggy in this driver.
-These patches fix various issues to get it work properly.
+From: Luca Ellero <l.ellero@asem.it>
 
-Luca Ellero (3):
-  ads7846: don't report pressure for ads7845
-  ads7846: always set last command to PWRDOWN
-  ads7846: don't check penirq immediately for 7845
+ADS7845 doesn't support pressure.
+This patch avoids the following error reported by libinput-list-devices:
+"ADS7845 Touchscreen: kernel bug: device has min == max on ABS_PRESSURE"
 
- drivers/input/touchscreen/ads7846.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+Signed-off-by: Luca Ellero <l.ellero@asem.it>
+---
+ drivers/input/touchscreen/ads7846.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
+index bed68a68f330..24605c40d039 100644
+--- a/drivers/input/touchscreen/ads7846.c
++++ b/drivers/input/touchscreen/ads7846.c
+@@ -1316,8 +1316,9 @@ static int ads7846_probe(struct spi_device *spi)
+ 			pdata->y_min ? : 0,
+ 			pdata->y_max ? : MAX_12BIT,
+ 			0, 0);
+-	input_set_abs_params(input_dev, ABS_PRESSURE,
+-			pdata->pressure_min, pdata->pressure_max, 0, 0);
++	if (ts->model != 7845)
++		input_set_abs_params(input_dev, ABS_PRESSURE,
++				pdata->pressure_min, pdata->pressure_max, 0, 0);
+ 
+ 	/*
+ 	 * Parse common framework properties. Must be done here to ensure the
 -- 
 2.25.1
 

@@ -2,65 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C40574BF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8858C574C04
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238831AbiGNL04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
+        id S238806AbiGNL1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238785AbiGNL0c (ORCPT
+        with ESMTP id S238813AbiGNL1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:26:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEB95726C;
-        Thu, 14 Jul 2022 04:26:27 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 656336601A3B;
-        Thu, 14 Jul 2022 12:26:24 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657797985;
-        bh=S3uu1fiJqnW9GfhBdNOm5ox+Kfz/PBBejcQCNxtJG7Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nmnLgvsJ7wUdm7PX1mVlONbq1I4u5c8cliefOUgywi8O7eQNZ9V+UIqkndktdgbcP
-         I0dEshLOWiiUfvkV/+4U8lS3BJfHmZgWj3KVrMa/ccUIYo9Dnpb4HTLgtic2FTgNh7
-         g5d+02tP+6EPQhfdPAcWyW0jpcfH2kHqBjomZ+ZuOvzEhVWZ2vJ9XBqB3laT4PSV/x
-         wE27WhtoF+NNzOHG02pv3MTUxMxOvBeOAV4Al3aYiSSPgVfkd9x19nYDLM9Qlt0zBW
-         OPk0gbvq517iOXDN2+v2c/sA8s86kGLxsltZPJRKhmMDcmNkBKg0OPz6pPN2wKSIEw
-         tSgJZPher7yKQ==
-Message-ID: <8bc57373-70e4-8ab6-659f-0917dbf14c38@collabora.com>
-Date:   Thu, 14 Jul 2022 13:26:21 +0200
+        Thu, 14 Jul 2022 07:27:15 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153FA5885E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8Ps/TljTNHGfY8PDlzoxZJIjrp8/Szhza8CwHrtIT94=; b=tPAfp9GBKXxV9jckn5pMF4an9F
+        gGGVDnga/jzhqanLvhCduFP7e2Gqm/nXJSG5ltwIZrXD63IfbPGAkfN3XRgaFt/i/8oFcyrqVLcjd
+        Rsq9pdpn06gtjIHUJhK5gTsP/2QedVhLK/MIW7d/NE6yB3C1olyDAgYRE/v2W1vV7X1yt/m9+NZvr
+        z1vrGD7Pdj7IDYUg48dMauiol7/vaJJ7QTPmUdetiuWNZrzCUT0+e4hO5PnzEX6t1qpcyw20nINpi
+        BLNKIRXhGtoEK4x7eKhAIYi6pCtGm0fC7h+xYliJkOttjP3qk8hP2t+pYGf/yAsH7gGhewYDFGtwF
+        g8/GHWgQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBwzc-009K9b-BT; Thu, 14 Jul 2022 11:26:52 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8566F98016F; Thu, 14 Jul 2022 13:26:51 +0200 (CEST)
+Date:   Thu, 14 Jul 2022 13:26:51 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Libo Chen <libo.chen@oracle.com>
+Cc:     vincent.guittot@linaro.org, mgorman@suse.de,
+        tim.c.chen@linux.intel.com, 21cnbao@gmail.com,
+        dietmar.eggemann@arm.com, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de
+Subject: Re: [PATCH] sched/fair: no sync wakeup from interrupt context
+Message-ID: <Ys/9e52SDRp8Kpnn@worktop.programming.kicks-ass.net>
+References: <20220711224704.1672831-1-libo.chen@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v14 04/10] video/hdmi: Add audio_infoframe packing for DP
-Content-Language: en-US
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
-        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
-        airlied@linux.ie
-Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
-        wenst@chromium.org, ck.hu@mediatek.com, liangxu.xu@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fbdev@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
- <20220712111223.13080-5-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220712111223.13080-5-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220711224704.1672831-1-libo.chen@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,210 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 12/07/22 13:12, Bo-Chen Chen ha scritto:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Mon, Jul 11, 2022 at 03:47:04PM -0700, Libo Chen wrote:
+> Barry Song first pointed out that replacing sync wakeup with regular wakeup
+> seems to reduce overeager wakeup pulling and shows noticeable performance
+> improvement.[1]
 > 
-> Similar to HDMI, DP uses audio infoframes as well which are structured
-> very similar to the HDMI ones.
-> 
-> This patch adds a helper function to pack the HDMI audio infoframe for
-> DP, called hdmi_audio_infoframe_pack_for_dp().
-> hdmi_audio_infoframe_pack_only() is split into two parts. One of them
-> packs the payload only and can be used for HDMI and DP.
-> 
-> Also constify the frame parameter in hdmi_audio_infoframe_check() as
-> it is passed to hdmi_audio_infoframe_check_only() which expects a const.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> This patch argues that allowing sync for wakeups from interrupt context
+> is a bug 
+
+Yes.
+
+> The
+> assumption is built into wake_affine() where it discounts the waker's presence
+> from the runqueue when sync is true. The random waker from interrupts bears no
+> relation to the wakee and don't usually go to sleep immediately afterwards
+> unless wakeup granularity is reached. 
+
+Exactly that.
+
+> Signed-off-by: Libo Chen <libo.chen@oracle.com>
 > ---
->   drivers/video/hdmi.c         | 82 +++++++++++++++++++++++++++---------
->   include/drm/display/drm_dp.h |  2 +
->   include/linux/hdmi.h         |  7 ++-
->   3 files changed, 71 insertions(+), 20 deletions(-)
+>  kernel/sched/fair.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/video/hdmi.c b/drivers/video/hdmi.c
-> index 947be761dfa4..86805d77cc86 100644
-> --- a/drivers/video/hdmi.c
-> +++ b/drivers/video/hdmi.c
-> @@ -21,6 +21,7 @@
->    * DEALINGS IN THE SOFTWARE.
->    */
->   
-> +#include <drm/display/drm_dp.h>
->   #include <linux/bitops.h>
->   #include <linux/bug.h>
->   #include <linux/errno.h>
-> @@ -381,12 +382,34 @@ static int hdmi_audio_infoframe_check_only(const struct hdmi_audio_infoframe *fr
->    *
->    * Returns 0 on success or a negative error code on failure.
->    */
-> -int hdmi_audio_infoframe_check(struct hdmi_audio_infoframe *frame)
-> +int hdmi_audio_infoframe_check(const struct hdmi_audio_infoframe *frame)
->   {
->   	return hdmi_audio_infoframe_check_only(frame);
->   }
->   EXPORT_SYMBOL(hdmi_audio_infoframe_check);
->   
-> +static void
-> +hdmi_audio_infoframe_pack_payload(const struct hdmi_audio_infoframe *frame,
-> +				  u8 *buffer)
-> +{
-> +	u8 channels;
-> +
-> +	if (frame->channels >= 2)
-> +		channels = frame->channels - 1;
-> +	else
-> +		channels = 0;
-> +
-> +	buffer[0] = ((frame->coding_type & 0xf) << 4) | (channels & 0x7);
-> +	buffer[1] = ((frame->sample_frequency & 0x7) << 2) |
-> +		 (frame->sample_size & 0x3);
-> +	buffer[2] = frame->coding_type_ext & 0x1f;
-> +	buffer[3] = frame->channel_allocation;
-> +	buffer[4] = (frame->level_shift_value & 0xf) << 3;
-> +
-> +	if (frame->downmix_inhibit)
-> +		buffer[4] |= BIT(7);
-> +}
-> +
->   /**
->    * hdmi_audio_infoframe_pack_only() - write HDMI audio infoframe to binary buffer
->    * @frame: HDMI audio infoframe
-> @@ -404,7 +427,6 @@ EXPORT_SYMBOL(hdmi_audio_infoframe_check);
->   ssize_t hdmi_audio_infoframe_pack_only(const struct hdmi_audio_infoframe *frame,
->   				       void *buffer, size_t size)
->   {
-> -	unsigned char channels;
->   	u8 *ptr = buffer;
->   	size_t length;
->   	int ret;
-> @@ -420,28 +442,13 @@ ssize_t hdmi_audio_infoframe_pack_only(const struct hdmi_audio_infoframe *frame,
->   
->   	memset(buffer, 0, size);
->   
-> -	if (frame->channels >= 2)
-> -		channels = frame->channels - 1;
-> -	else
-> -		channels = 0;
-> -
->   	ptr[0] = frame->type;
->   	ptr[1] = frame->version;
->   	ptr[2] = frame->length;
->   	ptr[3] = 0; /* checksum */
->   
-> -	/* start infoframe payload */
-> -	ptr += HDMI_INFOFRAME_HEADER_SIZE;
-> -
-> -	ptr[0] = ((frame->coding_type & 0xf) << 4) | (channels & 0x7);
-> -	ptr[1] = ((frame->sample_frequency & 0x7) << 2) |
-> -		 (frame->sample_size & 0x3);
-> -	ptr[2] = frame->coding_type_ext & 0x1f;
-> -	ptr[3] = frame->channel_allocation;
-> -	ptr[4] = (frame->level_shift_value & 0xf) << 3;
-> -
-> -	if (frame->downmix_inhibit)
-> -		ptr[4] |= BIT(7);
-> +	hdmi_audio_infoframe_pack_payload(frame,
-> +					  ptr + HDMI_INFOFRAME_HEADER_SIZE);
->   
->   	hdmi_infoframe_set_checksum(buffer, length);
->   
-> @@ -479,6 +486,43 @@ ssize_t hdmi_audio_infoframe_pack(struct hdmi_audio_infoframe *frame,
->   }
->   EXPORT_SYMBOL(hdmi_audio_infoframe_pack);
->   
-> +/**
-> + * hdmi_audio_infoframe_pack_for_dp - Pack a HDMI Audio infoframe for DisplayPort
-> + *
-> + * @frame:      HDMI Audio infoframe
-> + * @sdp:        secondary data packet for display port. This is filled with the
-> + * appropriate: data
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 794c2cb945f8..59b210d2cdb5 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6704,7 +6704,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  static int
+>  select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
+>  {
+> -	int sync = (wake_flags & WF_SYNC) && !(current->flags & PF_EXITING);
+> +	/* Don't set sync for wakeup from irq/soft ctx */
+> +	int sync = in_task() && (wake_flags & WF_SYNC)
+> +		   && !(current->flags & PF_EXITING);
 
-"This is filled with the appropriate data"
+That's not a coding style you'll find anywhere near this code though.
+I'll fix it up.
 
-... well, that's pretty obvious, isn't it?
-You're describing that this function is filling sdp in the description, so you
-can just remove that part.
-
-Also, "Secondary data packet for DisplayPort", please.
-
-
-> + * @dp_version: Display Port version to be encoded in the header
-
-We're not meaning "a display port", but really "DisplayPort": please remove
-the space between "Display" and "Port" :-)
-
-(here and in the description below)
-
-> + *
-> + * Packs a HDMI Audio Infoframe to be sent over Display Port. This function
-> + * fills the secondary data packet to be used for Display Port.
-> + *
-> + * Return: Number of total written bytes or a negative errno on failure.
-> + */
-> +ssize_t
-> +hdmi_audio_infoframe_pack_for_dp(const struct hdmi_audio_infoframe *frame,
-> +				 struct dp_sdp *sdp, u8 dp_version)
-> +{
-> +	int ret;
-> +
-> +	ret = hdmi_audio_infoframe_check(frame);
-> +	if (ret)
-> +		return ret;
-> +
-> +	memset(sdp->db, 0, sizeof(sdp->db));
-> +
-> +	/* Secondary-data packet header */
-> +	sdp->sdp_header.HB0 = 0;
-> +	sdp->sdp_header.HB1 = frame->type;
-> +	sdp->sdp_header.HB2 = DP_SDP_AUDIO_INFOFRAME_HB2;
-> +	sdp->sdp_header.HB3 = (dp_version & 0x3f) << 2;
-> +
-> +	hdmi_audio_infoframe_pack_payload(frame, sdp->db);
-> +
-> +	return frame->length + 4;
-
-What's this magic number 4 about?
-
-Please use a definition for that.
-
-> +}
-> +EXPORT_SYMBOL(hdmi_audio_infoframe_pack_for_dp);
-> +
->   /**
->    * hdmi_vendor_infoframe_init() - initialize an HDMI vendor infoframe
->    * @frame: HDMI vendor infoframe
-> diff --git a/include/drm/display/drm_dp.h b/include/drm/display/drm_dp.h
-> index 9e3aff7e68bb..6c0871164771 100644
-> --- a/include/drm/display/drm_dp.h
-> +++ b/include/drm/display/drm_dp.h
-> @@ -1536,6 +1536,8 @@ enum drm_dp_phy {
->   #define DP_SDP_VSC_EXT_CEA		0x21 /* DP 1.4 */
->   /* 0x80+ CEA-861 infoframe types */
->   
-> +#define DP_SDP_AUDIO_INFOFRAME_HB2	0x1b
-> +
->   /**
->    * struct dp_sdp_header - DP secondary data packet header
->    * @HB0: Secondary Data Packet ID
-> diff --git a/include/linux/hdmi.h b/include/linux/hdmi.h
-> index c8ec982ff498..2f4dcc8d060e 100644
-> --- a/include/linux/hdmi.h
-> +++ b/include/linux/hdmi.h
-> @@ -336,7 +336,12 @@ ssize_t hdmi_audio_infoframe_pack(struct hdmi_audio_infoframe *frame,
->   				  void *buffer, size_t size);
->   ssize_t hdmi_audio_infoframe_pack_only(const struct hdmi_audio_infoframe *frame,
->   				       void *buffer, size_t size);
-> -int hdmi_audio_infoframe_check(struct hdmi_audio_infoframe *frame);
-> +int hdmi_audio_infoframe_check(const struct hdmi_audio_infoframe *frame);
-> +
-> +struct dp_sdp;
-> +ssize_t
-> +hdmi_audio_infoframe_pack_for_dp(const struct hdmi_audio_infoframe *frame,
-> +				 struct dp_sdp *sdp, u8 dp_version);
->   
->   enum hdmi_3d_structure {
->   	HDMI_3D_STRUCTURE_INVALID = -1,
-
+>  	struct sched_domain *tmp, *sd = NULL;
+>  	int cpu = smp_processor_id();
+>  	int new_cpu = prev_cpu;
+> --
+> 2.31.1
+> 

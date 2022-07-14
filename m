@@ -2,110 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC0E575235
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0A7575237
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239507AbiGNPwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
+        id S239809AbiGNPx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiGNPwX (ORCPT
+        with ESMTP id S229498AbiGNPx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:52:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E661432BBA
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657813942;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QnSTyq0AylqMXq4K0qB4+ue2ifzFVZLJmilkj7YD2xE=;
-        b=MNdcKSbmuNkb+paykaRWHEmgghrvRSq4sMVmkYabNzQ8AvMAarBbwFDnVgp8voavg1fUl/
-        WvPvUf/YttgZlhdDrTuBqA0T3b6NwS6B+YJ0KchBwaiugwLWcUpYsYWK2c2Vo1twY5CaKW
-        1E7T9i+rTtyn09rMIFe04IfsyM1qD1A=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-219-laA4m1ukMpawWTwpxBDCCw-1; Thu, 14 Jul 2022 11:52:20 -0400
-X-MC-Unique: laA4m1ukMpawWTwpxBDCCw-1
-Received: by mail-qk1-f199.google.com with SMTP id bj26-20020a05620a191a00b006b5c4e2dc77so1112294qkb.16
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:52:20 -0700 (PDT)
+        Thu, 14 Jul 2022 11:53:26 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D991932BBA;
+        Thu, 14 Jul 2022 08:53:22 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id j12so778862plj.8;
+        Thu, 14 Jul 2022 08:53:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZSV9uu+AuHbrVWmSxWJ5hlL7FSlm4yniGon0X3L1vGw=;
+        b=mSOGAe0IKtLgYDltoZ2uj03mfF1ldaSBFDrVOojxM/0dInRStf82hVP8tc6hwPRUP/
+         JjGSfnACwsaSYaKJkon+JuELynFqR7GTekeURDDy4J/bQfTOi1mwG3OonHHvv0iVYWbE
+         NMU5eaCu86gstGoHoj2/7ps0eF17oGpRcyFP/0Vz3+ulQvaTy235HrBBQl3hucqtIFnB
+         QKKeMKhZwv/2hqTwFkYVio0Jv+/U1SwxBloqiSiGzU/zyFJqToSFLVmzvBVjhw/plBLa
+         yVXBHBmWIOQPowaH0vSyMdp21SqKIYsMys54UW9Y29XZBZFaZEeL0rVXWXcMnky2dTZQ
+         W8VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QnSTyq0AylqMXq4K0qB4+ue2ifzFVZLJmilkj7YD2xE=;
-        b=ZopzyfPicdBTnhCRWXFG/6ks30j9oIL3Q+++ZJVOSyeVtViv9+wKUx/PWSE3OnaTHr
-         8Cv6owjfhKWlECXd/PX+jFEFccYAjmAlrRQq6cisDe1l4utA05JU5d10erpdrwYBcp08
-         PhB0RVbliOggRNLvP9yZtv7hCCN3cBiV7yGnBCxexOnL+S7ttFBdpa5u9pSAT/33tAD9
-         HBdLcht3GqgnFB2+Qo1I4i/N1EYwryi84l66R/qtlbsrF2/zxVNovP4glVjV6gcAtjfd
-         Qr/AcUNvK81X7R0y0kPGEMCmc10pCCFzJ7Gh5BecDhTh3NYWn6TliEuK0j4LT1WfYIsC
-         pgkA==
-X-Gm-Message-State: AJIora8fdvmNK1+KwSRHrdUdR6Y7os3QmIx1967bMWtEC1tJNuqfYUCf
-        oc/dQQnDkoKD5leityXxZGT6vrRhLd7onL/bEufHzfm7cGKKWIHEqBISTA74AoaQJSR4gVjX8HM
-        3Bfn254840SM1PxkBiQoPeXRj
-X-Received: by 2002:ac8:7e8f:0:b0:31e:a1fe:8155 with SMTP id w15-20020ac87e8f000000b0031ea1fe8155mr8770853qtj.220.1657813940129;
-        Thu, 14 Jul 2022 08:52:20 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vscvtjLlw9+LwIcRwHiRW7/eS0T9+SZJaDkhtI4LvxGkVEj8NAm3X9xDVftNhWtS+fSLYEcg==
-X-Received: by 2002:ac8:7e8f:0:b0:31e:a1fe:8155 with SMTP id w15-20020ac87e8f000000b0031ea1fe8155mr8770839qtj.220.1657813939920;
-        Thu, 14 Jul 2022 08:52:19 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
-        by smtp.gmail.com with ESMTPSA id j11-20020a05620a288b00b006b5ad8e5c3asm1566084qkp.68.2022.07.14.08.52.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 08:52:19 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 11:52:18 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, mike.kravetz@oracle.com,
-        songmuchun@bytedance.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
-Subject: Re: [PATCH] mm/hugetlb: avoid corrupting page->mapping in
- hugetlb_mcopy_atomic_pte
-Message-ID: <YtA7svbn4MtuT7qJ@xz-m1.local>
-References: <20220712130542.18836-1-linmiaohe@huawei.com>
- <20220713102357.8328614813db01b569650ffd@linux-foundation.org>
- <a47922cf-eb30-1ad9-fc96-1896254564ef@huawei.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZSV9uu+AuHbrVWmSxWJ5hlL7FSlm4yniGon0X3L1vGw=;
+        b=ysy/KxrbZdXglaUrJyq0RSJZiUvA54xwoqW65iJUd4Dw8aJDKY0V7cdgnG8qVar+Br
+         PT45Bh68y9XHK5nphqmte7soBNHhf6XbBb4FTXNI79cMCZ4eOFf30JrxCOtaDt2USZt8
+         iMB1wIZrehf2u1kFMktHKgA+lNTrvka8SjdVcuiHPjW86wTf0FYfrsHiWaTZuohhllyQ
+         1V25nzDxau5gaNy0nktvggI+eG+UuVhptBsPTpQndCUWhfQwCauSGRapaYwe4wFg3RBn
+         ua9DVtJK7WQRUrlOKBQP/79QT2EyIDjiH68BST5AtrRFZc0e1cpahTDX7CrXmoCVOw/f
+         0mfA==
+X-Gm-Message-State: AJIora/weDxbNlIeuWUp/Dsg8VL7Xhk2aK7ATUYsfjJx1XNsIGMyBALy
+        nlrijKhn0ng7uQhFcQi9q0l1J9DsRQKO0HQIcbQ=
+X-Google-Smtp-Source: AGRyM1uObPdXPPCi/cljNCfrUnmG0La5SB8Ejt58qBm3+R9+LoCHi+EPoyalgF9uM7Lg98OYdmVCyTRBCYh7IwVOSNg=
+X-Received: by 2002:a17:90b:2243:b0:1f0:b0a:e40c with SMTP id
+ hk3-20020a17090b224300b001f00b0ae40cmr17249622pjb.76.1657814002376; Thu, 14
+ Jul 2022 08:53:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a47922cf-eb30-1ad9-fc96-1896254564ef@huawei.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220713074118.14733-1-frieder@fris.de> <20220713074118.14733-2-frieder@fris.de>
+In-Reply-To: <20220713074118.14733-2-frieder@fris.de>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 14 Jul 2022 12:53:10 -0300
+Message-ID: <CAOMZO5DCpxiYNXPOg+Cmc+6gBxZBp0oQ=wtGf14r8Y+_k1S2Sw@mail.gmail.com>
+Subject: Re: [PATCH 1/6] arm64: dts: imx8mm-kontron: Adjust board and SoM
+ model strings
+To:     Frieder Schrempf <frieder@fris.de>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Heiko Thiery <heiko.thiery@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 05:59:53PM +0800, Miaohe Lin wrote:
-> On 2022/7/14 1:23, Andrew Morton wrote:
-> > On Tue, 12 Jul 2022 21:05:42 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
-> > 
-> >> In MCOPY_ATOMIC_CONTINUE case with a non-shared VMA, pages in the page
-> >> cache are installed in the ptes. But hugepage_add_new_anon_rmap is called
-> >> for them mistakenly because they're not vm_shared. This will corrupt the
-> >> page->mapping used by page cache code.
-> > 
-> > Well that sounds bad.  And theories on why this has gone unnoticed for
-> > over a year?  I assume this doesn't have coverage in our selftests?
-> 
-> As discussed in another thread, when minor fault handling is proposed, only
-> VM_SHARED vma is expected to be supported. And the test case is also missing.
+Hi Frieder,
 
-Yes, after this patch applied it'll be great to have the test case covering
-private mappings too.
+On Wed, Jul 13, 2022 at 4:41 AM Frieder Schrempf <frieder@fris.de> wrote:
+>
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+>
+> The official naming includes "SL" (SoM-Line) or "BL" (Board-Line).
+> The legacy identifiers are kept in brackets and are still used in
+> file names and compatible strings.
+>
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-It's just that it'll be a bit more than setting test_uffdio_minor=1 for
-"hugetlb" test.  In hugetlb_allocate_area() we'll need to setup the alias
-too for !shared case, it'll be a bit challenging since currently we're
-using anonymous hugetlb mappings for private tests, and I'm not sure
-whether we'll need the hugetlb path back just like what we have with
-"hugetlb_shared" tests.
-
--- 
-Peter Xu
-
+The series looks good, but I cannot find patch 6/6 in my Inbox, nor in:
+https://lore.kernel.org/linux-arm-kernel/20220713074118.14733-1-frieder@fris.de/

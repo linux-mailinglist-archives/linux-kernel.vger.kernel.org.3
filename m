@@ -2,129 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0529A575147
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEACA57514C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239743AbiGNO71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
+        id S239766AbiGNPAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239716AbiGNO7Z (ORCPT
+        with ESMTP id S238568AbiGNPAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:59:25 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D890518B36;
-        Thu, 14 Jul 2022 07:59:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657810764; x=1689346764;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3aDp65fTRK/qEt1CuYuJTQdXl0hXhYuKHzT1cCAHkRk=;
-  b=HdaZea/I1TBBZ2PSqBKF/+6L0rTcNEtM1gy+d1GSmkMfaXi1e0L/bFN/
-   SdrHSe1e/IHE9E8v2ueeYKHlurvikWpD2zDVEt+Ipnwblu1LHPVyIJkvz
-   6oHfLPsDUq567ZPGSKf5khbWDE7ndbHxDsQ4eNLLCQEre5YA9XRzReNTr
-   s3HL7hvbaFRoV5d5hfEjA6opXrbQd3PoGscZBlYZhyP/Ol965IhYlSFwj
-   81MTcaNnh7/7121ckJGM++gPaOJGNL7qhcdTT13xl9/Z48BqpI+QHHq1D
-   lzvIlBazClRc2Xfkal4dnLQnQJuKU5/gOJPyY+AJHvOO0Db0nKY8QE3UT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="286671465"
-X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
-   d="scan'208";a="286671465"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 07:59:24 -0700
-X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
-   d="scan'208";a="593395611"
-Received: from jacobode-mobl.amr.corp.intel.com (HELO desk) ([10.212.243.89])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 07:59:24 -0700
-Date:   Thu, 14 Jul 2022 07:59:22 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        antonio.gomez.iglesias@linux.intel.com,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [PATCH] x86/bugs: Switch to "auto" when "ibrs" selected on
- Enhanced IBRS parts
-Message-ID: <20220714145922.vs5to67omdzv6nmp@desk>
-References: <0456b35fb9ef957d9a9138e0913fb1a3fd445dff.1657747493.git.pawan.kumar.gupta@linux.intel.com>
- <Ys/7RiC9Z++38tzq@quatroqueijos>
- <YtABEwRnWrJyIKTY@worktop.programming.kicks-ass.net>
+        Thu, 14 Jul 2022 11:00:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AAD2AE13;
+        Thu, 14 Jul 2022 08:00:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C143761EB6;
+        Thu, 14 Jul 2022 15:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1A1C2C385A2;
+        Thu, 14 Jul 2022 15:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657810815;
+        bh=R+qJYsXeO4VPKnKzbC6ePW1RszlSU5kzXy/j+1wtGL8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=pBbPobjqiHhMQErWCWv/hnEuLAcveWa9R/8G0gYHwc30+25M7DqDQf6oXJP4U7ApZ
+         Hr5M3dHscly6S+7EbduaXAxIul2kQPxX0wGDQzcsLu6PwlGS5xIviuQfS5cSBU21YS
+         BHC8S9lborX6i1Lw/jvOYY1VTNn8YevN8M6OfDfsoYr59iTUB6ifhl2Kt9jzOHe4lU
+         TqscNzet2fcyAT/RtaxsxuvNSl1f0iOo5whLzyjIh7Mb0Ke+Jhq4jgWWLNfkw6VUFI
+         a2HBsRtJMOUHkMdGwWtM1pBHMndtd0R944xSfjGDus52GP2bXIkWr2zuW01qQeQFKD
+         Th2eiDQUEHw+w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DC13EE45228;
+        Thu, 14 Jul 2022 15:00:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YtABEwRnWrJyIKTY@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] bpf, arm64: Mark dummy_tramp as global
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165781081489.29992.6920779338134686620.git-patchwork-notify@kernel.org>
+Date:   Thu, 14 Jul 2022 15:00:14 +0000
+References: <20220713173503.3889486-1-nathan@kernel.org>
+In-Reply-To: <20220713173503.3889486-1-nathan@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, zlim.lnx@gmail.com,
+        xukuohai@huawei.com, ndesaulniers@google.com, trix@redhat.com,
+        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, samitolvanen@google.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 01:42:11PM +0200, Peter Zijlstra wrote:
->On Thu, Jul 14, 2022 at 08:17:26AM -0300, Thadeu Lima de Souza Cascardo wrote:
->> On Wed, Jul 13, 2022 at 10:32:37PM -0700, Pawan Gupta wrote:
->> > Currently spectre_v2=ibrs forces write to MSR_IA32_SPEC_CTRL at every
->> > entry and exit. On Enhanced IBRS parts setting MSR_IA32_SPEC_CTRL[IBRS]
->> > only once at bootup is sufficient. MSR write at every kernel entry/exit
->> > incur unnecessary penalty that can be avoided.
->> >
->> > When Enhanced IBRS feature is present, switch from "ibrs" to "auto" mode
->> > so that appropriate mitigation is selected.
->> >
->> > Fixes: 7c693f54c873 ("x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS")
->> > Cc: stable@vger.kernel.org # 5.10+
->> > Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
->> > ---
->> >  arch/x86/kernel/cpu/bugs.c | 6 ++++++
->> >  1 file changed, 6 insertions(+)
->> >
->> > diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
->> > index 0dd04713434b..7d7ebfdfbeda 100644
->> > --- a/arch/x86/kernel/cpu/bugs.c
->> > +++ b/arch/x86/kernel/cpu/bugs.c
->> > @@ -1303,6 +1303,12 @@ static enum spectre_v2_mitigation_cmd __init spectre_v2_parse_cmdline(void)
->> >  		return SPECTRE_V2_CMD_AUTO;
->> >  	}
->> >
->> > +	if (cmd == SPECTRE_V2_CMD_IBRS && boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
->> > +		pr_err("%s selected but CPU supports Enhanced IBRS. Switching to AUTO select\n",
->> > +		       mitigation_options[i].option);
->> > +		return SPECTRE_V2_CMD_AUTO;
->> > +	}
->> > +
->> >  	spec_v2_print_cond(mitigation_options[i].option,
->> >  			   mitigation_options[i].secure);
->> >  	return cmd;
->> >
->> > base-commit: 72a8e05d4f66b5af7854df4490e3135168694b6b
->> > --
->> > 2.35.3
->> >
->> >
->>
->> Shouldn't we just use the mitigation the user asked for if it is still
->> possible? We could add the warning advising the user that a different
->> mitigation could be used instead with less penalty, but if the user asked for
->> IBRS and that is available, it should be used.
->>
->> One of the reasons for that is testing. I know it was useful enough for me and
->> it helped me find some bugs.
->
->Yeah this; if the user asks for IBRS, we should give him IBRS. I hate
->the 'I know better, let me change that for you' mentality.
->
->If you want to do something, print a warning.
+Hello:
 
-Fair enough, I will change that to a warning.
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-Thanks,
-Pawan
+On Wed, 13 Jul 2022 10:35:03 -0700 you wrote:
+> When building with clang + CONFIG_CFI_CLANG=y, the following error
+> occurs at link time:
+> 
+>   ld.lld: error: undefined symbol: dummy_tramp
+> 
+> dummy_tramp is declared globally in C but its definition in inline
+> assembly does not use .global, which prevents clang from properly
+> resolving the references to it when creating the CFI jump tables.
+> 
+> [...]
+
+Here is the summary with links:
+  - bpf, arm64: Mark dummy_tramp as global
+    https://git.kernel.org/bpf/bpf-next/c/33f32e5072b6
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

@@ -2,172 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C1157521B
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7CA57521E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240413AbiGNPnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
+        id S240440AbiGNPna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240404AbiGNPnP (ORCPT
+        with ESMTP id S240418AbiGNPn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:43:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCA21550BA
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657813392;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z7W6YU0Nb2M09QTorgpdGUCXAXIfeENdniIao9kV1cw=;
-        b=fAOR9lx/l/V2EgnB8/ifVW32qNRPV+iOFbjOH1sYRZ50kfwX7x8gGSrxIevHpHqrIccy0c
-        xxA7sTSs4u1QB6ZB+9rpPsaWIZb8MEAW9R8vywGyS1ydThpgYxQwWn5jGRrw3EX4I7q8VQ
-        8VkrJ2v+NwBVlKnxQt/C3YKBB1FyPs4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-rSwIzNxaOnqEb-oUq1P7Og-1; Thu, 14 Jul 2022 11:43:11 -0400
-X-MC-Unique: rSwIzNxaOnqEb-oUq1P7Og-1
-Received: by mail-ed1-f71.google.com with SMTP id m13-20020a056402430d00b0043ac2f27d83so1740155edc.20
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:43:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=z7W6YU0Nb2M09QTorgpdGUCXAXIfeENdniIao9kV1cw=;
-        b=SGSUt4mnpI7vJDy957b739VF73sECyZBFedKtHfqLjxMn0ABOyvq/E0OszQtUK5KoU
-         g8NAY0NkHepKiqwPOHC28VP0K3mqfVvEDA78gOc7EtsJe77kTidbenn+b7aGIT8Hdmzj
-         4Qh8YP0zfjw64gb4IgpJ5uMPOvP7B1nTmM+TzhlVx5pptypnYOo7TVVfHod+Muyjfb64
-         pYNukV7fKrgKftRYN11Wzk+lEgnoNG/VP7RruFdMQZksQH5Pl0j4FVkMnAUY7q8Ky5oE
-         4TSXBjdc/ONIGPxbyV8eantM0vWvGa7Dx7m4SPdzWYTo1COvS7mubgzBEkAU0jYKmtZp
-         7NPQ==
-X-Gm-Message-State: AJIora9DBrHjrly+/bsl1zFKCEvkc24bd1l3167cMWxRlPfQw+w3I3Ln
-        QTMIjNqpmIeFkrQD3Ijt2zEnIq/bcLQnwk+wa9TMCVJksiK6Qx6eriVKrRSFD+2iowUi4SvGcwx
-        hrwE2e3gbdQBi3gIbabIRCcOL
-X-Received: by 2002:a05:6402:27cf:b0:43a:de0b:9a82 with SMTP id c15-20020a05640227cf00b0043ade0b9a82mr12999087ede.427.1657813390003;
-        Thu, 14 Jul 2022 08:43:10 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sHi6lrpW1J6cgagkq6CrQc4KL2oMqOpxrMUFHeM0Ogknu3QviU02RZ1dI7cYioGxaZh6C1yw==
-X-Received: by 2002:a05:6402:27cf:b0:43a:de0b:9a82 with SMTP id c15-20020a05640227cf00b0043ade0b9a82mr12999074ede.427.1657813389810;
-        Thu, 14 Jul 2022 08:43:09 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id fq37-20020a1709069da500b0072b55713daesm827057ejc.56.2022.07.14.08.43.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 08:43:09 -0700 (PDT)
-Message-ID: <aa86054b-91ac-b321-37d6-88d483758be4@redhat.com>
-Date:   Thu, 14 Jul 2022 17:43:08 +0200
+        Thu, 14 Jul 2022 11:43:28 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0D15725A;
+        Thu, 14 Jul 2022 08:43:27 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26EBGT9r002977;
+        Thu, 14 Jul 2022 15:43:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=XjKbJWTNAy4ioQOT7EWLJNd88qNSy98TRzw40NFx5V0=;
+ b=RBmuTm7JYxpYQ9fNrrBZ0/da9jj4xy8/tyeaC4qGn0mtaz26LrK/GB4AzJYh0fTpW4Ts
+ VHnzeK8mRy3We6fgMxeYV521PjxGNa/8UlGkp4QI2/vvEuoULZ+jwgnh/eMQC9cehOg+
+ sIwBxlhXbOewoPl1cMglXWExam26C2JNH8Nr43ctfxtfJg+89Xe6eXi6I7vl0KiUgUQi
+ COFfJK8gqjHEhBPEwdTW5eEy67luJ21qDULU5mGvMsjo5WwXe+JQw6PoAdx3khdtRQEd
+ ejqMDxR6YTESoRYf9Ck8114Hk7W3NKe3g2lZdf7SmymYz4O93URkaC8y5+041eeZUnfR nw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3haaba9qj5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Jul 2022 15:43:18 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26EFhIb3015297
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Jul 2022 15:43:18 GMT
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 14 Jul 2022 08:43:17 -0700
+Received: from [10.216.25.106] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 14 Jul
+ 2022 08:43:14 -0700
+Message-ID: <156915e9-34c4-0b20-61b7-d6d5bfc584fa@quicinc.com>
+Date:   Thu, 14 Jul 2022 21:13:11 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] KVM: x86: Restrict get_mt_mask() to a u8, use
- KVM_X86_OP_OPTIONAL_RET0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
+ probed properly
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220714153707.3239119-1-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220714153707.3239119-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1657810516-31143-1-git-send-email-quic_kriskura@quicinc.com>
+ <YtAv8R7QlTZCjvRO@kroah.com>
+ <2938c8ff-ecc6-0a6e-6011-f83f3e3fbaa1@quicinc.com>
+ <YtA2FwnL9GRUU35i@kroah.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <YtA2FwnL9GRUU35i@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: CMJdVSAlC86WE-CmJh3cLUBn5X_sThcW
+X-Proofpoint-ORIG-GUID: CMJdVSAlC86WE-CmJh3cLUBn5X_sThcW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-14_12,2022-07-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 suspectscore=0 adultscore=0 malwarescore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207140067
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/14/22 17:37, Sean Christopherson wrote:
-> Restrict get_mt_mask() to a u8 and reintroduce using a RET0 static_call
-> for the SVM implementation.  EPT stores the memtype information in the
-> lower 8 bits (bits 6:3 to be precise), and even returns a shifted u8
-> without an explicit cast to a larger type; there's no need to return a
-> full u64.
-> 
-> Note, RET0 doesn't play nice with a u64 return on 32-bit kernels, see
-> commit bf07be36cd88 ("KVM: x86: do not use KVM_X86_OP_OPTIONAL_RET0 for
-> get_mt_mask").
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Doh, that's obvious.  Queued, thanks.
+On 7/14/2022 8:58 PM, Greg Kroah-Hartman wrote:
+> On Thu, Jul 14, 2022 at 08:39:31PM +0530, Krishna Kurapati PSSNV wrote:
+>> On 7/14/2022 8:32 PM, Greg Kroah-Hartman wrote:
+>>> On Thu, Jul 14, 2022 at 08:25:16PM +0530, Krishna Kurapati wrote:
+>>>> On SC7180 devices, it is observed that dwc3 probing is deferred
+>>>> because device_links_check_suppliers() finds that '88e3000.phy'
+>>>> isn't ready yet.
+>>>>
+>>>> As a part of its probe call, dwc3-qcom driver checks if dwc3 core
+>>>> is wakeup capable or not. If the dwc3 core is wakeup capable, driver
+>>>> configures dwc-qcom's power domain to be always ON. Also it configures
+>>>> dp/dm interrupts accordingly to support wakeup from system suspend.
+>>>>
+>>>> More info regarding the same can be found at:
+>>>> commit d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller status"
+>>>> commit 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
+>>>>
+>>>> In the event, dwc3 probe gets deferred and is processed after dwc3-qcom
+>>>> probe, driver ends up reading the wakeup capability of dwc3 core as false
+>>>> leading to instability in suspend/resume path.
+>>>>
+>>>> To avoid this scenario, ensure dwc3_probe is successful by checking
+>>>> if appropriate driver is assigned to it or not after the of_platform_populate
+>>>> call. If it isn't then defer dwc3-qcom probe as well.
+>>>>
+>>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>>> ---
+>>>>    drivers/usb/dwc3/dwc3-qcom.c | 3 +++
+>>>>    1 file changed, 3 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+>>>> index 7703655..096d1414 100644
+>>>> --- a/drivers/usb/dwc3/dwc3-qcom.c
+>>>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+>>>> @@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
+>>>>    		dev_err(dev, "failed to get dwc3 platform device\n");
+>>>>    	}
+>>>> +	if (!qcom->dwc3->dev.driver)
+>>>> +		return -EPROBE_DEFER;
+>>>> +
+>>> Why not limit this check to a device type like your changelog mentions?
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
+>> Hi Greg,
+>>
+>> I wanted to make it common to any device using this driver. Although on
+>> devices
+>> ike SC7280,this issue is not seen but the code would hold good. Do you see
+>> any
+>> concerns if we do it this way ?
+> How many different types of hardware did you test this change on and
+> what was the results?
+>
+> thanks,
+>
+> greg k-h
+Hi Greg,
 
-Paolo
+   I tested only on SC7180 and SC7280 devices. It was working on SC7280, 
+(the first run of of_platform_populate made sure dwc3 probe is done).
+On SC7180, during the first run of dwc3-qcom probe, we observed dwc3 
+probe getting deferred after of_platform_populate.
+As you suggested, I can try and check on other devices using this driver 
+and confirm if only SC7180 has this issue. 🙂
 
-> ---
->   arch/x86/include/asm/kvm-x86-ops.h | 2 +-
->   arch/x86/include/asm/kvm_host.h    | 2 +-
->   arch/x86/kvm/svm/svm.c             | 6 ------
->   arch/x86/kvm/vmx/vmx.c             | 2 +-
->   4 files changed, 3 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index 6f2f1affbb78..51f777071584 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -88,7 +88,7 @@ KVM_X86_OP(deliver_interrupt)
->   KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
->   KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
->   KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
-> -KVM_X86_OP(get_mt_mask)
-> +KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
->   KVM_X86_OP(load_mmu_pgd)
->   KVM_X86_OP(has_wbinvd_exit)
->   KVM_X86_OP(get_l2_tsc_offset)
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index de5a149d0971..fa4b2392fba0 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1546,7 +1546,7 @@ struct kvm_x86_ops {
->   	int (*sync_pir_to_irr)(struct kvm_vcpu *vcpu);
->   	int (*set_tss_addr)(struct kvm *kvm, unsigned int addr);
->   	int (*set_identity_map_addr)(struct kvm *kvm, u64 ident_addr);
-> -	u64 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
-> +	u8 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
->   
->   	void (*load_mmu_pgd)(struct kvm_vcpu *vcpu, hpa_t root_hpa,
->   			     int root_level);
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 37ce061dfc76..19af6dacfc5b 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4158,11 +4158,6 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
->   	return true;
->   }
->   
-> -static u64 svm_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-> -{
-> -	return 0;
-> -}
-> -
->   static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->   {
->   	struct vcpu_svm *svm = to_svm(vcpu);
-> @@ -4814,7 +4809,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
->   	.check_apicv_inhibit_reasons = avic_check_apicv_inhibit_reasons,
->   	.apicv_post_state_restore = avic_apicv_post_state_restore,
->   
-> -	.get_mt_mask = svm_get_mt_mask,
->   	.get_exit_info = svm_get_exit_info,
->   
->   	.vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index c30115b9cb33..c895a3b6824d 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7352,7 +7352,7 @@ static int __init vmx_check_processor_compat(void)
->   	return 0;
->   }
->   
-> -static u64 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-> +static u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
->   {
->   	u8 cache;
->   
-> 
-> base-commit: b9b71f43683ae9d76b0989249607bbe8c9eb6c5c
-
+Thanks,
+Krishna,

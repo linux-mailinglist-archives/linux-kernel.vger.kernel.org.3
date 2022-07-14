@@ -2,77 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D13257493B
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819BE57493E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238352AbiGNJkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
+        id S238381AbiGNJlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238127AbiGNJkb (ORCPT
+        with ESMTP id S231794AbiGNJlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:40:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6768246DA0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:40:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=MX1HLjZl06EVeBckFH+LH0/sb/LjoVBfdYkNEHMl7Ds=; b=jTGiw/CXC6l9jPjUkP0G7dK9K+
-        kF+Y/rvE8V3do1tcA1zdDJQjueM7tMxxjjPKTKBd5IEmS6fS3cKqW5NLdSnx4PX9ULYUOg87KHuDR
-        Hedr0YnwcUKf7u7+iwV0gNC/ckeKvPtYUhCp8q1wlgMk4azI/HpqmB3uB1zplBPwnlL4/O0ero9i3
-        6o4ZU7OI5zmBFOfWqsslrC6e2TCUWJqsqmZVbinicKV8/SAfoph+Ll0LAsn0YLble7j+xf72spUyR
-        F2UdPFbdwh6xHnChesgRhIsNkcYSzSF31Cl3+Mp++a0DRFHglmxEerjv78JiF/nZJjPQcLi7DHyn5
-        0tug9oxA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBvKV-009GGg-0q; Thu, 14 Jul 2022 09:40:19 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C9440980120; Thu, 14 Jul 2022 11:40:12 +0200 (CEST)
-Date:   Thu, 14 Jul 2022 11:40:12 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, lkft-triage@lists.linaro.org,
-        Borislav Petkov <bp@suse.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: RETBleed: WARNING: Spectre v2 mitigation leaves CPU vulnerable
- to RETBleed attacks, data leaks possible!
-Message-ID: <Ys/kfDk7mVE09N3L@worktop.programming.kicks-ass.net>
-References: <CA+G9fYv0N0FcYRp5irO_7TpheLcUY8LRMQbcZqwEmiRTEccEjA@mail.gmail.com>
- <Ys/bWIk0F5srkkpF@kroah.com>
+        Thu, 14 Jul 2022 05:41:08 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F4946DA0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:41:06 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id j29-20020a05600c1c1d00b003a2fdafdefbso866583wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:41:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding;
+        bh=7ITMCkMys6kS4GnXThXCrFzJ+x2vhA9RLy8nRC7h2Ps=;
+        b=Gw9dcPoI0AL9EIzTPqcn/DgkG46lOCjZSI+d228Po8/eSLZq1aFCIFSRsKmoXtVQYE
+         4eYsxmidFPWa0stqbEZ+FDPYK5lQ4CFlOgkjSDGStJemY8WBzQDgb+Lnkqh6e1SS/PYM
+         XCR4iM1wN2NZOToZvzsH+VCSdTT8V+yOK431BOA9ZWmArvc7wFoYN1vzr4X1yGX93fHU
+         KSkHNk9DkkAzhlYjVQxU5EdiixnM7VTs6YDfQSjrGlmIYpoKIajENRZwKubr7EbELYa3
+         MgOeUfFhBHB+kJSS642sqGcWkp/9Pu4iiBJh2SCuNOEKt2tKiBU9WutNQvdZOs3Iuk7A
+         UR5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=7ITMCkMys6kS4GnXThXCrFzJ+x2vhA9RLy8nRC7h2Ps=;
+        b=dIBUuRnNCVl+TanELXFDUB1VH0qd8gZ120pmWYAuaJbEBECTly7sYuhuIdRqq+xbJQ
+         PCM8iKJFV3xE8E/RJcygeSKfBMM0Apc0qu3skppt2oHls46T/XPN9lNhkrFBOM99LwtC
+         ywDVCp7iskXSE7D9/UodQ91hNuZLE1vl3XsH7shRmVtVev93qG/UWedHLBciVWIVuSj/
+         BLbXSpzHFAfg2H5Z68Xt0lJT/9LARKvYR0aozGqwiNs19EDPnaaJna5gx4KQsuEZcctn
+         rxVJD/0hvLkSYv/HP2ugddv4+16Jj3rBUnxzrZR7+HEhVDXJ6x+7Ox4Z4VPqJo+yl8uR
+         a6Dw==
+X-Gm-Message-State: AJIora8+f+HzKlYxUw9n3lI69KL66uSK9vUtY2AxDMQDeUNVYziEKFuh
+        jbM+aBTiNHl59FgyCl7tNF1KRQ==
+X-Google-Smtp-Source: AGRyM1uvvCgbY/zqupYYF5H/QLQQ666JHCfrYo6l6n0KvQHoHbigrzbYsCrsDByVcOr+YUriQDyvTA==
+X-Received: by 2002:a05:600c:3ac6:b0:3a2:ce07:d011 with SMTP id d6-20020a05600c3ac600b003a2ce07d011mr13688557wms.99.1657791665264;
+        Thu, 14 Jul 2022 02:41:05 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id u18-20020a05600c19d200b003973c54bd69sm4766784wmq.1.2022.07.14.02.41.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 02:41:04 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 10:41:02 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     linux-leds@vger.kernel.org
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: LED Maintainership
+Message-ID: <Ys/kruf8DE4ISo8M@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ys/bWIk0F5srkkpF@kroah.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 11:01:12AM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Jul 14, 2022 at 02:15:07PM +0530, Naresh Kamboju wrote:
-> > Results from Linaro’s test farm.
-> > 
-> > We are booting the i386 kernel on an x86 machine.
-> > With Spectre V2 patches merged into Linux mainline we have been noticing
-> > RETBleed: WARNING: Spectre v2 mitigation leaves CPU vulnerable to
-> > RETBleed attacks, data leaks possible!
-> 
-> That's funny.  I don't think that's a valid combination that should be
-> cared about, but I'll leave it to Pawan to comment if it is something
-> that is "real" to be concerned for.
+Pavel, et al.,
 
-Yeah, so far nobody cared to fix 32bit. If someone *realllllly* cares
-and wants to put the effort in I suppose I'll review the patches, but
-seriously, you shouldn't be running 32bit kernels on Skylake / Zen based
-systems, that's just silly.
+Not sure what's going on behind the scenes, but it looks as though the
+LED subsystem has been left unmaintained for at least 2 months now.
+
+Does anyone have any objection to me stepping in as temporary
+maintainer until the situation is resolved?
+
+Kind regards,
+Lee
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

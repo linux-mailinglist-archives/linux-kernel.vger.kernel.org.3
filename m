@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88A75748CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9E85748D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238255AbiGNJ06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
+        id S232888AbiGNJ1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237915AbiGNJ03 (ORCPT
+        with ESMTP id S237987AbiGNJ0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:26:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 804D71116
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:25:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657790722;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PjyxPDoAfnGHvLQ9oi2iH0nJfF4BvIMD++QLiGPQ/R0=;
-        b=AuxLkj4s2c3tn4L8F4/qO4WOw7lFe+7KQC0N1FjaH1qwH7Mu+vOcaZoH7qG5hYvJkIHlUD
-        HAxO5pqpdpcP1UU4Mc5fRIUOsrHSP5EOx0N8LdlSsbE6GHpZmp+EaDa/LHiMpSWxYFOYmN
-        lJE1gv8Rvh4V6FyoYPlBjttEBJNNk+E=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-93-M1e2cFEJMX22T8SKYyj7_w-1; Thu, 14 Jul 2022 05:25:21 -0400
-X-MC-Unique: M1e2cFEJMX22T8SKYyj7_w-1
-Received: by mail-wr1-f70.google.com with SMTP id e7-20020adfa447000000b0021d669c6a76so403612wra.19
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:25:21 -0700 (PDT)
+        Thu, 14 Jul 2022 05:26:32 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2860B38A9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:25:34 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id n18so1845526lfq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:25:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=G4SHg0v0UTb3/wETQ9utchWc9oSi737vagHnYZzNcEw=;
+        b=UJosXSDIOCQA7CkfHPIk2bFFsaniJh806Rdc+4td/6efm/F2x6bc3R55hxcASp6xE3
+         dssT7wZsAC7leRWDQccu9BJzy7qRRpTat5Yd0n57bc/IeHc2dY1eh/EYztXAyeQ4HJVb
+         HG4t7yhI0gWLcZJzQf1fwWoubI+NisWFwBvJhzcdA49YL4WAN8nlqwFJftVqjrlW652O
+         yovL8Bppc6/qJzzH/O6rzCntep+1VbeYhRWaKmjVWXRqLN5SjF5e/cwRMC31XZJKVWxE
+         h17p0U+6GgnDHT/4EFr8TWcAu+4gFFePea91v55PVpyg0fgT95pHkUzAzQaWD8XjOLyB
+         vogQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=PjyxPDoAfnGHvLQ9oi2iH0nJfF4BvIMD++QLiGPQ/R0=;
-        b=5MuGPHx+JKF+hJS2Et1Z7EeyH4BDWWbx6kaND92Y25hhPSo9lKXruk5nZTvlN2qtKq
-         JgA52OHtMC1j6BcCD9+AsaVMKRYFVHR/bVf6v+VRT7zfuAV3T1OrkhR0kcxATYaD5552
-         f14+i7mJPyCjPjdYAF8m/vBt5lmVE4oYm2FIEqlpIGBHIi0IS9ifrvIvpXpLZ9pgK059
-         MZJtCDzsvL0zIuPdsBuv7OMGCe+w6CUC75VSRi3QNRtg+vUEFjY20nLhIQ8FHvII8Zq6
-         GZuRu0m+iqXndHL6wyQzZeb4Hr1HXre/bBFgUUkIaS09Lndm7hTYOHmg21ualN1pYzhm
-         b3MA==
-X-Gm-Message-State: AJIora9pOPAa7KVYfYpKkyY+Z0vreZJlkwDrnk/hL7gfAsN/P6y/qiW0
-        52AQDNDQR+0BsX02SElIJd7jZvmctiHRp3YPWmY5kkqqEhGcMrtz9R7KHIOslQ1D+At6o0MmyEW
-        4ZtRD3zZoZr6VVFWBvquZbhKv
-X-Received: by 2002:a05:600c:4e8f:b0:3a1:8b21:ebbc with SMTP id f15-20020a05600c4e8f00b003a18b21ebbcmr8170753wmq.149.1657790720231;
-        Thu, 14 Jul 2022 02:25:20 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sDWa8M97C7iUgKy7ob02lo7HXopDQcslI8WX/Nv6bE77svQ5nWRf23KjxkgEGoAyTYxyc6aw==
-X-Received: by 2002:a05:600c:4e8f:b0:3a1:8b21:ebbc with SMTP id f15-20020a05600c4e8f00b003a18b21ebbcmr8170731wmq.149.1657790719957;
-        Thu, 14 Jul 2022 02:25:19 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id v130-20020a1cac88000000b003a046549a85sm4852696wme.37.2022.07.14.02.25.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 02:25:19 -0700 (PDT)
-Message-ID: <399f335a97f5e46a339f906290e0c90de3613fe9.camel@redhat.com>
-Subject: Re: [PATCH 1/3] KVM: x86: Hyper-V invariant TSC control
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-Date:   Thu, 14 Jul 2022 12:25:17 +0300
-In-Reply-To: <20220713150532.1012466-2-vkuznets@redhat.com>
-References: <20220713150532.1012466-1-vkuznets@redhat.com>
-         <20220713150532.1012466-2-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=G4SHg0v0UTb3/wETQ9utchWc9oSi737vagHnYZzNcEw=;
+        b=YJjNmDSviSOmRtHP/8bW1LbxMlDr1RGXMOvO9d7+D5XHQ/L+dGwly7/+CkE6vApvvi
+         7DzrvB2h7TvAJcJhX4IzVigry6KncLkq78C3cFHMFl11yxG0E+3hvC7Pk9ZQPHJgFDhI
+         kVWmCL2uxs/gN620nLN+r4Ow8ku/uoSoOpFrzi4KIsxeoGXphlf3MVKPtQcXzX3X8RUy
+         +ZsQuX8tFmR/ZI9bsbRMeSiT1cSom012vr8tKQxrIRbUJVdBWEUQoUMktFiiCuh1uaUW
+         JgLwVew8s+wepqoY+ReV5CdYppBxaUOvT7D6XMLIu3m9U1FgDGB6yhwusvvlthUGR/Hh
+         Pixg==
+X-Gm-Message-State: AJIora8hT5j21TQJuteVhY09dbeO12lZ8BrmWfjasjccOnqawLaN26nT
+        Ki8LgNrIK7JTPTZcnxktIWVktg==
+X-Google-Smtp-Source: AGRyM1ua6lLzYbEzTJQNV0u3KzfC8NiZH61p3CYrMfOwp61n3WD6zdS8uA7jQ6LgHPcEUmLg9bK8Bw==
+X-Received: by 2002:ac2:5590:0:b0:489:f4a2:5526 with SMTP id v16-20020ac25590000000b00489f4a25526mr5095824lfg.116.1657790732574;
+        Thu, 14 Jul 2022 02:25:32 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id s10-20020a2e2c0a000000b0025d70efeaaasm184639ljs.75.2022.07.14.02.25.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 02:25:32 -0700 (PDT)
+Message-ID: <8e564b29-50e2-aa83-7a21-f28d37b384d3@linaro.org>
+Date:   Thu, 14 Jul 2022 11:25:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 22/30] dt-bindings: phy: qcom,qmp-usb: add missing
+ qcom,sc7180-qmp-usb3-phy schema
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220707134725.3512-1-johan+linaro@kernel.org>
+ <20220707134725.3512-23-johan+linaro@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220707134725.3512-23-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,198 +83,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-13 at 17:05 +0200, Vitaly Kuznetsov wrote:
-> Normally, genuine Hyper-V doesn't expose architectural invariant TSC
-> (CPUID.80000007H:EDX[8]) to its guests by default. A special PV MSR
-> (HV_X64_MSR_TSC_INVARIANT_CONTROL, 0x40000118) and corresponding CPUID
-> feature bit (CPUID.0x40000003.EAX[15]) were introduced. When bit 0 of the
-> PV MSR is set, invariant TSC bit starts to show up in CPUID. When the
-> feature is exposed to Hyper-V guests, reenlightenment becomes unneeded.
+On 07/07/2022 15:47, Johan Hovold wrote:
+> The "qcom,sc7180-qmp-usb3-phy" compatible is apparently used to describe
+> a combo PHY where only the USB part is used. Specifically, only a single
+> reset is used.
 > 
-> Add the feature to KVM. Keep CPUID output intact when the feature
-> wasn't exposed to L1 and implement the required logic for hiding
-> invariant TSC when the feature was exposed and invariant TSC control
-> MSR wasn't written to. Copy genuine Hyper-V behavior and forbid to
-> disable the feature once it was enabled.
-> 
-> For the reference, for linux guests, support for the feature was added
-> in commit dce7cd62754b ("x86/hyperv: Allow guests to enable InvariantTSC").
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> 4ad7d7eeed3a ("dt-bindings: phy: qcom,qmp-usb3-dp: Add support for SC7180")
+> 94c34600b617 ("dt-bindings: phy: qcom,qmp-usb3-dp-phy: move usb3 compatibles back to qcom,qmp-phy.yaml")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->  arch/x86/include/asm/kvm_host.h |  1 +
->  arch/x86/kvm/cpuid.c            |  7 +++++++
->  arch/x86/kvm/hyperv.c           | 19 +++++++++++++++++++
->  arch/x86/kvm/hyperv.h           | 15 +++++++++++++++
->  arch/x86/kvm/x86.c              |  4 +++-
->  5 files changed, 45 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index de5a149d0971..88553f0b524c 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1022,6 +1022,7 @@ struct kvm_hv {
->         u64 hv_reenlightenment_control;
->         u64 hv_tsc_emulation_control;
->         u64 hv_tsc_emulation_status;
-> +       u64 hv_invtsc;
->  
->         /* How many vCPUs have VP index != vCPU index */
->         atomic_t num_mismatched_vp_indexes;
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index d47222ab8e6e..788df2eb1ec4 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -1404,6 +1404,13 @@ bool kvm_cpuid(struct kvm_vcpu *vcpu, u32 *eax, u32 *ebx,
->                             (data & TSX_CTRL_CPUID_CLEAR))
->                                 *ebx &= ~(F(RTM) | F(HLE));
->                 }
-
-Tiny nitpick: Maybe add a bit longer comment about this thing, like that guest needs to opt-in
-to see invtsc when it has the HV feature exposed to it, 
-I don't have a strong preference about this though.
-
-> +               /*
-> +                * Filter out invariant TSC (CPUID.80000007H:EDX[8]) for Hyper-V
-> +                * guests if needed.
-> +                */
-> +               if (function == 0x80000007 && kvm_hv_invtsc_filtered(vcpu))
-> +                       *edx &= ~(1 << 8);
-
-> +
->         } else {
->                 *eax = *ebx = *ecx = *edx = 0;
->                 /*
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index e2e95a6fccfd..0d8e6526a839 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -991,6 +991,7 @@ static bool kvm_hv_msr_partition_wide(u32 msr)
->         case HV_X64_MSR_REENLIGHTENMENT_CONTROL:
->         case HV_X64_MSR_TSC_EMULATION_CONTROL:
->         case HV_X64_MSR_TSC_EMULATION_STATUS:
-> +       case HV_X64_MSR_TSC_INVARIANT_CONTROL:
->         case HV_X64_MSR_SYNDBG_OPTIONS:
->         case HV_X64_MSR_SYNDBG_CONTROL ... HV_X64_MSR_SYNDBG_PENDING_BUFFER:
->                 r = true;
-> @@ -1275,6 +1276,9 @@ static bool hv_check_msr_access(struct kvm_vcpu_hv *hv_vcpu, u32 msr)
->         case HV_X64_MSR_TSC_EMULATION_STATUS:
->                 return hv_vcpu->cpuid_cache.features_eax &
->                         HV_ACCESS_REENLIGHTENMENT;
-> +       case HV_X64_MSR_TSC_INVARIANT_CONTROL:
-> +               return hv_vcpu->cpuid_cache.features_eax &
-> +                       HV_ACCESS_TSC_INVARIANT;
->         case HV_X64_MSR_CRASH_P0 ... HV_X64_MSR_CRASH_P4:
->         case HV_X64_MSR_CRASH_CTL:
->                 return hv_vcpu->cpuid_cache.features_edx &
-> @@ -1402,6 +1406,17 @@ static int kvm_hv_set_msr_pw(struct kvm_vcpu *vcpu, u32 msr, u64 data,
->                 if (!host)
->                         return 1;
->                 break;
-> +       case HV_X64_MSR_TSC_INVARIANT_CONTROL:
-> +               /* Only bit 0 is supported */
-> +               if (data & ~BIT_ULL(0))
-> +                       return 1;
-> +
-> +               /* The feature can't be disabled from the guest */
-> +               if (!host && hv->hv_invtsc && !data)
-> +                       return 1;
-
-The unit test in patch 3 claims, that this msr should #GP when 'invtsc'
-aka bit 8 of edx of leaf 0x80000007 is not enabled by the hypervisor in the guest cpuid.
-
-Yet, looking at the code I think that this msr read/write access only depends on
-the 'new' cpuid bit, aka the HV_ACCESS_TSC_INVARIANT, thus this msr will 'work'
-but do nothing if 'invtsc' is not exposed (it will then not turn it on).
 
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> +
-> +               hv->hv_invtsc = data;
-> +               break;
->         case HV_X64_MSR_SYNDBG_OPTIONS:
->         case HV_X64_MSR_SYNDBG_CONTROL ... HV_X64_MSR_SYNDBG_PENDING_BUFFER:
->                 return syndbg_set_msr(vcpu, msr, data, host);
-> @@ -1577,6 +1592,9 @@ static int kvm_hv_get_msr_pw(struct kvm_vcpu *vcpu, u32 msr, u64 *pdata,
->         case HV_X64_MSR_TSC_EMULATION_STATUS:
->                 data = hv->hv_tsc_emulation_status;
->                 break;
-> +       case HV_X64_MSR_TSC_INVARIANT_CONTROL:
-> +               data = hv->hv_invtsc;
-> +               break;
->         case HV_X64_MSR_SYNDBG_OPTIONS:
->         case HV_X64_MSR_SYNDBG_CONTROL ... HV_X64_MSR_SYNDBG_PENDING_BUFFER:
->                 return syndbg_get_msr(vcpu, msr, pdata, host);
-> @@ -2497,6 +2515,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
->                         ent->eax |= HV_MSR_REFERENCE_TSC_AVAILABLE;
->                         ent->eax |= HV_ACCESS_FREQUENCY_MSRS;
->                         ent->eax |= HV_ACCESS_REENLIGHTENMENT;
-> +                       ent->eax |= HV_ACCESS_TSC_INVARIANT;
->  
->                         ent->ebx |= HV_POST_MESSAGES;
->                         ent->ebx |= HV_SIGNAL_EVENTS;
-> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
-> index da2737f2a956..1a6316ab55eb 100644
-> --- a/arch/x86/kvm/hyperv.h
-> +++ b/arch/x86/kvm/hyperv.h
-> @@ -133,6 +133,21 @@ static inline bool kvm_hv_has_stimer_pending(struct kvm_vcpu *vcpu)
->                              HV_SYNIC_STIMER_COUNT);
->  }
->  
-> +/*
-> + * With HV_ACCESS_TSC_INVARIANT feature, invariant TSC (CPUID.80000007H:EDX[8])
-> + * is only observed after HV_X64_MSR_TSC_INVARIANT_CONTROL was written to.
-> + */
-> +static inline bool kvm_hv_invtsc_filtered(struct kvm_vcpu *vcpu)
-> +{
-> +       struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> +       struct kvm_hv *hv = to_kvm_hv(vcpu->kvm);
-> +
-> +       if (hv_vcpu && hv_vcpu->cpuid_cache.features_eax & HV_ACCESS_TSC_INVARIANT)
-> +               return !hv->hv_invtsc;
-> +
-> +       return false;
-> +}
-> +
->  void kvm_hv_process_stimers(struct kvm_vcpu *vcpu);
->  
->  void kvm_hv_setup_tsc_page(struct kvm *kvm,
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 567d13405445..322e0a544823 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -1466,7 +1466,7 @@ static const u32 emulated_msrs_all[] = {
->         HV_X64_MSR_STIMER0_CONFIG,
->         HV_X64_MSR_VP_ASSIST_PAGE,
->         HV_X64_MSR_REENLIGHTENMENT_CONTROL, HV_X64_MSR_TSC_EMULATION_CONTROL,
-> -       HV_X64_MSR_TSC_EMULATION_STATUS,
-> +       HV_X64_MSR_TSC_EMULATION_STATUS, HV_X64_MSR_TSC_INVARIANT_CONTROL,
->         HV_X64_MSR_SYNDBG_OPTIONS,
->         HV_X64_MSR_SYNDBG_CONTROL, HV_X64_MSR_SYNDBG_STATUS,
->         HV_X64_MSR_SYNDBG_SEND_BUFFER, HV_X64_MSR_SYNDBG_RECV_BUFFER,
-> @@ -3769,6 +3769,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->         case HV_X64_MSR_REENLIGHTENMENT_CONTROL:
->         case HV_X64_MSR_TSC_EMULATION_CONTROL:
->         case HV_X64_MSR_TSC_EMULATION_STATUS:
-> +       case HV_X64_MSR_TSC_INVARIANT_CONTROL:
->                 return kvm_hv_set_msr_common(vcpu, msr, data,
->                                              msr_info->host_initiated);
->         case MSR_IA32_BBL_CR_CTL3:
-> @@ -4139,6 +4140,7 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->         case HV_X64_MSR_REENLIGHTENMENT_CONTROL:
->         case HV_X64_MSR_TSC_EMULATION_CONTROL:
->         case HV_X64_MSR_TSC_EMULATION_STATUS:
-> +       case HV_X64_MSR_TSC_INVARIANT_CONTROL:
->                 return kvm_hv_get_msr_common(vcpu,
->                                              msr_info->index, &msr_info->data,
->                                              msr_info->host_initiated);
-
-
-Beware that this new msr also will need to be migrated by qemu, 
-when the feature is added to qemu -
-I had my own share of fun with AMD's TSC ratio msr when I implemented it
-(had to fix it twice in qemu :( ...)
 
 Best regards,
-	Maxim Levitrsky
-
+Krzysztof

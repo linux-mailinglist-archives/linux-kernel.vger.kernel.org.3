@@ -2,284 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FAF575198
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C5A5751B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240007AbiGNPUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
+        id S240096AbiGNPVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbiGNPUX (ORCPT
+        with ESMTP id S239993AbiGNPVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:20:23 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A7E481C2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:20:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657812022; x=1689348022;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=sbZhaT5tdicd4HOKbtLgjSP8ggs3tLu6dffAfZ7Zzk0=;
-  b=LyPChm5BH+ib5lg/4gVRjJX4ZThdLQOtnIatkYXN76peOuQhCEyl5CKL
-   AxSMy+a6/AK5uZzxYhxWA8a3Bkm90sw3XPzqIjTaY3dICBHpdG5wmbS1+
-   S0OKZdr5qYa9o1hZHhA37kqquEXBjqo2ojiYW894uol7V6KlId9wG8tOH
-   Y7gmwJO8hQ7I9pxY5vaFhoPTTPvtXvclp5CC2IdIkgQovWzFrFYNV8AM+
-   DiWnttUoRgpVJk+TuBFPULM4/BCTAQCX2WXyXMcJtiByT1Lb6SFjWWHjs
-   afTK7poU5CzMi0Qooo2PiavDSIFPFVIfeOmPtHqGmRZxx7K/axBuLw6Nx
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="285564040"
-X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
-   d="scan'208";a="285564040"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 08:20:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
-   d="scan'208";a="923107992"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Jul 2022 08:20:18 -0700
-Received: from [10.249.147.144] (mwajdecz-MOBL.ger.corp.intel.com [10.249.147.144])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 26EFKGKA026921;
-        Thu, 14 Jul 2022 16:20:16 +0100
-Message-ID: <a85f4b50-aba7-3a43-b8c3-5fed4217b0d9@intel.com>
-Date:   Thu, 14 Jul 2022 17:20:15 +0200
+        Thu, 14 Jul 2022 11:21:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8856057E05
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:21:47 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1oC0ef-0004Q5-Lq; Thu, 14 Jul 2022 17:21:29 +0200
+Message-ID: <1ba2b493-2ee2-e4b9-b11f-4fbb48473531@pengutronix.de>
+Date:   Thu, 14 Jul 2022 17:21:25 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 16/21] drm/i915: Define GuC Based TLB invalidation
- routines
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: bcm4329-fmac: add optional
+ brcm,ccode-map-trivial
 Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Prathap Kumar Valsan <prathap.kumar.valsan@intel.com>,
-        Alan Previn <alan.previn.teres.alexis@intel.com>,
-        Borislav Petkov <bp@suse.de>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
-        Vinay Belgaumkar <vinay.belgaumkar@intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1657800199.git.mchehab@kernel.org>
- <335645ebfde73421a506d6df72e78d370805aa9c.1657800199.git.mchehab@kernel.org>
-From:   Michal Wajdeczko <michal.wajdeczko@intel.com>
-In-Reply-To: <335645ebfde73421a506d6df72e78d370805aa9c.1657800199.git.mchehab@kernel.org>
+To:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alvin@pqrs.dk>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        van Spriel <arend@broadcom.com>
+Cc:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20220711123005.3055300-1-alvin@pqrs.dk>
+ <20220711123005.3055300-2-alvin@pqrs.dk>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20220711123005.3055300-2-alvin@pqrs.dk>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 14.07.2022 14:06, Mauro Carvalho Chehab wrote:
-> From: Prathap Kumar Valsan <prathap.kumar.valsan@intel.com>
+On 11.07.22 14:30, Alvin Šipraga wrote:
+> From: Alvin Šipraga <alsi@bang-olufsen.dk>
 > 
-> Add routines to interface with GuC firmware for selective TLB invalidation
-> supported on XeHP.
+> The bindings already offer a brcm,ccode-map property to describe the
+> mapping between the kernel's ISO3166 alpha 2 country code string and the
+> firmware's country code string and revision number. This is a
+> board-specific property and determined by the CLM blob firmware provided
+> by the hardware vendor.
 > 
-> Signed-off-by: Prathap Kumar Valsan <prathap.kumar.valsan@intel.com>
-> Cc: Matthew Brost <matthew.brost@intel.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> However, in some cases the firmware will also use ISO3166 country codes
+> internally, and the revision will always be zero. This implies a trivial
+> mapping: cc -> { cc, 0 }.
+> 
+> For such cases, add an optional property brcm,ccode-map-trivial which
+> obviates the need to describe every trivial country code mapping in the
+> device tree with the existing brcm,ccode-map property. The new property
+> is subordinate to the more explicit brcm,ccode-map property.
+> 
+> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+
+Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+
 > ---
+>  .../bindings/net/wireless/brcm,bcm4329-fmac.yaml       | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v2 00/21] at: https://lore.kernel.org/all/cover.1657800199.git.mchehab@kernel.org/
-> 
->  .../gpu/drm/i915/gt/uc/abi/guc_actions_abi.h  |  3 +
->  drivers/gpu/drm/i915/gt/uc/intel_guc.c        | 90 +++++++++++++++++++
->  drivers/gpu/drm/i915/gt/uc/intel_guc.h        | 10 +++
->  drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h   |  3 +
->  4 files changed, 106 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
-> index fb0af33e43cc..5c019856a269 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
-> @@ -188,6 +188,9 @@ enum intel_guc_state_capture_event_status {
->  #define INTEL_GUC_TLB_INVAL_FLUSH_CACHE (1 << 31)
+> diff --git a/Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml b/Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml
+> index c11f23b20c4c..53b4153d9bfc 100644
+> --- a/Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml
+> @@ -75,6 +75,16 @@ properties:
+>      items:
+>        pattern: '^[A-Z][A-Z]-[A-Z][0-9A-Z]-[0-9]+$'
 >  
->  enum intel_guc_tlb_invalidation_type {
-> +	INTEL_GUC_TLB_INVAL_FULL = 0x0,
-> +	INTEL_GUC_TLB_INVAL_PAGE_SELECTIVE = 0x1,
-> +	INTEL_GUC_TLB_INVAL_PAGE_SELECTIVE_CTX = 0x2,
->  	INTEL_GUC_TLB_INVAL_GUC = 0x3,
->  };
->  
-> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc.c b/drivers/gpu/drm/i915/gt/uc/intel_guc.c
-> index 8a104a292598..98260a7bc90b 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc.c
-> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc.c
-> @@ -923,6 +923,96 @@ static int guc_send_invalidate_tlb(struct intel_guc *guc, u32 *action, u32 size)
->  	return err;
->  }
->  
-> + /* Full TLB invalidation */
-> +int intel_guc_invalidate_tlb_full(struct intel_guc *guc,
-> +				  enum intel_guc_tlb_inval_mode mode)
-> +{
-> +	u32 action[] = {
-> +		INTEL_GUC_ACTION_TLB_INVALIDATION,
-> +		0,
-> +		INTEL_GUC_TLB_INVAL_FULL << INTEL_GUC_TLB_INVAL_TYPE_SHIFT |
-> +			mode << INTEL_GUC_TLB_INVAL_MODE_SHIFT |
-> +			INTEL_GUC_TLB_INVAL_FLUSH_CACHE,
-> +	};
+> +  brcm,ccode-map-trivial:
+> +    description: |
+> +      Use a trivial mapping of ISO3166 country codes to brcmfmac firmware
+> +      country code and revision: cc -> { cc, 0 }. In other words, assume that
+> +      the CLM blob firmware uses ISO3166 country codes as well, and that all
+> +      revisions are zero. This property is mutually exclusive with
+> +      brcm,ccode-map. If both properties are specified, then brcm,ccode-map
+> +      takes precedence.
+> +    type: boolean
 > +
-> +	if (!INTEL_GUC_SUPPORTS_TLB_INVALIDATION(guc)) {
-> +		DRM_ERROR("Tlb invalidation: Operation not supported in this platform!\n");
+>  required:
+>    - compatible
+>    - reg
 
-s/Tlb/TLB
 
-and use drm_err() or even consider GEM_BUG_ON() as this looks more like
-a coding mistake if we will be here, no ?
-
-> +		return 0;
-> +	}
-> +
-> +	return guc_send_invalidate_tlb(guc, action, ARRAY_SIZE(action));
-> +}
-> +
-> +/*
-> + * Selective TLB Invalidation for Address Range:
-> + * TLB's in the Address Range is Invalidated across all engines.
-> + */
-> +int intel_guc_invalidate_tlb_page_selective(struct intel_guc *guc,
-> +					    enum intel_guc_tlb_inval_mode mode,
-> +					    u64 start, u64 length)
-> +{
-> +	u64 vm_total = BIT_ULL(INTEL_INFO(guc_to_gt(guc)->i915)->ppgtt_size);
-> +	u32 address_mask = (ilog2(length) - ilog2(I915_GTT_PAGE_SIZE_4K));
-
-drop extra ( )
-
-> +	u32 full_range = vm_total == length;
-
-bool ?
-
-> +	u32 action[] = {
-> +		INTEL_GUC_ACTION_TLB_INVALIDATION,
-> +		0,
-> +		INTEL_GUC_TLB_INVAL_PAGE_SELECTIVE << INTEL_GUC_TLB_INVAL_TYPE_SHIFT |
-> +			mode << INTEL_GUC_TLB_INVAL_MODE_SHIFT |
-> +			INTEL_GUC_TLB_INVAL_FLUSH_CACHE,
-> +		0,
-> +		full_range ? full_range : lower_32_bits(start),
-> +		full_range ? 0 : upper_32_bits(start),
-> +		full_range ? 0 : address_mask,
-> +	};
-> +
-> +	if (!INTEL_GUC_SUPPORTS_TLB_INVALIDATION_SELECTIVE(guc)) {
-> +		DRM_ERROR("Tlb invalidation: Operation not supported in this platform!\n");
-
-as above
-
-> +		return 0;
-> +	}
-> +
-> +	GEM_BUG_ON(!IS_ALIGNED(start, I915_GTT_PAGE_SIZE_4K));
-> +	GEM_BUG_ON(!IS_ALIGNED(length, I915_GTT_PAGE_SIZE_4K));
-> +	GEM_BUG_ON(range_overflows(start, length, vm_total));
-> +
-> +	return guc_send_invalidate_tlb(guc, action, ARRAY_SIZE(action));
-> +}
-> +
-> +/*
-> + * Selective TLB Invalidation for Context:
-> + * Invalidates all TLB's for a specific context across all engines.
-> + */
-> +int intel_guc_invalidate_tlb_page_selective_ctx(struct intel_guc *guc,
-> +						enum intel_guc_tlb_inval_mode mode,
-> +						u64 start, u64 length, u32 ctxid)
-> +{
-> +	u64 vm_total = BIT_ULL(INTEL_INFO(guc_to_gt(guc)->i915)->ppgtt_size);
-> +	u32 address_mask = (ilog2(length) - ilog2(I915_GTT_PAGE_SIZE_4K));
-
-drop ( )
-
-> +	u32 full_range = vm_total == length;
-
-bool
-
-> +	u32 action[] = {
-> +		INTEL_GUC_ACTION_TLB_INVALIDATION,
-> +		0,
-> +		INTEL_GUC_TLB_INVAL_PAGE_SELECTIVE_CTX << INTEL_GUC_TLB_INVAL_TYPE_SHIFT |
-> +			mode << INTEL_GUC_TLB_INVAL_MODE_SHIFT |
-> +			INTEL_GUC_TLB_INVAL_FLUSH_CACHE,
-> +		ctxid,
-> +		full_range ? full_range : lower_32_bits(start),
-> +		full_range ? 0 : upper_32_bits(start),
-> +		full_range ? 0 : address_mask,
-> +	};
-> +
-> +	if (!INTEL_GUC_SUPPORTS_TLB_INVALIDATION_SELECTIVE(guc)) {
-> +		DRM_ERROR("Tlb invalidation: Operation not supported in this platform!\n");
-
-as above
-
-> +		return 0;
-> +	}
-> +
-> +	GEM_BUG_ON(!IS_ALIGNED(start, I915_GTT_PAGE_SIZE_4K));
-> +	GEM_BUG_ON(!IS_ALIGNED(length, I915_GTT_PAGE_SIZE_4K));
-> +	GEM_BUG_ON(range_overflows(start, length, vm_total));
-> +
-> +	return guc_send_invalidate_tlb(guc, action, ARRAY_SIZE(action));
-> +}
-> +
->  /*
->   * Guc TLB Invalidation: Invalidate the TLB's of GuC itself.
->   */
-> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc.h b/drivers/gpu/drm/i915/gt/uc/intel_guc.h
-> index 01c6478451cc..df6ba1c32808 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc.h
-> @@ -384,6 +384,16 @@ int intel_guc_allocate_and_map_vma(struct intel_guc *guc, u32 size,
->  int intel_guc_self_cfg32(struct intel_guc *guc, u16 key, u32 value);
->  int intel_guc_self_cfg64(struct intel_guc *guc, u16 key, u64 value);
->  
-> +int intel_guc_g2g_register(struct intel_guc *guc);
-
-drop this, not part of this series
-
-> +
-> +int intel_guc_invalidate_tlb_full(struct intel_guc *guc,
-> +				  enum intel_guc_tlb_inval_mode mode);
-> +int intel_guc_invalidate_tlb_page_selective(struct intel_guc *guc,
-> +					    enum intel_guc_tlb_inval_mode mode,
-> +					    u64 start, u64 length);
-> +int intel_guc_invalidate_tlb_page_selective_ctx(struct intel_guc *guc,
-> +						  enum intel_guc_tlb_inval_mode mode,
-> +						  u64 start, u64 length, u32 ctxid);
->  int intel_guc_invalidate_tlb_guc(struct intel_guc *guc,
->  				 enum intel_guc_tlb_inval_mode mode);
->  int intel_guc_invalidate_tlb_all(struct intel_guc *guc);
-> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h b/drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h
-> index 3edf567b3f65..29e402f70a94 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h
-> @@ -436,5 +436,8 @@ enum intel_guc_recv_message {
->  	((intel_guc_ct_enabled(&(guc)->ct)) && \
->  	 (intel_guc_submission_is_used(guc)) && \
->  	 (GRAPHICS_VER(guc_to_gt((guc))->i915) >= 12))
-> +#define INTEL_GUC_SUPPORTS_TLB_INVALIDATION_SELECTIVE(guc) \
-> +	(INTEL_GUC_SUPPORTS_TLB_INVALIDATION(guc) && \
-> +	HAS_SELECTIVE_TLB_INVALIDATION(guc_to_gt(guc)->i915))
->  
->  #endif
-
-,Michal
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

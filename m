@@ -2,114 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1535746B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2155746BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234692AbiGNI2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 04:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
+        id S234802AbiGNI3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 04:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233625AbiGNI2A (ORCPT
+        with ESMTP id S230158AbiGNI3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 04:28:00 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CB93AE40;
-        Thu, 14 Jul 2022 01:27:59 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id t1so1593102lft.8;
-        Thu, 14 Jul 2022 01:27:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2pK5vnd3CztnzTkE+rNKn5a3mKucIwku8ySPesIgYDQ=;
-        b=ZaBl6ghxvOoCi15XY7qnZBNcwSAQq29ipWDnkOjW6Sp5EsSr7uOPMemPswdqcPWkYp
-         6MZiFNq9PAhKgbk0xizQDei8rGueEFZCLniFzvjS2ugzK8lo6oQWrcqd5KgCliZfdO9+
-         12EozpOMgeZApBKc02vGMBtiEoYOGUEuZIh7VrniCktqlKIgt5niU1W2xTXyf1eW4UcO
-         nf7W5NgqChCM9CKHYbWOnpxdX8ncjlitS7vuPeFs9hoMx6ztcL+EON+bB6bSwdJhlOd2
-         CQFNzcgW8kmbUMyica39G2XhqPWzRRcfv/VKFsP1V6D9ivzhgCjyRSLtMdG8T+cWFG7X
-         mS7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2pK5vnd3CztnzTkE+rNKn5a3mKucIwku8ySPesIgYDQ=;
-        b=LVpkF89vUI+RzafkCY50kCZK/r/ua+9PjUkzxLYuResSIpDRWlqcyoz2GUDZNxFxpS
-         16oIF5hPLXhykjGT4R+tntizW0b341QGBKg6T7GdE4SIsuTYSaQS6QKwiZ0OFYdQkdNx
-         95GVlp3YxKIeCRguFTAQ/JaXfWjMGLC+lTnbv0PC/HYCca8QZo59I+IidPfM3iJqN/na
-         yS2AJNcseKwpY0TlY/LsJLAzkbJuf1IRkojUiQ9FJyTh7hLeWX1VGyItWEVtwqb7ZbkK
-         3UitlltlQIJfMsiXA4JE81UKm6tJbwMlKxieI6W4GgMXpjR8TjHQZctNQCck7EUJwZOt
-         Puaw==
-X-Gm-Message-State: AJIora8ZDuQK10mB39InRvt/Wi54rorRCAk3oRyIW5lqGvsRWgs6ei/0
-        U8G4DD7vAGjrs4yPWgsKusfAV14c6Xk=
-X-Google-Smtp-Source: AGRyM1t+uRyJiclu/xiFS5ssRkQcD6WpY+R19402VHqaEJtkQFqVPRddhHNT4oZ92QGEmNDMBxg3nA==
-X-Received: by 2002:a05:6512:ea1:b0:489:2930:9f1a with SMTP id bi33-20020a0565120ea100b0048929309f1amr4760060lfb.291.1657787277443;
-        Thu, 14 Jul 2022 01:27:57 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.79.77])
-        by smtp.gmail.com with ESMTPSA id j18-20020a056512345200b00489f0c8bddesm234621lfr.207.2022.07.14.01.27.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 01:27:56 -0700 (PDT)
-Subject: Re: [PATCH 8/9] selftests: timers: clocksource-switch: add 'runtime'
- command line parameter
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Cc:     John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
- <20220713204623.5443-9-wsa+renesas@sang-engineering.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <23526df7-b77d-4223-71ee-51c456dbc236@gmail.com>
-Date:   Thu, 14 Jul 2022 11:27:54 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 14 Jul 2022 04:29:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723471276C;
+        Thu, 14 Jul 2022 01:29:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19F13B82333;
+        Thu, 14 Jul 2022 08:28:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08A93C34114;
+        Thu, 14 Jul 2022 08:28:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657787337;
+        bh=QgGlUGH09m1ow96tpVo/G0/pJ6m+yCM3+utyiDzLGfY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FPbOsX15+v1QIDpDgYGb+3Id7i8q0/LE5fv8jpKTyv2i7Z5WdcWEhWtgJDPLqA6K6
+         8p4+RlYVUxgPs+lbbCaRqtTcFhSr0fUgEYhQyqQU7X8KAHvo5aG6XU4uiAPNxvGGnY
+         yFuCuwoIBp1dNHEdcgo1lPhbnszrbJaWk0TE8etg=
+Date:   Thu, 14 Jul 2022 10:28:54 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ben Hutchings <ben@decadent.org.uk>
+Cc:     kernel test robot <lkp@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        stable@vger.kernel.org
+Subject: Re: [linux-stable-rc:linux-5.10.y 7082/7120]
+ arch/x86/kernel/head_64.o: warning: objtool: xen_hypercall_mmu_update():
+ can't find starting instruction
+Message-ID: <Ys/TxoePQHvaYWcs@kroah.com>
+References: <202207130531.SkRjrrn8-lkp@intel.com>
+ <Ys9MKAriCchlEO8S@decadent.org.uk>
+ <Ys+8ZYxkDmSCcDWv@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <20220713204623.5443-9-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys+8ZYxkDmSCcDWv@kroah.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On 7/13/22 11:46 PM, Wolfram Sang wrote:
-
-> So the user can decide how long the test should run.
+On Thu, Jul 14, 2022 at 08:49:09AM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Jul 14, 2022 at 12:50:16AM +0200, Ben Hutchings wrote:
+> > On Wed, Jul 13, 2022 at 05:38:47AM +0800, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> > > head:   53b881e19526bcc3e51d9668cab955c80dcf584c
+> > > commit: 7575d3f3bbd1c68d6833b45d1b98ed182832bd44 [7082/7120] x86: Use return-thunk in asm code
+> > > config: x86_64-rhel-8.3-syz (https://download.01.org/0day-ci/archive/20220713/202207130531.SkRjrrn8-lkp@intel.com/config)
+> > > compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> > > reproduce (this is a W=1 build):
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=7575d3f3bbd1c68d6833b45d1b98ed182832bd44
+> > >         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+> > >         git fetch --no-tags linux-stable-rc linux-5.10.y
+> > >         git checkout 7575d3f3bbd1c68d6833b45d1b98ed182832bd44
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > 
+> > > All warnings (new ones prefixed by >>):
+> > > 
+> > > >> arch/x86/kernel/head_64.o: warning: objtool: xen_hypercall_mmu_update(): can't find starting instruction
+> > > 
+> > > -- 
+> > > 0-DAY CI Kernel Test Service
+> > > https://01.org/lkp
+> > 
+> > Please add the following patch to fix this.  This would also be
+> > needed for 5.15-stable.
+> > 
+> > Ben.
+> > 
+> > From: Ben Hutchings <ben@decadent.org.uk>
+> > Date: Thu, 14 Jul 2022 00:39:33 +0200
+> > Subject: [PATCH] x86/xen: Fix initialisation in hypercall_page after rethunk
+> > 
+> > The hypercall_page is special and the RETs there should not be changed
+> > into rethunk calls (but can have SLS mitigation).  Change the initial
+> > instructions to ret + int3 padding, as was done in upstream commit
+> > 5b2fc51576ef "x86/ibt,xen: Sprinkle the ENDBR".
+> > 
+> > Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+> > ---
+> >  arch/x86/xen/xen-head.S | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
+> > index 38b73e7e54ba..2a3ef5fcba34 100644
+> > --- a/arch/x86/xen/xen-head.S
+> > +++ b/arch/x86/xen/xen-head.S
+> > @@ -69,9 +69,9 @@ SYM_CODE_END(asm_cpu_bringup_and_idle)
+> >  SYM_CODE_START(hypercall_page)
+> >  	.rept (PAGE_SIZE / 32)
+> >  		UNWIND_HINT_FUNC
+> > -		.skip 31, 0x90
+> >  		ANNOTATE_UNRET_SAFE
+> > -		RET
+> > +		ret
+> > +		.skip 31, 0xcc
+> >  	.endr
+> >  
+> >  #define HYPERCALL(n) \
+> > 
+> > 
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  tools/testing/selftests/timers/clocksource-switch.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> That's really odd, I swear I tried this myself:
+> 	https://lore.kernel.org/r/Ys2jlGMqAe6+h1SX@kroah.com
 > 
-> diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
-> index 5256e6215980..a1d0d33738b6 100644
-> --- a/tools/testing/selftests/timers/clocksource-switch.c
-> +++ b/tools/testing/selftests/timers/clocksource-switch.c
-[...]
-> -	while ((opt = getopt(argc, argv, "s")) != -1) {
-> +	while ((opt = getopt(argc, argv, "st:")) != -1) {
->  		switch (opt) {
->  		case 's':
->  			do_sanity_check = 0;
->  			break;
-> +		case 't':
-> +			runtime = atoi(optarg);
-> +			break;
->  		default:
->  			printf("Usage: %s [-s]\n", argv[0]);
->  			printf("	-s: skip sanity checks\n");
+> I'll go queue this up and see if that solves the issue on my side.  But
+> see Boris's comment about how this shouldn't be an issue in the end.
 
-   Hm, you probably forgot to update the usage msg?
+Ah, yes, it does fix that warning, but causes this new one:
+	arch/x86/kernel/head_64.o: warning: objtool: .text+0x5: unreachable instruction
 
-[...]
+I'll keep your patch here, as it makes sense, but it does just exchange
+one warning for another one...
 
-MBR, Sergey
+thanks,
+
+greg k-h

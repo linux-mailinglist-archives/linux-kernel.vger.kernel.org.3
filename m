@@ -2,127 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BFB5755BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193FE5755C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239813AbiGNTS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 15:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
+        id S239941AbiGNTUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 15:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239672AbiGNTSZ (ORCPT
+        with ESMTP id S232237AbiGNTT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 15:18:25 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DC943E58
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 12:18:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=wlMwv2W7GppNW4+mdMkQLIwBGJUS+zaRkk+Q+NpsBjg=; b=ktpMXb04Vk8Tfpp5vf51DoeBMR
-        5T/ukhWs+mpvQfTnfPSEGggnRMv7k/v9wOpIkVdJcb9CgyDrOnLF2WRSySYYr3fVfIRlpkjzW9w42
-        S8xvj2gKSCt69MaSqeNfHbMgV0t/bp10LOZOpM7CWfOIKETnLapjKL1omBmK2E8T8AktAurILQ+zz
-        heV45xARt+ucMwBLnJpaNxi3ynM6P5VlEBVU5ygkH46qJv0up6QM1lcKS36U7T3CyeF5Jni0TumC5
-        ZE+WJ9Q7APe+qCI3JYl3Fho91/CmxeThqMdO44RnGwyTdZNfYm1F8toarDxhKIj+m100jfvCn+Oyg
-        bL6Q2Iug==;
-Received: from [177.139.47.106] (helo=localhost.localdomain)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oC4Ls-00Gla6-AH; Thu, 14 Jul 2022 21:18:20 +0200
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?=27Christian=20K=C3=B6nig=27?= <christian.koenig@amd.com>,
-        'Pan Xinhui' <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Tao Zhou <tao.zhou1@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Tom St Denis <tom.stdenis@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Cc:     kernel-dev@igalia.com,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-Subject: [PATCH v2 2/2] Documentation/gpu: Add GFXOFF section
-Date:   Thu, 14 Jul 2022 16:17:45 -0300
-Message-Id: <20220714191745.45512-2-andrealmeid@igalia.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220714191745.45512-1-andrealmeid@igalia.com>
-References: <20220714191745.45512-1-andrealmeid@igalia.com>
+        Thu, 14 Jul 2022 15:19:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2970C2C647;
+        Thu, 14 Jul 2022 12:19:58 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id C4D9234D34;
+        Thu, 14 Jul 2022 19:19:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657826396; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=J1TVAvphNmTpAWW61VUw6mw/9ks964p5lRoXg8fT5pQ=;
+        b=yaCt/W2pKkPFnDaETQRiTHkJCEF9k9sdkjq5JwaHQnawjSKoiYi4DI8vi/+Uw5d+Sul19z
+        37o2WGZVI43rBZhYukzagHSaK4SmQbA7jQM9qetajPGOmDZ520FSpw9IloUNbGKlSSf9kP
+        bRh46ZyDYQTdv+Zp8n1jh86KwnMJjmE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657826396;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=J1TVAvphNmTpAWW61VUw6mw/9ks964p5lRoXg8fT5pQ=;
+        b=wngWGUvhjqDObMv9OkYHJzzRhkbc88uRRchYKwwT861i6KWlF4AscZVrctIi5rsYr2VauG
+        Qs7ENmMlzAFzaQBw==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id 80F252C141;
+        Thu, 14 Jul 2022 19:19:55 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     linux-sunxi@lists.linux.dev
+Cc:     Michal Suchanek <msuchanek@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: [PATCH 1/2] mtd: spi-nor: When a flash memory is missing do not report an error
+Date:   Thu, 14 Jul 2022 21:19:47 +0200
+Message-Id: <701967b0c418db333c66b48d225df60aa9d03ead.1657826188.git.msuchanek@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a GFXOFF section at "GPU Power Controls" file, explaining what it is
-and how userspace can interact with it.
+It is normal that devices are designed with multiple types of storage,
+and only some types of storage are present.
 
-Signed-off-by: André Almeida <andrealmeid@igalia.com>
+The kernel can handle this situation gracefully for many types of
+storage devices such as mmc or ata but it reports and error when spi
+flash is not present.
+
+Only print a notice that the storage device is missing when no response
+to the identify command is received.
+
+Consider reply buffers with all bits set to the same value no response.
+
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
 ---
-Changes from v1: file created
+ drivers/mtd/spi-nor/core.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
- Documentation/gpu/amdgpu/thermal.rst | 41 ++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
-
-diff --git a/Documentation/gpu/amdgpu/thermal.rst b/Documentation/gpu/amdgpu/thermal.rst
-index 8aeb0186c9ef..14c0fb874cf6 100644
---- a/Documentation/gpu/amdgpu/thermal.rst
-+++ b/Documentation/gpu/amdgpu/thermal.rst
-@@ -63,3 +63,44 @@ gpu_metrics
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 502967c76c5f..6bab540171a4 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -1652,6 +1652,24 @@ static const struct flash_info *spi_nor_match_id(struct spi_nor *nor,
+ 	return NULL;
+ }
  
- .. kernel-doc:: drivers/gpu/drm/amd/pm/amdgpu_pm.c
-    :doc: gpu_metrics
++static const bool buffer_uniform(const u8 *buffer, size_t length)
++{
++	bool all0;
++	size_t i;
 +
-+GFXOFF
-+======
++	for (all0 = true, i = 0; i < length; i++)
++		if (buffer[i] != 0) {
++			all0 = false;
++			break;
++		}
++	if (all0)
++		return true;
++	for (i = 0; i < length; i++)
++		if (buffer[i] != 0xff)
++			return false;
++	return true;
++}
 +
-+GFXOFF is a feature found in some mobile GPUs that saves power consumption. The
-+card's firmware uses RLC (RunList Controller) to power off the gfx engine
-+dynamically when there is no workload on gfx pipe and puts gfx into "idle"
-+state. GFXOFF is on by default on supported GPUs.
-+
-+Userspace can interact with GFXOFF through a debugfs interface:
-+
-+``amdgpu_gfxoff``
-+-----------------
-+
-+Use it to enable/disable GFXOFF, and to check if it's current enabled/disabled::
-+
-+  $ xxd -l1 -p /sys/kernel/debug/dri/0/amdgpu_gfxoff
-+  01
-+
-+- Write 0 to disable it, and 1 to enable it.
-+- Read 0 means it's disabled, 1 it's enabled.
-+
-+If it's enabled, that means that the GPU is free to enter into GFXOFF mode as
-+needed. Disabled means that it will never enter GFXOFF mode.
-+
-+``amdgpu_gfxoff_status``
-+------------------------
-+
-+Read it to check current GFXOFF's status of a GPU::
-+
-+  $ xxd -l1 -p /sys/kernel/debug/dri/0/amdgpu_gfxoff_status
-+  02
-+
-+- 0: GPU is in GFXOFF state, the gfx engine is powered down.
-+- 1: Transition out of GFXOFF state
-+- 2: Not in GFXOFF state
-+- 3: Transition into GFXOFF state
-+
-+If GFXOFF is enabled, the value will be transitioning around [0, 3], always
-+getting into 0 when possible. When it's disabled, it's always at 2. Returns
-+``-EINVAL`` if it's not supported.
+ static const struct flash_info *spi_nor_detect(struct spi_nor *nor)
+ {
+ 	const struct flash_info *info;
+@@ -1666,8 +1684,11 @@ static const struct flash_info *spi_nor_detect(struct spi_nor *nor)
+ 
+ 	info = spi_nor_match_id(nor, id);
+ 	if (!info) {
+-		dev_err(nor->dev, "unrecognized JEDEC id bytes: %*ph\n",
+-			SPI_NOR_MAX_ID_LEN, id);
++		if (buffer_uniform(id, SPI_NOR_MAX_ID_LEN))
++			dev_info(nor->dev, "No flash memory detected.\n");
++		else
++			dev_err(nor->dev, "unrecognized JEDEC id bytes: %*ph\n",
++				SPI_NOR_MAX_ID_LEN, id);
+ 		return ERR_PTR(-ENODEV);
+ 	}
+ 	return info;
 -- 
-2.37.0
+2.35.3
 

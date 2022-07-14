@@ -2,153 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079445740E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3BB5740E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiGNBLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 21:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
+        id S231545AbiGNBTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 21:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbiGNBLV (ORCPT
+        with ESMTP id S231499AbiGNBTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 21:11:21 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534F12125A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:11:20 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id c7-20020a258807000000b0066d6839741eso326451ybl.23
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:11:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=0hF6tID653Wj3gfhMGdt71PhFpkNsHCuIdaPZ9N7avk=;
-        b=VdIRqVCRrKff6mYZG982d30mdg85GCCASxOzqnKGD6SIG1BDYD5Csh1GrHtAE1kgtN
-         tsGu/bgawpMLO/NzphBybKGqYH85NWg6sbhbxf/UOs0MMfIhtZ1VgDT9lf5nUqFOAio0
-         Gh8LkEX7e4JJf7XJJoy2/TZ874kAItjXy4tCYr7wKjOU0tOJhiJQTc0JbedfGmCh0qbX
-         +0XjoFQ6hii9ALYRACAUkwASnGb6OyctwEc5Q4PmCqLpfr9o4aZLIY4G1D5nzlYzrINK
-         gxYUOsvZuIDv4dFXvnFoTw3Y0O7L6LH4j9xJsoWGo5dcCpZhEojZgW/W6l41FCx3cVOG
-         CVtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=0hF6tID653Wj3gfhMGdt71PhFpkNsHCuIdaPZ9N7avk=;
-        b=uyg1b6RXMD2fKc60nAD4C9wRJ6KYGXeRyLj6sd2c/EwUjpwE3pC1Is/x+afXsgIHXs
-         QO7iZYkSVSeArQGugqSsfvyooG5V9cAjbvhq9+gAjvbBPlfF9PLd5NbrhKPTi8TSphJf
-         rEg6J0SVK8WUqVly5G+WQ/PBbNUvv+O69QtEeaIjHPMcZqF3nV/LAgDbtx+DsM1aF6/D
-         kFHrXZwLFxTuBZc9H4489+STgjuXciBbrOnM0yBHUya1j9QDrn4ddJokSSnwKamiD5e0
-         Iy2vO+MDPw6JswDzmik0OWdOt3PFK65LRzEtIlfPYa3GsD1geeqKwgss1HIRAueWuICy
-         Owrw==
-X-Gm-Message-State: AJIora/mbVbnUj1JrtP9V5/ooxY7Q+UnegPUcvBRDyf4N2mDN3eTk8Zm
-        /si8fAMhb9dC/CUX/zw2tB2mMB9DkKQ=
-X-Google-Smtp-Source: AGRyM1uH0z+R05anGU3HrhqscXx5O45ExUEGXquffB8+WAd5hRzyYoLS+h9s+kmbdLyNMeszMGoVasfb9CA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:3904:0:b0:310:cc3:15a2 with SMTP id
- g4-20020a813904000000b003100cc315a2mr7246667ywa.447.1657761079625; Wed, 13
- Jul 2022 18:11:19 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 14 Jul 2022 01:11:15 +0000
-Message-Id: <20220714011115.3135828-1-seanjc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [PATCH v2] KVM: selftests: Use "a" and "d" to set EAX/EDX for wrmsr_safe()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
+        Wed, 13 Jul 2022 21:19:11 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640C8DFC0;
+        Wed, 13 Jul 2022 18:19:02 -0700 (PDT)
+X-UUID: 838f550898a84d178dcdf8aefba2ddcc-20220714
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:3bb6d723-eaff-4165-9f88-3dd939a4c920,OB:10,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:54
+X-CID-INFO: VERSION:1.1.8,REQID:3bb6d723-eaff-4165-9f88-3dd939a4c920,OB:10,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_HamU,ACT
+        ION:release,TS:54
+X-CID-META: VersionHash:0f94e32,CLOUDID:d1b66dd7-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:d439a670ee54,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 838f550898a84d178dcdf8aefba2ddcc-20220714
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1557293866; Thu, 14 Jul 2022 09:18:56 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 14 Jul 2022 09:18:55 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 14 Jul 2022 09:18:54 +0800
+Message-ID: <1d30edbe1761bea511f6619d934e550e05ac4f7a.camel@mediatek.com>
+Subject: Re: [PATCH net v4 1/3] stmmac: dwmac-mediatek: fix clock issue
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        David Miller <davem@davemloft.net>
+CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <netdev@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <macpaul.lin@mediatek.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+Date:   Thu, 14 Jul 2022 09:18:54 +0800
+In-Reply-To: <c8fdfa7b-f4eb-8308-4064-b868ce945e3a@gmail.com>
+References: <20220713101002.10970-1-biao.huang@mediatek.com>
+         <20220713101002.10970-2-biao.huang@mediatek.com>
+         <c8fdfa7b-f4eb-8308-4064-b868ce945e3a@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+Dear Matthias,
+	Thanks for your comments~
 
-Do not use GCC's "A" constraint to load EAX:EDX in wrmsr_safe().  Per
-GCC's documenation on x86-specific constraints, "A" will not actually
-load a 64-bit value into EAX:EDX on x86-64.
+On Wed, 2022-07-13 at 14:11 +0200, Matthias Brugger wrote:
+> 
+> On 13/07/2022 12:10, Biao Huang wrote:
+> > The pm_runtime takes care of the clock handling in current
+> > stmmac drivers, and dwmac-mediatek implement the
+> > mediatek_dwmac_clks_config() as the callback for pm_runtime.
+> > 
+> > Then, stripping duplicated clocks handling in old init()/exit()
+> > to fix clock issue in suspend/resume test.
+> > 
+> > As to clocks in probe/remove, vendor need symmetric handling to
+> > ensure clocks balance.
+> > 
+> > Test pass, including suspend/resume and ko insertion/remove.
+> > 
+> > Fixes: 3186bdad97d5 ("stmmac: dwmac-mediatek: add platform level
+> > clocks management")
+> > Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> > ---
+> >   .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 49 ++++++++----
+> > -------
+> >   1 file changed, 21 insertions(+), 28 deletions(-)
+> > 
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> > b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> > index 6ff88df58767..ca8ab290013c 100644
+> > --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> > @@ -576,32 +576,7 @@ static int mediatek_dwmac_init(struct
+> > platform_device *pdev, void *priv)
+> >   		}
+> >   	}
+> >   
+> > -	ret = clk_bulk_prepare_enable(variant->num_clks, plat->clks);
+> > -	if (ret) {
+> > -		dev_err(plat->dev, "failed to enable clks, err = %d\n",
+> > ret);
+> > -		return ret;
+> > -	}
+> > -
+> > -	ret = clk_prepare_enable(plat->rmii_internal_clk);
+> > -	if (ret) {
+> > -		dev_err(plat->dev, "failed to enable rmii internal clk,
+> > err = %d\n", ret);
+> > -		goto err_clk;
+> > -	}
+> > -
+> >   	return 0;
+> > -
+> > -err_clk:
+> > -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
+> > -	return ret;
+> > -}
+> > -
+> > -static void mediatek_dwmac_exit(struct platform_device *pdev, void
+> > *priv)
+> > -{
+> > -	struct mediatek_dwmac_plat_data *plat = priv;
+> > -	const struct mediatek_dwmac_variant *variant = plat->variant;
+> > -
+> > -	clk_disable_unprepare(plat->rmii_internal_clk);
+> > -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
+> >   }
+> >   
+> >   static int mediatek_dwmac_clks_config(void *priv, bool enabled)
+> > @@ -643,7 +618,6 @@ static int mediatek_dwmac_common_data(struct
+> > platform_device *pdev,
+> >   	plat->addr64 = priv_plat->variant->dma_bit_mask;
+> >   	plat->bsp_priv = priv_plat;
+> >   	plat->init = mediatek_dwmac_init;
+> > -	plat->exit = mediatek_dwmac_exit;
+> >   	plat->clks_config = mediatek_dwmac_clks_config;
+> >   	if (priv_plat->variant->dwmac_fix_mac_speed)
+> >   		plat->fix_mac_speed = priv_plat->variant-
+> > >dwmac_fix_mac_speed;
+> > @@ -712,13 +686,32 @@ static int mediatek_dwmac_probe(struct
+> > platform_device *pdev)
+> >   	mediatek_dwmac_common_data(pdev, plat_dat, priv_plat);
+> >   	mediatek_dwmac_init(pdev, priv_plat);
+> >   
+> > +	ret = mediatek_dwmac_clks_config(priv_plat, true);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> >   	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+> >   	if (ret) {
+> >   		stmmac_remove_config_dt(pdev, plat_dat);
+> > -		return ret;
+> > +		goto err_drv_probe;
+> >   	}
+> >   
+> >   	return 0;
+> > +
+> > +err_drv_probe:
+> > +	mediatek_dwmac_clks_config(priv_plat, false);
+> > +	return ret;
+> > +}
+> > +
+> > +static int mediatek_dwmac_remove(struct platform_device *pdev)
+> > +{
+> > +	struct mediatek_dwmac_plat_data *priv_plat =
+> > get_stmmac_bsp_priv(&pdev->dev);
+> > +	int ret;
+> > +
+> > +	ret = stmmac_pltfr_remove(pdev);
+> > +	mediatek_dwmac_clks_config(priv_plat, false);
+> > +
+> 
+> We enalbe the clocks after calling stmmac_probe_config_dt(), so we
+> should 
+> disable them before calling stmmac_pltfr_remove(), correct?
+> 
+> Other then that:
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-  The a and d registers. This class is used for instructions that return
-  double word results in the ax:dx register pair. Single word values will
-  be allocated either in ax or dx. For example on i386 the following
-  implements rdtsc:
+To ensure the hw configuration in stmmac_pltfr_remove behavior
+normally, we should disable clocks after stmmac_pltfr_remove.
 
-  unsigned long long rdtsc (void)
-  {
-    unsigned long long tick;
-    __asm__ __volatile__("rdtsc":"=A"(tick));
-    return tick;
-  }
+And there is no order requirement between clocks configured by 
+stmmac_probe_config_dt/stmmac_remove_config_dt and clocks
+configured by mediatek_dwmac_clks_config, so it's safe for
+current snippet.
 
-  This is not correct on x86-64 as it would allocate tick in either ax or
-  dx. You have to use the following variant instead:
+Best Regards!
+Biao
 
-  unsigned long long rdtsc (void)
-  {
-    unsigned int tickl, tickh;
-    __asm__ __volatile__("rdtsc":"=a"(tickl),"=d"(tickh));
-    return ((unsigned long long)tickh << 32)|tickl;
-  }
-
-Because a u64 fits in a single 64-bit register, using "A" for selftests,
-which are 64-bit only, results in GCC loading the value into either RAX
-or RDX instead of splitting it across EAX:EDX.
-
-E.g.:
-
-  kvm_exit:             reason MSR_WRITE rip 0x402919 info 0 0
-  kvm_msr:              msr_write 40000118 = 0x60000000001 (#GP)
-...
-
-With "A":
-
-  48 8b 43 08          	mov    0x8(%rbx),%rax
-  49 b9 ba da ca ba 0a 	movabs $0xabacadaba,%r9
-  00 00 00
-  4c 8d 15 07 00 00 00 	lea    0x7(%rip),%r10        # 402f44 <guest_msr+0x34>
-  4c 8d 1d 06 00 00 00 	lea    0x6(%rip),%r11        # 402f4a <guest_msr+0x3a>
-  0f 30                 wrmsr
-
-With "a"/"d":
-
-  48 8b 53 08             mov    0x8(%rbx),%rdx
-  89 d0                   mov    %edx,%eax
-  48 c1 ea 20             shr    $0x20,%rdx
-  49 b9 ba da ca ba 0a    movabs $0xabacadaba,%r9
-  00 00 00
-  4c 8d 15 07 00 00 00    lea    0x7(%rip),%r10        # 402fc3 <guest_msr+0xb3>
-  4c 8d 1d 06 00 00 00    lea    0x6(%rip),%r11        # 402fc9 <guest_msr+0xb9>
-  0f 30                   wrmsr
-
-Fixes: 3b23054cd3f5 ("KVM: selftests: Add x86-64 support for exception fixup")
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Link: https://gcc.gnu.org/onlinedocs/gcc/Machine-Constraints.html#Machine-Constraints
-[sean: use "& -1u", provide GCC blurb and link to documentation]
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/testing/selftests/kvm/include/x86_64/processor.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 79dcf6be1b47..71e942ffac77 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -612,7 +612,7 @@ static inline uint8_t rdmsr_safe(uint32_t msr, uint64_t *val)
- 
- static inline uint8_t wrmsr_safe(uint32_t msr, uint64_t val)
- {
--	return kvm_asm_safe("wrmsr", "A"(val), "c"(msr));
-+	return kvm_asm_safe("wrmsr", "a"(val & -1u), "d"(val >> 32), "c"(msr));
- }
- 
- uint64_t vm_get_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
-
-base-commit: b624ae35418ce9424f639f8ffa2568e7674c262b
--- 
-2.37.0.144.g8ac04bfd2-goog
+> 
+> > +	return ret;
+> >   }
+> >   
+> >   static const struct of_device_id mediatek_dwmac_match[] = {
+> > @@ -733,7 +726,7 @@ MODULE_DEVICE_TABLE(of, mediatek_dwmac_match);
+> >   
+> >   static struct platform_driver mediatek_dwmac_driver = {
+> >   	.probe  = mediatek_dwmac_probe,
+> > -	.remove = stmmac_pltfr_remove,
+> > +	.remove = mediatek_dwmac_remove,
+> >   	.driver = {
+> >   		.name           = "dwmac-mediatek",
+> >   		.pm		= &stmmac_pltfr_pm_ops,
 

@@ -2,132 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9BF574EC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2354B574EE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239676AbiGNNOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
+        id S239224AbiGNNTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235068AbiGNNOk (ORCPT
+        with ESMTP id S239609AbiGNNTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:14:40 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457431C924
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:14:38 -0700 (PDT)
-Received: from mail-yw1-f181.google.com ([209.85.128.181]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mi2Fj-1nYmAX0zq5-00e8DK for <linux-kernel@vger.kernel.org>; Thu, 14 Jul
- 2022 15:14:36 +0200
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-31bf3656517so16228397b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:14:36 -0700 (PDT)
-X-Gm-Message-State: AJIora87dVBX+DLh37CXKUqy3ESZ510y4pTRJQH+h1oG/NCEbkzVIilh
-        8O9sUD5XiawQRXw1Ai2V7cV2/cxFX+G9TNOwL/A=
-X-Google-Smtp-Source: AGRyM1uafSJFpQOlxzTuazebv+1foYrOHcDhoNoaVMnzWGhMXx70Y5podLuFPtEHoJzzuxj3TfSuVgA3zmXb+TXcIs4=
-X-Received: by 2002:a81:9b02:0:b0:31c:9ae4:99ec with SMTP id
- s2-20020a819b02000000b0031c9ae499ecmr9597696ywg.495.1657804475066; Thu, 14
- Jul 2022 06:14:35 -0700 (PDT)
+        Thu, 14 Jul 2022 09:19:44 -0400
+Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C615D0C6;
+        Thu, 14 Jul 2022 06:19:43 -0700 (PDT)
+Received: from tarshish (unknown [10.0.8.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.tkos.co.il (Postfix) with ESMTPS id AB87F440F68;
+        Thu, 14 Jul 2022 16:19:20 +0300 (IDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+        s=default; t=1657804761;
+        bh=rC0OqKZ10lqLln3fBLyz//cFKspAfwxL4UXaVjVi8XU=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=MrTieGt7XR0JWNrlhEggY6RFpCNTkj4S/I29D/r7E9iLRoiiNEjgQw8yvijyGUY18
+         USwelBx/a/W0eH1BaP1mzhtFoM9EGuDIkyQdwKwH7qQFtHooAFVTAkQSU6Nc+jVVkM
+         XTerN+TiDMSh98lyFqFChgc5phW+3acfas1dwnG8BDaaQsH0Y6dVmCULYnlDgSSUGF
+         n70TM89gabXhe2/ccNloA4yxCXHBI7WYa/82TCDja8IbKO+p3UOwH50XvzjcbJeL1c
+         xtOXwehx2xeSIwpMNT+0h9FfXyONjU4gbsY8wNl8dUO7GlHNyoaFZurmpxRm0YhQcW
+         WuYOR6YQikoEQ==
+References: <20220714115515.5748-1-pali@kernel.org>
+User-agent: mu4e 1.8.2; emacs 27.1
+From:   Baruch Siach <baruch@tkos.co.il>
+To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K?= =?utf-8?Q?=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
+        linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/4] gpio: mvebu: Fix check for pwm support on non-A8K
+ platforms
+Date:   Thu, 14 Jul 2022 16:14:27 +0300
+In-reply-to: <20220714115515.5748-1-pali@kernel.org>
+Message-ID: <87lesvde6s.fsf@tarshish>
 MIME-Version: 1.0
-References: <20220714042736.2133067-1-shorne@gmail.com> <20220714042736.2133067-2-shorne@gmail.com>
- <CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com> <YtAO/nxcsjjc8M/c@antec>
-In-Reply-To: <YtAO/nxcsjjc8M/c@antec>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 14 Jul 2022 15:14:18 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2B82z3+qUDnm7hSn0y7Kqs3CoGtUDxUSrjG86UA56tAg@mail.gmail.com>
-Message-ID: <CAK8P3a2B82z3+qUDnm7hSn0y7Kqs3CoGtUDxUSrjG86UA56tAg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] openrisc: Add pci bus support
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, LKML <linux-kernel@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:jHmubrKEqz1zeuuGx1djmsVNmjLP5jT81eHPCDSYJ+5UDzfG47g
- qIrCFWfqD+8IE3e4ZRwJQ/G6Ce4kgNSFcO2m42ndtAaTSA95hQHlESPMwYJaXl9zCnRwkK/
- YC0DJstaFhKKtZB5IB9hCJgupSK9Cs3sTMIGNjc04fa8hwmPs3nyn0m/YRHra7KPp93el8L
- nKAYHQ9nFAwop5JOisMCg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:789tF/xj5OM=:EaTxDqXhyPyKfuuWsmMyvY
- auQ2FYUzmIEjm+Gn/iW3pBt1xDyjUGjtu2svgW/yoGZm43YYTYE6gz/dzlWwrBFLO7p4p94w7
- Gv+MUN8I8nHxesIuYFH6Zu9U8Fsl43P+xYfg7eC4e40piTQWWa/xHkZQO3awiuvyJl7gyeE1P
- xt5jo8WiD0MvBFAGzdRyiR2kbBHITqxSOehBKqZxkqCs34OeNX+t7dEtRIFTswRALS/d6Qk2K
- da4kShO3ClRl4UnnlgwyJXZJtY57Ve/cR6ETKJLyc5KwWlX/NerFBBkaa6OE7CfRpPC3oD/Ug
- EwnjyrZNPgdnZhFG0TuVwVRO+HQTZT82kQhWy3Odg1ZKjdIELIKUMA0VSCGvsxk1bCN661lKC
- wc8vGcNRs4Fx/d+FstOYEeV/YXgr46Ds4d18KnzwtlMmP1j19FjCMhYXLzeKL7zqd12YXYb3N
- 9C4pHnXrTuePdkKItMx0DluNpcUzGj3ojgNXXptKnB6aY1emfysqgkugy874Yx5KG2HTg9y4y
- +ZK/fZN31eIXGbD4lGlMVRe20GraQParfayxJlnVrpHOSFGDSnhN+IgLKq8zDEZCkQFaEWl1W
- 38X8hU302xvEpLgh7o1EFvOpCNy7qv7Rc/WDOnJ221RAUQkAxt1ceIWeMUrWo79Rcw7IrT+UC
- peWlpsbtwmdKZY4y4XfyRUupACS8W7Dg6cCg5d77A17DwmOeVKyc7DGqvv0oDw1OrLC3apt0J
- tbThgxDPRT+tayk6rjS8WMnpnWessrVYdLSs3A==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 2:41 PM Stafford Horne <shorne@gmail.com> wrote:
-> On Thu, Jul 14, 2022 at 09:56:44AM +0200, Arnd Bergmann wrote:
-> > > diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-> > > index e814df4c483c..327241988819 100644
-> > > --- a/arch/openrisc/Kconfig
-> > > +++ b/arch/openrisc/Kconfig
-> > > @@ -21,7 +21,9 @@ config OPENRISC
-> > >         select GENERIC_IRQ_PROBE
-> > >         select GENERIC_IRQ_SHOW
-> > >         select GENERIC_IOMAP
-> > > +       select GENERIC_PCI_IOMAP
-> > >         select GENERIC_CPU_DEVICES
-> >
-> > > @@ -46,9 +50,6 @@ config MMU
-> > >  config GENERIC_HWEIGHT
-> > >         def_bool y
-> > >
-> > > -config NO_IOPORT_MAP
-> > > -       def_bool y
-> > > -
+Hi Pali,
+
+On Thu, Jul 14 2022, Pali Roh=C3=A1r wrote:
+> pwm support incompatible with Armada 80x0/70x0 API is not only in
+> Armada 370, but also in Armada XP, 38x and 39x. So basically every non-A8K
+> platform. Fix check for pwm support appropriately.
 >
-> I tried the below patch on top of this but I get failures, as the __pci_ioport_map
-> uses ioport_map.
+> Fixes: 85b7d8abfec7 ("gpio: mvebu: add pwm support for Armada 8K/7K")
+> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+> ---
+>  drivers/gpio/gpio-mvebu.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 >
->     lib/pci_iomap.c: In function 'pci_iomap_range':
->       CC      drivers/i2c/i2c-core-base.o
->     ./include/asm-generic/pci_iomap.h:29:41: error: implicit declaration of function 'ioport_map'; did you mean 'ioremap'? [-Werror=implicit-function-declaration]
->        29 | #define __pci_ioport_map(dev, port, nr) ioport_map((port), (nr))
->           |                                         ^~~~~~~~~~
->     lib/pci_iomap.c:44:24: note: in expansion of macro '__pci_ioport_map'
->        44 |                 return __pci_ioport_map(dev, start, len);
->           |                        ^~~~~~~~~~~~~~~~
->
+> diff --git a/drivers/gpio/gpio-mvebu.c b/drivers/gpio/gpio-mvebu.c
+> index 2db19cd640a4..70a22b68c034 100644
+> --- a/drivers/gpio/gpio-mvebu.c
+> +++ b/drivers/gpio/gpio-mvebu.c
+> @@ -793,8 +793,7 @@ static int mvebu_pwm_probe(struct platform_device *pd=
+ev,
+>  	u32 offset;
+>  	u32 set;
+>=20=20
+> -	if (of_device_is_compatible(mvchip->chip.of_node,
+> -				    "marvell,armada-370-gpio")) {
+> +	if (mvchip->soc_variant !=3D MVEBU_GPIO_SOC_VARIANT_A8K) {
 
-Ah, I see. So setting NO_IOPORT_MAP without GENERIC_PCI_IOMAP
-probably just works, but then you'd also build all the driver that use
-ioport_map() when they cannot work.
+The 'if' condition that follow the 'else' below become always true:
 
-Maybe add another
+       } else if (mvchip->soc_variant =3D=3D MVEBU_GPIO_SOC_VARIANT_A8K) {
 
-#define __pci_ioport_map(dev, port, nr) NULL
+I would suggest to keep the '=3D=3D MVEBU_GPIO_SOC_VARIANT_A8K' condition,
+and reverse the if/else order, because positive logic is more readable.
 
-case to include/asm-generic/pci_iomap.h, or add an #ifdef to lib
-pci_iomap_range() to not call it in this case.
+There is also another 'else' below that is dead code with this patch.
 
-> > GENERIC_IOMAP makes no sense without PIO, and I think you also
-> > need to keep the NO_IOPORT_MAP. I think you still want
-> > GENERIC_PCI_IOMAP, which in the absence of the other two
-> > should turn just return an __iomem pointer for memory resource
-> > and NULL for i/o resources.
->
-> OK.
->
-> If we keep NO_IOPORT_MAP, it causes HAS_IOPORT_MAP to be false and it removes
-> the definition of ioport_map which still seems to be needed at link time.  Maybe
-> thats an issue though.
+baruch
 
-This is the intention of CONFIG_NO_IOPORT_MAP, it's meant to be set
-on architectures that have no way of defining ioport_map() in a sensible
-way.
+>  		/*
+>  		 * There are only two sets of PWM configuration registers for
+>  		 * all the GPIO lines on those SoCs which this driver reserves
 
-        Arnd
+
+--=20
+                                                     ~. .~   Tk Open Systems
+=3D}------------------------------------------------ooO--U--Ooo------------=
+{=3D
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -

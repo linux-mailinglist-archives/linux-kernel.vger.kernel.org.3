@@ -2,135 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995FE575780
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 00:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F90F575782
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 00:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241049AbiGNWRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 18:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
+        id S241072AbiGNWSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 18:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232845AbiGNWRp (ORCPT
+        with ESMTP id S232129AbiGNWSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 18:17:45 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA4F4F65D
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 15:17:44 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 75so5641536ybf.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 15:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fB7UyA3G0pIY+h82doefrasqYLaby+Atx6RkVerDDjc=;
-        b=SfrNlaZsJvjnnOLnUOsgA1fvwinhQETk/ZCTxYT021RkcK4JrTklS1y+xOWlIBkkmQ
-         QTLgDz1Lf0FHZklmOC+oXYOxB/SGngALX2X8hmKH1rrzw/pgbnhuUOQAilFGU6d+ku9O
-         gxftjQPjzLeHLMfQ1CQE85R1bmYC4xm4BQKxKkjpNOFKo2ti3zoVluTXzPtoRAbbjuBQ
-         0iDKiK1PbV9FJyfwgBRO8ONatjQULnd9Ly8uwqLlRFgEglBktxhYJAsYJMrEPnC5bCG0
-         0rjYaJwOr3mKTM1SqTp7EUOnS1vVZDgwS8M7Lhu9LaCZIHqJMhl/dHrwrVdBC9zrAKtp
-         ng8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fB7UyA3G0pIY+h82doefrasqYLaby+Atx6RkVerDDjc=;
-        b=dSg+R21/nrVsJrTgRrHgdLRcFCqXAt36lS+mWV9dnh7yGwXt54n1vfLwu0CuzCTcto
-         glc+7GSG/FgnLuyAD5UNI+TVkRQClsf+h1bu/2DCpKL6i7Ic37R+BAKARVNg6gWS5sPa
-         xn3lorajyOyAkg9DoVilBN3AWSJD8DxKk9af0h0YONYNWzAA+lzB+2NtPJ7yV3fJHIMk
-         XcnrT3SvzVUV4Mn1X17QS0TmSPN2PsBJeeCDqwetS26ZMIXRZuV1puag/ZVFDBW1swl6
-         36I1xenx9ZsE3dKLnpblmlvG1IauU9TWl0diT+1rugKk+YFqH031TZ3f5h8AZEs/F3zd
-         a7Bg==
-X-Gm-Message-State: AJIora8Pb9Os7v8cYxlQHT18xVejnp/2Hs7zZ9pirVbDDqiHLZZPxXnH
-        al6Pe2FHsdE4bbKLyvfRi1Wr4nH70NTakIjQkMNaqA==
-X-Google-Smtp-Source: AGRyM1uSAUTzD2JD0rgbA4MiEYzs6sy1mv8pRq4j5LVuDaq5SlFPJUd7LrUABX+V2rxEkIvQOjU4rGx0oe3onjRPwk8=
-X-Received: by 2002:a25:8a81:0:b0:65b:9268:2760 with SMTP id
- h1-20020a258a81000000b0065b92682760mr11279476ybl.119.1657837063641; Thu, 14
- Jul 2022 15:17:43 -0700 (PDT)
+        Thu, 14 Jul 2022 18:18:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFC718E3F;
+        Thu, 14 Jul 2022 15:18:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6692BB829D7;
+        Thu, 14 Jul 2022 22:18:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B57C34115;
+        Thu, 14 Jul 2022 22:18:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657837127;
+        bh=1Aqwr4YFqfGgDa0bG3vB0f3cqZWIAVz8aqAVl9OSS+s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mp0AHknd+XA/uw2dc8IvLvTyMr/8Z+2WjR8HL/0QnxBwakyYZ8WwteB8dbKYiFssA
+         ORKewj7/ZxlpjF4+reE6tAVbOcVoQzZ5RgWme33H82QdkxGeAhjLBAqYKjH0UyH7TF
+         K8crPXQ+jS2ZpaKxJrLNaqMXhPBcT2hu4okc2acAxpxrlN+TK1JU9rJxtGpALtRWUx
+         jTUgxRnugd8KGiYo7C67MNe5zZnSRqgRN6SPGbMP2Z/d3toHyQglIzLnYrzCjMbmeE
+         d7sDjKv2yT1Q6pm03GTU/jzejOvhg95odFgIwl2/8QDm8jMggsWMUy2dYk86w4SRaI
+         +KWmYMn0rusDg==
+Date:   Thu, 14 Jul 2022 15:18:45 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        stable <stable@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] x86/speculation: Use DECLARE_PER_CPU for
+ x86_spec_ctrl_current
+Message-ID: <20220714151845.59905190@kernel.org>
+In-Reply-To: <CAHk-=wgqJFV45497fBfc1HS3Oaoqi3pfenZ0XM3uqFGYz8wTQQ@mail.gmail.com>
+References: <20220713152436.2294819-1-nathan@kernel.org>
+        <20220714143005.73c71cf8@kernel.org>
+        <CAHk-=wi+O_3+uef45jxj1+GhT+H0vXs9iz8rpjk49vCiyLS4DA@mail.gmail.com>
+        <20220714145652.22cf4878@kernel.org>
+        <CAHk-=wgqJFV45497fBfc1HS3Oaoqi3pfenZ0XM3uqFGYz8wTQQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220706205136.v2.1.Ic7a7c81f880ab31533652e0928aa6e687bb268b5@changeid>
- <CACeCKadV=k5J1ZSG+p8M5iBnX5nXrn-XnK62Nq_op2kJ68+-9w@mail.gmail.com>
- <CANkg5ewRc5zhBtxLhazo8Wsfa3Srj32AwZD9mD=W=Qqpqi7zJQ@mail.gmail.com> <CACeCKaer_hacWmLDDMJSK-KFjxqiXV8S1-ydCWGT3mkQVeN-rg@mail.gmail.com>
-In-Reply-To: <CACeCKaer_hacWmLDDMJSK-KFjxqiXV8S1-ydCWGT3mkQVeN-rg@mail.gmail.com>
-From:   Tim Van Patten <timvp@google.com>
-Date:   Thu, 14 Jul 2022 16:17:32 -0600
-Message-ID: <CANkg5exPZH7LXV93SbAbNPsX2M-kE1yHqDhfk-cB0ywS15pOPQ@mail.gmail.com>
-Subject: Re: [PATCH v2] platform/chrome: cros_ec: Send host event for prepare/complete
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rrangel@chromium.org,
-        robbarnes@google.com, Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 14 Jul 2022 15:14:53 -0700 Linus Torvalds wrote:
+> On Thu, Jul 14, 2022 at 2:56 PM Jakub Kicinski <kuba@kernel.org> wrote:
+> > I have clang 13, let me double check this fix is enough for the build
+> > to complete without disabling WERROR.  
+> 
+> I have clang 14 locally, and it builds fine with that (and doesn't
+> build without it).
 
-> > We had issues measuring overall suspend and resume times, which this
-> > patch attempts to help resolve.   As stated in the description, the EC
-> > host command logs couldn't be used reliably, since they weren't
-> > generated at the start of suspend/end of resume, but instead at some
-> > point in the middle of the procedures.   This CL moves when the
-> > commands are sent from the AP to the EC to as early/late as possible
-> > in an attempt to deterministically capture as much of each process as
-> > possible.
->
-> If the timing of the EC host command logs is unreliable, why not add
-> new host commands specifically for this, and then call those at the moment(s)
-> you deem is more appropriate, instead of moving the suspend/resume itself
-> (which may be introducing its own timing ramifications)?
->
-> Calling such a theoretical new EC host command from the userspace power manager
-> would probably accomplish the same thing.
+FWIW I can confirm - builds with clang 13 as well.
 
-We investigated something like that internally initially:
-https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/3646238)
+> I actually normally build the kernel with both gcc and clang. My
+> "upstream" kernel I build with gcc, and then I have my "private random
+> collection of patches" kernel that I build with clang and that are
+> just rebased on top of the kernel-of-the-day.
+> 
+> This is all entirely for historical reasons - part of my "private
+> random collection of patches" used to be the "asm goto with outputs",
+> which had clang support first.
+> 
+> But then the reason I never even noticed the build breakage with the
+> retbleed patches until much too late was that those I just had as a
+> third fork off my upstream kernel, so despite me usually building with
+> clang too, that only got attention from gcc.
+> 
+> So it's really just a microcosm version of the exact same bigger issue
+> we always have with those embargoed hw security patches: they end up
+> missing out on all the usual test environments.
+> 
+> Anyway, I cherry-picked Nathan's patch from my clang tree and pushed
+> it out as commit db886979683a ("x86/speculation: Use DECLARE_PER_CPU
+> for x86_spec_ctrl_current").
 
-We decided to take this simpler approach instead, since it
-accomplishes the same goal without requiring new host commands.
-
-> From the kernel documentation[2], "The prepare phase is meant to
-> prevent races by preventing new devices from being registered; the PM core
-> would never know that all the children of a device had been suspended if new
-> children could be registered at will." and "The method may also prepare the
-> device or driver in some way for the upcoming system power transition, but
-> it should not put the device into a low-power state."
->
-> So it seems like an incorrect usage of this callback.
-
-Why is this usage incorrect?
-
-Sending the message to the EC is the preparation for the AP to enter
-the system power transition.   For example, it allows the EC to begin
-watchdogging the AP once the suspend begins and stop once the resume
-completes. This allows the EC to watchdog the entire process, without
-any gaps - a beneficial side effect of this change.
-
-> > While this patch could potentially be split, both the logging and PM
-> > changes are means to the same end: improving logging behavior to make
-> > it easier for developers to measure suspend/resume time and aid in
-> > debugging.
->
-> That alone is not sufficient cause to combine 2 different changes into
-> a single patch.
-> The flip side is: the patch to move the suspend/resume host commands into
-> prepare/complete() can itself introduce regressions. We should be able to
-> revert that without touching the patch adding the logging (assuming concerns
-> regarding that are addressed).
-
-Keeping the logging while reverting the PM change would be misleading
-to developers while debugging, since the log messages are no longer
-indicating the start/end of suspend/resume.
-
-Regardless, I can move them into a separate patch if this necessary.
-
--- 
-
-Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997
+Awesome, thanks!

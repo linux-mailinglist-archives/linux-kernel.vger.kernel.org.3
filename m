@@ -2,97 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3262057534E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7EFE57535F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240472AbiGNQrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
+        id S240499AbiGNQtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240299AbiGNQqs (ORCPT
+        with ESMTP id S240626AbiGNQtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:46:48 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774256BC22
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:45:06 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 23so2060232pgc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:45:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cUy4dG3fHsJ4SmPiGIKKf+s2etnhg2CaO8tWHfnew6k=;
-        b=qFrAePObL9zJKcAFx6A40IJ7c2tm0SuhEJ5Ox0+AxY+d0M1j68JBpolQ+cVCgFlofs
-         ztx5H64bPLN0DuR+vs1vR3ZzkFWtNCTxuR3+ysMaBxGFf7hDvU9kfn04AuC/AvLHnRLb
-         z4mqHiHU7bC98PdqJHlQSx9yM7oWdsRL1TPimD3n7MpbH7XtuyDQugCC2GUR3tW6JuMN
-         adf1iNLARNVoJf0k2a+qXDXJRSxIz6y+Cq5sr65CozVTzjwWWvs9uYhoCOvYqKKFhjL4
-         JuhNAizTOLm6WnGSTX/0k5KWnnHhs7ERLIS5tqdU7kKcynr+YJsHFSrAJuTMrnkv8T32
-         wE6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cUy4dG3fHsJ4SmPiGIKKf+s2etnhg2CaO8tWHfnew6k=;
-        b=mNUUIPUaU55DyqGHiWhYUE5TmVG8IvO7R2bAxzvM4FL79JONzEtgpdiYcHDUVVWrc7
-         W8AjJvndyz2hXlEG/T8Tcch5eWnMafL7jZ4+UO2Ma6K7ujPMmHIOPKTgx2HuaYkcu+Ji
-         /zhmfBhYX/8J2cn7QtkyP4JULJj4lZzcJczHYf25EYGN6AZACyVkHgkNTqWzQiVsmPyp
-         b2LGDVEW6gjI7KPq2OOJHxeXBDE6C/avitrJVYyEASG9GCvlSYD+ZQ7v4HNE0nVR2pz3
-         lxhpnZG/8+BOFDz0VlQCe7bo2c/Bj/nvAEwGhlsJyEPJfmymDUCX3z48hezWcfkNXHv5
-         nEnQ==
-X-Gm-Message-State: AJIora/Nnc/V203IeKNtGu3thHAwc4WgeQB+a6rKaNcu59/hYP1S5Dzp
-        R+Lxd2l5Xlhkda6dGlE22+EB9Q==
-X-Google-Smtp-Source: AGRyM1s5sAs61Xc615KUQJNZ6FNV/5FHFVrLm7UNuh79jl46ajdZqoF9CeEdkDs8in3PgVusQ0EkAw==
-X-Received: by 2002:a62:e919:0:b0:51e:7b6e:5a3b with SMTP id j25-20020a62e919000000b0051e7b6e5a3bmr9369884pfh.78.1657817105601;
-        Thu, 14 Jul 2022 09:45:05 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id n6-20020a170902d2c600b0016be527753bsm1737053plc.264.2022.07.14.09.45.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 09:45:05 -0700 (PDT)
-Message-ID: <2ca14dec-6e87-2e9a-80f7-0790f6e1f7cf@kernel.dk>
-Date:   Thu, 14 Jul 2022 10:45:04 -0600
+        Thu, 14 Jul 2022 12:49:18 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BA07098A
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:46:39 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4LkL3q0V6Yz9snB;
+        Thu, 14 Jul 2022 16:46:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1657817191; bh=XV9tkKItKKrKdxeOCrOFU/aMW2lffXNMCCQLXD35gdE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=FbfidNUvZjLDgWLPCM0leY/i4NLdBJrPJoPqoddJhnntfTDYAGYWCIkJ8OifHGSx5
+         Y07G8uogypDYBwjUHE1X1YNJ/Hq6yNHD1+kNuEgcMGDJMC3iLr8Kii+3MHyaT1uY4w
+         Vj0tdSehypuqwjzdHREubfLkstDtZTnsNZ1ntgKE=
+X-Riseup-User-ID: 4406E95CF501A8ACD5FACC26F496C7F7E4FA70E08EF19107281E6C1AE30978AD
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4LkL3j1v9fz5vW1;
+        Thu, 14 Jul 2022 16:46:24 +0000 (UTC)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        mwen@igalia.com, andrealmeid@riseup.net,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+Subject: [PATCH 09/12] drm/amd/display: Remove unused MaxUsedBW variable
+Date:   Thu, 14 Jul 2022 13:45:04 -0300
+Message-Id: <20220714164507.561751-9-mairacanal@riseup.net>
+In-Reply-To: <20220714164507.561751-1-mairacanal@riseup.net>
+References: <20220714164507.561751-1-mairacanal@riseup.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] io_uring: Use atomic_long_try_cmpxchg in __io_account_mem
-Content-Language: en-US
-To:     Uros Bizjak <ubizjak@gmail.com>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>
-References: <20220714163301.67794-1-ubizjak@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220714163301.67794-1-ubizjak@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/14/22 10:33 AM, Uros Bizjak wrote:
-> Use atomic_long_try_cmpxchg instead of
-> atomic_long_cmpxchg (*ptr, old, new) == old in __io_account_mem.
-> x86 CMPXCHG instruction returns success in ZF flag, so this
-> change saves a compare after cmpxchg (and related move
-> instruction in front of cmpxchg).
-> 
-> Also, atomic_long_try_cmpxchg implicitly assigns old *ptr value
-> to "old" when cmpxchg fails, enabling further code simplifications.
-> 
-> No functional change intended.
+Remove the variable MaxUsedBW from the function
+DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation.
+As a side-effect, the variables MaxPerPlaneVActiveWRBandwidth and
+WRBandwidth are also removed.
 
-This will be io_uring/rsrc.c for the for-next branches, but it'll apply
-directly as that with a slight offset:
+This was pointed by clang with the following warning:
 
-checking file io_uring/rsrc.c
-Hunk #1 succeeded at 56 (offset -10448 lines).
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3043:10:
+warning: variable 'MaxUsedBW' set but not used [-Wunused-but-set-variable]
+                double MaxUsedBW = 0;
+                       ^
+1 warning generated.
 
-I'll do that, thanks.
+Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+---
+ .../dc/dml/dcn30/display_mode_vba_30.c        | 28 -------------------
+ 1 file changed, 28 deletions(-)
 
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+index 842eb94ebe04..876b321b30ca 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+@@ -3037,40 +3037,12 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 
+ 	{
+ 		//Maximum Bandwidth Used
+-		double TotalWRBandwidth = 0;
+-		double MaxPerPlaneVActiveWRBandwidth = 0;
+-		double WRBandwidth = 0;
+-		double MaxUsedBW = 0;
+-		for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+-			if (v->WritebackEnable[k] == true
+-					&& v->WritebackPixelFormat[k] == dm_444_32) {
+-				WRBandwidth = v->WritebackDestinationWidth[k] * v->WritebackDestinationHeight[k]
+-						/ (v->HTotal[k] * v->WritebackSourceHeight[k] / v->PixelClock[k]) * 4;
+-			} else if (v->WritebackEnable[k] == true) {
+-				WRBandwidth = v->WritebackDestinationWidth[k] * v->WritebackDestinationHeight[k]
+-						/ (v->HTotal[k] * v->WritebackSourceHeight[k] / v->PixelClock[k]) * 8;
+-			}
+-			TotalWRBandwidth = TotalWRBandwidth + WRBandwidth;
+-			MaxPerPlaneVActiveWRBandwidth = dml_max(MaxPerPlaneVActiveWRBandwidth, WRBandwidth);
+-		}
+-
+ 		v->TotalDataReadBandwidth = 0;
+ 		for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+ 			v->TotalDataReadBandwidth = v->TotalDataReadBandwidth
+ 					+ v->ReadBandwidthPlaneLuma[k]
+ 					+ v->ReadBandwidthPlaneChroma[k];
+ 		}
+-
+-		{
+-			double MaxPerPlaneVActiveRDBandwidth = 0;
+-			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+-				MaxPerPlaneVActiveRDBandwidth = dml_max(MaxPerPlaneVActiveRDBandwidth,
+-						v->ReadBandwidthPlaneLuma[k] + v->ReadBandwidthPlaneChroma[k]);
+-
+-			}
+-		}
+-
+-		MaxUsedBW = MaxTotalRDBandwidth + TotalWRBandwidth;
+ 	}
+ 
+ 	// VStartup Margin
 -- 
-Jens Axboe
+2.36.1
 

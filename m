@@ -2,69 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6B3575172
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A8557517B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239967AbiGNPJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
+        id S239823AbiGNPMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiGNPJj (ORCPT
+        with ESMTP id S232328AbiGNPMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:09:39 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBC92981F;
-        Thu, 14 Jul 2022 08:09:38 -0700 (PDT)
+        Thu, 14 Jul 2022 11:12:39 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17F254C87
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:12:37 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id ss3so3939130ejc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:12:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657811378; x=1689347378;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ySITWGdTdHqE+HMwzETa1LVQtsm5GALRydsd94U9OFU=;
-  b=UTtQeHsKCpYJhWgzTg5CtwfVyYApnxZQyT7J0Kj2/hlJ3oKhdQShLWjy
-   J3fUbfHRZ4+aRexmi17tRtCjFE0baM1iUVgxms8m1E0JDqkp0cr9w2iqZ
-   OPVSGSwpvpcgZY6dlUzN5MwQTfSZdNrKXpgqq0Lhj6y+m/bkFO4J8eDfe
-   A=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Jul 2022 08:09:38 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 08:09:37 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 14 Jul 2022 08:09:37 -0700
-Received: from [10.216.25.106] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 14 Jul
- 2022 08:09:34 -0700
-Message-ID: <2938c8ff-ecc6-0a6e-6011-f83f3e3fbaa1@quicinc.com>
-Date:   Thu, 14 Jul 2022 20:39:31 +0530
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NC4d9/az3rNVuGlvggkx8InNgX//Mm2Q4UOR/vI6npM=;
+        b=fLbT2DXU3kmoIKLXDYzkf19dG6ahrTexxP+gO7bZFCbY4HdBL7p2Qb1Hxxd/PdpJBK
+         IIs7EJ+6FUDuDXWiay+ss+SROxu00zbvAEpaHF/wuOWiz05VoxAogq4XLwHJTIq3yrDX
+         AMfryvcN5ozCWjqIIwOoCi2KTp00umnag7dXs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NC4d9/az3rNVuGlvggkx8InNgX//Mm2Q4UOR/vI6npM=;
+        b=FaGR+OPGOQV0BSyP9kkCN0T6pmL72fvj9sscy7C9igjnlrO7sEFTLWdz8ZxbO5J1Bv
+         L1XLlNeb8r6bv0UpxQyHApMYfPGOZ+VFqJNbMruzMcicpf11bsgkvSJ/vnl4cUgwIuXG
+         du01z03cRNr/MF6oATRy2S8WLWYHhblt2Ljc65o3Hb6glVJHLBw463BK4qDd739RxTum
+         +2uoZxvUchD9KSMdjoBJvOAsZU5HwZGrVNpq2OH3yrkM5m0eoS97+CyYznLJsje4sMC7
+         X4fS6A2EmkBrqcGKk3Z/mziHNWrDSQ6c/EqothyGUrL/hBlwz9m+G4xOVU0aaGG0QN3E
+         RNQg==
+X-Gm-Message-State: AJIora92M5Fa76FyrAbX8KJqAqef2BgB9tNUDUcXCF+ld5WyTHGsGZGe
+        fU5ckq8ku87+AE/KXzNe2RRixIresfvrV84s
+X-Google-Smtp-Source: AGRyM1tJtX4j9N83gEHqrq3Ci/02a7YjFYMZJbsSGAlmnOMHcnzfjsxsnExZAs/JV/xgEUwJqamivg==
+X-Received: by 2002:a17:906:5305:b0:712:388c:2bf5 with SMTP id h5-20020a170906530500b00712388c2bf5mr9094695ejo.559.1657811556069;
+        Thu, 14 Jul 2022 08:12:36 -0700 (PDT)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
+        by smtp.gmail.com with ESMTPSA id r18-20020aa7d152000000b00437e08d319csm1186082edo.61.2022.07.14.08.12.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 08:12:34 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id l22-20020a05600c4f1600b003a2e10c8cdeso3573320wmq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:12:34 -0700 (PDT)
+X-Received: by 2002:a05:600c:1f0e:b0:3a3:52f:ac7d with SMTP id
+ bd14-20020a05600c1f0e00b003a3052fac7dmr2330912wmb.53.1657811554069; Thu, 14
+ Jul 2022 08:12:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
- probed properly
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Andy Gross <agross@kernel.org>,
+References: <20220714061151.2126288-1-judyhsiao@chromium.org> <20220714061151.2126288-4-judyhsiao@chromium.org>
+In-Reply-To: <20220714061151.2126288-4-judyhsiao@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 14 Jul 2022 08:12:21 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WrfbvFGB+3iW1KgYB-csxkW4=WcTKTe-H63HU2Bq9Riw@mail.gmail.com>
+Message-ID: <CAD=FV=WrfbvFGB+3iW1KgYB-csxkW4=WcTKTe-H63HU2Bq9Riw@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] arm64: dts: qcom: sc7280: include
+ sc7280-herobrine-audio-rt5682.dtsi in villager and herobrine-r1
+To:     Judy Hsiao <judyhsiao@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1657810516-31143-1-git-send-email-quic_kriskura@quicinc.com>
- <YtAv8R7QlTZCjvRO@kroah.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <YtAv8R7QlTZCjvRO@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Jimmy Cheng-Yi Chiang <cychiang@google.com>,
+        Judy Hsiao <judyhsiao@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Jimmy Chen <jinghung.chen3@hotmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,58 +85,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 7/14/2022 8:32 PM, Greg Kroah-Hartman wrote:
-> On Thu, Jul 14, 2022 at 08:25:16PM +0530, Krishna Kurapati wrote:
->> On SC7180 devices, it is observed that dwc3 probing is deferred
->> because device_links_check_suppliers() finds that '88e3000.phy'
->> isn't ready yet.
->>
->> As a part of its probe call, dwc3-qcom driver checks if dwc3 core
->> is wakeup capable or not. If the dwc3 core is wakeup capable, driver
->> configures dwc-qcom's power domain to be always ON. Also it configures
->> dp/dm interrupts accordingly to support wakeup from system suspend.
->>
->> More info regarding the same can be found at:
->> commit d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller status"
->> commit 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
->>
->> In the event, dwc3 probe gets deferred and is processed after dwc3-qcom
->> probe, driver ends up reading the wakeup capability of dwc3 core as false
->> leading to instability in suspend/resume path.
->>
->> To avoid this scenario, ensure dwc3_probe is successful by checking
->> if appropriate driver is assigned to it or not after the of_platform_populate
->> call. If it isn't then defer dwc3-qcom probe as well.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   drivers/usb/dwc3/dwc3-qcom.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
->> index 7703655..096d1414 100644
->> --- a/drivers/usb/dwc3/dwc3-qcom.c
->> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->> @@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
->>   		dev_err(dev, "failed to get dwc3 platform device\n");
->>   	}
->>   
->> +	if (!qcom->dwc3->dev.driver)
->> +		return -EPROBE_DEFER;
->> +
-> Why not limit this check to a device type like your changelog mentions?
+On Wed, Jul 13, 2022 at 11:12 PM Judy Hsiao <judyhsiao@chromium.org> wrote:
 >
-> thanks,
+> Include sc7280-herobrine-audio-rt5682.dtsi in villager and herobrine-r1 as
+> these boards use rt5682 codec.
 >
-> greg k-h
-Hi Greg,
+> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts | 1 +
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts  | 1 +
+>  2 files changed, 2 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+> index c1647a85a371..98280436813d 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+> @@ -8,6 +8,7 @@
+>  /dts-v1/;
+>
+>  #include "sc7280-herobrine.dtsi"
+> +#include "sc7280-herobrine-audio-rt5682.dtsi"
+>
+>  / {
+>         model = "Google Herobrine (rev1+)";
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
+> index cbd8a2d1ef2a..077c58c93a65 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
+> @@ -8,6 +8,7 @@
+>  /dts-v1/;
+>
+>  #include "sc7280-herobrine.dtsi"
+> +#include "sc7280-herobrine-audio-rt5682.dtsi"
 
-I wanted to make it common to any device using this driver. Although on 
-devices
-ike SC7280,this issue is not seen but the code would hold good. Do you 
-see any
-concerns if we do it this way ?
+Hmmm, I suspect that this is going to conflict with Jimmy's patch [1]
+since after Jimmy's patch then villager-r1 just includes villager-r0
+and then adds the _other_ audio include. The net result of that will
+be that the "-r1" file will end up including both audio solutions and
+I'm not sure that plays well together.
 
-Thanks,
-Krishna,
+I suspect that what you'll want to do is:
+
+1. Move most of the existing "sc7280-herobrine-villager-r0.dts" into a
+new file "sc7280-herobrine-villager.dtsi".
+
+2. Make a new "sc7280-herobrine-villager-r0.dts" that includes the
+dtsi and then the audio bit. This would also have the top-level
+"model" and "compatible".
+
+3. For simplicity sake, maybe you should add
+"sc7280-herobrine-villager-r1.dts" in your patch series. Then Jimmy's
+cover letter can document that his patch series is based atop yours
+and his patch series can just focus on the LTE bits. If you do this,
+then your patch series will also need a patch to add to the board
+bindings file (Documentation/devicetree/bindings/arm/qcom.yaml), so
+you'll need a patch that's part of Jimmy's patch #1.
+
+Does that all make sense?
+
+[1] https://lore.kernel.org/r/SG2PR03MB50066EA3AE8F8E98B67C920BCC889@SG2PR03MB5006.apcprd03.prod.outlook.com/

@@ -2,139 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9715741CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 05:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CB75741D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 05:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbiGNDTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 23:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
+        id S232673AbiGNDUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 23:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232673AbiGNDTc (ORCPT
+        with ESMTP id S231558AbiGNDUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 23:19:32 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AAF240A6;
-        Wed, 13 Jul 2022 20:19:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:Cc:To:Subject:From:
-        MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=hlVc3S338Hs1/PiwG/AKrI6AGgY3YdI9TqJMD9Bi1PE=; b=X+EIsxb/17qPVsjsj7DTQ1KetF
-        oyWGhlb840NRd9rsQLLwQAdYvhzpN/K1TJ/w/6GtgvC+EQ/7rY1hMl574NvgC5gTn6Fc5kfCA2+2z
-        eYyd2bL0cB9UvtEX8FZKm515zrK0gVspoy353swryS/WWZsV1pNs/Xq9dK4rwUYWKddMJ7pZLas/i
-        rq7iuLekWhdzuSqVwgZkVs+TcC77nhFLMa7v10/15Eu+Uzb/JEky+NyU9ndCevCvPnq3uf7Csu6sz
-        Yl9LNhfIZFTSnbcGgbO9Awpu6DvDU0sMcCshibs8vv9MA9EcNbWlFkb7OaRK0kChrGVZ6qyaNcjqu
-        G3i3zhgw==;
-Received: from [177.139.47.106] (helo=[192.168.15.109])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oBpNd-00Fohe-Gr; Thu, 14 Jul 2022 05:19:09 +0200
-Message-ID: <36a8f60a-69b2-4586-434e-29820a64cd88@igalia.com>
-Date:   Thu, 14 Jul 2022 00:18:51 -0300
+        Wed, 13 Jul 2022 23:20:43 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F58240AC
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 20:20:42 -0700 (PDT)
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B21443FC18
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:20:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1657768839;
+        bh=M5rngXpBSi/8BAmWOZjNpGjwI3WW+h4X/K0YbXQNmms=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=seLRui2syJgTwNb2Ns/A8PQ+oI7UXtQkte5pOQCqEj6Yv1W1eRy2X+oCKEG1jiNfo
+         aBpkdbgVe+0lQZjimPOwqWwi0eyK2FADpmevQfmKOfhFthNPuL8b36tsN8FRV6Uhcr
+         GsgF9vUo9n1MMCsxES80NaN8Y93LMc6Ptruy+VALtiAKZ7liwiXPE/qqq3MDC4CGoz
+         ObIuI6iyqU/59C5W83+6aib/fXfS9CMiYpRVmNP1nrP81X7nmB4QIPSYH5ff4iExEp
+         Wm6hw+2zORU3TT/xWb2lQMawJV1BCyxjDPjFQgW2S5kWDheBOws0OlldfrjS5VyUMH
+         G8e3c+qVi0zMQ==
+Received: by mail-ot1-f70.google.com with SMTP id e14-20020a9d63ce000000b0061c6ca80c54so248946otl.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 20:20:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M5rngXpBSi/8BAmWOZjNpGjwI3WW+h4X/K0YbXQNmms=;
+        b=gx8AwiXa9YGPnUqqIakv/PrCCCkguOtrYus9+l+11fiXxEgm/lrhqwfxCq7/MHfiTF
+         T+DkFPXbUvYwBqNCMgoHEX8McCp37ofpIv7fdxW3X7ynrjqVvaoQsabnR9gkP6yIIbRz
+         dUQNyDfkW0r8DRJtpSjTvCndaAI3UfrNQxC/oICgmysst4ri5vaSJd2CTkPqoOFXtddp
+         RKL2R39QAvo7UK1gE3VWjHOcnHlGsEa4b3MVBay0v1k6AdtxGlyKwhKKY3cckQdfC6GX
+         lJ3gpn8F+sB3NJnjAyhJ8gfSG5dcTQIHnlrwQyQfTYASmEKeunUCUnLdd3Y+YZy003wS
+         47zg==
+X-Gm-Message-State: AJIora+YzmcGDZygHeobRm6RPDMrn9cYduxrSItkmOdn6Hxc5+AiYScH
+        JsTsFRcTxXQDi8L5ETVoFRyEfYmiJ1WXqYkhPG3/45Lb6dOCIzCHKPRajGzhx+hHmS23LHdymuY
+        L4e+QIXBLvonL8fW44Ko048jibbADXEwfAHo5nePfENxF3kwOjGNKp+E2/g==
+X-Received: by 2002:a05:6870:2111:b0:e6:8026:8651 with SMTP id f17-20020a056870211100b000e680268651mr3463550oae.42.1657768838387;
+        Wed, 13 Jul 2022 20:20:38 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1swNElVyTCduZe/Wj8S87UIjYniw7HoMWKL++RqaPzDQzvc33cYWQhEto50ZGbFPMUsl8nzCEv2DvpXYKSODYI=
+X-Received: by 2002:a05:6870:2111:b0:e6:8026:8651 with SMTP id
+ f17-20020a056870211100b000e680268651mr3463532oae.42.1657768838040; Wed, 13
+ Jul 2022 20:20:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-Subject: [RFC] futex2: add NUMA awareness
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-api@vger.kernel.org, fweimer@redhat.com,
-        libc-alpha@sourceware.org,
-        Andrey Semashev <andrey.semashev@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220713112612.6935-1-limanyi@uniontech.com> <20220713182852.GA841582@bhelgaas>
+In-Reply-To: <20220713182852.GA841582@bhelgaas>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 14 Jul 2022 11:20:26 +0800
+Message-ID: <CAAd53p7g2Md73=UU6Rp-TZkksc+H02KAX58bWCzsgQ__VwvJ+g@mail.gmail.com>
+Subject: Re: [PATCH] PCI/ASPM: Should not report ASPM support to BIOS if FADT
+ indicates ASPM is unsupported
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Manyi Li <limanyi@uniontech.com>, bhelgaas@google.com,
+        refactormyself@gmail.com, kw@linux.com, rajatja@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+[+Cc Matthew]
 
-futex2 is an ongoing project with the goal to create a new interface for
-futex that solves ongoing issues with the current syscall.
+On Thu, Jul 14, 2022 at 2:28 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> [+cc Kai-Heng, Vidya, who also have ASPM patches in flight]
+>
+> On Wed, Jul 13, 2022 at 07:26:12PM +0800, Manyi Li wrote:
+> > Startup log of ASUSTeK X456UJ Notebook show:
+> > [    0.130563] ACPI FADT declares the system doesn't support PCIe ASPM, so disable it
+> > [   48.092472] pcieport 0000:00:1c.5: PCIe Bus Error: severity=Corrected, type=Physical Layer, (Receiver ID)
+> > [   48.092479] pcieport 0000:00:1c.5:   device [8086:9d15] error status/mask=00000001/00002000
+> > [   48.092481] pcieport 0000:00:1c.5:    [ 0] RxErr
+> > [   48.092490] pcieport 0000:00:1c.5: AER: Corrected error received: 0000:00:1c.5
+> > [   48.092504] pcieport 0000:00:1c.5: AER: can't find device of ID00e5
+> > [   48.092506] pcieport 0000:00:1c.5: AER: Corrected error received: 0000:00:1c.5
+>
+> Can you elaborate on the connection between the FADT ASPM bit and the
+> AER logs above?
+>
+> What problem are we solving here?  A single corrected error being
+> logged?  An infinite stream of errors?  A device that doesn't work at
+> all?
 
-One of this problems is the lack of NUMA awareness for futex operations.
-This RFC is aimed to gather feedback around the a NUMA interface proposal.
+Agree, what's the real symptom of the issue?
 
- * The problem
+>
+> We don't need the dmesg timestamps unless they contribute to
+> understanding the problem.  I don't think they do in this case.
 
-futex has a single, global hash table to store information of current
-waiters to be queried by wakers. This hash table is stored in a single
-node in non-uniform machines. This means that a process running in other
-nodes will have some overhead using futex, given that it will need to
-access the table in a different node.
+According to commit 387d37577fdd ("PCI: Don't clear ASPM bits when the
+FADT declares it's unsupported"), the bit means "just use the ASPM
+bits handed over by BIOS".
 
- * A solution
+However, I do wonder why both drivers/pci/pci-acpi.c and
+drivers/acpi/pci_root.c are doing the ACPI_FADT_NO_ASPM check, maybe
+one of them should be removed?
 
-For NUMA machines, it would be allocated a table per node. Processes
-then would be able to use the local table to avoid sharing data with
-other nodes.
+>
+> > Signed-off-by: Manyi Li <limanyi@uniontech.com>
+> > ---
+> >  drivers/pci/pcie/aspm.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > index a96b7424c9bc..b173d3c75ae7 100644
+> > --- a/drivers/pci/pcie/aspm.c
+> > +++ b/drivers/pci/pcie/aspm.c
+> > @@ -1359,6 +1359,7 @@ void pcie_no_aspm(void)
+> >       if (!aspm_force) {
+> >               aspm_policy = POLICY_DEFAULT;
+> >               aspm_disabled = 1;
+> > +             aspm_support_enabled = false;
+>
+> This makes pcie_no_aspm() work the same as booting with
+> "pcie_aspm=off".  That might be reasonable.
+>
+> I do wonder why we need both "aspm_disabled" and
+> "aspm_support_enabled".  And I wonder why we need to set "aspm_policy"
+> when we're disabling ASPM.  But those aren't really connected to your
+> change here.
 
- * The interface
+From what I can understand "aspm_disabled" means "don't touch ASPM
+left by BIOS", and "aspm_support_enabled" means "whether ASPM is
+disabled via command line".
+There seems to be some overlaps though.
 
-Userspace needs to specify which node would like to use to store/query
-the futex table. The common case would be to operate on the current
-node, but some cases could required to operate in another one.
+Kai-Heng
 
-Before getting to the NUMA part, a quick recap of the syscalls interface
-of futex2:
-
-futex_wait(void *uaddr, unsigned int val, unsigned int flags,
-           struct timespec *timo)
-
-futex_wake(void *uaddr, unsigned long nr_wake, unsigned int flags)
-
-struct futex_requeue {
-	void *uaddr;
-	unsigned int flags;
-};
-
-futex_requeue(struct futex_requeue *rq1, struct futex_requeue *rq2,
-	      unsigned int nr_wake, unsigned int nr_requeue,
-	      u64 cmpval, unsigned int flags)
-
-
-As requeue already has 6 arguments, we can't add an argument for the
-node ID, we need to pack it in a struct. So then we have
-
-struct futexX_numa {
-        __uX value;
-        __sX hint;
-};
-
-Where X can be 8, 16, 32 or 64 (futex2 supports variable sized futexes).
-`value` is the futex value and `hint` can be -1 for the current node, or
-[0, MAX_NUMA_NODES) to specify a node. Example:
-
-struct futex32_numa f = {.value = 0, hint = -1};
-
-...
-
-futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-
-Then &f would be used as the futex address, as expected, and this would
-be used for the current node. If an app is expecting to have calls from
-different nodes then it should do for instance:
-
-struct futex32_numa f = {.value = 0, hint = 2};
-
-For non-NUMA apps, a call without FUTEX_NUMA flag would just use the
-first node as default.
-
-Feedback? Who else should I CC?
-
-Thanks,
-	André
+>
+> >       }
+> >  }
+> >
+> > --
+> > 2.20.1
+> >
+> >
+> >

@@ -2,160 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54FB0575296
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C6C575298
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238967AbiGNQPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44758 "EHLO
+        id S234209AbiGNQQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbiGNQPs (ORCPT
+        with ESMTP id S229493AbiGNQQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:15:48 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED2E61732
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:15:47 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id v12so3040786edc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:15:47 -0700 (PDT)
+        Thu, 14 Jul 2022 12:16:45 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0C461B13;
+        Thu, 14 Jul 2022 09:16:44 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id s206so2002681pgs.3;
+        Thu, 14 Jul 2022 09:16:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=govIWRa7qaOV2WIczJDqmAkYPYMG/67BzPW5XLlKyvc=;
-        b=wwHDSW/azHUQ/dXzI4ImC8W7hItZhAmo8R0SiTyuuX/fYrhKkvqv3mVUr49+xTpUby
-         9gn1VHxei66XkaRiu+VGyDuu4+GSld5MF8susPqmvURu8hnhGCXdUo/BSMSg3Tn4mab0
-         AKIfp2W1bZ2YyxjaxFIfgAd5n6K1A6LC7UBBV9i4Ugl4g4BRDBOaj0EhfiJZownauzkV
-         D+G3ZVhCZ9g698PJnHdoBLJCRmrQ2gaHD6Xrnw+wNPHZ7OHRMzYFLtKfutecE6Ezemet
-         ILPzTdfaIQqJnWCXVn8HJ1NVEnJ8gVhHdS4czxVUj2+zjzhKg/lV5mxsI1gQIL+KPwLY
-         p/eg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zfIj5qyV6W5yq5ox/J/cFoftvvx5vCMig2RVtH35Sq0=;
+        b=qBHQS5KPrKzSzz4fy6T9DYMJgzLJNlkHeAEn5yHBzp9NxCz6UhFfzv4tg6UsDM/DdS
+         6tmyS/NoJZcPWLEz9WhqiHGAOCsnhKIg+3swRPT2CgDu4l/h52SKR8U/PmzZVF9uEA8M
+         7EAOfpgwvf/g8lLvmqVU2kdTccflOzpQyhyjtHo2z+KpOvCXhvpTeODyjsU010zbEH9m
+         9imXtC9n1DQC9aKUZ7LPzp5uB0hoyfSSC167M/ozlhZHCdKFnntxxYHMNpKyTZ6gffpb
+         hQHaiFnmOePz2wCpRyxzelsoROPFJhDlEyTbZ9Y9M40tpzPdNZJ8pxMm6xKfDNz1UWce
+         BUfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=govIWRa7qaOV2WIczJDqmAkYPYMG/67BzPW5XLlKyvc=;
-        b=ZVyzia9I9xOh6MRghZS+m+DBCFoC0YKRB9wmjN9kZ4rzX7s86gckvRi8o+ATYwPEd1
-         tFbRShSCkWjVkrWgX8DHm8ykba6nAhc/XiWSXoklkQL0KroRkQDmzWFbgl+pKSfmCF26
-         NLoCuZtpwW939xJ1JbnYBcsr0Tte5hD3ey8+jYsGSK6y4CnulhPZ0QtGQDfccy1gPZYu
-         zfZrrdvoS73hIOaHoDNfDjB+XX99F0ORfiW9/QZy3T39UJO3YEJ1JLKCkltJsb7Vzygp
-         HuXepasCGJA4492H7+B+AkJpg06kNmxgf+H3FMWVViFTsTRF7uoLXQ9KPOmI0beKFoaB
-         bTZA==
-X-Gm-Message-State: AJIora8yz0Vtj3pWiM/eBVRnJttoG0mWOcDuMhy47iQPxaZt1Q7FIgIw
-        9R2Y6x7Uj00D4dDPxQLKMohzZVO1DUb9YxrP9arBag==
-X-Google-Smtp-Source: AGRyM1uRlQZY0lm6PlIZv8ZWPALNPT1WMYOIzlf7AeIvGx0GX2B+25LAtwrQYAbWLB7amc6FGJVkRbDm5tkd3xZByjE=
-X-Received: by 2002:aa7:d5d7:0:b0:43a:6eda:464a with SMTP id
- d23-20020aa7d5d7000000b0043a6eda464amr13313083eds.193.1657815345955; Thu, 14
- Jul 2022 09:15:45 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zfIj5qyV6W5yq5ox/J/cFoftvvx5vCMig2RVtH35Sq0=;
+        b=U3Ev80oWYqhdkBdu1/RwtCAsa0EwSWxrqH+o8KkL1LKz7a/5uxkp4Jbmm6pOYdh+Wu
+         VaZ7zhHoA9zYW+3uZSh3oNfLeLRXem+qGQCektfK0naDG6uh8WxL1uv7zTbnWluuYsIN
+         pC/gPhve0BgTqRYyN3XS3kN5kiwxfHuft538PADsBnLTvlRjLW604zDiSPiCjwIQr0iX
+         cLaerxn+nkJmG/OGH3mspbsCzGN//qzg0oiRF+I0oIEfTLzoHLYn7IMTiv9hO7/a1vnw
+         hBgclvuYscry7kAMnE8UgbR9CSwACoRhg/OrpfYp6mQOnpc4qqo0FPTbyeRPpUmPZ8Cp
+         FQnw==
+X-Gm-Message-State: AJIora/uv2esr46ZG19eU66NL55vNysz3aMOkPoIJs3v3oAlBjVIzBYw
+        1GZJ5a3at2lgle9gUB8JGEw=
+X-Google-Smtp-Source: AGRyM1sbmcRbyKVTh1//ROU61N3Fczq0SjQ7kXeTzNSuebeT5GQeN8KQgtCY2GGlhG/jcEIxLci7nQ==
+X-Received: by 2002:a05:6a00:1312:b0:528:2ed8:7e35 with SMTP id j18-20020a056a00131200b005282ed87e35mr8900166pfu.13.1657815403880;
+        Thu, 14 Jul 2022 09:16:43 -0700 (PDT)
+Received: from fedora.. ([103.230.148.189])
+        by smtp.gmail.com with ESMTPSA id p10-20020a170902780a00b0016b68cf6ae5sm1654281pll.226.2022.07.14.09.16.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 09:16:42 -0700 (PDT)
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     shuah@kernel.org
+Cc:     Gautam Menghani <gautammenghani201@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests/kcmp: Make the test output consistent and clear
+Date:   Thu, 14 Jul 2022 21:46:29 +0530
+Message-Id: <20220714161629.5488-1-gautammenghani201@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <bdcac68c-e227-6376-9d71-aa667596c4e6@linuxfoundation.org>
+References: <bdcac68c-e227-6376-9d71-aa667596c4e6@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220713171241.184026-1-cascardo@canonical.com>
- <Ys/ncSnSFEST4fgL@worktop.programming.kicks-ass.net> <976510d2-c7ad-2108-27e0-4c3b82c210f1@redhat.com>
-In-Reply-To: <976510d2-c7ad-2108-27e0-4c3b82c210f1@redhat.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 14 Jul 2022 21:45:34 +0530
-Message-ID: <CA+G9fYvxR8+4cajcCBbPRuhR1tnuBmrLxosSOMzPg7CjxQU35w@mail.gmail.com>
-Subject: Re: [PATCH] x86/kvm: fix FASTOP_SIZE when return thunks are enabled
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paolo,
+In the KCMP test, currently the functions ksft_print_header() and
+ksft_set_plan() are not used due to which an error appears in the
+output. Also, the result of the tests is being printed multiple times
+because the output is printed by both ksft_print_cnts() and
+ksft_exit_fail()/ksft_exit_pass(). 
+This patch makes the output format of this test consistent. Currently the
+output is as follows:
 
-On Thu, 14 Jul 2022 at 17:06, Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 7/14/22 11:52, Peter Zijlstra wrote:
-> > On Wed, Jul 13, 2022 at 02:12:41PM -0300, Thadeu Lima de Souza Cascardo wrote:
-> >> The return thunk call makes the fastop functions larger, just like IBT
-> >> does. Consider a 16-byte FASTOP_SIZE when CONFIG_RETHUNK is enabled.
-> >>
-> >> Otherwise, functions will be incorrectly aligned and when computing their
-> >> position for differently sized operators, they will executed in the middle
-> >> or end of a function, which may as well be an int3, leading to a crash
-> >> like:
-> >
-> > Bah.. I did the SETcc stuff, but then forgot about the FASTOP :/
-> >
-> >    af2e140f3420 ("x86/kvm: Fix SETcc emulation for return thunks")
-> >
-> >> Fixes: aa3d480315ba ("x86: Use return-thunk in asm code")
-> >> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-> >> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> >> Cc: Borislav Petkov <bp@suse.de>
-> >> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-> >> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> >> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
++TAP version 13
++1..1
++# selftests: kcmp: kcmp_test
++# pid1:  45814 pid2:  45815 FD:  1 FILES:  1 VM:  2 FS:  1 SIGHAND:  2 
++  IO:  0 SYSVSEM:  0 INV: -1
++# PASS: 0 returned as expected
++# PASS: 0 returned as expected
++# PASS: 0 returned as expected
++# # Planned tests != run tests (0 != 3)
++# # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
++# # Planned tests != run tests (0 != 3)
++# # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
++# # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
++ok 1 selftests: kcmp: kcmp_test
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+With this patch applied the output is as follows:
 
-> >> ---
-> >>   arch/x86/kvm/emulate.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> >> index db96bf7d1122..d779eea1052e 100644
-> >> --- a/arch/x86/kvm/emulate.c
-> >> +++ b/arch/x86/kvm/emulate.c
-> >> @@ -190,7 +190,7 @@
-> >>   #define X16(x...) X8(x), X8(x)
-> >>
-> >>   #define NR_FASTOP (ilog2(sizeof(ulong)) + 1)
-> >> -#define FASTOP_SIZE (8 * (1 + HAS_KERNEL_IBT))
-> >> +#define FASTOP_SIZE (8 * (1 + (HAS_KERNEL_IBT | IS_ENABLED(CONFIG_RETHUNK))))
-> >
-> > Would it make sense to do something like this instead?
->
-> Yes, definitely.  Applied with a small tweak to make FASTOP_LENGTH
-> more similar to SETCC_LENGTH:
->
-> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> index db96bf7d1122..0a15b0fec6d9 100644
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -189,8 +189,12 @@
->   #define X8(x...) X4(x), X4(x)
->   #define X16(x...) X8(x), X8(x)
->
-> -#define NR_FASTOP (ilog2(sizeof(ulong)) + 1)
-> -#define FASTOP_SIZE (8 * (1 + HAS_KERNEL_IBT))
-> +#define NR_FASTOP      (ilog2(sizeof(ulong)) + 1)
-> +#define RET_LENGTH     (1 + (4 * IS_ENABLED(CONFIG_RETHUNK)) + \
-> +                        IS_ENABLED(CONFIG_SLS))
-> +#define FASTOP_LENGTH  (ENDBR_INSN_SIZE + 7 + RET_LENGTH)
-> +#define FASTOP_SIZE    (8 << ((FASTOP_LENGTH > 8) & 1) << ((FASTOP_LENGTH > 16) & 1))
-> +static_assert(FASTOP_LENGTH <= FASTOP_SIZE);
->
->   struct opcode {
->         u64 flags;
-> @@ -442,8 +446,6 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
->    * RET | JMP __x86_return_thunk       [1,5 bytes; CONFIG_RETHUNK]
->    * INT3                               [1 byte; CONFIG_SLS]
->    */
-> -#define RET_LENGTH     (1 + (4 * IS_ENABLED(CONFIG_RETHUNK)) + \
-> -                        IS_ENABLED(CONFIG_SLS))
->   #define SETCC_LENGTH  (ENDBR_INSN_SIZE + 3 + RET_LENGTH)
->   #define SETCC_ALIGN   (4 << ((SETCC_LENGTH > 4) & 1) << ((SETCC_LENGTH > 8) & 1))
->   static_assert(SETCC_LENGTH <= SETCC_ALIGN);
->
->
-> Paolo
++TAP version 13
++1..1
++# selftests: kcmp: kcmp_test
++# TAP version 13
++# 1..3
++# pid1:  46330 pid2:  46331 FD:  1 FILES:  2 VM:  2 FS:  2 SIGHAND:  1 
++  IO:  0 SYSVSEM:  0 INV: -1
++# PASS: 0 returned as expected
++# PASS: 0 returned as expected
++# PASS: 0 returned as expected
++# # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
++ok 1 selftests: kcmp: kcmp_test
 
-Applied your patch and tested on top of the mainline kernel and
-tested kvm-unit-tests and reported kernel panic fixed.
 
-https://lkft.validation.linaro.org/scheduler/job/5284626
+Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+---
+Changes in v2:
+1. Describe the changes in detail.
 
-- Naresh
+ tools/testing/selftests/kcmp/kcmp_test.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/kcmp/kcmp_test.c b/tools/testing/selftests/kcmp/kcmp_test.c
+index 6ea7b9f37a41..25110c7c0b3e 100644
+--- a/tools/testing/selftests/kcmp/kcmp_test.c
++++ b/tools/testing/selftests/kcmp/kcmp_test.c
+@@ -88,6 +88,9 @@ int main(int argc, char **argv)
+ 		int pid2 = getpid();
+ 		int ret;
+ 
++		ksft_print_header();
++		ksft_set_plan(3);
++
+ 		fd2 = open(kpath, O_RDWR, 0644);
+ 		if (fd2 < 0) {
+ 			perror("Can't open file");
+@@ -152,7 +155,6 @@ int main(int argc, char **argv)
+ 			ksft_inc_pass_cnt();
+ 		}
+ 
+-		ksft_print_cnts();
+ 
+ 		if (ret)
+ 			ksft_exit_fail();
+@@ -162,5 +164,5 @@ int main(int argc, char **argv)
+ 
+ 	waitpid(pid2, &status, P_ALL);
+ 
+-	return ksft_exit_pass();
++	return 0;
+ }
+-- 
+2.36.1
+

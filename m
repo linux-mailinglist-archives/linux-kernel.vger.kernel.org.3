@@ -2,143 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDDA574AB8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCBD574ABF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238313AbiGNKen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S238438AbiGNKfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238366AbiGNKej (ORCPT
+        with ESMTP id S238435AbiGNKe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:34:39 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346844BD1A
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:34:36 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id i204-20020a1c3bd5000000b003a2fa488efdso2491122wma.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:34:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=W6txFljYfKmn6JSD3sjou2N7DJFkcDR6jeyYOHSyWrU=;
-        b=gvZ4kN1Ki6OChldKcT3MpnPrFEubJtUXdh8C24U5b24nOK5/h+IFIOOL4CSL0vw4tB
-         iVOziuWudewMTKVk3jRln6XJM9BdGVWQJpYrvPZoS0SRyNbLJDbnqmHX0OiTMC93EAOI
-         JcjhtEYjG85cPEi1tixKsAG20DrICDh0hKOQLzzsHeY4b0HCr55DYiwKJVRFDU7Kdu+O
-         mxNZJRlpNVvagt18yu/SJI6rr+Lj/fJT40FO71qf5KPgkWcpez7epwuyUNaFMA3yLK4j
-         Om94Y3m17NS1I+wO1+1v1Mu6M3C0Kq4jL6mLU3G2P9kcle0kBLSnLPUfLwZ0LLN/ruDR
-         duVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=W6txFljYfKmn6JSD3sjou2N7DJFkcDR6jeyYOHSyWrU=;
-        b=pgdvmQeaBx5jR6yr7ms9BbkiciHllWa36rWyiktnfC9Om52gN97iLJeGLMBYDXmm4K
-         jpXGT9EESPtqOCHNdh23PyY47pYaBjn405FGdxRa9kF/0WvuTeM/E0uasTd3VYmCqdVc
-         JEuAQaY3FHxYL1vGcKG1VuG4DEJDZZsR7CMbGy9rLgN4llN25LyuS2WD5BE7pRSJJvTf
-         39Iha/LnC4lLxRelsrT4ikAIqgqV9eBghIQQO3m5n+7Neu63paAPk2iuTm4bsVO326Af
-         5xI7UGRXcSsZAZSbVNcfUil7nofnk2OEAepeYOcFsepGCFUUJNzZMgMU0Nn3GPpUA5va
-         S4yQ==
-X-Gm-Message-State: AJIora9PowCrgojEbojoev5cxBEd9qKQ31dH6vzFhfOxOSJ4acI2T1CH
-        CEmXYdEOo4FPQUV6tQqp1kUepg==
-X-Google-Smtp-Source: AGRyM1s4Lh53O5b+jj1CVhSlBTSYJOqKGj742dw9wSLaQ2htY7KgAPxfs1Ue9vLFbkz25LTPVtIDCQ==
-X-Received: by 2002:a05:600c:1908:b0:3a0:bfaa:38c with SMTP id j8-20020a05600c190800b003a0bfaa038cmr8428781wmq.130.1657794874579;
-        Thu, 14 Jul 2022 03:34:34 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id m9-20020a056000180900b0021d6a520ce9sm1094947wrh.47.2022.07.14.03.34.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 03:34:34 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 11:34:31 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Henning Schild <henning.schild@siemens.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
-Message-ID: <Ys/xN+6P0DvMrDOC@google.com>
-References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
- <YqBS8I62YBPFC9iS@google.com>
- <CAHp75Ve9Lju8AEQd5huz1aYGg4sOu-ae7tTdyDWCXPCBR=wXbQ@mail.gmail.com>
- <YrGyWCaY+swYAYzH@smile.fi.intel.com>
- <YryAXlZqcr/liN7n@smile.fi.intel.com>
- <20220629191406.35965d5b@md1za8fc.ad001.siemens.net>
- <Ys71dyMdozGUAto0@smile.fi.intel.com>
- <20220713204827.0b290fd7@md1za8fc.ad001.siemens.net>
- <Ys/jz7HqhrxSCOnV@google.com>
- <Ys/ukP8dqnwUoou4@smile.fi.intel.com>
+        Thu, 14 Jul 2022 06:34:59 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED854BD11;
+        Thu, 14 Jul 2022 03:34:47 -0700 (PDT)
+X-UUID: c013a5dc163c45d0a257b8428da23a83-20220714
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:b3b081c3-be57-49b0-935c-67e6ab94d8c1,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:3e64fb32-b9e4-42b8-b28a-6364427c76bb,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: c013a5dc163c45d0a257b8428da23a83-20220714
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2014864201; Thu, 14 Jul 2022 18:34:43 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 14 Jul 2022 18:34:42 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 14 Jul 2022 18:34:42 +0800
+Message-ID: <c5b54815c3667d38473a48d365af8d7520d1acdf.camel@mediatek.com>
+Subject: Re: [PATCH v14 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "mripard@kernel.org" <mripard@kernel.org>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "airlied@linux.ie" <airlied@linux.ie>
+CC:     "msp@baylibre.com" <msp@baylibre.com>,
+        "granquet@baylibre.com" <granquet@baylibre.com>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        LiangXu Xu =?UTF-8?Q?=28=E5=BE=90=E4=BA=AE=29?= 
+        <LiangXu.Xu@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 14 Jul 2022 18:34:41 +0800
+In-Reply-To: <1f698bb3d5d50a6e508cd48e905c8c69415c2fd9.camel@mediatek.com>
+References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
+         <20220712111223.13080-6-rex-bc.chen@mediatek.com>
+         <24726b8a5994961b966cf90b1f56c71a844d274a.camel@mediatek.com>
+         <1f698bb3d5d50a6e508cd48e905c8c69415c2fd9.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ys/ukP8dqnwUoou4@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Jul 2022, Andy Shevchenko wrote:
+Hi, Bo-Chen:
 
-> On Thu, Jul 14, 2022 at 10:37:19AM +0100, Lee Jones wrote:
-> > On Wed, 13 Jul 2022, Henning Schild wrote:
-> > > Am Wed, 13 Jul 2022 19:40:23 +0300
-> > > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> 
-> ...
-> 
-> > > And maybe there is a way/process to escalate to another maintainer.
-> > > Does anyone even know what is going on with Pavel? 
+On Thu, 2022-07-14 at 17:09 +0800, Rex-BC Chen wrote:
+> On Thu, 2022-07-14 at 14:51 +0800, CK Hu wrote:
+> > Hi, Bo-Chen:
 > > 
-> > I'll take the hit.  He had his chance.
+> > On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
+> > > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > 
+> > > This patch adds a embedded displayport driver for the MediaTek
+> > > mt8195
+> > > SoC.
+> > > 
+> > > It supports the MT8195, the embedded DisplayPort units. It offers
+> > > DisplayPort 1.4 with up to 4 lanes.
+> > > 
+> > > The driver creates a child device for the phy. The child device
+> > > will
+> > > never exist without the parent being active. As they are sharing
+> > > a
+> > > register range, the parent passes a regmap pointer to the child
+> > > so
+> > > that
+> > > both can work with the same register range. The phy driver sets
+> > > device
+> > > data that is read by the parent to get the phy device that can be
+> > > used
+> > > to control the phy properties.
+> > > 
+> > > This driver is based on an initial version by
+> > > Jitao shi <jitao.shi@mediatek.com>
+> > > 
+> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > > ---
 > > 
-> > I'm happy to move forward with Andy's review.
+> > [snip]
+> > 
+> > > +static int mtk_dp_train_tps_2_3(struct mtk_dp *mtk_dp, u8
+> > > target_linkrate,
+> > > +				u8 target_lane_count, int
+> > > *iteration_count,
+> > > +				u8 *lane_adjust,  int *status_control,
+> > > +				u8 *prev_lane_adjust)
+> > > +{
+> > > +	u8 val;
+> > > +	u8 link_status[DP_LINK_STATUS_SIZE] = {};
+> > > +
+> > > +	if (*status_control == 1) {
+> > > +		if (mtk_dp->train_info.tps4) {
+> > > +			mtk_dp_train_set_pattern(mtk_dp, 4);
+> > > +			val = DP_TRAINING_PATTERN_4;
+> > > +		} else if (mtk_dp->train_info.tps3) {
+> > > +			mtk_dp_train_set_pattern(mtk_dp, 3);
+> > > +			val = DP_LINK_SCRAMBLING_DISABLE |
+> > > +				DP_TRAINING_PATTERN_3;
+> > > +		} else {
+> > > +			mtk_dp_train_set_pattern(mtk_dp, 2);
+> > > +			val = DP_LINK_SCRAMBLING_DISABLE |
+> > > +				DP_TRAINING_PATTERN_2;
+> > > +		}
+> > > +		drm_dp_dpcd_writeb(&mtk_dp->aux,
+> > > +				   DP_TRAINING_PATTERN_SET, val);
+> > > +		drm_dp_dpcd_read(&mtk_dp->aux,
+> > > +				 DP_ADJUST_REQUEST_LANE0_1,
+> > > lane_adjust,
+> > > +				 sizeof(*lane_adjust) * 2);
+> > > +
+> > > +		mtk_dp_train_update_swing_pre(mtk_dp,
+> > > +					      target_lane_count,
+> > > lane_adjust);
+> > > +		*status_control = 2;
+> > > +		(*iteration_count)++;
+> > > +	}
+> > > +
+> > > +	drm_dp_link_train_channel_eq_delay(&mtk_dp->aux, mtk_dp-
+> > > > rx_cap);
+> > > 
+> > > +
+> > > +	drm_dp_dpcd_read_link_status(&mtk_dp->aux, link_status);
+> > > +
+> > > +	if (!drm_dp_clock_recovery_ok(link_status, target_lane_count)) 
+> > 
+> > I think this checking is redundant. I think we could just keep
+> > drm_dp_channel_eq_ok() and drop drm_dp_clock_recovery_ok() here
+> > because
+> > if drm_dp_clock_recovery_ok() fail, it imply that
+> > drm_dp_channel_eq_ok() would fail. So just check
+> > drm_dp_channel_eq_ok()
+> > is enough.
+> > 
+> > Regards,
+> > CK
+> > 
+> > > {
+> > > +		mtk_dp->train_info.cr_done = false;
+> > > +		mtk_dp->train_info.eq_done = false;
+> > > +		dev_dbg(mtk_dp->dev, "Link train EQ fail\n");
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	if (drm_dp_channel_eq_ok(link_status, target_lane_count)) {
+> > > +		mtk_dp->train_info.eq_done = true;
+> > > +		dev_dbg(mtk_dp->dev, "Link train EQ pass\n");
+> > > +		return 0;
+> > > +	}
+> > > +
 > 
-> Thank you, Lee, much appreciated!
-> The patches (9..12) have my SoB, I think it should be enough, but if you thinks
-> they need my Rb tag, I can reply to them with it.
-
-That's okay.  I've applied them and they are currently in soak.
-
-> > (Side note: Seeing as Pavel hasn't been seen for 2 months, I'll also
-> >  follow-up on  the LED ML to offer to become temporary maintainer for a
-> >  bit)
+> Hello CK,
 > 
-> This is good news as well, because I noticed there are a few series there stuck
-> as well.
+> do you mean like this?
+> if (drm_dp_channel_eq_ok(link_status, target_lane_count)) {
+>   mtk_dp-
+> > train_info.eq_done = true;
+> 
+>   dev_dbg(mtk_dp->dev, "Link train EQ pass\n");
+>   return 0;
+> } else {
+>   mtk_dp->train_info.cr_done = false;
+>   mtk_dp->train_info.eq_done = false;
+>   dev_dbg(mtk_dp->dev, "Link train EQ fail\n");
+>   return -EINVAL;
+> }
 
-Feel free to reply to object or in support:
+No, I mean just remove drm_dp_clock_recovery_ok() checking. When
+drm_dp_channel_eq_ok() fail, it should keep retry. If clock recovery
+has some problem, drm_dp_channel_eq_ok() would be finally out of retry
+count.
 
-https://lore.kernel.org/all/Ys%2Fkruf8DE4ISo8M@google.com/
+Regards,
+CK
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> 
+> BRs,
+> Bo-Chen
+> 
+> > > +	if (*prev_lane_adjust == link_status[4])
+> > > +		(*iteration_count)++;
+> > > +	else
+> > > +		*prev_lane_adjust = link_status[4];
+> > > +
+> > > +	return -EAGAIN;
+> > > +}
+> > > +
+> > 
+> > 
+> 
+> 
+

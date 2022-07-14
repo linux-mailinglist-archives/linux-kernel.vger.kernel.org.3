@@ -2,249 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F035755D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4045755D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240508AbiGNTf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 15:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
+        id S240486AbiGNTe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 15:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238661AbiGNTf2 (ORCPT
+        with ESMTP id S232336AbiGNTey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 15:35:28 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D536558DE;
-        Thu, 14 Jul 2022 12:35:27 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id va17so5300717ejb.0;
-        Thu, 14 Jul 2022 12:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vChKKF9FJ4ZU9VFDMkMSil6514q54Ua6e4LyojliXfk=;
-        b=DMwrkmws8NvuOuWIlz6qCaHKSH9ufUNiQS4Sks+0iRp1wH6GMTA4wvRCsh2VELrUjx
-         mN/Wq0Iz4xbXbdbgxvP/ntipszHF0onufubKTtGss+qLQxndi5ASkec51iGQ5kg0br4I
-         GgChfcVyUXR07zbC4N137knAHlrJx2I7qAWX3Ma6SA8M36QMq6WW+IchNmbjovFsbHIp
-         3KdTLNHLqaKeHNf6sWt2QeOzsZEMO8Qsl5A8rDtNR88PTxFoAZwFkVbGrxhjspcHcsOy
-         rJim/oihY5xwyJnGfFEeYT68gHWlb1bVXOL4wrrEFAN26pI2b+sAi03E5muxk+v/cERh
-         moTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vChKKF9FJ4ZU9VFDMkMSil6514q54Ua6e4LyojliXfk=;
-        b=gv+6m3xplfLLp5COP/mozhqbGdqMW9mCiT2byHB5H+y6+qaPRTm4btC4RTX2AHCXxx
-         UuRUEKV3y1g4rwkboq6G7qNDNktp3Mr+tdrecSvz6tVQhWkJZXdKLMoeDrsG5CZE+YL4
-         KyGaunfYfT/BWmI3aSa9Nb6g0rDWS7NOnMCmsB5TGlx5oCAzllGhiMDesC6aas8G1S6g
-         BFBV5TXdBn/73VJRj9ajuOyb3Bx+GBh5T4lOi1RWtTtaY2+ZMeUBjsBRnyEEM5d+sUO4
-         Cia8MyWlUx0xvmEBfPpDYRQ2WqqLCbkEpTmcT1SNy3cTC1+ZH4qOfIGEuGI+UrpwdofT
-         qzlQ==
-X-Gm-Message-State: AJIora+BbhL22VihPa+dT4ZBbk2LUyNG0QseNLIBch33txORDpNjg99f
-        2/Y+h3ZuFAjtAn7m/PWBm71dQ8VPo42TEg==
-X-Google-Smtp-Source: AGRyM1vqH9Cl010mU3uO3aUBR866ANu07zId8T1BlRv9H+6NGK2RG3Jh8P+z8zygDBSQdGkftD5L7g==
-X-Received: by 2002:a17:907:7617:b0:72b:49fe:fdf7 with SMTP id jx23-20020a170907761700b0072b49fefdf7mr10631256ejc.25.1657827325723;
-        Thu, 14 Jul 2022 12:35:25 -0700 (PDT)
-Received: from erthalion.local (dslb-094-222-027-106.094.222.pools.vodafone-ip.de. [94.222.27.106])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170906560d00b006fee98045cdsm1068716ejq.10.2022.07.14.12.35.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 12:35:25 -0700 (PDT)
-From:   Dmitrii Dolgov <9erthalion6@gmail.com>
-To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc:     songliubraving@fb.com, rostedt@goodmis.org, peterz@infradead.org,
-        mingo@redhat.com, mhiramat@kernel.org,
-        alexei.starovoitov@gmail.com,
-        Dmitrii Dolgov <9erthalion6@gmail.com>
-Subject: [PATCH v4 1/1] perf/kprobe: maxactive for fd-based kprobe
-Date:   Thu, 14 Jul 2022 21:34:03 +0200
-Message-Id: <20220714193403.13211-1-9erthalion6@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 14 Jul 2022 15:34:54 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E16B2BB3B
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 12:34:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=FRi6FX1mHfIDY8XJziHRe5A/6ngtGKMangsD1+ldoWY=; b=grq8cX6NN7Zndo+VE4Cg6W7oRd
+        w1+eQbW+a/UX7G+VLEXLvx3Zo3qFAvjLt8eWNkuPlbuH1Lb11BNNJfVvRz8C9gaYVEIrwR3sI4dFO
+        eM3GjT7ojx7wiQEBP4K5FMJWdlwA9yWeyuy78p6z0PqRbV2PKZMLet0ki/C31YBA1Kg9UBLCBOolp
+        P+LmPzx4Ouv6RL/TioGnrb4P4zMWQcJf4vV7aAqg8nDmylbBnsV2CZpAJUFqD/HFntpzvCk27rSRk
+        bhotmfsGYHTdd2JIOFdCBFR0olLgfhgj0a8j82ZtkGCte/I1DsA6OnBuSaaGWpNieRLxF1BHTEkbX
+        3ghR/quw==;
+Received: from 201-42-109-188.dsl.telesp.net.br ([201.42.109.188] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oC4bk-00GmV3-G3; Thu, 14 Jul 2022 21:34:44 +0200
+Message-ID: <bf57256f-127d-6f26-404a-b9cff6df70b3@igalia.com>
+Date:   Thu, 14 Jul 2022 16:34:29 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: Unstable tsc caused soft lockup in kdump kernel
+Content-Language: en-US
+To:     Baoquan He <bhe@redhat.com>, jstultz@google.com,
+        tglx@linutronix.de, sboyd@kernel.org
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org
+References: <YrwokiIVX9E9kQIh@MiWiFi-R3L-srv>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YrwokiIVX9E9kQIh@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Song Liu <songliubraving@fb.com>
+On 29/06/2022 07:25, Baoquan He wrote:
+> Hi,
+> 
+> On a HP machine, after crash triggered via sysrq-c, kdump kernel will
+> boot and get soft lockup as below. And this can be always reproduced.
+> 
+> From log, it seems that unreliable tsc was marked as unstable in
+> clocksource_watchdog, then worker sched_clock_work was scheduled. And
+> this tsc unstable marking always happened after sysrq-c is triggered.
+> And the cpu where worker smp_call_function_many_cond is running won't
+> be stopped and hang there and keep locks, even though the cpu should be
+> stopped. While kdump kernel is running in a different cpu and boot, then
+> soft lockup happened because other workers or the relevant threads are
+> waiting for locks taken by the hang sched_clock_work worker.
+> 
+> Any idea or suggestion?
+> 
+> The normal kernel boot log and kdump kernel log, kernel config, are all
+> attached, please check.
+> 
 
-Enable specifying maxactive for fd based kretprobe. This will be useful
-for tracing tools like bcc and bpftrace (see for example discussion [1]).
-Use highest 4 bit (bit 59-63) to allow specifying maxactive by log2.
+Hi Baoquan, interesting issue! Do you happen to have a full kdump boot
+log with the issue? Maybe collected through serial console, etc.
+It seems the one attached is from a succeeding kdump by passing
+"tsc=unstable" to the kdump kernel right?
 
-The original patch [2] seems to be fallen through the cracks and wasn't
-applied. I've merely rebased the work done by Song Liu, verififed it
-still works, and modified to allow specifying maxactive by log2 per
-suggestion from the discussion thread.
+Also, did you try to "forbid" tsc to get marked as unstable in the first
+kernel, before kdump? I mean like a hack code change, just prevent
+kernel doing that and seeing if it works. If that still fails, then it
+seems the cause of the issue is the same as the cause of TSC getting
+unstable - in other words, something would be causing both the kdump
+kernel lockup AND the TSC unstable marking in the first kernel...
 
-Note that changes in rethook implementation may render maxactive
-obsolete.
-
-[1]: https://github.com/iovisor/bpftrace/issues/835
-[2]: https://lore.kernel.org/all/20191007223111.1142454-1-songliubraving@fb.com/
-
-Signed-off-by: Song Liu <songliubraving@fb.com>
-Signed-off-by: Dmitrii Dolgov <9erthalion6@gmail.com>
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Previous discussion: https://lore.kernel.org/bpf/20220625152429.27539-1-9erthalion6@gmail.com/
-
-Resent with LKML in Cc instead of linux-perf-users, as it is a kernel
-change.
-
-Changes in v4:
-    - Allow specifying maxactive by log2
-
-Changes in v3:
-    - Set correct author
-
-Changes in v2:
-    - Fix comment about number bits for the offset
-
- include/linux/trace_events.h    |  3 ++-
- kernel/events/core.c            | 20 ++++++++++++++++----
- kernel/trace/trace_event_perf.c |  5 +++--
- kernel/trace/trace_kprobe.c     |  4 ++--
- kernel/trace/trace_probe.h      |  2 +-
- 5 files changed, 24 insertions(+), 10 deletions(-)
-
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index e6e95a9f07a5..7ca453a73252 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -850,7 +850,8 @@ extern void perf_trace_destroy(struct perf_event *event);
- extern int  perf_trace_add(struct perf_event *event, int flags);
- extern void perf_trace_del(struct perf_event *event, int flags);
- #ifdef CONFIG_KPROBE_EVENTS
--extern int  perf_kprobe_init(struct perf_event *event, bool is_retprobe);
-+extern int  perf_kprobe_init(struct perf_event *event, bool is_retprobe,
-+			     int max_active);
- extern void perf_kprobe_destroy(struct perf_event *event);
- extern int bpf_get_kprobe_info(const struct perf_event *event,
- 			       u32 *fd_type, const char **symbol,
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 23bb19716ad3..184325ff2656 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -9809,24 +9809,34 @@ static struct pmu perf_tracepoint = {
-  * PERF_PROBE_CONFIG_IS_RETPROBE if set, create kretprobe/uretprobe
-  *                               if not set, create kprobe/uprobe
-  *
-- * The following values specify a reference counter (or semaphore in the
-- * terminology of tools like dtrace, systemtap, etc.) Userspace Statically
-- * Defined Tracepoints (USDT). Currently, we use 40 bit for the offset.
-+ * PERF_UPROBE_REF_CTR_OFFSET_* specify a reference counter (or semaphore
-+ * in the terminology of tools like dtrace, systemtap, etc.) Userspace
-+ * Statically Defined Tracepoints (USDT). Currently, we use 32 bit for the
-+ * offset.
-  *
-  * PERF_UPROBE_REF_CTR_OFFSET_BITS	# of bits in config as th offset
-  * PERF_UPROBE_REF_CTR_OFFSET_SHIFT	# of bits to shift left
-+ *
-+ * PERF_KPROBE_MAX_ACTIVE_* defines log2 of max_active for kretprobe.
-+ * KRETPROBE_MAXACTIVE_MAX is 4096. We allow 4095 here to save a bit.
-  */
- enum perf_probe_config {
- 	PERF_PROBE_CONFIG_IS_RETPROBE = 1U << 0,  /* [k,u]retprobe */
- 	PERF_UPROBE_REF_CTR_OFFSET_BITS = 32,
- 	PERF_UPROBE_REF_CTR_OFFSET_SHIFT = 64 - PERF_UPROBE_REF_CTR_OFFSET_BITS,
-+	PERF_KPROBE_MAX_ACTIVE_BITS = 4,
-+	PERF_KPROBE_MAX_ACTIVE_SHIFT = 64 - PERF_KPROBE_MAX_ACTIVE_BITS,
- };
- 
- PMU_FORMAT_ATTR(retprobe, "config:0");
- #endif
- 
- #ifdef CONFIG_KPROBE_EVENTS
-+/* max_active is specified by log2, to allow larger values if needed */
-+PMU_FORMAT_ATTR(max_active_log2, "config:59-63");
-+
- static struct attribute *kprobe_attrs[] = {
-+	&format_attr_max_active_log2.attr,
- 	&format_attr_retprobe.attr,
- 	NULL,
- };
-@@ -9857,6 +9867,7 @@ static int perf_kprobe_event_init(struct perf_event *event)
- {
- 	int err;
- 	bool is_retprobe;
-+	int max_active_log2;
- 
- 	if (event->attr.type != perf_kprobe.type)
- 		return -ENOENT;
-@@ -9871,7 +9882,8 @@ static int perf_kprobe_event_init(struct perf_event *event)
- 		return -EOPNOTSUPP;
- 
- 	is_retprobe = event->attr.config & PERF_PROBE_CONFIG_IS_RETPROBE;
--	err = perf_kprobe_init(event, is_retprobe);
-+	max_active_log2 = event->attr.config >> PERF_KPROBE_MAX_ACTIVE_SHIFT;
-+	err = perf_kprobe_init(event, is_retprobe, 1U << max_active_log2);
- 	if (err)
- 		return err;
- 
-diff --git a/kernel/trace/trace_event_perf.c b/kernel/trace/trace_event_perf.c
-index a114549720d6..129000327809 100644
---- a/kernel/trace/trace_event_perf.c
-+++ b/kernel/trace/trace_event_perf.c
-@@ -245,7 +245,8 @@ void perf_trace_destroy(struct perf_event *p_event)
- }
- 
- #ifdef CONFIG_KPROBE_EVENTS
--int perf_kprobe_init(struct perf_event *p_event, bool is_retprobe)
-+int perf_kprobe_init(struct perf_event *p_event, bool is_retprobe,
-+					 int max_active)
- {
- 	int ret;
- 	char *func = NULL;
-@@ -271,7 +272,7 @@ int perf_kprobe_init(struct perf_event *p_event, bool is_retprobe)
- 
- 	tp_event = create_local_trace_kprobe(
- 		func, (void *)(unsigned long)(p_event->attr.kprobe_addr),
--		p_event->attr.probe_offset, is_retprobe);
-+		p_event->attr.probe_offset, is_retprobe, max_active);
- 	if (IS_ERR(tp_event)) {
- 		ret = PTR_ERR(tp_event);
- 		goto out;
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 47cebef78532..3ad30cfce9c3 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -1784,7 +1784,7 @@ static int unregister_kprobe_event(struct trace_kprobe *tk)
- /* create a trace_kprobe, but don't add it to global lists */
- struct trace_event_call *
- create_local_trace_kprobe(char *func, void *addr, unsigned long offs,
--			  bool is_return)
-+			  bool is_return, int max_active)
- {
- 	enum probe_print_type ptype;
- 	struct trace_kprobe *tk;
-@@ -1799,7 +1799,7 @@ create_local_trace_kprobe(char *func, void *addr, unsigned long offs,
- 	event = func ? func : "DUMMY_EVENT";
- 
- 	tk = alloc_trace_kprobe(KPROBE_EVENT_SYSTEM, event, (void *)addr, func,
--				offs, 0 /* maxactive */, 0 /* nargs */,
-+				offs, max_active, 0 /* nargs */,
- 				is_return);
- 
- 	if (IS_ERR(tk)) {
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index 92cc149af0fd..26fe21980793 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -376,7 +376,7 @@ extern int traceprobe_set_print_fmt(struct trace_probe *tp, enum probe_print_typ
- #ifdef CONFIG_PERF_EVENTS
- extern struct trace_event_call *
- create_local_trace_kprobe(char *func, void *addr, unsigned long offs,
--			  bool is_return);
-+			  bool is_return, int max_active);
- extern void destroy_local_trace_kprobe(struct trace_event_call *event_call);
- 
- extern struct trace_event_call *
--- 
-2.32.0
-
+Cheers!

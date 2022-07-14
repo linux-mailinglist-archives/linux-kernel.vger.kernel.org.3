@@ -2,72 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE26574488
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C61757448A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234449AbiGNFcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 01:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
+        id S234571AbiGNFc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 01:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbiGNFc0 (ORCPT
+        with ESMTP id S234625AbiGNFcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 01:32:26 -0400
-Received: from mg.sunplus.com (unknown [113.196.136.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E450720BE7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 22:32:21 -0700 (PDT)
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.202
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(2569:0:AUTH_RELAY)
-        (envelope-from <lh.Kuo@sunplus.com>); Thu, 14 Jul 2022 13:32:08 +0800 (CST)
-Received: from sphcmbx01.sunplus.com.tw (172.17.9.202) by
- sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Thu, 14 Jul 2022 13:32:07 +0800
-Received: from sphcmbx01.sunplus.com.tw ([fe80::bdb5:968f:d409:32d1]) by
- sphcmbx01.sunplus.com.tw ([fe80::bdb5:968f:d409:32d1%14]) with mapi id
- 15.00.1497.033; Thu, 14 Jul 2022 13:32:07 +0800
-From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v10 1/2] thermal: Add thermal driver for Sunplus
-Thread-Topic: [PATCH v10 1/2] thermal: Add thermal driver for Sunplus
-Thread-Index: AQHYlo2OQSnqDllFTEGHHVYnRdkiea19By6g
-Date:   Thu, 14 Jul 2022 05:32:06 +0000
-Message-ID: <a510b35f89034f60a05d6dbe7245e789@sphcmbx01.sunplus.com.tw>
-References: <cover.1654660009.git.lhjeff911@gmail.com>
- <b114b6f8ea51054561a61dc4982715bb73633ec5.1654660009.git.lhjeff911@gmail.com>
- <be752ee1-3732-bcbd-4d31-6d6fe0bd251f@linaro.org>
-In-Reply-To: <be752ee1-3732-bcbd-4d31-6d6fe0bd251f@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.51]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 14 Jul 2022 01:32:51 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC2C20BEF;
+        Wed, 13 Jul 2022 22:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657776771; x=1689312771;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=g3JhouRCSU7SAPZqa1QXPR7km+MMP1OzGRbcWLjGIBc=;
+  b=dm+rkUwdHg6rTyd0I88Bo2IPQD8Cee74n1wssixFf0D2t65ULZHien0j
+   zZFqBgm9P5eYoNhJ2Gl6vk0BZo5VIQ3MLDTCD8hEseXjCOWch8Cw4A4Hv
+   QerlxhbgG9QRcmXZoOJA2uS+9BtWgTGz0DcziJRQKcuC31fJI4dOIoe3d
+   N1ItER9joqNW8lRDKxrMXIiADx4olGj8jcHS1ITP8URs2H4yb1Yo4DvkH
+   ItmApJXhsx5qihu69TRJb/MeRMUE3AaBbKgQbDkDSt1CV+bD2zDBlEpll
+   G/fl/BWIJZ4Ue3nttxdvXNyMIu5bEDIMZ25vSBLlf7KF/wdzB+1TT+Uq+
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265208550"
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="265208550"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 22:32:38 -0700
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="653719713"
+Received: from pfische1-mobl1.amr.corp.intel.com (HELO desk) ([10.251.18.51])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 22:32:38 -0700
+Date:   Wed, 13 Jul 2022 22:32:37 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        antonio.gomez.iglesias@linux.intel.com,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: [PATCH] x86/bugs: Switch to "auto" when "ibrs" selected on Enhanced
+ IBRS parts
+Message-ID: <0456b35fb9ef957d9a9138e0913fb1a3fd445dff.1657747493.git.pawan.kumar.gupta@linux.intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50IHN1bnBsdXNfdGhlcm1hbF9yZW1vdmUoc3Ry
-dWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikgew0KPiA+ICsJc3RydWN0IHNwX3RoZXJtYWxfZGF0
-YSAqc3BfZGF0YSA9IHBsYXRmb3JtX2dldF9kcnZkYXRhKHBkZXYpOw0KPiA+ICsNCj4gPiArCXRo
-ZXJtYWxfem9uZV9vZl9zZW5zb3JfdW5yZWdpc3RlcigmcGRldi0+ZGV2LCBzcF9kYXRhLT5wY2Jf
-dHopOw0KPiANCj4gWW91IHVzZWQgZGV2bSB0byByZWdpc3Rlciwgc28gdGhpcyBsb29rcyB3cm9u
-ZyBhbmQgd2lsbCBsZWFkIHRvIGRvdWJsZSBmcmVlLg0KPiANCj4NCg0KWW91IG1lYW4gdGhlIHJl
-bW92ZSBmdW5jdGlvbiBpcyBub3QgbmVlZGVkLiAgPz8NCg0KDQoNCg==
+Currently spectre_v2=ibrs forces write to MSR_IA32_SPEC_CTRL at every
+entry and exit. On Enhanced IBRS parts setting MSR_IA32_SPEC_CTRL[IBRS]
+only once at bootup is sufficient. MSR write at every kernel entry/exit
+incur unnecessary penalty that can be avoided.
+
+When Enhanced IBRS feature is present, switch from "ibrs" to "auto" mode
+so that appropriate mitigation is selected.
+
+Fixes: 7c693f54c873 ("x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS")
+Cc: stable@vger.kernel.org # 5.10+
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+---
+ arch/x86/kernel/cpu/bugs.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 0dd04713434b..7d7ebfdfbeda 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -1303,6 +1303,12 @@ static enum spectre_v2_mitigation_cmd __init spectre_v2_parse_cmdline(void)
+ 		return SPECTRE_V2_CMD_AUTO;
+ 	}
+ 
++	if (cmd == SPECTRE_V2_CMD_IBRS && boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
++		pr_err("%s selected but CPU supports Enhanced IBRS. Switching to AUTO select\n",
++		       mitigation_options[i].option);
++		return SPECTRE_V2_CMD_AUTO;
++	}
++
+ 	spec_v2_print_cond(mitigation_options[i].option,
+ 			   mitigation_options[i].secure);
+ 	return cmd;
+
+base-commit: 72a8e05d4f66b5af7854df4490e3135168694b6b
+-- 
+2.35.3
+
+

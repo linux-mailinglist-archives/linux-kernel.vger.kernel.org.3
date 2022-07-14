@@ -2,112 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8DC57582F
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A25D9575830
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240906AbiGNXvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 19:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        id S240985AbiGNXyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 19:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiGNXvm (ORCPT
+        with ESMTP id S229556AbiGNXya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 19:51:42 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD126D9EB;
-        Thu, 14 Jul 2022 16:51:41 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id a15so4267130pjs.0;
-        Thu, 14 Jul 2022 16:51:41 -0700 (PDT)
+        Thu, 14 Jul 2022 19:54:30 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE1166AD7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:54:29 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so3963899wme.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:54:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=WQOJ87cxhZVY+IyP6bEM7D5o/BRipLCrV6YOLHFhk1w=;
-        b=IIMJ1246IIPKa4Fs/STJlOe4IyjgfiAckNmuhbjPtUIO1nj4eRzEmX0f/jDfkBJXM5
-         r7E6CEGq5UqqbXoicOFChB8yFFa9MNdXKs7zON/jTEW7lvcVeAw4lQh/X1oRNTLeQzSW
-         Wsf7d0XV+lcxH2oeQGXCXj4bOx+fHApevwf7BSbDKrVPLASQSRFeINMBHfI6T7lo1gwD
-         tn8dxzX14KsS14Mo97QiTwIdJLrPCkzw1VC745ROPwvcond6xyH40n5ReE4NADUTbAse
-         vAxo+f7u3jJ1gmPb2xJ/fw+RBT9GxVsEaPE/2hDyyg1iH/EhZ9g2L/pG4qg7HtaVF1gd
-         0CqQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ibj7frjbnZYO6FL5Vcqe0nREICqfMGkWNo0vt/sikdc=;
+        b=WRwkPR+l/fHOtFnWu857T99CGcTNNnKNno0+Q2bDqa6pzRYWywqfczziScZtRjEd5W
+         1R3MbArz5GlRSZWHB7FKq1E7fTNvHvR/XKEB3Qom0jV4h2h9SoYt2qjcp+L5Dd/WJGbI
+         GeP9OvRHwiHIsDsWZYbOlh5eLZA2VcPgKOQSTdM6NiF3xazjTSaTZkrnt7PpJpNIJn+o
+         bKkvDDMgnrcdCu8l4i0a0fuQSBzdpeiBzNnzT0MLhxLaadTHz58EEoonqNLRrrl+Yepc
+         +3LWT+tMjR0upeELByc9xFp8h75AHg/9LEICWbwHGWqgWm0K3+tjEhHUKewK0ljXm4i5
+         wCPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=WQOJ87cxhZVY+IyP6bEM7D5o/BRipLCrV6YOLHFhk1w=;
-        b=XIb9ELWtwHZCwszS/86xknNd39OaY2ezkluATFKCyUihqq97SVus9jpe1ZhJ7Y6yv+
-         GjVXfixeWgg1+waxGYX7xbr0KFGj0aDaowE15o0eY3mq/cTnb7Sr+nRtIG/ZKr3A/RXQ
-         4JzsxC9e6kqXTxpe8W4rvIA8O4SwpHmEhG5XzYd8F3Gpjm3CD7DF7ps6vlPCRHT4KTkh
-         N6oNIDAPjQnIcP1+jlQ6KP+j0lMeO/Jkjz1FbM3lMqBZc7dd3XV31IivOA/AuaQB4Zrb
-         BKkZP6vLqhe5JUgiWqMBF8AomXtBZIcutQ5U94T3NgteXd2mZEAqGc44/v4gZl83MmZ2
-         uXZA==
-X-Gm-Message-State: AJIora/0kBft/m03EZ1DiI8ElY6NQMiHGATbtAEdifLu/FDJsC1O9OJq
-        vVgodr9fiug1BFopfjYfvoY=
-X-Google-Smtp-Source: AGRyM1teLs417YHFJ/t2owHCD+vGs4Qr7DfmKbJT20i1kDWBwhWfbe5Bg5RlLbs0eGYr/5Q7QmTJjA==
-X-Received: by 2002:a17:90b:19d3:b0:1f0:addf:8ff4 with SMTP id nm19-20020a17090b19d300b001f0addf8ff4mr8732227pjb.191.1657842700547;
-        Thu, 14 Jul 2022 16:51:40 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t3-20020a6549c3000000b00411acdb1625sm1857442pgs.92.2022.07.14.16.51.37
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ibj7frjbnZYO6FL5Vcqe0nREICqfMGkWNo0vt/sikdc=;
+        b=DqESb5S1Wy7HkBkj2C94/iuGIvXFxNF+3TyBbtSTRust+M1r90hlIWWc38JcZawbqU
+         6BoFDVbd+yS/Rmqso/MIPaiyu3Wfg1FizabW2abSx4JLOFfGDo//nexibybrB80tvtYY
+         qNLST5D8Ytpn1qGyWRWj/1hUxUkNYEchrNsLzoIia7c0BYkUtyNy7e0sXC+MjmCwcU+f
+         rY49GQ8RslKsVoLuJ1UhYrb29p5vNY0Pp9Gv1DCkb9iKufqZKG1/5/NWrJgeZB+t27Tm
+         Y38AiBswxRI4oLu1q1F7pmPUMlfuflH8v12dvaIDLTRVUvFH8HW4Xh2q/XMs9pM+nvz1
+         kE8w==
+X-Gm-Message-State: AJIora+59NK39aX9INU4bWmxAV1G0VsOYyXaHsCOyr2A6spvrOlMUQqF
+        SnJMd8MXHbxb5ivRRRKQRow=
+X-Google-Smtp-Source: AGRyM1tQJHzl9hc1mqT5TqMUIUJix99T+jKqcZvUSZXSyQdFkEi0p4frQhhcaBj6ycd5YCUiNPrtLg==
+X-Received: by 2002:a05:600c:3b20:b0:3a2:e956:67ca with SMTP id m32-20020a05600c3b2000b003a2e95667camr11560523wms.183.1657842868097;
+        Thu, 14 Jul 2022 16:54:28 -0700 (PDT)
+Received: from opensuse.localnet (host-95-235-102-55.retail.telecomitalia.it. [95.235.102.55])
+        by smtp.gmail.com with ESMTPSA id b4-20020a05600c150400b003a03185231bsm3160722wmg.31.2022.07.14.16.54.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 16:51:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 14 Jul 2022 16:51:37 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
-Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        michal.winiarski@intel.com,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        brendanhiggins@google.com, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 4/9] drm: selftest: convert drm_format selftest to
- KUnit
-Message-ID: <20220714235137.GA485839@roeck-us.net>
-References: <20220708203052.236290-1-maira.canal@usp.br>
- <20220708203052.236290-5-maira.canal@usp.br>
+        Thu, 14 Jul 2022 16:54:26 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Russ Weight <russell.h.weight@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH] firmware_loader: Replace kmap() with kmap_local_page()
+Date:   Fri, 15 Jul 2022 01:54:15 +0200
+Message-ID: <1731607.VLH7GnMWUR@opensuse>
+In-Reply-To: <YtB/QJw84z7mh0dr@bombadil.infradead.org>
+References: <20220710101156.26139-1-fmdefrancesco@gmail.com> <YtAtQihwVrdymfOX@kroah.com> <YtB/QJw84z7mh0dr@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220708203052.236290-5-maira.canal@usp.br>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 05:30:47PM -0300, Maíra Canal wrote:
-> Considering the current adoption of the KUnit framework, convert the
-> DRM format selftest to the KUnit API.
-> 
-> Tested-by: David Gow <davidgow@google.com>
-> Acked-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> Signed-off-by: Maíra Canal <maira.canal@usp.br>
+On gioved=C3=AC 14 luglio 2022 22:40:32 CEST Luis Chamberlain wrote:
+> On Thu, Jul 14, 2022 at 04:50:42PM +0200, Greg Kroah-Hartman wrote:
+> > On Mon, Jul 11, 2022 at 08:52:49PM +0200, Fabio M. De Francesco wrote:
+> > >=20
+> > > I see that the outputs of selftests, regardless of running a 5.19.0-
+rc6 =20
+> > > kernel with or without my changes, show always the same error:
+> > >=20
+> > > "not ok 1 selftests: firmware: fw_run_tests.sh # TIMEOUT 165=20
+seconds".".
+> > >=20
+> > > I ran those tests on a QEMU/KVM 32-bits VM, booting a vanilla 5.19.0-
+rc6=20
+> > > kernel with HIGHMEM64GB enabled.=20
+> > >=20
+> > > As said, outputs don't change with or without my patch. Instead it=20
+changes=20
+> > > with the latest openSUSE stock kernel (5.18.9-2-pae):
+> > >=20
+> > > "ok 1 selftests: firmware: fw_run_tests.sh".
+> > >=20
+> > > Unfortunately, I'm not familiar with kernel selftests. Any ideas=20
+about what=20
+> > > could have made this tests fail? Is it expected?=20
+> > >=20
+> > > If not, I can try and figure out why these outputs are not what they=
+=20
+should=20
+> > > be (the second version of my patch can wait the time it takes).
+> >=20
+> > No idea, sorry, Luis might know more.
+>=20
+> The selftests should have a config file, ensure that stuff is all
+> enabled. Can you verify if this stuff was enabled on your config:
+>=20
+> cat tools/testing/selftests/firmware/config=20
+> CONFIG_TEST_FIRMWARE=3Dy
+> CONFIG_FW_LOADER=3Dy
+> CONFIG_FW_LOADER_USER_HELPER=3Dy
+> CONFIG_IKCONFIG=3Dy
+> CONFIG_IKCONFIG_PROC=3Dy
+> CONFIG_FW_UPLOAD=3Dy
+>=20
+>   Luis
+>=20
+You've been helpful to tell me how to check that all the necessary options=
+=20
+were enabled. Actually they were _all_ enabled.
 
-This patch results in:
+Soon after checking, I started to look at something else...
 
-Building powerpc:allmodconfig ... failed
---------------
-Error log:
-drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_format_min_pitch':
-drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of 3712 bytes is larger than 2048 bytes
+Being not familiar at all with selftests I had not realized that I was=20
+using the tests built for an older version of the kernel.=20
 
-presumably due to function nesting.
+I made some confusion between cross-compiling for x86-32 in a separate=20
+directory from sources, installing my custom 5.19.0-rc6 kernel in the VM,=20
+and running the selftests built for an older 5.18.0-rc[something].
 
-Guenter
+Everything is working perfectly now (with and without my patch)[1]:
+"ok 1 selftests: firmware: fw_run_tests.sh".
+
+I'm sorry for my lack of experience :-(
+
+Thank you so much,
+
+=46abio
+
+[1] https://lore.kernel.org/lkml/20220714235030.12732-1-fmdefrancesco@gmail=
+=2Ecom/
+
+
+
+

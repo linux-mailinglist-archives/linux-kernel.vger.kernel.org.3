@@ -2,97 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8CA575415
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB792575418
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239133AbiGNRdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 13:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
+        id S237417AbiGNRer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 13:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbiGNRdj (ORCPT
+        with ESMTP id S229529AbiGNRep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 13:33:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B771FA474
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 10:33:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657820017;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0uihKaBOQkwF5deCzOTDYRhxxtwy14Pizt+T/pVs9Yg=;
-        b=al4VYPA/9NyqMpBTtyejfFfvv2l/VPXDlHPVE9Tw3sCbPDljAlmZlYJ5nqcYBqAhE0fG7u
-        2wOd35TOLfBcnMdo8VUhPCuuCAqCNeEBxHu4dl4xBsHAGuAFT2bwCI+w2kytGnVcK9ZVmD
-        guysOigrijNTrH94hbRM8oLa+NBOBsk=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-332-AMo8uhPsPOGOG_Xiv8EPlw-1; Thu, 14 Jul 2022 13:33:35 -0400
-X-MC-Unique: AMo8uhPsPOGOG_Xiv8EPlw-1
-Received: by mail-ed1-f70.google.com with SMTP id z20-20020a05640240d400b0043a82d9d65fso1908099edb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 10:33:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0uihKaBOQkwF5deCzOTDYRhxxtwy14Pizt+T/pVs9Yg=;
-        b=AfxhcJAuKA0VIga1hueIWszvR0H6MijyLiC/79AllLf+UlJTkja/4MRWt9f3BXwDrR
-         Sg6XxCQ/Pk9audEQrsw/ntSQHzzgjYWJp9V091fXXiMFcnE7Fs2YOPl6VlizZ30XClcJ
-         usn0AV3VgpX6/72+gdgDN3ubYDe1TobQh7EejuaBgrY0PfJORixe79oWgkeYAFJUtwPg
-         qPHSTRP6BOZIT3XWRD3/5/NXBlWjQKWHV8jfC/3tJnSxjAvci6maef9Pok6VWelNnYf5
-         LAcWy5z3Jl62EcTOU87rHxs3pPSWGYKFBzYFO95GJoHIOodBixuP1mnGRyjV7g6t0v7X
-         6fog==
-X-Gm-Message-State: AJIora8RrW7wK/dOmhcUfup0h2H2RE04gu3ewODAn/PHML8blsIcKHWG
-        RpmuW1Z4q41sE/OJp3fLfeU+15Zv+pE1qxl4J48nHBQJ3Emqz6a7qtxC213Ai/NYZs+qrt2aKnj
-        SBh6BGFf60+Rk6En8aVeXIe3T
-X-Received: by 2002:a05:6402:3214:b0:43a:b36f:a0b4 with SMTP id g20-20020a056402321400b0043ab36fa0b4mr13821023eda.122.1657820014769;
-        Thu, 14 Jul 2022 10:33:34 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vV0UoPqphONFgcUdCBs8koMta1HObDMznrSBqqIdYHhspB9/PNO5wIYVZMH94ltjorGpco5g==
-X-Received: by 2002:a05:6402:3214:b0:43a:b36f:a0b4 with SMTP id g20-20020a056402321400b0043ab36fa0b4mr13821007eda.122.1657820014534;
-        Thu, 14 Jul 2022 10:33:34 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id h27-20020a170906719b00b0072aeaa1bb5esm920080ejk.211.2022.07.14.10.33.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 10:33:33 -0700 (PDT)
-Message-ID: <747332db-189a-2f58-4a2c-6a40eb631af8@redhat.com>
-Date:   Thu, 14 Jul 2022 19:33:33 +0200
+        Thu, 14 Jul 2022 13:34:45 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078CB27B2D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 10:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657820082; x=1689356082;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Q2hr6t9hP30vtYE8U9QK/PSmuSA0zJVABm+vYdNJ3cM=;
+  b=n/DweUQEY/yHhM6+HFIq9A/poemIIqHgVqEl+x3kewmbaGQu5TBW4Y2g
+   tr4g12SauZS5nt0YpQs7B0bFtEo+XgpAbwjuEhbLq4/Yar2LoCxvVsL0F
+   OJl6E5bdOUSkzMB9a5Fv9t2rVlmQudRLyP1H+QU6g5lBbn8MgKbW1yKwz
+   ZdWx+jKJtXn/HBspP1QFLq8EsxZH/qx70yK4PLEI6/5KNljmKFOpwuL8b
+   IpHPtdhkWmvVAt9s6XnUXXH+92ibf/ZMa1e21ZE93VwtnNGqMUxj0LNPz
+   jxQuipeOzqE/wWZTrT8b1xJJ4ErMY68YxGoQ/AX0BMLxJGx2EhPto8vn2
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="265999190"
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="265999190"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 10:34:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="628791855"
+Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 14 Jul 2022 10:34:30 -0700
+Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oC2jN-0000vu-Ia;
+        Thu, 14 Jul 2022 17:34:29 +0000
+Date:   Fri, 15 Jul 2022 01:33:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [morimoto:sound2-2022-07-08-v1 9/18] sound/soc/soc-core.c:966:5:
+ sparse: sparse: symbol '__snd_soc_add_pcm_runtime' was not declared. Should
+ it be static?
+Message-ID: <202207150148.5qKyHdfC-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/5] KVM: x86: Clean up rmap zap helpers
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220712015558.1247978-1-seanjc@google.com>
- <bc2c1af3-33ec-d97e-f604-12a991c7cd5e@redhat.com>
- <YtBR/x3CAEavwzMI@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YtBR/x3CAEavwzMI@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/14/22 19:27, Sean Christopherson wrote:
-> 
->    pte_list_remove  => kvm_zap_one_rmap_spte
->    pte_list_destroy => kvm_zap_all_rmap_sptes
-> 
-> That will yield a better series too, as I can move patch 5 to be patch 2, then
-> split what was patch 2 (the rename) into separate patches to first align kvm_zap_rmap()
-> and __kvm_zap_rmap(), and then rename the pte_list_remove/destroy helpers.
+tree:   https://github.com/morimoto/linux sound2-2022-07-08-v1
+head:   b5e8d2766050dfd3452dcdcdff072121984c9a31
+commit: 525984dfed23d3f036e4c9bd8f8a72bec3823ffb [9/18] ASoC: force to use DPCM on normal connection
+config: i386-randconfig-s003 (https://download.01.org/0day-ci/archive/20220715/202207150148.5qKyHdfC-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/morimoto/linux/commit/525984dfed23d3f036e4c9bd8f8a72bec3823ffb
+        git remote add morimoto https://github.com/morimoto/linux
+        git fetch --no-tags morimoto sound2-2022-07-08-v1
+        git checkout 525984dfed23d3f036e4c9bd8f8a72bec3823ffb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/
 
-Yeah, sounds good (I also was looking into moving patch 5 and possibly 
-even patch 4 more towards the beginning).
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Paolo
 
+sparse warnings: (new ones prefixed by >>)
+>> sound/soc/soc-core.c:966:5: sparse: sparse: symbol '__snd_soc_add_pcm_runtime' was not declared. Should it be static?
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

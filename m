@@ -2,53 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A46E57526A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 938B9575286
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237780AbiGNQFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S232509AbiGNQOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237665AbiGNQFt (ORCPT
+        with ESMTP id S238967AbiGNQOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:05:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6900F5143A;
-        Thu, 14 Jul 2022 09:05:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1517DB82730;
-        Thu, 14 Jul 2022 16:05:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4705AC34114;
-        Thu, 14 Jul 2022 16:05:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657814745;
-        bh=u1PzRpfvIioRbL5vI4/uG1dc+4gqO2bAsTU0TqTxIPY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CT5yUYctDZH0qrlGCxQAuMOPhME+eSBJ6C/DdjprmCXeGu8g64qYnz24aLVyk7OeL
-         JUc/T82SG0qPzcncprQ2CNCgskGbbduSDjkU3DlyyaS6/46A9zAbQE44WPQP0QVq/+
-         EMItdC36oS3MuGW8wG6n92hoXMSXrTu8wyIm/tFLMzxb1rg5fdDQwJg9xFSf6IMWKf
-         JEzhwySCauX+dN8stFawkDD8p7uycHt0rplKPdKm5ie5+5GqAbpoJa8OYYy1oSVLqY
-         rBTwM3Kc8GBFAVuCXRmQWkzkAOdDDgIx0fhhQtF/XJQLfXWpb/O3YC7vwWrMzgXJ4n
-         6CBsDgZnqZXuQ==
-Date:   Thu, 14 Jul 2022 09:05:43 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Subject: Re: linux-next: Tree for Jul 14
-Message-ID: <YtA+127QgRifnRBZ@dev-arch.thelio-3990X>
-References: <20220714185514.7d1a2ac9@canb.auug.org.au>
- <Ys/42uMzQy+CFTGI@debian>
+        Thu, 14 Jul 2022 12:14:10 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C25183B8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:14:08 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id w1so1338954qkj.12
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:14:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i0zBfnxSR+XSC3TWRrXeBSbIPtooMElqlO0E5qJfqHY=;
+        b=AicyMAMtAJ/Z0UOW+5U7FPyH3YduEHw66mxNzKFt83q0UgYAuUktYuRnKY19VdiPow
+         4zfsat974n37jCNFKnsLH9/F4qaV+PE1XPU9u0SIwjfBQTysVePz8O+XxnErKvNaDgiu
+         B6UXUzyoUci5m5SWoI7T8vrnf7LVgnHKkhSIP1jw7bO/0tDqO8N8Oi4VAgjs25g+rcE2
+         odBX+nEFF0Xbxb+m8zVMh527QH0F0m5j7i9tZFDD0Ig16MMX4/MvAnXOIv5T8zfTlLMy
+         ySDyz1mZ4Hp1aPxQhKxow7eFeA5Vr+P4b2Evt5h50OiqKtfSZj7aczQ7eu45G70ATrZ7
+         TGLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i0zBfnxSR+XSC3TWRrXeBSbIPtooMElqlO0E5qJfqHY=;
+        b=subEEe3Q2WMOV44FzM+sA1NX/Rv6Y3ZrW0ivzD+IsrD5u+ueoPsfJfQbjubRB4eQRx
+         a5xnAnXtOymyvZ/qcIf6Ky4BM4PPbLUiJg0Q/0FYpaPiVIXLJJFY6q16TiTcvTiudUQd
+         63ni9cYiYYlfm3eHNNpfE11ZWPovblQBQDkqqahg/O2Lqb/eCjCXxlh9vt5+uDuT55zh
+         2IDQb5oodOsHq9YxyfKZYDBRIwfpgorSCMvGfcecEUyKAfpuUxLfuma+OUni+jPsTFmF
+         qHOogOzXUqrtlTwX8fkbzneHmYbM2N/eEGFgt6E9pDohbio09CRmNpsFWsGcV1VE1xwQ
+         8ksg==
+X-Gm-Message-State: AJIora+ux/tYH+fZXZuLh5G8WRqp2gKEc9C7pAY+g8y9fPTsLa/Kjagf
+        svjdqnAzSITCeHF675K84NdyVA==
+X-Google-Smtp-Source: AGRyM1s87BgBAU1CqOQNE5w2MmJYKyfCjer37D9d4I2vq4RoVsg++iiHKfpOrCrnZDIDFNUm7HsPkw==
+X-Received: by 2002:a05:620a:22ef:b0:6b5:9a48:fa67 with SMTP id p15-20020a05620a22ef00b006b59a48fa67mr6604165qki.567.1657815247782;
+        Thu, 14 Jul 2022 09:14:07 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id cp4-20020a05622a420400b0031eb393aa45sm1690067qtb.40.2022.07.14.09.14.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 09:14:07 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH 0/4] Counter updates and cleanups for 5.20
+Date:   Thu, 14 Jul 2022 12:07:11 -0400
+Message-Id: <cover.1657813472.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys/42uMzQy+CFTGI@debian>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,47 +68,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudip,
+First set of Counter updates and cleanups for 5.20
 
-On Thu, Jul 14, 2022 at 12:07:06PM +0100, Sudip Mukherjee (Codethink) wrote:
-> Hi Stephen,
-> 
-> On Thu, Jul 14, 2022 at 06:55:14PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20220713:
-> 
-> Build failures on next-20220714:
+Only a couple changes this cycle, all involving the 104-QUAD-8 driver.
 
-<snip>
+The 104-QUAD-8 driver is refactored to utilize iomap() and respective
+ioread8()/iowrite8() I/O memory accessor calls. This allows some
+significant cleanup of magic numbers, replacing them with a more
+straight-forward approach of accessing named register structures.
 
-> x86_64 allmodconfig with clang fails with:
-> 
-> drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is not a compile-time constant
->         gpu_cc_parent,
->         ^~~~~~~~~~~~~
-> drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is not a compile-time constant
->         gpu_cc_parent,
->         ^~~~~~~~~~~~~
+The Counter git repository has moved to a new host
+<https://git.linaro.org/people/william.gray/counter.git/> and the
+MAINTAINTERS file updated accordingly along with my latest contact
+information. Syed Nayyar Waris is no longer available to maintain the
+104-QUAD-8 driver so the 104-QUAD-8 drivers maintainers list is updated
+as well to reflect the departure.
 
-I sent https://lore.kernel.org/20220711174004.3047516-1-nathan@kernel.org/
-for this a few days ago, it just needs to be picked up.
+William Breathitt Gray (4):
+  MAINTAINERS: Update info for William Breathitt Gray
+  counter: 104-quad-8: Utilize iomap interface
+  counter: 104-quad-8: Implement and utilize register structures
+  MAINTAINERS: Update 104-QUAD-8 driver maintainers list
 
-> arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
-> DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
->                     ^
-> ./arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
-> extern u64 x86_spec_ctrl_current;
+ MAINTAINERS                  |  29 +++--
+ drivers/counter/104-quad-8.c | 203 ++++++++++++++++++++---------------
+ 2 files changed, 130 insertions(+), 102 deletions(-)
 
-This is now fixed in -tip so it should be fixed in -next tomorrorow:
 
-https://git.kernel.org/tip/db866d3352ec85e821e730e191481cba3a2bfa6e
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+-- 
+2.36.1
 
-In the future, consider CC'ing our mailing list (llvm@lists.linux.dev)
-for any clang related issues so that we can get them taken care of ASAP,
-we have a MAINTAINERS entry for a reason :) thank you for testing with
-clang; the more people that use it, hopefully the easier it will be to
-get things unbroken.
-
-Cheers,
-Nathan

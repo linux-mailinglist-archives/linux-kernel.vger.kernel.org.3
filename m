@@ -2,120 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B139574F12
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFBEE574F1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239857AbiGNNXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
+        id S238730AbiGNNYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239760AbiGNNWs (ORCPT
+        with ESMTP id S239452AbiGNNYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:22:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0840C61D5E;
-        Thu, 14 Jul 2022 06:22:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30D8362063;
-        Thu, 14 Jul 2022 13:22:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74BF2C34114;
-        Thu, 14 Jul 2022 13:22:17 +0000 (UTC)
-Date:   Thu, 14 Jul 2022 09:22:15 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 bpf-next 1/5] ftrace: allow customized flags for
- ftrace_direct_multi ftrace_ops
-Message-ID: <20220714092215.149d4823@gandalf.local.home>
-In-Reply-To: <BDED3B27-B42F-44AD-904E-010752462A67@fb.com>
-References: <20220602193706.2607681-1-song@kernel.org>
-        <20220602193706.2607681-2-song@kernel.org>
-        <20220713191846.18b05b43@gandalf.local.home>
-        <0029EF24-6508-4011-B365-3E2175F9FEAB@fb.com>
-        <20220713203841.76d66245@rorschach.local.home>
-        <C2FCCC9B-5F7D-4BBF-8410-67EA79166909@fb.com>
-        <20220713225511.70d03fc6@gandalf.local.home>
-        <BDED3B27-B42F-44AD-904E-010752462A67@fb.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 14 Jul 2022 09:24:30 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DCC2652;
+        Thu, 14 Jul 2022 06:23:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R351e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VJJmwxW_1657805021;
+Received: from 30.97.56.179(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VJJmwxW_1657805021)
+          by smtp.aliyun-inc.com;
+          Thu, 14 Jul 2022 21:23:41 +0800
+Message-ID: <fe9508ae-f12a-2216-1160-145308d746f5@linux.alibaba.com>
+Date:   Thu, 14 Jul 2022 21:23:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH V5 1/2] ublk_drv: add io_uring based userspace block
+ driver
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+References: <20220713140711.97356-1-ming.lei@redhat.com>
+ <20220713140711.97356-2-ming.lei@redhat.com>
+ <a4249561-84a0-a314-c377-b96d28b7b20b@linux.alibaba.com>
+ <Ys/0jTxQCEHdI560@T590>
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+In-Reply-To: <Ys/0jTxQCEHdI560@T590>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Jul 2022 04:37:43 +0000
-Song Liu <songliubraving@fb.com> wrote:
-
-> >   
-> >> 
-> >> non-direct ops without IPMODIFY can already share with IPMODIFY ops.  
-> > 
-> > It can? ftrace sets IPMODIFY for all DIRECT callers to prevent that. Except
-> > for this patch that removes that restriction (which I believe is broken).  
+On 2022/7/14 18:48, Ming Lei wrote:
+> On Thu, Jul 14, 2022 at 06:20:38PM +0800, Ziyang Zhang wrote:
+>> On 2022/7/13 22:07, Ming Lei wrote:
+>>> This is the driver part of userspace block driver(ublk driver), the other
+>>> part is userspace daemon part(ublksrv)[1].
+>>>
+>>> The two parts communicate by io_uring's IORING_OP_URING_CMD with one
+>>> shared cmd buffer for storing io command, and the buffer is read only for
+>>> ublksrv, each io command is indexed by io request tag directly, and
+>>> is written by ublk driver.
+>>>
+>>> For example, when one READ io request is submitted to ublk block driver, ublk
+>>> driver stores the io command into cmd buffer first, then completes one
+>>> IORING_OP_URING_CMD for notifying ublksrv, and the URING_CMD is issued to
+>>> ublk driver beforehand by ublksrv for getting notification of any new io request,
+>>> and each URING_CMD is associated with one io request by tag.
+>>>
+>>> After ublksrv gets the io command, it translates and handles the ublk io
+>>> request, such as, for the ublk-loop target, ublksrv translates the request
+>>> into same request on another file or disk, like the kernel loop block
+>>> driver. In ublksrv's implementation, the io is still handled by io_uring,
+>>> and share same ring with IORING_OP_URING_CMD command. When the target io
+>>> request is done, the same IORING_OP_URING_CMD is issued to ublk driver for
+>>> both committing io request result and getting future notification of new
+>>> io request.
+>>>
+>>> Another thing done by ublk driver is to copy data between kernel io
+>>> request and ublksrv's io buffer:
+>>>
+>>> 1) before ubsrv handles WRITE request, copy the request's data into
+>>> ublksrv's userspace io buffer, so that ublksrv can handle the write
+>>> request
+>>>
+>>> 2) after ubsrv handles READ request, copy ublksrv's userspace io buffer
+>>> into this READ request, then ublk driver can complete the READ request
+>>>
+>>> Zero copy may be switched if mm is ready to support it.
+>>>
+>>> ublk driver doesn't handle any logic of the specific user space driver,
+>>> so it is small/simple enough.
+>>>
+>>> [1] ublksrv
+>>>
+>>> https://github.com/ming1/ubdsrv
+>>>
+>>> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+>>> ---
+>>
+>>
+>> Hi, Ming
+>>
+>> I find that a big change from v4 to v5 is the simplification of locks.
+>>
+>> In v5 you remove ubq->abort_lock, and I want to ask why it is OK to remove it?
 > 
-> I mean "non-direct" ftrace ops, not direct ftrace ops. 
-
-Ah, sorry misunderstood that.
-
-
-> > Let me start from the beginning.  
+> Actually V4 and previous version dealt with the issue too complicated.
 > 
-> I got your point now. We replace the flag on direct trampoline with a 
-> callback check. So yes, this works. 
-
-I'm glad we are on the same page :-)
-
-
-> > 9. ftrace sees the lkp IPMODIFY ops has SHARED_IPMODIFY on it, and knows
-> >   that there's a direct call here too. It removes the IPMODIFY ops, and
-> >   then calls the direct ops->ops_func(STOP_SHARE_WITH_IPMODIFY) to let the
-> >   direct code know that it is no longer sharing with an IPMODIFY such that
-> >   it can change to call the function directly and not use the stack.  
+>>
+>> If you have time, could you explain how ublk deals with potential race on:
+>> 1)queue_rq 2)ublk_abort_queue 3) ublk_ctrl_stop_dev 4) ublk_rq_task_work.
+>> (Lock in ublk really confuses me...)
 > 
-> I wonder whether we still need this flag. Alternatively, we can always
-> find direct calls on the function and calls ops_func(STOP_SHARE_WITH_IPMODIFY). 
+> One big change is the following code:
+> 
+> __ublk_rq_task_work():
+> 	bool task_exiting = current != ubq->ubq_daemon ||
+>                 (current->flags & PF_EXITING);
+> 	...
+> 	if (unlikely(task_exiting)) {
+>                 blk_mq_end_request(req, BLK_STS_IOERR);
+>                 mod_delayed_work(system_wq, &ub->monitor_work, 0);
+>                 return;
+>     }
+> 
+> Abort is always started after PF_EXITING is set, but if PF_EXITING is
+> set, __ublk_rq_task_work fails the request immediately, then io->flags
+> won't be touched, then no race with abort. Also PF_EXITING is
+> per-task flag, can only be set before calling __ublk_rq_task_work(),
+> and setting it actually serialized with calling task work func.
+> 
+> In ublk_queue_rq(), we don't touch io->flags, so there isn't race
+> with abort.
+> 
+> Wrt. ublk_ctrl_stop_dev(), it isn't related with abort directly, and
+> if del_gendisk() waits for inflight IO, abort work will be started
+> for making forward progress. After del_gendisk() returns, there can't
+> be any inflight io, so it is safe to cancel other pending io command.
+> 
 
-Actually we don't need the new flag and we don't need to always search. When
-a direct is attached to the function then the rec->flags will have
-FTRACE_FL_DIRECT attached to it.
+Thanks, Ming. I understand the aborting code now. And it looks good to me.
 
-Then if an IPMODIFY is being removed and the rec->flags has
-FTRACE_FL_DIRECT set, then we know to search the ops for the one that has a
-DIRECT flag attached and we can call the ops_func() on that one.
+Previously I think maybe monitor_work and task_work
+may be scheduled at the same time while task is exiting
+and blk_mq_end_request() on the same tag could be called twice.
 
-We should also add a FTRACE_WARN_ON() if a direct is not found but the flag
-was set.
+But I find there is a check on ublk_io's flag(UBLK_IO_FLAG_ACTIVE)
+in ublk_daemon_monitor_work() and ublk_io is aborted in task_work
+immediately(with UBLK_IO_FLAG_ACTIVE set, not cleared yet)
+
+So there is no chance to call a send blk_mq_end_request() on the same tag.
+
+Besides, for ublk_ios with UBLK_IO_FLAG_ACTIVE unset, 
+stop_work scheduled in monitor work will call ublk_cancel_queue() by sending
+cqes with UBLK_IO_RES_ABORT.
+
+Put it together:
+
+When daemon is PF_EXITING:
+
+1) current ublk_io: aborted immediately in task_work
+
+2) UBLK_IO_FLAG_ACTIVE set: aborted in ublk_daemon_monitor_work
+
+3) UBLK_IO_FLAG_ACTIVE unset: send cqe with UBLK_IO_RES_ABORT
+
+
+Hope I'm correct this time. :)
+
+>>
+>>
+>> [...]
+>>
+>>> +
+>>> +/*
+>>> + * __ublk_fail_req() may be called from abort context or ->ubq_daemon
+>>> + * context during exiting, so lock is required.
+>>> + *
+>>> + * Also aborting may not be started yet, keep in mind that one failed
+>>> + * request may be issued by block layer again.
+>>> + */
+>>> +static void __ublk_fail_req(struct ublk_io *io, struct request *req)
+>>> +{
+>>> +	WARN_ON_ONCE(io->flags & UBLK_IO_FLAG_ACTIVE);
+>>> +
+>>> +	if (!(io->flags & UBLK_IO_FLAG_ABORTED)) {
+>>> +		io->flags |= UBLK_IO_FLAG_ABORTED;
+>>> +		blk_mq_end_request(req, BLK_STS_IOERR);
+>>> +	}
+>>> +}
+>>> +
+>>
+>> [...]
+>>
+>>> +
+>>> +/*
+>>> + * When ->ubq_daemon is exiting, either new request is ended immediately,
+>>> + * or any queued io command is drained, so it is safe to abort queue
+>>> + * lockless
+>>> + */
+>>> +static void ublk_abort_queue(struct ublk_device *ub, struct ublk_queue *ubq)
+>>> +{
+>>> +	int i;
+>>> +
+>>> +	if (!ublk_get_device(ub))
+>>> +		return;
+>>> +
+>>> +	for (i = 0; i < ubq->q_depth; i++) {
+>>> +		struct ublk_io *io = &ubq->ios[i];
+>>> +
+>>> +		if (!(io->flags & UBLK_IO_FLAG_ACTIVE)) {
+>>> +			struct request *rq;
+>>> +
+>>> +			/*
+>>> +			 * Either we fail the request or ublk_rq_task_work_fn
+>>> +			 * will do it
+>>> +			 */
+>>> +			rq = blk_mq_tag_to_rq(ub->tag_set.tags[ubq->q_id], i);
+>>> +			if (rq)
+>>> +				__ublk_fail_req(io, rq);
+>>> +		}
+>>> +	}
+>>> +	ublk_put_device(ub);
+>>> +}
+>>> +
+>>
+>>
+>> Another problem: 
+>>
+>> 1) comment of __ublk_fail_req():  "so lock is required"
+> 
+> Yeah, now __ublk_fail_req is only called in abort context, and no race
+> with task work any more, so lock isn't needed.
+
+Ok, I see.
 
 > 
-> What do you think about this? 
->
+>>
+>> 2) comment of ublk_abort_queue(): "so it is safe to abort queue lockless"
+> 
+> This comment is updated in v5, and it is correct.
+> 
+>>
+>> 3) ublk_abort_queue() calls _ublk_fail_req() on all ubqs.
+> 
+> No, ublk_abort_queue() only aborts the passed ubq, so if one ubq daemon
+> is aborted, other ubqs can still handle IO during deleting disk.
 
-I think this works.
+Ok, I see.
 
-Also, on the patch that implements this in the next version, please add to
-the change log:
+I think if one ubq daemon is killed(and blk-mq requests related to it are aborted), 
+stop work should call del_gendisk() and other ubq daemons can still complete blk-mq requests
+but no new blk-mq requests will be issued. 
+After that, these unkilled ubq daemons will get UBLK_IO_RES_ABORT cqes
+and exit by themselves.
 
-Link: https://lore.kernel.org/all/20220602193706.2607681-2-song@kernel.org/
 
-so that we have a link to this discussion.
-
-Thanks,
-
--- Steve
+> 
+> 
+> Thanks,
+> Ming

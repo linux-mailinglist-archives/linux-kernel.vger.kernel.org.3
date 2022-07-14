@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40D3574E97
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023A3574E9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238197AbiGNNFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32824 "EHLO
+        id S238956AbiGNNFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231947AbiGNNF0 (ORCPT
+        with ESMTP id S238893AbiGNNFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:05:26 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBFD2D1F9;
-        Thu, 14 Jul 2022 06:05:25 -0700 (PDT)
+        Thu, 14 Jul 2022 09:05:46 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C144F671
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:05:44 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id bn33so2063668ljb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:05:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657803925; x=1689339925;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=o/uCGcJ47frDAidTP8LfsgkkatSl2wQ4r/QApE2FaGU=;
-  b=zESrki1aa27DopVzSh/NxADoXkmLgdzSmFcyGTs5BBAL+eRPovrEtsp8
-   CA3h6dEuhHE8/S1vuCECzsi83M4irllxr2ANJMefbuob/aIqBUa4h0n9Z
-   a9htUp1eUKkgoqiWaIDoIiXSZZzoo730Lqn2a+SJelYD55ymCBtA4GIWp
-   0=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Jul 2022 06:05:25 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 06:05:24 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 14 Jul 2022 06:05:24 -0700
-Received: from [10.242.7.35] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 14 Jul
- 2022 06:05:20 -0700
-Message-ID: <1bc53dc5-fc7f-54fd-ab7c-f1e77548b20d@quicinc.com>
-Date:   Thu, 14 Jul 2022 18:35:17 +0530
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=u+3rknmtb2dZGdFRfj+HaAmrjmjmI4vZwsXBVfJYyoA=;
+        b=sVGUiDjf0lNmV8joR1NFJJB73ewZQ7mfpDQ/NHORpp33c46ryiRzI5L+UTJP+rirVv
+         RLGbciQ1diEymQa0jxdXJDXcxr10hC4Yl9iqHCuYpyXDu/8j1C23rwZNDawbpAKUl6X1
+         QhFW/X7OifcXq8C/sXuY3Kd1fmKSgl6+8pgbrYYjJSsbwQLKG5eubgJ/xvwHbTmuZoA3
+         DBFIfoMIM9IMZlbe0uNp0rUfmvmJi3FuDuPIVyUlZgT1mknXNNVwF+ZPRwB0SSUmg4fz
+         RW6wgyGPbJzuBWNI/HjY2ER+znlWmW0BL663K/qaBtROGyl/yIW4tajNMfyjCSy6RhJS
+         0Sfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=u+3rknmtb2dZGdFRfj+HaAmrjmjmI4vZwsXBVfJYyoA=;
+        b=2oWoUi6HyOdU1WIGsOkmztdXdpDISTNvKZRqxr86KCgwIwi62/AZ+qdNfle4cXxypc
+         X9vcVLyxSuKwlb5p9gV/JVe3sDnoym/3bxytCTZBtsJ2pKfKwji4zKVabkNLmhubkXkE
+         IzJDEVVIAf/FAmSvJpBYtp7tMaIK1PxnkXeSYNV0+r+Gq2oA/7AyqjhEle+zdKo21eoY
+         B/nHvn4G+ErosH91Hf4cc08tPUQtcabxvs4REcgEYF7gOlZgpeTn8JcVEulDgKLPJ1q7
+         j+Al4O0gV+ap3y0ywiDAGWjEYGWYu9kdyJXOQfFS0h3XepLcByN1OoS0MDmULruvCDeN
+         eOMQ==
+X-Gm-Message-State: AJIora9oCFBPcxirNMQyWudJTbBfKL2h6sufxw7peW9vGPzj6A81rVK2
+        fVOvaPeZMcuI4njmMAPiDJYOrQ==
+X-Google-Smtp-Source: AGRyM1utuosbogphj/pZJQ0Zu/oq61N+cuIDtO7V7ISXg8NE0sxYlKJ7AyfdosnfkcsEkXstj2yjjw==
+X-Received: by 2002:a2e:9bd6:0:b0:25d:8712:64f6 with SMTP id w22-20020a2e9bd6000000b0025d871264f6mr4403216ljj.337.1657803942958;
+        Thu, 14 Jul 2022 06:05:42 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id u1-20020ac258c1000000b0047f943112e3sm350866lfo.285.2022.07.14.06.05.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 06:05:42 -0700 (PDT)
+Message-ID: <9ef036db-2ac8-2723-93de-ac841d94ba51@linaro.org>
+Date:   Thu, 14 Jul 2022 16:05:41 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [V5] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
- otherwise could return a sub-optimal clock rate.
-Content-Language: en-CA
-To:     Jiri Slaby <jirislaby@kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <konrad.dybcio@somainline.org>,
-        <gregkh@linuxfoundation.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_msavaliy@quicinc.com>, <dianders@chromium.org>,
-        <mka@chromium.org>, <swboyd@chromium.org>
-References: <1657629905-24685-1-git-send-email-quic_vnivarth@quicinc.com>
- <b973cfc2-d9a8-5d62-036f-14671cf56799@kernel.org>
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-In-Reply-To: <b973cfc2-d9a8-5d62-036f-14671cf56799@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Subject: Re: [PATCH] PCI: qcom: Add support for modular builds
+Content-Language: en-GB
+To:     Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220519094646.23009-1-johan+linaro@kernel.org>
+ <cc7c90aa-6705-7493-2f58-5112f7d663a3@mm-sol.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <cc7c90aa-6705-7493-2f58-5112f7d663a3@mm-sol.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,72 +82,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Stanimir,
 
-On 7/14/2022 4:16 PM, Jiri Slaby wrote:
-> On 12. 07. 22, 14:45, Vijaya Krishna Nivarthi wrote:
-> ...
->> +static unsigned long get_clk_div_rate(struct clk *clk, struct device 
->> *dev,
->> +        unsigned int baud, unsigned int sampling_rate, unsigned int 
->> *clk_div)
->> +{
->> +    unsigned long ser_clk;
->> +    unsigned long desired_clk;
->> +
->> +    desired_clk = baud * sampling_rate;
->> +    if (!desired_clk) {
->> +        dev_dbg(dev, "Invalid frequency\n");
->> +        return 0;
->>       }
->>   -    *clk_div = ser_clk / desired_clk;
->> -    if (!(*clk_div))
->> -        *clk_div = 1;
->> +    /*
->> +     * try to find a clock rate within 2% tolerance, then within
->
-> "then within" ... "5" is missing, perhaps?
+On 14/07/2022 15:19, Stanimir Varbanov wrote:
+> Hi Johan,
+> 
+> Please take a look why we made it built-in first [1].
+> 
+> If arguments there are still valid I don't see why to make it a module
+> again.
+> 
+> [1] https://lkml.org/lkml/2016/8/24/694
 
+It looks like there is a move to make all non-essential drivers 
+buildable as modules. For example, the Kirin, dra7xx, Meson PCI 
+controllers are now buildable as modules. So I think we can follow that 
+and allow building the pcie-qcom as a module.
 
-Yes :(
-
-Will change.
-
-
->
->> +     */
->> +    ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 2);
->> +    if (!ser_clk)
->> +        ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 5);
->> +
->> +    if (!ser_clk)
->> +        dev_err(dev, "Couldn't find suitable clock rate for %lu\n", 
->> desired_clk);
->> +    else
->> +        dev_dbg(dev, "desired_clk-%lu, ser_clk-%lu, clk_div-%u\n",
->> +                desired_clk, ser_clk, *clk_div);
->>         return ser_clk;
->>   }
->> @@ -1021,8 +1040,8 @@ static void qcom_geni_serial_set_termios(struct 
->> uart_port *uport,
->>       if (ver >= QUP_SE_VERSION_2_5)
->>           sampling_rate /= 2;
->>   -    clk_rate = get_clk_div_rate(port->se.clk, baud,
->> -        sampling_rate, &clk_div);
->> +    clk_rate = get_clk_div_rate(port->se.clk, port->se.dev, baud,
->
-> Maybe worth passing whole geni_se (port->se) then?
+> 
+> On 5/19/22 12:46, Johan Hovold wrote:
+>> Allow the Qualcomm PCIe controller driver to be built as a module, which
+>> is useful for multi-platform kernels as well as during development.
+>>
+>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+>> ---
+>>   drivers/pci/controller/dwc/Kconfig     |  2 +-
+>>   drivers/pci/controller/dwc/pcie-qcom.c | 36 +++++++++++++++++++++++---
+>>   2 files changed, 34 insertions(+), 4 deletions(-)
+>>
+> 
+> 
 
 
-but then geni_se is a struct; shall we pass port instead?
-
-Alternately move logging to caller?
-
-Thank you.
-
-
->
->> +                    sampling_rate, &clk_div);
->>       if (!clk_rate)
->>           goto out_restart_rx;
->
-> thanks,
+-- 
+With best wishes
+Dmitry

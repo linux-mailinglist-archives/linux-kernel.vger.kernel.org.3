@@ -2,64 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4FA574ED3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7FD574EDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238918AbiGNNSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
+        id S239643AbiGNNTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbiGNNSh (ORCPT
+        with ESMTP id S239428AbiGNNTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:18:37 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEDC2723
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:18:36 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id p9so2842984pjd.3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FICPOvskNZaVS6/YR3ZJCLElglUVHG4aUM/j9Ly4324=;
-        b=ooP01MEqxBoJ6U5T/WcpBN+kmFOvE889VGqCywIGW92yZMj/tMHwMp6z6X+qBhSxhC
-         /ZXjM3V3lGjRLGvunCkCSEAKBaTK7gGR0FNmTYEg871ZdLUVUYAzi0v/CrqtWubqr94w
-         LUPJP23Wz9OQBRgJ1gJWSmPgvZMC0Gt07jR1LW3hT/MRhse+tXwoMMW6VzhpWz7DrWLX
-         CRMrpHtfG22WVR/7YoPTfFSi7STDVIqt0MMk6Sw1HYvr1cAE+mhO29U0MbznaePoVYsG
-         HSoCwV1PzTXD59wkE+RU82tTnZ5thvHXP3e/PaMjyBPpsUkgnPLWwsf9FQs4sjmkKsKb
-         4xCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FICPOvskNZaVS6/YR3ZJCLElglUVHG4aUM/j9Ly4324=;
-        b=BHHsBT3kp8guyMPKb5l97CbRDwdWlE8W6zbssNUv4s1Rxw1q9tVd1a99pHqXhylVsZ
-         pDdie7O8V8pXV1diqnSJ9gN/wDZgW+Ur3cCLJjvUnVbC5j+dd0YCiCprUcR1nS28lSNs
-         BwdLY3jCC32RcEP2GNYY03iAO39N2YK4NOqhWOLlQS25Lkwuqr/PWOkmV2JOWldY3yHo
-         f+60zPoLkyArxo9RXRW/mgCEqI0sVX8obTXleZ3GQ6IpmMKnIae3zlkV6cASAnlXcYxA
-         1iuXiY9HWmTZT9ndKoXZzSHfvmxPYUAbJbEK5zqL+4ZY3CW2hZ/zz+WR3aGI5AdT8UzG
-         RuDA==
-X-Gm-Message-State: AJIora+KcgUkU2BvM4/T9/ecMtK2VcZ0aYQSTVm9RpuPE1VZQZc436rF
-        PncJ2/q6Ch2TbD9NUxxfWyQTeN0tCUH2RQ0=
-X-Google-Smtp-Source: AGRyM1uAw2M8wcHabu7VBgr4Scn4GmEmyZCmDrjmoyrcS84dkCO6AijkpeVD5EJaAuvSiKtlKGjaJQ==
-X-Received: by 2002:a17:90a:b117:b0:1ef:958f:e5b7 with SMTP id z23-20020a17090ab11700b001ef958fe5b7mr15947591pjq.107.1657804716264;
-        Thu, 14 Jul 2022 06:18:36 -0700 (PDT)
-Received: from localhost.localdomain ([144.202.91.207])
-        by smtp.gmail.com with ESMTPSA id c6-20020a63d146000000b0040d75537824sm1297573pgj.86.2022.07.14.06.18.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 06:18:35 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     eli.billauer@gmail.com, arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH v5 RESEND] char: xillybus: Check endpoint type at probe time
-Date:   Thu, 14 Jul 2022 21:18:24 +0800
-Message-Id: <20220714131824.919052-1-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 14 Jul 2022 09:19:41 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A9152FE1;
+        Thu, 14 Jul 2022 06:19:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=qkksVEBsCjPaHx8+ptjtKd+HcC8nBi1sTfjXD4WRlds=; b=xw
+        9yGMi+YrNTJOLYxGMkDGA/cxANj5nCGoB1T4gTZEUWTLyH8KAVlqkHDE+0PkAyVDqeYnMq+3zuLkD
+        UTIgAmlodwQvB1zBQDqk/SRiw3bPM8K/iKejcDHcfnV9hShqqotoA9hYkWGgo4WjeMKFPwIg1qtzt
+        t7PeoKg0megdni4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oBykd-00AHn5-Lx; Thu, 14 Jul 2022 15:19:31 +0200
+Date:   Thu, 14 Jul 2022 15:19:31 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/4] gpio: mvebu: Fix check for pwm support on non-A8K
+ platforms
+Message-ID: <YtAX427pw+3tnV84@lunn.ch>
+References: <20220714115515.5748-1-pali@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <20220714115515.5748-1-pali@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,85 +61,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver submits bulk urb without checking the endpoint type is
-actually bulk.
+On Thu, Jul 14, 2022 at 01:55:12PM +0200, Pali Rohár wrote:
+> pwm support incompatible with Armada 80x0/70x0 API is not only in
+> Armada 370, but also in Armada XP, 38x and 39x. So basically every non-A8K
+> platform. Fix check for pwm support appropriately.
+> 
+> Fixes: 85b7d8abfec7 ("gpio: mvebu: add pwm support for Armada 8K/7K")
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  drivers/gpio/gpio-mvebu.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpio-mvebu.c b/drivers/gpio/gpio-mvebu.c
+> index 2db19cd640a4..70a22b68c034 100644
+> --- a/drivers/gpio/gpio-mvebu.c
+> +++ b/drivers/gpio/gpio-mvebu.c
+> @@ -793,8 +793,7 @@ static int mvebu_pwm_probe(struct platform_device *pdev,
+>  	u32 offset;
+>  	u32 set;
+>  
+> -	if (of_device_is_compatible(mvchip->chip.of_node,
+> -				    "marvell,armada-370-gpio")) {
+> +	if (mvchip->soc_variant != MVEBU_GPIO_SOC_VARIANT_A8K) {
+>  		/*
+>  		 * There are only two sets of PWM configuration registers for
+>  		 * all the GPIO lines on those SoCs which this driver reserves
 
-[    3.108690] usb 1-1: BOGUS urb xfer, pipe 3 != type 1
-[    3.108983] WARNING: CPU: 0 PID: 211 at drivers/usb/core/urb.c:503 usb_submit_urb+0xcd9/0x18b0
-[    3.110976] RIP: 0010:usb_submit_urb+0xcd9/0x18b0
-[    3.115318] Call Trace:
-[    3.115452]  <TASK>
-[    3.115570]  try_queue_bulk_in+0x43c/0x6e0 [xillyusb]
-[    3.115838]  xillyusb_probe+0x488/0x1230 [xillyusb]
+The current code is:
 
-Add a check at probe time to fix the bug.
+        if (of_device_is_compatible(mvchip->chip.of_node,
+                                    "marvell,armada-370-gpio")) {
+                /*
+                 * There are only two sets of PWM configuration registers for
+                 * all the GPIO lines on those SoCs which this driver reserves
+                 * for the first two GPIO chips. So if the resource is missing
+                 * we can't treat it as an error.
+                 */
+                if (!platform_get_resource_byname(pdev, IORESOURCE_MEM, "pwm"))
+                        return 0;
+                offset = 0;
+        } else if (mvchip->soc_variant == MVEBU_GPIO_SOC_VARIANT_A8K) {
+                int ret = of_property_read_u32(dev->of_node,
+                                               "marvell,pwm-offset", &offset);
+                if (ret < 0)
+                        return 0;
+        } else {
+                return 0;
+        }
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
- drivers/char/xillybus/xillyusb.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+With your change, don't we end up with:
 
-diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
-index 39bcbfd908b4..b1bac2fdb42a 100644
---- a/drivers/char/xillybus/xillyusb.c
-+++ b/drivers/char/xillybus/xillyusb.c
-@@ -167,6 +167,7 @@ struct xillyusb_dev {
- 	struct device		*dev; /* For dev_err() and such */
- 	struct kref		kref;
- 	struct workqueue_struct	*workq;
-+	struct usb_interface *intf;
- 
- 	int error;
- 	spinlock_t error_lock; /* protect @error */
-@@ -1890,8 +1891,31 @@ static const struct file_operations xillyusb_fops = {
- 	.poll       = xillyusb_poll,
- };
- 
-+static int xillyusb_check_endpoint(struct xillyusb_dev *xdev, u8 addr)
-+{
-+	int i;
-+	struct usb_host_interface *if_desc = xdev->intf->altsetting;
-+
-+	for (i = 0; i < if_desc->desc.bNumEndpoints; i++) {
-+		struct usb_endpoint_descriptor *ep = &if_desc->endpoint[i].desc;
-+
-+		if (ep->bEndpointAddress != addr)
-+			continue;
-+
-+		if ((usb_pipein(addr) && usb_endpoint_is_bulk_in(ep)) ||
-+			(usb_pipeout(addr) && usb_endpoint_is_bulk_out(ep)))
-+			return 0;
-+	}
-+
-+	return -EINVAL;
-+}
-+
- static int xillyusb_setup_base_eps(struct xillyusb_dev *xdev)
- {
-+	if (xillyusb_check_endpoint(xdev, IN_EP_NUM | USB_DIR_IN) ||
-+		xillyusb_check_endpoint(xdev, MSG_EP_NUM | USB_DIR_OUT))
-+		return -EINVAL;
-+
- 	xdev->msg_ep = endpoint_alloc(xdev, MSG_EP_NUM | USB_DIR_OUT,
- 				      bulk_out_work, 1, 2);
- 	if (!xdev->msg_ep)
-@@ -1963,6 +1987,8 @@ static int setup_channels(struct xillyusb_dev *xdev,
- 			chan->out_log2_element_size = out_desc & 0x0f;
- 			chan->out_log2_fifo_size =
- 				((out_desc >> 8) & 0x1f) + 16;
-+			if (xillyusb_check_endpoint(xdev, (i+2) | USB_DIR_OUT))
-+				return -EINVAL;
- 		}
- 	}
- 
-@@ -2126,6 +2152,7 @@ static int xillyusb_probe(struct usb_interface *interface,
- 	mutex_init(&xdev->process_in_mutex);
- 	mutex_init(&xdev->msg_mutex);
- 
-+	xdev->intf = interface;
- 	xdev->udev = usb_get_dev(interface_to_usbdev(interface));
- 	xdev->dev = &interface->dev;
- 	xdev->error = 0;
--- 
-2.25.1
+	if (foo)
+	    .....
+	else if (!foo)
+	    .....
+	else
+	    .....
 
+The static analysers are going to complain about this.
+
+    Andrew

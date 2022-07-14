@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711F0575159
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628D357515C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239888AbiGNPBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
+        id S239912AbiGNPCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239849AbiGNPBq (ORCPT
+        with ESMTP id S238905AbiGNPCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:01:46 -0400
+        Thu, 14 Jul 2022 11:02:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F8B5F984;
-        Thu, 14 Jul 2022 08:01:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B9D5F984;
+        Thu, 14 Jul 2022 08:02:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D45DA61DE7;
-        Thu, 14 Jul 2022 15:01:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0107C34114;
-        Thu, 14 Jul 2022 15:01:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4733861EB7;
+        Thu, 14 Jul 2022 15:02:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 158E7C34114;
+        Thu, 14 Jul 2022 15:02:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657810904;
-        bh=SI797I+9i5TCoXhWZnsgC7kNquMHOYFwmIi2Q4aJ9wg=;
+        s=korg; t=1657810932;
+        bh=qDt/Hvab4L75v0TjPNLOZWfPE0EMEwWIOpXwvz0zJlM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kab1FRl/BcqQGRaAmhmEUqPu/uu6QzhrN0Nynl58PLqmfx2+liU8sbe1+BBLDaMao
-         pTb/bKp0r9l7F2mTmEkbUkepwcFeQjZZ5fvRxa/czPdaVZUyB08OSwMj1vSJHMO5ug
-         G8bcaqC1IWDZQRP2++4gBnRhXqt/PrRTBsm1hmGY=
-Date:   Thu, 14 Jul 2022 17:01:41 +0200
+        b=UArLkJjMY52CcHiPdpjcmn4ZcxRtcvGG/VfsGLQllpmUPB4kd55O1nWVtnrSZvvfa
+         iWDrK1OaesTwXddQSbtVPJVs0E8kXhOvZMHizswOOdoLDR0qgYW/J1vyewVzSTjwxJ
+         PHFwF/IHfOlZYV8bnRUjmORD0IHhNssTM9DK0HKA=
+Date:   Thu, 14 Jul 2022 17:02:09 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Krishna Kurapati <quic_kriskura@quicinc.com>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -40,7 +40,7 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
  probed properly
-Message-ID: <YtAv1U1VYkhIY1GA@kroah.com>
+Message-ID: <YtAv8R7QlTZCjvRO@kroah.com>
 References: <1657810516-31143-1-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -82,9 +82,21 @@ On Thu, Jul 14, 2022 at 08:25:16PM +0530, Krishna Kurapati wrote:
 > ---
 >  drivers/usb/dwc3/dwc3-qcom.c | 3 +++
 >  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 7703655..096d1414 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
+>  		dev_err(dev, "failed to get dwc3 platform device\n");
+>  	}
+>  
+> +	if (!qcom->dwc3->dev.driver)
+> +		return -EPROBE_DEFER;
+> +
 
-I got 2 different copies of this change, what's the difference?
+Why not limit this check to a device type like your changelog mentions?
 
-confused,
+thanks,
 
 greg k-h

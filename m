@@ -2,59 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293F7574ECE
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBB3574ED1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239741AbiGNNPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
+        id S238166AbiGNNPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239728AbiGNNPW (ORCPT
+        with ESMTP id S239387AbiGNNPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:15:22 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1744AD75
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657804521; x=1689340521;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9JhJXGsNh3uS5zji9zMKU6HbNI2F6dZtUhXMVs0s8Co=;
-  b=dxUsUyMcNAqvNSFLFFeCwtXHwLOZT7lyjSAOlNtCH/VLebRHPC2sxYPn
-   ldVJW+AJfmmlnh3WlOpZN5lvnhghJ8R6jH15RBOTmsoMoq1PtAjJkfM93
-   sEdWcQ+KM183aB5yhZaM9sQH6jnK+kLAwUbfZln/6jxtsqfoZgdQVwLqS
-   9R2ksRvdugB9l3GAAZCwyImacEJp7fqOgo2l8vB83z0vuZ84qmO+aMub/
-   vL4eQ6cKFtEXesS+NhvRTtWvxhNKpbk93i+g0aVKJSX9YdkaxK5ZIjzgJ
-   IbPFeM2PZ8RmaGvLWwMPw/MxgsDU7wFJa8cPID9bDbym7w3puT6KZf7l6
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="285529634"
-X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
-   d="scan'208";a="285529634"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 06:15:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
-   d="scan'208";a="628701335"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 14 Jul 2022 06:15:19 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oBygZ-0000h9-0t;
-        Thu, 14 Jul 2022 13:15:19 +0000
-Date:   Thu, 14 Jul 2022 21:14:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [andersson:wip/sc8280xp-next-20220708-incomplete 23/25]
- drivers/soc/qcom/pmic_glink.c:200:34: warning: 'pmic_glink_of_match' defined
- but not used
-Message-ID: <202207142105.MZ2AEE5w-lkp@intel.com>
+        Thu, 14 Jul 2022 09:15:48 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363A1545F1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:15:46 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id o7so2731709lfq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:15:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y48E6PDFxhOGhAYVKqWlob2V1GffQky6+hara5tcdLo=;
+        b=x9Hqw1BTgXzHKBiG2OLYcS2qRp7Sz3flmFvjdYEncU8GDBZQGFzRHDqWvl2GZEQzWs
+         FsmPaPtuFGaiqKXQ0rgYuY1IJvGT9XHaKIiGie3uBqCYb5yZUxsGKCGerqVb/EDy2MQy
+         BrkIPlpMjIIODx0OZIpPfuVTK/CPTmssfDzD87fRsv5/iF7Rkgzt3wvFTahxaqIGZ+wF
+         b0LxvmpRxROYRG7PvrgPGM3wSIagrIcIKwRXmd8quwYVM2XgRpqq7+pGhei6aj5AEZ1a
+         ZxtNyfAEF5Qg5TkVb401bU9vk1vAqt7Jy4UkztS6JIJpbx4jaxv5mhURfqXHgOZyi+xk
+         gVtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y48E6PDFxhOGhAYVKqWlob2V1GffQky6+hara5tcdLo=;
+        b=ldaLjWBVlmGo/OQWY22vF/X3BmAyNQyVIvf8ZMxnG2YiSW/FncRg+km6q7kk9xnHJB
+         8tpS64PYChQaemnrFcBJ2Arq3hqJIMGRXEM5gP6op+Fz4ahBGFvprykHBdSRWl1+nYq4
+         3gYsVNSL1vsdAdcD9I+gFA7HjuNZd84GBOFTI3eLyg7I15bj6xLFcf8H7leOUNueaJIj
+         ULjlecLs+Ll4uhiq6KtNjLvTPjphu8Q/GzwKzcJtDm0xcktYanNo8WQr19vIIf5rBNKe
+         gNaV6WFtQMQWh0A4DcJuuOY4isCpyxtJTUG3Z9yJLJ+Q7wxeiKk4IzxA2GvhddxeaYdL
+         UZVA==
+X-Gm-Message-State: AJIora/4kHP4fH+F5oktqhZxb1FKjMsiCpc9EsJ1qPGk1/73OvWdnkcQ
+        pPYktOMA5v9R0k79XYczAZez9tPpLro+2EWcqoHGCQ==
+X-Google-Smtp-Source: AGRyM1umM56+JO1HV8nicFnjzJ1pyPk04eb7pywiBmEsbAuvhiuDTIjoJzE4r2MPwg7ysTsXe877jrrGJ/WnekYwUVQ=
+X-Received: by 2002:a05:6512:139a:b0:48a:1a73:8adc with SMTP id
+ p26-20020a056512139a00b0048a1a738adcmr1218415lfa.226.1657804544526; Thu, 14
+ Jul 2022 06:15:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220710230603.13526-1-semen.protsenko@linaro.org>
+ <20220710230603.13526-5-semen.protsenko@linaro.org> <4d198463-fedc-a5d9-6804-63c134da76e7@linaro.org>
+In-Reply-To: <4d198463-fedc-a5d9-6804-63c134da76e7@linaro.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Thu, 14 Jul 2022 16:15:33 +0300
+Message-ID: <CAPLW+4ktP0_W_OgjAoK3BXOFaEiXvP1qNGCc-iQyr2fNL1srug@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] iommu/exynos: Use lookup based approach to access registers
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Janghyuck Kim <janghyuck.kim@samsung.com>,
+        Cho KyongHo <pullip.cho@samsung.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        David Virag <virag.david003@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,40 +75,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/andersson/kernel wip/sc8280xp-next-20220708-incomplete
-head:   49ce77f5c8eae56c32a9638a971b18ae1078a222
-commit: 75703ed2e9bd3cfaa15461fba5fb0bc53cc0c1ea [23/25] soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220714/202207142105.MZ2AEE5w-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/andersson/kernel/commit/75703ed2e9bd3cfaa15461fba5fb0bc53cc0c1ea
-        git remote add andersson https://github.com/andersson/kernel
-        git fetch --no-tags andersson wip/sc8280xp-next-20220708-incomplete
-        git checkout 75703ed2e9bd3cfaa15461fba5fb0bc53cc0c1ea
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/soc/qcom/
+On Tue, 12 Jul 2022 at 19:52, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+[snip]
 
-All warnings (new ones prefixed by >>):
+> > +static void sysmmu_write(struct sysmmu_drvdata *data, size_t idx, u32 val)
+> > +{
+> > +     writel(val, data->sfrbase + data->regs[idx]);
+>
+> Beside what Robin wrote, I also don't think these wrappers actually
+> help, because you reverse arguments comparing to writel.
+>
+> How about having a per-variant structure with offsets and using it like:
+>
+> #define SYSMMU_REG(data, reg) ((data)->sfrbase + (data)->variant->reg)
+> writel(CTRL_ENABLE, SYSMMU_REG(data, mmu_ctrl_reg))
+>
+> Would that be more readable?
+>
 
->> drivers/soc/qcom/pmic_glink.c:200:34: warning: 'pmic_glink_of_match' defined but not used [-Wunused-const-variable=]
-     200 | static const struct of_device_id pmic_glink_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~
+Yes, this looks better for my taste too. I tend to get a tunnel vision
+when working with downstream code for a while. But I noticed that that
+approach is used sometimes as well, e.g. in
+drivers/pinctrl/samsung/pinctrl-exynos-arm64.c (in struct
+samsung_pin_bank_type). Anyway, I've reworked it exactly as you
+suggested, will send v2 soon. Thanks!
 
-
-vim +/pmic_glink_of_match +200 drivers/soc/qcom/pmic_glink.c
-
-   199	
- > 200	static const struct of_device_id pmic_glink_of_match[] = {
-   201		{ .compatible = "qcom,pmic-glink", },
-   202		{}
-   203	};
-   204	MODULE_DEVICE_TABLE(of, pmic_glink_of_match);
-   205	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> Best regards,
+> Krzysztof

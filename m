@@ -2,40 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B827575334
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D2D575343
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238607AbiGNQoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
+        id S240454AbiGNQpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238231AbiGNQnm (ORCPT
+        with ESMTP id S238441AbiGNQnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:43:42 -0400
+        Thu, 14 Jul 2022 12:43:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEBE1163
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:43:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4EB25E1;
+        Thu, 14 Jul 2022 09:43:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 166E362079
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:43:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E52BAC341CA;
-        Thu, 14 Jul 2022 16:43:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43C9E62089;
+        Thu, 14 Jul 2022 16:43:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 197EFC341C6;
+        Thu, 14 Jul 2022 16:43:32 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oC1w3-004lTh-1Q;
+        id 1oC1w3-004lUG-7P;
         Thu, 14 Jul 2022 12:43:31 -0400
-Message-ID: <20220714164330.881322672@goodmis.org>
+Message-ID: <20220714164331.060725040@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Thu, 14 Jul 2022 12:43:12 -0400
+Date:   Thu, 14 Jul 2022 12:43:13 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [for-next][PATCH 16/23] scsi: qla2xxx: tracing: Use the new __vstring() helper
+        Marek Lindner <mareklindner@neomailbox.ch>,
+        Simon Wunderlich <sw@simonwunderlich.de>,
+        Antonio Quartulli <a@unstable.cc>,
+        Sven Eckelmann <sven@narfation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org
+Subject: [for-next][PATCH 17/23] batman-adv: tracing: Use the new __vstring() helper
 References: <20220714164256.403842845@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +62,47 @@ defeats the purpose of the dynamic array in the first place). Use the new
 __vstring() helper that will use a va_list and only write enough of the
 string into the ring buffer that is needed.
 
-Link: https://lkml.kernel.org/r/20220705224750.896553364@goodmis.org
+Link: https://lkml.kernel.org/r/20220705224751.080390002@goodmis.org
 
-Cc: Bart Van Assche <bvanassche@acm.org>
+Cc: Marek Lindner <mareklindner@neomailbox.ch>
 Cc: Ingo Molnar <mingo@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: Simon Wunderlich <sw@simonwunderlich.de>
+Cc: Antonio Quartulli <a@unstable.cc>
+Cc: Sven Eckelmann <sven@narfation.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: b.a.t.m.a.n@lists.open-mesh.org
+Cc: netdev@vger.kernel.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- include/trace/events/qla.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/batman-adv/trace.h | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/include/trace/events/qla.h b/include/trace/events/qla.h
-index 5857cf682ee7..e7fd55e7dc3d 100644
---- a/include/trace/events/qla.h
-+++ b/include/trace/events/qla.h
-@@ -22,11 +22,11 @@ DECLARE_EVENT_CLASS(qla_log_event,
+diff --git a/net/batman-adv/trace.h b/net/batman-adv/trace.h
+index d673ebdd0426..67d2a8a0196c 100644
+--- a/net/batman-adv/trace.h
++++ b/net/batman-adv/trace.h
+@@ -40,16 +40,13 @@ TRACE_EVENT(batadv_dbg,
+ 	    TP_STRUCT__entry(
+ 		    __string(device, bat_priv->soft_iface->name)
+ 		    __string(driver, KBUILD_MODNAME)
+-		    __dynamic_array(char, msg, BATADV_MAX_MSG_LEN)
++		    __vstring(msg, vaf->fmt, vaf->va)
+ 	    ),
  
- 	TP_STRUCT__entry(
- 		__string(buf, buf)
--		__dynamic_array(char, msg, QLA_MSG_MAX)
-+		__vstring(msg, vaf->fmt, vaf->va)
- 	),
- 	TP_fast_assign(
- 		__assign_str(buf, buf);
--		vsnprintf(__get_str(msg), QLA_MSG_MAX, vaf->fmt, *vaf->va);
-+		__assign_vstr(msg, vaf->fmt, vaf->va);
- 	),
+ 	    TP_fast_assign(
+ 		    __assign_str(device, bat_priv->soft_iface->name);
+ 		    __assign_str(driver, KBUILD_MODNAME);
+-		    WARN_ON_ONCE(vsnprintf(__get_dynamic_array(msg),
+-					   BATADV_MAX_MSG_LEN,
+-					   vaf->fmt,
+-					   *vaf->va) >= BATADV_MAX_MSG_LEN);
++		    __assign_vstr(msg, vaf->fmt, vaf->va);
+ 	    ),
  
- 	TP_printk("%s %s", __get_str(buf), __get_str(msg))
+ 	    TP_printk(
 -- 
 2.35.1

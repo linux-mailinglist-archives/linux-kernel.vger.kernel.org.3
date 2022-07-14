@@ -2,130 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A72E5750AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433E25750B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240323AbiGNOX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35966 "EHLO
+        id S240076AbiGNOYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239521AbiGNOXr (ORCPT
+        with ESMTP id S240322AbiGNOX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:23:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EB46587
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:23:41 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 14 Jul 2022 10:23:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E09562C3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:23:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A6AD76601A3F;
-        Thu, 14 Jul 2022 15:23:38 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657808619;
-        bh=C9VLKUurDe58HrZqhM0aPD6VGh/A29qN7rcwvWQV/HU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Qzg0i2ttNNypfFQcymKJHqgoKRP7AA52ZfEr3r/2Uxi6gRBYgOC94+5D/JbchEAWD
-         OihyZBxtPbFByuNM5544hyt4W6ESA124yVAwY0rX5MbSYxhNul4Y4Uh1NfiElxM/oi
-         Lr9K40trURiThyT0TG5R7V7xMu5rSJFkNuK/3mPNf9+Us9HKi19kZO+34BnCSvykpm
-         GwFp83kuhOVFb5LcICCDb0L++Tq2Oppo6VZ+774bJ97fJ7m7B9ZtdY+736vn6UPVV8
-         xYIMGh8oBtzTlJfqN5e6r3hFC71StHtPTs5PLahOjHtiaB2G9vAtRYaKlp/wyzx/zc
-         yUFTLEu2PFI+Q==
-Message-ID: <73fde0e0-11d2-a627-0bf9-84ee7d3b5fcc@collabora.com>
-Date:   Thu, 14 Jul 2022 17:23:35 +0300
+        by ams.source.kernel.org (Postfix) with ESMTPS id B07B0B82627
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:23:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 389C9C341C6
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:23:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657808632;
+        bh=ondxzTzSHvYAUKgrQuksilEhYfYB+ZIu538a4pRtHvk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PaaO6DebD9CQOaQP29w59lExhiAcq4J4UAFDmFEBHhsg5J1yNaiBTdac13qXhTBWY
+         46oqgJxief2Eqirp9rAL56cBr9osvp1A+FKcOY/c9RXlG6A3E/NXcSup7TUXaExOum
+         Xor/jAHfI0T5KyFtVAJwhtyjBygF9CPIp3EG0PLc/Fbbz5y0G/F0iYMIUhRtq5DhWf
+         vB42tra3nCSYJaAtqcXontVhCrgKrB/RqkG2i4c6MflRX12ZlqMHcQUvVqJtBOqX4q
+         mP/A3Quu4cVQCnNMpq90jtVs0VbmePgrZbJcJg1cI7eXzysR72Y4a+1GgocbHukG78
+         aVNPLygPkPKCQ==
+Received: by mail-vs1-f53.google.com with SMTP id s1so1571925vsr.12
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:23:52 -0700 (PDT)
+X-Gm-Message-State: AJIora/ss41ESlZO3MKBSiAsujZbKoBrcpYRRYdBi+K6vJaVcMz4Pfh8
+        sTqyzBaIl731B9ipL+BTVeh1zrsEjWamVGfzpA==
+X-Google-Smtp-Source: AGRyM1uDEwdv+KF5pevijLlHPYzYRVqfG22KbUB9jLgKGtjGyoooXllMwfupTBOjfQWdGLDUVm+Pv2iG+7MQ34spZnI=
+X-Received: by 2002:a67:c18e:0:b0:357:5fc3:45d7 with SMTP id
+ h14-20020a67c18e000000b003575fc345d7mr3356106vsj.53.1657808631159; Thu, 14
+ Jul 2022 07:23:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v1] drm/scheduler: Don't kill jobs in interrupt context
-Content-Language: en-US
-To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc:     Erico Nunes <nunes.erico@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-References: <20220411221536.283312-1-dmitry.osipenko@collabora.com>
- <a78343c8-2a6d-b223-4219-6b6b0a4fcb1f@arm.com>
- <CAK4VdL2hCEoshWZbCh5mkHuS6wYMiPFR3v4MWTnrEKM9zyv6Mw@mail.gmail.com>
- <ef88ec2c-77b5-fa0d-49d1-fdd2451713b7@collabora.com>
- <573fae0d-c9ab-98b0-c6f1-5b0d4e52dd01@amd.com>
- <a33ab7b9-738f-db91-f6ba-78a9641365e8@amd.com>
- <b05f9861-1966-72f5-132b-aebb4b6e0c6b@collabora.com>
- <107fe968-8311-0511-cc31-22feb994a6d7@collabora.com>
- <3e07a8d0-2cbc-8f3e-8f9f-5b73fb82028b@amd.com>
- <CADnq5_MMmeWkiMxjYfrG7pip8BEkbkRc8ADUDLEi++kRF76sqg@mail.gmail.com>
- <bff42c98-045d-2e5a-2cf9-eb563425375e@collabora.com>
- <6e0c7590-6ffb-162b-a98d-0a39333453f6@collabora.com>
- <4ca27cee-eda0-0a65-f972-c69cc3b3e53e@amd.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <4ca27cee-eda0-0a65-f972-c69cc3b3e53e@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220707081826.953449-1-Naresh.Solanki@9elements.com>
+ <20220707081826.953449-3-Naresh.Solanki@9elements.com> <20220714141041.GB2229197-robh@kernel.org>
+ <YtAkwcwXaQqZV75d@sirena.org.uk>
+In-Reply-To: <YtAkwcwXaQqZV75d@sirena.org.uk>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 14 Jul 2022 08:23:39 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKu_HCDoPBTcVdVV2JyD_8p3+cbrNC0u6VrK85vWZmt3Q@mail.gmail.com>
+Message-ID: <CAL_JsqKu_HCDoPBTcVdVV2JyD_8p3+cbrNC0u6VrK85vWZmt3Q@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] dt-bindings: regulator: add bindings for output-supply
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Naresh Solanki <naresh.solanki@9elements.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/14/22 17:14, Andrey Grodzovsky wrote:
-> 
-> On 2022-07-14 05:57, Dmitry Osipenko wrote:
->> On 7/12/22 11:56, Dmitry Osipenko wrote:
->>> On 7/6/22 18:46, Alex Deucher wrote:
->>>> On Wed, Jul 6, 2022 at 9:49 AM Andrey Grodzovsky
->>>> <andrey.grodzovsky@amd.com> wrote:
->>>>> On 2022-07-06 03:07, Dmitry Osipenko wrote:
->>>>>
->>>>>> Hello Andrey,
->>>>>>
->>>>>> On 5/17/22 17:48, Dmitry Osipenko wrote:
->>>>>>> On 5/17/22 17:13, Andrey Grodzovsky wrote:
->>>>>>>> Done.
->>>>>>>>
->>>>>>>> Andrey
->>>>>>> Awesome, thank you!
->>>>>>>
->>>>>> Given that this drm-scheduler issue needs to be fixed in the
->>>>>> 5.19-RC and
->>>>>> earlier, shouldn't it be in the drm-fixes and not in drm-next?
->>>>>
->>>>> I pushed it into drm-misc from where it got into drm-next. I don't
->>>>> have
->>>>> permission for drm-fixes.
->>>> The -fixes branch of drm-misc.
->>> Now I don't see the scheduler bugfix neither in the -fixes branch nor in
->>> the -next and today Dave sent out 5.19-rc7 pull request without the
->>> scheduler fix. Could anyone please check what is going on with the DRM
->>> patches? Thanks!
->>>
->>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Ffreedesktop%2Fdrm-misc%2Fcommits%2Fdrm-misc-fixes&amp;data=05%7C01%7Candrey.grodzovsky%40amd.com%7C68b627b8482a4fd28a5608da657f4375%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637933894551324163%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=CDdLG%2F7SqCudEnjhBSsXqq15mfhlHlS3xAdAfB%2Bh%2F1s%3D&amp;reserved=0
->>>
->>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcgit.freedesktop.org%2Fdrm%2Fdrm-misc%2Flog%2F%3Fh%3Ddrm-misc-fixes&amp;data=05%7C01%7Candrey.grodzovsky%40amd.com%7C68b627b8482a4fd28a5608da657f4375%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637933894551324163%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=4Vz40j6F%2FzHYckXEyPEunj9DRSoTXikhNxZDXeocTss%3D&amp;reserved=0
->>>
->> The patch is in the drm-misc-next-fixes, so it wasn't moved to the
->> drm-misc-fixes.
->>
->> Andrey, don't you have access to drm-misc-fixes? Or you meant
->> drm-fixes=drm-misc-fixes?
-> 
-> 
-> I have only accesses to drm-misc-next to which I pushed this patch.
+On Thu, Jul 14, 2022 at 8:14 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Thu, Jul 14, 2022 at 08:10:41AM -0600, Rob Herring wrote:
+> > On Thu, Jul 07, 2022 at 10:18:24AM +0200, Naresh Solanki wrote:
+> > > Add a devicetree binding for the 9elements,output-supply driver.
+>
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - 9elements,output-supply
+>
+> > Why does this have a vendor prefix when it appears to be a s/w
+> > construct?
+>
+> It's a description of a power supply output from their system (system as
+> a whole, not power provisioned within the system).
 
-Thank you for the clarification. IIUC, the drm-misc-next-fixes should
-become drm-misc-fixes, but perhaps it was late for the 5.19-rc6 for this
-patch.
+Well, that's a better commit message than the original, but I still
+don't understand.
 
--- 
-Best regards,
-Dmitry
+Rob

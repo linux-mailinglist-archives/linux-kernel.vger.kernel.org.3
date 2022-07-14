@@ -2,213 +2,481 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88976574104
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CF0574105
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbiGNBnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 21:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S230333AbiGNBrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 21:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiGNBnF (ORCPT
+        with ESMTP id S229468AbiGNBrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 21:43:05 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E802251A;
-        Wed, 13 Jul 2022 18:43:04 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DICfsE009044;
-        Wed, 13 Jul 2022 18:43:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=0LcmYG4EfZTDybzcqdCw79XoM9S6jh7lhqA5uJt761I=;
- b=NT0aMf9pdSPbu467Mf5pw7zgffPYBBYHJegxnyNznA7mDWFscjSnnnAfFOOQuDrdF7Og
- XAtJTFdsTnmZQq9ChJpJ2WASxYatSbxl4WZYkdAlc0mwnwy7gPtE565LdqJwRRrF7s3w
- ObAxGoEFrW1mz8dAaYSY11bPqdqVIYHzACM= 
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h9h5f880x-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Jul 2022 18:43:03 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UcuZuvzt086sSC9aeHytlqG3WRIb3QE8FYyykkKjP+yk9C8MZQbDZTG5M9xzjYLb1IXsecFGMXaIE16nDMTBMQFg5U/c9m289VSxiaI/o8QxOWtakc4XW7wADBlF2aGxW67rz57Q0CEwEoyv3cp9ixNYJW5fsPCBGsdPFWsB1DBEjCBAGlHqonPHVBaRhJLBNmjfZ35Bcr6+W5COOXmCWfqZYvplyBJrWqy2vEdC5fsHjID4kozgMejladx3UWkxRKw11gss+0M93SrZlCSdlQoczAekM8s3399ONbPQFOn1bk0XDF3DDSc/I++c2fQJdRYFDhiymjICrL8x+mxmsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0LcmYG4EfZTDybzcqdCw79XoM9S6jh7lhqA5uJt761I=;
- b=bRfIBagLXLdlmsNw0OHIWCRYLzplrmq3nq/C5TRZda2F9nYHPGDKAHrA9leo/wgXlHYWjuJkbfbOajk01rA+nBeyHaJCw+SvQBwFVKT6SUFOOPRdJbr45SFx4QtAYvugzHQJR29BYW7u9uHa0RO27W/bIxjE3KGcwgp3Mds47/csvJ/bf6pFqpe8EBwgorcnkePVielK/td4ybjnvaZ+gpDi7m30f2g6iFDFMnhmhJve2Lg5iFTd7bBzKuAocPjEZfIuvz6/DcvlOCN6xebrjIOT2Ecf+esPKbAGdhsEUcDhS+BnHuirFvjkirGmcWTH6xd+FefUaCqy26Ze1zV/TA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by BL0PR1501MB2052.namprd15.prod.outlook.com (2603:10b6:207:1b::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Thu, 14 Jul
- 2022 01:42:59 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::5de3:3999:66df:42d1]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::5de3:3999:66df:42d1%4]) with mapi id 15.20.5438.012; Thu, 14 Jul 2022
- 01:42:59 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     Song Liu <song@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 bpf-next 1/5] ftrace: allow customized flags for
- ftrace_direct_multi ftrace_ops
-Thread-Topic: [PATCH v2 bpf-next 1/5] ftrace: allow customized flags for
- ftrace_direct_multi ftrace_ops
-Thread-Index: AQHYdriN/yOd0MaY7kCCLNeAHt/+qa19MFsAgAAO2fGAAAd7gIAAEfYA
-Date:   Thu, 14 Jul 2022 01:42:59 +0000
-Message-ID: <C2FCCC9B-5F7D-4BBF-8410-67EA79166909@fb.com>
-References: <20220602193706.2607681-1-song@kernel.org>
- <20220602193706.2607681-2-song@kernel.org>
- <20220713191846.18b05b43@gandalf.local.home>
- <0029EF24-6508-4011-B365-3E2175F9FEAB@fb.com>
- <20220713203841.76d66245@rorschach.local.home>
-In-Reply-To: <20220713203841.76d66245@rorschach.local.home>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.100.31)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5685112e-0306-439b-7256-08da653a2ee8
-x-ms-traffictypediagnostic: BL0PR1501MB2052:EE_
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SLGm4thwzMzwm6UQfRGJv2LcE0ry09XlsvK1s7pZENyKVaXL2bhlNvtpvMINL+ARQmnKAD396WzY6C0M904C62Z4B3JGJAFyPg1nfxl1DknmKRpzebCjFi8gQ+1tdeDPF08Usyoxx9HJyx5FmJrpJUwUq1ffL5Tu3itlScRXrkSwuFsAtPUyCh1D0YmLjIPl5drmLXrsElG/fdW9Ewlmb+AtsNlpDl5ri5csS4swfpKSVb86dBBtOPmv2Ot4q/6/ZbI7DMb+bvtkq/wsF3qlQvF5eJnO1CxIlg3DbYaFluWUFZuiNZ8+oabgEwXZYKjxtVyHdns68sM+cqV+aWEGx4sCfyNdhQnmPU7DDi/oTlcMD4KYbU80fSiBKLUTrtwjOyBLSoY8z25B5wwFvg94M3MzpSUXBc0ZsOR8ekE2XQd/5X5TynP4E+Fm1jTCtr+fYCx3B1MIzSENxqArwqTLiR6oRGlU3YtmlNeK8un0rDkM/YDbcpBR24LXTYb5bQ8xdVqVU5pV8Ej3kh/Kf7mCC5XDX9rPkKQUKSem1/1xkrC/3OLr0PMuYJ03Q56MK0WGc0YuWOYeAq+WnU6OCMN4P045WCMa24RZ7Krvy4d2zrYT+DWFKD6LcVYRwE7rVFHo0FAC+mS1RSGgZp/clCL+HO9LFoeZeNRzH6nG9Rr/HhwLfylAzfNNbOVbHObpqX+Cnxi9l4QqongkopksH+CFZO0GsDZ/eY72eoun9JuvNh0AAFglQky5AEhpdTmdleD6s5bH8++guRRbzfV7g8we2gtmR0O1wmxD8cIRYk+imyG031h9kxDrFr2P0+2G2D8HSmxckblVnQYMt4EQnwW0wBq258ZPMzhTCQa63LaPv08=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(366004)(39860400002)(136003)(346002)(6486002)(83380400001)(71200400001)(66946007)(6506007)(6916009)(38070700005)(66476007)(4326008)(76116006)(8676002)(66556008)(66446008)(64756008)(122000001)(91956017)(54906003)(2616005)(478600001)(186003)(86362001)(316002)(33656002)(8936002)(36756003)(38100700002)(6512007)(53546011)(41300700001)(2906002)(7416002)(5660300002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QUHselXhsC2XjkLGSds8dVEVFRo2JLxOGymCbL7ZH+itcUIZGRcdPzB1wPPB?=
- =?us-ascii?Q?+oVzh3zyQ30Md5zBNV0wzLulu3nXjGD9D4Ww/5STrQe6NPPBC0M3nuYZ6nre?=
- =?us-ascii?Q?1UnlvzsFaTyXanrRfsfAoOz9u2KP9espxpPXVkRrG/7ivMyfxCOxf0qnUhXp?=
- =?us-ascii?Q?KttaQJGJvngxNp/vqGILnhu76yLyYQIvxddmRE6aN4BL2RBoytpgsD5uGp0D?=
- =?us-ascii?Q?nABTqdavdEMjd0uDqt98OqsKmAVTEx0ZpnuF7UGMy2gBZZL8omGh2c0O8zmL?=
- =?us-ascii?Q?xjqCpNVaN/qLBWt3FTVIq0WRQG6wfCY8hRY5nrASsEk/J0Ug7FysShOFARFy?=
- =?us-ascii?Q?zznq6R+1I+ct/VY5mzLaPAkphy1POldP5HcMLA5m8Ag5DMe9K2upmVPFHEDX?=
- =?us-ascii?Q?y6zfmU/vdxc3jFeokyftJh0ak56OB2MC/qOn0v5MpA3ZE2mh9LdpzdIS7RSM?=
- =?us-ascii?Q?kT7ScKUNwFETAYpC2Z/kekify3BI7EAQBxvTnxvFiO0EfPwdXrtsJj8AC5kx?=
- =?us-ascii?Q?wVppUQoLpxuo76AmtqewnZTIYJwQ/zukZQ0es6M5mZF1yi0QmsByE5UMADvQ?=
- =?us-ascii?Q?01M17JgRFBA5NsYsnwkUyb9kwipav7uihtjYg1g+PXCfltS/ZJiRojLLzLO5?=
- =?us-ascii?Q?GFlDYqxKxmfeTdyLgQx7nO7qxVMKKBWh3Tkw4+DYAzqfQ62aZBi6lsaBeneY?=
- =?us-ascii?Q?uHGPmjku4yioVaIUy8D6rsQmkW8dMQ0o+YS3qGsKi9HWJ1LTEhKjfAyQPMaS?=
- =?us-ascii?Q?zt7Yh39P2bl+afOm+SR/4WlA2oTVwb1ePyjxc8K1oPPXAQvk8HYSkxbpoiFB?=
- =?us-ascii?Q?WG3Ddi/8IEEj8xBv+w5PFDiQlvsNTrjjrL/wWeac8xozHjMkVIsQCwtbsbXP?=
- =?us-ascii?Q?dkqajpPB7fQzqed8dU0bpcCQ1/Yhdhs/mAdaG4qVT28ytAwzq7QlWOAUM6cB?=
- =?us-ascii?Q?9EQfc6f6UB+1mjwB1N9R7DQg3SlmQOKnEQd2Ycxwnsp27f1zdaAD21629RLP?=
- =?us-ascii?Q?f2d3efaMNVqIl9ijWFBCK61mwAnBkbU/+Qjw/nybuZlNcJz5It3lMGaMuHpt?=
- =?us-ascii?Q?Bd3b+JvFmD5gTeSfZukA+Yj6RV9te+ZtRFoydmZvKx6xaYTqe1P1SsmgFMsv?=
- =?us-ascii?Q?ZQlIQ+l5zF1z5pcKC3c1X995vK/LYUoTQ/VvrjYiA7MgcfdJvMVLUtfpGtO1?=
- =?us-ascii?Q?ztzC80k7CY1nJWf+YTcyjIKSiuY3FrcosKrk6z65jOsdtzFeITIGURxQLZSO?=
- =?us-ascii?Q?cO8rgvF01DVH/rke/y/AhnLrCMJMobwoCWKSo70Ut8tDCmleWN7VX/51z/HI?=
- =?us-ascii?Q?V69LgiNVmiYtJJ8+6WGb5xEbvyxINPIykIuEWW225AKtNfDuzUXN8kql1RnP?=
- =?us-ascii?Q?YkjoOBv/pJA10f/5p+aTT1jjmq30Qs6BEMY/fdmEqNMAesJCP6oMliH0R/xV?=
- =?us-ascii?Q?2Dzl/ekwgwfXl4681huksUiPT8a/IT0hm67FjPK2K2gWykSSeirXBeB/p3Na?=
- =?us-ascii?Q?I3kPeDVywN/bOwD97Wz5cueMKE0gX2V6VvbfTiIOhjOsPkFh/zwfemNQNqxo?=
- =?us-ascii?Q?xJ+/yLt4udMcPNOh1rnm/CZuFtk9QgTbMP6PsmjMid1ITVj60jvve7jNVj78?=
- =?us-ascii?Q?W6LRfU3MASRuxdYtSqXlsB0=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <F1C6D3841DA5214389D01B411B0CB64D@namprd15.prod.outlook.com>
+        Wed, 13 Jul 2022 21:47:37 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3D122B1E
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:47:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657763255; x=1689299255;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bajISLyURZvr8+VzicBKZ2S+nSg+sewX9QOVxbvMrIE=;
+  b=WsJ6YUuNSkqR/+03r8mVTs3f3jpxf4T0tQ4uS63CYXDs3Nn4vilTz7wg
+   jxA9fvqCjwGrbweHHmM3kwD+FmjzKPaUXYyc06rJOtvL99X16QAtLGP1F
+   d7Xd4V7+bJIvjJ8hYQgZ2WGNE8bNGsyWDrHx+5BGav6uLj8HW/Wtavl0y
+   OcikauvcYIvW/btq81puFSDPckNWYs+h1nLAQIOyDSnHcID3YDlkxZ2g+
+   905LgdRxIsoH/LAI2sM3QUSl+HZ6lxfMcb/Ksll0TkTDvxWl/WQ/54ggg
+   HZFOGEsAryUu4enc2492/y/3HANFttOJJNUb/3cu5kwluBUJdOL8Gabda
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="285413369"
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="285413369"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 18:47:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="623208702"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 13 Jul 2022 18:47:33 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBnwy-00043f-KD;
+        Thu, 14 Jul 2022 01:47:32 +0000
+Date:   Thu, 14 Jul 2022 09:47:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [krzk-github:n/qcom-bwmon-llcc-manual-regmap 21/21]
+ drivers/soc/qcom/icc-bwmon.c:196:27: error: 'const struct icc_bwmon_data'
+ has no member named 'irq_mask'
+Message-ID: <202207140934.JwNKGHAA-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5685112e-0306-439b-7256-08da653a2ee8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jul 2022 01:42:59.5371
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 80rK0SkkvF2aQEVqBSvBFyuUJsnnKArkHSD6VF33ffYCvdO++/0jwNG21bL19dm3T5Bl4YYL5bfSjSyq4w/N5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR1501MB2052
-X-Proofpoint-ORIG-GUID: lc3_UUzc1igA2FwR5vSHMWkC4MihMcWK
-X-Proofpoint-GUID: lc3_UUzc1igA2FwR5vSHMWkC4MihMcWK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-13_13,2022-07-13_03,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/krzk/linux n/qcom-bwmon-llcc-manual-regmap
+head:   f8c2f9796ac481bfd123096df5dd4d9f570c57b6
+commit: f8c2f9796ac481bfd123096df5dd4d9f570c57b6 [21/21] wip
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220714/202207140934.JwNKGHAA-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/krzk/linux/commit/f8c2f9796ac481bfd123096df5dd4d9f570c57b6
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/qcom-bwmon-llcc-manual-regmap
+        git checkout f8c2f9796ac481bfd123096df5dd4d9f570c57b6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/soc/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/io.h:13,
+                    from include/linux/irq.h:20,
+                    from include/asm-generic/hardirq.h:17,
+                    from arch/sh/include/asm/hardirq.h:9,
+                    from include/linux/hardirq.h:11,
+                    from include/linux/interrupt.h:11,
+                    from drivers/soc/qcom/icc-bwmon.c:9:
+   drivers/soc/qcom/icc-bwmon.c: In function 'bwmon_clear_irq':
+>> drivers/soc/qcom/icc-bwmon.c:196:27: error: 'const struct icc_bwmon_data' has no member named 'irq_mask'
+     196 |         writel(bwmon->data->irq_mask, BWMON_REG(bwmon, irq_clear_reg));
+         |                           ^~
+   arch/sh/include/asm/io.h:31:83: note: in definition of macro '__raw_writel'
+      31 | #define __raw_writel(v,a)       (__chk_io_ptr(a), *(volatile u32 __force *)(a) = (v))
+         |                                                                                   ^
+   arch/sh/include/asm/io.h:46:66: note: in expansion of macro 'ioswabl'
+      46 | #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)ioswabl(v),c))
+         |                                                                  ^~~~~~~
+   arch/sh/include/asm/io.h:56:43: note: in expansion of macro 'writel_relaxed'
+      56 | #define writel(v,a)             ({ wmb(); writel_relaxed((v),(a)); })
+         |                                           ^~~~~~~~~~~~~~
+   drivers/soc/qcom/icc-bwmon.c:196:9: note: in expansion of macro 'writel'
+     196 |         writel(bwmon->data->irq_mask, BWMON_REG(bwmon, irq_clear_reg));
+         |         ^~~~~~
+   drivers/soc/qcom/icc-bwmon.c: In function 'bwmon_start':
+   drivers/soc/qcom/icc-bwmon.c:273:40: error: 'const struct icc_bwmon_data' has no member named 'irq_mask'
+     273 |         bwmon_enable(bwmon, bwmon->data->irq_mask);
+         |                                        ^~
+   drivers/soc/qcom/icc-bwmon.c: In function 'bwmon_intr':
+   drivers/soc/qcom/icc-bwmon.c:283:30: error: 'const struct icc_bwmon_data' has no member named 'irq_mask'
+     283 |         status &= bwmon->data->irq_mask;
+         |                              ^~
+>> drivers/soc/qcom/icc-bwmon.c:299:55: error: 'const struct icc_bwmon_data' has no member named 'irq_shift'
+     299 |         zone = get_bitmask_order(status >> bwmon->data->irq_shift) - 1;
+         |                                                       ^~
+   drivers/soc/qcom/icc-bwmon.c: In function 'bwmon_intr_thread':
+   drivers/soc/qcom/icc-bwmon.c:344:41: error: 'const struct icc_bwmon_data' has no member named 'irq_mask'
+     344 |                 irq_enable = bwmon->data->irq_mask;
+         |                                         ^~
+   drivers/soc/qcom/icc-bwmon.c: At top level:
+   drivers/soc/qcom/icc-bwmon.c:445:10: error: 'const struct icc_bwmon_data' has no member named 'irq_mask'
+     445 |         .irq_mask = BWMON_V4_IRQ_ENABLE_MASK,
+         |          ^~~~~~~~
+   drivers/soc/qcom/icc-bwmon.c:446:10: error: 'const struct icc_bwmon_data' has no member named 'irq_shift'
+     446 |         .irq_shift = BWMON_V4_IRQ_STATUS_ZONE_SHIFT,
+         |          ^~~~~~~~~
+   drivers/soc/qcom/icc-bwmon.c:39:49: warning: initialized field overwritten [-Woverride-init]
+      39 | #define BWMON_V4_IRQ_STATUS                     0x100
+         |                                                 ^~~~~
+   drivers/soc/qcom/icc-bwmon.c:447:27: note: in expansion of macro 'BWMON_V4_IRQ_STATUS'
+     447 |         .irq_status_reg = BWMON_V4_IRQ_STATUS,
+         |                           ^~~~~~~~~~~~~~~~~~~
+   drivers/soc/qcom/icc-bwmon.c:39:49: note: (near initialization for 'msm8998_bwmon_data.irq_status_reg')
+      39 | #define BWMON_V4_IRQ_STATUS                     0x100
+         |                                                 ^~~~~
+   drivers/soc/qcom/icc-bwmon.c:447:27: note: in expansion of macro 'BWMON_V4_IRQ_STATUS'
+     447 |         .irq_status_reg = BWMON_V4_IRQ_STATUS,
+         |                           ^~~~~~~~~~~~~~~~~~~
+   drivers/soc/qcom/icc-bwmon.c:41:49: warning: initialized field overwritten [-Woverride-init]
+      41 | #define BWMON_V4_IRQ_CLEAR                      0x108
+         |                                                 ^~~~~
+   drivers/soc/qcom/icc-bwmon.c:448:26: note: in expansion of macro 'BWMON_V4_IRQ_CLEAR'
+     448 |         .irq_clear_reg = BWMON_V4_IRQ_CLEAR,
+         |                          ^~~~~~~~~~~~~~~~~~
+   drivers/soc/qcom/icc-bwmon.c:41:49: note: (near initialization for 'msm8998_bwmon_data.irq_clear_reg')
+      41 | #define BWMON_V4_IRQ_CLEAR                      0x108
+         |                                                 ^~~~~
+   drivers/soc/qcom/icc-bwmon.c:448:26: note: in expansion of macro 'BWMON_V4_IRQ_CLEAR'
+     448 |         .irq_clear_reg = BWMON_V4_IRQ_CLEAR,
+         |                          ^~~~~~~~~~~~~~~~~~
+   drivers/soc/qcom/icc-bwmon.c:471:10: error: 'const struct icc_bwmon_data' has no member named 'irq_mask'
+     471 |         .irq_mask = BWMON_V5_IRQ_ENABLE_MASK,
+         |          ^~~~~~~~
+>> drivers/soc/qcom/icc-bwmon.c:471:21: error: 'BWMON_V5_IRQ_ENABLE_MASK' undeclared here (not in a function); did you mean 'BWMON_V4_IRQ_ENABLE_MASK'?
+     471 |         .irq_mask = BWMON_V5_IRQ_ENABLE_MASK,
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~
+         |                     BWMON_V4_IRQ_ENABLE_MASK
+   drivers/soc/qcom/icc-bwmon.c:472:10: error: 'const struct icc_bwmon_data' has no member named 'irq_shift'
+     472 |         .irq_shift = BWMON_V5_IRQ_STATUS_ZONE_SHIFT,
+         |          ^~~~~~~~~
+>> drivers/soc/qcom/icc-bwmon.c:472:22: error: 'BWMON_V5_IRQ_STATUS_ZONE_SHIFT' undeclared here (not in a function); did you mean 'BWMON_V4_IRQ_STATUS_ZONE_SHIFT'?
+     472 |         .irq_shift = BWMON_V5_IRQ_STATUS_ZONE_SHIFT,
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                      BWMON_V4_IRQ_STATUS_ZONE_SHIFT
 
 
-> On Jul 13, 2022, at 5:38 PM, Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> On Thu, 14 Jul 2022 00:11:53 +0000
-> Song Liu <songliubraving@fb.com> wrote:
-> 
->>> That is, can we register a direct function with this function and pick a
->>> function with IPMODIFY already attached?  
->> 
->> Yes, if the direct function follows regs->ip, it works. 
->> 
->> For example, BPF trampoline with only fentry calls will just work with only this patch.
-> 
-> I replied with my thoughts on this to patch 3, but I disagree with this.
-> 
-> ftrace has no idea if the direct trampoline modifies the IP or not.
-> ftrace must assume that it does, and the management should be done in
-> the infrastructure.
-> 
-> As I replied to patch 3, here's my thoughts.
-> 
-> DIRECT is treated as though it changes the IP. If you register it to a
-> function that has an IPMODIFY already set to it, it will call the
-> ops->ops_func() asking if the ops can use SHARED_IPMODIFY (which means
-> a DIRECT can be shared with IPMODIFY). If it can, then it returns true,
-> and the SHARED_IPMODIFY is set *by ftrace*. The user of the ftrace APIs
-> should not have to manage this. It should be managed by the ftrace
-> infrastructure.
+vim +196 drivers/soc/qcom/icc-bwmon.c
 
-Hmm... I don't think this gonna work. 
+   > 9	#include <linux/interrupt.h>
+    10	#include <linux/io.h>
+    11	#include <linux/kernel.h>
+    12	#include <linux/module.h>
+    13	#include <linux/of_device.h>
+    14	#include <linux/platform_device.h>
+    15	#include <linux/pm_opp.h>
+    16	#include <linux/sizes.h>
+    17	
+    18	/*
+    19	 * The BWMON samples data throughput within 'sample_ms' time. With three
+    20	 * configurable thresholds (Low, Medium and High) gives four windows (called
+    21	 * zones) of current bandwidth:
+    22	 *
+    23	 * Zone 0: byte count < THRES_LO
+    24	 * Zone 1: THRES_LO < byte count < THRES_MED
+    25	 * Zone 2: THRES_MED < byte count < THRES_HIGH
+    26	 * Zone 3: THRES_HIGH < byte count
+    27	 *
+    28	 * Zones 0 and 2 are not used by this driver.
+    29	 */
+    30	
+    31	/* Internal sampling clock frequency */
+    32	#define HW_TIMER_HZ				19200000
+    33	
+    34	#define BWMON_V4_GLOBAL_IRQ_STATUS		0x0
+    35	#define BWMON_V4_GLOBAL_IRQ_CLEAR		0x8
+    36	#define BWMON_V4_GLOBAL_IRQ_ENABLE		0xc
+    37	#define BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE	BIT(0)
+    38	
+    39	#define BWMON_V4_IRQ_STATUS			0x100
+    40	#define BWMON_V4_IRQ_STATUS_ZONE_SHIFT		4
+  > 41	#define BWMON_V4_IRQ_CLEAR			0x108
+    42	#define BWMON_V4_IRQ_ENABLE			0x10c
+    43	#define BWMON_V4_IRQ_ENABLE_ZONE1_SHIFT		5
+    44	#define BWMON_V4_IRQ_ENABLE_ZONE2_SHIFT		6
+    45	#define BWMON_V4_IRQ_ENABLE_ZONE3_SHIFT		7
+    46	#define BWMON_V4_IRQ_ENABLE_MASK		(BIT(BWMON_V4_IRQ_ENABLE_ZONE1_SHIFT) | \
+    47							 BIT(BWMON_V4_IRQ_ENABLE_ZONE3_SHIFT))
+    48	#define BWMON_V5_IRQ_STATUS			0x00
+    49	#define BWMON_V5_IRQ_CLEAR			0x08
+    50	#define BWMON_V5_IRQ_ENABLE			0x0c
+    51	
+    52	#define BWMON_V4_ENABLE				0x2a0
+    53	#define BWMON_V5_ENABLE				0x10
+    54	#define BWMON_ENABLE_ENABLE			BIT(0)
+    55	
+    56	#define BWMON_V4_CLEAR				0x2a4
+    57	#define BWMON_V5_CLEAR				0x14
+    58	#define BWMON_CLEAR_CLEAR			BIT(0)
+    59	
+    60	#define BWMON_V4_SAMPLE_WINDOW			0x2a8
+    61	#define BWMON_V5_SAMPLE_WINDOW			0x20
+    62	
+    63	#define BWMON_V4_THRESHOLD_HIGH			0x2ac
+    64	#define BWMON_V4_THRESHOLD_MED			0x2b0
+    65	#define BWMON_V4_THRESHOLD_LOW			0x2b4
+    66	#define BWMON_V5_THRESHOLD_HIGH			0x24
+    67	#define BWMON_V5_THRESHOLD_MED			0x28
+    68	#define BWMON_V5_THRESHOLD_LOW			0x2c
+    69	
+    70	#define BWMON_V4_ZONE_ACTIONS			0x2b8
+    71	#define BWMON_V5_ZONE_ACTIONS			0x30
+    72	/*
+    73	 * Actions to perform on some zone 'z' when current zone hits the threshold:
+    74	 * Increment counter of zone 'z'
+    75	 */
+    76	#define BWMON_ZONE_ACTIONS_INCREMENT(z)		(0x2 << ((z) * 2))
+    77	/* Clear counter of zone 'z' */
+    78	#define BWMON_ZONE_ACTIONS_CLEAR(z)		(0x1 << ((z) * 2))
+    79	
+    80	/* Zone 0 threshold hit: Clear zone count */
+    81	#define BWMON_ZONE_ACTIONS_ZONE0		(BWMON_ZONE_ACTIONS_CLEAR(0))
+    82	
+    83	/* Zone 1 threshold hit: Increment zone count & clear lower zones */
+    84	#define BWMON_ZONE_ACTIONS_ZONE1		(BWMON_ZONE_ACTIONS_INCREMENT(1) | \
+    85							 BWMON_ZONE_ACTIONS_CLEAR(0))
+    86	
+    87	/* Zone 2 threshold hit: Increment zone count & clear lower zones */
+    88	#define BWMON_ZONE_ACTIONS_ZONE2		(BWMON_ZONE_ACTIONS_INCREMENT(2) | \
+    89							 BWMON_ZONE_ACTIONS_CLEAR(1) | \
+    90							 BWMON_ZONE_ACTIONS_CLEAR(0))
+    91	
+    92	/* Zone 3 threshold hit: Increment zone count & clear lower zones */
+    93	#define BWMON_ZONE_ACTIONS_ZONE3		(BWMON_ZONE_ACTIONS_INCREMENT(3) | \
+    94							 BWMON_ZONE_ACTIONS_CLEAR(2) | \
+    95							 BWMON_ZONE_ACTIONS_CLEAR(1) | \
+    96							 BWMON_ZONE_ACTIONS_CLEAR(0))
+    97	/* Value for BWMON_ZONE_ACTIONS */
+    98	#define BWMON_ZONE_ACTIONS_DEFAULT		(BWMON_ZONE_ACTIONS_ZONE0 | \
+    99							 BWMON_ZONE_ACTIONS_ZONE1 << 8 | \
+   100							 BWMON_ZONE_ACTIONS_ZONE2 << 16 | \
+   101							 BWMON_ZONE_ACTIONS_ZONE3 << 24)
+   102	
+   103	/*
+   104	 * There is no clear documentation/explanation of BWMON_V4_THRESHOLD_COUNT
+   105	 * register. Based on observations, this is number of times one threshold has to
+   106	 * be reached, to trigger interrupt in given zone.
+   107	 *
+   108	 * 0xff are maximum values meant to ignore the zones 0 and 2.
+   109	 */
+   110	#define BWMON_V4_THRESHOLD_COUNT		0x2bc
+   111	#define BWMON_V5_THRESHOLD_COUNT		0x34
+   112	#define BWMON_THRESHOLD_COUNT_ZONE1_SHIFT	8
+   113	#define BWMON_THRESHOLD_COUNT_ZONE2_SHIFT	16
+   114	#define BWMON_THRESHOLD_COUNT_ZONE3_SHIFT	24
+   115	#define BWMON_THRESHOLD_COUNT_ZONE0_DEFAULT	0xff
+   116	#define BWMON_THRESHOLD_COUNT_ZONE2_DEFAULT	0xff
+   117	
+   118	#define BWMON_V4_ZONE_MAX			0x2e0
+   119	#define BWMON_V5_ZONE_MAX			0x44
+   120	#define BWMON_REG_ZONE_MAX(bwmon, zone)		(BWMON_REG((bwmon), zone_max_reg) \
+   121							 + 4 * (zone))
+   122	
+   123	#define BWMON_REG(bwmon, reg)			((bwmon)->base + (bwmon)->data->reg)
+   124	
+   125	struct icc_bwmon_data {
+   126		unsigned int sample_ms;
+   127		unsigned int count_unit_kb; /* kbytes */
+   128		unsigned int default_highbw_kbps;
+   129		unsigned int default_medbw_kbps;
+   130		unsigned int default_lowbw_kbps;
+   131		u8 zone1_thres_count;
+   132		u8 zone3_thres_count;
+   133		bool has_global_irq;
+   134		u32 global_irq_status_reg;
+   135		u32 global_irq_clear_reg;
+   136		u32 global_irq_enable_reg;
+   137		u32 irq_status_reg;
+   138		u32 irq_clear_reg;
+   139		u32 irq_enable_reg;
+   140		u32 irq_status_mask;
+   141		u32 irq_status_shift;
+   142		u32 enable_reg;
+   143		u32 clear_reg;
+   144		u32 sample_window_reg;
+   145		u32 threshold_high_reg;
+   146		u32 threshold_med_reg;
+   147		u32 threshold_low_reg;
+   148		u32 threshold_count_reg;
+   149		u32 zone_actions_reg;
+   150		u32 zone_max_reg;
+   151	};
+   152	
+   153	struct icc_bwmon {
+   154		struct device *dev;
+   155		const struct icc_bwmon_data *data;
+   156		void __iomem *base;
+   157		int irq;
+   158	
+   159		unsigned int max_bw_kbps;
+   160		unsigned int min_bw_kbps;
+   161		unsigned int target_kbps;
+   162		unsigned int current_kbps;
+   163	};
+   164	
+   165	static void bwmon_clear_counters(struct icc_bwmon *bwmon)
+   166	{
+   167		/*
+   168		 * Clear counters. The order and barriers are
+   169		 * important. Quoting downstream Qualcomm msm-4.9 tree:
+   170		 *
+   171		 * The counter clear and IRQ clear bits are not in the same 4KB
+   172		 * region. So, we need to make sure the counter clear is completed
+   173		 * before we try to clear the IRQ or do any other counter operations.
+   174		 */
+   175		writel(BWMON_CLEAR_CLEAR, BWMON_REG(bwmon, clear_reg));
+   176	}
+   177	
+   178	static void bwmon_clear_irq(struct icc_bwmon *bwmon)
+   179	{
+   180		/*
+   181		 * Clear zone and global interrupts. The order and barriers are
+   182		 * important. Quoting downstream Qualcomm msm-4.9 tree:
+   183		 *
+   184		 * Synchronize the local interrupt clear in mon_irq_clear()
+   185		 * with the global interrupt clear here. Otherwise, the CPU
+   186		 * may reorder the two writes and clear the global interrupt
+   187		 * before the local interrupt, causing the global interrupt
+   188		 * to be retriggered by the local interrupt still being high.
+   189		 *
+   190		 * Similarly, because the global registers are in a different
+   191		 * region than the local registers, we need to ensure any register
+   192		 * writes to enable the monitor after this call are ordered with the
+   193		 * clearing here so that local writes don't happen before the
+   194		 * interrupt is cleared.
+   195		 */
+ > 196		writel(bwmon->data->irq_mask, BWMON_REG(bwmon, irq_clear_reg));
+   197		if (bwmon->data->has_global_irq)
+   198			writel(BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE,
+   199			       BWMON_REG(bwmon, global_irq_clear_reg));
+   200	}
+   201	
+   202	static void bwmon_disable(struct icc_bwmon *bwmon)
+   203	{
+   204		/* Disable interrupts. Strict ordering, see bwmon_clear_irq(). */
+   205		if (bwmon->data->has_global_irq)
+   206			writel(0x0, BWMON_REG(bwmon, global_irq_enable_reg));
+   207		writel(0x0, BWMON_REG(bwmon, irq_enable_reg));
+   208	
+   209		/*
+   210		 * Disable bwmon. Must happen before bwmon_clear_irq() to avoid spurious
+   211		 * IRQ.
+   212		 */
+   213		writel(0x0, BWMON_REG(bwmon, enable_reg));
+   214	}
+   215	
+   216	static void bwmon_enable(struct icc_bwmon *bwmon, unsigned int irq_enable)
+   217	{
+   218		/* Enable interrupts */
+   219		if (bwmon->data->has_global_irq)
+   220			writel(BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE,
+   221			       BWMON_REG(bwmon, global_irq_enable_reg));
+   222		writel(irq_enable, BWMON_REG(bwmon, irq_enable_reg));
+   223	
+   224		/* Enable bwmon */
+   225		writel(BWMON_ENABLE_ENABLE, BWMON_REG(bwmon, enable_reg));
+   226	}
+   227	
+   228	static unsigned int bwmon_kbps_to_count(struct icc_bwmon *bwmon, unsigned int kbps)
+   229	{
+   230		return kbps / bwmon->data->count_unit_kb;
+   231	}
+   232	
+   233	static void bwmon_set_threshold(struct icc_bwmon *bwmon,
+   234					volatile void __iomem *addr, unsigned int kbps)
+   235	{
+   236		unsigned int thres;
+   237	
+   238		thres = mult_frac(bwmon_kbps_to_count(bwmon, kbps), bwmon->data->sample_ms,
+   239				  MSEC_PER_SEC);
+   240		writel_relaxed(thres, addr);
+   241	}
+   242	
+   243	static void bwmon_start(struct icc_bwmon *bwmon)
+   244	{
+   245		const struct icc_bwmon_data *data = bwmon->data;
+   246		unsigned int thres_count;
+   247		int window;
+   248	
+   249		bwmon_clear_counters(bwmon);
+   250	
+   251		window = mult_frac(bwmon->data->sample_ms, HW_TIMER_HZ, MSEC_PER_SEC);
+   252		/* Maximum sampling window: 0xfffff */
+   253		writel_relaxed(window, BWMON_REG(bwmon, sample_window_reg));
+   254	
+   255		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_high_reg),
+   256				    data->default_highbw_kbps);
+   257		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_med_reg),
+   258				    data->default_medbw_kbps);
+   259		bwmon_set_threshold(bwmon, BWMON_REG(bwmon, threshold_low_reg),
+   260				    data->default_lowbw_kbps);
+   261	
+   262		thres_count = data->zone3_thres_count << BWMON_THRESHOLD_COUNT_ZONE3_SHIFT |
+   263			      BWMON_THRESHOLD_COUNT_ZONE2_DEFAULT << BWMON_THRESHOLD_COUNT_ZONE2_SHIFT |
+   264			      data->zone1_thres_count << BWMON_THRESHOLD_COUNT_ZONE1_SHIFT |
+   265			      BWMON_THRESHOLD_COUNT_ZONE0_DEFAULT;
+   266		writel_relaxed(thres_count,
+   267			       BWMON_REG(bwmon, threshold_count_reg));
+   268		writel_relaxed(BWMON_ZONE_ACTIONS_DEFAULT,
+   269			       BWMON_REG(bwmon, zone_actions_reg));
+   270		/* Write barriers in bwmon_clear_irq() */
+   271	
+   272		bwmon_clear_irq(bwmon);
+ > 273		bwmon_enable(bwmon, bwmon->data->irq_mask);
+   274	}
+   275	
+   276	static irqreturn_t bwmon_intr(int irq, void *dev_id)
+   277	{
+   278		struct icc_bwmon *bwmon = dev_id;
+   279		unsigned int status, max;
+   280		int zone;
+   281	
+   282		status = readl(BWMON_REG(bwmon, irq_status_reg));
+   283		status &= bwmon->data->irq_mask;
+   284		if (!status) {
+   285			/*
+   286			 * Only zone 1 and zone 3 interrupts are enabled but zone 2
+   287			 * threshold could be hit and trigger interrupt even if not
+   288			 * enabled.
+   289			 * Such spurious interrupt might come with valuable max count or
+   290			 * not, so solution would be to always check all
+   291			 * BWMON_ZONE_MAX() registers to find the highest value.
+   292			 * Such case is currently ignored.
+   293			 */
+   294			return IRQ_NONE;
+   295		}
+   296	
+   297		bwmon_disable(bwmon);
+   298	
+ > 299		zone = get_bitmask_order(status >> bwmon->data->irq_shift) - 1;
+   300		pr_err("AAA bwmon 0x%x -> zone %d-%d\n", status,
+   301		       get_bitmask_order(status >> BWMON_V4_IRQ_STATUS_ZONE_SHIFT), zone);
+   302	
+   303		/*
+   304		 * Zone max bytes count register returns count units within sampling
+   305		 * window.  Downstream kernel for BWMONv4 (called BWMON type 2 in
+   306		 * downstream) always increments the max bytes count by one.
+   307		 */
+   308		max = readl(BWMON_REG_ZONE_MAX(bwmon, zone)) + 1;
+   309		max *= bwmon->data->count_unit_kb;
+   310		bwmon->target_kbps = mult_frac(max, MSEC_PER_SEC, bwmon->data->sample_ms);
+   311	
+   312		return IRQ_WAKE_THREAD;
+   313	}
+   314	
 
-First, two IPMODIFY ftrace ops cannot work together on the same kernel 
-function. So there won't be a ops with both IPMODIFY and SHARE_IPMODIFY. 
-
-non-direct ops without IPMODIFY can already share with IPMODIFY ops.
-Only direct ops need SHARE_IPMODIFY flag, and it means "I can share with 
-another ops with IPMODIFY". So there will be different flavors of 
-direct ops:
-
-  1. w/ IPMODIFY, w/o SHARE_IPMODIFY;
-  2. w/o IPMODIFY, w/o SHARE_IPMODIFY;
-  3. w/o IPMODIFY, w/ SHARE_IPMODIFY. 
-
-#1 can never work on the same function with another IPMODIFY ops, and 
-we don't plan to make it work. #2 does not work with another IPMODIFY 
-ops. And #3 works with another IPMODIFY ops. 
-
-The owner of the direct trampoline uses these flags to tell ftrace 
-infrastructure the property of this trampoline. 
-
-BPF trampolines with only fentry calls are #3 direct ops. BPF 
-trampolines with fexit or fmod_ret calls will be #2 trampoline by 
-default, but it is also possible to generate #3 trampoline for it.
- 
-BPF side will try to register #2 trampoline, If ftrace detects another 
-IPMODIFY ops on the same function, it will let BPF trampoline know 
-with -EAGAIN from register_ftrace_direct_multi(). Then, BPF side will 
-regenerate a #3 trampoline and register it again. 
-
-I know this somehow changes the policy with direct ops, but it is the
-only way this can work, AFAICT. 
-
-Does this make sense? Did I miss something?
-
-Thanks,
-Song
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

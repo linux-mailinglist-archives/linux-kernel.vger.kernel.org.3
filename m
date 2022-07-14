@@ -2,162 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B475749C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227CB5749D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234827AbiGNJ5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36308 "EHLO
+        id S238101AbiGNJ5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiGNJ5F (ORCPT
+        with ESMTP id S237551AbiGNJ51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:57:05 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF084C603
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657792624; x=1689328624;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jm5IY6xwqjhzPn9Sa0+lhMEHPOhFZtYu1pdlIzIHsq0=;
-  b=BFQdKhkCnfJVpGsmU8H8UNb7Iv+gkm6Tp0S49F0j/dT8UxNhrla+AMzU
-   0Zi+3B1BC+CsttKuo4m/rxcseXC/GN2vQMg8txhgPuRpKpscuDrK7mgJQ
-   ASwADRaRTFVt0jWOZSXarxD9Jrv3S/BzotMdlNldCXvIEuJl2cnNOOSfu
-   b/5+3CVP0068NRW+SfEjGKZXyVxvzCacCV446uxZd2XYVs1FHOvZGUvdj
-   Ij9cnmYg2zyt1AIGI4g6d/Pgy91f76YPBWGRY22LoUIRNSqhzdMgOK27u
-   NBG/tx5HkQey0tOl5HeogPX06OdvzDuUK11Uo1e1VXcCkLhhJbMY1knSO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="286608714"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="286608714"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 02:57:03 -0700
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="653810786"
-Received: from acsok-mobl.ti.intel.com (HELO maurocar-mobl2) ([10.252.37.128])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 02:57:00 -0700
-Date:   Thu, 14 Jul 2022 11:56:57 +0200
-From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        intel-gfx@lists.freedesktop.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Patnana Venkata Sai <venkata.sai.patnana@intel.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Fernando Ramos <greenfoo@u92.eu>
-Subject: Re: [Intel-gfx] [PATCH v2 05/39] drm/i915: display: fix kernel-doc
- markup warnings
-Message-ID: <20220714114239.5da0362d@maurocar-mobl2>
-In-Reply-To: <Ys9BksNo/iylds2g@intel.com>
-References: <cover.1657699522.git.mchehab@kernel.org>
-        <e860a7d8e5f9c41c462ef354b9ca6f36ae142e1b.1657699522.git.mchehab@kernel.org>
-        <Ys9BksNo/iylds2g@intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 14 Jul 2022 05:57:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3B4650182
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:57:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657792639;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=due5AmS56nwKHQURWRio6Jj0V5YHWUHW3moonKZbp+k=;
+        b=jKt76gTpcOjv4x+mHomcPP6DK2cyJQWVEE9y7Tl5r+YlyLzRUdNs0vwUn0UhlB/XMiEK1U
+        ASCXnK976G9hXN6PnGyJv4a3D3VFlhhMYmRZv5pvU7YA7VjSSFC0zrZTw5gIbCz0z0CRdp
+        NNmxU+fUrs+S3bUt0fgODD5lE2roQoY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-0WmbUmN1NsC1jn5Nq3AMEQ-1; Thu, 14 Jul 2022 05:57:18 -0400
+X-MC-Unique: 0WmbUmN1NsC1jn5Nq3AMEQ-1
+Received: by mail-wm1-f70.google.com with SMTP id c17-20020a7bc011000000b003a2bfaf8d3dso448750wmb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:57:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=due5AmS56nwKHQURWRio6Jj0V5YHWUHW3moonKZbp+k=;
+        b=g33JSYeHwbLJobT9cHOf6RIXu1CLkE09+w13iHFWe9xjDv8TzvzG9IPrQgTe1BZ/l+
+         w+EBi/DgRFfoBFFFX1c+cUDCc0IP7f+rHVAWBNrLkgWg9A1lvOuML/MQxuvGAY9fSChr
+         rtD/1y0ufHV3bVKVhpchy1k/vaflxNQ3mX64C6gcdRZWfwePQJ5HjiTgHKx+pUt3+7DC
+         /RN2WzEGaW1RuNrbp5QlJzIxWCPutNM8ubWWLhs0g6MHfnB5Y+qGStBPDNa+dIbmPzlL
+         IcKYwD7zu9aSkxcv2q+KpbOvNrkeGNKx+9MuIB2HpNiiqr75HSfhG4IFQqsbPl4V4hS8
+         UH6g==
+X-Gm-Message-State: AJIora8VvbG12nnksrspAaFrirvLzRkFJkmvJUbPDAKmhH7UUvyRAL+p
+        FF1z/1KSE1cqU5yw3vmILECuxxJrfstktHv6ImTCM9TrxkYorMicW9EUiHBhZGSjNrdm3s5Ih0w
+        EjtOIhtYiNC1/ZM0PZaOevP2W
+X-Received: by 2002:a5d:6e8d:0:b0:21d:7adc:7102 with SMTP id k13-20020a5d6e8d000000b0021d7adc7102mr7322823wrz.9.1657792637714;
+        Thu, 14 Jul 2022 02:57:17 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1thfI/HeBALlz1MpWK7X8M2igq3/FhpwNnjJ1ZYgqajB1pTOb1ykpm1uWMRTuBXxCFL8QuxDg==
+X-Received: by 2002:a5d:6e8d:0:b0:21d:7adc:7102 with SMTP id k13-20020a5d6e8d000000b0021d7adc7102mr7322802wrz.9.1657792637491;
+        Thu, 14 Jul 2022 02:57:17 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id o12-20020adfca0c000000b0021dbaa4f38dsm1287018wrh.18.2022.07.14.02.57.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 02:57:16 -0700 (PDT)
+Message-ID: <aff0dd9ba5d5730435a92e6a90dc15bb6eae5977.camel@redhat.com>
+Subject: Re: [PATCH v4 03/25] x86/hyperv: Update 'struct
+ hv_enlightened_vmcs' definition
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 14 Jul 2022 12:57:15 +0300
+In-Reply-To: <20220714091327.1085353-4-vkuznets@redhat.com>
+References: <20220714091327.1085353-1-vkuznets@redhat.com>
+         <20220714091327.1085353-4-vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022 18:05:06 -0400
-Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
-
-> On Wed, Jul 13, 2022 at 09:11:53AM +0100, Mauro Carvalho Chehab wrote:
-> > There are a couple of issues at i915 display kernel-doc markups:
-> > 
-> > 	drivers/gpu/drm/i915/display/intel_display_debugfs.c:2238: warning: Function parameter or member 'intel_connector' not described in 'intel_connector_debugfs_add'
-> > 	drivers/gpu/drm/i915/display/intel_display_debugfs.c:2238: warning: Excess function parameter 'connector' description in 'intel_connector_debugfs_add'
-> > 	drivers/gpu/drm/i915/display/intel_display_power.c:700: warning: expecting prototype for intel_display_power_put_async(). Prototype was for __intel_display_power_put_async() instead
-> > 	drivers/gpu/drm/i915/display/intel_tc.c:807: warning: Function parameter or member 'work' not described in 'intel_tc_port_disconnect_phy_work'
-> > 	drivers/gpu/drm/i915/display/intel_tc.c:807: warning: Excess function parameter 'dig_port' description in 'intel_tc_port_disconnect_phy_work'
-> > 
-> > Those are due to wrong parameter of function name. Address them.
-> > 
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > ---
-> > 
-> > To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> > See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
-> > 
-> >  drivers/gpu/drm/i915/display/intel_display_debugfs.c | 2 +-
-> >  drivers/gpu/drm/i915/display/intel_display_power.c   | 2 +-
-> >  drivers/gpu/drm/i915/display/intel_tc.c              | 2 +-
-> >  3 files changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/i915/display/intel_display_debugfs.c b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-> > index 6c3954479047..1e35eb01742b 100644
-> > --- a/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-> > @@ -2229,7 +2229,7 @@ DEFINE_SHOW_ATTRIBUTE(i915_current_bpc);
-> >  
-> >  /**
-> >   * intel_connector_debugfs_add - add i915 specific connector debugfs files
-> > - * @connector: pointer to a registered drm_connector
-> > + * @intel_connector: pointer to a registered drm_connector
-> >   *
-> >   * Cleanup will be done by drm_connector_unregister() through a call to
-> >   * drm_debugfs_connector_remove().
-> > diff --git a/drivers/gpu/drm/i915/display/intel_display_power.c b/drivers/gpu/drm/i915/display/intel_display_power.c
-> > index 589af257edeb..fd6b71160a06 100644
-> > --- a/drivers/gpu/drm/i915/display/intel_display_power.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_display_power.c
-> > @@ -685,7 +685,7 @@ intel_display_power_put_async_work(struct work_struct *work)
-> >  }
-> >  
-> >  /**
-> > - * intel_display_power_put_async - release a power domain reference asynchronously
-> > + * __intel_display_power_put_async - release a power domain reference asynchronously  
+On Thu, 2022-07-14 at 11:13 +0200, Vitaly Kuznetsov wrote:
+> Updated Hyper-V Enlightened VMCS specification lists several new
+> fields for the following features:
 > 
-> oh, we are really using __ prefix for non-static functions?! o.O
-
-Yeah... Btw, this is actually a common practice to have __ prefix on
-non-static and even on exported functions. Usually, the __ variant
-assumes that a spinlock/mutex were already taken previously.
-
-However, that's not the case here, as it starts holding a mutex.
-
-In this specific case, the __ variant is called by an inline
-function on a different way, depending if 
-CONFIG_DRM_I915_DEBUG_RUNTIME_PM is true. On such case, it passes 
-the runtime PM wakeref, otherwise it passes a -1.
-
-Funny enough, intel_display_power_put() ifdef is inside the C
-file, using a different implementation:
-
-#if IS_ENABLED(CONFIG_DRM_I915_DEBUG_RUNTIME_PM)
-	...
-	void intel_display_power_put(struct drm_i915_private *dev_priv,
-        	                     enum intel_display_power_domain domain,
-                	             intel_wakeref_t wakeref)
-	...
-#else
-	...
-	void intel_display_power_put_unchecked(struct drm_i915_private *dev_priv,
-                                       enum intel_display_power_domain domain)
-	...
-#endif
-
-For consistency, I would use the same solution for both, probably
-at the C file, and avoiding use a __ prefix for the async put version.
-
-> anyway, with that ditto "()" consistency,
+> - PerfGlobalCtrl
+> - EnclsExitingBitmap
+> - Tsc Scaling
+> - GuestLbrCtl
+> - CET
+> - SSP
 > 
-> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Update the definition. The updated definition is available only when
+> CPUID.0x4000000A.EBX BIT(0) is '1'. Add a define for it as well.
+> 
+> Note: The latest TLFS is available at
+> https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/tlfs
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/include/asm/hyperv-tlfs.h | 26 ++++++++++++++++++++++++--
+>  1 file changed, 24 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 6f0acc45e67a..ebc27017fa48 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -138,6 +138,17 @@
+>  #define HV_X64_NESTED_GUEST_MAPPING_FLUSH              BIT(18)
+>  #define HV_X64_NESTED_MSR_BITMAP                       BIT(19)
+>  
+> +/*
+> + * Nested quirks. These are HYPERV_CPUID_NESTED_FEATURES.EBX bits.
+> + *
+> + * Note: HV_X64_NESTED_EVMCS1_2022_UPDATE is not currently documented in any
+> + * published TLFS version. When the bit is set, nested hypervisor can use
+> + * 'updated' eVMCSv1 specification (perf_global_ctrl, s_cet, ssp, lbr_ctl,
+> + * encls_exiting_bitmap, tsc_multiplier fields which were missing in 2016
+> + * specification).
+> + */
+> +#define HV_X64_NESTED_EVMCS1_2022_UPDATE               BIT(0)
+> +
+>  /*
+>   * This is specific to AMD and specifies that enlightened TLB flush is
+>   * supported. If guest opts in to this feature, ASID invalidations only
+> @@ -559,9 +570,20 @@ struct hv_enlightened_vmcs {
+>         u64 partition_assist_page;
+>         u64 padding64_4[4];
+>         u64 guest_bndcfgs;
+> -       u64 padding64_5[7];
+> +       u64 guest_ia32_perf_global_ctrl;
+> +       u64 guest_ia32_s_cet;
+> +       u64 guest_ssp;
+> +       u64 guest_ia32_int_ssp_table_addr;
+> +       u64 guest_ia32_lbr_ctl;
+> +       u64 padding64_5[2];
+>         u64 xss_exit_bitmap;
+> -       u64 padding64_6[7];
+> +       u64 encls_exiting_bitmap;
+> +       u64 host_ia32_perf_global_ctrl;
+> +       u64 tsc_multiplier;
+> +       u64 host_ia32_s_cet;
+> +       u64 host_ssp;
+> +       u64 host_ia32_int_ssp_table_addr;
+> +       u64 padding64_6;
+>  } __packed;
+>  
+>  #define HV_VMX_ENLIGHTENED_CLEAN_FIELD_NONE                    0
 
-Thanks!
+All look good now.
 
-Btw, I'm removing "()" from patches 1-3 (both at descriptions and
-internally), keeping your R-B on them too.
+I really don't like the new 'online' TLFS spec - as you said,
+they can indeed change it any moment without any traces.
 
-Regards,
-Mauro
+Seems it was done with good intentions, and it much easier to use,
+but they should also provide a PDF, or at least some form or archive of
+these web pages.
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+
+

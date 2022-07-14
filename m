@@ -2,142 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E1E5750CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461FF5750CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234232AbiGNO3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S238509AbiGNO3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbiGNO3Q (ORCPT
+        with ESMTP id S235151AbiGNO3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:29:16 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0157A18B16
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:29:14 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-31bf3656517so18564587b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:29:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YlzZEqFoTc04SaZBu+v7x99uaEOuP4naXZYf5VPkZpc=;
-        b=O/YzZ0aJNVY0Olu0WGI7mfps/K+hxAP/Q5ehQ9uy5W5FbDiZYpkflfBu66QtnT5UoT
-         8WQvvcRBZO6qpjjuim4qUGZXrVSNYwib4GqhQtoMwFWNWN8ljQGo8/Zx5TSMD/YRMibi
-         KDyRYOewJNHyW3I8zqJkngwbgp5d60pPZAuOkLQncEQ2Sn5BP9CGJqMGZSvydpEL0SQS
-         1OizMwLX+6/HdbP/BabSv9/AJ7qi7gzdd+jL5bqY97w82jLciJkdq/rb9ngfNgaZvO2l
-         XF5cCgws4GpWiY+gcMhgP7UbUmYV7WEusKRh1sxJDzMsS3CDl1up9yBfhXijAFZPycRB
-         +u+Q==
+        Thu, 14 Jul 2022 10:29:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E77FC5C36A
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:29:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657808988;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=N8oBD289dGEOPLHJiPefuD87Ky4LKaAMPVE1HnT2THU=;
+        b=iClZfEDVgDNQghCEk4+SnhMQIcBbKbDL2Z+MxiEBtgAgVbHQOHFHTmfeXPBmFjVWZHIFuQ
+        qPwHoJ3OFx7CKTOW1acjtsyXbsJUhptCnByGmd6xp1szTboRq6IjF42NBqclU65CWyS/jV
+        ffJiT+xRn23Ml10HLk4lIcZed438paQ=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-470-6VIuOQN8M3ettKrVrzyakA-1; Thu, 14 Jul 2022 10:29:46 -0400
+X-MC-Unique: 6VIuOQN8M3ettKrVrzyakA-1
+Received: by mail-qk1-f197.google.com with SMTP id bk21-20020a05620a1a1500b006b5c24695a4so1258098qkb.15
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:29:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YlzZEqFoTc04SaZBu+v7x99uaEOuP4naXZYf5VPkZpc=;
-        b=Pan3oJ4vPf32x8ABcjKA0Fj9a21wsJT8GFhLw1ErpqEvPC27U0eulg4oFnZ8bkGpho
-         euOD/I38ewxaGrZi+16PsNxbvmilh8y6P1QBPj/O52N9IcKriNhS+rXuYJVLKNAEzB7g
-         dnyRt7ucLSBf1j2ShfkK9j9hlpKblUQUDg73pRScolmWcalzc+qmHizJypKX25FXVC+o
-         JABS/rqTwcYg0WexqdSMbwKnM+igPaBvmTxJoDrgITAoDGOVH1paGN/79mDnc6QWfj/t
-         9HD4W8QeqzPO0vsrSlVC8b1qCw52mIL63udNxOiHAlzNSoOonx3mntbiFicBszLTAFk0
-         2WYA==
-X-Gm-Message-State: AJIora+207H9bpwL7yIfAC/u8e+QQEL7B9AGF2pn8rFQaaSh6rBUDJ54
-        0C3XprfnPfUHAKoWytqNi/y2vdMfhPC18iTaGj3nww==
-X-Google-Smtp-Source: AGRyM1vmdPBPDNRzF1/taI9PrebdFz2nDxBIOBFxahbjY1dlb1Sm6VY7LTHE55gzvKHxyFa+dJlJ43zOPZNBDS/L1RE=
-X-Received: by 2002:a81:1216:0:b0:31d:b19e:b72b with SMTP id
- 22-20020a811216000000b0031db19eb72bmr10102575yws.265.1657808952998; Thu, 14
- Jul 2022 07:29:12 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=N8oBD289dGEOPLHJiPefuD87Ky4LKaAMPVE1HnT2THU=;
+        b=5BhhCIWFKg9bIJzJzE/lx+MHba5s5ksnyHmOKQ5CSXEwrgcwbyt9KWopBs2SG1qXtu
+         uXb+XqXcZruVHbtBptbE2ifTU/fScAP76f7OdSNNUaibIIa2ru8OJyhAvEV09Qcx1tdq
+         htzzYWzy6ZFC8rsaXBwdv3eTdgeh/syNkuxn7A+aspJBaYo1Bq8+7ruy5qOkhEz5FdTX
+         1odxYXgy58MyS73MLH0U9FiUpwv6vpptvQ5oFWpk/fXZcu/+ImI0mdg0rRXjmFVfidb5
+         +T3zy6q658TYvSpxe1amc3qT97nKkYDndOQJzXgoYc3XCA/t9Vu+VYbSyZXOSmjnLuFA
+         djPQ==
+X-Gm-Message-State: AJIora81OztOpkS9rYey5eBHvKhX4Zp5LrM1ahDCYDkPGJOi2dtY+xml
+        Yt/e8juyK8dzBwh+9tB+bUL21H6VQNYGtOAyB4YpI6TOXOxAu7Gkj/mJNV7bsSs8emR0XM+oH4S
+        NvuBT0BmiU2Vj2VgaRuF/QzJt
+X-Received: by 2002:a05:620a:490b:b0:6b5:50ba:df51 with SMTP id ed11-20020a05620a490b00b006b550badf51mr6154034qkb.53.1657808986445;
+        Thu, 14 Jul 2022 07:29:46 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t16Q/9bg8jc78Kiv5IS34JX5fMV5xULfn6e6fF+bl1rBRgdTiM9zrPFe4bMltLNPjW6XLFWQ==
+X-Received: by 2002:a05:620a:490b:b0:6b5:50ba:df51 with SMTP id ed11-20020a05620a490b00b006b550badf51mr6154013qkb.53.1657808986204;
+        Thu, 14 Jul 2022 07:29:46 -0700 (PDT)
+Received: from xps13 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
+        by smtp.gmail.com with ESMTPSA id v11-20020a05622a014b00b0031e99798d70sm1719199qtw.29.2022.07.14.07.29.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 07:29:45 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 10:29:44 -0400
+From:   Brian Masney <bmasney@redhat.com>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 3/8] dt-bindings: PCI: qcom: Add SA8540P to binding
+Message-ID: <YtAoWOngodHMLY9L@xps13>
+References: <20220714071348.6792-1-johan+linaro@kernel.org>
+ <20220714071348.6792-4-johan+linaro@kernel.org>
 MIME-Version: 1.0
-References: <20220622162230.83474-1-kirill.shutemov@linux.intel.com>
- <20220622162230.83474-7-kirill.shutemov@linux.intel.com> <CAG_fn=Uo8E-6r3otLPC9iEfO02=A0=zROO8R8TL=8vXVZVE5Ww@mail.gmail.com>
- <20220712171445.74b46mgdxgaub3qj@black.fi.intel.com>
-In-Reply-To: <20220712171445.74b46mgdxgaub3qj@black.fi.intel.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 14 Jul 2022 16:28:36 +0200
-Message-ID: <CAG_fn=VeS7eFq5w0ny2VVe0j4YU4DKyaHDL0-b_VomnYwmDYow@mail.gmail.com>
-Subject: Re: [PATCHv4 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and ARCH_ENABLE_TAGGED_ADDR
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714071348.6792-4-johan+linaro@kernel.org>
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 7:14 PM Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> On Tue, Jul 12, 2022 at 03:12:01PM +0200, Alexander Potapenko wrote:
-> > On Wed, Jun 22, 2022 at 6:22 PM Kirill A. Shutemov
-> > <kirill.shutemov@linux.intel.com> wrote:
-> > >
-> > > Add a couple of arch_prctl() handles:
-> > >
-> > >  - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required numb=
-er
-> > >    of tag bits. It is rounded up to the nearest LAM mode that can
-> > >    provide it. For now only LAM_U57 is supported, with 6 tag bits.
-> > >
-> > >  - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
-> > >    bits located in the address.
-> > >
-> > Am I right that the desired way to detect the presence of LAM without
-> > enabling it is to check that arch_prctl(ARCH_GET_UNTAG_MASK, ...)
-> > returns zero?
->
-> Returns -1UL, but yes.
+On Thu, Jul 14, 2022 at 09:13:43AM +0200, Johan Hovold wrote:
+> SA8540P is a new platform related to SC8280XP but which uses a single
+> host interrupt for MSI routing.
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-No, I meant the return value of arch_prctl(), but in fact neither
-seems to be true.
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 
-Right now e.g. for the 5.17 kernel arch_prctl(ARCH_GET_UNTAG_MASK,
-&bits) returns -EINVAL regardless of the underlying hardware.
-A new kernel with your patches will return 0 and set bits=3D-1UL on both
-non-LAM and LAM-enabled machines. How can we distinguish those?
-
-> >
-> > One would expect that `arch_prctl(ARCH_ENABLE_TAGGED_ADDR, 0)`
-> > disables tagging for the current process.
-> > Shouldn't this workflow be supported as well?
->
-> Is there an use-case for it?
->
-> I would rather keep the interface minimal. We can always add this in the
-> future if an use-case comes.
-
-As discussed offline, we don't have a use-case for this yet, so I don't ins=
-ist.
-
-> --
->  Kirill A. Shutemov
-
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg

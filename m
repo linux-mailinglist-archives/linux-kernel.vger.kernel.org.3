@@ -2,133 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A1C5746BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401B85746C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234935AbiGNI3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 04:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        id S234913AbiGNIaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 04:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234904AbiGNI3b (ORCPT
+        with ESMTP id S233386AbiGNIaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 04:29:31 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FC21276C;
-        Thu, 14 Jul 2022 01:29:31 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E7oGNj027583;
-        Thu, 14 Jul 2022 08:29:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=3jQ61/O3RHNvo+Uxn3UXtV6mB8X3oEHqZVGcKkyjFmM=;
- b=DkGoOQEd4Pjna7gj+9ooUVf+ax7155DiMy4BXWLq00tzPAhqWCgm3+9w++fENqs/Ye/q
- sAyV7hrMQ6V0xfRyRf7NRoaVLx0T1ErReoSw0OdQRb5qQEFqhz/cpk5B2pb8LmhzjRyg
- Qo9QjW9G67OlOXxIO6zpmPnwcopfU+bn0Zy5CwF/MXx7WNjI2GpC9xutxG9BpPg3jaEI
- Od3ZMjtGF/4CjVwERz6lZ9b+zehSRZ3k/qjf+f4fEoVmaS+/W0ZSEt8YF8nkAwne8bCH
- xwqAhDvSHzeJ7vPL1Tj0itVqCL/NDycRWIUO3tQeJ3VhqcYhQY7G6eFPTIISrkVdhJ8v tQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3haf3m13ja-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jul 2022 08:29:30 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26E7q4XI031870;
-        Thu, 14 Jul 2022 08:29:30 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3haf3m13j4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jul 2022 08:29:29 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26E8KBRN026528;
-        Thu, 14 Jul 2022 08:29:29 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma04dal.us.ibm.com with ESMTP id 3h9e04vtvh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jul 2022 08:29:29 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26E8TRwp29032822
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Jul 2022 08:29:28 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D6D76C6057;
-        Thu, 14 Jul 2022 08:29:27 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 466AAC6063;
-        Thu, 14 Jul 2022 08:29:26 +0000 (GMT)
-Received: from [9.65.197.138] (unknown [9.65.197.138])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 14 Jul 2022 08:29:25 +0000 (GMT)
-Message-ID: <d3984f3d-4e28-61fc-879c-ca38b7daa779@linux.ibm.com>
-Date:   Thu, 14 Jul 2022 11:29:09 +0300
+        Thu, 14 Jul 2022 04:30:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3989C27B26;
+        Thu, 14 Jul 2022 01:30:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 364D5CE25A1;
+        Thu, 14 Jul 2022 08:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 29BC8C341CD;
+        Thu, 14 Jul 2022 08:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657787414;
+        bh=sS6goUG5X5JNFA+yAWK6MTCJUV48JL9vbeaQ1ZGiJ3I=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=KKxG1ZyBzXgqc5KYxvrky6BX8aEzCVM5PU/WxKc4JdVgv0Y8lcl/Vz9Yb1DCJfW3Z
+         7GyAKpw64BXZA7c7Pj4IwjSpWR6/yXYZo6tFaI30KDqxYVZx1UfosJbeETEYAAcJLQ
+         asRVih2jLyAqmhsTMXSam3jPUfPwVfKsE+I5swUdT5teRTmW2OOcdUQ+CYQxXUcJiF
+         Gd/xil2gWuK8ZcbN+3mJy2kp4iuFom3SxNDgchixUEMYHQkUSTKYnKx4HAmuUOWg9t
+         oveTS+qDThygHFvLfKBbWcp++ktjsF1L8imgaGKPsDdwZcXFHhuS2oySf3C7Glv/Sl
+         Vo3O79yUAfZ2A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0775EE45224;
+        Thu, 14 Jul 2022 08:30:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] Documentation: siphash: Fix typo in the name of
- offsetofend macro
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-doc@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
-        linux-kernel@vger.kernel.org
-References: <20220712104455.1408150-1-dovmurik@linux.ibm.com>
- <87fsj6bhwb.fsf@meer.lwn.net> <Ys13bqGuPYBUGg3O@zx2c4.com>
- <87fsj44w9h.fsf@meer.lwn.net>
-From:   Dov Murik <dovmurik@linux.ibm.com>
-In-Reply-To: <87fsj44w9h.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Hkqn6I2Qm3Ate44xNBFbuyoEWjdELzow
-X-Proofpoint-GUID: 7_QH3cuDFgZZUbM0gwZm0ZMGbaVWd2TG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-14_06,2022-07-13_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- bulkscore=0 clxscore=1011 lowpriorityscore=0 malwarescore=0 suspectscore=0
- mlxscore=0 mlxlogscore=728 priorityscore=1501 impostorscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207140033
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [net 0/3] seg6: fix skb checksum for SRH encapsulation/insertion 
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165778741402.25423.1210141658823932641.git-patchwork-notify@kernel.org>
+Date:   Thu, 14 Jul 2022 08:30:14 +0000
+References: <20220712175837.16267-1-andrea.mayer@uniroma2.it>
+In-Reply-To: <20220712175837.16267-1-andrea.mayer@uniroma2.it>
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        david.lebrun@uclouvain.be, m.xhonneux@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, stefano.salsano@uniroma2.it,
+        paolo.lungaroni@uniroma2.it, ahabdels.dev@gmail.com,
+        anton.makarov11235@gmail.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This series was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-On 13/07/2022 23:01, Jonathan Corbet wrote:
-> "Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+On Tue, 12 Jul 2022 19:58:34 +0200 you wrote:
+> The Linux kernel supports Segment Routing Header (SRH)
+> encapsulation/insertion operations by providing the capability to: i)
+> encapsulate a packet in an outer IPv6 header with a specified SRH; ii)
+> insert a specified SRH directly after the IPv6 header of the packet.
+> Note that the insertion operation is also referred to as 'injection'.
 > 
->> Hi Jon,
->>
->> On Tue, Jul 12, 2022 at 07:05:40AM -0600, Jonathan Corbet wrote:
->>> Dov Murik <dovmurik@linux.ibm.com> writes:
->>>
->>>> The siphash documentation misspelled "offsetendof" instead of
->>>> "offsetofend".
->>>>
->>>> Fixes: 2c956a60778cbb ("siphash: add cryptographically secure PRF")
->>>
->>> When you send a patch with a Fixes tag it's always a good idea to CC the
->>> author of the patch being fixed.  Adding Jason...let me know if you'd
->>> like me to grab this.
->>
->> Thanks for CC'ing me. Sure, feel free to take this:
->>
->>     Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> The two operations are respectively supported by seg6_do_srh_encap() and
+> seg6_do_srh_inline(), which operate on the skb associated to the packet as
+> needed (e.g. adding the necessary headers and initializing them, while
+> taking care to recalculate the skb checksum).
 > 
-> Applied, thanks.
+> [...]
 
-Thank you Jon.
+Here is the summary with links:
+  - [net,1/3] seg6: fix skb checksum evaluation in SRH encapsulation/insertion
+    https://git.kernel.org/netdev/net/c/df8386d13ea2
+  - [net,2/3] seg6: fix skb checksum in SRv6 End.B6 and End.B6.Encaps behaviors
+    https://git.kernel.org/netdev/net/c/f048880fc770
+  - [net,3/3] seg6: bpf: fix skb checksum in bpf_push_seg6_encap()
+    https://git.kernel.org/netdev/net/c/4889fbd98dea
 
-I'll try to remember your tip about CC the author of the Fixes tag.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
--Dov
 
-
-> 
-> jon

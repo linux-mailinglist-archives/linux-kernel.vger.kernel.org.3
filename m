@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D8157418C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 04:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3BE57418E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 04:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbiGNCtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 22:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        id S231473AbiGNCuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 22:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiGNCtA (ORCPT
+        with ESMTP id S229495AbiGNCuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 22:49:00 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069E1BF53;
-        Wed, 13 Jul 2022 19:48:58 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LjzQP1xpBzhXh4;
-        Thu, 14 Jul 2022 10:46:21 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 14 Jul 2022 10:48:57 +0800
-Subject: Re: [PATCH RESEND -next] lsm_audit: Clean up redundant NULL pointer
- check
-To:     Paul Moore <paul@paul-moore.com>
-CC:     <jmorris@namei.org>, <serge@hallyn.com>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220714012421.55627-1-xiujianfeng@huawei.com>
- <CAHC9VhRM8_Eo9rCL88LLgY7e=soKpSSRK2Zftt9e24GC3A_yMQ@mail.gmail.com>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <e4b4833e-7c28-9b7f-76d9-a1c5335368dd@huawei.com>
-Date:   Thu, 14 Jul 2022 10:48:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Wed, 13 Jul 2022 22:50:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C031022505;
+        Wed, 13 Jul 2022 19:50:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AB9861DE0;
+        Thu, 14 Jul 2022 02:50:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B42FFC341C0;
+        Thu, 14 Jul 2022 02:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657767013;
+        bh=FCZFnhXyh+lfrPcxJ48T/CH+JC21T5uXUjkG/sGSH1s=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=pHhPgx7i3PgHba3UOUV5ewm7rR7725dh3eS/rlTcV9F8YzH6HfNOV+I6BVfHvh1Pg
+         5FLZFj6LYjpEAD9fxVJ1igtYckrUDCFWimyD7u61Rt3PbFl5o9DuXTSZADB4wUnlKS
+         /82LcA2S0k8ra4KXSeafPzoh0Leqk032bqyw3AUWPMykhuPvOnubG3/daXY+20VCi3
+         INRfNRTbqMF6DBWanA5tg5a91A0LVBpsEoDbyiuQ5E/omx3X+NFnSWsdX7bHcBPj/f
+         RFpGpqW0CugICy2vIF9QYgwDEzPdzAcrx+ItZs5IKfU6W8yA5etEPKC8vkOm/R+gy2
+         wtmoDWPkuwqrw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 94675E4521F;
+        Thu, 14 Jul 2022 02:50:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <CAHC9VhRM8_Eo9rCL88LLgY7e=soKpSSRK2Zftt9e24GC3A_yMQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] NFC: nxp-nci: add error reporting
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165776701360.26805.7732027276081136696.git-patchwork-notify@kernel.org>
+Date:   Thu, 14 Jul 2022 02:50:13 +0000
+References: <20220712170011.2990629-1-michael@walle.cc>
+In-Reply-To: <20220712170011.2990629-1-michael@walle.cc>
+To:     Michael Walle <michael@walle.cc>
+Cc:     krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kuba@kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
-在 2022/7/14 10:33, Paul Moore 写道:
-> On Wed, Jul 13, 2022 at 9:27 PM Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
->> The implements of {ip,tcp,udp,dccp,sctp,ipv6}_hdr(skb) guarantee that
->> they will never return NULL, and elsewhere users don't do the check
->> as well, so remove the check here.
->>
->> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
->> ---
->>   security/lsm_audit.c | 14 +-------------
->>   1 file changed, 1 insertion(+), 13 deletions(-)
-> Hi Xiu Jianfeng,
->
-> We just changed LSM maintainers earlier this week, and while I haven't
-> forgotten about your patch (I reviewed it previously), it is too late
-> in this current release cycle (-rc6) to merge non-critical fixes.
-> This would go into the LSM tree after the upcoming merge window.
->
-> Thank you for your patience and understanding.
-Hi, paul, I get it, thanks very much :)
->
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 12 Jul 2022 19:00:10 +0200 you wrote:
+> The PN7160 supports error notifications. Add the appropriate callbacks.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/nfc/nxp-nci/core.c | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+
+Here is the summary with links:
+  - NFC: nxp-nci: add error reporting
+    https://git.kernel.org/netdev/net-next/c/5dc0f7491f9a
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

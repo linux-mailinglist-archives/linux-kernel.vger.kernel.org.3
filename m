@@ -2,95 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D983357432F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CBB57433A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237195AbiGNEbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 00:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
+        id S237232AbiGNEbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 00:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237350AbiGNEav (ORCPT
+        with ESMTP id S237227AbiGNE3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 00:30:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99403246C;
-        Wed, 13 Jul 2022 21:25:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A1B261E99;
-        Thu, 14 Jul 2022 04:25:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 923B5C36AE5;
-        Thu, 14 Jul 2022 04:25:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657772713;
-        bh=2qjO8+odQ7oxEl1fALycalDewY6Q0DjTfZWWlCdvWKE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mwQhqooUVFp5AzPkiJ/1THaSD+ImTXpgWdEqnbmRSWrzBG1uIL+mragcIZQiW6Ze4
-         F///cjRICORbp7zSmBn46d8rDKMhgW42jdgYMmdtZexsM1q4y/wFZ1RGLPhX1FVowG
-         IjsTej6RPqNVxGomjkNbarisYSC6QI8JHU2MpzBrR29Skx6bIxsQ4+olN4ImYvX5v5
-         luViXaz7hEJR/BLM99DIqdRze2Rw0xMhE1SZPzzY3tWIzJZ7e43isTb3za0ptZCeGF
-         diwQIUSr4vE+4lgBAYpFylIMDEcytP+HSYqgvCKo9UO9v/YBUPI9c/PteXfiylC5SZ
-         mbtkHCZl2ib7Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stafford Horne <shorne@gmail.com>, Marc Zyngier <maz@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, tglx@linutronix.de,
-        openrisc@lists.librecores.org
-Subject: [PATCH AUTOSEL 5.15 19/28] irqchip: or1k-pic: Undefine mask_ack for level triggered hardware
-Date:   Thu, 14 Jul 2022 00:24:20 -0400
-Message-Id: <20220714042429.281816-19-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220714042429.281816-1-sashal@kernel.org>
-References: <20220714042429.281816-1-sashal@kernel.org>
+        Thu, 14 Jul 2022 00:29:52 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E084F31DFF
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 21:25:07 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1657772706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XRf9R0o+fSMZ5LBdaxhYZP7PNoN9BepwjSvwbf2mACk=;
+        b=wzJaSUq+cq2c/g7wOTMheofahuoQLC/lJySne8NngV8YOHuAPY31JeADHfGWPWMqTm3wQA
+        Ixki1i7UdSNcr2KkhLOOeoxTZb5F6aIR/JB0CyUkd7X0prMPH9JnaSQZ5eDKI2qJoIjNJ5
+        FqdNfTOfdndIk0HbG8CCQgtT31c9cuI=
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org
+Subject: [mm-unstable PATCH v7 8/8] mm, hwpoison: enable memory error handling on 1GB hugepage
+Date:   Thu, 14 Jul 2022 13:24:20 +0900
+Message-Id: <20220714042420.1847125-9-naoya.horiguchi@linux.dev>
+In-Reply-To: <20220714042420.1847125-1-naoya.horiguchi@linux.dev>
+References: <20220714042420.1847125-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stafford Horne <shorne@gmail.com>
+From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-[ Upstream commit 8520501346ed8d1c4a6dfa751cb57328a9c843f1 ]
+Now error handling code is prepared, so remove the blocking code and
+enable memory error handling on 1GB hugepage.
 
-The mask_ack operation clears the interrupt by writing to the PICSR
-register.  This we don't want for level triggered interrupt because
-it does not actually clear the interrupt on the source hardware.
-
-This was causing issues in qemu with multi core setups where
-interrupts would continue to fire even though they had been cleared in
-PICSR.
-
-Just remove the mask_ack operation.
-
-Acked-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Stafford Horne <shorne@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- drivers/irqchip/irq-or1k-pic.c | 1 -
- 1 file changed, 1 deletion(-)
+ include/linux/mm.h      |  1 -
+ include/ras/ras_event.h |  1 -
+ mm/memory-failure.c     | 16 ----------------
+ 3 files changed, 18 deletions(-)
 
-diff --git a/drivers/irqchip/irq-or1k-pic.c b/drivers/irqchip/irq-or1k-pic.c
-index 03d2366118dd..d5f1fabc45d7 100644
---- a/drivers/irqchip/irq-or1k-pic.c
-+++ b/drivers/irqchip/irq-or1k-pic.c
-@@ -66,7 +66,6 @@ static struct or1k_pic_dev or1k_pic_level = {
- 		.name = "or1k-PIC-level",
- 		.irq_unmask = or1k_pic_unmask,
- 		.irq_mask = or1k_pic_mask,
--		.irq_mask_ack = or1k_pic_mask_ack,
- 	},
- 	.handle = handle_level_irq,
- 	.flags = IRQ_LEVEL | IRQ_NOPROBE,
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 7668831c919f..b0e83835184e 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3241,7 +3241,6 @@ enum mf_action_page_type {
+ 	MF_MSG_DIFFERENT_COMPOUND,
+ 	MF_MSG_HUGE,
+ 	MF_MSG_FREE_HUGE,
+-	MF_MSG_NON_PMD_HUGE,
+ 	MF_MSG_UNMAP_FAILED,
+ 	MF_MSG_DIRTY_SWAPCACHE,
+ 	MF_MSG_CLEAN_SWAPCACHE,
+diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
+index d0337a41141c..cbd3ddd7c33d 100644
+--- a/include/ras/ras_event.h
++++ b/include/ras/ras_event.h
+@@ -360,7 +360,6 @@ TRACE_EVENT(aer_event,
+ 	EM ( MF_MSG_DIFFERENT_COMPOUND, "different compound page after locking" ) \
+ 	EM ( MF_MSG_HUGE, "huge page" )					\
+ 	EM ( MF_MSG_FREE_HUGE, "free huge page" )			\
+-	EM ( MF_MSG_NON_PMD_HUGE, "non-pmd-sized huge page" )		\
+ 	EM ( MF_MSG_UNMAP_FAILED, "unmapping failed page" )		\
+ 	EM ( MF_MSG_DIRTY_SWAPCACHE, "dirty swapcache page" )		\
+ 	EM ( MF_MSG_CLEAN_SWAPCACHE, "clean swapcache page" )		\
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 3721de624b98..d86b5acd5754 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -765,7 +765,6 @@ static const char * const action_page_types[] = {
+ 	[MF_MSG_DIFFERENT_COMPOUND]	= "different compound page after locking",
+ 	[MF_MSG_HUGE]			= "huge page",
+ 	[MF_MSG_FREE_HUGE]		= "free huge page",
+-	[MF_MSG_NON_PMD_HUGE]		= "non-pmd-sized huge page",
+ 	[MF_MSG_UNMAP_FAILED]		= "unmapping failed page",
+ 	[MF_MSG_DIRTY_SWAPCACHE]	= "dirty swapcache page",
+ 	[MF_MSG_CLEAN_SWAPCACHE]	= "clean swapcache page",
+@@ -1887,21 +1886,6 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+ 
+ 	page_flags = head->flags;
+ 
+-	/*
+-	 * TODO: hwpoison for pud-sized hugetlb doesn't work right now, so
+-	 * simply disable it. In order to make it work properly, we need
+-	 * make sure that:
+-	 *  - conversion of a pud that maps an error hugetlb into hwpoison
+-	 *    entry properly works, and
+-	 *  - other mm code walking over page table is aware of pud-aligned
+-	 *    hwpoison entries.
+-	 */
+-	if (huge_page_size(page_hstate(head)) > PMD_SIZE) {
+-		action_result(pfn, MF_MSG_NON_PMD_HUGE, MF_IGNORED);
+-		res = -EBUSY;
+-		goto out;
+-	}
+-
+ 	if (!hwpoison_user_mappings(p, pfn, flags, head)) {
+ 		action_result(pfn, MF_MSG_UNMAP_FAILED, MF_IGNORED);
+ 		res = -EBUSY;
 -- 
-2.35.1
+2.25.1
 

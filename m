@@ -2,128 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 704305754C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46E75754CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240577AbiGNSRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 14:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34396 "EHLO
+        id S232422AbiGNSRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 14:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239622AbiGNSRB (ORCPT
+        with ESMTP id S240574AbiGNSRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 14:17:01 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CB368DDF
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:16:59 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id r18so3449434edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:16:59 -0700 (PDT)
+        Thu, 14 Jul 2022 14:17:49 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95F968DF9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:17:48 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 6so4599183ybc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:17:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=hK5ocrmgpve0PHNj3o4tIMSgRA6JbzmNbYxh+aYsl2k=;
-        b=ZCnQcVQGg0nfALVvWkqkGriFOMCDXxk6m2CvS9WlJvQ5Scn8GJJrBt/WYG0OuGJ5tK
-         rHkj30PPf39TjXc7DVh1SMiF5ndE1lqe4ZrZMbqaj1klcnvokOZK149gaK/RwqMZK3U6
-         NPUauVqcy8ILPqpKTcOikT324FVRl/5HXS6Ik=
+        bh=B3qeqoAZABkkxex4KiYw4gyha/XDsYFHqm4XDsEOFxU=;
+        b=pC1AAX1aado9B1UaT2DtNyupW05yhy/5eRqykgggK+WGUU5L4UeuSGqXFGx4RbZySh
+         dT9p+Ioai3Yi1ACl0mYhJpsYADvsSi4dUgfs+nVhTdol+QL5dhfRnhfZOdNW860tylkc
+         7jeURW/gYEvG6ktk8xs87alyuFA/MPujpAYAmwBiIaVtwc0Cle1eUYO9+mdseYj7+zzk
+         1tX6HS2XixG1L4DMfy6tiKgO71fTGLSHN6QyDDNrfh++mhdtcmzF0dsD/2424AW5pdDS
+         29WuttjB+kiZMN51ppzQgb0LhDcsc6s+VBjSeJH+dR56Wkw6EjUcAn0i2j4iOdsIbOPr
+         kXBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hK5ocrmgpve0PHNj3o4tIMSgRA6JbzmNbYxh+aYsl2k=;
-        b=VBUD6fihDPVcOvsrFMCFXF9xaKDWZs7N+ZGQNTZA2x3JMd2WLmpJiJ2sGdw7Id1v+/
-         sz7dhtA0KU2R4L2CoXnY4MA5+0PcvRkW6qhvuatkZHUyiRGQXO52OLBiWM2Mdx0s6HyE
-         d4uzXGIzuy+hqpExU187c1yy706vQeXWF29Z+7EEs92wql/hN2ozbUeDKTCkj8wdmnFj
-         23zrPnNhYIlDkOhYMJAzC1x6jxkYkqF9CM1ll6q8T50RpnR9mMaS+kioEx3D4bCOO0GX
-         poG7DOSkv2lRfD0dFKE3Wq7elrCFv1O8pN5Vqj7yBJKeFkAmE9JYZR3NgZ39cGRRdOvx
-         j9CQ==
-X-Gm-Message-State: AJIora+flhKX9J0xehj2xCalxDTamkorQm3wqsC7Qszux1lu3sA5poa6
-        poE584JRLaqJSUBW7fIPWJeMYb+f4GL3OPYiCN0=
-X-Google-Smtp-Source: AGRyM1uPFMo0l11QnXGEKbULyhLcKNiwY4fjqxIH7fpAFOlJMMz8rd9TUU7tQxGV+Ny2nrDh3nXiBA==
-X-Received: by 2002:a05:6402:2985:b0:439:651b:c1f4 with SMTP id eq5-20020a056402298500b00439651bc1f4mr13956630edb.276.1657822617765;
-        Thu, 14 Jul 2022 11:16:57 -0700 (PDT)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id sb12-20020a1709076d8c00b0072b2ffc662esm965430ejc.156.2022.07.14.11.16.56
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 11:16:57 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id bu1so3622854wrb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:16:56 -0700 (PDT)
-X-Received: by 2002:a5d:69c2:0:b0:21d:807c:a892 with SMTP id
- s2-20020a5d69c2000000b0021d807ca892mr9469726wrw.274.1657822616453; Thu, 14
- Jul 2022 11:16:56 -0700 (PDT)
+        bh=B3qeqoAZABkkxex4KiYw4gyha/XDsYFHqm4XDsEOFxU=;
+        b=11gvn/iH0g3oLNHO6ulhj12Vs8NSTWBL5eBxo5ST9CH93Omynxg3x4KEXK0YjpV/GT
+         6qaOZgqRK1u9dxVLEs0uuMhcglsz1eH278bK2fvvoXl5figEgx0+7Wvo/GfbiT3TymLN
+         mj40hLgrTwzN2pAsL9Tqq59AIYFr7BdOcDJHrAMB/pl/lav96kkixAh2yzMMfJBgMU8m
+         +Z5281qZXDAH07LYiqnXvJB9XxhRQSxQWn6xtiZxABZHKW5hLXktKRyLpdwDvFjoLwqF
+         tiLtp6CxKr+xthzamRtC0+VsU8ci621EbF/BXK4kfaXFzaEXcW985zLokmqiXplDN2SN
+         d+kw==
+X-Gm-Message-State: AJIora9KqTjcn2dEqg9FeVoEVVwO/NRNKbuPdVTH0vRhdh9aqWLx45ZG
+        99HbBzzpL7kubzD/zolFMzUysAZ2aKemt+KmxoOkag==
+X-Google-Smtp-Source: AGRyM1t0uydpjlf/L97dSFwP61Riwo45dZ5AgijM0VdruQu1Yfq+iQyXxWIvfdEym65vsNBK5d1ugq90Qr8uNdpBtE0=
+X-Received: by 2002:a25:8a81:0:b0:65b:9268:2760 with SMTP id
+ h1-20020a258a81000000b0065b92682760mr10205017ybl.119.1657822667466; Thu, 14
+ Jul 2022 11:17:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220712183238.844813653@linuxfoundation.org> <CA+G9fYtntg7=zWSs-dm+n_AUr_u0eBOU0zrwWqMeXZ+SF6_bLw@mail.gmail.com>
- <eb63e4ce-843f-c840-060e-6e15defd3c4d@roeck-us.net> <CAHk-=wj5cOA+fbGeV15kvwe6YGT54Wsk8F2UGoekVQLTPJz_pw@mail.gmail.com>
- <CAHk-=wgq1soM4gudypWLVQdYuvJbXn38LtvJMtnLZX+RTypqLg@mail.gmail.com>
- <Ys/bYJ2bLVfNBjFI@nazgul.tnic> <6b4337f4-d1de-7ba3-14e8-3ad0f9b18788@redhat.com>
- <8BEC3365-FC09-46C5-8211-518657C0308E@alien8.de> <CAHk-=wj4vtoWZPMXJU-B9qW1zLHsoA1Qb2P0NW=UFhZmrCrf9Q@mail.gmail.com>
- <YtBQutgSh2j3mFNB@worktop.programming.kicks-ass.net> <CAHk-=wjAouqJQ=C4XZVUmWEV9kerNzbOkK9OeErpHshNkcR=gQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wjAouqJQ=C4XZVUmWEV9kerNzbOkK9OeErpHshNkcR=gQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 14 Jul 2022 11:16:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whYia1fnjJFiJ59xZv4ROqqTfG4crQNWxb71JYJf5B-Lg@mail.gmail.com>
-Message-ID: <CAHk-=whYia1fnjJFiJ59xZv4ROqqTfG4crQNWxb71JYJf5B-Lg@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/78] 5.15.55-rc1 review
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Boris Petkov <bp@alien8.de>, Paolo Bonzini <pbonzini@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        stable <stable@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Slade Watkins <slade@sladewatkins.com>, patches@kernelci.org,
-        Sean Christopherson <seanjc@google.com>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
-        lkft-triage@lists.linaro.org,
-        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Anders Roxell <anders.roxell@linaro.org>
+References: <20220701095421.1.I78ded92e416b55de31975686d34b2058d4761c07@changeid>
+ <202207020433.aSSwzWJn-lkp@intel.com> <CANkg5eyrBz9aA+ZTSBz=VeSjufPpEaNPDHNMM83V36gAM4v1VQ@mail.gmail.com>
+In-Reply-To: <CANkg5eyrBz9aA+ZTSBz=VeSjufPpEaNPDHNMM83V36gAM4v1VQ@mail.gmail.com>
+From:   Tim Van Patten <timvp@google.com>
+Date:   Thu, 14 Jul 2022 12:17:36 -0600
+Message-ID: <CANkg5ezrCdmLhH6=TS1hOHYMNeYaOCrTPM+t_Rm8-4-DXK0MEQ@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_ec: Send host event for prepare/complete
+To:     kernel test robot <lkp@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kbuild-all@lists.01.org,
+        robbarnes@google.com, rrangel@chromium.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oh, btw, how bad would it be to just do
+[Resending in plain text mode.]
 
-     #define FASTOP_SIZE 16
-     static_assert(FASTOP_SIZE >= FASTOP_LENGTH)
+Hi Guenter,
 
-and leave it at that?
+The PM subsystem doesn't print out the prepare/complete callbacks, so
+we've added them to keep parity with the rest of the system that has
+this output.
 
-Afaik both gcc and clang default to -falign-functions=16 *anyway*, and
-while on 32-bit x86 we have options to minimize alignment, we don't do
-that on x86-64 afaik.
 
-In fact, we have an option to force *bigger* alignment
-(DEBUG_FORCE_FUNCTION_ALIGN_64B) but not any way to make it less.
+On Fri, Jul 1, 2022 at 3:16 PM Tim Van Patten <timvp@google.com> wrote:
+>
+> Hi Guenter,
+>
+> The PM subsystem doesn't print out the prepare/complete callbacks, so we've added them to keep parity with the rest of the system that has this output.
+>
+> On Fri, Jul 1, 2022 at 2:40 PM kernel test robot <lkp@intel.com> wrote:
+>>
+>> Hi Tim,
+>>
+>> Thank you for the patch! Yet something to improve:
+>>
+>> [auto build test ERROR on chrome-platform/for-next]
+>> [also build test ERROR on linus/master v5.19-rc4 next-20220701]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch]
+>>
+>> url:    https://github.com/intel-lab-lkp/linux/commits/Tim-Van-Patten/platform-chrome-cros_ec-Send-host-event-for-prepare-complete/20220701-235602
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
+>> config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220702/202207020433.aSSwzWJn-lkp@intel.com/config)
+>> compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+>> reproduce (this is a W=1 build):
+>>         # https://github.com/intel-lab-lkp/linux/commit/46055ab1171506ae76daf77f7b880087c8a9119f
+>>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>>         git fetch --no-tags linux-review Tim-Van-Patten/platform-chrome-cros_ec-Send-host-event-for-prepare-complete/20220701-235602
+>>         git checkout 46055ab1171506ae76daf77f7b880087c8a9119f
+>>         # save the config file
+>>         mkdir build_dir && cp config build_dir/.config
+>>         make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+>>
+>> If you fix the issue, kindly add following tag where applicable
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>> >> drivers/platform/chrome/cros_ec_lpc.c:553:20: error: 'cros_ec_lpc_suspend' undeclared here (not in a function); did you mean 'cros_ec_suspend'?
+>>      553 |         .prepare = cros_ec_lpc_suspend,
+>>          |                    ^~~~~~~~~~~~~~~~~~~
+>>          |                    cros_ec_suspend
+>> >> drivers/platform/chrome/cros_ec_lpc.c:554:21: error: 'cros_ec_lpc_resume' undeclared here (not in a function); did you mean 'cros_ec_lpc_remove'?
+>>      554 |         .complete = cros_ec_lpc_resume
+>>          |                     ^~~~~~~~~~~~~~~~~~
+>>          |                     cros_ec_lpc_remove
+>>
+>>
+>> vim +553 drivers/platform/chrome/cros_ec_lpc.c
+>>
+>>    551
+>>    552  static const struct dev_pm_ops cros_ec_lpc_pm_ops = {
+>>  > 553          .prepare = cros_ec_lpc_suspend,
+>>  > 554          .complete = cros_ec_lpc_resume
+>>    555  };
+>>    556
+>>
+>> --
+>> 0-DAY CI Kernel Test Service
+>> https://01.org/lkp
+>
+>
+>
+> --
+>
+> Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997
 
-And we use
 
-        .p2align 4
 
-in most of our asm, aling with
+-- 
 
-    #define __ALIGN          .p2align 4, 0x90
-
-So all the *normal* functions already get 16-byte alignment anyway.
-
-So yeah, it would be less dense, but do we care? Wouldn't the "this is
-really simple" be a nice thing? It's not like there are a ton of those
-fastop functions anyway. 128 of them? Plus 16 of the "setCC" ones?
-
-               Linus
+Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997

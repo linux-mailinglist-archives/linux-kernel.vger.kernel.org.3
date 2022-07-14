@@ -2,89 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB585574C19
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196A6574BF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238930AbiGNL2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
+        id S238786AbiGNL0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238858AbiGNL2I (ORCPT
+        with ESMTP id S238808AbiGNL0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:28:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D7D57253;
-        Thu, 14 Jul 2022 04:28:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6149661CC2;
-        Thu, 14 Jul 2022 11:28:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6257EC341CA;
-        Thu, 14 Jul 2022 11:28:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657798083;
-        bh=9ohwBQS9o/0eQWGzO9pBqXpDkfHCagUjBWWDKn5wNw4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QkBcA0xOxbZqDCuGkJ7ygm1jVxMqSFVVfQ9Ich8Wwlo7Wp2YMy77JoAzeaiKqZgKX
-         grNU7pvKFtU6xkOFXQUuZOFN3/NRuvX7B1fPNvnsibfjNuUOU0M1gdGk0DbhO9XtSK
-         2r1sWZ4dXbQguu5mlNWrdHhvrLKVduWNR1EfWBZdR4YEwxebvQsQYRQxWYeFO58uku
-         8FKbtPbyNi8Mz5ud7HoSsic0QdRj5a5pad1uRtqF8jcMvNlIxf9Bi/Bbetk4QCYdSq
-         r3+bW58nRHSGFuyqGYzDLK1WI+4NzXABcgjWs9ejAwP+FY2qGsIv5kBX4Hx7rOGFco
-         r2UN5KAEAAZNg==
-From:   Lee Jones <lee@kernel.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 8/8] dt-bindings: regulator: pwm: Update Lee Jones' email address
-Date:   Thu, 14 Jul 2022 12:25:33 +0100
-Message-Id: <20220714112533.539910-9-lee@kernel.org>
-X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-In-Reply-To: <20220714112533.539910-1-lee@kernel.org>
-References: <20220714112533.539910-1-lee@kernel.org>
+        Thu, 14 Jul 2022 07:26:30 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C01411A3D;
+        Thu, 14 Jul 2022 04:26:25 -0700 (PDT)
+Received: from pyrite.rasen.tech (softbank036240121080.bbtec.net [36.240.121.80])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 53808383;
+        Thu, 14 Jul 2022 13:26:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1657797983;
+        bh=AQ3cDfs5mqD5D2ZbUTNaZ5y1z0ye9T8PPhXg0VIIDWw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nupsxWef+p9mFvJUVCdSBTVCVUME6cmFvHmr8GyJvai4My0K4IXHbYmmFMTAn13DW
+         zXKoUrAuB5QRBEvysWTB31b/YLAXqXY7ackzYJFPevgvq/rQ/mkBj67/FydnMgqTcJ
+         RxLh0p2+OGLjvWkqH+kA8QEsEIBtwJ+1y7wW0ZKw=
+From:   Paul Elder <paul.elder@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Paul Elder <paul.elder@ideasonboard.com>,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        laurent.pinchart@ideasonboard.com,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] media: rkisp1: Add support for UYVY output
+Date:   Thu, 14 Jul 2022 20:26:01 +0900
+Message-Id: <20220714112603.1117335-1-paul.elder@ideasonboard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Going forward, I'll be using my kernel.org for upstream work.
+This series adds support for UYVY as an output format in the rkisp1
+driver, for devices that support it. Notably, the i.MX8MP supports it,
+while the rk3399 does not.
 
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org> (su
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: linux-pwm@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Lee Jones <lee@kernel.org>
----
- Documentation/devicetree/bindings/regulator/pwm-regulator.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series is based on branch pinchartl/v5.19/isp/1 [1] at this repo [2].
 
-diff --git a/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml b/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
-index 0332fec48a883..82b6f2fde422b 100644
---- a/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
-@@ -8,7 +8,7 @@ title: Bindings for the Generic PWM Regulator
- 
- maintainers:
-   - Brian Norris <briannorris@chromium.org>
--  - Lee Jones <lee.jones@linaro.org>
-+  - Lee Jones <lee@kernel.org>
-   - Alexandre Courbot <acourbot@nvidia.com>
- 
- description: |
+[1] https://gitlab.com/ideasonboard/nxp/linux/-/commits/pinchartl/v5.19/isp/1
+[2] https://gitlab.com/ideasonboard/nxp/linux
+
+Paul Elder (2):
+  media: rkisp1: Add YC swap capability
+  media: rkisp1: Add UYVY as an output format
+
+ .../platform/rockchip/rkisp1/rkisp1-capture.c | 67 +++++++++++++++++--
+ .../platform/rockchip/rkisp1/rkisp1-common.h  |  1 +
+ .../platform/rockchip/rkisp1/rkisp1-dev.c     |  3 +-
+ 3 files changed, 63 insertions(+), 8 deletions(-)
+
 -- 
-2.37.0.144.g8ac04bfd2-goog
+2.30.2
 

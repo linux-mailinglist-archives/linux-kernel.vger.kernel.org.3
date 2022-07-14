@@ -2,153 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C552A5751F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B61575204
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238839AbiGNPhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
+        id S240269AbiGNPi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGNPhK (ORCPT
+        with ESMTP id S239808AbiGNPig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:37:10 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2A84AD73
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:37:09 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id v202-20020a6361d3000000b0041615ebed02so1392079pgb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:37:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=JkRA3Mpa+i25bXGiM48nrv2DUtxPE5vPtImMAiVJCCQ=;
-        b=Esfd8MNtNxWYJPcYQ/wED/Laa6sCw2myW6KT2u8A6wlFKhJXSNSKfH3clFKTZA9/OI
-         1+9sB2Ng3bA3kwy9+0cqTgDXvINhiOPmf6pk+0wLY986MmcP6YOr8hUVDyYUf/1LrAAi
-         7B67RFadbzS8uMub4k4GdRtSAjq6tiUpPLPhWT5/eeSt9ksNQDdFkLXXMDIsnQPRWPGS
-         VeTMT7cR1xl0/FyGhapM84G0P5Bm7JYoT8t5Hb1v9Brddav7LLEpoG6I6NBpgKJnpVcA
-         f7c+GXAHCQ9lM4FQmjYyXNvDakR1e+npIwTA2JDiSUdG/kNePxk8sbvbIoyqL+wOQsFq
-         3wow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=JkRA3Mpa+i25bXGiM48nrv2DUtxPE5vPtImMAiVJCCQ=;
-        b=h9qfYsyg7cD7VbwbX020sZsSphwBlPDGvTpfLKZbcYq0hOuMcW8+/+Y/H1C+oX5u3n
-         l0Ptlar2niIRnaWzNmJEXj/y1K3K6P2q0nwNovD0uCvGk7Bs3HV3DcMKyCgsoCST0xt+
-         Nu6yqpNwvhqaYMXIDk1oxGXJdGbX+OUlK7XABhHm69FdH7qL100Xg5x8rM4LGlCaazai
-         7XxYUQ9URXO5jXjWtbTkGRvMqcpinBXs2r6aR2msohHIffog/fxIu5jXRccIg0K1wAZX
-         u/3S6S6mnbGwieysB3vDBzIxIIevGMRlaScthK5vcsFfgzQ4WHI4llnTEHdCLOlq4lYr
-         EV8w==
-X-Gm-Message-State: AJIora8k157anVH1Y5t8tepsiq3Mmu2NGXw4Cqatn8ZTRfERU1/Twku6
-        RVqctGW6iR4d7GwucoYRAvilMCs3Z0k=
-X-Google-Smtp-Source: AGRyM1te2o3cMfktLglQrxa1ovvTodM+d9kHChmo9hfTBQpm8nd+VQWhs3W1f4B7/eBJjtZy3k1LKzSdG9A=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:99f:b0:52a:dd61:a50f with SMTP id
- u31-20020a056a00099f00b0052add61a50fmr8894806pfg.9.1657813029533; Thu, 14 Jul
- 2022 08:37:09 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 14 Jul 2022 15:37:07 +0000
-Message-Id: <20220714153707.3239119-1-seanjc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [PATCH] KVM: x86: Restrict get_mt_mask() to a u8, use KVM_X86_OP_OPTIONAL_RET0
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 14 Jul 2022 11:38:36 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F8B63925;
+        Thu, 14 Jul 2022 08:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1657813095;
+        bh=DtJnqs/sSTnIu3XjHE2BezrZQiBgwGyZEk5B116ynNQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=MZt/PuS/hLfThaTSR2wanewjwHHkJDUdJaOShzdUR80706ftTx4Ea+/bAfV91L8ud
+         FUNxDmDmQ9MTnBXaDCog8iMujDeQ7A1QPwVV1JZ3NoAU4MbB5NYTYZ+vaLjtp0gnsU
+         8fPxkF5v6vV5yvX8jAA+PWmypDR2/sBB8/kM4ioU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from max-esprimop556.user.selfnet.de ([141.72.241.228]) by
+ mail.gmx.net (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1My36N-1nL89Z48K7-00zYLE; Thu, 14 Jul 2022 17:38:15 +0200
+From:   Max Buchholz <max.buchholz@gmx.de>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sameer Pujar <spujar@nvidia.com>
+Cc:     Max Buchholz <Max.Buchholz@gmx.de>,
+        David Heidelberg <david@ixit.cz>,
+        Max Buchholz <max.buchholz@gmx.de>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: nvidia,tegra20-kbc: Convert to json-schema
+Date:   Thu, 14 Jul 2022 17:37:31 +0200
+Message-Id: <20220714153732.48698-1-max.buchholz@gmx.de>
+X-Mailer: git-send-email 2.37.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:fIrSM4Gy1y4DV0VVUdtk9JrFSlEEZSzVRogeJi377bW5WwSVUcW
+ A0GI622mXXcKHn8TFGwvftFPvCUNqx013rwmIYQPsYGae1FXE2R67znqsIIEEQ64jAcewnv
+ KKD6qV1YP1O6FH3xIPwNQf6/1Q+pcvMUAy8kF4NX53RIeo8qr7n+wLLVFsXYp3ZcEqHPL+v
+ pYuypIR2TT3/UT0tiWe3w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JcalHAO1k7A=:8RBClnJt1vAxUzvv8Mzo6+
+ UuvhGP3LrQl134WotTYrrUyTR6IGEbmNdrApGKq+ohmvLbYG3mNgHsrXiZQnr1o+a7odlglKj
+ /KGtK9mQPu6ECxKhU/6h0+5XJwrnYbPolPbVNd7SiwfkbHgKV+UYb2WobOVT13W/7dC+/0+Wh
+ aq4fwZC5UUtg6kdBW2VBCmCvADzd2mxcFBvDXXf0g30EnbRfoKYpWV6omT7E0CsStPyif4cMJ
+ GW3Ji4BVeSBpI5qkVM6Bn6NyV+Ij/9d5P2MGJLmQGr+iXFHZXW97rJruvc9yqUHPknMUR46Ud
+ rZdd+cH6HPUAto2Ph3vGQL1OFzMEd8wItzQOnqSlKu6OD7sXms+0IdCNR3XO/fdWv3i8X0oDI
+ M1qnoItQg9bloPbhdMCrWiYMYR9uGD5ov8AdH7GXJzFFyz8W/nxoOor0JYb1HuuWv2pJ5pPel
+ 7KJzGDOtNzycosGCjkXZy0uXgYhYQgvtNIfKekbOvwmPf8FD2a7lEKbfo45g0BIbHwLHaXWqa
+ TSeWXzl9pnyt18hC3mN97bPfJttZWzBeoqlykVRNuU4Pv1k2bfc/V1RUUhFs+aoY6+jWCcOLq
+ iT2OyE+DDRQ2mQtrQOYqccQOWKxCPaQ++/UtPTGjzm08PFkt9uooYGqjajKXhRIiaXgPsF+dg
+ T9XcuH8SG9QbEPlhlht1dB3sxDYKWZ8+072A/Veh8Dibkfym5vwUGn/zBX3seqAyjSKEi09BL
+ /AXDuMOgY6RQEGodg3ICNMO5My6mbyDHBu+JCGpjgNQjaZ8IJDahTBcaazW2+5Q6p8UwZfjrT
+ Qc4P6wr/5ZMOBgOA76HBlzj+rsiMxD/F7jW3F2Vdx6x28pgjHabvufCAEH0FDtJJ22SW9bqOV
+ c9/cJE2AtI9zF0zyl1zf2VWEiAFkokbtJrZxPMCC/+e1gGv0EkPMiRrtE1M7IgjFr0yDJ4uzj
+ 93VJzX53LAdqgGK1Mkn5ZKViisLUN6PjH5a2PO4AQ0w/aXZyb40ZN3RzCTJmRJZ6mFpIo/Zdc
+ Fq67SkqlthpK/HQJc2BRdPMdTgFw7reyOqZ+Gra6wcLhL+CJIA+tHlz+Q1sawUVuMaZ5kJ3EK
+ BklmwK7czbn4k+y4bGq3iTN+cVCCtM2s1PBCzyC653lEdT4Vf12BodxXw==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Restrict get_mt_mask() to a u8 and reintroduce using a RET0 static_call
-for the SVM implementation.  EPT stores the memtype information in the
-lower 8 bits (bits 6:3 to be precise), and even returns a shifted u8
-without an explicit cast to a larger type; there's no need to return a
-full u64.
+From: Max Buchholz <Max.Buchholz@gmx.de>
 
-Note, RET0 doesn't play nice with a u64 return on 32-bit kernels, see
-commit bf07be36cd88 ("KVM: x86: do not use KVM_X86_OP_OPTIONAL_RET0 for
-get_mt_mask").
+This converts the Nvidia Tegra keyboard controller bindings to YAML
+and fix them up a bit.
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/kvm-x86-ops.h | 2 +-
- arch/x86/include/asm/kvm_host.h    | 2 +-
- arch/x86/kvm/svm/svm.c             | 6 ------
- arch/x86/kvm/vmx/vmx.c             | 2 +-
- 4 files changed, 3 insertions(+), 9 deletions(-)
+Reviewed-by: David Heidelberg <david@ixit.cz>
+Signed-off-by: Max Buchholz <max.buchholz@gmx.de>
+=2D--
+ .../bindings/input/nvidia,tegra20-kbc.txt     |  55 ---------
+ .../bindings/input/nvidia,tegra20-kbc.yaml    | 109 ++++++++++++++++++
+ 2 files changed, 109 insertions(+), 55 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/nvidia,tegra20=
+-kbc.txt
+ create mode 100644 Documentation/devicetree/bindings/input/nvidia,tegra20=
+-kbc.yaml
 
-diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-index 6f2f1affbb78..51f777071584 100644
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -88,7 +88,7 @@ KVM_X86_OP(deliver_interrupt)
- KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
- KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
- KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
--KVM_X86_OP(get_mt_mask)
-+KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
- KVM_X86_OP(load_mmu_pgd)
- KVM_X86_OP(has_wbinvd_exit)
- KVM_X86_OP(get_l2_tsc_offset)
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index de5a149d0971..fa4b2392fba0 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1546,7 +1546,7 @@ struct kvm_x86_ops {
- 	int (*sync_pir_to_irr)(struct kvm_vcpu *vcpu);
- 	int (*set_tss_addr)(struct kvm *kvm, unsigned int addr);
- 	int (*set_identity_map_addr)(struct kvm *kvm, u64 ident_addr);
--	u64 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
-+	u8 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
- 
- 	void (*load_mmu_pgd)(struct kvm_vcpu *vcpu, hpa_t root_hpa,
- 			     int root_level);
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 37ce061dfc76..19af6dacfc5b 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4158,11 +4158,6 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
- 	return true;
- }
- 
--static u64 svm_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
--{
--	return 0;
--}
+diff --git a/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.tx=
+t b/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
+deleted file mode 100644
+index 1faa7292e21f..000000000000
+=2D-- a/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
++++ /dev/null
+@@ -1,55 +0,0 @@
+-* Tegra keyboard controller
+-The key controller has maximum 24 pins to make matrix keypad. Any pin
+-can be configured as row or column. The maximum column pin can be 8
+-and maximum row pins can be 16 for Tegra20/Tegra30.
 -
- static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
-@@ -4814,7 +4809,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.check_apicv_inhibit_reasons = avic_check_apicv_inhibit_reasons,
- 	.apicv_post_state_restore = avic_apicv_post_state_restore,
- 
--	.get_mt_mask = svm_get_mt_mask,
- 	.get_exit_info = svm_get_exit_info,
- 
- 	.vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index c30115b9cb33..c895a3b6824d 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7352,7 +7352,7 @@ static int __init vmx_check_processor_compat(void)
- 	return 0;
- }
- 
--static u64 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-+static u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
- {
- 	u8 cache;
- 
-
-base-commit: b9b71f43683ae9d76b0989249607bbe8c9eb6c5c
--- 
-2.37.0.144.g8ac04bfd2-goog
+-Required properties:
+=2D- compatible: "nvidia,tegra20-kbc"
+=2D- reg: Register base address of KBC.
+=2D- interrupts: Interrupt number for the KBC.
+=2D- nvidia,kbc-row-pins: The KBC pins which are configured as row. This i=
+s an
+-  array of pin numbers which is used as rows.
+=2D- nvidia,kbc-col-pins: The KBC pins which are configured as column. Thi=
+s is an
+-  array of pin numbers which is used as column.
+=2D- linux,keymap: The keymap for keys as described in the binding documen=
+t
+-  devicetree/bindings/input/matrix-keymap.txt.
+=2D- clocks: Must contain one entry, for the module clock.
+-  See ../clocks/clock-bindings.txt for details.
+=2D- resets: Must contain an entry for each entry in reset-names.
+-  See ../reset/reset.txt for details.
+=2D- reset-names: Must include the following entries:
+-  - kbc
+-
+-Optional properties, in addition to those specified by the shared
+-matrix-keyboard bindings:
+-
+=2D- linux,fn-keymap: a second keymap, same specification as the
+-  matrix-keyboard-controller spec but to be used when the KEY_FN modifier
+-  key is pressed.
+=2D- nvidia,debounce-delay-ms: delay in milliseconds per row scan for debo=
+uncing
+=2D- nvidia,repeat-delay-ms: delay in milliseconds before repeat starts
+=2D- nvidia,ghost-filter: enable ghost filtering for this device
+=2D- wakeup-source: configure keyboard as a wakeup source for suspend/resu=
+me
+-		 (Legacy property supported: "nvidia,wakeup-source")
+-
+-Example:
+-
+-keyboard: keyboard {
+-	compatible =3D "nvidia,tegra20-kbc";
+-	reg =3D <0x7000e200 0x100>;
+-	interrupts =3D <0 85 0x04>;
+-	clocks =3D <&tegra_car 36>;
+-	resets =3D <&tegra_car 36>;
+-	reset-names =3D "kbc";
+-	nvidia,ghost-filter;
+-	nvidia,debounce-delay-ms =3D <640>;
+-	nvidia,kbc-row-pins =3D <0 1 2>;    /* pin 0, 1, 2 as rows */
+-	nvidia,kbc-col-pins =3D <11 12 13>; /* pin 11, 12, 13 as columns */
+-	linux,keymap =3D <0x00000074
+-			0x00010067
+-			0x00020066
+-			0x01010068
+-			0x02000069
+-			0x02010070
+-			0x02020071>;
+-};
+diff --git a/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.ya=
+ml b/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
+new file mode 100644
+index 000000000000..8ecd42e02f09
+=2D-- /dev/null
++++ b/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
+@@ -0,0 +1,109 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/input/nvidia,tegra20-kbc.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Nvidia Tegra keyboard controller
++
++maintainers:
++  - Jon Hunter <jonathanh@nvidia.com>
++  - Sameer Pujar <spujar@nvidia.com>
++
++description: The key controller has maximum 24 pins to make matrix keypad=
+. Any pin
++  can be configured as row or column.
++
++allOf:
++  - $ref: "/schemas/input/matrix-keymap.yaml#"
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - const: nvidia,tegra30-kbc
++          - const: nvidia,tegra20-kbc
++      - items:
++          - const: nvidia,tegra20-kbc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  nvidia,kbc-row-pins:
++    maxItems: 16
++    description: KBC pins which are configured as row
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++
++  nvidia,kbc-col-pins:
++    maxItems: 8
++    description: KBC pins which are configured as column
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++
++  clocks:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  reset-names:
++    const: kbc
++
++  linux,fn-keymap:
++    description: a secondary keymap to be used when the KEY_FN modifier k=
+ey is pressed
++
++  nvidia,debounce-delay-ms:
++    description: delay in milliseconds per row scan for debouncing
++
++  nvidia,repeat-delay-ms:
++    description: delay in milliseconds before repeat starts
++
++  nvidia,ghost-filter:
++    description: enable ghost filtering for this device
++    type: boolean
++
++  wakeup-source:
++    description: configure keyboard as a wakeup source for suspend/resume
++
++  nvidia,wakeup-source:
++    description: configure keyboard as a wakeup source for suspend/resume
++    deprecated: true
++    type: boolean
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - nvidia,kbc-row-pins
++  - nvidia,kbc-col-pins
++  - linux,keymap
++  - clocks
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    kbc@7000e200 {
++        compatible =3D "nvidia,tegra20-kbc";
++        reg =3D <0x7000e200 0x100>;
++        interrupts =3D <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
++        clocks =3D <&tegra_car 36>;
++        resets =3D <&tegra_car 36>;
++        reset-names =3D "kbc";
++        nvidia,ghost-filter;
++        nvidia,debounce-delay-ms =3D <640>;
++        nvidia,kbc-row-pins =3D <0 1 2>;    /* pin 0, 1, 2 as rows */
++        nvidia,kbc-col-pins =3D <11 12 13>; /* pin 11, 12, 13 as columns =
+*/
++        linux,keymap =3D <0x00000074
++                        0x00010067
++                        0x00020066
++                        0x01010068
++                        0x02000069
++                        0x02010070
++                        0x02020071>;
++    };
+=2D-
+2.37.0
 

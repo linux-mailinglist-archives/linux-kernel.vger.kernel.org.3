@@ -2,92 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4445753F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727B55753F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbiGNRVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 13:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        id S237150AbiGNRWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 13:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbiGNRVj (ORCPT
+        with ESMTP id S229496AbiGNRWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 13:21:39 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED3552457;
-        Thu, 14 Jul 2022 10:21:38 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id n7so1953431ioo.7;
-        Thu, 14 Jul 2022 10:21:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TwlP1i3DseYJRbHuqOfV0GFqZdryH2G33X6Mm9Jm2CM=;
-        b=YpzSu3HTJc2LdbWx25T3piHljMqbRRYDIIpn4+UR5HEJaVeadGUn1t0wheKcm4tNG0
-         yYVf9Y9NjCPNPNuRE2FVlzwy/1E+0bJVI7pKQZh/b2oa8YfFa5hde/DFoS5Gygwq4CzT
-         NSgsmbQO6CJFfCYN+L9vMXNxPEKxN4lMUOEsD0eDBfQ+ZK1E+oF32Ong7QFmrsuLOhPR
-         yqQ7LJUCjPcvO4TmYCUl5/MfYhS5E+tEY4MKqnkMDzxMfFk3kqf+TZP/DBOvrb16bZ37
-         pfjAPe81b3GsBthfKg0eZXgx5v23FXyqVj5yLTWflHRRnCBoOOhuj+/jC3JhVy5ADOuv
-         ZT2Q==
-X-Gm-Message-State: AJIora9yVOusF35tIHCRiU7J0Yaj/rww11arxt9Xmv/ZYOE8S8ihwyKb
-        Pm+xOUz4FIIcgH5Uvmyurw==
-X-Google-Smtp-Source: AGRyM1vO9dGrA7Y7SKsg+5554fBaotiNHywW1yLUMUZ53GyvbeVEnUtAvGac2Q1pjgYrrT0HbEWTiw==
-X-Received: by 2002:a05:6602:1682:b0:65d:f539:e30 with SMTP id s2-20020a056602168200b0065df5390e30mr4768576iow.81.1657819297971;
-        Thu, 14 Jul 2022 10:21:37 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id p32-20020a056638192000b00339da678a7csm970726jal.78.2022.07.14.10.21.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 10:21:37 -0700 (PDT)
-Received: (nullmailer pid 2584872 invoked by uid 1000);
-        Thu, 14 Jul 2022 17:21:36 -0000
-Date:   Thu, 14 Jul 2022 11:21:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH v6 5/6] of: kexec: Refactor IMA buffer related functions
- to make them reusable
-Message-ID: <20220714172136.GA2575969-robh@kernel.org>
-References: <20220707172026.831614-1-stefanb@linux.ibm.com>
- <20220707172026.831614-6-stefanb@linux.ibm.com>
+        Thu, 14 Jul 2022 13:22:34 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBA54F642;
+        Thu, 14 Jul 2022 10:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=htDFA1Y7dlEasSYr1rXrw+KJdNZ2vQTs/F4G7+dnxHc=; b=vF7uoe/sCJwSIeJJcf4y6HPKM2
+        Q3yipjaZYv0Hmbou/nWc9Iy5EkFsMo+uDuFtNRjlgF9TyVfjrjcmF9BpPxq2VBZ5qauRgwsK8IrVi
+        83yuE0iiD52ag2wAsQdie4D8f+5aRmsf+ZGGjqIi/cmVrxCUVEB2hQREKYgCHcpjTr2fby2czP3rC
+        W/V8zgXnXHl+hDE111cklWOQhqbKxMcFNBRzldUrIE2sfJMyre3XWmkSuiGpYvzcXljmNPBJCKB6k
+        3GsnI3G4n4h7z46pDkwqFMt5vZLUAr0WiAuPU9F1RdmUf4AY80A5pwqkSi1GK9LjfdgQxFAVpjDy5
+        ivJO228w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oC2XM-009XzV-3L; Thu, 14 Jul 2022 17:22:04 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AD80B980185; Thu, 14 Jul 2022 19:22:02 +0200 (CEST)
+Date:   Thu, 14 Jul 2022 19:22:02 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Boris Petkov <bp@alien8.de>, Paolo Bonzini <pbonzini@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        stable <stable@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Slade Watkins <slade@sladewatkins.com>, patches@kernelci.org,
+        Sean Christopherson <seanjc@google.com>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH 5.15 00/78] 5.15.55-rc1 review
+Message-ID: <YtBQutgSh2j3mFNB@worktop.programming.kicks-ass.net>
+References: <20220712183238.844813653@linuxfoundation.org>
+ <CA+G9fYtntg7=zWSs-dm+n_AUr_u0eBOU0zrwWqMeXZ+SF6_bLw@mail.gmail.com>
+ <eb63e4ce-843f-c840-060e-6e15defd3c4d@roeck-us.net>
+ <CAHk-=wj5cOA+fbGeV15kvwe6YGT54Wsk8F2UGoekVQLTPJz_pw@mail.gmail.com>
+ <CAHk-=wgq1soM4gudypWLVQdYuvJbXn38LtvJMtnLZX+RTypqLg@mail.gmail.com>
+ <Ys/bYJ2bLVfNBjFI@nazgul.tnic>
+ <6b4337f4-d1de-7ba3-14e8-3ad0f9b18788@redhat.com>
+ <8BEC3365-FC09-46C5-8211-518657C0308E@alien8.de>
+ <CAHk-=wj4vtoWZPMXJU-B9qW1zLHsoA1Qb2P0NW=UFhZmrCrf9Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707172026.831614-6-stefanb@linux.ibm.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wj4vtoWZPMXJU-B9qW1zLHsoA1Qb2P0NW=UFhZmrCrf9Q@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 01:20:25PM -0400, Stefan Berger wrote:
-> Refactor IMA buffer related functions to make them reusable for carrying
-> TPM logs across kexec.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> 
-> ---
-> v6:
->  - Add __init to get_kexec_buffer as suggested by Jonathan
-> 
-> v5:
->  - Rebased on Jonathan McDowell's commit "b69a2afd5afc x86/kexec: Carry
->    forward IMA measurement log on kexec"
-> v4:
->  - Move debug output into setup_buffer()
-> ---
->  drivers/of/kexec.c | 126 ++++++++++++++++++++++++++-------------------
->  1 file changed, 74 insertions(+), 52 deletions(-)
+On Thu, Jul 14, 2022 at 10:02:57AM -0700, Linus Torvalds wrote:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> I like Peter's more obvious use of FASTYOP_LENGTH, but this is just disgusting:
+> 
+>     #define FASTOP_SIZE (8 << ((FASTOP_LENGTH > 8) & 1) <<
+> ((FASTOP_LENGTH > 16) & 1))
+> 
+> I mean, I understand what it's doing, but just two lines above it the
+> code has a "ilog2()" use that already depends on the fact that you can
+> use ilog2() as a constant compile-time expression.
+> 
+> And guess what? The code could just use roundup_pow_of_two(), which is
+> designed exactly like ilog2() to be used for compile-time constant
+> values.
+
+But NR_FASTOP isn't used in ASM.
+
+> So the code should just use
+> 
+>     #define FASTOP_SIZE roundup_pow_of_two(FASTOP_LENGTH)
+> 
+> and be a lot more legible, wouldn't it?
+
+If only :/ FASTOP_SIZE is used in ASM, which means we've got to play by
+GNU-as rules, and them are aweful.

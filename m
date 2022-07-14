@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F265745D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E895745D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237010AbiGNHXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 03:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S236694AbiGNH1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 03:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236299AbiGNHXa (ORCPT
+        with ESMTP id S229699AbiGNH1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 03:23:30 -0400
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E646630F4A
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:23:28 -0700 (PDT)
-Received: by mail-qv1-f53.google.com with SMTP id g9so854925qvq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:23:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RmlXtnA3cC4Ik7QOf/RIurG9dJCZvwzcFfVviIGb20U=;
-        b=ZN5LpblNbgg6tJqbb/F//QzCV3lZMxJCCuX8ZJPsArIRVM8HX9AtAZ1WlhRyW5rL4c
-         Uxo6SyWi4TFtBl9og7+wC3y7AbyF14izxFGBU8VSssexcjrtpKawkkcJEW7Y5yNBl0S6
-         RY5DsLBY3QPdFDF0tthGTJUOOg8KW/yOzGjs2D0Ucbg1ci0JgibKizhXFgaCzd1o2qZv
-         5O3QNWwXa6fdkTHPzmhkLmhg68XPXT2Ck6sebrw1di9rZoeCMnvTjVXH3po6ME60/AvM
-         yGduwgMXQzhf2IYwCSNZjQnvGp+7oOn1DSKJSkHeHEUea7ry59Ao7uBn2ZOWZ+lXxU9B
-         6gxQ==
-X-Gm-Message-State: AJIora/K/Pqe++5l0sQs6pPl1gTY2keT+qgcamJdDkbm9TchFGp/aZ8/
-        HXT6g5dZ32o9fMNnpbgzZ6LQ6brhIv4uEA==
-X-Google-Smtp-Source: AGRyM1sxdoIURgttjaKLkPUe60nscpROMW8BZ1KZaKSiTWRMjnqtYtG7V9f47Buwf5nLsQ87qjcddQ==
-X-Received: by 2002:a0c:e10d:0:b0:473:1d:d6ce with SMTP id w13-20020a0ce10d000000b00473001dd6cemr6342694qvk.36.1657783407834;
-        Thu, 14 Jul 2022 00:23:27 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id t13-20020a37ea0d000000b006af147d4876sm782558qkj.30.2022.07.14.00.23.26
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 00:23:26 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id y195so1864450yby.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:23:26 -0700 (PDT)
-X-Received: by 2002:a5b:6c1:0:b0:669:a7c3:4c33 with SMTP id
- r1-20020a5b06c1000000b00669a7c34c33mr7180560ybq.543.1657783405770; Thu, 14
- Jul 2022 00:23:25 -0700 (PDT)
+        Thu, 14 Jul 2022 03:27:03 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8543A1A828;
+        Thu, 14 Jul 2022 00:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MxjTs9nuJ3FmUOtUGZD4K0rKKYlzahKqtMX7rQs+RMQ=; b=P+HF2qeaBGfEDHrWZkyaJPn3IB
+        QiNrtA//HWV+0ORiO+86u7mo74SlcDdcVqFoIgZCWMGIoxYPaVQGU+72wQPOBiQ0vqF2fr+XRsVbn
+        nG4Lm56rEpjCfhHtpiCFZf03XpUsAJZgKdFlccUm7lCAO3u1M/WuvVAV2x9aOziByeZBhRqtX/9ft
+        5DZmULcqm2l89KTXWlaN47QZXt8XCD3bthIsytQv8r1CKT3O3kx6tAfz7rw9SYprDq1RXGJq2pCc/
+        jB9UMMQ/l8jzUSCKC6r6Bmgb5It5ci3rvZPoHr5b7OlcWI/3C+MzPHmlXP8EX53pPhhfRJrmH2Fyh
+        PzeRPolA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBtEs-003mx0-U9; Thu, 14 Jul 2022 07:26:23 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D0146980083; Thu, 14 Jul 2022 09:26:22 +0200 (CEST)
+Date:   Thu, 14 Jul 2022 09:26:22 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-modules@vger.kernel.org, mcgrof@kernel.org,
+        rostedt@goodmis.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, mhiramat@kernel.org, naveen.n.rao@linux.ibm.com,
+        davem@davemloft.net, anil.s.keshavamurthy@intel.com,
+        keescook@chromium.org, dave@stgolabs.net, daniel@iogearbox.net,
+        kernel-team@fb.com, x86@kernel.org, dave.hansen@linux.intel.com,
+        rick.p.edgecombe@intel.com, akpm@linux-foundation.org
+Subject: Re: [PATCH bpf-next 1/3] mm/vmalloc: introduce vmalloc_exec which
+ allocates RO+X memory
+Message-ID: <Ys/FHgonNLo29Bp2@worktop.programming.kicks-ass.net>
+References: <20220713071846.3286727-1-song@kernel.org>
+ <20220713071846.3286727-2-song@kernel.org>
+ <Ys6cWUMHO8XwyYgr@hirez.programming.kicks-ass.net>
+ <Ys+mtMUb7lXZ/GaS@infradead.org>
 MIME-Version: 1.0
-References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
- <20220713050724.GA2471738@roeck-us.net> <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
- <a804b76e-159f-dbc2-f8dc-62a58552e88d@roeck-us.net> <CADnq5_O6Tp2QPXyDCvpWuRXhDr6H1PM50Ow5YG2WeukqUd-GnQ@mail.gmail.com>
- <CAHk-=wj4+BSj2SPMRUr-TZ4Qg2o9HGOBWiJQE336YcF_U1sVNQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wj4+BSj2SPMRUr-TZ4Qg2o9HGOBWiJQE336YcF_U1sVNQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 14 Jul 2022 09:23:13 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV9Pj9V-ZPpu=BMSkPt1uA_eCvU4+bxF8ZfHjteRk2CAg@mail.gmail.com>
-Message-ID: <CAMuHMdV9Pj9V-ZPpu=BMSkPt1uA_eCvU4+bxF8ZfHjteRk2CAg@mail.gmail.com>
-Subject: Re: Linux 5.19-rc6
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys+mtMUb7lXZ/GaS@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed, Jul 13, 2022 at 10:16:36PM -0700, Christoph Hellwig wrote:
+> On Wed, Jul 13, 2022 at 12:20:09PM +0200, Peter Zijlstra wrote:
+> > Start by adding VM_TOPDOWN_VMAP, which instead of returning the lowest
+> > (leftmost) vmap_area that fits, picks the higests (rightmost).
+> > 
+> > Then add module_alloc_data() that uses VM_TOPDOWN_VMAP and make
+> > ARCH_WANTS_MODULE_DATA_IN_VMALLOC use that instead of vmalloc (with a
+> > weak function doing the vmalloc).
+> > 
+> > This gets you bottom of module range is RO+X only, top is shattered
+> > between different !X types.
+> > 
+> > Then track the boundary between X and !X and ensure module_alloc_data()
+> > and module_alloc() never cross over and stay strictly separated.
+> > 
+> > Then change all module_alloc() users to expect RO+X memory, instead of
+> > RW.
+> > 
+> > Then make sure any extention of the X range is 2M aligned.
+> > 
+> > And presto, *everybody* always uses 2M TLB for text, modules, bpf,
+> > ftrace, the lot and nobody is tracking chunks.
+> > 
+> > Maybe migration can be eased by instead providing module_alloc_text()
+> > and ARCH_WANTS_MODULE_ALLOC_TEXT.
+> 
+> This all looks pretty sensible.  How are we going to do the initial
+> write to the executable memory, though?
 
-On Wed, Jul 13, 2022 at 11:51 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Wed, Jul 13, 2022 at 2:01 PM Alex Deucher <alexdeucher@gmail.com> wrote:
-> > If you want to apply Guenter's patch original patch:
-> > https://patchwork.freedesktop.org/patch/490184/
-> > That's fine with me.
->
-> Honestly, by this time I feel that it's too little, too late.
+With something like text_poke_memcpy(). I suppose that the proposed
+ARCH_WANTS_MODULE_ALLOC_TEXT needs to imply availability of that too.
 
-[...]
-
-> So considering that the ppc people ignored this whole issue since the
-> merge window, I think it's entirely unreasonable to then apply a
-> ppc-specific patch for this at this time, when people literally asked
-> "why is this needed", and there was no reply from the powerpc side.
-
-Oh, it's not just this one. The lists of build regressions between v5.18
-and v5.19-rc1 [1] resp. v5.19-rc6 [2] look surprisingly similar :-(
-
-[1] https://lore.kernel.org/all/20220606082201.2792145-1-geert@linux-m68k.org
-[2] https://lore.kernel.org/all/20220711064425.3084093-1-geert@linux-m68k.org
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+If the 4K copy thing ends up being a bottleneck we can easily extend
+that to have a 2M option as well.

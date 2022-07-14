@@ -2,34 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332D55749D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB125749D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237743AbiGNJ52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
+        id S237877AbiGNJ5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235898AbiGNJ5I (ORCPT
+        with ESMTP id S231447AbiGNJ5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:57:08 -0400
+        Thu, 14 Jul 2022 05:57:07 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7F3D4C603;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7B74630D;
         Thu, 14 Jul 2022 02:57:06 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oBvaj-0006rx-01; Thu, 14 Jul 2022 11:57:05 +0200
+        id 1oBvaj-0006rx-02; Thu, 14 Jul 2022 11:57:05 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 69F76C0493; Thu, 14 Jul 2022 11:55:06 +0200 (CEST)
-Date:   Thu, 14 Jul 2022 11:55:06 +0200
+        id 03A31C0493; Thu, 14 Jul 2022 11:55:42 +0200 (CEST)
+Date:   Thu, 14 Jul 2022 11:55:42 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Remove VR41xx support
-Message-ID: <20220714095506.GB10086@alpha.franken.de>
-References: <20220705164632.97942-1-tsbogend@alpha.franken.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rahul Bedarkar <rahulbedarkar89@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/2] MIPS: dts: correct gpio-keys names and properties
+Message-ID: <20220714095542.GC10086@alpha.franken.de>
+References: <20220624170740.66271-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220705164632.97942-1-tsbogend@alpha.franken.de>
+In-Reply-To: <20220624170740.66271-1-krzysztof.kozlowski@linaro.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -40,114 +50,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 06:46:25PM +0200, Thomas Bogendoerfer wrote:
-> No (active) developer owns this hardware, so let's remove Linux support.
+On Fri, Jun 24, 2022 at 07:07:39PM +0200, Krzysztof Kozlowski wrote:
+> gpio-keys children do not use unit addresses.
 > 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 > ---
->  arch/mips/Kbuild.platforms              |   1 -
->  arch/mips/Kconfig                       |  23 -
->  arch/mips/Makefile                      |   1 -
->  arch/mips/configs/capcella_defconfig    |  91 ---
->  arch/mips/configs/e55_defconfig         |  37 --
->  arch/mips/configs/mpc30x_defconfig      |  53 --
->  arch/mips/configs/tb0219_defconfig      |  76 ---
->  arch/mips/configs/tb0226_defconfig      |  71 ---
->  arch/mips/configs/tb0287_defconfig      |  84 ---
->  arch/mips/configs/workpad_defconfig     |  67 ---
->  arch/mips/include/asm/cpu-type.h        |  11 -
->  arch/mips/include/asm/cpu.h             |   3 +-
->  arch/mips/include/asm/mach-vr41xx/irq.h |   9 -
->  arch/mips/include/asm/mipsregs.h        |  14 -
->  arch/mips/include/asm/pgtable-32.h      |   5 -
->  arch/mips/include/asm/pgtable-64.h      |   5 -
->  arch/mips/include/asm/vermagic.h        |   2 -
->  arch/mips/include/asm/vr41xx/capcella.h |  30 -
->  arch/mips/include/asm/vr41xx/giu.h      |  41 --
->  arch/mips/include/asm/vr41xx/irq.h      |  97 ----
->  arch/mips/include/asm/vr41xx/mpc30x.h   |  24 -
->  arch/mips/include/asm/vr41xx/pci.h      |  77 ---
->  arch/mips/include/asm/vr41xx/siu.h      |  45 --
->  arch/mips/include/asm/vr41xx/tb0219.h   |  29 -
->  arch/mips/include/asm/vr41xx/tb0226.h   |  30 -
->  arch/mips/include/asm/vr41xx/tb0287.h   |  30 -
->  arch/mips/include/asm/vr41xx/vr41xx.h   | 148 -----
->  arch/mips/kernel/cpu-probe.c            |  40 --
->  arch/mips/lib/dump_tlb.c                |   8 -
->  arch/mips/mm/c-r4k.c                    |  44 --
->  arch/mips/mm/tlbex.c                    |  35 --
->  arch/mips/pci/Makefile                  |   6 -
->  arch/mips/pci/fixup-capcella.c          |  37 --
->  arch/mips/pci/fixup-mpc30x.c            |  36 --
->  arch/mips/pci/fixup-tb0219.c            |  38 --
->  arch/mips/pci/fixup-tb0226.c            |  73 ---
->  arch/mips/pci/fixup-tb0287.c            |  52 --
->  arch/mips/pci/ops-vr41xx.c              | 113 ----
->  arch/mips/pci/pci-vr41xx.c              | 309 ----------
->  arch/mips/pci/pci-vr41xx.h              | 141 -----
->  arch/mips/vr41xx/Kconfig                | 104 ----
->  arch/mips/vr41xx/Makefile               |   5 -
->  arch/mips/vr41xx/Platform               |  29 -
->  arch/mips/vr41xx/casio-e55/Makefile     |   6 -
->  arch/mips/vr41xx/casio-e55/setup.c      |  27 -
->  arch/mips/vr41xx/common/Makefile        |   6 -
->  arch/mips/vr41xx/common/bcu.c           | 210 -------
->  arch/mips/vr41xx/common/cmu.c           | 242 --------
->  arch/mips/vr41xx/common/giu.c           | 110 ----
->  arch/mips/vr41xx/common/icu.c           | 714 ------------------------
->  arch/mips/vr41xx/common/init.c          |  60 --
->  arch/mips/vr41xx/common/irq.c           | 106 ----
->  arch/mips/vr41xx/common/pmu.c           | 123 ----
->  arch/mips/vr41xx/common/rtc.c           | 105 ----
->  arch/mips/vr41xx/common/siu.c           | 142 -----
->  arch/mips/vr41xx/common/type.c          |  11 -
->  arch/mips/vr41xx/ibm-workpad/Makefile   |   6 -
->  arch/mips/vr41xx/ibm-workpad/setup.c    |  27 -
->  58 files changed, 1 insertion(+), 4068 deletions(-)
->  delete mode 100644 arch/mips/configs/capcella_defconfig
->  delete mode 100644 arch/mips/configs/e55_defconfig
->  delete mode 100644 arch/mips/configs/mpc30x_defconfig
->  delete mode 100644 arch/mips/configs/tb0219_defconfig
->  delete mode 100644 arch/mips/configs/tb0226_defconfig
->  delete mode 100644 arch/mips/configs/tb0287_defconfig
->  delete mode 100644 arch/mips/configs/workpad_defconfig
->  delete mode 100644 arch/mips/include/asm/mach-vr41xx/irq.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/capcella.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/giu.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/irq.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/mpc30x.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/pci.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/siu.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/tb0219.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/tb0226.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/tb0287.h
->  delete mode 100644 arch/mips/include/asm/vr41xx/vr41xx.h
->  delete mode 100644 arch/mips/pci/fixup-capcella.c
->  delete mode 100644 arch/mips/pci/fixup-mpc30x.c
->  delete mode 100644 arch/mips/pci/fixup-tb0219.c
->  delete mode 100644 arch/mips/pci/fixup-tb0226.c
->  delete mode 100644 arch/mips/pci/fixup-tb0287.c
->  delete mode 100644 arch/mips/pci/ops-vr41xx.c
->  delete mode 100644 arch/mips/pci/pci-vr41xx.c
->  delete mode 100644 arch/mips/pci/pci-vr41xx.h
->  delete mode 100644 arch/mips/vr41xx/Kconfig
->  delete mode 100644 arch/mips/vr41xx/Makefile
->  delete mode 100644 arch/mips/vr41xx/Platform
->  delete mode 100644 arch/mips/vr41xx/casio-e55/Makefile
->  delete mode 100644 arch/mips/vr41xx/casio-e55/setup.c
->  delete mode 100644 arch/mips/vr41xx/common/Makefile
->  delete mode 100644 arch/mips/vr41xx/common/bcu.c
->  delete mode 100644 arch/mips/vr41xx/common/cmu.c
->  delete mode 100644 arch/mips/vr41xx/common/giu.c
->  delete mode 100644 arch/mips/vr41xx/common/icu.c
->  delete mode 100644 arch/mips/vr41xx/common/init.c
->  delete mode 100644 arch/mips/vr41xx/common/irq.c
->  delete mode 100644 arch/mips/vr41xx/common/pmu.c
->  delete mode 100644 arch/mips/vr41xx/common/rtc.c
->  delete mode 100644 arch/mips/vr41xx/common/siu.c
->  delete mode 100644 arch/mips/vr41xx/common/type.c
->  delete mode 100644 arch/mips/vr41xx/ibm-workpad/Makefile
->  delete mode 100644 arch/mips/vr41xx/ibm-workpad/setup.c
+> 
+> See: https://lore.kernel.org/all/20220616005224.18391-1-krzysztof.kozlowski@linaro.org/
+> ---
+>  arch/mips/boot/dts/img/pistachio_marduk.dts   |  4 +--
+>  arch/mips/boot/dts/ingenic/gcw0.dts           | 31 +++++++++----------
+>  arch/mips/boot/dts/ingenic/rs90.dts           | 18 +++++------
+>  arch/mips/boot/dts/pic32/pic32mzda_sk.dts     |  9 ++----
+>  .../boot/dts/qca/ar9132_tl_wr1043nd_v1.dts    |  6 ++--
+>  arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  4 +--
+>  .../mips/boot/dts/qca/ar9331_dragino_ms14.dts |  6 ++--
+>  arch/mips/boot/dts/qca/ar9331_omega.dts       |  4 +--
+>  .../qca/ar9331_openembed_som9331_board.dts    |  4 +--
+>  arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts   |  8 ++---
+>  10 files changed, 37 insertions(+), 57 deletions(-)
 
 applied to mips-next.
 

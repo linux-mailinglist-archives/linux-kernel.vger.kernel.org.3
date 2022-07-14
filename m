@@ -2,97 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8C357495A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3161C574953
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiGNJoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
+        id S238390AbiGNJoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238243AbiGNJoZ (ORCPT
+        with ESMTP id S229897AbiGNJoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:44:25 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E96211A0F;
-        Thu, 14 Jul 2022 02:44:24 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2ef5380669cso11207607b3.9;
-        Thu, 14 Jul 2022 02:44:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zQfNaPBMj9qupXp4mDqBN3FvXkuDRylRWUn+zvSSLGM=;
-        b=oUdjAR6phW8mBTe5eDzj0QeWXcrYu1dSSLOGdISEQbBbC80E3nnO2FEXxGYAf5RiXM
-         qwCt3mFNhcwCVxxKFv95OoQ0lQSZxF92XMKvQIcmRpKoj31iWTGkf6owEnJ4SKyFwH0k
-         JauEuOFAu1eKjoPKsewxkkdItYHKrSID6UH/riAytvkcYOvK7wJWfdXGd7YOn2ZlGDPx
-         UknY6TlQhPMD62NXaNa84SFcZnW0ErJAIVlOFo4CQxO3vJ5UK7w+Chs6Xo+IjKurYNSH
-         WqV07lOMcczIHACgOGIOzTx9kcVs99te0vmj/tlI8+bxgqMwN7h4K7I2B72mfGLzkJ4i
-         gQ2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zQfNaPBMj9qupXp4mDqBN3FvXkuDRylRWUn+zvSSLGM=;
-        b=2IDATPUV3G1XUlJtbtTM/xKl0j703c9YOSnfV3GKddxJ4lPihMz21mMbCrTnI7cVUt
-         PlvTJ5i8etYQnPm9iJL1QCZwmpJwmQ9bXR1WN374T3YNLpc3qt5/ve/mnn2rPHnZMgEl
-         Cw7U5xNraEMtyLdYa0YuEkXpkbCS4HVKLnqiwkzsA+Ko79/ZYWHExD1I89xHL40s4+ln
-         MEsvOgsd+J1yAhvgcrfcP4xAdocH4Cm4u7au8wU66lAC089+TDhnE23KDVvfIQJtJiFb
-         NA2ACoBkfJSRr4/5veO5SADFDogaH5k1B13iOS3G+TfXLa7TraLCkweEExxVH4e6oPem
-         Y/+Q==
-X-Gm-Message-State: AJIora94Q2UfK832rlallO3kczk0rIDqvHwZch5lVcEWV/Ig1/AyRdTf
-        KTAp/dW4h3mDmodhEmdwj1QKj+Pf18CBY4WIE7A=
-X-Google-Smtp-Source: AGRyM1tGq8KvNtgJfDDwwfnd/uLdaBM71GAdhz/B4s7iJ7PIRrr3jUFpxSU8W+abEjc+p3ioRN+vN34Iicys3Eb13K4=
-X-Received: by 2002:a81:4986:0:b0:31d:388b:d08d with SMTP id
- w128-20020a814986000000b0031d388bd08dmr8542894ywa.185.1657791863639; Thu, 14
- Jul 2022 02:44:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-14-peterwu.pub@gmail.com>
- <CAHp75VdwEc9AW1w8ejsxkw+sBTF1dumd99QyzTY9BZaXiViRWQ@mail.gmail.com>
- <CABtFH5K-2+2hbpvpq2nPE5AsznkQxZF2r3MVC64Q39DJhVuUtA@mail.gmail.com>
- <CAHp75VevDwdAKLYEWJgnMDvzuPuFibLuVqH-GKazEOT76wM6_A@mail.gmail.com>
- <CABtFH5LT1Ct_9-B_XRrGwYFmL5kGS6KHR7dNVyUO5z4sTy_6oA@mail.gmail.com> <CAHp75VcU_9Ao2CoqiUDZHqhVOjEMZor+hctPp3YYP4HOjYLDUg@mail.gmail.com>
-In-Reply-To: <CAHp75VcU_9Ao2CoqiUDZHqhVOjEMZor+hctPp3YYP4HOjYLDUg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 14 Jul 2022 11:43:46 +0200
-Message-ID: <CAHp75VeMP4zDMmGfdya5Y1C0Hkb7=jeOQGE_HqyDdZcmd_Uyyg@mail.gmail.com>
-Subject: Re: [PATCH v4 13/13] video: backlight: mt6370: Add Mediatek MT6370 support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Thu, 14 Jul 2022 05:44:20 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB47C11C1A;
+        Thu, 14 Jul 2022 02:44:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VJImA7W_1657791845;
+Received: from localhost(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0VJImA7W_1657791845)
+          by smtp.aliyun-inc.com;
+          Thu, 14 Jul 2022 17:44:14 +0800
+From:   Wen Gu <guwen@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 0/6] net/smc: Introduce virtually contiguous buffers for SMC-R
+Date:   Thu, 14 Jul 2022 17:43:59 +0800
+Message-Id: <1657791845-1060-1-git-send-email-guwen@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,51 +38,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 11:27 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Thu, Jul 14, 2022 at 9:13 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> > Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
-=9C=8813=E6=97=A5 =E9=80=B1=E4=B8=89 =E6=99=9A=E4=B8=8A8:07=E5=AF=AB=E9=81=
-=93=EF=BC=9A
+On long-running enterprise production servers, high-order contiguous
+memory pages are usually very rare and in most cases we can only get
+fragmented pages.
 
-...
+When replacing TCP with SMC-R in such production scenarios, attempting
+to allocate high-order physically contiguous sndbufs and RMBs may result
+in frequent memory compaction, which will cause unexpected hung issue
+and further stability risks.
 
-> > I have tried two methods so far, as follows
-> > -------------------------------------------------------------
-> > /*
-> >  * prop_val =3D  1      -->  1 steps --> b'00
-> >  * prop_val =3D  2 ~  4 -->  4 steps --> b'01
-> >  * prop_val =3D  5 ~ 16 --> 16 steps --> b'10
-> >  * prop_val =3D 17 ~ 64 --> 64 steps --> b'11
-> > */
->
-> So, for 1 --> 0, for 2 --> 1, for 5 --> 2, and for 17 --> 3.
-> Now, consider x - 1:
-> 0  ( 0 ) --> 0
-> 1  (2^0) --> 1
-> 4  (2^2) --> 2
-> 16 (2^4) --> 3
-> 64 (2^6) --> ? (but let's consider that the range has been checked alread=
-y)
->
-> Since we take the lower limit, it means ffs():
->
->   y =3D (ffs(x - 1) + 1) / 2;
->
-> Does it work for you?
+So this patch set is aimed to allow SMC-R link group to use virtually
+contiguous sndbufs and RMBs to avoid potential issues mentioned above.
+Whether to use physically or virtually contiguous buffers can be set
+by sysctl smcr_buf_type.
 
-It wouldn't, because we need to use fls() against it actually.
+Note that using virtually contiguous buffers will bring an acceptable
+performance regression, which can be mainly divided into two parts:
 
-So,
-0..1   (-1..0)   --> 0
-2..4   (1..3)   --> 1
-5..16  (4..15)  --> 2
-17..64 (16..63) --> 3
+1) regression in data path, which is brought by additional address
+   translation of sndbuf by RNIC in Tx. But in general, translating
+   address through MTT is fast. According to qperf test, this part
+   regression is basically less than 10% in latency and bandwidth.
+   (see patch 5/6 for details)
 
-y =3D x ? ((fls(x - 1) + 1) / 2 : 0;
+2) regression in buffer initialization and destruction path, which is
+   brought by additional MR operations of sndbufs. But thanks to link
+   group buffer reuse mechanism, the impact of this kind of regression
+   decreases as times of buffer reuse increases.
 
+Patch set overview:
+- Patch 1/6 and 2/6 mainly about simplifying and optimizing DMA sync
+  operation, which will reduce overhead on the data path, especially
+  when using virtually contiguous buffers;
+- Patch 3/6 and 4/6 introduce a sysctl smcr_buf_type to set the type
+  of buffers in new created link group;
+- Patch 5/6 allows SMC-R to use virtually contiguous sndbufs and RMBs,
+  including buffer creation, destruction, MR operation and access;
+- patch 6/6 extends netlink attribute for buffer type of SMC-R link group;
 
---=20
-With Best Regards,
-Andy Shevchenko
+v1->v2:
+- Patch 5/6 fixes build issue on 32bit;
+- Patch 3/6 adds description of new sysctl in smc-sysctl.rst;
+
+Guangguan Wang (2):
+  net/smc: remove redundant dma sync ops
+  net/smc: optimize for smc_sndbuf_sync_sg_for_device and
+    smc_rmb_sync_sg_for_cpu
+
+Wen Gu (4):
+  net/smc: Introduce a sysctl for setting SMC-R buffer type
+  net/smc: Use sysctl-specified types of buffers in new link group
+  net/smc: Allow virtually contiguous sndbufs or RMBs for SMC-R
+  net/smc: Extend SMC-R link group netlink attribute
+
+ Documentation/networking/smc-sysctl.rst |  13 ++
+ include/net/netns/smc.h                 |   1 +
+ include/uapi/linux/smc.h                |   1 +
+ net/smc/af_smc.c                        |  68 +++++++--
+ net/smc/smc_clc.c                       |   8 +-
+ net/smc/smc_clc.h                       |   2 +-
+ net/smc/smc_core.c                      | 246 +++++++++++++++++++++-----------
+ net/smc/smc_core.h                      |  20 ++-
+ net/smc/smc_ib.c                        |  44 +++++-
+ net/smc/smc_ib.h                        |   2 +
+ net/smc/smc_llc.c                       |  33 +++--
+ net/smc/smc_rx.c                        |  92 +++++++++---
+ net/smc/smc_sysctl.c                    |  11 ++
+ net/smc/smc_tx.c                        |  10 +-
+ 14 files changed, 404 insertions(+), 147 deletions(-)
+
+-- 
+1.8.3.1
+

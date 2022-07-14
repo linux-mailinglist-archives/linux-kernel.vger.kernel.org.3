@@ -2,148 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C87E5754F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C085754F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240571AbiGNS1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 14:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
+        id S240144AbiGNS1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 14:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236398AbiGNS1F (ORCPT
+        with ESMTP id S229504AbiGNS1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 14:27:05 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D026A9C8;
+        Thu, 14 Jul 2022 14:27:04 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD8C2F67F;
         Thu, 14 Jul 2022 11:27:04 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id y195so4745691yby.0;
-        Thu, 14 Jul 2022 11:27:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fHHAmoVicpFFRe1AG6LugNyRwFvXqtAqGnNR8gzDIHA=;
-        b=X+bTOZ62pL9/HmA4hfPkyUnh8Me/C2KZ/ywgwKbofh0Mkj7k9F8SZIs5hAlYet0ZuS
-         9wIsUiUtQv8cDrlDGhpaHBSPBn8SD2ufXJOMf58GcY/BKtrJIWEwkEdCXP+FZnxyougC
-         gtIe9Hez3x057H9WxwBl8yePhP8Otn/0V44tolcpZOqhVn9JlJ43lIyqQU7fRRnPGcxo
-         0CR302hMhLECMQPLc/OmR8MUf4WoYmFZftgILsQJNe7wf76m6gS0GNsVK1td68QpK13s
-         XgPVnAF29626VjlZKQK6Z7JgdFrSoB48RK2YEAT1PgEJDYIIUuyFzbujAKG/CDEr3lLV
-         vrhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fHHAmoVicpFFRe1AG6LugNyRwFvXqtAqGnNR8gzDIHA=;
-        b=58vcWsdNdkkVcYxzEnCXagzl1JnNx/tkViohHTwwOrB+HaVxjKBx3WzDq+aoWiB5uV
-         HVnTxQenKQ50l77Q/ZaXD6G8J0MFSE1Kol2JOAfcZVsPMkJ+VB4Mw980neqCeETa1EBB
-         NU24GPuKA1kR/+9fxx+VwLhF2ApaBm3X7C0LHt7jCmxUlbpFPIhUMzV+Rrv/wXC8c+Yl
-         UW2zU7v8+8Vcjqlh3V3BBQw+BtI+MNV2zxNXeyUddJTM9j//Qw6UcyT3HAvD5c/OuQGs
-         EXGA4grtfJJOXyORyZuAnnh6hcXND7jJMNOPuKPHRfZyk6Z0Yob91j2IhhTXGsnZDM8G
-         1c2w==
-X-Gm-Message-State: AJIora+/PeAmCal25GSAvC96HcIUOod4qTdR4KNTyVy3N8yOdAzqntYi
-        1vnG5eMqslbpq+TtmEKBkwuLNKOOcS8w84iPtjbjz6ejNfGdxQ==
-X-Google-Smtp-Source: AGRyM1uUoLczGcQp7vuW1nHxcpTA4w0cAng0KFgNrn0RBhSzACka+oUqQjb9tIKlOX4AHuTC5bFiTX12Biy7jWwYBMY=
-X-Received: by 2002:a25:44a:0:b0:66e:e25f:e4cb with SMTP id
- 71-20020a25044a000000b0066ee25fe4cbmr10380581ybe.158.1657823223558; Thu, 14
- Jul 2022 11:27:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657823224; x=1689359224;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ONPbwadEFPaJq6FRTJMZTyZ98gk4Ml1qAm6cr+oQAwY=;
+  b=FMr1vveyhFEQoIHML4WpdQ4TACQMGNzNE96UejscZH4tVRPOvsyBMhTf
+   b4zdlgiYi8UwwOg24GmrcU9UH+96oPR/afhbDBQH1al5nTrL5hrm88HWo
+   0jODBk3Iwo93Adk4jvxBEDkMbBtHUjYUAkZ0fwm+wGzkztQZ41VeGlQBD
+   WKJUSGwJHADnw6xjJv/YqC1Uj+P849g9jLPoGMBODz2+kmm/N6TjBECkN
+   8BGqds8PxBDPJ7+PqoMfnXjGUK3GIu0xbf+RX4QPPt/5Zw9QwabVNfwso
+   7k9kVUhsxAajiuLmO0VG4HNfRb2VhWdCIIFEGhsL6EJP+39vv8fqeRqs+
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="285623054"
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="285623054"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 11:27:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="571210455"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by orsmga006.jf.intel.com with ESMTP; 14 Jul 2022 11:27:03 -0700
+From:   kan.liang@linux.intel.com
+To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        vincent.weaver@maine.edu, linux-kernel@vger.kernel.org
+Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org,
+        pawan.kumar.gupta@linux.intel.com,
+        Kan Liang <kan.liang@linux.intel.com>, stable@vger.kernel.org
+Subject: [PATCH] perf/x86/intel/lbr: Fix unchecked MSR access error on HSW
+Date:   Thu, 14 Jul 2022 11:26:30 -0700
+Message-Id: <20220714182630.342107-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220714185514.7d1a2ac9@canb.auug.org.au> <Ys/42uMzQy+CFTGI@debian>
- <YtA+127QgRifnRBZ@dev-arch.thelio-3990X> <CADVatmOTNA8uVqDEx6kp=+_O=wEhV2jbS9-frct-c4ZqBxcspg@mail.gmail.com>
- <YtBEXdrsthFamQs8@dev-arch.thelio-3990X>
-In-Reply-To: <YtBEXdrsthFamQs8@dev-arch.thelio-3990X>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Thu, 14 Jul 2022 19:26:27 +0100
-Message-ID: <CADVatmNOV+jn1WSFo=z4F9KqzYAgxCWr0cxTFL_5myJKFkQNzQ@mail.gmail.com>
-Subject: Re: linux-next: Tree for Jul 14
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan,
+From: Kan Liang <kan.liang@linux.intel.com>
 
-On Thu, Jul 14, 2022 at 5:29 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Thu, Jul 14, 2022 at 05:21:32PM +0100, Sudip Mukherjee wrote:
-> > Hi Nathan,
-> >
-> > On Thu, Jul 14, 2022 at 5:05 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > Hi Sudip,
-> > >
-> > > On Thu, Jul 14, 2022 at 12:07:06PM +0100, Sudip Mukherjee (Codethink) wrote:
-> > > > Hi Stephen,
-> > > >
-> > > > On Thu, Jul 14, 2022 at 06:55:14PM +1000, Stephen Rothwell wrote:
-> > > > > Hi all,
-> > > > >
-> > > > > Changes since 20220713:
-> > > >
-> > > > Build failures on next-20220714:
-> > >
-> > > <snip>
-> > >
+The fuzzer triggers the below trace.
 
-<snip>
+[ 7763.384369] unchecked MSR access error: WRMSR to 0x689
+(tried to write 0x1fffffff8101349e) at rIP: 0xffffffff810704a4
+(native_write_msr+0x4/0x20)
+[ 7763.397420] Call Trace:
+[ 7763.399881]  <TASK>
+[ 7763.401994]  intel_pmu_lbr_restore+0x9a/0x1f0
+[ 7763.406363]  intel_pmu_lbr_sched_task+0x91/0x1c0
+[ 7763.410992]  __perf_event_task_sched_in+0x1cd/0x240
 
->
-> Sure! I am not sure that we have tested mips or powerpc allmodconfig now
-> that I am thinking about it but we'll certainly take a look at any
-> issues that come from them and see what we can do.
+On a machine with the LBR format LBR_FORMAT_EIP_FLAGS2, when the TSX is
+disabled, a TSX quirk is required to access LBR from registers.
+The lbr_from_signext_quirk_needed() is introduced to determine whether
+the TSX quirk should be applied. However, the
+lbr_from_signext_quirk_needed() is invoked before the
+intel_pmu_lbr_init(), which parses the LBR format information. Without
+the correct LBR format information, the TSX quirk never be applied.
 
-The build errors from powerpc allmodconfig with clang:
+Move the lbr_from_signext_quirk_needed() into the intel_pmu_lbr_init().
+Checking x86_pmu.lbr_has_tsx in the lbr_from_signext_quirk_needed() is
+not required anymore.
 
-1)
-Error: External symbol 'memset' referenced from prom_init.c
+Both LBR_FORMAT_EIP_FLAGS2 and LBR_FORMAT_INFO have LBR_TSX flag, but
+only the LBR_FORMAT_EIP_FLAGS2 requirs the quirk. Update the comments
+accordingly.
 
-2)
-drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is
-not a compile-time constant
-        gpu_cc_parent,
-        ^~~~~~~~~~~~~
-drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is
-not a compile-time constant
-        gpu_cc_parent,
-        ^~~~~~~~~~~~~
-3)
-sound/soc/intel/avs/path.c:815:18: error: stack frame size (2672)
-exceeds limit (2048) in 'avs_path_create'
-[-Werror,-Wframe-larger-than]
-struct avs_path *avs_path_create(struct avs_dev *adev, u32 dma_id,
-                 ^
-4)
-drivers/net/ethernet/mellanox/mlx4/main.c:3332:12: error: stack frame
-size (2128) exceeds limit (2048) in 'mlx4_load_one'
-[-Werror,-Wframe-larger-than]
-static int mlx4_load_one(struct pci_dev *pdev, int pci_dev_data,
-           ^
-5)
-In file included from drivers/scsi/BusLogic.c:51:
-drivers/scsi/FlashPoint.c:1712:12: error: stack frame size (2896)
-exceeds limit (2048) in 'FlashPoint_HandleInterrupt'
-[-Werror,-Wframe-larger-than]
-static int FlashPoint_HandleInterrupt(void *pcard)
-           ^
-6)
-drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1093:12: error: stack frame size
-(2128) exceeds limit (2048) in 'vcn_v3_0_start'
-[-Werror,-Wframe-larger-than]
+Fixes: 1ac7fd8159a8 ("perf/x86/intel/lbr: Support LBR format V7")
+Reported-by: Vince Weaver <vincent.weaver@maine.edu>
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Cc: stable@vger.kernel.org
+---
+ arch/x86/events/intel/lbr.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-
-The (1) is also seen with gcc-12 on mainline -
-https://lore.kernel.org/lkml/Ys%2FaDKZNhhsENH9S@debian/
-
-
+diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+index 13179f31fe10..4f70fb6c2c1e 100644
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -278,9 +278,9 @@ enum {
+ };
+ 
+ /*
+- * For formats with LBR_TSX flags (e.g. LBR_FORMAT_EIP_FLAGS2), bits 61:62 in
+- * MSR_LAST_BRANCH_FROM_x are the TSX flags when TSX is supported, but when
+- * TSX is not supported they have no consistent behavior:
++ * For format LBR_FORMAT_EIP_FLAGS2, bits 61:62 in MSR_LAST_BRANCH_FROM_x
++ * are the TSX flags when TSX is supported, but when TSX is not supported
++ * they have no consistent behavior:
+  *
+  *   - For wrmsr(), bits 61:62 are considered part of the sign extension.
+  *   - For HW updates (branch captures) bits 61:62 are always OFF and are not
+@@ -288,7 +288,7 @@ enum {
+  *
+  * Therefore, if:
+  *
+- *   1) LBR has TSX format
++ *   1) LBR format LBR_FORMAT_EIP_FLAGS2
+  *   2) CPU has no TSX support enabled
+  *
+  * ... then any value passed to wrmsr() must be sign extended to 63 bits and any
+@@ -300,7 +300,7 @@ static inline bool lbr_from_signext_quirk_needed(void)
+ 	bool tsx_support = boot_cpu_has(X86_FEATURE_HLE) ||
+ 			   boot_cpu_has(X86_FEATURE_RTM);
+ 
+-	return !tsx_support && x86_pmu.lbr_has_tsx;
++	return !tsx_support;
+ }
+ 
+ static DEFINE_STATIC_KEY_FALSE(lbr_from_quirk_key);
+@@ -1609,9 +1609,6 @@ void intel_pmu_lbr_init_hsw(void)
+ 	x86_pmu.lbr_sel_map  = hsw_lbr_sel_map;
+ 
+ 	x86_get_pmu(smp_processor_id())->task_ctx_cache = create_lbr_kmem_cache(size, 0);
+-
+-	if (lbr_from_signext_quirk_needed())
+-		static_branch_enable(&lbr_from_quirk_key);
+ }
+ 
+ /* skylake */
+@@ -1702,7 +1699,11 @@ void intel_pmu_lbr_init(void)
+ 	switch (x86_pmu.intel_cap.lbr_format) {
+ 	case LBR_FORMAT_EIP_FLAGS2:
+ 		x86_pmu.lbr_has_tsx = 1;
+-		fallthrough;
++		x86_pmu.lbr_from_flags = 1;
++		if (lbr_from_signext_quirk_needed())
++			static_branch_enable(&lbr_from_quirk_key);
++		break;
++
+ 	case LBR_FORMAT_EIP_FLAGS:
+ 		x86_pmu.lbr_from_flags = 1;
+ 		break;
 -- 
-Regards
-Sudip
+2.35.1
+

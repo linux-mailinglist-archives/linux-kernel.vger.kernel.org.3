@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CE4574404
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306575742EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237732AbiGNE6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 00:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S235871AbiGNE1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 00:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbiGNE6E (ORCPT
+        with ESMTP id S233878AbiGNE06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 00:58:04 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A5A29830
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 21:47:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657774021; x=1689310021;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=tQabWDHm5mUWj7HdtljK3PgAxXDNA1HKUQKgEYI3PlE=;
-  b=FaWN+UQ03ucoGDoiT+oVhoET4W/oSnwPf/A1jm8clayTg+1ChA0C4q6P
-   s7+xch6tq8KbDWYM8928nnnIxB1E0qcy0nhoBnCbyf+H2l7ZCczmzCjMr
-   Y1qOMx3DcCbCve8ZnNOOhEWX3RoDm0MtLjBVG505jIQLwYSm1XLuNRYZZ
-   jVQb799AS+b/15VAu6Eu25MGeROC8Qg4PxmLvtPWyeaTi4fEiFwxQ32xf
-   GNtOUeZaFIdOrT3yA+sVUcFc7vvWP4+xNTfYbMw+jYFujwb72uB98+eiX
-   eKJY282xbiEm5FWgwvS8I2eGx9T5sDnh/o2caRmVhlKItZ5yAO4pJ5SIA
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="284170448"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="asc'?scan'208";a="284170448"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 21:47:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="asc'?scan'208";a="599992536"
-Received: from zhen-hp.sh.intel.com (HELO zhen-hp) ([10.239.159.108])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Jul 2022 21:46:57 -0700
-Date:   Thu, 14 Jul 2022 12:23:26 +0800
-From:   Zhenyu Wang <zhenyuw@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 07/39] drm/i915: gvt: fix kernel-doc trivial warnings
-Message-ID: <20220714042326.GY1089@zhen-hp.sh.intel.com>
-Reply-To: Zhenyu Wang <zhenyuw@linux.intel.com>
-References: <cover.1657699522.git.mchehab@kernel.org>
- <375c0c0ca2ef414f25e14f274457f77373a9268d.1657699522.git.mchehab@kernel.org>
+        Thu, 14 Jul 2022 00:26:58 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF74B2B1AF;
+        Wed, 13 Jul 2022 21:23:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wvxNVC7v6IRfhPDvi+vlda/Ydr6xcl7uzGy3JRiwJsk=; b=h6zx/qtQBkYoU+/liavyngGoGQ
+        qsOPbojToSP07GYfoD4L1Rj/BdqAn48dD0TbbkCv6s0frYjwB2NxyHfS8sg/zexGgCpRPzE/TYQFN
+        Li5G/evrqQyw+eHnbHDEYkA4UPfWAFvroO4nVkNVpo0j73IBWKbiJAUxbwqIo60Snl76iyVaNU4i/
+        PwqGuaMEcrYNxkwnJJxhEXZau/ZDirtLGlKAl9iQ27dKm5Nb57sDSzijqu4zBp3yAGRrB/+7UcQNB
+        Eqroje4xhcnqhz99amuRSNTyDZf+KIL39W8xd/Abw/myVnEL3l8woK+0k4FNHzi/b7nJee72rFeH8
+        mFG3QhHQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBqOC-00AasH-TU; Thu, 14 Jul 2022 04:23:48 +0000
+Date:   Wed, 13 Jul 2022 21:23:48 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, Song Liu <song@kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "anil.s.keshavamurthy@intel.com" <anil.s.keshavamurthy@intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH bpf-next 1/3] mm/vmalloc: introduce vmalloc_exec which
+ allocates RO+X memory
+Message-ID: <Ys+aVKFJaQd130Pn@infradead.org>
+References: <20220713071846.3286727-1-song@kernel.org>
+ <20220713071846.3286727-2-song@kernel.org>
+ <Ys6ZkDUhRZcmvPYy@infradead.org>
+ <BE896037-B79C-4B38-B777-96002C5861F5@fb.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="CCAbHT5wTCfICpGW"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <375c0c0ca2ef414f25e14f274457f77373a9268d.1657699522.git.mchehab@kernel.org>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <BE896037-B79C-4B38-B777-96002C5861F5@fb.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,164 +75,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 13, 2022 at 03:49:45PM +0000, Song Liu wrote:
+> 
+> 
+> > On Jul 13, 2022, at 3:08 AM, Christoph Hellwig <hch@infradead.org> wrote:
+> > 
+> > NAK.  This is not something that should be an exported public API
+> > ever.
+> 
+> Hmm.. I will remove EXPORT_SYMBOL_GPL (if we ever do a v2 of this..)
 
---CCAbHT5wTCfICpGW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 2022.07.13 09:11:55 +0100, Mauro Carvalho Chehab wrote:
-> Some functions seem to have been renamed without updating the kernel-doc
-> markup causing warnings. Also, struct intel_vgpu_dmabuf_obj is not
-> properly documented, but has a kerneld-doc markup.
->=20
-> Fix those warnings:
-> 	drivers/gpu/drm/i915/gvt/aperture_gm.c:308: warning: expecting prototype=
- for inte_gvt_free_vgpu_resource(). Prototype was for intel_vgpu_free_resou=
-rce() instead
-> 	drivers/gpu/drm/i915/gvt/aperture_gm.c:344: warning: expecting prototype=
- for intel_alloc_vgpu_resource(). Prototype was for intel_vgpu_alloc_resour=
-ce() instead
-> 	drivers/gpu/drm/i915/gvt/cfg_space.c:257: warning: expecting prototype f=
-or intel_vgpu_emulate_cfg_read(). Prototype was for intel_vgpu_emulate_cfg_=
-write() instead
-> 	drivers/gpu/drm/i915/gvt/dmabuf.h:61: warning: Function parameter or mem=
-ber 'vgpu' not described in 'intel_vgpu_dmabuf_obj'
-> 	drivers/gpu/drm/i915/gvt/dmabuf.h:61: warning: Function parameter or mem=
-ber 'info' not described in 'intel_vgpu_dmabuf_obj'
-> 	drivers/gpu/drm/i915/gvt/dmabuf.h:61: warning: Function parameter or mem=
-ber 'dmabuf_id' not described in 'intel_vgpu_dmabuf_obj'
-> 	drivers/gpu/drm/i915/gvt/dmabuf.h:61: warning: Function parameter or mem=
-ber 'kref' not described in 'intel_vgpu_dmabuf_obj'
-> 	drivers/gpu/drm/i915/gvt/dmabuf.h:61: warning: Function parameter or mem=
-ber 'initref' not described in 'intel_vgpu_dmabuf_obj'
-> 	drivers/gpu/drm/i915/gvt/dmabuf.h:61: warning: Function parameter or mem=
-ber 'list' not described in 'intel_vgpu_dmabuf_obj'
-> 	drivers/gpu/drm/i915/gvt/handlers.c:3066: warning: expecting prototype f=
-or intel_t_default_mmio_write(). Prototype was for intel_vgpu_default_mmio_=
-write() instead
-> 	drivers/gpu/drm/i915/gvt/mmio_context.c:560: warning: expecting prototyp=
-e for intel_gvt_switch_render_mmio(). Prototype was for intel_gvt_switch_mm=
-io() instead
-> 	drivers/gpu/drm/i915/gvt/page_track.c:131: warning: expecting prototype =
-for intel_vgpu_enable_page_track(). Prototype was for intel_vgpu_disable_pa=
-ge_track() instead
-> 	drivers/gpu/drm/i915/gvt/vgpu.c:215: warning: expecting prototype for in=
-tel_gvt_active_vgpu(). Prototype was for intel_gvt_activate_vgpu() instead
-> 	drivers/gpu/drm/i915/gvt/vgpu.c:230: warning: expecting prototype for in=
-tel_gvt_deactive_vgpu(). Prototype was for intel_gvt_deactivate_vgpu() inst=
-ead
-> 	drivers/gpu/drm/i915/gvt/vgpu.c:358: warning: expecting prototype for in=
-tel_gvt_destroy_vgpu(). Prototype was for intel_gvt_destroy_idle_vgpu() ins=
-tead
->=20
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
->=20
-> To avoid mailbombing on a large number of people, only mailing lists were=
- C/C on the cover.
-> See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git=
-=2Emchehab@kernel.org/
->=20
->  drivers/gpu/drm/i915/gvt/cfg_space.c  | 2 +-
->  drivers/gpu/drm/i915/gvt/dmabuf.h     | 2 +-
->  drivers/gpu/drm/i915/gvt/page_track.c | 2 +-
->  drivers/gpu/drm/i915/gvt/vgpu.c       | 6 +++---
->  4 files changed, 6 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/i915/gvt/cfg_space.c b/drivers/gpu/drm/i915/=
-gvt/cfg_space.c
-> index dad3a6054335..a0fc6d356588 100644
-> --- a/drivers/gpu/drm/i915/gvt/cfg_space.c
-> +++ b/drivers/gpu/drm/i915/gvt/cfg_space.c
-> @@ -243,7 +243,7 @@ static void emulate_pci_bar_write(struct intel_vgpu *=
-vgpu, unsigned int offset,
->  }
-> =20
->  /**
-> - * intel_vgpu_emulate_cfg_read - emulate vGPU configuration space write
-> + * intel_vgpu_emulate_cfg_write - emulate vGPU configuration space write
->   * @vgpu: target vgpu
->   * @offset: offset
->   * @p_data: write data ptr
-> diff --git a/drivers/gpu/drm/i915/gvt/dmabuf.h b/drivers/gpu/drm/i915/gvt=
-/dmabuf.h
-> index 5f8f03fb1d1b..3dcdb6570eda 100644
-> --- a/drivers/gpu/drm/i915/gvt/dmabuf.h
-> +++ b/drivers/gpu/drm/i915/gvt/dmabuf.h
-> @@ -48,7 +48,7 @@ struct intel_vgpu_fb_info {
->  	struct intel_vgpu_dmabuf_obj *obj;
->  };
-> =20
-> -/**
-> +/*
->   * struct intel_vgpu_dmabuf_obj- Intel vGPU device buffer object
->   */
->  struct intel_vgpu_dmabuf_obj {
-> diff --git a/drivers/gpu/drm/i915/gvt/page_track.c b/drivers/gpu/drm/i915=
-/gvt/page_track.c
-> index 3375b51c75f1..df34e73cba41 100644
-> --- a/drivers/gpu/drm/i915/gvt/page_track.c
-> +++ b/drivers/gpu/drm/i915/gvt/page_track.c
-> @@ -120,7 +120,7 @@ int intel_vgpu_enable_page_track(struct intel_vgpu *v=
-gpu, unsigned long gfn)
->  }
-> =20
->  /**
-> - * intel_vgpu_enable_page_track - cancel write-protection on guest page
-> + * intel_vgpu_disable_page_track - cancel write-protection on guest page
->   * @vgpu: a vGPU
->   * @gfn: the gfn of guest page
->   *
-> diff --git a/drivers/gpu/drm/i915/gvt/vgpu.c b/drivers/gpu/drm/i915/gvt/v=
-gpu.c
-> index 46da19b3225d..8e71cda19995 100644
-> --- a/drivers/gpu/drm/i915/gvt/vgpu.c
-> +++ b/drivers/gpu/drm/i915/gvt/vgpu.c
-> @@ -205,7 +205,7 @@ static void intel_gvt_update_vgpu_types(struct intel_=
-gvt *gvt)
->  }
-> =20
->  /**
-> - * intel_gvt_active_vgpu - activate a virtual GPU
-> + * intel_gvt_activate_vgpu - activate a virtual GPU
->   * @vgpu: virtual GPU
->   *
->   * This function is called when user wants to activate a virtual GPU.
-> @@ -219,7 +219,7 @@ void intel_gvt_activate_vgpu(struct intel_vgpu *vgpu)
->  }
-> =20
->  /**
-> - * intel_gvt_deactive_vgpu - deactivate a virtual GPU
-> + * intel_gvt_deactivate_vgpu - deactivate a virtual GPU
->   * @vgpu: virtual GPU
->   *
->   * This function is called when user wants to deactivate a virtual GPU.
-> @@ -348,7 +348,7 @@ struct intel_vgpu *intel_gvt_create_idle_vgpu(struct =
-intel_gvt *gvt)
->  }
-> =20
->  /**
-> - * intel_gvt_destroy_vgpu - destroy an idle virtual GPU
-> + * intel_gvt_destroy_idle_vgpu - destroy an idle virtual GPU
->   * @vgpu: virtual GPU
->   *
->   * This function is called when user wants to destroy an idle virtual GP=
-U.
-> --=20
-
-Acked-by: Zhenyu Wang <zhenyuw@linux.intel.com>
-
-Thanks! I'll put in queue with other gvt fixes.
-
---CCAbHT5wTCfICpGW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EARECAB0WIQTXuabgHDW6LPt9CICxBBozTXgYJwUCYs+aNAAKCRCxBBozTXgY
-J9jlAJ0SBHiGlVnl69HpQC7DoBtaBEcTKwCaA5E4YFCilATJ34RgabNyuY5uV0U=
-=ZLap
------END PGP SIGNATURE-----
-
---CCAbHT5wTCfICpGW--
+Even without that it really is not a vmalloc API anyway.  Executable
+memory needs to be written first, so we should allocate it in that state
+and only mark it executable after that write has completed.

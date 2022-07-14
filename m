@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1115746AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1535746B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234382AbiGNIZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 04:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
+        id S234692AbiGNI2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 04:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234314AbiGNIZK (ORCPT
+        with ESMTP id S233625AbiGNI2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 04:25:10 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B873AE40
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:25:08 -0700 (PDT)
-Received: from mail-yw1-f173.google.com ([209.85.128.173]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Md76B-1nbk7k05pL-00aHEC for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022
- 10:25:07 +0200
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-3137316bb69so9469627b3.10
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:25:06 -0700 (PDT)
-X-Gm-Message-State: AJIora+cBCM2/Um/q4pEP1VTDRafKT3IATWfiihJiP9TCrdS/s62Smwt
-        QUi06BvOTEEXEqAidIGzRLeWrwuv+HsKEXIlcVg=
-X-Google-Smtp-Source: AGRyM1vt2i+MLzQoQ8EUAstVq2RqNs3pwOpWRFUMpYqOFMtyP7eGTQHRST6xfO3JNud96tGfOfo+oDtOe953D88c1j4=
-X-Received: by 2002:a81:d93:0:b0:31c:d32d:4d76 with SMTP id
- 141-20020a810d93000000b0031cd32d4d76mr9102171ywn.135.1657787105766; Thu, 14
- Jul 2022 01:25:05 -0700 (PDT)
+        Thu, 14 Jul 2022 04:28:00 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CB93AE40;
+        Thu, 14 Jul 2022 01:27:59 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id t1so1593102lft.8;
+        Thu, 14 Jul 2022 01:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2pK5vnd3CztnzTkE+rNKn5a3mKucIwku8ySPesIgYDQ=;
+        b=ZaBl6ghxvOoCi15XY7qnZBNcwSAQq29ipWDnkOjW6Sp5EsSr7uOPMemPswdqcPWkYp
+         6MZiFNq9PAhKgbk0xizQDei8rGueEFZCLniFzvjS2ugzK8lo6oQWrcqd5KgCliZfdO9+
+         12EozpOMgeZApBKc02vGMBtiEoYOGUEuZIh7VrniCktqlKIgt5niU1W2xTXyf1eW4UcO
+         nf7W5NgqChCM9CKHYbWOnpxdX8ncjlitS7vuPeFs9hoMx6ztcL+EON+bB6bSwdJhlOd2
+         CQFNzcgW8kmbUMyica39G2XhqPWzRRcfv/VKFsP1V6D9ivzhgCjyRSLtMdG8T+cWFG7X
+         mS7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2pK5vnd3CztnzTkE+rNKn5a3mKucIwku8ySPesIgYDQ=;
+        b=LVpkF89vUI+RzafkCY50kCZK/r/ua+9PjUkzxLYuResSIpDRWlqcyoz2GUDZNxFxpS
+         16oIF5hPLXhykjGT4R+tntizW0b341QGBKg6T7GdE4SIsuTYSaQS6QKwiZ0OFYdQkdNx
+         95GVlp3YxKIeCRguFTAQ/JaXfWjMGLC+lTnbv0PC/HYCca8QZo59I+IidPfM3iJqN/na
+         yS2AJNcseKwpY0TlY/LsJLAzkbJuf1IRkojUiQ9FJyTh7hLeWX1VGyItWEVtwqb7ZbkK
+         3UitlltlQIJfMsiXA4JE81UKm6tJbwMlKxieI6W4GgMXpjR8TjHQZctNQCck7EUJwZOt
+         Puaw==
+X-Gm-Message-State: AJIora8ZDuQK10mB39InRvt/Wi54rorRCAk3oRyIW5lqGvsRWgs6ei/0
+        U8G4DD7vAGjrs4yPWgsKusfAV14c6Xk=
+X-Google-Smtp-Source: AGRyM1t+uRyJiclu/xiFS5ssRkQcD6WpY+R19402VHqaEJtkQFqVPRddhHNT4oZ92QGEmNDMBxg3nA==
+X-Received: by 2002:a05:6512:ea1:b0:489:2930:9f1a with SMTP id bi33-20020a0565120ea100b0048929309f1amr4760060lfb.291.1657787277443;
+        Thu, 14 Jul 2022 01:27:57 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.79.77])
+        by smtp.gmail.com with ESMTPSA id j18-20020a056512345200b00489f0c8bddesm234621lfr.207.2022.07.14.01.27.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 01:27:56 -0700 (PDT)
+Subject: Re: [PATCH 8/9] selftests: timers: clocksource-switch: add 'runtime'
+ command line parameter
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org
+Cc:     John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
+ <20220713204623.5443-9-wsa+renesas@sang-engineering.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <23526df7-b77d-4223-71ee-51c456dbc236@gmail.com>
+Date:   Thu, 14 Jul 2022 11:27:54 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220714025901.359695-1-xianting.tian@linux.alibaba.com> <20220714025901.359695-3-xianting.tian@linux.alibaba.com>
-In-Reply-To: <20220714025901.359695-3-xianting.tian@linux.alibaba.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 14 Jul 2022 10:24:49 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3-jKEs+uGL=_kjmfzao6DYgmrkO+YWtNhv5O+hFw_qog@mail.gmail.com>
-Message-ID: <CAK8P3a3-jKEs+uGL=_kjmfzao6DYgmrkO+YWtNhv5O+hFw_qog@mail.gmail.com>
-Subject: Re: [PATCH V2 2/2] riscv: Add modules to virtual kernel memory layout dump
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Mike Rapoport <rppt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        huanyi.xj@alibaba-inc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Meby81FiNPBNulXbVWAnTvyAvt6U7M6RS2gfN2IYZ8hmtP8fjwW
- 3u3xSNODWk0PNrkgK4k8ONjJYlCMa/7f+2qxrKOSfytiFUov0S60vOiwfILh41QRwv46BvC
- 8lxLGmxou09XWKziRIuAWAWPzG8+BlJPAmE3B5duC6HVm+wyiDqknVxA0+mUJ1nRCIk3bp8
- obtS0UIKMFJRcU1O5IktQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:94Kw0jlsFTA=:f8xaTEd4KXV3py8SxWBb6w
- 2vTmwMCGcGlaa9TmHIsS3wsRPdPX4AB9VQMd8kgb8bgMRGZO9cs/cD+2OD9cmerxIysE2Db7S
- LVPkLXGQAwg15FEHCaXieZnx+6HbOOlsUfb7DJhuwRqIm25J73ZFXLUGMlHZr/hsJWUu7u6Gh
- l6UApB9oY4tgv4LbCxYhZ8qVkUlFdCJ+NAW43Pd4E4YUa+DPyLsEKfALt8eFTGr/U034VUoPu
- Ws0S/6XJb3gaXkd05VlM27HRxyJotcOKhAvCunK8TveZuhqBdZsQSf6gx4mUM8R9Q7YUkodGp
- y6cN6X2eGvj0l+QnMdA9U8ri/9vu4tqATQATRhQsbXL8ZjpmDTfav1f1DaPP/VszYm/8BzptE
- XVMYEk+s5VWPEG+biyw4EH/yHSwyD9raAogRXgZjwbtS4c51Fny4Q2yVd/0DE3jwwZy7PumGZ
- HlICjRGhaOmpSMhN82BYi2gB/Kd54QyP1csUridQfqjIrwn/yG72NyowdRsv1QRdZO6TkjChm
- Sp7I/O+uaV6mIX3Ml5w/FsHHxRRN6a5P5E6f+LLwv12Q0OJKIHaZ5rbana+PYYyCR+Pju2oDH
- yabiNIcQn242NrDf1JtBidBqsBByqZItocoRFp2mnqUNA/2DhG52NQMMIL9pUtTsluk46xLC6
- oqydCAgUjLwpPHPDPd6Z96N0SsSJS64RHBvIqknCHPSbDJGy3nLP58aFa0yGyMipmQ0Zufsj/
- fO27+TliBSd1P09TZ0vWP6q2CGivfQd5nM9he120MLfwfvcItPj+AMhlCvOzqP7ZR8/bFDh24
- AXTLuOLAiiM90gDiz0SlbJhw9/7TB5j6oxzOzmfBvdou3EmoiygN1os4ZB5s7p/IajeAJQfo3
- d+squEe7JvlGUtyuJwLQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220713204623.5443-9-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,22 +79,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 4:59 AM Xianting Tian
-<xianting.tian@linux.alibaba.com> wrote:
->
-> As MODULES is only defined for CONFIG_64BIT, so we dump it when
-> CONFIG_64BIT.
+Hello!
 
-Doesn't this cause a compile-time error on 32-bit?
+On 7/13/22 11:46 PM, Wolfram Sang wrote:
 
->                 (unsigned long)VMEMMAP_END);
->         print_ml("vmalloc", (unsigned long)VMALLOC_START,
->                 (unsigned long)VMALLOC_END);
-> +       if (IS_ENABLED(CONFIG_64BIT))
-> +               print_ml("modules", (unsigned long)MODULES_VADDR,
-> +                       (unsigned long)MODULES_END);
+> So the user can decide how long the test should run.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  tools/testing/selftests/timers/clocksource-switch.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
+> index 5256e6215980..a1d0d33738b6 100644
+> --- a/tools/testing/selftests/timers/clocksource-switch.c
+> +++ b/tools/testing/selftests/timers/clocksource-switch.c
+[...]
+> -	while ((opt = getopt(argc, argv, "s")) != -1) {
+> +	while ((opt = getopt(argc, argv, "st:")) != -1) {
+>  		switch (opt) {
+>  		case 's':
+>  			do_sanity_check = 0;
+>  			break;
+> +		case 't':
+> +			runtime = atoi(optarg);
+> +			break;
+>  		default:
+>  			printf("Usage: %s [-s]\n", argv[0]);
+>  			printf("	-s: skip sanity checks\n");
 
-The IS_ENABLED() check prevents the line from getting executed, but
-unlike an #ifdef it still relies on it to be parsable.
+   Hm, you probably forgot to update the usage msg?
 
-         Arnd
+[...]
+
+MBR, Sergey

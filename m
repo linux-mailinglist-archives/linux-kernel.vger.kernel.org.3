@@ -2,88 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0818C575420
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7030575422
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239408AbiGNRiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 13:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
+        id S239586AbiGNRid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 13:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiGNRiS (ORCPT
+        with ESMTP id S232679AbiGNRib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 13:38:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9074B5F10C;
-        Thu, 14 Jul 2022 10:38:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F00662109;
-        Thu, 14 Jul 2022 17:38:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 175A1C34114;
-        Thu, 14 Jul 2022 17:38:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657820296;
-        bh=I+JR2vuCoo4TsjHs0xtWLheVFBc/lFgWZka+PVI97jQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bbzrVmFt3ESKn/syjc7nTkCggq0bopPdVbbmq6nlS92dKqrK2/qGOnmisoEfRQ8GZ
-         AAR7H0Ds1HMwIiG8VgxpHikOq/nBat8+2JphE78F7BJeg8mfhS83ZQcpKXD27Jk4M5
-         AyHok7VHNCwSqxjkvERpnvvIoeUZtldhsJqnK/W6yKBHEK1t/mhyz9OPhAMABT4C6z
-         KQGC/OyNAalN8pYU0yV25thSq+OChMn6DNW3SlJpDR8sFNByaSR6RkEodACoj3D7jL
-         3wKWSsVyA7CGJWrw98Ix3x/hcIuDfuQnLKQGZTDqQ1pXk49Fh0BK0sUByEMnjoW9N8
-         FV/Dw0mSH8Dmw==
-Date:   Thu, 14 Jul 2022 10:38:14 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        antonio.gomez.iglesias@linux.intel.com
-Subject: Re: [PATCH] x86/bugs: Switch to "auto" when "ibrs" selected on
- Enhanced IBRS parts
-Message-ID: <20220714173814.p5kdyimu6ho7zjt5@treble>
-References: <0456b35fb9ef957d9a9138e0913fb1a3fd445dff.1657747493.git.pawan.kumar.gupta@linux.intel.com>
- <Ys/7RiC9Z++38tzq@quatroqueijos>
- <YtABEwRnWrJyIKTY@worktop.programming.kicks-ass.net>
- <20220714160106.c6efowo6ptsu72ne@treble>
- <YtBMZMaOnA8g8m0a@worktop.programming.kicks-ass.net>
+        Thu, 14 Jul 2022 13:38:31 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B59606B6;
+        Thu, 14 Jul 2022 10:38:30 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id x91so3366433ede.1;
+        Thu, 14 Jul 2022 10:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yu2+SIwToyiijVbo49UhP1kKR2aa55foE/D2/YT55Yg=;
+        b=IWw5CaMfCXVmaVCS03FgCetqbph2FBq2DUnPT/8+/8GQMunsfmxv0pYinebZmpiuq3
+         Y+ZXXUC12JAPvmVqatMBk5t/MzDjcc7+XhpU2CRuLNYH96ZQz86xc/tmUyb+cZ6A5JoK
+         IttW1wUcqf3GZ436e7C3CZLqtT9JV84KIUArFqMXyUFqR7tHznpw6QNFf/qvF2l98Yat
+         QlulbkF6P9Ltj3XDWaZVAaf8gAKS5aD1NC7gQh6mcBp6MM79Mt0VC9GrVwYvz8cu6dal
+         o10N2lLvoGNqST0P9Pg6eB6vketB+wvZtFehLb1VWg5vPSH6FWJGNA1VuQFNeMOWscgG
+         DXeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yu2+SIwToyiijVbo49UhP1kKR2aa55foE/D2/YT55Yg=;
+        b=f4bJ7gFQDJmm0zXMeUJfYzaXkWueEEMU48liDWxfU/rVORO+g9DYWaPBfSIFG/Ofzm
+         GRrZWo2HG37FVRTyJTliXC8hDakwC92waKC9dhFPCeLOJm/IgB3KDZand6Wnq2k5MAz2
+         oeLL9vxH3t3OjNl/q8Q6c3XTeOu2qWDB7MECxNIo/YfJZL8qChLRVfxeDuD/HkFdH2R1
+         YWVBqK4sHiSutSioLvwwJ+FMzmzwI+s/g85mEY3tTYiILzz0Nf7Z2Mvt83jmVyXvNti0
+         qn6R1Y8L/ta8KFIi/PKGXLkmoDH3Ob61HAv8jQUStdCSxe15yHQ4Fmg5pVvioLdPkJY1
+         g0Xg==
+X-Gm-Message-State: AJIora+r1hgBNDuZvRMJNLeA1K5qync+0eD7/zPcCZFaRUNn0ck0tzQs
+        YRuA8hZBzuINfyxDn1P454H0VTQm6WA=
+X-Google-Smtp-Source: AGRyM1sp11JRsdFgMZcGctJa6r0ts/rppEWWYSPQdRobSA6f2F4IXltHCnp1Q3lsilwqlAoKnBW2aw==
+X-Received: by 2002:aa7:dd06:0:b0:43b:247e:3d6c with SMTP id i6-20020aa7dd06000000b0043b247e3d6cmr5120458edv.407.1657820309353;
+        Thu, 14 Jul 2022 10:38:29 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b0072a55ec6f3bsm942235ejg.165.2022.07.14.10.38.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 10:38:28 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH] posix_acl: Use try_cmpxchg in get_acl
+Date:   Thu, 14 Jul 2022 19:38:19 +0200
+Message-Id: <20220714173819.13312-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YtBMZMaOnA8g8m0a@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 07:03:32PM +0200, Peter Zijlstra wrote:
-> On Thu, Jul 14, 2022 at 09:01:06AM -0700, Josh Poimboeuf wrote:
-> 
-> > > Yeah this; if the user asks for IBRS, we should give him IBRS. I hate
-> > > the 'I know better, let me change that for you' mentality.
-> > 
-> > eIBRS CPUs don't even have legacy IBRS so I don't see how this is even
-> > possible.
-> 
-> You can still WRMSR a lot on them. Might not make sense but it 'works'.
+Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old
+in get_acl. x86 CMPXCHG instruction returns success in ZF flag,
+so this change saves a compare after cmpxchg (and related move
+instruction in front of cmpxchg).
 
-Even in Intel documentation, eIBRS is often referred to as IBRS. It
-wouldn't be surprising for a user to consider spectre_v2=ibrs to mean
-"use eIBRS".
+No functional change intended.
 
-I'm pretty sure there's nobody out there that wants spectre_v2=ibrs to
-mean "make it slower and possibly less secure because it's being used
-contrary to the spec".
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+---
+ fs/posix_acl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/fs/posix_acl.c b/fs/posix_acl.c
+index 962d32468eb4..49a13fd4d3cb 100644
+--- a/fs/posix_acl.c
++++ b/fs/posix_acl.c
+@@ -164,7 +164,7 @@ struct posix_acl *get_acl(struct inode *inode, int type)
+ 	 * Cache the result, but only if our sentinel is still in place.
+ 	 */
+ 	posix_acl_dup(acl);
+-	if (unlikely(cmpxchg(p, sentinel, acl) != sentinel))
++	if (unlikely(!try_cmpxchg(p, &sentinel, acl)))
+ 		posix_acl_release(acl);
+ 	return acl;
+ }
 -- 
-Josh
+2.35.3
+

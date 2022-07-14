@@ -2,131 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37753574B1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CB4574B18
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238484AbiGNKsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
+        id S237289AbiGNKsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238463AbiGNKsU (ORCPT
+        with ESMTP id S238483AbiGNKsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:48:20 -0400
-Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E07D54C9B
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:48:19 -0700 (PDT)
-Received: by mail-wr1-x449.google.com with SMTP id j16-20020adfa550000000b0021d63d200a8so457236wrb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:48:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=TcbL293klknuFRfZ1i01tinmhCgguD5yCB7g0kW+L6k=;
-        b=G5jbzXEoJg6vN8TMAZMcpCS0XRYpdmVmOPqNHtSHypAGXhz8VJoUqU2KRox7AiA3sM
-         S/NvzjYJK0dBsxN8zKdMRLKvQruCZIAPdLW7y/DfggEgFSv34G4aPSqJXomGxqG0Dua7
-         h1HdW9A8ErP4DhheRfut5PVo+APDi2/JlHiLgy9uR3pA5uCQQpsHLqzPi1zfqrtKqfzo
-         vO7fDKnOdgqE2jml88KtH6iEWhqQ5j7QcktLOgHd/zhX3ByHqhz5CcRI2lXW1HIuJh0o
-         Mfw4L9Z/QQ0n+YXx9w967uVqwXWjxijfPD3/yBrs9J1+9dNTEpZY6tvrlv4n4GOj87EG
-         HxHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=TcbL293klknuFRfZ1i01tinmhCgguD5yCB7g0kW+L6k=;
-        b=lbHtp+D2lR+a3qgzQDL2uOotGcCdNepdDHoyiVMtAFyrBjAmhvLUXDKqcyQza814W0
-         Z0DkA8h8+Ef/Mmaxg64nl6GzMtGjY2OZYE1zduZYQPoDRW+mjqyrSDGaKCjxpfcWqCAM
-         ORR0xiX6r3xEo14sn6E+QQKnzndBZBIRXOXVU+fmdyO65tTMzCON/YDqsUuGRblbrCKL
-         TGLUIngUbPa3ElMpCrnF3O82tbUmnIuHu93KLICduIcD2gXYdyEPJM47pNAyxbljkdFy
-         H2FxWyBFvS97MNTHCbCXkEufa6VaAmeCq79KlsGbXjEK4cbR99wFoodD94vfCB5dLqPw
-         PK2w==
-X-Gm-Message-State: AJIora/oaL6d0ncwuhWFqGpaEeTtoLavQKeAxxhck5wftXt5btTnI8/A
-        qoUttaMMtP1Uohb9UstxFDKdiIyElqE=
-X-Google-Smtp-Source: AGRyM1sbV0Yq2YAAjCOTbGhhzgSDovNLXEQNSglI0p/MoD9f0OPPIRDj1RhbV1yqEROnz6Hyhac9fEZ/eeo=
-X-Received: from rax.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2a98])
- (user=poprdi job=sendgmr) by 2002:a05:600c:4f4d:b0:3a1:98de:abde with SMTP id
- m13-20020a05600c4f4d00b003a198deabdemr14697421wmq.36.1657795697567; Thu, 14
- Jul 2022 03:48:17 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 10:48:14 +0000
-Message-Id: <20220714104814.1296858-1-poprdi@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [PATCH v2] Bluetooth: Collect kcov coverage from hci_rx_work
-From:   Tamas Koczka <poprdi@google.com>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, theflow@google.com,
-        Tamas Koczka <poprdi@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 14 Jul 2022 06:48:25 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B106651406;
+        Thu, 14 Jul 2022 03:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XohSnVoV4/1lapZbhGBzX2/x+DHxkPY5UG2ab+3neEw=; b=MziSggPty3ej2uD1YfMBwconmS
+        1f1LjggwlXHkmCjf8EvrkcJMFYuZfMo5gyndLt+GS3m29klzYZ5UB8iwXY3bwd9GkrpLlh8iwg+Qh
+        PIGGXMO84HlmxCTwDm4slMY9WEM+2rzr4a8ROntmdlPdm9n/30UL90FzecQW2wvgOBgMvGHHGNUu4
+        ZL1x0+aiMDgDqx7DEBpcsHJQ0PutUzPfUBzRJ+JQO7ek+fLfsRIASxtvBX1eTyoMMotaTM2+V2mQ5
+        dZ7wtIpu1dE2GtcyQzLlMWfYG6fFK5jq8biA/YFvZutry/xjboDsRCCT5BQ2eqOcCw64h8dgd2/La
+        br7+6K5w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBwOI-003oqI-VN; Thu, 14 Jul 2022 10:48:19 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E26E6980120; Thu, 14 Jul 2022 12:48:17 +0200 (CEST)
+Date:   Thu, 14 Jul 2022 12:48:17 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] objtool: Fix spelling mistake "teh " -> "the"
+Message-ID: <Ys/0cXFRssinOqRE@worktop.programming.kicks-ass.net>
+References: <20220714102856.22512-1-colin.i.king@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714102856.22512-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Annotate hci_rx_work() with kcov_remote_start() and kcov_remote_stop()
-calls, so remote KCOV coverage is collected while processing the rx_q
-queue which is the main incoming Bluetooth packet queue.
+On Thu, Jul 14, 2022 at 11:28:56AM +0100, Colin Ian King wrote:
+> There is a spelling mistake in a WARN_FUNC message. Fix it.
 
-Coverage is associated with the thread which created the packet skb.
-
-The collected extra coverage helps kernel fuzzing efforts in finding
-vulnerabilities.
-
-This change only has effect if the kernel is compiled with CONFIG_KCOV,
-otherwise kcov_ functions don't do anything.
-
-Signed-off-by: Tamas Koczka <poprdi@google.com>
-Tested-by: Aleksandr Nogikh <nogikh@google.com>
-Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
----
-Changelog since v1:
- - add comment about why kcov_remote functions are called
-
-v1: https://lore.kernel.org/all/20220517094532.2729049-1-poprdi@google.com/
-
-Note: this is a resubmission of https://lore.kernel.org/netdev/CAPUC6bJbVMPn1FMLYnXg2GUX4ikesMSRjj=oPOOrS5H2DOx_bA@mail.gmail.com/T/
-
- net/bluetooth/hci_core.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 45c2dd2e1590..0af43844c55a 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -29,6 +29,7 @@
- #include <linux/rfkill.h>
- #include <linux/debugfs.h>
- #include <linux/crypto.h>
-+#include <linux/kcov.h>
- #include <linux/property.h>
- #include <linux/suspend.h>
- #include <linux/wait.h>
-@@ -3780,7 +3781,14 @@ static void hci_rx_work(struct work_struct *work)
- 
- 	BT_DBG("%s", hdev->name);
- 
--	while ((skb = skb_dequeue(&hdev->rx_q))) {
-+	/* The kcov_remote functions used for collecting packet parsing
-+	 * coverage information from this background thread and associate
-+	 * the coverage with the syscall's thread which originally injected
-+	 * the packet. This helps fuzzing the kernel.
-+	 */
-+	for (; (skb = skb_dequeue(&hdev->rx_q)); kcov_remote_stop()) {
-+		kcov_remote_start_common(skb_get_kcov_handle(skb));
-+
- 		/* Send copy to monitor */
- 		hci_send_to_monitor(hdev, skb);
- 
--- 
-2.37.0.144.g8ac04bfd2-goog
-
+That was so on purpose... :-)

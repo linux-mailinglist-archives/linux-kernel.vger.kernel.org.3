@@ -2,108 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8BC574D56
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8896574D5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238959AbiGNMWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S237452AbiGNMXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiGNMWo (ORCPT
+        with ESMTP id S238976AbiGNMXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:22:44 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B30D32BA1;
-        Thu, 14 Jul 2022 05:22:38 -0700 (PDT)
-X-UUID: de906403d5f54b8d96c5cb8eae9dcb4c-20220714
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:bb8aa357-990a-44d1-980f-e560e5eccd36,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:ba907fd7-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: de906403d5f54b8d96c5cb8eae9dcb4c-20220714
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 592939605; Thu, 14 Jul 2022 20:22:32 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 14 Jul 2022 20:22:30 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 14 Jul 2022 20:22:30 +0800
-Message-ID: <e7d28a927044e47ad8018c71d511754dda9ae7d7.camel@mediatek.com>
-Subject: Re: [PATCH v1 03/16] dt-bindings: power: mediatek: Refine multiple
- level power domain nodes
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        <iommu@lists.linux-foundation.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 14 Jul 2022 20:22:30 +0800
-In-Reply-To: <20220712192119.GK1823936-robh@kernel.org>
-References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
-         <20220704100028.19932-4-tinghan.shen@mediatek.com>
-         <20220705205739.GA2599256-robh@kernel.org>
-         <b5667c052447d1b3c3498131af98d80a07ed4767.camel@mediatek.com>
-         <20220712192119.GK1823936-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 14 Jul 2022 08:23:45 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6EBB615B;
+        Thu, 14 Jul 2022 05:23:43 -0700 (PDT)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 2EB961C80F83;
+        Thu, 14 Jul 2022 20:23:42 +0800 (CST)
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Thu, 14 Jul
+ 2022 20:23:41 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Thu, 14 Jul 2022 20:23:41 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id CAE6F63A20; Thu, 14 Jul 2022 15:23:40 +0300 (IDT)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <linus.walleij@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <j.neuschaefer@gmx.net>, <zhengbin13@huawei.com>
+CC:     <openbmc@lists.ozlabs.org>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v2 0/2] pinctrl: nuvoton: add pinmux and GPIO driver for NPCM8XX
+Date:   Thu, 14 Jul 2022 15:23:20 +0300
+Message-ID: <20220714122322.63663-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-> 
-> Okay, I think you need something more like this that doesn't recurse 
-> infinitely:
-> 
-> patternProperties:
->   "^power-domain@[0-9a-f]+$":
->     $ref: #/$defs/power-domain-node
-> 
->     unevaluatedProperties:
->       $ref: #/$defs/power-domain-node
-> 
-> If you need a 3rd level of nodes:
->       unevaluatedProperties:
->         $ref: #/$defs/power-domain-node
-> 
-> 
-> Rob
+This patch set adds pinmux and GPIO controller for the Arbel NPCM8XX 
+Baseboard Management Controller (BMC).
 
-After some test, your 1st suggestion works.
+Arbel BMC NPCM8XX pinctrl driver based on Poleg NPCM7XX, except the
+pin mux mapping difference the NPCM8XX GPIO supports adjust debounce
+period time.
 
-The infinite error is introduced from my changes and affect the result of power/renesas,sysc-
-rmobile.yaml. The 'additionalProperties' being defined as a DT property is the root of this error.
-After fix the indentation, the error is gone.
+Arbel BMC NPCM8XX Pinmux functions accessible only for pin groups 
+and pin configuration parameters available only for individual pins.
 
-I'll update the yaml as your 1st suggestion in next version.
+Arbel BMC NPCM8XX has eight identical GPIO modules,
+each module has 32 GPIO ports.
 
-Thanks,
-TingHan
+Most of the GPIO ports are multiplexed with other system functions.
 
+The NPCM8XX pinctrl and GPIO driver were tested on NPCM845 evaluation board.
 
+Addressed comments from:
+ - Andy Shevchenko : https://www.spinics.net/lists/devicetree/msg516573.html
+ - Krzysztof Kozlowski: https://www.spinics.net/lists/kernel/msg4368955.html
+
+Changes since version 1:
+ - Pin controller driver
+	- Remove unnecessary debug prints and comments.
+	- Use fwnode functions.
+	- Remove Redundant 'else'.
+	- Use switch case instead of else if.
+	- Use GENMASK and BIT macros.
+	- Use dev_err_probe in probe error.
+	- Use callback GPIO range.
+	- Add GCR phandle property.
+	- Parameter order in reversed xmas
+
+ - Pin controller dt-binding
+	- Modify name from pin to mux.
+	- Add phandle property.
+
+Tomer Maimon (2):
+  dt-binding: pinctrl: Add NPCM8XX pinctrl and GPIO documentation
+  pinctrl: nuvoton: add NPCM8XX pinctrl and GPIO driver
+
+ .../pinctrl/nuvoton,npcm845-pinctrl.yaml      |  213 ++
+ drivers/pinctrl/nuvoton/Kconfig               |   13 +
+ drivers/pinctrl/nuvoton/Makefile              |    1 +
+ drivers/pinctrl/nuvoton/pinctrl-npcm8xx.c     | 2528 +++++++++++++++++
+ 4 files changed, 2755 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/nuvoton,npcm845-pinctrl.yaml
+ create mode 100644 drivers/pinctrl/nuvoton/pinctrl-npcm8xx.c
+
+-- 
+2.33.0
 

@@ -2,79 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BB1574893
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC707574899
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238178AbiGNJWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
+        id S237760AbiGNJW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237841AbiGNJWR (ORCPT
+        with ESMTP id S237834AbiGNJWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:22:17 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3B124BF3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:19:30 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id t25so1789818lfg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7QxUW5JMlP7swDnKQEo+sHfu77Q/PjxZ/uJIQjymj+A=;
-        b=GJo55pzcoqaMBfitY8O5/LH4SNF1gDtDM0JsAgkTFil8+G1dr4nroUct1DckujY4yy
-         eyUjFhJMEIAmgwP/xY6CdRWAEe2s+viuOvp8wbP9GyxBdVmlQuSPvRL/M88csbvsEJm7
-         p87qmSS/or/EU4On0QdCniSvQFoNJyuZxvgNTP1PQDlStyar5yeAycYYYx27T0WO70VD
-         440Qv6PB2ZEWkiQMjOZDPN1K338Z18TxLKWGDdq8CK0K5H6A9zHZd7cB/tj0emVFCLuf
-         I+dF2Hqbi61GSTgXCB/Ka/eKgGUGg2kgUXm1nUcAKSF/HF61aTV2jjuFNSa/o7myobwd
-         g+Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7QxUW5JMlP7swDnKQEo+sHfu77Q/PjxZ/uJIQjymj+A=;
-        b=SL5NvBA8KfUcHpOsYdB2MLTcmTnMW69OQPh7ilk1xprSkgqZKblE9NqVbpPQ1M5ciV
-         2dmVat5R/WNwAJowYDMZK+/MpfgWy+dq6YpKMMFJPvyPCFbG3Rin1ktriw68pu8xm+x1
-         9xxRh4Fer/o680goDNB6DlXT5LzroEsB+y2vPIqTSd0OHhaxylNHx6Zc7ER6fB0huVfr
-         enH1xw5RR322R70zaZ20Wa7jkv1a/nJvbAFou8rB6W80YeMv/4csQV7PP7YJMTH/uVl1
-         kx670DVqU4XW7YkpaQ0FqL34ZxHBm4Cp6v2xjsiEdmIcVyMmpzBr6reQyGPh8PfvhF/L
-         GTZQ==
-X-Gm-Message-State: AJIora/irPVpWMjLJTUTdjfYDfDYtHkOF3m7cPI4bOLgM8FphCl+2X2U
-        6+j1Dd/cVlwrCelKLbbc8dAEGA==
-X-Google-Smtp-Source: AGRyM1uqSRcNrXIWIdcfwf9tIvKqf3frD5YHCR/8Kn7uL8tqp0xj+ZmXyCUNNLyjPIxc9dcE9oXkdQ==
-X-Received: by 2002:a05:6512:2610:b0:47f:74dc:3205 with SMTP id bt16-20020a056512261000b0047f74dc3205mr4404989lfb.429.1657790368758;
-        Thu, 14 Jul 2022 02:19:28 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id l23-20020a2e5717000000b0025d519d0609sm183071ljb.44.2022.07.14.02.19.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 02:19:28 -0700 (PDT)
-Message-ID: <0d626c44-001a-dd1a-4255-966a3f53f79e@linaro.org>
-Date:   Thu, 14 Jul 2022 11:19:25 +0200
+        Thu, 14 Jul 2022 05:22:35 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B1C13D5D;
+        Thu, 14 Jul 2022 02:20:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657790430; x=1689326430;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=Hxg4gO6Jxz/Xms9zjmnevBwshVx92baqpiGUsry7Yz0=;
+  b=kZZpCx0lIaIaM5yKJ7PSt7o8UXqJQKQtuyszEhfK7pjPofmsfo1So9lw
+   w6V2kVShM3QbYpJKAkMRhsqVZxSy1SBQQvuCMuJhDf2rJvGUJBs4wsaC6
+   +vh9GpBylNiMeFs1F5DzJz8yfohKs+pLLUC/6hZ+n13Ti90IBQtpYprnE
+   0GaKJNGY8zfQ2rMk1Dkh8rp2WAFDfoIaLB39O0BlQUbDK+V2Dm4cWcjwX
+   uQzyJjInG1F+UC+qure9MAGFJkdHLcD6b3Xd6V9ylbVHhXyHksrW7SBFV
+   pfGpVehn872LDCNSxJdnOBqxITBkhAksu9ybqiRAADZEr3Tn80t04544B
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="349429849"
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="349429849"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 02:20:30 -0700
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="593307408"
+Received: from wmoyer-mobl3.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.86.31])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 02:20:27 -0700
+Message-ID: <2802b8c36ad3741701e04ec5f52d2e9b849a90e3.camel@intel.com>
+Subject: Re: [PATCH v4 07/25] KVM: selftests: Add
+ ENCLS_EXITING_BITMAP{,HIGH} VMCS fields
+From:   Kai Huang <kai.huang@intel.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 14 Jul 2022 21:20:25 +1200
+In-Reply-To: <20220714091327.1085353-8-vkuznets@redhat.com>
+References: <20220714091327.1085353-1-vkuznets@redhat.com>
+         <20220714091327.1085353-8-vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 15/30] dt-bindings: phy: add QMP UFS PHY schema
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220707134725.3512-1-johan+linaro@kernel.org>
- <20220707134725.3512-16-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220707134725.3512-16-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,16 +67,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2022 15:47, Johan Hovold wrote:
-> The QMP PHY DT schema is getting unwieldy. Break out the UFS PHY
-> binding in a separate file.
-> 
-> Add an example node based on a cleaned up version of sc8280xp.dtsi.
-> 
+On Thu, 2022-07-14 at 11:13 +0200, Vitaly Kuznetsov wrote:
+> The updated Enlightened VMCS definition has 'encls_exiting_bitmap'
+> field which needs mapping to VMCS, add the missing encoding.
+>=20
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  tools/testing/selftests/kvm/include/x86_64/vmx.h | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/vmx.h b/tools/tes=
+ting/selftests/kvm/include/x86_64/vmx.h
+> index cc3604f8f1d3..5292d30fb7f2 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/vmx.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/vmx.h
+> @@ -208,6 +208,8 @@ enum vmcs_field {
+>  	VMWRITE_BITMAP_HIGH		=3D 0x00002029,
+>  	XSS_EXIT_BITMAP			=3D 0x0000202C,
+>  	XSS_EXIT_BITMAP_HIGH		=3D 0x0000202D,
+> +	ENCLS_EXITING_BITMAP		=3D 0x0000202E,
+> +	ENCLS_EXITING_BITMAP_HIGH	=3D 0x0000202F,
+>  	TSC_MULTIPLIER			=3D 0x00002032,
+>  	TSC_MULTIPLIER_HIGH		=3D 0x00002033,
+>  	GUEST_PHYSICAL_ADDRESS		=3D 0x00002400,
+
+Reviewed-by: Kai Huang <kai.huang@intel.com>
+
+--=20
+Thanks,
+-Kai
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof

@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99FC574064
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 02:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E360574068
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 02:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiGNAO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 20:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
+        id S230238AbiGNASw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 20:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiGNAOu (ORCPT
+        with ESMTP id S229619AbiGNASs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 20:14:50 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E31D11C22;
-        Wed, 13 Jul 2022 17:14:49 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id s21so715889pjq.4;
-        Wed, 13 Jul 2022 17:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ii6n5f/fOOUgR7/Y+drLs3iaf97b0TdLdk/emGlXIF8=;
-        b=ozPeQ7X1kcTmBBScHFKnFfyDyNw/sFsnuWoQBn24wlNUkRMey86RifvZVHAeWEWRAJ
-         AD7u1b6TakJrQk0gpILsEdOdG6RiLTMvbWfI7mDeAa8h6H0IbzUTovEQHdXFicZLuufl
-         s+lPFRm9tWVjFjzG45N7F+OFl7AOui5juvhYJzN1J+o/GusFi50xdTieNjUPo0eT3i8n
-         OiZfWIXO2tfXWEO4XSCB4zNc7KGzDQqzPRHTVxx3UplO4QaiYJoQFRMFI80hnWRozODj
-         hxObSEk7cmBmnqb8oATNr/Uo+gYGBmukMQrXmAQ/ot7dk7KKegxqEor5uLPL7weLA5JQ
-         Z9/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ii6n5f/fOOUgR7/Y+drLs3iaf97b0TdLdk/emGlXIF8=;
-        b=orRJSemPEgTkEJmG2hL9N+dfePCHpJIZMWAAwxZqk0x2CErZuQ3bOMBUYsw7smPOXM
-         GLZSQ9WTTLltJJm962Wvda9dSf38s+cv9PVENOD5U77qKmdp89SE+jeTcisviE64lKGj
-         bbGfZ166F+BR7DxOZnRVOWkMT0+a3sHCAjhiz6m9wxTWammt4WPq9JMKBPKhWIumDcyh
-         /pYKIGsFd2/zwyGdwFZSX2ysS66Co45pOrf1Xw91ydJbm3pk8WfFnwrMX3C8WBUYbGzH
-         xy8XPG93Lw18aTCj1SSLVSMZHAQ0iMMrc3p48PoTkHS1chMzC1oHk4dj2GMoTCnBo4RA
-         DMHQ==
-X-Gm-Message-State: AJIora/n8U03yC2Eoe7436jABbKG3a5VUEU13fCq5vI+Skmo0D/5mzzT
-        CWwSvbCINHT4vXb3CjMBHGI=
-X-Google-Smtp-Source: AGRyM1srwOoc40LfXUKfHHlDlrYs/ZQxb0FsBwcv06gOviPYR31PBxK8XOk5oKfAMOGt0qVpUMw0Zw==
-X-Received: by 2002:a17:903:32c1:b0:16c:35b2:18c3 with SMTP id i1-20020a17090332c100b0016c35b218c3mr5599782plr.126.1657757688598;
-        Wed, 13 Jul 2022 17:14:48 -0700 (PDT)
-Received: from localhost (fmdmzpr02-ext.fm.intel.com. [192.55.54.37])
-        by smtp.gmail.com with ESMTPSA id c14-20020a170902c2ce00b0016c84677aa2sm28094pla.9.2022.07.13.17.14.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 17:14:48 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 17:14:46 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-Subject: Re: [PATCH v7 033/102] KVM: x86/mmu: Add address conversion
- functions for TDX shared bits
-Message-ID: <20220714001446.GR1379820@ls.amr.corp.intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
- <69f4b4942d5f17fad40a8d08556488b8e4b7954d.1656366338.git.isaku.yamahata@intel.com>
- <6cc36b662dffaf0aa2a2f389f073daa2d63a530b.camel@intel.com>
- <20220713045225.GP1379820@ls.amr.corp.intel.com>
- <e4a106ba016d790af60ed72492695ab2b905ede1.camel@intel.com>
+        Wed, 13 Jul 2022 20:18:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7AABF49
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 17:18:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F7E261BBB
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:18:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86EF9C34114;
+        Thu, 14 Jul 2022 00:18:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657757924;
+        bh=s2jppAvnaEIOitXCk0btEGH24tLzcDR+EAid2TPfudM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uW3/HudbjgoOO8bo1RH4yw4Oymhh7H8tO0AVnNmFCBoQnEYJNquuW8voEeDnQ37dt
+         NFDWJ/ONmJLcD1K5BwtyUEAzMAB+b6yiWagd660vcnYe9RCsnwIlHmTWIiCF63Vexv
+         fLKJO9TVCYUR9KgW3KPAGlMez1m0c2tEQx/e4ifsjUD3Gy9UCCWdbwwb2hCUfauzbI
+         bqERJCc26hoZsKL7hm++T7L4j806pPRCWJZZLGwY/XjjftPPosaxTJL24217mkN2UE
+         +qvqAOvXFqk0Z2msgvuXMgbiAhBgl+3WZ4SNivLrAfnClg/MqZESRvCOWBYU3N1RnW
+         YoBoOiU6cHY9w==
+Date:   Wed, 13 Jul 2022 17:18:42 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Ben Hutchings <bwh@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [linux-stable-rc:linux-5.10.y 6996/7120]
+ arch/x86/kernel/ftrace_64.o: warning: objtool: ftrace_epilogue()+0x10:
+ unreachable instruction
+Message-ID: <20220714001842.drzq7oeyk4akk2xo@treble>
+References: <202207130344.dwXyDmTk-lkp@intel.com>
+ <7b7c5908ccb62f365fff8f55d32baae4c4a6ea89.camel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e4a106ba016d790af60ed72492695ab2b905ede1.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7b7c5908ccb62f365fff8f55d32baae4c4a6ea89.camel@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 10:41:33PM +1200,
-Kai Huang <kai.huang@intel.com> wrote:
-
+On Thu, Jul 14, 2022 at 01:41:58AM +0200, Ben Hutchings wrote:
+> On Wed, 2022-07-13 at 03:57 +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> > head:   ba398a0e54049bb6a1c102245ae84103f103ff2c
+> > commit: 8ca9dceaa17983afec1cc8e1a6e76d6bd142447a [6996/7120] objtool: Assume only ELF functions do sibling calls
+> > config: x86_64-rhel-8.3-syz (https://download.01.org/0day-ci/archive/20220713/202207130344.dwXyDmTk-lkp@intel.com/config)
+> > compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> > reproduce (this is a W=1 build):
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=8ca9dceaa17983afec1cc8e1a6e76d6bd142447a
+> >         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+> >         git fetch --no-tags linux-stable-rc linux-5.10.y
+> >         git checkout 8ca9dceaa17983afec1cc8e1a6e76d6bd142447a
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> > > > arch/x86/kernel/ftrace_64.o: warning: objtool: ftrace_epilogue()+0x10: unreachable instruction
+> > 
+> > 
+> > objdump-func vmlinux.o ftrace_epilogue:
+> > 0000 000000000008ca70 <ftrace_epilogue>:
+> > 0000    8ca70:	e9 00 00 00 00       	jmp    8ca75 <ftrace_epilogue+0x5>	8ca71: R_X86_64_PLT32	ftrace_stub-0x4
+> > 0005    8ca75:	66 66 2e 0f 1f 84 00 00 00 00 00 	data16 cs nopw 0x0(%rax,%rax,1)
+> > 
 > 
-> > > 
-> > > And by applying this patch, nothing will prevent you to turn on INTEL_TDX_HOST
-> > > and KVM_INTEL, which also turns on KVM_MMU_PRIVATE.
-> > > 
-> > > So 'kvm_arch::gfn_shared_mask' is guaranteed to be 0?  If not, can legal
-> > > (shared) GFN for normal VM be potentially treated as private?
-> > > 
-> > > If yes, perhaps explicitly call out in changelog so people don't need to worry
-> > > about?
-> > 
-> > struct kvm that includes struct kvm_arch is guaranteed to be zero.
-> > 
-> > Here is the updated commit message.
-> > 
-> > Author: Isaku Yamahata <isaku.yamahata@intel.com>
-> > Date:   Tue Jul 12 00:10:13 2022 -0700
-> > 
-> >     KVM: x86/mmu: Add address conversion functions for TDX shared bit of GPA
-> >     
-> >     TDX repurposes one GPA bit (51 bit or 47 bit based on configuration) to
-> >     indicate the GPA is private(if cleared) or shared (if set) with VMM.  If
-> >     GPA.shared is set, GPA is converted existing conventional EPT pointed by
-> >     EPTP.  If GPA.shared bit is cleared, GPA is converted by TDX module.
-> >     VMM has to issue SEAMCALLs to operate.
-> 
-> Sorry what does "GPA is converted ..." mean?
+> I don't know what's going on here.  There's a jump to a ret (now
+> potentialy a rethunk), and nothing obviously unreachable. 
+> ftrace_epilogue got simplified by commit 0c0593b45c9b "x86/ftrace: Make
+> function graph use ftrace directly" which maybe avoids the warning in
+> the mainline.
 
-Oops. typo. I meant GPA is covered by ...
+The unreachable warning is actually pointing to ftrace_stub().  I think
+you need
+
+  18660698a3d3 ("x86/ftrace: Add UNWIND_HINT_FUNC annotation for ftrace_stub")
 
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Josh

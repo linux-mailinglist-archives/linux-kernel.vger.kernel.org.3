@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F17574B8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6D0574B8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238626AbiGNLIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
+        id S238452AbiGNLIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiGNLIg (ORCPT
+        with ESMTP id S238260AbiGNLIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Jul 2022 07:08:36 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7597E3AE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A80E89;
         Thu, 14 Jul 2022 04:08:34 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 11:08:31 -0000
+Date:   Thu, 14 Jul 2022 11:08:32 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657796912;
+        s=2020; t=1657796913;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qxX5sW+cuNZzG69+cBPf9V0vtrlfTlK6c63AmDLg2Ac=;
-        b=zF26pg5msQNMNO6qOGcYDXNsZXUrjPA9Lgssul1fhwculLD7n5jbt9vkCYVAd3DI6bWgtO
-        P7ppd13ww7dvU/NfNtBmg9RBxG4e4NeGH59hHvFzDdy5lJvwctRvJPutyUhFpv+F8W8MwZ
-        uOBLJ1d5xiwtbvHih3b/8lDFpH5keuzRIof99yNqBIMetfwAkC9BuGe6x2aHcUEyIX5yj6
-        bi6xXMse8Yx+iVSDIP2nhSG81xPMXQzUrXeccg4GfxeEMxkzxjxdJD+DbDNzMI2YHg8bTX
-        AhFb3IOs07Mm6kVcW48vOpjNMvYshFCe9BR85Scl0FaOll9RhYG/+K3lRSMUeg==
+        bh=pHbjtE2rRok+PDLTLfeXHRG66lZG1VHrYTg2Mc7KRmA=;
+        b=l0o0mGVEo3aG1nm/azETnbcv912beRkDj6Mi28Wba/b0XkSKl6c3JKNyWYzfHBNDLDo7OD
+        ejtrRdDUswOYy+cwkKN1F9bi1vMHnhk8OJ+AwC1OXjv9+P8P0Q/ygTv2TZwYDMXH5kdxS2
+        y0Mn6dvB9vvh/Uf1TBfNZFakLezpNSX9PRbzqIs89M7wY4eBLlD8HjM1EDkTHYkF2CuW5Y
+        d9/qQmOKHZFL1ChgSiPIDD74CzkyfvdHGqURn0pwxAPN5zDXWIQQZwBQgmWVkUQJTEkqx/
+        arv1yr3eext0H0MEnh8tebFhbo7N2Q9aW4IF5iBMDwFKxfnsYzKZkrEiwru/GA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657796912;
+        s=2020e; t=1657796913;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qxX5sW+cuNZzG69+cBPf9V0vtrlfTlK6c63AmDLg2Ac=;
-        b=FsAWEZeldOfvL7V8JqmEQ+JkAlmcI0VZU3KBBa/RxAvV8FSM/SZejZ2W+veq0fhkI2KwnJ
-        Izf6IGZClNxmiRBw==
-From:   "tip-bot2 for Alexandre Chartre" <tip-bot2@linutronix.de>
+        bh=pHbjtE2rRok+PDLTLfeXHRG66lZG1VHrYTg2Mc7KRmA=;
+        b=K//a577Lepf+k3NWFVCTMIsf0SGNcjTH5FeqbLqF0R3VvETI8ZU5WhaMD+1diBwrUTYWVs
+        GokR69ylrdBetNAw==
+From:   "tip-bot2 for Jiapeng Chong" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/entry: Remove UNTRAIN_RET from native_irq_return_ldt
-Cc:     Alexandre Chartre <alexandre.chartre@oracle.com>,
+Subject: [tip: x86/urgent] x86/bugs: Mark retbleed_strings static
+Cc:     Abaci Robot <abaci@linux.alibaba.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
         Borislav Petkov <bp@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <35b0d50f-12d1-10c3-f5e8-d6c140486d4a@oracle.com>
-References: <35b0d50f-12d1-10c3-f5e8-d6c140486d4a@oracle.com>
+In-Reply-To: <20220714072939.71162-1-jiapeng.chong@linux.alibaba.com>
+References: <20220714072939.71162-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Message-ID: <165779691151.15455.14072147760711822581.tip-bot2@tip-bot2>
+Message-ID: <165779691246.15455.16253032169822799893.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,38 +68,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     d16e0b26672066035439b2f49887f6576c4a3689
-Gitweb:        https://git.kernel.org/tip/d16e0b26672066035439b2f49887f6576c4a3689
-Author:        Alexandre Chartre <alexandre.chartre@oracle.com>
-AuthorDate:    Wed, 13 Jul 2022 21:58:08 +02:00
+Commit-ID:     33a8573bdfeec5b746aedeea880733a4c7993158
+Gitweb:        https://git.kernel.org/tip/33a8573bdfeec5b746aedeea880733a4c7993158
+Author:        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+AuthorDate:    Thu, 14 Jul 2022 15:29:39 +08:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 14 Jul 2022 09:45:12 +02:00
+CommitterDate: Thu, 14 Jul 2022 09:41:30 +02:00
 
-x86/entry: Remove UNTRAIN_RET from native_irq_return_ldt
+x86/bugs: Mark retbleed_strings static
 
-UNTRAIN_RET is not needed in native_irq_return_ldt because RET
-untraining has already been done at this point.
+This symbol is not used outside of bugs.c, so mark it static.
 
-In addition, when the RETBleed mitigation is IBPB, UNTRAIN_RET clobbers
-several registers (AX, CX, DX) so here it trashes user values which are
-in these registers.
-
-Signed-off-by: Alexandre Chartre <alexandre.chartre@oracle.com>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/35b0d50f-12d1-10c3-f5e8-d6c140486d4a@oracle.com
+Link: https://lore.kernel.org/r/20220714072939.71162-1-jiapeng.chong@linux.alibaba.com
 ---
- arch/x86/entry/entry_64.S | 1 -
- 1 file changed, 1 deletion(-)
+ arch/x86/kernel/cpu/bugs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 285e043..9953d96 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -727,7 +727,6 @@ native_irq_return_ldt:
- 	pushq	%rdi				/* Stash user RDI */
- 	swapgs					/* to kernel GS */
- 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rdi	/* to kernel CR3 */
--	UNTRAIN_RET
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 0dd0471..3a0787a 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -793,7 +793,7 @@ enum retbleed_mitigation_cmd {
+ 	RETBLEED_CMD_IBPB,
+ };
  
- 	movq	PER_CPU_VAR(espfix_waddr), %rdi
- 	movq	%rax, (0*8)(%rdi)		/* user RAX */
+-const char * const retbleed_strings[] = {
++static const char * const retbleed_strings[] = {
+ 	[RETBLEED_MITIGATION_NONE]	= "Vulnerable",
+ 	[RETBLEED_MITIGATION_UNRET]	= "Mitigation: untrained return thunk",
+ 	[RETBLEED_MITIGATION_IBPB]	= "Mitigation: IBPB",

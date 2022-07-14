@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207935750F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A285750FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238671AbiGNOkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        id S238922AbiGNOlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbiGNOkD (ORCPT
+        with ESMTP id S231666AbiGNOlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:40:03 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504C827CC3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:40:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wrcLHCXkGbK7r6biJENdbeKdi71fzKteX/R2jsnl7ww=; b=YGX/bfqIsAQgg4G/mabage3DgV
-        nLKSfaYMdsm91/BlFdSc5LxNk38KojSX8XzP+LSd0J3f9jW6OmJusDcqquwFQjk/G2E4lMs2G1r3R
-        tNbU6mODO2odgtnq+5EPd6pDoQg1BP+G+Rs7LYNRAm+C5+asPC0lax4nxjZmUl/rsQ70UjTXH4UGp
-        OncefpBEF634lTtKIqSGOACwADH6p6sk7UN04x0OzFK0+tsCSLnj6pC9TewOEc32/5S4sAKhH78Z7
-        eABkoOYw8LKuIh/QRrC33yKwriKn4ytZRsDiHTWv6wDiSKn5+UadcrW4CQt5Zh4ip+eMro8cufWIa
-        d8tyVsMg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oC00K-009RYL-Lj; Thu, 14 Jul 2022 14:39:48 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 36DE398017C; Thu, 14 Jul 2022 16:39:47 +0200 (CEST)
-Date:   Thu, 14 Jul 2022 16:39:47 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     Schspa Shi <schspa@gmail.com>, tj@kernel.org,
-        linux-kernel@vger.kernel.org, zhaohui.shi@horizon.ai
-Subject: Re: [PATCH] workqueue: Use active mask for new worker when pool is
- DISASSOCIATED
-Message-ID: <YtAqsyjlvmfDokH/@worktop.programming.kicks-ass.net>
-References: <20220707090501.55483-1-schspa@gmail.com>
- <0320c5f9-cbda-1652-1f97-24d1a22fb298@gmail.com>
+        Thu, 14 Jul 2022 10:41:32 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418F23ED42;
+        Thu, 14 Jul 2022 07:41:32 -0700 (PDT)
+Received: from localhost (mtl.collabora.ca [66.171.169.34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: krisman)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D23FC6601A3B;
+        Thu, 14 Jul 2022 15:41:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657809691;
+        bh=mJIM2zGgD78gQfPnTLvFFsazmmE8m4nDAx4O+dQ3QR0=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=TpfrT7ybUq990Pru3NUwibUPmdfYNU/FPugMFvIN9KOq/p4JnnBGjUly5UwLDJPjU
+         /eFpDjrdsmM3k8JeBVXxVmaboJYRrfjR942ifNvRWuq9VTdt6o173+hYSAfwgswzIZ
+         WSxufC4rQyq9wJsSrppHERrcBRbhBBHm7PzR3opjDIEP7AwUuHj8Yh2TYlOFhjz35w
+         h/yrdv/o1jkNN3zWkW70THW6UFs8qHplYTyOvC9NibKdPISYVnRZJ+honMu7bLeQtg
+         HyyKQ+5CzQ0nqNibp65WQcTPqHz8GGdxH8PO275zBzN9lrlF4upYOb1rwFPah02sbB
+         4zK6xnYcIm4RA==
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+Subject: Re: [PATCH V5 0/2] ublk: add io_uring based userspace block driver
+Organization: Collabora
+References: <20220713140711.97356-1-ming.lei@redhat.com>
+Date:   Thu, 14 Jul 2022 10:41:27 -0400
+In-Reply-To: <20220713140711.97356-1-ming.lei@redhat.com> (Ming Lei's message
+        of "Wed, 13 Jul 2022 22:07:09 +0800")
+Message-ID: <87h73jah9k.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0320c5f9-cbda-1652-1f97-24d1a22fb298@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 05:52:58PM +0800, Lai Jiangshan wrote:
-> 
-> 
-> CC Peter.
-> Peter has changed the CPU binding code in workqueue.c.
+Ming Lei <ming.lei@redhat.com> writes:
 
-[ 1622.829091] WARNING: CPU: 3 PID: 31 at kernel/sched/core.c:7756 sched_cpu_dying+0x74/0x204
-[ 1622.829374] CPU: 3 PID: 31 Comm: migration/3 Tainted: P           O      5.10.59-rt52 #2
-									^^^^^^^^^^^^^^^^^^^^^
+> ublk driver is one kernel driver for implementing generic userspace block
+> device/driver, which delivers io request from ublk block device(/dev/ublkbN) into
+> ublk server[1] which is the userspace part of ublk for communicating
+> with ublk driver and handling specific io logic by its target module.
 
-I think we can ignore this as being some ancient kernel. Please try
-something recent.
+Hey Ming,
+
+I didn't get a chance to look deep into v5 as I was on a last minute
+leave in the past few days.  Either way, I went through them now and the
+patches look good to me.  I'm quite happy they are merged, thank you
+very much for this work.
+
+Just for ML archive purposes, the entire series is
+
+Reviewed-by: Gabriel Krisman Bertazi <krisman@collabora.com>
+
+:)
+
+-- 
+Gabriel Krisman Bertazi

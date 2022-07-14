@@ -2,71 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB48C575035
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2EE575036
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239911AbiGNOAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
+        id S240250AbiGNOAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239878AbiGNN6p (ORCPT
+        with ESMTP id S240386AbiGNN6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Jul 2022 09:58:45 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F65C112B
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:58:04 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id d12so2916029lfq.12
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:58:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AsyrMzElWzo80Z5egogMNWofiRDznVZXTCiFutbvKII=;
-        b=eZvDJbMtdOPQ3Hlc73SGr+GXOezfkTn0ravZ4O7F1MoOod7OhqpD8vvfNfTFMeVp74
-         j5NNgqimVWpvNd+hChUbhIZNlrM3MLHTmzV8E6ztrs4iqKNuKTpgKjgCI4GQK+C5k31G
-         lj6n12ONLcGYveOkj8O41G87V4fCSke/tHYo+N6uFox0EqjJa6jhVvgyoNGqABFydujL
-         sWXjC6waub7/4XEcL6TJUQnrYqacqJKZLdYZ+WzEdL1NQ1xLz9C0JaG+PQbMiWoQEufV
-         qxsp7Y+znXbPuD9CuWNsBW1ZYNAV1G/6IM6bdntXeYy61oTPfMlrmrsJqSzmNcjigXAS
-         u1IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AsyrMzElWzo80Z5egogMNWofiRDznVZXTCiFutbvKII=;
-        b=GS8jPoHzc9q+TKx/OV6zP09zwOEaXs1ncL0kgfgvJT/+G8+lzUtbKW7lzhqZ1KV+BK
-         IVWjmjOnhWPAjRy8iIMMPRmCCx7yGb+GzjssK9QuVuuKSABHFMnpD0jpbuz/1VDzunv+
-         NK2ZerhyJAKhCPbPMXBYsNqJ97rhVymaLbvDAfuEkcBPNqxMNZZhCAk03E1E7hOHoqVR
-         Pe+QRwHcnk8MbWOyCR18+6p43k/+nmC7WUjvpBzaF/enP4bq+MbWKMgAjqDdDOCgn+tZ
-         ubbYokJ1nTibZibwfC6PQ05AdVS6VhlEbtfjDgkP19yH/UnYdF0XeCF7AKjB24M04tfr
-         uZFQ==
-X-Gm-Message-State: AJIora/rQkIBvg9diMHUjdfQZ9KP8m2qpq9lkBm5xsf9Yc83f9A3DsAY
-        +vom0hKnsu+Z+HBQPhGlHz0LE+brJGsscycLizcPJQ==
-X-Google-Smtp-Source: AGRyM1utf5B4o7kELwBxm7mmneS2IRfBXaZ05RbaenlLg45jt5LuOHpIalhl4TyctEbGWWsqOS6t/zSaVykK5WbqsVo=
-X-Received: by 2002:ac2:47f6:0:b0:488:b649:9f77 with SMTP id
- b22-20020ac247f6000000b00488b6499f77mr5638296lfp.559.1657807082858; Thu, 14
- Jul 2022 06:58:02 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9CA1030;
+        Thu, 14 Jul 2022 06:57:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94C88620D7;
+        Thu, 14 Jul 2022 13:57:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB2ACC34114;
+        Thu, 14 Jul 2022 13:57:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657807077;
+        bh=B3D92egulcgsm7n+0NyPggYVx4mKUFGfzEbgM/Tvgsk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Nt+67W1KduX3BsbSmUru6FCod7KTvA+ioLWnF26sxzcAHfSjz34RJ8PPac7yaAOmZ
+         t8MNSLtjQ40sotrT/LNtiYlZX/H92nP0yBGVmRReE1mKvNehxMsY2b0ZZnIS19Pdlg
+         zHQ4dwHiOPguyTlmUSDdM5BO5WGjq+m1IGH1C2vqwdrw9zWdi8VzvaHgKMCDfo7TKA
+         j6E4O/PR7OCNYtHryj5p0WV+NVXHzjJ1Cli5CQLdEKDhv3j3Q8D8q0Y5uL1JZHBVjZ
+         ykJo5pWwmE4x/OpaFWRVHrwhnpYCWsFbmLd5191EuVPHQLAlvuYMLN4GdHU6tG8qm4
+         dVsukeS0/C09g==
+From:   Mark Brown <broonie@kernel.org>
+To:     vaishnav.a@ti.com, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Cc:     p.yadav@ti.com, vigneshr@ti.com
+In-Reply-To: <20220601071611.11853-1-vaishnav.a@ti.com>
+References: <20220601071611.11853-1-vaishnav.a@ti.com>
+Subject: Re: [PATCH -next] spi: cadence-quadspi: Remove spi_master_put() in probe failure path
+Message-Id: <165780707568.72312.6357335988927291228.b4-ty@kernel.org>
+Date:   Thu, 14 Jul 2022 14:57:55 +0100
 MIME-Version: 1.0
-References: <20220710230603.13526-1-semen.protsenko@linaro.org>
- <20220710230603.13526-7-semen.protsenko@linaro.org> <dcf4da29-9da0-69ea-300e-80d1f5cc10a3@arm.com>
-In-Reply-To: <dcf4da29-9da0-69ea-300e-80d1f5cc10a3@arm.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Thu, 14 Jul 2022 16:57:51 +0300
-Message-ID: <CAPLW+4nc2B0J4yvnz37MrJnTHKtkDCNBX5L2ff_YRGDEbZiKQA@mail.gmail.com>
-Subject: Re: [PATCH v2 6/7] iommu/exynos: Add SysMMU v7 register sets
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        David Virag <virag.david003@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,102 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 at 20:00, Robin Murphy <robin.murphy@arm.com> wrote:
->
-> On 2022-07-11 00:06, Sam Protsenko wrote:
-> > SysMMU v7 might have different register layouts (VM capable or non-VM
-> > capable). Check which layout is implemented in current SysMMU module and
-> > prepare the corresponding register table for futher usage.
-> >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > ---
-> > Changes in v2:
-> >    - (none) This patch is new and added in v2
-> >
-> >   drivers/iommu/exynos-iommu.c | 26 ++++++++++++++++++++++----
-> >   1 file changed, 22 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
-> > index 48681189ccf8..64bf3331064f 100644
-> > --- a/drivers/iommu/exynos-iommu.c
-> > +++ b/drivers/iommu/exynos-iommu.c
-> > @@ -166,6 +166,8 @@ static u32 lv2ent_offset(sysmmu_iova_t iova)
-> >   enum {
-> >       REG_SET_V1,
-> >       REG_SET_V5,
-> > +     REG_SET_V7_NON_VM,
-> > +     REG_SET_V7_VM,
-> >       MAX_REG_SET
-> >   };
-> >
-> > @@ -201,6 +203,16 @@ static const unsigned int sysmmu_regs[MAX_REG_SET][MAX_REG_IDX] = {
-> >               0x00, 0x04, 0x08, 0x0c, 0x10, 0x14, 0x18, 0x20, 0x24,
-> >               0x60, 0x64,
-> >       },
-> > +     /* SysMMU v7: Default register set (non-VM) */
-> > +     {
-> > +             0x00, 0x04, 0x08, 0x0c, 0x10, 0x14, 0x18, 0x20, 0x24,
-> > +             0x60, 0x64,
-> > +     },
-> > +     /* SysMMU v7: VM capable register set */
-> > +     {
-> > +             0x00, 0x04, 0x08, 0x800c, 0x8010, 0x8014, 0x8018, 0x8020,
-> > +             0x8024, 0x60, 0x64,
->
-> Yuck, see, it's turning into an unreadable mess already.
->
+On Wed, 1 Jun 2022 12:46:11 +0530, Vaishnav Achath wrote:
+> Currently the spi_master is allocated by devm_spi_alloc_master()
+> and devres core manages the deallocation, but in probe failure
+> path spi_master_put() is being handled manually which causes
+> "refcount underflow use-after-free" warning when probe failure happens
+> after allocating spi_master.
+> 
+> Trimmed backtrace during failure:
+> 
+> [...]
 
-Will be reworked in v2, using variant struct approach suggested by Krzysztof.
+Applied to
 
-> This is also raising the question of whether it's worth abstracting
-> accesses to the common registers if it means having an ever-increasing
-> number of copies of those same offsets. Personally I'd leave those using
-> regular readl/writel, but even if there's an argument for keeping all
-> the callsites consistent (modulo the one that already can't be), there's
-> no reason the wrappers couldn't pick up the slack, e.g.:
->
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Agreed. Gonna leave the common regs out of it in v2, having only
-non-common registers in the variant structure. Also in v2 gonna stick
-with plain readl/writel calls, using SYSMMU_REG() wrapper suggested by
-Krzysztof.
+Thanks!
 
-> static void sysmmu_write(struct sysmmu_drvdata *data, size_t idx, u32 val)
-> {
->         unsigned int offset;
->
->         if (idx <= IDX_STATUS) {
->                 offset = idx * 4;
->         } else {
->                 offset = data->regs[idx - IDX_PT_BASE];
->                 if (WARN_ON(!offset))
->                         return;
->         }
->         writel(val, data->sfrbase + offset);
-> }
->
-> Indeed, not abstracting REG_MMU_CTRL via data->regs would then make it
-> trivial to be robust against unimplemented registers without even having
-> to remember to initialise their offsets to some magic value, which seems
-> rather attractive.
->
+[1/1] spi: cadence-quadspi: Remove spi_master_put() in probe failure path
+      commit: 73d5fe046270281a46344e06bf986c607632f7ea
 
-Just on the discussion point (as this function won't be present in
-v2): one reason for this rework is to avoid using if-else branching,
-AFAIU those might have some performance impact (caches/branch
-prediction). Also the code looks better that way. Of course, in this
-particular driver those I/O calls don't happen very often, but still.
-One-line static function I used in v1 would be probably inlined by the
-compiler. Also SysMMU register layout(s) doesn't seem to be very
-consistent, w.r.t. offset values :)
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Anyway, I hope the way it's done in v2 will be more to your liking.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-> (also, as it only strikes me now, why are we passing enum values around
-> as size_t? That's just odd)
->
-> Thanks,
-> Robin.
->
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-[snip]
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

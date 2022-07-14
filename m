@@ -2,126 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94884574A91
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC315574A96
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235036AbiGNKX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
+        id S237906AbiGNK0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiGNKX0 (ORCPT
+        with ESMTP id S231582AbiGNK0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:23:26 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30396222B3;
-        Thu, 14 Jul 2022 03:23:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657794205; x=1689330205;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UbzX0APp7Mo6B5jHE+G1Jm7JNvJbZu+NCDrRJ18nxbk=;
-  b=A078pS08PsHSUlv4nV1RA/3Meh7UKv8tMDzhnCopKBi1AqqJFv7+jDUi
-   CltXs6sXLwxyNsDURN/Y9hkUGPmFrKKbJLA12ALWhH0HjtVhh2ZtoWcXL
-   hFGIO2nLZfdtoN4G/WptmUWed2pikR5W7HOBflzghnz5/w3yFvnwAMzmL
-   o9jodb4x6g0xD+KMJfllGlS5yJqduK4iD/Xtinax7bCoVB0iXQdkSxhiE
-   in2QmOadHvQwT5gqkog9jjLrabH4vUXv1ldJcdYl43a3/gAbL0k7DiZR5
-   aE0dTKZtCLQVg3Z5abmPO/b/66uzCfyCIAWHWI9h3uzNVv/yWOrivgCao
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265262673"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="265262673"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 03:23:23 -0700
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="596044416"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 03:23:17 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oBw01-001D7R-0H;
-        Thu, 14 Jul 2022 13:23:13 +0300
-Date:   Thu, 14 Jul 2022 13:23:12 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Henning Schild <henning.schild@siemens.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
-Message-ID: <Ys/ukP8dqnwUoou4@smile.fi.intel.com>
-References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
- <YqBS8I62YBPFC9iS@google.com>
- <CAHp75Ve9Lju8AEQd5huz1aYGg4sOu-ae7tTdyDWCXPCBR=wXbQ@mail.gmail.com>
- <YrGyWCaY+swYAYzH@smile.fi.intel.com>
- <YryAXlZqcr/liN7n@smile.fi.intel.com>
- <20220629191406.35965d5b@md1za8fc.ad001.siemens.net>
- <Ys71dyMdozGUAto0@smile.fi.intel.com>
- <20220713204827.0b290fd7@md1za8fc.ad001.siemens.net>
- <Ys/jz7HqhrxSCOnV@google.com>
+        Thu, 14 Jul 2022 06:26:38 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECC247B8A;
+        Thu, 14 Jul 2022 03:26:37 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id r10so1948622wrv.4;
+        Thu, 14 Jul 2022 03:26:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RFrMj3I9fEKLl5pZ59KkM7PDh3+un+j2V5sd8WHdwXA=;
+        b=Cr7goEIzRVsjKcdhoo6Jhcyv8MieqHS3qgbivPcK2pdzkUesVqq29HIfjOz44xNVa7
+         bU0Toe0+X6JLI8gAahikvmEK0C3D1lsj9h4MLBLE8/8SMEK0dX8SAKxN5MZ7nyTNJG51
+         JMAbBqq21z7iyJVTH81gtPkTvymsFiZOIo4aD0KAwU9Ji0nrM4FI5yA/l/9opNiPUyUE
+         iikQdJlUZL09//UQahetomPutOzgyR2zxHcU2lhYWNnkAiDEvJPo7Az2VATbakvFsz5k
+         n7M53i/9YHkEFRyKz0Hao6EpsCerXiyfXZ4yA9wU4eY2y/RJzbbRdiOAMeSQ3xp/MXJc
+         lQqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RFrMj3I9fEKLl5pZ59KkM7PDh3+un+j2V5sd8WHdwXA=;
+        b=52UY8YPQIKVIOrNajrRSUwDBUO+Ud7GGHUs2DZ3D498lluoXRknyALW0h9vPsVxRBS
+         lQPwXMQWSBlMHUkq89AA6/G86iqidcViS217siLeE6c4BeKDjs5x5BHRzISZNSicH6Qg
+         3bf/Fl73ReWmlo+0QNF7o/Ohj1h+rZzwjtGZlVzby2s4EeFEYvIKM/qDfffO5pvRPLgD
+         OUvczp/A2TI9ZLwa8Sod0B6AP/Bo+q8Fo7jlgPDHb4SjW021+TtiiO21RQ+oIWmRdDCR
+         pNMQ0Np++YVoc2Ox8r/mjKP/ZkFxmBqJbg2sNs5JQTLfrDTPfgiUbGOJGECqhKf8OoPw
+         ql2A==
+X-Gm-Message-State: AJIora+ELV59WjY4hUq7J6WQDYtuHmAbD+9mFqV7hTCHeifjOLdd8Wqu
+        mtykPauIO95zx33K+ifcS7g=
+X-Google-Smtp-Source: AGRyM1t6IHbW5cOG4J3Y5OSrq8ocfoOIrKcBW9byPXKZ6lAdeOX4taN+i6aFg+nQcHbbF2VdfLeK8g==
+X-Received: by 2002:a5d:6da4:0:b0:21d:7e96:c040 with SMTP id u4-20020a5d6da4000000b0021d7e96c040mr7670447wrs.417.1657794396367;
+        Thu, 14 Jul 2022 03:26:36 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id h26-20020a05600c2cba00b003a2e5f536b3sm5402213wmc.24.2022.07.14.03.26.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 03:26:35 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        linux-hyperv@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] Drivers: hv: Fix spelling mistake "total_pages_commited" -> "total_pages_committed"
+Date:   Thu, 14 Jul 2022 11:26:34 +0100
+Message-Id: <20220714102634.22184-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys/jz7HqhrxSCOnV@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 10:37:19AM +0100, Lee Jones wrote:
-> On Wed, 13 Jul 2022, Henning Schild wrote:
-> > Am Wed, 13 Jul 2022 19:40:23 +0300
-> > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+There is a spelling mistake in a seq_printf message. Fix it.
 
-...
+Fixes: e237eed373cc ("Drivers: hv: Create debugfs file with hyper-v balloon usage information")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/hv/hv_balloon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > And maybe there is a way/process to escalate to another maintainer.
-> > Does anyone even know what is going on with Pavel? 
-> 
-> I'll take the hit.  He had his chance.
-> 
-> I'm happy to move forward with Andy's review.
-
-Thank you, Lee, much appreciated!
-The patches (9..12) have my SoB, I think it should be enough, but if you thinks
-they need my Rb tag, I can reply to them with it.
-
-> (Side note: Seeing as Pavel hasn't been seen for 2 months, I'll also
->  follow-up on  the LED ML to offer to become temporary maintainer for a
->  bit)
-
-This is good news as well, because I noticed there are a few series there stuck
-as well.
-
+diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
+index ba52d3a3e3e3..fdf6decacf06 100644
+--- a/drivers/hv/hv_balloon.c
++++ b/drivers/hv/hv_balloon.c
+@@ -1892,7 +1892,7 @@ static int hv_balloon_debug_show(struct seq_file *f, void *offset)
+ 	/* pages we have given back to host */
+ 	seq_printf(f, "%-22s: %u\n", "pages_ballooned", dm->num_pages_ballooned);
+ 
+-	seq_printf(f, "%-22s: %lu\n", "total_pages_commited",
++	seq_printf(f, "%-22s: %lu\n", "total_pages_committed",
+ 				get_pages_committed(dm));
+ 
+ 	seq_printf(f, "%-22s: %llu\n", "max_dynamic_page_count",
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.3
 

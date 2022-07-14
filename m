@@ -2,167 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE28575653
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 22:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBA9575656
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 22:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239903AbiGNUZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 16:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44346 "EHLO
+        id S240195AbiGNUZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 16:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbiGNUZK (ORCPT
+        with ESMTP id S231793AbiGNUZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 16:25:10 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1FC27B36;
-        Thu, 14 Jul 2022 13:25:09 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id 80A352B05ABD;
-        Thu, 14 Jul 2022 16:25:05 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 14 Jul 2022 16:25:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pjd.dev; h=cc:cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1657830305; x=1657833905; bh=dEHQ4rwrUu
-        F1UGpd+DLi5Y852uMVTewadoYXIvYJyJM=; b=wRYAFZ/7xoGteRVuspPfArr2Wv
-        QxSlR3KayGoBNWtidEUqGY1ThClRBiPK3OjVq5PRdJfEF4zZ+xtjym31cJ/taLb4
-        gxbhcYJ9AibBSgIev/GG8WaWBROGmnz8mJ8mU2YmBmWQI5iQYRSjQvHXMS3qebMk
-        EpuqmuPvfMeEEi4VOnNjqSrIKtsN/JcsNQRYPTS1GKIFNSNS8oLHo5GJakO/dW0X
-        CRZ1kuqsJWiQr3uQL8oc1N125W7DywFqwYKvgLy/+BQ5wzCIrEP7SY2AAp9QTtDd
-        gbaoiA7IseY+dDNSSSoVKKA3BgZ3O38f8j2Ob7NuXu2Vl3R88UTrd21b9y7w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1657830305; x=1657833905; bh=dEHQ4rwrUuF1UGpd+DLi5Y852uMV
-        TewadoYXIvYJyJM=; b=w9n6I+xL9nIeF9NVBJz20HOQFomsC8mPpKBrKhetOET3
-        dCgUR+cnC0xytQ7JUEv/Yjs620/ZeFIM16VdbHw8ecI+1cOw6fjq9FDkpDF0WhoX
-        JamGjntgTRcfHMjpAmH22+S0Zt/DB55+2PA1zP9dr7yJnmQdTdLe0SKMuOr3O5hi
-        /Rf9wVG9GRwXZWm7soku5Qzzfmb2rn8fS6NzMX7ekFNMELnG5V4T6OKTLFWjf5rP
-        WD7iSsrXT5pKtVi0uDziPmIVDfxugelQFEh7QUV0gsA+4s47JvQCJT9DT8czXpP6
-        E0PDGBAMMGdEt6JBwoesC41AgItNRD7aLiEHANcnZQ==
-X-ME-Sender: <xms:n3vQYoxYrmLBvOTZxcr3XQ0RYmp21wtQnMVw1C5VGdTILhNaplnGLQ>
-    <xme:n3vQYsSXz_jfKXJPBkdrI2wQH7_aqZTqHWIqFmCrvENEW23PJJjm-C-b4-cLaTqLa
-    KsKX3K_JnL-K1m70_s>
-X-ME-Received: <xmr:n3vQYqUOzkq8L_zwBJd9Ss6Pu0qV0mcWN-jPwBBozzLfQtPWoPUo-QxWojK_OYE2akWaR0oQtY_8InXWUIDm4c9G>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejledgudehudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefrvght
-    vghrucffvghlvghvohhrhigrshcuoehpvghtvghrsehpjhgurdguvghvqeenucggtffrrg
-    htthgvrhhnpeejudfgfedvhffhffeiudefvdffhfegffegjefffedtheekgfehgfefveeh
-    feejteenucffohhmrghinhepohhpvghntghomhhpuhhtvgdrohhrghdpkhgvrhhnvghlrd
-    horhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
-    mhepmhgrihhlfhhrohhmpehpvghtvghrsehpjhgurdguvghv
-X-ME-Proxy: <xmx:n3vQYmjm49W_-Ii0_MrEhS1Lf1UCW8CV_EUm3sbSxYsUDAfaMJG2ww>
-    <xmx:n3vQYqBOLqcQiHvi3fs9StcThDD2I5sa8v7_OASlZEAdCjvFD2jT3g>
-    <xmx:n3vQYnLWwYUykBvsuk04ZbYlmpNwAetcXgYBIoHf8e1otp9W9jJABg>
-    <xmx:oHvQYiZNTe8EZhARh8DUBjNpok7vd-vCVkqg1KEhDJWmklGDc12oaETh6Zg>
-Feedback-ID: i9e814621:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 14 Jul 2022 16:25:01 -0400 (EDT)
-Date:   Thu, 14 Jul 2022 13:24:59 -0700
-From:   Peter Delevoryas <peter@pjd.dev>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Logananth Sundararaj <logananth13.hcl@gmail.com>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        naveen.mosess@hcl.com, thangavel.k@hcl.com,
-        SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>, Olof Johansson <olof@lixom.net>,
-        garnermic@gmail.com, velumanit@hcl.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3] The Yosemite V3.5 is a facebook multi-node server
- platform that host four OCP server. The BMC in the Yosemite V3.5 platform
- based on AST2600 SoC.
-Message-ID: <YtB7mw1YSahFg0xI@pdel-mbp.dhcp.thefacebook.com>
-References: <20220707132054.GA10610@logan-ThinkPad-T14-Gen-1>
- <CAK8P3a0P2u+LdXcU7As=dfNbg_J2eWfhgB9TT1-xVyH0v6OM5Q@mail.gmail.com>
- <YtBazSo/uJzFeF+L@pdel-mbp>
- <CAK8P3a1juHV6N2QtXaEcobWs6kQHBqqUn9MynvobyJtFFyOsfg@mail.gmail.com>
+        Thu, 14 Jul 2022 16:25:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27D71E3E4;
+        Thu, 14 Jul 2022 13:25:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BE8A6222E;
+        Thu, 14 Jul 2022 20:25:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F839C34115;
+        Thu, 14 Jul 2022 20:25:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657830346;
+        bh=FhIKhIYhRK71ucJvwaPwDTehtabRlgM5Sr6TUUsrpgY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FzCWQTznCPdsJxZOTczXvJx5TTOzK27deQ7SBg4/OtI1DglpOHA9o7H4JFkBlqMCE
+         FDTDIbvd/RmSnELUw01L4uXNaSzRH8LvHanOUuEOi148ruZU4UYOjh/LOulyfP5mQf
+         pwBxx/lYri9z6BZQR9xei5jDYNo/Emaip0Ow3ygDbn2G5UQbm/lhKpX7aPyIkDBR64
+         1hPDguOHVh88XzLpzBmbe0n4Lgco/7ofBOumLRKK2Dz+xuhuzNZVZvbtAeOcuAvPz0
+         xoxbOMhS93UctLq+Sc4aQlH/vzLa7jatULlm8RkSWBQ97n8mfOdxjGOBN+X5IUisdh
+         bLFxwzd9ZWIEQ==
+Date:   Thu, 14 Jul 2022 22:25:41 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: LED Maintainership
+Message-ID: <20220714222541.232eadfb@thinkpad>
+In-Reply-To: <YtAIm+X2XchcSkFX@google.com>
+References: <Ys/kruf8DE4ISo8M@google.com>
+        <20220714112326.GA16407@duo.ucw.cz>
+        <YtAIm+X2XchcSkFX@google.com>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a1juHV6N2QtXaEcobWs6kQHBqqUn9MynvobyJtFFyOsfg@mail.gmail.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 10:15:15PM +0200, Arnd Bergmann wrote:
-> On Thu, Jul 14, 2022 at 8:05 PM Peter Delevoryas <peter@pjd.dev> wrote:
-> > On Thu, Jul 07, 2022 at 03:33:48PM +0200, Arnd Bergmann wrote:
-> > > > +       model = "Facebook fby35";
-> > > > +       compatible = "facebook,fby35", "aspeed,ast2600";
-> > > > +
-> > > > +       aliases {
-> > > > +               serial4 = &uart5;
-> > > > +       };
-> > >
-> > > Why not start at serial0 here?
-> >
-> > Hey, Facebook person jumping in here (using a personal email):
-> >
-> > I think you're right, it should be like this:
-> >
-> >         aliases {
-> >                 serial0 = &uart5;
-> >                 serial1 = &uart1;
-> >                 serial2 = &uart2;
-> >                 serial3 = &uart3;
-> >                 serial4 = &uart4;
-> >         };
-> 
-> Are you actually using all five uarts though?
+On Thu, 14 Jul 2022 13:14:19 +0100
+Lee Jones <lee.jones@linaro.org> wrote:
 
-Actually yes, I should have mentioned this in my previous message.
+> On Thu, 14 Jul 2022, Pavel Machek wrote:
+>=20
+> > Hi!
+> >  =20
+> > > Not sure what's going on behind the scenes, but it looks as though the
+> > > LED subsystem has been left unmaintained for at least 2 months now. =
+=20
+> >  =20
+> > > Does anyone have any objection to me stepping in as temporary
+> > > maintainer until the situation is resolved? =20
+> >=20
+> > Yes, I'm a bit busy and would not mind help.
+> >=20
+> > There's a lot of easy stuff in the LED -- drivers not introducing new
+> > APIs -- and some quite tricky stuff -- userland API leaves... a lot to
+> > be desired, and we are in the middle of defining multicolor API.
+> >=20
+> > I wanted to ask Marek (in cc now) if he would be interested in
+> > helping. He knows the APIs / issues, and actually has multicolor LEDs
+> > he cares about. Marek, are you interested?
+> >=20
+> > If Marek is not interested, yes, help with the driver stuff would be
+> > welcome. =20
+>=20
+> No problem.  The offer still stands.
+>=20
+> I guess Marek and I aren't mutually exclusive either.
+>=20
+> Any harm in us both helping out (if Marek is also interested that is)?
 
-YosemiteV3.5 is similar to YosemiteV3, which you can see here:
+Hello Lee, Pavel,
 
-https://www.opencompute.org/products/423/wiwynn-yosemite-v3-server
+I am interested, but unfortunately I won't have much time for reviewing
+patches until september.
 
-This dts is for the BMC on the sled baseboard, and it manages the 4 slots in the
-sled. Each slot has a "Bridge Interconnect" (BIC) (an AST1030) that manages the
-slot CPU/etc. uart1 is connected to a uart on slot1's BIC, uart2 to slot2, etc.
+=46rom september, I would be open to co-maintaining.
 
-We also have a work-in-progress QEMU model for this:
-
-https://lore.kernel.org/qemu-devel/20220714154456.2565189-1-clg@kaod.org/
-
-> 
-> > > > +       chosen {
-> > > > +               stdout-path = &uart5;
-> > > > +               bootargs = "console=ttyS4,57600n8 root=/dev/ram rw vmalloc=384M";
-> > > > +       };
-> >
-> > Also: if we do serial0 = &uart5, it should be console=ttyS0, not ttyS4.
-> >
-> > >
-> > > The bootargs should really come from the boot loader.
-> >
-> > What if we want to boot the kernel by itself with QEMU? It's kinda annoying to
-> > have to specify '-append "console=ttyS0,57600n8...' everytime, or to have to use
-> > a wrapper script. But, it's also a source of bugs: I realized yesterday the
-> > dts we were using here:
-> >
-> > https://github.com/facebook/openbmc-linux/blob/e26c76992e0761d9e440ff514538009384c094b4/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-> >
-> > Has the wrong console setting.
-> 
-> You can encode the uart settings like
-> 
->            stdout-path = "serial0:115200n8"
-> 
-> the rest really should be passed on the command line, not in
-> the DT shipped with the kernel.
-> 
->         Arnd
+Marek

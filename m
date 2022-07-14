@@ -2,39 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3585745DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E936D5745DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236912AbiGNH3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 03:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
+        id S234236AbiGNHbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 03:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiGNH3v (ORCPT
+        with ESMTP id S231281AbiGNHbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 03:29:51 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C997B31DEA;
-        Thu, 14 Jul 2022 00:29:49 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VJI8bZq_1657783782;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VJI8bZq_1657783782)
-          by smtp.aliyun-inc.com;
-          Thu, 14 Jul 2022 15:29:47 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     tglx@linutronix.de
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] x86/bugs: make retbleed_strings static
-Date:   Thu, 14 Jul 2022 15:29:39 +0800
-Message-Id: <20220714072939.71162-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 14 Jul 2022 03:31:14 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBF530F7F;
+        Thu, 14 Jul 2022 00:31:13 -0700 (PDT)
+X-UUID: 932b742c3a0648f9b5f4477775c95999-20220714
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:257bfe7c-b61a-482f-a1e8-442ce3a16703,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:0f94e32,CLOUDID:e9514664-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 932b742c3a0648f9b5f4477775c95999-20220714
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <mark-pk.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1739704461; Thu, 14 Jul 2022 15:31:06 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 14 Jul 2022 15:31:05 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Thu, 14 Jul 2022 15:31:05 +0800
+From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        "Mel Gorman" <mgorman@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <yj.chiang@mediatek.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        <stable@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH 5.4] sched/rt: Disable RT_RUNTIME_SHARE by default
+Date:   Thu, 14 Jul 2022 15:30:52 +0800
+Message-ID: <20220714073055.15049-1-mark-pk.tsai@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,29 +67,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This symbol is not used outside of bugs.c, so marks it static.
+From: Daniel Bristot de Oliveira <bristot@redhat.com>
 
-arch/x86/kernel/cpu/bugs.c:796:12: warning: symbol 'retbleed_strings' was not declared. Should it be static?
+commit 2586af1ac187f6b3a50930a4e33497074e81762d upstream.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+The RT_RUNTIME_SHARE sched feature enables the sharing of rt_runtime
+between CPUs, allowing a CPU to run a real-time task up to 100% of the
+time while leaving more space for non-real-time tasks to run on the CPU
+that lend rt_runtime.
+
+The problem is that a CPU can easily borrow enough rt_runtime to allow
+a spinning rt-task to run forever, starving per-cpu tasks like kworkers,
+which are non-real-time by design.
+
+This patch disables RT_RUNTIME_SHARE by default, avoiding this problem.
+The feature will still be present for users that want to enable it,
+though.
+
+Signed-off-by: Daniel Bristot de Oliveira <bristot@redhat.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Wei Wang <wvw@google.com>
+Link: https://lkml.kernel.org/r/b776ab46817e3db5d8ef79175fa0d71073c051c7.1600697903.git.bristot@redhat.com
+Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Cc: stable@vger.kernel.org
 ---
- arch/x86/kernel/cpu/bugs.c | 2 +-
+ kernel/sched/features.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 0dd04713434b..3a0787a36910 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -793,7 +793,7 @@ enum retbleed_mitigation_cmd {
- 	RETBLEED_CMD_IBPB,
- };
+diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+index 2410db5e9a35..66c74aa4753e 100644
+--- a/kernel/sched/features.h
++++ b/kernel/sched/features.h
+@@ -77,7 +77,7 @@ SCHED_FEAT(WARN_DOUBLE_CLOCK, false)
+ SCHED_FEAT(RT_PUSH_IPI, true)
+ #endif
  
--const char * const retbleed_strings[] = {
-+static const char * const retbleed_strings[] = {
- 	[RETBLEED_MITIGATION_NONE]	= "Vulnerable",
- 	[RETBLEED_MITIGATION_UNRET]	= "Mitigation: untrained return thunk",
- 	[RETBLEED_MITIGATION_IBPB]	= "Mitigation: IBPB",
+-SCHED_FEAT(RT_RUNTIME_SHARE, true)
++SCHED_FEAT(RT_RUNTIME_SHARE, false)
+ SCHED_FEAT(LB_MIN, false)
+ SCHED_FEAT(ATTACH_AGE_LOAD, true)
+ 
 -- 
-2.20.1.7.g153144c
+2.18.0
 

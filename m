@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A69574D15
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41493574CF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239212AbiGNMHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
+        id S238098AbiGNMGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238980AbiGNMGg (ORCPT
+        with ESMTP id S238744AbiGNMGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:06:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719B75C9FC
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:06:34 -0700 (PDT)
+        Thu, 14 Jul 2022 08:06:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409AD5C9C7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:06:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88AABB824DD
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 12:06:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81254C341CF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC64961E36
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 12:06:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77DAFC341CD;
         Thu, 14 Jul 2022 12:06:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1657800390;
-        bh=gcA9dOS6rwcNmQfl8nke3c+qO7FUQU/QyXIVIH9SjiU=;
+        bh=EJ+Eu+AlHvcZJVhLfS1AaAv6RAV4GPKJyWGwKlKkeUo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sN3mwrVk2ZJrJEs3O1JYU5A0HKKO1m+I1ALTOeFIpI9xLW7iNMJvgiL1qE5gtXSOE
-         PFbF+sg2RdBlhUjNifw+V2P63CgH7qMkuCBRuttgTPhQ7IUyY06ZZzQ1Hc3Vk/TUtr
-         dkbnkurk1dIo15btmQpZl/RTAq/3j+MFnWh4ibBVShlUFwVrIOU89jQ5Utp/RCV5Ge
-         3y1WMRvA+8mbi+svaf/TywgAfS9Zpf2SODKaD8Lf5Z/YLjWzYNpjLEl8yu9AmHDS1Q
-         ATz2g9msqPS1ON0e733T+vKGgfFXAeqR4PD6hdQW7/IH97VZw3Pa7jUIucf0taJXKv
-         iyp5iHIddixLA==
+        b=KhQqg2fSnkzof9xdkPDLEW0SuUqmT21eCNQ0W/On3Zoj6IPEGrRx7Mwrlvk5Pw8qG
+         aaKmh/3yvCyuTcW4g4obnqgHongo+eGO1FP3irUqMPEZCi6K6VAsuK3t3JYfM+W9TG
+         1FQkM1kL2E34CpzmVmG5MjgiX4kb+g1N4gKIyEpy+1eAx9Ax4qjS0fnN8jYdb+XDvu
+         FTPLlzQi2Z44DGXLjSUXRpzencFzneG6K8lfSKmymglJPJSc3rvTHJXWkvWbfpK+aC
+         hh9InPeX8QGT9+10ANez2nYyuMvIg2WUW4/PkBa8twpioubgnq5K7KndGnYmYhYxVL
+         7vtPeRfygHsoQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1oBxbw-0059sw-0B;
+        id 1oBxbw-0059sz-0o;
         Thu, 14 Jul 2022 13:06:28 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Alan Previn <alan.previn.teres.alexis@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
         David Airlie <airlied@linux.ie>,
         Jani Nikula <jani.nikula@linux.intel.com>,
         John Harrison <John.C.Harrison@Intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
         Matthew Brost <matthew.brost@intel.com>,
-        Michal Wajdeczko <michal.wajdeczko@intel.com>,
         Prathap Kumar Valsan <prathap.kumar.valsan@intel.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Vinay Belgaumkar <vinay.belgaumkar@intel.com>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
         dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 10/21] drm/i915/guc: use kernel-doc for enum intel_guc_tlb_inval_mode
-Date:   Thu, 14 Jul 2022 13:06:15 +0100
-Message-Id: <de22e315b5a9041610a6659616cdac50273e1b01.1657800199.git.mchehab@kernel.org>
+Subject: [PATCH v2 11/21] drm/i915/guc: document the TLB invalidation struct members
+Date:   Thu, 14 Jul 2022 13:06:16 +0100
+Message-Id: <f308a3545cb5ca5e18357547b74a0f26510648f8.1657800199.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1657800199.git.mchehab@kernel.org>
 References: <cover.1657800199.git.mchehab@kernel.org>
@@ -71,8 +72,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Transform the comments for intel_guc_tlb_inval_mode into a
-kernel-doc markup.
+Add documentation for the 3 new members of struct intel_guc
+that are used to handle TLB cache invalidation logic.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -80,36 +81,38 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/21] at: https://lore.kernel.org/all/cover.1657800199.git.mchehab@kernel.org/
 
- drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/i915/gt/uc/intel_guc.h | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
-index 2e39d8df4c82..14e35a2f8306 100644
---- a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
-+++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
-@@ -190,15 +190,18 @@ enum intel_guc_tlb_invalidation_type {
- 	INTEL_GUC_TLB_INVAL_GUC = 0x3,
- };
+diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc.h b/drivers/gpu/drm/i915/gt/uc/intel_guc.h
+index f82a121b0838..73c46d405dc4 100644
+--- a/drivers/gpu/drm/i915/gt/uc/intel_guc.h
++++ b/drivers/gpu/drm/i915/gt/uc/intel_guc.h
+@@ -76,11 +76,23 @@ struct intel_guc {
+ 	 */
+ 	atomic_t outstanding_submission_g2h;
  
--/*
-- * 0: Heavy mode of Invalidation:
-+/**
-+ * enum intel_guc_tlb_inval_mode - define the mode for TLB cache invlidation
-+ *
-+ * @INTEL_GUC_TLB_INVAL_MODE_HEAVY: Heavy Invalidation Mode.
-  * The pipeline of the engine(s) for which the invalidation is targeted to is
-  * blocked, and all the in-flight transactions are guaranteed to be Globally
-- * Observed before completing the TLB invalidation
-- * 1: Lite mode of Invalidation:
-+ * Observed before completing the TLB invalidation.
-+ * @INTEL_GUC_TLB_INVAL_MODE_LITE: Light Invalidation Mode.
-  * TLBs of the targeted engine(s) are immediately invalidated.
-  * In-flight transactions are NOT guaranteed to be Globally Observed before
-  * completing TLB invalidation.
-+ *
-  * Light Invalidation Mode is to be used only when
-  * it can be guaranteed (by SW) that the address translations remain invariant
-  * for the in-flight transactions across the TLB invalidation. In other words,
+-	/** @interrupts: pointers to GuC interrupt-managing functions. */
++	/**
++	 * @tlb_lookup: TLB cache invalidation lookup table.
++	 */
+ 	struct xarray tlb_lookup;
++
++	/**
++	 * @serial_slot: index to the latest allocated element at the
++	 * @tlb_lookup xarray.
++	 */
+ 	u32 serial_slot;
++
++	/**
++	 * @next_seqno: next index to be allocated at the @tlb_lookup xarray.
++	 */
+ 	u32 next_seqno;
+ 
++	/** @interrupts: pointers to GuC interrupt-managing functions. */
+ 	struct {
+ 		void (*reset)(struct intel_guc *guc);
+ 		void (*enable)(struct intel_guc *guc);
 -- 
 2.36.1
 

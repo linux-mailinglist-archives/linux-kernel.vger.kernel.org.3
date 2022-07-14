@@ -2,150 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095A357463D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A02574643
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237058AbiGNH5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 03:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
+        id S235961AbiGNIAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 04:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiGNH5K (ORCPT
+        with ESMTP id S229686AbiGNIAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 03:57:10 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02B3E5E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:57:04 -0700 (PDT)
-Received: from mail-yw1-f177.google.com ([209.85.128.177]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M4K6z-1oBcjf3yPR-000Hx0 for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022
- 09:57:03 +0200
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-31caffa4a45so9165137b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:57:02 -0700 (PDT)
-X-Gm-Message-State: AJIora+4hQtLg5msm5LdbT8oxjMlzyqMZw46hQoFE9hYTcGAudm6nyLt
-        K27oM+vVQ+vSTsrWHHz/Q1+xt8oEHI4fakNagj4=
-X-Google-Smtp-Source: AGRyM1s6hq6erZ1yK1nIUP2svi0ANxmBF0XKQOXZ/sRFvr5z9HEm2aKaLzHV16xP3Q8+fv2MN1haOC3UBR+vKS0ayV0=
-X-Received: by 2002:a81:9b02:0:b0:31c:9ae4:99ec with SMTP id
- s2-20020a819b02000000b0031c9ae499ecmr8278547ywg.495.1657785421695; Thu, 14
- Jul 2022 00:57:01 -0700 (PDT)
+        Thu, 14 Jul 2022 04:00:38 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAED22522
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:00:37 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id b9so1153235pfp.10
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hZvupmqkRAYTvBrFs91h5XDaRVd2eOd2qUWtUN+1M8o=;
+        b=XYYlyuW12p66C6THJPXjHlrI6pZHbUC8MmVB7wtvGlnEoP4sc3gK2VqK5Y6GYd+bkN
+         fQ7BeqlxZK65dno8VwKCa6bP+H/uZmGyKMMosXOLmel/36VObWA5VWHivKJBAP6hvVln
+         yYxWPCIlfXHXxU0BZ22h3BRQ0Ma2rohKY3Vinfc2NyH0ZzM2NnBIQ4hV38yRbScqJDow
+         8SzW955wW8SWgjr3nTLEUAgfSyIVoEuBMD9lbT9nWVtV2w3qZrnB3mB1EnB45lZ5n3D3
+         5xI015JBH0Goag1N7STVHhxRYIPgeYzUzkRfzLtyU5qDfceoSCgmmHH2d6dcqYtNg5GH
+         HYKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hZvupmqkRAYTvBrFs91h5XDaRVd2eOd2qUWtUN+1M8o=;
+        b=WqLGi8aHbalGWrJim1s0Gnm+U0Fz9wbyaeaXEl4MZwtmhGH2LFFZyeH10Z8Mdv/iUb
+         0qSbhjdzzzbJtfzxoVQnDwJiwYYRTKaxCXBdE4xHEDDdnrJQu36VfGh9EUcMfpLGmqfW
+         KQjViMXv/H9WcWZBlH50lrYrVLdBzGpOQcJlwGUNkmk1vUPbENUDVJyeqxqNrfwkd90J
+         0Zh4+EXseMKhppabUQU686f2dp0SZChMO3BbyFyZvblGtYXXTRPFMZGnWXoRpuiysWza
+         rQM7Bbw+QyzrVW25RZiSPzCOZWky7vHs6WenLrb8duo7JoeWDe43oPzskUThOin4DhGy
+         ZVmA==
+X-Gm-Message-State: AJIora97MeIV7KhyRv8SunK+bjsPpSL8pGFavMvMkUsnfRFZnLllvHvv
+        T2SmegxIeMghpnNH/QjmyFY85g0pY/z2cw==
+X-Google-Smtp-Source: AGRyM1veVmlkG8CMsJci8DaYwSOG73eVpFgTu9CQkTyeMgPQtAI+ZD6xzy68EZEkylwgBaBF4K9ZGw==
+X-Received: by 2002:a63:cf52:0:b0:40d:fb07:a793 with SMTP id b18-20020a63cf52000000b0040dfb07a793mr6884025pgj.576.1657785636808;
+        Thu, 14 Jul 2022 01:00:36 -0700 (PDT)
+Received: from [10.94.58.189] ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id t187-20020a625fc4000000b0052ab8a92496sm588516pfb.168.2022.07.14.01.00.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 01:00:36 -0700 (PDT)
+Message-ID: <5df03ae2-6c5d-aa38-4a4d-632c0f484140@bytedance.com>
+Date:   Thu, 14 Jul 2022 16:00:31 +0800
 MIME-Version: 1.0
-References: <20220714042736.2133067-1-shorne@gmail.com> <20220714042736.2133067-2-shorne@gmail.com>
-In-Reply-To: <20220714042736.2133067-2-shorne@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 14 Jul 2022 09:56:44 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com>
-Message-ID: <CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] openrisc: Add pci bus support
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH 1/5] sched/fair: ignore SIS_UTIL when has idle core
+Content-Language: en-US
+To:     Yicong Yang <yangyicong@huawei.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:GDYCbmxyCS6dcrmwKsOs12ElGFbe0tLej9O3EYZiukCeTx5wjDM
- REA3SHjIJabTM0d4gjNRFAdDSXp0uUxuNIb9LxFtElt6TRLHfiIVH4qQBc5LGoR9KXHwl0l
- O6HBqUYoAvVNR9EuqTG9a0AkN/xaxxQnn4IblhahzQ46c+Bd5P+A4Wt4u7xAx6S5lldCrqQ
- yP+LDxWbid/x1YNWEfFmQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:41ryh/wyzv0=:JClpietly9qXfK4aeDt/nK
- s/F626kB3YZRLBAy5o22eGC/pAKJcScnrlUMPYs0I7RNNVwlUvS/NOsfLQSOKvMDfLgcm6pGT
- TuYY3cubOij0Bdt4ighNs4oxIPLI2BMFxGVmq1WsSX7oNo1nfws7+mfOCkIuuIyXPfgZzwoVD
- 3RRONR0OIXv4cLXK0wgT7Bds15qPzv/jlabFQqZMWX+Fv6uYUreo7EcKQ+sF189WGWoP1MWKT
- Ryekv5r721bKG0njUKPnfhNLlOFoLitXwuwFO4Z29pglru+lCw4eq3wsxjpkAMRlNgkybhe1e
- 3jrfl0smN80TWcOJ4v7R8/wPYwuRVYHk9STUrKToXsA3Q6LDy6Mjhdc3afq0gl9bUiQFz8Zoq
- lHQ95wIkqkotukyp01XbUklEXiClBlnxnI5lysO3YpfL4isUV4wT3MTGF/+xnf8eLmBfLZSmZ
- ZnDw9n5WWXUjKIELzh9jJusunp3+aE6p5feOv+TDyM45j9aR9sM04X/+Uj4xb78rnAePYNaLF
- fKgnVE/yLePCO8kYtwlsIBL9m9PUhqy3P2NhOCwnETx2gMwGW2nxss0mj8RO0yh0jNB7YWdvY
- 1RLoqcXkdQcfhImxsAss0XPtka4isJJV+3v8iagj9C7Dsbrli+ZfMJSJbWxhDzOcqWbv6iOvz
- QPUSPxug+Q7UvDU3nzj25NOd4NPaunOC9JUD/nCBEIuobVCLRWk0uyO3EzkFcrD3jVldudTtI
- X6/bl9WyVNL05V+UVvwUKy75hyLTqGNK1Qkn0TsnyuzDsCeF/bhHjK8QKZudFP4Sfr8rtqgS4
- tki10kSRWgZAa9GRd9TexB1SI+T9sk3olEJZq+WHfTMqUOor0CjI6LgXHWmvqgEHGisjVKPb0
- G58oqyS6/JfjCVxd4vEg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     yangyicong@hisilicon.com, Josh Don <joshdon@google.com>,
+        Chen Yu <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
+References: <20220712082036.5130-1-wuyun.abel@bytedance.com>
+ <20220712082036.5130-2-wuyun.abel@bytedance.com>
+ <8e7d75d4-613e-f35e-e932-323789666fb1@huawei.com>
+ <4dde05be-8470-5984-0a30-ba077b9fe6bd@bytedance.com>
+ <e8a59a8f-1e0c-2bb6-2d1b-4e76f5c511f5@huawei.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <e8a59a8f-1e0c-2bb6-2d1b-4e76f5c511f5@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 6:27 AM Stafford Horne <shorne@gmail.com> wrote:
->
-> This patch adds required definitions to allow for PCI buses on OpenRISC.
-> This is being in the QEMU virt platform.
->
-> OpenRISC does not have IO ports so this defines PCI IO to be allowed in
-> any range.  Keeping PIO_RESERVED defined as 0 allows OpenRISC to use
-> MMIO for all IO.
 
-Ok, this looks better.
+On 7/14/22 3:15 PM, Yicong Yang Wrote:
+> On 2022/7/14 14:58, Abel Wu wrote:
+>>
+>> On 7/14/22 2:19 PM, Yicong Yang Wrote:
+>>> On 2022/7/12 16:20, Abel Wu wrote:
+>>>> When SIS_UTIL is enabled, SIS domain scan will be skipped if
+>>>> the LLC is overloaded. Since the overloaded status is checked
+>>>> in the load balancing at LLC level, the interval is llc_size
+>>>> miliseconds. The duration might be long enough to affect the
+>>>> overall system throughput if idle cores are out of reach in
+>>>> SIS domain scan.
+>>>>
+>>>> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+>>>> ---
+>>>>    kernel/sched/fair.c | 15 +++++++++------
+>>>>    1 file changed, 9 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>>>> index a78d2e3b9d49..cd758b3616bd 100644
+>>>> --- a/kernel/sched/fair.c
+>>>> +++ b/kernel/sched/fair.c
+>>>> @@ -6392,16 +6392,19 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>>>>        struct sched_domain *this_sd;
+>>>>        u64 time = 0;
+>>>>    -    this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
+>>>> -    if (!this_sd)
+>>>> -        return -1;
+>>>> -
+>>>>        cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
+>>>>    -    if (sched_feat(SIS_PROP) && !has_idle_core) {
+>>>> +    if (has_idle_core)
+>>>> +        goto scan;
+>>>> +
+>>>> +    if (sched_feat(SIS_PROP)) {
+>>>>            u64 avg_cost, avg_idle, span_avg;
+>>>>            unsigned long now = jiffies;
+>>>>    +        this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
+>>>> +        if (!this_sd)
+>>>> +            return -1;
+>>>> +
+>>>
+>>> I don't follow the change here. True that this_sd is used only in SIS_PROP, but it seems irrelevant with your
+>>> commit. Does the position of this make any performance difference?
+>>
+>> No, this change doesn't make much difference to performance. Are
+>> you suggesting that I should make this a separate patch?
+>>
+> 
+> It just makes me think that dereference is unnecessary if this_cpu and target locates in
+> the same LLC, since it's already been passed. But since you noticed no difference it may
+> have little effect. :)
+> 
 
-> Also, since commit 66bcd06099bb ("parport_pc: Also enable driver for PCI
-> systems") all platforms that support PCI also need to support parallel
-> port.  We add a generic header to support parallel port drivers.
-
-The parport_pc driver is actually one of the things that doesn't work without
-I/O ports, so at least the description here is misleading. We should really
-have Kconfig logic to enforce this, but that is a separate topic.
-
-> diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-> index e814df4c483c..327241988819 100644
-> --- a/arch/openrisc/Kconfig
-> +++ b/arch/openrisc/Kconfig
-> @@ -21,7 +21,9 @@ config OPENRISC
->         select GENERIC_IRQ_PROBE
->         select GENERIC_IRQ_SHOW
->         select GENERIC_IOMAP
-> +       select GENERIC_PCI_IOMAP
->         select GENERIC_CPU_DEVICES
-
-> @@ -46,9 +50,6 @@ config MMU
->  config GENERIC_HWEIGHT
->         def_bool y
->
-> -config NO_IOPORT_MAP
-> -       def_bool y
-> -
-
-GENERIC_IOMAP makes no sense without PIO, and I think you also
-need to keep the NO_IOPORT_MAP. I think you still want
-GENERIC_PCI_IOMAP, which in the absence of the other two
-should turn just return an __iomem pointer for memory resource
-and NULL for i/o resources.
-
-> +static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> +{
-> +       /* no legacy IRQs on or1k */
-> +       return -ENODEV;
-> +}
-
-The comment seems misleading, as "legacy IRQs" normally refers to
-non-MSI interrupts, which you do support. It's only the legacy IDE
-interrupts that are not supported.
-
-I see that the asm-generic/pci.h file is now completely useless,
-as it only has a single function left in it, and this one is wrong
-on most architectures -- it only works when you have PC-style
-interrupt numbers. Out of the five architectures that include
-asm-generic/pci.h  (m68k, s390, sparc, x86, xtensa), I would
-expect only x86 to use this version, and maybe a few sparc
-machines.
-
-Can I ask you to move out the existing asm-generic/pci.h
-code into those architectures, and add a new file in its place
-that you can use as-is on openrisc? Ideally we should
-be able to also remove most of the contents of asm/pci.h
-on arm64 and riscv. If you have conflicting settings, the normal
-way to handle them in asm-generic headers is like
-
-#ifndef PCIBIOS_MIN_IO
-#define PCIBIOS_MIN_IO 0
-#endif
-
-#ifndef pcibios_assign_all_busses
-#define pcibios_assign_all_busses() 1
-#endif
-
-       Arnd
+Hmm.. Not exactly. The sched-domains are cpu private, and this_cpu can
+be in another LLC than target.

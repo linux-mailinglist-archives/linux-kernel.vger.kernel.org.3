@@ -2,187 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEF75753A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB41B5753B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239971AbiGNRCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 13:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
+        id S240095AbiGNRDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 13:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239659AbiGNRCn (ORCPT
+        with ESMTP id S239659AbiGNRDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 13:02:43 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36F05724C;
-        Thu, 14 Jul 2022 10:02:42 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26EFvskb000871;
-        Thu, 14 Jul 2022 17:02:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : content-id :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=zSlVk9pomjGpA9ESyLpManPJVIUWXZvFlCJfXeX5jyE=;
- b=X8wvhUYU72TciwCgrd9cW6ht74pD099LcM0t0ZNJdS6rF9RfJnlq6DmfD0fhxFY06qJ6
- hlHxqpRUvi+oleV+U2XV+w9LGxMOgLMZr8FfWzcRaXOO2DEe9BEi7CF8SxCEGd0livYK
- dNY3+fOBG90zYLBbp2lWP5Y/UzJNchn4HV4V9fU6RZpjbGW6ldUTYXU5ELaoPh7SNN5A
- 6h3oy/eyn4YZVXqI5h+kksuWAastQfR3YgxlFOZoEIbsQHWIeY+L9ag9jR/JDpBfvciP
- oviyZ5mZOtt3jnmnHaTR5jN6YXddjGu0IpnO8Czsher+vykjzc7zftcnP/rE80giTgDP Jg== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h71xrnsr7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Jul 2022 17:02:38 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26EH0IUq027789;
-        Thu, 14 Jul 2022 17:02:37 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2103.outbound.protection.outlook.com [104.47.58.103])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3h7046h7mq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Jul 2022 17:02:37 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kuIHIC269RasKlSBPe7idjitWklunaGjnMc3N65bqYiXnXJlYEYo+6W9mN0zb5kWDMiTshHgtM/M4RvFJO5rnmLrkreYMU7jW76j6CXyQeA1V3wHYmk9uKwW6ztndt/WrPYLl/FzepIO9FecmBStTuvtJ140ts47pu2iZOE+Dao0L01qsVD1jeEj0dyLEjPIYYqcAY/SyOZfguzQJNhezV+7w+g3dDZ+4wg2lHP2D4vbD1zWfivSXpD+v/GRLo+s+5ujnhZsdc5twfaNdLoa1rkOOOMqkEi6d4d3zJczS+yogHmCzEBZCZhNkhlnZNO8SFkhXuUZAjLgWjS14I0dwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zSlVk9pomjGpA9ESyLpManPJVIUWXZvFlCJfXeX5jyE=;
- b=Ii0jVw4f1r8zc6aR1UKerKEaZK28cjw2QJdoF8rGH6JRU+TM+YFVhZ3ZB0ZC9YIXkOwBEZVTjHC+tTCpDAa6Q46pOHH9LHjv296Q758ArC90tUfyLcDRFknDXUcRKvew6ZHXD0W9Bk0QRJfO9Qhrf43U0KMcLFv2QHkdlUO/7mCDCf1qSY/IuFjbiTq+0iuSuKNUgLv+zAg0ynih+MD2cu4CDEj7sH2eArlvUyVlYpMxQffLifA3zZokIP9J7ZB3vnyQSj3krpp/lyel7SKl9+cjp+YfmKLAb4DcymkWlrs//S/XvZODthBTVgLZyuxn5Ax1PesBongI2fYG03MJWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 14 Jul 2022 13:03:19 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BC15724C
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 10:03:18 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id dn9so4511038ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 10:03:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zSlVk9pomjGpA9ESyLpManPJVIUWXZvFlCJfXeX5jyE=;
- b=Vs7fPVhmZr0jY7eifjEf9L6oHmuxyRGfrTJewyhexuck8JJa21kEI1ehu/I2+s5MnSb2YkoIK2X9WtZbdqqUY6YjKw3fvTYAGqdKgtjQWV3amRoaeFaynsFYJh0tV7k8Aveuqa1bg2J9DyvpbqzwL+c2UgifGsnaSkw6DA1DiE8=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by BN7PR10MB2580.namprd10.prod.outlook.com (2603:10b6:406:c3::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Thu, 14 Jul
- 2022 17:02:36 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::8cc6:21c7:b3e7:5da6]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::8cc6:21c7:b3e7:5da6%7]) with mapi id 15.20.5438.015; Thu, 14 Jul 2022
- 17:02:36 +0000
-From:   Chuck Lever III <chuck.lever@oracle.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jeff Layton <jlayton@kernel.org>
-Subject: [GIT PULL] 3rd round of nfsd fixes for 5.19
-Thread-Topic: [GIT PULL] 3rd round of nfsd fixes for 5.19
-Thread-Index: AQHYl6OE1V3Uq6cMC0eq+JoTgplj2A==
-Date:   Thu, 14 Jul 2022 17:02:35 +0000
-Message-ID: <5E921C2D-2309-4EEF-B360-A27361CA9F2B@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.100.31)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: efbb5a95-ba84-4a68-046d-08da65baa69c
-x-ms-traffictypediagnostic: BN7PR10MB2580:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PGjnMxl9lWbj50BcbboxhZT5PdL8cG39CnPSS1Rs5kjhTF6MnMZ+kd/GwUEKd1m1HlQOt/x7fdwx95+TDVDDDjnCeLVM2aNzz/dconjC+aIhaMwcjehlGNU+iiGA7tryqkOdy/TWtiegK9GAB32GZmQCD81OJRFyQwgUwPgC7Z2xXEyFyCuE/QFPxQoDZdGnMbPZzruygAyWsS0detPqVE6Iphfc7WDXbUm9gHnRO0qkp44kEd4WG3lqA1eOAyI5vCk8CDQxz0Ht1SfFbI6DTaJJqiZlgqPCCuDeVbPpHFrIagNcX/MAJLqqhZ7DCMbeeRoK0HvR3eDuaK8TSe7dIU1D6b/CvixpGZBFsornqwF7rBwiOwDJbc7illBa2311oc/AxrdtLZiltluYtnT2sdCyXpqxER/GAU6D1ktU5V479qJErMO7E7QxtYQUiBeI94uTk1PMvk/vjW2hLZYFlH/M9ddkHgFdkewjIboHgjcp+J0lM7CzVMrGmhYMs2JAW+nCnR4mkZt0SQ1FFfGow7TRiVgJtduCe19gtm6yoCa6G1ILvABIHIIyrglJUU67WxBKfxh5r69ARHIEiMzfhK41dUDpktWw93rsqfandjFsT4u+y1Gdp2fSxUgwx6Xg8grI1W0/GDqpS/irt3DBI/PwQa62Cv5hRIFEwR+DGYwCgQxQm9zbdCeXL7CtedZTtSC4Lu+JR+1NPQgS6zlMtDKQ8NLaW7TjaMOKIa2sCuBcaiOoIoV4QqokyjynerPh//9PQRiRqPriB/fU/IlHX5siPFTZxDecRSrPUcxKl7ZGFM+ST+YeT0/xtFvYRmhvkHYyYazvdklBneGWR8IuHTNbzFoRoriDsuLPdy3C4v8NsgIkYoZRzEUMbZgL2x8Q
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(376002)(346002)(136003)(396003)(39860400002)(71200400001)(316002)(54906003)(6916009)(186003)(86362001)(83380400001)(2616005)(966005)(41300700001)(478600001)(6486002)(26005)(6512007)(6506007)(2906002)(8936002)(5660300002)(36756003)(38070700005)(122000001)(38100700002)(76116006)(66476007)(66446008)(66946007)(64756008)(66556008)(8676002)(4744005)(91956017)(33656002)(4326008)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?er0fFYNRNA/lw/A3TSHFJ/9HQxW0h+bPOMP6K9b7L4TNchIM04/9YNQpmE4Y?=
- =?us-ascii?Q?CpHj9tPWGtzurUnjiS4BuXZMncJt597WvkfVhrpjGvQFqKB6doBxeD4uC4uf?=
- =?us-ascii?Q?T4DMDLA5z6ERXk+D7jVnb6y/f+Cz3xrsMTeAeZMlLbHJTOOwt2Xv7TdYnkeq?=
- =?us-ascii?Q?ZErbf8hq9UgtnOpdSeLxVHOroTAg2dqNhU8zPDPyruFTa5mBm08HC1GnSy/3?=
- =?us-ascii?Q?KsLLzG/rITPkG8YyZKbiCqHtc7SyMnNQhzoFHIXifPBS1rBflme1pVyeYI/X?=
- =?us-ascii?Q?C9CluQ4P8Alj0aqVnZqetqJkCeYzrS+FszES5KVULFKcg+gWkbhhUogxM+wX?=
- =?us-ascii?Q?+FJnr870fVXQSQK/GY4BlplizML0Sy0/dmILaAg/xKJLWawvAXusMBvbXzgy?=
- =?us-ascii?Q?+9gOJ37WIDzGE+QlTMT0oD/GX/uqa1cYJpMXNqZDLDHtWsZvBk/AzAvZXEeH?=
- =?us-ascii?Q?pTrTf5o0PCbMW0vxAc+DIFzCnELj0N0mfkj6rS+AOf3i8rkK5gN6njxFZ6Sq?=
- =?us-ascii?Q?m7m3KNtG9sR8baUOxhDi7Ml8UdraxeovO51+cETSppuemjORy2uNGIT5t4Ms?=
- =?us-ascii?Q?Uh+KeZFaaIoH5OSQNunRy9o2PZ+2aIW3MsBm1XzWEfRzmg++DTsuIUBbAVcR?=
- =?us-ascii?Q?Gu8S+WOaAbQ/7DVUv9CdNV98tS137LWO0J2S6nql30/L5QI3rjvtWGjgyZY3?=
- =?us-ascii?Q?LfelqbwaCT4UvmEpDwIW0dJNnYM7THEH0m0I1Rob7chnFwGZT3dDI66X/SM7?=
- =?us-ascii?Q?MQ8NDpW4aUjLxALmZOXCU25j/gGDoovtoB0ZaGTvr8i092rwbmhBfpj0ALu/?=
- =?us-ascii?Q?qPAKES9GIaF91mStNImgmXaiyfdO61GbLrN0O5Jie/5Q6fcUSxdRsy9ZD4wm?=
- =?us-ascii?Q?q7UqQfSDrNZXFXh18/48EHpr1ukfAHmBKFbr4evgt+e8HEwdElI0VScymKCH?=
- =?us-ascii?Q?nkCXNrtO9jjeXD8Fg8Us3o/wBKWNY3UoKzTnJJpEh1/SCQRQZBHTu/mbVrk2?=
- =?us-ascii?Q?vErhGKQ62lJSAaGdLnGYR2FIdi6pxjDO/82aF6H1RQfm6oBkbqE4I8z4TvXn?=
- =?us-ascii?Q?3cpLtsZ9JNB4nnRclBt4mkbGE5C12pvtUGh5ydFPXscc03PI9m5THVKHKsh1?=
- =?us-ascii?Q?Q/A0MuRH1j5uBGOTz976SDb+ar8X8uRR+nSk3sf5vz2vWsDgziO3SWejrmTk?=
- =?us-ascii?Q?RkXJ/o97h7yJmfkaWtZwqCJGCrYFJ5lOtXCTBk92AjvbTzK+lrbuxvt34FHa?=
- =?us-ascii?Q?4VhAI7Gkz+xniEhgO+cMfuT2hkyZ9s+HybF6aDeJaD1tXwcL6S95YNaukoI9?=
- =?us-ascii?Q?0TTAQyNXLnszDsM3TpickCIqOJ6lksZKfKwYcsxxIZH1BrL3j2j5jvfLjj9P?=
- =?us-ascii?Q?gGnNntm18TmvT7DKoVXnjXgfsqzvqBNUA+lcH1lxK06eunU+8oi3ruIGbJdI?=
- =?us-ascii?Q?ZFka4mKmzefJXxU/Ds39NwiAWalOyBfxl6UO7npzMLKJrFUv9wlzq0AxoFok?=
- =?us-ascii?Q?6en6u8izpxUsjZRZYNbZyM9BfdWVCv8g5q8Rf8Sbv+I749QQwCO0XuJo4YAu?=
- =?us-ascii?Q?6BlY0gWInLiaQIqWhXRW38H1lpgaDi+/Mu6l1Dl3oZ3viDp+onDwlXm0hCtf?=
- =?us-ascii?Q?uQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9E163B22762BCA4896E8ADBA2B3B4839@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Pm+iphli5RRfa4JmHeh81lVBkwRMzWQKLMKTsw18lMo=;
+        b=Z6ZquADLYu4uMwnTfB77Llp499vJAhe+VRkqcHP7yOsgzWOu9zDeuVv569iCGwq/TN
+         n14hSaPCbUQ38LjnNOasq8gCvSbs/42WYABjzHa4Zob3/Bzo6643Bg7S4R0uqisbfoYa
+         ihvN3aq2+yGj/oCPRE7nev9NxH4BVy6V92VdA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Pm+iphli5RRfa4JmHeh81lVBkwRMzWQKLMKTsw18lMo=;
+        b=Th1lKxdcOGY1eWqJY/DO23EPIFYFgu+mBDQrA87hpkyHXh4SLg6/224nT+KgeyeHpc
+         sEuBhg1Wsc0emW5xfzYjet23MU90fTkuQimoyTPgLmjSUn/tHb2anuhFootnRYS+/R1N
+         siYwesZZvWJv6TuZzqlkeJ3SkzlTHtvs5ILfG6kWdau/ZPi31E4rgpp2hGsTmHCKO+F+
+         rdpVHlBNNNhWfCSLryKuYdwJb/AtNEqHjbHHNud1XPEaMk9nLmqyZYENnGMGj1bzU/2n
+         rKz3ymhI3dV6AGG8EOrDG2czy0UaMbndaWe9xJ+EbghNMLEsyJcf1TTb0PLnZm7ZwRFr
+         U8uQ==
+X-Gm-Message-State: AJIora93IbxmIPAEZUl5u/7sD7HNYsQZYm2DVygZVNohhEMVU8olXfgF
+        YOPiQsppfqCWVQymhVrweZH9WmxmRXysBBgN5a0=
+X-Google-Smtp-Source: AGRyM1vHg7egNBg1z/z6E4Xmshzq3v/bQ3CJdj027dCINgAtyNUEU/nqHc2h3PuBbbdD9aIqalGhEw==
+X-Received: by 2002:a17:906:4fc4:b0:6da:b4c6:fadb with SMTP id i4-20020a1709064fc400b006dab4c6fadbmr9689337ejw.282.1657818196406;
+        Thu, 14 Jul 2022 10:03:16 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id b6-20020aa7cd06000000b004355998ec1asm1322133edw.14.2022.07.14.10.03.13
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 10:03:14 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id r14so3418359wrg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 10:03:13 -0700 (PDT)
+X-Received: by 2002:a5d:544b:0:b0:21d:70cb:b4a2 with SMTP id
+ w11-20020a5d544b000000b0021d70cbb4a2mr8990916wrv.281.1657818193135; Thu, 14
+ Jul 2022 10:03:13 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: efbb5a95-ba84-4a68-046d-08da65baa69c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jul 2022 17:02:35.9439
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l5Q28tur4VWATsSiAU0fNdXF0SWsyEchyT/7sA557PU129uHVOrN20oYRt+DwOCNmaOXLEjiaGClm3Uhj6YtRQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR10MB2580
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-07-14_14:2022-07-14,2022-07-14 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=969
- malwarescore=0 suspectscore=0 mlxscore=0 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207140074
-X-Proofpoint-GUID: MjPp38WPcV7eRoLZcBGB8UvcfMBDmVRj
-X-Proofpoint-ORIG-GUID: MjPp38WPcV7eRoLZcBGB8UvcfMBDmVRj
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220712183238.844813653@linuxfoundation.org> <CA+G9fYtntg7=zWSs-dm+n_AUr_u0eBOU0zrwWqMeXZ+SF6_bLw@mail.gmail.com>
+ <eb63e4ce-843f-c840-060e-6e15defd3c4d@roeck-us.net> <CAHk-=wj5cOA+fbGeV15kvwe6YGT54Wsk8F2UGoekVQLTPJz_pw@mail.gmail.com>
+ <CAHk-=wgq1soM4gudypWLVQdYuvJbXn38LtvJMtnLZX+RTypqLg@mail.gmail.com>
+ <Ys/bYJ2bLVfNBjFI@nazgul.tnic> <6b4337f4-d1de-7ba3-14e8-3ad0f9b18788@redhat.com>
+ <8BEC3365-FC09-46C5-8211-518657C0308E@alien8.de>
+In-Reply-To: <8BEC3365-FC09-46C5-8211-518657C0308E@alien8.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 14 Jul 2022 10:02:57 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj4vtoWZPMXJU-B9qW1zLHsoA1Qb2P0NW=UFhZmrCrf9Q@mail.gmail.com>
+Message-ID: <CAHk-=wj4vtoWZPMXJU-B9qW1zLHsoA1Qb2P0NW=UFhZmrCrf9Q@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/78] 5.15.55-rc1 review
+To:     Boris Petkov <bp@alien8.de>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        stable <stable@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Slade Watkins <slade@sladewatkins.com>, patches@kernelci.org,
+        Sean Christopherson <seanjc@google.com>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
+        lkft-triage@lists.linaro.org,
+        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus-
+On Thu, Jul 14, 2022 at 7:46 AM Boris Petkov <bp@alien8.de> wrote:
+>
+> On July 14, 2022 1:46:53 PM UTC, Paolo Bonzini <pbonzini@redhat.com> wrote:
+> >Please leave that one out as Peter suggested a better fix and I have that queued for Linus.
+>
+> Already zapped.
 
-The following changes since commit a23dd544debcda4ee4a549ec7de59e85c3c8345c=
-:
+I like Peter's more obvious use of FASTYOP_LENGTH, but this is just disgusting:
 
-  SUNRPC: Fix READ_PLUS crasher (2022-06-30 17:41:08 -0400)
+    #define FASTOP_SIZE (8 << ((FASTOP_LENGTH > 8) & 1) <<
+((FASTOP_LENGTH > 16) & 1))
 
-are available in the Git repository at:
+I mean, I understand what it's doing, but just two lines above it the
+code has a "ilog2()" use that already depends on the fact that you can
+use ilog2() as a constant compile-time expression.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-5=
-.19-3
+And guess what? The code could just use roundup_pow_of_two(), which is
+designed exactly like ilog2() to be used for compile-time constant
+values.
 
-for you to fetch changes up to 1197eb5906a5464dbaea24cac296dfc38499cc00:
+So the code should just use
 
-  lockd: fix nlm_close_files (2022-07-11 15:49:56 -0400)
+    #define FASTOP_SIZE roundup_pow_of_two(FASTOP_LENGTH)
 
-----------------------------------------------------------------
-Notable regression fixes:
-- Enable SETATTR(time_create) to fix regression with Mac OS clients
-- Fix a lockd crasher and broken NLM UNLCK behavior
+and be a lot more legible, wouldn't it?
 
-----------------------------------------------------------------
-Chuck Lever (1):
-      NFSD: Decode NFSv4 birth time attribute
+Because I don't think there is anything magical about the length
+"8/16/32". It's purely "aligned and big enough to contain
+FASTOP_LENGTH".
 
-Jeff Layton (2):
-      lockd: set fl_owner when unlocking files
-      lockd: fix nlm_close_files
+And then the point of that
 
- fs/lockd/svcsubs.c | 14 +++++++-------
- fs/nfsd/nfs4xdr.c  |  9 +++++++++
- fs/nfsd/nfsd.h     |  3 ++-
- 3 files changed, 18 insertions(+), 8 deletions(-)
+    static_assert(FASTOP_LENGTH <= FASTOP_SIZE);
 
---
-Chuck Lever
+just goes away, because there are no subtle math issues there any more.
 
+In fact, the remaining question is just "where did the 7 come from" in
 
+    #define FASTOP_LENGTH (7 + ENDBR_INSN_SIZE + RET_LENGTH)
 
+because other than that it all looks fairly straightforward.
+
+              Linus

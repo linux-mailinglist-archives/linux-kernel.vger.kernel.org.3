@@ -2,63 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F65574B21
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EEF6574B29
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238501AbiGNKtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S238507AbiGNKul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238540AbiGNKtB (ORCPT
+        with ESMTP id S238456AbiGNKue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:49:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 796BFC57
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657795738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DzTeR2rmk7qmr31e8W4zO+N/0UYr/rJ97WwWMsCN/PI=;
-        b=RLSqGjQsDvivrGrQ2SalsieWO6RMOh8ME3B4Rw85HKusl6vR7snmdSd9/x1DGNojllQvsM
-        9QK0fLahqJ1ZobR389tB4mmcSyEyu5yiQEQvGU8Qycxx4wyzn3b/Kk8WiRb4xowyDlxU/7
-        cwtjPmq+9quA6FpLoz+7PkHBXpt7hKk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-eBwoO6OIM6aOnMs7XGa7jg-1; Thu, 14 Jul 2022 06:48:55 -0400
-X-MC-Unique: eBwoO6OIM6aOnMs7XGa7jg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1AF443C0D195;
-        Thu, 14 Jul 2022 10:48:55 +0000 (UTC)
-Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 32C48141511D;
-        Thu, 14 Jul 2022 10:48:49 +0000 (UTC)
-Date:   Thu, 14 Jul 2022 18:48:45 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        ming.lei@redhat.com
-Subject: Re: [PATCH V5 1/2] ublk_drv: add io_uring based userspace block
- driver
-Message-ID: <Ys/0jTxQCEHdI560@T590>
-References: <20220713140711.97356-1-ming.lei@redhat.com>
- <20220713140711.97356-2-ming.lei@redhat.com>
- <a4249561-84a0-a314-c377-b96d28b7b20b@linux.alibaba.com>
+        Thu, 14 Jul 2022 06:50:34 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36119550AB
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:50:32 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id r9so1678177ljp.9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:50:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Z7MLNfS7kpF23MkCCTVtj5YNhoPMRTO751pyRtCbFcs=;
+        b=oET52dqA3ro7HwCzr2WcBcKO6o1/fBPd/rcBiOt9K2M5jPMq4rMwltCwIvWbavm28h
+         ccDK8+zQgmZudlq4j+GdwJgXIWeewY6n/Iy1QMITPTmwcJRxQMJIekmV08IqhErEKdPY
+         SVZZjIDNwKae4bA4MaGJNQesOrWCfsQhKCSKzBPTNwuxsANFEYpAt/ClUtET/BSezuYs
+         W8HtUx5g0Kiyco6n/mVJEKcWJka9DXieT/GIHFeSwUCQ0f4dngjT87kDV5HmsDZp6f2S
+         JaJ8Vw9qgAmgwn6+fHzt0+yYNNDPP6rRmQpiIcCJR8bWddVa/ZF1A7ASGPQNE+D346eC
+         xaWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z7MLNfS7kpF23MkCCTVtj5YNhoPMRTO751pyRtCbFcs=;
+        b=B9F1xlYl7ynV6SkKXSaSbvktlqyIySA2Y7YNfd/B/q8dG+Piir5t369fOEuGlFtblL
+         VUY6juWFFJgjfbz/qW/cB1YdpbwicmsWQv8OrxRIVp4Q0n9ZKXviVEQd97acJ9T1jrzi
+         DwqCWczUJpO9ip1Yd6WKTcePs2JigBtgLlgdglwWQDwhjFul1LQ6+9zWPkNZOFEVpTs8
+         jHuaO1Y+T/t1JzMtCIPNmce2G29VpoFl9Q3SSt7B5K4nzbYOo/HM0O0LSFoUt/xCow6d
+         nV17GvWeOkWNdfPtZmnhINhWEOYN2vf4LX72d7BBstnQ/YjWghgQeVzdVljI6TrDo1zF
+         2Iww==
+X-Gm-Message-State: AJIora8Mc7YxgUIiRDks9tgSDH8LJ9F0tfGRM/tlgMnmpuM5HbW2cWIg
+        UDoYZNBlnWCYarH5x5klPgj/Lw==
+X-Google-Smtp-Source: AGRyM1sQ37UwVB00AS/TuBt9WhFKv6nkOywtjL2/GJD2YMpDoX5RAV3WYiT85/7MfbOftTAHsEvD3A==
+X-Received: by 2002:a05:651c:1061:b0:25d:6302:68a2 with SMTP id y1-20020a05651c106100b0025d630268a2mr4091981ljm.212.1657795830591;
+        Thu, 14 Jul 2022 03:50:30 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id y10-20020a0565123f0a00b00489ec0d7636sm292350lfa.110.2022.07.14.03.50.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 03:50:29 -0700 (PDT)
+Message-ID: <18d4d8f6-ae5d-382c-e23f-1630bda42c37@linaro.org>
+Date:   Thu, 14 Jul 2022 12:50:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a4249561-84a0-a314-c377-b96d28b7b20b@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/7] dt-bindings: usb: qcom,dwc3: refine interrupt
+ requirements
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220713131340.29401-1-johan+linaro@kernel.org>
+ <20220713131340.29401-3-johan+linaro@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220713131340.29401-3-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,170 +84,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 06:20:38PM +0800, Ziyang Zhang wrote:
-> On 2022/7/13 22:07, Ming Lei wrote:
-> > This is the driver part of userspace block driver(ublk driver), the other
-> > part is userspace daemon part(ublksrv)[1].
-> > 
-> > The two parts communicate by io_uring's IORING_OP_URING_CMD with one
-> > shared cmd buffer for storing io command, and the buffer is read only for
-> > ublksrv, each io command is indexed by io request tag directly, and
-> > is written by ublk driver.
-> > 
-> > For example, when one READ io request is submitted to ublk block driver, ublk
-> > driver stores the io command into cmd buffer first, then completes one
-> > IORING_OP_URING_CMD for notifying ublksrv, and the URING_CMD is issued to
-> > ublk driver beforehand by ublksrv for getting notification of any new io request,
-> > and each URING_CMD is associated with one io request by tag.
-> > 
-> > After ublksrv gets the io command, it translates and handles the ublk io
-> > request, such as, for the ublk-loop target, ublksrv translates the request
-> > into same request on another file or disk, like the kernel loop block
-> > driver. In ublksrv's implementation, the io is still handled by io_uring,
-> > and share same ring with IORING_OP_URING_CMD command. When the target io
-> > request is done, the same IORING_OP_URING_CMD is issued to ublk driver for
-> > both committing io request result and getting future notification of new
-> > io request.
-> > 
-> > Another thing done by ublk driver is to copy data between kernel io
-> > request and ublksrv's io buffer:
-> > 
-> > 1) before ubsrv handles WRITE request, copy the request's data into
-> > ublksrv's userspace io buffer, so that ublksrv can handle the write
-> > request
-> > 
-> > 2) after ubsrv handles READ request, copy ublksrv's userspace io buffer
-> > into this READ request, then ublk driver can complete the READ request
-> > 
-> > Zero copy may be switched if mm is ready to support it.
-> > 
-> > ublk driver doesn't handle any logic of the specific user space driver,
-> > so it is small/simple enough.
-> > 
-> > [1] ublksrv
-> > 
-> > https://github.com/ming1/ubdsrv
-> > 
-> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> > ---
+On 13/07/2022 15:13, Johan Hovold wrote:
+> Not all platforms have all of the four wakeup interrupts currently
+> described by the bindings.
 > 
+> Specifically, MSM8953/6/8 and SDM660 do not use the DP/DM interrupts,
+> while the SS PHY interrupt is optional on SDM660 and SC7280.
 > 
-> Hi, Ming
+> Note that no devicetree in mainline specify any wakeup interrupts for
 > 
-> I find that a big change from v4 to v5 is the simplification of locks.
+>   - qcom,ipq4019-dwc3
+>   - qcom,ipq6018-dwc3
+>   - qcom,ipq8064-dwc3
+>   - qcom,ipq8074-dwc3
+>   - qcom,msm8994-dwc3
+>   - qcom,qcs404-dwc3
 > 
-> In v5 you remove ubq->abort_lock, and I want to ask why it is OK to remove it?
-
-Actually V4 and previous version dealt with the issue too complicated.
-
+> but let's keep the schema warnings about that for now.
 > 
-> If you have time, could you explain how ublk deals with potential race on:
-> 1)queue_rq 2)ublk_abort_queue 3) ublk_ctrl_stop_dev 4) ublk_rq_task_work.
-> (Lock in ublk really confuses me...)
-
-One big change is the following code:
-
-__ublk_rq_task_work():
-	bool task_exiting = current != ubq->ubq_daemon ||
-                (current->flags & PF_EXITING);
-	...
-	if (unlikely(task_exiting)) {
-                blk_mq_end_request(req, BLK_STS_IOERR);
-                mod_delayed_work(system_wq, &ub->monitor_work, 0);
-                return;
-    }
-
-Abort is always started after PF_EXITING is set, but if PF_EXITING is
-set, __ublk_rq_task_work fails the request immediately, then io->flags
-won't be touched, then no race with abort. Also PF_EXITING is
-per-task flag, can only be set before calling __ublk_rq_task_work(),
-and setting it actually serialized with calling task work func.
-
-In ublk_queue_rq(), we don't touch io->flags, so there isn't race
-with abort.
-
-Wrt. ublk_ctrl_stop_dev(), it isn't related with abort directly, and
-if del_gendisk() waits for inflight IO, abort work will be started
-for making forward progress. After del_gendisk() returns, there can't
-be any inflight io, so it is safe to cancel other pending io command.
-
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  .../devicetree/bindings/usb/qcom,dwc3.yaml    | 60 +++++++++++++++++--
+>  1 file changed, 55 insertions(+), 5 deletions(-)
 > 
-> 
-> [...]
-> 
-> > +
-> > +/*
-> > + * __ublk_fail_req() may be called from abort context or ->ubq_daemon
-> > + * context during exiting, so lock is required.
-> > + *
-> > + * Also aborting may not be started yet, keep in mind that one failed
-> > + * request may be issued by block layer again.
-> > + */
-> > +static void __ublk_fail_req(struct ublk_io *io, struct request *req)
-> > +{
-> > +	WARN_ON_ONCE(io->flags & UBLK_IO_FLAG_ACTIVE);
-> > +
-> > +	if (!(io->flags & UBLK_IO_FLAG_ABORTED)) {
-> > +		io->flags |= UBLK_IO_FLAG_ABORTED;
-> > +		blk_mq_end_request(req, BLK_STS_IOERR);
-> > +	}
-> > +}
-> > +
-> 
-> [...]
-> 
-> > +
-> > +/*
-> > + * When ->ubq_daemon is exiting, either new request is ended immediately,
-> > + * or any queued io command is drained, so it is safe to abort queue
-> > + * lockless
-> > + */
-> > +static void ublk_abort_queue(struct ublk_device *ub, struct ublk_queue *ubq)
-> > +{
-> > +	int i;
-> > +
-> > +	if (!ublk_get_device(ub))
-> > +		return;
-> > +
-> > +	for (i = 0; i < ubq->q_depth; i++) {
-> > +		struct ublk_io *io = &ubq->ios[i];
-> > +
-> > +		if (!(io->flags & UBLK_IO_FLAG_ACTIVE)) {
-> > +			struct request *rq;
-> > +
-> > +			/*
-> > +			 * Either we fail the request or ublk_rq_task_work_fn
-> > +			 * will do it
-> > +			 */
-> > +			rq = blk_mq_tag_to_rq(ub->tag_set.tags[ubq->q_id], i);
-> > +			if (rq)
-> > +				__ublk_fail_req(io, rq);
-> > +		}
-> > +	}
-> > +	ublk_put_device(ub);
-> > +}
-> > +
-> 
-> 
-> Another problem: 
-> 
-> 1) comment of __ublk_fail_req():  "so lock is required"
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index c991d9103f87..fea3e7092ace 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -94,9 +94,11 @@ properties:
+>        - const: apps-usb
+>  
+>    interrupts:
+> +    minItems: 1
+>      maxItems: 4
+>  
+>    interrupt-names:
+> +    minItems: 1
+>      maxItems: 4
+>  
+>    qcom,select-utmi-as-pipe-clk:
+> @@ -333,14 +335,9 @@ allOf:
+>                - qcom,ipq6018-dwc3
+>                - qcom,ipq8064-dwc3
+>                - qcom,ipq8074-dwc3
+> -              - qcom,msm8953-dwc3
+>                - qcom,msm8994-dwc3
+> -              - qcom,msm8996-dwc3
+> -              - qcom,msm8998-dwc3
+>                - qcom,qcs404-dwc3
+>                - qcom,sc7180-dwc3
+> -              - qcom,sc7280-dwc3
+> -              - qcom,sdm660-dwc3
+>                - qcom,sdm845-dwc3
+>                - qcom,sdx55-dwc3
+>                - qcom,sdx65-dwc3
+> @@ -369,6 +366,59 @@ allOf:
+>              - const: dm_hs_phy_irq
+>              - const: dp_hs_phy_irq
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,msm8953-dwc3
+> +              - qcom,msm8996-dwc3
+> +              - qcom,msm8998-dwc3
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          maxItems: 2
+> +        interrupt-names:
+> +          items:
+> +            - const: hs_phy_irq
+> +            - const: ss_phy_irq
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sdm660-dwc3
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          minItems: 1
+> +          maxItems: 2
+> +        interrupt-names:
+> +          minItems: 1
+> +          items:
+> +            - const: hs_phy_irq
+> +            - const: ss_phy_irq
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sc7280-dwc3
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          minItems: 3
+> +          maxItems: 4
+> +        interrupt-names:
+> +          minItems: 3
+> +          items:
+> +            - const: hs_phy_irq
+> +            - const: dp_hs_phy_irq
+> +            - const: dm_hs_phy_irq
+> +            - const: ss_phy_irq
 
-Yeah, now __ublk_fail_req is only called in abort context, and no race
-with task work any more, so lock isn't needed.
+OK, I see now that you used SC8280XP order matching this one.
 
-> 
-> 2) comment of ublk_abort_queue(): "so it is safe to abort queue lockless"
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This comment is updated in v5, and it is correct.
-
-> 
-> 3) ublk_abort_queue() calls _ublk_fail_req() on all ubqs.
-
-No, ublk_abort_queue() only aborts the passed ubq, so if one ubq daemon
-is aborted, other ubqs can still handle IO during deleting disk.
+> +
+>    - if:
+>        properties:
+>          compatible:
 
 
-Thanks,
-Ming
-
+Best regards,
+Krzysztof

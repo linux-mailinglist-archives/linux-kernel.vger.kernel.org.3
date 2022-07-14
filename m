@@ -2,115 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6459E5757EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB555757F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240919AbiGNXQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 19:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S240935AbiGNXRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 19:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240929AbiGNXQN (ORCPT
+        with ESMTP id S240630AbiGNXRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 19:16:13 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9299372EEC;
-        Thu, 14 Jul 2022 16:16:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657840572; x=1689376572;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AJL06bd9lQh2AmUSTEF0Un/ArSUeAQHW+QlFFAbUKbo=;
-  b=k6cf54BXfmyUyXnLvxzvQIMmUCAA9P7qep2Nzj0eosegfx7L8TlZjyZK
-   TvRmWDFMr332dgM6yF+yh3P3bqUa9SvIiqi77RqQM8kBlTcfkx+dbwa85
-   wNOonP9KmMqpcZxGtop2W0ZCCdTyYgdncC81W4rK1WXOpdnhnjVBi6laa
-   xb6nfTX8Ft0CqHl7f/m78vlgc42bhDrOQX4jiJ6YeYPRaO1hV/JollrVj
-   C/L1gf8Sq5v1rwVXbT1lmt0JVNZq8HalMbcn4vahKHVgLq8LwsV2hySEQ
-   idGtPmBY3DD/z63sgHkV61k6TWtE0pPhu+YocudLxtX5diydMb9dj7+Wi
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="268676967"
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="268676967"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 16:16:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="738449838"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Jul 2022 16:16:11 -0700
-Received: from rjingar-desk5.amr.corp.intel.com (vicentes-mobl.amr.corp.intel.com [10.209.132.117])
-        by linux.intel.com (Postfix) with ESMTP id 20D9958092F;
-        Thu, 14 Jul 2022 16:16:11 -0700 (PDT)
-From:   Rajvi Jingar <rajvi.jingar@linux.intel.com>
-To:     rafael.j.wysocki@intel.com, bhelgaas@google.com
-Cc:     rajvi.jingar@linux.intel.com, david.e.box@linux.intel.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v2 2/2] PCI/PTM: fix to maintain pci_dev->ptm_enabled
-Date:   Thu, 14 Jul 2022 16:16:09 -0700
-Message-Id: <20220714231609.3962051-2-rajvi.jingar@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220714231609.3962051-1-rajvi.jingar@linux.intel.com>
-References: <20220714231609.3962051-1-rajvi.jingar@linux.intel.com>
+        Thu, 14 Jul 2022 19:17:00 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792F871BFE
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:16:59 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4C7B05C0089;
+        Thu, 14 Jul 2022 19:16:56 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 14 Jul 2022 19:16:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=russell.cc; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1657840616; x=
+        1657927016; bh=FONg2bGJtmJ1Xycx7o6dOlmZb1WdDxtKAAFomE5W5C8=; b=K
+        KFOv3s+MSUYK5qq9x5uY42bcGtNalZYRAYl3imZDKHc5TA0DSEHlXwc2pYpgS2mP
+        bVsJCX2Ec27KD5QJiijJO4VX7b+IET2LDhHlquMCNRL59o78IwQ3FdPtkIlgvAkm
+        9di0JTExG47PcdaAzfHS7rrOfT51IiY4BWH3LxSq/09/pqZyZPUf9PF1PBPtW+8x
+        Ewlx+oS7EUoBf4W5oJMvlUSyVGjQ7V4W3LaysyCIFYUffMoxZlv6uX1WTraT41ol
+        GiKyn78/OuN011wlL3g2z3kV6jxMWjkuQsSu6uH4PRiziAixTSXadGOl0MbRZPle
+        vhZjy6qnVKBplOwWFMH9w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1657840616; x=
+        1657927016; bh=FONg2bGJtmJ1Xycx7o6dOlmZb1WdDxtKAAFomE5W5C8=; b=E
+        MAGFxeIMibG+L2v3RG8GE5TpSspc4ZloRNbBNOAE/RlXQ4EtQj3k/h0GqxjL7DZK
+        msPftkQ1w4yY2SZdTg9SUU7niC8GNUJy2gVTfyj6vunjrjCYiWag8IOBgTg7pAQR
+        NFKrItEF6CNjOdhWImpMZSINdYlWz6A4uPVBOFWPDeCUBpDVTxmhRmshlpBFVhT/
+        KbzZxAcfMQPth3V9S/3BI7nytpIVLn9tvF1KDIINatveWvWiyMA6e2O58fYiz3OC
+        aymkZaLhqWYGnWT41TYZwWRj9wmODBUCFXj9k3P0WT2qkcOT8IZNKVuYmiOM791h
+        aY0OEYU7QnfnQ8Sq/u1VQ==
+X-ME-Sender: <xms:56PQYkmAVfffG4i6IOUndK5-wImCYA0RiWBN8eaIcH_GgWa_XTz5oQ>
+    <xme:56PQYj1R6_nXllY2HOkGZGA0k_CxjbNoGrLrHNNZg1GbVH1UzlDCtRtCDLHPgPy0L
+    Xosu6iYcOeTB24wJg>
+X-ME-Received: <xmr:56PQYiq9ypVOFjSD4RlGkgfumLYEk2RmrmcEPP3lvv6_CG0-kfrB9Pq99utcrjOjG0bRn4w1ALEj-D5ktkoFHyRv_GQXpmA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudektddgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdluddtmdenucfjughrpefkuffhvfevffgjfhgtgfgfggesthhqredt
+    tderjeenucfhrhhomheptfhushhsvghllhcuvehurhhrvgihuceorhhushgtuhhrsehruh
+    hsshgvlhhlrdgttgeqnecuggftrfgrthhtvghrnheptdevfeetfffghffgveekieellefh
+    vdefudektdelueeiueffhedvhfeltdevieefnecuffhomhgrihhnpehfrhgvvgguvghskh
+    htohhprdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomheprhhushgtuhhrsehruhhsshgvlhhlrdgttg
+X-ME-Proxy: <xmx:56PQYgmz4QBCawDKxRWW3OZ6uoVhHop-56nSLu-27i6YDNlT7T5COA>
+    <xmx:56PQYi0Vgz0qZHjVi5sC2slmAanUzTM_cUrXkew-gSlwLi5Ef3o2-A>
+    <xmx:56PQYnsOOQIKIZhWMucU_guDUlnmHGs2NX0z4c9TRLka0EoLl2Sauw>
+    <xmx:6KPQYoOBCrD7XIHiFxVYj45fi25eBcMbm_wo9U9CqkLQVU4NJ-PgnQ>
+Feedback-ID: i4421424f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 14 Jul 2022 19:16:50 -0400 (EDT)
+Message-ID: <9d18166d534dc30d83f2255d4512619aa6b3b517.camel@russell.cc>
+Subject: Re: Linux 5.19-rc6
+From:   Russell Currey <ruscur@russell.cc>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alex Deucher <alexdeucher@gmail.com>
+Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Axtens <dja@axtens.net>
+Date:   Fri, 15 Jul 2022 09:16:47 +1000
+In-Reply-To: <CAHk-=wj4+BSj2SPMRUr-TZ4Qg2o9HGOBWiJQE336YcF_U1sVNQ@mail.gmail.com>
+References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
+         <20220713050724.GA2471738@roeck-us.net>
+         <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
+         <a804b76e-159f-dbc2-f8dc-62a58552e88d@roeck-us.net>
+         <CADnq5_O6Tp2QPXyDCvpWuRXhDr6H1PM50Ow5YG2WeukqUd-GnQ@mail.gmail.com>
+         <CAHk-=wj4+BSj2SPMRUr-TZ4Qg2o9HGOBWiJQE336YcF_U1sVNQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pci_dev->ptm_enabled needs to be maintained to reflect the current PTM
-state of the device. In pci_ptm_disable(), clear ptm_enabled from
-'struct pci_dev' on disabling PTM state for the device.
-In pci_restore_ptm_state(), set dev->ptm_enabled based on the restored
-PTM state of the device.
+Hi Linus,
 
-Also, perform ptm_enabled check in pci_ptm_disable() to avoid config
-space access in case if PTM is already disabled for the device.
+On Wed, 2022-07-13 at 14:32 -0700, Linus Torvalds wrote:
+> On Wed, Jul 13, 2022 at 2:01 PM Alex Deucher <alexdeucher@gmail.com>
+> wrote:
+> >=20
+> > If you want to apply Guenter's patch original patch:
+> > https://patchwork.freedesktop.org/patch/490184/
+> > That's fine with me.
+>=20
+> Honestly, by this time I feel that it's too little, too late.
+>=20
+> The ppc people apparently didn't care at all about the fact that this
+> driver didn't compile.
+>=20
+> At least Michael Ellerman and Daniel Axtens were cc'd on that thread
+> with the proposed fix originally.
+>=20
+> I don't see any replies from ppc people as to why it happened, even
+> though apparently a bog-standard "make allmodconfig" just doesn't
+> build.
 
-Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
----
- v1->v2:
-   - add ptm_enabled check in pci_ptm_disable().
-   - set the dev->ptm_enabled value in pci_restore_ptm_state().
----
- drivers/pci/pcie/ptm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+I believe Michael Ellerman has been on holiday for some time, and
+Daniel Axtens no longer works on powerpc (and wasn't the one that
+submitted the patch, it was submitted by Paul Mackerras, who wasn't on
+CC).
 
-diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
-index 368a254e3124..8dc7d2285a0d 100644
---- a/drivers/pci/pcie/ptm.c
-+++ b/drivers/pci/pcie/ptm.c
-@@ -34,6 +34,9 @@ void pci_disable_ptm(struct pci_dev *dev)
- 	int ptm;
- 	u16 ctrl;
- 
-+	if (!dev->ptm_enabled)
-+		return;
-+
- 	if (!pci_is_pcie(dev))
- 		return;
- 
-@@ -44,6 +47,7 @@ void pci_disable_ptm(struct pci_dev *dev)
- 	pci_read_config_word(dev, ptm + PCI_PTM_CTRL, &ctrl);
- 	ctrl &= ~(PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT);
- 	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, ctrl);
-+	dev->ptm_enabled = 0;
- }
- 
- void pci_save_ptm_state(struct pci_dev *dev)
-@@ -83,6 +87,7 @@ void pci_restore_ptm_state(struct pci_dev *dev)
- 
- 	cap = (u16 *)&save_state->cap.data[0];
- 	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, *cap);
-+	dev->ptm_enabled = !!(*cap & PCI_PTM_CTRL_ENABLE);
- }
- 
- void pci_ptm_init(struct pci_dev *dev)
--- 
-2.25.1
+The proposed fix didn't get sent to linuxppc-dev either, so it's
+unlikely many ppc people knew about it.
 
+We certainly should have noticed allmodconfig was broken, and should
+have more than just Michael keeping an eye on all his automated builds.
+
+I would count this case as ignorance rather than apathy.
+
+- ruscur

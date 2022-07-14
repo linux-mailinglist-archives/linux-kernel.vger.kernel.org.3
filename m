@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBD9574BE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BB5574BEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238728AbiGNLZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
+        id S238722AbiGNLZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238410AbiGNLZl (ORCPT
+        with ESMTP id S236515AbiGNLZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:25:41 -0400
+        Thu, 14 Jul 2022 07:25:40 -0400
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68DB452E5C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71A1652FDA;
         Thu, 14 Jul 2022 04:25:38 -0700 (PDT)
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26EBPREc8023305, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26EBPREc8023305
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26EBPSXy8023309, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26EBPSXy8023309
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
         Thu, 14 Jul 2022 19:25:28 +0800
 Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 14 Jul 2022 19:25:30 +0800
+ 15.1.2375.28; Thu, 14 Jul 2022 19:25:30 +0800
 Received: from localhost.localdomain (172.21.132.192) by
  RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 14 Jul 2022 19:25:29 +0800
+ 15.1.2308.27; Thu, 14 Jul 2022 19:25:30 +0800
 From:   <hildawu@realtek.com>
 To:     <marcel@holtmann.org>
 CC:     <johan.hedberg@gmail.com>, <luiz.dentz@gmail.com>,
         <linux-bluetooth@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <max.chou@realtek.com>, <alex_lu@realsil.com.cn>,
         <kidman@realtek.com>
-Subject: [PATCH v2 4/5] Bluetooth: btusb: Add Realtek RTL8852C support ID 0x13D3:0x3587
-Date:   Thu, 14 Jul 2022 19:25:22 +0800
-Message-ID: <20220714112523.13242-5-hildawu@realtek.com>
+Subject: [PATCH v2 5/5] Bluetooth: btusb: Add Realtek RTL8852C support ID 0x13D3:0x3586
+Date:   Thu, 14 Jul 2022 19:25:23 +0800
+Message-ID: <20220714112523.13242-6-hildawu@realtek.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220714112523.13242-1-hildawu@realtek.com>
 References: <20220714112523.13242-1-hildawu@realtek.com>
@@ -57,10 +57,10 @@ X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
 X-KSE-Antivirus-Interceptor-Info: scan successful
 X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzcvMTQgpFekyCAwOTowNTowMA==?=
 X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -72,14 +72,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Hilda Wu <hildawu@realtek.com>
 
-Add the support ID(0x13D3, 0x3587) to usb_device_id table for
+Add the support ID(0x13D3, 0x3586) to usb_device_id table for
 Realtek RTL8852C.
 
 The device info from /sys/kernel/debug/usb/devices as below.
 
 T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=12   MxCh= 0
 D:  Ver= 1.00 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=13d3 ProdID=3587 Rev= 0.00
+P:  Vendor=13d3 ProdID=3586 Rev= 0.00
 S:  Manufacturer=Realtek
 S:  Product=Bluetooth Radio
 S:  SerialNumber=00e04c000001
@@ -113,14 +113,14 @@ Signed-off-by: Hilda Wu <hildawu@realtek.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 50f2b0094cc7..e2da9d2573c9 100644
+index e2da9d2573c9..aaba2d737178 100644
 --- a/drivers/bluetooth/btusb.c
 +++ b/drivers/bluetooth/btusb.c
-@@ -434,6 +434,8 @@ static const struct usb_device_id blacklist_table[] = {
+@@ -436,6 +436,8 @@ static const struct usb_device_id blacklist_table[] = {
  						     BTUSB_WIDEBAND_SPEECH },
- 	{ USB_DEVICE(0x0cb8, 0xc558), .driver_info = BTUSB_REALTEK |
+ 	{ USB_DEVICE(0x13d3, 0x3587), .driver_info = BTUSB_REALTEK |
  						     BTUSB_WIDEBAND_SPEECH },
-+	{ USB_DEVICE(0x13d3, 0x3587), .driver_info = BTUSB_REALTEK |
++	{ USB_DEVICE(0x13d3, 0x3586), .driver_info = BTUSB_REALTEK |
 +						     BTUSB_WIDEBAND_SPEECH },
  
  	/* Realtek Bluetooth devices */

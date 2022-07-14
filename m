@@ -2,110 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1BA574424
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E797574426
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235381AbiGNFCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 01:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
+        id S232557AbiGNFCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 01:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237758AbiGNE75 (ORCPT
+        with ESMTP id S230435AbiGNFAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 00:59:57 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330441F2F3;
-        Wed, 13 Jul 2022 21:56:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657774600; x=1689310600;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=lo8m1CDkPXiL9g2nnCBXYZuPow5p7LgdYRNIqe9SssU=;
-  b=VEj6W8tdTJTFMw7g9YxfsqSjv5sk5mmsBENSvtC7c7GF4RDorbmHYsEw
-   eFRG/A6DulzW6dgHxNCxlKW5NtkgdInlWo+nTVdVwQvLtL9YelMKLxU5E
-   O1SBs/k1uBkOBTWG2OFOWUmiDhEqYEoewUi9bwuZC01EZEyZHKB6zQrun
-   k=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jul 2022 21:56:40 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 21:56:39 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Jul 2022 21:56:39 -0700
-Received: from hu-rkollals-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Jul 2022 21:56:36 -0700
-From:   Rohith Kollalsi <quic_rkollals@quicinc.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Rohith Kollalsi" <quic_rkollals@quicinc.com>
-Subject: [PATCH v2] usb: dwc3: core: Do not perform GCTL_CORE_SOFTRESET during bootup
-Date:   Thu, 14 Jul 2022 10:26:25 +0530
-Message-ID: <20220714045625.20377-1-quic_rkollals@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 14 Jul 2022 01:00:22 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A2325E94
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 21:57:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657774637; x=1689310637;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=lwQnOGjgivQ5p2oJYc4Kbap67iNh8bkmNF0iKNVM8Oo=;
+  b=GtPSE7cV+cUQQj2ay8gZSqzTOaSta9qsTh+r0Jg7W+nS4BwjVqHY1kL+
+   tpXxKXIcwPjEZsuU4/9SSWhfEdThoMdzxBkOpQjBn9jfkgOGs7Bvbgaiw
+   2Twjnu/eoQOx6UGu/xItgsHEQTiJ4tZpBvYGTdPQVQ+sVjkmVKXz0xFfK
+   YXAi2JBGqMJQhvSagcz31cOL9e9WzMjpay+MJxYCm5rDqJzQbzS+r+QkZ
+   /t0s3xZJpkcTS18hLQfE1yPJnRdqIJ0tfVqP/Rd6magt4nmA1Je+xT/9D
+   aZ2FWY/Fz7Pmb9IThkvf9nc2dNlc/vtqVe+kigyT6mUlVtYtIQBQTBogf
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="286554359"
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="286554359"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 21:57:16 -0700
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="546128526"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 21:57:13 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>, jvgediya.oss@gmail.com
+Subject: Re: [PATCH v8 00/12] mm/demotion: Memory tiers and demotion
+References: <20220704070612.299585-1-aneesh.kumar@linux.ibm.com>
+        <87r130b2rh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <60e97fa2-0b89-cf42-5307-5a57c956f741@linux.ibm.com>
+        <87r12r5dwu.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <0a55e48a-b4b7-4477-a72f-73644b5fc4cb@linux.ibm.com>
+        <87mtde6cla.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <fef35622-0bd4-f220-26bd-37d8e0112c4d@linux.ibm.com>
+        <87ilo267jl.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <ad4b095b-bb85-b01f-5d69-383219384c29@linux.ibm.com>
+        <87edyp67m1.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <878roxuz9l.fsf@linux.ibm.com>
+Date:   Thu, 14 Jul 2022 12:56:55 +0800
+In-Reply-To: <878roxuz9l.fsf@linux.ibm.com> (Aneesh Kumar K. V.'s message of
+        "Wed, 13 Jul 2022 15:10:06 +0530")
+Message-ID: <87o7xs47hk.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the programming guide, it is recommended to
-perform a GCTL_CORE_SOFTRESET only when switching the mode
-from device to host or host to device. However, it is found
-that during bootup when __dwc3_set_mode() is called for the
-first time, GCTL_CORESOFTRESET is done with suspendable bit(BIT 17)
-of DWC3_GUSB3PIPECTL set. This some times leads to issues
-like controller going into bad state and controller registers
-reading value zero. Until GCTL_CORESOFTRESET is done and
-run/stop bit is set core initialization is not complete.
-Setting suspendable bit of DWC3_GUSB3PIPECTL and then
-performing GCTL_CORESOFTRESET is therefore not recommended.
-Avoid this by only performing the reset if current_dr_role is set,
-that is, when doing subsequent role switching.
+"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
 
-Fixes: f88359e1588b ("usb: dwc3: core: Do core softreset when switch mode")
-Signed-off-by: Rohith Kollalsi <quic_rkollals@quicinc.com>
----
-v2: Explaining the scenario in a better way in the comment before
-    GCTL.CoreSoftReset.
+> "Huang, Ying" <ying.huang@intel.com> writes:
 
- drivers/usb/dwc3/core.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+[snip]
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 050b2ba5986d..c5c238ab3083 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -158,9 +158,13 @@ static void __dwc3_set_mode(struct work_struct *work)
- 		break;
- 	}
- 
--	/* For DRD host or device mode only */
--	if ((DWC3_IP_IS(DWC3) || DWC3_VER_IS_PRIOR(DWC31, 190A)) &&
--	    dwc->desired_dr_role != DWC3_GCTL_PRTCAP_OTG) {
-+	/*
-+	 * When current_dr_role is not set, there's no role switching.
-+	 * Only perform GCTL.CoreSoftReset when there's DRD role switching.
-+	 */
-+	if (dwc->current_dr_role && ((DWC3_IP_IS(DWC3) ||
-+			DWC3_VER_IS_PRIOR(DWC31, 190A)) &&
-+			dwc->desired_dr_role != DWC3_GCTL_PRTCAP_OTG)) {
- 		reg = dwc3_readl(dwc->regs, DWC3_GCTL);
- 		reg |= DWC3_GCTL_CORESOFTRESET;
- 		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
--- 
-2.17.1
+>>
+>> I believe that sparse memory tier IDs can make memory tier more stable
+>> in some cases.  But this is different from the system suggested by
+>> Johannes.  Per my understanding, with Johannes' system, we will
+>>
+>> - one driver may online different memory types (such as kmem_dax may
+>>   online HBM, PMEM, etc.)
+>>
+>> - one memory type manages several memory nodes (NUMA nodes)
+>>
+>> - one "abstract distance" for each memory type
+>>
+>> - the "abstract distance" can be offset by user space override knob
+>>
+>> - memory tiers generated dynamic from different memory types according
+>>   "abstract distance" and overridden "offset"
+>>
+>> - the granularity to group several memory types into one memory tier can
+>>   be overridden via user space knob
+>>
+>> In this way, the memory tiers may be changed totally after user space
+>> overridden.  It may be hard to link memory tiers before/after the
+>> overridden.  So we may need to reset all per-memory-tier configuration,
+>> such as cgroup paritation limit or interleave weight, etc.
+>
+> Making sure we all agree on the details.
+>
+> In the proposal https://lore.kernel.org/linux-mm/7b72ccf4-f4ae-cb4e-f411-74d055482026@linux.ibm.com
+> instead of calling it "abstract distance" I was referring it as device
+> attributes.
+>
+> Johannes also suggested these device attributes/"abstract distance"
+> to be used to derive the memory tier to which the memory type/memory
+> device will be assigned.
+>
+> So dax kmem would manage different types of memory and based on the device
+> attributes, we would assign them to different memory tiers (memory tiers
+> in the range [0-200)).
+>
+> Now the additional detail here is that we might add knobs that will be
+> used by dax kmem to fine-tune memory types to memory tiers assignment.
+> On updating these knob values, the kernel should rebuild the entire
+> memory tier hierarchy. (earlier I was considering only newly added
+> memory devices will get impacted by such a change. But I agree it
+> makes sense to rebuild the entire hierarchy again) But that rebuilding
+> will be restricted to dax kmem driver.
+>
 
+Thanks for explanation and pointer.  Per my understanding, memory
+types and memory devices including abstract distances are used to
+describe the *physical* memory devices, not *policy*.  We may add more
+physical attributes to these memory devices, such as, latency,
+throughput, etc.  I think we can reach consensus on this point?
+
+In contrast, memory tiers are more about policy, such as
+demotion/promotion, interleaving and possible partition among cgroups.
+How to derive memory tiers from memory types (or devices)?  We have
+multiple choices.
+
+Per my understanding, Johannes suggested to use some policy parameters
+such as distance granularity (e.g., if granularity is 100, then memory
+devices with abstract distance 0-100, 100-200, 200-300, ... will be put
+to memory tier 0, 1, 2, ...) to build the memory tiers.  Distance
+granularity may be not flexible enough, we may need something like a set
+of cutoffs or range, e.g., 50, 100, 200, 500, or 0-50, 50-100, 100-200,
+200-500, >500.  These policy parameters should be overridable from user
+space.
+
+And per my understanding, you suggested to place memory devices to
+memory tiers directly via a knob of memory types (or memory devices).
+e.g., memory_type/memtier can be written to place the memory devices of
+the memory_type to the specified memtier.  Or via
+memorty_type/distance_offset to do that.
+
+Best Regards,
+Huang, Ying
+
+[snip]

@@ -2,100 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8858C574C04
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB26D574C02
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238806AbiGNL1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:27:22 -0400
+        id S238821AbiGNL1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:27:16 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238813AbiGNL1P (ORCPT
+        with ESMTP id S238850AbiGNL1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:27:15 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153FA5885E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8Ps/TljTNHGfY8PDlzoxZJIjrp8/Szhza8CwHrtIT94=; b=tPAfp9GBKXxV9jckn5pMF4an9F
-        gGGVDnga/jzhqanLvhCduFP7e2Gqm/nXJSG5ltwIZrXD63IfbPGAkfN3XRgaFt/i/8oFcyrqVLcjd
-        Rsq9pdpn06gtjIHUJhK5gTsP/2QedVhLK/MIW7d/NE6yB3C1olyDAgYRE/v2W1vV7X1yt/m9+NZvr
-        z1vrGD7Pdj7IDYUg48dMauiol7/vaJJ7QTPmUdetiuWNZrzCUT0+e4hO5PnzEX6t1qpcyw20nINpi
-        BLNKIRXhGtoEK4x7eKhAIYi6pCtGm0fC7h+xYliJkOttjP3qk8hP2t+pYGf/yAsH7gGhewYDFGtwF
-        g8/GHWgQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBwzc-009K9b-BT; Thu, 14 Jul 2022 11:26:52 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8566F98016F; Thu, 14 Jul 2022 13:26:51 +0200 (CEST)
-Date:   Thu, 14 Jul 2022 13:26:51 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Libo Chen <libo.chen@oracle.com>
-Cc:     vincent.guittot@linaro.org, mgorman@suse.de,
-        tim.c.chen@linux.intel.com, 21cnbao@gmail.com,
-        dietmar.eggemann@arm.com, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de
-Subject: Re: [PATCH] sched/fair: no sync wakeup from interrupt context
-Message-ID: <Ys/9e52SDRp8Kpnn@worktop.programming.kicks-ass.net>
-References: <20220711224704.1672831-1-libo.chen@oracle.com>
+        Thu, 14 Jul 2022 07:27:00 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BA757E3F;
+        Thu, 14 Jul 2022 04:26:58 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 315591C0001; Thu, 14 Jul 2022 13:26:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1657798017;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dUHCXrZZsaZHtr/Nu1V80b9dO4byk2qDHza8hn02rTg=;
+        b=Gj7OhCwMRUAJIG2tO+Y/LkLYyMBJMejUdiwDPo7s12ZQvgECr525CrwqgD9Sq1bgQqU8Be
+        G8Xik25hWTjZ50c5J/d9HLu+PkKvc3W0jGJZe+Cq9UaKCJEe87zklo6ADczXeek2ZQsuFq
+        ktuAYsOWEgqPKdtP9e0VSDgR74IKrtk=
+Date:   Thu, 14 Jul 2022 13:26:56 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Henning Schild <henning.schild@siemens.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
+Message-ID: <20220714112656.GB16407@duo.ucw.cz>
+References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+ <YqBS8I62YBPFC9iS@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="s2ZSL+KKDSLx8OML"
 Content-Disposition: inline
-In-Reply-To: <20220711224704.1672831-1-libo.chen@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YqBS8I62YBPFC9iS@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 03:47:04PM -0700, Libo Chen wrote:
-> Barry Song first pointed out that replacing sync wakeup with regular wakeup
-> seems to reduce overeager wakeup pulling and shows noticeable performance
-> improvement.[1]
-> 
-> This patch argues that allowing sync for wakeups from interrupt context
-> is a bug 
 
-Yes.
+--s2ZSL+KKDSLx8OML
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> The
-> assumption is built into wake_affine() where it discounts the waker's presence
-> from the runqueue when sync is true. The random waker from interrupts bears no
-> relation to the wakee and don't usually go to sleep immediately afterwards
-> unless wakeup granularity is reached. 
+On Wed 2022-06-08 08:42:40, Lee Jones wrote:
+> On Mon, 06 Jun 2022, Andy Shevchenko wrote:
+>=20
+> > There are a few users that would like to utilize P2SB mechanism of hidi=
+ng
+> > and unhiding a device from the PCI configuration space.
+> >=20
+> > Here is the series to consolidate p2sb handling code for existing users
+> > and to provide a generic way for new comer(s).
+> >=20
+> > It also includes a patch to enable GPIO controllers on Apollo Lake
+> > when it's used with ABL bootloader w/o ACPI support.
+> >=20
+> > The patch that brings the helper ("platform/x86/intel: Add Primary to
+> > Sideband (P2SB) bridge support") has a commit message that sheds a light
+> > on what the P2SB is and why this is needed.
+> >=20
+> > I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
+> > since we have an ACPI device for GPIO I do not see any attempts to recr=
+eate
+> > one).
+> >=20
+> > The series is ready to be merged via MFD tree, but see below.
+> >=20
+> > The series also includes updates for Simatic IPC drivers that partially
+> > tagged by respective maintainers (the main question is if Pavel is okay
+> > with the last three patches, since I believe Hans is okay with removing
+> > some code under PDx86). Hence the first 8 patches can be merged right
+> > away and the rest when Pavel does his review.
+>=20
+> Can we just wait for Pavel's review, then merge them all at once?
 
-Exactly that.
+10,12: Acked-by: Pavel Machek <pavel@ucw.cz>
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
 
-> Signed-off-by: Libo Chen <libo.chen@oracle.com>
-> ---
->  kernel/sched/fair.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 794c2cb945f8..59b210d2cdb5 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6704,7 +6704,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->  static int
->  select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
->  {
-> -	int sync = (wake_flags & WF_SYNC) && !(current->flags & PF_EXITING);
-> +	/* Don't set sync for wakeup from irq/soft ctx */
-> +	int sync = in_task() && (wake_flags & WF_SYNC)
-> +		   && !(current->flags & PF_EXITING);
+--s2ZSL+KKDSLx8OML
+Content-Type: application/pgp-signature; name="signature.asc"
 
-That's not a coding style you'll find anywhere near this code though.
-I'll fix it up.
+-----BEGIN PGP SIGNATURE-----
 
->  	struct sched_domain *tmp, *sd = NULL;
->  	int cpu = smp_processor_id();
->  	int new_cpu = prev_cpu;
-> --
-> 2.31.1
-> 
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYs/9gAAKCRAw5/Bqldv6
+8ubTAJ4lJV3sSOMmCDzU9ppIj7pPee2UsACfXwn5zrZlCGTRzug+D74SB+3OTaA=
+=zcrF
+-----END PGP SIGNATURE-----
+
+--s2ZSL+KKDSLx8OML--

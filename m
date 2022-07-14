@@ -2,106 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA1E574D3B
+	by mail.lfdr.de (Postfix) with ESMTP id CA02B574D3C
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238910AbiGNMOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S238777AbiGNMOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239268AbiGNMOd (ORCPT
+        with ESMTP id S239229AbiGNMOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:14:33 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C6C2B199
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:14:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=8IsG3X6zCfF6DLdWoVTEy5WGlpBO4SysD3lWEtSUkiM=; b=jnnl+pDIp9qmpJESNHT4kZK9Sk
-        wv6gsqi+CQ1dQqvqbWqrsgN/o6Q9ZUcR8/t8t37+FaKkyP2/zBN7JmcOK6VorXpf5Mo0ac0epXuBB
-        NZRhSYJvIyY4pLELJxngsRsSbUPw/4wbtFdiQzirnWeYOdg7zCPBJFYZhR3uQmAd8apivkpdswyLj
-        GgcwVFrNVAMe5RdkExrbtqDc9bUSyUK1i+Y9r4II38IqRnUkPoLJi9a4T41oCq6WfRx0Flki8VxBr
-        gosBlbUYIvxyLgmzyGiIBsghk7C2y1P8A30o2qYnP5K3kUC72JqSTR8appZuJpfjT0qhl4AuIbRZ0
-        OX/U1diw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33330)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oBxjP-0005k5-MF; Thu, 14 Jul 2022 13:14:11 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oBxjJ-0006b8-ND; Thu, 14 Jul 2022 13:14:05 +0100
-Date:   Thu, 14 Jul 2022 13:14:05 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
-Subject: Re: Linux 5.19-rc6
-Message-ID: <YtAIjVDa7IKRO3JX@shell.armlinux.org.uk>
-References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
- <20220713050724.GA2471738@roeck-us.net>
- <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
- <Ys8hqoiN5iWbslsM@shell.armlinux.org.uk>
- <CAHk-=wjNxyXQqn=k0KipzUPoBYWQhUwybxee8GTkF_Oz6RPVFw@mail.gmail.com>
- <e63e108b-c99c-9ab7-0638-367b72983b81@roeck-us.net>
+        Thu, 14 Jul 2022 08:14:24 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F343D275D3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:14:22 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id a5so2272951wrx.12
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=55zD0QXo1chptuJ40MTWPwlftZQu04txJOVAu3oL538=;
+        b=ZXYu1GkaXaZUAHXW7NJ2tAYgEpj4bKCVa7T6a9U2i/U65Q0YFw+8PdPsOFQWvF/M6a
+         tWuatYf+v5MqLzicwVwbsA57D69Ds36GUtEki3dtP40ajob0dHNUbMs0/ZYvJIHqsKfH
+         21xXuA9Hnq8KvrDG8KQciPjVW4xp9veIVUSyWnv1vNEd+DXi1WJF1j8BzcnfhBodAFvt
+         Uk7v8wNyGEuy0ksM6dXDpgk51zNJX/lc51pOV0nnjPIlqOUnRyMpqK77xBLYy6tFUtdw
+         QzbKo4AexLBk+/mkykQssXcYg9uq60ygYf/GJzfB2N7u4R3lU4AfKl3rowO+9G3ERjQd
+         r+2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=55zD0QXo1chptuJ40MTWPwlftZQu04txJOVAu3oL538=;
+        b=Rh9KQToP7+lMhFOpbo0mQbn+DhvpD2kiDlSR1vgIsDryKWGIUBGBgyhAKXAs/VutE5
+         LKpj91rPhPXKvvZ7420x7t2EnLJRCQcKBH2ZptdLgRactQaneZcA/CYGsfWsRNOg9FO7
+         WtGFUHvwh1/RCsghk6Hag9daFOhWbN+xIodJ4dD0HjMefe93vPoW8d0aTraZ5VfHOwjY
+         FN7AekE4fCVVCSvyvmeEfkCdz2HDeItJZzO2hqrMFZZZENDdx4KorNC9bONe72T8wMkK
+         1Jo/BMsxA6GA5agMw8wUf+e+WxsMUP1Xs/cifopzLBJs4/KH0Opnj7FzNMl2oud6CJdG
+         eH6A==
+X-Gm-Message-State: AJIora8m+cOHZy9Mcvd44E/5oj2MhcAME0YnNbrBFRGLD8VmChEQAlR2
+        X+WChrXDUJQ/2ZIhmsikrTaxNQ==
+X-Google-Smtp-Source: AGRyM1saV55L9vYobgC89Wv4XJvzm19tWEri3/ZcIeaoXiCcTUqM/sFrN8H9v9XzAU0zH9hYub5bsw==
+X-Received: by 2002:a05:6000:1046:b0:21d:6c52:b648 with SMTP id c6-20020a056000104600b0021d6c52b648mr8249231wrx.131.1657800861495;
+        Thu, 14 Jul 2022 05:14:21 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id d13-20020adffbcd000000b0021d9591c64fsm1375498wrs.33.2022.07.14.05.14.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 05:14:20 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 13:14:19 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     marek.behun@nic.cz, linux-leds@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: LED Maintainership
+Message-ID: <YtAIm+X2XchcSkFX@google.com>
+References: <Ys/kruf8DE4ISo8M@google.com>
+ <20220714112326.GA16407@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e63e108b-c99c-9ab7-0638-367b72983b81@roeck-us.net>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220714112326.GA16407@duo.ucw.cz>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 01:40:41PM -0700, Guenter Roeck wrote:
-> On 7/13/22 13:21, Linus Torvalds wrote:
-> > On Wed, Jul 13, 2022 at 12:49 PM Russell King (Oracle)
-> > <linux@armlinux.org.uk> wrote:
-> > > 
-> > > There may be a patch that solves that, but it's never been submitted to
-> > > my patch system:
-> > > 
-> > > https://lore.kernel.org/all/20220524025139.40212-1-wangkefeng.wang@huawei.com/
-> > 
-> > That patch looks sane to me, but I guess Guenter would need to check
-> > ... Guenter?
-> > 
-> 
-> That patch is (and has been) in linux-next for a long time,
-> as commit d2ca1fd2bc70, and with the following tags.
-> 
->     Fixes: 7719a68b2fa4 ("ARM: 9192/1: amba: fix memory leak in amba_device_try_add()")
->     Reported-by: Guenter Roeck <linux@roeck-us.net>
->     Tested-by: Guenter Roeck <linux@roeck-us.net>
->     Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->     Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> 
-> So, yes, it fixes the problem. I don't know where it is pulled from, though.
-> I thought that it is from Russell's tree, given his Signed-off-by:,
-> but I never really checked.
+On Thu, 14 Jul 2022, Pavel Machek wrote:
 
-Ah, yes, it's in the same bracnh as 9192/1. So if Linus is reporting
-that 9192/1 is still a problem in linux-next, then this patch does
-_not_ fix it.
+> Hi!
+> 
+> > Not sure what's going on behind the scenes, but it looks as though the
+> > LED subsystem has been left unmaintained for at least 2 months now.
+> 
+> > Does anyone have any objection to me stepping in as temporary
+> > maintainer until the situation is resolved?
+> 
+> Yes, I'm a bit busy and would not mind help.
+> 
+> There's a lot of easy stuff in the LED -- drivers not introducing new
+> APIs -- and some quite tricky stuff -- userland API leaves... a lot to
+> be desired, and we are in the middle of defining multicolor API.
+> 
+> I wanted to ask Marek (in cc now) if he would be interested in
+> helping. He knows the APIs / issues, and actually has multicolor LEDs
+> he cares about. Marek, are you interested?
+> 
+> If Marek is not interested, yes, help with the driver stuff would be
+> welcome.
+
+No problem.  The offer still stands.
+
+I guess Marek and I aren't mutually exclusive either.
+
+Any harm in us both helping out (if Marek is also interested that is)?
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

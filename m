@@ -2,270 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E700574A82
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106E2574A48
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238295AbiGNKVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
+        id S238192AbiGNKPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238280AbiGNKVJ (ORCPT
+        with ESMTP id S231895AbiGNKO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:21:09 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDBE52FF9;
-        Thu, 14 Jul 2022 03:21:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657794068; x=1689330068;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=g49j0cb9hxZKdZ75BONB6nCv4q9hV2JY4Lk4I2Q6EZ0=;
-  b=UEF9Djq1Ma/LZlty0OuGnRTeUJBfvtCMN4XOFB3OgfHQjS/Ir50MUyoh
-   GOjLrv4N4NWjVisUkLpmZr1shdUwCoZB3hQhT2Jq7Ds3tyoU2rE6QWjaD
-   d4f65l4N8WQExU6Z9K6Q+AnZ0wbjx0Wutkry3pDv0eVb6nsr4wHphXp4L
-   IkfEBWs7cJlFGYQwev3U80ko/CF0FG4acJLDXMWAj+BJK6NTmMJCWSptT
-   zhjLF8AW4I6FuwIjIqELn9f0KRjlIxRMdtLGVrdKHdKKLxjAUaBdiA+2E
-   u3OHtR8DycViqyWp8ZXcp+OTdZ8LlKZSOd8PjdHSlS53/PBrS1R6x/ieo
-   w==;
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="167808613"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jul 2022 03:21:06 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 14 Jul 2022 03:21:05 -0700
-Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 14 Jul 2022 03:20:57 -0700
-From:   Sergiu Moga <sergiu.moga@microchip.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>, <eugen.hristev@microchip.com>
-CC:     <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Sergiu Moga <sergiu.moga@microchip.com>
-Subject: [PATCH] watchdog: dt-bindings: atmel,at91sam9-wdt: convert to json-schema
-Date:   Thu, 14 Jul 2022 13:12:44 +0300
-Message-ID: <20220714101242.103521-1-sergiu.moga@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 14 Jul 2022 06:14:58 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058F4EAC;
+        Thu, 14 Jul 2022 03:14:57 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id dn9so2529211ejc.7;
+        Thu, 14 Jul 2022 03:14:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A5yNT274X8JVIXWHK9IfpidEsdTyKnF8Wkvv4Lr1xrM=;
+        b=qmVMmCYWMChsAdG5X2Y6Q/71MVwf6RLbEeeaW/ZqgWPv2eKibulRjrYxHgTXo0KA0A
+         bzTsMcZDe7yY1TDRfQxWKl71icobxi6GmFc8yL9kAxvQdzLJ1GgEZ6us8/nqVmIVLnxZ
+         mWtnNOmmQC2TNzfGiVIzO5bpLXpe58zrruchtLRHwrbwdfJBxS52XVuch8LpAdRquONi
+         MIYxhvxUkivGN257E3Fp6AdDtspBA+pYCfJmLI/KYeUkdO+mKNt2oNvt91+6qTYI7L5l
+         o/EnrRh/HkXq73Wywd+SdK1tRHBCiLo6yFUC1khIVKN5JDzxQ2qzP8D2/hLe8XS7fkdP
+         vrjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A5yNT274X8JVIXWHK9IfpidEsdTyKnF8Wkvv4Lr1xrM=;
+        b=FvV4/CyddB8nWbuoR0k9L1yWHHzz8SUmPqW+PSqs4EL2HxKSGG9NFxacmtq0uqJfJl
+         n+As0Rmaw/Rtn9CY0NsVPmoKA+YurKIAd9JUoAnHDEouTkJz6lDziNUzjiJEao9VTceR
+         4VXWffPAdSVQBuZ3xtGihLCHmnOvbeHI3mEnFRTqQ8/ufsvoVJpl+bX8ldsypvnV8rxJ
+         gwxqZm7WLPljCi/mX1F3FqjjIvmpg+Z4ZgmBpp7AJh9MlkWmJ5Dpq0GYO7Rqml0VgHXA
+         sdI0oqcKbXOsM67tBiufuYlrJWS1bxE3bQ2k+gUDLOg+Byn+b+XkcHrO0tEMBysu15bR
+         0qCw==
+X-Gm-Message-State: AJIora+VoHvnZ8J6vntPIfXNfrKapx4kcn+tIy1woUL69yzeR4ISy+QT
+        es22zwU4zxYMOTXNHstWayg=
+X-Google-Smtp-Source: AGRyM1syFCF0F+Fqp287n/A30gl78Y4QaTt0zI7KL/3Wiff6be/4hPBEXNKZmiYryEXzPDttSmTUfQ==
+X-Received: by 2002:a17:907:7628:b0:72b:4d6f:ce8a with SMTP id jy8-20020a170907762800b0072b4d6fce8amr8207487ejc.59.1657793695494;
+        Thu, 14 Jul 2022 03:14:55 -0700 (PDT)
+Received: from fedora.robimarko.hr (dh207-98-197.xnet.hr. [88.207.98.197])
+        by smtp.googlemail.com with ESMTPSA id gr19-20020a170906e2d300b0072b592ee073sm535313ejb.147.2022.07.14.03.14.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 03:14:54 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v6 1/5] dt-bindings: thermal: tsens: Add ipq8074 compatible
+Date:   Thu, 14 Jul 2022 12:14:47 +0200
+Message-Id: <20220714101451.198211-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert at91sam9 WDT binding for Atmel/Microchip SoCs to Device Tree
-Schema format.
+Qualcomm IPQ8074 has tsens v2.3.0 block, though unlike existing v2 IP it
+only uses one IRQ, so tsens v2 compatible cannot be used as the fallback.
 
-Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+We also have to make sure that correct interrupts are set according to
+compatibles, so populate interrupt information per compatibles.
+
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/watchdog/atmel,at91sam9-wdt.yaml | 127 ++++++++++++++++++
- .../bindings/watchdog/atmel-wdt.txt           |  51 -------
- 2 files changed, 127 insertions(+), 51 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-wdt.txt
+Changes in v4:
+* Add the forgotten Reviewed-by tag from Krzysztof
 
-diff --git a/Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml b/Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml
-new file mode 100644
-index 000000000000..b3f7cbe913a5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml
-@@ -0,0 +1,127 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/atmel,at91sam9-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+Changes in v3:
+* Remove implied min/maxItem properties as pointed by Rob
+
+Changes in v2:
+* No need for a list in compatible check
+* Specify minItems and maxItems for interrupt and interrupt-names
+---
+ .../bindings/thermal/qcom-tsens.yaml          | 76 ++++++++++++++++---
+ 1 file changed, 65 insertions(+), 11 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index 038d81338fcf..fee2b6281417 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -59,6 +59,10 @@ properties:
+               - qcom,sm8350-tsens
+           - const: qcom,tsens-v2
+ 
++      - description: v2 of TSENS with combined interrupt
++        enum:
++          - qcom,ipq8074-tsens
 +
-+title: Atmel Watchdog Timers
-+
-+maintainers:
-+  - Eugen Hristev <eugen.hristev@microchip.com>
-+
-+allOf:
-+  - $ref: watchdog.yaml#
+   reg:
+     items:
+       - description: TM registers
+@@ -66,15 +70,11 @@ properties:
+ 
+   interrupts:
+     minItems: 1
+-    items:
+-      - description: Combined interrupt if upper or lower threshold crossed
+-      - description: Interrupt if critical threshold crossed
++    maxItems: 2
+ 
+   interrupt-names:
+     minItems: 1
+-    items:
+-      - const: uplow
+-      - const: critical
++    maxItems: 2
+ 
+   nvmem-cells:
+     minItems: 1
+@@ -128,22 +128,61 @@ allOf:
+     then:
+       properties:
+         interrupts:
+-          maxItems: 1
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
+         interrupt-names:
+-          maxItems: 1
++          items:
++            - const: uplow
+ 
+-    else:
 +  - if:
 +      properties:
-+        atmel,reset-type:
-+          enum:
-+            - all
-+            - proc
++        compatible:
++          contains:
++            enum:
++              - qcom,msm8953-tsens
++              - qcom,msm8996-tsens
++              - qcom,msm8998-tsens
++              - qcom,sc7180-tsens
++              - qcom,sc7280-tsens
++              - qcom,sc8180x-tsens
++              - qcom,sdm630-tsens
++              - qcom,sdm845-tsens
++              - qcom,sm8150-tsens
++              - qcom,sm8250-tsens
++              - qcom,sm8350-tsens
++              - qcom,tsens-v2
 +    then:
 +      properties:
-+        atmel,watchdog-type:
-+          const: hardware
++        interrupts:
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
++            - description: Interrupt if critical threshold crossed
++        interrupt-names:
++          items:
++            - const: uplow
++            - const: critical
 +
-+properties:
-+  compatible:
-+    const: atmel,at91sam9260-wdt
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,ipq8074-tsens
++    then:
+       properties:
+         interrupts:
+-          minItems: 2
++          items:
++            - description: Combined interrupt if upper, lower or critical thresholds crossed
+         interrupt-names:
+-          minItems: 2
++          items:
++            - const: combined
+ 
+   - if:
+       properties:
+         compatible:
+           contains:
+             enum:
++              - qcom,ipq8074-tsens
+               - qcom,tsens-v0_1
+               - qcom,tsens-v1
+               - qcom,tsens-v2
+@@ -226,4 +265,19 @@ examples:
+            #qcom,sensors = <13>;
+            #thermal-sensor-cells = <1>;
+     };
 +
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  atmel,max-heartbeat-sec:
-+    description:
-+      Should contain the maximum heartbeat value in seconds. This value
-+      should be less or equal to 16. It is used to compute the WDV field.
-+    maximum: 16
-+
-+  atmel,min-heartbeat-sec:
-+    description:
-+      Should contain the minimum heartbeat value in seconds. This value
-+      must be smaller than the max-heartbeat-sec value. It is used to
-+      compute the WDD field.
-+    maximum: 16
-+
-+  atmel,watchdog-type:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    description: |
-+      Should be hardware or software.
-+    oneOf:
-+      - description:
-+          Hardware watchdog uses the at91 watchdog reset.
-+        const: hardware
-+      - description: |
-+          Software watchdog uses the watchdog interrupt
-+          to trigger a software reset.
-+        const: software
-+    default: hardware
-+
-+  atmel,reset-type:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    description: |
-+      Should be proc or all. This is valid only when using hardware watchdog.
-+    oneOf:
-+      - description:
-+          Assert peripherals and processor reset signals.
-+        const: all
-+      - description:
-+          Assert the processor reset signal.
-+        const: proc
-+    default: all
-+
-+  atmel,disable:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description:
-+      Should be present if you want to stop the watchdog.
-+
-+  atmel,idle-halt:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description: |
-+      Should be present if you want to stop the watchdog when
-+      entering idle state.
-+      CAUTION: This property should be used with care, it actually makes the
-+      watchdog not counting when the CPU is in idle state, therefore the
-+      watchdog reset time depends on mean CPU usage and will not reset at all
-+      if the CPU stops working while it is in idle state, which is probably
-+      not what you want.
-+
-+  atmel,dbg-halt:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description: |
-+      Should be present if you want to stop the watchdog when
-+      entering debug state.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+
-+dependencies:
-+  atmel,reset-type: ['atmel,watchdog-type']
-+
-+unevaluatedProperties: false
-+
-+examples:
 +  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    // Example 4 (for any IPQ8074 based SoC-s):
++    tsens4: thermal-sensor@4a9000 {
++           compatible = "qcom,ipq8074-tsens";
++           reg = <0x4a9000 0x1000>,
++                 <0x4a8000 0x1000>;
 +
-+    watchdog@fffffd40 {
-+        compatible = "atmel,at91sam9260-wdt";
-+        reg = <0xfffffd40 0x10>;
-+        interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
-+        clocks = <&clk32k>;
-+        timeout-sec = <15>;
-+        atmel,watchdog-type = "hardware";
-+        atmel,reset-type = "all";
-+        atmel,dbg-halt;
-+        atmel,idle-halt;
-+        atmel,max-heartbeat-sec = <16>;
-+        atmel,min-heartbeat-sec = <0>;
++           interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
++           interrupt-names = "combined";
++
++           #qcom,sensors = <16>;
++           #thermal-sensor-cells = <1>;
 +    };
-diff --git a/Documentation/devicetree/bindings/watchdog/atmel-wdt.txt b/Documentation/devicetree/bindings/watchdog/atmel-wdt.txt
-deleted file mode 100644
-index 711a880b3d3b..000000000000
---- a/Documentation/devicetree/bindings/watchdog/atmel-wdt.txt
-+++ /dev/null
-@@ -1,51 +0,0 @@
--* Atmel Watchdog Timers
--
--** at91sam9-wdt
--
--Required properties:
--- compatible: must be "atmel,at91sam9260-wdt".
--- reg: physical base address of the controller and length of memory mapped
--  region.
--- clocks: phandle to input clock.
--
--Optional properties:
--- timeout-sec: contains the watchdog timeout in seconds.
--- interrupts : Should contain WDT interrupt.
--- atmel,max-heartbeat-sec : Should contain the maximum heartbeat value in
--	seconds. This value should be less or equal to 16. It is used to
--	compute the WDV field.
--- atmel,min-heartbeat-sec : Should contain the minimum heartbeat value in
--	seconds. This value must be smaller than the max-heartbeat-sec value.
--	It is used to compute the WDD field.
--- atmel,watchdog-type : Should be "hardware" or "software". Hardware watchdog
--	use the at91 watchdog reset. Software watchdog use the watchdog
--	interrupt to trigger a software reset.
--- atmel,reset-type : Should be "proc" or "all".
--	"all" : assert peripherals and processor reset signals
--	"proc" : assert the processor reset signal
--	This is valid only when using "hardware" watchdog.
--- atmel,disable : Should be present if you want to disable the watchdog.
--- atmel,idle-halt : Should be present if you want to stop the watchdog when
--	entering idle state.
--	CAUTION: This property should be used with care, it actually makes the
--	watchdog not counting when the CPU is in idle state, therefore the
--	watchdog reset time depends on mean CPU usage and will not reset at all
--	if the CPU stop working while it is in idle state, which is probably
--	not what you want.
--- atmel,dbg-halt : Should be present if you want to stop the watchdog when
--	entering debug state.
--
--Example:
--	watchdog@fffffd40 {
--		compatible = "atmel,at91sam9260-wdt";
--		reg = <0xfffffd40 0x10>;
--		interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
--		clocks = <&clk32k>;
--		timeout-sec = <15>;
--		atmel,watchdog-type = "hardware";
--		atmel,reset-type = "all";
--		atmel,dbg-halt;
--		atmel,idle-halt;
--		atmel,max-heartbeat-sec = <16>;
--		atmel,min-heartbeat-sec = <0>;
--	};
+ ...
 -- 
-2.25.1
+2.36.1
 

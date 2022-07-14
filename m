@@ -2,78 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496A357559D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35385755A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237551AbiGNTFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 15:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
+        id S234643AbiGNTLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 15:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234864AbiGNTFP (ORCPT
+        with ESMTP id S232283AbiGNTLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 15:05:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4773065D4D;
-        Thu, 14 Jul 2022 12:05:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 14 Jul 2022 15:11:31 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B7723BD4;
+        Thu, 14 Jul 2022 12:11:29 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id d548e557d55f423d; Thu, 14 Jul 2022 21:11:27 +0200
+Received: from kreacher.localnet (unknown [213.134.162.64])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8424B621D9;
-        Thu, 14 Jul 2022 19:05:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CD9C34114;
-        Thu, 14 Jul 2022 19:05:07 +0000 (UTC)
-Date:   Thu, 14 Jul 2022 15:05:06 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Jiri Pirko <jiri@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [for-next][PATCH 03/23] tracing: devlink: Use static array for
- string in devlink_trap_report even
-Message-ID: <20220714150506.34bef430@gandalf.local.home>
-In-Reply-To: <YtBjKLsoB4e+hSB5@shredder>
-References: <20220714164256.403842845@goodmis.org>
-        <20220714164328.461963902@goodmis.org>
-        <YtBjKLsoB4e+hSB5@shredder>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by v370.home.net.pl (Postfix) with ESMTPSA id F212C66CC26;
+        Thu, 14 Jul 2022 21:11:26 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] intel: thermal: PCH: Drop ACPI_FADT_LOW_POWER_S0 check
+Date:   Thu, 14 Jul 2022 21:11:26 +0200
+Message-ID: <12013659.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.162.64
+X-CLIENT-HOSTNAME: 213.134.162.64
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudejledgudefhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudeivddrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeivddrieegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehm
+ rghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Jul 2022 21:40:40 +0300
-Ido Schimmel <idosch@idosch.org> wrote:
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> On the off chance that my tags weren't omitted on purpose:
+If ACPI_FADT_LOW_POWER_S0 is not set, this doesn't mean that low-power
+S0 idle is not usable.  It merely means that using S3 on the given
+system is more beneficial from the energy saving perspective than using
+low-power S0 idle, as long as S3 is supported.
 
-Ah, I probably pulled it in from my patchwork before you sent the tags. I
-usually let my internal patchwork add them for me. So, it was not on
-purpose.
+Suspend-to-idle is still a valid suspend mode if ACPI_FADT_LOW_POWER_S0
+is not set and the pm_suspend_via_firmware() check in pch_wpt_suspend()
+is sufficient to distinguish suspend-to-idle from S3, so drop the
+confusing ACPI_FADT_LOW_POWER_S0 check.
 
-It's also a reason I post to the mailing list before I push to linux-next.
-In case I missed anything.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/intel/intel_pch_thermal.c |    8 --------
+ 1 file changed, 8 deletions(-)
 
-> 
-> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-> Tested-by: Ido Schimmel <idosch@nvidia.com>
+Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
++++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
+@@ -207,14 +207,6 @@ static int pch_wpt_suspend(struct pch_th
+ 		return 0;
+ 	}
+ 
+-	/* Do not check temperature if it is not a S0ix capable platform */
+-#ifdef CONFIG_ACPI
+-	if (!(acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0))
+-		return 0;
+-#else
+-	return 0;
+-#endif
+-
+ 	/* Do not check temperature if it is not s2idle */
+ 	if (pm_suspend_via_firmware())
+ 		return 0;
 
-Will add. Thanks!
 
-> 
-> s/even/event/ in subject
 
-I'll fix that too.
-
--- Steve

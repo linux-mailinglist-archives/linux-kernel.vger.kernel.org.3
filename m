@@ -2,102 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E99A574509
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 08:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84E157450B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 08:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbiGNG0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 02:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
+        id S233011AbiGNG1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 02:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiGNG0R (ORCPT
+        with ESMTP id S229745AbiGNG1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 02:26:17 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13BB3CE03
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 23:26:14 -0700 (PDT)
-Received: from lingfengzhe-ms7c94.loongson.cn (unknown [10.90.50.23])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9P+ts9igHYdAA--.21617S2;
-        Thu, 14 Jul 2022 14:26:06 +0800 (CST)
-From:   Qi Hu <huqi@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Oleg Nesterov <oleg@redhat.com>
-Cc:     Xu Li <lixu@loongson.cn>, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>, Qi Hu <huqi@loongson.cn>
-Subject: [PATCH] LoongArch: Fix missing fcsr in ptrace's fpr_set
-Date:   Thu, 14 Jul 2022 14:25:50 +0800
-Message-Id: <20220714062550.4934-1-huqi@loongson.cn>
-X-Mailer: git-send-email 2.37.0
+        Thu, 14 Jul 2022 02:27:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBEC6CE03;
+        Wed, 13 Jul 2022 23:27:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A924B8236E;
+        Thu, 14 Jul 2022 06:27:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C77BC34115;
+        Thu, 14 Jul 2022 06:27:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657780062;
+        bh=xabvHW7Yl6E9/kXioSdSRfN7xOeaPfq01JHLUVr5mjg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jOdvNOrcXuR1OceEyDp7VbkU0GvaXx98iK+S+tAh/w/TfdVglWbIUwu5x8v0jGIKn
+         /VsWucoDpo6fXCiOIt0ef8HuA1raH9gXj6ujebYyGdumsylpCvNIJpbb7QbPqzeLDO
+         K/h368OTqgyFByCZR6ujIEXl1BHrqoa4mZsIRBAE=
+Date:   Thu, 14 Jul 2022 08:27:38 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ben Hutchings <bwh@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [linux-stable-rc:linux-5.10.y 7114/7120] arch/x86/kernel/kvm.o:
+ warning: objtool: __raw_callee_save___kvm_vcpu_is_preempted()+0x12: 'naked'
+ return found in RETHUNK build
+Message-ID: <Ys+3WixImdEkyzm8@kroah.com>
+References: <202207130605.fX0cfbtW-lkp@intel.com>
+ <d76cd438d325e874ededc4f58818f7edae6edd68.camel@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxn9P+ts9igHYdAA--.21617S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uryrtF1UJFyDJw43tF45Awb_yoW8Xr13pr
-        ZxAas3Wr45GFWFvr4Dtw1v9r1DX3s2gryS9397J3WfAwnrXrs8XryqyFZ2vFW2y348Wayx
-        ZF9Y9r45KFsFqaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: pkxtxqxorr0wxvrqhubq/1tbiAQAHCV3QvP1CugAWst
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d76cd438d325e874ededc4f58818f7edae6edd68.camel@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In file ptrace.c, function fpr_set does not copy fcsr data from ubuf
-to kbuf. That's the reason why fcsr cannot be modified by ptrace.
+On Thu, Jul 14, 2022 at 12:31:03AM +0200, Ben Hutchings wrote:
+> On Wed, 2022-07-13 at 06:39 +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> > head:   53b881e19526bcc3e51d9668cab955c80dcf584c
+> > commit: 892f1f2b8631df5bdd0baba6e1ee3fa6eff396d0 [7114/7120] x86/retbleed: Add fine grained Kconfig knobs
+> > config: x86_64-rhel-8.3-syz (https://download.01.org/0day-ci/archive/20220713/202207130605.fX0cfbtW-lkp@intel.com/config)
+> > compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> > reproduce (this is a W=1 build):
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=892f1f2b8631df5bdd0baba6e1ee3fa6eff396d0
+> >         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+> >         git fetch --no-tags linux-stable-rc linux-5.10.y
+> >         git checkout 892f1f2b8631df5bdd0baba6e1ee3fa6eff396d0
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> > > > arch/x86/kernel/kvm.o: warning: objtool: __raw_callee_save___kvm_vcpu_is_preempted()+0x12: 'naked' return found in RETHUNK build
+> > 
+> 
+> 5.10-stable will need this fix that was already included in 5.15-
+> stable:
+> 
+> commit edbaf6e5e93acda96aae23ba134ef3c1466da3b5
+> Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Date:   Thu Jun 30 12:19:47 2022 +0200
+>  
+>     x86, kvm: use proper ASM macros for kvm_vcpu_is_preempted
+> 
 
-This patch fixs this problem and allows users using ptrace to modify
-the fcsr.
+Ah, thanks, I forgot I had fixed that already!  Now queued up.
 
-Signed-off-by: Qi Hu <huqi@loongson.cn>
-Signed-off-by: Xu Li <lixu@loongson.cn>
----
- arch/loongarch/kernel/ptrace.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/arch/loongarch/kernel/ptrace.c b/arch/loongarch/kernel/ptrace.c
-index e6ab87948e1d..dc2b82ea894c 100644
---- a/arch/loongarch/kernel/ptrace.c
-+++ b/arch/loongarch/kernel/ptrace.c
-@@ -193,7 +193,7 @@ static int fpr_set(struct task_struct *target,
- 		   const void *kbuf, const void __user *ubuf)
- {
- 	const int fcc_start = NUM_FPU_REGS * sizeof(elf_fpreg_t);
--	const int fcc_end = fcc_start + sizeof(u64);
-+	const int fcsr_start = fcc_start + sizeof(u64);
- 	int err;
- 
- 	BUG_ON(count % sizeof(elf_fpreg_t));
-@@ -209,10 +209,12 @@ static int fpr_set(struct task_struct *target,
- 	if (err)
- 		return err;
- 
--	if (count > 0)
--		err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
--					  &target->thread.fpu.fcc,
--					  fcc_start, fcc_end);
-+	err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
-+				  &target->thread.fpu.fcc, fcc_start,
-+				  fcc_start + sizeof(u64));
-+	err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
-+				  &target->thread.fpu.fcsr, fcsr_start,
-+				  fcsr_start + sizeof(u32));
- 
- 	return err;
- }
--- 
-2.37.0
-
+greg k-h

@@ -2,124 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFFA575155
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17989575150
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239834AbiGNPB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
+        id S239784AbiGNPBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239817AbiGNPB0 (ORCPT
+        with ESMTP id S232374AbiGNPBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:01:26 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EF45E33B;
-        Thu, 14 Jul 2022 08:01:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=SD+E46jleghc1zhKhR9PveNf5aZVNxzYDkkNEuLw6xs=; b=jPDf1sXvRlPt3kdJgvEDxX2uey
-        IoOgOI2HYUqGtfmOWtAn/eLsTaubeRmEpDtlThTCaZPwh0qo4P1axzKtPseySrD5Z6TKVVf6Gx+J8
-        gwHyY7HD7pLZ1C4EqAV8nJIwcWGj3NENks9j2m0vCDOYMwuT0t/E8/6AY7TNYUuCW6X3CRo4Li2Mg
-        xHCkAj6UAHswTSl4wssGSfxEJ09ev0/AyK87B61JTyjy5th087ygs0og9jduneGmc4yOxzyUrwNim
-        vtVDigEUVgARQqcOg7FQ/RTTbMkFszxNB9lNYZHadrXPaLU5tdUk2FYt8K8vRzOMUWBB0z3KTOu63
-        yl6BYIoA==;
-Received: from [177.139.47.106] (helo=[192.168.15.109])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oC0L8-00GV8X-3S; Thu, 14 Jul 2022 17:01:18 +0200
-Message-ID: <8bfd13a7-ed02-00dd-63a1-7144f2e55ef0@igalia.com>
-Date:   Thu, 14 Jul 2022 12:00:59 -0300
+        Thu, 14 Jul 2022 11:01:05 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32B175D0CE
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:01:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47EEB1D13;
+        Thu, 14 Jul 2022 08:01:04 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B6263F70D;
+        Thu, 14 Jul 2022 08:01:02 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 16:01:00 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Conor.Dooley@microchip.com
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        ionela.voinescu@arm.com, pierre.gondois@arm.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH -next] arch_topology: Fix cache attributes detection in
+ the CPU hotplug path
+Message-ID: <20220714150100.aqvmdgjkymc2dr5t@bogus>
+References: <20220713133344.1201247-1-sudeep.holla@arm.com>
+ <0abd0acf-70a1-d546-a517-19efe60042d1@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC] futex2: add NUMA awareness
-Content-Language: en-US
-To:     Andrey Semashev <andrey.semashev@gmail.com>
-Cc:     linux-api@vger.kernel.org, fweimer@redhat.com,
-        linux-kernel@vger.kernel.org, Darren Hart <dvhart@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        libc-alpha@sourceware.org, Davidlohr Bueso <dave@stgolabs.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-References: <36a8f60a-69b2-4586-434e-29820a64cd88@igalia.com>
- <74ba5239-27b0-299e-717c-595680cd52f9@gmail.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <74ba5239-27b0-299e-717c-595680cd52f9@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0abd0acf-70a1-d546-a517-19efe60042d1@microchip.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrey,
-
-Thanks for the feedback.
-
-Às 08:01 de 14/07/22, Andrey Semashev escreveu:
-> On 7/14/22 06:18, André Almeida wrote:
-[...]
->>
->> Feedback? Who else should I CC?
+On Thu, Jul 14, 2022 at 02:17:33PM +0000, Conor.Dooley@microchip.com wrote:
+> On 13/07/2022 14:33, Sudeep Holla wrote:
 > 
-> Just a few questions:
+> Hey Sudeep,
+> I could not get this patch to actually apply, tried a couple
+> different versions of -next :/
+>
+
+That's strange.
+
+> It is in -next already though, which I suspect might be part of why
+> it does not apply.. 
+
+Ah that could be the case.
+
+> Surely you can fast forward your arch_topology
+> for-next branch to gregs merge commit rather than generating this
+> from the premerge branch & re-merging into your branch that Stephen
+> picks up?
+>
+
+Greg has merged my branch and all those commits are untouched, so it shouldn't
+cause any issue as the hash remains same in both the trees, I just added just
+this one patch on the top. Did you see any issues with the merge, or are you
+just speculating based on your understanding. As I said if Greg had picked
+up patches directly, then I would have definitely based on his -next branch
+to avoid duplicate hash, but that is not the case here.
+
+> Either way, I tested it directly in -next since that's back to
+> booting for me today and ...
+>
+
+Thanks.
+
+> > init_cpu_topology() is called only once at the boot and all the cache
+> > attributes are detected early for all the possible CPUs. However when
+> > the CPUs are hotplugged out, the cacheinfo gets removed. While the
+> > attributes are added back when the CPUs are hotplugged back in as part
+> > of CPU hotplug state machine, it ends up called quite late after the
+> > update_siblings_masks() are called in the secondary_start_kernel()
+> > resulting in wrong llc_sibling_masks.
+> > 
+> > Move the call to detect_cache_attributes() inside update_siblings_masks()
+> > to ensure the cacheinfo is updated before the LLC sibling masks are
+> > updated. This will fix the incorrect LLC sibling masks generated when
+> > the CPUs are hotplugged out and hotplugged back in again.
+> > 
+> > Reported-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> > ---
+> >   drivers/base/arch_topology.c | 16 ++++++----------
+> >   1 file changed, 6 insertions(+), 10 deletions(-)
+> > 
+> > Hi Conor,
+> > 
+> > Ionela reported an issue with the CPU hotplug and as a fix I need to
+> > move the call to detect_cache_attributes() which I had thought to keep
+> > it there from first but for no reason had moved it to init_cpu_topology().
+> > 
+> > Wonder if this fixes the -ENOMEM on RISC-V as this one is called on the
+> > cpu in the secondary CPUs init path while init_cpu_topology executed
+> > detect_cache_attributes() for all possible CPUs much earlier. I think
+> > this might help as the percpu memory might be initialised in this case.
 > 
-> Do I understand correctly that notifiers won't be able to wake up
-> waiters unless they know on which node they are waiting?
+> Actually, we are now worse off than before:
+>      0.009813] smp: Bringing up secondary CPUs ...
+> [    0.011530] BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> [    0.011550] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 0, name: swapper/1
+> [    0.011566] preempt_count: 1, expected: 0
+> [    0.011580] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.19.0-rc6-next-20220714-dirty #1
+> [    0.011599] Hardware name: Microchip PolarFire-SoC Icicle Kit (DT)
+> [    0.011608] Call Trace:
+> [    0.011620] [<ffffffff80005070>] dump_backtrace+0x1c/0x24
+> [    0.011661] [<ffffffff8066b0c4>] show_stack+0x2c/0x38
+> [    0.011699] [<ffffffff806704a2>] dump_stack_lvl+0x40/0x58
+> [    0.011725] [<ffffffff806704ce>] dump_stack+0x14/0x1c
+> [    0.011745] [<ffffffff8002f42a>] __might_resched+0x100/0x10a
+> [    0.011772] [<ffffffff8002f472>] __might_sleep+0x3e/0x66
+> [    0.011793] [<ffffffff8014d774>] __kmalloc+0xd6/0x224
+> [    0.011825] [<ffffffff803d631c>] detect_cache_attributes+0x37a/0x448
+> [    0.011855] [<ffffffff803e8fbe>] update_siblings_masks+0x24/0x246
+> [    0.011885] [<ffffffff80005f32>] smp_callin+0x38/0x5c
+> [    0.015990] smp: Brought up 1 node, 4 CPUs
+>
+
+Interesting, need to check if it is not in atomic context on arm64.
+Wonder if some configs are disabled and making this bug hidden. Let me
+check.
+
+One possible solution is to add GFP_ATOMIC to the allocation but I want
+to make sure if it is legal to be in atomic context when calling
+update_siblings_masks.
+
+> > 
+> > Anyways give this a try, also test the CPU hotplug and check if nothing
+> > is broken on RISC-V. We noticed this bug only on one platform while
 > 
+> So, our system monitor that runs openSBI does not actually support
+> any hotplug features yet, so:
 
-If userspace is using NUMA_FLAG, yes. Otherwise all futexes would be
-located in the default node, and userspace doesn't need to know which
-one is the default.
+OK, we can ignore hotplug on RISC-V for now then. We have tested on multiple
+arm64 platforms(DT as well as ACPI).
 
-> Is it possible to wait on a futex on different nodes?
-
-Yes, given that you specify `.hint = id` with the proper node id.
-
-> 
-> Is it possible to wake waiters on a futex on all nodes? When a single
-> (or N, where N is not "all") waiter is woken, which node is selected? Is
-> there a rotation of nodes, so that nodes are not skewed in terms of
-> notified waiters?
-
-Regardless of which node the waiter process is running, what matter is
-in which node the futex hash table is. So for instance if we have:
-
-	struct futex32_numa f = {.value = 0, hint = 2};
-
-And now we add some waiters for this futex:
-
-Thread 1, running on node 3:
-
-	futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-
-Thread 2, running on node 0:
-
-	futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-
-Thread 3, running on node 2:
-
-	futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-
-And then, Thread 4, running on node 3:
-
-	futex_wake(&f, 2, FUTEX_NUMA | FUTEX_32);
-
-Now, two waiter would wake up (e.g. T1 and T3, node 3 and 2) and they
-are from different nodes. futex_wake() doesn't provide guarantees of
-which waiter will be selected, so I can't say which node would be
-selected. There's no policy for fairness/starvation for futex_wake(). Do
-you think this would be important for the NUMA case?
-
-Let me know if this clarifies your questions.
+-- 
+Regards,
+Sudeep

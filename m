@@ -2,102 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9C0575584
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0ED575595
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239843AbiGNS6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 14:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
+        id S232483AbiGNTCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 15:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240897AbiGNS5f (ORCPT
+        with ESMTP id S229458AbiGNTCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 14:57:35 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A266B764
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=O6B474X8P2gxKKp7qXnpFakS0XL
-        VtX/7FNJL6iki3kU=; b=XNplPfaLVlLVZl1NYESMAVjWqAyxa/XruwrOTvEXaA7
-        HEnTSzeuh9HeTt2Yf+VmVbcD45hC2BfR1/ouh8pVtVgLfxAi2rsqgm2pwJoys1Lt
-        OH42mL9E8+AMJvrIICLq0vJv4y170xd57sJmPXKMimDhAd7aY8MFg8H6FmMJ0a8w
-        =
-Received: (qmail 704724 invoked from network); 14 Jul 2022 20:57:30 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jul 2022 20:57:30 +0200
-X-UD-Smtp-Session: l3s3148p1@4dM8ecjjRsIgAwDtxwdRAEXXn+yo/Rze
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2] selftests: timers: clocksource-switch: add 'runtime' command line parameter
-Date:   Thu, 14 Jul 2022 20:57:21 +0200
-Message-Id: <20220714185721.48125-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 14 Jul 2022 15:02:12 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90FB47B9A;
+        Thu, 14 Jul 2022 12:02:07 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id CD5F082068;
+        Thu, 14 Jul 2022 21:02:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1657825324;
+        bh=aHmjHaJxJBZMe6BIMPN1PX2HZAmaQsSLKb6ocrjbf3c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Yl0WFHSWcyzjqkYmmGxvcYT9IkqHlCFo/Vzp8L1XW6DvWMLiuD3nvagHfsLKNApH6
+         AZai81nV1jWaSP4M97fg9V3nA2VSBRUym6mn9YgycnoSLQQrwo5nwmrzN4ohS8skfw
+         lfwTvGxOgG1FYCHi1gWc22+N/Q5Mv+LiVbVWmAgb/vp+6y1mO0fvvjNY/tneSkYQ0n
+         eByjnH8O0A/AFM0T5TL32MpGM45uNAEpEMtXOikPOAfjcqWECj//PByJokGRgSs0S0
+         x41m6qKyCndwEwip16B2S4FH1p5esMAz8ijeIvaPMbNHr0kWhy5v71TvxV3I6FfhbD
+         z9+NyyXCvocng==
+Message-ID: <e1fbf7cf-1bb7-6583-3713-7dbd58a4898e@denx.de>
+Date:   Thu, 14 Jul 2022 21:02:03 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 3/4] dmaengine: stm32-dma: add support to trigger STM32
+ MDMA
+Content-Language: en-US
+To:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-doc@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220713142148.239253-1-amelie.delaunay@foss.st.com>
+ <20220713142148.239253-4-amelie.delaunay@foss.st.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20220713142148.239253-4-amelie.delaunay@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So the user can decide how long the test should run.
+On 7/13/22 16:21, Amelie Delaunay wrote:
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Acked-by: John Stultz <jstultz@google.com>
----
+[...]
 
-Change since V1:
-* added the new parameter to the help printout
+> diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
+> index adb25a11c70f..3916295fe154 100644
+> --- a/drivers/dma/stm32-dma.c
+> +++ b/drivers/dma/stm32-dma.c
+> @@ -142,6 +142,8 @@
+>   #define STM32_DMA_DIRECT_MODE_GET(n)	(((n) & STM32_DMA_DIRECT_MODE_MASK) >> 2)
+>   #define STM32_DMA_ALT_ACK_MODE_MASK	BIT(4)
+>   #define STM32_DMA_ALT_ACK_MODE_GET(n)	(((n) & STM32_DMA_ALT_ACK_MODE_MASK) >> 4)
+> +#define STM32_DMA_MDMA_STREAM_ID_MASK	GENMASK(19, 16)
+> +#define STM32_DMA_MDMA_STREAM_ID_GET(n) (((n) & STM32_DMA_MDMA_STREAM_ID_MASK) >> 16)
 
- tools/testing/selftests/timers/clocksource-switch.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+Try FIELD_GET() from include/linux/bitfield.h
 
-diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
-index 5256e6215980..577e4b74211a 100644
---- a/tools/testing/selftests/timers/clocksource-switch.c
-+++ b/tools/testing/selftests/timers/clocksource-switch.c
-@@ -124,17 +124,22 @@ int main(int argc, char **argv)
- 	char orig_clk[512];
- 	int count, i, status, opt;
- 	int do_sanity_check = 1;
-+	int runtime = 60;
- 	pid_t pid;
- 
- 	/* Process arguments */
--	while ((opt = getopt(argc, argv, "s")) != -1) {
-+	while ((opt = getopt(argc, argv, "st:")) != -1) {
- 		switch (opt) {
- 		case 's':
- 			do_sanity_check = 0;
- 			break;
-+		case 't':
-+			runtime = atoi(optarg);
-+			break;
- 		default:
--			printf("Usage: %s [-s]\n", argv[0]);
-+			printf("Usage: %s [-s] [-t <secs>]\n", argv[0]);
- 			printf("	-s: skip sanity checks\n");
-+			printf("	-t: Number of seconds to run\n");
- 			exit(-1);
- 		}
- 	}
-@@ -167,7 +172,7 @@ int main(int argc, char **argv)
- 	printf("Running Asynchronous Switching Tests...\n");
- 	pid = fork();
- 	if (!pid)
--		return run_tests(60);
-+		return run_tests(runtime);
- 
- 	while (pid != waitpid(pid, &status, WNOHANG))
- 		for (i = 0; i < count; i++)
--- 
-2.35.1
+[...]
 
+> @@ -1630,6 +1670,20 @@ static int stm32_dma_probe(struct platform_device *pdev)
+>   		chan->id = i;
+>   		chan->vchan.desc_free = stm32_dma_desc_free;
+>   		vchan_init(&chan->vchan, dd);
+> +
+> +		chan->mdma_config.ifcr = res->start;
+> +		chan->mdma_config.ifcr += (chan->id & 4) ? STM32_DMA_HIFCR : STM32_DMA_LIFCR;
+> +
+> +		chan->mdma_config.tcf = STM32_DMA_TCI;
+> +		/*
+> +		 * bit0 of chan->id represents the need to left shift by 6
+> +		 * bit1 of chan->id represents the need to extra left shift by 16
+> +		 * TCIF0, chan->id = b0000; TCIF4, chan->id = b0100: left shift by 0*6 + 0*16
+> +		 * TCIF1, chan->id = b0001; TCIF5, chan->id = b0101: left shift by 1*6 + 0*16
+> +		 * TCIF2, chan->id = b0010; TCIF6, chan->id = b0110: left shift by 0*6 + 1*16
+> +		 * TCIF3, chan->id = b0011; TCIF7, chan->id = b0111: left shift by 1*6 + 1*16
+> +		 */
+> +		chan->mdma_config.tcf <<= (6 * (chan->id & 0x1) + 16 * ((chan->id & 0x2) >> 1));
+
+Some sort of symbolic macros instead of open-coded constants could help 
+readability here.
+
+[...]

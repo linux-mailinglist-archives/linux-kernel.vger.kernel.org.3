@@ -2,169 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3E457569A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 22:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2855756A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 22:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240638AbiGNUuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 16:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S240710AbiGNUxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 16:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240622AbiGNUu1 (ORCPT
+        with ESMTP id S232633AbiGNUxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 16:50:27 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999F16D55A
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 13:50:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657831826; x=1689367826;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=nNJfJ9TsAcAPTEKJojFJZvNnTJUKJEEpGI0mF/350sk=;
-  b=P3VJ4QUoQlJtgUDm8NIdCWPH+NROwR0QVBPLgKi78JtaGNpE8JpRB83W
-   YcojIV/eZdmZxCpBLtQBaA0I87woOqu0TcX01LEvyKmYTPiRB12MCaE3m
-   RwHTzsQLnXy/sh9j95cRACarhhACHjqGgLAhrsBnUFzHnt707T3A/1Tpl
-   X8ulJ+3cfXFz6NrTIl/RRgZQjJLBWm2OG6LtKytMmjd/9jaDicclScpNo
-   3bKcP/LRVDHLRzp9AINX5gwVao6XDsypLQ2/WlMoQrl56vwhW/jUEqQj8
-   nQFODbCia9GfOgT8pubnnZvc7jwQHTdZpYZQ2jlWf0vdVNbah9UmNX57v
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="283185030"
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="283185030"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 13:50:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="663929385"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Jul 2022 13:50:26 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 14 Jul 2022 13:50:26 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 14 Jul 2022 13:50:25 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Thu, 14 Jul 2022 13:50:25 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.172)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 14 Jul 2022 13:50:25 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IsjZIHPWkMDZnaG/xGYMijp4oWFUjW/X3zCrxKSIh7g0SHf6nf4KVBXeLH5PwJqk3pyt34iCP7c3UtYUhrzoH3pLSIidhPhe+qz3QkZdBoPGewji9/g3Chsb9KwQRzvX39rTbgc7T1x84sSLLj9oTI68qn0DtePxZoDvbqWSRfiDsp5f5xz5LSFbrui08eMx6Giwx8k8o4Ltxa1zwNLe8mM/cfSQzVsqIsjrIc16b1UMxu4Q7KjkOKMU+/ViOl/WZNyvmGQxHyDvRfp7UEL4jZasEqYU9pdQPDyLO+W8/8GvkrCsGk37wRk3VxUUazKapiQkPtH0uIyYuuqgIs+7Zg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kkGDfnQYfwPGvFizgOfz0+O7bAedJUQFaTK9gpqi2ic=;
- b=nut4FIXpzk+4bC8+JaYdrfz2paH/zFXPGwt6ybEORWKEO3X41tQAB3fH5zPMQQx1Bkz5U4YhS8QZnjdioUJHuJNZPCSssQ54iE2zLsa79DY1+gHkn9r/0p3nlEHcwAilyeP006l9KUssfpo9K09nV8s6MnzZqi3C8orCadbWazgUcCIeLwPYBu3pBDSBWa/RfdIhBXg6Ff1m8u+MilQNS0Sten3vR8/effHxBtFrW2T7BTrA5nfP6b5LgzCGdBzY2scHCq2QCxi9/pkoITkimIcTa6iUDUb10DlmwUNeumQcYVEE/wWq42hhmGUdBljjm1MaLuDqjtjqE64qfve3ag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by SN6PR11MB3280.namprd11.prod.outlook.com
- (2603:10b6:805:bb::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.21; Thu, 14 Jul
- 2022 20:50:23 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::6466:20a6:57b4:1edf]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::6466:20a6:57b4:1edf%11]) with mapi id 15.20.5438.014; Thu, 14 Jul
- 2022 20:50:23 +0000
-Date:   Thu, 14 Jul 2022 13:50:21 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     <nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH v1 1/1] nvdimm/namespace: return uuid_null only once in
- nd_dev_to_uuid()
-Message-ID: <62d0818dbc1bb_1643dc294e7@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20220607152525.33468-1-andriy.shevchenko@linux.intel.com>
- <62d05f453b73e_1643dc29412@dwillia2-xfh.jf.intel.com.notmuch>
- <YtBkOo2vME1jgU1C@smile.fi.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YtBkOo2vME1jgU1C@smile.fi.intel.com>
-X-ClientProxiedBy: SJ0PR05CA0100.namprd05.prod.outlook.com
- (2603:10b6:a03:334::15) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        Thu, 14 Jul 2022 16:53:01 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D4D6758F;
+        Thu, 14 Jul 2022 13:53:00 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id w2so3553037ljj.7;
+        Thu, 14 Jul 2022 13:52:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qoOEVRog5Z9OnfGA667isDqDOO6aHHg3XsYmCVgJlPE=;
+        b=ZnNjcqwzm3TIowpCiyQqSnvZJMN8vS+WW7Ol5NU9/gR8pS4CKS1AmfxY0Ro7cTwsMP
+         I+bTKCR2CO8lFyZUwUd/Av5EltJz6B1oH0nmmT20JY0XdWEhPL1XROurGi9xgJe6uwPY
+         uuUjY7EsmJkzrWH5EvWDtEqeXLPU4Y35BsZnW6ZLGkrFZ8QSQAcCNpkA2eAi4olMWEjH
+         UG1zufCHg0GGv87BI7dMsHPZSr/u6uYawXe6qwD6JMc9Ld7e4GwTSn5yNN2V806qUxHN
+         QedKIBMvV4S3OJJVgvN74CHFg1+yR9zON2h7pUz2nSyYRXCGkiBtZ/6wI0lUi+buMmL7
+         ZGFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qoOEVRog5Z9OnfGA667isDqDOO6aHHg3XsYmCVgJlPE=;
+        b=NoJBwFv7ZYJtiUrl5oFT1vwWUk9TsHDh66AVSV5juFMduX/NeY3RxL6R5+BO5mP0Cx
+         0euI6RMIJYPzAJJbPjena02UiepM0bUZhK1Yxh5j1G9c/I9VVpeAS5SDHGcVGmQDmz4T
+         VEBcArkYtKmVn+LfKusV09Vmy64xKWYWscW9RYTeFQOTFGsZxWNUYH/jcOW6QODbvrlC
+         5hVQGhxTsQV/HG99qqMKNu87Xa/NElPyp2AldQ2pVfCvsuKFgc1LbYQkQd3Q42VDqW90
+         4MC3yxKKZ3Vx2sJnAcD6KhL6n2VeF+UzInYTc8ZPi0hh5uLyRSDyfuHRKVrMTiN8miVJ
+         ezbw==
+X-Gm-Message-State: AJIora+n2AOvcPXArDfuE+8YIN6LpKBUVq/FN7fI2D4uKoKvScRYMVcS
+        BoXSpJKtRurYCWd1JHIDnhUAB5ZUN8o8Yb//WUo=
+X-Google-Smtp-Source: AGRyM1thlr1wx3tNWOgTqSb+LfcRI9DpbpLJcE7Mm1Jj8QhbF8tPjEwhNX8pwgBS9xHXodTA61eMiwahhYDfUcb+YKs=
+X-Received: by 2002:a05:651c:1691:b0:25d:8240:6b3a with SMTP id
+ bd17-20020a05651c169100b0025d82406b3amr5020152ljb.305.1657831978184; Thu, 14
+ Jul 2022 13:52:58 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f4ac5b83-6a29-4f7b-1861-08da65da790e
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3280:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ye436tuM88vf5bI/VQkwoIorljAwr+lIz3+NyXRbXzfM3Jro9kXnBtjzSUIoEPeGnqLk5kjCyLqJXGDLFHAQ+al/e2OgVA+ulFYE522i7Nklt2YpoaqubgZPIVQ6KXKDJsGzw1Zt4hFlUWzAhuy1Jgxf60umU8EgjQWOa6k52N8OAzfWsCFrfXYpnSpz6COeurcA6yY7UTbCYn3uEm4/P0clu060BNXqCVpD8N5pnsm2WxvfRuS+9BpRz27WsVuHZyNYSDS6PL4pb4KDdB0oVbSrTRugxZsu+oy0XhWYBmRJthaENRL+VysMbtEZzF8+N+CNagQ6TLqavDzRyoZjI4ULbzStd1XyFjOvy3rVdqxUNfehNUDvXNS7wxbdwfwPBGGW6nk7kW+8HRpvf9832y6iFYwmSe+jc34qqgotMF75a64QUj1n8D7yWmJs8lgX0lzXWqqK+gl+7Vp9LsNrzMSx1p/G43eCa0HYNNfurWVRBXUAT1UVmL5YSeMOeDJjOr3Y2HF4DLjNqSiFe7PTM68LcUpisJV1usYfzuhQovIJQQPfMJVilygNPZVnBly6Z2InOgDHvNmDVL9ZBRMqr7ntavfH0I0eo1e+NZtYODZbe40mHe0LTzXH+dz04GyBc9nldP5fIPjty4R9NC1ExQNNCBzR/EmPynSBPy3vJzscqelewmTYeIwTmuHdw6S29pYJ5NNpUjCGZaZhf5MS8tpbrZPSzL5dqToNjFHouqxTqurVfUKzbpb3YPT6+hIXUj0j+sZl2xR8U9JhJrhGew==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(346002)(39860400002)(396003)(376002)(366004)(4326008)(8676002)(54906003)(66556008)(66946007)(82960400001)(38100700002)(83380400001)(66476007)(5660300002)(110136005)(186003)(9686003)(26005)(8936002)(6512007)(478600001)(4744005)(316002)(2906002)(86362001)(6506007)(6486002)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Mtne75MnEN2CKNpsZzoFYJ/pw5rFdKsUpNHzT3MAXFnS0+oGJCQ8Xe4WDKhs?=
- =?us-ascii?Q?g9m5owUwN2LiTo9hiyQl31ztvD//5KOK3FrtskeCYutF/J4IAFVDAdXn+G0t?=
- =?us-ascii?Q?8luam36VrjZ9s/iCbj/Ytl/w0l19IObGmbgAJi9+g8mhiVcgTWl2FmcMHuU5?=
- =?us-ascii?Q?s1PGlklAA1QLxlX4Zt1N+FqFasbYaO762DT7XGnpS4FUnQo/4P5cgapgFvfq?=
- =?us-ascii?Q?mQXNdrj3qcaGxD8VBabRCJRNPCz4fFefJF47Y45Iub6Lt3d8aqxQexfx87uN?=
- =?us-ascii?Q?Og79oGW8ZnkZwFuwpybtZkD5K8G58tiwo7/4H6IGUSXlpAtXUpvq/CBu/+Mb?=
- =?us-ascii?Q?4l2rg8PbYtVw6kiwS5yGKNycpxzPO6cfi7gLzMM19blAzWFK2wndP7xPsXuO?=
- =?us-ascii?Q?60nfIWfVj2ZyKuCoHLPg/zXvPDL5cRjA++rhHoaUNx6C/K6QRjkA1k3Jm2Sa?=
- =?us-ascii?Q?GwW63gtUwSctpKAXPHw3IdnSLaIAGs9gwgf+cvyw4y9NY6VgA2hQckDG64nb?=
- =?us-ascii?Q?ho+/nO4BMhjq0NSr4tR6fGW6c8m94fVuPd/WQEuRNdBJWkZTLtYuvMXBsD8D?=
- =?us-ascii?Q?FpcgfDYL0kqzSMNIzsMOVtbJRWjMBgwu/a6Lk2361O0nAglJLZosr25FQ/Dx?=
- =?us-ascii?Q?djwIf1wucxhLcAnT341XwDaRdlk6bg5abf38+dZc6p4BJq261Mwn/dLvNjFI?=
- =?us-ascii?Q?LB6TtjZP7Vnh5YrIE/izNn4siuTKdislWGOavGd3Vg3ao9uzX3+bVEPd4cwt?=
- =?us-ascii?Q?OWrlIHKxU8433+E1t2dwcGqiXJL1jm4YHp4Ea14WP1ZyPtTteWWLQXoJV6rr?=
- =?us-ascii?Q?PcjalS7BmpsTUYzgGVi4YbnDABYYwDxY9lTj9GdXqTGS//VqytQYlwi9fq/R?=
- =?us-ascii?Q?fMGXK1xSFTfqETI9dpQjn9E5l9OSSIaks22zTxs0LvX8Era7G5JrWlrxUhmr?=
- =?us-ascii?Q?tl68m4AJETU4LSCwB1WbY97Q0uO++sIrxaXO01vfGDcyHkCP0mdelLnilMiY?=
- =?us-ascii?Q?76E+xugi8PATav4vjdM7WijFSbwB20tTyvszeXLCSmfnuVkDj/YUrZWcbMNP?=
- =?us-ascii?Q?VMpFiPg4nLlfpuo4LYoM8yEUXI+6KHRdhoTPbC+XQIp6N7IDWfxaLqcLSR7n?=
- =?us-ascii?Q?pKOCOmZgL4pmvoBkFc12/7CTD4Iyq8gNgUsUFgb/taAYOsUKc5QfZSeTMsxs?=
- =?us-ascii?Q?EoogPmKAojdMXvPyoJE/eSwWqoPrsXV9DMPwaNSelYHsX9RMi4ZRYdPYyFZ8?=
- =?us-ascii?Q?rQImCxEyJOwIXHNp9Ftw73V0Asfz1dCYpt1MyEEZaBoQZ1DcVoryn2Ppsd0h?=
- =?us-ascii?Q?ZxtqD6eeOTaZDW52deymD/yNEsbDGd7qTpoJUDz4aIfO/qJGywNKhsCS+WqE?=
- =?us-ascii?Q?t7sm29E5nC5k8qAK/nuLodOSU6agSBzPbVK/HcWel74GMty3iTIsXOFLyWSk?=
- =?us-ascii?Q?wpcvrlm6KoRByXjX6dktwIuD5dwFvbwgkAsTeRqdhqmEzt9pffXhgYcXWGFJ?=
- =?us-ascii?Q?9e25hMakMGhA38BA9bkHx6dNNCaVfJbs33EPCjZPKghrNMX7KiD/zJpHZvW1?=
- =?us-ascii?Q?ODqt44nRNKhU66xDQ8BCQWr3E6fM16qjubqkeUooR3xYpuXTaNQN3USaPpKJ?=
- =?us-ascii?Q?WQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4ac5b83-6a29-4f7b-1861-08da65da790e
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2022 20:50:23.5839
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5+z345Wwy8XaKpFmTt5SJpM5S3KZZe1DnBKAECCGdbpgPXdMZ9SmzUaO9uBiJUNgwc+4mJXzpfKMFX9hhsdHEeHx7A+LMgwpbw8aQSiU2a0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3280
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1657774452-4497-1-git-send-email-quic_zijuhu@quicinc.com>
+In-Reply-To: <1657774452-4497-1-git-send-email-quic_zijuhu@quicinc.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Thu, 14 Jul 2022 13:52:46 -0700
+Message-ID: <CABBYNZJG8uKv-270u1P4NTr-gML5=uR2Syhjs=x4LMhJOnqSxA@mail.gmail.com>
+Subject: Re: [PATCH v1] Bluetooth: hci_sync: Remove redundant func definition
+To:     Zijun Hu <quic_zijuhu@quicinc.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Luiz Augusto Von Dentz <luiz.von.dentz@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andy Shevchenko wrote:
-> On Thu, Jul 14, 2022 at 11:24:05AM -0700, Dan Williams wrote:
-> > Andy Shevchenko wrote:
-> > > Refactor nd_dev_to_uuid() in order to make code shorter and cleaner
-> > > by joining conditions and hence returning uuid_null only once.
-> > 
-> > Apologies for the delay, applied for v5.20.
-> 
-> No problem and thanks!
-> 
-> P.S. One patch out of three is a fix, would be nice to have it in v5.19
-> release.
+Hi Zijun,
 
-Found it, applied it.
+On Wed, Jul 13, 2022 at 9:54 PM Zijun Hu <quic_zijuhu@quicinc.com> wrote:
+>
+> both hci_request.c and hci_sync.c have the same definition
+> for disconnected_accept_list_entries(), so remove a redundant
+> copy.
+>
+> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+> ---
+>  net/bluetooth/hci_request.c |  2 +-
+>  net/bluetooth/hci_request.h |  2 ++
+>  net/bluetooth/hci_sync.c    | 18 ------------------
+>  3 files changed, 3 insertions(+), 19 deletions(-)
+
+We are actually deprecating hci_request functions in favor of hci_sync
+ones so this is going in the opposite direction.
+
+> diff --git a/net/bluetooth/hci_request.c b/net/bluetooth/hci_request.c
+> index 635cc5fb451e..38e6c66a3327 100644
+> --- a/net/bluetooth/hci_request.c
+> +++ b/net/bluetooth/hci_request.c
+> @@ -1784,7 +1784,7 @@ int hci_update_random_address(struct hci_request *req, bool require_privacy,
+>         return 0;
+>  }
+>
+> -static bool disconnected_accept_list_entries(struct hci_dev *hdev)
+> +bool disconnected_accept_list_entries(struct hci_dev *hdev)
+>  {
+>         struct bdaddr_list *b;
+>
+> diff --git a/net/bluetooth/hci_request.h b/net/bluetooth/hci_request.h
+> index 7f8df258e295..e80b500878d9 100644
+> --- a/net/bluetooth/hci_request.h
+> +++ b/net/bluetooth/hci_request.h
+> @@ -120,6 +120,8 @@ void __hci_req_update_scan(struct hci_request *req);
+>  int hci_update_random_address(struct hci_request *req, bool require_privacy,
+>                               bool use_rpa, u8 *own_addr_type);
+>
+> +bool disconnected_accept_list_entries(struct hci_dev *hdev);
+> +
+>  int hci_abort_conn(struct hci_conn *conn, u8 reason);
+>  void __hci_abort_conn(struct hci_request *req, struct hci_conn *conn,
+>                       u8 reason);
+> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+> index 212b0cdb25f5..99ffac6c5e8c 100644
+> --- a/net/bluetooth/hci_sync.c
+> +++ b/net/bluetooth/hci_sync.c
+> @@ -2419,24 +2419,6 @@ int hci_write_fast_connectable_sync(struct hci_dev *hdev, bool enable)
+>         return err;
+>  }
+>
+> -static bool disconnected_accept_list_entries(struct hci_dev *hdev)
+> -{
+> -       struct bdaddr_list *b;
+> -
+> -       list_for_each_entry(b, &hdev->accept_list, list) {
+> -               struct hci_conn *conn;
+> -
+> -               conn = hci_conn_hash_lookup_ba(hdev, ACL_LINK, &b->bdaddr);
+> -               if (!conn)
+> -                       return true;
+> -
+> -               if (conn->state != BT_CONNECTED && conn->state != BT_CONFIG)
+> -                       return true;
+> -       }
+> -
+> -       return false;
+> -}
+> -
+>  static int hci_write_scan_enable_sync(struct hci_dev *hdev, u8 val)
+>  {
+>         return __hci_cmd_sync_status(hdev, HCI_OP_WRITE_SCAN_ENABLE,
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+>
+
+
+-- 
+Luiz Augusto von Dentz

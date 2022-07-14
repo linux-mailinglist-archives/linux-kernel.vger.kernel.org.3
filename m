@@ -2,93 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1121574212
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 05:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7DD574216
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbiGND6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 23:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
+        id S231357AbiGNEEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 00:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiGND6b (ORCPT
+        with ESMTP id S229473AbiGNEES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 23:58:31 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F20726ADE;
-        Wed, 13 Jul 2022 20:58:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 92226CE2358;
-        Thu, 14 Jul 2022 03:58:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C31DC34115;
-        Thu, 14 Jul 2022 03:58:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657771106;
-        bh=oo63PaGjPpwIVhi/pmHBgQPiQmqbOpRR7v0EHyoS0Tg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QIeYv8YcxlMDJrwSoqk6B3PrfnNHl9b7zTww1m7GhJdryiyDFihSYcx/jytelcXkA
-         Qiv6ixVNE9yGH8H67D4NGtDwtWZynoR6aq2MsiHdGP3DmtSdFs6y+kR7ECMJcJFK/p
-         dYtsu0MVEmr691XCw9WkxHLaUUoJDfpkBPYHCxjIfrRSWbXbmeY34tLO1J3dJoDTNN
-         FyvYKcfo1Gp5ETvy6ti1gXIkddObNlUeHlrDWSDIcqpufrpbw54eoaTwSgWDX6liWh
-         5LSLkraiM6j9HIozN3M+sDukWfLiCPo6bv+a6WJouVTaRYXHjUuDjZ8/8YTofbVR8n
-         tBz+6iHfxW2Tw==
-Date:   Wed, 13 Jul 2022 20:58:25 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        syzbot+1fa91bcd05206ff8cbb5@syzkaller.appspotmail.com
-Subject: Re: [RFC PATCH 0/1][RESEND] Fix KASAN: slab-out-of-bounds Read in
- sk_psock_get
-Message-ID: <20220713205825.33ea6e9c@kernel.org>
-In-Reply-To: <CAABMjtG9PDPUm9vrK-Kho7WW+V5h9MmMox1EiLuvfKfiCNp=xw@mail.gmail.com>
-References: <20220713181324.14228-1-khalid.masum.92@gmail.com>
-        <20220713115622.25672f01@kernel.org>
-        <CAABMjtG9PDPUm9vrK-Kho7WW+V5h9MmMox1EiLuvfKfiCNp=xw@mail.gmail.com>
+        Thu, 14 Jul 2022 00:04:18 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC87275D5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 21:04:16 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id r9so798211lfp.10
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 21:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4i9kRRQ3z5mPuTkc7JYERdBNQjh9yJap1kHoFmvgt2E=;
+        b=g2PW9IgWmqtqJqypCXqUQuEht8KkrnXHuWybS7uFFKnrHx34x8vzi8X43eSz5cpPvb
+         RU/lfqVHLQeGjNLX+ryurrcn/yPW2Egl7H1MeSeBYtzdnBlokD6W8RARKfcKjb9mSx2H
+         73RILF0jFfUKLuF5FGMhd/OPwnIQec9eVD6fhIDBujAhXWjaF5ZVDEeTPRM+RA38lta3
+         CbfBbR/LhkV9aRqfo/bpb1VYmQ9eVtfovKyQyDNp7caDWiQ3yYWEWfAhEXDkD6YtU9A5
+         pLCJ+nf7Q4Lkw0BBYMPFL17FB3rM8R7NuiMeiczNU9IqB6vxc/9VD2zVKLa4ehJ9vxwo
+         PvKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4i9kRRQ3z5mPuTkc7JYERdBNQjh9yJap1kHoFmvgt2E=;
+        b=hw2SmBzplYMqFTQ04L6nJK4otYPgmuFsE4GjWQW8jGLDTCsvWwLjQojO1rsB4T1PQh
+         2z4iFzCqy7+ixdLu6dI75p8B7mdghxMp8S552heUSeoiLN0+//YFJQJMc5VzwdmExzne
+         gw4z+/LcmRsrNRLsGuwB+BepT4wF13aLyLhFdlT0W++K4rFZZwYo4YOYhuClgO4hU1rs
+         BypjJuz7iw7lzmixJGfGD119IouIj25ZNA93fKKVZzRZH7w1GZGaO9uu41QTBrrRImA0
+         lyxEMliDDa/IGBtuIRGNvl2NSwQCrrgS5pRbUx0+nUpyihZnHyP3jFtXoNj0WjmejaRa
+         Wn8g==
+X-Gm-Message-State: AJIora/lR/C0aJ4Ue5n3TTKddWNsHZBOb4wf4mK0l3jeVAmR/XNg3VWo
+        NCAnWDlKIMALNpVsRsYiqkb3+4X61Ie85wC7XRA=
+X-Google-Smtp-Source: AGRyM1tTXHqt4pCwxoPjOyqf/dZLan2X/Xhis7R50nAsZuWfR4YjfA9pDssH6EMEMRpQ9gggAzyTiGViJC6Jx2ikHYU=
+X-Received: by 2002:a05:6512:23aa:b0:489:ddb4:6f84 with SMTP id
+ c42-20020a05651223aa00b00489ddb46f84mr3923640lfv.683.1657771454853; Wed, 13
+ Jul 2022 21:04:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20210623120127.327154589@linutronix.de> <20210623121452.214903673@linutronix.de>
+In-Reply-To: <20210623121452.214903673@linutronix.de>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Wed, 13 Jul 2022 21:04:02 -0700
+Message-ID: <CANaxB-wkcNKWjyNGFuMn6f6H2DQSGwwQjUgg1eATdUgmM-Kg+A@mail.gmail.com>
+Subject: Re: [patch V4 09/65] x86/fpu: Sanitize xstateregs_set()
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Borislav Petkov <bp@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Chang Seok Bae <chang.seok.bae@intel.com>,
+        Megha Dey <megha.dey@linux.intel.com>,
+        Oliver Sang <oliver.sang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Jul 2022 09:55:18 +0600 Khalid Masum wrote:
-> On Thu, Jul 14, 2022 at 12:56 AM Jakub Kicinski <kuba@kernel.org> wrote:
-> > On Thu, 14 Jul 2022 00:13:23 +0600 Khalid Masum wrote:  
-> > > Using size of sk_psock as the size for kcm_psock_cache size no longer
-> > > reproduces the issue. There might be a better way to solve this issue
-> > > though so I would like to ask for feedback.
-> > >
-> > > The patch was sent to the wrong mailing list so resending it. Please
-> > > ignore the previous one.  
-> >
-> > What happened to my other off-list feedback?
-> >
-> > I pointed you at another solution which was already being discussed -
-> > does it solve the issue you're fixing?  
-> 
-> Yes, this patch solves the issue I am fixing.
+On Wed, Jun 23, 2021 at 5:24 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+....
+>
+> -       /*
+> -        * mxcsr reserved bits must be masked to zero for security reasons.
+> -        */
+> -       xsave->i387.mxcsr &= mxcsr_feature_mask;
+> -
+> -       /*
+> -        * In case of failure, mark all states as init:
+> -        */
+> -       if (ret)
+> -               fpstate_init(&fpu->state);
+> +       fpu__prepare_write(fpu);
+> +       ret = copy_kernel_to_xstate(&fpu->state.xsave, kbuf ?: tmpbuf);
 
-Thanks for checking! You can send your
+This change breaks gVisor. Now, when we set a new fpu state without
+fp,sse and ymm
+via ptrace, mxcsr isn't reset to the default value. The issue is
+reproduced only on hosts
+without xsaves. On hosts with xsaves, it works as expected.
 
-Tested-by:
-
-tag in reply to the most recent posting if you'd like:
-
-https://lore.kernel.org/all/165772238175.1757.4978340330606055982.stgit@oracle-102.nfsv4.dev/
+Thanks,
+Andrei

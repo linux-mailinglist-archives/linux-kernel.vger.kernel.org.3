@@ -2,309 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87785749EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3DA5749F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237163AbiGNKB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
+        id S237505AbiGNKCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234293AbiGNKBw (ORCPT
+        with ESMTP id S236997AbiGNKB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:01:52 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18350237
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:01:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657792910; x=1689328910;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CKGB/yo/ih8xEbnORUj5mJ3VqyPJ4af0U9ygsNoB2do=;
-  b=BL6dl+/NuQnZMCpBcyx7vsMV7jOuWxyxrCSi1QaIFvBOMksRnQTYqqVy
-   x/BSpBWyi1y83ofu1QxWm6ErW2GnhKkHWKUrz+sK6zQSug9qYToZyGrfS
-   u4gUzzKQ9ki+v1HGEchFltXIPGh/yY1mAhiigJETcQGvZyhLpZB9OzYFu
-   Zv8yDUr+zRxM1yVLwLpKHzYtsB+IC/SVoJGl36z4/OAAGFCfihQ6KyzZI
-   CDRt4bvcaTbnnInX/wxwc4Zz2uVdW0RQXzHrn1Y9SgnkSHooFeBHSsaZn
-   p9QTMkKdzX5Vt70M+JON5ZvWH2kDoagoveUz1k9xx+aQ9W6+i0Hb6ZFrL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="311121050"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="311121050"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 03:01:49 -0700
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="623354560"
-Received: from acsok-mobl.ti.intel.com (HELO maurocar-mobl2) ([10.252.37.128])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 03:01:44 -0700
-Date:   Thu, 14 Jul 2022 12:01:41 +0200
-From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas =?UTF-8?B?SGVsbHN0?= =?UTF-8?B?csO2bQ==?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Michael Cheng <michael.cheng@intel.com>,
-        Alan Previn <alan.previn.teres.alexis@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?B?TWljaGHFgg==?= Winiarski <michal.winiarski@intel.com>,
-        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
-        intel-gfx@lists.freedesktop.org, Nirmoy Das <nirmoy.das@intel.com>
-Subject: Re: [Intel-gfx] [PATCH v2 06/39] drm/i915: gt: fix some Kernel-doc
- issues
-Message-ID: <20220714120141.18b5e69d@maurocar-mobl2>
-In-Reply-To: <Ys9CMLm2vgwJmi3+@intel.com>
-References: <cover.1657699522.git.mchehab@kernel.org>
-        <3cb8ebff378fc0634e992eba68176ed30842572a.1657699522.git.mchehab@kernel.org>
-        <Ys9CMLm2vgwJmi3+@intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 14 Jul 2022 06:01:56 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF99050040;
+        Thu, 14 Jul 2022 03:01:53 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id sz17so2464592ejc.9;
+        Thu, 14 Jul 2022 03:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hnb6dmJVJ8w+0s7YTlnQHUZqrxFXtH+uKxV3IXY9L40=;
+        b=BBvvyLCcMtbUvehMM2snxdWnz/o57eYWts/1kZVSRIHaFo8g/gbOmGiq9dzzXSEEY0
+         6k4yuafUZ2DfJIEW7EXBBiY3yx2jCIGEhmOmjKP22SZ2e7TgfdMAJQzTzlknpq7BJRQS
+         t0Au1FhwOBHM91G0Z5KDYb4F2wkMK+fgnJ3LWNwr3DFNSpSj5lwo7K6OcDA/AydjV3WY
+         TcPh8k6afACQV76dCekexaxcFLiJWupnOa88OtAJSPDck8XhHjtEs7aFXNcAex8PuneQ
+         Y56Aaf/JVTGK+EuNVOJRRp0XHITuunFgYTU/qdIqOwhC5n6+5k0aZvAG5x03pLaYXI76
+         Arpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hnb6dmJVJ8w+0s7YTlnQHUZqrxFXtH+uKxV3IXY9L40=;
+        b=rcA457bD/FrEtLcD+hmNWfHGC1hlmeUNn8j4q2mWD7QpfzdmILTCjcrqbJmNv0W0gt
+         HMWfAGkmvXDiVgNTNkvmOaAidi4rH9bC8k9xkC1TdgsXS0IH/XdDlYpeSTtVKkb/SXZB
+         SBapDPjmIez/cMA71P79KMp1JGFyc8mgm06GMmdtkjbGzeFSUsqcchLg18NL5fM6cnRa
+         X/qdM1/Y4UlNWXi0QFdUORYhc5FVyc3upfoqBsLoNoYmqqj+Ai3H5eK/Hz7HXBk+0kKz
+         gnzbycWKVuO0So3o3uT3GM7vRr5wjMmi9fLMue9Pc4gGMhW1q1fKX0t0scR6od6tUSaG
+         uLwg==
+X-Gm-Message-State: AJIora87U2g0Ak8Cy9knbWr5W80wyUFWWwTpSAkgPCa4VjXVw6SRz2Km
+        bIhxQ9Q5OFewgjdIeM/IWHIppPjw+zk6PbWW03s=
+X-Google-Smtp-Source: AGRyM1sCQn8e+iDOsrWhFzdhSNCJDhCc4UgyWLSakUOGtksbk5r0HgvpK3Fsmib9vFWsJBhOgZej6MmBSRRPHyBcaPw=
+X-Received: by 2002:a17:907:971a:b0:72b:6bab:abc2 with SMTP id
+ jg26-20020a170907971a00b0072b6bababc2mr8046604ejc.551.1657792912428; Thu, 14
+ Jul 2022 03:01:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220714013131.12648-1-zhouzhouyi@gmail.com> <87tu7k6o7n.fsf@jogness.linutronix.de>
+In-Reply-To: <87tu7k6o7n.fsf@jogness.linutronix.de>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Thu, 14 Jul 2022 18:01:41 +0800
+Message-ID: <CAABZP2x-OiwX7-nRvdPz0NU1D5kgUoL4MQOgTqLK1KgLcrZ5DA@mail.gmail.com>
+Subject: Re: [PATCH linux-next] powerpc: use raw_smp_processor_id in arch_touch_nmi_watchdog
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        paulus@samba.org, Nicholas Piggin <npiggin@gmail.com>,
+        ldufour@linux.ibm.com, pmladek@suse.com, Julia.Lawall@inria.fr,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu <rcu@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022 18:07:44 -0400
-Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
+Thank John for correcting me ;-)
 
-> On Wed, Jul 13, 2022 at 09:11:54AM +0100, Mauro Carvalho Chehab wrote:
-> > There are several trivial warnings there, due to trivial things:
-> > 	- lack of function name at the kerneldoc markup;
-> > 	- undocumented structs with kernel-doc markups;
-> > 	- wrong parameter syntax.
-> > 
-> >     Fix such warnings:
-> > 
-> > 	drivers/gpu/drm/i915/gt/intel_context.h:107: warning: Function parameter or member 'ce' not described in 'intel_context_lock_pinned'
-> > 	drivers/gpu/drm/i915/gt/intel_context.h:122: warning: Function parameter or member 'ce' not described in 'intel_context_is_pinned'
-> > 	drivers/gpu/drm/i915/gt/intel_context.h:141: warning: Function parameter or member 'ce' not described in 'intel_context_unlock_pinned'
-> > 	drivers/gpu/drm/i915/gt/intel_gtt.h:510: warning: Function parameter or member 'vm' not described in 'i915_vm_resv_put'
-> > 	drivers/gpu/drm/i915/gt/intel_gtt.h:510: warning: Excess function parameter 'resv' description in 'i915_vm_resv_put'
-> > 	drivers/gpu/drm/i915/gt/intel_gtt.h:615: warning: Function parameter or member 'i915' not described in 'i915_ggtt_mark_pte_lost'
-> > 	drivers/gpu/drm/i915/gt/intel_gtt.h:615: warning: Function parameter or member 'val' not described in 'i915_ggtt_mark_pte_lost'
-> > 	drivers/gpu/drm/i915/gt/intel_rps.c:2343: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-> > 	 * Tells the intel_ips driver that the i915 driver is now loaded, if
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:28: warning: Function parameter or member 'size' not described in '__guc_capture_bufstate'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:28: warning: Function parameter or member 'data' not described in '__guc_capture_bufstate'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:28: warning: Function parameter or member 'rd' not described in '__guc_capture_bufstate'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:28: warning: Function parameter or member 'wr' not described in '__guc_capture_bufstate'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:60: warning: Function parameter or member 'link' not described in '__guc_capture_parsed_output'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:60: warning: Function parameter or member 'is_partial' not described in '__guc_capture_parsed_output'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:60: warning: Function parameter or member 'eng_class' not described in '__guc_capture_parsed_output'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:60: warning: Function parameter or member 'eng_inst' not described in '__guc_capture_parsed_output'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:60: warning: Function parameter or member 'guc_id' not described in '__guc_capture_parsed_output'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:60: warning: Function parameter or member 'lrca' not described in '__guc_capture_parsed_output'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:60: warning: Function parameter or member 'reginfo' not described in '__guc_capture_parsed_output'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:63: warning: wrong kernel-doc identifier on line:
-> > 	 * struct guc_debug_capture_list_header / struct guc_debug_capture_list
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:81: warning: wrong kernel-doc identifier on line:
-> > 	 * struct __guc_mmio_reg_descr / struct __guc_mmio_reg_descr_group
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:106: warning: wrong kernel-doc identifier on line:
-> > 	 * struct guc_state_capture_header_t / struct guc_state_capture_t /
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:164: warning: Function parameter or member 'is_valid' not described in '__guc_capture_ads_cache'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:164: warning: Function parameter or member 'ptr' not described in '__guc_capture_ads_cache'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:164: warning: Function parameter or member 'size' not described in '__guc_capture_ads_cache'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:164: warning: Function parameter or member 'status' not described in '__guc_capture_ads_cache'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:217: warning: Function parameter or member 'ads_null_cache' not described in 'intel_guc_state_capture'
-> > 	drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:217: warning: Function parameter or member 'max_mmio_per_node' not described in 'intel_guc_state_capture'
-> > 	drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h:401: warning: Function parameter or member 'marker' not described in 'guc_log_buffer_state'
-> > 	drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h:401: warning: Function parameter or member 'read_ptr' not described in 'guc_log_buffer_state'
-> > 	drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h:401: warning: Function parameter or member 'write_ptr' not described in 'guc_log_buffer_state'
-> > 	drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h:401: warning: Function parameter or member 'size' not described in 'guc_log_buffer_state'
-> > 	drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h:401: warning: Function parameter or member 'sampled_write_ptr' not described in 'guc_log_buffer_state'
-> > 	drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h:401: warning: Function parameter or member 'wrap_offset' not described in 'guc_log_buffer_state'
-> > 	drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h:401: warning: Function parameter or member 'flush_to_file' not described in 'guc_log_buffer_state'
-> > 	drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h:401: warning: Function parameter or member 'buffer_full_cnt' not described in 'guc_log_buffer_state'
-> > 	drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h:401: warning: Function parameter or member 'reserved' not described in 'guc_log_buffer_state'
-> > 	drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h:401: warning: Function parameter or member 'flags' not described in 'guc_log_buffer_state'
-> > 	drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h:401: warning: Function parameter or member 'version' not described in 'guc_log_buffer_state'
-> > 
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > ---
-> > 
-> > To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> > See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
-> > 
-> >  drivers/gpu/drm/i915/gt/intel_context.h       |  6 +++---
-> >  drivers/gpu/drm/i915/gt/intel_engine_cs.c     |  4 ++--
-> >  drivers/gpu/drm/i915/gt/intel_gtt.h           |  6 +++---
-> >  drivers/gpu/drm/i915/gt/intel_rps.c           |  4 ++--
-> >  drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h | 14 +++++++-------
-> >  drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h   |  2 +-
-> >  6 files changed, 18 insertions(+), 18 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/i915/gt/intel_context.h b/drivers/gpu/drm/i915/gt/intel_context.h
-> > index 8e2d70630c49..91c092d5deae 100644
-> > --- a/drivers/gpu/drm/i915/gt/intel_context.h
-> > +++ b/drivers/gpu/drm/i915/gt/intel_context.h
-> > @@ -96,7 +96,7 @@ void intel_context_bind_parent_child(struct intel_context *parent,
-> >  
-> >  /**
-> >   * intel_context_lock_pinned - Stablises the 'pinned' status of the HW context
-> > - * @ce - the context
-> > + * @ce: the context
-> >   *
-> >   * Acquire a lock on the pinned status of the HW context, such that the context
-> >   * can neither be bound to the GPU or unbound whilst the lock is held, i.e.
-> > @@ -110,7 +110,7 @@ static inline int intel_context_lock_pinned(struct intel_context *ce)
-> >  
-> >  /**
-> >   * intel_context_is_pinned - Reports the 'pinned' status
-> > - * @ce - the context
-> > + * @ce: the context
-> >   *
-> >   * While in use by the GPU, the context, along with its ring and page
-> >   * tables is pinned into memory and the GTT.
-> > @@ -132,7 +132,7 @@ static inline void intel_context_cancel_request(struct intel_context *ce,
-> >  
-> >  /**
-> >   * intel_context_unlock_pinned - Releases the earlier locking of 'pinned' status
-> > - * @ce - the context
-> > + * @ce: the context
-> >   *
-> >   * Releases the lock earlier acquired by intel_context_unlock_pinned().
-> >   */
-> > diff --git a/drivers/gpu/drm/i915/gt/intel_engine_cs.c b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
-> > index 37fa813af766..da225f5db2a4 100644
-> > --- a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
-> > +++ b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
-> > @@ -1197,7 +1197,7 @@ create_kernel_context(struct intel_engine_cs *engine)
-> >  }
-> >  
-> >  /**
-> > - * intel_engines_init_common - initialize cengine state which might require hw access
-> > + * engine_init_common - initialize cengine state which might require hw access
-> >   * @engine: Engine to initialize.
-> >   *
-> >   * Initializes @engine@ structure members shared between legacy and execlists
-> > @@ -1278,7 +1278,7 @@ int intel_engines_init(struct intel_gt *gt)
-> >  }
-> >  
-> >  /**
-> > - * intel_engines_cleanup_common - cleans up the engine state created by
-> > + * intel_engine_cleanup_common - cleans up the engine state created by
-> >   *                                the common initiailizers.
-> >   * @engine: Engine to cleanup.
-> >   *
-> > diff --git a/drivers/gpu/drm/i915/gt/intel_gtt.h b/drivers/gpu/drm/i915/gt/intel_gtt.h
-> > index e639434e97fd..fca8eedee1d8 100644
-> > --- a/drivers/gpu/drm/i915/gt/intel_gtt.h
-> > +++ b/drivers/gpu/drm/i915/gt/intel_gtt.h
-> > @@ -503,7 +503,7 @@ static inline void i915_vm_put(struct i915_address_space *vm)
-> >  
-> >  /**
-> >   * i915_vm_resv_put - Release a reference on the vm's reservation lock
-> > - * @resv: Pointer to a reservation lock obtained from i915_vm_resv_get()
-> > + * @vm: The vm whose reservation lock was obtained from i915_vm_resv_get()
-> >   */
-> >  static inline void i915_vm_resv_put(struct i915_address_space *vm)
-> >  {
-> > @@ -604,8 +604,8 @@ void i915_ggtt_resume(struct i915_ggtt *ggtt);
-> >  
-> >  /**
-> >   * i915_ggtt_mark_pte_lost - Mark ggtt ptes as lost or clear such a marking
-> > - * @i915 The device private.
-> > - * @val whether the ptes should be marked as lost.
-> > + * @i915: The device private.
-> > + * @val: whether the ptes should be marked as lost.
-> >   *
-> >   * In some cases pte content is retained across suspend, but typically lost
-> >   * across hibernate. Typically they should be marked as lost on
-> > diff --git a/drivers/gpu/drm/i915/gt/intel_rps.c b/drivers/gpu/drm/i915/gt/intel_rps.c
-> > index fb3f57ee450b..8aefc427e06e 100644
-> > --- a/drivers/gpu/drm/i915/gt/intel_rps.c
-> > +++ b/drivers/gpu/drm/i915/gt/intel_rps.c
-> > @@ -2339,8 +2339,8 @@ bool rps_read_mask_mmio(struct intel_rps *rps,
-> >  static struct drm_i915_private __rcu *ips_mchdev;
-> >  
-> >  /**
-> > - * Tells the intel_ips driver that the i915 driver is now loaded, if
-> > - * IPS got loaded first.
-> > + * ips_ping_for_i915_load - Tells the intel_ips driver that the i915 driver
-> > + *	 is now loaded, if IPS got loaded first.
-> >   *
-> >   * This awkward dance is so that neither module has to depend on the
-> >   * other in order for IPS to do the appropriate communication of
-> > diff --git a/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h b/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
-> > index 3624abfd22d1..58f93226b1c1 100644
-> > --- a/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
-> > +++ b/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
-> > @@ -12,7 +12,7 @@
-> >  struct intel_guc;
-> >  struct file;
-> >  
-> > -/**
-> > +/*
-> >   * struct __guc_capture_bufstate
-> >   *
-> >   * Book-keeping structure used to track read and write pointers
-> > @@ -26,7 +26,7 @@ struct __guc_capture_bufstate {
-> >  	u32 wr;
-> >  };
-> >  
-> > -/**
-> > +/*
-> >   * struct __guc_capture_parsed_output - extracted error capture node
-> >   *
-> >   * A single unit of extracted error-capture output data grouped together
-> > @@ -58,7 +58,7 @@ struct __guc_capture_parsed_output {
-> >  #define GCAP_PARSED_REGLIST_INDEX_ENGINST  BIT(GUC_CAPTURE_LIST_TYPE_ENGINE_INSTANCE)
-> >  };
-> >  
-> > -/**
-> > +/*
-> >   * struct guc_debug_capture_list_header / struct guc_debug_capture_list
-> >   *
-> >   * As part of ADS registration, these header structures (followed by
-> > @@ -76,7 +76,7 @@ struct guc_debug_capture_list {
-> >  	struct guc_mmio_reg regs[0];
-> >  } __packed;
-> >  
-> > -/**
-> > +/*
-> >   * struct __guc_mmio_reg_descr / struct __guc_mmio_reg_descr_group
-> >   *
-> >   * intel_guc_capture module uses these structures to maintain static
-> > @@ -101,7 +101,7 @@ struct __guc_mmio_reg_descr_group {
-> >  	struct __guc_mmio_reg_descr *extlist; /* only used for steered registers */
-> >  };
-> >  
-> > -/**
-> > +/*
-> >   * struct guc_state_capture_header_t / struct guc_state_capture_t /
-> >   * guc_state_capture_group_header_t / guc_state_capture_group_t
-> >   *
-> > @@ -148,7 +148,7 @@ struct guc_state_capture_group_t {
-> >  	struct guc_state_capture_t capture_entries[0];
-> >  } __packed;
-> >  
-> > -/**
-> > +/*
-> >   * struct __guc_capture_ads_cache  
-> 
-> and many more here... :/
-> Hopefully this great work on the docs will make these ugly
-> "exported" "__" prefixes visible and we will fix them 
+On Thu, Jul 14, 2022 at 5:25 PM John Ogness <john.ogness@linutronix.de> wrote:
+>
+> On 2022-07-14, Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
+> > use raw_smp_processor_id() in arch_touch_nmi_watchdog
+> > because when called from watchdog, the cpu is preemptible.
+>
+> I would expect the correct solution is to make it a non-migration
+> section. Something like the below (untested) patch.
+I applied your patch (I have made a tiny modification by removing the
+return statement after "goto out;") and
+passed the test in the ppc VM of Open Source Lab of Oregon State University.
 
-Yeah, while I can see why __function would be ok on some cases
-(like for lock/unlock variants and on some special macros like the ones
-that use THIS_MODULE), I can't see any reason why struct/enum/union 
-would ever need to have __ prefixes on it ;-)
+Tested-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
 
-> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-
-Thanks!
-
-Regards,
-Mauro
+Many Thanks
+Kindly Regards
+Zhouyi
+>
+> John Ogness
+>
+> diff --git a/arch/powerpc/kernel/watchdog.c b/arch/powerpc/kernel/watchdog.c
+> index bfc27496fe7e..9d34aa809241 100644
+> --- a/arch/powerpc/kernel/watchdog.c
+> +++ b/arch/powerpc/kernel/watchdog.c
+> @@ -450,17 +450,23 @@ static enum hrtimer_restart watchdog_timer_fn(struct hrtimer *hrtimer)
+>  void arch_touch_nmi_watchdog(void)
+>  {
+>         unsigned long ticks = tb_ticks_per_usec * wd_timer_period_ms * 1000;
+> -       int cpu = smp_processor_id();
+> +       int cpu;
+>         u64 tb;
+>
+> -       if (!cpumask_test_cpu(cpu, &watchdog_cpumask))
+> +       cpu = get_cpu();
+> +
+> +       if (!cpumask_test_cpu(cpu, &watchdog_cpumask)) {
+> +               goto out;
+>                 return;
+I think we should remove the return statement here.
+> +       }
+>
+>         tb = get_tb();
+>         if (tb - per_cpu(wd_timer_tb, cpu) >= ticks) {
+>                 per_cpu(wd_timer_tb, cpu) = tb;
+>                 wd_smp_clear_cpu_pending(cpu);
+>         }
+> +out:
+> +       put_cpu();
+>  }
+>  EXPORT_SYMBOL(arch_touch_nmi_watchdog);

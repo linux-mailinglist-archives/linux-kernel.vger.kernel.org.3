@@ -2,89 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306575742EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B246F574307
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235871AbiGNE1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 00:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
+        id S235184AbiGNE30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 00:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233878AbiGNE06 (ORCPT
+        with ESMTP id S236130AbiGNE2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 00:26:58 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF74B2B1AF;
-        Wed, 13 Jul 2022 21:23:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wvxNVC7v6IRfhPDvi+vlda/Ydr6xcl7uzGy3JRiwJsk=; b=h6zx/qtQBkYoU+/liavyngGoGQ
-        qsOPbojToSP07GYfoD4L1Rj/BdqAn48dD0TbbkCv6s0frYjwB2NxyHfS8sg/zexGgCpRPzE/TYQFN
-        Li5G/evrqQyw+eHnbHDEYkA4UPfWAFvroO4nVkNVpo0j73IBWKbiJAUxbwqIo60Snl76iyVaNU4i/
-        PwqGuaMEcrYNxkwnJJxhEXZau/ZDirtLGlKAl9iQ27dKm5Nb57sDSzijqu4zBp3yAGRrB/+7UcQNB
-        Eqroje4xhcnqhz99amuRSNTyDZf+KIL39W8xd/Abw/myVnEL3l8woK+0k4FNHzi/b7nJee72rFeH8
-        mFG3QhHQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBqOC-00AasH-TU; Thu, 14 Jul 2022 04:23:48 +0000
-Date:   Wed, 13 Jul 2022 21:23:48 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, Song Liu <song@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "anil.s.keshavamurthy@intel.com" <anil.s.keshavamurthy@intel.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH bpf-next 1/3] mm/vmalloc: introduce vmalloc_exec which
- allocates RO+X memory
-Message-ID: <Ys+aVKFJaQd130Pn@infradead.org>
-References: <20220713071846.3286727-1-song@kernel.org>
- <20220713071846.3286727-2-song@kernel.org>
- <Ys6ZkDUhRZcmvPYy@infradead.org>
- <BE896037-B79C-4B38-B777-96002C5861F5@fb.com>
+        Thu, 14 Jul 2022 00:28:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A68C2E6BB;
+        Wed, 13 Jul 2022 21:24:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E767B61E51;
+        Thu, 14 Jul 2022 04:24:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8458CC34114;
+        Thu, 14 Jul 2022 04:24:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657772672;
+        bh=08m7YkgMf00+tBrPAp/k1bxRwMkOC+fQBhyogyRaGSI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hFOC3vyFToJfJsLnbtKCjlvxmUTqSK1KLqbr8cm7BfaW1ZQ4vM5/R0TzJwdk7svnu
+         DQknKSqLYADSXCuayqrEOX4hvf0JVIi2AOnJ4eS8e+8rzNEYGwAXP+E4v3tT7fi2t4
+         yQFi9VkuTz9jNrmAQmHXvrgCqONPRFMHdIM2jz81O3EhOnNjsnQxVm43asQA5jJCgE
+         unqCcXvZNnETjINBzhGqNN7D3oJVVMFPnyjXnJtuAmbu3V9A8zAT9iQE1LlfZIIc2k
+         YEAGkwbm6n6QQ02K01h8rQ0gpieKVURHM0hu5o2icn49Eu5IO9mj0FUQ1Y1x6f+BXR
+         q6e3vJ76Bnnag==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.15 01/28] ASoC: ops: Fix off by one in range control validation
+Date:   Thu, 14 Jul 2022 00:24:02 -0400
+Message-Id: <20220714042429.281816-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BE896037-B79C-4B38-B777-96002C5861F5@fb.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 03:49:45PM +0000, Song Liu wrote:
-> 
-> 
-> > On Jul 13, 2022, at 3:08 AM, Christoph Hellwig <hch@infradead.org> wrote:
-> > 
-> > NAK.  This is not something that should be an exported public API
-> > ever.
-> 
-> Hmm.. I will remove EXPORT_SYMBOL_GPL (if we ever do a v2 of this..)
+From: Mark Brown <broonie@kernel.org>
 
-Even without that it really is not a vmalloc API anyway.  Executable
-memory needs to be written first, so we should allocate it in that state
-and only mark it executable after that write has completed.
+[ Upstream commit 5871321fb4558c55bf9567052b618ff0be6b975e ]
+
+We currently report that range controls accept a range of 0..(max-min) but
+accept writes in the range 0..(max-min+1). Remove that extra +1.
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20220604105246.4055214-1-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ sound/soc/soc-ops.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/soc-ops.c b/sound/soc/soc-ops.c
+index f32ba64c5dda..e73360e9de8f 100644
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -526,7 +526,7 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
+ 		return -EINVAL;
+ 	if (mc->platform_max && tmp > mc->platform_max)
+ 		return -EINVAL;
+-	if (tmp > mc->max - mc->min + 1)
++	if (tmp > mc->max - mc->min)
+ 		return -EINVAL;
+ 
+ 	if (invert)
+@@ -547,7 +547,7 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
+ 			return -EINVAL;
+ 		if (mc->platform_max && tmp > mc->platform_max)
+ 			return -EINVAL;
+-		if (tmp > mc->max - mc->min + 1)
++		if (tmp > mc->max - mc->min)
+ 			return -EINVAL;
+ 
+ 		if (invert)
+-- 
+2.35.1
+

@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C5C5744DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 08:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BF55744CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 08:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbiGNGJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 02:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S232500AbiGNGFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 02:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233280AbiGNGIw (ORCPT
+        with ESMTP id S230061AbiGNGFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 02:08:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635E811C1E;
-        Wed, 13 Jul 2022 23:08:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A06B2B8220B;
-        Thu, 14 Jul 2022 06:08:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45C8C34114;
-        Thu, 14 Jul 2022 06:08:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657778920;
-        bh=o9lMKv613CrGGGygcthUdb4r6QPjw/LhZtoV5PD7a2g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eTQvcGYaPiqQUid3SIlQwBgz0x2usn1xBAD6Q9/9C6XDcMdw2H3olNWk9+VNhxbAq
-         a8YVCJvVJtzITAjcX2eE3anmQoJ1MWXJk0jZFPPxX0aSuYIepproHBOMGtE4okEohA
-         3hY91SEK4R9ATArIft3De4vnhpDGbtETslV4LrKY=
-Date:   Thu, 14 Jul 2022 08:08:37 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     sean.wang@kernel.org
-Cc:     stable@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sean Wang <sean.wang@mediatek.com>
-Subject: Re: [PATCH 5.15 2/5] Revert "mt76: mt7921e: fix possible probe
- failure after reboot"
-Message-ID: <Ys+y5QuKqtTPBGd0@kroah.com>
-References: <4bdcd29552ba78c87d8799181b9acddec465ad3c.1657764335.git.sean.wang@kernel.org>
- <c297b97b4af66777202652b29183397e671bc15d.1657764335.git.sean.wang@kernel.org>
+        Thu, 14 Jul 2022 02:05:46 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7A42F001;
+        Wed, 13 Jul 2022 23:05:44 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lk3nl0b2bzkX1F;
+        Thu, 14 Jul 2022 14:03:23 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 14 Jul
+ 2022 14:05:27 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <hawk@kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH v2,bpf-next] bpf: Don't redirect packets with invalid pkt_len
+Date:   Thu, 14 Jul 2022 14:09:59 +0800
+Message-ID: <20220714060959.25232-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c297b97b4af66777202652b29183397e671bc15d.1657764335.git.sean.wang@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,19 +51,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 07:07:38PM -0700, sean.wang@kernel.org wrote:
-> From: Sean Wang <sean.wang@mediatek.com>
-> 
-> This reverts commit 649178c0493e4080b2b226b0ef9fa2d834b1b412.
-> 
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> ---
-> There was mistake in
-> 649178c0493e ("mt76: mt7921e: fix possible probe failure after reboot")
-> that caused WiFi reset cannot work well as the reported issue
-> "PROBLEM: [Stable v5.15.42+] [mt7921] Wake after suspend locks up system
-> when mt7921-driver is used on a Lenovo ThinkPad E15 G3"
-> in http://lists.infradead.org/pipermail/linux-mediatek/2022-June/042668.html
-> So, we need to revert, fix and land it again on the stable tree from upstream.
+Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
+skbs, that is, the flow->head is null.
+The root cause, as the [2] says, is because that bpf_prog_test_run_skb()
+run a bpf prog which redirects empty skbs.
+So we should determine whether the length of the packet modified by bpf
+prog is valid before forwarding it directly.
 
-Same questions here as on patch 1/5.
+LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
+LINK: [2] https://www.spinics.net/lists/netdev/msg777503.html
+
+Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+v1: should not check len in fast path
+
+ net/bpf/test_run.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 2ca96acbc50a..750d7d173a20 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -1152,6 +1152,12 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	ret = convert___skb_to_skb(skb, ctx);
+ 	if (ret)
+ 		goto out;
++
++	if (skb->len == 0) {
++		ret = -EINVAL;
++		goto out;
++	}
++
+ 	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
+ 	if (ret)
+ 		goto out;
+-- 
+2.17.1
+

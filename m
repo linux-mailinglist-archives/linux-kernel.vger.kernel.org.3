@@ -2,99 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0BA574985
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CADE2574988
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238491AbiGNJqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
+        id S237531AbiGNJsh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 14 Jul 2022 05:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238399AbiGNJpr (ORCPT
+        with ESMTP id S233750AbiGNJsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:45:47 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5911A4B4B4;
-        Thu, 14 Jul 2022 02:45:46 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id c3so453230pfb.13;
-        Thu, 14 Jul 2022 02:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=d5dQ5EQwn8mX60+IF0sZKf5rrEpnkwl9K3LbLZ9fU5E=;
-        b=WE4NfXRNJOlUu1nI7eT+yjooUYkwHuL4Zc+a7jJMb4lu9txVWiagY+QSWpsMOrq+gH
-         PbpvPaON+EDr4kxaRPLJPplEKL2VGjHUmt62T3pJjHuMlaZtQ8GdOHAJRdMZiJJaqF6x
-         p38Xbrt6natRwjkfQZEtR35yknaQFEK6eOUuFGJQA61XlJLoQryAyIMOfbpY2KSsfDGm
-         5rsQFXP3pDQ7wBm3srYVqET1kPj++qY/XQ39iG9zmPBepXJK7OCCUQzzXKkHmuCeaPnU
-         3uyjQoKWWOkGfru/5uvglL1jymz+NSVwWxg/aL53jU38Q35nRus892c66oIiRve1j+rV
-         Pt/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=d5dQ5EQwn8mX60+IF0sZKf5rrEpnkwl9K3LbLZ9fU5E=;
-        b=m0qdB42MEBXdpaUXeXNiTqpbl0z/lhUlIodrNpXVlXuEQ1jBKl5t4/eE3tQZHo+L2z
-         IZB1FU6bQ1PKTbqRPaqh4oGaamJsyZC5ZxRPjYnzAyutFBl7r0dMscWwhLnlDYpdflf5
-         jeiUS63jMiltx32qbtViVK8yxe1caFhvB8/2Dvrus/BXKb4GjhCe2I1kZJog5HySfP/c
-         BMnThSLxLyA8Cp5ZaRisZoGJxwp11nZN1zKg88SgoFgzONxKKj7GLdniP/X61BvMQLHQ
-         JyuSnuDp987bAH1JJmDzwZHPY3apDYqUVSMnW3I4RHa2+J0Jr3Lq5DyvZsFePG9nrFOb
-         6wtQ==
-X-Gm-Message-State: AJIora9RBFmmczqVy7R4wpBrpMhH4pwDjhXkfIGSIqrCJCH/I7cUZqal
-        KSzfpQLiNp1qW/OPxg+PI7g=
-X-Google-Smtp-Source: AGRyM1t20DkAevcHeaiJX+bQcVXqEihBXsE5IoQKn3N3qunX3d7UgtfRsZtk9UUAN8tXLf9a8S1NEg==
-X-Received: by 2002:a63:5c5e:0:b0:412:a2f1:d0dd with SMTP id n30-20020a635c5e000000b00412a2f1d0ddmr7069106pgm.251.1657791945809;
-        Thu, 14 Jul 2022 02:45:45 -0700 (PDT)
-Received: from localhost.localdomain ([2402:7500:488:5f89:217d:a3c8:f1ea:4115])
-        by smtp.gmail.com with ESMTPSA id i1-20020a056a00004100b0052acb753b8bsm1169233pfk.158.2022.07.14.02.45.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 14 Jul 2022 02:45:45 -0700 (PDT)
-From:   cy_huang <u0084500@gmail.com>
-To:     jic23@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     lars@metafoo.de, cy_huang@richtek.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v6 3/3] Documentation: ABI: testing: rtq6056: Update ABI docs
-Date:   Thu, 14 Jul 2022 17:45:25 +0800
-Message-Id: <1657791925-23929-4-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1657791925-23929-1-git-send-email-u0084500@gmail.com>
-References: <1657791925-23929-1-git-send-email-u0084500@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 14 Jul 2022 05:48:07 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF19713CDE
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:46:35 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oBvQL-0002sU-8M; Thu, 14 Jul 2022 11:46:21 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Mike Rapoport <rppt@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        huanyi.xj@alibaba-inc.com
+Subject: Re: [PATCH V2 2/2] riscv: Add modules to virtual kernel memory layout dump
+Date:   Thu, 14 Jul 2022 11:46:20 +0200
+Message-ID: <3975689.5fSG56mABF@diego>
+In-Reply-To: <f706ddff-8444-bba1-a98a-23a1333cc70a@linux.alibaba.com>
+References: <20220714025901.359695-1-xianting.tian@linux.alibaba.com> <CAK8P3a3-jKEs+uGL=_kjmfzao6DYgmrkO+YWtNhv5O+hFw_qog@mail.gmail.com> <f706ddff-8444-bba1-a98a-23a1333cc70a@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+Am Donnerstag, 14. Juli 2022, 11:17:26 CEST schrieb Xianting Tian:
+> 
+> 在 2022/7/14 下午4:24, Arnd Bergmann 写道:
+> > On Thu, Jul 14, 2022 at 4:59 AM Xianting Tian
+> > <xianting.tian@linux.alibaba.com> wrote:
+> >> As MODULES is only defined for CONFIG_64BIT, so we dump it when
+> >> CONFIG_64BIT.
+> > Doesn't this cause a compile-time error on 32-bit?
+> I tested, rv32 compile is OK.
 
-Add documentation for the usage of voltage channel integration time.
+> >>                  (unsigned long)VMEMMAP_END);
+> >>          print_ml("vmalloc", (unsigned long)VMALLOC_START,
+> >>                  (unsigned long)VMALLOC_END);
+> >> +       if (IS_ENABLED(CONFIG_64BIT))
+> >> +               print_ml("modules", (unsigned long)MODULES_VADDR,
+> >> +                       (unsigned long)MODULES_END);
+> > The IS_ENABLED() check prevents the line from getting executed, but
+> > unlike an #ifdef it still relies on it to be parsable.
+> Thanks, I will use #ifdef instead of IS_ENABLED
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
- Documentation/ABI/testing/sysfs-bus-iio | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Patch1 also has that issue with the
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
-index d4ccc68..1f7d327 100644
---- a/Documentation/ABI/testing/sysfs-bus-iio
-+++ b/Documentation/ABI/testing/sysfs-bus-iio
-@@ -2030,3 +2030,13 @@ Description:
- 		Available range for the forced calibration value, expressed as:
- 
- 		- a range specified as "[min step max]"
-+
-+What:		/sys/bus/iio/devices/iio:deviceX/in_voltageY_integration_time
-+KernelVersion:	5.20
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		For voltage sensing hardware, there may be different time between
-+		channel conversion and sample update. 'Integration time' is used to
-+		specify the channel internal conversion time. And sample update
-+		interval is equal to average sample count multiple integration time.
-+		Unit as microsecond.
--- 
-2.7.4
+      if (IS_ENABLED(CONFIG_64BIT)) {
+              vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
+              vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
+      ....
+
+
+module_alloc falls back to a weak variant [0] which is the same as the riscv variant
+only then using VMALLOC_START - VMALLOC_END as range, as the riscv-variant
+conditional to CONFIG_64BIT.
+
+I'm wondering if it wouldn't be easier in the long run to just define
+MODULES_VADDR, MODULES_END for 32bit to use these values and get rid of
+the CONFIG_64BIT ifdef we already have for MODULES (and new ones we are
+introducing now).
+
+
+Heiko
+
+
+[0] https://elixir.bootlin.com/linux/latest/source/kernel/module.c#L2835
+
+
 

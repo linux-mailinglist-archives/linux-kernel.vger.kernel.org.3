@@ -2,90 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18EA574DCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31288574DD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239400AbiGNMgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
+        id S239406AbiGNMg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239402AbiGNMgl (ORCPT
+        with ESMTP id S239407AbiGNMg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:36:41 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D125D594;
-        Thu, 14 Jul 2022 05:36:28 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EEBE16601A3F;
-        Thu, 14 Jul 2022 13:36:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657802186;
-        bh=fcsVlf6xPjzt5yZzyb/7Pgp8srcKQ+iZoypPGWQLnpI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=B7VNKzC74eawIHUeNRTyXOmvtwhbg0XtsCGVXt8OjKqpnhveB0pWJUeCCW66bzZlv
-         5lquChQXuumBdUj6Y2KpkdaIR/CWqjKd/FfszSitYJjTngjWzoK97g26A218BvQwx3
-         UXkZSDDwxvDy/jQYp5uVPyLxfiilKoiNmJvzOvMTigVjhlyoxgDazhHAd5Pw8HM1Gh
-         +LBDYRzrCG4QItjnCf/QOTIBumdxFqwFHNxZuTwWpChCL2VK9byqSaBsiUptoqBMfN
-         MOp4UwwhrstyFnyv+wNLFR40buO2nOMhY4AHOJlhgRfp8tBR8hj4xUuX9+NbJNAMyd
-         KcLRCWCuos3HQ==
-Message-ID: <54d573df-fa3c-b2d2-e470-c157ac06bcf3@collabora.com>
-Date:   Thu, 14 Jul 2022 14:36:23 +0200
+        Thu, 14 Jul 2022 08:36:57 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270895C9CE
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:36:49 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id p6so1994062ljc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BiNLu6xnGV9ZsmOkKtRu8GiJpJaUEre3r3pnPbEbxjM=;
+        b=FHdgMunntPsutX4pz+6aGsb6vcE7Ixf2ZYUFoPTGHrEFejrLnyjAlfCD0ywMiGyRDk
+         UfEhXQxQP0ZuNp/Z3UGCb5Q/138+hHJbn65GnZcA413gKMKOWlQsvHtuqC4VEAN+MXl4
+         CBO9h4pCl2qqbpu2Jwulr+X0VkSinEp6hUW6PcfB4NIeAnab+OFrMAeOB+Fd63cvd2Ty
+         y0a6XkU6jcb9YDWJ2EIDhVhhIlvrnWDCpUja06ZdC7BDBr5OJY3rhVES6GA/hk0r62Yc
+         DZoNyyE3jzlCFZD3Dw8EIXi1hxmYPzzJicSNAP6YnxNW8AQ/l8Q8//SWZvLU8YKajMSl
+         /ZqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BiNLu6xnGV9ZsmOkKtRu8GiJpJaUEre3r3pnPbEbxjM=;
+        b=jMusv3TpirEtOzV0Rfb7RRyB8DntQ2hygZeZLfyRkcN8xnTIFSPDruO3DNJNj99+Kl
+         9uOKqdAc7vzHO4sCt/uyUVyaJaJGJK8cestn9iN1fTnoP3TVUkxCjfriRkXfROqlnNM1
+         4byM15XXFTNyHIAP8e7cboGJzVERiT0IEXYMKcHLziAUsWCNbLADX4uGeF/TOeiLX/Cm
+         W6I6zpLv/OoPyCzEsX4Ac4W8cYIj9wCTbbEiaa4O+IfVrAKW9fepOmB+sJ/qM9t6LH+p
+         dDDiJzo95NJiHhSGBhJsgSe/s+ugVSIBZKwKQcxcQQMOcDPq36q3nINm6LcoGDV/hFCG
+         gT9w==
+X-Gm-Message-State: AJIora897arJb3kp8fOcAd3GgfbNfwYEjuwqYXpNrkmjp/5tiUp0oSSM
+        wM/Z0UbOAjvxzwgp1smKfeaDOg==
+X-Google-Smtp-Source: AGRyM1ufjQDkB4prXpgXK1PHUIK0jMqKORD8LAVpBkL75jwLGc06XPfOU+ozWIva+N7ub5TXsI558g==
+X-Received: by 2002:a2e:a3d2:0:b0:25d:4834:aa0a with SMTP id w18-20020a2ea3d2000000b0025d4834aa0amr4658241lje.272.1657802207546;
+        Thu, 14 Jul 2022 05:36:47 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id j16-20020a05651231d000b00489c924497asm339568lfe.202.2022.07.14.05.36.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 05:36:46 -0700 (PDT)
+Message-ID: <727e71b7-9f80-d715-7761-0c56af1cf1e1@linaro.org>
+Date:   Thu, 14 Jul 2022 14:36:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2 02/19] dt-bindings: memory: mediatek: Update condition
- for mt8195 smi node
+Subject: Re: [PATCH v2 2/5] dt-bindings: mmc: sdhci-msm: Document the SM8450
+ compatible
 Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        MandyJH Liu <mandyjh.liu@mediatek.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>
-Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220714122837.20094-1-tinghan.shen@mediatek.com>
- <20220714122837.20094-3-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220714122837.20094-3-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220714123406.1919836-1-konrad.dybcio@somainline.org>
+ <20220714123406.1919836-2-konrad.dybcio@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220714123406.1919836-2-konrad.dybcio@somainline.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 14/07/22 14:28, Tinghan Shen ha scritto:
-> The max clock items for the dts node with compatible
-> 'mediatek,mt8195-smi-sub-common' should be 3.
+On 14/07/2022 14:34, Konrad Dybcio wrote:
+> Document the compatible for SDHCI on SM8450.
 > 
-> However, the dtbs_check of such node will get following message,
-> arch/arm64/boot/dts/mediatek/mt8195-evb.dtb: smi@14010000: clock-names: ['apb', 'smi', 'gals0'] is too long
->           From schema: Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+> Changes since v1:
+> * Add this forgotten snowflake
 > 
-> It's because the 'mediatek,mt8195-smi-sub-common' compatible incorrectly
-> matches the 'else' conditions for gen2 HW without gals.
-> 
-> Rewrite the 'else' condition to specifically identify the compatibles
-> that utilizing gen2 HW without gals.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

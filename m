@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1715752C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA645752CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239374AbiGNQaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
+        id S239458AbiGNQax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237459AbiGNQ37 (ORCPT
+        with ESMTP id S237741AbiGNQat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:29:59 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DE733410
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:29:58 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id eq6so3106175edb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:29:58 -0700 (PDT)
+        Thu, 14 Jul 2022 12:30:49 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE5F655A1;
+        Thu, 14 Jul 2022 09:30:49 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id o18so2019420pgu.9;
+        Thu, 14 Jul 2022 09:30:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZI0YHVo/gtkOB8tgyDWcbFNn6KxRA45rOQ9nm1YXK/Q=;
-        b=qDcqaSAhw+hlOV5MLaMQb3gYMlJSXY1JVhNzIBNLgXH/Azc2KW0WxR+hxUZcNtDxm6
-         InWFK4mBuPj0hpBt3PvwutZW5wUJKMYCh0SPUqO4ZXY8DZB7dVBAr/e2/bq6FEbr7j8a
-         igiR4rkthJIEYAAJHPMok4ww9tD869WwPg8aAOKwa0/tachtsAIUBYQNJu2lL7dSTuFm
-         bFNhX6QVDJRJBWkwMrW/0pxO6DFhcWycipykiOhv48CW/jjT0SmOfSn2DaggW8swX/WL
-         s/UNX/NjcUc71qQNPXWtJfbQPctemAAkIZMZhE6w1fxcaNdrj5q5UAAKsh+KhhdrYB29
-         25Ig==
+         :cc:content-transfer-encoding;
+        bh=KMvgUo5DFbdUy4r+dfQ8/l8alJs97+14aru3ICZ5dWE=;
+        b=aVYXqeHR4lLS66BV84dEqs2N7IPHrywmQzWK5PaawnJ3IDE1pQ9zAEolcs1RKiOIio
+         xi1h0gC/7rEbWpuhBa+Du1vRxZr+v6qznl3fuBnTlNrwmaWXRc8qzZgwH6Cwln2PcGAV
+         NwuOeCG59C8a7ytUrJGNdVIvuOhKHgOk9jr+N9W+bHtf9+bPij1Pp0+6CJFDOLCVq9nE
+         Bych74VoDEPqhMPVRTXswi9XLBKFAgYQ2/5d6e3LRW4kVFOgAEHKiHnX9nYb8pqC+lbL
+         9vbg57Zy8bNW/pSYeO3OQX4RuVtJoBaJoDfd5+YM8hL6812Z+SNCD5jzL6QtleLaiR2S
+         LQBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZI0YHVo/gtkOB8tgyDWcbFNn6KxRA45rOQ9nm1YXK/Q=;
-        b=Z2HlDNEZRG11NRTPrwcSzo1hTkI1a/UPV0qzWRIj310CsAzhjPJnZjOv98XYvgCEWB
-         3wWJWUQrFQfcKcf+1CDcvHRLK33dA9Ai1VOcGV7h6uZjJBNmYljNCardB1Zs+SAd25uW
-         TUBeoqwAbpAkJS+c7sENYmScE3p+P0iOhEo1WZ+pfKYyOg1Qu7ImiyLGQeCWkAxSh3Wp
-         72zozVBlavwL0wdpr/EVfY8NKKO4e98Bp0sZ7hD5kYXSJ6K7JA/zGJApjrk1SqyJPkwy
-         gYAfSIcvFWnVdHSmx4EiUZt1YCFzteA9G1HT6zpOfG+JYHY2zagv69W8XUvALwoe5bqa
-         Q8AA==
-X-Gm-Message-State: AJIora+WJM50dR33dvLXF7f2pTBbaLxfMeyv0gV/zXEzQMWmWwxv+Wal
-        voHWbmEU1jImNTmw7i+y/NNstFD23gV8pnsa/P5uqyhm
-X-Google-Smtp-Source: AGRyM1v1rUkvs34Q+Hk692TjKXzRoe56b59xLKpN80MV6b/Wor2PR/mwxiLwKJwHkkS8wmVStWlwlpJkBoau4i75WJc=
-X-Received: by 2002:a05:6402:13:b0:439:ffe8:bec9 with SMTP id
- d19-20020a056402001300b00439ffe8bec9mr13648034edu.297.1657816196801; Thu, 14
- Jul 2022 09:29:56 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KMvgUo5DFbdUy4r+dfQ8/l8alJs97+14aru3ICZ5dWE=;
+        b=qEAwnT0j2EWSASkgZUA5XYoIIfO7NYov4gcLGdZODQx6IVyvZ7yxvdeMiEAk2h/XGd
+         ze57Q5+31hgCsG4xD5CZZMVRtgbazFrSgHkoTlG9pI7HBp7Sno7K7Tms9Gasta9LSmRh
+         L0LHlppjnsaUPLJcFAFjTcIoWdJpfnCqdy34PYyjm06QSgB/l5dVRAqsScjg6CjUUqMy
+         peHlhKl9NL8AndiHWQTEjPgNFbuAPFJG2I432C0o+7KxC9eIz3RwIk0/DY1dh5Qzpb4S
+         hXhM9rE7FJvB2RMe8waHA7nTlY8/4SniSIxT1Brq00hPAJh3vHECCEYe7Q4+oObQ7phx
+         BISg==
+X-Gm-Message-State: AJIora9eGO717fHv9b5yz8eHZ74AELAa3UO3VeIuOXkhK92fyOmoNcn9
+        SXLDQsCE449AU8FD5g37RIPX3ceUAs/qPAJ50xQ=
+X-Google-Smtp-Source: AGRyM1tS14qGXtCk9KbXJ6e3xehx84e35ntlJxOWVAsxIo439cdGoV34KvROhmpGBYH7yxy26wQ3KIwtpMSvZXhUA7o=
+X-Received: by 2002:a63:4847:0:b0:419:c8f4:4f88 with SMTP id
+ x7-20020a634847000000b00419c8f44f88mr1552857pgk.603.1657816248636; Thu, 14
+ Jul 2022 09:30:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220712224247.1950273-1-linux@roeck-us.net> <98b656f3-e506-90be-ebcc-898813051e74@amd.com>
-In-Reply-To: <98b656f3-e506-90be-ebcc-898813051e74@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 14 Jul 2022 12:29:45 -0400
-Message-ID: <CADnq5_OMayFN52hr7ZWFqMHPaV5_q7Hi+4LEbNMgfTPqo3__=w@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Enable building new display engine with
- KCOV enabled
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, Arnd Bergmann <arnd@arndb.de>,
-        Leo Li <sunpeng.li@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>
+References: <1657815915-1872-1-git-send-email-michal.vokac@ysoft.com>
+In-Reply-To: <1657815915-1872-1-git-send-email-michal.vokac@ysoft.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 14 Jul 2022 13:30:36 -0300
+Message-ID: <CAOMZO5BNc35_v5c4oYbO4DpGAv4shzq63M1eo04V5NJ7na7FSQ@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dts: imx6dl-yapp4: Bind the backlight controller to
+ the LCD panel
+To:     =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,59 +73,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Thu, Jul 14, 2022 at 1:25 PM Michal Vok=C3=A1=C4=8D <michal.vokac@ysoft.=
+com> wrote:
+>
+> Add connection between the backlight controller and LCD panel.
+> With that the backlight is automatically switched on when the panel
+> is on or switched off when the panel is blanked.
+>
+> Signed-off-by: Michal Vok=C3=A1=C4=8D <michal.vokac@ysoft.com>
 
-On Wed, Jul 13, 2022 at 4:03 PM Harry Wentland <harry.wentland@amd.com> wrote:
->
-> On 2022-07-12 18:42, Guenter Roeck wrote:
-> > The new display engine uses floating point math, which is not supported
-> > by KCOV. Commit 9d1d02ff3678 ("drm/amd/display: Don't build DCN1 when kcov
-> > is enabled") tried to work around the problem by disabling
-> > CONFIG_DRM_AMD_DC_DCN if KCOV_INSTRUMENT_ALL and KCOV_ENABLE_COMPARISONS
-> > are enabled. The result is that KCOV can not be enabled on systems which
-> > require this display engine. A much simpler and less invasive solution is
-> > to disable KCOV selectively when compiling the display enagine while
-> > keeping it enabled for the rest of the kernel.
-> >
-> > Fixes: 9d1d02ff3678 ("drm/amd/display: Don't build DCN1 when kcov is enabled")
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Leo Li <sunpeng.li@amd.com>
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->
-> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
->
-> Harry
->
-> > ---
-> >  drivers/gpu/drm/amd/display/Kconfig     | 2 +-
-> >  drivers/gpu/drm/amd/display/dc/Makefile | 3 +++
-> >  2 files changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
-> > index b4029c0d5d8c..96cbc87f7b6b 100644
-> > --- a/drivers/gpu/drm/amd/display/Kconfig
-> > +++ b/drivers/gpu/drm/amd/display/Kconfig
-> > @@ -6,7 +6,7 @@ config DRM_AMD_DC
-> >       bool "AMD DC - Enable new display engine"
-> >       default y
-> >       select SND_HDA_COMPONENT if SND_HDA_CORE
-> > -     select DRM_AMD_DC_DCN if (X86 || PPC64) && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
-> > +     select DRM_AMD_DC_DCN if (X86 || PPC64)
-> >       help
-> >         Choose this option if you want to use the new display engine
-> >         support for AMDGPU. This adds required support for Vega and
-> > diff --git a/drivers/gpu/drm/amd/display/dc/Makefile b/drivers/gpu/drm/amd/display/dc/Makefile
-> > index b4eca0236435..b801973749d2 100644
-> > --- a/drivers/gpu/drm/amd/display/dc/Makefile
-> > +++ b/drivers/gpu/drm/amd/display/dc/Makefile
-> > @@ -26,6 +26,9 @@
-> >  DC_LIBS = basics bios dml clk_mgr dce gpio irq link virtual
-> >
-> >  ifdef CONFIG_DRM_AMD_DC_DCN
-> > +
-> > +KCOV_INSTRUMENT := n
-> > +
-> >  DC_LIBS += dcn20
-> >  DC_LIBS += dsc
-> >  DC_LIBS += dcn10
->
+Reviewed-by: Fabio Estevam <festevam@gmail.com>

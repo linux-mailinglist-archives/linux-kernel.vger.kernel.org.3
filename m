@@ -2,100 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461FF5750CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67225750D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238509AbiGNO3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
+        id S239245AbiGNOaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235151AbiGNO3u (ORCPT
+        with ESMTP id S238976AbiGNO36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:29:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E77FC5C36A
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:29:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657808988;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N8oBD289dGEOPLHJiPefuD87Ky4LKaAMPVE1HnT2THU=;
-        b=iClZfEDVgDNQghCEk4+SnhMQIcBbKbDL2Z+MxiEBtgAgVbHQOHFHTmfeXPBmFjVWZHIFuQ
-        qPwHoJ3OFx7CKTOW1acjtsyXbsJUhptCnByGmd6xp1szTboRq6IjF42NBqclU65CWyS/jV
-        ffJiT+xRn23Ml10HLk4lIcZed438paQ=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-470-6VIuOQN8M3ettKrVrzyakA-1; Thu, 14 Jul 2022 10:29:46 -0400
-X-MC-Unique: 6VIuOQN8M3ettKrVrzyakA-1
-Received: by mail-qk1-f197.google.com with SMTP id bk21-20020a05620a1a1500b006b5c24695a4so1258098qkb.15
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:29:46 -0700 (PDT)
+        Thu, 14 Jul 2022 10:29:58 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1845C95C
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:29:57 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id va17so3833683ejb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:29:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1X87mQYG95YA6ZZAAKldNH7qg7++iZIilnL645FgaYE=;
+        b=PTDNmnzInPFykguc6N2+FlL1QMiTDe4AYkk6DNFVUa24DeXwL+7HiVkfBqWKNkUGv+
+         h10SXjpEZiFr6VFocoA1GetnziVXgTZgmdUHXxP1AQGjtpbpTZXOI1JG2FYPp6+WmTAl
+         1hZ2ObiE1+gmVGiT6t8GIp5VSG5vfdeyQy03+5AXgDT4yBWJWveIGxAPloaw0pbn8+fv
+         Hcw9+lZkbxzTckXwE9OiUwUl7p1GpusnJC6UPqLJjVMsuFOV8vlKDTdAJ6JwYrb1Nufk
+         7d4wz2oewvVrJEOcN9qLxF3qc1wumIMmuIX/fCAn/4sZgyKOCAtX7l/JSf3MwN89fkD8
+         mKnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=N8oBD289dGEOPLHJiPefuD87Ky4LKaAMPVE1HnT2THU=;
-        b=5BhhCIWFKg9bIJzJzE/lx+MHba5s5ksnyHmOKQ5CSXEwrgcwbyt9KWopBs2SG1qXtu
-         uXb+XqXcZruVHbtBptbE2ifTU/fScAP76f7OdSNNUaibIIa2ru8OJyhAvEV09Qcx1tdq
-         htzzYWzy6ZFC8rsaXBwdv3eTdgeh/syNkuxn7A+aspJBaYo1Bq8+7ruy5qOkhEz5FdTX
-         1odxYXgy58MyS73MLH0U9FiUpwv6vpptvQ5oFWpk/fXZcu/+ImI0mdg0rRXjmFVfidb5
-         +T3zy6q658TYvSpxe1amc3qT97nKkYDndOQJzXgoYc3XCA/t9Vu+VYbSyZXOSmjnLuFA
-         djPQ==
-X-Gm-Message-State: AJIora81OztOpkS9rYey5eBHvKhX4Zp5LrM1ahDCYDkPGJOi2dtY+xml
-        Yt/e8juyK8dzBwh+9tB+bUL21H6VQNYGtOAyB4YpI6TOXOxAu7Gkj/mJNV7bsSs8emR0XM+oH4S
-        NvuBT0BmiU2Vj2VgaRuF/QzJt
-X-Received: by 2002:a05:620a:490b:b0:6b5:50ba:df51 with SMTP id ed11-20020a05620a490b00b006b550badf51mr6154034qkb.53.1657808986445;
-        Thu, 14 Jul 2022 07:29:46 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t16Q/9bg8jc78Kiv5IS34JX5fMV5xULfn6e6fF+bl1rBRgdTiM9zrPFe4bMltLNPjW6XLFWQ==
-X-Received: by 2002:a05:620a:490b:b0:6b5:50ba:df51 with SMTP id ed11-20020a05620a490b00b006b550badf51mr6154013qkb.53.1657808986204;
-        Thu, 14 Jul 2022 07:29:46 -0700 (PDT)
-Received: from xps13 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
-        by smtp.gmail.com with ESMTPSA id v11-20020a05622a014b00b0031e99798d70sm1719199qtw.29.2022.07.14.07.29.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 07:29:45 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 10:29:44 -0400
-From:   Brian Masney <bmasney@redhat.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 3/8] dt-bindings: PCI: qcom: Add SA8540P to binding
-Message-ID: <YtAoWOngodHMLY9L@xps13>
-References: <20220714071348.6792-1-johan+linaro@kernel.org>
- <20220714071348.6792-4-johan+linaro@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1X87mQYG95YA6ZZAAKldNH7qg7++iZIilnL645FgaYE=;
+        b=cj6j1iwMrQ0DDjT+qArZIcH9uS8ncIjRsVG68M1+4Y7jOieSLqMx1OoYXLV1om5nDO
+         lYVLU6EkOLSkqOBVCAbB1mGFqsL0DjD50aHwTQCd8qR76v7WjXEC4yEhG0KSEVTvB8d0
+         fTazo48dHxS4WiLEcykmXc9GyeiPBxuVt4qZzIaU79mQAOIwRognBbVO2KFDwSsvtSch
+         BBKIiCdHnvOzzK0TsIEjTzublgzOv9I6NchbR+FcMRjliZY0WsB89IEa+/IHZHtu/iWH
+         /ZgtQ4sjiTvsxYFDYWYzgAQmJBN4csRJxI+cziK9TfJTUt8np8ijDAwvr+wWSm00Sq2H
+         zCGg==
+X-Gm-Message-State: AJIora+4lTqjVIsqrIC+gscLdQuusZJQ3VpQlLJCSknR8q0S4bjFMoH/
+        dATTcHlQ5fgk18nJTaDxZod/6OtY0HzUY4ny2QJqdw==
+X-Google-Smtp-Source: AGRyM1vm6GjtZHoqF4hgzMx23b5BRicpYtS2WOByyw2qG698rE5P4eoixnC2wpbC9PRCXQZPg9NBRFVR38jt6MQYFYE=
+X-Received: by 2002:a17:907:720a:b0:72b:549e:305a with SMTP id
+ dr10-20020a170907720a00b0072b549e305amr8680576ejc.691.1657808996109; Thu, 14
+ Jul 2022 07:29:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220714071348.6792-4-johan+linaro@kernel.org>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220628024913.1755292-1-tzungbi@kernel.org> <20220628024913.1755292-6-tzungbi@kernel.org>
+ <CABXOdTeC+q-UiPiThqL5MGg-+cGACGW4qLaLKZbmX4M26TvbDg@mail.gmail.com> <Ys+OlrVCy4MkyRnr@google.com>
+In-Reply-To: <Ys+OlrVCy4MkyRnr@google.com>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Thu, 14 Jul 2022 07:29:45 -0700
+Message-ID: <CABXOdTfJ6x5ePkmj+w21jTX7EOTXZrCd8PwikAJQTfeQmUBxaQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH 05/11] platform/chrome: cros_ec_proto: separate cros_ec_wait_until_complete()
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
+        <chrome-platform@lists.linux.dev>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 09:13:43AM +0200, Johan Hovold wrote:
-> SA8540P is a new platform related to SC8280XP but which uses a single
-> host interrupt for MSI routing.
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On Wed, Jul 13, 2022 at 8:33 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> On Wed, Jul 13, 2022 at 11:15:47AM -0700, Guenter Roeck wrote:
+> > On Mon, Jun 27, 2022 at 7:49 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+> > > -static int cros_ec_send_command(struct cros_ec_device *ec_dev, struct cros_ec_command *msg)
+> > > +static int cros_ec_wait_until_complete(struct cros_ec_device *ec_dev, uint32_t *result)
+> > >  {
+> > > -       int ret = cros_ec_xfer_command(ec_dev, msg);
+> > > +       struct cros_ec_command *msg;
+> > > +       struct ec_response_get_comms_status *status;
+> > > +       int ret = 0, i;
+> > > +
+> > > +       msg = kzalloc(sizeof(*msg) + sizeof(*status), GFP_KERNEL);
+> > > +       if (!msg)
+> > > +               return -ENOMEM;
+> >
+> > AFAICS this is always 24 bytes. I would suggest to allocate it on the
+> > stack to reduce overhead.
+>
+> Ack.
+>
+> > > +               ret = cros_ec_xfer_command(ec_dev, msg);
+> > > +               if (ret == -EAGAIN)
+> > > +                       continue;
+> > > +               if (ret < 0)
+> > > +                       break;
+> >
+> > With the command allocated on the stack, this can return immediately.
+>
+> Nack, the function has no goto labels.  `return ret` follows the loop
+> immediately.  The `break` here doesn't make it to become too complicated.
+> I would prefer to keep it.
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+Sorry, you lost me here. The code after the loop does
 
+           kfree(msg);
+           return ret;
+
+If kfree() is no longer necessary, only the return statement is left. So break;
+is identical to return ret;. Am I missing something ?
+
+>
+> > > +
+> > > +               *result = msg->result;
+> > > +               if (msg->result != EC_RES_SUCCESS)
+> > > +                       break;
+> >
+> > Again, this can return immediately if the command buffer is on the stack.
+>
+> Nack.  See above.
+>
+> > > -               kfree(status_msg);
+> > > +               if (!(status->flags & EC_COMMS_STATUS_PROCESSING))
+> > > +                       break;
+> >
+> > Can return immediately.
+>
+> Nack.  See above.
+>
+
+Really, for those I think that
+                   return 0;
+would be better and more explicit.
+
+> > > +       kfree(msg);
+> > > +       return ret;
+> >
+> > What should this return on timeout ?
+>
+> It returns either:
+> * -EAGAIN, if cros_ec_xfer_command() returned -EAGAIN
+> * 0, if EC_COMMS_STATUS_PROCESSING flag was on
+> for EC_COMMAND_RETRIES times so far.
+>
+> This is a "move" refactor.  I would prefer to keep it as is and change the
+> behavior in later patch.
+
+Ok.
+
+Thanks,
+Guenter

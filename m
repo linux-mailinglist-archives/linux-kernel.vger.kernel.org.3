@@ -2,137 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D41B574D28
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ADBB574D2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238740AbiGNML2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        id S239227AbiGNMLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238730AbiGNMLI (ORCPT
+        with ESMTP id S231637AbiGNMLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:11:08 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5B927C;
-        Thu, 14 Jul 2022 05:10:05 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id B1B9D5C006E;
-        Thu, 14 Jul 2022 08:10:04 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 14 Jul 2022 08:10:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1657800604; x=1657887004; bh=D7XHW2lpBa
-        3ZTgH/W4t9embYc3/p5pA/+qwtSxzA0qc=; b=gT2vjyMISNAlVpK6KBb58APCFo
-        2SHGPrqnY/8Gg1KxoJ+ljIDa7Wj7Q9HPLyP//Sz0fzzRu+loj9qrvTLJE6UU1CGW
-        WQN/3MXHSdjyyqnTGgmQFmJJegZ8+xm7cORiDTKp4ZX81ENOn6T5Sw/BreCuFmJD
-        fKY9SwxueiwrHkn3A0V3wmArA5ZNybEt3WbwzCGdMTgnfpFGgzKPQQFXDhKQ0utp
-        TpIW/joHCLyaJ2uW/ryhigvBpNCLZzyVIYPkinEAXgCgCcOo3YY3lnfFBezWZpUv
-        Zi4sgXdYqm4pSD08eDGSZFH4leuogQxjQBq80mZGGtoIo+DWoqE823iaG0pQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1657800604; x=1657887004; bh=D7XHW2lpBa3ZTgH/W4t9embYc3/p
-        5pA/+qwtSxzA0qc=; b=DygIqKVDSB3rTAsVCxidxoQLxEsTRV/j0metHeFG3zGZ
-        WgkxwyGnb4n3y/qUi9NMOLC2KMcaR8dgqbHyO8WVeGGdrvA/5aqqcBrzRbX5oMCz
-        Ie+DuzWCMFuiI7m1LvjFuBqWXRl2IQqvkBSGAxzWOy4DNUJZNFBNfvuufySRM+z1
-        ZCqzzKeR6NSrN89jO1Sy6KkSclmG9DBhACaOS3UMACL9lIHt+lekRzonDbEoJyQk
-        qLuXCliFfITIdH/RqxHpfVrur6yYN2rUy0Ivz78ovzvePuH1Lu3wjD3n/EFXKirc
-        ro8X49UuUULW5HtBArJC+YZdYpjso67S80UAcpE2CA==
-X-ME-Sender: <xms:nAfQYtaL3DEJ9QwEdcbl-ApNga9iUFmopPr1HmwfrIuist6aDbQk-w>
-    <xme:nAfQYkbqxyVAzMHy13T5Al7O2y112aTEMC3GZdk4hxWXi4dVigdh37YFO6Km6UMMX
-    lG4pgUYyzPFWDMVc-U>
-X-ME-Received: <xmr:nAfQYv_7gVZaWHQj_puWp_KNvsMymAfCKCnN_yA7siEtQUVRp-7CTJkOrTWdNKQIVKWUy6IyLF_SlaUVWcvLtbMrxtF91kudHMYesrg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejledggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:nAfQYrrRtlMu83HLa5kqd7j1q0fwGNlTg4vHtvC99ANfcO0JEC38Mw>
-    <xmx:nAfQYoosAMXLaGNMSLwo9AqMoETt9CGiXvqR0PPoGoTarWumLHm5kQ>
-    <xmx:nAfQYhSPNUUY-mS3WGVwbLj59RWRyiqwSC3xh1Aqgc-ciWTh3qtyKg>
-    <xmx:nAfQYkfiMwI4tSrMAHZ__A9EcHFaNaQd7Pd8MpC3sGl3ONsB9vZygg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 14 Jul 2022 08:10:04 -0400 (EDT)
-Date:   Thu, 14 Jul 2022 14:10:02 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        Thu, 14 Jul 2022 08:11:40 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D085E5D59D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:10:53 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id q9so2281543wrd.8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:10:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=y5Tg7l3XIXoLarUSKVZXEIQ6qB8NqY7J9uUJaMOQEX8=;
+        b=b/ypvXVyh+dDxJNobrL9DNZ1DoTaduf7JAcxjZ4FguVhuYGZjXPdNS5C3UDuBmE3JX
+         B5BVsODBbBg4sgftte7GAxhPHdvpFPAAGPql53cVq4Oee/IumsBM1qvYwyKDpGX9OFd9
+         OCghFn7ZZhG14Ro3ckNC3+/t82pvU1ECLnWquKP5LGO9Dffux4Jysc13mVFUjKiIQ7P4
+         7G9H4ojcn7vuZ9//k56Ucu3Js86jjVaMY3H8ckafZ7oYSFwTgQ9CKX71g7WJM9QhYS6a
+         dB0gF/WK12cO461nmCJn9BDxYvx9wI6OMw5AGJSj9PfJlzmyvfCtv3TyoYWlx3KBp1YG
+         0zig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=y5Tg7l3XIXoLarUSKVZXEIQ6qB8NqY7J9uUJaMOQEX8=;
+        b=mTPWfhLPxIibgBhE3WqgPpBjSU/OQ3Xgz/mgVbxWkmrEUq01c3+7OhRmHqw1YR4zlG
+         rEBEbQycH1is4sto81qTSeAYHfdvkSx94yMljgxgXaNhW0yH9xjouOZebAt+DZ/6wxlB
+         3hTgardPkaa1wJa9T3JyiVy7uq+yMnVyzOSjp8xOKXYksDlshpZE4zvnItaLjyJBrHRz
+         vgMGCVVTonU+W1CPs6vA9lKk3QOT8DoIZ0fYq+/6E/IrwXjPf4B6yWHJBV3eKfhuXbVX
+         OOU4BWoGvKvTeIaYtJbenEDAEpUArncydl9f5vQ9MLUJuFNgkef81PWPBUWSSt6I+Prm
+         CJRQ==
+X-Gm-Message-State: AJIora9WcUYsJMiC07JfLVOdmo2Nuh8dJigfqP44VL0eI/CcIkkx8SmH
+        KrmgUfWk9rDbe1A+OJS4i5mHwA==
+X-Google-Smtp-Source: AGRyM1v/MKz110s+XqlPHUIpr1tAlhGTb2EkTdhvuwwGbX91Jd/nkFrdVfYH/EhwzLayzDaDhecP8g==
+X-Received: by 2002:adf:f5c7:0:b0:21d:7f20:7508 with SMTP id k7-20020adff5c7000000b0021d7f207508mr7965566wrp.458.1657800652395;
+        Thu, 14 Jul 2022 05:10:52 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id m17-20020a05600c3b1100b003976fbfbf00sm2121158wms.30.2022.07.14.05.10.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 05:10:51 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 13:10:49 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Henning Schild <henning.schild@siemens.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] drm/modes: Add support for driver-specific named
- modes
-Message-ID: <20220714121002.wm6byk6puajnzvmo@houat>
-References: <cover.1657788997.git.geert@linux-m68k.org>
- <528b126b3d932bff055ff085e598b91e2e690a4e.1657788997.git.geert@linux-m68k.org>
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
+Message-ID: <YtAHyZ5WHDRbgOZe@google.com>
+References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+ <YqBS8I62YBPFC9iS@google.com>
+ <20220714112656.GB16407@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="itqpfuzowi2osqrt"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <528b126b3d932bff055ff085e598b91e2e690a4e.1657788997.git.geert@linux-m68k.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220714112656.GB16407@duo.ucw.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 14 Jul 2022, Pavel Machek wrote:
 
---itqpfuzowi2osqrt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed 2022-06-08 08:42:40, Lee Jones wrote:
+> > On Mon, 06 Jun 2022, Andy Shevchenko wrote:
+> > 
+> > > There are a few users that would like to utilize P2SB mechanism of hiding
+> > > and unhiding a device from the PCI configuration space.
+> > > 
+> > > Here is the series to consolidate p2sb handling code for existing users
+> > > and to provide a generic way for new comer(s).
+> > > 
+> > > It also includes a patch to enable GPIO controllers on Apollo Lake
+> > > when it's used with ABL bootloader w/o ACPI support.
+> > > 
+> > > The patch that brings the helper ("platform/x86/intel: Add Primary to
+> > > Sideband (P2SB) bridge support") has a commit message that sheds a light
+> > > on what the P2SB is and why this is needed.
+> > > 
+> > > I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
+> > > since we have an ACPI device for GPIO I do not see any attempts to recreate
+> > > one).
+> > > 
+> > > The series is ready to be merged via MFD tree, but see below.
+> > > 
+> > > The series also includes updates for Simatic IPC drivers that partially
+> > > tagged by respective maintainers (the main question is if Pavel is okay
+> > > with the last three patches, since I believe Hans is okay with removing
+> > > some code under PDx86). Hence the first 8 patches can be merged right
+> > > away and the rest when Pavel does his review.
+> > 
+> > Can we just wait for Pavel's review, then merge them all at once?
+> 
+> 10,12: Acked-by: Pavel Machek <pavel@ucw.cz>
 
-On Thu, Jul 14, 2022 at 11:04:09AM +0200, Geert Uytterhoeven wrote:
-> The mode parsing code recognizes named modes only if they are explicitly
-> listed in the internal whitelist, which is currently limited to "NTSC"
-> and "PAL".
->=20
-> Provide a mechanism for drivers to override this list to support custom
-> mode names.
->=20
-> Ideally, this list should just come from the driver's actual list of
-> modes, but connector->probed_modes is not yet populated at the time of
-> parsing.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Thanks Pavel.  I'll get that added.
 
-Like we discussed on IRC, I'm not sure allowing drivers to handle named
-modes is the right thing to do.
-
-Named modes in general were a workaround the fact that we were missing
-infos in drm_display_mode to describe all the modes.
-
-I think we really should focus on addressing that first, and then
-creating some kind of backward compat layer to create an initial DRM
-state from a named mode provided on the command line.
-
-Maxime
-
---itqpfuzowi2osqrt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYtAHmgAKCRDj7w1vZxhR
-xQ/aAP9oTKyhWWihhvc4XgJIvP101uSmuw+L0FQuNx3PzZgp4QEAhPIBgTwIgcqj
-nYi/57nHkDeCEA5xHbJydUz8v0AyoA4=
-=tRFA
------END PGP SIGNATURE-----
-
---itqpfuzowi2osqrt--
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,145 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DCD5743F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56975743FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233379AbiGNEx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 00:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
+        id S235135AbiGNE4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 00:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236010AbiGNExE (ORCPT
+        with ESMTP id S234711AbiGNEzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 00:53:04 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F87D3DBC9;
-        Wed, 13 Jul 2022 21:37:47 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 26DICfdO028844;
-        Wed, 13 Jul 2022 21:37:46 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=FTmTOIvyMW0+AdVGK7NYyTPGgImrnf3ZUw9hzsxgXWI=;
- b=ktJ2Az/QkX19GNvBrfbmhGP2dWSLG5r3PUr8uOqm1U2rCX3KMyYYFIsPLmqL9Zo+WByl
- EDIaAJdki7j+fGUggk1j0yNa/r+cSMrGQyVQPTcRQ4SvIWFwhBxh8pZR8WpwHpUImjTE
- DG1GDzN2swuUCq09tEPv0b5QTqOlTIOCKHI= 
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2044.outbound.protection.outlook.com [104.47.57.44])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3h9h5f0ucv-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Jul 2022 21:37:46 -0700
+        Thu, 14 Jul 2022 00:55:38 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2081.outbound.protection.outlook.com [40.107.92.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B25C643EF;
+        Wed, 13 Jul 2022 21:39:53 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m2xn9q1Bai1tbwL9mKg8FuVhkU+Ke/eINwqcZlC+u1rjiamAX+BG7CnqxXDmdlG7QD+9lRmEfzhXpWZcz0DZSAzxJ+g3CUrWRBg0WRV4WWtW/5C+RG3TN62zSfe+n0DYdPy6Z/J5zqLEJVF6h2t45ouLDM90oWUzaHuDYjZdnFUSaxc+TvqQv0hZ7hw8hAmN33Zpp7ge2wZ30B/GdYDonhjOEwOuGSJZpt28gLjFHKe8jcuEu0nAl1Q0DqBJVHFkgPPA3/GYyYB27yKKDDo4ikQEBvHpt1LqbSXIBcT14pPQPHPkXS1Gn7MdIVqqiaOYv2qyb50Hdw3PkSUzwSkCZQ==
+ b=AbhdvKZJNdyQATNtK8VNYXFora/+OLu12r7hGO+cyh9ZV6cjSfVPEPAMrwJe7Y9rXDvENCb8/omx4bLBysl900EyjL+1lXNsGAA/6cp6tOMwt4KN36o/by4jSDc1GjsZOEkEKKFL9XTlh9bFl9K7Si9md0wwW4GEa7c1oaAJXYd6ePWoRtskSgbdkDUJaSjxhBvpbo+oepAwnOmhbD1woBKg0f2ASNPJPsET+Fbrd6MN8PO3ZIjT6pMx78hXcXBUIBB9WFGPWCbBM6PJWWwQ3KXBVHGfzEhBD/FYft1F/BizVn7JUHsHy8RSHL7aE/IZKl8dq2f08M8UEEcOS9i7MA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FTmTOIvyMW0+AdVGK7NYyTPGgImrnf3ZUw9hzsxgXWI=;
- b=M69MlMgOQMoAOWlYwHdkSk+lN5vG75a6bGih3Y7Fz3I4fmRSZCgYi1DJ4M5TvM0HtK825vmscioif/hiB43EE0GytTR/+2qRlD89NVH3+JxUmTgPagEwmblnHX5ZYx42emfhumc29sZ1J6nqv4rWgMt7tyorLvL13ISVBcCisnbSpnFE+yJewjSjcBX6lL4QQQ16/RAgVb+Z+LkB0We4p3WG+wvbOkqTNgB20LLws3pfUeE9EBTo0xg0p39TYaOO5fWtdFTneNATVCQAVRN6gxOkPW9aucwO1Sfw3AN+TSUgkm6pMTz+dbGq6nMYpJGijenhkIWZ8wNZfEmBE6iyJA==
+ bh=JiH++72cP6PvlniAvI81A14IGuMIsNrP70AVG88c3VE=;
+ b=Ikbv8R5SK7EcqRfms0jKu8cS3iy9Hs2L87eFjggDtVMqsonQHA3EhbZ7MGfatj+rrv/BcZ45qy7d3L4BcuTmtyoCncan4E/RiNDIXky/gFahA38Z6nkQFdnSXZv3wjMTopR9SKlqzIPUfhir7Lidl6ULErtXi/VZ0xhyJxgPbS+IU7swlJ980VfSc9rYF3KUFZo74WqdoUMDxyerjCOD46ZXnMQlNWwnsMldWJ17OFW7EYw7i0rl9mVXyEh04VrMb7Xndgltb2Y6q13sxrAm/x586MglRdA7Q/pbzMgm8ipiPibTWC0/g5VxF/mAQ3GubRLHLaKbRvQNzgxBBDhZrw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by CO1PR15MB4970.namprd15.prod.outlook.com (2603:10b6:303:e5::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Thu, 14 Jul
- 2022 04:37:43 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::5de3:3999:66df:42d1]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::5de3:3999:66df:42d1%4]) with mapi id 15.20.5438.012; Thu, 14 Jul 2022
- 04:37:43 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     Song Liu <song@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 bpf-next 1/5] ftrace: allow customized flags for
- ftrace_direct_multi ftrace_ops
-Thread-Topic: [PATCH v2 bpf-next 1/5] ftrace: allow customized flags for
- ftrace_direct_multi ftrace_ops
-Thread-Index: AQHYdriN/yOd0MaY7kCCLNeAHt/+qa19MFsAgAAO2fGAAAd7gIAAEfYAgAAULoCAABykAA==
-Date:   Thu, 14 Jul 2022 04:37:43 +0000
-Message-ID: <BDED3B27-B42F-44AD-904E-010752462A67@fb.com>
-References: <20220602193706.2607681-1-song@kernel.org>
- <20220602193706.2607681-2-song@kernel.org>
- <20220713191846.18b05b43@gandalf.local.home>
- <0029EF24-6508-4011-B365-3E2175F9FEAB@fb.com>
- <20220713203841.76d66245@rorschach.local.home>
- <C2FCCC9B-5F7D-4BBF-8410-67EA79166909@fb.com>
- <20220713225511.70d03fc6@gandalf.local.home>
-In-Reply-To: <20220713225511.70d03fc6@gandalf.local.home>
-Accept-Language: en-US
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JiH++72cP6PvlniAvI81A14IGuMIsNrP70AVG88c3VE=;
+ b=GcV40z1oIlNNKEoaDhe4B2vZPdREYwEz7Q7GPDg+po0Xf2AZOJgeMUo0yBs1kryIy4axlyeouSSGRz/MtJ+yAQGRxwV51UKyKsQVNrw2D6Tzk9Qm1ZjOyasExWcyLwBFvVk4UfJX5Inbei56XId4MLiLhUfg7nu+ufuukB/GxXI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CY4PR1201MB0181.namprd12.prod.outlook.com
+ (2603:10b6:910:1f::11) by DM6PR12MB4139.namprd12.prod.outlook.com
+ (2603:10b6:5:214::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Thu, 14 Jul
+ 2022 04:39:50 +0000
+Received: from CY4PR1201MB0181.namprd12.prod.outlook.com
+ ([fe80::1001:3c79:9504:8d6a]) by CY4PR1201MB0181.namprd12.prod.outlook.com
+ ([fe80::1001:3c79:9504:8d6a%10]) with mapi id 15.20.5417.026; Thu, 14 Jul
+ 2022 04:39:50 +0000
+Message-ID: <9f868fd3-ae47-d44e-fd55-566793405121@amd.com>
+Date:   Thu, 14 Jul 2022 06:39:37 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.100.31)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 342222e5-053c-4034-82cd-08da6552978f
-x-ms-traffictypediagnostic: CO1PR15MB4970:EE_
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fLFSrYuhg1K4TQ8bKdIuW8+uVdTWsGFLSAOp5tK8WXeEvZpAlsXXff865aoQOg4QBeylTg+gyVZf/QWXcVUQ7ARFret/zwsieisAJPGyZj9owkdKxxUGQwJNVuko+0ssqe1q536MbRHN7l9kzDOwPx2ZVHrzlQAMTp8hFv+HvYsM7D45BaSWiwkTsYgzGPlhl3DZvR6Lfqn/YksZYqYLrUnfrclUp8OrCe8RKVFY6nQ8KYX9R/mWpiWLmph3jbxTGd6d7IN+gyu//pBuAoXwi0Xsd6MsVt2eD83rlo9oMwPBgeZl7OioVBYONLku8KP0zlvqwOjntCrEr9c0NI5OWtuhV93TzSteWtdF3InzUaVu3J02C1i/dOdoFzDWHwFd/zw+C3ec9ZVy18/4TQkIVjz2o7IlpmAObG6ALWl+ULRxYbcigu1jc57a9LGGuIz0GY6ZWBqlRdPfFTQVkse0cqmPYubuBOiJiVby+oxPrCVe76rUXE5P9uRrvFXKafoGqJjfnXTyagCinnv5HlsqRtYHNniPfC+8wL66/uNFOoaGEsHp1AQwmOYBSqV9RQ4T+qYaTxVZewa2oHhWrh3QaulI2d5Cz2doYMEkiJzMEs7RmDyc6QKV9rrMT+dsoKYKRHTbGICmLqSqvSiFhufJeTs6mzFo0M514MaocdbCu14cGTozFuMhycqKptRIiZL07HaxJNON+Pa6gs87RZ1uZ9GsJuhxDo1gW79OahbPyJgQ9w+zsnJ3q+0VPaLrRPqon4o3ettebTQ2N4nIGjnP5WB/dacetfXYwvz5JY9jkTfP5raRoTwM1TTu82vCU/LlTe2C75cTU0HpOU45vxW4OQC9b7pwVTIFlJPfKiqfrI4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(396003)(366004)(39860400002)(346002)(122000001)(71200400001)(66556008)(54906003)(316002)(33656002)(76116006)(6916009)(38070700005)(8676002)(66946007)(91956017)(4326008)(38100700002)(86362001)(6512007)(478600001)(64756008)(66476007)(6486002)(66446008)(7416002)(2616005)(53546011)(5660300002)(2906002)(41300700001)(186003)(6506007)(36756003)(83380400001)(8936002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jFGq9DG9CcB4R+HUUShYkML11VOh7cKhZ2F7/kGWUH27izgYgCiB7LQJehlC?=
- =?us-ascii?Q?d4sLhFYSo3q6s1Mvlyceaz52nJEYpxAiycYNVcJbu+jSpmmYRQgscKU2ubCZ?=
- =?us-ascii?Q?cK6RY5PzXnrW9vUpUrrwXv0kwO7fjxqDnX/WbAAfGdbiQMls+IF9tcHkKDSm?=
- =?us-ascii?Q?hka5o2NgCEr0iwFVRG4SsuRfH7u7MsjgvqiEI03XcGLTe6fJ66x4CwLcPLIg?=
- =?us-ascii?Q?lSlpxunP49WDb6oBk8U4PkAZVXb1+Uea8RqvjC5VD454IDmglRA9zvtIRdfo?=
- =?us-ascii?Q?pmDpFFUMr9+LtEYtglZJJJqaSmKQpAF5nmR12LpSiagzPzbNo8tvTU/mzeTs?=
- =?us-ascii?Q?Q83tSIhd3ICwyf4q794s29xr7T5mLdOfPZgNp1PUOdexeE6It2o8oTLlrtse?=
- =?us-ascii?Q?9atshsxZduP9lrsjRv5A8fFteF1tzNDwLQXvtNHJl8sCQhX7PYJRdk9vyVli?=
- =?us-ascii?Q?3Ydu/pox/Kp2qb5eZXn+meEer6I0y8y1Y5naYRN6JA7Vlcxp1rq5wyhmiXcC?=
- =?us-ascii?Q?Yt/CfgpGtPHj/3SQiCDb/0rb8f4gsa/TTSVkqhuyIzheZDnbo0AsUiWHuMdu?=
- =?us-ascii?Q?o/sHF/ZBfXsv5BMS7ePidxOoZMC7sTZJNxkPWwJuAAofhauaofUOxzu3O05z?=
- =?us-ascii?Q?o0s3kvbWeeRB3MJvK2BQe5xZqvWCTSP9U53fy/GxCp3zTA2Pr1DY+1p5RG3/?=
- =?us-ascii?Q?j6PbNjsq7ogCXrUJ/ntMiSvFwNYDpMSAtsR8Nkprok5zTDkDXtSBX9aAxkUs?=
- =?us-ascii?Q?gFYMH8NK9dTYShMI7KvPbDrj6TLGGcUWu0N5k2bjo8KdgMjBKrtTPEFwXzls?=
- =?us-ascii?Q?FVlVyIQCPROzXYe/cxFqaduBFwbreg3sichH78jMZt+mLwUEpWhMLdA+PgVH?=
- =?us-ascii?Q?6T5ipKBbBuRgpAlftD+uKBfjlAgudrgHop8Q+VJ4UQCuhpNILvkKqEVTkM6U?=
- =?us-ascii?Q?IuqqqoSNShadZj4NjhAvBTKzMUzQmknUhgzvKubnH9I/JfzMMR7zxbUxwTwY?=
- =?us-ascii?Q?Ov6pjCronSdGzmdxtG1q3Av7zeEsDlk1/jk6DYNn/23/I4wailyliavSPN+2?=
- =?us-ascii?Q?TZG9+aJUpv61es/Dw1cvX4/GpSvSUR4SNzAyA+uQMCLlhSnd9AYhe7x/U9X1?=
- =?us-ascii?Q?YSNIIYuYiT8OUcSqV7YsjyPVSu6P3+SOmMzXJ2SeEQL5HNS2IX/b8T52tbSS?=
- =?us-ascii?Q?4SkjnyKZsjykC1vZGo30dkhiUaZIvkwavk93Xy6j8RqvGu98AXKk2h33dETX?=
- =?us-ascii?Q?M+xcJMk4CfG5fM2TvEAU3hjbOfV4wrkyKaUXl6neCpUSkE8PfsPsL8cj9FUo?=
- =?us-ascii?Q?ilg7MY+PQ13U4IkUM2Snh/opScbgPy5B/qnp8mJL17yE7QMx6Xw92s+fF7kJ?=
- =?us-ascii?Q?xR7V0Uob6Uj9V9xcAmuEMJkaV+YrTFhrygow0pPqgDedI6NlamR1RvmXciBm?=
- =?us-ascii?Q?UY7XWio807YkvVsdgfL9GKM5iwnGHeenMH0hhjcfKG2J4eigfzBFcVagSHTz?=
- =?us-ascii?Q?9PCH0TujFgJOzZP0G2D2dSDNiFmyWc7Q2lbdhC7brJBxme7CECJP7SVXKWot?=
- =?us-ascii?Q?4J5Mz5MEGCkmBV/RV5eilp1hOFhEBk8cxgSlEE2+EA6nEmiwOARL9QjIC0K2?=
- =?us-ascii?Q?byk9l8l8i876c96ZY+hjoU8=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <DAF9E52BE7CB744B9A4D3BE7ACA05CC5@namprd15.prod.outlook.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <b1c12a4b-46f7-081b-242f-005a8824aad1@amd.com>
+ <20220713075738.GC2831541@chaop.bj.intel.com>
+ <13d25d2e-ff79-5762-ddb8-87df56f5cbcf@amd.com>
+ <20220713235922.GB2881285@chaop.bj.intel.com>
+From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
+In-Reply-To: <20220713235922.GB2881285@chaop.bj.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM5PR0601CA0067.eurprd06.prod.outlook.com
+ (2603:10a6:206::32) To CY4PR1201MB0181.namprd12.prod.outlook.com
+ (2603:10b6:910:1f::11)
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ead61a78-b9f2-4e38-26ac-08da6552e31c
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4139:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X2nA99ESSA7nLrA3tjdi1twrBW1DeGkcb6vzB4pVRNw52Vade6QYBQ1IBGuuGa8YNZyI6Dw4jfxSNkCQfFuvcmOJQiCRXz3OR3B1zib/J4aIge06aHePD6eIJmDw4SMI8zQKiMq4XxT2O0jPbt0xqeDbRVrbPkdXIGThsKs2P+0J5c4JjtJx5IKdVWea6NCQwF4R7215zYpt/K4yGchY/j+U8X8TYy47jfhbr2MI4wJw+xULz9tpgGQPBc3hT6xp9+kJGAMu9CwVDFhj4AKJuE/tGcNjP2KX5+Gmwr+ocjXd+GhQASqqZdah+FzJsjmZrhDCvSqpJ5mxglKzm5OrvAbFXf7klah/2q0/xDynVMbo/BUjIZGhtVe661XgWp4aTmZhI/S5YZfBNLMCHxGThg1mDIb8u2lPIfcZAFGU9UuI4RDZSdVO+hO5XX55sFAPLG0AxIIsRO8aqYwD1nu6FPwAwpwNUo1JxKizVoK//IRXQhbVFCAkKYCbTkdwFAcLt2WGcmEXUddDxSYYA1ytMvKtR1X/KMY0zh86gypRd9TRYP/kN+ueV0DJTojXM10t8AXPXtB4WbpsRZPOD2Y1+r2KE3Npjc1eIBiUX3xrMefiFMt2Ez5qrJu354CMXQsiIqgjCtdEdV5qmbucipawuUGaaUz3NnWVuPBiSrLmWlM//P1Rbs126Ni4hmTqNRy9z14lWQlSkMmvuL5M4T5p5UEmXForllBLKz2UUowQ+HtMkQpMK7cn+ItBUUM6Voob5KQm2P6tRxeYGzQB73DQimt+6AxLGNq9IiSSPdAenEogX+lJPo7/7vQ2qWNxA2awm2eWZ4UM2FjHMhc1m/7JIg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1201MB0181.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(366004)(376002)(136003)(396003)(66946007)(66476007)(2616005)(4326008)(8676002)(8936002)(186003)(5660300002)(86362001)(478600001)(36756003)(54906003)(316002)(7406005)(31696002)(31686004)(6486002)(7416002)(6916009)(2906002)(66556008)(41300700001)(6506007)(6666004)(6512007)(38100700002)(26005)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VjJxMGZTRktkNDU3Q1ZVV0REZ3hpVlJOMjhJMkJMTS9JWlZjTHgvOWtVZDE4?=
+ =?utf-8?B?S3RhWCtLL01yRzdCM0Uvc2h2bnVSaFVXZGJCUXVoNEExbTJLQ0RmMyt3anJ5?=
+ =?utf-8?B?ekhUS3BkWm43eGdSUW1zVzQzeFlxaTU4bVhaeGYyakVVL3dVMVhpWGpTbS80?=
+ =?utf-8?B?a2o2MEQ5YUdXVTR3NXRScnpJQ3JtQW1hSlNpWVo4VmtYOW8vNGQyN1JlR3dQ?=
+ =?utf-8?B?M2RzRldoM0xoVmFDQ21SOCsvbFRNV2h1cTEyZ0dPRW4veHVTOC9ZNFBDQnEr?=
+ =?utf-8?B?eEZReG9mZUM2WnQyN0tnSm1UUk9KTEl5OXVLVEZRbW5XV1RsamVvWk96RUMv?=
+ =?utf-8?B?WU9zVGsvMkl2ZGgwNnRCWFQ0RVczZTg5OFJmZWFNUDljWEF4MDZVUVhjVEUz?=
+ =?utf-8?B?c0NCQmZWd0svM3RITWtjZHBKeWFjOTVFUWgwNUtWSXNxRHdwRzByaXpsVmRr?=
+ =?utf-8?B?cUp5ZHcxS2RSZVZnYTZJS2VnZTFFWnVSKzJjbDVPeVIyMUVMd2Nqc1Ewc2VB?=
+ =?utf-8?B?UG5LQTFPQVJ6WUhBTXljdENQeEFxa2IzNDZSZjJXUmp4VzNkNnFUbUJVNXdK?=
+ =?utf-8?B?UVNrUFJYMnNLdC9WUXFxZzJxZ25QRHVITUs2NE1NYXVlbmgxRkVFSm81UDZM?=
+ =?utf-8?B?dC8rWVk4ZG1QRE9BakJxUlVOcnRKRWFpQWxGdXBLc1ZhNkV0N1M1Q1RUbmY1?=
+ =?utf-8?B?WUYrV3hhT00yUk5xQUhhWjVUZ0pNYVdLem1DY3VCU2cvbFlvSHZvVkhjeGhV?=
+ =?utf-8?B?bjdFeitrdzIxUE0yeHFKZVNJMmk2REcxb2Q1dlgvVnViZCtsS1BnZU9WM0kz?=
+ =?utf-8?B?VXBHMEZ5TjQ2TWNMT1hCeGtSVnFjbVQ1bE0vc0tIV2syeWdCN1VaaUJvakk2?=
+ =?utf-8?B?UFArK1EvQWY3MlA3R28zY0sxQTBQVGZpSGU2dEZ6a1htVHBIRVAybVpzblhx?=
+ =?utf-8?B?cjNNYkV6cVhwZEtlOWx6TGhhMWhLaWQ1T3VaWE5FWDJNTGZ0UjMxL1lKU1pP?=
+ =?utf-8?B?NGcvYmNHV1orZnI0WU4rV1hSK0l1RWsyMnJnc3NFdW41T2ljRUtnbWhaRnk0?=
+ =?utf-8?B?MHhLdEg0Mi90d0tjUDlqVHk0VWt5QTk0eHp0Yjk1Y2dwRUhGeXlVcTJDRi9O?=
+ =?utf-8?B?SFNPYmRJNlNJZXdkSWh4T1hXYWRSQkhUREVTblE0YWRFUEVqRVFvU0RPU0lY?=
+ =?utf-8?B?YnVVSGt3a1Iwc0swUlZ6UHNsTjlEZlQ2TDk5dS9DRlFzT1FyNVE5dDVVaTdJ?=
+ =?utf-8?B?TDdhc1NYNHhQc3d0eU93YmVRZFZ3eEdDQnF2d1R5enJYUzg3c0hXM1FXUWJF?=
+ =?utf-8?B?OXR3VHdSMFlFVm0rVXQ3VS9FZ0gvZDh4OFJlVWh3aVlkWE9mUUxnR1ZYRlcw?=
+ =?utf-8?B?NmQwRXFXdUd2cUM1aElpaktrK0NEZHI5NEtBdHVYbTdwOEhpYmJxTDM5YlFm?=
+ =?utf-8?B?d3FvYUprQlY2allBZytkN0JWNG5rc3B3Tlk4QVFOUTJSVU5WQ0hLRjhkZ3hv?=
+ =?utf-8?B?ZjBCWXRrOHpxMXc3eXdYcTNPSHQ0SnRKREZJUlBlUkE4Myt1SkgvdWVlcGpO?=
+ =?utf-8?B?WStRRFhLd2lMN2l1N08yNUVlK0gzQ0JpN25uK09ZZEoza3FVb0twWkxDaC9E?=
+ =?utf-8?B?TFUveSt3VUwzOE5ad1gvb1drN0pJSk9Fc3JlQUVlME1UMHVkSXNKM0RlWmlt?=
+ =?utf-8?B?V25GTklvNzhCbUJKYVdLTktUSklNTzFRYlg1SWVSbGJnSE1CQThsWnN0bGlI?=
+ =?utf-8?B?ejVoZU1tTUFFMXNSOEw3OUhBTWEvNjh3THVtMkJ3MEM0RVVFemRWazdkN2pp?=
+ =?utf-8?B?NHFyWW9TL2hPZkoyb0xETmhlcHNMUjh4NHRTK1YxaUhrdk1YcmZvakxkRXA1?=
+ =?utf-8?B?ZkF2VlR4RGhab2VtVW9mR2k0YUJURGpXSndhdEI0U09zMXVLTDUxQTNLNm9o?=
+ =?utf-8?B?YzZLYjArc2NtYmdmSGJCYzlwUmxHd0wraERsb0JFVm9ZVjdoaFduU2hOWkdi?=
+ =?utf-8?B?Z203OVpySXVteWoyQVNmOTZJQy82YTZUTlN0c3E3VHNiWlB4ODNUUlA0blBQ?=
+ =?utf-8?B?aFc2T2VISlc0MHluK2paRlRaMGxtakErZ3k3bi9MM1FTRm9pOHlSbDBsN3Bw?=
+ =?utf-8?Q?J0ApEf6WsLAOlIX1buvLtdaxQ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ead61a78-b9f2-4e38-26ac-08da6552e31c
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR1201MB0181.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 342222e5-053c-4034-82cd-08da6552978f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jul 2022 04:37:43.0678
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2022 04:39:50.1780
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6HAL4hKTaVTXygfIiOHaHXcOUsNtL0zQB+W1w3c4oU9L9FFrf5bUOxd6Pj6z4PqCvn5/FH8t4nRSWWdw87Qetw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR15MB4970
-X-Proofpoint-ORIG-GUID: nhMK5XlqoKDS2q0Bigz4QZK8TXBlqJnM
-X-Proofpoint-GUID: nhMK5XlqoKDS2q0Bigz4QZK8TXBlqJnM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-14_02,2022-07-13_03,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HxjmDwv+ndNmA8b/s9rWD17Gc/TJNq1Ppwthczdjs1HPNvU/iPKcNDyMpOE3jhjd3ftMB4D1HOXfjLqRYmHTag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4139
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -148,178 +159,51 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+>>>>> This is the v7 of this series which tries to implement the fd-based KVM
+>>>>> guest private memory. The patches are based on latest kvm/queue branch
+>>>>> commit:
+>>>>>
+>>>>>      b9b71f43683a (kvm/queue) KVM: x86/mmu: Buffer nested MMU
+>>>>> split_desc_cache only by default capacity
+>>>>>
+>>>>> Introduction
+>>>>> ------------
+>>>>> In general this patch series introduce fd-based memslot which provides
+>>>>> guest memory through memory file descriptor fd[offset,size] instead of
+>>>>> hva/size. The fd can be created from a supported memory filesystem
+>>>>> like tmpfs/hugetlbfs etc. which we refer as memory backing store. KVM
+>>>>
+>>>> Thinking a bit, As host side fd on tmpfs or shmem will store memory on host
+>>>> page cache instead of mapping pages into userspace address space. Can we hit
+>>>> double (un-coordinated) page cache problem with this when guest page cache
+>>>> is also used?
+>>>
+>>> This is my understanding: in host it will be indeed in page cache (in
+>>> current shmem implementation) but that's just the way it allocates and
+>>> provides the physical memory for the guest. In guest, guest OS will not
+>>> see this fd (absolutely), it only sees guest memory, on top of which it
+>>> can build its own page cache system for its own file-mapped content but
+>>> that is unrelated to host page cache.
+>>
+>> yes. If guest fills its page cache with file backed memory, this at host
+>> side(on shmem fd backend) will also fill the host page cache fast. This can
+>> have an impact on performance of guest VM's if host goes to memory pressure
+>> situation sooner. Or else we end up utilizing way less System RAM.
+> 
+> (Currently), the file backed guest private memory is long-term pinned
+> and not reclaimable, it's in page cache anyway once we allocated it for
+> guest. This does not depend on how guest use it (e.g. use it for guest
+> page cache or not).
 
-> On Jul 13, 2022, at 7:55 PM, Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> On Thu, 14 Jul 2022 01:42:59 +0000
-> Song Liu <songliubraving@fb.com> wrote:
-> 
->>> As I replied to patch 3, here's my thoughts.
->>> 
->>> DIRECT is treated as though it changes the IP. If you register it to a
->>> function that has an IPMODIFY already set to it, it will call the
->>> ops->ops_func() asking if the ops can use SHARED_IPMODIFY (which means
->>> a DIRECT can be shared with IPMODIFY). If it can, then it returns true,
->>> and the SHARED_IPMODIFY is set *by ftrace*. The user of the ftrace APIs
->>> should not have to manage this. It should be managed by the ftrace
->>> infrastructure.  
->> 
->> Hmm... I don't think this gonna work. 
->> 
->> First, two IPMODIFY ftrace ops cannot work together on the same kernel 
->> function. So there won't be a ops with both IPMODIFY and SHARE_IPMODIFY. 
-> 
-> I'm not saying that.
-> 
-> I'm saying that ftrace does not have any clue (nor cares) about what a
-> DIRECT ops does. It might modify the IP or it might not. It doesn't know.
-> 
-> But ftrace has control over the callbacks it does control.
-> 
-> A DIRECT ops knows if it can work with another ops that has IPMODIFY set.
-> If the DIRECT ops does not work with IPMODIFY (perhaps it wants to modify
-> the IP), then it will tell ftrace that it can't and ftrace will not allow
-> it.
-> 
-> That is, ftrace doesn't care if the DIRECT ops modifies the IP or not. It
-> can only ask (through the ops->ops_func()) if the direct trampoline can
-> honor the IP that is modified. If it can, then it reports back that it can,
-> and then ftrace will set that ops to SHARED_MODIFY, and the direct function
-> can switch the ops->func() to one that uses SHARED_MODIFY.
-> 
->> 
->> non-direct ops without IPMODIFY can already share with IPMODIFY ops.
-> 
-> It can? ftrace sets IPMODIFY for all DIRECT callers to prevent that. Except
-> for this patch that removes that restriction (which I believe is broken).
+Even if host shmem backed memory always be always un-reclaimable, we end 
+up utilizing double RAM (both in guest & host page cache) for guest disk 
+accesses?
 
-I mean "non-direct" ftrace ops, not direct ftrace ops. 
+I am considering this a serious design decision before we commit to this 
+approach.
 
-> 
->> Only direct ops need SHARE_IPMODIFY flag, and it means "I can share with 
->> another ops with IPMODIFY". So there will be different flavors of 
->> direct ops:
-> 
-> I agree that only DIRECT ops can have SHARED_IPMODIFY set. That's what I'm
-> saying. But I'm saying it gets set by ftrace.
-> 
->> 
->>  1. w/ IPMODIFY, w/o SHARE_IPMODIFY;
->>  2. w/o IPMODIFY, w/o SHARE_IPMODIFY;
->>  3. w/o IPMODIFY, w/ SHARE_IPMODIFY. 
->> 
->> #1 can never work on the same function with another IPMODIFY ops, and 
->> we don't plan to make it work. #2 does not work with another IPMODIFY 
->> ops. And #3 works with another IPMODIFY ops.
-> 
-> Lets look at this differently. What I'm proposing is that registering a
-> direct ops does not need to tell ftrace if it modifies the IP or not.
-> That's because ftrace doesn't care. Once ftrace calls the direct trampoline
-> it loses all control. With the ftrace ops callbacks, it is the one
-> responsible for setting up the modified IP. That's not the case with the
-> direct trampolines.
-> 
-> I'm saying that ftrace doesn't care what the DIRECT ops does. But it will
-> not, by default, allow an IPMODIFY to happen when a DIRECT ops is on the
-> same function, or vice versa.
-> 
-> What I'm suggesting is when a IPMODIFY tries to attach to a function that
-> also has a DIRECT ops, or a DIRECT tries to attach to a function that
-> already has an IPMODIFY ops on it, that ftrace calls the direct
-> ops->ops_func() asking if it is safe to use with an IPMODIFY function.
-> 
-> If the direct ops modifies the IP itself, it will return a "no", and ftrace
-> will reject the attachment. If the direct ops can, it returns a "yes" and
-> then ftrace will set the SHARED_IPMODIFY flag to that ops and continue.
-> 
-> The fact that the ops->ops_func was called will let the caller (bpf) know
-> that it needs to use the stack to return to the function, or to call it if
-> it is also tracing the return.
-> 
-> If the IPMODIFY ops is removed, then ftrace will call the ops->ops_func()
-> telling it it no longer has the IPMODIFY set, and will clear the
-> SHARED_IPMODIFY flag, and then the owner of the direct ops can go back to
-> doing whatever it did before (the calling the function directly, or
-> whatever).
-> 
->> 
->> The owner of the direct trampoline uses these flags to tell ftrace 
->> infrastructure the property of this trampoline. 
-> 
-> I disagree. The owner shouldn't have to care about the flags. Let ftrace
-> handle it. This will make things so much more simple for both BPF and
-> ftrace.
-> 
->> 
->> BPF trampolines with only fentry calls are #3 direct ops. BPF 
->> trampolines with fexit or fmod_ret calls will be #2 trampoline by 
->> default, but it is also possible to generate #3 trampoline for it.
-> 
-> And ftrace doesn't care about this. But bpf needs to care if the IP is
-> being modified or not. Which can be done by the ops->ops_func() that you
-> added.
-> 
->> 
->> BPF side will try to register #2 trampoline, If ftrace detects another 
->> IPMODIFY ops on the same function, it will let BPF trampoline know 
->> with -EAGAIN from register_ftrace_direct_multi(). Then, BPF side will 
->> regenerate a #3 trampoline and register it again. 
-> 
-> This is too complex. You are missing the simple way.
-> 
->> 
->> I know this somehow changes the policy with direct ops, but it is the
->> only way this can work, AFAICT. 
-> 
-> I disagree. There's a much better way that this can work.
-> 
->> 
->> Does this make sense? Did I miss something?
-> 
-> 
-> Let me start from the beginning.
-
-I got your point now. We replace the flag on direct trampoline with a 
-callback check. So yes, this works. 
-
-> 
-> 1. Live kernel patching patches function foo.
-> 
-> 2. lkp has an ops->flags | IPMODIFY set when it registers.
-> 
-> 3. bpf registers a direct trampoline to function foo.
-> 
-> 4. bpf has an ops->flags | DIRECT set when it registers
-> 
-> 5. ftrace sees that the function already has an ops->flag = IPMODIFY on it,
-> so it calls bpf ops->ops_func(SHARE_WITH_IPMODIFY)
-> 
-> 6. bpf can and does the following
-> 
->  a. if it's the simple #1 trampoline (just traces the start of a function)
->     it doesn't need to do anything special returns "yes".
-> 
->  b. if it's the #2 trampoline, it will change the trampoline to use the
->     stack to find what to call, and returns "yes".
-> 
-> 7. ftrace gets "yes" and sets the *ipmodify* ops with SHARED_IPMODIFY
->   (there's a reason for setting this flag for the ipmodify ops and not the
->    direct ops).
-> 
-> 
-> 8. LKP is removed from the function foo.
-> 
-> 9. ftrace sees the lkp IPMODIFY ops has SHARED_IPMODIFY on it, and knows
->   that there's a direct call here too. It removes the IPMODIFY ops, and
->   then calls the direct ops->ops_func(STOP_SHARE_WITH_IPMODIFY) to let the
->   direct code know that it is no longer sharing with an IPMODIFY such that
->   it can change to call the function directly and not use the stack.
-
-I wonder whether we still need this flag. Alternatively, we can always
-find direct calls on the function and calls ops_func(STOP_SHARE_WITH_IPMODIFY). 
-
-What do you think about this? 
+Happy to be enlightened on this and know the thoughts from others as well.
 
 Thanks,
-Song
+Pankaj
 

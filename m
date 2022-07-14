@@ -2,208 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED14574DE7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048FC574E06
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239444AbiGNMll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
+        id S239456AbiGNMoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiGNMli (ORCPT
+        with ESMTP id S238942AbiGNMoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:41:38 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2D45E312
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:41:36 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so8612120pjn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:41:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3h9c3FGTTpmVX++3flAulp3WHcv9mbKiAG+klxgd4Fg=;
-        b=koV+yx9nkANm2Uhwc2mx1p5TDVvFO0Pq9026BPOplyIfNkRQxR172QmsM1iZZsRR0l
-         hTZhVAPjokJ1WmwxCpkdz76SFFZ3He+2CS/3yu1+4Xyue49Ut0nmEAIIABtBjBscI2F/
-         FKVi/u/gYbZdU8Sjtrc14gSnroHF3rwWZ3nAffq6mqA9dts50OcbA3G9RGCUKyhKGg26
-         MIRADkVdUR9D6S+BcW95uBk9BFrtNobrOQbqU2cyC6Aq2UFQRrUfNaXMwOKRkAvbGoe5
-         6ORcFKNWFQ7U6VUZ9m5tbj1Wh2kPtZMhEC8niQc1stGNKl83l04Qi80Df9lC1uTd+1dQ
-         UQtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3h9c3FGTTpmVX++3flAulp3WHcv9mbKiAG+klxgd4Fg=;
-        b=j1+MidZC4u4qF83cJsxQLa2WIJv5AaowQS7jMpwrTyNxb2yTO3Jg7eU4A9tMsXPqWa
-         pjYOvgWKkUwgmjtiVK0Uh4a/U0GrpSRr1r5wHUI314Qz1SqdziKVXGCjn+MBTtC00/n+
-         0ggPKZn/9OiMpPk8/z2e9R+NMLUqrtj9qDGpX19fTvgKBFg9iIk87Wt7a6zvZtqZ+JoR
-         qQOS9tGwtgPzEWlcFEviynSAcBzjrNlB+Q1lCXfnj1CqvYzA31Eg8Gn7CdoNU/sewenQ
-         3coFETL2buDP8UA33H8XHmOVoVqx0V6ASk53r7j+vUXb9yPySi1nIu1oajjglB09CszV
-         HN3Q==
-X-Gm-Message-State: AJIora/QZckgoDMISmF460waNFUdyqOmYFRf02ZM697SDvSTYx9Erlcj
-        C7upW4u4PkxXxbHqL4nKdwA=
-X-Google-Smtp-Source: AGRyM1uZUUoWrMws0sOG5cPzaHob5mxbfrBC/vfZxXW6L7AasRxArG6rpLgplExROVPACGPcJXcKlg==
-X-Received: by 2002:a17:90b:3811:b0:1ef:e647:ff34 with SMTP id mq17-20020a17090b381100b001efe647ff34mr9875511pjb.171.1657802496327;
-        Thu, 14 Jul 2022 05:41:36 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id t7-20020a170902e84700b0016c1cdd2de3sm1375408plg.281.2022.07.14.05.41.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 05:41:36 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 21:41:34 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 1/2] openrisc: Add pci bus support
-Message-ID: <YtAO/nxcsjjc8M/c@antec>
-References: <20220714042736.2133067-1-shorne@gmail.com>
- <20220714042736.2133067-2-shorne@gmail.com>
- <CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com>
+        Thu, 14 Jul 2022 08:44:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C2D1FCC5;
+        Thu, 14 Jul 2022 05:44:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADBA361F73;
+        Thu, 14 Jul 2022 12:44:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 071EFC341C8;
+        Thu, 14 Jul 2022 12:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657802644;
+        bh=QHwAddHD+o4YxO5fPQSFi9XnW6UkKE5vsIk/KhPzzLA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Q9uRBvGUgpgtTAHKFRXMYMkj30Mqice1ld3NADNMzlptVtV737ILZ/ImXwVblxgIA
+         rv+PPI5HaOxNhDgU8LV9DgZv1JGDm8rqgPulMslpPSKjep/29tsS6MHDYstp1U64ck
+         N8M00Go1CsENReeNJNFE5iTh5JalID16eslk42C+i/qwuZy+TqKeg3Jno7g2aydOJo
+         WuhkYplxSlfFaz/E4I50p2NjORflqgWeZ+NwF1H5ZhWwsGoZbxsxk0QO6YjHBCS23E
+         CtRZ1B6kcJWqDstrTApqhI7TeB6sAF1Qkk3wvtGOvOxen7UV2XUdGOBfh5w3KwZdl4
+         ETCZxmLWrZ3Ow==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1oByCO-0007D5-M9; Thu, 14 Jul 2022 14:44:08 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v3 00/30] phy: qcom,qmp: fix dt-bindings and deprecate lane suffix
+Date:   Thu, 14 Jul 2022 14:43:03 +0200
+Message-Id: <20220714124333.27643-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 09:56:44AM +0200, Arnd Bergmann wrote:
-> On Thu, Jul 14, 2022 at 6:27 AM Stafford Horne <shorne@gmail.com> wrote:
-> >
-> > This patch adds required definitions to allow for PCI buses on OpenRISC.
-> > This is being in the QEMU virt platform.
-> >
-> > OpenRISC does not have IO ports so this defines PCI IO to be allowed in
-> > any range.  Keeping PIO_RESERVED defined as 0 allows OpenRISC to use
-> > MMIO for all IO.
-> 
-> Ok, this looks better.
-> 
-> > Also, since commit 66bcd06099bb ("parport_pc: Also enable driver for PCI
-> > systems") all platforms that support PCI also need to support parallel
-> > port.  We add a generic header to support parallel port drivers.
-> 
-> The parport_pc driver is actually one of the things that doesn't work without
-> I/O ports, so at least the description here is misleading. We should really
-> have Kconfig logic to enforce this, but that is a separate topic.
+When adding support for SC8280XP to the QMP PHY driver I noticed that
+the PHY provider child node was not described by the current DT schema.
 
-OK, let me try to fix up this comment in v3.
+The SC8280XP PHYs also need a second fixed-divider PIPE clock
+("pipediv2") and I didn't want to have to add a bogus "lane" suffix to
+the clock name just to match the current "pipe0" name so I decided to
+deprecate the unnecessary suffix in the current binding instead.
 
-> > diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-> > index e814df4c483c..327241988819 100644
-> > --- a/arch/openrisc/Kconfig
-> > +++ b/arch/openrisc/Kconfig
-> > @@ -21,7 +21,9 @@ config OPENRISC
-> >         select GENERIC_IRQ_PROBE
-> >         select GENERIC_IRQ_SHOW
-> >         select GENERIC_IOMAP
-> > +       select GENERIC_PCI_IOMAP
-> >         select GENERIC_CPU_DEVICES
-> 
-> > @@ -46,9 +50,6 @@ config MMU
-> >  config GENERIC_HWEIGHT
-> >         def_bool y
-> >
-> > -config NO_IOPORT_MAP
-> > -       def_bool y
-> > -
+To be able to add the missing child-node schema and handle device
+specifics like additional PIPE clocks, it quickly became obvious that
+the binding needs to be split up.
 
-I tried the below patch on top of this but I get failures, as the __pci_ioport_map
-uses ioport_map.
+This series clean up and fixes some issue with the current schema before
+splitting it up in separate schemas for PCIe, UFS and USB and adding
+missing parts like the child PHY provider nodes.
 
-    lib/pci_iomap.c: In function 'pci_iomap_range':
-      CC      drivers/i2c/i2c-core-base.o
-    ./include/asm-generic/pci_iomap.h:29:41: error: implicit declaration of function 'ioport_map'; did you mean 'ioremap'? [-Werror=implicit-function-declaration]
-       29 | #define __pci_ioport_map(dev, port, nr) ioport_map((port), (nr))
-	  |                                         ^~~~~~~~~~
-    lib/pci_iomap.c:44:24: note: in expansion of macro '__pci_ioport_map'
-       44 |                 return __pci_ioport_map(dev, start, len);
-	  |                        ^~~~~~~~~~~~~~~~
+The MSM8996 PCIe PHY gets its own schema as this is the only non-combo
+PHY that actually provides more than one PHY per IP block. Note that the
+"lane" suffix is still unnecessary and misleading.
+
+The final patches add support for the updated binding to the (recently
+split up) PHY drivers. Included is also a related combo PHY cleanup.
+
+Johan
 
 
-diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-index 327241988819..c7f282f60f64 100644
---- a/arch/openrisc/Kconfig
-+++ b/arch/openrisc/Kconfig
-@@ -20,7 +20,6 @@ config OPENRISC
-        select GENERIC_IRQ_CHIP
-        select GENERIC_IRQ_PROBE
-        select GENERIC_IRQ_SHOW
--       select GENERIC_IOMAP
-        select GENERIC_PCI_IOMAP
-        select GENERIC_CPU_DEVICES
-        select HAVE_PCI
-@@ -50,6 +49,9 @@ config MMU
- config GENERIC_HWEIGHT
-        def_bool y
- 
-+config NO_IOPORT_MAP
-+       def_bool y
-+
- # For now, use generic checksum functions
- #These can be reimplemented in assembly later if so inclined
- config GENERIC_CSUM
+Changes in v3
+ - rebase on linux-next which has a new binding for IPQ8074
+ - fix git-bisect breakage due to removal of an unused variable one
+   patch too soon (Krzysztof)
+ - replace one Fixes tag with reference in commit message (Krzysztof)
+ - drop two redundant minItems (Krzysztof)
+ - fix two Fixes tags that lacked the actual tag
+ - add more ack and review tags from Krzysztof
+
+Changes in v2
+ - squash split + cleanup + example patches (Krzysztof)
+ - deprecate clock-names instead of dropping suffix (Krzysztof)
+ - deprecate reset-names instead of dropping suffix (Krzysztof)
+ - flatten child reg if/then schemas (Krzysztof)
+ - add back optional vddp-ref-clk to all bindings even though it likely
+   only applies to MSM8996/98 UFS (Krzysztof)
+ - add missing sc7180 schema to USB binding
+ - misc clean ups
+   - shorten or drop descriptions
+   - drop quotes around $id and $schema (Krzysztof)
+   - use maxItems with clock-output-names
+   - combine two USB clock+reset schemas
+ - add Reviewed-by/Acked-by tags
 
 
-> GENERIC_IOMAP makes no sense without PIO, and I think you also
-> need to keep the NO_IOPORT_MAP. I think you still want
-> GENERIC_PCI_IOMAP, which in the absence of the other two
-> should turn just return an __iomem pointer for memory resource
-> and NULL for i/o resources.
+Johan Hovold (30):
+  dt-bindings: phy: qcom,qmp: fix bogus clock-cells property
+  dt-bindings: phy: qcom,qmp: sort compatible strings
+  dt-bindings: phy: qcom,qmp: drop redundant descriptions
+  dt-bindings: phy: qcom,qmp: fix child node description
+  dt-bindings: phy: qcom,qmp: clean up descriptions
+  dt-bindings: phy: qcom,qmp: clean up example
+  dt-bindings: phy: qcom,qmp: drop child-node comment
+  dt-bindings: phy: add qcom,msm8996-qmp-pcie-phy schema
+  dt-bindings: phy: qcom,msm8996-qmp-pcie: add missing child node schema
+  dt-bindings: phy: qcom,msm8996-qmp-pcie: deprecate PIPE clock names
+  dt-bindings: phy: qcom,msm8996-qmp-pcie: deprecate reset names
+  dt-bindings: phy: add QMP PCIe PHY schema
+  dt-bindings: phy: qcom,qmp-pcie: add missing child node schema
+  dt-bindings: phy: qcom,qmp-pcie: deprecate PIPE clock name
+  dt-bindings: phy: add QMP UFS PHY schema
+  dt-bindings: phy: qcom,qmp-ufs: add missing SM8450 clock
+  dt-bindings: phy: qcom,qmp-ufs: add missing SM8150 power domain
+  dt-bindings: phy: qcom,qmp-ufs: add missing child node schema
+  dt-bindings: phy: add QMP USB PHY schema
+  dt-bindings: phy: qcom,qmp-usb: add missing child node schema
+  dt-bindings: phy: qcom,qmp-usb: deprecate PIPE clock name
+  dt-bindings: phy: qcom,qmp-usb: add missing qcom,sc7180-qmp-usb3-phy
+    schema
+  dt-bindings: phy: qcom,qmp-usb3-dp: fix bogus clock-cells property
+  dt-bindings: phy: qcom,qmp-usb3-dp: deprecate USB PIPE clock name
+  phy: qcom-qmp-pcie: drop pipe clock lane suffix
+  phy: qcom-qmp-combo: drop unused lane reset
+  phy: qcom-qmp-combo: drop pipe clock lane suffix
+  phy: qcom-qmp-pcie-msm8996: drop pipe clock lane suffix
+  phy: qcom-qmp-pcie-msm8996: drop reset lane suffix
+  phy: qcom-qmp-usb: drop pipe clock lane suffix
 
-OK.
+ .../phy/qcom,msm8996-qmp-pcie-phy.yaml        | 189 +++++++
+ .../bindings/phy/qcom,qmp-pcie-phy.yaml       | 296 +++++++++++
+ .../devicetree/bindings/phy/qcom,qmp-phy.yaml | 502 ------------------
+ .../bindings/phy/qcom,qmp-ufs-phy.yaml        | 239 +++++++++
+ .../bindings/phy/qcom,qmp-usb-phy.yaml        | 385 ++++++++++++++
+ .../bindings/phy/qcom,qmp-usb3-dp-phy.yaml    |   8 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c     |   6 +-
+ .../phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c  |   8 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      |   4 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c       |   4 +-
+ 10 files changed, 1115 insertions(+), 526 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-pcie-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-ufs-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-usb-phy.yaml
 
-If we keep NO_IOPORT_MAP, it causes HAS_IOPORT_MAP to be false and it removes
-the definition of ioport_map which still seems to be needed at link time.  Maybe
-thats an issue though.
+-- 
+2.35.1
 
-> > +static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > +{
-> > +       /* no legacy IRQs on or1k */
-> > +       return -ENODEV;
-> > +}
-> 
-> The comment seems misleading, as "legacy IRQs" normally refers to
-> non-MSI interrupts, which you do support. It's only the legacy IDE
-> interrupts that are not supported.
-
-OK, I might have copied this from another architecture.  I will check if those
-comments should be updated too.
-
-> I see that the asm-generic/pci.h file is now completely useless,
-> as it only has a single function left in it, and this one is wrong
-> on most architectures -- it only works when you have PC-style
-> interrupt numbers. Out of the five architectures that include
-> asm-generic/pci.h  (m68k, s390, sparc, x86, xtensa), I would
-> expect only x86 to use this version, and maybe a few sparc
-> machines.
-> 
-> Can I ask you to move out the existing asm-generic/pci.h
-> code into those architectures, and add a new file in its place
-> that you can use as-is on openrisc? Ideally we should
-> be able to also remove most of the contents of asm/pci.h
-> on arm64 and riscv. If you have conflicting settings, the normal
-> way to handle them in asm-generic headers is like
-
-Yeah, that sounds like a good plan,
-
-> #ifndef PCIBIOS_MIN_IO
-> #define PCIBIOS_MIN_IO 0
-> #endif
-> 
-> #ifndef pcibios_assign_all_busses
-> #define pcibios_assign_all_busses() 1
-> #endif
-
-OK.
-
--Stafford

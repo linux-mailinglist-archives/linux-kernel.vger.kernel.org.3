@@ -2,77 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A02574643
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CDA8574645
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235961AbiGNIAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 04:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
+        id S237610AbiGNIB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 04:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiGNIAi (ORCPT
+        with ESMTP id S236396AbiGNIBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 04:00:38 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAED22522
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:00:37 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id b9so1153235pfp.10
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:00:37 -0700 (PDT)
+        Thu, 14 Jul 2022 04:01:21 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2107.outbound.protection.outlook.com [40.107.237.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FC822522;
+        Thu, 14 Jul 2022 01:01:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YDUPAOKMOphxy9lsBNVGaBZf2g6nDwFWL5egkL4+qo32Ki/WjZykEmo3LP1O3klMRTMBSk2rqHwNJ6vkWw5jGgNGm76CZCRAz35BK+O9Zu/kHYb6sH0HiHqNLOGe3BYL6HmR3JeBLvrI+c3izDxDZkHw/hYfPQgLsyzPdmA4JpjpvVzxRz3IiS3dC5cpuPi+B3VTOPLPS4Vjk8B22sqvSt/zTp0xU9tXfh+ZM34F/OcH5pblx4mMUK77Nhpbdqnrt4FOFC/Spr1bjzwxB6rRSHh5V7WH/AXt6W2AL+wkts7RQdhg3QfoNjg2mHYcrMhwiCZnSLpUMYnHleQzqgDz9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cwwE8cisTu7u6opjMWRDzwUH3LyxGNeq3/utgdQGNHU=;
+ b=MjaJf8Ri+yQs68RPtTfL6r/5fUemLxvYoKMzdF469OMa8yFj84FBGHJ9l5b4qJoc0dYIG/MwyzvOLAU80V+5ZQllxk9iiy6UrByLMaq3CsVo7KPKgQT+PLufmzW0qgFqGAWnDCoj6BF4MqgWT3epijOyIq/7NGS6CQX7KBNxXrqt86SdL5jBj2oIFcLLEbH4BAlK84Dn1g2udTExXr7yWRABMrkwQ26mpTlAKSzeBBItTg/myVv6wxmGhM6t5alU8G4tuDN0/FQuMnZfELRigoYN2gElc7iHwRjQKd7wCT2bSIYFbSJzLTa4oTnn9yitX6kjsfLXStCoGzRU45ISLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hZvupmqkRAYTvBrFs91h5XDaRVd2eOd2qUWtUN+1M8o=;
-        b=XYYlyuW12p66C6THJPXjHlrI6pZHbUC8MmVB7wtvGlnEoP4sc3gK2VqK5Y6GYd+bkN
-         fQ7BeqlxZK65dno8VwKCa6bP+H/uZmGyKMMosXOLmel/36VObWA5VWHivKJBAP6hvVln
-         yYxWPCIlfXHXxU0BZ22h3BRQ0Ma2rohKY3Vinfc2NyH0ZzM2NnBIQ4hV38yRbScqJDow
-         8SzW955wW8SWgjr3nTLEUAgfSyIVoEuBMD9lbT9nWVtV2w3qZrnB3mB1EnB45lZ5n3D3
-         5xI015JBH0Goag1N7STVHhxRYIPgeYzUzkRfzLtyU5qDfceoSCgmmHH2d6dcqYtNg5GH
-         HYKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hZvupmqkRAYTvBrFs91h5XDaRVd2eOd2qUWtUN+1M8o=;
-        b=WqLGi8aHbalGWrJim1s0Gnm+U0Fz9wbyaeaXEl4MZwtmhGH2LFFZyeH10Z8Mdv/iUb
-         0qSbhjdzzzbJtfzxoVQnDwJiwYYRTKaxCXBdE4xHEDDdnrJQu36VfGh9EUcMfpLGmqfW
-         KQjViMXv/H9WcWZBlH50lrYrVLdBzGpOQcJlwGUNkmk1vUPbENUDVJyeqxqNrfwkd90J
-         0Zh4+EXseMKhppabUQU686f2dp0SZChMO3BbyFyZvblGtYXXTRPFMZGnWXoRpuiysWza
-         rQM7Bbw+QyzrVW25RZiSPzCOZWky7vHs6WenLrb8duo7JoeWDe43oPzskUThOin4DhGy
-         ZVmA==
-X-Gm-Message-State: AJIora97MeIV7KhyRv8SunK+bjsPpSL8pGFavMvMkUsnfRFZnLllvHvv
-        T2SmegxIeMghpnNH/QjmyFY85g0pY/z2cw==
-X-Google-Smtp-Source: AGRyM1veVmlkG8CMsJci8DaYwSOG73eVpFgTu9CQkTyeMgPQtAI+ZD6xzy68EZEkylwgBaBF4K9ZGw==
-X-Received: by 2002:a63:cf52:0:b0:40d:fb07:a793 with SMTP id b18-20020a63cf52000000b0040dfb07a793mr6884025pgj.576.1657785636808;
-        Thu, 14 Jul 2022 01:00:36 -0700 (PDT)
-Received: from [10.94.58.189] ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id t187-20020a625fc4000000b0052ab8a92496sm588516pfb.168.2022.07.14.01.00.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 01:00:36 -0700 (PDT)
-Message-ID: <5df03ae2-6c5d-aa38-4a4d-632c0f484140@bytedance.com>
-Date:   Thu, 14 Jul 2022 16:00:31 +0800
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cwwE8cisTu7u6opjMWRDzwUH3LyxGNeq3/utgdQGNHU=;
+ b=nGRVNlx40NBUUhnKEmcDNPFzmpNUhV7toGoCedzYvmnEU9MGdNykMC61utWGjkKzy37P0QBcdFj0BOTf7jlDGJZ4UGyEoQ5Ry+hoiJnjzfTRePIzujcEjBShJsZ66wNOuHuWNb8SSPHHiAGq5NNt73PRit7dyQq0gBE/RUg/XKQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by DM5PR04MB0252.namprd04.prod.outlook.com (2603:10b6:3:6f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.21; Thu, 14 Jul
+ 2022 08:01:17 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::f02d:f2e:cba9:223b]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::f02d:f2e:cba9:223b%6]) with mapi id 15.20.5438.012; Thu, 14 Jul 2022
+ 08:01:17 +0000
+Date:   Thu, 14 Jul 2022 16:01:12 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, Rob Herring <robh@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v18 1/2] dt-bindings: usb: Add analogix anx7411 PD binding
+Message-ID: <20220714080112.GA13028@anxtwsw-Precision-3640-Tower>
+References: <20220713084139.2810115-1-xji@analogixsemi.com>
+ <f9e1ad3b-d6ed-7392-2fd9-ca6ff0417b16@linaro.org>
+ <20220714020238.GA4276@anxtwsw-Precision-3640-Tower>
+ <f3c98e31-7c68-34a6-f492-95c1b6eeb625@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f3c98e31-7c68-34a6-f492-95c1b6eeb625@linaro.org>
+X-ClientProxiedBy: TY2PR04CA0006.apcprd04.prod.outlook.com
+ (2603:1096:404:f6::18) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH 1/5] sched/fair: ignore SIS_UTIL when has idle core
-Content-Language: en-US
-To:     Yicong Yang <yangyicong@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     yangyicong@hisilicon.com, Josh Don <joshdon@google.com>,
-        Chen Yu <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
-References: <20220712082036.5130-1-wuyun.abel@bytedance.com>
- <20220712082036.5130-2-wuyun.abel@bytedance.com>
- <8e7d75d4-613e-f35e-e932-323789666fb1@huawei.com>
- <4dde05be-8470-5984-0a30-ba077b9fe6bd@bytedance.com>
- <e8a59a8f-1e0c-2bb6-2d1b-4e76f5c511f5@huawei.com>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <e8a59a8f-1e0c-2bb6-2d1b-4e76f5c511f5@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cad38908-33ed-4933-d739-08da656f0797
+X-MS-TrafficTypeDiagnostic: DM5PR04MB0252:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BUsTSxVKXmMeKTomusTM08LuVfi5JodagR4ibIHtRKrd+TAI4RPppxuksb1FPh+J2i9TORO7CjJQKra/xVzX0gbTMbWc+gsVz1CxhyA0tlnuIokbr73QF0JlcsKz9AGaDm1yIfs+gGLzPwFSz6ghDVZG3fdxK6wWw5nRemjQZmwQ5KF/SF4nqqG0RNaOvptpT4PzV1nZNuBKMVuUgPGvDFc2Gfsxvf5uswhaeunqeQYT7laNky5U8Un90dmmvmK4WNv9UwRXpkjauJB+ynJrsyW2Pe7LccqXWR1AzTvoGwln3smGnzvV+g/TYEDxuahfCOVuHftK2SDSjqxJB/T54oI0URJeHW8iZC1yPI+3JlVmPcuQ3CEpq6syaxbEiHO31LeCBiQTBEbUgUwCxtWLMn5dC03pLwfCBmm9OKYdLVIEHgLFcL7xLfgTv67w1B+YGTEWOupjMJqNbtzl9hMCHGV3RAda1T0X5qrA+/R34b3cCQVNaGdKaqR/Np5tdT18eBQoOIAH1DhTb6guI1mvFJ79qxC8ra+iucKkyYg+hpRp1yCHRBmH/LULQnBC6lvGSehudZqpHhMsry/sseF8HQCVnWsfc0hWlnAd2+hg+VBFWRh5NhD49x+PFPDI+L9NKb8uTx4YSOSvhedP6fAlhRdWQ0Xazlqz565uFPGn5TZzpVcOVtp/6SRuagQgkgtKjdOHpkIr3D7mn7g8fBYSicbGrTfYnuWQwb1PvdXdbPLHBkr8AC7CGsf7WXbKhOSyTXqyE3RkLEY+iDwNBhaL0JQv9vKqtByVYje2/BluJgNQh+YyPoQLnf06RvdH1WDm
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(346002)(376002)(39840400004)(136003)(366004)(38350700002)(2906002)(316002)(38100700002)(5660300002)(41300700001)(33656002)(4744005)(33716001)(1076003)(52116002)(55236004)(66556008)(8676002)(6506007)(66476007)(6666004)(86362001)(53546011)(66946007)(8936002)(26005)(6512007)(4326008)(6486002)(6916009)(478600001)(186003)(9686003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d2R4/ahctaHMaWEiGUxL/e1GLHRXJXDzjAQIKYF9eBg9FmyqU2rfRi4Ppv5J?=
+ =?us-ascii?Q?M+dXwz04mJQtDqMEzcrMtKgvsMZ0qliDrJjY0pElfpplkFf8nqjkERORH7ef?=
+ =?us-ascii?Q?ci7ZUnoKYKUfWk5zpxMPR1vsRPlHz0kAw3kHV6EuhuMPLBpHD6zBZejO7XwJ?=
+ =?us-ascii?Q?0wPEfB1QMeKY9Mtpf312e1ReV9tk2vn61CW26EClZaoDWCw8XhW17yT8SycR?=
+ =?us-ascii?Q?vrNR/HdSLrCHLXPiUJzgxUTj10QXR1H87Vh4fQQoGZl4E6GWGvhl9oz3bYdK?=
+ =?us-ascii?Q?ne6NnL/y0l9XFYx/S7Qw1Vzi3xSR7Vgwl4/jRZUjEERwte5+9Sc/p2Iy9lHB?=
+ =?us-ascii?Q?PmWSc+rr8OMa+hmiIIf00wJxpDWS8opefSKSxHr5tcUs4GPOchJkTx5b9VZ2?=
+ =?us-ascii?Q?wYuNv4z7/Sa8/ra+9SNmEycw2xBMzUJx7Z60f3qU/mwWvgNS8Ou8nSN/vdC3?=
+ =?us-ascii?Q?0AG0gXnFdABZCaKDiln0GyRnuVQxruiqFpF/SnOOHOwTpqu4D3WJX/k0xoep?=
+ =?us-ascii?Q?3wYis1ydzXGfhd9tJ4Zz10dMKN9nXpA/z6DcJu2rNBDCtdsttoV2ED7h20fw?=
+ =?us-ascii?Q?tRtd4Qok1SjdoRVUEQknvfSGTQoima68upSrVSTZW2uKLLWoIYdaNIJmSx4P?=
+ =?us-ascii?Q?dV9Q3+4dqwFICglYHSV9JAdPeaGMpl+87QDMANk0Fr6l6V/b3T8jgjK/VKOl?=
+ =?us-ascii?Q?n4H38+Qsp4dlczVz44pgfXO4El2K5dlr7RM1lozgrCIyRENAher4UubyObcA?=
+ =?us-ascii?Q?Ar14LiAl+Zy2u5XH/vdGTFXWUjkk0mfusTmJVJ7ClhT7x1YT3zb8szC2R8xJ?=
+ =?us-ascii?Q?1Y/ZNk8xg20eVaiy/rU7WvnCq+heCyyrFNQBvs8bAq+7YRNKnHCPi8H4nYVC?=
+ =?us-ascii?Q?FktykeLnHtDMTliAa+uLV+jE2diPK3HgfcP0sWKnWvdGNAUPaizc2kSCjChu?=
+ =?us-ascii?Q?FAuYDj7jnfCL6BUKMNOV+oT7dK6dXSXudeBGEo/QgbTOLbP8jRNcBlnlf2/2?=
+ =?us-ascii?Q?hazb6SBEquk14IDUfl21MvbwkRA/tbbcIggd5RwqFFY3KAdw8kCGCydKQCOt?=
+ =?us-ascii?Q?xc84Pcn8yD1RoYzs3clduudjQ7D3ZgBrepDJOCzG4CznbR52RoSQx+Z1E8ZU?=
+ =?us-ascii?Q?Iq3wT+VcAwpLz84XgcTFQVzHEd/SUxuphF4JmEuGBLyVZWZgwAVAn0981DoX?=
+ =?us-ascii?Q?lT1W9LiLNJV1zoaS5yN5fOl96T8ra4fjII9FsMtU9NLX0G7t4/dvkAKmLza6?=
+ =?us-ascii?Q?NeTHAlzu4+czc2aCbOhLN48LbMruRbRad+kjSwRh+ANJ+a5UomY2fYB508bc?=
+ =?us-ascii?Q?ssGo5jxOmHeA+3TNvN1sQ9/e3/qfTGjDC4c9iOPff2EJwsA80ip4Lb2nd80N?=
+ =?us-ascii?Q?IKYAeOYWDbOE9r2QJEvrt0AOrps7XdBDwp9/4yX5Aloy6RQUPqxEu1W1wPIJ?=
+ =?us-ascii?Q?wUTBCLilYquUYvrMAx8dwpkvrnHNy8YeG4xJRVxhFdVmio1xbmVoTb3bO7Ks?=
+ =?us-ascii?Q?54Jg/AamYrniwv0e5nI2p2LEm9mrBVH1VZM37iHDBNDD+y+CB9BKaSdzRaEg?=
+ =?us-ascii?Q?rosQn2LGqoHnO0wgi6PP6delwqIFi0Uy+uVQyN+z?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cad38908-33ed-4933-d739-08da656f0797
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2022 08:01:17.1714
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6H1gKabu8LvGZeEnePaRhyuQH5J7XtjblFXfpZKnOan3TXDXMYTADPbUXRma0s6KPwwGNNfHDtg8d7sWQxrGWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB0252
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,59 +117,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 7/14/22 3:15 PM, Yicong Yang Wrote:
-> On 2022/7/14 14:58, Abel Wu wrote:
->>
->> On 7/14/22 2:19 PM, Yicong Yang Wrote:
->>> On 2022/7/12 16:20, Abel Wu wrote:
->>>> When SIS_UTIL is enabled, SIS domain scan will be skipped if
->>>> the LLC is overloaded. Since the overloaded status is checked
->>>> in the load balancing at LLC level, the interval is llc_size
->>>> miliseconds. The duration might be long enough to affect the
->>>> overall system throughput if idle cores are out of reach in
->>>> SIS domain scan.
->>>>
->>>> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
->>>> ---
->>>>    kernel/sched/fair.c | 15 +++++++++------
->>>>    1 file changed, 9 insertions(+), 6 deletions(-)
->>>>
->>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>>> index a78d2e3b9d49..cd758b3616bd 100644
->>>> --- a/kernel/sched/fair.c
->>>> +++ b/kernel/sched/fair.c
->>>> @@ -6392,16 +6392,19 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->>>>        struct sched_domain *this_sd;
->>>>        u64 time = 0;
->>>>    -    this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
->>>> -    if (!this_sd)
->>>> -        return -1;
->>>> -
->>>>        cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
->>>>    -    if (sched_feat(SIS_PROP) && !has_idle_core) {
->>>> +    if (has_idle_core)
->>>> +        goto scan;
->>>> +
->>>> +    if (sched_feat(SIS_PROP)) {
->>>>            u64 avg_cost, avg_idle, span_avg;
->>>>            unsigned long now = jiffies;
->>>>    +        this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
->>>> +        if (!this_sd)
->>>> +            return -1;
->>>> +
->>>
->>> I don't follow the change here. True that this_sd is used only in SIS_PROP, but it seems irrelevant with your
->>> commit. Does the position of this make any performance difference?
->>
->> No, this change doesn't make much difference to performance. Are
->> you suggesting that I should make this a separate patch?
->>
+On Thu, Jul 14, 2022 at 08:52:09AM +0200, Krzysztof Kozlowski wrote:
+> On 14/07/2022 04:02, Xin Ji wrote:
+> > On Wed, Jul 13, 2022 at 11:28:16AM +0200, Krzysztof Kozlowski wrote:
+> >> On 13/07/2022 10:41, Xin Ji wrote:
+> >>> Add analogix PD chip anx7411 device binding
+> >>>
+> >>> Reviewed-by: Rob Herring <robh@kernel.org>
+> >>> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> >>>
+> >>> ---
+> >>> v17 -> v18 : Change node name from "usb_typec" to "typec"
+> >>
+> >> Node name was anx7411, not usb_typec. What are you changing here? The label?
+> > Hi Krzysztof, sorry, I'm confused by your comment, this patch followed the
+> > other dts example in other yaml file and passed the dts checking by
+> > command "make dt_binding_check".
+> > 
+> > Do you mean change the the node name "anx7411" to "typec"?
 > 
-> It just makes me think that dereference is unnecessary if this_cpu and target locates in
-> the same LLC, since it's already been passed. But since you noticed no difference it may
-> have little effect. :)
+> Yes, since the some revisions ago I asked to use a generic name for the
+> node (generic node name).
 > 
-
-Hmm.. Not exactly. The sched-domains are cpu private, and this_cpu can
-be in another LLC than target.
+> 
+> Best regards,
+> Krzysztof
+Hi Krzysztof, OK, I'll change it in next version.
+Thanks,
+Xin

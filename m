@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B71B575281
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FB0575296
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238554AbiGNQMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
+        id S238967AbiGNQPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238516AbiGNQMu (ORCPT
+        with ESMTP id S232196AbiGNQPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:12:50 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42DE564FA
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:12:49 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id j27so1798001qtv.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:12:49 -0700 (PDT)
+        Thu, 14 Jul 2022 12:15:48 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED2E61732
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:15:47 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id v12so3040786edc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:15:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maine.edu; s=google;
-        h=from:date:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=CZLFeaVS7vWOEfaeQkprgU1KCxlSQm00dIhPzGkGGKU=;
-        b=LDDvkmSjKKbscVokOXbYzqcdRhJ4gYz0B5kwXLAji/c8LxVZopE/LU4tDWJxFiBdFv
-         owHKoL6rACGJmSckOjybjEjGktTvBk2e7KWkvSxEyKN0vwqpX7aQPB5SZlyUsOcXESQ6
-         PVSrVS53MAGy33w5GcuejKTTOBQeb/xek54pw=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=govIWRa7qaOV2WIczJDqmAkYPYMG/67BzPW5XLlKyvc=;
+        b=wwHDSW/azHUQ/dXzI4ImC8W7hItZhAmo8R0SiTyuuX/fYrhKkvqv3mVUr49+xTpUby
+         9gn1VHxei66XkaRiu+VGyDuu4+GSld5MF8susPqmvURu8hnhGCXdUo/BSMSg3Tn4mab0
+         AKIfp2W1bZ2YyxjaxFIfgAd5n6K1A6LC7UBBV9i4Ugl4g4BRDBOaj0EhfiJZownauzkV
+         D+G3ZVhCZ9g698PJnHdoBLJCRmrQ2gaHD6Xrnw+wNPHZ7OHRMzYFLtKfutecE6Ezemet
+         ILPzTdfaIQqJnWCXVn8HJ1NVEnJ8gVhHdS4czxVUj2+zjzhKg/lV5mxsI1gQIL+KPwLY
+         p/eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=CZLFeaVS7vWOEfaeQkprgU1KCxlSQm00dIhPzGkGGKU=;
-        b=0pU3zh5Z7nExGJZYKQeV/a76grdAJBfs2yKYVisJpwhLsxZ+v81qvEI6Fol58ei0ty
-         E+baC1L23TkntXZpCdIuEtSHMeJJVDMpkBtbzRGivguIHueE92vKXMGbjQen1SNVPcwa
-         0maAoncHrBFWAZ4ZnwrcqEs8Y96N4kxCE6vn+VWpBIvxdVl4dWFRXFXiuwfAatts5368
-         OhTe6KW3FKZgV2AXL98lBRs8myGz5CrQEX0UlaPLON6VtPWplnMCzVfgr3ie7A2I9uVM
-         /bH9/j/1iufXTJbkRynQNzk2JFLcKubNJutcw5K0qlBkzVisDYNe3yTGkjBfpUTQq9Zx
-         /JuA==
-X-Gm-Message-State: AJIora9cKWvDgOaIyH7pp0ojxKczmO8AzcvoN3tcIWxKlbKpNwVOT03w
-        5sbeHrrL6i6btyZWkgz5cTxPSCPI1wpAdg==
-X-Google-Smtp-Source: AGRyM1sKc1UZIwcvXiITIgT3O8TjGW5qevBlln9Z5/qySGu99Qq2GdSQh0Mo9EfBNAkt+5zRlxwhxw==
-X-Received: by 2002:a05:622a:c6:b0:31e:b32c:a280 with SMTP id p6-20020a05622a00c600b0031eb32ca280mr8777918qtw.211.1657815168945;
-        Thu, 14 Jul 2022 09:12:48 -0700 (PDT)
-Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
-        by smtp.gmail.com with ESMTPSA id bp13-20020a05622a1b8d00b0031e9fa40c2esm1880404qtb.27.2022.07.14.09.12.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 09:12:48 -0700 (PDT)
-From:   Vince Weaver <vincent.weaver@maine.edu>
-X-Google-Original-From: Vince Weaver <vince@maine.edu>
-Date:   Thu, 14 Jul 2022 12:12:42 -0400 (EDT)
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-cc:     Vince Weaver <vincent.weaver@maine.edu>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [perf] unchecked MSR access error: WRMSR to 0x689 in
- intel_pmu_lbr_restore
-In-Reply-To: <0e3b3e6e-53b9-b426-71cd-911d3ecbfc24@linux.intel.com>
-Message-ID: <15f85765-ff2f-5d32-5991-06ef225706f0@maine.edu>
-References: <66961a7d-a6d8-2536-9ed3-68c2e7f4e03d@maine.edu> <e71fa75-a718-ffb-c3f3-40cccf77ba9b@maine.edu> <4b15d3d1-389b-fee4-d1b9-8732859e3696@linux.intel.com> <20220711221658.4gpkizopmftpnav6@guptapa-desk> <32ccdda1-63bf-746e-48fb-935fa58285b1@maine.edu>
- <20220712204830.kvblayj37s3udt4b@guptapa-desk> <487465e6-b034-f08-907-de37a0a173b5@maine.edu> <0e3b3e6e-53b9-b426-71cd-911d3ecbfc24@linux.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=govIWRa7qaOV2WIczJDqmAkYPYMG/67BzPW5XLlKyvc=;
+        b=ZVyzia9I9xOh6MRghZS+m+DBCFoC0YKRB9wmjN9kZ4rzX7s86gckvRi8o+ATYwPEd1
+         tFbRShSCkWjVkrWgX8DHm8ykba6nAhc/XiWSXoklkQL0KroRkQDmzWFbgl+pKSfmCF26
+         NLoCuZtpwW939xJ1JbnYBcsr0Tte5hD3ey8+jYsGSK6y4CnulhPZ0QtGQDfccy1gPZYu
+         zfZrrdvoS73hIOaHoDNfDjB+XX99F0ORfiW9/QZy3T39UJO3YEJ1JLKCkltJsb7Vzygp
+         HuXepasCGJA4492H7+B+AkJpg06kNmxgf+H3FMWVViFTsTRF7uoLXQ9KPOmI0beKFoaB
+         bTZA==
+X-Gm-Message-State: AJIora8yz0Vtj3pWiM/eBVRnJttoG0mWOcDuMhy47iQPxaZt1Q7FIgIw
+        9R2Y6x7Uj00D4dDPxQLKMohzZVO1DUb9YxrP9arBag==
+X-Google-Smtp-Source: AGRyM1uRlQZY0lm6PlIZv8ZWPALNPT1WMYOIzlf7AeIvGx0GX2B+25LAtwrQYAbWLB7amc6FGJVkRbDm5tkd3xZByjE=
+X-Received: by 2002:aa7:d5d7:0:b0:43a:6eda:464a with SMTP id
+ d23-20020aa7d5d7000000b0043a6eda464amr13313083eds.193.1657815345955; Thu, 14
+ Jul 2022 09:15:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20220713171241.184026-1-cascardo@canonical.com>
+ <Ys/ncSnSFEST4fgL@worktop.programming.kicks-ass.net> <976510d2-c7ad-2108-27e0-4c3b82c210f1@redhat.com>
+In-Reply-To: <976510d2-c7ad-2108-27e0-4c3b82c210f1@redhat.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 14 Jul 2022 21:45:34 +0530
+Message-ID: <CA+G9fYvxR8+4cajcCBbPRuhR1tnuBmrLxosSOMzPg7CjxQU35w@mail.gmail.com>
+Subject: Re: [PATCH] x86/kvm: fix FASTOP_SIZE when return thunks are enabled
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -77,24 +73,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022, Liang, Kan wrote:
+Hi Paolo,
 
-> 
-> Could you please apply the below patch, reboot to the patched kernel and
-> share the dmesg log?
+On Thu, 14 Jul 2022 at 17:06, Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 7/14/22 11:52, Peter Zijlstra wrote:
+> > On Wed, Jul 13, 2022 at 02:12:41PM -0300, Thadeu Lima de Souza Cascardo wrote:
+> >> The return thunk call makes the fastop functions larger, just like IBT
+> >> does. Consider a 16-byte FASTOP_SIZE when CONFIG_RETHUNK is enabled.
+> >>
+> >> Otherwise, functions will be incorrectly aligned and when computing their
+> >> position for differently sized operators, they will executed in the middle
+> >> or end of a function, which may as well be an int3, leading to a crash
+> >> like:
+> >
+> > Bah.. I did the SETcc stuff, but then forgot about the FASTOP :/
+> >
+> >    af2e140f3420 ("x86/kvm: Fix SETcc emulation for return thunks")
+> >
+> >> Fixes: aa3d480315ba ("x86: Use return-thunk in asm code")
+> >> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+> >> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> >> Cc: Borislav Petkov <bp@suse.de>
+> >> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+> >> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> >> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-here's the info with your patch applied:
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-[    0.000000] microcode: microcode updated early to revision 0x28, date = 2019-11-12
-...
-[    1.460296] NO HLE NO RTM. LBR has tsx 0
-[    1.468217] Haswell events, 16-deep LBR, full-width counters, Intel PMU driver.
-[    1.472292] ... version:                3
-[    1.476275] ... bit width:              48
-[    1.480275] ... generic registers:      4
-[    1.484276] ... value mask:             0000ffffffffffff
-[    1.488277] ... max period:             00007fffffffffff
-[    1.492277] ... fixed-purpose events:   3
-[    1.496271] ... event mask:             000000070000000f
+> >> ---
+> >>   arch/x86/kvm/emulate.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> >> index db96bf7d1122..d779eea1052e 100644
+> >> --- a/arch/x86/kvm/emulate.c
+> >> +++ b/arch/x86/kvm/emulate.c
+> >> @@ -190,7 +190,7 @@
+> >>   #define X16(x...) X8(x), X8(x)
+> >>
+> >>   #define NR_FASTOP (ilog2(sizeof(ulong)) + 1)
+> >> -#define FASTOP_SIZE (8 * (1 + HAS_KERNEL_IBT))
+> >> +#define FASTOP_SIZE (8 * (1 + (HAS_KERNEL_IBT | IS_ENABLED(CONFIG_RETHUNK))))
+> >
+> > Would it make sense to do something like this instead?
+>
+> Yes, definitely.  Applied with a small tweak to make FASTOP_LENGTH
+> more similar to SETCC_LENGTH:
+>
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index db96bf7d1122..0a15b0fec6d9 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -189,8 +189,12 @@
+>   #define X8(x...) X4(x), X4(x)
+>   #define X16(x...) X8(x), X8(x)
+>
+> -#define NR_FASTOP (ilog2(sizeof(ulong)) + 1)
+> -#define FASTOP_SIZE (8 * (1 + HAS_KERNEL_IBT))
+> +#define NR_FASTOP      (ilog2(sizeof(ulong)) + 1)
+> +#define RET_LENGTH     (1 + (4 * IS_ENABLED(CONFIG_RETHUNK)) + \
+> +                        IS_ENABLED(CONFIG_SLS))
+> +#define FASTOP_LENGTH  (ENDBR_INSN_SIZE + 7 + RET_LENGTH)
+> +#define FASTOP_SIZE    (8 << ((FASTOP_LENGTH > 8) & 1) << ((FASTOP_LENGTH > 16) & 1))
+> +static_assert(FASTOP_LENGTH <= FASTOP_SIZE);
+>
+>   struct opcode {
+>         u64 flags;
+> @@ -442,8 +446,6 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+>    * RET | JMP __x86_return_thunk       [1,5 bytes; CONFIG_RETHUNK]
+>    * INT3                               [1 byte; CONFIG_SLS]
+>    */
+> -#define RET_LENGTH     (1 + (4 * IS_ENABLED(CONFIG_RETHUNK)) + \
+> -                        IS_ENABLED(CONFIG_SLS))
+>   #define SETCC_LENGTH  (ENDBR_INSN_SIZE + 3 + RET_LENGTH)
+>   #define SETCC_ALIGN   (4 << ((SETCC_LENGTH > 4) & 1) << ((SETCC_LENGTH > 8) & 1))
+>   static_assert(SETCC_LENGTH <= SETCC_ALIGN);
+>
+>
+> Paolo
 
-Vince
+Applied your patch and tested on top of the mainline kernel and
+tested kvm-unit-tests and reported kernel panic fixed.
+
+https://lkft.validation.linaro.org/scheduler/job/5284626
+
+- Naresh

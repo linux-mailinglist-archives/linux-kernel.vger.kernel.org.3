@@ -2,37 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB7B574639
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4604A57463A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237202AbiGNHzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 03:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
+        id S231135AbiGNHzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 03:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiGNHzj (ORCPT
+        with ESMTP id S237569AbiGNHzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 03:55:39 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9A81E4;
-        Thu, 14 Jul 2022 00:55:37 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VJIAY5q_1657785334;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VJIAY5q_1657785334)
-          by smtp.aliyun-inc.com;
-          Thu, 14 Jul 2022 15:55:34 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     krzysztof.kozlowski@linaro.org
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next RESEND] soc: qcom: icc-bwmon: Remove unnecessary print function dev_err()
-Date:   Thu, 14 Jul 2022 15:55:32 +0800
-Message-Id: <20220714075532.104665-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 14 Jul 2022 03:55:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E22665E0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:55:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657785347;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SE9eAN5X+ShMxtdmF41zDz1yLtEpxxR36zmsks8hPS0=;
+        b=e3hSQtDdEYakwMVeshl1oq7u9c1+YeseSHqIq2SQ9IAS+jvbRXAdO9SehU7I9K1uwcKb+a
+        5bVxT0mfqx1fyfjSsRGnovb9VBmSm52mep0GTGj8G+nvMSQ76/7NW8ywbHRA25iy9FojrC
+        FOHkTqtuBuODkAIKOS1/X8Uu92OZlWw=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-225-l0eVmmN9N9qwUv2KQp5aGA-1; Thu, 14 Jul 2022 03:55:45 -0400
+X-MC-Unique: l0eVmmN9N9qwUv2KQp5aGA-1
+Received: by mail-ed1-f72.google.com with SMTP id b15-20020a056402278f00b0043acaf76f8dso974327ede.21
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:55:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SE9eAN5X+ShMxtdmF41zDz1yLtEpxxR36zmsks8hPS0=;
+        b=Q5AB1zkR04mf6La8s3l6cdiu2nh/bJ0DZDHSAZlVay/yaPGKDrMgJti0B+QVE4Y55b
+         P+KnFh2gvqEBikV7pZQsMVoxgEbqdhOJcOy9/wEfFoZvxmeCSsfLDNOCG30TdhT/+D3L
+         p8GHT+JSUNXyIHIa0XHoFY8MDYS0Y8QSibcJjCFTV8lrqqjIxBjKAOLeGNp3/zRAkfZY
+         /8S5UFq9GKIg1f2K08RavWQml3Hds4rOjU90+3IBhPbC9JOj36WzHYCOBSXE5JNJWMzi
+         9dmBvShFGadDEz3966w771ngoIIkoPyRcsCa094nBkC0blCRobCNMwqzDdf3TKOZDw/L
+         yAMQ==
+X-Gm-Message-State: AJIora/tLfIaj8EmlKtMyhO06gFP8XakjBcxWE34X3hPPluAhWWplXkv
+        60JAff9RE6wmmeK89maQlLsMKACrwcXFy3kEdxgcp2EFM/NJnYQ/FGJuLrsbhA/ugHS9V16176W
+        ZwYOWDfNb4kn/0hWsAzShKk2T
+X-Received: by 2002:a05:6402:34c1:b0:43a:bd7a:898a with SMTP id w1-20020a05640234c100b0043abd7a898amr10764883edc.426.1657785344691;
+        Thu, 14 Jul 2022 00:55:44 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1um/IMU8CKiTuPcepZAnSTRYoRBRZ2ZH0kI9/eLTdxlSioknmf1mGAkVR3V+y/TA4I2nzD2xg==
+X-Received: by 2002:a05:6402:34c1:b0:43a:bd7a:898a with SMTP id w1-20020a05640234c100b0043abd7a898amr10764856edc.426.1657785344487;
+        Thu, 14 Jul 2022 00:55:44 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id kv10-20020a17090778ca00b0072eddc468absm385354ejc.134.2022.07.14.00.55.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 00:55:43 -0700 (PDT)
+Message-ID: <52ef13d4-068d-bd2c-11aa-c7053798aee9@redhat.com>
+Date:   Thu, 14 Jul 2022 09:55:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 0/9] KVM: x86/MMU: Optimize disabling dirty logging
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+References: <20220321224358.1305530-1-bgardon@google.com>
+ <dba0ecc8-90ae-975f-7a27-3049d6951ba0@redhat.com>
+ <YszQcBy1RwGmkkht@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YszQcBy1RwGmkkht@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,30 +88,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminate the follow coccicheck warning:
-./drivers/soc/qcom/icc-bwmon.c:349:2-9: line 349 is redundant because platform_get_irq() already prints an error
+On 7/12/22 03:37, Sean Christopherson wrote:
+> This fell through the cracks.  Ben is on a long vacation, I'll find my copy of
+> the Necronomicon and do a bit of resurrection, and address the feedback from v2
+> along the way.
 
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/soc/qcom/icc-bwmon.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+This was superseded by the simple patch to zap only the leaves I think?
 
-diff --git a/drivers/soc/qcom/icc-bwmon.c b/drivers/soc/qcom/icc-bwmon.c
-index bea3ea1de7a4..7f8aca533cd3 100644
---- a/drivers/soc/qcom/icc-bwmon.c
-+++ b/drivers/soc/qcom/icc-bwmon.c
-@@ -345,10 +345,8 @@ static int bwmon_probe(struct platform_device *pdev)
- 	}
- 
- 	bwmon->irq = platform_get_irq(pdev, 0);
--	if (bwmon->irq < 0) {
--		dev_err(dev, "failed to acquire bwmon IRQ\n");
-+	if (bwmon->irq < 0)
- 		return bwmon->irq;
--	}
- 
- 	ret = devm_pm_opp_of_add_table(dev);
- 	if (ret)
--- 
-2.20.1.7.g153144c
+Paolo
 

@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25975749A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5062E5749A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237486AbiGNJvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S236790AbiGNJvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237462AbiGNJvY (ORCPT
+        with ESMTP id S238098AbiGNJvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:51:24 -0400
+        Thu, 14 Jul 2022 05:51:23 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FB74D164
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:51:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319F74BD33
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:51:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657792277; x=1689328277;
+  t=1657792276; x=1689328276;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WBUTw7tz+k6O2goVYiYebYBag5C/B83mURXLeuUbsu0=;
-  b=Bcofn7GSZLpviDdHZvKqh9fmm3OOmmRs/09CGH5Gwr7KnzODP4Oib5ON
-   yHVMjhjtO8cMvqMKqBiKDvnd08J5ErUqE3xv21tyqryKlkQiNssK9kJjf
-   MprxJ7zJDzL0euZmh8DK9985DZW5aL04Jarj804XPkVi5qmEZ/9mxq8La
-   S45py14iPMVYFxvUF9B8snFdNtr06L7b7jWLPZjmBVcqDocGuOuwiw6/i
-   aWwxkvoIYK9YIYsH00fDsB3Sz5FfjG2bxBmouRi6sG4dPQa2cMJpfRL6N
-   2nVB6YkrouC6AYmpRw/AOb+rPNpcQQG5j6NCFkG6irj5JrP22kTPMBrVs
+  bh=X6hreYbVjHvf40p2LuAOzp9Z9aRhDAEm5TxVhK1TaLE=;
+  b=MvBsZkD5o19vvdefusFHfuFMjoMNu/FaLIpOlj5ScYZk0LPtOcFsY1f3
+   PV0ck0wcUoEFlEDGFgglPubtfvQnmdiXrqi6BK2s7XASJRzVvfBRi0lYo
+   ApMcGW2WVHjFZ1zVwfujaNr0/JJzvwIy7lFYRvnIb998Kx9P7CwmrK93b
+   OTFnnSa68GLP3Ox23MByONzogylM8scD6f5qsyek6x5gflcyMKtSSd/CF
+   mOtYqT2z8d+mDJvEkLF6QT4DaaVdJYo2kOY1YrnHtGdAQDpxuvkRmZOFk
+   oaNFFAsdffaZ9v0OM81egSdOUNxjmEly6CAcp+elt/XpTlpS1CDYWwJOW
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265256148"
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265256147"
 X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="265256148"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
+   d="scan'208";a="265256147"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 02:51:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="596036079"
+   d="scan'208";a="663722834"
 Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 14 Jul 2022 02:51:07 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 14 Jul 2022 02:51:07 -0700
 Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1oBvUx-0000PQ-3j;
-        Thu, 14 Jul 2022 09:51:07 +0000
-Date:   Thu, 14 Jul 2022 17:50:34 +0800
+        id 1oBvUw-0000PK-Vw;
+        Thu, 14 Jul 2022 09:51:06 +0000
+Date:   Thu, 14 Jul 2022 17:50:36 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [morimoto:sound-2022-07-04-v1 23/23]
- sound/soc/codecs/wcd9335.c:2070:4: error: field designator 'playback' does
- not refer to any field in type 'struct snd_soc_dai_driver'
-Message-ID: <202207141741.fIItLaEd-lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: module.c:undefined reference to `apply_returns'
+Message-ID: <202207141712.n23UKGoF-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -63,202 +62,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/morimoto/linux sound-2022-07-04-v1
-head:   e9efd77b37adcddf8f910f34dd0df06be9d896cb
-commit: e9efd77b37adcddf8f910f34dd0df06be9d896cb [23/23] remove
-config: arm64-randconfig-r001-20220714 (https://download.01.org/0day-ci/archive/20220714/202207141741.fIItLaEd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4a57a8400075bc5287c5c877702c68aeae2a033d
+commit: 15e67227c49a57837108acfe1c80570e1bd9f962 x86: Undo return-thunk damage
+date:   2 weeks ago
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220714/202207141712.n23UKGoF-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/morimoto/linux/commit/e9efd77b37adcddf8f910f34dd0df06be9d896cb
-        git remote add morimoto https://github.com/morimoto/linux
-        git fetch --no-tags morimoto sound-2022-07-04-v1
-        git checkout e9efd77b37adcddf8f910f34dd0df06be9d896cb
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=15e67227c49a57837108acfe1c80570e1bd9f962
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 15e67227c49a57837108acfe1c80570e1bd9f962
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/codecs/
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> sound/soc/codecs/wcd9335.c:2070:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
->> sound/soc/codecs/wcd9335.c:2085:4: error: field designator 'capture' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .capture = {
-                    ^
-   sound/soc/codecs/wcd9335.c:2099:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
-   sound/soc/codecs/wcd9335.c:2114:4: error: field designator 'capture' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .capture = {
-                    ^
-   sound/soc/codecs/wcd9335.c:2128:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
-   sound/soc/codecs/wcd9335.c:2143:4: error: field designator 'capture' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .capture = {
-                    ^
-   sound/soc/codecs/wcd9335.c:2157:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
->> sound/soc/codecs/wcd9335.c:4930:13: error: invalid application of 'sizeof' to an incomplete type 'struct snd_soc_dai_driver[]'
-                                                  ARRAY_SIZE(wcd9335_slim_dais));
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:55:32: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-                                  ^~~~~
-   8 errors generated.
---
->> sound/soc/codecs/wcd934x.c:2022:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
->> sound/soc/codecs/wcd934x.c:2036:4: error: field designator 'capture' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .capture = {
-                    ^
-   sound/soc/codecs/wcd934x.c:2050:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
-   sound/soc/codecs/wcd934x.c:2064:4: error: field designator 'capture' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .capture = {
-                    ^
-   sound/soc/codecs/wcd934x.c:2078:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
-   sound/soc/codecs/wcd934x.c:2092:4: error: field designator 'capture' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .capture = {
-                    ^
-   sound/soc/codecs/wcd934x.c:2106:4: error: field designator 'playback' does not refer to any field in type 'struct snd_soc_dai_driver'
-                   .playback = {
-                    ^
->> sound/soc/codecs/wcd934x.c:5949:13: error: invalid application of 'sizeof' to an incomplete type 'struct snd_soc_dai_driver[]'
-                                                  ARRAY_SIZE(wcd934x_slim_dais));
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:55:32: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-                                  ^~~~~
-   8 errors generated.
-
-
-vim +2070 sound/soc/codecs/wcd9335.c
-
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2065  
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2066  static struct snd_soc_dai_driver wcd9335_slim_dais[] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2067  	[0] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2068  		.name = "wcd9335_rx1",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2069  		.id = AIF1_PB,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28 @2070  		.playback = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2071  			.stream_name = "AIF1 Playback",
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2072  			.rates = WCD9335_RATES_MASK | WCD9335_FRAC_RATES_MASK |
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2073  				 SNDRV_PCM_RATE_384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2074  			.formats = WCD9335_FORMATS_S16_S24_LE,
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2075  			.rate_max = 384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2076  			.rate_min = 8000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2077  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2078  			.channels_max = 2,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2079  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2080  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2081  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2082  	[1] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2083  		.name = "wcd9335_tx1",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2084  		.id = AIF1_CAP,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28 @2085  		.capture = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2086  			.stream_name = "AIF1 Capture",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2087  			.rates = WCD9335_RATES_MASK,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2088  			.formats = SNDRV_PCM_FMTBIT_S16_LE,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2089  			.rate_min = 8000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2090  			.rate_max = 192000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2091  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2092  			.channels_max = 4,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2093  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2094  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2095  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2096  	[2] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2097  		.name = "wcd9335_rx2",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2098  		.id = AIF2_PB,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2099  		.playback = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2100  			.stream_name = "AIF2 Playback",
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2101  			.rates = WCD9335_RATES_MASK | WCD9335_FRAC_RATES_MASK |
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2102  				 SNDRV_PCM_RATE_384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2103  			.formats = WCD9335_FORMATS_S16_S24_LE,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2104  			.rate_min = 8000,
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2105  			.rate_max = 384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2106  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2107  			.channels_max = 2,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2108  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2109  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2110  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2111  	[3] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2112  		.name = "wcd9335_tx2",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2113  		.id = AIF2_CAP,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2114  		.capture = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2115  			.stream_name = "AIF2 Capture",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2116  			.rates = WCD9335_RATES_MASK,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2117  			.formats = SNDRV_PCM_FMTBIT_S16_LE,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2118  			.rate_min = 8000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2119  			.rate_max = 192000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2120  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2121  			.channels_max = 4,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2122  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2123  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2124  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2125  	[4] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2126  		.name = "wcd9335_rx3",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2127  		.id = AIF3_PB,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2128  		.playback = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2129  			.stream_name = "AIF3 Playback",
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2130  			.rates = WCD9335_RATES_MASK | WCD9335_FRAC_RATES_MASK |
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2131  				 SNDRV_PCM_RATE_384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2132  			.formats = WCD9335_FORMATS_S16_S24_LE,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2133  			.rate_min = 8000,
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2134  			.rate_max = 384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2135  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2136  			.channels_max = 2,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2137  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2138  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2139  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2140  	[5] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2141  		.name = "wcd9335_tx3",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2142  		.id = AIF3_CAP,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2143  		.capture = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2144  			.stream_name = "AIF3 Capture",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2145  			.rates = WCD9335_RATES_MASK,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2146  			.formats = SNDRV_PCM_FMTBIT_S16_LE,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2147  			.rate_min = 8000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2148  			.rate_max = 192000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2149  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2150  			.channels_max = 4,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2151  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2152  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2153  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2154  	[6] = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2155  		.name = "wcd9335_rx4",
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2156  		.id = AIF4_PB,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2157  		.playback = {
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2158  			.stream_name = "AIF4 Playback",
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2159  			.rates = WCD9335_RATES_MASK | WCD9335_FRAC_RATES_MASK |
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2160  				 SNDRV_PCM_RATE_384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2161  			.formats = WCD9335_FORMATS_S16_S24_LE,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2162  			.rate_min = 8000,
-a8a652bfac7f4a Srinivas Kandagatla 2019-08-22  2163  			.rate_max = 384000,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2164  			.channels_min = 1,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2165  			.channels_max = 2,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2166  		},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2167  		.ops = &wcd9335_dai_ops,
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2168  	},
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2169  };
-20aedafdf4926e Srinivas Kandagatla 2019-01-28  2170  
-
-:::::: The code at line 2070 was first introduced by commit
-:::::: 20aedafdf4926e7a957f8b302a18c8fb75c7e332 ASoC: wcd9335: add support to wcd9335 codec
-
-:::::: TO: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-:::::: CC: Mark Brown <broonie@kernel.org>
+   /usr/bin/ld: arch/x86/um/../kernel/module.o: in function `module_finalize':
+>> module.c:(.text+0x23b): undefined reference to `apply_returns'
+   collect2: error: ld returned 1 exit status
 
 -- 
 0-DAY CI Kernel Test Service

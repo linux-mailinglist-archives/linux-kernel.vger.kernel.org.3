@@ -2,62 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBED574872
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F543574830
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238110AbiGNJRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
+        id S237850AbiGNJOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237895AbiGNJR0 (ORCPT
+        with ESMTP id S237777AbiGNJNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:17:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B96948C9C
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657790079;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UjsNm2Jv3oaUf3Eo8JPqiZa30xi6lvau/0XmuvFshsw=;
-        b=Ppi5MqR6NERcNj4C6iZGA12E7vMxk+LUHqExnLMU2piA9J25YCjjIWlQSgbQrzMOoZCmYR
-        s6HsLDFx80pF+2RXv+4jeUJWRBwxgM/IeRd0RGVhCT9iAWB+HrVtQOXlugGYtRKYtG0NAV
-        U+fn2SISk3EC0JdOiYF9vGnuVjG0UA8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-426-YCDDQresObKSa9XCUyP33A-1; Thu, 14 Jul 2022 05:14:34 -0400
-X-MC-Unique: YCDDQresObKSa9XCUyP33A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD20B3C01DE4;
-        Thu, 14 Jul 2022 09:14:33 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.135])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7B79F2166B26;
-        Thu, 14 Jul 2022 09:14:31 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 25/25] KVM: nVMX: Use cached host MSR_IA32_VMX_MISC value for setting up nested MSR
-Date:   Thu, 14 Jul 2022 11:13:27 +0200
-Message-Id: <20220714091327.1085353-26-vkuznets@redhat.com>
-In-Reply-To: <20220714091327.1085353-1-vkuznets@redhat.com>
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
+        Thu, 14 Jul 2022 05:13:55 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15E012D13
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:13:50 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id bx13so1453431ljb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YSaLOo3uvJc2rTh7KMA4aG1KJJmXpp9TQCunK6o1eqo=;
+        b=HJzl40vM7NVVmag2wEVD3j2ELJbEz1mUFz/1ap7mFAMQwyfApIwYNtlbvTWCrbCn8N
+         lzrtQdsRm2ayRKGoP5XtjVzY1mq4/LkkC5kXHIA39KRhfobj5JaZ1sskXswRLHmHBGqf
+         W2/P0P74h3+SAUgsLq/7HhM2aBi4BxlQ9teduoRxgVmZiPqey4ad1AhtDcwCgz+L1U8s
+         2PBuAIhjsB0wyzP2VZVxH9F6vtMBteHpZBt6uWHUeidw36EN0789FKGF2zx4MoYiOTjr
+         ABCojRIwRNPutNy9wZr3BXmZiOQSB6lQ73gQZudS7cFdFzemVopZBhThpzOWd+Jjm6vw
+         3VhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YSaLOo3uvJc2rTh7KMA4aG1KJJmXpp9TQCunK6o1eqo=;
+        b=pnbhNbkRff2T1aPi92s18T8WSgGa1qNjfW2xKKnqTzJW0KHw+rm0ox/Mx3VouHBOvF
+         mvAObluDZwfFRaVjoTNZ5XotUkVT4UBW6Ysceyy4BID2YKTcemYTlMJVzo5fMCrg8oxm
+         ak14rYJpffBi8IYusUtoXgyFixKooZzz7fSAJUiUkviNH3kHx2uev1IVGWyxUA/rjTz6
+         sjd8ws1enL3XZmigxSon9J6ol7IlSYpqMoPOiXS4zCNlo6fEGmVyqP5hQI3tIhenzZTE
+         Y2bvMrmiTdVBFVKoWZZlxnk/tTWo0cAZ8FlO5Z9QmlW/5qdITDPx1BJK2W5G9Y7vSFvB
+         D0gQ==
+X-Gm-Message-State: AJIora8OUw3Lw2cNDAU22GXbpgfIHeClA1JGh9L1MiyAaOfJHcHv2S8Z
+        0u8ny27AtVAEP3sq9m84RwbMLA==
+X-Google-Smtp-Source: AGRyM1vuqxlGG04+b96O84F7+W2zXY/cg945cr6JRYD7Cm7ZFVyOiQd+TX4lD9N+ST50d4dEeWDl0g==
+X-Received: by 2002:a05:651c:243:b0:25d:9aa4:d7c9 with SMTP id x3-20020a05651c024300b0025d9aa4d7c9mr1363015ljn.35.1657790028879;
+        Thu, 14 Jul 2022 02:13:48 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id t3-20020a2e8e63000000b0025d4866b2c7sm183253ljk.4.2022.07.14.02.13.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 02:13:48 -0700 (PDT)
+Message-ID: <6e3f32b1-ab9f-13de-19ce-1433c6d74119@linaro.org>
+Date:   Thu, 14 Jul 2022 11:13:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 10/30] dt-bindings: phy: qcom,msm8996-qmp-pcie:
+ deprecate PIPE clock names
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220707134725.3512-1-johan+linaro@kernel.org>
+ <20220707134725.3512-11-johan+linaro@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220707134725.3512-11-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,35 +83,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vmcs_config has cached host MSR_IA32_VMX_MISC value, use it for setting
-up nested MSR_IA32_VMX_MISC in nested_vmx_setup_ctls_msrs() and avoid the
-redundant rdmsr().
+On 07/07/2022 15:47, Johan Hovold wrote:
+> Deprecate the PHY node 'clock-names' property which specified that the
+> PIPE clock name should have an unnecessary "lane" suffix.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-No (real) functional change intended.
 
-Reviewed-by: Jim Mattson <jmattson@google.com>
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- arch/x86/kvm/vmx/nested.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 3d386c663fac..8026dab71086 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -6754,10 +6754,7 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
- 		msrs->secondary_ctls_high |= SECONDARY_EXEC_ENCLS_EXITING;
- 
- 	/* miscellaneous data */
--	rdmsr(MSR_IA32_VMX_MISC,
--		msrs->misc_low,
--		msrs->misc_high);
--	msrs->misc_low &= VMX_MISC_SAVE_EFER_LMA;
-+	msrs->misc_low = (u32)vmcs_conf->misc & VMX_MISC_SAVE_EFER_LMA;
- 	msrs->misc_low |=
- 		MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS |
- 		VMX_MISC_EMULATED_PREEMPTION_TIMER_RATE |
--- 
-2.35.3
 
+Best regards,
+Krzysztof

@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABEE257534D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E845575336
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240302AbiGNQrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
+        id S240494AbiGNQqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240022AbiGNQqp (ORCPT
+        with ESMTP id S240388AbiGNQqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:46:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE69A6BC19;
-        Thu, 14 Jul 2022 09:45:04 -0700 (PDT)
+        Thu, 14 Jul 2022 12:46:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54E46A9E1;
+        Thu, 14 Jul 2022 09:44:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EA3A62054;
-        Thu, 14 Jul 2022 16:44:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C01FC34114;
-        Thu, 14 Jul 2022 16:44:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 884BC6202B;
+        Thu, 14 Jul 2022 16:44:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61802C34114;
+        Thu, 14 Jul 2022 16:44:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657817069;
-        bh=iM0sHba9YtLd8lM6n792MFUeeIeWthKKRCzYAJSsaiI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=USWNvHsK5uZ9X+4GaAJNb0zO9c3mkeZ86qiWdqvOkTD44X3QZKGFcMEUyEIeLfA+v
-         YJPHd/yQYytXaHZv8jbcb+tVdV1nnLM89TJ2LaFpb2AYkZ0g3e9cF+BXLF8uP2AXz7
-         7YaV7oPnUHP5yNHgtGSENcQC1QWRAntFMiRRXXXgFV+KU9LzFSczBWiqhomPo+DDzt
-         GO+JG3l9jawbqON4ewGl8EKpghvT9dwxqJNtIFFPTwt+2hwjgaA/g26HIs96iz74W+
-         DeZYARD50imniZKQFLyh6j1Bh83dVykm9MgjMiqZgppEGJCeXyu83pS9QKfC7gaMZV
-         a5C7y/75wGXjw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] mm/damon/reclaim: fix potential memory leak in damon_reclaim_init()
-Date:   Thu, 14 Jul 2022 16:44:27 +0000
-Message-Id: <20220714164427.157184-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220714063746.2343549-1-niejianglei2021@163.com>
-References: 
+        s=k20201202; t=1657817087;
+        bh=8DzjZ8Pj1BFtFMk4g4SFC/yQwR97X9txfSiLvi2MmfI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fydiakQwD0XRBJza3O5Fq46aBDUSHohbSZ3dk4fnf0PDvrAA6Q19+5Ktjp69bfAaG
+         Qe+lOFqYkXOvdHXZkGyaBi2fx3DSfH5qPVz3gSz2c3ZJTopfJRWp6QZzOicdGP01Ma
+         /TOXi/87lQsioSTRzEPKmxL0iSSmd14K3Jy1O3zcddG63JSznRvlzoj721UrzEiyXq
+         H/TBKteIsSUdFe2WOyhRUCXSfQldQ2EduiQQi55vgBiGxCBaK6ZjT4/mJEI9lQjB7a
+         OmbTmbyAa13DguFHze88dY7hnMLv5ogTK70+1EHsY/TlIBAbLHZBknNmLww4AwZneH
+         zZNjNwJGxz10A==
+Date:   Thu, 14 Jul 2022 09:44:47 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jie2x Zhou <jie2x.zhou@intel.com>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        shuah@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev,
+        Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] tools/testing/selftests/net/bpf/Makefile: fix fatal
+ error: 'bpf/bpf_helpers.h' file not found
+Message-ID: <20220714094447.6e66fd0e@kernel.org>
+In-Reply-To: <20220714065003.8388-1-jie2x.zhou@intel.com>
+References: <20220714065003.8388-1-jie2x.zhou@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,52 +60,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jianglei,
-
-On Thu, 14 Jul 2022 14:37:46 +0800 Jianglei Nie <niejianglei2021@163.com> wrote:
-
-> damon_reclaim_init() allocates a memory chunk for ctx with
-> damon_new_ctx(). When damon_select_ops() fails, ctx is not released, which
-> will lead to a memory leak.
+On Thu, 14 Jul 2022 14:50:03 +0800 Jie2x Zhou wrote:
+> In tools/testing/selftests run:
+> make -C bpf
+> make -C net
+> fatal error: 'bpf/bpf_helpers.h' file not found
 > 
-> We should release the ctx with damon_destroy_ctx() when damon_select_ops()
-> fails to fix the memory leak.
-
-Thank you for this patch!
-
-I think below tags would be better to be added.
-
-Fixes: 4d69c3457821 ("mm/damon/reclaim: use damon_select_ops() instead of damon_{v,p}a_set_operations()")
-Cc: <stable@vger.kernel.org> # 5.18.x
-
+> Add bpf/bpf_helpers.h include path in net/bpf/Makefile.
 > 
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-
-Thanks,
-SJ
-
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
 > ---
->  mm/damon/reclaim.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  tools/testing/selftests/net/bpf/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-> index 4b07c29effe9..0b3c7396cb90 100644
-> --- a/mm/damon/reclaim.c
-> +++ b/mm/damon/reclaim.c
-> @@ -441,8 +441,10 @@ static int __init damon_reclaim_init(void)
->  	if (!ctx)
->  		return -ENOMEM;
+> diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
+> index 8ccaf8732eb2..07d56d446358 100644
+> --- a/tools/testing/selftests/net/bpf/Makefile
+> +++ b/tools/testing/selftests/net/bpf/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
 >  
-> -	if (damon_select_ops(ctx, DAMON_OPS_PADDR))
-> +	if (damon_select_ops(ctx, DAMON_OPS_PADDR)) {
-> +		damon_destroy_ctx(ctx);
->  		return -EINVAL;
-> +	}
->  
->  	ctx->callback.after_wmarks_check = damon_reclaim_after_wmarks_check;
->  	ctx->callback.after_aggregation = damon_reclaim_after_aggregation;
-> -- 
-> 2.25.1
+>  CLANG ?= clang
+> +CCINCLUDE += -I../bpf/tools/include
+>  CCINCLUDE += -I../../bpf
+>  CCINCLUDE += -I../../../../lib
+>  CCINCLUDE += -I../../../../../usr/include/
+
+Can we switch to relative paths here, somehow?
+We keep adding those include paths, see 7b92aa9e6135 ("selftests net:
+fix kselftest net fatal error") for example.

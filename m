@@ -2,99 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D1657492F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8931D574928
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238324AbiGNJha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
+        id S238258AbiGNJhZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 14 Jul 2022 05:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238299AbiGNJh0 (ORCPT
+        with ESMTP id S231724AbiGNJhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:37:26 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAA13719F
+        Thu, 14 Jul 2022 05:37:24 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E793342F
         for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:37:23 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id j29-20020a05600c1c1d00b003a2fdafdefbso861309wms.2
+Received: by mail-il1-f198.google.com with SMTP id f11-20020a056e02168b00b002dc8abbf7f9so815516ila.12
         for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:37:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=SzhVHfRoTJrnpDanrMQh8Ww74DmMD2/mZU8JBmDOY6U=;
-        b=w+SFia/W6qX5vP8nw0AjesFXx0zp6LOc8q909IC4Cp95MZ71BILXXzMnC/3WOsIdct
-         CkYau2KI5/JEJ94jeRt3YB5ZPPzWtM5XHvFatRoNYbDQHm9H3PyTO3kZoJtZQZbeFVex
-         wuXzGkhH5Omos/WJIs5Gmht6ZF8kawYZFanMIDuB+LmNS/xzLCiKfD6Qpd/G8xN3uwF5
-         vSLbfC2nRkiow5AqDQ0LkAPV2AlMYzgAjJZlb1n8JFE/uvm3zQI3xjVNyqv3H24yUvmN
-         F3+DR4PDRPQVSlxRXc5UIZrP4UcgIWHALHsSrTkHe+InkX1J5061qEIJSY3iZlzvjmfO
-         oVcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=SzhVHfRoTJrnpDanrMQh8Ww74DmMD2/mZU8JBmDOY6U=;
-        b=Fe/pM5eBRSNQMdkfP7fyHj/kTCrbq9Yq9c24+v6WNBi4m69QGuoAz3I5t8mepwEBDr
-         LcGcsessDSzlvjnxnrjgzeiLJyPDt/E+L9cxO65uHbEjhihbbqiY0yyKf1aNoZfKxJuH
-         +kevnrfpL4KVWv6Hu/uGav3SZRrrR2ZKZ5mL7ZjAlibzejlF9B4xxBawDlwnNXp2X7rU
-         xMIAj4UhQ+XQTagB6YwDvx56/5kkkLPg8N6S9LHnETD6YvPIfcROH8qKwts7ogkUuuWA
-         YrKGHndIE6nSKGOjwZq5P92HzPqfRejCt5/cCC2+gcaz7EE3uFXjHgKR+Oir0qUtGnJ0
-         IXOA==
-X-Gm-Message-State: AJIora/t8DQRHUMNolIxpB5Y2GpaxQ+x1oUe+eqjcSxrRPGss4WjxFXE
-        F/SVp1HTJrJgkIMkjhkBI7CfxQ==
-X-Google-Smtp-Source: AGRyM1sYAcheIlzffIBizpYIN7jFiJ0gX1659DuMbABmoyKT1xnuz89E+Mbrc/U/du9waWQjzl2Ikg==
-X-Received: by 2002:a05:600c:1e18:b0:3a0:4865:3784 with SMTP id ay24-20020a05600c1e1800b003a048653784mr8096924wmb.139.1657791442299;
-        Thu, 14 Jul 2022 02:37:22 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id z16-20020adff1d0000000b0021d65675583sm987947wro.52.2022.07.14.02.37.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 02:37:21 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 10:37:19 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
-Message-ID: <Ys/jz7HqhrxSCOnV@google.com>
-References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
- <YqBS8I62YBPFC9iS@google.com>
- <CAHp75Ve9Lju8AEQd5huz1aYGg4sOu-ae7tTdyDWCXPCBR=wXbQ@mail.gmail.com>
- <YrGyWCaY+swYAYzH@smile.fi.intel.com>
- <YryAXlZqcr/liN7n@smile.fi.intel.com>
- <20220629191406.35965d5b@md1za8fc.ad001.siemens.net>
- <Ys71dyMdozGUAto0@smile.fi.intel.com>
- <20220713204827.0b290fd7@md1za8fc.ad001.siemens.net>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to
+         :content-transfer-encoding;
+        bh=WFr8N/EOSmpJftgydqWTgWKBCIxK/qqg2SGca5b7/a0=;
+        b=HUir2mpjEFZcbBGttGeTEcSXdkE99p5I7Se/hHKa7+GkDxVaBaYurJFzMnvRKYGHYv
+         iEaHRx/Ao3snRmCvGKg4suLViVKJSgkIz/h0y4ndai0rZgPMmuCrzJIINmUaRJKkym5K
+         CwXqcGLvsmLl3rYUHz5bx2zT5XjF3OEdHADvB6vI7W+W42fWLwSFCHVW7gps1ILzws+i
+         mVsUiSVwZRqi5McxvuOCi6raMVWhVHvC3lJ8UDsbF4ynZ2ocj42LnbvY4cuNgs2O4VU9
+         CblT9BN0nn0+CFEiTLBxzqkIIPl/J1nP/8D16xtsnaAtp3iU26x20mlgf7u7c8gLUci1
+         oWVQ==
+X-Gm-Message-State: AJIora/jVfY1EPPJwQXnzORgSY1Fd2L0VGwneEePwIBPQ8EH5tvRsZvp
+        bzGZV5inOE6q7wJ1F4Q3WJLb98g05rlZhzKvtu0fbsuCk3j5
+X-Google-Smtp-Source: AGRyM1sxKJjXTj4UWFLpmqINTljIveX51rI2INVvyAcfGFllt4JljMPZ63V8JFmC4qfytTKGfBRdfnZRa/QQCTAJM5EWQJDzPCdw
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220713204827.0b290fd7@md1za8fc.ad001.siemens.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a05:6638:419a:b0:341:3eac:e467 with SMTP id
+ az26-20020a056638419a00b003413eace467mr936227jab.101.1657791442807; Thu, 14
+ Jul 2022 02:37:22 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 02:37:22 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000f74bf05e3c0a6f0@google.com>
+Subject: [syzbot] linux-next boot error: kernel panic: swiotlb_init_remap:
+ nslabs = NUM too small
+From:   syzbot <syzbot+99f6c2141b62e707578c@syzkaller.appspotmail.com>
+To:     hch@infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,136 +58,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022, Henning Schild wrote:
+Hello,
 
-> Am Wed, 13 Jul 2022 19:40:23 +0300
-> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> 
-> > On Wed, Jun 29, 2022 at 07:14:06PM +0200, Henning Schild wrote:
-> > > Am Wed, 29 Jun 2022 19:39:58 +0300
-> > > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> > >   
-> > > > +Cc: Rafael
-> > > > 
-> > > > On Tue, Jun 21, 2022 at 02:58:16PM +0300, Andy Shevchenko wrote:  
-> > > > > On Wed, Jun 08, 2022 at 12:50:44PM +0200, Andy Shevchenko
-> > > > > wrote:    
-> > > > > > On Wed, Jun 8, 2022 at 9:42 AM Lee Jones
-> > > > > > <lee.jones@linaro.org> wrote:    
-> > > > > > > On Mon, 06 Jun 2022, Andy Shevchenko wrote:
-> > > > > > >    
-> > > > > > > > There are a few users that would like to utilize P2SB
-> > > > > > > > mechanism of hiding and unhiding a device from the PCI
-> > > > > > > > configuration space.
-> > > > > > > >
-> > > > > > > > Here is the series to consolidate p2sb handling code for
-> > > > > > > > existing users and to provide a generic way for new
-> > > > > > > > comer(s).
-> > > > > > > >
-> > > > > > > > It also includes a patch to enable GPIO controllers on
-> > > > > > > > Apollo Lake when it's used with ABL bootloader w/o ACPI
-> > > > > > > > support.
-> > > > > > > >
-> > > > > > > > The patch that brings the helper ("platform/x86/intel: Add
-> > > > > > > > Primary to Sideband (P2SB) bridge support") has a commit
-> > > > > > > > message that sheds a light on what the P2SB is and why
-> > > > > > > > this is needed.
-> > > > > > > >
-> > > > > > > > I have tested this on Apollo Lake platform (I'm able to
-> > > > > > > > see SPI NOR and since we have an ACPI device for GPIO I
-> > > > > > > > do not see any attempts to recreate one).
-> > > > > > > >
-> > > > > > > > The series is ready to be merged via MFD tree, but see
-> > > > > > > > below.
-> > > > > > > >
-> > > > > > > > The series also includes updates for Simatic IPC drivers
-> > > > > > > > that partially tagged by respective maintainers (the main
-> > > > > > > > question is if Pavel is okay with the last three patches,
-> > > > > > > > since I believe Hans is okay with removing some code
-> > > > > > > > under PDx86). Hence the first 8 patches can be merged
-> > > > > > > > right away and the rest when Pavel does his review.    
-> > > > > > >
-> > > > > > > Can we just wait for Pavel's review, then merge them all at
-> > > > > > > once?    
-> > > > > > 
-> > > > > > Sure, it would be the best course of action.    
-> > > > > 
-> > > > > Pavel, do you have a chance to review the patches (last three)
-> > > > > that touch LED drivers? What would be your verdict?    
-> > > > 
-> > > > Lee, Rafael,
-> > > > 
-> > > > It seems quite hard to get Pavel's attention to this series [1].
-> > > > It's already passed more than 3 weeks for any sign of review of
-> > > > three top patches of the series that touched LED subsystem. The
-> > > > entire series has all necessary tags, but for LED changes.
-> > > > 
-> > > > Note, that the top of this series is not done by me and was sent
-> > > > for preliminary review much earlier [2], altogether it makes
-> > > > months of no response from the maintainer.
-> > > > 
-> > > > The nature of patches is pretty simple and doesn't touch any of
-> > > > other than Simatic LED drivers nor LED core. Moreover, it was
-> > > > written by Siemens, who produces the H/W in question and very
-> > > > well tested as a separate change and as part of the series.  
-> > > 
-> > > The code has been reviewed and is in fact pretty simple. The only
-> > > questionable but pragmatic change that might catch the attention of
-> > > a pedantic reviewer is that i did put the gpio implementation of the
-> > > driver under the same/existing kernel config switch.
-> > >   
-> > > > I think to move forward we may ask Rafael to review it on behalf
-> > > > of good maintainer and with his approval apply entire series.
-> > > > 
-> > > > Thoughts?  
-> > > 
-> > > Thanks for pushing this Andy. I was wondering how and when that
-> > > story would continue. Technically these changes should really go in
-> > > one badge or we need to find a way to separate them somehow. I
-> > > would try to go that extra mile to get out of your way. But i am
-> > > kind of afraid such an effort might also end up touching the same
-> > > files and block us at the same maintainer.
-> > > 
-> > > Did anyone check whether Pavel was active at all in those last
-> > > months and maybe other patches waiting for review? Hope he is fine
-> > > and active and just somehow forgot/overlooked/ignored this one.  
-> > 
-> > I have send a private mail to Pavel and have got no response.
-> > Can we move this forward, let's say, by applying first 8 patches?
-> 
-> I am sorry that situation is now coming. Both simatic-ipc and that
-> appollo lake pinctrl driver compete for the same device memory. That
-> conflict was known and we agreed on sorting it out together somehow.
-> Not applying my patches could leave my LED drivers simply not working
-> any longer, or worse ... them making the apollolake platform stuff act
-> up somehow weird with unexpected EBUSY.
-> 
-> The series can not be split, or we have to write additional code to
-> properly deal with the conflict. I could envision my LED drivers still
-> accessing raw memory and ignoring EBUSY (very hacky! ... and touching
-> "we need Pavel code")
-> 
-> Another way could maybe be. Do the whole P2SB but do not make
-> apollolake pinctrl come up without ACPI. Somewhere in patches 1-8 there
-> is code which makes the pinctrl stuff come up for certain CPUs without
-> ACPI. It is really only some out of many CPUs which have pinctrl, and i
-> am not sure i remember what that has to do with the P2SB helpers as
-> such. The helpers are a refactoring, while the "bring up apollolake
-> pinctrl at all times" is a functional change ... now causing conflict.
-> 
-> And maybe there is a way/process to escalate to another maintainer.
-> Does anyone even know what is going on with Pavel? 
+syzbot found the following issue on:
 
-I'll take the hit.  He had his chance.
+HEAD commit:    4662b7adea50 Add linux-next specific files for 20220713
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17a1c5c8080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=91e2c45190556e73
+dashboard link: https://syzkaller.appspot.com/bug?extid=99f6c2141b62e707578c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-I'm happy to move forward with Andy's review.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+99f6c2141b62e707578c@syzkaller.appspotmail.com
 
-(Side note: Seeing as Pavel hasn't been seen for 2 months, I'll also
- follow-up on  the LED ML to offer to become temporary maintainer for a
- bit)
+NODE_DATA(0) allocated [mem 0x13fffa000-0x13fffffff]
+NODE_DATA(1) allocated [mem 0x23fff7000-0x23fffcfff]
+Zone ranges:
+  DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+  DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+  Normal   [mem 0x0000000100000000-0x000000023fffffff]
+  Device   empty
+Movable zone start for each node
+Early memory node ranges
+  node   0: [mem 0x0000000000001000-0x000000000009efff]
+  node   0: [mem 0x0000000000100000-0x00000000bfffcfff]
+  node   0: [mem 0x0000000100000000-0x000000013fffffff]
+  node   1: [mem 0x0000000140000000-0x000000023fffffff]
+Initmem setup node 0 [mem 0x0000000000001000-0x000000013fffffff]
+Initmem setup node 1 [mem 0x0000000140000000-0x000000023fffffff]
+On node 0, zone DMA: 1 pages in unavailable ranges
+On node 0, zone DMA: 97 pages in unavailable ranges
+On node 0, zone Normal: 3 pages in unavailable ranges
+kasan: KernelAddressSanitizer initialized
+ACPI: PM-Timer IO Port: 0xb008
+ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+IOAPIC[0]: apic_id 0, version 17, address 0xfec00000, GSI 0-23
+ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+ACPI: Using ACPI (MADT) for SMP configuration information
+smpboot: Allowing 2 CPUs, 0 hotplug CPUs
+PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+PM: hibernation: Registered nosave memory: [mem 0x0009f000-0x0009ffff]
+PM: hibernation: Registered nosave memory: [mem 0x000a0000-0x000effff]
+PM: hibernation: Registered nosave memory: [mem 0x000f0000-0x000fffff]
+PM: hibernation: Registered nosave memory: [mem 0xbfffd000-0xbfffffff]
+PM: hibernation: Registered nosave memory: [mem 0xc0000000-0xfffbbfff]
+PM: hibernation: Registered nosave memory: [mem 0xfffbc000-0xffffffff]
+[mem 0xc0000000-0xfffbbfff] available for PCI devices
+Booting paravirtualized kernel on KVM
+clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+setup_percpu: NR_CPUS:8 nr_cpumask_bits:8 nr_cpu_ids:2 nr_node_ids:2
+percpu: Embedded 69 pages/cpu s243848 r8192 d30584 u1048576
+kvm-guest: PV spinlocks enabled
+PV qspinlock hash table entries: 256 (order: 0, 4096 bytes, linear)
+Fallback order for Node 0: 0 1 
+Fallback order for Node 1: 1 0 
+Built 2 zonelists, mobility grouping on.  Total pages: 2064125
+Policy zone: Normal
+Kernel command line: earlyprintk=serial net.ifnames=0 sysctl.kernel.hung_task_all_cpu_backtrace=1 ima_policy=tcb nf-conntrack-ftp.ports=20000 nf-conntrack-tftp.ports=20000 nf-conntrack-sip.ports=20000 nf-conntrack-irc.ports=20000 nf-conntrack-sane.ports=20000 binder.debug_mask=0 rcupdate.rcu_expedited=1 no_hash_pointers page_owner=on sysctl.vm.nr_hugepages=4 sysctl.vm.nr_overcommit_hugepages=4 secretmem.enable=1 sysctl.max_rcu_stall_to_panic=1 msr.allow_writes=off root=/dev/sda console=ttyS0 vsyscall=native numa=fake=2 kvm-intel.nested=1 spec_store_bypass_disable=prctl nopcid vivid.n_devs=16 vivid.multiplanar=1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2 netrom.nr_ndevs=16 rose.rose_ndevs=16 dummy_hcd.num=8 smp.csd_lock_timeout=100000 watchdog_thresh=55 workqueue.watchdog_thresh=140 sysctl.net.core.netdev_unregister_timeout_secs=140 panic_on_warn=1 BOOT_IMAGE=/boot/bzImage root=/dev/sda1 console=ttyS0
+Unknown kernel command line parameters "spec_store_bypass_disable=prctl BOOT_IMAGE=/boot/bzImage", will be passed to user space.
+mem auto-init: stack:off, heap alloc:on, heap free:off
+stackdepot hash table entries: 1048576 (order: 11, 8388608 bytes, linear)
+Kernel panic - not syncing: swiotlb_init_remap: nslabs = 0 too small
+CPU: 0 PID: 0 Comm: swapper Not tainted 5.19.0-rc6-next-20220713-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ panic+0x2c8/0x627 kernel/panic.c:274
+ swiotlb_init_remap+0x60/0x7e kernel/dma/swiotlb.c:306
+ mem_init+0x18/0x351 arch/x86/mm/init_64.c:1332
+ mm_init+0xa1/0xc9 init/main.c:843
+ start_kernel+0x18e/0x494 init/main.c:990
+ secondary_startup_64_no_verify+0xce/0xdb
+ </TASK>
+Rebooting in 86400 seconds..
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

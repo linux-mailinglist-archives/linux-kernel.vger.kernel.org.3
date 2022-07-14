@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CC55740DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBA75740DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbiGNBK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 21:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
+        id S231883AbiGNBLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 21:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbiGNBKz (ORCPT
+        with ESMTP id S231669AbiGNBK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 21:10:55 -0400
+        Wed, 13 Jul 2022 21:10:58 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ED8201A3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:10:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CA5201A4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:10:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657761055; x=1689297055;
+  t=1657761057; x=1689297057;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=64zHAd0VO/In2o8u2a2F5KFDhUcSaQ7u0ws37chHb6o=;
-  b=F4GNPwOdq/XrbfRZslMVkzlZ2+4mxPEUUGCG1BbCyPooMDKxCF+xh4jn
-   nmxF2qOvyv2mqhVftCzXrrLB7dF/7o0zodSt3JMEDxdhWkApRalFieQbU
-   uAkbU4E7AhXMvrNdo9yfneYlL/1FcEVfdfUjAjtHVwWAUCqjzx7c2oJ5Q
-   LCnQtfEFFzynRYM1ajRcN8OOS0epmXoiw9st0EGG0uJ420s3hLT0G8f7N
-   3+Au9fWXz2ezv1NcCyEOjzg6ml97R4X2SPDOQGetxYCW5XRDhNDovVeur
-   FKnHKJOF/TNZEHzYMGCW45Q+LaY9FS8/oskyIXa5jLMg9wAVgxvD9xKId
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="282937916"
+  bh=Y1J5nWNOz+sncSR+Y9wqNIrStrFxV1lay+BampiPlQo=;
+  b=axdpw0YJZ66SQBZnuizFKHJ5NSJwrZZvYvsoPeXCOny5RcY3ezBbS40I
+   LenI98fHSP5d44z8Kaypw1D4oMJq0PWQqJgRmLv6aU/oA9f+REvjcQIQs
+   8kIxcT4aTuIZHjkyOzwlxZ2yg2qNnvmCGe2gYbuuyKAKBGC1kMWvRPSmW
+   s/grbOMseYh//HWvtOQuOLl/Q8QNiRxKMyeaCl+m/EWyO8GgM7uKSjnnk
+   UqfN+deqn5U3IpJIfkUalEvJXOBrP4DAqJlnjqjNGxGGlopwheGW+aO2f
+   PhmVCo4X75ARK1uHno7wZXNoipe4fULMg4rTxgZOinMNhgau2eygE9QWt
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="282937922"
 X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="282937916"
+   d="scan'208";a="282937922"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 18:10:55 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 18:10:57 -0700
 X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="593192522"
+   d="scan'208";a="593192532"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 18:10:52 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 18:10:55 -0700
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org
 Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
         broonie@kernel.org, pierre-louis.bossart@linux.intel.com,
         bard.liao@intel.com
-Subject: [PATCH 2/4] soundwire: intel/cadence: expose PING status in manager ops
-Date:   Thu, 14 Jul 2022 09:10:41 +0800
-Message-Id: <20220714011043.46059-3-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH 3/4] soundwire: add sdw_show_ping_status() helper
+Date:   Thu, 14 Jul 2022 09:10:42 +0800
+Message-Id: <20220714011043.46059-4-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220714011043.46059-1-yung-chuan.liao@linux.intel.com>
 References: <20220714011043.46059-1-yung-chuan.liao@linux.intel.com>
@@ -62,61 +62,74 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-Simple indirection to existing register.
+This helper provides an optional delay parameter to wait for devices
+to resync in case of errors, and checks that devices are indeed
+attached on the bus.
 
 Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Rander Wang <rander.wang@intel.com>
 Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 ---
- drivers/soundwire/cadence_master.c | 8 ++++++++
- drivers/soundwire/cadence_master.h | 2 ++
- drivers/soundwire/intel.c          | 1 +
- 3 files changed, 11 insertions(+)
+ drivers/soundwire/bus.c       | 32 ++++++++++++++++++++++++++++++++
+ include/linux/soundwire/sdw.h |  2 ++
+ 2 files changed, 34 insertions(+)
 
-diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
-index 4fbb19557f5e..615b0b63a3e1 100644
---- a/drivers/soundwire/cadence_master.c
-+++ b/drivers/soundwire/cadence_master.c
-@@ -756,6 +756,14 @@ cdns_reset_page_addr(struct sdw_bus *bus, unsigned int dev_num)
+diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+index 2772973eebb1..0a99ac791c7e 100644
+--- a/drivers/soundwire/bus.c
++++ b/drivers/soundwire/bus.c
+@@ -300,6 +300,38 @@ int sdw_transfer(struct sdw_bus *bus, struct sdw_msg *msg)
+ 	return ret;
  }
- EXPORT_SYMBOL(cdns_reset_page_addr);
  
-+u32 cdns_read_ping_status(struct sdw_bus *bus)
++/**
++ * sdw_show_ping_status() - Direct report of PING status, to be used by Peripheral drivers
++ * @bus: SDW bus
++ * @sync_delay: Delay before reading status
++ */
++void sdw_show_ping_status(struct sdw_bus *bus, bool sync_delay)
 +{
-+	struct sdw_cdns *cdns = bus_to_cdns(bus);
++	u32 status;
 +
-+	return cdns_readl(cdns, CDNS_MCP_SLAVE_STAT);
++	if (!bus->ops->read_ping_status)
++		return;
++
++	/*
++	 * wait for peripheral to sync if desired. 10-15ms should be more than
++	 * enough in most cases.
++	 */
++	if (sync_delay)
++		usleep_range(10000, 15000);
++
++	mutex_lock(&bus->msg_lock);
++
++	status = bus->ops->read_ping_status(bus);
++
++	mutex_unlock(&bus->msg_lock);
++
++	if (!status)
++		dev_warn(bus->dev, "%s: no peripherals attached\n", __func__);
++	else
++		dev_dbg(bus->dev, "PING status: %#x\n", status);
 +}
-+EXPORT_SYMBOL(cdns_read_ping_status);
++EXPORT_SYMBOL(sdw_show_ping_status);
 +
- /*
-  * IRQ handling
-  */
-diff --git a/drivers/soundwire/cadence_master.h b/drivers/soundwire/cadence_master.h
-index 595d72c15d97..ca9e805bab88 100644
---- a/drivers/soundwire/cadence_master.h
-+++ b/drivers/soundwire/cadence_master.h
-@@ -177,6 +177,8 @@ enum sdw_command_response
- cdns_xfer_msg_defer(struct sdw_bus *bus,
- 		    struct sdw_msg *msg, struct sdw_defer *defer);
+ /**
+  * sdw_transfer_defer() - Asynchronously transfer message to a SDW Slave device
+  * @bus: SDW bus
+diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
+index a85cf829bb77..9e4537f409c2 100644
+--- a/include/linux/soundwire/sdw.h
++++ b/include/linux/soundwire/sdw.h
+@@ -926,6 +926,8 @@ int sdw_bus_master_add(struct sdw_bus *bus, struct device *parent,
+ 		       struct fwnode_handle *fwnode);
+ void sdw_bus_master_delete(struct sdw_bus *bus);
  
-+u32 cdns_read_ping_status(struct sdw_bus *bus);
++void sdw_show_ping_status(struct sdw_bus *bus, bool sync_delay);
 +
- int cdns_bus_conf(struct sdw_bus *bus, struct sdw_bus_params *params);
- 
- int cdns_set_sdw_stream(struct snd_soc_dai *dai,
-diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-index 25b27cd1be1d..e1e943396e36 100644
---- a/drivers/soundwire/intel.c
-+++ b/drivers/soundwire/intel.c
-@@ -1255,6 +1255,7 @@ static struct sdw_master_ops sdw_intel_ops = {
- 	.set_bus_conf = cdns_bus_conf,
- 	.pre_bank_switch = intel_pre_bank_switch,
- 	.post_bank_switch = intel_post_bank_switch,
-+	.read_ping_status = cdns_read_ping_status,
- };
- 
- static int intel_init(struct sdw_intel *sdw)
+ /**
+  * sdw_port_config: Master or Slave Port configuration
+  *
 -- 
 2.25.1
 

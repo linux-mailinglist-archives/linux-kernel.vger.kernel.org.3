@@ -2,193 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405E15756DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC18C5756E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240805AbiGNV0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 17:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
+        id S240820AbiGNV1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 17:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240795AbiGNV0p (ORCPT
+        with ESMTP id S240795AbiGNV1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 17:26:45 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2AE6D9F4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:26:44 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id e16so2970310pfm.11
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:26:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=A82TrBfvwK16A0WmBpUzkOCIu8QaflndhNSONWHsTyI=;
-        b=Iige2mJGGUUPL5VGGoebtLr+8r+yZZTpb6RzXRHxCieHfegCfLjo8YRLUaQKCNYqHp
-         2/Vmt7cgBe6z6fE7uDakqB1iKwoRvbnAsMAoX4PPhb/mUeRIoWRRvwnFhr0htM9yYsg3
-         sjIoIFbhjbA0FzuDNGLBlzwGD7TdGnn5BzJ6o2/HnX+fLR29CWuDId34mT8C/ZljQGCB
-         ZaV5sX5KAT6Se9xd0UwbjiL20z6V1hkGzVTjSF0ElJdpwjDuNCJ+643tPDQzdI/1Ob1v
-         j0OXIvVZaoXYwJWf/kMXF0rMZa+tedS6jJphiIe7rpcYgat+ke4ruKiRByQWzElQtEaX
-         HUEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=A82TrBfvwK16A0WmBpUzkOCIu8QaflndhNSONWHsTyI=;
-        b=Z6BwxC+9Fvs0xT0UmUJ5SOV2lVdmK9xiUSaWnL1DijFmrTo0JVdlHlWNshkVnOGGlu
-         48jPvBvMmOxYGiO6KRiY0IgxfxnZ9vv8x/k+wGT+B6PKiUoMsigPwsVu3ayXgUnL57Sh
-         p8rqGWGmAigg2536mwhZVpwXgVHzajf9u1hjZu/HfQMIL0cMZmZwJHEJDMeXNKPkp75q
-         y+mEEB4qUEl7ceoswt8lKUsg2cDuyDZQkNIHXirMrTvA7ur1ySmugVoxgNGJdrc4KrGD
-         DVHZYL+b6egQ3z5EkHtXNDOSMvuZlbw1MgomLauvkZN4ApXDFlkAeZmsYpJ9s50YIgj7
-         Bq4Q==
-X-Gm-Message-State: AJIora/VAICFbYlufRpOqGavO1Lfz+pxUhVmJ2fYRWgB238/2O4MZPIZ
-        fd2DIN0cqqIuwzgO16eGle3AqN80qLBMUfT+LDFQlA==
-X-Google-Smtp-Source: AGRyM1tucHhmA1dXhZrSh53rKxTi0X7NS5UUXAMWuwVb4boYYkxJPXelYwHOoS6BTNufVRmuRATqRqcOKmKOG3MCZgY=
-X-Received: by 2002:a62:6d05:0:b0:528:99a2:b10 with SMTP id
- i5-20020a626d05000000b0052899a20b10mr10183904pfc.72.1657834003735; Thu, 14
- Jul 2022 14:26:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220714060959.25232-1-shaozhengchao@huawei.com>
- <CAKH8qBtxJOCWoON6QXygOTD7AqjF+k=-4JWPHXEAQh-TO+W54A@mail.gmail.com> <7b333bcc-c8ed-f1f8-8331-58cba7897637@iogearbox.net>
-In-Reply-To: <7b333bcc-c8ed-f1f8-8331-58cba7897637@iogearbox.net>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Thu, 14 Jul 2022 14:26:32 -0700
-Message-ID: <CAKH8qBvd1mc_fM6Ha_=kMppvuy67aB5EzmoHmODmGtVT5pcq7A@mail.gmail.com>
-Subject: Re: [PATCH v2,bpf-next] bpf: Don't redirect packets with invalid pkt_len
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Zhengchao Shao <shaozhengchao@huawei.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hawk@kernel.org, ast@kernel.org,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com
+        Thu, 14 Jul 2022 17:27:06 -0400
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D62B6D9FF;
+        Thu, 14 Jul 2022 14:27:05 -0700 (PDT)
+Received: from 1oC6MM-00090K-WA by out3b.electric.net with emc1-ok (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1oC6MQ-00096c-U9; Thu, 14 Jul 2022 14:27:02 -0700
+Received: by emcmailer; Thu, 14 Jul 2022 14:27:02 -0700
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+        by out3b.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1oC6MM-00090K-WA; Thu, 14 Jul 2022 14:26:59 -0700
+Received: from tsdebian (97-120-89-198.ptld.qwest.net [97.120.89.198])
+        by mail.embeddedts.com (Postfix) with ESMTPSA id 9134F4DC;
+        Thu, 14 Jul 2022 14:26:57 -0700 (MST)
+Message-ID: <1657833995.2979.1.camel@embeddedTS.com>
+Subject: Re: [RFC PATCH v2] ARM: dts: Add TS-7553-V2 support
+From:   Kris Bahnsen <kris@embeddedTS.com>
+Reply-To: kris@embeddedTS.com
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Mark Featherston <mark@embeddedTS.com>
+Date:   Thu, 14 Jul 2022 14:26:35 -0700
+In-Reply-To: <55dccabb-41e9-dc45-f404-c333f5472e75@linaro.org>
+References: <20220713221233.8486-1-kris@embeddedTS.com>
+         <55dccabb-41e9-dc45-f404-c333f5472e75@linaro.org>
+Organization: embeddedTS
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.22.6-1+deb9u2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS:  TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
+X-Authenticated_ID: 
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=GseA+cRnj+YmYAVO5Y69v8C7WrdURv4BgtAoSd0DCpM=;b=hz/WBxV3h4iBrP9vWNGrG4x0jxMVhUxNOPwrX3h7o0QyBiR5HsXN/Bs9/wXVs/g8mZSku/B2FQ7BxxHy2HMleJ620RzIN3meKsr0OopL129w+iS8YtQlm1cZc9fM2omqRfbDAMVWcZ1C6Hmwar03v964/qcteuEuyFNbq0zmzg8GTgS6DERwcCqZT4FPbhy/DqTgizsF6wHXR0SKmWPgotdQCD3jt1mYnO96jx2evGcWAnpRBmUGD10KZe6zf7eo19jiK7ZA0S2DfgXKUjyi/+VjYEDAvL0nhW6RLJedYTc0BShVy6h6NLA1gj7Jad4uUFIkHfHwrVp5twI1FMw/dg==;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 1:39 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 7/14/22 8:22 PM, Stanislav Fomichev wrote:
-> > On Wed, Jul 13, 2022 at 11:05 PM Zhengchao Shao
-> > <shaozhengchao@huawei.com> wrote:
-> >>
-> >> Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
-> >> skbs, that is, the flow->head is null.
-> >> The root cause, as the [2] says, is because that bpf_prog_test_run_skb()
-> >> run a bpf prog which redirects empty skbs.
-> >> So we should determine whether the length of the packet modified by bpf
-> >> prog is valid before forwarding it directly.
-> >>
-> >> LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
-> >> LINK: [2] https://www.spinics.net/lists/netdev/msg777503.html
-> >>
-> >> Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
-> >> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> >
-> > Reviewed-by: Stanislav Fomichev <sdf@google.com>
-> >
-> > Daniel, do you see any issues with this approach?
->
-> I think it's fine, maybe this could be folded into:
->
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 750d7d173a20..256cd18cfe22 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -957,6 +957,8 @@ static int convert___skb_to_skb(struct sk_buff *skb, struct __sk_buff *__skb)
->
->          if (!__skb)
->                  return 0;
-> +       if (!skb->len)
-> +               return -EINVAL;
+On Thu, 2022-07-14 at 10:34 +0200, Krzysztof Kozlowski wrote:
+> On 14/07/2022 00:12, Kris Bahnsen wrote:
+> > Add initial support of the i.MX6UL based TS-7553-V2 platform.
+> 
+> Use subject prefix matching the subsystem. git log --oneline --
 
-So putting it in convert___skb_to_skb lets us remove a goto :-) Works
-for me, whichever you prefer.
+Can you please elaborate? The subject prefix is "ARM: dts:", I'm not
+sure what is missing. Should it be something like
+"ARM: dts: imx6ul-ts7553v2:" in this case?
 
->          /* make sure the fields we don't use are zeroed */
->          if (!range_is_zero(__skb, 0, offsetof(struct __sk_buff, mark)))
->
-> > I wonder if we might also want to add some WARN_ON to the
-> > __bpf_redirect_common routine gated by #ifdef CONFIG_DEBUG_NET ?
-> > In case syscaller manages to hit similar issues elsewhere..
->
-> Assuming the issue is generic (and CONFIG_DEBUG_NET only enabled by things like
-> syzkaller), couldn't we do something like the below?
+> 
+> > 
+> > Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+> > ---
+> > 
+> > V1->V2: Implement changes recommended by Rob Herring and dtbs_check
+> > 
+> > RFC only, not yet ready to merge, more testing needed and we're working on
+> > SPI LCD support for this platform.
+> > 
+> > Specifically, I have a few questions on some paradigms and dtbs_check output:
+> > 
+> > imx6ul-ts7553v2.dtb: /: i2c-gpio: {'compatible': ... \
+> > 'magnetometer@c': {'compatible': ['asahi-kasei,ak8975'], 'reg': [[12]]}}}} \
+> > is not of type 'array'
+> >   I'm not sure what this error is referring to as I've copied the example in
+> >   invensense,mpu6050.yaml almost verbatim. Is this an issue with our patch
+> >   or a false positive from dtbs_check?
+> 
+> You would need to paste entire error, maybe with checker flags -v.
 
-Based on [1] it's selected by DEBUG_KERNEL, so it feels like it's safe
-to assume that it's mostly debugging/fuzzing workloads?
-Your suggestion to put it into __dev_queue_xmit looks good to me!
+Here is the verbose output. I'm not familiar enough yet with the schema and its
+validation code to catch what is wrong and would appreciate any insight.
 
-[1] https://lore.kernel.org/netdev/20220509190851.1107955-3-eric.dumazet@gmail.com/
+Check:  arch/arm/boot/dts/imx6ul-ts7553v2.dtb
+/work/arch/arm/boot/dts/imx6ul-ts7553v2.dtb: /: i2c-gpio: {'compatible': ['i2c-gpio'], \
+'#address-cells': [[1]], '#size-cells': [[0]], 'pinctrl-names': ['default'], \
+'pinctrl-0': [[58]], 'sda-gpios': [[11, 5, 6]], 'scl-gpios': [[11, 4, 6]], \
+'imu@68': {'compatible': ['invensense,mpu9250'], 'reg': [[104]], \
+'interrupt-parent': [[55]], 'interrupts': [[1, 1]], 'i2c-gate': {'#address-cells': [[1]], \
+'#size-cells': [[0]], 'magnetometer@c': {'compatible': ['asahi-kasei,ak8975'], \
+'reg': [[12]]}}}} is not of type 'array'
 
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index f6a27ab19202..c9988a785294 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -2459,6 +2459,17 @@ static inline void skb_set_tail_pointer(struct sk_buff *skb, const int offset)
->
->   #endif /* NET_SKBUFF_DATA_USES_OFFSET */
->
-> +static inline void skb_assert_len(struct sk_buff *skb)
-> +{
-> +#ifdef CONFIG_DEBUG_NET
-> +       if (unlikey(!skb->len)) {
-> +               pr_err("%s\n", __func__);
-> +               skb_dump(KERN_ERR, skb, false);
-> +               WARN_ON_ONCE(1);
-> +       }
-> +#endif /* CONFIG_DEBUG_NET */
-> +}
-> +
->   /*
->    *     Add data to an sk_buff
->    */
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 978ed0622d8f..53c4b9fd22c0 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -4168,7 +4168,7 @@ int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
->          bool again = false;
->
->          skb_reset_mac_header(skb);
-> -
-> +       skb_assert_len(skb);
->          if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_SCHED_TSTAMP))
->                  __skb_tstamp_tx(skb, NULL, NULL, skb->sk, SCM_TSTAMP_SCHED);
->
->
->
-> >> ---
-> >> v1: should not check len in fast path
-> >>
-> >>   net/bpf/test_run.c | 6 ++++++
-> >>   1 file changed, 6 insertions(+)
-> >>
-> >> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> >> index 2ca96acbc50a..750d7d173a20 100644
-> >> --- a/net/bpf/test_run.c
-> >> +++ b/net/bpf/test_run.c
-> >> @@ -1152,6 +1152,12 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
-> >>          ret = convert___skb_to_skb(skb, ctx);
-> >>          if (ret)
-> >>                  goto out;
-> >> +
-> >> +       if (skb->len == 0) {
-> >> +               ret = -EINVAL;
-> >> +               goto out;
-> >> +       }
-> >> +
-> >>          ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
-> >>          if (ret)
-> >>                  goto out;
-> >> --
-> >> 2.17.1
-> >>
->
+Failed validating 'type' in schema['patternProperties']['(?<!,nr)-gpios?$']:
+    {'items': {'additionalItems': {'$ref': '#/definitions/cell'},
+               'items': [{'oneOf': [{'maximum': 4294967295,
+                                     'minimum': 1,
+                                     'phandle': True,
+                                     'type': 'integer'},
+                                    {'const': 0, 'type': 'integer'}]}],
+               'minItems': 1,
+               'type': 'array'},
+     'minItems': 1,
+     'type': 'array'}
+
+On instance['i2c-gpio']:
+    {'#address-cells': [[1]],
+     '#size-cells': [[0]],
+     'compatible': ['i2c-gpio'],
+     'imu@68': {'compatible': ['invensense,mpu9250'],
+                'i2c-gate': {'#address-cells': [[1]],
+                             '#size-cells': [[0]],
+                             'magnetometer@c': {'compatible': ['asahi-kasei,ak8975'],
+                                                'reg': [[12]]}},
+                'interrupt-parent': [[55]],
+                'interrupts': [[1, 1]],
+                'reg': [[104]]},
+     'pinctrl-0': [[58]],
+     'pinctrl-names': ['default'],
+     'scl-gpios': [[11, 4, 6]],
+     'sda-gpios': [[11, 5, 6]]}
+        From schema: /usr/local/lib/python3.9/dist-packages/dtschema/schemas/gpio/gpio-consumer.yaml
+
+> 
+> > 
+> > 
+> > imx6ul-ts7553v2.dtb: spi@2010000: spidev@1: 'compatible' is a required property
+> >   Many of our devices have open-ended I2C and SPI ports that may or may not be
+> >   used in customer applications. With "spidev" compatible string no longer
+> >   supported, there is no easy way we know of to leave a placeholder or
+> >   indication that the interface is present, usable, and either needs specific
+> >   support enabled in kernel or userspace access via /dev/. We would love
+> >   feedback on how to handle this situation when submitting platforms upstream.
+> 
+> No empty devices, especially for spidev in DTS. There is really no
+> single need to add fake spidev... really, why? The customer cannot read
+> hardware manual and cannot see the header on the board? You can give him
+> a tutorial/howto guide, but don't embed dead or non-real code in DTS.
+
+We ship devices as bootable out of the box. A number of our customers end up
+attaching SPI devices that do not have existing kernel drivers and talk to them
+from userspace without having to touch a kernel build. The loss of spidev
+directly has increased support requests we receive on the matter.
+
+> 
+> > 
+> > 
+> > imx6ul-ts7553v2.dtb: wifi@0: compatible:0: 'microchip,wilc1000' was expected
+> > imx6ul-ts7553v2.dtb: wifi@0: compatible: ['microchip,wilc3000'...] is too long
+> > imx6ul-ts7553v2.dtb: wifi@0: 'chip_en-gpios' does not match any of the \
+> > regexes: pinctrl-[0-9]+'
+> >   As noted in the comments in the dts, the WILC1000 in-kernel driver doesn't
+> >   support the BLE features of the WILC3000. We maintain an external module
+> >   tree that lets us build Microchip's official driver with WILC3000 support.
+> >   Would the extraneous compatible string and property be accepted upstream
+> >   in light of this?
+> 
+> No. No undocumented comaptibles with some wrong properties. chip_en is
+> clearly wrong, so it cannot go to DTS. Upstream driver or remove the node.
+
+Unfortunate, but, understood.
+
+> 
+> > 
+> > 
+> >  Documentation/devicetree/bindings/arm/fsl.yaml |    1 +
+> 
+> This is a separate patch.
+
+Makes sense.
+
+> 
+> >  arch/arm/boot/dts/Makefile                     |    1 +
+> >  arch/arm/boot/dts/imx6ul-ts7553v2.dts          |  693 ++++++++++
+> >  arch/arm/configs/ts7970_defconfig              | 1627 ++++++++++++++++++++++++
+> >  arch/arm/configs/tsimx6ul_defconfig            |  967 ++++++++++++++
+> 
+> This as well (and won't be accepted - no new defconfigs).
+
+The defconfigs being included were an oversight and absolutely sloppy on my
+part. I sincerely apologize for that.
+
+> 
+> > 
+> > +
+> > +	leds {
+> > +		pinctrl-names = "default";
+> > +		pinctrl-0 = <&pinctrl_gpio_leds>;
+> > +		compatible = "gpio-leds";
+> > +
+> > +		green-led {
+> 
+> led-0
+> 
+> > +			label = "green-led";
+> 
+> Rather use color and function, then labels.
+
+Fixed, thank you. I was unaware of this newer set of properties and I've
+found where they are clearly spelled out.
+
+> 
+> > +
+> > +	gpio-keys {
+> > +		compatible = "gpio-keys";
+> > +		pinctrl-names = "default";
+> > +		pinctrl-0 = <&pinctrl_gpio_keys>;
+> > +
+> > +		left {
+> 
+> This fails on dtbs_check. Generic node names, so "key-0" or "key-left"
+
+For reference, as of commit b047602d579b4fb028128a525f056bbdc890e7f0, there
+are no errors/warnings from dtbs_check or checkpatch.pl regarding node
+names being "key-..." and the example in gpio-keys.yaml uses "up" "left" etc.
+
+I've also changed the node name to just "keys" per devicetree specifications
+doc.
+
+> 
+> > +	i2c_gpio: i2c-gpio {
+> 
+> Generic node name, so "i2c"
+
+Understood.
+
+Are there any guidelines/restrictions on label use/schema 
+throughout a dts file? The devicetree-specification document only defines
+valid characters for a label and I've been unable to find any other docs.
+
+> 
+> > +		compatible = "i2c-gpio";
+> > +		pinctrl-names = "default";
+> > +		pinctrl-0 = <&pinctrl_i2cgpio>;
+> > +		sda-gpios = <&gpio5 5 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+> > +		scl-gpios = <&gpio5 4 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+> > +		#address-cells = <1>;
+> > +		#size-cells = <0>;
+> > +		status = "okay";
+> 
+> Why do you add status? Isn't this a new node?
+
+That was my mistake, Rob pointed it out in v1 and I forgot to remove it.
+
+> 
+> > +
+> > +	pinctrl_i2cgpio: i2cgrpgpio {
+> 
+> Name not matching schema, as they must end with grp. Derive your board
+> from something new, not ancient...
+> > +
+> > +	pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
+> 
+> Same.
+> 
+> > 
+> > +
+> > +	pinctrl_usdhc1_200mhz: usdhc1grp200mhz {
+> 
+> No really...
+> 
+
+Thanks for pointing this out, I was unable to find any specific docs on the
+pinctrl node name schema and dtbs_check gave no errors on it.
+
+> > 
+> > +};
+> > diff --git a/arch/arm/configs/ts7970_defconfig b/arch/arm/configs/ts7970_defconfig
+> > new file mode 100644
+> > index 000000000000..a96831752449
+> 
+> Rest is not accepted as not explained/justified.
+> 
+> 
+> Best regards,
+> Krzysztof
+
+Many thanks for the review. 

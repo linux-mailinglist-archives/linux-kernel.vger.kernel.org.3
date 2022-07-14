@@ -2,74 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30966574D1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E01574D22
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239076AbiGNMIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        id S239118AbiGNMKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239159AbiGNMGr (ORCPT
+        with ESMTP id S234487AbiGNMJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:06:47 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8919F5D0C7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:06:46 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id z25so2472135lfr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:06:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JP/tjZFPBXiPkDSIwi7EAQJKbNtxPejuw/369uy5bpE=;
-        b=jP4WCMy3/arJ4RhHvkcrhWISPYiHpg0OvEjdj9bjHpSaQ4KdQJMvMOjjWbrZBYlIik
-         LzvjFsoOh5iHvPLBBDJooEVW7PFLCulA+TLiuH3r3CBzlZZvsobyEHhn0qi+XCfhWwLm
-         LXoZcjZq0IUlkZoN37mqJekJ1uMvj4WGbGlJ9CstWqf2M3SIo/PE/uqoT+wEW1PojO40
-         0EhTOEYw2Pg6C7NxpMuzEgYhvF5aCjntoNgqHhGn28DqL5dJkAzEjMOkE7t2tfhHEBcx
-         fiomK6QETXnkHC4mfOYt8zB8WxgTvPX7/SboaIqhLy2cyqErWHYq8s/UCSHiCvS3mYQ0
-         wWUA==
+        Thu, 14 Jul 2022 08:09:52 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3B33F333
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:08:48 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id j17-20020a056e02219100b002dc4e721203so987996ila.22
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:08:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JP/tjZFPBXiPkDSIwi7EAQJKbNtxPejuw/369uy5bpE=;
-        b=6b7iBOVrizKpsnVw/Z8Bo1YRDNz1yz2DBb+xD/PvlafSThSRBh+ZYmv/yieNFsv4rK
-         VZfFfM+l4RGvoB+xX192w1UTw/bWUlAiMoMmfYyB6KjVpjofK/EWZktd0Buq86WgbB1M
-         sGIGk5e9cqQSKDgbUXJLyWoOox5rOdMt5b797U+33fBh9MQSqA/YP/U59tj2+7Mlc9Jb
-         ZOPnKjc4Tqd8RYCmFJUEfcl+foSWOB06tx+kcWX4a2JcxaRDQ/vdeDv3l0sCjnYZx1EN
-         B5miz+whwESuvY2QFtW/t+uZt52HZJtLonQW0LNlNOncWdjtuYhniuVJXAIE9WpBYSjH
-         X5jA==
-X-Gm-Message-State: AJIora+jdbUaMRHpJC+pQzZmSN1Z2tn/3tHT4n4MtBH93DSV2Y2nfEqx
-        gInaCAgWZoaG++GxJgUrP5IOgg==
-X-Google-Smtp-Source: AGRyM1s1AwL/+8iWanx4h7Go7zVLShOosA3NySOVsXYXmBYOFy6q4waOvoW9Qs0gIoSLh8jw0T4lTw==
-X-Received: by 2002:a05:6512:118b:b0:46b:a9ae:3a3b with SMTP id g11-20020a056512118b00b0046ba9ae3a3bmr4639039lfr.188.1657800404841;
-        Thu, 14 Jul 2022 05:06:44 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id b16-20020a056512071000b004886508ca5csm327879lfs.68.2022.07.14.05.06.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 05:06:44 -0700 (PDT)
-Message-ID: <54b0e279-5eac-b304-05d0-9bc64a94cbd3@linaro.org>
-Date:   Thu, 14 Jul 2022 14:06:42 +0200
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=xFnPnpP/G7u2XnAw40xBSXDR4IKqMm4aVVQnDeJHz1g=;
+        b=tNsi389gkA4JbOhGxOQ9t9Z/aX0813VSVunqYAJKsmJFS075G/9PgLeZLI3UyCCX6R
+         yEXJSDKl5mif3gd215MulrvMopAPVUs848AdRjW/2a43/DyXChdsp0F5nXFve2pvpcKg
+         3EJymNReWJz8iQgFYIF0S/ya1ZPc02/51cUSlTES3dhmGudFz8xDcB5OaTsj9mEXtsaP
+         sV6FQPh5lhDHj+oiGyoptN9/ajBp+6bHEF7Hx1mqnFcKW0nRrzJda1dtFx2ISzdiqSjZ
+         Q9VEKELQE6cWLeHpNAzONqzj9i0rKZE5CgyRsi9ajlz3F1N61zYQs1uWI3Ks9QJy0mpZ
+         4WEw==
+X-Gm-Message-State: AJIora9XhYQoKqf4/nVKyAYKfWOkb1jt+0dMxLgksTMjsRG3Ww/4vtzx
+        R/lFh/UYJW+mCUst7tn5iTcuqDyw7VsHNSro4ISWPdCPJZN9
+X-Google-Smtp-Source: AGRyM1uHruF+JtwFguHVwlc4HWMQAzNuNdkMKcgYVJZ8aL9xJ0irTHvP+9dNr1/xZ7pAJFVuv5qMVFYjMIkQdt+beiCDmmI/JfFW
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] memory: dfl-emif: Update the dfl emif driver support
- revision 1
-Content-Language: en-US
-To:     Tianfei Zhang <tianfei.zhang@intel.com>, ssantosh@kernel.org
-Cc:     trix@redhat.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        matthew.gerlach@linux.intel.com,
-        Debarati Biswas <debaratix.biswas@intel.com>
-References: <20220713130355.196115-1-tianfei.zhang@intel.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220713130355.196115-1-tianfei.zhang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a05:6602:2c4e:b0:657:4115:d9e4 with SMTP id
+ x14-20020a0566022c4e00b006574115d9e4mr4164255iov.91.1657800505735; Thu, 14
+ Jul 2022 05:08:25 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 05:08:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000040bd4905e3c2c237@google.com>
+Subject: [syzbot] INFO: trying to register non-static key in ieee80211_do_stop
+From:   syzbot <syzbot+eceab52db7c4b961e9d6@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,28 +56,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/07/2022 15:03, Tianfei Zhang wrote:
-> From: Debarati Biswas <debaratix.biswas@intel.com>
-> 
-> The next generation (revision 1) of the DFL EMIF feature device requires
-> support for more than 4 memory banks. It does not support the selective
-> clearing of memory banks. A capability register replaces the previous
-> control register, and contains a bitmask to indicate the presence of each
-> memory bank. This bitmask aligns with the previous control register
-> bitmask that served the same purpose. The control and capability
-> registers are treated like a C Union structure in order to support both
-> the new and old revisions of the EMIF device.
-> 
-> Signed-off-by: Debarati Biswas <debaratix.biswas@intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> ---
+Hello,
 
-Thanks for the patch and for the review.
+syzbot found the following issue on:
 
-It is too late in the cycle for me to pick it up. I will take it after
-the merge window.
+HEAD commit:    b11e5f6a3a5c net: sunhme: output link status with a single..
+git tree:       net
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=108ed862080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fa95f12403a2e0d2
+dashboard link: https://syzkaller.appspot.com/bug?extid=eceab52db7c4b961e9d6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=173a7c78080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1102749a080000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+eceab52db7c4b961e9d6@syzkaller.appspotmail.com
+
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 0 PID: 3615 Comm: syz-executor630 Not tainted 5.19.0-rc5-syzkaller-00263-gb11e5f6a3a5c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ assign_lock_key kernel/locking/lockdep.c:979 [inline]
+ register_lock_class+0xf30/0x1130 kernel/locking/lockdep.c:1292
+ __lock_acquire+0x10a/0x5660 kernel/locking/lockdep.c:4932
+ lock_acquire kernel/locking/lockdep.c:5665 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+ __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+ _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:178
+ spin_lock_bh include/linux/spinlock.h:354 [inline]
+ ieee80211_do_stop+0xc3/0x1ff0 net/mac80211/iface.c:380
+ ieee80211_runtime_change_iftype net/mac80211/iface.c:1789 [inline]
+ ieee80211_if_change_type+0x383/0x840 net/mac80211/iface.c:1827
+ ieee80211_change_iface+0x57/0x3f0 net/mac80211/cfg.c:190
+ rdev_change_virtual_intf net/wireless/rdev-ops.h:69 [inline]
+ cfg80211_change_iface+0x5e1/0xf10 net/wireless/util.c:1078
+ nl80211_set_interface+0x64f/0x8c0 net/wireless/nl80211.c:4041
+ genl_family_rcv_msg_doit+0x228/0x320 net/netlink/genetlink.c:731
+ genl_family_rcv_msg net/netlink/genetlink.c:775 [inline]
+ genl_rcv_msg+0x328/0x580 net/netlink/genetlink.c:792
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
+ genl_rcv+0x24/0x40 net/netlink/genetlink.c:803
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x6eb/0x810 net/socket.c:2488
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2542
+ __sys_sendmsg net/socket.c:2571 [inline]
+ __do_sys_sendmsg net/socket.c:2580 [inline]
+ __se_sys_sendmsg net/socket.c:2578 [inline]
+ __x64_sys_sendmsg+0x132/0x220 net/socket.c:2578
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f5bf1b37b89
+Code: 28 c3 e8 5a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd682b8a38 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
 
 
-Best regards,
-Krzysztof
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

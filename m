@@ -2,112 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59F257577B
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 00:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E4D757577E
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 00:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241048AbiGNWP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 18:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
+        id S241051AbiGNWQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 18:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241042AbiGNWPX (ORCPT
+        with ESMTP id S232845AbiGNWQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 18:15:23 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E524B0C1;
-        Thu, 14 Jul 2022 15:15:22 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10c8e8d973eso4197684fac.5;
-        Thu, 14 Jul 2022 15:15:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ng3/X4PelThqjSHpCTGPAN/BVGWWlZ6hoIZsJJT4v7Y=;
-        b=F58ZWzw58v3u/Ep11tkIsNCLmim7u4IKUrhmGA4BSfnvT85un5c2mitiW4qVkQ5mXb
-         wwOafM1aLO3EfDaRiLDDeUUEoHdetODhpnK9ui4uHAvjC/QxEH2WkMSdFW2NykuDtP7i
-         YAOhLfXAsAacUoVrhR/XlZU//q/V4qja3+w+1Y8eLQYvJXG+z7VKwV3j8KKgevogjGwG
-         pyIzA2YqaL8jVUPQRLGfUqaDQLzW98UGjAzY6iqFjJb4tCoXTRITsEBJkM+o+cPIaT3m
-         hQdn11+HugzDnU3pmHrQQBMoeYkQjlTV/EA522n6EjPlIKx72kcDOuPWfYvQKkz75LP1
-         9QPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ng3/X4PelThqjSHpCTGPAN/BVGWWlZ6hoIZsJJT4v7Y=;
-        b=ZkNUUarAlMvppbPzILrZkD5+Xtf2dZUa5OelN44j1tSitOTl5FfktPMKrL1bS8sNfH
-         ViA0QXLoet+h2LlHSa5Tp9geMmqXvYvAK0ntM5BevjtDfosfuZU6IfzZGKDnF+jBCnrq
-         dBn6JFmhf/R6qugJdVtqORu81kD5S9ZxN+bVWeAXrboa7TIyfoNV0ZNQ7pFLS3oov/q2
-         9rVJAfbJKx9JHtL47uA/xepZZVhUFFOphovWBkc4BDVv9qS7mTXKS/C9567s2ZTwrOtg
-         fB6ovd6Qo6H5kl+UGIWfvXbwEjgUikhHFYZQ6lluoRQTKl3AWxl1DUNa+Zi4xvavD/x+
-         qZSg==
-X-Gm-Message-State: AJIora/21HmqtiFGaOa2u2MSyYzLHn4pE3Cbjc40WM6TXaQWWfsfNGup
-        0DRzCURSejFcwyv0xZPlRConCtDpyVHo6w==
-X-Google-Smtp-Source: AGRyM1vVXmOV/Fn33yqyYL2kv3owKqaXip641o/zmVhcrSArz5/BWplK7y5pW+xjNvqdrJrqqnZyOg==
-X-Received: by 2002:a05:6870:c353:b0:101:e7e4:9388 with SMTP id e19-20020a056870c35300b00101e7e49388mr5579381oak.45.1657836922071;
-        Thu, 14 Jul 2022 15:15:22 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id w21-20020a9d5a95000000b0061c68a35fdfsm1192880oth.9.2022.07.14.15.15.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 15:15:21 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 15:15:20 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        NeilBrown <neilb@suse.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Russell King <linux@armlinux.org.uk>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2 00/10] lib: cleanup bitmap-related headers
-Message-ID: <YtCVeOGLiQ4gNPSf@yury-laptop>
-References: <20220706174253.4175492-1-yury.norov@gmail.com>
- <CAAH8bW-OcdzetthsBanbkObVQxF1J6CiyBBnab=VXd2wcj517Q@mail.gmail.com>
+        Thu, 14 Jul 2022 18:16:41 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE394F65D;
+        Thu, 14 Jul 2022 15:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657837000; x=1689373000;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=mVQwO9QEzd5OsYdGTYrC/Ah0nwY6fA94AdPAZzAXcbU=;
+  b=I+79d2cA+gvQesOsgc2UbqGsVc2XKEKxXr/ZpyRG1sarSzcdGyd1S/ql
+   KuSQYepiHFjfMxtxR44rXF68zIIWBa8O7PnEfH9yNYeitgHsS3Ir8latf
+   prNUZUqnU8QAyLQIvprihtI8mpUWdPnTEF8QCz9eC3wWRRB1ca3zWmTnG
+   0bm2Uv3CUjgOPR9ZPB1dglIWTY8PWolESm1o4uClQxnv5PuuLt95S5WZ+
+   oUFPpno9jEkkAb6a4+TSJg5J8l54e8yBwWcUvKDp8tNvSqi9PT3AcK5ZD
+   tgUnzBpOJz5qr9lsQnMglcNaS0R9d5W7+AHy1OizWfxL1LSzBxD/ijwVj
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="311299492"
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="311299492"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 15:16:39 -0700
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="722880444"
+Received: from kputtann-mobl1.amr.corp.intel.com ([10.212.211.20])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 15:16:39 -0700
+Message-ID: <472f7fc2d44d781edb64f19f9970fe50eec79c1f.camel@linux.intel.com>
+Subject: Re: PNP0501 serial driver takes almost 2 seconds to suspend/resume
+ (printk issue)
+From:   Todd Brandt <todd.e.brandt@linux.intel.com>
+Reply-To: todd.e.brandt@linux.intel.com
+To:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Petr Mladek <pmladek@suse.com>, rafael.j.wysocki@intel.com,
+        len.brown@intel.com
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Date:   Thu, 14 Jul 2022 15:16:39 -0700
+In-Reply-To: <875yk0908j.fsf@jogness.linutronix.de>
+References: <12fb98fe27e23e3f74a139e5e8eb83a97a343372.camel@linux.intel.com>
+         <51b9e2cc3baf61a604bd239b736ec2d12f1f6695.camel@linux.intel.com>
+         <87czegxccb.fsf@jogness.linutronix.de>
+         <045ebee30af2b80aaeace1dab18ecd113e3f17c7.camel@linux.intel.com>
+         <87tu7qvx1q.fsf@jogness.linutronix.de>
+         <CAHp75VfyzMNMO2NRwXwSjAmQqBbdRG3+SzyFDG+90dmvmg1xLQ@mail.gmail.com>
+         <87o7xwbuoy.fsf@jogness.linutronix.de> <Ysvbp8vz7R9hDNqx@alley>
+         <Ysv3JNs4RwE7kAou@google.com> <87ilo1wdac.fsf@jogness.linutronix.de>
+         <c60f5634e8605cb4c2ef4646b6e511e6135bea48.camel@linux.intel.com>
+         <7d79e9877d63cdb74144f38d8736959281b562cc.camel@linux.intel.com>
+         <875yk0908j.fsf@jogness.linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAH8bW-OcdzetthsBanbkObVQxF1J6CiyBBnab=VXd2wcj517Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 09:28:21AM -0700, Yury Norov wrote:
-> On Wed, Jul 6, 2022 at 10:42 AM Yury Norov <yury.norov@gmail.com> wrote:
-> >
-> > This series unifies declarations of bitmap-related functions and aligns
-> > return types with values that actually returned. Also, it moves one-liner
-> > wrappers around cpumask functions into headers, so that compiler has a
-> > chance to optimize better.
-> >
-> > With this series, GCC 11.2 for ARM64 with kernel v5.19-rc4:
-> > add/remove: 15/7 grow/shrink: 461/164 up/down: 14844/-4580 (10264)
-> >
-> > This +10K didn't surprise me because  modern compilers are more aggressive
-> > in inlining, loop unrolling, and other techniques that increase size of
-> > the image.
-> >
-> > v1: https://lore.kernel.org/linux-mm/YsAzU3g2QpgmIGre@smile.fi.intel.com/T/
-> > v2: - Align whitespaces in headers;
-> >     - Make bitmap_weight() unsigned long consistently;
-> >     - Pick 2 patches from Ingo's sched/headers series [1] that split
-> >       linux/gfp.h, and drop my similar patch for it.
-> 
-> Ping?
+On Wed, 2022-07-13 at 23:28 +0206, John Ogness wrote:
+> On 2022-07-13, Todd Brandt <todd.e.brandt@linux.intel.com> wrote:
+> > URGENT: Removing the commit FIXES the issue.
+> >=20
+> > I just ran a 5.19.0-rc6 kernel with the offending commit removed
+> > and
+> > it fixed the problem completely on all 3 machines.
+>=20
+> I believe to have found the issue. A patch was posted to bugzilla:
+>=20
+> https://bugzilla.kernel.org/attachment.cgi?id=3D301413
+>=20
+> Please test this. Thanks.
+>=20
+> John Ogness
 
-OK, I realize that it's not the very entertaining thing to review a
-headers cleanup.
+I ran with your fix on 30 systems. On the 7 machines where this problem
+appears, the patch fixes it completely. On the 23 machines where this
+problem does not appear, there are no issues or regressions.
 
-Adding this into -next because there's no negative feedback (he-he).
+Fix verified, thank you!

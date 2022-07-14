@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F6C574EB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9D5574EBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238735AbiGNNKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
+        id S239028AbiGNNL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbiGNNK1 (ORCPT
+        with ESMTP id S231486AbiGNNLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:10:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8008A3C8C2;
-        Thu, 14 Jul 2022 06:10:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B61E62032;
-        Thu, 14 Jul 2022 13:10:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76882C34114;
-        Thu, 14 Jul 2022 13:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657804225;
-        bh=zLp/AR4ZE0g1bNDhIi5HWc7Co5fEvx2EAIPW5r/y1/Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bYaSDUY7Q+EFv6QVqj6S7nMY1JZGln25rYUefKCE2wHaj2APKXdckenaSG19kvi1b
-         h1SB13pSbU1RtrIA2Cn3h7dkBB9dHhZnN+T5yzwJ8ViRUTibsJ6S68Wy49BduMOnkl
-         B2LadR3JRmNFQFkKVlBSn6nYTpfegRGCUhu4u+tawUiDd/AOz2CxsFD2D7SHW7HY1L
-         mYOLyqcZF/fD6LYtMd9Gk0vJayAxJN9vuJg82YywMdffflEBHBSSQbJ/OyHJP32zO4
-         Ays0rindN21Qti++XyY3Ayhl8KAmoEm8VPJWRkkzEynATagP7IDHyXFcoWMOhTubzA
-         pQjbMDE4BKhHw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oBybt-0007Zh-T9; Thu, 14 Jul 2022 15:10:30 +0200
-Date:   Thu, 14 Jul 2022 15:10:29 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Stanimir Varbanov <svarbanov@mm-sol.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: qcom: Add support for modular builds
-Message-ID: <YtAVxZJZmsxjytNp@hovoldconsulting.com>
-References: <20220519094646.23009-1-johan+linaro@kernel.org>
- <cc7c90aa-6705-7493-2f58-5112f7d663a3@mm-sol.com>
+        Thu, 14 Jul 2022 09:11:25 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A363C8C1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:11:21 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id e28so2738872lfj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:11:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i3k2QX4bguOE0L7QO8kTytO481rt2YTc1m8KARAq/JE=;
+        b=OseFNQWCpneawnk6hDRAcmEjZIvGnmdYZBZowJgnKaUcQMpIn5ZycNGgemvrKty1Ky
+         nWVLsrYroWqs1jKbXnmksiWdubrPiOfzYQ/Jadkq28J49HyA2oqZxcSrNwuHFylw1tMP
+         0D0tSl58B1KULox2v9JIjxnUoihgdl/zodAm1y54fjNq3nJTJh5aQ5fTFX3O849183pI
+         2iN0/YoWII2OUuSKWES3GXfom9+SHS6HWCnsUwx2pkn5N6WnIlLheIE2p79uajKY3WFW
+         Qaw+ojqZRkbPpspf8jjzdGecNGvsKzn8V+idkD+PIY60XuTEQOD+mtlp7TerlTUmqxkr
+         M5HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i3k2QX4bguOE0L7QO8kTytO481rt2YTc1m8KARAq/JE=;
+        b=1GrAGKHDvoVyEr643F8zZcdKbrNmlsCAS+xWRKFpkQqFVIlytSlsdI/ZpAEav7belp
+         f0tGlCZkOQU27qunqaRpoAi/9sRbv2RVL9dxlzPJRyAsezioxQWzH8WIb9P57qFuY4Jn
+         0vJjEj0dC+p5/ss6cpL5zzMsPanRXOrQztsFLSI+lefdXRPd+K2MBQBq9/oSWY/FGvz4
+         q+EKALRI7ywdoIj8t+oE9eLISpYyLVuoZ6U/Gk2oxZw4Xc7lbFPHPdcMN38Qmr//5KTy
+         14b2F9fwoD0kauJf3FWVuOnO7yobwUW6BglHHb6rYhQzkUTAYW8My999u41rFJLvyccx
+         eLow==
+X-Gm-Message-State: AJIora+YEN5QwjMwGFVZ4qQ8nuCJK0+ubT3CqOMemzcEbGJ2UV+2aIlc
+        AZW72qK0G/SxLxYq9SFWVUqRJMFy0gwL/h3hdjmWbg==
+X-Google-Smtp-Source: AGRyM1uG/EcQ4xkQr2lwBmOJy5j05NRxm363QEGm3+XpW5ztY9XxmPCK2hQgTdMeJgU3mUt6QlIChrPlb/72n9Yjrg8=
+X-Received: by 2002:a05:6512:398d:b0:489:c7a2:be6f with SMTP id
+ j13-20020a056512398d00b00489c7a2be6fmr4987221lfu.11.1657804279347; Thu, 14
+ Jul 2022 06:11:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cc7c90aa-6705-7493-2f58-5112f7d663a3@mm-sol.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220710230603.13526-1-semen.protsenko@linaro.org>
+ <20220710230603.13526-5-semen.protsenko@linaro.org> <9eb795cd-999b-73e5-2eeb-c123b1d05a34@arm.com>
+In-Reply-To: <9eb795cd-999b-73e5-2eeb-c123b1d05a34@arm.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Thu, 14 Jul 2022 16:11:07 +0300
+Message-ID: <CAPLW+4=QOv_gAov2KHC4zR881CV3igESMH5JU7XgLbDLS8UNAg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] iommu/exynos: Use lookup based approach to access registers
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Janghyuck Kim <janghyuck.kim@samsung.com>,
+        Cho KyongHo <pullip.cho@samsung.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        David Virag <virag.david003@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,37 +75,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 03:19:49PM +0300, Stanimir Varbanov wrote:
-> Hi Johan,
-> 
-> Please take a look why we made it built-in first [1].
-> 
-> If arguments there are still valid I don't see why to make it a module
-> again.
+On Tue, 12 Jul 2022 at 19:24, Robin Murphy <robin.murphy@arm.com> wrote:
 
-Yeah, I've seen that patch, and many just like that one by the same
-author, and I don't think the arguments spelled out there are valid.
+[snip]
 
-Sure, the Kconfig symbol for this driver was bool at the time so the
-remove() code could not have received much testing, but the patch
-ignores the fact that preventing drivers to be built as modules is
-detrimental to multi-platform builds (e.g. Android GKI).
+> > No functional change here, just a refactoring patch.
+>
+> FWIW I'd say that this absolutely *is* a functional change. Achieving
+> the same end result, but fundamentally changing the mechanism used to
+> get there, is a bit different to simply moving code around.
+>
 
-As I mention in passing below, being able to build a driver as a module
-is also really useful during development. Not least to be able to test
-power-sequencing and making sure that you're not unknowingly relying on
-boot firmware to have set things up for you.
+As I understand, usually the "functional change" means some change
+that can be observed from the user's point of view (i.e. user of this
+driver). But ok, I'll clarify this bit in the commit message.
 
-> [1] https://lkml.org/lkml/2016/8/24/694
-> 
-> On 5/19/22 12:46, Johan Hovold wrote:
-> > Allow the Qualcomm PCIe controller driver to be built as a module, which
-> > is useful for multi-platform kernels as well as during development.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  drivers/pci/controller/dwc/Kconfig     |  2 +-
-> >  drivers/pci/controller/dwc/pcie-qcom.c | 36 +++++++++++++++++++++++---
-> >  2 files changed, 34 insertions(+), 4 deletions(-)
+[snip]
 
-Johan
+> > +/*
+> > + * Some SysMMU versions might not implement some registers from this set, thus
+> > + * those registers shouldn't be accessed. Set the offsets for those registers to
+> > + * 0x1 to trigger an unaligned access exception, which can help one to debug
+> > + * related issues.
+> > + */
+> > +static const unsigned int sysmmu_regs[MAX_REG_SET][MAX_REG_IDX] = {
+>
+> Do we really need MAX_REG_SET? Maybe there's a consistency argument, I
+> guess :/
+>
+
+Here and below: I reworked the register table using approach suggested
+by Krzysztof, so those enums won't be present in v2 at all.
+
+> > +     /* SysMMU v1..v3 */
+> > +     {
+> > +             0x00, 0x04, 0x08, 0x14, 0x0c, 0x10, 0x1, 0x1, 0x1,
+> > +             0x18, 0x1c,
+>
+> This looks fragile and unnecessarily difficult to follow and maintain -
+> designated initialisers would be a lot better in all respects, i.e.:
+>
+>         [REG_SET_V1] = {
+>                 ...
+>                 [IDX_PT_BASE] = REG_PT_BASE_ADDR,
+>                 ...
+>
+> etc.
+>
+
+[snip]
+
+> >   static void __sysmmu_tlb_invalidate_entry(struct sysmmu_drvdata *data,
+> > @@ -317,31 +348,33 @@ static void __sysmmu_tlb_invalidate_entry(struct sysmmu_drvdata *data,
+> >
+> >       if (MMU_MAJ_VER(data->version) < 5) {
+> >               for (i = 0; i < num_inv; i++) {
+> > -                     writel((iova & SPAGE_MASK) | 1,
+> > -                                  data->sfrbase + REG_MMU_FLUSH_ENTRY);
+> > +                     sysmmu_write(data, IDX_FLUSH_ENTRY,
+> > +                                  (iova & SPAGE_MASK) | 0x1);
+> >                       iova += SPAGE_SIZE;
+> >               }
+> >       } else {
+> >               if (num_inv == 1) {
+>
+> You could merge this condition into the one above now. That much I'd
+> call non-functional refactoring ;)
+>
+
+Done, thanks.
+
+[snip]
+
+> > +
+> > +static void sysmmu_get_hw_info(struct sysmmu_drvdata *data)
+> > +{
+>
+> Seems a bit unnecessary to split the call up like this - I'd say the
+> register set is fundamentally connected to the version, and
+> "get_hw_info" is even less meaningfully descriptive than just having
+> "get_version" take care of one more assignment, but hey ho, it's not my
+> driver.
+>
+
+Guess I was looking into downstream vendor's kernel too much :) They
+do a bit more things in this function -- like getting TLBs number and
+"no block mode" capability; that's why I renamed it. Anyway, don't
+have a strong opinion on this one, will use the old name in v2.
+
+Thanks for the review!
+
+> Thanks,
+> Robin.

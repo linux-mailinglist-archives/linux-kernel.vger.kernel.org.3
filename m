@@ -2,105 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7C0575726
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A63F575728
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240513AbiGNVpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 17:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
+        id S238657AbiGNVrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 17:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiGNVpo (ORCPT
+        with ESMTP id S229984AbiGNVrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 17:45:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37216F7C0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:45:43 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oC6eU-0008JV-3X; Thu, 14 Jul 2022 23:45:42 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oC6eT-000zKG-5p; Thu, 14 Jul 2022 23:45:41 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oC6eS-005Djk-F7; Thu, 14 Jul 2022 23:45:40 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] pcmcia: sa1100: Make sa11x0_drv_pcmcia_legacy_remove() return void
-Date:   Thu, 14 Jul 2022 23:45:34 +0200
-Message-Id: <20220714214534.63517-1-u.kleine-koenig@pengutronix.de>
+        Thu, 14 Jul 2022 17:47:19 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D1E6F7C8;
+        Thu, 14 Jul 2022 14:47:18 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id z1so1583113plb.1;
+        Thu, 14 Jul 2022 14:47:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/JBraEEF7Pi/rPUlvSul3up/f1rkIrFL2lXpXxABUjo=;
+        b=lscc9nAaqk/gLbSr2XL8YrPRs/zyT8T4SiE+UzcwyfJZDejV2V03/Ceml36zOXDw2j
+         GSw5Bz+NY1ohcFs2Y+SbhIHhCmrrBRefc9Ctq2tTml3QpKdab/V6fYGRGmiVrgBUngI1
+         99Q4DNc0rMuLLiHGkogfp/rrBqI7OQKuhgDfVe9wNw9mtmWkUZ0MuZBbsOMzAVRzGvLD
+         9xrGld/ogqVffulMZ1eEaY/hE23kNAH0MTXlQDS3QZykMAvUoMSZwpUr0kXvMYTo6mw+
+         feoN81IqGiQNmpkPgcbCkP6v7rV2i5qe9SRfa03yGMJNePPiSyC36JkgtWtmZHn9FToR
+         7dKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/JBraEEF7Pi/rPUlvSul3up/f1rkIrFL2lXpXxABUjo=;
+        b=6QwXP10Cr/vxxjLJSZ/JduPHFicz+Gs1pjFXtD0jKhHC6YW+vjazKoiGDCyOkl0YtC
+         1/Hl+aLEdkqCOEt5hPwpXjeUFVoaZ9UkiaShQfLRWUQk+J3wFZkk688aPqMzAUjllg/u
+         vfdWnISFLvOf5rlQ++3rAbeB/yx9z2YiewUyJ0E3vQmj+fdWPM3UwyBWHpgI5+G0zl5k
+         Rz9NV42wyjoGfa8A+IvUZYkdAfdlr7b99x04mEdiEisMlLTcN3hVdSQkMYqcDp4/ABBY
+         vgU3sO8I2Atm8tKlVflU/tAOgE2xVhq7HSzBikqjJx7yAvWZd+b2SfDewhMUzIPRk5/F
+         vREA==
+X-Gm-Message-State: AJIora8Sqxb2/rc66bp0RsaYxKzplpdwEWRVDzMdarjEddkfoJy5oRNi
+        GVsOkqKEu6tM1brXZFI8tNYzK5aks4UKjQ==
+X-Google-Smtp-Source: AGRyM1v5QC4ANKVLVpkPuuJcTPGQopcKs4QNjHemdLKq1UTYUTez/Vz/d5mLTfj3qgv8jyrxm1KP0A==
+X-Received: by 2002:a17:90b:3c07:b0:1f0:eab4:79e4 with SMTP id pb7-20020a17090b3c0700b001f0eab479e4mr3015352pjb.186.1657835237487;
+        Thu, 14 Jul 2022 14:47:17 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id v21-20020a17090ac91500b001f113765d48sm145572pjt.2.2022.07.14.14.47.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 14:47:17 -0700 (PDT)
+From:   Stafford Horne <shorne@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Stafford Horne <shorne@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org
+Subject: [RFC PATCH 0/2] Updates for asm-generic/pci.h
+Date:   Fri, 15 Jul 2022 06:46:55 +0900
+Message-Id: <20220714214657.2402250-1-shorne@gmail.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1617; h=from:subject; bh=/KOsnQwcJQVul4wMzQAkJkQgZTHjXHM4GxuzMgZHL1U=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi0I569TxNv3HYoElZc4+pNv/N2YOMXVuT93gDKAID G4FwQDaJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYtCOegAKCRDB/BR4rcrsCRTyCA CgnIgi+VonYXuvbkCdcqh+cyc24vNYs8Q5lIsEQQfymaN6V2G5tk82VmjclsN5LjRkFIRWTfoEOFfP yHUtm2UDzJaJmX1IXYO1zVOeibblusd7KGaO+uDevXb2QU8+hogcWwK4ybFvJVgeNCg1tyfIaHomOe 0vfsO+6vmEe6OULTq+rQBagUF0hvvu3SUIXc8sLQvP+c8K8KvKqB78cibJE3+9toA49/rXE5fCXs0j ozBeO31236HRaLx4som/DnP0rtzmdratSUXT19p3eUyEjSh4ffCWcVMvsS5Z7V3Mxpg/UDnctkZS/3 tq7zAPCdnkhZ0Z/feC0x9Ps6pe8hnl
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sa11x0_drv_pcmcia_legacy_remove() returns zero unconditionally. Letting it
-return void instead makes it easier to see in the caller that there is no
-error to handle.
+When reviewing the OpenRISC PCI support patch Arnd suggested that
+we avoid copying arm64 and riscv asm/pci.h and moving that to be
+the new asm-generic/pci.h.
 
-This is a preparation for making platform remove callbacks return void.
+This patch does that by first moving the old pci.h definition
+of pci_get_legacy_ide_irq out to the architectures that use it.
+Next, we create the new pci.h definition.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/pcmcia/sa1100_generic.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Stafford Horne (2):
+  asm-generic: Remove pci.h copying code out to architectures
+  asm-generic: Add new pci.h and use it
 
-diff --git a/drivers/pcmcia/sa1100_generic.c b/drivers/pcmcia/sa1100_generic.c
-index 47b060c57418..c2b6e828c2c6 100644
---- a/drivers/pcmcia/sa1100_generic.c
-+++ b/drivers/pcmcia/sa1100_generic.c
-@@ -125,7 +125,7 @@ static int sa11x0_drv_pcmcia_legacy_probe(struct platform_device *dev)
- 	return ret;
- }
- 
--static int sa11x0_drv_pcmcia_legacy_remove(struct platform_device *dev)
-+static void sa11x0_drv_pcmcia_legacy_remove(struct platform_device *dev)
- {
- 	struct skt_dev_info *sinfo = platform_get_drvdata(dev);
- 	int i;
-@@ -134,8 +134,6 @@ static int sa11x0_drv_pcmcia_legacy_remove(struct platform_device *dev)
- 
- 	for (i = 0; i < sinfo->nskt; i++)
- 		soc_pcmcia_remove_one(&sinfo->skt[i]);
--
--	return 0;
- }
- 
- static int sa11x0_drv_pcmcia_probe(struct platform_device *pdev)
-@@ -167,8 +165,10 @@ static int sa11x0_drv_pcmcia_remove(struct platform_device *dev)
- {
- 	struct soc_pcmcia_socket *skt;
- 
--	if (dev->id == -1)
--		return sa11x0_drv_pcmcia_legacy_remove(dev);
-+	if (dev->id == -1) {
-+		sa11x0_drv_pcmcia_legacy_remove(dev);
-+		return 0;
-+	}
- 
- 	skt = platform_get_drvdata(dev);
- 
+ arch/alpha/include/asm/pci.h   |  1 -
+ arch/arm64/include/asm/pci.h   | 18 ++-----------
+ arch/csky/include/asm/pci.h    | 24 +++--------------
+ arch/ia64/include/asm/pci.h    |  1 -
+ arch/m68k/include/asm/pci.h    |  7 +++--
+ arch/powerpc/include/asm/pci.h |  1 -
+ arch/riscv/include/asm/pci.h   | 25 +++--------------
+ arch/s390/include/asm/pci.h    |  6 ++++-
+ arch/sparc/include/asm/pci.h   |  5 +++-
+ arch/um/include/asm/pci.h      | 24 ++---------------
+ arch/x86/include/asm/pci.h     |  6 +++--
+ arch/xtensa/include/asm/pci.h  |  6 +++--
+ include/asm-generic/pci.h      | 49 +++++++++++++++++++++++++---------
+ 13 files changed, 69 insertions(+), 104 deletions(-)
 
-base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 -- 
 2.36.1
 

@@ -2,126 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EACA05751C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095545751CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240185AbiGNP1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
+        id S240233AbiGNP2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240192AbiGNP1X (ORCPT
+        with ESMTP id S240163AbiGNP2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:27:23 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16CA474C8
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:27:21 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id z1so711076plb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:27:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HI9CgNWKgeW7231dCtqDTX0fqqchygptoI0IPLenPck=;
-        b=e2QCE6urif/v2vTYEnvTvWpG3mdbVuUdheNQ8U6ByRWeKrbSH3KdcZLbXXwJ/3KQqm
-         jdFhhuFZ1mIn+1x4Cmb+UQu7YuQRJPfpXo4ce7GkPS7/faKIhAUpd4rn2NlyQF3M0rLG
-         cyNJde73IBC8abl+ufVa0BinXByGg1iKiEP3TTl0cfoQyG4KbDGA374S0AGEew9MpXKi
-         vJiB7SyRp1ylrxb9Plxv91HsSVf/KKi48odD9fI/uncag5qYQ86IVHNfRBa+Jh/mVkb0
-         sVCZPSCFIGLWqH5+IboInA9ejoSfureqUNRantXNf+JjrX+3ur22EiYc6JoDP70pPd7m
-         1E0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HI9CgNWKgeW7231dCtqDTX0fqqchygptoI0IPLenPck=;
-        b=nCMG4bpMthafitoVh8x7BaithseihqE2VFMEW6zF15TJVSdiOeGlAxlxADzh1w5v/n
-         2zbks0tb+aNYBZ1LLAKpvi+g/VHAYiMLdqCIUpvuVJYdz36S/sUe6fcwHyz8T1rvw0qm
-         ZWhGfkIFYSnLLv9/fyTdJALD1UM89MBcQRqwgJTexVk1/W3BY4+NS1+Qph0OkIqQoQrU
-         bXxDkoBm4cXrw5DgrOINKggc44YoM6WMJNst8jG/HCxeY/p9pVNLpqswYYo6XBJa6Z9v
-         E79RvZcMOjzTMbXIPcXk3NQldhVmoLI0rVzZJ9qZOvZ8LzmkaVnu3rIr4SCLEPPp7U8R
-         j1KA==
-X-Gm-Message-State: AJIora9RNKCCfgOrQJ/uhOmUz0gkYZjIp4sKQLyMxcZrkNeZ+7lNvS8X
-        G4POPeTRoIT39VCNyrZxNWuUwg==
-X-Google-Smtp-Source: AGRyM1up4WSZl6YMWYTzJzSHE6AZ9dtjfL4oS6Irek7Mq6UdWej33SDmamidR9vXa335CphMOwqBbA==
-X-Received: by 2002:a17:90b:1bc1:b0:1f0:3830:8c99 with SMTP id oa1-20020a17090b1bc100b001f038308c99mr17029550pjb.1.1657812441261;
-        Thu, 14 Jul 2022 08:27:21 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id c11-20020a170902d48b00b0016bfe9ab1f3sm1626758plg.36.2022.07.14.08.27.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 08:27:20 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 15:27:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v2 0/9] KVM: x86/MMU: Optimize disabling dirty logging
-Message-ID: <YtA11dFqXG6Ou5WE@google.com>
-References: <20220321224358.1305530-1-bgardon@google.com>
- <dba0ecc8-90ae-975f-7a27-3049d6951ba0@redhat.com>
- <YszQcBy1RwGmkkht@google.com>
- <52ef13d4-068d-bd2c-11aa-c7053798aee9@redhat.com>
+        Thu, 14 Jul 2022 11:28:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEA5491D1;
+        Thu, 14 Jul 2022 08:28:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D70AB82158;
+        Thu, 14 Jul 2022 15:28:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0311EC34114;
+        Thu, 14 Jul 2022 15:28:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657812506;
+        bh=UHVTNSkCzm9DDuuxFuLvHdAZaBjHmgSYbC8odP2+tjU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WN5r76BtwY0MWpvAzNouauJ36nIJdUe3J3D9U3YuoFwWcSlPNUEOEyQFIlm49oMEm
+         RpbpkOA8YSyYMZeI1T6orbzLMZhLoapUjrTNtNpcMapaJ87Treo9S3/2NSQY12HJFK
+         NA60GY604csUi4goXEU+fTvOFFh3519MoEv3cYvA=
+Date:   Thu, 14 Jul 2022 17:28:23 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
+ probed properly
+Message-ID: <YtA2FwnL9GRUU35i@kroah.com>
+References: <1657810516-31143-1-git-send-email-quic_kriskura@quicinc.com>
+ <YtAv8R7QlTZCjvRO@kroah.com>
+ <2938c8ff-ecc6-0a6e-6011-f83f3e3fbaa1@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <52ef13d4-068d-bd2c-11aa-c7053798aee9@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2938c8ff-ecc6-0a6e-6011-f83f3e3fbaa1@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022, Paolo Bonzini wrote:
-> On 7/12/22 03:37, Sean Christopherson wrote:
-> > This fell through the cracks.  Ben is on a long vacation, I'll find my copy of
-> > the Necronomicon and do a bit of resurrection, and address the feedback from v2
-> > along the way.
+On Thu, Jul 14, 2022 at 08:39:31PM +0530, Krishna Kurapati PSSNV wrote:
 > 
-> This was superseded by the simple patch to zap only the leaves I think?
+> On 7/14/2022 8:32 PM, Greg Kroah-Hartman wrote:
+> > On Thu, Jul 14, 2022 at 08:25:16PM +0530, Krishna Kurapati wrote:
+> > > On SC7180 devices, it is observed that dwc3 probing is deferred
+> > > because device_links_check_suppliers() finds that '88e3000.phy'
+> > > isn't ready yet.
+> > > 
+> > > As a part of its probe call, dwc3-qcom driver checks if dwc3 core
+> > > is wakeup capable or not. If the dwc3 core is wakeup capable, driver
+> > > configures dwc-qcom's power domain to be always ON. Also it configures
+> > > dp/dm interrupts accordingly to support wakeup from system suspend.
+> > > 
+> > > More info regarding the same can be found at:
+> > > commit d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller status"
+> > > commit 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
+> > > 
+> > > In the event, dwc3 probe gets deferred and is processed after dwc3-qcom
+> > > probe, driver ends up reading the wakeup capability of dwc3 core as false
+> > > leading to instability in suspend/resume path.
+> > > 
+> > > To avoid this scenario, ensure dwc3_probe is successful by checking
+> > > if appropriate driver is assigned to it or not after the of_platform_populate
+> > > call. If it isn't then defer dwc3-qcom probe as well.
+> > > 
+> > > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > > ---
+> > >   drivers/usb/dwc3/dwc3-qcom.c | 3 +++
+> > >   1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> > > index 7703655..096d1414 100644
+> > > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > > @@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
+> > >   		dev_err(dev, "failed to get dwc3 platform device\n");
+> > >   	}
+> > > +	if (!qcom->dwc3->dev.driver)
+> > > +		return -EPROBE_DEFER;
+> > > +
+> > Why not limit this check to a device type like your changelog mentions?
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> Hi Greg,
+> 
+> I wanted to make it common to any device using this driver. Although on
+> devices
+> ike SC7280,this issue is not seen but the code would hold good. Do you see
+> any
+> concerns if we do it this way ?
 
-Ah, right you are, commit 5ba7c4c6d1c7 ("KVM: x86/MMU: Zap non-leaf SPTEs when
-disabling dirty logging").  I got somewhat confused because there's a stale comment
-above the inner helper:
+How many different types of hardware did you test this change on and
+what was the results?
 
-	/*
-	 * Clear leaf entries which could be replaced by large mappings, for
-	 * GFNs within the slot.
-	 */
+thanks,
 
-If we drop the "only refcounted struct pages can be huge" requirement, then the
-flow becomes much simpler as there's no need to recurse down to the leafs only to
-step back up:
-
-	for_each_tdp_pte_min_level(iter, root, PG_LEVEL_2M, start, end) {
-retry:
-		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
-			continue;
-
-		if (!is_shadow_present_pte(iter.old_spte))
-			continue;
-
-		/*
-		 * Don't zap leaf SPTEs, if a leaf SPTE could be replaced with
-		 * a large page size, then its parent would have been zapped
-		 * instead of stepping down.
-		 */
-		if (is_last_spte(iter.old_spte, iter.level))
-			continue;
-
-		max_mapping_level = kvm_mmu_max_mapping_level(kvm, slot,
-							      iter.gfn, PG_LEVEL_NUM);
-		if (max_mapping_level <= iter.level)
-			continue;
-
-		/* Note, a successful atomic zap also does a remote TLB flush. */
-		if (tdp_mmu_zap_spte_atomic(kvm, &iter))
-			goto retry;
-	}
+greg k-h

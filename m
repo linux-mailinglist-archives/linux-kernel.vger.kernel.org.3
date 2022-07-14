@@ -2,315 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AA6574F5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAB9574F61
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239755AbiGNNjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        id S239806AbiGNNjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239586AbiGNNjD (ORCPT
+        with ESMTP id S232196AbiGNNjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:39:03 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B46619035
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:39:02 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VJJnnTC_1657805937;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VJJnnTC_1657805937)
-          by smtp.aliyun-inc.com;
-          Thu, 14 Jul 2022 21:38:59 +0800
-Date:   Thu, 14 Jul 2022 21:38:57 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/16] erofs: prepare for folios, duplication and kill
- PG_error
-Message-ID: <YtAcceR/K/2eFqN4@B-P7TQMD6M-0146.local>
-References: <20220714132051.46012-1-hsiangkao@linux.alibaba.com>
+        Thu, 14 Jul 2022 09:39:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E1B4958D;
+        Thu, 14 Jul 2022 06:39:50 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 994FE1CE2;
+        Thu, 14 Jul 2022 06:39:50 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.26.139])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F9283F73D;
+        Thu, 14 Jul 2022 06:39:48 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 14:39:40 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Aishwarya TCV <Aishwarya.TCV@arm.com>
+Subject: Re: FVP: kernel BUG at arch/arm64/kernel/traps.c:497 - Internal
+ error: Oops - BUG: 0
+Message-ID: <YtAcW9DRrdun/pW9@FVFF77S0Q05N.cambridge.arm.com>
+References: <CA+G9fYtOX-6=f70FA5PuDVA=kX=2L4spXKXS8=LHkUphafXowg@mail.gmail.com>
+ <Ys1g8PH4M2W7Z50U@sirena.org.uk>
+ <CA+G9fYu7mJ6X3_xhboODP_cjABE4QTJCON_NMduQ60x4Z7N78Q@mail.gmail.com>
+ <Ys/9TSV5muvKXN6W@FVFF77S0Q05N>
+ <YtABEDylGJkYLXrJ@sirena.org.uk>
+ <YtASzuHo1MXe5LJH@FVFF77S0Q05N.cambridge.arm.com>
+ <YtAU1AHLLgK/v7RP@FVFF77S0Q05N.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8p0f8rH78wjnSdC4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220714132051.46012-1-hsiangkao@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YtAU1AHLLgK/v7RP@FVFF77S0Q05N.cambridge.arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---8p0f8rH78wjnSdC4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-On Thu, Jul 14, 2022 at 09:20:35PM +0800, Gao Xiang wrote:
-> Hi folks,
+On Thu, Jul 14, 2022 at 02:06:28PM +0100, Mark Rutland wrote:
+ 
+> ... and I've just reproduced the issue by running the script from a different
+> directory, since apprarently the semihosting interface just grabs the file from
+> the current directory.
 > 
-> I've been doing this for almost 2 months, the main point of this is
-> to support large folios and rolling hash deduplication for compressed
-> data.
-> 
-> This patchset is as a start of this work targeting for the next 5.20,
-> it introduces a flexable range representation for (de)compressed buffers
-> instead of too relying on page(s) directly themselves, so large folios
-> can laterly base on this work.  Also, this patchset gets rid of all
-> PG_error flags in the decompression code. It's a cleanup as a result
-> as well.
-> 
-> In addition, this patchset kicks off rolling hash deduplication for
-> compressed data by introducing fully-referenced multi-reference
-> pclusters first instead of reporting fs corruption if one pcluster
-> is introduced by several differnt extents.  The full implementation
-> is expected to be finished in the merge window after the next.  One
-> of my colleagues is actively working on the userspace part of this
-> feature.
-> 
-> However, it's still easy to verify fully-referenced multi-reference
-> pcluster by constructing some image by hand (see attachment):
-> 
-> Dataset: 300M
-> seq-read (data-deduplicated, read_ahead_kb 8192): 1095MiB/s
-> seq-read (data-deduplicated, read_ahead_kb 4096): 771MiB/s
-> seq-read (data-deduplicated, read_ahead_kb 512):  577MiB/s
-> seq-read (vanilla, read_ahead_kb 8192):         364MiB/s
-> 
+> I'm pretty sure this means that *something* is clobbering the Image early on
+> during boot, and the semihisting loading happens to refresh it.
 
-Testdata above as attachment for reference.
+I had a go with my own kernel built from my arm64/traps/rework branch:
+  
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/traps/rework
 
---8p0f8rH78wjnSdC4
-Content-Type: application/octet-stream
-Content-Disposition: attachment; filename="pat.erofs.xz"
-Content-Transfer-Encoding: base64
+... and Naresh's config:
 
-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
-AgAAAAAEWVo=
+  https://builds.tuxbuild.com/2BnQMpJj3kDTJXoCwd2pY5gW9CN/config
 
---8p0f8rH78wjnSdC4--
+When *only* using the initial loading into memory, that blows up in stackdepot
+and with a subsequent bogus pointer dereference (full log below), and when
+loaded via semihosting that just works. Note that my kernel is based on the
+arm64 for-next/core branch, which itself is based on v5.19-rc3.
+
+My failing kernel Image is ~47M, as is Naresh's original Image. When using
+smaller Images (as large as 43M so far), I don't see any issues.
+
+I also note that if I enable KASAN_OUTLINE, the kernel is so big that it
+clobbers the DTB, and cannot be booted. So this looks liek a problem with tha
+arbitrary placement / limits chosen for U-Boot being too small, and this is not
+a kernel bug.
+
+Naresh, please can you fix your boot flow before reporting any further issues?
+This sort of corruption will manifest in a number of ways, and we need to rule
+that out for any other bug reports.
+
+Thanks,
+Mark.
+
+---->8----
+
+[mark@lakrids:~]% telnet localhost 5000
+Trying ::1...
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+NOTICE:  Booting Trusted Firmware
+NOTICE:  BL1: v2.5(debug):v2.5
+NOTICE:  BL1: Built : 09:39:44, Apr  8 2022
+INFO:    BL1: RAM 0x4035000 - 0x403c000
+INFO:    Loading image id=31 at address 0x4001010
+INFO:    Image id=31 loaded: 0x4001010 - 0x40011e8
+INFO:    FCONF: Config file with image ID:31 loaded at address = 0x4001010
+INFO:    Loading image id=24 at address 0x4001300
+INFO:    Image id=24 loaded: 0x4001300 - 0x400156c
+INFO:    FCONF: Config file with image ID:24 loaded at address = 0x4001300
+INFO:    BL1: Loading BL2
+INFO:    Loading image id=1 at address 0x4022000
+INFO:    Image id=1 loaded: 0x4022000 - 0x402a779
+NOTICE:  BL1: Booting BL2
+INFO:    Entry point address = 0x4022000
+INFO:    SPSR = 0x3c5
+INFO:    FCONF: Reading FW_CONFIG firmware configuration file from: 0x4001010
+INFO:    FCONF: Reading firmware configuration information for: dyn_cfg
+INFO:    FCONF: Reading TB_FW firmware configuration file from: 0x4001300
+NOTICE:  BL2: v2.5(debug):v2.5
+NOTICE:  BL2: Built : 08:01:44, May  2 2022
+INFO:    BL2: Doing platform setup
+INFO:    Configuring TrustZone Controller
+INFO:    Total 4 regions set.
+INFO:    BL2: Loading image id 3
+INFO:    Loading image id=3 at address 0x4003000
+INFO:    Image id=3 loaded: 0x4003000 - 0x401623c
+INFO:    BL2: Loading image id 23
+INFO:    Loading image id=23 at address 0x82000000
+INFO:    Image id=23 loaded: 0x82000000 - 0x82002348
+INFO:    BL2: Loading image id 25
+INFO:    Loading image id=25 at address 0x4001300
+INFO:    Image id=25 loaded: 0x4001300 - 0x4001348
+INFO:    BL2: Loading image id 5
+INFO:    Loading image id=5 at address 0x88000000
+INFO:    Image id=5 loaded: 0x88000000 - 0x8807fb28
+INFO:    BL2: Loading image id 27
+INFO:    Loading image id=27 at address 0x80000000
+INFO:    Image id=27 loaded: 0x80000000 - 0x80000048
+NOTICE:  BL1: Booting BL31
+INFO:    Entry point address = 0x4003000
+INFO:    SPSR = 0x3cd
+INFO:    FCONF: Reading HW_CONFIG firmware configuration file from: 0x82000000
+INFO:    FCONF: Reading firmware configuration information for: cpu_timer
+INFO:    FCONF: Reading firmware configuration information for: uart_config
+INFO:    FCONF: Reading firmware configuration information for: topology
+INFO:    FCONF: Reading firmware configuration information for: gicv3_config
+NOTICE:  BL31: v2.5(debug):v2.5
+NOTICE:  BL31: Built : 08:01:44, May  2 2022
+INFO:    GICv3 with legacy support detected.
+INFO:    ARM GICv3 driver initialized in EL3
+INFO:    Maximum SPI INTID supported: 255
+INFO:    BL31: Initializing runtime services
+INFO:    BL31: Preparing for EL3 exit to normal world
+INFO:    Entry point address = 0x88000000
+INFO:    SPSR = 0x3c9
+
+
+U-Boot 2021.04-dirty (May 02 2022 - 08:04:14 +0000) vexpress_aemv8a
+
+DRAM:  4 GiB
+Flash: 64 MiB
+*** Warning - bad CRC, using default environment
+
+In:    serial_pl01x
+Out:   serial_pl01x
+Err:   serial_pl01x
+Net:   SMC91111-0
+Hit any key to stop autoboot:  0
+smh_open: ERROR fd -1 for file 'boot.img'
+smh_open: ERROR fd -1 for file 'Image'
+smh_open: ERROR fd -1 for file 'devtree.dtb'
+smh_open: ERROR fd -1 for file 'ramdisk.img'
+fdt - flattened device tree utility commands
+
+Usage:
+fdt addr [-c]  <addr> [<length>]   - Set the [control] fdt location to <addr>
+fdt move   <fdt> <newaddr> <length> - Copy the fdt to <addr> and make it active
+fdt resize [<extrasize>]            - Resize fdt to size + padding to 4k addr + some optional <extrasize> if needed
+fdt print  <path> [<prop>]          - Recursive print starting at <path>
+fdt list   <path> [<prop>]          - Print one level starting at <path>
+fdt get value <var> <path> <prop>   - Get <property> and store in <var>
+fdt get name <var> <path> <index>   - Get name of node <index> and store in <var>
+fdt get addr <var> <path> <prop>    - Get start address of <property> and store in <var>
+fdt get size <var> <path> [<prop>]  - Get size of [<property>] or num nodes and store in <var>
+fdt set    <path> <prop> [<val>]    - Set <property> [to <val>]
+fdt mknode <path> <node>            - Create a new node after <path>
+fdt rm     <path> [<prop>]          - Delete the node or <property>
+fdt header [get <var> <member>]     - Display header info
+                                      get - get header member <member> and store it in <var>
+fdt bootcpu <id>                    - Set boot cpuid
+fdt memory <addr> <size>            - Add/Update memory node
+fdt rsvmem print                    - Show current mem reserves
+fdt rsvmem add <addr> <size>        - Add a mem reserve
+fdt rsvmem delete <index>           - Delete a mem reserves
+fdt chosen [<start> <end>]          - Add/update the /chosen branch in the tree
+                                        <start>/<end> - initrd start/end addr
+NOTE: Dereference aliases by omitting the leading '/', e.g. fdt print ethernet0.
+Moving Image from 0x80080000 to 0x80200000, end=83120000
+## Flattened Device Tree blob at 86000000
+   Booting using the fdt blob at 0x86000000
+   Using Device Tree in place at 0000000086000000, end 0000000086005fff
+
+Starting kernel ...
+
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd0f0]
+[    0.000000] Linux version 5.19.0-rc3-00132-g647529cd3b65 (mark@lakrids) (aarch64-linux-gcc (GCC) 11.3.0, GNU ld (GNU Binutils) 2.38) #1 SMP PREEMPT Thu Jul 14 14:21:33 BST 2022
+[    0.000000] Machine model: FVP Base RevC
+[    0.000000] earlycon: pl11 at MMIO 0x000000001c090000 (options '')
+[    0.000000] printk: bootconsole [pl11] enabled
+[    0.000000] efi: UEFI not found.
+[    0.000000] Reserved memory: created DMA memory pool at 0x0000000018000000, size 8 MiB
+[    0.000000] OF: reserved mem: initialized node vram@18000000, compatible id shared-dma-pool
+[    0.000000] NUMA: No NUMA configuration found
+[    0.000000] NUMA: Faking a node at [mem 0x0000000080000000-0x00000008ffffffff]
+[    0.000000] NUMA: NODE_DATA [mem 0x8ff7f6b40-0x8ff7f8fff]
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000080000000-0x00000000ffffffff]
+[    0.000000]   DMA32    empty
+[    0.000000]   Normal   [mem 0x0000000100000000-0x00000008ffffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080000000-0x00000000feffffff]
+[    0.000000]   node   0: [mem 0x0000000880000000-0x00000008ffffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000008ffffffff]
+[    0.000000] On node 0, zone Normal: 4096 pages in unavailable ranges
+[    0.000000] cma: Reserved 32 MiB at 0x00000000fd000000
+[    0.000000] psci: probing for conduit method from DT.
+[    0.000000] psci: PSCIv1.1 detected in firmware.
+[    0.000000] psci: Using standard PSCI v0.2 function IDs
+[    0.000000] psci: MIGRATE_INFO_TYPE not supported.
+[    0.000000] psci: SMC Calling Convention v1.2
+[    0.000000] percpu: Embedded 30 pages/cpu s82792 r8192 d31896 u122880
+[    0.000000] pcpu-alloc: s82792 r8192 d31896 u122880 alloc=30*4096
+[    0.000000] pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 [0] 4 [0] 5 [0] 6 [0] 7
+[    0.000000] Detected PIPT I-cache on CPU0
+[    0.000000] CPU features: detected: Branch Target Identification
+[    0.000000] CPU features: detected: Address authentication (IMP DEF algorithm)
+[    0.000000] CPU features: detected: GIC system register CPU interface
+[    0.000000] CPU features: detected: Virtualization Host Extensions
+[    0.000000] CPU features: detected: Hardware dirty bit management
+[    0.000000] alternatives: patching kernel code
+[    0.000000] Fallback order for Node 0: 0
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 1028096
+[    0.000000] Policy zone: Normal
+[    0.000000] Kernel command line: console=ttyAMA0 earlycon=pl011,0x1c090000 root=/dev/vda rw ip=dhcp debug user_debug=31 loglevel=9
+[    0.000000] Unknown kernel command line parameters "user_debug=31", will be passed to user space.
+[    0.000000] Dentry cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] ------------[ cut here ]------------
+[    0.000000] WARNING: CPU: 0 PID: 0 at lib/stackdepot.c:181 stack_depot_early_init+0x10/0xb4
+[    0.000000] Modules linked in:
+[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.19.0-rc3-00132-g647529cd3b65 #1
+[    0.000000] Hardware name: FVP Base RevC (DT)
+[    0.000000] pstate: 400000c9 (nZcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.000000] pc : stack_depot_early_init+0x10/0xb4
+[    0.000000] lr : start_kernel+0x450/0x744
+[    0.000000] sp : ffffd7c5d5d63e30
+[    0.000000] x29: ffffd7c5d5d63e30 x28: 0000000082090010 x27: ffffd7c5d5000398
+[    0.000000] x26: ffffd7c5d5000398 x25: 0000000000000000 x24: ffff6d4b3f7e42ce
+[    0.000000] x23: ffff6d4b3f7e42c0 x22: ffffd7c5d5d6e9c0 x21: ffffd7c5d5115318
+[    0.000000] x20: ffffd7c5d622b000 x19: ffffd7c5d5115318 x18: ffffffffffffffff
+[    0.000000] x17: 2c73657479622032 x16: 353137393032202c x15: ffffd7c655d63b17
+[    0.000000] x14: 0000000000000000 x13: 66666f3a65657266 x12: 2070616568202c66
+[    0.000000] x11: 666f3a636f6c6c61 x10: ffffd7c5d5dea850 x9 : ffffd7c5d5d92850
+[    0.000000] x8 : 00000000ffffefff x7 : ffffd7c5d5dea850 x6 : 0000000000000000
+[    0.000000] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
+[    0.000000] x2 : 000000000000006d x1 : ffffd7c5d5d79e00 x0 : ffffd7c5d5380000
+[    0.000000] Call trace:
+[    0.000000]  stack_depot_early_init+0x10/0xb4
+[    0.000000]  __primary_switched+0xb8/0xc0
+[    0.000000] ---[ end trace 0000000000000000 ]---
+[    0.000000] software IO TLB: mapped [mem 0x00000000f9000000-0x00000000fd000000] (64MB)
+[    0.000000] Memory: 3947600K/4177920K available (19968K kernel code, 4882K rwdata, 11156K rodata, 11072K init, 951K bss, 197552K reserved, 32768K cma-reserved)
+[    0.000000] SLUB: HWalign=128, Order=0-3, MinObjects=0, CPUs=8, Nodes=1
+[    0.000000] ftrace: allocating 65020 entries in 254 pages
+[    0.000000] ftrace: allocated 254 pages with 7 groups
+[    0.000000] trace event string verifier disabled
+[    0.000000] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000] rcu:     RCU event tracing is enabled.
+[    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=8.
+[    0.000000]  Trampoline variant of Tasks RCU enabled.
+[    0.000000]  Rude variant of Tasks RCU enabled.
+[    0.000000]  Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=8
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] GICv3: GIC: Using split EOI/Deactivate mode
+[    0.000000] GICv3: 224 SPIs implemented
+[    0.000000] GICv3: 0 Extended SPIs implemented
+[    0.000000] Root IRQ handler: gic_handle_irq
+[    0.000000] GICv3: GICv3 features: 16 PPIs
+[    0.000000] GICv3: CPU0: found redistributor 0 region 0:0x000000002f100000
+[    0.000000] ITS [mem 0x2f020000-0x2f03ffff]
+[    0.000000] ITS@0x000000002f020000: allocated 8192 Devices @8801f0000 (indirect, esz 8, psz 64K, shr 1)
+[    0.000000] ITS@0x000000002f020000: allocated 8192 Virtual CPUs @880200000 (indirect, esz 8, psz 64K, shr 1)
+[    0.000000] ITS@0x000000002f020000: allocated 8192 Interrupt Collections @880210000 (flat, esz 8, psz 64K, shr 1)
+[    0.000000] GICv3: using LPI property table @0x0000000880220000
+[    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000000880230000
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000] kfence: initialized - using 2097152 bytes for 255 objects at 0x(____ptrval____)-0x(____ptrval____)
+[    0.000000] timer_sp804: timer clock not found: -517
+[    0.000000] timer_sp804: arm,sp804 clock not found: -2
+[    0.000000] Failed to initialize '/bus@8000000/motherboard-bus/iofpga-bus@300000000/timer@110000': -22
+[    0.000000] timer_sp804: timer clock not found: -517
+[    0.000000] timer_sp804: arm,sp804 clock not found: -2
+[    0.000000] Failed to initialize '/bus@8000000/motherboard-bus/iofpga-bus@300000000/timer@120000': -22
+[    0.000000] arch_timer: cp15 timer(s) running at 100.00MHz (phys).
+[    0.000000] clocksource: arch_sys_counter: mask: 0x1ffffffffffffff max_cycles: 0x171024e7e0, max_idle_ns: 440795205315 ns
+[    0.000000] sched_clock: 57 bits at 100MHz, resolution 10ns, wraps every 4398046511100ns
+[    0.000997] random: crng init done
+[    0.001966] Console: colour dummy device 80x25
+[    0.002703] Calibrating delay loop (skipped), value calculated using timer frequency.. 200.00 BogoMIPS (lpj=400000)
+[    0.002952] pid_max: default: 32768 minimum: 301
+[    0.003952] LSM: Security Framework initializing
+[    0.004052] LSM: security= is ignored because it is superseded by lsm=
+[    0.004208] Unable to handle kernel paging request at virtual address 0000000004000000
+[    0.004382] Mem abort info:
+[    0.004468]   ESR = 0x0000000096000004
+[    0.004587]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    0.004752]   SET = 0, FnV = 0
+[    0.004852]   EA = 0, S1PTW = 0
+[    0.004997]   FSC = 0x04: level 0 translation fault
+[    0.005152] Data abort info:
+[    0.005252]   ISV = 0, ISS = 0x00000004
+[    0.005352]   CM = 0, WnR = 0
+[    0.005488] [0000000004000000] user address but active_mm is swapper
+[    0.005596] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+[    0.005652] Modules linked in:
+[    0.005816] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W         5.19.0-rc3-00132-g647529cd3b65 #1
+[    0.005952] Hardware name: FVP Base RevC (DT)
+[    0.006030] pstate: 80000009 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.006152] pc : __pi_strlen+0x14/0x150
+[    0.006252] lr : kstrdup+0x34/0xa4
+[    0.006352] sp : ffffd7c5d5d63d60
+[    0.006389] x29: ffffd7c5d5d63d60 x28: 0000000082090010 x27: ffffd7c5d514c000
+[    0.006552] x26: ffffd7c5d5000398 x25: 0000000000000000 x24: 2200000004000000
+[    0.006811] x23: ffffd7c5d4fb4df8 x22: ffffd7c5d54a8db8 x21: b09ad7c5d52b951c
+[    0.006985] x20: 2200000004000000 x19: 0000000000000cc0 x18: ffffffffffffffff
+[    0.007158] x17: 000000000000003f x16: 000000000000000b x15: ffffd7c655d63ae7
+[    0.007372] x14: 0000000000000000 x13: 3d6d736c20796220 x12: 6465646573726570
+[    0.007552] x11: 7573207369207469 x10: ffffd7c5d5dea850 x9 : ffffd7c5d52b951c
+[    0.007765] x8 : 0101010101010101 x7 : ffffd7c5d5dea850 x6 : 0000000000000000
+[    0.007952] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000003000001
+[    0.008112] x2 : 0000000000000000 x1 : 0000000000000cc0 x0 : 2200000004000000
+[    0.008286] Call trace:
+[    0.008373]  __pi_strlen+0x14/0x150
+[    0.008460]  ordered_lsm_parse+0xa4/0x27c
+[    0.008601]  security_init+0xdc/0x2c4
+[    0.008720]  start_kernel+0x6cc/0x744
+[    0.008852]  __primary_switched+0xb8/0xc0
+[    0.009011] Code: 92402c04 b200c3e8 f13fc09f 5400088c (a9400c02)
+[    0.009067] ---[ end trace 0000000000000000 ]---
+[    0.009240] Kernel panic - not syncing: Attempted to kill the idle task!
+[    0.009352] ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---

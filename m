@@ -2,114 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9A85754B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 691735754BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240554AbiGNSMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 14:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
+        id S240557AbiGNSOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 14:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240473AbiGNSMw (ORCPT
+        with ESMTP id S232339AbiGNSOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 14:12:52 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7A16872E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:12:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657822372; x=1689358372;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AZbSgw4PiPhHiI2IkamjWGYAFK+m9rBc4mek9Q/SNdQ=;
-  b=cbDJpALSG07+eDqR4XorrqSB8UJ4nDWnpSgckjBopW1/TP2/jJ81bEC/
-   1mne9Ka7x5UXfLfwRRv67bfaKHe3cM1HKs7RJxvXpHM3cq9fH/NHMWtnW
-   4zqvx7FyT26UUSR3CbrLrnqe8TavZkQNbk2DVvG09tn1NSskHoBCUnT2m
-   xIRaXW00uyexdpdeC2eRdCelasFXZcCS4GWaYG4hrqrKUioc9NbV1TBBB
-   QYSwona4msuoNmVhaejBl63I5JdHmUA0gdmx8EDpK8shamOzqFFHColGq
-   WFs0kmrIZARHpVSpdPG/T3uP+XWPoVK9eJV1EumdX5gBC9yiyLT6N2lFR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="349563098"
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="349563098"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 11:12:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="923180403"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Jul 2022 11:12:48 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 2917FF1; Thu, 14 Jul 2022 21:12:55 +0300 (EEST)
-Date:   Thu, 14 Jul 2022 21:12:55 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv4 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
- ARCH_ENABLE_TAGGED_ADDR
-Message-ID: <20220714181255.7aonbyzca3avfylp@black.fi.intel.com>
-References: <20220622162230.83474-1-kirill.shutemov@linux.intel.com>
- <20220622162230.83474-7-kirill.shutemov@linux.intel.com>
- <CAG_fn=Uo8E-6r3otLPC9iEfO02=A0=zROO8R8TL=8vXVZVE5Ww@mail.gmail.com>
- <20220712171445.74b46mgdxgaub3qj@black.fi.intel.com>
- <CAG_fn=VeS7eFq5w0ny2VVe0j4YU4DKyaHDL0-b_VomnYwmDYow@mail.gmail.com>
+        Thu, 14 Jul 2022 14:14:52 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234DD67CA9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:14:52 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id j3so3339771oif.8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yL38y/2bFG1AO5qjLaabbJhiweElDmrY+o816APFSRc=;
+        b=Ux+0eZn8uZtPH+hZ2lAG9pVVSBXTqp/fZBKovKB09+ewbBwSxUUfldTSCtw75y8LIv
+         +tO7muQOWwlfNC51j0F7GNuUhwVxTPmLNQk/5o2qEQHoD0y/dEsVbJVAF4J25HtTWYFM
+         vHQJ7vLQHU0xHeP8k4RYHCAUU3cGCE7cG5ZOU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yL38y/2bFG1AO5qjLaabbJhiweElDmrY+o816APFSRc=;
+        b=e3ju9B9poEKQXgFdR/opKljSHEtdAM+R4w2TvmGd2ngkFxiaNSwAKvzMFl3Fd5HpZY
+         n5CqLx94eZ+PJ/hGnECLehEL4lhtjEeLjOonG86ac4Z+no3UoEK3sb1d6e2E0U3PR/UY
+         OK+S56ejSg93uWzOr2VHsJnoEB8C2xfcQt/w5insLL1UWrPoRVDvpZl9j3KhmUapmh//
+         Lm17HjqxRo5CPb5Hez2QMYbZK8PtLkJw5+PRQvACVGO6WZUB2YpKFfwHY9IbqFuG7Lrm
+         S6JA8d2KAvx2b9UpdLAsPKfGVoX3zqUZA7YuJmt+HjmamQAk/mbWFNi6P+tWPfVbAhXt
+         l6aA==
+X-Gm-Message-State: AJIora8+JwQ2hyD8/XjRlgZxvvCK1URtU+u2Sk2XVFUQXj7EKZt3bEDA
+        NMSbiIKgxURqV20sH1D/Re7pDB7f7RtG7g==
+X-Google-Smtp-Source: AGRyM1sF/O89XDBF+v83v7NBQ40CfjoaL+nG848yCyAys3SYcHAzRE9apzSIB+5C845E2FB+nPMLPQ==
+X-Received: by 2002:a05:6808:1648:b0:333:45ae:3777 with SMTP id az8-20020a056808164800b0033345ae3777mr8459229oib.4.1657822491047;
+        Thu, 14 Jul 2022 11:14:51 -0700 (PDT)
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com. [209.85.210.51])
+        by smtp.gmail.com with ESMTPSA id l9-20020a544109000000b0033a05951ccdsm895342oic.12.2022.07.14.11.14.48
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 11:14:49 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id k8-20020a9d4b88000000b0061c7f8c4f77so822241otf.10
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:14:48 -0700 (PDT)
+X-Received: by 2002:a05:6830:3493:b0:61c:140e:b2e2 with SMTP id
+ c19-20020a056830349300b0061c140eb2e2mr3766958otu.292.1657822488121; Thu, 14
+ Jul 2022 11:14:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=VeS7eFq5w0ny2VVe0j4YU4DKyaHDL0-b_VomnYwmDYow@mail.gmail.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220708080726.4170711-1-judyhsiao@chromium.org>
+In-Reply-To: <20220708080726.4170711-1-judyhsiao@chromium.org>
+From:   Brian Norris <briannorris@chromium.org>
+Date:   Thu, 14 Jul 2022 11:14:37 -0700
+X-Gmail-Original-Message-ID: <CA+ASDXM-Cb8idKp+9nBDrGd5SRb4dy20TChAQT3WmdwS+wbzNw@mail.gmail.com>
+Message-ID: <CA+ASDXM-Cb8idKp+9nBDrGd5SRb4dy20TChAQT3WmdwS+wbzNw@mail.gmail.com>
+Subject: Re: [PATCH v1] arm64: dts: rk3399: i2s: switch BCLK to GPIO
+To:     Judy Hsiao <judyhsiao@chromium.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Lin Huang <hl@rock-chips.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 04:28:36PM +0200, Alexander Potapenko wrote:
-> On Tue, Jul 12, 2022 at 7:14 PM Kirill A. Shutemov
-> <kirill.shutemov@linux.intel.com> wrote:
-> >
-> > On Tue, Jul 12, 2022 at 03:12:01PM +0200, Alexander Potapenko wrote:
-> > > On Wed, Jun 22, 2022 at 6:22 PM Kirill A. Shutemov
-> > > <kirill.shutemov@linux.intel.com> wrote:
-> > > >
-> > > > Add a couple of arch_prctl() handles:
-> > > >
-> > > >  - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
-> > > >    of tag bits. It is rounded up to the nearest LAM mode that can
-> > > >    provide it. For now only LAM_U57 is supported, with 6 tag bits.
-> > > >
-> > > >  - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
-> > > >    bits located in the address.
-> > > >
-> > > Am I right that the desired way to detect the presence of LAM without
-> > > enabling it is to check that arch_prctl(ARCH_GET_UNTAG_MASK, ...)
-> > > returns zero?
-> >
-> > Returns -1UL, but yes.
-> 
-> No, I meant the return value of arch_prctl(), but in fact neither
-> seems to be true.
-> 
-> Right now e.g. for the 5.17 kernel arch_prctl(ARCH_GET_UNTAG_MASK,
-> &bits) returns -EINVAL regardless of the underlying hardware.
-> A new kernel with your patches will return 0 and set bits=-1UL on both
-> non-LAM and LAM-enabled machines. How can we distinguish those?
+On Fri, Jul 8, 2022 at 1:07 AM Judy Hsiao <judyhsiao@chromium.org> wrote:
+>
+> We discoverd that the state of BCLK on, LRCLK off and SD_MODE on
 
-With CPUID?
+super-nit: s/discoverd/discovered/
 
--- 
- Kirill A. Shutemov
+(If this is the only issue, perhaps Heiko can fix that when applying.)
+
+> may cause the speaker melting issue. Removing LRCLK while BCLK
+> is present can cause unexpected output behavior including a large
+> DC output voltage as described in the Max98357a datasheet.
+>
+> In order to:
+>   1. prevent BCLK from turning on by other component.
+>   2. keep BCLK and LRCLK being present at the same time
+>
+> This patch adjusts the device tree to allow BCLK to switch
+> to GPIO func before LRCLK output, and switch back during
+> LRCLK is output.
+>
+> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+
+IIUC, it's not guaranteed everyone is using max98357a on this I2S
+channel, but I suppose this change is still safe anyway? Or if this is
+expected only for Gru-related boards, we could override the i2s node
+settings in rk3399-gru.dtsi or similar.
+
+Anyway, I think this is right:
+
+Reviewed-by: Brian Norris <briannorris@chromium.org>

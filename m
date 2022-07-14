@@ -2,69 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3782C574A55
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C292E574A61
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238123AbiGNKPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
+        id S237685AbiGNKQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238210AbiGNKPD (ORCPT
+        with ESMTP id S230073AbiGNKQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:15:03 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC24120A5;
-        Thu, 14 Jul 2022 03:15:01 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id fy29so1417231ejc.12;
-        Thu, 14 Jul 2022 03:15:01 -0700 (PDT)
+        Thu, 14 Jul 2022 06:16:37 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C4F120A5;
+        Thu, 14 Jul 2022 03:16:36 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id y195so2487074yby.0;
+        Thu, 14 Jul 2022 03:16:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kyJ4qGj8eHBHJuHHdzCBMz1BsQHdmCZcZqOIQgAVkk4=;
-        b=cHZ8AriwRJyRwM6j+nXYNdxol6uzs1KKZHoYC8KX7f6/tjQjzY6YMa8WZJM/8ULjcL
-         G6mYw8GAhzY500Gql1Wn4yNE2S6cbpPPBZUcS8f6WWMO7VPaEgiHbu2OzW/+6HsAk7Yj
-         X3saYD7mZpXzObIICgRHUCWw3VgJtr1TCF6/EeowjOX6huIWltDLlTaQVq1VaaxEjPxk
-         OaV+W2mJYumSkUjjopWL7M/zt7IzNt1YfErBNIs/laZMrkEmhX7v3isX212jO5MPIKYg
-         lT/qD0fJRjojkoen/XoiqUMEuabM8iyINzZhAxH9baWTJZvYjpUbT9Jr6BelI9wbkoTe
-         mYAg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DAB/V2thJrX7oNWAiw69xQ9s2yER1z6zgaPEDVTbARY=;
+        b=WzDjqq1pRDiX/e0JhdlBpio8zOrckRWFWYoqqx6oFzHppl1HXZKC0K0Vo9UvICBDx4
+         1IgGFxPhaOdHa0ijcMRnAWpg15ZqdMXn+A4AN+KbbyLfV+DLK/zGUswdeyoa6I/gMSWB
+         mLZcWexKeicX3ZsiBj8qG9KhT504M9qLDNPa+/3b4OVXUQmkey6iL5NUBSkO06Ql9xqx
+         7ABvX+TuwC6gjV6lZglt+ptPstfpEqlr1Yg9+65NKMHYYSOzn23aEysk+sSCVoQV5iL6
+         RIo+DgXA1m8aiBJ1aC+G2pOf803m52JzwysZxxKXTmLKrJdLDZZrFNf6ymvczZtUZHNx
+         NC+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kyJ4qGj8eHBHJuHHdzCBMz1BsQHdmCZcZqOIQgAVkk4=;
-        b=EtZOvTdk7VnPVm+kTpYuL0hkz3UDkRI7Zn8fMC9ifTM6bRfaKjVHM1XGUzDouYk9MJ
-         zWGNhxCgr0suNNvCbu5HP+BzhsayE5hRpFXFH1J60egWxEOhRnSO/K+3wjZqH8ANGrYo
-         wLa2IkMidUwcTSoQ1ZiL6roRYXNmhNhQ049hSPStN56JanHKlEgqPpr6/e0j39cqkO6Z
-         zy88mEHmP8+NIVq7eRsM9edZWHZIE5nw/+QO30+H+g7t7dzehvpTIwB+9KpSczpmDB+l
-         XfkUYzc6+7v4Q9/V9vlNtTXIdUO9WukgfovG3+eSRE6oVePEristRjLWAbqpWBuwfBg3
-         tHsQ==
-X-Gm-Message-State: AJIora880HsqSaho9wh1o0p/aIBBnqbX8rqnyCv3rNk9yz5EPVhS5HF5
-        7rlRH7+5j9Dg+zvgHpHAmNQ=
-X-Google-Smtp-Source: AGRyM1s68591pQ9y4rEecbAi3VFSuElDTfxlsdXA7PNvIDIud1gAERS4RRgrOotgD/ISrFNP3x+TLg==
-X-Received: by 2002:a17:907:6ea4:b0:72b:8550:90db with SMTP id sh36-20020a1709076ea400b0072b855090dbmr7981114ejc.135.1657793700352;
-        Thu, 14 Jul 2022 03:15:00 -0700 (PDT)
-Received: from fedora.robimarko.hr (dh207-98-197.xnet.hr. [88.207.98.197])
-        by smtp.googlemail.com with ESMTPSA id gr19-20020a170906e2d300b0072b592ee073sm535313ejb.147.2022.07.14.03.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 03:15:00 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, amitk@kernel.org,
-        thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v6 5/5] arm64: dts: ipq8074: add thermal nodes
-Date:   Thu, 14 Jul 2022 12:14:51 +0200
-Message-Id: <20220714101451.198211-5-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220714101451.198211-1-robimarko@gmail.com>
-References: <20220714101451.198211-1-robimarko@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DAB/V2thJrX7oNWAiw69xQ9s2yER1z6zgaPEDVTbARY=;
+        b=zd0TXa3ccyOwBBJjB+uQo+lzRSumxdbxEoV3qr/dCPj55C2RbbWDifNraEZm609qu0
+         w1QvJbffkV2WGGFkjggR4ZRI0Tb5w1O8PyrBoZcfILoHtN8621+mLzP6989YbrOaEFir
+         XVdMdrDPw4bN+fOZUSGWg4HmivMQHFqmU6w+5orxmrTaC4c+2fM+YtzsBVSNF/Wi8NYL
+         zznjtl6dwodcR2TGJwEpaCJ4RMMC2X6LYD3DhYvl+TfKTX+s9KRWu2yfxJ0cNZboDLHb
+         406SMFaviorzsXpObR8aQyJZSrubJhNBovqSc6d1tS74oC9wALA3XxgOSKHH1TJO/HaA
+         DYOw==
+X-Gm-Message-State: AJIora9n0DiigPni0fiNksHx987JPA6i7BH6qczxLrbSgkVRddkU6fGm
+        F9LhETRK4YMzSYuT6VG4aA0vySQCwqAg8E2ZLTw=
+X-Google-Smtp-Source: AGRyM1tsa04XdX6EoBLAKq/4vJYddIuWfRGN796P9MIbmkVyYowmMMx33Ee2ini1a+JW/8CzKBWdXOgF/S8Hwfl8jYQ=
+X-Received: by 2002:a05:6902:686:b0:66e:627f:4d29 with SMTP id
+ i6-20020a056902068600b0066e627f4d29mr7320510ybt.385.1657793795448; Thu, 14
+ Jul 2022 03:16:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-14-peterwu.pub@gmail.com>
+ <CAHp75VdwEc9AW1w8ejsxkw+sBTF1dumd99QyzTY9BZaXiViRWQ@mail.gmail.com>
+ <CABtFH5K-2+2hbpvpq2nPE5AsznkQxZF2r3MVC64Q39DJhVuUtA@mail.gmail.com>
+ <CAHp75VevDwdAKLYEWJgnMDvzuPuFibLuVqH-GKazEOT76wM6_A@mail.gmail.com>
+ <CABtFH5LT1Ct_9-B_XRrGwYFmL5kGS6KHR7dNVyUO5z4sTy_6oA@mail.gmail.com>
+ <CAHp75VcU_9Ao2CoqiUDZHqhVOjEMZor+hctPp3YYP4HOjYLDUg@mail.gmail.com> <CAHp75VeMP4zDMmGfdya5Y1C0Hkb7=jeOQGE_HqyDdZcmd_Uyyg@mail.gmail.com>
+In-Reply-To: <CAHp75VeMP4zDMmGfdya5Y1C0Hkb7=jeOQGE_HqyDdZcmd_Uyyg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 14 Jul 2022 12:15:58 +0200
+Message-ID: <CAHp75VdXGJtPd_oZPGkS1=DoWjFYxbQu_7Vtfj547QQkpz2KNA@mail.gmail.com>
+Subject: Re: [PATCH v4 13/13] video: backlight: mt6370: Add Mediatek MT6370 support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,134 +101,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IPQ8074 has a tsens v2.3.0 peripheral which monitors
-temperatures around the various subsystems on the
-die.
+On Thu, Jul 14, 2022 at 11:43 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Thu, Jul 14, 2022 at 11:27 AM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Thu, Jul 14, 2022 at 9:13 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote=
+:
+> > > Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=
+=E6=9C=8813=E6=97=A5 =E9=80=B1=E4=B8=89 =E6=99=9A=E4=B8=8A8:07=E5=AF=AB=E9=
+=81=93=EF=BC=9A
 
-So lets add the tsens and thermal zone nodes, passive
-CPU cooling will come in later patches after CPU frequency
-scaling is supported.
+...
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
-Changes in v5:
-* Rebase to apply on next-20220708
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 96 +++++++++++++++++++++++++++
- 1 file changed, 96 insertions(+)
+> > >  * prop_val =3D  1      -->  1 steps --> b'00
+> > >  * prop_val =3D  2 ~  4 -->  4 steps --> b'01
+> > >  * prop_val =3D  5 ~ 16 --> 16 steps --> b'10
+> > >  * prop_val =3D 17 ~ 64 --> 64 steps --> b'11
+> >
+> > So, for 1 --> 0, for 2 --> 1, for 5 --> 2, and for 17 --> 3.
+> > Now, consider x - 1:
+> > 0  ( 0 ) --> 0
+> > 1  (2^0) --> 1
+> > 4  (2^2) --> 2
+> > 16 (2^4) --> 3
+> > 64 (2^6) --> ? (but let's consider that the range has been checked alre=
+ady)
+> >
+> > Since we take the lower limit, it means ffs():
+> >
+> >   y =3D (ffs(x - 1) + 1) / 2;
+> >
+> > Does it work for you?
+>
+> It wouldn't, because we need to use fls() against it actually.
+>
+> So,
+> 0..1   (-1..0)   --> 0
+> 2..4   (1..3)   --> 1
+> 5..16  (4..15)  --> 2
+> 17..64 (16..63) --> 3
+>
+> y =3D x ? ((fls(x - 1) + 1) / 2 : 0;
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index c1c608728d4e..64f3f0d18cf9 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -308,6 +308,16 @@ prng: rng@e3000 {
- 			status = "disabled";
- 		};
- 
-+		tsens: thermal-sensor@4a9000 {
-+			compatible = "qcom,ipq8074-tsens";
-+			reg = <0x4a9000 0x1000>, /* TM */
-+			      <0x4a8000 0x1000>; /* SROT */
-+			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "combined";
-+			#qcom,sensors = <16>;
-+			#thermal-sensor-cells = <1>;
-+		};
-+
- 		cryptobam: dma-controller@704000 {
- 			compatible = "qcom,bam-v1.7.0";
- 			reg = <0x00704000 0x20000>;
-@@ -918,4 +928,90 @@ timer {
- 			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
- 			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
- 	};
-+
-+	thermal-zones {
-+		nss-top-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 4>;
-+		};
-+
-+		nss0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 5>;
-+		};
-+
-+		nss1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 6>;
-+		};
-+
-+		wcss-phya0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 7>;
-+		};
-+
-+		wcss-phya1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 8>;
-+		};
-+
-+		cpu0_thermal: cpu0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 9>;
-+		};
-+
-+		cpu1_thermal: cpu1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 10>;
-+		};
-+
-+		cpu2_thermal: cpu2-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 11>;
-+		};
-+
-+		cpu3_thermal: cpu3-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 12>;
-+		};
-+
-+		cluster_thermal: cluster-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 13>;
-+		};
-+
-+		wcss-phyb0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 14>;
-+		};
-+
-+		wcss-phyb1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 15>;
-+		};
-+	};
- };
--- 
-2.36.1
+Okay, I nailed it down, but Daniel is right, it's simpler to have just
+conditionals.
 
+y =3D x >=3D2 ? __fls(x - 1) / 2 + 1 : 0;
+
+
+--
+With Best Regards,
+Andy Shevchenko

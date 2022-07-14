@@ -2,123 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797A2574486
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE26574488
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234575AbiGNFa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 01:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S234449AbiGNFcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 01:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234312AbiGNFax (ORCPT
+        with ESMTP id S231601AbiGNFc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 01:30:53 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C708021277;
-        Wed, 13 Jul 2022 22:30:51 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oBrR1-0001Nh-2x; Thu, 14 Jul 2022 07:30:47 +0200
-Message-ID: <5ea45b0d-32b5-1a13-de86-9988144c0dbe@leemhuis.info>
-Date:   Thu, 14 Jul 2022 07:30:45 +0200
+        Thu, 14 Jul 2022 01:32:26 -0400
+Received: from mg.sunplus.com (unknown [113.196.136.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E450720BE7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 22:32:21 -0700 (PDT)
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.202
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(2569:0:AUTH_RELAY)
+        (envelope-from <lh.Kuo@sunplus.com>); Thu, 14 Jul 2022 13:32:08 +0800 (CST)
+Received: from sphcmbx01.sunplus.com.tw (172.17.9.202) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Thu, 14 Jul 2022 13:32:07 +0800
+Received: from sphcmbx01.sunplus.com.tw ([fe80::bdb5:968f:d409:32d1]) by
+ sphcmbx01.sunplus.com.tw ([fe80::bdb5:968f:d409:32d1%14]) with mapi id
+ 15.00.1497.033; Thu, 14 Jul 2022 13:32:07 +0800
+From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v10 1/2] thermal: Add thermal driver for Sunplus
+Thread-Topic: [PATCH v10 1/2] thermal: Add thermal driver for Sunplus
+Thread-Index: AQHYlo2OQSnqDllFTEGHHVYnRdkiea19By6g
+Date:   Thu, 14 Jul 2022 05:32:06 +0000
+Message-ID: <a510b35f89034f60a05d6dbe7245e789@sphcmbx01.sunplus.com.tw>
+References: <cover.1654660009.git.lhjeff911@gmail.com>
+ <b114b6f8ea51054561a61dc4982715bb73633ec5.1654660009.git.lhjeff911@gmail.com>
+ <be752ee1-3732-bcbd-4d31-6d6fe0bd251f@linaro.org>
+In-Reply-To: <be752ee1-3732-bcbd-4d31-6d6fe0bd251f@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.51]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] Subject: x86/PAT: Report PAT on CPUs that support PAT
- without MTRR
-Content-Language: en-US
-To:     Chuck Zmudzinski <brchuckz@aol.com>, linux-kernel@vger.kernel.org
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Jane Chu <jane.chu@oracle.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, stable@vger.kernel.org
-References: <9d5070ae4f3e956a95d3f50e24f1a93488b9ff52.1657671676.git.brchuckz.ref@aol.com>
- <9d5070ae4f3e956a95d3f50e24f1a93488b9ff52.1657671676.git.brchuckz@aol.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <9d5070ae4f3e956a95d3f50e24f1a93488b9ff52.1657671676.git.brchuckz@aol.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1657776651;878720af;
-X-HE-SMSGID: 1oBrR1-0001Nh-2x
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.07.22 03:36, Chuck Zmudzinski wrote:
-> The commit 99c13b8c8896d7bcb92753bf
-> ("x86/mm/pat: Don't report PAT on CPUs that don't support it")
-> incorrectly failed to account for the case in init_cache_modes() when
-> CPUs do support PAT and falsely reported PAT to be disabled when in
-> fact PAT is enabled. In some environments, notably in Xen PV domains,
-> MTRR is disabled but PAT is still enabled, and that is the case
-> that the aforementioned commit failed to account for.
-> 
-> As an unfortunate consequnce, the pat_enabled() function currently does
-> not correctly report that PAT is enabled in such environments. The fix
-> is implemented in init_cache_modes() by setting pat_bp_enabled to true
-> in init_cache_modes() for the case that commit 99c13b8c8896d7bcb92753bf
-> ("x86/mm/pat: Don't report PAT on CPUs that don't support it") failed
-> to account for.
-> 
-> This approach arranges for pat_enabled() to return true in the Xen PV
-> environment without undermining the rest of PAT MSR management logic
-> that considers PAT to be disabled: Specifically, no writes to the PAT
-> MSR should occur.
-> 
-> This patch fixes a regression that some users are experiencing with
-> Linux as a Xen Dom0 driving particular Intel graphics devices by
-> correctly reporting to the Intel i915 driver that PAT is enabled where
-> previously it was falsely reporting that PAT is disabled. Some users
-> are experiencing system hangs in Xen PV Dom0 and all users on Xen PV
-> Dom0 are experiencing reduced graphics performance because the keying of
-> the use of WC mappings to pat_enabled() (see arch_can_pci_mmap_wc())
-> means that in particular graphics frame buffer accesses are quite a bit
-> less performant than possible without this patch.
-> 
-> Also, with the current code, in the Xen PV environment, PAT will not be
-> disabled if the administrator sets the "nopat" boot option. Introduce
-> a new boolean variable, pat_force_disable, to forcibly disable PAT
-> when the administrator sets the "nopat" option to override the default
-> behavior of using the PAT configuration that Xen has provided.
-> 
-> For the new boolean to live in .init.data, init_cache_modes() also needs
-> moving to .init.text (where it could/should have lived already before).
-> 
-> Fixes: 99c13b8c8896d7bcb92753bf ("x86/mm/pat: Don't report PAT on CPUs that don't support it")
-
-BTW, "submitting-patches.rst" says it should just be "the first 12
-characters of the SHA-1 ID"
-
-> Co-developed-by: Jan Beulich <jbeulich@suse.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Chuck Zmudzinski <brchuckz@aol.com>
-
-Sorry, have to ask: is this supposed to finally fix this regression?
-https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
-
-If yes, please include Link: and Reported-by: tags, as explained in
-submitting-patches.rst (I only care about the link tag, as I'm tacking
-that regression).
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+PiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50IHN1bnBsdXNfdGhlcm1hbF9yZW1vdmUoc3Ry
+dWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikgew0KPiA+ICsJc3RydWN0IHNwX3RoZXJtYWxfZGF0
+YSAqc3BfZGF0YSA9IHBsYXRmb3JtX2dldF9kcnZkYXRhKHBkZXYpOw0KPiA+ICsNCj4gPiArCXRo
+ZXJtYWxfem9uZV9vZl9zZW5zb3JfdW5yZWdpc3RlcigmcGRldi0+ZGV2LCBzcF9kYXRhLT5wY2Jf
+dHopOw0KPiANCj4gWW91IHVzZWQgZGV2bSB0byByZWdpc3Rlciwgc28gdGhpcyBsb29rcyB3cm9u
+ZyBhbmQgd2lsbCBsZWFkIHRvIGRvdWJsZSBmcmVlLg0KPiANCj4NCg0KWW91IG1lYW4gdGhlIHJl
+bW92ZSBmdW5jdGlvbiBpcyBub3QgbmVlZGVkLiAgPz8NCg0KDQoNCg==

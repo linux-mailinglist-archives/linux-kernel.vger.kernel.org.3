@@ -2,161 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B830C57501E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB28575020
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239894AbiGNNzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
+        id S240325AbiGNNz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239906AbiGNNz2 (ORCPT
+        with ESMTP id S239889AbiGNNzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:55:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C41E062A42
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:52:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657806730;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/DbMY4fkJWP+PysgOKi02iEpV+7O3rbRErGJbwgQ+eQ=;
-        b=ZTLuzZXfaTc3mrwQygEl7utWfb98JcfGP/kIpiq38a+4lZeCLyV1UaEFw5fG/bZsEDey32
-        1H4mjFKeA/t6aLE3+YJyiiBEApSYClDF34LeTCh5g4jOKP7HUn9mSe1b0zpwCbqZSpCQRZ
-        fJKxMbS2sLZjNAHxd20dKkKZYSPNVJY=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-203-fzMyQ7vNPVul0hnyZA2mlA-1; Thu, 14 Jul 2022 09:52:09 -0400
-X-MC-Unique: fzMyQ7vNPVul0hnyZA2mlA-1
-Received: by mail-ej1-f69.google.com with SMTP id hs16-20020a1709073e9000b0072b73a28465so790092ejc.17
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:52:09 -0700 (PDT)
+        Thu, 14 Jul 2022 09:55:31 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8176113A
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:52:15 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso8726712pjc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=dRLjUTiQCQTOPTl0yY/jJ6h6pURCSE+L6aidbvep7OI=;
+        b=SHsen0pbZp9/IJZqYExYxr/I8KuqtcNReumOmnXUCjhsNZcdzM97eQIYFSxY00Sk0J
+         AT2ETy4Mqy0S3m9EJt4A4Zy8vbdUSne+KOaxaE25nV3k3XhF0tSzP0WUsprfvXBaiX1f
+         vAnmS/T+qeF8iCN6Rr6rafVYuDdERmjfM7ZW2LL9RU7zr2xqu7fWXUkXgblotell2I5M
+         oMBpPMhDLRyoo9qdrbeklUkhMZSrzKhtBWvhrZl/sCoXn6/eEro8Jlcxg+L5OVx2K2Nk
+         UD6yk5yOrmGs+urVH973fYmBDjArlbF85T8doE1xcqVOtqC+uw7QlpmM8L73qGfJWgMo
+         5pLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
          :content-transfer-encoding;
-        bh=/DbMY4fkJWP+PysgOKi02iEpV+7O3rbRErGJbwgQ+eQ=;
-        b=VA2ms1NpwPUEOnyMmwDYap+04eEFQJizJzwI5WO/JFptWzajX+bzGkSeGecPTBgbUM
-         GeFozPwN3IIQ+7im2UzN77GaK+UZviAmWP4r8ZK7mV60WpLAC78+wgAguSh8sAiXvQum
-         SebupvW3/dyUCWvbZ748IoQXkt6fa5oo5X7wvol/AGqFc4ISukLdu8U/8BYJf8Dbp/ia
-         E0b3LMBWgZ17FZIACPHzkX+Du99bBVLKqpq/gqJtgyJOzhJcpBBMkFO7LpLbUNqDtGpq
-         nKOehkvMtgAKo4BCV0J9GVEx9yEvxUZ1mvD8JPDjJsaRpjuhSmBSnHz7A9/nZowOId/a
-         biDg==
-X-Gm-Message-State: AJIora9GrPv5mW5QFa5zMO13AEOLcoE/8G3actb6FBsZ8J9CyBOkznqZ
-        TkdeNivWm6sw6lWqK25Unf4K65HH2lOJ1oou3SEPCgSvph9QoQ0qdxId5bZuUwwidZIX1E18neO
-        HXTqD+GmeGr2x4kiEZkERhLny
-X-Received: by 2002:a05:6402:5388:b0:435:71b:5d44 with SMTP id ew8-20020a056402538800b00435071b5d44mr12127189edb.364.1657806727937;
-        Thu, 14 Jul 2022 06:52:07 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t9j243sp0KAU90kUpGzuuJ6eriMDQU6VG9uY7+LPoOkHNVc5QAtLQp/FA07g5PE0QNkP3Luw==
-X-Received: by 2002:a05:6402:5388:b0:435:71b:5d44 with SMTP id ew8-20020a056402538800b00435071b5d44mr12127159edb.364.1657806727740;
-        Thu, 14 Jul 2022 06:52:07 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id s18-20020a170906501200b007121361d54asm734486ejj.25.2022.07.14.06.52.06
+        bh=dRLjUTiQCQTOPTl0yY/jJ6h6pURCSE+L6aidbvep7OI=;
+        b=1wpVCg8JAaIkeQK6LckL5JLVI/mBi/1o7rzGCleEo7xP/BYdO7Yz6eax1HAV4zBajf
+         g5cWb1OIcnQmFmRcL2WO6MhsOGQt9DF18gSNKT1W9nS6DZtifWU7KaAUeNTwkw1VUQta
+         cBMF55r9IKmwPM0Gc1TtNkiAM82U0o9aZlthdTQTfjd0Y+mIBb6botC9E22F45goz90T
+         7dsM4N/PXHvhpiW4rhYyT0glqrRlIn9PhqbXEN5I/ms9mjqMUvj79xKi0cpZKlGBwski
+         Ovqj2MMUhMzmNJPRrHzmtcEOTb8awUri1ulBCK9gRhrcRtigs7p9RHABac2JKZaY92UZ
+         7b4w==
+X-Gm-Message-State: AJIora9Te0B56TYHWG/YOC089vFzxkYV2d4hQVph/98wFu205EVweBuZ
+        DCOTuq5KV69FJno5jWACpMQk5w==
+X-Google-Smtp-Source: AGRyM1uHTeR7seCsmKjUG2nMZzmbbO+jAvtlZFdVXsRaCMTZyLDqTwb3J773pwxK0gu9q4HGJrxzzQ==
+X-Received: by 2002:a17:902:e2d1:b0:16c:65bc:995f with SMTP id l17-20020a170902e2d100b0016c65bc995fmr9200419plc.133.1657806734799;
+        Thu, 14 Jul 2022 06:52:14 -0700 (PDT)
+Received: from ?IPV6:2601:1c0:4c00:ad20:feaa:14ff:fe3a:b225? ([2601:1c0:4c00:ad20:feaa:14ff:fe3a:b225])
+        by smtp.gmail.com with ESMTPSA id o1-20020a170902d4c100b0016a565f3f34sm1486013plg.168.2022.07.14.06.52.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 06:52:07 -0700 (PDT)
-Message-ID: <c5d81d4a-5002-3ffe-e70e-f4238da873c5@redhat.com>
-Date:   Thu, 14 Jul 2022 15:52:06 +0200
+        Thu, 14 Jul 2022 06:52:14 -0700 (PDT)
+Message-ID: <31c6f827-65fa-0fe3-6c98-53be585d818a@linaro.org>
+Date:   Thu, 14 Jul 2022 06:52:13 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] KVM: selftests: Double check on the current CPU in
- rseq_test
+ Thunderbird/91.11.0
 Content-Language: en-US
-To:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, seanjc@google.com,
-        mathieu.desnoyers@efficios.com, shuah@kernel.org, maz@kernel.org,
-        oliver.upton@linux.dev, shan.gavin@gmail.com
-References: <20220714080642.3376618-1-gshan@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220714080642.3376618-1-gshan@redhat.com>
+To:     Lukas Czerner <lczerner@redhat.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com
+References: <20220713185904.64138-1-tadeusz.struk@linaro.org>
+ <20220714095300.ffij7re6l5n6ixlg@fedora>
+ <20220714122351.vtiai34zvrrg2np2@fedora>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH] ext4: fix kernel BUG in ext4_free_blocks
+In-Reply-To: <20220714122351.vtiai34zvrrg2np2@fedora>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/14/22 10:06, Gavin Shan wrote:
-> In rseq_test, there are two threads created. Those two threads are
-> 'main' and 'migration_thread' separately. We also have the assumption
-> that non-migration status on 'migration-worker' thread guarantees the
-> same non-migration status on 'main' thread. Unfortunately, the assumption
-> isn't true. The 'main' thread can be migrated from one CPU to another
-> one between the calls to sched_getcpu() and READ_ONCE(__rseq.cpu_id).
-> The following assert is raised eventually because of the mismatched
-> CPU numbers.
+On 7/14/22 05:23, Lukas Czerner wrote:
+>> This does not seem right. we should never work with block number smaller
+>> than s_first_data_block. The first 1024 bytes of the file system are
+>> unused and in case we have 1k block size, the entire first block is
+>> unused.
+>>
+>> I guess the image we work here with is corrupted, from the log it seems
+>> that it was noticed correctly so the question is why did we still ended
+>> up calling ext4_free_blocks() ? Seems like this should have been stopped
+>> earlier by ext4_clear_blocks() ?
+>>
+>> I did notice that in ext4_mb_clear_bb() we call
+>> ext4_get_group_no_and_offset() before ext4_inode_block_valid() but
+>> again we should have caught this problem earlier.
+>>
+>> Can you link me the file system image that generated this problem?
+> ok, I got the syzkaller C repro to work. The problem is that it's
+> bigalloc file system and the 'block' and 'count' to free in
+> ext4_free_blocks will get adjusted after the ext4_inode_block_valid().
 > 
-> The issue can be reproduced on arm64 system occasionally.
-> 
->    host# uname -r
->    5.19.0-rc6-gavin+
->    host# # cat /proc/cpuinfo | grep processor | tail -n 1
->    processor    : 223
->    host# pwd
->    /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
->    host# for i in `seq 1 100`;   \
->          do echo "--------> $i"; \
->          ./rseq_test; sleep 3;   \
->          done
->    --------> 1
->    --------> 2
->    --------> 3
->    --------> 4
->    --------> 5
->    --------> 6
->    ==== Test Assertion Failure ====
->      rseq_test.c:265: rseq_cpu == cpu
->      pid=3925 tid=3925 errno=4 - Interrupted system call
->         1  0x0000000000401963: main at rseq_test.c:265 (discriminator 2)
->         2  0x0000ffffb044affb: ?? ??:0
->         3  0x0000ffffb044b0c7: ?? ??:0
->         4  0x0000000000401a6f: _start at ??:?
->      rseq CPU = 4, sched CPU = 27
-> 
-> This fixes the issue by double-checking on the current CPU after
-> call to READ_ONCE(__rseq.cpu_id) and restarting the test if the
-> two consecutive CPU numbers aren't euqal.
-> 
-> Fixes: 61e52f1630f5 ("KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs")
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
->   tools/testing/selftests/kvm/rseq_test.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-> index 4158da0da2bb..74709dd9f5b2 100644
-> --- a/tools/testing/selftests/kvm/rseq_test.c
-> +++ b/tools/testing/selftests/kvm/rseq_test.c
-> @@ -207,7 +207,7 @@ int main(int argc, char *argv[])
->   {
->   	int r, i, snapshot;
->   	struct kvm_vm *vm;
-> -	u32 cpu, rseq_cpu;
-> +	u32 cpu, rseq_cpu, last_cpu;
->   
->   	/* Tell stdout not to buffer its content */
->   	setbuf(stdout, NULL);
-> @@ -259,8 +259,9 @@ int main(int argc, char *argv[])
->   			smp_rmb();
->   			cpu = sched_getcpu();
->   			rseq_cpu = READ_ONCE(__rseq.cpu_id);
-> +			last_cpu = sched_getcpu();
->   			smp_rmb();
-> -		} while (snapshot != atomic_read(&seq_cnt));
-> +		} while (snapshot != atomic_read(&seq_cnt) || cpu != last_cpu);
->   
->   		TEST_ASSERT(rseq_cpu == cpu,
->   			    "rseq CPU = %d, sched CPU = %d\n", rseq_cpu, cpu);
+> We should make sure that if this happens we also clear the
+> EXT4_FREE_BLOCKS_VALIDATED. Additonally the ext4_inode_block_valid()
+> in ext4_mb_clear_bb() should be called*before*  the values are taken for
+> granted. I'll prepare a patch to fix this.
 
-Queued for -rc, thanks.
-
-Paolo
-
+Thank you for feedback Lukas. Please CC me on your patch so I could test it.
+-- 
+Thanks,
+Tadeusz

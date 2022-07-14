@@ -2,135 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4242E57432D
+	by mail.lfdr.de (Postfix) with ESMTP id D983357432F
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237360AbiGNEbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 00:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
+        id S237195AbiGNEbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 00:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbiGNE30 (ORCPT
+        with ESMTP id S237350AbiGNEav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 00:29:26 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D6031DD4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 21:25:03 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1657772701;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QFGu2TWdKctYd3jzQb7mcIpilK5qcQQipmt2wnr4Teg=;
-        b=X5Y7ADJtRLRlG8Hoy8Xid5t/PtUaUJdq5UHQ5PPCu3LL68/j93w3CesxPKtcqAnywdK5Kq
-        k1xfExT3M7VNgAXkK/Grlf2AO78LpJJKq2lw6VIFfaRoP0wz3y1/s0rJJXXbV6usFO8rAu
-        zK7P5ELEEt7xmWa6st/unT9NT5CpW8I=
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: [mm-unstable PATCH v7 7/8] mm, hwpoison: skip raw hwpoison page in freeing 1GB hugepage
-Date:   Thu, 14 Jul 2022 13:24:19 +0900
-Message-Id: <20220714042420.1847125-8-naoya.horiguchi@linux.dev>
-In-Reply-To: <20220714042420.1847125-1-naoya.horiguchi@linux.dev>
-References: <20220714042420.1847125-1-naoya.horiguchi@linux.dev>
+        Thu, 14 Jul 2022 00:30:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99403246C;
+        Wed, 13 Jul 2022 21:25:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A1B261E99;
+        Thu, 14 Jul 2022 04:25:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 923B5C36AE5;
+        Thu, 14 Jul 2022 04:25:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657772713;
+        bh=2qjO8+odQ7oxEl1fALycalDewY6Q0DjTfZWWlCdvWKE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mwQhqooUVFp5AzPkiJ/1THaSD+ImTXpgWdEqnbmRSWrzBG1uIL+mragcIZQiW6Ze4
+         F///cjRICORbp7zSmBn46d8rDKMhgW42jdgYMmdtZexsM1q4y/wFZ1RGLPhX1FVowG
+         IjsTej6RPqNVxGomjkNbarisYSC6QI8JHU2MpzBrR29Skx6bIxsQ4+olN4ImYvX5v5
+         luViXaz7hEJR/BLM99DIqdRze2Rw0xMhE1SZPzzY3tWIzJZ7e43isTb3za0ptZCeGF
+         diwQIUSr4vE+4lgBAYpFylIMDEcytP+HSYqgvCKo9UO9v/YBUPI9c/PteXfiylC5SZ
+         mbtkHCZl2ib7Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Stafford Horne <shorne@gmail.com>, Marc Zyngier <maz@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, tglx@linutronix.de,
+        openrisc@lists.librecores.org
+Subject: [PATCH AUTOSEL 5.15 19/28] irqchip: or1k-pic: Undefine mask_ack for level triggered hardware
+Date:   Thu, 14 Jul 2022 00:24:20 -0400
+Message-Id: <20220714042429.281816-19-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220714042429.281816-1-sashal@kernel.org>
+References: <20220714042429.281816-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+From: Stafford Horne <shorne@gmail.com>
 
-Currently if memory_failure() (modified to remove blocking code with
-subsequent patch) is called on a page in some 1GB hugepage, memory error
-handling fails and the raw error page gets into leaked state.  The impact
-is small in production systems (just leaked single 4kB page), but this
-limits the testability because unpoison doesn't work for it.
-We can no longer create 1GB hugepage on the 1GB physical address range
-with such leaked pages, that's not useful when testing on small systems.
+[ Upstream commit 8520501346ed8d1c4a6dfa751cb57328a9c843f1 ]
 
-When a hwpoison page in a 1GB hugepage is handled, it's caught by the
-PageHWPoison check in free_pages_prepare() because the 1GB hugepage is
-broken down into raw error pages before coming to this point:
+The mask_ack operation clears the interrupt by writing to the PICSR
+register.  This we don't want for level triggered interrupt because
+it does not actually clear the interrupt on the source hardware.
 
-        if (unlikely(PageHWPoison(page)) && !order) {
-                ...
-                return false;
-        }
+This was causing issues in qemu with multi core setups where
+interrupts would continue to fire even though they had been cleared in
+PICSR.
 
-Then, the page is not sent to buddy and the page refcount is left 0.
+Just remove the mask_ack operation.
 
-Originally this check is supposed to work when the error page is freed from
-page_handle_poison() (that is called from soft-offline), but now we are
-opening another path to call it, so the callers of __page_handle_poison()
-need to handle the case by considering the return value 0 as success. Then
-page refcount for hwpoison is properly incremented so unpoison works.
-
-Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Acked-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Stafford Horne <shorne@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-v2 -> v3:
-- remove "res = MF_FAILED" in try_memory_failure_hugetlb (by Miaohe)
----
- mm/memory-failure.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/irqchip/irq-or1k-pic.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index c8fa3643791c..3721de624b98 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1084,7 +1084,6 @@ static int me_huge_page(struct page_state *ps, struct page *p)
- 		res = truncate_error_page(hpage, page_to_pfn(p), mapping);
- 		unlock_page(hpage);
- 	} else {
--		res = MF_FAILED;
- 		unlock_page(hpage);
- 		/*
- 		 * migration entry prevents later access on error hugepage,
-@@ -1092,9 +1091,11 @@ static int me_huge_page(struct page_state *ps, struct page *p)
- 		 * subpages.
- 		 */
- 		put_page(hpage);
--		if (__page_handle_poison(p) > 0) {
-+		if (__page_handle_poison(p) >= 0) {
- 			page_ref_inc(p);
- 			res = MF_RECOVERED;
-+		} else {
-+			res = MF_FAILED;
- 		}
- 	}
- 
-@@ -1874,10 +1875,11 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
- 	 */
- 	if (res == 0) {
- 		unlock_page(head);
--		res = MF_FAILED;
--		if (__page_handle_poison(p) > 0) {
-+		if (__page_handle_poison(p) >= 0) {
- 			page_ref_inc(p);
- 			res = MF_RECOVERED;
-+		} else {
-+			res = MF_FAILED;
- 		}
- 		action_result(pfn, MF_MSG_FREE_HUGE, res);
- 		return res == MF_RECOVERED ? 0 : -EBUSY;
+diff --git a/drivers/irqchip/irq-or1k-pic.c b/drivers/irqchip/irq-or1k-pic.c
+index 03d2366118dd..d5f1fabc45d7 100644
+--- a/drivers/irqchip/irq-or1k-pic.c
++++ b/drivers/irqchip/irq-or1k-pic.c
+@@ -66,7 +66,6 @@ static struct or1k_pic_dev or1k_pic_level = {
+ 		.name = "or1k-PIC-level",
+ 		.irq_unmask = or1k_pic_unmask,
+ 		.irq_mask = or1k_pic_mask,
+-		.irq_mask_ack = or1k_pic_mask_ack,
+ 	},
+ 	.handle = handle_level_irq,
+ 	.flags = IRQ_LEVEL | IRQ_NOPROBE,
 -- 
-2.25.1
+2.35.1
 

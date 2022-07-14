@@ -2,172 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DDA5752AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA9F5752AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237881AbiGNQWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49290 "EHLO
+        id S238088AbiGNQXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiGNQWa (ORCPT
+        with ESMTP id S238530AbiGNQXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:22:30 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261CC62496
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657815749; x=1689351749;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=H7HDPGwlOFF7Yq4G5L3GwQFJTE8YQ724tcND/EmRbRo=;
-  b=cqHgphymBtrLZLARnMvJdxF1sZBso/hrbA4qe7GN6eUmqb9JXAOy8eRQ
-   1Qi9gq/IgzPcJ0nP/xlcZhEBSkUUVtVK+XzYYCHkLoz583HGwCLGMigW4
-   fpKGEKS3wGggekPwpr9KN9//z5bm5pd+Tra5/ImKwfJucI5NFBf1znmbU
-   5LRnvur64ybpf3/j8cCoICHLSbzH12dzHSMHKH5Muej5nILfnO45BM3v5
-   065LPfwyuABBA75Gkyuh8VcNZmO85vcL0/R1SSbYWOWhc9QJP4nPAfRug
-   Vm4gxmMPdGmbD63gsWgbySnv6+7Xz+0afY6/9nHmxaakSwHwdrccr5K6u
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="286699858"
-X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
-   d="scan'208";a="286699858"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 09:22:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
-   d="scan'208";a="738332920"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Jul 2022 09:22:27 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oC1be-0000qz-JY;
-        Thu, 14 Jul 2022 16:22:26 +0000
-Date:   Fri, 15 Jul 2022 00:21:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     William Tu <u9012063@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        0day robot <lkp@intel.com>
-Subject: drivers/net/vmxnet3/vmxnet3_drv.c:1557:13: warning: variable
- 'delta_len' set but not used
-Message-ID: <202207150027.C0HuxMn8-lkp@intel.com>
+        Thu, 14 Jul 2022 12:23:12 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D0F62A54
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:23:11 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id os14so4356795ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:23:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=C9JWDT2rInqljNrrv1A4QkeX//3wZrC9s/rrqP8RPI4=;
+        b=biRrvXxpwxJsg3+tNigbVdTNTspvK5SFmAxHPGxSaHTa56J24DZO/02Fdvq0s+34QI
+         6N2sOrpDkSdvEQ01xBHmR+jUu1oL6W2vDJwndF09RJVo8qCC61Eh1XAkDuY6cqcin0OT
+         ERa+ird+RYIO+pgxmXAOERclc0TpWhsxC24VjahPXHvmTSHGmfRC5X5mCuZrL8PB6PmQ
+         6bGm0Q4+mWMXl137FgwEguf4tjEqJqUXooX11nZoEtzsHHdkZDcyEjf7x1XGm6hL9XLc
+         3PHsiJQWFhHaYOirXMCDiagXqzDCCG7hA0zp4x95QF2ulknZ/F+yH6ewuTVFj2kqcSYI
+         qsYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=C9JWDT2rInqljNrrv1A4QkeX//3wZrC9s/rrqP8RPI4=;
+        b=Vvwsl2inzdASKsdaKGj58hKJkVeRkbhw6zhEyyKCWn6jiLip6QZ2EoVTPKM8pP5rRo
+         +KOzG4x37aJwZwqv6AU1qgiK5FBIVmS7R9D+BlxhSi11ByZCzx9uJjgupu2LjaFetz77
+         z/8K4l/msVBArTNrk2dX+1DyNE+MeQvMQmf8760z67+uu0ScwUNU/c57DFVDbliJ3Bby
+         wTc84rITYQXNMIS1/eXcRbdRHRXuu1s+b+BEjCGIevE+0ph6Ao9ezBT6sjplpjVxDS4K
+         HFtAFZl/AA+IBO8zkgvjHsFqqQugDtO9h99DIo66dS2Z2l6W/u4MH7W7goRMz8c0vb/g
+         TgGw==
+X-Gm-Message-State: AJIora/vC+n80n4N7JgxGWHzdTsFDFcHvw7INeMlPwU3uhnvHMYcKtwn
+        XUxxngdKpnfqAexG27S8Cp04RYRlMj9OXqE+Cm0=
+X-Google-Smtp-Source: AGRyM1t74GFLvvlY6Ne1/+x525lGyIMtfiNeayrb0wUJl46pK3cNyFCQ2Dzx/PoE8UZlfBqmTxDLZxCUykhrGkPU+OY=
+X-Received: by 2002:a17:907:1623:b0:72b:64e3:878a with SMTP id
+ hb35-20020a170907162300b0072b64e3878amr9617982ejc.185.1657815789930; Thu, 14
+ Jul 2022 09:23:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220411221536.283312-1-dmitry.osipenko@collabora.com>
+ <a78343c8-2a6d-b223-4219-6b6b0a4fcb1f@arm.com> <CAK4VdL2hCEoshWZbCh5mkHuS6wYMiPFR3v4MWTnrEKM9zyv6Mw@mail.gmail.com>
+ <ef88ec2c-77b5-fa0d-49d1-fdd2451713b7@collabora.com> <573fae0d-c9ab-98b0-c6f1-5b0d4e52dd01@amd.com>
+ <a33ab7b9-738f-db91-f6ba-78a9641365e8@amd.com> <b05f9861-1966-72f5-132b-aebb4b6e0c6b@collabora.com>
+ <107fe968-8311-0511-cc31-22feb994a6d7@collabora.com> <3e07a8d0-2cbc-8f3e-8f9f-5b73fb82028b@amd.com>
+ <CADnq5_MMmeWkiMxjYfrG7pip8BEkbkRc8ADUDLEi++kRF76sqg@mail.gmail.com>
+ <bff42c98-045d-2e5a-2cf9-eb563425375e@collabora.com> <6e0c7590-6ffb-162b-a98d-0a39333453f6@collabora.com>
+ <4ca27cee-eda0-0a65-f972-c69cc3b3e53e@amd.com>
+In-Reply-To: <4ca27cee-eda0-0a65-f972-c69cc3b3e53e@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 14 Jul 2022 12:22:58 -0400
+Message-ID: <CADnq5_Mms=UbPc7D0-Z-HNUHfCHVWMO82NO+jh5Yg8DmkKwH3A@mail.gmail.com>
+Subject: Re: [PATCH v1] drm/scheduler: Don't kill jobs in interrupt context
+To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Erico Nunes <nunes.erico@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220714-210938/William-Tu/vmxnet3-Add-XDP-support/20220707-213553
-head:   4340e33d0526f1a236e07f564ab630fe1df9a776
-commit: 4340e33d0526f1a236e07f564ab630fe1df9a776 vmxnet3: Add XDP support.
-date:   3 hours ago
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220715/202207150027.C0HuxMn8-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/4340e33d0526f1a236e07f564ab630fe1df9a776
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220714-210938/William-Tu/vmxnet3-Add-XDP-support/20220707-213553
-        git checkout 4340e33d0526f1a236e07f564ab630fe1df9a776
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/
+On Thu, Jul 14, 2022 at 10:14 AM Andrey Grodzovsky
+<andrey.grodzovsky@amd.com> wrote:
+>
+>
+> On 2022-07-14 05:57, Dmitry Osipenko wrote:
+> > On 7/12/22 11:56, Dmitry Osipenko wrote:
+> >> On 7/6/22 18:46, Alex Deucher wrote:
+> >>> On Wed, Jul 6, 2022 at 9:49 AM Andrey Grodzovsky
+> >>> <andrey.grodzovsky@amd.com> wrote:
+> >>>> On 2022-07-06 03:07, Dmitry Osipenko wrote:
+> >>>>
+> >>>>> Hello Andrey,
+> >>>>>
+> >>>>> On 5/17/22 17:48, Dmitry Osipenko wrote:
+> >>>>>> On 5/17/22 17:13, Andrey Grodzovsky wrote:
+> >>>>>>> Done.
+> >>>>>>>
+> >>>>>>> Andrey
+> >>>>>> Awesome, thank you!
+> >>>>>>
+> >>>>> Given that this drm-scheduler issue needs to be fixed in the 5.19-R=
+C and
+> >>>>> earlier, shouldn't it be in the drm-fixes and not in drm-next?
+> >>>>
+> >>>> I pushed it into drm-misc from where it got into drm-next. I don't h=
+ave
+> >>>> permission for drm-fixes.
+> >>> The -fixes branch of drm-misc.
+> >> Now I don't see the scheduler bugfix neither in the -fixes branch nor =
+in
+> >> the -next and today Dave sent out 5.19-rc7 pull request without the
+> >> scheduler fix. Could anyone please check what is going on with the DRM
+> >> patches? Thanks!
+> >>
+> >> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgi=
+thub.com%2Ffreedesktop%2Fdrm-misc%2Fcommits%2Fdrm-misc-fixes&amp;data=3D05%=
+7C01%7Candrey.grodzovsky%40amd.com%7C68b627b8482a4fd28a5608da657f4375%7C3dd=
+8961fe4884e608e11a82d994e183d%7C0%7C0%7C637933894551324163%7CUnknown%7CTWFp=
+bGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%=
+7C3000%7C%7C%7C&amp;sdata=3DCDdLG%2F7SqCudEnjhBSsXqq15mfhlHlS3xAdAfB%2Bh%2F=
+1s%3D&amp;reserved=3D0
+> >> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fcg=
+it.freedesktop.org%2Fdrm%2Fdrm-misc%2Flog%2F%3Fh%3Ddrm-misc-fixes&amp;data=
+=3D05%7C01%7Candrey.grodzovsky%40amd.com%7C68b627b8482a4fd28a5608da657f4375=
+%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637933894551324163%7CUnknown%=
+7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6M=
+n0%3D%7C3000%7C%7C%7C&amp;sdata=3D4Vz40j6F%2FzHYckXEyPEunj9DRSoTXikhNxZDXeo=
+cTss%3D&amp;reserved=3D0
+> > The patch is in the drm-misc-next-fixes, so it wasn't moved to the
+> > drm-misc-fixes.
+> >
+> > Andrey, don't you have access to drm-misc-fixes? Or you meant
+> > drm-fixes=3Ddrm-misc-fixes?
+>
+>
+> I have only accesses to drm-misc-next to which I pushed this patch.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+anyone with drm-misc rights can commit to any of the branches in the
+drm-misc tree.  You just need to check out and push the appropriate
+branch.  then push the changes.  E.g.,
+dim push-branch drm-misc-next
+vs
+dim push-branch drm-misc-next-fixes
+etc.
 
-All warnings (new ones prefixed by >>):
-
-   drivers/net/vmxnet3/vmxnet3_drv.c: In function '__vmxnet3_run_xdp':
->> drivers/net/vmxnet3/vmxnet3_drv.c:1557:13: warning: variable 'delta_len' set but not used [-Wunused-but-set-variable]
-    1557 |         int delta_len;
-         |             ^~~~~~~~~
->> drivers/net/vmxnet3/vmxnet3_drv.c:1556:18: warning: variable 'delta' set but not used [-Wunused-but-set-variable]
-    1556 |         int err, delta;
-         |                  ^~~~~
+Alex
 
 
-vim +/delta_len +1557 drivers/net/vmxnet3/vmxnet3_drv.c
-
-  1546	
-  1547	static int
-  1548	__vmxnet3_run_xdp(struct vmxnet3_rx_queue *rq, void *data, int data_len,
-  1549			  int headroom, int frame_sz, bool *need_xdp_flush)
-  1550	{
-  1551		struct xdp_frame *xdpf;
-  1552		void *buf_hard_start;
-  1553		struct xdp_buff xdp;
-  1554		struct page *page;
-  1555		void *orig_data;
-> 1556		int err, delta;
-> 1557		int delta_len;
-  1558		u32 act;
-  1559	
-  1560		buf_hard_start = data;
-  1561		xdp_init_buff(&xdp, frame_sz, &rq->xdp_rxq);
-  1562		xdp_prepare_buff(&xdp, buf_hard_start, headroom, data_len, false);
-  1563		orig_data = xdp.data;
-  1564	
-  1565		act = bpf_prog_run_xdp(rq->xdp_bpf_prog, &xdp);
-  1566		rq->stats.xdp_packets++;
-  1567	
-  1568		switch (act) {
-  1569		case XDP_DROP:
-  1570			rq->stats.xdp_drops++;
-  1571			break;
-  1572		case XDP_PASS:
-  1573			delta = xdp.data - orig_data;
-  1574			delta_len = (xdp.data_end - xdp.data) - data_len;
-  1575			/* FIXME */
-  1576			break;
-  1577		case XDP_TX:
-  1578			xdpf = xdp_convert_buff_to_frame(&xdp);
-  1579			if (!xdpf ||
-  1580			    vmxnet3_xdp_xmit_back(rq->adapter, xdpf, NULL)) {
-  1581				rq->stats.xdp_drops++;
-  1582			} else {
-  1583				rq->stats.xdp_tx++;
-  1584			}
-  1585			break;
-  1586		case XDP_ABORTED:
-  1587			trace_xdp_exception(rq->adapter->netdev, rq->xdp_bpf_prog,
-  1588					    act);
-  1589			rq->stats.xdp_aborted++;
-  1590			break;
-  1591		case XDP_REDIRECT:
-  1592			page = alloc_page(GFP_ATOMIC);
-  1593			if (!page) {
-  1594				rq->stats.rx_buf_alloc_failure++;
-  1595				return XDP_DROP;
-  1596			}
-  1597			xdp_init_buff(&xdp, PAGE_SIZE, &rq->xdp_rxq);
-  1598			xdp_prepare_buff(&xdp, page_address(page),
-  1599					 XDP_PACKET_HEADROOM,
-  1600					 data_len, false);
-  1601			memcpy(xdp.data, data, data_len);
-  1602			err = xdp_do_redirect(rq->adapter->netdev, &xdp,
-  1603					      rq->xdp_bpf_prog);
-  1604			if (!err) {
-  1605				rq->stats.xdp_redirects++;
-  1606			} else {
-  1607				__free_page(page);
-  1608				rq->stats.xdp_drops++;
-  1609			}
-  1610			*need_xdp_flush = true;
-  1611			break;
-  1612		default:
-  1613			bpf_warn_invalid_xdp_action(rq->adapter->netdev,
-  1614						    rq->xdp_bpf_prog, act);
-  1615			break;
-  1616		}
-  1617		return act;
-  1618	}
-  1619	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> Andrey
+>
+>
+> >

@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F571574C10
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6874D574C16
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238836AbiGNL2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S238843AbiGNL2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238790AbiGNL16 (ORCPT
+        with ESMTP id S238854AbiGNL2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:27:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D7959254;
-        Thu, 14 Jul 2022 04:27:52 -0700 (PDT)
+        Thu, 14 Jul 2022 07:28:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B8057E2E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:27:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A5F661B75;
-        Thu, 14 Jul 2022 11:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10998C341C6;
-        Thu, 14 Jul 2022 11:27:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3048B8239B
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:27:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C071C34115;
+        Thu, 14 Jul 2022 11:27:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657798071;
-        bh=z3OehqzocWWfEInB5FG2h4y3ILd+e0iNXAQOXKXUjPI=;
+        s=k20201202; t=1657798073;
+        bh=xSumGVZMSb75TlWyVR1tNpXOiF+aSuDUJCzx03HJzvw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D+734pI6r2qJStCs1uQdWyl2f0eVUtzmP5Tnc4PvAb+v9B1sFZNRanQeOWa6MNw41
-         s45RBw5kMgOVx59Y2QYwEnc0xITsuCAJA/AXBTFEr/QuaJ2yivwGYtM1HHtU4fxBPe
-         fJw9fa4+90LXZjRB8kvcdViBIhnIt/h3lg8jscE8SCvPGuH6f8MO00hCRAjNfrPQYa
-         QaZEXYfOVlpb4ayBmXcsypzx3RTOYrFs1zOolBmX4OXfUEMRX9TBGRIb4FdNtR3iun
-         G95Cfw6MSmqDI+uOJH8Bf8V7RzDLXKJg65pbLCP2o/WaPOVJCyGqAU2aYKIqpuJNzJ
-         GhUEm1P/I4mqg==
+        b=WNRL5OmW5HFDRmnuNCMF4GdvoWRji8V1I0awDRou83Lc0jvX0x9wYzBl+a4/j8lHc
+         3Xp9s1aOhr7SpNfQvsn11tBdWl5fqV7AcGNTV3rr6iChfxLUa1PfJTegBuZ2VfTZWf
+         LomKtVF1jTBITEzo3wam+AoJNhKES8MTrKDoH+FOdaxRnxonQJ5128lgilUnuQ2hcC
+         iPWnt1ztO/PsEEREEhGowsjfQ1DEbYv+dcrW+vq9l1lCjDfojjqEXw89lLm3lA7CiU
+         n3gixrsI4ckZWD9uTmMwpuYYKPhZUhwuhE16DUaqK3HbHpdzzeidGpEvzm+dTlsuDG
+         aH1fWt5wTsjjw==
 From:   Lee Jones <lee@kernel.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org
-Subject: [PATCH 3/8] MAINTAINERS: Remove myself as PWM maintainer
-Date:   Thu, 14 Jul 2022 12:25:28 +0100
-Message-Id: <20220714112533.539910-4-lee@kernel.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 4/8] docs: ABI: sysfs-class-pwm: Update Lee Jones' email address
+Date:   Thu, 14 Jul 2022 12:25:29 +0100
+Message-Id: <20220714112533.539910-5-lee@kernel.org>
 X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
 In-Reply-To: <20220714112533.539910-1-lee@kernel.org>
 References: <20220714112533.539910-1-lee@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -57,31 +55,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thierry and Uwe are doing a fine job, leaving me surplus to requirement.
+Going forward, I'll be using my kernel.org for upstream work.
 
-Happy to pop back on-board if anything changes in the future.
-
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Cc: linux-pwm@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 Signed-off-by: Lee Jones <lee@kernel.org>
 ---
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
+ Documentation/ABI/testing/sysfs-class-pwm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5fbbeec1fae6b..67ae1329123fa 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16465,7 +16465,6 @@ F:	drivers/media/rc/pwm-ir-tx.c
- PWM SUBSYSTEM
- M:	Thierry Reding <thierry.reding@gmail.com>
- R:	Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
--M:	Lee Jones <lee.jones@linaro.org>
- L:	linux-pwm@vger.kernel.org
- S:	Maintained
- Q:	https://patchwork.ozlabs.org/project/linux-pwm/list/
+diff --git a/Documentation/ABI/testing/sysfs-class-pwm b/Documentation/ABI/testing/sysfs-class-pwm
+index 3d65285bcd5f6..0638c94d01eff 100644
+--- a/Documentation/ABI/testing/sysfs-class-pwm
++++ b/Documentation/ABI/testing/sysfs-class-pwm
+@@ -81,7 +81,7 @@ Description:
+ What:		/sys/class/pwm/pwmchip<N>/pwmX/capture
+ Date:		June 2016
+ KernelVersion:	4.8
+-Contact:	Lee Jones <lee.jones@linaro.org>
++Contact:	Lee Jones <lee@kernel.org>
+ Description:
+ 		Capture information about a PWM signal. The output format is a
+ 		pair unsigned integers (period and duty cycle), separated by a
 -- 
 2.37.0.144.g8ac04bfd2-goog
 

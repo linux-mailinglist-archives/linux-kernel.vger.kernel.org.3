@@ -2,85 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B9957487B
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D651857487E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237886AbiGNJTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
+        id S238152AbiGNJUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238214AbiGNJTQ (ORCPT
+        with ESMTP id S237995AbiGNJUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:19:16 -0400
-Received: from gentwo.de (gentwo.de [161.97.139.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36F724BD9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:16:32 -0700 (PDT)
-Received: by gentwo.de (Postfix, from userid 1001)
-        id ED319B0028E; Thu, 14 Jul 2022 11:15:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
-        t=1657790159; bh=32hwBy0u3/431+faOWAMGVXWX8xeJyN/BOQ9pzsMuOc=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=xDw5deeaOdaaXyFY5w2uRpXZqhwlePLrMk4hMaLuuhKWpFcjV947IocSt5ERy3Tdx
-         k/XbxvqYbjcn7QgQuWL5mZJoyOmk8BZBDc/FpXsJmyWyZzj+BLH72+eZOK7NkBw0Ty
-         W8RkBVNsoVA07SxBEMUzERVAuK89CxFBVwF7gv+58r3jVa5/cL8pLnQFVS/cYzn1KX
-         CQ3xqb+vCzIAOS7FQksZX7h8PB9PoipmKYvnvLwEDFepUWb2d8Ud4D5/0MTINSBr+u
-         cEuMOLN1xu1E3e0qlX0Mly4sNdgDn4gb0lz7280QQlzc9kePgcgrDx04QAmiFTdWhA
-         x91A2HD/88V+A==
-Received: from localhost (localhost [127.0.0.1])
-        by gentwo.de (Postfix) with ESMTP id EBC0AB00266;
-        Thu, 14 Jul 2022 11:15:59 +0200 (CEST)
-Date:   Thu, 14 Jul 2022 11:15:59 +0200 (CEST)
-From:   Christoph Lameter <cl@gentwo.de>
-To:     Marco Elver <elver@google.com>
-cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Joe Perches <joe@perches.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Matthew WilCox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 16/16] mm/sl[au]b: check if large object is valid in
- __ksize()
-In-Reply-To: <CANpmjNPbbugrbCFADy1C7PgaU-4PMd9UK90QiHKS-Md0ocqa3w@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2207141115050.184626@gentwo.de>
-References: <20220712133946.307181-1-42.hyeyoo@gmail.com> <20220712133946.307181-17-42.hyeyoo@gmail.com> <alpine.DEB.2.22.394.2207121701070.57893@gentwo.de> <Ys6Pp6ZPwJTdJvpk@ip-172-31-24-42.ap-northeast-1.compute.internal> <alpine.DEB.2.22.394.2207131205590.112646@gentwo.de>
- <CANpmjNPbbugrbCFADy1C7PgaU-4PMd9UK90QiHKS-Md0ocqa3w@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 14 Jul 2022 05:20:33 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02B253D16;
+        Thu, 14 Jul 2022 02:17:31 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id bb16so1634820oib.11;
+        Thu, 14 Jul 2022 02:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=F3oRxfi4iYMnvW/pvcTNQHegzRL7rC68EPwBmJ/EtTY=;
+        b=P1NIzebve93CTfnu8RPpEKKo6CCqteR1umi8kgJ+5Lh6Jf7vF8QB6zicPZXXMm5M8j
+         U9PrKCXMOhH1sbwiuNEZApnjAyy2mKp/76Adng/mCFNJ4KE3lzLFUaU2Vf8nLYif1WAw
+         rUtpue1Tk7j5X0pDlcQDyueyl2Wbxxsimg1Z9fjWBGr/730d+q9mRQ7P93J+/wj4ei6U
+         5GzXWXE407OK+irJDw89hbNNHeED3h/wwlRXUoRkaOGLnChsr5Y7SwhNPCpzu7UIP6KQ
+         mcI6QkEnYMR9hPkuI7oQajILbisc4qvBMoFaVyHB4CduqncBEgO0h6O+5BX5w8aozLEi
+         aYDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=F3oRxfi4iYMnvW/pvcTNQHegzRL7rC68EPwBmJ/EtTY=;
+        b=Biael0ySsp5O5xX5ylR5yew+StznwB2tltp1s6tghsaJ/hpaXc4XWqH0VojVC3nFhO
+         VLdTmFcsiTKbkojWBusQZqpt+xGYKFjae49NNbBBOwBu1QmwE73c7FLJvteZZxrU3112
+         RYDdCZbbDzVZFd0u/gPUfxRx5mw7XIBKuyJmW4VZtRwrKZUQR4b4qLBHNm14exwEB4Uz
+         PnG6wFXB6tT5He3ggBKwVvEljBOhEm8oenhr88Emk2W90H9jS9W01z781DLwVaHHZLxr
+         DhoViY2Hk/wQGDh9LcCxaDuTzN7M6d0WJ64S0MBX2gtRNHACXXZk1e0fc623E1rHGhHj
+         z2dg==
+X-Gm-Message-State: AJIora/DdrZi/ufTWxquyqbj8ZdtSBhgeUFxYEWuKr6LxAiYB7OFuCLV
+        X0UZgytFoTCi69UERxO4m0xA9XSBj4PE9PX9L9kU2lm2nPrGkQ==
+X-Google-Smtp-Source: AGRyM1voiPTRka4g6Tnhu67eX8MZfU/eH/SH2VVj9wzVWfBpH5NmvSkOa9qWywonJgFad2apZ06CdSUKqXONeHUvoDI=
+X-Received: by 2002:a05:6808:bce:b0:337:aaf6:8398 with SMTP id
+ o14-20020a0568080bce00b00337aaf68398mr4111400oik.252.1657790250658; Thu, 14
+ Jul 2022 02:17:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de> <20220703212551.1114923-1-andres@anarazel.de>
+In-Reply-To: <20220703212551.1114923-1-andres@anarazel.de>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 14 Jul 2022 11:16:54 +0200
+Message-ID: <CA+icZUVDzogiyG=8sCuxdW4aaby_kRwToit2tg-A4D3VorVKnA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] tools: fix compilation failure caused by
+ init_disassemble_info API changes
+To:     Andres Freund <andres@anarazel.de>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Ben Hutchings <ben@decadent.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022, Marco Elver wrote:
-
-> We shouldn't crash, so it should be WARN(), but also returning
-> PAGE_SIZE is bad. The intuition behind returning 0 is to try and make
-> the buggy code cause less harm to the rest of the kernel.
+On Sun, Jul 3, 2022 at 11:25 PM Andres Freund <andres@anarazel.de> wrote:
 >
-> >From [1]:
+> binutils changed the signature of init_disassemble_info(), which now causes
+> compilation failures for tools/{perf,bpf} on e.g. debian unstable. Relevant
+> binutils commit:
+> https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
 >
-> > Similarly, if you are able to tell if the passed pointer is not a
-> > valid object some other way, you can do something better - namely,
-> > return 0. The intuition here is that the caller has a pointer to an
-> > invalid object, and wants to use ksize() to determine its size, and
-> > most likely access all those bytes. Arguably, at that point the kernel
-> > is already in a degrading state. But we can try to not let things get
-> > worse by having ksize() return 0, in the hopes that it will stop
-> > corrupting more memory. It won't work in all cases, but should avoid
-> > things like "s = ksize(obj); touch_all_bytes(obj, s)" where the size
-> > bounds the memory accessed corrupting random memory.
+> I first fixed this without introducing the compat header, as suggested by
+> Quentin, but I thought the amount of repeated boilerplate was a bit too
+> much. So instead I introduced a compat header to wrap the API changes. Even
+> tools/bpf/bpftool/jit_disasm.c, which needs its own callbacks for json, imo
+> looks nicer this way.
+>
+> I'm not regular contributor, so it very well might be my procedures are a
+> bit off...
+>
+> I am not sure I added the right [number of] people to CC?
+>
+> WRT the feature test: Not sure what the point of the -DPACKAGE='"perf"' is,
+> nor why tools/perf/Makefile.config sets some LDFLAGS/CFLAGS that are also
+> in feature/Makefile and why -ldl isn't needed in the other places. But...
+>
+> V2:
+> - split patches further, so that tools/bpf and tools/perf part are entirely
+>   separate
+> - included a bit more information about tests I did in commit messages
+> - add a maybe_unused to fprintf_json_styled's style argument
+>
 
-"in the hopes that it will stop corrupting memory"!!!???
+[ CC Ben ]
 
-Do a BUG() then and definitely stop all chances of memory corruption.
+The Debian kernel-team has integrated your patchset v2.
 
+In case you build without libbfd support there is [1].
+So, feel free to take this for v3.
+
+-Sedat-
+
+[1] https://salsa.debian.org/kernel-team/linux/-/blob/sid/debian/patches/bugfix/all/tools-perf-fix-build-without-libbfd.patch
+
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> Cc: Quentin Monnet <quentin@isovalent.com>
+> To: bpf@vger.kernel.org
+> To: linux-kernel@vger.kernel.org
+> Link: https://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
+> Link: https://lore.kernel.org/lkml/CA+icZUVpr8ZeOKCj4zMMqbFT013KJz2T1csvXg+VSkdvJH1Ubw@mail.gmail.com
+>
+> Andres Freund (5):
+>   tools build: add feature test for init_disassemble_info API changes
+>   tools include: add dis-asm-compat.h to handle version differences
+>   tools perf: Fix compilation error with new binutils
+>   tools bpf_jit_disasm: Fix compilation error with new binutils
+>   tools bpftool: Fix compilation error with new binutils
+>
+>  tools/bpf/Makefile                            |  7 ++-
+>  tools/bpf/bpf_jit_disasm.c                    |  5 +-
+>  tools/bpf/bpftool/Makefile                    |  7 ++-
+>  tools/bpf/bpftool/jit_disasm.c                | 42 ++++++++++++---
+>  tools/build/Makefile.feature                  |  4 +-
+>  tools/build/feature/Makefile                  |  4 ++
+>  tools/build/feature/test-all.c                |  4 ++
+>  .../feature/test-disassembler-init-styled.c   | 13 +++++
+>  tools/include/tools/dis-asm-compat.h          | 53 +++++++++++++++++++
+>  tools/perf/Makefile.config                    |  8 +++
+>  tools/perf/util/annotate.c                    |  7 +--
+>  11 files changed, 137 insertions(+), 17 deletions(-)
+>  create mode 100644 tools/build/feature/test-disassembler-init-styled.c
+>  create mode 100644 tools/include/tools/dis-asm-compat.h
+>
+> --
+> 2.37.0.3.g30cc8d0f14
+>

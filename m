@@ -2,125 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A21CB575362
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7DC575353
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239687AbiGNQuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        id S240507AbiGNQrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240471AbiGNQts (ORCPT
+        with ESMTP id S240501AbiGNQrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:49:48 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917806BC15
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:47:01 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4LkL4N6vKRzDrb1;
-        Thu, 14 Jul 2022 16:47:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1657817221; bh=pXK1y13nfHFmum/eAc1D7DPmsGn+mtPUsWZPAoKOP6U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zc4q657uDfYEctwtS5/0JULSqEKSoeQoGhGrctIkTJf8/pXaD9ROA3jircH9dKvKJ
-         JtCHMvVOQBrdtay7U9bGSeS383Jo3Nm6OFUQbmLM5ShLjj1qnDOI+FbaJnYMY1r5Vy
-         JzpC3wjUM6idnKYak4IyxBySYu2Q1gfgNznAuQ7I=
-X-Riseup-User-ID: 0FD0449652E5E53D0138AE87B18F8F852B8D4C8FB1381F26A125A0059EB257FB
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4LkL4G4q6Hz5vW1;
-        Thu, 14 Jul 2022 16:46:54 +0000 (UTC)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>
-Cc:     amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        mwen@igalia.com, andrealmeid@riseup.net,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-Subject: [PATCH 12/12] drm/amd/display: Rewrite CalculateWriteBackDISPCLK function
-Date:   Thu, 14 Jul 2022 13:45:07 -0300
-Message-Id: <20220714164507.561751-12-mairacanal@riseup.net>
-In-Reply-To: <20220714164507.561751-1-mairacanal@riseup.net>
-References: <20220714164507.561751-1-mairacanal@riseup.net>
+        Thu, 14 Jul 2022 12:47:21 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459E119039;
+        Thu, 14 Jul 2022 09:45:30 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id z23so4435614eju.8;
+        Thu, 14 Jul 2022 09:45:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hhxIWNbzrgE/4mMvH3ENhNTONUeqoY/2MuWDy67vgak=;
+        b=JeRIQYogWxTP7m+CyHQWOmmYu9LcGJBf9gdIglPrxd7QCli6YzRtV9SUWnPcaDcUfs
+         dtjfW8wjbQNPUNuePp7TDaE+ApuVYMSI2yKVcOMMdShGqwmRJKcfIbSUziOTv41muYIM
+         JwFHjRnw3YdHIB/aJbSmn1CiYFLsu3HcC8EhTt4dXCdnSeBkdn6MktdFcxwjPZYFVr8Q
+         jvrQc2pHoVLVO29N3o0zZUvRi8oIPfuYV1kfOx0IK1ksOl8lin/Lwb7fYJI8Wk0Av0dC
+         JIU9pcuR9EH6ai3CYiGvLjMwiL2KmF6NtjvcWTSdO2RZIOffY7cHrqbSotcKD5KNNLuW
+         DXyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hhxIWNbzrgE/4mMvH3ENhNTONUeqoY/2MuWDy67vgak=;
+        b=c4I7nqtNI/40zKJP71Pz/AM1LkttcaRo7hO6QqsrkiUfMVeSgKcqShO8vNY9ozKiVG
+         7gYTJ3ItcOg5jeSTOzOcfwJ1JyErIq11nROCLbs1tw26aT75bzVg2Nz/rtcDyDDVpzGF
+         qZCvyJ5KAzunQIDlUEirYzLl01QzZaYEJWtT/FlZQcfX5HW1tMmzzhORRj0/2FRyi5wU
+         NSrPDX9OYSnCwilCutF1v4ypFiAie95dBq6JGDlT1loP2b2d+OBW0n5TUEmJuCpC4/KV
+         PhaF4A8HaScGYxrybTyNlgaAgUkJi1isAk6brlwjfPS6xChw5r3d091m/auhc1jhPE24
+         jprQ==
+X-Gm-Message-State: AJIora/smS1Rh9kG4BuLVBTmwpQP1QBwuseRcT3aXs2UAm2sHDqXDNKh
+        cXqcV2ivy35uwm2OHuUOhXBTlJpdsIc=
+X-Google-Smtp-Source: AGRyM1tqOzj/60GEr+33fLXoqzb/CRFI3uqNFX7HBU77x45YOmmBmz+qwFRTOZ3e2n3ukqWQe2Q/jw==
+X-Received: by 2002:a17:907:2854:b0:72b:8f44:26a3 with SMTP id el20-20020a170907285400b0072b8f4426a3mr9566677ejc.96.1657817128297;
+        Thu, 14 Jul 2022 09:45:28 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id t10-20020a05640203ca00b0043a26e3db72sm1341586edw.54.2022.07.14.09.45.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 09:45:27 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <bc2c1af3-33ec-d97e-f604-12a991c7cd5e@redhat.com>
+Date:   Thu, 14 Jul 2022 18:45:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/5] KVM: x86: Clean up rmap zap helpers
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220712015558.1247978-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220712015558.1247978-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Based on the dml30_CalculateWriteBackDISPCLK, it separates the
-DISPCLK calculations on three variables, making no functional changes, in order
-to make it more readable and better express that three values are being compared
-on dml_max.
+On 7/12/22 03:55, Sean Christopherson wrote:
+> Clean up the rmap helpers (mostly renames) to yield a more coherent set of
+> APIs, and to purge the irritating and inconsistent "rmapp" (p is for pointer)
+> nomenclature.
+> 
+> Patch 1 is a tangentially related fix for a benign bug.
+> 
+> Sean Christopherson (5):
+>    KVM: x86/mmu: Return a u64 (the old SPTE) from
+>      mmu_spte_clear_track_bits()
+>    KVM: x86/mmu: Rename rmap zap helpers to better show relationships
+>    KVM: x86/mmu: Remove underscores from __pte_list_remove()
+>    KVM: x86/mmu: Use innermost rmap zap helper when recycling rmaps
+>    KVM: x86/mmu: Drop the "p is for pointer" from rmap helpers
+> 
+>   arch/x86/kvm/mmu/mmu.c | 73 +++++++++++++++++++++---------------------
+>   1 file changed, 36 insertions(+), 37 deletions(-)
+> 
+> 
+> base-commit: b9b71f43683ae9d76b0989249607bbe8c9eb6c5c
 
-Signed-off-by: Maíra Canal <mairacanal@riseup.net>
----
- .../drm/amd/display/dc/dml/display_mode_vba.c | 31 ++++++++++++-------
- 1 file changed, 20 insertions(+), 11 deletions(-)
+I'm not sure I dig the ____, I'll take a closer look tomorrow or next 
+week since it's dinner time here.
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
-index c5a0a3649e9a..5fc1d16a2e15 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
-@@ -1113,20 +1113,29 @@ double CalculateWriteBackDISPCLK(
- 		unsigned int HTotal,
- 		unsigned int WritebackChromaLineBufferWidth)
- {
--	double CalculateWriteBackDISPCLK = 1.01 * PixelClock * dml_max(
--		dml_ceil(WritebackLumaHTaps / 4.0, 1) / WritebackHRatio,
--		dml_max((WritebackLumaVTaps * dml_ceil(1.0 / WritebackVRatio, 1) * dml_ceil(WritebackDestinationWidth / 4.0, 1)
-+
-+	double DISPCLK_H = 0, DISPCLK_V = 0, DISPCLK_HB = 0;
-+	double CalculateWriteBackDISPCLK = 0;
-+
-+	DISPCLK_H = dml_ceil(WritebackLumaHTaps / 4.0, 1) / WritebackHRatio;
-+	DISPCLK_V = (WritebackLumaVTaps * dml_ceil(1.0 / WritebackVRatio, 1) * dml_ceil(WritebackDestinationWidth / 4.0, 1)
- 			+ dml_ceil(WritebackDestinationWidth / 4.0, 1)) / (double) HTotal + dml_ceil(1.0 / WritebackVRatio, 1)
--			* (dml_ceil(WritebackLumaVTaps / 4.0, 1) + 4.0) / (double) HTotal,
--			dml_ceil(1.0 / WritebackVRatio, 1) * WritebackDestinationWidth / (double) HTotal));
-+			* (dml_ceil(WritebackLumaVTaps / 4.0, 1) + 4.0) / (double) HTotal;
-+	DISPCLK_HB = dml_ceil(1.0 / WritebackVRatio, 1) * WritebackDestinationWidth / (double) HTotal;
-+
-+	CalculateWriteBackDISPCLK = 1.01 * PixelClock * dml_max3(DISPCLK_H, DISPCLK_V, DISPCLK_HB);
-+
- 	if (WritebackPixelFormat != dm_444_32) {
--		CalculateWriteBackDISPCLK = dml_max(CalculateWriteBackDISPCLK, 1.01 * PixelClock * dml_max(
--			dml_ceil(WritebackChromaHTaps / 2.0, 1) / (2 * WritebackHRatio),
--			dml_max((WritebackChromaVTaps * dml_ceil(1 / (2 * WritebackVRatio), 1) * dml_ceil(WritebackDestinationWidth / 2.0 / 2.0, 1)
--				+ dml_ceil(WritebackDestinationWidth / 2.0 / WritebackChromaLineBufferWidth, 1)) / HTotal
--				+ dml_ceil(1 / (2 * WritebackVRatio), 1) * (dml_ceil(WritebackChromaVTaps / 4.0, 1) + 4) / HTotal,
--				dml_ceil(1.0 / (2 * WritebackVRatio), 1) * WritebackDestinationWidth / 2.0 / HTotal)));
-+		DISPCLK_H = dml_ceil(WritebackChromaHTaps / 2.0, 1) / (2 * WritebackHRatio);
-+		DISPCLK_V = (WritebackChromaVTaps * dml_ceil(1 / (2 * WritebackVRatio), 1) *
-+				dml_ceil(WritebackDestinationWidth / 4.0, 1) +
-+				dml_ceil(WritebackDestinationWidth / 2.0 / WritebackChromaLineBufferWidth, 1)) / HTotal +
-+			dml_ceil(1 / (2 * WritebackVRatio), 1) *(dml_ceil(WritebackChromaVTaps / 4.0, 1) + 4) / HTotal;
-+		DISPCLK_HB = dml_ceil(1.0 / (2 * WritebackVRatio), 1) * WritebackDestinationWidth / 2.0 / HTotal;
-+		CalculateWriteBackDISPCLK = dml_max(CalculateWriteBackDISPCLK,
-+				1.01 * PixelClock * dml_max3(DISPCLK_H, DISPCLK_V, DISPCLK_HB));
- 	}
-+
- 	return CalculateWriteBackDISPCLK;
- }
- 
--- 
-2.36.1
+I'm pushing what you and I collected over the past 3 weeks, for now I 
+only checked that it compiles.
 
+Paolo

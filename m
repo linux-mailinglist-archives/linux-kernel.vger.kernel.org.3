@@ -2,112 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524A1574CBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538DE574CC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238393AbiGNMDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
+        id S237932AbiGNMFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbiGNMDm (ORCPT
+        with ESMTP id S229822AbiGNMFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:03:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E35D31AE
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:03:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657800212;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=wAxz9tvWBXP7vb3lbaEzVBejhbAljYzNf3UGKYGM0hM=;
-        b=M9XNxA/GeRPEQLsyYFNRE/wArUjJKlKj3toQqRoLEIgEAyasrxp/4UqM80ZBUXNPFxFsQ1
-        zIsE6HBayZfpH7140AJgNZoVeh809Vut/fWfjTdqXpAThLX36MmhTrTmlEiJ3WiN+qf5LR
-        0vV45gxsMeJFwdSMxMzFmuHihveIN5s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-29-Z5XlF72MMByeMNnpFn95vw-1; Thu, 14 Jul 2022 08:03:30 -0400
-X-MC-Unique: Z5XlF72MMByeMNnpFn95vw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82206811E75;
-        Thu, 14 Jul 2022 12:03:30 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 698B92166B26;
-        Thu, 14 Jul 2022 12:03:30 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH] Documentation: kvm: clarify histogram units
-Date:   Thu, 14 Jul 2022 08:03:30 -0400
-Message-Id: <20220714120330.1410308-2-pbonzini@redhat.com>
+        Thu, 14 Jul 2022 08:05:09 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E31F5C372;
+        Thu, 14 Jul 2022 05:05:07 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9BA655C0114;
+        Thu, 14 Jul 2022 08:05:04 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 14 Jul 2022 08:05:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1657800304; x=1657886704; bh=m30tQ4rO6J
+        cxVKQX3c4vUbcVqVnZtqCNGR90qL2rgJ0=; b=A4c5jD4STW1WQeSMFTdb0X7QKs
+        WTim9GfmyycLprwmdqM4qiHI4REeW287xo4zlJ5hP6wREpNsCkDZTq+yByRmWDRL
+        EgFauqXthrvZl33JpMhBsI0GAqc36Alv3DwzzAjUDcZCBjWkvoggbsn11JJmOpCC
+        W+eMH9PiFW6rdmgxXkq6g5zgjvrmeoEbUCJOVYix8J247n7MPym1Tb3jKQNFdIK5
+        G5Zg0DnFyMhGTBUirfrBWYXemOKQgOP/gmAP+6ek+SFyjRBAgSZFgMgEozIJWb/t
+        1a1c9WFlf+R+BTs7RYd6g5QJl8TVhJPDvNBPJrCaQd2swIjXszdocaXR5wrQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1657800304; x=1657886704; bh=m30tQ4rO6JcxVKQX3c4vUbcVqVnZ
+        tqCNGR90qL2rgJ0=; b=pacqNrBm8LplaBP3Opxlrog92i+HsxBK2UsIZ9/KtDYf
+        0Ehg6k4PV5GCkuhnk2Cw8tuRgcbfvecKZ5OZLJ/3EuOMr5xi/KmEbNlQ3AQEGdK0
+        02tH9PPV0q85ivM32KVQGYxB+fwdTbC9LO8L6puqALF2R0YWGgpEpg3n6sPCAlQb
+        qS8FamH9thtkids97dx3BFcxvcpMz9snjumNSkQY0uCRYtZqMVjhJrT1GCizQfXa
+        goyNZRJqCQhQNIcLSzLo4xGpK2JemM+DKGXSbDTmFXNOs1lQL4TgdgaFwey7V6Xv
+        b6P5CX0BP09gvmf6zBT6rtHRGzL1HKB6qNHGA5trLw==
+X-ME-Sender: <xms:bwbQYkWnnpPxS0zKj8jBPhbuvXsFP71xKalqf0i0shFibFoMNL7wjw>
+    <xme:bwbQYolSZ7bZqtZfoliqhFuAyySpQGB7F4kJ87J2jSugr9jxSPvShQZ4ZOm2OHvUM
+    ZpvjxEt0YiQX1wF2Q4>
+X-ME-Received: <xmr:bwbQYoaS0VlkJNqlZ1X6KfZCG8DrX8xzeWPQspfw_FEYNTx-6NSQoxqkQdEQlZhG3YsWrZkLA-AGTihIm9Itpj5e1tbYtQId2i2zL2s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejledggeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:bwbQYjUzSxQlaLAvc0xbeKZkXaIt--AtMuz7a2G_SPqRsYBvXjf58w>
+    <xmx:bwbQYukvJpv17SGiXPBjZbUalf1uEe2Gx-SdEkyQddoiTx993aApkA>
+    <xmx:bwbQYodYABj2OUIt9qU0VKIVb8GXQ636O-D8W0vIfyIZ6ekRhWnDSw>
+    <xmx:cAbQYo4owk1kUQ0i96VUc6bYJw3kXFvIJmLIF0GbLlI03YKuvH0OvA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 14 Jul 2022 08:05:03 -0400 (EDT)
+Date:   Thu, 14 Jul 2022 14:05:00 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] drm/modes: parse_cmdline: Handle empty mode name
+ part
+Message-ID: <20220714120500.miufhnkzaomaqxyp@houat>
+References: <cover.1657788997.git.geert@linux-m68k.org>
+ <302d0737539daa2053134e8f24fdf37e3d939e1e.1657788997.git.geert@linux-m68k.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cphgueiqg6ec2b5x"
+Content-Disposition: inline
+In-Reply-To: <302d0737539daa2053134e8f24fdf37e3d939e1e.1657788997.git.geert@linux-m68k.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the case of histogram statistics, the values are always sample
-counts; the unit instead applies to the bucket range.  For example,
-halt_poll_success_hist is a nanosecond statistic because the buckets are
-for 0ns, 1ns, 2-3ns, 4-7ns etc.  There isn't really any other sensible
-interpretation, but clarify this anyway in the Documentation.
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- Documentation/virt/kvm/api.rst | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+--cphgueiqg6ec2b5x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 48bf6e49a7de..6e090fb96a0e 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -5703,14 +5703,13 @@ Bits 0-3 of ``flags`` encode the type:
-     by the ``hist_param`` field. The range of the Nth bucket (1 <= N < ``size``)
-     is [``hist_param``*(N-1), ``hist_param``*N), while the range of the last
-     bucket is [``hist_param``*(``size``-1), +INF). (+INF means positive infinity
--    value.) The bucket value indicates how many samples fell in the bucket's range.
-+    value.)
-   * ``KVM_STATS_TYPE_LOG_HIST``
-     The statistic is reported as a logarithmic histogram. The number of
-     buckets is specified by the ``size`` field. The range of the first bucket is
-     [0, 1), while the range of the last bucket is [pow(2, ``size``-2), +INF).
-     Otherwise, The Nth bucket (1 < N < ``size``) covers
--    [pow(2, N-2), pow(2, N-1)). The bucket value indicates how many samples fell
--    in the bucket's range.
-+    [pow(2, N-2), pow(2, N-1)).
- 
- Bits 4-7 of ``flags`` encode the unit:
- 
-@@ -5731,6 +5730,10 @@ Bits 4-7 of ``flags`` encode the unit:
-     statistics can be linear histograms (with two buckets) but not logarithmic
-     histograms.
- 
-+Note that, in the case of histograms, the unit applies to the bucket
-+ranges, while the bucket value indicates how many samples fell in the
-+bucket's range.
-+
- Bits 8-11 of ``flags``, together with ``exponent``, encode the scale of the
- unit:
- 
-@@ -5752,7 +5755,7 @@ the corresponding statistics data.
- 
- The ``bucket_size`` field is used as a parameter for histogram statistics data.
- It is only used by linear histogram statistics data, specifying the size of a
--bucket.
-+bucket in the unit expressed by bits 4-11 of ``flags`` together with ``exponent``.
- 
- The ``name`` field is the name string of the statistics data. The name string
- starts at the end of ``struct kvm_stats_desc``.  The maximum length including
--- 
-2.31.1
+Hi,
 
+On Thu, Jul 14, 2022 at 11:04:06AM +0200, Geert Uytterhoeven wrote:
+> If no mode name part was specified, mode_end is zero, and the "ret =3D=3D
+> mode_end" check does the wrong thing.
+>=20
+> Fix this by skipping all named mode handling when mode_end is zero.
+>=20
+> Fixes: 7b1cce760afe38b4 ("drm/modes: parse_cmdline: Allow specifying stan=
+d-alone options")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+
+We should add a test for that in drivers/gpu/drm/tests/drm_cmdline_parser_t=
+est.c
+
+Maxime
+
+--cphgueiqg6ec2b5x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYtAGbAAKCRDj7w1vZxhR
+xeI7AP4t2KrerCg+30mJU05ZCc7OVEHw7n2y2IWFX+d6zWDDSgEA1c8eVVk9fxHg
+VdcJ0SwbZdaPq1KmT2RLi+IuImnDggM=
+=WpoD
+-----END PGP SIGNATURE-----
+
+--cphgueiqg6ec2b5x--

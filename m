@@ -2,140 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB555757F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F285757F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240935AbiGNXRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 19:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
+        id S240868AbiGNXTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 19:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240630AbiGNXRA (ORCPT
+        with ESMTP id S232822AbiGNXTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 19:17:00 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792F871BFE
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:16:59 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4C7B05C0089;
-        Thu, 14 Jul 2022 19:16:56 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 14 Jul 2022 19:16:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=russell.cc; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1657840616; x=
-        1657927016; bh=FONg2bGJtmJ1Xycx7o6dOlmZb1WdDxtKAAFomE5W5C8=; b=K
-        KFOv3s+MSUYK5qq9x5uY42bcGtNalZYRAYl3imZDKHc5TA0DSEHlXwc2pYpgS2mP
-        bVsJCX2Ec27KD5QJiijJO4VX7b+IET2LDhHlquMCNRL59o78IwQ3FdPtkIlgvAkm
-        9di0JTExG47PcdaAzfHS7rrOfT51IiY4BWH3LxSq/09/pqZyZPUf9PF1PBPtW+8x
-        Ewlx+oS7EUoBf4W5oJMvlUSyVGjQ7V4W3LaysyCIFYUffMoxZlv6uX1WTraT41ol
-        GiKyn78/OuN011wlL3g2z3kV6jxMWjkuQsSu6uH4PRiziAixTSXadGOl0MbRZPle
-        vhZjy6qnVKBplOwWFMH9w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1657840616; x=
-        1657927016; bh=FONg2bGJtmJ1Xycx7o6dOlmZb1WdDxtKAAFomE5W5C8=; b=E
-        MAGFxeIMibG+L2v3RG8GE5TpSspc4ZloRNbBNOAE/RlXQ4EtQj3k/h0GqxjL7DZK
-        msPftkQ1w4yY2SZdTg9SUU7niC8GNUJy2gVTfyj6vunjrjCYiWag8IOBgTg7pAQR
-        NFKrItEF6CNjOdhWImpMZSINdYlWz6A4uPVBOFWPDeCUBpDVTxmhRmshlpBFVhT/
-        KbzZxAcfMQPth3V9S/3BI7nytpIVLn9tvF1KDIINatveWvWiyMA6e2O58fYiz3OC
-        aymkZaLhqWYGnWT41TYZwWRj9wmODBUCFXj9k3P0WT2qkcOT8IZNKVuYmiOM791h
-        aY0OEYU7QnfnQ8Sq/u1VQ==
-X-ME-Sender: <xms:56PQYkmAVfffG4i6IOUndK5-wImCYA0RiWBN8eaIcH_GgWa_XTz5oQ>
-    <xme:56PQYj1R6_nXllY2HOkGZGA0k_CxjbNoGrLrHNNZg1GbVH1UzlDCtRtCDLHPgPy0L
-    Xosu6iYcOeTB24wJg>
-X-ME-Received: <xmr:56PQYiq9ypVOFjSD4RlGkgfumLYEk2RmrmcEPP3lvv6_CG0-kfrB9Pq99utcrjOjG0bRn4w1ALEj-D5ktkoFHyRv_GQXpmA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudektddgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdluddtmdenucfjughrpefkuffhvfevffgjfhgtgfgfggesthhqredt
-    tderjeenucfhrhhomheptfhushhsvghllhcuvehurhhrvgihuceorhhushgtuhhrsehruh
-    hsshgvlhhlrdgttgeqnecuggftrfgrthhtvghrnheptdevfeetfffghffgveekieellefh
-    vdefudektdelueeiueffhedvhfeltdevieefnecuffhomhgrihhnpehfrhgvvgguvghskh
-    htohhprdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomheprhhushgtuhhrsehruhhsshgvlhhlrdgttg
-X-ME-Proxy: <xmx:56PQYgmz4QBCawDKxRWW3OZ6uoVhHop-56nSLu-27i6YDNlT7T5COA>
-    <xmx:56PQYi0Vgz0qZHjVi5sC2slmAanUzTM_cUrXkew-gSlwLi5Ef3o2-A>
-    <xmx:56PQYnsOOQIKIZhWMucU_guDUlnmHGs2NX0z4c9TRLka0EoLl2Sauw>
-    <xmx:6KPQYoOBCrD7XIHiFxVYj45fi25eBcMbm_wo9U9CqkLQVU4NJ-PgnQ>
-Feedback-ID: i4421424f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 14 Jul 2022 19:16:50 -0400 (EDT)
-Message-ID: <9d18166d534dc30d83f2255d4512619aa6b3b517.camel@russell.cc>
-Subject: Re: Linux 5.19-rc6
-From:   Russell Currey <ruscur@russell.cc>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Axtens <dja@axtens.net>
-Date:   Fri, 15 Jul 2022 09:16:47 +1000
-In-Reply-To: <CAHk-=wj4+BSj2SPMRUr-TZ4Qg2o9HGOBWiJQE336YcF_U1sVNQ@mail.gmail.com>
-References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
-         <20220713050724.GA2471738@roeck-us.net>
-         <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
-         <a804b76e-159f-dbc2-f8dc-62a58552e88d@roeck-us.net>
-         <CADnq5_O6Tp2QPXyDCvpWuRXhDr6H1PM50Ow5YG2WeukqUd-GnQ@mail.gmail.com>
-         <CAHk-=wj4+BSj2SPMRUr-TZ4Qg2o9HGOBWiJQE336YcF_U1sVNQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Thu, 14 Jul 2022 19:19:02 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2430749B79;
+        Thu, 14 Jul 2022 16:19:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:Subject:From:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=XGpd5T1EafVDLNNMFCoN/oDpo1B2rzHEZsGMSXen9LM=; b=KfoBEIF8M1t65cP6ile0m6SP1y
+        T8b8W3HkhivO5XCW3uhZjImKuZGVAlVciHCyQBl/7fyol0ozTn7CPJNON9QArYvJD0sFaCBLtnvjY
+        uDtmbwvunX+NqDJiW205u5gEQkPMHy97YN1/0Vk+xmgd8znjUfEKLyF9Wfd6+j8Ht1tye7V48IkrW
+        yI2CdXSdtfHXa1zSoPrOS9bfetd2GQJeGsh0hsabb3Ue+f2Qje3b5l0BjjGajzZmzJGVHJas/zkXA
+        KnLmzQ6panSYUocBfUnCqxK8XhLB27qKWeWQZtGx1E70D9sFaeTh6RVLlsaS41hcA9KfJgrXlQ6Yv
+        oUsJQMpw==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oC86k-002aUy-EM; Thu, 14 Jul 2022 23:18:58 +0000
+Message-ID: <ae06388f-a062-132b-ee61-8ad68f227970@infradead.org>
+Date:   Thu, 14 Jul 2022 16:18:57 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2] Documentation: process: Update email client
+ instructions for Thunderbird
+To:     sndanailov@gmail.com, corbet@lwn.net
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bagasdotme@gmail.com
+References: <20220714131152.12709-1-sndanailov@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20220714131152.12709-1-sndanailov@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi,
 
-On Wed, 2022-07-13 at 14:32 -0700, Linus Torvalds wrote:
-> On Wed, Jul 13, 2022 at 2:01 PM Alex Deucher <alexdeucher@gmail.com>
-> wrote:
-> >=20
-> > If you want to apply Guenter's patch original patch:
-> > https://patchwork.freedesktop.org/patch/490184/
-> > That's fine with me.
->=20
-> Honestly, by this time I feel that it's too little, too late.
->=20
-> The ppc people apparently didn't care at all about the fact that this
-> driver didn't compile.
->=20
-> At least Michael Ellerman and Daniel Axtens were cc'd on that thread
-> with the proposed fix originally.
->=20
-> I don't see any replies from ppc people as to why it happened, even
-> though apparently a bog-standard "make allmodconfig" just doesn't
-> build.
+On 7/14/22 06:11, sndanailov@gmail.com wrote:
+> From: Sotir Danailov <sndanailov@gmail.com>
+> 
+> The instructions don't match with the current Thunderbird interface.
+> Clarification on using external extensions.
+> New information on how to avoid writing HTML emails.
+> 
+> Signed-off-by: Sotir Danailov <sndanailov@gmail.com>
+> ---
+> Changelog since v1:
+>  - better external extensions explanation
+>  - information on avoiding HTML emails
+> 
+> v1: https://lore.kernel.org/linux-doc/20220713225037.1201-1-sndanailov@gmail.com/
+> 
+>  Documentation/process/email-clients.rst | 64 +++++++++++++++++--------
+>  1 file changed, 43 insertions(+), 21 deletions(-)
+> 
+> diff --git a/Documentation/process/email-clients.rst b/Documentation/process/email-clients.rst
+> index 16586f6cc888..229cbde5b62c 100644
+> --- a/Documentation/process/email-clients.rst
+> +++ b/Documentation/process/email-clients.rst
+> @@ -278,35 +278,57 @@ Thunderbird is an Outlook clone that likes to mangle text, but there are ways
+>  to coerce it into behaving.
+>  
+>  - Allow use of an external editor:
+> -  The easiest thing to do with Thunderbird and patches is to use an
+> -  "external editor" extension and then just use your favorite ``$EDITOR``
+> -  for reading/merging patches into the body text.  To do this, download
+> -  and install the extension, then add a button for it using
+> -  :menuselection:`View-->Toolbars-->Customize...` and finally just click on it
+> -  when in the :menuselection:`Compose` dialog.
+> -
+> -  Please note that "external editor" requires that your editor must not
+> -  fork, or in other words, the editor must not return before closing.
+> -  You may have to pass additional flags or change the settings of your
+> -  editor. Most notably if you are using gvim then you must pass the -f
+> -  option to gvim by putting ``/usr/bin/gvim -f`` (if the binary is in
+> -  ``/usr/bin``) to the text editor field in :menuselection:`external editor`
+> -  settings. If you are using some other editor then please read its manual
+> -  to find out how to do this.
+> +
+> +  The easiest thing to do with Thunderbird and patches is to use extensions
+> +  which open your favorite external editor.
+> +
+> +  Here are some example extensions which are capable of doing this.
+> +
+> +  - "External Editor Revived"
+> +
+> +    https://github.com/Frederick888/external-editor-revived
+> +
+> +    https://addons.thunderbird.net/en-GB/thunderbird/addon/external-editor-revived/
+> +
+> +    It requires installing a "native messaging host".
+> +    Please read the wiki which can be found here:
+> +    https://github.com/Frederick888/external-editor-revived/wiki
 
-I believe Michael Ellerman has been on holiday for some time, and
-Daniel Axtens no longer works on powerpc (and wasn't the one that
-submitted the patch, it was submitted by Paul Mackerras, who wasn't on
-CC).
+Does thunderbird v91.11.0 qualify as newer or older?
 
-The proposed fix didn't get sent to linuxppc-dev either, so it's
-unlikely many ppc people knew about it.
+I tried to use the external-editor-revived yesterday with v1 of the patch..
+no success.
 
-We certainly should have noticed allmodconfig was broken, and should
-have more than just Michael keeping an eye on all his automated builds.
+v2 of the patch has more useful info (about native-messaging), so I installed
+that and still not happy.
+After pressing "External Editor" in a tbird reply window, nothing happens.
 
-I would count this case as ignorance rather than apathy.
+Wait -- hold everything!  Exiting tbird and reloading it
+fixed all problems. :)
 
-- ruscur
+Thanks for all of the updates. (says the file's original author)
+
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+
+-- 
+~Randy

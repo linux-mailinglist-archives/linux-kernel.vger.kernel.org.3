@@ -2,140 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BF85741F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 05:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6DA5741F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 05:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbiGNDhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 23:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
+        id S232003AbiGNDhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 23:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbiGNDhX (ORCPT
+        with ESMTP id S233039AbiGNDhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 23:37:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937B6113;
-        Wed, 13 Jul 2022 20:37:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FE6EB82284;
-        Thu, 14 Jul 2022 03:37:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56C6AC34114;
-        Thu, 14 Jul 2022 03:37:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657769839;
-        bh=3YBXEGIoFqhOrxSmmYzSrJlGdc7ekAfO4Uiq2ymx4R8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=cTxaATepM/+YZrLKhGS8yKyYzbzEnaOQ18gJ6rW8GpyVHqA1/spYgy0dUXHRgDlMl
-         GJIH5vqNpnQERcNDfv4CbaApPNxn/2wylVJ3aM/rJFWW3N5NUxk8b3yYezveAou8oS
-         tDD/w79uicGI5bb9JC+VWvm9tr/LxXmX7XYFtqDAFjWYLaz0Oiq1oBSNducPQVf/+t
-         TuYN4R8BedJ1NJeggEkY3XB/3JtUiCtdsuMcaoP49SJhCEsjEfPxJ2ZAGGZ8/6RTve
-         EtEIMZ0s0h5DRUw7JQip93p73aN58/zIW06jeEUaK2voW4Lb6Mwz169t1xUSVzdwrx
-         NRjTk9+z8Bt6g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id ECF7A5C03B9; Wed, 13 Jul 2022 20:37:18 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 20:37:18 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] rcu-tasks: Make synchronize_rcu_tasks_generic()
- no-ops on early booting
-Message-ID: <20220714033718.GT1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220712082606.3662616-1-qiang1.zhang@intel.com>
- <20220712082606.3662616-3-qiang1.zhang@intel.com>
- <20220712173709.GX1790663@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB588067B6DC5195CBE1DDA7BFDA889@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Wed, 13 Jul 2022 23:37:51 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67A115FCE
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 20:37:49 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id r186so412275pgr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 20:37:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lvv+2TNZ0UDHHJtA78+IPj1aaCqqH2RNt69XAZ3FeMQ=;
+        b=kGmHh59tEq+2m/EXFCaTXBuhec54r+LXVmBhv6huC9hibsPHvJJj1ys+qrE6Q+QlQB
+         DI+v8T/0C8b7exf9ujwi1xbkMLl9p7N1O5hrIZPIougaTEF8SPcDJJsowVGMzT2k/VKv
+         gugnlaGDXN3zCL1vGMPLCtpsB3dD/4KuIqLcg5BwnkVhqmliDQ44sbdgaIe741XIyZav
+         jcPYFO9cGu0bm80KPz9p4b0TIxZIyDVfVXc6+dkpNBMBLYhLK+6YwsXdLlP41e82M9vq
+         sZ2e6CjUFE21Wi9/8r83RaofWIL6rhx1sJe31XDvEWFzOxRqXnoa/WCWWcHVeWS8tzUP
+         vxwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lvv+2TNZ0UDHHJtA78+IPj1aaCqqH2RNt69XAZ3FeMQ=;
+        b=UvQcbLxfFsBn0jQSuHtK4JJfYM4VbVYilghfDdl29RkOX7BJtWeeYUPbvKJ5n7QzlD
+         Fxz6uvILwwC1NV8XDiECmpInxsjSbznanqyVvBL7vWvJHBxPEWTpeG/LDEihwlfNh0J1
+         OKWFsjr4sgKjxsd1dZESkHaVg3yF1dmKm91nZuKWDoz4GdOnBensAsorCfbzW+57Mfm4
+         FXNANf32lCoiEtn0W6k7i1w0hXFiojwtog1Ksqnb37p9j9gpFvmrVu1rfZWn9YBmNy8g
+         fS49sdFGrD+XBpUjcesYgqZPkpODywTpHAjWQKGee6gJ2SLCFZG43FIqXThjNZJRo5iR
+         CxrQ==
+X-Gm-Message-State: AJIora+zUAyi6f7w6PIuH+1qT/sK1SrcOq8QFsHTW2pHKDScCpkVCD/n
+        /dbpVnpGk5ZGoUsNZxrzaJ2RrTlDUc+GB7oIQNxYQQ==
+X-Google-Smtp-Source: AGRyM1t2WNX3fdg8RDVN4sXgU8o9Eo5obTLhkOP7m80mDOjsuCxh8E/oGcw8TMyRHeHrzjaR3mcwAC6vdTYNNiVwhGk=
+X-Received: by 2002:a62:6d05:0:b0:528:99a2:b10 with SMTP id
+ i5-20020a626d05000000b0052899a20b10mr6311821pfc.72.1657769869020; Wed, 13 Jul
+ 2022 20:37:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB588067B6DC5195CBE1DDA7BFDA889@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220714015647.25074-1-xiaolinkui@kylinos.cn>
+In-Reply-To: <20220714015647.25074-1-xiaolinkui@kylinos.cn>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Wed, 13 Jul 2022 20:37:37 -0700
+Message-ID: <CAKH8qBuj=7HXF2xTRWqso9o56t5Tpg68C+r5PnHVnEyu129UmA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Return true/false (not 1/0) from
+ bool functions
+To:     xiaolinkui <xiaolinkui@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        xiaolinkui@kylinos.cn, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 01:53:20AM +0000, Zhang, Qiang1 wrote:
-> 
-> On Tue, Jul 12, 2022 at 04:26:06PM +0800, Zqiang wrote:
-> > When the rcu_scheduler_active variable is RCU_SCHEDULER_INACTIVE and not
-> > yet converted to RCU_SCHEDULER_INIT, there is only idle task, any legal
-> > call synchronize_rcu_tasks_generic() is a quiescent state. this commit
-> > make synchronize_rcu_tasks_generic() no-ops when the rcu_scheduler_active
-> > variable is RCU_SCHEDULER_INACTIVE.
-> > 
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > ---
-> 
-> >It looks like this would be a good way to provide early boot access
-> >to synchronize_rcu_tasks(), synchronize_rcu_tasks_rude(), and
-> >synchronize_rcu_tasks_trace().
-> >
-> >But do we really need early boot access to these functions?  As in has
-> >the below WARN_ON() actually triggered?
-> 
-> when the rcu_scheduler_active variable is RCU_SCHEDULER_INACTIVE,
-> invoke synchronize_rcu_tasks_generic(), in addition to triggering a warning, 
-> also need to make it return directly, if not, the rcu_tasks_one_gp() will be
-> called directly, but due to the rtp structure's -> pregp_func is not initialized,
-> A null pointer bug will appear.
-> 
-> But like said, I don't see the need to call synchronize_rcu_tasks_generic() on 
-> early booting.  maybe this change is  not necessary.
+On Wed, Jul 13, 2022 at 6:57 PM xiaolinkui <xiaolinkui@gmail.com> wrote:
+>
+> From: Linkui Xiao <xiaolinkui@kylinos.cn>
+>
+> Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> functions.  This fixes the following warnings from coccicheck:
+>
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
+> return of 0/1 in function 'decap_v4' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
+> return of 0/1 in function 'decap_v6' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
+> return of 0/1 in function 'encap_v6' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
+> return of 0/1 in function 'parse_tcp' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
+> return of 0/1 in function 'parse_udp' with return type bool
+>
+> Generated by: scripts/coccinelle/misc/boolreturn.cocci
+>
+> Signed-off-by: Linkui Xiao <xiaolinkui@kylinos.cn>
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
 
-Not yet, anyway.  And adding this would require more testing.
+> Suggested-by: Stanislav Fomichev <sdf@google.com>
+That shouldn't be here :-) I didn't suggest the patch, you're
+suggesting it, I'm just suggesting to properly format it.
+Probably not worth a respin, I hope whoever gets to apply it can drop
+that line (or maybe keep it, I don't mind).
 
-However, if the current warning does trigger, and the caller has a
-legitimate reason for invoking this function so early, please remember
-this patch.  ;-)
-
-							Thanx, Paul
-
-> Thanks
-> Zqiang
-> 
-> >
-> >And if it has triggered, and in a context that means that these functions
-> >really are needed during early boot, how should the testing strategy
-> >change to test these at the relevant portions of the boot sequence?
-> >
-> >>From what I know, hitting these during early boot would indicate that
-> >something was removing a trace during early boot, and I know of no way
-> >to make that happen.  Hence my skepticism.  ;-)
-> >
-> >But *if* this was really needed, this looks to be a reasonable way to
-> >implement it.
-> >
-> >							Thanx, Paul
-> 
-> >  kernel/rcu/tasks.h | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> > index 469bf2a3b505..0237e765c28e 100644
-> > --- a/kernel/rcu/tasks.h
-> > +++ b/kernel/rcu/tasks.h
-> > @@ -560,8 +560,9 @@ static int __noreturn rcu_tasks_kthread(void *arg)
-> >  static void synchronize_rcu_tasks_generic(struct rcu_tasks *rtp)
-> >  {
-> >  	/* Complain if the scheduler has not started.  */
-> > -	WARN_ONCE(rcu_scheduler_active == RCU_SCHEDULER_INACTIVE,
-> > -			 "synchronize_rcu_tasks called too soon");
-> > +	if (WARN_ONCE(rcu_scheduler_active == RCU_SCHEDULER_INACTIVE,
-> > +			 "synchronize_rcu_tasks called too soon"))
-> > +		return;
-> >  
-> >  	// If the grace-period kthread is running, use it.
-> >  	if (READ_ONCE(rtp->kthread_ptr)) {
-> > -- 
-> > 2.25.1
-> > 
+> ---
+>  .../selftests/bpf/progs/test_xdp_noinline.c   | 30 +++++++++----------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+> index 125d872d7981..ba48fcb98ab2 100644
+> --- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+> +++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+> @@ -239,7 +239,7 @@ bool parse_udp(void *data, void *data_end,
+>         udp = data + off;
+>
+>         if (udp + 1 > data_end)
+> -               return 0;
+> +               return false;
+>         if (!is_icmp) {
+>                 pckt->flow.port16[0] = udp->source;
+>                 pckt->flow.port16[1] = udp->dest;
+> @@ -247,7 +247,7 @@ bool parse_udp(void *data, void *data_end,
+>                 pckt->flow.port16[0] = udp->dest;
+>                 pckt->flow.port16[1] = udp->source;
+>         }
+> -       return 1;
+> +       return true;
+>  }
+>
+>  static __attribute__ ((noinline))
+> @@ -261,7 +261,7 @@ bool parse_tcp(void *data, void *data_end,
+>
+>         tcp = data + off;
+>         if (tcp + 1 > data_end)
+> -               return 0;
+> +               return false;
+>         if (tcp->syn)
+>                 pckt->flags |= (1 << 1);
+>         if (!is_icmp) {
+> @@ -271,7 +271,7 @@ bool parse_tcp(void *data, void *data_end,
+>                 pckt->flow.port16[0] = tcp->dest;
+>                 pckt->flow.port16[1] = tcp->source;
+>         }
+> -       return 1;
+> +       return true;
+>  }
+>
+>  static __attribute__ ((noinline))
+> @@ -287,7 +287,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
+>         void *data;
+>
+>         if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct ipv6hdr)))
+> -               return 0;
+> +               return false;
+>         data = (void *)(long)xdp->data;
+>         data_end = (void *)(long)xdp->data_end;
+>         new_eth = data;
+> @@ -295,7 +295,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
+>         old_eth = data + sizeof(struct ipv6hdr);
+>         if (new_eth + 1 > data_end ||
+>             old_eth + 1 > data_end || ip6h + 1 > data_end)
+> -               return 0;
+> +               return false;
+>         memcpy(new_eth->eth_dest, cval->mac, 6);
+>         memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
+>         new_eth->eth_proto = 56710;
+> @@ -314,7 +314,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
+>         ip6h->saddr.in6_u.u6_addr32[2] = 3;
+>         ip6h->saddr.in6_u.u6_addr32[3] = ip_suffix;
+>         memcpy(ip6h->daddr.in6_u.u6_addr32, dst->dstv6, 16);
+> -       return 1;
+> +       return true;
+>  }
+>
+>  static __attribute__ ((noinline))
+> @@ -335,7 +335,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
+>         ip_suffix <<= 15;
+>         ip_suffix ^= pckt->flow.src;
+>         if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct iphdr)))
+> -               return 0;
+> +               return false;
+>         data = (void *)(long)xdp->data;
+>         data_end = (void *)(long)xdp->data_end;
+>         new_eth = data;
+> @@ -343,7 +343,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
+>         old_eth = data + sizeof(struct iphdr);
+>         if (new_eth + 1 > data_end ||
+>             old_eth + 1 > data_end || iph + 1 > data_end)
+> -               return 0;
+> +               return false;
+>         memcpy(new_eth->eth_dest, cval->mac, 6);
+>         memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
+>         new_eth->eth_proto = 8;
+> @@ -367,8 +367,8 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
+>                 csum += *next_iph_u16++;
+>         iph->check = ~((csum & 0xffff) + (csum >> 16));
+>         if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
+> -               return 0;
+> -       return 1;
+> +               return false;
+> +       return true;
+>  }
+>
+>  static __attribute__ ((noinline))
+> @@ -386,10 +386,10 @@ bool decap_v6(struct xdp_md *xdp, void **data, void **data_end, bool inner_v4)
+>         else
+>                 new_eth->eth_proto = 56710;
+>         if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct ipv6hdr)))
+> -               return 0;
+> +               return false;
+>         *data = (void *)(long)xdp->data;
+>         *data_end = (void *)(long)xdp->data_end;
+> -       return 1;
+> +       return true;
+>  }
+>
+>  static __attribute__ ((noinline))
+> @@ -404,10 +404,10 @@ bool decap_v4(struct xdp_md *xdp, void **data, void **data_end)
+>         memcpy(new_eth->eth_dest, old_eth->eth_dest, 6);
+>         new_eth->eth_proto = 8;
+>         if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
+> -               return 0;
+> +               return false;
+>         *data = (void *)(long)xdp->data;
+>         *data_end = (void *)(long)xdp->data_end;
+> -       return 1;
+> +       return true;
+>  }
+>
+>  static __attribute__ ((noinline))
+> --
+> 2.17.1
+>

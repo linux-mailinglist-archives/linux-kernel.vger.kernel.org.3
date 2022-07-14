@@ -2,137 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17C457520C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABE5575215
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240416AbiGNPj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        id S240256AbiGNPmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240380AbiGNPjq (ORCPT
+        with ESMTP id S239891AbiGNPm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:39:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E77D114F
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:39:44 -0700 (PDT)
+        Thu, 14 Jul 2022 11:42:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B81CF528AC
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:42:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657813184;
+        s=mimecast20190719; t=1657813346;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zXjUnaumkR0TOxe9lPH1tSh7D3NCENEIHeJQmON/pbA=;
-        b=JcjMS4NWs46Et3qo6viU20RsBD7JBGrVXJQ2OjEq6CZsVHWw56ontzB0NcPM44gWaPv84z
-        dAksgQ77SdsMLdCo1ZEnKXe4GlrMY78hMx02ciyrbHUAqJopkbeLFSHisSIv5gpBrjlWNw
-        XCe3+fpFP8y3qU7NQJXtXa8E4b6yJRY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=VOgvUYIncXWnFhKR1hAi50QlDyggks7WiA8ZUF17MI0=;
+        b=fg9Up3dG5BJ1rBLTfg42pxeIH9RhD5efYv7NVENMK3zOs3Cf/ibQ3VpTheIsbc4qr132GP
+        XfYmmGzXhKxMQdxftaM7hzqv9j+DztAyLD4Bxv3MvZ2nrDEQQcSCcIuhXNDhjux03p3YFN
+        dK9fZOaxWVNqdiQmyn4naGlB4CT0j0A=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-486-DSi88q8OOWi2maST8bCe1g-1; Thu, 14 Jul 2022 11:39:42 -0400
-X-MC-Unique: DSi88q8OOWi2maST8bCe1g-1
-Received: by mail-wm1-f69.google.com with SMTP id a6-20020a05600c348600b003a2d72b7a15so2801358wmq.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:39:42 -0700 (PDT)
+ us-mta-103-dw5EjQU3OO2EKi5QNTocuw-1; Thu, 14 Jul 2022 11:42:25 -0400
+X-MC-Unique: dw5EjQU3OO2EKi5QNTocuw-1
+Received: by mail-ej1-f69.google.com with SMTP id hr24-20020a1709073f9800b0072b57c28438so896640ejc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:42:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zXjUnaumkR0TOxe9lPH1tSh7D3NCENEIHeJQmON/pbA=;
-        b=AGu48zSbEN9CcGgc9rcX+S7Q+4ILWpFOo/AmlLnhT5qsPwIHTm6a8ryd4KPUKNGoGa
-         rhYQWxVjzgseIl+EaQVE5eR9KnYIZbTvXIjiecMi2Fogrfm1lEcSm4t6anFbwZIeNcVT
-         OuOR+7dPdPynTcGl0GxBON/IZtbujHdYKzbc3Hh92R+CiieVXef7rerf+fgo2Jvw4L+U
-         b/ITxIduAVQUBA2jFuCAh22MGEPmjbeSuf8W73x1JKMEuY/xW/6muEzak8ZxmEfyxnlI
-         RXC1jMCzQUYrzZJGt/8S8rZEHYqVEKweM9Ofov/2jPAgQJSTKzqt3tnVDKFZlDGgQgrF
-         zG+A==
-X-Gm-Message-State: AJIora/nwg+OwO3xV144FEKkjkuHIFREYCYV4JhnAcoihMKWQpFn7iH6
-        NUSUyRomALh3LOLgkflQpE+u8n/J2U26WujF4/Ib14cWfe9Td5ojtdezgalTfeu8gLq7N6EjAEZ
-        DYagS0ZxX34aYltqgnGPy/BY=
-X-Received: by 2002:a05:600c:206:b0:3a2:e224:da6f with SMTP id 6-20020a05600c020600b003a2e224da6fmr16099549wmi.167.1657813181598;
-        Thu, 14 Jul 2022 08:39:41 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1umKj6lyufc2E/Zv8r5bdD3dbXIXniFnzkwkp6SxSbe6WGK2L1R/iMwFMU8NMI5GYg/lzZAtQ==
-X-Received: by 2002:a05:600c:206:b0:3a2:e224:da6f with SMTP id 6-20020a05600c020600b003a2e224da6fmr16099535wmi.167.1657813181427;
-        Thu, 14 Jul 2022 08:39:41 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id a15-20020adffb8f000000b0021dbac444a7sm1742198wrr.59.2022.07.14.08.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 08:39:40 -0700 (PDT)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        atomlin@atomlin.com, oleksandr@natalenko.name, neelx@redhat.com
-Subject: [PATCH v2 3/3] module: Show the last unloaded module's taint flag(s)
-Date:   Thu, 14 Jul 2022 16:39:33 +0100
-Message-Id: <20220714153933.2095776-4-atomlin@redhat.com>
-X-Mailer: git-send-email 2.34.3
-In-Reply-To: <20220714153933.2095776-1-atomlin@redhat.com>
-References: <20220714153933.2095776-1-atomlin@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VOgvUYIncXWnFhKR1hAi50QlDyggks7WiA8ZUF17MI0=;
+        b=NTAqcK9A80FduUYbrmsXGyFZsqq4e26R+vgRg0MFoaub9matyN+xXB2WSVcuz3S1Kg
+         hOrZPBJ9VNVsY6tE0SiT9+YLCEeEjU1CW8Szcaz3aCgHCOJON0JkUXg1pq4OPRl8NWJc
+         449Jw+yNUUM7F1IObzcHgGd6VvGcNlpoWsNqYnqrIwID320KyRFrzmud6eNf/HdOkTSN
+         Yv2g90/D3g2i9Gmd1eiIvtIpEAgobEOIYrWfv9Jyw2xByoetGt6Rus8hP7xAzkTg60BC
+         SFq+YNWd8AY99LdPAgsuBIY/bsrojM7F0Ys1V10xocNOd1QhinPT/7J2Ir+3/Zk0ZoKu
+         X0jQ==
+X-Gm-Message-State: AJIora8UxEi1oLMDqG0JIOPtVdyA0libbMRBFGJtvQx/pjnbcoCTVBxg
+        KT/tBlOhaWmAxqexIgwIg8B4LjQW9uWQ7B3I679lBBOM/iKZJ83cAleNXlDZHj8AbK1iGRCrWQU
+        yWgdf/854nGxVaRPr6ZCOjTci
+X-Received: by 2002:aa7:d155:0:b0:43a:bc8d:8d75 with SMTP id r21-20020aa7d155000000b0043abc8d8d75mr13060083edo.322.1657813344365;
+        Thu, 14 Jul 2022 08:42:24 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s7gve3iab4X/ADupNn/dQIy8nWtHC/Qs9AINATQpnZItpmwgA4FIBPCDi8iL7P+4KWrXVlCg==
+X-Received: by 2002:aa7:d155:0:b0:43a:bc8d:8d75 with SMTP id r21-20020aa7d155000000b0043abc8d8d75mr13060048edo.322.1657813344150;
+        Thu, 14 Jul 2022 08:42:24 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id v6-20020aa7d806000000b0043a754d53e5sm1231016edq.78.2022.07.14.08.42.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 08:42:23 -0700 (PDT)
+Message-ID: <a2ade925-89db-5d05-ba44-e3b77125032e@redhat.com>
+Date:   Thu, 14 Jul 2022 17:42:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] KVM: selftests: Double check on the current CPU in
+ rseq_test
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
+        shuah@kernel.org, maz@kernel.org, oliver.upton@linux.dev,
+        shan.gavin@gmail.com
+References: <20220714080642.3376618-1-gshan@redhat.com>
+ <cd5d029c-b396-45ef-917b-92e054659623@redhat.com>
+ <YtA3s0VRj3x7vO7B@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YtA3s0VRj3x7vO7B@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For diagnostic purposes, this patch, in addition to keeping a record/or
-track of the last known unloaded module, we now will include the
-module's taint flag(s) too e.g: " [last unloaded: fpga_mgr_mod(OE)]"
+On 7/14/22 17:35, Sean Christopherson wrote:
+>> Can you check that smp_rmb() and smp_wmb() generate correct instructions on
+>> arm64?
+> 
+> That seems like the most likely scenario (or a kernel bug), I distinctly remember
+> the barriers provided by tools/ being rather bizarre.
 
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
----
- kernel/module/main.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+Maybe we should bite the bait and use C11 atomics in tools/.  I've long 
+planned an article "C11 atomics for kernel programmers", especially 
+because this will also be an issue when Rust gets into the mix...
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c5db13d06995..96ec7f94228d 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -524,7 +524,10 @@ static struct module_attribute modinfo_##field = {                    \
- MODINFO_ATTR(version);
- MODINFO_ATTR(srcversion);
- 
--static char last_unloaded_module[MODULE_NAME_LEN+1];
-+static struct {
-+	char name[MODULE_NAME_LEN + 1];
-+	char taints[MODULE_FLAGS_BUF_SIZE];
-+} last_unloaded_module;
- 
- #ifdef CONFIG_MODULE_UNLOAD
- 
-@@ -694,6 +697,7 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
- {
- 	struct module *mod;
- 	char name[MODULE_NAME_LEN];
-+	char buf[MODULE_FLAGS_BUF_SIZE];
- 	int ret, forced = 0;
- 
- 	if (!capable(CAP_SYS_MODULE) || modules_disabled)
-@@ -753,8 +757,9 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
- 
- 	async_synchronize_full();
- 
--	/* Store the name of the last unloaded module for diagnostic purposes */
--	strscpy(last_unloaded_module, mod->name, sizeof(last_unloaded_module));
-+	/* Store the name and taints of the last unloaded module for diagnostic purposes */
-+	strscpy(last_unloaded_module.name, mod->name, sizeof(last_unloaded_module.name));
-+	strscpy(last_unloaded_module.taints, module_flags(mod, buf, false), sizeof(last_unloaded_module.taints));
- 
- 	free_module(mod);
- 	/* someone could wait for the module in add_unformed_module() */
-@@ -3128,7 +3133,8 @@ void print_modules(void)
- 
- 	print_unloaded_tainted_modules();
- 	preempt_enable();
--	if (last_unloaded_module[0])
--		pr_cont(" [last unloaded: %s]", last_unloaded_module);
-+	if (last_unloaded_module.name[0])
-+		pr_cont(" [last unloaded: %s%s]", last_unloaded_module.name,
-+			last_unloaded_module.taints);
- 	pr_cont("\n");
- }
--- 
-2.34.3
+Paolo
 

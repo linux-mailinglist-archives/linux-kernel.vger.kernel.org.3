@@ -2,159 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E467D575074
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD85575077
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240315AbiGNOMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
+        id S240442AbiGNOM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239853AbiGNOL6 (ORCPT
+        with ESMTP id S240350AbiGNOMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:11:58 -0400
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCE64D161;
-        Thu, 14 Jul 2022 07:11:57 -0700 (PDT)
-Received: from [44.168.19.21] (unknown [86.242.59.24])
-        (Authenticated sender: f6bvp@free.fr)
-        by smtp3-g21.free.fr (Postfix) with ESMTPSA id 9939D13F8AC;
-        Thu, 14 Jul 2022 16:11:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-        s=smtp-20201208; t=1657807915;
-        bh=76x9V4ZPd7dZV6qV5zmO1yMizENW3OWuT5Yztxf4MGE=;
-        h=Date:To:Cc:References:Subject:From:In-Reply-To:From;
-        b=IeF8xwKIukQsbGHRrSXV7nkQwhfgBZJ+9Ayop5GFnQcPSS0cbekYVDm/u5omNuWMH
-         ZLpulpkdVugBhRUOA1YtM2c4Z6n/Sueo1UwIa+UP9EfwhGHYEHbcFwpoOedTC37Ujm
-         myLqz998AAFqjAcSEhp3miAgaghXqQWlxRhCMqR0laySoEcUN7neWIes2JkNAsoGoU
-         EJMHmGdcOOHxlYo3M4zGF1ES5XUS32VCJomHnIjsjNBiPoncKk0bNbdrE2QD7HEeUz
-         vB57olIGeG7ohT0WY8czVpkyKgAPwqb5gXhHVfwuYWYmNkLcP+EIJBR0kwgJVySHzK
-         arHE25oJAW9dw==
-Message-ID: <4c604039-ffb8-bca3-90bb-d8014249c9a2@free.fr>
-Date:   Thu, 14 Jul 2022 16:11:44 +0200
+        Thu, 14 Jul 2022 10:12:21 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E42654C82;
+        Thu, 14 Jul 2022 07:12:08 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26ECaxI7031958;
+        Thu, 14 Jul 2022 14:12:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=678zjVBjiVOwXHJhZQpMbyH65qlU4B7o72itmKDXWz4=;
+ b=te6WQXJeFPgHlUAS9ZTh+d4mlFG3Li/FNiCHg2MKyRcXiz5XRi4LtTI6WGiOP+ohnXgg
+ ss8DfGPO1hHnLgg5hbIfDIUXWp++LD1mvuRL2RCgHQ7tdgCcUvlq8F0u3qCp3IdVVKWV
+ QSxhEJ5C+xA9MRjuTMiFlwR9SsKjva7Nh3kUnv8mX0g/r12twz01WULtwiJVukhwGQV/
+ oHEWfzWgK2xqV49nFH5xZMIJrs8RnsSHaxWWngNz3nbynwtzOQrlHw5mtBaZhIpRfnFd
+ 1o7bznvsaU78uRgkua3IWBhHLPPD1W1H1ePspi09Jpw+5qkBv4nbuPpFzhw1cy6t1J3h GA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hak32aq4s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Jul 2022 14:12:07 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26EE08NI028291;
+        Thu, 14 Jul 2022 14:12:07 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hak32aq3q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Jul 2022 14:12:07 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26EE5Q8k015181;
+        Thu, 14 Jul 2022 14:12:04 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3h71a8necr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Jul 2022 14:12:04 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26EEC1BS24904102
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Jul 2022 14:12:01 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5BC23A405B;
+        Thu, 14 Jul 2022 14:12:01 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 97DC4A4054;
+        Thu, 14 Jul 2022 14:12:00 +0000 (GMT)
+Received: from [9.145.62.186] (unknown [9.145.62.186])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 14 Jul 2022 14:12:00 +0000 (GMT)
+Message-ID: <541d85d3-4864-583c-ff33-d0f566770c9f@linux.ibm.com>
+Date:   Thu, 14 Jul 2022 16:12:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-To:     duoming@zju.edu.cn
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-hams@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, ralf@linux-mips.org
-References: <26cdbcc8.3f44f.181f6cc848f.Coremail.duoming@zju.edu.cn>
-Subject: Re: [PATCH net v6] net: rose: fix null-ptr-deref caused by
- rose_kill_by_neigh
+ Thunderbird/91.9.0
 Content-Language: en-US
-From:   Bernard f6bvp <f6bvp@free.fr>
-Organization: Dimension Parabole
-In-Reply-To: <26cdbcc8.3f44f.181f6cc848f.Coremail.duoming@zju.edu.cn>
+To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, cohuck@redhat.com, david@redhat.com,
+        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
+        nrb@linux.ibm.com, scgl@linux.ibm.com
+References: <20220714101824.101601-1-pmorel@linux.ibm.com>
+ <20220714101824.101601-3-pmorel@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v13 2/2] KVM: s390: resetting the Topology-Change-Report
+In-Reply-To: <20220714101824.101601-3-pmorel@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: HMjFGSPX4U6Gaf9HY3xHKcarm35HOhcO
+X-Proofpoint-GUID: VoOHqQY2O1Xi0R0dvQYg7TLmBxfjvtZF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-14_10,2022-07-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 phishscore=0 malwarescore=0 adultscore=0 mlxscore=0
+ bulkscore=0 spamscore=0 mlxlogscore=999 clxscore=1015 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207140060
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 7/14/22 12:18, Pierre Morel wrote:
+> During a subsystem reset the Topology-Change-Report is cleared.
+> 
+> Let's give userland the possibility to clear the MTCR in the case
+> of a subsystem reset.
+> 
+> To migrate the MTCR, we give userland the possibility to
+> query the MTCR state.
+> 
+> We indicate KVM support for the CPU topology facility with a new
+> KVM capability: KVM_CAP_S390_CPU_TOPOLOGY.
+> 
+> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+> Reviewed-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 
-I am an oldtimer FPAC / ROSE user and occasionnally debugger.
+Nit below, but:
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-Let me take this opportunity to report a major issue present in rose 
-module since kernel 5.4.83 (5.5.10).
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1158,6 +1158,7 @@ struct kvm_ppc_resize_hpt {
+>   #define KVM_CAP_SYSTEM_EVENT_DATA 215
+>   #define KVM_CAP_ARM_SYSTEM_SUSPEND 216
+>   #define KVM_CAP_S390_PROTECTED_DUMP 217
+> +#define KVM_CAP_S390_CPU_TOPOLOGY 218
+>   #define KVM_CAP_S390_ZPCI_OP 221
 
-The bug is an impossibility for a rose application to connect to rose 
-socket.
+Using 222 and moving it a line down might make more sense as 218 is 
+KVM_CAP_X86_TRIPLE_FAULT_EVENT.
 
-Connect request was working until 5.4.81 kernel.
+Can you fix this and push both patches to devel?
+Also send the fixed patch as a reply to this message so I can pick it 
+from the list.
 
-Here is an illustration using
+next and devel have diverted a bit so I will need to fix this up for 
+next, same for the Documentation entry which will be 6.39 instead of 6.38.
 
-Linux F6BVP-8 5.4.79-v7+ #1373 SMP Mon Nov 23 13:22:33 GMT 2020 armv7l 
-GNU/Linux
-
-and kernel downgraded to kernel 4.4.79 on a RaspbBerry Pi configured 
-with ROSE / FPAC node f6bvp-8.
-
-Connect request to co-located node on the same machine does not use 
-Ethernet network.
-
-pi@F6BVP-8:~ $ sudo rose_call rose0 f6bvp f6bvp-8 2080175520
-F6BVP-8 (Commands = ?) : uilt May 15 2022) for LINUX (help = h)
-
-Or success connecting a remote ROSE / FPAC node via Internet (AX25 over 
-UDP frames) :
-
-pi@F6BVP-8:/etc/ax25 $ sudo rose_call rose0 f6bvp f6kkr-8 2080178520
-F6KKR-8 (Commands = ?) : uilt Nov 17 2019) for LINUX (help = h)
-F6KKR-8 (Commands = ?) :
-
-On listen AX25 tool screen dump (pid=1(X.25) means ROSE protocol
-
-axudp: fm F6BVP-9 to F6KKR-9 ctl I11^ pid=1(X.25) len 60 15:25:04.162488
-X.25: LCI 001 : CALL REQUEST - NbAlea: 7801
-fm F6BVP-0   @2080,175520
-to F6KKR-8   @2080,178520
-axudp: fm F6KKR-9 to F6BVP-9 ctl I21^ pid=1(X.25) len 230 15:25:04.177346
-X.25: LCI 001 : CALL ACCEPTED
-axudp: fm F6KKR-9 to F6BVP-9 ctl I22+ pid=1(X.25) len 179 15:25:04.182222
-X.25: LCI 001 : DATA R0 S0  len 176
-0000  55 73 65 72 20 63 61 6C 6C 20 3A 20 46 36 42 56  | User call : F6BV
-0010  50 2D 30 0D 57 65 6C 63 6F 6D 65 2F 42 69 65 6E  | P-0MWelcome/Bien
-0020  76 65 6E 75 65 0D 46 36 4B 4B 52 20 52 61 6D 62  | venueMF6KKR Ramb
-0030  6F 75 69 6C 6C 65 74 2C 20 37 38 20 2C 20 46 72  | ouillet, 78 , Fr
-0040  61 6E 63 65 0D 35 30 6B 6D 20 53 57 20 6F 66 20  | anceM50km SW of
-0050  50 61 72 69 73 0D 0D 46 50 41 43 2D 4E 6F 64 65  | ParisMMFPAC-Node
-0060  20 76 20 34 2E 31 2E 31 2D 62 65 74 61 20 28 62  |  v 4.1.1-beta (b
-0070  75 69 6C 74 20 4E 6F 76 20 31 37 20 32 30 31 39  | uilt Nov 17 2019
-0080  29 20 66 6F 72 20 4C 49 4E 55 58 20 28 68 65 6C  | ) for LINUX (hel
-0090  70 20 3D 20 68 29 0D 46 36 4B 4B 52 2D 38 20 28  | p = h)MF6KKR-8 (
-00A0  43 6F 6D 6D 61 6E 64 73 20 3D 20 3F 29 20 3A 20  | Commands = ?) :
-axudp: fm F6BVP-9 to F6KKR-9 ctl RR3- 15:25:04.184195
-
-
-Using 5.18.11 kernel with up-to-date netdev ax25 and rose modules.
-
-Linux ubuntu-f6bvp 5.18.11-F6BVP #1 SMP PREEMPT_DYNAMIC Tue Jul 12 
-22:13:30 CEST 2022 x86_64 x86_64 x86_64 GNU/Linux
-
-And performing the same connection sequences.
-
-First connect request to co located node:
-
-bernard@ubuntu-f6bvp:/etc/ax25$ sudo rose_call rose0 f6bvp f6bvp-4 
-2080175524
-Connecting to f6bvp-4 @ 2080175524 ...
-
-infinite wait ...
-
-And trying to connect a local network node does not show any packet 
-going out when displaying ax25 activity with "listen" application :
-
-bernard@ubuntu-f6bvp:/etc/ax25$ sudo rose_call rose0 f6bvp f6bvp-8 
-2080175520
-bernard@ubuntu-f6bvp:/etc/ax25$ 20 ...
-
-No connection... and no outgoing frames on listen screen dump AX25 
-application.
-
-Again:
-
-bernard@ubuntu-f6bvp:/etc/ax25$ sudo rose_call rose0 f6bvp f6kkr-8 
-2080178520
-bernard@ubuntu-f6bvp:/etc/ax25$ 20 ...
-
-No connection.
-
-The issue seems to be in rose socket connect ... I understand that some 
-ROSE headers have been changed ... recently (???)
-
-I would be pleased to check any patch to repair this nasty bug and be 
-able to let 5.4.79 kernel away with its AX25 bugs ...
-
-Bernard
-Hemradio f6bvp / ai7bg
-http://f6bvp.org
-
+>   
+>   #ifdef KVM_CAP_IRQ_ROUTING
 

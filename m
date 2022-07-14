@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FA6574C17
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08149574C13
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238897AbiGNL2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
+        id S238855AbiGNL2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238861AbiGNL2B (ORCPT
+        with ESMTP id S238862AbiGNL2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Jul 2022 07:28:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4B459261
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:27:58 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB57459266;
+        Thu, 14 Jul 2022 04:27:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0006CB824B7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:27:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0621BC341C8;
-        Thu, 14 Jul 2022 11:27:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2196C61CC2;
+        Thu, 14 Jul 2022 11:27:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F4A4C341C6;
+        Thu, 14 Jul 2022 11:27:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657798075;
-        bh=+SPLt9VP2GO4YubuyjOhsJ0inE13AM1tjfBKmcp7OXw=;
+        s=k20201202; t=1657798078;
+        bh=tOGmD5u/m9ilA/glyEAQrd2KlEkkAMsHW3drN8WKV/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BQeDMfu+l230j+0OepCir8xMrGwiGH3Z6tgemP5TgJTMlzRrOh5n1/Sz8kljQnNaX
-         2TiWrCP4JKunT7ru4hRcfMFhuN4ddTQtYilKNEDFB8LomvHnmZy9NwXVph6AiZZ7Ps
-         wgHxAYrJnI4DPg2CqTm9zAIjuhqtenomSS/APSPorZux2eBasWq0oRcYIlpaLlanWa
-         kkjJqO37k9JRbzRaJMZeW4H/cP5PA0j7Z7kJONI1uo23YRMpyPIzwFi+znC3EMFdDy
-         10vOjsXXQ3p1nJkHdj3c8LmZLUVh5Bo95wnz+/wgGZWgTPwKqsgWZzDM7PA3Py5vQS
-         VVzLgQuXaRupA==
+        b=I5WiL4mTT1a43S+B3rLO5E5wkRqZ3KWIFX4R+bXiXL2Dewy3zBY4HJfc42nlDyF57
+         Y0UnraujQsDkAAXNarcSHVn8LnM2BnOJqIDPWwwrr1lwfjB6VkqPRcdfG6umF9GqtS
+         KtOjOylKy/v0UOHIQ6ohhK/u7hrFUychRoxN34Ns0ivWRC/W18x3z9Rkw+YVIACThW
+         W6InZslRmF/LCFxydbfpYAqiG3Bvy/TiP6kd6Adxn01TAAAyuehyU/yjaj5OjZAAXE
+         pGXZ396EXSEnUgKimKA7VZ/aowwQDpuM2hFZ0wRPiATw+Jgs+kitZ4+yzeGhfRlVZ+
+         G4OBG8DTzCyvA==
 From:   Lee Jones <lee@kernel.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 5/8] docs: ABI: sysfs-devices-soc: Update Lee Jones' email address
-Date:   Thu, 14 Jul 2022 12:25:30 +0100
-Message-Id: <20220714112533.539910-6-lee@kernel.org>
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH 6/8] dt-bindings: backlight: Update Lee Jones' email address
+Date:   Thu, 14 Jul 2022 12:25:31 +0100
+Message-Id: <20220714112533.539910-7-lee@kernel.org>
 X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
 In-Reply-To: <20220714112533.539910-1-lee@kernel.org>
 References: <20220714112533.539910-1-lee@kernel.org>
@@ -57,77 +61,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Going forward, I'll be using my kernel.org for upstream work.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Daniel Thompson <daniel.thompson@linaro.org>
+Cc: Jingoo Han <jingoohan1@gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-leds@vger.kernel.org
+Cc: devicetree@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 Signed-off-by: Lee Jones <lee@kernel.org>
 ---
- Documentation/ABI/testing/sysfs-devices-soc | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ Documentation/devicetree/bindings/leds/backlight/common.yaml    | 2 +-
+ .../devicetree/bindings/leds/backlight/gpio-backlight.yaml      | 2 +-
+ .../devicetree/bindings/leds/backlight/led-backlight.yaml       | 2 +-
+ .../devicetree/bindings/leds/backlight/lm3630a-backlight.yaml   | 2 +-
+ .../devicetree/bindings/leds/backlight/pwm-backlight.yaml       | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-soc b/Documentation/ABI/testing/sysfs-devices-soc
-index ea999e292f111..5269808ec35f8 100644
---- a/Documentation/ABI/testing/sysfs-devices-soc
-+++ b/Documentation/ABI/testing/sysfs-devices-soc
-@@ -1,6 +1,6 @@
- What:		/sys/devices/socX
- Date:		January 2012
--contact:	Lee Jones <lee.jones@linaro.org>
-+contact:	Lee Jones <lee@kernel.org>
- Description:
- 		The /sys/devices/ directory contains a sub-directory for each
- 		System-on-Chip (SoC) device on a running platform. Information
-@@ -14,14 +14,14 @@ Description:
+diff --git a/Documentation/devicetree/bindings/leds/backlight/common.yaml b/Documentation/devicetree/bindings/leds/backlight/common.yaml
+index 702ba350d8698..3b60afbab68ba 100644
+--- a/Documentation/devicetree/bindings/leds/backlight/common.yaml
++++ b/Documentation/devicetree/bindings/leds/backlight/common.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Common backlight properties
  
- What:		/sys/devices/socX/machine
- Date:		January 2012
--contact:	Lee Jones <lee.jones@linaro.org>
-+contact:	Lee Jones <lee@kernel.org>
- Description:
- 		Read-only attribute common to all SoCs. Contains the SoC machine
- 		name (e.g. Ux500).
+ maintainers:
+-  - Lee Jones <lee.jones@linaro.org>
++  - Lee Jones <lee@kernel.org>
+   - Daniel Thompson <daniel.thompson@linaro.org>
+   - Jingoo Han <jingoohan1@gmail.com>
  
- What:		/sys/devices/socX/family
- Date:		January 2012
--contact:	Lee Jones <lee.jones@linaro.org>
-+contact:	Lee Jones <lee@kernel.org>
- Description:
- 		Read-only attribute common to all SoCs. Contains SoC family name
- 		(e.g. DB8500).
-@@ -59,7 +59,7 @@ Description:
+diff --git a/Documentation/devicetree/bindings/leds/backlight/gpio-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/gpio-backlight.yaml
+index 75cc569b9c558..3300451fcfd5e 100644
+--- a/Documentation/devicetree/bindings/leds/backlight/gpio-backlight.yaml
++++ b/Documentation/devicetree/bindings/leds/backlight/gpio-backlight.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: gpio-backlight bindings
  
- What:		/sys/devices/socX/soc_id
- Date:		January 2012
--contact:	Lee Jones <lee.jones@linaro.org>
-+contact:	Lee Jones <lee@kernel.org>
- Description:
- 		Read-only attribute supported by most SoCs. In the case of
- 		ST-Ericsson's chips this contains the SoC serial number.
-@@ -72,21 +72,21 @@ Description:
+ maintainers:
+-  - Lee Jones <lee.jones@linaro.org>
++  - Lee Jones <lee@kernel.org>
+   - Daniel Thompson <daniel.thompson@linaro.org>
+   - Jingoo Han <jingoohan1@gmail.com>
  
- What:		/sys/devices/socX/revision
- Date:		January 2012
--contact:	Lee Jones <lee.jones@linaro.org>
-+contact:	Lee Jones <lee@kernel.org>
- Description:
- 		Read-only attribute supported by most SoCs. Contains the SoC's
- 		manufacturing revision number.
+diff --git a/Documentation/devicetree/bindings/leds/backlight/led-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/led-backlight.yaml
+index f5822f4ea6679..0793d0adc4ec9 100644
+--- a/Documentation/devicetree/bindings/leds/backlight/led-backlight.yaml
++++ b/Documentation/devicetree/bindings/leds/backlight/led-backlight.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: led-backlight bindings
  
- What:		/sys/devices/socX/process
- Date:		January 2012
--contact:	Lee Jones <lee.jones@linaro.org>
-+contact:	Lee Jones <lee@kernel.org>
- Description:
- 		Read-only attribute supported ST-Ericsson's silicon. Contains the
- 		the process by which the silicon chip was manufactured.
+ maintainers:
+-  - Lee Jones <lee.jones@linaro.org>
++  - Lee Jones <lee@kernel.org>
+   - Daniel Thompson <daniel.thompson@linaro.org>
+   - Jingoo Han <jingoohan1@gmail.com>
  
- What:		/sys/bus/soc
- Date:		January 2012
--contact:	Lee Jones <lee.jones@linaro.org>
-+contact:	Lee Jones <lee@kernel.org>
- Description:
- 		The /sys/bus/soc/ directory contains the usual sub-folders
- 		expected under most buses. /sys/bus/soc/devices is of particular
+diff --git a/Documentation/devicetree/bindings/leds/backlight/lm3630a-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/lm3630a-backlight.yaml
+index 08fe5cf8614a8..3c9b4054ed9a5 100644
+--- a/Documentation/devicetree/bindings/leds/backlight/lm3630a-backlight.yaml
++++ b/Documentation/devicetree/bindings/leds/backlight/lm3630a-backlight.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: TI LM3630A High-Efficiency Dual-String White LED
+ 
+ maintainers:
+-  - Lee Jones <lee.jones@linaro.org>
++  - Lee Jones <lee@kernel.org>
+   - Daniel Thompson <daniel.thompson@linaro.org>
+   - Jingoo Han <jingoohan1@gmail.com>
+ 
+diff --git a/Documentation/devicetree/bindings/leds/backlight/pwm-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/pwm-backlight.yaml
+index fcb8429f3088c..78fbe20a17580 100644
+--- a/Documentation/devicetree/bindings/leds/backlight/pwm-backlight.yaml
++++ b/Documentation/devicetree/bindings/leds/backlight/pwm-backlight.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: pwm-backlight bindings
+ 
+ maintainers:
+-  - Lee Jones <lee.jones@linaro.org>
++  - Lee Jones <lee@kernel.org>
+   - Daniel Thompson <daniel.thompson@linaro.org>
+   - Jingoo Han <jingoohan1@gmail.com>
+ 
 -- 
 2.37.0.144.g8ac04bfd2-goog
 

@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029EC574A81
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCD9574A89
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238308AbiGNKVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
+        id S238333AbiGNKWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238281AbiGNKVK (ORCPT
+        with ESMTP id S238171AbiGNKWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:21:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE1E52FFE
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:21:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63BF861F03
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 10:21:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1055C34114;
-        Thu, 14 Jul 2022 10:21:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657794066;
-        bh=3dg23Jgtwukc/GCHd2LHRM+BYubgruVg6fjGLogiQYM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NmhVa/CU3B8mmGtz8blBuT9rEZsK/OJdoesCxO2cjxthY1xO942wd66p37fSbaelT
-         Oj6EbZzD6F3SUM2NLz90oYUAUabiX8aHhlgPMyDccX2NVDxtbXtKjuLA47o3oldpy2
-         9CRxdQWRqHPUYKblXQ6pWg2n/cqsAKE+i3Irn9Fmbo+e4SU1Mt56P/5izRsy9TAQ1N
-         cjV+bztsPj4So6psEXNeOht7ZKUsuEKiMqlWS90+1Iqr4hcLVlDKfb7JLL1FKikxGM
-         bp3P+Rv+x6fGaN0VkH2IHgv3TSK3DTb6/hFlwqQuInOi6o1rqr1H2UiIan7AQf43nd
-         dF5QaCRJ3uS7g==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1oBvxw-007QGu-EY;
-        Thu, 14 Jul 2022 11:21:04 +0100
+        Thu, 14 Jul 2022 06:22:11 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEB7222B3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657794131; x=1689330131;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SjixICY63dlkEDqfR3BHJ38BHvY7nzfEqXWF2S723SY=;
+  b=j6bWlSYf5LJOqAk1ys7KWVGJZRBpTlEZYGRNxTRxhhf1wg9nWgjB4lGj
+   HAKF5Lr1TWIiTjJebTggG+MchOZP6nq7LtCgZqzpcJNoujDF9Tm1jZ0wP
+   pJngLcs7Md7iom2K80z9+mMAcgR19ODxCQ+r6BJVaM1TQtNOJ6K3NTvEM
+   4wj0cAcqQseClrcSNH8aX8k1tPhcFWqomdkT6ZH8tVeVCAegadn+ii/WZ
+   QkiTx8OCFDmwlQqvp7Pn2tzN+ijZuOlHrcmGuPu/wot/2We7crLGkzLcs
+   L+sDlBpkLqucL9ECHoCTGBClzfNGboGKvVtria8EaB/zYnci4nnpDN8vN
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="347155343"
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="347155343"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 03:22:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="663731719"
+Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Jul 2022 03:22:08 -0700
+Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBvyy-0000Rh-8Q;
+        Thu, 14 Jul 2022 10:22:08 +0000
+Date:   Thu, 14 Jul 2022 18:21:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [morimoto:sound-2022-07-04-v1 15/23]
+ sound/soc/mediatek/mt8195/mt8195-mt6359.c:1341:18: error: no member named
+ 'stream_active' in 'struct snd_soc_dai'
+Message-ID: <202207141829.xL3HSLc4-lkp@intel.com>
 MIME-Version: 1.0
-Date:   Thu, 14 Jul 2022 11:21:04 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH V14 14/15] irqchip / ACPI: Introduce ACPI_IRQ_MODEL_LPIC
- for LoongArch
-In-Reply-To: <bfbd08d6-6f09-3ddb-0fdf-8c459352cf0f@loongson.cn>
-References: <1656837932-18257-1-git-send-email-lvjianmin@loongson.cn>
- <1656837932-18257-15-git-send-email-lvjianmin@loongson.cn>
- <87y1x5krjd.wl-maz@kernel.org>
- <f76927be-8c8c-5bbe-ef5c-a63f4a09b29c@loongson.cn>
- <bfbd08d6-6f09-3ddb-0fdf-8c459352cf0f@loongson.cn>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <22902b5c7616d47f6e48acc536a70da7@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,80 +63,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-14 11:02, Jianmin Lv wrote:
-> On 2022/7/8 上午11:17, Jianmin Lv wrote:
->> 
->> 
->> On 2022/7/7 下午8:59, Marc Zyngier wrote:
->>> On Sun, 03 Jul 2022 09:45:31 +0100,
->>> Jianmin Lv <lvjianmin@loongson.cn> wrote:
->>>> 
->>>> For LoongArch, ACPI_IRQ_MODEL_LPIC is introduced, and then the
->>>> callback acpi_get_gsi_domain_id and acpi_gsi_to_irq_fallback are
->>>> implemented.
->>>> 
->>>> The acpi_get_gsi_domain_id callback returns related fwnode handle
->>>> of irqdomain for different GSI range.
->>>> 
->>>> The acpi_gsi_to_irq_fallback will create new mapping for gsi when
->>>> the mapping of it is not found.
->>>> 
->>>> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
->>>> ---
->>>>   drivers/acpi/bus.c                  |  3 +++
->>>>   drivers/irqchip/irq-loongarch-cpu.c | 37 
->>>> +++++++++++++++++++++++++++++++++++++
->>>>   include/linux/acpi.h                |  1 +
->>>>   3 files changed, 41 insertions(+)
->>>> 
->>>> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
->>>> index 86fa61a..63fbf00 100644
->>>> --- a/drivers/acpi/bus.c
->>>> +++ b/drivers/acpi/bus.c
->>>> @@ -1145,6 +1145,9 @@ static int __init acpi_bus_init_irq(void)
->>>>       case ACPI_IRQ_MODEL_PLATFORM:
->>>>           message = "platform specific model";
->>>>           break;
->>>> +    case ACPI_IRQ_MODEL_LPIC:
->>>> +        message = "LPIC";
->>>> +        break;
->>>>       default:
->>>>           pr_info("Unknown interrupt routing model\n");
->>>>           return -ENODEV;
->>>> diff --git a/drivers/irqchip/irq-loongarch-cpu.c 
->>>> b/drivers/irqchip/irq-loongarch-cpu.c
->>>> index c2f7411..1b241d7 100644
->>>> --- a/drivers/irqchip/irq-loongarch-cpu.c
->>>> +++ b/drivers/irqchip/irq-loongarch-cpu.c
->>>> @@ -15,6 +15,41 @@
->>>>   static struct irq_domain *irq_domain;
->>>> +static int lpic_gsi_to_irq(u32 gsi)
->>>> +{
->>>> +    /* Only pch irqdomain transferring is required for LoongArch. 
->>>> */
->>>> +    if (gsi >= GSI_MIN_PCH_IRQ && gsi <= GSI_MAX_PCH_IRQ)
->>>> +        return acpi_register_gsi(NULL, gsi, ACPI_LEVEL_SENSITIVE, 
->>>> ACPI_ACTIVE_HIGH);
->>>> +    return -1;
->>> 
->>> The expected return value on failure is 0 (which indicates that no
->>> interrupt was mapped). Here, things will break as acpi_gsi_to_irq()
->>> stores the result as unsigned, and compares the result to 0.
->>> 
->> 
->> Ok, thanks, I'll change the return value to 0 on failure and change 
->> return type to unsigned int.
->> 
->> 
-> 
-> Hi, Marc, if the return type is changed to unsigned int, the return
-> type of the fallback handler in the patch:
-> ACPI: irq: Allow acpi_gsi_to_irq() to have an arch-specific fallback
-> 
-> should be changed to unsigned int too, yes?
+tree:   https://github.com/morimoto/linux sound-2022-07-04-v1
+head:   e9efd77b37adcddf8f910f34dd0df06be9d896cb
+commit: 2aa8bfec7e0ff4ab531a688f8fd43150ad78ae23 [15/23] ASoC: count activity via TX/RX base instead of Playback/Capture.
+config: arm-randconfig-r026-20220714 (https://download.01.org/0day-ci/archive/20220714/202207141829.xL3HSLc4-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/morimoto/linux/commit/2aa8bfec7e0ff4ab531a688f8fd43150ad78ae23
+        git remote add morimoto https://github.com/morimoto/linux
+        git fetch --no-tags morimoto sound-2022-07-04-v1
+        git checkout 2aa8bfec7e0ff4ab531a688f8fd43150ad78ae23
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/ sound/soc/mediatek/mt8195/ sound/soc/meson/ sound/soc/qcom/ sound/soc/stm/ sound/soc/sunxi/
 
-Yes, of course.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-         M.
+All errors (new ones prefixed by >>):
+
+>> sound/soc/mediatek/mt8195/mt8195-mt6359.c:1341:18: error: no member named 'stream_active' in 'struct snd_soc_dai'
+                                   if (cpu_dai->stream_active[conn->stream_dir] > 0) {
+                                       ~~~~~~~  ^
+   1 error generated.
+
+
+vim +1341 sound/soc/mediatek/mt8195/mt8195-mt6359.c
+
+40d605df0a7bf77 sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2021-08-19  1319  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1320  /* fixup the BE DAI link to match any values from topology */
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1321  static int mt8195_dai_link_fixup(struct snd_soc_pcm_runtime *rtd,
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1322  				 struct snd_pcm_hw_params *params)
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1323  {
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1324  	struct snd_soc_card *card = rtd->card;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1325  	struct snd_soc_dai_link *sof_dai_link = NULL;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1326  	struct snd_soc_pcm_runtime *runtime;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1327  	struct snd_soc_dai *cpu_dai;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1328  	int i, j, ret = 0;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1329  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1330  	for (i = 0; i < ARRAY_SIZE(g_sof_conn_streams); i++) {
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1331  		const struct sof_conn_stream *conn = &g_sof_conn_streams[i];
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1332  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1333  		if (strcmp(rtd->dai_link->name, conn->normal_link))
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1334  			continue;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1335  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1336  		for_each_card_rtds(card, runtime) {
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1337  			if (strcmp(runtime->dai_link->name, conn->sof_link))
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1338  				continue;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1339  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1340  			for_each_rtd_cpu_dais(runtime, j, cpu_dai) {
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24 @1341  				if (cpu_dai->stream_active[conn->stream_dir] > 0) {
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1342  					sof_dai_link = runtime->dai_link;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1343  					break;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1344  				}
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1345  			}
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1346  			break;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1347  		}
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1348  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1349  		if (sof_dai_link && sof_dai_link->be_hw_params_fixup)
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1350  			ret = sof_dai_link->be_hw_params_fixup(runtime, params);
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1351  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1352  		break;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1353  	}
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1354  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1355  	if (!strcmp(rtd->dai_link->name, "ETDM2_IN_BE") ||
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1356  	    !strcmp(rtd->dai_link->name, "ETDM1_OUT_BE")) {
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1357  		mt8195_etdm_hw_params_fixup(runtime, params);
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1358  	}
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1359  
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1360  	return ret;
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1361  }
+4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1362  
+
+:::::: The code at line 1341 was first introduced by commit
+:::::: 4dbc714fe07641e7a07731f82152448ef09f3002 ASoC: mediatek: mt8195: revise mt8195-mt6359-rt1019-rt5682.c
+
+:::::: TO: Trevor Wu <trevor.wu@mediatek.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
 -- 
-Jazz is not dead. It just smells funny...
+0-DAY CI Kernel Test Service
+https://01.org/lkp

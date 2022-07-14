@@ -2,107 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCE7574F7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4D8574F8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239070AbiGNNoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
+        id S239762AbiGNNrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239871AbiGNNoM (ORCPT
+        with ESMTP id S231811AbiGNNrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:44:12 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E9452477;
-        Thu, 14 Jul 2022 06:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657806250; x=1689342250;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gHdsixsz1auIu7i5568UQTbakjMkD0Fc5TX5GEXk8js=;
-  b=bDjfwwaM29YNs7jUwoGItV4pdYvFwVzL+CVKXpZwGymf/PGkpQ2m1lye
-   U3sTLOW8ZDZtYYwDQbBiNs/kf2Cx5HmwDd52mwjV1Ll2ODYofwdpOyIpY
-   YVZz8Q+Xnzml49/o0M2QnsGs1L4GAwP92dE2LQ2jb7KpR8TKGH8H+cAhu
-   Q=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 14 Jul 2022 06:44:09 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 06:44:09 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 14 Jul 2022 06:44:08 -0700
-Received: from hu-kshivnan-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 14 Jul 2022 06:44:06 -0700
-From:   Shivnandan Kumar <quic_kshivnan@quicinc.com>
-To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Shivnandan Kumar" <quic_kshivnan@quicinc.com>
-Subject: [PATCH v2 1/1] PM: QoS: Add check to make sure CPU freq is non-negative
-Date:   Thu, 14 Jul 2022 19:13:42 +0530
-Message-ID: <20220714134342.3498384-1-quic_kshivnan@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 14 Jul 2022 09:47:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86EE2528A0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657806419;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+awr3ZhBs5ChFhOgpPkaLATcx5cLB7nHdpf6QXxPxMY=;
+        b=PPBF2Gs3BACqWjwRUIcGHL3jOFStnAQ+CzLuB+Xc8R+twAT7uKE/vCDKgQexZPBF1Z5y+d
+        yKMS1+za6R4wuFF0uoWmOlD/iXUaRFpNJ+xuf6KcvdLwJPTOqQAvYXbvCUbD5pjJ/jltXk
+        yQDs43ZZjXVYE0CxM/cgmwlBTci8iuA=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-647-83mlpVkMOICYyqGPni9kiQ-1; Thu, 14 Jul 2022 09:46:58 -0400
+X-MC-Unique: 83mlpVkMOICYyqGPni9kiQ-1
+Received: by mail-ed1-f72.google.com with SMTP id bs1-20020a056402304100b0043ad1e84611so1548445edb.15
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:46:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+awr3ZhBs5ChFhOgpPkaLATcx5cLB7nHdpf6QXxPxMY=;
+        b=u/7/z6rAM96JzUH3Abh+4WhcRXnY4yEDMzZl5/SankVXaagnn32mVa7jV8mKTa3AQ4
+         USpa+BMP4JD/rtu58zE2SbeVQNHzKaOR5QmB1/K8WKGLX5OHh6onTBMjl7ZH+5YghZsx
+         PFzPs3lCQo20zao+KH4TZRNNiUz/RNgm2A3sLQ/oB6s1ADggE+CG6JP+vjcisTh/Vfq1
+         hMAUpDUrAeOE5fD0QC1oQktceYddhaidHxD+reaNbN7hODiXV6w0Zw5hHWgdKjy9SNQ8
+         rDwUUJEv3v+9cM6bUpczjCbAm1biRMWU52Sx9oZcoAsX/6ETPUgYr+6F2xBrGmqOL6ak
+         15KA==
+X-Gm-Message-State: AJIora/+m+WTYtXEKiso8ECa7+uQJdJJMoWKi/RPobNAgLvGQuC4CWyl
+        9NVGDFy1L3id6ZcArFD+vp0hWCORnT714t9ArKmNrf6x2AX58N0VXFz4Kph0NY6sidivEeHyu7O
+        GByAdhU9sRGBnx4SgUUAzLCpQ
+X-Received: by 2002:a17:907:1c8c:b0:72b:6b8f:4add with SMTP id nb12-20020a1709071c8c00b0072b6b8f4addmr8917278ejc.556.1657806417357;
+        Thu, 14 Jul 2022 06:46:57 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sLM5Xyg7JtYTCIQNuUJMLYhlONllSjxPkuyV7k114ks5G16n5o0fFDxAMDpk1LxZB8rtufpA==
+X-Received: by 2002:a17:907:1c8c:b0:72b:6b8f:4add with SMTP id nb12-20020a1709071c8c00b0072b6b8f4addmr8917259ejc.556.1657806417122;
+        Thu, 14 Jul 2022 06:46:57 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id r14-20020aa7cfce000000b0043a4de1d421sm1072680edy.84.2022.07.14.06.46.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 06:46:56 -0700 (PDT)
+Message-ID: <6b4337f4-d1de-7ba3-14e8-3ad0f9b18788@redhat.com>
+Date:   Thu, 14 Jul 2022 15:46:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5.15 00/78] 5.15.55-rc1 review
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Slade Watkins <slade@sladewatkins.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        =?UTF-8?Q?Alex_Benn=c3=a9e?= <alex.bennee@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+References: <20220712183238.844813653@linuxfoundation.org>
+ <CA+G9fYtntg7=zWSs-dm+n_AUr_u0eBOU0zrwWqMeXZ+SF6_bLw@mail.gmail.com>
+ <eb63e4ce-843f-c840-060e-6e15defd3c4d@roeck-us.net>
+ <CAHk-=wj5cOA+fbGeV15kvwe6YGT54Wsk8F2UGoekVQLTPJz_pw@mail.gmail.com>
+ <CAHk-=wgq1soM4gudypWLVQdYuvJbXn38LtvJMtnLZX+RTypqLg@mail.gmail.com>
+ <Ys/bYJ2bLVfNBjFI@nazgul.tnic>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Ys/bYJ2bLVfNBjFI@nazgul.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	CPU frequency should never be negative.
-	If some client driver calls freq_qos_update_request with some
-	value greater than INT_MAX, then it will set max CPU freq at
-	fmax but it will add plist node with some negative priority.
-	plist node has priority from INT_MIN (highest) to INT_MAX
-	(lowest). Once priority is set as negative, another client
-	will not be able to reduce CPU frequency. Adding check to
-	make sure CPU freq is non-negative will fix this problem.
+On 7/14/22 11:01, Borislav Petkov wrote:
+> On Wed, Jul 13, 2022 at 11:40:03AM -0700, Linus Torvalds wrote:
+>> And I see that Thadeau already figured it out:
+>>
+>>    https://lore.kernel.org/all/20220713171241.184026-1-cascardo@canonical.com/
+>>
+>> So presumably we need that patch everywhere.
+> Right, I've queued it along with other fallout fixes. Will do some
+> testing before I send them to you on Sunday.
+> 
+> I'm guessing you're thinking of cutting an -rc7 so that people can test
+> the whole retbleed mitigation disaster an additional week?
 
-Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+Please leave that one out as Peter suggested a better fix and I have 
+that queued for Linus.
 
----
-v1->v2
-	-addressed comments from Rafael
-	-changed commit text accordingly
+(If you don't no big deal, the conflict will be very clear, but it will 
+be a bit more work for everyone).
 
- kernel/power/qos.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-index ec7e1e85923e..27e6596f287a 100644
---- a/kernel/power/qos.c
-+++ b/kernel/power/qos.c
-@@ -531,7 +531,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
- {
- 	int ret;
- 
--	if (IS_ERR_OR_NULL(qos) || !req)
-+	if (IS_ERR_OR_NULL(qos) || !req || value < FREQ_QOS_MIN_DEFAULT_VALUE)
- 		return -EINVAL;
- 
- 	if (WARN(freq_qos_request_active(req),
-@@ -563,7 +563,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
-  */
- int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
- {
--	if (!req)
-+	if (!req || new_value < FREQ_QOS_MIN_DEFAULT_VALUE)
- 		return -EINVAL;
- 
- 	if (WARN(!freq_qos_request_active(req),
--- 
-2.25.1
+Paolo
 

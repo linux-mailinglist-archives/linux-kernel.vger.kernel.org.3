@@ -2,83 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF77575152
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFFA575155
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239807AbiGNPBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
+        id S239834AbiGNPB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232374AbiGNPBK (ORCPT
+        with ESMTP id S239817AbiGNPB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:01:10 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EE35FAEF;
-        Thu, 14 Jul 2022 08:01:08 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 26EF0bXF011189
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jul 2022 11:00:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1657810839; bh=sFpZcIaOd7DnAF9OZCZNzBmIaZ7bPD9+z4NRwNzFCPM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=MqxNurxY2MEVlO28KsCu+VVgYMNnTJMYlxck3rxM1lkAqVxuas1JBdaKLSUqibSj6
-         24ciFqCOr3VFmEJjTl75qrXS5ZMZVy7792fEJnq9HtAArg8CbRLC6blGuu5hmY60yj
-         hU6A9MxUxdaGSuwhEXmvVv43ZxRcR2f86Jzf1svuDUyISY1NjesOF86QfrJOEBQT5+
-         C7HWKRDJz/8fmyVujgDRjHzccdwz/pvx0bBVR0DYgZtP/9jezkqT5/3m/FrFgmg0Uj
-         ZDZ/GxH23p5R3wwlh/JIxwTsHww6PfHJE7gp9qPwEAFj+VuWhy2dlHXbyiKcsXRB4n
-         N4FkivbcsTn4g==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 44D4515C003C; Thu, 14 Jul 2022 11:00:37 -0400 (EDT)
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     linux-ext4@vger.kernel.org, libaokun1@huawei.com
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, jack@suse.cz, yi.zhang@huawei.com,
-        linux-kernel@vger.kernel.org, enwlinux@gmail.com,
-        yebin10@huawei.com, lczerner@redhat.com, ritesh.list@gmail.com,
-        adilger.kernel@dilger.ca, yukuai3@huawei.com
-Subject: Re: [PATCH v3 0/4] ext4: fix use-after-free in ext4_xattr_set_entry
-Date:   Thu, 14 Jul 2022 11:00:34 -0400
-Message-Id: <165781082373.2477554.10824721995094277212.b4-ty@mit.edu>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220616021358.2504451-1-libaokun1@huawei.com>
-References: <20220616021358.2504451-1-libaokun1@huawei.com>
+        Thu, 14 Jul 2022 11:01:26 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EF45E33B;
+        Thu, 14 Jul 2022 08:01:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=SD+E46jleghc1zhKhR9PveNf5aZVNxzYDkkNEuLw6xs=; b=jPDf1sXvRlPt3kdJgvEDxX2uey
+        IoOgOI2HYUqGtfmOWtAn/eLsTaubeRmEpDtlThTCaZPwh0qo4P1axzKtPseySrD5Z6TKVVf6Gx+J8
+        gwHyY7HD7pLZ1C4EqAV8nJIwcWGj3NENks9j2m0vCDOYMwuT0t/E8/6AY7TNYUuCW6X3CRo4Li2Mg
+        xHCkAj6UAHswTSl4wssGSfxEJ09ev0/AyK87B61JTyjy5th087ygs0og9jduneGmc4yOxzyUrwNim
+        vtVDigEUVgARQqcOg7FQ/RTTbMkFszxNB9lNYZHadrXPaLU5tdUk2FYt8K8vRzOMUWBB0z3KTOu63
+        yl6BYIoA==;
+Received: from [177.139.47.106] (helo=[192.168.15.109])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oC0L8-00GV8X-3S; Thu, 14 Jul 2022 17:01:18 +0200
+Message-ID: <8bfd13a7-ed02-00dd-63a1-7144f2e55ef0@igalia.com>
+Date:   Thu, 14 Jul 2022 12:00:59 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC] futex2: add NUMA awareness
+Content-Language: en-US
+To:     Andrey Semashev <andrey.semashev@gmail.com>
+Cc:     linux-api@vger.kernel.org, fweimer@redhat.com,
+        linux-kernel@vger.kernel.org, Darren Hart <dvhart@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        libc-alpha@sourceware.org, Davidlohr Bueso <dave@stgolabs.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+References: <36a8f60a-69b2-4586-434e-29820a64cd88@igalia.com>
+ <74ba5239-27b0-299e-717c-595680cd52f9@gmail.com>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <74ba5239-27b0-299e-717c-595680cd52f9@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022 10:13:54 +0800, Baokun Li wrote:
-> This series adds a macro for whether there is space for xattr in
-> ext4 inode, and fixes some problems with this macro.
+Hi Andrey,
+
+Thanks for the feedback.
+
+Às 08:01 de 14/07/22, Andrey Semashev escreveu:
+> On 7/14/22 06:18, André Almeida wrote:
+[...]
+>>
+>> Feedback? Who else should I CC?
 > 
-> V1->V2:
-> 	Split the patch to make the logic clearer.
-> 	Rename macro to EXT4_INODE_HAVE_XATTR_SPACE.
-> V2->V3:
-> 	Rename macro to EXT4_INODE_HAS_XATTR_SPACE.
+> Just a few questions:
 > 
-> [...]
+> Do I understand correctly that notifiers won't be able to wake up
+> waiters unless they know on which node they are waiting?
+> 
 
-Applied, thanks!
+If userspace is using NUMA_FLAG, yes. Otherwise all futexes would be
+located in the default node, and userspace doesn't need to know which
+one is the default.
 
-[1/4] ext4: add EXT4_INODE_HAS_XATTR_SPACE macro in xattr.h
-      commit: ff528f6b155ce79adf38583a66867d8e54cbd460
-[2/4] ext4: fix use-after-free in ext4_xattr_set_entry
-      commit: 0847102f2b38b43f7352ed8a7f714a291ed1513d
-[3/4] ext4: correct max_inline_xattr_value_size computing
-      commit: 3d783a3751995003002a5f4f6d333c7c02c7966e
-[4/4] ext4: correct the misjudgment in ext4_iget_extra_inode
-      commit: 31c5d92b53629452d669980d17adbd22f2af0d26
+> Is it possible to wait on a futex on different nodes?
 
-Best regards,
--- 
-Theodore Ts'o <tytso@mit.edu>
+Yes, given that you specify `.hint = id` with the proper node id.
+
+> 
+> Is it possible to wake waiters on a futex on all nodes? When a single
+> (or N, where N is not "all") waiter is woken, which node is selected? Is
+> there a rotation of nodes, so that nodes are not skewed in terms of
+> notified waiters?
+
+Regardless of which node the waiter process is running, what matter is
+in which node the futex hash table is. So for instance if we have:
+
+	struct futex32_numa f = {.value = 0, hint = 2};
+
+And now we add some waiters for this futex:
+
+Thread 1, running on node 3:
+
+	futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
+
+Thread 2, running on node 0:
+
+	futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
+
+Thread 3, running on node 2:
+
+	futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
+
+And then, Thread 4, running on node 3:
+
+	futex_wake(&f, 2, FUTEX_NUMA | FUTEX_32);
+
+Now, two waiter would wake up (e.g. T1 and T3, node 3 and 2) and they
+are from different nodes. futex_wake() doesn't provide guarantees of
+which waiter will be selected, so I can't say which node would be
+selected. There's no policy for fairness/starvation for futex_wake(). Do
+you think this would be important for the NUMA case?
+
+Let me know if this clarifies your questions.

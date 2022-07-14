@@ -2,142 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A575757EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E625757F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbiGNXPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 19:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        id S240962AbiGNXQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 19:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240790AbiGNXPt (ORCPT
+        with ESMTP id S240920AbiGNXQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 19:15:49 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6179570E5A
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:15:48 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id k19so1740208pll.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:15:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1uA4mMpLpcRR07bw1byaro66HK9+gzc14ZtiPZ8jfjA=;
-        b=As7pQ8CUT32Bd1LIq4AKb1ELuwXk+Tg1MdC1AUysMK9njWTOlc0OAsXlYWtrr15WJk
-         t5DF7RJsJdX2IR1vzbg0HicaP5A2owgtHNkeSnINSoyTDbi8Ql5QDPkxKyD4dfoUrGJo
-         tRetXkr7kWDTsVcYinNmDFQ39nrnuRrxNd5E4wCVyv1itFi0ABg2+6qKEqwMEprgc893
-         TSEFRiVf74mGYfN6ZZqIzL20etl7QHWiX4IciOkajGrieYbSwPZ+5UYHPMkPzIMhAkbL
-         PcIKqJiZwDSy4YkQnQ7E94tuNJCizdBQWm0M7qr2DoUzRPC9iCHDUTY0QU51B8YEZlMw
-         S2RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1uA4mMpLpcRR07bw1byaro66HK9+gzc14ZtiPZ8jfjA=;
-        b=IyOuBUDpXzV5pkJzCHEArol9wh0nunAtW0dRK7/3BlebI7RGch0i1H8j6oTpbKrZX7
-         c8UUrtiwXSe8opnYXysOOEEa3gVquvO+R4JWozPPJBtprh2IINobbSyxkidHrLXQqO4m
-         KBZRInIy9gKDbYulrLPB/EyBJSSMwtxhSzQJhWg5wc587H37TIQZbbSRtnVdVRwUSfnr
-         UOFra2zJtvyrtjaJ6B086L1IddSzS9mwtEAFKDli0SuuwZPHtY1AmwejjnEpwEDVkoaS
-         IgaJLbGb3w6T9MzHfWJaMWiPzoSZHxySz0DsbNhzgenJHG2A3TkeG5AonR+ttXBEG5o3
-         2Bkw==
-X-Gm-Message-State: AJIora9EWeu8D0lOT60RCVhTp0FPXo7XDjvEJBZsn0t9ETcmZcdutdBi
-        0zJMuUihDtoSA3XZb/eDM8uBK+4iYgMRvg==
-X-Google-Smtp-Source: AGRyM1uZbC7z2IBVQIZHYd+INOO841VeEdfsy+WMFnXkM1+47oPPD8//WDi92rKva1HNS7Gb3v0yVQ==
-X-Received: by 2002:a17:90a:c4f:b0:1df:a178:897f with SMTP id u15-20020a17090a0c4f00b001dfa178897fmr12107587pje.19.1657840547725;
-        Thu, 14 Jul 2022 16:15:47 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id m5-20020a170902db0500b001677d4a9654sm2016703plx.265.2022.07.14.16.15.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 16:15:47 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 23:15:42 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Subject: Re: [PATCH 04/12] KVM: X86/MMU: Remove mmu_pages_clear_parents()
-Message-ID: <YtCjnvTkx1wtsuLn@google.com>
-References: <20220605064342.309219-1-jiangshanlai@gmail.com>
- <20220605064342.309219-5-jiangshanlai@gmail.com>
+        Thu, 14 Jul 2022 19:16:20 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B1B70E52;
+        Thu, 14 Jul 2022 16:16:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657840578; x=1689376578;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FrYh3K9iwXAx6UuvS+41bwa0q58BzXMelivLnufGNBc=;
+  b=dDipWpuB/5/6qMV0Xh9JhBItKlGvkQhthmEs4MtCASYGk0ulTBA/Vdnw
+   +tD7sqR0Uy1315OQkuCH1768HWJZdsH+kD1lsoUjEf5YgcDI8J/8pJYuU
+   s2wBH/tS6AZljAkzCOjL205cFYJiBLYhWx5u6JQhewBm+cS38He9vnc02
+   FA0jitX5RZVjrzHaUflyv4Coxu8uCD7ZD+Sfow/rzNVKWDdz+OkeiLDIq
+   HkKo/V1yvET2vV3Hpqw5Bo4k9O2br639YO3dg9lsQ/BP3XxL1dV9KsdGX
+   bn3hJaKlRUjCS4luVVKbqVL2UyKHxZVHWbS4R++hD7POw3EMlGl+7JQgW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="268676975"
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="268676975"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 16:16:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="663970223"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Jul 2022 16:16:10 -0700
+Received: from rjingar-desk5.amr.corp.intel.com (vicentes-mobl.amr.corp.intel.com [10.209.132.117])
+        by linux.intel.com (Postfix) with ESMTP id 0E86E580812;
+        Thu, 14 Jul 2022 16:16:10 -0700 (PDT)
+From:   Rajvi Jingar <rajvi.jingar@linux.intel.com>
+To:     rafael.j.wysocki@intel.com, bhelgaas@google.com
+Cc:     rajvi.jingar@linux.intel.com, david.e.box@linux.intel.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v2 1/2] PCI/PM: refactor pci_pm_suspend_noirq()
+Date:   Thu, 14 Jul 2022 16:16:08 -0700
+Message-Id: <20220714231609.3962051-1-rajvi.jingar@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220605064342.309219-5-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the shortlog, I really want to capture the net effect.  It took me a lot of
-staring and reading (and hopefully not misreading) to figure out that this is a
-glorified nop.
+The state of the device is saved during pci_pm_suspend_noirq(), if it
+has not already been saved, regardless of the skip_bus_pm flag value. So
+skip_bus_pm check is removed before saving the device state.
 
-  KVM: x86/mmu: Update unsync children metadata via recursion, not bottom-up walk
+Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ v1->v2: no change
+---
+ drivers/pci/pci-driver.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
-On Sun, Jun 05, 2022, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> 
-> mmu_unsync_walk() is designed to be workable in a pagetable which has
-> unsync child bits set in the shadow pages in the pagetable but without
-> any unsync shadow pages.
-> 
-> This can be resulted when the unsync shadow pages of a pagetable
-> can be walked from other pagetables and have been synced or zapped
-> when other pagetables are synced or zapped.
->
-> So mmu_pages_clear_parents() is not required even when the callers of
-> mmu_unsync_walk() zap or sync the pagetable.
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index 49238ddd39ee..1f64de3e5280 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -867,20 +867,14 @@ static int pci_pm_suspend_noirq(struct device *dev)
+ 		}
+ 	}
+ 
+-	if (pci_dev->skip_bus_pm) {
++	if (!pci_dev->state_saved) {
++		pci_save_state(pci_dev);
+ 		/*
+-		 * Either the device is a bridge with a child in D0 below it, or
+-		 * the function is running for the second time in a row without
+-		 * going through full resume, which is possible only during
+-		 * suspend-to-idle in a spurious wakeup case.  The device should
+-		 * be in D0 at this point, but if it is a bridge, it may be
+-		 * necessary to save its state.
++		 * If the device is a bridge with a child in D0 below it, it needs to
++		 * stay in D0, so check skip_bus_pm to avoid putting it into a
++		 * low-power state in that case.
+ 		 */
+-		if (!pci_dev->state_saved)
+-			pci_save_state(pci_dev);
+-	} else if (!pci_dev->state_saved) {
+-		pci_save_state(pci_dev);
+-		if (pci_power_manageable(pci_dev))
++		if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
+ 			pci_prepare_to_sleep(pci_dev);
+ 	}
+ 
+-- 
+2.25.1
 
-There's one other critical piece that it took me a quite some time to suss out
-from the code: the @parent passed to mmu_sync_children() _is_ updated because
-mmu_sync_children() loops on mmu_unsync_walk().  It's only the parents of @parent
-that are not updated, but they weren't updated anyways because mmu_pages_clear_parents()
-doesn't operate on the parents of @parent.
-
-> So remove mmu_pages_clear_parents() and the child bits can be cleared in
-> the next call of mmu_unsync_walk() in one go.
-
-Ah, I missed (over and over) that the "next call" is the one right mmu_sync_children()
-and mmu_unsync_walk(), not a future call.
-
-Because I kept losing track of which pagetable was which, how about this for
-a changelog?
-
-  When syncing a shadow page with unsync children, do not update the
-  "unsync children" metadata from the bottom up, and instead defer the
-  update to the next "iteration" of mmu_unsync_walk() (all users of
-  mmu_unsync_walk() loop until it returns "no unsync children").
-
-  mmu_unsync_walk() is designed to handle the scenario where a shadow page
-  has a false positive on having unsync children, i.e. unsync_children can
-  be elevated without any child shadow pages actually being unsync.
-
-  Such a scenario already occurs when a child is synced or zapped by a
-  different walk of the page tables, i.e. with a different set of parents,
-  as unmarking parents is done only for the current walk.
-
-  Note, mmu_pages_clear_parents() doesn't update parents of @parent, so
-  there's no change in functionality from that perspective.
-
-  Removing mmu_pages_clear_parents() allows for further simplifying
-  mmu_unsync_walk(), including removing the struct mmu_page_path since
-  mmu_pages_clear_parents() was the only the function is the only user of it.
-
-With a cleaned up shortlog+changelog, and assuming I didn't misread everything...
-
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-
-> 
-> Removing mmu_pages_clear_parents() allows for further simplifying
-> mmu_unsync_walk() including removing the struct mmu_page_path since
-> the function is the only user of it.
-> 
-> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> ---

@@ -2,94 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE8C574DA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF57574DA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239341AbiGNMbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
+        id S239352AbiGNMcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239037AbiGNMbC (ORCPT
+        with ESMTP id S230228AbiGNMbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:31:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2B26069A;
-        Thu, 14 Jul 2022 05:30:09 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C1EB96601A3D;
-        Thu, 14 Jul 2022 13:30:04 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657801805;
-        bh=JVzIn5i13DB3/LDAuFTquEfvgf4d0MOmVf70FJzjMJc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OoAviENdLmUSvVXKjtV8pZcO9HKH6GmHsSHPis+lTpAkyhs422g+PIZEeVDWzySig
-         ueTEMOkXaenWoQSWRpkl7mU9zOOn7NaXh7bnnBtSyHL58YaJhaYzYbjDicIfWIRdcA
-         y95lrdbjBDfOx7y/r1rlAGzfzR1AhdMcsOZ4VLVYYPqh6OZfI7707HzBfj0Rs/WxId
-         NunmwCi+DVC6y+3MZCDj/+m3LphY6H/GlG01fnw/WzUCKYvU2BnJXZ7jCD9FzZuYiD
-         P2bpxjTDLHSUyMh+PgEFbtxK5ChjnPv5sWMc1RjBhiOy+BbVeq4NiBV+6TjQVcPzSm
-         2uxIivKlaPlQA==
-Message-ID: <468507bc-e10d-0d7c-aa77-bab4769efbcf@collabora.com>
-Date:   Thu, 14 Jul 2022 14:30:01 +0200
+        Thu, 14 Jul 2022 08:31:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E55C258847
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:30:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0390913D5;
+        Thu, 14 Jul 2022 05:30:52 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53F323F792;
+        Thu, 14 Jul 2022 05:30:50 -0700 (PDT)
+Message-ID: <8025988d-7d1d-0b4a-6eed-8b3698bc9bad@arm.com>
+Date:   Thu, 14 Jul 2022 14:30:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/1] dt-bindings: uart: update bindings for MT8188 SoC
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 03/10] sched/fair: maintain task se depth in
+ set_task_rq()
 Content-Language: en-US
-To:     kewei.xu@mediatek.com, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        srv_heupstream@mediatek.com, leilk.liu@mediatek.com,
-        qii.wang@mediatek.com, liguo.zhang@mediatek.com,
-        caiyu.chen@mediatek.com, david-yh.chiu@mediatek.com
-References: <20220714104149.23343-1-kewei.xu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220714104149.23343-1-kewei.xu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20220713040430.25778-1-zhouchengming@bytedance.com>
+ <20220713040430.25778-4-zhouchengming@bytedance.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20220713040430.25778-4-zhouchengming@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 14/07/22 12:41, kewei.xu@mediatek.com ha scritto:
-> From: Kewei Xu <kewei.xu@mediatek.com>
-> 
-> Add a DT binding documentation for the MT8188 soc.
-> 
-> Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
+On 13/07/2022 06:04, Chengming Zhou wrote:
+> Previously we only maintain task se depth in task_move_group_fair(),
+> if a !fair task change task group, its se depth will not be updated,
+> so commit eb7a59b2c888 ("sched/fair: Reset se-depth when task switched to FAIR")
+> fix the problem by updating se depth in switched_to_fair() too.
 
-This file doesn't even exist anymore. I've converted it to json-schema, check
-out commit 22b10b33b9c6e76bc08f64e52862e68c4dc76052
+Maybe it's worth mentioning how the se.depth setting from
+task_move_group_fair() and switched_to_fair() went into
+attach_task_cfs_rq() with commit daa59407b558 ("sched/fair: Unify
+switched_{from,to}_fair() and task_move_group_fair()"}  and further into
+attach_entity_cfs_rq() with commit df217913e72e ("sched/fair: Factorize
+attach/detach entity").
 
-Regards,
-Angelo
+> This patch move task se depth maintainence to set_task_rq(), which will be
+> called when CPU/cgroup change, so its depth will always be correct.
+> 
+> This patch is preparation for the next patch.
+> 
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 
 > ---
->   Documentation/devicetree/bindings/serial/mtk-uart.txt | 1 +
->   1 file changed, 1 insertion(+)
+>  kernel/sched/fair.c  | 8 --------
+>  kernel/sched/sched.h | 1 +
+>  2 files changed, 1 insertion(+), 8 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/serial/mtk-uart.txt b/Documentation/devicetree/bindings/serial/mtk-uart.txt
-> index 113b5d6a2245..e5094e1db7b4 100644
-> --- a/Documentation/devicetree/bindings/serial/mtk-uart.txt
-> +++ b/Documentation/devicetree/bindings/serial/mtk-uart.txt
-> @@ -21,6 +21,7 @@ Required properties:
->     * "mediatek,mt8173-uart" for MT8173 compatible UARTS
->     * "mediatek,mt8183-uart", "mediatek,mt6577-uart" for MT8183 compatible UARTS
->     * "mediatek,mt8186-uart", "mediatek,mt6577-uart" for MT8183 compatible UARTS
-> +  * "mediatek,mt8188-uart", "mediatek,mt6577-uart" for MT8188 compatible UARTS
->     * "mediatek,mt8192-uart", "mediatek,mt6577-uart" for MT8192 compatible UARTS
->     * "mediatek,mt8195-uart", "mediatek,mt6577-uart" for MT8195 compatible UARTS
->     * "mediatek,mt8516-uart" for MT8516 compatible UARTS
-> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 2a3e12ead144..bf595b622656 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -11539,14 +11539,6 @@ static void attach_entity_cfs_rq(struct sched_entity *se)
+>  {
+>  	struct cfs_rq *cfs_rq = cfs_rq_of(se);
+>  
+> -#ifdef CONFIG_FAIR_GROUP_SCHED
+> -	/*
+> -	 * Since the real-depth could have been changed (only FAIR
+> -	 * class maintain depth value), reset depth properly.
+> -	 */
+> -	se->depth = se->parent ? se->parent->depth + 1 : 0;
+> -#endif
+> -
+>  	/* Synchronize entity with its cfs_rq */
+>  	update_load_avg(cfs_rq, se, sched_feat(ATTACH_AGE_LOAD) ? 0 : SKIP_AGE_LOAD);
+>  	attach_entity_load_avg(cfs_rq, se);
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index aad7f5ee9666..8cc3eb7b86cd 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -1940,6 +1940,7 @@ static inline void set_task_rq(struct task_struct *p, unsigned int cpu)
+>  	set_task_rq_fair(&p->se, p->se.cfs_rq, tg->cfs_rq[cpu]);
+>  	p->se.cfs_rq = tg->cfs_rq[cpu];
+>  	p->se.parent = tg->se[cpu];
+> +	p->se.depth = tg->se[cpu] ? tg->se[cpu]->depth + 1 : 0;
+>  #endif
+>  
+>  #ifdef CONFIG_RT_GROUP_SCHED
 

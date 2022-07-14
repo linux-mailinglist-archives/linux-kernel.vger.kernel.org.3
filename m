@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39597574632
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1761574633
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237817AbiGNHx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 03:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        id S237584AbiGNHxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 03:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237637AbiGNHwu (ORCPT
+        with ESMTP id S237628AbiGNHw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 03:52:50 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C360D2663
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:52:48 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so7744980pjm.2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:52:48 -0700 (PDT)
+        Thu, 14 Jul 2022 03:52:59 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CE526E3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:52:58 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so7694201pjl.5
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tcNGA3XzcRpkB54UbiRwCq/ocLcwLdrUgSteNlNaCe8=;
-        b=lEcA0UWrC6raUJrZWmqB71/bzsVSJJ55UkgurxyF9UqHs/KGuEtZg+3oaT7Fw5hutV
-         Csyc10J5PMgS2pDn4jBxhbBKc9X53dTJm4ZSMnH1pe7Mz1gfpM6kxHvBiLiEvSqL73CV
-         QHqcXKl1QBl3bWUqFNjKgvoQZCL+CrqyBZgHEVpk1j4u6ktz43bKs1r/iH7GC9gpERha
-         LHrKgn5C6y7yJ+ILkjgVnrc0fNlpLvAV/BIn2CqFhQ0xXHkMykBkP6DLR3KxDf2E8sIb
-         hvURkKRvZ8sBf/Fwv99sTg318oTsa1VV1bhvhuTotHxEa7gHD2zg4rTn74aTRUlH+WVq
-         DDUQ==
+        bh=egUZShWWFfJvJGgDYNvzi2mq2YkyEJX8dqyYulCWxMA=;
+        b=kCZjuXiNve52btMzwkOrHXi0qbubRIPWlPYTzqCtMfVej81TQRPENJiIWfCYVwv4wo
+         y8u+ft84ab1joSTR75Z27N18UisYHNho5KsoNJA7iBWvoP1HZKhw4mOV4d0rAcy56i71
+         DDFNQm9SlIAKpJqhxYojkO38HcEk5S02kuprbfOqFD59tg+ri2E9Eyy8XGeJrmGKKj65
+         DlY+I1aVaWlXl1wDvlmk5hy381KMdbDAA5E03AgcM68lChv11ednAmWWOV50vVWMHdML
+         hQx9Jp/PQp7547/5KQIa6Xzd1/DoJELKRV+8aFE5uVyF7GHP7Bq65nCZxuKHpn+qXpAf
+         NACQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tcNGA3XzcRpkB54UbiRwCq/ocLcwLdrUgSteNlNaCe8=;
-        b=6v39D68qJ9lpJd7/57PHHxHpD6F6iRHSO/8nYODEvpwVSAOPkbJn5INzzHxKChZ2Ak
-         ktzY3YSPk4h7bMw5VSXztcPK3shfd3Nfqbxc0bY88MLo/x3m8yhDaxdXM9MVRZ4DchW8
-         AOgx86MphnVWByBPCCEW4mio585psPjVPXUx6gE2FV6UANkAeMhVVOVF+5hxOp1CuLeT
-         5qumJlpvm881/1ZbH896apfhWtO1eiXJJD9VFGjHTvPRI95lZE3qcaqjxENyagk4fQQy
-         q1TGqokKbmEmUVTEpWuw08KNl5qZAiJ+SK5I0ElwB7b7Q7782xsY5L5T+RiAv+pWl5dH
-         7Spg==
-X-Gm-Message-State: AJIora/bjX7EOlSbHI6WSw2cnePtJOLAwGdVHy5IYDU5dw4rZ2fvZSup
-        WX0QVJIroux4aiVWd/UpZHfkxFIYHScLPQ==
-X-Google-Smtp-Source: AGRyM1tJXeOsuMb0ttruI104XChvIpW5XYaKsbIPeZa4Cp0YSiMT7XmAN+lLwi1Yli1IZgFcX3Hmfw==
-X-Received: by 2002:a17:902:d581:b0:16c:66bf:baef with SMTP id k1-20020a170902d58100b0016c66bfbaefmr7175474plh.29.1657785168288;
-        Thu, 14 Jul 2022 00:52:48 -0700 (PDT)
+        bh=egUZShWWFfJvJGgDYNvzi2mq2YkyEJX8dqyYulCWxMA=;
+        b=eDllIjPX1nEIj+nzyBuHM81Gd4uZ991bJLLW9OzIOjXD/1KBFosDkm1lLK7NwppZQE
+         XTGJW/MpEFA+zjoMZTbynh1ZiRpa/nMRFNf0Plz8m2RboVjhRZLjeAGFtHbVUDwUD6Ly
+         Gg11xQlR0Ih88Jet0rpG98VnjfMwW+/fs1qzSMHQjo2yzXQfVae41EM2FEKjkBdWD2sC
+         Rm9aK6iq/P8UJsjFiipa0KLvyESAp3EP/1w6ekB0RVXiNrjFMLHOw2cD/Ibxih1wf0IS
+         LQnk+0biA6Zz3nF346VxNOXWQrS+V554OW1DnMljLqXsz9wNpCO4YXvw4IOSg1nmYuEU
+         X5iQ==
+X-Gm-Message-State: AJIora+NSqyaNT0CPizUGUoY1nhHLzpxyDgmbDoaRXQT5en/DnWTBnA1
+        4fklDqtoYCOoF3ew5uY+U/s=
+X-Google-Smtp-Source: AGRyM1u5QSr5pqLCDw267ozgral5tGr/brIhzB4k02FD6FD+QVfOA1zaa10tysPIrvksOA/jS9CjBg==
+X-Received: by 2002:a17:90b:3e89:b0:1f0:4233:b20e with SMTP id rj9-20020a17090b3e8900b001f04233b20emr8547349pjb.0.1657785177509;
+        Thu, 14 Jul 2022 00:52:57 -0700 (PDT)
 Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:d0f1:2297:37d1:f468])
-        by smtp.gmail.com with ESMTPSA id z128-20020a626586000000b0051c6613b5basm904488pfb.134.2022.07.14.00.52.47
+        by smtp.gmail.com with ESMTPSA id c11-20020a056a00008b00b005289fad1bbesm923541pfj.94.2022.07.14.00.52.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 00:52:47 -0700 (PDT)
+        Thu, 14 Jul 2022 00:52:56 -0700 (PDT)
 From:   Max Filippov <jcmvbkbc@gmail.com>
 To:     linux-xtensa@linux-xtensa.org
 Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
         Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH] xtensa: enable KCOV support
-Date:   Thu, 14 Jul 2022 00:52:54 -0700
-Message-Id: <20220714075254.154725-1-jcmvbkbc@gmail.com>
+Subject: [PATCH] xtensa: enable ARCH_HAS_GCOV_PROFILE_ALL
+Date:   Thu, 14 Jul 2022 00:53:05 -0700
+Message-Id: <20220714075305.154776-1-jcmvbkbc@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -69,20 +69,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Select ARCH_HAS_KCOV and set KCOV_INSTRUMENT = n inside
+Select ARCH_HAS_GCOV_PROFILE_ALL and set GCOV_PROFILE = n inside
 arch/xtensa/boot/lib.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- Documentation/features/debug/kcov/arch-support.txt | 2 +-
- arch/xtensa/Kconfig                                | 1 +
- arch/xtensa/boot/lib/Makefile                      | 1 +
+ Documentation/features/debug/gcov-profile-all/arch-support.txt | 2 +-
+ arch/xtensa/Kconfig                                            | 1 +
+ arch/xtensa/boot/lib/Makefile                                  | 1 +
  3 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/features/debug/kcov/arch-support.txt b/Documentation/features/debug/kcov/arch-support.txt
-index afb90bebded2..0a91f5ce34a9 100644
---- a/Documentation/features/debug/kcov/arch-support.txt
-+++ b/Documentation/features/debug/kcov/arch-support.txt
+diff --git a/Documentation/features/debug/gcov-profile-all/arch-support.txt b/Documentation/features/debug/gcov-profile-all/arch-support.txt
+index 502c1d409648..0b3ba2415fac 100644
+--- a/Documentation/features/debug/gcov-profile-all/arch-support.txt
++++ b/Documentation/features/debug/gcov-profile-all/arch-support.txt
 @@ -27,5 +27,5 @@
      |       sparc: | TODO |
      |          um: |  ok  |
@@ -91,26 +91,26 @@ index afb90bebded2..0a91f5ce34a9 100644
 +    |      xtensa: |  ok  |
      -----------------------
 diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 0b0f0172cced..c4ef8e9c7249 100644
+index c4ef8e9c7249..5fa1fd1aecff 100644
 --- a/arch/xtensa/Kconfig
 +++ b/arch/xtensa/Kconfig
 @@ -6,6 +6,7 @@ config XTENSA
  	select ARCH_HAS_CURRENT_STACK_POINTER
  	select ARCH_HAS_DEBUG_VM_PGTABLE
  	select ARCH_HAS_DMA_PREP_COHERENT if MMU
-+	select ARCH_HAS_KCOV
++	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_HAS_KCOV
  	select ARCH_HAS_SYNC_DMA_FOR_CPU if MMU
  	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if MMU
- 	select ARCH_HAS_DMA_SET_UNCACHED if MMU
 diff --git a/arch/xtensa/boot/lib/Makefile b/arch/xtensa/boot/lib/Makefile
-index 162d10af36f3..6f9a56a8ca85 100644
+index 6f9a56a8ca85..0378a22a08e3 100644
 --- a/arch/xtensa/boot/lib/Makefile
 +++ b/arch/xtensa/boot/lib/Makefile
-@@ -17,6 +17,7 @@ endif
- 
+@@ -18,6 +18,7 @@ endif
  KASAN_SANITIZE := n
  KCSAN_SANITIZE := n
-+KCOV_INSTRUMENT := n
+ KCOV_INSTRUMENT := n
++GCOV_PROFILE := n
  
  CFLAGS_REMOVE_inflate.o += -fstack-protector -fstack-protector-strong
  CFLAGS_REMOVE_zmem.o += -fstack-protector -fstack-protector-strong

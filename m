@@ -2,83 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90610574AF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813C9574AFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238435AbiGNKmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S231559AbiGNKnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238430AbiGNKmS (ORCPT
+        with ESMTP id S229929AbiGNKnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:42:18 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2867B54C9B
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:42:15 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id x10so1208606ljj.11
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=s8VpnwHhFZWAVYlNIpH9kdWPTbLI6uI4nckrgHC8pmM=;
-        b=w/T9awmLctnifdlcq+QcujLO7NnFl5WH8vXOpLTcy4qrV5vlHZnKOR1CMzdQcuaPgQ
-         HBNJFHC7ZV4d9G3OVwfea+iRJf1w0kWXl93CD0JyTwukccUZiFkgBkdzc0ae6gfWFV6P
-         A/E+Leq2hzYRI9/3vg2gWrmAhRoDRxMxLI5f1FonpBWVeVR8+Wqi323+boh/VD06g9Jo
-         pMBw3mYS33cAygwv9iKCsymMQ7jhOrgY5anq3GrH5CBqAonr8SoRUm6syMTN2OMAj7Ti
-         tOLkmLcwPFgpEfy6zdwhs0jzCl3TGJvV2Emgv/ZT5DwSDg75YoXnyVwqqE2syaIBVpTj
-         WPxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=s8VpnwHhFZWAVYlNIpH9kdWPTbLI6uI4nckrgHC8pmM=;
-        b=JAOStAWT0k/er7/Tt5vUUi2USAFKzDAfHyBWsmPa2vmx2+cTRwBkBurpuAt9DwlNUH
-         ibM4yln73J+SyS1CXCUyL7zONUlgSKfHrs1Cc9cetFWU9Aq7JCYn0KpRhOnJBaoZ9YOZ
-         t+MrmhYYz3avdsZO294ZBJ7k8ysN9KZ8WLssCbvZBqxZcfwpqoGyOhCThdwyqJBAKyai
-         YRs+AdST8qCFf5lYOYUEToAc4vjrixTKDJ+ItBeafyl+CqAnLOl8gDq5LTZ1vHFdbRBo
-         toF8M9BYV7L5SfKXKcqfhzyN9yVItAq5ixxmQgSJvc+4QtAYvMzqsQR7TfTkm1YLukAO
-         ng3w==
-X-Gm-Message-State: AJIora/QGD6Kn8W+4Kl8rNOnbRDn01OsHZzOHmHXm5ryZX1Nzrtsbsbb
-        1vNrrtDa5DM+sW3GhG0Cp4Daag==
-X-Google-Smtp-Source: AGRyM1vDS7gTXDdroBeSqdLza2aD+ghoINa7WVmkHLbyGd09X2av2JkhdGocs3fMe6JT2umowMWNuw==
-X-Received: by 2002:a2e:8719:0:b0:25d:7650:6c06 with SMTP id m25-20020a2e8719000000b0025d76506c06mr4159705lji.330.1657795333568;
-        Thu, 14 Jul 2022 03:42:13 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id p22-20020a2eba16000000b0025d87966100sm209373lja.140.2022.07.14.03.42.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 03:42:13 -0700 (PDT)
-Message-ID: <f7d544eb-4e7f-29a9-815c-693d2369761f@linaro.org>
-Date:   Thu, 14 Jul 2022 12:42:11 +0200
+        Thu, 14 Jul 2022 06:43:04 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976C754661
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:43:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657795383; x=1689331383;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=hufqI4f/1PfwNYYAJozQMqsmXZUEwUbhsvoM1GVNgVI=;
+  b=RoA79jyhtJNImBMiUIuywmxtIzyc12zNgkDiOChMDU881wd2Oca9XAXr
+   gy9sdgqTDNtPFV5A5Xc5Kzd95kg5MeaAJNInvaobLcNqOl3qqLZtT8R86
+   TUl0huLUInFIyoLPst/tEdVyCJT0VCzgKZZLscePHDxvGZmHPy1lCQw3W
+   sUaG7Ihj+A+qVRtA2Qoi2+untyfTyHD+flm5JkM1BYIrHVV0yo/ivqZf4
+   Tjwu/sF0WGj0mCoG0lbnvfLlUfZ1vKYuiHUKb6sHA/emRCRRj/8k5Ya+2
+   /jKT+PpDtvNhd1YolI/EZEOgRl8/pTyHkhw0yrGXxbGX8B0v3chAaAosG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="283033256"
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="283033256"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 03:43:03 -0700
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="685526256"
+Received: from wmoyer-mobl3.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.86.31])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 03:42:59 -0700
+Message-ID: <434ff0edcd5a0f1eb671bb2850ef5444ac1359a3.camel@intel.com>
+Subject: Re: [PATCH v8 2/5] x86/tdx: Add TDX Guest event notify interrupt
+ support
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Yao, Jiewen" <jiewen.yao@intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
+        "tim.gardner@canonical.com" <tim.gardner@canonical.com>,
+        "khalid.elmously@canonical.com" <khalid.elmously@canonical.com>,
+        "Cox, Philip" <philip.cox@canonical.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Thu, 14 Jul 2022 22:42:57 +1200
+In-Reply-To: <503e7135-782c-b72b-6f55-3c4acf55921b@linux.intel.com>
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220609025220.2615197-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <78873cc1db47ba00a4c01f38290521c1a6072820.camel@intel.com>
+         <efb2cdab-289b-8757-fe5e-5348519b0474@linux.intel.com>
+         <385B219C-4DB2-480C-913C-411AB4D644ED@intel.com>
+         <MW4PR11MB5872E3B775A680678331D6358CB79@MW4PR11MB5872.namprd11.prod.outlook.com>
+         <9c7d99469179340eeecabaf3e9c414fc98900626.camel@intel.com>
+         <503e7135-782c-b72b-6f55-3c4acf55921b@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 03/30] dt-bindings: phy: qcom,qmp: drop redundant
- descriptions
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220707134725.3512-1-johan+linaro@kernel.org>
- <20220707134725.3512-4-johan+linaro@kernel.org>
- <26916d41-f398-8527-96f4-9a28f4f4e789@linaro.org>
- <Ys/pQw3e0HPhLZUg@hovoldconsulting.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Ys/pQw3e0HPhLZUg@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,51 +84,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/07/2022 12:00, Johan Hovold wrote:
-> On Thu, Jul 14, 2022 at 11:07:21AM +0200, Krzysztof Kozlowski wrote:
->> On 07/07/2022 15:46, Johan Hovold wrote:
->>> Drop the redundant supply and clock descriptions which did not add much
->>> information beyond what can be inferred from the corresponding resource
->>> names.
->>>
->>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->>
->>
->> (...)
->>
->>>              - const: ref
->>>              - const: refgen
->>>          resets:
->>> -          items:
->>> -            - description: reset of phy block.
->>> +          maxItems: 1
->>>          reset-names:
->>>            items:
->>>              - const: phy
->>> @@ -376,11 +334,7 @@ allOf:
->>>      then:
->>>        properties:
->>>          clocks:
->>> -          items:
->>> -            - description: Phy aux clock.
->>> -            - description: 19.2 MHz ref clk source.
->>> -            - description: 19.2 MHz ref clk.
->>
->> Here and in other places - I think you loose information, because the
->> frequency is not mentioned in clock name.
-> 
-> Right, but it is also arguable redundant information for the binding
-> (similar for the vdda-pll voltage).
+On Wed, 2022-07-13 at 17:46 -0700, Sathyanarayanan Kuppuswamy wrote:
+> Hi Kai/Dave,
+>=20
+> On 6/27/22 4:21 AM, Kai Huang wrote:
+> > On Sat, 2022-06-25 at 15:35 +1200, Yao, Jiewen wrote:
+> > > Thank you, Jun.
+> > >=20
+> > > Yes. I confirmed that we will include below change to GHCI.next spec.
+> > >=20
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > 3.5 TDG.VP.VMCALL<SetupEventNotifyInterrupt>
+> > >=20
+> > > From: "The host VMM should use SEAMCALL [TDWRVPS] leaf to inject an i=
+nterrupt at the requested-interrupt vector into the TD via the posted-inter=
+rupt descriptor. "
+> > >=20
+> > > To: "The host VMM should use SEAMCALL [TDWRVPS] leaf to inject an int=
+errupt at the requested-interrupt vector into the TD VCPU that executed TDG=
+.VP.VMCALL <SetupEventNotifyInterrupt> via the posted-interrupt descriptor.=
+ "
+> > >=20
+> >=20
+> > Hi Sathy,
+> >=20
+> > With this change, I don't think we should use system vector anymore.  I=
+nstead,
+> > we just need one non-migratable IRQ which has a fixed vector on a fixed=
+ cpu.
+> >=20
+>=20
+> Thanks. As suggested, I have attempted to allocate IRQ vector at runtime
+> using irq_domain_alloc_irqs() call. Vector is allocated from
+> "x86_vector_domain" as Kai suggested.
 
-True.
+I am not expert either. I said "idea only" in my first reply :)
 
-> 
-> I can add a comment after the name if you prefer that?
+>=20
+> Since I am not well versed in this area, I would like expert comments on =
+it.
+> Mainly for IRQ allocation logic in tdx_late_init(). I have tested this ve=
+rsion using
+> QEMU and it works fine.
+>=20
+>=20
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index 928dcf7a20d9..dcc878546574 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -5,12 +5,16 @@
+>  #define pr_fmt(fmt)     "tdx: " fmt
+> =20
+>  #include <linux/cpufeature.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/numa.h>
+>  #include <asm/coco.h>
+>  #include <asm/tdx.h>
+>  #include <asm/vmx.h>
+>  #include <asm/insn.h>
+>  #include <asm/insn-eval.h>
+>  #include <asm/pgtable.h>
+> +#include <asm/irqdomain.h>
+> =20
+>  /* TDX module Call Leaf IDs */
+>  #define TDX_GET_INFO                   1
+> @@ -19,6 +23,7 @@
+> =20
+>  /* TDX hypercall Leaf IDs */
+>  #define TDVMCALL_MAP_GPA               0x10001
+> +#define TDVMCALL_SETUP_NOTIFY_INTR     0x10004
+> =20
+>  /* MMIO direction */
+>  #define EPT_READ       0
+> @@ -34,6 +39,26 @@
+>  #define VE_GET_PORT_NUM(e)     ((e) >> 16)
+>  #define VE_IS_IO_STRING(e)     ((e) & BIT(4))
+> =20
+> +/*
+> + * Handler used to report notifications about
+> + * TDX_GUEST_EVENT_NOTIFY_VECTOR IRQ. Currently it will be
+> + * used only by the attestation driver. So, race condition
+> + * with read/write operation is not considered.
+> + */
+> +static void (*tdx_event_notify_handler)(void);
+> +
+> +/* Helper function to register tdx_event_notify_handler */
+> +void tdx_setup_ev_notify_handler(void (*handler)(void))
+> +{
+> +       tdx_event_notify_handler =3D handler;
+> +}
+> +
+> +/* Helper function to unregister tdx_event_notify_handler */
+> +void tdx_remove_ev_notify_handler(void)
+> +{
+> +       tdx_event_notify_handler =3D NULL;
+> +}
+> +
 
-Ah, skip it.
+Looks it's weird that you still need it.  Couldn't we pass the function to
+handle GetQuote directly to request_irq()?
+
+>  /*
+>   * Wrapper for standard use of __tdx_hypercall with no output aside from
+>   * return code.
+> @@ -98,6 +123,31 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u=
+64 rdx, u64 r8, u64 r9,
+>                 panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
+>  }
+> =20
+> +/*
+> + * tdx_hcall_set_notify_intr() - Setup Event Notify Interrupt Vector.
+> + *
+> + * @vector: Vector address to be used for notification.
+> + *
+> + * return 0 on success or failure error number.
+> + */
+> +static long tdx_hcall_set_notify_intr(u8 vector)
+> +{
+> +       /* Minimum vector value allowed is 32 */
+> +       if (vector < 32)
+> +               return -EINVAL;
+> +
+> +       /*
+> +        * Register callback vector address with VMM. More details
+> +        * about the ABI can be found in TDX Guest-Host-Communication
+> +        * Interface (GHCI), sec titled
+> +        * "TDG.VP.VMCALL<SetupEventNotifyInterrupt>".
+> +        */
+> +       if (_tdx_hypercall(TDVMCALL_SETUP_NOTIFY_INTR, vector, 0, 0, 0))
+> +               return -EIO;
+> +
+> +       return 0;
+> +}
+> +
+>  static u64 get_cc_mask(void)
+>  {
+>         struct tdx_module_output out;
+> @@ -775,3 +825,52 @@ void __init tdx_early_init(void)
+> =20
+>         pr_info("Guest detected\n");
+>  }
+> +
+> +static irqreturn_t tdx_ev_handler(int irq, void *dev_id)
+> +{
+> +       tdx_event_notify_handler();
+> +       return IRQ_HANDLED;
+> +}
+> +
+> +static int __init tdx_late_init(void)
+> +{
+> +        struct irq_alloc_info info;
+> +       struct irq_cfg *cfg;
+> +       int evirq, cpu;
+> +
+> +       if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+> +               return 0;
+> +
+> +       if (!x86_vector_domain) {
+> +               pr_err("x86 vector domain is NULL\n");
+> +               return 0;
+> +       }
+> +
+> +       init_irq_alloc_info(&info, NULL);
+> +
+> +       evirq =3D irq_domain_alloc_irqs(x86_vector_domain, 1, NUMA_NO_NOD=
+E, &info);
+
+If I read correctly, if you set info->mask to cpumask_of(cpu), and pass it =
+to
+irq_domain_alloc_irqs(), the x86_vector_domain.alloc will immediately alloc=
+ate a
+vector on the given cpu, so you don't need to call irq_set_affinity() and w=
+ait
+to allocate the vector on _this_ cpu until request_irq().
+
+> +
+> +       cpu =3D get_cpu();
+> +
+> +       irq_set_handler(evirq, handle_edge_irq);
+> +
+> +       /*
+> +        * Event notification vector will be delivered to the CPU
+> +        * in which TDVMCALL_SETUP_NOTIFY_INTR hypercall is requested.
+> +        * So set the IRQ affinity to the current CPU.
+> +        */
+> +       irq_set_affinity(evirq, cpumask_of(cpu));
+> +
+> +       if (request_irq(evirq, tdx_ev_handler, 0, "tdx_evirq", NULL))
+> +               pr_err("Request event IRQ failed\n");
+> +
+> +       cfg =3D irq_cfg(evirq);
+> +
+> +       if (tdx_hcall_set_notify_intr(cfg->vector))
+> +               pr_err("Setting event notification interrupt failed\n");
+> +
+> +       put_cpu();
+
+So the IRQ's affinity isn't kernel managed.  Also looks it doesn't have any=
+thing
+like IRQF_NOBALANCING to prevent it from being migrated.  If I understand
+correctly, userspace can still change the affinity which could cause the ve=
+ctor
+being reallocated on another cpu?
+
+Perhaps you can pass IRQF_NO_BALANCING to request_irq()?
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--=20
+Thanks,
+-Kai
 
-Best regards,
-Krzysztof
+

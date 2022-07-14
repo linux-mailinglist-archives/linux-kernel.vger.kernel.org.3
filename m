@@ -2,39 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193FE5755C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96905755C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239941AbiGNTUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 15:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S240039AbiGNTUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 15:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232237AbiGNTT7 (ORCPT
+        with ESMTP id S239940AbiGNTUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 15:19:59 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2970C2C647;
-        Thu, 14 Jul 2022 12:19:58 -0700 (PDT)
+        Thu, 14 Jul 2022 15:20:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5572C647;
+        Thu, 14 Jul 2022 12:19:59 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C4D9234D34;
-        Thu, 14 Jul 2022 19:19:56 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id 2EAD91F986;
+        Thu, 14 Jul 2022 19:19:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1657826396; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=J1TVAvphNmTpAWW61VUw6mw/9ks964p5lRoXg8fT5pQ=;
-        b=yaCt/W2pKkPFnDaETQRiTHkJCEF9k9sdkjq5JwaHQnawjSKoiYi4DI8vi/+Uw5d+Sul19z
-        37o2WGZVI43rBZhYukzagHSaK4SmQbA7jQM9qetajPGOmDZ520FSpw9IloUNbGKlSSf9kP
-        bRh46ZyDYQTdv+Zp8n1jh86KwnMJjmE=
+        t=1657826398; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4IXIt9i4IIWMBr8dsDU+TZSGcKwpUFNYiCeI9reK8Fo=;
+        b=ogcuG11BaEb+JOU64/DLbpgROHc29PvOwMkMSFEH8hy5UIsK9BC4cqqutMZKAfXGQ2z4LP
+        qSEsQv9CuNeUmZ7y5YwBVvGA4WuJJUKfCsz4zm+SBeD0aNTKYbw5XJp6IPBjrWawJMqKEX
+        QIPycGOXqiz9VCZE45SgE0f1ikUqMys=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1657826396;
+        s=susede2_ed25519; t=1657826398;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=J1TVAvphNmTpAWW61VUw6mw/9ks964p5lRoXg8fT5pQ=;
-        b=wngWGUvhjqDObMv9OkYHJzzRhkbc88uRRchYKwwT861i6KWlF4AscZVrctIi5rsYr2VauG
-        Qs7ENmMlzAFzaQBw==
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4IXIt9i4IIWMBr8dsDU+TZSGcKwpUFNYiCeI9reK8Fo=;
+        b=gbsPuTgJhHTRxWIuoej/HugirZJCurSMj40g+kYnzuvVo+0NexrRxKqgASXl/wBCVR5oJF
+        be/0CDRYgEv7enDQ==
 Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        by relay2.suse.de (Postfix) with ESMTP id 80F252C141;
-        Thu, 14 Jul 2022 19:19:55 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTP id CE1032C142;
+        Thu, 14 Jul 2022 19:19:57 +0000 (UTC)
 From:   Michal Suchanek <msuchanek@suse.de>
 To:     linux-sunxi@lists.linux.dev
 Cc:     Michal Suchanek <msuchanek@suse.de>,
@@ -51,10 +55,12 @@ Cc:     Michal Suchanek <msuchanek@suse.de>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: [PATCH 1/2] mtd: spi-nor: When a flash memory is missing do not report an error
-Date:   Thu, 14 Jul 2022 21:19:47 +0200
-Message-Id: <701967b0c418db333c66b48d225df60aa9d03ead.1657826188.git.msuchanek@suse.de>
+Subject: [PATCH resend 2/2] ARM: dts: sunxi: Enable optional SPI flash on Orange Pi Zero board
+Date:   Thu, 14 Jul 2022 21:19:48 +0200
+Message-Id: <62c4e6be12771f3120f67a328a51ac360dc468d2.1657826188.git.msuchanek@suse.de>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <701967b0c418db333c66b48d225df60aa9d03ead.1657826188.git.msuchanek@suse.de>
+References: <701967b0c418db333c66b48d225df60aa9d03ead.1657826188.git.msuchanek@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,66 +73,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is normal that devices are designed with multiple types of storage,
-and only some types of storage are present.
+The flash is present on all new boards and users went out of their way
+to add it on the old ones.
 
-The kernel can handle this situation gracefully for many types of
-storage devices such as mmc or ata but it reports and error when spi
-flash is not present.
-
-Only print a notice that the storage device is missing when no response
-to the identify command is received.
-
-Consider reply buffers with all bits set to the same value no response.
+Enabling it makes a more reasonable default.
 
 Signed-off-by: Michal Suchanek <msuchanek@suse.de>
 ---
- drivers/mtd/spi-nor/core.c | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+Link: https://lore.kernel.org/all/20200929083025.2089-1-msuchanek@suse.de/
+ arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 502967c76c5f..6bab540171a4 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -1652,6 +1652,24 @@ static const struct flash_info *spi_nor_match_id(struct spi_nor *nor,
- 	return NULL;
- }
+diff --git a/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts b/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts
+index 3706216ffb40..4f782b1bdf27 100644
+--- a/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts
++++ b/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts
+@@ -163,8 +163,8 @@ &ohci1 {
+ };
  
-+static const bool buffer_uniform(const u8 *buffer, size_t length)
-+{
-+	bool all0;
-+	size_t i;
-+
-+	for (all0 = true, i = 0; i < length; i++)
-+		if (buffer[i] != 0) {
-+			all0 = false;
-+			break;
-+		}
-+	if (all0)
-+		return true;
-+	for (i = 0; i < length; i++)
-+		if (buffer[i] != 0xff)
-+			return false;
-+	return true;
-+}
-+
- static const struct flash_info *spi_nor_detect(struct spi_nor *nor)
- {
- 	const struct flash_info *info;
-@@ -1666,8 +1684,11 @@ static const struct flash_info *spi_nor_detect(struct spi_nor *nor)
+ &spi0 {
+-	/* Disable SPI NOR by default: it optional on Orange Pi Zero boards */
+-	status = "disabled";
++	/* Enable optional SPI NOR by default */
++	status = "okay";
  
- 	info = spi_nor_match_id(nor, id);
- 	if (!info) {
--		dev_err(nor->dev, "unrecognized JEDEC id bytes: %*ph\n",
--			SPI_NOR_MAX_ID_LEN, id);
-+		if (buffer_uniform(id, SPI_NOR_MAX_ID_LEN))
-+			dev_info(nor->dev, "No flash memory detected.\n");
-+		else
-+			dev_err(nor->dev, "unrecognized JEDEC id bytes: %*ph\n",
-+				SPI_NOR_MAX_ID_LEN, id);
- 		return ERR_PTR(-ENODEV);
- 	}
- 	return info;
+ 	flash@0 {
+ 		#address-cells = <1>;
 -- 
 2.35.3
 

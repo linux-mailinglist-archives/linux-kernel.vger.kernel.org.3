@@ -2,99 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858455748A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EFD5748AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235350AbiGNJXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        id S237765AbiGNJXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237182AbiGNJXM (ORCPT
+        with ESMTP id S238205AbiGNJXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:23:12 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD0A481FC
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:21:57 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id bx13so1475906ljb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TZbkzMvSZU0C1M4JV0xVgJvuTUUAz1VVtLQNRxdms4A=;
-        b=OfCJFx8krvR7N0u27F7RS9zlcFbCK/hXAnuevdwTLHvWPi8HuVSp7IaQCbqwR9Trrr
-         IqKylmeaSyDjnWs/Rh5TkzmJHmBdLFOrsiQtuRKt0UW6IAYozzqUN7o+BLejP2q6PX+q
-         yHC7e+hyZDm5y+SAKFLGCDBIRoyyDzL6+qWFQWuKfTXIHZZZ4iy10F1PETNHnzSDZoC9
-         yvU2URcqyXhsp7zFxirH5DUlIxTypVCZ+NJrHzZ0XG++fjLrPOxC3dpjoztgL/M/9CCD
-         Jm8GKbnVts1b0oOUwt44FZZnE/Vn2GdbB8LXeY++o+sANBURr9IqyzWjlOL2SU6JSWiQ
-         KQcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TZbkzMvSZU0C1M4JV0xVgJvuTUUAz1VVtLQNRxdms4A=;
-        b=g55Zcc0P9WPZ/3UWuDxmqbRnvCmdfv7h7G9X4D5Lafodke1dEd4DEY8AvX+8dIKReP
-         AGW/KeU77QJ7FFv3Ac1kmD1uaRB3f7zoMU+m3aeNURnMe2cyxFM8RR8cM0/JBv415BZ9
-         +7qXoaK75PkMKiFrVHAlNi0AtRT7f1ItSyJyNay7prrDJJDjC4xR8C4Ot/bomYZWxAD3
-         q5B2F61zhrX9MyNVs77h9LC5vuXlgTOmsGfQ3B3CrWCTYqvt/TSrPKD/s6XVPhZRw4ff
-         2DPkkmRruMOsJEcusyLUBF3LEZ+Y2AnAg7BzdnQVCAHhAEQB0rwOTIgJBSo2PvspUOAF
-         O8Ng==
-X-Gm-Message-State: AJIora9Nw9RvBvsq34udkpGC9KaTzuBZtzXnYDNTQSgC+rcivxZxQDeH
-        xQ3m9+mZltjx/7DZHCjMUy4MCw==
-X-Google-Smtp-Source: AGRyM1uFuAVXyDIgiKh2eo18Tm1/3ynhtp7A6qKUZLGz3dA+UsobViAS6AaRrk5a//97+Zw8k7AZKA==
-X-Received: by 2002:a05:651c:243:b0:25d:5b44:197d with SMTP id x3-20020a05651c024300b0025d5b44197dmr4290099ljn.516.1657790515585;
-        Thu, 14 Jul 2022 02:21:55 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id r6-20020a2e8e26000000b0025d67053f0dsm179911ljk.135.2022.07.14.02.21.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 02:21:54 -0700 (PDT)
-Message-ID: <e8046961-9555-07b7-721c-eeb278cb2ec7@linaro.org>
-Date:   Thu, 14 Jul 2022 11:21:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 16/30] dt-bindings: phy: qcom,qmp-ufs: add missing
- SM8450 clock
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
+        Thu, 14 Jul 2022 05:23:15 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EF848C8C;
+        Thu, 14 Jul 2022 02:22:00 -0700 (PDT)
+X-UUID: a87b0a2509844c1ba1445dee77f730f1-20220714
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:c4b775a0-d725-4a41-9db1-e1cab3a1703c,OB:10,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:100
+X-CID-INFO: VERSION:1.1.8,REQID:c4b775a0-d725-4a41-9db1-e1cab3a1703c,OB:10,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:100
+X-CID-META: VersionHash:0f94e32,CLOUDID:17d2f932-b9e4-42b8-b28a-6364427c76bb,C
+        OID:1f3df999b64b,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: a87b0a2509844c1ba1445dee77f730f1-20220714
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1873285117; Thu, 14 Jul 2022 17:21:55 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 14 Jul 2022 17:21:55 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 14 Jul 2022 17:21:55 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220707134725.3512-1-johan+linaro@kernel.org>
- <20220707134725.3512-17-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220707134725.3512-17-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
+        <randy.wu@mediatek.com>, <moudy.ho@mediatek.com>,
+        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
+        <river.cheng@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <cellopoint.kai@gmail.com>
+Subject: [PATCH v22 3/4] arm64: dts: mt8183: add Mediatek MDP3 nodes
+Date:   Thu, 14 Jul 2022 17:21:52 +0800
+Message-ID: <20220714092153.16686-4-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220714092153.16686-1-moudy.ho@mediatek.com>
+References: <20220714092153.16686-1-moudy.ho@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2022 15:47, Johan Hovold wrote:
-> Add the missing "qref" clock used by the SM8450 UFS QMP PHY to the
-> binding.
-> 
-> Fixes: e04121ba1b08 ("dt-bindings: phy: qcom,qmp: Add SM8450 UFS phy compatible")
-> Fixes: 07fa917a335e ("arm64: dts: qcom: sm8450: add ufs nodes")
+Add device nodes for Media Data Path 3 (MDP3) modules.
 
-The second fixes seems not appropriate here, because you are not fixing
-a DTS. A fix for DTS would be a fix for that one.
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 63 ++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 01e650251928..0776fc8290ce 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1389,6 +1389,60 @@
+ 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
+ 		};
+ 
++		mdp3-rdma0@14001000 {
++			compatible = "mediatek,mt8183-mdp3-rdma";
++			reg = <0 0x14001000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x1000 0x1000>;
++			mediatek,gce-events = <CMDQ_EVENT_MDP_RDMA0_SOF>,
++					      <CMDQ_EVENT_MDP_RDMA0_EOF>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_MDP_RDMA0>,
++				 <&mmsys CLK_MM_MDP_RSZ1>;
++			iommus = <&iommu M4U_PORT_MDP_RDMA0>;
++			mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
++				 <&gce 21 CMDQ_THR_PRIO_LOWEST 0>;
++		};
++
++		mdp3-rsz0@14003000 {
++			compatible = "mediatek,mt8183-mdp3-rsz";
++			reg = <0 0x14003000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x3000 0x1000>;
++			mediatek,gce-events = <CMDQ_EVENT_MDP_RSZ0_SOF>,
++					      <CMDQ_EVENT_MDP_RSZ0_EOF>;
++			clocks = <&mmsys CLK_MM_MDP_RSZ0>;
++		};
++
++		mdp3-rsz1@14004000 {
++			compatible = "mediatek,mt8183-mdp3-rsz";
++			reg = <0 0x14004000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x4000 0x1000>;
++			mediatek,gce-events = <CMDQ_EVENT_MDP_RSZ1_SOF>,
++					      <CMDQ_EVENT_MDP_RSZ1_EOF>;
++			clocks = <&mmsys CLK_MM_MDP_RSZ1>;
++		};
++
++		mdp3-wrot0@14005000 {
++			compatible = "mediatek,mt8183-mdp3-wrot";
++			reg = <0 0x14005000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x5000 0x1000>;
++			mediatek,gce-events = <CMDQ_EVENT_MDP_WROT0_SOF>,
++					      <CMDQ_EVENT_MDP_WROT0_EOF>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_MDP_WROT0>;
++			iommus = <&iommu M4U_PORT_MDP_WROT0>;
++		};
++
++		mdp3-wdma@14006000 {
++			compatible = "mediatek,mt8183-mdp3-wdma";
++			reg = <0 0x14006000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x6000 0x1000>;
++			mediatek,gce-events = <CMDQ_EVENT_MDP_WDMA0_SOF>,
++					      <CMDQ_EVENT_MDP_WDMA0_EOF>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_MDP_WDMA0>;
++			iommus = <&iommu M4U_PORT_MDP_WDMA0>;
++		};
++
+ 		ovl0: ovl@14008000 {
+ 			compatible = "mediatek,mt8183-disp-ovl";
+ 			reg = <0 0x14008000 0 0x1000>;
+@@ -1531,6 +1585,15 @@
+ 			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+ 		};
+ 
++		mdp3-ccorr@1401c000 {
++			compatible = "mediatek,mt8183-mdp3-ccorr";
++			reg = <0 0x1401c000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0xc000 0x1000>;
++			mediatek,gce-events = <CMDQ_EVENT_MDP_CCORR_SOF>,
++					      <CMDQ_EVENT_MDP_CCORR_EOF>;
++			clocks = <&mmsys CLK_MM_MDP_CCORR>;
++		};
++
+ 		imgsys: syscon@15020000 {
+ 			compatible = "mediatek,mt8183-imgsys", "syscon";
+ 			reg = <0 0x15020000 0 0x1000>;
+-- 
+2.18.0
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F251574C18
+	by mail.lfdr.de (Postfix) with ESMTP id BB585574C19
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238907AbiGNL2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
+        id S238930AbiGNL2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238847AbiGNL2G (ORCPT
+        with ESMTP id S238858AbiGNL2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:28:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30800599DE;
-        Thu, 14 Jul 2022 04:28:02 -0700 (PDT)
+        Thu, 14 Jul 2022 07:28:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D7D57253;
+        Thu, 14 Jul 2022 04:28:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F42961BFD;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6149661CC2;
+        Thu, 14 Jul 2022 11:28:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6257EC341CA;
         Thu, 14 Jul 2022 11:28:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD82C34114;
-        Thu, 14 Jul 2022 11:27:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657798080;
-        bh=N1fNSRCueq/ZQuGKF7Mf1VOJKbVklZ0O06iKTAUyTMU=;
+        s=k20201202; t=1657798083;
+        bh=9ohwBQS9o/0eQWGzO9pBqXpDkfHCagUjBWWDKn5wNw4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kMzUz7CD1tFQgTBqA1lYx3oX15IN1LcOyvkJ2mjldZUc+ahxb/cfLuF8DofcrfcSL
-         SzmW+dKIEGR2cIHW7xj1bbdEwkf5VPql8Fsw0WDaGPEDdolCWn8EgWqc59KhOZJIpR
-         DHQb00+urstAOR5kPkBCOlcldtaKi/NTCu/gh4bujRtr+9Ai0v+wW+BgQ5MgVB9hJk
-         c+iqK0IzeFTHiqUrrfy8lcMLO1ZJpeggFGoC4jxK4WXLiOf0gwd10EXqxhD3yg/UYi
-         sEVGqLQooX/SCGGbTgnyRzZxT/rSdm1DQ+p0Im8hKr2FkQmxuMCu4jdCRis8Pwl82r
-         yfiCOz5rguLRw==
+        b=QkBcA0xOxbZqDCuGkJ7ygm1jVxMqSFVVfQ9Ich8Wwlo7Wp2YMy77JoAzeaiKqZgKX
+         grNU7pvKFtU6xkOFXQUuZOFN3/NRuvX7B1fPNvnsibfjNuUOU0M1gdGk0DbhO9XtSK
+         2r1sWZ4dXbQguu5mlNWrdHhvrLKVduWNR1EfWBZdR4YEwxebvQsQYRQxWYeFO58uku
+         8FKbtPbyNi8Mz5ud7HoSsic0QdRj5a5pad1uRtqF8jcMvNlIxf9Bi/Bbetk4QCYdSq
+         r3+bW58nRHSGFuyqGYzDLK1WI+4NzXABcgjWs9ejAwP+FY2qGsIv5kBX4Hx7rOGFco
+         r2UN5KAEAAZNg==
 From:   Lee Jones <lee@kernel.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: [PATCH 7/8] dt-bindings: mfd: syscon: Update Lee Jones' email address
-Date:   Thu, 14 Jul 2022 12:25:32 +0100
-Message-Id: <20220714112533.539910-8-lee@kernel.org>
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 8/8] dt-bindings: regulator: pwm: Update Lee Jones' email address
+Date:   Thu, 14 Jul 2022 12:25:33 +0100
+Message-Id: <20220714112533.539910-9-lee@kernel.org>
 X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
 In-Reply-To: <20220714112533.539910-1-lee@kernel.org>
 References: <20220714112533.539910-1-lee@kernel.org>
@@ -59,29 +60,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Going forward, I'll be using my kernel.org for upstream work.
 
-Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org> (su
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-pwm@vger.kernel.org
 Cc: devicetree@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 Signed-off-by: Lee Jones <lee@kernel.org>
 ---
- Documentation/devicetree/bindings/mfd/syscon.yaml | 2 +-
+ Documentation/devicetree/bindings/regulator/pwm-regulator.yaml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
-index fb784045013f5..c10f0b577268e 100644
---- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-+++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-@@ -17,7 +17,7 @@ description: |
-   and access the registers directly.
+diff --git a/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml b/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
+index 0332fec48a883..82b6f2fde422b 100644
+--- a/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
+@@ -8,7 +8,7 @@ title: Bindings for the Generic PWM Regulator
  
  maintainers:
+   - Brian Norris <briannorris@chromium.org>
 -  - Lee Jones <lee.jones@linaro.org>
 +  - Lee Jones <lee@kernel.org>
+   - Alexandre Courbot <acourbot@nvidia.com>
  
- select:
-   properties:
+ description: |
 -- 
 2.37.0.144.g8ac04bfd2-goog
 

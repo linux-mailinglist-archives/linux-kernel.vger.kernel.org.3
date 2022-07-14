@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480545744E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 08:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9662A5744EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 08:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233290AbiGNGMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 02:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
+        id S231835AbiGNGMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 02:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiGNGMJ (ORCPT
+        with ESMTP id S233500AbiGNGMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 02:12:09 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3501512082
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 23:12:05 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id j3so969941pfb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 23:12:05 -0700 (PDT)
+        Thu, 14 Jul 2022 02:12:14 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4885012740
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 23:12:13 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso1806263pjo.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 23:12:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0JQX6/cIgCdb7Mg76sUFpOl71mtDqdXfnF0wcsBKWsM=;
-        b=MSniBgnOLurkJBS/hE33Ycon1qF3cNBocVhNzr3LgMuamK6dYjUdoDVt336IyjBgSt
-         BeY843VST6NEyYyLyhBxUdsiOMrMGUTqFNoWCydnQE5x0XOnWxYO5HWaWxOfp8NimnmZ
-         wRkQenr9JHGsORs7BzTst6zb+ahj4rDAsc2L4=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=jhKCnn2vUZabyEjVQ34XnYYStwx7FF/g1HUD8RjY5qg=;
+        b=L317bCTzKTqaXlJ4EfmgBVMoewNTGGEOrPaCffD0ZZXIwdyuepe5EKRQ6kMfrKVy12
+         ACo5fbj1mCL+ZnwKzvskmbcuPUhseZnhRmxLziWdVnspTEMZU8Uew+h6isuw4k+6o9DJ
+         vXFbcJ7Mfw1gp439kEFYWq0j6cZA4jN46XgNE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0JQX6/cIgCdb7Mg76sUFpOl71mtDqdXfnF0wcsBKWsM=;
-        b=KRqThaetqdEXHMBnpsWQISIXrwWwIW/WZXNYu6ikYD8/MaIPHn0+E4GLE8YiVsjIsC
-         L7YjWdxV4WKc2XJnJj0ZyribV6OcU+cQxWZp4NhYZRvnriPNykLEsAFGFz7/bXXoBZ1h
-         saZ4vRTpt/XpAA3Jsq8xjioZLlSqpK38ylcFkym0jJtpYzC/LCBG8b7+YzfB4unI9ymE
-         LRD1yEQvNMlSEomz8j61G037nM9WmBO9HkwelzbOqamLMBd34n5hSgC41+BWTFddm8qX
-         WHZadAK8zxCKYLMbEQ36JLbDqPf4nmFtLDJs9wJudmiMRUyB1KZev18Mjay/uTMGHTw8
-         7TkA==
-X-Gm-Message-State: AJIora9vtRj5Pe5m7lTfVXUg70aCjUnwrwy5gCZOlNHOL8U97WoNgRAF
-        he8tveJqMn95hIOoPaPeFzMRaA==
-X-Google-Smtp-Source: AGRyM1taVQ9qHJJchRWXeqZw9zn67tFuwEXQj2+SbtcE1e1jgkp3bIJq+Jc2EaYDxH5GTEm/hoPC9g==
-X-Received: by 2002:a63:2a8f:0:b0:412:5278:b90 with SMTP id q137-20020a632a8f000000b0041252780b90mr6214516pgq.363.1657779124714;
-        Wed, 13 Jul 2022 23:12:04 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jhKCnn2vUZabyEjVQ34XnYYStwx7FF/g1HUD8RjY5qg=;
+        b=w5i37ZEmSerTxIWsX3tXOlExUyQe/0yyD4DOhWel+zfOE81rr83Sb2uQ+kZnzpqwj6
+         grEaDLsHep2nknsHoADu+KoU326c9CISdSljT+Kx/yM12kX+nhXVzKECgRpwmjqzFhar
+         pWzO2xSwbKcxKp66T/1Cf3VJyxisyNOmPO+ThDDfYmw3bcQe5xV2EZhgq2nJIIEgTtkS
+         dBaxemUW06RAm3wqe+b9v/T895WmUTBWAzzWwgBV611Voq/YnYuoO575eA0hmC+DqUxy
+         vdYoWdea62uxkyR1ODbzDVUj2+3P7ZaFAdqlwSl6IqXarkunNE9UtajYbnJh28b9Bv/S
+         KAaQ==
+X-Gm-Message-State: AJIora/YI36Q6mEoQx4V4k4ux4yWOAJa8nfR2dqh7xeAIg6pY1nqo27T
+        9JMVyCqLAn8J2HAbpF89Ha6SWg==
+X-Google-Smtp-Source: AGRyM1tIepRwep6gJA7RqD5bmmkiAwYliMFcEY85zwW1xxcbOSk/eXbsg4HYmU3w3lY7EbYHlLAaSA==
+X-Received: by 2002:a17:903:18c:b0:16c:51c6:675d with SMTP id z12-20020a170903018c00b0016c51c6675dmr6781526plg.153.1657779132852;
+        Wed, 13 Jul 2022 23:12:12 -0700 (PDT)
 Received: from judyhsiao0523.c.googlers.com.com (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
-        by smtp.gmail.com with ESMTPSA id j10-20020a170902690a00b0016a17da4ad4sm509683plk.39.2022.07.13.23.12.02
+        by smtp.gmail.com with ESMTPSA id j10-20020a170902690a00b0016a17da4ad4sm509683plk.39.2022.07.13.23.12.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 23:12:04 -0700 (PDT)
+        Wed, 13 Jul 2022 23:12:12 -0700 (PDT)
 From:   Judy Hsiao <judyhsiao@chromium.org>
 To:     Andy Gross <agross@kernel.org>
 Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -55,10 +55,12 @@ Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Judy Hsiao <judyhsiao@chromium.org>
-Subject: [PATCH v1 0/3] Add dtsi for sc7280 herobrine boards that using
-Date:   Thu, 14 Jul 2022 06:11:48 +0000
-Message-Id: <20220714061151.2126288-1-judyhsiao@chromium.org>
+Subject: [PATCH v1 1/3] arm64: dts: qcom: sc7280: herobrine: Add pinconf settings for mi2s1
+Date:   Thu, 14 Jul 2022 06:11:49 +0000
+Message-Id: <20220714061151.2126288-2-judyhsiao@chromium.org>
 X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+In-Reply-To: <20220714061151.2126288-1-judyhsiao@chromium.org>
+References: <20220714061151.2126288-1-judyhsiao@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -71,24 +73,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Put sound node and lpass_cpu node settings for boards that use rt5682
-codec in the sc7280-herobrine-audio-rt5682.dtsi as there are different
-choices of headset codec for herobrine projects. Common audio setting
-for the internal speaker is in sc7280-herobrine.dtsi.
+1. Add drive strength property for mi2s1 on sc7280 based platforms.
+2. Disable the pull-up for mi2s1 lines.
 
-Judy Hsiao (3):
-  arm64: dts: qcom: sc7280: herobrine: Add pinconf settings for mi2s1
-  arm64: dts: qcom: sc7280: Add sc7280-herobrine-audio-rt5682.dtsi
-  arm64: dts: qcom: sc7280: include sc7280-herobrine-audio-rt5682.dtsi
-    in villager and herobrine-r1
+Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
- .../qcom/sc7280-herobrine-audio-rt5682.dtsi   | 121 ++++++++++++++++++
- .../qcom/sc7280-herobrine-herobrine-r1.dts    |   1 +
- .../dts/qcom/sc7280-herobrine-villager-r0.dts |   1 +
- .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  15 +++
- 4 files changed, 138 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
+---
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+index 0a220e7421d9..74c451bf0d00 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+@@ -632,6 +632,21 @@ &dp_hot_plug_det {
+ 	bias-disable;
+ };
+ 
++&mi2s1_data0 {
++	drive-strength = <6>;
++	bias-disable;
++};
++
++&mi2s1_sclk {
++	drive-strength = <6>;
++	bias-disable;
++};
++
++&mi2s1_ws {
++	drive-strength = <6>;
++	bias-disable;
++};
++
+ &pcie1_clkreq_n {
+ 	bias-pull-up;
+ 	drive-strength = <2>;
 -- 
 2.37.0.144.g8ac04bfd2-goog
 

@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA645752CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F05D05752D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239458AbiGNQax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        id S239491AbiGNQbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237741AbiGNQat (ORCPT
+        with ESMTP id S231649AbiGNQbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:30:49 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE5F655A1;
-        Thu, 14 Jul 2022 09:30:49 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id o18so2019420pgu.9;
-        Thu, 14 Jul 2022 09:30:49 -0700 (PDT)
+        Thu, 14 Jul 2022 12:31:35 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD73433410;
+        Thu, 14 Jul 2022 09:31:34 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id e15so3132388edj.2;
+        Thu, 14 Jul 2022 09:31:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KMvgUo5DFbdUy4r+dfQ8/l8alJs97+14aru3ICZ5dWE=;
-        b=aVYXqeHR4lLS66BV84dEqs2N7IPHrywmQzWK5PaawnJ3IDE1pQ9zAEolcs1RKiOIio
-         xi1h0gC/7rEbWpuhBa+Du1vRxZr+v6qznl3fuBnTlNrwmaWXRc8qzZgwH6Cwln2PcGAV
-         NwuOeCG59C8a7ytUrJGNdVIvuOhKHgOk9jr+N9W+bHtf9+bPij1Pp0+6CJFDOLCVq9nE
-         Bych74VoDEPqhMPVRTXswi9XLBKFAgYQ2/5d6e3LRW4kVFOgAEHKiHnX9nYb8pqC+lbL
-         9vbg57Zy8bNW/pSYeO3OQX4RuVtJoBaJoDfd5+YM8hL6812Z+SNCD5jzL6QtleLaiR2S
-         LQBA==
+         :cc;
+        bh=yhoWI4qXoHsRxXejZ4bDxx8rPwc5PrEne0xLbfw7b3c=;
+        b=TMtVpRdxuzY+GFOrJzgXJjS7PgzhBL4YjbaEAWduBAB5qc6UjWHULm5HpSJXOScbnh
+         qWEGguzru0OxloGviNMBCEMELWtL87lhZPUrXd+lwmq5MeGAhuz8/wSDdWnagZVMSXO6
+         Iwaz2MgUYZWYEk9HwPUn238XUQEyvW4/F89ZSvxYnsnQYfyRDpqB+PlRlQAGkT1Gdv/S
+         7UGkeO2D281Yu7wnsy3YzxsgczEQJjmqgHVCwX+fKFpQGejBv1EsHLWb4EyJYtlmOQbW
+         H6nYg2W1YS7Rf0gA3nIdJo6HQTUivxtXB2m4D73Sd4ofi6gJ6i/aJNKJz3lQyySfJioN
+         fbKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KMvgUo5DFbdUy4r+dfQ8/l8alJs97+14aru3ICZ5dWE=;
-        b=qEAwnT0j2EWSASkgZUA5XYoIIfO7NYov4gcLGdZODQx6IVyvZ7yxvdeMiEAk2h/XGd
-         ze57Q5+31hgCsG4xD5CZZMVRtgbazFrSgHkoTlG9pI7HBp7Sno7K7Tms9Gasta9LSmRh
-         L0LHlppjnsaUPLJcFAFjTcIoWdJpfnCqdy34PYyjm06QSgB/l5dVRAqsScjg6CjUUqMy
-         peHlhKl9NL8AndiHWQTEjPgNFbuAPFJG2I432C0o+7KxC9eIz3RwIk0/DY1dh5Qzpb4S
-         hXhM9rE7FJvB2RMe8waHA7nTlY8/4SniSIxT1Brq00hPAJh3vHECCEYe7Q4+oObQ7phx
-         BISg==
-X-Gm-Message-State: AJIora9eGO717fHv9b5yz8eHZ74AELAa3UO3VeIuOXkhK92fyOmoNcn9
-        SXLDQsCE449AU8FD5g37RIPX3ceUAs/qPAJ50xQ=
-X-Google-Smtp-Source: AGRyM1tS14qGXtCk9KbXJ6e3xehx84e35ntlJxOWVAsxIo439cdGoV34KvROhmpGBYH7yxy26wQ3KIwtpMSvZXhUA7o=
-X-Received: by 2002:a63:4847:0:b0:419:c8f4:4f88 with SMTP id
- x7-20020a634847000000b00419c8f44f88mr1552857pgk.603.1657816248636; Thu, 14
- Jul 2022 09:30:48 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=yhoWI4qXoHsRxXejZ4bDxx8rPwc5PrEne0xLbfw7b3c=;
+        b=JMmOqoluSyMRkw2sRC0j92DEwTJWTo2F3h9aWR7uJOMNwhKM2E+Zi4k0v7y0a6XjCa
+         Lm2Y5iudvmZzqtCX0oXsWtQNW+nRwdfXSIvtBvq9DvJaBOPzamPyCFwbG0pfa35oFuFE
+         inCLkwtV98enPJYjYCaF2a4iaTxu4EogKl5V1oIk+Nr90eT7TBr2zHYFcJdENntnkn2e
+         pvamQO0nO4CRkxMOySLpfDHCUI99BLQ9mQ1EqAW+ugWsAq3UhwS1eBVY5uDYa/dhCovi
+         i011/5TNLRi3AaiZ+opMnZgUq9f4FTYzXh955VhHU8nSvtIuaEMXW/4Zsn3CZ+x6X2kI
+         M3ng==
+X-Gm-Message-State: AJIora9Mh83uUbx2HUtzqO46WjwlgeO/xlfi+GSZZb0aWV3cvhgBW2GS
+        5talQ05kTc7+4AG86vMJyr9fJfEAqI/6XQPUJ1E=
+X-Google-Smtp-Source: AGRyM1vlBR6f4juYCV/yCZg3RjA87tp7VDETKIK9iYx5gzzUL4ZdyFIJbjjXw8MVnaPdQX+oNlbMl0PPVfnIXBNwT48=
+X-Received: by 2002:a05:6402:2895:b0:43b:1e47:c132 with SMTP id
+ eg21-20020a056402289500b0043b1e47c132mr7007574edb.425.1657816293374; Thu, 14
+ Jul 2022 09:31:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <1657815915-1872-1-git-send-email-michal.vokac@ysoft.com>
-In-Reply-To: <1657815915-1872-1-git-send-email-michal.vokac@ysoft.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 14 Jul 2022 13:30:36 -0300
-Message-ID: <CAOMZO5BNc35_v5c4oYbO4DpGAv4shzq63M1eo04V5NJ7na7FSQ@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dts: imx6dl-yapp4: Bind the backlight controller to
- the LCD panel
-To:     =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220714103427.23255-1-colin.i.king@gmail.com>
+In-Reply-To: <20220714103427.23255-1-colin.i.king@gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 14 Jul 2022 12:31:21 -0400
+Message-ID: <CADnq5_PO79-dzPy0VVG2fuyQ0wX0GcWHbcvyyy_bUrF2JwQSOQ@mail.gmail.com>
+Subject: Re: [PATCH][next] drm/amd/display: Fix spelling mistake "supporing"
+ -> "supporting"
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,13 +76,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 1:25 PM Michal Vok=C3=A1=C4=8D <michal.vokac@ysoft.=
-com> wrote:
->
-> Add connection between the backlight controller and LCD panel.
-> With that the backlight is automatically switched on when the panel
-> is on or switched off when the panel is blanked.
->
-> Signed-off-by: Michal Vok=C3=A1=C4=8D <michal.vokac@ysoft.com>
+Applied.  Thanks!
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Alex
+
+On Thu, Jul 14, 2022 at 6:34 AM Colin Ian King <colin.i.king@gmail.com> wrote:
+>
+> There is a spelling mistake in a dml_print message. Fix it.
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  .../gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c    | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> index 6101c962ab0a..fc4d7474c111 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> @@ -2994,7 +2994,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+>                         for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+>                                 if (v->ImmediateFlipSupportedForPipe[k] == false) {
+>  #ifdef __DML_VBA_DEBUG__
+> -                                       dml_print("DML::%s: Pipe %0d not supporing iflip\n", __func__, k);
+> +                                       dml_print("DML::%s: Pipe %0d not supporting iflip\n", __func__, k);
+>  #endif
+>                                         v->ImmediateFlipSupported = false;
+>                                 }
+> --
+> 2.35.3
+>

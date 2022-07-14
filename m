@@ -2,150 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4006C5750DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DFC5750DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239485AbiGNOa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
+        id S239592AbiGNObU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238984AbiGNOax (ORCPT
+        with ESMTP id S239603AbiGNObN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:30:53 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D0962A6D;
-        Thu, 14 Jul 2022 07:30:51 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id j22so3781794ejs.2;
-        Thu, 14 Jul 2022 07:30:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mhxl6eN4n1/eHRsFI0/DaV3ApKNuqLo+yTBdClbFgTQ=;
-        b=TRd/5gS0532BsVfScibV1uknLn8y47TMMuLa7gwdQAKuLDNlCEsP0nT6ca5h0H0O3h
-         sAqkBYDeAzqvn9z6p9TMeJvmxNuq0eCctO4umtMKnEZiqGxC3YPLThAuHG0kPdQgPAI2
-         D1W8bUUbbhu/7xeVG/MGXxE8zc0wI47LoiKqQr4rOZeNdL634tqBdhmeelD3hpV3nAkl
-         ygsJRG3qQKpA4C9A9CEFQGTyE6AIiruq7pq1xSYYxVfcGA7Z6zaRhc3Qf6HQyhjWcOTT
-         6nS0NHlZ60uBewd0uGUvja2HYjAJTVMXHaq1Y+xv8STcnwlapEwghUcHH+lb0jgVFhZ4
-         9bow==
+        Thu, 14 Jul 2022 10:31:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFC196555E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:31:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657809071;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QX/RLK32OpRxV1YeloU8UOOFuwfWL5YnhaUNtPHHDQw=;
+        b=WVSmoAUtK5IkqPiuqPlUGTKBgxdAxmmdqceO2JLlabGsdWMMom2DrJIBa72JbukMtsaZdC
+        zeAyl/jiccRiqLBe85KmJQKP8Z5+A28EZpsSF4GjW2Li+mlBqpRFN8rMehpWNBi4XGdaGm
+        St2vDSB/YuwREmZygAce63XcB2oXk0Q=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-402-F7AgwwV8NnGR9BNFOFCkYg-1; Thu, 14 Jul 2022 10:31:04 -0400
+X-MC-Unique: F7AgwwV8NnGR9BNFOFCkYg-1
+Received: by mail-qk1-f199.google.com with SMTP id k190-20020a37bac7000000b006af6d953751so1264854qkf.13
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:31:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mhxl6eN4n1/eHRsFI0/DaV3ApKNuqLo+yTBdClbFgTQ=;
-        b=Z+EpSa2TlxJ9U7t3LOtmZPY3wMhZf+AShTD1krQdh8WqHJc1+oGnRWAPcUN+dox60y
-         KND9BDLucHagLo+z9YMD0E03B0AwGQXsYZQLKyZS+XAK7ZEXvCqA2k8xbzcp7uv3Wlmz
-         urnpWFCztbNHtTI/STuGw1wz02H2PM4CqEolz6U9+uZSlDyJS6kOcDOgwRIifDYzjfrl
-         rQOUrQiRMU9kJs9/e9gRiEzzJqtU8vaaJB6zTvzDCMFolHO383FfGxTxJBpeghuMNG5T
-         G0Pu/La5ygVkBIS893VOjKj1EEfQDd8O7+wCmCN/VfO2KXyYnA3f1oAiOgyVrKlepVLz
-         HfPw==
-X-Gm-Message-State: AJIora/HUZrI3mUeQ9o9748XTeGNA+9FzVQ5ZuoFIZ5oia/QZAFEbypi
-        EYxQ4Tjvnh2iBalkFoMJ2eI=
-X-Google-Smtp-Source: AGRyM1vCHoOBnx8lHPDEQ6erOmD8PP6lAMuCwxcVYKikQmjy12ujMqVxUfcL4ttkRL10Axsyh3zxrQ==
-X-Received: by 2002:a17:906:cc45:b0:72b:313b:f3ee with SMTP id mm5-20020a170906cc4500b0072b313bf3eemr8854277ejb.362.1657809050339;
-        Thu, 14 Jul 2022 07:30:50 -0700 (PDT)
-Received: from debian64.daheim (p5b0d78f3.dip0.t-ipconnect.de. [91.13.120.243])
-        by smtp.gmail.com with ESMTPSA id r14-20020aa7cfce000000b0043a4de1d421sm1134425edy.84.2022.07.14.07.30.49
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QX/RLK32OpRxV1YeloU8UOOFuwfWL5YnhaUNtPHHDQw=;
+        b=qAb84rKpJVgPVF1RuqsGcutwoqTv22h5BT7XagyC7JmM1BpcM43/FMtcWbwGoONzCv
+         b8q6EEP9U5Pmp0DPyRjQJu0SBfTRks9QULnlens0ZQhCBzt2EndWnQDj6nuqe8a25YWM
+         L/Qf+ackBpmremlxLE2ByG+CiVQY0ZXZ2aZOkVMPEWfmfweChLdQCF7aycTBJln60ap6
+         wso/wUjGI48n/mWWqcO+0DrqS693Wisq1lbKkVVG/TXo5Uawz9cdXe/M7n1pT63kJj39
+         MfymT7iCUWKeVzimP8t7ZwaJ/r1r1+WOrAtsGiDDwL4oq1Y/fzUGtRTGQXlj+dAx5Udm
+         Dl1w==
+X-Gm-Message-State: AJIora8Hp1n/ZP/pJ1RfoDdYHFDqErR0JPwjpgeVSuLYFq4u2cfAdQNx
+        NaMI1nxl71agFQLctRN2qFMx5esFduFwtOcp8ticjTrhzb0X/mj/dEIwfQbsqzObp0ibZy/6EgF
+        ylkOmUVY7rUYl0M8vQKlAEKBN
+X-Received: by 2002:a05:6214:c47:b0:473:59e9:69e8 with SMTP id r7-20020a0562140c4700b0047359e969e8mr8224501qvj.99.1657809064316;
+        Thu, 14 Jul 2022 07:31:04 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1st9rFmJztebffsWgSzn3ebwEOQOhl0BrSbnSPPOnthwDQ19NhIitawRRBA7nrdrhQArstG9w==
+X-Received: by 2002:a05:6214:c47:b0:473:59e9:69e8 with SMTP id r7-20020a0562140c4700b0047359e969e8mr8224467qvj.99.1657809064030;
+        Thu, 14 Jul 2022 07:31:04 -0700 (PDT)
+Received: from xps13 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
+        by smtp.gmail.com with ESMTPSA id r9-20020a05620a298900b006b5cb5d2fa0sm70699qkp.1.2022.07.14.07.31.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 07:30:49 -0700 (PDT)
-Received: from localhost.daheim ([127.0.0.1])
-        by debian64.daheim with esmtp (Exim 4.96)
-        (envelope-from <chunkeey@gmail.com>)
-        id 1oBxyj-0006LN-2D;
-        Thu, 14 Jul 2022 16:30:49 +0200
-Message-ID: <5d4c944e-005e-a443-cb87-230c4e097f93@gmail.com>
-Date:   Thu, 14 Jul 2022 16:30:49 +0200
+        Thu, 14 Jul 2022 07:31:03 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 10:31:02 -0400
+From:   Brian Masney <bmasney@redhat.com>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 6/8] PCI: qcom: Make all optional clocks optional
+Message-ID: <YtAopgoz+gv53y8X@xps13>
+References: <20220714071348.6792-1-johan+linaro@kernel.org>
+ <20220714071348.6792-7-johan+linaro@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH v2] p54: add missing parentheses in p54_flush()
-Content-Language: de-DE, en-US
-To:     Rustam Subkhankulov <subkhankulov@ispras.ru>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org
-References: <20220714134831.106004-1-subkhankulov@ispras.ru>
-From:   Christian Lamparter <chunkeey@gmail.com>
-In-Reply-To: <20220714134831.106004-1-subkhankulov@ispras.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714071348.6792-7-johan+linaro@kernel.org>
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/07/2022 15:48, Rustam Subkhankulov wrote:
-> The assignment of the value to the variable total in the loop
-> condition must be enclosed in additional parentheses, since otherwise,
-> in accordance with the precedence of the operators, the conjunction
-> will be performed first, and only then the assignment.
+On Thu, Jul 14, 2022 at 09:13:46AM +0200, Johan Hovold wrote:
+> The kernel is not a devicetree validator and does not need to re-encode
+> information which is already available in the devicetree.
 > 
-> Due to this error, a warning later in the function after the loop may
-> not occur in the situation when it should.
+> This is specifically true for the optional PCIe clocks, some of which
+> are really interconnect clocks.
 > 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> Treat also the 2.7.0 optional clocks as truly optional instead of
+> maintaining a list of clocks per compatible (including two compatible
+> strings for the two identical controllers on sm8450) just to validate
+> the devicetree.
 > 
-> Signed-off-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
-> Fixes: 0d4171e2153b ("p54: implement flush callback")
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-For reference: This is the "warning" the commit message talks about:
-| WARN(total, "tx flush timeout, unresponsive firmware");
-| } // this is right at the end of the p54_flush() function
-
-
-from what I can tell, the difference between:
-
-|	while ((total = p54_flush_count(priv) && i--)) {
-
-and
-
-|	while ((total = p54_flush_count(priv)) && i--) {
-
-boils down to what that "total" ends up being after the
-while() has run through.
-
-In the original code it can either be 0 (for everything is ok)
-or 1 (still pending - this is bad / firmware is on the fritz).
-
-In the patched version "total" will be 0 or the value of
-p54_flush_count(priv).
-
-I think both the current and the patched version behave
-the same way and produce the same output.
-
-However I think (since the variable is named "total")
-the returned value of p54_flush_count() is indeed more
-precise here.
-
-Acked-by: Christian Lamparter <chunkeey@gmail.com>
-
-> ---
->   drivers/net/wireless/intersil/p54/main.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/intersil/p54/main.c b/drivers/net/wireless/intersil/p54/main.c
-> index a3ca6620dc0c..8fa3ec71603e 100644
-> --- a/drivers/net/wireless/intersil/p54/main.c
-> +++ b/drivers/net/wireless/intersil/p54/main.c
-> @@ -682,7 +682,7 @@ static void p54_flush(struct ieee80211_hw *dev, struct ieee80211_vif *vif,
->   	 * queues have already been stopped and no new frames can sneak
->   	 * up from behind.
->   	 */
-> -	while ((total = p54_flush_count(priv) && i--)) {
-> +	while ((total = p54_flush_count(priv)) && i--) {
->   		/* waste time */
->   		msleep(20);
->   	}
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 

@@ -2,177 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221A75754CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 140695754D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240587AbiGNST2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 14:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        id S240593AbiGNSUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 14:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239042AbiGNSTZ (ORCPT
+        with ESMTP id S232377AbiGNSUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 14:19:25 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9E912AB9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:19:24 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-31cf1adbf92so25599687b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:19:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=UalPu2ksuWmPhMJk6j/nedFQH4vb0HRRAL+Epn4qbZ8=;
-        b=j4dwcaQHxccsYOFZrXtomfe9hOl6BlVc4DQKsraUI3MJvpEoX61FMcb4nxyZRbRD+y
-         SS1TtWDZUdJE1B+TtUsKSI1GUNUMmsL0zWNYoVVMksVTckyC1IYa0j6SdesEOJHPmkl1
-         KyDzM+uxVRocoJ+TKjPx5nsaU32fQyQrJp+BGkwL6V5QyOccv1GCuQ8REo4/GYhuh0+P
-         KGQxPNRaZzbCGKpY51IBbk0O/s7k931S2m6nM2CVV6ZYSG2TQfWxoKTZjSVLdZ2ydhyP
-         To2+Hn+xOGUPAGEHyAAzB4wlp2oUgyRFggJtIs8CeZjVagrVXZRaQNI+c5LIevh68Vjf
-         M9YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=UalPu2ksuWmPhMJk6j/nedFQH4vb0HRRAL+Epn4qbZ8=;
-        b=UXxrxwpWxiAQSWsVIL5sGsuznYt9khLLpt4wmzaogEzJm3wJopwrbyw1lWjgDmc8In
-         bDRmu7QxeFVuKn3gmRo/FvvrgLy8XMsdaZ/ouIiJbpJm4wp7YTDrQP/SSAKwOgu1rnHx
-         d6ItzWPJyOl8+kTUnv9ChchO+2yxfc4s/enKPof6G5wYOdf2QnSCzwtB34YkK+F7s6f/
-         aft1g3SJd1zNcvsfvKO7nhCnFLungX7bxMTx59U4EMiumkSsIcTb8SV3tcTg5h5nrhYt
-         Ih0lNMRQUaERgUnyzzxJsY0LDvLfIWoh0lpp1H2xt8ZBoN+7Uh/bhy89jsF2obOA+qgf
-         CPvg==
-X-Gm-Message-State: AJIora/Upgj3qZ3V6p9V4z1egZ+yn+XHWIp3PrZOaDk60IRYv+tTMBB5
-        eJ5ddA/oIbrFtwxirEnfudCtb8jkW7JfQtJdllkN2g==
-X-Google-Smtp-Source: AGRyM1tyJfI1/uNHge25px5/PLanVAieHbxdM60iopHkkljV0nkYyMuYqzY2eroNzQHCTe3fJ7VxxB7ATKaOGnnw3vY=
-X-Received: by 2002:a81:4427:0:b0:31d:b9ad:4a7c with SMTP id
- r39-20020a814427000000b0031db9ad4a7cmr10743607ywa.396.1657822763794; Thu, 14
- Jul 2022 11:19:23 -0700 (PDT)
+        Thu, 14 Jul 2022 14:20:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C045568DFB
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:20:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6AA75B82768
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 18:20:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67BADC34114;
+        Thu, 14 Jul 2022 18:20:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657822845;
+        bh=iKFL8MhgnwvAzfXoCa/xPbE8h1onzSSmHhZbueGDxas=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AzCMaqSw4zc4mCQAf9RRReN7QGBYuoeEF/Wo6MEKU6hdvUdhSRSA1EYakW9MRGLu3
+         LAx+tKlwdbmQQ1wmIj6xWfnMjPbKbrAiwnAPEu4ri5od8LTek62FHo/D9ueKvwUDwZ
+         XHNMcySfdkx0mEefR4pzC0qMP1tyDvrqYnsAqYzU=
+Date:   Thu, 14 Jul 2022 20:20:40 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Phil Auld <pauld@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Yury Norov <yury.norov@gmail.com>
+Subject: Re: [PATCH v4] drivers/base: fix userspace break from using
+ bin_attributes for cpumap and cpulist
+Message-ID: <YtBeeL+eB6iQ7CHH@kroah.com>
+References: <20220714180121.2917662-1-pauld@redhat.com>
 MIME-Version: 1.0
-References: <20220706205136.v2.1.Ic7a7c81f880ab31533652e0928aa6e687bb268b5@changeid>
- <Ys40uw4QIe4fQKA/@google.com> <CANkg5eyehcECGeDHBEsxR=iOoyMwzkcpvX+oRxy7PJPYLD=VuQ@mail.gmail.com>
-In-Reply-To: <CANkg5eyehcECGeDHBEsxR=iOoyMwzkcpvX+oRxy7PJPYLD=VuQ@mail.gmail.com>
-From:   Tim Van Patten <timvp@google.com>
-Date:   Thu, 14 Jul 2022 12:19:12 -0600
-Message-ID: <CANkg5exT1kFr9WBQEGD0=ndH1aJMD3OXmuZ4Obx9JtVDgKS6ow@mail.gmail.com>
-Subject: Re: [PATCH v2] platform/chrome: cros_ec: Send host event for prepare/complete
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rrangel@chromium.org,
-        robbarnes@google.com, Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714180121.2917662-1-pauld@redhat.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Resending in plain text mode]
+On Thu, Jul 14, 2022 at 02:01:21PM -0400, Phil Auld wrote:
+> Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
+> This breaks userspace code that retrieves the size before reading the file. Rather
+> than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
+> limitation of cpumap ABI") let's put in a size value at compile time. Use direct
+> comparison and a worst-case maximum to ensure compile time constants. For cpulist the
+> max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960
+> (8192 * 5). In order to get near that you'd need a system with every other CPU on one
+> node or something similar. e.g. (0,2,4,8, ... ). To simplify the math and support
+> larger NR_CPUS in the future we are using NR_CPUS * 7. We also set it to a min of
+> PAGE_SIZE to retain the older behavior for smaller NR_CPUS. The cpumap file wants to
+> be something like NR_CPUS/4 + NR_CPUS/32, for the ","s so for simplicity we are using
+> NR_CPUS/2.
+> 
+> Add a set of macros for these values to cpumask.h so they can be used in multiple places.
+> Apply these to the handful of such files in drivers/base/topology.c as well as node.c.
+> 
+> On an 80 cpu 4-node sytem (NR_CPUS == 8192)
+> 
+> before:
+> 
+> -r--r--r--. 1 root root 0 Jul 12 14:08 /sys/devices/system/node/node0/cpulist
+> -r--r--r--. 1 root root 0 Jul 11 17:25 /sys/devices/system/node/node0/cpumap
+> 
+> after:
+> 
+> -r--r--r--. 1 root root 57344 Jul 13 11:32 /sys/devices/system/node/node0/cpulist
+> -r--r--r--. 1 root root  4096 Jul 13 11:31 /sys/devices/system/node/node0/cpumap
+> 
+> CONFIG_NR_CPUS = 16384
+> -r--r--r--. 1 root root 114688 Jul 13 14:03 /sys/devices/system/node/node0/cpulist
+> -r--r--r--. 1 root root   8192 Jul 13 14:02 /sys/devices/system/node/node0/cpumap
+> 
+> Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
+> Fixes: bb9ec13d156 ("topology: use bin_attribute to break the size limitation of cpumap ABI")
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Signed-off-by: Phil Auld <pauld@redhat.com>
+> ---
+>  drivers/base/node.c     |  4 ++--
+>  drivers/base/topology.c | 32 ++++++++++++++++----------------
+>  include/linux/cpumask.h | 16 ++++++++++++++++
+>  3 files changed, 34 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/base/node.c b/drivers/base/node.c
+> index 0ac6376ef7a1..eb0f43784c2b 100644
+> --- a/drivers/base/node.c
+> +++ b/drivers/base/node.c
+> @@ -45,7 +45,7 @@ static inline ssize_t cpumap_read(struct file *file, struct kobject *kobj,
+>  	return n;
+>  }
+>  
+> -static BIN_ATTR_RO(cpumap, 0);
+> +static BIN_ATTR_RO(cpumap, CPUMAP_FILE_MAX_BYTES);
+>  
+>  static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
+>  				   struct bin_attribute *attr, char *buf,
+> @@ -66,7 +66,7 @@ static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
+>  	return n;
+>  }
+>  
+> -static BIN_ATTR_RO(cpulist, 0);
+> +static BIN_ATTR_RO(cpulist, CPULIST_FILE_MAX_BYTES);
+>  
+>  /**
+>   * struct node_access_nodes - Access class device to hold user visible
+> diff --git a/drivers/base/topology.c b/drivers/base/topology.c
+> index ac6ad9ab67f9..89f98be5c5b9 100644
+> --- a/drivers/base/topology.c
+> +++ b/drivers/base/topology.c
+> @@ -62,47 +62,47 @@ define_id_show_func(ppin, "0x%llx");
+>  static DEVICE_ATTR_ADMIN_RO(ppin);
+>  
+>  define_siblings_read_func(thread_siblings, sibling_cpumask);
+> -static BIN_ATTR_RO(thread_siblings, 0);
+> -static BIN_ATTR_RO(thread_siblings_list, 0);
+> +static BIN_ATTR_RO(thread_siblings, CPUMAP_FILE_MAX_BYTES);
+> +static BIN_ATTR_RO(thread_siblings_list, CPULIST_FILE_MAX_BYTES);
+>  
+>  define_siblings_read_func(core_cpus, sibling_cpumask);
+> -static BIN_ATTR_RO(core_cpus, 0);
+> -static BIN_ATTR_RO(core_cpus_list, 0);
+> +static BIN_ATTR_RO(core_cpus, CPUMAP_FILE_MAX_BYTES);
+> +static BIN_ATTR_RO(core_cpus_list, CPULIST_FILE_MAX_BYTES);
+>  
+>  define_siblings_read_func(core_siblings, core_cpumask);
+> -static BIN_ATTR_RO(core_siblings, 0);
+> -static BIN_ATTR_RO(core_siblings_list, 0);
+> +static BIN_ATTR_RO(core_siblings, CPUMAP_FILE_MAX_BYTES);
+> +static BIN_ATTR_RO(core_siblings_list, CPULIST_FILE_MAX_BYTES);
+>  
+>  #ifdef TOPOLOGY_CLUSTER_SYSFS
+>  define_siblings_read_func(cluster_cpus, cluster_cpumask);
+> -static BIN_ATTR_RO(cluster_cpus, 0);
+> -static BIN_ATTR_RO(cluster_cpus_list, 0);
+> +static BIN_ATTR_RO(cluster_cpus, CPUMAP_FILE_MAX_BYTES);
+> +static BIN_ATTR_RO(cluster_cpus_list, CPULIST_FILE_MAX_BYTES);
+>  #endif
+>  
+>  #ifdef TOPOLOGY_DIE_SYSFS
+>  define_siblings_read_func(die_cpus, die_cpumask);
+> -static BIN_ATTR_RO(die_cpus, 0);
+> -static BIN_ATTR_RO(die_cpus_list, 0);
+> +static BIN_ATTR_RO(die_cpus, CPUMAP_FILE_MAX_BYTES);
+> +static BIN_ATTR_RO(die_cpus_list, CPULIST_FILE_MAX_BYTES);
+>  #endif
+>  
+>  define_siblings_read_func(package_cpus, core_cpumask);
+> -static BIN_ATTR_RO(package_cpus, 0);
+> -static BIN_ATTR_RO(package_cpus_list, 0);
+> +static BIN_ATTR_RO(package_cpus, CPUMAP_FILE_MAX_BYTES);
+> +static BIN_ATTR_RO(package_cpus_list, CPULIST_FILE_MAX_BYTES);
+>  
+>  #ifdef TOPOLOGY_BOOK_SYSFS
+>  define_id_show_func(book_id, "%d");
+>  static DEVICE_ATTR_RO(book_id);
+>  define_siblings_read_func(book_siblings, book_cpumask);
+> -static BIN_ATTR_RO(book_siblings, 0);
+> -static BIN_ATTR_RO(book_siblings_list, 0);
+> +static BIN_ATTR_RO(book_siblings, CPUMAP_FILE_MAX_BYTES);
+> +static BIN_ATTR_RO(book_siblings_list, CPULIST_FILE_MAX_BYTES);
+>  #endif
+>  
+>  #ifdef TOPOLOGY_DRAWER_SYSFS
+>  define_id_show_func(drawer_id, "%d");
+>  static DEVICE_ATTR_RO(drawer_id);
+>  define_siblings_read_func(drawer_siblings, drawer_cpumask);
+> -static BIN_ATTR_RO(drawer_siblings, 0);
+> -static BIN_ATTR_RO(drawer_siblings_list, 0);
+> +static BIN_ATTR_RO(drawer_siblings, CPUMAP_FILE_MAX_BYTES);
+> +static BIN_ATTR_RO(drawer_siblings_list, CPULIST_FILE_MAX_BYTES);
+>  #endif
+>  
+>  static struct bin_attribute *bin_attrs[] = {
+> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+> index fe29ac7cc469..007acdb462bd 100644
+> --- a/include/linux/cpumask.h
+> +++ b/include/linux/cpumask.h
+> @@ -1071,4 +1071,20 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
+>  	[0] =  1UL							\
+>  } }
+>  
+> +/* 
+> + * Provide a valid theoretical max size for cpumap ands cpulist sysfs files to 
+> + * avoid breaking userspace which may allocate a buffer based on the size 
+> + * reported by e.g. fstat.
+> + *
+> + * For cpumap NR_CPUS/2 is a simplification of NR_CPUS/4 + NR_CPUS/32. 
+> + *
+> + * For cpulist 7 is (ceil(log10(NR_CPUS)) + 1) allowing for NR_CPUS to be up to 
+> + * 2 orders of magnitude larger than 8192. This covers a worst-case of every 
+> + * other cpu being on one of two nodes for a very large NR_CPUS.
+> + *
+> + *  Use PAGE_SIZE as a minimum for smaller configurations. 
+> + */
+> +#define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS >> 1) > PAGE_SIZE) ? NR_CPUS >> 1 : PAGE_SIZE)
+> +#define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7) > PAGE_SIZE) ? NR_CPUS * 7 : PAGE_SIZE)
+> +
+>  #endif /* __LINUX_CPUMASK_H */
+> -- 
+> 2.31.1
+> 
 
 Hi,
 
-> Please be consistent.  Either way:
-> - .prepare and .complete.
-> - .prepare() and .complete().
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-I'll address this in the next version.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-> The patch doesn't allow EC to log anything.  It makes AP emit more logs.
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
 
-This patch changes when the EC outputs the host command that indicates
-the AP is starting suspend and finishing resume, due to the change (in
-this patch) when the AP sends that host command.   This makes the EC's
-logs more accurate when correlating them with the AP's logs in regards
-to when suspend is started and resume is completed.   Previously,
-those events were sent when suspend/resume were already in progress.
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-We'd also like to keep the new logs emitted by the AP to make it
-clearer when the AP is starting suspend and completing resume, so we
-can correlate it with the EC logs more easily.   This should aid
-debugging and timing analysis.   Since it only occurs during
-suspend/resume, it shouldn't flood the logs and follows the logging of
-other driver PM functions.
+thanks,
 
-> I didn't see concerns in [1] have been addressed.
-
-I replied to the first email stating why we want to keep the log
-message (and reiterated it above).   What's the correct process to
-indicate we don't want to make the change requested in [1]?
-
-On Wed, Jul 13, 2022 at 12:05 PM Tim Van Patten <timvp@google.com> wrote:
->
-> Hi,
->
->> Please be consistent.  Either way:
->> - .prepare and .complete.
->> - .prepare() and .complete().
->
->
-> I'll address this in the next version.
->
->> The patch doesn't allow EC to log anything.  It makes AP emit more logs.
->
->
-> This patch changes when the EC outputs the host command that indicates th=
-e AP is starting suspend and finishing resume, due to the change (in this p=
-atch) when the AP sends that host command.   This makes the EC's logs more =
-accurate when correlating them with the AP's logs in regards to when suspen=
-d is started and resume is completed.   Previously, those events were sent =
-when suspend/resume were already in progress.
->
-> We'd also like to keep the new logs emitted by the AP to make it clearer =
-when the AP is starting suspend and completing resume, so we can correlate =
-it with the EC logs more easily.   This should aid debugging and timing ana=
-lysis.   Since it only occurs during suspend/resume, it shouldn't flood the=
- logs and follows the logging of other driver PM functions.
->
->> I didn't see concerns in [1] have been addressed.
->
->
-> I replied to the first email stating why we want to keep the log message =
-(and reiterated it above).   What's the correct process to indicate we don'=
-t want to make the change requested in [1]?
->
->
-> On Tue, Jul 12, 2022 at 8:58 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->>
->> On Wed, Jul 06, 2022 at 08:51:39PM -0600, Tim Van Patten wrote:
->> > Update cros_ec_lpc_pm_ops to call cros_ec_lpc_suspend() during PM
->> > .prepare() and cros_ec_lpc_resume() during .complete. This allows the
->> > EC to log entry/exit of AP's suspend/resume more accurately.
->>
->> Please be consistent.  Either way:
->> - .prepare and .complete.
->> - .prepare() and .complete().
->>
->> The patch doesn't allow EC to log anything.  It makes AP emit more logs.
->>
->> On the related note, the commit subject is confusing.  The patch doesn't
->> send "host event".  "host event" is a terminology when EC wants to notif=
-y
->> AP something.  Also, s/cros_ec/cros_ec_lpcs/.
->>
->> > Changes in v2:
->> > - Include cros_ec_resume() return value in dev_info() output.
->> > - Guard setting .prepare/.complete with #ifdef CONFIG_PM_SLEEP.
->>
->> I didn't see concerns in [1] have been addressed.
->>
->> [1]: https://patchwork.kernel.org/project/chrome-platform/patch/20220701=
-095421.1.I78ded92e416b55de31975686d34b2058d4761c07@changeid/#24920824
->
->
->
-> --
->
-> Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997
-
-
-
---=20
-
-Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997
+greg k-h's patch email bot

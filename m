@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668CA57540D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DACF1575413
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238171AbiGNR3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 13:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S238489AbiGNRdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 13:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiGNR3i (ORCPT
+        with ESMTP id S229496AbiGNRdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 13:29:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831CB55097;
-        Thu, 14 Jul 2022 10:29:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27BF6620E4;
-        Thu, 14 Jul 2022 17:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED2CBC34114;
-        Thu, 14 Jul 2022 17:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657819776;
-        bh=eo67ao+PmEWgpCKzwt6V2TacgfLQ/ODBJXB/xIJDpTo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nGIusFj9Kp+eKcydlmMP+BeXbVLtDjVYAw4xJr2F690moNFmNRmQuv6q/wOhcS52a
-         Q0ykG9wQIP/LAR3FmDk61Qv0QRODUD47sdFfkqJX2PrHzqqkW8b1MDbAdou9M9KJwe
-         WCfx1KeVlTxPhfB9a2jEJcLwQoyNIat1eszCsu+o=
-Date:   Thu, 14 Jul 2022 19:29:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev, bleung@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v4 0/9] Type-C switch driver and Type-C framework updates
-Message-ID: <YtBSfeKKGrFx3wA3@kroah.com>
-References: <20220711072333.2064341-1-pmalani@chromium.org>
- <YtAkeQ1Do7CuM/PR@kroah.com>
- <CACeCKaekD4S93XbYGOia+vuCwc+oRJpcNKVgrxEasa4MDGsSoQ@mail.gmail.com>
+        Thu, 14 Jul 2022 13:33:07 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D234E55097;
+        Thu, 14 Jul 2022 10:33:06 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id oy13so4698563ejb.1;
+        Thu, 14 Jul 2022 10:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wl4sLOCF4r2ryQPKsJLAlrwRrWQnq6/0JlGSvQNEWKo=;
+        b=TRPa1OlsYyCUZtSFg9cBU6tOHcsv8iEC/lby3fn89qjOU2w4LYMGsGo1b0y9nFtRLe
+         TYQwjlZc4Z0/8xxqDmAkN+3jst09QapJBY1kUg45L3/uBCBJ24B99Gv+9zmmar4x+zmo
+         FiNQFWLqMIhJi2j5xZXIyV3F9B7mrUWWbTitmsB90MK3CTZBNETSMkqi1BZnbFOKVhqJ
+         4yyeSOTHK+AYxaIQGJiWWA6NcGBiPVrVRKQosXID8HXVrTdwG0aLxw+cAi/RvUaxsOYn
+         vQ/6Z5wDSfsrkHzqBxQUbXeIV0onMU9NdNMsG2/ukBAA+9vBeHIUwpPyud9V98my9A4Q
+         clyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wl4sLOCF4r2ryQPKsJLAlrwRrWQnq6/0JlGSvQNEWKo=;
+        b=XJ9foouA7uh9I1K7W8NQS8gZPA/FJV9EmJZisz/HEWTaLEJ4Pbz15VaLQHjA3u7hyO
+         eW0T8/KoBc6UAGg9Sfixkqo6N3/kzLZeS4nQWd3Pe+aDQU8Ng4jsq/sHlMqlx/944LSq
+         k83zmYVO+b6V+wcyg2rlsK0ekyD+xeP7IWSCmVtHaPWIaGlGLxlWDW8Ly5VYFI4YCEXb
+         YrbZVnWlFrGCpnf1DCCATot3m8Xo/mkkVW8FvZKqkD1FcIunM/dijg02Uo8P7jxODVGb
+         4SNK9wTiTJYxqDxeD3hsyknyjrAh7hdFWL2dQ4m3HqMvND+jEWuQ3sitoU3PIhMN38eK
+         Aleg==
+X-Gm-Message-State: AJIora/s8kaT8u4w2oELwI40lfX/kmMS4StMNTk2F422SR0zKoq34WxV
+        AI3k3aFTtdSHXMaIHVjFZcoURDZpVDQ=
+X-Google-Smtp-Source: AGRyM1u8zVl5Ok/5naDIlDYM0Rjk2/BJUSfdhrkoneWxhHCTmGRDeXNU7c4ISL2tJmCu7RPN1oXChg==
+X-Received: by 2002:a17:907:3f29:b0:72b:91df:2c4b with SMTP id hq41-20020a1709073f2900b0072b91df2c4bmr9803308ejc.206.1657819985210;
+        Thu, 14 Jul 2022 10:33:05 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id a10-20020a170906190a00b0072aa1313f5csm910875eje.201.2022.07.14.10.33.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 10:33:04 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH] epoll: Use try_cmpxchg in list_add_tail_lockless
+Date:   Thu, 14 Jul 2022 19:32:55 +0200
+Message-Id: <20220714173255.12987-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACeCKaekD4S93XbYGOia+vuCwc+oRJpcNKVgrxEasa4MDGsSoQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 10:02:32AM -0700, Prashant Malani wrote:
-> Hi Greg,
-> 
-> On Thu, Jul 14, 2022 at 7:15 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Jul 11, 2022 at 07:22:54AM +0000, Prashant Malani wrote:
-> > > This series introduces a retimer class to the USB Type-C framework,
-> > > It also introduces a Chrome EC (Embedded Controller) switch driver which
-> > > registers the aforementioned retimer switches as well as mode-switches.
-> > >
-> > > Patch 1 and 2 introduce the retimer class and associated functions to
-> > > the Type-C common code.
-> > >
-> > > Patches 3-7 add the cros-typec-switch driver.
-> > >
-> > > Patches 8-9 update cros-ec-typec to get and use retimer switch handles.
-> > >
-> > > Submission suggestion (as always, open to better suggestions):
-> > > - Patch 1 and 2 can go through the USB repo.
-> > > - Patch 3-9 can go through the chrome-platform repo. Since they depend
-> > >   on patches 1 and 2, we can create an "topic branch" off of usb-next
-> > >   once Patch 1 and 2 are submitted, and then apply Patches 3-9 on top
-> > >   of that "topic branch" before merging it back into chrome-platform's
-> > >   for-next branch
-> >
-> > That's a mess, I can just take all of them into my tree if you want.
-> 
-> That works for me. Thanks for taking Patch 1 and 2; it should be fine
-> to apply the rest of the patches to your tree too.
+Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old
+in list_add_tail_lockless. x86 CMPXCHG instruction returns
+success in ZF flag, so this change saves a compare after
+cmpxchg (and related move instruction in front of cmpxchg).
 
-Ok, now queued up.
+No functional change intended.
 
-greg k-h
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+---
+ fs/eventpoll.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+index e2daa940ebce..6705cb965fbe 100644
+--- a/fs/eventpoll.c
++++ b/fs/eventpoll.c
+@@ -1065,7 +1065,7 @@ static inline bool list_add_tail_lockless(struct list_head *new,
+ 	 * added to the list from another CPU: the winner observes
+ 	 * new->next == new.
+ 	 */
+-	if (cmpxchg(&new->next, new, head) != new)
++	if (!try_cmpxchg(&new->next, &new, head))
+ 		return false;
+ 
+ 	/*
+-- 
+2.35.3
+

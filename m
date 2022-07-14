@@ -2,274 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C6F574EC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B2E574ECB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239688AbiGNNOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
+        id S239691AbiGNNPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbiGNNOm (ORCPT
+        with ESMTP id S239689AbiGNNPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:14:42 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726CF46D9C;
-        Thu, 14 Jul 2022 06:14:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=XhHZFllZttK/nD0DghuHkAh2pYiQ6FVFXSwybTv29+M=; b=qMmQN49rflM5nNAbrtDJndAePo
-        JkZBQa4twrJ30algsJoMebfheMEDj3dvPEMTjEs61ybh448PVs7S0+evyXujJGkfhp7wgK79OppbE
-        cCooS75r3gjqj/ZScAe2awt8ja6AKbOT4KewCHmroR/G1/ijtcEN72ocsBK9ST6g7z/N825vnPwzc
-        JOYlQY25cgg9yjfCbNn6Uq0ubwzMRXNUQS+QkE7WRJBB+X5wnhUASoqG4zGCxgillM9vUW+FsdPOQ
-        CHM9C/bOghoqyPT+jjqxBWQ2cW5xzxp2tqHjc3ujH4SxkkQbk+ad6JzrWibSHcYDYN9BWQtXqB3P8
-        m41ydZB/IdGkY+6AIu7TaMMKeDn+CSbJhCW0MpdZ0F/GbPv+Nk0jRny1sYD5T16Owx14keLT2KYZA
-        plnf9k103TAWyYqoAm+NvkZ8XBNU8U+x5pnsLR1dX157HFtvGhuk3UqC7jet6yMfQ47VhizhWY6FJ
-        VYCpzwf6nnyFzsuk7aXNhqaaq/eQgw2CrSGCP/UUcIrsVBnq/P/RhsAknlBv6SAtJxYJO/uIxLkaz
-        rqxQhYNl/QKeGbgPZqjbxVIbASa5vd4SVYqAIq5zWFH7Th28K90znIIM/IzQF4uiee/j3MWXgba0E
-        O6Xoocfx3t4MpX4rpyWgt8jiXFYI/Cf6unHSMamZE=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Nikolay Kichukov <nikolay@oldum.net>
-Subject: Re: [PATCH v5 10/11] net/9p: add p9_msg_buf_size()
-Date:   Thu, 14 Jul 2022 15:14:31 +0200
-Message-ID: <1784081.3E5Dq0oo6N@silver>
-In-Reply-To: <Ys8wqPbA5eogtvmG@codewreck.org>
-References: <cover.1657636554.git.linux_oss@crudebyte.com> <5564296.oo812IJUPE@silver>
- <Ys8wqPbA5eogtvmG@codewreck.org>
+        Thu, 14 Jul 2022 09:15:15 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686B249B7C;
+        Thu, 14 Jul 2022 06:15:14 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-31c89111f23so16891557b3.0;
+        Thu, 14 Jul 2022 06:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MRwG+zlBQ+kmeFEt4Mjc7sgEiz7bh2APqSKI/QbwyJk=;
+        b=JX1n/jFGRiKmk8qdje4WBbxBW3K6poXkLNK7oNx7J1BajqurACE5r7MuoikJsrHlyq
+         WHslv+Mhg2/b5ZawLhmhZvZzeegJpH7HlUck0TRMdu7acvWoIq+gPAOuzTUsRCYiTHNh
+         051n6kX1f+IRKf2Q8q9/ZOzaF1pclqMdiV/6Yhiq7enWeEqBAon6e353IAhXYMcSAV1m
+         QPVdC0p0S8ZN/pChTDD8AqdgwNcSuU33NCm69+6aFXoZ4xJ5eJnp9w13uKcluXfzIY8X
+         qu0pJzKokIFX0SjPraAq0RRCAy3dfnqJkxkTlLkji9XSwut6G5rk4PGB2pHVEC58OEqT
+         JAAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MRwG+zlBQ+kmeFEt4Mjc7sgEiz7bh2APqSKI/QbwyJk=;
+        b=utmpJ3iSVQe6xU2kqO8q6WvP1HGMvEenQrpW/P6bHUbQW2DfHQt/iWvzZBHDfP6WpV
+         3LE6TkdkC+QUG0ZGWNh7YcgQztitIyfc552YetiBYnOAwfks/7NGmQ5+UBh40V2lNpFa
+         wcI2iTCplnwzZPuyYiaXd4JwveQo2cvhZoHCzcoItItlAH6lBpWB5z2ub22aoo1qmGHQ
+         xfcjp2QHg+aeYfthEQ3trjsLkH4FoppXlzDZaTD1/I5nCPtw0v21z1o7/VYneuGs0xjU
+         RcFV+0cWK6dVg3cHP4qtqmL7QPIWojjkEP6rT6fcj3P/EIEXvl3njf6AZ/v6VrU4F5Vf
+         dN9w==
+X-Gm-Message-State: AJIora/BQLCcVSjvREzDbB7Ib9y8uJX3oBbxzmQh29AQ0iUj6dEcMYTN
+        Iean75TzsHluVxqxn/9X0UJdLBYOGe2tICSkkNc=
+X-Google-Smtp-Source: AGRyM1tOHS3ptK/ixYVOdGAyBC75qeMAA3UC+i5MULVUHqOlJ3vMz2IdKDCCsZw93xwst9jve/G/9SCD6kW4WehLyT4=
+X-Received: by 2002:a81:4986:0:b0:31d:388b:d08d with SMTP id
+ w128-20020a814986000000b0031d388bd08dmr9458913ywa.185.1657804513550; Thu, 14
+ Jul 2022 06:15:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20220714122322.63663-1-tmaimon77@gmail.com> <20220714122322.63663-3-tmaimon77@gmail.com>
+ <b6a0abb7-f31f-0c8a-f65e-8d61b9e72f48@linaro.org>
+In-Reply-To: <b6a0abb7-f31f-0c8a-f65e-8d61b9e72f48@linaro.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 14 Jul 2022 15:14:37 +0200
+Message-ID: <CAHp75VepYwx9FCf0-7_MO9r7WNqxiTR7MAQcwSL4oNcdgt8qEA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] pinctrl: nuvoton: add NPCM8XX pinctrl and GPIO driver
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Tomer Maimon <tmaimon77@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        zhengbin13@huawei.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mittwoch, 13. Juli 2022 22:52:56 CEST Dominique Martinet wrote:
-> Christian Schoenebeck wrote on Wed, Jul 13, 2022 at 03:06:01PM +0200:
-> > > > +	case P9_TWALK:
-> > > > +		BUG_ON(strcmp("ddT", fmt));
-> > > > +		va_arg(ap, int32_t);
-> > > > +		va_arg(ap, int32_t);
-> > > > +		{
-> > > > +			uint i, nwname = max(va_arg(ap, int), 0);
-> > > 
-> > > I was about to say that the max is useless as for loop would be cut
-> > > short, but these are unsigned... So the code in protocol.c p9pdu_vwritef
-> > > 'T' has a bug (int cast directly to uint16): do you want to fix it or
-> > > shall I go ahead?
-> > 
-> > I'd either send a separate patch today for fixing 'T', or if you want
-> > to handle it by yourself, then just go ahead.
-> 
-> I'd appreciate if you have time, doesn't make much difference though
+On Thu, Jul 14, 2022 at 2:29 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 14/07/2022 14:23, Tomer Maimon wrote:
 
-Looking closer at this separate issue; there is probably nothing to fix. 'T'
-(and 'R') in p9pdu_vwritef() pulls an 'int' argument from the stack. But the
-actual variable is passed here:
+...
 
-struct p9_fid *p9_client_walk(struct p9_fid *oldfid, uint16_t nwname,
-			      const unsigned char * const *wnames, int clone)
-{
-    ...
-    req = p9_client_rpc(clnt, P9_TWALK, "ddT", oldfid->fid, fid->fid,
-                        nwname, wnames);
-    ...
-}
+> > +static int npcm8xx_pinctrl_probe(struct platform_device *pdev)
+> > +{
 
-So the variable being passed was already uint16_t, which made me re-aware why
-this is working anyway: Because C and C++ have this nice language hack that
-any variadic integer variable smaller than 'int' is automatically casted to
-'int' before being passed.
+Temporary variable, i.e.
 
-I mean I could clamp the pulled argument like:
+  struct device *dev = &pdev->dev;
 
-diff --git a/net/9p/protocol.c b/net/9p/protocol.c
-index 3754c33e2974..5fd1e948c86a 100644
---- a/net/9p/protocol.c
-+++ b/net/9p/protocol.c
-@@ -441,7 +441,7 @@ p9pdu_vwritef(struct p9_fcall *pdu, int proto_version, const char *fmt,
-                        }
-                        break;
-                case 'T':{
--                               uint16_t nwname = va_arg(ap, int);
-+                               uint16_t nwname = clamp_t(int, va_arg(ap, int), 0, USHRT_MAX);
-                                const char **wnames = va_arg(ap, const char **);
- 
-                                errcode = p9pdu_writef(pdu, proto_version, "w",
-@@ -462,7 +462,7 @@ p9pdu_vwritef(struct p9_fcall *pdu, int proto_version, const char *fmt,
-                        }
-                        break;
-                case 'R':{
--                               uint16_t nwqid = va_arg(ap, int);
-+                               uint16_t nwqid = clamp_t(int, va_arg(ap, int), 0, USHRT_MAX);
-                                struct p9_qid *wqids =
-                                    va_arg(ap, struct p9_qid *);
+> > +     struct npcm8xx_pinctrl *pctrl;
+> > +     int ret;
+> > +
+> > +     pctrl = devm_kzalloc(&pdev->dev, sizeof(*pctrl), GFP_KERNEL);
+> > +     if (!pctrl)
+> > +             return -ENOMEM;
+> > +
+> > +     pctrl->dev = &pdev->dev;
+> > +     dev_set_drvdata(&pdev->dev, pctrl);
+> > +
+> > +     pctrl->gcr_regmap =
+> > +             syscon_regmap_lookup_by_phandle(pctrl->dev->of_node, "nuvoton,sysgcr");
+> > +     if (IS_ERR(pctrl->gcr_regmap))
+> > +             return dev_err_probe(pctrl->dev, PTR_ERR(pctrl->gcr_regmap), "Failed to find nuvoton,sysgcr property\n");
 
-But it's pretty much pointless overhead. Another option would be to change
-va_arg(ap, int) -> va_arg(ap, uint16_t), just to make it more clear what was
-pushed from the other side.
+Will help to shorten the above line(s).
 
-Which probably also means I can simply drop the max() call in this patch 10
-here as well.
+> Please wrap your code according to Linux coding style - @80.
 
-For the 'R' case: I haven't found the spot where this is actually used.
-
-> > > > +	case P9_TCREATE:
-> > > > +		BUG_ON(strcmp("dsdb?s", fmt));
-> > > > +		va_arg(ap, int32_t);
-> > > > +		{
-> > > > +			const char *name = va_arg(ap, const char *);
-> > > > +			if ((c->proto_version != p9_proto_2000u) &&
-> > > > +			    (c->proto_version != p9_proto_2000L))
-> > > 
-> > > (I don't think 9p2000.L can call TCREATE, but it doesn't really hurt
-> > > either)
-> > 
-> > Yes, Tcreate is only 9p2000 and 9p2000.u. Semantically this particular
-> > check here means "if proto == 9p.2000". I can't remember anymore why I
-> > came up with this inverted form here. I'll change it to "if
-> > (c->proto_version == p9_proto_legacy)".
-> 
-> Sounds good.
-> 
-> > > > +	case P9_TRENAMEAT:
-> > > if we have trenameat we probably want trename, tunlinkat as well?
-> > > What's your criteria for counting individually vs slapping 8k at it?
-> > > 
-> > > In this particular case, oldname/newname are single component names
-> > > within a directory so this is capped at 2*(4+256), that could easily fit
-> > > in 4k without bothering.
-> > 
-> > I have not taken the Linux kernel's current filename limit NAME_MAX
-> > (255) as basis, in that case you would be right. Instead I looked up
-> > what the maximum filename length among file systems in general was,
-> > and saw that ReiserFS supports up to slightly below 4k? So I took 4k
-> > as basis for the calculation used here, and the intention was to make
-> > this code more future proof. Because revisiting this code later on
-> > always takes quite some time and always has this certain potential to
-> > miss out details.
-> 
-> hmm, that's pretty deeply engrained into the VFS but I guess it might
-> change eventually, yes.
-> 
-> I don't mind as long as we're consistent (cf. unlink/mkdir below), in
-> practice measuring doesn't cost much.
-
-OK, I also make that more clear from the commit log then that 4k was taken as
-basis and why.
-
-> > Independent of the decision; additionally it might make sense to add
-> > something like:
-> > 
-> > #if NAME_MAX > 255
-> > # error p9_msg_buf_size() needs adjustments
-> > #endif
-> 
-> That's probably an understatement but I don't mind either way, it
-> doesn't hurt.
-> 
-> > > > +		BUG_ON(strcmp("dsds", fmt));
-> > > > +		va_arg(ap, int32_t);
-> > > > +		{
-> > > > +			const char *oldname = va_arg(ap, const char *);
-> > > > +			va_arg(ap, int32_t);
-> > > > +			{
-> > > > +				const char *newname = va_arg(ap, const char *);
-> > > 
-> > > (style nitpick) I don't see the point of nesting another level of
-> > > indentation here, it feels cleaner to declare oldname/newname at the
-> > > start of the block and be done with it.
-> > 
-> > Because  va_arg(ap, int32_t);  must remain between those two
-> > declarations, and I think either the compiler or style check script
-> > was barking at me. But I will recheck, if possible I will remove the
-> > additional block scope here.
-> 
-> Yes, I think it'd need to look like this:
-> 
-> 	case foo:
-> 		BUG_ON(...)
-> 		va_arg(ap, int32_t);
-> 		{
-> 			const char *oldname = va_arg(ap, const char *);
-> 			const char *newname;
-> 			va_arg(ap, int32_t);
-> 			newname = va_arg(ap, const_char *);
-> 			...
-> 		}
-> or
-> 		{
-> 			const char *oldname, *newname;
-> 			oldname = va_arg(ap, const char *);
-> 			va_arg(ap, int32_t)
-> 			newname = va_arg(ap, const char *);
-> 			...
-> 		}
-> 
-> I guess the later is slightly easier on the eyes
-
-Ah yes, that's your win there.
-
-> > > > +	/* small message types */
-> > > 
-> > > ditto: what's your criteria for 4k vs 8k?
-> > 
-> > As above, 4k being the basis for directory entry names, plus PATH_MAX
-> > (4k) as basis for maximum path length.
-> > 
-> > However looking at it again, if NAME_MAX == 4k was assumed exactly,
-> > then Tsymlink would have the potential to exceed 8k, as it has name[s]
-> > and symtgt[s] plus the other fields.
-> 
-> yes.
-> 
-> > > > +	case P9_TSTAT:
-> > > this is just fid[4], so 4k is more than enough
-> > 
-> > I guess that was a typo and should have been Twstat instead?
-> 
-> Ah, had missed this because 9p2000.L's version of stat[n] is fixed size.
-> Sounds good.
-> 
-> > > > +	case P9_RSTAT:
-> > > also fixed size 4+4+8+8+8+8+8+8+4 -- fits in 4k.
-> > 
-> > Rstat contains stat[n] which in turn contains variable-length string
-> > fields (filename, owner name, group name)
-> 
-> Right, same mistake.
-> 
-> > > > +	case P9_TSYMLINK:
-> > > that one has symlink target which can be arbitrarily long (filesystem
-> > > specific, 4k is the usual limit for linux but some filesystem I don't
-> > > know might handle more -- it might be worth going through the trouble of
-> > > going through it.
-> > 
-> > Like mentioned above, if exactly NAME_MAX == 4k was assumed, then
-> > Tsymlink may even be >8k.
-> 
-> And all the other remarks are 'yes if we assume bigger NAME_MAX' -- I'm
-> happy either way.
-> 
-> > > rest all looks ok to me.
-> > 
-> > Thanks for the review! I know, that's really a dry patch to look
-> > at. :)
-> 
-> Thanks for writing it in the first place ;)
-> 
-> --
-> Dominique
-
-
-
-
+-- 
+With Best Regards,
+Andy Shevchenko

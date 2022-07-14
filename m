@@ -2,104 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 291235751CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9368575195
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 17:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240248AbiGNP2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 11:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
+        id S239982AbiGNPTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 11:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240242AbiGNP2s (ORCPT
+        with ESMTP id S231937AbiGNPTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:28:48 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E9F11C2F
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:28:44 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id e16so2147738pfm.11
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:28:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=1WXbs9Fy2MWdbGl25z8Oh8hLkXQ1fFvb9A9F5gVezUs=;
-        b=SpCvPVu6C2PQfOt5+oRsi+icyQphag5PHEyWURhyDMjx2nGjQyavgX82qKJ6wR+z9N
-         lJmcCb1xqCw17MwHGLiO/8SP6t3esyVR5KN0vGDVGAm/XYOukuPQXF1fn+5FmmejPDKy
-         LAVDeZAcV/wWvkGCAzsaHmi0G5/duan7jR5eJXAt5I/V+kztGE/dd1GyLsMnABnVI7ei
-         HWciE0epXZrqWzI2LB9Frd8TYCE2hwns7igroFHj/tnZwKFyzPXVM/Hwi7MQH1SkV/4P
-         hBVctZ92B3WcfVTLsvKl0MHzsdneS3nlknF7pD70YQKnYnwHP/1FPx3GfXywCAKjeAil
-         KzeA==
+        Thu, 14 Jul 2022 11:19:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A96B549B6B
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:19:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657811970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3g/51Am7hhNBKok4aSvT7atGRsltefp8gJyPRmGJItU=;
+        b=dcUOHmY3KxPpmQVG+FCtYGyg1BKLxbSKaC3YkjTqqXKZQ71HT3LogZ/pm/i0EggI/KPE5r
+        /bBjcg69wEq9nYVnZYSczTXWjv6dwPx6Il8Xf3QyHo9DHee+DI/TI27AMIv4vMD7WBZXH4
+        r9FH0qI7xTdmzRX1Sr6iMjkLOWomZKY=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-90-z6B5SIm8O6SKKzT3LCs7Dg-1; Thu, 14 Jul 2022 11:19:23 -0400
+X-MC-Unique: z6B5SIm8O6SKKzT3LCs7Dg-1
+Received: by mail-qk1-f197.google.com with SMTP id bm38-20020a05620a19a600b006b5bbb087b6so1355507qkb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 08:19:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=1WXbs9Fy2MWdbGl25z8Oh8hLkXQ1fFvb9A9F5gVezUs=;
-        b=vZpMBKmxN5IrtQFVGWo7vd10v9pSYmR4/dCzbnxVf9nCF4mNJ9O1aXB4qpLCOixia+
-         RJK6NiqqcuVkH/MZQ498xoRw+/9VE00KdNtKBuuCBxVp6gBKtPSHzRN0yPG17zExscR5
-         8nEAkjrpN9iNp/lRnCuoh7wLWvIfaZm5RGzvrdHPFoVf+5EEwr9clvlelUXrmX3IFuT/
-         8k6x99Vi7Ya4FYVxxKMyUyOwKuWI52A8Njh8a+giZnyt6aaOkPpEFkxOCbymkgEnKGpj
-         FK7QkUX+/q2YDpAboUpCnCjuGicx0jsbpnx/zKpCD81M/S2LGhRP6/ltoExiUlWQOS61
-         eyUw==
-X-Gm-Message-State: AJIora+p4QmXnrKOzvqBpRZxrKAbUwEQXzT5adw9x5+zDxx+sGQ/FhLD
-        h+ZxONPE725IVoviEW3d5v/ihrwL+aunXw==
-X-Google-Smtp-Source: AGRyM1sT/B6Ji2BMAdZI5CJbIYsJ1bZpMHfyva4mzP6hjrXz0RiSEK03YMSpytRXkYKiZpU7sx2f4g==
-X-Received: by 2002:a65:49c8:0:b0:415:e89d:ea1a with SMTP id t8-20020a6549c8000000b00415e89dea1amr8174459pgs.266.1657812523278;
-        Thu, 14 Jul 2022 08:28:43 -0700 (PDT)
-Received: from ArchLinux (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id f1-20020a170902860100b0016bfa097927sm1584352plo.249.2022.07.14.08.28.38
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3g/51Am7hhNBKok4aSvT7atGRsltefp8gJyPRmGJItU=;
+        b=B4gaWmIrHvsHAeYP/vhljxW3nkH4QvV4++bJboHbRZn12CXZwP1YMwftm5sj4An/Lt
+         Au6FxVyHx+29mrwTlE4W03gR0/lLCZzKI2QSJWP9BgLx3Ys/s6YQYQwG1VHtrUHBdZoC
+         YshFtmUXTd2HDZGp4d9vgRX7ABa3Yx0QJRXzpVIjCsE7kN38mXy4N1EvhMR5UmFiUSVN
+         5Ufq1UsiGv7PNIxlcic/Dr0JYf58i/xYIdj5n7sBiIci1JxEhcwNgwmYhfHGBdhqK0WZ
+         sNJTK4oJAALFmNbViuXFQKXLuANhT320+AqK6gzfvxJYcauLoag7we2Cv4CW9+uEnBjc
+         yv2A==
+X-Gm-Message-State: AJIora/qsPc+iwMVoo3hXIQPA7Jb6r1cRw+M1m3Idsmx+bHYAD/xvkAP
+        5USyCO+e8pOq+Ao3GaZ0hmv2WwDyH5Ap1WE84nwpyYS+lOcOzq3odWGmrGu97br0vZv5IB7MzAp
+        xiOF6uMVsr8vFCeXgdbJIG5rrb6ib4102mDWBjiA7bQNqzZi0AYEiWAXYhr6Rnu43VDo5uL7kuN
+        C9tO4=
+X-Received: by 2002:ac8:7fcf:0:b0:31e:cb6f:2487 with SMTP id b15-20020ac87fcf000000b0031ecb6f2487mr7776909qtk.528.1657811961241;
+        Thu, 14 Jul 2022 08:19:21 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vuDG1f+p3VMd/jpv+jcJjxRHrYm4T6wO2lWr00narn1rhXbhrgFy56BIisbhuc7XIW2VKVrw==
+X-Received: by 2002:ac8:7fcf:0:b0:31e:cb6f:2487 with SMTP id b15-20020ac87fcf000000b0031ecb6f2487mr7776859qtk.528.1657811960888;
+        Thu, 14 Jul 2022 08:19:20 -0700 (PDT)
+Received: from localhost.localdomain.com ([151.29.62.255])
+        by smtp.gmail.com with ESMTPSA id w18-20020a05620a445200b006a37c908d33sm1662031qkp.28.2022.07.14.08.19.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 08:28:42 -0700 (PDT)
-References: <20220707090501.55483-1-schspa@gmail.com>
- <0320c5f9-cbda-1652-1f97-24d1a22fb298@gmail.com>
- <YtAqsyjlvmfDokH/@worktop.programming.kicks-ass.net>
-User-agent: mu4e 1.7.5; emacs 28.1
-From:   Schspa Shi <schspa@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>, tj@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] workqueue: Use active mask for new worker when pool is
- DISASSOCIATED
-Date:   Thu, 14 Jul 2022 23:17:59 +0800
-In-reply-to: <YtAqsyjlvmfDokH/@worktop.programming.kicks-ass.net>
-Message-ID: <m2y1wvd87z.fsf@gmail.com>
+        Thu, 14 Jul 2022 08:19:20 -0700 (PDT)
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>
+Cc:     "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>,
+        Juri Lelli <juri.lelli@redhat.com>, stable@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Subject: [PATCH v2] sched/deadline: Fix BUG_ON condition for deboosted tasks
+Date:   Thu, 14 Jul 2022 17:19:08 +0200
+Message-Id: <20220714151908.533052-1-juri.lelli@redhat.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Tasks the are being deboosted from SCHED_DEADLINE might enter
+enqueue_task_dl() one last time and hit an erroneous BUG_ON condition:
+since they are not boosted anymore, the if (is_dl_boosted()) branch is
+not taken, but the else if (!dl_prio) is and inside this one we
+BUG_ON(!is_dl_boosted), which is of course false (BUG_ON triggered)
+otherwise we had entered the if branch above. Long story short, the
+current condition doesn't make sense and always leads to triggering of a
+BUG.
 
-Peter Zijlstra <peterz@infradead.org> writes:
+Fix this by only checking enqueue flags, properly: ENQUEUE_REPLENISH has
+to be present, but additional flags are not a problem.
 
-> On Wed, Jul 13, 2022 at 05:52:58PM +0800, Lai Jiangshan wrote:
->> 
->> 
->> CC Peter.
->> Peter has changed the CPU binding code in workqueue.c.
->
-> [ 1622.829091] WARNING: CPU: 3 PID: 31 at kernel/sched/core.c:7756 sched_cpu_dying+0x74/0x204
-> [ 1622.829374] CPU: 3 PID: 31 Comm: migration/3 Tainted: P           O      5.10.59-rt52 #2
-> 									^^^^^^^^^^^^^^^^^^^^^
->
-> I think we can ignore this as being some ancient kernel. Please try
-> something recent.
+Fixes: 64be6f1f5f71 ("sched/deadline: Don't replenish from a !SCHED_DEADLINE entity")
+Cc: stable@vger.kernel.org
+Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
 
-I have merged all the workqueue changes from
-Link: https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git/log/kernel/workqueue.c?h=v5.10-rt
+---
+v1->v2
+ - Make detection of faulty condition less fatal [Peter Zijlstra]
+ - Cc stable and update fixes tag [Srivatsa S. Bhat]
+---
+ kernel/sched/deadline.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-And this problem can still reproduce.
-
-I checked the patch from master tree too, it seems there is no existed
-patch can fix this problem.
-
-Or are there any scheduler, process management related patches that
-might fix this problem?
-
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index 5867e186c39a..0ab79d819a0d 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -1703,7 +1703,10 @@ static void enqueue_task_dl(struct rq *rq, struct task_struct *p, int flags)
+ 		 * the throttle.
+ 		 */
+ 		p->dl.dl_throttled = 0;
+-		BUG_ON(!is_dl_boosted(&p->dl) || flags != ENQUEUE_REPLENISH);
++		if (!(flags & ENQUEUE_REPLENISH))
++			printk_deferred_once("sched: DL de-boosted task PID %d: REPLENISH flag missing\n",
++					     task_pid_nr(p));
++
+ 		return;
+ 	}
+ 
 -- 
-BRs
-Schspa Shi
+2.36.1
+

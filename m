@@ -2,98 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7165754B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9A85754B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240545AbiGNSMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 14:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
+        id S240554AbiGNSMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 14:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240539AbiGNSMX (ORCPT
+        with ESMTP id S240473AbiGNSMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 14:12:23 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EDC6872E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:12:22 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id w29so1363937qtv.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:12:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pHDX+ueiTJVI3deKG6Hv7RJHDyQ/mE9meqfCKJ1qXHw=;
-        b=QuB7HSlZJ0ej/IHezAJ2sA282MkWQ5QaNeXagaJTwQ6i0bymRwqHTTbaWWEw+Hmhvu
-         BWnwYdw2+jZ0O4dFkskLtXSv2h2uFy9pudKdcfw2Bq3vhLbqLgK+WjD8XABKvjGZ6LqK
-         E6r20idKcW0VSHqnCNzzPk3X288fhrhxnadACRX15OmEtB+/ZYmYyzvqEEypcrAQ9KTj
-         6AS7Wz8QGAbnQ4toW9yWi29oJUueEg4nbxLxvs3uQiDxGoV7yBNp0KLWtQefmxk4cc5j
-         g7bZ4Hqb8uo2PBGWw1dTMB/e+s3iPTgU0uBPKOtWDxdElFQcm8tNGmW0Uh7su6mDLLoa
-         JPkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pHDX+ueiTJVI3deKG6Hv7RJHDyQ/mE9meqfCKJ1qXHw=;
-        b=cDGEgaB18aIR3u9E6KLnI9Gm0hTgWrHN5hEvsRefp4W0012xJLjF5ypYq7tVmDqI2+
-         7JYaT94fA6vKwsBIkvY79yv/6iVJdHkCUYCs8DO1weoii3N9uJlIOZYapFtuppySW/K8
-         weMrBSkDI0bgVgownI1NG35ADx9XYkE16xS6USUwNJOqGGo7kDJ8AEgQzrRREBzt4FdG
-         km5WtZJWo3D40clUNJmKjUFjgD3sEXWAJ/q8kS9/lcUJkIxW+bkE8hcSEPy+1uYoKpFh
-         4t9vAARBJHh2ZueMovK2LBnKxEWrNmN8yD0G+gcfwXkg3jKcbz7dHCPSaUFsQtxh4T32
-         HeDA==
-X-Gm-Message-State: AJIora+q7U1lFLtEhO0eWKs8rJdyJr69Eawn05oYnYRAlKTM/05rHY3M
-        aUkl9y6FGcmpGP7jPSFs+5a2JEVf9ZE=
-X-Google-Smtp-Source: AGRyM1vAIqiVasN+BPwGXAoTChMCpMSsajgBneBOok04gPchxgKO2SGyxwc+WW4IeI/gnGyVFhH9hA==
-X-Received: by 2002:ac8:7f45:0:b0:31e:bebe:18e5 with SMTP id g5-20020ac87f45000000b0031ebebe18e5mr9442092qtk.382.1657822341926;
-        Thu, 14 Jul 2022 11:12:21 -0700 (PDT)
-Received: from localhost (c-69-254-185-160.hsd1.ar.comcast.net. [69.254.185.160])
-        by smtp.gmail.com with ESMTPSA id bp9-20020a05620a458900b006a793bde241sm1956834qkb.63.2022.07.14.11.12.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 11:12:21 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 11:12:21 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] lib/bitmap: Make count and length parameters unsigned
-Message-ID: <YtBchVNwjWk5OySA@yury-laptop>
-References: <20220714164207.52410-1-pmenzel@molgen.mpg.de>
- <YtBIo8XnDqchGhyk@smile.fi.intel.com>
+        Thu, 14 Jul 2022 14:12:52 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7A16872E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657822372; x=1689358372;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AZbSgw4PiPhHiI2IkamjWGYAFK+m9rBc4mek9Q/SNdQ=;
+  b=cbDJpALSG07+eDqR4XorrqSB8UJ4nDWnpSgckjBopW1/TP2/jJ81bEC/
+   1mne9Ka7x5UXfLfwRRv67bfaKHe3cM1HKs7RJxvXpHM3cq9fH/NHMWtnW
+   4zqvx7FyT26UUSR3CbrLrnqe8TavZkQNbk2DVvG09tn1NSskHoBCUnT2m
+   xIRaXW00uyexdpdeC2eRdCelasFXZcCS4GWaYG4hrqrKUioc9NbV1TBBB
+   QYSwona4msuoNmVhaejBl63I5JdHmUA0gdmx8EDpK8shamOzqFFHColGq
+   WFs0kmrIZARHpVSpdPG/T3uP+XWPoVK9eJV1EumdX5gBC9yiyLT6N2lFR
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="349563098"
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="349563098"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 11:12:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="923180403"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 14 Jul 2022 11:12:48 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 2917FF1; Thu, 14 Jul 2022 21:12:55 +0300 (EEST)
+Date:   Thu, 14 Jul 2022 21:12:55 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv4 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
+ ARCH_ENABLE_TAGGED_ADDR
+Message-ID: <20220714181255.7aonbyzca3avfylp@black.fi.intel.com>
+References: <20220622162230.83474-1-kirill.shutemov@linux.intel.com>
+ <20220622162230.83474-7-kirill.shutemov@linux.intel.com>
+ <CAG_fn=Uo8E-6r3otLPC9iEfO02=A0=zROO8R8TL=8vXVZVE5Ww@mail.gmail.com>
+ <20220712171445.74b46mgdxgaub3qj@black.fi.intel.com>
+ <CAG_fn=VeS7eFq5w0ny2VVe0j4YU4DKyaHDL0-b_VomnYwmDYow@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YtBIo8XnDqchGhyk@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAG_fn=VeS7eFq5w0ny2VVe0j4YU4DKyaHDL0-b_VomnYwmDYow@mail.gmail.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 07:47:31PM +0300, Andy Shevchenko wrote:
-> On Thu, Jul 14, 2022 at 06:42:07PM +0200, Paul Menzel wrote:
-> > Counts and the length are non-negative, so make them unsigned, and adapt the
-> > while condition in `__bitmap_set()` and `__bitmap_clear()` accordingly.
-> > 
-> > For `__bitmap_set()` six less intstructions are used as a result:
+On Thu, Jul 14, 2022 at 04:28:36PM +0200, Alexander Potapenko wrote:
+> On Tue, Jul 12, 2022 at 7:14 PM Kirill A. Shutemov
+> <kirill.shutemov@linux.intel.com> wrote:
+> >
+> > On Tue, Jul 12, 2022 at 03:12:01PM +0200, Alexander Potapenko wrote:
+> > > On Wed, Jun 22, 2022 at 6:22 PM Kirill A. Shutemov
+> > > <kirill.shutemov@linux.intel.com> wrote:
+> > > >
+> > > > Add a couple of arch_prctl() handles:
+> > > >
+> > > >  - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
+> > > >    of tag bits. It is rounded up to the nearest LAM mode that can
+> > > >    provide it. For now only LAM_U57 is supported, with 6 tag bits.
+> > > >
+> > > >  - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
+> > > >    bits located in the address.
+> > > >
+> > > Am I right that the desired way to detect the presence of LAM without
+> > > enabling it is to check that arch_prctl(ARCH_GET_UNTAG_MASK, ...)
+> > > returns zero?
+> >
+> > Returns -1UL, but yes.
 > 
-> You may check this by doing
+> No, I meant the return value of arch_prctl(), but in fact neither
+> seems to be true.
 > 
-> 	make allyesconfig
-> 	make
-> 	cp vmlinux.o old
-> 	# apply your patch
-> 	make
-> 	cp vmlinux.o new
-> 	scripts/bloat-o-meter old new
+> Right now e.g. for the 5.17 kernel arch_prctl(ARCH_GET_UNTAG_MASK,
+> &bits) returns -EINVAL regardless of the underlying hardware.
+> A new kernel with your patches will return 0 and set bits=-1UL on both
+> non-LAM and LAM-enabled machines. How can we distinguish those?
 
-For me it's:
+With CPUID?
 
-add/remove: 0/0 grow/shrink: 19/17 up/down: 178/-404 (-226)
-
-I'll append it to bitmap-for-next after some testing.
-
-Thanks,
-Yury
+-- 
+ Kirill A. Shutemov

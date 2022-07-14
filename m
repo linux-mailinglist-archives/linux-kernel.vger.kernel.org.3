@@ -2,156 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7AA5756D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A9C5756D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234864AbiGNVTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 17:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
+        id S239326AbiGNVYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 17:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiGNVTp (ORCPT
+        with ESMTP id S229458AbiGNVX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 17:19:45 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C69113CF9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:19:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657833582; x=1689369582;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hBJ3M0nsHX8Turu4kfaB9l5SbtZW0jgibEdxujmYpCQ=;
-  b=jP81WxkSkgjVByuUpIdEcUJb/jAodImU1/TyGILoO0S+76Lv8V6dQOMX
-   VdjYU2HeLfy5tY4EVVyFqx6qaLeAgEJeEHpRH9MVIhq4FJ4pgD//bYRMr
-   1RbPL+kkZB8lNveFE3LscR/1NLKS+k/qpq/h+Vm66V3rJi2GrfX/CsjoD
-   hR19jBTGmZbNo4zMTsO6LSQR4jhtj9P4g6AXbg2f4xRF3N4MILFuUugb4
-   F1XnuH3tm4jpZCl7ryJ3XakNcK2wuajeBWRhBczBNZM1DG5JvujO767AC
-   ChFr/j/+JFcjdDJQf/Ntggz+bklRKTMd1RBLLaA4IpW34+EqP3FITNXNZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="284387967"
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="284387967"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 14:19:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="623586041"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 14 Jul 2022 14:19:40 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oC6FH-0001AT-CS;
-        Thu, 14 Jul 2022 21:19:39 +0000
-Date:   Fri, 15 Jul 2022 05:19:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Evan Quan <evan.quan@amd.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17:
- warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less
- aligned than 'PPTable_t' and is usually due to 'struct
- smu_11_0_powerplay_table' being packed, which can lea...
-Message-ID: <202207150552.eYsCNEle-lkp@intel.com>
+        Thu, 14 Jul 2022 17:23:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1778326AC2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657833836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aX0UCpzxHCp9LLdQUb/GLcuIR0vbBL4YD9MyslaxhRM=;
+        b=DMv786IrE8akVExpx2k9wWQnbLEcnUEvaTokglEZTZrB8LyqbDJ0Rohiw6Fn3GG52g4fuv
+        Yy6aWIXFItnjZk7KOED4r2lbhoBHvPlP1yFff/bVZsNgFHac5HMGo1Yxb9dsUYGS7KMEqC
+        8qBQObyI9Bp3Ago8NBcJyhWgGdqJknI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-611-smZVnk9tOu2DM03VdiZmfw-1; Thu, 14 Jul 2022 17:23:51 -0400
+X-MC-Unique: smZVnk9tOu2DM03VdiZmfw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D4C63806653;
+        Thu, 14 Jul 2022 21:23:51 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.33.101])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DA993C28100;
+        Thu, 14 Jul 2022 21:23:50 +0000 (UTC)
+Date:   Thu, 14 Jul 2022 17:23:49 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Yury Norov <yury.norov@gmail.com>
+Subject: Re: [PATCH v4 RESEND] drivers/base: fix userspace break from using
+ bin_attributes for cpumap and cpulist
+Message-ID: <YtCJZT08lHrsLul7@lorien.usersys.redhat.com>
+References: <20220714183021.2924119-1-pauld@redhat.com>
+ <YtBkA3QvP8JDGbhX@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YtBkA3QvP8JDGbhX@kroah.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Evan,
+Hi Greg,
 
-FYI, the error/warning still remains.
+On Thu, Jul 14, 2022 at 08:44:19PM +0200 Greg Kroah-Hartman wrote:
+> On Thu, Jul 14, 2022 at 02:30:21PM -0400, Phil Auld wrote:
+> > Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
+> > This breaks userspace code that retrieves the size before reading the file. Rather
+> > than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
+> > limitation of cpumap ABI") let's put in a size value at compile time. Use direct
+> > comparison and a worst-case maximum to ensure compile time constants. For cpulist the
+> > max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960
+> > (8192 * 5). In order to get near that you'd need a system with every other CPU on one
+> > node or something similar. e.g. (0,2,4,8, ... ). To simplify the math and support
+> > larger NR_CPUS in the future we are using NR_CPUS * 7. We also set it to a min of
+> > PAGE_SIZE to retain the older behavior for smaller NR_CPUS. The cpumap file wants to
+> > be something like NR_CPUS/4 + NR_CPUS/32, for the ","s so for simplicity we are using
+> > NR_CPUS/2.
+> > 
+> > Add a set of macros for these values to cpumask.h so they can be used in multiple places.
+> > Apply these to the handful of such files in drivers/base/topology.c as well as node.c.
+> 
+> Git should have asked you to round at 72 columns, right?
+>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4a57a8400075bc5287c5c877702c68aeae2a033d
-commit: 837d542a09cd533055423dfca7e621a9c1d13c5b drm/amd/pm: relocate the power related headers
-date:   6 months ago
-config: arm-randconfig-r016-20220714 (https://download.01.org/0day-ci/archive/20220715/202207150552.eYsCNEle-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=837d542a09cd533055423dfca7e621a9c1d13c5b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 837d542a09cd533055423dfca7e621a9c1d13c5b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+My git doesn't do that. Maybe I'm missing a useful config.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> And that's one huge wall of text for the first paragraph, can you make
+> that more readable?
 
-All warnings (new ones prefixed by >>):
+Fixed.
 
-   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/arcturus_ppt.c:37:
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17: warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
-                   ^
-   1 warning generated.
---
-   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:39:
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_7_pptable.h:193:17: warning: field smc_pptable within 'struct smu_11_0_7_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_7_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
-                   ^
-   1 warning generated.
---
-   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/aldebaran_ppt.c:37:
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v13_0_pptable.h:161:12: warning: field smc_pptable within 'struct smu_13_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_13_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           PPTable_t smc_pptable;                        //PPTable_t in driver_if.h
-                     ^
-   1 warning generated.
+> 
+> > 
+> > On an 80 cpu 4-node sytem (NR_CPUS == 8192)
+> > 
+> > before:
+> > 
+> > -r--r--r--. 1 root root 0 Jul 12 14:08 /sys/devices/system/node/node0/cpulist
+> > -r--r--r--. 1 root root 0 Jul 11 17:25 /sys/devices/system/node/node0/cpumap
+> > 
+> > after:
+> > 
+> > -r--r--r--. 1 root root 57344 Jul 13 11:32 /sys/devices/system/node/node0/cpulist
+> > -r--r--r--. 1 root root  4096 Jul 13 11:31 /sys/devices/system/node/node0/cpumap
+> > 
+> > CONFIG_NR_CPUS = 16384
+> > -r--r--r--. 1 root root 114688 Jul 13 14:03 /sys/devices/system/node/node0/cpulist
+> > -r--r--r--. 1 root root   8192 Jul 13 14:02 /sys/devices/system/node/node0/cpumap
+> > 
+> > Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
+> > Fixes: bb9ec13d156 ("topology: use bin_attribute to break the size limitation of cpumap ABI")
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Signed-off-by: Phil Auld <pauld@redhat.com>
+> 
+> You want to cc: stable too, right?
+>
+
+Will do.
 
 
-vim +163 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h
+> > --- a/include/linux/cpumask.h
+> > +++ b/include/linux/cpumask.h
+> > @@ -1071,4 +1071,20 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
+> >  	[0] =  1UL							\
+> >  } }
+> >  
+> > +/* 
+> > + * Provide a valid theoretical max size for cpumap ands cpulist sysfs files to 
+> > + * avoid breaking userspace which may allocate a buffer based on the size 
+> > + * reported by e.g. fstat.
+> > + *
+> > + * For cpumap NR_CPUS/2 is a simplification of NR_CPUS/4 + NR_CPUS/32. 
+> > + *
+> > + * For cpulist 7 is (ceil(log10(NR_CPUS)) + 1) allowing for NR_CPUS to be up to 
+> > + * 2 orders of magnitude larger than 8192. This covers a worst-case of every 
+> > + * other cpu being on one of two nodes for a very large NR_CPUS.
+> > + *
+> > + *  Use PAGE_SIZE as a minimum for smaller configurations. 
+> > + */
+> 
+> Please run checkpatch on your patches before sending them out and
+> getting grumpy emails from maintainers asking you to run checkpatch on
+> your patches...
+>
 
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  137  
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  138  struct smu_11_0_powerplay_table
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  139  {
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  140        struct atom_common_table_header header;
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  141        uint8_t  table_revision;
-4b2bb705a0b72fb drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Kenneth Feng 2019-04-04  142        uint16_t table_size;                          //Driver portion table size. The offset to smc_pptable including header size
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  143        uint32_t golden_pp_id;
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  144        uint32_t golden_revision;
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  145        uint16_t format_id;
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  146        uint32_t platform_caps;                       //POWERPLAYABLE::ulPlatformCaps
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  147                                                      
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  148        uint8_t  thermal_controller_type;             //one of SMU_11_0_PP_THERMALCONTROLLER
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  149  
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  150        uint16_t small_power_limit1;
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  151        uint16_t small_power_limit2;
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  152        uint16_t boost_power_limit;
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  153        uint16_t od_turbo_power_limit;                //Power limit setting for Turbo mode in Performance UI Tuning. 
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  154        uint16_t od_power_save_power_limit;           //Power limit setting for PowerSave/Optimal mode in Performance UI Tuning. 
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  155        uint16_t software_shutdown_temp;
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  156  
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  157        uint16_t reserve[6];                          //Zero filled field reserved for future use
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  158  
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  159        struct smu_11_0_power_saving_clock_table      power_saving_clock;
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  160        struct smu_11_0_overdrive_table               overdrive_table;
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  161  
-73abde4d864b381 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  162  #ifndef SMU_11_0_PARTIAL_PPTABLE
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12 @163        PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
-73abde4d864b381 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  164  #endif
-2dd1209e5760686 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2019-02-12  165  } __attribute__((packed));
-ae35cd6a480f9c2 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  166  
+Aargh, yes, sorry. I used to use the RH internal version all the time but the workflow
+has changed and it's not needed anymore. Totally forget about the uptream version.
+You'd think this was my first upstream patch...
 
-:::::: The code at line 163 was first introduced by commit
-:::::: ae35cd6a480f9c2ac356f792c9a9321a5863776a drm/amd/powerplay: add pptable header for smu11
+I'll fix up the numbers and clean it up for the next version.
 
-:::::: TO: Huang Rui <ray.huang@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+
+Cheers,
+Phil
+
+
+> greg k-h
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+

@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5A4575043
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7D2575047
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239698AbiGNOEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
+        id S239918AbiGNOE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240408AbiGNODz (ORCPT
+        with ESMTP id S240319AbiGNOEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:03:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F297E6870C
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:02:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657807343;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rzI2xFBiAM8l/m5BCcJd1veC9jaA+Dymufc6m+uuo/s=;
-        b=JNitHfEbo/H6rHiF7lqujLr796MILlVq6kNo/oZipdosHgqtREV4T9EICDemGuwXPTqHlk
-        xV74jvpBmxOwkn8u0poSk+GGeQWT2xLVichwbsGjAK0Li4H3maGGMGNx3zf4HkBif39p1/
-        2RYlMfB5ucNmkkzboqySaQU5+pX6wls=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-171-oW_zcTArOg6wMdi7HomoFg-1; Thu, 14 Jul 2022 10:02:18 -0400
-X-MC-Unique: oW_zcTArOg6wMdi7HomoFg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 76FC53800C28;
-        Thu, 14 Jul 2022 14:02:17 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.33.101])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CA155C28100;
-        Thu, 14 Jul 2022 14:02:16 +0000 (UTC)
-Date:   Thu, 14 Jul 2022 10:02:15 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Tian Tao <tiantao6@hisilicon.com>
-Subject: Re: [PATCH v3] drivers/base/node.c: fix userspace break from using
- bin_attributes for cpumap and cpulist
-Message-ID: <YtAh57FudrywhX67@lorien.usersys.redhat.com>
-References: <20220713183855.2188201-1-pauld@redhat.com>
- <CAGsJ_4yb5Z3msMgXRZpSXLFiysQdJq-n_p9B6d-p2t_-_UHhVQ@mail.gmail.com>
- <YtATLNvojuvOOmys@lorien.usersys.redhat.com>
+        Thu, 14 Jul 2022 10:04:09 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F1538B4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:02:55 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id p81so1469897iod.2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:02:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RsxRFWookUjb9M1eoVrfmNO791X9QhGp0s9BwKoLC08=;
+        b=ej3N6eT3QVNMmGegVhaeKFGN6mELTqticRKN4eLFLE9bcVwRDxLGWwqWeBGIDLdOn5
+         cZzP+NkjAnhn5wgDAhZibQVmkBx1gDQwMgg0G+OsHggEJxv1vK5gXFdXtq5o74T9TnRI
+         8QNl35TLO67FH8WP9v/VvrkmugXrWVeOYpI1Jnn4+CYRAGRgsnLeCRIDqrcGjPBR4uFH
+         7FNIQFix6Bv6d/G2Q4Y/xhwgqwWxIN0RKfQ/I9BFHfiB7mL9IObVoBMBLyIZT7rHg7fJ
+         zjVFQ2xmAOzPrGaCiXIzzDZWFg5KJyL+7bf0wq40v7FwwgPgY47Pp7NePt6yPlVocb0Q
+         pJ5A==
+X-Gm-Message-State: AJIora/mYlGeNe/KMkDKg4I1tGRs45h/b0gQ2jj9HLvCd3nQg/T2ZdXx
+        mRhiDGJQm1IHr4A+hidmYIrmdw7ynQ==
+X-Google-Smtp-Source: AGRyM1smf1WAcR8IN4kePXM6pm0T9Cswdl5y1ddZqV+QgMkBJy49JHaZ8hMNP6HJrz1kWeEf0xSUpA==
+X-Received: by 2002:a02:a88d:0:b0:33f:15e5:7fdc with SMTP id l13-20020a02a88d000000b0033f15e57fdcmr5083451jam.271.1657807374840;
+        Thu, 14 Jul 2022 07:02:54 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id p13-20020a02c80d000000b00339e2f0a9bfsm755174jao.13.2022.07.14.07.02.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 07:02:54 -0700 (PDT)
+Received: (nullmailer pid 2233203 invoked by uid 1000);
+        Thu, 14 Jul 2022 14:02:53 -0000
+Date:   Thu, 14 Jul 2022 08:02:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v4 2/4] dt-bindings: regulator: add bindings for
+ output-supply
+Message-ID: <20220714140253.GA2229197-robh@kernel.org>
+References: <20220707081826.953449-1-Naresh.Solanki@9elements.com>
+ <20220707081826.953449-3-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YtATLNvojuvOOmys@lorien.usersys.redhat.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220707081826.953449-3-Naresh.Solanki@9elements.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,48 +65,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 08:59:25AM -0400 Phil Auld wrote:
-> On Thu, Jul 14, 2022 at 12:23:01PM +1200 Barry Song wrote:
-> > btw, we have a lot of other places which might need this, such as
-> > drivers/base/topology.c
-> > 
-> > so perhaps we can move them to some common place,
-> > 
-> > #define cpu_bitmap_bytes  (((NR_CPUS >> 1) > PAGE_SIZE) ? NR_CPUS >> 1
-> > : PAGE_SIZE)
-> > #define cpu_list_bytes  (((NR_CPUS * 7) > PAGE_SIZE) ? NR_CPUS * 7 : PAGE_SIZE)
-> > 
-> > is include/linux/cpumask.h a good place for it?
+On Thu, Jul 07, 2022 at 10:18:24AM +0200, Naresh Solanki wrote:
+> Add a devicetree binding for the 9elements,output-supply driver.
+> Example is also provided.
+> 
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  .../regulator/9elements,output-supply.yaml    | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/9elements,output-supply.yaml
 
-drivers/base/base.h does not look like the right place, so I think your cpumask.h idea
-is better. I'll put in there and update the topology.c BIN_ATTRs. 
+Now failing in linux-next. Please send an incremental patch to fix (and 
+test it yourself):
 
-Thanks,
-Phil
-
-> 
-> My concern is the ones that are breaking actual userspace code. But yes, those
-> otherwise have the same 0 size. 
-> 
-> It seems somewhat specific to drivers/base. Maybe there's a less global place to
-> put those closer. I can look and do it this way if that will help get it fixed.
-> 
-> 
-> Cheers,
-> Phil
-> 
-> > 
-> > >  /**
-> > >   * struct node_access_nodes - Access class device to hold user visible
-> > > --
-> > > 2.31.1
-> > >
-> > 
-> > Thanks
-> > Barry
-> > 
-> 
-> -- 
-
--- 
+/builds/robherring/linux-dt/Documentation/devicetree/bindings/regulator/9elements,output-supply.yaml: required:2: '.*-supply$' does not match '^([a-zA-Z#][a-zA-Z0-9,+\\-._@]{0,63}|\\$nodename)$'
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+./Documentation/devicetree/bindings/regulator/9elements,output-supply.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/regulator/9elements,output-supply.yaml#
 

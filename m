@@ -2,49 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9861F5755AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5E55755B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238985AbiGNTQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 15:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        id S239599AbiGNTSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 15:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiGNTQW (ORCPT
+        with ESMTP id S229504AbiGNTST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 15:16:22 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7212D2DA88
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 12:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=Tkxkd+pdE19XC0lUU8oQ8Peb4YvHVWYiASesMiTlbkA=; b=aBWehos5u3QQ6zPND9TqxbbuSv
-        21buZRhuZOirrfTY6IvbvL/WPWQzQwX8B4cD3bcuZhnPZVj8OIXGML0Fh4o5eyRw23XdAS0yQKOed
-        SA/i014SKaKlo2kikH2XDdvpV9mxs0SwZU0HTA/Q/wmovTxmq9rSHuW7KJHD8gv3KhA2+QdOO7XFd
-        EMqvd7iQGAWLqyXhhAr+4SO3SnCYMFg2HXL8vTAbAUrueqJFWkLnOnLCDud3BMRh80QZmF3iNM5VC
-        GKLdHoULMZbL3W+GQwUUgiOgZ9GhwpDOFl74fOaGsbBG2H+k82Qi59NeAfmiJ7vNyAjEvoNuhWeyf
-        eX5LIk7xzJgjWocySGfbSJQbMZER3NU0twvnzrMwspnCrX5Umydu+48kMT0y7SuDjXkhLbGH5jDbW
-        YM2ObQWjVzvoZ5jBt1hNLOlhXZSWROftZo0A0QzWeY7uyUxE1Sf6upSn8juF6iJj7REUrhMccxwfN
-        WVw2BJbTJne3buHSPGA5eyphwzSZyEEiv3m7yVZHw5Te8beP8XuLKfJv4H/S1uUjhLb5CCupDpvrS
-        ZWNAwx03vnjuf5m8BfpfdlOL+FQTz2Cz4yT6007IPIUAlmcyfR6U2bwB5Y/K3MyIQUCruzqCs3rh5
-        X8mYCxX4OHKxUb/aOCrdCBcwQPhqOfYCkA/fyYvmo=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Kent Overstreet <kent.overstreet@gmail.com>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Cc:     linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        Greg Kurz <groug@kaod.org>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>
-Subject: Re: [RFC PATCH] 9p: forbid use of mempool for TFLUSH
-Date:   Thu, 14 Jul 2022 21:16:14 +0200
-Message-ID: <2229731.hRsvSkCM7u@silver>
-In-Reply-To: <20220713041700.2502404-1-asmadeus@codewreck.org>
-References: <12950409.o0bIpVV1Ut@silver>
- <20220713041700.2502404-1-asmadeus@codewreck.org>
+        Thu, 14 Jul 2022 15:18:19 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC57D42ADC
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 12:18:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
+        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=4hMXKYb5oQeNCFz0c5Kq84rZ4yBy2gy1pD+jGE3P3t0=; b=hzGt9vhXedFNIhMMyzDtltnFsN
+        qHJGD1K/NmIpjvwDfx37/4PDdhVGGOYopt0A1BpHCQTMapNn6BBaNKMWNOzptlfLiaqXTOWIgcrnY
+        SQ/6ExW/Nwtao3frIJqaWQQeG8suwTLA/l7BwenxaEJ7LPzYRazspQJ1fAJtvUToQBwFzLGMLn3hp
+        ktgfgSwR8Vr6wqwrfHvGtwtvEhyuzpZYW6PpEHNL2srhziFui0utvITAiMzyFjSFl8fk++kJWrpUB
+        pjR11wBisDiyG3U372KUOBEvfc8ewyv6sVSlL2ZFMd17BXuySIu/QPaq9o7v27xsJfgcDQ4/Yg8nU
+        lXGGfS1w==;
+Received: from [177.139.47.106] (helo=localhost.localdomain)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1oC4Ll-00Gla6-1q; Thu, 14 Jul 2022 21:18:13 +0200
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?=27Christian=20K=C3=B6nig=27?= <christian.koenig@amd.com>,
+        'Pan Xinhui' <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Tom St Denis <tom.stdenis@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc:     kernel-dev@igalia.com,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+Subject: [PATCH v2 1/2] drm/amd/debugfs: Expose GFXOFF state to userspace
+Date:   Thu, 14 Jul 2022 16:17:44 -0300
+Message-Id: <20220714191745.45512-1-andrealmeid@igalia.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -54,137 +62,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mittwoch, 13. Juli 2022 06:17:01 CEST Dominique Martinet wrote:
-> TFLUSH is called while the thread still holds memory for the
-> request we're trying to flush, so mempool alloc can deadlock
-> there. With p9_msg_buf_size() rework the flush allocation is
-> small so just make it fail if allocation failed; all that does
-> is potentially leak the request we're flushing until its reply
-> finally does come.. or if it never does until umount.
-> 
-> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
-> ---
+GFXOFF has two different "state" values: one to define if the GPU is
+allowed/disallowed to enter GFXOFF, usually called state; and another
+one to define if currently GFXOFF is being used, usually called status.
+Even when GFXOFF is allowed, GPU firmware can decide to not used it
+accordingly to the GPU load.
 
-Patch looks fine on first impression, but I'll postpone testing this. And yes, 
-I also think that exempting Tflush should be fair. If 4k (soon) cannot be 
-allocated, then you probably have worse problems than that.
+Userspace can allow/disallow GPUs to enter into GFXOFF via debugfs. The
+kernel maintains a counter of requests for GFXOFF (gfx_off_req_count)
+that should be decreased to allow GFXOFF and increased to disallow.
 
-> Here's a concrete version of what I had in mind: literally just make
-> allocation fail if the initial alloc failed.
-> 
-> I can't reproduce any bad hang with a sane server here, but we still
-> risk hanging with a bad server that ignores flushes as these are still
-> unkillable (someday I'll finish my async requests work...)
-> 
-> So ultimately there are two things I'm not so happy about with mempools:
->  - this real possibility of client hangs if a server mishandles some
-> replies -- this might make fuzzing difficult in particular, I think it's
+The issue with this interface is that userspace can't be sure if GFXOFF
+is currently allowed. Even by checking amdgpu_gfxoff file, one might get
+an ambiguous 2, that means that GPU is currently out of GFXOFF, but that
+can be either because it's currently disallowed or because it's allowed
+but given the current GPU load it's enabled. Then, userspace needs to
+rely on the fact that GFXOFF is enabled by default on boot and to track
+this information.
 
-Concrete example of such a mishap?
+To make userspace life easier and GFXOFF more reliable, return the
+current state of GFXOFF to userspace when reading amdgpu_gfxoff with the
+same semantics of writing: 0 means not allowed, not 0 means allowed.
 
-> easier to deal with failed IO (as long as it fails all the way back to
-> userspace) than to hang forever.
-> I'm sure there are others who prefer to wait instead, but I think this
-> should at least have a timeout or something.
+Expose the current status of GFXOFF through a new file,
+amdgpu_gfxoff_status.
 
-Not sure if it was easy to pick an appropriate timeout value. I've seen things 
-slowing down extremely with 9p after a while. But to be fair, these were on 
-production machines with ancient kernel versions, so maybe already fixed.
+Signed-off-by: André Almeida <andrealmeid@igalia.com>
+---
+Changes from v1: none
 
-A proc interface would be useful though to be able to identify things like 
-piling up too many fids and other performance related numbers.
+ drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 49 ++++++++++++++++++++-
+ 1 file changed, 47 insertions(+), 2 deletions(-)
 
->  - One of the reasons I wanted to drop the old request cache before is
-> that these caches are per mount/connection. If you have a dozen of
-> mounts that each cache 4 requests worth as here, with msize=1MB and two
-> buffers per request we're locking down 8 * 12 = 96 MB of ram just for
-> mounting.
-> That being said, as long as hanging is a real risk I'm not comfortable
-> sharing the mempools between all the clients either, so I'm not sure
-> what to suggest.
-
-Why would a shared mempool increase the chance of a hang or worsen its 
-outcome?
-
-> Anyway, we're getting close to the next merge request and I don't have
-> time to look deeper into this; I'll be putting the mempool patches on
-> hold for next cycle at least and we can discuss again if Kent still
-> encounters allocation troubles with Christian's smaller buffers
-> optimization first.
-> These will very likely get in this cycle unless something bad happens,
-> I've finished retesting a bit without trouble here.
-> 
-> 
->  net/9p/client.c | 23 +++++++++++++++++++----
->  1 file changed, 19 insertions(+), 4 deletions(-)
-> 
-> diff --git a/net/9p/client.c b/net/9p/client.c
-> index 928c9f88f204..f9c17fb79f35 100644
-> --- a/net/9p/client.c
-> +++ b/net/9p/client.c
-> @@ -218,7 +218,7 @@ static int parse_opts(char *opts, struct p9_client
-> *clnt) return ret;
->  }
-> 
-> -static void p9_fcall_init(struct p9_client *c, struct p9_fcall *fc,
-> +static int p9_fcall_init(struct p9_client *c, struct p9_fcall *fc,
->  			  int fc_idx, unsigned alloc_msize)
->  {
->  	gfp_t gfp = GFP_NOFS|__GFP_NOWARN;
-> @@ -232,11 +232,13 @@ static void p9_fcall_init(struct p9_client *c, struct
-> p9_fcall *fc, if (alloc_msize < c->msize)
->  		fc->sdata = kmalloc(alloc_msize, gfp);
-> 
-> -	if (!fc->sdata) {
-> +	if (!fc->sdata && fc_idx >= 0) {
->  		fc->sdata = mempool_alloc(&c->pools[fc_idx], gfp);
->  		fc->used_mempool = true;
->  		fc->capacity = c->msize;
->  	}
-> +
-> +	return fc->sdata == NULL;
->  }
-> 
->  void p9_fcall_fini(struct p9_client *c, struct p9_fcall *fc,
-> @@ -280,6 +282,7 @@ p9_tag_alloc(struct p9_client *c, int8_t type, uint
-> t_size, uint r_size, struct p9_req_t *req = kmem_cache_alloc(p9_req_cache,
-> GFP_NOFS); int alloc_tsize;
->  	int alloc_rsize;
-> +	int fc_idx = 0;
->  	int tag;
->  	va_list apc;
-> 
-> @@ -294,8 +297,19 @@ p9_tag_alloc(struct p9_client *c, int8_t type, uint
-> t_size, uint r_size, if (!req)
->  		return ERR_PTR(-ENOMEM);
-> 
-> -	p9_fcall_init(c, &req->tc, 0, alloc_tsize);
-> -	p9_fcall_init(c, &req->rc, 1, alloc_rsize);
-> +	/* We cannot use the mempool for TFLUSH because flushes can be
-> +	 * allocated when the thread still holds memory for the request
-> +	 * we're flushing. A negative fc_idx will make p9_fcall_init
-> +	 * error out.
-> +	 */
-> +	if (type == P9_TFLUSH) {
-> +		fc_idx = -2;
-> +	}
-> +
-> +	if (p9_fcall_init(c, &req->tc, fc_idx, alloc_tsize))
-> +		goto free_req;
-> +	if (p9_fcall_init(c, &req->rc, fc_idx + 1, alloc_rsize))
-> +		goto free;
-> 
->  	p9pdu_reset(&req->tc);
->  	p9pdu_reset(&req->rc);
-> @@ -334,6 +348,7 @@ p9_tag_alloc(struct p9_client *c, int8_t type, uint
-> t_size, uint r_size, free:
->  	p9_fcall_fini(c, &req->tc, 0);
->  	p9_fcall_fini(c, &req->rc, 1);
-> +free_req:
->  	kmem_cache_free(p9_req_cache, req);
->  	return ERR_PTR(-ENOMEM);
->  }
-
-
-
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+index f3b3c688e4e7..e2eec985adb3 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+@@ -1117,13 +1117,50 @@ static ssize_t amdgpu_debugfs_gfxoff_read(struct file *f, char __user *buf,
+ 	}
+ 
+ 	while (size) {
+-		uint32_t value;
++		u32 value = adev->gfx.gfx_off_state;
++
++		r = put_user(value, (u32 *)buf);
++		if (r)
++			goto out;
++
++		result += 4;
++		buf += 4;
++		*pos += 4;
++		size -= 4;
++	}
++
++	r = result;
++out:
++	pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
++	pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
++
++	return r;
++}
++
++static ssize_t amdgpu_debugfs_gfxoff_status_read(struct file *f, char __user *buf,
++						 size_t size, loff_t *pos)
++{
++	struct amdgpu_device *adev = file_inode(f)->i_private;
++	ssize_t result = 0;
++	int r;
++
++	if (size & 0x3 || *pos & 0x3)
++		return -EINVAL;
++
++	r = pm_runtime_get_sync(adev_to_drm(adev)->dev);
++	if (r < 0) {
++		pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
++		return r;
++	}
++
++	while (size) {
++		u32 value;
+ 
+ 		r = amdgpu_get_gfx_off_status(adev, &value);
+ 		if (r)
+ 			goto out;
+ 
+-		r = put_user(value, (uint32_t *)buf);
++		r = put_user(value, (u32 *)buf);
+ 		if (r)
+ 			goto out;
+ 
+@@ -1206,6 +1243,12 @@ static const struct file_operations amdgpu_debugfs_gfxoff_fops = {
+ 	.llseek = default_llseek
+ };
+ 
++static const struct file_operations amdgpu_debugfs_gfxoff_status_fops = {
++	.owner = THIS_MODULE,
++	.read = amdgpu_debugfs_gfxoff_status_read,
++	.llseek = default_llseek
++};
++
+ static const struct file_operations *debugfs_regs[] = {
+ 	&amdgpu_debugfs_regs_fops,
+ 	&amdgpu_debugfs_regs2_fops,
+@@ -1217,6 +1260,7 @@ static const struct file_operations *debugfs_regs[] = {
+ 	&amdgpu_debugfs_wave_fops,
+ 	&amdgpu_debugfs_gpr_fops,
+ 	&amdgpu_debugfs_gfxoff_fops,
++	&amdgpu_debugfs_gfxoff_status_fops,
+ };
+ 
+ static const char *debugfs_regs_names[] = {
+@@ -1230,6 +1274,7 @@ static const char *debugfs_regs_names[] = {
+ 	"amdgpu_wave",
+ 	"amdgpu_gpr",
+ 	"amdgpu_gfxoff",
++	"amdgpu_gfxoff_status",
+ };
+ 
+ /**
+-- 
+2.37.0
 

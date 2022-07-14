@@ -2,111 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C26F57571A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA0B575725
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240989AbiGNVlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 17:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S240498AbiGNVoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 17:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240942AbiGNVla (ORCPT
+        with ESMTP id S232538AbiGNVoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 17:41:30 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA532F3AE
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:41:29 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31bf3656517so30103217b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:41:29 -0700 (PDT)
+        Thu, 14 Jul 2022 17:44:00 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B5B13F85;
+        Thu, 14 Jul 2022 14:43:57 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id o12so3697738ljc.3;
+        Thu, 14 Jul 2022 14:43:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XrLJ6t8ylgvZSQuZlmobmLCnVlZPRzZJ+MdpYtHUOJI=;
-        b=Xosv3ScUfv21//1t7/kb8Wskbr5g/+WLejRea8X/qIg4fcT6osyLtoFWd1q65TrZxz
-         feesD9cIQ72VczWllJBOl77MkiNJmE+/vXXrwJbIARFcs7H4HWsl0JvmJvI5JmzTyN3U
-         meKwZc6FIVNI5r3igtveG+zCZ1j1ojRwPdhq0ES07Nfv4SzSwQkHmjd8eu8KL6xOi/fI
-         LRi3I2xpRJ1KhOGYQW0t3TrGtTfQ0unWzgEbvygAc1GceVzHXPM/aZ/jAK7d4Y44MtL6
-         sW1lpoijWw5+VMCETqp+N8fw1Tk56Ozgw2WXd2wlnHobOp2GtLGRpppxH0EVDLF89dQE
-         6bCw==
+        d=gmail.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=UgtOla5iDdHvY794z5uOthpZLFwvuSdiV1bTDAW0mWg=;
+        b=jQp3zOlZb8SydXE3IiTDbjwmoz94rlhSBjMCDYJaAhtQPaWOAELyzretwUzWmI/gyL
+         wPQF9aDj79QJO4ClxYOZ2M0cb2cvRaX2yKJqZbA/yAfCwW7aQf3dxTncQnrAB1Sz9mjV
+         NWMxeJjkhbYULjFwyDAGTi+1VfNwGvQtHyeTMV71LRqM1A97t5jo6xZ0fNA9MqBdxxY+
+         +yswsroXaP8ssHRAsJeotqii/3xAMhFr0XZZ6Tk5pZPg079nAOqZjmccPqQC4bKJ+hNL
+         cXzAuoJ4DOW4RXyMWtctXnysBPcWnEEMEeY5clmmGaUi8F97+5/2fTIqP3m1R7EGSdtK
+         dFaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XrLJ6t8ylgvZSQuZlmobmLCnVlZPRzZJ+MdpYtHUOJI=;
-        b=pAeT0RGbkmEgGPDlWyv06FAd91za4d/QdhUZlOb93WAD/Q/ayFqcBBxOdUyb5H4Bnj
-         AVkwNfsWY24rBG/BLPdYJtIq7N/Q1pjUWdKC5q+SDmknw/DaO4TIa1hAk3JhaZhVtlqG
-         UmOI3u7ffnkYv/AHBDxd1bFPoW6UX5zZwzxZYILKwOhbCvoWuAS0qkGs0MqGZen9rvaV
-         s5ns8qmQ9sWPRZZNvL9rrQmCPqWXP7K0qq0U22i/RawypgQzruXGuVv8XdyqmU+A6zLY
-         mmOB6r3mHGAvixlWO27JaCnrO3wC4tftNDhifLqiDUvwIZcZKq68EV8PE2CfnmXBv+NB
-         iW2A==
-X-Gm-Message-State: AJIora/neexVEj3ygcv9YhE21skT+EPqjCeULn2DDiiq0bt7dPd2DwB8
-        5xNn1d1eCNMnOeZruKFmbviSLCs1jaazYfU7/cY4pA==
-X-Google-Smtp-Source: AGRyM1vy8aVzUOhf/QXtZSH2ZHZaYwjbY3A577lPtx9AZ7Gv/zhEApvhp+lI7PzWDsJz53NTrxobz5jH80xVUG689vA=
-X-Received: by 2002:a81:e17:0:b0:31c:a24c:9ee6 with SMTP id
- 23-20020a810e17000000b0031ca24c9ee6mr12223353ywo.362.1657834888937; Thu, 14
- Jul 2022 14:41:28 -0700 (PDT)
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=UgtOla5iDdHvY794z5uOthpZLFwvuSdiV1bTDAW0mWg=;
+        b=b3l/yEt4LSvunF8huLo7jG6yAkxv/i5nK+Ci+4oDErIkfA0ctrl6WQ/+4bvCN/B/LN
+         q7q/jcxkfwJnunQeOpsMYIlJS41X5HKVtt3MICnxSKF+5LFF59/l7Zo/FcBZcyJbRyX8
+         8NMe5owtIjmm3dguV++1HLcAkNtqj9Gp3kHyNzZuG/OQoXoa8KhXbDnDB1ql6BljmBxP
+         mVHytoqvX637sLhlgmrFWEpQh2a5VFp0/nFbx4cRXT4ytFx6vipLNhQYSd31a9qIz8Mh
+         k0lxLwETo4SL/7YdOpKPza+wafuBzhOlPrJVPsNU/XAdJTDjwGP3qM6AZpL1g8zd3Be5
+         gQYA==
+X-Gm-Message-State: AJIora85nGSMmusASh8O2cF3lIJDyL8oh+Pj6GUCQ6AcZUQ6YOhUxcyL
+        9/QQ4payXEb9dmg38q2IW68kiIrKwZli3g==
+X-Google-Smtp-Source: AGRyM1seRrQY8GY3IH9uaKjaGGfCmlx4S3oZGra7nDuZclzlNcDZOSbq67LR4/xpHKsBD8ZsSUb6bA==
+X-Received: by 2002:a2e:b0fc:0:b0:25d:a025:fd03 with SMTP id h28-20020a2eb0fc000000b0025da025fd03mr1055971ljl.87.1657835035779;
+        Thu, 14 Jul 2022 14:43:55 -0700 (PDT)
+Received: from razdolb (95-31-189-152.broadband.corbina.ru. [95.31.189.152])
+        by smtp.gmail.com with ESMTPSA id 27-20020ac25f5b000000b0047255d210e4sm548496lfz.19.2022.07.14.14.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 14:43:55 -0700 (PDT)
+References: <20220712141925.678595-1-mike.rudenko@gmail.com>
+ <20220712141925.678595-2-mike.rudenko@gmail.com>
+ <YtCGeBp5U18ljyuX@valkosipuli.retiisi.eu>
+User-agent: mu4e 1.7.27; emacs 28.1
+From:   Mikhail Rudenko <mike.rudenko@gmail.com>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] media: dt-bindings: media: i2c: document OV4689 DT
+ bindings
+Date:   Fri, 15 Jul 2022 00:43:04 +0300
+In-reply-to: <YtCGeBp5U18ljyuX@valkosipuli.retiisi.eu>
+Message-ID: <87zghb8j51.fsf@gmail.com>
 MIME-Version: 1.0
-References: <20220518073232.526443-1-davidgow@google.com> <20220518073232.526443-2-davidgow@google.com>
- <YoS6rthXi9VRXpkg@elver.google.com> <CABVgOSmyApbC7en25ZBr7hLJye0mOnUY5ETR-VVEWmbaXq3bdQ@mail.gmail.com>
- <CANpmjNOdSy6DuO6CYZ4UxhGxqhjzx4tn0sJMbRqo2xRFv9kX6Q@mail.gmail.com> <CAGS_qxr_+KgqXRG-f9XMWsZ+ASOxSHFy9_4OZKnvS5eZAaAT7g@mail.gmail.com>
-In-Reply-To: <CAGS_qxr_+KgqXRG-f9XMWsZ+ASOxSHFy9_4OZKnvS5eZAaAT7g@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 14 Jul 2022 23:40:53 +0200
-Message-ID: <CANpmjNP-YYB05skVuJkk9CRB=KVvS+5Yd+yTAzXC7MAkKAe4jw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kcsan: test: Add a .kunitconfig to run KCSAN tests
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Jul 2022 at 22:23, Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Thu, May 19, 2022 at 6:24 AM Marco Elver <elver@google.com> wrote:
-> > I'd keep it simple for now, and remove both lines i.e. make non-strict
-> > the default. It's easy to just run with --kconfig_add
-> > CONFIG_KCSAN_STRICT=y, along with other variations. I know that
-> > rcutoruture uses KCSAN_STRICT=y by default, so it's already getting
-> > coverage there. ;-)
->
-> David decided to drop the parent patch (the new QEMU config) now
-> --qemu_args was merged into the kunit tree.
-> Did we want a standalone v2 of this patch?
->
-> Based on Marco's comments, we'd change:
-> * drop CONFIG_KCSAN_STRICT=y per this comment [1]
-> * drop CONFIG_KCSAN_WEAK_MEMORY per previous comments
-> Then for --qemu_args changes:
-> * add CONFIG_SMP=y explicitly to this file
-> * update the comment to show to include --qemu_args="-smp 8"
->
-> Does this sound right?
 
-Yes, sounds good to me, and thanks for remembering this. I'd prefer a
-close-to-default config.
+On 2022-07-15 at 00:11 +03, Sakari Ailus <sakari.ailus@iki.fi> wrote:
 
-> [1] Note: there's also patches in kunit now so you could do
-> --kconfig_add=CONFIG_KCSAN_STRICT=n to explicitly disable it. This
-> wasn't possible before. Does that change what we want for the default?
+> Hi Mikhail,
+>
+> Thanks for the patch.
+>
+> On Tue, Jul 12, 2022 at 05:19:09PM +0300, Mikhail Rudenko wrote:
+>> Add device-tree binding documentation for OV4689 image sensor driver,
+>> and the relevant MAINTAINERS entries.
+>>
+>> Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
+>> ---
+>>  .../bindings/media/i2c/ovti,ov4689.yaml       | 122 ++++++++++++++++++
+>>  MAINTAINERS                                   |   7 +
+>>  2 files changed, 129 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
+>> new file mode 100644
+>> index 000000000000..6bdebe5862b4
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
+>> @@ -0,0 +1,122 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov4689.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Omnivision OV4689 CMOS Sensor Device Tree Bindings
+>> +
+>> +maintainers:
+>> +  - Mikhail Rudenko <mike.rudenko@gmail.com>
+>> +
+>> +description: |-
+>> +  The Omnivision OV4689 is a high performance, 1/3-inch, 4 megapixel
+>> +  image sensor. Ihis chip supports high frame rate speeds up to 90 fps
+>> +  at 2688x1520 resolution. It is programmable through an I2C
+>> +  interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
+>> +  connection.
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/media/video-interface-devices.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: ovti,ov4689
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  clock-names:
+>> +    description:
+>> +      External clock for the sensor.
+>> +    items:
+>> +      - const: xclk
+>> +
+>> +  dovdd-supply:
+>> +    description:
+>> +      Definition of the regulator used as Digital I/O voltage supply.
+>> +
+>> +  avdd-supply:
+>> +    description:
+>> +      Definition of the regulator used as Analog voltage supply.
+>> +
+>> +  dvdd-supply:
+>> +    description:
+>> +      Definition of the regulator used as Digital core voltage supply.
+>> +
+>> +  powerdown-gpios:
+>> +    maxItems: 1
+>> +    description:
+>> +      Reference to the GPIO connected to the powerdown pin (active low).
+>> +
+>> +  reset-gpios:
+>> +    maxItems: 1
+>> +    description:
+>> +      Reference to the GPIO connected to the reset pin (active low).
+>> +
+>> +  orientation: true
+>> +
+>> +  rotation: true
+>> +
+>> +  port:
+>> +    $ref: /schemas/graph.yaml#/$defs/port-base
+>> +    additionalProperties: false
+>> +    description:
+>> +      Output port node, single endpoint describing the CSI-2 transmitter.
+>> +
+>> +    properties:
+>> +      endpoint:
+>> +        $ref: /schemas/media/video-interfaces.yaml#
+>> +        unevaluatedProperties: false
+>
+> The number of lanes is needed, please require data-lanes property here (as
+> well as add it to the example).
 
-I'd just have KCSAN_STRICT=n by default, and if desired it can be
-added per kconfig_add just the same way.
+Thanks for review, will fix in v2
 
-Thanks,
--- Marco
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +  - clock-names
+>> +  - dovdd-supply
+>> +  - avdd-supply
+>> +  - dvdd-supply
+>> +  - powerdown-gpios
+>> +  - reset-gpios
+>> +  - port
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/gpio/gpio.h>
+>> +
+>> +    i2c {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        ov4689: camera@36 {
+>> +            compatible = "ovti,ov4689";
+>> +            reg = <0x36>;
+>> +
+>> +            clocks = <&ov4689_clk>;
+>> +            clock-names = "xclk";
+>> +
+>> +            avdd-supply = <&ov4689_avdd>;
+>> +            dovdd-supply = <&ov4689_dovdd>;
+>> +            dvdd-supply = <&ov4689_dvdd>;
+>> +
+>> +            powerdown-gpios = <&pio 107 GPIO_ACTIVE_LOW>;
+>> +            reset-gpios = <&pio 109 GPIO_ACTIVE_LOW>;
+>> +
+>> +            orientation = <2>;
+>> +            rotation = <0>;
+>> +
+>> +            port {
+>> +                wcam_out: endpoint {
+>> +                    remote-endpoint = <&mipi_in_wcam>;
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> +
+>> +...
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index f468864fd268..63c4844f26e6 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -14523,6 +14523,13 @@ S:	Maintained
+>>  T:	git git://linuxtv.org/media_tree.git
+>>  F:	drivers/media/i2c/ov2740.c
+>>
+>> +OMNIVISION OV4689 SENSOR DRIVER
+>> +M:	Mikhail Rudenko <mike.rudenko@gmail.com>
+>> +L:	linux-media@vger.kernel.org
+>> +S:	Maintained
+>> +T:	git git://linuxtv.org/media_tree.git
+>> +F:	Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
+>> +
+>>  OMNIVISION OV5640 SENSOR DRIVER
+>>  M:	Steve Longerbeam <slongerbeam@gmail.com>
+>>  L:	linux-media@vger.kernel.org
+
+
+--
+Best regards,
+Mikhail Rudenko

@@ -2,198 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9913E57564C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 22:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D1257564E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 22:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240457AbiGNUXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 16:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S240080AbiGNUY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 16:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbiGNUXw (ORCPT
+        with ESMTP id S232299AbiGNUY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 16:23:52 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95ADD11172
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 13:23:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657830231; x=1689366231;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=/0OJ0nzyrctthLczJgP+qJylBXirm8Qg6iKCnUL7OFA=;
-  b=eGs0CO0FB6fYI+3gz9+IDmcf5MBR47IglEjrzrDDTnAvL9bsnd+yrlbC
-   DeNdLp/SWOEPSrExb2Zr4MIZ6uohyPGKepraS1l8wnX4EY3WioiTFi8rd
-   /id/LqfB72VAOeMbU69R0kfhPgPUI8c5guSTpj59UWtw+ywvI7ZnzihM/
-   r4Klyj724Y1CId17LZiZkKgBwDos8XZGfWhHmrp2oCt0mMbPaqNQxEbpt
-   lnPizk6oO/q9PZc4V6Hiim9r9d0XQfMQXyYjTdKZPe8EYUluro+HfjoZ3
-   pYXsqjN9cN0gnsKgxJ86+gLVvOIFUdx47puAh/XQ16cYbuleXFvaFT/0T
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="371937432"
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="371937432"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 13:23:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="654025841"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Jul 2022 13:23:51 -0700
-Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 14 Jul 2022 13:23:50 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Thu, 14 Jul 2022 13:23:50 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.109)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 14 Jul 2022 13:23:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nyR2a4YemPl3o7Hm2mghUSlUfVE6ViIa3sip7+gzrcj50eDDxL0eDIUVa8QG2+uXRC680xtPykGDvL/0Qj9lpOZs35Nv6Z2EN/b6Kag5+mBzafGHPlZyPiCfZZ3hPj5n4iHxANyiwQcOyz8W3uuxBnyodjUtJT/pEJn3+LN5+9QUHySYOlkgRwjtsBcSWPFT1m/Win6xWMYj3p6vzTPXiCNLrrFwmh5hZK12sMp+Rs6KV/d2tDdbNz01PyjXGmbxbuNyyGYJyxYwNqM/+Vpfx3II/dcgY49thhYRsnAuyxlSz0f7CWsugpplZfcQGxB9wMN+twXAR4xiBmBJ+YlvUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V3o1va4yO8Q2AKwIw4+jEBpEdMv9EcZOa/9CnE8W/HI=;
- b=RosrtaATu/YOwJh94WqkH7tyaBOt1HfDciRmUXHyWzFn6jqYQS8X3hd+NtD4rjJ0qYJ+3ViBVvxZuhDZ2wmQiURcWsHzvGJA5RR5ghA5T+hGdsA780ivHMSs0msMaVh4jgZcrwc+JUYSTOW9Ns03l4PKmA4EsQCzAIEX0F3kZ2Z2Ef/l42Mikysg+9IQegij9gtDZTRpMS+dwcwEZnouIhMgloRFfuybfQUXgMTthBpPeQIEPyG0I6RGC3wLNV6htWx15iP31G/0OtzjHb4k1JkqWOsBM0ry+RGJ8oi2W7EXekHHdrPgdiEfCFZIfReVcbtMdFGhChg2a5bFUym8/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by DM6PR11MB3497.namprd11.prod.outlook.com
- (2603:10b6:5:6e::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25; Thu, 14 Jul
- 2022 20:23:48 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::6466:20a6:57b4:1edf]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::6466:20a6:57b4:1edf%11]) with mapi id 15.20.5438.014; Thu, 14 Jul
- 2022 20:23:47 +0000
-Date:   Thu, 14 Jul 2022 13:23:45 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Richard Weinberger <richard@nod.at>
-CC:     Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        <linux-um@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Christoph Hellwig" <hch@lst.de>, <jane.chu@oracle.com>
-Subject: RE: [PATCH] um: Replace to_phys() and to_virt() with less generic
- function names
-Message-ID: <62d07b5120291_16fb97294fb@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20220714184600.3981953-1-linux@roeck-us.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220714184600.3981953-1-linux@roeck-us.net>
-X-ClientProxiedBy: BY3PR03CA0002.namprd03.prod.outlook.com
- (2603:10b6:a03:39a::7) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        Thu, 14 Jul 2022 16:24:27 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8BD1D0CD
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 13:24:27 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso4152101pjk.3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 13:24:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=pcRnU+Ror4gYiRZTAUzcABV8hGHFjcJDb40sHS5AYVk=;
+        b=hvlDHdDOxK52P0/LBKCWfDreDHWqjZ0+X00Ved/rTViRBSVXTq2lYSvFTdJu/JsxcH
+         Ilil5aAXg8Df3wnUF5jyZBi6aoLWCimQsGtR7CmVIOKpKWSOuVPNVKZfbs6am4YGaExF
+         7kscXgmArrrB4keRwxUmuehwGsgP7fc2CTf4uTLkX10oMCdPBBldJlEP22szXpAuxJJD
+         n7iw57jMeGLQLdoAFKejDR+I8P3rVeUeiIqy4pHiwDXDAIhXeDcUwj0xl05k5IcSnr1f
+         WdV6IF0hjMPu2/tYtTRpJLj77S851CLISPSfKgjBG5iQELG6SFjYF4g1FUJiWlMvbkGO
+         eIzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=pcRnU+Ror4gYiRZTAUzcABV8hGHFjcJDb40sHS5AYVk=;
+        b=hAQJLclTsKiiHEv9qj87SR9aUs1cgVGFhTW1+jui4IYED678ZGQV/Bz+8+xUTmWeXM
+         +c0YXZVh/OB6K8xiqxyddgoupDF8UI6oZhNNO1wx8IX6DxSWoZxcVIEc6cm5zfdC41xp
+         PnCYzZLA/i8OLGLlkSumjdfwpSMkJPQqz87iCPwpTZLV60I2Y+AqB9fGf/QCT1dUtmYO
+         +4XYhaG0dQ1mK7cfxLdNTtZdIKKBf95AE9orr1yrjPXPJVIga5snyKNC89fb4ozCO3/k
+         XjHtZTIgKdOUVOiek1Xp98+g/4PRyY1efz0pJ5/dcz9ADadH2TcXn44KzUFLJG4FHO/8
+         +/eQ==
+X-Gm-Message-State: AJIora9KFJEfQKucwFvUzJB5Gjur7XlZs/29BDQ/WYbtvH5rIgPomW69
+        WIUYQH1L6zpNKaYh6nIWNW9Ierar7vGbgA==
+X-Google-Smtp-Source: AGRyM1tx/BKIt8gG9FjSZ+ck6gTBSu+yZzhvOUhowONfqODvxLg5/2Tfh0PFxmmu7wnVClZYpTsl0Q==
+X-Received: by 2002:a17:90a:fe4:b0:1ef:8564:4f4 with SMTP id 91-20020a17090a0fe400b001ef856404f4mr18027029pjz.118.1657830266447;
+        Thu, 14 Jul 2022 13:24:26 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q8-20020a17090311c800b0016bd16f8acbsm1889201plh.114.2022.07.14.13.24.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 13:24:25 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <17edd8b1-27d3-a768-87a3-c815e5df5d14@roeck-us.net>
+Date:   Thu, 14 Jul 2022 13:24:23 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6eec1cb5-b892-48da-e729-08da65d6c1dd
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3497:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0C5v3FSwCgjp4XW1k7ErsalVCwI45kA6lb0ZbeufQ0KojLEzjN25/aJI8qktyr9XlaJVUbupe/ibWdh0AkifUPGDlbhpIE91pUJPTY4vXR9sXQkNMOALvSqLOLNaCsADXFu63NmTeOB3QTMNbIQk7ortDPR62qclfGzmIPe/AUxhhGUSuVyjLjcOujrA8ylw6tqbqBuTHvd7HEdzDrQyJjMcuvs1uCQ0TSehRAOoombuimEDK6FH5EiA783h7pG3i1vBXhwdxe/aWXKUGOmv5kowaOJ3YUl8gRfBCMF0gInOOR0FrolLYZAqvu2aHRWfq9kubi5Mp7D+NlGuIHjdEUYlQ5BJGUyUd2YkOFTJoMk8qd05auuL3e1QKbU72FXo1OdUf+U3JsuTg5nZvbKsjMpv+q8mvvJmdu1/rb7C5KDKSsjhYtJV1UMtdtIh8d/R51bzVwZAjYfHUlRiNJDLMJRdCRa7mXcxFq66NCWLLE5UADef14PPURFblOBUc8cADH6B/5G7nYeiEIZQY7lbFGyOFGKgShxFULaXFnYzcktr1rG/g+kCffTbAV9C4baeImD16kt6rQVQI6rEDI+tOTuNEmR0g25n4Wb3pDrx082DDdagDguklgGzZemwFAmIqaz44if/yF6sVx3c7DlAJPBHLMXxazxdwM7UH+h2ug5FwODetCqEAeU80qTTS+Wo0du9k1pBVt1S8LLqbvSR+A5ikEc8Lrz6nJ1AUZbnUsGyrlGq6w1Cr0SugaHSQDsTXLnbrcHnrz/9pOFC9S+NHxk5f/5y05kFsG9ZriuC271zHH0DA3CxeSCLDAVJ53yMJ+oeTRwP1HiYrnA79ezvXg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(396003)(136003)(376002)(39860400002)(966005)(86362001)(66476007)(2906002)(6486002)(8676002)(8936002)(54906003)(110136005)(66556008)(316002)(5660300002)(6512007)(66946007)(478600001)(26005)(9686003)(186003)(41300700001)(83380400001)(4326008)(38100700002)(82960400001)(6506007)(41533002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UGQ0UUZDTHFBT3RjUjJvZW85dytwc3FVNisxbXF0Um1WbUorbTlBWEhoelBL?=
- =?utf-8?B?MVRxQWhrZi9Id1d0NWlnL05NZ2FodHVSNGk5Zk5xVjRvR0M0Uk41QnJSeTlV?=
- =?utf-8?B?REhpR3JNcVo1OU5waXRlajdBWWdteE9qT1EzWGZIT3BYcDFwMHhmZExTZzF2?=
- =?utf-8?B?cFltOVphcGNMM0RBSlo4MGpTUnhiSXBNVkJiU2lnZWhDTVBrbmcrNHFVbmRz?=
- =?utf-8?B?bkxGWFZBc2d2Zi9hOS9tamo0MzFQK2ppTk9FTHk2Y3F3Nlo0cjRSN3Q2NW95?=
- =?utf-8?B?SjdPR1pQMTh3ODhYUW84TTBoNFVqT0ZycXlLUC94cFdYWE9iSm1RaXpQOHhM?=
- =?utf-8?B?WUVnUmhpYTd6Y21OdkJpeTNZRHMxdk9JSS8wVlZTKzhBekFwQXBmNmhqcjN0?=
- =?utf-8?B?MVllSXNZYTJSMWlyMGh4Vlh0Q3p2YnpETjU1aW5pNzJjQ2xoNlgyQ0tFb09Q?=
- =?utf-8?B?azZrem9QWkU4c0RQQ3VteVo5RitGSGI3MGxJQzNFQ1ZOMTV5TTFhWE5iR2kz?=
- =?utf-8?B?WDRzUUYzOTZUZ3dvZlFJam5OTG0yaWtocjZMbHBQYkhBck5rOTVSc2RJdndm?=
- =?utf-8?B?Wk14S1NRZ1c4WnQvYmt3Z09oeFQyQy9DRmNCNWhSYnRhUWZQQkFPM0JRa1dW?=
- =?utf-8?B?M0lieDhtbHQ3NHdaanVnT2FYMTg5NnRpemhaZUR6cmlsaEhacnovZ2tjbjEv?=
- =?utf-8?B?S2sxK0krcVAwelIzaFBCT21xY3ZyMHpoQjMzZ2tFUHhydUxrTU5NN0ZyRW1G?=
- =?utf-8?B?Z3B2REpNL2dNcStBSC9WeDFiSmJrRFNTTk5XVzFBZzgyTW40a3lUSk52elZL?=
- =?utf-8?B?bjZjUEI3S2U5d2tZODJHN2h0a29zUHZ1aFp3eXN5OGxXeithT2VaTitaZ08v?=
- =?utf-8?B?UGY4SEVzd1lLUFRRazV6My80Y21ISkpiSkgyUi93bVhFbFZTM0gxd1Bvajdp?=
- =?utf-8?B?NFJMWXZldG1taUw1ODlPU0JJUG5ROW5qK0g3UGFOaXg4a2JIcWt0eXA3M0JQ?=
- =?utf-8?B?aGd0MWo2ZG0vQWNiTXhEb1NrNUdLUDJyVU1NSXhzWURmQTgybnNabjBySXZP?=
- =?utf-8?B?RkdFakthWVg5VkJZMGx3OW1md2crVmFKZTh2Y2F6WCt3SW45Vm5pRlUrM0JZ?=
- =?utf-8?B?QUpGazdaZm9HYTBDbitQem0weXVtazBaMDdrenZZM2c2c1ZqSkgvVEU1dDVu?=
- =?utf-8?B?K29LbnBramRwNUozZy9NZ2l2Rkl4RldORnp2bnhja2wrTDlCS0cwejltV2s2?=
- =?utf-8?B?ZkhJZ0pGT093RDVGcFd5SVJRRmp6MXUzdXN4Ly9ZekFUeU96dmIwMjErNVln?=
- =?utf-8?B?S0s3SGpsd01nZHN5UkZySi95SDVPM1M0bUxQWkVSUytmaDBvN2hpYWg3c3lY?=
- =?utf-8?B?dmVLZ3h3OFowbnlrTlhZMUtRTkFILzRzOVdsUEpLUE9NVU1NcEFuZ1R1MGps?=
- =?utf-8?B?R2diRC9VTXZTWHpybUE5LzR6TVVkUGNmRW9NUWRtY2x2d29NTFNaaVB2ZWxu?=
- =?utf-8?B?THk0OGxGVFFaVFZHZW1vQThreE4vS25lV1VKaGQ1bXdxdHVFRU01OGp6UHhj?=
- =?utf-8?B?MERsaWFpakV2a29UM3F3MFlySUFYYTRvQW9wb2RkQVBoYlJzekIxdFZST0Uv?=
- =?utf-8?B?c0pEUW1mejB0MXZpcDc0bkczU3dDQUx3azE1czBkcm5DbnpuZ3JiQkNOZ2Z5?=
- =?utf-8?B?TkxOZEYvUnFvNG51TVNMRjlIQ2FtTmZMOElKcm15aVJzSFVRR2Jwd29rcnVs?=
- =?utf-8?B?SDVzeGN2d3BUSzNTV1RKZFhUYVFSVHk5SnEyVjQ4cEF3cXhTbXg5QnVNcS9V?=
- =?utf-8?B?N3R3RXVaNmhDbHBodmpPK1VOcmFSSFdTMlYrZ3RhMjFORlFubjRVR2RKaHcz?=
- =?utf-8?B?Zks1WXRPRHJqMGtLOG5EWWFpSS9hanpqaTJVU09lSkdhZGdjUEhkcE0yQnVl?=
- =?utf-8?B?cHR4SFJHbS84dGdBY1JXdGMvM3VPTCtMZUdraVEyL0czMDI3aisrQTJaRXpy?=
- =?utf-8?B?MkQ4L0c3QzhZemJHQi9kS09GTXRoelRPYkw0MFVjbXlPY29ucFJEYzlMcis0?=
- =?utf-8?B?S3BRNW9Cc3ZTalRaQjJoc0FDZjZIUHhiNEF3UnU5a2J0SVpSNU9uYk1aZzNi?=
- =?utf-8?B?UTZhQ2NOTlVlNkk0ZVF2MEFQeGMyVGdNQTBqWGJnYWxqUEFJOW44K1BiRGc4?=
- =?utf-8?B?NXc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6eec1cb5-b892-48da-e729-08da65d6c1dd
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2022 20:23:47.7548
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AQp09Bga8oXHDLnZWS1DNe6BM7q+fNSo/kOTIGuK0DsNbgQ6EmXKzDa/U65X4RyRPKOlI2BVhOX610PMk6j19/+fKNn5deGVTRjHiwvRws0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3497
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Melissa Wen <mwen@igalia.com>, Alex Deucher <alexdeucher@gmail.com>
+Cc:     Leo Li <sunpeng.li@amd.com>, Michael Ellerman <mpe@ellerman.id.au>,
+        Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        David Airlie <airlied@linux.ie>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Daniel Axtens <dja@axtens.net>
+References: <20220618232737.2036722-1-linux@roeck-us.net>
+ <584fc348-7a60-26a2-af61-9edc4f4830e4@amd.com>
+ <CADnq5_NkVWqcxwLMBeskqpcSEYCEjUAK0hqvA_PAo7ACHKL2cA@mail.gmail.com>
+ <6a026c9a-c4ee-deba-e028-4c0f478c1911@roeck-us.net>
+ <CADnq5_OrxMMkazXEPHeZXp_bV890=r21DRx2QsqLXUFj4t8aYg@mail.gmail.com>
+ <20220713230917.GE32544@roeck-us.net>
+ <CADnq5_PAg8xg2J3WUfjxK_-WFaLOK7cQd6bqWDnfVqE6fpXq2Q@mail.gmail.com>
+ <20220714184919.rmsexizgfdkfboiq@mail.igalia.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] drm/amd/display: Add missing hard-float compile flags for
+ PPC64 builds
+In-Reply-To: <20220714184919.rmsexizgfdkfboiq@mail.igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ add Jane ]
-
-Guenter Roeck wrote:
-> to_virt() and to_phys() are very generic and may be defined by drivers.
-> As it turns out, commit 9409c9b6709e ("pmem: refactor pmem_clear_poison()")
-> did exactly that. This results in build errors such as the following
-> when trying to build um:allmodconfig.
+On 7/14/22 11:49, Melissa Wen wrote:
+> O 07/13, Alex Deucher wrote:
+>> On Wed, Jul 13, 2022 at 7:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>>
+>>> On Wed, Jul 13, 2022 at 05:20:40PM -0400, Alex Deucher wrote:
+>>>>>
+>>>>> The problem is not the FPU operations, but the fact that soft-float
+>>>>> and hard-float compiled code is linked together. The soft-float and
+>>>>> hard-float ABIs on powerpc are not compatible, so one ends up with
+>>>>> an object file which is partially soft-float and partially hard-float
+>>>>> compiled and thus uses different ABIs. That can only create chaos,
+>>>>> so the linker complains about it.
+>>>>
+>>>> I get that, I just don't see why only DCN 3.1.x files have this
+>>>> problem.  The DCN 2.x files should as well.
+>>>>
+>>>
+>>> Seen in drivers/gpu/drm/amd/display/dc/clk_mgr/Makefile:
+>>>
+>>> # prevent build errors regarding soft-float vs hard-float FP ABI tags
+>>> # this code is currently unused on ppc64, as it applies to Renoir APUs only
+>>> ifdef CONFIG_PPC64
+>>> CFLAGS_$(AMDDALPATH)/dc/clk_mgr/dcn21/rn_clk_mgr.o := $(call cc-option,-mno-gnu-attribute)
+>>> endif
+>>>
+>>> Does that explain it ?
+>>
+>> I would expect to see it in dcn20_resource.c and dcn30_clk_mgr.c for
+>> example.  They follow the same pattern as the dcn 3.1.x files.  They
+>> call functions that use FP, but maybe there is some FP code still in
+>> those functions that we missed somehow.
 > 
-> drivers/nvdimm/pmem.c: In function ‘pmem_dax_zero_page_range’:
-> ./arch/um/include/asm/page.h:105:20: error:
-> 			too few arguments to function ‘to_phys’
->   105 | #define __pa(virt) to_phys((void *) (unsigned long) (virt))
->       |                    ^~~~~~~
+> Hi,
 > 
-> Use less generic function names for the um specific to_phys() and to_virt()
-> functions to fix the problem and to avoid similar problems in the future.
+> I'm a little late here, but I'm not able to reproduce the issue yet.
+> I have this setup:
+> - gcc 11.3.0
+> - binutils 2.38.50
+> - mainline kernel (torvalds) version: 5.19.0-rc6 (cross-compiling)
+>    -> make ARCH=powerpc CROSS_COMPILE=powerpc64-linux-gnu- allmodconfig
+>      => DRM_AMD_DC [=y] && HAS_IOMEM [=y] && DRM [=m] && DRM_AMDGPU [=m] && (X86 || PPC64 [=y]) && (!KCOV_INSTRUMENT_ALL [=n] || !KCOV_ENABLE_COMPARISONS [=n])
+>    -> make -j16 ARCH=powerpc CROSS_COMPILE=powerpc64-linux-gnu-
 > 
-> Fixes: 9409c9b6709e ("pmem: refactor pmem_clear_poison()")
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Christoph Hellwig <hch@lst.de>
+> Am I missing something?
+> 
+> So, as Alex mentioned the possibility of some non-isolated FPU code in
+> 3.1, I reviewed dcn31 code and my best bet so far is that the issue
+> is here:
+> 
+> https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c#L1721
+> 
+> Although dcn31_update_soc_for_wm_a() is only called inside
+> dml/dcn31/dcn31_fpu:
+> - dc->res_pool->funcs->update_soc_for_wm_a(dc, context);
+> 
+> it's declared in dcn31_resource and has FPU code. So, we should move it
+> to dml/dcn31/dcn31_fpu.
+> 
+> However, as I can't reproduce the issue, I don't know if it addresses
+> the problem reported here and also if everything will be clean after
+> moving it.
+> 
 
-Acked-by: Dan Williams <dan.j.williams@intel.com>
+I don't think that would solve anything. As I have tried to point out,
+the problem is that code compiled with hard-float is linked together
+with code compiled with soft-float. An alternate fix might be something
+like the one attached below, but I don't know if that would be correct
+and/or complete.
 
-Jane had sent a pmem local fixup, that I was about to push to linux-next:
+> Guenter,
+> 
+> Can you provide more info about your setup: cross-compile or not, any
+> flags, branch, etc?
+> 
 
-https://lore.kernel.org/nvdimm/20220630182802.3250449-1-jane.chu@oracle.com/
+Nothing special. Same compile options as the ones you use, and it is a
+cross-compile environment. I tried gcc 11.2.0 with binutils 2.36.1
+and gcc 11.3.0 with binutils 2.38.
 
-...but I like this one too, lets do both.
+Guenter
 
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  arch/um/include/asm/page.h      | 4 ++--
->  arch/um/include/shared/mem.h    | 4 ++--
->  arch/um/os-Linux/skas/process.c | 6 +++---
->  3 files changed, 7 insertions(+), 7 deletions(-)
+---
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/Makefile b/drivers/gpu/drm/amd/display/dc/dcn31/Makefile
+index ec041e3cda30..44ff6f196860 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn31/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dcn31/Makefile
+@@ -10,6 +10,8 @@
+  #
+  # Makefile for dcn31.
+
++CFLAGS_$(AMDDALPATH)/dc/dcn31/dcn31_resource.o := $(call cc-option,-mno-gnu-attribute)
++
+  DCN31 = dcn31_resource.o dcn31_hubbub.o dcn31_hwseq.o dcn31_init.o dcn31_hubp.o \
+         dcn31_dccg.o dcn31_optc.o dcn31_dio_link_encoder.o dcn31_panel_cntl.o \
+         dcn31_apg.o dcn31_hpo_dp_stream_encoder.o dcn31_hpo_dp_link_encoder.o \
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn315/Makefile b/drivers/gpu/drm/amd/display/dc/dcn315/Makefile
+index 59381d24800b..55fcae2d2aae 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn315/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dcn315/Makefile
+@@ -25,6 +25,8 @@
+
+  DCN315 = dcn315_resource.o
+
++CFLAGS_$(AMDDALPATH)/dc/dcn315/$(DCN315) := $(call cc-option,-mno-gnu-attribute)
++
+  AMD_DAL_DCN315 = $(addprefix $(AMDDALPATH)/dc/dcn315/,$(DCN315))
+
+  AMD_DISPLAY_FILES += $(AMD_DAL_DCN315)
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn316/Makefile b/drivers/gpu/drm/amd/display/dc/dcn316/Makefile
+index 819d44a9439b..7251ef9c1afb 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn316/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dcn316/Makefile
+@@ -25,6 +25,8 @@
+
+  DCN316 = dcn316_resource.o
+
++CFLAGS_$(AMDDALPATH)/dc/dcn316/$(DCN316) := $(call cc-option,-mno-gnu-attribute)
++
+  AMD_DAL_DCN316 = $(addprefix $(AMDDALPATH)/dc/dcn316/,$(DCN316))
+
+  AMD_DISPLAY_FILES += $(AMD_DAL_DCN316)

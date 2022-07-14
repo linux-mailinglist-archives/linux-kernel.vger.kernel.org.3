@@ -2,281 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5025755D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F035755D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 21:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240478AbiGNTcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 15:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
+        id S240508AbiGNTf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 15:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232336AbiGNTcV (ORCPT
+        with ESMTP id S238661AbiGNTf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 15:32:21 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEB84AD7E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 12:32:19 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id g1so1206718qki.7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 12:32:19 -0700 (PDT)
+        Thu, 14 Jul 2022 15:35:28 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D536558DE;
+        Thu, 14 Jul 2022 12:35:27 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id va17so5300717ejb.0;
+        Thu, 14 Jul 2022 12:35:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wrqocee6wFB7VNnjcoQjCA09g9WsXTBwX3U1N3wurho=;
-        b=gm8yMiBzyEjQMl52W80Wt/8mHUwSS5cm/nBVfYddpKK55Jp2MXXG+ymKBlXP8tLoKq
-         jPCk4RlASYUS9BqlmgSLtyx6XvtzH7kK21OIq5MNf2TNvtZXyULSrYxbQ80mvcYhoqVa
-         +gU45JV9fcnT75lp5kWnKbV1B8eTAvLOlPEWALPZ4Y1R9RBfyzYubMCaHWepfyoGE88N
-         BFxoBDHo1T+DBWui/Bq+64uIWw5yu297OVBfTssak+1r6qhZ0O0dMUqNYzwtKWTlpBG5
-         tjXZCQS896PoOHo8MfzxGOmKuy45vKy0Mex6fRWY6Id4jZiN3Hbgb8g1BA7ROCbVnc/8
-         c7xA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vChKKF9FJ4ZU9VFDMkMSil6514q54Ua6e4LyojliXfk=;
+        b=DMwrkmws8NvuOuWIlz6qCaHKSH9ufUNiQS4Sks+0iRp1wH6GMTA4wvRCsh2VELrUjx
+         mN/Wq0Iz4xbXbdbgxvP/ntipszHF0onufubKTtGss+qLQxndi5ASkec51iGQ5kg0br4I
+         GgChfcVyUXR07zbC4N137knAHlrJx2I7qAWX3Ma6SA8M36QMq6WW+IchNmbjovFsbHIp
+         3KdTLNHLqaKeHNf6sWt2QeOzsZEMO8Qsl5A8rDtNR88PTxFoAZwFkVbGrxhjspcHcsOy
+         rJim/oihY5xwyJnGfFEeYT68gHWlb1bVXOL4wrrEFAN26pI2b+sAi03E5muxk+v/cERh
+         moTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wrqocee6wFB7VNnjcoQjCA09g9WsXTBwX3U1N3wurho=;
-        b=H9/BsRtA1cri48fqb2o6Co8RvQqjozdP/wU7IPlGM6pytQ1iKJmrcxtJQORi/E/jwT
-         lRXGL5jWdIaUoK49YumMKcdmQAl9wpDvr5AdCbqUB7sZKdtRU8K+IApNGufoIw4cQ2aH
-         EMB33A1BCASm5ZfY2YTAWnknfY4r59BHzDWId6tkA2fqmNoGT8expUfrNbodzB+mUfWX
-         vDPnRcCE4Fzw+/dHLEAhI4YDUqPR9JWrqPFlD8opr8pdFG9WXRTb+SAe+qEHWzwFyEex
-         TospY+AM8MLEBUW9dOvLjnv9ZdqVK3GTg1l90q6HIT9HPTpp8GSWcHqDSNyAwBE5cGAj
-         d/Cw==
-X-Gm-Message-State: AJIora/XxE0C19ltOGt6FWOsC5pDPpRjbt8wukTsI2fQJImifq0CatFg
-        Lii2VAigVvvDr4Wi08AThGr3I1oSw2c=
-X-Google-Smtp-Source: AGRyM1vWpY2e1/+pSAb7n7+py24Dp5iXS8MLI7iQU1rSyl2UA6gMMEXB3mmmEI5X5D1+T/DpG2VWSg==
-X-Received: by 2002:a05:620a:bcb:b0:6a9:8f2a:ecf9 with SMTP id s11-20020a05620a0bcb00b006a98f2aecf9mr7202974qki.351.1657827138641;
-        Thu, 14 Jul 2022 12:32:18 -0700 (PDT)
-Received: from localhost (c-69-254-185-160.hsd1.ar.comcast.net. [69.254.185.160])
-        by smtp.gmail.com with ESMTPSA id i2-20020ae9ee02000000b006af039ff090sm1878886qkg.97.2022.07.14.12.32.17
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vChKKF9FJ4ZU9VFDMkMSil6514q54Ua6e4LyojliXfk=;
+        b=gv+6m3xplfLLp5COP/mozhqbGdqMW9mCiT2byHB5H+y6+qaPRTm4btC4RTX2AHCXxx
+         UuRUEKV3y1g4rwkboq6G7qNDNktp3Mr+tdrecSvz6tVQhWkJZXdKLMoeDrsG5CZE+YL4
+         KyGaunfYfT/BWmI3aSa9Nb6g0rDWS7NOnMCmsB5TGlx5oCAzllGhiMDesC6aas8G1S6g
+         BFBV5TXdBn/73VJRj9ajuOyb3Bx+GBh5T4lOi1RWtTtaY2+ZMeUBjsBRnyEEM5d+sUO4
+         Cia8MyWlUx0xvmEBfPpDYRQ2WqqLCbkEpTmcT1SNy3cTC1+ZH4qOfIGEuGI+UrpwdofT
+         qzlQ==
+X-Gm-Message-State: AJIora+BbhL22VihPa+dT4ZBbk2LUyNG0QseNLIBch33txORDpNjg99f
+        2/Y+h3ZuFAjtAn7m/PWBm71dQ8VPo42TEg==
+X-Google-Smtp-Source: AGRyM1vqH9Cl010mU3uO3aUBR866ANu07zId8T1BlRv9H+6NGK2RG3Jh8P+z8zygDBSQdGkftD5L7g==
+X-Received: by 2002:a17:907:7617:b0:72b:49fe:fdf7 with SMTP id jx23-20020a170907761700b0072b49fefdf7mr10631256ejc.25.1657827325723;
+        Thu, 14 Jul 2022 12:35:25 -0700 (PDT)
+Received: from erthalion.local (dslb-094-222-027-106.094.222.pools.vodafone-ip.de. [94.222.27.106])
+        by smtp.gmail.com with ESMTPSA id f13-20020a170906560d00b006fee98045cdsm1068716ejq.10.2022.07.14.12.35.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 12:32:17 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 12:32:17 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Tian Tao <tiantao6@hisilicon.com>
-Subject: Re: [PATCH v4 RESEND] drivers/base: fix userspace break from using
- bin_attributes for cpumap and cpulist
-Message-ID: <YtBvQUzRn5idNA5J@yury-laptop>
-References: <20220714183021.2924119-1-pauld@redhat.com>
+        Thu, 14 Jul 2022 12:35:25 -0700 (PDT)
+From:   Dmitrii Dolgov <9erthalion6@gmail.com>
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     songliubraving@fb.com, rostedt@goodmis.org, peterz@infradead.org,
+        mingo@redhat.com, mhiramat@kernel.org,
+        alexei.starovoitov@gmail.com,
+        Dmitrii Dolgov <9erthalion6@gmail.com>
+Subject: [PATCH v4 1/1] perf/kprobe: maxactive for fd-based kprobe
+Date:   Thu, 14 Jul 2022 21:34:03 +0200
+Message-Id: <20220714193403.13211-1-9erthalion6@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220714183021.2924119-1-pauld@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 02:30:21PM -0400, Phil Auld wrote:
-> Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
-> This breaks userspace code that retrieves the size before reading the file. Rather
-> than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
-> limitation of cpumap ABI") let's put in a size value at compile time. Use direct
-> comparison and a worst-case maximum to ensure compile time constants. For cpulist the
-> max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960
-> (8192 * 5). In order to get near that you'd need a system with every other CPU on one
-> node or something similar. e.g. (0,2,4,8, ... ).
+From: Song Liu <songliubraving@fb.com>
 
-My python says:
-        >>> len(str(list(range(0, 8194, 2))).replace(" ", ''))
-        19931
+Enable specifying maxactive for fd based kretprobe. This will be useful
+for tracing tools like bcc and bpftrace (see for example discussion [1]).
+Use highest 4 bit (bit 59-63) to allow specifying maxactive by log2.
 
-Where the list looks like:
-        [0,2,4,6,8,10,...,8190,8192]
-        
-So excluding open and close braces, max length of the cpu list is
-19929 bytes, which is almost3 times smaller than your estimation
-(8192 * 7 = 57344).
+The original patch [2] seems to be fallen through the cracks and wasn't
+applied. I've merely rebased the work done by Song Liu, verififed it
+still works, and modified to allow specifying maxactive by log2 per
+suggestion from the discussion thread.
 
+Note that changes in rethook implementation may render maxactive
+obsolete.
 
-For NR_CPUS == 16x8192:
-        >>> len(str(list(range(0, 8194 * 16, 2))).replace(" ", '')) - 2
-        403308
-        >>> 8192 * 16 * 7
-        917504
+[1]: https://github.com/iovisor/bpftrace/issues/835
+[2]: https://lore.kernel.org/all/20191007223111.1142454-1-songliubraving@fb.com/
 
-For NR_CPUS == 128x8192:
-        >>> len(str(list(range(0, 8194 * 128, 2))).replace(" ", '')) - 2
-        3639774
-        >>> 8192 * 16 * 7
-        7340032
+Signed-off-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Dmitrii Dolgov <9erthalion6@gmail.com>
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+Previous discussion: https://lore.kernel.org/bpf/20220625152429.27539-1-9erthalion6@gmail.com/
 
-Looks like it 2x overestimates for large lists, and 4x for standard
-256-bit mask. Before, it was possible to fit ~1800 cpus into 4k page,
-after - 585.
+Resent with LKML in Cc instead of linux-perf-users, as it is a kernel
+change.
 
-> To simplify the math and support
-> larger NR_CPUS in the future we are using NR_CPUS * 7. We also set it to a min of
-> PAGE_SIZE to retain the older behavior for smaller NR_CPUS. The cpumap file wants to
-> be something like NR_CPUS/4 + NR_CPUS/32, for the ","s so for simplicity we are using
-> NR_CPUS/2.
+Changes in v4:
+    - Allow specifying maxactive by log2
 
-This again overestimates almost twice. In this case, NR_CPUS * 9/32 - 1
-is a precise value, if I didn't screw up. Why don't you just use it?
+Changes in v3:
+    - Set correct author
 
-> Add a set of macros for these values to cpumask.h so they can be used in multiple places.
-> Apply these to the handful of such files in drivers/base/topology.c as well as node.c.
-> 
-> On an 80 cpu 4-node sytem (NR_CPUS == 8192)
-> 
-> before:
-> 
-> -r--r--r--. 1 root root 0 Jul 12 14:08 /sys/devices/system/node/node0/cpulist
-> -r--r--r--. 1 root root 0 Jul 11 17:25 /sys/devices/system/node/node0/cpumap
-> 
-> after:
-> 
-> -r--r--r--. 1 root root 57344 Jul 13 11:32 /sys/devices/system/node/node0/cpulist
-> -r--r--r--. 1 root root  4096 Jul 13 11:31 /sys/devices/system/node/node0/cpumap
-> 
-> CONFIG_NR_CPUS = 16384
-> -r--r--r--. 1 root root 114688 Jul 13 14:03 /sys/devices/system/node/node0/cpulist
-> -r--r--r--. 1 root root   8192 Jul 13 14:02 /sys/devices/system/node/node0/cpumap
-> 
-> Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
-> Fixes: bb9ec13d156 ("topology: use bin_attribute to break the size limitation of cpumap ABI")
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Phil Auld <pauld@redhat.com>
-> ---
-> 
-> v2: Fix cpumap size calculation. Increase multiplier for cpulist size.
-> 
-> v3: Add comments in code.
-> 
-> v4: Define constants in cpumask.h. Move comments there. Also fix
-> topology.c.
-> 
-> 
->  drivers/base/node.c     |  4 ++--
->  drivers/base/topology.c | 32 ++++++++++++++++----------------
->  include/linux/cpumask.h | 16 ++++++++++++++++
->  3 files changed, 34 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/base/node.c b/drivers/base/node.c
-> index 0ac6376ef7a1..eb0f43784c2b 100644
-> --- a/drivers/base/node.c
-> +++ b/drivers/base/node.c
-> @@ -45,7 +45,7 @@ static inline ssize_t cpumap_read(struct file *file, struct kobject *kobj,
->  	return n;
->  }
->  
-> -static BIN_ATTR_RO(cpumap, 0);
-> +static BIN_ATTR_RO(cpumap, CPUMAP_FILE_MAX_BYTES);
->  
->  static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
->  				   struct bin_attribute *attr, char *buf,
-> @@ -66,7 +66,7 @@ static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
->  	return n;
->  }
->  
-> -static BIN_ATTR_RO(cpulist, 0);
-> +static BIN_ATTR_RO(cpulist, CPULIST_FILE_MAX_BYTES);
->  
->  /**
->   * struct node_access_nodes - Access class device to hold user visible
-> diff --git a/drivers/base/topology.c b/drivers/base/topology.c
-> index ac6ad9ab67f9..89f98be5c5b9 100644
-> --- a/drivers/base/topology.c
-> +++ b/drivers/base/topology.c
-> @@ -62,47 +62,47 @@ define_id_show_func(ppin, "0x%llx");
->  static DEVICE_ATTR_ADMIN_RO(ppin);
->  
->  define_siblings_read_func(thread_siblings, sibling_cpumask);
-> -static BIN_ATTR_RO(thread_siblings, 0);
-> -static BIN_ATTR_RO(thread_siblings_list, 0);
-> +static BIN_ATTR_RO(thread_siblings, CPUMAP_FILE_MAX_BYTES);
-> +static BIN_ATTR_RO(thread_siblings_list, CPULIST_FILE_MAX_BYTES);
->  
->  define_siblings_read_func(core_cpus, sibling_cpumask);
-> -static BIN_ATTR_RO(core_cpus, 0);
-> -static BIN_ATTR_RO(core_cpus_list, 0);
-> +static BIN_ATTR_RO(core_cpus, CPUMAP_FILE_MAX_BYTES);
-> +static BIN_ATTR_RO(core_cpus_list, CPULIST_FILE_MAX_BYTES);
->  
->  define_siblings_read_func(core_siblings, core_cpumask);
-> -static BIN_ATTR_RO(core_siblings, 0);
-> -static BIN_ATTR_RO(core_siblings_list, 0);
-> +static BIN_ATTR_RO(core_siblings, CPUMAP_FILE_MAX_BYTES);
-> +static BIN_ATTR_RO(core_siblings_list, CPULIST_FILE_MAX_BYTES);
->  
->  #ifdef TOPOLOGY_CLUSTER_SYSFS
->  define_siblings_read_func(cluster_cpus, cluster_cpumask);
-> -static BIN_ATTR_RO(cluster_cpus, 0);
-> -static BIN_ATTR_RO(cluster_cpus_list, 0);
-> +static BIN_ATTR_RO(cluster_cpus, CPUMAP_FILE_MAX_BYTES);
-> +static BIN_ATTR_RO(cluster_cpus_list, CPULIST_FILE_MAX_BYTES);
->  #endif
->  
->  #ifdef TOPOLOGY_DIE_SYSFS
->  define_siblings_read_func(die_cpus, die_cpumask);
-> -static BIN_ATTR_RO(die_cpus, 0);
-> -static BIN_ATTR_RO(die_cpus_list, 0);
-> +static BIN_ATTR_RO(die_cpus, CPUMAP_FILE_MAX_BYTES);
-> +static BIN_ATTR_RO(die_cpus_list, CPULIST_FILE_MAX_BYTES);
->  #endif
->  
->  define_siblings_read_func(package_cpus, core_cpumask);
-> -static BIN_ATTR_RO(package_cpus, 0);
-> -static BIN_ATTR_RO(package_cpus_list, 0);
-> +static BIN_ATTR_RO(package_cpus, CPUMAP_FILE_MAX_BYTES);
-> +static BIN_ATTR_RO(package_cpus_list, CPULIST_FILE_MAX_BYTES);
->  
->  #ifdef TOPOLOGY_BOOK_SYSFS
->  define_id_show_func(book_id, "%d");
->  static DEVICE_ATTR_RO(book_id);
->  define_siblings_read_func(book_siblings, book_cpumask);
-> -static BIN_ATTR_RO(book_siblings, 0);
-> -static BIN_ATTR_RO(book_siblings_list, 0);
-> +static BIN_ATTR_RO(book_siblings, CPUMAP_FILE_MAX_BYTES);
-> +static BIN_ATTR_RO(book_siblings_list, CPULIST_FILE_MAX_BYTES);
->  #endif
->  
->  #ifdef TOPOLOGY_DRAWER_SYSFS
->  define_id_show_func(drawer_id, "%d");
->  static DEVICE_ATTR_RO(drawer_id);
->  define_siblings_read_func(drawer_siblings, drawer_cpumask);
-> -static BIN_ATTR_RO(drawer_siblings, 0);
-> -static BIN_ATTR_RO(drawer_siblings_list, 0);
-> +static BIN_ATTR_RO(drawer_siblings, CPUMAP_FILE_MAX_BYTES);
-> +static BIN_ATTR_RO(drawer_siblings_list, CPULIST_FILE_MAX_BYTES);
->  #endif
->  
->  static struct bin_attribute *bin_attrs[] = {
-> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> index fe29ac7cc469..007acdb462bd 100644
-> --- a/include/linux/cpumask.h
-> +++ b/include/linux/cpumask.h
-> @@ -1071,4 +1071,20 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
->  	[0] =  1UL							\
->  } }
->  
-> +/* 
-> + * Provide a valid theoretical max size for cpumap ands cpulist sysfs files to 
+Changes in v2:
+    - Fix comment about number bits for the offset
 
-s/ands/and
+ include/linux/trace_events.h    |  3 ++-
+ kernel/events/core.c            | 20 ++++++++++++++++----
+ kernel/trace/trace_event_perf.c |  5 +++--
+ kernel/trace/trace_kprobe.c     |  4 ++--
+ kernel/trace/trace_probe.h      |  2 +-
+ 5 files changed, 24 insertions(+), 10 deletions(-)
 
-> + * avoid breaking userspace which may allocate a buffer based on the size 
-> + * reported by e.g. fstat.
-> + *
-> + * For cpumap NR_CPUS/2 is a simplification of NR_CPUS/4 + NR_CPUS/32. 
-> + *
-> + * For cpulist 7 is (ceil(log10(NR_CPUS)) + 1) allowing for NR_CPUS to be up to 
-> + * 2 orders of magnitude larger than 8192. This covers a worst-case of every 
-> + * other cpu being on one of two nodes for a very large NR_CPUS.
-> + *
-> + *  Use PAGE_SIZE as a minimum for smaller configurations. 
-> + */
-> +#define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS >> 1) > PAGE_SIZE) ? NR_CPUS >> 1 : PAGE_SIZE)
-> +#define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7) > PAGE_SIZE) ? NR_CPUS * 7 : PAGE_SIZE)
-> +
->  #endif /* __LINUX_CPUMASK_H */
-> -- 
-> 2.31.1
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index e6e95a9f07a5..7ca453a73252 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -850,7 +850,8 @@ extern void perf_trace_destroy(struct perf_event *event);
+ extern int  perf_trace_add(struct perf_event *event, int flags);
+ extern void perf_trace_del(struct perf_event *event, int flags);
+ #ifdef CONFIG_KPROBE_EVENTS
+-extern int  perf_kprobe_init(struct perf_event *event, bool is_retprobe);
++extern int  perf_kprobe_init(struct perf_event *event, bool is_retprobe,
++			     int max_active);
+ extern void perf_kprobe_destroy(struct perf_event *event);
+ extern int bpf_get_kprobe_info(const struct perf_event *event,
+ 			       u32 *fd_type, const char **symbol,
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 23bb19716ad3..184325ff2656 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -9809,24 +9809,34 @@ static struct pmu perf_tracepoint = {
+  * PERF_PROBE_CONFIG_IS_RETPROBE if set, create kretprobe/uretprobe
+  *                               if not set, create kprobe/uprobe
+  *
+- * The following values specify a reference counter (or semaphore in the
+- * terminology of tools like dtrace, systemtap, etc.) Userspace Statically
+- * Defined Tracepoints (USDT). Currently, we use 40 bit for the offset.
++ * PERF_UPROBE_REF_CTR_OFFSET_* specify a reference counter (or semaphore
++ * in the terminology of tools like dtrace, systemtap, etc.) Userspace
++ * Statically Defined Tracepoints (USDT). Currently, we use 32 bit for the
++ * offset.
+  *
+  * PERF_UPROBE_REF_CTR_OFFSET_BITS	# of bits in config as th offset
+  * PERF_UPROBE_REF_CTR_OFFSET_SHIFT	# of bits to shift left
++ *
++ * PERF_KPROBE_MAX_ACTIVE_* defines log2 of max_active for kretprobe.
++ * KRETPROBE_MAXACTIVE_MAX is 4096. We allow 4095 here to save a bit.
+  */
+ enum perf_probe_config {
+ 	PERF_PROBE_CONFIG_IS_RETPROBE = 1U << 0,  /* [k,u]retprobe */
+ 	PERF_UPROBE_REF_CTR_OFFSET_BITS = 32,
+ 	PERF_UPROBE_REF_CTR_OFFSET_SHIFT = 64 - PERF_UPROBE_REF_CTR_OFFSET_BITS,
++	PERF_KPROBE_MAX_ACTIVE_BITS = 4,
++	PERF_KPROBE_MAX_ACTIVE_SHIFT = 64 - PERF_KPROBE_MAX_ACTIVE_BITS,
+ };
+ 
+ PMU_FORMAT_ATTR(retprobe, "config:0");
+ #endif
+ 
+ #ifdef CONFIG_KPROBE_EVENTS
++/* max_active is specified by log2, to allow larger values if needed */
++PMU_FORMAT_ATTR(max_active_log2, "config:59-63");
++
+ static struct attribute *kprobe_attrs[] = {
++	&format_attr_max_active_log2.attr,
+ 	&format_attr_retprobe.attr,
+ 	NULL,
+ };
+@@ -9857,6 +9867,7 @@ static int perf_kprobe_event_init(struct perf_event *event)
+ {
+ 	int err;
+ 	bool is_retprobe;
++	int max_active_log2;
+ 
+ 	if (event->attr.type != perf_kprobe.type)
+ 		return -ENOENT;
+@@ -9871,7 +9882,8 @@ static int perf_kprobe_event_init(struct perf_event *event)
+ 		return -EOPNOTSUPP;
+ 
+ 	is_retprobe = event->attr.config & PERF_PROBE_CONFIG_IS_RETPROBE;
+-	err = perf_kprobe_init(event, is_retprobe);
++	max_active_log2 = event->attr.config >> PERF_KPROBE_MAX_ACTIVE_SHIFT;
++	err = perf_kprobe_init(event, is_retprobe, 1U << max_active_log2);
+ 	if (err)
+ 		return err;
+ 
+diff --git a/kernel/trace/trace_event_perf.c b/kernel/trace/trace_event_perf.c
+index a114549720d6..129000327809 100644
+--- a/kernel/trace/trace_event_perf.c
++++ b/kernel/trace/trace_event_perf.c
+@@ -245,7 +245,8 @@ void perf_trace_destroy(struct perf_event *p_event)
+ }
+ 
+ #ifdef CONFIG_KPROBE_EVENTS
+-int perf_kprobe_init(struct perf_event *p_event, bool is_retprobe)
++int perf_kprobe_init(struct perf_event *p_event, bool is_retprobe,
++					 int max_active)
+ {
+ 	int ret;
+ 	char *func = NULL;
+@@ -271,7 +272,7 @@ int perf_kprobe_init(struct perf_event *p_event, bool is_retprobe)
+ 
+ 	tp_event = create_local_trace_kprobe(
+ 		func, (void *)(unsigned long)(p_event->attr.kprobe_addr),
+-		p_event->attr.probe_offset, is_retprobe);
++		p_event->attr.probe_offset, is_retprobe, max_active);
+ 	if (IS_ERR(tp_event)) {
+ 		ret = PTR_ERR(tp_event);
+ 		goto out;
+diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+index 47cebef78532..3ad30cfce9c3 100644
+--- a/kernel/trace/trace_kprobe.c
++++ b/kernel/trace/trace_kprobe.c
+@@ -1784,7 +1784,7 @@ static int unregister_kprobe_event(struct trace_kprobe *tk)
+ /* create a trace_kprobe, but don't add it to global lists */
+ struct trace_event_call *
+ create_local_trace_kprobe(char *func, void *addr, unsigned long offs,
+-			  bool is_return)
++			  bool is_return, int max_active)
+ {
+ 	enum probe_print_type ptype;
+ 	struct trace_kprobe *tk;
+@@ -1799,7 +1799,7 @@ create_local_trace_kprobe(char *func, void *addr, unsigned long offs,
+ 	event = func ? func : "DUMMY_EVENT";
+ 
+ 	tk = alloc_trace_kprobe(KPROBE_EVENT_SYSTEM, event, (void *)addr, func,
+-				offs, 0 /* maxactive */, 0 /* nargs */,
++				offs, max_active, 0 /* nargs */,
+ 				is_return);
+ 
+ 	if (IS_ERR(tk)) {
+diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+index 92cc149af0fd..26fe21980793 100644
+--- a/kernel/trace/trace_probe.h
++++ b/kernel/trace/trace_probe.h
+@@ -376,7 +376,7 @@ extern int traceprobe_set_print_fmt(struct trace_probe *tp, enum probe_print_typ
+ #ifdef CONFIG_PERF_EVENTS
+ extern struct trace_event_call *
+ create_local_trace_kprobe(char *func, void *addr, unsigned long offs,
+-			  bool is_return);
++			  bool is_return, int max_active);
+ extern void destroy_local_trace_kprobe(struct trace_event_call *event_call);
+ 
+ extern struct trace_event_call *
+-- 
+2.32.0
+

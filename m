@@ -2,158 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3109A575670
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 22:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B7257566D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 22:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240525AbiGNUjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 16:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S240501AbiGNUjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 16:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240511AbiGNUjt (ORCPT
+        with ESMTP id S240299AbiGNUjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 16:39:49 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6BC422E0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 13:39:48 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id y4so3914813edc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 13:39:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TExNSZ/s/035rcwvcGhKf8b3mCtg1+8MAx2E+0mZs0k=;
-        b=QlimJt9jnXA9WGUrrQpsyCnanjLLw2jppJeg8tlDJyUjoU7EVZkhjwQfw1utPbJFYw
-         V2J/VhZUmpGT/0AOkO/cGcOvDnr/166nGbtK/23TIpPRTkOHY0byi1fwM5PVz2v65CaC
-         CGxmh6/85iCwDd/Ru/CPAYbK8QhOpNrWTrRyY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TExNSZ/s/035rcwvcGhKf8b3mCtg1+8MAx2E+0mZs0k=;
-        b=p3sU8ocDWUtN5XERyvV71L5gL58j8+/DbbU07TtK0+z2w+r7LEPHZkfvK3rjgJysWW
-         Qk1T1y/Il2nAidLu83x6twkmfXbZFa3RGsy2MjwDL0095ObYpaEW5uoqJQlEYA/psUgL
-         XrCzToqcNqdFzgHJMIKb3/6x2dkdtnSXR97JMyrORDiL3pxiBa9rIFClLJAzPK6+Es6Z
-         /kosi2wy8YR3CTTOdtR3le1acuIFJfSJaUBKGr1V3jbopyTuCu7br7dowC4fgGduEplS
-         CGvbdycNi8eJl9YEB6ooauadgnpEJQjan+LC23ypXK4TocA0BMnn3hiAmC0MH/twe+lV
-         PXMg==
-X-Gm-Message-State: AJIora+lrwht2ZP1j9qEjsgd1pHlVJ88jR6ChPCvfaDKcCb19D38kqOm
-        pZiUnl9SGvOzBlTU55pHwGpVKb99QqUWJsQJ3tE=
-X-Google-Smtp-Source: AGRyM1vUZ8+qkOcG5O7a5PEGyqG9omOnCYqjvTIzBbrPShYDWCSPZTdb2VuI3n4fj5aExC1+Ez5JCQ==
-X-Received: by 2002:a05:6402:2549:b0:43a:dcf2:27f8 with SMTP id l9-20020a056402254900b0043adcf227f8mr14632764edb.143.1657831186903;
-        Thu, 14 Jul 2022 13:39:46 -0700 (PDT)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id y18-20020a1709063a9200b007030c97ae62sm1090567ejd.191.2022.07.14.13.39.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 13:39:43 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id r2so3068952wrs.3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 13:39:41 -0700 (PDT)
-X-Received: by 2002:a05:6000:1f8c:b0:21d:7e98:51ba with SMTP id
- bw12-20020a0560001f8c00b0021d7e9851bamr9427301wrb.442.1657831181447; Thu, 14
- Jul 2022 13:39:41 -0700 (PDT)
+        Thu, 14 Jul 2022 16:39:42 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFC53B95C;
+        Thu, 14 Jul 2022 13:39:41 -0700 (PDT)
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oC5cT-000CPV-G6; Thu, 14 Jul 2022 22:39:34 +0200
+Received: from [85.1.206.226] (helo=linux-3.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oC5cT-0000C8-0g; Thu, 14 Jul 2022 22:39:33 +0200
+Subject: Re: [PATCH v2,bpf-next] bpf: Don't redirect packets with invalid
+ pkt_len
+To:     Stanislav Fomichev <sdf@google.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        hawk@kernel.org, ast@kernel.org, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        weiyongjun1@huawei.com, yuehaibing@huawei.com
+References: <20220714060959.25232-1-shaozhengchao@huawei.com>
+ <CAKH8qBtxJOCWoON6QXygOTD7AqjF+k=-4JWPHXEAQh-TO+W54A@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <7b333bcc-c8ed-f1f8-8331-58cba7897637@iogearbox.net>
+Date:   Thu, 14 Jul 2022 22:39:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20220712183238.844813653@linuxfoundation.org> <CA+G9fYtntg7=zWSs-dm+n_AUr_u0eBOU0zrwWqMeXZ+SF6_bLw@mail.gmail.com>
- <eb63e4ce-843f-c840-060e-6e15defd3c4d@roeck-us.net> <CAHk-=wj5cOA+fbGeV15kvwe6YGT54Wsk8F2UGoekVQLTPJz_pw@mail.gmail.com>
- <CAHk-=wgq1soM4gudypWLVQdYuvJbXn38LtvJMtnLZX+RTypqLg@mail.gmail.com>
- <Ys/bYJ2bLVfNBjFI@nazgul.tnic> <CAHk-=wjdafFUFwwQNvNQY_D32CBXnp6_V=DL2FpbbdstVxafow@mail.gmail.com>
- <YtBLe5AziniDm/Wt@nazgul.tnic>
-In-Reply-To: <YtBLe5AziniDm/Wt@nazgul.tnic>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 14 Jul 2022 13:39:25 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wghZB60WCh5M_Y0n1qGYbg-1fvWFnU-bV-4j1bQM1qE5A@mail.gmail.com>
-Message-ID: <CAHk-=wghZB60WCh5M_Y0n1qGYbg-1fvWFnU-bV-4j1bQM1qE5A@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/78] 5.15.55-rc1 review
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Slade Watkins <slade@sladewatkins.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+In-Reply-To: <CAKH8qBtxJOCWoON6QXygOTD7AqjF+k=-4JWPHXEAQh-TO+W54A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26601/Thu Jul 14 09:57:26 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 10:02 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Thu, Jul 14, 2022 at 09:51:40AM -0700, Linus Torvalds wrote:
-> > Oh, absolutely. Doing an -rc7 is normal.
->
-> Good. I'm gathering all the fallout fixes and will send them to you on
-> Sunday, if nothing unexpected happens.
+On 7/14/22 8:22 PM, Stanislav Fomichev wrote:
+> On Wed, Jul 13, 2022 at 11:05 PM Zhengchao Shao
+> <shaozhengchao@huawei.com> wrote:
+>>
+>> Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
+>> skbs, that is, the flow->head is null.
+>> The root cause, as the [2] says, is because that bpf_prog_test_run_skb()
+>> run a bpf prog which redirects empty skbs.
+>> So we should determine whether the length of the packet modified by bpf
+>> prog is valid before forwarding it directly.
+>>
+>> LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
+>> LINK: [2] https://www.spinics.net/lists/netdev/msg777503.html
+>>
+>> Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
+>> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> 
+> Reviewed-by: Stanislav Fomichev <sdf@google.com>
+> 
+> Daniel, do you see any issues with this approach?
 
-Btw, I assume that includes the clang fix for the
-x86_spec_ctrl_current section attribute.
+I think it's fine, maybe this could be folded into:
 
-That's kind of personally embarrassing that it slipped through: I do
-all my normal test builds that I actually *boot* with clang.
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 750d7d173a20..256cd18cfe22 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -957,6 +957,8 @@ static int convert___skb_to_skb(struct sk_buff *skb, struct __sk_buff *__skb)
 
-But since I kept all of the embargoed stuff outside my normal trees,
-it also meant that the test builds I did didn't have my "this is my
-clang tree" stuff in it.
+         if (!__skb)
+                 return 0;
++       if (!skb->len)
++               return -EINVAL;
 
-And so I - like apparently everybody else - only did those builds with gcc.
+         /* make sure the fields we don't use are zeroed */
+         if (!range_is_zero(__skb, 0, offsetof(struct __sk_buff, mark)))
 
-And gcc for some reason doesn't care about this whole "you redeclared
-that variable with a different attribute" thing.
+> I wonder if we might also want to add some WARN_ON to the
+> __bpf_redirect_common routine gated by #ifdef CONFIG_DEBUG_NET ?
+> In case syscaller manages to hit similar issues elsewhere..
 
-And sadly, our percpu accessor functions don't verify these things
-either, so you can write code like this:
+Assuming the issue is generic (and CONFIG_DEBUG_NET only enabled by things like
+syzkaller), couldn't we do something like the below?
 
-    unsigned long myvariable;
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index f6a27ab19202..c9988a785294 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -2459,6 +2459,17 @@ static inline void skb_set_tail_pointer(struct sk_buff *skb, const int offset)
 
-    unsigned long test_fn(void)
-    {
-        return this_cpu_read(myvariable);
-    }
+  #endif /* NET_SKBUFF_DATA_USES_OFFSET */
 
-and the compiler will not complain about anything at all, and happily
-generate completely nonsensical code like
++static inline void skb_assert_len(struct sk_buff *skb)
++{
++#ifdef CONFIG_DEBUG_NET
++       if (unlikey(!skb->len)) {
++               pr_err("%s\n", __func__);
++               skb_dump(KERN_ERR, skb, false);
++               WARN_ON_ONCE(1);
++       }
++#endif /* CONFIG_DEBUG_NET */
++}
++
+  /*
+   *     Add data to an sk_buff
+   */
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 978ed0622d8f..53c4b9fd22c0 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4168,7 +4168,7 @@ int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
+         bool again = false;
 
-        movq %gs:myvariable(%rip), %rax
+         skb_reset_mac_header(skb);
+-
++       skb_assert_len(skb);
+         if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_SCHED_TSTAMP))
+                 __skb_tstamp_tx(skb, NULL, NULL, skb->sk, SCM_TSTAMP_SCHED);
 
-for it, which will do entirely the wrong thing because 'myvariable'
-wasn't allocated in the percpu section.
 
-In the 'x86_spec_ctrl_current' case, that nonsensical code _worked_
-(with gcc), because despite the declaration being for a regular
-variable, the actual definition was in the proper segment.
 
-But that 'myvariable' thing above does end up being another example of
-how we are clearly missing some type checkng in this area.
+>> ---
+>> v1: should not check len in fast path
+>>
+>>   net/bpf/test_run.c | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+>> index 2ca96acbc50a..750d7d173a20 100644
+>> --- a/net/bpf/test_run.c
+>> +++ b/net/bpf/test_run.c
+>> @@ -1152,6 +1152,12 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+>>          ret = convert___skb_to_skb(skb, ctx);
+>>          if (ret)
+>>                  goto out;
+>> +
+>> +       if (skb->len == 0) {
+>> +               ret = -EINVAL;
+>> +               goto out;
+>> +       }
+>> +
+>>          ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
+>>          if (ret)
+>>                  goto out;
+>> --
+>> 2.17.1
+>>
 
-I'm not sure if there's any way to get that section mismatch at
-compile-time at all. For the static declarations, we could just make
-DECLARE_PER_CPU() add some prefix/postfix to the name (and obviously
-then do it at use time too).
-
-We have that '__pcpu_scope_##name' thing to make sure of globally
-unique naming due to the whole weak type thing. I wonder if we could
-do something similar to verify that "yes, this has been declared as a
-percpu variable" at use time?
-
-                   Linus

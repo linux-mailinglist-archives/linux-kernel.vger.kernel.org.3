@@ -2,194 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2262574620
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A735745E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 09:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237527AbiGNHs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 03:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
+        id S237187AbiGNHhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 03:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237612AbiGNHrn (ORCPT
+        with ESMTP id S229645AbiGNHhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 03:47:43 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DAB3AB23;
-        Thu, 14 Jul 2022 00:47:15 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 78BA21A2049;
-        Thu, 14 Jul 2022 09:47:14 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 12BDE1A2034;
-        Thu, 14 Jul 2022 09:47:14 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 6AD0F180327D;
-        Thu, 14 Jul 2022 15:47:12 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     l.stach@pengutronix.de, bhelgaas@google.com, robh+dt@kernel.org,
-        broonie@kernel.org, lorenzo.pieralisi@arm.com, festevam@gmail.com,
-        francesco.dolcini@toradex.com
-Cc:     hongxing.zhu@nxp.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: [PATCH v15 17/17] PCI: imx6: Reformat suspend callback to keep symmetric with resume
-Date:   Thu, 14 Jul 2022 15:31:09 +0800
-Message-Id: <1657783869-19194-18-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1657783869-19194-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1657783869-19194-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 14 Jul 2022 03:37:15 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6FC1F639
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 00:37:12 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 1201A22246;
+        Thu, 14 Jul 2022 09:37:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1657784230;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sj8dYrzAUpWONlRlYvGhP0wqfCyH1Y3205lfjeCKT90=;
+        b=ryPrkb2gY1Qh9i3w6MtJUKWW9WlpibTjQVNXg/M3kLzmmbTNuZLkMG4BWh3I7/pleZdGGb
+        6E6OeFXtOV608dMhZHC5cMj1kMffNjgYmC+aRyh2mZDlu3zavSlOl7IrVMcdeFTaB845R/
+        gpBxhDd7bTcfJgF/dq86M2n8p6CLZzs=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Thu, 14 Jul 2022 09:37:09 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Graeme Gregory <quic_ggregory@quicinc.com>,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mtd: spi-nor: winbond: add support for W25Q512NW-IQ
+In-Reply-To: <20220713211210.1945044-1-quic_jaehyoo@quicinc.com>
+References: <20220713211210.1945044-1-quic_jaehyoo@quicinc.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <4d4a2abab1508fe80e36c2e524f98ed8@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create imx6_pcie_stop_link() and imx6_pcie_host_exit() functions.
-Encapsulate clocks, regulators disables and PHY uninitialization into
-imx6_pcie_host_exit().
+Hi,
 
-To keep suspend/resume symmetric as much as possible, invoke these two
-new created functions in suspend callback.
+thanks for the update.
 
-To be symmetric with imx6_pcie_host_exit(), move imx6_pcie_clk_enable()
-to imx6_pcie_host_init() from imx6_pcie_deassert_core_reset().
+Am 2022-07-13 23:12, schrieb Jae Hyun Yoo:
+> Add support for Winbond W25Q512NW-IQ/IN
+> 
+> Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+> Link: 
+> https://www.winbond.com/resource-files/W25Q512NW%20RevB%2007192021.pdf
+> Reviewed-by: Cédric Le Goater <clg@kaod.org>
+> ---
+> Changes in v2:
+>  * Refined commit message (Michael)
+> 
+> Test result on AST2600 SoC's SPI controller:
+> $ cat
+> /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/jedec_id
+> ef6020
+> 
+> $ cat
+> /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/manufacturer
+> winbond
+> 
+> $ cat
+> /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/partname
+> w25q512nwq
+> 
+> $ hexdump
+> /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/sfdp
+> 0000000 4653 5044 0106 ff01 0600 1001 0080 ff00
+> 0000010 0084 0201 00d0 ff00 ffff ffff ffff ffff
+> 0000020 ffff ffff ffff ffff ffff ffff ffff ffff
+> *
+> 0000080 20e5 fffb ffff 1fff eb44 6b08 3b08 bb42
+> 0000090 fffe ffff ffff 0000 ffff eb40 200c 520f
+> 00000a0 d810 0000 0233 00a6 e781 d914 63e9 3376
+> 00000b0 757a 757a bdf7 5cd5 f719 ff5d 70e9 a5f9
+> 00000c0 ffff ffff ffff ffff ffff ffff ffff ffff
+> 00000d0 0aff fff0 ff21 ffdc
+> 00000d8
 
-Link: https://lore.kernel.org/r/1656645935-1370-18-git-send-email-hongxing.zhu@nxp.com
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
----
- drivers/pci/controller/dwc/pci-imx6.c | 62 ++++++++++++++++-----------
- 1 file changed, 37 insertions(+), 25 deletions(-)
+md5sum of this file is missing.
 
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index 21e9101f63f0..b7a7e3465f28 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -703,13 +703,6 @@ static int imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
- {
- 	struct dw_pcie *pci = imx6_pcie->pci;
- 	struct device *dev = pci->dev;
--	int ret;
--
--	ret = imx6_pcie_clk_enable(imx6_pcie);
--	if (ret) {
--		dev_err(dev, "unable to enable pcie clocks: %d\n", ret);
--		return ret;
--	}
- 
- 	switch (imx6_pcie->drvdata->variant) {
- 	case IMX8MQ:
-@@ -904,6 +897,14 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
- 	return 0;
- }
- 
-+static void imx6_pcie_stop_link(struct dw_pcie *pci)
-+{
-+	struct device *dev = pci->dev;
-+
-+	/* Turn off PCIe LTSSM */
-+	imx6_pcie_ltssm_disable(dev);
-+}
-+
- static int imx6_pcie_host_init(struct pcie_port *pp)
- {
- 	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-@@ -923,11 +924,17 @@ static int imx6_pcie_host_init(struct pcie_port *pp)
- 	imx6_pcie_assert_core_reset(imx6_pcie);
- 	imx6_pcie_init_phy(imx6_pcie);
- 
-+	ret = imx6_pcie_clk_enable(imx6_pcie);
-+	if (ret) {
-+		dev_err(dev, "unable to enable pcie clocks: %d\n", ret);
-+		goto err_reg_disable;
-+	}
-+
- 	if (imx6_pcie->phy) {
- 		ret = phy_power_on(imx6_pcie->phy);
- 		if (ret) {
- 			dev_err(dev, "pcie phy power up failed\n");
--			goto err_reg_disable;
-+			goto err_clk_disable;
- 		}
- 	}
- 
-@@ -941,24 +948,40 @@ static int imx6_pcie_host_init(struct pcie_port *pp)
- 		ret = phy_init(imx6_pcie->phy);
- 		if (ret) {
- 			dev_err(dev, "waiting for phy ready timeout!\n");
--			goto err_clk_disable;
-+			goto err_phy_off;
- 		}
- 	}
- 	imx6_setup_phy_mpll(imx6_pcie);
- 
- 	return 0;
- 
--err_clk_disable:
--	imx6_pcie_clk_disable(imx6_pcie);
- err_phy_off:
- 	if (imx6_pcie->phy)
- 		phy_power_off(imx6_pcie->phy);
-+err_clk_disable:
-+	imx6_pcie_clk_disable(imx6_pcie);
- err_reg_disable:
- 	if (imx6_pcie->vpcie)
- 		regulator_disable(imx6_pcie->vpcie);
- 	return ret;
- }
- 
-+static void imx6_pcie_host_exit(struct pcie_port *pp)
-+{
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+	struct imx6_pcie *imx6_pcie = to_imx6_pcie(pci);
-+
-+	if (imx6_pcie->phy) {
-+		if (phy_power_off(imx6_pcie->phy))
-+			dev_err(pci->dev, "unable to power off PHY\n");
-+		phy_exit(imx6_pcie->phy);
-+	}
-+	imx6_pcie_clk_disable(imx6_pcie);
-+
-+	if (imx6_pcie->vpcie)
-+		regulator_disable(imx6_pcie->vpcie);
-+}
-+
- static const struct dw_pcie_host_ops imx6_pcie_host_ops = {
- 	.host_init = imx6_pcie_host_init,
- };
-@@ -1008,25 +1031,14 @@ static void imx6_pcie_pm_turnoff(struct imx6_pcie *imx6_pcie)
- static int imx6_pcie_suspend_noirq(struct device *dev)
- {
- 	struct imx6_pcie *imx6_pcie = dev_get_drvdata(dev);
-+	struct pcie_port *pp = &imx6_pcie->pci->pp;
- 
- 	if (!(imx6_pcie->drvdata->flags & IMX6_PCIE_FLAG_SUPPORTS_SUSPEND))
- 		return 0;
- 
- 	imx6_pcie_pm_turnoff(imx6_pcie);
--	imx6_pcie_ltssm_disable(dev);
--	imx6_pcie_clk_disable(imx6_pcie);
--	switch (imx6_pcie->drvdata->variant) {
--	case IMX8MM:
--		if (phy_power_off(imx6_pcie->phy))
--			dev_err(dev, "unable to power off PHY\n");
--		phy_exit(imx6_pcie->phy);
--		break;
--	default:
--		break;
--	}
--
--	if (imx6_pcie->vpcie)
--		regulator_disable(imx6_pcie->vpcie);
-+	imx6_pcie_stop_link(imx6_pcie->pci);
-+	imx6_pcie_host_exit(pp);
- 
- 	return 0;
- }
--- 
-2.25.1
+For the record: there is still an ongoing discussion on the v1 of
+this patch.
 
+-michael

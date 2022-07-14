@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CCC574919
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC6757491C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237477AbiGNJcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
+        id S238385AbiGNJc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238180AbiGNJb4 (ORCPT
+        with ESMTP id S238321AbiGNJcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:31:56 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5BF193EB
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:31:55 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id n18so1870564lfq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:31:55 -0700 (PDT)
+        Thu, 14 Jul 2022 05:32:08 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0D22B256
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:32:03 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id o7so1825554lfq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:32:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PMZaNjQtAbx8J0mKRSpXwktuMPwXaREJXWQ/VLykmlA=;
-        b=CV/iF5PngbOmaQbK3ZOIIcJ9SkDO4TLcvHWghMhvpmE5BTDLqPUTFdvd0hSXgVQ174
-         WV47TTX/ZyVZ8aP1Hmx+EUVcDNTW5QVHrOsh8CU+7tZ0Hhm9jc1Vbw6/+py2Tqsdz5f5
-         AK/ChQhXHfqBx5I6jO3qkMqAvOY1uaMH92HWBnajolSa4s24wa8KnV1QYZ4aqvGkLS+n
-         ZH0ZkcVOzgDNBUMtHwGdRiai9nC4NZ9c54hWxZDofGgx97xREC/MYbpwtTxmcDx9Fr4h
-         j7ry1oGVBkEeMedlHOfb6ugnqwjr+DgglfIMi0/JHz5X5biUsDMhreLIUrraAUF/nMoE
-         PI5A==
+        bh=qLoqEanmHmcOVGRPRRT+aRCQvQ8+n03ZqH5LbbY6VbQ=;
+        b=qqv8VRNxws6KBp3n3JqlUE94PaWsQnNPeJTcW/Zk7KymYZX7T7kzAGVhLc59C3qlh/
+         qulRUDcoyjV10n2ah8TyFSr2vEXvjiN3x8/RyNmP8z0G3blX//ngjPZQ7Yj5JeVcp5FN
+         Ldlqh03s7WTVuguG2fVxH4JFARBX6Y5B16CsCvgLK1vGMM3URMXAC1rZ/1+aApfS49cM
+         hbPwKuQz++OeyJcZhaRdnycCqWgBjERj9nfqySGAix7X1oxJuZL17naBCWNdL4vYNniD
+         iu6dvXxReYpHt22xT+z5OUvg3zlOtLBx6TlDZK1vq9OKaf4fITbpDzIUM+r0W8Zrm3St
+         IwHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=PMZaNjQtAbx8J0mKRSpXwktuMPwXaREJXWQ/VLykmlA=;
-        b=MZ5/pZvy6C6ZEgCn07An6czG1y9hdn6qaJRkmrI0bpf3DYaAE65gGAOv5MqxA13uWL
-         AM8+45P4HeYbHLfatcoxBTjUB6ZytwNCrYzNQ7CXrf1aGmTEliXDnrurMMgEqMXd1dPb
-         2v85tKiTlyoMtaDbPjHrUijSjKP7/ToSAtxGIS0SdRI9lhx2Qf1LJo3nr2ES+0PEcsOS
-         nAb0Qsz0H1InoQg3uEepMDMDBRZqNmAiWXrSXZAEDii47IKXvp7SohH9bHUlNwljmWZp
-         Bqi/JVPq4Zvqle3jyDuQeW1LB7aiVvs5QFry8ELS4sG6WqpJPB8sB9q7+QpFNdLtqdwy
-         dlWw==
-X-Gm-Message-State: AJIora88CZiPQZFyuRjMNYFeDLwJny5f7bABHLY2OCXdAbTGsvO8SGy1
-        4zBXDYEzKggT0i19C6xchOwQnw==
-X-Google-Smtp-Source: AGRyM1sj75WrIm4R5Qs3nZKUQGBZwT2cTSTGxK9L3cPa36VVhOBtfYdLvyXmgesp8yOvZ0gQtlHQoQ==
-X-Received: by 2002:ac2:42c5:0:b0:489:ce27:a777 with SMTP id n5-20020ac242c5000000b00489ce27a777mr4692866lfl.596.1657791113767;
-        Thu, 14 Jul 2022 02:31:53 -0700 (PDT)
+        bh=qLoqEanmHmcOVGRPRRT+aRCQvQ8+n03ZqH5LbbY6VbQ=;
+        b=CtfkIwQmQXfrWqghpbrWxVnAh1yO8A3IzCgUAa6Ick4vX3GDF3GqQ02W7Jhxk2/S7I
+         Zz0h6FVBVxeJPYmGlneMYRjrFbuJ4SOKEXUAbY0Gi3axuQmd5eqder7ibJ9plNnp0lOe
+         Gzt6Vek9rA7qaIj2z2Tqe2uvNN/dDhm2z3v2he/QZicL5bF+Nbi7cJyyl/7uvHq8Qdxw
+         cYuqI/n+nTG0U39wWfO/vMphfjEyESuYm4DSOxgBJVwZtPdGdmDU3HdzlmslcN/obu+U
+         Qg9lgl2BWRNvB8YdjV+Qjo2/6bT1bNZnN7uLlfgShrOkftBaaenhQEvtdnXUrNY0vV6C
+         KSQQ==
+X-Gm-Message-State: AJIora+49QwMyNffL3+TBqRJzELqpVsGYihsjJ2EVVhoQjj4PSUM77fX
+        cPTxkvWg1GEqQyRlqKO0lVJQjQ==
+X-Google-Smtp-Source: AGRyM1tQqgmtfH0+ObvZ9P9WicC7fls3gdqpTXkF74E4fFHf2mZS8SoD7oxLCgJUT0sZDQDXxkXz7Q==
+X-Received: by 2002:a05:6512:238a:b0:489:e6f6:c13f with SMTP id c10-20020a056512238a00b00489e6f6c13fmr4982398lfv.673.1657791122376;
+        Thu, 14 Jul 2022 02:32:02 -0700 (PDT)
 Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id y12-20020a05651c106c00b0025d53e34fe7sm187744ljm.56.2022.07.14.02.31.52
+        by smtp.gmail.com with ESMTPSA id f5-20020a05651c03c500b0025a724f2935sm184502ljp.137.2022.07.14.02.32.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 02:31:53 -0700 (PDT)
-Message-ID: <40a60647-01f2-1e3f-88aa-8625903e1081@linaro.org>
-Date:   Thu, 14 Jul 2022 11:31:51 +0200
+        Thu, 14 Jul 2022 02:32:01 -0700 (PDT)
+Message-ID: <2a7c5cb3-f7a6-8953-e16b-5675e62562e1@linaro.org>
+Date:   Thu, 14 Jul 2022 11:31:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2 29/30] phy: qcom-qmp-pcie-msm8996: drop reset lane
- suffix
+Subject: Re: [PATCH v2 30/30] phy: qcom-qmp-usb: drop pipe clock lane suffix
 Content-Language: en-US
 To:     Johan Hovold <johan+linaro@kernel.org>,
         Vinod Koul <vkoul@kernel.org>,
@@ -68,9 +67,9 @@ Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220707134725.3512-1-johan+linaro@kernel.org>
- <20220707134725.3512-30-johan+linaro@kernel.org>
+ <20220707134725.3512-31-johan+linaro@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220707134725.3512-30-johan+linaro@kernel.org>
+In-Reply-To: <20220707134725.3512-31-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,31 +83,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 07/07/2022 15:47, Johan Hovold wrote:
-> The lane reset is defined in the "lane" node so there's no need to keep
-> adding a redundant lane-number suffix to the reset name.
+> The pipe clock is defined in the "lane" node so there's no need to keep
+> adding a redundant lane-number suffix to the clock name.
 > 
-> Update driver to support the new binding where the "lane" reset name has
-> been deprecated by instead requesting the reset by index.
+> Update driver to support the new binding where the pipe clock name has
+> been deprecated by instead requesting the clock by index.
 > 
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-> index af2f14a53b38..1734fb01955a 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-> @@ -909,9 +909,7 @@ int qcom_qmp_phy_pcie_msm8996_create(struct device *dev, struct device_node *np,
->  				     "failed to get lane%d pipe clock\n", id);
->  	}
->  
-> -	/* Get lane reset, if any */
-> -	snprintf(prop_name, sizeof(prop_name), "lane%d", id);
-> -	qphy->lane_rst = of_reset_control_get_exclusive(np, prop_name);
 
 
-I guess prop_name variable should be removed here.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,

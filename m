@@ -2,73 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B03C574B52
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E603574B55
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235704AbiGNK6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        id S237794AbiGNK7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237695AbiGNK6o (ORCPT
+        with ESMTP id S237669AbiGNK7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:58:44 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBFF63DF;
-        Thu, 14 Jul 2022 03:58:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5D905CE25B7;
-        Thu, 14 Jul 2022 10:58:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C65C34114;
-        Thu, 14 Jul 2022 10:58:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657796311;
-        bh=blzTjVSdteYEEgziH1egT1Z2bdKseoVJHmbkMNfVChc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Znv3Xz9kEA/E3bEnKB3yklOJOeuKWJyI5kWfbITCR6uRU1ZrOXgaT7h2B6AIIa9Xs
-         Ff6sG5k6ejG2owjqR53K8e4rd/M5u0OgAo2B3a7Gyzjs7raRBUzRvj1xRvGXtdIV6B
-         sphSfKyZqmWZBktb9a4hFx5Wk5+YAZlXm9YTcxSitALd5gmm+T/weYwM9SsdATtmhf
-         50/HpTrzgOOmI+UDyub2aixaf7hFL/rekDZyj0xTb97QAHmtNcZmv8PdbK33pVcyTf
-         O75dXTaZOwF0q7MN4Vbao9+vIaCUVL5RNXVhMQhGD6BdG1KmoklbfIx8mc4hrnJqX8
-         FbtL400aYAjEg==
-Message-ID: <65a1d324-9645-56a3-fd81-7ff87897fe49@kernel.org>
-Date:   Thu, 14 Jul 2022 12:58:27 +0200
+        Thu, 14 Jul 2022 06:59:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1D4F4B4BA
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:59:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657796381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FavxfYWL200Y0rn9Lp1shFMwNCXImob7qzskzLrDddU=;
+        b=Dbh2yNnDdKna4OsqEf8qT/hwofO2srJEREsi94/iHyGLDCeZZIDJBwiShzHFQMD9SCBMBc
+        WV0z5GvlV1ejUumm/EL8gcxvfHhtJ7rHzjAxkQvU3L4yP04UUkjcFokruKR9RHugco3cf4
+        II1VF9YwNjgqvwt6qDWsfPyEhIinwPs=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-41-OOjnwfdRMZiMFvxBPBpBHQ-1; Thu, 14 Jul 2022 06:59:37 -0400
+X-MC-Unique: OOjnwfdRMZiMFvxBPBpBHQ-1
+Received: by mail-wm1-f72.google.com with SMTP id n18-20020a05600c501200b003a050cc39a0so494640wmr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:59:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=FavxfYWL200Y0rn9Lp1shFMwNCXImob7qzskzLrDddU=;
+        b=p/Yjk6CzR9QRDvgRGQJhopVY0u1JoYtuj5U9q30k/CB19eBdku37UvFfjun1u2Ix9m
+         +1BLWXUzXzketAGAwYYJ+/TgFbs3Rmb8ejhyny0/8NOsopwuxy/1PnLDRQJbttztfsIm
+         Hy25tdjFr2BQCfRu1nmXANlq7IhIoVW5Usrl7/hcWRVv5+acsOdZ1R14p1zbKcnMEwmN
+         /cH+1DvYSHrQGK9MJQx6MW1FjoErmt8ViA6xVUi78VlM/N54xSOtBq8JBI6utR8YFtw5
+         +11xTOK3ynQ+lWvn/YHKxzFLpw9nrwCFx/L+uZNS1BvesCDMKfzwWoTbP4DsRKt+RJ+Z
+         rBkQ==
+X-Gm-Message-State: AJIora8Cgg7DZnc7qvRVfnm5yUUrEb68xJBSNTBl5z4cxfquR1tSJHyv
+        dOoBFO87k9AW+3AXtSlZSE4q0oFdEaaphQb7ecEgUn6txwAVlqSdbudTRhFrE9aPTTlBM3DeZeG
+        A/norqSRpBogQP6Mnp4K7ij8+
+X-Received: by 2002:a5d:47a4:0:b0:21d:99b2:9434 with SMTP id 4-20020a5d47a4000000b0021d99b29434mr8238608wrb.597.1657796376742;
+        Thu, 14 Jul 2022 03:59:36 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vMFeyb0UzdUzINxZqK//aaNWZxJ8umYEnULpjLkJUb8f7TOKCnyWQdEJVvreAIVsbJGvW6Mg==
+X-Received: by 2002:a5d:47a4:0:b0:21d:99b2:9434 with SMTP id 4-20020a5d47a4000000b0021d99b29434mr8238592wrb.597.1657796376512;
+        Thu, 14 Jul 2022 03:59:36 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id d13-20020adffbcd000000b0021d9591c64fsm1215600wrs.33.2022.07.14.03.59.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 03:59:35 -0700 (PDT)
+Message-ID: <7f8d7a318bde9f290b5d782e63c8d27b3a6cdb40.camel@redhat.com>
+Subject: Re: [PATCH 5.15 00/78] 5.15.55-rc1 review
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        kvm list <kvm@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Alex =?ISO-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Date:   Thu, 14 Jul 2022 13:59:33 +0300
+In-Reply-To: <Ys/qHw7E/6gWqEbN@kroah.com>
+References: <20220712183238.844813653@linuxfoundation.org>
+         <CA+G9fYtntg7=zWSs-dm+n_AUr_u0eBOU0zrwWqMeXZ+SF6_bLw@mail.gmail.com>
+         <1a143d949dc333666374cf14fae4496045f77db4.camel@redhat.com>
+         <Ys/qHw7E/6gWqEbN@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2] rtla: Fix Makefile when called from -C tools/
-Content-Language: en-US
-To:     sedat.dilek@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <870c02d4d97a921f02a31fa3b229fc549af61a20.1657747763.git.bristot@kernel.org>
- <CA+icZUVbQNM+MkMCQik83FoiWF_a1v7Mb-4hZX6SZgNcp2x5SA@mail.gmail.com>
- <CA+icZUW-Mu-Cak481yrE9f6PvGcfaDN7ZPLhrtX6L7zOPU73Zg@mail.gmail.com>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <CA+icZUW-Mu-Cak481yrE9f6PvGcfaDN7ZPLhrtX6L7zOPU73Zg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/14/22 11:53, Sedat Dilek wrote:
->>
-> Addendum:
+On Thu, 2022-07-14 at 12:04 +0200, Greg Kroah-Hartman wrote:
+> On Thu, Jul 14, 2022 at 12:50:10PM +0300, Maxim Levitsky wrote:
+> > On Wed, 2022-07-13 at 18:22 +0530, Naresh Kamboju wrote:
+> > > On Wed, 13 Jul 2022 at 00:17, Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > > 
+> > > > This is the start of the stable review cycle for the 5.15.55 release.
+> > > > There are 78 patches in this series, all will be posted as a response
+> > > > to this one.  If anyone has any issues with these being applied, please
+> > > > let me know.
+> > > > 
+> > > > Responses should be made by Thu, 14 Jul 2022 18:32:19 +0000.
+> > > > Anything received after that time might be too late.
+> > > > 
+> > > > The whole patch series can be found in one patch at:
+> > > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.55-rc1.gz
+> > > > or in the git tree and branch at:
+> > > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> > > > and the diffstat can be found below.
+> > > > 
+> > > > thanks,
+> > > > 
+> > > > greg k-h
+> > > 
+> > > Results from Linaro’s test farm.
+> > > Regressions on x86_64.
+> > > 
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > 
+> > > 1) Kernel panic noticed on device x86_6 while running kvm-unit-tests.
+> > >    - APIC base relocation is unsupported by KVM
+> > 
+> > My 0.2 cent:
+> > 
+> > APIC base relocation warning is harmless, and I removed it 5.19 kernel:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v5.19-rc6&id=3743c2f0251743b8ae968329708bbbeefff244cf
 > 
-> Subject?
+> Nice, but doesn't look relevant for stable trees.
 > 
-> [PATCH V2] rtla: Fix Makefile when called from -C tools/
+> > The 'emulating exchange as write' is also something that KVM unit tests trigger
+> > normally although this warning recently did signal a real and very nasty bug, which I fixed in this commit:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v5.19-rc6&id=33fbe6befa622c082f7d417896832856814bdde0
 > 
-> ...called from -C tools/ clean?
-> 
-it is not needed.
+> Already in the 5.18.2 release, doesn't look all that relevant for 5.15,
+> odd that it is showing up on 5.15.
 
--- Daniel
+Yep, I also think so - I just wanted to point out the source of these warnings.
+
+Best regards,
+	Maxim Levitsky
+
+> 
+> thanks,
+> 
+> greg k-h
+> 
+
+

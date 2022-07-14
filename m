@@ -2,143 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BB75747BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA6A5747B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237626AbiGNJHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S237552AbiGNJHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233386AbiGNJHt (ORCPT
+        with ESMTP id S237542AbiGNJH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:07:49 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AC422BFB;
-        Thu, 14 Jul 2022 02:07:47 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id r191so1636257oie.7;
-        Thu, 14 Jul 2022 02:07:47 -0700 (PDT)
+        Thu, 14 Jul 2022 05:07:28 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A385020BFA
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:07:27 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id p6so1399199ljc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:07:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=HtoAKV34fkg7oJD7fYEz8ioi5wZAzA+9Ww8IthJm6js=;
-        b=SGUOaQYgjTEUxx3qgHflmR3uXxb9Sdtf8NQ2J3S7+I9Fzk7GslAZLiWW5Tnn1uVSj1
-         dU9DoOwvNfecF2lHZxoxVKojNAZz1ta9JDkZycrvSBayPIntBof9VOnGEIbCnAxjWtRt
-         j6Awmt5ANPjlm/eLS3eoelzjFAtZvSJp1NgvJcV0/ad/ULiKtEdnBtrBdSNokFgWM/tA
-         8NeQSRzcF6CFq5RC3xjMHlKb6Yjlg7Y7L+pF2JW1BIsaApuEXq6M/lWZ8xC+tBtpm6MC
-         ep4EYgwdjkPVymQ4/pPO8YAO8PwTMk2A+zPFREd1a1OXDmvbDXd4lofhs+fCLxyKnACG
-         DAng==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IFDdRvC9ZQ77e13XEaQ5abctlA6xZYx1dQc3x9ug9p0=;
+        b=Z4qi8sR/JKAHbfgzIpvlLsBmokZm90HVdCB480lzZJKqZH847+f6bGs4IArLGPAL7N
+         dqunROMcAAWtAXK9lo4mwI0NyeZ+JDW6P2GYea61r9+CHK83pv8LkDSzcyS5iDpNpXPC
+         fFPnCjOtz9fy9wSTb+Jet0jOoXTSGpZIsYVbY33tHSMwiETZ95hZB901UfoXcqnN9kzt
+         gqPLFVBN8jSiKd+7W/W6pzQb1fZ+Gn1JS9VAGymaqDr1CVR9lo2qmX3XjpCMb37TCa1f
+         yuwXdIswQOlpEmhFtjpDTERFFJKgISh/E+xRFkQy08i6RPnbI18pANxdqws0P4/ATy7o
+         3Obg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=HtoAKV34fkg7oJD7fYEz8ioi5wZAzA+9Ww8IthJm6js=;
-        b=BP45e1Mt30I13XuyluJlEyNg6G+y/F+qqV2mxpLV1QIvPIfRIByHtFjKLPy9ajZLjO
-         frauyp9s/1AizibtvISi/fjgaXisEj605W1oECFqUNBy1V4zHb1XKUF+SxJr9d7HlLva
-         IRr7RokDA8r87KKWVEIiALxE48DlQMKrsc8UG89iAPZpO9C85HmsVT3ukTprScmLUbKt
-         joauWorFSl+2VlgEcJwmvZmBW+U4WNt2UltWexRYaJOqIjRZYqrp/aVDYbvg5S4f4xw/
-         S2wr5leEmriqqz330DmhzAtM6qL4LmV0UgIeRchY8u7t/Nv+/Cxbx5CgHczqyDMDPrfP
-         oXKA==
-X-Gm-Message-State: AJIora+axvUoDl3UcyAUEaqaLKJYb1RFa7KrTnOJ3V/4td6X08y3u+8H
-        N41arBMKF+43TxJHu7RhWERACD45qmXEoFD/utNMsLITuy0MIw==
-X-Google-Smtp-Source: AGRyM1tYqmmTTh5yn+aJRqp7Gt0nH2iHs/VvgL4A/Z2KEfbB9bG1GoGX0CATwSeA424Pn/7rMywZUN2VoUO5xOKXPVk=
-X-Received: by 2002:a05:6808:bce:b0:337:aaf6:8398 with SMTP id
- o14-20020a0568080bce00b00337aaf68398mr4096084oik.252.1657789666301; Thu, 14
- Jul 2022 02:07:46 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IFDdRvC9ZQ77e13XEaQ5abctlA6xZYx1dQc3x9ug9p0=;
+        b=ZcD6ATVfLnEVnQgyQklO5Zgoh22WoWCAEvcWqjSI77ROJtWCt3rsjuYElizULJKy+K
+         GGigKECwewS74dvoaVnTrU+qOPJ36FDNf3IKHt60sfQmNN3AfR1YpKE/9uWswljxrKHM
+         KbHPaIqxaCUvdGekPPcekhkDK0BpU7/mqmIjrzaMUCvudcCLxtedDCu/1OtAdWGKufjS
+         S6YC/R/xEt9fI4b+T++MXdpK0SwVg68ePiPgodKbY9SCauft59kw4U8EoR3/DmCkppb1
+         ksXJOURotM/3nl17PWK4pcR0lWGDI1GsHII2AXE2+/WBxpRTqKpRTA9rRrgYppjiRoP1
+         g1Tg==
+X-Gm-Message-State: AJIora/ov4fmOW6gh6XofgSHEReLmLyJFNpQFmJA3j0Y45Vg2FjtJg7v
+        bGf2Nyf/qDaqYECX/eraHz9tmw==
+X-Google-Smtp-Source: AGRyM1tzaFWQc48vaEzE2Yomk3B1qT9dVcVRjRU8KCSVyQXEIxRn20YoW0SyKHg5PQMsK8j6Ii7kmQ==
+X-Received: by 2002:a2e:994d:0:b0:25d:8554:6c3f with SMTP id r13-20020a2e994d000000b0025d85546c3fmr4153887ljj.471.1657789645970;
+        Thu, 14 Jul 2022 02:07:25 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id p18-20020a2e9a92000000b0025d7517edd2sm180506lji.11.2022.07.14.02.07.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 02:07:25 -0700 (PDT)
+Message-ID: <26916d41-f398-8527-96f4-9a28f4f4e789@linaro.org>
+Date:   Thu, 14 Jul 2022 11:07:21 +0200
 MIME-Version: 1.0
-References: <870c02d4d97a921f02a31fa3b229fc549af61a20.1657747763.git.bristot@kernel.org>
-In-Reply-To: <870c02d4d97a921f02a31fa3b229fc549af61a20.1657747763.git.bristot@kernel.org>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Thu, 14 Jul 2022 11:07:10 +0200
-Message-ID: <CA+icZUVbQNM+MkMCQik83FoiWF_a1v7Mb-4hZX6SZgNcp2x5SA@mail.gmail.com>
-Subject: Re: [PATCH V2] rtla: Fix Makefile when called from -C tools/
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 03/30] dt-bindings: phy: qcom,qmp: drop redundant
+ descriptions
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220707134725.3512-1-johan+linaro@kernel.org>
+ <20220707134725.3512-4-johan+linaro@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220707134725.3512-4-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 11:32 PM Daniel Bristot de Oliveira
-<bristot@kernel.org> wrote:
->
-> Sedat Dilek reported an error on rtla Makefile when running:
->
->     $ make -C tools/ clean
->     [...]
->     make[2]: Entering directory
->     '/home/dileks/src/linux-kernel/git/tools/tracing/rtla'
->     [...]
->     '/home/dileks/src/linux-kernel/git/Documentation/tools/rtla'
->     /bin/sh: 1: test: rtla-make[2]:: unexpected operator    <------ The problem
->     rm: cannot remove '/home/dileks/src/linux-kernel/git': Is a directory
->     make[2]: *** [Makefile:120: clean] Error 1
->     make[2]: Leaving directory
->
-> This occurred because the rtla calls kernel's Makefile to get the
-> version in silence mode, e.g.,
->
->     $ make -sC ../../.. kernelversion
->     5.19.0-rc4
->
-> But the -s is being ignored when rtla's makefile is called indirectly,
-> so the output looks like this:
->
->     $ make -C ../../.. kernelversion
->     make: Entering directory '/root/linux'
->     5.19.0-rc4
->     make: Leaving directory '/root/linux'
->
-> Using 'grep -v make' avoids this problem, e.g.,
->
->     $ make -C ../../.. kernelversion | grep -v make
->     5.19.0-rc4
->
-> Thus, add | grep -v make.
->
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Fixes: 8619e32825fd ("rtla: Follow kernel version")
-> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
-> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-> ---
+On 07/07/2022 15:46, Johan Hovold wrote:
+> Drop the redundant supply and clock descriptions which did not add much
+> information beyond what can be inferred from the corresponding resource
+> names.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Thanks for v2.
-That looks good to me.
 
-Daniel, you are right that not passing -s to make-line will not show
-the grep output.
+(...)
 
-Formally and again my...
+>              - const: ref
+>              - const: refgen
+>          resets:
+> -          items:
+> -            - description: reset of phy block.
+> +          maxItems: 1
+>          reset-names:
+>            items:
+>              - const: phy
+> @@ -376,11 +334,7 @@ allOf:
+>      then:
+>        properties:
+>          clocks:
+> -          items:
+> -            - description: Phy aux clock.
+> -            - description: 19.2 MHz ref clk source.
+> -            - description: 19.2 MHz ref clk.
 
-Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+Here and in other places - I think you loose information, because the
+frequency is not mentioned in clock name.
 
--Sedat-
 
->  tools/tracing/rtla/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-> index 3822f4ea5f49..1bea2d16d4c1 100644
-> --- a/tools/tracing/rtla/Makefile
-> +++ b/tools/tracing/rtla/Makefile
-> @@ -1,6 +1,6 @@
->  NAME   :=      rtla
->  # Follow the kernel version
-> -VERSION :=     $(shell cat VERSION 2> /dev/null || make -sC ../../.. kernelversion)
-> +VERSION :=     $(shell cat VERSION 2> /dev/null || make -sC ../../.. kernelversion | grep -v make)
->
->  # From libtracefs:
->  # Makefiles suck: This macro sets a default value of $(2) for the
-> --
-> 2.32.0
->
+Best regards,
+Krzysztof

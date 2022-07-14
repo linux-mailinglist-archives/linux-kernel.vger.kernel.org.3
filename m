@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E01574D22
+	by mail.lfdr.de (Postfix) with ESMTP id 8062B574D21
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239118AbiGNMKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
+        id S239164AbiGNMKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234487AbiGNMJw (ORCPT
+        with ESMTP id S238644AbiGNMJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:09:52 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3B33F333
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:08:48 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id j17-20020a056e02219100b002dc4e721203so987996ila.22
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:08:48 -0700 (PDT)
+        Thu, 14 Jul 2022 08:09:54 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A931013
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:08:50 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id w12-20020a05660201cc00b0067bcf00282dso628445iot.9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:08:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=xFnPnpP/G7u2XnAw40xBSXDR4IKqMm4aVVQnDeJHz1g=;
-        b=tNsi389gkA4JbOhGxOQ9t9Z/aX0813VSVunqYAJKsmJFS075G/9PgLeZLI3UyCCX6R
-         yEXJSDKl5mif3gd215MulrvMopAPVUs848AdRjW/2a43/DyXChdsp0F5nXFve2pvpcKg
-         3EJymNReWJz8iQgFYIF0S/ya1ZPc02/51cUSlTES3dhmGudFz8xDcB5OaTsj9mEXtsaP
-         sV6FQPh5lhDHj+oiGyoptN9/ajBp+6bHEF7Hx1mqnFcKW0nRrzJda1dtFx2ISzdiqSjZ
-         Q9VEKELQE6cWLeHpNAzONqzj9i0rKZE5CgyRsi9ajlz3F1N61zYQs1uWI3Ks9QJy0mpZ
-         4WEw==
-X-Gm-Message-State: AJIora9XhYQoKqf4/nVKyAYKfWOkb1jt+0dMxLgksTMjsRG3Ww/4vtzx
-        R/lFh/UYJW+mCUst7tn5iTcuqDyw7VsHNSro4ISWPdCPJZN9
-X-Google-Smtp-Source: AGRyM1uHruF+JtwFguHVwlc4HWMQAzNuNdkMKcgYVJZ8aL9xJ0irTHvP+9dNr1/xZ7pAJFVuv5qMVFYjMIkQdt+beiCDmmI/JfFW
+        bh=WugDegGD5tYpRsXUE6iQPO7lN4FJAzAu9piPnbZrWMo=;
+        b=Mm67UoTBkLG4L1Bmm4hVcZ2zyh1ItreddcOumIQQn9Y+mPaMtV+BLZc8IWoUkMmhpS
+         /G/1gV4kfG7R5j6fA9IS3SIdwQtA0i4JZU09tyfjyXDeZYY5npNfTKZ4Smgf34gHjCVW
+         325dkOV3guC8CuF5WbUOMCVn+FCP6ZgvQkwfQ0GtsGnqVnN8a36NsDl/aAr/Cxl4FKhF
+         P2Kjh6rfxoA0pQfv2Uu3yX1vUPt5PDVSBA/NsOF0LxVcA3A4dBkb/V0Wfg7fqdPPm2im
+         1M5XDhDoQtf/F+4rvcV9ybR9Tkrdd7PJX4Q4TUx51yp9CYFMtdY9eisYxW5NWLukiOyJ
+         Lhrw==
+X-Gm-Message-State: AJIora/S50OfY8dH2KrmMpqrpFDL3pB2TmNwLbfCyRxw+cipJvSlz3Lo
+        DFw7STzic2FMh4h9TEJzZAKCJV3oXWhCtjS9a/KZt65oLBGr
+X-Google-Smtp-Source: AGRyM1stg3QufNq27r18ZDT8evXqsYrJV2PTeShtDN38PD5PDQy3L+MQLWCRjezDhgltpGSXqJ9Uhm394v5jnuq/E6I52bB9JU/U
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2c4e:b0:657:4115:d9e4 with SMTP id
- x14-20020a0566022c4e00b006574115d9e4mr4164255iov.91.1657800505735; Thu, 14
+X-Received: by 2002:a05:6638:41a:b0:33f:8881:888c with SMTP id
+ q26-20020a056638041a00b0033f8881888cmr4039712jap.110.1657800505951; Thu, 14
  Jul 2022 05:08:25 -0700 (PDT)
 Date:   Thu, 14 Jul 2022 05:08:25 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000040bd4905e3c2c237@google.com>
-Subject: [syzbot] INFO: trying to register non-static key in ieee80211_do_stop
-From:   syzbot <syzbot+eceab52db7c4b961e9d6@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <00000000000044115e05e3c2c2fb@google.com>
+Subject: [syzbot] WARNING in ext4_iomap_begin
+From:   syzbot <syzbot+c97a5f91bbd6de05e1c2@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,65 +58,74 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    b11e5f6a3a5c net: sunhme: output link status with a single..
-git tree:       net
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=108ed862080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa95f12403a2e0d2
-dashboard link: https://syzkaller.appspot.com/bug?extid=eceab52db7c4b961e9d6
+HEAD commit:    4a57a8400075 vf/remap: return the amount of bytes actually..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=17460cac080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=970ac5ffe160d24
+dashboard link: https://syzkaller.appspot.com/bug?extid=c97a5f91bbd6de05e1c2
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=173a7c78080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1102749a080000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16f964ac080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15655f92080000
+
+Bisection is inconclusive: the issue happens on the oldest tested release.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12083f1c080000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11083f1c080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16083f1c080000
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+eceab52db7c4b961e9d6@syzkaller.appspotmail.com
+Reported-by: syzbot+c97a5f91bbd6de05e1c2@syzkaller.appspotmail.com
 
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 0 PID: 3615 Comm: syz-executor630 Not tainted 5.19.0-rc5-syzkaller-00263-gb11e5f6a3a5c #0
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 8422 at fs/ext4/inode.c:3418 ext4_iomap_begin+0x1aa/0x780 fs/ext4/inode.c:3418
+Modules linked in:
+CPU: 0 PID: 8422 Comm: syz-executor260 Not tainted 5.19.0-rc6-syzkaller-00115-g4a57a8400075 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+RIP: 0010:ext4_iomap_begin+0x1aa/0x780 fs/ext4/inode.c:3418
+Code: 83 c0 01 38 d0 7c 08 84 d2 0f 85 d8 05 00 00 41 0f b7 9f c2 05 00 00 31 ff 89 de e8 70 72 5b ff 66 85 db 74 5c e8 46 76 5b ff <0f> 0b 41 bd de ff ff ff e8 39 76 5b ff 48 b8 00 00 00 00 00 fc ff
+RSP: 0018:ffffc9000d87f260 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 00000000000000bc RCX: 0000000000000000
+RDX: ffff88807a848100 RSI: ffffffff821e24ea RDI: 0000000000000003
+RBP: 0000000000000180 R08: 0000000000000003 R09: 0000000000000000
+R10: 00000000000000bc R11: 0000000000000001 R12: 000000000000000c
+R13: ffff88806f0aa6fa R14: ffffc9000d87f550 R15: ffff88806f0aa630
+FS:  00007fcf662ec700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fcf662cb718 CR3: 0000000021572000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- assign_lock_key kernel/locking/lockdep.c:979 [inline]
- register_lock_class+0xf30/0x1130 kernel/locking/lockdep.c:1292
- __lock_acquire+0x10a/0x5660 kernel/locking/lockdep.c:4932
- lock_acquire kernel/locking/lockdep.c:5665 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:354 [inline]
- ieee80211_do_stop+0xc3/0x1ff0 net/mac80211/iface.c:380
- ieee80211_runtime_change_iftype net/mac80211/iface.c:1789 [inline]
- ieee80211_if_change_type+0x383/0x840 net/mac80211/iface.c:1827
- ieee80211_change_iface+0x57/0x3f0 net/mac80211/cfg.c:190
- rdev_change_virtual_intf net/wireless/rdev-ops.h:69 [inline]
- cfg80211_change_iface+0x5e1/0xf10 net/wireless/util.c:1078
- nl80211_set_interface+0x64f/0x8c0 net/wireless/nl80211.c:4041
- genl_family_rcv_msg_doit+0x228/0x320 net/netlink/genetlink.c:731
- genl_family_rcv_msg net/netlink/genetlink.c:775 [inline]
- genl_rcv_msg+0x328/0x580 net/netlink/genetlink.c:792
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
- genl_rcv+0x24/0x40 net/netlink/genetlink.c:803
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x6eb/0x810 net/socket.c:2488
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2542
- __sys_sendmsg net/socket.c:2571 [inline]
- __do_sys_sendmsg net/socket.c:2580 [inline]
- __se_sys_sendmsg net/socket.c:2578 [inline]
- __x64_sys_sendmsg+0x132/0x220 net/socket.c:2578
+ iomap_iter+0x454/0x1110 fs/iomap/iter.c:74
+ __iomap_dio_rw+0x6b6/0x1a80 fs/iomap/direct-io.c:600
+ iomap_dio_rw+0x3c/0xa0 fs/iomap/direct-io.c:689
+ ext4_dio_write_iter fs/ext4/file.c:566 [inline]
+ ext4_file_write_iter+0xe50/0x1520 fs/ext4/file.c:677
+ call_write_iter include/linux/fs.h:2058 [inline]
+ do_iter_readv_writev+0x3d1/0x640 fs/read_write.c:742
+ do_iter_write+0x182/0x700 fs/read_write.c:868
+ vfs_iter_write+0x70/0xa0 fs/read_write.c:909
+ iter_file_splice_write+0x6fa/0xc10 fs/splice.c:689
+ do_splice_from fs/splice.c:767 [inline]
+ direct_splice_actor+0x110/0x180 fs/splice.c:936
+ splice_direct_to_actor+0x34b/0x8c0 fs/splice.c:891
+ do_splice_direct+0x1a7/0x270 fs/splice.c:979
+ do_sendfile+0xae0/0x1240 fs/read_write.c:1262
+ __do_sys_sendfile64 fs/read_write.c:1327 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1313 [inline]
+ __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1313
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f5bf1b37b89
-Code: 28 c3 e8 5a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd682b8a38 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fcf6633fe79
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fcf662ec2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007fcf663c54c0 RCX: 00007fcf6633fe79
+RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000004
+RBP: 00007fcf663920bc R08: 0000000000000000 R09: 0000000000000000
+R10: 00000000ffffdffa R11: 0000000000000246 R12: 00007fcf663910b8
+R13: 0030656c69662f2e R14: e5d26e84aa4cf3c6 R15: 00007fcf663c54c8
+ </TASK>
 
 
 ---
@@ -128,5 +135,6 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 syzbot can test patches for this issue, for details see:
 https://goo.gl/tpsmEJ#testing-patches

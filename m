@@ -2,72 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C49057545E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5285754AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 20:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239502AbiGNSEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 14:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S240526AbiGNSLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 14:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232432AbiGNSEK (ORCPT
+        with ESMTP id S229458AbiGNSLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 14:04:10 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B41613E27
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:04:10 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id e16so2528298pfm.11
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 11:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=74QXJDWqAz0LnYjov29LyjS5LD/BWMFkyZoslDFd9ro=;
-        b=jXulcJn2qk2I+WR+IrKZcKqBz7BdkyQJFsHN08ms2tBie3OptA81d+AfKQZjjNxJxJ
-         5ya2T0KEXVyPIF2OktpUiW2RKn21OX9COW+OYbGl4WqaDrilX1RthQVx/SvSCey6ARy4
-         re+zUBKhHvEMP2sFiut4E3nqnZ1AbtO29jPjqHTYLzJzov0EB8/gIwo2YeWYmpalghDl
-         Xf0WVgruZbv5h2HIm6KT3PaAMqznRzMxLcMvdGhdRNTbzjGeK1Z6Bc7YSOUZddzslTEg
-         gGMyGGcTDtxuNhUOM/7w57AbxRWAYEmetNWfNfS0ehv6/prdWLw2q6krr5ejUIWkDP/0
-         89wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=74QXJDWqAz0LnYjov29LyjS5LD/BWMFkyZoslDFd9ro=;
-        b=795PH2WDNf8fOf9OXtGBkVhf9rZSf44F7Zqgs1ie9hA/O2xD0FEYJHzRLvELNIAl2N
-         Exvew9TM8/vnir2qmj9koQ8OdZNh1UFFQl5+rCxM/E1X+s7Wja+Oh8AV57A7qkX+dWO/
-         lClHKz67B47HoMI2WjKmQSPE76eZgc8F9DCXeC8yr/f4uBK7+sd2ejaBpbT2ul8u4BKx
-         kDnqbMGje0J3BeaBGqjejSaRzNMTcnVcPvDhEa2kP7rwxmesV4KJXXB8P3UGWjmvxN9Q
-         aHC2lUvlrlj7gg7R9zEwNcEgE+Z5YuNIlhhFGhaZcZcKAzXFiKddS266bQGlgbeXB34w
-         tZkA==
-X-Gm-Message-State: AJIora8CMnXLXug/2B/rX9aBeZT6EXnYJVlVrbLro1bnGVPVG39iNsf4
-        iLc3qbQTNc/oIgqRe0vBsDE/rYSWhdTt9rGfpEbRBIZWlAvjuA==
-X-Google-Smtp-Source: AGRyM1sUoVQm8N+YZYdzp7cpFoagdthkfsn6pDOUle8OmNsTPWiXR8CB5jhR7mJgRGTkxU/0KwjZ9L780eh+J+H5+VA=
-X-Received: by 2002:a63:c006:0:b0:411:c33f:b4bb with SMTP id
- h6-20020a63c006000000b00411c33fb4bbmr8631858pgg.433.1657821849487; Thu, 14
- Jul 2022 11:04:09 -0700 (PDT)
+        Thu, 14 Jul 2022 14:11:05 -0400
+X-Greylist: delayed 353 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Jul 2022 11:11:03 PDT
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5B3C63;
+        Thu, 14 Jul 2022 11:11:03 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id B46A62B0597F;
+        Thu, 14 Jul 2022 14:05:06 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 14 Jul 2022 14:05:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pjd.dev; h=cc:cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1657821906; x=1657825506; bh=/iwEYxigdE
+        FuJz5vUQfpajKlKQ642prMXuR8LsWTJx4=; b=dsP1dcOwic3v090lBty7m6YW4K
+        atHGONu7Led0sjHJZWelPCHgNq9BtvCXoAlawZinMH7q+4MLV+52lyecfKvPC8fo
+        zDfpaHKoD7N4x9QIEogUA3YYhUPI042cDS3aVqc9eYzN2bQnV2YPDegWsrwQZwSY
+        RhM57rkIgthJXPb4Wy1ZOBg0+bWYEsEv0YEfGaIJT016haemk3WFPXeACzgkZ7qG
+        sy2nB6v9CtYohh4fKzjj4BAWOupA0ZjkEoB3UU9ad/DQHG3PoPrlNZZVJwputKnW
+        LjZ2+/f1VO9Q0MfgWXf//Ho20NDcsQ0qaoNE6wp8RN5gWaZGWA2XpqCknHkA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1657821906; x=1657825506; bh=/iwEYxigdEFuJz5vUQfpajKlKQ64
+        2prMXuR8LsWTJx4=; b=uiftyfxJnwG7Wl8vGOUO9ZiZhGBb7O5yZVTr+YdQmAC9
+        cTNgOu9DZTtAOac1txGWodXuHV3b6JEDgm0s7X01WTzoLieBZiO1GFhd0N/gqppM
+        sVid7qPRakRVkow4ZFiOPrQnfWReuW5I9pyV0NWeIwWdfE9JnL6YN+Aa1Biq0e05
+        A1WWLT/D4dKfeJn7f8ORNcmbpE1JcmVdbQykxPHPp7kjXkv7fncj2t61M12n5Xko
+        V1/PcGuPHiGSPdfd9G+DTTnOhFGbcRVXKIAQEbno6LBnkcXjgsOzIK4nRjbm8XYf
+        7wIj5LvH0PmfXt7bDLYCo9LF8V4j/hVdfS7BYcRCtg==
+X-ME-Sender: <xms:0VrQYjyHiWXVZBbaR8bHz7yfS7_8NklA2UspznsHItCUqOGkJdS7yA>
+    <xme:0VrQYrSYVManhJiKOK4dcMB70ICfjHzQ9-wampgNgNkYXvWPgLEXumjCuxD3Bf417
+    xnKuIaWXwJI6UKg5H4>
+X-ME-Received: <xmr:0VrQYtUUh0hJCG9yHDccVve4wtQQB_gEMvOqrh4XPm7N1QMRddT7T9PHBQqd>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejledguddvudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefrvght
+    vghrucffvghlvghvohhrhigrshcuoehpvghtvghrsehpjhgurdguvghvqeenucggtffrrg
+    htthgvrhhnpeevgfehgedvvdekveeifeekjeduueetieegvdeitedvffdvgffhjeekveek
+    tdehfeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepphgvthgvrhesphhjugdruggvvh
+X-ME-Proxy: <xmx:0VrQYtioem0RvXqwb80HhYC7sd8amseCPfy2JJeOq9Dj7AU02vodxA>
+    <xmx:0VrQYlC4TwTpUizVdKPXOnHZULWLG-O20y0mnMoKNWIHmhFLQOpzlQ>
+    <xmx:0VrQYmL2L0AILy7TtR5-w9MOaztDtt9xcaKoxpM3WkVJEeSTRQ91rg>
+    <xmx:0lrQYtYtfCsKbstjPAbkTtiUDy_lO1pVxG2CP284ecVn-GZ-SDG-cOInk5w>
+Feedback-ID: i9e814621:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 14 Jul 2022 14:05:03 -0400 (EDT)
+Date:   Thu, 14 Jul 2022 11:05:01 -0700
+From:   Peter Delevoryas <peter@pjd.dev>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Logananth Sundararaj <logananth13.hcl@gmail.com>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        naveen.mosess@hcl.com, thangavel.k@hcl.com,
+        SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>, Olof Johansson <olof@lixom.net>,
+        garnermic@gmail.com, velumanit@hcl.com,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3] The Yosemite V3.5 is a facebook multi-node server
+ platform that host four OCP server. The BMC in the Yosemite V3.5 platform
+ based on AST2600 SoC.
+Message-ID: <YtBazSo/uJzFeF+L@pdel-mbp>
+References: <20220707132054.GA10610@logan-ThinkPad-T14-Gen-1>
+ <CAK8P3a0P2u+LdXcU7As=dfNbg_J2eWfhgB9TT1-xVyH0v6OM5Q@mail.gmail.com>
 MIME-Version: 1.0
-Sender: mo933472@gmail.com
-Received: by 2002:a05:7301:2519:b0:6a:d2b6:9d79 with HTTP; Thu, 14 Jul 2022
- 11:04:09 -0700 (PDT)
-From:   Jessica Daniel <jessicadaniel7833@gmail.com>
-Date:   Thu, 14 Jul 2022 18:04:09 +0000
-X-Google-Sender-Auth: B3BGFcFWfNEqyv-zWr5gN-Si1M0
-Message-ID: <CAHbkfQzseSov1PbyHet-uCnGSDuAqD949MNJAN_xa+cOxQ1mjg@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a0P2u+LdXcU7As=dfNbg_J2eWfhgB9TT1-xVyH0v6OM5Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello. Dear,
-how are you today
-My name is Jessica Daniel
-I will share pictures and more details about me as soon as i hear from you
-Thanks???
+On Thu, Jul 07, 2022 at 03:33:48PM +0200, Arnd Bergmann wrote:
+> On Thu, Jul 7, 2022 at 3:20 PM Logananth Sundararaj
+> <logananth13.hcl@gmail.com> wrote:
+> >
+> > This patch adds linux device tree entry related to
+> > Yosemite V3.5 specific devices connected to BMC SoC.
+> >
+> > Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
+> 
+> 
+> Something went wrong with the patch description, it looks like you dropped
+> the subject and sent the first paragraph as the subject instead.
+> 
+> > +/ {
+> > +       model = "Facebook fby35";
+> > +       compatible = "facebook,fby35", "aspeed,ast2600";
+> > +
+> > +       aliases {
+> > +               serial4 = &uart5;
+> > +       };
+> 
+> Why not start at serial0 here?
+
+Hey, Facebook person jumping in here (using a personal email):
+
+I think you're right, it should be like this:
+
+	aliases {
+		serial0 = &uart5;
+		serial1 = &uart1;
+		serial2 = &uart2;
+		serial3 = &uart3;
+		serial4 = &uart4;
+	};
+
+> 
+> > +       chosen {
+> > +               stdout-path = &uart5;
+> > +               bootargs = "console=ttyS4,57600n8 root=/dev/ram rw vmalloc=384M";
+> > +       };
+
+Also: if we do serial0 = &uart5, it should be console=ttyS0, not ttyS4.
+
+> 
+> The bootargs should really come from the boot loader.
+
+What if we want to boot the kernel by itself with QEMU? It's kinda annoying to
+have to specify '-append "console=ttyS0,57600n8...' everytime, or to have to use
+a wrapper script. But, it's also a source of bugs: I realized yesterday the
+dts we were using here:
+
+https://github.com/facebook/openbmc-linux/blob/e26c76992e0761d9e440ff514538009384c094b4/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+
+Has the wrong console setting.
+
+Booting the kernel directly is actualy really useful for us, because U-Boot
+literally takes 4+ minutes in QEMU because we execute in-place from flash for
+most of it.
+
+> 
+> Why do you need the vmalloc=384M? That seems excessive.
+
+Yeah I'm not sure what that is about, would need to find
+the person who wrote this originally. Speaking of which:
+
+The dts I linked above, from our repo, how come this patch is not just a copy of
+that?
+
+> 
+> > +
+> > +       memory@80000000 {
+> > +               device_type = "memory";
+> > +               reg = <0x80000000 0x80000000>;
+> > +       };
+> 
+> The memory location and size is usually also set by the boot loader
+
+Yeah not sure what happens if I remove this and boot the kernel directly in
+QEMU, would we need to specify the RAM size explicitly in console args? Hmmm,
+I'll check it out.
+
+Thanks for your comments!
+Peter
+
+> 
+>         Arnd

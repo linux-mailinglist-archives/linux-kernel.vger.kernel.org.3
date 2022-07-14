@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD52574F34
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B9D574F35
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238877AbiGNNbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
+        id S239310AbiGNNbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238592AbiGNNbS (ORCPT
+        with ESMTP id S238605AbiGNNbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Jul 2022 09:31:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2156C5E32D
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 473F45E332
         for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:31:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1657805475;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9FSo8XtzlTYanivvYEARXQax4+PoAE9EIoVCtOZ5gZk=;
-        b=IYZv7YJdZIEPVJO3cNbvLTIGfy3d5KnhqaQZAF0io+c5/XELG+J6t4b9Slk3NDdJZctqvt
-        GYsf+rCwn4GOdsJga9wkCmz2pFb568VN5XuZWxeU7jJBo3f30YwZLgAsgop4C75bCwofS/
-        I5R/L+um/82iOh+YrK67vbCJHSlajN8=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=S0v84aQzK5VtpJNrL8vNxYh4ihCQcbd1OPMTZNLA4YQ=;
+        b=FP7yZmw8Hv1pzEX4sSsN6C/zxwSL239OIupbNkb+He527/vdWOjuAGZaBAeSlKa4QZ0RW+
+        FUjRa0Dix1YE0f2tEoTThpobZWlB4jTD1NgOidPYQtej7UqPeK3UdY/5wIKaa6xue1IDPY
+        8yEcUgRCxxAJSuGC30Y5DDSb4Mm6fLE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-599-akqebN13NAKg0IVxJpQRFw-1; Thu, 14 Jul 2022 09:31:14 -0400
-X-MC-Unique: akqebN13NAKg0IVxJpQRFw-1
-Received: by mail-qv1-f70.google.com with SMTP id od5-20020a0562142f0500b00473838e0feeso1220761qvb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:31:14 -0700 (PDT)
+ us-mta-114-HatHPJGqPTyP_JhXSeviqw-1; Thu, 14 Jul 2022 09:31:14 -0400
+X-MC-Unique: HatHPJGqPTyP_JhXSeviqw-1
+Received: by mail-ed1-f71.google.com with SMTP id y21-20020a056402359500b0043adf65d1a0so1528331edc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:31:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9FSo8XtzlTYanivvYEARXQax4+PoAE9EIoVCtOZ5gZk=;
-        b=xOihrWPceTsGKt+jtIqa6XagHDtomFg4KaetTZLE31jpm5rOTTfsrmOzZvjpn45fAU
-         MpxdWaEVFVBV+SLHkXx1/g5D5ooHSKVK7CfJ+g1+s8lFGS+MyttADxJmdFEoZ4693Xxh
-         G1KpVXQBwb2ZtDmMNiQ1N+zFuF3ToU2c2CiUUeB0dgB3frZ29oa8tCczOgEmyD8nBkU5
-         Qowt4TroyFbBpKGgKShbzp+lKoYM3FcLoOIQTqZdYyIuYKOPQf6Pd8o0DawcQ6KczXD4
-         SJOPGSaMpqo9xv69ldKfgUQQcP0erJeDT/4hsI88tHKSQoLY3xUQHCxxBEkYfvcWERhW
-         QO2g==
-X-Gm-Message-State: AJIora++V+9NB1EH9xFqX5oSuOuePkCEAucfu5WmJWp/3uENfgjv6F8j
-        u6+b+webINfQUqnAmmpE17Vj91kht1R7Sv2ELdsIzBXz1fK2XM4NpLYIV1Wq5y86t7e4ouJnWX6
-        7cv6iqpUXWZnAgBAW/yQHT2CA
-X-Received: by 2002:a05:620a:16ca:b0:6b5:b971:1aa6 with SMTP id a10-20020a05620a16ca00b006b5b9711aa6mr5223161qkn.144.1657805473437;
-        Thu, 14 Jul 2022 06:31:13 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sjabRBa+rxyI0T+f44L65WTTYmZUNwMEYoOiHrIt+kDhoMDjYjmhAMJG1aeFZuLPRe6f+ygQ==
-X-Received: by 2002:a05:620a:16ca:b0:6b5:b971:1aa6 with SMTP id a10-20020a05620a16ca00b006b5b9711aa6mr5223126qkn.144.1657805472980;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=S0v84aQzK5VtpJNrL8vNxYh4ihCQcbd1OPMTZNLA4YQ=;
+        b=fuqB/MEw7omvR6oLspDshMom5RjUAbNfFhdu1C2W57Nk0Th5yqX2pIQ7tLbrAT4IbC
+         ZrRhea+KSnAYF7Ekcq3n6TSHLUWJW6OKXcSmgjyYXckA1h+uHKkN26c32amrYvLV5abc
+         /fvm86WImu1/lV5YSmY4psMg9C71oq8L0f9cwgaXN7x2Ex6jpKyQT1D+Nibsz1auI6X1
+         KfUgnj1Pm8KjD59El27/tmZ/PtX1+o4ilnMN6Ykz+CpJeqPKE8+sNzq0MNXHBDivY4ai
+         ztoodsUyA3GV1v0MDSL9LryGY93p67yIV6uKvBnlz61xECPqiVzUZay6lNR9WTtR9MUB
+         /q9A==
+X-Gm-Message-State: AJIora9cfClaZrWZ8Uea00DudMMcXRnuSShMlptTSAgX0GM1oqhCBzib
+        Dg5zI+SYyz/vrsYkRs4COZHDuBkUejvv7y2y6Lyg1p+T4rhyvxGG1CW3EI1NkyzIDYTAYFBgt+F
+        TsAQZO6QOQ3jjPjjIYOj3ftamyWmHpPDFiCEISGNoMhlMyDIEK7jhRnt1yP7Dn4doceF4DAkS5Z
+        31
+X-Received: by 2002:a17:906:93ef:b0:72b:3e88:a47 with SMTP id yl15-20020a17090693ef00b0072b3e880a47mr8830208ejb.706.1657805472953;
         Thu, 14 Jul 2022 06:31:12 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id z125-20020a37b083000000b006a758ce2ae1sm1291694qke.104.2022.07.14.06.31.12
+X-Google-Smtp-Source: AGRyM1vyGA2DyNCno5IElXh8b5C5z7Aa3bmVWSnWLiTNc6SnaMdy9mGR7CFk8LpUKsaLOZngHRWmXQ==
+X-Received: by 2002:a17:906:93ef:b0:72b:3e88:a47 with SMTP id yl15-20020a17090693ef00b0072b3e880a47mr8830179ejb.706.1657805472717;
+        Thu, 14 Jul 2022 06:31:12 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id r17-20020a056402035100b0043a6a7048absm1049315edw.95.2022.07.14.06.31.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 14 Jul 2022 06:31:12 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 09:31:09 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        dylanbhatch@google.com, skhan@linuxfoundation.org
-Subject: Re: [PATCH v2] proc: fix test for "vsyscall=xonly" boot option
-Message-ID: <YtAanSSBrhsL7S9J@bfoster>
-References: <Ys2Hi3Ps933B6IsE@localhost.localdomain>
- <Ys2KgeiEMboU8Ytu@localhost.localdomain>
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 00/39] KVM: x86: hyper-v: Fine-grained TLB flush + L2
+ TLB flush features
+In-Reply-To: <eab4d1d8-913d-71b8-b48e-01ff83bc128f@redhat.com>
+References: <20220613133922.2875594-1-vkuznets@redhat.com>
+ <eab4d1d8-913d-71b8-b48e-01ff83bc128f@redhat.com>
+Date:   Thu, 14 Jul 2022 15:31:11 +0200
+Message-ID: <87a69bom74.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys2KgeiEMboU8Ytu@localhost.localdomain>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,186 +84,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 05:51:45PM +0300, Alexey Dobriyan wrote:
-> Booting with vsyscall=xonly results in the following vsyscall VMA:
-> 
-> 	ffffffffff600000-ffffffffff601000 --xp ... [vsyscall]\n
-> 
-> Test does read from fixed vsyscall address to determine if kernel
-> supports vsyscall page but it doesn't work because, well, vsyscall
-> page is execute only.
-> 
-> Fix test by trying to execute from the first byte of the page which
-> contains gettimeofday() stub. This should work because vsyscall
-> entry points have stable addresses by design.
-> 
-> 	Alexey, avoiding parsing .config, /proc/config.gz and
-> 	/proc/cmdline at all costs.
-> 
-> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
-> ---
+Paolo Bonzini <pbonzini@redhat.com> writes:
 
-Hi Alexey,
+> On 6/13/22 15:38, Vitaly Kuznetsov wrote:
+>> Changes since v6:
+>> - Rebase to the latest kvm/queue [8baacf67c76c], newly introduced
+>>    selftests had to be adapted to the overhauled API [blame Sean].
+>> - Rename 'entry' to 'flush_all_entry' in hv_tlb_flush_enqueue() [Max].
+>> - Add "KVM: selftests: Rename 'evmcs_test' to 'hyperv_evmcs'" patch.
+>> - Collect R-b tags.
+>> 
+>> Original description:
+>> 
+>> Currently, KVM handles HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} requests
+>> by flushing the whole VPID and this is sub-optimal. This series introduces
+>> the required mechanism to make handling of these requests more
+>> fine-grained by flushing individual GVAs only (when requested). On this
+>> foundation, "Direct Virtual Flush" Hyper-V feature is implemented. The
+>> feature allows L0 to handle Hyper-V TLB flush hypercalls directly at
+>> L0 without the need to reflect the exit to L1. This has at least two
+>> benefits: reflecting vmexit and the consequent vmenter are avoided + L0
+>> has precise information whether the target vCPU is actually running (and
+>> thus requires a kick).
+>
+> I haven't reviewed the selftests part yet, but for the rest I only had 
+> two very small comments.
 
-I had run into this failure when testing something unrelated, so thanks
-for the fix. It passes in my test env. That said, some of code
-duplication stood out to me when I took a closer look. Not a huge deal
-for a selftest, but any thoughts on any of the following cleanups on top
-of your diff..? It still passes my quick tests and cuts the patch in
-half or so..
+I got back to this today and turns out there's a conflict with 
 
-Brian
+commit cc5851c6be864c5772944e32df3da322fe3ad415
+Author: Sean Christopherson <seanjc@google.com>
+Date:   Wed Jun 8 22:45:15 2022 +0000
 
---- 8< ---
+    KVM: selftests: Use exception fixup for #UD/#GP Hyper-V MSR/hcall tests
+ 
+in selftest part. It's nothing big but I did some non-trivial changes
+when resolving and I think the reslut looks a bit nicer at the end.
+Also, I've addresed one of your comments and moved
+kvm_hv_get_tlb_flush_fifo()'s 'is_guest_mode' parameter introduction to
+PATCH11. I'm going to send out v8 with these changes.
 
-diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
-index e5962f4794f5..d4dca92d60f3 100644
---- a/tools/testing/selftests/proc/proc-pid-vm.c
-+++ b/tools/testing/selftests/proc/proc-pid-vm.c
-@@ -212,32 +212,35 @@ static int make_exe(const uint8_t *payload, size_t len)
- #endif
- 
- /*
-- * 0: vsyscall VMA doesn't exist	vsyscall=none
-- * 1: vsyscall VMA is r-xp		vsyscall=emulate
-+ * vsyscall probe return codes:
-+ *
-+ * 0: vsyscall VMA is r-xp		vsyscall=emulate
-+ * 1: vsyscall VMA doesn't exist	vsyscall=none
-  * 2: vsyscall VMA is --xp		vsyscall=xonly
-  */
--static int g_vsyscall;
-+static volatile int g_vsyscall;
- static const char *str_vsyscall;
- 
--static const char str_vsyscall_0[] = "";
--static const char str_vsyscall_1[] =
--"ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
--static const char str_vsyscall_2[] =
--"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
-+static const char *str_vsyscall_arr[] = {
-+"ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n",
-+"",
-+"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n"
-+};
- 
- #ifdef __x86_64__
- static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
- {
--	_exit(1);
-+	_exit(g_vsyscall);
- }
- 
- /*
-  * vsyscall page can't be unmapped, probe it directly.
-  */
--static void vsyscall(void)
-+static bool vsyscall(void)
- {
- 	pid_t pid;
- 	int wstatus;
-+	bool ret = false;
- 
- 	pid = fork();
- 	if (pid < 0) {
-@@ -256,72 +259,34 @@ static void vsyscall(void)
- 		(void)sigaction(SIGSEGV, &act, NULL);
- 
- 		/* gettimeofday(NULL, NULL); */
-+		g_vsyscall = 1;
- 		asm volatile (
- 			"call %P0"
- 			:
- 			: "i" (0xffffffffff600000), "D" (NULL), "S" (NULL)
- 			: "rax", "rcx", "r11"
- 		);
--		exit(0);
--	}
--	waitpid(pid, &wstatus, 0);
--	if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 0) {
--		/* vsyscall page exists and is executable. */
--	} else {
--		/* vsyscall page doesn't exist. */
--		g_vsyscall = 0;
--		return;
--	}
--
--	pid = fork();
--	if (pid < 0) {
--		fprintf(stderr, "fork, errno %d\n", errno);
--		exit(1);
--	}
--	if (pid == 0) {
--		struct rlimit rlim = {0, 0};
--		(void)setrlimit(RLIMIT_CORE, &rlim);
--
--		/* Hide "segfault at ffffffffff600000" messages. */
--		struct sigaction act;
--		memset(&act, 0, sizeof(struct sigaction));
--		act.sa_flags = SA_SIGINFO;
--		act.sa_sigaction = sigaction_SIGSEGV;
--		(void)sigaction(SIGSEGV, &act, NULL);
- 
-+		g_vsyscall = 2;
- 		*(volatile int *)0xffffffffff600000UL;
- 		exit(0);
- 	}
- 	waitpid(pid, &wstatus, 0);
--	if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 0) {
--		/* vsyscall page is readable and executable. */
--		g_vsyscall = 1;
--		return;
-+	if (WIFEXITED(wstatus)) {
-+		g_vsyscall = WEXITSTATUS(wstatus);
-+		ret = g_vsyscall != 1;
- 	}
--
--	/* vsyscall page is executable but unreadable. */
--	g_vsyscall = 2;
-+	str_vsyscall = str_vsyscall_arr[g_vsyscall];
-+	return ret;
- }
- 
- int main(void)
- {
- 	int pipefd[2];
- 	int exec_fd;
-+	bool have_vsyscall;
- 
--	vsyscall();
--	switch (g_vsyscall) {
--	case 0:
--		str_vsyscall = str_vsyscall_0;
--		break;
--	case 1:
--		str_vsyscall = str_vsyscall_1;
--		break;
--	case 2:
--		str_vsyscall = str_vsyscall_2;
--		break;
--	default:
--		abort();
--	}
-+	have_vsyscall = vsyscall();
- 
- 	atexit(ate);
- 
-@@ -388,7 +353,7 @@ int main(void)
- 		rv = read(fd, buf, sizeof(buf));
- 		assert(rv == len);
- 		assert(memcmp(buf, buf0, strlen(buf0)) == 0);
--		if (g_vsyscall > 0) {
-+		if (have_vsyscall) {
- 			assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
- 		}
- 	}
-@@ -435,7 +400,7 @@ int main(void)
- 			assert(memmem(buf, rv, S[i], strlen(S[i])));
- 		}
- 
--		if (g_vsyscall > 0) {
-+		if (have_vsyscall) {
- 			assert(memmem(buf, rv, str_vsyscall, strlen(str_vsyscall)));
- 		}
- 	}
+-- 
+Vitaly
 

@@ -2,111 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E50C574BAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0222574BAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238355AbiGNLRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
+        id S238418AbiGNLTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbiGNLRg (ORCPT
+        with ESMTP id S230016AbiGNLTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:17:36 -0400
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E235F501A8;
-        Thu, 14 Jul 2022 04:17:35 -0700 (PDT)
-Received: from quatroqueijos (unknown [177.9.88.15])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 8339E3F382;
-        Thu, 14 Jul 2022 11:17:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1657797453;
-        bh=fWFv+RFz/llfCdkXnbXZ80kWIaRC3ju+kgm5LZk6q5I=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=JvEF/7/dJS41ORhT0juyMzcdB/gU0LGjiI0eDAc4tu7h8BYdfrlcW7V6QVzpXdjQW
-         kmlUlVy7uIr1fmj+8lC+hf0Of7SErkTK472rC/IhhepgoIVDM0bt1O7bEPyUhpYtZu
-         3rwX5oVJP3sjXIvheBxVGIlOEUsLCdOHOU34CtUfcGDOkipqNOj3vGB2Rcc/rk/GyA
-         oTdw07yPg7/wXHQS6hbk+gjMkIrm0MvRPphfzqf+H3XX0HHEtMUb6cAYAwx7OUNcSQ
-         r/Xu+fNamXRaKl1WUJTAbdiv7wSkee4CHOhRj1ZsMh4qYYBTTiWSREJRVGfNwc6YcK
-         ccfsmxnCGHj3g==
-Date:   Thu, 14 Jul 2022 08:17:26 -0300
-From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        antonio.gomez.iglesias@linux.intel.com,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [PATCH] x86/bugs: Switch to "auto" when "ibrs" selected on
- Enhanced IBRS parts
-Message-ID: <Ys/7RiC9Z++38tzq@quatroqueijos>
-References: <0456b35fb9ef957d9a9138e0913fb1a3fd445dff.1657747493.git.pawan.kumar.gupta@linux.intel.com>
+        Thu, 14 Jul 2022 07:19:22 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1272A42AFB;
+        Thu, 14 Jul 2022 04:19:20 -0700 (PDT)
+X-UUID: 87323f8443794ff2bdacbc3f052a3eb3-20220714
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:dd6261c3-b5af-4250-a2c9-126d182e9630,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:586a4c64-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 87323f8443794ff2bdacbc3f052a3eb3-20220714
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1722459032; Thu, 14 Jul 2022 19:19:17 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 14 Jul 2022 19:19:16 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 14 Jul 2022 19:19:15 +0800
+Message-ID: <f0ba5478d77a5190a9050e4518ebbd44bcd889a6.camel@mediatek.com>
+Subject: Re: [PATCH v14 03/10] drm/edid: Add cea_sad helpers for freq/length
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <ck.hu@mediatek.com>, <liangxu.xu@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 14 Jul 2022 19:19:10 +0800
+In-Reply-To: <67b3a842-66aa-2336-3955-d5aa760cdd4b@collabora.com>
+References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
+         <20220712111223.13080-4-rex-bc.chen@mediatek.com>
+         <67b3a842-66aa-2336-3955-d5aa760cdd4b@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0456b35fb9ef957d9a9138e0913fb1a3fd445dff.1657747493.git.pawan.kumar.gupta@linux.intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 10:32:37PM -0700, Pawan Gupta wrote:
-> Currently spectre_v2=ibrs forces write to MSR_IA32_SPEC_CTRL at every
-> entry and exit. On Enhanced IBRS parts setting MSR_IA32_SPEC_CTRL[IBRS]
-> only once at bootup is sufficient. MSR write at every kernel entry/exit
-> incur unnecessary penalty that can be avoided.
+On Thu, 2022-07-14 at 13:12 +0200, AngeloGioacchino Del Regno wrote:
+> Il 12/07/22 13:12, Bo-Chen Chen ha scritto:
+> > From: Guillaume Ranquet <granquet@baylibre.com>
+> > 
+> > This patch adds two helper functions that extract the frequency and
+> > word
+> > length from a struct cea_sad.
+> > 
+> > For these helper functions new defines are added that help
+> > translate the
+> > 'freq' and 'byte2' fields into real numbers.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >   drivers/gpu/drm/drm_edid.c | 73
+> > ++++++++++++++++++++++++++++++++++++++
+> >   include/drm/drm_edid.h     | 14 ++++++++
+> >   2 files changed, 87 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/drm_edid.c
+> > b/drivers/gpu/drm/drm_edid.c
+> > index bc43e1b32092..79316d7f1fd8 100644
+> > --- a/drivers/gpu/drm/drm_edid.c
+> > +++ b/drivers/gpu/drm/drm_edid.c
+> > @@ -4916,6 +4916,79 @@ int drm_edid_to_speaker_allocation(const
+> > struct edid *edid, u8 **sadb)
+> >   }
+> >   EXPORT_SYMBOL(drm_edid_to_speaker_allocation);
+> >   
+> > +/**
+> > + * drm_cea_sad_get_sample_rate - Extract the sample rate from
+> > cea_sad
+> > + * @sad: Pointer to the cea_sad struct
+> > + *
+> > + * Extracts the cea_sad frequency field and returns the sample
+> > rate in Hz.
+> > + *
+> > + * Return: Sample rate in Hz or a negative errno if parsing
+> > failed.
+> > + */
+> > +int drm_cea_sad_get_sample_rate(const struct cea_sad *sad)
+> > +{
+> > +	switch (sad->freq) {
+> > +	case DRM_CEA_SAD_FREQ_32KHZ:
+> > +		return 32000;
+> > +	case DRM_CEA_SAD_FREQ_44KHZ:
+> > +		return 44100;
+> > +	case DRM_CEA_SAD_FREQ_48KHZ:
+> > +		return 48000;
+> > +	case DRM_CEA_SAD_FREQ_88KHZ:
+> > +		return 88200;
+> > +	case DRM_CEA_SAD_FREQ_96KHZ:
+> > +		return 96000;
+> > +	case DRM_CEA_SAD_FREQ_176KHZ:
+> > +		return 176400;
+> > +	case DRM_CEA_SAD_FREQ_192KHZ:
+> > +		return 192000;
+> > +	default:
+> > +		return -EINVAL;
+> > +	}
+> > +}
+> > +EXPORT_SYMBOL(drm_cea_sad_get_sample_rate);
+> > +
+> > +static bool drm_cea_sad_is_pcm(const struct cea_sad *sad)
+> > +{
+> > +	switch (sad->format) {
+> > +	case HDMI_AUDIO_CODING_TYPE_PCM:
+> > +		return true;
+> > +	default:
+> > +		return false;
+> > +	}
 > 
-> When Enhanced IBRS feature is present, switch from "ibrs" to "auto" mode
-> so that appropriate mitigation is selected.
+> Are you sure that you need this helper? That's used only in one
+> function...
+> ...if you really need this one, though, I don't think that using a
+> switch
+> is the best option here.
 > 
-> Fixes: 7c693f54c873 ("x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS")
-> Cc: stable@vger.kernel.org # 5.10+
-> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> ---
->  arch/x86/kernel/cpu/bugs.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+> Unless anyone is against that (please, reason?), I would be for doing
+> it like:
 > 
-> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> index 0dd04713434b..7d7ebfdfbeda 100644
-> --- a/arch/x86/kernel/cpu/bugs.c
-> +++ b/arch/x86/kernel/cpu/bugs.c
-> @@ -1303,6 +1303,12 @@ static enum spectre_v2_mitigation_cmd __init spectre_v2_parse_cmdline(void)
->  		return SPECTRE_V2_CMD_AUTO;
->  	}
->  
-> +	if (cmd == SPECTRE_V2_CMD_IBRS && boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
-> +		pr_err("%s selected but CPU supports Enhanced IBRS. Switching to AUTO select\n",
-> +		       mitigation_options[i].option);
-> +		return SPECTRE_V2_CMD_AUTO;
-> +	}
-> +
->  	spec_v2_print_cond(mitigation_options[i].option,
->  			   mitigation_options[i].secure);
->  	return cmd;
+> 	return sad->format == HDMI_AUDIO_CODING_TYPE_PCM;
 > 
-> base-commit: 72a8e05d4f66b5af7854df4490e3135168694b6b
-> -- 
-> 2.35.3
+> Everything else looks good to me (and working, too).
 > 
-> 
+> Cheers,
+> Angelo
 
-Shouldn't we just use the mitigation the user asked for if it is still
-possible? We could add the warning advising the user that a different
-mitigation could be used instead with less penalty, but if the user asked for
-IBRS and that is available, it should be used.
+Hello Angelo,
 
-One of the reasons for that is testing. I know it was useful enough for me and
-it helped me find some bugs.
+I think you are right,
+in this case, we don't need this help function.
+I will merge this function into
+drm_cea_sad_get_uncompressed_word_length()
 
-Cascardo.
+BRs,
+Bo-Chen
+
+

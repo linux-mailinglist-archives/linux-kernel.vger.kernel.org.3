@@ -2,258 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CCB5756BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5635756BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240527AbiGNVL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 17:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
+        id S240712AbiGNVNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 17:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbiGNVL0 (ORCPT
+        with ESMTP id S232762AbiGNVNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 17:11:26 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E72952445;
-        Thu, 14 Jul 2022 14:11:25 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 123041B0011F;
-        Fri, 15 Jul 2022 00:11:21 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1657833081;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hkPRrVhg014vSftczUrkaj8GJSROx5XO5OafN6l7PA8=;
-        b=FypAc4GMVjPAXMq6zsG+lhChm69w6J1ibMQZ9MMTENG6WiwMwoDVxgSVhU4N5opxClxCDA
-        uB/MtXmPeNIW0YJn4eDQkE1REbAMH1LbLEhrGYcL68cavIQT9ttIz7Zt5yj4bJlJCt+Wxz
-        xjrf9x/4D7RQFw7cVwMEQS66C+41t+YicHhpmMmFc5of0T5umeaPbgp7xRjZr5cYXDVbWQ
-        mWCYIA0joNTOhLxBty89QdPGUUYupZ1I/eX2twZAqJjXveGRUU0sJqUmBDUmbsJS0RR3Tg
-        +oWpGe9ZeZERW6yo78P9p8rc2EHhRzCRmftSoVa92LykkI8Q8F5gJrNZkYM9dg==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id AC09E634D5F;
-        Fri, 15 Jul 2022 00:11:20 +0300 (EEST)
-Date:   Fri, 15 Jul 2022 00:11:20 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Mikhail Rudenko <mike.rudenko@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] media: dt-bindings: media: i2c: document OV4689 DT
- bindings
-Message-ID: <YtCGeBp5U18ljyuX@valkosipuli.retiisi.eu>
-References: <20220712141925.678595-1-mike.rudenko@gmail.com>
- <20220712141925.678595-2-mike.rudenko@gmail.com>
+        Thu, 14 Jul 2022 17:13:13 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DED466B8D;
+        Thu, 14 Jul 2022 14:13:08 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id c3so2037203pfb.13;
+        Thu, 14 Jul 2022 14:13:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B8cg+mg5jw1FPQY3lZieWXxuymftU8CQoVPtDoUrT1k=;
+        b=N4B8l/vxJ2Xe1WBWxHBNHOXdKIleUoQraxHL6cKnbirSEeVlNV8t/zKLRnCYqzYzVa
+         VOFhRLaFcUQDbF6R7jicePd2wjfV1lu7CVAlAjtrzkNXofz1wzoTSoCQ+sM3IJbuaIXj
+         Q9PW/XbBEzCz+hRs6n8Jy/MHVQgHBGYkLxeG2plAguprbm7lkYLn8UNwqtSA7B8KVlDi
+         6sIsUxkZ6lY1TMCQA+we74LZrsGoG0733NIVrg4y+0ENCUA87gk4aRIQl423r/z6dRjm
+         QdpEKOqFNvQ71AYeOdSA++DIaUSUDvzLfXIbMZF9IVl4sYrpxQyNeRY+ZYTfkp4J3ivw
+         DyIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B8cg+mg5jw1FPQY3lZieWXxuymftU8CQoVPtDoUrT1k=;
+        b=uzVpPfT7NkwDu55WYX1JmM5gmp7rLeV4siVA4VbyZm7CSiF7xE97MSD+d0IynndBfF
+         9Z1T2S+WJPqjB3v3WvTH+hq2EM80d3Gf9ymfwUmRnNWxOKA0ez/1Z8MWgx89w62XITSB
+         BGv475RJgg1a4gZcpyojdayRiOks1MOae4mrhFWR8SWdnZhRZ+sciEf8F62UXMjmwNau
+         1+cbJXtr5nwV/ykDK14whsmQW77ztqvCd5U1yk/rLb6mSEp9+q9ByxirKDo9NIMus4vB
+         aklcYt87qw7N/VBkx0y1ZxhwHKSK9eOKDVtVRAxQ2EmDg5Qj78zqXMsj2IHPRBOOooJo
+         KpXw==
+X-Gm-Message-State: AJIora8pohxGoyNXV1cg4mGd43ft3TsrK8h+t0jxauUX8i2AH6jSUXKe
+        Za0kOEKkBTNTtRRHnHmR9Siwlb/7vvU=
+X-Google-Smtp-Source: AGRyM1tE09kZsob7yu5BB/hFdoN9wNzLWdn2SuCJwb2sZPMx+cGS5kDlbRSDdRnY+5bBNjepbAyDWw==
+X-Received: by 2002:a05:6a00:8cf:b0:522:93a6:46e9 with SMTP id s15-20020a056a0008cf00b0052293a646e9mr10619023pfu.62.1657833187250;
+        Thu, 14 Jul 2022 14:13:07 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id z5-20020a1709027e8500b0016c9ac386dfsm1896782pla.94.2022.07.14.14.13.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 14:13:06 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-mips@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] MIPS: BCM47XX: Add support for Netgear WNR3500L v2
+Date:   Thu, 14 Jul 2022 14:13:01 -0700
+Message-Id: <20220714211302.1391015-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712141925.678595-2-mike.rudenko@gmail.com>
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1657833081; a=rsa-sha256;
-        cv=none;
-        b=vLgyybCLGayGmra7eX7USEJE6GUvJVYwEErSbfhWWk/AsmLt7k4JppDSqCbbCEeCVbcpA4
-        jcKyJZHlhRpwjjRwGxWzhthbEXrbIKyQBUOciLWpI4uU083dJWJfwSrxJQJXJH/Nfhr2uc
-        NiJFEBqpY9Wqgmub7Zy7aDAuprsU7AJpzXlXGNcJQYwPNpiI4OVW+7v5jSfdEqKspCdeY+
-        XZeOTeYS6zdFe2qf0W3G/zoBPdocC2/cG6xRfpOU4sJ8fAu625K7JR4eWiaRc5pwWsjCBA
-        rESHCeETGY31GIPTXYOH0YHV3mzEBi4KG+MeSouu3Gcipga9W35wlzQAzL1DXw==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1657833081;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hkPRrVhg014vSftczUrkaj8GJSROx5XO5OafN6l7PA8=;
-        b=RWdHu8/HFe/PAfEBxex/VjLMmgwzo7f1NVHxBTWZXu+y9QQ7JyvaYfMyMVcYxw2OoJRRYg
-        Z9mlKtVfqZhTH49v9OmURgZHKrmLTC9go3ovVEkbhrs/8rs15FlwlPr4Q2Lu4GnfsMKZCZ
-        2R38J6UPe+BdlwYrm5tuuwm//faqpctlZaeP+NY0iy2CkLcjSAOsV1/kY4MEeKWSrIM7L2
-        BBziwp1kYqXSOrfOsP5U53WsZP5/YncFYqr26rcVu3Sgq8bR4iTSgiUN9pAeIeC6K7zgdh
-        8s2dEy5+LZchTqo4FEjiSQCDc4/1whptCenIJP/tLsHIJmNZBl44nfTMkqFjYQ==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mikhail,
+Add support for the Netgear WNR3500L v2 router based on the BCM47186
+chipset and supporting 802.11n Wi-Fi.
 
-Thanks for the patch.
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ arch/mips/bcm47xx/board.c                          |  2 ++
+ arch/mips/bcm47xx/buttons.c                        | 10 ++++++++++
+ arch/mips/bcm47xx/leds.c                           | 11 +++++++++++
+ arch/mips/bcm47xx/workarounds.c                    |  1 +
+ arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h |  1 +
+ 5 files changed, 25 insertions(+)
 
-On Tue, Jul 12, 2022 at 05:19:09PM +0300, Mikhail Rudenko wrote:
-> Add device-tree binding documentation for OV4689 image sensor driver,
-> and the relevant MAINTAINERS entries.
-> 
-> Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
-> ---
->  .../bindings/media/i2c/ovti,ov4689.yaml       | 122 ++++++++++++++++++
->  MAINTAINERS                                   |   7 +
->  2 files changed, 129 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
-> new file mode 100644
-> index 000000000000..6bdebe5862b4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
-> @@ -0,0 +1,122 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov4689.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Omnivision OV4689 CMOS Sensor Device Tree Bindings
-> +
-> +maintainers:
-> +  - Mikhail Rudenko <mike.rudenko@gmail.com>
-> +
-> +description: |-
-> +  The Omnivision OV4689 is a high performance, 1/3-inch, 4 megapixel
-> +  image sensor. Ihis chip supports high frame rate speeds up to 90 fps
-> +  at 2688x1520 resolution. It is programmable through an I2C
-> +  interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
-> +  connection.
-> +
-> +allOf:
-> +  - $ref: /schemas/media/video-interface-devices.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: ovti,ov4689
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    description:
-> +      External clock for the sensor.
-> +    items:
-> +      - const: xclk
-> +
-> +  dovdd-supply:
-> +    description:
-> +      Definition of the regulator used as Digital I/O voltage supply.
-> +
-> +  avdd-supply:
-> +    description:
-> +      Definition of the regulator used as Analog voltage supply.
-> +
-> +  dvdd-supply:
-> +    description:
-> +      Definition of the regulator used as Digital core voltage supply.
-> +
-> +  powerdown-gpios:
-> +    maxItems: 1
-> +    description:
-> +      Reference to the GPIO connected to the powerdown pin (active low).
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description:
-> +      Reference to the GPIO connected to the reset pin (active low).
-> +
-> +  orientation: true
-> +
-> +  rotation: true
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/$defs/port-base
-> +    additionalProperties: false
-> +    description:
-> +      Output port node, single endpoint describing the CSI-2 transmitter.
-> +
-> +    properties:
-> +      endpoint:
-> +        $ref: /schemas/media/video-interfaces.yaml#
-> +        unevaluatedProperties: false
-
-The number of lanes is needed, please require data-lanes property here (as
-well as add it to the example).
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - dovdd-supply
-> +  - avdd-supply
-> +  - dvdd-supply
-> +  - powerdown-gpios
-> +  - reset-gpios
-> +  - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        ov4689: camera@36 {
-> +            compatible = "ovti,ov4689";
-> +            reg = <0x36>;
-> +
-> +            clocks = <&ov4689_clk>;
-> +            clock-names = "xclk";
-> +
-> +            avdd-supply = <&ov4689_avdd>;
-> +            dovdd-supply = <&ov4689_dovdd>;
-> +            dvdd-supply = <&ov4689_dvdd>;
-> +
-> +            powerdown-gpios = <&pio 107 GPIO_ACTIVE_LOW>;
-> +            reset-gpios = <&pio 109 GPIO_ACTIVE_LOW>;
-> +
-> +            orientation = <2>;
-> +            rotation = <0>;
-> +
-> +            port {
-> +                wcam_out: endpoint {
-> +                    remote-endpoint = <&mipi_in_wcam>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f468864fd268..63c4844f26e6 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14523,6 +14523,13 @@ S:	Maintained
->  T:	git git://linuxtv.org/media_tree.git
->  F:	drivers/media/i2c/ov2740.c
->  
-> +OMNIVISION OV4689 SENSOR DRIVER
-> +M:	Mikhail Rudenko <mike.rudenko@gmail.com>
-> +L:	linux-media@vger.kernel.org
-> +S:	Maintained
-> +T:	git git://linuxtv.org/media_tree.git
-> +F:	Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
-> +
->  OMNIVISION OV5640 SENSOR DRIVER
->  M:	Steve Longerbeam <slongerbeam@gmail.com>
->  L:	linux-media@vger.kernel.org
-
+diff --git a/arch/mips/bcm47xx/board.c b/arch/mips/bcm47xx/board.c
+index 87dc76a1f941..8ef002471b9c 100644
+--- a/arch/mips/bcm47xx/board.c
++++ b/arch/mips/bcm47xx/board.c
+@@ -181,6 +181,7 @@ struct bcm47xx_board_type_list1 bcm47xx_board_list_board_id[] __initconst = {
+ 	{{BCM47XX_BOARD_NETGEAR_WNR1000_V3, "Netgear WNR1000 V3"}, "U12H139T50_NETGEAR"},
+ 	{{BCM47XX_BOARD_NETGEAR_WNR2000, "Netgear WNR2000"}, "U12H114T00_NETGEAR"},
+ 	{{BCM47XX_BOARD_NETGEAR_WNR3500L, "Netgear WNR3500L"}, "U12H136T99_NETGEAR"},
++	{{BCM47XX_BOARD_NETGEAR_WNR3500L_V2, "Netgear WNR3500L V2"}, "U12H172T00_NETGEAR"},
+ 	{{BCM47XX_BOARD_NETGEAR_WNR3500U, "Netgear WNR3500U"}, "U12H136T00_NETGEAR"},
+ 	{{BCM47XX_BOARD_NETGEAR_WNR3500V2, "Netgear WNR3500 V2"}, "U12H127T00_NETGEAR"},
+ 	{{BCM47XX_BOARD_NETGEAR_WNR3500V2VC, "Netgear WNR3500 V2vc"}, "U12H127T70_NETGEAR"},
+@@ -195,6 +196,7 @@ struct bcm47xx_board_type_list3 bcm47xx_board_list_board[] __initconst = {
+ 	{{BCM47XX_BOARD_PHICOMM_M1, "Phicomm M1"}, "0x0590", "80", "0x1104"},
+ 	{{BCM47XX_BOARD_ZTE_H218N, "ZTE H218N"}, "0x053d", "1234", "0x1305"},
+ 	{{BCM47XX_BOARD_NETGEAR_WNR3500L, "Netgear WNR3500L"}, "0x04CF", "3500", "02"},
++	{{BCM47XX_BOARD_NETGEAR_WNR3500L_V2, "Netgear WNR3500L V2"}, "0x052b", "3500L", "02"},
+ 	{{BCM47XX_BOARD_LINKSYS_WRT54G_TYPE_0101, "Linksys WRT54G/GS/GL"}, "0x0101", "42", "0x10"},
+ 	{{BCM47XX_BOARD_LINKSYS_WRT54G_TYPE_0467, "Linksys WRT54G/GS/GL"}, "0x0467", "42", "0x10"},
+ 	{{BCM47XX_BOARD_LINKSYS_WRT54G_TYPE_0708, "Linksys WRT54G/GS/GL"}, "0x0708", "42", "0x10"},
+diff --git a/arch/mips/bcm47xx/buttons.c b/arch/mips/bcm47xx/buttons.c
+index 36f0b1aafaa2..38e4a9cbcf4e 100644
+--- a/arch/mips/bcm47xx/buttons.c
++++ b/arch/mips/bcm47xx/buttons.c
+@@ -459,6 +459,13 @@ bcm47xx_buttons_netgear_wnr3500lv1[] __initconst = {
+ 	BCM47XX_GPIO_KEY(6, KEY_WPS_BUTTON),
+ };
+ 
++static const struct gpio_keys_button
++bcm47xx_buttons_netgear_wnr3500lv2[] __initconst = {
++	BCM47XX_GPIO_KEY(4, KEY_RESTART),
++	BCM47XX_GPIO_KEY(6, KEY_WPS_BUTTON),
++	BCM47XX_GPIO_KEY(8, KEY_RFKILL),
++};
++
+ static const struct gpio_keys_button
+ bcm47xx_buttons_netgear_wnr834bv2[] __initconst = {
+ 	BCM47XX_GPIO_KEY(6, KEY_RESTART),
+@@ -736,6 +743,9 @@ int __init bcm47xx_buttons_register(void)
+ 	case BCM47XX_BOARD_NETGEAR_WNR3500L:
+ 		err = bcm47xx_copy_bdata(bcm47xx_buttons_netgear_wnr3500lv1);
+ 		break;
++	case BCM47XX_BOARD_NETGEAR_WNR3500L_V2:
++		err = bcm47xx_copy_bdata(bcm47xx_buttons_netgear_wnr3500lv2);
++		break;
+ 	case BCM47XX_BOARD_NETGEAR_WNR834BV2:
+ 		err = bcm47xx_copy_bdata(bcm47xx_buttons_netgear_wnr834bv2);
+ 		break;
+diff --git a/arch/mips/bcm47xx/leds.c b/arch/mips/bcm47xx/leds.c
+index 4648a302a3c0..8e257d0896d2 100644
+--- a/arch/mips/bcm47xx/leds.c
++++ b/arch/mips/bcm47xx/leds.c
+@@ -527,6 +527,14 @@ bcm47xx_leds_netgear_wnr3500lv1[] __initconst = {
+ 	BCM47XX_GPIO_LED(7, "amber", "power", 0, LEDS_GPIO_DEFSTATE_OFF),
+ };
+ 
++static const struct gpio_led
++bcm47xx_leds_netgear_wnr3500lv2[] __initconst = {
++	BCM47XX_GPIO_LED(0, "blue", "wlan", 0, LEDS_GPIO_DEFSTATE_OFF),
++	BCM47XX_GPIO_LED(1, "green", "wps", 0, LEDS_GPIO_DEFSTATE_OFF),
++	BCM47XX_GPIO_LED(3, "green", "power", 0, LEDS_GPIO_DEFSTATE_ON),
++	BCM47XX_GPIO_LED(7, "amber", "power", 0, LEDS_GPIO_DEFSTATE_OFF),
++};
++
+ static const struct gpio_led
+ bcm47xx_leds_netgear_wnr834bv2[] __initconst = {
+ 	BCM47XX_GPIO_LED(2, "green", "power", 0, LEDS_GPIO_DEFSTATE_ON),
+@@ -791,6 +799,9 @@ void __init bcm47xx_leds_register(void)
+ 	case BCM47XX_BOARD_NETGEAR_WNR3500L:
+ 		bcm47xx_set_pdata(bcm47xx_leds_netgear_wnr3500lv1);
+ 		break;
++	case BCM47XX_BOARD_NETGEAR_WNR3500L_V2:
++		bcm47xx_set_pdata(bcm47xx_leds_netgear_wnr3500lv2);
++		break;
+ 	case BCM47XX_BOARD_NETGEAR_WNR834BV2:
+ 		bcm47xx_set_pdata(bcm47xx_leds_netgear_wnr834bv2);
+ 		break;
+diff --git a/arch/mips/bcm47xx/workarounds.c b/arch/mips/bcm47xx/workarounds.c
+index 0ab95dd431b3..745c6228eb2c 100644
+--- a/arch/mips/bcm47xx/workarounds.c
++++ b/arch/mips/bcm47xx/workarounds.c
+@@ -22,6 +22,7 @@ void __init bcm47xx_workarounds(void)
+ 
+ 	switch (board) {
+ 	case BCM47XX_BOARD_NETGEAR_WNR3500L:
++	case BCM47XX_BOARD_NETGEAR_WNR3500L_V2:
+ 		bcm47xx_workarounds_enable_usb_power(12);
+ 		break;
+ 	case BCM47XX_BOARD_NETGEAR_WNDR3400V2:
+diff --git a/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h b/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h
+index 6583639fe760..30f4114ab872 100644
+--- a/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h
++++ b/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h
+@@ -118,6 +118,7 @@ enum bcm47xx_board {
+ 	BCM47XX_BOARD_NETGEAR_WNR1000_V3,
+ 	BCM47XX_BOARD_NETGEAR_WNR2000,
+ 	BCM47XX_BOARD_NETGEAR_WNR3500L,
++	BCM47XX_BOARD_NETGEAR_WNR3500L_V2,
+ 	BCM47XX_BOARD_NETGEAR_WNR3500U,
+ 	BCM47XX_BOARD_NETGEAR_WNR3500V2,
+ 	BCM47XX_BOARD_NETGEAR_WNR3500V2VC,
 -- 
-Regards,
+2.25.1
 
-Sakari Ailus

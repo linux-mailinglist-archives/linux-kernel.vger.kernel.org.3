@@ -2,88 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433E25750B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB5D5750B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240076AbiGNOYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36226 "EHLO
+        id S238996AbiGNO0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240322AbiGNOX4 (ORCPT
+        with ESMTP id S231987AbiGNO0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:23:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E09562C3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:23:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B07B0B82627
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:23:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 389C9C341C6
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:23:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657808632;
-        bh=ondxzTzSHvYAUKgrQuksilEhYfYB+ZIu538a4pRtHvk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PaaO6DebD9CQOaQP29w59lExhiAcq4J4UAFDmFEBHhsg5J1yNaiBTdac13qXhTBWY
-         46oqgJxief2Eqirp9rAL56cBr9osvp1A+FKcOY/c9RXlG6A3E/NXcSup7TUXaExOum
-         Xor/jAHfI0T5KyFtVAJwhtyjBygF9CPIp3EG0PLc/Fbbz5y0G/F0iYMIUhRtq5DhWf
-         vB42tra3nCSYJaAtqcXontVhCrgKrB/RqkG2i4c6MflRX12ZlqMHcQUvVqJtBOqX4q
-         mP/A3Quu4cVQCnNMpq90jtVs0VbmePgrZbJcJg1cI7eXzysR72Y4a+1GgocbHukG78
-         aVNPLygPkPKCQ==
-Received: by mail-vs1-f53.google.com with SMTP id s1so1571925vsr.12
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:23:52 -0700 (PDT)
-X-Gm-Message-State: AJIora/ss41ESlZO3MKBSiAsujZbKoBrcpYRRYdBi+K6vJaVcMz4Pfh8
-        sTqyzBaIl731B9ipL+BTVeh1zrsEjWamVGfzpA==
-X-Google-Smtp-Source: AGRyM1uDEwdv+KF5pevijLlHPYzYRVqfG22KbUB9jLgKGtjGyoooXllMwfupTBOjfQWdGLDUVm+Pv2iG+7MQ34spZnI=
-X-Received: by 2002:a67:c18e:0:b0:357:5fc3:45d7 with SMTP id
- h14-20020a67c18e000000b003575fc345d7mr3356106vsj.53.1657808631159; Thu, 14
- Jul 2022 07:23:51 -0700 (PDT)
+        Thu, 14 Jul 2022 10:26:36 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0926D5142D;
+        Thu, 14 Jul 2022 07:26:36 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id c15so2418126ljr.0;
+        Thu, 14 Jul 2022 07:26:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xhAdDwR7fkHmP5A2mwh6VjI19vPe0VaNlf9urUpx8Og=;
+        b=hINe2A+4rDsO5qx9r85RBNBCkuJYvM+3sJiN3lY76d+aFcYM1FL4AzzIIMEQ9bBstP
+         x2a+hNbdWpX2UFWFTcI/JqwAlb2WDj93S/d4pvcbo5HcL1XgKIDXRTmQ3EOJqlp7zmdy
+         3f3KsIkym9rNdc6a8ECB66yrOVz1mU473DSP+hIvYFH9+G8MM9Jz7IcY6g81EIt/a4DY
+         UwT/Gk78TtX5CsazY8xdZt6M1GwQEdRXMnbR0k2jtlaA0eBQ3kXpZSv67jhIls9uG7gV
+         9wGeVkTCuKK3eSr7OpKj60z7aq9iweHaArBIqGtC7AJv405Hs7TDziT573dBeevw3aOh
+         VHhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xhAdDwR7fkHmP5A2mwh6VjI19vPe0VaNlf9urUpx8Og=;
+        b=xGKiD4XZleCAcS2ZMU/fUOteFcsyM7LFLqiZWmYh690rVAwA+5QzRVEunT8V8U9xTl
+         kbKBH1MCvQ4r3sr5N2299B81Ec1Bsq2QT0qJnWRCzW5FCP+slbskg8Mq8vaIzZfnvEv7
+         9HBkGTJOU0MqreV70vi+bK54TlouDEZ8lN4BRfKxhHloAtpAdxn6CxrUlEsQFcqI94YR
+         ycjnb0ZCzuCCumF9lVbCU/L6OEjTQrimF1q0JYGSISi++HG16EPG7Fnt2zrIU1Qx8gqE
+         d/9W5WgUchryVsmYJ7X30WCNKKrJnmclP6pYnisuxKmWX825y4kEC8+2FBGR7R6/ncEa
+         UCig==
+X-Gm-Message-State: AJIora/cwcmM7ratXatPzKzdxJEdDHyZsaldQN5rWNfU0Y27c7BWKVx4
+        /Ir2U7CAW0Fo72N31y937XAu8tKWfaWpMQ==
+X-Google-Smtp-Source: AGRyM1sI1Dl9Qmbe2UutdGzOYC6VzFsKnNHLtcRH+6OjgCWBc6AqXqI2QGNzP6O3eNnhay2PqUfk1g==
+X-Received: by 2002:a2e:944a:0:b0:24f:10bd:b7e8 with SMTP id o10-20020a2e944a000000b0024f10bdb7e8mr4980778ljh.238.1657808794231;
+        Thu, 14 Jul 2022 07:26:34 -0700 (PDT)
+Received: from home.paul.comp (paulfertser.info. [2001:470:26:54b:226:9eff:fe70:80c2])
+        by smtp.gmail.com with ESMTPSA id q17-20020a056512211100b00489c665af61sm382594lfr.274.2022.07.14.07.26.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 07:26:33 -0700 (PDT)
+Received: from home.paul.comp (home.paul.comp [IPv6:0:0:0:0:0:0:0:1])
+        by home.paul.comp (8.15.2/8.15.2/Debian-22) with ESMTP id 26EEQT1u027118;
+        Thu, 14 Jul 2022 17:26:31 +0300
+Received: (from paul@localhost)
+        by home.paul.comp (8.15.2/8.15.2/Submit) id 26EEQPC1027117;
+        Thu, 14 Jul 2022 17:26:25 +0300
+From:   Paul Fertser <fercerpav@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>
+Cc:     Andrew Jeffery <andrew@aj.id.au>, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Paul Fertser <fercerpav@gmail.com>
+Subject: [PATCH] hwmon: (aspeed-pwm-tacho) increase fan tach period (again)
+Date:   Thu, 14 Jul 2022 17:23:44 +0300
+Message-Id: <20220714142344.27071-1-fercerpav@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220707081826.953449-1-Naresh.Solanki@9elements.com>
- <20220707081826.953449-3-Naresh.Solanki@9elements.com> <20220714141041.GB2229197-robh@kernel.org>
- <YtAkwcwXaQqZV75d@sirena.org.uk>
-In-Reply-To: <YtAkwcwXaQqZV75d@sirena.org.uk>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 14 Jul 2022 08:23:39 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKu_HCDoPBTcVdVV2JyD_8p3+cbrNC0u6VrK85vWZmt3Q@mail.gmail.com>
-Message-ID: <CAL_JsqKu_HCDoPBTcVdVV2JyD_8p3+cbrNC0u6VrK85vWZmt3Q@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] dt-bindings: regulator: add bindings for output-supply
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Naresh Solanki <naresh.solanki@9elements.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 8:14 AM Mark Brown <broonie@kernel.org> wrote:
->
-> On Thu, Jul 14, 2022 at 08:10:41AM -0600, Rob Herring wrote:
-> > On Thu, Jul 07, 2022 at 10:18:24AM +0200, Naresh Solanki wrote:
-> > > Add a devicetree binding for the 9elements,output-supply driver.
->
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - 9elements,output-supply
->
-> > Why does this have a vendor prefix when it appears to be a s/w
-> > construct?
->
-> It's a description of a power supply output from their system (system as
-> a whole, not power provisioned within the system).
+The old value allows measuring fan speeds down to about 970 RPM and
+gives timeout for anything less than that. It is problematic because it
+can also be used as an indicator for fan failure or absence.
 
-Well, that's a better commit message than the original, but I still
-don't understand.
+Despite having read the relevant section of "ASPEED AST2500/AST2520 A2
+Datasheet – V1.7" multiple times I wasn't able to figure out what
+exactly "fan tach period" and "fan tach falling point of period" mean
+(both are set by the driver from the constant this patch is amending).
 
-Rob
+Experimentation with a Tioga Pass OCP board (AST2500 BMC) showed that
+value of 0x0108 gives time outs for speeds below 1500 RPM and the value
+offered by the patch is good for at least 750 RPM (the fans can't spin
+any slower so the lower bound is unknown). Measuring with the fans
+spinning takes about 30 ms, sometimes down to 18 ms, so about the same
+as with the previous value.
+
+This constant was last changed in
+762b1e88801357770889d013c5d20fe110d1f456.
+
+Signed-off-by: Paul Fertser <fercerpav@gmail.com>
+---
+ drivers/hwmon/aspeed-pwm-tacho.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+index 3cb88d6fbec0..d11f674e3dc3 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -159,7 +159,7 @@
+  * 11: reserved.
+  */
+ #define M_TACH_MODE 0x02 /* 10b */
+-#define M_TACH_UNIT 0x0210
++#define M_TACH_UNIT 0x0420
+ #define INIT_FAN_CTRL 0xFF
+ 
+ /* How long we sleep in us while waiting for an RPM result. */
+-- 
+2.32.0
+

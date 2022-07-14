@@ -2,166 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323A5574746
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E984F574747
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236261AbiGNIiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 04:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
+        id S237108AbiGNIi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 04:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237543AbiGNIiT (ORCPT
+        with ESMTP id S234904AbiGNIi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 04:38:19 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDBE402C0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:38:00 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3137316bb69so9736017b3.10
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:38:00 -0700 (PDT)
+        Thu, 14 Jul 2022 04:38:26 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79313402C6
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:38:10 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id n18so1671294lfq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:38:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OijWc6/zN7+oJw44OKbMxP70Rr2Fy33fyFndj1YTp2w=;
-        b=eAVrmrs4YJUffyfHBU4akJYJp//HiI6yxd7W+aBm4OkaBxQbZPO3Y4GdKPe//6MSrP
-         iM/l9jAkioiiNkThmgO2ubJ7kZZR09wFG4F9b5wS0UA/b3Ljam02GqAnlFK5JNDyXMed
-         /7XHPP9QjlNyfCpuSXVV8j9RHaed78VG5nNev1JJK+nZk4WXoRVdENKz6anLwI9DJ0p6
-         ZipbvZfMt9zERy8ljTtY6vZJF9qVp1QzgHTmVjD8rFHRrCihsZMdAj5Nry0gGWTKaCG5
-         ntoDQeYKA+ihPIdZXaXafgoB0xTpMs6h6rnOje8FzIAr7TvqCacuO4nMIl9oaGf7ZwgJ
-         /DdA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7fxd01WSVmh4sZ+rShAEvNwWTJPHinWndJQGVhp8bBI=;
+        b=AV6Hhli373vNQFbi9Ak8xtnfk65n1qJoOFR1iopuhLqNO+9rR7YVnsPRxPwQyDSQIV
+         +QSw/uYsUn0j3lTno1eRLpYu6NCmKMJ9NHXnu4MS/85dt2BIFA1oM9XA7hsrJQYOFIdC
+         hQbQbbF8+DErln2+k/IyanoaqZumXBcql8mwC+7C8GE42BE1um9abQ98AyATK4QRbSW2
+         ljWFFeMgHHg4xta7hDjX252AJNu8ISxRyUblN+e3kCPgKPRQ1EbvbtncAOYC8xFT3/bH
+         xVMAPvZIlkTEWGZd93pTeNDQCQpHIH9ToFdVKCDS72OiK4S9a+FfVKuuh/PHcI4oOCZI
+         5d5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OijWc6/zN7+oJw44OKbMxP70Rr2Fy33fyFndj1YTp2w=;
-        b=jlc04HbO6Z/qAhaOJQA/e2IzXaCiRgpKYgadTamU4KPp3nPc/nmr5tVc9xVWazXuJR
-         DCy/72KCFJf3/Ngn01nOu7L1Vm4SS614VkkcLJdWCkN8X+nA1GuWCiOFEl3/rgFm0rMo
-         W1lANb6dnFh6gQ5X78N/jglj5fLBysgZ/ugCsLmMdHlzjwjMDzS3o5M4zcdjZrXBSqDK
-         uI0XgaW4biD9/nOEVWJhy5TcpQisCj4sbsc8tRjOssGsxvpEHw3laADZH3BXNsskSaYs
-         9zGUjjQgYGaUl9VTpuWhrsLf3d/z5T3dXAVvBrt1YO/IrMh+kwFDKyXk14CCMk1Y56A4
-         emsw==
-X-Gm-Message-State: AJIora8k2AsnqF834gnIohF94R/VQJ7Dkqf2ZPRO5EaZcC3xcXmfVa8L
-        H7KpEl2fA04iBDfLzVE7zSiGQnyJ5MWqkb9yhEMIwg==
-X-Google-Smtp-Source: AGRyM1sd2jEWh+VjyUEuIyeyBE2cFo3QVD7rPln4nwnP0s0LxVlNjBhuQ3ZR1urywd+ATP3o33bc2OHkkuxdZsDvU5A=
-X-Received: by 2002:a0d:dbc3:0:b0:31d:f1e:7e8e with SMTP id
- d186-20020a0ddbc3000000b0031d0f1e7e8emr8530544ywe.180.1657787879527; Thu, 14
- Jul 2022 01:37:59 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7fxd01WSVmh4sZ+rShAEvNwWTJPHinWndJQGVhp8bBI=;
+        b=Kv0tCXIulDNmtd8F+UP1lyP9TyEQzqZ2p2eof6QcehqzmB8UJc6r8NRr/cHoYUwLEN
+         GdnuV0Q2zN3VLtCfcAVZLGDBEprCCdkyIMSEoJhyRFNbzbGVO+pfMWlANvbUJdUJhOSv
+         djZoFEpszSY2n8mTLXZH93VdcpticFjaqQIFfTee5XMsCVM/YGJkkIk9RLRTsm2oVDpn
+         cMK3xDf9cI0bTTDhlA3a29+iOnEPqVvisYM6XDrQsmIdbS740dgYBA98HWLm33Y88XSl
+         XbMkV9qlNnrknVIlXhLuVjK/ve2D75gl5NVZJcBQwbn8n3bxtsB/XTewBQ0cv0D5mMxL
+         DucQ==
+X-Gm-Message-State: AJIora8qq+RhfWvfIsKEBm+EgnlJsOT16lHMNWMh0D9I/GOiABADBmoo
+        sElA341KlGBrn4WQf2BTzz0ATw==
+X-Google-Smtp-Source: AGRyM1uNnmvHoyTRHbkEvCEx1QbExHpVGO/O3M8jCnCpVPFay7j9MN3UnazfseCVeu8DlEirOYwVeg==
+X-Received: by 2002:a05:6512:2308:b0:48a:f9d:7389 with SMTP id o8-20020a056512230800b0048a0f9d7389mr3677290lfu.235.1657787888760;
+        Thu, 14 Jul 2022 01:38:08 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id k6-20020ac257c6000000b00489cd8ee61asm237159lfo.275.2022.07.14.01.38.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 01:38:07 -0700 (PDT)
+Message-ID: <3178fad9-b761-dd28-971a-007159d10695@linaro.org>
+Date:   Thu, 14 Jul 2022 10:38:04 +0200
 MIME-Version: 1.0
-References: <20220704084354.3556326-1-jeongik@google.com>
-In-Reply-To: <20220704084354.3556326-1-jeongik@google.com>
-From:   Jeongik Cha <jeongik@google.com>
-Date:   Thu, 14 Jul 2022 17:37:48 +0900
-Message-ID: <CAE7E4g=BGzup31AD5zAuZpoR2gMswJhuo67B7cV8=wHOY=Y+qA@mail.gmail.com>
-Subject: Re: [PATCH v1] wifi: mac80211_hwsim: fix race condition in pending packet
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     adelva@google.com, kernel-team@android.com, jaeman@google.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ASoC: dt-bindings: atmel-i2s: Convert to json-schema
+Content-Language: en-US
+To:     Ryan.Wanner@microchip.com, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220713162538.139115-1-Ryan.Wanner@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220713162538.139115-1-Ryan.Wanner@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 5:44 PM Jeongik Cha <jeongik@google.com> wrote:
->
-> A pending packet uses a cookie as an unique key, but it can be duplicated
-> because it didn't use atomic operators.
->
-> And also, a pending packet can be null in hwsim_tx_info_frame_received_nl
-> due to race condition with mac80211_hwsim_stop.
->
-> For this,
->  * Use an atomic type and operator for a cookie
->  * Add a lock around the loop for pending packets
->
-> Signed-off-by: Jeongik Cha <jeongik@google.com>
+On 13/07/2022 18:25, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+> 
+
+Thank you for your patch. There is something to discuss/improve.
+
+> Convert atmel i2s devicetree binding to json-schema.
+> Change file name to match json-schema naming.
+> 
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 > ---
->  drivers/net/wireless/mac80211_hwsim.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
-> index c5bb97b381cf..ea006248ffcd 100644
-> --- a/drivers/net/wireless/mac80211_hwsim.c
-> +++ b/drivers/net/wireless/mac80211_hwsim.c
-> @@ -687,7 +687,7 @@ struct mac80211_hwsim_data {
->         bool ps_poll_pending;
->         struct dentry *debugfs;
->
-> -       uintptr_t pending_cookie;
-> +       atomic64_t pending_cookie;
->         struct sk_buff_head pending;    /* packets pending */
->         /*
->          * Only radios in the same group can communicate together (the
-> @@ -1358,7 +1358,7 @@ static void mac80211_hwsim_tx_frame_nl(struct ieee80211_hw *hw,
->         int i;
->         struct hwsim_tx_rate tx_attempts[IEEE80211_TX_MAX_RATES];
->         struct hwsim_tx_rate_flag tx_attempts_flags[IEEE80211_TX_MAX_RATES];
-> -       uintptr_t cookie;
-> +       u64 cookie;
->
->         if (data->ps != PS_DISABLED)
->                 hdr->frame_control |= cpu_to_le16(IEEE80211_FCTL_PM);
-> @@ -1427,8 +1427,7 @@ static void mac80211_hwsim_tx_frame_nl(struct ieee80211_hw *hw,
->                 goto nla_put_failure;
->
->         /* We create a cookie to identify this skb */
-> -       data->pending_cookie++;
-> -       cookie = data->pending_cookie;
-> +       cookie = (u64)atomic64_inc_return(&data->pending_cookie);
->         info->rate_driver_data[0] = (void *)cookie;
->         if (nla_put_u64_64bit(skb, HWSIM_ATTR_COOKIE, cookie, HWSIM_ATTR_PAD))
->                 goto nla_put_failure;
-> @@ -4178,6 +4177,7 @@ static int hwsim_tx_info_frame_received_nl(struct sk_buff *skb_2,
->         const u8 *src;
->         unsigned int hwsim_flags;
->         int i;
-> +       unsigned long flags;
->         bool found = false;
->
->         if (!info->attrs[HWSIM_ATTR_ADDR_TRANSMITTER] ||
-> @@ -4205,18 +4205,20 @@ static int hwsim_tx_info_frame_received_nl(struct sk_buff *skb_2,
->         }
->
->         /* look for the skb matching the cookie passed back from user */
-> +       spin_lock_irqsave(&data2->pending.lock, flags);
->         skb_queue_walk_safe(&data2->pending, skb, tmp) {
->                 u64 skb_cookie;
->
->                 txi = IEEE80211_SKB_CB(skb);
-> -               skb_cookie = (u64)(uintptr_t)txi->rate_driver_data[0];
-> +               skb_cookie = (u64)txi->rate_driver_data[0];
->
->                 if (skb_cookie == ret_skb_cookie) {
-> -                       skb_unlink(skb, &data2->pending);
-> +                       __skb_unlink(skb, &data2->pending);
->                         found = true;
->                         break;
->                 }
->         }
-> +       spin_unlock_irqrestore(&data2->pending.lock, flags);
->
->         /* not found */
->         if (!found)
-> --
-> 2.37.0.rc0.161.g10f37bed90-goog
->
+>  .../bindings/sound/atmel,sama5d2-i2s.yaml     | 83 +++++++++++++++++++
+>  .../devicetree/bindings/sound/atmel-i2s.txt   | 46 ----------
+>  2 files changed, 83 insertions(+), 46 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/atmel,sama5d2-i2s.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/sound/atmel-i2s.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/atmel,sama5d2-i2s.yaml b/Documentation/devicetree/bindings/sound/atmel,sama5d2-i2s.yaml
+> new file mode 100644
+> index 000000000000..1cadc476565c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/atmel,sama5d2-i2s.yaml
+> @@ -0,0 +1,83 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/atmel,sama5d2-i2s.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel I2S controller
+> +
+> +maintainers:
+> +  - Nicolas Ferre <nicolas.ferre@microchip.com>
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +description:
+> +  Atmel I2S (Inter-IC Sound Controller) bus is the standard
+> +  interface for connecting audio devices, such as audio codecs.
+> +
+> +properties:
+> +  compatible:
+> +    const: atmel,sama5d2-i2s
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      Only the peripheral clock (pclk) is required. The generated clock (gclk)
+> +      and the I2S mux clock (muxclk) are optional and should only be set together,
+> +      when Master Mode is required.
 
-Hello Johannes!
+Skip property description, but list and describe the items.
 
-It fixes kernel panics during a long test which uses mac80211_hwsim
-driver. So I think it would be beneficial if we could merge this into
-LTS branches. Could you share your opinion?
+> +
+> +  clock-names:
+> +    items:
+> +      - const: pclk
+> +      - const: gclk
+> +      - const: muxclk
+> +    minItems: 1
+> +
+> +  dmas:
+> +    description:
+> +      Should be one per channel name listed in the dma-names property.
+> +    maxItems: 2
 
-Thanks
-Jeongik
+Instead items+description. The description you pasted is obvious and not
+helping.
+
+> +
+> +  dma-names:
+> +    items:
+> +      - const: tx
+> +      - const: rx
+> +
+Best regards,
+Krzysztof

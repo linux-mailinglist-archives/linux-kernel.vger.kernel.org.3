@@ -2,90 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5062E5749A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B235749A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236790AbiGNJvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
+        id S237598AbiGNJwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238098AbiGNJvX (ORCPT
+        with ESMTP id S237520AbiGNJvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:51:23 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319F74BD33
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657792276; x=1689328276;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=X6hreYbVjHvf40p2LuAOzp9Z9aRhDAEm5TxVhK1TaLE=;
-  b=MvBsZkD5o19vvdefusFHfuFMjoMNu/FaLIpOlj5ScYZk0LPtOcFsY1f3
-   PV0ck0wcUoEFlEDGFgglPubtfvQnmdiXrqi6BK2s7XASJRzVvfBRi0lYo
-   ApMcGW2WVHjFZ1zVwfujaNr0/JJzvwIy7lFYRvnIb998Kx9P7CwmrK93b
-   OTFnnSa68GLP3Ox23MByONzogylM8scD6f5qsyek6x5gflcyMKtSSd/CF
-   mOtYqT2z8d+mDJvEkLF6QT4DaaVdJYo2kOY1YrnHtGdAQDpxuvkRmZOFk
-   oaNFFAsdffaZ9v0OM81egSdOUNxjmEly6CAcp+elt/XpTlpS1CDYWwJOW
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265256147"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="265256147"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 02:51:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="663722834"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Jul 2022 02:51:07 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oBvUw-0000PK-Vw;
-        Thu, 14 Jul 2022 09:51:06 +0000
-Date:   Thu, 14 Jul 2022 17:50:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: module.c:undefined reference to `apply_returns'
-Message-ID: <202207141712.n23UKGoF-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 14 Jul 2022 05:51:54 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0F201C131
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:51:52 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.188:46016.629183404
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-10.133.8.199 (unknown [172.18.0.188])
+        by chinatelecom.cn (HERMES) with SMTP id 7337328008B;
+        Thu, 14 Jul 2022 17:51:46 +0800 (CST)
+X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
+Received: from  ([172.18.0.188])
+        by app0023 with ESMTP id 67b370444c964ef1ac82f61b4102a6d5 for sfr@canb.auug.org.au;
+        Thu, 14 Jul 2022 17:51:48 CST
+X-Transaction-ID: 67b370444c964ef1ac82f61b4102a6d5
+X-Real-From: liuxp11@chinatelecom.cn
+X-Receive-IP: 172.18.0.188
+X-MEDUSA-Status: 0
+Sender: liuxp11@chinatelecom.cn
+From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
+To:     sfr@canb.auug.org.au, viro@zeniv.linux.org.uk, willy@infradead.org
+Cc:     linux-kernel@vger.kernel.org, Liu Xinpeng <liuxp11@chinatelecom.cn>
+Subject: [PATCH linux-next] iov_iter: Fix repeated minus operation
+Date:   Thu, 14 Jul 2022 17:51:34 +0800
+Message-Id: <1657792294-56244-1-git-send-email-liuxp11@chinatelecom.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4a57a8400075bc5287c5c877702c68aeae2a033d
-commit: 15e67227c49a57837108acfe1c80570e1bd9f962 x86: Undo return-thunk damage
-date:   2 weeks ago
-config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220714/202207141712.n23UKGoF-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=15e67227c49a57837108acfe1c80570e1bd9f962
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 15e67227c49a57837108acfe1c80570e1bd9f962
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+After executing command 'cat /proc/cpuinfo', got a message:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+[    6.909745] ------------[ cut here ]------------
+[    6.910267] WARNING: CPU: 0 PID: 76 at lib/iov_iter.c:1026
+iov_iter_pipe+0x34/0x40
+[    6.910951] Modules linked in:
+[    6.911584] CPU: 0 PID: 76 Comm: cat Not tainted 5.19.0-rc6-next-20220711 #9
+[    6.911916] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+[    6.912668] RIP: 0010:iov_iter_pipe+0x34/0x40
+[    6.913062] Code: 72 54 39 72 5c 76 23 48 c7 07 00 00 00 00 48 c7 47 08 00 00
+00 00 c6 07 03 48 89 4f 10 48 89 57 18 89 47 20 89 47 24 c3 0f 0b <0f> 7
+[    6.914341] RSP: 0018:ffffc900001c7d48 EFLAGS: 00000246
+[    6.914647] RAX: 0000000000000010 RBX: ffff888004988700 RCX: 0000000000000000
+[    6.914893] RDX: ffff88800490bc00 RSI: 0000000000000010 RDI: ffffc900001c7d58
+[    6.915302] RBP: ffffc900001c7e00 R08: 0000000000000000 R09: ffff888004cafad8
+[    6.915609] R10: 0000000000020000 R11: 0000000000001000 R12: ffff88800490bc00
+[    6.915856] R13: ffffc900001c7e48 R14: 00000000000002d5 R15: ffff88800490bc00
+[    6.916352] FS:  00000000016df8c0(0000) GS:ffff88800f600000(0000)
 
-All errors (new ones prefixed by >>):
+Checking the code, need to delete the duplicate minus in a loop.
 
-   /usr/bin/ld: arch/x86/um/../kernel/module.o: in function `module_finalize':
->> module.c:(.text+0x23b): undefined reference to `apply_returns'
-   collect2: error: ld returned 1 exit status
+Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+---
+ lib/iov_iter.c | 1 -
+ 1 file changed, 1 deletion(-)
 
+diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+index 4a3451e..642841ce 100644
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@ -472,7 +472,6 @@ static size_t copy_pipe_to_iter(const void *addr, size_t bytes,
+ 			break;
+ 		memcpy_to_page(page, off, addr, chunk);
+ 		addr += chunk;
+-		n -= chunk;
+ 	}
+ 	return bytes;
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+1.8.3.1
+

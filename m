@@ -2,64 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9C8575722
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7C0575726
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 23:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240539AbiGNVne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 17:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
+        id S240513AbiGNVpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 17:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240364AbiGNVnb (ORCPT
+        with ESMTP id S229984AbiGNVpo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 17:43:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDD4C6EEB1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657835008;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qQDjerzXJSCJFgfNtcXiHSPfeoMguzE4pEXuI+0+GjY=;
-        b=G3otsWuIQu53I2ZBQtYjqxxhCgOxCAAzhoVC9MVXd2SDi4ZGt5LblhiyQEpBu7Uu2oCzPq
-        rTX0TTRN/bc9kTC/sUfqtJdgjbBUqouyYypim3jgRMhExGPoMsj1N3kXuLsMsW8c2diUpU
-        62CUAQc8mVQd+ICqbtBM9gYeC8Buv0w=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-10-eq6rwds3PPmEOb_47aS48w-1; Thu, 14 Jul 2022 17:43:25 -0400
-X-MC-Unique: eq6rwds3PPmEOb_47aS48w-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6C59A3C0D85D;
-        Thu, 14 Jul 2022 21:43:25 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.33.101])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0BFD6140EBE3;
-        Thu, 14 Jul 2022 21:43:25 +0000 (UTC)
-Date:   Thu, 14 Jul 2022 17:43:23 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Tian Tao <tiantao6@hisilicon.com>
-Subject: Re: [PATCH v4 RESEND] drivers/base: fix userspace break from using
- bin_attributes for cpumap and cpulist
-Message-ID: <YtCN+wXGC5U0BR9U@lorien.usersys.redhat.com>
-References: <20220714183021.2924119-1-pauld@redhat.com>
- <YtBvQUzRn5idNA5J@yury-laptop>
- <YtCFjZJFpQCgBiyF@lorien.usersys.redhat.com>
- <YtCLoMlYzjgBqhia@yury-laptop>
+        Thu, 14 Jul 2022 17:45:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37216F7C0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 14:45:43 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oC6eU-0008JV-3X; Thu, 14 Jul 2022 23:45:42 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oC6eT-000zKG-5p; Thu, 14 Jul 2022 23:45:41 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oC6eS-005Djk-F7; Thu, 14 Jul 2022 23:45:40 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] pcmcia: sa1100: Make sa11x0_drv_pcmcia_legacy_remove() return void
+Date:   Thu, 14 Jul 2022 23:45:34 +0200
+Message-Id: <20220714214534.63517-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtCLoMlYzjgBqhia@yury-laptop>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1617; h=from:subject; bh=/KOsnQwcJQVul4wMzQAkJkQgZTHjXHM4GxuzMgZHL1U=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi0I569TxNv3HYoElZc4+pNv/N2YOMXVuT93gDKAID G4FwQDaJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYtCOegAKCRDB/BR4rcrsCRTyCA CgnIgi+VonYXuvbkCdcqh+cyc24vNYs8Q5lIsEQQfymaN6V2G5tk82VmjclsN5LjRkFIRWTfoEOFfP yHUtm2UDzJaJmX1IXYO1zVOeibblusd7KGaO+uDevXb2QU8+hogcWwK4ybFvJVgeNCg1tyfIaHomOe 0vfsO+6vmEe6OULTq+rQBagUF0hvvu3SUIXc8sLQvP+c8K8KvKqB78cibJE3+9toA49/rXE5fCXs0j ozBeO31236HRaLx4som/DnP0rtzmdratSUXT19p3eUyEjSh4ffCWcVMvsS5Z7V3Mxpg/UDnctkZS/3 tq7zAPCdnkhZ0Z/feC0x9Ps6pe8hnl
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,258 +53,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 02:33:20PM -0700 Yury Norov wrote:
-> On Thu, Jul 14, 2022 at 05:07:25PM -0400, Phil Auld wrote:
-> > Hi Yury,
-> > 
-> > On Thu, Jul 14, 2022 at 12:32:17PM -0700 Yury Norov wrote:
-> > > On Thu, Jul 14, 2022 at 02:30:21PM -0400, Phil Auld wrote:
-> > > > Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
-> > > > This breaks userspace code that retrieves the size before reading the file. Rather
-> > > > than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
-> > > > limitation of cpumap ABI") let's put in a size value at compile time. Use direct
-> > > > comparison and a worst-case maximum to ensure compile time constants. For cpulist the
-> > > > max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960
-> > > > (8192 * 5). In order to get near that you'd need a system with every other CPU on one
-> > > > node or something similar. e.g. (0,2,4,8, ... ).
-> > > 
-> > > My python says:
-> > >         >>> len(str(list(range(0, 8194, 2))).replace(" ", ''))
-> > >         19931
-> > > 
-> > > Where the list looks like:
-> > >         [0,2,4,6,8,10,...,8190,8192]
-> > >         
-> > > So excluding open and close braces, max length of the cpu list is
-> > > 19929 bytes, which is almost3 times smaller than your estimation
-> > > (8192 * 7 = 57344).
-> > > 
-> > > 
-> > > For NR_CPUS == 16x8192:
-> > >         >>> len(str(list(range(0, 8194 * 16, 2))).replace(" ", '')) - 2
-> > >         403308
-> > >         >>> 8192 * 16 * 7
-> > >         917504
-> > > 
-> > > For NR_CPUS == 128x8192:
-> > >         >>> len(str(list(range(0, 8194 * 128, 2))).replace(" ", '')) - 2
-> > >         3639774
-> > >         >>> 8192 * 16 * 7
-> > >         7340032
-> > > 
-> > > Looks like it 2x overestimates for large lists, and 4x for standard
-> > > 256-bit mask.
-> > 
-> > Thanks! It's totally possible my math is wrong. But I'm not seeing a
-> > suggestion here. What would you like the formula to be?
-> > 
-> > I don't have any attachment to the numbers that are in there now. I'm not
-> > surprised it's 2x since it counts all of them. I could just divide it by 2
-> > I suppose.
-> 
-> Agree.
-> 
-> Actually, I accidentally removed the sentence below from the previous email:
-> 
-> I think there's no simple formula for this, so dividing by 2 would
-> probably be a simplest solution. 
->
+sa11x0_drv_pcmcia_legacy_remove() returns zero unconditionally. Letting it
+return void instead makes it easier to see in the caller that there is no
+error to handle.
 
-Right! That's what I've got now :)   I'll have a new version after I get
-it built and sanity tested.
+This is a preparation for making platform remove callbacks return void.
 
-Thanks again,
-Phil
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/pcmcia/sa1100_generic.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/pcmcia/sa1100_generic.c b/drivers/pcmcia/sa1100_generic.c
+index 47b060c57418..c2b6e828c2c6 100644
+--- a/drivers/pcmcia/sa1100_generic.c
++++ b/drivers/pcmcia/sa1100_generic.c
+@@ -125,7 +125,7 @@ static int sa11x0_drv_pcmcia_legacy_probe(struct platform_device *dev)
+ 	return ret;
+ }
+ 
+-static int sa11x0_drv_pcmcia_legacy_remove(struct platform_device *dev)
++static void sa11x0_drv_pcmcia_legacy_remove(struct platform_device *dev)
+ {
+ 	struct skt_dev_info *sinfo = platform_get_drvdata(dev);
+ 	int i;
+@@ -134,8 +134,6 @@ static int sa11x0_drv_pcmcia_legacy_remove(struct platform_device *dev)
+ 
+ 	for (i = 0; i < sinfo->nskt; i++)
+ 		soc_pcmcia_remove_one(&sinfo->skt[i]);
+-
+-	return 0;
+ }
+ 
+ static int sa11x0_drv_pcmcia_probe(struct platform_device *pdev)
+@@ -167,8 +165,10 @@ static int sa11x0_drv_pcmcia_remove(struct platform_device *dev)
+ {
+ 	struct soc_pcmcia_socket *skt;
+ 
+-	if (dev->id == -1)
+-		return sa11x0_drv_pcmcia_legacy_remove(dev);
++	if (dev->id == -1) {
++		sa11x0_drv_pcmcia_legacy_remove(dev);
++		return 0;
++	}
+ 
+ 	skt = platform_get_drvdata(dev);
+ 
 
-> > > Before, it was possible to fit ~1800 cpus into 4k page, after - 585.
-> > >
-> > 
-> > I don't understand this part. Nothing I did changes how the files are
-> > actually built I think.
-> 
-> I just meant that we'll significantly increase requirements for the
-> size.
->  
-> > > > To simplify the math and support
-> > > > larger NR_CPUS in the future we are using NR_CPUS * 7. We also set it to a min of
-> > > > PAGE_SIZE to retain the older behavior for smaller NR_CPUS. The cpumap file wants to
-> > > > be something like NR_CPUS/4 + NR_CPUS/32, for the ","s so for simplicity we are using
-> > > > NR_CPUS/2.
-> > > 
-> > > This again overestimates almost twice. In this case, NR_CPUS * 9/32 - 1
-> > > is a precise value, if I didn't screw up. Why don't you just use it?
-> > >
-> > 
-> > I was just keeping it simple since it's used twice. But I can do it this way. 
-> > 
-> > 
-> > Cheers,
-> > Phil
-> > 
-> > > > Add a set of macros for these values to cpumask.h so they can be used in multiple places.
-> > > > Apply these to the handful of such files in drivers/base/topology.c as well as node.c.
-> > > > 
-> > > > On an 80 cpu 4-node sytem (NR_CPUS == 8192)
-> > > > 
-> > > > before:
-> > > > 
-> > > > -r--r--r--. 1 root root 0 Jul 12 14:08 /sys/devices/system/node/node0/cpulist
-> > > > -r--r--r--. 1 root root 0 Jul 11 17:25 /sys/devices/system/node/node0/cpumap
-> > > > 
-> > > > after:
-> > > > 
-> > > > -r--r--r--. 1 root root 57344 Jul 13 11:32 /sys/devices/system/node/node0/cpulist
-> > > > -r--r--r--. 1 root root  4096 Jul 13 11:31 /sys/devices/system/node/node0/cpumap
-> > > > 
-> > > > CONFIG_NR_CPUS = 16384
-> > > > -r--r--r--. 1 root root 114688 Jul 13 14:03 /sys/devices/system/node/node0/cpulist
-> > > > -r--r--r--. 1 root root   8192 Jul 13 14:02 /sys/devices/system/node/node0/cpumap
-> > > > 
-> > > > Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
-> > > > Fixes: bb9ec13d156 ("topology: use bin_attribute to break the size limitation of cpumap ABI")
-> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > > > Signed-off-by: Phil Auld <pauld@redhat.com>
-> > > > ---
-> > > > 
-> > > > v2: Fix cpumap size calculation. Increase multiplier for cpulist size.
-> > > > 
-> > > > v3: Add comments in code.
-> > > > 
-> > > > v4: Define constants in cpumask.h. Move comments there. Also fix
-> > > > topology.c.
-> > > > 
-> > > > 
-> > > >  drivers/base/node.c     |  4 ++--
-> > > >  drivers/base/topology.c | 32 ++++++++++++++++----------------
-> > > >  include/linux/cpumask.h | 16 ++++++++++++++++
-> > > >  3 files changed, 34 insertions(+), 18 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/base/node.c b/drivers/base/node.c
-> > > > index 0ac6376ef7a1..eb0f43784c2b 100644
-> > > > --- a/drivers/base/node.c
-> > > > +++ b/drivers/base/node.c
-> > > > @@ -45,7 +45,7 @@ static inline ssize_t cpumap_read(struct file *file, struct kobject *kobj,
-> > > >  	return n;
-> > > >  }
-> > > >  
-> > > > -static BIN_ATTR_RO(cpumap, 0);
-> > > > +static BIN_ATTR_RO(cpumap, CPUMAP_FILE_MAX_BYTES);
-> > > >  
-> > > >  static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
-> > > >  				   struct bin_attribute *attr, char *buf,
-> > > > @@ -66,7 +66,7 @@ static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
-> > > >  	return n;
-> > > >  }
-> > > >  
-> > > > -static BIN_ATTR_RO(cpulist, 0);
-> > > > +static BIN_ATTR_RO(cpulist, CPULIST_FILE_MAX_BYTES);
-> > > >  
-> > > >  /**
-> > > >   * struct node_access_nodes - Access class device to hold user visible
-> > > > diff --git a/drivers/base/topology.c b/drivers/base/topology.c
-> > > > index ac6ad9ab67f9..89f98be5c5b9 100644
-> > > > --- a/drivers/base/topology.c
-> > > > +++ b/drivers/base/topology.c
-> > > > @@ -62,47 +62,47 @@ define_id_show_func(ppin, "0x%llx");
-> > > >  static DEVICE_ATTR_ADMIN_RO(ppin);
-> > > >  
-> > > >  define_siblings_read_func(thread_siblings, sibling_cpumask);
-> > > > -static BIN_ATTR_RO(thread_siblings, 0);
-> > > > -static BIN_ATTR_RO(thread_siblings_list, 0);
-> > > > +static BIN_ATTR_RO(thread_siblings, CPUMAP_FILE_MAX_BYTES);
-> > > > +static BIN_ATTR_RO(thread_siblings_list, CPULIST_FILE_MAX_BYTES);
-> > > >  
-> > > >  define_siblings_read_func(core_cpus, sibling_cpumask);
-> > > > -static BIN_ATTR_RO(core_cpus, 0);
-> > > > -static BIN_ATTR_RO(core_cpus_list, 0);
-> > > > +static BIN_ATTR_RO(core_cpus, CPUMAP_FILE_MAX_BYTES);
-> > > > +static BIN_ATTR_RO(core_cpus_list, CPULIST_FILE_MAX_BYTES);
-> > > >  
-> > > >  define_siblings_read_func(core_siblings, core_cpumask);
-> > > > -static BIN_ATTR_RO(core_siblings, 0);
-> > > > -static BIN_ATTR_RO(core_siblings_list, 0);
-> > > > +static BIN_ATTR_RO(core_siblings, CPUMAP_FILE_MAX_BYTES);
-> > > > +static BIN_ATTR_RO(core_siblings_list, CPULIST_FILE_MAX_BYTES);
-> > > >  
-> > > >  #ifdef TOPOLOGY_CLUSTER_SYSFS
-> > > >  define_siblings_read_func(cluster_cpus, cluster_cpumask);
-> > > > -static BIN_ATTR_RO(cluster_cpus, 0);
-> > > > -static BIN_ATTR_RO(cluster_cpus_list, 0);
-> > > > +static BIN_ATTR_RO(cluster_cpus, CPUMAP_FILE_MAX_BYTES);
-> > > > +static BIN_ATTR_RO(cluster_cpus_list, CPULIST_FILE_MAX_BYTES);
-> > > >  #endif
-> > > >  
-> > > >  #ifdef TOPOLOGY_DIE_SYSFS
-> > > >  define_siblings_read_func(die_cpus, die_cpumask);
-> > > > -static BIN_ATTR_RO(die_cpus, 0);
-> > > > -static BIN_ATTR_RO(die_cpus_list, 0);
-> > > > +static BIN_ATTR_RO(die_cpus, CPUMAP_FILE_MAX_BYTES);
-> > > > +static BIN_ATTR_RO(die_cpus_list, CPULIST_FILE_MAX_BYTES);
-> > > >  #endif
-> > > >  
-> > > >  define_siblings_read_func(package_cpus, core_cpumask);
-> > > > -static BIN_ATTR_RO(package_cpus, 0);
-> > > > -static BIN_ATTR_RO(package_cpus_list, 0);
-> > > > +static BIN_ATTR_RO(package_cpus, CPUMAP_FILE_MAX_BYTES);
-> > > > +static BIN_ATTR_RO(package_cpus_list, CPULIST_FILE_MAX_BYTES);
-> > > >  
-> > > >  #ifdef TOPOLOGY_BOOK_SYSFS
-> > > >  define_id_show_func(book_id, "%d");
-> > > >  static DEVICE_ATTR_RO(book_id);
-> > > >  define_siblings_read_func(book_siblings, book_cpumask);
-> > > > -static BIN_ATTR_RO(book_siblings, 0);
-> > > > -static BIN_ATTR_RO(book_siblings_list, 0);
-> > > > +static BIN_ATTR_RO(book_siblings, CPUMAP_FILE_MAX_BYTES);
-> > > > +static BIN_ATTR_RO(book_siblings_list, CPULIST_FILE_MAX_BYTES);
-> > > >  #endif
-> > > >  
-> > > >  #ifdef TOPOLOGY_DRAWER_SYSFS
-> > > >  define_id_show_func(drawer_id, "%d");
-> > > >  static DEVICE_ATTR_RO(drawer_id);
-> > > >  define_siblings_read_func(drawer_siblings, drawer_cpumask);
-> > > > -static BIN_ATTR_RO(drawer_siblings, 0);
-> > > > -static BIN_ATTR_RO(drawer_siblings_list, 0);
-> > > > +static BIN_ATTR_RO(drawer_siblings, CPUMAP_FILE_MAX_BYTES);
-> > > > +static BIN_ATTR_RO(drawer_siblings_list, CPULIST_FILE_MAX_BYTES);
-> > > >  #endif
-> > > >  
-> > > >  static struct bin_attribute *bin_attrs[] = {
-> > > > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> > > > index fe29ac7cc469..007acdb462bd 100644
-> > > > --- a/include/linux/cpumask.h
-> > > > +++ b/include/linux/cpumask.h
-> > > > @@ -1071,4 +1071,20 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
-> > > >  	[0] =  1UL							\
-> > > >  } }
-> > > >  
-> > > > +/* 
-> > > > + * Provide a valid theoretical max size for cpumap ands cpulist sysfs files to 
-> > > 
-> > > s/ands/and
-> > > 
-> > > > + * avoid breaking userspace which may allocate a buffer based on the size 
-> > > > + * reported by e.g. fstat.
-> > > > + *
-> > > > + * For cpumap NR_CPUS/2 is a simplification of NR_CPUS/4 + NR_CPUS/32. 
-> > > > + *
-> > > > + * For cpulist 7 is (ceil(log10(NR_CPUS)) + 1) allowing for NR_CPUS to be up to 
-> > > > + * 2 orders of magnitude larger than 8192. This covers a worst-case of every 
-> > > > + * other cpu being on one of two nodes for a very large NR_CPUS.
-> > > > + *
-> > > > + *  Use PAGE_SIZE as a minimum for smaller configurations. 
-> > > > + */
-> > > > +#define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS >> 1) > PAGE_SIZE) ? NR_CPUS >> 1 : PAGE_SIZE)
-> > > > +#define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7) > PAGE_SIZE) ? NR_CPUS * 7 : PAGE_SIZE)
-> > > > +
-> > > >  #endif /* __LINUX_CPUMASK_H */
-> > > > -- 
-> > > > 2.31.1
-> > > 
-> > 
-> > -- 
-> 
-
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
 -- 
+2.36.1
 

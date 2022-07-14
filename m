@@ -2,86 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972BF574AF3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEB5574AF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbiGNKmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
+        id S238350AbiGNKmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237845AbiGNKmI (ORCPT
+        with ESMTP id S237845AbiGNKmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:42:08 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C755467F;
-        Thu, 14 Jul 2022 03:42:06 -0700 (PDT)
-X-UUID: 7f899fa0db0b499ea78709cf133241d8-20220714
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:f92936f6-fd9a-4ac2-93da-147fcff96b8c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:53f37dd7-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 7f899fa0db0b499ea78709cf133241d8-20220714
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <kewei.xu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 323635748; Thu, 14 Jul 2022 18:42:00 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 14 Jul 2022 18:42:00 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Jul 2022 18:41:59 +0800
-From:   <kewei.xu@mediatek.com>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
-        <caiyu.chen@mediatek.com>, <kewei.xu@mediatek.com>,
-        <david-yh.chiu@mediatek.com>
-Subject: [PATCH 1/1] dt-bindings: uart: update bindings for MT8188 SoC
-Date:   Thu, 14 Jul 2022 18:41:49 +0800
-Message-ID: <20220714104149.23343-1-kewei.xu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Thu, 14 Jul 2022 06:42:00 -0400
+Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7AE491FF
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:41:56 -0700 (PDT)
+Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
+  by ironport.ite.com.tw with ESMTP; 14 Jul 2022 18:41:53 +0800
+Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
+        by mse.ite.com.tw with ESMTP id 26EAfp1K040938;
+        Thu, 14 Jul 2022 18:41:51 +0800 (GMT-8)
+        (envelope-from allen.chen@ite.com.tw)
+Received: from CSBMAIL1.internal.ite.com.tw (192.168.65.58) by
+ CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.14; Thu, 14 Jul 2022 18:41:51 +0800
+Received: from CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7]) by
+ CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7%18]) with mapi id
+ 15.01.2176.014; Thu, 14 Jul 2022 18:41:51 +0800
+From:   <allen.chen@ite.com.tw>
+To:     <treapking@chromium.org>, <andrzej.hajda@intel.com>,
+        <narmstrong@baylibre.com>, <robert.foss@linaro.org>,
+        <Laurent.pinchart@ideasonboard.com>, <jonas@kwiboo.se>,
+        <jernej.skrabec@gmail.com>, <airlied@linux.ie>, <daniel@ffwll.ch>
+CC:     <hsinyi@chromium.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <Kenneth.Hung@ite.com.tw>,
+        <Jau-Chih.Tseng@ite.com.tw>, <Hermes.Wu@ite.com.tw>
+Subject: RE: [PATCH v2] drm/bridge: it6505: Power on downstream device in
+ .atomic_enable
+Thread-Topic: [PATCH v2] drm/bridge: it6505: Power on downstream device in
+ .atomic_enable
+Thread-Index: AQHYl2WhMyMSW5NQwU2abTU4OMFnz619rWtw
+Date:   Thu, 14 Jul 2022 10:41:51 +0000
+Message-ID: <a7c9c0b2a35e45f89cb7d6d7646396f2@ite.com.tw>
+References: <20220714173715.v2.1.I85af54e9ceda74ec69f661852825845f983fc343@changeid>
+In-Reply-To: <20220714173715.v2.1.I85af54e9ceda74ec69f661852825845f983fc343@changeid>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.70.46]
+x-tm-snts-smtp: 9FC9254C1A08E1488876D87E4C2C2BE95FBC308C14AFD7FCAE685AFA5B44DC1B2002:8
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MAIL: mse.ite.com.tw 26EAfp1K040938
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kewei Xu <kewei.xu@mediatek.com>
-
-Add a DT binding documentation for the MT8188 soc.
-
-Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
----
- Documentation/devicetree/bindings/serial/mtk-uart.txt | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/serial/mtk-uart.txt b/Documentation/devicetree/bindings/serial/mtk-uart.txt
-index 113b5d6a2245..e5094e1db7b4 100644
---- a/Documentation/devicetree/bindings/serial/mtk-uart.txt
-+++ b/Documentation/devicetree/bindings/serial/mtk-uart.txt
-@@ -21,6 +21,7 @@ Required properties:
-   * "mediatek,mt8173-uart" for MT8173 compatible UARTS
-   * "mediatek,mt8183-uart", "mediatek,mt6577-uart" for MT8183 compatible UARTS
-   * "mediatek,mt8186-uart", "mediatek,mt6577-uart" for MT8183 compatible UARTS
-+  * "mediatek,mt8188-uart", "mediatek,mt6577-uart" for MT8188 compatible UARTS
-   * "mediatek,mt8192-uart", "mediatek,mt6577-uart" for MT8192 compatible UARTS
-   * "mediatek,mt8195-uart", "mediatek,mt6577-uart" for MT8195 compatible UARTS
-   * "mediatek,mt8516-uart" for MT8516 compatible UARTS
--- 
-2.18.0
-
+UmV2aWV3ZWQtYnk6IEFsbGVuIENoZW4gPGFsbGVuLmNoZW5AaXRlLmNvbS50dz4NCg0KLS0tLS1P
+cmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IFBpbi1ZZW4gTGluIDx0cmVhcGtpbmdAY2hyb21p
+dW0ub3JnPiANClNlbnQ6IFRodXJzZGF5LCBKdWx5IDE0LCAyMDIyIDU6MzkgUE0NClRvOiBBbmRy
+emVqIEhhamRhIDxhbmRyemVqLmhhamRhQGludGVsLmNvbT47IE5laWwgQXJtc3Ryb25nIDxuYXJt
+c3Ryb25nQGJheWxpYnJlLmNvbT47IFJvYmVydCBGb3NzIDxyb2JlcnQuZm9zc0BsaW5hcm8ub3Jn
+PjsgTGF1cmVudCBQaW5jaGFydCA8TGF1cmVudC5waW5jaGFydEBpZGVhc29uYm9hcmQuY29tPjsg
+Sm9uYXMgS2FybG1hbiA8am9uYXNAa3dpYm9vLnNlPjsgSmVybmVqIFNrcmFiZWMgPGplcm5lai5z
+a3JhYmVjQGdtYWlsLmNvbT47IERhdmlkIEFpcmxpZSA8YWlybGllZEBsaW51eC5pZT47IERhbmll
+bCBWZXR0ZXIgPGRhbmllbEBmZndsbC5jaD4NCkNjOiBIc2luLVlpIFdhbmcgPGhzaW55aUBjaHJv
+bWl1bS5vcmc+OyBBbGxlbiBDaGVuICizr6xmpnQpIDxhbGxlbi5jaGVuQGl0ZS5jb20udHc+OyBQ
+aW4tWWVuIExpbiA8dHJlYXBraW5nQGNocm9taXVtLm9yZz47IGRyaS1kZXZlbEBsaXN0cy5mcmVl
+ZGVza3RvcC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNClN1YmplY3Q6IFtQQVRD
+SCB2Ml0gZHJtL2JyaWRnZTogaXQ2NTA1OiBQb3dlciBvbiBkb3duc3RyZWFtIGRldmljZSBpbiAu
+YXRvbWljX2VuYWJsZQ0KDQpTZW5kIERQQ0QgRFBfU0VUX1BPV0VSX0QwIGNvbW1hbmQgdG8gdGhl
+IG1vbml0b3IgaW4gLmF0b21pY19lbmFibGUgY2FsbGJhY2suIFdpdGhvdXQgdGhpcyBjb21tYW5k
+LCBzb21lIG1vbml0b3JzIHdvbid0IHNob3cgdXAgYWdhaW4gYWZ0ZXIgY2hhbmdpbmcgdGhlIHJl
+c29sdXRpb24uDQoNCkZpeGVzOiA0NmNhN2RhN2YxZTggKCJkcm0vYnJpZGdlOiBpdDY1MDU6IFNl
+bmQgRFBDRCBTRVRfUE9XRVIgdG8gZG93bnN0cmVhbSIpDQoNClNpZ25lZC1vZmYtYnk6IFBpbi1Z
+ZW4gTGluIDx0cmVhcGtpbmdAY2hyb21pdW0ub3JnPg0KLS0tDQoNCkNoYW5nZXMgaW4gdjI6DQot
+IFVwZGF0ZSB0aGUgdHlwbyBpbiB0aGUgc3VtbWFyeSAocG93ZXIgb24gLS0+IHBvd2VyIG9mZikN
+Ci0gUmUtd3JpdGUgdGhlIGNvbW1pdCBtZXNzYWdlIHRvIG1ha2UgaXQgY2xlYXJlci4NCg0KIGRy
+aXZlcnMvZ3B1L2RybS9icmlkZ2UvaXRlLWl0NjUwNS5jIHwgMyArKysNCiAxIGZpbGUgY2hhbmdl
+ZCwgMyBpbnNlcnRpb25zKCspDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vYnJpZGdl
+L2l0ZS1pdDY1MDUuYyBiL2RyaXZlcnMvZ3B1L2RybS9icmlkZ2UvaXRlLWl0NjUwNS5jDQppbmRl
+eCA0YjY3M2M0NzkyZDcuLmU1NjI2MDM1ZjMxMSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvZ3B1L2Ry
+bS9icmlkZ2UvaXRlLWl0NjUwNS5jDQorKysgYi9kcml2ZXJzL2dwdS9kcm0vYnJpZGdlL2l0ZS1p
+dDY1MDUuYw0KQEAgLTI5NDUsNiArMjk0NSw5IEBAIHN0YXRpYyB2b2lkIGl0NjUwNV9icmlkZ2Vf
+YXRvbWljX2VuYWJsZShzdHJ1Y3QgZHJtX2JyaWRnZSAqYnJpZGdlLA0KIAlpZiAocmV0KQ0KIAkJ
+ZGV2X2VycihkZXYsICJGYWlsZWQgdG8gc2V0dXAgQVZJIGluZm9mcmFtZTogJWQiLCByZXQpOw0K
+IA0KKwlpdDY1MDVfZHJtX2RwX2xpbmtfc2V0X3Bvd2VyKCZpdDY1MDUtPmF1eCwgJml0NjUwNS0+
+bGluaywNCisJCQkJICAgICBEUF9TRVRfUE9XRVJfRDApOw0KKw0KIAlpdDY1MDVfdXBkYXRlX3Zp
+ZGVvX3BhcmFtZXRlcihpdDY1MDUsIG1vZGUpOw0KIA0KIAlyZXQgPSBpdDY1MDVfc2VuZF92aWRl
+b19pbmZvZnJhbWUoaXQ2NTA1LCAmZnJhbWUpOw0KLS0NCjIuMzcuMC4xNDQuZzhhYzA0YmZkMi1n
+b29nDQoNCg==

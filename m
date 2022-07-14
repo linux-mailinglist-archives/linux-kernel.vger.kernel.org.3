@@ -2,79 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBFC574982
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A61ED57494E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237804AbiGNJqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
+        id S237659AbiGNJoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238413AbiGNJps (ORCPT
+        with ESMTP id S229897AbiGNJoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:45:48 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A624B4BC;
-        Thu, 14 Jul 2022 02:45:46 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VJIcqPy_1657791941;
-Received: from localhost(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0VJIcqPy_1657791941)
-          by smtp.aliyun-inc.com;
-          Thu, 14 Jul 2022 17:45:43 +0800
-From:   Wen Gu <guwen@linux.alibaba.com>
-To:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 6/6] net/smc: Extend SMC-R link group netlink attribute
-Date:   Thu, 14 Jul 2022 17:44:05 +0800
-Message-Id: <1657791845-1060-7-git-send-email-guwen@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1657791845-1060-1-git-send-email-guwen@linux.alibaba.com>
-References: <1657791845-1060-1-git-send-email-guwen@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 14 Jul 2022 05:44:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D381260F;
+        Thu, 14 Jul 2022 02:44:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6287B61F68;
+        Thu, 14 Jul 2022 09:44:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9C93C34115;
+        Thu, 14 Jul 2022 09:44:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657791853;
+        bh=AaG5DijCBCbZIPwIggTULO+h15a919z2ZS94dMzJroY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lbIP8/t/lBeB+OdaUEhX2HsSDs06lOpzNUScj7RaB7i/msLrjMmTTqB2d2NF+3Qzm
+         4JuGWMqkXa4D6vUvwE/zFCsVuowFSGC5wkfuvJl/S2QHtdJT/21/FzZ1bJVTkSU/ox
+         90iF1pBXes8zbxXd8kwlU7M8DJptdOYmvvF1DfpZB1kVaFHcaGdmgRhhS4ONArmNxE
+         p7tDJ0+fir60cv6cVKu7aGLiZeE0nJtMLrlGXBhkALr+CzxWNIUgXZW6DFK6iaBPmF
+         4k0/Pmgkv+GnGQ79B+Ok3pobjvVAif/I32B/sLFixvL/f5LqPdKWF9X98X+tOpNxVC
+         GorCtotJOL/sA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oBvOM-00057B-1x; Thu, 14 Jul 2022 11:44:18 +0200
+Date:   Thu, 14 Jul 2022 11:44:18 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/30] phy: qcom,qmp: fix dt-bindings and deprecate
+ lane suffix
+Message-ID: <Ys/lct4Dc0o426xy@hovoldconsulting.com>
+References: <20220707134725.3512-1-johan+linaro@kernel.org>
+ <Ys/QBPJmkWO6O3Fw@hovoldconsulting.com>
+ <5187985c-7f86-320b-aee9-a1107c8ce0a7@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5187985c-7f86-320b-aee9-a1107c8ce0a7@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend SMC-R link group netlink attribute SMC_GEN_LGR_SMCR.
-Introduce SMC_NLA_LGR_R_BUF_TYPE to show the buffer type of
-SMC-R link group.
+On Thu, Jul 14, 2022 at 11:31:22AM +0200, Krzysztof Kozlowski wrote:
+> On 14/07/2022 10:12, Johan Hovold wrote:
 
-Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
----
- include/uapi/linux/smc.h | 1 +
- net/smc/smc_core.c       | 2 ++
- 2 files changed, 3 insertions(+)
+> > Any further comments to this series?
+> > 
+> > Vinod, I noticed there was a conflict when rebasing on linux-next due to
+> > commit 85d43a69db2d ("dt-bindings: phy: qcom,qmp: add IPQ8074 PCIe Gen3
+> > PHY binding").
+> > 
+> 
+> I got few comments. Apologies for a slow review, I am a bit overloaded.
 
-diff --git a/include/uapi/linux/smc.h b/include/uapi/linux/smc.h
-index 693f549..bb4dacc 100644
---- a/include/uapi/linux/smc.h
-+++ b/include/uapi/linux/smc.h
-@@ -124,6 +124,7 @@ enum {
- 	SMC_NLA_LGR_R_V2,		/* nest */
- 	SMC_NLA_LGR_R_NET_COOKIE,	/* u64 */
- 	SMC_NLA_LGR_R_PAD,		/* flag */
-+	SMC_NLA_LGR_R_BUF_TYPE,		/* u8 */
- 	__SMC_NLA_LGR_R_MAX,
- 	SMC_NLA_LGR_R_MAX = __SMC_NLA_LGR_R_MAX - 1
- };
-diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
-index f26770c..ff49a11 100644
---- a/net/smc/smc_core.c
-+++ b/net/smc/smc_core.c
-@@ -347,6 +347,8 @@ static int smc_nl_fill_lgr(struct smc_link_group *lgr,
- 		goto errattr;
- 	if (nla_put_u8(skb, SMC_NLA_LGR_R_TYPE, lgr->type))
- 		goto errattr;
-+	if (nla_put_u8(skb, SMC_NLA_LGR_R_BUF_TYPE, lgr->buf_type))
-+		goto errattr;
- 	if (nla_put_u8(skb, SMC_NLA_LGR_R_VLAN_ID, lgr->vlan_id))
- 		goto errattr;
- 	if (nla_put_u64_64bit(skb, SMC_NLA_LGR_R_NET_COOKIE,
--- 
-1.8.3.1
+Heh, no worries. Review within a week is awesome.
 
+Thanks for taking another look.
+
+Johan

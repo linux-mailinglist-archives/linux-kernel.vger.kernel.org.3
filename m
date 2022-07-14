@@ -2,173 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CFE574DBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68C4574DC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239381AbiGNMej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
+        id S239393AbiGNMf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239346AbiGNMe0 (ORCPT
+        with ESMTP id S239384AbiGNMfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:34:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8049352462;
-        Thu, 14 Jul 2022 05:34:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 14 Jul 2022 08:35:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75535D0D0;
+        Thu, 14 Jul 2022 05:35:45 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4509CB824E2;
-        Thu, 14 Jul 2022 12:34:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C15ACC34115;
-        Thu, 14 Jul 2022 12:34:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657802061;
-        bh=qBirXXWP2MvpS4lCr+loYwR+cC50dveyyNNYEAD0Bqs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=knaJXlPNMLbIxCYOYMKHQqEMkMwL8qRRGZXzl/1Qohf6zRJ4xd5gHTnKhqZGWjL5z
-         IE3X3Bjl8UC8cPhRzT8Lo1Z77YCok4yj9Li87twVXITrGIy5y0GSYPTriXuzrL1ZRd
-         So5VG7MxrP7o5O2V7W9WewYzwer1iy2NrPvjAe+fJ+BQlJcSROjm4xmXwPYlK9qtjL
-         N9MlAm+IdGj8Lrx/MtDnSYWoQX2tVJlDZBeQbkBOwGGPU9MwhV3RYTqhi+0Sni30X3
-         VfzICXYjlk9lNLCwb4yVi+zsq16JVeK8ufwSXNeZ1D1dXediYjTaoI56H6W/usVSjy
-         pHwz+P4RBhSFw==
-Received: by mail-vs1-f42.google.com with SMTP id d187so1292168vsd.10;
-        Thu, 14 Jul 2022 05:34:21 -0700 (PDT)
-X-Gm-Message-State: AJIora84cXHFvQIsYwxi+I7hIj6cA0bjL7Tu2WfZZ0gZgDZPfptCnPzO
-        9zd5OuLT5i+Gv7AGkQUMMpHWTBsC1JFbRMchrUg=
-X-Google-Smtp-Source: AGRyM1ty5yRBbaVRJ8PJWbtdv5Dy7XJuthHHzmRMybTtmDUVI2vw0cugeBgictCY0ND5UquBP9+bozDTgNcHp02K6aM=
-X-Received: by 2002:a67:6fc3:0:b0:356:18:32ba with SMTP id k186-20020a676fc3000000b00356001832bamr3253584vsc.43.1657802060763;
- Thu, 14 Jul 2022 05:34:20 -0700 (PDT)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9685E6601A3B;
+        Thu, 14 Jul 2022 13:35:43 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657802144;
+        bh=3tgtT8VanBEk9yfmpT18dxURM1+JmT9sPRThb3SqdXU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Vf5U0hWiMxt5Q3ex4YjkiE6+PBMaxDbDk39QDy2/0vcfRL4GItQlRJvDmnmy4C2/9
+         vgG7C0audHui/O0rF1kvHAMQKhq8/yZ7U6qo2aXejNLx+W4sNYlDY8uMl8xkB0jPzB
+         hL94+CfuXQQqqxQJGwkf0kyE297wqAyxao8kKEU5mO9JkYSBTH/Khppt/NV2DybmIz
+         hraUdGHLyueOoNEKQc6d5IsrZK4ywKSNN5vdVYAJn2Cf6A6zZvKu7PbbX1py7lTSRC
+         +FFx+ga5ctvdrPkJotwo8tFGmEBnCh/voC2uDA2C0pzZVt0BReL2jy1d0zX0uta4SM
+         4P+S9kvN9uAQg==
+Message-ID: <eefcb818-484b-9964-4a64-dbfb98edd446@collabora.com>
+Date:   Thu, 14 Jul 2022 14:35:40 +0200
 MIME-Version: 1.0
-References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
- <20220704112526.2492342-4-chenhuacai@loongson.cn> <20220705092937.GA552@willie-the-truck>
- <CAAhV-H5r8HDaxt8fkO97in5-eH8X9gokVNervmUWn6km4S0e-w@mail.gmail.com>
- <20220706161736.GC3204@willie-the-truck> <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
-In-Reply-To: <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 14 Jul 2022 20:34:08 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6EziBQ=3SveRvaPxHfbsGpmYrhVHfuBkpLJXn-t-uTZA@mail.gmail.com>
-Message-ID: <CAAhV-H6EziBQ=3SveRvaPxHfbsGpmYrhVHfuBkpLJXn-t-uTZA@mail.gmail.com>
-Subject: Re: [PATCH V4 3/4] mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages()
-To:     Will Deacon <will@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 15/19] arm64: dts: mt8195: Add adsp node and adsp
+ mailbox nodes
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>
+Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        YC Hung <yc.hung@mediatek.corp-partner.google.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
+References: <20220714122837.20094-1-tinghan.shen@mediatek.com>
+ <20220714122837.20094-16-tinghan.shen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220714122837.20094-16-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oh, Sudarshan Rajagopalan's Email has changed, Let's update.
+Il 14/07/22 14:28, Tinghan Shen ha scritto:
+> From: YC Hung <yc.hung@mediatek.corp-partner.google.com>
+> 
+> Add adsp node and adsp mailbox nodes for mt8195.
+> 
+> Signed-off-by: YC Hung <yc.hung@mediatek.corp-partner.google.com>
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 37 ++++++++++++++++++++++++
+>   1 file changed, 37 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> index 818f7dea27c6..9cb68417c550 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> @@ -739,6 +739,43 @@
+>   			#clock-cells = <1>;
+>   		};
+>   
+> +		adsp: adsp@10803000 {
 
-Huacai
+adsp: dsp@10803000
 
-On Fri, Jul 8, 2022 at 5:47 PM Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> +Dan Williams
-> +Sudarshan Rajagopalan
->
-> On Thu, Jul 7, 2022 at 12:17 AM Will Deacon <will@kernel.org> wrote:
-> >
-> > On Tue, Jul 05, 2022 at 09:07:59PM +0800, Huacai Chen wrote:
-> > > On Tue, Jul 5, 2022 at 5:29 PM Will Deacon <will@kernel.org> wrote:
-> > > > On Mon, Jul 04, 2022 at 07:25:25PM +0800, Huacai Chen wrote:
-> > > > > diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
-> > > > > index 33e2a1ceee72..6f2e40bb695d 100644
-> > > > > --- a/mm/sparse-vmemmap.c
-> > > > > +++ b/mm/sparse-vmemmap.c
-> > > > > @@ -686,6 +686,60 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
-> > > > >       return vmemmap_populate_range(start, end, node, altmap, NULL);
-> > > > >  }
-> > > > >
-> > > > > +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
-> > > > > +                                   unsigned long addr, unsigned long next)
-> > > > > +{
-> > > > > +}
-> > > > > +
-> > > > > +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
-> > > > > +                                    unsigned long next)
-> > > > > +{
-> > > > > +     return 0;
-> > > > > +}
-> > > > > +
-> > > > > +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
-> > > > > +                                      int node, struct vmem_altmap *altmap)
-> > > > > +{
-> > > > > +     unsigned long addr;
-> > > > > +     unsigned long next;
-> > > > > +     pgd_t *pgd;
-> > > > > +     p4d_t *p4d;
-> > > > > +     pud_t *pud;
-> > > > > +     pmd_t *pmd;
-> > > > > +
-> > > > > +     for (addr = start; addr < end; addr = next) {
-> > > > > +             next = pmd_addr_end(addr, end);
-> > > > > +
-> > > > > +             pgd = vmemmap_pgd_populate(addr, node);
-> > > > > +             if (!pgd)
-> > > > > +                     return -ENOMEM;
-> > > > > +
-> > > > > +             p4d = vmemmap_p4d_populate(pgd, addr, node);
-> > > > > +             if (!p4d)
-> > > > > +                     return -ENOMEM;
-> > > > > +
-> > > > > +             pud = vmemmap_pud_populate(p4d, addr, node);
-> > > > > +             if (!pud)
-> > > > > +                     return -ENOMEM;
-> > > > > +
-> > > > > +             pmd = pmd_offset(pud, addr);
-> > > > > +             if (pmd_none(READ_ONCE(*pmd))) {
-> > > > > +                     void *p;
-> > > > > +
-> > > > > +                     p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
-> > > > > +                     if (p) {
-> > > > > +                             vmemmap_set_pmd(pmd, p, node, addr, next);
-> > > > > +                             continue;
-> > > > > +                     } else if (altmap)
-> > > > > +                             return -ENOMEM; /* no fallback */
-> > > >
-> > > > Why do you return -ENOMEM if 'altmap' here? That seems to be different to
-> > > > what we currently have on arm64 and it's not clear to me why we're happy
-> > > > with an altmap for the pmd case, but not for the pte case.
-> > > The generic version is the same as X86. It seems that ARM64 always
-> > > fallback whether there is an altmap, but X86 only fallback in the no
-> > > altmap case. I don't know the reason of X86, can Dan Williams give
-> > > some explaination?
-> >
-> > Right, I think we need to understand the new behaviour here before we adopt
-> > it on arm64.
-> Hi, Dan,
-> Could you please tell us the reason? Thanks.
->
-> And Sudarshan,
-> You are the author of adding a fallback mechanism to ARM64,  do you
-> know why ARM64 is different from X86 (only fallback in no altmap
-> case)?
->
-> Huacai
->
-> >
-> > Will
+(without the 'a', just dsp@....)
+
+After which:
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+

@@ -2,131 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1A1575034
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DE1575069
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240197AbiGNOAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
+        id S239454AbiGNOK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240407AbiGNN6q (ORCPT
+        with ESMTP id S231915AbiGNOKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:58:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2CEA1133
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657807084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KsB/k7XGvHWoQ6egQzGPsZym+TsC+6TwIfhUT/WwqdM=;
-        b=jUYitV73EP5Nn0VqulsvYOi8ruGNtvRlibhUXyrvCrixGd5YqHi3SU/rqTbhqwDuQaxCtd
-        WGkktn1rUXhsG8kWXmez4EAYuC1L0QBeKC8oRQ1ScNAO1bhqytLpxLgkAk4paT1bWd4+bZ
-        8u46Ufj0wx2xTy918Lg6OsSHmLabgmA=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-570-2JgjBLVsNraEBAxg5j6ocA-1; Thu, 14 Jul 2022 09:58:03 -0400
-X-MC-Unique: 2JgjBLVsNraEBAxg5j6ocA-1
-Received: by mail-qk1-f200.google.com with SMTP id ay8-20020a05620a178800b006b57a178418so1198567qkb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:58:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=KsB/k7XGvHWoQ6egQzGPsZym+TsC+6TwIfhUT/WwqdM=;
-        b=GhvzfXdWmRjJ4rsJqNs69ucMhaFtuZwvTjSIroqTV9ppTiPHzYAxWqzC1zS50QJ9NH
-         WvTMYPE7aCbYheK+DMrOOJzWrojYp+ThGJQWMXshXcyO66w/OcMUVxzaOAGznp/ibAmQ
-         kMQAQhwzQQl5RHOArtcnbfc4GSebGMQApcgPNh1kC4jj2CO5QJIHXbmspUhFJhvkYhjf
-         iaFnUfZrAQjt96DiolgpxECXVPQQdCUN3QkjHE0UR+mbgYyv0aGoRO5+Iqz0S/8XBOFW
-         T9yDpR+254CDgjkZhcFGMSEusp5Q8bBsvp0Z0OgHjPaIYinNNU3Vn4FvYJllEWRbLHMb
-         jTvQ==
-X-Gm-Message-State: AJIora8kjs/5/OGR1ielKU9hhmkq0f1U6kGwPlHQhw9Sxdo1FleXWzIJ
-        GrqI5YMFClKthAqb9iZgpECTDF/dSHgUNnZ+LV+rTTDmSwV9rK1n8LNkAXcZTrDI6jpB6ZL13ed
-        t2oTnLnNyOXE9o6ccwbrhmHIX
-X-Received: by 2002:a05:6214:27cb:b0:473:5954:5951 with SMTP id ge11-20020a05621427cb00b0047359545951mr7919661qvb.2.1657807083227;
-        Thu, 14 Jul 2022 06:58:03 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1srA1bYyjq1CYysZjazFyJYNL6ms774yQxtBEhGn0TW9yx4Z/jHqjZ9e2hADHZfbOpuOOXj5w==
-X-Received: by 2002:a05:6214:27cb:b0:473:5954:5951 with SMTP id ge11-20020a05621427cb00b0047359545951mr7919646qvb.2.1657807083040;
-        Thu, 14 Jul 2022 06:58:03 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id cf12-20020a05622a400c00b0031ece0bc9f5sm290591qtb.45.2022.07.14.06.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 06:58:02 -0700 (PDT)
-Message-ID: <034401953bc935d997c143153938edb1034b52cd.camel@redhat.com>
-Subject: Re: [PATCH] KVM: SVM: fix task switch emulation on INTn instruction.
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        kvm@vger.kernel.org
-Date:   Thu, 14 Jul 2022 16:57:56 +0300
-In-Reply-To: <52d44630-21ad-1291-4185-40d5728eaea6@maciej.szmigiero.name>
-References: <20220714124453.188655-1-mlevitsk@redhat.com>
-         <52d44630-21ad-1291-4185-40d5728eaea6@maciej.szmigiero.name>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Thu, 14 Jul 2022 10:10:19 -0400
+X-Greylist: delayed 2660 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Jul 2022 07:10:18 PDT
+Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335654A81C;
+        Thu, 14 Jul 2022 07:10:18 -0700 (PDT)
+Received: from [91.187.115.177] (helo=deadeye)
+        by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1oByqp-0000X2-IP; Thu, 14 Jul 2022 15:25:55 +0200
+Received: from ben by deadeye with local (Exim 4.96)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1oByqn-004wFW-2Z;
+        Thu, 14 Jul 2022 15:25:53 +0200
+Message-ID: <5afd3b45e9b95fa5023790c24f8a1b0b4ce1ca7c.camel@decadent.org.uk>
+Subject: Re: [PATCH v2 0/5] tools: fix compilation failure caused by
+ init_disassemble_info API changes
+From:   Ben Hutchings <ben@decadent.org.uk>
+To:     sedat.dilek@gmail.com, Andres Freund <andres@anarazel.de>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>
+Date:   Thu, 14 Jul 2022 15:25:44 +0200
+In-Reply-To: <CA+icZUVDzogiyG=8sCuxdW4aaby_kRwToit2tg-A4D3VorVKnA@mail.gmail.com>
+References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
+         <20220703212551.1114923-1-andres@anarazel.de>
+         <CA+icZUVDzogiyG=8sCuxdW4aaby_kRwToit2tg-A4D3VorVKnA@mail.gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-OgXkSgMMXMfCDQQ6En6D"
+User-Agent: Evolution 3.44.2-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 91.187.115.177
+X-SA-Exim-Mail-From: ben@decadent.org.uk
+X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-14 at 15:50 +0200, Maciej S. Szmigiero wrote:
-> On 14.07.2022 14:44, Maxim Levitsky wrote:
-> > Recently KVM's SVM code switched to re-injecting software interrupt events,
-> > if something prevented their delivery.
-> > 
-> > Task switch due to task gate in the IDT, however is an exception
-> > to this rule, because in this case, INTn instruction causes
-> > a task switch intercept and its emulation completes the INTn
-> > emulation as well.
-> > 
-> > Add a missing case to task_switch_interception for that.
-> > 
-> > This fixes 32 bit kvm unit test taskswitch2.
-> > 
-> > Fixes: 7e5b5ef8dca322 ("KVM: SVM: Re-inject INTn instead of retrying the insn on "failure"")
-> > 
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> 
-> That's a good catch, your patch looks totally sensible to me.
-> People running Win 3.x or OS/2 on top of KVM will surely be grateful for it :)
 
-Yes and also people who run 32 bit kvm unit tests :)
+--=-OgXkSgMMXMfCDQQ6En6D
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-BTW, I do have a win98 VM which I run once in a while under KVM.
-On Intel it works very well, on AMD, only works without NPT and without MMU
-pre-fetching, due to fact that the OS doesn't correctly invalidate TLB entries.
+On Thu, 2022-07-14 at 11:16 +0200, Sedat Dilek wrote:
+> On Sun, Jul 3, 2022 at 11:25 PM Andres Freund <andres@anarazel.de> wrote:
+> >=20
+> > binutils changed the signature of init_disassemble_info(), which now ca=
+uses
+> > compilation failures for tools/{perf,bpf} on e.g. debian unstable. Rele=
+vant
+> > binutils commit:
+> > https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3D60a3da0=
+0bd5407f07
+> >=20
+> > I first fixed this without introducing the compat header, as suggested =
+by
+> > Quentin, but I thought the amount of repeated boilerplate was a bit too
+> > much. So instead I introduced a compat header to wrap the API changes. =
+Even
+> > tools/bpf/bpftool/jit_disasm.c, which needs its own callbacks for json,=
+ imo
+> > looks nicer this way.
+> >=20
+> > I'm not regular contributor, so it very well might be my procedures are=
+ a
+> > bit off...
+> >=20
+> > I am not sure I added the right [number of] people to CC?
+> >=20
+> > WRT the feature test: Not sure what the point of the -DPACKAGE=3D'"perf=
+"' is,
+> > nor why tools/perf/Makefile.config sets some LDFLAGS/CFLAGS that are al=
+so
+> > in feature/Makefile and why -ldl isn't needed in the other places. But.=
+..
+> >=20
+> > V2:
+> > - split patches further, so that tools/bpf and tools/perf part are enti=
+rely
+> >   separate
+> > - included a bit more information about tests I did in commit messages
+> > - add a maybe_unused to fprintf_json_styled's style argument
+> >=20
+>=20
+> [ CC Ben ]
+>=20
+> The Debian kernel-team has integrated your patchset v2.
+>=20
+> In case you build without libbfd support there is [1].
+> So, feel free to take this for v3.
+>=20
+> -Sedat-
+>=20
+> [1] https://salsa.debian.org/kernel-team/linux/-/blob/sid/debian/patches/=
+bugfix/all/tools-perf-fix-build-without-libbfd.patch
+[...]
 
-I do need to test KVM with OS/2 on one of the weekends.... ;-)
+Thanks, I meant to send that fix upstream but got distracted.  It
+should really be folded into "tools perf: Fix compilation error with
+new binutils".
 
-Thanks for the review,
-	Best regards,
-		Maxim Levitsky
+Ben.
+>=20
 
-> 
-> Reviewed-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> 
-> Thanks,
-> Maciej
-> 
+--=20
+Ben Hutchings
+Always try to do things in chronological order;
+it's less confusing that way.
 
+--=-OgXkSgMMXMfCDQQ6En6D
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmLQGVgACgkQ57/I7JWG
+EQnUjBAAk2XI7hNjRozbY7yy+c7k2alNVHWewYw9eUYYJ/2tSIMWsZuerXn0V7iT
+iUEDDd2CVlSSWiSrUHOHimsNjfsDlUtQ+Ev4pc+D83czOWFibs3n4qfixLsE2MFM
+dUXatRQVLgYCJzAvEZnsRK1rAMAbwhh6F1lZGPu+qBN10qDbUOIUnzpEcv4KOhb4
+yLEG1dLHNTO1L2N11xkG2OyDQTUhZxUetEwvmV7LikaA8zXfEpF2O1DNFVdgw3zI
+T0TzpQEvxaPgEcGd2PxFH034gNajsq9WkkiTdXBSGAF0XRkgPQP+LKoQKFc7RkGj
+E01IFeR+DuJVgf6J0YlrQYM23TuJOz4VKVjbbLUFgRqeBC5CQTKvE79jbQSmDZhm
+7QPfcOyRMAJ/FeGDuo8gn9S+9iIWJN8lJ+2RXMv0oT2wvyVF7C292mhAUecz5pmy
+Q/50PBWq3DCDEW8ILlWxqOBI7HeboygjznfEbubJtom13HYCwETUYjxIUdL/duLH
+6/MoktNcrC8XXCttBaFdLO9Ylp7z1w2hDB4+6Trz4y8uitQnJP2hNwxuhsb9clYh
+/fAxsXWPL45QAXMsAQMcWy+ciFaO7nEeTqcWgnj3O29htS72HgOkcdKTtNUp0enI
+OJrsQpLJlAa/4EbpLjtCPDDmDwrtGhlInE3P7mBhWf3iNuCP7Dk=
+=ReGY
+-----END PGP SIGNATURE-----
+
+--=-OgXkSgMMXMfCDQQ6En6D--

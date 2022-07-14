@@ -2,87 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF19574C29
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC14574C28
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238882AbiGNLcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
+        id S238857AbiGNLcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238846AbiGNLcx (ORCPT
+        with ESMTP id S238846AbiGNLci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:32:53 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554592DD3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:32:51 -0700 (PDT)
-Received: from mail-yb1-f181.google.com ([209.85.219.181]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MJEIl-1nrFXe1cVv-00Kdya for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022
- 13:32:49 +0200
-Received: by mail-yb1-f181.google.com with SMTP id k85so67651ybk.7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:32:49 -0700 (PDT)
-X-Gm-Message-State: AJIora9jBdx+mBTMyZaubzaIQgJY8D54/cGv83xlL1SSLXHYtnfCT8jS
-        2Lnt+SJiVlL9HffWkWHVqCBmyXWg/Biu2SdZVYM=
-X-Google-Smtp-Source: AGRyM1vE8JYz3xOgLE6KMkE+pATDrszzSzapNzY6x8GDhIEZ6wBc62gMnHue2h6Xki51q87PhzPcJR5Wjmahm7Wormg=
-X-Received: by 2002:a25:7c41:0:b0:66d:766a:4815 with SMTP id
- x62-20020a257c41000000b0066d766a4815mr8111642ybc.480.1657798367361; Thu, 14
- Jul 2022 04:32:47 -0700 (PDT)
+        Thu, 14 Jul 2022 07:32:38 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5AA1ADA2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=QF7MlNUqjT2UfEW9YfPAvRYW4tsr
+        xdKIhmgnJ6AkEkI=; b=HKqMpM1AKn0Tjl/qDOcLHPQOUidWaHe+loZMDcxOQeX+
+        Wh39vQfXsMS7VYRoizVYeD//Y4Ncuxn466bnL7pCYxwA1uwDqAOhGwg4uonMMxfC
+        MvNh5oed9JluTbYfh3oYmIE6CO08IIjnp8xVWiecPo5vroo9zhhTVCZ4BP/0eeM=
+Received: (qmail 578448 invoked from network); 14 Jul 2022 13:32:33 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jul 2022 13:32:33 +0200
+X-UD-Smtp-Session: l3s3148p1@QgjvQcLjvKQgAwDtxwdRAEXXn+yo/Rze
+Date:   Thu, 14 Jul 2022 13:32:32 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     John Stultz <jstultz@google.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 0/9] selftests: timers: fixes and improvements
+Message-ID: <Ys/+0CVwtTpBNfws@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        John Stultz <jstultz@google.com>, linux-renesas-soc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
+ <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220708094950.41944-1-zhengqi.arch@bytedance.com> <20220708094950.41944-2-zhengqi.arch@bytedance.com>
-In-Reply-To: <20220708094950.41944-2-zhengqi.arch@bytedance.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 14 Jul 2022 13:32:30 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2kgVikkKBZLa31XUopEFa9ykLS=qxiH=qiFD8HtUvw=A@mail.gmail.com>
-Message-ID: <CAK8P3a2kgVikkKBZLa31XUopEFa9ykLS=qxiH=qiFD8HtUvw=A@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] arm64: run softirqs on the per-CPU IRQ stack
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:RFExNZXlg809pui/N6iIRljogisu+/zTQgOhqu9NNeiGV7mQ54S
- B/IqDbPHE78JAO9nBpz3OI1FuPohdUTEcQo7P0bry5YCM0ep8EvL75hAef63Vt/Rb2n2lWI
- eJzfX1qWIs5v833Kth60ixXiItD+n9xSE7cD773EjZBiJNNUk3FRXTUBU7yG7n0utWF/IhW
- uQYeWEGlG7q2cRH8H04yg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UyCmE2kLzG0=:e05QBLm5ryVI+UCaVJpMgj
- gz/YRKaOPNixDJ7px4XEY4MJ6Rh4WFcQQDa8fcktr5rm3629CFTX2mm98zD0zdePlri4NqV/U
- 0ky+zQZ5vD/zWPyH1M/S1qHEFbp4Y2rN9h6wP8NcgbRlqF3ayVMuZ9NIKjqxPhVN3xr+uQFpj
- ZROX2gXxsSs1sE/1zDtJ7Ew9FhFisbE3rPNZKO5UcMVgoNojK1jaT0WIdeGUtAYYSjucwAYoW
- nENyMLFvs3ZPWXuHcqtld4qxEwsiQC/oPYiLPrM1L/xMOjbss65XjLy6lwr+gN51OApvmZK6L
- zmSwVFwer9l/E0j9dQKzcLXC2FpvAqyHmS40Z4E51W/G4/6NuDUrd4zbyNHFbiRHjZj69QCfC
- hbfbZWbwoZw5ofzJCxcrZyG4+YAemz6HlwQxxywkQoZlOd8StgFIuI/8mJcQBPdvOPSShlqHc
- Jcji4pgUGvNr/EOJV3zQOke0ajFnZ8DGCp2iyqZWQIaZCYeDNIL+wtEz2Bu1g2dQgAkbh+f0D
- vGVda7Mbzoodeu8P0VJ11B89AkUS0xoGjetgmfQ3DUDtCFwa5qGI/bJmvefWm3u1GwLD/PD87
- o3x6Mc8QZpSEyvnxOHGxRpfvOXvDWtlMBUNAFRA9k/0kgtYniyVvjSTsU8c93CVh+T0pax/Vl
- Mv+6lGU/t+6XzVeXNKjzzKuTF+C0O9IfZByGhI/I76TJi4vlN9rQXDGucMdXArfk1tvZ7EERj
- a18AOTzooY3dHQt18Xp/k/XGD1Jz/87PRVtGSAANGSM2De8ZLiGxLNueIyDLU5z19FiXnb2+8
- g4izuGB2Nk8ff+l1lFrlrLmiQzimGDCPbQkeK7+rpxNOfVs6MVr+mGV+Kpl7wZ52P3bXUcgJ6
- bb2hNlkpUhqPbTXr9g3A==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="en0QinxNUHwiuF7U"
+Content-Disposition: inline
+In-Reply-To: <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 11:49 AM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
->
-> Currently arm64 supports per-CPU IRQ stack, but softirqs
-> are still handled in the task context.
->
-> Since any call to local_bh_enable() at any level in the task's
-> call stack may trigger a softirq processing run, which could
-> potentially cause a task stack overflow if the combined stack
-> footprints exceed the stack's size, let's run these softirqs
-> on the IRQ stack as well.
->
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 
-This seems like a nice improvement, and this version addresses
-my concern I raised on the RFC version.
+--en0QinxNUHwiuF7U
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Hey John,
+
+> Acked-by: John Stultz <jstultz@google.com>
+>=20
+> Thanks so much for submitting these.
+
+Glad you like this series. I will wait some more to see if there are
+further review comments. But surely, I will add the missing parameter to
+the help output and add your tags to v2.
+
+Thank you for doing these tools :)
+
+   Wolfram
+
+
+--en0QinxNUHwiuF7U
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLP/tAACgkQFA3kzBSg
+KbZgqBAAl9r+En2Z/stzjSCSrZw83Tb7y+Kjgj2SlsEp37lxn5mIS1nAQa0N+yvL
+3S5zkE1Hj9yJagC7eIcDEv/oFX8zf3SJIAfJQ4NkfDO5ZhRUsiOyUhm81ywgbBCB
+xF4t5upcE7iJ7oeaxqaMEW26eQJOz7bRNec1SzX/jz3mZazfua+PD4ShhyTAaXzn
+xNJn7C3um2ySdmOS8wiLrFLVKqm7LIXmQy9eYzNnbfVf27n8/kM17co7xvYjeARG
+JxBGfhuMBBcayAVeTr2PlTtWzbSkaZkz1S+38KAeQDsJaPJbi8DcHxfBfnPgE88N
+1OabM1TUhN7qohy7VaAooWBL7JJt92aQkB5c0Os2ftHoCmmSELXEgQZz5clnsMD5
++OWzNxOgCX1YNb6aVufraIUxtJhql1HveE84Q014uAUYob+HnY39bGFyruqc7EK2
+QCXCrqjzV0wJjxjxZ8b4Gpo6nIrei9PgxU6TFy1pDvJ6HJypQz2YnbJ5Tx5IXuc3
+c1EIjYfQlODtryWANoqhvyaUQZy4L1Is7UM5iuVXsYhzL/DazqItoBl5dQf5+pmu
+n7h3lNVKThnYUJdXzEujtuMITFTfWW1Y/cyLhthdTnhiBbmFlKktc/9nOf3ykMD6
+1xF7ilgQYOGnyk3VD36Ov7ZtPtYXh2eTyezgquP9+EMsMmYSS7I=
+=ZXu/
+-----END PGP SIGNATURE-----
+
+--en0QinxNUHwiuF7U--

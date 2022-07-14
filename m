@@ -2,81 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD4357576D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 00:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DAA575770
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 00:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241003AbiGNWMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 18:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S241020AbiGNWMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 18:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240973AbiGNWMB (ORCPT
+        with ESMTP id S241009AbiGNWMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 18:12:01 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA4970E44;
-        Thu, 14 Jul 2022 15:11:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oC7PbahrZ+zt+ZNZQK8PnJ21HqUpiAyBo5kx7bHB41o=; b=bLV9fd8LHs+alXPaXoapc8uVKG
-        Me8pxfrO3IElztWtdPK6qayknLTY9nSZSMntAX9U7ZjMwQCVHIKOspWRio2SOCHBHwKuNWFGy71xD
-        2w0ts05jhF33X5BjH1qpUkMS0SKMhtxg8cRizVXXi/pqF6aZM4RWie/Vtz4fxvf0gZiqdV+JDExvg
-        n1hIUA8Q+tgXSMetLiZ2FIdPAApwIbwJwjZ3R9timFFQNOPdtqVyCpxjOxBmnIkoFiQptluOiQ2IT
-        79srFu9U66VLuKRrYTAUko23YVlwImxmfUMPIrdnuIOoJkayHkEWJr7VktW0K8UhJdx7paFW5mdud
-        g2nbreJw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oC73X-009igR-Cd; Thu, 14 Jul 2022 22:11:35 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DA89B980222; Fri, 15 Jul 2022 00:11:33 +0200 (CEST)
-Date:   Fri, 15 Jul 2022 00:11:33 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        stable <stable@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] x86/speculation: Use DECLARE_PER_CPU for
- x86_spec_ctrl_current
-Message-ID: <YtCUleBPU31sY0jK@worktop.programming.kicks-ass.net>
-References: <20220713152436.2294819-1-nathan@kernel.org>
- <20220714143005.73c71cf8@kernel.org>
- <CAHk-=wi+O_3+uef45jxj1+GhT+H0vXs9iz8rpjk49vCiyLS4DA@mail.gmail.com>
- <CAHk-=wjeVbrd3HOMh-t8968pMgZUFs6uP-p45Fn8qr27j8D0aQ@mail.gmail.com>
+        Thu, 14 Jul 2022 18:12:14 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B275F7099F;
+        Thu, 14 Jul 2022 15:12:13 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4LkTHd1QyHzDqCr;
+        Thu, 14 Jul 2022 22:12:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1657836733; bh=TOYGHJVemM3HdzYUR0ZWD2+ERLLCMqlGatn1gDT1m68=;
+        h=From:To:Cc:Subject:Date:From;
+        b=n/ZbLbnp/LT8Q1IIhi7t3T4asTarA5KEnvFjgKYn1LxBwlYX233QZdgCRX3CaS4m6
+         w/sXzjer4lg4AbEnOuxGDvTCSmTv2g+DhIgZXy3s2NKex8CrmPUW7ueC5T3J862DVj
+         cWP75eFxXyATq48S1rXxREVi0jmZBWoOhwDdSe+A=
+X-Riseup-User-ID: AE9E7F6A7455B84571D8DF2DA9A93E0FA0778D6D7066110693261CA032224D42
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4LkTHY5wxcz1yWZ;
+        Thu, 14 Jul 2022 22:12:09 +0000 (UTC)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+To:     mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
+        andrzej.hajda@intel.com
+Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+Subject: [PATCH RESEND 0/2] media: s5c73m3: Update gpio interface and documentation
+Date:   Thu, 14 Jul 2022 19:12:00 -0300
+Message-Id: <20220714221202.86768-1-mairacanal@riseup.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjeVbrd3HOMh-t8968pMgZUFs6uP-p45Fn8qr27j8D0aQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 02:56:12PM -0700, Linus Torvalds wrote:
-> On Thu, Jul 14, 2022 at 2:51 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > But if this particular one causes problems for maintainers, I can
-> > easily just take it right away just cherry-pick it from my own
-> > test-tree to my "main" tree.
-> 
-> Oh, and as I did that cherry-pick, I suddenly remembered that I think
-> PeterZ had a slightly different version of it - the one I picked up is
-> Nathan's "v2".
-> 
-> PeterZ, do you have preferences? I've waited this long, I might as
-> well wait a bit more before I push out whatever version people prefer.
+As suggested by Andrzej, all s5c73m3 specific gpio code is completely removed
+and replaced by the gpiod framework. Moreover, the documentation is updated by
+fixing the misplaced gpio property.
 
-Nathan's is much nicer; I got bit by header hell and punted.
+This patchset was originaly sended on April 2022 [1].
+
+Best Regards,
+- Maíra Canal
+
+[1] https://lore.kernel.org/linux-media/20220429123740.147703-1-maira.canal@usp.br/
+
+Maíra Canal (2):
+  media: s5c73m3: Replace legacy gpio interface for gpiod
+  dt-bindings: media: s5c73m3: Fix reset-gpio descriptor
+
+ .../bindings/media/samsung-s5c73m3.txt        |  2 +-
+ drivers/media/i2c/s5c73m3/s5c73m3-core.c      | 95 ++++++++-----------
+ drivers/media/i2c/s5c73m3/s5c73m3.h           |  9 +-
+ include/media/i2c/s5c73m3.h                   | 15 +--
+ 4 files changed, 45 insertions(+), 76 deletions(-)
+
+-- 
+2.36.1
+

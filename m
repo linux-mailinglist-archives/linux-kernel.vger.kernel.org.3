@@ -2,149 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02294574B50
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B03C574B52
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238006AbiGNK6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
+        id S235704AbiGNK6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbiGNK6X (ORCPT
+        with ESMTP id S237695AbiGNK6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:58:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92F2A558F7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:58:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657796301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nM5yVanzRJTIfs3jtPwCWDlU85jtUwSjBS8/j3385bI=;
-        b=ZKq1Of6Mpec9NSGo7VabF21JWTRy/CkKeAx5Wi411faPjdwFa6XENFQV1J0LLk2ITG8SZM
-        MHNZF5bLz/16cn5upjISBLwHXGd9VvAKvH3391kgrgTgXGlzl/cRsHVxTsMMQA6B8a77UT
-        otoy4NbuY5Kj5HMN66dhIu5r1sbztFQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-408-s5Uixfw4PvS4MMA8CYjL7w-1; Thu, 14 Jul 2022 06:58:20 -0400
-X-MC-Unique: s5Uixfw4PvS4MMA8CYjL7w-1
-Received: by mail-wm1-f69.google.com with SMTP id c126-20020a1c3584000000b003a02fa133ceso501239wma.2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:58:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=nM5yVanzRJTIfs3jtPwCWDlU85jtUwSjBS8/j3385bI=;
-        b=Goc7xLCAQ79Wx97ETbMYqbJvEfrKP+KHdwEe+xHWVmjimvG1CdpycFzT4BYZK9NrfF
-         XMXQ874Bmy4CELs2nhIZJLP7BDv9rEzLkqGnoubFvM7Dw7L83fz4fq2QM/OVp1j0IqeF
-         TmAodllSwMJVzm/Fi/QlEjoJHdm34SwcL1ukwwrBErI5B1WC58bHe2PRL+5LzPUfOlXe
-         TBpDnU9zDdnlgf7pkYQaiiBsQguf//wyLv1+qIOMwbaNftD2lSYgRxuRGSYL39qqG6fj
-         Ec2MTSxyi+0in2I/qI3jq9kZSOAZFGOCkKCPpLxg8RfhkHtZaTNUc5tg0M5qhdwNXekZ
-         mFMA==
-X-Gm-Message-State: AJIora/tB9tBXQ0mAh/a5osjtD/6LYJW/opmLQ5T5WoTbzVhXVz0QdSy
-        U8LMorzC9erVJ2DlxofXPq/o0ZmWWrd0SBj2TA1KIUIcrR38KU8f+VNcCOD4GxmrOYqttq1UtCg
-        4oGgLlbZVILCs3WUgpGeNS7DN
-X-Received: by 2002:a5d:5985:0:b0:21d:b6b6:4434 with SMTP id n5-20020a5d5985000000b0021db6b64434mr7579275wri.111.1657796299362;
-        Thu, 14 Jul 2022 03:58:19 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uAEUQ0kwm+yiiE9dw/IiB5F2EY4Xbq86kJCUcxpug/0Urvuhaq7E6wyYQ1FXFo7snQYDcNxg==
-X-Received: by 2002:a5d:5985:0:b0:21d:b6b6:4434 with SMTP id n5-20020a5d5985000000b0021db6b64434mr7579253wri.111.1657796299087;
-        Thu, 14 Jul 2022 03:58:19 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id d13-20020adffbcd000000b0021d9591c64fsm1212994wrs.33.2022.07.14.03.58.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 03:58:18 -0700 (PDT)
-Message-ID: <087db845684c18af112e396172598172c7cc9980.camel@redhat.com>
-Subject: Re: [PATCH v2] KVM: x86: Add dedicated helper to get CPUID entry
- with significant index
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 14 Jul 2022 13:58:17 +0300
-In-Reply-To: <Ys2qwUmEJaJnsj6r@google.com>
-References: <20220712000645.1144186-1-seanjc@google.com>
-         <8a1ff7338f1252d75ff96c3518f16742919f92d7.camel@redhat.com>
-         <Ys2i2B/jt5yDsAKj@google.com> <Ys2qwUmEJaJnsj6r@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Thu, 14 Jul 2022 06:58:44 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBFF63DF;
+        Thu, 14 Jul 2022 03:58:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5D905CE25B7;
+        Thu, 14 Jul 2022 10:58:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C65C34114;
+        Thu, 14 Jul 2022 10:58:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657796311;
+        bh=blzTjVSdteYEEgziH1egT1Z2bdKseoVJHmbkMNfVChc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Znv3Xz9kEA/E3bEnKB3yklOJOeuKWJyI5kWfbITCR6uRU1ZrOXgaT7h2B6AIIa9Xs
+         Ff6sG5k6ejG2owjqR53K8e4rd/M5u0OgAo2B3a7Gyzjs7raRBUzRvj1xRvGXtdIV6B
+         sphSfKyZqmWZBktb9a4hFx5Wk5+YAZlXm9YTcxSitALd5gmm+T/weYwM9SsdATtmhf
+         50/HpTrzgOOmI+UDyub2aixaf7hFL/rekDZyj0xTb97QAHmtNcZmv8PdbK33pVcyTf
+         O75dXTaZOwF0q7MN4Vbao9+vIaCUVL5RNXVhMQhGD6BdG1KmoklbfIx8mc4hrnJqX8
+         FbtL400aYAjEg==
+Message-ID: <65a1d324-9645-56a3-fd81-7ff87897fe49@kernel.org>
+Date:   Thu, 14 Jul 2022 12:58:27 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V2] rtla: Fix Makefile when called from -C tools/
+Content-Language: en-US
+To:     sedat.dilek@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <870c02d4d97a921f02a31fa3b229fc549af61a20.1657747763.git.bristot@kernel.org>
+ <CA+icZUVbQNM+MkMCQik83FoiWF_a1v7Mb-4hZX6SZgNcp2x5SA@mail.gmail.com>
+ <CA+icZUW-Mu-Cak481yrE9f6PvGcfaDN7ZPLhrtX6L7zOPU73Zg@mail.gmail.com>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <CA+icZUW-Mu-Cak481yrE9f6PvGcfaDN7ZPLhrtX6L7zOPU73Zg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-12 at 17:09 +0000, Sean Christopherson wrote:
-> On Tue, Jul 12, 2022, Sean Christopherson wrote:
-> > On Tue, Jul 12, 2022, Maxim Levitsky wrote:
-> > > On Tue, 2022-07-12 at 00:06 +0000, Sean Christopherson wrote:
-> > > > +               /*
-> > > > +                * Function matches and index is significant; not specifying an
-> > > > +                * exact index in this case is a KVM bug.
-> > > > +                */
-> > > Nitpick: Why KVM bug? Bad userspace can also provide a index-significant entry for cpuid
-> > > leaf for which index is not significant in the x86 spec.
-> > 
-> > Ugh, you're right.
-> > 
-> > > We could arrange a table of all known leaves and for each leaf if it has an index
-> > > in the x86 spec, and warn/reject the userspace CPUID info if it doesn't match.
-> > 
-> > We have such a table, cpuid_function_is_indexed().  The alternative would be to
-> > do:
-> > 
-> >                 WARN_ON_ONCE(index == KVM_CPUID_INDEX_NOT_SIGNIFICANT &&
-> >                              cpuid_function_is_indexed(function));
-> > 
-> > The problem with rejecting userspace CPUID on mismatch is that it could break
-> > userspace :-/  Of course, this entire patch would also break userspace to some
-> > extent, e.g. if userspace is relying on an exact match on index==0.  The only
-> > difference being the guest lookups with an exact index would still work.
-> > 
-> > I think the restriction we could put in place would be that userspace can make
-> > a leaf more relaxed, e.g. to play nice if userspace forgets to set the SIGNFICANT
-> > flag, but rejects attempts to make guest CPUID more restrictive, i.e. disallow
-> > setting the SIGNFICANT flag on leafs that KVM doesn't enumerate as significant.
-> > 
-> > > > +               WARN_ON_ONCE(index == KVM_CPUID_INDEX_NOT_SIGNIFICANT);
+On 7/14/22 11:53, Sedat Dilek wrote:
+>>
+> Addendum:
 > 
-> Actually, better idea.  Let userspace do whatever, and have direct KVM lookups
-> for functions that architecturally don't have a significant index use the first
-> entry even if userspace set the SIGNIFICANT flag.  That will mostly maintain
-> backwards compatibility, the only thing that would break is if userspace set the
-> SIGNIFICANT flag _and_ provided a non-zero index _and_ relied on KVM to not match
-> the entry.
-
-Makes sense as well.
-
-Best regards,
-	Maxim Levitsky
-
+> Subject?
 > 
-> We could still enforce matching in the future, but it wouldn't be a prerequisite
-> for this cleanup.
+> [PATCH V2] rtla: Fix Makefile when called from -C tools/
 > 
->                 /*
->                  * Similarly, use the first matching entry if KVM is doing a
->                  * lookup (as opposed to emulating CPUID) for a function that's
->                  * architecturally defined as not having a significant index.
->                  */
->                 if (index == KVM_CPUID_INDEX_NOT_SIGNIFICANT) {
->                         /*
->                          * Direct lookups from KVM should not diverge from what
->                          * KVM defines internally (the architectural behavior).
->                          */
->                         WARN_ON_ONCE(cpuid_function_is_indexed(function));
->                         return e;
->                 }
+> ...called from -C tools/ clean?
 > 
+it is not needed.
 
-
+-- Daniel

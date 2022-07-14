@@ -2,325 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D41C574F08
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FFF574F05
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239165AbiGNNWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
+        id S239492AbiGNNWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239777AbiGNNV1 (ORCPT
+        with ESMTP id S239727AbiGNNVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:21:27 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43B95E330
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:21:25 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VJJkPSH_1657804881;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VJJkPSH_1657804881)
-          by smtp.aliyun-inc.com;
-          Thu, 14 Jul 2022 21:21:23 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH 16/16] erofs: introduce multi-reference pclusters (fully-referenced)
-Date:   Thu, 14 Jul 2022 21:20:51 +0800
-Message-Id: <20220714132051.46012-17-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
-In-Reply-To: <20220714132051.46012-1-hsiangkao@linux.alibaba.com>
-References: <20220714132051.46012-1-hsiangkao@linux.alibaba.com>
+        Thu, 14 Jul 2022 09:21:25 -0400
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3DA5D5A1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:21:24 -0700 (PDT)
+Received: from [192.168.16.236] (helo=vzdev.sw.ru)
+        by relay.virtuozzo.com with esmtp (Exim 4.95)
+        (envelope-from <alexander.atanasov@virtuozzo.com>)
+        id 1oBylc-00AE3T-CD;
+        Thu, 14 Jul 2022 15:20:55 +0200
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Cc:     kernel@openvz.org,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 1/1] Create debugfs file with virtio balloon usage information
+Date:   Thu, 14 Jul 2022 13:20:52 +0000
+Message-Id: <20220714132053.56323-1-alexander.atanasov@virtuozzo.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <7fd5e645-3892-6e0d-de80-08728e29b150@redhat.com>
+References: <7fd5e645-3892-6e0d-de80-08728e29b150@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's introduce multi-reference pclusters at runtime. In details,
-if one pcluster is requested by multiple extents at almost the same
-time (even belong to different files), the longest extent will be
-decompressed as representative and the other extents are actually
-copied from the longest one.
+Allow the guest to know how much it is ballooned by the host.
+It is useful when debugging out of memory conditions.
 
-After this patch, fully-referenced extents can be correctly handled
-and the full decoding check needs to be bypassed for
-partial-referenced extents.
+When host gets back memory from the guest it is accounted
+as used memory in the guest but the guest have no way to know
+how much it is actually ballooned.
 
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
 ---
- fs/erofs/compress.h     |   2 +-
- fs/erofs/decompressor.c |   2 +-
- fs/erofs/zdata.c        | 120 +++++++++++++++++++++++++++-------------
- fs/erofs/zdata.h        |   3 +
- 4 files changed, 88 insertions(+), 39 deletions(-)
+ drivers/virtio/virtio_balloon.c     | 79 +++++++++++++++++++++++++++++
+ include/uapi/linux/virtio_balloon.h |  1 +
+ 2 files changed, 80 insertions(+)
 
-diff --git a/fs/erofs/compress.h b/fs/erofs/compress.h
-index 19e6c56a9f47..26fa170090b8 100644
---- a/fs/erofs/compress.h
-+++ b/fs/erofs/compress.h
-@@ -17,7 +17,7 @@ struct z_erofs_decompress_req {
+V2:
+ - fixed coding style
+ - removed pretty print
+V3:
+ - removed dublicate of features
+ - comment about balooned_pages more clear
+ - convert host pages to balloon pages
+V4:
+ - added a define for BALLOON_PAGE_SIZE to make things clear
+V5:
+ - Made the calculatons work properly for both ways of memory accounting
+   with or without deflate_on_oom
+ - dropped comment 
+
+diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
+index b9737da6c4dd..e17f8cc71ba4 100644
+--- a/drivers/virtio/virtio_balloon.c
++++ b/drivers/virtio/virtio_balloon.c
+@@ -10,6 +10,7 @@
+ #include <linux/virtio_balloon.h>
+ #include <linux/swap.h>
+ #include <linux/workqueue.h>
++#include <linux/debugfs.h>
+ #include <linux/delay.h>
+ #include <linux/slab.h>
+ #include <linux/module.h>
+@@ -731,6 +732,79 @@ static void report_free_page_func(struct work_struct *work)
+ 	}
+ }
  
- 	/* indicate the algorithm will be used for decompression */
- 	unsigned int alg;
--	bool inplace_io, partial_decoding;
-+	bool inplace_io, partial_decoding, fillgaps;
- };
- 
- struct z_erofs_decompressor {
-diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
-index 6dca1900c733..91b9bff10198 100644
---- a/fs/erofs/decompressor.c
-+++ b/fs/erofs/decompressor.c
-@@ -83,7 +83,7 @@ static int z_erofs_lz4_prepare_dstpages(struct z_erofs_lz4_decompress_ctx *ctx,
- 			j = 0;
- 
- 		/* 'valid' bounced can only be tested after a complete round */
--		if (test_bit(j, bounced)) {
-+		if (!rq->fillgaps && test_bit(j, bounced)) {
- 			DBG_BUGON(i < lz4_max_distance_pages);
- 			DBG_BUGON(top >= lz4_max_distance_pages);
- 			availables[top++] = rq->out[i - lz4_max_distance_pages];
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 8dcfc2a9704e..601cfcb07c50 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -467,7 +467,8 @@ static void z_erofs_try_to_claim_pcluster(struct z_erofs_decompress_frontend *f)
- 	 * type 2, link to the end of an existing open chain, be careful
- 	 * that its submission is controlled by the original attached chain.
- 	 */
--	if (cmpxchg(&pcl->next, Z_EROFS_PCLUSTER_TAIL,
-+	if (*owned_head != &pcl->next && pcl != f->tailpcl &&
-+	    cmpxchg(&pcl->next, Z_EROFS_PCLUSTER_TAIL,
- 		    *owned_head) == Z_EROFS_PCLUSTER_TAIL) {
- 		*owned_head = Z_EROFS_PCLUSTER_TAIL;
- 		f->mode = Z_EROFS_PCLUSTER_HOOKED;
-@@ -480,20 +481,8 @@ static void z_erofs_try_to_claim_pcluster(struct z_erofs_decompress_frontend *f)
- 
- static int z_erofs_lookup_pcluster(struct z_erofs_decompress_frontend *fe)
- {
--	struct erofs_map_blocks *map = &fe->map;
- 	struct z_erofs_pcluster *pcl = fe->pcl;
- 
--	/* to avoid unexpected loop formed by corrupted images */
--	if (fe->owned_head == &pcl->next || pcl == fe->tailpcl) {
--		DBG_BUGON(1);
--		return -EFSCORRUPTED;
--	}
--
--	if (pcl->pageofs_out != (map->m_la & ~PAGE_MASK)) {
--		DBG_BUGON(1);
--		return -EFSCORRUPTED;
--	}
--
- 	mutex_lock(&pcl->lock);
- 	/* used to check tail merging loop due to corrupted images */
- 	if (fe->owned_head == Z_EROFS_PCLUSTER_TAIL)
-@@ -785,6 +774,8 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
- 	z_erofs_onlinepage_split(page);
- 	/* bump up the number of spiltted parts of a page */
- 	++spiltted;
-+	fe->pcl->multibases =
-+		(fe->pcl->pageofs_out != (map->m_la & ~PAGE_MASK));
- 
- 	if (fe->pcl->length < offset + end - map->m_la) {
- 		fe->pcl->length = offset + end - map->m_la;
-@@ -842,36 +833,90 @@ struct z_erofs_decompress_backend {
- 	/* pages to keep the compressed data */
- 	struct page **compressed_pages;
- 
-+	struct list_head decompressed_secondary_bvecs;
- 	struct page **pagepool;
- 	unsigned int onstack_used, nr_pages;
- };
- 
--static int z_erofs_do_decompressed_bvec(struct z_erofs_decompress_backend *be,
--					struct z_erofs_bvec *bvec)
-+struct z_erofs_bvec_item {
-+	struct z_erofs_bvec bvec;
-+	struct list_head list;
-+};
++/*
++ * DEBUGFS Interface
++ */
++#ifdef CONFIG_DEBUG_FS
 +
-+static void z_erofs_do_decompressed_bvec(struct z_erofs_decompress_backend *be,
-+					 struct z_erofs_bvec *bvec)
- {
--	unsigned int pgnr = (bvec->offset + be->pcl->pageofs_out) >> PAGE_SHIFT;
--	struct page *oldpage;
-+	struct z_erofs_bvec_item *item;
- 
--	DBG_BUGON(pgnr >= be->nr_pages);
--	oldpage = be->decompressed_pages[pgnr];
--	be->decompressed_pages[pgnr] = bvec->page;
-+	if (!((bvec->offset + be->pcl->pageofs_out) & ~PAGE_MASK)) {
-+		unsigned int pgnr;
-+		struct page *oldpage;
- 
--	/* error out if one pcluster is refenenced multiple times. */
--	if (oldpage) {
--		DBG_BUGON(1);
--		z_erofs_page_mark_eio(oldpage);
--		z_erofs_onlinepage_endio(oldpage);
--		return -EFSCORRUPTED;
-+		pgnr = (bvec->offset + be->pcl->pageofs_out) >> PAGE_SHIFT;
-+		DBG_BUGON(pgnr >= be->nr_pages);
-+		oldpage = be->decompressed_pages[pgnr];
-+		be->decompressed_pages[pgnr] = bvec->page;
++#define guest_to_balloon_pages(i) ((i)*VIRTIO_BALLOON_PAGES_PER_PAGE)
++/**
++ * virtio_balloon_debug_show - shows statistics of balloon operations.
++ * @f: pointer to the &struct seq_file.
++ * @offset: ignored.
++ *
++ * Provides the statistics that can be accessed in virtio-balloon in the debugfs.
++ *
++ * Return: zero on success or an error code.
++ */
 +
-+		if (!oldpage)
-+			return;
++static int virtio_balloon_debug_show(struct seq_file *f, void *offset)
++{
++	struct virtio_balloon *b = f->private;
++	u32 num_pages, total_pages, current_pages;
++	struct sysinfo i;
++
++	si_meminfo(&i);
++
++	seq_printf(f, "%-22s: %d\n", "page_size", VIRTIO_BALLOON_PAGE_SIZE);
++
++	virtio_cread_le(b->vdev, struct virtio_balloon_config, actual,
++			&num_pages);
++
++	seq_printf(f, "%-22s: %u\n", "ballooned_pages", num_pages);
++
++	if (virtio_has_feature(b->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM)) {
++		total_pages = guest_to_balloon_pages(i.totalram);
++		current_pages = guest_to_balloon_pages(i.totalram) - num_pages;
++	} else {
++		total_pages = guest_to_balloon_pages(i.totalram) +  num_pages;
++		current_pages = guest_to_balloon_pages(i.totalram);
 +	}
 +
-+	/* (cold path) one pcluster is requested multiple times */
-+	item = kmalloc(sizeof(*item), GFP_KERNEL | __GFP_NOFAIL);
-+	item->bvec = *bvec;
-+	list_add(&item->list, &be->decompressed_secondary_bvecs);
++	/* Total Memory for the guest from host */
++	seq_printf(f, "%-22s: %u\n", "total_pages", total_pages);
++
++	/* Current memory for the guest */
++	seq_printf(f, "%-22s: %u\n", "current_pages", current_pages);
++
++	return 0;
 +}
 +
-+static void z_erofs_fill_other_copies(struct z_erofs_decompress_backend *be,
-+				      int err)
++DEFINE_SHOW_ATTRIBUTE(virtio_balloon_debug);
++
++static void  virtio_balloon_debugfs_init(struct virtio_balloon *b)
 +{
-+	unsigned int off0 = be->pcl->pageofs_out;
-+	struct list_head *p, *n;
++	debugfs_create_file("virtio-balloon", 0444, NULL, b,
++			    &virtio_balloon_debug_fops);
++}
 +
-+	list_for_each_safe(p, n, &be->decompressed_secondary_bvecs) {
-+		struct z_erofs_bvec_item *bvi;
-+		unsigned int end, cur;
-+		void *dst, *src;
++static void  virtio_balloon_debugfs_exit(struct virtio_balloon *b)
++{
++	debugfs_remove(debugfs_lookup("virtio-balloon", NULL));
++}
 +
-+		bvi = container_of(p, struct z_erofs_bvec_item, list);
-+		cur = bvi->bvec.offset < 0 ? -bvi->bvec.offset : 0;
-+		end = min_t(unsigned int, be->pcl->length - bvi->bvec.offset,
-+			    bvi->bvec.end);
-+		dst = kmap_local_page(bvi->bvec.page);
-+		while (cur < end) {
-+			unsigned int pgnr, scur, len;
++#else
 +
-+			pgnr = (bvi->bvec.offset + cur + off0) >> PAGE_SHIFT;
-+			DBG_BUGON(pgnr >= be->nr_pages);
++static inline void virtio_balloon_debugfs_init(struct virtio_balloon *b)
++{
++}
 +
-+			scur = bvi->bvec.offset + cur -
-+					((pgnr << PAGE_SHIFT) - off0);
-+			len = min_t(unsigned int, end - cur, PAGE_SIZE - scur);
-+			if (!be->decompressed_pages[pgnr]) {
-+				err = -EFSCORRUPTED;
-+				cur += len;
-+				continue;
-+			}
-+			src = kmap_local_page(be->decompressed_pages[pgnr]);
-+			memcpy(dst + cur, src + scur, len);
-+			kunmap_local(src);
-+			cur += len;
-+		}
-+		kunmap_local(dst);
-+		if (err)
-+			z_erofs_page_mark_eio(bvi->bvec.page);
-+		z_erofs_onlinepage_endio(bvi->bvec.page);
-+		list_del(p);
-+		kfree(bvi);
- 	}
--	return 0;
- }
++static inline void virtio_balloon_debugfs_exit(struct virtio_balloon *b)
++{
++}
++
++#endif	/* CONFIG_DEBUG_FS */
++
+ #ifdef CONFIG_BALLOON_COMPACTION
+ /*
+  * virtballoon_migratepage - perform the balloon page migration on behalf of
+@@ -1019,6 +1093,9 @@ static int virtballoon_probe(struct virtio_device *vdev)
  
--static int z_erofs_parse_out_bvecs(struct z_erofs_decompress_backend *be)
-+static void z_erofs_parse_out_bvecs(struct z_erofs_decompress_backend *be)
+ 	if (towards_target(vb))
+ 		virtballoon_changed(vdev);
++
++	virtio_balloon_debugfs_init(vb);
++
+ 	return 0;
+ 
+ out_unregister_oom:
+@@ -1065,6 +1142,8 @@ static void virtballoon_remove(struct virtio_device *vdev)
  {
- 	struct z_erofs_pcluster *pcl = be->pcl;
- 	struct z_erofs_bvec_iter biter;
- 	struct page *old_bvpage;
--	int i, err = 0;
-+	int i;
+ 	struct virtio_balloon *vb = vdev->priv;
  
- 	z_erofs_bvec_iter_begin(&biter, &pcl->bvset, Z_EROFS_INLINE_BVECS, 0);
- 	for (i = 0; i < pcl->vcnt; ++i) {
-@@ -883,13 +928,12 @@ static int z_erofs_parse_out_bvecs(struct z_erofs_decompress_backend *be)
- 			z_erofs_put_shortlivedpage(be->pagepool, old_bvpage);
- 
- 		DBG_BUGON(z_erofs_page_is_invalidated(bvec.page));
--		err = z_erofs_do_decompressed_bvec(be, &bvec);
-+		z_erofs_do_decompressed_bvec(be, &bvec);
- 	}
- 
- 	old_bvpage = z_erofs_bvec_iter_end(&biter);
- 	if (old_bvpage)
- 		z_erofs_put_shortlivedpage(be->pagepool, old_bvpage);
--	return err;
- }
- 
- static int z_erofs_parse_in_bvecs(struct z_erofs_decompress_backend *be,
-@@ -924,7 +968,7 @@ static int z_erofs_parse_in_bvecs(struct z_erofs_decompress_backend *be,
- 					err = -EIO;
- 				continue;
- 			}
--			err = z_erofs_do_decompressed_bvec(be, bvec);
-+			z_erofs_do_decompressed_bvec(be, bvec);
- 			*overlapped = true;
- 		}
- 	}
-@@ -940,7 +984,7 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
- 	struct erofs_sb_info *const sbi = EROFS_SB(be->sb);
- 	struct z_erofs_pcluster *pcl = be->pcl;
- 	unsigned int pclusterpages = z_erofs_pclusterpages(pcl);
--	unsigned int i, inputsize, err2;
-+	unsigned int i, inputsize;
- 	struct page *page;
- 	bool overlapped;
- 
-@@ -970,10 +1014,8 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
- 			kvcalloc(pclusterpages, sizeof(struct page *),
- 				 GFP_KERNEL | __GFP_NOFAIL);
- 
--	err = z_erofs_parse_out_bvecs(be);
--	err2 = z_erofs_parse_in_bvecs(be, &overlapped);
--	if (err2)
--		err = err2;
-+	z_erofs_parse_out_bvecs(be);
-+	err = z_erofs_parse_in_bvecs(be, &overlapped);
- 	if (err)
- 		goto out;
- 
-@@ -993,6 +1035,7 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
- 					.alg = pcl->algorithmformat,
- 					.inplace_io = overlapped,
- 					.partial_decoding = pcl->partial,
-+					.fillgaps = pcl->multibases,
- 				 }, be->pagepool);
- 
- out:
-@@ -1016,6 +1059,7 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
- 	if (be->compressed_pages < be->onstack_pages ||
- 	    be->compressed_pages >= be->onstack_pages + Z_EROFS_ONSTACK_PAGES)
- 		kvfree(be->compressed_pages);
-+	z_erofs_fill_other_copies(be, err);
- 
- 	for (i = 0; i < be->nr_pages; ++i) {
- 		page = be->decompressed_pages[i];
-@@ -1052,6 +1096,8 @@ static void z_erofs_decompress_queue(const struct z_erofs_decompressqueue *io,
- 	struct z_erofs_decompress_backend be = {
- 		.sb = io->sb,
- 		.pagepool = pagepool,
-+		.decompressed_secondary_bvecs =
-+			LIST_HEAD_INIT(be.decompressed_secondary_bvecs),
- 	};
- 	z_erofs_next_pcluster_t owned = io->head;
- 
-diff --git a/fs/erofs/zdata.h b/fs/erofs/zdata.h
-index a7fd44d21d9e..515fa2b28b97 100644
---- a/fs/erofs/zdata.h
-+++ b/fs/erofs/zdata.h
-@@ -84,6 +84,9 @@ struct z_erofs_pcluster {
- 	/* L: whether partial decompression or not */
- 	bool partial;
- 
-+	/* L: indicate several pageofs_outs or not */
-+	bool multibases;
++	virtio_balloon_debugfs_exit(vb);
 +
- 	/* A: compressed bvecs (can be cached or inplaced pages) */
- 	struct z_erofs_bvec compressed_bvecs[];
- };
+ 	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_REPORTING))
+ 		page_reporting_unregister(&vb->pr_dev_info);
+ 	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
+diff --git a/include/uapi/linux/virtio_balloon.h b/include/uapi/linux/virtio_balloon.h
+index ddaa45e723c4..f3ff7c4e5884 100644
+--- a/include/uapi/linux/virtio_balloon.h
++++ b/include/uapi/linux/virtio_balloon.h
+@@ -40,6 +40,7 @@
+ 
+ /* Size of a PFN in the balloon interface. */
+ #define VIRTIO_BALLOON_PFN_SHIFT 12
++#define VIRTIO_BALLOON_PAGE_SIZE (1<<VIRTIO_BALLOON_PFN_SHIFT)
+ 
+ #define VIRTIO_BALLOON_CMD_ID_STOP	0
+ #define VIRTIO_BALLOON_CMD_ID_DONE	1
 -- 
-2.24.4
+2.25.1
 

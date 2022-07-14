@@ -2,179 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA3A5746C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 323A5574746
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 10:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235167AbiGNIcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 04:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
+        id S236261AbiGNIiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 04:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbiGNIcq (ORCPT
+        with ESMTP id S237543AbiGNIiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 04:32:46 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4735D286FC;
-        Thu, 14 Jul 2022 01:32:46 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E8KdgM009136;
-        Thu, 14 Jul 2022 08:32:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=cFaZ3Vr+W+qoOMpxojUcyA/iKf9/1eOSRbI4B3P7F/c=;
- b=nt1TayDtGYqdMLhuAYZpBAFy69vVbx7FqKiJ4gVCEW+edIeDfeQE99uofv+mHtkYpJPx
- LI/yiBzLyT0hfEl6ntQc+E/ycXGUJ4XlmAbv0aOznKAbhvaGnXtBYFbniFzrOJ0n3kic
- 1LO5JDH5GlCkPuoEg9awmt+3fGdTjikQzlwmnLS5S4Suq/wqWiUhqgnEyQO7nWHt4msE
- WJanPbSHkwlxogfeH8ZDh3tEKTbY5EU/wWD87d2HDjh4qBeeDEUdM8aJCoLPbagaq/4F
- DlMyMuTfTRNgvHxFHbYdI0Zt1LkxRjUlxyGxf1Ve8UKigjpfIzURpn0U0ERJUWINH6XB 4A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hafj5886v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jul 2022 08:32:45 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26E8VbWi024298;
-        Thu, 14 Jul 2022 08:32:45 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hafj5886c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jul 2022 08:32:44 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26E8KEAu022880;
-        Thu, 14 Jul 2022 08:32:43 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3h71a8xsxu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jul 2022 08:32:43 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26E8Wep421234126
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Jul 2022 08:32:40 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE11AAE04D;
-        Thu, 14 Jul 2022 08:32:39 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 380F5AE045;
-        Thu, 14 Jul 2022 08:32:39 +0000 (GMT)
-Received: from [9.171.80.107] (unknown [9.171.80.107])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 14 Jul 2022 08:32:39 +0000 (GMT)
-Message-ID: <d62d2844-1d3b-4a0a-73dc-8ed961d9e22e@linux.ibm.com>
-Date:   Thu, 14 Jul 2022 10:37:21 +0200
+        Thu, 14 Jul 2022 04:38:19 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDBE402C0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:38:00 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3137316bb69so9736017b3.10
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 01:38:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OijWc6/zN7+oJw44OKbMxP70Rr2Fy33fyFndj1YTp2w=;
+        b=eAVrmrs4YJUffyfHBU4akJYJp//HiI6yxd7W+aBm4OkaBxQbZPO3Y4GdKPe//6MSrP
+         iM/l9jAkioiiNkThmgO2ubJ7kZZR09wFG4F9b5wS0UA/b3Ljam02GqAnlFK5JNDyXMed
+         /7XHPP9QjlNyfCpuSXVV8j9RHaed78VG5nNev1JJK+nZk4WXoRVdENKz6anLwI9DJ0p6
+         ZipbvZfMt9zERy8ljTtY6vZJF9qVp1QzgHTmVjD8rFHRrCihsZMdAj5Nry0gGWTKaCG5
+         ntoDQeYKA+ihPIdZXaXafgoB0xTpMs6h6rnOje8FzIAr7TvqCacuO4nMIl9oaGf7ZwgJ
+         /DdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OijWc6/zN7+oJw44OKbMxP70Rr2Fy33fyFndj1YTp2w=;
+        b=jlc04HbO6Z/qAhaOJQA/e2IzXaCiRgpKYgadTamU4KPp3nPc/nmr5tVc9xVWazXuJR
+         DCy/72KCFJf3/Ngn01nOu7L1Vm4SS614VkkcLJdWCkN8X+nA1GuWCiOFEl3/rgFm0rMo
+         W1lANb6dnFh6gQ5X78N/jglj5fLBysgZ/ugCsLmMdHlzjwjMDzS3o5M4zcdjZrXBSqDK
+         uI0XgaW4biD9/nOEVWJhy5TcpQisCj4sbsc8tRjOssGsxvpEHw3laADZH3BXNsskSaYs
+         9zGUjjQgYGaUl9VTpuWhrsLf3d/z5T3dXAVvBrt1YO/IrMh+kwFDKyXk14CCMk1Y56A4
+         emsw==
+X-Gm-Message-State: AJIora8k2AsnqF834gnIohF94R/VQJ7Dkqf2ZPRO5EaZcC3xcXmfVa8L
+        H7KpEl2fA04iBDfLzVE7zSiGQnyJ5MWqkb9yhEMIwg==
+X-Google-Smtp-Source: AGRyM1sd2jEWh+VjyUEuIyeyBE2cFo3QVD7rPln4nwnP0s0LxVlNjBhuQ3ZR1urywd+ATP3o33bc2OHkkuxdZsDvU5A=
+X-Received: by 2002:a0d:dbc3:0:b0:31d:f1e:7e8e with SMTP id
+ d186-20020a0ddbc3000000b0031d0f1e7e8emr8530544ywe.180.1657787879527; Thu, 14
+ Jul 2022 01:37:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v12 3/3] KVM: s390: resetting the Topology-Change-Report
-Content-Language: en-US
-To:     Janosch Frank <frankja@linux.ibm.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, cohuck@redhat.com, david@redhat.com,
-        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
-        nrb@linux.ibm.com
-References: <20220711084148.25017-1-pmorel@linux.ibm.com>
- <20220711084148.25017-4-pmorel@linux.ibm.com>
- <58016efc-9053-b743-05d6-4ace4dcdc2a8@linux.ibm.com>
- <a268d8b7-bbd8-089d-896c-e4e3e4167e46@linux.ibm.com>
- <87c5514b-4971-b283-912c-573ab1b4d636@linux.ibm.com>
- <0c73fc23-2cfe-86c6-b91d-77a73bc435b4@linux.ibm.com>
- <7cd9cf5b-d91e-f676-48e9-abbea94d62e0@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <7cd9cf5b-d91e-f676-48e9-abbea94d62e0@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3wf5Hd9fRwDZNOqeZQWPDcGxUZaUvdtq
-X-Proofpoint-ORIG-GUID: Is-kOT_28PLR2_9gy_lvOfAUFGYpUObM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-14_06,2022-07-13_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 mlxscore=0 bulkscore=0 phishscore=0 malwarescore=0
- spamscore=0 impostorscore=0 mlxlogscore=999 adultscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207140033
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220704084354.3556326-1-jeongik@google.com>
+In-Reply-To: <20220704084354.3556326-1-jeongik@google.com>
+From:   Jeongik Cha <jeongik@google.com>
+Date:   Thu, 14 Jul 2022 17:37:48 +0900
+Message-ID: <CAE7E4g=BGzup31AD5zAuZpoR2gMswJhuo67B7cV8=wHOY=Y+qA@mail.gmail.com>
+Subject: Re: [PATCH v1] wifi: mac80211_hwsim: fix race condition in pending packet
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     adelva@google.com, kernel-team@android.com, jaeman@google.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 4, 2022 at 5:44 PM Jeongik Cha <jeongik@google.com> wrote:
+>
+> A pending packet uses a cookie as an unique key, but it can be duplicated
+> because it didn't use atomic operators.
+>
+> And also, a pending packet can be null in hwsim_tx_info_frame_received_nl
+> due to race condition with mac80211_hwsim_stop.
+>
+> For this,
+>  * Use an atomic type and operator for a cookie
+>  * Add a lock around the loop for pending packets
+>
+> Signed-off-by: Jeongik Cha <jeongik@google.com>
+> ---
+>  drivers/net/wireless/mac80211_hwsim.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
+> index c5bb97b381cf..ea006248ffcd 100644
+> --- a/drivers/net/wireless/mac80211_hwsim.c
+> +++ b/drivers/net/wireless/mac80211_hwsim.c
+> @@ -687,7 +687,7 @@ struct mac80211_hwsim_data {
+>         bool ps_poll_pending;
+>         struct dentry *debugfs;
+>
+> -       uintptr_t pending_cookie;
+> +       atomic64_t pending_cookie;
+>         struct sk_buff_head pending;    /* packets pending */
+>         /*
+>          * Only radios in the same group can communicate together (the
+> @@ -1358,7 +1358,7 @@ static void mac80211_hwsim_tx_frame_nl(struct ieee80211_hw *hw,
+>         int i;
+>         struct hwsim_tx_rate tx_attempts[IEEE80211_TX_MAX_RATES];
+>         struct hwsim_tx_rate_flag tx_attempts_flags[IEEE80211_TX_MAX_RATES];
+> -       uintptr_t cookie;
+> +       u64 cookie;
+>
+>         if (data->ps != PS_DISABLED)
+>                 hdr->frame_control |= cpu_to_le16(IEEE80211_FCTL_PM);
+> @@ -1427,8 +1427,7 @@ static void mac80211_hwsim_tx_frame_nl(struct ieee80211_hw *hw,
+>                 goto nla_put_failure;
+>
+>         /* We create a cookie to identify this skb */
+> -       data->pending_cookie++;
+> -       cookie = data->pending_cookie;
+> +       cookie = (u64)atomic64_inc_return(&data->pending_cookie);
+>         info->rate_driver_data[0] = (void *)cookie;
+>         if (nla_put_u64_64bit(skb, HWSIM_ATTR_COOKIE, cookie, HWSIM_ATTR_PAD))
+>                 goto nla_put_failure;
+> @@ -4178,6 +4177,7 @@ static int hwsim_tx_info_frame_received_nl(struct sk_buff *skb_2,
+>         const u8 *src;
+>         unsigned int hwsim_flags;
+>         int i;
+> +       unsigned long flags;
+>         bool found = false;
+>
+>         if (!info->attrs[HWSIM_ATTR_ADDR_TRANSMITTER] ||
+> @@ -4205,18 +4205,20 @@ static int hwsim_tx_info_frame_received_nl(struct sk_buff *skb_2,
+>         }
+>
+>         /* look for the skb matching the cookie passed back from user */
+> +       spin_lock_irqsave(&data2->pending.lock, flags);
+>         skb_queue_walk_safe(&data2->pending, skb, tmp) {
+>                 u64 skb_cookie;
+>
+>                 txi = IEEE80211_SKB_CB(skb);
+> -               skb_cookie = (u64)(uintptr_t)txi->rate_driver_data[0];
+> +               skb_cookie = (u64)txi->rate_driver_data[0];
+>
+>                 if (skb_cookie == ret_skb_cookie) {
+> -                       skb_unlink(skb, &data2->pending);
+> +                       __skb_unlink(skb, &data2->pending);
+>                         found = true;
+>                         break;
+>                 }
+>         }
+> +       spin_unlock_irqrestore(&data2->pending.lock, flags);
+>
+>         /* not found */
+>         if (!found)
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>
 
+Hello Johannes!
 
-On 7/13/22 11:01, Janosch Frank wrote:
-> On 7/12/22 13:17, Pierre Morel wrote:
->>
->>
->> On 7/12/22 10:47, Janis Schoetterl-Glausch wrote:
->>> On 7/12/22 09:24, Pierre Morel wrote:
->>>>
->>>>
+It fixes kernel panics during a long test which uses mac80211_hwsim
+driver. So I think it would be beneficial if we could merge this into
+LTS branches. Could you share your opinion?
 
-...
-
->> kernel.
->>
->> In userland we check any wrong selector before the instruction goes back
->> to the guest.
-> 
-> I opt for passing the lower selectors down for QEMU to handle.
-
-OK
-
-> 
->>
->>> But that's only relevant if STSI can be extended without a 
->>> capability, which is why I asked about that.
->>
->> Logicaly any change, extension, in the architecture should be signaled
->> by a facility bit or something.
->>
->>>
->>>> Even testing the facility or PV in the kernel is for my opinion 
->>>> arguable in the case we do not do any treatment in the kernel.
-> 
-> That's actually a good point.
-> 
-> New instruction interceptions for PV will need to be enabled by KVM via 
-> a switch somewhere since the UV can't rely on the fact that KVM will 
-> correctly handle it without an enablement.
-> 
-> 
-> So please remove the pv check
-
-OK
-
-> 
-
-...
-
->>>>>>     +static int kvm_s390_set_topology(struct kvm *kvm, struct 
->>>>>> kvm_device_attr *attr)
->>>>>
->>>>> kvm_s390_set_topology_changed maybe?
->>>>> kvm_s390_get_topology_changed below then.
-> 
-> kvm_s390_set_topology_change_indication
-> 
-> It's long but it's rarely used.
-> Maybe shorten topology to "topo"
-
-OK
-I use
-kvm_s390_get_topo_change_indication()
-
-
-Thanks.
-
-Regards,
-Pierre
-
--- 
-Pierre Morel
-IBM Lab Boeblingen
+Thanks
+Jeongik

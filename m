@@ -2,149 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CE857537C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC7C57537F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238388AbiGNQzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S238638AbiGNQz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 12:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237499AbiGNQzq (ORCPT
+        with ESMTP id S238794AbiGNQzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:55:46 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA52A4A837;
-        Thu, 14 Jul 2022 09:55:45 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 64so4177579ybt.12;
-        Thu, 14 Jul 2022 09:55:45 -0700 (PDT)
+        Thu, 14 Jul 2022 12:55:55 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60B454CBD
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:55:53 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id y22-20020a7bcd96000000b003a2e2725e89so1591363wmj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:55:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vtZPLFwxYNKanG+h3QDUM6ra0yijWiFb3B9BIWY3S/E=;
-        b=cMrZXi0Pvn7gE8mgb+Kk7Z7fqa/En6zp7q4PLY0uwK8QhR7RMf1b0JXavpeGSzBnxK
-         UWPM+TBWB5uze16RTTsVLuvsNJEproQtmwbQbuW1pOoPc1Tf7st0Bv0t97YZUPrmV4GZ
-         P/7VWUA0694iTSby/WA+82ey0a1XTfOuFW/qFwnjySlKYRSxYMmQIGJR8WqR8n8xikVd
-         0xyjI2VM3KgR9L+BsD0vNH6HovcV5XwpdeOnBteFNkAia/CX3FsyLbOnFERoH2YDwY/Q
-         Oq8vnXmwceEn4JnIN55o8kz9+NJDXsIQ8tIyNRWhTv7ah5dEIXSbQjlk1f70wFhrvyMK
-         1dAg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YL8SXrf5E+M6fcmsXFxLr3AwzTQU1pkyfX1gPaaxl4g=;
+        b=yzTY8/JScLREDVva8u4+YNj6LmYxF9EIVD+XwCtYkLOEVLH1GJrIFioNH+MJj1Vp0I
+         +CCLPrrfeS2nVyApdO73U2IbiOwvXlLe7rZb8fiq+8w9NhCIaZ55EpuPiMqJgNsbw/L9
+         1A4TLgOQr/+peKJ6FjHVmkrOCjDfRs/ax3QRpnuegbonhyxpTRpf9D3PysQMEQcCYyMV
+         w9fTRiJ8fyiptKaY4FS1xvcAaeMc2z25vdEV9G85FN+W3ioM0MnHEkATgMMFzFqx4SUx
+         SDwFQ2HM5GOI+0wEvUKGFiNnE4fDFpVYLYnSg4LHZX+2wNDK9ToB1HBfuKpq1nihMv9F
+         gRsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vtZPLFwxYNKanG+h3QDUM6ra0yijWiFb3B9BIWY3S/E=;
-        b=Vv2Mur/9bVYvMk/sVKWvnvYX5j6FNmDNro97Onne05kSvhSXahoYowJ/gZa/xpkLzn
-         jekuJJ6fjMgnE1PYO+69jqOQNg4oQd135vaa0w0zvMGrQOLzEmtfocPLLpK5n51RXo94
-         YnZrAbaCb4J+qL0GoLACnY9ClumEs6w9arO3nrBRjYMcB6LaOEmJcqJULQ0ZMoyBwRoN
-         zsmGzbFYOgarjcGLQzRL152CZOzPKLwMqHPiCFrrm2WpInNb/2MiqVeTSHowoeSHK7K4
-         rfuPnK2fvx8M+b6F59u9nTU2PRwb9LPoDDYjUEJUfIE6VO03H+AzTAn8kYkFQXT4uvd1
-         JY9Q==
-X-Gm-Message-State: AJIora9SXjPhOVWQTT2o8+/Ert+T6RvnnkgrunkXFceUNPmqcwB/Y742
-        sIfKPY/UPr1swmpLG4E6MwwBElbXkNXPaiEbobE=
-X-Google-Smtp-Source: AGRyM1umoixex0sO+mcpexwT3t4HYjZOSBppDD8uRoW0tGM/uVoGSmFrclS/FHlDdVoimeoDUxODbtUIoj2Fka4tDMQ=
-X-Received: by 2002:a05:6902:1109:b0:66e:f386:61ce with SMTP id
- o9-20020a056902110900b0066ef38661cemr8895044ybu.364.1657817744896; Thu, 14
- Jul 2022 09:55:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YL8SXrf5E+M6fcmsXFxLr3AwzTQU1pkyfX1gPaaxl4g=;
+        b=1ufY6tybvVLCTd6I7hgsxSwFVG8prsZuiyT81WY/ofMoHZPzHImJah2cthl2i5AaGg
+         ebKqnnhzcGg7TdnERrCjgz2atfpYyNS5t7EM6HRH8lMuw6xO310TuYKfhJldImbXM3m3
+         g+kbjAXfuHoBvZ/JK7y8gE6A9qNF+qoUdJVdOWWlElf7uSjG/xF/T807Sr6jmvkaAYoE
+         u1EzM4CB3aVKWrgaOUMKmWlWjG6tMA78L2h+p47M4ZjzJuDOdAa+mnQbt9AuDJKmAfg4
+         fodqeJ619wxMHWtrM9Fnb5W7bPQVRj6DEiEkC1fLzmZ8UwRPQM0Jx5sRNKpwQSuLwFIV
+         lBPA==
+X-Gm-Message-State: AJIora9Tav/1s6+aO2lnTaM19joT1Jy9tVxUWoa9rNalUL2fiPf98qAN
+        uxVe6rQV4HUckGaW8wcTAfBlGQ==
+X-Google-Smtp-Source: AGRyM1vFn4HJAkOQC+XNsUm3xozYDCzxYVg/gZigISkKiP71CoqxZWFE7vGtjgNMufO1WXaz+VH3ew==
+X-Received: by 2002:a05:600c:a08:b0:3a1:9319:ab78 with SMTP id z8-20020a05600c0a0800b003a19319ab78mr15875548wmp.158.1657817752131;
+        Thu, 14 Jul 2022 09:55:52 -0700 (PDT)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id p17-20020adff211000000b0021d9207e6f1sm1862666wro.34.2022.07.14.09.55.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 09:55:51 -0700 (PDT)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Janghyuck Kim <janghyuck.kim@samsung.com>,
+        Cho KyongHo <pullip.cho@samsung.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        David Virag <virag.david003@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/6] iommu/exynos: Add basic support for SysMMU v7
+Date:   Thu, 14 Jul 2022 19:55:44 +0300
+Message-Id: <20220714165550.8884-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220714185514.7d1a2ac9@canb.auug.org.au> <Ys/42uMzQy+CFTGI@debian>
- <YtA+127QgRifnRBZ@dev-arch.thelio-3990X> <CADVatmOTNA8uVqDEx6kp=+_O=wEhV2jbS9-frct-c4ZqBxcspg@mail.gmail.com>
- <YtBEXdrsthFamQs8@dev-arch.thelio-3990X>
-In-Reply-To: <YtBEXdrsthFamQs8@dev-arch.thelio-3990X>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Thu, 14 Jul 2022 17:55:08 +0100
-Message-ID: <CADVatmNBWnPxmMCs_LdTKgiy=+ebTZV7KT3E-62bZuK8LJyMfg@mail.gmail.com>
-Subject: Re: linux-next: Tree for Jul 14
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 5:29 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Thu, Jul 14, 2022 at 05:21:32PM +0100, Sudip Mukherjee wrote:
-> > Hi Nathan,
-> >
-> > On Thu, Jul 14, 2022 at 5:05 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > Hi Sudip,
-> > >
-> > > On Thu, Jul 14, 2022 at 12:07:06PM +0100, Sudip Mukherjee (Codethink) wrote:
-> > > > Hi Stephen,
-> > > >
-> > > > On Thu, Jul 14, 2022 at 06:55:14PM +1000, Stephen Rothwell wrote:
-> > > > > Hi all,
-> > > > >
-> > > > > Changes since 20220713:
-> > > >
-> > > > Build failures on next-20220714:
-> > >
-> > > <snip>
-> > >
-> > > > x86_64 allmodconfig with clang fails with:
-> > > >
-> > > > drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is not a compile-time constant
-> > > >         gpu_cc_parent,
-> > > >         ^~~~~~~~~~~~~
-> > > > drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is not a compile-time constant
-> > > >         gpu_cc_parent,
-> > > >         ^~~~~~~~~~~~~
-> > >
-> > > I sent https://lore.kernel.org/20220711174004.3047516-1-nathan@kernel.org/
-> > > for this a few days ago, it just needs to be picked up.
-> > >
-> > > > arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
-> > > > DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
-> > > >                     ^
-> > > > ./arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
-> > > > extern u64 x86_spec_ctrl_current;
-> > >
-> > > This is now fixed in -tip so it should be fixed in -next tomorrorow:
-> > >
-> > > https://git.kernel.org/tip/db866d3352ec85e821e730e191481cba3a2bfa6e
-> >
-> > This should also go to Linus. This failure is in the mainline also.
-> > https://lore.kernel.org/lkml/Ys6sZj6KYthnDppq@debian/
->
-> Yes, it is in the x86/urgent branch so it should get there by -rc7. Our
-> CI is red too :(
->
-> > > In the future, consider CC'ing our mailing list (llvm@lists.linux.dev)
-> > > for any clang related issues so that we can get them taken care of ASAP,
-> > > we have a MAINTAINERS entry for a reason :) thank you for testing with
-> > > clang; the more people that use it, hopefully the easier it will be to
-> > > get things unbroken.
-> >
-> > Sure. I run arm, arm64, powerpc and x86_64 allmodconfigs with clang
-> > (along with gcc) every night for mainline, started with linux-next
-> > from today. Trying to setup the mips build also, I will mail llvm list
-> > asking for help with the mips build.
-> > Currently I only monitor the clang output from x86_64 as thats the one
-> > which builds. If you want I can send the other reports also.
->
-> Sure! I am not sure that we have tested mips or powerpc allmodconfig now
-> that I am thinking about it but we'll certainly take a look at any
-> issues that come from them and see what we can do.
+Add minimal viable support for SysMMU v7.x, which can be found in modern
+Exynos chips (like Exynos850 or Google's GS101). SysMMU v7.x may
+implement VM register set, and those registers should be initialized
+properly if present. Usually 8 translation domains are supported via VM
+registers (0..7), but only n=0 (default) is used for now.
 
-Uhhh.. I just checked powerpc build log and have now raised:
-https://github.com/llvm/llvm-project/issues/56530
+Existing exynos-iommu driver only supports SysMMU versions up to v5. But
+it's pretty much ready for basic usage with SysMMU v7, only small
+changes have to be done. As SysMMU version is tested dynamically (by
+reading the corresponding register), there is no need to introduce new
+compatible string.
 
-I am also part of Elisa project and there we run clang-analyzer on
-defconfig of linux-next every day and the results are stored in a web
-interface to check and compare. I have added Lukas if you both think
-it will be good to collaborate.
+The only major change is that SysMMU v7 can have different register
+layouts:
+  - with Virtual Machine support
+  - without Virtual Machine support
 
+That can be checked by reading the capability registers. In the case if
+SysMMU IP-core is VM-capable, the VM registers have to be used, and some
+additional initialization is needed. That is the case on E850-96 board,
+which non-secure SysMMU (v7.4) implements VM-capable register set.
+
+Another required change to make SysMMU v7 functional (at least the one
+that has VM registers), is to enable default VM instance. That should
+be added to the code enabling MMU itself. Insights for that change were
+taken by comparing the I/O dump (writel() / readl() operations) for the
+vendor driver and this upstream driver.
+
+The patch series was tested on E850-96 board. Because at the moment
+there are no SysMMU users for that board, the testing was done using so
+called "Emulated Translation" registers available on SysMMU v7. That
+allows one to initiate the translation from CPU, by writing to those
+registers, and then reading the corresponding TLB registers to find out
+the translation result. The testing driver can be found in [1] tree.
+
+Thanks to Marek, who did let me know it only takes a slight change of
+registers to make this driver work with v7.
+
+[1] https://github.com/joe-skb7/linux/tree/e850-96-mainline-iommu
+
+Changes in v3:
+  - Merged "Check if SysMMU v7 has VM registers" patch into "Add SysMMU
+    v7 register set" patch
+  - Used variant struct instead of arrays for keeping register offsets
+  - Kept common registers out of variant struct
+  - See per-patch changes for more details
+
+Changes in v2:
+  - Addressed all comments on review
+  - Reworked commit messages correspondingly
+  - Added new patch: "iommu/exynos: Handle failed registration properly"
+  - Added new patch: "iommu/exynos: Add SysMMU v7 register sets"
+  - Added new patch: "iommu/exynos: Reuse SysMMU constants for page size
+    and order"
+
+Sam Protsenko (6):
+  iommu/exynos: Reuse SysMMU constants for page size and order
+  iommu/exynos: Handle failed IOMMU device registration properly
+  iommu/exynos: Set correct dma mask for SysMMU v5+
+  iommu/exynos: Abstract non-common registers on different variants
+  iommu/exynos: Add SysMMU v7 register set
+  iommu/exynos: Enable default VM instance on SysMMU v7
+
+ drivers/iommu/exynos-iommu.c | 178 ++++++++++++++++++++++++++---------
+ 1 file changed, 136 insertions(+), 42 deletions(-)
 
 -- 
-Regards
-Sudip
+2.30.2
+

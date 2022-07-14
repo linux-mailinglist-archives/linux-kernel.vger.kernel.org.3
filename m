@@ -2,140 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4818857449E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56AA15744A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 07:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233444AbiGNFke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 01:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
+        id S234784AbiGNFkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 01:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiGNFkb (ORCPT
+        with ESMTP id S234088AbiGNFkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 01:40:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A7528E0A;
-        Wed, 13 Jul 2022 22:40:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8EA1B82331;
-        Thu, 14 Jul 2022 05:40:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CB13C34114;
-        Thu, 14 Jul 2022 05:40:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657777227;
-        bh=sQeo6HldtXN8M4W0pVBmML4XesDPzY/D6bMZad4+vpU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MTK72L0eGaI3hw+pAexW8Y0mSgy7+ctoJJol7ZJjt0TWT8fxoworx4od1K1fA7UbF
-         TyjulKrVHYktWttXX8gEs0/E5mX7QJEuxaA4cFSYkMmRUHelubjuGB/J/yq4O2DXv5
-         q8h3AQJcVCQUHObrstoAj6qRsKDuxXIcQZ/VSHQ0VEgXatbPvWwnfRrgMssUJhE8qw
-         nB0jULbfnDXc/TbvdOciLuJI4v0xRcgzdB8262WGnN4ykbAVwlCULy0SI708D+rIPP
-         chiBbLPhOVOsFsmwKpMJdThljkoCREb72vQ7RxMXp5siG6SjRDymLACB45Y+3pPkEP
-         hEvExqDBhJqyw==
-From:   alexs@kernel.org
-Cc:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
-        Jonathan Corbet <corbet@lwn.net>, Hu Haowen <src.res@email.cn>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Pan Yunwang <panyunwang849@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net
-Subject: [PATCH] doc/zh_CN: remove submitting-driver reference from docs
-Date:   Thu, 14 Jul 2022 13:40:13 +0800
-Message-Id: <20220714054013.214031-1-alexs@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Thu, 14 Jul 2022 01:40:43 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B8528E36;
+        Wed, 13 Jul 2022 22:40:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657777242; x=1689313242;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4NKbmXxhlXJ2EzhZYmyUNHWWphemE+rKL52FLwRy3ew=;
+  b=B9BO8JKy4MYh7EajcJwVG53Vgt9H5q0xNzltg4RttQMH30rtjuLqsA/l
+   9P/eyppEMyKArReYE7dKNaSLnmcp8qM/NK7xpYivLe0h6ZU+yjReWDBtH
+   eHdQ/50nQijVxVsgzrMU7W8cKQN+TyRW4b4qdIBowcyEmlWwxiAJMm9dr
+   8=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Jul 2022 22:40:41 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 22:40:41 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 22:40:41 -0700
+Received: from [10.216.13.53] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Jul
+ 2022 22:40:33 -0700
+Message-ID: <c022538d-c616-8f1a-e1c2-c11b5f0de670@quicinc.com>
+Date:   Thu, 14 Jul 2022 11:10:29 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2 5/7] arm64: dts: qcom: sc7280: Update gpu register list
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Taniya Das <quic_tdas@quicinc.com>, <quic_rjendra@quicinc.com>
+CC:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "Stephen Boyd" <swboyd@chromium.org>
+References: <1657346375-1461-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220709112837.v2.5.I7291c830ace04fce07e6bd95a11de4ba91410f7b@changeid>
+ <CAD=FV=XzvcjS51q78BZ=FPCEVUDMD+VKJ70ksCm5V4qwHN_wRg@mail.gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <CAD=FV=XzvcjS51q78BZ=FPCEVUDMD+VKJ70ksCm5V4qwHN_wRg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Shi <alexs@kernel.org>
+On 7/12/2022 4:57 AM, Doug Anderson wrote:
+> Hi,
+>
+> On Fri, Jul 8, 2022 at 11:00 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>> Update gpu register array with gpucc memory region.
+>>
+>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>> ---
+>>
+>> (no changes since v1)
+>>
+>>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 6 ++++--
+>>   1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> index e66fc67..defdb25 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> @@ -2228,10 +2228,12 @@
+>>                          compatible = "qcom,adreno-635.0", "qcom,adreno";
+>>                          reg = <0 0x03d00000 0 0x40000>,
+>>                                <0 0x03d9e000 0 0x1000>,
+>> -                             <0 0x03d61000 0 0x800>;
+>> +                             <0 0x03d61000 0 0x800>,
+>> +                             <0 0x03d90000 0 0x2000>;
+>>                          reg-names = "kgsl_3d0_reg_memory",
+>>                                      "cx_mem",
+>> -                                   "cx_dbgc";
+>> +                                   "cx_dbgc",
+>> +                                   "gpucc";
+> This doesn't seem right. Shouldn't you be coordinating with the
+> existing gpucc instead of reaching into its registers?
+>
+> -Doug
+IIUC, qcom gdsc driver doesn't ensure hardware is collapsed since they 
+are vote-able switches. Ideally, we should ensure that the hw has 
+collapsed for gpu recovery because there could be transient votes from 
+other subsystems like hypervisor using their vote register.
 
-The doc is removed, so related reference should be removed too.
+I am not sure how complex the plumbing to gpucc driver would be to allow 
+gpu driver to check hw status. OTOH, with this patch, gpu driver does a 
+read operation on a gpucc register which is in always-on domain. That 
+means we don't need to vote any resource to access this register.
 
-Signed-off-by: Alex Shi <alexs@kernel.org>
-Cc: Alex Shi <alexs@kernel.org> 
-Cc: Yanteng Si <siyanteng@loongson.cn> 
-Cc: Jonathan Corbet <corbet@lwn.net> 
-Cc: Hu Haowen <src.res@email.cn> 
-Cc: Jiri Kosina <jkosina@suse.cz> 
-Cc: Thorsten Leemhuis <linux@leemhuis.info> 
-Cc: Konstantin Ryabitsev <konstantin@linuxfoundation.org> 
-Cc: Pan Yunwang <panyunwang849@gmail.com> 
-Cc: linux-doc@vger.kernel.org 
-Cc: linux-kernel@vger.kernel.org 
-Cc: linux-doc-tw-discuss@lists.sourceforge.net 
----
- Documentation/translations/zh_CN/process/8.Conclusion.rst     | 1 -
- .../translations/zh_CN/process/submitting-patches.rst         | 4 +---
- Documentation/translations/zh_TW/process/8.Conclusion.rst     | 1 -
- .../translations/zh_TW/process/submitting-patches.rst         | 4 +---
- 4 files changed, 2 insertions(+), 8 deletions(-)
+Stephen/Rajendra/Taniya, any suggestion?
 
-diff --git a/Documentation/translations/zh_CN/process/8.Conclusion.rst b/Documentation/translations/zh_CN/process/8.Conclusion.rst
-index 4707f0101964..643b88af97bb 100644
---- a/Documentation/translations/zh_CN/process/8.Conclusion.rst
-+++ b/Documentation/translations/zh_CN/process/8.Conclusion.rst
-@@ -19,7 +19,6 @@
- :ref:`Documentation/translations/zh_CN/process/howto.rst <cn_process_howto>`
- 文件是一个重要的起点；
- :ref:`Documentation/translations/zh_CN/process/submitting-patches.rst <cn_submittingpatches>`
--和 :ref:`Documentation/translations/zh_CN/process/submitting-drivers.rst <cn_submittingdrivers>`
- 也是所有内核开发人员都应该阅读的内容。许多内部内核API都是使用kerneldoc机制
- 记录的；“make htmldocs”或“make pdfdocs”可用于以HTML或PDF格式生成这些文档
- （尽管某些发行版提供的tex版本会遇到内部限制，无法正确处理文档）。
-diff --git a/Documentation/translations/zh_CN/process/submitting-patches.rst b/Documentation/translations/zh_CN/process/submitting-patches.rst
-index a9570165582a..ebb7f37575c1 100644
---- a/Documentation/translations/zh_CN/process/submitting-patches.rst
-+++ b/Documentation/translations/zh_CN/process/submitting-patches.rst
-@@ -23,9 +23,7 @@
- 以下文档含有大量简洁的建议， 具体请见：
- :ref:`Documentation/process <development_process_main>`
- 同样，:ref:`Documentation/translations/zh_CN/process/submit-checklist.rst <cn_submitchecklist>`
--给出在提交代码前需要检查的项目的列表。如果你在提交一个驱动程序，那么
--同时阅读一下:
--:ref:`Documentation/process/submitting-drivers.rst <submittingdrivers>`
-+给出在提交代码前需要检查的项目的列表。
- 
- 其中许多步骤描述了Git版本控制系统的默认行为；如果您使用Git来准备补丁，
- 您将发现它为您完成的大部分机械工作，尽管您仍然需要准备和记录一组合理的
-diff --git a/Documentation/translations/zh_TW/process/8.Conclusion.rst b/Documentation/translations/zh_TW/process/8.Conclusion.rst
-index 7572b17667d9..044fcc118bef 100644
---- a/Documentation/translations/zh_TW/process/8.Conclusion.rst
-+++ b/Documentation/translations/zh_TW/process/8.Conclusion.rst
-@@ -22,7 +22,6 @@
- :ref:`Documentation/translations/zh_TW/process/howto.rst <tw_process_howto>`
- 文件是一個重要的起點；
- :ref:`Documentation/translations/zh_TW/process/submitting-patches.rst <tw_submittingpatches>`
--和 :ref:`Documentation/translations/zh_TW/process/submitting-drivers.rst <tw_submittingdrivers>`
- 也是所有內核開發人員都應該閱讀的內容。許多內部內核API都是使用kerneldoc機制
- 記錄的；「make htmldocs」或「make pdfdocs」可用於以HTML或PDF格式生成這些文檔
- （儘管某些發行版提供的tex版本會遇到內部限制，無法正確處理文檔）。
-diff --git a/Documentation/translations/zh_TW/process/submitting-patches.rst b/Documentation/translations/zh_TW/process/submitting-patches.rst
-index c4fd48f5bd8b..3f77ef5d48a0 100644
---- a/Documentation/translations/zh_TW/process/submitting-patches.rst
-+++ b/Documentation/translations/zh_TW/process/submitting-patches.rst
-@@ -26,9 +26,7 @@
- 以下文檔含有大量簡潔的建議， 具體請見：
- :ref:`Documentation/process <development_process_main>`
- 同樣，:ref:`Documentation/translations/zh_TW/process/submit-checklist.rst <tw_submitchecklist>`
--給出在提交代碼前需要檢查的項目的列表。如果你在提交一個驅動程序，那麼
--同時閱讀一下:
--:ref:`Documentation/process/submitting-drivers.rst <submittingdrivers>`
-+給出在提交代碼前需要檢查的項目的列表。
- 
- 其中許多步驟描述了Git版本控制系統的默認行爲；如果您使用Git來準備補丁，
- 您將發現它爲您完成的大部分機械工作，儘管您仍然需要準備和記錄一組合理的
--- 
-2.25.1
+-Akhil.
+
 

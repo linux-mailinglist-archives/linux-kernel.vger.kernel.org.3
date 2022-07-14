@@ -2,112 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7263A5740DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079445740E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 03:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiGNBLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 21:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
+        id S231879AbiGNBLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 21:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231587AbiGNBL2 (ORCPT
+        with ESMTP id S231668AbiGNBLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 21:11:28 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC50201A0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:11:28 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id fd6so522414edb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:11:28 -0700 (PDT)
+        Wed, 13 Jul 2022 21:11:21 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534F12125A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:11:20 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id c7-20020a258807000000b0066d6839741eso326451ybl.23
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 18:11:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a93Cdw/b08yokkZOSoTxTp1XSO9jT1YPFIGh2tVBaFY=;
-        b=UUMi4C1J6wo829oEZN7ope7dgBnp7YAvLYYnMn8vrRhxCl76VTZp95FiE2L0VKlIkN
-         WgYqr0+0mpJY3k2EW3/4faf45g3D/11EJ9QNBYIu1Drq38/CStnSGwEGsxWCfdpHOGDW
-         cZtOdCgXjI1sf2Zm6CUuRjVBkljGpwg0u9ARRc9kH09L0zOz4kvjMbzZW8HkbXrXwMBE
-         7BCtU+4zu/BAGj9UsCUXu6tKAlcgAEgkwgw/04gUwounq3t4xykoSXyHt9Vw4tVNZHW/
-         lHyeA0cF+Nf5+xSeggakBgwuPc59QlOT7gbOHGmUNi0hsdXwYBKmcO/wCKL5dBKRm40E
-         erfg==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=0hF6tID653Wj3gfhMGdt71PhFpkNsHCuIdaPZ9N7avk=;
+        b=VdIRqVCRrKff6mYZG982d30mdg85GCCASxOzqnKGD6SIG1BDYD5Csh1GrHtAE1kgtN
+         tsGu/bgawpMLO/NzphBybKGqYH85NWg6sbhbxf/UOs0MMfIhtZ1VgDT9lf5nUqFOAio0
+         Gh8LkEX7e4JJf7XJJoy2/TZ874kAItjXy4tCYr7wKjOU0tOJhiJQTc0JbedfGmCh0qbX
+         +0XjoFQ6hii9ALYRACAUkwASnGb6OyctwEc5Q4PmCqLpfr9o4aZLIY4G1D5nzlYzrINK
+         gxYUOsvZuIDv4dFXvnFoTw3Y0O7L6LH4j9xJsoWGo5dcCpZhEojZgW/W6l41FCx3cVOG
+         CVtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a93Cdw/b08yokkZOSoTxTp1XSO9jT1YPFIGh2tVBaFY=;
-        b=wP6FBcmAnkFyL+QsYd/vBUhYNJK8m3+kWI1hQ2cbFSApJ9LPHiHhGstjsGvsW3lCMn
-         +5cc85OpWbaea6HzKrsw1C4yXY/AIbHB4of8fELSArS/wo9dYGtNxY++wqv+1m96RlHt
-         ontgMs05jFECqKd+At0i7D3dbiaIdut5ZcYfHWg2DSpnE/7o+u7RWYcERzsmeRC7fFn+
-         Pl9vUASX3sWZGqb/ihexpUm1kHIuNIiSpXoWyDqJBuPPxqESLgUIUMDSpX8Q4EAY6QsJ
-         8S6G5KkhSRqH6/ju3psfKKR6wr7ys+u4dxztO902OsSYhzj/zBzA8fXfzidZlvPKDRyd
-         eiVA==
-X-Gm-Message-State: AJIora8f5XDDutHQOy1pZoNqmMCpBX6Fb9INdQ9JHeYvdmhjzcRXuMMu
-        /y33QvjmXdz/VD2DPPX5fg69hczoXKCTI6k/Spo=
-X-Google-Smtp-Source: AGRyM1vejis9cF5nlYAXPBkQvErPD5hsJQ+0uQcZHBF7j95H9sjacuUDwJm2zzPpCY152/+jN4qYQcQzaSHHnVS9lO0=
-X-Received: by 2002:a05:6402:274c:b0:43a:9204:95fb with SMTP id
- z12-20020a056402274c00b0043a920495fbmr8880451edd.259.1657761086555; Wed, 13
- Jul 2022 18:11:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220618232737.2036722-1-linux@roeck-us.net> <584fc348-7a60-26a2-af61-9edc4f4830e4@amd.com>
- <CADnq5_NkVWqcxwLMBeskqpcSEYCEjUAK0hqvA_PAo7ACHKL2cA@mail.gmail.com>
- <6a026c9a-c4ee-deba-e028-4c0f478c1911@roeck-us.net> <CADnq5_OrxMMkazXEPHeZXp_bV890=r21DRx2QsqLXUFj4t8aYg@mail.gmail.com>
- <20220713230917.GE32544@roeck-us.net>
-In-Reply-To: <20220713230917.GE32544@roeck-us.net>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 13 Jul 2022 21:11:14 -0400
-Message-ID: <CADnq5_PAg8xg2J3WUfjxK_-WFaLOK7cQd6bqWDnfVqE6fpXq2Q@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Add missing hard-float compile flags for
- PPC64 builds
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Axtens <dja@axtens.net>
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=0hF6tID653Wj3gfhMGdt71PhFpkNsHCuIdaPZ9N7avk=;
+        b=uyg1b6RXMD2fKc60nAD4C9wRJ6KYGXeRyLj6sd2c/EwUjpwE3pC1Is/x+afXsgIHXs
+         QO7iZYkSVSeArQGugqSsfvyooG5V9cAjbvhq9+gAjvbBPlfF9PLd5NbrhKPTi8TSphJf
+         rEg6J0SVK8WUqVly5G+WQ/PBbNUvv+O69QtEeaIjHPMcZqF3nV/LAgDbtx+DsM1aF6/D
+         kFHrXZwLFxTuBZc9H4489+STgjuXciBbrOnM0yBHUya1j9QDrn4ddJokSSnwKamiD5e0
+         Iy2vO+MDPw6JswDzmik0OWdOt3PFK65LRzEtIlfPYa3GsD1geeqKwgss1HIRAueWuICy
+         Owrw==
+X-Gm-Message-State: AJIora/mbVbnUj1JrtP9V5/ooxY7Q+UnegPUcvBRDyf4N2mDN3eTk8Zm
+        /si8fAMhb9dC/CUX/zw2tB2mMB9DkKQ=
+X-Google-Smtp-Source: AGRyM1uH0z+R05anGU3HrhqscXx5O45ExUEGXquffB8+WAd5hRzyYoLS+h9s+kmbdLyNMeszMGoVasfb9CA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:3904:0:b0:310:cc3:15a2 with SMTP id
+ g4-20020a813904000000b003100cc315a2mr7246667ywa.447.1657761079625; Wed, 13
+ Jul 2022 18:11:19 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu, 14 Jul 2022 01:11:15 +0000
+Message-Id: <20220714011115.3135828-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH v2] KVM: selftests: Use "a" and "d" to set EAX/EDX for wrmsr_safe()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 7:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Wed, Jul 13, 2022 at 05:20:40PM -0400, Alex Deucher wrote:
-> > >
-> > > The problem is not the FPU operations, but the fact that soft-float
-> > > and hard-float compiled code is linked together. The soft-float and
-> > > hard-float ABIs on powerpc are not compatible, so one ends up with
-> > > an object file which is partially soft-float and partially hard-float
-> > > compiled and thus uses different ABIs. That can only create chaos,
-> > > so the linker complains about it.
-> >
-> > I get that, I just don't see why only DCN 3.1.x files have this
-> > problem.  The DCN 2.x files should as well.
-> >
->
-> Seen in drivers/gpu/drm/amd/display/dc/clk_mgr/Makefile:
->
-> # prevent build errors regarding soft-float vs hard-float FP ABI tags
-> # this code is currently unused on ppc64, as it applies to Renoir APUs only
-> ifdef CONFIG_PPC64
-> CFLAGS_$(AMDDALPATH)/dc/clk_mgr/dcn21/rn_clk_mgr.o := $(call cc-option,-mno-gnu-attribute)
-> endif
->
-> Does that explain it ?
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-I would expect to see it in dcn20_resource.c and dcn30_clk_mgr.c for
-example.  They follow the same pattern as the dcn 3.1.x files.  They
-call functions that use FP, but maybe there is some FP code still in
-those functions that we missed somehow.
+Do not use GCC's "A" constraint to load EAX:EDX in wrmsr_safe().  Per
+GCC's documenation on x86-specific constraints, "A" will not actually
+load a 64-bit value into EAX:EDX on x86-64.
 
-Alex
+  The a and d registers. This class is used for instructions that return
+  double word results in the ax:dx register pair. Single word values will
+  be allocated either in ax or dx. For example on i386 the following
+  implements rdtsc:
+
+  unsigned long long rdtsc (void)
+  {
+    unsigned long long tick;
+    __asm__ __volatile__("rdtsc":"=A"(tick));
+    return tick;
+  }
+
+  This is not correct on x86-64 as it would allocate tick in either ax or
+  dx. You have to use the following variant instead:
+
+  unsigned long long rdtsc (void)
+  {
+    unsigned int tickl, tickh;
+    __asm__ __volatile__("rdtsc":"=a"(tickl),"=d"(tickh));
+    return ((unsigned long long)tickh << 32)|tickl;
+  }
+
+Because a u64 fits in a single 64-bit register, using "A" for selftests,
+which are 64-bit only, results in GCC loading the value into either RAX
+or RDX instead of splitting it across EAX:EDX.
+
+E.g.:
+
+  kvm_exit:             reason MSR_WRITE rip 0x402919 info 0 0
+  kvm_msr:              msr_write 40000118 = 0x60000000001 (#GP)
+...
+
+With "A":
+
+  48 8b 43 08          	mov    0x8(%rbx),%rax
+  49 b9 ba da ca ba 0a 	movabs $0xabacadaba,%r9
+  00 00 00
+  4c 8d 15 07 00 00 00 	lea    0x7(%rip),%r10        # 402f44 <guest_msr+0x34>
+  4c 8d 1d 06 00 00 00 	lea    0x6(%rip),%r11        # 402f4a <guest_msr+0x3a>
+  0f 30                 wrmsr
+
+With "a"/"d":
+
+  48 8b 53 08             mov    0x8(%rbx),%rdx
+  89 d0                   mov    %edx,%eax
+  48 c1 ea 20             shr    $0x20,%rdx
+  49 b9 ba da ca ba 0a    movabs $0xabacadaba,%r9
+  00 00 00
+  4c 8d 15 07 00 00 00    lea    0x7(%rip),%r10        # 402fc3 <guest_msr+0xb3>
+  4c 8d 1d 06 00 00 00    lea    0x6(%rip),%r11        # 402fc9 <guest_msr+0xb9>
+  0f 30                   wrmsr
+
+Fixes: 3b23054cd3f5 ("KVM: selftests: Add x86-64 support for exception fixup")
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Link: https://gcc.gnu.org/onlinedocs/gcc/Machine-Constraints.html#Machine-Constraints
+[sean: use "& -1u", provide GCC blurb and link to documentation]
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ tools/testing/selftests/kvm/include/x86_64/processor.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index 79dcf6be1b47..71e942ffac77 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -612,7 +612,7 @@ static inline uint8_t rdmsr_safe(uint32_t msr, uint64_t *val)
+ 
+ static inline uint8_t wrmsr_safe(uint32_t msr, uint64_t val)
+ {
+-	return kvm_asm_safe("wrmsr", "A"(val), "c"(msr));
++	return kvm_asm_safe("wrmsr", "a"(val & -1u), "d"(val >> 32), "c"(msr));
+ }
+ 
+ uint64_t vm_get_page_table_entry(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+
+base-commit: b624ae35418ce9424f639f8ffa2568e7674c262b
+-- 
+2.37.0.144.g8ac04bfd2-goog
+

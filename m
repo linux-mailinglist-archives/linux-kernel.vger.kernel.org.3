@@ -2,128 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EFA5749B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3925749B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237704AbiGNJxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
+        id S237924AbiGNJxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237147AbiGNJxB (ORCPT
+        with ESMTP id S237741AbiGNJxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:53:01 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9CDE7E;
-        Thu, 14 Jul 2022 02:53:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RXOON8J5cdaMRGNYYzIEKyaAcGIubDWbXh4Ksvavg9I=; b=dK0DngAMpUPBlwIqTfJMEe8snz
-        rXYIB14WiawccAS/FcJ32iHHcgQd2oUqXSGIfOJzGgcFgDfZQrGZoH9JQ9jZPeE3hx7vnjqP5qMvW
-        rdjbdwteUct8rlPsRXZc5Bz/F2qQnNjgpDF2Z/HyUsSSWbVXfMhn2xI+dIoo9/YY9a/QvHC+VU3qh
-        +eNaRk4WNlUb+nNWux3ux4jQEinG7j8RLVcPAqr/a7Qbhq3ftUtTF3FTQbVFDIF2U7W0zyyv6383h
-        WD6g0sAyLa7Og3vnavdJ0vgN40HgZMvnnpJ3rIPZPigs2WnzF190TslfKCk+ldy2ih434OLPF+3lI
-        PxBV6r7g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBvWb-003oMV-UQ; Thu, 14 Jul 2022 09:52:50 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 533D0980120; Thu, 14 Jul 2022 11:52:49 +0200 (CEST)
-Date:   Thu, 14 Jul 2022 11:52:49 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH] x86/kvm: fix FASTOP_SIZE when return thunks are enabled
-Message-ID: <Ys/ncSnSFEST4fgL@worktop.programming.kicks-ass.net>
-References: <20220713171241.184026-1-cascardo@canonical.com>
+        Thu, 14 Jul 2022 05:53:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A59BA65B1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:53:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657792387;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=80l7CIgZI7WVIfB+WzdMnlXN0gnsDQBvNb7GorZ9Juo=;
+        b=ELeqXRHVK9g1UL1e6momKpXExBI8ADYjw3kDSQ42+KTxCcJdZ1VbXlSU3ilMIA+huxEAHg
+        s3kyqK5woqk0BYePOC5J4jHG4t/bZcgAfMCmaX9wUeBkBfFJSgmYRIkam3pDloJiP2w2Wy
+        1XopA1cE2yReyyHLbAuNOxbMrMuf+t8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-495-_pwIHv9MO22bLjd7RabhyA-1; Thu, 14 Jul 2022 05:53:04 -0400
+X-MC-Unique: _pwIHv9MO22bLjd7RabhyA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8FCD8037A9;
+        Thu, 14 Jul 2022 09:53:03 +0000 (UTC)
+Received: from fedora (unknown [10.40.193.131])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B7D1440CF8EE;
+        Thu, 14 Jul 2022 09:53:02 +0000 (UTC)
+Date:   Thu, 14 Jul 2022 11:53:00 +0200
+From:   Lukas Czerner <lczerner@redhat.com>
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com
+Subject: Re: [PATCH] ext4: fix kernel BUG in ext4_free_blocks
+Message-ID: <20220714095300.ffij7re6l5n6ixlg@fedora>
+References: <20220713185904.64138-1-tadeusz.struk@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220713171241.184026-1-cascardo@canonical.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220713185904.64138-1-tadeusz.struk@linaro.org>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 02:12:41PM -0300, Thadeu Lima de Souza Cascardo wrote:
-> The return thunk call makes the fastop functions larger, just like IBT
-> does. Consider a 16-byte FASTOP_SIZE when CONFIG_RETHUNK is enabled.
+On Wed, Jul 13, 2022 at 11:59:04AM -0700, Tadeusz Struk wrote:
+> Syzbot reported a BUG in ext4_free_blocks.
+> The issue is triggered from ext4_mb_clear_bb(). What happens is the
+> block number passed to ext4_get_group_no_and_offset() is 0 and the
+> es->s_first_data_block is 1. This makes block group number returned
+> from ext4_get_group_no_and_offset equal to -1. This is then passed to
+> ext4_get_group_info() and hits a BUG:
+> BUG_ON(group >= EXT4_SB(sb)->s_groups_count),
+> what can be seen in the trace below.
+> This patch adds an assertion to ext4_get_group_no_and_offset() that
+> checks if block number is not smaller than es->s_first_data_block.
 > 
-> Otherwise, functions will be incorrectly aligned and when computing their
-> position for differently sized operators, they will executed in the middle
-> or end of a function, which may as well be an int3, leading to a crash
-> like:
-
-Bah.. I did the SETcc stuff, but then forgot about the FASTOP :/
-
-  af2e140f3420 ("x86/kvm: Fix SETcc emulation for return thunks")
-
-> Fixes: aa3d480315ba ("x86: Use return-thunk in asm code")
-> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Cc: Borislav Petkov <bp@suse.de>
-> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> kernel BUG at fs/ext4/ext4.h:3319!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 337 Comm: repro Not tainted 5.19.0-rc6-00105-g4e8e898e4107-dirty #14
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-1.fc36 04/01/2014
+> RIP: 0010:ext4_mb_clear_bb+0x1bd6/0x1be0
+> Call Trace:
+>  <TASK>
+>  ext4_free_blocks+0x9b3/0xc90
+>  ext4_clear_blocks+0x344/0x3b0
+>  ext4_ind_truncate+0x967/0x1050
+>  ext4_truncate+0xb1b/0x1210
+>  ext4_evict_inode+0xf06/0x16f0
+>  evict+0x2a3/0x630
+>  iput+0x618/0x850
+>  ext4_enable_quotas+0x578/0x920
+>  ext4_orphan_cleanup+0x539/0x1200
+>  ext4_fill_super+0x94d8/0x9bc0
+>  get_tree_bdev+0x40c/0x630
+>  ext4_get_tree+0x1c/0x20
+>  vfs_get_tree+0x88/0x290
+>  do_new_mount+0x289/0xac0
+>  path_mount+0x607/0xfd0
+>  __se_sys_mount+0x2c4/0x3b0
+>  __x64_sys_mount+0xbf/0xd0
+>  do_syscall_64+0x3d/0x90
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>  </TASK>
+> 
+> Link: https://syzkaller.appspot.com/bug?id=5266d464285a03cee9dbfda7d2452a72c3c2ae7c
+> Reported-by: syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com
+> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
 > ---
->  arch/x86/kvm/emulate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  fs/ext4/balloc.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> index db96bf7d1122..d779eea1052e 100644
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -190,7 +190,7 @@
->  #define X16(x...) X8(x), X8(x)
+> diff --git a/fs/ext4/balloc.c b/fs/ext4/balloc.c
+> index 78ee3ef795ae..1175750ad05f 100644
+> --- a/fs/ext4/balloc.c
+> +++ b/fs/ext4/balloc.c
+> @@ -56,6 +56,9 @@ void ext4_get_group_no_and_offset(struct super_block *sb, ext4_fsblk_t blocknr,
+>  	struct ext4_super_block *es = EXT4_SB(sb)->s_es;
+>  	ext4_grpblk_t offset;
 >  
->  #define NR_FASTOP (ilog2(sizeof(ulong)) + 1)
-> -#define FASTOP_SIZE (8 * (1 + HAS_KERNEL_IBT))
-> +#define FASTOP_SIZE (8 * (1 + (HAS_KERNEL_IBT | IS_ENABLED(CONFIG_RETHUNK))))
+> +	if (blocknr < le32_to_cpu(es->s_first_data_block))
+> +		blocknr = le32_to_cpu(es->s_first_data_block);
+> +
 
-Would it make sense to do something like this instead?
+This does not seem right. we should never work with block number smaller
+than s_first_data_block. The first 1024 bytes of the file system are
+unused and in case we have 1k block size, the entire first block is
+unused.
 
----
- arch/x86/kvm/emulate.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+I guess the image we work here with is corrupted, from the log it seems
+that it was noticed correctly so the question is why did we still ended
+up calling ext4_free_blocks() ? Seems like this should have been stopped
+earlier by ext4_clear_blocks() ?
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index db96bf7d1122..b4305d2dcc51 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -189,8 +189,12 @@
- #define X8(x...) X4(x), X4(x)
- #define X16(x...) X8(x), X8(x)
- 
--#define NR_FASTOP (ilog2(sizeof(ulong)) + 1)
--#define FASTOP_SIZE (8 * (1 + HAS_KERNEL_IBT))
-+#define NR_FASTOP	(ilog2(sizeof(ulong)) + 1)
-+#define RET_LENGTH	(1 + (4 * IS_ENABLED(CONFIG_RETHUNK)) + \
-+			 IS_ENABLED(CONFIG_SLS))
-+#define FASTOP_LENGTH	(7 + ENDBR_INSN_SIZE + RET_LENGTH)
-+#define FASTOP_SIZE	(8 << ((FASTOP_LENGTH > 8) & 1) << ((FASTOP_LENGTH > 16) & 1))
-+static_assert(FASTOP_LENGTH <= FASTOP_SIZE);
- 
- struct opcode {
- 	u64 flags;
-@@ -442,8 +446,6 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
-  * RET | JMP __x86_return_thunk	[1,5 bytes; CONFIG_RETHUNK]
-  * INT3				[1 byte; CONFIG_SLS]
-  */
--#define RET_LENGTH	(1 + (4 * IS_ENABLED(CONFIG_RETHUNK)) + \
--			 IS_ENABLED(CONFIG_SLS))
- #define SETCC_LENGTH	(ENDBR_INSN_SIZE + 3 + RET_LENGTH)
- #define SETCC_ALIGN	(4 << ((SETCC_LENGTH > 4) & 1) << ((SETCC_LENGTH > 8) & 1))
- static_assert(SETCC_LENGTH <= SETCC_ALIGN);
+I did notice that in ext4_mb_clear_bb() we call
+ext4_get_group_no_and_offset() before ext4_inode_block_valid() but
+again we should have caught this problem earlier.
+
+Can you link me the file system image that generated this problem?
+
+Thanks!
+-Lukas
+
+
+>  	blocknr = blocknr - le32_to_cpu(es->s_first_data_block);
+>  	offset = do_div(blocknr, EXT4_BLOCKS_PER_GROUP(sb)) >>
+>  		EXT4_SB(sb)->s_cluster_bits;
+> -- 
+> 2.36.1
+> 
+

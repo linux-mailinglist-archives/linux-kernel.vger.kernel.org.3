@@ -2,149 +2,528 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149C7575389
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 18:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF83C575397
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238630AbiGNQ4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 12:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
+        id S238494AbiGNRAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 13:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239839AbiGNQ4D (ORCPT
+        with ESMTP id S233286AbiGNRAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 12:56:03 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9BE54CBD
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:56:01 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id z12so3369261wrq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 09:56:01 -0700 (PDT)
+        Thu, 14 Jul 2022 13:00:21 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D180954CA7;
+        Thu, 14 Jul 2022 10:00:19 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31df2545d87so660027b3.10;
+        Thu, 14 Jul 2022 10:00:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nU0WVVbdgEc789G5a6s5LocA0QeCbC2E3DQ5sHk48Y8=;
-        b=IYzHDmH6TgdKlf033EfO1Bg7jNq4Zm8uLryO7o6yzv6Ii23qReYyoXEWZNdJN4wNBz
-         91CunxhQuK2D4gOwqIQIPlvaMskTJn7ZqteC4EL4/6gPBvpJkKZAGc3wGrtaJG9IxL1a
-         CB6noJky+hMahbL7giTw4QO2UCSHzu3CTOHUm7EF2V1L2UClKHK+r40pTMyRCWXgwEcC
-         +5R7j+/v2Xc3nW2EhkvgoQgVYu7cXbbRPBdQJqhy0NF2Ua1NcIxp2VMipbNQTsSp1Lfy
-         2DWAETiTz1VZ9n+vIBEjZlwLH54b4etHBnO4sCojLtvP+erRugR8wUTqVr8wd9Mi967+
-         yWTA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Yu/LZMM77+OazDEA02pgMpteAkMyBK5KRAEy7jXL1hc=;
+        b=P95AxEiTCYrt5Ytz+lhANp961rSuf/fzAjmzc3J2QUpf8SClRz433C8fBhKh3IzBsh
+         acaEoKK3SnheOhA/Pj7mgSfHwQ3gygZ+O6oYOw7xP6Qet5slvS1xFYuL5lTyYvQOXH5x
+         5KJFCJHkE4GyU2vJKJXwjDgWTn5ApEl7JN89ZB90LqpQ4gDzNK0AdD9PvmT0lTCdVlKE
+         11FyFCvW5dJaqZuOmHGw+NGOKYECLpbpVSewYCsXQNRQ+h6UrCkuIQZgZtITv9aDpNMv
+         NuUe+UnTYDK6NSNaOXX6Sdo4WRmYLSER7did0XSgYAQkXd/ChQ0EXeYDvuMvx2sCB/6s
+         dh4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=nU0WVVbdgEc789G5a6s5LocA0QeCbC2E3DQ5sHk48Y8=;
-        b=XKjGTbGRsRJpvwIeEgddSwBa9RJbh3Zbi4ArKwq09El/Vbo6VOVik84yHQ71No/HUl
-         m2McEw4wJa3kkB/TcMP2nWSGbmHP5MheDmyIs3SgM44l6UR9UB2ARK6m/8r1l6OpPPdA
-         n3L6KAcBIjNdIt08nzehqeWKnJWq3OR4HyqCrLT+jbySWS2puJr7i7AAr0EMu318D/oZ
-         Ja7KpSKT3PClBHtw727ZfALgdIs2Pthwd53wowy082idmAk/FFf13UmzNk4dV8fv4ZJC
-         erpNdSyatx5FiEfI82jZ4D2y1rLclhv7ZLJa6PBWxq8+1vGbI/0Y4RWU3pwd+25ZBHDT
-         ZLlA==
-X-Gm-Message-State: AJIora+hu/T9EkMZ6sAuaEQPtYS7cSiYyd/Kkv+o5fNg7zxPRQ0dpgUW
-        CXlsqSBFt4QyCBmvFXqtDqOx1Q==
-X-Google-Smtp-Source: AGRyM1s90qNS8RahfDcyAz6R2NLl80gXy4ylX6MoZ40JpBSVeuXHVLVvAuPqfZ3uGCFbPVq6lPH2Xw==
-X-Received: by 2002:a5d:6da3:0:b0:21d:cde7:cb7 with SMTP id u3-20020a5d6da3000000b0021dcde70cb7mr227704wrs.683.1657817760912;
-        Thu, 14 Jul 2022 09:56:00 -0700 (PDT)
-Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id l29-20020a05600c1d1d00b003a2e27fc275sm2797092wms.12.2022.07.14.09.56.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 09:56:00 -0700 (PDT)
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        David Virag <virag.david003@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 6/6] iommu/exynos: Enable default VM instance on SysMMU v7
-Date:   Thu, 14 Jul 2022 19:55:50 +0300
-Message-Id: <20220714165550.8884-7-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220714165550.8884-1-semen.protsenko@linaro.org>
-References: <20220714165550.8884-1-semen.protsenko@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Yu/LZMM77+OazDEA02pgMpteAkMyBK5KRAEy7jXL1hc=;
+        b=fA8u2TfqCcFt56tCkwTv+E91M231XJ2iwor341fr2EgP5U2XSgdKamhkgERVqTlO3G
+         1uZQa4TLycEmX/ANUkq7N+dAYwHOwoqM/Viak1OrCFiSjiATfCunzU+FDkdxN2PqCdM1
+         WVu5uuT2Re5yrbD+EOz8adFW3VwRBU6ELgb408K+JSQ/cL99kgbb8PtjyanPuUph6hhO
+         6dOHYiMpTZDf71Pvvl3bZ1sEujK4nZ+mZnMHrkydPqYuaS7ze0kKiPpIMjZ4P28eWGOB
+         U5/5MrbdQubvM7B3yT1HS5Ul3Hu+cNKWF42ZlpC/CMLed6lcWYADsim0xWCkzKPM6rTs
+         nNeg==
+X-Gm-Message-State: AJIora9j69D8mFyWsnhSJABv6PCofGk/MjB8pAcsGILUaB6REgNS3pRE
+        yAFv/CZiAfaaJZxrx9JTiTa80/jGRUX9Ap7bhAhrqatMYXxauA==
+X-Google-Smtp-Source: AGRyM1tiRQoLtYjVrbOFk7dYSy0ZmYajnsvawCRXoRCvK6Q/kGNGmrKzOer306s/JQTOiJUr4hO4x9B9oBkJxh6GwzM=
+X-Received: by 2002:a81:54c1:0:b0:31d:ec18:fd5d with SMTP id
+ i184-20020a8154c1000000b0031dec18fd5dmr1282433ywb.277.1657818018838; Thu, 14
+ Jul 2022 10:00:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220714122322.63663-1-tmaimon77@gmail.com> <20220714122322.63663-3-tmaimon77@gmail.com>
+In-Reply-To: <20220714122322.63663-3-tmaimon77@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 14 Jul 2022 18:59:41 +0200
+Message-ID: <CAHp75Vcd6vATJQoJMh_SQ27ijOpiCjMWuSZ04d2OOnExunveqg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] pinctrl: nuvoton: add NPCM8XX pinctrl and GPIO driver
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        zhengbin13@huawei.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to enable SysMMU v7 with VM register layout, at least the
-default VM instance (n=0) must be enabled, in addition to enabling the
-SysMMU itself. To do so, add corresponding write to MMU_CTRL_VM[0]
-register, before writing to MMU_CTRL register.
+On Thu, Jul 14, 2022 at 2:29 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+>
+> Add pinctrl and GPIO controller driver support to Arbel BMC NPCM8XX SoC.
+>
+> Arbel BMC NPCM8XX pinctrl driver based on Poleg NPCM7XX, except the
+> pin mux mapping difference the NPCM8XX GPIO supports adjust debounce
+> period time.
 
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
-Changes in v3:
-  - Reworked for using plain writel()
-  - Added Marek's Acked-by tag
+...
 
-Changes in v2:
-  - Extracted VM enabling code to the separate function
-  - Used new SysMMU read/write functions to access the registers
+> +config PINCTRL_NPCM8XX
+> +       bool "Pinctrl and GPIO driver for Nuvoton NPCM8XX"
 
- drivers/iommu/exynos-iommu.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Why boolean?
 
-diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
-index fc9ef3ff0057..8e18984a0c4f 100644
---- a/drivers/iommu/exynos-iommu.c
-+++ b/drivers/iommu/exynos-iommu.c
-@@ -135,6 +135,8 @@ static u32 lv2ent_offset(sysmmu_iova_t iova)
- #define CFG_SYSSEL	(1 << 22) /* System MMU 3.2 only */
- #define CFG_FLPDCACHE	(1 << 20) /* System MMU 3.2+ only */
- 
-+#define CTRL_VM_ENABLE			BIT(0)
-+#define CTRL_VM_FAULT_MODE_STALL	BIT(3)
- #define CAPA0_CAPA1_EXIST		BIT(11)
- #define CAPA1_VCR_ENABLED		BIT(14)
- 
-@@ -163,6 +165,7 @@ static u32 lv2ent_offset(sysmmu_iova_t iova)
- /* v7.x registers */
- #define REG_V7_CAPA0		0x870
- #define REG_V7_CAPA1		0x874
-+#define REG_V7_CTRL_VM		0x8000
- 
- #define has_sysmmu(dev)		(dev_iommu_priv_get(dev) != NULL)
- 
-@@ -548,6 +551,18 @@ static void __sysmmu_init_config(struct sysmmu_drvdata *data)
- 	writel(cfg, data->sfrbase + REG_MMU_CFG);
- }
- 
-+static void __sysmmu_enable_vid(struct sysmmu_drvdata *data)
-+{
-+	u32 ctrl;
-+
-+	if (MMU_MAJ_VER(data->version) < 7 || !data->has_vcr)
-+		return;
-+
-+	ctrl = readl(data->sfrbase + REG_V7_CTRL_VM);
-+	ctrl |= CTRL_VM_ENABLE | CTRL_VM_FAULT_MODE_STALL;
-+	writel(ctrl, data->sfrbase + REG_V7_CTRL_VM);
-+}
-+
- static void __sysmmu_enable(struct sysmmu_drvdata *data)
- {
- 	unsigned long flags;
-@@ -558,6 +573,7 @@ static void __sysmmu_enable(struct sysmmu_drvdata *data)
- 	writel(CTRL_BLOCK, data->sfrbase + REG_MMU_CTRL);
- 	__sysmmu_init_config(data);
- 	__sysmmu_set_ptbase(data, data->pgtable);
-+	__sysmmu_enable_vid(data);
- 	writel(CTRL_ENABLE, data->sfrbase + REG_MMU_CTRL);
- 	data->active = true;
- 	spin_unlock_irqrestore(&data->lock, flags);
+> +       depends on (ARCH_NPCM || COMPILE_TEST) && OF
+
+I believe the OF is not compile time dependency, hence you may for it
+as functional one by
+
+  depends on (ARCH_NPCM && OF) || COMPILE_TEST
+
+> +       select PINMUX
+> +       select PINCONF
+> +       select GENERIC_PINCONF
+> +       select GPIOLIB
+> +       select GPIO_GENERIC
+> +       select GPIOLIB_IRQCHIP
+> +       help
+> +         Say Y here to enable pin controller and GPIO support
+> +         for Nuvoton NPCM8XX SoC.
+
+Depends on the answer above, this might need an addition on how module
+will be called.
+
+...
+
+Missed bits.h.
+
+> +#include <linux/device.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+
+Missed mod_devicetable.h.
+
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+
+How are these being used?
+
+> +#include <linux/pinctrl/machine.h>
+> +#include <linux/pinctrl/pinconf.h>
+> +#include <linux/pinctrl/pinconf-generic.h>
+> +#include <linux/pinctrl/pinctrl.h>
+> +#include <linux/pinctrl/pinmux.h>
+> +#include <linux/platform_device.h>
+
++ property.h.
+
+> +#include <linux/regmap.h>
+
+...
+
+> +/* GCR registers */
+> +#define NPCM8XX_GCR_PDID       0x00
+> +#define NPCM8XX_GCR_SRCNT      0x68
+> +#define NPCM8XX_GCR_FLOCKR1    0x74
+> +#define NPCM8XX_GCR_DSCNT      0x78
+> +#define NPCM8XX_GCR_I2CSEGCTL  0xE4
+> +#define NPCM8XX_GCR_I2CSEGSEL  0xE0
+
+Format them with the same width, e.g. 0x0E0.
+And, btw, why capital letters in the numbers?
+
+> +#define NPCM8XX_GCR_MFSEL1     0x260
+> +#define NPCM8XX_GCR_MFSEL2     0x264
+> +#define NPCM8XX_GCR_MFSEL3     0x268
+> +#define NPCM8XX_GCR_MFSEL4     0x26C
+> +#define NPCM8XX_GCR_MFSEL5     0x270
+> +#define NPCM8XX_GCR_MFSEL6     0x274
+> +#define NPCM8XX_GCR_MFSEL7     0x278
+
+...
+
+> +/* GPIO registers */
+
+Ditto.
+
+...
+
+> +#define NPCM8XX_DEBOUNCE_NANOSEC       40
+
+_NSEC is enough.
+
+...
+
+> +#define NPCM8XX_DEBOUNCE_VAL_MASK      GENMASK(23, 4)
+> +#define NPCM8XX_DEBOUNCE_MAX_VAL       0xFFFFF7
+
+How MAX_VAL is different from the MASK ?
+
+...
+
+> +struct npcm8xx_gpio {
+> +       void __iomem            *base;
+
+> +       struct gpio_chip        gc;
+
+Making this first member in the structure may reduce the code base at
+compile time due to pointer arithmetic. You may confirm that by using
+bloat-o-meter.
+
+> +       struct debounce_time    debounce;
+> +       int                     irqbase;
+> +       int                     irq;
+> +       struct irq_chip         irq_chip;
+> +       u32                     pinctrl_id;
+> +       int (*direction_input)(struct gpio_chip *chip, unsigned int offset);
+> +       int (*direction_output)(struct gpio_chip *chip, unsigned int offset,
+> +                               int value);
+> +       int (*request)(struct gpio_chip *chip, unsigned int offset);
+> +       void (*free)(struct gpio_chip *chip, unsigned int offset);
+> +};
+
+...
+
+> +       val = ioread32(reg) | pinmask;
+> +       iowrite32(val, reg);
+
+With this kind of indentation you may even reduce codebase with
+
+iowrite32(ioread32(reg) | pinmask, reg);
+
+...
+
+> +       val = ioread32(reg) & ~pinmask;
+> +       iowrite32(val, reg);
+
+Ditto.
+
+...
+
+> +static void npcmgpio_dbg_show(struct seq_file *s, struct gpio_chip *chip)
+> +{
+> +       seq_printf(s, "-- module %d [gpio%d - %d]\n",
+
+Hmm... Isn't pin range is showed in a separate debugfs node?
+
+> +}
+
+...
+
+> +       for_each_set_bit(bit, (const void *)&sts, NPCM8XX_GPIO_PER_BANK)
+
+Why this casting?
+
+> +               generic_handle_domain_irq(gc->irq.domain, bit);
+
+...
+
+> +       unsigned int gpio = BIT(d->hwirq);
+
+There is a special helper to get an H/W IRQ, which is type of
+irq_hw_number_t IIRC.
+
+...
+
+> +       if (type & (IRQ_TYPE_LEVEL_HIGH | IRQ_TYPE_LEVEL_LOW)) {
+
+IRQ_TYPE_LEVEL_MASK
+
+> +               npcm_gpio_clr(&bank->gc, bank->base + NPCM8XX_GP_N_EVTYP, gpio);
+> +               irq_set_handler_locked(d, handle_level_irq);
+
+> +       } else if (type & (IRQ_TYPE_EDGE_BOTH | IRQ_TYPE_EDGE_RISING
+> +                          | IRQ_TYPE_EDGE_FALLING)) {
+
+Why duplicating RISING and FAILING? Isn't it covered by BOTH?
+
+> +               npcm_gpio_set(&bank->gc, bank->base + NPCM8XX_GP_N_EVTYP, gpio);
+> +               irq_set_handler_locked(d, handle_edge_irq);
+> +       }
+
+...
+
+> +       unsigned int gpio = d->hwirq;
+
+Read the documentation on how the mask()/unmask() has to be
+implemented (there are examples):
+https://www.kernel.org/doc/html/latest/driver-api/gpio/driver.html#infrastructure-helpers-for-gpio-irqchips
+
+...
+
+> +/*
+> + * pin:             name, number
+> + * group:    name, npins,   pins
+> + * function: name, ngroups, groups
+> + */
+> +struct npcm8xx_group {
+> +       const char *name;
+> +       const unsigned int *pins;
+> +       int npins;
+> +};
+
+NIH struct pingroup.
+
+...
+
+Temporary variable here
+
+ ...reg = base + OSCR;
+
+> +       int gpio = BIT(pin % bank->gc.ngpio);
+> +
+> +       if (pincfg[pin].flag & SLEW) {
+> +               switch (arg) {
+> +               case 0:
+> +                       npcm_gpio_clr(&bank->gc, bank->base + NPCM8XX_GP_N_OSRC,
+> +                                     gpio);
+> +                       return 0;
+> +               case 1:
+> +                       npcm_gpio_set(&bank->gc, bank->base + NPCM8XX_GP_N_OSRC,
+> +                                     gpio);
+
+...will save one LoC in this switch-case.
+
+> +                       return 0;
+> +               default:
+> +                       return -EINVAL;
+> +               }
+> +       }
+
+...
+
+> +       int gpio = (pin % bank->gc.ngpio);
+
+Too many parentheses.
+
+...
+
+> +       u32 ds = 0;
+
+This assignment is redundant, if...
+
+> +       flg = pincfg[pin].flag;
+> +       if (flg & DRIVE_STRENGTH_MASK) {
+
+you use traditional pattern, i.e.
+
+if (error_condition)
+  return an_error;
+
+> +               val = ioread32(bank->base + NPCM8XX_GP_N_ODSC) & pinmask;
+> +               ds = val ? DSHI(flg) : DSLO(flg);
+> +               dev_dbg(bank->gc.parent, "pin %d strength %d = %d\n", pin, val, ds);
+> +               return ds;
+> +       }
+> +
+> +       return -EINVAL;
+
+...
+
+> +       v = (pincfg[pin].flag & DRIVE_STRENGTH_MASK);
+
+Too many parentheses.
+
+> +       if (!nval || !v)
+> +               return -ENOTSUPP;
+> +       if (DSLO(v) == nval) {
+> +               npcm_gpio_clr(&bank->gc, bank->base + NPCM8XX_GP_N_ODSC, gpio);
+> +               return 0;
+> +       }
+> +       if (DSHI(v) == nval) {
+> +               npcm_gpio_set(&bank->gc, bank->base + NPCM8XX_GP_N_ODSC, gpio);
+> +               return 0;
+> +       }
+> +
+> +       return -ENOTSUPP;
+
+Traditional pattern:
+
+if (LO == nval)
+  clr()
+else if (HI == nval)
+  set()
+else
+  return -ENOTSUPP;
+
+return 0;
+
+...
+
+> +static int npcm8xx_gpio_request_enable(struct pinctrl_dev *pctldev,
+> +                                      struct pinctrl_gpio_range *range,
+> +                                      unsigned int offset)
+> +{
+> +       struct npcm8xx_pinctrl *npcm = pinctrl_dev_get_drvdata(pctldev);
+
+> +       if (!range) {
+> +               dev_err(npcm->dev, "invalid range\n");
+> +               return -EINVAL;
+> +       }
+
+> +       if (!range->gc) {
+> +               dev_err(npcm->dev, "invalid gpiochip\n");
+> +               return -EINVAL;
+> +       }
+
+I'm wondering when you can have one of these triggered.
+
+> +
+> +       npcm8xx_setfunc(npcm->gcr_regmap, &offset, 1, fn_gpio);
+> +
+> +       return 0;
+> +}
+
+...
+
+> +static int debounce_timing_setting(struct npcm8xx_gpio *bank, u32 gpio,
+> +                                  u32 nanosecs)
+> +{
+> +       int gpio_debounce = (gpio % 16) * 2;
+> +       u32 dbncp_val, dbncp_val_mod;
+> +       int DBNCS_offset = gpio / 16;
+
+Can you group it together with gpio%16 line? It would be easier for
+the reader who knows that on some architectures the both assignments
+may be done in one assembly instruction.
+
+> +       int debounce_select;
+
+This logically would be grouped with above int:s.
+
+       u32 dbncp_val, dbncp_val_mod;
+       int gpio_debounce = (gpio % 16) * 2;
+       int DBNCS_offset = gpio / 16;
+       int debounce_select;
+
+...
+
+> +                               npcm_gpio_set(&bank->gc, bank->base + NPCM8XX_GP_N_DBNCS0 + (DBNCS_offset * 4), debounce_select);
+
+> +                       npcm_gpio_set(&bank->gc, bank->base + NPCM8XX_GP_N_DBNCS0 + (DBNCS_offset * 4), debounce_select);
+
+We can make this line much shorter with help of a temporary variable.
+
+...
+
+> +                               iowrite32(0x40, bank->base + NPCM8XX_GP_N_DBNCP0 + (i * 4));
+> +                               iowrite32(0x50, bank->base + NPCM8XX_GP_N_DBNCP0 + (i * 4));
+> +                               iowrite32(0x60, bank->base + NPCM8XX_GP_N_DBNCP0 + (i * 4));
+> +                               iowrite32(0x70, bank->base + NPCM8XX_GP_N_DBNCP0 + (i * 4));
+
+And this lines can be shorter with a helper function, but this is up to you.
+
+...
+
+> +                               dbncp_val_mod = dbncp_val & 0xF;
+
+GENMASK() ?
+Or (BIT(x) - 1) if it's a limitation by the hardware in bits, this
+will show it directly (like 4 bits limit).
+
+> +                               if (dbncp_val_mod > 0x7)
+
+In similar way.
+
+...
+
+> +       int ret = 0;
+
+Redundant assignment.
+
+Such assignments in some cases may hide real bugs.
+
+> +       if (nanosecs) {
+> +               ret = debounce_timing_setting(bank, pin % bank->gc.ngpio,
+> +                                             nanosecs);
+> +               if (!ret) {
+
+Why not positive conditional and in this case aka "traditional pattern":
+  if (error) {
+    ...handle error...
+    return error;
+  }
+
+> +                       npcm_gpio_set(&bank->gc, bank->base + NPCM8XX_GP_N_DBNC,
+> +                                     gpio);
+> +               } else {
+
+> +                       dev_info(npcm->dev, "All four debounce timing values are used, please use one of exist debounce values\n");
+> +                       dev_err(npcm->dev, "Pin %d debounce_timing_setting failed, ret=%d\n", pin, ret);
+
+Too much noise in the messages. Create one error message
+
+> +               }
+> +
+> +               return ret;
+> +       }
+> +
+> +       npcm_gpio_clr(&bank->gc, bank->base + NPCM8XX_GP_N_DBNC, gpio);
+> +
+> +       return 0;
+
+...
+
+> +               if (param == PIN_CONFIG_BIAS_DISABLE)
+> +                       rc = (!pu && !pd);
+> +               else if (param == PIN_CONFIG_BIAS_PULL_UP)
+> +                       rc = (pu && !pd);
+> +               else if (param == PIN_CONFIG_BIAS_PULL_DOWN)
+> +                       rc = (!pu && pd);
+
+In many places (and not only in this function) you are using too many
+parentheses, why? Can you clean all them up?
+
+...
+
+> +static int npcm8xx_gpio_of(struct npcm8xx_pinctrl *pctrl)
+
+_fw
+
+...
+
+> +       char gpioirqname[30];
+
+How 30 was chosen?
+
+...
+
+> +               pctrl->gpio_bank[id].gc.label = devm_kasprintf(dev, GFP_KERNEL, "%pfw", child);
+> +               if (!pctrl->gpio_bank[id].gc.label)
+> +                       dev_err_probe(dev, -ENOMEM, "No GPIO label %u\n", id);
+
+-ENOMEM doesn't need an error message.
+
+...
+
+> +       dev_set_drvdata(&pdev->dev, pctrl);
+
+platform_set_drvdata();
+
 -- 
-2.30.2
-
+With Best Regards,
+Andy Shevchenko

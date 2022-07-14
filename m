@@ -2,104 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BD8574D53
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8BC574D56
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238911AbiGNMU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        id S238959AbiGNMWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238850AbiGNMUu (ORCPT
+        with ESMTP id S229952AbiGNMWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:20:50 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0A83A4BC
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 05:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3ZwteaP4NnrDJ+pme08P/9gfb4eLG/+pqy4tLFWFnzA=; b=QOv58TMYcmxUyS6UiJ7BnIiiKt
-        BuKeR2bXbIJea1RuS2ywAiSh4CrY1ftuzQ1kgxypa+bWwr4Knu+1U4Gl3F9RvD5HBVRNuqOCi6qMP
-        op2zsevbvDPqe14yPqg+jNOLVmdsiaq5xuAjDjHVWG9r2v0eo51xZPfFkcUGSy1eqWktsQ/8uDV6E
-        RjK0z9/fAxxersZPCCUVdD2HUNplnVAaTtmQ640zhlQRiXrsFoJljFckvvDIEYwULcEihJxgT4IxN
-        kjLTs41Gt/3bQ+GDElnAvRn/k17ieHOf0PFMn4apLVapgSf1KUUrdrTfAl8laypddwx48Pf02t+rQ
-        +j+UuMaQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33332)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oBxpe-0005ka-77; Thu, 14 Jul 2022 13:20:38 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oBxpc-0006bM-NC; Thu, 14 Jul 2022 13:20:36 +0100
-Date:   Thu, 14 Jul 2022 13:20:36 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
-Subject: Re: Linux 5.19-rc6
-Message-ID: <YtAKFNgeC1vXjHYI@shell.armlinux.org.uk>
-References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
- <20220713050724.GA2471738@roeck-us.net>
- <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
- <Ys8hqoiN5iWbslsM@shell.armlinux.org.uk>
- <CAHk-=wjNxyXQqn=k0KipzUPoBYWQhUwybxee8GTkF_Oz6RPVFw@mail.gmail.com>
- <e63e108b-c99c-9ab7-0638-367b72983b81@roeck-us.net>
- <CAHk-=wh-SE=s+bJq_jwuQ6zfnifaAwYdXikpXo8iZ4JbbNph4Q@mail.gmail.com>
+        Thu, 14 Jul 2022 08:22:44 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B30D32BA1;
+        Thu, 14 Jul 2022 05:22:38 -0700 (PDT)
+X-UUID: de906403d5f54b8d96c5cb8eae9dcb4c-20220714
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:bb8aa357-990a-44d1-980f-e560e5eccd36,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:ba907fd7-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: de906403d5f54b8d96c5cb8eae9dcb4c-20220714
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 592939605; Thu, 14 Jul 2022 20:22:32 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 14 Jul 2022 20:22:30 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 14 Jul 2022 20:22:30 +0800
+Message-ID: <e7d28a927044e47ad8018c71d511754dda9ae7d7.camel@mediatek.com>
+Subject: Re: [PATCH v1 03/16] dt-bindings: power: mediatek: Refine multiple
+ level power domain nodes
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        "Will Deacon" <will@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>,
+        <iommu@lists.linux-foundation.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 14 Jul 2022 20:22:30 +0800
+In-Reply-To: <20220712192119.GK1823936-robh@kernel.org>
+References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
+         <20220704100028.19932-4-tinghan.shen@mediatek.com>
+         <20220705205739.GA2599256-robh@kernel.org>
+         <b5667c052447d1b3c3498131af98d80a07ed4767.camel@mediatek.com>
+         <20220712192119.GK1823936-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wh-SE=s+bJq_jwuQ6zfnifaAwYdXikpXo8iZ4JbbNph4Q@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 01:42:15PM -0700, Linus Torvalds wrote:
-> On Wed, Jul 13, 2022 at 1:40 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > That patch is (and has been) in linux-next for a long time,
-> > as commit d2ca1fd2bc70, and with the following tags.
-> >
-> >      Fixes: 7719a68b2fa4 ("ARM: 9192/1: amba: fix memory leak in amba_device_try_add()")
-> >      Reported-by: Guenter Roeck <linux@roeck-us.net>
-> >      Tested-by: Guenter Roeck <linux@roeck-us.net>
-> >      Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> >      Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> >
-> > So, yes, it fixes the problem. I don't know where it is pulled from, though.
-> > I thought that it is from Russell's tree, given his Signed-off-by:,
-> > but I never really checked.
+Hi Rob,
 > 
-> Heh. Yeah, with that sign-off, I bet it's in Russell's queue, bit it
-> just ended up in the "for next release" branch. Russell?
+> Okay, I think you need something more like this that doesn't recurse 
+> infinitely:
+> 
+> patternProperties:
+>   "^power-domain@[0-9a-f]+$":
+>     $ref: #/$defs/power-domain-node
+> 
+>     unevaluatedProperties:
+>       $ref: #/$defs/power-domain-node
+> 
+> If you need a 3rd level of nodes:
+>       unevaluatedProperties:
+>         $ref: #/$defs/power-domain-node
+> 
+> 
+> Rob
 
-Oh, I see, I never rebased my "misc" branch from the last cycle, so it
-looks to me like 9192/1 was due for _this_ merge window - so I merged
-the fix for it into that same branch, rather than the "fixes" branch.
-I've moved it over to the correct branch now.
+After some test, your 1st suggestion works.
 
-Looks like there's another fix that's in that very same state as well.
+The infinite error is introduced from my changes and affect the result of power/renesas,sysc-
+rmobile.yaml. The 'additionalProperties' being defined as a DT property is the root of this error.
+After fix the indentation, the error is gone.
 
-Expect a pull request shortly.
+I'll update the yaml as your 1st suggestion in next version.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Thanks,
+TingHan
+
+
+

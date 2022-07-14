@@ -2,309 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A81457509E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5563357509F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 16:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240000AbiGNOSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 10:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
+        id S240228AbiGNOSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 10:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239104AbiGNOSS (ORCPT
+        with ESMTP id S240382AbiGNOSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:18:18 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678BE643CB;
-        Thu, 14 Jul 2022 07:18:15 -0700 (PDT)
+        Thu, 14 Jul 2022 10:18:43 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D859A112A
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 07:18:39 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 9A4881F926;
-        Thu, 14 Jul 2022 14:18:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1657808294; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out2.suse.de (Postfix) with ESMTP id 0F7A41FB51;
+        Thu, 14 Jul 2022 14:18:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657808318; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ahtBmMFVqn+iStyYp+fe1qrCLV3kGTdnrSb81jBiVNM=;
-        b=Vu2ZFAOu2QVTU7sNzBQDz+5lBTeTKy3a2qucZ1eW/1gpiisz6U+Ly/5WUtDUuGBWwqTi+p
-        bt4naTaMeg1PCOmXG0KbvAkJ9GKk6u0BrunBK/mjXlSnE4VRmeSCerDS6k07E77R4JOqS5
-        HaxPYzcE0DWHbzaBqhZwWfhV2b6Jbto=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1657808294;
+        bh=XRYpzb6LIWbbWphMBkUMzVqsIrAi3ylOIRjAlXln8lU=;
+        b=i7FCf848n8urHD64muK7nmATRmwmxFYqZvNuJ2cEQEJW1+s+hFo8AbQOIGG6pBfw5MI79L
+        xoR22BMiiQN9YODyaNwRzBW3BC5wZqHTqD/dltJ9vprcD7cg6932M0XC0JNrM9QrJSBm9v
+        PNRrMNyfTZqEQooSg0G5AS7UIfo+v/E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657808318;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ahtBmMFVqn+iStyYp+fe1qrCLV3kGTdnrSb81jBiVNM=;
-        b=An7OdbqbbK79nbXw8d2fs37p9OVp53SCkstx7OQucB7A43pwzAFqJUAWjC7G5IHNlnYiLV
-        ZW3IR/TGBqIHq1Ag==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
+        bh=XRYpzb6LIWbbWphMBkUMzVqsIrAi3ylOIRjAlXln8lU=;
+        b=THlZ+LI+q2S6YGQTxJ3m6+Uv3cjbwiz0XSgIRiu1Jn/bmmpAsFSD6CJXgVWs7cGGfNhYQg
+        g4ZyT2KvEmOx2IBA==
+Received: from suse.de (unknown [10.163.43.106])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 672E92C141;
-        Thu, 14 Jul 2022 14:18:14 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 0D36FA0659; Thu, 14 Jul 2022 16:18:13 +0200 (CEST)
-Date:   Thu, 14 Jul 2022 16:18:13 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     linux-mm@kvack.org
-Cc:     jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu, linux-fsdevel@vger.kernel.org
-Subject: Re: [syzbot] possible deadlock in start_this_handle (3)
-Message-ID: <20220714141813.yi5p4o2tiyvkao6b@quack3>
-References: <000000000000471c2905e3c2c2c2@google.com>
+        by relay2.suse.de (Postfix) with ESMTPS id 50B622C141;
+        Thu, 14 Jul 2022 14:18:37 +0000 (UTC)
+Date:   Thu, 14 Jul 2022 15:18:34 +0100
+From:   Mel Gorman <mgorman@suse.de>
+To:     Libo Chen <libo.chen@oracle.com>
+Cc:     Tim Chen <tim.c.chen@linux.intel.com>, peterz@infradead.org,
+        vincent.guittot@linaro.org, 21cnbao@gmail.com,
+        dietmar.eggemann@arm.com, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de
+Subject: Re: [PATCH] sched/fair: no sync wakeup from interrupt context
+Message-ID: <20220714141834.GC3493@suse.de>
+References: <20220711224704.1672831-1-libo.chen@oracle.com>
+ <2c0c61a1c4c54d06905279a9a724a9390d9ee5c3.camel@linux.intel.com>
+ <0917f479-b6aa-19de-3d6a-6fd422df4d21@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <000000000000471c2905e3c2c2c2@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <0917f479-b6aa-19de-3d6a-6fd422df4d21@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Jul 13, 2022 at 12:17:33PM -0700, Libo Chen wrote:
+> 
+> 
+> On 7/13/22 09:40, Tim Chen wrote:
+> > On Mon, 2022-07-11 at 15:47 -0700, Libo Chen wrote:
+> > > Barry Song first pointed out that replacing sync wakeup with regular wakeup
+> > > seems to reduce overeager wakeup pulling and shows noticeable performance
+> > > improvement.[1]
+> > > 
+> > > This patch argues that allowing sync for wakeups from interrupt context
+> > > is a bug and fixing it can improve performance even when irq/softirq is
+> > > evenly spread out.
+> > > 
+> > > For wakeups from ISR, the waking CPU is just the CPU of ISR and the so-called
+> > > waker can be any random task that happens to be running on that CPU when the
+> > > interrupt comes in. This is completely different from other wakups where the
+> > > task running on the waking CPU is the actual waker. For example, two tasks
+> > > communicate through a pipe or mutiple tasks access the same critical section,
+> > > etc. This difference is important because with sync we assume the waker will
+> > > get off the runqueue and go to sleep immedately after the wakeup. The
+> > > assumption is built into wake_affine() where it discounts the waker's presence
+> > > from the runqueue when sync is true. The random waker from interrupts bears no
+> > > relation to the wakee and don't usually go to sleep immediately afterwards
+> > > unless wakeup granularity is reached. Plus the scheduler no longer enforces the
+> > > preepmtion of waker for sync wakeup as it used to before
+> > > patch f2e74eeac03ffb7 ("sched: Remove WAKEUP_SYNC feature"). Enforcing sync
+> > > wakeup preemption for wakeups from interrupt contexts doesn't seem to be
+> > > appropriate too but at least sync wakeup will do what it's supposed to do.
+> > Will there be scenarios where you do want the task being woken up be pulled
+> > to the CPU where the interrupt happened, as the data that needs to be accessed is
+> > on local CPU/NUMA that interrupt happened?  For example, interrupt associated with network
+> > packets received.  Sync still seems desirable, at least if there is no task currently
+> > running on the CPU where interrupt happened.  So maybe we should have some consideration
+> > of the load on the CPU/NUMA before deciding whether we should do sync wake for such
+> > interrupt.
+> > 
+> There are only two places where sync wakeup matters: wake_affine_idle() and
+> wake_affine_weight().
+> In wake_affine_idle(), it considers pulling if there is one runnable on the
+> waking CPU because
+> of the belief that this runnable will voluntarily get off the runqueue. In
+> wake_affine_weight(),
+> it basically takes off the waker's load again assuming the waker goes to
+> sleep after the wakeup.
+> My argument is that this assumption doesn't really hold for wakeups from the
+> interrupt contexts
+> when the waking CPU is non-idle. Wakeups from task context? sure, it seems
+> to be a reasonable
+> assumption. For your idle case, I totally agree but I don't think having
+> sync or not will actually
+> have any impacts here giving what the code does. Real impact comes fromMel's
+> patch 7332dec055f2457c3
+> which makes it less likely to pull tasks when the waking CPU is idle. I
+> believe we should consider
+> reverting 7332dec055f2 because a significant RDS latency regression has been
+> spotted recently on our
+> system due to this patch.
+> 
 
-so this lockdep report looks real but is more related to OOM handling than
-to ext4 as such. The immediate problem I can see is that
-mem_cgroup_print_oom_meminfo() which is called under oom_lock calls
-memory_stat_format() which does GFP_KERNEL allocations to allocate buffers
-for dumping of MM statistics. This creates oom_lock -> fs reclaim
-dependency and because OOM can be hit (and thus oom_lock acquired) in
-practically any allocation (regardless of GFP_NOFS) this has a potential of
-creating real deadlock cycles.
+The intent of 7332dec055f2 was to prevent harmful cross-node accesses.
+It still allowed cache-local migrations on the assumption that the incoming
+data was critical enough to justify losing any other cache-hot data. You
+state explicitly that "the interrupt CPU isn't as performance critical as
+cache from its previous CPU" so that assumption was incorrect, at least
+in your case. I don't have a counter example where the interrupt data *is*
+more important than any other cache-hot data so the check can go.
 
-So should mem_cgroup_print_oom_meminfo() be using
-memalloc_nofs_save/restore() to avoid such deadlocks? Or perhaps someone
-sees another solution? Generally allocating memory to report OOM looks a
-bit dangerous to me ;).
+I think a revert would not achieve what you want as a plain revert would
+still allow an interrupt to pull a task from an arbitrary location as sync
+is not checked. A follow-up to your patch or an updated version should not
+check available_idle_cpu at all in wake_affine_idle as it's only idle the
+wake is from interrupt context and vcpu_is_preempted is not necessarily
+justification for pulling a task due to an interrupt.
 
-								Honza
+Something like this but needs testing with your target loads, particularly
+the RDS (Relational Database Service?) latency regression;
 
-On Thu 14-07-22 05:08:26, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    5a29232d870d Merge tag 'for-5.19-rc6-tag' of git://git.ker..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16619ce8080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=525bc0635a2b942a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=2d2aeadc6ce1e1f11d45
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: i386
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+2d2aeadc6ce1e1f11d45@syzkaller.appspotmail.com
-> 
-> ======================================================
-> WARNING: possible circular locking dependency detected
-> 5.19.0-rc6-syzkaller-00026-g5a29232d870d #0 Not tainted
-> ------------------------------------------------------
-> khugepaged/48 is trying to acquire lock:
-> ffff888044598990 (jbd2_handle){++++}-{0:0}, at: start_this_handle+0xfb4/0x14a0 fs/jbd2/transaction.c:461
-> 
-> but task is already holding lock:
-> ffffffff8bebdb20 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim mm/page_alloc.c:4638 [inline]
-> ffffffff8bebdb20 (fs_reclaim){+.+.}-{0:0}, at: __alloc_pages_direct_reclaim mm/page_alloc.c:4663 [inline]
-> ffffffff8bebdb20 (fs_reclaim){+.+.}-{0:0}, at: __alloc_pages_slowpath.constprop.0+0x9e1/0x2160 mm/page_alloc.c:5066
-> 
-> which lock already depends on the new lock.
-> 
-> 
-> the existing dependency chain (in reverse order) is:
-> 
-> -> #2 (fs_reclaim){+.+.}-{0:0}:
->        __fs_reclaim_acquire mm/page_alloc.c:4589 [inline]
->        fs_reclaim_acquire+0x115/0x160 mm/page_alloc.c:4603
->        might_alloc include/linux/sched/mm.h:271 [inline]
->        slab_pre_alloc_hook mm/slab.h:723 [inline]
->        slab_alloc_node mm/slub.c:3157 [inline]
->        slab_alloc mm/slub.c:3251 [inline]
->        kmem_cache_alloc_trace+0x40/0x3f0 mm/slub.c:3282
->        kmalloc include/linux/slab.h:600 [inline]
->        memory_stat_format+0x95/0xae0 mm/memcontrol.c:1468
->        mem_cgroup_print_oom_meminfo.cold+0x50/0x7e mm/memcontrol.c:1594
->        dump_header+0x13f/0x7f9 mm/oom_kill.c:462
->        oom_kill_process.cold+0x10/0x15 mm/oom_kill.c:1037
->        out_of_memory+0x358/0x14b0 mm/oom_kill.c:1175
->        mem_cgroup_out_of_memory+0x206/0x270 mm/memcontrol.c:1650
->        memory_max_write+0x25c/0x3b0 mm/memcontrol.c:6299
->        cgroup_file_write+0x1de/0x770 kernel/cgroup/cgroup.c:3882
->        kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:290
->        call_write_iter include/linux/fs.h:2058 [inline]
->        new_sync_write+0x38a/0x560 fs/read_write.c:504
->        vfs_write+0x7c0/0xac0 fs/read_write.c:591
->        ksys_write+0x127/0x250 fs/read_write.c:644
->        do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->        __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
->        do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
->        entry_SYSENTER_compat_after_hwframe+0x53/0x62
-> 
-> -> #1 (oom_lock){+.+.}-{3:3}:
->        __mutex_lock_common kernel/locking/mutex.c:603 [inline]
->        __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
->        mem_cgroup_out_of_memory+0x8d/0x270 mm/memcontrol.c:1640
->        mem_cgroup_oom mm/memcontrol.c:1880 [inline]
->        try_charge_memcg+0xef9/0x1380 mm/memcontrol.c:2670
->        obj_cgroup_charge_pages mm/memcontrol.c:2999 [inline]
->        obj_cgroup_charge+0x2ab/0x5e0 mm/memcontrol.c:3289
->        memcg_slab_pre_alloc_hook mm/slab.h:505 [inline]
->        slab_pre_alloc_hook mm/slab.h:728 [inline]
->        slab_alloc_node mm/slub.c:3157 [inline]
->        slab_alloc mm/slub.c:3251 [inline]
->        __kmem_cache_alloc_lru mm/slub.c:3258 [inline]
->        kmem_cache_alloc+0x92/0x3b0 mm/slub.c:3268
->        kmem_cache_zalloc include/linux/slab.h:723 [inline]
->        alloc_buffer_head+0x20/0x140 fs/buffer.c:3294
->        alloc_page_buffers+0x285/0x7a0 fs/buffer.c:829
->        grow_dev_page fs/buffer.c:965 [inline]
->        grow_buffers fs/buffer.c:1011 [inline]
->        __getblk_slow+0x525/0x1080 fs/buffer.c:1038
->        __getblk_gfp+0x6e/0x80 fs/buffer.c:1333
->        sb_getblk include/linux/buffer_head.h:326 [inline]
->        ext4_getblk+0x20d/0x7c0 fs/ext4/inode.c:866
->        ext4_bread+0x2a/0x1c0 fs/ext4/inode.c:912
->        ext4_append+0x177/0x3a0 fs/ext4/namei.c:67
->        ext4_init_new_dir+0x25e/0x4d0 fs/ext4/namei.c:2920
->        ext4_mkdir+0x3cf/0xb20 fs/ext4/namei.c:2966
->        vfs_mkdir+0x1c3/0x3b0 fs/namei.c:3975
->        do_mkdirat+0x285/0x300 fs/namei.c:4001
->        __do_sys_mkdirat fs/namei.c:4016 [inline]
->        __se_sys_mkdirat fs/namei.c:4014 [inline]
->        __ia32_sys_mkdirat+0x81/0xa0 fs/namei.c:4014
->        do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->        __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
->        do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
->        entry_SYSENTER_compat_after_hwframe+0x53/0x62
-> 
-> -> #0 (jbd2_handle){++++}-{0:0}:
->        check_prev_add kernel/locking/lockdep.c:3095 [inline]
->        check_prevs_add kernel/locking/lockdep.c:3214 [inline]
->        validate_chain kernel/locking/lockdep.c:3829 [inline]
->        __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
->        lock_acquire kernel/locking/lockdep.c:5665 [inline]
->        lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
->        start_this_handle+0xfe7/0x14a0 fs/jbd2/transaction.c:463
->        jbd2__journal_start+0x399/0x930 fs/jbd2/transaction.c:520
->        __ext4_journal_start_sb+0x3a8/0x4a0 fs/ext4/ext4_jbd2.c:105
->        __ext4_journal_start fs/ext4/ext4_jbd2.h:326 [inline]
->        ext4_dirty_inode+0x9d/0x110 fs/ext4/inode.c:5949
->        __mark_inode_dirty+0x495/0x1050 fs/fs-writeback.c:2381
->        mark_inode_dirty_sync include/linux/fs.h:2337 [inline]
->        iput.part.0+0x57/0x820 fs/inode.c:1767
->        iput+0x58/0x70 fs/inode.c:1760
->        dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
->        __dentry_kill+0x3c0/0x640 fs/dcache.c:607
->        shrink_dentry_list+0x23c/0x800 fs/dcache.c:1201
->        prune_dcache_sb+0xe7/0x140 fs/dcache.c:1282
->        super_cache_scan+0x336/0x590 fs/super.c:104
->        do_shrink_slab+0x42d/0xbd0 mm/vmscan.c:770
->        shrink_slab+0x17c/0x6f0 mm/vmscan.c:930
->        shrink_node_memcgs mm/vmscan.c:3124 [inline]
->        shrink_node+0x8b3/0x1db0 mm/vmscan.c:3245
->        shrink_zones mm/vmscan.c:3482 [inline]
->        do_try_to_free_pages+0x3b5/0x1700 mm/vmscan.c:3540
->        try_to_free_pages+0x2ac/0x840 mm/vmscan.c:3775
->        __perform_reclaim mm/page_alloc.c:4641 [inline]
->        __alloc_pages_direct_reclaim mm/page_alloc.c:4663 [inline]
->        __alloc_pages_slowpath.constprop.0+0xa8a/0x2160 mm/page_alloc.c:5066
->        __alloc_pages+0x436/0x510 mm/page_alloc.c:5439
->        __alloc_pages_node include/linux/gfp.h:587 [inline]
->        khugepaged_alloc_page+0xa0/0x170 mm/khugepaged.c:859
->        collapse_huge_page mm/khugepaged.c:1062 [inline]
->        khugepaged_scan_pmd mm/khugepaged.c:1348 [inline]
->        khugepaged_scan_mm_slot mm/khugepaged.c:2170 [inline]
->        khugepaged_do_scan mm/khugepaged.c:2251 [inline]
->        khugepaged+0x3473/0x66a0 mm/khugepaged.c:2296
->        kthread+0x2e9/0x3a0 kernel/kthread.c:376
->        ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-> 
-> other info that might help us debug this:
-> 
-> Chain exists of:
->   jbd2_handle --> oom_lock --> fs_reclaim
-> 
->  Possible unsafe locking scenario:
-> 
->        CPU0                    CPU1
->        ----                    ----
->   lock(fs_reclaim);
->                                lock(oom_lock);
->                                lock(fs_reclaim);
->   lock(jbd2_handle);
-> 
->  *** DEADLOCK ***
-> 
-> 3 locks held by khugepaged/48:
->  #0: ffffffff8bebdb20 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim mm/page_alloc.c:4638 [inline]
->  #0: ffffffff8bebdb20 (fs_reclaim){+.+.}-{0:0}, at: __alloc_pages_direct_reclaim mm/page_alloc.c:4663 [inline]
->  #0: ffffffff8bebdb20 (fs_reclaim){+.+.}-{0:0}, at: __alloc_pages_slowpath.constprop.0+0x9e1/0x2160 mm/page_alloc.c:5066
->  #1: ffffffff8be7d850 (shrinker_rwsem){++++}-{3:3}, at: shrink_slab+0xc9/0x6f0 mm/vmscan.c:920
->  #2: ffff8880445800e0 (&type->s_umount_key#33){++++}-{3:3}, at: trylock_super fs/super.c:415 [inline]
->  #2: ffff8880445800e0 (&type->s_umount_key#33){++++}-{3:3}, at: super_cache_scan+0x6c/0x590 fs/super.c:79
-> 
-> stack backtrace:
-> CPU: 2 PID: 48 Comm: khugepaged Not tainted 5.19.0-rc6-syzkaller-00026-g5a29232d870d #0
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
->  check_prev_add kernel/locking/lockdep.c:3095 [inline]
->  check_prevs_add kernel/locking/lockdep.c:3214 [inline]
->  validate_chain kernel/locking/lockdep.c:3829 [inline]
->  __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
->  lock_acquire kernel/locking/lockdep.c:5665 [inline]
->  lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
->  start_this_handle+0xfe7/0x14a0 fs/jbd2/transaction.c:463
->  jbd2__journal_start+0x399/0x930 fs/jbd2/transaction.c:520
->  __ext4_journal_start_sb+0x3a8/0x4a0 fs/ext4/ext4_jbd2.c:105
->  __ext4_journal_start fs/ext4/ext4_jbd2.h:326 [inline]
->  ext4_dirty_inode+0x9d/0x110 fs/ext4/inode.c:5949
->  __mark_inode_dirty+0x495/0x1050 fs/fs-writeback.c:2381
->  mark_inode_dirty_sync include/linux/fs.h:2337 [inline]
->  iput.part.0+0x57/0x820 fs/inode.c:1767
->  iput+0x58/0x70 fs/inode.c:1760
->  dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
->  __dentry_kill+0x3c0/0x640 fs/dcache.c:607
->  shrink_dentry_list+0x23c/0x800 fs/dcache.c:1201
->  prune_dcache_sb+0xe7/0x140 fs/dcache.c:1282
->  super_cache_scan+0x336/0x590 fs/super.c:104
->  do_shrink_slab+0x42d/0xbd0 mm/vmscan.c:770
->  shrink_slab+0x17c/0x6f0 mm/vmscan.c:930
->  shrink_node_memcgs mm/vmscan.c:3124 [inline]
->  shrink_node+0x8b3/0x1db0 mm/vmscan.c:3245
->  shrink_zones mm/vmscan.c:3482 [inline]
->  do_try_to_free_pages+0x3b5/0x1700 mm/vmscan.c:3540
->  try_to_free_pages+0x2ac/0x840 mm/vmscan.c:3775
->  __perform_reclaim mm/page_alloc.c:4641 [inline]
->  __alloc_pages_direct_reclaim mm/page_alloc.c:4663 [inline]
->  __alloc_pages_slowpath.constprop.0+0xa8a/0x2160 mm/page_alloc.c:5066
->  __alloc_pages+0x436/0x510 mm/page_alloc.c:5439
->  __alloc_pages_node include/linux/gfp.h:587 [inline]
->  khugepaged_alloc_page+0xa0/0x170 mm/khugepaged.c:859
->  collapse_huge_page mm/khugepaged.c:1062 [inline]
->  khugepaged_scan_pmd mm/khugepaged.c:1348 [inline]
->  khugepaged_scan_mm_slot mm/khugepaged.c:2170 [inline]
->  khugepaged_do_scan mm/khugepaged.c:2251 [inline]
->  khugepaged+0x3473/0x66a0 mm/khugepaged.c:2296
->  kthread+0x2e9/0x3a0 kernel/kthread.c:376
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
->  </TASK>
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index b7b275672c89..e55a3a67a442 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5975,8 +5975,8 @@ static int wake_wide(struct task_struct *p)
+  * soonest. For the purpose of speed we only consider the waking and previous
+  * CPU.
+  *
+- * wake_affine_idle() - only considers 'now', it check if the waking CPU is
+- *			cache-affine and is (or	will be) idle.
++ * wake_affine_idle() - only considers 'now', it checks if the waker task is a
++ *			sync wakeup from a CPU that should be idle soon.
+  *
+  * wake_affine_weight() - considers the weight to reflect the average
+  *			  scheduling latency of the CPUs. This seems to work
+@@ -5985,21 +5985,6 @@ static int wake_wide(struct task_struct *p)
+ static int
+ wake_affine_idle(int this_cpu, int prev_cpu, int sync)
+ {
+-	/*
+-	 * If this_cpu is idle, it implies the wakeup is from interrupt
+-	 * context. Only allow the move if cache is shared. Otherwise an
+-	 * interrupt intensive workload could force all tasks onto one
+-	 * node depending on the IO topology or IRQ affinity settings.
+-	 *
+-	 * If the prev_cpu is idle and cache affine then avoid a migration.
+-	 * There is no guarantee that the cache hot data from an interrupt
+-	 * is more important than cache hot data on the prev_cpu and from
+-	 * a cpufreq perspective, it's better to have higher utilisation
+-	 * on one CPU.
+-	 */
+-	if (available_idle_cpu(this_cpu) && cpus_share_cache(this_cpu, prev_cpu))
+-		return available_idle_cpu(prev_cpu) ? prev_cpu : this_cpu;
+-
+ 	if (sync && cpu_rq(this_cpu)->nr_running == 1)
+ 		return this_cpu;
+ 

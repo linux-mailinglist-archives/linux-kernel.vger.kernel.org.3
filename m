@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 132F8574516
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 08:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A777157451D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 08:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234577AbiGNGaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 02:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
+        id S232359AbiGNGdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 02:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiGNGaR (ORCPT
+        with ESMTP id S229455AbiGNGdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 02:30:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1957764DC;
-        Wed, 13 Jul 2022 23:30:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB925B823A5;
-        Thu, 14 Jul 2022 06:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 52903C3411C;
-        Thu, 14 Jul 2022 06:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657780213;
-        bh=Co4vum7iIofAsD257jnj79VKCZwfePDA16sToDYsDFo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=uDJJ0LKTiahf9Xl10Les2tj5eitPVe7zSFCq+o6CQQ7v2qxIqzua07hqJV5M2hDu1
-         bwDONyhcJTWF+7pGCRDRcusezXuKApExW1Q58J5Wz+e6IhoNCi5UisyIhtXX6S1Kr1
-         L36H9rDo+mfZ6B6dXPIzCToU/OM7CISkXjG3cpBDeOincTdmuDHaaZzzmRhlooGffe
-         tRfOGL9iq+xjQK/T9iaC0WbU6SYdoahXBjd2rWeu1p+Z2crik9GXqiuZ/C5B1apYw2
-         082WCdvz/8dYJPV3RDHrxj19m7haPr1fFTc6WEAhGTCenN6hJG2BD6nv0/mXbuQZEK
-         uyQrwPT/jwAHw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 34EBEE45227;
-        Thu, 14 Jul 2022 06:30:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 14 Jul 2022 02:33:42 -0400
+Received: from m12-18.163.com (m12-18.163.com [220.181.12.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 714E42ADF;
+        Wed, 13 Jul 2022 23:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=y2Bvn
+        iMhbl5jK8THTHxbQtXvRNWzTIer28MZL2NagjI=; b=MFjxR9LAZtTatjvAg+SSn
+        3wsJMnONJHk7V30YTydtZZTcDNUenpZ4+UEE3q+vpSF6c90QyFvluQDhnoGaR07P
+        rd7vEnz5rN9iPrLrKhotoHTAJlprSg37YERsQahCN0VH2Jd9M0mYc5EimS+0D8cF
+        0zyXrlE0SONYleVCM4YawY=
+Received: from localhost.localdomain (unknown [111.48.58.12])
+        by smtp14 (Coremail) with SMTP id EsCowAAnT_K2uM9i5aWBMw--.1991S2;
+        Thu, 14 Jul 2022 14:33:29 +0800 (CST)
+From:   Jiangshan Yi <13667453960@163.com>
+To:     jack@suse.com
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>
+Subject: [PATCH] fs/ext2: replace ternary operator with min_t()
+Date:   Thu, 14 Jul 2022 14:33:18 +0800
+Message-Id: <20220714063318.1777139-1-13667453960@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Return true/false (not 1/0) from bool
- functions
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165778021321.31820.870066365778813774.git-patchwork-notify@kernel.org>
-Date:   Thu, 14 Jul 2022 06:30:13 +0000
-References: <20220714015647.25074-1-xiaolinkui@kylinos.cn>
-In-Reply-To: <20220714015647.25074-1-xiaolinkui@kylinos.cn>
-To:     xiaolinkui <xiaolinkui@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        xiaolinkui@kylinos.cn, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: EsCowAAnT_K2uM9i5aWBMw--.1991S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uFWfCr15KF1UtF1ktF4Utwb_yoW8GrykpF
+        ykAr4xGFyrur1UX3ZrWw4DX3WxWayDKF40qrWj9r1UZr9xtw1fKFn8tFy5WF409r4xZ34v
+        qFs09ryxJw1xWw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jxF4iUUUUU=
+X-Originating-IP: [111.48.58.12]
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/xtbBthU++11uPnbZhAAAsA
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+Fix the following coccicheck warning:
 
-On Thu, 14 Jul 2022 09:56:47 +0800 you wrote:
-> From: Linkui Xiao <xiaolinkui@kylinos.cn>
-> 
-> Return boolean values ("true" or "false") instead of 1 or 0 from bool
-> functions.  This fixes the following warnings from coccicheck:
-> 
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
-> return of 0/1 in function 'decap_v4' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
-> return of 0/1 in function 'decap_v6' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
-> return of 0/1 in function 'encap_v6' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
-> return of 0/1 in function 'parse_tcp' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
-> return of 0/1 in function 'parse_udp' with return type bool
-> 
-> [...]
+fs/ext2/super.c:1494: WARNING opportunity for min().
+fs/ext2/super.c:1533: WARNING opportunity for min().
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Return true/false (not 1/0) from bool functions
-    https://git.kernel.org/bpf/bpf-next/c/94bf6aad5dbe
+min_t() macro is defined in include/linux/minmax.h. It avoids
+multiple evaluations of the arguments when non-constant and performs
+strict type-checking.
 
-You are awesome, thank you!
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+---
+ fs/ext2/super.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/fs/ext2/super.c b/fs/ext2/super.c
+index f6a19f6d9f6d..300f2f0cf566 100644
+--- a/fs/ext2/super.c
++++ b/fs/ext2/super.c
+@@ -1490,8 +1490,7 @@ static ssize_t ext2_quota_read(struct super_block *sb, int type, char *data,
+ 		len = i_size-off;
+ 	toread = len;
+ 	while (toread > 0) {
+-		tocopy = sb->s_blocksize - offset < toread ?
+-				sb->s_blocksize - offset : toread;
++		tocopy = min_t(size_t, sb->s_blocksize - offset, toread);
+ 
+ 		tmp_bh.b_state = 0;
+ 		tmp_bh.b_size = sb->s_blocksize;
+@@ -1529,8 +1528,7 @@ static ssize_t ext2_quota_write(struct super_block *sb, int type,
+ 	struct buffer_head *bh;
+ 
+ 	while (towrite > 0) {
+-		tocopy = sb->s_blocksize - offset < towrite ?
+-				sb->s_blocksize - offset : towrite;
++		tocopy = min_t(size_t, sb->s_blocksize - offset, towrite);
+ 
+ 		tmp_bh.b_state = 0;
+ 		tmp_bh.b_size = sb->s_blocksize;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 

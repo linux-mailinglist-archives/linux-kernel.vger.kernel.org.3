@@ -2,76 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3319E5747EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEEA857480D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 11:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237761AbiGNJLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 05:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
+        id S237774AbiGNJNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 05:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237709AbiGNJK7 (ORCPT
+        with ESMTP id S237695AbiGNJNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 05:10:59 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D57D2408E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:10:57 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id c15so1469856ljr.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:10:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CZPLNxoOrlBXnnELoaUQZiTp1bpHPpDagke/CdxO/sA=;
-        b=w40AoTU9ec62G6Pl7RJx0BX5Ba8XLiFWwt17SYbTMi6qtaF4sjXjMnIxmV4DKjLlLj
-         nBCnYUUvpJRI/dVKSdA/nQw1+AnLNx2cqk/j/plX8ZpGctfz+BdBPmFov/dM2Av7KvdX
-         xbToaDKOk1/WcU/JRqQbGQS0EY/TJ15+F/9N7pFpbmS18Yh6mlYjd/0x72E+mKSseBUT
-         tjkd3Y4bUKRgJyL0ROSfBdxyPCif1GdeXNq+hkioC0FCayl+QgAf5ghvpSyFoL5qTI3m
-         hHD/A5LGcWJm0nnf3z3BBJVZqhoH1ziR/CBuId+ReckCsAgGKu4040WmwRhvq1SWwRcu
-         L+Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CZPLNxoOrlBXnnELoaUQZiTp1bpHPpDagke/CdxO/sA=;
-        b=hfWXZCiJBUeyOwR9QAA6VMmMcXP4a7hKzwp+oD8I4MCf8Dbia3t7vaA0WuT6wvK5Ht
-         mulXnJ+kw4yZpFq6u49AN4iQnRpqbbjHgbKnMaRfZ3S0xyYGr4wuYAOgwpankhfRNmpc
-         1FSDC9G/O7lg8PAh+bAGl//tLc5H72JeJpXOUp6JeDTIdjRe0+x1NVG0IFcpSO4vGnNo
-         nNdOoOL0JZ4tQg1c8HFqeOSTWckZQ2FV/X3tJOH/U6oIKjBOepNQ5FyvaVjqigVndIYh
-         ybnw+OcNxU6SgN/jz7cIeyfiWlGkFb1lTei1FY0lVTNa64WzuFgFIWTxPbmy/sa8XLy5
-         ETMg==
-X-Gm-Message-State: AJIora+we9oHsWAEqLsg/yRM4BmtxhiRXbw01R02B/YcS/U3qNByGWv1
-        J7z3K0XmzBZqPtVqm1Y3M9NwPg==
-X-Google-Smtp-Source: AGRyM1txAJKSbvRFtUvOJa0mWbsnIAkKGgiWNta1hCJHavlH87N+jCrX8rb96Wx9KKeggeag63bq9A==
-X-Received: by 2002:a2e:8093:0:b0:25d:63ce:4d56 with SMTP id i19-20020a2e8093000000b0025d63ce4d56mr3790440ljg.105.1657789855541;
-        Thu, 14 Jul 2022 02:10:55 -0700 (PDT)
-Received: from krzk-bin.. (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id d8-20020a056512368800b004790ef191e3sm250006lfs.216.2022.07.14.02.10.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 02:10:55 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH v3 3/3] mmc: sdhci-msm: drop redundant of_device_id entries
-Date:   Thu, 14 Jul 2022 11:10:42 +0200
-Message-Id: <20220714091042.22287-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220714091042.22287-1-krzysztof.kozlowski@linaro.org>
-References: <20220714091042.22287-1-krzysztof.kozlowski@linaro.org>
+        Thu, 14 Jul 2022 05:13:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9420AC6A
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 02:13:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657790014;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nOA215hnzcdqJZf4RCSHh/Wt55xK9xHePL22gYt6JO0=;
+        b=C0UC9NeE8asCdev7ujHKfAl/97kVIaVwGKdTmX2rZuMHXTOOvzg+2WaBMvYRjcYpfvFITG
+        2x62JDSVbP+u8eRFE20yYYMAuZfto4fYS3PIdgity8Yf/yuqG7n/UYdMJPiI8BdHk1DiSA
+        5PeWV1ws7g/6iXRphx80CDWseROfT2w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-124-u5D8SHSmP4K9AnUvW2YQvQ-1; Thu, 14 Jul 2022 05:13:31 -0400
+X-MC-Unique: u5D8SHSmP4K9AnUvW2YQvQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C85E385A586;
+        Thu, 14 Jul 2022 09:13:30 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.194.135])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4F15D2166B26;
+        Thu, 14 Jul 2022 09:13:28 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 00/25] KVM: VMX: Support updated eVMCSv1 revision + use vmcs_config for L1 VMX MSRs
+Date:   Thu, 14 Jul 2022 11:13:02 +0200
+Message-Id: <20220714091327.1085353-1-vkuznets@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,80 +62,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts three commits:
-1. Revert "mmc: sdhci-msm: Add compatible string check for sdx65"
-   This reverts commit 953706844f0f2fd4dc6984cc010fe6cf51c041f2.
+Changes since v3 [Max]:
+- Fix swapped encls_exiting_bitmap and host_ia32_perf_global_ctrl fields.
+- Wipe 'hv_vcpu->cpuid_cache' with memset() on update.
+- Add a comment explaining made-up HV_X64_NESTED_EVMCS1_2022_UPDATE name
+  and what this bit means.
+- Add R-b tags.
 
-2. Revert "mmc: sdhci-msm: Add compatible string check for sm8150"
-   This reverts commit 5acd6adb65802cc6f9986be3750179a820580d37.
+Original description:
 
-3. Revert "mmc: sdhci-msm: Add SoC specific compatibles"
-   This reverts commit 466614a9765c6fb67e1464d0a3f1261db903834b.
+Enlightened VMCS v1 definition was updates to include fields for the
+following features:
+    - PerfGlobalCtrl
+    - EnclsExitingBitmap
+    - TSC scaling
+    - GuestLbrCtl
+    - CET
+    - SSP
+While the information is missing in the publicly available TLFS, the
+updated definition comes with a new feature bit in CPUID.0x4000000A.EBX
+(BIT 0). Use a made up HV_X64_NESTED_EVMCS1_2022_UPDATE name for it.
 
-The oldest commit 466614a9765c ("mmc: sdhci-msm: Add SoC specific
-compatibles") did not specify what benefits such multiple compatibles
-bring, therefore assume there is none.  On the other hand such approach
-brings a lot of churn to driver maintenance by expecting commit for
-every new compatible, even though it is already covered by the fallback.
+Add support for the new revision to KVM. SSP, CET and GuestLbrCtl
+features are not currently supported by KVM.
 
-There is really no sense in duplicating of_device_id for each
-variant, which is already covered by generic compatible fallback
-qcom,sdhci-msm-v4 or qcom,sdhci-msm-v5.
+While on it, implement Sean's idea to use vmcs_config for setting up
+L1 VMX control MSRs instead of re-reading host MSRs.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Jim Mattson (1):
+  KVM: x86: VMX: Replace some Intel model numbers with mnemonics
 
----
+Sean Christopherson (1):
+  KVM: VMX: Adjust CR3/INVPLG interception for EPT=y at runtime, not
+    setup
 
-Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc: Doug Anderson <dianders@chromium.org>
----
- drivers/mmc/host/sdhci-msm.c | 29 ++++-------------------------
- 1 file changed, 4 insertions(+), 25 deletions(-)
+Vitaly Kuznetsov (23):
+  KVM: x86: hyper-v: Expose access to debug MSRs in the partition
+    privilege flags
+  x86/hyperv: Fix 'struct hv_enlightened_vmcs' definition
+  x86/hyperv: Update 'struct hv_enlightened_vmcs' definition
+  KVM: VMX: Define VMCS-to-EVMCS conversion for the new fields
+  KVM: nVMX: Support several new fields in eVMCSv1
+  KVM: x86: hyper-v: Cache HYPERV_CPUID_NESTED_FEATURES CPUID leaf
+  KVM: selftests: Add ENCLS_EXITING_BITMAP{,HIGH} VMCS fields
+  KVM: selftests: Switch to updated eVMCSv1 definition
+  KVM: VMX: nVMX: Support TSC scaling and PERF_GLOBAL_CTRL with
+    enlightened VMCS
+  KVM: selftests: Enable TSC scaling in evmcs selftest
+  KVM: VMX: Get rid of eVMCS specific VMX controls sanitization
+  KVM: VMX: Check VM_ENTRY_IA32E_MODE in setup_vmcs_config()
+  KVM: VMX: Check CPU_BASED_{INTR,NMI}_WINDOW_EXITING in
+    setup_vmcs_config()
+  KVM: VMX: Tweak the special handling of SECONDARY_EXEC_ENCLS_EXITING
+    in setup_vmcs_config()
+  KVM: VMX: Extend VMX controls macro shenanigans
+  KVM: VMX: Move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering out of
+    setup_vmcs_config()
+  KVM: VMX: Add missing VMEXIT controls to vmcs_config
+  KVM: VMX: Add missing CPU based VM execution controls to vmcs_config
+  KVM: VMX: Move LOAD_IA32_PERF_GLOBAL_CTRL errata handling out of
+    setup_vmcs_config()
+  KVM: nVMX: Always set required-1 bits of pinbased_ctls to
+    PIN_BASED_ALWAYSON_WITHOUT_TRUE_MSR
+  KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs
+  KVM: VMX: Cache MSR_IA32_VMX_MISC in vmcs_config
+  KVM: nVMX: Use cached host MSR_IA32_VMX_MISC value for setting up
+    nested MSR
 
-diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-index e395411fb6fd..dc2991422a87 100644
---- a/drivers/mmc/host/sdhci-msm.c
-+++ b/drivers/mmc/host/sdhci-msm.c
-@@ -2435,33 +2435,12 @@ static const struct sdhci_msm_variant_info sdm845_sdhci_var = {
- };
- 
- static const struct of_device_id sdhci_msm_dt_match[] = {
--	 /* Following two entries are deprecated (kept only for backward compatibility) */
--	{.compatible = "qcom,sdhci-msm-v4", .data = &sdhci_msm_mci_var},
--	{.compatible = "qcom,sdhci-msm-v5", .data = &sdhci_msm_v5_var},
--	/* Add entries for sdcc versions less than 5.0 here */
--	{.compatible = "qcom,apq8084-sdhci", .data = &sdhci_msm_mci_var},
--	{.compatible = "qcom,msm8226-sdhci", .data = &sdhci_msm_mci_var},
--	{.compatible = "qcom,msm8916-sdhci", .data = &sdhci_msm_mci_var},
--	{.compatible = "qcom,msm8953-sdhci", .data = &sdhci_msm_mci_var},
--	{.compatible = "qcom,msm8974-sdhci", .data = &sdhci_msm_mci_var},
--	{.compatible = "qcom,msm8992-sdhci", .data = &sdhci_msm_mci_var},
--	{.compatible = "qcom,msm8994-sdhci", .data = &sdhci_msm_mci_var},
--	{.compatible = "qcom,msm8996-sdhci", .data = &sdhci_msm_mci_var},
- 	/*
--	 * Add entries for sdcc version 5.0 here. For SDCC version 5.0.0,
--	 * MCI registers are removed from SDCC interface and some registers
--	 * are moved to HC.
-+	 * Do not add new variants to the driver which are compatible with
-+	 * generic ones, unless they need customization.
- 	 */
--	{.compatible = "qcom,qcs404-sdhci", .data = &sdhci_msm_v5_var},
--	{.compatible = "qcom,sdx55-sdhci",  .data = &sdhci_msm_v5_var},
--	{.compatible = "qcom,sdx65-sdhci",  .data = &sdhci_msm_v5_var},
--	{.compatible = "qcom,sdm630-sdhci", .data = &sdhci_msm_v5_var},
--	{.compatible = "qcom,sm6125-sdhci", .data = &sdhci_msm_v5_var},
--	{.compatible = "qcom,sm6350-sdhci", .data = &sdhci_msm_v5_var},
--	{.compatible = "qcom,sm8150-sdhci", .data = &sdhci_msm_v5_var},
--	{.compatible = "qcom,sm8250-sdhci", .data = &sdhci_msm_v5_var},
--	{.compatible = "qcom,sc7280-sdhci", .data = &sdhci_msm_v5_var},
--	/* Add entries where soc specific handling is required, here */
-+	{.compatible = "qcom,sdhci-msm-v4", .data = &sdhci_msm_mci_var},
-+	{.compatible = "qcom,sdhci-msm-v5", .data = &sdhci_msm_v5_var},
- 	{.compatible = "qcom,sdm845-sdhci", .data = &sdm845_sdhci_var},
- 	{.compatible = "qcom,sc7180-sdhci", .data = &sdm845_sdhci_var},
- 	{},
+ arch/x86/include/asm/hyperv-tlfs.h            |  30 ++-
+ arch/x86/include/asm/kvm_host.h               |   2 +
+ arch/x86/kvm/hyperv.c                         |  20 +-
+ arch/x86/kvm/vmx/capabilities.h               |  14 +-
+ arch/x86/kvm/vmx/evmcs.c                      | 127 +++++++---
+ arch/x86/kvm/vmx/evmcs.h                      |  18 +-
+ arch/x86/kvm/vmx/nested.c                     |  70 ++++--
+ arch/x86/kvm/vmx/nested.h                     |   2 +-
+ arch/x86/kvm/vmx/vmx.c                        | 235 ++++++++----------
+ arch/x86/kvm/vmx/vmx.h                        | 116 +++++++++
+ include/asm-generic/hyperv-tlfs.h             |   2 +
+ .../selftests/kvm/include/x86_64/evmcs.h      |  45 +++-
+ .../selftests/kvm/include/x86_64/vmx.h        |   2 +
+ .../testing/selftests/kvm/x86_64/evmcs_test.c |  31 ++-
+ 14 files changed, 484 insertions(+), 230 deletions(-)
+
 -- 
-2.34.1
+2.35.3
 

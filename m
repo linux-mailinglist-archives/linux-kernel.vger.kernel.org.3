@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD559574C2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2182574C30
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238932AbiGNLdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
+        id S238941AbiGNLdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238900AbiGNLdJ (ORCPT
+        with ESMTP id S238914AbiGNLdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Jul 2022 07:33:09 -0400
 Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D3E13FAC
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:33:07 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VJJBi4t_1657798382;
-Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VJJBi4t_1657798382)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDE317054
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:33:08 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VJJYPVm_1657798384;
+Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VJJYPVm_1657798384)
           by smtp.aliyun-inc.com;
-          Thu, 14 Jul 2022 19:33:03 +0800
+          Thu, 14 Jul 2022 19:33:04 +0800
 From:   Xianting Tian <xianting.tian@linux.alibaba.com>
 To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
         aou@eecs.berkeley.edu, alexandre.ghiti@canonical.com,
@@ -27,10 +27,12 @@ To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         huanyi.xj@alibaba-inc.com,
         Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: [PATCH V3 0/2] Improve vmcoreinfo and memory layout dump
-Date:   Thu, 14 Jul 2022 19:32:58 +0800
-Message-Id: <20220714113300.367854-1-xianting.tian@linux.alibaba.com>
+Subject: [PATCH V3 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
+Date:   Thu, 14 Jul 2022 19:32:59 +0800
+Message-Id: <20220714113300.367854-2-xianting.tian@linux.alibaba.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220714113300.367854-1-xianting.tian@linux.alibaba.com>
+References: <20220714113300.367854-1-xianting.tian@linux.alibaba.com>
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
@@ -41,35 +43,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series are the improvements for vmcoreinfo and memory
-layout dump.
+Add arch_crash_save_vmcoreinfo(), which exports VM layout(MODULES, VMALLOC,
+VMEMMAP and KERNEL_LINK_ADDR ranges), satp mode and ram base to vmcore.
 
-The first patch(1/2) is to add VM layout to vmcoreinfo, which can
-simlify the development of crash tool as ARM64 already did
-(arch/arm64/kernel/crash_core.c).
+Default pagetable levels and PAGE_OFFSET aren't same for different kernel
+version as below. For default pagetable levels, it sets sv57 on defaultly
+in latest kernel and do fallback to try to set sv48 on boot time if sv57
+is not supported in current hardware.
 
-The second patch(2/2) is to add MODULES to memory layout dump.
+For ram base, the default value is 0x80200000 for qemu riscv64 env, 0x200000
+for riscv64 SoC platform(eg, SoC platform of RISC-V XuanTie 910 CPU).
 
-Changes v1 -> v2:
- patch 1: add VA_BITS to vmcoreinfo as ARM64 does, not satp_mode.
-          crash tool can read VA_BITS to determin the pagetable
-          levels.
- patch 1,2: As MODULES area is only defined when CONFIG_64BIT=y for
-            riscv64, so only use MODULES area when CONFIG_64BIT=y.
-Changes v2 -> v3:
- patch 1,2: use "#ifdef CONFIG_64BIT" instead of "IS_ENABLED(CONFIG_64BIT)"
-            when check whether MODULES area is available.
+ * Linux Kernel 5.18 ~
+ *      PGTABLE_LEVELS = 5
+ *      PAGE_OFFSET = 0xff60000000000000
+ * Linux Kernel 5.17 ~
+ *      PGTABLE_LEVELS = 4
+ *      PAGE_OFFSET = 0xffffaf8000000000
+ * Linux Kernel 4.19 ~
+ *      PGTABLE_LEVELS = 3
+ *      PAGE_OFFSET = 0xffffffe000000000
 
-Xianting Tian (2):
-  RISC-V: Add arch_crash_save_vmcoreinfo support
-  riscv: Add modules to virtual kernel memory layout dump
+Since these configurations change from time to time and version to version,
+it is preferable to export them via vmcoreinfo than to change the crash's
+code frequently, it can simplify the development of crash tool.
 
+Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+---
  arch/riscv/kernel/Makefile     |  1 +
  arch/riscv/kernel/crash_core.c | 29 +++++++++++++++++++++++++++++
- arch/riscv/mm/init.c           |  4 ++++
- 3 files changed, 34 insertions(+)
+ 2 files changed, 30 insertions(+)
  create mode 100644 arch/riscv/kernel/crash_core.c
 
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index c71d6591d539..54e4183db080 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -81,6 +81,7 @@ obj-$(CONFIG_KGDB)		+= kgdb.o
+ obj-$(CONFIG_KEXEC)		+= kexec_relocate.o crash_save_regs.o machine_kexec.o
+ obj-$(CONFIG_KEXEC_FILE)	+= elf_kexec.o machine_kexec_file.o
+ obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
++obj-$(CONFIG_CRASH_CORE)	+= crash_core.o
+ 
+ obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
+ 
+diff --git a/arch/riscv/kernel/crash_core.c b/arch/riscv/kernel/crash_core.c
+new file mode 100644
+index 000000000000..8d7f5ff108da
+--- /dev/null
++++ b/arch/riscv/kernel/crash_core.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/crash_core.h>
++#include <linux/pagemap.h>
++
++void arch_crash_save_vmcoreinfo(void)
++{
++	VMCOREINFO_NUMBER(VA_BITS);
++	VMCOREINFO_NUMBER(phys_ram_base);
++
++	vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n", PAGE_OFFSET);
++	vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
++	vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n", VMALLOC_END);
++	vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
++	vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
++#ifdef CONFIG_64BIT
++	vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
++	vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
++#endif
++
++	if (IS_ENABLED(CONFIG_64BIT)) {
++#ifdef CONFIG_KASAN
++		vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_START)=0x%lx\n", KASAN_SHADOW_START);
++		vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_END)=0x%lx\n", KASAN_SHADOW_END);
++#endif
++		vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n", KERNEL_LINK_ADDR);
++		vmcoreinfo_append_str("NUMBER(ADDRESS_SPACE_END)=0x%lx\n", ADDRESS_SPACE_END);
++	}
++}
 -- 
 2.17.1
 

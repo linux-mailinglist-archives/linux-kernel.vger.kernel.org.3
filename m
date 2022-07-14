@@ -2,138 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E9D574B7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B797574B82
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 13:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238612AbiGNLG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 07:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S238614AbiGNLHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 07:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiGNLGy (ORCPT
+        with ESMTP id S229666AbiGNLHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:06:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 073A631E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:06:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657796813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y8wXm24tfJNe6NPosFaatJWUdYNSg5mujV72lboWyy8=;
-        b=V97qSS2TSDfudYwuPQpcVcdoxPU6JHfy+DMiXVQ1Ewh0hJhqHib+QuTi9XcwmvuJMaK+rs
-        tww4XzrfDXDnGPoyMgN70uP/UgeuG2Z7cK0RNP+Qkux2ginAglvpMYtL18HM+7IyYKpGJM
-        WSNcNuxPFAZ3Gw961mrcpQfuhAYWza4=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-163-Kr87aXuJPTa2Xy_APDZkPw-1; Thu, 14 Jul 2022 07:06:52 -0400
-X-MC-Unique: Kr87aXuJPTa2Xy_APDZkPw-1
-Received: by mail-wm1-f70.google.com with SMTP id i184-20020a1c3bc1000000b003a026f48333so504608wma.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 04:06:51 -0700 (PDT)
+        Thu, 14 Jul 2022 07:07:19 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FEB6163;
+        Thu, 14 Jul 2022 04:07:17 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id z12so2072585wrq.7;
+        Thu, 14 Jul 2022 04:07:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AfpMtZf7diWsPaOpufPn+75l2jzeWCRIIGx5dt42+xw=;
+        b=g8XVdvvUflNTnFz93Jw0xk/v418YAtunY5swaQgsfJhK/H1NV0EKH12i9bGo3qDROf
+         jfLrjJ8ndOMKrJMCdbJUMk4RZGrXfzCeKOtQ/G2sj9wrMY42qOAT47Z5T8w5k+x3mCq+
+         6oM8u6GH8yS0srS9D0SP+jRfKvl3TPmZOUpA1McTFoJoqJ32/e+ASn2FAls4ZMJ3l8lw
+         rsUsVm43kbFRy1Z0b9FW2Kg5bPEt+pw0L8wOWHe7H/ClDk4pMkkDtkGM9feRjgc/nyhG
+         fEKpT3L3aebMf2QiKtSobRr3m6uHzbxdiLcjPKWf5UCXdZdV5ywBb6idav+aN0EeGvWM
+         bm5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=y8wXm24tfJNe6NPosFaatJWUdYNSg5mujV72lboWyy8=;
-        b=FD4+zYlf09IYj6Ld7Oh+n6WUF5XH6xErWwUOa4CAE083aZTZ7YYk57mMuI4Ga5PLq9
-         azcY2UwU4HTOP7M/Khq5bqxxTvj1Chbm8vVAfnbVRH/9iE5fk2LTD9BXPBmfc3NVUudF
-         UVHJ5i6IX7h4EFoPl7VEJs12ijiLI5Fm8dogzNgJ1FbH1rKlUIzPEbuNDAN5MfRtLavX
-         v/ehEEQWN6sfLddffQR5NyU2ywTr20oo+JV3qXnRdrQT8UBs5YQVdbVQkiCSqiEa2qs7
-         7RSapGZVwEYN4Q/TkIQiMpwygI5cKQp+qFEULQDYIIQ9LR9juV4wK+eMppDA89kfjxNT
-         wLgQ==
-X-Gm-Message-State: AJIora8dWbAitpVBLSZFHb6BaqPPJR4NqLhhGq48QySg4WaGX+HHUaa4
-        Ih+3DoDbMQ+bTWme+0kR274Al/cPzGt3Tp+J4jBRlVgJIx85GeHxl9GhpCgqGxGtynakpfGtgg1
-        kXEwzF5N4vtyWFAVRS9Zg7hBg
-X-Received: by 2002:a1c:2b86:0:b0:3a3:7fb:52d9 with SMTP id r128-20020a1c2b86000000b003a307fb52d9mr36206wmr.86.1657796810733;
-        Thu, 14 Jul 2022 04:06:50 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t/xbT4d5N+qH3qzW75qqZhQnw3n8R4cmUcRmhYPK4Jai8/idmpKmVaJDhefqTviUCY4WtgTg==
-X-Received: by 2002:a1c:2b86:0:b0:3a3:7fb:52d9 with SMTP id r128-20020a1c2b86000000b003a307fb52d9mr36171wmr.86.1657796810558;
-        Thu, 14 Jul 2022 04:06:50 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id z11-20020a05600c0a0b00b003a033177655sm5819383wmp.29.2022.07.14.04.06.48
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AfpMtZf7diWsPaOpufPn+75l2jzeWCRIIGx5dt42+xw=;
+        b=GoIiK53oykSVSZ3+PH4k66/vlyXhr2lAplv1ofZgkumHmdiyAgdWHKOmwlFM3qOtdY
+         gwbWOatW8AAvytpg6uW4lDbvExatFBxE88r7OOGcIyMHQC2SObFtvN3IfuNdfYWqoaYV
+         SRkk+jp9TdCc4EtmSSC4KxoQan2vSjUG2meiXAbQGPwEQ/QBL+0PATqGsBdYlxLS+TAy
+         vuWcILKsu3oeZg/SBlcdFF55hoPm/FXimxg84pQC2eRRF4qnn91dINgTvoafXwgvZ7VQ
+         YJgwu1xwzABby3fEeSueVgWkyOg2IDBg7+58iHhr8xXr8ojVjhV3fo9xgKd5l7wkfZ3n
+         VwBw==
+X-Gm-Message-State: AJIora+sMSLQKe6aDwdo1+C9cyOLBxLBouju+x77gztzZuynW0ps6p0I
+        njb0hiM3uDzpnymniii5M5IdQWjSu5aa1g==
+X-Google-Smtp-Source: AGRyM1shIzJRkqAWkOd6jCYlNSls1WkWkbsiI15Jw2JKocUkiagUUhHj+gMgf2346nJQEtM9shvOfw==
+X-Received: by 2002:a05:6000:68f:b0:21d:928e:d0cd with SMTP id bo15-20020a056000068f00b0021d928ed0cdmr7758317wrb.539.1657796835558;
+        Thu, 14 Jul 2022 04:07:15 -0700 (PDT)
+Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
+        by smtp.gmail.com with ESMTPSA id i10-20020adfe48a000000b0021b90cc66a1sm1170581wrm.2.2022.07.14.04.07.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 04:06:49 -0700 (PDT)
-Message-ID: <a866e044713be1ab3f446775934ec15541c39726.camel@redhat.com>
-Subject: Re: [PATCH v2 00/11] SMM emulation and interrupt shadow fixes
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>, x86@kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>
-Date:   Thu, 14 Jul 2022 14:06:47 +0300
-In-Reply-To: <20220621150902.46126-1-mlevitsk@redhat.com>
-References: <20220621150902.46126-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Thu, 14 Jul 2022 04:07:15 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 12:07:06 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Jul 14
+Message-ID: <Ys/42uMzQy+CFTGI@debian>
+References: <20220714185514.7d1a2ac9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714185514.7d1a2ac9@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-21 at 18:08 +0300, Maxim Levitsky wrote:
-> This patch series is a result of long debug work to find out why
-> sometimes guests with win11 secure boot
-> were failing during boot.
-> 
-> During writing a unit test I found another bug, turns out
-> that on rsm emulation, if the rsm instruction was done in real
-> or 32 bit mode, KVM would truncate the restored RIP to 32 bit.
-> 
-> I also refactored the way we write SMRAM so it is easier
-> now to understand what is going on.
-> 
-> The main bug in this series which I fixed is that we
-> allowed #SMI to happen during the STI interrupt shadow,
-> and we did nothing to both reset it on #SMI handler
-> entry and restore it on RSM.
-> 
-> Best regards,
->         Maxim Levitsky
-> 
-> Maxim Levitsky (11):
->   KVM: x86: emulator: em_sysexit should update ctxt->mode
->   KVM: x86: emulator: introduce update_emulation_mode
->   KVM: x86: emulator: remove assign_eip_near/far
->   KVM: x86: emulator: update the emulation mode after rsm
->   KVM: x86: emulator: update the emulation mode after CR0 write
->   KVM: x86: emulator/smm: number of GPRs in the SMRAM image depends on
->     the image format
->   KVM: x86: emulator/smm: add structs for KVM's smram layout
->   KVM: x86: emulator/smm: use smram struct for 32 bit smram load/restore
->   KVM: x86: emulator/smm: use smram struct for 64 bit smram load/restore
->   KVM: x86: SVM: use smram structs
->   KVM: x86: emulator/smm: preserve interrupt shadow in SMRAM
-> 
->  arch/x86/include/asm/kvm_host.h |   6 -
->  arch/x86/kvm/emulate.c          | 305 ++++++++++++++++----------------
->  arch/x86/kvm/kvm_emulate.h      | 146 +++++++++++++++
->  arch/x86/kvm/svm/svm.c          |  28 +--
->  arch/x86/kvm/x86.c              | 162 ++++++++---------
->  5 files changed, 394 insertions(+), 253 deletions(-)
-> 
-> -- 
-> 2.26.3
-> 
-> 
-A kind ping on these patches.
+Hi Stephen,
 
-Best regards,
-	Maxim Levitsky
+On Thu, Jul 14, 2022 at 06:55:14PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20220713:
 
+Build failures on next-20220714:
+
+csky, xtensa and mips allmodconfig fails with:
+
+drivers/net/wireless/mac80211_hwsim.c: In function 'mac80211_hwsim_tx_frame_nl':
+drivers/net/wireless/mac80211_hwsim.c:1431:37: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+ 1431 |         info->rate_driver_data[0] = (void *)cookie;
+      |                                     ^
+cc1: all warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:250: drivers/net/wireless/mac80211_hwsim.o] Error 1
+make[2]: *** [scripts/Makefile.build:525: drivers/net/wireless] Error 2
+make[2]: *** Waiting for unfinished jobs....
+drivers/scsi/mpi3mr/mpi3mr_os.c: In function 'mpi3mr_queue_qd_reduction_event':
+drivers/scsi/mpi3mr/mpi3mr_os.c:389:40: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
+  389 |         *(__le64 *)fwevt->event_data = (__le64)tg;
+      |                                        ^
+drivers/scsi/mpi3mr/mpi3mr_os.c: In function 'mpi3mr_fwevt_bh':
+drivers/scsi/mpi3mr/mpi3mr_os.c:1655:22: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+ 1655 |                 tg = (struct mpi3mr_throttle_group_info *)
+ 
+_____________________________________________________________________________________
+
+arm and arm64 allmodconfig fails with:
+
+make[3]: *** No rule to make target 'drivers/pinctrl/sunxi/pinctrl-sun20i-d1.o', needed by 'drivers/pinctrl/sunxi/built-in.a'.  Stop.
+ 
+_____________________________________________________________________________________
+
+x86_64 allmodconfig with clang fails with:
+
+drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is not a compile-time constant
+        gpu_cc_parent,
+        ^~~~~~~~~~~~~
+drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is not a compile-time constant
+        gpu_cc_parent,
+        ^~~~~~~~~~~~~
+
+arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
+DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
+                    ^
+./arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
+extern u64 x86_spec_ctrl_current;
+_____________________________________________________________________________________
+
+
+
+--
+Regards
+Sudip

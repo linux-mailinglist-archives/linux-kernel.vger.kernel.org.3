@@ -2,149 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154D3574E70
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A5C574E75
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 14:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239634AbiGNM4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 08:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        id S239583AbiGNM6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 08:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbiGNM4F (ORCPT
+        with ESMTP id S230117AbiGNM6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:56:05 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9CD4D4F5;
-        Thu, 14 Jul 2022 05:56:04 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id o8so988187wms.2;
-        Thu, 14 Jul 2022 05:56:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vbTEm3oI6IgJFHsJWIHl+dQRVX68qV+BiPO2Jb+Qzcs=;
-        b=aYafQQptpaj/jiAhls31/DMXbevapRrMNC4lYXGqKMk+WxvJH4CEUhd337xJdMlAtx
-         dJHTi98XvDkj7TcURAng17HC0quMVUlP4guZ9gldHQIpnwAqH8d6CHvn0BaVRg2Kie80
-         /9NQn4Ip4tsAOi8c4oKzTnJJ5BTv6s62RrZCamuIl3IhaKwxhRJOdSVYLrYGa6zYNXk9
-         Y31qtNkjgej7UuTcd39GDn082uEXjZFzbXGUvK9k9MQmLqr76xDYcrJiomvItGQzKcoD
-         wQOuDUrVVwaLl8bE9c+W0GCJKuJHsxS9flAKqEUR8KZ79u0C647AhHF2znv9yZGaaQ+G
-         7RPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vbTEm3oI6IgJFHsJWIHl+dQRVX68qV+BiPO2Jb+Qzcs=;
-        b=HlRUxVU2FlGmsgf1Yx08qYLMENE1Pk1S+kcmu8yFzqPrt9vCRi60GCRUWBAbJP1tT0
-         R+lN+kS0n/s3120pMiEQgOzXNA9dc5cMgJBCPszmALdqo2D3DntWTgPZ3Vjojugr/ogd
-         acsC8p+KXCSdt8FPdy3lKp3Ac+6d+WwA/0kHiwpy3u2p+YLz79Vjhu1+L+bGqiQHwBjA
-         VAk5ffh2EjhHTLgTGfNDfXzdJVjTv1GxGNUIfXDukinUiw1THBI7yPzo5hhHEHtFxKhv
-         rcK/9gRgXsXpD2qbM97ikfTSBpOGB5wq7Ol5F9Gg+qXaOI6aSBcFqKIrBe4NTfLAhKAt
-         kEjw==
-X-Gm-Message-State: AJIora8Ws2zAcP1etNsQWQSMfBjF/chkJ8pQrGwbo6xk5T/w8Kfpui2T
-        BuhsfviyqG7LlglaWU76lwc=
-X-Google-Smtp-Source: AGRyM1vphDRTHe0FjntvAsam/bcOuRYiK+SBQJ5eie6byGyPW63ldZxb3fv3ZQMexvhYOitoK503uQ==
-X-Received: by 2002:a05:600c:1c0e:b0:3a1:9a4b:28ee with SMTP id j14-20020a05600c1c0e00b003a19a4b28eemr14609203wms.203.1657803362957;
-        Thu, 14 Jul 2022 05:56:02 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id m2-20020a05600c3b0200b0039ee391a024sm5733425wms.14.2022.07.14.05.56.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 05:56:02 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm: flip-work: rename commited -> committed
-Date:   Thu, 14 Jul 2022 13:56:01 +0100
-Message-Id: <20220714125601.34812-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Thu, 14 Jul 2022 08:58:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7C76528AC;
+        Thu, 14 Jul 2022 05:58:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1739613D5;
+        Thu, 14 Jul 2022 05:58:01 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.26.139])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0BD193F73D;
+        Thu, 14 Jul 2022 05:57:58 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 13:57:50 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Aishwarya TCV <Aishwarya.TCV@arm.com>
+Subject: Re: FVP: kernel BUG at arch/arm64/kernel/traps.c:497 - Internal
+ error: Oops - BUG: 0
+Message-ID: <YtASzuHo1MXe5LJH@FVFF77S0Q05N.cambridge.arm.com>
+References: <CA+G9fYtOX-6=f70FA5PuDVA=kX=2L4spXKXS8=LHkUphafXowg@mail.gmail.com>
+ <Ys1g8PH4M2W7Z50U@sirena.org.uk>
+ <CA+G9fYu7mJ6X3_xhboODP_cjABE4QTJCON_NMduQ60x4Z7N78Q@mail.gmail.com>
+ <Ys/9TSV5muvKXN6W@FVFF77S0Q05N>
+ <YtABEDylGJkYLXrJ@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtABEDylGJkYLXrJ@sirena.org.uk>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in the list head variable, rename it.
+On Thu, Jul 14, 2022 at 12:42:08PM +0100, Mark Brown wrote:
+> On Thu, Jul 14, 2022 at 12:26:05PM +0100, Mark Rutland wrote:
+> 
+> > I note that your log has:
+> 
+> > | Hit any key to stop autoboot:  1  0 
+> > | smh_open: ERROR fd -1 for file 'boot.img'
+> > | smh_open: ERROR fd -1 for file 'Image'
+> > | smh_open: ERROR fd -1 for file 'devtree.dtb'
+> > | smh_open: ERROR fd -1 for file 'ramdisk.img'
+> 
+> ...
+> 
+> > | Hit any key to stop autoboot:  0   
+> > | smh_open: ERROR fd -1 for file 'boot.img'
+> > | loaded file Image from 80080000 to 82F299FF, 02EA9A00 bytes
+> > | smh_open: ERROR fd -1 for file 'devtree.dtb'
+> > | smh_open: ERROR fd -1 for file 'ramdisk.img'
+> > | fdt - flattened device tree utility commands
+> 
+> > ... and I wonder if that has something to do with it, given it appears that
+> > your Image is corrupted somehow.
+> 
+> Naresh's command line is putting Image directly into RAM with
+> 
+>     --data cluster0.cpu0=/tuxrun-r4_1075p-lava-1/Image@0x80080000
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/gpu/drm/drm_flip_work.c | 10 +++++-----
- include/drm/drm_flip_work.h     |  6 +++---
- 2 files changed, 8 insertions(+), 8 deletions(-)
+Likewise in mine:
 
-diff --git a/drivers/gpu/drm/drm_flip_work.c b/drivers/gpu/drm/drm_flip_work.c
-index 060b753881a2..8efb5f2c5773 100644
---- a/drivers/gpu/drm/drm_flip_work.c
-+++ b/drivers/gpu/drm/drm_flip_work.c
-@@ -104,7 +104,7 @@ void drm_flip_work_commit(struct drm_flip_work *work,
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&work->lock, flags);
--	list_splice_tail(&work->queued, &work->commited);
-+	list_splice_tail(&work->queued, &work->committed);
- 	INIT_LIST_HEAD(&work->queued);
- 	spin_unlock_irqrestore(&work->lock, flags);
- 	queue_work(wq, &work->worker);
-@@ -122,8 +122,8 @@ static void flip_worker(struct work_struct *w)
- 
- 		INIT_LIST_HEAD(&tasks);
- 		spin_lock_irqsave(&work->lock, flags);
--		list_splice_tail(&work->commited, &tasks);
--		INIT_LIST_HEAD(&work->commited);
-+		list_splice_tail(&work->committed, &tasks);
-+		INIT_LIST_HEAD(&work->committed);
- 		spin_unlock_irqrestore(&work->lock, flags);
- 
- 		if (list_empty(&tasks))
-@@ -149,7 +149,7 @@ void drm_flip_work_init(struct drm_flip_work *work,
- {
- 	work->name = name;
- 	INIT_LIST_HEAD(&work->queued);
--	INIT_LIST_HEAD(&work->commited);
-+	INIT_LIST_HEAD(&work->committed);
- 	spin_lock_init(&work->lock);
- 	work->func = func;
- 
-@@ -165,6 +165,6 @@ EXPORT_SYMBOL(drm_flip_work_init);
-  */
- void drm_flip_work_cleanup(struct drm_flip_work *work)
- {
--	WARN_ON(!list_empty(&work->queued) || !list_empty(&work->commited));
-+	WARN_ON(!list_empty(&work->queued) || !list_empty(&work->committed));
- }
- EXPORT_SYMBOL(drm_flip_work_cleanup);
-diff --git a/include/drm/drm_flip_work.h b/include/drm/drm_flip_work.h
-index 21c3d512d25c..2e1342cdc568 100644
---- a/include/drm/drm_flip_work.h
-+++ b/include/drm/drm_flip_work.h
-@@ -67,15 +67,15 @@ struct drm_flip_task {
-  * @func: callback fxn called for each committed item
-  * @worker: worker which calls @func
-  * @queued: queued tasks
-- * @commited: commited tasks
-- * @lock: lock to access queued and commited lists
-+ * @committed: committed tasks
-+ * @lock: lock to access queued and committed lists
-  */
- struct drm_flip_work {
- 	const char *name;
- 	drm_flip_func_t func;
- 	struct work_struct worker;
- 	struct list_head queued;
--	struct list_head commited;
-+	struct list_head committed;
- 	spinlock_t lock;
- };
- 
--- 
-2.35.3
+	--data cluster0.cpu0=/mnt/data/models/fvp/naresh/Image@0x80080000
 
+... as I'm using the same command line, just with paths altered.
+
+Mark.

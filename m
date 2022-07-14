@@ -2,149 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCD9574A89
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C757574A86
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238333AbiGNKWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
+        id S238318AbiGNKVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238171AbiGNKWL (ORCPT
+        with ESMTP id S237809AbiGNKVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:22:11 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEB7222B3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657794131; x=1689330131;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SjixICY63dlkEDqfR3BHJ38BHvY7nzfEqXWF2S723SY=;
-  b=j6bWlSYf5LJOqAk1ys7KWVGJZRBpTlEZYGRNxTRxhhf1wg9nWgjB4lGj
-   HAKF5Lr1TWIiTjJebTggG+MchOZP6nq7LtCgZqzpcJNoujDF9Tm1jZ0wP
-   pJngLcs7Md7iom2K80z9+mMAcgR19ODxCQ+r6BJVaM1TQtNOJ6K3NTvEM
-   4wj0cAcqQseClrcSNH8aX8k1tPhcFWqomdkT6ZH8tVeVCAegadn+ii/WZ
-   QkiTx8OCFDmwlQqvp7Pn2tzN+ijZuOlHrcmGuPu/wot/2We7crLGkzLcs
-   L+sDlBpkLqucL9ECHoCTGBClzfNGboGKvVtria8EaB/zYnci4nnpDN8vN
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="347155343"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="347155343"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 03:22:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="663731719"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Jul 2022 03:22:08 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oBvyy-0000Rh-8Q;
-        Thu, 14 Jul 2022 10:22:08 +0000
-Date:   Thu, 14 Jul 2022 18:21:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [morimoto:sound-2022-07-04-v1 15/23]
- sound/soc/mediatek/mt8195/mt8195-mt6359.c:1341:18: error: no member named
- 'stream_active' in 'struct snd_soc_dai'
-Message-ID: <202207141829.xL3HSLc4-lkp@intel.com>
+        Thu, 14 Jul 2022 06:21:53 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BE1222B7;
+        Thu, 14 Jul 2022 03:21:51 -0700 (PDT)
+X-UUID: b2b634651a5e41c693ba2f87c87e5099-20220714
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:48061111-a145-4f1d-ba54-267d8bf77698,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:142cfb32-b9e4-42b8-b28a-6364427c76bb,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: b2b634651a5e41c693ba2f87c87e5099-20220714
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 800925553; Thu, 14 Jul 2022 18:21:45 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 14 Jul 2022 18:21:44 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 14 Jul 2022 18:21:42 +0800
+Message-ID: <7c847b4177b9420b98bd6ecde473f149463e50b1.camel@mediatek.com>
+Subject: Re: [PATCH v14 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "mripard@kernel.org" <mripard@kernel.org>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "airlied@linux.ie" <airlied@linux.ie>
+CC:     "msp@baylibre.com" <msp@baylibre.com>,
+        "granquet@baylibre.com" <granquet@baylibre.com>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        LiangXu Xu =?UTF-8?Q?=28=E5=BE=90=E4=BA=AE=29?= 
+        <LiangXu.Xu@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 14 Jul 2022 18:21:41 +0800
+In-Reply-To: <b04f4a68e012157db43f8f7b0887d611f790a9c5.camel@mediatek.com>
+References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
+         <20220712111223.13080-6-rex-bc.chen@mediatek.com>
+         <8fad0421bb7a61ae5e2ecabfc93790f1e2f30b63.camel@mediatek.com>
+         <b04f4a68e012157db43f8f7b0887d611f790a9c5.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/morimoto/linux sound-2022-07-04-v1
-head:   e9efd77b37adcddf8f910f34dd0df06be9d896cb
-commit: 2aa8bfec7e0ff4ab531a688f8fd43150ad78ae23 [15/23] ASoC: count activity via TX/RX base instead of Playback/Capture.
-config: arm-randconfig-r026-20220714 (https://download.01.org/0day-ci/archive/20220714/202207141829.xL3HSLc4-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/morimoto/linux/commit/2aa8bfec7e0ff4ab531a688f8fd43150ad78ae23
-        git remote add morimoto https://github.com/morimoto/linux
-        git fetch --no-tags morimoto sound-2022-07-04-v1
-        git checkout 2aa8bfec7e0ff4ab531a688f8fd43150ad78ae23
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/ sound/soc/mediatek/mt8195/ sound/soc/meson/ sound/soc/qcom/ sound/soc/stm/ sound/soc/sunxi/
+Hi, Bo-Chen:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Thu, 2022-07-14 at 16:24 +0800, Rex-BC Chen wrote:
+> On Wed, 2022-07-13 at 16:10 +0800, CK Hu wrote:
+> > Hi, Bo-Chen:
+> > 
+> > On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
+> > > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > 
+> > > This patch adds a embedded displayport driver for the MediaTek
+> > > mt8195
+> > > SoC.
+> > > 
+> > > It supports the MT8195, the embedded DisplayPort units. It offers
+> > > DisplayPort 1.4 with up to 4 lanes.
+> > > 
+> > > The driver creates a child device for the phy. The child device
+> > > will
+> > > never exist without the parent being active. As they are sharing
+> > > a
+> > > register range, the parent passes a regmap pointer to the child
+> > > so
+> > > that
+> > > both can work with the same register range. The phy driver sets
+> > > device
+> > > data that is read by the parent to get the phy device that can be
+> > > used
+> > > to control the phy properties.
+> > > 
+> > > This driver is based on an initial version by
+> > > Jitao shi <jitao.shi@mediatek.com>
+> > > 
+> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > > ---
+> > 
+> > [snip]
+> > 
+> > > +
+> > > +struct mtk_dp_timings {
+> > > +	struct videomode vm;
+> > > +};
+> > > +
+> > > +struct mtk_dp_irq_sta {
+> > > +	bool hpd_inerrupt;
+> > > +};
+> > > +
+> > > +struct mtk_dp_train_info {
+> > > +	bool tps3;
+> > > +	bool tps4;
+> > > +	bool sink_ssc;
+> > > +	bool cable_plugged_in;
+> > > +	bool cable_state_change;
+> > > +	bool cr_done;
+> > > +	bool eq_done;
+> > > +	/* link_rate is in multiple of 0.27Gbps */
+> > > +	int link_rate;
+> > > +	int lane_count;
+> > > +	struct mtk_dp_irq_sta irq_sta;
+> > 
+> > There is only one member in struct mtk_dp_irq_sta, so drop struct
+> > mtk_dp_irq_sta and use bool hpd_inerrupt directly here.
+> > 
+> 
+> Hello CK,
+> 
+> ok, I will drop this.
+> 
+> > > +};
+> > > +
+> > > +struct mtk_dp_info {
+> > > +	u32 depth;
+> > > +	enum dp_pixelformat format;
+> > > +	struct mtk_dp_timings timings;
+> > 
+> > There is only one member in struct mtk_dp_timings, so drop struct
+> > mtk_dp_timings and use struct videomode vm directly here.
+> > 
+> 
+> This structure will add more variable in following patch.
+> whole struct is like,
+> struct mtk_dp_timings {
+> 	struct videomode vm;
+> 	u8 frame_rate;
+> 	u32 pix_rate_khz;
+> };
+> 
+> I want to keep this.
 
-All errors (new ones prefixed by >>):
+I think we could just drop struct mtk_dp_timings and place these member
+directly in struct mtk_dp_info.
 
->> sound/soc/mediatek/mt8195/mt8195-mt6359.c:1341:18: error: no member named 'stream_active' in 'struct snd_soc_dai'
-                                   if (cpu_dai->stream_active[conn->stream_dir] > 0) {
-                                       ~~~~~~~  ^
-   1 error generated.
+Regards,
+CK
 
+> 
+> BRs,
+> Bo-Chen
+> 
+> 
+> > Regards,
+> > CK
+> > 
+> > > +};
+> > > +
+> > 
+> > 
+> 
+> 
 
-vim +1341 sound/soc/mediatek/mt8195/mt8195-mt6359.c
-
-40d605df0a7bf77 sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2021-08-19  1319  
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1320  /* fixup the BE DAI link to match any values from topology */
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1321  static int mt8195_dai_link_fixup(struct snd_soc_pcm_runtime *rtd,
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1322  				 struct snd_pcm_hw_params *params)
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1323  {
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1324  	struct snd_soc_card *card = rtd->card;
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1325  	struct snd_soc_dai_link *sof_dai_link = NULL;
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1326  	struct snd_soc_pcm_runtime *runtime;
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1327  	struct snd_soc_dai *cpu_dai;
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1328  	int i, j, ret = 0;
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1329  
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1330  	for (i = 0; i < ARRAY_SIZE(g_sof_conn_streams); i++) {
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1331  		const struct sof_conn_stream *conn = &g_sof_conn_streams[i];
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1332  
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1333  		if (strcmp(rtd->dai_link->name, conn->normal_link))
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1334  			continue;
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1335  
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1336  		for_each_card_rtds(card, runtime) {
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1337  			if (strcmp(runtime->dai_link->name, conn->sof_link))
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1338  				continue;
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1339  
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1340  			for_each_rtd_cpu_dais(runtime, j, cpu_dai) {
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24 @1341  				if (cpu_dai->stream_active[conn->stream_dir] > 0) {
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1342  					sof_dai_link = runtime->dai_link;
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1343  					break;
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1344  				}
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1345  			}
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1346  			break;
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1347  		}
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1348  
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1349  		if (sof_dai_link && sof_dai_link->be_hw_params_fixup)
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1350  			ret = sof_dai_link->be_hw_params_fixup(runtime, params);
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1351  
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1352  		break;
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1353  	}
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1354  
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1355  	if (!strcmp(rtd->dai_link->name, "ETDM2_IN_BE") ||
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1356  	    !strcmp(rtd->dai_link->name, "ETDM1_OUT_BE")) {
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1357  		mt8195_etdm_hw_params_fixup(runtime, params);
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1358  	}
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1359  
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1360  	return ret;
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1361  }
-4dbc714fe07641e sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c Trevor Wu 2022-03-24  1362  
-
-:::::: The code at line 1341 was first introduced by commit
-:::::: 4dbc714fe07641e7a07731f82152448ef09f3002 ASoC: mediatek: mt8195: revise mt8195-mt6359-rt1019-rt5682.c
-
-:::::: TO: Trevor Wu <trevor.wu@mediatek.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

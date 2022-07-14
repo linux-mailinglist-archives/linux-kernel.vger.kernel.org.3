@@ -2,71 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B935753D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF125753D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 19:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240414AbiGNRQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 13:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
+        id S240418AbiGNRRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 13:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiGNRQd (ORCPT
+        with ESMTP id S230012AbiGNRRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 13:16:33 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1CF45998;
-        Thu, 14 Jul 2022 10:16:32 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id j3so3142190oif.8;
-        Thu, 14 Jul 2022 10:16:32 -0700 (PDT)
+        Thu, 14 Jul 2022 13:17:09 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407FE474E6;
+        Thu, 14 Jul 2022 10:17:05 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id ez10so4539212ejc.13;
+        Thu, 14 Jul 2022 10:17:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uhEv4YSwcCxcXhWvFeqOjhWTxgBTIYrW5s8rWKcWzmU=;
-        b=ItL0eFnVB11SXPSXjMU89R674AtggxpXHV/agOLJfMB6wYEGuARbddcbEYLSRFWz8O
-         VpmbahSN91O/LiBLRMlPtsb3hEcgHxc/H6xYKT0PRm4fC6kZKFU0+/A5Plrk83XvknAA
-         uA+QWtAOQ8Ga52PUCaDXBPK71FO+WJVnJMDeokAyZT+bVXEiEKB4TsVyBouRB6EBofcA
-         nZxZQm6c0O4JWtXMJX5J/55+bJ8rlqc9LajvDvYoceWflYBbTPmwTE+DMG7lYDKsk+AM
-         Yzluggp6hhmLSQEp+3R+xtv8fuXyhFD74bT0YWopS2g3Lxy5tKREZnhFsPXShUxhCvoV
-         IjpQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aT73ovZkq/npubIyLigGbBLJTEexGlHL4gMxc6aPln8=;
+        b=BGa0lNo0DUpc3iXq7AD97rOi8dhvdPScN7+fCgHUqML7PCEhKKx/6SqTF8RhC/d+Kh
+         t69E9wzOjUmONW7qTsmVdvcX1KlUXFoz0DgJ6JRMdLUPEDa+T5t4eft4xhvUKknahqvd
+         mrukhXm3X6e4R5hxAseAnz/Qi3kuQbIELrBA6tohi/Ra6mBgCRuJGB5lxaa9cSLpAOje
+         0nyaRzHt1nTpIX8Ce6vo1OyjeePldLZLzM+ZTzl9U75+BqHBlEe7Of5UZnmRj6Bfcf6Z
+         xBxicZQ8yVj5gucGWkxZIsvv2fFxJwi9XMG4CBTfYGtG5wypSyopZEBdHj3lPdrFq6kg
+         1Zkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=uhEv4YSwcCxcXhWvFeqOjhWTxgBTIYrW5s8rWKcWzmU=;
-        b=ZdTF8HKDG8HCgshMa2K1Knq/tTqvPKwXV2KmE9LhZawhZAyVuqfI4HUcAfrkYaqhhr
-         bXkxFCdLMaX4TiJNmQWVhmPmnF+8fxOCuILwAh2hu6g4o+FtoR5bDdzIQ0wNJQBS9DJ5
-         NUNC0fz8FFo2u0oMXcdmMlfjaGEW/Zdgd2ZvMtA9StplIJnsYTTE6kFF2fgYYd0xMbkE
-         cTXkvjYJu0i/cwHqSLwlgY3HgJ5fqZoxgfJSUAvVPcvvLWpcALDFpwZodfz316N77xhu
-         usCBHufk/8MKUOdKZMCAB+0g6wuOeCRFEDZaseQKD43GVAj4GwyFLRUclBymD9J/ajZg
-         Hs4Q==
-X-Gm-Message-State: AJIora8Eae4l1IIvFLhq8Y4gULnzmP9WHZKmg452lNohyBdy/OXcumZI
-        HpXCOvm8W6H29UTnaxBdZbA=
-X-Google-Smtp-Source: AGRyM1vurFHFWHvzQuDrVyPlMqlF0xZTPWoVAsb1/ZLVS5YEMncqwaVpv4UADyYF+aMmxRIdbeezOw==
-X-Received: by 2002:a05:6808:1184:b0:322:4c18:2f7e with SMTP id j4-20020a056808118400b003224c182f7emr4948099oil.109.1657818992002;
-        Thu, 14 Jul 2022 10:16:32 -0700 (PDT)
-Received: from ?IPV6:2603:8081:140c:1a00:e02a:9936:8f26:4598? (2603-8081-140c-1a00-e02a-9936-8f26-4598.res6.spectrum.com. [2603:8081:140c:1a00:e02a:9936:8f26:4598])
-        by smtp.gmail.com with ESMTPSA id n45-20020a4a9570000000b0042313f42b26sm818999ooi.39.2022.07.14.10.16.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 10:16:31 -0700 (PDT)
-Message-ID: <47c790e7-ef89-dd9b-76a4-1f2af7976105@gmail.com>
-Date:   Thu, 14 Jul 2022 12:16:30 -0500
+        bh=aT73ovZkq/npubIyLigGbBLJTEexGlHL4gMxc6aPln8=;
+        b=J8znpMW69JgAeZnvOLMmlv/8FWuwvGCdxoShtGtBLxrEjFZE0BA2UJ6GS7B8hUlifW
+         fm5ZEM88t8bWPaxKn1K5AbrL1p+fRCAR8KETNCH+HvqSLoCQejtOSXKV+9ITY+kSD8/e
+         i6IzY9vTPdRsvzGAlbtOPdfk0XGcaH9gjQGaLXcin22R0H8Z4O2kKRuJ7awiiKf5/lCw
+         MAkA/2jKNbICGO7EB7if6QJzEgA99j1CQX+9hvXHnj9WDUqCqdMzLWFsWYAmHgNGRgGR
+         S4tYzMov5G0rsd4acEsFqj8IlOXQ1HQWrgN44JILduEoyBPXCkN2ZQbxva6Numzfe76b
+         FQ5Q==
+X-Gm-Message-State: AJIora/iqzRjFBq2IRfLG1QjPxqUUhjDf8/NhVUetrM7E3tMvP6hBJxw
+        LdjyH2ImoRzuYgk99aq7iFDMHmk8nAQ=
+X-Google-Smtp-Source: AGRyM1vpW2N1A1esFXcNudY8G1KDnk2qb0S7P6tY3W8yA8uidwsrHOnIuAdW49wShoHabBEK8TKCBw==
+X-Received: by 2002:a17:906:106:b0:715:7cdf:400f with SMTP id 6-20020a170906010600b007157cdf400fmr9871224eje.1.1657819023585;
+        Thu, 14 Jul 2022 10:17:03 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906201200b0072b1bb3cc08sm905151ejo.120.2022.07.14.10.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 10:17:03 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH] buffer: Use try_cmpxchg in discard_buffer
+Date:   Thu, 14 Jul 2022 19:16:53 +0200
+Message-Id: <20220714171653.12128-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] RDMA/rxe: Fix typo
-Content-Language: en-US
-To:     Zhang Jiaming <jiaming@nfschina.com>, zyjzyj2000@gmail.com,
-        jgg@ziepe.ca, leon@kernel.org
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liqiong@nfschina.com, renyu@nfschina.com
-References: <20220701080019.13329-1-jiaming@nfschina.com>
-From:   Bob Pearson <rpearsonhpe@gmail.com>
-In-Reply-To: <20220701080019.13329-1-jiaming@nfschina.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,29 +68,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/1/22 03:00, Zhang Jiaming wrote:
-> There is a spelling mistake (writeable) in function rxe_check_bind_mw.
-> Fix it.
-> 
-> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
-> ---
->  drivers/infiniband/sw/rxe/rxe_mw.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/infiniband/sw/rxe/rxe_mw.c b/drivers/infiniband/sw/rxe/rxe_mw.c
-> index 2e1fa844fabf..83b5d2b2ebfd 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_mw.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_mw.c
-> @@ -113,7 +113,7 @@ static int rxe_check_bind_mw(struct rxe_qp *qp, struct rxe_send_wqe *wqe,
->  		      (IB_ACCESS_REMOTE_WRITE | IB_ACCESS_REMOTE_ATOMIC)) &&
->  		     !(mr->access & IB_ACCESS_LOCAL_WRITE))) {
->  		pr_err_once(
-> -			"attempt to bind an writeable MW to an MR without local write access\n");
-> +			"attempt to bind an writable MW to an MR without local write access\n");
->  		return -EINVAL;
->  	}
->  
+Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old
+in discard_buffer. x86 CMPXCHG instruction returns success in
+ZF flag, so this change saves a compare after cmpxchg (and
+related move instruction in front of cmpxchg).
 
-Correct.
+Also, try_cmpxchg implicitly assigns old *ptr value to "old"
+when cmpxchg fails, enabling further code simplifications.
 
-Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+Note that the value from *ptr should be read using READ_ONCE to
+prevent the compiler from merging, refetching or reordering the read.
+
+No functional change intended.
+
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+---
+ fs/buffer.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/fs/buffer.c b/fs/buffer.c
+index 898c7f301b1b..23e1f0dcdbc4 100644
+--- a/fs/buffer.c
++++ b/fs/buffer.c
+@@ -1464,19 +1464,15 @@ EXPORT_SYMBOL(set_bh_page);
+ 
+ static void discard_buffer(struct buffer_head * bh)
+ {
+-	unsigned long b_state, b_state_old;
++	unsigned long b_state;
+ 
+ 	lock_buffer(bh);
+ 	clear_buffer_dirty(bh);
+ 	bh->b_bdev = NULL;
+-	b_state = bh->b_state;
+-	for (;;) {
+-		b_state_old = cmpxchg(&bh->b_state, b_state,
+-				      (b_state & ~BUFFER_FLAGS_DISCARD));
+-		if (b_state_old == b_state)
+-			break;
+-		b_state = b_state_old;
+-	}
++	b_state = READ_ONCE(bh->b_state);
++	do {
++	} while (!try_cmpxchg(&bh->b_state, &b_state,
++			      b_state & ~BUFFER_FLAGS_DISCARD));
+ 	unlock_buffer(bh);
+ }
+ 
+-- 
+2.35.3
+

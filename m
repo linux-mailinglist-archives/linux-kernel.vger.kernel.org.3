@@ -2,124 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FE8574B0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37753574B1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 12:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238470AbiGNKq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 06:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
+        id S238484AbiGNKsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 06:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238459AbiGNKq1 (ORCPT
+        with ESMTP id S238463AbiGNKsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:46:27 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD3354CAD;
-        Thu, 14 Jul 2022 03:46:26 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id x91so1883018ede.1;
-        Thu, 14 Jul 2022 03:46:26 -0700 (PDT)
+        Thu, 14 Jul 2022 06:48:20 -0400
+Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E07D54C9B
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:48:19 -0700 (PDT)
+Received: by mail-wr1-x449.google.com with SMTP id j16-20020adfa550000000b0021d63d200a8so457236wrb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 03:48:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=TcbL293klknuFRfZ1i01tinmhCgguD5yCB7g0kW+L6k=;
+        b=G5jbzXEoJg6vN8TMAZMcpCS0XRYpdmVmOPqNHtSHypAGXhz8VJoUqU2KRox7AiA3sM
+         S/NvzjYJK0dBsxN8zKdMRLKvQruCZIAPdLW7y/DfggEgFSv34G4aPSqJXomGxqG0Dua7
+         h1HdW9A8ErP4DhheRfut5PVo+APDi2/JlHiLgy9uR3pA5uCQQpsHLqzPi1zfqrtKqfzo
+         vO7fDKnOdgqE2jml88KtH6iEWhqQ5j7QcktLOgHd/zhX3ByHqhz5CcRI2lXW1HIuJh0o
+         Mfw4L9Z/QQ0n+YXx9w967uVqwXWjxijfPD3/yBrs9J1+9dNTEpZY6tvrlv4n4GOj87EG
+         HxHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mdZHN68nnDMwF7tgjBDSWcIdnt+cELpwBZVJBAjefvQ=;
-        b=hxsg9NKfPHtAJXlsaBjbZYm+d6y3jnGqhVjhwZfbyFu37+r4Ik+rX6+5YdkCTj1j6q
-         Zvnvt0lvbKCGIa9KjKmz8bNMBAwthXU3ZzIIsYWOJazQwZDazvGiEIR/yCFd1sDdh70d
-         Cf9DXLtcEhx6dBQRBS+hTkVAjnS/lbvmAIQym4kfonSVAfqegB2MmbG7JHMSo/l4KRNx
-         gyrHdg/Tl30y2VQOLeAM9ruxYvL8Ch/Aqgj8Pg1ZrZzA4gFKax1ODEVW8TDYVZ+mWDPy
-         wCusAEYDSJS5LIC4UgtPcNcrTjTzBTrRLpGxgPydZVxtA7HB+g28mzY85YTL2QDFAs9x
-         2W+w==
-X-Gm-Message-State: AJIora96mc7UNIwd977YyQYlAGt4dLzmMamOgmLjfxBX+YArWcPvR4lm
-        5aSobQrYQaFVL/J488kgRyw6oFJcXLVz0Q==
-X-Google-Smtp-Source: AGRyM1syDuPlSQ3J3FJoTOFBJyVnDbl1sd0yL1SHmEfTsGCfRY7Ir7La5x85AMDOtIgmhPVSfr1Y4Q==
-X-Received: by 2002:a05:6402:2997:b0:43b:247b:89cb with SMTP id eq23-20020a056402299700b0043b247b89cbmr2879714edb.91.1657795584887;
-        Thu, 14 Jul 2022 03:46:24 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906329200b0072b2eab813fsm343840ejw.75.2022.07.14.03.46.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 03:46:24 -0700 (PDT)
-Message-ID: <b973cfc2-d9a8-5d62-036f-14671cf56799@kernel.org>
-Date:   Thu, 14 Jul 2022 12:46:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [V5] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
- otherwise could return a sub-optimal clock rate.
-Content-Language: en-US
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, gregkh@linuxfoundation.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org
-References: <1657629905-24685-1-git-send-email-quic_vnivarth@quicinc.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <1657629905-24685-1-git-send-email-quic_vnivarth@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=TcbL293klknuFRfZ1i01tinmhCgguD5yCB7g0kW+L6k=;
+        b=lbHtp+D2lR+a3qgzQDL2uOotGcCdNepdDHoyiVMtAFyrBjAmhvLUXDKqcyQza814W0
+         Z0DkA8h8+Ef/Mmaxg64nl6GzMtGjY2OZYE1zduZYQPoDRW+mjqyrSDGaKCjxpfcWqCAM
+         ORR0xiX6r3xEo14sn6E+QQKnzndBZBIRXOXVU+fmdyO65tTMzCON/YDqsUuGRblbrCKL
+         TGLUIngUbPa3ElMpCrnF3O82tbUmnIuHu93KLICduIcD2gXYdyEPJM47pNAyxbljkdFy
+         H2FxWyBFvS97MNTHCbCXkEufa6VaAmeCq79KlsGbXjEK4cbR99wFoodD94vfCB5dLqPw
+         PK2w==
+X-Gm-Message-State: AJIora/oaL6d0ncwuhWFqGpaEeTtoLavQKeAxxhck5wftXt5btTnI8/A
+        qoUttaMMtP1Uohb9UstxFDKdiIyElqE=
+X-Google-Smtp-Source: AGRyM1sbV0Yq2YAAjCOTbGhhzgSDovNLXEQNSglI0p/MoD9f0OPPIRDj1RhbV1yqEROnz6Hyhac9fEZ/eeo=
+X-Received: from rax.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2a98])
+ (user=poprdi job=sendgmr) by 2002:a05:600c:4f4d:b0:3a1:98de:abde with SMTP id
+ m13-20020a05600c4f4d00b003a198deabdemr14697421wmq.36.1657795697567; Thu, 14
+ Jul 2022 03:48:17 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 10:48:14 +0000
+Message-Id: <20220714104814.1296858-1-poprdi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH v2] Bluetooth: Collect kcov coverage from hci_rx_work
+From:   Tamas Koczka <poprdi@google.com>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, theflow@google.com,
+        Tamas Koczka <poprdi@google.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12. 07. 22, 14:45, Vijaya Krishna Nivarthi wrote:
-...
-> +static unsigned long get_clk_div_rate(struct clk *clk, struct device *dev,
-> +		unsigned int baud, unsigned int sampling_rate, unsigned int *clk_div)
-> +{
-> +	unsigned long ser_clk;
-> +	unsigned long desired_clk;
-> +
-> +	desired_clk = baud * sampling_rate;
-> +	if (!desired_clk) {
-> +		dev_dbg(dev, "Invalid frequency\n");
-> +		return 0;
->   	}
->   
-> -	*clk_div = ser_clk / desired_clk;
-> -	if (!(*clk_div))
-> -		*clk_div = 1;
-> +	/*
-> +	 * try to find a clock rate within 2% tolerance, then within
+Annotate hci_rx_work() with kcov_remote_start() and kcov_remote_stop()
+calls, so remote KCOV coverage is collected while processing the rx_q
+queue which is the main incoming Bluetooth packet queue.
 
-"then within" ... "5" is missing, perhaps?
+Coverage is associated with the thread which created the packet skb.
 
-> +	 */
-> +	ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 2);
-> +	if (!ser_clk)
-> +		ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 5);
-> +
-> +	if (!ser_clk)
-> +		dev_err(dev, "Couldn't find suitable clock rate for %lu\n", desired_clk);
-> +	else
-> +		dev_dbg(dev, "desired_clk-%lu, ser_clk-%lu, clk_div-%u\n",
-> +				desired_clk, ser_clk, *clk_div);
->   
->   	return ser_clk;
->   }
-> @@ -1021,8 +1040,8 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
->   	if (ver >= QUP_SE_VERSION_2_5)
->   		sampling_rate /= 2;
->   
-> -	clk_rate = get_clk_div_rate(port->se.clk, baud,
-> -		sampling_rate, &clk_div);
-> +	clk_rate = get_clk_div_rate(port->se.clk, port->se.dev, baud,
+The collected extra coverage helps kernel fuzzing efforts in finding
+vulnerabilities.
 
-Maybe worth passing whole geni_se (port->se) then?
+This change only has effect if the kernel is compiled with CONFIG_KCOV,
+otherwise kcov_ functions don't do anything.
 
-> +					sampling_rate, &clk_div);
->   	if (!clk_rate)
->   		goto out_restart_rx;
->   
+Signed-off-by: Tamas Koczka <poprdi@google.com>
+Tested-by: Aleksandr Nogikh <nogikh@google.com>
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+---
+Changelog since v1:
+ - add comment about why kcov_remote functions are called
 
-thanks,
+v1: https://lore.kernel.org/all/20220517094532.2729049-1-poprdi@google.com/
+
+Note: this is a resubmission of https://lore.kernel.org/netdev/CAPUC6bJbVMPn1FMLYnXg2GUX4ikesMSRjj=oPOOrS5H2DOx_bA@mail.gmail.com/T/
+
+ net/bluetooth/hci_core.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index 45c2dd2e1590..0af43844c55a 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -29,6 +29,7 @@
+ #include <linux/rfkill.h>
+ #include <linux/debugfs.h>
+ #include <linux/crypto.h>
++#include <linux/kcov.h>
+ #include <linux/property.h>
+ #include <linux/suspend.h>
+ #include <linux/wait.h>
+@@ -3780,7 +3781,14 @@ static void hci_rx_work(struct work_struct *work)
+ 
+ 	BT_DBG("%s", hdev->name);
+ 
+-	while ((skb = skb_dequeue(&hdev->rx_q))) {
++	/* The kcov_remote functions used for collecting packet parsing
++	 * coverage information from this background thread and associate
++	 * the coverage with the syscall's thread which originally injected
++	 * the packet. This helps fuzzing the kernel.
++	 */
++	for (; (skb = skb_dequeue(&hdev->rx_q)); kcov_remote_stop()) {
++		kcov_remote_start_common(skb_get_kcov_handle(skb));
++
+ 		/* Send copy to monitor */
+ 		hci_send_to_monitor(hdev, skb);
+ 
 -- 
-js
-suse labs
+2.37.0.144.g8ac04bfd2-goog
+

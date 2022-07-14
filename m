@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D258574FEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B45574FF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 15:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240191AbiGNNv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 09:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
+        id S240198AbiGNNwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 09:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240020AbiGNNv1 (ORCPT
+        with ESMTP id S240196AbiGNNva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 09:51:27 -0400
+        Thu, 14 Jul 2022 09:51:30 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 916CD624A0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:50:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 409F4624B9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 06:50:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657806641;
+        s=mimecast20190719; t=1657806645;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=i1XQfNX6cu3yi+2ZtUo4hhs2T6vS+g1qDTTOWCw8xrc=;
-        b=Wny4KzTHnepdFV66RgG5W4jTpL++5dFdjLUFnJvZbSs7sCe2HXt/2bcNjTo86slUYVFdEW
-        8RjB5Yrwx9IAdvm2SS0Su7QHHQ/gkR5I7aSi6LRmkoscnON9gpW2PIJovZHi3axc/pu+Kv
-        zr33TN5FxHM2SN+7miQ2cjZUgbSqcSY=
+        bh=ecC4NiR8pcTeqNXLN0vllaf0rgqmXl+XWsqTZ0ljkOM=;
+        b=GO0mTw04Wu2EIyBFFQqzxZK/tivV+DOLgGVF+d4bP4YylKlsF7/oaZ6cdvhb8pNBIxYe/u
+        0tAksPRQQm+boyhpzMShbfXf1rUBY2p7WoGphEYNzYOnebKG+gx8h5CDBSenJNUiwRQM+o
+        m4G25Ih9PWFE07Wjg2dk4s/0sbi4b1c=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-10-fJ9cjYRdOxm-a2KJDDuWWQ-1; Thu, 14 Jul 2022 09:50:39 -0400
-X-MC-Unique: fJ9cjYRdOxm-a2KJDDuWWQ-1
+ us-mta-288-nyfM2KpaOauMTDeqidrMmA-1; Thu, 14 Jul 2022 09:50:42 -0400
+X-MC-Unique: nyfM2KpaOauMTDeqidrMmA-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DDD4A3C11728;
-        Thu, 14 Jul 2022 13:50:38 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 698233C1172E;
+        Thu, 14 Jul 2022 13:50:41 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.40.194.135])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E69E02166B26;
-        Thu, 14 Jul 2022 13:50:36 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 40C302166B26;
+        Thu, 14 Jul 2022 13:50:39 +0000 (UTC)
 From:   Vitaly Kuznetsov <vkuznets@redhat.com>
 To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -48,9 +48,9 @@ Cc:     Sean Christopherson <seanjc@google.com>,
         Yuan Yao <yuan.yao@linux.intel.com>,
         Maxim Levitsky <mlevitsk@redhat.com>,
         linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v8 28/39] KVM: selftests: Fill in vm->vpages_mapped bitmap in virt_map() too
-Date:   Thu, 14 Jul 2022 15:49:18 +0200
-Message-Id: <20220714134929.1125828-29-vkuznets@redhat.com>
+Subject: [PATCH v8 29/39] KVM: selftests: Export vm_vaddr_unused_gap() to make it possible to request unmapped ranges
+Date:   Thu, 14 Jul 2022 15:49:19 +0200
+Message-Id: <20220714134929.1125828-30-vkuznets@redhat.com>
 In-Reply-To: <20220714134929.1125828-1-vkuznets@redhat.com>
 References: <20220714134929.1125828-1-vkuznets@redhat.com>
 MIME-Version: 1.0
@@ -59,7 +59,7 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,27 +67,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to vm_vaddr_alloc(), virt_map() needs to reflect the mapping
-in vm->vpages_mapped.
+Currently, tests can only request a new vaddr range by using
+vm_vaddr_alloc()/vm_vaddr_alloc_page()/vm_vaddr_alloc_pages() but
+these functions allocate and map physical pages too. Make it possible
+to request unmapped range too.
 
 Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/kvm/include/kvm_util_base.h | 1 +
+ tools/testing/selftests/kvm/lib/kvm_util.c          | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index b78e3c7a2566..720c9066b85f 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -376,6 +376,7 @@ void vm_mem_region_set_flags(struct kvm_vm *vm, uint32_t slot, uint32_t flags);
+ void vm_mem_region_move(struct kvm_vm *vm, uint32_t slot, uint64_t new_gpa);
+ void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot);
+ struct kvm_vcpu *__vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id);
++vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
+ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
+ vm_vaddr_t vm_vaddr_alloc_pages(struct kvm_vm *vm, int nr_pages);
+ vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm);
 diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 768f3bce0161..63f411f7da1e 100644
+index 63f411f7da1e..2d8517366f8d 100644
 --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1275,6 +1275,9 @@ void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
- 		virt_pg_map(vm, vaddr, paddr);
- 		vaddr += page_size;
- 		paddr += page_size;
-+
-+		sparsebit_set(vm->vpages_mapped,
-+			vaddr >> vm->page_shift);
- 	}
- }
+@@ -1096,8 +1096,8 @@ struct kvm_vcpu *__vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
+  * TEST_ASSERT failure occurs for invalid input or no area of at least
+  * sz unallocated bytes >= vaddr_min is available.
+  */
+-static vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
+-				      vm_vaddr_t vaddr_min)
++vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
++			       vm_vaddr_t vaddr_min)
+ {
+ 	uint64_t pages = (sz + vm->page_size - 1) >> vm->page_shift;
  
 -- 
 2.35.3

@@ -2,132 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384B2574323
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66807574339
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 06:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237020AbiGNEaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 00:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S237166AbiGNEbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 00:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237053AbiGNE3R (ORCPT
+        with ESMTP id S236925AbiGNEaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 00:29:17 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C737B3192C
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 21:24:59 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1657772697;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t1cH48TsYgnMbCs85Xjd/gEDfmg15eYdysyMKeEyQaw=;
-        b=MK+VYGzFHPOhVzFkcB+WBdKd2SKCz3HDhj7lJOuCvwCqOvR1ka6CIA8COfVSSJa8TYsznd
-        yld9V/YJipttANKJ/y1yiaPg2E3pEBrXWBBOMqaLi3iv5MxZJdR/ZtafuhZkOXk0frOxOY
-        uhUGxs30vHI6QanO2s9rQUQ4wcPT2mc=
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: [mm-unstable PATCH v7 6/8] mm, hwpoison: make __page_handle_poison returns int
-Date:   Thu, 14 Jul 2022 13:24:18 +0900
-Message-Id: <20220714042420.1847125-7-naoya.horiguchi@linux.dev>
-In-Reply-To: <20220714042420.1847125-1-naoya.horiguchi@linux.dev>
-References: <20220714042420.1847125-1-naoya.horiguchi@linux.dev>
+        Thu, 14 Jul 2022 00:30:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427E53244B;
+        Wed, 13 Jul 2022 21:25:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D83ACB82377;
+        Thu, 14 Jul 2022 04:25:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A189C385A5;
+        Thu, 14 Jul 2022 04:25:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657772710;
+        bh=O8tlw0dNGRaykhtvOszk9r/8Y1NGnYjj0OZ9LrffeaM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SFfon5oDgtBx5x2XTWX6KVMSYc4QNvsDsmNmRCV3PJehTdvS6URi0N6DXYVM1/HEz
+         axXL0YazCmKLQ0xvaUm5k3oi2tRJzigs5juWaDMr6Yi5S5XxmKNvFMUDITpnxdLP4m
+         mZtR1d6XJNlF4fF4ZUw5XFIAA19V4+Z4mYZPlYpfJQZFyyw6RM6HdW/vZeJjeHwC4l
+         U6673bEZp+CrqdZ6tpcw5UClkVzkfCR/o0tL3dAGM+ux9Fa7MWMWy2oVnHmSAWjFYK
+         RKjSWhTbQiE8aLFZKV3SmyiTTLmdMKDSXGV0jztdPt7/SEktWZuOITc8zzm6r+ywT1
+         EmVDJVwH7KfzA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, rf@opensource.cirrus.com,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com
+Subject: [PATCH AUTOSEL 5.15 17/28] ASoC: madera: Fix event generation for OUT1 demux
+Date:   Thu, 14 Jul 2022 00:24:18 -0400
+Message-Id: <20220714042429.281816-17-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220714042429.281816-1-sashal@kernel.org>
+References: <20220714042429.281816-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-__page_handle_poison() returns bool that shows whether
-take_page_off_buddy() has passed or not now.  But we will want to
-distinguish another case of "dissolve has passed but taking off failed"
-by its return value. So change the type of the return value.
-No functional change.
+[ Upstream commit e3cabbef3db8269207a6b8808f510137669f8deb ]
 
-Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+madera_out1_demux_put returns the value of
+snd_soc_dapm_mux_update_power, which returns a 1 if a path was found for
+the kcontrol. This is obviously different to the expected return a 1 if
+the control was updated value. This results in spurious notifications to
+user-space. Update the handling to only return a 1 when the value is
+changed.
+
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220623105120.1981154-4-ckeepax@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-v2 -> v3:
-- move deleting "res = MF_FAILED" to the later patch. (by Miaohe)
----
- mm/memory-failure.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ sound/soc/codecs/madera.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index f15d521c3f1f..c8fa3643791c 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -71,7 +71,13 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
+diff --git a/sound/soc/codecs/madera.c b/sound/soc/codecs/madera.c
+index f4ed7e04673f..d3e7a591b5a8 100644
+--- a/sound/soc/codecs/madera.c
++++ b/sound/soc/codecs/madera.c
+@@ -618,7 +618,13 @@ int madera_out1_demux_put(struct snd_kcontrol *kcontrol,
+ end:
+ 	snd_soc_dapm_mutex_unlock(dapm);
  
- static bool hw_memory_failure __read_mostly = false;
- 
--static bool __page_handle_poison(struct page *page)
-+/*
-+ * Return values:
-+ *   1:   the page is dissolved (if needed) and taken off from buddy,
-+ *   0:   the page is dissolved (if needed) and not taken off from buddy,
-+ *   < 0: failed to dissolve.
-+ */
-+static int __page_handle_poison(struct page *page)
- {
- 	int ret;
- 
-@@ -81,7 +87,7 @@ static bool __page_handle_poison(struct page *page)
- 		ret = take_page_off_buddy(page);
- 	zone_pcp_enable(page_zone(page));
- 
--	return ret > 0;
-+	return ret;
+-	return snd_soc_dapm_mux_update_power(dapm, kcontrol, mux, e, NULL);
++	ret = snd_soc_dapm_mux_update_power(dapm, kcontrol, mux, e, NULL);
++	if (ret < 0) {
++		dev_err(madera->dev, "Failed to update demux power state: %d\n", ret);
++		return ret;
++	}
++
++	return change;
  }
+ EXPORT_SYMBOL_GPL(madera_out1_demux_put);
  
- static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, bool release)
-@@ -91,7 +97,7 @@ static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, boo
- 		 * Doing this check for free pages is also fine since dissolve_free_huge_page
- 		 * returns 0 for non-hugetlb pages as well.
- 		 */
--		if (!__page_handle_poison(page))
-+		if (__page_handle_poison(page) <= 0)
- 			/*
- 			 * We could fail to take off the target page from buddy
- 			 * for example due to racy page allocation, but that's
-@@ -1086,7 +1092,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
- 		 * subpages.
- 		 */
- 		put_page(hpage);
--		if (__page_handle_poison(p)) {
-+		if (__page_handle_poison(p) > 0) {
- 			page_ref_inc(p);
- 			res = MF_RECOVERED;
- 		}
-@@ -1869,7 +1875,7 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
- 	if (res == 0) {
- 		unlock_page(head);
- 		res = MF_FAILED;
--		if (__page_handle_poison(p)) {
-+		if (__page_handle_poison(p) > 0) {
- 			page_ref_inc(p);
- 			res = MF_RECOVERED;
- 		}
 -- 
-2.25.1
+2.35.1
 

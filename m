@@ -2,178 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F3F576826
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8030057682B
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbiGOUcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 16:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S231313AbiGOUet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 16:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiGOUcW (ORCPT
+        with ESMTP id S230474AbiGOUes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 16:32:22 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D67D186E1
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:32:19 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id fy29so9761487ejc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
-        h=from:content-transfer-encoding:mime-version:subject:message-id:date
-         :cc:to;
-        bh=QyhOR01DoxGCYnC4bLLESVLmV3qWJRFD3wmuOiKUM+s=;
-        b=Z6VzxmO6hGDfHH8LKcLYuVI2nHVAeXPXEXU8HNTLXXfNsSamzoe7i1tvTSpIqGwnRX
-         eb7uCb86aYA6r3Ymrl/fR2gyC+47oOTKX+SPPBtB3y+avXE52ROk7wcBBUrNBqtCLMlZ
-         KGRP7NVaSEBG2ZRN3jrjcWJRx2mtwJT++GeRcCN381prDLZR977xf9Bi/9Qji60mBZAP
-         Zi1UhzdRx3SYrHNE7l61cl/03Pe7GLS5B09Es0Ykf6YZDP8et4SjN7IOSByRn85s3ePC
-         dzwy99tLcPsDy/MS9DPZu+YSExOjhogvC9DZ1TrU3sNesAfiB72SoZByHsVCfI9Rd/Rq
-         JjVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:content-transfer-encoding:mime-version
-         :subject:message-id:date:cc:to;
-        bh=QyhOR01DoxGCYnC4bLLESVLmV3qWJRFD3wmuOiKUM+s=;
-        b=fUonVOFu/raEiLescnBMR61g+R19CCE3z2hD992U0Otph1/rDj9ofP3J3/S9J2JqRP
-         0sk0pWNYoxT/47apaUwIGos0JSaT10tYCbpmptMsOfhLf0rDPaQPM3ak0h4Rl4QcnVE7
-         ETraT0pBkFTP3LR2aiUwkvFTm4vwBfe1rzh2oIwOv0ODbxmjDQFnKlkt50/NQe2B6ytx
-         Ny9uOaRigg9VlKv+x5C+yyKaSFNoUZbjZhBZU1rUdhIOYKLI7UZ+kYzqHCzmgpUK3WkZ
-         FcnFtLGZtBvrX6+YPKMzc4zWlwlKj1joCHctLl+J580r4V+jeXTGEtC2+k0gniqte0LV
-         APRw==
-X-Gm-Message-State: AJIora9WzfHTYXXcawrQPzy9ekBhcIAB3UBUUkgox/w388v+TnMvdR6a
-        hew/vbp2iHFG3g2FsPURBlxK0A==
-X-Google-Smtp-Source: AGRyM1snP/L4DiOZS/0MJdzbFUPKreO0jk3IPQtyANLnH4rMZRf2ATr75Ln58SBsVbEfxUEbkunwCg==
-X-Received: by 2002:a17:906:5343:b0:722:ea54:fe67 with SMTP id j3-20020a170906534300b00722ea54fe67mr15579245ejo.181.1657917138169;
-        Fri, 15 Jul 2022 13:32:18 -0700 (PDT)
-Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
-        by smtp.gmail.com with ESMTPSA id a15-20020a1709066d4f00b00715705dd23asm2375834ejt.89.2022.07.15.13.32.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 15 Jul 2022 13:32:17 -0700 (PDT)
-From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-Content-Type: text/plain;
-        charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: [PATCH] regulator: core: Resolve supply name earlier to prevent
- double-init
-Message-Id: <3B4AE882-0C28-41E3-9466-F8E301567627@kohlschutter.com>
-Date:   Fri, 15 Jul 2022 22:32:16 +0200
-Cc:     Robin Murphy <robin.murphy@arm.com>, wens@kernel.org,
-        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Fri, 15 Jul 2022 16:34:48 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB187C1B9
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:34:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657917287; x=1689453287;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nJ0M24idHS5m1j/vi9GIalitdhanFbxupBn5I356qP8=;
+  b=IYjf9O7WNygOS0NQmRPfdPlCAHt5OpSOhyEtvsPGSFhD3FNvuNJGscSd
+   PlsbXZGePB9fk279IqJthxiFnC83BpoYGoy0frmOPBvBUlgxovA9VMhyq
+   1zrVURZtpKVls7ffOQnP2Uf9Omo9rbIppPQAJ3K472CUV9otYHB2cmP/C
+   WWnyIELRpzXcOwqd0nIsuHd7PZgAzzsrsaxbLOTH0k0XYTkR5/wFWh4Oc
+   wqrYSCd4q654toLs54+gDRYqOsDZb1WWyp1pVi2E1hVg/1Kwy53BALgrA
+   +4EE66fV6+9VkOD/T5QjGGjmm6VY1AJ5d9w50aNagTW5pVPlSbFcQJqWh
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="266307259"
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="266307259"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 13:34:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="571666001"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 15 Jul 2022 13:34:44 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCS1M-0000k8-8F;
+        Fri, 15 Jul 2022 20:34:44 +0000
+Date:   Sat, 16 Jul 2022 04:34:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [ammarfaizi2-block:axboe/linux-block/for-next 12/108]
+ drivers/block/ublk_drv.c:417:24: sparse: sparse: incorrect type in return
+ expression (different base types)
+Message-ID: <202207160409.lm5WvURw-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, an unresolved regulator supply reference upon calling
-regulator_register on an always-on or boot-on regulator caused
-set_machine_constraints to be called twice.
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/for-next
+head:   dc2ebf038c4a21786283c56d67e3cfd995275771
+commit: 71f28f3136aff5890cd56de78abc673f8393cad9 [12/108] ublk_drv: add io_uring based userspace block driver
+config: alpha-allmodconfig (https://download.01.org/0day-ci/archive/20220716/202207160409.lm5WvURw-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/71f28f3136aff5890cd56de78abc673f8393cad9
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/for-next
+        git checkout 71f28f3136aff5890cd56de78abc673f8393cad9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash drivers/block/
 
-This in turn may initialize the regulator twice, leading to voltage
-glitches that are timing-dependent. A simple, unrelated configuration
-change may be enough to hide this problem, only to be surfaced by
-chance.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-One such example is the SD-Card voltage regulator in a NanoPI R4S that
-would not initialize reliably unless the registration flow was just
-complex enough to allow the regulator to properly reset between calls.
 
-Fix this by re-arranging regulator_register, trying resolve the
-regulator's supply early enough that set_machine_constraints does not
-need to be called twice.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/block/ublk_drv.c:417:24: sparse: sparse: incorrect type in return expression (different base types) @@     expected int @@     got restricted blk_status_t [usertype] @@
+   drivers/block/ublk_drv.c:417:24: sparse:     expected int
+   drivers/block/ublk_drv.c:417:24: sparse:     got restricted blk_status_t [usertype]
+>> drivers/block/ublk_drv.c:570:13: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted blk_status_t [usertype] res @@     got int @@
+   drivers/block/ublk_drv.c:570:13: sparse:     expected restricted blk_status_t [usertype] res
+   drivers/block/ublk_drv.c:570:13: sparse:     got int
 
-Signed-off-by: Christian Kohlsch=C3=BCtter <christian@kohlschutter.com>
----
- drivers/regulator/core.c | 42 ++++++++++++++++++++++++++--------------
- 1 file changed, 28 insertions(+), 14 deletions(-)
+vim +417 drivers/block/ublk_drv.c
 
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index c4d844ffad7a..728840827e9c 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -5433,7 +5433,34 @@ regulator_register(const struct regulator_desc =
-*regulator_desc,
- 	BLOCKING_INIT_NOTIFIER_HEAD(&rdev->notifier);
- 	INIT_DELAYED_WORK(&rdev->disable_work, regulator_disable_work);
-=20
--	/* preform any regulator specific init */
-+	/* set regulator constraints */
-+	if (init_data)
-+		rdev->constraints =3D kmemdup(&init_data->constraints,
-+					    sizeof(*rdev->constraints),
-+					    GFP_KERNEL);
-+	else
-+		rdev->constraints =3D =
-kzalloc(sizeof(*rdev->constraints),
-+					    GFP_KERNEL);
-+
-+	if (init_data && init_data->supply_regulator)
-+		rdev->supply_name =3D init_data->supply_regulator;
-+	else if (regulator_desc->supply_name)
-+		rdev->supply_name =3D regulator_desc->supply_name;
-+
-+	if ((rdev->supply_name && !rdev->supply) && rdev->constraints
-+		&& (rdev->constraints->always_on || =
-rdev->constraints->boot_on)) {
-+		/* Try to resolve the name of the supplying regulator =
-here first
-+		 * so we prevent double-initializing the regulator, =
-which may
-+		 * cause timing-specific voltage brownouts/glitches that =
-are
-+		 * hard to debug.
-+		 */
-+		ret =3D regulator_resolve_supply(rdev);
-+		if (ret)
-+			rdev_dbg(rdev, "unable to resolve supply early: =
-%pe\n",
-+					 ERR_PTR(ret));
-+	}
-+
-+	/* perform any regulator specific init */
- 	if (init_data && init_data->regulator_init) {
- 		ret =3D init_data->regulator_init(rdev->reg_data);
- 		if (ret < 0)
-@@ -5459,24 +5486,11 @@ regulator_register(const struct regulator_desc =
-*regulator_desc,
- 		    (unsigned long) atomic_inc_return(&regulator_no));
- 	dev_set_drvdata(&rdev->dev, rdev);
-=20
--	/* set regulator constraints */
--	if (init_data)
--		rdev->constraints =3D kmemdup(&init_data->constraints,
--					    sizeof(*rdev->constraints),
--					    GFP_KERNEL);
--	else
--		rdev->constraints =3D =
-kzalloc(sizeof(*rdev->constraints),
--					    GFP_KERNEL);
- 	if (!rdev->constraints) {
- 		ret =3D -ENOMEM;
- 		goto wash;
- 	}
-=20
--	if (init_data && init_data->supply_regulator)
--		rdev->supply_name =3D init_data->supply_regulator;
--	else if (regulator_desc->supply_name)
--		rdev->supply_name =3D regulator_desc->supply_name;
--
- 	ret =3D set_machine_constraints(rdev);
- 	if (ret =3D=3D -EPROBE_DEFER) {
- 		/* Regulator might be in bypass mode and so needs its =
-supply
---=20
-2.36.1
+   393	
+   394	static int ublk_setup_iod(struct ublk_queue *ubq, struct request *req)
+   395	{
+   396		struct ublksrv_io_desc *iod = ublk_get_iod(ubq, req->tag);
+   397		struct ublk_io *io = &ubq->ios[req->tag];
+   398		u32 ublk_op;
+   399	
+   400		switch (req_op(req)) {
+   401		case REQ_OP_READ:
+   402			ublk_op = UBLK_IO_OP_READ;
+   403			break;
+   404		case REQ_OP_WRITE:
+   405			ublk_op = UBLK_IO_OP_WRITE;
+   406			break;
+   407		case REQ_OP_FLUSH:
+   408			ublk_op = UBLK_IO_OP_FLUSH;
+   409			break;
+   410		case REQ_OP_DISCARD:
+   411			ublk_op = UBLK_IO_OP_DISCARD;
+   412			break;
+   413		case REQ_OP_WRITE_ZEROES:
+   414			ublk_op = UBLK_IO_OP_WRITE_ZEROES;
+   415			break;
+   416		default:
+ > 417			return BLK_STS_IOERR;
+   418		}
+   419	
+   420		/* need to translate since kernel may change */
+   421		iod->op_flags = ublk_op | ublk_req_build_flags(req);
+   422		iod->nr_sectors = blk_rq_sectors(req);
+   423		iod->start_sector = blk_rq_pos(req);
+   424		iod->addr = io->addr;
+   425	
+   426		return BLK_STS_OK;
+   427	}
+   428	
+   429	static inline struct ublk_uring_cmd_pdu *ublk_get_uring_cmd_pdu(
+   430			struct io_uring_cmd *ioucmd)
+   431	{
+   432		return (struct ublk_uring_cmd_pdu *)&ioucmd->pdu;
+   433	}
+   434	
+   435	static bool ubq_daemon_is_dying(struct ublk_queue *ubq)
+   436	{
+   437		return ubq->ubq_daemon->flags & PF_EXITING;
+   438	}
+   439	
+   440	/* todo: handle partial completion */
+   441	static void ublk_complete_rq(struct request *req)
+   442	{
+   443		struct ublk_queue *ubq = req->mq_hctx->driver_data;
+   444		struct ublk_io *io = &ubq->ios[req->tag];
+   445		unsigned int unmapped_bytes;
+   446	
+   447		/* failed read IO if nothing is read */
+   448		if (!io->res && req_op(req) == REQ_OP_READ)
+   449			io->res = -EIO;
+   450	
+   451		if (io->res < 0) {
+   452			blk_mq_end_request(req, errno_to_blk_status(io->res));
+   453			return;
+   454		}
+   455	
+   456		/*
+   457		 * FLUSH or DISCARD usually won't return bytes returned, so end them
+   458		 * directly.
+   459		 *
+   460		 * Both the two needn't unmap.
+   461		 */
+   462		if (req_op(req) != REQ_OP_READ && req_op(req) != REQ_OP_WRITE) {
+   463			blk_mq_end_request(req, BLK_STS_OK);
+   464			return;
+   465		}
+   466	
+   467		/* for READ request, writing data in iod->addr to rq buffers */
+   468		unmapped_bytes = ublk_unmap_io(ubq, req, io);
+   469	
+   470		/*
+   471		 * Extremely impossible since we got data filled in just before
+   472		 *
+   473		 * Re-read simply for this unlikely case.
+   474		 */
+   475		if (unlikely(unmapped_bytes < io->res))
+   476			io->res = unmapped_bytes;
+   477	
+   478		if (blk_update_request(req, BLK_STS_OK, io->res))
+   479			blk_mq_requeue_request(req, true);
+   480		else
+   481			__blk_mq_end_request(req, BLK_STS_OK);
+   482	}
+   483	
+   484	/*
+   485	 * __ublk_fail_req() may be called from abort context or ->ubq_daemon
+   486	 * context during exiting, so lock is required.
+   487	 *
+   488	 * Also aborting may not be started yet, keep in mind that one failed
+   489	 * request may be issued by block layer again.
+   490	 */
+   491	static void __ublk_fail_req(struct ublk_io *io, struct request *req)
+   492	{
+   493		WARN_ON_ONCE(io->flags & UBLK_IO_FLAG_ACTIVE);
+   494	
+   495		if (!(io->flags & UBLK_IO_FLAG_ABORTED)) {
+   496			io->flags |= UBLK_IO_FLAG_ABORTED;
+   497			blk_mq_end_request(req, BLK_STS_IOERR);
+   498		}
+   499	}
+   500	
+   501	#define UBLK_REQUEUE_DELAY_MS	3
+   502	
+   503	static void ublk_rq_task_work_cb(struct io_uring_cmd *cmd)
+   504	{
+   505		struct ublk_uring_cmd_pdu *pdu = ublk_get_uring_cmd_pdu(cmd);
+   506		struct ublk_device *ub = cmd->file->private_data;
+   507		struct request *req = pdu->req;
+   508		struct ublk_queue *ubq = req->mq_hctx->driver_data;
+   509		int tag = req->tag;
+   510		struct ublk_io *io = &ubq->ios[tag];
+   511		bool task_exiting = current != ubq->ubq_daemon ||
+   512			(current->flags & PF_EXITING);
+   513		unsigned int mapped_bytes;
+   514	
+   515		pr_devel("%s: complete: op %d, qid %d tag %d io_flags %x addr %llx\n",
+   516				__func__, io->cmd->cmd_op, ubq->q_id, req->tag, io->flags,
+   517				ublk_get_iod(ubq, req->tag)->addr);
+   518	
+   519		if (unlikely(task_exiting)) {
+   520			blk_mq_end_request(req, BLK_STS_IOERR);
+   521			mod_delayed_work(system_wq, &ub->monitor_work, 0);
+   522			return;
+   523		}
+   524	
+   525		mapped_bytes = ublk_map_io(ubq, req, io);
+   526	
+   527		/* partially mapped, update io descriptor */
+   528		if (unlikely(mapped_bytes != blk_rq_bytes(req))) {
+   529			/*
+   530			 * Nothing mapped, retry until we succeed.
+   531			 *
+   532			 * We may never succeed in mapping any bytes here because
+   533			 * of OOM. TODO: reserve one buffer with single page pinned
+   534			 * for providing forward progress guarantee.
+   535			 */
+   536			if (unlikely(!mapped_bytes)) {
+   537				blk_mq_requeue_request(req, false);
+   538				blk_mq_delay_kick_requeue_list(req->q,
+   539						UBLK_REQUEUE_DELAY_MS);
+   540				return;
+   541			}
+   542	
+   543			ublk_get_iod(ubq, req->tag)->nr_sectors =
+   544				mapped_bytes >> 9;
+   545		}
+   546	
+   547		/* mark this cmd owned by ublksrv */
+   548		io->flags |= UBLK_IO_FLAG_OWNED_BY_SRV;
+   549	
+   550		/*
+   551		 * clear ACTIVE since we are done with this sqe/cmd slot
+   552		 * We can only accept io cmd in case of being not active.
+   553		 */
+   554		io->flags &= ~UBLK_IO_FLAG_ACTIVE;
+   555	
+   556		/* tell ublksrv one io request is coming */
+   557		io_uring_cmd_done(io->cmd, UBLK_IO_RES_OK, 0);
+   558	}
+   559	
+   560	static blk_status_t ublk_queue_rq(struct blk_mq_hw_ctx *hctx,
+   561			const struct blk_mq_queue_data *bd)
+   562	{
+   563		struct ublk_queue *ubq = hctx->driver_data;
+   564		struct request *rq = bd->rq;
+   565		struct io_uring_cmd *cmd = ubq->ios[rq->tag].cmd;
+   566		struct ublk_uring_cmd_pdu *pdu = ublk_get_uring_cmd_pdu(cmd);
+   567		blk_status_t res;
+   568	
+   569		/* fill iod to slot in io cmd buffer */
+ > 570		res = ublk_setup_iod(ubq, rq);
+   571		if (unlikely(res != BLK_STS_OK))
+   572			return BLK_STS_IOERR;
+   573	
+   574		blk_mq_start_request(bd->rq);
+   575	
+   576		if (unlikely(ubq_daemon_is_dying(ubq))) {
+   577			mod_delayed_work(system_wq, &ubq->dev->monitor_work, 0);
+   578			return BLK_STS_IOERR;
+   579		}
+   580	
+   581		pdu->req = rq;
+   582		io_uring_cmd_complete_in_task(cmd, ublk_rq_task_work_cb);
+   583	
+   584		return BLK_STS_OK;
+   585	}
+   586	
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9866D575DB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE62575DBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232702AbiGOIpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 04:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
+        id S232725AbiGOIpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 04:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiGOIpF (ORCPT
+        with ESMTP id S230479AbiGOIpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:45:05 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2032.outbound.protection.outlook.com [40.92.52.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699C2814A8;
-        Fri, 15 Jul 2022 01:45:04 -0700 (PDT)
+        Fri, 15 Jul 2022 04:45:09 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2105.outbound.protection.outlook.com [40.92.52.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460CC814A8;
+        Fri, 15 Jul 2022 01:45:08 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nW0/zulrJqn9XuEH+Xnf1Cf0h/G91Crblf8pv8l8SP/Wi4VErD9ZH3nsPeer5DmD41X4dXmXmUH3rZKtUPm5yBACKUsXU7QNy/bamm98wespIuImzTK/HjDLlQOZWqjvNKDbkdfsPwZM/BljbXE1Yt/2HouWvQPx8NLP+YOeFi5qL/tFk7rwPCfRUwoX5iklOluHsYRK3NgQleZiHd2kkDyCwYBhV9vv/XGBuUtvXA869ZJ2U3bWqZcoIPGKnYYZP8YaWE/xB/hAmIO34eXuel7nx29Tf6jzkIJ5w/IM1Z/ExobltLVWbVOiompD5oqsVYB2PQZqmXa5Gz+s8PNyTQ==
+ b=e5Y8Q7vKgo2AfP3FWJ0OZjQN8Xg/d2v2z0inONYLRGep1gLvEfh6V6Q0yGJw6uncQY09JJgmRGq170ajQjPb03MnZZPgW5okdJuczzKblgLA4KXn+X2Uc0aGa9wLud8JAdc4PlddNhvFLWV2jqsDeLXvlwKJUyOjP2PUwaBM0NQubnpwIEJXTkzG+4JwMIyqj7p5WM4echdLArbZ01Q1ISd2xtJiEz3NyytPJtfdaxJR9xr846IvSbZXp1lk50fSxAC47zhs0BvNlnWvxfbMrtW6VJld84UljeWQgldl/DgGSBG286xPQQ7Otq2+NTPq52pJDaxRO9AXEaAd+WUGpQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GZVxV/oRzw6lbv5GwOBud1RrA0BNMnDVql40rCxaK+U=;
- b=Yms+vMWUIG9Q5mv3XnayFf+3Ul908idT3o9daW4zBxhoIF+NGiuiaZaa+8kKCbRKxXTPScBJ5SQKTilAEkVSmfzIhOe/zWDIBPqdCiYCUGfESDsilheDX9eEfDJtGcD/6rMFBsmE0EVxO8+3z7u09Y6tDgPd0MGQg5NsegUoycvPTun/mXtOPrzPr1o5IT+kDLTOpZRhMcXAzf+lDGs38EHJrpzLiP/N6u0OpT+8WhedVhvRlaFt8JkMB5p1ZnvdqvCpDfaz9aboB2oCGwWfznhytkpeg5KLDzI+7xiVNgoe/1P54/34d66y5aZYms8a+mGvJmvljeEGH1BIE1fUww==
+ bh=HIRKzaqHjUv0ulWOF4pBuPr9bJ051lzRXkZwZ7OlMvc=;
+ b=IIe3WvV9HdMWdYTnGKlI2zGAcAJJTcHsTfkxQnOFIA+zpvTCHEjJxlcztUqhBc3v6l2rC570IxSxPuH4mnCOeYJESyv57LQLvhmvPL9VbRHD66ttMHrapM8ISq+8g2f1JPCkNPO8wJwsWCXC1AfAnY1Nc6KbG2p6jkPTy6X9B5u3cNMCpB7YCJUXO0xebkxOitGMN+VWj20CelcMSenV3Y2w/YZLh2IQ8U2Vu+hNC/9jhRtocQySmoL5o5YcR/ckP/ktfz3KeP/UeQ3MfnwIDmrpuer3wHsx6Pk8gd+vBWj0RppuyP33rgWHGerNqj30ZtbKjRoOrBWuuSwtgoTNBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GZVxV/oRzw6lbv5GwOBud1RrA0BNMnDVql40rCxaK+U=;
- b=rv5z5AnhVTzehMVx3fBFmMKK3QO9/OdgIj+7AjoYzbFJ4ze85/XI4BEo27aOZSVoyumT63WeZ2chCOAY8kNGrEera6afe7iIuTYms9Ar2Ps0m/jJYBW6AjxY52V0Zaq5XyolPI/wTpJxyyYEEjqAj2ajEyimIwEwa93CcoHrO5xZIuM2bulJGHZBdaM1Hv1MsAhMv1Bqnr+3+PJMiPyLzsBkaHbOg3b3k8nRnp+FuDx11EfqTrBJ4s37lALFdLsaoXTg7tsaT8HKGSBqZx6YtU5tM4kngF+dHCBeLMmke1aon32cP6w9wdm9Y9VjkYooS50eleUAv7SlzJ5sUtp77w==
+ bh=HIRKzaqHjUv0ulWOF4pBuPr9bJ051lzRXkZwZ7OlMvc=;
+ b=gGrET66STQKNqW5Rdu6Wb3KU+ev+bqR/jqn8Bj167bdCYzJTaGys8MmzWvTf0pnmI/Ishugpq/QSViKfzSFKQLVva5kxkqb4rFaAdYBcOBG0Pc0Y0RclvM8hKt1V4E9q2op2vUyhcsDNO1DdrZa+L9ADxwzT4jOkqYMVKNHtSx57g1AvGZqQos0Sul5UGmwo5Fwm06uGDg3QrHEG8ihU0HTVa/LjWcYFLEg7w4Q+YIkMEeNc82S8W+v1+l1UtyIFudHvcHO3lwqtMg2RZU606mhYWfgXHOCKylK/vj5sqVQxipOQrmBNQ5qYRiJwaqWQkrgMKQ800ldUeb7CgTrgBw==
 Received: from SG2PR03MB5006.apcprd03.prod.outlook.com (2603:1096:4:df::10) by
  TY2PR03MB3421.apcprd03.prod.outlook.com (2603:1096:404:31::21) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5438.10; Fri, 15 Jul 2022 08:45:00 +0000
+ 15.20.5438.10; Fri, 15 Jul 2022 08:45:04 +0000
 Received: from SG2PR03MB5006.apcprd03.prod.outlook.com
  ([fe80::b96f:3a3b:5eef:e796]) by SG2PR03MB5006.apcprd03.prod.outlook.com
  ([fe80::b96f:3a3b:5eef:e796%5]) with mapi id 15.20.5458.007; Fri, 15 Jul 2022
- 08:45:00 +0000
+ 08:45:04 +0000
 From:   Jimmy Chen <jinghung.chen3@hotmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>, Andy Gross <agross@kernel.org>
 Cc:     Alan Huang <alan-huang@quanta.corp-partner.google.com>,
@@ -46,55 +46,55 @@ Cc:     Alan Huang <alan-huang@quanta.corp-partner.google.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Douglas Anderson <dianders@chromium.org>,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v5 1/3] dt-bindings: arm: qcom: document sc7280 and villager board
-Date:   Fri, 15 Jul 2022 16:44:40 +0800
-Message-ID: <SG2PR03MB5006667607216338081A723FCC8B9@SG2PR03MB5006.apcprd03.prod.outlook.com>
+Subject: [PATCH v5 2/3] arm64: dts: qcom: sc7280: Add herobrine-villager-r1
+Date:   Fri, 15 Jul 2022 16:44:41 +0800
+Message-ID: <SG2PR03MB5006D3E109835FCAD1B01A47CC8B9@SG2PR03MB5006.apcprd03.prod.outlook.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220715084442.115021-1-jinghung.chen3@hotmail.com>
 References: <20220715084442.115021-1-jinghung.chen3@hotmail.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [246l7eAtu0c2TGLIRe3C+vEd5Us5iKRA]
+X-TMN:  [gTKieQ6YplqpgvWBibN0EG0m/7/dZUuk]
 X-ClientProxiedBy: TYCP286CA0139.JPNP286.PROD.OUTLOOK.COM
  (2603:1096:400:31b::7) To SG2PR03MB5006.apcprd03.prod.outlook.com
  (2603:1096:4:df::10)
-X-Microsoft-Original-Message-ID: <20220715164428.v5.1.I338c337971904724a52c65641f601d3bcab7a990@changeid>
+X-Microsoft-Original-Message-ID: <20220715164428.v5.2.If645d262f4893c8839e80134c1d477c00c4631c1@changeid>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5a32cbcf-474e-4578-2b70-08da663e4d54
+X-MS-Office365-Filtering-Correlation-Id: 6548d85e-ddf1-4378-4e7f-08da663e4fed
 X-MS-TrafficTypeDiagnostic: TY2PR03MB3421:EE_
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t3tN6Lx21d8arNrG4bLgSk73V93NSvrKLs1+9zlpd4iwOp83gtbmvVDruogs0cu+e7fR27zdc6+sLx2ewzGYxcwxOv8is3ViCnfv2wBJMjWvOy+3CXdmZZNBl25C34OZXJvg6zS3e7zxsXdJg3RQHl2+AVpJjxZsF7eVjh0tzSJrTL6B5eOkfN01UNIbLcgRY7no/sTsMysl1oFlreJp0tvRj0wHeYshua03EZyNvhJtmhO/WXgCvhlVqVlgEWYWDt5hzehKqUPYBc31bx5il5cGUw+DgrkX7V+f6kLgTVb3kwWtP5ZsyjD5UJpAItIhg2oA3SnMrBgEkt9VWhXtO5pQ5kW2h3lijvxOZoVvngkKtY+q4QyDJqd4uR+V9X1lt7jikkCGG/hpKvUPhwbElrUG0mTeS2QGcHYib5d3fhNV0Q+Vfyy4HYc5bzXhBapqihDFYiS2gsak/dp55Dkl0Km9bQ1Dr3g9OUhrTkaVlGpnSWNcrvHIFSKrcaKLY47GAlj1hmlu/5DJenIm6DhuKvH5x0bA+Mcznt5PR9VmLdhqqY1F9lisipAojqrrOfH7s42CxK9ClbTQxKN9mltrAfHi0Aqb40bvYG1CvVFpzj4vkamLtzjraRiwnEr7p+OTCtl0nkeXKTrpm4HJotzqoie7YB3lSJ64aeJR7DYHh8wcqFbI0BBKYvbcQP1qruw6M1bj7zYrk6DKQ7XXgpLyZQ==
+X-Microsoft-Antispam-Message-Info: GxzRNidMKY0d6WhCOkFHtUxIlLiSfkj9w3hhBfDjBs2+kZW82ARv8ZkJUjYJavno4U2+PL+J8ksZryOsw8oOhRkjhwlQAMEGAlrzjHndK6R4jKLmreHLnXAdiOSQybhOwTJVmutO9u6Ewt+rGBsZSou+yM872l8Me+UeqFqwHcL7p6oQrAFp8rzvH9pAyaCGl4Ry7oj7KwdnfU1lReaIgoSoYogNgCyvwh+likjifOU19woEHhi4sfBmTGzKDaVIaL98MAD4TwJi2K+Bxwj6+FgEu9ENwidoGxIN62OQqAz2deeDHcM6oSPxNZhkbML/NG1zwDB3J5hER13594A2Er/tRitrRD+wr+k6JuV7bEBI/ysa6J7mNu/qWRSIrB6TK/XGfERHV795q+JKKAeYUtG2ZhH7DLWerqYxnWFtDtcP5OoINyp3K3ZbzG41pqcavpFGCguH/gHjcTPQMTQ4yB5Jsf1snx2+UnUCKLc55MIZMHhxSuR4OiivnRXiwU6HuWD8oGfu8adc1atyWni/O884PL1pkE+uhj9tr591vmfp5jSiBUHDNR9iznjloZe91Z2CPtDhhyHsaegrDvkz+KDQlZtq6rQ12xk1swTgIOEd28ehGUfFwDhx1ZLzstwJLPbLbDlSUZ4+2HVSLWe0hzsvj+edzrZdO7ZVWPSWDrmT2ysE/OAONBwrulAFgfZVt+F27/ynwV64sKHcGv26Sw==
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1EJYFAioLSgYp6rKbuB0PGaUUm53BeNT17LNqDMEdybvJczUZErYewKigl1D?=
- =?us-ascii?Q?Ukzl9+IUKWsKvPHcL1PDdCvP2mkVKy7AvWWIdq3xO1RAPHgFLqKGJBIwei6S?=
- =?us-ascii?Q?cRLiH7dZdYNZlTsh+dBTVtqW7pO+TVFRiCN5NGECG2X/nK7YjIY1ml8CFISY?=
- =?us-ascii?Q?2pI58BBHAdtFNEbsKbB/oZFaLATg51yVvqYa4dD3OEk4Z/QCLbMphCGGSyUf?=
- =?us-ascii?Q?c+0r51yZKM+x3C5xekxde65Umjc4QVNhdwHC5IRakAGfD1gj9rwW8DLfsbl6?=
- =?us-ascii?Q?FVHpu8ZQ9dFxqdD9eX1GykIWXSoOb4Yk/gx2VX2+I5UYVy7mIvPAjpiN+MkI?=
- =?us-ascii?Q?QTt4X3L7QUuyBlYxulVmFK0xMl4LhIX5gxp4mneQWtSETp03W1Hj9CEO29ss?=
- =?us-ascii?Q?rOo6s8S3HsXbUgWsiLbxmpFrcI0nzrOO+QPdeXfQ7Aw0It2ivuCGrQsOeapQ?=
- =?us-ascii?Q?vak/QxkGQjxsLjSVc1dXs4OctMkZu1zK33pQByHW9l9r7N0ZZlp/t8X2XfCY?=
- =?us-ascii?Q?bUOkdnYucvgVTeUKr/d/qJ55FiZTHGpk3N+vkCu1Ozzzkw5JK8JItobKZXSi?=
- =?us-ascii?Q?XpKt2GnpFDArG6Cspdd4/5eWb4h/L4CgWAHXrCPFirnycUcVmYq6NIHnOvZj?=
- =?us-ascii?Q?dG+KkRymZdvhv/WrIjZ+kiTAmLY0mehFs1CGVdDW/yE+VEtRV7GJcmEo4ZiW?=
- =?us-ascii?Q?6bJKnSC1gQHdosH0UiPiuvACFtKi0I8s9US5CcteN5RimHsTcXg+zLVWLUi1?=
- =?us-ascii?Q?aNDKOmbErUtWng+LY6PLsgawygKHGc5+QYXQByZIOsbx3BSTGUChrsRPBYUL?=
- =?us-ascii?Q?7r6WCi82C0oeCVMKYtfGcemhY9PguUAXOcz8a/eN4m4l4Y3WlAJ3h7/H2B3e?=
- =?us-ascii?Q?wDYJKGizkOkJXK4i2uiJG01yyTBFm1JIbljxUvpbZZn+W9mK4RUdrP8BM55I?=
- =?us-ascii?Q?nqLz750HrztlG+ZFCkdqQMJAqJ1L8zFb0LDgyiLQ5cXYTfH1htojWAYjPAfO?=
- =?us-ascii?Q?rdZEsOV5PAb7U1iWmZNtyxYj3dQhC82r517mQ7GIMOUUDtgyOUiz8Bd3VVxE?=
- =?us-ascii?Q?bSZdATk9q93mTQtYlcNd10ql/qpwsW9YNnU9omUc5sV6w7tfqc65wtppuET8?=
- =?us-ascii?Q?2u2oQZbY3UxQv90jxBmFkGYqrEjSJC4OLy4QiLJHBhYXrYmrE9jVGyVxbQg8?=
- =?us-ascii?Q?MfViAeQKPdRYvURlBiY2g+PhaF14cBjHYuQmZZdlz+R+Qvz2whYgL1X87Ah6?=
- =?us-ascii?Q?ia5E1gyUSIHb/KgxceCPJ4NU4BpUWXk7/pInMc50LhQGx37zcLBowdCB7jW2?=
- =?us-ascii?Q?48g=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FpW/niVj+Z1wlmIzPTJ5sflzjOhnKnfhKd5BPNvkffUB722/MVRceWD48wQj?=
+ =?us-ascii?Q?o8wHVB/upW55dqJzj3T0GPWhKcXPhk8tfZu5+ZIi6Eror1nOfgBrx9jBn5le?=
+ =?us-ascii?Q?IAtu/Mx3fDiLfDL0Agna+LAvbqmo5rOPnodmuMa6P3kDpJ6zWnjbmC1bCP4l?=
+ =?us-ascii?Q?dW03X6B+R8Vd3uoM54Halg4O2CuGSk66j3IPLCYY5kWzYm3RCgxwrTmnxl4f?=
+ =?us-ascii?Q?sS5nxM9T7Folotf6yCcLZkKXCfkyvfqMYHBLh8e66WLaNjL4Rm2135bUourk?=
+ =?us-ascii?Q?HhwSAmIDT8QGZfqD6hFuUqkH52F9CA3yThzGAqgxnlhXKTriOkG7es8f3z1k?=
+ =?us-ascii?Q?e9C0p1u6RqHTwGZf5dKj+xQP+TUzkZx08fSdDA06ArNo3K+/r3gJY3Maa6KP?=
+ =?us-ascii?Q?VeGZrLcJYwzAtJiHU6VPpXMu+LVo7Et7kuvoPZDUfTg0QXDWZb+1QStgKV4O?=
+ =?us-ascii?Q?b65WDMwJM3ski1IXDzAoD1rYmxYcY/bvqL+EfZUAPLDMgX7X9B9FXtndtOJC?=
+ =?us-ascii?Q?ERSOlo4hpLIdLt4/56p+dxkz52PrG9v7AzxSSMy9KzhjGD9vefpgJMRB87A5?=
+ =?us-ascii?Q?Y+dFmgX0IqVEy3iZjOZbQ9s0WxPDP9n0jjetK5QniLKp+rw8wYPNPbviLZrH?=
+ =?us-ascii?Q?UODdJ/d07jnTLBt1Q/SXjPa4UY/FDqW1rQRccbKIA/aSXrQ7CCLr73ZBxSVk?=
+ =?us-ascii?Q?++WkeFv3TNnMFNkaV4oz7vtosNSC0FKxLdNhH2W9rJjxzgq4SPXiZT6wOdfY?=
+ =?us-ascii?Q?zGifHgc3DPg2/xXwo4RIcE6yBY+PapNA9fTO4vquH2kO81sFNO3ORvI4D4tX?=
+ =?us-ascii?Q?qRHayNIDJcKs23p0eukQi8ANiQJ5Ea3wdXGmQhwevt62WnSPr2mGkGoJWDHk?=
+ =?us-ascii?Q?PPwM+XchcsRzLbmLDZEUKBdrqgSBb3uDqBGB1YXHiQV9a+MB2JbcL/vk3eS5?=
+ =?us-ascii?Q?H3qfKoaLy2ZOW1+hMDI7S5QFxQxhqM6Y7q8/n3TvyeN+C9j4jYLwBVD+ggxt?=
+ =?us-ascii?Q?m0+CFw6gycZWIwwT2yMLBN2t2xWp2bPfSqb+cMh6/tpIphtQue8XNarsN+rp?=
+ =?us-ascii?Q?146dM17SkSZ/BeFY3iqUzYwLc86fVEovUoxaT5BV8tgAbfNUAzzMPbdGAh4p?=
+ =?us-ascii?Q?eAkgMkN7joDfHFyQhW33VEt2EWR8v8TCjbBq0IOXqdNHr0NMF6LRN0RXlDRZ?=
+ =?us-ascii?Q?aMkfBiuAPogGdZiD6N22uRgWNbDMUvY+Z2EB19716hZXXqN4IUDVQCAFeCVJ?=
+ =?us-ascii?Q?e96e4yiZV7IhHpVvgoUVYMnBn1WssErJyqQ40xIwdb09Lzu0PkHSQLzSG7oC?=
+ =?us-ascii?Q?jfI=3D?=
 X-OriginatorOrg: sct-15-20-4734-24-msonline-outlook-c0b75.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a32cbcf-474e-4578-2b70-08da663e4d54
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6548d85e-ddf1-4378-4e7f-08da663e4fed
 X-MS-Exchange-CrossTenant-AuthSource: SG2PR03MB5006.apcprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 08:45:00.0369
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 08:45:04.3335
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -102,58 +102,81 @@ X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-0000
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR03MB3421
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a LTE skus for Chromebook Villager to the yaml.
+This adds sc7280-herobrine-villager-r1.dts for villager device tree files.
+Herobrine-r1 is exactly the same as -r0 except that it uses a
+different audio solution (it uses the same one as the CRD).
 
 Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
 ---
 
-(no changes since v2)
+Changes in v5:
+-Revise rev0+ to rev0
+-Add -r1 line to the Makefile
 
-Changes in v2:
+Changes in v4:
 -Add this patch
 
- Documentation/devicetree/bindings/arm/qcom.yaml | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ arch/arm64/boot/dts/qcom/Makefile                  |  1 +
+ .../boot/dts/qcom/sc7280-herobrine-villager-r0.dts |  4 ++--
+ .../boot/dts/qcom/sc7280-herobrine-villager-r1.dts | 14 ++++++++++++++
+ 3 files changed, 17 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-index 4dd18fbf20b68..a136b1389c2ac 100644
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -529,11 +529,26 @@ properties:
-           - const: google,herobrine
-           - const: qcom,sc7280
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index 9e2a13d75f9de..7e6a4d7ef3266 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -103,6 +103,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1-lte.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-crd.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r0.dtb
++dtb-$(CONFIG_ARCG_QCOM)	+= sc7280-herobrine-villager-r1.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
+index 2cacafd8faa8d..cbd8a2d1ef2a7 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
+@@ -10,8 +10,8 @@
+ #include "sc7280-herobrine.dtsi"
  
-+      - description: Google Villager (rev0)
-+        items:
-+          - const: google,villager-rev0
-+          - const: qcom,sc7280
-+
-       - description: Google Villager (newest rev)
-         items:
-           - const: google,villager
-           - const: qcom,sc7280
+ / {
+-	model = "Google Villager (rev0+)";
+-	compatible = "google,villager", "qcom,sc7280";
++	model = "Google Villager (rev0)";
++	compatible = "google,villager-rev0", "qcom,sc7280";
+ };
  
-+      - description: Google Villager with LTE (rev0)
-+        items:
-+          - const: google,villager-rev0-sku0
-+          - const: qcom,sc7280
+ /*
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
+new file mode 100644
+index 0000000000000..c03b3ae4de506
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
+@@ -0,0 +1,14 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Villager board device tree source
++ *
++ * Copyright 2022 Google LLC.
++ */
 +
-+      - description: Google Villager with LTE (newest rev)
-+        items:
-+          - const: google,villager-sku0
-+          - const: qcom,sc7280
++#include "sc7280-herobrine-villager-r0.dts"
++#include "sc7280-herobrine-audio-wcd9385.dtsi"
 +
-       - items:
-           - enum:
-               - lenovo,flex-5g
++/ {
++	model = "Google Villager (rev1+)";
++	compatible = "google,villager", "qcom,sc7280";
++};
 -- 
 2.25.1
 

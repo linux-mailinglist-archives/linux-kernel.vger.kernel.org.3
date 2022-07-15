@@ -2,132 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849E45764CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F90E5764CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiGOP5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 11:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        id S230198AbiGOP6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 11:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiGOP5n (ORCPT
+        with ESMTP id S229510AbiGOP6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 11:57:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B25763904
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:57:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657900662;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/FdZSaJ6nYpAHiWDAVZdlLoPRtdepjpdp6VwK6oqQrM=;
-        b=M2m9fFnVhCUXouJuvSh1+0y696MV5z6RAlUH5wwSrmQLpJhiR3IxS9EBdOzslnZ8MARcdQ
-        LSsO5/Bo9ZsxB0CwCZb96wMj+ZzcPGYCcnNafzN4L9yzhDGVVnVQslKCh0A3ffC5mH8t2e
-        hi8lFUADwtiCSLKoZwkqTdNC9UljUOQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-490-IlLMWm90MDWU3IvRpObP7g-1; Fri, 15 Jul 2022 11:57:38 -0400
-X-MC-Unique: IlLMWm90MDWU3IvRpObP7g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B7EC299E76B;
-        Fri, 15 Jul 2022 15:57:37 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.39.193.130])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9ADC91121314;
-        Fri, 15 Jul 2022 15:57:34 +0000 (UTC)
-Date:   Fri, 15 Jul 2022 11:57:30 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Yury Norov <yury.norov@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v5] drivers/base: fix userspace break from using
- bin_attributes for cpumap and cpulist
-Message-ID: <YtGOajQ7vmqUEjO8@lorien.usersys.redhat.com>
-References: <20220715134924.3466194-1-pauld@redhat.com>
- <YtGJqYrbSPq9q19U@kroah.com>
+        Fri, 15 Jul 2022 11:58:21 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC56E65D4D
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:58:20 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso11943549pjc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xsKYhSLwsE8/SUXFxlsoQGizq/ndscv+1fEJX7G56IY=;
+        b=WcGQ3p99TKasjnSfcWoBHd0IlimUMNYF7oGcVhFYwjkB1bYUS8HG3RfUQo9rksrGYI
+         vmegpOSM1MfpWMTrkTNxNzAZT0+AiprGuV7mAdN0unBZI4+NN244skhoiJSAXDl4C7fJ
+         8T5Mw6gZtDzLfE75JYN817ArQfyivhjWJ3pScPwPOEsqURQES0odQuxCNJxwKG4Bmke5
+         j9O9SG72ZogYopzZnJrobPJot83KAwCreHM6aRrrQkCZ9EfFPYj16Lc7PiZKer59xpVg
+         pR51RMvs8vIbYPzYWRqeSLJVnQHAznii+MgM2Rf+mIJX4WgmHw1pw8F9TVtyKw1a+NkM
+         mXKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xsKYhSLwsE8/SUXFxlsoQGizq/ndscv+1fEJX7G56IY=;
+        b=fa9xoxNK9aWaoDlmfgm/3EqQ3qJy9P+9CVjQxTYf8F8+boIUOPnZW7VxP+JeYh4G3l
+         MfUaBL71cHgt2/JUB18MWocMA6UlpuykrfhVGn5fA0YLziC1ExjhPhffjCwT9bAQD3jr
+         snYzYSRIU1gbBKAd9UZlCZTfzaTORvuNQgDgfn9Xu6nS0wC9BU9xHPBNQtFngJAdCOvg
+         u5iU1aA+mge7zG0nyGi7fGJaMiJ9AbiCF+jiqMJ92MIo+nDO2CN32jyvnwlY82k5ygj1
+         wWmZJ7EJohwwiU2ZxucDGCS7rqEFK/l7BpHMRzAH9u8YGgZfiMyqLQkADO3ZDE04qP74
+         dEUA==
+X-Gm-Message-State: AJIora/+4Pv5NywREs6F+48HY0QPvLU7V5ZeH6rO8LcOxCXg5dilrbki
+        mVuBvDZoGXJe3iyZ/GV/ZKUl/g==
+X-Google-Smtp-Source: AGRyM1tqzKoamzwlhHnc+IM9pZxIoOzEVydP45L6Isk2EsXkeVmHXci+zPyFL6vkZ7f5VwiGiuTyYA==
+X-Received: by 2002:a17:90b:341:b0:1e0:cf43:df4f with SMTP id fh1-20020a17090b034100b001e0cf43df4fmr16491919pjb.126.1657900700196;
+        Fri, 15 Jul 2022 08:58:20 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id k2-20020a170902ce0200b0016c09e23b18sm3676427plg.154.2022.07.15.08.58.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 08:58:19 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 15:58:16 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Yang, Weijiang" <weijiang.yang@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rick.p.edgecombe@intel.com
+Subject: Re: [PATCH 00/19] Refresh queued CET virtualization series
+Message-ID: <YtGOmEeMW1BbC3Ne@google.com>
+References: <20220616084643.19564-1-weijiang.yang@intel.com>
+ <YqsB9upUystxvl+d@hirez.programming.kicks-ass.net>
+ <62d4f7f0-e7b2-83ad-a2c7-a90153129da2@redhat.com>
+ <Yqs7qjjbqxpw62B/@hirez.programming.kicks-ass.net>
+ <8a38488d-fb6e-72f9-3529-b098a97d8c97@redhat.com>
+ <2855f8a9-1f77-0265-f02c-b7d584bd8990@intel.com>
+ <YtBwRIiZi262hHiE@google.com>
+ <950988cd-708c-af25-9d0e-47062aded504@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YtGJqYrbSPq9q19U@kroah.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <950988cd-708c-af25-9d0e-47062aded504@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 05:37:13PM +0200 Greg Kroah-Hartman wrote:
-> On Fri, Jul 15, 2022 at 09:49:24AM -0400, Phil Auld wrote:
-> > Using bin_attributes with a 0 size causes fstat and friends to return that
-> > 0 size. This breaks userspace code that retrieves the size before reading
-> > the file. Rather than reverting 75bd50fa841 ("drivers/base/node.c: use
-> > bin_attribute to break the size limitation of cpumap ABI") let's put in a
-> > size value at compile time.
-> > 
-> > For cpulist the maximum size is on the order of
-> > 	NR_CPUS * (ceil(log10(NR_CPUS)) + 1)/2
-> > 
-> > which for 8192 is 20480 (8192 * 5)/2. In order to get near that you'd need
-> > a system with every other CPU on one node. For example: (0,2,4,8, ... ).
-> > To simplify the math and support larger NR_CPUS in the future we are using
-> > (NR_CPUS * 7)/2. We also set it to a min of PAGE_SIZE to retain the older
-> > behavior for smaller NR_CPUS.
-> > 
-> > The cpumap file the size works out to be NR_CPUS/4 + NR_CPUS/32 - 1
-> > (or NR_CPUS * 9/32 - 1) including the ","s.
-> > 
-> > Add a set of macros for these values to cpumask.h so they can be used in
-> > multiple places. Apply these to the handful of such files in
-> > drivers/base/topology.c as well as node.c.
-> > 
-> > As an example, on an 80 cpu 4-node system (NR_CPUS == 8192):
-> > 
-> > before:
-> > 
-> > -r--r--r--. 1 root root 0 Jul 12 14:08 system/node/node0/cpulist
-> > -r--r--r--. 1 root root 0 Jul 11 17:25 system/node/node0/cpumap
-> > 
-> > after:
-> > 
-> > -r--r--r--. 1 root root 28672 Jul 13 11:32 system/node/node0/cpulist
-> > -r--r--r--. 1 root root  4096 Jul 13 11:31 system/node/node0/cpumap
-> > 
-> > CONFIG_NR_CPUS = 16384
-> > -r--r--r--. 1 root root 57344 Jul 13 14:03 system/node/node0/cpulist
-> > -r--r--r--. 1 root root  4607 Jul 13 14:02 system/node/node0/cpumap
-> > 
-> > The actual number of cpus doesn't matter for the reported size since they
-> > are based on NR_CPUS.
-> > 
-> > Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
-> > Fixes: bb9ec13d156 ("topology: use bin_attribute to break the size limitation of cpumap ABI")
+On Fri, Jul 15, 2022, Yang, Weijiang wrote:
 > 
-> Nit, use the full 12 characters otherwise our tools will complain.  I'll
-> go fix it up by hand...
->
-
-Erm, counting is hard...  I thought I did have 12 :)
-
-> thanks for sticking with this.
-
-Thanks for the patience.
-
-
-Cheers,
-Phil
-
+> On 7/15/2022 3:36 AM, Sean Christopherson wrote:
+> > It's definitely uncommon; unless I'm forgetting features, LA57 is the only feature
+> > that KVM fully virtualizes (as opposed to emulates in software) without requiring
+> > host enablement.  Ah, and good ol' MPX, which is probably the best prior are since
+> > it shares the same XSAVE+VMCS for user+supervisor state management.  So more than
+> > one, but still not very many.
 > 
-> greg k-h
-> 
+> Speaking of MPX, is it really active in recent kernel? I can find little
+> piece of code at native side, instead, more code in KVM.
 
--- 
-
+Nope, native MPX support was ripped out a year or two ago.  The kernel provides
+just enough save+restore support so that KVM can continue to virtualize MPX.

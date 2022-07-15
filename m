@@ -2,209 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AE05762C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2B15762CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbiGON1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 09:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S230038AbiGON2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 09:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233182AbiGON1n (ORCPT
+        with ESMTP id S232154AbiGON22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 09:27:43 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAC979EEF
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 06:27:41 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id q5so3235420plr.11
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 06:27:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0w0kQnLZNCUoA67Subv68HnzjOpEtCqrqlpvwcv8QtQ=;
-        b=aQJTeA/7QYoqg4phh6dYbrQSrhVVwmYY+spKooPDbdK0/+3i5UXnK5MMw1/F6ry2/e
-         qTCtfYnU6xf2MfjFDlDdR4Ux7++iRsvOhr+NYVNSwL8ImRpCOv4ju2Kw1ED5ovrhkXsr
-         /3cPLPIg/KN8FEYj6D7UGhWwYiIEhQUQSDw7KC4kEul7gTCFVJ9pvBQ58S+OfNtCxWgo
-         Tex/aWXTs9mccMEc9BzY+3Uk5c7vb6x978y1fzzX8PMgEXdPShX1nGddytJLu2YVEbA9
-         fvNefAmRSSpOR2rEd+qpzYaH66WcfPMXIwBxfyCN5WRFZz0nc9XWxevPlzPZQUn66jwf
-         X4qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0w0kQnLZNCUoA67Subv68HnzjOpEtCqrqlpvwcv8QtQ=;
-        b=UW5jQY+/lhH6PcF9RDYtOeByEy7fe9OeebQm278qUhobXph3utyQYZm9oX9M0EQzTi
-         cIxThlDWkJH4emEb760fsmDqAcz1OcOhcF80ntL5EWORT5Ujw8rG0QTyiDh16BBVheSB
-         LNpxhgOcyuESczwpsT3aXJ9gjbrJJ9M5PPHkyE8vXytgj4cbQ6arY7HA/qGfjCNr2xzD
-         zo59lRaA1klwiRaPwquAsGotlOc9JDLNMwKlWJNE8mqdNdq3dhIiWjSFx/laz3VRuZzO
-         tXhUmJqdAr5Xk2DRAUi5LkccpuSjiGf1qjQeDp5OCIuB/GB1rCf5Deyv6be193j2xRDL
-         A8pQ==
-X-Gm-Message-State: AJIora8bLUkloBnvDrRm1Fx+nH4JXHQEYc4AlTlM3eHCvKSk1FyjjrAY
-        w3IWYLcLzEISyq7GAp7rcie/F8kAjb8ePJd8sixcHQ==
-X-Google-Smtp-Source: AGRyM1uxobt3jQNw8mkgTNw7tHuEHXM0gZenwP8TKU40cNS4zzk/pNnAHQubPXJXXJpyrdH3FzItpK7St541HUkKyP4=
-X-Received: by 2002:a17:902:d510:b0:16c:3cd:db78 with SMTP id
- b16-20020a170902d51000b0016c03cddb78mr13974279plg.17.1657891661082; Fri, 15
- Jul 2022 06:27:41 -0700 (PDT)
+        Fri, 15 Jul 2022 09:28:28 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2070.outbound.protection.outlook.com [40.107.20.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABB078DDF;
+        Fri, 15 Jul 2022 06:28:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KDV7S02357N4Y9xv7ibRghB/DnbPo+OyeV6LyJgQj+OrNJVMko4oi70FzxvHbiOsT3ehiqcwKMhULlph1FiYt1AM1FSJqJZN1qF8cwbAezyfKDxywWB92fXT7KT56wkslNPVg/A5OYZOQ+C4mMNMESFKMbk7ndlZtF8FH3C/RIwwAi6DWSgEFwOckFHobGtqqgizQQggwDOzy0IS2G0LGUWsjT54omH/5YsnWyLWf8fjAgCzxhoQydSHRHJuyVVmD1xcMw5QX3+av9blprtC++DXKXA+W1S4yLQlYOK6dYDhMJxqrOFbdPOB6Z4poGR8PQrtZKyl/q6sMq+d1/V2NQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DQnHQRE4XcKwhuLaI/t0iiaa21iKoxzvGgzXnm+iB8Y=;
+ b=AT2uMxLIuUuH550G3Pc8NyPdLcFL+tREuskTrATNEZKg6SugOKUSfGJA8T5MO+0A+5U+h7L530pBQB65csWSerDYofx5AdX4Y8wW65qgOp0J6dKkegXeGxsiP0XqGY5SP1qvKH8q/ze0GJG0JUAmJbWFnqdqCo+X5N6aWSQ/Wqt2A7FaPY4Pu5IFczJaXnLPyf+KzZL1AH/rOVqtClGcmhdp7IXhX3DRVk0/CiCYVbnBPKMVAQF4Fi96riy7byIOIKiR+QEAoAPUosPFU9j2iCG8L067LPtvzfGy5T5CWxhlRSrl+EXeu1H2j6eQuFoEqv6APdVX8qjGmzf3/yPkCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 151.1.184.193) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=asem.it;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=asem.it;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=asem.it; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DQnHQRE4XcKwhuLaI/t0iiaa21iKoxzvGgzXnm+iB8Y=;
+ b=UJ19b53VjmskKOWDLzdklnKM9EaCoUxYw7+55GWbkIQcE/hpwwrVyEmO8j6nMAUbydPjaZyLw/gVBKDpMLSLwfwXU6yL6hB/v3O9fprFimTYsADzvMsYeYXp6vYCCv3enHzgezMSPVx+iCj6tIMd9TcKLPTXFnin/5BZ5hTByMg=
+Received: from DB6PR0301CA0102.eurprd03.prod.outlook.com (2603:10a6:6:30::49)
+ by AM7PR01MB6994.eurprd01.prod.exchangelabs.com (2603:10a6:20b:1c2::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.21; Fri, 15 Jul
+ 2022 13:28:22 +0000
+Received: from DB5EUR01FT013.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:6:30:cafe::d0) by DB6PR0301CA0102.outlook.office365.com
+ (2603:10a6:6:30::49) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.19 via Frontend
+ Transport; Fri, 15 Jul 2022 13:28:22 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 151.1.184.193) smtp.mailfrom=asem.it; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=asem.it;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ asem.it discourages use of 151.1.184.193 as permitted sender)
+Received: from asas054.asem.intra (151.1.184.193) by
+ DB5EUR01FT013.mail.protection.outlook.com (10.152.4.239) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5438.14 via Frontend Transport; Fri, 15 Jul 2022 13:28:21 +0000
+Received: from flavio-x.asem.intra ([172.16.17.64]) by asas054.asem.intra with Microsoft SMTPSVC(10.0.14393.0);
+         Fri, 15 Jul 2022 15:28:21 +0200
+From:   Flavio Suligoi <f.suligoi@asem.it>
+To:     Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Flavio Suligoi <f.suligoi@asem.it>
+Subject: [PATCH v1] 2c: imx: fix typo in comment
+Date:   Fri, 15 Jul 2022 15:28:16 +0200
+Message-Id: <20220715132816.592657-1-f.suligoi@asem.it>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220707125329.378277-1-jaz@semihalf.com> <MN0PR12MB610107D8E99AC05C7884AEE6E2839@MN0PR12MB6101.namprd12.prod.outlook.com>
-In-Reply-To: <MN0PR12MB610107D8E99AC05C7884AEE6E2839@MN0PR12MB6101.namprd12.prod.outlook.com>
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-Date:   Fri, 15 Jul 2022 15:27:30 +0200
-Message-ID: <CAH76GKM+bGM77gcPCz1yt=MULOxRW=-TCVFwsn6grP0aGRpsMg@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/2] x86: allow to notify host about guest entering s2idle
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dmy@semihalf.com" <dmy@semihalf.com>,
-        "dbehr@google.com" <dbehr@google.com>,
-        "upstream@semihalf.com" <upstream@semihalf.com>,
-        "zide.chen@intel.corp-partner.google.com" 
-        <zide.chen@intel.corp-partner.google.com>,
-        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Sachi King <nakato@nakato.io>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-OriginalArrivalTime: 15 Jul 2022 13:28:21.0281 (UTC) FILETIME=[C08DA910:01D8984E]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 8a09c203-bff9-4d04-98ac-08da6665e36f
+X-MS-TrafficTypeDiagnostic: AM7PR01MB6994:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: szfOPd7NwCr92X+gRNhgtk9s/0rbTzg/r2hUw4Kgl0kyh2VAo6d5nAZVlh3gaOOEcn7s/NGcGG7uIReZiTNErZNxlvVA2wqKSiauYeA88VeDwvDtd1ZBmmEJ/NC4MYT1DTLoj91jHNMhAh9r9deEJP+jXl6PWIl35TdEb5IHxDyvoanK8p5T3C+pRdPkzuxHWWtYwae1SUNh0DcE8cxLuEQQui0JcnA+9QubXyRgkuY+TZZJ9qO4vibVXukgj6FHfKoLLAauS13XgoA3tpbwJw/rPE4KmhUsBHlbst7i+V6V6wFpHNgaxIub0UlAnNde43FcFHEqtDZ9LqdgUxQacN7os7/7RUrltFWHXzBc94iXXVjXvlnMqcnGd27NV1QZWJirZQLbWmbLVLHqc3q7+5/TxqY90j68mhFz16APXVlr0PtVKu2wVXWS7HFpS2xgRbxCmwOJb3FPznmQ36qVfPBTR1V2dA8McH7UNgD/NfZCBKRvn+IP//Jg1+nnusogLEOcJI2Mg5b9/7bnaScOCJJ03o4qBIETb7uqJdRLD0sgkE+OQ8GS6Z/6SuuoyMVJWvNj87kZPq7BMWZiUmdM64eSuuZLz3hSgvjpo07d//Fes78C2BEgcX6otJkNsNmx7PKP8IuUucXSaOohSvmI9zz6yy64U7YkDu5y5+uzSO1iRcS61D1I0N5MX7aSp8rk6GLaQpZze9TDNZoU5NadC9RGTzCid/QP3BBvUZeUMWWL33A20lT3Ww8l1/8uuwEco6liHZQeyQDbonqs81OoT0mDmlihnn9PnCUqZig7JNrvRNfEf9K7kVCaUiJSTfFv
+X-Forefront-Antispam-Report: CIP:151.1.184.193;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:asas054.asem.intra;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(136003)(346002)(376002)(396003)(39840400004)(46966006)(36840700001)(110136005)(70206006)(81166007)(47076005)(70586007)(356005)(450100002)(1076003)(316002)(41300700001)(6666004)(336012)(2616005)(107886003)(186003)(26005)(36860700001)(478600001)(36756003)(8676002)(86362001)(2906002)(4326008)(40480700001)(82310400005)(4744005)(5660300002)(8936002)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: asem.it
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 13:28:21.8568
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a09c203-bff9-4d04-98ac-08da6665e36f
+X-MS-Exchange-CrossTenant-Id: d0a766c6-7992-4344-a4a2-a467a7bb1ed2
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d0a766c6-7992-4344-a4a2-a467a7bb1ed2;Ip=[151.1.184.193];Helo=[asas054.asem.intra]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT013.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR01MB6994
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-czw., 7 lip 2022 o 17:27 Limonciello, Mario
-<Mario.Limonciello@amd.com> napisa=C5=82(a):
->
-> [Public]
->
->
->
-> > -----Original Message-----
-> > From: Grzegorz Jaszczyk <jaz@semihalf.com>
-> > Sent: Thursday, July 7, 2022 07:53
-> > To: linux-kernel@vger.kernel.org
-> > Cc: jaz@semihalf.com; dmy@semihalf.com; Limonciello, Mario
-> > <Mario.Limonciello@amd.com>; seanjc@google.com; dbehr@google.com;
-> > upstream@semihalf.com; zide.chen@intel.corp-partner.google.com; Rafael =
-J.
-> > Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; Hans de Goede
-> > <hdegoede@redhat.com>; Mark Gross <markgross@kernel.org>; Pavel Machek
-> > <pavel@ucw.cz>; Mika Westerberg <mika.westerberg@linux.intel.com>; Sach=
-i
-> > King <nakato@nakato.io>; open list:ACPI <linux-acpi@vger.kernel.org>; o=
-pen
-> > list:X86 PLATFORM DRIVERS <platform-driver-x86@vger.kernel.org>; open
-> > list:HIBERNATION (aka Software Suspend, aka swsusp) <linux-
-> > pm@vger.kernel.org>
-> > Subject: [RFC PATCH 0/2] x86: allow to notify host about guest entering=
- s2idle
-> >
-> > According to the mailing list discussion [1] about the preferred approa=
-ch
-> > for notifying hypervisor/VMM about guest entering s2idle state this RFC=
- was
-> > implemented.
-> >
-> > Instead of original hypercall based approach, which involves KVM change=
- [2]
-> > and makes it hypervisor specific, implement different mechanism, which
-> > takes advantage of MMIO/PIO trapping and makes it hypervisor independen=
-t.
-> >
-> > Patch #1 extends S2Idle ops by new notify handler which will be invoked=
- as
-> > a very last command before system actually enters S2Idle states. It als=
-o
-> > allows to register and use driver specific notification hook which is u=
-sed
-> > in patch #2.
-> >
-> > Patch #2 introduces new driver for virtual PMC, which registers
-> > acpi_s2idle_dev_ops's notify handler. Its implementation is based on an
-> > ACPI _DSM evaluation, which in turn can perform MMIO access and allow t=
-o
-> > trap and therefore notify the VMM about guest entering S2Idle state.
-> >
-> > Please see individual patches and commit logs for more verbose descript=
-ion.
-> >
-> > This patchset is marked as RFC since patch #2 implements driver for non
-> > existing device "HYPE0001", which ACPI ID was not registered yet.
-> > Furthermore the required registration process [3] will not be started
-> > before getting positive feedback about this patchset.
-> >
-> > [1]
-> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpat=
-chw
-> > ork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F20220609110337.1238762-
-> > 2-
-> > jaz%40semihalf.com%2F&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
-> > m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
-> > 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
-> > eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
-> > 7C3000%7C%7C%7C&amp;sdata=3DRIDiHUNpHUsBYyK3pwGND%2BWJoioXZNCKt
-> > mML2%2F1LAxs%3D&amp;reserved=3D0
-> > [2]
-> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpat=
-chw
-> > ork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F20220609110337.1238762-
-> > 3-
-> > jaz%40semihalf.com%2F&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
-> > m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
-> > 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
-> > eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
-> > 7C3000%7C%7C%7C&amp;sdata=3DBqykAwWzO%2BfeGPSsAqTmX13O8F0Vvm3G
-> > PL56EpmdSJ8%3D&amp;reserved=3D0
-> > [3]
-> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fuef=
-i.org
-> > %2FPNP_ACPI_Registry&amp;data=3D05%7C01%7Cmario.limonciello%40amd.co
-> > m%7C514a545cf9aa4a7b6d9508da6018138b%7C3dd8961fe4884e608e11a82d9
-> > 94e183d%7C0%7C0%7C637927953769026163%7CUnknown%7CTWFpbGZsb3d8
-> > eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
-> > 7C3000%7C%7C%7C&amp;sdata=3DQXK52zFXJGEBm6xIv6IFeF7Xxgz4Yp5UmgLSQ
-> > diXtlI%3D&amp;reserved=3D0
-> >
-> > Grzegorz Jaszczyk (2):
-> >   suspend: extend S2Idle ops by new notify handler
-> >   platform/x86: Add virtual PMC driver used for S2Idle
-> >
-> >  drivers/acpi/x86/s2idle.c       | 11 +++++
-> >  drivers/platform/x86/Kconfig    |  7 ++++
-> >  drivers/platform/x86/Makefile   |  1 +
-> >  drivers/platform/x86/virt_pmc.c | 73 +++++++++++++++++++++++++++++++++
-> >  include/linux/acpi.h            |  1 +
-> >  include/linux/suspend.h         |  1 +
-> >  kernel/power/suspend.c          |  4 ++
-> >  7 files changed, 98 insertions(+)
-> >  create mode 100644 drivers/platform/x86/virt_pmc.c
-> >
-> > --
-> > 2.37.0.rc0.161.g10f37bed90-goog
->
-> Thanks, you matched the implementation I was expecting.
-> This looks fine by me.
+to provid --> to provide
 
-Thank you Mario.
+Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
+---
+ drivers/i2c/busses/i2c-imx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Rafael, Sean, Hans - could you please kindly tell if this approach is
-ok by you? If so I will want to start the registration process of ACPI
-ID required for this series.
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index e9e2db68b9fb..78fb1a4274a6 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -66,7 +66,7 @@
+ 
+ /* IMX I2C registers:
+  * the I2C register offset is different between SoCs,
+- * to provid support for all these chips, split the
++ * to provide support for all these chips, split the
+  * register offset into a fixed base address and a
+  * variable shift value, then the full register offset
+  * will be calculated by
+-- 
+2.25.1
 
-Previously Mario suggested that maybe Linux Foundation could own the
-namespace and ID for this Virtual PMC device - could you please advise
-in this matter?
-
-Thank you in advance,
-Grzegorz

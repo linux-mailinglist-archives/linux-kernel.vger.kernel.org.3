@@ -2,74 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F35F2576081
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D40C576083
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbiGOLbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 07:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
+        id S234426AbiGOLbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 07:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234554AbiGOLax (ORCPT
+        with ESMTP id S233193AbiGOLbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 07:30:53 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21838CD;
-        Fri, 15 Jul 2022 04:29:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657884587; x=1689420587;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wFVftC7QX89NOiFaLZt38n3lJn0gHUE9x/Z2wU+8L90=;
-  b=Rn63xdFtx6piCvn9R/U20abDQXxWKnVE4RP4Xe/GIhetZGsVwJIczovz
-   JFHVKrjXAjRQKsEYOVSdF/rwvXkEhRa9DjG0mNmZEDI91MSWFdtwizsIF
-   zID2YuNQ5TGqvMLDUzQB2jAic3drk4LDIu7nFKwgU9OttwtfPYjqUdvwP
-   M=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 15 Jul 2022 04:29:42 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 04:29:41 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 15 Jul 2022 04:29:41 -0700
-Received: from [10.216.15.238] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 15 Jul
- 2022 04:29:30 -0700
-Message-ID: <84c5bc3a-bbab-d37f-5993-44ef36a750c5@quicinc.com>
-Date:   Fri, 15 Jul 2022 16:59:25 +0530
+        Fri, 15 Jul 2022 07:31:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDB7FD35;
+        Fri, 15 Jul 2022 04:30:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB3AB622A5;
+        Fri, 15 Jul 2022 11:30:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AFCAC34115;
+        Fri, 15 Jul 2022 11:30:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657884603;
+        bh=n4oeHO2qOw19Hz/zJnP2KQEXgK/Eto9ZEdGd2nqIoAI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=zXp3zKf0SIe6+0fORyADqWjbRuvBDKGYvXav9za3tCjy2v7nFjjYLNciJgnX25BI4
+         uU7Vex3LoPxRMi/frJIUN+N6BBVeVdarbSOdJCxaba6axDRI5a4zlz3X4YYRA34cX+
+         fsAJtcmKd7WpujKCCNPFTTTDUlh2dNde3bMoRB04=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.18.12
+Date:   Fri, 15 Jul 2022 13:29:59 +0200
+Message-Id: <1657884524138103@kroah.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] PCI: qcom: Allow L1 and its sub states
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-CC:     <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_vbadigan@quicinc.com>, <quic_hemantk@quicinc.com>,
-        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
-        <quic_ramkri@quicinc.com>, <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Stanimir Varbanov" <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <1654240730-31322-1-git-send-email-quic_krichai@quicinc.com>
- <1655298939-392-1-git-send-email-quic_krichai@quicinc.com>
- <20220715082440.GB12197@workstation>
-From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-In-Reply-To: <20220715082440.GB12197@workstation>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,60 +49,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I'm announcing the release of the 5.18.12 kernel.
 
-On 7/15/2022 1:54 PM, Manivannan Sadhasivam wrote:
-> On Wed, Jun 15, 2022 at 06:45:39PM +0530, Krishna chaitanya chundru wrote:
->> Allow L1 and its sub-states in the qcom pcie driver.
->> By default this is disabled in the hardware. So enabling it explicitly.
->>
-> You are enabling L1ss for controllers belonging to 2_7_0, so this should
-> be mentioned in the commit message. Otherwise, it will imply that the
-> L1ss is added for all controller versions.
->
->> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
->> ---
-> Change log should be added here for versions > 1.
->
-> Thanks,
-> Mani
+This, and the 5.15.55, 5.10.131, and 5.4.206 releases are only for those users
+of the drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c driver, to prevent known data
+loss issues with that codebase.  If you don't use this driver, no need to
+upgrade.
 
-I will update new patch with your inputs.
+The updated 5.18.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.18.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
+thanks,
 
-Thanks,
+greg k-h
 
-Krishna Chaitanya.
+------------
 
->
->>   drivers/pci/controller/dwc/pcie-qcom.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
->> index 6ab9089..0d8efcc 100644
->> --- a/drivers/pci/controller/dwc/pcie-qcom.c
->> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
->> @@ -41,6 +41,9 @@
->>   #define L23_CLK_RMV_DIS				BIT(2)
->>   #define L1_CLK_RMV_DIS				BIT(1)
->>   
->> +#define PCIE20_PARF_PM_CTRL			0x20
->> +#define REQ_NOT_ENTR_L1				BIT(5)
->> +
->>   #define PCIE20_PARF_PHY_CTRL			0x40
->>   #define PHY_CTRL_PHY_TX0_TERM_OFFSET_MASK	GENMASK(20, 16)
->>   #define PHY_CTRL_PHY_TX0_TERM_OFFSET(x)		((x) << 16)
->> @@ -1267,6 +1270,11 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
->>   	val |= BIT(4);
->>   	writel(val, pcie->parf + PCIE20_PARF_MHI_CLOCK_RESET_CTRL);
->>   
->> +	/* Enable L1 and L1ss */
->> +	val = readl(pcie->parf + PCIE20_PARF_PM_CTRL);
->> +	val &= ~REQ_NOT_ENTR_L1;
->> +	writel(val, pcie->parf + PCIE20_PARF_PM_CTRL);
->> +
->>   	if (IS_ENABLED(CONFIG_PCI_MSI)) {
->>   		val = readl(pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT);
->>   		val |= BIT(31);
->> -- 
->> 2.7.4
->>
+ Makefile                                   |    2 +-
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+Greg Kroah-Hartman (2):
+      Revert "mtd: rawnand: gpmi: Fix setting busy timeout setting"
+      Linux 5.18.12
+

@@ -2,416 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD19657687D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBAB576886
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbiGOUpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 16:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
+        id S231617AbiGOUv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 16:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbiGOUoQ (ORCPT
+        with ESMTP id S230050AbiGOUv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 16:44:16 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487DA88751
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:43:27 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id o8-20020a17090ab88800b001ef81869167so5776224pjr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:43:26 -0700 (PDT)
+        Fri, 15 Jul 2022 16:51:57 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC05E12752
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:51:55 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id va17so11051773ejb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:51:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=ssIN9VdpZbdCxAjdsQu8uJIWoDpXRW6hq3im5RjK8/0=;
-        b=OM/GQ/32roPTEZjmhT+pf6jjokY807JS+hCG6XpTp22VfyzINFwX2zxuF+Ne+pzm9O
-         NG3z02JClNxunXkPVa+SAiQKFuxFccpTAMEiDl7jGut4KRHjCEcay8cZxu+gl84P0JAg
-         ei3bA72Oz5jy4uK+qYGK5mhXbfAXzp24ynsCYJZgVn4C5zYmx+4g+A2Mh09FyQPK5Jxm
-         ndWwCPpElSeti5YrX1/A72+dDulh2trN316R6vuoMzAdGpwbUBnaepobN6MWVZWJ0NdJ
-         EQ5vSHJe64Fqnh4HPiywRZK0qCpqodLPGLmAFKF5nXdzzt8ARanEpacLuAAUMFWvWk9c
-         wYrA==
+        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=3Vcv+Zqcd+YiC3pv/6ZVpdeh0nqVlQ60ZrMu8iVPCE0=;
+        b=hfpxKr79PIpiVKRB3kbWZcyibR5lAWIyCaYB6tIMOaKXIiUUN5eu2EiH5vEqDMrst1
+         Smt2Kj8v1PmDvq8asPjO2YfgTbZ7sTMbghfSoW2v8jv9p1GdthIBCEJZpncO+tARqtkb
+         DP1Nbp0R6UWAvkWgR66eR4osoAWPmmU/XreUBF3xzjKLPCpJaECgfaInsZOLVOIoXNZi
+         Nxj4R/5uRV0cYoQjj3t56Zu2T97a17XYrvAe/2dqcfLDsk0kpBVEdbEpeBO3hynzrMok
+         8FFV/GgATToM+BYaY4/KwerxRdz+ZObWPp6EooUnWXydrNx49HuGebWTsj7aFvkKkzKr
+         DGXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=ssIN9VdpZbdCxAjdsQu8uJIWoDpXRW6hq3im5RjK8/0=;
-        b=q/bictxtdSIOCfIRFtZ/Cr7VZICVtlOesdSKxG19OyqCtqpxlkQ4qJsWBnRYSHdkNV
-         V4+AW61E+O8Ona3m1JcX8g6+GLl8GowBqJDNlvNJJWc2a6RNQ+yMwqpewHJtZpnxqmCj
-         jPNiOe/bm/5W3S8m0756+FLDhkLorYBSYX0dd8VS8lya9ciiBZY8hX23g4HwSn16TZDb
-         3mU+XSUWMIqUPevbMDVz/rWd7ExUvRnkYaMDdgV9VvkHw3XOrFL+t7T0erTJ99FRFkux
-         1oCfH38yrBLtldZI1dVFqdJ4KkBASnn7QgUxBkO2w4zadep3V16tLm/j9KzLyAKxLdmd
-         Flew==
-X-Gm-Message-State: AJIora/k7W03G+608378mQq4qa2RnHHBwr3sPZ4KRoFWahaz9nhRuE6n
-        ARCcqiMm8ZJtvfDzr1dLCvtRhDC9tOA=
-X-Google-Smtp-Source: AGRyM1tYESI+1CYLIEra/nwTDd9QtsnGJu6C6GnhkHJNgGNwbyNzkmoih/9i+QXBNBfE2HACscGKI5LM8fs=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:f1cc:b0:16c:1a1c:7dd0 with SMTP id
- e12-20020a170902f1cc00b0016c1a1c7dd0mr15424630plc.73.1657917794929; Fri, 15
- Jul 2022 13:43:14 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 15 Jul 2022 20:42:26 +0000
-In-Reply-To: <20220715204226.3655170-1-seanjc@google.com>
-Message-Id: <20220715204226.3655170-25-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220715204226.3655170-1-seanjc@google.com>
-X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v2 24/24] KVM: selftests: Add an x86-only test to verify
- nested exception queueing
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=3Vcv+Zqcd+YiC3pv/6ZVpdeh0nqVlQ60ZrMu8iVPCE0=;
+        b=mLv3XwEreiit6A8XFZhTbMA6ToNErLLWkWAkP4mMbbKZK4DrMR2UnvUHu4uqgLvjrI
+         yixc8bRK2htpx1UV052d8GcFN82M1nL44rALb5b2Zba8970o4nIZG2YuzecTXWn7IpLs
+         bXDKlQM++PBhn/vpQhcTLbEqmEGY5oZiAXGsYuXbwhnUGtzMIctFMx/zJ+2Y1Rdm1kpM
+         yFujycIaTtyiySHK7VmD5MN8QbO153wofHuC7wPJM92vLQLsY+irtxSVp1wil7wT0kO/
+         VC7bFgvSSeaWYPmYaHonVBPa37xOzXgLMSHIcn+VVgzcWQbdNry1pbdLIY45z8UmRTDp
+         a3bA==
+X-Gm-Message-State: AJIora9RrULLl8EUEjFvJc7EPsmS2liQ3N+fgFNjGoocXMk0jCRygrJB
+        OCgx/6uuydUxGzm3f+ksRca1AQ==
+X-Google-Smtp-Source: AGRyM1sNJTmw5My6E+UIFPxEEm5NSizCZE5yfStZxt0SI6lvyujXMl0QKBnTWcpM2xTQKS+FnyDkGw==
+X-Received: by 2002:a17:906:2086:b0:715:7983:a277 with SMTP id 6-20020a170906208600b007157983a277mr15317328ejq.386.1657918314254;
+        Fri, 15 Jul 2022 13:51:54 -0700 (PDT)
+Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
+        by smtp.gmail.com with ESMTPSA id wj18-20020a170907051200b0072af92fa086sm2401478ejb.32.2022.07.15.13.51.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 15 Jul 2022 13:51:53 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH] regulator: core: Resolve supply name earlier to prevent
+ double-init
+From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>
+In-Reply-To: <3B4AE882-0C28-41E3-9466-F8E301567627@kohlschutter.com>
+Date:   Fri, 15 Jul 2022 22:51:52 +0200
+Cc:     Robin Murphy <robin.murphy@arm.com>, wens@kernel.org,
+        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <DFF60E71-B8CF-43C9-B476-9216AFF0463B@kohlschutter.com>
+References: <3B4AE882-0C28-41E3-9466-F8E301567627@kohlschutter.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test to verify that KVM_{G,S}ET_EVENTS play nice with pending vs.
-injected exceptions when an exception is being queued for L2, and that
-KVM correctly handles L1's exception intercept wants.
+Hi all,
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../kvm/x86_64/nested_exceptions_test.c       | 295 ++++++++++++++++++
- 3 files changed, 297 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c
+This is a follow-up patch from my patch on mmc side:
+[PATCH v4] arm64: dts: rockchip: Fix SD card init on rk3399-nanopi4
+=
+https://patchwork.kernel.org/project/linux-rockchip/patch/73F9AED0-D2A8-42=
+94-B6E1-1B92D2A36529@kohlschutter.com/
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 91429330faea..6c0c37fe81b6 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -28,6 +28,7 @@
- /x86_64/max_vcpuid_cap_test
- /x86_64/mmio_warning_test
- /x86_64/monitor_mwait_test
-+/x86_64/nested_exceptions_test
- /x86_64/nx_huge_pages_test
- /x86_64/platform_info_test
- /x86_64/pmu_event_filter_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 6b22fb1ce2b9..c6a67c389ac7 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -88,6 +88,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/kvm_clock_test
- TEST_GEN_PROGS_x86_64 += x86_64/kvm_pv_test
- TEST_GEN_PROGS_x86_64 += x86_64/mmio_warning_test
- TEST_GEN_PROGS_x86_64 += x86_64/monitor_mwait_test
-+TEST_GEN_PROGS_x86_64 += x86_64/nested_exceptions_test
- TEST_GEN_PROGS_x86_64 += x86_64/platform_info_test
- TEST_GEN_PROGS_x86_64 += x86_64/pmu_event_filter_test
- TEST_GEN_PROGS_x86_64 += x86_64/set_boot_cpu_id
-diff --git a/tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c b/tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c
-new file mode 100644
-index 000000000000..ac33835f78f4
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c
-@@ -0,0 +1,295 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "vmx.h"
-+#include "svm_util.h"
-+
-+#define L2_GUEST_STACK_SIZE 256
-+
-+/*
-+ * Arbitrary, never shoved into KVM/hardware, just need to avoid conflict with
-+ * the "real" exceptions used, #SS/#GP/#DF (12/13/8).
-+ */
-+#define FAKE_TRIPLE_FAULT_VECTOR	0xaa
-+
-+/* Arbitrary 32-bit error code injected by this test. */
-+#define SS_ERROR_CODE 0xdeadbeef
-+
-+/*
-+ * Bit '0' is set on Intel if the exception occurs while delivering a previous
-+ * event/exception.  AMD's wording is ambiguous, but presumably the bit is set
-+ * if the exception occurs while delivering an external event, e.g. NMI or INTR,
-+ * but not for exceptions that occur when delivering other exceptions or
-+ * software interrupts.
-+ *
-+ * Note, Intel's name for it, "External event", is misleading and much more
-+ * aligned with AMD's behavior, but the SDM is quite clear on its behavior.
-+ */
-+#define ERROR_CODE_EXT_FLAG	BIT(0)
-+
-+/*
-+ * Bit '1' is set if the fault occurred when looking up a descriptor in the
-+ * IDT, which is the case here as the IDT is empty/NULL.
-+ */
-+#define ERROR_CODE_IDT_FLAG	BIT(1)
-+
-+/*
-+ * The #GP that occurs when vectoring #SS should show the index into the IDT
-+ * for #SS, plus have the "IDT flag" set.
-+ */
-+#define GP_ERROR_CODE_AMD ((SS_VECTOR * 8) | ERROR_CODE_IDT_FLAG)
-+#define GP_ERROR_CODE_INTEL ((SS_VECTOR * 8) | ERROR_CODE_IDT_FLAG | ERROR_CODE_EXT_FLAG)
-+
-+/*
-+ * Intel and AMD both shove '0' into the error code on #DF, regardless of what
-+ * led to the double fault.
-+ */
-+#define DF_ERROR_CODE 0
-+
-+#define INTERCEPT_SS		(BIT_ULL(SS_VECTOR))
-+#define INTERCEPT_SS_DF		(INTERCEPT_SS | BIT_ULL(DF_VECTOR))
-+#define INTERCEPT_SS_GP_DF	(INTERCEPT_SS_DF | BIT_ULL(GP_VECTOR))
-+
-+static void l2_ss_pending_test(void)
-+{
-+	GUEST_SYNC(SS_VECTOR);
-+}
-+
-+static void l2_ss_injected_gp_test(void)
-+{
-+	GUEST_SYNC(GP_VECTOR);
-+}
-+
-+static void l2_ss_injected_df_test(void)
-+{
-+	GUEST_SYNC(DF_VECTOR);
-+}
-+
-+static void l2_ss_injected_tf_test(void)
-+{
-+	GUEST_SYNC(FAKE_TRIPLE_FAULT_VECTOR);
-+}
-+
-+static void svm_run_l2(struct svm_test_data *svm, void *l2_code, int vector,
-+		       uint32_t error_code)
-+{
-+	struct vmcb *vmcb = svm->vmcb;
-+	struct vmcb_control_area *ctrl = &vmcb->control;
-+
-+	vmcb->save.rip = (u64)l2_code;
-+	run_guest(vmcb, svm->vmcb_gpa);
-+
-+	if (vector == FAKE_TRIPLE_FAULT_VECTOR)
-+		return;
-+
-+	GUEST_ASSERT_EQ(ctrl->exit_code, (SVM_EXIT_EXCP_BASE + vector));
-+	GUEST_ASSERT_EQ(ctrl->exit_info_1, error_code);
-+}
-+
-+static void l1_svm_code(struct svm_test_data *svm)
-+{
-+	struct vmcb_control_area *ctrl = &svm->vmcb->control;
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+
-+	generic_svm_setup(svm, NULL, &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+	svm->vmcb->save.idtr.limit = 0;
-+	ctrl->intercept |= BIT_ULL(INTERCEPT_SHUTDOWN);
-+
-+	ctrl->intercept_exceptions = INTERCEPT_SS_GP_DF;
-+	svm_run_l2(svm, l2_ss_pending_test, SS_VECTOR, SS_ERROR_CODE);
-+	svm_run_l2(svm, l2_ss_injected_gp_test, GP_VECTOR, GP_ERROR_CODE_AMD);
-+
-+	ctrl->intercept_exceptions = INTERCEPT_SS_DF;
-+	svm_run_l2(svm, l2_ss_injected_df_test, DF_VECTOR, DF_ERROR_CODE);
-+
-+	ctrl->intercept_exceptions = INTERCEPT_SS;
-+	svm_run_l2(svm, l2_ss_injected_tf_test, FAKE_TRIPLE_FAULT_VECTOR, 0);
-+	GUEST_ASSERT_EQ(ctrl->exit_code, SVM_EXIT_SHUTDOWN);
-+
-+	GUEST_DONE();
-+}
-+
-+static void vmx_run_l2(void *l2_code, int vector, uint32_t error_code)
-+{
-+	GUEST_ASSERT(!vmwrite(GUEST_RIP, (u64)l2_code));
-+
-+	GUEST_ASSERT_EQ(vector == SS_VECTOR ? vmlaunch() : vmresume(), 0);
-+
-+	if (vector == FAKE_TRIPLE_FAULT_VECTOR)
-+		return;
-+
-+	GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON), EXIT_REASON_EXCEPTION_NMI);
-+	GUEST_ASSERT_EQ((vmreadz(VM_EXIT_INTR_INFO) & 0xff), vector);
-+	GUEST_ASSERT_EQ(vmreadz(VM_EXIT_INTR_ERROR_CODE), error_code);
-+}
-+
-+static void l1_vmx_code(struct vmx_pages *vmx)
-+{
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+
-+	GUEST_ASSERT_EQ(prepare_for_vmx_operation(vmx), true);
-+
-+	GUEST_ASSERT_EQ(load_vmcs(vmx), true);
-+
-+	prepare_vmcs(vmx, NULL, &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+	GUEST_ASSERT_EQ(vmwrite(GUEST_IDTR_LIMIT, 0), 0);
-+
-+	/*
-+	 * VMX disallows injecting an exception with error_code[31:16] != 0,
-+	 * and hardware will never generate a VM-Exit with bits 31:16 set.
-+	 * KVM should likewise truncate the "bad" userspace value.
-+	 */
-+	GUEST_ASSERT_EQ(vmwrite(EXCEPTION_BITMAP, INTERCEPT_SS_GP_DF), 0);
-+	vmx_run_l2(l2_ss_pending_test, SS_VECTOR, (u16)SS_ERROR_CODE);
-+	vmx_run_l2(l2_ss_injected_gp_test, GP_VECTOR, GP_ERROR_CODE_INTEL);
-+
-+	GUEST_ASSERT_EQ(vmwrite(EXCEPTION_BITMAP, INTERCEPT_SS_DF), 0);
-+	vmx_run_l2(l2_ss_injected_df_test, DF_VECTOR, DF_ERROR_CODE);
-+
-+	GUEST_ASSERT_EQ(vmwrite(EXCEPTION_BITMAP, INTERCEPT_SS), 0);
-+	vmx_run_l2(l2_ss_injected_tf_test, FAKE_TRIPLE_FAULT_VECTOR, 0);
-+	GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON), EXIT_REASON_TRIPLE_FAULT);
-+
-+	GUEST_DONE();
-+}
-+
-+static void __attribute__((__flatten__)) l1_guest_code(void *test_data)
-+{
-+	if (this_cpu_has(X86_FEATURE_SVM))
-+		l1_svm_code(test_data);
-+	else
-+		l1_vmx_code(test_data);
-+}
-+
-+static void assert_ucall_vector(struct kvm_vcpu *vcpu, int vector)
-+{
-+	struct kvm_run *run = vcpu->run;
-+	struct ucall uc;
-+
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-+		    "Unexpected exit reason: %u (%s),\n",
-+		    run->exit_reason, exit_reason_str(run->exit_reason));
-+
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_SYNC:
-+		TEST_ASSERT(vector == uc.args[1],
-+			    "Expected L2 to ask for %d, got %ld", vector, uc.args[1]);
-+		break;
-+	case UCALL_DONE:
-+		TEST_ASSERT(vector == -1,
-+			    "Expected L2 to ask for %d, L2 says it's done", vector);
-+		break;
-+	case UCALL_ABORT:
-+		TEST_FAIL("%s at %s:%ld (0x%lx != 0x%lx)",
-+			  (const char *)uc.args[0], __FILE__, uc.args[1],
-+			  uc.args[2], uc.args[3]);
-+		break;
-+	default:
-+		TEST_FAIL("Expected L2 to ask for %d, got unexpected ucall %lu", vector, uc.cmd);
-+	}
-+}
-+
-+static void queue_ss_exception(struct kvm_vcpu *vcpu, bool inject)
-+{
-+	struct kvm_vcpu_events events;
-+
-+	vcpu_events_get(vcpu, &events);
-+
-+	TEST_ASSERT(!events.exception.pending,
-+		    "Vector %d unexpectedlt pending", events.exception.nr);
-+	TEST_ASSERT(!events.exception.injected,
-+		    "Vector %d unexpectedly injected", events.exception.nr);
-+
-+	events.flags = KVM_VCPUEVENT_VALID_PAYLOAD;
-+	events.exception.pending = !inject;
-+	events.exception.injected = inject;
-+	events.exception.nr = SS_VECTOR;
-+	events.exception.has_error_code = true;
-+	events.exception.error_code = SS_ERROR_CODE;
-+	vcpu_events_set(vcpu, &events);
-+}
-+
-+/*
-+ * Verify KVM_{G,S}ET_EVENTS play nice with pending vs. injected exceptions
-+ * when an exception is being queued for L2.  Specifically, verify that KVM
-+ * honors L1 exception intercept controls when a #SS is pending/injected,
-+ * triggers a #GP on vectoring the #SS, morphs to #DF if #GP isn't intercepted
-+ * by L1, and finally causes (nested) SHUTDOWN if #DF isn't intercepted by L1.
-+ */
-+int main(int argc, char *argv[])
-+{
-+	vm_vaddr_t nested_test_data_gva;
-+	struct kvm_vcpu_events events;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_EXCEPTION_PAYLOAD));
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM) || kvm_cpu_has(X86_FEATURE_VMX));
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
-+	vm_enable_cap(vm, KVM_CAP_EXCEPTION_PAYLOAD, -2ul);
-+
-+	if (kvm_cpu_has(X86_FEATURE_SVM))
-+		vcpu_alloc_svm(vm, &nested_test_data_gva);
-+	else
-+		vcpu_alloc_vmx(vm, &nested_test_data_gva);
-+
-+	vcpu_args_set(vcpu, 1, nested_test_data_gva);
-+
-+	/* Run L1 => L2.  L2 should sync and request #SS. */
-+	vcpu_run(vcpu);
-+	assert_ucall_vector(vcpu, SS_VECTOR);
-+
-+	/* Pend #SS and request immediate exit.  #SS should still be pending. */
-+	queue_ss_exception(vcpu, false);
-+	vcpu->run->immediate_exit = true;
-+	vcpu_run_complete_io(vcpu);
-+
-+	/* Verify the pending events comes back out the same as it went in. */
-+	vcpu_events_get(vcpu, &events);
-+	ASSERT_EQ(events.flags & KVM_VCPUEVENT_VALID_PAYLOAD,
-+		  KVM_VCPUEVENT_VALID_PAYLOAD);
-+	ASSERT_EQ(events.exception.pending, true);
-+	ASSERT_EQ(events.exception.nr, SS_VECTOR);
-+	ASSERT_EQ(events.exception.has_error_code, true);
-+	ASSERT_EQ(events.exception.error_code, SS_ERROR_CODE);
-+
-+	/*
-+	 * Run for real with the pending #SS, L1 should get a VM-Exit due to
-+	 * #SS interception and re-enter L2 to request #GP (via injected #SS).
-+	 */
-+	vcpu->run->immediate_exit = false;
-+	vcpu_run(vcpu);
-+	assert_ucall_vector(vcpu, GP_VECTOR);
-+
-+	/*
-+	 * Inject #SS, the #SS should bypass interception and cause #GP, which
-+	 * L1 should intercept before KVM morphs it to #DF.  L1 should then
-+	 * disable #GP interception and run L2 to request #DF (via #SS => #GP).
-+	 */
-+	queue_ss_exception(vcpu, true);
-+	vcpu_run(vcpu);
-+	assert_ucall_vector(vcpu, DF_VECTOR);
-+
-+	/*
-+	 * Inject #SS, the #SS should bypass interception and cause #GP, which
-+	 * L1 is no longer interception, and so should see a #DF VM-Exit.  L1
-+	 * should then signal that is done.
-+	 */
-+	queue_ss_exception(vcpu, true);
-+	vcpu_run(vcpu);
-+	assert_ucall_vector(vcpu, FAKE_TRIPLE_FAULT_VECTOR);
-+
-+	/*
-+	 * Inject #SS yet again.  L1 is not intercepting #GP or #DF, and so
-+	 * should see nested TRIPLE_FAULT / SHUTDOWN.
-+	 */
-+	queue_ss_exception(vcpu, true);
-+	vcpu_run(vcpu);
-+	assert_ucall_vector(vcpu, -1);
-+
-+	kvm_vm_free(vm);
-+}
--- 
-2.37.0.170.g444d1eabd0-goog
+Thanks to Robin Murphy's help, we were able to figure out that my NanoPI =
+R4S's SD-Card voltage regulator was initialized twice and that a voltage =
+drop was the reason for the initialization failure.
+Adding an mdelay to the init code, or =E2=80=94 surprisingly =E2=80=94 =
+adding a "regulator-uv-protection-microvolt" declaration had "fixed" the =
+issue in 99/100 tries.
+
+Best,
+Christian
+
+from arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi:
+vcc3v0_sd: vcc3v0-sd {
+        compatible =3D "regulator-fixed";
+        enable-active-high;
+        gpio =3D <&gpio0 RK_PA1 GPIO_ACTIVE_HIGH>;
+        pinctrl-names =3D "default";
+        pinctrl-0 =3D <&sdmmc0_pwr_h>;
+        regulator-always-on;
+        regulator-min-microvolt =3D <3000000>;
+        regulator-max-microvolt =3D <3000000>;
+        regulator-name =3D "vcc3v0_sd";
+        vin-supply =3D <&vcc3v3_sys>;
+};                                       =20
+
+> Am 15.07.2022 um 22:32 schrieb Christian Kohlsch=C3=BCtter =
+<christian@kohlschutter.com>:
+>=20
+> Previously, an unresolved regulator supply reference upon calling
+> regulator_register on an always-on or boot-on regulator caused
+> set_machine_constraints to be called twice.
+>=20
+> This in turn may initialize the regulator twice, leading to voltage
+> glitches that are timing-dependent. A simple, unrelated configuration
+> change may be enough to hide this problem, only to be surfaced by
+> chance.
+>=20
+> One such example is the SD-Card voltage regulator in a NanoPI R4S that
+> would not initialize reliably unless the registration flow was just
+> complex enough to allow the regulator to properly reset between calls.
+>=20
+> Fix this by re-arranging regulator_register, trying resolve the
+> regulator's supply early enough that set_machine_constraints does not
+> need to be called twice.
+>=20
+> Signed-off-by: Christian Kohlsch=C3=BCtter =
+<christian@kohlschutter.com>
+> ---
+> drivers/regulator/core.c | 42 ++++++++++++++++++++++++++--------------
+> 1 file changed, 28 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+> index c4d844ffad7a..728840827e9c 100644
+> --- a/drivers/regulator/core.c
+> +++ b/drivers/regulator/core.c
+> @@ -5433,7 +5433,34 @@ regulator_register(const struct regulator_desc =
+*regulator_desc,
+> 	BLOCKING_INIT_NOTIFIER_HEAD(&rdev->notifier);
+> 	INIT_DELAYED_WORK(&rdev->disable_work, regulator_disable_work);
+>=20
+> -	/* preform any regulator specific init */
+> +	/* set regulator constraints */
+> +	if (init_data)
+> +		rdev->constraints =3D kmemdup(&init_data->constraints,
+> +					    sizeof(*rdev->constraints),
+> +					    GFP_KERNEL);
+> +	else
+> +		rdev->constraints =3D =
+kzalloc(sizeof(*rdev->constraints),
+> +					    GFP_KERNEL);
+> +
+> +	if (init_data && init_data->supply_regulator)
+> +		rdev->supply_name =3D init_data->supply_regulator;
+> +	else if (regulator_desc->supply_name)
+> +		rdev->supply_name =3D regulator_desc->supply_name;
+> +
+> +	if ((rdev->supply_name && !rdev->supply) && rdev->constraints
+> +		&& (rdev->constraints->always_on || =
+rdev->constraints->boot_on)) {
+> +		/* Try to resolve the name of the supplying regulator =
+here first
+> +		 * so we prevent double-initializing the regulator, =
+which may
+> +		 * cause timing-specific voltage brownouts/glitches that =
+are
+> +		 * hard to debug.
+> +		 */
+> +		ret =3D regulator_resolve_supply(rdev);
+> +		if (ret)
+> +			rdev_dbg(rdev, "unable to resolve supply early: =
+%pe\n",
+> +					 ERR_PTR(ret));
+> +	}
+> +
+> +	/* perform any regulator specific init */
+> 	if (init_data && init_data->regulator_init) {
+> 		ret =3D init_data->regulator_init(rdev->reg_data);
+> 		if (ret < 0)
+> @@ -5459,24 +5486,11 @@ regulator_register(const struct regulator_desc =
+*regulator_desc,
+> 		    (unsigned long) atomic_inc_return(&regulator_no));
+> 	dev_set_drvdata(&rdev->dev, rdev);
+>=20
+> -	/* set regulator constraints */
+> -	if (init_data)
+> -		rdev->constraints =3D kmemdup(&init_data->constraints,
+> -					    sizeof(*rdev->constraints),
+> -					    GFP_KERNEL);
+> -	else
+> -		rdev->constraints =3D =
+kzalloc(sizeof(*rdev->constraints),
+> -					    GFP_KERNEL);
+> 	if (!rdev->constraints) {
+> 		ret =3D -ENOMEM;
+> 		goto wash;
+> 	}
+>=20
+> -	if (init_data && init_data->supply_regulator)
+> -		rdev->supply_name =3D init_data->supply_regulator;
+> -	else if (regulator_desc->supply_name)
+> -		rdev->supply_name =3D regulator_desc->supply_name;
+> -
+> 	ret =3D set_machine_constraints(rdev);
+> 	if (ret =3D=3D -EPROBE_DEFER) {
+> 		/* Regulator might be in bypass mode and so needs its =
+supply
+> --=20
+> 2.36.1
+>=20
 

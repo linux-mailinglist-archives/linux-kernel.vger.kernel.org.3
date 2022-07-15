@@ -2,109 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E70576462
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC6F576464
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235306AbiGOPVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 11:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
+        id S235341AbiGOPYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 11:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233509AbiGOPVt (ORCPT
+        with ESMTP id S233509AbiGOPYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 11:21:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E631135;
-        Fri, 15 Jul 2022 08:21:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 15 Jul 2022 11:24:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5E417AB0
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:24:37 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EDF44B82B3F;
-        Fri, 15 Jul 2022 15:21:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8698DC34115;
-        Fri, 15 Jul 2022 15:21:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657898505;
-        bh=SeHL3z+KjgQcyJvmNfCBj4QdNfWU9NNlzqSnGnX/s2E=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=FFYnxh8vDFpJxObyCx3iqWeu/wktIdHAG1ftuu9mAg7rWsFz+tc5h+J93PTT2+15z
-         6nkiG1NzWNmfOvOrWXl11D0KolzzxYMtA5EzfEJypjK4i0xYt1tRSwWnb2lQmz80Jz
-         F2FQ7SGUt37b7w9pBg1Uq5j93jhxgrBxlFgN0o5yI8ludEeSyQMyDkMn7c2ObbD1+1
-         sdRHcDsoi7QQiArr48uJHtttPRLAwYb0bgn4i5wQXNXQBVBCBRmzGGWLITD6eUQx6U
-         uNDiMda04+9taFjnGjkaGjP9Q3G1ZpxAWFaOHnCiS3qu4j2C46SL6mpRX2it92jOUt
-         xIs2FC4xPq/3A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 246F25C015D; Fri, 15 Jul 2022 08:21:45 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 08:21:45 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <Paul.Heidekrueger@in.tum.de>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        linux-toolchains@vger.kernel.org,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: Re: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
-Message-ID: <20220715152145.GZ1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
- <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
- <50B9D7C1-B11D-4583-9814-BFFF2C80D8CA@in.tum.de>
- <YrHUkfDWsexHRUKj@rowland.harvard.edu>
- <04B4DBD6-1262-4905-9E85-9466FC104895@in.tum.de>
- <YrnFCSjESpeQdciv@rowland.harvard.edu>
- <20F4C097-24B4-416B-95EE-AC11F5952B44@in.tum.de>
- <YtFrPoOARrL/etBu@rowland.harvard.edu>
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6DDA86601A59;
+        Fri, 15 Jul 2022 16:24:35 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657898676;
+        bh=Q1SrTlaWTXiSCm0wttGzLDDRoXfdJ8btsuQhW65c8i4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DAZnmF19OD5pNx5pjFhUsFyPLjC5BBZfaNbZqjDx2mIVkgBN9IO7t7u4J1gnFN8j+
+         dg9cVADAEFxTMwG5HNZ+HmRXxZJqc8+IV1C+E27Q6ty2hJ+b3esHtAOwDKd+jWMu69
+         gUjLaGybTAQVcQoDzJMXnEa77jvwi2jG3e2fCer4bzffJ0r2UcbHt9/l7QsuLAJKjC
+         u/Fy3X0FxHKIt9BMtwC0V99eIGTmqYubHEUT+qPLalxN2RXqubdIn3E4Tl33afw0Ll
+         pbz2qW4Ce/8Qvuag5lIICmZ9fRObeH47NPedjUCT41BwSAOdQUMMp1ZS5d0lxfL7rv
+         4Rtrbumr+u0Lg==
+Message-ID: <25d90169-24df-69b5-8a5e-5c9b49a621ae@collabora.com>
+Date:   Fri, 15 Jul 2022 18:24:32 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1] drm/scheduler: Don't kill jobs in interrupt context
+Content-Language: en-US
+To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Alex Deucher <alexdeucher@gmail.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Erico Nunes <nunes.erico@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+References: <20220411221536.283312-1-dmitry.osipenko@collabora.com>
+ <a78343c8-2a6d-b223-4219-6b6b0a4fcb1f@arm.com>
+ <CAK4VdL2hCEoshWZbCh5mkHuS6wYMiPFR3v4MWTnrEKM9zyv6Mw@mail.gmail.com>
+ <ef88ec2c-77b5-fa0d-49d1-fdd2451713b7@collabora.com>
+ <573fae0d-c9ab-98b0-c6f1-5b0d4e52dd01@amd.com>
+ <a33ab7b9-738f-db91-f6ba-78a9641365e8@amd.com>
+ <b05f9861-1966-72f5-132b-aebb4b6e0c6b@collabora.com>
+ <107fe968-8311-0511-cc31-22feb994a6d7@collabora.com>
+ <3e07a8d0-2cbc-8f3e-8f9f-5b73fb82028b@amd.com>
+ <CADnq5_MMmeWkiMxjYfrG7pip8BEkbkRc8ADUDLEi++kRF76sqg@mail.gmail.com>
+ <bff42c98-045d-2e5a-2cf9-eb563425375e@collabora.com>
+ <6e0c7590-6ffb-162b-a98d-0a39333453f6@collabora.com>
+ <4ca27cee-eda0-0a65-f972-c69cc3b3e53e@amd.com>
+ <CADnq5_Mms=UbPc7D0-Z-HNUHfCHVWMO82NO+jh5Yg8DmkKwH3A@mail.gmail.com>
+ <4c7e7b6d-8dcf-41ae-c853-b95e6efd9c32@amd.com>
+ <CADnq5_NQ+BCQKt1cJX_V0ZmLE6O2ve5UwSxCzXbDrtkcig4=9Q@mail.gmail.com>
+ <e18a645b-a3ec-9331-d480-1693221b8d31@amd.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <e18a645b-a3ec-9331-d480-1693221b8d31@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YtFrPoOARrL/etBu@rowland.harvard.edu>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 09:27:26AM -0400, Alan Stern wrote:
-> On Fri, Jul 15, 2022 at 02:27:28PM +0200, Paul Heidekr�ger wrote:
-> > I have just been thinking about how to word this patch; am I correct in
-> > assuming that the LKMM does not deal with loop conditions? Or in other
-> > words, there is no way for a loop condition to impose a ctrl dependency on
-> > any WRITE_ONCE's in the loop body? It are only if and switch statements the
-> > LKMM is concerned with in the case of ctrl dependencies?
+On 7/15/22 18:18, Andrey Grodzovsky wrote:
 > 
-> In theory, the LKMM does say that a loop condition imposes a control 
-> dependency on any memory accesses within the loop body.  However, the 
-> herd7 tool has only very limited support for looping constructs, so in 
-> practice it's not possible to create suitable litmus tests with loops.
+> On 2022-07-14 17:16, Alex Deucher wrote:
+>> On Thu, Jul 14, 2022 at 1:58 PM Andrey Grodzovsky
+>> <andrey.grodzovsky@amd.com> wrote:
+>>> On 2022-07-14 12:22, Alex Deucher wrote:
+>>>
+>>>> On Thu, Jul 14, 2022 at 10:14 AM Andrey Grodzovsky
+>>>> <andrey.grodzovsky@amd.com> wrote:
+>>>>> On 2022-07-14 05:57, Dmitry Osipenko wrote:
+>>>>>> On 7/12/22 11:56, Dmitry Osipenko wrote:
+>>>>>>> On 7/6/22 18:46, Alex Deucher wrote:
+>>>>>>>> On Wed, Jul 6, 2022 at 9:49 AM Andrey Grodzovsky
+>>>>>>>> <andrey.grodzovsky@amd.com> wrote:
+>>>>>>>>> On 2022-07-06 03:07, Dmitry Osipenko wrote:
+>>>>>>>>>
+>>>>>>>>>> Hello Andrey,
+>>>>>>>>>>
+>>>>>>>>>> On 5/17/22 17:48, Dmitry Osipenko wrote:
+>>>>>>>>>>> On 5/17/22 17:13, Andrey Grodzovsky wrote:
+>>>>>>>>>>>> Done.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Andrey
+>>>>>>>>>>> Awesome, thank you!
+>>>>>>>>>>>
+>>>>>>>>>> Given that this drm-scheduler issue needs to be fixed in the
+>>>>>>>>>> 5.19-RC and
+>>>>>>>>>> earlier, shouldn't it be in the drm-fixes and not in drm-next?
+>>>>>>>>> I pushed it into drm-misc from where it got into drm-next. I
+>>>>>>>>> don't have
+>>>>>>>>> permission for drm-fixes.
+>>>>>>>> The -fixes branch of drm-misc.
+>>>>>>> Now I don't see the scheduler bugfix neither in the -fixes branch
+>>>>>>> nor in
+>>>>>>> the -next and today Dave sent out 5.19-rc7 pull request without the
+>>>>>>> scheduler fix. Could anyone please check what is going on with
+>>>>>>> the DRM
+>>>>>>> patches? Thanks!
+>>>>>>>
+>>>>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Ffreedesktop%2Fdrm-misc%2Fcommits%2Fdrm-misc-fixes&amp;data=05%7C01%7Candrey.grodzovsky%40amd.com%7C9585d3814d9b4e51bfcb08da65de368d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637934302314091129%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=QjSspRJyOZpFOoaA988nH2V7Gq54gSUl6mm87B1sYhE%3D&amp;reserved=0
+>>>>>>>
+>>>>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcgit.freedesktop.org%2Fdrm%2Fdrm-misc%2Flog%2F%3Fh%3Ddrm-misc-fixes&amp;data=05%7C01%7Candrey.grodzovsky%40amd.com%7C9585d3814d9b4e51bfcb08da65de368d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637934302314091129%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=8ysjuD7Ufsyu5c%2BfRdpT9nkWHjotsd1cjCfy4yRw2uw%3D&amp;reserved=0
+>>>>>>>
+>>>>>> The patch is in the drm-misc-next-fixes, so it wasn't moved to the
+>>>>>> drm-misc-fixes.
+>>>>>>
+>>>>>> Andrey, don't you have access to drm-misc-fixes? Or you meant
+>>>>>> drm-fixes=drm-misc-fixes?
+>>>>> I have only accesses to drm-misc-next to which I pushed this patch.
+>>>> anyone with drm-misc rights can commit to any of the branches in the
+>>>> drm-misc tree.  You just need to check out and push the appropriate
+>>>> branch.  then push the changes.  E.g.,
+>>>> dim push-branch drm-misc-next
+>>>> vs
+>>>> dim push-branch drm-misc-next-fixes
+>>>> etc.
+>>>>
+>>>> Alex
+>>>
+>>> I see, but what  is the reason then that Dave sent out 5.19-rc7 pull
+>>> request without the
+>>> scheduler fix if the patch was merged into drm-misc-next long ago ? All
+>>> the changes from
+>>> there are usually picked up for pull requests, no ?
+>> drm-misc-next is for new stuff for the next kernel (e.g., 5.20).
+>> drm-misc-fixes is for fixes for the current kernel cycle (e.g., 5.19).
+>> See:
+>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdrm.pages.freedesktop.org%2Fmaintainer-tools%2Fdrm-misc.html&amp;data=05%7C01%7Candrey.grodzovsky%40amd.com%7C9585d3814d9b4e51bfcb08da65de368d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637934302314091129%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=8IW3uNvSEogYjj%2BNKh1b9jkT5CaJ5osZ9GgEcI8zyqo%3D&amp;reserved=0
+>>
+>>
+>> Alex
+> 
+> 
+> Got it, Dmitry, I pushed this time to drm-misc-fixes so i hope this time
+> it will be picked up for next rc release.
 
-And Alan isn't joking.  The closest simulation that I know of is to
-combine limited loop unrolling with the "filter" clause.  The point of
-the filter clause is to eliminate from consideration executions that
-need the more iterations of the loop to be unrolled.
+Great, thank you!
 
-And that means that as far as LKMM is concerned, loop-based control
-dependencies are similar to those for nested "if" statements.
-
-							Thanx, Paul
+-- 
+Best regards,
+Dmitry

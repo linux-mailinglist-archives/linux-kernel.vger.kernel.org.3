@@ -2,152 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE1E576303
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50B65762E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233866AbiGONos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 09:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        id S234906AbiGONhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 09:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiGONop (ORCPT
+        with ESMTP id S234865AbiGONhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 09:44:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A95147BAE
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 06:44:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C8EF623D5
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:44:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA350C34115;
-        Fri, 15 Jul 2022 13:44:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657892682;
-        bh=8BPiocY7scDyLEcAlQjPC++udc/2v52MfXgPwsWJmaM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U/7omktuc5K9bv7/vVtx7s2hZGuEbq0x4Dh4gwEpveYMluuJqTFobMI6tTQq11MLB
-         gIQ9PaLyEE9Muo+wlE9HzsHn1dKUYJC7GRQWYiJQ52ZMnxahn1VyzKEraFZtTIW/h6
-         1FuC6wRdT1JG5zL75xUh52YjQ27H+tseApcbggAtffCJre2UsHzQJVRw7N3Ivn0kqK
-         yBF60fvKOtN94xRY7MzDB95QGSINMLmbfbknA1Z4mEjxXOkqiWApUvyyyNd0/K06uX
-         6FgysEEhgFN/3+LHriZH+Kloq/Td8aj4sdmOX18TkCAxSkScaj6bIcdEuxzoQ6DJiw
-         U1ooy1Ii1DwUQ==
-Date:   Fri, 15 Jul 2022 21:35:43 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     anup@brainfault.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, ryabinin.a.a@gmail.com, glider@google.com,
-        andreyknvl@gmail.com, dvyukov@google.com,
-        vincenzo.frascino@arm.com, alexandre.ghiti@canonical.com,
-        Atish Patra <atishp@rivosinc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com
-Subject: Re: [PATCH v4 0/2] use static key to optimize pgtable_l4_enabled
-Message-ID: <YtFtL3+/3FNkalZ5@xhacker>
-References: <CAAhSdy0mkwacNMVa_jFZmZ+NRPBa1TpKUQGpzr6Z9_wfoq1R4g@mail.gmail.com>
- <mhng-17913c13-57bd-42f9-9136-b4eb9632253c@palmer-mbp2014>
+        Fri, 15 Jul 2022 09:37:11 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3E37CB7A
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 06:37:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=0CK7/XiAMhupawfrWQ+PTIpUyjnKMaKIN+EBiTWXkTI=; b=QxwJQrPcPW70NuWTnf4RiTP9LX
+        UDYXhDB3UkbyMMX+/LdgeOeMRAL7/POLJles7kptlaCIyrg1lm7+aAlp0AS8K9JX/dbVX+KRl2TVr
+        clZz1P8G7OCvVrhtQBJwA62eVBKuUCBrArGlbeE78dOJhR7+rQnkdpnIqsZRcqt5isqKOG5uVoleH
+        kc8UT8EaJpNO0aR2By51izwXeWUs17ON1796Zc8JNH/tCPh+2Of1Bsa3Er+qUqmNa3x3vhbxhbwAl
+        EtQqBTLYAxSrRF0RZmHlGWVab9y3HD/5hvSzI9Tu1c1wGei9lsTWUGMZob02WmK5N0RmVDA1dyaQS
+        uC5awWnA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33356)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oCLV6-00074P-Qj; Fri, 15 Jul 2022 14:37:00 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oCLV5-0007aQ-69; Fri, 15 Jul 2022 14:36:59 +0100
+Date:   Fri, 15 Jul 2022 14:36:59 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Marc Zyngier <maz@kernel.org>, Tony Lindgren <tony@atomide.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2] ARM: spectre-v2: fix smp_processor_id() warning
+Message-ID: <YtFte2mTbfkMkRpJ@shell.armlinux.org.uk>
+References: <795c9463-452e-bf64-1cc0-c318ccecb1da@I-love.SAKURA.ne.jp>
+ <e5bdea6c767d3a8260360afaddab5f7c@kernel.org>
+ <YrMhVAev9wMAA8tl@shell.armlinux.org.uk>
+ <421c1ca9-f553-4c0a-d963-2fdeb270dbcc@I-love.SAKURA.ne.jp>
+ <fa786d1c-db06-f7f1-9ac9-6a468c1e8d81@I-love.SAKURA.ne.jp>
+ <3188347c-3375-b728-cd08-ea4421d823cd@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <mhng-17913c13-57bd-42f9-9136-b4eb9632253c@palmer-mbp2014>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3188347c-3375-b728-cd08-ea4421d823cd@I-love.SAKURA.ne.jp>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 08:48:25PM -0700, Palmer Dabbelt wrote:
-> On Sat, 25 Jun 2022 21:33:07 PDT (-0700), anup@brainfault.org wrote:
-> > On Sat, May 21, 2022 at 8:13 PM Jisheng Zhang <jszhang@kernel.org> wrote:
-> > > 
-> > > The pgtable_l4|[l5]_enabled check sits at hot code path, performance
-> > > is impacted a lot. Since pgtable_l4|[l5]_enabled isn't changed after
-> > > boot, so static key can be used to solve the performance issue[1].
-> > > 
-> > > An unified way static key was introduced in [2], but it only targets
-> > > riscv isa extension. We dunno whether SV48 and SV57 will be considered
-> > > as isa extension, so the unified solution isn't used for
-> > > pgtable_l4[l5]_enabled now.
-> > > 
-> > > patch1 fixes a NULL pointer deference if static key is used a bit earlier.
-> > > patch2 uses the static key to optimize pgtable_l4|[l5]_enabled.
-> > > 
-> > > [1] http://lists.infradead.org/pipermail/linux-riscv/2021-December/011164.html
-> > > [2] https://lore.kernel.org/linux-riscv/20220517184453.3558-1-jszhang@kernel.org/T/#t
-> > > 
-> > > Since v3:
-> > >  - fix W=1 call to undeclared function 'static_branch_likely' error
-> > > 
-> > > Since v2:
-> > >  - move the W=1 warning fix to a separate patch
-> > >  - move the unified way to use static key to a new patch series.
-> > > 
-> > > Since v1:
-> > >  - Add a W=1 warning fix
-> > >  - Fix W=1 error
-> > >  - Based on v5.18-rcN, since SV57 support is added, so convert
-> > >    pgtable_l5_enabled as well.
-> > > 
-> > > 
-> > > 
-> > > Jisheng Zhang (2):
-> > >   riscv: move sbi_init() earlier before jump_label_init()
-> > >   riscv: turn pgtable_l4|[l5]_enabled to static key for RV64
-> > 
-> > I have tested both these patches on QEMU RV64 and RV32.
-> > 
-> > Tested-by: Anup Patel <anup@brainfault.org>
-> > 
-> > Thanks,
-> > Anup
+On Fri, Jul 15, 2022 at 10:09:01PM +0900, Tetsuo Handa wrote:
+> syzbot is reporting that CONFIG_HARDEN_BRANCH_PREDICTOR=y +
+> CONFIG_DEBUG_PREEMPT=y on ARM32 causes "BUG: using smp_processor_id() in
+> preemptible code" message [1], for this check was not designed to handle
+> attempts to access kernel memory like
 > 
-> Thanks for testing these.  Unfortunatly they're failing for me under my
-> kasan+sparsemem-vmemmap config, which looks like a defconfig with
+>   ----------
+>   int main() { return *(char *) -1; }
+>   ----------
 > 
->    CONFIG_KASAN=y
->    # CONFIG_FLATMEM_MANUAL is not set
->    CONFIG_SPARSEMEM_MANUAL=y
->    CONFIG_SPARSEMEM=y
->    # CONFIG_SPARSEMEM_VMEMMAP is not set
+> . Although Russell King commented that this BUG: message might help finding
+> possible exploit attempts [2], this is not a kernel's problem that worth
+> giving up fuzz testing.
 
-Hi Palmer,
+But shutting up a valid warning when the real problem is still there is
+also not acceptable.
 
-Thank you for the hint, I find the reason: SPARSEMEM is the key, KASAN
-doesn't matter. To fix this issue, we need to move
-riscv_finalise_pgtable_lx() after sparse_init(). I will send out a
-newer version soon.
+As I've said many times, the workaround needs to be run on the _same_
+CPU that faulted. The warning is telling us that we're preemptible at
+this point, which means that can't be guaranteed.
 
-> 
-> Nothing's really jumping out and I'm not sure that's a super compelling
-> configuration, but IIRC it's found a handful of issues before so I'm not
-> sure it's sane to just toss it.
-> 
-> I've put this all on the riscv-pgtable_static_key branch of
-> kernel.org/palmer/linux .  If nobody has the time to look then I'll try and
-> give it another shot, but I'm pretty buried right now so happy to have the
-> help.
+So bodging it by disabling preemption around here DOES NOT FIX THE
+PROBLEM. It _SHUTS UP THE VALID WARNING_. And shutting up a valid
+warning is A VERY BAD PRACTICE.
 
-Let me know if you want a seperate patch against
-riscv-pgtable_static_key branch.
+NAK. MAK. NAK. NAK. NAK.
 
-Thanks
-
-> 
-> > 
-> > > 
-> > >  arch/riscv/include/asm/pgalloc.h    | 16 ++++----
-> > >  arch/riscv/include/asm/pgtable-32.h |  3 ++
-> > >  arch/riscv/include/asm/pgtable-64.h | 60 ++++++++++++++++++---------
-> > >  arch/riscv/include/asm/pgtable.h    |  5 +--
-> > >  arch/riscv/kernel/cpu.c             |  4 +-
-> > >  arch/riscv/kernel/setup.c           |  2 +-
-> > >  arch/riscv/mm/init.c                | 64 ++++++++++++++++++-----------
-> > >  arch/riscv/mm/kasan_init.c          | 16 ++++----
-> > >  8 files changed, 104 insertions(+), 66 deletions(-)
-> > > 
-> > > --
-> > > 2.34.1
-> > > 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

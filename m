@@ -2,111 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6542157684C
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FF357684F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiGOUmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 16:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
+        id S230152AbiGOUmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 16:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiGOUmA (ORCPT
+        with ESMTP id S229680AbiGOUmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 16:42:00 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672AF528A6
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:41:59 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id o12so5599320pfp.5
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:41:59 -0700 (PDT)
+        Fri, 15 Jul 2022 16:42:35 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4F5528A6
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:42:34 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id b13-20020a170902e94d00b001692fd82122so2587601pll.14
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:42:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WtZRDzM8YJ97S/1Li5D/D44YAKcdEwJfblvdKCPMsAc=;
-        b=h9mO28BVHHbGShv1uBCtq7ZZifV3OOTDANCsGvtddURVoUa57Ouy0cRfb8h/UxuZUn
-         wHWtFVlfeAly/PSS/772SluwtFygGQYZrM+pSzu07xnsKlX06xwKk3lXfQqTnzgpPYgs
-         vG9B137tWetNmkSVx/6ucFo/nv10tm0kBnsjc=
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=I/QtSIUAt/ll33VekTJLh62H8IcuJ8z6tut6BxZsMlM=;
+        b=fyGq4PDW6nNQF4AgVR2GWsJutzb8REI7X30M+jAdJvMXKIiLqLV5+41RoSH2TGMyke
+         In+cj7mPYK0r2awY7X/evjcY1kdNfY5xPXJX6mKoMWvW0p4NbdxM4tS3pqpygfvoilha
+         niWGT/MtkjgADD6uIh8CZcOLymPLPPYO+HH5SnFUYjuDVL7HF3fRUMp600ZRo64UzB3e
+         jYHhdk8F3/6eRvz9JbkcvSpg3wg1t3jEsVc/NV7alHZUvcf59/mzzwHxk8lHlKbElHUG
+         XrjEh9gsJNP8BGFl6FJs6w8e1tPTPfWlWQ29EuF9fElc/jZ3mhk9iZVa8yPXnhaWavgs
+         YCLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WtZRDzM8YJ97S/1Li5D/D44YAKcdEwJfblvdKCPMsAc=;
-        b=i09bxE8I1IggRqB0T7t1RThBT4AjSOx+kTwdJxxU8Y16/YVw5l+Tz/jMVnI0cP/aIA
-         1h0/dOS+cMY1ES7tsdMhaNIqajNj/l9sQWMyAZcl+RMeHKWbIBUehJFBUcoyyvHV+aBE
-         IiNe68ftG2swLh/t/i5+wLL28bXV6rGh4p9azcoILz/u6xh3cQ5/YUfCcy+3Z0Xr7lAT
-         64YSxw5DZkVXtDgB7ii3CNuqbYav4NxXSbrB6exAHkBtqC8AHGIS3FDtBytX1NEJ8Tq1
-         icVdfkU4H3Xq7ltvt3c81LkxH71+4rUp5rB+4DTr4cnXAYGJmljN/jxXpwcwnX/vZ4HT
-         yCOA==
-X-Gm-Message-State: AJIora8A/50bbx5/hqbzBo4FLb6kv871+zZRvrGXyOehB1CjEJJUVwGm
-        FjKPsvCgphFP/dDikAcA03PMLQ==
-X-Google-Smtp-Source: AGRyM1vr9Gi++zE+26ugt96VQljO9f6LQq5uJA99uXorvAUYnr7XDA1roHUKlradhlJytAU1JAbaOQ==
-X-Received: by 2002:a63:2486:0:b0:412:9de2:eb49 with SMTP id k128-20020a632486000000b004129de2eb49mr13912375pgk.224.1657917718974;
-        Fri, 15 Jul 2022 13:41:58 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:835b:7656:818:a69a])
-        by smtp.gmail.com with UTF8SMTPSA id 187-20020a6205c4000000b0051c4f6d2d95sm4309705pff.106.2022.07.15.13.41.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 13:41:58 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 13:41:57 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
- probed properly
-Message-ID: <YtHRFcol5uslEel1@google.com>
-References: <1657891312-21748-1-git-send-email-quic_kriskura@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1657891312-21748-1-git-send-email-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=I/QtSIUAt/ll33VekTJLh62H8IcuJ8z6tut6BxZsMlM=;
+        b=wQK0AbYrOHvhqhHXCIjqMs62mBAFo+18Nqp2zgO9EylnMjfd8tBDKaj4eyIKr5hCEt
+         zKqYp5TOShrxrlw9gupRsaVydNlwe2Wg1zMPAUu6FJbwFOe/v6DW1jwytb0aNM0uaR6t
+         17Y47PL97hnaAnB/g0+pTQTmKp7/OlRDfNTcsOzo+MMAu2wY1AmHL406w6AqqQzqj18D
+         RoRo0Iemk9CjdU02XTcyV5bzPVZKtT3xQWAF+yjqK7Zx9TrbS8mDz4PhWs9eQm2Ks3BW
+         dDsp/XpFbsyVFZb/k4ck/hlO1K/AAwjTO7LDj4XWMVduIKYSlt5Qj6b358OYybWcnFnN
+         yKCA==
+X-Gm-Message-State: AJIora8a95I/Kj3tDK4dvtx3wTe5B5Gat2xg3HS9m3J+45kJrhAYcYcB
+        vGEePyIrk3hpDVUHjGCh26mZ4iNhJ0w=
+X-Google-Smtp-Source: AGRyM1sFgmYzLtmfKLJLV5nfuc4k+8wI40y5q4ho5M0nFm/EHMVCPOr80cRtiKWNrD4WZI42WiPdfLuL+9Y=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:f8ce:b0:1ef:798c:ae03 with SMTP id
+ l14-20020a17090af8ce00b001ef798cae03mr24290306pjd.8.1657917754552; Fri, 15
+ Jul 2022 13:42:34 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 15 Jul 2022 20:42:02 +0000
+Message-Id: <20220715204226.3655170-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH v2 00/24] KVM: x86: Event/exception fixes and cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 06:51:52PM +0530, Krishna Kurapati wrote:
+The main goal of this series is to fix KVM's longstanding bug of not
+honoring L1's exception intercepts wants when handling an exception that
+occurs during delivery of a different exception.  E.g. if L0 and L1 are
+using shadow paging, and L2 hits a #PF, and then hits another #PF while
+vectoring the first #PF due to _L1_ not having a shadow page for the IDT,
+KVM needs to check L1's intercepts before morphing the #PF => #PF => #DF
+so that the #PF is routed to L1, not injected into L2 as a #DF.
 
-> Subject: usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't probed properly
+nVMX has hacked around the bug for years by overriding the #PF injector
+for shadow paging to go straight to VM-Exit, and nSVM has started doing
+the same.  The hacks mostly work, but they're incomplete, confusing, and
+lead to other hacky code, e.g. bailing from the emulator because #PF
+injection forced a VM-Exit and suddenly KVM is back in L1.
 
-nit: "isn't probed properly" sounds like a bug or HW issue. In case
-you re-spin maybe change it to "hasn't probed yet" or similar.
+Maxim, I believe I addressed all of your comments, holler if I missed
+something.
 
-> On SC7180 devices, it is observed that dwc3 probing is deferred
-> because device_links_check_suppliers() finds that '88e3000.phy'
-> isn't ready yet.
-> 
-> As a part of its probe call, dwc3-qcom driver checks if dwc3 core
-> is wakeup capable or not. If the dwc3 core is wakeup capable, driver
-> configures dwc-qcom's power domain to be always ON. Also it configures
-> dp/dm interrupts accordingly to support wakeup from system suspend.
-> 
-> More info regarding the same can be found at:
-> commit d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller status")
-> commit 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-> 
-> In the event, dwc3 probe gets deferred and is processed after dwc3-qcom
-> probe, driver ends up reading the wakeup capability of dwc3 core as false
-> leading to instability in suspend/resume path.
-> 
-> To avoid this scenario, ensure dwc3_probe is successful by checking
-> if appropriate driver is assigned to it or not after the of_platform_populate
-> call. If it isn't then defer dwc3-qcom probe as well.
-> 
-> Fixes: 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system suspend")
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+v2:
+ - Collect reviews. [Maxim, Jim]
+ - Split a few patches into more consumable chunks. [Maxim]
+ - Document that KVM doesn't correctly handle SMI+MTF (or SMI priority). [Maxim]
+ - Add comment to document the instruction boundary (event window) aspect
+   of block_nested_events. [Maxim]
+ - Add a patch to rename inject_pending_events() and add a comment to
+   document KVM's not-quite-architecturally-correct handing of instruction
+   boundaries and asynchronous events. [Maxim]
 
-Reported-by: Matthias Kaehlcke <mka@chromium.org>
-Tested-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+v1: https://lore.kernel.org/all/20220614204730.3359543-1-seanjc@google.com
 
-Please make sure to add reviewers of previous versions or other folks you
-would like to review your patches in cc. I found v2 accidentally while
-looking for something else.
+Sean Christopherson (24):
+  KVM: nVMX: Unconditionally purge queued/injected events on nested
+    "exit"
+  KVM: VMX: Drop bits 31:16 when shoving exception error code into VMCS
+  KVM: x86: Don't check for code breakpoints when emulating on exception
+  KVM: nVMX: Treat General Detect #DB (DR7.GD=1) as fault-like
+  KVM: nVMX: Prioritize TSS T-flag #DBs over Monitor Trap Flag
+  KVM: x86: Treat #DBs from the emulator as fault-like (code and
+    DR7.GD=1)
+  KVM: x86: Use DR7_GD macro instead of open coding check in emulator
+  KVM: nVMX: Ignore SIPI that arrives in L2 when vCPU is not in WFS
+  KVM: nVMX: Unconditionally clear mtf_pending on nested VM-Exit
+  KVM: VMX: Inject #PF on ENCLS as "emulated" #PF
+  KVM: x86: Rename kvm_x86_ops.queue_exception to inject_exception
+  KVM: x86: Make kvm_queued_exception a properly named, visible struct
+  KVM: x86: Formalize blocking of nested pending exceptions
+  KVM: x86: Use kvm_queue_exception_e() to queue #DF
+  KVM: x86: Hoist nested event checks above event injection logic
+  KVM: x86: Evaluate ability to inject SMI/NMI/IRQ after potential
+    VM-Exit
+  KVM: nVMX: Add a helper to identify low-priority #DB traps
+  KVM: nVMX: Document priority of all known events on Intel CPUs
+  KVM: x86: Morph pending exceptions to pending VM-Exits at queue time
+  KVM: x86: Treat pending TRIPLE_FAULT requests as pending exceptions
+  KVM: VMX: Update MTF and ICEBP comments to document KVM's subtle
+    behavior
+  KVM: x86: Rename inject_pending_events() to
+    kvm_check_and_inject_events()
+  KVM: selftests: Use uapi header to get VMX and SVM exit reasons/codes
+  KVM: selftests: Add an x86-only test to verify nested exception
+    queueing
+
+ arch/x86/include/asm/kvm-x86-ops.h            |   2 +-
+ arch/x86/include/asm/kvm_host.h               |  35 +-
+ arch/x86/kvm/emulate.c                        |   3 +-
+ arch/x86/kvm/svm/nested.c                     | 110 ++---
+ arch/x86/kvm/svm/svm.c                        |  20 +-
+ arch/x86/kvm/vmx/nested.c                     | 329 ++++++++-----
+ arch/x86/kvm/vmx/sgx.c                        |   2 +-
+ arch/x86/kvm/vmx/vmx.c                        |  53 ++-
+ arch/x86/kvm/x86.c                            | 450 ++++++++++++------
+ arch/x86/kvm/x86.h                            |  11 +-
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/include/x86_64/svm_util.h   |   7 +-
+ .../selftests/kvm/include/x86_64/vmx.h        |  51 +-
+ .../kvm/x86_64/nested_exceptions_test.c       | 295 ++++++++++++
+ 15 files changed, 950 insertions(+), 420 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c
+
+
+base-commit: 8031d87aa9953ddeb047a5356ebd0b240c30f233
+-- 
+2.37.0.170.g444d1eabd0-goog
+

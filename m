@@ -2,99 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E5257650A
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 18:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D46576511
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 18:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbiGOQCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 12:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
+        id S231342AbiGOQDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 12:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233382AbiGOQCG (ORCPT
+        with ESMTP id S229778AbiGOQDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 12:02:06 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2526747BE;
-        Fri, 15 Jul 2022 09:02:03 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26FFL0YF010551;
-        Fri, 15 Jul 2022 16:01:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Nc7U3jMNz3s5relVkPSuzWGxkTEQWd++fvh2MPtZbDU=;
- b=KQoMl8eYhN6d6yRs668JUFyi3p0AiiMq0OLhbenyevAzQ1dRl1Pn2sUWq1EOyxg3GTY+
- 4vkUAPlwg9vHxfY+YnChBcVItus4fUCjgMg4LnFV7wjc1f6WCKJZnOvT7XdhNwWo0624
- h6gPlUfhBhSdNzhOf3cIr4OIZHp8q4FBKMmtXQw9Oo9z0reD03HKMe1ex9mItzEqRWFR
- OfSSo5lIsKPVhkBXSvBHTfOGeG22u/a4lYMx+dzNPeSDwouOzNjbO2kWZg7icVWTTiAy
- J7rS8n3jKT6NmPVv1HrTgiEyN6SFl2XJI8igH1EN+G25O6BdpC5xtFRm9n0OR19rcZKO 7Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hbat68vfn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 16:01:40 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26FFkLSm026424;
-        Fri, 15 Jul 2022 16:01:40 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hbat68vf5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 16:01:39 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26FFp5vB021358;
-        Fri, 15 Jul 2022 16:01:39 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02dal.us.ibm.com with ESMTP id 3h9am58svk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 16:01:39 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26FG1bhc35914158
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 15 Jul 2022 16:01:37 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B64D1136053;
-        Fri, 15 Jul 2022 16:01:37 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0F72413604F;
-        Fri, 15 Jul 2022 16:01:36 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 15 Jul 2022 16:01:36 +0000 (GMT)
-Message-ID: <3a9196b3-c510-0c32-8b70-572d9c4fe69d@linux.ibm.com>
-Date:   Fri, 15 Jul 2022 12:01:36 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v5 4/6] tpm: of: Make of-tree specific function commonly
- available
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-References: <20220706152329.665636-1-stefanb@linux.ibm.com>
- <20220706152329.665636-5-stefanb@linux.ibm.com> <YsuTRny45aBxGjm5@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <YsuTRny45aBxGjm5@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Ad0o9E6xukVBHUz222-CjzD2D4HlvqOu
-X-Proofpoint-ORIG-GUID: ZqRm3DHERDE5hNRQwUZcbTuvmXWwlZGl
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 15 Jul 2022 12:03:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D442FC8;
+        Fri, 15 Jul 2022 09:03:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C6636216E;
+        Fri, 15 Jul 2022 16:03:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66131C34115;
+        Fri, 15 Jul 2022 16:03:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657901017;
+        bh=jrlFeUIlmq6USCDUyOFysJvOq822JHFZZ7Z40MxY9qw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dadoHH8CNpbJL21+f44Epd5J674JaHKpzitYi5Yt6EmFV684hfkDRo+FU0AUmtQqS
+         z1+Hz1CQ6Pw7Y+OIeVoXKvDwcNmTI/60tTPCQ8DFUG/j8lkQnjDvcE94j18yHU/By2
+         Phhwo4EiJ/3/rQz9AuknKwC9JQR0+oZh5Yls6JEYUch/QOKB1zjBpeTlsPpc3MAnEK
+         WQ1wuH8tWlBKZemmAsiWSaQW3jCKJAkMbHD6WfEpsc7lryOKiga4QG0/3uAqnFeGgF
+         pKQuDymcNVqLw8AZQNAgogELOmcLaCvQoV/n3JomfnruEUbYSGz9jwTWulu9U4d4yp
+         ETqG4+zPC0Crw==
+Date:   Fri, 15 Jul 2022 17:03:31 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "git@xilinx.com" <git@xilinx.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Subject: Re: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
+ device
+Message-ID: <YtGP0+7TPGdcPTEM@sirena.org.uk>
+References: <20220606112607.20800-1-amit.kumar-mahapatra@xilinx.com>
+ <20220606112607.20800-2-amit.kumar-mahapatra@xilinx.com>
+ <YqHfccvhy7e5Bc6m@sirena.org.uk>
+ <40110ff8-5c19-bc54-759b-a51a919788eb@xilinx.com>
+ <Ysw5MpvjKM5LKvWd@sirena.org.uk>
+ <DM6PR12MB2809BA6D4F94EA59E76E6576DC8B9@DM6PR12MB2809.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-15_08,2022-07-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- lowpriorityscore=0 mlxscore=0 phishscore=0 clxscore=1015
- priorityscore=1501 impostorscore=0 adultscore=0 bulkscore=0 spamscore=0
- suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2206140000 definitions=main-2207150068
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DxORmGk94Y1lYeUm"
+Content-Disposition: inline
+In-Reply-To: <DM6PR12MB2809BA6D4F94EA59E76E6576DC8B9@DM6PR12MB2809.namprd12.prod.outlook.com>
+X-Cookie: You dialed 5483.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -102,141 +75,43 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--DxORmGk94Y1lYeUm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 7/10/22 23:04, Jarkko Sakkinen wrote:
-> On Wed, Jul 06, 2022 at 11:23:27AM -0400, Stefan Berger wrote:
->> Simplify tpm_read_log_of() by moving reusable parts of the code into
->> an inline function that makes it commonly available so it can be
->> used also for kexec support. Call the new of_tpm_get_sml_parameters()
->> function from the TPM Open Firmware driver.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Cc: Jarkko Sakkinen <jarkko@kernel.org>
->> Cc: Jason Gunthorpe <jgg@ziepe.ca>
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Cc: Frank Rowand <frowand.list@gmail.com>
->>
->> ---
->> v4:
->>   - converted to inline function
->> ---
->>   drivers/char/tpm/eventlog/of.c | 31 +++++--------------------------
->>   include/linux/tpm.h            | 27 +++++++++++++++++++++++++++
->>   2 files changed, 32 insertions(+), 26 deletions(-)
->>
->> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
->> index a9ce66d09a75..f9462d19632e 100644
->> --- a/drivers/char/tpm/eventlog/of.c
->> +++ b/drivers/char/tpm/eventlog/of.c
->> @@ -12,6 +12,7 @@
->>   
->>   #include <linux/slab.h>
->>   #include <linux/of.h>
->> +#include <linux/tpm.h>
->>   #include <linux/tpm_eventlog.h>
->>   
->>   #include "../tpm.h"
->> @@ -20,11 +21,10 @@
->>   int tpm_read_log_of(struct tpm_chip *chip)
->>   {
->>   	struct device_node *np;
->> -	const u32 *sizep;
->> -	const u64 *basep;
->>   	struct tpm_bios_log *log;
->>   	u32 size;
->>   	u64 base;
->> +	int ret;
->>   
->>   	log = &chip->log;
->>   	if (chip->dev.parent && chip->dev.parent->of_node)
->> @@ -35,30 +35,9 @@ int tpm_read_log_of(struct tpm_chip *chip)
->>   	if (of_property_read_bool(np, "powered-while-suspended"))
->>   		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
->>   
->> -	sizep = of_get_property(np, "linux,sml-size", NULL);
->> -	basep = of_get_property(np, "linux,sml-base", NULL);
->> -	if (sizep == NULL && basep == NULL)
->> -		return -ENODEV;
->> -	if (sizep == NULL || basep == NULL)
->> -		return -EIO;
->> -
->> -	/*
->> -	 * For both vtpm/tpm, firmware has log addr and log size in big
->> -	 * endian format. But in case of vtpm, there is a method called
->> -	 * sml-handover which is run during kernel init even before
->> -	 * device tree is setup. This sml-handover function takes care
->> -	 * of endianness and writes to sml-base and sml-size in little
->> -	 * endian format. For this reason, vtpm doesn't need conversion
->> -	 * but physical tpm needs the conversion.
->> -	 */
+On Fri, Jul 15, 2022 at 03:36:23PM +0000, Mahapatra, Amit Kumar wrote:
 
+> Thank you for the clarification.
+> As per my understanding we would not be needing a new DT=20
+> property for expressing multi chip select support in the driver.
+> We can use "num-cs" property of the spi controller for=20
+> broadcasting multi chip select support of the driver.
+> If "num-cs" value is greater than 1 then the driver can support=20
+> multiple chip selects.
 
-Jarkko,
+That's true in some sense but not in the sense of being actually able to
+use more than one chip select for a single device.  If the controller
+hardware manages the chip selects it may not be physically possible for
+it to control more than one chip select.
 
-  can I apply your R-b tag after putting this lost comment back into the 
-inline function?
-    Stefan
+While it's not an issue for the bindings even hardware that can
+physically do it is going to need a driver update (in the core for GPIO
+stuff) to do so.
 
->> -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
->> -	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
->> -		size = be32_to_cpup((__force __be32 *)sizep);
->> -		base = be64_to_cpup((__force __be64 *)basep);
->> -	} else {
->> -		size = *sizep;
->> -		base = *basep;
->> -	}
->> +	ret = of_tpm_get_sml_parameters(np, &base, &size);
->> +	if (ret < 0)
->> +		return ret;
->>   
->>   	if (size == 0) {
->>   		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
->> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
->> index dfeb25a0362d..b3dff255bc58 100644
->> --- a/include/linux/tpm.h
->> +++ b/include/linux/tpm.h
->> @@ -460,4 +460,31 @@ static inline struct tpm_chip *tpm_default_chip(void)
->>   	return NULL;
->>   }
->>   #endif
->> +
->> +#ifdef CONFIG_OF
->> +static inline int of_tpm_get_sml_parameters(struct device_node *np,
->> +					    u64 *base, u32 *size)
->> +{
->> +	const u32 *sizep;
->> +	const u64 *basep;
->> +
->> +	sizep = of_get_property(np, "linux,sml-size", NULL);
->> +	basep = of_get_property(np, "linux,sml-base", NULL);
->> +	if (sizep == NULL && basep == NULL)
->> +		return -ENODEV;
->> +	if (sizep == NULL || basep == NULL)
->> +		return -EIO;
->> +
->> +	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
->> +	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
->> +		*size = be32_to_cpup((__force __be32 *)sizep);
->> +		*base = be64_to_cpup((__force __be64 *)basep);
->> +	} else {
->> +		*size = *sizep;
->> +		*base = *basep;
->> +	}
->> +	return 0;
->> +}
->> +#endif
->> +
->>   #endif
->> -- 
->> 2.35.1
->>
-> 
-> 
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> BR, Jarkko
-> 
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
+--DxORmGk94Y1lYeUm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLRj9IACgkQJNaLcl1U
+h9ASdQf/ca/l2sFbQii/WohGkZhhQqY8tP78zj73reO3O08IgMatkP91Qg1cm/g4
+C9lTmIC/jAtn3id4aXNkli7H7ZJhq8dOfzd+O5T32FIULoAvLJUnyw6roTsncRul
+RUooo3/llgKSEX9sZ3w/nfOoyBg49Sj/n6hkxuvIIj33Cys2E8y5JzXiVbEyFCkh
+Q9amQxSAa4p+jyDj4zQ1MtY4J58LsepXJkU+E1F/8HuJHieKxChblZKC4LCGwZ2k
+UWVdCUxSTg25IpkLJLrjbJBRuwuwJl9ZGTeDj78Sf9OM/x1vbkgKPwk5RVGioKMV
+vWkEa2d0/0ioERCpoUjzCYH27X8bxg==
+=AYb4
+-----END PGP SIGNATURE-----
+
+--DxORmGk94Y1lYeUm--

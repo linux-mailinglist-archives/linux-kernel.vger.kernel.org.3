@@ -2,140 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5807C5760B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 938A05760B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234360AbiGOLnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 07:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
+        id S234465AbiGOLnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 07:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234288AbiGOLnQ (ORCPT
+        with ESMTP id S232305AbiGOLn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 07:43:16 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F7C87C30
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 04:43:13 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10c0119dd16so5890017fac.6
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 04:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VQI+n5ZVexq/RFQtI9uTeCBYc9Q8ptTIuUXze5tj8Kk=;
-        b=uZGvy+WcHMyYVjCAleBI4P+bCDSsNwSmTD9uDqJfTlJZz91e04FQ09gTeV6bl9KAYc
-         LbPfGGF2CE+5ipsiGFGyAMKjQ/jolT0xAYXhfatc+uv/Vof3YQQncGpJQXIqAcj8u6SE
-         K9R2XwIZItbdjoRhs3pC0rlt272PcbQc2bFrSJvhd9YamEY2M1FqxX+iRUpFMSjoA2Oz
-         6R4Gyk6dVKYrkLS6N/ePpQVEAot9E0g5KpFuQfkxMckUCN/qF1iv06O7ph3Mf+C1109x
-         Jmq4Uj8xZwr6/f6Q1tzSjqKU3GSwcbXqyWIeWBnXtcxx51bewl7OAKpc8VN1v7QOhvFJ
-         gm0Q==
+        Fri, 15 Jul 2022 07:43:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0719B88CC7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 04:43:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657885407;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ki/rg86NxH+wVXrdnmin0JzoM5KA471l52TevDjA+74=;
+        b=gmGJ3Y5ATUZPwfEq9QrYgbiAF/M6in7TeIHKm9Om3MRSuWfrX3+LQdvpthKf0/X1juxIZ0
+        niWb/cXMBmUAY+7kPtieUFUhGVfRWB6L23kM1vyDEiHEeSTqKlp99p7ZmyqQzCQoLOolP/
+        BvrN/qBCCXXqnrsrmQ5xYtVWRpECbhc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-478-30UILfKFP32zO5rZiERzcQ-1; Fri, 15 Jul 2022 07:43:26 -0400
+X-MC-Unique: 30UILfKFP32zO5rZiERzcQ-1
+Received: by mail-wm1-f71.google.com with SMTP id a6-20020a05600c348600b003a2d72b7a15so4129789wmq.9
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 04:43:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VQI+n5ZVexq/RFQtI9uTeCBYc9Q8ptTIuUXze5tj8Kk=;
-        b=4HrSclsbnX0CzWqI065+0zlexYt9C+TcJY6T4DjLw7iVDLvPf2kQg01lWHDIPVRuSo
-         0BjDBXZVjuuSLYC1ZNoSiRsDBbjmAaVD3lLW5D0Gjwu5gHt38q9Q2uCagkh+wGCU5jc9
-         PPKN9zONmWmOPhy1EhbY3BmyKlLYIbeF3Au6CRrzVLYtlqOkWinivDRvxteuaX5cS+uz
-         3GDcgR2KoXjFYtYelZkeJwBeabGV6OzNseWTwDPuG6ZbLvUxW5NrehDApkAKBS6Pf2rj
-         LalCdwLhJWgWsJOVosPgqjcK9jGVXQHNPt8G2rcxTTgnilWhW6HruSyrew118lSpqDLq
-         YDDA==
-X-Gm-Message-State: AJIora8kw/kfrsuzi0OHCdi/DNSYOzOCHB2szKAMFa1oX2f3Y9ZHyGEN
-        CiTDWxEctn9P28vlqBBOkr87HQ==
-X-Google-Smtp-Source: AGRyM1v1cEuvsOrEB1NGvZu3qaCyx+3hVDMt28UI411gif+IDxpkN5hrzgkEzpAQ7jhWf5EFqpP44Q==
-X-Received: by 2002:a05:6870:b148:b0:101:a001:77f with SMTP id a8-20020a056870b14800b00101a001077fmr7612760oal.90.1657885392547;
-        Fri, 15 Jul 2022 04:43:12 -0700 (PDT)
-Received: from [192.168.1.195] ([187.36.234.139])
-        by smtp.gmail.com with ESMTPSA id r41-20020a056870582900b00108b31bf8fbsm2233890oap.53.2022.07.15.04.43.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 04:43:12 -0700 (PDT)
-Message-ID: <df984423-a751-2251-e392-840675da31e5@usp.br>
-Date:   Fri, 15 Jul 2022 08:43:02 -0300
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=ki/rg86NxH+wVXrdnmin0JzoM5KA471l52TevDjA+74=;
+        b=DCWO1pbbjK3oasyq3kEZ5arR4fd1IV9Jo/Wt+e55QHBQ+hQXPESCqp6VIA7DRcDtMW
+         xpWJdKeU0lUKY3Q9P0P7O2GBnNu+ZN/69WWRCfPToco9DqfSDRRKiRSWOk/0nsdA+o6c
+         YoCAGlaNvtIIaGE8u4ocCQLcZukYugfUJe8JU5OyAPpQk+tv5+xS2P+2GWcmM/CLlXZM
+         WjEA9shsNfYmvzbxQvMdfPZVgVApo+hop7z4mc9cUbsMOkJoUsXY1x0/LArrzOCRJa7m
+         KekmFUURgTJOgT7RIub/cXFq9DAOMg9IoKFSzS31BIoLuvcaq8REa6yNbRzktNnbncnO
+         dubQ==
+X-Gm-Message-State: AJIora+CWR8I3BP6qyPwwMEbXO2Fo/GXLZ2Ud4APILN3yWG2TMoBfKc2
+        f+fCj11Cvwc4N7McDoppBt3NzmoZG3VpeqLt3l7lBWQyqMnsIO6IXu2UFI4Mz9jbiUBTDrzXYGW
+        J0susof5mUXw0dqsYRkkqUuUM
+X-Received: by 2002:a05:600c:4e90:b0:3a0:57d6:4458 with SMTP id f16-20020a05600c4e9000b003a057d64458mr13918805wmq.198.1657885404891;
+        Fri, 15 Jul 2022 04:43:24 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1voIa5Xp8Y0zIi2+lyef5dLJtzpVn4q2JN57Y+LEI7F2eUcC5n0x/9efIPGFXDC6NoCXzKKcA==
+X-Received: by 2002:a05:600c:4e90:b0:3a0:57d6:4458 with SMTP id f16-20020a05600c4e9000b003a057d64458mr13918780wmq.198.1657885404641;
+        Fri, 15 Jul 2022 04:43:24 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id m24-20020a056000181800b0021d68e1fd42sm3655846wrh.89.2022.07.15.04.43.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 04:43:23 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        "Durrant, Paul" <pdurrant@amazon.co.uk>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v5] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info)
+ sub-leaves, if present
+In-Reply-To: <Ys2E2ckrk0JtDl52@google.com>
+References: <20220629130514.15780-1-pdurrant@amazon.com>
+ <YsynoyUb4zrMBhRU@google.com>
+ <369c3e9e02f947e2a2b0c093cbddc99c@EX13D32EUC003.ant.amazon.com>
+ <Ys2E2ckrk0JtDl52@google.com>
+Date:   Fri, 15 Jul 2022 13:43:22 +0200
+Message-ID: <87ilnymwit.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 4/9] drm: selftest: convert drm_format selftest to
- KUnit
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        michal.winiarski@intel.com,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>, brendanhiggins@google.com,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220708203052.236290-1-maira.canal@usp.br>
- <20220708203052.236290-5-maira.canal@usp.br>
- <20220714235137.GA485839@roeck-us.net>
- <CAGS_qxrhy3=pST9f85fvxubKQShOq1XF6ZHALzMhXDOf5gnaUg@mail.gmail.com>
- <5f9b35b4-09fa-a8a9-3181-cd8cd7898d03@redhat.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>
-In-Reply-To: <5f9b35b4-09fa-a8a9-3181-cd8cd7898d03@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/15/22 03:59, Javier Martinez Canillas wrote:
-> On 7/15/22 02:03, Daniel Latypov wrote:
->> On Thu, Jul 14, 2022 at 4:51 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>>
->>> On Fri, Jul 08, 2022 at 05:30:47PM -0300, Maíra Canal wrote:
->>>> Considering the current adoption of the KUnit framework, convert the
->>>> DRM format selftest to the KUnit API.
->>>>
->>>> Tested-by: David Gow <davidgow@google.com>
->>>> Acked-by: Daniel Latypov <dlatypov@google.com>
->>>> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
->>>> Signed-off-by: Maíra Canal <maira.canal@usp.br>
->>>
->>> This patch results in:
->>>
->>> Building powerpc:allmodconfig ... failed
->>> --------------
->>> Error log:
->>> drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_format_min_pitch':
->>> drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of 3712 bytes is larger than 2048 bytes
->>>
->>> presumably due to function nesting.
->>
->> This can happen when there's a lot of KUNIT_EXPECT_* calls in a single function.
->> See [1] for some related context.
->> There were a number of patches that went into 5.18 ([2] and others) to
->> try and mitigate this, but it's not always enough.
->>
->> Ideally the compiler would see that the stack-local variables used in
->> these macros don't need to stick around, but it doesn't always
->> happen...
-> 
-> Thanks Daniel for the explanation.
-> 
->> One workaround would be to split up the test case functions into smaller chunks.
->>
-> 
-> Maíra,
-> 
-> Could you please look at splitting in smaller chunks to mitigate this issue ?
+Sean Christopherson <seanjc@google.com> writes:
 
-I'll look into this during the weekend. Thanks Guenter for the report.
+> On Tue, Jul 12, 2022, Durrant, Paul wrote:
+>> > > @@ -1855,3 +1858,51 @@ void kvm_xen_destroy_vm(struct kvm *kvm)
+>> > >       if (kvm->arch.xen_hvm_config.msr)
+>> > >               static_branch_slow_dec_deferred(&kvm_xen_enabled);
+>> > >  }
+>> > > +
+>> > > +void kvm_xen_after_set_cpuid(struct kvm_vcpu *vcpu)
+>> > > +{
+>> > > +     u32 base = 0;
+>> > > +     u32 limit;
+>> > > +     u32 function;
+>> > > +
+>> > > +     vcpu->arch.xen.cpuid_tsc_info = 0;
+>> > > +
+>> > > +     for_each_possible_hypervisor_cpuid_base(function) {
+>> > > +             struct kvm_cpuid_entry2 *entry = kvm_find_cpuid_entry(vcpu, function, 0);
+>> > > +
+>> > > +             if (entry &&
+>> > > +                 entry->ebx == XEN_CPUID_SIGNATURE_EBX &&
+>> > > +                 entry->ecx == XEN_CPUID_SIGNATURE_ECX &&
+>> > > +                 entry->edx == XEN_CPUID_SIGNATURE_EDX) {
+>> > > +                     base = function;
+>> > > +                     limit = entry->eax;
+>> > > +                     break;
+>> > > +             }
+>> > > +     }
+>> > > +     if (!base)
+>> > > +             return;
+>> > 
+>> > Rather than open code a variant of kvm_update_kvm_cpuid_base(), that helper can
+>> > be tweaked to take a signature.  Along with a patch to provide a #define for Xen's
+>> > signature as a string, this entire function becomes a one-liner.
+>> > 
+>> 
+>> Sure, but as said above, we could make capturing the limit part of the
+>> general function too. It could even be extended to capture the Hyper-V
+>> base/limit too.  As for defining the sig as a string... I guess it would be
+>> neater to use the values from the Xen header, but it'll probably make the
+>> code more ugly so a secondary definition is reasonable.
+>
+> The base needs to be captured separately for KVM and Xen because KVM (and presumably
+> Xen itself since Xen also allows a variable base) supports advertising multiple
+> hypervisors to the guest.  I don't know if there are any guests that will concurrently
+> utilize multiple hypervisor's paravirt features, so maybe we could squeak by, but
+> saving 4 bytes isn't worth the risk.
+>
+> AFAIK, Hyper-V doesn't allow for a variable base, and so doesn't utilize the
+> for_each_possible... macro.
 
-Best Regards,
-- Maíra Canal
+FWIW, this matches my understanding too: Windows guests don't seem to
+check anything besides 0x40000001 and give up if Hyper-V's id is not
+there.
 
-> 
+-- 
+Vitaly
+

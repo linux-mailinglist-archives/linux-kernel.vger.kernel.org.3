@@ -2,95 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168C45769EE
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 823415769F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbiGOWeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S232343AbiGOWfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbiGOWeI (ORCPT
+        with ESMTP id S230144AbiGOWf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:34:08 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC758B7E4
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:34:06 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id d16so8523913wrv.10
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:34:06 -0700 (PDT)
+        Fri, 15 Jul 2022 18:35:27 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5F76BC03
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:26 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id o5-20020a170902d4c500b0016c643623e8so2730722plg.13
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wOP2A2FeSpHI1WPKlFbVK/7JXB5FOqAuroR4HnQVIN8=;
-        b=yU9E9Wg5JswBO9l8eJlendpb+vPlcQCfr4Y5vU+yHGP3wDLUgKEGxGWipU0CuHSSzZ
-         5QKHvpmDNEq9bU/xfGJ+UwJXQT469Plvf2uL9Zm6VDXbbrXjx+cQQjvqxEuUYUkq01qh
-         OwwgXhE/YJ1RnarjTa0CQ056VFpGpq/ADeoQeTU2+c5bTgLrvtUDMC/aEL4UoLgW6hwj
-         S4+S2PYLtE9ld6VXyNFmIMibuL1v/MC6kY3iSNPX+HdmuXCVG4dvSFiZaTNw2/4YnUKQ
-         510GDbFsryCi08oVM816gquWyJLJ1oJbCl+ywjPxCCemAmwx5uYLsiD4Sxdh/mvczme7
-         toog==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Uj8SeARJLMyg9DKNAY9bhB9140qxBdG/Kjci8bJYAcA=;
+        b=B3mv3BlHwHMDgtvov1Ex0MLQMTBHWfAjEw5B98QgJ10P4WsUB7Hy0Iuv/h2Ddm22Yd
+         1kAx+gsJSeNNS7hcFZwLJ0Iy6NKjM9EOSq2DLHkp4shetdd+QkMRP3pV0XDUM+hw6lK4
+         lJFoo13P+QpUdXVaNQ8uhiUfMo0VJOy97oxhIGpucim/MJ0PWEy9+Un8UZXO1ovLjdKT
+         tJGIGgWQHw7p4syJxZFPHxZXtg7aZcTtmjfhxezdgJ5mlAHRU2L15GkM5bjq65pr2z0p
+         mTP/FUyRJTeZbS5Grbv4Xnv+r76K2lIJATz41DbiHYp3n/83gCEkHvAU6kC/Vl/X6wVe
+         7ilQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wOP2A2FeSpHI1WPKlFbVK/7JXB5FOqAuroR4HnQVIN8=;
-        b=oC0CX8DQppyuWH9/qoymDczPFjRjWRC9+hCA2FAWq2oXDr+lZwqPLpHFAAUTnRSric
-         pc7QfswMQNWlVck4JC+NxcewSEQ+OD5JDJR99IlTe2O9dAoKaoMXm2m2Igw6eUnlJQIQ
-         i02qA8fJTbm3875AtAQu0AstXlEhSsYpWL9ZSq3HIA/Vg2M72lwXRenp8K+g9jufRxqm
-         08+AdjZrejGfr6KQSIxa1i6bg5hKowrgdsZ8hc0ZuGHHLiq8FonkbpTNqMyZaCmquzUn
-         kVBvrLumjrxpOXx3/DDgqjzbgM2eFPH5ORETXDyFyk+MWOYr0/LekMxD9pbkr41UvqQG
-         T8jQ==
-X-Gm-Message-State: AJIora+eJaZf/Rl1wZ2H76IFyptX5s1b+JBWBeQZhYXgpRsNTqBlsExl
-        ChyBgHPtZ3eReqteILlUKR7ujuyTNWZwQQ==
-X-Google-Smtp-Source: AGRyM1tbT9XekkCh3jRlzFprRNajmItl/jpNcqdWw/6Y7rtttT4qARHLc7X74MPURYIChJNKmgjbmQ==
-X-Received: by 2002:a5d:64cc:0:b0:21d:a4bd:fdbe with SMTP id f12-20020a5d64cc000000b0021da4bdfdbemr14234254wri.580.1657924445455;
-        Fri, 15 Jul 2022 15:34:05 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:a223:f4b3:40c9:43fa? ([2a05:6e02:1041:c10:a223:f4b3:40c9:43fa])
-        by smtp.googlemail.com with ESMTPSA id r16-20020a5d52d0000000b0021dabdc381fsm4719388wrv.22.2022.07.15.15.34.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 15:34:04 -0700 (PDT)
-Message-ID: <b00b14a5-0e8d-bf64-de02-2551eb5df6df@linaro.org>
-Date:   Sat, 16 Jul 2022 00:34:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] clocksource: arm_global_timer: fix Kconfig "its" grammar
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220715015852.12523-1-rdunlap@infradead.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220715015852.12523-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Uj8SeARJLMyg9DKNAY9bhB9140qxBdG/Kjci8bJYAcA=;
+        b=7IPB8yEGxMWCsBCmHkP00kLC4c1z86PJfDLjhPxYGRDAMqimrOWLWmyxyPOa5jMAOx
+         GVcCwlJRdjnIIYJp/Jm001ZwPvapK9WU6E0mK/dVzrc37FoCoSfZEy+hF+1jACjtADw/
+         qWg+ES3Yo0xn6PtHSbNlokMLLkRU91XTCooYh7zppQUFu6yxG+gYqnnJTP08ujp1h3tM
+         gca7Z1M3UaA89YOYUNq4KQXcHLZ2hnTy/1LKUcvuowlg2PnlmoF5w6pq2BQPrWREM2lS
+         K9Rrlyzi+nm9JyKAAzRORra2vgt2nnPnSAKMzrskmsShvkI+1zZET0zxdcD1J1kebPIU
+         qtTQ==
+X-Gm-Message-State: AJIora/sezHhl/z74mdM53czZ0Lh0RtFDYa5IReMwFNh/wUOurAr9Kv9
+        zYJy5Q1Z5RkAO9unMbccF/az1IP08oqB
+X-Google-Smtp-Source: AGRyM1uSAOMdbZrHCTFno/wdibRMWE6UTsIa2Rm/sYU3ri4fJ2Yh2RItC7fxs2mk+32HpyRDzEtGwQOnAUzb
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:72de:b499:63be:efe1])
+ (user=irogers job=sendgmr) by 2002:a05:6a00:2347:b0:52a:cf39:59a5 with SMTP
+ id j7-20020a056a00234700b0052acf3959a5mr15760131pfj.28.1657924526164; Fri, 15
+ Jul 2022 15:35:26 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 15:35:19 -0700
+Message-Id: <20220715223521.3389971-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH v3 0/2] Add arch TSC frequency information
+From:   Ian Rogers <irogers@google.com>
+To:     perry.taylor@intel.com, caleb.biggers@intel.com,
+        kshipra.bopardikar@intel.com,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/07/2022 03:58, Randy Dunlap wrote:
-> Use the possessive "its" instead of the contraction "it's"
-> where appropriate.
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: linux-arm-kernel@lists.infradead.org
-> ---
+The first patch adds support for deriving from /proc/cpuinfo and adds
+tests. The second patch from Kan Liang derives it from CPUID available
+on newer Intel processors as discussed here:
+https://lore.kernel.org/lkml/20220527040407.4193232-1-irogers@google.com/#t
 
-Applied, thanks
+v2. Adds warnings to make clear if things have changed/broken on future
+    Intel platforms. It also adds caching and an Intel specific that a
+    value is computed.
 
+Ian Rogers (1):
+  perf metrics: Add literal for system TSC frequency
+
+Kan Liang (1):
+  perf tsc: Add arch TSC frequency information
+
+ tools/perf/arch/x86/util/cpuid.h  | 34 +++++++++++++++++
+ tools/perf/arch/x86/util/header.c | 27 ++++++--------
+ tools/perf/arch/x86/util/tsc.c    | 33 ++++++++++++++++
+ tools/perf/tests/expr.c           | 15 ++++++++
+ tools/perf/util/expr.c            | 62 +++++++++++++++++++++++++++++++
+ tools/perf/util/tsc.h             |  1 +
+ 6 files changed, 156 insertions(+), 16 deletions(-)
+ create mode 100644 tools/perf/arch/x86/util/cpuid.h
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.37.0.170.g444d1eabd0-goog
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

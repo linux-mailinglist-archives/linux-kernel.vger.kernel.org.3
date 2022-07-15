@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C51578254
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C236857825A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234384AbiGRM2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
+        id S234484AbiGRMa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiGRM2d (ORCPT
+        with ESMTP id S233110AbiGRMaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:28:33 -0400
+        Mon, 18 Jul 2022 08:30:24 -0400
 Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C38B25E8D;
-        Mon, 18 Jul 2022 05:28:28 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1658147295tjonkhrc
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DB69FF7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:30:20 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1658147384tla2pq15
 Received: from localhost.localdomain ( [171.223.96.21])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 18 Jul 2022 20:28:14 +0800 (CST)
+        id ; Mon, 18 Jul 2022 20:29:42 +0800 (CST)
 X-QQ-SSF: 01000000002000E0U000C00A0000020
-X-QQ-FEAT: 4rCmCcmdMHf21FkghsKkD9U1bfbfRHIEFGsJSAc68J4bW5HbM3c3skKotsThN
-        QXIhAYkp8Kzkxs7vVWXego9VLz0jB5TWVUhqvFOGw/00AfPTs5SGviv9b9Joo90SGMDIl6E
-        XzxotuTPSQPpksDyAzloE//ooyt6gBYPRa0tgL3pvbF3DQY6JKFBtLH5t761TIwOxqkgj0l
-        xt7KWzb063OIgiwsV/q9ke5wxDFHd23zHkMGGCDGiOfiJh5n6xLbhQNzRXFdivaSYD8IhvW
-        d7vqpZ3V2aNgASa6BNc+7caBA+9sf/oqz2DXFS83bN5A2eUj5yekFyDDQrf7kyc3jzy0/4q
-        uNer8Y+jhWTxfqxLTRae3ArcylxWA7WFZKm1xdUipDoAwSCg2Svn78uoB8bYIh9sqBrAcRP
+X-QQ-FEAT: MFQNDABwGMnG3QsZatbGD4I1WiXIyJyAzMqiZ/sq9ymsqWHZaTxRD8C1sUp0j
+        weG4VLNP13F2upYyDFzGL4ign7OARYznrnjudfnKh1ZVprTt24A8h9HhTU9/dRKtbTBFgSQ
+        mFndtoV5zqDneUISK4eV3Oeo2lKWSN1c/ylTD1PyA2/TC14bhmPTyYOyfnRG/b4ymvD+37j
+        OTMHw0m7Z9x+Q+lJSLvduZSYWfGIyIVMouR0V4gwtAljd1epyXtWUhkPJjxEUIG5HHaKEwd
+        VxBzNrFb0Qb/47npqGwhB7N2eJnyLU639Kop8RUKj1msJIQMp+uGHhwkDggwWbGX7krXLKb
+        zt4Ut0Tum387alsqj4PcBLMSK3J5aLr3YE5gYtg/vFc7r36F/SCvkvqCD4bFsRTtjjMp+vW
+        mx+dqcRadG0=
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     davem@davemloft.net
-Cc:     schnelle@linux.ibm.com, oohall@gmail.com, bhelgaas@google.com,
-        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     haojian.zhuang@gmail.com
+Cc:     daniel@zonque.org, robert.jarzmik@free.fr, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] sparc: Fix comment typo
-Date:   Fri, 15 Jul 2022 12:26:10 +0800
-Message-Id: <20220715042610.14570-1-wangborong@cdjrlc.com>
+Subject: [PATCH] ARM: pxa: hx4700: Fix comment typo
+Date:   Fri, 15 Jul 2022 12:27:45 +0800
+Message-Id: <20220715042745.14883-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -49,26 +50,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `the' is duplicated in line 313, remove one.
+The double `the' is duplicated in line 33, remove one.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- arch/sparc/kernel/pci.c | 2 +-
+ arch/arm/mach-pxa/hx4700-pcmcia.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/sparc/kernel/pci.c b/arch/sparc/kernel/pci.c
-index 31b0c1983286..385c61d199cd 100644
---- a/arch/sparc/kernel/pci.c
-+++ b/arch/sparc/kernel/pci.c
-@@ -310,7 +310,7 @@ static struct pci_dev *of_create_pci_dev(struct pci_pbm_info *pbm,
- 	/* We can't actually use the firmware value, we have
- 	 * to read what is in the register right now.  One
- 	 * reason is that in the case of IDE interfaces the
--	 * firmware can sample the value before the the IDE
-+	 * firmware can sample the value before the IDE
- 	 * interface is programmed into native mode.
+diff --git a/arch/arm/mach-pxa/hx4700-pcmcia.c b/arch/arm/mach-pxa/hx4700-pcmcia.c
+index e2331dfe427d..860b78aed18c 100644
+--- a/arch/arm/mach-pxa/hx4700-pcmcia.c
++++ b/arch/arm/mach-pxa/hx4700-pcmcia.c
+@@ -30,7 +30,7 @@ static int hx4700_pcmcia_hw_init(struct soc_pcmcia_socket *skt)
+ 	/*
+ 	 * IRQ type must be set before soc_pcmcia_hw_init() calls request_irq().
+ 	 * The asic3 default IRQ type is level trigger low level detect, exactly
+-	 * the the signal present on GPIOD4_CF_nCD when a CF card is inserted.
++	 * the signal present on GPIOD4_CF_nCD when a CF card is inserted.
+ 	 * If the IRQ type is not changed, the asic3 interrupt handler will loop
+ 	 * repeatedly because it is unable to clear the level trigger interrupt.
  	 */
- 	pci_read_config_dword(dev, PCI_CLASS_REVISION, &class);
 -- 
 2.35.1
 

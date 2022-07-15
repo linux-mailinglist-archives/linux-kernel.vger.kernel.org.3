@@ -2,103 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4345576AC0
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C65576AC6
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbiGOXdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 19:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
+        id S231266AbiGOXeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 19:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiGOXdK (ORCPT
+        with ESMTP id S232778AbiGOXeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 19:33:10 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7501012AF9
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:33:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E928BCE30C4
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 23:33:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B59C34115;
-        Fri, 15 Jul 2022 23:33:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1657927986;
-        bh=C2b3YLrjkNeagDR8DxwpKkhSaFC5JfY7+Rq4F/K+LUM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FEnapZq/UkEN2jjYPl8+26kKS3k5gOPiKVO0480IXNXy2jy8Fv0LNLk5zZKQEjRrd
-         7uGrChARWx5XIGasYrEq7mh0U8jZqSDuZSVl6LlXXIqHcVq9FN9LzLQkQsozA42DTC
-         uB/aBzyjZrXApZE1z7dWbS9MuKm4D+hzdrGkWso0=
-Date:   Fri, 15 Jul 2022 16:33:05 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     yee.lee@mediatek.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:KFENCE" <kasan-dev@googlegroups.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Marco Elver <elver@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: [PATCH v2 1/1] mm: kfence: apply kmemleak_ignore_phys on early
- allocated pool
-Message-Id: <20220715163305.e70c8542d5e7d96c5fd87185@linux-foundation.org>
-In-Reply-To: <CAMuHMdX=MTsmo5ZVa8ya3xmr4Mx7f0PB3gvFF42pdaTYB6-u5A@mail.gmail.com>
-References: <20220628113714.7792-1-yee.lee@mediatek.com>
-        <20220628113714.7792-2-yee.lee@mediatek.com>
-        <CAMuHMdX=MTsmo5ZVa8ya3xmr4Mx7f0PB3gvFF42pdaTYB6-u5A@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 15 Jul 2022 19:34:11 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A153913E1C;
+        Fri, 15 Jul 2022 16:34:10 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso7487532pjk.3;
+        Fri, 15 Jul 2022 16:34:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=HVuLWaX/51pe6iPKpZjM/AG01K4knnM/A3m3uAhbAQs=;
+        b=Y8DVxR6sOawVEjaHLCXc1dJoDIL28pl/tbsDsHTC7h8M9ZMK/Qunzt1Po92GRQnLFD
+         6ojEkwkeczjtyYJaRbl8xWrbftge7ceHpByaXgFxCAxk6Sjx3upElB7cJR/rUrxf9hxX
+         ciMkiXbjnNhK2zMD21wKE+x3C5yqFcvY4UR8CLlzfeHCt7qV427MbwY07hEUr31H31P1
+         6s4Z96mQme4sH+7IywQ87UHRW44iZFAfEFakEmCFayGok9AfaFIQw3qoJYJfO3nWhufc
+         JUWcqoJqTR/7wsz89CIAMJR49+XZ6FihlU31Z7jsH931f1cgeHt8M2Su1/xGuCLXrgZF
+         c1ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=HVuLWaX/51pe6iPKpZjM/AG01K4knnM/A3m3uAhbAQs=;
+        b=3pbCwChevjPxVRqB3+HNOE6HCOfQQHWuZSSf/NkHb1FJHo0E+4feOsLrMIBttzXCRR
+         WyNiZAaZUgfRtAe3SuaVazkGSouMo2QcMT7xcaLplGvioW79Z6xMTuSTKaVGOr6hYhPL
+         MGxhneWcsuIG7dSH4y2El5nCBiKeb7e1cvmzbr+qbj0lj/2d9BGeZ/ZvmtyptMmKwBUQ
+         2b4QjUyIQNWZX8uYqaxU5HkSGQskgNBmS+LQ0GkChV4ndd+cT1g6Jh1nKZ2OaQT9O8JW
+         xVPoERsiok5uI8KbUd4Fc6D9YZImqT4Sx3H07YtkJ6ERcRH0QPwFAqd6n0w+rLreoLe2
+         amLA==
+X-Gm-Message-State: AJIora8qFF4bLhsHTEJpQlBqVjjHFSN9VVJnizR2cMj435P39DCB6kbe
+        Jxj/mmWnpUMhSXGJF03GWcQ=
+X-Google-Smtp-Source: AGRyM1uM81+cKbKT3WGocUxAy5d1sDgAAMq6j/VwKs19GHZuTtzSuJ2OhHXu8WyZAUMGVKKTwS1R+w==
+X-Received: by 2002:a17:902:d543:b0:16c:3150:9ba1 with SMTP id z3-20020a170902d54300b0016c31509ba1mr16469556plf.13.1657928050099;
+        Fri, 15 Jul 2022 16:34:10 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t2-20020a170902e84200b0016c2da4e73fsm4170878plg.106.2022.07.15.16.34.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 16:34:09 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 15 Jul 2022 16:34:08 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Paul Fertser <fercerpav@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aspeed-pwm-tacho) increase fan tach period
+ (again)
+Message-ID: <20220715233408.GA2181024@roeck-us.net>
+References: <20220714142344.27071-1-fercerpav@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220714142344.27071-1-fercerpav@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Jul 2022 10:17:43 +0200 Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-
-> On Tue, Jun 28, 2022 at 1:42 PM <yee.lee@mediatek.com> wrote:
-> > From: Yee Lee <yee.lee@mediatek.com>
-> >
-> > This patch solves two issues.
-> >
-> > (1) The pool allocated by memblock needs to unregister from
-> > kmemleak scanning. Apply kmemleak_ignore_phys to replace the
-> > original kmemleak_free as its address now is stored in the phys tree.
-> >
-> > (2) The pool late allocated by page-alloc doesn't need to unregister.
-> > Move out the freeing operation from its call path.
-> >
-> > Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
-> > Suggested-by: Marco Elver <elver@google.com>
-> > Signed-off-by: Yee Lee <yee.lee@mediatek.com>
+On Thu, Jul 14, 2022 at 05:23:44PM +0300, Paul Fertser wrote:
+> The old value allows measuring fan speeds down to about 970 RPM and
+> gives timeout for anything less than that. It is problematic because it
+> can also be used as an indicator for fan failure or absence.
 > 
-> Thank you, this fixes the storm of
+> Despite having read the relevant section of "ASPEED AST2500/AST2520 A2
+> Datasheet – V1.7" multiple times I wasn't able to figure out what
+> exactly "fan tach period" and "fan tach falling point of period" mean
+> (both are set by the driver from the constant this patch is amending).
 > 
->     BUG: KFENCE: invalid read in scan_block+0x78/0x130
->     BUG: KFENCE: use-after-free read in scan_block+0x78/0x130
->     BUG: KFENCE: out-of-bounds read in scan_block+0x78/0x130
+> Experimentation with a Tioga Pass OCP board (AST2500 BMC) showed that
+> value of 0x0108 gives time outs for speeds below 1500 RPM and the value
+> offered by the patch is good for at least 750 RPM (the fans can't spin
+> any slower so the lower bound is unknown). Measuring with the fans
+> spinning takes about 30 ms, sometimes down to 18 ms, so about the same
+> as with the previous value.
 > 
-> messages I was seeing on arm64.
+> This constant was last changed in
+> 762b1e88801357770889d013c5d20fe110d1f456.
+> 
+> Signed-off-by: Paul Fertser <fercerpav@gmail.com>
 
-Thanks, but...
+Patrick - any feedback ? Would it be possible to test this change with
+Quanta-q71l ? Or do you envision no problems ?
 
-- It would be great if we could identify a Fixes: for this.
+Thanks,
+Guenter
 
-- This patch has been accused of crashing the kernel:
-
-	https://lkml.kernel.org/r/YsFeUHkrFTQ7T51Q@xsang-OptiPlex-9020
-
-  Do we think that report is bogus?
+> ---
+>  drivers/hwmon/aspeed-pwm-tacho.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+> index 3cb88d6fbec0..d11f674e3dc3 100644
+> --- a/drivers/hwmon/aspeed-pwm-tacho.c
+> +++ b/drivers/hwmon/aspeed-pwm-tacho.c
+> @@ -159,7 +159,7 @@
+>   * 11: reserved.
+>   */
+>  #define M_TACH_MODE 0x02 /* 10b */
+> -#define M_TACH_UNIT 0x0210
+> +#define M_TACH_UNIT 0x0420
+>  #define INIT_FAN_CTRL 0xFF
+>  
+>  /* How long we sleep in us while waiting for an RPM result. */

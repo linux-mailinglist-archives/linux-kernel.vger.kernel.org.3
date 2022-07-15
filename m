@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1AB5769F1
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23DF55769F2
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiGOWfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
+        id S232708AbiGOWfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbiGOWfa (ORCPT
+        with ESMTP id S232533AbiGOWfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:35:30 -0400
+        Fri, 15 Jul 2022 18:35:36 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECA26C108
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:29 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id r16-20020a257610000000b0066f5239588eso4783833ybc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95D76D54C
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:31 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id t10-20020a5b07ca000000b0066ec1bb6e2cso4766112ybq.14
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Jr53tgo6pPtSm720C8wiHjlk7XjKJWW+YOa2HOTSwBk=;
-        b=nxCFMMK7okp6PcYQszzFL7Pkq85ar+xehe9K+lNxnEcxIix+Fllvyo8hDDDJIv59m4
-         0BrmBLRkkCD7gT8uFqKb1AJVaPdKCAgo9pAVHhdR400pdP24pyp08yCQtuQ6qbCOKNH0
-         ok/DVKokk/sYzVJHYOecs+hV6Mob8ATctQpItggNN4rAoZHRFZ8ebRcd+uPl8blCtogd
-         AJA3IH+2kSDDsHZkwboTb+XHMJhD9C2DHuDAI9bmVwPTkNUFk1N4owxnWN3lDmQlJC17
-         JGfCOXLgtzenGEPy3jAvoMq3s8LZ2AkVktQ5Nvd/H4+P+14Jm9/l2pxpk/rUnMLP9Bj5
-         BBIg==
+        bh=fH5/pDMEYCY8SUmiVMKR5Ga7ZJ52u6LPz4jcyuW03tw=;
+        b=F4GXvgMn5lYyGWw4Uc6NIMHAZJoAwhlVfJjWahz6uimrpxmF4Kzjai94oZWkR1QvhV
+         f4QCoEWsHpMEWQqVKlbvGLoGvZTxYJerr6L7YNbaDK5I6Zd0X1K6TaIMW4c9t+X2zFrM
+         uLO5vuOKkEc50YTY5TVK0U4kishXvpxBHWqNsFPIEAAMzEaIJsyB8FIYg4k4vHLfXto4
+         LLsxvk6zrkIJqnAz4FCruCus94+nHwtSZDtjQbzzAwM5d7n+b2/BvfGvo50vm/Qyf4by
+         j5FJWGdj7E1+n2cmIZBIGTbwqTCDeCOAMIENcuKZVk5q91kJzcDIQNDzNE1djSK1aW89
+         TuGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Jr53tgo6pPtSm720C8wiHjlk7XjKJWW+YOa2HOTSwBk=;
-        b=SgidoGQVxZvf0u/jMt9+upj5b/OWdMQBYeFta3Ep4x8RMV2l9IKGB3pdrxEBbpXh9o
-         UunchiIzSRSNYeR1UHemrJq5Axpbsr8vdS2fZOxnlD9EG2zfIWisbM7q0aFr+hnONXPa
-         cS+9sftmNWyi+57NtYU5qXlbAUXyuXOFc0aT5se5FwfIpr+B+sZUGy+ferlxyUMX+gGT
-         uEaT+05XJzIx/GRFb/DTPC29H057bRj+/GEpvdNa06USAh3ZVyTOuo3gb9DLcD4h4i2z
-         HzwmjgMDqP9lVGUaOLzRY4s/20w8N7vwJTmUxBv8UU31tcfic/16Z27yidp6aTsL/40K
-         L/ew==
-X-Gm-Message-State: AJIora82AsL4NG+KAbAcJL1aQtA/HsLrb+pSdr0cZA/wPhf+VXuYp85c
-        RbMq3drp/YSsiKOtCVtMYKhi8tE9gb3g
-X-Google-Smtp-Source: AGRyM1vgU8ro3WU7pMf71EqDWZhvbhbOjrSPyemVok5CitutWzRVlfFvrSr4djCS+u/ExEJUG7ZSOlBig+Qf
+        bh=fH5/pDMEYCY8SUmiVMKR5Ga7ZJ52u6LPz4jcyuW03tw=;
+        b=0yckp2uGgQQNVMhupEgPD61WyskLrtgewcUnYVGYPJDRXhFzZTHlFxOrbn/pQGyBo0
+         1KmpwUOt/XjddWxm0eaEC3pR8giOaY1wsh4nujWeLSGiZv5pKJ0dyDhYsQRM0l4cozwI
+         eJ8JUmzIJMieKN4mRPT2UGIxhmSyKIHeg7FPZri0byD5GlGmv+TYeqbh60fg7GYTfYq8
+         SbpkwFwgJjaDP8GM8tFbZfqMTP/13ZV+T30wWZ0rEdFQ0BCaFPIZEGtOlB3i9N3M1N0t
+         2yiFckKvGZWspcXfrgpSRvBIDicuD9MjEvv6yNE4ObJwUytTj6Q5NKxc8z/FSRHgG1Oz
+         LofA==
+X-Gm-Message-State: AJIora9vOoHviSLR98JqFL5g/AQ4d7TpW10vj/W/qLL/BqdXdflhtawi
+        b5Cna0S9TkQ0hV44euxkBUJAq9iv/mMY
+X-Google-Smtp-Source: AGRyM1tffswOsW0OlrF0Kr3r5kCpMECXZhBpgglfMmgOZn/EvrepcZb/vb2/5+uEEKnzYNqVVMmBac8dqsU7
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:72de:b499:63be:efe1])
- (user=irogers job=sendgmr) by 2002:a25:bdc6:0:b0:66e:3b23:55f6 with SMTP id
- g6-20020a25bdc6000000b0066e3b2355f6mr16485350ybk.230.1657924528660; Fri, 15
- Jul 2022 15:35:28 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 15:35:20 -0700
+ (user=irogers job=sendgmr) by 2002:a81:1949:0:b0:31c:7f17:e2e4 with SMTP id
+ 70-20020a811949000000b0031c7f17e2e4mr18539902ywz.485.1657924531165; Fri, 15
+ Jul 2022 15:35:31 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 15:35:21 -0700
 In-Reply-To: <20220715223521.3389971-1-irogers@google.com>
-Message-Id: <20220715223521.3389971-2-irogers@google.com>
+Message-Id: <20220715223521.3389971-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20220715223521.3389971-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v3 1/2] perf metrics: Add literal for system TSC frequency
+Subject: [PATCH v3 2/2] perf tsc: Add arch TSC frequency information
 From:   Ian Rogers <irogers@google.com>
 To:     perry.taylor@intel.com, caleb.biggers@intel.com,
         kshipra.bopardikar@intel.com,
@@ -84,130 +84,222 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Such a literal is useful to calculate things like the average frequency
-[1]. The TSC frequency isn't exposed by sysfs although some experimental
-drivers look to add it [2]. This change computes the value using the
-frequency in /proc/cpuinfo which is accruate at least on Intel
-processors.
+From: Kan Liang <kan.liang@linux.intel.com>
 
-[1] https://github.com/intel/perfmon-metrics/blob/5ad9ef7056f31075e8178b9f1fb732af183b2c8d/SKX/metrics/perf/skx_metric_perf.json#L11
-[2] https://github.com/trailofbits/tsc_freq_khz
+The TSC frequency information is required for the event metrics with
+the literal, system_tsc_freq. For the newer Intel platform, the TSC
+frequency information can be retrieved from the CPUID leaf 0x15.
+If the TSC frequency information isn't present the /proc/cpuinfo
+approach is used.
 
+Refactor cpuid for this use. Note, the previous stack pushing/popping
+approach was broken on x86-64 that has stack red zones that would be
+clobbered.
+
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/expr.c | 15 +++++++++++++
- tools/perf/util/expr.c  | 49 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 64 insertions(+)
+ tools/perf/arch/x86/util/cpuid.h  | 34 +++++++++++++++++++++++++++++++
+ tools/perf/arch/x86/util/header.c | 27 ++++++++++--------------
+ tools/perf/arch/x86/util/tsc.c    | 33 ++++++++++++++++++++++++++++++
+ tools/perf/util/expr.c            | 15 +++++++++++++-
+ tools/perf/util/tsc.h             |  1 +
+ 5 files changed, 93 insertions(+), 17 deletions(-)
+ create mode 100644 tools/perf/arch/x86/util/cpuid.h
 
-diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
-index 5c0032fe93ae..45afe4f24859 100644
---- a/tools/perf/tests/expr.c
-+++ b/tools/perf/tests/expr.c
-@@ -1,8 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "util/debug.h"
- #include "util/expr.h"
-+#include "util/header.h"
- #include "util/smt.h"
- #include "tests.h"
-+#include <math.h>
- #include <stdlib.h>
- #include <string.h>
- #include <linux/zalloc.h>
-@@ -69,6 +71,11 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
- 	double val, num_cpus, num_cores, num_dies, num_packages;
- 	int ret;
- 	struct expr_parse_ctx *ctx;
-+	bool is_intel = false;
-+	char buf[128];
+diff --git a/tools/perf/arch/x86/util/cpuid.h b/tools/perf/arch/x86/util/cpuid.h
+new file mode 100644
+index 000000000000..0a3ae0ace7e9
+--- /dev/null
++++ b/tools/perf/arch/x86/util/cpuid.h
+@@ -0,0 +1,34 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef PERF_CPUID_H
++#define PERF_CPUID_H 1
 +
-+	if (!get_cpuid(buf, sizeof(buf)))
-+		is_intel = strstr(buf, "Intel") != NULL;
- 
- 	TEST_ASSERT_EQUAL("ids_union", test_ids_union(), 0);
- 
-@@ -175,6 +182,14 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
- 	if (num_dies) // Some platforms do not have CPU die support, for example s390
- 		TEST_ASSERT_VAL("#num_dies >= #num_packages", num_dies >= num_packages);
- 
-+	if (is_intel) {
-+		double system_tsc_freq;
 +
-+		TEST_ASSERT_VAL("#system_tsc_freq", expr__parse(&system_tsc_freq, ctx,
-+								"#system_tsc_freq") == 0);
-+		TEST_ASSERT_VAL("!isnan(#system_tsc_freq)", !isnan(system_tsc_freq));
-+	}
++static inline void
++cpuid(unsigned int op, unsigned int op2, unsigned int *a, unsigned int *b,
++	unsigned int *c, unsigned int *d)
++{
++	/*
++	 * Preserve %ebx/%rbx register by either placing it in %rdi or saving it
++	 * on the stack - x86-64 needs to avoid the stack red zone. In PIC
++	 * compilations %ebx contains the address of the global offset
++	 * table. %rbx is occasionally used to address stack variables in
++	 * presence of dynamic allocas.
++	 */
++	asm(
++#if defined(__x86_64__)
++		"mov %%rbx, %%rdi\n"
++		"cpuid\n"
++		"xchg %%rdi, %%rbx\n"
++#else
++		"pushl %%ebx\n"
++		"cpuid\n"
++		"movl %%ebx, %%edi\n"
++		"popl %%ebx\n"
++#endif
++		: "=a"(*a), "=D"(*b), "=c"(*c), "=d"(*d)
++		: "a"(op), "2"(op2));
++}
 +
- 	/*
- 	 * Source count returns the number of events aggregating in a leader
- 	 * event including the leader. Check parsing yields an id.
-diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
-index 675f318ce7c1..4c81533e4b43 100644
---- a/tools/perf/util/expr.c
-+++ b/tools/perf/util/expr.c
-@@ -402,6 +402,50 @@ double expr_id_data__source_count(const struct expr_id_data *data)
- 	return data->val.source_count;
++void get_cpuid_0(char *vendor, unsigned int *lvl);
++
++#endif
+diff --git a/tools/perf/arch/x86/util/header.c b/tools/perf/arch/x86/util/header.c
+index 578c8c568ffd..a51444a77a5f 100644
+--- a/tools/perf/arch/x86/util/header.c
++++ b/tools/perf/arch/x86/util/header.c
+@@ -9,18 +9,17 @@
+ 
+ #include "../../../util/debug.h"
+ #include "../../../util/header.h"
++#include "cpuid.h"
+ 
+-static inline void
+-cpuid(unsigned int op, unsigned int *a, unsigned int *b, unsigned int *c,
+-      unsigned int *d)
++void get_cpuid_0(char *vendor, unsigned int *lvl)
+ {
+-	__asm__ __volatile__ (".byte 0x53\n\tcpuid\n\t"
+-			      "movl %%ebx, %%esi\n\t.byte 0x5b"
+-			: "=a" (*a),
+-			"=S" (*b),
+-			"=c" (*c),
+-			"=d" (*d)
+-			: "a" (op));
++	unsigned int b, c, d;
++
++	cpuid(0, 0, lvl, &b, &c, &d);
++	strncpy(&vendor[0], (char *)(&b), 4);
++	strncpy(&vendor[4], (char *)(&d), 4);
++	strncpy(&vendor[8], (char *)(&c), 4);
++	vendor[12] = '\0';
  }
  
-+/*
-+ * Derive the TSC frequency in Hz from the /proc/cpuinfo, for example:
-+ * ...
-+ * model name      : Intel(R) Xeon(R) Gold 6154 CPU @ 3.00GHz
-+ * ...
-+ * will return 3000000000.
-+ */
-+static double system_tsc_freq(void)
+ static int
+@@ -31,14 +30,10 @@ __get_cpuid(char *buffer, size_t sz, const char *fmt)
+ 	int nb;
+ 	char vendor[16];
+ 
+-	cpuid(0, &lvl, &b, &c, &d);
+-	strncpy(&vendor[0], (char *)(&b), 4);
+-	strncpy(&vendor[4], (char *)(&d), 4);
+-	strncpy(&vendor[8], (char *)(&c), 4);
+-	vendor[12] = '\0';
++	get_cpuid_0(vendor, &lvl);
+ 
+ 	if (lvl >= 1) {
+-		cpuid(1, &a, &b, &c, &d);
++		cpuid(1, 0, &a, &b, &c, &d);
+ 
+ 		family = (a >> 8) & 0xf;  /* bits 11 - 8 */
+ 		model  = (a >> 4) & 0xf;  /* Bits  7 - 4 */
+diff --git a/tools/perf/arch/x86/util/tsc.c b/tools/perf/arch/x86/util/tsc.c
+index 559365f8fe52..b69144f22489 100644
+--- a/tools/perf/arch/x86/util/tsc.c
++++ b/tools/perf/arch/x86/util/tsc.c
+@@ -1,7 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/types.h>
++#include <string.h>
+ 
+ #include "../../../util/tsc.h"
++#include "cpuid.h"
+ 
+ u64 rdtsc(void)
+ {
+@@ -11,3 +13,34 @@ u64 rdtsc(void)
+ 
+ 	return low | ((u64)high) << 32;
+ }
++
++double arch_get_tsc_freq(void)
 +{
-+	static double result;
-+	static bool computed;
-+	FILE *cpuinfo;
-+	char *line = NULL;
-+	size_t len = 0;
++	unsigned int a, b, c, d, lvl;
++	static bool cached;
++	static double tsc;
++	char vendor[16];
 +
-+	if (computed)
-+		return result;
++	if (cached)
++		return tsc;
 +
-+	computed = true;
-+	result = NAN;
-+	cpuinfo = fopen("/proc/cpuinfo", "r");
-+	if (!cpuinfo) {
-+		pr_err("Failed to read /proc/cpuinfo for TSC frequency");
-+		return NAN;
-+	}
-+	while (getline(&line, &len, cpuinfo) > 0) {
-+		if (!strncmp(line, "model name", 10)) {
-+			char *pos = strstr(line + 11, " @ ");
++	cached = true;
++	get_cpuid_0(vendor, &lvl);
++	if (!strstr(vendor, "Intel"))
++		return 0;
 +
-+			if (pos && sscanf(pos, " @ %lfGHz", &result) == 1) {
-+				result *= 1000000000;
-+				goto out;
-+			}
-+		}
-+	}
-+out:
-+	if (isnan(result))
-+		pr_err("Failed to find TSC frequency in /proc/cpuinfo");
++	/*
++	 * Don't support Time Stamp Counter and
++	 * Nominal Core Crystal Clock Information Leaf.
++	 */
++	if (lvl < 0x15)
++		return 0;
 +
-+	free(line);
-+	fclose(cpuinfo);
-+	return result;
++	cpuid(0x15, 0, &a, &b, &c, &d);
++	/* TSC frequency is not enumerated */
++	if (!a || !b || !c)
++		return 0;
++
++	tsc = (double)c * (double)b / (double)a;
++	return tsc;
 +}
+diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+index 4c81533e4b43..16f10e6d5ca5 100644
+--- a/tools/perf/util/expr.c
++++ b/tools/perf/util/expr.c
+@@ -12,6 +12,7 @@
+ #include "expr-bison.h"
+ #include "expr-flex.h"
+ #include "smt.h"
++#include "tsc.h"
+ #include <linux/err.h>
+ #include <linux/kernel.h>
+ #include <linux/zalloc.h>
+@@ -443,9 +444,19 @@ static double system_tsc_freq(void)
+ 
+ 	free(line);
+ 	fclose(cpuinfo);
++	if (isnan(result))
++		pr_err("Error reading system_tsc_freq");
++
+ 	return result;
+ }
+ 
++#if !defined(__i386__) && !defined(__x86_64__)
++double arch_get_tsc_freq(void)
++{
++	return 0.0;
++}
++#endif
 +
  double expr__get_literal(const char *literal)
  {
  	static struct cpu_topology *topology;
-@@ -417,6 +461,11 @@ double expr__get_literal(const char *literal)
+@@ -462,7 +473,9 @@ double expr__get_literal(const char *literal)
+ 	}
+ 
+ 	if (!strcasecmp("#system_tsc_freq", literal)) {
+-		result = system_tsc_freq();
++		result = arch_get_tsc_freq();
++		if (fpclassify(result) == FP_ZERO)
++			result = system_tsc_freq();
  		goto out;
  	}
  
-+	if (!strcasecmp("#system_tsc_freq", literal)) {
-+		result = system_tsc_freq();
-+		goto out;
-+	}
-+
- 	/*
- 	 * Assume that topology strings are consistent, such as CPUs "0-1"
- 	 * wouldn't be listed as "0,1", and so after deduplication the number of
+diff --git a/tools/perf/util/tsc.h b/tools/perf/util/tsc.h
+index 7d83a31732a7..88fd1c4c1cb8 100644
+--- a/tools/perf/util/tsc.h
++++ b/tools/perf/util/tsc.h
+@@ -25,6 +25,7 @@ int perf_read_tsc_conversion(const struct perf_event_mmap_page *pc,
+ u64 perf_time_to_tsc(u64 ns, struct perf_tsc_conversion *tc);
+ u64 tsc_to_perf_time(u64 cyc, struct perf_tsc_conversion *tc);
+ u64 rdtsc(void);
++double arch_get_tsc_freq(void);
+ 
+ size_t perf_event__fprintf_time_conv(union perf_event *event, FILE *fp);
+ 
 -- 
 2.37.0.170.g444d1eabd0-goog
 

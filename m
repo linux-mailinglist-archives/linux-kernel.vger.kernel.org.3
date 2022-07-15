@@ -2,103 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8CF57656B
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 18:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469EA57656F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 18:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiGOQso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 12:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
+        id S233808AbiGOQwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 12:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiGOQsl (ORCPT
+        with ESMTP id S229771AbiGOQwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 12:48:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB0E267C
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 09:48:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4B09B82D21
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:48:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29114C34115;
-        Fri, 15 Jul 2022 16:48:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657903717;
-        bh=7nCXiwhGkmmW2s7T5Yi43qsIhqbsZvIWOtkF2dkQC9s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=sSVK6zWm9ogupRm0gxfDMjRI8ElePOS+x+8CyYUFHQTS4VtN9vLPA+yr1QEYl6wA4
-         HUD4jWOi+9okoxF/KUhv7B8XFhdADLkwoGvo8ntFC+fAlJpSPJvYPno4jfZURA6WKg
-         GIv0F3Y4bciNBt9Br1/4CltCL1bIK/gbbLlNrQDGQ1UJJoD3vhs4dW2ZRu6SJov4jH
-         xfM+TTW0WtgiVWug1ym+wfD8FgmRLnFPgfIHrEY2IZOPAWDtXLLcPQCcjECaBglvAH
-         SkLZhKytdZg5VyVxVaoUi11M1XTKL1YfbfXqerpwti8d3VeffDd727qey28g6uo9Mk
-         76ickshCb/cpA==
-Date:   Fri, 15 Jul 2022 11:48:35 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm: ioremap: Fix compilation of code which use
- pci_remap_iospace() without CONFIG_MMU
-Message-ID: <20220715164835.GA1138891@bhelgaas>
+        Fri, 15 Jul 2022 12:52:06 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958684AD40;
+        Fri, 15 Jul 2022 09:52:04 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31c9b70c382so52578327b3.6;
+        Fri, 15 Jul 2022 09:52:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y3fEn7k6DEbC0BSZl5T1cKqr6t4t3jgvkJEo6o2VWJg=;
+        b=MXGzp2L91pEJL+AcTAycFNXQ1RlDsP6v+gpGIgwODuesPa+p9Vkg4kB7S9nocynJGw
+         Z6eSLqvXs18KQxUaf2JoIzf80wNgEBx5lb8hmQls/pYl5cmqKU6ZV2U293CPRD7pHPxN
+         oVoCyNl0NZggmwruE29B+fIK5bXDrw9tjgIG3C8Nq+6m6OWBSRplWoiH96JI+OT2GKU0
+         e+tCPQwL8IYMCW95SAqKMM4ZmBlz4myO2waTWwKa21CY9s4W7s12O0mKU6NbZpFIBwjv
+         WQndJpk7ul+2kIlNcx4SEPMyoKdY46YyQ2MP3qjPVvRdKZ8R3yH3WQfj2xLINnsHUnDO
+         ZohA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y3fEn7k6DEbC0BSZl5T1cKqr6t4t3jgvkJEo6o2VWJg=;
+        b=S8bBgDCaTx7vYdVu0Yek0FMny4kKKl+WrwSl5TTRd2XKbCkeygR8pl/TDjO1YjF8AG
+         4Z1aGufvqgTM35RWcjWnc5n5EY6OIe1Rnr0UzEbRL0JNpmX4jrDjHZLv0gK/H6d7GHXa
+         Vy5Q69AfmUylfx/bILXyy4N6lU/zWToat/amV+aXqQRkHQjheDt747SAFibf1JmkBaf7
+         /Btl3we1bhiVeeuzFtrD2Ix3i6YgWuQ0+W1T+ZRHn9u39P7fZBr7ReQP1SzfmSe5uM19
+         3q56cYFxZBKDIQZSNQiXVKM/icdnVtgjRR4MkU37fRBFixED1tFTnfqIh4CQGlJDuRC+
+         EB+g==
+X-Gm-Message-State: AJIora/z0DRec7AclL7m7KjlxLTV9vQI201wOsVYKCzi8pBbzuaHubgN
+        U7d39gjiA8yqx5HRvpiTr7KIvmn31RuS/QU+B1A=
+X-Google-Smtp-Source: AGRyM1sCY24F2pEPhG1uDrQQmbeNKcxn2P0g2UtmOwj7faRUDuEi5O71VSZCHL0+DLUg4GOwi/Ey7mykcBwsz36AuRU=
+X-Received: by 2002:a81:54c1:0:b0:31d:ec18:fd5d with SMTP id
+ i184-20020a8154c1000000b0031dec18fd5dmr7130568ywb.277.1657903923745; Fri, 15
+ Jul 2022 09:52:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK8P3a25JH4=XdS_QRBdTpLhsLyc13XYjt9xq8FcXCNUf+DTiQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715112607.591-1-peterwu.pub@gmail.com> <20220715112607.591-11-peterwu.pub@gmail.com>
+In-Reply-To: <20220715112607.591-11-peterwu.pub@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 15 Jul 2022 18:51:27 +0200
+Message-ID: <CAHp75Ve_WRAUyy=h9_F-tC1dDkb_=-F1uf7_h7R0p7xZgBAd-w@mail.gmail.com>
+Subject: Re: [PATCH v5 10/13] power: supply: mt6370: Add MediaTek MT6370
+ charger driver
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 10:19:51PM +0200, Arnd Bergmann wrote:
-> On Thu, Jul 14, 2022 at 8:57 PM Pali Rohár <pali@kernel.org> wrote:
-> > Custom ARM version of pci_remap_iospace() is implemented only for MMU
-> > kernel builds. So do not define pci_remap_iospace() without CONFIG_MMU.
-> >
-> > See compilation failures:
-> > https://lore.kernel.org/r/202112040150.wvyJZIZO-lkp@intel.com/
-> > https://lore.kernel.org/r/202112261802.u9iXqdWh-lkp@intel.com/
-> > https://lore.kernel.org/r/202201131529.A2s7rKQc-lkp@intel.com/
-> > https://lore.kernel.org/r/202203090147.24cUL0De-lkp@intel.com/
-> >
-> > Fixes: bc02973a06a6 ("arm: ioremap: Implement standard PCI function pci_remap_iospace()")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> >
-> > ---
-> >
-> > PING!!!! Is somebody interested in fixing these compile errors? As nobody
-> > answered to my emails where I proposed this fix more than half year ago and
-> > asked for opinion...
-> >
-> > https://lore.kernel.org/r/20211204022131.bmhla4gkph7s7hy2@pali/
-> > https://lore.kernel.org/r/20211205123209.lyx76daqdwzqwex4@pali/
-> > https://lore.kernel.org/r/20211226215135.blcnafbuwhrq5ram@pali/
-> > https://lore.kernel.org/r/20220113134938.3tx7iiukphvazvsq@pali/
-> > https://lore.kernel.org/r/20220308184851.jmw2xvrapy5wzwof@pali/
-> 
-> Are you sure this still happens in mainline kernels? Since
-> commit 2f618d5ef5dd ("ARM: remove support for NOMMU ARMv4/v5")
-> it should no longer be possible to disable the MMU in any Arm machines
-> other than the Cortex-M based ones, which do not support PCI.
+On Fri, Jul 15, 2022 at 1:29 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+>
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+>
+> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
+> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
+> driver, display bias voltage supply, one general purpose LDO, and the
+> USB Type-C & PD controller complies with the latest USB Type-C and PD
+> standards.
+>
+> This adds MediaTek MT6370 Charger driver support. The charger module
+> of MT6370 supports High-Accuracy Voltage/Current Regulation,
+> Average Input Current Regulation, Battery Temperature Sensing,
+> Over-Temperature Protection, DPDM Detection for BC1.2.
 
-I don't know whether it happens in mainline kernels either.
+...
 
-But even if the 2f618d5ef5dd Kconfiggery makes MMU mostly obsolete for
-Arm, it seems a little weird that io.h unconditionally promises an
-arch-specific implementation of pci_remap_iospace(), but we only
-provide it when CONFIG_MMU=y.
+> +static int mt6370_chg_probe(struct platform_device *pdev)
+> +{
+> +       int ret;
+> +       struct mt6370_priv *priv;
+> +
+> +       priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> +       if (!priv)
+> +               return -ENOMEM;
+> +
+> +       priv->dev = &pdev->dev;
+> +
+> +       priv->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +       if (!priv->regmap)
+> +               return dev_err_probe(&pdev->dev, -ENODEV,
+> +                                    "Failed to get regmap\n");
+> +
+> +       ret = mt6370_chg_init_rmap_fields(priv);
+> +       if (ret)
+> +               return dev_err_probe(&pdev->dev, ret,
+> +                                    "Failed to init regmap fields\n");
+> +
+> +       platform_set_drvdata(pdev, priv);
+> +
+> +       priv->iio_adcs = devm_iio_channel_get_all(priv->dev);
+> +       if (IS_ERR(priv->iio_adcs))
+> +               return dev_err_probe(&pdev->dev, PTR_ERR(priv->iio_adcs),
+> +                                    "Failed to get iio adc\n");
+> +
+> +       ret = mt6370_chg_init_otg_regulator(priv);
+> +       if (ret)
+> +               return dev_err_probe(&pdev->dev, ret,
+> +                                    "Failed to init otg regulator\n");
+> +
+> +       ret = mt6370_chg_init_psy(priv);
+> +       if (ret)
+> +               return dev_err_probe(&pdev->dev, ret, "Failed to init psy\n");
+> +
+> +       mutex_init(&priv->attach_lock);
+> +       priv->attach = MT6370_ATTACH_STAT_DETACH;
+> +
+> +       priv->wq = create_singlethread_workqueue(dev_name(priv->dev));
+> +       if (IS_ERR(priv->wq))
 
-It seems like it'd be a little cleaner if the same condition
-determined visibility of both the declaration and the definition.
+> +               return dev_err_probe(priv->dev, PTR_ERR(priv->wq),
+> +                                    "Failed to create workqueue\n");
 
-Bjorn
+You need either wrap mutex to be deallocated by devm or don't use
+dev_err_probe() here.
+
+> +       INIT_WORK(&priv->bc12_work, mt6370_chg_bc12_work_func);
+> +       INIT_DELAYED_WORK(&priv->mivr_dwork, mt6370_chg_mivr_dwork_func);
+> +
+> +       ret = mt6370_chg_init_setting(priv);
+> +       if (ret) {
+> +               dev_err(&pdev->dev, "Failed to init mt6370 charger setting\n");
+> +               goto probe_out;
+> +       }
+> +
+> +       ret = mt6370_chg_init_irq(priv);
+> +       if (ret)
+> +               goto probe_out;
+> +
+> +       mt6370_chg_pwr_rdy_check(priv);
+> +
+> +       return 0;
+> +
+> +probe_out:
+> +       cancel_delayed_work_sync(&priv->mivr_dwork);
+> +       flush_workqueue(priv->wq);
+> +       destroy_workqueue(priv->wq);
+> +       mutex_destroy(&priv->attach_lock);
+> +
+> +       return ret;
+> +}
+> +
+> +static int mt6370_chg_remove(struct platform_device *pdev)
+> +{
+> +       struct mt6370_priv *priv = platform_get_drvdata(pdev);
+> +
+> +       cancel_delayed_work_sync(&priv->mivr_dwork);
+> +       flush_workqueue(priv->wq);
+> +       destroy_workqueue(priv->wq);
+> +       mutex_destroy(&priv->attach_lock);
+> +
+> +       return 0;
+> +}
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

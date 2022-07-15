@@ -2,91 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15029575C87
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5682B575C8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbiGOHlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 03:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
+        id S232063AbiGOHmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 03:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiGOHlI (ORCPT
+        with ESMTP id S229693AbiGOHmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 03:41:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67350753BD;
-        Fri, 15 Jul 2022 00:41:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 15 Jul 2022 03:42:08 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C737C1A1;
+        Fri, 15 Jul 2022 00:42:07 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0173E615F2;
-        Fri, 15 Jul 2022 07:41:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58255C341CE;
-        Fri, 15 Jul 2022 07:41:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657870863;
-        bh=prx18bORl5xayVstWwmiZFOyFEmOKbL1W8Z3hB00LP4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lkSiiafU5C45/C8bCakTdND+kvpTBdZ1iPuhSKPqrJpuQNfaqdrPYjzWrm1RPduFw
-         MnPrbepf3yDR4tMiVdbEA0KP52NkJjp+Zv18wF70yfCpbRepWyKsXKxawkSeSeO6b7
-         bMPw+CcpRRjmf84JRrbfbwcCtLXyvSkLqlO4dlxT6z8hS5UFRwJgJezlxVtnfeGg6U
-         Sr39kbdd4e6rt8I0hhuYru5kwoJlg2+pDJbCj2Jtn2U3ukLGliQ4hWIOT91CEtYT1w
-         BrpL++VSAl3vYTctfp3n3iazLzcNhSFepoYGdE1wvENxBIYC21ZKRFCWiZrUqYiXC9
-         PIoR5KBfjetBw==
-Received: by mail-yb1-f173.google.com with SMTP id i14so7218765yba.1;
-        Fri, 15 Jul 2022 00:41:03 -0700 (PDT)
-X-Gm-Message-State: AJIora/qoSeH8nypJNdFF8yUywMvsSdjfxYQ+wcpuWit00lgbP8WlkVM
-        0Jc0F3o6b7SNuVq9xwYRQoOWQNsKYVi7MMhfdeg=
-X-Google-Smtp-Source: AGRyM1vD8yRr3rCO2aad5yuzRxpfe+hXi9LJGGQdP4f74UITSslw7JOrGgrNF4WpUfUKerNzgWm0yWrbB1KQXCl+nfc=
-X-Received: by 2002:a5b:b47:0:b0:66e:3617:d262 with SMTP id
- b7-20020a5b0b47000000b0066e3617d262mr12045942ybr.106.1657870862212; Fri, 15
- Jul 2022 00:41:02 -0700 (PDT)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id D48DD2223E;
+        Fri, 15 Jul 2022 09:42:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1657870925;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6SnvQG5VhCJCXnGPvoEalEA0+MbJXBkQo3LdF+0/Y4Y=;
+        b=g44IL4KKkMiMQ/5uce+1CnL1rNVoDMJaJfLZ6Cvf11WSO8lmkxBH9aYJI4Twoo3nTG3OEv
+        b3giAdZYwCij/S81+8q6iKp4Kvzayymviu0dxbxyBGDEKlDXCH1ZJKlVYgOABYY4rUTAjV
+        lGEaY8K37kZs6IBBgwWtj0AqkcbwaSY=
 MIME-Version: 1.0
-References: <20220715053334.5986-1-arun.ramadoss@microchip.com>
-In-Reply-To: <20220715053334.5986-1-arun.ramadoss@microchip.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 15 Jul 2022 09:40:46 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1Egk5BA1Q155dSN=E0DvBmzGqQSqzDayYf6mZZ7oYVSg@mail.gmail.com>
-Message-ID: <CAK8P3a1Egk5BA1Q155dSN=E0DvBmzGqQSqzDayYf6mZZ7oYVSg@mail.gmail.com>
-Subject: Re: [Patch net-next] net: dsa: microchip: fix Clang
- -Wunused-const-variable warning on 'ksz_dt_ids'
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     clang-built-linux <llvm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Russell King <linux@armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 15 Jul 2022 09:42:05 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Sherry Sun <sherry.sun@nxp.com>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH 2/2] tty: serial: fsl_lpuart: writing a 1 and then a 0 to
+ trigger a break character
+In-Reply-To: <AS8PR04MB840448675E64E4FCDEEF91A1928B9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+References: <20220715025944.11076-1-sherry.sun@nxp.com>
+ <20220715025944.11076-3-sherry.sun@nxp.com>
+ <509669b26b5899088e9b77ed94d103ee@walle.cc>
+ <AS8PR04MB840448675E64E4FCDEEF91A1928B9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e2560f01fd1731ea2422d82c97efcc6f@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 7:33 AM Arun Ramadoss
-<arun.ramadoss@microchip.com> wrote:
->
-> This patch removes the of_match_ptr() pointer when dereferencing the
-> ksz_dt_ids which produce the unused variable warning.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Suggested-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+Hi,
 
-Looks good to me, thanks!
+Am 2022-07-15 09:20, schrieb Sherry Sun:
+>> Subject: Re: [PATCH 2/2] tty: serial: fsl_lpuart: writing a 1 and then 
+>> a 0 to
+>> trigger a break character
+>> 
+>> Hi,
+>> 
+>> Am 2022-07-15 04:59, schrieb Sherry Sun:
+>> > According to the lpuart reference manual, need to writing a 1 and then
+>> > a
+>> > 0 to the UARTCTRL_SBK field queues a break character in the transmit
+>> > data stream. Only writing a 1 cannot trigger the break character, so
+>> > fix it.
+>> 
+>> I don't think this is correct. The tty core will already call this:
+>>    .break_ctl(port, 1)
+>>    usleep()
+>>    .break_ctl(port, 0)
+>> 
+>> So you'll have your 1->0 transition.
+>> 
+>> My RM from the LS1028A says the following:
+>> 
+>> | Writing a 1 and then a 0 to SBK queues a break character in the
+>> | transmit data stream. Additional break characters of 10 to 13, or 13
+>> | to 16 if LPUART_STATBRK13] is set, bit times of logic 0 are queued 
+>> as
+>> | long as SBK is set. Depending on the timing of the set and clear of
+>> | SBK relative to the information currently being transmitted, a 
+>> second
+>> | break character may be queued before software clears SBK.
+>> 
+>> To me it seems that setting the SBK bit just pulls the TX line low and 
+>> releasing
+>> it will return to normal transmitter mode.
+>> 
+> 
+> Hi Michael,
+> 
+> Actually set break_ctl(tty, -1) then break_ctl(tty, 0) is only done in
+> the send_break() function.
+> If we call TIOCSBRK from user space, it will only set break_ctl(tty,
+> -1) without break_ctl(tty, 0).
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+That is expected. no? There is also the TIOCCBRK which will clear the
+break. TIOCSBRK will just turn the break on.
+
+I'm not sure if the break is already transmitted when the SBK bit
+is set, though. Is that your problem here? I'd need to check that
+on the real hardware.
+
+> And from the definition of .break_ctl(port,ctl), the callback is used
+> to Control the transmission of a break
+> signal(Documentation/driver-api/serial/driver.rst), if ctl is nonzero,
+> it should queues a break character. I don't think it is reasonable to
+> call break_ctl() twice in order to send one break signal.
+
+Maybe Gred can correct me, but to me it seems like the .break_ctl()
+will set the *state* according to the argument, that is either
+turning it on or turning it off (Except if TTY_DRIVER_HARDWARE_BREAK
+is set, but that doesn't seem to be supported by the ioctl interface.)
+
+> Also I have tried other uart IP, such as drivers/tty/serial/imx.c, it
+> also queues a break character if we call break_ctl() once. So I
+> believe the break_ctl() in lpuart driver should be fixed.
+
+-michael

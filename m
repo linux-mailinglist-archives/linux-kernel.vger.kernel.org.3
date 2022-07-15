@@ -2,187 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B4257648B
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991BF5763E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiGOPjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 11:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        id S229923AbiGOOz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 10:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiGOPjC (ORCPT
+        with ESMTP id S229559AbiGOOzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 11:39:02 -0400
-X-Greylist: delayed 2776 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Jul 2022 08:39:01 PDT
-Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [IPv6:2620:100:9001:583::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21723222B4;
-        Fri, 15 Jul 2022 08:39:00 -0700 (PDT)
-Received: from pps.filterd (m0050093.ppops.net [127.0.0.1])
-        by m0050093.ppops.net-00190b01. (8.17.1.5/8.17.1.5) with ESMTP id 26FEPHU2013883;
-        Fri, 15 Jul 2022 15:52:43 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=jan2016.eng;
- bh=n3/u7Xb/IhKRXOG6IcljUKALO6zCGBgcAdJo43NbcvE=;
- b=ohQlKxLyIIUqtetRW+ExkQHKkClWIfI3NFlMd0L2aLTn2Am8HVNxbA3QLI5doKZbgFTY
- c74tRZtx1gbyJPuNOM2A+sNtpXfQnZlA17fGAOtHxMLb7CRq1Ccw70KbGsM1ACwrxI4T
- rKwtoLbgJyKVs8to+AtlrfEmkZLqbPoJsQHjArqHn3+Ai+2OGKbm7FUVgIIxFAv0Grjn
- OrWDdrF/LeEbJj4L+Z8OKqjldbRcAv4FVkTDAFPxicvzjoJ/x+oZThGRGY9dO7zqS43R
- Rzv7VSAolGdGJkuXoVubEDU87uLhrntg079KgzEc2PumIfXtY4F5n+gy8v5FSGigeGIX 7g== 
-Received: from prod-mail-ppoint3 (a72-247-45-31.deploy.static.akamaitechnologies.com [72.247.45.31] (may be forged))
-        by m0050093.ppops.net-00190b01. (PPS) with ESMTPS id 3haty51v06-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 15:52:42 +0100
-Received: from pps.filterd (prod-mail-ppoint3.akamai.com [127.0.0.1])
-        by prod-mail-ppoint3.akamai.com (8.17.1.5/8.17.1.5) with ESMTP id 26FC4lQO032668;
-        Fri, 15 Jul 2022 10:52:41 -0400
-Received: from prod-mail-relay19.dfw02.corp.akamai.com ([172.27.165.173])
-        by prod-mail-ppoint3.akamai.com (PPS) with ESMTP id 3h7q6pq355-1;
-        Fri, 15 Jul 2022 10:52:41 -0400
-Received: from [0.0.0.0] (prod-ssh-gw01.bos01.corp.akamai.com [172.27.119.138])
-        by prod-mail-relay19.dfw02.corp.akamai.com (Postfix) with ESMTP id 21DB8600E6;
-        Fri, 15 Jul 2022 14:52:41 +0000 (GMT)
-Message-ID: <ab77d779-31a6-62f7-a81c-97d6b9a35018@akamai.com>
-Date:   Fri, 15 Jul 2022 10:52:40 -0400
+        Fri, 15 Jul 2022 10:55:54 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FDA46DB7;
+        Fri, 15 Jul 2022 07:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=yMChqUS1P9k9RZ7lev7X/u1NHY9UHpOS0k0M7hpJ0Qw=; b=MYUg6HZk4WnUkQqe4YgjDIUM/q
+        t/2trymMgvlTjfP0FiCehzgdFSAO6ZYEkhJD3xXNcWD65PIO3PISrX3nQJ5XJdmapJVn3ZmZMkSIT
+        M5vk3A6QusizEJPsQw/PDLbzDJl4irHntn6X+2OEePX0v/hs1NfHFO1tXGUY03jGL2OuGPB97e1jL
+        C3X0OT//Bur/WEsZUHkZXJ6ftPy4bLEnDPBXfGfLBowzSRH327Z6jADPHA6iyrQ1Q/ae6FqgR7DMN
+        gGGxdMvL44G5BnZb0fY/7vmU+Tz+fjZ9JQy7wBTMm2zdwyZOI4A8UuTysK6A7f+9dlEwSYvUr78gD
+        KjadXi4A==;
+Received: from 201-42-109-188.dsl.telesp.net.br ([201.42.109.188] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oCMiv-000KCj-0j; Fri, 15 Jul 2022 16:55:21 +0200
+Message-ID: <17fb8d12-60f9-09d5-91fa-09d5a5a9a4fd@igalia.com>
+Date:   Fri, 15 Jul 2022 11:55:04 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] EDAC/ie31200: Add Skylake-S support
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 1/2] powerpc/pci: Add config option for using OF 'reg'
+ for PCI domain
 Content-Language: en-US
-To:     Josh Hant <joshuahant@gmail.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <8e44d499-ad55-d90a-d4e6-2a97aa6d0c41@akamai.com>
- <20220712102121.20812-1-joshuahant@gmail.com>
-From:   Jason Baron <jbaron@akamai.com>
-In-Reply-To: <20220712102121.20812-1-joshuahant@gmail.com>
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Guowen Shan <gshan@redhat.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220706102148.5060-1-pali@kernel.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220706102148.5060-1-pali@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-15_07,2022-07-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 bulkscore=0
- malwarescore=0 mlxlogscore=999 phishscore=0 suspectscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207150065
-X-Proofpoint-GUID: VYuJZ7Yu-c3A4TP0qw9DDnYQRnTdAlgr
-X-Proofpoint-ORIG-GUID: VYuJZ7Yu-c3A4TP0qw9DDnYQRnTdAlgr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-15_07,2022-07-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 phishscore=0 impostorscore=0 bulkscore=0 spamscore=0
- adultscore=0 malwarescore=0 clxscore=1011 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207150065
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06/07/2022 07:21, Pali Rohár wrote:
+> [...] 
+> Fix this issue and introduce a new option CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG.
+> When this option is disabled then powerpc kernel would assign PCI domains
+> in the similar way like it is doing kernel for other architectures,
+> starting from zero and also how it was done prior that commit.
+
+I found this sentence a bit weird, "in the similar way like it is doing
+kernel for other architectures", but other than that:
+
+Reviewed-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+
+Thanks for the improvement!
+Cheers,
 
 
-On 7/12/22 06:21, Josh Hant wrote:
-> Add device IDs for Skylake-S CPUs according to datasheet.
+Guilherme
+
+
 > 
-> Signed-off-by: Josh Hant <joshuahant@gmail.com>
+> This option is by default enabled for powernv and pseries platform for which
+> was that commit originally intended.
+> 
+> With this change upgrading kernels from LTS 4.4 version does not change PCI
+> domain on smaller embedded platforms with fixed number of PCIe controllers.
+> And also ensure that PCI domain zero is present as before that commit.
+> 
+> Fixes: 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on device-tree properties")
+> Signed-off-by: Pali Rohár <pali@kernel.org>
 > ---
-> Hi Jason,
+> Changes in v2:
+> * Enable CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG by default on powernv and pseries
+> ---
+>  arch/powerpc/Kconfig             | 11 +++++++++++
+>  arch/powerpc/kernel/pci-common.c |  4 ++--
+>  2 files changed, 13 insertions(+), 2 deletions(-)
 > 
-> Sorry for the late response. I added the missing check you asked for. I
-> kept the documentation the same for now. I found the register in table 3
-> of the original document I linked. If you would rather I provide the one
-> you linked, I'll do that in the next patch.
-
-Yes, I think the link I had was useful, for example it had register offsets
-for things like ECCERRLOG which I didn't see in the reference you linked.
-Maybe just include both?
-
-
-> 
-> I confirmed that the name and size in /proc/meminfo is consistent with
-> what is in /sys/devices/system/edac/mc/mc0.
-
-Ok, great. Yeah let's just add the extra documentation link and then the
-patch seems fine.
-
-Thanks,
-
--Jason
-
-> 
-> Thanks
-> -Josh
->  drivers/edac/ie31200_edac.c | 27 ++++++++++++++++++---------
->  1 file changed, 18 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-> index 9a9ff5ad611a..3d322603bce8 100644
-> --- a/drivers/edac/ie31200_edac.c
-> +++ b/drivers/edac/ie31200_edac.c
-> @@ -20,11 +20,14 @@
->   * 0c08: Xeon E3-1200 v3 Processor DRAM Controller
->   * 1918: Xeon E3-1200 v5 Skylake Host Bridge/DRAM Registers
->   * 5918: Xeon E3-1200 Xeon E3-1200 v6/7th Gen Core Processor Host Bridge/DRAM Registers
-> + * 190f: 6th Gen Core Dual-Core Processor Host Bridge/DRAM Registers
-> + * 191f: 6th Gen Core Quad-Core Processor Host Bridge/DRAM Registers
->   * 3e..: 8th/9th Gen Core Processor Host Bridge/DRAM Registers
->   *
->   * Based on Intel specification:
->   * https://urldefense.com/v3/__https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/xeon-e3-1200v3-vol-2-datasheet.pdf__;!!GjvTz_vk!R59Q1Bnf9RyI0ZIv2OAIqpD_lPa6_sdWaeFoH595ZLDCCri1SLs1ZCbrgr53QjTZAyLVmoiv9oZ-6raD$ 
->   * https://urldefense.com/v3/__http://www.intel.com/content/www/us/en/processors/xeon/xeon-e3-1200-family-vol-2-datasheet.html__;!!GjvTz_vk!R59Q1Bnf9RyI0ZIv2OAIqpD_lPa6_sdWaeFoH595ZLDCCri1SLs1ZCbrgr53QjTZAyLVmoiv9m6NRBGA$ 
-> + * https://urldefense.com/v3/__https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/desktop-6th-gen-core-family-datasheet-vol-2.pdf__;!!GjvTz_vk!R59Q1Bnf9RyI0ZIv2OAIqpD_lPa6_sdWaeFoH595ZLDCCri1SLs1ZCbrgr53QjTZAyLVmoiv9gF6-zMQ$ 
->   * https://urldefense.com/v3/__https://www.intel.com/content/www/us/en/processors/core/7th-gen-core-family-mobile-h-processor-lines-datasheet-vol-2.html__;!!GjvTz_vk!R59Q1Bnf9RyI0ZIv2OAIqpD_lPa6_sdWaeFoH595ZLDCCri1SLs1ZCbrgr53QjTZAyLVmoiv9q7dFz1H$ 
->   * https://urldefense.com/v3/__https://www.intel.com/content/www/us/en/products/docs/processors/core/8th-gen-core-family-datasheet-vol-2.html__;!!GjvTz_vk!R59Q1Bnf9RyI0ZIv2OAIqpD_lPa6_sdWaeFoH595ZLDCCri1SLs1ZCbrgr53QjTZAyLVmoiv9vbMAhyi$ 
->   *
-> @@ -53,15 +56,17 @@
->  #define ie31200_printk(level, fmt, arg...) \
->  	edac_printk(level, "ie31200", fmt, ##arg)
-> 
-> -#define PCI_DEVICE_ID_INTEL_IE31200_HB_1 0x0108
-> -#define PCI_DEVICE_ID_INTEL_IE31200_HB_2 0x010c
-> -#define PCI_DEVICE_ID_INTEL_IE31200_HB_3 0x0150
-> -#define PCI_DEVICE_ID_INTEL_IE31200_HB_4 0x0158
-> -#define PCI_DEVICE_ID_INTEL_IE31200_HB_5 0x015c
-> -#define PCI_DEVICE_ID_INTEL_IE31200_HB_6 0x0c04
-> -#define PCI_DEVICE_ID_INTEL_IE31200_HB_7 0x0c08
-> -#define PCI_DEVICE_ID_INTEL_IE31200_HB_8 0x1918
-> -#define PCI_DEVICE_ID_INTEL_IE31200_HB_9 0x5918
-> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_1  0x0108
-> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_2  0x010c
-> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_3  0x0150
-> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_4  0x0158
-> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_5  0x015c
-> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_6  0x0c04
-> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_7  0x0c08
-> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_8  0x190F
-> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_9  0x1918
-> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_10 0x191F
-> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_11 0x5918
-> 
->  /* Coffee Lake-S */
->  #define PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK 0x3e00
-> @@ -80,6 +85,8 @@
->  #define DEVICE_ID_SKYLAKE_OR_LATER(did)                                        \
->  	(((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_8) ||                        \
->  	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_9) ||                        \
-> +	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_10) ||                       \
-> +	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_11) ||                       \
->  	 (((did) & PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK) ==                 \
->  	  PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK))
-> 
-> @@ -577,6 +584,8 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
->  	{ PCI_VEND_DEV(INTEL, IE31200_HB_7),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
->  	{ PCI_VEND_DEV(INTEL, IE31200_HB_8),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
->  	{ PCI_VEND_DEV(INTEL, IE31200_HB_9),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
-> +	{ PCI_VEND_DEV(INTEL, IE31200_HB_10),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
-> +	{ PCI_VEND_DEV(INTEL, IE31200_HB_11),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
->  	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_1),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
->  	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_2),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
->  	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_3),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
-> --
-> 2.34.3
-> 
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index f66084bc1dfe..053a88e84049 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -386,6 +386,17 @@ config PPC_OF_PLATFORM_PCI
+>  	depends on PCI
+>  	depends on PPC64 # not supported on 32 bits yet
+>  
+> +config PPC_PCI_DOMAIN_FROM_OF_REG
+> +	bool "Use OF reg property for PCI domain"
+> +	depends on PCI
+> +	default y if PPC_PSERIES || PPC_POWERNV
+> +	help
+> +	  By default PCI domain for host bridge during its registration is
+> +	  chosen as the lowest unused PCI domain number.
+> +
+> +	  When this option is enabled then PCI domain can be determined
+> +	  also from lower bits of the OF / Device Tree 'reg' property.
+> +
+>  config ARCH_SUPPORTS_UPROBES
+>  	def_bool y
+>  
+> diff --git a/arch/powerpc/kernel/pci-common.c b/arch/powerpc/kernel/pci-common.c
+> index 068410cd54a3..7f959df34833 100644
+> --- a/arch/powerpc/kernel/pci-common.c
+> +++ b/arch/powerpc/kernel/pci-common.c
+> @@ -74,7 +74,6 @@ void __init set_pci_dma_ops(const struct dma_map_ops *dma_ops)
+>  static int get_phb_number(struct device_node *dn)
+>  {
+>  	int ret, phb_id = -1;
+> -	u32 prop_32;
+>  	u64 prop;
+>  
+>  	/*
+> @@ -83,7 +82,8 @@ static int get_phb_number(struct device_node *dn)
+>  	 * reading "ibm,opal-phbid", only present in OPAL environment.
+>  	 */
+>  	ret = of_property_read_u64(dn, "ibm,opal-phbid", &prop);
+> -	if (ret) {
+> +	if (ret && IS_ENABLED(CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG)) {
+> +		u32 prop_32;
+>  		ret = of_property_read_u32_index(dn, "reg", 1, &prop_32);
+>  		prop = prop_32;
+>  	}

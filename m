@@ -2,45 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19697575FE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E293B575FF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232698AbiGOLSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 07:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
+        id S231589AbiGOLY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 07:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiGOLSh (ORCPT
+        with ESMTP id S229452AbiGOLYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 07:18:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C20FBC55
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 04:18:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F03851474;
-        Fri, 15 Jul 2022 04:18:36 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 50E603F73D;
-        Fri, 15 Jul 2022 04:18:35 -0700 (PDT)
-Message-ID: <e838ac28-f68e-2282-94d5-616ea3bdf8d0@arm.com>
-Date:   Fri, 15 Jul 2022 13:18:13 +0200
+        Fri, 15 Jul 2022 07:24:55 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD95A13DDA;
+        Fri, 15 Jul 2022 04:24:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657884294; x=1689420294;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JNPs4/IF9I3v2fBpT9/SGwbwqcvHXBKUeiu4ZOuzkhE=;
+  b=d6vlxd9M05hidsXkn/J5dfmzryZu3d8h3yie6Wvh63HMxFenJU7sYk6x
+   mrdZABYB4PpqPo1/w8um9UdBMZNiTZatNY/dH7uGGJm5SB70n3ylDr71+
+   Qc/iXC9orWOEWgQyomsxY2mOyKQ2jd3XXIyRRahrzlqUx0iYR0vvgnVmF
+   9zukeAuGK10F4JpOjnYW8DALxHVH0q6UaoDUce3BV31t9wcgVlUOcqfMu
+   LpDc93ZVsFNRil3kxL+s9DmEgIpz0fsRlI2Xr3o+6OBlFSGt4pqRkHwya
+   tks9Od3dxatRJ2WdbVotAMbSvtmS0Y8RrPi3vKQ/rQe3vd37GDlorqf/k
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="349732046"
+X-IronPort-AV: E=Sophos;i="5.92,273,1650956400"; 
+   d="scan'208";a="349732046"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 04:24:54 -0700
+X-IronPort-AV: E=Sophos;i="5.92,273,1650956400"; 
+   d="scan'208";a="654298689"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.52.80])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 04:24:50 -0700
+Message-ID: <13af7867-4a42-751c-e7b1-9af4e239c085@intel.com>
+Date:   Fri, 15 Jul 2022 14:24:47 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 07/10] sched/fair: use update_load_avg() to
- attach/detach entity load_avg
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH] scsi: ufs: ufshcd: Read device property for ref clock
 Content-Language: en-US
-To:     Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20220713040430.25778-1-zhouchengming@bytedance.com>
- <20220713040430.25778-8-zhouchengming@bytedance.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20220713040430.25778-8-zhouchengming@bytedance.com>
+To:     Daniil Lunev <dlunev@chromium.org>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20220715210230.1.I365d113d275117dee8fd055ce4fc7e6aebd0bce9@changeid>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220715210230.1.I365d113d275117dee8fd055ce4fc7e6aebd0bce9@changeid>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,85 +72,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/07/2022 06:04, Chengming Zhou wrote:
-> Since update_load_avg() support DO_ATTACH and DO_DETACH now, we can
-> use update_load_avg() to implement attach/detach entity load_avg.
+On 15/07/22 14:03, Daniil Lunev wrote:
+> UFS storage devices require bRefClkFreq attribute to be set to operate
+> correctly at high speed mode. The necessary value is determined by what the
+> SoC / board supports. The standard doesn't specify a method to query the
+> value, so the information needs to be fed in separately.
 > 
-> Another advantage of using update_load_avg() is that it will check
-> last_update_time before attach or detach, instead of unconditional
-> attach/detach in the current code.
+> DT information feeds into setting up the clock framework, so platforms
+> using DT can get the UFS reference clock frequency from the clock
+> framework. A special node "ref_clk" from the clock array for the UFS
+> controller node is used as the source for the information.
 > 
-> This way can avoid some corner problematic cases of load tracking,
-> like twice attach problem, detach unattached NEW task problem.
+> On the platforms that do not use DT (e.g. Intel), the alternative mechanism
+> to feed the intended reference clock frequency is necessary. Specifying the
+> necessary information in DSD of the UFS controller ACPI node is an
+> alternative mechanism proposed in this patch. Those can be accessed via
+> firmware property facility in the kernel and in many ways simillar to
+> querying properties defined in DT.
+> 
+> This patch introduces a small helper function to query a predetermined ACPI
+> supplied property of the UFS controller, and uses it to attempt retrieving
+> reference clock value, unless that was already done by the clock
+> infrastructure.
+> 
+> Signed-off-by: Daniil Lunev <dlunev@chromium.org>
 
-This explanation is somewhat hard to follow for me. Since both issues
-have been fixed already (you mention this further below) you're saying
-that with you change you don't reintroduce them?
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
 
-> 1. switch to fair class (twice attach problem)
 > 
-> p->sched_class = fair_class;  --> p.se->avg.last_update_time = 0
-> if (queued)
->   enqueue_task(p);
->     ...
->       enqueue_entity()
->         update_load_avg(UPDATE_TG | DO_ATTACH)
->           if (!se->avg.last_update_time && (flags & DO_ATTACH))  --> true
->             attach_entity_load_avg()  --> attached, will set last_update_time
-> check_class_changed()
->   switched_from() (!fair)
->   switched_to()   (fair)
->     switched_to_fair()
->       attach_entity_load_avg()  --> unconditional attach again!
+> ---
 > 
-> 2. change cgroup of NEW task (detach unattached task problem)
+>  Documentation/scsi/ufs.rst | 15 +++++++++++++++
+>  drivers/ufs/core/ufshcd.c  | 16 ++++++++++++++++
+>  2 files changed, 31 insertions(+)
 > 
-> sched_move_group(p)
->   if (queued)
->     dequeue_task()
->   task_move_group_fair()
->     detach_task_cfs_rq()
->       detach_entity_load_avg()  --> detach unattached NEW task
->     set_task_rq()
->     attach_task_cfs_rq()
->       attach_entity_load_avg()
->   if (queued)
->     enqueue_task()
-> 
-> These problems have been fixed in commit 7dc603c9028e
-> ("sched/fair: Fix PELT integrity for new tasks"), which also
-> bring its own problems.
-> 
-> First, it add a new task state TASK_NEW and an unnessary limitation
-> that we would fail when change the cgroup of TASK_NEW tasks.
-> 
-> Second, it attach entity load_avg in post_init_entity_util_avg(),
-> in which we only set sched_avg last_update_time for !fair tasks,
-> will cause PELT integrity problem when switched_to_fair().
-
-I guess those PELT integrity problems are less severe since we have the
-enqueue_task_fair() before the switched_to_fair() for enqueued tasks. So
-we always decay the time the task spend outside fair.
-
-Looks to me that you want to replace this by your `freeze PELT when
-outside fair` model.
-
-> This patch make update_load_avg() the only location of attach/detach,
-> and can handle these corner cases like change cgroup of NEW tasks,
-> by checking last_update_time before attach/detach.
-
-[...]
-
-> @@ -11527,9 +11522,7 @@ static void detach_entity_cfs_rq(struct sched_entity *se)
->  	struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> diff --git a/Documentation/scsi/ufs.rst b/Documentation/scsi/ufs.rst
+> index fbac745b783ce..885b1a736e3f3 100644
+> --- a/Documentation/scsi/ufs.rst
+> +++ b/Documentation/scsi/ufs.rst
+> @@ -17,6 +17,8 @@ Universal Flash Storage
+>       3.2 UTP Transfer requests
+>       3.3 UFS error handling
+>       3.4 SCSI Error handling
+> +   4. BSG Support
+> +   5. UFS Reference Clock Frequency configuration
 >  
->  	/* Catch up with the cfs_rq and remove our load when we leave */
-> -	update_load_avg(cfs_rq, se, 0);
-> -	detach_entity_load_avg(cfs_rq, se);
-> -	update_tg_load_avg(cfs_rq);
-> +	update_load_avg(cfs_rq, se, UPDATE_TG | DO_DETACH);
+>  
+>  1. Overview
+> @@ -193,3 +195,16 @@ UFS specifications can be found at:
+>  
+>  - UFS - http://www.jedec.org/sites/default/files/docs/JESD220.pdf
+>  - UFSHCI - http://www.jedec.org/sites/default/files/docs/JESD223.pdf
+> +
+> +5. UFS Reference Clock Frequency configuration
+> +==============================================
+> +
+> +Devicetree can define a clock named "ref_clk" under the UFS controller node
+> +to specify the intended reference clock frequency for the UFS storage
+> +parts. ACPI-based system can specify the frequency using ACPI
+> +Device-Specific Data property named "ref-clk-freq". In both ways the value
+> +is interpreted as frequency in Hz and must match one of the values given in
+> +the UFS specification. UFS subsystem will attempt to read the value when
+> +executing common controller initialization. If the value is available, UFS
+> +subsytem will ensure the bRefClkFreq attribute of the UFS storage device is
+> +set accordingly and will modify it if there is a mismatch.
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index ce86d1b790c05..78242f189f636 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -8536,6 +8536,19 @@ static int ufshcd_setup_clocks(struct ufs_hba *hba, bool on)
+>  	return ret;
+>  }
+>  
+> +static enum ufs_ref_clk_freq ufshcd_parse_ref_clk_property(struct ufs_hba *hba)
+> +{
+> +	u32 freq;
+> +	int ret = device_property_read_u32(hba->dev, "ref-clk-freq", &freq);
+> +
+> +	if (ret) {
+> +		dev_dbg(hba->dev, "Cannnot query 'ref-clk-freq' property = %d", ret);
+> +		return REF_CLK_FREQ_INVAL;
+> +	}
+> +
+> +	return ufs_get_bref_clk_from_hz(freq);
+> +}
+> +
+>  static int ufshcd_init_clocks(struct ufs_hba *hba)
+>  {
+>  	int ret = 0;
+> @@ -8629,6 +8642,9 @@ static int ufshcd_hba_init(struct ufs_hba *hba)
+>  	if (err)
+>  		goto out_disable_hba_vreg;
+>  
+> +	if (hba->dev_ref_clk_freq == REF_CLK_FREQ_INVAL)
+> +		hba->dev_ref_clk_freq = ufshcd_parse_ref_clk_property(hba);
+> +
+>  	err = ufshcd_setup_clocks(hba, true);
+>  	if (err)
+>  		goto out_disable_hba_vreg;
 
-IMHO, the DO_[DE|AT]TACH comments in update_load_avg() would have to be
-updated in this case.
-
-[...]

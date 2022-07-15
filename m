@@ -2,139 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B91575B0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 07:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E81E0575B18
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 07:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiGOFj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 01:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S229870AbiGOFuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 01:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiGOFj0 (ORCPT
+        with ESMTP id S229468AbiGOFuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 01:39:26 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF705509C
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 22:39:25 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id b12-20020a5edc0c000000b0067b8030caa8so1834759iok.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 22:39:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=l2QAeekmVrp5Pj3poxHb1l2Iy+FrpOT/BOM8hDiG4Rk=;
-        b=4ORfZ+oZYYByLQc8IVQn6oHXdRqD7cTi7vWaVzGsggK69j+K/7LzCD6Vj9n2dYKrxP
-         9L4Et5I5SVPhurDQ+ntWWjhj0Gg5PNhUqQbwQQWUD6rFOctHpMmJp/Vsq2SkJh2RGjDx
-         XY1sqa/fnKLKbE2XmtCVQCkkzUrBqJuN84ZJGcc4iydpTub5X1EENIKp869yqOzB7t56
-         whfiUSVyGUS3Kxw3KIixoEL0qoKBQLS5ya25+0UMyYYNkEit4+cyPBvpopKV+jGFjMKz
-         aYBJyt+HGj55UASFwU5DZ2IPxbXiR+bq3podOrEZl2WCw2MxPoCe2zZNcA18LjaSjO7S
-         0dFg==
-X-Gm-Message-State: AJIora89KHIkvJRW1h8jpprnHwXlOldH8asZL4tyRhV5CiRyYzIr7chW
-        MZXbkONv10XqeJfvYCPvsSaSU+K1znoia+/Q33ZS2je0AiIX
-X-Google-Smtp-Source: AGRyM1vSSfzbRa9xmuhDZdZmSstgn1akAOKI0dDkXGpeqqr34jtiRzZTlUfK5wOkW4HY2cQSfWuPT/sXFk2cMmK9xs7N4VXo5U9/
+        Fri, 15 Jul 2022 01:50:03 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DF75C356
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 22:50:01 -0700 (PDT)
+Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26F5o0XU020229;
+        Fri, 15 Jul 2022 14:50:00 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
+ Fri, 15 Jul 2022 14:50:00 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26F5nxg6020212
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 15 Jul 2022 14:50:00 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <04278747-41fe-3a0a-81bf-2935efaafac0@I-love.SAKURA.ne.jp>
+Date:   Fri, 15 Jul 2022 14:49:58 +0900
 MIME-Version: 1.0
-X-Received: by 2002:a92:8748:0:b0:2d9:3f81:d0b7 with SMTP id
- d8-20020a928748000000b002d93f81d0b7mr6164423ilm.310.1657863564449; Thu, 14
- Jul 2022 22:39:24 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 22:39:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d85ed905e3d1707e@google.com>
-Subject: [syzbot] upstream test error: INFO: trying to register non-static key
- in ieee80211_do_stop
-From:   syzbot <syzbot+82d7f0e2f7a45da561c5@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        "Rafael J. Wysocki" <rjw@sisk.pl>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Cc:     linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: [PATCH v3] PM: hibernate: defer device probing when resuming from
+ hibernation
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+syzbot is reporting hung task at misc_open() [1], for there is a race
+window of AB-BA deadlock which involves probe_count variable. Currently
+wait_for_device_probe() from snapshot_open() from misc_open() can sleep
+forever with misc_mtx held if probe_count cannot become 0.
 
-syzbot found the following issue on:
+When a device is probed by hub_event() work function, probe_count is
+incremented before the probe function starts, and probe_count is
+decremented after the probe function completed.
 
-HEAD commit:    e5d523f1ae8f ubsan: disable UBSAN_DIV_ZERO for clang
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11e0ab1c080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=970ac5ffe160d24
-dashboard link: https://syzkaller.appspot.com/bug?extid=82d7f0e2f7a45da561c5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+There are three cases that can prevent probe_count from dropping to 0.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+82d7f0e2f7a45da561c5@syzkaller.appspotmail.com
+  (a) A device being probed stopped responding (i.e. broken/malicious
+      hardware).
 
-netdevsim netdevsim0 netdevsim1 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
-netdevsim netdevsim0 netdevsim0 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 2 PID: 3695 Comm: kworker/u16:3 Not tainted 5.19.0-rc6-syzkaller-00272-ge5d523f1ae8f #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Workqueue: netns cleanup_net
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- assign_lock_key kernel/locking/lockdep.c:979 [inline]
- register_lock_class+0xf30/0x1130 kernel/locking/lockdep.c:1292
- __lock_acquire+0x10a/0x5660 kernel/locking/lockdep.c:4932
- lock_acquire kernel/locking/lockdep.c:5665 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:354 [inline]
- ieee80211_do_stop+0xc3/0x1ff0 net/mac80211/iface.c:380
- ieee80211_stop+0xc5/0x610 net/mac80211/iface.c:680
- __dev_close_many+0x1b6/0x2e0 net/core/dev.c:1516
- dev_close_many+0x22c/0x630 net/core/dev.c:1541
- dev_close net/core/dev.c:1567 [inline]
- dev_close+0x16d/0x210 net/core/dev.c:1561
- cfg80211_shutdown_all_interfaces+0x96/0x1f0 net/wireless/core.c:273
- ieee80211_remove_interfaces+0xed/0x820 net/mac80211/iface.c:2212
- ieee80211_unregister_hw+0x47/0x1f0 net/mac80211/main.c:1400
- mac80211_hwsim_del_radio drivers/net/wireless/mac80211_hwsim.c:3964 [inline]
- hwsim_exit_net+0x50e/0xca0 drivers/net/wireless/mac80211_hwsim.c:4731
- ops_exit_list+0xb0/0x170 net/core/net_namespace.c:162
- cleanup_net+0x4ea/0xb00 net/core/net_namespace.c:594
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-device hsr_slave_0 left promiscuous mode
-device hsr_slave_1 left promiscuous mode
-batman_adv: batadv0: Interface deactivated: batadv_slave_0
-batman_adv: batadv0: Removing interface: batadv_slave_0
-batman_adv: batadv0: Interface deactivated: batadv_slave_1
-batman_adv: batadv0: Removing interface: batadv_slave_1
-device bridge_slave_1 left promiscuous mode
-bridge0: port 2(bridge_slave_1) entered disabled state
-device bridge_slave_0 left promiscuous mode
-bridge0: port 1(bridge_slave_0) entered disabled state
-device veth1_macvtap left promiscuous mode
-device veth0_macvtap left promiscuous mode
-device veth1_vlan left promiscuous mode
-device veth0_vlan left promiscuous mode
-team0 (unregistering): Port device team_slave_1 removed
-team0 (unregistering): Port device team_slave_0 removed
-bond0 (unregistering): (slave bond_slave_1): Releasing backup interface
-bond0 (unregistering): (slave bond_slave_0): Releasing backup interface
-bond0 (unregistering): Released all slaves
+  (b) A process emulating a USB device using /dev/raw-gadget interface
+      stopped responding for some reason.
 
+  (c) New device probe requests keeps coming in before existing device
+      probe requests complete.
 
+The phenomenon syzbot is reporting is (b). A process which is holding
+system_transition_mutex and misc_mtx is waiting for probe_count to become
+0 inside wait_for_device_probe(), but the probe function which is called
+ from hub_event() work function is waiting for the processes which are
+blocked at mutex_lock(&misc_mtx) to respond via /dev/raw-gadget interface.
+
+This patch mitigates (b) by deferring wait_for_device_probe() from
+snapshot_open() to snapshot_write() and snapshot_ioctl(). Please note that
+the possibility of (b) remains as long as any thread which is emulating a
+USB device via /dev/raw-gadget interface can be blocked by uninterruptible
+blocking operations (e.g. mutex_lock()).
+
+Please also note that (a) and (c) are not addressed. Regarding (c), we
+should change the code to wait for only one device which contains the
+image for resuming from hibernation. I don't know how to address (a), for
+use of timeout for wait_for_device_probe() might result in loss of user
+data in the image. Maybe we should require the userland to wait for the
+image device before opening /dev/snapshot interface.
+
+Link: https://syzkaller.appspot.com/bug?extid=358c9ab4c93da7b7238c [1]
+Reported-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Tested-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Oliver Neukum <oneukum@suse.com>
+Cc: Wedson Almeida Filho <wedsonaf@google.com>
+Cc: Rafael J. Wysocki <rjw@sisk.pl>
+Cc: Arjan van de Ven <arjan@linux.intel.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Changes in v3:
+  Defer wait_for_device_probe() till first write()/ioctl() request.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+v2 is at https://lkml.kernel.org/r/03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp .
+
+v1 is at https://lkml.kernel.org/r/72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp .
+
+ kernel/power/user.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/power/user.c b/kernel/power/user.c
+index ad241b4ff64c..d43c2aa583b2 100644
+--- a/kernel/power/user.c
++++ b/kernel/power/user.c
+@@ -26,6 +26,7 @@
+ 
+ #include "power.h"
+ 
++static bool need_wait;
+ 
+ static struct snapshot_data {
+ 	struct snapshot_handle handle;
+@@ -78,7 +79,7 @@ static int snapshot_open(struct inode *inode, struct file *filp)
+ 		 * Resuming.  We may need to wait for the image device to
+ 		 * appear.
+ 		 */
+-		wait_for_device_probe();
++		need_wait = true;
+ 
+ 		data->swap = -1;
+ 		data->mode = O_WRONLY;
+@@ -168,6 +169,11 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+ 	ssize_t res;
+ 	loff_t pg_offp = *offp & ~PAGE_MASK;
+ 
++	if (need_wait) {
++		wait_for_device_probe();
++		need_wait = false;
++	}
++
+ 	lock_system_sleep();
+ 
+ 	data = filp->private_data;
+@@ -244,6 +250,11 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
+ 	loff_t size;
+ 	sector_t offset;
+ 
++	if (need_wait) {
++		wait_for_device_probe();
++		need_wait = false;
++	}
++
+ 	if (_IOC_TYPE(cmd) != SNAPSHOT_IOC_MAGIC)
+ 		return -ENOTTY;
+ 	if (_IOC_NR(cmd) > SNAPSHOT_IOC_MAXNR)
+-- 
+2.18.4

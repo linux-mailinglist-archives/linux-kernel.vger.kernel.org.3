@@ -2,237 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368C1575E16
+	by mail.lfdr.de (Postfix) with ESMTP id 83AFC575E17
 	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 11:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbiGOIw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 04:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
+        id S231503AbiGOIug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 04:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233254AbiGOIvb (ORCPT
+        with ESMTP id S229758AbiGOIuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:51:31 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001C67BE3F
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:50:52 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id t1so6769460lft.8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fezBfQAJ2Jc7g4+Nk8PG5Lswj+jW8kXFPL2QSLPMg9I=;
-        b=rzw3ryPC9hPJVQEddHD6sIN07bCLWZ+7xexAZCwSN0fdkxSWGggvu0wwZABHG7Zxlz
-         fOXQZxWSI6Z9FkWwoztaKyinsqC45qiKqWLO/hpg84vEbYAviBeQBSPoGs3G8itffhJV
-         Sspi+9GSj6/4bTv26ly7dufqYaJmq7mz/9ntQnO6H0w9ghdOS2nnog5CQ+Ixo1U0QNkk
-         w9hZpbjPcHXsE+r5bYuCi2FrnbtUCvTadE+CCt+YWwfpNuT9H1TnKAC2qDHKICNRA1Xg
-         eVvltOXKfcZ8rxHC+6lJS4hrLKeBA4lGH+DFT+rBLz0MFfyFUJKpgCQdM24bgB2Kai0e
-         nbuA==
+        Fri, 15 Jul 2022 04:50:32 -0400
+Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51C3820FB
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:50:30 -0700 (PDT)
+Received: by mail-pj1-f66.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso10976773pjc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:50:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fezBfQAJ2Jc7g4+Nk8PG5Lswj+jW8kXFPL2QSLPMg9I=;
-        b=lim/RR5cmD3EcrzSIyaFwpt+Wvq/JAKkoXoyOFUannYpRNGnKD4Y0Esns8ywV38mAY
-         EbBiP4YCsDi1MzLPhlnhpCtkRBGV+t03dY78JDajM2/sixbeQu7QqDtXBjSqs7FZv3LZ
-         bXNOx0FEwzVuQtrUz5c2jZBFqzOHD9r80r6hTfxB/jx5s3RulzCJilUkDAJpdA25JPLT
-         RY+z5er/621O/FgWo3kE7WezpxmnNQej8Vlx35VFrU9mz+W7fagfTL0UEnaftlzI/uAO
-         bOS1NyaDbzl7Omw37Ff02HgsQlAp99gOIk1q0q4MYdxMX63fdUl6la5SZa0qj6ri+Chi
-         cg4g==
-X-Gm-Message-State: AJIora+QEmtua9Yqxi/Pc2Ud1Tbx2eG4Cm31McvIkg+bkHoIeDKyuMRx
-        nplrW46qRDBDWuZGvrEgrk8rBZGnVg2DDQ==
-X-Google-Smtp-Source: AGRyM1tJ2ITwJs8M2KuFzKSj3rn0UjsLc2ZbkOPICf/e+RhQbzA1sT5YPMhqJIgUjJPuYr/DjTxafg==
-X-Received: by 2002:a05:6512:2527:b0:489:ec08:7ada with SMTP id be39-20020a056512252700b00489ec087adamr7203114lfb.621.1657875050824;
-        Fri, 15 Jul 2022 01:50:50 -0700 (PDT)
-Received: from gilgamesh.lab.semihalf.net ([83.142.187.85])
-        by smtp.gmail.com with ESMTPSA id e4-20020a2e9e04000000b0025d773448basm667846ljk.23.2022.07.15.01.50.49
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UKbfSg7TrsohuBtUBfw/4JYHhjgKNHMy0QyToUGRqo4=;
+        b=MVe3bzT9P970JDITY89GgaUVVChs35oUDcUlSR2XBfTIU7gdzkntmEkKHmiSgGbChG
+         XJk8C+twd3ahEw7nNgp8g7wPrygjiqr1sGPT4jnoR22P5fHmONfy+4Sl+wcRluIGzLUT
+         okPbnRglK+qFLfcCxUqsuI6MdY3hmZPcmC8PhQ4499IYY+483gU8jeD0aUAn1nmUiO1f
+         +EJ1k0B2i/zERkv2UeBIr2kGEQO+6Y++8afmkX9owDUt4Q9ntAIzUS+KHfU1Q/2/WvMA
+         gT20r/Dhl0VgnonUk2JMRqOHu+IJsGLUGpK4rtsk41pnNQloOV28GsyFRDBWpuIMEtVL
+         ulwg==
+X-Gm-Message-State: AJIora8oJYuTIp7s2XIMGeB+QM824pP/U5JYiSiqvlLuF+RZD7IuUgT3
+        b3YLMtZqxIJKJ+hRQLD57A==
+X-Google-Smtp-Source: AGRyM1sVKKvlZlyVUtJgYEChzMynl/kOSor1qJE2p4LSUK5/y28sNLLG4lYcfa6bl8Ir1+jbRFoMYw==
+X-Received: by 2002:a17:902:e74a:b0:16c:3bdf:26bd with SMTP id p10-20020a170902e74a00b0016c3bdf26bdmr13125985plf.116.1657875030231;
+        Fri, 15 Jul 2022 01:50:30 -0700 (PDT)
+Received: from localhost.localdomain ([156.146.53.107])
+        by smtp.gmail.com with ESMTPSA id h29-20020aa796dd000000b0052a198c2046sm3237477pfq.203.2022.07.15.01.50.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 01:50:50 -0700 (PDT)
-From:   Marcin Wojtas <mw@semihalf.com>
-To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     rafael@kernel.org, andriy.shevchenko@linux.intel.com,
-        sean.wang@mediatek.com, Landen.Chao@mediatek.com,
-        linus.walleij@linaro.org, andrew@lunn.ch, vivien.didelot@gmail.com,
-        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@armlinux.org.uk, hkallweit1@gmail.com, gjb@semihalf.com,
-        mw@semihalf.com, jaz@semihalf.com, tn@semihalf.com,
-        Samer.El-Haj-Mahmoud@arm.com, upstream@semihalf.com
-Subject: [net-next: PATCH v2 8/8] net: dsa: mv88e6xxx: switch to device_/fwnode_ APIs
-Date:   Fri, 15 Jul 2022 10:50:12 +0200
-Message-Id: <20220715085012.2630214-9-mw@semihalf.com>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20220715085012.2630214-1-mw@semihalf.com>
-References: <20220715085012.2630214-1-mw@semihalf.com>
+        Fri, 15 Jul 2022 01:50:29 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     rostedt@goodmis.org, mhiramat@kernel.org, beaub@linux.microsoft.com
+Cc:     linux-kernel@vger.kernel.org, kelulanainsley@gmail.com,
+        sunliming <sunliming@kylinos.cn>
+Subject: [PATCH] user_events: make data_file and status_file static
+Date:   Fri, 15 Jul 2022 16:50:15 +0800
+Message-Id: <20220715085015.248932-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to support both DT and ACPI in future, modify the
-mv88e6xx driver  code to use device_/fwnode_ equivalent routines.
-No functional change is introduced by this patch.
+Variables data_file and status_file are not used outside of example.c,
+so marks them static.
 
-Signed-off-by: Marcin Wojtas <mw@semihalf.com>
+Signed-off-by: sunliming <sunliming@kylinos.cn>
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 57 ++++++++++----------
- 1 file changed, 27 insertions(+), 30 deletions(-)
+ samples/user_events/example.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 1baf07b3284b..ca9ae691573e 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -3312,7 +3312,7 @@ static int mv88e6xxx_setup_upstream_port(struct mv88e6xxx_chip *chip, int port)
+diff --git a/samples/user_events/example.c b/samples/user_events/example.c
+index 4f5778e441c0..13b514bc03e9 100644
+--- a/samples/user_events/example.c
++++ b/samples/user_events/example.c
+@@ -15,8 +15,8 @@
+ #include <linux/user_events.h>
  
- static int mv88e6xxx_setup_port(struct mv88e6xxx_chip *chip, int port)
+ /* Assumes debugfs is mounted */
+-const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
+-const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
++static const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
++static const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
+ 
+ static int event_status(char **status)
  {
--	struct device_node *phy_handle = NULL;
-+	struct fwnode_handle *phy_handle = NULL;
- 	struct dsa_switch *ds = chip->ds;
- 	struct dsa_port *dp;
- 	int tx_amp;
-@@ -3499,15 +3499,15 @@ static int mv88e6xxx_setup_port(struct mv88e6xxx_chip *chip, int port)
- 
- 	if (chip->info->ops->serdes_set_tx_amplitude) {
- 		if (dp)
--			phy_handle = of_parse_phandle(to_of_node(dp->fwnode), "phy-handle", 0);
-+			phy_handle = fwnode_find_reference(dp->fwnode, "phy-handle", 0);
- 
--		if (phy_handle && !of_property_read_u32(phy_handle,
--							"tx-p2p-microvolt",
--							&tx_amp))
-+		if (!IS_ERR(phy_handle) && !fwnode_property_read_u32(phy_handle,
-+								     "tx-p2p-microvolt",
-+								     &tx_amp))
- 			err = chip->info->ops->serdes_set_tx_amplitude(chip,
- 								port, tx_amp);
--		if (phy_handle) {
--			of_node_put(phy_handle);
-+		if (!IS_ERR(phy_handle)) {
-+			fwnode_handle_put(phy_handle);
- 			if (err)
- 				return err;
- 		}
-@@ -3891,10 +3891,11 @@ static int mv88e6xxx_mdio_write(struct mii_bus *bus, int phy, int reg, u16 val)
- }
- 
- static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
--				   struct device_node *np,
-+				   struct fwnode_handle *fwnode,
- 				   bool external)
- {
- 	static int index;
-+	struct device_node *np = to_of_node(fwnode);
- 	struct mv88e6xxx_mdio_bus *mdio_bus;
- 	struct mii_bus *bus;
- 	int err;
-@@ -3973,18 +3974,18 @@ static void mv88e6xxx_mdios_unregister(struct mv88e6xxx_chip *chip)
- }
- 
- static int mv88e6xxx_mdios_register(struct mv88e6xxx_chip *chip,
--				    struct device_node *np)
-+				    struct fwnode_handle *fwnode)
- {
--	struct device_node *child;
-+	struct fwnode_handle *child;
- 	int err;
- 
- 	/* Always register one mdio bus for the internal/default mdio
- 	 * bus. This maybe represented in the device tree, but is
- 	 * optional.
- 	 */
--	child = of_get_child_by_name(np, "mdio");
-+	child = fwnode_get_named_child_node(fwnode, "mdio");
- 	err = mv88e6xxx_mdio_register(chip, child, false);
--	of_node_put(child);
-+	fwnode_handle_put(child);
- 	if (err)
- 		return err;
- 
-@@ -3992,13 +3993,13 @@ static int mv88e6xxx_mdios_register(struct mv88e6xxx_chip *chip,
- 	 * which say they are compatible with the external mdio
- 	 * bus.
- 	 */
--	for_each_available_child_of_node(np, child) {
--		if (of_device_is_compatible(
--			    child, "marvell,mv88e6xxx-mdio-external")) {
-+	fwnode_for_each_available_child_node(fwnode, child) {
-+		if (fwnode_property_match_string(child, "compatible",
-+						 "marvell,mv88e6xxx-mdio-external") == 0) {
- 			err = mv88e6xxx_mdio_register(chip, child, true);
- 			if (err) {
- 				mv88e6xxx_mdios_unregister(chip);
--				of_node_put(child);
-+				fwnode_handle_put(child);
- 				return err;
- 			}
- 		}
-@@ -6975,20 +6976,16 @@ static SIMPLE_DEV_PM_OPS(mv88e6xxx_pm_ops, mv88e6xxx_suspend, mv88e6xxx_resume);
- static int mv88e6xxx_probe(struct mdio_device *mdiodev)
- {
- 	struct dsa_mv88e6xxx_pdata *pdata = mdiodev->dev.platform_data;
-+	struct fwnode_handle *fwnode = dev_fwnode(&mdiodev->dev);
- 	const struct mv88e6xxx_info *compat_info = NULL;
- 	struct device *dev = &mdiodev->dev;
--	struct device_node *np = dev->of_node;
- 	struct mv88e6xxx_chip *chip;
- 	int port;
- 	int err;
- 
--	if (!np && !pdata)
--		return -EINVAL;
--
--	if (np)
--		compat_info = of_device_get_match_data(dev);
--
--	if (pdata) {
-+	if (fwnode)
-+		compat_info = device_get_match_data(dev);
-+	else if (pdata) {
- 		compat_info = pdata_device_get_match_data(dev);
- 
- 		if (!pdata->netdev)
-@@ -7045,9 +7042,9 @@ static int mv88e6xxx_probe(struct mdio_device *mdiodev)
- 	mv88e6xxx_phy_init(chip);
- 
- 	if (chip->info->ops->get_eeprom) {
--		if (np)
--			of_property_read_u32(np, "eeprom-length",
--					     &chip->eeprom_len);
-+		if (fwnode)
-+			device_property_read_u32(dev, "eeprom-length",
-+						 &chip->eeprom_len);
- 		else
- 			chip->eeprom_len = pdata->eeprom_len;
- 	}
-@@ -7058,8 +7055,8 @@ static int mv88e6xxx_probe(struct mdio_device *mdiodev)
- 	if (err)
- 		goto out;
- 
--	if (np) {
--		chip->irq = of_irq_get(np, 0);
-+	if (fwnode) {
-+		chip->irq = fwnode_irq_get(fwnode, 0);
- 		if (chip->irq == -EPROBE_DEFER) {
- 			err = chip->irq;
- 			goto out;
-@@ -7097,7 +7094,7 @@ static int mv88e6xxx_probe(struct mdio_device *mdiodev)
- 	if (err)
- 		goto out_g1_atu_prob_irq;
- 
--	err = mv88e6xxx_mdios_register(chip, np);
-+	err = mv88e6xxx_mdios_register(chip, fwnode);
- 	if (err)
- 		goto out_g1_vtu_prob_irq;
- 
 -- 
-2.29.0
+2.25.1
 

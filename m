@@ -2,103 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00811576203
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 14:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 659A7576212
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 14:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiGOMov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 08:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
+        id S231915AbiGOMsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 08:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiGOMot (ORCPT
+        with ESMTP id S229595AbiGOMsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 08:44:49 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8253B5D594;
-        Fri, 15 Jul 2022 05:44:48 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LkrfP3HHxz4xZD;
-        Fri, 15 Jul 2022 22:44:45 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657889087;
-        bh=+6PXPZIukil825g3WgxAnyRCEE+uB/jPmnZfVYSdSZM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SS+PJHknLTkIqYRMOVsINw1EP2jCdhwhTQpcT6iPYM71zoE0YP0N+04sX7MIeDx9e
-         +/ZVT0S5q7fKwFiwEBHnZ5O5S/AyFVsSw+Mm+39/nQFjTUrqf7ToX9KOthxZV1CMJ7
-         Wms4NcmQ6jlNByamNJD3SmWuZuiCt1KMznOjT8ArPyHEIgqQUyLH0BmjJgd3TjQ/xT
-         i1KEvIWkXb5S6xzs7ancQMNiCrbFCf35FzIkd5YTYI/9vlIU3eJjM0pPx2XxX+0JNf
-         rBLKK2vDG/qtV7Fp10fQQFkIQpiU5cL7y/S1yZk2eegAcR5aMTpVoD6GeU2HduU+uf
-         URiiOk1FnT3ZQ==
-Date:   Fri, 15 Jul 2022 22:44:43 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Vitaly Rodionov <vitalyr@opensource.cirrus.com>
-Subject: linux-next: build failure after merge of the sound tree
-Message-ID: <20220715224443.46ce75ca@canb.auug.org.au>
+        Fri, 15 Jul 2022 08:48:16 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B0D6C129
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 05:48:15 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso5957107pjk.3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 05:48:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WobHjGnXEstvgY9WdzvQAd+zN5fEdHbmcar/6NVFvmg=;
+        b=CGnX2SotKISaTXX/p06h0MAF5ZCZ0iIvMuo3YLy6PMGAeaRm1xyMHrMbWOZkn+nUbN
+         4PA7evUzpLDzIavz/6M9ygc79bzabOHCcBrKX9YhW2vY0DL7w3aTBj1vWESoeR8rk5nC
+         Yk3WFs3hBq4LTpMWms8ZQOAtuLwtWKL4g5skI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WobHjGnXEstvgY9WdzvQAd+zN5fEdHbmcar/6NVFvmg=;
+        b=T8QuYP3KaYvU+85TvlxADjWiZVhhC3JMKe6dLZJoBi6hIE/VDRxClNoX0KDpv6y8XB
+         8gH4tXfeOq530Z9QTlZyY7T6XSjtBuAM6mg/oOXQdSXINvSb5MID/QPmC8O1XYCDVHln
+         8J2WuOWhStWSHI7jVN6g78n07MuMUcVC1MTmoDNZbi3229SfoZqGB6N5YUEHqNmN8GB+
+         pqDBN0CDGHKW0sqmdkegaP9QGQBCroX3dF1G6a2/tBzBRWRZZEpqqq3ZG3FvBGUMmkHB
+         tkPuhVPO/Piuws1enlp0W94XbMtP2mwmpiDZnrszfduQx4elTuWAXPhTKD/JgR8GjqI6
+         dFiA==
+X-Gm-Message-State: AJIora/FKLkq/NFYMDY4FgfaMM8QyMquFOtoA1g9YsiyGoMQ9qtJLW4Y
+        VGFw3W5P/p0vesrQGyscrJZAcQ==
+X-Google-Smtp-Source: AGRyM1uujm85L0CQUZcgqAYRbsZtc+sjUu6h8mrLFguMbPMHGLQstpqScMdP7AHPirNmcMiLV/A7zQ==
+X-Received: by 2002:a17:902:988b:b0:16b:fae3:fcd5 with SMTP id s11-20020a170902988b00b0016bfae3fcd5mr14026480plp.109.1657889294789;
+        Fri, 15 Jul 2022 05:48:14 -0700 (PDT)
+Received: from dlunevwfh.roam.corp.google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
+        by smtp.gmail.com with ESMTPSA id u16-20020a170903125000b001690d398401sm3530730plh.88.2022.07.15.05.48.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 05:48:14 -0700 (PDT)
+From:   Daniil Lunev <dlunev@chromium.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Daniil Lunev <dlunev@chromium.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: [PATCH] scsi: ufs: ufs-pci: Correct check for RESET DSM
+Date:   Fri, 15 Jul 2022 22:48:07 +1000
+Message-Id: <20220715224722.1.I22460c4f4a9ccf2c96c3f9bb392b409926d80b2f@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Tc+ApL3edy=coBk2tZfD.4u";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Tc+ApL3edy=coBk2tZfD.4u
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+dsm_fns is a bitmap, and it is 0-indexed according to the check in
+__intel_dsm funciton. But common initialization was checking it as if it
+was 1-indexed. The CL corrects the discrepancy. This change won't break
+any existing calls to the function, since before the change both bits 0
+and 1 were checked and needed to be set.
 
-Hi all,
+Signed-off-by: Daniil Lunev <dlunev@chromium.org>
 
-After merging the sound tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+---
 
-sound/pci/hda/cs35l41_hda.c: In function 'cs35l41_get_acpi_sub_string':
-sound/pci/hda/cs35l41_hda.c:693:43: error: invalid use of undefined type 's=
-truct acpi_device'
-  693 |         status =3D acpi_evaluate_object(adev->handle, "_SUB", NULL,=
- &buffer);
-      |                                           ^~
+ drivers/ufs/host/ufshcd-pci.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-Caused by commit
+diff --git a/drivers/ufs/host/ufshcd-pci.c b/drivers/ufs/host/ufshcd-pci.c
+index 04166bda41daa..e54a49e64acad 100644
+--- a/drivers/ufs/host/ufshcd-pci.c
++++ b/drivers/ufs/host/ufshcd-pci.c
+@@ -20,6 +20,12 @@
+ #include <linux/acpi.h>
+ #include <linux/gpio/consumer.h>
+ 
++#define __INTEL_DSM_SUPPORTED(host, fn) \
++	((fn) < 32 && (fn) >= 0 && ((host)->dsm_fns & (1 << (fn))))
++
++#define INTEL_DSM_SUPPORTED(host, name) \
++	__INTEL_DSM_SUPPORTED(host, INTEL_DSM_##name)
++
+ struct ufs_host {
+ 	void (*late_init)(struct ufs_hba *hba);
+ };
+@@ -71,7 +77,7 @@ static int __intel_dsm(struct intel_host *intel_host, struct device *dev,
+ static int intel_dsm(struct intel_host *intel_host, struct device *dev,
+ 		     unsigned int fn, u32 *result)
+ {
+-	if (fn > 31 || !(intel_host->dsm_fns & (1 << fn)))
++	if (!__INTEL_DSM_SUPPORTED(intel_host, fn))
+ 		return -EOPNOTSUPP;
+ 
+ 	return __intel_dsm(intel_host, dev, fn, result);
+@@ -300,7 +306,7 @@ static int ufs_intel_device_reset(struct ufs_hba *hba)
+ {
+ 	struct intel_host *host = ufshcd_get_variant(hba);
+ 
+-	if (host->dsm_fns & INTEL_DSM_RESET) {
++	if (INTEL_DSM_SUPPORTED(host, RESET)) {
+ 		u32 result = 0;
+ 		int err;
+ 
+@@ -342,7 +348,7 @@ static int ufs_intel_common_init(struct ufs_hba *hba)
+ 		return -ENOMEM;
+ 	ufshcd_set_variant(hba, host);
+ 	intel_dsm_init(host, hba->dev);
+-	if (host->dsm_fns & INTEL_DSM_RESET) {
++	if (INTEL_DSM_SUPPORTED(host, RESET)) {
+ 		if (hba->vops->device_reset)
+ 			hba->caps |= UFSHCD_CAP_DEEPSLEEP;
+ 	} else {
+-- 
+2.31.0
 
-  d60b05b4c780 ("ALSA: hda: cs35l41: Allow compilation test on non-ACPI con=
-figurations")
-
-along with commit
-
-  eef375960210 ("ALSA: hda: cs35l41: Support reading subsystem id from ACPI=
-")
-
-I have reverted commit d60b05b4c780 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Tc+ApL3edy=coBk2tZfD.4u
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLRYTsACgkQAVBC80lX
-0GzADwf/SxxNIWifSnwkykYpb22uegXnUcygQsF7R7ZZ9vy5/Ms3pdVpRUcw0F10
-o8q8yNWPH2CLMA/tCiFNZKEW5NhnAKsd5FRmRZa4uPjFJdftMieSosya8Og32upa
-SpJyAqJMweHeW6tJ1xor5YHVQcy0VD94DtTv4iuLNJJ4E3IwS1C0DU+8C1WohKkD
-hyLlqj6gjMSzUbqpuaxc6cjCmwr/K74iTp0mMycPKGvujruG0nZWZi2YrkGLcIN5
-JySMzwD1lSGDyaqr5j8J8S1QtkXSLU7GJqrThjQktj8irxEyaR/JHczgnJJj4vuL
-RIv2rGS9fvp8aTzuZmQD+A1JdAcDFw==
-=XegK
------END PGP SIGNATURE-----
-
---Sig_/Tc+ApL3edy=coBk2tZfD.4u--

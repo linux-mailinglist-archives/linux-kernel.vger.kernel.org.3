@@ -2,86 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E37AA575FBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0BA575FC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbiGOLGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 07:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S232543AbiGOLIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 07:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiGOLGB (ORCPT
+        with ESMTP id S229490AbiGOLIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 07:06:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB9FCDF98
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 04:06:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04E691474;
-        Fri, 15 Jul 2022 04:06:01 -0700 (PDT)
-Received: from [10.57.86.139] (unknown [10.57.86.139])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AF79A3F73D;
-        Fri, 15 Jul 2022 04:05:59 -0700 (PDT)
-Message-ID: <fa52e5cc-41e6-a77c-a200-70a3a2c3b508@arm.com>
-Date:   Fri, 15 Jul 2022 12:05:58 +0100
+        Fri, 15 Jul 2022 07:08:23 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1C8868BF
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 04:08:22 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id r2so5256367wrs.3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 04:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OmAVkQqBTTkr9luYSoZNqmHxg6zKrdYzcTAh39XB80E=;
+        b=WHo2FU3vtMGV3aElDTXi+mGo+/8MM2a56xn0TGixZDPayyPzlYagMDJb7abO5NWLzp
+         V6QBe6cHD2iC/JjNFxLPxxOkhjL2OX/IQxZ9AxnfnJ2g07EfV1gs1EbdNy/qtP7P/2iQ
+         Fze5KHOR30JKo0qsuODX1AcxJOdEZhyqW4oE0BMVyiOfKB52QWepFHScSFaY8BWFlIsZ
+         YlSE3dUxuRILm9qIcuyDMx6m3f2l15QkleH49hBbN5FUtnO6/rYYj1LikLf/fUWV4as4
+         ctMSdWmGHme0FScQiEXP8K97X/D6Ru8dB84i8MuyaqKCuSuKuUqG7pBlCOVwR9dMXeOZ
+         LYbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OmAVkQqBTTkr9luYSoZNqmHxg6zKrdYzcTAh39XB80E=;
+        b=TX41jh9Spcn7oYdrIhgcBt2yQIVFqP5fBF77TiS9CXpXAIGsYQR3rDuwbRua2gSU24
+         /6NZ12RRV25Jw6/MphSbNd+eC5sTvbmt28/OHbQqFAkdCYE2TCDf0NS7EtcPyPQhdfcT
+         BP884PtplrmdHSk4WLprl/La+cHqgus7M4U9rK6hLa3qPlzxuqG2RZ3cRNXF+tFCjTdR
+         JkVpEkVVyFnunzebSIfPpzrYMBRtyUlXqJbvvlZ17z+rMSkeVIBQorsmbtX9THhGBRI4
+         91mY+jwo9hB+eTv2V31a2xzMkFHt/hox5eTLu7nzwtq56JLh2IDEzy1IDNbGanWwbgEs
+         LDxg==
+X-Gm-Message-State: AJIora+EX4QkDbOeq0yis7ogxkaF7BlXsZ6YEG6Obn2nozVFSgGP7FB8
+        Fei3XYF42EHj8WTLAIlobv6sWg==
+X-Google-Smtp-Source: AGRyM1sEjpj7feotX5UfZAdeUwTZLkodeYC6VvTR5tSQyXV/Uekt9N0ER1lQi7rDu073X4wM9rjEKg==
+X-Received: by 2002:a5d:59ac:0:b0:21d:944a:8a0e with SMTP id p12-20020a5d59ac000000b0021d944a8a0emr12137645wrr.61.1657883300766;
+        Fri, 15 Jul 2022 04:08:20 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id m18-20020a5d56d2000000b0021a34023ca3sm3521355wrw.62.2022.07.15.04.08.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 04:08:20 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 12:08:18 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 6/8] dt-bindings: backlight: Update Lee Jones' email
+ address
+Message-ID: <20220715110818.2hxept5xuaxkpcvw@maple.lan>
+References: <20220714112533.539910-1-lee@kernel.org>
+ <20220714112533.539910-7-lee@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] MAINTAINERS: Add Robin Murphy as IOMMU SUBSYTEM reviewer
-Content-Language: en-GB
-To:     Joerg Roedel <joro@8bytes.org>, iommu@lists.linux.dev
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        Joerg Roedel <jroedel@suse.de>
-References: <20220715110334.6969-1-joro@8bytes.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220715110334.6969-1-joro@8bytes.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714112533.539910-7-lee@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-15 12:03, Joerg Roedel wrote:
-> From: Joerg Roedel <jroedel@suse.de>
-> 
-> Robin has been acting as a reviewer of the IOMMU Subsystem for a long
-> time. He is also defacto maintaining the IOMMU DMA-API Layer, so make
-> both roles official by adding Robin to the MAINTAINERS file.
+On Thu, Jul 14, 2022 at 12:25:31PM +0100, Lee Jones wrote:
+> Going forward, I'll be using my kernel.org for upstream work.
+>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
 
-Acked-by: Robin Murphy <robin.murphy@arm.com>
+Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
 
-> Signed-off-by: Joerg Roedel <jroedel@suse.de>
-> ---
->   MAINTAINERS | 13 ++++++++++++-
->   1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8f9ed151ad4c..029f49f29982 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10448,9 +10448,20 @@ T:	git git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git
->   F:	fs/iomap/
->   F:	include/linux/iomap.h
->   
-> -IOMMU DRIVERS
-> +IOMMU DMA-API LAYER
-> +M:	Robin Murphy <robin.murphy@arm.com>
-> +L:	iommu@lists.linux.dev
-> +S:	Maintained
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git
-> +F:	drivers/iommu/dma-iommu.c
-> +F:	drivers/iommu/iova.c
-> +F:	include/linux/dma-iommu.h
-> +F:	include/linux/iova.h
-> +
-> +IOMMU SUBSYSTEM
->   M:	Joerg Roedel <joro@8bytes.org>
->   M:	Will Deacon <will@kernel.org>
-> +R:	Robin Murphy <robin.murphy@arm.com>
->   L:	iommu@lists.linux.dev
->   S:	Maintained
->   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git
+
+> Cc: Jingoo Han <jingoohan1@gmail.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Lee Jones <lee@kernel.org>
+
+
+Daniel.

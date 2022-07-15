@@ -2,80 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52A05768AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 23:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB155768BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 23:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbiGOVJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 17:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
+        id S230414AbiGOVOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 17:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbiGOVJY (ORCPT
+        with ESMTP id S229513AbiGOVO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 17:09:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D7470E55
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 14:09:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ED6061760
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 21:09:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31454C34115;
-        Fri, 15 Jul 2022 21:09:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657919357;
-        bh=jDRTvdwY8R1xATb4PJAsxJ5AKoErEZjvC/CdZJc17aM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y6FBC2PWHOSMyUsQ/hGpp77j0S5w4T0pP5QtN9oUZVbn9j4/yI19fqG7nkdKITybP
-         Jk5hEQdBxVlEaYH3JS/hu1cKnkKU4rRpv1JymfhhTIr2N607kIrbFeXH15B348QVFQ
-         8qtIi9+7IlO1D/uvlbVRfWut1dN1hV3JFXH3vjkf8Pz/t7ldEgq2Vq0zttBt/7zz/S
-         51dvMhlBiZx5B1iuMjLIFFXsFMVAega0s25WGzmYBFDYCZ4KnQRL7y5VrTsdt+1liv
-         XIOlSC7QX1VYE0blt+cUqHD0VJ4XI5bqOKCEnpd+RIlBvVidrYNLh4SrCO7OMhLSuH
-         i689AruIGEWDg==
-Date:   Fri, 15 Jul 2022 14:09:15 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [git pull] drm fixes for 5.19-rc7
-Message-ID: <YtHXe4PcWXfihF9Q@dev-arch.thelio-3990X>
-References: <CAPM=9twM75GDM9t+9-CSCPDZG3QdcEpQ-X+FzQ4CLUCM7cKLkw@mail.gmail.com>
+        Fri, 15 Jul 2022 17:14:28 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75B32B186;
+        Fri, 15 Jul 2022 14:14:26 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id ss3so11006791ejc.11;
+        Fri, 15 Jul 2022 14:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4jnwaKSFrPbXm7tPbqUxltJNzUOl5SncKSIZVs8IUH8=;
+        b=MIxtPAOXNa3uDXY0po8014F6W7nVRoyldH4pwU/j7Kbxvo1E59SnG2+ky8TFIVwaIG
+         Ka+yFnIM4OwmPsd6fllxxWBjgu/DiVxR0zyYT9F+Dx7rhSvQAefgq516sW+l6nKceZYp
+         SuNvicXRj8hEZUHBxPHzB88PASocLl6Xy4jDd4fnh/z0IiiGnKoghc0J5e9woTauaxxn
+         sGvOX0YVuo/DnEoTkt1It7FRYhPxsC1BBFbJrpmLD6B6OcFITsieVYYdknu0qj/iJdnB
+         QEkSYc+vYh41gHeKI2BH+d93PQD4HT8Ocsty2jWV23gmVx5FMo7++QHZy/WCF1aoL4Bl
+         obLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4jnwaKSFrPbXm7tPbqUxltJNzUOl5SncKSIZVs8IUH8=;
+        b=ZGYM1ClpF99Y1zM7KDCtdti2luS26LgdQfRc1wwb+2Via7mGa22pjMHFTWlHO1oLS5
+         XKE+On/ViKi6dbjMAx5pRegBSxWx9+VbAXoflfTPaAVJJKDE1Euv1zt6pgtO5s6CwLZA
+         8CkgAWTNyBFw4KogMHtIRgVGsCZ0KGMB6nwZz/H9fwhPvDxoXEsIRu4CG1/JawzTBsT1
+         HsGGOC+VZ9/E/d1uwjmq/BTrrmH+nWxWILG729R4p4XJ0E6+1cz7fphWtaWagk+Dz2Ee
+         KNfw8BzR4T47QTlf9ItdS4VZSpnZaDBirdAEPHYZTN7Eu115F6v8YBXMf+DfJGUwwhbD
+         6WtA==
+X-Gm-Message-State: AJIora9RZHi/cSj/UmU286bAvTSBpIE/FSsDtgjyHRIQ6aVW2852U5en
+        2w++8+Vc7vJKIZ8TAEL5ZxE=
+X-Google-Smtp-Source: AGRyM1ulZ1t7kEN0uGVJ52lXzet5jxCPqjmayE79wtwiZYAxUE/4rkT527PV0ow3/GrOcaywwPDQWA==
+X-Received: by 2002:a17:907:7d8b:b0:726:aad6:f421 with SMTP id oz11-20020a1709077d8b00b00726aad6f421mr15046466ejc.80.1657919665403;
+        Fri, 15 Jul 2022 14:14:25 -0700 (PDT)
+Received: from junglepc.fritz.box (h081217087223.dyn.cm.kabsi.at. [81.217.87.223])
+        by smtp.gmail.com with ESMTPSA id ez7-20020a056402450700b0043a87e6196esm3488624edb.6.2022.07.15.14.14.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 14:14:25 -0700 (PDT)
+From:   Sotir Danailov <sndanailov@gmail.com>
+To:     corbet@lwn.net
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bagasdotme@gmail.com, rdunlap@infradead.org,
+        Sotir Danailov <sndanailov@gmail.com>
+Subject: [PATCH v3] Documentation: process: Update email client instructions for Thunderbird
+Date:   Fri, 15 Jul 2022 23:13:07 +0200
+Message-Id: <20220715211307.9358-1-sndanailov@gmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPM=9twM75GDM9t+9-CSCPDZG3QdcEpQ-X+FzQ4CLUCM7cKLkw@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 01:36:17PM +1000, Dave Airlie wrote:
-> Matthew Auld (1):
->       drm/i915/ttm: fix sg_table construction
+The instructions don't match with the current Thunderbird interface.
+Clarification on using external extensions.
+New information on how to avoid writing HTML emails.
+Tell user to restart Thunderbird after modifications.
 
-This patch breaks i386_defconfig with both GCC and clang:
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Sotir Danailov <sndanailov@gmail.com>
+---
+Changelog since v2:
+ - tell user to restart Thunderbird after modifications
+ - unnecessary comment on older versions for "External Editor"
 
-  ld: drivers/gpu/drm/i915/i915_scatterlist.o: in function `i915_rsgt_from_mm_node':
-  i915_scatterlist.c:(.text+0x1a7): undefined reference to `__udivdi3'
+Changelog since v1:
+ - better external extensions explanation
+ - information on avoiding HTML emails
 
-  ld.lld: error: undefined symbol: __udivdi3
-  >>> referenced by i915_scatterlist.c
-  >>>               gpu/drm/i915/i915_scatterlist.o:(i915_rsgt_from_mm_node) in archive drivers/built-in.a
+v2: https://lore.kernel.org/linux-doc/20220714131152.12709-1-sndanailov@gmail.com/
+v1: https://lore.kernel.org/linux-doc/20220713225037.1201-1-sndanailov@gmail.com/
 
-It was reported by Stephen in -next [1] and there is a fix [2] that
-works for me but it doesn't appear to be applied yet (at least, it is
-not in drm-intel-fixes at the moment). It is a little disappointing to
-see new build errors being introduced before -rc7, especially when
-visible with a defconfig...
+ Documentation/process/email-clients.rst | 69 +++++++++++++++++--------
+ 1 file changed, 47 insertions(+), 22 deletions(-)
 
-[1]: https://lore.kernel.org/20220713221454.67bb20df@canb.auug.org.au/
-[2]: https://lore.kernel.org/20220712174050.592550-1-matthew.auld@intel.com/
+diff --git a/Documentation/process/email-clients.rst b/Documentation/process/email-clients.rst
+index 16586f6cc888..fc2c46f3f82d 100644
+--- a/Documentation/process/email-clients.rst
++++ b/Documentation/process/email-clients.rst
+@@ -277,36 +277,61 @@ Thunderbird (GUI)
+ Thunderbird is an Outlook clone that likes to mangle text, but there are ways
+ to coerce it into behaving.
+ 
++After doing the modifications, this includes installing the extensions,
++you need to restart Thunderbird.
++
+ - Allow use of an external editor:
+-  The easiest thing to do with Thunderbird and patches is to use an
+-  "external editor" extension and then just use your favorite ``$EDITOR``
+-  for reading/merging patches into the body text.  To do this, download
+-  and install the extension, then add a button for it using
+-  :menuselection:`View-->Toolbars-->Customize...` and finally just click on it
+-  when in the :menuselection:`Compose` dialog.
+-
+-  Please note that "external editor" requires that your editor must not
+-  fork, or in other words, the editor must not return before closing.
+-  You may have to pass additional flags or change the settings of your
+-  editor. Most notably if you are using gvim then you must pass the -f
+-  option to gvim by putting ``/usr/bin/gvim -f`` (if the binary is in
+-  ``/usr/bin``) to the text editor field in :menuselection:`external editor`
+-  settings. If you are using some other editor then please read its manual
+-  to find out how to do this.
++
++  The easiest thing to do with Thunderbird and patches is to use extensions
++  which open your favorite external editor.
++
++  Here are some example extensions which are capable of doing this.
++
++  - "External Editor Revived"
++
++    https://github.com/Frederick888/external-editor-revived
++
++    https://addons.thunderbird.net/en-GB/thunderbird/addon/external-editor-revived/
++
++    It requires installing a "native messaging host".
++    Please read the wiki which can be found here:
++    https://github.com/Frederick888/external-editor-revived/wiki
++
++  - "External Editor"
++
++    https://github.com/exteditor/exteditor
++
++    To do this, download and install the extension, then open the
++    :menuselection:`compose` window, add a button for it using
++    :menuselection:`View-->Toolbars-->Customize...`
++    then just click on the new button when you wish to use the external editor.
++
++    Please note that "External Editor" requires that your editor must not
++    fork, or in other words, the editor must not return before closing.
++    You may have to pass additional flags or change the settings of your
++    editor. Most notably if you are using gvim then you must pass the -f
++    option to gvim by putting ``/usr/bin/gvim --nofork"`` (if the binary is in
++    ``/usr/bin``) to the text editor field in :menuselection:`external editor`
++    settings. If you are using some other editor then please read its manual
++    to find out how to do this.
+ 
+ To beat some sense out of the internal editor, do this:
+ 
+-- Edit your Thunderbird config settings so that it won't use ``format=flowed``.
+-  Go to :menuselection:`edit-->preferences-->advanced-->config editor` to bring up
+-  the thunderbird's registry editor.
++- Edit your Thunderbird config settings so that it won't use ``format=flowed``!
++  Go to your main window and find the button for your main dropdown menu.
++  :menuselection:`Main Menu-->Preferences-->General-->Config Editor...`
++  to bring up the thunderbird's registry editor.
+ 
+-- Set ``mailnews.send_plaintext_flowed`` to ``false``
++  - Set ``mailnews.send_plaintext_flowed`` to ``false``
+ 
+-- Set ``mailnews.wraplength`` from ``72`` to ``0``
++  - Set ``mailnews.wraplength`` from ``72`` to ``0``
+ 
+-- :menuselection:`View-->Message Body As-->Plain Text`
++- Don't write HTML messages! Go to the main window
++  :menuselection:`Main Menu-->Account Settings-->youracc@server.something-->Composition & Addressing`!
++  There you can disable the option "Compose messages in HTML format".
+ 
+-- :menuselection:`View-->Character Encoding-->Unicode (UTF-8)`
++- Open messages only as plain text! Go to the main window
++  :menuselection:`Main Menu-->View-->Message Body As-->Plain Text`!
+ 
+ TkRat (GUI)
+ ***********
+-- 
+2.37.0
 
-Cheers,
-Nathan

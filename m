@@ -2,76 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184515759A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 04:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEB05759A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 04:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240880AbiGOCq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 22:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
+        id S241075AbiGOCr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 22:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232185AbiGOCq5 (ORCPT
+        with ESMTP id S240927AbiGOCr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 22:46:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F4565D52;
-        Thu, 14 Jul 2022 19:46:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0A29B82A63;
-        Fri, 15 Jul 2022 02:46:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E37C34114;
-        Fri, 15 Jul 2022 02:46:48 +0000 (UTC)
-Date:   Thu, 14 Jul 2022 22:46:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>, Networking <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 bpf-next 3/5] ftrace: introduce
- FTRACE_OPS_FL_SHARE_IPMODIFY
-Message-ID: <20220714224646.62d49e36@rorschach.local.home>
-In-Reply-To: <6A7EF1C7-471B-4652-99C1-87C72C223C59@fb.com>
-References: <20220602193706.2607681-1-song@kernel.org>
-        <20220602193706.2607681-4-song@kernel.org>
-        <20220713203343.4997eb71@rorschach.local.home>
-        <AA1D9833-DF67-4AFD-815C-DD89AB57B3A2@fb.com>
-        <20220714204817.2889e280@rorschach.local.home>
-        <6A7EF1C7-471B-4652-99C1-87C72C223C59@fb.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 14 Jul 2022 22:47:27 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9747539F;
+        Thu, 14 Jul 2022 19:47:25 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LkbN218m3zFpxV;
+        Fri, 15 Jul 2022 10:46:26 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Jul 2022 10:47:23 +0800
+CC:     <yangyicong@hisilicon.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>, x86 <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Darren Hart <darren@os.amperecomputing.com>,
+        <huzhanyuan@oppo.com>,
+        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>, =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
+        real mz <realmz6@gmail.com>, <linux-mips@vger.kernel.org>,
+        <openrisc@lists.librecores.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        "tiantao (H)" <tiantao6@hisilicon.com>
+Subject: Re: [PATCH v2 0/4] mm: arm64: bring up BATCHED_UNMAP_TLB_FLUSH
+To:     Barry Song <21cnbao@gmail.com>, <xhao@linux.alibaba.com>
+References: <20220711034615.482895-1-21cnbao@gmail.com>
+ <24f5e25b-3946-b92a-975b-c34688005398@linux.alibaba.com>
+ <CAGsJ_4zjnmQV6LT3yo--K-qD-92=hBmgfK121=n-Y0oEFX8RnQ@mail.gmail.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <77e245a3-56b8-d624-187d-d8dacaf8d043@huawei.com>
+Date:   Fri, 15 Jul 2022 10:47:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <CAGsJ_4zjnmQV6LT3yo--K-qD-92=hBmgfK121=n-Y0oEFX8RnQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Jul 2022 02:04:33 +0000
-Song Liu <songliubraving@fb.com> wrote:
-
-> > What I'm suggesting is that a DIRECT ops will never set IPMODIFY.  
+On 2022/7/14 12:51, Barry Song wrote:
+> On Thu, Jul 14, 2022 at 3:29 PM Xin Hao <xhao@linux.alibaba.com> wrote:
+>>
+>> Hi barry.
+>>
+>> I do some test on Kunpeng arm64 machine use Unixbench.
+>>
+>> The test  result as below.
+>>
+>> One core, we can see the performance improvement above +30%.
 > 
-> Aha, this the point I misunderstood. I thought DIRECT ops would always
-> set IPMODIFY (as it does now). 
+> I am really pleased to see the 30%+ improvement on unixbench on single core.
+> 
+>> ./Run -c 1 -i 1 shell1
+>> w/o
+>> System Benchmarks Partial Index              BASELINE RESULT INDEX
+>> Shell Scripts (1 concurrent)                     42.4 5481.0 1292.7
+>> ========
+>> System Benchmarks Index Score (Partial Only)                         1292.7
+>>
+>> w/
+>> System Benchmarks Partial Index              BASELINE RESULT INDEX
+>> Shell Scripts (1 concurrent)                     42.4 6974.6 1645.0
+>> ========
+>> System Benchmarks Index Score (Partial Only)                         1645.0
+>>
+>>
+>> But with whole cores, there have little performance degradation above -5%
+> 
+> That is sad as we might get more concurrency between mprotect(), madvise(),
+> mremap(), zap_pte_range() and the deferred tlbi.
+> 
+>>
+>> ./Run -c 96 -i 1 shell1
+>> w/o
+>> Shell Scripts (1 concurrent)                  80765.5 lpm   (60.0 s, 1
+>> samples)
+>> System Benchmarks Partial Index              BASELINE RESULT INDEX
+>> Shell Scripts (1 concurrent)                     42.4 80765.5 19048.5
+>> ========
+>> System Benchmarks Index Score (Partial Only)                        19048.5
+>>
+>> w
+>> Shell Scripts (1 concurrent)                  76333.6 lpm   (60.0 s, 1
+>> samples)
+>> System Benchmarks Partial Index              BASELINE RESULT INDEX
+>> Shell Scripts (1 concurrent)                     42.4 76333.6 18003.2
+>> ========
+>> System Benchmarks Index Score (Partial Only)                        18003.2
+>>
+>> ----------------------------------------------------------------------------------------------
+>>
+>>
+>> After discuss with you, and do some changes in the patch.
+>>
+>> ndex a52381a680db..1ecba81f1277 100644
+>> --- a/mm/rmap.c
+>> +++ b/mm/rmap.c
+>> @@ -727,7 +727,11 @@ void flush_tlb_batched_pending(struct mm_struct *mm)
+>>          int flushed = batch >> TLB_FLUSH_BATCH_FLUSHED_SHIFT;
+>>
+>>          if (pending != flushed) {
+>> +#ifdef CONFIG_ARCH_HAS_MM_CPUMASK
+>>                  flush_tlb_mm(mm);
+>> +#else
+>> +               dsb(ish);
+>> +#endif
+>>
+> 
+> i was guessing the problem might be flush_tlb_batched_pending()
+> so i asked you to change this to verify my guess.
+> 
+>      /*
+>>                   * If the new TLB flushing is pending during flushing, leave
+>>                   * mm->tlb_flush_batched as is, to avoid losing flushing.
+>>
+>> there have a performance improvement with whole cores, above +30%
+> 
+> But I don't think it is a proper patch. There is no guarantee the cpu calling
+> flush_tlb_batched_pending is exactly the cpu sending the deferred
+> tlbi. so the solution is unsafe. But since this temporary code can bring the
+> 30%+ performance improvement back for high concurrency, we have huge
+> potential to finally make it.
+> 
+> Unfortunately I don't have an arm64 server to debug on this. I only have
+> 8 cores which are unlikely to reproduce regression which happens in
+> high concurrency with 96 parallel tasks.
+> 
+> So I'd ask if @yicong or someone else working on kunpeng or other
+> arm64 servers  is able to actually debug and figure out a proper
+> patch for this, then add the patch as 5/5 into this series?
+> 
 
-My fault. I was probably not being clear when I was suggesting that
-DIRECT should *act* like an IPMODIFY, but never explicitly stated that
-it should not set the IPMODIFY flag.
+sure, Tiantao and I will look into this on Kunpeng 920.
 
-The only reason it does today was to make it easy to act like an
-IPMODIFY (because it set the flag). But I'm now suggesting to get rid
-of that and just make DIRECT act like an IPMDOFIY as there can only be
-one of them on a function, but now we have some cases where DIRECT can
-work with IPMODIFY via the callbacks.
-
--- Steve
+>>
+>> ./Run -c 96 -i 1 shell1
+>> 96 CPUs in system; running 96 parallel copies of tests
+>>
+>> Shell Scripts (1 concurrent)                 109229.0 lpm   (60.0 s, 1 samples)
+>> System Benchmarks Partial Index              BASELINE       RESULT    INDEX
+>> Shell Scripts (1 concurrent)                     42.4     109229.0  25761.6
+>>                                                                     ========
+>> System Benchmarks Index Score (Partial Only)                        25761.6
+>>
+>>
+>> Tested-by: Xin Hao<xhao@linux.alibaba.com>
+> 
+> Thanks for your testing!
+> 
+>>
+>> Looking forward to your next version patch.
+>>
+>> On 7/11/22 11:46 AM, Barry Song wrote:
+>>> Though ARM64 has the hardware to do tlb shootdown, the hardware
+>>> broadcasting is not free.
+>>> A simplest micro benchmark shows even on snapdragon 888 with only
+>>> 8 cores, the overhead for ptep_clear_flush is huge even for paging
+>>> out one page mapped by only one process:
+>>> 5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
+>>>
+>>> While pages are mapped by multiple processes or HW has more CPUs,
+>>> the cost should become even higher due to the bad scalability of
+>>> tlb shootdown.
+>>>
+>>> The same benchmark can result in 16.99% CPU consumption on ARM64
+>>> server with around 100 cores according to Yicong's test on patch
+>>> 4/4.
+>>>
+>>> This patchset leverages the existing BATCHED_UNMAP_TLB_FLUSH by
+>>> 1. only send tlbi instructions in the first stage -
+>>>       arch_tlbbatch_add_mm()
+>>> 2. wait for the completion of tlbi by dsb while doing tlbbatch
+>>>       sync in arch_tlbbatch_flush()
+>>> My testing on snapdragon shows the overhead of ptep_clear_flush
+>>> is removed by the patchset. The micro benchmark becomes 5% faster
+>>> even for one page mapped by single process on snapdragon 888.
+>>>
+>>>
+>>> -v2:
+>>> 1. Collected Yicong's test result on kunpeng920 ARM64 server;
+>>> 2. Removed the redundant vma parameter in arch_tlbbatch_add_mm()
+>>>     according to the comments of Peter Zijlstra and Dave Hansen
+>>> 3. Added ARCH_HAS_MM_CPUMASK rather than checking if mm_cpumask
+>>>     is empty according to the comments of Nadav Amit
+>>>
+>>> Thanks, Yicong, Peter, Dave and Nadav for your testing or reviewing
+>>> , and comments.
+>>>
+>>> -v1:
+>>> https://lore.kernel.org/lkml/20220707125242.425242-1-21cnbao@gmail.com/
+>>>
+>>> Barry Song (4):
+>>>    Revert "Documentation/features: mark BATCHED_UNMAP_TLB_FLUSH doesn't
+>>>      apply to ARM64"
+>>>    mm: rmap: Allow platforms without mm_cpumask to defer TLB flush
+>>>    mm: rmap: Extend tlbbatch APIs to fit new platforms
+>>>    arm64: support batched/deferred tlb shootdown during page reclamation
+>>>
+>>>   Documentation/features/arch-support.txt       |  1 -
+>>>   .../features/vm/TLB/arch-support.txt          |  2 +-
+>>>   arch/arm/Kconfig                              |  1 +
+>>>   arch/arm64/Kconfig                            |  1 +
+>>>   arch/arm64/include/asm/tlbbatch.h             | 12 ++++++++++
+>>>   arch/arm64/include/asm/tlbflush.h             | 23 +++++++++++++++++--
+>>>   arch/loongarch/Kconfig                        |  1 +
+>>>   arch/mips/Kconfig                             |  1 +
+>>>   arch/openrisc/Kconfig                         |  1 +
+>>>   arch/powerpc/Kconfig                          |  1 +
+>>>   arch/riscv/Kconfig                            |  1 +
+>>>   arch/s390/Kconfig                             |  1 +
+>>>   arch/um/Kconfig                               |  1 +
+>>>   arch/x86/Kconfig                              |  1 +
+>>>   arch/x86/include/asm/tlbflush.h               |  3 ++-
+>>>   mm/Kconfig                                    |  3 +++
+>>>   mm/rmap.c                                     | 14 +++++++----
+>>>   17 files changed, 59 insertions(+), 9 deletions(-)
+>>>   create mode 100644 arch/arm64/include/asm/tlbbatch.h
+>>>
+>> --
+>> Best Regards!
+>> Xin Hao
+>>
+> 
+> Thanks
+> Barry
+> .
+> 

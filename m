@@ -2,84 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F3A5769DA
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D9A5769DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbiGOWXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        id S232358AbiGOWXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbiGOWXO (ORCPT
+        with ESMTP id S232498AbiGOWXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:23:14 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6952661B21;
-        Fri, 15 Jul 2022 15:23:13 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id j1-20020a17090aeb0100b001ef777a7befso9071807pjz.0;
-        Fri, 15 Jul 2022 15:23:13 -0700 (PDT)
+        Fri, 15 Jul 2022 18:23:34 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73D362A65
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:23:31 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id bf13so5563487pgb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:23:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Ou4ITJAtDpdEe2oGXNdiIauXOvcSg7DQL0fAZO9cl2U=;
-        b=Q8lGAoHw8McxXXPUu9JJi1XBb9QitejFhB3EEwl7pOmObYxg0niuVsgwD5pp+sh+vE
-         xuIKedL/WXyDOOgKJBNrsDZftnMo9VkkzEBAU07KrLja6rRFtcHKmFquU9rhG815UU2M
-         4qN1XN8OsBzeKfEo5BTfdcSUJQ2BwjYyJuOFMY1ANoellCCLxbAHe55abXJ7Zm6HvfQg
-         GKaa2Vtf5KUXirx9wqbsorAJO9z4sV3vRf0YDGd8uZXmu52ax/4hGUDH+Qk3BfTyJPaN
-         iAwhnKMbwb+t+CoQOhksE/3VAGMsc4nRaI5nIO7QpJ2agWHS8WCalQSMbeCbYh/XUxGP
-         0SVg==
+        bh=h08OBDtouOlnPaz6Mk89TkUqXNC6lVw4WMryRnoY4iQ=;
+        b=SWBq670YGdUDUrz+LfGaVqhLNtXSduF+1kAy8tHbqCMHxzTK2rLblqfH6+CYEvdUam
+         v/yPvYMRRAlLYRePmgUlEhwaZDQzzCUf0nqX9tCSngUrFJ3YHZC9ejmTonEQ50Z+I/Yj
+         c1sewCP8LAbIU2jpaun7nKp+rgKHD72Lizf+bO4mumGPe2vWfA67JxK3kb+IEdYq8TNn
+         pIdzdO2OTit8/qw1V54APG3u1c8H1kvrqDVs+q/aXt73IJUVDKz0ARo02W3lSYb3Qefq
+         EDluaP4iCN+GLO9VxvShkAf0mAA5qQAoOdTV4B8ZwfWJRk5kK9g44irFj6vG73BckUH8
+         N1Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Ou4ITJAtDpdEe2oGXNdiIauXOvcSg7DQL0fAZO9cl2U=;
-        b=x08JxCvc5rlQ5ZmgNiCzeJKKD0khSHmMG1Linjb+lulR/ekCIW7YI4xU9wcl7EOLRe
-         ZoYZOhgg5C+qx7gTsJj88V69d0XVs6VJPUNHrJ/7/A9CaBOedV0MfL/NqbsXVYsW71eY
-         lWzI0mcztRxxdWPO1tOuSz2+y4WoPwb2cTMiujnblCyMLQgC/xKs9rox0BVogtXu3YHK
-         7uDm/gRC9vYEUeCIpyYyjp+VxfV+sAR6IfKTOZy+ouYamt7fIiuKuEhuu4MtHrZP3IT+
-         ibxRZwh1C949nmWbw/dV1qw5qsc53qMd13K71Kc/L4/pJ3QKnXSY9ThDhAnroz2h9rMs
-         bUJQ==
-X-Gm-Message-State: AJIora84iZb2eVpPtQhjvJK45J+4qhmEx0ku1rges7Ir1S3zMx+nxMdo
-        35lS67olAUwwS7rvMJuk64Q=
-X-Google-Smtp-Source: AGRyM1tY7KJ/8yKzDhwZuUT2Q/d9pehX12mE0ZjdresU33mAA0lNxgF0E239suZTF5xMlCXXfdaB4Q==
-X-Received: by 2002:a17:90b:3e8e:b0:1f0:1ac:5908 with SMTP id rj14-20020a17090b3e8e00b001f001ac5908mr17817321pjb.175.1657923792909;
-        Fri, 15 Jul 2022 15:23:12 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id j20-20020a170902759400b00161ccdc172dsm4013893pll.300.2022.07.15.15.23.12
+        bh=h08OBDtouOlnPaz6Mk89TkUqXNC6lVw4WMryRnoY4iQ=;
+        b=M5sSGULnGSfPfv8rwY3oWgju1bN/QJw5PafwNFRpwAYXLYprXiKGuvQU32DJ6ubOGx
+         4jOaHv+rnGXL3LQOsTjWplLxDYAmL3u8OQMIwlECKUgKcA2oG3jV3AbHL4o5zkXmJHze
+         lInbtKhph67g/mVwspSDS36vwY1633iEfYTVS80YR9Z3gzJS0F8Gw1L1Z01PSt33kPxv
+         nMPzm9ZeVpz5vCdCDU0kSe8A4/H9PlYbqrxKAeFFW5T2FzrzOpc2Cs2KxJlHb02sSEjl
+         +abKpixeuXvjg6+45p/c5HESiTzKJNy963UE9389gCM0VZoI/Y7OQh60KXWOmL2taNPr
+         FS1g==
+X-Gm-Message-State: AJIora8zR1CuxWcMYeRpJ4Y5Hz/4JhI2cjniB/Sz2oDXTzNPCjsY0dqw
+        4UHpmtW1x3GrecrcHA0rzR1unA==
+X-Google-Smtp-Source: AGRyM1t7Ufq+16dtrPJCG7vL3sPupbfNcIcgSZ5v9myXTI8I39QsDiDTWJovZbADGjskDpoUBCWLQQ==
+X-Received: by 2002:a65:5688:0:b0:3c2:1015:988e with SMTP id v8-20020a655688000000b003c21015988emr14079913pgs.280.1657923811299;
+        Fri, 15 Jul 2022 15:23:31 -0700 (PDT)
+Received: from google.com ([2620:15c:2d:3:e72f:c983:e093:d463])
+        by smtp.gmail.com with ESMTPSA id s15-20020a170902ea0f00b0016bf803341asm1972182plg.146.2022.07.15.15.23.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 15:23:12 -0700 (PDT)
-Date:   Sat, 16 Jul 2022 07:23:10 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        Fri, 15 Jul 2022 15:23:30 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 15:23:25 -0700
+From:   Isaac Manjarres <isaacmanjarres@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>
-Subject: Re: [RFC PATCH 2/2] asm-generic: Add new pci.h and use it
-Message-ID: <YtHozgXIkpyWHKth@antec>
-References: <20220714214657.2402250-1-shorne@gmail.com>
- <20220714214657.2402250-3-shorne@gmail.com>
- <CAK8P3a2_HKMf8nMcSkK1_jyCEHEdzz=YiRmPvN+ACbPTafXJzA@mail.gmail.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saravana Kannan <saravanak@google.com>, kernel-team@android.com
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <YtHo3Xu33jovwpFt@google.com>
+References: <YlaOIbSA7B/G9222@arm.com>
+ <YlkV7NtatO7KFusX@gondor.apana.org.au>
+ <CAMj1kXFW_zC-U5Ox9_=4gKCwWOmkR7wPNb6UQhiz8viNWTRU-w@mail.gmail.com>
+ <YlkkGpVx8rhcsBot@gondor.apana.org.au>
+ <YllALIgZcQJ6asdA@arm.com>
+ <YlllpH+PB8XVUn6h@arm.com>
+ <YlvLqkIdrCp/rOsG@gondor.apana.org.au>
+ <YlvSEHul1Rv3Ap34@arm.com>
+ <YlvTNQGh+MfZFWKW@gondor.apana.org.au>
+ <YlxATW56ZoNtmxlk@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a2_HKMf8nMcSkK1_jyCEHEdzz=YiRmPvN+ACbPTafXJzA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <YlxATW56ZoNtmxlk@arm.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,67 +92,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 10:09:21AM +0200, Arnd Bergmann wrote:
-> On Thu, Jul 14, 2022 at 11:46 PM Stafford Horne <shorne@gmail.com> wrote:
-> >
-> > The asm/pci.h used for many newer architectures share similar
-> > definitions.  Move the common parts to asm-generic/pci.h to allow for
-> > sharing code.
+On Sun, Apr 17, 2022 at 05:29:01PM +0100, Catalin Marinas wrote:
+> On Sun, Apr 17, 2022 at 04:43:33PM +0800, Herbert Xu wrote:
+> > On Sun, Apr 17, 2022 at 09:38:40AM +0100, Catalin Marinas wrote:
+> > > I don't think we need to do anything here. A structure like:
+> > > 
+> > > struct x {
+> > > 	char y;
+> > > 	char z[] CRYPTO_MINALIGN_ATTR;
+> > > };
+> > > 
+> > > is already of size 128. Without CRYPTO_MINALIGN_ATTR, its size would be
+> > > 1 but otherwise the whole structure inherits the alignment of its
+> > > member and this translates into an aligned size.
+> > 
+> > No we should not lie to the compiler,
 > 
-> This looks very nice, thanks for doing it!
+> We won't if we ensure that a structure with sizeof() >= 128 is aligned
+> to 128.
 > 
-> > Two things to note are:
-> >
-> >  - isa_dma_bridge_buggy, traditionally this is defined in asm/dma.h but
-> >    these architectures avoid creating that file and add the definition
-> >    to asm/pci.h.
-> 
-> I would prefer if we could just kill off this variable for non-x86, as it's
-> only set to a nonzero value in two implementations that are both
-> x86-specific and most of the references are gone. That does not have
-> to be part of this series though, if you don't want to address it here, just
-> add a comment to the new pci.h file.
+Right. kmalloc() should return a 128 byte aligned pointer as long as
+the size of the allocation is >= 128 bytes, and the kmalloc-192 cache
+isn't present. So, the current behavior that crypto is relying on
+wouldn't change, so I agree with Catalin that we wouldn't be lying to
+the compiler if we move forward with getting rid of kmalloc-192.
 
-I will look at it, maybe in a v3.
+FWIW, I did a comparison on my machine with and without kmalloc-192, and
+the amount of memory usage that increased from allocations being redirected to
+kmalloc-256 was about 0.4-0.5 MB, which doesn't seem too bad.
 
-> >  - ARCH_GENERIC_PCI_MMAP_RESOURCE, csky does not define this so we
-> >    undefine it after including asm-generic/pci.h.  Why doesn't csky
-> >    define it?
-> 
-> Adding David Woodhouse to Cc, as he introduced this interface. As I
-> understand it, this was meant as a replacement for the old
-> architecture specific pci_mmap_page_range interface, and is ideally
-> used everywhere.
-> 
-> It's probably something that slipped through the review of csky and
-> should have been there.
-> 
-> As an aside, it seems the pci_mmap_page_range() cleanup was
-> left almost complete, with sparc being the only one left after
-> David Miller found a problem with the generic code. Not sure if
-> this was ever resolved:
-> https://lore.kernel.org/lkml/1519887203.622.3.camel@infradead.org/t/#u
+> > we have code elsewhere
+> > that uses the alignment to compute the amount of extra padding
+> > needed to create greater padding.  If CRYPTO_MINALIGN is misleading
+> > then that calculation will fall apart.
+I don't think it would be misleading. If all of your allocations
+are >= CRYPTO_MINALIGN == ARCH_DMA_MINALIGN in size, and
+kmalloc()--with kmalloc-192 removed--returns buffers that are aligned to a
+power of 2, and are big enough to accomodate your allocation, then wouldn't
+they always be CYRPTO_MINALIGN'ed, so your calculation would still be fine?
 
-I see, I will leave it foe now.
-
-> > +#ifndef PCIBIOS_MIN_IO
-> > +#define PCIBIOS_MIN_IO         0
-> > +#endif
-> > +
-> > +#define PCIBIOS_MIN_MEM                0
-> 
-> We should probably #ifdef both of these for consistency.
-
-OK.
-
-> > +static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > +{
-> > +       /* no legacy ide irq support */
-> > +       return -ENODEV;
-> > +}
-> 
-> And this can just go away now, according to what we found.
-
-Yeah, that will be nice.
-
--Stafford
+--Isaac

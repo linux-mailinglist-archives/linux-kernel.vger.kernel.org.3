@@ -2,176 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550CA575C3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295FB575C44
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231783AbiGOHU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 03:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53372 "EHLO
+        id S230366AbiGOHW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 03:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiGOHUX (ORCPT
+        with ESMTP id S229468AbiGOHWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 03:20:23 -0400
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50082.outbound.protection.outlook.com [40.107.5.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13367479D;
-        Fri, 15 Jul 2022 00:20:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e8dgnELEkopS8QaA+Mvz0DzkE86Q7FlZAP66EnHQTXn5s5tsW4lOxdlERjNd3Jd3VK9nJuOgu0yXgcNNzpjhT1pJMQ4+rnPJ42w70on9WDDf4j3B7/M6JeRLyzscqtrC6tE3W2zW+bd6ZegoxYF29bKu3xW0s8+4ZWZ5Obl7cVi4095BSJxSD0n4JRIEYB3PB7MEpdz97bNcsuVwJv+i7UiovNLR6QDhGUmsOF7pjZPgZJtPAPby3lKwPqg7PKXfwojnLDREelYXj3jgudWDf5KspRtKaJckuNxyvcCYCG/qt2UD3GoLjxavYeoOIIPbKAVFlzeE71HLG/FK7AOB0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OVFtKtq+LHsz5NVwZmbHaVgVVm5MWxlfeLMyrtf87IM=;
- b=ZzmPa0ELwBrhw9YhAsnmqOqTzaSXyIo5e8TIxTnvDfspg06ftWgFKuSodE75rhuAuHfyciyMD0wF06izCCklQ0wc43g9ObbPRmEp2y1B4k2VuF9D7QgZkao6CDoysjwm6vwK9x5Yl5ikqVEs3B4a4z4WYKmOBJwmiQaY3FT5tETLVnCn7KkHppEPVJh9aq2QMwQnDVlQ/8yoKp2l/CZ+7xNdgJNal5CrFXkSeRldRL3/MyGFi62QuO0CS/M17eOitJRB5TWPrGhShu88rAXegZHv55bEXa+KuBzhm5vecWg823x4dijl2QlmvtHYlhs7oRMrPYg4yg1b6iC+EL1V9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OVFtKtq+LHsz5NVwZmbHaVgVVm5MWxlfeLMyrtf87IM=;
- b=YmLXs6eENPTC3Q0Khga4jowsGB/q/0xwAXcGszhy4OpP5SH6sf0RprGaDdDtPLnbjmmRjC/f+iaBLxudB0V82QRJ+jnmMlleIrSrp50v1WW1ECoUpZwEz9rDulluKKSHYXi755fvyfzbsajNe01XZq+axNYay4x0aGsiL+Vuk18=
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
- by PAXPR04MB8208.eurprd04.prod.outlook.com (2603:10a6:102:1c7::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Fri, 15 Jul
- 2022 07:20:16 +0000
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::3cec:d61:3836:2826]) by AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::3cec:d61:3836:2826%5]) with mapi id 15.20.5438.017; Fri, 15 Jul 2022
- 07:20:16 +0000
-From:   Sherry Sun <sherry.sun@nxp.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH 2/2] tty: serial: fsl_lpuart: writing a 1 and then a 0 to
- trigger a break character
-Thread-Topic: [PATCH 2/2] tty: serial: fsl_lpuart: writing a 1 and then a 0 to
- trigger a break character
-Thread-Index: AQHYl/cqr4tzMlicFUS5QAVEdKaVoa1+/W8AgAAE7pA=
-Date:   Fri, 15 Jul 2022 07:20:16 +0000
-Message-ID: <AS8PR04MB840448675E64E4FCDEEF91A1928B9@AS8PR04MB8404.eurprd04.prod.outlook.com>
-References: <20220715025944.11076-1-sherry.sun@nxp.com>
- <20220715025944.11076-3-sherry.sun@nxp.com>
- <509669b26b5899088e9b77ed94d103ee@walle.cc>
-In-Reply-To: <509669b26b5899088e9b77ed94d103ee@walle.cc>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f6f75b81-0bab-4aec-aa34-08da66327751
-x-ms-traffictypediagnostic: PAXPR04MB8208:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: h/bq8oc/8Mua7xpkJHzNiF1EpivAOyT2ryPhnyv8UdpPjUzKcUn9PTeFqSuBfQJxpdlBrbjsiHbtVeiCf+MjQnoDEDSU/9C570qsZOtkt6+/YmQ5vHa9vqMeA9QNKXRaJJlnb8mjEzjrgg8qmiT6dx+0Nhpzu/3WFeyubQ6Zk5LYwSuYFdnODQrq2mjfYlt16WdeUxT/q86RhhoAIaEbDuPEajt9GLiaolrcu50BtUTCv3v/2i6sWTC1e0pVQwYuQha5wUsDhEwWF9xTK2wEOIceGXgRvuqIqUm23O96byCg92zGFMUbeuXc7c2PeFgxxJRW048+1vvIEzVxoylqzTTvpzs7Tteb1F2ouQaZTihmS3NOXJr+MyrbVBNP1oNYNcT8kBuZ75ZCTR3YJUHr0Ts6CnhksGPZHyqPV+KiH4Ly6a7en9ToqeWhJhsnJ57SpvfjbJWY2vdZ2wo0i/+7anTjP7tVvXExAdrK6DJ23bSUEK+g1YOPI242VprzAteiigYrmqm49GXAclzjHI5r+H6i8I5VnxEfg6+hwtMgJtvHJODrJhALmWOgjo/jNnkQiA3oeA9WZjmkX/SAuge0dKDhpF484GsBukak0Wp5nGboGfoUVU9dPR9e9wAWhnswd5cVYaeR+eQJylEckn+yYqg11kRf/Q3l9l8bvCND2eu9cnBcOezLTwTPvDQRmTlyF3tqw3WPC9pby6Wm4WGg55FGTLUekoQ6MedpyyYvBW6AEfwnhT4aZxil6o3ZvsKvC70Bf0sAdwdz4iuUXPqONmwE/c5cWCPPl37DSA9cGdPuh+qff77cd5+ND1pLP7OW
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(136003)(396003)(376002)(39860400002)(66946007)(86362001)(33656002)(52536014)(26005)(71200400001)(9686003)(55016003)(66556008)(2906002)(41300700001)(66476007)(83380400001)(8936002)(186003)(54906003)(6506007)(478600001)(122000001)(6916009)(316002)(38100700002)(64756008)(76116006)(8676002)(66446008)(38070700005)(4326008)(5660300002)(7696005)(44832011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eaLkOvih/ZYhMVKXGeIIfffZ8Xt4v/RFWnPqd2FEUqKXLUP/92Fppgj8agRs?=
- =?us-ascii?Q?0Qc07XcNDVmQVDxpZgWSSojICxbMvAf1ITy3iVnscZ6BMwku+UKVaD2V+GML?=
- =?us-ascii?Q?iXzH8chWm4frBqBBHYrB7dK7G9hvwSPwNvEEdxbkcp2sUktByHd+Uf8cs7/E?=
- =?us-ascii?Q?uGnOxoGPBejUCytFz399xIzHd9RXUYHILsmIG455wKhWVP7JzxuhhCq5uRze?=
- =?us-ascii?Q?6xTIFbPyWC96zW/9u1QVUlO3M7HepsumtT+Civcgxltpa7aV2COyzNyqS0Hu?=
- =?us-ascii?Q?o/GjPzK+1q5Z1zbsh1IEDg18NgQPSsyCfrjjPrhIyeVTVk8GAlQPVlrcJmYV?=
- =?us-ascii?Q?Mve+N8M3F5lsaA8/E+HnkvRV2ZC3lG5WFH+uXC16EjN0qgkJrsDr7c11iww4?=
- =?us-ascii?Q?tqZL+wZxouJKK+ouq0ZD7Nu8FgdsgTG8uNI1szXPGIDFcGDrmx4w0knhV6tN?=
- =?us-ascii?Q?vuwX+VSxfeiq6GETSrRBVZBpmhfYb4W2P8R0iIQis6XE6mXI8vLnxBljORL7?=
- =?us-ascii?Q?FAVrRaRs8+/Ir9o+nBgGd/uFDqUO6cG1LWIEbrEDWbHM3gGa2lOgLHSIY7UQ?=
- =?us-ascii?Q?GVXP1OU9PrY0dXt4SAX7TrzQ3Jf55s36s3PaTCdt/m7IQBMp/f7EP9C5cD5g?=
- =?us-ascii?Q?z8ldubLO76immsUN4LQ/Qj67jFn42LPVcO6S3FBDgdO54/6aqTQAhAr2S8+/?=
- =?us-ascii?Q?tSsFNy570h5DInQ6+CUkC0qY7Pk9OUEBI366psW6EVtmFBLjV+JiW9OtfNen?=
- =?us-ascii?Q?yxedpWEC4pmxqhfoOBv4+yjF7e827egzmIh+6xM0OU0wML/NWR7dYGR1NW3R?=
- =?us-ascii?Q?BdYIT8A6kOhH1jAiioH4oHw1EyyFxmPGXDCFfoo9BwnsAoti5izSJBcgCTNX?=
- =?us-ascii?Q?Jk2A3qKPy/30H/yS5FlOtbtCJzrMD7AjZgQvUMJYKrMxLHgjkVxZxNANIu2h?=
- =?us-ascii?Q?jaddOzszilgavWvxHQHNeonfTfWhcggA5fFKmtrWsOksjkqFo+dEecwEukul?=
- =?us-ascii?Q?EVAX0Dl7yafG1TQlJ+ACEMH3nwpyJ3DeKDZyYRNU148ua1+YL4+LB7GT6Pxl?=
- =?us-ascii?Q?vS9yYKk6AStUbwy73MsGb75EHUB9bAmdfkY61fUmttgV2rl6ggomJdQnN6DZ?=
- =?us-ascii?Q?6R8WdkBjFql3egEUQT7wfd7gE/VWj8WkLRIB9ZKmG7LU/o8owrLmJBHCzgNF?=
- =?us-ascii?Q?ABiQ3hG07lcCIHg5crEU0fLvP0on8Y6u/3CKrVcgNDOSPZyn8pCwp6DONq07?=
- =?us-ascii?Q?IhkxPPFfVuvGifikKpZ31MIYAtiw7Xwp8yCpwLHjmRJj4i1UymK7gSgZDe/o?=
- =?us-ascii?Q?D654em6yP/2mY2RLYJ3wPq2VkSEC6O0UszIhROLwfhbZwno7Inn4z12Vo1jR?=
- =?us-ascii?Q?X5zJOBiMOdyjoTXmoQuB6HG27egL23i7BCTFxg+0aHAJqplI5R25GTwdBAxq?=
- =?us-ascii?Q?bTmPo0St0MevPSluJOBgV3M0/i8vSggq+mAZXcr6KxeLlOcoz0N54I6/JQdZ?=
- =?us-ascii?Q?elAFL4QW1h1CzILcKglHVqBQ3+CmxGT5II2vopWT639SThcfw8VYLp9FdoyO?=
- =?us-ascii?Q?J67ciS+pDiuk2fq5Hf+tCVv7kru9gxOkLnsi/fOh?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 15 Jul 2022 03:22:22 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B8B7437B
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 00:22:21 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26F6hoCb004034;
+        Fri, 15 Jul 2022 07:22:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=+czgEbTszIZgJ23+VtNlz6CBVsIjEr9wjSrV/qdWzo0=;
+ b=Gqav5gnHE6Od5rGJYBBw9AwT2oIRHxMX+ePRfYm/WMIyaaegoYMx3p9r2wkSFNHcVSiW
+ XLvgzvAwwSS7x5EeJLEES91slKiGqVJ70SeeXS4iSew6GDT5xg0E/6nYpha9FtJ66pOw
+ 9V3EEcoWetBrOrocK9lYx59LPx7mw5kCm6eSlimpq7IphqTDm62zFOJTfvvnEHqKj2NA
+ qUzpnPPrl5JQDA18xY1DyQj7A1XztoYK9Wihu/DjZlp0DMEKAYKo8J4zk2Yk7XksJRTj
+ pXF2ZiEYCduldSxO08sI1Hg5dJNVIahFH1609bzLEZ5DFuPHXEuwHLVwL/i76uhHCAYA Aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hb37jgq8s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Jul 2022 07:22:01 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26F78ckI004509;
+        Fri, 15 Jul 2022 07:22:01 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hb37jgq8e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Jul 2022 07:22:01 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26F7JwNq028579;
+        Fri, 15 Jul 2022 07:22:00 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma04wdc.us.ibm.com with ESMTP id 3h71a9ygpq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Jul 2022 07:22:00 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26F7LxrY50463120
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 15 Jul 2022 07:21:59 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B6CFB28059;
+        Fri, 15 Jul 2022 07:21:59 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6A4E628060;
+        Fri, 15 Jul 2022 07:21:54 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.84.38])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 15 Jul 2022 07:21:54 +0000 (GMT)
+X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
+Subject: Re: [PATCH v9 5/8] mm/demotion: Build demotion targets based on
+ explicit memory tiers
+In-Reply-To: <87cze6apeo.fsf@nvdebian.thelocal>
+References: <20220714045351.434957-1-aneesh.kumar@linux.ibm.com>
+ <20220714045351.434957-6-aneesh.kumar@linux.ibm.com>
+ <87cze6apeo.fsf@nvdebian.thelocal>
+Date:   Fri, 15 Jul 2022 12:51:51 +0530
+Message-ID: <87zghau9gw.fsf@linux.ibm.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6f75b81-0bab-4aec-aa34-08da66327751
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jul 2022 07:20:16.2272
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: P1n6Aw20O0OgeV5EIvh/amphCk2cPLClx1K/OFOJLWSXtMwMZUKTXEpQs6xPAyFgGGBNCpQ3AcOFphzjzxlmeA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8208
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: tE9xHqtNZlpqTx1u4k4IPXjuYeofyL7q
+X-Proofpoint-ORIG-GUID: qvo2Y_mnWp8zdFdenqJ_expB0aU2f8_l
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-15_02,2022-07-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 malwarescore=0 impostorscore=0
+ mlxlogscore=919 adultscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207150029
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [PATCH 2/2] tty: serial: fsl_lpuart: writing a 1 and then a =
-0 to
-> trigger a break character
->=20
-> Hi,
->=20
-> Am 2022-07-15 04:59, schrieb Sherry Sun:
-> > According to the lpuart reference manual, need to writing a 1 and then
-> > a
-> > 0 to the UARTCTRL_SBK field queues a break character in the transmit
-> > data stream. Only writing a 1 cannot trigger the break character, so
-> > fix it.
->=20
-> I don't think this is correct. The tty core will already call this:
->    .break_ctl(port, 1)
->    usleep()
->    .break_ctl(port, 0)
->=20
-> So you'll have your 1->0 transition.
->=20
-> My RM from the LS1028A says the following:
->=20
-> | Writing a 1 and then a 0 to SBK queues a break character in the
-> | transmit data stream. Additional break characters of 10 to 13, or 13
-> | to 16 if LPUART_STATBRK13] is set, bit times of logic 0 are queued as
-> | long as SBK is set. Depending on the timing of the set and clear of
-> | SBK relative to the information currently being transmitted, a second
-> | break character may be queued before software clears SBK.
->=20
-> To me it seems that setting the SBK bit just pulls the TX line low and re=
-leasing
-> it will return to normal transmitter mode.
+Alistair Popple <apopple@nvidia.com> writes:
+....
+
+> + */
+>> +static void establish_migration_targets(void)
+>> +{
+>> +	struct memory_tier *memtier;
+>> +	struct demotion_nodes *nd;
+>> +	int target = NUMA_NO_NODE, node;
+>> +	int distance, best_distance;
+>> +	nodemask_t used;
+>> +
+>> +	if (!node_demotion || !IS_ENABLED(CONFIG_MIGRATION))
 >
+> Does it make sense to include the memory tiering/demotion code if
+> CONFIG_MIGRATION isn't enabled? From what I can tell none of the
+> information established here is used if CONFIG_MIGRATION isn't enabled,
+> so it would be better to remove the IS_ENABLED checks and not include
+> the code at all.
 
-Hi Michael,
+We use the same function/codepath for updating top_tier details. We
+would want to get node_is_toptier() to work even with CONFIG_MIGRATION
+disabled? 
 
-Actually set break_ctl(tty, -1) then break_ctl(tty, 0) is only done in the =
-send_break() function.
-If we call TIOCSBRK from user space, it will only set break_ctl(tty, -1) wi=
-thout break_ctl(tty, 0).
+>
+>> +		return;
+>> +
+>> +	disable_all_migrate_targets();
+>> +
+>> +	for_each_node_state(node, N_MEMORY) {
+>> +		best_distance = -1;
+>> +		nd = &node_demotion[node];
+>> +
+>> +		memtier = __node_get_memory_tier(node);
+>> +		if (!memtier || list_is_last(&memtier->list, &memory_tiers))
+>> +			continue;
+>> +		/*
+>> +		 * Get the next memtier to find the  demotion node list.
+>> +		 */
+>> +		memtier = list_next_entry(memtier, list);
+>> +
+>> +		/*
+>> +		 * find_next_best_node, use 'used' nodemask as a skip list.
+>> +		 * Add all memory nodes except the selected memory tier
+>> +		 * nodelist to skip list so that we find the best node from the
+>> +		 * memtier nodelist.
+>> +		 */
+>> +		nodes_andnot(used, node_states[N_MEMORY], memtier->nodelist);
+>> +
+>> +		/*
+>> +		 * Find all the nodes in the memory tier node list of same best distance.
+>> +		 * add them to the preferred mask. We randomly select between nodes
+>> +		 * in the preferred mask when allocating pages during demotion.
+>> +		 */
+>> +		do {
+>> +			target = find_next_best_node(node, &used);
+>> +			if (target == NUMA_NO_NODE)
+>> +				break;
+>> +
+>> +			distance = node_distance(node, target);
+>> +			if (distance == best_distance || best_distance == -1) {
+>> +				best_distance = distance;
+>> +				node_set(target, nd->preferred);
+>> +			} else {
+>> +				break;
+>> +			}
+>> +		} while (1);
+>> +	}
+>> +}
+>> +
 
-And from the definition of .break_ctl(port,ctl), the callback is used to Co=
-ntrol the transmission of a break signal(Documentation/driver-api/serial/dr=
-iver.rst), if ctl is nonzero, it should queues a break character. I don't t=
-hink it is reasonable to call break_ctl() twice in order to send one break =
-signal.
+.....
 
-Also I have tried other uart IP, such as drivers/tty/serial/imx.c, it also =
-queues a break character if we call break_ctl() once. So I believe the brea=
-k_ctl() in lpuart driver should be fixed.
-
-Best regards
-Sherry
+-aneesh

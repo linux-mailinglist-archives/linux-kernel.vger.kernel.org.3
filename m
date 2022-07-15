@@ -2,130 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA34576690
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A85576693
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiGOSLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 14:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S229664AbiGOSMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 14:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiGOSLr (ORCPT
+        with ESMTP id S229631AbiGOSMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 14:11:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAE53564EE;
-        Fri, 15 Jul 2022 11:11:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9FDA212FC;
-        Fri, 15 Jul 2022 11:11:45 -0700 (PDT)
-Received: from [10.57.86.139] (unknown [10.57.86.139])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E769E3F792;
-        Fri, 15 Jul 2022 11:11:43 -0700 (PDT)
-Message-ID: <17a4c6f6-d79c-a7b2-860f-e5944b778f9f@arm.com>
-Date:   Fri, 15 Jul 2022 19:11:39 +0100
+        Fri, 15 Jul 2022 14:12:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A91D59245;
+        Fri, 15 Jul 2022 11:12:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB4D362315;
+        Fri, 15 Jul 2022 18:12:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24257C3411E;
+        Fri, 15 Jul 2022 18:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657908749;
+        bh=zv88e6V2bOYszh5xZ5YFkXFxU2Be44JHufVZU7uo7YY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=lOXj38MUE4WmuKeKIPlNexwIs7d8j8Mz4uoK2G7zN/dZp+RTkb2v8L75BR+FVb2zH
+         NmLEm83eUNRwIqIcI9wL5Q7Y/K5KaSXYAggo90eNZJreO3MwD6YLDAVtSqrhawd220
+         FfTrGX7RzR5bYdQfxpxddrFbFuFVbOAP84mKTE5tFRcQ9vpdfUvihzKC280u33p+nf
+         sgh91eVFS1/df/x4i5S5Y3xGZfhkxUDSNLG//qoPSaN62QmkmLK3zEnf05TyCfYrGC
+         o42ruHmQt/OmwMwUVYrktc9irgZcBlYavqVg1mrCYYtvemdz22qgg797b5wCsDY7Xe
+         fosRk69rVR62A==
+From:   SeongJae Park <sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     roger.pau@citrix.com, axboe@kernel.dk, boris.ostrovsky@oracle.com,
+        jgross@suse.com, olekstysh@gmail.com, andrii.chepurnyi82@gmail.com,
+        mheyne@amazon.de, xen-devel@lists.xenproject.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] Fix persistent grants negotiation with a behavior change
+Date:   Fri, 15 Jul 2022 18:12:26 +0000
+Message-Id: <20220715181226.126714-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220715175521.126649-1-sj@kernel.org>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] arm64: dts: rockchip: Fix SD card init on
- rk3399-nanopi4
-Content-Language: en-GB
-To:     =?UTF-8?Q?Christian_Kohlsch=c3=bctter?= 
-        <christian@kohlschutter.com>, wens@kernel.org,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Markus Reichl <m.reichl@fivetechno.de>
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>
-References: <C639AD88-77A1-4485-BAEA-2FF8FC15A844@kohlschutter.com>
- <12878108.O9o76ZdvQC@diego> <103b714c-b07c-f016-1062-84bd94786b22@arm.com>
- <9AF1E75F-5947-49B0-887D-82C426527B99@kohlschutter.com>
- <590f7a08-a6ca-be54-4254-363343642a52@arm.com>
- <A6B896E5-CD25-4441-B6A5-0BE1FA284B2C@kohlschutter.com>
- <A9634366-A012-43D2-B253-8BB9BF6005C7@kohlschutter.com>
- <CAGb2v65Ehbu1wrib2CzF1fDZuD3fHZQDhKfVusyUF9KnxTvi+Q@mail.gmail.com>
- <5ca9bd94-54d9-04f8-0098-a56ffb6f5fe1@arm.com>
- <502b3fbe-3077-407e-6010-a8cb3ffce7d6@arm.com>
- <449292CA-CE60-4B90-90F7-295FBFEAB3F8@kohlschutter.com>
- <73F9AED0-D2A8-4294-B6E1-1B92D2A36529@kohlschutter.com>
- <115AD6A4-021B-4879-BFB5-BC7689A0203E@kohlschutter.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <115AD6A4-021B-4879-BFB5-BC7689A0203E@kohlschutter.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-15 18:16, Christian Kohlschütter wrote:
-> OK, this took me a while to figure out.
+Hi all,
+
+On Fri, 15 Jul 2022 17:55:19 +0000 SeongJae Park <sj@kernel.org> wrote:
+
+> The first patch of this patchset fixes 'feature_persistent' parameter
+> handling in 'blkback' to respect the frontend's persistent grants
+> support always.  The fix makes a behavioral change, so the second patch
+> makes the counterpart of 'blkfront' to consistently follow the behavior
+> change.
+
+I made the behavior change as requested by Andrii[1].  I therefore made similar
+behavior change to blkfront and Cc-ed stable for the second change, too.
+
+To make the change history clear and reduce the stable side overhead, however,
+it might be better to apply the v2, which don't make behavior change but only
+fix the issue, Cc stable@ for it, make the behavior change commits for both
+blkback and blkfront, update the documents, and don't Cc stable@ for the
+behavior change and documents update commits.
+
+One downside of that would be that it will make a behavioral difference in
+pre-5.19.x and post-5.19.x.
+
+I think both downsides are not critical, so posted this patchset in this shape.
+If anyone prefer some changes, please let me know, though.
+
+[1] https://lore.kernel.org/xen-devel/CAJwUmVB6H3iTs-C+U=v-pwJB7-_ZRHPxHzKRJZ22xEPW7z8a=g@mail.gmail.com/
+
+
+Thanks,
+SJ
+
 > 
-> When no undervoltage limit is configured, I can reliably trigger the initialization bug upon boot.
-> When the limit is set to 3.0V, it rarely occurs, but just after I send the v3 patch, I was able to reproduce...
-
-Well this has to be in the running for "weirdest placebo ever"... :/
-
-All it actually seems to achieve is printing an error[1] (this is after 
-all a tiny 5-pin fixed-voltage LDO regulator, not an intelligent PMIC), 
-and if that makes an appreciable difference then there has to be some 
-kind of weird timing condition at play. Maybe regulator_register() ends 
-up turning it off and on again rapidly enough that the card sees a 
-voltage brownout and glitches, and adding more delay by printing to the 
-console somewhere in the middle gives it enough time to act as a proper 
-power cycle with no ill effect?
-
-If you just whack something like an mdelay(500) at around that point in 
-set_machine_constraints(), without the DT property, does it have the 
-same effect?
-
-Robin.
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/regulator/core.c#n1521
-
->> Am 15.07.2022 um 19:12 schrieb Christian Kohlschütter <christian@kohlschutter.com>:
->>
->> mmc/SD-card initialization may fail on NanoPi R4S with
->> "mmc1: problem reading SD Status register" /
->> "mmc1: error -110 whilst initialising SD card"
->> either on cold boot or after a reboot.
->>
->> Moreover, the system would also sometimes hang upon reboot.
->>
->> This is prevented by setting an explicit undervoltage protection limit
->> for the SD-card-specific vcc3v0_sd voltage regulator.
->>
->> Set the undervoltage protection limit to 2.7V, which is the minimum
->> permissible SD card operating voltage.
->>
->> Signed-off-by: Christian Kohlschütter <christian@kohlschutter.com>
->> ---
->> arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi | 4 ++++
->> 1 file changed, 4 insertions(+)
->> mode change 100644 => 100755 arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
->>
->> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
->> old mode 100644
->> new mode 100755
->> index 8c0ff6c96e03..669c74ce4d13
->> --- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
->> +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
->> @@ -73,6 +73,10 @@ vcc3v0_sd: vcc3v0-sd {
->> 		regulator-always-on;
->> 		regulator-min-microvolt = <3000000>;
->> 		regulator-max-microvolt = <3000000>;
->> +
->> +		// must be configured or SD card may fail to initialize occasionally
->> +		regulator-uv-protection-microvolt = <2700000>;
->> +
->> 		regulator-name = "vcc3v0_sd";
->> 		vin-supply = <&vcc3v3_sys>;
->> 	};
->> -- 
->> 2.36.1
+> Changes from v2
+> (https://lore.kernel.org/xen-devel/20220714224410.51147-1-sj@kernel.org/)
+> - Keep the behavioral change of v1
+> - Update blkfront's counterpart to follow the changed behavior
+> - Update documents for the changed behavior
 > 
+> Changes from v1
+> (https://lore.kernel.org/xen-devel/20220106091013.126076-1-mheyne@amazon.de/)
+> - Avoid the behavioral change
+>   (https://lore.kernel.org/xen-devel/20220121102309.27802-1-sj@kernel.org/)
+> - Rebase on latest xen/tip/linux-next
+> - Re-work by SeongJae Park <sj@kernel.org>
+> - Cc stable@
+> 
+> 
+> 
+> Maximilian Heyne (1):
+>   xen, blkback: fix persistent grants negotiation
+> 
+> SeongJae Park (1):
+>   xen-blkfront: Apply 'feature_persistent' parameter when connect
+> 
+>  Documentation/ABI/testing/sysfs-driver-xen-blkback  | 2 +-
+>  Documentation/ABI/testing/sysfs-driver-xen-blkfront | 2 +-
+>  drivers/block/xen-blkback/xenbus.c                  | 9 +++------
+>  drivers/block/xen-blkfront.c                        | 4 +---
+>  4 files changed, 6 insertions(+), 11 deletions(-)
+> 
+> -- 
+> 2.25.1

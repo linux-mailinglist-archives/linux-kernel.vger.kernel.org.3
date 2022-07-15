@@ -2,126 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9A6576283
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EFF57627C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234429AbiGONGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 09:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
+        id S234302AbiGONF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 09:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiGONGT (ORCPT
+        with ESMTP id S230055AbiGONFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 09:06:19 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A468B3D599;
-        Fri, 15 Jul 2022 06:06:17 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 6so8329824ybc.8;
-        Fri, 15 Jul 2022 06:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cjk0QcLK7Qj7+zbxyz81ybo9xTsZsUl/7XEcNiCSZlk=;
-        b=I/KxJOarbkD3CTr6bI1+GX+R+0NK3NiJOovyOkNmpfsXSDv2vhcKk5NI+vZftnkbGg
-         MwrvPAOczLpV/PzuzznMkxCSxJ+6WcBxz2SeXhuGLsY0hH+bxgIA+vAWaqy8gXKWAq2A
-         uzFOe2j4x3jy2QIvV7SK11B49LyIqafJ56HKzoiej9S7S0ggTmMqLI8tQrHvAJsSRq/z
-         rNeHJ2pSwMUMYzeC8dNaH6ecQWQOtzNB7/eDnb0GxvTouw5w6xHmU0P81MLtH8ioFMQA
-         fU5zDFovh6s+bvTishJ0zl5v/l4nnJ809RZNoyuqT7PXEo9cUMjGqySfB+fn2ERJmoLs
-         3duw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cjk0QcLK7Qj7+zbxyz81ybo9xTsZsUl/7XEcNiCSZlk=;
-        b=H5ztsXgtdPdhxjNfLlDvNXD2n7pVUmxlic9bMcioNNnGL3iAxoY2mKgsTvcAti25n3
-         SG5BqjPUl3V9/wfI50Kicyhq0/Vy1srtnht3X2lU/Bat8u8O149jfW6YFJ55fx/2+YtJ
-         BAC/zgY8yCPwTlhlwaSoCoHkI6sDz7Rgi3KnRrh28QPfWC9X/1iJlkmG1AJx02gXwauA
-         Rz2Q6YqM9UMph9pNwlERWYB8pUDckUuzsZ4lJW7ndNuweU4Mexjip5nzsu271O10jk4q
-         YBEIGJY30cEajjc9/FQh0akSfEcmWaSrcFgTtXWlRMpiibN/jqFSZCUpVwompp9S9NtE
-         V+UQ==
-X-Gm-Message-State: AJIora/zfuY0767eC++6t2Mqy1l+2KqJvtQoxIr6SYyFjwt/IpwTJWZx
-        IuxZHqnBPKbC0gpAC9ChtW3hTsIpQ+HqZg5l/tc=
-X-Google-Smtp-Source: AGRyM1u3gUyh808T1Pv3+nx4gv3OvZpiRmNXNk53IV5K4A6JGQG9S+KaILzgC03cdHtsws8VU8kBi0pySHUZ77kiRtY=
-X-Received: by 2002:a05:6902:1143:b0:66e:eb08:4c23 with SMTP id
- p3-20020a056902114300b0066eeb084c23mr14488436ybu.570.1657890376848; Fri, 15
- Jul 2022 06:06:16 -0700 (PDT)
+        Fri, 15 Jul 2022 09:05:53 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E215B3D599
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 06:05:51 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by albert.telenet-ops.be with bizsmtp
+        id vR5o2700b4C55Sk06R5oDe; Fri, 15 Jul 2022 15:05:48 +0200
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oCL0u-003gTx-Br; Fri, 15 Jul 2022 15:05:48 +0200
+Date:   Fri, 15 Jul 2022 15:05:48 +0200 (CEST)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+X-X-Sender: geert@ramsan.of.borg
+To:     Dai Ngo <dai.ngo@oracle.com>
+cc:     chuck.lever@oracle.com, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] NFSD: limit the number of v4 clients to 1024 per
+ 1GB of system memory
+In-Reply-To: <1657815462-14069-3-git-send-email-dai.ngo@oracle.com>
+Message-ID: <alpine.DEB.2.22.394.2207151502420.878233@ramsan.of.borg>
+References: <1657815462-14069-1-git-send-email-dai.ngo@oracle.com> <1657815462-14069-3-git-send-email-dai.ngo@oracle.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20220715112607.591-1-peterwu.pub@gmail.com> <20220715112607.591-12-peterwu.pub@gmail.com>
- <d7157483-a6c6-1883-6fc1-d518c7095288@collabora.com>
-In-Reply-To: <d7157483-a6c6-1883-6fc1-d518c7095288@collabora.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 15 Jul 2022 15:05:40 +0200
-Message-ID: <CAHp75VdzG4hjcMDv5Qro25gJx+adO-rNTiCx9ez30uVoUX-odg@mail.gmail.com>
-Subject: Re: [PATCH v5 11/13] leds: mt6370: Add MediaTek MT6370 current sink
- type LED Indicator support
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 2:40 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
-> Il 15/07/22 13:26, ChiaEn Wu ha scritto:
+ 	Hi Dai,
 
-...
-
-> > +#define STATE_OFF                            0
-> > +#define STATE_KEEP                           1
-> > +#define STATE_ON                             2
+On Thu, 14 Jul 2022, Dai Ngo wrote:
+> Currently there is no limit on how many v4 clients are supported
+> by the system. This can be a problem in systems with small memory
+> configuration to function properly when a very large number of
+> clients exist that creates memory shortage conditions.
 >
-> I propose, instead:
+> This patch enforces a limit of 1024 NFSv4 clients, including courtesy
+> clients, per 1GB of system memory.  When the number of the clients
+> reaches the limit, requests that create new clients are returned
+> with NFS4ERR_DELAY and the laundromat is kicked start to trim old
+> clients. Due to the overhead of the upcall to remove the client
+> record, the maximun number of clients the laundromat removes on
+> each run is limited to 128. This is done to ensure the laundromat
+> can still process the other tasks in a timely manner.
 >
-> enum mt6370_state {
->         STATE_OFF = 0,
->         STATE_KEEP,
->         STATE_ON,
+> Since there is now a limit of the number of clients, the 24-hr
+> idle time limit of courtesy client is no longer needed and was
+> removed.
+>
+> Signed-off-by: Dai Ngo <dai.ngo@oracle.com>
 
->         STATE_MAX,
+Thanks for your patch, which is now commit 05eaba9bd8c06580 ("NFSD:
+limit the number of v4 clients to 1024 per 1GB of system memory")
+in next-20220715.
 
-Usually we don't put commas at the terminator entries.
+noreply@ellerman.id.au reports:
 
-> };
+     fs/nfsd/nfsctl.c:1504:24: error: 'NFS4_CLIENTS_PER_GB' undeclared (first use in this function)
 
--- 
-With Best Regards,
-Andy Shevchenko
+> --- a/fs/nfsd/nfsctl.c
+> +++ b/fs/nfsd/nfsctl.c
+> @@ -1463,6 +1463,8 @@ static __net_init int nfsd_init_net(struct net *net)
+> {
+> 	int retval;
+> 	struct nfsd_net *nn = net_generic(net, nfsd_net_id);
+> +	u64 max_clients;
+> +	struct sysinfo si;
+>
+> 	retval = nfsd_export_init(net);
+> 	if (retval)
+> @@ -1488,6 +1490,10 @@ static __net_init int nfsd_init_net(struct net *net)
+
+Not protected by #ifdef CONFIG_NFSD_V4:
+
+> 	seqlock_init(&nn->writeverf_lock);
+>
+> 	atomic_set(&nn->nfs4_client_count, 0);
+> +	si_meminfo(&si);
+> +	max_clients = (u64)si.totalram * si.mem_unit / (1024 * 1024 * 1024);
+> +	max_clients *= NFS4_CLIENTS_PER_GB;
+> +	nn->nfs4_max_clients = max_t(int, max_clients, NFS4_CLIENTS_PER_GB);
+>
+> 	return 0;
+>
+> diff --git a/fs/nfsd/nfsd.h b/fs/nfsd/nfsd.h
+> index 847b482155ae..bbada18225b1 100644
+> --- a/fs/nfsd/nfsd.h
+> +++ b/fs/nfsd/nfsd.h
+> @@ -341,6 +341,8 @@ void		nfsd_lockd_shutdown(void);
+
+Protected by #ifdef CONFIG_NFSD_V4:
+
+>
+> #define NFSD_LAUNDROMAT_MINTIMEOUT      1   /* seconds */
+> #define	NFSD_COURTESY_CLIENT_TIMEOUT	(24 * 60 * 60)	/* seconds */
+> +#define	NFSD_CLIENT_MAX_TRIM_PER_RUN	128
+> +#define	NFS4_CLIENTS_PER_GB		1024
+>
+> /*
+>  * The following attributes are currently not supported by the NFSv4 server:
+> -- 
+> 2.9.5
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds

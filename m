@@ -2,115 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C4C576150
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 14:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB2A5761B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 14:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232427AbiGOM24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 08:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
+        id S232358AbiGOMca convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 15 Jul 2022 08:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbiGOM2h (ORCPT
+        with ESMTP id S229525AbiGOMc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 08:28:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6187D10BB;
-        Fri, 15 Jul 2022 05:28:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01048B82BE8;
-        Fri, 15 Jul 2022 12:28:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD41C34115;
-        Fri, 15 Jul 2022 12:28:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657888112;
-        bh=1WQoyyAkCDerK4uyFTm/h5bbBttlBNT3gkioRS+yT4Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GtQSWdXWimjAGo9or4zJmG2+2tsw4HN0iHXYVpGNl89aAImmBwL64ArkXHldkKw/I
-         bcGKV1BefgjFF++jixQWnTgaMAnTUx8lGwKv3eYOFFrIY+GqVy/tGdfDlatSjypDVc
-         +vNamPpzPcODKA8y0sUT7EAT3OscJ3cLneHRmJW1uRzXNbqIsz+QM4pHW49ed/CAIc
-         OzrC8zBQmDWAwzBwC+DVCMcnKnbGza6fopTQEAf2C671TLy8PZ8J/rxRHDMRNvH8XG
-         MAs5rUAFiO6gPN0z/i+rNACDwsqCh+Rd5zXlYGkjChseWipB5euOtoGEXkSYm3sJNc
-         QA2OvVZlCct8g==
-Date:   Fri, 15 Jul 2022 13:28:26 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Aishwarya TCV <Aishwarya.TCV@arm.com>
-Subject: Re: FVP: kernel BUG at arch/arm64/kernel/traps.c:497 - Internal
- error: Oops - BUG: 0
-Message-ID: <YtFdarmJKQbV2Wz8@sirena.org.uk>
-References: <CA+G9fYtOX-6=f70FA5PuDVA=kX=2L4spXKXS8=LHkUphafXowg@mail.gmail.com>
- <Ys1g8PH4M2W7Z50U@sirena.org.uk>
- <CA+G9fYu7mJ6X3_xhboODP_cjABE4QTJCON_NMduQ60x4Z7N78Q@mail.gmail.com>
- <Ys/9TSV5muvKXN6W@FVFF77S0Q05N>
- <YtABEDylGJkYLXrJ@sirena.org.uk>
- <YtASzuHo1MXe5LJH@FVFF77S0Q05N.cambridge.arm.com>
- <YtAU1AHLLgK/v7RP@FVFF77S0Q05N.cambridge.arm.com>
- <YtAcW9DRrdun/pW9@FVFF77S0Q05N.cambridge.arm.com>
- <CA+G9fYvmrraS7ANdRA0XDoM-u-oVvcHFWsrFuBya9Es_WN3fkw@mail.gmail.com>
+        Fri, 15 Jul 2022 08:32:29 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D1713D65;
+        Fri, 15 Jul 2022 05:32:28 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-31bf3656517so45209557b3.12;
+        Fri, 15 Jul 2022 05:32:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OjxnZb7meHcqrP1kpVMixA9ZvzRnaNtGWdUlQK9VV+M=;
+        b=GNQt0nYETwGug4NvYtq1njmDLF2jzfDzbYnBo/R+pBumV2+qYNqIwcjYXDskUZ8rGo
+         MjDWGSIu5xK5Wm2wEj0fGAWbH3qRn19N5aUNLMm58Tzxy+aBKJ2e/eISNklxr9FrQiDn
+         MzqhJ+pqrAIAfzQrfvBGAlyxuo9dY2+Pakcw+d6jVKy/C35DGB1JfATEJ/6O3KQ4O14n
+         JigHaXRwzcAx+YDzOnj3f5z45uDwiyR84HQTF55S4+kOfpt+g7zZESZf5p9hJZdzhpz+
+         9KgLLLvxuAHwFK5pCWUdM1jcY2YDHAlCQ1uEG4lU2ids3x/8mPgLYgPwuNY/J+EtSbii
+         P0RA==
+X-Gm-Message-State: AJIora+lv/3ZYlykD76T0vrdoNNKe/h5ePE2dNViWg8A6VAFtsKEKYEw
+        OhSw+4OTeIcYe03SCKt2RyK8YPph1VgR2yNcQln5fEcOeeA=
+X-Google-Smtp-Source: AGRyM1s++VDNfV3ZtENKhzMx6BK4IlNXSALHoNcFxPJGeuFyVGgf3QqnXWE9Kej9RrfsQd8N01hZjKxD6oq5n1kNOR0=
+X-Received: by 2002:a81:17d0:0:b0:31c:c5e2:fc1e with SMTP id
+ 199-20020a8117d0000000b0031cc5e2fc1emr15917280ywx.196.1657888347705; Fri, 15
+ Jul 2022 05:32:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="H1Sr8Wku87tqrIFD"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvmrraS7ANdRA0XDoM-u-oVvcHFWsrFuBya9Es_WN3fkw@mail.gmail.com>
-X-Cookie: You dialed 5483.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220713112612.6935-1-limanyi@uniontech.com> <20220713182852.GA841582@bhelgaas>
+ <CAAd53p7g2Md73=UU6Rp-TZkksc+H02KAX58bWCzsgQ__VwvJ+g@mail.gmail.com>
+ <7305201c-eaf2-cb36-80fe-15174d3e33c7@uniontech.com> <20220715082945.GA10661@srcf.ucam.org>
+ <c8498fc1-854f-efdc-bbc8-3de67dcf6430@uniontech.com> <20220715093236.GA12020@srcf.ucam.org>
+ <62d14039.1c69fb81.86d3c.71c2SMTPIN_ADDED_BROKEN@mx.google.com>
+In-Reply-To: <62d14039.1c69fb81.86d3c.71c2SMTPIN_ADDED_BROKEN@mx.google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 15 Jul 2022 14:32:16 +0200
+Message-ID: <CAJZ5v0hQezrqP8W0GBs8edqTLxZ=ZBmqYsevn57PUgnEDf0EXg@mail.gmail.com>
+Subject: Re: [PATCH] PCI/ASPM: Should not report ASPM support to BIOS if FADT
+ indicates ASPM is unsupported
+To:     Manyi Li <limanyi@uniontech.com>
+Cc:     Matthew Garrett <mjg59@srcf.ucam.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rajat Jain <rajatja@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 15, 2022 at 12:23 PM Manyi Li <limanyi@uniontech.com> wrote:
+>
+>
+>
+> On 2022/7/15 17:32, Matthew Garrett wrote:
+> > On Fri, Jul 15, 2022 at 05:19:25PM +0800, Manyi Li wrote:
+> >>
+> >>
+> >> On 2022/7/15 16:29, Matthew Garrett wrote:
+> >>> On Fri, Jul 15, 2022 at 03:40:36PM +0800, Manyi Li wrote:
+> >>>
+> >>>> Please see the details of this issus:
+> >>>> https://bugzilla.kernel.org/show_bug.cgi?id=216245
+> >>>
+> >>> Hmm. The only case where changing aspm_support_enabled to false should
+> >>> matter is in pcie_aspm_init_link_state(), where it looks like we'll
+> >>> potentially rewrite some registers even if aspm_disabled is true. I
+> >>> think in theory we shouldn't actually modify anything as a result, and
+> >>> the lspcis from the bug don't show any ASPM values having changed, but I
+> >>> don't trust Realtek hardware in the general case so maybe it gets upset
+> >>> here? If the proposed patch is to just set aspm_support_enabled to false
+> >>> when we see the FADT bit set then I think this is fine.
+> >>>
+> >>
+> >> "aspm_support_enabled" alse be used in calculate_support():
+> >> if (pcie_aspm_support_enabled())
+> >>      support |= OSC_PCI_ASPM_SUPPORT | OSC_PCI_CLOCK_PM_SUPPORT;
+> >> When set OSC_PCI_ASPM_SUPPORT | OSC_PCI_CLOCK_PM_SUPPORT, cause this AER
+> >> issue. I want don't set OSC_PCI_ASPM_SUPPORT | OSC_PCI_CLOCK_PM_SUPPORT when
+> >> we see the FADT bit set.
+> >
+> > Oh hm. Are you sure it's the OSC call that breaks it? I have some
+>
+> I don't sure.
+>
+> > recollection that I verified the behaviour of Windows here, but it's
+> > been over 10 years since I touched this so I could well be wrong. I can
+> > try to set up a test env to verify the behaviour of Windows when it
+> > comes to _OSC if the FADT says ASPM is unsupported.
+> >
+> but, I did a test，this modification also solves the problem:
+>
+> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
+> index d57cf8454b93..b3ea8e886d7c 100644
+> --- a/drivers/acpi/pci_root.c
+> +++ b/drivers/acpi/pci_root.c
+> @@ -494,8 +494,8 @@ static u32 calculate_support(void)
+>          support |= OSC_PCI_HPX_TYPE_3_SUPPORT;
+>       if (pci_ext_cfg_avail())
+>               support |= OSC_PCI_EXT_CONFIG_SUPPORT;
+> -    if (pcie_aspm_support_enabled())
+> -            support |= OSC_PCI_ASPM_SUPPORT | OSC_PCI_CLOCK_PM_SUPPORT;
+> +//  if (pcie_aspm_support_enabled())
+> +//          support |= OSC_PCI_ASPM_SUPPORT | OSC_PCI_CLOCK_PM_SUPPORT;
+>       if (pci_msi_enabled())
+>               support |= OSC_PCI_MSI_SUPPORT;
+>       if (IS_ENABLED(CONFIG_PCIE_EDR))
+>
+> This issue occur in the Notebook: ASUSTeK COMPUTER INC. X456UJ
+> (ASUS-NotebookSKU) Notebook
+>
+> log "AER: Corrected error received: 0000:00:1c.5" is in the device:
+> 00:1c.5 PCI bridge [0604]: Intel Corporation Sunrise Point-LP PCI
+> Express Root Port #6 [8086:9d15] (rev f1)
 
---H1Sr8Wku87tqrIFD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So it looks like the BIOS sets ACPI_FADT_NO_ASPM and then happily
+grants control of ASPM via _OSC.  That's somewhat contradictory.
 
-On Thu, Jul 14, 2022 at 07:35:50PM +0530, Naresh Kamboju wrote:
-> On Thu, 14 Jul 2022 at 19:09, Mark Rutland <mark.rutland@arm.com> wrote:
-
-> > When *only* using the initial loading into memory, that blows up in sta=
-ckdepot
-> > and with a subsequent bogus pointer dereference (full log below), and w=
-hen
-> > loaded via semihosting that just works. Note that my kernel is based on=
- the
-> > arm64 for-next/core branch, which itself is based on v5.19-rc3.
-
-> > Naresh, please can you fix your boot flow before reporting any further =
-issues?
->=20
-> Yes.
-
-If you don't *need* to use u-boot for any reason then it might be worth
-looking into using EDK2 instead, it will dynamically place loaded images
-so you don't need to worry about size issues unless you actually run out
-of memory which is a whole other problem.
-
---H1Sr8Wku87tqrIFD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLRXWkACgkQJNaLcl1U
-h9Dsggf8CuVIwr2J6sCd8w1lFG4bdwpcsGZVeZQTGRFo7mhscUcQA/DVbERphMa5
-rm/R+juwkEXldiHj1CHQvCBsNsW3a8WuDVVx5BWgiSuwFmKUmr95T4Sj2mNsCXPb
-T3qKNT9Ub1TA/h1zIpo53co/2p4kl+BaQO9cQm64TTuP4ACX+X8wH7q8oSp/kC2n
-/Xux0I+gA/BX2U6ppSGaIdBvck/hl5kF4NSaMx6kcojedaX/lpQjdZxUTOsz6rVj
-DfJ7E2nB38IVH+QJor1+274rd+zPrUNaHJRhKmuEtLMQb+iiSvRBq7se5lHVHFen
-JxJtedtwJe2QJQkEjSvrSoH6dM3/6Q==
-=hWus
------END PGP SIGNATURE-----
-
---H1Sr8Wku87tqrIFD--
+I would rather look at adjusting pcie_aspm_sanity_check() to this case
+instead of wholesale changing the way _OSC is handled at the host
+bridge level.

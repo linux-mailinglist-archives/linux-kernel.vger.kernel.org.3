@@ -2,83 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752185758A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 242FF5758A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240760AbiGOAaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 20:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S232302AbiGOAeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 20:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232627AbiGOAaN (ORCPT
+        with ESMTP id S229481AbiGOAd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 20:30:13 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CDA67CB6
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 17:30:11 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id bb16so4340988oib.11
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 17:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=2y/bRWdrE6PknWUfOr49D67DacrQqJC2LFsgWNk0Y08=;
-        b=bVvFSjYP1AC38tnyGp0DkBPhExptuvki0alnKs1ljCDwyAF6r8UywkndRWlo7r59+A
-         qL/1Na4Rg95/gvkG51UfSyYcXEm3XlMeQ3xJYETlQ+LCkORddgYXdtALN8U7+VkvAzcB
-         +pcApIohOVp60Y0UdzBsxxTiW0eHZGeXAY6VlaGGRBdD4UPwx/1uXq8lcLRPyMT7GcH+
-         p1t3NgnRW3yJCVuFON61NE637EqeJCil6tbYznSCNvYj5fZkRBz0VukVNqxfnuGik59x
-         oCwslppN3iTbO+yMIaKOxrP3Rg+AScPnJrOu5/woBDcsvZAF1nAQowOT5XdAq7zzJ/WU
-         X/Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=2y/bRWdrE6PknWUfOr49D67DacrQqJC2LFsgWNk0Y08=;
-        b=hggipKjrbwiP3ea9GM2ZB/BHMu3B1e+uBY0CQ2Kb1Qd80FAKYTLXZXezn3x+OOBCQH
-         nD3HkPCqonTi9Z692kY17SQEVcLxJdi8oXJ3tpZ2PCrrqFSNxYTo6n2IMCIflqaQeoTG
-         J9PD7JDs/yvpH0Fenh8jYCWwp61/faeSHZUIT7uSNV0QYBDe1s9eq9JRMfwzV51wyGIz
-         Voc6Zl/6QkYZsuByq96EOxAHTnxWiNOJqk0XBzVsDFw+0vSyOfWmSqAZxDaeq3g+165S
-         RKhHkyl9loT9DeCxvm5NN1Cy9fLix1/PC4ezs7WJPte//g53o75Etf1ciZlsrOkTd1lX
-         llqw==
-X-Gm-Message-State: AJIora/93IQYOv40Fgnr1k2YVfutaANnn/540L9CVRYUU2UCBxgysHUR
-        BzgTRfaZk87ZdEBXmtRX7rTAHEoNvWACk0NzadP9inJ+W761Gg==
-X-Google-Smtp-Source: AGRyM1soLUMwcjsE6jDXApdSR+KjB9+WB2b9q4a0+HiGObdb9awXlav0hJ3WR1H9Nz2/NIj/jqunBi+nect7Hn1BMRQ=
-X-Received: by 2002:a05:6808:2124:b0:335:7483:f62d with SMTP id
- r36-20020a056808212400b003357483f62dmr8905045oiw.112.1657845009367; Thu, 14
- Jul 2022 17:30:09 -0700 (PDT)
+        Thu, 14 Jul 2022 20:33:56 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5AF2A25B;
+        Thu, 14 Jul 2022 17:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657845235; x=1689381235;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LmHXyKnAKMH9F3nbUsgv39wMlBgdj3qLzQZyWOGkDDQ=;
+  b=ROyMxVnt20NI0QmWJp+IJc9+xQ2F+Te9AsGEfWivYeqIsFkYXpQDYwGB
+   KmW0XYmpZODqPOCoM/KFD7madDBwBGpm74gZrvqtNrDC4ofRY5BpUUMbA
+   DfAhA6mm07jUV7jVpfVYsLKyZz4g0FvJYGhNLXtd1Wo1MEe2hdvfrETWD
+   il56kUDQ3lCJbK807CPbalF1KuE2TpkAixfN2oKc0opBE3Xtr+veSdyQV
+   3fibeCxDbiFspQUjLt90NFETmH+Hg/254yE1sqkeGdLBkp4MDNG6dE/Qn
+   3k6gA3kvJRue4VtBOZU/G3CCrRlH1sQk9kFXmtLkhu5H2c+FqoGJFMCEr
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="311326656"
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="311326656"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 17:33:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="546470039"
+Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 14 Jul 2022 17:33:52 -0700
+Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oC9HE-0001JL-2q;
+        Fri, 15 Jul 2022 00:33:52 +0000
+Date:   Fri, 15 Jul 2022 08:33:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Benjamin Bara <bbara93@gmail.com>, dmitry.torokhov@gmail.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        Richard Leitner <richard.leitner@skidata.com>
+Subject: Re: [PATCH] Input: tsc2007 - enable GPIO chips that can sleep
+Message-ID: <202207150807.PrPXLs2u-lkp@intel.com>
+References: <20220713084247.3090353-1-bbara93@gmail.com>
 MIME-Version: 1.0
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 14 Jul 2022 17:29:58 -0700
-Message-ID: <CALMp9eS5pBrKWe=LbWXON6bhTdhbX9rB2aF+c-h_a0=SXfyj7A@mail.gmail.com>
-Subject: Retbleed (RSBA vs BTC)
-To:     LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713084247.3090353-1-bbara93@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-What is the value in conflating the Intel and AMD findings under the
-same moniker (arch/x86/kernel/cpu/common.c)? The vulnerabilities seem
-quite different to me.
+Hi Benjamin,
 
-The Intel CPUs tagged with RETBLEED should already report RSBA. The
-paper just highlights this previously disclosed vulnerability. Or are
-there Intel CPUs subject to Retbleed that don't report RSBA, and I'm
-just confused?
+Thank you for the patch! Perhaps something to improve:
 
-On the AMD side, however, Branch Type Confusion is a much bigger deal.
-All instructions are subject to steering by BTI, not just returns with
-an empty RSB.
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on hid/for-next linus/master v5.19-rc6 next-20220714]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Don't these two vulnerabilities deserve separate names (and don't we
-already have a name for the first one)?
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Bara/Input-tsc2007-enable-GPIO-chips-that-can-sleep/20220713-164521
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+config: riscv-randconfig-r003-20220714 (https://download.01.org/0day-ci/archive/20220715/202207150807.PrPXLs2u-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/13455f523263c4e90b5cc8c587ef2be97008ff5f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Benjamin-Bara/Input-tsc2007-enable-GPIO-chips-that-can-sleep/20220713-164521
+        git checkout 13455f523263c4e90b5cc8c587ef2be97008ff5f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/amd/display/amdgpu_dm/ drivers/input/touchscreen/
 
-Tangentially, I believe that the following line is wrong:
-VULNBL_INTEL_STEPPINGS(SKYLAKE_X, X86_STEPPING_ANY, MMIO | RETBLEED),
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Steppings 5, 6, and 7 are "Cascade Lake," with eIBRS, and I don't
-think Cascade Lake suffers from RSBA.
+All warnings (new ones prefixed by >>):
+
+>> drivers/input/touchscreen/tsc2007_core.c:112:6: warning: no previous prototype for function 'tsc2007_is_pen_down_cansleep' [-Wmissing-prototypes]
+   bool tsc2007_is_pen_down_cansleep(struct tsc2007 *ts)
+        ^
+   drivers/input/touchscreen/tsc2007_core.c:112:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool tsc2007_is_pen_down_cansleep(struct tsc2007 *ts)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/tsc2007_is_pen_down_cansleep +112 drivers/input/touchscreen/tsc2007_core.c
+
+   111	
+ > 112	bool tsc2007_is_pen_down_cansleep(struct tsc2007 *ts)
+   113	{
+   114		if (!ts->get_pendown_state_cansleep)
+   115			return true;
+   116	
+   117		return ts->get_pendown_state_cansleep(&ts->client->dev);
+   118	}
+   119	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,104 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51329576349
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF0C576446
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235205AbiGOOA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 10:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
+        id S234857AbiGOPRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 11:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235070AbiGOOAK (ORCPT
+        with ESMTP id S234766AbiGOPRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 10:00:10 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBCD422D9
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:00:06 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id dn9so9112930ejc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:00:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0HJhff+E4NeHVlDobtIdZgmKxifRHzjFEik47oKvdx8=;
-        b=Y7wIv9EckNkZ7nGMnE3ATuKJzVp4UCn2jU15kLgbDPjftMPmAMsnamKn1JkD9RzZfi
-         jfUutLahgtHSoxCIkCtyXgjCg6LH7guNoIJN7+UvmIOHZTqKXb8x8Zp6MQ+iDHfAIhgF
-         0gtZZkF3HWFGMSam6Iq8JeycOTackA+6F5q+Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0HJhff+E4NeHVlDobtIdZgmKxifRHzjFEik47oKvdx8=;
-        b=ww/lI4bB+iFqW1DAaQvfatT/+5BlUOgA60VCPCSk2fCr5erbzeSKRCCcoSa/yk232R
-         A6z1ZZGsCWGQI9ik8a8YQLOoVAOzYyDHpn1T7onp9kQc3Tox6Viib4QvlTa963WqG1P1
-         ZP8CE2ZNYdntVzidih6zWs+5ZGlaAG6L6ExlT3ivSIVTEJuedSWfBckICKiTaLd6PSYt
-         xPGOkP4GliGS3MiTzTQDj9twpP6Zp2XkDzJ6EFPDeongXyviZmKjhjr6FMJ/7LfZtCr6
-         U6LN8WZ4MhK1/9JmZ6S0z/dIujW782Dx62T5jLieLMXpaEH138BLC0U+jWjTdiOCc4ho
-         R5Ew==
-X-Gm-Message-State: AJIora/ZWnMr5UKGJey5O68IW+cEa6d+2YfZyGTQH6m7xYq3Ooxre5Jq
-        HH6YErCgfRS22UlW4YmJdArWaFrDoUQzOBk1
-X-Google-Smtp-Source: AGRyM1uvvNm8lPIOE0uIOeNXyrdWfhqOSdWI3iTOERArsdATgkjyCsN0pqJFKbFsCpmccfOtHnZ1+Q==
-X-Received: by 2002:a17:906:3f51:b0:712:3945:8c0d with SMTP id f17-20020a1709063f5100b0071239458c0dmr13740754ejj.302.1657893605189;
-        Fri, 15 Jul 2022 07:00:05 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id m17-20020a50ef11000000b0043a9144d8ecsm2885016eds.71.2022.07.15.07.00.04
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 07:00:04 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id q9so6848371wrd.8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:00:04 -0700 (PDT)
-X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id
- b13-20020adff90d000000b0020cde324d35mr12761948wrr.583.1657893603592; Fri, 15
- Jul 2022 07:00:03 -0700 (PDT)
+        Fri, 15 Jul 2022 11:17:51 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50237CB7D
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:17:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657898270; x=1689434270;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xBqlCX55IhT2QfviA38MnGgKqYqsK8K97exNB1Y7Q3g=;
+  b=GYQ0/B1/CAPKz+ZavFLOIgOLPgjeEi5PTHBnYWb5YZL2AQu/5yITz2us
+   ZuilfyVIbqNqiDUF/9NTs1kmBrvERBWups8mFYe4FCNSMfRevaNEeEM1R
+   mkeo+7Fbz/7xHqifgVHL2fiQMYkGypeUG9hb21inxGLyhPDuLHpwZCtCU
+   W7ZyvpHv4j5rk+1WMgGf4AXgLnBJRzV45gG76l+GXc2AMIPuJZv8uB88N
+   9HDwAJFlw01STBgyyqD1iHt3kWvx9bA/ufmZDZOFugfdFMv0+XAC72iEL
+   tTvTTP75r1fieH7mXXRV6kPkr+oCQjoMiCSGdtX819020ocNP11mI8wqb
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="266230266"
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="266230266"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 08:17:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="738689322"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Jul 2022 08:17:49 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCN4e-00001P-SW;
+        Fri, 15 Jul 2022 15:17:48 +0000
+Date:   Fri, 15 Jul 2022 18:01:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/for-next-fam1] BUILD SUCCESS
+ e5b2fb004c584fe93ddde56fff6e699416096298
+Message-ID: <62d13ae2.VnGg5iFyb3zOPeEi%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220715084442.115021-1-jinghung.chen3@hotmail.com> <SG2PR03MB5006667607216338081A723FCC8B9@SG2PR03MB5006.apcprd03.prod.outlook.com>
-In-Reply-To: <SG2PR03MB5006667607216338081A723FCC8B9@SG2PR03MB5006.apcprd03.prod.outlook.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 15 Jul 2022 06:59:51 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U+2oiWOO5=eDZNbsHMgFEb5500tfcO+-m=24WaNiTCRg@mail.gmail.com>
-Message-ID: <CAD=FV=U+2oiWOO5=eDZNbsHMgFEb5500tfcO+-m=24WaNiTCRg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] dt-bindings: arm: qcom: document sc7280 and
- villager board
-To:     Jimmy Chen <jinghung.chen3@hotmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Alan Huang <alan-huang@quanta.corp-partner.google.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/for-next-fam1
+branch HEAD: e5b2fb004c584fe93ddde56fff6e699416096298  scsi: aacraid: Use struct_size() in code related to struct sgmapraw
 
-On Fri, Jul 15, 2022 at 1:45 AM Jimmy Chen <jinghung.chen3@hotmail.com> wrote:
->
-> This adds a LTE skus for Chromebook Villager to the yaml.
->
-> Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
-> ---
->
-> (no changes since v2)
->
-> Changes in v2:
-> -Add this patch
->
->  Documentation/devicetree/bindings/arm/qcom.yaml | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+elapsed time: 1723m
 
-There were no changes between v4 and v5 and I gave my Reviewed-by tag
-on v4. That means you should carry my tag forward to your v5. In any
-case:
+configs tested: 117
+configs skipped: 4
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+sparc                             allnoconfig
+arm                           h3600_defconfig
+mips                         cobalt_defconfig
+sh                        sh7785lcr_defconfig
+m68k                       m5275evb_defconfig
+arm                        oxnas_v6_defconfig
+arm                        clps711x_defconfig
+powerpc                      pcm030_defconfig
+m68k                          atari_defconfig
+arc                          axs103_defconfig
+powerpc                     pq2fads_defconfig
+arm                             ezx_defconfig
+sh                             sh03_defconfig
+m68k                        m5272c3_defconfig
+arc                                 defconfig
+arm                         at91_dt_defconfig
+sh                           se7343_defconfig
+sh                             espt_defconfig
+powerpc                 mpc8540_ads_defconfig
+alpha                             allnoconfig
+arm                           viper_defconfig
+sh                        edosk7705_defconfig
+x86_64                                  kexec
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+x86_64                        randconfig-c001
+csky                              allnoconfig
+arc                               allnoconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+mips                          ath79_defconfig
+arm                            dove_defconfig
+arm                           spitz_defconfig
+powerpc                 mpc836x_rdk_defconfig
+powerpc                 mpc8560_ads_defconfig
+powerpc                     tqm8560_defconfig
+powerpc                          g5_defconfig
+powerpc                    gamecube_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                    mvme5100_defconfig
+arm                        vexpress_defconfig
+arm                   milbeaut_m10v_defconfig
+s390                             alldefconfig
+powerpc                   lite5200b_defconfig
+arm                      pxa255-idp_defconfig
+arm                          pcm027_defconfig
+arm                       cns3420vb_defconfig
+mips                      malta_kvm_defconfig
+powerpc                        fsp2_defconfig
+hexagon                             defconfig
+powerpc                      ppc44x_defconfig
+mips                           ip28_defconfig
+powerpc                     ppa8548_defconfig
+powerpc                     kilauea_defconfig
+powerpc                          allyesconfig
+mips                       rbtx49xx_defconfig
+mips                        omega2p_defconfig
+arm                          moxart_defconfig
+powerpc                     mpc512x_defconfig
+mips                     cu1000-neo_defconfig
+arm                         orion5x_defconfig
+powerpc                      pmac32_defconfig
+arm                         socfpga_defconfig
+riscv                            alldefconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220714
+hexagon              randconfig-r041-20220714
+hexagon              randconfig-r045-20220715
+s390                 randconfig-r044-20220715
+hexagon              randconfig-r041-20220715
+riscv                randconfig-r042-20220715
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

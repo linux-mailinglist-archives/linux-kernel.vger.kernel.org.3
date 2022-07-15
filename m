@@ -2,127 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFB75769F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0475769FC
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbiGOWgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        id S231559AbiGOWhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbiGOWf5 (ORCPT
+        with ESMTP id S230341AbiGOWhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:35:57 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579A78BA9D
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:49 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id b6so3072456wmq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HBF1B79IIedCwHvdJGS8cmm6JrlM62/nduTPrlZmdLw=;
-        b=bjN5fNMS6fCYWu85LBfhtS4Sjd/k1/GGBAs8w2uHuDTycThBQx0r9wYTWJWT6aBEqq
-         uyT5wlQZNCJENpaMiYiuTv/nq1SFssqkn3q7xz8Qqn8URzApz5iUOMYRzX9lW8zrhhTh
-         xG9v/66bqHZ06qr53dRDqtJZYX3u6ALibf9X0eHvywsTGelo27cpSyQnmWHGhadAA33a
-         JNqXXg0otU3s8/Vs6EWKYSGayCK75OXfP8taE7f+xVKLItIAUskp1a6E3FKOHtMiYzkM
-         dOCwEVUwf8eC567/UxTaXpdHigdq12fDJ44C4KhhR45eez2GZfkKx6zdbmFNpUYuxIGs
-         eWYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HBF1B79IIedCwHvdJGS8cmm6JrlM62/nduTPrlZmdLw=;
-        b=n6G9FSkQd4LPbah7s1rE3/dAoKi/er1zYbPOwJhAt8/vi4GUyFCnLzfarDIa2DkYVm
-         RpZ6V0JheQNIjzmT9d26K1ZM1SsMAXWcfmBcDRWuInT6BQiEVZPfp3nvBFazHfjdqaZz
-         4PJfbH/KYHeINpGlMsugBaqkJahCoWJuonqihkbU1HgNTScd/7kx69dFZC8uBKXuv185
-         7l1sXSZ4GFVRn/IOCYTJsvTE91SnypEEQIQ+SuKIaNxFI96CczHYjduGcj7ldsZXGfXi
-         RJ5mxjZhGKxSvatOtixUEnV9Rt+x6BZoEqPdTNIhnPznugqCIlHbnvpfaDXJ/PGrGWIE
-         XQag==
-X-Gm-Message-State: AJIora/KqzEgta/Bvw99EpX66LT4VF5JV13ysqOYaZbsvjGUJ7C+ZCjy
-        3ykt3N5gJ+s7qlnlxIOJDRQOBQ==
-X-Google-Smtp-Source: AGRyM1sEXVpXQpUbjt1Vmt9jF2dZkzMOh7zuOjiy2TAojBvfakWnhxBJBIzW4HlnZcGpWrZYXl4RFw==
-X-Received: by 2002:a05:600c:1992:b0:3a1:9252:c373 with SMTP id t18-20020a05600c199200b003a19252c373mr21652210wmq.140.1657924547835;
-        Fri, 15 Jul 2022 15:35:47 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:a223:f4b3:40c9:43fa? ([2a05:6e02:1041:c10:a223:f4b3:40c9:43fa])
-        by smtp.googlemail.com with ESMTPSA id y18-20020a05600c365200b003a2c67aa6c0sm7755297wmq.23.2022.07.15.15.35.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 15:35:47 -0700 (PDT)
-Message-ID: <62b1f1bd-c15d-662c-027e-1cdeff5eb580@linaro.org>
-Date:   Sat, 16 Jul 2022 00:35:45 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/3] dt-bindings: timer: renesas,cmt: Add r8a779f0 and
- generic Gen4 CMT support
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Fri, 15 Jul 2022 18:37:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658B06BC19;
+        Fri, 15 Jul 2022 15:37:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE43F619AC;
+        Fri, 15 Jul 2022 22:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BA07C3411E;
+        Fri, 15 Jul 2022 22:37:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657924650;
+        bh=d/azbyEVdFZlo7JV/C9g5tOBZLmX1z3s/YUXa/PuKxg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=EYNFuHu/nuAFHUbcicDmnFwVtZjpid/FQXLaVvQol6ZUzJuSAY5uglpeAlu/YKr51
+         Mey5XkLZjK2v5/RwjIaMwVGrrGIEoLHchS6CUKJdMrqOVkklP/ItJierO7zjNpYQR0
+         r2M9y77+P1xEHmLeZMV2NugDzZBe1Xv4CO2QudaKafM26LfUML4QWhjvQo4kfcP3Yq
+         mX9vv854mV6rfNDii5Zwc9CzPtgO7hSn/gFpt7VVWA+szJDYvLJ40AH+X6skhsqoxV
+         7XL5eytton3eCo0og498WyCopjfJoLlanCd5xHrYx8mJHoh1ADVTO+LyjL2PrXOAVj
+         +9sXoPAkFFmhA==
+Date:   Fri, 15 Jul 2022 17:37:28 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220713100603.3391-1-wsa+renesas@sang-engineering.com>
- <20220713100603.3391-2-wsa+renesas@sang-engineering.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220713100603.3391-2-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/8] PCI: qcom: Add support for SC8280XP and SA8540P
+Message-ID: <20220715223728.GA1205880@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714071348.6792-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/07/2022 12:06, Wolfram Sang wrote:
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Thu, Jul 14, 2022 at 09:13:40AM +0200, Johan Hovold wrote:
+> This series adds support for the PCIe controllers found on SC8280XP and
+> SA8540P.
 
-Krzysztof ?
+These look fairly straightforward, and I don't mind doing minor tweaks
+and conflict resolution, but given that we've got four or five cooks
+in the qcom kitchen, I'm looking for an ack from Stan before spending
+too much time on this.
 
-> ---
->   .../devicetree/bindings/timer/renesas,cmt.yaml         | 10 ++++++++++
->   1 file changed, 10 insertions(+)
+> Included are also three patches that clean up the way the driver handles
+> different IP revisions (e.g. by modelling optional clocks as being truly
+> optional).
 > 
-> diff --git a/Documentation/devicetree/bindings/timer/renesas,cmt.yaml b/Documentation/devicetree/bindings/timer/renesas,cmt.yaml
-> index 53dd6d9f518f..7cc1ec4b4e38 100644
-> --- a/Documentation/devicetree/bindings/timer/renesas,cmt.yaml
-> +++ b/Documentation/devicetree/bindings/timer/renesas,cmt.yaml
-> @@ -83,6 +83,11 @@ properties:
->                 - renesas,r8a779a0-cmt0     # 32-bit CMT0 on R-Car V3U
->             - const: renesas,rcar-gen3-cmt0 # 32-bit CMT0 on R-Car Gen3 and RZ/G2
->   
-> +      - items:
-> +          - enum:
-> +              - renesas,r8a779f0-cmt0     # 32-bit CMT0 on R-Car S4-8
-> +          - const: renesas,rcar-gen4-cmt0 # 32-bit CMT0 on R-Car Gen4
-> +
->         - items:
->             - enum:
->                 - renesas,r8a774a1-cmt1     # 48-bit CMT on RZ/G2M
-> @@ -100,6 +105,11 @@ properties:
->                 - renesas,r8a779a0-cmt1     # 48-bit CMT on R-Car V3U
->             - const: renesas,rcar-gen3-cmt1 # 48-bit CMT on R-Car Gen3 and RZ/G2
->   
-> +      - items:
-> +          - enum:
-> +              - renesas,r8a779f0-cmt1     # 48-bit CMT on R-Car S4-8
-> +          - const: renesas,rcar-gen4-cmt1 # 48-bit CMT on R-Car Gen4
-> +
->     reg:
->       maxItems: 1
->   
+> These patches depend on the recently merged (but currently held off?)
+> PIPE clock series:
+> 
+> 	https://lore.kernel.org/all/20220608105238.2973600-1-dmitry.baryshkov@linaro.org/
 
+As far as I know it's on pci/ctrl/qcom [1], in -next, and ready to go.
+It's based on Bjorn A's immutable branch [2].
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> as well as the about-to-be-merged MSI series (v17):
+> 
+> 	https://lore.kernel.org/all/20220707134733.2436629-6-dmitry.baryshkov@linaro.org/
+> 
+> Note that the final patch in the PIPE clock series is currently missing
+> from the pci/ctrl/qcom-pending branch:
+> 
+> 	https://lore.kernel.org/all/20220608105238.2973600-6-dmitry.baryshkov@linaro.org/
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+I think I fixed that, let me know if not; see [1].
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=839fbdee4c08
+[2] https://lore.kernel.org/linux-pci/YroMyWNO8ZLk1bTe@builder.lan/
+
+> Changes in v2
+>  - drop the two DT schema fixes which have been applied by Bjorn H and
+>    squashed into the MSI v17 series by Dmitry, respectively
+>  - rebase on pci/ctrl/qcom-pending (2022-07-14)
+>  - fix compatible sort order (Krzysztof)
+>  - amend commit message for first patch to clarify motivation
+>    (Krzysztof)
+>  - add acks and reviewed-by tags from Dmitry, Krzysztof, Mani and Rob
+> 
+> 
+> Johan Hovold (8):
+>   dt-bindings: PCI: qcom: Enumerate platforms with single msi interrupt
+>   dt-bindings: PCI: qcom: Add SC8280XP to binding
+>   dt-bindings: PCI: qcom: Add SA8540P to binding
+>   PCI: qcom: Add support for SC8280XP
+>   PCI: qcom: Add support for SA8540P
+>   PCI: qcom: Make all optional clocks optional
+>   PCI: qcom: Clean up IP configurations
+>   PCI: qcom: Sort device-id table
+> 
+>  .../devicetree/bindings/pci/qcom,pcie.yaml    |  70 +++++++++-
+>  drivers/pci/controller/dwc/pcie-qcom.c        | 121 +++++++-----------
+>  2 files changed, 114 insertions(+), 77 deletions(-)
+> 
+> -- 
+> 2.35.1
+> 

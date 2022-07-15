@@ -2,151 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405305765C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A615765C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235650AbiGORLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 13:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
+        id S233585AbiGORMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 13:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiGORLk (ORCPT
+        with ESMTP id S229787AbiGORMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 13:11:40 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC7F61B05;
-        Fri, 15 Jul 2022 10:11:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5512BCE30C2;
-        Fri, 15 Jul 2022 17:11:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D36AC34115;
-        Fri, 15 Jul 2022 17:11:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657905095;
-        bh=p0+be8P4mJSpNS9w7xRI+Uug5MZvY14f4VbucNXXoio=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dfN0uPKEoJHsjrZ16wMRE+U8mUy79Engm2H+j29wl7llvEOh0cZoHz50aSsAi/JSB
-         Ghd3O1BP3YOdN+7THMTOItFNjrsmlFIUq2zZFUgSdxBmwtYe88iEAVr6OqgwprbKy3
-         2zG8Z1r/o/9kCxQyDeLjrBIvcmaf9rGihLckb297CFMCQq8Qg97sH3gEgFNzEz51e7
-         qLWmPKypPxqv9ULkzkU4SN2rCIMjW+5fayPDFCxdqzXgHMZ6+BjhMT/VRgvpLnXWyj
-         HhJB3IUEjCrvqroaoyaKHsWq8LF+h/s+rZ31KzFsc5I5cr3xor44C4dv8M05Ufwcee
-         I7dj5LUYfWYaA==
-Received: by pali.im (Postfix)
-        id 47F2DA32; Fri, 15 Jul 2022 19:11:32 +0200 (CEST)
-Date:   Fri, 15 Jul 2022 19:11:32 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Guowen Shan <gshan@redhat.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] powerpc/pci: Add config option for using OF 'reg'
- for PCI domain
-Message-ID: <20220715171132.ujaexzm4ipad7o4f@pali>
-References: <20220706102148.5060-1-pali@kernel.org>
- <17fb8d12-60f9-09d5-91fa-09d5a5a9a4fd@igalia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <17fb8d12-60f9-09d5-91fa-09d5a5a9a4fd@igalia.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 15 Jul 2022 13:12:32 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265A26173A
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:12:14 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id fd6so7109207edb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:12:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=KXfsOmRJt+ko9q2xCFE2u/0piZsS+7uuoZliHVGfwJQ=;
+        b=JrUCiOaL0g8EZjc7wwNGSWCtN8AoXNWc/FBN+G13zkfhPnZfEyApW41SbcCUJVq6VO
+         dR7HcyqrkF58dvkmfAe5ylq+x4m6VpO7NMbfqSSS19cfgNYETRuS3UrwNSOsLk23EDvp
+         k1Ux3y42VDgKAghB/G3mnPHggMBKcCQYjJzDEalT18pNvI14L+0dDiBVMOQo1cTafUzf
+         fep39I8Wf6WaljcC8DGRHErqfQaFQsMSQHrE7CJH1vANwCMDcKWNXL0wgIYpiD8x97zr
+         BnQUicxkYqw/8dfPVegc4muo10PfDYkr1DNLyiuq2VZPfINs4wTMyGy2wPz9QQHw+MHD
+         2C7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=KXfsOmRJt+ko9q2xCFE2u/0piZsS+7uuoZliHVGfwJQ=;
+        b=Ef713kDIPmDNrBEYr/iKXQCJlI5ihrcB67heXIBga9IqYNpZDEuZWKfngyINyfH+UR
+         u/5CNDvpU1CbGHrKFQ+9ZIsAZ9CyxhOfI2RaUstHOCYQIDy1ZPWb7b4IJmy+KpKSWyv3
+         UkeIy8heMtJA0FOW4IVF1uNdsx5s0NWQFAJwzDUND+n+JAoi0WchY0X9T4JthfbuZkfJ
+         /xlkFQ/bbLyYMMV0ubUYwckjelqPT/tH0zoUCaX7nfBMD1iRVSXImxC0e6zvqVt9+ZHy
+         aDzmFotLoO7OnB82olWmJl8XGkdnh+eM0pT81SRvPbsK02xdRwg1vT0aRWHs7afbT4a8
+         EcnQ==
+X-Gm-Message-State: AJIora96Ev38TiW6zx8GK8DBSUn747OnzTIrkl/+oeZzUFZDM/uyLbRj
+        DYoAN0dbTyz0HXGzurPDw5MfKg==
+X-Google-Smtp-Source: AGRyM1sSLPziXUwYzLmFnukeeceHvDSD/6Jo8MXOHXz40mmUWueDudeIQrT56eXfaH9gWvcZcE3Acw==
+X-Received: by 2002:a05:6402:34c1:b0:43a:bd7a:898a with SMTP id w1-20020a05640234c100b0043abd7a898amr20426220edc.426.1657905132673;
+        Fri, 15 Jul 2022 10:12:12 -0700 (PDT)
+Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
+        by smtp.gmail.com with ESMTPSA id l5-20020aa7c3c5000000b0043575ae2051sm3179899edr.62.2022.07.15.10.12.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 15 Jul 2022 10:12:12 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: [PATCH v4] arm64: dts: rockchip: Fix SD card init on rk3399-nanopi4
+From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>
+In-Reply-To: <449292CA-CE60-4B90-90F7-295FBFEAB3F8@kohlschutter.com>
+Date:   Fri, 15 Jul 2022 19:12:11 +0200
+Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <73F9AED0-D2A8-4294-B6E1-1B92D2A36529@kohlschutter.com>
+References: <C639AD88-77A1-4485-BAEA-2FF8FC15A844@kohlschutter.com>
+ <12878108.O9o76ZdvQC@diego> <103b714c-b07c-f016-1062-84bd94786b22@arm.com>
+ <9AF1E75F-5947-49B0-887D-82C426527B99@kohlschutter.com>
+ <590f7a08-a6ca-be54-4254-363343642a52@arm.com>
+ <A6B896E5-CD25-4441-B6A5-0BE1FA284B2C@kohlschutter.com>
+ <A9634366-A012-43D2-B253-8BB9BF6005C7@kohlschutter.com>
+ <CAGb2v65Ehbu1wrib2CzF1fDZuD3fHZQDhKfVusyUF9KnxTvi+Q@mail.gmail.com>
+ <5ca9bd94-54d9-04f8-0098-a56ffb6f5fe1@arm.com>
+ <502b3fbe-3077-407e-6010-a8cb3ffce7d6@arm.com>
+ <449292CA-CE60-4B90-90F7-295FBFEAB3F8@kohlschutter.com>
+To:     Robin Murphy <robin.murphy@arm.com>, wens@kernel.org,
+        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Markus Reichl <m.reichl@fivetechno.de>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 15 July 2022 11:55:04 Guilherme G. Piccoli wrote:
-> On 06/07/2022 07:21, Pali Rohár wrote:
-> > [...] 
-> > Fix this issue and introduce a new option CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG.
-> > When this option is disabled then powerpc kernel would assign PCI domains
-> > in the similar way like it is doing kernel for other architectures,
-> > starting from zero and also how it was done prior that commit.
-> 
-> I found this sentence a bit weird, "in the similar way like it is doing
-> kernel for other architectures", but other than that:
+mmc/SD-card initialization may fail on NanoPi R4S with
+"mmc1: problem reading SD Status register" /
+"mmc1: error -110 whilst initialising SD card"
+either on cold boot or after a reboot.
 
-If you have some idea how to improve commit description, let me know and
-I can change it.
+Moreover, the system would also sometimes hang upon reboot.
 
-> Reviewed-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> 
-> Thanks for the improvement!
-> Cheers,
-> 
-> 
-> Guilherme
-> 
-> 
-> > 
-> > This option is by default enabled for powernv and pseries platform for which
-> > was that commit originally intended.
-> > 
-> > With this change upgrading kernels from LTS 4.4 version does not change PCI
-> > domain on smaller embedded platforms with fixed number of PCIe controllers.
-> > And also ensure that PCI domain zero is present as before that commit.
-> > 
-> > Fixes: 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on device-tree properties")
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > ---
-> > Changes in v2:
-> > * Enable CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG by default on powernv and pseries
-> > ---
-> >  arch/powerpc/Kconfig             | 11 +++++++++++
-> >  arch/powerpc/kernel/pci-common.c |  4 ++--
-> >  2 files changed, 13 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> > index f66084bc1dfe..053a88e84049 100644
-> > --- a/arch/powerpc/Kconfig
-> > +++ b/arch/powerpc/Kconfig
-> > @@ -386,6 +386,17 @@ config PPC_OF_PLATFORM_PCI
-> >  	depends on PCI
-> >  	depends on PPC64 # not supported on 32 bits yet
-> >  
-> > +config PPC_PCI_DOMAIN_FROM_OF_REG
-> > +	bool "Use OF reg property for PCI domain"
-> > +	depends on PCI
-> > +	default y if PPC_PSERIES || PPC_POWERNV
-> > +	help
-> > +	  By default PCI domain for host bridge during its registration is
-> > +	  chosen as the lowest unused PCI domain number.
-> > +
-> > +	  When this option is enabled then PCI domain can be determined
-> > +	  also from lower bits of the OF / Device Tree 'reg' property.
-> > +
-> >  config ARCH_SUPPORTS_UPROBES
-> >  	def_bool y
-> >  
-> > diff --git a/arch/powerpc/kernel/pci-common.c b/arch/powerpc/kernel/pci-common.c
-> > index 068410cd54a3..7f959df34833 100644
-> > --- a/arch/powerpc/kernel/pci-common.c
-> > +++ b/arch/powerpc/kernel/pci-common.c
-> > @@ -74,7 +74,6 @@ void __init set_pci_dma_ops(const struct dma_map_ops *dma_ops)
-> >  static int get_phb_number(struct device_node *dn)
-> >  {
-> >  	int ret, phb_id = -1;
-> > -	u32 prop_32;
-> >  	u64 prop;
-> >  
-> >  	/*
-> > @@ -83,7 +82,8 @@ static int get_phb_number(struct device_node *dn)
-> >  	 * reading "ibm,opal-phbid", only present in OPAL environment.
-> >  	 */
-> >  	ret = of_property_read_u64(dn, "ibm,opal-phbid", &prop);
-> > -	if (ret) {
-> > +	if (ret && IS_ENABLED(CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG)) {
-> > +		u32 prop_32;
-> >  		ret = of_property_read_u32_index(dn, "reg", 1, &prop_32);
-> >  		prop = prop_32;
-> >  	}
+This is prevented by setting an explicit undervoltage protection limit
+for the SD-card-specific vcc3v0_sd voltage regulator.
+
+Set the undervoltage protection limit to 2.7V, which is the minimum
+permissible SD card operating voltage.
+
+Signed-off-by: Christian Kohlsch=C3=BCtter <christian@kohlschutter.com>
+---
+arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi | 4 ++++
+1 file changed, 4 insertions(+)
+mode change 100644 =3D> 100755 =
+arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi =
+b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
+old mode 100644
+new mode 100755
+index 8c0ff6c96e03..669c74ce4d13
+--- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
+@@ -73,6 +73,10 @@ vcc3v0_sd: vcc3v0-sd {
+		regulator-always-on;
+		regulator-min-microvolt =3D <3000000>;
+		regulator-max-microvolt =3D <3000000>;
++
++		// must be configured or SD card may fail to initialize =
+occasionally
++		regulator-uv-protection-microvolt =3D <2700000>;
++
+		regulator-name =3D "vcc3v0_sd";
+		vin-supply =3D <&vcc3v3_sys>;
+	};
+--=20
+2.36.1=

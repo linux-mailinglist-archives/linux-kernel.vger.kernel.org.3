@@ -2,104 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D6C57599F
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 04:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51823575990
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 04:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240976AbiGOCiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 22:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
+        id S241251AbiGOC1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 22:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiGOCiF (ORCPT
+        with ESMTP id S229541AbiGOC1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 22:38:05 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D705481E6
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 19:38:03 -0700 (PDT)
-Received: from lingfengzhe-ms7c94.loongson.cn (unknown [10.90.50.23])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf+ME09BiLbsfAA--.64763S2;
-        Fri, 15 Jul 2022 10:37:56 +0800 (CST)
-From:   Qi Hu <huqi@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Oleg Nesterov <oleg@redhat.com>
-Cc:     Xu Li <lixu@loongson.cn>, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>, Qi Hu <huqi@loongson.cn>
-Subject: [PATCH v2] LoongArch: Fix missing fcsr in ptrace's fpr_set
-Date:   Fri, 15 Jul 2022 10:37:53 +0800
-Message-Id: <20220715023753.436226-1-huqi@loongson.cn>
-X-Mailer: git-send-email 2.37.0
+        Thu, 14 Jul 2022 22:27:11 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E90122B39;
+        Thu, 14 Jul 2022 19:27:08 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LkZvt2q8FzlVxh;
+        Fri, 15 Jul 2022 10:25:30 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
+ (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 15 Jul
+ 2022 10:27:06 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <stable@vger.kernel.org>, <linux-ext4@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <tytso@mit.edu>,
+        <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <ritesh.list@gmail.com>, <lczerner@redhat.com>,
+        <enwlinux@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yebin10@huawei.com>, <yukuai3@huawei.com>,
+        <libaokun1@huawei.com>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH 4.19] ext4: fix race condition between ext4_ioctl_setflags and ext4_fiemap
+Date:   Fri, 15 Jul 2022 10:39:28 +0800
+Message-ID: <20220715023928.2701166-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxf+ME09BiLbsfAA--.64763S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uryrtF1UJw4rWF1rXw1xuFg_yoW8XFWrpr
-        ZxAas3Wr4rGFWSvr4Dt3yv9ryDX3s2gFyS9393J3WfAwnrXrs8XryjyFZ2vFW2y348Wayx
-        XF9Y9r4YyFsFqaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
-        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svP
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: pkxtxqxorr0wxvrqhubq/1tbiAQAICV3QvP1zwwACs+
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In file ptrace.c, function fpr_set does not copy fcsr data from ubuf
-to kbuf. That's the reason why fcsr cannot be modified by ptrace.
+This patch and problem analysis is based on v4.19 LTS.
+The d3b6f23f7167("ext4: move ext4_fiemap to use iomap framework") patch
+is incorporated in v5.7-rc1. This patch avoids this problem by switching
+to iomap in ext4_fiemap.
 
-This patch fixs this problem and allows users using ptrace to modify
-the fcsr.
+Hulk Robot reported a BUG on stable 4.19.252:
+==================================================================
+kernel BUG at fs/ext4/extents_status.c:762!
+invalid opcode: 0000 [#1] SMP KASAN PTI
+CPU: 7 PID: 2845 Comm: syz-executor Not tainted 4.19.252 #46
+RIP: 0010:ext4_es_cache_extent+0x30e/0x370
+[...]
+Call Trace:
+ ext4_cache_extents+0x238/0x2f0
+ ext4_find_extent+0x785/0xa40
+ ext4_fiemap+0x36d/0xe90
+ do_vfs_ioctl+0x6af/0x1200
+[...]
+==================================================================
 
-Co-developed-by: Xu Li <lixu@loongson.cn>
-Signed-off-by: Qi Hu <huqi@loongson.cn>
+Above issue may happen as follows:
+-------------------------------------
+           cpu1		    cpu2
+_____________________|_____________________
+do_vfs_ioctl
+ ext4_ioctl
+  ext4_ioctl_setflags
+   ext4_ind_migrate
+                        do_vfs_ioctl
+                         ioctl_fiemap
+                          ext4_fiemap
+                           ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)
+                           ext4_fill_fiemap_extents
+    down_write(&EXT4_I(inode)->i_data_sem);
+    ext4_ext_check_inode
+    ext4_clear_inode_flag(inode, EXT4_INODE_EXTENTS)
+    memset(ei->i_data, 0, sizeof(ei->i_data))
+    up_write(&EXT4_I(inode)->i_data_sem);
+                            down_read(&EXT4_I(inode)->i_data_sem);
+                            ext4_find_extent
+                             ext4_cache_extents
+                              ext4_es_cache_extent
+                               BUG_ON(end < lblk)
+
+We can easily reproduce this problem with the syzkaller testcase:
+```
+02:37:07 executing program 3:
+r0 = openat(0xffffffffffffff9c, &(0x7f0000000040)='./file0\x00', 0x26e1, 0x0)
+ioctl$FS_IOC_FSSETXATTR(r0, 0x40086602, &(0x7f0000000080)={0x17e})
+mkdirat(0xffffffffffffff9c, &(0x7f00000000c0)='./file1\x00', 0x1ff)
+r1 = openat(0xffffffffffffff9c, &(0x7f0000000100)='./file1\x00', 0x0, 0x0)
+ioctl$FS_IOC_FIEMAP(r1, 0xc020660b, &(0x7f0000000180)={0x0, 0x1, 0x0, 0xef3, 0x6, []}) (async, rerun: 32)
+ioctl$FS_IOC_FSSETXATTR(r1, 0x40086602, &(0x7f0000000140)={0x17e}) (rerun: 32)
+```
+
+To solve this issue, we use __generic_block_fiemap() instead of
+generic_block_fiemap() and add inode_lock_shared to avoid race condition.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
 ---
-V1 -> V2: Change Signed-off-by to Co-developed-by in the commit message.
----
- arch/loongarch/kernel/ptrace.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ fs/ext4/extents.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/arch/loongarch/kernel/ptrace.c b/arch/loongarch/kernel/ptrace.c
-index e6ab87948e1d..dc2b82ea894c 100644
---- a/arch/loongarch/kernel/ptrace.c
-+++ b/arch/loongarch/kernel/ptrace.c
-@@ -193,7 +193,7 @@ static int fpr_set(struct task_struct *target,
- 		   const void *kbuf, const void __user *ubuf)
- {
- 	const int fcc_start = NUM_FPU_REGS * sizeof(elf_fpreg_t);
--	const int fcc_end = fcc_start + sizeof(u64);
-+	const int fcsr_start = fcc_start + sizeof(u64);
- 	int err;
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index 6c492fca60c4..38aaf48e94cb 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -5198,13 +5198,18 @@ int ext4_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
+ 			return error;
+ 	}
  
- 	BUG_ON(count % sizeof(elf_fpreg_t));
-@@ -209,10 +209,12 @@ static int fpr_set(struct task_struct *target,
- 	if (err)
- 		return err;
++	inode_lock_shared(inode);
+ 	/* fallback to generic here if not in extents fmt */
+-	if (!(ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)))
+-		return generic_block_fiemap(inode, fieinfo, start, len,
++	if (!(ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS))) {
++		error = __generic_block_fiemap(inode, fieinfo, start, len,
+ 			ext4_get_block);
++		goto out_unlock;
++	}
  
--	if (count > 0)
--		err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
--					  &target->thread.fpu.fcc,
--					  fcc_start, fcc_end);
-+	err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
-+				  &target->thread.fpu.fcc, fcc_start,
-+				  fcc_start + sizeof(u64));
-+	err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
-+				  &target->thread.fpu.fcsr, fcsr_start,
-+				  fcsr_start + sizeof(u32));
+-	if (fiemap_check_flags(fieinfo, EXT4_FIEMAP_FLAGS))
+-		return -EBADR;
++	if (fiemap_check_flags(fieinfo, EXT4_FIEMAP_FLAGS)) {
++		error = -EBADR;
++		goto out_unlock;
++	}
  
- 	return err;
+ 	if (fieinfo->fi_flags & FIEMAP_FLAG_XATTR) {
+ 		error = ext4_xattr_fiemap(inode, fieinfo);
+@@ -5225,6 +5230,8 @@ int ext4_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
+ 		error = ext4_fill_fiemap_extents(inode, start_blk,
+ 						 len_blks, fieinfo);
+ 	}
++out_unlock:
++	inode_unlock_shared(inode);
+ 	return error;
  }
+ 
 -- 
-2.37.0
+2.31.1
 

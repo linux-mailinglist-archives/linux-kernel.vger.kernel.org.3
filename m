@@ -2,135 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB2B575B79
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4E6575B8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiGOGXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 02:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36616 "EHLO
+        id S231528AbiGOG3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 02:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbiGOGX1 (ORCPT
+        with ESMTP id S229782AbiGOG3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 02:23:27 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09557753A3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:23:26 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id u10-20020a6be30a000000b0067bcbb8a637so1877379ioc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:23:26 -0700 (PDT)
+        Fri, 15 Jul 2022 02:29:17 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53F013F86
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:29:16 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id os14so7281610ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gHgYQ57up5w2WHv1hYXHN8IBevAz2rN/LxpGnpqYmU4=;
+        b=JI4Kgbgo0bQEvLMje6miGiraUoMac1F9ZoiQJ+JuxaDGse+xEfEKQC5DwcveHzTwnT
+         oGcnGu9eUy687ISvDbxv5cB67LpDgH2Qg3LtelVfDEFIWMbkpfg40nVgPP+EjSHiqRpF
+         fJH29ek18VNzPmjs2332lWP+IPY3UDd2C9DUpp0s02cy8rNhpVj59Gi7rg1T/l0Wmtl9
+         hxb43UTFeSsOa+11pTOkzZ3VphowX6UvUEpKCJ+YvY07Df5Mvl2UpNUmH/DaeMFzJpAE
+         GTE5pP7+FZAcIfTn/CYqOCuSr729sf9Evt9jHxdIy6D8DoSD8FI/IraOO7xKatADNHx9
+         WDLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ECHvv+m4NKRuX14ubQJPUDLv1bbnfJjE0NSa75hnsh8=;
-        b=klIN37zuh/WnJGhgDR19dOz/8i+2jT40THATCqnckpp/jmuBlTAvYe7OAUXs/CvBIP
-         GkKjbdu7Rrn/OdkULzbKh42aceowt6KhLclBihmJF0WYmIfJSwh7tYYQpe6XS/7zCvty
-         b+k9WzsBjQZv1q8WYX1bBvJ/RzpH4hDMmxO4/kqfOnxNUnmTFJQQEiCRnJVKr212h53b
-         hYTr1TIfe1WZIeRDVD2hFnlTSw7chC586hJZ9rLvESt3PVmiTlKA/Ujp/ssqDvK/GwJ5
-         j8Oe/2isQXc0nm4PJXRWfhJy9vsH9BtDYRbNnN0AlZXuJi19onkjJLWexCUejF+KQ8eD
-         wfDw==
-X-Gm-Message-State: AJIora90rdcivZOxWxtiHR0j22KSM/MeM6XiPZ7CCRmybY/D/nbDddtg
-        0mjVyUzc/FDO+C7PcNim6SeusGzovwqaTbIwcqDaEXdCWAQ8
-X-Google-Smtp-Source: AGRyM1vrMr+R9Bj3ssAKdUq2JrpTgJTGb1q3MgxULXiwN02ckj3l0hMSZ0Yh7sMGTSiSL2DFBNaAUvzjUMzQ1wxrTaibUZ5DqDzo
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gHgYQ57up5w2WHv1hYXHN8IBevAz2rN/LxpGnpqYmU4=;
+        b=braYZwmSMnaaRxfYw96gInNJVmAqM6Ps5iBLuLZI2x4tgIR/6RvYC1Yz5GXmuVSJgj
+         OZZpQbRZPxEfThmDXbCgZ6Blr+zEpTjOnUCdZGl7QfPMfjffMLlQ8IxiMVWer55fKC0A
+         hR6UcGJWrt/tclHiOQdXmq7flMMvDZdez22VXmHR/OEojCuaxvbZBmSByvHCOHH3XA3y
+         rj27kD5JVObPNpTV6c0ko9j2z1HtWYfXZ/P/MK7RS512XNB9wqizJ7XOW6lt+ojvomb6
+         tOclpO4S1g7TQO8/yexIMkFSv9XmnSrXHVlvaUld/peel6swLH6Cly+LlQPHCjPN0Ytk
+         Et+w==
+X-Gm-Message-State: AJIora/TBk7KzLS7xx3qRApohsR3vwKaCYeylcK6i9wk5uE2MDM1fGzZ
+        QVRvExk7k9MvjoO45Z51N2A=
+X-Google-Smtp-Source: AGRyM1uVsVPDS5mdTshIbzATliAzNcoW6hnqrk/t1m2yBgyfDc8D7QsW90IY2yCwRuxcJbnwwSDqrQ==
+X-Received: by 2002:a17:907:9810:b0:722:f204:b409 with SMTP id ji16-20020a170907981000b00722f204b409mr12069875ejc.457.1657866555422;
+        Thu, 14 Jul 2022 23:29:15 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb91.dynamic.kabel-deutschland.de. [95.90.187.145])
+        by smtp.gmail.com with ESMTPSA id ku5-20020a170907788500b007262a5e2204sm1614515ejc.153.2022.07.14.23.29.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 23:29:15 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 0/5] staging: r8188eu: remove SetHwReg8188EU()
+Date:   Fri, 15 Jul 2022 08:29:03 +0200
+Message-Id: <20220715062908.8547-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1448:b0:33f:7a74:5f2c with SMTP id
- l8-20020a056638144800b0033f7a745f2cmr6830715jad.179.1657866205379; Thu, 14
- Jul 2022 23:23:25 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 23:23:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000041c2d305e3d20e6d@google.com>
-Subject: [syzbot] Internal error in io_serial_out (2)
-From:   syzbot <syzbot+26e067dfa81f748d3210@syzkaller.appspotmail.com>
-To:     andy.shevchenko@gmail.com, etremblay@distech-controls.com,
-        gregkh@linuxfoundation.org, ilpo.jarvinen@linux.intel.com,
-        jirislaby@kernel.org, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, u.kleine-koenig@pengutronix.de,
-        wander@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This series finally removes SetHwReg8188EU().
 
-syzbot found the following issue on:
+Tested on x86_64 with Inter-Tech DMG-02.
 
-HEAD commit:    4a57a8400075 vf/remap: return the amount of bytes actually..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1168fa9a080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f7d589e916fa3bbe
-dashboard link: https://syzkaller.appspot.com/bug?extid=26e067dfa81f748d3210
-compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+Michael Straube (5):
+  staging: r8188eu: remove HW_VAR_SET_OPMODE from SetHwReg8188EU()
+  staging: r8188eu: remove unused parameter from correct_TSF()
+  staging: r8188eu: remove unused parameter from update_TSF()
+  staging: r8188eu: make update_TSF() and correct_TSF() static
+  staging: r8188eu: remove SetHwReg8188EU()
 
-Unfortunately, I don't have any reproducer for this issue yet.
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 163 +++++++++++++++++-
+ drivers/staging/r8188eu/core/rtw_wlan_util.c  |  20 ---
+ drivers/staging/r8188eu/hal/usb_halinit.c     | 152 +---------------
+ drivers/staging/r8188eu/include/hal_intf.h    |   7 -
+ .../staging/r8188eu/include/rtw_mlme_ext.h    |   5 +-
+ 5 files changed, 161 insertions(+), 186 deletions(-)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+26e067dfa81f748d3210@syzkaller.appspotmail.com
+-- 
+2.37.0
 
-Internal error: synchronous external abort: 97140050 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 29340 Comm: syz-executor.1 Not tainted 5.19.0-rc6-syzkaller-00115-g4a57a8400075 #0
-Hardware name: linux,dummy-virt (DT)
-pstate: 804000c9 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __raw_writeb arch/arm64/include/asm/io.h:27 [inline]
-pc : _outb include/asm-generic/io.h:501 [inline]
-pc : logic_outb+0x3c/0xa4 lib/logic_pio.c:302
-lr : io_serial_out+0x2c/0x3c drivers/tty/serial/8250/8250_port.c:466
-sp : ffff80000c263b40
-x29: ffff80000c263b40 x28: f3ff0000265dd000 x27: 0000000000000000
-x26: fbff000003d00528 x25: fdff000005bd3000 x24: f8ff000028c17000
-x23: fbff000003d00528 x22: 0000000000000000 x21: ffff80000a6380e0
-x20: 0000000000000008 x19: fffffbfffe800001 x18: 00000000fffffffb
-x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000020
-x14: 0000000000000000 x13: ffff80000c263d78 x12: ffff80000c263d3a
-x11: 0000000000000000 x10: 0000000000000066 x9 : 000000000000005c
-x8 : 0000000000000000 x7 : 0000000000000001 x6 : ffff80000a2e0000
-x5 : 0000000000005452 x4 : 0000000000000000 x3 : ffff80000a6380e0
-x2 : 0000000000000000 x1 : fffffbfffe800000 x0 : 0000000000ffbffe
-Call trace:
- _outb include/asm-generic/io.h:501 [inline]
- logic_outb+0x3c/0xa4 lib/logic_pio.c:302
- io_serial_out+0x2c/0x3c drivers/tty/serial/8250/8250_port.c:466
- serial_port_out include/linux/serial_core.h:270 [inline]
- serial8250_enable_ms drivers/tty/serial/8250/8250_port.c:1728 [inline]
- serial8250_enable_ms+0x68/0xa0 drivers/tty/serial/8250/8250_port.c:1715
- uart_enable_ms drivers/tty/serial/serial_core.c:1179 [inline]
- uart_wait_modem_status+0xcc/0x2a0 drivers/tty/serial/serial_core.c:1207
- uart_ioctl+0x1ec/0x894 drivers/tty/serial/serial_core.c:1437
- tty_ioctl+0x1f4/0xd44 drivers/tty/tty_io.c:2778
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __arm64_sys_ioctl+0xa8/0xf0 fs/ioctl.c:856
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xec arch/arm64/kernel/syscall.c:142
- do_el0_svc+0xa0/0xc0 arch/arm64/kernel/syscall.c:206
- el0_svc+0x44/0xb0 arch/arm64/kernel/entry-common.c:624
- el0t_64_sync_handler+0x1ac/0x1b0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x198/0x19c arch/arm64/kernel/entry.S:581
-Code: d2bfd001 f2df7fe1 f2ffffe1 8b010273 (39000274) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	d2bfd001 	mov	x1, #0xfe800000            	// #4269801472
-   4:	f2df7fe1 	movk	x1, #0xfbff, lsl #32
-   8:	f2ffffe1 	movk	x1, #0xffff, lsl #48
-   c:	8b010273 	add	x19, x19, x1
-* 10:	39000274 	strb	w20, [x19] <-- trapping instruction
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

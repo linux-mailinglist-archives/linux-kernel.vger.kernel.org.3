@@ -2,98 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BF6575B78
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB2B575B79
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbiGOGX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 02:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
+        id S231448AbiGOGXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 02:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbiGOGX0 (ORCPT
+        with ESMTP id S231441AbiGOGX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 02:23:26 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6863D7479F
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:23:25 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id e132so3577075pgc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:23:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HvPrR9PIE0FNCqOgFLW4Eslzvb6RnaQ22kAYBIHei34=;
-        b=S2iHj+VFNVxnLekpu122G0p/swN1DGTW0uZ5m2uQvyIVyk6BvXLcTi4Yq7t5NucfwN
-         RNhUH2sUPDyeY/NAITUOUgYEtxrEK9NalbDnarbPNv/VP+9QQmHRkje0W79+sIGMN0Iy
-         WhXSrnsLZM8DDIQ+GpaEBqJWYyOf/mmclYD91LDyhTfxaI1AdshaUjpN7z2QvXl6LQGM
-         UYtAmYTatcr9G5hyFjzBQaxmKDJ78QGUxu0TFSTJOB1Brr6UzRyXVhB7iCstVR5OtvMR
-         npkpfdEJ1GWJg0GK0xVxZB5r9QTEngKobBJWpZL1ePw9v5iyRdkVWXyuUwL4UH3g0nZb
-         lcNw==
+        Fri, 15 Jul 2022 02:23:27 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09557753A3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:23:26 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id u10-20020a6be30a000000b0067bcbb8a637so1877379ioc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:23:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HvPrR9PIE0FNCqOgFLW4Eslzvb6RnaQ22kAYBIHei34=;
-        b=yR51KzecmviIOl1hRZGa/69EFq0kFyIc9PHls601R3JT/kt47vMt7kgPst+vsgS9+r
-         9V5k0sC2Pwg80HfdITWRTNT7gRik3ZRQ/Bs9a41tu5bAfW2xUM5FcZd1hzgbcV6hR2kq
-         lGtOOWq/wQBe2BeIBkLWI8zrZ+Mjfx/qqh9LepVniA2nfqcdeNDhz9nmxmDLEZZpXL/X
-         oxOub3PMnadcGzhR1wsf2sVATd5x5OAxrCTByH0xjYLxVkuAISAACVBrERc8533gEZ3m
-         EVfyxKqQWJYA2yZd7mBNn6CvKFe/h52PZFaWIqDOg9GeTIwOivGgBgvGuYK1LuONiG8a
-         L8LA==
-X-Gm-Message-State: AJIora/c+xBk+5+QXdy53VlHrk8dAD7+uqECtKud8sXLdRo1ozN6G/+o
-        iQb/x1w2Ea2QQ994BTbyZpo=
-X-Google-Smtp-Source: AGRyM1sTC6B5IXpBBvNT/82EeGdVT/5LyajSqupUagFzyHf+rDIloPLuW3RaX8PdPdbIKYGjZdUnTw==
-X-Received: by 2002:a63:4463:0:b0:419:d02e:4dcc with SMTP id t35-20020a634463000000b00419d02e4dccmr3268700pgk.184.1657866205037;
-        Thu, 14 Jul 2022 23:23:25 -0700 (PDT)
-Received: from localhost.localdomain ([129.227.148.126])
-        by smtp.gmail.com with ESMTPSA id o10-20020a634e4a000000b00401a9bc0f33sm2334307pgl.85.2022.07.14.23.23.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 23:23:24 -0700 (PDT)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        longman@redhat.com, roman.gushchin@linux.dev,
-        ebiederm@xmission.com, legion@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH] ipc: mqueue: fix possible memory leak in init_mqueue_fs()
-Date:   Fri, 15 Jul 2022 14:23:01 +0800
-Message-Id: <20220715062301.19311-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ECHvv+m4NKRuX14ubQJPUDLv1bbnfJjE0NSa75hnsh8=;
+        b=klIN37zuh/WnJGhgDR19dOz/8i+2jT40THATCqnckpp/jmuBlTAvYe7OAUXs/CvBIP
+         GkKjbdu7Rrn/OdkULzbKh42aceowt6KhLclBihmJF0WYmIfJSwh7tYYQpe6XS/7zCvty
+         b+k9WzsBjQZv1q8WYX1bBvJ/RzpH4hDMmxO4/kqfOnxNUnmTFJQQEiCRnJVKr212h53b
+         hYTr1TIfe1WZIeRDVD2hFnlTSw7chC586hJZ9rLvESt3PVmiTlKA/Ujp/ssqDvK/GwJ5
+         j8Oe/2isQXc0nm4PJXRWfhJy9vsH9BtDYRbNnN0AlZXuJi19onkjJLWexCUejF+KQ8eD
+         wfDw==
+X-Gm-Message-State: AJIora90rdcivZOxWxtiHR0j22KSM/MeM6XiPZ7CCRmybY/D/nbDddtg
+        0mjVyUzc/FDO+C7PcNim6SeusGzovwqaTbIwcqDaEXdCWAQ8
+X-Google-Smtp-Source: AGRyM1vrMr+R9Bj3ssAKdUq2JrpTgJTGb1q3MgxULXiwN02ckj3l0hMSZ0Yh7sMGTSiSL2DFBNaAUvzjUMzQ1wxrTaibUZ5DqDzo
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1448:b0:33f:7a74:5f2c with SMTP id
+ l8-20020a056638144800b0033f7a745f2cmr6830715jad.179.1657866205379; Thu, 14
+ Jul 2022 23:23:25 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 23:23:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000041c2d305e3d20e6d@google.com>
+Subject: [syzbot] Internal error in io_serial_out (2)
+From:   syzbot <syzbot+26e067dfa81f748d3210@syzkaller.appspotmail.com>
+To:     andy.shevchenko@gmail.com, etremblay@distech-controls.com,
+        gregkh@linuxfoundation.org, ilpo.jarvinen@linux.intel.com,
+        jirislaby@kernel.org, johan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, u.kleine-koenig@pengutronix.de,
+        wander@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit db7cfc380900 ("ipc: Free mq_sysctls if ipc namespace creation
-failed")
+Hello,
 
-Here's a similar memory leak to the one fixed by the patch above.
-retire_mq_sysctls need to be called when init_mqueue_fs fails after
-setup_mq_sysctls.
+syzbot found the following issue on:
 
-Fixes: dc55e35f9e81 ("ipc: Store mqueue sysctls in the ipc namespace")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+HEAD commit:    4a57a8400075 vf/remap: return the amount of bytes actually..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1168fa9a080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f7d589e916fa3bbe
+dashboard link: https://syzkaller.appspot.com/bug?extid=26e067dfa81f748d3210
+compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+26e067dfa81f748d3210@syzkaller.appspotmail.com
+
+Internal error: synchronous external abort: 97140050 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 29340 Comm: syz-executor.1 Not tainted 5.19.0-rc6-syzkaller-00115-g4a57a8400075 #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 804000c9 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __raw_writeb arch/arm64/include/asm/io.h:27 [inline]
+pc : _outb include/asm-generic/io.h:501 [inline]
+pc : logic_outb+0x3c/0xa4 lib/logic_pio.c:302
+lr : io_serial_out+0x2c/0x3c drivers/tty/serial/8250/8250_port.c:466
+sp : ffff80000c263b40
+x29: ffff80000c263b40 x28: f3ff0000265dd000 x27: 0000000000000000
+x26: fbff000003d00528 x25: fdff000005bd3000 x24: f8ff000028c17000
+x23: fbff000003d00528 x22: 0000000000000000 x21: ffff80000a6380e0
+x20: 0000000000000008 x19: fffffbfffe800001 x18: 00000000fffffffb
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000020
+x14: 0000000000000000 x13: ffff80000c263d78 x12: ffff80000c263d3a
+x11: 0000000000000000 x10: 0000000000000066 x9 : 000000000000005c
+x8 : 0000000000000000 x7 : 0000000000000001 x6 : ffff80000a2e0000
+x5 : 0000000000005452 x4 : 0000000000000000 x3 : ffff80000a6380e0
+x2 : 0000000000000000 x1 : fffffbfffe800000 x0 : 0000000000ffbffe
+Call trace:
+ _outb include/asm-generic/io.h:501 [inline]
+ logic_outb+0x3c/0xa4 lib/logic_pio.c:302
+ io_serial_out+0x2c/0x3c drivers/tty/serial/8250/8250_port.c:466
+ serial_port_out include/linux/serial_core.h:270 [inline]
+ serial8250_enable_ms drivers/tty/serial/8250/8250_port.c:1728 [inline]
+ serial8250_enable_ms+0x68/0xa0 drivers/tty/serial/8250/8250_port.c:1715
+ uart_enable_ms drivers/tty/serial/serial_core.c:1179 [inline]
+ uart_wait_modem_status+0xcc/0x2a0 drivers/tty/serial/serial_core.c:1207
+ uart_ioctl+0x1ec/0x894 drivers/tty/serial/serial_core.c:1437
+ tty_ioctl+0x1f4/0xd44 drivers/tty/tty_io.c:2778
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __arm64_sys_ioctl+0xa8/0xf0 fs/ioctl.c:856
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
+ el0_svc_common.constprop.0+0x44/0xec arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0xa0/0xc0 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x44/0xb0 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x1ac/0x1b0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x198/0x19c arch/arm64/kernel/entry.S:581
+Code: d2bfd001 f2df7fe1 f2ffffe1 8b010273 (39000274) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	d2bfd001 	mov	x1, #0xfe800000            	// #4269801472
+   4:	f2df7fe1 	movk	x1, #0xfbff, lsl #32
+   8:	f2ffffe1 	movk	x1, #0xffff, lsl #48
+   c:	8b010273 	add	x19, x19, x1
+* 10:	39000274 	strb	w20, [x19] <-- trapping instruction
+
+
 ---
- ipc/mqueue.c | 1 +
- 1 file changed, 1 insertion(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/ipc/mqueue.c b/ipc/mqueue.c
-index 12ad7860bb88..83370fef8879 100644
---- a/ipc/mqueue.c
-+++ b/ipc/mqueue.c
-@@ -1746,6 +1746,7 @@ static int __init init_mqueue_fs(void)
- 	unregister_filesystem(&mqueue_fs_type);
- out_sysctl:
- 	kmem_cache_destroy(mqueue_inode_cachep);
-+	retire_mq_sysctls(&init_ipc_ns);
- 	return error;
- }
- 
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,234 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD33357591D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 03:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C37CD57591F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 03:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240837AbiGOBaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 21:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
+        id S241033AbiGOBd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 21:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiGOBaV (ORCPT
+        with ESMTP id S231683AbiGOBdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 21:30:21 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67503ED46;
-        Thu, 14 Jul 2022 18:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657848620; x=1689384620;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VULQdfb9uIcToxA48uBh48V4LsuTxsYYsa97hl98D9s=;
-  b=CMoRLk/yhbV/65hticH0qkVBTvgZH+TBf+z2ZWFlQ5iUDCbcPajpXtgf
-   2f0+AZ/to5G9wxMoxkFRjFkphX+O8418Ex+3zWMrocGHunMytrgPq1I1v
-   08pgA5DzyLFY0mkmRrSThHpoIdIGS+Oh2t5iBeq4aIz6FDnV0Xl/KbK6y
-   JnC4NeuoKPSEEne4KpD6hHHw76VryAQoJUGY0Da3hj6DQhTYTIzSQ3pDa
-   c/HWpU/k01KcJXucdlP5KbV07R6ThKTwJzRtw2YUqlHR8/JZ/f+Pz3aVy
-   u3abaU1BQjt1rz0QEAnNXRaVScaI6vEj7xo80lSDmsQA/mjCuPrhndAIQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="268700723"
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="268700723"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 18:30:20 -0700
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="600329519"
-Received: from pravinpa-mobl.amr.corp.intel.com (HELO desk) ([10.212.243.89])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 18:30:19 -0700
-Date:   Thu, 14 Jul 2022 18:30:18 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, tony.luck@intel.com,
-        antonio.gomez.iglesias@linux.intel.com,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO Stale
- Data
-Message-ID: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
+        Thu, 14 Jul 2022 21:33:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 576753ED46
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 18:33:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657848803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u/U2xaa/vsw5f/HwUYz7caI2/KRVjJ8EhiCQx4+NJbM=;
+        b=XG9vhSFdsxoQf+Z+Uxdh9jneRbCyLeOp4+stj3BHgkS5iWlKadzpcHpAcrPDJH8r+VHx51
+        5xuxdFmrY2WhhsHKkuY1HRRNIdFNDIq6zTz8DxLmDatEnuqH1FPr1uzQy697D3nKyQJQ5W
+        iEec4XyaxQ/Y+hP4A8vlBCFrmjIs3bI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-467-RiRW-v7BNY69kwk-8B8ToA-1; Thu, 14 Jul 2022 21:33:20 -0400
+X-MC-Unique: RiRW-v7BNY69kwk-8B8ToA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1FF26800124;
+        Fri, 15 Jul 2022 01:33:19 +0000 (UTC)
+Received: from localhost (ovpn-13-91.pek2.redhat.com [10.72.13.91])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A5B1C2166B26;
+        Fri, 15 Jul 2022 01:33:16 +0000 (UTC)
+Date:   Fri, 15 Jul 2022 09:33:13 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     jstultz@google.com, tglx@linutronix.de, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org
+Subject: Re: Unstable tsc caused soft lockup in kdump kernel
+Message-ID: <YtDD2WHLiFbceXuE@MiWiFi-R3L-srv>
+References: <YrwokiIVX9E9kQIh@MiWiFi-R3L-srv>
+ <bf57256f-127d-6f26-404a-b9cff6df70b3@igalia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=0.2 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <bf57256f-127d-6f26-404a-b9cff6df70b3@igalia.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Older CPUs beyond its Servicing period are not listed in the affected
-processor list for MMIO Stale Data vulnerabilities. These CPUs currently
-report "Not affected" in sysfs, which may not be correct.
+On 07/14/22 at 04:34pm, Guilherme G. Piccoli wrote:
+> On 29/06/2022 07:25, Baoquan He wrote:
+> > Hi,
+> > 
+> > On a HP machine, after crash triggered via sysrq-c, kdump kernel will
+> > boot and get soft lockup as below. And this can be always reproduced.
+> > 
+> > From log, it seems that unreliable tsc was marked as unstable in
+> > clocksource_watchdog, then worker sched_clock_work was scheduled. And
+> > this tsc unstable marking always happened after sysrq-c is triggered.
+> > And the cpu where worker smp_call_function_many_cond is running won't
+> > be stopped and hang there and keep locks, even though the cpu should be
+> > stopped. While kdump kernel is running in a different cpu and boot, then
+> > soft lockup happened because other workers or the relevant threads are
+> > waiting for locks taken by the hang sched_clock_work worker.
+> > 
+> > Any idea or suggestion?
+> > 
+> > The normal kernel boot log and kdump kernel log, kernel config, are all
+> > attached, please check.
+> > 
+> 
+> Hi Baoquan, interesting issue! Do you happen to have a full kdump boot
+> log with the issue? Maybe collected through serial console, etc.
+> It seems the one attached is from a succeeding kdump by passing
+> "tsc=unstable" to the kdump kernel right?
 
-Add support for "Unknown" reporting for such CPUs. Mitigation is not
-deployed when the status is "Unknown".
+The attached kdump boot log is the one in which kdump kernel is hang.
+The 'tsc=unstable' need be added to 1st kernel to work around it. Only
+adding 'tsc=unstable' into kdump kernel doesn't change anything since
+the clocksouce_watchdog work has been in a loop because of the unstable
+tsc in 1st kernel.
 
-"CPU is beyond its Servicing period" means these CPUs are beyond their
-Servicing [1] period and have reached End of Servicing Updates (ESU) [2].
+> 
+> Also, did you try to "forbid" tsc to get marked as unstable in the first
+> kernel, before kdump? I mean like a hack code change, just prevent
+> kernel doing that and seeing if it works. If that still fails, then it
+> seems the cause of the issue is the same as the cause of TSC getting
+> unstable - in other words, something would be causing both the kdump
+> kernel lockup AND the TSC unstable marking in the first kernel...
 
-  [1] Servicing: The process of providing functional and security
-  updates to Intel processors or platforms, utilizing the Intel Platform
-  Update (IPU) process or other similar mechanisms.
-
-  [2] End of Servicing Updates (ESU): ESU is the date at which Intel
-  will no longer provide Servicing, such as through IPU or other similar
-  update processes. ESU dates will typically be aligned to end of
-  quarter.
-
-Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Suggested-by: Tony Luck <tony.luck@intel.com>
-Fixes: 8d50cdf8b834 ("x86/speculation/mmio: Add sysfs reporting for Processor MMIO Stale Data")
-Cc: stable@vger.kernel.org
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
----
-CPU vulnerability is unknown if, hardware doesn't set the immunity bits
-and CPU is not in the known-affected-list.
-
-In order to report the unknown status, this patch sets the MMIO bug
-for all Intel CPUs that don't have the hardware immunity bits set.
-Based on the known-affected-list of CPUs, mitigation selection then
-deploys the mitigation or sets the "Unknown" status; which is ugly.
-
-I will appreciate suggestions to improve this.
-
-Thanks,
-Pawan
-
- .../hw-vuln/processor_mmio_stale_data.rst     |  3 +++
- arch/x86/kernel/cpu/bugs.c                    | 11 +++++++-
- arch/x86/kernel/cpu/common.c                  | 26 +++++++++++++------
- arch/x86/kernel/cpu/cpu.h                     |  1 +
- 4 files changed, 32 insertions(+), 9 deletions(-)
-
-diff --git a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-index 9393c50b5afc..55524e0798da 100644
---- a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-+++ b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-@@ -230,6 +230,9 @@ The possible values in this file are:
-      * - 'Mitigation: Clear CPU buffers'
-        - The processor is vulnerable and the CPU buffer clearing mitigation is
-          enabled.
-+     * - 'Unknown: CPU is beyond its Servicing period'
-+       - The processor vulnerability status is unknown because it is
-+	 out of Servicing period. Mitigation is not attempted.
- 
- If the processor is vulnerable then the following information is appended to
- the above information:
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 0dd04713434b..dd6e78d370bc 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -416,6 +416,7 @@ enum mmio_mitigations {
- 	MMIO_MITIGATION_OFF,
- 	MMIO_MITIGATION_UCODE_NEEDED,
- 	MMIO_MITIGATION_VERW,
-+	MMIO_MITIGATION_UNKNOWN,
- };
- 
- /* Default mitigation for Processor MMIO Stale Data vulnerabilities */
-@@ -426,12 +427,18 @@ static const char * const mmio_strings[] = {
- 	[MMIO_MITIGATION_OFF]		= "Vulnerable",
- 	[MMIO_MITIGATION_UCODE_NEEDED]	= "Vulnerable: Clear CPU buffers attempted, no microcode",
- 	[MMIO_MITIGATION_VERW]		= "Mitigation: Clear CPU buffers",
-+	[MMIO_MITIGATION_UNKNOWN]	= "Unknown: CPU is beyond its servicing period",
- };
- 
- static void __init mmio_select_mitigation(void)
- {
- 	u64 ia32_cap;
- 
-+	if (mmio_stale_data_unknown()) {
-+		mmio_mitigation = MMIO_MITIGATION_UNKNOWN;
-+		return;
-+	}
-+
- 	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
- 	    cpu_mitigations_off()) {
- 		mmio_mitigation = MMIO_MITIGATION_OFF;
-@@ -1638,6 +1645,7 @@ void cpu_bugs_smt_update(void)
- 			pr_warn_once(MMIO_MSG_SMT);
- 		break;
- 	case MMIO_MITIGATION_OFF:
-+	case MMIO_MITIGATION_UNKNOWN:
- 		break;
- 	}
- 
-@@ -2235,7 +2243,8 @@ static ssize_t tsx_async_abort_show_state(char *buf)
- 
- static ssize_t mmio_stale_data_show_state(char *buf)
- {
--	if (mmio_mitigation == MMIO_MITIGATION_OFF)
-+	if (mmio_mitigation == MMIO_MITIGATION_OFF ||
-+	    mmio_mitigation == MMIO_MITIGATION_UNKNOWN)
- 		return sysfs_emit(buf, "%s\n", mmio_strings[mmio_mitigation]);
- 
- 	if (boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 736262a76a12..82088410870e 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1286,6 +1286,22 @@ static bool arch_cap_mmio_immune(u64 ia32_cap)
- 		ia32_cap & ARCH_CAP_SBDR_SSDP_NO);
- }
- 
-+bool __init mmio_stale_data_unknown(void)
-+{
-+	u64 ia32_cap = x86_read_arch_cap_msr();
-+
-+	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
-+		return false;
-+	/*
-+	 * CPU vulnerability is unknown when, hardware doesn't set the
-+	 * immunity bits and CPU is not in the known affected list.
-+	 */
-+	if (!cpu_matches(cpu_vuln_blacklist, MMIO) &&
-+	    !arch_cap_mmio_immune(ia32_cap))
-+		return true;
-+	return false;
-+}
-+
- static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
- {
- 	u64 ia32_cap = x86_read_arch_cap_msr();
-@@ -1349,14 +1365,8 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
- 	    cpu_matches(cpu_vuln_blacklist, SRBDS | MMIO_SBDS))
- 		    setup_force_cpu_bug(X86_BUG_SRBDS);
- 
--	/*
--	 * Processor MMIO Stale Data bug enumeration
--	 *
--	 * Affected CPU list is generally enough to enumerate the vulnerability,
--	 * but for virtualization case check for ARCH_CAP MSR bits also, VMM may
--	 * not want the guest to enumerate the bug.
--	 */
--	if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
-+	 /* Processor MMIO Stale Data bug enumeration */
-+	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL &&
- 	    !arch_cap_mmio_immune(ia32_cap))
- 		setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
- 
-diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
-index 7c9b5893c30a..a2dbfc1bbc49 100644
---- a/arch/x86/kernel/cpu/cpu.h
-+++ b/arch/x86/kernel/cpu/cpu.h
-@@ -82,6 +82,7 @@ unsigned int aperfmperf_get_khz(int cpu);
- 
- extern void x86_spec_ctrl_setup_ap(void);
- extern void update_srbds_msr(void);
-+extern bool mmio_stale_data_unknown(void);
- 
- extern u64 x86_read_arch_cap_msr(void);
- 
-
-base-commit: 4a57a8400075bc5287c5c877702c68aeae2a033d
--- 
-2.35.3
-
+As I added later that adding 'tsc=unstable' into 1st kernel's cmdline can work
+around the issue. kdump works well with that.
 

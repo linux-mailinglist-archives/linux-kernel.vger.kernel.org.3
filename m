@@ -2,188 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99605767FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B4A57682A
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbiGOUKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 16:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        id S231286AbiGOUeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 16:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiGOUKK (ORCPT
+        with ESMTP id S230044AbiGOUeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 16:10:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA8A4B0F4
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:10:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0816AB82E4C
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 20:10:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A72C341C0;
-        Fri, 15 Jul 2022 20:10:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657915805;
-        bh=HJoPFEFLh4BbRDqJRXWZVqcGp9gCtdCVTUp8CpfJo00=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e9jtgz8TBxYvw4iLTMWuVKyJqUZQlf1rMd3lHZeDy9NOj7+AjOr0DQBgGiLocunWW
-         T1wdkDyQrlbYzIM28qPdLQn3yBt2YHC+/XVOstYOgBF4oUtiliRLinfsNZOUP+60nM
-         yYCtzrLVDM8yxKWNS7ldpXaLXzplYV1JQkumDFQC0CfWv16eZXeNcB9wVopjaCnswv
-         tRFRZuWmoGbGLOO2TYemv38NF3+VupdTxCmnbj1h7Av9QLIosoXDcW7q9GUJ6KWG3m
-         5ea5qBAGcVw6nWX6Er71OXbwY3h7k/TtlyhudFqUkFe2NA26bu1/H4WvopUnZWtWuV
-         zWc3+xRZG1vyQ==
-Date:   Fri, 15 Jul 2022 13:10:03 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: <instantiation>:3:3: error: invalid instruction mnemonic
- 'annotate_unret_safe'
-Message-ID: <YtHJm0Uiv4c7ihTf@dev-arch.thelio-3990X>
-References: <202207160308.NAwtZPxG-lkp@intel.com>
+        Fri, 15 Jul 2022 16:34:08 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B68011A3F
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:34:05 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id y8so7732064eda.3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:34:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wihsb0n6gcsXnN/ZX11aE7ujpg1ZGkFIavm0CFhkvw8=;
+        b=f20Of98/kyuGYRFOXnXeZH0cyAjXmxX6SdDKxnduL83h1e+eQJFgFYNrupiC5rjI99
+         zfZgW2XIVud3Nu7477yRKYqPn19f31T+sIGEFFf4chcFXm8tKWzSlyVQKNGcVzg6QURp
+         hUDWdHTcKLrv4ZDQxebHE/vURHEoGW8/H+WaLNfKD1ZmL73B5mjRFJV8Z5LCVWHTnqat
+         jEkMqoYcElP40Ofav3JDSzz9tMuhv7O978dLrYOMW5y8oJZAPXt9AQvBZyP7qd64xV3c
+         26dY+X9oYxiHw6Rk+EMiaKjU5wlYvBpMpEmw2pm/BnwontL3YTnj+eVrVyCjxBpdHGOE
+         J8/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wihsb0n6gcsXnN/ZX11aE7ujpg1ZGkFIavm0CFhkvw8=;
+        b=QU5xq/S2w5QApc2UTCj0wLtmG0DYXbJ+kwNPbwdmYF0E0FB3/3+Ri8yXtwKIyoJjo+
+         J7JB0xxlpXW4wYsHMUcgetTigvFnlFC3+RFxP3k1daWzEoaGT4x5ZpTJDh9vLRS1lXjO
+         YIjWh5vkqwZ2vCLJhzKubem8zU+0cgKQSlDCYJMov3bnPyqOS6LQm9S8slpWTBGeeOVT
+         mUM37e4rvjeHU9nLu9RYu2N+Bzjrvy11bJ0XCRzpithxPWmknCqTsLsdU3YOYhxq9O3G
+         +t3zCQO6/4/Fg1IXJBPPeg/G3zMZJ6VaGUuy5+3chA9rPYWknuyZYoCNIyTlEMrEBo7P
+         clhQ==
+X-Gm-Message-State: AJIora999vv2sFU6yJL0NLmsItyiRCfj5jlCH8QdrG/sDpohzJ3CbcEG
+        3YmJaS8h0NBGKeGlPgAIHzM=
+X-Google-Smtp-Source: AGRyM1vdCnsNftrR848qgWz3Aqx3x+Fk2pl+eTrwo1Khhu/1iF4kficM7cMbE24EebvUmyG49engEQ==
+X-Received: by 2002:a05:6402:3297:b0:43a:9233:23b4 with SMTP id f23-20020a056402329700b0043a923323b4mr21231003eda.397.1657917243605;
+        Fri, 15 Jul 2022 13:34:03 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id t21-20020aa7d4d5000000b0043a5bcf80a2sm3465243edr.60.2022.07.15.13.34.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 13:34:03 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH] regmap: permit to set reg_update_bits with bulk implementation
+Date:   Fri, 15 Jul 2022 22:10:32 +0200
+Message-Id: <20220715201032.19507-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202207160308.NAwtZPxG-lkp@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 03:22:46AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   9b59ec8d50a1f28747ceff9a4f39af5deba9540e
-> commit: 9bb2ec608a209018080ca262f771e6a9ff203b6f objtool: Update Retpoline validation
-> date:   3 weeks ago
-> config: i386-randconfig-a011-20220704 (https://download.01.org/0day-ci/archive/20220716/202207160308.NAwtZPxG-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 2da550140aa98cf6a3e96417c87f1e89e3a26047)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9bb2ec608a209018080ca262f771e6a9ff203b6f
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 9bb2ec608a209018080ca262f771e6a9ff203b6f
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> <instantiation>:3:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:11:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:19:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:27:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:35:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:43:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:51:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:59:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:67:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:75:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:83:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:91:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:99:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:107:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:115:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:123:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
->     ^
->    <instantiation>:131:3: error: invalid instruction mnemonic 'annotate_unret_safe'
->      ANNOTATE_UNRET_SAFE
->      ^~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
->     .rept ((1 << 12) / 32)
+A regmap may still require to set a custom reg_update_bits instead of
+relying to the regmap_bus_read/write general function.
 
-Looks like https://git.kernel.org/tip/3131ef39fb03bbde237d0b8260445898f3dfda5b
-should take care of this (not clang specific, GCC errors too with the
-same configuration).
+Permit to set it in the map if provided by the regmap config.
 
-Cheers,
-Nathan
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+
+If this is accepted, this is needed for net-next tree so a signed tags
+is needed, if it's not a problem.
+
+ drivers/base/regmap/regmap.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
+index 0caa5690c560..fee221c5008c 100644
+--- a/drivers/base/regmap/regmap.c
++++ b/drivers/base/regmap/regmap.c
+@@ -882,6 +882,8 @@ struct regmap *__regmap_init(struct device *dev,
+ 
+ 	if (config && config->read && config->write) {
+ 		map->reg_read  = _regmap_bus_read;
++		if (config->reg_update_bits)
++			map->reg_update_bits = config->reg_update_bits;
+ 
+ 		/* Bulk read/write */
+ 		map->read = config->read;
+-- 
+2.36.1
+

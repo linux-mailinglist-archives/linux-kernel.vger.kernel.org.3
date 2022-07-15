@@ -2,388 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D50C575C20
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67369575BFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbiGOHHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 03:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
+        id S230392AbiGOHGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 03:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbiGOHGP (ORCPT
+        with ESMTP id S230250AbiGOHFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 03:06:15 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7F7D74347
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 00:06:09 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxWeDQEdFiyyogAA--.1717S10;
-        Fri, 15 Jul 2022 15:05:59 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V15 08/15] irqchip/loongson-pch-pic: Add ACPI init support
-Date:   Fri, 15 Jul 2022 15:05:44 +0800
-Message-Id: <1657868751-30444-9-git-send-email-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
-References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
-X-CM-TRANSID: AQAAf9AxWeDQEdFiyyogAA--.1717S10
-X-Coremail-Antispam: 1UD129KBjvJXoW3Aw1UGw43tFWUXFWkuF18AFb_yoWDGF45pF
-        W5AwsxXr4UJr17Wry0kws8Zryay34a9a12gaySkFn3Jw4DXryvgF10yF1qkF1rAF45AF47
-        Zrs3K3Wj9a1UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv01xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzx
-        vE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        JVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-        AKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l
-        42xK82IY6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
-        XdbUUUUUU==
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 15 Jul 2022 03:05:53 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A20473902
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 00:05:50 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id u13so6423263lfn.5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 00:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=edM+VSgZuPwkNgVUT8py67tbaaITMsjlVWVkcCDQAsA=;
+        b=PGglcyklYCODqhqZomhrvcCPMC/MKauEc1hIuD04gsXdjA8fEVonnXExSjLSLi5B7K
+         HiQr4SMDje4DNpD2c/sEnFCJRxiVK5yrYLSzAi2uimE3Qhc+vXDcQ3UnxChwGU/jm+6r
+         yaqIlV8ehPMvSvPYqO3o8peRoRZEqAzaYLObFflVPa7w88wV+jxUawvuHiHbqd3YPrpH
+         EYFEmwIeNN5mX8pxwKgPNQHH3+RMvJoGPQX2qzbJ+RwJYIriacRLffF72knAhR6Y++oG
+         mDHZk9IOZbFJWFiGlB6RGePG5uBK/BDFxMpqSG9zlzrlbgI8bZ+pLHajRAZLtQOzKIUG
+         COYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=edM+VSgZuPwkNgVUT8py67tbaaITMsjlVWVkcCDQAsA=;
+        b=WRvQe0zCjT+0BbtRzH+hLSj2NIBvf+BmDX814UFiSdGV/+w8EZ8WWPCCFGWbGM2uh0
+         AU8jThwXASVROS6KEb7W5ia+qKd4Ed44/fDiv7BUOpmmp87HTBI3RjxqaHvWX2V5GuZM
+         ZwWrOhTyx5gJ6Er3TJZSs9aLwN5l8uKrom3el/eMWqjfjAQxXYGVUbBn08CTq/qyL/QY
+         W3jdmW8ZxJW2i1pFCxf4D/ue1WqnUmi4mV0DasU3y0bAVr3Q/Jp2yOSNDowAnnMmeIoc
+         44jega3Y6SJjBL8cIqqd3wSgoftueVKpaKQ6aFGk50jjx0hK8Dj6a3cfut5tvavirUjd
+         N2bQ==
+X-Gm-Message-State: AJIora+6r40Qb1wHknmLOfHK0YdJnTa0+pNe+xCgjDETpe3BpItBd7cw
+        cy8vkO8zWb2AesjL24P7wynD5A==
+X-Google-Smtp-Source: AGRyM1t2QQxl/yaaeAHwsPu1s24eahAxTzedj3rFOTcpWst+PXEshlEEMsPrVqxOrATaYvQNybQo/g==
+X-Received: by 2002:a05:6512:1054:b0:489:d273:be3a with SMTP id c20-20020a056512105400b00489d273be3amr7553671lfb.615.1657868748174;
+        Fri, 15 Jul 2022 00:05:48 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id v1-20020a05651203a100b00489d18e39bfsm753939lfp.288.2022.07.15.00.05.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 00:05:47 -0700 (PDT)
+Message-ID: <573830b4-096c-a227-6c14-9fe59771e56c@linaro.org>
+Date:   Fri, 15 Jul 2022 09:05:45 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/3] arm64: dts: qcom: msm8916-samsung-e2015: Add initial
+ common dtsi
+Content-Language: en-US
+To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
+        devicetree@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20220714200308.22138-1-linmengbo0689@protonmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220714200308.22138-1-linmengbo0689@protonmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Huacai Chen <chenhuacai@loongson.cn>
+On 14/07/2022 22:05, Lin, Meng-Bo wrote:
+> Samsung Galaxy E5, E7 and Grand Max are smartphones using the MSM8916 SoC
+> released in 2015.
+> 
+> e2015 and a2015 are similar, with some differences in accelerometer,
+> MUIC and Vibrator. The common parts are shared in
+> msm8916-samsung-a2015-common.dtsi to reduce duplication.
+> 
+> Add a common device tree for with initial support for:
+> 
+> - GPIO keys and vibrator
+> - Hall sensor (except Grand Max)
+> - SDHCI (internal and external storage)
+> - USB Device Mode
+> - UART (on USB connector via the SM5504 MUIC)
+> - WCNSS (WiFi/BT)
+> - Regulators
+> - S3FWRN5 NFC (except Grand Max)
+> 
+> The three devices (and all other variants of E5/E7/Grand Max released in
+> 2015) are very similar, with some differences in display, touchscreen,
+> sensors and NFC. The common parts are shared in
+> msm8916-samsung-e2015-common.dtsi to reduce duplication.
+> 
+> Unfortunately, some E5/E7/Grand Max were released with outdated 32-bit
+> only firmware and never received any update from Samsung. Since the 32-bit
+> TrustZone firmware is signed there seems to be no way currently to
+> actually boot this device tree on arm64 Linux on those variants at the
+> moment.
+> 
+> However, it is possible to use this device tree by compiling an ARM32
+> kernel instead. The device tree can be easily built on ARM32 with
+> an #include and it works really well there. To avoid confusion for others
+> it is still better to add this device tree on arm64. Otherwise it's easy
+> to forget to update this one when making some changes that affect all
+> MSM8916 devices.
+> 
+> Maybe someone finds a way to boot ARM64 Linux on those device at some
+> point. In this case I expect that this device tree can be simply used
+> as-is.
+> 
+> Co-developed-by: Stephan Gerhold <stephan@gerhold.net>
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 
-PCH-PIC/PCH-MSI stands for "Interrupt Controller" that described in
-Section 5 of "Loongson 7A1000 Bridge User Manual". For more information
-please refer Documentation/loongarch/irq-chip-model.rst.
+Please thread your patches (which is by default with git-send-email, so
+just don't disable it). Without it you are making life of reviewer much
+more difficult.
 
-Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/include/asm/irq.h            |   5 +-
- arch/loongarch/kernel/irq.c                 |   1 -
- arch/mips/include/asm/mach-loongson64/irq.h |   2 +-
- drivers/irqchip/irq-loongson-pch-pic.c      | 178 +++++++++++++++++++++++-----
- 4 files changed, 151 insertions(+), 35 deletions(-)
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile             |  3 ++
+>  .../qcom/msm8916-samsung-e2015-common.dtsi    | 39 +++++++++++++++++++
+>  .../boot/dts/qcom/msm8916-samsung-e5.dts      | 24 ++++++++++++
+>  .../boot/dts/qcom/msm8916-samsung-e7.dts      | 29 ++++++++++++++
+>  .../dts/qcom/msm8916-samsung-grandmax.dts     | 36 +++++++++++++++++
+>  5 files changed, 131 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-e5.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-e7.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-grandmax.dts
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 2f8aec2cc6db..941494553b9e 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -15,6 +15,9 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-longcheer-l8910.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-mtp.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-a3u-eur.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-a5u-eur.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-e5.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-e7.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-grandmax.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-j5.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi b/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
+> new file mode 100644
+> index 000000000000..373154ee2643
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
+> @@ -0,0 +1,39 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include "msm8916-samsung-a2015-common.dtsi"
+> +
+> +/ {
+> +	i2c-muic {
+> +		/* SM5504 MUIC instead of SM5502 */
+> +		/delete-node/ extcon@25;
+> +
+> +		muic: extcon@14 {
+> +			compatible = "siliconmitus,sm5504-muic";
+> +			reg = <0x14>;
+> +
+> +			interrupt-parent = <&msmgpio>;
+> +			interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
+> +
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&muic_int_default>;
+> +		};
+> +	};
+> +
+> +	vibrator: vibrator {
+> +		compatible = "gpio-vibrator";
+> +		enable-gpios = <&msmgpio 76 GPIO_ACTIVE_HIGH>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&motor_en_default>;
+> +	};
+> +};
+> +
+> +&msmgpio {
+> +	motor_en_default: motor-en-default {
+> +		pins = "gpio76";
+> +		function = "gpio";
+> +
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-e5.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-e5.dts
+> new file mode 100644
+> index 000000000000..777eb934eb4b
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-e5.dts
+> @@ -0,0 +1,24 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/dts-v1/;
+> +
+> +#include "msm8916-samsung-e2015-common.dtsi"
+> +
+> +/*
+> + * NOTE: The original firmware from Samsung can only boot ARM32 kernels on some
+> + * variants.
+> + * Unfortunately, the firmware is signed and cannot be replaced easily.
+> + * There seems to be no way to boot ARM64 kernels on 32-bit devices at the
+> + * moment, even though the hardware would support it.
+> + *
+> + * However, it is possible to use this device tree by compiling an ARM32 kernel
+> + * instead. For clarity and build testing this device tree is maintained next
+> + * to the other MSM8916 device trees. However, it is actually used through
+> + * arch/arm/boot/dts/qcom-msm8916-samsung-e5.dts
+> + */
+> +
+> +/ {
+> +	model = "Samsung Galaxy E5";
+> +	compatible = "samsung,e5", "qcom,msm8916";
 
-diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
-index 48c0ce4..74fef60 100644
---- a/arch/loongarch/include/asm/irq.h
-+++ b/arch/loongarch/include/asm/irq.h
-@@ -108,8 +108,9 @@ int pch_lpc_acpi_init(struct irq_domain *parent,
- 					struct acpi_madt_lpc_pic *acpi_pchlpc);
- struct irq_domain *pch_msi_acpi_init(struct irq_domain *parent,
- 					struct acpi_madt_msi_pic *acpi_pchmsi);
--struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
-+int pch_pic_acpi_init(struct irq_domain *parent,
- 					struct acpi_madt_bio_pic *acpi_pchpic);
-+int find_pch_pic(u32 gsi);
- 
- extern struct acpi_madt_lio_pic *acpi_liointc;
- extern struct acpi_madt_eio_pic *acpi_eiointc[MAX_IO_PICS];
-@@ -123,7 +124,7 @@ struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
- extern struct irq_domain *liointc_domain;
- extern struct fwnode_handle *pch_lpc_handle;
- extern struct irq_domain *pch_msi_domain[MAX_IO_PICS];
--extern struct irq_domain *pch_pic_domain[MAX_IO_PICS];
-+extern struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
- 
- extern irqreturn_t loongson3_ipi_interrupt(int irq, void *dev);
- 
-diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
-index 07d6059..866b2ee 100644
---- a/arch/loongarch/kernel/irq.c
-+++ b/arch/loongarch/kernel/irq.c
-@@ -28,7 +28,6 @@
- struct irq_domain *cpu_domain;
- struct irq_domain *liointc_domain;
- struct irq_domain *pch_msi_domain[MAX_IO_PICS];
--struct irq_domain *pch_pic_domain[MAX_IO_PICS];
- 
- /*
-  * 'what should we do if we get a hw irq event on an illegal vector'.
-diff --git a/arch/mips/include/asm/mach-loongson64/irq.h b/arch/mips/include/asm/mach-loongson64/irq.h
-index 98ea977..55e0dee 100644
---- a/arch/mips/include/asm/mach-loongson64/irq.h
-+++ b/arch/mips/include/asm/mach-loongson64/irq.h
-@@ -7,7 +7,7 @@
- #define NR_MIPS_CPU_IRQS	8
- #define NR_MAX_CHAINED_IRQS	40 /* Chained IRQs means those not directly used by devices */
- #define NR_IRQS			(NR_IRQS_LEGACY + NR_MIPS_CPU_IRQS + NR_MAX_CHAINED_IRQS + 256)
--
-+#define MAX_IO_PICS		1
- #define MIPS_CPU_IRQ_BASE 	NR_IRQS_LEGACY
- 
- #include <asm/mach-generic/irq.h>
-diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
-index a4eb8a2..b6a73c8 100644
---- a/drivers/irqchip/irq-loongson-pch-pic.c
-+++ b/drivers/irqchip/irq-loongson-pch-pic.c
-@@ -33,13 +33,40 @@
- #define PIC_REG_IDX(irq_id)	((irq_id) / PIC_COUNT_PER_REG)
- #define PIC_REG_BIT(irq_id)	((irq_id) % PIC_COUNT_PER_REG)
- 
-+static int nr_pics;
-+
- struct pch_pic {
- 	void __iomem		*base;
- 	struct irq_domain	*pic_domain;
- 	u32			ht_vec_base;
- 	raw_spinlock_t		pic_lock;
-+	u32			vec_count;
-+	u32			gsi_base;
- };
- 
-+static struct pch_pic *pch_pic_priv[MAX_IO_PICS];
-+
-+struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
-+
-+int find_pch_pic(u32 gsi)
-+{
-+	int i;
-+
-+	/* Find the PCH_PIC that manages this GSI. */
-+	for (i = 0; i < MAX_IO_PICS; i++) {
-+		struct pch_pic *priv = pch_pic_priv[i];
-+
-+		if (!priv)
-+			return -1;
-+
-+		if (gsi >= priv->gsi_base && gsi < (priv->gsi_base + priv->vec_count))
-+			return i;
-+	}
-+
-+	pr_err("ERROR: Unable to locate PCH_PIC for GSI %d\n", gsi);
-+	return -1;
-+}
-+
- static void pch_pic_bitset(struct pch_pic *priv, int offset, int bit)
- {
- 	u32 reg;
-@@ -139,6 +166,28 @@ static void pch_pic_ack_irq(struct irq_data *d)
- 	.irq_set_type		= pch_pic_set_type,
- };
- 
-+static int pch_pic_domain_translate(struct irq_domain *d,
-+					struct irq_fwspec *fwspec,
-+					unsigned long *hwirq,
-+					unsigned int *type)
-+{
-+	struct pch_pic *priv = d->host_data;
-+	struct device_node *of_node = to_of_node(fwspec->fwnode);
-+
-+	if (fwspec->param_count < 1)
-+		return -EINVAL;
-+
-+	if (of_node) {
-+		*hwirq = fwspec->param[0] + priv->ht_vec_base;
-+		*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
-+	} else {
-+		*hwirq = fwspec->param[0] - priv->gsi_base;
-+		*type = IRQ_TYPE_NONE;
-+	}
-+
-+	return 0;
-+}
-+
- static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
- 			      unsigned int nr_irqs, void *arg)
- {
-@@ -149,13 +198,13 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
- 	struct irq_fwspec parent_fwspec;
- 	struct pch_pic *priv = domain->host_data;
- 
--	err = irq_domain_translate_twocell(domain, fwspec, &hwirq, &type);
-+	err = pch_pic_domain_translate(domain, fwspec, &hwirq, &type);
- 	if (err)
- 		return err;
- 
- 	parent_fwspec.fwnode = domain->parent->fwnode;
- 	parent_fwspec.param_count = 1;
--	parent_fwspec.param[0] = hwirq + priv->ht_vec_base;
-+	parent_fwspec.param[0] = hwirq;
- 
- 	err = irq_domain_alloc_irqs_parent(domain, virq, 1, &parent_fwspec);
- 	if (err)
-@@ -170,7 +219,7 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
- }
- 
- static const struct irq_domain_ops pch_pic_domain_ops = {
--	.translate	= irq_domain_translate_twocell,
-+	.translate	= pch_pic_domain_translate,
- 	.alloc		= pch_pic_alloc,
- 	.free		= irq_domain_free_irqs_parent,
- };
-@@ -180,7 +229,7 @@ static void pch_pic_reset(struct pch_pic *priv)
- 	int i;
- 
- 	for (i = 0; i < PIC_COUNT; i++) {
--		/* Write vectored ID */
-+		/* Write vector ID */
- 		writeb(priv->ht_vec_base + i, priv->base + PCH_INT_HTVEC(i));
- 		/* Hardcode route to HT0 Lo */
- 		writeb(1, priv->base + PCH_INT_ROUTE(i));
-@@ -198,50 +247,37 @@ static void pch_pic_reset(struct pch_pic *priv)
- 	}
- }
- 
--static int pch_pic_of_init(struct device_node *node,
--				struct device_node *parent)
-+static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
-+			struct irq_domain *parent_domain, struct fwnode_handle *domain_handle,
-+			u32 gsi_base)
- {
- 	struct pch_pic *priv;
--	struct irq_domain *parent_domain;
--	int err;
- 
- 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
- 
- 	raw_spin_lock_init(&priv->pic_lock);
--	priv->base = of_iomap(node, 0);
--	if (!priv->base) {
--		err = -ENOMEM;
-+	priv->base = ioremap(addr, size);
-+	if (!priv->base)
- 		goto free_priv;
--	}
--
--	parent_domain = irq_find_host(parent);
--	if (!parent_domain) {
--		pr_err("Failed to find the parent domain\n");
--		err = -ENXIO;
--		goto iounmap_base;
--	}
- 
--	if (of_property_read_u32(node, "loongson,pic-base-vec",
--				&priv->ht_vec_base)) {
--		pr_err("Failed to determine pic-base-vec\n");
--		err = -EINVAL;
--		goto iounmap_base;
--	}
-+	priv->ht_vec_base = vec_base;
-+	priv->vec_count = ((readq(priv->base) >> 48) & 0xff) + 1;
-+	priv->gsi_base = gsi_base;
- 
- 	priv->pic_domain = irq_domain_create_hierarchy(parent_domain, 0,
--						       PIC_COUNT,
--						       of_node_to_fwnode(node),
--						       &pch_pic_domain_ops,
--						       priv);
-+						priv->vec_count, domain_handle,
-+						&pch_pic_domain_ops, priv);
-+
- 	if (!priv->pic_domain) {
- 		pr_err("Failed to create IRQ domain\n");
--		err = -ENOMEM;
- 		goto iounmap_base;
- 	}
- 
- 	pch_pic_reset(priv);
-+	pch_pic_handle[nr_pics] = domain_handle;
-+	pch_pic_priv[nr_pics++] = priv;
- 
- 	return 0;
- 
-@@ -250,7 +286,87 @@ static int pch_pic_of_init(struct device_node *node,
- free_priv:
- 	kfree(priv);
- 
--	return err;
-+	return -EINVAL;
-+}
-+
-+#ifdef CONFIG_OF
-+
-+static int pch_pic_of_init(struct device_node *node,
-+				struct device_node *parent)
-+{
-+	int err, vec_base;
-+	struct resource res;
-+	struct irq_domain *parent_domain;
-+
-+	if (of_address_to_resource(node, 0, &res))
-+		return -EINVAL;
-+
-+	parent_domain = irq_find_host(parent);
-+	if (!parent_domain) {
-+		pr_err("Failed to find the parent domain\n");
-+		return -ENXIO;
-+	}
-+
-+	if (of_property_read_u32(node, "loongson,pic-base-vec", &vec_base)) {
-+		pr_err("Failed to determine pic-base-vec\n");
-+		return -EINVAL;
-+	}
-+
-+	err = pch_pic_init(res.start, resource_size(&res), vec_base,
-+				parent_domain, of_node_to_fwnode(node), 0);
-+	if (err < 0)
-+		return err;
-+
-+	return 0;
- }
- 
- IRQCHIP_DECLARE(pch_pic, "loongson,pch-pic-1.0", pch_pic_of_init);
-+
-+#endif
-+
-+#ifdef CONFIG_ACPI
-+static int __init
-+lpcintc_parse_madt(union acpi_subtable_headers *header,
-+		       const unsigned long end)
-+{
-+	struct acpi_madt_lpc_pic *lpcintc_entry = (struct acpi_madt_lpc_pic *)header;
-+
-+	return pch_lpc_acpi_init(pch_pic_priv[0]->pic_domain, lpcintc_entry);
-+}
-+
-+static int __init acpi_cascade_irqdomain_init(void)
-+{
-+	acpi_table_parse_madt(ACPI_MADT_TYPE_LPC_PIC,
-+			      lpcintc_parse_madt, 0);
-+	return 0;
-+}
-+
-+int __init pch_pic_acpi_init(struct irq_domain *parent,
-+					struct acpi_madt_bio_pic *acpi_pchpic)
-+{
-+	int ret, vec_base;
-+	struct fwnode_handle *domain_handle;
-+
-+	if (!acpi_pchpic)
-+		return -EINVAL;
-+
-+	vec_base = acpi_pchpic->gsi_base - GSI_MIN_PCH_IRQ;
-+
-+	domain_handle = irq_domain_alloc_fwnode((phys_addr_t *)acpi_pchpic);
-+	if (!domain_handle) {
-+		pr_err("Unable to allocate domain handle\n");
-+		return -ENOMEM;
-+	}
-+
-+	ret = pch_pic_init(acpi_pchpic->address, acpi_pchpic->size,
-+				vec_base, parent, domain_handle, acpi_pchpic->gsi_base);
-+
-+	if (!ret) {
-+		if (acpi_pchpic->id == 0)
-+			acpi_cascade_irqdomain_init();
-+	} else
-+		irq_domain_free_fwnode(domain_handle);
-+
-+	return ret;
-+}
-+#endif
--- 
-1.8.3.1
+You miss bindings document.
 
+Best regards,
+Krzysztof

@@ -2,106 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0416576489
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C34D257648F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiGOPhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 11:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
+        id S233216AbiGOPl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 11:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiGOPhS (ORCPT
+        with ESMTP id S231782AbiGOPl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 11:37:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDC2558E4;
-        Fri, 15 Jul 2022 08:37:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE8F5620C4;
-        Fri, 15 Jul 2022 15:37:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3225C34115;
-        Fri, 15 Jul 2022 15:37:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657899436;
-        bh=+TdpH4LmJ65RSDe8U7gFREpB+3xhVtMCKYTl6PjP6AQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZDVxByyE06Yf/5CCHEZTotbv5fbyiY/Qsc/fUy21vl9mi0YZsXBvHSSaPscGE4B3J
-         xDN/mU+5+sxfbv/nTtpG0vr6QaftZJbfq5HGOY5XDk0FXlAK/h6ctZGZAAH4dCYf3b
-         kJAecfM0aRxl9xOh72MsfM1chbID98RZ0jPk0GQs=
-Date:   Fri, 15 Jul 2022 17:37:13 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Yury Norov <yury.norov@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v5] drivers/base: fix userspace break from using
- bin_attributes for cpumap and cpulist
-Message-ID: <YtGJqYrbSPq9q19U@kroah.com>
-References: <20220715134924.3466194-1-pauld@redhat.com>
+        Fri, 15 Jul 2022 11:41:26 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E037251A03
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:41:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 086DD12FC;
+        Fri, 15 Jul 2022 08:41:26 -0700 (PDT)
+Received: from bogus (unknown [10.57.11.76])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B8F403F70D;
+        Fri, 15 Jul 2022 08:41:23 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 16:41:20 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Conor.Dooley@microchip.com
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        Sudeep Holla <sudeep.holla@arm.com>, ionela.voinescu@arm.com,
+        pierre.gondois@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH -next] arch_topology: Fix cache attributes detection in
+ the CPU hotplug path
+Message-ID: <20220715154120.wsviffws2bsgvtio@bogus>
+References: <20220713133344.1201247-1-sudeep.holla@arm.com>
+ <0abd0acf-70a1-d546-a517-19efe60042d1@microchip.com>
+ <20220714150100.aqvmdgjkymc2dr5t@bogus>
+ <f9b13298-5a0b-34ee-44b9-90168205cc59@microchip.com>
+ <20220714160016.honjpzg35ccq4fto@bogus>
+ <50b3316b-aed0-2ef1-a7ff-69aa3991d7e4@microchip.com>
+ <20220715091121.mvwsopbh52c3zztc@bogus>
+ <8146f6e0-0682-4876-95d0-01e99141330d@microchip.com>
+ <343b8031-f2d7-0d53-6967-d2e5925703cf@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220715134924.3466194-1-pauld@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <343b8031-f2d7-0d53-6967-d2e5925703cf@microchip.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 09:49:24AM -0400, Phil Auld wrote:
-> Using bin_attributes with a 0 size causes fstat and friends to return that
-> 0 size. This breaks userspace code that retrieves the size before reading
-> the file. Rather than reverting 75bd50fa841 ("drivers/base/node.c: use
-> bin_attribute to break the size limitation of cpumap ABI") let's put in a
-> size value at compile time.
+On Fri, Jul 15, 2022 at 02:04:41PM +0000, Conor.Dooley@microchip.com wrote:
+> On 15/07/2022 10:16, Conor Dooley wrote:
+> > On 15/07/2022 10:11, Sudeep Holla wrote:
+> >> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >>
+> >> On Thu, Jul 14, 2022 at 04:10:36PM +0000, Conor.Dooley@microchip.com wrote:
+> >>> With the GFP_ATOMIC, behaviour is the same as before for me.
+> >>>
+> >>
+> >> So you still get -ENOMEM failure on your platform. It is fine, just that
+> >> I am bit curious to know why as it succeeds at device_initcall later.
+> >> I was hoping this might fix your memory allocation failure.
+> > 
+> > Correct. 
 > 
-> For cpulist the maximum size is on the order of
-> 	NR_CPUS * (ceil(log10(NR_CPUS)) + 1)/2
-> 
-> which for 8192 is 20480 (8192 * 5)/2. In order to get near that you'd need
-> a system with every other CPU on one node. For example: (0,2,4,8, ... ).
-> To simplify the math and support larger NR_CPUS in the future we are using
-> (NR_CPUS * 7)/2. We also set it to a min of PAGE_SIZE to retain the older
-> behavior for smaller NR_CPUS.
-> 
-> The cpumap file the size works out to be NR_CPUS/4 + NR_CPUS/32 - 1
-> (or NR_CPUS * 9/32 - 1) including the ","s.
-> 
-> Add a set of macros for these values to cpumask.h so they can be used in
-> multiple places. Apply these to the handful of such files in
-> drivers/base/topology.c as well as node.c.
-> 
-> As an example, on an 80 cpu 4-node system (NR_CPUS == 8192):
-> 
-> before:
-> 
-> -r--r--r--. 1 root root 0 Jul 12 14:08 system/node/node0/cpulist
-> -r--r--r--. 1 root root 0 Jul 11 17:25 system/node/node0/cpumap
-> 
-> after:
-> 
-> -r--r--r--. 1 root root 28672 Jul 13 11:32 system/node/node0/cpulist
-> -r--r--r--. 1 root root  4096 Jul 13 11:31 system/node/node0/cpumap
-> 
-> CONFIG_NR_CPUS = 16384
-> -r--r--r--. 1 root root 57344 Jul 13 14:03 system/node/node0/cpulist
-> -r--r--r--. 1 root root  4607 Jul 13 14:02 system/node/node0/cpumap
-> 
-> The actual number of cpus doesn't matter for the reported size since they
-> are based on NR_CPUS.
-> 
-> Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
-> Fixes: bb9ec13d156 ("topology: use bin_attribute to break the size limitation of cpumap ABI")
+> I take that back. On today's next with patch 2 applied, I don't see a
+> problem with no memory, so this does appear to have sorted the memory
+> allocation failure. Sorry for misleading you & thanks!
+>
 
-Nit, use the full 12 characters otherwise our tools will complain.  I'll
-go fix it up by hand...
+No worries. Glad to hear this fixed the memory allocation issue you had
+on your platform, I was hopeful based on some analysis I did. I must have
+done this from first, I think I had seen the bug in my initial testing and
+moved the call to detect_cache_attributes() into init_cpu_topology() instead
+which fixed it but broke hotplug which I didn't notice on few platforms
+I tested until Ionela tested it on a particular platform.
 
-thanks for sticking with this.
+> With my patches for store_cpu_topology on RISC-V I do see it though,
+> when called on the boot cpu. I must have mixed up which I had tested.
+> I have a fix for that though & will update my patches later.
+> 
 
-greg k-h
+Sure.
+
+-- 
+Regards,
+Sudeep

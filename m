@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A41576517
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 18:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE00457651B
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 18:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiGOQGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 12:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
+        id S232083AbiGOQJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 12:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiGOQGl (ORCPT
+        with ESMTP id S233451AbiGOQJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 12:06:41 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561FC63939;
-        Fri, 15 Jul 2022 09:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657901200; x=1689437200;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=RA6Wj2dcAYMvgXRrD1UGRGBL8oXhBhwHgtqU/ENlld0=;
-  b=YFZ4C7G+clKGVktGJR/i1YjLx9OuraZjpm4M54otmDidmME7HmSYk39b
-   8iQ3/XOTq6VXJMkayQF8h52mhiNgdhwl8E1Px5GkDwmooS1Z1yBF6F8Vk
-   Pt6MnGSLf7pPTUplXoHAjol30mQcdIRd4+QNW6kJhvDVpILuKocVEijzw
-   Yd6hUS13fzaUKkqKBmyRZfzISGzwgGSEI2+mSYwqIZn+hFCS7CBGYDrqB
-   RiItqn+/jybnBc1YALh3pUnSOId4ALXrDATsVGGozQ5UFc4Nqf07M7W/H
-   sw4Ej7Lqnigje9WAk4KQbsdE0LBMp1JSfyT1jVbJJACTFOVQhkUX5o62t
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="349791396"
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="349791396"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 09:06:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="738704952"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Jul 2022 09:06:37 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id CDF2AF1; Fri, 15 Jul 2022 19:06:45 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] media: atomisp_gmin_platform: Switch to use acpi_evaluate_dsm_typed()
-Date:   Fri, 15 Jul 2022 19:06:41 +0300
-Message-Id: <20220715160641.73526-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 15 Jul 2022 12:09:17 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1306326AEE
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 09:09:16 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id z23so9768451eju.8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 09:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bJX3p7X7GOK9qVv2gnItONL7YBZZiTBUGOlCpJZhZxY=;
+        b=eE19BX8P41MJ8LvSqx7a3/EfGqy7aFcAFZcad09sakHSWzOt11snamtSBbG0tzr8fN
+         pYAUz904GxuKrfnaZ5fTeksUP8XthihCE66GsE6uqzKjbXCJEePGfxBneo4jtTzkzI7+
+         GJdvzo78GF9F6X9KbCQMCswjQhlqAA61cHJW3HpzdbIf1Y/rxXQITjapcxG8w17HtJIA
+         kFwl0L1PNNgdcJyekKsSpJOaPN1c0ht0qlyLZEoGVarNg2PARkbVrbMX45+71Ri0ianP
+         MnNejcShBBDnMCH1nuG+bR9BCNrN9gK8KpCBbZNelS6Vo/ErQBLg8tv6vLDfBkgpp3OH
+         cogg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bJX3p7X7GOK9qVv2gnItONL7YBZZiTBUGOlCpJZhZxY=;
+        b=dWgIF6pp7daq/xdtLZuTE7fibZy0e9oFDqkhII/Rl/JuKhA3gehhTUWYIJZghu/R9L
+         s97Nx96XH/zdy7xFbtiQ+ovjiPNEBLF4ABiHDfjB2h7qyse3gzwP9DHInSv3Ba61CtaK
+         gvGhQ57hQ2/E3DoWD3Ek9p8AQkSov+iDvJPGUZYQV8beqCGmrv69moPm8xGrpr0HTetS
+         1ykDusQKs5UFby3ZM9tSL3IE5FB70aFOjz7fhgnobbwQ3XsswUM5sF2zJzIaMa8EGKXq
+         iqbutGSENRCYQQqBG9WpwxzPRG7+ODTEw5l8k1FvGp5xNPqS8IH3eXTYryS1gfeqHvQt
+         IpAg==
+X-Gm-Message-State: AJIora8iNoJNrVoRlAXSN11YtmMV3dI4ySsTLOVKnlCW7+0d5eqacwXi
+        w7t7Etzj/gP68nUMlSY5pVtBG7oCxLVhbq1UIlUY3Q==
+X-Google-Smtp-Source: AGRyM1sROcVO8OSKO7qwFvpaqjCzgRod4XOTl9oCAfqXqI/bNiuw8/q0F3IhK0EVtOw13yHA3z5xh0GJa2L7AQirM9A=
+X-Received: by 2002:a17:906:8a45:b0:72b:31d4:d537 with SMTP id
+ gx5-20020a1709068a4500b0072b31d4d537mr14666472ejc.170.1657901354531; Fri, 15
+ Jul 2022 09:09:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715064052.2673958-1-davidgow@google.com>
+In-Reply-To: <20220715064052.2673958-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 15 Jul 2022 09:09:03 -0700
+Message-ID: <CAGS_qxpMJtuqOvOhqXa-dMzvQX_88hnidCPxZhWFVdedxxSfoQ@mail.gmail.com>
+Subject: Re: [PATCH v2] kcsan: test: Add a .kunitconfig to run KCSAN tests
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Marco Elver <elver@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The acpi_evaluate_dsm_typed() provides a way to check the type of the
-object evaluated by _DSM call. Use it instead of open coded variant.
+On Thu, Jul 14, 2022 at 11:41 PM 'David Gow' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> Add a .kunitconfig file, which provides a default, working config for
+> running the KCSAN tests. Note that it needs to run on an SMP machine, so
+> to run under kunit_tool, the --qemu_args option should be used (on a
+> supported architecture, like x86_64). For example:
+> ./tools/testing/kunit/kunit.py run --arch=x86_64 --qemu_args='-smp 8'
+>                                         --kunitconfig=kernel/kcsan
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+> Reviewed-by: Marco Elver <elver@google.com>
+> Acked-by: Brendan Higgins <brendanhiggins@google.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Tested-by: Daniel Latypov <dlatypov@google.com>
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index bf527b366ab3..d4cfda07f7fb 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -1207,16 +1207,13 @@ static int gmin_get_config_dsm_var(struct device *dev,
- 	if (!strcmp(var, "CamClk"))
- 		return -EINVAL;
- 
--	obj = acpi_evaluate_dsm(handle, &atomisp_dsm_guid, 0, 0, NULL);
-+	/* Return on unexpected object type */
-+	obj = acpi_evaluate_dsm_typed(handle, &atomisp_dsm_guid, 0, 0, NULL, ACPI_TYPE_PACKAGE);
- 	if (!obj) {
- 		dev_info_once(dev, "Didn't find ACPI _DSM table.\n");
- 		return -EINVAL;
- 	}
- 
--	/* Return on unexpected object type */
--	if (obj->type != ACPI_TYPE_PACKAGE)
--		return -EINVAL;
--
- #if 0 /* Just for debugging purposes */
- 	for (i = 0; i < obj->package.count; i++) {
- 		union acpi_object *cur = &obj->package.elements[i];
--- 
-2.35.1
+Ran it and everything worked as expected.
+[16:06:34] Testing complete. Ran 141 tests: passed: 140, skipped: 1
+[16:06:34] Elapsed time: 70.861s total, 0.002s configuring, 3.519s
+building, 67.276s running
 
+Ran again with --kconfig_add=CONFIG_KCSAN_STRICT=y
+[16:08:29] Testing complete. Ran 141 tests: passed: 141
+[16:08:29] Elapsed time: 83.355s total, 1.557s configuring, 24.188s
+building, 57.582s running

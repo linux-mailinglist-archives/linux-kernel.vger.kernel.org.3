@@ -2,148 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E005761FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 14:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BE5576245
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 14:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiGOMj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 08:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
+        id S233088AbiGOMwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 08:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234937AbiGOMjr (ORCPT
+        with ESMTP id S229480AbiGOMwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 08:39:47 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201758734E;
-        Fri, 15 Jul 2022 05:39:44 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LkrSF56qHzVft5;
-        Fri, 15 Jul 2022 20:35:57 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 15 Jul 2022 20:39:33 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 15 Jul
- 2022 20:39:32 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <tytso@mit.edu>, <jack@suse.com>, <ritesh.list@gmail.com>,
-        <lczerner@redhat.com>, <akpm@osdl.org>, <shaggy@austin.ibm.com>
-CC:     <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>
-Subject: [PATCH] jbd2: Fix assertion 'jh->b_frozen_data == NULL' failure when journal aborted
-Date:   Fri, 15 Jul 2022 20:51:52 +0800
-Message-ID: <20220715125152.4022726-1-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 15 Jul 2022 08:52:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D2B93F33E
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 05:52:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657889552;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bn/sNX4ffBRjzNPcS5PuemUEc8YHP6wFTJGbO8K7n3w=;
+        b=WpbSfuuHowHosc0Bba5f0Ag39IqrH7Vlzs3Kl5Pa/aQnaNPg1kxjBtcDTEErgMGVlyAOg6
+        /pHNhx79fZ+gVb6Uu6OgZdB4gHRyLyescDXVgmgtu8OhoMl664JNumN5gFHzlpYrFXX8Zs
+        JDRhTQ81JUGc0xyJanaAtGpJ8/mgkqk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-312-C_Sj2__HN3qa7syAvV4R6g-1; Fri, 15 Jul 2022 08:52:29 -0400
+X-MC-Unique: C_Sj2__HN3qa7syAvV4R6g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7BD285A581;
+        Fri, 15 Jul 2022 12:52:28 +0000 (UTC)
+Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7138F40315D;
+        Fri, 15 Jul 2022 12:52:27 +0000 (UTC)
+Date:   Fri, 15 Jul 2022 14:52:25 +0200
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Song Liu <song@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>, dvacek@redhat.com
+Subject: Re: [RFC PATCH bpf-next 3/4] bpf: add bpf_panic() helper
+Message-ID: <YtFjCSR8YiK8E13J@samus.usersys.redhat.com>
+Mail-Followup-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Song Liu <song@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>, dvacek@redhat.com
+References: <20220711083220.2175036-1-asavkov@redhat.com>
+ <20220711083220.2175036-4-asavkov@redhat.com>
+ <CAPhsuW7xTRpLf1kyj5ejH0fV_aHCMQjUwn-uhWeNytXedh4+TQ@mail.gmail.com>
+ <CAADnVQ+ju04JAqyEbA_7oVj9uBAuL-fUP1FBr_OTygGf915RfQ@mail.gmail.com>
+ <Ys7JL9Ih3546Eynf@wtfbox.lan>
+ <CAADnVQ+6aN5nMwaTjoa9ddnT6rakgwb9oPhtdWSsgyaHP8kZ6Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAADnVQ+6aN5nMwaTjoa9ddnT6rakgwb9oPhtdWSsgyaHP8kZ6Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following process will fail assertion 'jh->b_frozen_data == NULL' in
-jbd2_journal_dirty_metadata():
+On Wed, Jul 13, 2022 at 03:20:22PM -0700, Alexei Starovoitov wrote:
+> On Wed, Jul 13, 2022 at 6:31 AM Artem Savkov <asavkov@redhat.com> wrote:
+> >
+> > On Tue, Jul 12, 2022 at 11:08:54AM -0700, Alexei Starovoitov wrote:
+> > > On Tue, Jul 12, 2022 at 10:53 AM Song Liu <song@kernel.org> wrote:
+> > > >
+> > > > >
+> > > > > +BPF_CALL_1(bpf_panic, const char *, msg)
+> > > > > +{
+> > > > > +       panic(msg);
+> > > >
+> > > > I think we should also check
+> > > >
+> > > >    capable(CAP_SYS_BOOT) && destructive_ebpf_enabled()
+> > > >
+> > > > here. Or at least, destructive_ebpf_enabled(). Otherwise, we
+> > > > may trigger panic after the sysctl is disabled.
+> > > >
+> > > > In general, I don't think sysctl is a good API, as it is global, and
+> > > > the user can easily forget to turn it back off. If possible, I would
+> > > > rather avoid adding new BPF related sysctls.
+> > >
+> > > +1. New syscal isn't warranted here.
+> > > Just CAP_SYS_BOOT would be enough here.
+> >
+> > Point taken, I'll remove sysctl knob in any further versions.
+> >
+> > > Also full blown panic() seems unnecessary.
+> > > If the motivation is to get a memory dump then crash_kexec() helper
+> > > would be more suitable.
+> > > If the goal is to reboot the system then the wrapper of sys_reboot()
+> > > is better.
+> > > Unfortunately the cover letter lacks these details.
+> >
+> > The main goal is to get the memory dump, so crash_kexec() should be enough.
+> > However panic() is a bit more versatile and it's consequences are configurable
+> > to some extent. Are there any downsides to using it?
+> 
+> versatile? In what sense? That it does a lot more than kexec?
+> That's a disadvantage.
+> We should provide bpf with minimal building blocks and let
+> bpf program decide what to do.
+> If dmesg (that is part of panic) is useful it should be its
+> own kfunc.
+> If halt is necessary -> separate kfunc as well.
+> reboot -> another kfunc.
+> 
+> Also panic() is not guaranteed to do kexec and just
+> panic is not what you stated is the goal of the helper.
 
-                   jbd2_journal_commit_transaction
-unlink(dir/a)
- jh->b_transaction = trans1
- jh->b_jlist = BJ_Metadata
-                    journal->j_running_transaction = NULL
-                    trans1->t_state = T_COMMIT
-unlink(dir/b)
- handle->h_trans = trans2
- do_get_write_access
-  jh->b_modified = 0
-  jh->b_frozen_data = frozen_buffer
-  jh->b_next_transaction = trans2
- jbd2_journal_dirty_metadata
-  is_handle_aborted
-   is_journal_aborted // return false
+Alright, if the aim is to provide the smallest building blocks then
+crash_kexec() is a better choice.
 
-           --> jbd2 abort <--
+> >
+> > > Why this destructive action cannot be delegated to user space?
+> >
+> > Going through userspace adds delays and makes it impossible to hit "exactly
+> > the right moment" thus making it unusable in most cases.
+> 
+> What would be an example of that?
+> kexec is not instant either.
 
-                     while (commit_transaction->t_buffers)
-                      if (is_journal_aborted)
-                       jbd2_journal_refile_buffer
-                        __jbd2_journal_refile_buffer
-                         WRITE_ONCE(jh->b_transaction,
-						jh->b_next_transaction)
-                         WRITE_ONCE(jh->b_next_transaction, NULL)
-                         __jbd2_journal_file_buffer(jh, BJ_Reserved)
-        J_ASSERT_JH(jh, jh->b_frozen_data == NULL) // assertion failure !
+With kexec at least the thread it got called in is in a proper state. I
+guess it is possible to achieve this by signalling userspace to do
+kexec/panic and then block the thread somehow but that won't work in a
+single-cpu case. Or am I missing something?
 
-The reproducer (See detail in [Link]) reports:
- ------------[ cut here ]------------
- kernel BUG at fs/jbd2/transaction.c:1629!
- invalid opcode: 0000 [#1] PREEMPT SMP
- CPU: 2 PID: 584 Comm: unlink Tainted: G        W
- 5.19.0-rc6-00115-g4a57a8400075-dirty #697
- RIP: 0010:jbd2_journal_dirty_metadata+0x3c5/0x470
- RSP: 0018:ffffc90000be7ce0 EFLAGS: 00010202
- Call Trace:
-  <TASK>
-  __ext4_handle_dirty_metadata+0xa0/0x290
-  ext4_handle_dirty_dirblock+0x10c/0x1d0
-  ext4_delete_entry+0x104/0x200
-  __ext4_unlink+0x22b/0x360
-  ext4_unlink+0x275/0x390
-  vfs_unlink+0x20b/0x4c0
-  do_unlinkat+0x42f/0x4c0
-  __x64_sys_unlink+0x37/0x50
-  do_syscall_64+0x35/0x80
-
-After journal aborting, __jbd2_journal_refile_buffer() is executed with
-holding @jh->b_state_lock, we can fix it by moving 'is_handle_aborted()'
-into the area protected by @jh->b_state_lock.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216251
-Fixes: 470decc613ab20 ("[PATCH] jbd2: initial copy of files from jbd")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
----
- fs/jbd2/transaction.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/fs/jbd2/transaction.c b/fs/jbd2/transaction.c
-index e9c308ae475f..e0377f558eb1 100644
---- a/fs/jbd2/transaction.c
-+++ b/fs/jbd2/transaction.c
-@@ -1486,8 +1486,6 @@ int jbd2_journal_dirty_metadata(handle_t *handle, struct buffer_head *bh)
- 	struct journal_head *jh;
- 	int ret = 0;
- 
--	if (is_handle_aborted(handle))
--		return -EROFS;
- 	if (!buffer_jbd(bh))
- 		return -EUCLEAN;
- 
-@@ -1534,6 +1532,18 @@ int jbd2_journal_dirty_metadata(handle_t *handle, struct buffer_head *bh)
- 	journal = transaction->t_journal;
- 	spin_lock(&jh->b_state_lock);
- 
-+	if (is_handle_aborted(handle)) {
-+		/*
-+		 * Check journal aborting with @jh->b_state_lock locked,
-+		 * since 'jh->b_transaction' could be replaced with
-+		 * 'jh->b_next_transaction' during old transaction
-+		 * committing if journal aborted, which may fail
-+		 * assertion on 'jh->b_frozen_data == NULL'.
-+		 */
-+		ret = -EROFS;
-+		goto out_unlock_bh;
-+	}
-+
- 	if (jh->b_modified == 0) {
- 		/*
- 		 * This buffer's got modified and becoming part
 -- 
-2.31.1
+ Artem
 

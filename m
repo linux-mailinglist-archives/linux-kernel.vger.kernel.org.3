@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E973A578C40
+	by mail.lfdr.de (Postfix) with ESMTP id 9D549578C3F
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 22:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236086AbiGRU5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 16:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
+        id S236181AbiGRU5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 16:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235983AbiGRU5D (ORCPT
+        with ESMTP id S235905AbiGRU5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Jul 2022 16:57:03 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B63C32B82
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BFB32B89
         for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:57:00 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id l9-20020a056830268900b006054381dd35so10234029otu.4
+Received: by mail-ot1-x336.google.com with SMTP id g19-20020a9d1293000000b0061c7bfda5dfso9879974otg.1
         for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BguhXpMM+bZOyQ8uv1giPWb1tgh33TeNy2eh10Br27A=;
-        b=An8lC8KfY06PYa1RYp4mbjKfj0VonTQ6ApbL99AYyiYT7Vnx1YQyEW0za0mQMgLrMm
-         AeRpEfc/qW2KV2Z2rwl0Ba1URVJywnNZxUMhdNJ7bEPNu7ODEnzl4FaSGdBDKNo+I/84
-         cvhK2fttexFfQRZB7BYtY501FMmhYpq0ayFqHuLXgYvHjfhFHF3c/zOtBJ29nGds674H
-         9onUBYD20iVc84ljkocmYdk2ks+gO8SCVc+0zlttHT6gUZzm+oyOAexB8NsepmXZaTMe
-         MaSIK65qoZ5NztCKlnXjCH/ltXfTea9c4/IhGuWJog6L4f84CfZGtq1IGrwadzxJxr6P
-         hkeQ==
+        bh=MaL6nUZp1qnzFg5lPX4aXiHwyJgQQ7FQ0456bzIqrd4=;
+        b=FjumPJRgFY5eeB5lGRtrx/X4WGR/RNXvsyxCmxHJGjWmWxjxX43Oy0h9WpbVs/G9Or
+         ++LnnUzMDM8N8WiAPGWENuyv5Ge8ng3s0C9MIWQJBIwePOUDvymCk63MTBmkp4IAkg/j
+         hF+eXYwEDIKVMRvbLEPtf3Cn1mQJhUImeG0A/Cacpl5VwDjJKp0cDJw+hX+5yIcoFNw9
+         DfGEGZ3qecfcqrN2NDwhv1m0FYtpyNlvIMRajW0azcLEgmC/dqMQFkyOByA2Z0UsnNi2
+         X7NY6L9CjaaV2eaWXNI7uXUX57pTXfHIfJ1+F560d5GcQzkUlB5F1+uYxnkzbcG9kMIV
+         u4Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BguhXpMM+bZOyQ8uv1giPWb1tgh33TeNy2eh10Br27A=;
-        b=iy1F1xrE1cCNB8Q11ZMidY/kLQ3gyvXL+527eTb1WO8OEDvSLV/KzM52A9/nDqbr+e
-         gujAiDWH58F0ZN1rkHCzy2S/pD4BO+lnxkt8TLvY0Eo32RC8x4mQr1ZTkn7/otPSwr0V
-         ZWrpTyIZ1ZkVmz8EsZSqS6mcQG7ewOo2MuqAHFDAQ4OJn+UDSEhS5kcWhaTabujPZCzH
-         xtFAfliBIC1P47cLHeOgHBY3keUum9LvNcltNhxE8ALVP1+bd+4PB0Dz5yDYwwK2ZyrV
-         uthrPW/dPXR1mK1G0ZvD5nTyUfFooZQ6V4iGOUW7NbwppLCxWZB4PhAJEUauQWitYG3A
-         hTJA==
-X-Gm-Message-State: AJIora8oWiJlOnDCtsQuNKzdBd3HQejJxWBoejq43U/XWuAcCzoLPGph
-        r1tsrbrjeaetbCjEFPwSBEbLlg==
-X-Google-Smtp-Source: AGRyM1v2qj1xxNiiv3R+F6Gxia9t/N/x49Yw5ZzYzY/xYyGBpQ75JZuuJ/VfwKJUhUPqPwrOe5f17w==
-X-Received: by 2002:a05:6830:1e31:b0:61c:ac69:94ce with SMTP id t17-20020a0568301e3100b0061cac6994cemr1559544otr.282.1658177819445;
-        Mon, 18 Jul 2022 13:56:59 -0700 (PDT)
+        bh=MaL6nUZp1qnzFg5lPX4aXiHwyJgQQ7FQ0456bzIqrd4=;
+        b=w5Dt4V75vILZ3I41JuKk+k2oVt6k72cCAXduBXIis4R5jSxNmDw6eRXl/7+h5bxGxb
+         lmDlDb0Kcj1+GOtXC2lTPY/nXRtiCRvA0AW3igsBhp6jLYCMDhJH2QxuxRD75zlCIEXG
+         Iunsqxro4m5EwHnoDQBXyceP2gifnvWZd2RG96IG/tIxRgNqywpQnVzRBq8/VrA9BnaZ
+         rXshuBp32AZ32VvYiuTJvdsSxHNzBPdyTY4osWaoVWKo/MY/XChu4yjucfZbVCAdvn2f
+         q1OJx6UvuvmGd75bzewkIoXuYd6phq5MRL439lqxNFQl/Njts4+DhnG9YAk0eEpJoVE7
+         QDdw==
+X-Gm-Message-State: AJIora9saDfAR78TUN9VcAGbSmiGwdoCon06aqVN0zEtyxr1bQyfnYIw
+        rBPZ4H66dQnVX3jfWuQ9F2+swA==
+X-Google-Smtp-Source: AGRyM1v3ju4pWLaLyB7J9v+/Op4/p9RZ3pLizVgSCnsZE/a78N8riyvlWvFOIZs2qlRWVbAqriefDg==
+X-Received: by 2002:a9d:5a05:0:b0:61c:32a3:f402 with SMTP id v5-20020a9d5a05000000b0061c32a3f402mr11582713oth.107.1658177820213;
+        Mon, 18 Jul 2022 13:57:00 -0700 (PDT)
 Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id l8-20020a4ab2c8000000b0035eb4e5a6cbsm5252065ooo.33.2022.07.18.13.56.58
+        by smtp.gmail.com with ESMTPSA id l8-20020a4ab2c8000000b0035eb4e5a6cbsm5252065ooo.33.2022.07.18.13.56.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 13:56:59 -0700 (PDT)
+        Mon, 18 Jul 2022 13:57:00 -0700 (PDT)
 From:   William Breathitt Gray <william.gray@linaro.org>
 To:     linus.walleij@linaro.org, brgl@bgdev.pl
 Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         William Breathitt Gray <william.gray@linaro.org>,
-        John Hentges <jhentges@accesio.com>,
-        Jay Dolan <jay.dolan@accesio.com>
-Subject: [PATCH v3 5/6] gpio: 104-idi-48: Implement and utilize register structures
-Date:   Fri, 15 Jul 2022 14:52:27 -0400
-Message-Id: <300ea3f4c4b1ebc0ef934875fdefe9402ab1e9a4.1657907849.git.william.gray@linaro.org>
+        Fred Eckert <Frede@cmslaser.com>
+Subject: [PATCH v3 6/6] gpio: gpio-mm: Implement and utilize register structures
+Date:   Fri, 15 Jul 2022 14:52:28 -0400
+Message-Id: <124fb6518c06db7ac5c6032c8d4fe429611ac3ed.1657907849.git.william.gray@linaro.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1657907849.git.william.gray@linaro.org>
 References: <cover.1657907849.git.william.gray@linaro.org>
@@ -72,296 +71,350 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Reduce magic numbers and improve code readability by implementing and
-utilizing named register data structures. The 104-IDI-48 device features
-an Intel 8255 compatible GPIO interface, so the i8255 GPIO module is
+utilizing named register data structures. The GPIO-MM device features an
+Intel 8255 compatible GPIO interface, so the i8255 GPIO module is
 selected and utilized as well.
 
-Cc: John Hentges <jhentges@accesio.com>
-Cc: Jay Dolan <jay.dolan@accesio.com>
+Tested-by: Fred Eckert <Frede@cmslaser.com>
 Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 ---
 Changes in v3:
  - Include "gpio-i8255.h" instead of <linux/gpio/i8255.h>
  - Import I8255 symbol namespace
- - Consolidate 'lock' and 'ack_lock' into a single spinlock 'lock'
-   synchronizing I/O as well as protecting irq_mask states
+ - Define GPIOMM_NUM_PPI as the number of PPI (2)
+ - Utilize i8255_state struct; replaces 'control_state' and 'lock' with
+   'ppi_state'
+ - Call i8255_state_init() to initialize 'ppi_state'
 
- drivers/gpio/Kconfig           |   1 +
- drivers/gpio/gpio-104-idi-48.c | 141 ++++++++++++++-------------------
- 2 files changed, 60 insertions(+), 82 deletions(-)
+ drivers/gpio/Kconfig        |   1 +
+ drivers/gpio/gpio-gpio-mm.c | 202 +++++++-----------------------------
+ 2 files changed, 41 insertions(+), 162 deletions(-)
 
 diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 1d4529c39dc6..253a03ee3fa4 100644
+index 253a03ee3fa4..5202e3b6f2c6 100644
 --- a/drivers/gpio/Kconfig
 +++ b/drivers/gpio/Kconfig
-@@ -868,6 +868,7 @@ config GPIO_104_IDI_48
+@@ -889,6 +889,7 @@ config GPIO_GPIO_MM
+ 	tristate "Diamond Systems GPIO-MM GPIO support"
  	depends on PC104
  	select ISA_BUS_API
- 	select GPIOLIB_IRQCHIP
 +	select GPIO_I8255
  	help
- 	  Enables GPIO support for the ACCES 104-IDI-48 family (104-IDI-48A,
- 	  104-IDI-48AC, 104-IDI-48B, 104-IDI-48BC). The base port addresses for
-diff --git a/drivers/gpio/gpio-104-idi-48.c b/drivers/gpio/gpio-104-idi-48.c
-index 9521ece3ebef..380ab1221a66 100644
---- a/drivers/gpio/gpio-104-idi-48.c
-+++ b/drivers/gpio/gpio-104-idi-48.c
-@@ -6,7 +6,6 @@
-  * This driver supports the following ACCES devices: 104-IDI-48A,
-  * 104-IDI-48AC, 104-IDI-48B, and 104-IDI-48BC.
+ 	  Enables GPIO support for the Diamond Systems GPIO-MM and GPIO-MM-12.
+ 
+diff --git a/drivers/gpio/gpio-gpio-mm.c b/drivers/gpio/gpio-gpio-mm.c
+index 097a06463d01..75b3ceeddbaf 100644
+--- a/drivers/gpio/gpio-gpio-mm.c
++++ b/drivers/gpio/gpio-gpio-mm.c
+@@ -6,7 +6,7 @@
+  * This driver supports the following Diamond Systems devices: GPIO-MM and
+  * GPIO-MM-12.
   */
 -#include <linux/bitmap.h>
++#include <linux/bits.h>
  #include <linux/bitops.h>
  #include <linux/device.h>
  #include <linux/errno.h>
-@@ -20,6 +19,11 @@
+@@ -17,7 +17,10 @@
+ #include <linux/kernel.h>
  #include <linux/module.h>
  #include <linux/moduleparam.h>
- #include <linux/spinlock.h>
-+#include <linux/types.h>
+-#include <linux/spinlock.h>
 +
 +#include "gpio-i8255.h"
 +
 +MODULE_IMPORT_NS(I8255);
  
- #define IDI_48_EXTENT 8
- #define MAX_NUM_IDI_48 max_num_isa_dev(IDI_48_EXTENT)
-@@ -33,21 +37,34 @@ static unsigned int irq[MAX_NUM_IDI_48];
- module_param_hw_array(irq, uint, irq, NULL, 0);
- MODULE_PARM_DESC(irq, "ACCES 104-IDI-48 interrupt line numbers");
+ #define GPIOMM_EXTENT 8
+ #define MAX_NUM_GPIOMM max_num_isa_dev(GPIOMM_EXTENT)
+@@ -27,32 +30,26 @@ static unsigned int num_gpiomm;
+ module_param_hw_array(base, uint, ioport, &num_gpiomm, 0);
+ MODULE_PARM_DESC(base, "Diamond Systems GPIO-MM base addresses");
  
-+/**
-+ * struct idi_48_reg - device register structure
-+ * @port0:	Port 0 Inputs
-+ * @unused:	Unused
-+ * @port1:	Port 1 Inputs
-+ * @irq:	Read: IRQ Status Register/IRQ Clear
-+ *		Write: IRQ Enable/Disable
-+ */
-+struct idi_48_reg {
-+	u8 port0[3];
-+	u8 unused;
-+	u8 port1[3];
-+	u8 irq;
-+};
++#define GPIOMM_NUM_PPI 2
 +
  /**
-  * struct idi_48_gpio - GPIO device private data structure
-  * @chip:	instance of the gpio_chip
-  * @lock:	synchronization lock to prevent I/O race conditions
-- * @ack_lock:	synchronization lock to prevent IRQ handler race conditions
-  * @irq_mask:	input bits affected by interrupts
+  * struct gpiomm_gpio - GPIO device private data structure
+- * @chip:	instance of the gpio_chip
+- * @io_state:	bit I/O state (whether bit is set to input or output)
+- * @out_state:	output bits state
+- * @control:	Control registers state
+- * @lock:	synchronization lock to prevent I/O race conditions
 - * @base:	base port address of the GPIO device
-+ * @reg:	I/O address offset for the device registers
-  * @cos_enb:	Change-Of-State IRQ enable boundaries mask
++ * @chip:		instance of the gpio_chip
++ * @ppi_state:		Programmable Peripheral Interface group states
++ * @ppi:		Programmable Peripheral Interface groups
   */
- struct idi_48_gpio {
+ struct gpiomm_gpio {
  	struct gpio_chip chip;
--	raw_spinlock_t lock;
--	spinlock_t ack_lock;
-+	spinlock_t lock;
- 	unsigned char irq_mask[6];
+-	unsigned char io_state[6];
+-	unsigned char out_state[6];
+-	unsigned char control[2];
+-	spinlock_t lock;
 -	void __iomem *base;
-+	struct idi_48_reg __iomem *reg;
- 	unsigned char cos_enb;
++	struct i8255_state ppi_state[GPIOMM_NUM_PPI];
++	struct i8255 __iomem *ppi;
  };
  
-@@ -64,42 +81,18 @@ static int idi_48_gpio_direction_input(struct gpio_chip *chip, unsigned offset)
- static int idi_48_gpio_get(struct gpio_chip *chip, unsigned offset)
+ static int gpiomm_gpio_get_direction(struct gpio_chip *chip,
+ 	unsigned int offset)
  {
- 	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(chip);
--	unsigned i;
--	static const unsigned int register_offset[6] = { 0, 1, 2, 4, 5, 6 };
--	void __iomem *port_addr;
--	unsigned mask;
--
--	for (i = 0; i < 48; i += 8)
--		if (offset < i + 8) {
--			port_addr = idi48gpio->base + register_offset[i / 8];
--			mask = BIT(offset - i);
--
--			return !!(ioread8(port_addr) & mask);
--		}
-+	const void __iomem *const ppi = idi48gpio->reg;
+ 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
+-	const unsigned int port = offset / 8;
+-	const unsigned int mask = BIT(offset % 8);
  
--	/* The following line should never execute since offset < 48 */
--	return 0;
-+	return i8255_get(ppi, offset);
+-	if (gpiommgpio->io_state[port] & mask)
++	if (i8255_get_direction(gpiommgpio->ppi_state, offset))
+ 		return GPIO_LINE_DIRECTION_IN;
+ 
+ 	return GPIO_LINE_DIRECTION_OUT;
+@@ -62,35 +59,8 @@ static int gpiomm_gpio_direction_input(struct gpio_chip *chip,
+ 	unsigned int offset)
+ {
+ 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
+-	const unsigned int io_port = offset / 8;
+-	const unsigned int control_port = io_port / 3;
+-	unsigned long flags;
+-	unsigned int control;
+-
+-	spin_lock_irqsave(&gpiommgpio->lock, flags);
+-
+-	/* Check if configuring Port C */
+-	if (io_port == 2 || io_port == 5) {
+-		/* Port C can be configured by nibble */
+-		if (offset % 8 > 3) {
+-			gpiommgpio->io_state[io_port] |= 0xF0;
+-			gpiommgpio->control[control_port] |= BIT(3);
+-		} else {
+-			gpiommgpio->io_state[io_port] |= 0x0F;
+-			gpiommgpio->control[control_port] |= BIT(0);
+-		}
+-	} else {
+-		gpiommgpio->io_state[io_port] |= 0xFF;
+-		if (io_port == 0 || io_port == 3)
+-			gpiommgpio->control[control_port] |= BIT(4);
+-		else
+-			gpiommgpio->control[control_port] |= BIT(1);
+-	}
+ 
+-	control = BIT(7) | gpiommgpio->control[control_port];
+-	iowrite8(control, gpiommgpio->base + 3 + control_port*4);
+-
+-	spin_unlock_irqrestore(&gpiommgpio->lock, flags);
++	i8255_direction_input(gpiommgpio->ppi, gpiommgpio->ppi_state, offset);
+ 
+ 	return 0;
+ }
+@@ -99,44 +69,9 @@ static int gpiomm_gpio_direction_output(struct gpio_chip *chip,
+ 	unsigned int offset, int value)
+ {
+ 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
+-	const unsigned int io_port = offset / 8;
+-	const unsigned int control_port = io_port / 3;
+-	const unsigned int mask = BIT(offset % 8);
+-	const unsigned int out_port = (io_port > 2) ? io_port + 1 : io_port;
+-	unsigned long flags;
+-	unsigned int control;
+-
+-	spin_lock_irqsave(&gpiommgpio->lock, flags);
+-
+-	/* Check if configuring Port C */
+-	if (io_port == 2 || io_port == 5) {
+-		/* Port C can be configured by nibble */
+-		if (offset % 8 > 3) {
+-			gpiommgpio->io_state[io_port] &= 0x0F;
+-			gpiommgpio->control[control_port] &= ~BIT(3);
+-		} else {
+-			gpiommgpio->io_state[io_port] &= 0xF0;
+-			gpiommgpio->control[control_port] &= ~BIT(0);
+-		}
+-	} else {
+-		gpiommgpio->io_state[io_port] &= 0x00;
+-		if (io_port == 0 || io_port == 3)
+-			gpiommgpio->control[control_port] &= ~BIT(4);
+-		else
+-			gpiommgpio->control[control_port] &= ~BIT(1);
+-	}
+-
+-	if (value)
+-		gpiommgpio->out_state[io_port] |= mask;
+-	else
+-		gpiommgpio->out_state[io_port] &= ~mask;
+-
+-	control = BIT(7) | gpiommgpio->control[control_port];
+-	iowrite8(control, gpiommgpio->base + 3 + control_port*4);
+ 
+-	iowrite8(gpiommgpio->out_state[io_port], gpiommgpio->base + out_port);
+-
+-	spin_unlock_irqrestore(&gpiommgpio->lock, flags);
++	i8255_direction_output(gpiommgpio->ppi, gpiommgpio->ppi_state, offset,
++			       value);
+ 
+ 	return 0;
+ }
+@@ -144,47 +79,16 @@ static int gpiomm_gpio_direction_output(struct gpio_chip *chip,
+ static int gpiomm_gpio_get(struct gpio_chip *chip, unsigned int offset)
+ {
+ 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
+-	const unsigned int port = offset / 8;
+-	const unsigned int mask = BIT(offset % 8);
+-	const unsigned int in_port = (port > 2) ? port + 1 : port;
+-	unsigned long flags;
+-	unsigned int port_state;
+-
+-	spin_lock_irqsave(&gpiommgpio->lock, flags);
+-
+-	/* ensure that GPIO is set for input */
+-	if (!(gpiommgpio->io_state[port] & mask)) {
+-		spin_unlock_irqrestore(&gpiommgpio->lock, flags);
+-		return -EINVAL;
+-	}
+-
+-	port_state = ioread8(gpiommgpio->base + in_port);
+-
+-	spin_unlock_irqrestore(&gpiommgpio->lock, flags);
+ 
+-	return !!(port_state & mask);
++	return i8255_get(gpiommgpio->ppi, offset);
  }
  
- static int idi_48_gpio_get_multiple(struct gpio_chip *chip, unsigned long *mask,
+-static const size_t ports[] = { 0, 1, 2, 4, 5, 6 };
+-
+ static int gpiomm_gpio_get_multiple(struct gpio_chip *chip, unsigned long *mask,
  	unsigned long *bits)
  {
- 	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(chip);
+ 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
 -	unsigned long offset;
 -	unsigned long gpio_mask;
--	static const size_t ports[] = { 0, 1, 2, 4, 5, 6 };
 -	void __iomem *port_addr;
 -	unsigned long port_state;
 -
 -	/* clear bits array to a clean slate */
 -	bitmap_zero(bits, chip->ngpio);
-+	const void __iomem *const ppi = idi48gpio->reg;
  
 -	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
--		port_addr = idi48gpio->base + ports[offset / 8];
+-		port_addr = gpiommgpio->base + ports[offset / 8];
 -		port_state = ioread8(port_addr) & gpio_mask;
 -
 -		bitmap_set_value8(bits, port_state, offset);
 -	}
-+	i8255_get_multiple(ppi, mask, bits, chip->ngpio);
++	i8255_get_multiple(gpiommgpio->ppi, mask, bits, chip->ngpio);
  
  	return 0;
  }
-@@ -113,30 +106,24 @@ static void idi_48_irq_mask(struct irq_data *data)
- 	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
- 	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(chip);
- 	const unsigned offset = irqd_to_hwirq(data);
--	unsigned i;
--	unsigned mask;
--	unsigned boundary;
-+	const unsigned long boundary = offset / 8;
-+	const unsigned long mask = BIT(offset % 8);
- 	unsigned long flags;
- 
--	for (i = 0; i < 48; i += 8)
--		if (offset < i + 8) {
--			mask = BIT(offset - i);
--			boundary = i / 8;
+@@ -193,49 +97,17 @@ static void gpiomm_gpio_set(struct gpio_chip *chip, unsigned int offset,
+ 	int value)
+ {
+ 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
+-	const unsigned int port = offset / 8;
+-	const unsigned int mask = BIT(offset % 8);
+-	const unsigned int out_port = (port > 2) ? port + 1 : port;
+-	unsigned long flags;
 -
--			idi48gpio->irq_mask[boundary] &= ~mask;
-+	spin_lock_irqsave(&idi48gpio->lock, flags);
- 
--			if (!idi48gpio->irq_mask[boundary]) {
--				idi48gpio->cos_enb &= ~BIT(boundary);
-+	idi48gpio->irq_mask[boundary] &= ~mask;
- 
--				raw_spin_lock_irqsave(&idi48gpio->lock, flags);
-+	/* Exit early if there are still input lines with IRQ unmasked */
-+	if (idi48gpio->irq_mask[boundary])
-+		goto exit;
- 
--				iowrite8(idi48gpio->cos_enb, idi48gpio->base + 7);
-+	idi48gpio->cos_enb &= ~BIT(boundary);
- 
--				raw_spin_unlock_irqrestore(&idi48gpio->lock, flags);
--			}
-+	iowrite8(idi48gpio->cos_enb, &idi48gpio->reg->irq);
- 
--			return;
--		}
-+exit:
-+	spin_unlock_irqrestore(&idi48gpio->lock, flags);
- }
- 
- static void idi_48_irq_unmask(struct irq_data *data)
-@@ -144,32 +131,27 @@ static void idi_48_irq_unmask(struct irq_data *data)
- 	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
- 	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(chip);
- 	const unsigned offset = irqd_to_hwirq(data);
--	unsigned i;
--	unsigned mask;
--	unsigned boundary;
-+	const unsigned long boundary = offset / 8;
-+	const unsigned long mask = BIT(offset % 8);
- 	unsigned prev_irq_mask;
- 	unsigned long flags;
- 
--	for (i = 0; i < 48; i += 8)
--		if (offset < i + 8) {
--			mask = BIT(offset - i);
--			boundary = i / 8;
--			prev_irq_mask = idi48gpio->irq_mask[boundary];
-+	spin_lock_irqsave(&idi48gpio->lock, flags);
- 
--			idi48gpio->irq_mask[boundary] |= mask;
-+	prev_irq_mask = idi48gpio->irq_mask[boundary];
- 
--			if (!prev_irq_mask) {
--				idi48gpio->cos_enb |= BIT(boundary);
-+	idi48gpio->irq_mask[boundary] |= mask;
- 
--				raw_spin_lock_irqsave(&idi48gpio->lock, flags);
-+	/* Exit early if IRQ was already unmasked for this boundary */
-+	if (prev_irq_mask)
-+		goto exit;
- 
--				iowrite8(idi48gpio->cos_enb, idi48gpio->base + 7);
-+	idi48gpio->cos_enb |= BIT(boundary);
- 
--				raw_spin_unlock_irqrestore(&idi48gpio->lock, flags);
--			}
-+	iowrite8(idi48gpio->cos_enb, &idi48gpio->reg->irq);
- 
--			return;
--		}
-+exit:
-+	spin_unlock_irqrestore(&idi48gpio->lock, flags);
- }
- 
- static int idi_48_irq_set_type(struct irq_data *data, unsigned flow_type)
-@@ -200,17 +182,13 @@ static irqreturn_t idi_48_irq_handler(int irq, void *dev_id)
- 	unsigned long gpio;
- 	struct gpio_chip *const chip = &idi48gpio->chip;
- 
--	spin_lock(&idi48gpio->ack_lock);
+-	spin_lock_irqsave(&gpiommgpio->lock, flags);
 -
--	raw_spin_lock(&idi48gpio->lock);
+-	if (value)
+-		gpiommgpio->out_state[port] |= mask;
+-	else
+-		gpiommgpio->out_state[port] &= ~mask;
 -
--	cos_status = ioread8(idi48gpio->base + 7);
-+	spin_lock(&idi48gpio->lock);
+-	iowrite8(gpiommgpio->out_state[port], gpiommgpio->base + out_port);
  
--	raw_spin_unlock(&idi48gpio->lock);
-+	cos_status = ioread8(&idi48gpio->reg->irq);
- 
- 	/* IRQ Status (bit 6) is active low (0 = IRQ generated by device) */
- 	if (cos_status & BIT(6)) {
--		spin_unlock(&idi48gpio->ack_lock);
-+		spin_unlock(&idi48gpio->lock);
- 		return IRQ_NONE;
- 	}
- 
-@@ -228,7 +206,7 @@ static irqreturn_t idi_48_irq_handler(int irq, void *dev_id)
- 		}
- 	}
- 
--	spin_unlock(&idi48gpio->ack_lock);
-+	spin_unlock(&idi48gpio->lock);
- 
- 	return IRQ_HANDLED;
+-	spin_unlock_irqrestore(&gpiommgpio->lock, flags);
++	i8255_set(gpiommgpio->ppi, gpiommgpio->ppi_state, offset, value);
  }
-@@ -250,8 +228,8 @@ static int idi_48_irq_init_hw(struct gpio_chip *gc)
- 	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(gc);
  
- 	/* Disable IRQ by default */
--	iowrite8(0, idi48gpio->base + 7);
--	ioread8(idi48gpio->base + 7);
-+	iowrite8(0, &idi48gpio->reg->irq);
-+	ioread8(&idi48gpio->reg->irq);
+ static void gpiomm_gpio_set_multiple(struct gpio_chip *chip,
+ 	unsigned long *mask, unsigned long *bits)
+ {
+ 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
+-	unsigned long offset;
+-	unsigned long gpio_mask;
+-	size_t index;
+-	void __iomem *port_addr;
+-	unsigned long bitmask;
+-	unsigned long flags;
+-
+-	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
+-		index = offset / 8;
+-		port_addr = gpiommgpio->base + ports[index];
+-
+-		bitmask = bitmap_get_value8(bits, offset) & gpio_mask;
+-
+-		spin_lock_irqsave(&gpiommgpio->lock, flags);
  
- 	return 0;
+-		/* update output state data and set device gpio register */
+-		gpiommgpio->out_state[index] &= ~gpio_mask;
+-		gpiommgpio->out_state[index] |= bitmask;
+-		iowrite8(gpiommgpio->out_state[index], port_addr);
+-
+-		spin_unlock_irqrestore(&gpiommgpio->lock, flags);
+-	}
++	i8255_set_multiple(gpiommgpio->ppi, gpiommgpio->ppi_state, mask, bits,
++			   chip->ngpio);
  }
-@@ -273,8 +251,8 @@ static int idi_48_probe(struct device *dev, unsigned int id)
+ 
+ #define GPIOMM_NGPIO 48
+@@ -250,6 +122,21 @@ static const char *gpiomm_names[GPIOMM_NGPIO] = {
+ 	"Port 2C2", "Port 2C3", "Port 2C4", "Port 2C5", "Port 2C6", "Port 2C7",
+ };
+ 
++static void gpiomm_init_dio(struct i8255 __iomem *const ppi,
++			    struct i8255_state *const ppi_state)
++{
++	const unsigned long ngpio = 24;
++	const unsigned long mask = GENMASK(ngpio - 1, 0);
++	const unsigned long bits = 0;
++	unsigned long i;
++
++	/* Initialize all GPIO to output 0 */
++	for (i = 0; i < GPIOMM_NUM_PPI; i++) {
++		i8255_mode0_output(&ppi[i]);
++		i8255_set_multiple(&ppi[i], &ppi_state[i], &mask, &bits, ngpio);
++	}
++}
++
+ static int gpiomm_probe(struct device *dev, unsigned int id)
+ {
+ 	struct gpiomm_gpio *gpiommgpio;
+@@ -266,8 +153,8 @@ static int gpiomm_probe(struct device *dev, unsigned int id)
  		return -EBUSY;
  	}
  
--	idi48gpio->base = devm_ioport_map(dev, base[id], IDI_48_EXTENT);
--	if (!idi48gpio->base)
-+	idi48gpio->reg = devm_ioport_map(dev, base[id], IDI_48_EXTENT);
-+	if (!idi48gpio->reg)
+-	gpiommgpio->base = devm_ioport_map(dev, base[id], GPIOMM_EXTENT);
+-	if (!gpiommgpio->base)
++	gpiommgpio->ppi = devm_ioport_map(dev, base[id], GPIOMM_EXTENT);
++	if (!gpiommgpio->ppi)
  		return -ENOMEM;
  
- 	idi48gpio->chip.label = name;
-@@ -298,8 +276,7 @@ static int idi_48_probe(struct device *dev, unsigned int id)
- 	girq->handler = handle_edge_irq;
- 	girq->init_hw = idi_48_irq_init_hw;
+ 	gpiommgpio->chip.label = name;
+@@ -284,7 +171,8 @@ static int gpiomm_probe(struct device *dev, unsigned int id)
+ 	gpiommgpio->chip.set = gpiomm_gpio_set;
+ 	gpiommgpio->chip.set_multiple = gpiomm_gpio_set_multiple;
  
--	raw_spin_lock_init(&idi48gpio->lock);
--	spin_lock_init(&idi48gpio->ack_lock);
-+	spin_lock_init(&idi48gpio->lock);
+-	spin_lock_init(&gpiommgpio->lock);
++	i8255_state_init(gpiommgpio->ppi_state, GPIOMM_NUM_PPI);
++	gpiomm_init_dio(gpiommgpio->ppi, gpiommgpio->ppi_state);
  
- 	err = devm_gpiochip_add_data(dev, &idi48gpio->chip, idi48gpio);
+ 	err = devm_gpiochip_add_data(dev, &gpiommgpio->chip, gpiommgpio);
  	if (err) {
+@@ -292,16 +180,6 @@ static int gpiomm_probe(struct device *dev, unsigned int id)
+ 		return err;
+ 	}
+ 
+-	/* initialize all GPIO as output */
+-	iowrite8(0x80, gpiommgpio->base + 3);
+-	iowrite8(0x00, gpiommgpio->base);
+-	iowrite8(0x00, gpiommgpio->base + 1);
+-	iowrite8(0x00, gpiommgpio->base + 2);
+-	iowrite8(0x80, gpiommgpio->base + 7);
+-	iowrite8(0x00, gpiommgpio->base + 4);
+-	iowrite8(0x00, gpiommgpio->base + 5);
+-	iowrite8(0x00, gpiommgpio->base + 6);
+-
+ 	return 0;
+ }
+ 
 -- 
 2.36.1
 

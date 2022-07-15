@@ -2,481 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436F8576AD4
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BA9576AF2
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbiGOXo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 19:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S230047AbiGOX4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 19:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiGOXo5 (ORCPT
+        with ESMTP id S231768AbiGOX4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 19:44:57 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367B42F39A;
-        Fri, 15 Jul 2022 16:44:56 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id f2so8685005wrr.6;
-        Fri, 15 Jul 2022 16:44:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N5thT5NLuuwBXvq/8xQLslRAV9uyeybXk3ABL1LJfB8=;
-        b=LjVIvJAn9fdZk2OrXoQ8ff19epOy40bmGq3pNUtPVjU7V9kD9o1g7TuDMXR0CuOzeY
-         i6tf3uO/yySDxAdp5EChuL/9W+5yOAdj0LPiXHxqcU7imbuRyFONDb570+ZE0ujA/bb+
-         Q4YTTjPOBRrUKS5Ne5F9c6yROkrItyES7sGCJ8oRb22AxGWp15VlGRkV7QU7pNl1HHyr
-         1m6+v725KBVITMslzzVAf2+bAsLUDcOLpk8T400EMjnPQWS9+DYlTFt5Tq2C5Suud85C
-         epqmkAPav+SaXEPUA+YzdLBkU1OCN5OvMLlhm8IDA1pOm8Zi+TDvuQ1vfbkC1mwRZNMY
-         dMuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N5thT5NLuuwBXvq/8xQLslRAV9uyeybXk3ABL1LJfB8=;
-        b=qFjAAagub6BKeDIdarRMpfxibzZ1qsjdTTWsHaNho233IVsKuLYDKFCq0kgwCVZUfu
-         8dOjOhyKwe9M77JI8SVrpe1o7QRwzzd6SUIlZ7FxSkmvPWT7THv94AfXbpi4UPE8QWeh
-         edimozvbxRrzVe8xunBoE12C1S7wHghGQBSYkry3IAlF80KMMJN6dKJxWf8lcWYbCrdB
-         2KTZEe+Mjun1lAlmbHihmKAq7+Y8Ig7vCaHhX9Z9XJjT1lDFV8sUG/3lTciY5s0y7n1h
-         Xvf90fuk9mGGLTCDlAned2kWaEZ+hPXArCljmSx0Pr7uc4ZBxngUaS8mo5pJmQwBlCWL
-         hcmQ==
-X-Gm-Message-State: AJIora+cVQf2r1zjaejCLYcyL1AwBOvFdfULZXEH4mUQPqVZkQNzI2Lm
-        gwW/JAihPFJedAaWfnRl8nysBpN1lwR3hV1q
-X-Google-Smtp-Source: AGRyM1tRDvCqGvBzZSYIVR1pmdU26g0rK0NtlHFqQ2H8p99fAOOyt11Mn1aP/UfHhkPIunamQHr3sA==
-X-Received: by 2002:a5d:66c1:0:b0:21d:6c98:7aa4 with SMTP id k1-20020a5d66c1000000b0021d6c987aa4mr14215841wrw.136.1657928694619;
-        Fri, 15 Jul 2022 16:44:54 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:4b00:9414:100:70ae:aa59:3138:f63c])
-        by smtp.gmail.com with ESMTPSA id r8-20020a5d52c8000000b0021d65e9d449sm5040776wrv.73.2022.07.15.16.44.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 16:44:53 -0700 (PDT)
-From:   Alexey Klimov <klimov.linux@gmail.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, oneukum@suse.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        atishp@rivosinc.com, atishp@atishpatra.org, yury.norov@gmail.com,
-        aklimov@redhat.com, atomlin@redhat.com, klimov.linux@gmail.com
-Subject: [PATCH v4] watchdog: add driver for StreamLabs USB watchdog device
-Date:   Sat, 16 Jul 2022 00:44:42 +0100
-Message-Id: <20220715234442.3910204-1-klimov.linux@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 15 Jul 2022 19:56:24 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA4097A28;
+        Fri, 15 Jul 2022 16:56:18 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26FKnKIH011904;
+        Fri, 15 Jul 2022 16:55:46 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=zao8aTZgqvrUe+ImKMEBtGS2B7kydB+wCjILluFRoCo=;
+ b=bwiAzEnJl82k8rNHHa0TKedVjNCqs+uJp4rALa9KcSS0XbLBq5Ryvmf11T1pP5PwNrwu
+ u+UMBzCWcBlNh/NUdbBru/Nv46DFASX8Az/mJHeJ2WZpYZdSBu1scpCtUVJZjQKyta6a
+ ErcVewBlQVbVQgoXF5HbzK61NiDm5Hf15zc= 
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2173.outbound.protection.outlook.com [104.47.57.173])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hae0wchpw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Jul 2022 16:55:46 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=feKasl3z7fkjhBVjblAUhshJyOhFnlmg3MtR5JetTZDHoJgfjwQXR4Eufm54LZqluhZLUKtzq7Jn4b5m1R39iNqa2zlzDa0ZyTUUBh4ADUYIRQpXYM1Np2Pgo1aCXw9bpvo4K5DCkG+RS7sB12ZcEq61tRcRK+eA51uXhYWFf1cjiF6lqRUA36ejCxfBEAhPezyt6EoR10tBXJgKS0FWJG2DPo8XJCl8QHws/i3dtfTq4umGb7HpdT4/iT5coeZ/lK7OAsxY5uwhiicgPTgobBpntrweW/BNQWsApLJ+DjSzltO5n4DEn5QWsKMybJ7kcq58Jsqf4ClJX2Kc4bgo6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zao8aTZgqvrUe+ImKMEBtGS2B7kydB+wCjILluFRoCo=;
+ b=ln+wGYczaCRyueLAyPLCeQyLNtmzftK3bI2P8kl9T01/ApAzySl8+pGQhhzuoi+MkPyZXy3+rXArdQv4sxlR2E8eCj4R7SPZ4UMNC7isPKD38LlLBDylZ83x7HcVlWvz1H+4oPJDnfgGEa8bf0PcANaMnYAOB4RwZ2dBPEcdMbSqLbja/0g0JYQjqxNVEjM6jag8IiWtlukDTunxLoNl3an3HQbNufNoQqI8YMn20BYHibvQmxPBJqqTpfG/y+3jccARcqyMa6BbwnIS7uE1/nyDl6xiVoTC3/O7prze7kn9v/LeEtOHqmlBOlRPuyllnNRnMmpthCX3Wr2WRu708w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by BYAPR15MB2693.namprd15.prod.outlook.com (2603:10b6:a03:155::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Fri, 15 Jul
+ 2022 23:55:43 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::9568:e5d9:b8ab:bb23]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::9568:e5d9:b8ab:bb23%6]) with mapi id 15.20.5438.017; Fri, 15 Jul 2022
+ 23:55:43 +0000
+Message-ID: <e8415c81-070d-304e-4068-885f3ec3cbb8@fb.com>
+Date:   Fri, 15 Jul 2022 16:55:40 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH bpf-next v6 01/23] selftests/bpf: fix config for CLS_BPF
+Content-Language: en-US
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+ <20220712145850.599666-2-benjamin.tissoires@redhat.com>
+From:   Yonghong Song <yhs@fb.com>
+In-Reply-To: <20220712145850.599666-2-benjamin.tissoires@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0130.namprd03.prod.outlook.com
+ (2603:10b6:a03:33c::15) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c48b15b9-cbbd-43b7-2aeb-08da66bd878a
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2693:EE_
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +Kf8h6hyX6VeF39JxiP8pw4Mz2u+mGAdUj8KDU/q6qTbIDNEfdDH+GZ/rShCEB4W0TmpiuLeW60C+foFJHCY0CHBynBcSmqErjypQH4d8EBVe0RgVTI3Bzw/i94WnIU55BEcWGD/lyMsOZ7IBiM+lftFuJzGj8oG3p2VIhdsSh/ppSIpGHLmAgp1SRhkho+gPm4VwepeHU2TS9XXsRSNQvHEBqzdRdSnPhh51ugDB+E8mntN1lFbHSkZyhsrKtELl2TmRAiH5BneRmVgYv2Y7gN43Lh5hWUBJ4G8TV9x2n+sPaRf8JBXnhsrKId3qYJQ2JiFmKXphjVKZl4tubK3wYfNgP7Mtg7GXSm28W/YmSBznWEhLvh8YhGeV5o6al3kX5PDdLHNSKzqKuJjkJGKEHiSUI/upbiYTSUUf9EBzRsBQ79iWriTItvLAOQDdOyO+vtQCjanc9WOpHj/cIMjv6D2hmlpxPvC9xmayyF9JjKJokZe7kvGKRxRuRaO0BHmid70FFiWRJUHKIBdL3vubuyawH28ZEWr5hrhF7hgvvn0MgEt69YGvt8FOJqlbQ73PwBQT+QlJEqemT7UHMiTZ+bIt1TL/go5KcgTW5kNDxrDIDxHVsbTEn2UC2wEeAwWp91VUmZryHTuQlTKxpl6SHWLg5xVEwmt/ID7+26ei3GX/t3iQPcgmbnrICH2KcL8jmLjFg0Bt1pBoohGX1/49L8brvxzUvtNMrUD60JSWhAyFNRSS5fvoAps3FLCHkS6KO0ZoUFH2KXd+o3h5gFopXS/8Bow0ELuoJe77SiJzSH73OoaK9ISRZakeWHK14gm8THIUwBUomgc/HnlZkKqazxC5U79MmXYZcelYTSIP26SqU6CalF3Nnhbv1xBvyEw
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(376002)(136003)(366004)(346002)(2906002)(316002)(8936002)(921005)(8676002)(66946007)(7416002)(66556008)(110136005)(4326008)(4744005)(66476007)(36756003)(41300700001)(86362001)(186003)(31696002)(53546011)(6512007)(6486002)(31686004)(6506007)(38100700002)(2616005)(478600001)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZmdHRjVsZGkrZzRCNlR2YU1aSjNWYlVWc2ZYOUhTRmZkL1BqL3RSUStHRXkz?=
+ =?utf-8?B?MnNlWVVrRzdlOU1pY0lPV01SWlBlVkRhd05OdjFyQWtKdzZUUkxRaVdJbmt3?=
+ =?utf-8?B?YTFnT2RuNG9BU1dWbnVBRFdRZDdCcEZwVFdvYWorOUgxS3A5ZERHQ0FoTUNB?=
+ =?utf-8?B?OUVBMGtXajZMeGp0T21VL1hPL1lOTTNJS1lBeXlPYnVqNEdPdlAvZUhRajEz?=
+ =?utf-8?B?dE5NWEFYMnNkSlVFNWl3T0Zwb240S2tkZ3dEWUVXV3NqYlI1VGhrc0hrVHVX?=
+ =?utf-8?B?Q1ppWkFVUVR2UjBGUlFvNUdJN1F5N3JBQUV3a2dWL1Q0cjRQR1JTOGJpYVds?=
+ =?utf-8?B?YUxkTE5WMWV0Ulh3NW5Pc29IM1poeE9qSXF3ajZXblVGemRma2YrM25UbW84?=
+ =?utf-8?B?NnQzSnFtOTVPdDNZTjBkYWxjQ3ZNRnY3clJsd3ZkeW1VVEVhQ3NTQ2xyZm5F?=
+ =?utf-8?B?ZnBmOTUvbndkUFhZOFMzTFpaUUQxVklNMnZoWHBJeFo0VHdiSTRmazhIK09z?=
+ =?utf-8?B?cmxWWUFHajRYWjhUdDVJQkdrcXd2VXNjNU5zYnFpdWIzUVdiUXQ0S21UTDE1?=
+ =?utf-8?B?OVJSYkRxNjcxWnNyZ05JbUtVMWNrWWkybEFjRllVSkdUdWIwSENmSitNYnlk?=
+ =?utf-8?B?dmJuYXJDQWZNZmk3MkNDdlozRTI5UDZXQ3h0dTMxd1RPbWJDQmFsMEFJWUc3?=
+ =?utf-8?B?VWNYWWxjeVpsaWVYZ2lrYWJMZHB2RG1wR25jNDJzb0FwQWE3UXYyUWJ3SmZN?=
+ =?utf-8?B?YzMyN0lWZE5qek5EeUk5cGN5L2FqMVAyVE54bVQxSkRPSEtaWlZXalBQazNL?=
+ =?utf-8?B?c3lYZnVDNiszeEVUOWdLK3RSQXFoVmZmbGJCTTYrR0t1RVI5V25NUk9hU0I4?=
+ =?utf-8?B?WnA2STJ3MUFJSTR3ZWMyNVBOUHBYU2dNd2V1ZUxFOXpZdEJpTS9NMTliU3dy?=
+ =?utf-8?B?R2FJRHVNQ0dpZlI4RklZMTVCNFA0S2c1aE9JRnMvbUduR2NHSmREM1FNMkVu?=
+ =?utf-8?B?TFQ2dUpNKzVoQmozeFptbDQvU0IvS3ZYWkYxMHdnOXNhYy94Z1h0dy8yamhy?=
+ =?utf-8?B?SEkyUm8rR3diQ1p2Qkxrd09BRVp5SkpJVFkyM3JVNFF1TXd3ZERvZFpIb1Nv?=
+ =?utf-8?B?K2pEdExvM2lHUytYWDRkcWEvNHpGckFVRWMraUtmU0FPcDhNaWVzTzhBRkI4?=
+ =?utf-8?B?aDQwelRLSFBtakZtU1Y1MCsxMUtDdjJjZzFKcXJ1T2ZaTk5LWi9GeGxUbjBM?=
+ =?utf-8?B?MURZUUFlUUZ3bTJtdjcxOUIyNk9HVDNYUEtCVytyMEw4TEhOOTNSVVdSc0Z5?=
+ =?utf-8?B?MEoxL3VQQWowRFRJemN3by9QOEY0eEQxazF4YTN3Q0YyRFpPRVJ6ZElFTThs?=
+ =?utf-8?B?TWJURTc0ejR6bjNvVFRwMWUwMEtad1VOd0RqRWU2aWQ5ZzZsbW1SN3NKbjEz?=
+ =?utf-8?B?Ny9iajdnb0pTS0lRbHgyYTZlWGVWMC9xT3d2T0JJTkxyVzlOOW5pWGtEVXFa?=
+ =?utf-8?B?WmtBSHVIY1ZEeWtIdzFzdmU3UVZYSkhVL2phNWx6M0RjWXRNS3hlejZqU04r?=
+ =?utf-8?B?bG9Sa00wU2ZyVkFDWWVmbmd4SG9QRGI3Szh2WVdRQ0syWXN3MFV6cEpPUDlS?=
+ =?utf-8?B?ZzRxdjZPUGhYVk9NWm1SVTQxMmdjZlZPMnZXRHIwbzROeC9HRno3aU81bXls?=
+ =?utf-8?B?ckp1RkhmZGx3dVJmTFozYkJtWlkvbUEwRmtZMG0yWFErWTdJSWthMGFJelhn?=
+ =?utf-8?B?emhQcHJ2aHBUd0lHZnNrNCs5ekowME8vVHlhVGk3QTIvQmZvOG5aNm1TbXVM?=
+ =?utf-8?B?T0NaNTdIS25pTDVJV2FZWHVSL1QvdEZ3azJWVU4yYTVaQVFaUE4rdlVoQlBk?=
+ =?utf-8?B?emphQ2c0eUt3T3pFNFNQWEpLQzFTazMybW8rTVJ4SzEvMEIwbnZqK2RxNFEr?=
+ =?utf-8?B?bWx3VXRVbzMrUi9xTXlicXZPQkVxOWN2TEVwclBybTRVTzV2OG90bWt0Vkl1?=
+ =?utf-8?B?cHBRMk02NDkzZ0ZkUzB4RUpxcEVFd1c4cWEvbi80Q3VmUXh1SHlJN2ZmRjBO?=
+ =?utf-8?B?dUNnRE5va0VyMFJlRHpvMWpFd3N5TU43TDIrd3VhelNGQTlkblZqbGhRM2tR?=
+ =?utf-8?B?SE03T3k2eWFlM2tneUp2dDRPSWlSS1g5UkJ5RUZlNis1QzBpcmwvL0dIWmdw?=
+ =?utf-8?B?V3c9PQ==?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c48b15b9-cbbd-43b7-2aeb-08da66bd878a
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 23:55:43.7052
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /jzn4hlBYHrNA3eWjVDKiFXVtJj5h5Cc8cUc1PgHY6tTa9AFZfKD4IedA1KiYNwk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2693
+X-Proofpoint-GUID: 6ZZGH_6ZGNW4cDRpbsaYUX3ZwO50IFK8
+X-Proofpoint-ORIG-GUID: 6ZZGH_6ZGNW4cDRpbsaYUX3ZwO50IFK8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-15_15,2022-07-15_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Driver supports StreamLabs usb watchdog device. The device plugs
-into 9-pin usb header and connects to reset pins and reset button
-pins on desktop PC.
 
-USB commands used to communicate with device were reverse
-engineered using usbmon.
 
-Signed-off-by: Alexey Klimov <klimov.linux@gmail.com>
----
+On 7/12/22 7:58 AM, Benjamin Tissoires wrote:
+> When running test_progs under the VM (with vmtest.sh), some tests are
+> failing because the classifier bpf is not available.
+> 
+> Given that the script doesn't load that particular module, make it
+> part of vmlinux.
+> 
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-Changes since v3:
-	-- added nowayout module param;
-	-- removed usb_set_intfdata(intf, NULL) in ->disconnect since
-	usb_unbind_interface() should take care of it;
-	-- keep the usb_streamlabs_wdt_stop_cmd() in ->disconnect().
-	Disconnect can be triggered via sysfs or on module removing,
-	it looks like we want to stop the watchdog on such events;
-	Should it also be stopped in ->disconnect() only if !nowayout?
-	-- rebased, cleanups, URL correction;
-	-- migrated to managed (devm_*) interfaces;
-	-- error in usb_streamlabs_wdt_validate_response() changed
-	to -EPROTO;
-	-- added entry in MAINTAINERS file;
-	-- const struct usb_device_id and watchdog_ops;
-
-Previous version:
-https://lore.kernel.org/lkml/20170217092523.23358-1-klimov.linux@gmail.com/
-
- MAINTAINERS                       |   6 +
- drivers/watchdog/Kconfig          |  15 ++
- drivers/watchdog/Makefile         |   1 +
- drivers/watchdog/streamlabs_wdt.c | 311 ++++++++++++++++++++++++++++++
- 4 files changed, 333 insertions(+)
- create mode 100644 drivers/watchdog/streamlabs_wdt.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a5f65e7a113d..717d39a2d874 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19120,6 +19120,12 @@ W:	http://www.stlinux.com
- F:	Documentation/networking/device_drivers/ethernet/stmicro/
- F:	drivers/net/ethernet/stmicro/stmmac/
- 
-+STREAMLABS USB WATCHDOG DRIVER
-+M:	Alexey Klimov <klimov.linux@gmail.com>
-+L:	linux-watchdog@vger.kernel.org
-+S:	Maintained
-+F:	drivers/watchdog/streamlabs_wdt.c
-+
- SUN3/3X
- M:	Sam Creasey <sammy@sammy.net>
- S:	Maintained
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 32fd37698932..64b7f947b196 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -2171,6 +2171,21 @@ config USBPCWATCHDOG
- 
- 	  Most people will say N.
- 
-+config USB_STREAMLABS_WATCHDOG
-+	tristate "StreamLabs USB watchdog driver"
-+	depends on USB
-+	help
-+	  This is the driver for the USB Watchdog dongle from StreamLabs.
-+	  If you correctly connect reset pins to motherboard Reset pin and
-+	  to Reset button then this device will simply watch your kernel to make
-+	  sure it doesn't freeze, and if it does, it reboots your computer
-+	  after a certain amount of time.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called streamlabs_wdt.
-+
-+	  Most people will say N. Say yes or M if you want to use such usb device.
-+
- config KEEMBAY_WATCHDOG
- 	tristate "Intel Keem Bay SoC non-secure watchdog"
- 	depends on ARCH_KEEMBAY || (ARM64 && COMPILE_TEST)
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index c324e9d820e9..2d601da9b5bd 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -33,6 +33,7 @@ obj-$(CONFIG_WDTPCI) += wdt_pci.o
- 
- # USB-based Watchdog Cards
- obj-$(CONFIG_USBPCWATCHDOG) += pcwd_usb.o
-+obj-$(CONFIG_USB_STREAMLABS_WATCHDOG) += streamlabs_wdt.o
- 
- # ALPHA Architecture
- 
-diff --git a/drivers/watchdog/streamlabs_wdt.c b/drivers/watchdog/streamlabs_wdt.c
-new file mode 100644
-index 000000000000..f2b782f3c98e
---- /dev/null
-+++ b/drivers/watchdog/streamlabs_wdt.c
-@@ -0,0 +1,311 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * StreamLabs USB Watchdog driver
-+ *
-+ * Copyright (c) 2016-2017,2022 Alexey Klimov <klimov.linux@gmail.com>
-+ */
-+
-+#include <linux/errno.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <linux/usb.h>
-+#include <linux/watchdog.h>
-+#include <asm/byteorder.h>
-+
-+/*
-+ * USB Watchdog device from Streamlabs:
-+ * https://www.stream-labs.com/products/devices/watch-dog/
-+ *
-+ * USB commands have been reverse engineered using usbmon.
-+ */
-+
-+#define DRIVER_AUTHOR "Alexey Klimov <klimov.linux@gmail.com>"
-+#define DRIVER_DESC "StreamLabs USB watchdog driver"
-+#define DRIVER_NAME "usb_streamlabs_wdt"
-+
-+MODULE_AUTHOR(DRIVER_AUTHOR);
-+MODULE_DESCRIPTION(DRIVER_DESC);
-+MODULE_LICENSE("GPL");
-+
-+#define USB_STREAMLABS_WATCHDOG_VENDOR	0x13c0
-+#define USB_STREAMLABS_WATCHDOG_PRODUCT	0x0011
-+
-+/*
-+ * one buffer is used for communication, however transmitted message is only
-+ * 32 bytes long
-+ */
-+#define BUFFER_TRANSFER_LENGTH	32
-+#define BUFFER_LENGTH		64
-+#define USB_TIMEOUT		350
-+
-+#define STREAMLABS_CMD_START	0xaacc
-+#define STREAMLABS_CMD_STOP	0xbbff
-+
-+/* timeout values are taken from windows program */
-+#define STREAMLABS_WDT_MIN_TIMEOUT	1
-+#define STREAMLABS_WDT_MAX_TIMEOUT	46
-+
-+struct streamlabs_wdt {
-+	struct watchdog_device wdt_dev;
-+	struct usb_interface *intf;
-+	struct mutex lock;
-+	u8 *buffer;
-+};
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+/*
-+ * This function is used to check if watchdog actually changed
-+ * its state to disabled that is reported in first two bytes of response
-+ * message.
-+ */
-+static int usb_streamlabs_wdt_check_stop(u16 *buf)
-+{
-+	if (buf[0] != cpu_to_le16(STREAMLABS_CMD_STOP))
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int usb_streamlabs_wdt_validate_response(u8 *buf)
-+{
-+	/*
-+	 * If watchdog device understood the command it will acknowledge
-+	 * with values 1,2,3,4 at indexes 10, 11, 12, 13 in response message
-+	 * when response treated as 8bit message.
-+	 */
-+	if (buf[10] != 1 || buf[11] != 2 || buf[12] != 3 || buf[13] != 4)
-+		return -EPROTO;
-+
-+	return 0;
-+}
-+
-+static void usb_streamlabs_wdt_prepare_buf(u16 *buf, u16 cmd,
-+						unsigned long timeout_msec)
-+{
-+	/*
-+	 * remaining elements expected to be zero everytime during
-+	 * communication
-+	 */
-+	buf[0] = cpu_to_le16(cmd);
-+	buf[1] = cpu_to_le16(0x8000);
-+	buf[3] = cpu_to_le16(timeout_msec);
-+	buf[5] = 0x0;
-+	buf[6] = 0x0;
-+}
-+
-+static int usb_streamlabs_wdt_cmd(struct streamlabs_wdt *wdt, u16 cmd)
-+{
-+	struct usb_device *usbdev;
-+	unsigned long timeout_msec;
-+	int retval;
-+	int size;
-+
-+	if (unlikely(!wdt->intf))
-+		return -ENODEV;
-+
-+	usbdev = interface_to_usbdev(wdt->intf);
-+	timeout_msec = wdt->wdt_dev.timeout * MSEC_PER_SEC;
-+
-+	usb_streamlabs_wdt_prepare_buf((u16 *) wdt->buffer, cmd, timeout_msec);
-+
-+	/* send command to watchdog */
-+	retval = usb_interrupt_msg(usbdev, usb_sndintpipe(usbdev, 0x02),
-+					wdt->buffer, BUFFER_TRANSFER_LENGTH,
-+					&size, USB_TIMEOUT);
-+	if (retval)
-+		return retval;
-+
-+	if (size != BUFFER_TRANSFER_LENGTH)
-+		return -EIO;
-+
-+	/* and read response from watchdog */
-+	retval = usb_interrupt_msg(usbdev, usb_rcvintpipe(usbdev, 0x81),
-+					wdt->buffer, BUFFER_LENGTH,
-+					&size, USB_TIMEOUT);
-+	if (retval)
-+		return retval;
-+
-+	if (size != BUFFER_LENGTH)
-+		return -EIO;
-+
-+	/* check if watchdog actually acked/recognized command */
-+	return usb_streamlabs_wdt_validate_response(wdt->buffer);
-+}
-+
-+static int usb_streamlabs_wdt_stop_cmd(struct streamlabs_wdt *wdt)
-+{
-+	/* how many times to re-send stop cmd */
-+	int retry_counter = 10;
-+	int retval;
-+
-+	/*
-+	 * Transition from enabled to disabled state in this device
-+	 * for stop command doesn't happen immediately. Usually, 2 or 3
-+	 * (sometimes even 4) stop commands should be sent until
-+	 * watchdog answers 'I'm stopped!'.
-+	 * Retry only stop command if watchdog fails to answer correctly
-+	 * about its state. After 10 attempts go out and return error.
-+	 */
-+
-+	do {
-+		retval = usb_streamlabs_wdt_cmd(wdt, STREAMLABS_CMD_STOP);
-+		if (retval)
-+			break;
-+
-+		retval = usb_streamlabs_wdt_check_stop((u16 *) wdt->buffer);
-+
-+	} while (retval && --retry_counter >= 0);
-+
-+	return retry_counter > 0 ? retval : -EIO;
-+}
-+
-+static int usb_streamlabs_wdt_start(struct watchdog_device *wdt_dev)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = watchdog_get_drvdata(wdt_dev);
-+	int retval;
-+
-+	mutex_lock(&streamlabs_wdt->lock);
-+	retval = usb_streamlabs_wdt_cmd(streamlabs_wdt, STREAMLABS_CMD_START);
-+	mutex_unlock(&streamlabs_wdt->lock);
-+
-+	return retval;
-+}
-+
-+static int usb_streamlabs_wdt_stop(struct watchdog_device *wdt_dev)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = watchdog_get_drvdata(wdt_dev);
-+	int retval;
-+
-+	mutex_lock(&streamlabs_wdt->lock);
-+	retval = usb_streamlabs_wdt_stop_cmd(streamlabs_wdt);
-+	mutex_unlock(&streamlabs_wdt->lock);
-+
-+	return retval;
-+}
-+
-+static const struct watchdog_info streamlabs_wdt_ident = {
-+	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
-+	.identity	= DRIVER_NAME,
-+};
-+
-+static const struct watchdog_ops usb_streamlabs_wdt_ops = {
-+	.owner	= THIS_MODULE,
-+	.start	= usb_streamlabs_wdt_start,
-+	.stop	= usb_streamlabs_wdt_stop,
-+};
-+
-+static int usb_streamlabs_wdt_probe(struct usb_interface *intf,
-+					const struct usb_device_id *id)
-+{
-+	struct usb_device *usbdev = interface_to_usbdev(intf);
-+	struct streamlabs_wdt *streamlabs_wdt;
-+	int retval;
-+
-+	/*
-+	 * USB IDs of this device appear to be weird/unregistered. Hence, do
-+	 * an additional check on product and manufacturer.
-+	 * If there is similar device in the field with same values then
-+	 * there is stop command in probe() below that checks if the device
-+	 * behaves as a watchdog.
-+	 */
-+	if (!usbdev->product || !usbdev->manufacturer
-+		|| strncmp(usbdev->product, "USBkit", 6)
-+		|| strncmp(usbdev->manufacturer, "STREAM LABS", 11))
-+		return -ENODEV;
-+
-+	streamlabs_wdt = devm_kzalloc(&intf->dev, sizeof(struct streamlabs_wdt),
-+								GFP_KERNEL);
-+	if (!streamlabs_wdt)
-+		return -ENOMEM;
-+
-+	streamlabs_wdt->buffer = devm_kzalloc(&intf->dev, BUFFER_LENGTH,
-+								GFP_KERNEL);
-+	if (!streamlabs_wdt->buffer)
-+		return -ENOMEM;
-+
-+	mutex_init(&streamlabs_wdt->lock);
-+
-+	streamlabs_wdt->wdt_dev.info = &streamlabs_wdt_ident;
-+	streamlabs_wdt->wdt_dev.ops = &usb_streamlabs_wdt_ops;
-+	streamlabs_wdt->wdt_dev.timeout = STREAMLABS_WDT_MAX_TIMEOUT;
-+	streamlabs_wdt->wdt_dev.max_timeout = STREAMLABS_WDT_MAX_TIMEOUT;
-+	streamlabs_wdt->wdt_dev.min_timeout = STREAMLABS_WDT_MIN_TIMEOUT;
-+	streamlabs_wdt->wdt_dev.parent = &intf->dev;
-+
-+	streamlabs_wdt->intf = intf;
-+	usb_set_intfdata(intf, &streamlabs_wdt->wdt_dev);
-+	watchdog_set_drvdata(&streamlabs_wdt->wdt_dev, streamlabs_wdt);
-+	watchdog_set_nowayout(&streamlabs_wdt->wdt_dev, nowayout);
-+
-+	retval = usb_streamlabs_wdt_stop(&streamlabs_wdt->wdt_dev);
-+	if (retval)
-+		return -ENODEV;
-+
-+	retval = devm_watchdog_register_device(&intf->dev,
-+						&streamlabs_wdt->wdt_dev);
-+	if (retval) {
-+		dev_err(&intf->dev, "failed to register watchdog device\n");
-+		return retval;
-+	}
-+
-+	dev_info(&intf->dev, "StreamLabs USB watchdog driver loaded.\n");
-+	return 0;
-+}
-+
-+static int usb_streamlabs_wdt_suspend(struct usb_interface *intf,
-+					pm_message_t message)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = usb_get_intfdata(intf);
-+
-+	if (watchdog_active(&streamlabs_wdt->wdt_dev))
-+		return usb_streamlabs_wdt_stop(&streamlabs_wdt->wdt_dev);
-+
-+	return 0;
-+}
-+
-+static int usb_streamlabs_wdt_resume(struct usb_interface *intf)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = usb_get_intfdata(intf);
-+
-+	if (watchdog_active(&streamlabs_wdt->wdt_dev))
-+		return usb_streamlabs_wdt_start(&streamlabs_wdt->wdt_dev);
-+
-+	return 0;
-+}
-+
-+static void usb_streamlabs_wdt_disconnect(struct usb_interface *intf)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = usb_get_intfdata(intf);
-+
-+	mutex_lock(&streamlabs_wdt->lock);
-+	usb_streamlabs_wdt_stop_cmd(streamlabs_wdt);
-+	/* Stop sending messages to the device */
-+	streamlabs_wdt->intf = NULL;
-+	mutex_unlock(&streamlabs_wdt->lock);
-+}
-+
-+static const struct usb_device_id usb_streamlabs_wdt_device_table[] = {
-+	{ USB_DEVICE(USB_STREAMLABS_WATCHDOG_VENDOR, USB_STREAMLABS_WATCHDOG_PRODUCT) },
-+	{ }	/* Terminating entry */
-+};
-+
-+MODULE_DEVICE_TABLE(usb, usb_streamlabs_wdt_device_table);
-+
-+static struct usb_driver usb_streamlabs_wdt_driver = {
-+	.name		= DRIVER_NAME,
-+	.probe		= usb_streamlabs_wdt_probe,
-+	.disconnect	= usb_streamlabs_wdt_disconnect,
-+	.suspend	= usb_streamlabs_wdt_suspend,
-+	.resume		= usb_streamlabs_wdt_resume,
-+	.reset_resume	= usb_streamlabs_wdt_resume,
-+	.id_table	= usb_streamlabs_wdt_device_table,
-+};
-+
-+module_usb_driver(usb_streamlabs_wdt_driver);
--- 
-2.36.1
-
+Acked-by: Yonghong Song <yhs@fb.com>

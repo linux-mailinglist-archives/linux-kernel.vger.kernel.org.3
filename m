@@ -2,132 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2E8575F54
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 12:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040CA575F56
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 12:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233258AbiGOKZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 06:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S232501AbiGOK0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 06:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbiGOKZs (ORCPT
+        with ESMTP id S231508AbiGOK0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 06:25:48 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2989C82F89;
-        Fri, 15 Jul 2022 03:25:46 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LknZ03WwZz4xMW;
-        Fri, 15 Jul 2022 20:25:44 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657880744;
-        bh=4vjOOOwfoF4KOdfvvxHNqQQD9CGszcxtnLonMPLZijg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DWtUwNJP9HPBg/4QOFjEtH1xKL0L7JEfLue3r5ApubZ+VyHt4SNHhvMIKkmNxAaRN
-         Kn8lo2JJ98cc141pjxNnk0Ngf1GE5xsFnQL/MUUilleU8AZWxrOnMnq15ozlMUtvRi
-         KZ3BXTbdE9HogIMIOwvTdjQx9tOmMRboYNN1gZngNWiffms3abOe/J+drYZqpfsfbB
-         P3VglX9q5c017d7WB5iwEEdzrnuCoKXVl15dacqArj35QG4/urzyiZVJBH5I6l1rRA
-         5w2X6lBMz6+mpgt9zprkRBp0XotDuApRmUfzTiPj5joZxOdZHkUyqHZzwqOmGtT3FW
-         eTIp6US/+Q51w==
-Date:   Fri, 15 Jul 2022 20:25:43 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Yury Norov <yury.norov@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bitmap tree with the arm64 tree
-Message-ID: <20220715202543.4062514e@canb.auug.org.au>
+        Fri, 15 Jul 2022 06:26:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74379796A6
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 03:26:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 942BD1474;
+        Fri, 15 Jul 2022 03:26:18 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C99223F792;
+        Fri, 15 Jul 2022 03:26:16 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH -next v2 1/2] cacheinfo: Use atomic allocation for percpu cache attributes
+Date:   Fri, 15 Jul 2022 11:26:08 +0100
+Message-Id: <20220715102609.2160689-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sUAzOhAiNBY2NoANo9iAbkc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/sUAzOhAiNBY2NoANo9iAbkc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On couple of architectures like RISC-V and ARM64, we need to detect
+cache attribues quite early during the boot when the secondary CPUs
+start. So we will call detect_cache_attributes in the atomic context
+and since use of normal allocation can sleep, we will end up getting
+"sleeping in the atomic context" bug splat.
 
-Hi all,
+In order avoid that, move the allocation to use atomic version in
+preparation to move the actual detection of cache attributes in the
+CPU hotplug path which is atomic.
 
-Today's linux-next merge of the bitmap tree got a conflict in:
-
-  include/linux/gfp.h
-
-between commit:
-
-  70c248aca9e7 ("mm: kasan: Skip unpoisoning of user pages")
-
-from the arm64 tree and commit:
-
-  34973181c728 ("headers/deps: mm: Split <linux/gfp_types.h> out of <linux/=
-gfp.h>")
-
-from the bitmap tree.
-
-I fixed it up (I used the latter version of this files and applied the
-following merge resolution patch) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 15 Jul 2022 19:45:25 +1000
-Subject: [PATCH] fix up for "mm: kasan: Skip unpoisoning of user pages"
-
-interacting with "headers/deps: mm: Split <linux/gfp_types.h> out of
-<linux/gfp.h>"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
- include/linux/gfp_types.h | 2 +-
+ drivers/base/cacheinfo.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
-index 06fc85cee23f..d88c46ca82e1 100644
---- a/include/linux/gfp_types.h
-+++ b/include/linux/gfp_types.h
-@@ -340,7 +340,7 @@ typedef unsigned int __bitwise gfp_t;
- #define GFP_DMA32	__GFP_DMA32
- #define GFP_HIGHUSER	(GFP_USER | __GFP_HIGHMEM)
- #define GFP_HIGHUSER_MOVABLE	(GFP_HIGHUSER | __GFP_MOVABLE | \
--			 __GFP_SKIP_KASAN_POISON)
-+			 __GFP_SKIP_KASAN_POISON | __GFP_SKIP_KASAN_UNPOISON)
- #define GFP_TRANSHUGE_LIGHT	((GFP_HIGHUSER_MOVABLE | __GFP_COMP | \
- 			 __GFP_NOMEMALLOC | __GFP_NOWARN) & ~__GFP_RECLAIM)
- #define GFP_TRANSHUGE	(GFP_TRANSHUGE_LIGHT | __GFP_DIRECT_RECLAIM)
---=20
-2.35.1
+Hi Greg,
 
---=20
-Cheers,
-Stephen Rothwell
+Can you apply these couple of patches directly if and when you are happy
+with them ?
 
---Sig_/sUAzOhAiNBY2NoANo9iAbkc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Regards,
+Sudeep
 
------BEGIN PGP SIGNATURE-----
+v1->v2: This was added in v2
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLRQKcACgkQAVBC80lX
-0Gz0Vwf/aHEnJuOQ1ytugT/PfKOau5wXvMxSZ47sMS1EuXR3h2/dkS/L6xLn+z6h
-lfN59c10aExt4pnFP4AftZN7Yd3nqpMnLyOKvyj0ArVlt610rjb3wwSfGftbxY1l
-IgQhn3/RXNAQ7ndaQwKXFa1i4jbGtnhqlAp2OLNSylNrBGnR5XDyzTH/dE1V4G38
-eF0ZC2g/rA5QUh4QTTZiZXsUQBtoJRyfJjmdlmpAOKJOhY47W7nCwZpqwbfVXCPV
-uaxSJJ19OS7KQLCKZOe0Ham3SQFR/FrKJSOdtZcB3VAbpGFa9WYmO1hDFl1eLf6V
-9msetJPxWjSx5zMYismORSU57hzvHQ==
-=wMuj
------END PGP SIGNATURE-----
+diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
+index 65d566ff24c4..4b5cd08c5a65 100644
+--- a/drivers/base/cacheinfo.c
++++ b/drivers/base/cacheinfo.c
+@@ -356,7 +356,7 @@ int detect_cache_attributes(unsigned int cpu)
+ 		return -ENOENT;
 
---Sig_/sUAzOhAiNBY2NoANo9iAbkc--
+ 	per_cpu_cacheinfo(cpu) = kcalloc(cache_leaves(cpu),
+-					 sizeof(struct cacheinfo), GFP_KERNEL);
++					 sizeof(struct cacheinfo), GFP_ATOMIC);
+ 	if (per_cpu_cacheinfo(cpu) == NULL) {
+ 		cache_leaves(cpu) = 0;
+ 		return -ENOMEM;
+--
+2.37.1
+

@@ -2,101 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 979415768E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 23:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028A75768E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 23:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiGOV2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 17:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S231287AbiGOV31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 17:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiGOV2i (ORCPT
+        with ESMTP id S231422AbiGOV3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 17:28:38 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6C3D2;
-        Fri, 15 Jul 2022 14:28:35 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id r18so7836555edb.9;
-        Fri, 15 Jul 2022 14:28:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:user-agent:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=vKP8LRUE0yFoYd2NSJtjDx8dGT5PCA4BqZdFt2yy0yE=;
-        b=Lh9w6zXbZBZA7GiEpjb7SSyhQR9Z0cioFtyjFntBW3I/JmkDdVM4wZa++097wPJchb
-         UNj/v3N7C2YYrtrKVPn7nkyFKlaMK+JwIotUu4/FQ3DYDFix7EpVQeHJXlZEihEiX8Yv
-         8L9bgcuhwMBiq8pBnv8zsEJMjEsp4W/DzfWDwqQ2qqENb8jIgqn4qtHypmYi37VXT9Sf
-         Gaf6hppROhI15zAE3EHbTjyoEUw8eAEQAjgF6OW8L3cDPFOlNz7PuruQ4LyqhUezXsGM
-         QYpaKgqI4p+MxFSY+EqcvQawKQMBYpqeRIZapy7ekfXC5noYFNCgK83GPu0v1PCpNkYD
-         8t4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=vKP8LRUE0yFoYd2NSJtjDx8dGT5PCA4BqZdFt2yy0yE=;
-        b=LwUbPLEG4iRwIIxqOcfQgcfBwCdlObRGduQG6M7AgnvKJpMm4dL9z4RDklXBDrlk/o
-         UtaGcCAMrEjzFJjy7F+mE5nFlEpspFdMXpMGo1jcQLuSSz6qAgT9PiJjxA6xNE41tDLs
-         mCsleZiqgb3FtQTYSDcbjcmo3iWlnWMB4Dn1noBsn5D6+0Z8fRQBB7HZIuefYiHSkUc4
-         C95zWnrAvtbGN9O9zGntl6x4I5V/mKzTz+emW4XH7zWHWMjY2ByYtZIPnQ40WsyAaZ9r
-         0dCpdW3awkYyRBODbfbC3MmRrcEvKxjC5t8BRQYASCfb9WGzVVUXherKA6EYK03Hp8UH
-         C2Mg==
-X-Gm-Message-State: AJIora/l/W8qbBQi06NjXQMs/6AibC4k2exDO3Orvl+5JfUPIdZ1vf1K
-        Da9OufFI/TsDDs+tHV3kwTAY8zLgGDNMNQ==
-X-Google-Smtp-Source: AGRyM1s05yWcHFvP3gv214D8NvoaPGT9vm/UMlinro+VSSYis2KoGNKbdEL2VZPLMx5EOm85tzkSZw==
-X-Received: by 2002:a05:6402:5001:b0:437:8918:8dbe with SMTP id p1-20020a056402500100b0043789188dbemr21343249eda.70.1657920514358;
-        Fri, 15 Jul 2022 14:28:34 -0700 (PDT)
-Received: from ?IPv6:::1? (2a02-a466-aae1-1-410d-5d2b-3240-fd55.fixed6.kpn.net. [2a02:a466:aae1:1:410d:5d2b:3240:fd55])
-        by smtp.gmail.com with ESMTPSA id x25-20020aa7dad9000000b0043a0da110e3sm3526563eds.43.2022.07.15.14.28.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 14:28:33 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 23:28:33 +0200
-From:   Frans Klaver <fransklaver@gmail.com>
-To:     Reinhard Speyerer <rspmn@arcor.de>
-CC:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Frans Klaver <frans.klaver@vislink.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: serial: qcserial: add EM9191 support
-User-Agent: K-9 Mail for Android
-In-Reply-To: <YtHVfc40VGbB2Tkz@arcor.de>
-References: <20220715095623.28002-1-frans.klaver@vislink.com> <YtHVfc40VGbB2Tkz@arcor.de>
-Message-ID: <F3F460AC-05D0-4DF9-9C18-B95881B62F8F@gmail.com>
+        Fri, 15 Jul 2022 17:29:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95ED474786;
+        Fri, 15 Jul 2022 14:29:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 329A861874;
+        Fri, 15 Jul 2022 21:29:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CF20C341C6;
+        Fri, 15 Jul 2022 21:29:21 +0000 (UTC)
+Date:   Fri, 15 Jul 2022 17:29:19 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Song Liu <song@kernel.org>, Networking <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>
+Subject: Re: [PATCH v2 bpf-next 3/5] ftrace: introduce
+ FTRACE_OPS_FL_SHARE_IPMODIFY
+Message-ID: <20220715172919.76d60b47@gandalf.local.home>
+In-Reply-To: <6271DEDF-F585-4A3B-90BF-BA2EB76DDC01@fb.com>
+References: <20220602193706.2607681-1-song@kernel.org>
+        <20220602193706.2607681-4-song@kernel.org>
+        <20220713203343.4997eb71@rorschach.local.home>
+        <AA1D9833-DF67-4AFD-815C-DD89AB57B3A2@fb.com>
+        <20220714204817.2889e280@rorschach.local.home>
+        <6A7EF1C7-471B-4652-99C1-87C72C223C59@fb.com>
+        <20220714224646.62d49e36@rorschach.local.home>
+        <170BE89A-101C-4B25-A664-5E47A902DB83@fb.com>
+        <0CE9BF90-B8CE-40F6-A431-459936157B78@fb.com>
+        <20220715151217.141dc98f@gandalf.local.home>
+        <0EB34157-8BCA-47FC-B78F-AA8FE45A1707@fb.com>
+        <20220715155953.4fb692e2@gandalf.local.home>
+        <6271DEDF-F585-4A3B-90BF-BA2EB76DDC01@fb.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 15 Jul 2022 20:21:49 +0000
+Song Liu <songliubraving@fb.com> wrote:
 
+> >>> Wouldn't this need to be done anyway if BPF was first and live kernel
+> >>> patching needed the update? An -EAGAIN would not suffice.    
+> >> 
+> >> prepare_direct_functions_for_ipmodify handles BPF-first-livepatch-later
+> >> case. The benefit of prepare_direct_functions_for_ipmodify() is that it 
+> >> holds direct_mutex before ftrace_lock, and keeps holding it if necessary. 
+> >> This is enough to make sure we don't need the wash-rinse-repeat. 
+> >> 
+> >> OTOH, if we wait until __ftrace_hash_update_ipmodify(), we already hold
+> >> ftrace_lock, but not direct_mutex. To make changes to bpf trampoline, we
+> >> have to unlock ftrace_lock and lock direct_mutex to avoid deadlock. 
+> >> However, this means we will need the wash-rinse-repeat.   
+> 
+> What do you think about the prepare_direct_functions_for_ipmodify() 
+> approach? If this is not ideal, maybe we can simplify it so that it only
+> holds direct_mutex (when necessary). The benefit is that we are sure
+> direct_mutex is already held in __ftrace_hash_update_ipmodify(). However, 
+> I think it is not safe to unlock ftrace_lock in __ftrace_hash_update_ipmodify(). 
+> We can get parallel do_for_each_ftrace_rec(), which is dangerous, no? 
 
-On July 15, 2022 11:00:45 PM GMT+02:00, Reinhard Speyerer <rspmn@arcor=2Ed=
-e> wrote:
+I'm fine with it. But one nit on the logic:
 
->the qcserial driver used in the usb-devices output above does not seem
->to be built from the mainline qcserial=2Ec with your patch applied as USB
->interface 4 is ignored by the QCSERIAL_SWI layout=2E
+>  int register_ftrace_function(struct ftrace_ops *ops)
+> +	__releases(&direct_mutex)
+>  {
+> +	bool direct_mutex_locked;
+>  	int ret;
+>  
+>  	ftrace_ops_init(ops);
+>  
+> +	ret = prepare_direct_functions_for_ipmodify(ops);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	direct_mutex_locked = ret == 1;
+> +
 
-Right, I will need to look into that then=2E I won't be able to access the=
- devices for a couple of weeks, though=2E It might also just have been me n=
-o paying attention while testing=2E I'll get back to this=2E=20
+Please make the above:
 
+	if (ret < 0)
+		return ret;
+	else if (ret == 1)
+		direct_mutex_locked = true;
 
->To avoid potential side effects in case Sierra Wireless adds a vendor cla=
-ss
->USB interface 2 not intended to be used with qcserial=2Ec it might be bes=
-t
->to use a new QCSERIAL_SWI2 layout similar to what has been done in
->their MBPL drivers mentioned here
->https://forum=2Esierrawireless=2Ecom/t/rc7620-and-linux-driver/24308/ =2E
+It's much easier to read that way.
 
-I'll have a look at this too=2E=20
+-- Steve
 
-Thanks,=20
-Frans=20
+>  	mutex_lock(&ftrace_lock);
+>  
+>  	ret = ftrace_startup(ops, 0);
+>  
+>  	mutex_unlock(&ftrace_lock);
+>  
+> +	if (direct_mutex_locked)
+> +		mutex_unlock(&direct_mutex);
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(register_ftrace_function);
+> -- 

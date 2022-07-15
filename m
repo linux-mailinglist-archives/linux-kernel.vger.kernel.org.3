@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A0B575BA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3233575BA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiGOGhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 02:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
+        id S230443AbiGOGhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 02:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiGOGhQ (ORCPT
+        with ESMTP id S229881AbiGOGhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 02:37:16 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAD642AC7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:37:14 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31cd7ade3d6so34035457b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:37:14 -0700 (PDT)
+        Fri, 15 Jul 2022 02:37:18 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAA442AC8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:37:16 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id m5-20020a2598c5000000b0066faab590c5so3303472ybo.7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=AIFcnzKNAWh0YR95RoPUIx3ktwPspiMxJpZ1Mt/N6QE=;
-        b=tAoOXv24XNeGrIuZy5uSSDVCq+whkCi6tEGfJKUs2NmibJmoMfvnVm8T4+4fsSmQlm
-         xhDEIYLCfmw6yvc8441Y/IqzpaO6JFecGpsi3F9lUBma6HZlU8hQxnSUjjvK8zCULQQ7
-         CnWmzDivXc5Ny8DBgI2t8Z9qNiDfQK+rSB1khBFTsSY97K0k1BMXANPwVwI1bxtEY2eA
-         uu1ONU39e1e4fcBxpZZ88MMkB5CMqphmcszTKRgnOyed/YBeHadYpzqTR+jyeWgHL91j
-         eQcyPRU92d71zNhZje5IC/wIEfroEwLhz0u2O3AA4C4MTiCrQ1lZE0E7Br1Eq3jitqjB
-         VDnA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=I8mIXVo9Jr2k+tlsqaJg0nYaaYQybo0siO3CB03II98=;
+        b=agKGOIE1vqPjt1tgqd8riMq+O+VFoi11uiX3rz3x8Jm+lIy4iadKYc3u30xQ+YSN5b
+         PlepmeeZhyElM5S1c7iEPQA36JF5TderemYVFZqRAfi8zwefjKxI9QbyjsYdlnuAsBpY
+         LrfjS9e8RGKVxPeUKva4IFt4BRv4lk2qxIUKBjo2hYJsur0cyVkISvNa1cMPSz4dNY6D
+         AWbzJHUJ6553kNi39z2+D+lHExBkt4ycqqlGBP/3eKjW+0gqoL1n0aCkXrV6onAE1FVF
+         Gwh1XqzEEoaBgYFcSWefu22J9nHLz6vZg74FF8ozFDtpJdOKy8hXyLsbw9Tq/hvaV2hA
+         MD3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=AIFcnzKNAWh0YR95RoPUIx3ktwPspiMxJpZ1Mt/N6QE=;
-        b=nWPJhGusKSZXvvL2mug3W9W+75Dt0R+w7g4wQrcq8BVSLlfVluzMvMk9flotgCOlpd
-         dO8DbE3QXtelq+Et3/LZVCj0Rf7WCU4UeXXDczY4QpEY79mdMYi7CUVcFWoiPBGLOGuk
-         xOqzMxjnfpzs7uJy5x1zdmSBgpyxtCo+xQoieei2AMQUGHnDx53Cxi41yYJeQXJeKXeH
-         zgH/uNWxiTihg0nFPOVBBrGSmQsIcsQuSqg2DQMSvy6ETAbm7PH3UyxTSRRPh/qlQ/d5
-         p8DT3VDlyu0RjCsRSXyL/7NSUoZxvAN8J9vKlH3mE0PLO+STv4XuWDyffVFGL9mI6GXR
-         CoLA==
-X-Gm-Message-State: AJIora82lx/QG9N3zWtPG8TlkIlbtgqO+CJfeIKqVSZJSns/JhpatZzv
-        f/AwbZDh/0lqKl7yV9G0WytFbE5tQ0kX
-X-Google-Smtp-Source: AGRyM1sGwfLX6O3C9IIcZXOvrN6+z5zcDfJ6paIRGF7rJMxYkEiVPmP2srQ+IH4qJg1M74aota/jWW+kQjjv
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=I8mIXVo9Jr2k+tlsqaJg0nYaaYQybo0siO3CB03II98=;
+        b=C90mesXTqtST17E25ZK/LamrYl75ZP32v2PmTGjzMib4Sr6RO2E4c/iaRDvd6O/usx
+         jYuGgm8dKjTbgvetbgRBCNhMM2K6NRA2V8LUojVpqv7uBX4XsUsyODhT2BSq60M0ogCw
+         3ICEmWL8nkoUMyEIXzuEWGqPh+BtAcuAqjtkYaMmJ9VtXcEmy8wPEwjsyLDfckTRgqv/
+         oM9/QhARtyyVRdqSiupSPKjg9Qlr8HAcReHp2UX3pjWEiVmQHzRI0kBRFPKcwgw6awDA
+         oFRK6z9j3Va5StLT7GH9rwhpuYzHmOjV7gFFxHHEXWFPp9CVdAgBfResYX34SaCg1edt
+         4cbw==
+X-Gm-Message-State: AJIora8gDhAx3Cwe2pmPRVsDGCC0pE+mmty+QbENxrzVJKtyvalEaBVt
+        sPhWUHvPq3Rh04nF6XsnNyyLN4MCT9Ts
+X-Google-Smtp-Source: AGRyM1vWw2+R3+LXTeD6M1RrxELOEjWl7BVzVgogGej1aWKtKZtiRk+SNJ4lUGbI/jz/nlU28rJ+WgAxmB9n
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:e8fe:2a8e:e0f6:318d])
- (user=irogers job=sendgmr) by 2002:a25:d96:0:b0:66e:2d0b:1d45 with SMTP id
- 144-20020a250d96000000b0066e2d0b1d45mr12695121ybn.163.1657867033605; Thu, 14
- Jul 2022 23:37:13 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 23:36:38 -0700
-Message-Id: <20220715063653.3203761-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a25:730a:0:b0:66e:698b:37bd with SMTP id
+ o10-20020a25730a000000b0066e698b37bdmr12397283ybc.485.1657867036179; Thu, 14
+ Jul 2022 23:37:16 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 23:36:39 -0700
+In-Reply-To: <20220715063653.3203761-1-irogers@google.com>
+Message-Id: <20220715063653.3203761-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20220715063653.3203761-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v1 00/15] Compress the pmu_event tables
+Subject: [PATCH v1 01/15] perf jevents: Simplify generation of C-string
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
         James Clark <james.clark@arm.com>,
@@ -74,70 +78,56 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-jevents.py creates a number of large arrays from the json events. The
-arrays contain pointers to strings that need relocating. The
-relocations have file size, run time and memory costs. These changes
-refactor the pmu_events API so that the storage of the pmu_event
-struct isn't exposed. The format is then changed to an offset within a
-combined big string, with adjacent pmu_event struct variables being
-next to each other in the string separated by \0 - meaning only the
-first variable of the struct needs its offset recording.
+Previous implementation wanted variable order and '(null)' string output
+to match the C implementation. The '(null)' string output was a
+quirk/bug and so there is no need to carry it forward.
 
-Some related fixes are contained with the patches. The architecture
-jevents.py creates tables for can now be set by the JEVENTS_ARCH make
-variable, with a new 'all' that generates the events and metrics for
-all architectures.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/pmu-events/jevents.py | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-An example of the improvement to the file size on x86 is:
-no jevents - the same 19,579,104bytes
-x86 jevents - ~12.5% file size saving 22,088,944bytes vs 25,235,048bytes
-all jevents - ~15.8% file size saving 22,821,896bytes vs 27,106,648bytes
-default build options plus NO_LIBBFD=1.
-
-I originally suggested fixing this problem in:
-https://lore.kernel.org/linux-perf-users/CAP-5=fVB8G4bdb9T=FncRTh9oBVKCS=+=eowAO+YSgAhab+Dtg@mail.gmail.com/
-
-Ian Rogers (15):
-  perf jevents: Simplify generation of C-string
-  perf jevents: Add JEVENTS_ARCH make option
-  perf jevent: Add an 'all' architecture argument
-  perf jevents: Remove the type/version variables
-  perf jevents: Provide path to json file on error
-  perf jevents: Sort json files entries
-  perf pmu-events: Hide pmu_sys_event_tables
-  perf pmu-events: Avoid passing pmu_events_map
-  perf pmu-events: Hide pmu_events_map
-  perf test: Use full metric resolution
-  perf pmu-events: Move test events/metrics to json
-  perf pmu-events: Don't assume pmu_event is an array
-  perf pmu-events: Hide the pmu_events
-  perf metrics: Copy entire pmu_event in find metric
-  perf jevents: Compress the pmu_events_table
-
- tools/perf/arch/arm64/util/pmu.c              |   4 +-
- tools/perf/pmu-events/Build                   |   6 +-
- .../arch/test/test_soc/cpu/metrics.json       |  64 +++
- tools/perf/pmu-events/empty-pmu-events.c      | 204 +++++++-
- tools/perf/pmu-events/jevents.py              | 478 ++++++++++++++----
- tools/perf/pmu-events/pmu-events.h            |  40 +-
- tools/perf/tests/expand-cgroup.c              |  25 +-
- tools/perf/tests/parse-metric.c               |  77 +--
- tools/perf/tests/pmu-events.c                 | 466 +++++++----------
- tools/perf/util/metricgroup.c                 | 275 ++++++----
- tools/perf/util/metricgroup.h                 |   5 +-
- tools/perf/util/pmu.c                         | 139 ++---
- tools/perf/util/pmu.h                         |   8 +-
- tools/perf/util/s390-sample-raw.c             |  50 +-
- 14 files changed, 1128 insertions(+), 713 deletions(-)
- create mode 100644 tools/perf/pmu-events/arch/test/test_soc/cpu/metrics.json
-
+diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+index 83e0dcbeac9a..4a170f23bd67 100755
+--- a/tools/perf/pmu-events/jevents.py
++++ b/tools/perf/pmu-events/jevents.py
+@@ -204,7 +204,7 @@ class JsonEvent:
+     """Representation of the event as a C struct initializer."""
+ 
+     def attr_string(attr: str, value: str) -> str:
+-      return '\t.%s = \"%s\",\n' % (attr, value)
++      return f'\t.{attr} = \"{value}\",\n'
+ 
+     def str_if_present(self, attr: str) -> str:
+       if not getattr(self, attr):
+@@ -212,17 +212,11 @@ class JsonEvent:
+       return attr_string(attr, getattr(self, attr))
+ 
+     s = '{\n'
+-    for attr in ['name', 'event']:
+-      s += str_if_present(self, attr)
+-    if self.desc is not None:
+-      s += attr_string('desc', self.desc)
+-    else:
+-      s += attr_string('desc', '(null)')
+-    s += str_if_present(self, 'compat')
+     s += f'\t.topic = "{topic_local}",\n'
+     for attr in [
+-        'long_desc', 'pmu', 'unit', 'perpkg', 'aggr_mode', 'metric_expr',
+-        'metric_name', 'metric_group', 'deprecated', 'metric_constraint'
++        'aggr_mode', 'compat', 'deprecated', 'desc', 'event', 'long_desc',
++        'metric_constraint', 'metric_expr', 'metric_group', 'metric_name',
++        'name', 'perpkg', 'pmu', 'unit'
+     ]:
+       s += str_if_present(self, attr)
+     s += '},\n'
 -- 
 2.37.0.170.g444d1eabd0-goog
 

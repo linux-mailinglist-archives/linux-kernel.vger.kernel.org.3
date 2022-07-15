@@ -2,89 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E663B575B66
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D65575C64
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiGOGQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 02:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
+        id S231908AbiGOHbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 03:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbiGOGPp (ORCPT
+        with ESMTP id S231902AbiGOHbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 02:15:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5845F774B1;
-        Thu, 14 Jul 2022 23:14:30 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657865668;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SEFrGRzx2HRmzhJ7UPpw8gHa4O4qj4ywFqjMDBC7ZXg=;
-        b=DUixPfAjTwHcZ91MSA7eJganvqbUgueXazFi+F1VBlI8C/krnKmID0y5WVAHljpGP8s8Nh
-        kAMrhh1laSaViMucwqFzRZ3L1Hbue11PPQ89k7F6ceU6i02Ruc4uzrKldELGEhrBPXYpSh
-        EhjWZ6dR0fnxrBHvgSZX3ipXAcl7IgFC83Voh/j5YEWSsVBUHpXm5rx/DyFQQUlBaDNCBH
-        d27RZuI/IvZmM1m03YnTwd3tZeUJX9tZb92VpKmxSjtWl3GadEcTbTLlSUlIWUHyvlsnay
-        qq+AzH7F2OtwEq3l+06dfOA5cSyN4Qv9Lin6utPnsb04GcVYde/suiTlb4zk5w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657865668;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SEFrGRzx2HRmzhJ7UPpw8gHa4O4qj4ywFqjMDBC7ZXg=;
-        b=VhykZswD1fCTN4vsmaBG/oZCrHvXluGEhdQmSywaFUKeqVY9BE4UurdnzBZ86f4x4sVqJo
-        jEDCXaqELswn29AQ==
-To:     todd.e.brandt@linux.intel.com,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Petr Mladek <pmladek@suse.com>, rafael.j.wysocki@intel.com,
-        len.brown@intel.com
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: PNP0501 serial driver takes almost 2 seconds to suspend/resume
- (printk issue)
-In-Reply-To: <472f7fc2d44d781edb64f19f9970fe50eec79c1f.camel@linux.intel.com>
-References: <12fb98fe27e23e3f74a139e5e8eb83a97a343372.camel@linux.intel.com>
- <51b9e2cc3baf61a604bd239b736ec2d12f1f6695.camel@linux.intel.com>
- <87czegxccb.fsf@jogness.linutronix.de>
- <045ebee30af2b80aaeace1dab18ecd113e3f17c7.camel@linux.intel.com>
- <87tu7qvx1q.fsf@jogness.linutronix.de>
- <CAHp75VfyzMNMO2NRwXwSjAmQqBbdRG3+SzyFDG+90dmvmg1xLQ@mail.gmail.com>
- <87o7xwbuoy.fsf@jogness.linutronix.de> <Ysvbp8vz7R9hDNqx@alley>
- <Ysv3JNs4RwE7kAou@google.com> <87ilo1wdac.fsf@jogness.linutronix.de>
- <c60f5634e8605cb4c2ef4646b6e511e6135bea48.camel@linux.intel.com>
- <7d79e9877d63cdb74144f38d8736959281b562cc.camel@linux.intel.com>
- <875yk0908j.fsf@jogness.linutronix.de>
- <472f7fc2d44d781edb64f19f9970fe50eec79c1f.camel@linux.intel.com>
-Date:   Fri, 15 Jul 2022 08:20:27 +0206
-Message-ID: <8735f2x5q4.fsf@jogness.linutronix.de>
+        Fri, 15 Jul 2022 03:31:45 -0400
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914877B78E;
+        Fri, 15 Jul 2022 00:31:41 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id AF88C209E1;
+        Fri, 15 Jul 2022 09:31:28 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mgWaDqviUQaR; Fri, 15 Jul 2022 09:30:53 +0200 (CEST)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id 213FB208A6;
+        Fri, 15 Jul 2022 08:14:55 +0200 (CEST)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout2.secunet.com (Postfix) with ESMTP id 18E5C80004A;
+        Fri, 15 Jul 2022 08:14:45 +0200 (CEST)
+Received: from mbx-dresden-01.secunet.de (10.53.40.199) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Jul 2022 08:14:34 +0200
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-dresden-01.secunet.de
+ (10.53.40.199) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 15 Jul
+ 2022 08:14:34 +0200
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id CCB823180785; Fri, 15 Jul 2022 08:14:33 +0200 (CEST)
+Date:   Fri, 15 Jul 2022 08:14:33 +0200
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     <iamwjia@163.com>
+CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: Re: [PATCH -next] xfrm: Fix couple of spellings
+Message-ID: <20220715061433.GS566407@gauss3.secunet.de>
+References: <20220713154529.53031-1-iamwjia@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220713154529.53031-1-iamwjia@163.com>
+X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
+ mbx-dresden-01.secunet.de (10.53.40.199)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-14, Todd Brandt <todd.e.brandt@linux.intel.com> wrote:
-> I ran with your fix on 30 systems. On the 7 machines where this
-> problem appears, the patch fixes it completely. On the 23 machines
-> where this problem does not appear, there are no issues or
-> regressions.
->
-> Fix verified, thank you!
+On Wed, Jul 13, 2022 at 11:45:29PM +0800, iamwjia@163.com wrote:
+> From: Wang Jia <iamwjia@163.com>
+> 
+> accomodate  ==> accommodate
+> destionation  ==> destination
+> execeeds  ==> exceeds
+> informations  ==> information
+> 
+> Reported-by: Hacash Robot <hacashRobot@santino.com>
+> Signed-off-by: Wang Jia <iamwjia@163.com>
+> ---
+>  net/ipv6/ah6.c     | 2 +-
+>  net/ipv6/esp6.c    | 4 ++--
 
-I have posted [0] an official patch for 5.19-rc7. For the posted
-version, I added more information to the commit message and comments.
+Your patch does not apply to ipsec-next, the fixes
+for net/ipv6/esp6.c are already done there.
 
-Todd, thanks for reporting and testing!
-
-John
-
-[0] https://lore.kernel.org/lkml/20220715061042.373640-1-john.ogness@linutronix.de
+Please rebase your patch to ipsec-next, thanks!

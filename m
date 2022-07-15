@@ -2,153 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D73D576939
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 23:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C1657693A
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 23:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiGOVxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 17:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
+        id S230443AbiGOV4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 17:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiGOVxR (ORCPT
+        with ESMTP id S229724AbiGOV4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 17:53:17 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB7488752;
-        Fri, 15 Jul 2022 14:53:16 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26FJb9Rw017003;
-        Fri, 15 Jul 2022 21:53:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=xEsbWzo7tDk/z11XoXB7E6aUnOCq/Vviu8d4ley9Vug=;
- b=QQiEfdboqUHoewMHKtC5FU/H/a+vX6XnZpSIXowNKqVpiHvKKYMd5hRIChIQ8lvTMj5H
- 4eMYAJ6MCwwfe9+hvMKFe2bUEx7j93P5oZP7oIlVDBhPKIvF2PwRyAXVfqAj1wG597SY
- Nw5jf5XcR20AWugSmFTOq2KGjuP/ky4Cfsvnjc/vpGDmAlOQmBHBYzt4o4DZ0Fcghf0s
- 2Be5jqIC+UT9uXEbhA/VsolnWGEUb44hH2TlLvR0+W+43BsmmEmtlgOXpTYd3+ntlCnZ
- cqoJvjlhIMyAc9iAICwpgjInp/G4fLHDjR9SJeVj2KpB6wLXkSN9CDU/iH6J/5Hulve8 vA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hbbh0eds3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 21:53:11 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26FLYUCE004798;
-        Fri, 15 Jul 2022 21:53:10 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hbbh0eds0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 21:53:10 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26FLptUJ012667;
-        Fri, 15 Jul 2022 21:53:10 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma04wdc.us.ibm.com with ESMTP id 3h71aa3hbq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 21:53:10 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26FLr9jj2097756
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 15 Jul 2022 21:53:09 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B8C5CAC05F;
-        Fri, 15 Jul 2022 21:53:09 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 71388AC05E;
-        Fri, 15 Jul 2022 21:53:09 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 15 Jul 2022 21:53:09 +0000 (GMT)
-Message-ID: <4b82b766-4482-762f-f366-cf5a47321ef7@linux.ibm.com>
-Date:   Fri, 15 Jul 2022 17:53:09 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] KEYS: asymmetric: Fix ECDSA use via keyctl uapi
-Content-Language: en-US
-To:     Denis Kenzior <denkenz@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220715182810.30505-1-denkenz@gmail.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220715182810.30505-1-denkenz@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 232kP6svoJql8Y8Z_Td0NSrqJfEq6KQD
-X-Proofpoint-ORIG-GUID: dSB4sike6dYJXvFwX9nmqREVCTmAkyJ3
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 15 Jul 2022 17:56:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75EC8B4A5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 14:55:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85AE9B82E8C
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 21:55:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7CA5C34115;
+        Fri, 15 Jul 2022 21:55:56 +0000 (UTC)
+Date:   Fri, 15 Jul 2022 17:55:55 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH] tracing: Add example and documentation for new __vstring()
+ macro
+Message-ID: <20220715175555.16375a3b@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-15_13,2022-07-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- adultscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 impostorscore=0
- mlxlogscore=999 phishscore=0 bulkscore=0 suspectscore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207150095
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
+Update the sample trace events to include an example that uses the new
+__vstring() helpers for TRACE_EVENTS.
 
-On 7/15/22 14:28, Denis Kenzior wrote:
-> When support for ECDSA keys was added, constraints for data & signature
-> sizes were never updated.  This makes it impossible to use such keys via
-> keyctl API from userspace; fix that.
-> 
-> Fixes: 299f561a6693 ("x509: Add support for parsing x509 certs with ECDSA keys")
-> Signed-off-by: Denis Kenzior <denkenz@gmail.com>
-> ---
->   crypto/asymmetric_keys/public_key.c | 24 ++++++++++++++++++++++--
->   1 file changed, 22 insertions(+), 2 deletions(-)
-> 
-> diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-> index 2f8352e88860..eca5671ad3f2 100644
-> --- a/crypto/asymmetric_keys/public_key.c
-> +++ b/crypto/asymmetric_keys/public_key.c
-> @@ -186,8 +186,28 @@ static int software_key_query(const struct kernel_pkey_params *params,
->   
->   	len = crypto_akcipher_maxsize(tfm);
->   	info->key_size = len * 8;
-> -	info->max_data_size = len;
-> -	info->max_sig_size = len;
-> +
-> +	if (strncmp(pkey->pkey_algo, "ecdsa", 5) == 0) {
-> +		/*
-> +		 * ECDSA key sizes are much smaller than RSA, and thus could
-> +		 * operate on (hashed) inputs that are larger than key size.
-> +		 * For example SHA384-hashed input used with secp256r1
-> +		 * based keys.  Set max_data_size to be at least as large as
-> +		 * the largest supported hash size (SHA512)
-> +		 */
-> +		info->max_data_size = 64;
-> +
-> +		/*
-> +		 * Verify takes ECDSA-Sig (described in RFC 5480) as input,
-> +		 * which is actually 2 'key_size'-bit integers encoded in
-> +		 * ASN.1.  Account for the ASN.1 encoding overhead here.
-> +		 */
-> +		info->max_sig_size = 2 * (len + 3) + 2;
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
 
+Based off of the patch series:
+  https://lore.kernel.org/all/20220705224453.120955146@goodmis.org/
 
-This part matches what I wrote about here: 
-https://lore.kernel.org/linux-integrity/127811ae-ef71-d225-0450-710a6ee6afef@linux.ibm.com/T/#m7aea8ca697e7c35773c3f8f110329553f4f8d91e
+ samples/trace_events/trace-events-sample.c | 14 ++++++++--
+ samples/trace_events/trace-events-sample.h | 32 +++++++++++++++++++---
+ 2 files changed, 40 insertions(+), 6 deletions(-)
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+diff --git a/samples/trace_events/trace-events-sample.c b/samples/trace_events/trace-events-sample.c
+index 4d34dc0b0fee..608c4ae3b08a 100644
+--- a/samples/trace_events/trace-events-sample.c
++++ b/samples/trace_events/trace-events-sample.c
+@@ -19,9 +19,10 @@ static const char *random_strings[] = {
+ 	"One ring to rule them all"
+ };
+ 
+-static void simple_thread_func(int cnt)
++static void do_simple_thread_func(int cnt, const char *fmt, ...)
+ {
+ 	unsigned long bitmask[1] = {0xdeadbeefUL};
++	va_list va;
+ 	int array[6];
+ 	int len = cnt % 5;
+ 	int i;
+@@ -33,9 +34,13 @@ static void simple_thread_func(int cnt)
+ 		array[i] = i + 1;
+ 	array[i] = 0;
+ 
++	va_start(va, fmt);
++
+ 	/* Silly tracepoints */
+ 	trace_foo_bar("hello", cnt, array, random_strings[len],
+-		      current->cpus_ptr);
++		      current->cpus_ptr, fmt, &va);
++
++	va_end(va);
+ 
+ 	trace_foo_with_template_simple("HELLO", cnt);
+ 
+@@ -48,6 +53,11 @@ static void simple_thread_func(int cnt)
+ 	trace_foo_rel_loc("Hello __rel_loc", cnt, bitmask);
+ }
+ 
++static void simple_thread_func(int cnt)
++{
++	do_simple_thread_func(cnt, "iter=%d", cnt);
++}
++
+ static int simple_thread(void *arg)
+ {
+ 	int cnt = 0;
+diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_events/trace-events-sample.h
+index cbbbb83beced..1a92226202fc 100644
+--- a/samples/trace_events/trace-events-sample.h
++++ b/samples/trace_events/trace-events-sample.h
+@@ -141,6 +141,27 @@
+  *         In most cases, the __assign_str() macro will take the same
+  *         parameters as the __string() macro had to declare the string.
+  *
++ *   __vstring: This is similar to __string() but instead of taking a
++ *         dynamic length, it takes a variable list va_list 'va' variable.
++ *         Some event callers already have a message from parameters saved
++ *         in a va_list. Passing in the format and the va_list variable
++ *         will save just enough on the ring buffer for that string.
++ *         Note, the va variable used is a pointer to a va_list, not
++ *         to the va_list directly.
++ *
++ *           (va_list *va)
++ *
++ *         __vstring(foo, fmt, va)  is similar to:  vsnprintf(foo, fmt, va)
++ *
++ *         To assign the string, use the helper macro __assign_vstr().
++ *
++ *         __assign_vstr(foo, fmt, va);
++ *
++ *         In most cases, the __assign_vstr() macro will take the same
++ *         parameters as the __vstring() macro had to declare the string.
++ *         Use __get_str() to retrieve the __vstring() just like it would for
++ *         __string().
++ *
+  *   __string_len: This is a helper to a __dynamic_array, but it understands
+  *	   that the array has characters in it, and with the combined
+  *         use of __assign_str_len(), it will allocate 'len' + 1 bytes
+@@ -256,9 +277,10 @@ TRACE_DEFINE_ENUM(TRACE_SAMPLE_ZOO);
+ TRACE_EVENT(foo_bar,
+ 
+ 	TP_PROTO(const char *foo, int bar, const int *lst,
+-		 const char *string, const struct cpumask *mask),
++		 const char *string, const struct cpumask *mask,
++		 const char *fmt, va_list *va),
+ 
+-	TP_ARGS(foo, bar, lst, string, mask),
++	TP_ARGS(foo, bar, lst, string, mask, fmt, va),
+ 
+ 	TP_STRUCT__entry(
+ 		__array(	char,	foo,    10		)
+@@ -266,6 +288,7 @@ TRACE_EVENT(foo_bar,
+ 		__dynamic_array(int,	list,   __length_of(lst))
+ 		__string(	str,	string			)
+ 		__bitmask(	cpus,	num_possible_cpus()	)
++		__vstring(	vstr,	fmt,	va		)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -274,10 +297,11 @@ TRACE_EVENT(foo_bar,
+ 		memcpy(__get_dynamic_array(list), lst,
+ 		       __length_of(lst) * sizeof(int));
+ 		__assign_str(str, string);
++		__assign_vstr(vstr, fmt, va);
+ 		__assign_bitmask(cpus, cpumask_bits(mask), num_possible_cpus());
+ 	),
+ 
+-	TP_printk("foo %s %d %s %s %s %s (%s)", __entry->foo, __entry->bar,
++	TP_printk("foo %s %d %s %s %s %s (%s) %s", __entry->foo, __entry->bar,
+ 
+ /*
+  * Notice here the use of some helper functions. This includes:
+@@ -321,7 +345,7 @@ TRACE_EVENT(foo_bar,
+ 		  __print_array(__get_dynamic_array(list),
+ 				__get_dynamic_array_len(list) / sizeof(int),
+ 				sizeof(int)),
+-		  __get_str(str), __get_bitmask(cpus))
++		  __get_str(str), __get_bitmask(cpus), __get_str(vstr))
+ );
+ 
+ /*
+-- 
+2.35.1
 
-> +	} else {
-> +		info->max_data_size = len;
-> +		info->max_sig_size = len;
-> +	}
-> +
->   	info->max_enc_size = len;
->   	info->max_dec_size = len;
->   	info->supported_ops = (KEYCTL_SUPPORTS_ENCRYPT |

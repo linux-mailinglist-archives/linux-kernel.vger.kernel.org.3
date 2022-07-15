@@ -2,130 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20DD5766F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5625766FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbiGOS4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 14:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
+        id S229629AbiGOS5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 14:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiGOS4B (ORCPT
+        with ESMTP id S229538AbiGOS5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 14:56:01 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EDC26110;
-        Fri, 15 Jul 2022 11:56:01 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id h132so5162113pgc.10;
-        Fri, 15 Jul 2022 11:56:01 -0700 (PDT)
+        Fri, 15 Jul 2022 14:57:30 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DB33B969
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 11:57:28 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id fd6so7440044edb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 11:57:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=txNDrk9pGz6uXD/rzBLEuIe+526tTagKyY+blkSYT/c=;
-        b=hBa/KZV1VsmsfbAJShL0fRQke5T9Fodc9DS10V+7Js/uchvw/e4wuzdhgCl6IA7nXJ
-         2E9328A+1VJgmwOprC5pNFDJ5IF1yz1qTZ01qwDBkW4W08+XKdc5qti8MXyAVSkOzN3J
-         Npa8q8uXUwEMj01BRhYd8tUOXGMpuYchQewEKe3kPg2LcIivziFRLWpyC2VUyjrtlZ8O
-         UJ6XE92l2X5IL1IKWGUOqKp8uTZVeK5bn4KFiSHb99OyyP1FgDHBkySEhsYoleR2NLdx
-         JkZoVVCF+nQTvodv3wxWgbChzqnu30jtJnoSL/njjTukYGn717pNGnm3xieOpW/AhSWF
-         gAKg==
+        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=cGwhK/ZtvSr9wwZc7/rNFgjUf04Hq4lw/c5RyLtXhv4=;
+        b=n30FiJMdCmOAUiVxpAmFVASHuizhc6AX2acGIQrmGWi2ITlMu7dy5tY3GAusQZCwUX
+         mClk0//XWWNtoKOlVDp3bevjwUCPlPu6qT58ckogGwW3fiPwV3AnX1JH80Tcv/qvJxbD
+         dd2hnpWUh+kbDnSUzqOnXj71sddyRZYkIlR5uwqBsXNmW8E86IjtsWgCOCj96w7UTJh1
+         ekclrrbo31eDkn55oa2xD7ZY8kZCRduEeNmKBSZ3yK6cNK/PRrM+v1/yUUWmbSW8KzBk
+         1G3I9oE8dPOml71Mav31UBLpfptw3Ree6F9LzjmopmoauGHoWKXK8zG7iMIjoX2r53ev
+         BDow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=txNDrk9pGz6uXD/rzBLEuIe+526tTagKyY+blkSYT/c=;
-        b=5gxzu3BIMY6RmCL59Kn4Pe587L+TYt2/qkfyTTUrJjGpPi8I7/dKHkt7HSDEnSB7p8
-         nvc149a28j10onRruM6Twpc64GLdIpjDDPw5D6ps2GM6rp7Loa012Gh6a0FICGkI/+si
-         zdUc4SukbHM0AUg5PzmmqqAGm7ady/fG+zjtyHPZEmupRLOGJv4BfnUMGpR2S4YT/VSy
-         0Fvl2ZcvL+yglfC435J+YBA9NYjuwutIdmvNKGF6bflY6BbGme3MjNUh3+/5+pFqOXw2
-         hiiicDgYBCizo76m22qYKcCcqEiR+ciAoy0u2fZVncf5PAY7CFd19NQpC3pQjEzqMHXv
-         ZTew==
-X-Gm-Message-State: AJIora+8SgNGL/BH4tBBLHXwgIX9rlZBm14no0EhsFs4hDiZ+/bynZ/0
-        eOkv/54Rw2kup6cC+7rDTZ3mklL6utw=
-X-Google-Smtp-Source: AGRyM1vqAMemFePL0Rs384dOpVs+hjs41yGbA+QMSgCOMDS0RVu8TMtfNQPELQKX7JiOmm9QekB6cQ==
-X-Received: by 2002:a62:b514:0:b0:525:1ccd:4506 with SMTP id y20-20020a62b514000000b005251ccd4506mr15295958pfe.8.1657911360327;
-        Fri, 15 Jul 2022 11:56:00 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id b132-20020a621b8a000000b0052a75004c51sm4310943pfb.146.2022.07.15.11.55.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 11:55:59 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     hch@lst.de, nathan@kernel.org, naresh.kamboju@linaro.org,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        heiko@sntech.de, Florian Fainelli <f.fainelli@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: [PATCH] tools: Fixed MIPS builds due to struct flock re-definition
-Date:   Fri, 15 Jul 2022 11:55:49 -0700
-Message-Id: <20220715185551.3951955-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=cGwhK/ZtvSr9wwZc7/rNFgjUf04Hq4lw/c5RyLtXhv4=;
+        b=P3i1lad+Yz7Ln4Ex/IkC+bi1/c7C377rFboLbXDijFu++4EzpxDLEGgFf2f1vkvoex
+         nSt9cTYXPzBeKQPlIWr6CNA/bGzkP2/LAkWfOegURMrDG7QgOmB2+om800ejnanQpFUd
+         0QVxm88j5mG1DTAknMcGRlTmUXWPkZAECUrv6pTy6P0AVFViS1sltAuJ0vc2ABcnpJWr
+         EfgV+kzW0QkRWLiwp3OONn028dEcSOck/lkiwLTMMGML/nX9SlJATiG+pAv4Bubii8bD
+         LhUmlWW5nyfdALomCb4WSBKCEHZaEvkrbylpyal2tMQiqfSP0doOcBVwW0ajQpH2NwDt
+         QvBQ==
+X-Gm-Message-State: AJIora/xMhmU00Tz2mgr8Od0AsA8xeuOnB9mi0dNMb8bOe+17eo4kYON
+        u/nlwNOM/Rer8F0ue2wfVBkErA==
+X-Google-Smtp-Source: AGRyM1sNSdrb4hPilLYMF0OeyZKR2sc7pz98xPbz2HQO6R2iT7Hy2/VCmJFBU0H7V8xJJER7HTBMcw==
+X-Received: by 2002:a05:6402:40d6:b0:43a:cc69:1db9 with SMTP id z22-20020a05640240d600b0043acc691db9mr20997614edb.380.1657911447021;
+        Fri, 15 Jul 2022 11:57:27 -0700 (PDT)
+Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
+        by smtp.gmail.com with ESMTPSA id o18-20020a170906769200b00726abf9a32bsm2329648ejm.138.2022.07.15.11.57.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 15 Jul 2022 11:57:25 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH v4] arm64: dts: rockchip: Fix SD card init on
+ rk3399-nanopi4
+From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>
+In-Reply-To: <17a4c6f6-d79c-a7b2-860f-e5944b778f9f@arm.com>
+Date:   Fri, 15 Jul 2022 20:57:24 +0200
+Cc:     wens@kernel.org, =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <BEEF9E7B-E8A9-4E33-B53B-72D72F9EA536@kohlschutter.com>
+References: <C639AD88-77A1-4485-BAEA-2FF8FC15A844@kohlschutter.com>
+ <12878108.O9o76ZdvQC@diego> <103b714c-b07c-f016-1062-84bd94786b22@arm.com>
+ <9AF1E75F-5947-49B0-887D-82C426527B99@kohlschutter.com>
+ <590f7a08-a6ca-be54-4254-363343642a52@arm.com>
+ <A6B896E5-CD25-4441-B6A5-0BE1FA284B2C@kohlschutter.com>
+ <A9634366-A012-43D2-B253-8BB9BF6005C7@kohlschutter.com>
+ <CAGb2v65Ehbu1wrib2CzF1fDZuD3fHZQDhKfVusyUF9KnxTvi+Q@mail.gmail.com>
+ <5ca9bd94-54d9-04f8-0098-a56ffb6f5fe1@arm.com>
+ <502b3fbe-3077-407e-6010-a8cb3ffce7d6@arm.com>
+ <449292CA-CE60-4B90-90F7-295FBFEAB3F8@kohlschutter.com>
+ <73F9AED0-D2A8-4294-B6E1-1B92D2A36529@kohlschutter.com>
+ <115AD6A4-021B-4879-BFB5-BC7689A0203E@kohlschutter.com>
+ <17a4c6f6-d79c-a7b2-860f-e5944b778f9f@arm.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Building perf for MIPS failed after 9f79b8b72339 ("uapi: simplify
-__ARCH_FLOCK{,64}_PAD a little") with the following error:
+> Am 15.07.2022 um 20:11 schrieb Robin Murphy <robin.murphy@arm.com>:
+>=20
+> On 2022-07-15 18:16, Christian Kohlsch=C3=BCtter wrote:
+>> OK, this took me a while to figure out.
+>> When no undervoltage limit is configured, I can reliably trigger the =
+initialization bug upon boot.
+>> When the limit is set to 3.0V, it rarely occurs, but just after I =
+send the v3 patch, I was able to reproduce...
+>=20
+> Well this has to be in the running for "weirdest placebo ever"... :/
+>=20
+> All it actually seems to achieve is printing an error[1] (this is =
+after all a tiny 5-pin fixed-voltage LDO regulator, not an intelligent =
+PMIC), and if that makes an appreciable difference then there has to be =
+some kind of weird timing condition at play. Maybe regulator_register() =
+ends up turning it off and on again rapidly enough that the card sees a =
+voltage brownout and glitches, and adding more delay by printing to the =
+console somewhere in the middle gives it enough time to act as a proper =
+power cycle with no ill effect?
 
-  CC
-/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o
-In file included from
-../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:77,
-                 from ../include/uapi/linux/fcntl.h:5,
-                 from trace/beauty/fcntl.c:10:
-../include/uapi/asm-generic/fcntl.h:188:8: error: redefinition of
-'struct flock'
- struct flock {
-        ^~~~~
-In file included from ../include/uapi/linux/fcntl.h:5,
-                 from trace/beauty/fcntl.c:10:
-../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:63:8:
-note: originally defined here
- struct flock {
-        ^~~~~
+That's definitely something between placebo and homeopathy :-)
 
-This is due to the local copy under
-tools/include/uapi/asm-generic/fcntl.h including the toolchain's kernel
-headers which already define 'struct flock' and define
-HAVE_ARCH_STRUCT_FLOCK to future inclusions make a decision as to
-whether re-defining 'struct flock' is appropriate or not.
+I can confirm that setting a limit higher than 3.0V still works, which =
+means that the one time incident where it still crashed means that =
+there's indeed a timing issue at play, and adding that undervoltage =
+statement (unlike the ramp-delay configs that I also tried) added just =
+enough of a delay that made it work 99 out of 100 times.
 
-Make sure what do not re-define 'struct flock'
-when HAVE_ARCH_STRUCT_FLOCK is already defined.
+> If you just whack something like an mdelay(500) at around that point =
+in set_machine_constraints(), without the DT property, does it have the =
+same effect?
+Adding a delay for vcc3v0_sd works, which is great! (patch below)
 
-Fixes: 9f79b8b72339 ("uapi: simplify __ARCH_FLOCK{,64}_PAD a little")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- tools/include/uapi/asm-generic/fcntl.h | 2 ++
- 1 file changed, 2 insertions(+)
+Is there an existing path from device-tree parser to regular/core.c that =
+we can use to specify this delay specifically for this regulator?
+Also, what delay should we choose to make sure it works all the time and =
+not just 99 out of 100 times?
 
-diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
-index 0197042b7dfb..312881aa272b 100644
---- a/tools/include/uapi/asm-generic/fcntl.h
-+++ b/tools/include/uapi/asm-generic/fcntl.h
-@@ -185,6 +185,7 @@ struct f_owner_ex {
- 
- #define F_LINUX_SPECIFIC_BASE	1024
- 
-+#ifndef HAVE_ARCH_STRUCT_FLOCK
- struct flock {
- 	short	l_type;
- 	short	l_whence;
-@@ -209,5 +210,6 @@ struct flock64 {
- 	__ARCH_FLOCK64_PAD
- #endif
- };
-+#endif /* HAVE_ARCH_STRUCT_FLOCK */
- 
- #endif /* _ASM_GENERIC_FCNTL_H */
--- 
-2.25.1
+Best,
+Christian
+
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index c4d844ffad7a..0e15ec2548f4 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -1483,6 +1483,11 @@ static int set_machine_constraints(struct =
+regulator_dev *rdev)
+                          "IC does not support requested over voltage =
+limits\n");
+        }
+=20
++if(!strncmp(rdev_get_name(rdev),"vcc3v0_sd",sizeof("vcc3v0_sd"))) {
++       rdev_err(rdev, "DELAY: %s\n", rdev_get_name(rdev));
++       mdelay(500);
++}
++
+        if (rdev->constraints->under_voltage_detection)
+                ret =3D handle_notify_limits(rdev,
+                                           =
+ops->set_under_voltage_protection,
+
 

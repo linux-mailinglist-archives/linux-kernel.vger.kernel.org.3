@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406105765D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0FC5765E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235858AbiGORWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 13:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
+        id S235923AbiGORW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 13:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235781AbiGORWI (ORCPT
+        with ESMTP id S235769AbiGORWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 13:22:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE66F84EC9;
-        Fri, 15 Jul 2022 10:22:07 -0700 (PDT)
+        Fri, 15 Jul 2022 13:22:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB45885D48
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:22:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 394556225E;
-        Fri, 15 Jul 2022 17:22:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9F6C34115;
-        Fri, 15 Jul 2022 17:22:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C488A6225E
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 17:22:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80DD5C34115;
+        Fri, 15 Jul 2022 17:22:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657905726;
-        bh=zhKFGDAKzjIcdaKCKOjey1iz1DIJM+vZjFXRFpNiVa0=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rFmPJuP9Z+UG9D6jPNimAhPrSVZLAU88g1c2UJrPhNhk55G/jNf37HEZFCuHrCGrw
-         SQ+dMlDeNQtQRIZ/9dhvPUgRNClxsg8iVlLR8c19K45YpJkHNLO4qrO9TVdmDXXh2P
-         YcTUyWJnBzN8iHZIOHja5PmogyG/YQ54FgiTnipDOPvDBLdN+hpwx3ZjAVRk5yroW9
-         2xPkx0oAtqhRipjosoRCjWno4md/Sj52bM638vNBfoOA6aBT/UuSLHSHpgqBc/PmGx
-         xZ3X5SU9yD2LKQJWvJOI1YZgSUdh/gKpro7M94X0xH/tZ7NSN/dnSikHA0FMx3VguN
-         vebCAIu42KI3A==
+        s=k20201202; t=1657905731;
+        bh=Gd5+Z4wtxEhn7tEPYjzScgvwIhw26WiYATVwYYadh2U=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=bgw4ceIOM4Cip7gRCGQAnHHLbhL0OeLbny31yMz0Hx7VBBDQQ5q8A36NY+2Sv7o3r
+         wRgpYlLiHbmkAjyiRHISTm/4lKb8yhMGVH++hycbddVU6k3TkdRZZm31I7h5iJHKms
+         DNARggEXBv9Wonu8Fia9liC8BwK2RZWybGPJUgQKqNXOtE3ExYSygpcS31QCnJD5QQ
+         EQ4ABXaQ4sXEO+Xhg1ntnDgKe04mF1z00Oaqm4cnPGhIedrVeABucCyF2/SXbqiLvL
+         zi0od+YvKJ+2ykIk7GuMqsWE970SKPCxPbSjuRc8mEgGsE+6XYLqyh3599hB/brlWH
+         AQ3ljMqnT3laQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     sbinding@opensource.cirrus.com, lenb@kernel.org,
-        lgirdwood@gmail.com, rafael@kernel.org
-Cc:     linux-acpi@vger.kernel.org, patches@opensource.cirrus.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220707151037.3901050-1-sbinding@opensource.cirrus.com>
-References: <20220707151037.3901050-1-sbinding@opensource.cirrus.com>
-Subject: Re: [PATCH v6 0/2] Read _SUB from ACPI to be able to identify firmware
-Message-Id: <165790572476.3961283.3237743064047303492.b4-ty@kernel.org>
-Date:   Fri, 15 Jul 2022 18:22:04 +0100
+To:     lgirdwood@gmail.com, linux-kernel@vger.kernel.org, windhl@126.com
+In-Reply-To: <20220715111027.391032-1-windhl@126.com>
+References: <20220715111027.391032-1-windhl@126.com>
+Subject: Re: [PATCH] regulator: of: Fix refcount leak bug in of_get_regulation_constraints()
+Message-Id: <165790573026.3961462.13205737184979102580.b4-ty@kernel.org>
+Date:   Fri, 15 Jul 2022 18:22:10 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,26 +51,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Jul 2022 16:10:35 +0100, Stefan Binding wrote:
-> CS35L41 has a DSP which is able to run firmware, as well as a tuning file.
-> Different systems may want to use different firmwares and tuning files, and
-> some firmwares/tunings may not be compatible with other systems.
-> To allow a system to select the correct fimware/tuning, we can read an _SUB
-> from the ACPI. This _SUB can then be used to uniquely identify the system
-> in the firmware/tuning file name.
+On Fri, 15 Jul 2022 19:10:27 +0800, Liang He wrote:
+> We should call the of_node_put() for the reference returned by
+> of_get_child_by_name() which has increased the refcount.
 > 
-> [...]
+> 
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
 Thanks!
 
-[1/2] ACPI: utils: Add api to read _SUB from ACPI
-      commit: 93064e15c8a3a8394319a11b8037666e4b7d653d
-[2/2] ASoC: cs35l41: Read System Name from ACPI _SUB to identify firmware
-      commit: c1ad138822a1be95a7a7b122521c2415583a0c26
+[1/1] regulator: of: Fix refcount leak bug in of_get_regulation_constraints()
+      commit: 66efb665cd5ad69b27dca8571bf89fc6b9c628a4
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

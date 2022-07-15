@@ -2,130 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5682B575C8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BDBE575C8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbiGOHmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 03:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        id S231361AbiGOHnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 03:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiGOHmI (ORCPT
+        with ESMTP id S229693AbiGOHnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 03:42:08 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C737C1A1;
-        Fri, 15 Jul 2022 00:42:07 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id D48DD2223E;
-        Fri, 15 Jul 2022 09:42:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657870925;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6SnvQG5VhCJCXnGPvoEalEA0+MbJXBkQo3LdF+0/Y4Y=;
-        b=g44IL4KKkMiMQ/5uce+1CnL1rNVoDMJaJfLZ6Cvf11WSO8lmkxBH9aYJI4Twoo3nTG3OEv
-        b3giAdZYwCij/S81+8q6iKp4Kvzayymviu0dxbxyBGDEKlDXCH1ZJKlVYgOABYY4rUTAjV
-        lGEaY8K37kZs6IBBgwWtj0AqkcbwaSY=
+        Fri, 15 Jul 2022 03:43:15 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1467C1B0
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 00:43:14 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id n74so7202153yba.3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 00:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=wow5GwZUq1ephtzdcsWQKNRsHibDh8Of4LJkNVIGZKs=;
+        b=Ke0eisTSZGPbvx05SZjplrvc8C0ps+HhylKVr+trNqEhKwHq+FokvjgLJvRoKLkAuH
+         RD2HYioVCFb24lhQ3XcFHhusrC5pH5T7Qj0KZP8v8x1rprcWNS0c6WzBy+Nf5rTMGtpK
+         TeL6rUbgbp52mBHpAZsxK+zJro+L7RGvte7pTNctGhTQTJBr2NlJmL9/FkHsRcKAvXEB
+         tFNAHIKrBq7jWQqcdb9SJ6Qh9qsshjr5Smwo0Y8fNPp+StwDYbSlwGv0kGslv2fgJ9C9
+         cVt4zngbnfJ9x8wrWx+K0j5AmmPw8IFf/FPHi6jmlGRf0y62N9BNz5KNjSMBeQtKXvLw
+         fJoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wow5GwZUq1ephtzdcsWQKNRsHibDh8Of4LJkNVIGZKs=;
+        b=PE486ITNqFPm0x7uzKTCuS0t9hqBNXvq5kUCs5F7LyHjDaI3xRkyGsyCxqjFxh9ysw
+         C/NSREupX9tENB/yZ6YTWSPxLRuhfgWX410uuG11G5PZf0SXCmtC2SbAKRirtXIVdYfe
+         MmuZxYMeHEbX62WqIS1wFiiFLtkMy1NT+Ym3kqsJS17Y/jUsR4bzn61/NW58wHosomiQ
+         0RFRr7pEhWwG9FDJQBVPbEsrgTEzpjQco1Zwa8pnDLfykTeuI8Sj7ixymJViABoBSje6
+         2eketjJ4ibFV8sIERY5aUd49/srQXHINSlsLMGd2NemMAPMiXCBDx038C1J4lxqtlBHo
+         OaCw==
+X-Gm-Message-State: AJIora+ENR2pY0NASLqQlwGb14h5D1s1LW0h2GwTSEdLusJbdvG+Vewg
+        WXXkCCDEjYdaqmUvi77ux3M5Fs244Va6QhUPdXzLlw==
+X-Google-Smtp-Source: AGRyM1tscrvzEdkwMdJTGf/7hU0rpmIPG1IpGhQ3bkblbX9MB1wpw8oOOH54vUDQHR0mEaBRLxiUvqdvy/KJh//vzBU=
+X-Received: by 2002:a25:d78c:0:b0:66f:5acb:d3bf with SMTP id
+ o134-20020a25d78c000000b0066f5acbd3bfmr12396195ybg.307.1657870993486; Fri, 15
+ Jul 2022 00:43:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 15 Jul 2022 09:42:05 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH 2/2] tty: serial: fsl_lpuart: writing a 1 and then a 0 to
- trigger a break character
-In-Reply-To: <AS8PR04MB840448675E64E4FCDEEF91A1928B9@AS8PR04MB8404.eurprd04.prod.outlook.com>
-References: <20220715025944.11076-1-sherry.sun@nxp.com>
- <20220715025944.11076-3-sherry.sun@nxp.com>
- <509669b26b5899088e9b77ed94d103ee@walle.cc>
- <AS8PR04MB840448675E64E4FCDEEF91A1928B9@AS8PR04MB8404.eurprd04.prod.outlook.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <e2560f01fd1731ea2422d82c97efcc6f@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-7-glider@google.com>
+ <CANpmjNN=XO=6rpV-KS2xq=3fiV1L3wCL1DFwLes-CJsi=6ZmcQ@mail.gmail.com>
+In-Reply-To: <CANpmjNN=XO=6rpV-KS2xq=3fiV1L3wCL1DFwLes-CJsi=6ZmcQ@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 15 Jul 2022 09:42:37 +0200
+Message-ID: <CAG_fn=X5w5F1rwHuQqQ9GRYT4MiNGQLh71FRN16Wy3rGJLX_AA@mail.gmail.com>
+Subject: Re: [PATCH v4 06/45] kmsan: add ReST documentation
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+> To be consistent with other tools, I think we have settled on "The
+> Kernel <...> Sanitizer (K?SAN)", see
+> Documentation/dev-tools/k[ac]san.rst. So this will be "The Kernel
+> Memory Sanitizer (KMSAN)".
 
-Am 2022-07-15 09:20, schrieb Sherry Sun:
->> Subject: Re: [PATCH 2/2] tty: serial: fsl_lpuart: writing a 1 and then 
->> a 0 to
->> trigger a break character
->> 
->> Hi,
->> 
->> Am 2022-07-15 04:59, schrieb Sherry Sun:
->> > According to the lpuart reference manual, need to writing a 1 and then
->> > a
->> > 0 to the UARTCTRL_SBK field queues a break character in the transmit
->> > data stream. Only writing a 1 cannot trigger the break character, so
->> > fix it.
->> 
->> I don't think this is correct. The tty core will already call this:
->>    .break_ctl(port, 1)
->>    usleep()
->>    .break_ctl(port, 0)
->> 
->> So you'll have your 1->0 transition.
->> 
->> My RM from the LS1028A says the following:
->> 
->> | Writing a 1 and then a 0 to SBK queues a break character in the
->> | transmit data stream. Additional break characters of 10 to 13, or 13
->> | to 16 if LPUART_STATBRK13] is set, bit times of logic 0 are queued 
->> as
->> | long as SBK is set. Depending on the timing of the set and clear of
->> | SBK relative to the information currently being transmitted, a 
->> second
->> | break character may be queued before software clears SBK.
->> 
->> To me it seems that setting the SBK bit just pulls the TX line low and 
->> releasing
->> it will return to normal transmitter mode.
->> 
-> 
-> Hi Michael,
-> 
-> Actually set break_ctl(tty, -1) then break_ctl(tty, 0) is only done in
-> the send_break() function.
-> If we call TIOCSBRK from user space, it will only set break_ctl(tty,
-> -1) without break_ctl(tty, 0).
+Done (will appear in v5).
 
-That is expected. no? There is also the TIOCCBRK which will clear the
-break. TIOCSBRK will just turn the break on.
 
-I'm not sure if the break is already transmitted when the SBK bit
-is set, though. Is that your problem here? I'd need to check that
-on the real hardware.
+> -> "The third stack trace ..."
+> (Because it looks like there's also another stack trace in the middle
+> and "lower" is ambiguous)
 
-> And from the definition of .break_ctl(port,ctl), the callback is used
-> to Control the transmission of a break
-> signal(Documentation/driver-api/serial/driver.rst), if ctl is nonzero,
-> it should queues a break character. I don't think it is reasonable to
-> call break_ctl() twice in order to send one break signal.
+Done
 
-Maybe Gred can correct me, but to me it seems like the .break_ctl()
-will set the *state* according to the argument, that is either
-turning it on or turning it off (Except if TTY_DRIVER_HARDWARE_BREAK
-is set, but that doesn't seem to be supported by the ioctl interface.)
+>
+> > +where this variable was created.
+> > +
+> > +The upper stack shows where the uninit value was used - in
+>
+> -> "The first stack trace shows where the uninit value was used (in
+> ``test_uninit_kmsan_check_memory()``)."
+Done
 
-> Also I have tried other uart IP, such as drivers/tty/serial/imx.c, it
-> also queues a break character if we call break_ctl() once. So I
-> believe the break_ctl() in lpuart driver should be fixed.
+> > +KMSAN and Clang
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> The KASAN documentation has a section on "Support" which lists
+> architectures and compilers supported. I'd try to mirror (or improve
+> on) that.
 
--michael
+Renamed this section to "Support", added a line about supported
+architectures (x86_64)
+
+>
+> > +In order for KMSAN to work the kernel must be built with Clang, which =
+so far is
+> > +the only compiler that has KMSAN support. The kernel instrumentation p=
+ass is
+> > +based on the userspace `MemorySanitizer tool`_.
+> > +
+> > +How to build
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> I'd call it "Usage", like in the KASAN and KCSAN documentation.
+Done
+
+>
+> > +In order to build a kernel with KMSAN you will need a fresh Clang (14.=
+0.0+).
+> > +Please refer to `LLVM documentation`_ for the instructions on how to b=
+uild Clang.
+> > +
+> > +Now configure and build the kernel with CONFIG_KMSAN enabled.
+>
+> I would move build/usage instructions right after introduction as
+> that's most likely what users of KMSAN will want to know about first.
+
+Done
+
+> > +How KMSAN works
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +KMSAN shadow memory
+> > +-------------------
+> > +
+> > +KMSAN associates a metadata byte (also called shadow byte) with every =
+byte of
+> > +kernel memory. A bit in the shadow byte is set iff the corresponding b=
+it of the
+> > +kernel memory byte is uninitialized. Marking the memory uninitialized =
+(i.e.
+> > +setting its shadow bytes to ``0xff``) is called poisoning, marking it
+> > +initialized (setting the shadow bytes to ``0x00``) is called unpoisoni=
+ng.
+> > +
+> > +When a new variable is allocated on the stack, it is poisoned by defau=
+lt by
+> > +instrumentation code inserted by the compiler (unless it is a stack va=
+riable
+> > +that is immediately initialized). Any new heap allocation done without
+> > +``__GFP_ZERO`` is also poisoned.
+> > +
+> > +Compiler instrumentation also tracks the shadow values with the help f=
+rom the
+> > +runtime library in ``mm/kmsan/``.
+>
+> This sentence might still be confusing. I think it should highlight
+> that runtime and compiler go together, but depending on the scope of
+> the value, the compiler invokes the runtime to persist the shadow.
+
+Changed to:
+"""
+Compiler instrumentation also tracks the shadow values as they are used alo=
+ng
+the code. When needed, instrumentation code invokes the runtime library in
+``mm/kmsan/`` to persist shadow values.
+"""
+
+> > +
+> > +
+>
+> There are 2 blank lines here, which is inconsistent with the rest of
+> the document.
+
+Fixed
+
+> > +Origin tracking
+> > +---------------
+> > +
+> > +Every four bytes of kernel memory also have a so-called origin assigne=
+d to
+>
+> Is "assigned" or "mapped" more appropriate here?
+
+I think initially this was more about origin values that exist in SSA
+as well as memory, so not all of them were "mapped".
+On the other hand, we're talking about bytes in the memory, so "mapped" is =
+fine.
+
+> > +them. This origin describes the point in program execution at which th=
+e
+> > +uninitialized value was created. Every origin is associated with eithe=
+r the
+> > +full allocation stack (for heap-allocated memory), or the function con=
+taining
+> > +the uninitialized variable (for locals).
+> > +
+> > +When an uninitialized variable is allocated on stack or heap, a new or=
+igin
+> > +value is created, and that variable's origin is filled with that value=
+.
+> > +When a value is read from memory, its origin is also read and kept tog=
+ether
+> > +with the shadow. For every instruction that takes one or more values t=
+he origin
+>
+> s/values the origin/values, the origin/
+Done, thanks!
+
+
+> > +
+> > +If ``a`` is initialized and ``b`` is not, the shadow of the result wou=
+ld be
+> > +0xffff0000, and the origin of the result would be the origin of ``b``.
+> > +``ret.s[0]`` would have the same origin, but it will be never used, be=
+cause
+>
+> s/be never/never be/
+Done
+
+> > +Passing uninitialized values to functions
+> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > +
+> > +KMSAN instrumentation pass has an option, ``-fsanitize-memory-param-re=
+tval``,
+>
+> "KMSAN instrumentation pass" -> "Clang's instrumentation support" ?
+> Because it seems wrong to say that KMSAN has the instrumentation pass.
+How about "Clang's MSan instrumentation pass"?
+
+> > +
+> > +Sometimes the pointers passed into inline assembly do not point to val=
+id memory.
+> > +In such cases they are ignored at runtime.
+> > +
+> > +Disabling the instrumentation
+> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> It would be useful to move this section somewhere to the beginning,
+> closer to usage and the example, as this is information that a user of
+> KMSAN might want to know (but they might not want to know much about
+> how KMSAN works).
+
+I restructured the TOC as follows:
+
+=3D=3D The Kernel Memory Sanitizer (KMSAN)
+=3D=3D Usage
+--- Building the kernel
+--- Example report
+--- Disabling the instrumentation
+=3D=3D Support
+=3D=3D How KMSAN works
+--- KMSAN shadow memory
+--- Origin tracking
+~~~~ Origin chaining
+--- Clang instrumentation API
+~~~~ Shadow manipulation
+~~~~ Handling locals
+~~~~ Access to per-task data
+~~~~ Passing uninitialized values to functions
+~~~~ String functions
+~~~~ Error reporting
+~~~~ Inline assembly instrumentation
+--- Runtime library
+~~~~ Per-task KMSAN state
+~~~~ KMSAN contexts
+~~~~ Metadata allocation
+=3D=3D References
+
+
+> > +Another function attribute supported by KMSAN is ``__no_sanitize_memor=
+y``.
+> > +Applying this attribute to a function will result in KMSAN not instrum=
+enting it,
+> > +which can be helpful if we do not want the compiler to mess up some lo=
+w-level
+>
+> s/mess up/interfere with/
+Done
+
+> > +code (e.g. that marked with ``noinstr``).
+>
+> maybe "... (e.g. that marked with ``noinstr``, which implicitly adds
+> ``__no_sanitize_memory``)."
+
+Done
+
+> otherwise people might think that it's necessary to add
+> __no_sanitize_memory explicitly to noinstr.
+
+Good point!
+
+> > +    ...
+> > +    struct kmsan_context kmsan;
+> > +    ...
+> > +  }
+> > +
+> > +
+>
+> 1 blank line instead of 2?
+Done
+
+> > +This means that in general for two contiguous memory pages their shado=
+w/origin
+> > +pages may not be contiguous. So, if a memory access crosses the bounda=
+ry
+>
+> s/So, /Consequently, /
+Done
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

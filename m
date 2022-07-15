@@ -2,81 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99831576A6C
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4D8576A6A
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbiGOXGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 19:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
+        id S231883AbiGOXGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 19:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbiGOXGg (ORCPT
+        with ESMTP id S229580AbiGOXGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 19:06:36 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC248B495
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:06:35 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-10c8e8d973eso9441586fac.5
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:06:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mBpXtEslnV1zurvmWEIDiRzGKqnjEUmVJoFW6W9qWCw=;
-        b=AECQ0eHEqmcRYhw/kZaytfxobirCfOqjKbk7//nSJ87Bw9hMpidynMX+QaIk0VUI5O
-         iHNnNLHUStvEkFZ9O7Jbf/Xqqrvods4PMgTxcqJzPLHWW4BzOKzYuG/+BEgP6V3t9XTB
-         LoGIe6NRjIoYGor1s3QyYmhDXT0nn0nuup5cgmfulhkcsULKU1V22NEYCLNP4wJftyg8
-         pWlmK/tPSHI6BCKkvqrxOmdz4+mffWYtXZ3ZPQQ2cL0gECDioTEYSrFvVu/KUStlW2zR
-         WRI/3qDj/hdlTbRDmWEVxaFWgP1TZfR949+D1CPbIQPAlrR2evnu1Oy9FVERBGc1ePtb
-         icfg==
+        Fri, 15 Jul 2022 19:06:35 -0400
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34028B49A;
+        Fri, 15 Jul 2022 16:06:34 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id p128so5009671iof.1;
+        Fri, 15 Jul 2022 16:06:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mBpXtEslnV1zurvmWEIDiRzGKqnjEUmVJoFW6W9qWCw=;
-        b=6hkA6FS33w1CENJljVcK243y1aRiEUCfSibJ9gi6Mvm5x3F7G0co+nQGzS1Njn7Mma
-         oGKEgydgsBiFnLXL6+EP3y3LiXXlflVDIELj3LxR2kn5OLeFrkhlpc0l7hHUoWPcV9bH
-         JPvlBqYf4B1bB3oaKoXLJIez1nj00O/VhEMEI4NPobv7HNo4z8Fs/CbY75RwaRdGuCWv
-         wZuMEO4JWwxAmP4n47WU9wkJluNiEW2RFSDIDmr8myR+yDxrSUCnaj5lbh66QIGAj/nO
-         J/KXrOFWryldZiuVGTBVUhfYKZWwE2wt4iH7YneTsNrPsaIeyQqHYMZECsYMJIsbjFOt
-         +eeA==
-X-Gm-Message-State: AJIora8Rd0j3g6RwjNWi8xdBCpNYW3BaabHpayH793IvyPKeoEKVFCNT
-        3LgqyB8jRztfYVM9SjaZ9FqiOby/pEIFqhbbuS6bCw==
-X-Google-Smtp-Source: AGRyM1u1OTXm2QGLPrI1m/Pl+zrnOXkxWwMmzH8915eiu6wZd+mbVdweoU84R3ujtobf5TgYhtrJSnbOzEOuYLsKi/U=
-X-Received: by 2002:aca:5e05:0:b0:337:bd43:860b with SMTP id
- s5-20020aca5e05000000b00337bd43860bmr7988724oib.181.1657926394114; Fri, 15
- Jul 2022 16:06:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220715230016.3762909-1-seanjc@google.com> <20220715230016.3762909-2-seanjc@google.com>
-In-Reply-To: <20220715230016.3762909-2-seanjc@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 15 Jul 2022 16:06:23 -0700
-Message-ID: <CALMp9eQdzZK4ZAyQZXUWff_zuRRdr=ugkujWfFrt9dP8uFcs=Q@mail.gmail.com>
-Subject: Re: [PATCH 1/4] KVM: x86: Reject loading KVM if host.PAT[0] != WB
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=YDlkhqWKsbJBSkGChagGjsv3FbYi9c+x2tAtlYBYcqs=;
+        b=LExJW4pi4GcUClBF//o6HyygHymcmueSxFiZ7WATlXvnJ02P3NwRFFJWuIIwJarE0v
+         5GG+9FbWCnjlVoC7SUYwJjz8iJ69VV00SM2NjYJDcYyrAlGLjk5+Sg1r1rwObGKwDaFG
+         h7065MUqgWlyrDK16a96exS9M1DbcZBcLK6qihBjV4hwfRayololRO4hnPJdQ8ogXNOd
+         CZV5OAuLvRw84myD2byWAf+EJ1Ck9Tl29nkTs5Sv2YEaH74cDnyxpbsMsO1HbhCyxj67
+         h2v42Vu8qloFXEYWI7pMQAq61W6a67vJktrNuuEGQ1ImwFGbzjlF4G0+gQoWzkNrsjk4
+         1Ozw==
+X-Gm-Message-State: AJIora/1JztSBNUAAFYt0SiwgKKlz7Sr+Yn7WbPu0X9XlYnKi2g6MXT7
+        bUt1xQu8bQoFni6ZaD0+hQ==
+X-Google-Smtp-Source: AGRyM1sUbyT8G+qLwBnGuz9wxAX+YT+GbATzT32jX5qUjf9gpXjD6N6hWKSTZmNym1N+6hLf7WDI3Q==
+X-Received: by 2002:a05:6638:3586:b0:33c:9df7:6dec with SMTP id v6-20020a056638358600b0033c9df76decmr8832917jal.175.1657926393834;
+        Fri, 15 Jul 2022 16:06:33 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id v20-20020a02b094000000b0033c836fe144sm2453075jah.85.2022.07.15.16.06.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 16:06:33 -0700 (PDT)
+Received: (nullmailer pid 1631479 invoked by uid 1000);
+        Fri, 15 Jul 2022 23:06:28 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220715215954.1449214-4-sean.anderson@seco.com>
+References: <20220715215954.1449214-1-sean.anderson@seco.com> <20220715215954.1449214-4-sean.anderson@seco.com>
+Subject: Re: [PATCH net-next v3 03/47] dt-bindings: net: Convert FMan MAC bindings to yaml
+Date:   Fri, 15 Jul 2022 17:06:28 -0600
+Message-Id: <1657926388.246596.1631478.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 4:02 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> Reject KVM if entry '0' in the host's IA32_PAT MSR is not programmed to
-> writeback (WB) memtype.  KVM subtly relies on IA32_PAT entry '0' to be
-> programmed to WB by leaving the PAT bits in shadow paging and NPT SPTEs
-> as '0'.  If something other than WB is in PAT[0], at _best_ guests will
-> suffer very poor performance, and at worst KVM will crash the system by
-> breaking cache-coherency expecations (e.g. using WC for guest memory).
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Fri, 15 Jul 2022 17:59:10 -0400, Sean Anderson wrote:
+> This converts the MAC portion of the FMan MAC bindings to yaml.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
-What if someone changes the host's PAT to violate this rule *after*
-kvm is loaded?
+> 
+> Changes in v3:
+> - Incorperate some minor changes into the first FMan binding commit
+> 
+> Changes in v2:
+> - New
+> 
+>  .../bindings/net/fsl,fman-dtsec.yaml          | 145 ++++++++++++++++++
+>  .../devicetree/bindings/net/fsl-fman.txt      | 128 +---------------
+>  2 files changed, 146 insertions(+), 127 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/fsl,fman-dtsec.yaml
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/fsl,fman-dtsec.example.dtb: ethernet@e8000: 'phy-connection-type', 'phy-handle' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/fsl,fman-dtsec.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

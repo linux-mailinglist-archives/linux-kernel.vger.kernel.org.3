@@ -2,184 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65CD57586A
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A024A57587D
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241073AbiGOAEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 20:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
+        id S241101AbiGOAFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 20:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbiGOAEG (ORCPT
+        with ESMTP id S241063AbiGOAFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 20:04:06 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8942B189;
-        Thu, 14 Jul 2022 17:04:05 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id b9so3239383pfp.10;
-        Thu, 14 Jul 2022 17:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=y3ZTJgJrieoT1UdgTTqiqvukDGVLKLFMuIKTE7lODpM=;
-        b=RQV4iwKe2wUPu88mMk1f6hs8+uQ1Ya6IG4iamvqBQZ0RnnatLUT16HB70JAQQsh2Rm
-         s/ZRjb/ADi4YjYlOZNf4rRyEHJGwGJHwKIiG/DxJhiQvwFZFqo1yvOApgxPwBWTwkE5k
-         n05fGFUuDSx5fRERuGNvyQqCRS4HEDE+CyUN+1lrE9LEmUj9d8Mvc4I81WAP7TNQhbiq
-         9c+IqL2ykCq4gi9+rg+u/ZGtfmAwtRJNjCNwkj3iJLGUh8+Gjpmg4oeH3i+A1pwKbEKY
-         E4dM1e/kl76zFL3umoiwRY/WGlN/y8IBrZ8AJfo6C4EuqIoxLlHZoCugbJerixMfjj8z
-         2LYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=y3ZTJgJrieoT1UdgTTqiqvukDGVLKLFMuIKTE7lODpM=;
-        b=CBA1RDm4a3y5QL8HX6Y81xa3Mh+2jUGkNrSUSoal9n8K8hJdS08NZ0PG/Vj64vUIUW
-         V2WN7kCtzHiPbvyUPVvRD1/Ly/HfOtMTavM7ctN+47YyrYOxzeGFGF1TVbTxNLdFGLJn
-         Qc8ERuT2T2SWo3JOAap/UN9NDUzgsGta5nzclALA7pYDNaLPcChCEstziYWF40v7wrlC
-         7SgWr95rH7KhpQrPb3flvA4o9OL1HRSD/70nU8qD0mPwXRjORuhZ8luP0SQe8lXmaxGg
-         fI0eie/azM216+cx6sNr1/SFBnTrrOoFjm2hCJfoozht4N9GoBbO7U2jFD5Dy222bL6G
-         yQsg==
-X-Gm-Message-State: AJIora/G3ZFpeETj66ro6tWLl+IcWWPA05fbADug8gRR+wpdDRSKZtTG
-        yxqPBQBPHqnztm7po34Or7M=
-X-Google-Smtp-Source: AGRyM1urj2GIv1EKKty6wS9S6o5S8NLwsi59Wfu0TRZljegQWACf5/nBdipXNUa9lHaMrUSBQbZy+g==
-X-Received: by 2002:a63:c63:0:b0:3fe:e14b:b5a0 with SMTP id 35-20020a630c63000000b003fee14bb5a0mr9409241pgm.428.1657843444620;
-        Thu, 14 Jul 2022 17:04:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w125-20020a636283000000b00419b1671c54sm1995347pgb.4.2022.07.14.17.04.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 17:04:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 14 Jul 2022 17:04:02 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+        Thu, 14 Jul 2022 20:05:15 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622E8735B6;
+        Thu, 14 Jul 2022 17:05:13 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A2DB69DA;
+        Fri, 15 Jul 2022 02:05:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1657843510;
+        bh=eUrWlueduRgSkr9QAPg6mJaG55bmEBeshRDPqeUsPhM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t+ys3+MLbVdT5iTS6NTWCpHz2R2ecFFLvH78hMoP1bCBqV2mo10mZexYRSrVHjbYU
+         GWBBMHR6M0jGcPcPiCqI/Nzq2TqdHia5FWD5f6IlWXqxDTqAmebfa/q0yV+gzc68RV
+         BI5KJTGx+8rBVCIso+Dsuboay3jPlBa6SC4PgyVw=
+Date:   Fri, 15 Jul 2022 03:04:39 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org, jernej.skrabec@gmail.com,
+        knaerzche@gmail.com, kernel@collabora.com,
+        bob.beckett@collabora.com, ezequiel@vanguardiasur.com.ar,
+        mchehab@kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, Jonas Karlman <jonas@kwiboo.se>,
+        Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 6/9] bitops: let optimize out non-atomic bitops on
- compile-time constants
-Message-ID: <20220715000402.GA512558@roeck-us.net>
-References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
- <20220624121313.2382500-7-alexandr.lobakin@intel.com>
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH 1/6] media: v4l2: Add NV15 pixel format
+Message-ID: <YtCvF+kAfeiTduW+@pendragon.ideasonboard.com>
+References: <20220713162449.133738-1-sebastian.fricke@collabora.com>
+ <20220713162449.133738-2-sebastian.fricke@collabora.com>
+ <Ys8OzDzXmmCHI9qb@pendragon.ideasonboard.com>
+ <acded11db2957b4e9d4f8df44f82dc1babe7aae0.camel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220624121313.2382500-7-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <acded11db2957b4e9d4f8df44f82dc1babe7aae0.camel@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 02:13:10PM +0200, Alexander Lobakin wrote:
-> Currently, many architecture-specific non-atomic bitop
-> implementations use inline asm or other hacks which are faster or
-> more robust when working with "real" variables (i.e. fields from
-> the structures etc.), but the compilers have no clue how to optimize
-> them out when called on compile-time constants. That said, the
-> following code:
+On Thu, Jul 14, 2022 at 09:02:38AM -0400, Nicolas Dufresne wrote:
+> Le mercredi 13 juillet 2022 à 21:28 +0300, Laurent Pinchart a écrit :
+> > Hi Sebastian and Jonas,
+> > 
+> > Thank you for the patch.
+> > 
+> > On Wed, Jul 13, 2022 at 06:24:46PM +0200, Sebastian Fricke wrote:
+> > > From: Jonas Karlman <jonas@kwiboo.se>
+> > > 
+> > > Add the NV15 pixel format used by the Rockchip Video Decoder for 10-bit
+> > > buffers.
+> > > 
+> > > NV15 is a packed 10-bit 4:2:0 Y/CbCr format similar to P010 and P210 but
+> > > has no padding between components. Instead, luminance and chrominance
+> > > samples are grouped into 4s so that each group is packed into an integer
+> > > number of bytes:
+> > > 
+> > > YYYY = UVUV = 4 * 10 bits = 40 bits = 5 bytes
+> > > 
+> > > The '15' suffix refers to the optimum effective bits per pixel which is
+> > > achieved when the total number of luminance samples is a multiple of 8
+> > > for NV15.
+> > > 
+> > > Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+> > > Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> > > ---
+> > >  .../media/v4l/pixfmt-yuv-planar.rst           | 53 +++++++++++++++++++
+> > >  drivers/media/v4l2-core/v4l2-common.c         |  2 +
+> > >  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
+> > >  include/uapi/linux/videodev2.h                |  1 +
+> > >  4 files changed, 57 insertions(+)
+> > > 
+> > > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> > > index a900ff66911a..42ab3fe4667f 100644
+> > > --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> > > +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> > > @@ -79,6 +79,13 @@ All components are stored with the same number of bits per component.
+> > >        - Cr, Cb
+> > >        - Yes
+> > >        - Linear
+> > > +    * - V4L2_PIX_FMT_NV15
+> > > +      - 'NV15'
+> > > +      - 15
+> > > +      - 4:2:0
+> > > +      - Cb, Cr
+> > > +      - Yes
+> > > +      - Linear
+> > >      * - V4L2_PIX_FMT_NV12M
+> > >        - 'NM12'
+> > >        - 8
+> > > @@ -176,6 +183,7 @@ horizontally.
+> > >  
+> > >  .. _V4L2-PIX-FMT-NV12:
+> > >  .. _V4L2-PIX-FMT-NV21:
+> > > +.. _V4L2-PIX-FMT-NV15:
+> > >  .. _V4L2-PIX-FMT-NV12M:
+> > >  .. _V4L2-PIX-FMT-NV21M:
+> > >  .. _V4L2-PIX-FMT-P010:
+> > > @@ -570,6 +578,51 @@ Data in the 10 high bits, zeros in the 6 low bits, arranged in little endian ord
+> > >        - Cb\ :sub:`11`
+> > >        - Cr\ :sub:`11`
+> > >  
+> > > +.. _V4L2_PIX_FMT_NV15:
+> > > +
+> > > +NV15
+> > > +----
+> > > +
+> > > +Like P010 but a packed 10-bit 4:2:0 semi-planar Y/CbCr format without padding between components.
+> > 
+> > "packed 10-bit semi-planar" sounds confusing, as "packed YUV" usually
+> > refers to YUYV-style formats, but I'm not sure how to express that
+> > better.
 > 
-> 	DECLARE_BITMAP(foo, BITS_PER_LONG) = { }; // -> unsigned long foo[1];
-> 	unsigned long bar = BIT(BAR_BIT);
-> 	unsigned long baz = 0;
+> Perhaps:
 > 
-> 	__set_bit(FOO_BIT, foo);
-> 	baz |= BIT(BAZ_BIT);
+> "Similar to P010 (10-bit 4:":0 semi-planer Y/CbCr), though unlike P010, the
+> there is not padding between components."
 > 
-> 	BUILD_BUG_ON(!__builtin_constant_p(test_bit(FOO_BIT, foo));
-> 	BUILD_BUG_ON(!__builtin_constant_p(bar & BAR_BIT));
-> 	BUILD_BUG_ON(!__builtin_constant_p(baz & BAZ_BIT));
+> > > +Instead, luminance and chrominance samples are grouped into 4s so that each group is packed into an integer
+> > > +number of bytes:
+> > 
+> > Could you please wrap the description at 80 columns ?
+> > 
+> > > +YYYY = UVUV = 4 * 10 bits = 40 bits = 5 bytes
+> > > +
+> > > +.. flat-table:: Sample 4x4 NV15 Image
+> > > +    :header-rows:  0
+> > > +    :stub-columns: 0
+> > > +
+> > > +    * - start + 0:
+> > > +      - Y'\ :sub:`00`
+> > > +      - Y'\ :sub:`01`
+> > > +      - Y'\ :sub:`02`
+> > > +      - Y'\ :sub:`03`
+> > > +    * - start + 8:
+> > > +      - Y'\ :sub:`10`
+> > > +      - Y'\ :sub:`11`
+> > > +      - Y'\ :sub:`12`
+> > > +      - Y'\ :sub:`13`
+> > > +    * - start + 16:
+> > > +      - Y'\ :sub:`20`
+> > > +      - Y'\ :sub:`21`
+> > > +      - Y'\ :sub:`22`
+> > > +      - Y'\ :sub:`23`
+> > > +    * - start + 24:
+> > > +      - Y'\ :sub:`30`
+> > > +      - Y'\ :sub:`31`
+> > > +      - Y'\ :sub:`32`
+> > > +      - Y'\ :sub:`33`
+> > > +    * - start + 32:
+> > > +      - Cb\ :sub:`00`
+> > > +      - Cr\ :sub:`00`
+> > > +      - Cb\ :sub:`01`
+> > > +      - Cr\ :sub:`01`
+> > > +    * - start + 40:
+> > > +      - Cb\ :sub:`10`
+> > > +      - Cr\ :sub:`10`
+> > > +      - Cb\ :sub:`11`
+> > > +      - Cr\ :sub:`11`
+> > 
+> > This doesn't look right. You need to describe the data at the bit level,
+> > so show how the 10-bit samples are packed into bytes.
 > 
-> triggers the first assertion on x86_64, which means that the
-> compiler is unable to evaluate it to a compile-time initializer
-> when the architecture-specific bitop is used even if it's obvious.
-> In order to let the compiler optimize out such cases, expand the
-> bitop() macro to use the "constant" C non-atomic bitop
-> implementations when all of the arguments passed are compile-time
-> constants, which means that the result will be a compile-time
-> constant as well, so that it produces more efficient and simple
-> code in 100% cases, comparing to the architecture-specific
-> counterparts.
-> 
-> The savings are architecture, compiler and compiler flags dependent,
-> for example, on x86_64 -O2:
-> 
-> GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
-> LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
-> LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
-> 
-> and ARM64 (courtesy of Mark):
-> 
-> GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
-> LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
-> 
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Reviewed-by: Marco Elver <elver@google.com>
+> A word of NV15 is 40 bits, so 1 word of NV12 is 5 bytes, 4 pixels. I believe
+> there is no choice here but to describe 4 pixels for Y plane, and 4 pixels for
+> CbCr plane. This might be a bit big though.
 
-Building i386:allyesconfig ... failed
---------------
-Error log:
-arch/x86/platform/olpc/olpc-xo1-sci.c: In function 'send_ebook_state':
-arch/x86/platform/olpc/olpc-xo1-sci.c:83:63: error: logical not is only applied to the left hand side of comparison
+I agree, it may not be the prettiest, but I'd rather have a larger table
+than a format that is understood differently by different drivers. Been
+there, done that, not again :-)
 
-Bisect log attached.
+> > > +
+> > >  .. raw:: latex
+> > >  
+> > >      \endgroup
+> > > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+> > > index 1e38ad8906a2..23a0cb02ea3a 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-common.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-common.c
+> > > @@ -262,6 +262,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+> > >  		/* YUV planar formats */
+> > >  		{ .format = V4L2_PIX_FMT_NV12,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+> > >  		{ .format = V4L2_PIX_FMT_NV21,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+> > > +		{ .format = V4L2_PIX_FMT_NV15,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 5, 5, 0, 0 }, .hdiv = 2, .vdiv = 2,
+> > > +		  .block_w = { 4, 2, 0, 0 }, .block_h = { 1, 1, 0, 0 } },
+> > >  		{ .format = V4L2_PIX_FMT_NV16,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> > >  		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> > >  		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > index e2526701294e..9e5510cb255e 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> > > @@ -1302,6 +1302,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+> > >  	case V4L2_PIX_FMT_M420:		descr = "YUV 4:2:0 (M420)"; break;
+> > >  	case V4L2_PIX_FMT_NV12:		descr = "Y/CbCr 4:2:0"; break;
+> > >  	case V4L2_PIX_FMT_NV21:		descr = "Y/CrCb 4:2:0"; break;
+> > > +	case V4L2_PIX_FMT_NV15:		descr = "10-bit Y/CbCr 4:2:0 (Packed)"; break;
+> > >  	case V4L2_PIX_FMT_NV16:		descr = "Y/CbCr 4:2:2"; break;
+> > >  	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
+> > >  	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
+> > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> > > index 5a73b92ffe4d..47ff34d6b79f 100644
+> > > --- a/include/uapi/linux/videodev2.h
+> > > +++ b/include/uapi/linux/videodev2.h
+> > > @@ -598,6 +598,7 @@ struct v4l2_pix_format {
+> > >  /* two planes -- one Y, one Cr + Cb interleaved  */
+> > >  #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/CbCr 4:2:0  */
+> > >  #define V4L2_PIX_FMT_NV21    v4l2_fourcc('N', 'V', '2', '1') /* 12  Y/CrCb 4:2:0  */
+> > > +#define V4L2_PIX_FMT_NV15    v4l2_fourcc('N', 'V', '1', '5') /* 15  Y/CbCr 4:2:0 10-bit packed */
+> > >  #define V4L2_PIX_FMT_NV16    v4l2_fourcc('N', 'V', '1', '6') /* 16  Y/CbCr 4:2:2  */
+> > >  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
+> > >  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
 
-Guenter
+-- 
+Regards,
 
----
-# bad: [4662b7adea50bb62e993a67f611f3be625d3df0d] Add linux-next specific files for 20220713
-# good: [32346491ddf24599decca06190ebca03ff9de7f8] Linux 5.19-rc6
-git bisect start 'HEAD' 'v5.19-rc6'
-# good: [8b7e002d8bc6e17c94092d25e7261db4e6e5f2cc] Merge branch 'drm-next' of git://git.freedesktop.org/git/drm/drm.git
-git bisect good 8b7e002d8bc6e17c94092d25e7261db4e6e5f2cc
-# good: [07f6d21d6e33c1e28e24ae84e9d26e4e7d4853f5] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git
-git bisect good 07f6d21d6e33c1e28e24ae84e9d26e4e7d4853f5
-# good: [5ff085e5d4f6700e03635d5e700f52163a6dc2a7] Merge branch 'staging-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-git bisect good 5ff085e5d4f6700e03635d5e700f52163a6dc2a7
-# good: [eb9e3fdbdd8b61ef0f4bee23259fe6ab69e463ab] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
-git bisect good eb9e3fdbdd8b61ef0f4bee23259fe6ab69e463ab
-# good: [9f2183cd961e5ddb7954eafb6bb01a495c6a9c7b] hexagon/mm: enable ARCH_HAS_VM_GET_PAGE_PROT
-git bisect good 9f2183cd961e5ddb7954eafb6bb01a495c6a9c7b
-# bad: [e878aa5faf9ac8c0b5d0c3f293389c194c250fff] Merge branch 'mm-nonmm-stable' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-git bisect bad e878aa5faf9ac8c0b5d0c3f293389c194c250fff
-# good: [cf95d50205f62c4f5f538676def847292cf39fa9] fs: don't call ->writepage from __mpage_writepage
-git bisect good cf95d50205f62c4f5f538676def847292cf39fa9
-# good: [5103cbfd92d3587713476f94f9485b96e02f0146] Merge branch 'for-next/execve' of git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
-git bisect good 5103cbfd92d3587713476f94f9485b96e02f0146
-# good: [ee56c3e8eec166f4e4a2ca842b7804d14f3a0208] Merge branch 'master' into mm-nonmm-stable
-git bisect good ee56c3e8eec166f4e4a2ca842b7804d14f3a0208
-# bad: [dc34d5036692c614eef23c1130ee42a201c316bf] lib: test_bitmap: add compile-time optimization/evaluations assertions
-git bisect bad dc34d5036692c614eef23c1130ee42a201c316bf
-# good: [bb7379bfa680bd48b468e856475778db2ad866c1] bitops: define const_*() versions of the non-atomics
-git bisect good bb7379bfa680bd48b468e856475778db2ad866c1
-# bad: [b03fc1173c0c2bb8fad61902a862985cecdc4b1b] bitops: let optimize out non-atomic bitops on compile-time constants
-git bisect bad b03fc1173c0c2bb8fad61902a862985cecdc4b1b
-# good: [e69eb9c460f128b71c6b995d75a05244e4b6cc3e] bitops: wrap non-atomic bitops with a transparent macro
-git bisect good e69eb9c460f128b71c6b995d75a05244e4b6cc3e
-# first bad commit: [b03fc1173c0c2bb8fad61902a862985cecdc4b1b] bitops: let optimize out non-atomic bitops on compile-time constants
+Laurent Pinchart

@@ -2,164 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81E0575B18
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 07:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F59575B1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 07:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiGOFuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 01:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
+        id S229780AbiGOF4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 01:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiGOFuD (ORCPT
+        with ESMTP id S229456AbiGOF4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 01:50:03 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DF75C356
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 22:50:01 -0700 (PDT)
-Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26F5o0XU020229;
-        Fri, 15 Jul 2022 14:50:00 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
- Fri, 15 Jul 2022 14:50:00 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26F5nxg6020212
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 15 Jul 2022 14:50:00 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <04278747-41fe-3a0a-81bf-2935efaafac0@I-love.SAKURA.ne.jp>
-Date:   Fri, 15 Jul 2022 14:49:58 +0900
+        Fri, 15 Jul 2022 01:56:07 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8AF4F668;
+        Thu, 14 Jul 2022 22:56:04 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LkgZj5yH2z4xZB;
+        Fri, 15 Jul 2022 15:55:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657864558;
+        bh=lW0fBGZ83Ym1P4dAAfXAwmwE8gdVd0eRG6eRH+Hgpg4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZtWXus4PGlp9lO0wWR0wulhGu0SrVDQdt7t9llUIzRN9t68L6HQ9UXjOtWQFGGVd6
+         G1zT2MEHTVUZJjEGBfRF14l93jnuhR5bOy6Aazn36c5m12+4xS7nmrbajP5GEriRfp
+         091kwMHJVg/OW9+QQwCW4pvxaMwIyyNQVQArqvMc6nXCmqua59m9SAlBWjLHvxJfn6
+         kMgIU86NcRkN6Ye0RIPVDK6gZTLMlWnnrYC3KB+DKYFNCBovXJx5Cf5nuR/rm/CIWr
+         CD5rArz+A0uC+vACDYhlXZRTdleL7d7cHV0JSfsNX26E0KkWY/EFp83kCBuB1G3AaL
+         ZUUt4Zv+CBt4A==
+Date:   Fri, 15 Jul 2022 15:55:56 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     KVM <kvm@vger.kernel.org>, Chenyi Qiang <chenyi.qiang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tao Xu <tao3.xu@intel.com>, Xiaoyao Li <xiaoyao.li@intel.com>
+Subject: linux-next: manual merge of the kvm tree with the kvm-fixes tree
+Message-ID: <20220715155556.77911cfe@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        "Rafael J. Wysocki" <rjw@sisk.pl>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Cc:     linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH v3] PM: hibernate: defer device probing when resuming from
- hibernation
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/SccVHT+w0Pg2sOJQu1cOCFD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot is reporting hung task at misc_open() [1], for there is a race
-window of AB-BA deadlock which involves probe_count variable. Currently
-wait_for_device_probe() from snapshot_open() from misc_open() can sleep
-forever with misc_mtx held if probe_count cannot become 0.
+--Sig_/SccVHT+w0Pg2sOJQu1cOCFD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-When a device is probed by hub_event() work function, probe_count is
-incremented before the probe function starts, and probe_count is
-decremented after the probe function completed.
+Hi all,
 
-There are three cases that can prevent probe_count from dropping to 0.
+Today's linux-next merge of the kvm tree got a conflict in:
 
-  (a) A device being probed stopped responding (i.e. broken/malicious
-      hardware).
+  arch/x86/kvm/x86.c
 
-  (b) A process emulating a USB device using /dev/raw-gadget interface
-      stopped responding for some reason.
+between commit:
 
-  (c) New device probe requests keeps coming in before existing device
-      probe requests complete.
+  1b870fa5573e ("kvm: stats: tell userspace which values are boolean")
 
-The phenomenon syzbot is reporting is (b). A process which is holding
-system_transition_mutex and misc_mtx is waiting for probe_count to become
-0 inside wait_for_device_probe(), but the probe function which is called
- from hub_event() work function is waiting for the processes which are
-blocked at mutex_lock(&misc_mtx) to respond via /dev/raw-gadget interface.
+from the kvm-fixes tree and commit:
 
-This patch mitigates (b) by deferring wait_for_device_probe() from
-snapshot_open() to snapshot_write() and snapshot_ioctl(). Please note that
-the possibility of (b) remains as long as any thread which is emulating a
-USB device via /dev/raw-gadget interface can be blocked by uninterruptible
-blocking operations (e.g. mutex_lock()).
+  2f4073e08f4c ("KVM: VMX: Enable Notify VM exit")
 
-Please also note that (a) and (c) are not addressed. Regarding (c), we
-should change the code to wait for only one device which contains the
-image for resuming from hibernation. I don't know how to address (a), for
-use of timeout for wait_for_device_probe() might result in loss of user
-data in the image. Maybe we should require the userland to wait for the
-image device before opening /dev/snapshot interface.
+from the kvm tree.
 
-Link: https://syzkaller.appspot.com/bug?extid=358c9ab4c93da7b7238c [1]
-Reported-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Cc: Oliver Neukum <oneukum@suse.com>
-Cc: Wedson Almeida Filho <wedsonaf@google.com>
-Cc: Rafael J. Wysocki <rjw@sisk.pl>
-Cc: Arjan van de Ven <arjan@linux.intel.com>
----
-Changes in v3:
-  Defer wait_for_device_probe() till first write()/ioctl() request.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-v2 is at https://lkml.kernel.org/r/03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp .
+--=20
+Cheers,
+Stephen Rothwell
 
-v1 is at https://lkml.kernel.org/r/72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp .
+diff --cc arch/x86/kvm/x86.c
+index af0c5b5fc28f,031678eff28e..000000000000
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@@ -298,7 -286,8 +286,8 @@@ const struct _kvm_stats_desc kvm_vcpu_s
+  	STATS_DESC_COUNTER(VCPU, directed_yield_successful),
+  	STATS_DESC_COUNTER(VCPU, preemption_reported),
+  	STATS_DESC_COUNTER(VCPU, preemption_other),
+- 	STATS_DESC_IBOOLEAN(VCPU, guest_mode)
+ -	STATS_DESC_ICOUNTER(VCPU, guest_mode),
+++	STATS_DESC_IBOOLEAN(VCPU, guest_mode),
++ 	STATS_DESC_COUNTER(VCPU, notify_window_exits),
+  };
+ =20
+  const struct kvm_stats_header kvm_vcpu_stats_header =3D {
 
- kernel/power/user.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+--Sig_/SccVHT+w0Pg2sOJQu1cOCFD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index ad241b4ff64c..d43c2aa583b2 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -26,6 +26,7 @@
- 
- #include "power.h"
- 
-+static bool need_wait;
- 
- static struct snapshot_data {
- 	struct snapshot_handle handle;
-@@ -78,7 +79,7 @@ static int snapshot_open(struct inode *inode, struct file *filp)
- 		 * Resuming.  We may need to wait for the image device to
- 		 * appear.
- 		 */
--		wait_for_device_probe();
-+		need_wait = true;
- 
- 		data->swap = -1;
- 		data->mode = O_WRONLY;
-@@ -168,6 +169,11 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
- 	ssize_t res;
- 	loff_t pg_offp = *offp & ~PAGE_MASK;
- 
-+	if (need_wait) {
-+		wait_for_device_probe();
-+		need_wait = false;
-+	}
-+
- 	lock_system_sleep();
- 
- 	data = filp->private_data;
-@@ -244,6 +250,11 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
- 	loff_t size;
- 	sector_t offset;
- 
-+	if (need_wait) {
-+		wait_for_device_probe();
-+		need_wait = false;
-+	}
-+
- 	if (_IOC_TYPE(cmd) != SNAPSHOT_IOC_MAGIC)
- 		return -ENOTTY;
- 	if (_IOC_NR(cmd) > SNAPSHOT_IOC_MAXNR)
--- 
-2.18.4
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLRAWwACgkQAVBC80lX
+0GyPGwf/REik8Nq1tANNerJH+9c1LLZv+lA/q798tY3m3LoLHh4jRFCa/JLrl3Eg
+E81b7WAmLUKGMCu2IvKpAh4XObKuvpqVNnntkZZAla1KiRx+EA0pzYXc8g9n37O9
+PIesefM1M5Q/got8zwehj2Ol38887njTWhFzWitNC67aCe59XInzKrEGD8I0JxoZ
+8YvjrUmEuE8ssX1BfensqdwsM3UptAhQrxqukPQJWH1/M2CXQlGBJp0qP0+nSp/9
++miabahe7NXaheBLhb2IKEDkRtM1RBeyGaOHL4z6j0wKNxzPkP/lFnJhQ6dNfaUb
+RSGRNj5PonFhQCI/bMnX0SFdlwKktA==
+=p/EE
+-----END PGP SIGNATURE-----
+
+--Sig_/SccVHT+w0Pg2sOJQu1cOCFD--

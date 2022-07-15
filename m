@@ -2,118 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC77575BB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AEB575BB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbiGOGmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 02:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
+        id S231304AbiGOGmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 02:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiGOGmB (ORCPT
+        with ESMTP id S231344AbiGOGmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 02:42:01 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9420D281
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:41:02 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id f9-20020a636a09000000b00401b6bc63beso2369061pgc.23
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:41:02 -0700 (PDT)
+        Fri, 15 Jul 2022 02:42:20 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CC9281
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:42:19 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id o12so4686799ljc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:42:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=q8Lc0RHx8l1tneFtOMp4vYatrYpRnfAN4z26Z90CGPY=;
-        b=I3+mcTQjza1bx8oAMCZzMGdjVEMxpYxRzUPAB6JhVCT94InSWSpJquuiCY8UjNzWrC
-         lZzxp8Y5pgEpkHKSV3a7ESL+QAb+h1xQy9YDqOR1kj7SH7xHga4BXC2hiXNZC/LyDEcB
-         /tfcVpdj9dbgWDGS1/4dALG9qMwPlqTtPiGIdSLoGUF0n7Beak2RNv1DB8yg4anAHMRh
-         YojIBSQ8maVsM6YU3/s4l7xA+S9RvwxyEYnX119dAJujdA/V1xSTc6+8uCDiWbatN40S
-         LrLTMmBLkXLg0pmE571T79MAMy6wxrC3YBfvlfCkLsJOwcs/glUvxOBWRtaJNau7XTPK
-         nDmw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Uf6GWzYw1HwEhiM5v6Xj4T/p2Oc5BRtriA6/ink+6tw=;
+        b=x0OSq6vvQOacwZpFC9UDnHV+CShB5c+nvA7qN5zB2NqWQch1fY3NFXlHuc6w/BTgH1
+         nJYLLwCyuTc0VPWKIEv6enyMkQwDD94MZzT9JWkaI1Svq2MYhcZqCfSjQ4YbGubegZ1m
+         nvb+m7YqhyobGt48ciqacajaI/tN94hKVkodUpZF01cVvfb60JCeyI1k+KBzBY+QPf2e
+         gJVy+9cY4LBGPnGbAzcTkfTXZEYe0wCfEq1W3RJRftSNBMXdi5oF78h8qVzxFcEKIWJJ
+         2YKJ+y8/7ylSjPAwyW0pDoQDZ/lxvrM5JBZV9ZEP+OR2/Uibt/Oo1nYqhm+dQuOn20NC
+         u2SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=q8Lc0RHx8l1tneFtOMp4vYatrYpRnfAN4z26Z90CGPY=;
-        b=W9JjrFb3VWGqTYPDqE5p/MwGPobDzx2Cx6ykm3MRqNIvaHOt+vywHd/pa/0UyvylRr
-         k1ymhr8J+CagguURq3JWSek8IXIyv195qZwwysGVvw7LkitILrJ0DMHJggzGbmzzrP8T
-         l1kzvpHMwYWYBffQVR4SfRCRnrQNqfALJqIUkpy/8od9yjhHN4zmJo2aMUC/7+/4GJrk
-         DWC1a5MFoQCALjrdgy80PITBmtEJ7ygeLglMnu6ytmfaLWcINfMCrKo1gOHRIh4BRZz3
-         ACGH2DmQY32XnUz+AoDVOhSznvIicTxgKriKWAlYVnDt66JddL7NiPs4KHEHfRa3CE6J
-         KjTw==
-X-Gm-Message-State: AJIora9UXVgddNGvUZ4/tUzeuOt2+dVDAWWJ6ELmWjSRVzaVMdLcqwgt
-        DX0SlbjX+haKFBbPQno9aH1UwarJZktL5Q==
-X-Google-Smtp-Source: AGRyM1tOj6AgJlSuNGJEistybCR0Q1SsJhJC49AkehoUVZDd4/hpfDG3DDf4ThSx/gaSgAjzvEt5OSqAyBpl1g==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:902:f606:b0:168:ecca:44e with SMTP id
- n6-20020a170902f60600b00168ecca044emr11864579plg.144.1657867261813; Thu, 14
- Jul 2022 23:41:01 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 14:40:52 +0800
-Message-Id: <20220715064052.2673958-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v2] kcsan: test: Add a .kunitconfig to run KCSAN tests
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Marco Elver <elver@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Uf6GWzYw1HwEhiM5v6Xj4T/p2Oc5BRtriA6/ink+6tw=;
+        b=l4idih40vm8f2jZQIFM04SYHPUioOA6ibQbClcHkXNyo0vz/Ybm/YIdheyhrtN1HB3
+         qAxOFEysIngdt1EtLZFTFdrl7WEqwcA9nzkxZhnoBaulr50L+lEWK7ZmRRuh+IGpUQAz
+         L30J4tufUbyrJUHFHQFQEvSf18jmL2/NVqh7Q9Bc7wdGebUUT+QfHNb1Yy8399B33j5g
+         sQ3PZ0bBxjhVDnt2zJaxkasMNrvOeqNem99CCYQj7ccpu/txIq9v+OgRspuqGwWKBPeF
+         b0AdfLQNTqhkOAsMXRgsek9WvyWAhrAAKGjwB1hr3EhzO+Ilo6PIwJg2WoM8I7EjWLC0
+         tRFA==
+X-Gm-Message-State: AJIora/bDQ61xT1vdJa92rdRYE2x6ErrILlgDZlAEq/PrrPiAbq+lJRk
+        EDQChl48yJkeg+0YwepOYm4BLw==
+X-Google-Smtp-Source: AGRyM1uh2DyxY6QI7lAzOT7SM4BVDOfxjruegb5KhuF7CsCQmqMh2JE4R8JGyloUxcPy16Je+Vp7IQ==
+X-Received: by 2002:a2e:2284:0:b0:25d:490f:60d3 with SMTP id i126-20020a2e2284000000b0025d490f60d3mr6415545lji.486.1657867337685;
+        Thu, 14 Jul 2022 23:42:17 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id z24-20020a0565120c1800b00482e7f07dfcsm432374lfu.309.2022.07.14.23.42.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 23:42:17 -0700 (PDT)
+Message-ID: <eb993f8d-e72f-aba3-e7a4-1bbd2ac00f6c@linaro.org>
+Date:   Fri, 15 Jul 2022 08:42:15 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH v2] ARM: dts: Add TS-7553-V2 support
+Content-Language: en-US
+To:     kris@embeddedTS.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Mark Featherston <mark@embeddedTS.com>
+References: <20220713221233.8486-1-kris@embeddedTS.com>
+ <55dccabb-41e9-dc45-f404-c333f5472e75@linaro.org>
+ <1657833995.2979.1.camel@embeddedTS.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1657833995.2979.1.camel@embeddedTS.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a .kunitconfig file, which provides a default, working config for
-running the KCSAN tests. Note that it needs to run on an SMP machine, so
-to run under kunit_tool, the --qemu_args option should be used (on a
-supported architecture, like x86_64). For example:
-./tools/testing/kunit/kunit.py run --arch=x86_64 --qemu_args='-smp 8'
-					--kunitconfig=kernel/kcsan
+On 14/07/2022 23:26, Kris Bahnsen wrote:
+> On Thu, 2022-07-14 at 10:34 +0200, Krzysztof Kozlowski wrote:
+>> On 14/07/2022 00:12, Kris Bahnsen wrote:
+>>> Add initial support of the i.MX6UL based TS-7553-V2 platform.
+>>
+>> Use subject prefix matching the subsystem. git log --oneline --
+> 
+> Can you please elaborate? The subject prefix is "ARM: dts:", I'm not
+> sure what is missing. Should it be something like
+> "ARM: dts: imx6ul-ts7553v2:" in this case?
 
-Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Marco Elver <elver@google.com>
-Acked-by: Brendan Higgins <brendanhiggins@google.com>
----
- kernel/kcsan/.kunitconfig | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 kernel/kcsan/.kunitconfig
+Run the command, you will see.
 
-diff --git a/kernel/kcsan/.kunitconfig b/kernel/kcsan/.kunitconfig
-new file mode 100644
-index 000000000000..e82f0f52ab0a
---- /dev/null
-+++ b/kernel/kcsan/.kunitconfig
-@@ -0,0 +1,24 @@
-+# Note that the KCSAN tests need to run on an SMP setup.
-+# Under kunit_tool, this can be done by using the --qemu_args
-+# option to configure a machine with several cores. For example:
-+# ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan \
-+# 				 --arch=x86_64 --qemu_args="-smp 8"
-+
-+CONFIG_KUNIT=y
-+
-+CONFIG_DEBUG_KERNEL=y
-+
-+# Need some level of concurrency to test a concurrency sanitizer.
-+CONFIG_SMP=y
-+
-+CONFIG_KCSAN=y
-+CONFIG_KCSAN_KUNIT_TEST=y
-+
-+# Set these if you want to run test_barrier_nothreads
-+#CONFIG_KCSAN_STRICT=y
-+#CONFIG_KCSAN_WEAK_MEMORY=y
-+
-+# This prevents the test from timing out on many setups. Feel free to remove
-+# (or alter) this, in conjunction with setting a different test timeout with,
-+# for example, the --timeout kunit_tool option.
-+CONFIG_KCSAN_REPORT_ONCE_IN_MS=100
--- 
-2.37.0.170.g444d1eabd0-goog
+> 
+>>
+>>>
+>>> Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+>>> ---
+>>>
+>>> V1->V2: Implement changes recommended by Rob Herring and dtbs_check
+>>>
+>>> RFC only, not yet ready to merge, more testing needed and we're working on
+>>> SPI LCD support for this platform.
+>>>
+>>> Specifically, I have a few questions on some paradigms and dtbs_check output:
+>>>
+>>> imx6ul-ts7553v2.dtb: /: i2c-gpio: {'compatible': ... \
+>>> 'magnetometer@c': {'compatible': ['asahi-kasei,ak8975'], 'reg': [[12]]}}}} \
+>>> is not of type 'array'
+>>>   I'm not sure what this error is referring to as I've copied the example in
+>>>   invensense,mpu6050.yaml almost verbatim. Is this an issue with our patch
+>>>   or a false positive from dtbs_check?
+>>
+>> You would need to paste entire error, maybe with checker flags -v.
+> 
+> Here is the verbose output. I'm not familiar enough yet with the schema and its
+> validation code to catch what is wrong and would appreciate any insight.
+> 
+> Check:  arch/arm/boot/dts/imx6ul-ts7553v2.dtb
+> /work/arch/arm/boot/dts/imx6ul-ts7553v2.dtb: /: i2c-gpio: {'compatible': ['i2c-gpio'], \
+> '#address-cells': [[1]], '#size-cells': [[0]], 'pinctrl-names': ['default'], \
+> 'pinctrl-0': [[58]], 'sda-gpios': [[11, 5, 6]], 'scl-gpios': [[11, 4, 6]], \
+> 'imu@68': {'compatible': ['invensense,mpu9250'], 'reg': [[104]], \
+> 'interrupt-parent': [[55]], 'interrupts': [[1, 1]], 'i2c-gate': {'#address-cells': [[1]], \
+> '#size-cells': [[0]], 'magnetometer@c': {'compatible': ['asahi-kasei,ak8975'], \
+> 'reg': [[12]]}}}} is not of type 'array'
+> 
+> Failed validating 'type' in schema['patternProperties']['(?<!,nr)-gpios?$']:
+>     {'items': {'additionalItems': {'$ref': '#/definitions/cell'},
+>                'items': [{'oneOf': [{'maximum': 4294967295,
+>                                      'minimum': 1,
+>                                      'phandle': True,
+>                                      'type': 'integer'},
+>                                     {'const': 0, 'type': 'integer'}]}],
+>                'minItems': 1,
+>                'type': 'array'},
+>      'minItems': 1,
+>      'type': 'array'}
+> 
+> On instance['i2c-gpio']:
 
+Because you use "i2c-gpio", it seems... Fix it and check if error goes away.
+
+>     {'#address-cells': [[1]],
+>      '#size-cells': [[0]],
+>      'compatible': ['i2c-gpio'],
+>      'imu@68': {'compatible': ['invensense,mpu9250'],
+>                 'i2c-gate': {'#address-cells': [[1]],
+>                              '#size-cells': [[0]],
+>                              'magnetometer@c': {'compatible': ['asahi-kasei,ak8975'],
+>                                                 'reg': [[12]]}},
+>                 'interrupt-parent': [[55]],
+>                 'interrupts': [[1, 1]],
+>                 'reg': [[104]]},
+>      'pinctrl-0': [[58]],
+>      'pinctrl-names': ['default'],
+>      'scl-gpios': [[11, 4, 6]],
+>      'sda-gpios': [[11, 5, 6]]}
+>         From schema: /usr/local/lib/python3.9/dist-packages/dtschema/schemas/gpio/gpio-consumer.yaml
+> 
+>>
+>>>
+>>>
+>>> imx6ul-ts7553v2.dtb: spi@2010000: spidev@1: 'compatible' is a required property
+>>>   Many of our devices have open-ended I2C and SPI ports that may or may not be
+>>>   used in customer applications. With "spidev" compatible string no longer
+>>>   supported, there is no easy way we know of to leave a placeholder or
+>>>   indication that the interface is present, usable, and either needs specific
+>>>   support enabled in kernel or userspace access via /dev/. We would love
+>>>   feedback on how to handle this situation when submitting platforms upstream.
+>>
+>> No empty devices, especially for spidev in DTS. There is really no
+>> single need to add fake spidev... really, why? The customer cannot read
+>> hardware manual and cannot see the header on the board? You can give him
+>> a tutorial/howto guide, but don't embed dead or non-real code in DTS.
+> 
+> We ship devices as bootable out of the box. A number of our customers end up
+> attaching SPI devices that do not have existing kernel drivers and talk to them
+> from userspace without having to touch a kernel build. The loss of spidev
+> directly has increased support requests we receive on the matter.
+
+Unfortunately this is an argument like - our customers always wanted
+dead code in DTS, so we embed here such. Feel free to add a comment
+about placeholder etc, but empty node not. Another issue is that empty
+node without compatible also does not help your customers...
+
+> 
+(...)
+
+> 
+>>
+>>> +
+>>> +	gpio-keys {
+>>> +		compatible = "gpio-keys";
+>>> +		pinctrl-names = "default";
+>>> +		pinctrl-0 = <&pinctrl_gpio_keys>;
+>>> +
+>>> +		left {
+>>
+>> This fails on dtbs_check. Generic node names, so "key-0" or "key-left"
+> 
+> For reference, as of commit b047602d579b4fb028128a525f056bbdc890e7f0, there
+> are no errors/warnings from dtbs_check or checkpatch.pl regarding node
+> names being "key-..." and the example in gpio-keys.yaml uses "up" "left" etc.
+
+I know, I changed it. It's in linux-next.
+
+> 
+> I've also changed the node name to just "keys" per devicetree specifications
+> doc.
+> 
+>>
+>>> +	i2c_gpio: i2c-gpio {
+>>
+>> Generic node name, so "i2c"
+> 
+> Understood.
+> 
+> Are there any guidelines/restrictions on label use/schema 
+> throughout a dts file? The devicetree-specification document only defines
+> valid characters for a label and I've been unable to find any other docs.
+
+For label - use underscores and that's it. Only the node names should be
+generic.
+
+> 
+
+Best regards,
+Krzysztof

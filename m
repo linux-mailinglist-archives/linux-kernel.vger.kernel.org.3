@@ -2,209 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3113E575F6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 12:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62834575F76
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 12:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbiGOKeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 06:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
+        id S231244AbiGOKho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 06:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGOKeD (ORCPT
+        with ESMTP id S229436AbiGOKhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 06:34:03 -0400
-X-Greylist: delayed 51747 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Jul 2022 03:34:02 PDT
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042D71402C
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 03:34:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 25CC43420A;
-        Fri, 15 Jul 2022 10:34:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1657881240; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V/aNejyhpJ5R+9PXS3UG8zpOnmCWu14VxGWWtda2Lac=;
-        b=Ir6qC4jfUlDnM0aT+Vwlsl+lR0VIln9fTlvI8wEQJXgg4VPQIP98Kyi7fKdLWaE7GgZRqG
-        kWtIFFYF9WtO7B2WsExgJPMFHvNpWsF0x0Jq2DYAEs/GreOyPl5aK8jvA+nddMW21VV5MN
-        +yYvBhCx6Aqd1hzSScga/4zVS1oLavw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1657881240;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V/aNejyhpJ5R+9PXS3UG8zpOnmCWu14VxGWWtda2Lac=;
-        b=FVGvkNwE34xUkewaldVgHtaEzOL5zDw1XV6MAgEari9XCj1/Z8hfaf+x1ZwOQz3EHLOW6q
-        OVj/eAyUQa0qPgAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F392613AC3;
-        Fri, 15 Jul 2022 10:33:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id uIDVOpdC0WJTXQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 15 Jul 2022 10:33:59 +0000
-Message-ID: <e109dab2-71e5-0c60-016e-f798da23884e@suse.cz>
-Date:   Fri, 15 Jul 2022 12:33:59 +0200
+        Fri, 15 Jul 2022 06:37:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CE91753BB
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 03:37:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8AC9B1474;
+        Fri, 15 Jul 2022 03:37:41 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.87.59])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B8BA73F792;
+        Fri, 15 Jul 2022 03:37:39 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 11:37:38 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
+        Wei Wang <wvw@google.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Hank <han.lin@mediatek.com>, Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH 1/7] sched/uclamp: Fix relationship between uclamp and
+ migration margin
+Message-ID: <20220715103738.ufqv2nhkivlhzy7v@wubuntu>
+References: <20220629194632.1117723-1-qais.yousef@arm.com>
+ <20220629194632.1117723-2-qais.yousef@arm.com>
+ <CAKfTPtBAOLzYocTEg3KErACSyrAWDU94NdR7EAOnW0gti2GiDQ@mail.gmail.com>
+ <20220712102334.6nwkbkilmmup4h4u@wubuntu>
+ <CAKfTPtDweeQDRcZb+_ANO6rzZd11vbiatoVxDNwsWPtoCTG+AQ@mail.gmail.com>
+ <20220712142013.j6fy77yejupvllah@wubuntu>
+ <CAKfTPtB3pjoFWFP9E6RnH87nshEqJxPdFzX495R_Xju9rCPvEw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/3] mm/slub: fix the race between validate_slab and
- slab_free
-Content-Language: en-US
-To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     David Rientjes <rientjes@google.com>, songmuchun@bytedance.com,
-        akpm@linux-foundation.org, roman.gushchin@linux.dev,
-        iamjoonsoo.kim@lge.com, penberg@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220529081535.69275-1-rongwei.wang@linux.alibaba.com>
- <YpNa4tB/jfW3MDyi@n2.us-central1-a.c.spheric-algebra-350919.internal>
- <ac9ba68f-9ee2-1611-9ff8-b486ed9c4df0@google.com>
- <alpine.DEB.2.22.394.2206021712530.2924@gentwo.de>
- <9794df4f-3ffe-4e99-0810-a1346b139ce8@linux.alibaba.com>
- <alpine.DEB.2.22.394.2206071411460.375438@gentwo.de>
- <29723aaa-5e28-51d3-7f87-9edf0f7b9c33@linux.alibaba.com>
- <alpine.DEB.2.22.394.2206081417370.465021@gentwo.de>
- <faf416b9-f46c-8534-7fb7-557c046a564d@suse.cz>
- <aceab1c8-0c10-fa5f-da39-6820294494c4@linux.alibaba.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <aceab1c8-0c10-fa5f-da39-6820294494c4@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtB3pjoFWFP9E6RnH87nshEqJxPdFzX495R_Xju9rCPvEw@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/15/22 10:05, Rongwei Wang wrote:
-> 
-> 
-> On 6/17/22 5:40 PM, Vlastimil Babka wrote:
->> On 6/8/22 14:23, Christoph Lameter wrote:
->>> On Wed, 8 Jun 2022, Rongwei Wang wrote:
->>>
->>>> If available, I think document the issue and warn this incorrect
->>>> behavior is
->>>> OK. But it still prints a large amount of confusing messages, and
->>>> disturbs us?
->>>
->>> Correct it would be great if you could fix this in a way that does not
->>> impact performance.
->>>
->>>>> are current operations on the slab being validated.
->>>> And I am trying to fix it in following way. In a short, these changes only
->>>> works under the slub debug mode, and not affects the normal mode (I'm not
->>>> sure). It looks not elegant enough. And if all approve of this way, I can
->>>> submit the next version.
->>>
->>>
->>>>
->>>> Anyway, thanks for your time:).
->>>> -wrw
->>>>
->>>> @@ -3304,7 +3300,7 @@ static void __slab_free(struct kmem_cache *s,
->>> struct
->>>> slab *slab,
->>>>
->>>>   {
->>>>          void *prior;
->>>> -       int was_frozen;
->>>> +       int was_frozen, to_take_off = 0;
->>>>          struct slab new;
->>>
->>> to_take_off has the role of !n ? Why is that needed?
->>>
->>>> -       do {
->>>> -               if (unlikely(n)) {
->>>> +               spin_lock_irqsave(&n->list_lock, flags);
->>>> +               ret = free_debug_processing(s, slab, head, tail, cnt,
->>>> addr);
->>>
->>> Ok so the idea is to take the lock only if kmem_cache_debug. That looks
->>> ok. But it still adds a number of new branches etc to the free loop.
->>
-> Hi, Vlastimil, sorry for missing your message long time.
+On 07/13/22 14:39, Vincent Guittot wrote:
 
-Hi, no problem.
+[...]
 
->> It also further complicates the already tricky code. I wonder if we should
->> make more benefit from the fact that for kmem_cache_debug() caches we don't
->> leave any slabs on percpu or percpu partial lists, and also in
->> free_debug_processing() we aready take both list_lock and slab_lock. If we
->> just did the freeing immediately there under those locks, we would be
->> protected against other freeing cpus by that list_lock and don't need the
->> double cmpxchg tricks.
-> enen, I'm not sure get your "don't need the double cmpxchg tricks" means
-> completely. What you want to say is that replace cmpxchg_double_slab() here
-> with following code when kmem_cache_debug(s)?
+> > > That's why I have mentioned that I have thermal pressure and irq in
+> > > mind. I'm speaking about performance level but not about bandwidth and
+> > > time sharing.
+> >
+> > irq pressure has no impact on the cpu's ability to get any OPP, no? It purely
+> > reduces the bandwidth availability for CFS tasks AFAIU. So the task's ability
+> > to achieve a performance level has no correlation with irq pressure IMO. Unless
+> > I missed something.
 > 
-> __slab_lock(slab);
-> if (slab->freelist == freelist_old && slab->counters == counters_old){
->     slab->freelist = freelist_new;
->     slab->counters = counters_new;
->     __slab_unlock(slab);
->     local_irq_restore(flags);
->     return true;
-> }
-> __slab_unlock(slab);
+> The way irq is accounted in pelt might impact the result. TBH, i
+> haven't looked in details what would be the impact
 
-Pretty much, but it's more complicated.
+I can't see how irq can impact what performance level we can achieve on any
+CPU. It should just impact bandwidth?
 
-> If I make mistakes for your words, please let me know.
-> Thanks!
->>
->> What about against allocating cpus? More tricky as those will currently end
->> up privatizing the freelist via get_partial(), only to deactivate it again,
->> so our list_lock+slab_lock in freeing path would not protect in the
->> meanwhile. But the allocation is currently very inefficient for debug
->> caches, as in get_partial() it will take the list_lock to take the slab from
->> partial list and then in most cases again in deactivate_slab() to return it.
-> It seems that I need speed some time to eat these words. Anyway, thanks.
->>
->> If instead the allocation path for kmem_cache_debug() cache would take a
->> single object from the partial list (not whole freelist) under list_lock, it
->> would be ultimately more efficient, and protect against freeing using
->> list_lock. Sounds like an idea worth trying to me?
-> 
-> Hyeonggon had a similar advice that split freeing and allocating slab from
-> debugging, likes below:
-> 
-> 
-> __slab_alloc() {
->     if (kmem_cache_debug(s))
->         slab_alloc_debug()
->     else
->         ___slab_alloc()
-> }
-> 
-> I guess that above code aims to solve your mentioned problem (idea)?
-> 
-> slab_free() {
->     if (kmem_cache_debug(s))
->         slab_free_debug()
->     else
->         __do_slab_free()
-> }
-> 
-> Currently, I only modify the code of freeing slab to fix the confusing
-> messages of "slabinfo -v". If you agree, I can try to realize above
-> mentioned slab_alloc_debug() code. Maybe it's also a challenge to me.
+[...]
 
-I already started working on this approach and hope to post a RFC soon.
-
-> Thanks for your time.
+> > > more concerned by the thermal pressure as I mentioned previously. As
+> > > an example the thermal pressure reflects the impact on the performance
+> > > while task is running.
+> >
+> > Like we discussed on that RT email thread. If you have a 1024 task, tiny
+> > thermal pressure will make it look like it won't fit anywhere.
 > 
->> And of course we would stop creating the 'validate' sysfs files for
->> non-debug caches.
+> maybe another big core without pressure. Otherwise if the task can
 
+Isn't thermal pressure per perf domain?
+
+> accept a lower compute capacity why not setting uclamp_min to a lower
+> value like 900
+
+Well if the system has lost its top 10% and you're still running as fast as
+the system can possibly do, what better can you do?
+
+I can't see how comparing uclamp with thermal pressure will help.
+
+In feec() we pick the highest spare capacity CPU. So if the bigs were split
+into 1 per perf domain and truly one of them can become severely throttled
+while the other isn't as you're trying to say, then this distribution will pick
+the highest spare capacity one.
+
+fits_capacity() just says this CPU is a candidate that we can consider.
+
+[...]
+
+> > > TaskA usually runs 4 ms every 8ms but wants to ensure a running time
+> > > around 5ms. Task A asks for a uclamp_min of 768.
+> > > medium cpu capacity_orig is 800 but runs at half its max freq because
+> > > of thermal mitigation then your task will runs more than 8ms
+> >
+> > If thermal pressure is 50%, then capacity_of() is 400. A 50% task will have
+> > util_avg of 512, which is much larger than 0.8 * 400. So this is dealt with
+> > already in this code, no?
+> 
+> May be my example is not perfect but apply a mitigation of 20% and you
+> fall in the case
+
+	capacity_orig_of(medium) = 800
+	capacity_of(medium) = 800 * 0.8 - sum_of_(irq, rt) pressure :: <= 640
+
+	migration_margin * capacity_of(medium) = 0.8 * 640 = 512 === p->util_avg
+
+So this task will struggle still to run on the medium even under 20% pressure.
+
+I can see your point for sure that we could have scenarios where we should pick
+a bigger CPU. But my counter point is that if there's a meaningful thermal
+pressure we are screwed already and uclamp can't save the day.
+
+I'll repeat my question, how would you encode the relationship?
+
+Consider these scenarios:
+
+
+	capaity_orig_of(little) = 400
+	capaity_orig_of(medium) = 800
+	capaity_orig_of(big) = 1024
+
+	p0->util_avg = 300
+	p0->uclamp_min = 800
+
+	p1->util_avg = 300
+	p1->uclamp_min = 1024
+
+
+When there's 10% thermal pressure on all CPUs.
+
+Does p1 fit on big still? Fit here means the  big is a viable candidate from
+uclamp point of view.
+
+How would you define the relationship so that p0 will not fit the medium, but
+p1 still fits the big.
+
+What happens when thermal pressure is 1%? Should p0 still fit on the medium
+then? As Lukasz highlighted in other email threads, the decay of thermal
+pressure signal has a very long tail.
+
+
+Thanks!
+
+--
+Qais Yousef

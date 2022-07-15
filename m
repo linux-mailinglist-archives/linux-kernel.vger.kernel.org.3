@@ -2,42 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7A75782C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DB65782C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234747AbiGRMvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S235151AbiGRMwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbiGRMvk (ORCPT
+        with ESMTP id S234600AbiGRMv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:51:40 -0400
+        Mon, 18 Jul 2022 08:51:56 -0400
 Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861276339;
-        Mon, 18 Jul 2022 05:51:35 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1658148675t65hmxy8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4B620F58;
+        Mon, 18 Jul 2022 05:51:51 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1658148705tr6iccbm
 Received: from localhost.localdomain ( [171.223.96.21])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 18 Jul 2022 20:51:13 +0800 (CST)
-X-QQ-SSF: 01000000002000E0U000C00A0000000
-X-QQ-FEAT: DoD8xN2rKow5rkGmDF4e6qEv2N+kzmuS/CsbsKnen9LCGciXeKXBAkEkjGXzn
-        kLIYQmQEnHHPaGU7lj1gBwclHD7Cq11CkjySJ+hp/klM3TW0kWFvxBtQhVbb/B6CV4bm+Gj
-        P3Xi6Gw9HjE/MD5J9deOcf5oM+5Qq9qCcsj/nugyuCH47r/FhppPiMC73CS8Vu7aXTv6102
-        C32DTGvI637He9Ooy//8X1qXQr30Os1cMHrPg5/Ecs+6zYcjtnTVvFxOun4mEn+Y5G9xcov
-        oMBfIt9AIRp3ostERXGArsQtU8kqEaCbZFjifwiY0JiovGPQu+8pM+e3H765VKBY2x1+NxI
-        /g/qpWMN9JaGCPDrcUaXmPk+ShPtkEUCIo6L9e2EF5eTmwwGwnKh9HBNywP6bNfhlCnW0nm
-        iaEQXGot0/k=
+        id ; Mon, 18 Jul 2022 20:51:43 +0800 (CST)
+X-QQ-SSF: 01000000002000E0U000C00A0000020
+X-QQ-FEAT: nUI8eyKROnHXnaQZjotUY3P+hV3DbtNiGzLUyrpyWQ7xU3b8dZirKfj/pzN4z
+        cXdK+DFE3HsP0Nb1eInZT0cZCorKrPagagVpyJveqOfBT1xwD99axMU4C1xtC+p7O5M5Vxr
+        cBK+M4ucfaNDdAddmWeFH7TRrqBA1Bl85SkSOTJ1Xtt+9WS468yq8Zrb82bJg3GMdD+aStu
+        kVpH87ZqtSRPFWq+TuRHEXoxAGbdg99R6gB+df0JbckfYvlYLz/F+XxX/+z4vZfxDF/+BQ/
+        Bf6880i5sfIKGIV+Nbv3UE9oIoKIxqU7QYKHzj6iiIQ9MXGDJYuxUyG5Bq+7MZfqCD8xcL/
+        5EAfxLWqEIOYHsvXtNNqrstDey55IG/z/T4oHF2RQ/LdAxRN0gu6DNU+3+4wLOorBJ/Hxn1
+        CQftNojluYE=
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     deller@gmx.de
-Cc:     James.Bottomley@HansenPartnership.com, dave.anglin@bell.net,
-        akpm@linux-foundation.org, mpe@ellerman.id.au,
-        rmk+kernel@armlinux.org.uk, peterx@redhat.com,
-        zhengqi.arch@bytedance.com, linux-parisc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] mm: Fix comment typo
-Date:   Fri, 15 Jul 2022 12:49:15 +0800
-Message-Id: <20220715044915.21077-1-wangborong@cdjrlc.com>
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] block: Fix comment typo
+Date:   Fri, 15 Jul 2022 12:49:47 +0800
+Message-Id: <20220715044947.21260-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -52,26 +49,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `the' is duplicated in line 41, remove one.
+The double `can' is duplicated in line 570, remove one.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- arch/parisc/mm/fault.c | 2 +-
+ block/bio.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/parisc/mm/fault.c b/arch/parisc/mm/fault.c
-index 9ad80d4d3389..869204e97ec9 100644
---- a/arch/parisc/mm/fault.c
-+++ b/arch/parisc/mm/fault.c
-@@ -38,7 +38,7 @@ int show_unhandled_signals = 1;
- /*
-  * parisc_acctyp(unsigned int inst) --
-  *    Given a PA-RISC memory access instruction, determine if the
-- *    the instruction would perform a memory read or memory write
-+ *    instruction would perform a memory read or memory write
-  *    operation.
+diff --git a/block/bio.c b/block/bio.c
+index 06abd495c6ea..6cc1271a9f98 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -567,7 +567,7 @@ EXPORT_SYMBOL(bio_alloc_bioset);
+  * be reused by calling bio_uninit() before calling bio_init() again.
   *
-  *    This function assumes that the given instruction is a memory access
+  * Note that unlike bio_alloc() or bio_alloc_bioset() allocations from this
+- * function are not backed by a mempool can can fail.  Do not use this function
++ * function are not backed by a mempool can fail.  Do not use this function
+  * for allocations in the file system I/O path.
+  *
+  * Returns: Pointer to new bio on success, NULL on failure.
 -- 
 2.35.1
 

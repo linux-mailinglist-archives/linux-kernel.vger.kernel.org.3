@@ -2,139 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF75575CF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58394575CFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbiGOIET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 04:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        id S232665AbiGOIFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 04:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiGOIEQ (ORCPT
+        with ESMTP id S230225AbiGOIFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:04:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064E961D65;
-        Fri, 15 Jul 2022 01:04:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A019F61F35;
-        Fri, 15 Jul 2022 08:04:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD348C34115;
-        Fri, 15 Jul 2022 08:04:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657872255;
-        bh=4eoGergpOqcE4ttRkFKv9ntlQ2YzgMrnZ25BFzNcBqY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D0dK6sy/O9Dk8HVk3XO7fvxqQU6LlwDlISzOnkl4kuVK7gqEfKT6ZidxklB+TTNOQ
-         b7eJmZFltqKmYrC6wegXx6K7ZD7TvPfcapE0HTT+XYcLHq563j9iPfKBrISIbLNQQx
-         uRTT0xJPqEl8XWbdC9yFXZCeSSdWzeESB4wUiT2Zkx1uV3N+uCMbZa28ozT4T7tWLC
-         KX88ycWSAZwuHKmY1xt7eH931uNbbzFb2ZztQeqmoSa+nOAwRo2rORAqfeAmpKjmKj
-         z0835q1QJo+c9ZiWErMhAb6dP7W+BMq0SwOXT06fAGxSO7ok/ue+mkkpOYaUxNleKg
-         v9FiOyj7X0VLg==
-Received: by pali.im (Postfix)
-        id 35632A32; Fri, 15 Jul 2022 10:04:12 +0200 (CEST)
-Date:   Fri, 15 Jul 2022 10:04:12 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH] arm: ioremap: Fix compilation of code which use
- pci_remap_iospace() without CONFIG_MMU
-Message-ID: <20220715080412.j3wgvzlv5evp5zbb@pali>
-References: <20220714185700.6137-1-pali@kernel.org>
- <20220714200443.GA1036464@bhelgaas>
+        Fri, 15 Jul 2022 04:05:37 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928B661D65
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:05:36 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R531e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VJOTsiV_1657872329;
+Received: from 30.240.97.187(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VJOTsiV_1657872329)
+          by smtp.aliyun-inc.com;
+          Fri, 15 Jul 2022 16:05:31 +0800
+Message-ID: <aceab1c8-0c10-fa5f-da39-6820294494c4@linux.alibaba.com>
+Date:   Fri, 15 Jul 2022 16:05:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220714200443.GA1036464@bhelgaas>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:103.0)
+ Gecko/20100101 Thunderbird/103.0
+Subject: Re: [PATCH 1/3] mm/slub: fix the race between validate_slab and
+ slab_free
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     David Rientjes <rientjes@google.com>, songmuchun@bytedance.com,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, akpm@linux-foundation.org,
+        roman.gushchin@linux.dev, iamjoonsoo.kim@lge.com,
+        penberg@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220529081535.69275-1-rongwei.wang@linux.alibaba.com>
+ <YpNa4tB/jfW3MDyi@n2.us-central1-a.c.spheric-algebra-350919.internal>
+ <ac9ba68f-9ee2-1611-9ff8-b486ed9c4df0@google.com>
+ <alpine.DEB.2.22.394.2206021712530.2924@gentwo.de>
+ <9794df4f-3ffe-4e99-0810-a1346b139ce8@linux.alibaba.com>
+ <alpine.DEB.2.22.394.2206071411460.375438@gentwo.de>
+ <29723aaa-5e28-51d3-7f87-9edf0f7b9c33@linux.alibaba.com>
+ <alpine.DEB.2.22.394.2206081417370.465021@gentwo.de>
+ <faf416b9-f46c-8534-7fb7-557c046a564d@suse.cz>
+Content-Language: en-US
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+In-Reply-To: <faf416b9-f46c-8534-7fb7-557c046a564d@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 14 July 2022 15:04:43 Bjorn Helgaas wrote:
-> [+cc linux-pci, update Lorenzo's email addr]
-> 
-> Hi Pali,
-> 
-> Thanks for cc'ing me.  I think your previous notes didn't include
-> linux-pci or me, so I missed them.
 
-https://lore.kernel.org/r/20211205123209.lyx76daqdwzqwex4@pali/
 
-> It looks like bc02973a06a6 was merged via the PCI tree for v5.17 [1],
-> so we should probably merge the fix the same way.
+On 6/17/22 5:40 PM, Vlastimil Babka wrote:
+> On 6/8/22 14:23, Christoph Lameter wrote:
+>> On Wed, 8 Jun 2022, Rongwei Wang wrote:
+>>
+>>> If available, I think document the issue and warn this incorrect behavior is
+>>> OK. But it still prints a large amount of confusing messages, and disturbs us?
+>>
+>> Correct it would be great if you could fix this in a way that does not
+>> impact performance.
+>>
+>>>> are current operations on the slab being validated.
+>>> And I am trying to fix it in following way. In a short, these changes only
+>>> works under the slub debug mode, and not affects the normal mode (I'm not
+>>> sure). It looks not elegant enough. And if all approve of this way, I can
+>>> submit the next version.
+>>
+>>
+>>>
+>>> Anyway, thanks for your time:).
+>>> -wrw
+>>>
+>>> @@ -3304,7 +3300,7 @@ static void __slab_free(struct kmem_cache *s,
+>> struct
+>>> slab *slab,
+>>>
+>>>   {
+>>>          void *prior;
+>>> -       int was_frozen;
+>>> +       int was_frozen, to_take_off = 0;
+>>>          struct slab new;
+>>
+>> to_take_off has the role of !n ? Why is that needed?
+>>
+>>> -       do {
+>>> -               if (unlikely(n)) {
+>>> +               spin_lock_irqsave(&n->list_lock, flags);
+>>> +               ret = free_debug_processing(s, slab, head, tail, cnt, addr);
+>>
+>> Ok so the idea is to take the lock only if kmem_cache_debug. That looks
+>> ok. But it still adds a number of new branches etc to the free loop.
 > 
-> Russell, let me know if you object.  Otherwise, I put it on pci/misc
-> for v5.20.
+Hi, Vlastimil, sorry for missing your message long time.
+> It also further complicates the already tricky code. I wonder if we should
+> make more benefit from the fact that for kmem_cache_debug() caches we don't
+> leave any slabs on percpu or percpu partial lists, and also in
+> free_debug_processing() we aready take both list_lock and slab_lock. If we
+> just did the freeing immediately there under those locks, we would be
+> protected against other freeing cpus by that list_lock and don't need the
+> double cmpxchg tricks.
+enen, I'm not sure get your "don't need the double cmpxchg tricks" means 
+completely. What you want to say is that replace cmpxchg_double_slab() 
+here with following code when kmem_cache_debug(s)?
+
+__slab_lock(slab);
+if (slab->freelist == freelist_old && slab->counters == counters_old){
+     slab->freelist = freelist_new;
+     slab->counters = counters_new;
+     __slab_unlock(slab);
+     local_irq_restore(flags);
+     return true;
+}
+__slab_unlock(slab);
+
+If I make mistakes for your words, please let me know.
+Thanks!
 > 
-> [1] https://lore.kernel.org/r/20220114155608.GA557997@bhelgaas
+> What about against allocating cpus? More tricky as those will currently end
+> up privatizing the freelist via get_partial(), only to deactivate it again,
+> so our list_lock+slab_lock in freeing path would not protect in the
+> meanwhile. But the allocation is currently very inefficient for debug
+> caches, as in get_partial() it will take the list_lock to take the slab from
+> partial list and then in most cases again in deactivate_slab() to return it.
+It seems that I need speed some time to eat these words. Anyway, thanks.
 > 
-> On Thu, Jul 14, 2022 at 08:57:00PM +0200, Pali Rohár wrote:
-> > Custom ARM version of pci_remap_iospace() is implemented only for MMU
-> > kernel builds. So do not define pci_remap_iospace() without CONFIG_MMU.
-> >
-> > See compilation failures:
-> > https://lore.kernel.org/r/202112040150.wvyJZIZO-lkp@intel.com/
-> > https://lore.kernel.org/r/202112261802.u9iXqdWh-lkp@intel.com/
-> > https://lore.kernel.org/r/202201131529.A2s7rKQc-lkp@intel.com/
-> > https://lore.kernel.org/r/202203090147.24cUL0De-lkp@intel.com/
-> > 
-> > Fixes: bc02973a06a6 ("arm: ioremap: Implement standard PCI function pci_remap_iospace()")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > 
-> > ---
-> > 
-> > PING!!!! Is somebody interested in fixing these compile errors? As nobody
-> > answered to my emails where I proposed this fix more than half year ago and
-> > asked for opinion...
-> > 
-> > https://lore.kernel.org/r/20211204022131.bmhla4gkph7s7hy2@pali/
-> > https://lore.kernel.org/r/20211205123209.lyx76daqdwzqwex4@pali/
-> > https://lore.kernel.org/r/20211226215135.blcnafbuwhrq5ram@pali/
-> > https://lore.kernel.org/r/20220113134938.3tx7iiukphvazvsq@pali/
-> > https://lore.kernel.org/r/20220308184851.jmw2xvrapy5wzwof@pali/
-> > 
-> > If nobody is interested then please STOP sending me these Intel "0-DAY CI
-> > Kernel Test Service" emails. Thanks!
-> > ---
-> >  arch/arm/include/asm/io.h | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/arch/arm/include/asm/io.h b/arch/arm/include/asm/io.h
-> > index eba7cbc93b86..47cf79229b7c 100644
-> > --- a/arch/arm/include/asm/io.h
-> > +++ b/arch/arm/include/asm/io.h
-> > @@ -180,10 +180,12 @@ void pci_ioremap_set_mem_type(int mem_type);
-> >  static inline void pci_ioremap_set_mem_type(int mem_type) {}
-> >  #endif
-> >  
-> > +#ifdef CONFIG_MMU
-> >  struct resource;
-> >  
-> >  #define pci_remap_iospace pci_remap_iospace
-> >  int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr);
-> > +#endif
-> >  
-> >  /*
-> >   * PCI configuration space mapping function.
-> > -- 
-> > 2.20.1
-> > 
-> > 
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> If instead the allocation path for kmem_cache_debug() cache would take a
+> single object from the partial list (not whole freelist) under list_lock, it
+> would be ultimately more efficient, and protect against freeing using
+> list_lock. Sounds like an idea worth trying to me?
+
+Hyeonggon had a similar advice that split freeing and allocating slab 
+from debugging, likes below:
+
+
+__slab_alloc() {
+     if (kmem_cache_debug(s))
+         slab_alloc_debug()
+     else
+         ___slab_alloc()
+}
+
+I guess that above code aims to solve your mentioned problem (idea)?
+
+slab_free() {
+     if (kmem_cache_debug(s))
+         slab_free_debug()
+     else
+         __do_slab_free()
+}
+
+Currently, I only modify the code of freeing slab to fix the confusing 
+messages of "slabinfo -v". If you agree, I can try to realize above 
+mentioned slab_alloc_debug() code. Maybe it's also a challenge to me.
+
+Thanks for your time.
+
+> And of course we would stop creating the 'validate' sysfs files for
+> non-debug caches.

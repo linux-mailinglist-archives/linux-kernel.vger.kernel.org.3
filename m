@@ -2,153 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BFD576687
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FC357668B
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiGOSDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 14:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
+        id S230097AbiGOSJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 14:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiGOSDX (ORCPT
+        with ESMTP id S229650AbiGOSJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 14:03:23 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D625542AD0;
-        Fri, 15 Jul 2022 11:03:22 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id s21so6279256pjq.4;
-        Fri, 15 Jul 2022 11:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=82CEaTbPG5hRrKufgDuMl8R+gnz9vTnIDmFc+J3kvLs=;
-        b=mS6SGZnqBxs6zBiQDMMbYqq1t1OADDFPaNO8IC2b1/cmmQF4XjF8YZYPKhTRECATiv
-         LLG8iEG2GZDAqIloJ/l+7k1dezrL+UyuU6ScAVfOBgxZkgbnFJNvTYLtYdRIUlxgvtQS
-         MGf35eiT1yZDjjYJp7IrVVs09i5buYYi1wPr9RiGKYH0wLJ61T266xZ+JaMRPp0OSR1L
-         jdUAd58fQSGD1b0WBfBIkMQVT0L/4BqRGJbQsASXnRZ6lObtPCFUoOInvqU8YFYaqbJH
-         AYztprdigI6blCGWs65eK4U7aCYX0cZJ5ZkAzktbNWAB7Mtx60vbecICHEwHP79pp9ec
-         xfAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=82CEaTbPG5hRrKufgDuMl8R+gnz9vTnIDmFc+J3kvLs=;
-        b=mUQgILbXevU5fglEbfd1Wm7xVk7yAFvImx8Q0wHJ/LsQEfzDygKHwNLFHdVKVcqZ4e
-         hLWu13v2Vs9qV0c1uLtHJ3qGI2Kvrh+NHdy8Z8hbaudqt8OV9qlniLTP5530l8MXV6/E
-         Oa5rYZCobfRSGNBD9dVh7n+pRbGvtfz33VyYh7zlwR4q275qGP3YjLSthsEOOq1X4qG3
-         lCgkg+MhtxQLDmXVd57VCbZJYTHnvwWm7rmBqg/Jyq00GU90DddlPLDdw/6Vll6npEID
-         yYff5DNcOrPggLH7Kj2KM6aL3F2H2uH2KOt//s2xh8rdK7bqkpL0CVZMfJIjfdIKDK81
-         nY9g==
-X-Gm-Message-State: AJIora+3qkvuvnllkMFHgA6b5uQaWbYABHkqFA0hDZyEpqu/ppoMTunJ
-        nDFNz40YxpHaGPrYhIU83S1yR+qR0vc=
-X-Google-Smtp-Source: AGRyM1vERXA6u2bO16oEvEDdFxRpgtr5+ZU6yasU0gnfdlN9ZH5WlAbBu+BHoT5EVFKk6OtHITRArQ==
-X-Received: by 2002:a17:90b:1b48:b0:1ef:a90d:eae1 with SMTP id nv8-20020a17090b1b4800b001efa90deae1mr22951161pjb.68.1657908202280;
-        Fri, 15 Jul 2022 11:03:22 -0700 (PDT)
-Received: from [172.30.1.47] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id x1-20020a170902a38100b0015ee60ef65bsm3870042pla.260.2022.07.15.11.03.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 11:03:21 -0700 (PDT)
-Message-ID: <06ba1e63-16a5-5659-e062-3c7e12f7e5cd@gmail.com>
-Date:   Sat, 16 Jul 2022 03:03:12 +0900
+        Fri, 15 Jul 2022 14:09:28 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728C110567;
+        Fri, 15 Jul 2022 11:09:27 -0700 (PDT)
+Received: from quatroqueijos (unknown [177.9.88.15])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 3C29F3F125;
+        Fri, 15 Jul 2022 18:09:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1657908565;
+        bh=65kdUCfkTNv3oV00kmotnY0z4oMUCHRghCx6OOkBIuY=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=Q6rO1pEqZe29iu1h8yuyUeiFsW65zuWj210RNq+NgMEvnoTdZ2X4qxHAkASm5WpAH
+         cG+52xnrHux8Jfsn5ZsFuRwTfwUFqmE7YEa1PAG33z4WXyigKROHPfGqssKVnuwj8e
+         fh9X+tULiBqXhIa7gJFEwYMIXVn5njc6tZE81vO8TEl9xIhcSD8CFKtRlSgLlyeb0n
+         h2BoJjLy3L1zstu8uNfeSC8Mthr1i4W4/H+DN5Dj63eyBu2ep2lzc8XRJzfe3ThKg1
+         IDgTAYp1R3Kjh4oA9DSJzYV4AKeKGVbT8C/vZwi9EuiMyztufgulj8k+w+NGmMzDfL
+         AvlcZDMaCQ8eg==
+Date:   Fri, 15 Jul 2022 15:09:19 -0300
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
+        peterz@infradead.org, bp@suse.de,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH] KVM: emulate: do not adjust size of fastop and setcc
+ subroutines
+Message-ID: <YtGtT2DSazLNiMR6@quatroqueijos>
+References: <20220715114927.1460356-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Chanwoo Choi <chanwoo@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Subject: [GIT PULL] devfreq next for 5.20
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715114927.1460356-1-pbonzini@redhat.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Rafael,
+On Fri, Jul 15, 2022 at 07:49:27AM -0400, Paolo Bonzini wrote:
+> Instead of doing complicated calculations to find the size of the subroutines
+> (which are even more complicated because they need to be stringified into
+> an asm statement), just hardcode to 16.
+> 
+> It is less dense for a few combinations of IBT/SLS/retbleed, but it has
+> the advantage of being really simple.
+> 
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/emulate.c | 17 +++++++----------
+>  1 file changed, 7 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 0a15b0fec6d9..f8382abe22ff 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -189,13 +189,6 @@
+>  #define X8(x...) X4(x), X4(x)
+>  #define X16(x...) X8(x), X8(x)
+>  
+> -#define NR_FASTOP	(ilog2(sizeof(ulong)) + 1)
+> -#define RET_LENGTH	(1 + (4 * IS_ENABLED(CONFIG_RETHUNK)) + \
+> -			 IS_ENABLED(CONFIG_SLS))
+> -#define FASTOP_LENGTH	(ENDBR_INSN_SIZE + 7 + RET_LENGTH)
+> -#define FASTOP_SIZE	(8 << ((FASTOP_LENGTH > 8) & 1) << ((FASTOP_LENGTH > 16) & 1))
+> -static_assert(FASTOP_LENGTH <= FASTOP_SIZE);
+> -
+>  struct opcode {
+>  	u64 flags;
+>  	u8 intercept;
+> @@ -310,9 +303,15 @@ static void invalidate_registers(struct x86_emulate_ctxt *ctxt)
+>   * Moreover, they are all exactly FASTOP_SIZE bytes long, so functions for
+>   * different operand sizes can be reached by calculation, rather than a jump
+>   * table (which would be bigger than the code).
+> + *
+> + * The 16 byte alignment, considering 5 bytes for the RET thunk, 3 for ENDBR
+> + * and 1 for the straight line speculation INT3, leaves 7 bytes for the
+> + * body of the function.  Currently none is larger than 4.
 
-This is devfreq-next pull request for v5.20-rc1. I add detailed description of
-this pull request on the following tag. Please pull devfreq with
-following updates.
+The ENDBR is 4 bytes long, which leaves only 6 bytes left. Which is why the
+calculation being replaced may end up with a FASTOP_SIZE of 32.
 
-Best Regards,
-Chanwoo Choi
+Can you fix up these numbers when applying?
 
+Cascardo.
 
-The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
-
-  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.20
-
-for you to fetch changes up to 53f853d55e312a639eaa910154248ce06eb754ac:
-
-  PM / devfreq: tegra30: Add error message for devm_devfreq_add_device() (2022-07-15 11:40:08 +0900)
-----------------------------------------------------------------
-
-Update devfreq next for v5.20
-
-Detailed description for this pull request:
-1. Add new Mediatek CCI (Cache Coherent Interconnect) devfreq driver
-- Add new MediaTek Cache Coherent Interconnect (CCI) devfreq drviver
-  which supports the dynamic voltage and clock scaling.
-  This driver uses the passive devfreq governor to get target frequencies
-  and adjust voltages because it depends on MediaTek cpu frequency
-  driver. In MT8183 and MT8186, the MediaTek CCI is supplied
-  by the same regulators with the little core CPUs.
-
-2. Update the devfreq drivers
-- Convert the Samsung Exynos SoC Bus bindings to DT schema of exynos-bus.c
-
-- Remove kernel-doc warnings by adding the description for unused
-  fucntio parameters on devfreq core.
-
-- Use NULL to pass a null pointer rather than zero according to function
-  propotype on imx-bus.c
-
-- Print error message instead of error interger value on tegra30-devfreq.c
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      PM / devfreq: imx-bus: use NULL to pass a null pointer rather than zero
-
-Dmitry Osipenko (1):
-      PM / devfreq: tegra30: Add error message for devm_devfreq_add_device()
-
-Johnson Wang (2):
-      dt-bindings: interconnect: Add MediaTek CCI dt-bindings
-      PM / devfreq: mediatek: Introduce MediaTek CCI devfreq driver
-
-Krzysztof Kozlowski (1):
-      dt-bindings: interconnect: samsung,exynos-bus: convert to dtschema
-
-Mauro Carvalho Chehab (1):
-      PM / devfreq: shut up kernel-doc warnings
-
- .../devicetree/bindings/devfreq/exynos-bus.txt     | 488 ---------------------
- .../bindings/interconnect/mediatek,cci.yaml        | 141 ++++++
- .../bindings/interconnect/samsung,exynos-bus.yaml  | 290 ++++++++++++
- MAINTAINERS                                        |   3 +-
- drivers/devfreq/Kconfig                            |  10 +
- drivers/devfreq/Makefile                           |   1 +
- drivers/devfreq/devfreq.c                          |   4 +
- drivers/devfreq/imx-bus.c                          |   2 +-
- drivers/devfreq/mtk-cci-devfreq.c                  | 440 +++++++++++++++++++
- drivers/devfreq/tegra30-devfreq.c                  |   4 +-
- 10 files changed, 892 insertions(+), 491 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/devfreq/exynos-bus.txt
- create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/samsung,exynos-bus.yaml
- create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
+>   */
+>  static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+>  
+> +#define FASTOP_SIZE	16
+> +
+>  #define __FOP_FUNC(name) \
+>  	".align " __stringify(FASTOP_SIZE) " \n\t" \
+>  	".type " name ", @function \n\t" \
+> @@ -446,9 +445,7 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+>   * RET | JMP __x86_return_thunk	[1,5 bytes; CONFIG_RETHUNK]
+>   * INT3				[1 byte; CONFIG_SLS]
+>   */
+> -#define SETCC_LENGTH	(ENDBR_INSN_SIZE + 3 + RET_LENGTH)
+> -#define SETCC_ALIGN	(4 << ((SETCC_LENGTH > 4) & 1) << ((SETCC_LENGTH > 8) & 1))
+> -static_assert(SETCC_LENGTH <= SETCC_ALIGN);
+> +#define SETCC_ALIGN	16
+>  
+>  #define FOP_SETCC(op) \
+>  	".align " __stringify(SETCC_ALIGN) " \n\t" \
+> -- 
+> 2.31.1
+> 

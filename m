@@ -2,86 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D65575C64
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEB2575B6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbiGOHbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 03:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
+        id S229788AbiGOGRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 02:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbiGOHbp (ORCPT
+        with ESMTP id S229504AbiGOGRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 03:31:45 -0400
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914877B78E;
-        Fri, 15 Jul 2022 00:31:41 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id AF88C209E1;
-        Fri, 15 Jul 2022 09:31:28 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mgWaDqviUQaR; Fri, 15 Jul 2022 09:30:53 +0200 (CEST)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id 213FB208A6;
-        Fri, 15 Jul 2022 08:14:55 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout2.secunet.com (Postfix) with ESMTP id 18E5C80004A;
-        Fri, 15 Jul 2022 08:14:45 +0200 (CEST)
-Received: from mbx-dresden-01.secunet.de (10.53.40.199) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+        Fri, 15 Jul 2022 02:17:07 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EF1DB3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:17:05 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lkh1C0SQDzlVvF;
+        Fri, 15 Jul 2022 14:15:27 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 15 Jul 2022 08:14:34 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-dresden-01.secunet.de
- (10.53.40.199) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 15 Jul
- 2022 08:14:34 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id CCB823180785; Fri, 15 Jul 2022 08:14:33 +0200 (CEST)
-Date:   Fri, 15 Jul 2022 08:14:33 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     <iamwjia@163.com>
-CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Hacash Robot <hacashRobot@santino.com>
-Subject: Re: [PATCH -next] xfrm: Fix couple of spellings
-Message-ID: <20220715061433.GS566407@gauss3.secunet.de>
-References: <20220713154529.53031-1-iamwjia@163.com>
+ 15.1.2375.24; Fri, 15 Jul 2022 14:17:03 +0800
+From:   Yuanzheng Song <songyuanzheng@huawei.com>
+To:     <sj@kernel.org>, <akpm@linux-foundation.org>
+CC:     <damon@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] mm/damon/reclaim: fix 'enabled' is incorrectly set because 'system_wq' is not initialized
+Date:   Fri, 15 Jul 2022 06:16:09 +0000
+Message-ID: <20220715061609.48463-1-songyuanzheng@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220713154529.53031-1-iamwjia@163.com>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-dresden-01.secunet.de (10.53.40.199)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 11:45:29PM +0800, iamwjia@163.com wrote:
-> From: Wang Jia <iamwjia@163.com>
-> 
-> accomodate  ==> accommodate
-> destionation  ==> destination
-> execeeds  ==> exceeds
-> informations  ==> information
-> 
-> Reported-by: Hacash Robot <hacashRobot@santino.com>
-> Signed-off-by: Wang Jia <iamwjia@163.com>
-> ---
->  net/ipv6/ah6.c     | 2 +-
->  net/ipv6/esp6.c    | 4 ++--
+The 'enabled' will be incorrectly set because the 'system_wq'
+might not initialized yet. This results in 'enabled=true',
+but the 'damon_reclaim_timer' is inactive. So fix it by moving
+the judgment logic of the 'damon_reclaim_initialized' to the
+start position of the enable_store().
 
-Your patch does not apply to ipsec-next, the fixes
-for net/ipv6/esp6.c are already done there.
+Fixes: 294928293813 ("mm/damon/reclaim: schedule 'damon_reclaim_timer' only after 'system_wq' is initialized")
+Signed-off-by: Yuanzheng Song <songyuanzheng@huawei.com>
+---
+ mm/damon/reclaim.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-Please rebase your patch to ipsec-next, thanks!
+diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
+index e69b807fefe4..b13d5a02bf2e 100644
+--- a/mm/damon/reclaim.c
++++ b/mm/damon/reclaim.c
+@@ -374,13 +374,14 @@ static bool damon_reclaim_initialized;
+ static int damon_reclaim_enabled_store(const char *val,
+ 		const struct kernel_param *kp)
+ {
+-	int rc = param_set_bool(val, kp);
+-
+-	if (rc < 0)
+-		return rc;
++	int rc;
+ 
+ 	/* system_wq might not initialized yet */
+ 	if (!damon_reclaim_initialized)
++		return -EINVAL;
++
++	rc = param_set_bool(val, kp);
++	if (rc < 0)
+ 		return rc;
+ 
+ 	schedule_delayed_work(&damon_reclaim_timer, 0);
+-- 
+2.25.1
+

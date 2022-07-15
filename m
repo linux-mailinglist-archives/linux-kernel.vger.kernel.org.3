@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4339D576A10
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3BA576A15
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbiGOWnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
+        id S231945AbiGOWn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbiGOWmt (ORCPT
+        with ESMTP id S231562AbiGOWm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:42:49 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0EF8BAA9
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:42:43 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id o21-20020a17090aac1500b001ef977190efso5871721pjq.7
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:42:43 -0700 (PDT)
+        Fri, 15 Jul 2022 18:42:58 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89418C147
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:42:44 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id cu12-20020a17090afa8c00b001efdd3bac65so2687903pjb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:42:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=9jEPpmejaSJpxIROjRPts8ujHRiSKDn3EzCK/DbmdXQ=;
-        b=alccWWwRp4dJ72ANmbiqaAnCXwro8TrJGygV1VoT+fTjk9M+6mqrMXtonQxeqNRMcw
-         V9h1FBIS9wrKO6Re0MU7jAxbM7h4m+BuiKvsnDjhrUEPRGfd8h579Hz8p322zegtivig
-         3+L5ZGL+PW6ve138NJuu3jNYbtMXYxzgEYkhsX63xm25fXIFvjP+Z++6XZcY7mup9ITD
-         7PgFF7IeWgCHyySR5EGOalorJNcKqMH81NFed5xuDcRf3nNMCCtVWVk+f1brlNxPoQmF
-         3Up9TLIvnwYCC2rRx7HnDGlRagHyEY/D4RHeOblD1Jxjdzj6oHFfo/MzXBulrMTPWCdl
-         mlxQ==
+        bh=12pAoMG7eqUpSjBxIvOnNJnEwyKK8LrfDPX8olcQNKs=;
+        b=byCtTANhDQqGzobjfvR7dIeBxKJXRj9f4WjvncLqxasPzh2o5H8X/IPljjW2Ey8jZy
+         +eoPB5V0ZDvJ2dBhL4uTf24x6vfC/c7050s049hXISAkUbvVlOHOgAtQG4gFO+RYQpML
+         l0SOhdeMpJGIMNTvySvhtTbMntz1feob2FN52Sn692iRK2j0W/JLUSk39CaeZbeZFeKt
+         Lyc7ehni3ryxB2Hw0pza6UgYFMnk5vTK0M6Py5MSbrDHE7rGSAUbfHU4QbZFfa12x2Md
+         I3kklLPd4TMwvnUAo2nkOS55mDilXcguEdQuaWsJkq57fqiu0vot30r9djl+Tt0rewAh
+         X9fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=9jEPpmejaSJpxIROjRPts8ujHRiSKDn3EzCK/DbmdXQ=;
-        b=5XBq83nnw5EvF5SQrxlntuAeAbEyREewOvW3SiXg1dFQCkH6uuybuvt/N+srh5d047
-         bSeJFaYXFTN5nBE8bY4BVUPyPPUGRsF/5VOgzc0ZINwa36NCNRqCqmoi2ufuiaiSMLow
-         hVcq/xDeJtoPHlgqqdGUzyDWr5MT3fPd02le7tRRUzuzUomsvTq8cWlvZfGKmqFP3PE/
-         6MZOVEsCbFfXq9TgTcVE6deKEMvXYUKgsMgoGPStRpUl36ZfrYfNdmo33f++jwEZJEsY
-         nbuBuTHIx+TAjaxDetHmb/63sXY82Xvwt5uwwY+cvxuuTAnVhDYlt5mqb4jJYvBqz47H
-         PjUA==
-X-Gm-Message-State: AJIora8c135aq2PGS81Be4Je6wykIwZtXBBQgb97W4bB6d0bWVxdbS1l
-        XWFSNV10Tm57BYKmzfxKmJx5v4lnX7s=
-X-Google-Smtp-Source: AGRyM1vgvAyE6T8+8qp0blINZFRVIxz5+mmnSQBx64ekEZIG0aC+EdVSCbLJW9jxVwiusNnQ9MLfVODPs8k=
+        bh=12pAoMG7eqUpSjBxIvOnNJnEwyKK8LrfDPX8olcQNKs=;
+        b=qZFdMbfsHokV52uJxsz/EvtNBmZW6g0iODd+HLzLveEHGORfbLeV1DkZZRt6G+9X8a
+         eb2h3rewGYKhhJOP+4V5EGT1JfSuHib8iUAyYu1p8wutTCh7ACgbHFG5hhMtieXM2BA3
+         b/4YqDvYv+1ZqJZugmfuXWiA01/hQzOrJsnzHp8jQ3sLmyQD1wcpY/8WnBOc9Efi2Cx2
+         RPdhCmCVxhp6c8OMlVK41aQzeDTJefYxRpLtAalPkLgc2ytAhyELgyYTJNath/nYeVQD
+         X7f1XwysqncyPTKZjmlBQUJJCaFUbe63TXIWkktcOsh+sf1FSY+mILu3mhWlima7uIBU
+         QeHQ==
+X-Gm-Message-State: AJIora8vDZcj8evIBfe+zBxbvrvwN2VukrJPxJDI4I8/jQ+hLWlAmxa4
+        Uw4IChoubG/+x8hhONpKnveNVDUZ4jY=
+X-Google-Smtp-Source: AGRyM1uNRYq10LMeXTESy4mNUWMPIr8lGyZaxJ19QKoiM47J1hE2CGcDTLs2w0Eod1PKupNoYlp2xhx/KPE=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:31c9:b0:16c:3024:69c4 with SMTP id
- v9-20020a17090331c900b0016c302469c4mr16001311ple.81.1657924962676; Fri, 15
- Jul 2022 15:42:42 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:903:11d0:b0:16b:80cf:5d9 with SMTP id
+ q16-20020a17090311d000b0016b80cf05d9mr16043328plh.91.1657924964208; Fri, 15
+ Jul 2022 15:42:44 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 15 Jul 2022 22:42:25 +0000
+Date:   Fri, 15 Jul 2022 22:42:26 +0000
 In-Reply-To: <20220715224226.3749507-1-seanjc@google.com>
-Message-Id: <20220715224226.3749507-7-seanjc@google.com>
+Message-Id: <20220715224226.3749507-8-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220715224226.3749507-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v2 6/7] KVM: x86/mmu: Rename pte_list_{destroy,remove}() to
- show they zap SPTEs
+Subject: [PATCH v2 7/7] KVM: x86/mmu: Remove underscores from __pte_list_remove()
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -70,79 +69,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename pte_list_remove() and pte_list_destroy() to kvm_zap_one_rmap_spte()
-and kvm_zap_all_rmap_sptes() respectively to document that (a) they zap
-SPTEs and (b) to better document how they differ (remove vs. destroy does
-not exactly scream "one vs. all").
+Remove the underscores from __pte_list_remove(), the function formerly
+known as pte_list_remove() is now named kvm_zap_one_rmap_spte() to show
+that it zaps rmaps/PTEs, i.e. doesn't just remove an entry from a list.
 
 No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 00be88e0a5f7..282e7e2ab446 100644
+index 282e7e2ab446..5957c3e66b77 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -957,15 +957,16 @@ static void __pte_list_remove(u64 *spte, struct kvm_rmap_head *rmap_head)
- 	}
+@@ -921,7 +921,7 @@ pte_list_desc_remove_entry(struct kvm_rmap_head *rmap_head,
+ 	mmu_free_pte_list_desc(desc);
  }
  
--static void pte_list_remove(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--			    u64 *sptep)
-+static void kvm_zap_one_rmap_spte(struct kvm *kvm,
-+				  struct kvm_rmap_head *rmap_head, u64 *sptep)
+-static void __pte_list_remove(u64 *spte, struct kvm_rmap_head *rmap_head)
++static void pte_list_remove(u64 *spte, struct kvm_rmap_head *rmap_head)
+ {
+ 	struct pte_list_desc *desc;
+ 	struct pte_list_desc *prev_desc;
+@@ -961,7 +961,7 @@ static void kvm_zap_one_rmap_spte(struct kvm *kvm,
+ 				  struct kvm_rmap_head *rmap_head, u64 *sptep)
  {
  	mmu_spte_clear_track_bits(kvm, sptep);
- 	__pte_list_remove(sptep, rmap_head);
+-	__pte_list_remove(sptep, rmap_head);
++	pte_list_remove(sptep, rmap_head);
  }
  
--/* Return true if rmap existed, false otherwise */
--static bool pte_list_destroy(struct kvm *kvm, struct kvm_rmap_head *rmap_head)
-+/* Return true if at least one SPTE was zapped, false otherwise */
-+static bool kvm_zap_all_rmap_sptes(struct kvm *kvm,
-+				   struct kvm_rmap_head *rmap_head)
- {
- 	struct pte_list_desc *desc, *next;
- 	int i;
-@@ -1386,7 +1387,7 @@ static bool kvm_vcpu_write_protect_gfn(struct kvm_vcpu *vcpu, u64 gfn)
- static bool __kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 			   const struct kvm_memory_slot *slot)
- {
--	return pte_list_destroy(kvm, rmap_head);
-+	return kvm_zap_all_rmap_sptes(kvm, rmap_head);
+ /* Return true if at least one SPTE was zapped, false otherwise */
+@@ -1051,7 +1051,7 @@ static void rmap_remove(struct kvm *kvm, u64 *spte)
+ 	slot = __gfn_to_memslot(slots, gfn);
+ 	rmap_head = gfn_to_rmap(gfn, sp->role.level, slot);
+ 
+-	__pte_list_remove(spte, rmap_head);
++	pte_list_remove(spte, rmap_head);
  }
  
- static bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-@@ -1417,7 +1418,7 @@ static bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 		need_flush = true;
+ /*
+@@ -1693,7 +1693,7 @@ static void mmu_page_add_parent_pte(struct kvm_mmu_memory_cache *cache,
+ static void mmu_page_remove_parent_pte(struct kvm_mmu_page *sp,
+ 				       u64 *parent_pte)
+ {
+-	__pte_list_remove(parent_pte, &sp->parent_ptes);
++	pte_list_remove(parent_pte, &sp->parent_ptes);
+ }
  
- 		if (pte_write(pte)) {
--			pte_list_remove(kvm, rmap_head, sptep);
-+			kvm_zap_one_rmap_spte(kvm, rmap_head, sptep);
- 			goto restart;
- 		} else {
- 			new_spte = kvm_mmu_changed_pte_notifier_make_spte(
-@@ -1596,7 +1597,7 @@ static void __rmap_add(struct kvm *kvm,
- 	rmap_count = pte_list_add(cache, spte, rmap_head);
- 
- 	if (rmap_count > RMAP_RECYCLE_THRESHOLD) {
--		pte_list_destroy(kvm, rmap_head);
-+		kvm_zap_all_rmap_sptes(kvm, rmap_head);
- 		kvm_flush_remote_tlbs_with_address(
- 				kvm, sp->gfn, KVM_PAGES_PER_HPAGE(sp->role.level));
- 	}
-@@ -6406,7 +6407,7 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
- 		if (sp->role.direct &&
- 		    sp->role.level < kvm_mmu_max_mapping_level(kvm, slot, sp->gfn,
- 							       pfn, PG_LEVEL_NUM)) {
--			pte_list_remove(kvm, rmap_head, sptep);
-+			kvm_zap_one_rmap_spte(kvm, rmap_head, sptep);
- 
- 			if (kvm_available_flush_tlb_with_range())
- 				kvm_flush_remote_tlbs_with_address(kvm, sp->gfn,
+ static void drop_parent_pte(struct kvm_mmu_page *sp,
 -- 
 2.37.0.170.g444d1eabd0-goog
 

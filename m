@@ -2,136 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A1F5759DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 05:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9C35759ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 05:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241234AbiGODNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 23:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
+        id S241057AbiGODUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 23:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiGODNQ (ORCPT
+        with ESMTP id S229809AbiGODUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 23:13:16 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A052CC91;
-        Thu, 14 Jul 2022 20:13:15 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 23so3273293pgc.8;
-        Thu, 14 Jul 2022 20:13:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0kNvzHNczTALecfT9wto6CsS50awskOSoxCbfvaNPgc=;
-        b=d6rOttoave+cYYycQLZVtn7+6/EvvZMoC4KlEKnu5+Iy0CvIZB6RZvM+yDNYgjVsg2
-         zExWP1Kt2mvHL2caS42uLQwLfFdIGT+vt+VNkOv6EFVEz1IJ1Ei1z/SUwomvWvL9yqs/
-         LsfjR3vwcHDm1bfvDdBsjVXVCIzYFoJ6KMcatcAC61WXc2/vMcOjiKCXnv0z+ZYpPW1D
-         29300GYk48m1QvWYlTwrWUJ2ga8Ap1QJw6DN92YdxZnF6aT4PwJr+48L7OzWyifSHnIo
-         bBliGjA2A7iI1JHvd2yG0VTITazqxx3xOm38zhCb9ZIUiYeXEPs2TlvdcILgJvPCljIq
-         R2+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0kNvzHNczTALecfT9wto6CsS50awskOSoxCbfvaNPgc=;
-        b=QN1KHrm48rAJD5fzBNOgZjhfCzLL8XI17G9WwVqedi0xmXJr+o4BaGjxNFXWcshhUC
-         CmHS6PrTCfGBrnbZ9z4vGHmXJ+SL//YgSGSzEtX6lBI19hHyXLtjSBs9HctMfkGtO8ml
-         0X9hX9AlLkBpQXtn1QQ5jdSmNs+WGL0Jk1Lk3arotJV5+ANfLEgRLd7sS7cRoK04QdK5
-         b3hxuKptjV7JNBQnFwgpsHI5UcaJeOqyfLIA1IDX2EmNzpCp490SxVhvM69ihquIZeOd
-         rPXrHv86Nkbp/d28j3C/DMopZHJJHhmRfkIGHsxWayrIdb6LHd94G3taAg8koCq+59N7
-         L0+Q==
-X-Gm-Message-State: AJIora/SCLgVhagKduoZ2Bldj4py96FUWu4qtip08JTEn/nvRD2iAyXq
-        /rHgr7ZE3NSmYeZkhSv0VcQ+s5MPcxY=
-X-Google-Smtp-Source: AGRyM1vK5uqkhNs5DYoiUnUKiOfj2RRKOpP4xHProAEOYr/w1Br1ZQPpNcitPwDkSe+/qgFCXMCFZg==
-X-Received: by 2002:a63:2051:0:b0:412:6d61:ab0a with SMTP id r17-20020a632051000000b004126d61ab0amr10627004pgm.52.1657854794876;
-        Thu, 14 Jul 2022 20:13:14 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170903230c00b0016c6a6d8967sm2236563plh.83.2022.07.14.20.13.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 20:13:14 -0700 (PDT)
-Message-ID: <d95d1afe-655c-3526-0c7e-949dfad8c6ba@gmail.com>
-Date:   Thu, 14 Jul 2022 20:13:12 -0700
+        Thu, 14 Jul 2022 23:20:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4767FA447
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 20:20:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC5AA621EE
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 03:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42CB6C341C6
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 03:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657855221;
+        bh=r9nH0nnXki3fn2qUEx//h7cuqEVQBiYMXEgpzqbyJ5g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oKw6mCZOD1HPIbLdEpgbQaev8ZMcZVxjKSGNSOdQchcnAh9IwRz8aZ2io+E+MTbbs
+         XcmIqOkLdbMkSErlBQNXmCN4tH1N8M/5uhNwn5IT0Kmiky4/q9Qmhqt5V75U7eniEm
+         od+2dX50pYreYY7GoKdd23jyYFRPrlFJH0r5Lh71vaftCd8mhUuqbtRkv5VnYyG+nx
+         1Jr5VxxHNSn4Qt9Gsn9P+a75y1IMp6sMMBkO2CFQtG+DOX3Gif1PGBMreTHt/PN/zc
+         rT5vLW7VBRTgIxnF15DbEyWLedboADMcTJUBusvin3BHOr002YDnkexTbxCWudGtpY
+         Ki5496NqPPDSg==
+Received: by mail-vk1-f172.google.com with SMTP id 7so1648665vkq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 20:20:21 -0700 (PDT)
+X-Gm-Message-State: AJIora/YUVnTCcMhY84W75imyY0DZwDhPy4kwQz391zJzs8mhzFNvntf
+        NNnPne1KteO5Xtze4GaCA0vmtXPMqTcRy2cqSYg=
+X-Google-Smtp-Source: AGRyM1sN/ekI6UBawgnS3GWAQCMGXmmQNl+i2V8eRmbTHANUBobaCVtXNRsxJogDqP7TV8roV7OyjVCMMeIJdfGqkbs=
+X-Received: by 2002:a1f:340f:0:b0:374:7b8a:378 with SMTP id
+ b15-20020a1f340f000000b003747b8a0378mr4918379vka.37.1657855220231; Thu, 14
+ Jul 2022 20:20:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH V12 01/20] uapi: simplify __ARCH_FLOCK{,64}_PAD a little
-Content-Language: en-US
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
-        naresh.kamboju@linaro.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        heiko@sntech.de
-References: <20220405071314.3225832-1-guoren@kernel.org>
- <20220405071314.3225832-2-guoren@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220405071314.3225832-2-guoren@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220714062550.4934-1-huqi@loongson.cn> <CAAhV-H6NWYG1ChLRyK-EAGAmhDvP-x+z9BgBo3a=GAbQ-2bKig@mail.gmail.com>
+ <6896bb4c-5224-678f-e73c-fe95be41d196@loongson.cn>
+In-Reply-To: <6896bb4c-5224-678f-e73c-fe95be41d196@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Fri, 15 Jul 2022 11:20:07 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6eBuGS5F2=DQEMnV1JWOi8rn8g=SR++FxAWa5V6WABgQ@mail.gmail.com>
+Message-ID: <CAAhV-H6eBuGS5F2=DQEMnV1JWOi8rn8g=SR++FxAWa5V6WABgQ@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Fix missing fcsr in ptrace's fpr_set
+To:     Qi Hu <huqi@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>, Oleg Nesterov <oleg@redhat.com>,
+        Xu Li <lixu@loongson.cn>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 14, 2022 at 10:07 PM Qi Hu <huqi@loongson.cn> wrote:
+>
+>
+> On 2022/7/14 21:12, Huacai Chen wrote:
+> > Hi,
+> >
+> > On Thu, Jul 14, 2022 at 2:26 PM Qi Hu <huqi@loongson.cn> wrote:
+> >> In file ptrace.c, function fpr_set does not copy fcsr data from ubuf
+> >> to kbuf. That's the reason why fcsr cannot be modified by ptrace.
+> >>
+> >> This patch fixs this problem and allows users using ptrace to modify
+> >> the fcsr.
+> >>
+> >> Signed-off-by: Qi Hu <huqi@loongson.cn>
+> >> Signed-off-by: Xu Li <lixu@loongson.cn>
+> >> ---
+> >>   arch/loongarch/kernel/ptrace.c | 12 +++++++-----
+> >>   1 file changed, 7 insertions(+), 5 deletions(-)
+> >>
+> >> diff --git a/arch/loongarch/kernel/ptrace.c b/arch/loongarch/kernel/ptrace.c
+> >> index e6ab87948e1d..dc2b82ea894c 100644
+> >> --- a/arch/loongarch/kernel/ptrace.c
+> >> +++ b/arch/loongarch/kernel/ptrace.c
+> >> @@ -193,7 +193,7 @@ static int fpr_set(struct task_struct *target,
+> >>                     const void *kbuf, const void __user *ubuf)
+> >>   {
+> >>          const int fcc_start = NUM_FPU_REGS * sizeof(elf_fpreg_t);
+> >> -       const int fcc_end = fcc_start + sizeof(u64);
+> >> +       const int fcsr_start = fcc_start + sizeof(u64);
+> >>          int err;
+> >>
+> >>          BUG_ON(count % sizeof(elf_fpreg_t));
+> >> @@ -209,10 +209,12 @@ static int fpr_set(struct task_struct *target,
+> >>          if (err)
+> >>                  return err;
+> >>
+> >> -       if (count > 0)
+> >> -               err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
+> >> -                                         &target->thread.fpu.fcc,
+> >> -                                         fcc_start, fcc_end);
+> >> +       err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
+> >> +                                 &target->thread.fpu.fcc, fcc_start,
+> >> +                                 fcc_start + sizeof(u64));
+> >> +       err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
+> >> +                                 &target->thread.fpu.fcsr, fcsr_start,
+> >> +                                 fcsr_start + sizeof(u32));
+> > You shouldn't remove (count > 0) here, because  the above
+> > user_regset_copyin() will modify count inside, and so "count == 0" is
+> > possible.
+> >
+> > Huacai
+>
+> Yes, the "count" should be considered. But the "count" is checked at the
+> beginning of the "user_regset_copyin()".
+>
+> So "count > 0" is useless, i think.
+Yes, you are right, thanks.
 
-
-On 4/5/2022 12:12 AM, guoren@kernel.org wrote:
-> From: Christoph Hellwig <hch@lst.de>
-> 
-> Don't bother to define the symbols empty, just don't use them.
-> That makes the intent a little more clear.
-> 
-> Remove the unused HAVE_ARCH_STRUCT_FLOCK64 define and merge the
-> 32-bit mips struct flock into the generic one.
-> 
-> Add a new __ARCH_FLOCK_EXTRA_SYSID macro following the style of
-> __ARCH_FLOCK_PAD to avoid having a separate definition just for
-> one architecture.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
-
-Being late to this, but this breaks the perf build for me using a MIPS 
-toolchain with the following:
-
-   CC 
-/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o
-In file included from 
-../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:77,
-                  from ../include/uapi/linux/fcntl.h:5,
-                  from trace/beauty/fcntl.c:10:
-../include/uapi/asm-generic/fcntl.h:188:8: error: redefinition of 
-'struct flock'
-  struct flock {
-         ^~~~~
-In file included from ../include/uapi/linux/fcntl.h:5,
-                  from trace/beauty/fcntl.c:10:
-../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:63:8: 
-note: originally defined here
-  struct flock {
-         ^~~~~
-make[6]: *** 
-[/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/build/Makefile.build:97: 
-/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o] 
-Error 1
-
-the kernel headers are set to 4.1.31 which is arguably old but 
-toolchains using newer kernel headers do not fare much better either 
-unfortunately as I tried a toolchain with kernel headers 4.9.x.
-
-I will start doing more regular MIPS builds of the perf tools since that 
-seems to escape our testing.
-
-Thanks!
--- 
-Florian
+Huacai
+>
+> Also like riscv, "count" is not checked in "riscv_fpr_set()".
+>
+> >>          return err;
+> >>   }
+> >> --
+> >> 2.37.0
+> >>
+>

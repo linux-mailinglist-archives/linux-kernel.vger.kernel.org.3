@@ -2,118 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DAA5768BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 23:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589985768AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 23:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbiGOVK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 17:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S229688AbiGOVJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 17:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbiGOVKI (ORCPT
+        with ESMTP id S229951AbiGOVJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 17:10:08 -0400
-Received: from mr4.vodafonemail.de (mr4.vodafonemail.de [145.253.228.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A0197AB0D
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 14:10:06 -0700 (PDT)
-Received: from smtp.vodafone.de (unknown [10.0.0.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mr4.vodafonemail.de (Postfix) with ESMTPS id 4Ll3gR4Wv7z1y3d;
-        Fri, 15 Jul 2022 21:01:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arcor.de;
-        s=vfde-mb-mr2-21dec; t=1657918883;
-        bh=g0bZNQ/qAGzQLRkN3t2THCJbsEj5rzgZ60pOMTH7Mao=;
-        h=Date:From:To:Subject:Message-ID:References:Content-Type:
-         In-Reply-To:From;
-        b=RhBsweNS+Px1w+brCGcYvdNy6c+SqURr/fXm/i3BR68wsmOck6Gf+6VMpK92azfa9
-         v+N0hBwQgTqULfBxo46CvwWsfg+SRP8g+sFfXzuVLPJKwqg3kByK1nNiMZLw1PoScu
-         zv2ltNpU6PnZjxKqUI1OXWr+Pva46z28G888dTQU=
-Received: from arcor.de (p3ee2ce05.dip0.t-ipconnect.de [62.226.206.5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp.vodafone.de (Postfix) with ESMTPSA id 4Ll3g24xSkzHnHl;
-        Fri, 15 Jul 2022 21:00:59 +0000 (UTC)
-Date:   Fri, 15 Jul 2022 23:00:45 +0200
-From:   Reinhard Speyerer <rspmn@arcor.de>
-To:     Frans Klaver <fransklaver@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Frans Klaver <frans.klaver@vislink.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: serial: qcserial: add EM9191 support
-Message-ID: <YtHVfc40VGbB2Tkz@arcor.de>
-References: <20220715095623.28002-1-frans.klaver@vislink.com>
+        Fri, 15 Jul 2022 17:09:22 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BC570E49
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 14:09:17 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id r2so7331495wrs.3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 14:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uxbEsFkRpuwGSHkFCYXm35Pz3gor1PXEdEjjZ4dDIso=;
+        b=ECmqWgF0/iWw8OYnFSCpnZrLQzFvpZ5Wlcl8Qk4xM83h11NVTftDk+p8Mlq3jY/MyJ
+         42oTvGWj10aYYQNuw+YtlAau9zvQuI0CRMe0jLmVk4CeyQgBCuc7UDrMjIGMl9WvkLqs
+         u9BO3xzcLDJoyFV6dvjCTQU09yhh+vQoTuEd18/Y4pxcWJ6PxFjT+W1WhTmYaHR5c61t
+         867vz+XfF4iEbP8YgZFSDFGzMjjj34jaKb0s41Yf+y54i38dafN3VN0BhW5oa8YmTD6L
+         Des2VcZw8kC5oDAQySjKol5oMfJEddJldCRPz+4Rz9dlKnJtggvCix2mdT0CojHikeW+
+         hvOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uxbEsFkRpuwGSHkFCYXm35Pz3gor1PXEdEjjZ4dDIso=;
+        b=sRfyclBl9UFSLjOv0ieUkFB+oR60y5kfibI8QRo7dbx+5nr2v7aCx7sEBRVujEmd6f
+         diaToY3qUHN1BVmE5LuwUOD4VOHcwAg1RIH6Ec9WLCH8pg/Y0v9soAv3WY/aXQnnXoOX
+         mfhnDF9UDOiFSOhMlFojF1DvWdT6IPUhvHg67KE6RDTs/HL3qjIBYTDOG//u86WrAC5v
+         mrD9V+d80BK6ZlvFi66nLIZQnygGn4NJRTB2FnmgkOwEj5zANoTuDxvPO+o9wxWAgYYK
+         iuvZZSpV9b0y4aYbb97zuPJTFZB4VTFHkZjaB1IRje3ft0it72fWY4VKS4bpOa5G6Lum
+         b1uA==
+X-Gm-Message-State: AJIora87xpNLmax8paPgV26UsBVYCosuaL8i5dsqZHmgyZj1plRYQn3K
+        ShQyecKlipsr+dh/UG4uOUMMDGzjhi0siw==
+X-Google-Smtp-Source: AGRyM1tfI/a0XswTl9zWy7klWOZegxdyf+AgVvsQqVZ2RN6hG8W2eCK3caMais/j2oseH5w5i6M4xw==
+X-Received: by 2002:a5d:64c7:0:b0:21d:a742:5e2c with SMTP id f7-20020a5d64c7000000b0021da7425e2cmr14376966wri.178.1657919355571;
+        Fri, 15 Jul 2022 14:09:15 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:a223:f4b3:40c9:43fa])
+        by smtp.gmail.com with ESMTPSA id b14-20020a5d40ce000000b0021a56cda047sm4567752wrq.60.2022.07.15.14.09.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 14:09:14 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     quic_manafm@quicinc.com, rui.zhang@intel.com, amitk@kernel.org,
+        lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/4] thermal/core: Encapsulate the trip point crossed function
+Date:   Fri, 15 Jul 2022 23:09:08 +0200
+Message-Id: <20220715210911.714479-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220715095623.28002-1-frans.klaver@vislink.com>
-X-purgate-type: clean
-X-purgate: clean
-X-purgate-size: 2507
-X-purgate-ID: 155817::1657918881-11F7A23F-EC5999A9/0/0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 11:56:23AM +0200, Frans Klaver wrote:
-> From: Frans Klaver <frans.klaver@vislink.com>
-> 
-> Support for QDL mode is already present for EM9191 modules, but the
-> non-QDL mode appears to be missing. Add it now.
-> 
-> T:  Bus=03 Lev=03 Prnt=04 Port=01 Cnt=02 Dev#= 17 Spd=480 MxCh= 0
-> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1199 ProdID=90d3 Rev=00.06
-> S:  Manufacturer=Sierra Wireless, Incorporated
-> S:  Product=Sierra Wireless EM9191
-> S:  SerialNumber=8W0463003002A114
-> C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
-> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-> I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=qcserial
-> I:  If#=0x4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=qcserial
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Frans Klaver <frans.klaver@vislink.com>
-> ---
-> I noticed an e-mail address discrepancy that git-send-email didn't
-> magically fix for me. No change otherwise.
-> 
->  drivers/usb/serial/qcserial.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-> index 586ef5551e76e..73f6d3a37c0c4 100644
-> --- a/drivers/usb/serial/qcserial.c
-> +++ b/drivers/usb/serial/qcserial.c
-> @@ -166,6 +166,7 @@ static const struct usb_device_id id_table[] = {
->  	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
->  	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
->  	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
-> +	{DEVICE_SWI(0x1199, 0x90d3)},	/* Sierra Wireless EM9191 */
->  	{DEVICE_SWI(0x1199, 0xc080)},	/* Sierra Wireless EM7590 QDL */
->  	{DEVICE_SWI(0x1199, 0xc081)},	/* Sierra Wireless EM7590 */
->  	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
+The routine where the trip point crossed is detected is a strategic
+place where different processing will happen. Encapsulate the code in
+a function, so all specific actions related with a trip point crossed
+can be grouped.
 
-Hi Frans,
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/thermal_core.c | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
-the qcserial driver used in the usb-devices output above does not seem
-to be built from the mainline qcserial.c with your patch applied as USB
-interface 4 is ignored by the QCSERIAL_SWI layout.
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index cdc0552e8c42..d9f771b15ed8 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -358,6 +358,25 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
+ 		tz->ops->critical(tz);
+ }
+ 
++static void handle_thermal_trip_crossed(struct thermal_zone_device *tz, int trip,
++					int trip_temp, int trip_hyst, enum thermal_trip_type trip_type)
++{
++	if (tz->last_temperature == THERMAL_TEMP_INVALID)
++		return;
++
++	if (tz->last_temperature < trip_temp &&
++	    tz->temperature >= trip_temp) {
++		thermal_notify_tz_trip_up(tz->id, trip,
++					  tz->temperature);
++	}
++
++	if (tz->last_temperature >= trip_temp &&
++	    tz->temperature < (trip_temp - trip_hyst)) {
++		thermal_notify_tz_trip_down(tz->id, trip,
++					    tz->temperature);
++	}
++}
++
+ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+ {
+ 	enum thermal_trip_type type;
+@@ -372,16 +391,7 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+ 	if (tz->ops->get_trip_hyst)
+ 		tz->ops->get_trip_hyst(tz, trip, &hyst);
+ 
+-	if (tz->last_temperature != THERMAL_TEMP_INVALID) {
+-		if (tz->last_temperature < trip_temp &&
+-		    tz->temperature >= trip_temp)
+-			thermal_notify_tz_trip_up(tz->id, trip,
+-						  tz->temperature);
+-		if (tz->last_temperature >= trip_temp &&
+-		    tz->temperature < (trip_temp - hyst))
+-			thermal_notify_tz_trip_down(tz->id, trip,
+-						    tz->temperature);
+-	}
++	handle_thermal_trip_crossed(tz, trip, trip_temp, hyst, type);
+ 
+ 	if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
+ 		handle_critical_trips(tz, trip, type);
+-- 
+2.25.1
 
-To avoid potential side effects in case Sierra Wireless adds a vendor class
-USB interface 2 not intended to be used with qcserial.c it might be best
-to use a new QCSERIAL_SWI2 layout similar to what has been done in
-their MBPL drivers mentioned here
-https://forum.sierrawireless.com/t/rc7620-and-linux-driver/24308/ .
-
-Regards,
-Reinhard

@@ -2,110 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C08576623
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303F457662D
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbiGORfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 13:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
+        id S229821AbiGORiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 13:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiGORfJ (ORCPT
+        with ESMTP id S229503AbiGORiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 13:35:09 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C9F52FF8;
-        Fri, 15 Jul 2022 10:35:09 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id h145so4371254iof.9;
-        Fri, 15 Jul 2022 10:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x4PyeC7DknSEozr2Rop+Ti8Cfi6yj/0ATtSdVUySwnQ=;
-        b=J1aj53+wNAbEw+IHLK8Z72Y/0Gb/enxKDEJoJCi4kEwUPHNRFo1YVnepiO7k9zjt0O
-         XHj/bdo8LBMk4vsZSQCkVyZLljQkF9AJ5WZNAUlNeAbOWqnC7NE7Ig1U0k5XSWExGfcp
-         KTbUI0jK/K60oYXEtB0xjO2Xgsc1ZwN52sJBRBqM2mjIYxC04NpLbVRz0Wipph4hVYjh
-         KmTDvSI/H1NUeQ6Rp/UrbYqXkCPmifNCWfHwBJP4lDUS8G0fZLZ3a23QFbjrUy5K2xUw
-         jCw2h1G86t5Rsy5e8H6ztxYSpGBE9pc6bA14zrda8bPbR2rDcjfadcynVp+5sLL9xHDQ
-         Wz9A==
+        Fri, 15 Jul 2022 13:38:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49BF152FF8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:38:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657906686;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+QJFgzXdNV/CBVZ6SM9/IIKX+DwJmeA8immjPOoWrIc=;
+        b=e2tZYFO10CBMw0LiEHtHne/UE4PVLeaL2qEo+8dYJVyo9gx/D9p1/MdvNR/wryzkfkU3WL
+        XqY2+PSMgaVLAmGMnPl9MmRsHUOaQoCF0vsyYK7l4V4pPu/63XeVWTSyQuKkWH2dcxlrQC
+        b8V7Y9uS8OEivCRTcDrNg7YTRRT64Lg=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-601-A5oDm8IKN8Wfqkw_LaL7fA-1; Fri, 15 Jul 2022 13:38:05 -0400
+X-MC-Unique: A5oDm8IKN8Wfqkw_LaL7fA-1
+Received: by mail-qt1-f197.google.com with SMTP id x16-20020ac85f10000000b0031d3262f264so4042509qta.22
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:38:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x4PyeC7DknSEozr2Rop+Ti8Cfi6yj/0ATtSdVUySwnQ=;
-        b=sOa+sAk9v9E6m9IH8Mhml8EWLiZtYHLpFSvh5QX9FQ/hpyAHEw0pyE8bzViZIv1S8c
-         HVw3k2gSYnfGIMdhImDfl8YT+1/VYqybOrRGrq4bypp6qKKMqXlA6m5BFdLn6daRAjky
-         1tcAekFGNeSJww6xarRFYWLR6fMAGb9i1uQzmUHefhtF2ZElNohIrOHxEmoWaMbefa+F
-         vMBbNI9KF0E17nrLbFa8WcbvgBnbmQNvBUYsP4vFzhJPW8dEuC7UOcneJb7/osP2nmX7
-         p7p32C+OW7q60L4MeDI/PxHq+YjAOFiYYX0q18orVx+IgDCH9H0C006QcLbfu9uCKH7m
-         Al6Q==
-X-Gm-Message-State: AJIora9gJD/H6DRUVXZpYQAYQWTUcDR6C3fq5AIy4AiGPUl44digTrv3
-        5E0Ia+AcwnGjY1pEXoqLgcyqmzeE6A+dSKIKAqkj90wg/9g=
-X-Google-Smtp-Source: AGRyM1vXy8j20gHUEsoo8QWPuQvHey3I1meuQx56FZHopAnVEj3jwYjJHzssCdwlGyl/uj0ZRucTt5XsKmZhobZWFis=
-X-Received: by 2002:a05:6602:2e8d:b0:64f:b683:c70d with SMTP id
- m13-20020a0566022e8d00b0064fb683c70dmr7236737iow.62.1657906508386; Fri, 15
- Jul 2022 10:35:08 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+QJFgzXdNV/CBVZ6SM9/IIKX+DwJmeA8immjPOoWrIc=;
+        b=rJa4ODGk3/5K3HYCy6wd3Hy6TjD9IZ4whnRluLppHvKcujxGlPKKQsCfY5RSCh+9/k
+         JD3d7Y+p4qUFPYhWVR9/rDEwkEO7AdQa1CZG+82X/rBRlTrFJzNDejK49QgKgWnGuana
+         pBhLuaJWhuXMhCUTRaC2GbjojevDG+kPo26+yHeyyrgpve/Z19ZXk2qO6IJ19DtSQo+5
+         HaJZZiuV2G5Pv39Se/MNZjNpNWOTUSJpn0CCoxK/32FIhhtH3WB2p8ZpNNZbRg1ELVwP
+         E7IX3vAZ9XDe39feHmpBgBU5hbirdiOmjqxhhmVzyYnRgXV9PErhhTyiozQ3NzlfiPcE
+         V2Bw==
+X-Gm-Message-State: AJIora8qaoDLXBUBWqm/KHZ4Kouw1q8ZQZpmWwHnOtOceUp6w0u1fe8f
+        1Yy184Ti4XGasy1g0L60qeZ9otIUs1L4aqelUgbBwXRfu6n2gkAVT5h0X03AdS3BhJbsEV9IIJv
+        4Ncr3YhThlpKUFpSCAVOppXNn
+X-Received: by 2002:a05:622a:3d2:b0:31e:9704:dfe4 with SMTP id k18-20020a05622a03d200b0031e9704dfe4mr13304146qtx.240.1657906684767;
+        Fri, 15 Jul 2022 10:38:04 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t7MbHPD0/BZrxEZLLpMTZMXqpIbIlTg/PFCo+sShkoR38wOq6CLGHtWYk9DfydCQqcXSO1/g==
+X-Received: by 2002:a05:622a:3d2:b0:31e:9704:dfe4 with SMTP id k18-20020a05622a03d200b0031e9704dfe4mr13304133qtx.240.1657906684408;
+        Fri, 15 Jul 2022 10:38:04 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
+        by smtp.gmail.com with ESMTPSA id s27-20020a05622a1a9b00b0031d3996d304sm4271352qtc.17.2022.07.15.10.38.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 10:38:03 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 13:38:01 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm/hugetlb: avoid corrupting page->mapping in
+ hugetlb_mcopy_atomic_pte
+Message-ID: <YtGl+bqat/H+wtk8@xz-m1.local>
+References: <20220712130542.18836-1-linmiaohe@huawei.com>
+ <20220713102357.8328614813db01b569650ffd@linux-foundation.org>
+ <a47922cf-eb30-1ad9-fc96-1896254564ef@huawei.com>
+ <YtA7svbn4MtuT7qJ@xz-m1.local>
+ <402ae708-4c86-8feb-75c4-9339e1deac3b@huawei.com>
+ <YtFfHU3fb/ncCG6O@xz-m1.local>
+ <CAJHvVcgFY2uXM=CkxYmHc32Vqb5qmr8vFv0dpFk-2=Ef+Kssqw@mail.gmail.com>
+ <YtGe2qIO038e627p@xz-m1.local>
+ <YtGj/YYixDT0npgL@monkey>
 MIME-Version: 1.0
-References: <20220712145850.599666-1-benjamin.tissoires@redhat.com> <20220714213912.zrotlequhpgxzdl4@MacBook-Pro-3.local>
-In-Reply-To: <20220714213912.zrotlequhpgxzdl4@MacBook-Pro-3.local>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Fri, 15 Jul 2022 19:34:32 +0200
-Message-ID: <CAP01T746cSrRgYME75O-NZvf+4NQNvtU8ZhGf5XGmXRqY6jQzQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 00/23] Introduce eBPF support for HID devices
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YtGj/YYixDT0npgL@monkey>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Jul 2022 at 23:39, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Jul 12, 2022 at 04:58:27PM +0200, Benjamin Tissoires wrote:
-> > Hi,
-> >
-> > and after a little bit of time, here comes the v6 of the HID-BPF series.
-> >
-> > Again, for a full explanation of HID-BPF, please refer to the last patch
-> > in this series (23/23).
-> >
-> > This version sees some improvements compared to v5 on top of the
-> > usual addressing of the previous comments:
-> > - now I think every eBPF core change has a matching selftest added
-> > - the kfuncs declared in syscall can now actually access the memory of
-> >   the context
-> > - the code to retrieve the BTF ID of the various HID hooks is much
-> >   simpler (just a plain use of the BTF_ID() API instead of
-> >   loading/unloading of a tracing program)
-> > - I also added my HID Surface Dial example that I use locally to provide
-> >   a fuller example to users
->
-> Looking great.
-> Before another respin to address bits in patch 12 let's land the first ~8 patches,
-> since they're generic useful improvements.
->
-> Kumar, could you please help review the verifier bits?
+On Fri, Jul 15, 2022 at 10:29:33AM -0700, Mike Kravetz wrote:
+> On 07/15/22 13:07, Peter Xu wrote:
+> > On Fri, Jul 15, 2022 at 09:45:37AM -0700, Axel Rasmussen wrote:
+> > > I don't really have a strong preference between the two. The second option
+> > > is what I originally proposed in the first version of the minor fault
+> > > series, so going back to that isn't a problem at least from my perspective.
+> > > If in the future we find a real use case for this, we could always easily
+> > > re-enable it and add selftests for it at that point.
+> > 
+> > I'd go for fixing the test case if possible.  Mike, would it be fine if we
+> > go back to /dev/hugepages path based approach in the test case?
+> > 
+> 
+> No problem going back to using a file for private mapping testing.  Removing
+> that was more of a simplification, because of new MADV_DONTNEED support.
+> Just want to make sure we also keep remap and remove event testing.
 
-Sure, I'll take a look.
+Yeah definitely, thanks Mike!
+
+-- 
+Peter Xu
+

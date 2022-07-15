@@ -2,154 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CBA576843
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7635576849
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiGOUhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 16:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
+        id S229665AbiGOUkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 16:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbiGOUhS (ORCPT
+        with ESMTP id S229471AbiGOUkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 16:37:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC6384EFA
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:37:17 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oCS3Z-0004u2-Sr; Fri, 15 Jul 2022 22:37:01 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oCS3Z-001BFu-4w; Fri, 15 Jul 2022 22:37:01 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oCS3Y-005PyZ-3F; Fri, 15 Jul 2022 22:37:00 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] interconnect: imx: Make imx_icc_unregister() return void
-Date:   Fri, 15 Jul 2022 22:36:52 +0200
-Message-Id: <20220715203652.89912-9-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220715203652.89912-1-u.kleine-koenig@pengutronix.de>
-References: <20220715203652.89912-1-u.kleine-koenig@pengutronix.de>
+        Fri, 15 Jul 2022 16:40:16 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B341A528A6
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:40:15 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-10bd4812c29so8644660fac.11
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:40:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UClsEqV3JD19ACu3JsNCWl/cLZeryKIb1irorP73Kww=;
+        b=RVUd2g3PIrxABLRIB1PNNTftaU79wvj5UgCLSgXOAFRI4kW3+YteNAOmOYEvtd5aEg
+         NF9EHuEcCgzN7/GDIJPlhLl+rxA9j8Yhx4LwFUQPW60/Wf+hEcqlR9Q9V8FgHZt6q+Gp
+         U5QACBFUVwS1hHAYaIWlTNQ7TxJF2wM2ut0aPMXNt2nYKA5xaWLhaaW9XXSVXnbG+Jc2
+         u08x2aCitbp+mejBem5CxkqiiKYVhMkuNw6kFAhnvIBTv98gdQhEYMUjncv78a1nq9vT
+         slXdcanwItyVoZgzdBaTrVL+bM38aB/FSZsIiq+okBUw7cdWVPfky50mBo0+D/JP5G42
+         B1IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UClsEqV3JD19ACu3JsNCWl/cLZeryKIb1irorP73Kww=;
+        b=WhmvLV7pxgUawtmdSCZ276nkFXdHc1kwqaCfPLygMDJzfR4JoqrnxCSVf7XmZml8ii
+         epujiRLyY/CajXjUYhF/ZUBW9+NQZI53dOwp2317SO4u53pFwMqVmqKdL2VY3DGRO/h8
+         6hUDGgieVJ6GWlJPeBDvw00E4gAE2nWHy/Y1NYDnaV5+z5N8fEYJznOreMIe6p1+p1g8
+         v3e5lunYx1Oh3ec++qZPDbjTrHp6Vf8PQ5Km/Ib0IOES3X7u2ucuGJJ8e3kmyWi6/Ar7
+         3l37YbfEh1yVLLvkFW2LDCKr5hnWa+ZlPAIw2YjAEQxpGGUZNIaVhpSXAo9B0hPMrfPW
+         m37g==
+X-Gm-Message-State: AJIora/iNzzvJ8jjwwo1zih+fXhN52SsWgkui+UsVKMHrPIdVupI32Ei
+        QQdY4OHk5NpKWEH2wfImhNKuDBmHEdbGZdDcWihZAiBKSTQ=
+X-Google-Smtp-Source: AGRyM1tfRbAM589Ft1sdKHiA3BtukLPlMAhE/lLFiqPbTB8j7bIekBpV6v1Ndn5hJL0aCl1+ULCZ+Yn5GmTQA793onM=
+X-Received: by 2002:a05:6808:2292:b0:33a:5ec2:8f63 with SMTP id
+ bo18-20020a056808229200b0033a5ec28f63mr666595oib.112.1657917614793; Fri, 15
+ Jul 2022 13:40:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3164; h=from:subject; bh=7KukAtvH5Bq30kuEwIg28LJ8PMRL6qo8BHa0A2/HLbM=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi0c+s0VFV3l2yU6+MVs4rL1Au6U6sq+5+aOG/8TLT qP+54gSJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYtHPrAAKCRDB/BR4rcrsCZtiB/ 9expsimli0HRq4gZeoNwXXHWa4FF8Vi+Gx33WCUGQSEO0uNn7xgHpwXJ+/OdUZHxEHtd91a/z8b6tp FokDkOWE43yZytFeV/ijQtsrKu0WWxqMjcNCrZYhFapYNwk0Qe3IKHexvcnLRcyuqc0BT5gMjv1jzI zt3OI5iATd75X93YPw/JRLHESRzvHkbZw5gTeQA5N2NE+Z1BpFZGFp1rSYQNaaQoJatKsThWL+U6OY 0Yleds6GaTdRLpIlBRszfuCDQSo2H5dQvK6TSaWuYqztHVh4NViL3/98u8C2ruw3Arxg1Pa/T/GXgc erOvv92Vkx41h9uTWkqj34Xwq2Nz8G
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CALMp9eS5pBrKWe=LbWXON6bhTdhbX9rB2aF+c-h_a0=SXfyj7A@mail.gmail.com>
+ <f68c283c-cfc9-bc63-5d0f-143295a575d4@citrix.com>
+In-Reply-To: <f68c283c-cfc9-bc63-5d0f-143295a575d4@citrix.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Fri, 15 Jul 2022 13:40:03 -0700
+Message-ID: <CALMp9eSe6dRvSAa6CQp9P_dO5840OqSmhXrS2AabZeCyL_3j=g@mail.gmail.com>
+Subject: Re: Retbleed (RSBA vs BTC)
+To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function imx_icc_unregister() returns zero unconditionally. Make it
-return void.
+On Thu, Jul 14, 2022 at 6:07 PM Andrew Cooper <Andrew.Cooper3@citrix.com> wrote:
+>
+> On 15/07/2022 01:29, Jim Mattson wrote:
+> > What is the value in conflating the Intel and AMD findings under the
+> > same moniker (arch/x86/kernel/cpu/common.c)? The vulnerabilities seem
+> > quite different to me.
+>
+> They are entirely different, beyond the fact that they both pertain to
+> the `ret` instruction.
 
-This is a preparation for making platform remove callbacks return void.
+BTC affects much more than just the 'ret' instruction.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/interconnect/imx/imx.c    | 4 +---
- drivers/interconnect/imx/imx.h    | 2 +-
- drivers/interconnect/imx/imx8mm.c | 4 +++-
- drivers/interconnect/imx/imx8mn.c | 4 +++-
- drivers/interconnect/imx/imx8mq.c | 4 +++-
- 5 files changed, 11 insertions(+), 7 deletions(-)
+> Suffice it to say that I tried very hard to prevent this confusion...
+>
+> > The Intel CPUs tagged with RETBLEED should already report RSBA. The
+> > paper just highlights this previously disclosed vulnerability. Or are
+> > there Intel CPUs subject to Retbleed that don't report RSBA, and I'm
+> > just confused?
+>
+> There are CPUs which suffer from RSBA, that don't have MSR_ARCH_CAPS and
+> therefore can't enumerate it.
+>
+> IIRC, MSR_ARCH_CAPS only appeared with Cascade Lake (or thereabouts), so
+> the earlier Skylake CPUs (which are the majority subject of "Intel
+> Retbleed") lack the RSBA enumeration.
 
-diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
-index 4c70530e3064..e96794acad59 100644
---- a/drivers/interconnect/imx/imx.c
-+++ b/drivers/interconnect/imx/imx.c
-@@ -274,15 +274,13 @@ int imx_icc_register(struct platform_device *pdev,
- }
- EXPORT_SYMBOL_GPL(imx_icc_register);
- 
--int imx_icc_unregister(struct platform_device *pdev)
-+void imx_icc_unregister(struct platform_device *pdev)
- {
- 	struct icc_provider *provider = platform_get_drvdata(pdev);
- 
- 	imx_icc_unregister_nodes(provider);
- 
- 	icc_provider_del(provider);
--
--	return 0;
- }
- EXPORT_SYMBOL_GPL(imx_icc_unregister);
- 
-diff --git a/drivers/interconnect/imx/imx.h b/drivers/interconnect/imx/imx.h
-index 75da51076c68..b533c9a99710 100644
---- a/drivers/interconnect/imx/imx.h
-+++ b/drivers/interconnect/imx/imx.h
-@@ -56,6 +56,6 @@ struct imx_icc_node_desc {
- int imx_icc_register(struct platform_device *pdev,
- 		     struct imx_icc_node_desc *nodes,
- 		     int nodes_count);
--int imx_icc_unregister(struct platform_device *pdev);
-+void imx_icc_unregister(struct platform_device *pdev);
- 
- #endif /* __DRIVERS_INTERCONNECT_IMX_H */
-diff --git a/drivers/interconnect/imx/imx8mm.c b/drivers/interconnect/imx/imx8mm.c
-index 1083490bb391..fa9639c6ea37 100644
---- a/drivers/interconnect/imx/imx8mm.c
-+++ b/drivers/interconnect/imx/imx8mm.c
-@@ -88,7 +88,9 @@ static int imx8mm_icc_probe(struct platform_device *pdev)
- 
- static int imx8mm_icc_remove(struct platform_device *pdev)
- {
--	return imx_icc_unregister(pdev);
-+	imx_icc_unregister(pdev);
-+
-+	return 0;
- }
- 
- static struct platform_driver imx8mm_icc_driver = {
-diff --git a/drivers/interconnect/imx/imx8mn.c b/drivers/interconnect/imx/imx8mn.c
-index ad97e55fd4e5..3b11571c23d0 100644
---- a/drivers/interconnect/imx/imx8mn.c
-+++ b/drivers/interconnect/imx/imx8mn.c
-@@ -77,7 +77,9 @@ static int imx8mn_icc_probe(struct platform_device *pdev)
- 
- static int imx8mn_icc_remove(struct platform_device *pdev)
- {
--	return imx_icc_unregister(pdev);
-+	imx_icc_unregister(pdev);
-+
-+	return 0;
- }
- 
- static struct platform_driver imx8mn_icc_driver = {
-diff --git a/drivers/interconnect/imx/imx8mq.c b/drivers/interconnect/imx/imx8mq.c
-index d7768d3c6d8a..fb19b90d6767 100644
---- a/drivers/interconnect/imx/imx8mq.c
-+++ b/drivers/interconnect/imx/imx8mq.c
-@@ -87,7 +87,9 @@ static int imx8mq_icc_probe(struct platform_device *pdev)
- 
- static int imx8mq_icc_remove(struct platform_device *pdev)
- {
--	return imx_icc_unregister(pdev);
-+	imx_icc_unregister(pdev);
-+
-+	return 0;
- }
- 
- static struct platform_driver imx8mq_icc_driver = {
--- 
-2.36.1
+Ah, right. I was thinking that we got IA32_ARCH_CAPABILITIES on older
+parts with microcode updates, but I was mistaken.
 
+> > On the AMD side, however, Branch Type Confusion is a much bigger deal.
+> > All instructions are subject to steering by BTI, not just returns with
+> > an empty RSB.
+> >
+> > Don't these two vulnerabilities deserve separate names (and don't we
+> > already have a name for the first one)?
+> >
+> > Tangentially, I believe that the following line is wrong:
+> > VULNBL_INTEL_STEPPINGS(SKYLAKE_X, X86_STEPPING_ANY, MMIO | RETBLEED),
+> >
+> > Steppings 5, 6, and 7 are "Cascade Lake," with eIBRS, and I don't
+> > think Cascade Lake suffers from RSBA.
+>
+> As documented, Cascade Lake does suffer RSBA when eIBRS isn't active, so
+> it's not a binary affliction state.
+
+Is there no value in separating RRSBA from RSBA? Per Table 1 in
+Intel's "Return Stack Buffer Underflow" technical paper, Cascade Lake
+exhibits RRSBA behavior, but not RSBA behavior.

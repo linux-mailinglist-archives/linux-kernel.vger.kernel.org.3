@@ -2,171 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1258F5761FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 14:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F2B576205
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 14:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiGOMkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 08:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        id S231347AbiGOMoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 08:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiGOMka (ORCPT
+        with ESMTP id S229685AbiGOMox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 08:40:30 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C2952DFE
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 05:40:29 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id l11so8182334ybu.13
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 05:40:29 -0700 (PDT)
+        Fri, 15 Jul 2022 08:44:53 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3EC71BE1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 05:44:52 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id by8so1978241ljb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 05:44:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rFg14LcgZeTXkwnfeYDRgexezyvnv3PPOW7dv1pA4P8=;
-        b=MgzKUYmwoAkXqXd5KzKLIkmvhgxw0vpQqzQDgoqaKs6pF/soK1ZNa2tOcOkV9L6PLZ
-         wBVcJfEsn/tqWlctpkCwzUIVhBEmQM3AxvlDIuQgHbAIX5ov9ojWMhWbFkj3Zmv1RSdF
-         JO5fTN4rb2liogKFZbHbd1/lqrHXmcW63mcaEa3re5Pcj9V0IXuVn9Z//MTEn2IsvS78
-         Kso+taRua7VpAw4UpGcQWmYwXxjkX01mpE8mmCjdP871lLz/AoTH4guUdfIV6bvIBkkd
-         ObTO1xyNdA7tOH6GMF+MpTLGkBoLhvcxPvVw1aF69x/Ds1WbV6/SjU8pxw/Nfcsc24rr
-         gL+A==
+        bh=MwAK4H2fVQwUr3+IIFLavhYbNJQlw8pntln2eHgKkYw=;
+        b=xkd2N7NGlJjsxyfWaBYiu4504FmMAzx9WdGCA1mHXUCdraS+3nek0OoHMV5wXltoQK
+         7jBHjR81MK3dEw2/+TT2EoTokOQyoTJ9qd3qMSB6z8xU1AZ02ZJYRDreU0pbsF0lC7XX
+         k/q7vgPIFaur3/c49NhsLqf+q1/UemhMbSvK/HxkNZBfvkILQT8l0lYf48ol0AVzHYQq
+         JYyXqXHpKvn5crcBjkf8fFfm0kHT93fpo4jUstolI3AoNixEisdDaGDUQFKfkJRekkdq
+         8+Y+0h4KgKWhAUcxLQI2yTVbQwbNezkiyp4o+ox2kuVZxaslPGZj/39qUOGar91N0Cix
+         RsOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rFg14LcgZeTXkwnfeYDRgexezyvnv3PPOW7dv1pA4P8=;
-        b=sV2gR1qsOPKP7m/3JMU+kwyZorZ5jN9/sXoE8B/rRMksLn3xPZjerzmi+NvagTb8Vh
-         /QBNT1Ak7ZZCYIfhf7UzF50BXf3Qt+2HI4hjtZWGPStKxAuJNowCY2UVbhIgcOqtj2+X
-         aHfkvGitD+ySyZFkAtsSgl8pH0eBCNITIidU/lhymSWKBqY3WY5HTxfK0mnB8+ff10g3
-         PP3g/NOlgvXeIoxcuiw7bES4wxvjLQvM1metE2D9jzCmDy2EhVrhDtltTEt4fX1AHgKG
-         gP1U3vOszk4xD5rpULlnAMZII9IqE/40nxYOl3WOeP4HSEyu4ij7y9zmRMfdvg9xHgif
-         mDpA==
-X-Gm-Message-State: AJIora+hPFiPGUVreXl6g6ajVUZuiDIqRHB5bZOzI9eQduCJ+W4XUQ9B
-        I2XZIQX9c0Gxuyfs8hwJrRqEN4ZN6uAbWHtlcK/mRw==
-X-Google-Smtp-Source: AGRyM1sw01W+gq/gh9ZPzSWhiZEYPNEYPsXHwsXTS43Azg2CScUfHjXmj1/LWvn0fMHkp54AVE1N5zbFE2XE6uhCmkY=
-X-Received: by 2002:a5b:885:0:b0:66f:a7f5:23a4 with SMTP id
- e5-20020a5b0885000000b0066fa7f523a4mr13203832ybq.87.1657888828869; Fri, 15
- Jul 2022 05:40:28 -0700 (PDT)
+        bh=MwAK4H2fVQwUr3+IIFLavhYbNJQlw8pntln2eHgKkYw=;
+        b=zu4+t7njkWlhvpCZocwjSzbGpoVavY4ZKkJ3S//QJSMws/Z8qPXK/E9LJFJ1O+gM+B
+         VY5N3+ASy4qzyhxGUgHLkBJWDHBSnZtQIiYfDPDDihBSADS++ZW5W6UkeHefwOVVau5q
+         6F/X2h4z5X6V27qcb0MkwLAQcthK+bHQttKP59t7ROX8EZHeqhHetEM+9i61dpytkPmt
+         IazdE6J8UFpAI7ZPoTitQ0h91k+FMnfaGSZhp5iR9o7/MbDH9QnzsYWkBi3drRR820Ai
+         bJC/XdefcLSFX5tq2a9eIGEjfer0ADSW9P/rw6yztGY+0E85jZ7yegvhAR+3jBSd664B
+         Mx7w==
+X-Gm-Message-State: AJIora+O+r3ytX91KDdolQUai1Xtqlv5TU/fPpRv6aXlsnXYgu/oJiZ/
+        tpkPkVe/nwPDpqabZN6BXtvWG62jK/c/BcOj5Ud+RA==
+X-Google-Smtp-Source: AGRyM1sLowP5UFCjY6i+lwr3s+svnMnfBmDjh4s0YfgEmYk4rETNfT++ZPrlf4BUQEqFL0k+8Y+hq9DGBtLWzDqBsxo=
+X-Received: by 2002:a2e:a413:0:b0:25d:4844:9d65 with SMTP id
+ p19-20020a2ea413000000b0025d48449d65mr6839813ljn.169.1657889090278; Fri, 15
+ Jul 2022 05:44:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220715120152.17760-1-pmladek@suse.com>
-In-Reply-To: <20220715120152.17760-1-pmladek@suse.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 15 Jul 2022 14:39:52 +0200
-Message-ID: <CANpmjNOHY1GC_Fab4T6J06vqW0vRf=4jQR0dG0MJoFOPpKzcUA@mail.gmail.com>
-Subject: Re: [PATCH] printk: Make console tracepoint safe in NMI() context
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        kasan-dev@googlegroups.com, Thomas Gleixner <tglx@linutronix.de>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        linux-kernel@vger.kernel.org
+References: <20220714165550.8884-1-semen.protsenko@linaro.org>
+ <20220714165550.8884-5-semen.protsenko@linaro.org> <29cb0b4f-531c-b17a-09b6-2da2faaf9e11@arm.com>
+In-Reply-To: <29cb0b4f-531c-b17a-09b6-2da2faaf9e11@arm.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 15 Jul 2022 15:44:39 +0300
+Message-ID: <CAPLW+4nzxAP4jFxxWRTuXWHzEbpsZEVO7OAZH5A_V1Bda-tNBg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] iommu/exynos: Abstract non-common registers on
+ different variants
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Janghyuck Kim <janghyuck.kim@samsung.com>,
+        Cho KyongHo <pullip.cho@samsung.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        David Virag <virag.david003@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Jul 2022 at 14:02, Petr Mladek <pmladek@suse.com> wrote:
+On Fri, 15 Jul 2022 at 15:14, Robin Murphy <robin.murphy@arm.com> wrote:
 >
-> The commit 701850dc0c31bfadf75a0 ("printk, tracing: fix console
-> tracepoint") moved the tracepoint from console_unlock() to
-> vprintk_store(). As a result, it might be called in any
-> context and triggered the following warning:
+> On 2022-07-14 17:55, Sam Protsenko wrote:
+> > At the moment the driver supports SysMMU v1..v5 versions. SysMMU v5 has
+> > different register layout than SysMMU v1..v3. Instead of checking the
+> > version each time before reading/writing the registers, let's create
+> > corresponding register structure for each SysMMU version and set the
+> > needed structure on init, checking the SysMMU version one single time.
+> > This way is faster and more elegant.
+> >
+> > No behavior changes from the user's point of view, it's only a
+> > refactoring patch.
+> >
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > ---
+> > Changes in v3:
+> >    - Added Marek's Acked-by tag
+> >    - Removed abstracting common regs, used plain readl/writel to access
+> >      those instead
+> >    - Used variant struct instead of array to keep non-common register
+> >      offsets
 >
->   WARNING: CPU: 1 PID: 16462 at include/trace/events/printk.h:10 printk_sprint+0x81/0xda
->   Modules linked in: ppdev parport_pc parport
->   CPU: 1 PID: 16462 Comm: event_benchmark Not tainted 5.19.0-rc5-test+ #5
->   Hardware name: MSI MS-7823/CSM-H87M-G43 (MS-7823), BIOS V1.6 02/22/2014
->   EIP: printk_sprint+0x81/0xda
->   Code: 89 d8 e8 88 fc 33 00 e9 02 00 00 00 eb 6b 64 a1 a4 b8 91 c1 e8 fd d6 ff ff 84 c0 74 5c 64 a1 14 08 92 c1 a9 00 00 f0 00 74 02 <0f> 0b 64 ff 05 14 08 92 c1 b8 e0 c4 6b c1 e8 a5 dc 00 00 89 c7 e8
->   EAX: 80110001 EBX: c20a52f8 ECX: 0000000c EDX: 6d203036
->   ESI: 3df6004c EDI: 00000000 EBP: c61fbd7c ESP: c61fbd70
->   DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010006
->   CR0: 80050033 CR2: b7efc000 CR3: 05b80000 CR4: 001506f0
->   Call Trace:
->    vprintk_store+0x24b/0x2ff
->    vprintk+0x37/0x4d
->    _printk+0x14/0x16
->    nmi_handle+0x1ef/0x24e
->    ? find_next_bit.part.0+0x13/0x13
->    ? find_next_bit.part.0+0x13/0x13
->    ? function_trace_call+0xd8/0xd9
->    default_do_nmi+0x57/0x1af
->    ? trace_hardirqs_off_finish+0x2a/0xd9
->    ? to_kthread+0xf/0xf
->    exc_nmi+0x9b/0xf4
->    asm_exc_nmi+0xae/0x29c
+> I'm a bit late, but just for the record I think the new approach in this
+> version looks really good :)
 >
-> It comes from:
->
->   #define __DO_TRACE(name, args, cond, rcuidle) \
->   [...]
->                 /* srcu can't be used from NMI */       \
->                 WARN_ON_ONCE(rcuidle && in_nmi());      \
->
-> It might be possible to make srcu working in NMI. But it
-> would be slower on some architectures. It is not worth
-> doing it just because of this tracepoint.
->
-> It would be possible to disable this tracepoint in NMI
-> or in rcuidle context. Where the rcuidle context looks
-> more rare and thus more acceptable to be ignored.
->
-> Alternative solution would be to move the tracepoint
-> back to console code. But the location is less reliable
-> by definition. Also the synchronization against other
-> tracing messages is much worse.
->
-> Let's ignore the tracepoint in rcuidle context as the least
-> evil solution.
->
-> Link: https://lore.kernel.org/r/20220712151655.GU1790663@paulmck-ThinkPad-P17-Gen-1
->
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
-> ---
->  include/trace/events/printk.h | 11 ++++++++++-
->  kernel/printk/printk.c        |  2 +-
->  2 files changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/include/trace/events/printk.h b/include/trace/events/printk.h
-> index 13d405b2fd8b..a3ee720f41b5 100644
-> --- a/include/trace/events/printk.h
-> +++ b/include/trace/events/printk.h
-> @@ -7,11 +7,20 @@
->
->  #include <linux/tracepoint.h>
->
-> -TRACE_EVENT(console,
-> +TRACE_EVENT_CONDITION(console,
->         TP_PROTO(const char *text, size_t len),
->
->         TP_ARGS(text, len),
->
-> +       /*
-> +        * trace_console_rcuidle() is not working in NMI. printk()
-> +        * is used more often in NMI than in rcuidle context.
-> +        * Choose the less evil solution here.
-> +        *
-> +        * raw_smp_processor_id() is reliable in rcuidle context.
-> +        */
-> +       TP_CONDITION(!rcu_is_idle_cpu(raw_smp_processor_id())),
-> +
 
-Couldn't this just use rcu_is_watching()?
+Thank you for the review, Robin!
 
-  | * rcu_is_watching - see if RCU thinks that the current CPU is not idle
-
-Thanks,
--- Marco
+> Cheers,
+> Robin.
+>
+> >    - Removed 0x1 value used as an offset for missing registers
+> >    - Merged __sysmmu_hw_info() into __sysmmu_get_version()
+> >    - Refactored __sysmmu_tlb_invalidate_entry() for "num_inv == 1" case
+> >    - Reworked the commit message w.r.t. all changes
+> >
+> > Changes in v2:
+> >    - Reworked existing code (SysMMU v1..v5) to use this approach
+> >    - Extracted v7 registers to the separate patches
+> >    - Replaced MMU_REG() with corresponding SysMMU read/write functions
+> >    - Improved the comment for 0x1 offsets triggering an unaligned access
+> >      exception
+> >    - Removed support for VMID number, as only VMID=0 (default) is used
+> >      for now
+> >    - Renamed register index names to reflect the old SysMMU version
+> >      register names
+> >
+> >   drivers/iommu/exynos-iommu.c | 100 +++++++++++++++++++++--------------
+> >   1 file changed, 60 insertions(+), 40 deletions(-)
+> >
+> > diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
+> > index 494f7d7aa9c5..6a0299fe1722 100644
+> > --- a/drivers/iommu/exynos-iommu.c
+> > +++ b/drivers/iommu/exynos-iommu.c
+> > @@ -148,26 +148,12 @@ static u32 lv2ent_offset(sysmmu_iova_t iova)
+> >   #define MAKE_MMU_VER(maj, min)      ((((maj) & 0xF) << 7) | ((min) & 0x7F))
+> >
+> >   /* v1.x - v3.x registers */
+> > -#define REG_MMU_FLUSH                0x00C
+> > -#define REG_MMU_FLUSH_ENTRY  0x010
+> > -#define REG_PT_BASE_ADDR     0x014
+> > -#define REG_INT_STATUS               0x018
+> > -#define REG_INT_CLEAR                0x01C
+> > -
+> >   #define REG_PAGE_FAULT_ADDR 0x024
+> >   #define REG_AW_FAULT_ADDR   0x028
+> >   #define REG_AR_FAULT_ADDR   0x02C
+> >   #define REG_DEFAULT_SLAVE_ADDR      0x030
+> >
+> >   /* v5.x registers */
+> > -#define REG_V5_PT_BASE_PFN   0x00C
+> > -#define REG_V5_MMU_FLUSH_ALL 0x010
+> > -#define REG_V5_MMU_FLUSH_ENTRY       0x014
+> > -#define REG_V5_MMU_FLUSH_RANGE       0x018
+> > -#define REG_V5_MMU_FLUSH_START       0x020
+> > -#define REG_V5_MMU_FLUSH_END 0x024
+> > -#define REG_V5_INT_STATUS    0x060
+> > -#define REG_V5_INT_CLEAR     0x064
+> >   #define REG_V5_FAULT_AR_VA  0x070
+> >   #define REG_V5_FAULT_AW_VA  0x080
+> >
+> > @@ -250,6 +236,21 @@ struct exynos_iommu_domain {
+> >       struct iommu_domain domain; /* generic domain data structure */
+> >   };
+> >
+> > +/*
+> > + * SysMMU version specific data. Contains offsets for the registers which can
+> > + * be found in different SysMMU variants, but have different offset values.
+> > + */
+> > +struct sysmmu_variant {
+> > +     u32 pt_base;            /* page table base address (physical) */
+> > +     u32 flush_all;          /* invalidate all TLB entries */
+> > +     u32 flush_entry;        /* invalidate specific TLB entry */
+> > +     u32 flush_range;        /* invalidate TLB entries in specified range */
+> > +     u32 flush_start;        /* start address of range invalidation */
+> > +     u32 flush_end;          /* end address of range invalidation */
+> > +     u32 int_status;         /* interrupt status information */
+> > +     u32 int_clear;          /* clear the interrupt */
+> > +};
+> > +
+> >   /*
+> >    * This structure hold all data of a single SYSMMU controller, this includes
+> >    * hw resources like registers and clocks, pointers and list nodes to connect
+> > @@ -274,6 +275,30 @@ struct sysmmu_drvdata {
+> >       unsigned int version;           /* our version */
+> >
+> >       struct iommu_device iommu;      /* IOMMU core handle */
+> > +     const struct sysmmu_variant *variant; /* version specific data */
+> > +};
+> > +
+> > +#define SYSMMU_REG(data, reg) ((data)->sfrbase + (data)->variant->reg)
+> > +
+> > +/* SysMMU v1..v3 */
+> > +static const struct sysmmu_variant sysmmu_v1_variant = {
+> > +     .flush_all      = 0x0c,
+> > +     .flush_entry    = 0x10,
+> > +     .pt_base        = 0x14,
+> > +     .int_status     = 0x18,
+> > +     .int_clear      = 0x1c,
+> > +};
+> > +
+> > +/* SysMMU v5 */
+> > +static const struct sysmmu_variant sysmmu_v5_variant = {
+> > +     .pt_base        = 0x0c,
+> > +     .flush_all      = 0x10,
+> > +     .flush_entry    = 0x14,
+> > +     .flush_range    = 0x18,
+> > +     .flush_start    = 0x20,
+> > +     .flush_end      = 0x24,
+> > +     .int_status     = 0x60,
+> > +     .int_clear      = 0x64,
+> >   };
+> >
+> >   static struct exynos_iommu_domain *to_exynos_domain(struct iommu_domain *dom)
+> > @@ -304,10 +329,7 @@ static bool sysmmu_block(struct sysmmu_drvdata *data)
+> >
+> >   static void __sysmmu_tlb_invalidate(struct sysmmu_drvdata *data)
+> >   {
+> > -     if (MMU_MAJ_VER(data->version) < 5)
+> > -             writel(0x1, data->sfrbase + REG_MMU_FLUSH);
+> > -     else
+> > -             writel(0x1, data->sfrbase + REG_V5_MMU_FLUSH_ALL);
+> > +     writel(0x1, SYSMMU_REG(data, flush_all));
+> >   }
+> >
+> >   static void __sysmmu_tlb_invalidate_entry(struct sysmmu_drvdata *data,
+> > @@ -315,33 +337,30 @@ static void __sysmmu_tlb_invalidate_entry(struct sysmmu_drvdata *data,
+> >   {
+> >       unsigned int i;
+> >
+> > -     if (MMU_MAJ_VER(data->version) < 5) {
+> > +     if (MMU_MAJ_VER(data->version) < 5 || num_inv == 1) {
+> >               for (i = 0; i < num_inv; i++) {
+> >                       writel((iova & SPAGE_MASK) | 1,
+> > -                                  data->sfrbase + REG_MMU_FLUSH_ENTRY);
+> > +                            SYSMMU_REG(data, flush_entry));
+> >                       iova += SPAGE_SIZE;
+> >               }
+> >       } else {
+> > -             if (num_inv == 1) {
+> > -                     writel((iova & SPAGE_MASK) | 1,
+> > -                                  data->sfrbase + REG_V5_MMU_FLUSH_ENTRY);
+> > -             } else {
+> > -                     writel((iova & SPAGE_MASK),
+> > -                                  data->sfrbase + REG_V5_MMU_FLUSH_START);
+> > -                     writel((iova & SPAGE_MASK) + (num_inv - 1) * SPAGE_SIZE,
+> > -                                  data->sfrbase + REG_V5_MMU_FLUSH_END);
+> > -                     writel(1, data->sfrbase + REG_V5_MMU_FLUSH_RANGE);
+> > -             }
+> > +             writel(iova & SPAGE_MASK, SYSMMU_REG(data, flush_start));
+> > +             writel((iova & SPAGE_MASK) + (num_inv - 1) * SPAGE_SIZE,
+> > +                    SYSMMU_REG(data, flush_end));
+> > +             writel(0x1, SYSMMU_REG(data, flush_range));
+> >       }
+> >   }
+> >
+> >   static void __sysmmu_set_ptbase(struct sysmmu_drvdata *data, phys_addr_t pgd)
+> >   {
+> > +     u32 pt_base;
+> > +
+> >       if (MMU_MAJ_VER(data->version) < 5)
+> > -             writel(pgd, data->sfrbase + REG_PT_BASE_ADDR);
+> > +             pt_base = pgd;
+> >       else
+> > -             writel(pgd >> SPAGE_ORDER, data->sfrbase + REG_V5_PT_BASE_PFN);
+> > +             pt_base = pgd >> SPAGE_ORDER;
+> >
+> > +     writel(pt_base, SYSMMU_REG(data, pt_base));
+> >       __sysmmu_tlb_invalidate(data);
+> >   }
+> >
+> > @@ -378,6 +397,11 @@ static void __sysmmu_get_version(struct sysmmu_drvdata *data)
+> >       dev_dbg(data->sysmmu, "hardware version: %d.%d\n",
+> >               MMU_MAJ_VER(data->version), MMU_MIN_VER(data->version));
+> >
+> > +     if (MMU_MAJ_VER(data->version) < 5)
+> > +             data->variant = &sysmmu_v1_variant;
+> > +     else
+> > +             data->variant = &sysmmu_v5_variant;
+> > +
+> >       __sysmmu_disable_clocks(data);
+> >   }
+> >
+> > @@ -405,19 +429,14 @@ static irqreturn_t exynos_sysmmu_irq(int irq, void *dev_id)
+> >       const struct sysmmu_fault_info *finfo;
+> >       unsigned int i, n, itype;
+> >       sysmmu_iova_t fault_addr;
+> > -     unsigned short reg_status, reg_clear;
+> >       int ret = -ENOSYS;
+> >
+> >       WARN_ON(!data->active);
+> >
+> >       if (MMU_MAJ_VER(data->version) < 5) {
+> > -             reg_status = REG_INT_STATUS;
+> > -             reg_clear = REG_INT_CLEAR;
+> >               finfo = sysmmu_faults;
+> >               n = ARRAY_SIZE(sysmmu_faults);
+> >       } else {
+> > -             reg_status = REG_V5_INT_STATUS;
+> > -             reg_clear = REG_V5_INT_CLEAR;
+> >               finfo = sysmmu_v5_faults;
+> >               n = ARRAY_SIZE(sysmmu_v5_faults);
+> >       }
+> > @@ -426,7 +445,7 @@ static irqreturn_t exynos_sysmmu_irq(int irq, void *dev_id)
+> >
+> >       clk_enable(data->clk_master);
+> >
+> > -     itype = __ffs(readl(data->sfrbase + reg_status));
+> > +     itype = __ffs(readl(SYSMMU_REG(data, int_status)));
+> >       for (i = 0; i < n; i++, finfo++)
+> >               if (finfo->bit == itype)
+> >                       break;
+> > @@ -443,7 +462,7 @@ static irqreturn_t exynos_sysmmu_irq(int irq, void *dev_id)
+> >       /* fault is not recovered by fault handler */
+> >       BUG_ON(ret != 0);
+> >
+> > -     writel(1 << itype, data->sfrbase + reg_clear);
+> > +     writel(1 << itype, SYSMMU_REG(data, int_clear));
+> >
+> >       sysmmu_unblock(data);
+> >
+> > @@ -622,6 +641,8 @@ static int exynos_sysmmu_probe(struct platform_device *pdev)
+> >       data->sysmmu = dev;
+> >       spin_lock_init(&data->lock);
+> >
+> > +     __sysmmu_get_version(data);
+> > +
+> >       ret = iommu_device_sysfs_add(&data->iommu, &pdev->dev, NULL,
+> >                                    dev_name(data->sysmmu));
+> >       if (ret)
+> > @@ -633,7 +654,6 @@ static int exynos_sysmmu_probe(struct platform_device *pdev)
+> >
+> >       platform_set_drvdata(pdev, data);
+> >
+> > -     __sysmmu_get_version(data);
+> >       if (PG_ENT_SHIFT < 0) {
+> >               if (MMU_MAJ_VER(data->version) < 5) {
+> >                       PG_ENT_SHIFT = SYSMMU_PG_ENT_SHIFT;

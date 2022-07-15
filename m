@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331C2575DC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9866D575DB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbiGOIpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 04:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
+        id S232702AbiGOIpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 04:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiGOIpA (ORCPT
+        with ESMTP id S230479AbiGOIpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:45:00 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01olkn2024.outbound.protection.outlook.com [40.92.107.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8074C814AF;
-        Fri, 15 Jul 2022 01:44:59 -0700 (PDT)
+        Fri, 15 Jul 2022 04:45:05 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2032.outbound.protection.outlook.com [40.92.52.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699C2814A8;
+        Fri, 15 Jul 2022 01:45:04 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lW4w1OPI6D+KKmOHAFJr9YIUdXSkTwfo2v1aXMuuhjkuDUgxzcniaQOns8XU6ckJ5VTkQ4w0wIXzQngh45NxhQ0wGIhhPCHOeITAb5mcaqKRS07/X507ZYosxtQShRVfkzixhllTjshdMZu/3cqn6vwjPG8Eydc0WQSVeXa6uE8eLQnStR9lMIUavs8LX8v62v+qImlGfJVl0EZ0PyfZUZyQKmI+dfWFymddpz8PTzHJ9z8wsdevUiZ8ts9W937Ah3PGMvLLOEwMotYFW5GRYlem8Fxpx8QOwBO0gwZGLOE02e26CZmv1jEuCSCoAYArmbm5oZhCVCOQ2xir+kBubA==
+ b=nW0/zulrJqn9XuEH+Xnf1Cf0h/G91Crblf8pv8l8SP/Wi4VErD9ZH3nsPeer5DmD41X4dXmXmUH3rZKtUPm5yBACKUsXU7QNy/bamm98wespIuImzTK/HjDLlQOZWqjvNKDbkdfsPwZM/BljbXE1Yt/2HouWvQPx8NLP+YOeFi5qL/tFk7rwPCfRUwoX5iklOluHsYRK3NgQleZiHd2kkDyCwYBhV9vv/XGBuUtvXA869ZJ2U3bWqZcoIPGKnYYZP8YaWE/xB/hAmIO34eXuel7nx29Tf6jzkIJ5w/IM1Z/ExobltLVWbVOiompD5oqsVYB2PQZqmXa5Gz+s8PNyTQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gwtdlGY9kDOvw43ujMDCLhdsTvmkiB9923SmQwKsWxU=;
- b=UIv+n9aBkNm2dUEe1Yd0WGrXUiH5SbjsgbyaZNO0KDfoeS8EmGzpnOHNiedG+MormvV7SbFYAinzIjecJgDJ6z1H4BkExSgMCrxk0abE+igJ0/EG2cnuPHcDMDvkUEdl7JWQilPkwdl3VUZanPejp1UtR0qeD7u8Bf7UUG7W3fRMVIA4PV+m89GWVuwbTiwO7ppiEWr6p/37zXE0O6rFJt3vtMct/L86sPaVMQlJLeFrb0vYn+LYQDTiofDiO5BQR9oab1aObbucs036PMVne4Dfn8y2uQUYX9oAjeGsnew8xIfmce4DTBTMujU4iMZXQhs00GZlqRDcq7B2FVouoA==
+ bh=GZVxV/oRzw6lbv5GwOBud1RrA0BNMnDVql40rCxaK+U=;
+ b=Yms+vMWUIG9Q5mv3XnayFf+3Ul908idT3o9daW4zBxhoIF+NGiuiaZaa+8kKCbRKxXTPScBJ5SQKTilAEkVSmfzIhOe/zWDIBPqdCiYCUGfESDsilheDX9eEfDJtGcD/6rMFBsmE0EVxO8+3z7u09Y6tDgPd0MGQg5NsegUoycvPTun/mXtOPrzPr1o5IT+kDLTOpZRhMcXAzf+lDGs38EHJrpzLiP/N6u0OpT+8WhedVhvRlaFt8JkMB5p1ZnvdqvCpDfaz9aboB2oCGwWfznhytkpeg5KLDzI+7xiVNgoe/1P54/34d66y5aZYms8a+mGvJmvljeEGH1BIE1fUww==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gwtdlGY9kDOvw43ujMDCLhdsTvmkiB9923SmQwKsWxU=;
- b=KyS7AW1g81gOpEKtN/FxwdG6w+o6p7DH3j8AXgK8RNnhUo1WIJmqzVxUKJLz3z8tjdffeVzM+ljxMZL+bwNeB2Gt/DWTx5/cR/uoha+RPJ6jPx+sSlX1AfSASTy7bw/z28SkUEjU2fgxsyXnuPcbmZxrZ2ErZKlgb7IwkUi1JioPnRRQ4IIGc/Y3TSqzY2ok6lS592G9qhAMgFJeFV7DtpcfdQRkd+bdWluz0YYhsoX+mLui1Tsq1zw+0iu5kgaOzhS/FhSZ6UNqJ0bDAmvMxxKv5NC2QI0CdXqzr8dWcXejaOJTvmY73gWvHtxPnOiuIbLOxDSsnvPOO4x8kEV6qg==
+ bh=GZVxV/oRzw6lbv5GwOBud1RrA0BNMnDVql40rCxaK+U=;
+ b=rv5z5AnhVTzehMVx3fBFmMKK3QO9/OdgIj+7AjoYzbFJ4ze85/XI4BEo27aOZSVoyumT63WeZ2chCOAY8kNGrEera6afe7iIuTYms9Ar2Ps0m/jJYBW6AjxY52V0Zaq5XyolPI/wTpJxyyYEEjqAj2ajEyimIwEwa93CcoHrO5xZIuM2bulJGHZBdaM1Hv1MsAhMv1Bqnr+3+PJMiPyLzsBkaHbOg3b3k8nRnp+FuDx11EfqTrBJ4s37lALFdLsaoXTg7tsaT8HKGSBqZx6YtU5tM4kngF+dHCBeLMmke1aon32cP6w9wdm9Y9VjkYooS50eleUAv7SlzJ5sUtp77w==
 Received: from SG2PR03MB5006.apcprd03.prod.outlook.com (2603:1096:4:df::10) by
  TY2PR03MB3421.apcprd03.prod.outlook.com (2603:1096:404:31::21) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5438.10; Fri, 15 Jul 2022 08:44:54 +0000
+ 15.20.5438.10; Fri, 15 Jul 2022 08:45:00 +0000
 Received: from SG2PR03MB5006.apcprd03.prod.outlook.com
  ([fe80::b96f:3a3b:5eef:e796]) by SG2PR03MB5006.apcprd03.prod.outlook.com
  ([fe80::b96f:3a3b:5eef:e796%5]) with mapi id 15.20.5458.007; Fri, 15 Jul 2022
- 08:44:54 +0000
+ 08:45:00 +0000
 From:   Jimmy Chen <jinghung.chen3@hotmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>, Andy Gross <agross@kernel.org>
 Cc:     Alan Huang <alan-huang@quanta.corp-partner.google.com>,
@@ -46,52 +46,55 @@ Cc:     Alan Huang <alan-huang@quanta.corp-partner.google.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Douglas Anderson <dianders@chromium.org>,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v5 0/3] Add new board revision and LTE SKUs for sc7280-villager family
-Date:   Fri, 15 Jul 2022 16:44:39 +0800
-Message-ID: <SG2PR03MB500650CEB05F33953972C162CC8B9@SG2PR03MB5006.apcprd03.prod.outlook.com>
+Subject: [PATCH v5 1/3] dt-bindings: arm: qcom: document sc7280 and villager board
+Date:   Fri, 15 Jul 2022 16:44:40 +0800
+Message-ID: <SG2PR03MB5006667607216338081A723FCC8B9@SG2PR03MB5006.apcprd03.prod.outlook.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220715084442.115021-1-jinghung.chen3@hotmail.com>
+References: <20220715084442.115021-1-jinghung.chen3@hotmail.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [5Y83nVPQoBLeVAeygEETdsIZfRK6gA+b]
+X-TMN:  [246l7eAtu0c2TGLIRe3C+vEd5Us5iKRA]
 X-ClientProxiedBy: TYCP286CA0139.JPNP286.PROD.OUTLOOK.COM
  (2603:1096:400:31b::7) To SG2PR03MB5006.apcprd03.prod.outlook.com
  (2603:1096:4:df::10)
-X-Microsoft-Original-Message-ID: <20220715084442.115021-1-jinghung.chen3@hotmail.com>
+X-Microsoft-Original-Message-ID: <20220715164428.v5.1.I338c337971904724a52c65641f601d3bcab7a990@changeid>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6e3876d4-d1c1-4198-9da2-08da663e4a0a
+X-MS-Office365-Filtering-Correlation-Id: 5a32cbcf-474e-4578-2b70-08da663e4d54
 X-MS-TrafficTypeDiagnostic: TY2PR03MB3421:EE_
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aTL3/6j6yb0Po5fuK2NfZtx/uYfEEnmBvH6uFnvorQugDztejPvyexUD77xBEIQee8IJIdd0vZgJpODxXFv+rsKPRIiT22LsUiM0b/7AJblq7zluFeS0Q0AwqT3oQN4R/qvYrrUZRmXCNiihj0iAD9Yo1LRSufGlqEEX792OFoYeofhPSEUsyfY43PTQTJcSuKM5k04CDY2Xfj1puAYa/ierwgACGpQykREMC9UTm3ZSHWawhhhbGvr1RT4wOz5aaHmrD9OKKsDizCeKutQ2dItcZJAKNF5D884YZbQAp+Z4BZQRsrbG9ynLjEIzgvJa0TPFbkqer0Q9gvS3cIROZ9xGGx487t7pHs72zzhqoNYzDMSEN7FV5sFZE1z7kaFFcExi6lxfeHQ23PtLozMuGXzf5fAOLcXr45I2QFpE8Emn75GntjNZPkpdfzlOmE4ISvm/LuFYXQq44hBk+KjJGOkdbUzYzhM9cDLhKmT5rPKl+N6vABJ3DWplsse5+SVWXi+gZ2KVm3cWG+uiRNqxq8q9KYvwwbxwn6pFhvRyn8elhQPFJq4a1JMm7Pl9SFe8Tul3rF81toF0aB6zY1EwLakAhkx35AL23KTZk+rmtqKMTGGsSRuhsInkuvirAVpSjjJOmYyqNkNmJ3aMgD/G/zljJRzstPbh1/l3Z5MLs8dIIqM6CQ5YszhEixh2hCbE875adBPTnFz6VZION1XcGVNNJGXJ0sFJHJdTUIkD8PI=
+X-Microsoft-Antispam-Message-Info: t3tN6Lx21d8arNrG4bLgSk73V93NSvrKLs1+9zlpd4iwOp83gtbmvVDruogs0cu+e7fR27zdc6+sLx2ewzGYxcwxOv8is3ViCnfv2wBJMjWvOy+3CXdmZZNBl25C34OZXJvg6zS3e7zxsXdJg3RQHl2+AVpJjxZsF7eVjh0tzSJrTL6B5eOkfN01UNIbLcgRY7no/sTsMysl1oFlreJp0tvRj0wHeYshua03EZyNvhJtmhO/WXgCvhlVqVlgEWYWDt5hzehKqUPYBc31bx5il5cGUw+DgrkX7V+f6kLgTVb3kwWtP5ZsyjD5UJpAItIhg2oA3SnMrBgEkt9VWhXtO5pQ5kW2h3lijvxOZoVvngkKtY+q4QyDJqd4uR+V9X1lt7jikkCGG/hpKvUPhwbElrUG0mTeS2QGcHYib5d3fhNV0Q+Vfyy4HYc5bzXhBapqihDFYiS2gsak/dp55Dkl0Km9bQ1Dr3g9OUhrTkaVlGpnSWNcrvHIFSKrcaKLY47GAlj1hmlu/5DJenIm6DhuKvH5x0bA+Mcznt5PR9VmLdhqqY1F9lisipAojqrrOfH7s42CxK9ClbTQxKN9mltrAfHi0Aqb40bvYG1CvVFpzj4vkamLtzjraRiwnEr7p+OTCtl0nkeXKTrpm4HJotzqoie7YB3lSJ64aeJR7DYHh8wcqFbI0BBKYvbcQP1qruw6M1bj7zYrk6DKQ7XXgpLyZQ==
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IrHm/UN490nBhX+da7B3tGiBEPGXJYpSvJv27hL2TvJPU6zNIkP8qPuvZLxV?=
- =?us-ascii?Q?WxucM1Hbwwd0UUhKcTMRTf2BH+gwZp69KwymmSfkF2EJ4xm8cTyiV2pY0TKR?=
- =?us-ascii?Q?iEgCBxYcjckzAW0sGj+BqFdB/oJeR0nVFDZZ+5G6aDpfKjvnmpysBOCwXr8h?=
- =?us-ascii?Q?KNNlIke3qkzmrcjwD2W9QvajaWN9+VbG+Lq4SERTYlboJjzjcE9lpzgM5OnY?=
- =?us-ascii?Q?ikescb7m0FRV3qIm7w3wkhReMHab1V+jf2uRLflRYFf3Rml0KU8Gs22kBsX0?=
- =?us-ascii?Q?R+QyxDpDEiQZdngrpMX3wfFYmXrUfdvJpTAFaxyDIJDeFGpEpU6wJAmMCZrU?=
- =?us-ascii?Q?NnMYHoH3v4tlV3GqjU1RRlEoH8EjiLpvqxhW5VTz/MVBTmbl5ji1+CVvAKiq?=
- =?us-ascii?Q?pF91L9B65d5X2kwNkTZCkYDtO/YpWZnehaM96904CaaPinO3Y7LWpgQ6NV8s?=
- =?us-ascii?Q?lj8ceyoZCSaGb3pqh5w6TwPzStF56GMwWWAN/nODphFeOfUJexQBKrJF6Ty9?=
- =?us-ascii?Q?In9VPvlkiUk6iyyccSA31j+SkylM6nB7WTihEg9Ba/dVEdYqwO1NO491oVus?=
- =?us-ascii?Q?k3rfafiVxMc4ZRZezH+g6+59T5X21uzqtjtIZ5ZCI45ihmdIT0yv3qJy0qb9?=
- =?us-ascii?Q?nDHC9jS2Aywumvwnw09CVnXLs7XpvsVA1CV6aMahopoQNaGdZqUJbVnBLoTl?=
- =?us-ascii?Q?Ib+yWiDqE2/FLmtbME5E7l4oWTYViiyQkbp+ZlECKU/Rk6UzdALrZ5r/vfYB?=
- =?us-ascii?Q?eJcgc5jMi6Cbi4TUbJ69YlJ4RQ8QbaqsuYNee8wE1+1GJU/ZD08ilimOF2xL?=
- =?us-ascii?Q?5/LaX16jZO38LZCfEGuawlLKAB+PwUyfub6BgVgOAT00MNMAnl27lcmldEea?=
- =?us-ascii?Q?0b70OVKgHtUXUxfXsCtYuG7cOIi8NBbtlV10fvPi9hlPWd6AANMwL8jldlNE?=
- =?us-ascii?Q?mPMQMr6bIa12DO2SUajImLsJQnDPjH324G0/dblglOa19hVexUBYo6tt6lQ9?=
- =?us-ascii?Q?E4KgXjtlMxY3JH+jaEkeo3ykghvV5ZLGDHfMGLk1drF4eKJip4ok0xZtfEUu?=
- =?us-ascii?Q?PjJX5hL46uFK5viUwOeOo6lXFAG53B7IGgcDt4Ol+pxs+Hf4W4RqtXn/uM8P?=
- =?us-ascii?Q?PWx2KK+n8PzR5/JFoqmH5ShrkIeBWWip/+OUjvdsUeyinXFjlWc4zZtiaC2N?=
- =?us-ascii?Q?wwhJUmbwOkaGNaROyjs70PWIAQ3Lo5eFblxIumRBZMsfQ3e7+duKUPcbh0LS?=
- =?us-ascii?Q?82FlFVAl+nEC4Af1TgI1MVnfZIgp09CSgKhNkKFlnw=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1EJYFAioLSgYp6rKbuB0PGaUUm53BeNT17LNqDMEdybvJczUZErYewKigl1D?=
+ =?us-ascii?Q?Ukzl9+IUKWsKvPHcL1PDdCvP2mkVKy7AvWWIdq3xO1RAPHgFLqKGJBIwei6S?=
+ =?us-ascii?Q?cRLiH7dZdYNZlTsh+dBTVtqW7pO+TVFRiCN5NGECG2X/nK7YjIY1ml8CFISY?=
+ =?us-ascii?Q?2pI58BBHAdtFNEbsKbB/oZFaLATg51yVvqYa4dD3OEk4Z/QCLbMphCGGSyUf?=
+ =?us-ascii?Q?c+0r51yZKM+x3C5xekxde65Umjc4QVNhdwHC5IRakAGfD1gj9rwW8DLfsbl6?=
+ =?us-ascii?Q?FVHpu8ZQ9dFxqdD9eX1GykIWXSoOb4Yk/gx2VX2+I5UYVy7mIvPAjpiN+MkI?=
+ =?us-ascii?Q?QTt4X3L7QUuyBlYxulVmFK0xMl4LhIX5gxp4mneQWtSETp03W1Hj9CEO29ss?=
+ =?us-ascii?Q?rOo6s8S3HsXbUgWsiLbxmpFrcI0nzrOO+QPdeXfQ7Aw0It2ivuCGrQsOeapQ?=
+ =?us-ascii?Q?vak/QxkGQjxsLjSVc1dXs4OctMkZu1zK33pQByHW9l9r7N0ZZlp/t8X2XfCY?=
+ =?us-ascii?Q?bUOkdnYucvgVTeUKr/d/qJ55FiZTHGpk3N+vkCu1Ozzzkw5JK8JItobKZXSi?=
+ =?us-ascii?Q?XpKt2GnpFDArG6Cspdd4/5eWb4h/L4CgWAHXrCPFirnycUcVmYq6NIHnOvZj?=
+ =?us-ascii?Q?dG+KkRymZdvhv/WrIjZ+kiTAmLY0mehFs1CGVdDW/yE+VEtRV7GJcmEo4ZiW?=
+ =?us-ascii?Q?6bJKnSC1gQHdosH0UiPiuvACFtKi0I8s9US5CcteN5RimHsTcXg+zLVWLUi1?=
+ =?us-ascii?Q?aNDKOmbErUtWng+LY6PLsgawygKHGc5+QYXQByZIOsbx3BSTGUChrsRPBYUL?=
+ =?us-ascii?Q?7r6WCi82C0oeCVMKYtfGcemhY9PguUAXOcz8a/eN4m4l4Y3WlAJ3h7/H2B3e?=
+ =?us-ascii?Q?wDYJKGizkOkJXK4i2uiJG01yyTBFm1JIbljxUvpbZZn+W9mK4RUdrP8BM55I?=
+ =?us-ascii?Q?nqLz750HrztlG+ZFCkdqQMJAqJ1L8zFb0LDgyiLQ5cXYTfH1htojWAYjPAfO?=
+ =?us-ascii?Q?rdZEsOV5PAb7U1iWmZNtyxYj3dQhC82r517mQ7GIMOUUDtgyOUiz8Bd3VVxE?=
+ =?us-ascii?Q?bSZdATk9q93mTQtYlcNd10ql/qpwsW9YNnU9omUc5sV6w7tfqc65wtppuET8?=
+ =?us-ascii?Q?2u2oQZbY3UxQv90jxBmFkGYqrEjSJC4OLy4QiLJHBhYXrYmrE9jVGyVxbQg8?=
+ =?us-ascii?Q?MfViAeQKPdRYvURlBiY2g+PhaF14cBjHYuQmZZdlz+R+Qvz2whYgL1X87Ah6?=
+ =?us-ascii?Q?ia5E1gyUSIHb/KgxceCPJ4NU4BpUWXk7/pInMc50LhQGx37zcLBowdCB7jW2?=
+ =?us-ascii?Q?48g=3D?=
 X-OriginatorOrg: sct-15-20-4734-24-msonline-outlook-c0b75.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e3876d4-d1c1-4198-9da2-08da663e4a0a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a32cbcf-474e-4578-2b70-08da663e4d54
 X-MS-Exchange-CrossTenant-AuthSource: SG2PR03MB5006.apcprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 08:44:54.6623
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 08:45:00.0369
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -107,51 +110,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These patches add a new board revision for device Villager, and add
-new LTE sku for both board revisions.
+This adds a LTE skus for Chromebook Villager to the yaml.
 
-yaml issue has been clarified in [1] and [2], and 'status' has been
-reordeded last since v4.
+Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
+---
 
-[1] https://lore.kernel.org/all/CAD=FV=WtKRFQr5jSQvsr08x9dgHrvenUWWtX_SKuCLuSvSH7WQ@mail.gmail.com/
-[2] https://lore.kernel.org/all/d3d4d90b-85b5-5ad9-78e6-5a074c21af4f@linaro.org/
-
-Changes in v5:
--Update subject and revise Makefile
-
-Changes in v4:
-- Add patch 1/3 and update patch 3/3
-
-Changes in v3:
-- Update patch format
+(no changes since v2)
 
 Changes in v2:
-- Add patch 1/2
-
-Jimmy Chen (3):
-  dt-bindings: arm: qcom: document sc7280 and villager board
-  arm64: dts: qcom: sc7280: Add herobrine-villager-r1
-  arm64: dts: qcom: Add LTE SKUs for sc7280-villager family
+-Add this patch
 
  Documentation/devicetree/bindings/arm/qcom.yaml | 15 +++++++++++++++
- arch/arm64/boot/dts/qcom/Makefile               |  3 +++
- .../boot/dts/qcom/sc7280-chrome-common.dtsi     | 11 -----------
- .../boot/dts/qcom/sc7280-herobrine-crd.dts      |  1 +
- .../qcom/sc7280-herobrine-herobrine-r1-lte.dts  | 14 ++++++++++++++
- .../dts/qcom/sc7280-herobrine-herobrine-r1.dts  |  1 +
- .../boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi | 17 +++++++++++++++++
- .../qcom/sc7280-herobrine-villager-r0-lte.dts   | 14 ++++++++++++++
- .../dts/qcom/sc7280-herobrine-villager-r0.dts   |  4 ++--
- .../qcom/sc7280-herobrine-villager-r1-lte.dts   | 14 ++++++++++++++
- .../dts/qcom/sc7280-herobrine-villager-r1.dts   | 14 ++++++++++++++
- arch/arm64/boot/dts/qcom/sc7280-idp.dts         |  1 +
- 12 files changed, 96 insertions(+), 13 deletions(-)
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1-lte.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0-lte.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
+ 1 file changed, 15 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 4dd18fbf20b68..a136b1389c2ac 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -529,11 +529,26 @@ properties:
+           - const: google,herobrine
+           - const: qcom,sc7280
+ 
++      - description: Google Villager (rev0)
++        items:
++          - const: google,villager-rev0
++          - const: qcom,sc7280
++
+       - description: Google Villager (newest rev)
+         items:
+           - const: google,villager
+           - const: qcom,sc7280
+ 
++      - description: Google Villager with LTE (rev0)
++        items:
++          - const: google,villager-rev0-sku0
++          - const: qcom,sc7280
++
++      - description: Google Villager with LTE (newest rev)
++        items:
++          - const: google,villager-sku0
++          - const: qcom,sc7280
++
+       - items:
+           - enum:
+               - lenovo,flex-5g
 -- 
 2.25.1
 

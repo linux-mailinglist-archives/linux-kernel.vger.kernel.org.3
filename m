@@ -2,103 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FAC575FA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A246575FA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbiGOLAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 07:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S232107AbiGOLBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 07:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbiGOLAb (ORCPT
+        with ESMTP id S229550AbiGOLBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 07:00:31 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE9B85F99
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 04:00:29 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id d12so7200772lfq.12
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 04:00:28 -0700 (PDT)
+        Fri, 15 Jul 2022 07:01:18 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A014985F99;
+        Fri, 15 Jul 2022 04:01:16 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id u6so3592926iop.5;
+        Fri, 15 Jul 2022 04:01:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QCQCmBsf1DA1Wn9Db/rqbLuUpiiA+4ckSDT/a9GkcLg=;
-        b=KLG+3UnmIBqTm11CZQOXA3v5XkFnjQ3NnsSIXk+Wbxp3IMj+ntYW/QzFmMexKmI7te
-         gAgfNJ3enlvskxm9V/tqzEtAuVRUEmINkLeGnHOPQjTykdPoGNfqWjYOlHWsJKKaJKos
-         ACweysGLbgiJr9pAYcdRSj+V6Cshr5G6oBLVBU1FXIiwRGWqmPyr5fLQ1NUihkjqON6M
-         DZZbepq07ojP6/3sPvVU35YNZ5urb0g47ARuOONZB+FXDSRRJwgM0gQdiDAipXCz1x84
-         un+8cOEheNXU8XUopXTBigTUSznJ5QIuiEqYSKFCD6eeMO9SwA0BBK8kCmJ8jafHEh5r
-         2CdQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wmRCA/LiungRB9dNg0L8Jv8y/3XJdg8KhXJdHQWBT8s=;
+        b=Qlx2ZfVFxy2UOWskdQiCPtPnqVYoYtwLvQq5Yu9diw8qStL3WTHIaJl75stp7d0aUw
+         Yd6/zCaCsSBGKqWMWy56CWnVwieafFIWdRENyBTPWuXjl1SQHbrRALJBxOLPZZz5Vv28
+         M/oZHoXBMV2ZWuGEzg0xCkVuobllCyMWGhXY+CsIfNrS9xtG1j19F/m/dkjWiBNUcs3v
+         KmTvPKwQheikTZk2M/+ekm5wA5r2YJfpgj7pZbW8Rk6GSh8H9rfKy/oqPQpBFd8JUB0x
+         7ulZauNFCa+n6F8Pzch2CD87W6t5upjGu+JL13DLLIdFeY7QOEg0pu29cyt+zrmDVTmw
+         W+yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QCQCmBsf1DA1Wn9Db/rqbLuUpiiA+4ckSDT/a9GkcLg=;
-        b=EBK+WVnLOAqeFqS0umVvXQNht9ruKG4ybd8wqyok17mLCnE3l/TVCHFh6fat6GwmQE
-         RDkocy1Ps+/o/tXD4oeAb3LGX5hmlyHcAPlmhF1E4TN8LmIxoXfRAY1Hcv9fwxHxc5yW
-         Fr1SM37SCBzLYxCLCeV+cnqzg/tnfgUhWR/JcJ1nfmLmbiEx0ThOwSMFKwQk30rDgygW
-         8zO8wG+VxGNa/ems7D8RiAZ9uciyYGh9eNBXR7x4woY/loVijucDQ6UTBRbNuFifkTza
-         Kz/+l4TndZlaKWl4UJwuoIZaFPCZzIUugC2x5hZTJrRhnNdrUjziziAXFNl6O5/r3rla
-         8ibw==
-X-Gm-Message-State: AJIora/gwq3GRMzKQ6vFIFn0+bAEqBx+38B8JuhdO1o7HXqn64kwelv4
-        aqTHy/KsVUU5ySnRJ+pga2JyVQ==
-X-Google-Smtp-Source: AGRyM1uud0vYpm9BdHaEw4F/cDP+GmNnJZYc1ROR+M3VRHmuHg9rOz6vgMJzDj5ccZj7a0ziUcFdBA==
-X-Received: by 2002:ac2:44cf:0:b0:48a:1251:1cf5 with SMTP id d15-20020ac244cf000000b0048a12511cf5mr5145684lfm.680.1657882827338;
-        Fri, 15 Jul 2022 04:00:27 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id u16-20020ac25190000000b0047f88d15ec0sm842600lfi.251.2022.07.15.04.00.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 04:00:26 -0700 (PDT)
-Message-ID: <937479a6-8ad5-dc38-3c8a-f972993d23e2@linaro.org>
-Date:   Fri, 15 Jul 2022 14:00:26 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wmRCA/LiungRB9dNg0L8Jv8y/3XJdg8KhXJdHQWBT8s=;
+        b=B06e+o0m4BCPEAU1KiGPqj/NcSRYhRodSA/cTfFGRrRZx8TNTi8dLIr50+Y/uvPytY
+         ti6KCqpAEJyA8N3v1ehTqWxvCWUHYbx2oEQtjj58ljGe+Qj1WiGva9l0AxI/RbyERbAG
+         0qSbaRaCA0JXdp6eutK3ODq5jqNqPz9LHzkjnEu52Gl6PZhXFIjfSnHM/9e+QZfwe4DJ
+         d27+uK0lcHUWUKfqErli5tRsX7exfSAgMXB/ASwaxSI0ksF/sesNe4JKliXW5BAHTfXn
+         ot9LurnF59wKa4yQGnCz/RJp3i6bKkpYm7uaQGxmJ+6HiSYW6M9nwXIxVUthu53S9oYH
+         o5Pg==
+X-Gm-Message-State: AJIora+t60j7AMt0K7P0YyCIeba+U4cZrRe3NkzZzKj6Ea5cuXhfV/yh
+        5IJbmp9cNV4cwAHuicUBzE+o24aLodemRdb3GF8=
+X-Google-Smtp-Source: AGRyM1vZZ3UQOGfgMYDweQ9lVqTLy5z2IcTlGeyhos85Km9ll0NOv2JAsRTLHjSUhSRirc+NzEesoMLnm/TjyLhbKUY=
+X-Received: by 2002:a6b:e011:0:b0:67b:cf17:ddb8 with SMTP id
+ z17-20020a6be011000000b0067bcf17ddb8mr4201071iog.44.1657882876035; Fri, 15
+ Jul 2022 04:01:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 30/30] phy: qcom-qmp-usb: drop pipe clock lane suffix
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20220714124333.27643-1-johan+linaro@kernel.org>
- <20220714124333.27643-31-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220714124333.27643-31-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220713203409.559c5464@canb.auug.org.au> <Ys6u88DqQdgmkWWf@hirez.programming.kicks-ass.net>
+ <CANiq72k_dtr2=KX-WheUiM2v2370imAdWFawJR+8P41L7HjwpA@mail.gmail.com> <YtEs9H+JEDUq6NNm@worktop.programming.kicks-ass.net>
+In-Reply-To: <YtEs9H+JEDUq6NNm@worktop.programming.kicks-ass.net>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 15 Jul 2022 13:01:04 +0200
+Message-ID: <CANiq72=oOEdxY1bEA3YFwFkSiYk+Uwv=x-4yEwHgCz0SizY66w@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with Linus' tree
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Borislav Petkov <bp@suse.de>, Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        David Gow <davidgow@google.com>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Cano <macanroj@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        joao@overdrivepizza.com, Kees Cook <keescook@chromium.org>,
+        Arthur Cohen <arthur.cohen@embecosm.com>,
+        Antoni Boucher <bouanto@zoho.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Philip Herron <philip.herron@embecosm.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/07/2022 15:43, Johan Hovold wrote:
-> The pipe clock is defined in the "lane" node so there's no need to keep
-> adding a redundant lane-number suffix to the clock name.
-> 
-> Update driver to support the new binding where the pipe clock name has
-> been deprecated by instead requesting the clock by index.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On Fri, Jul 15, 2022 at 11:02 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Ok; I'm supposing that'll be sorted by the time rust happens.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+No, it most likely won't, and I don't see why you would assume that,
+or why we would want to block Rust support on that.
 
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
+> There's quite a few things affecting code-gen; rustc not using the exact
+> same compiler arguments is going to create a head-ache.
 
--- 
-With best wishes
-Dmitry
+Yes, a GCC-like driver in `rustc` would be nice for projects like the
+kernel. The GCC Rust project will support GCC-like flags, as far as I
+understand.
+
+(Cc'ing Antoni, Arthur, Josh, Philip).
+
+> But does it support everything clang does now? If not, you need to
+> express that in Kconfig and disable the features it doesn't carry. So
+> even for a single rustc version will you need RUSTC_HAS_ stuff.
+
+You could still make everything work around the `RUST` symbol, no need
+to "litter everything" (as you said) just yet. :)
+
+> What about CC_HAS_IBT? Can rust generate sane IBT code? Current next
+> doesn't seem to have anything there, suggesting I can't build an IBT
+> enabled kernel if rust is on (or rather, it'll build, but it'll also
+> burn at boot).
+>
+> What if LLVM were to grow -mindirect-branch-cs-prefix (please!) and rust
+> doesn't have it? Same if LLVM finally stops generating those pesky
+> conditional tail-calls, will rust continue emitting them?
+>
+> I'm thinking of the kCFI work, will rustc support that from day 1 or
+> will that only work when not building any rust.
+>
+> There being a single rustc is not a single target, every compiler
+> version grows (and breaks) new features. And for some reason we seem to
+> change the actual kernel calling convetion a lot of late :/
+>
+> Currently we can support a feature when one compiler version supports it
+> (either gcc or clang), but the moment rust becomes a mandatory part of
+> the kernel build (and I dread that day) we'll need to
+> wait/update/wrangle at least two different toolchains to implement the
+> feature in a consistent manner before we can use it.
+>
+> I also don't see any RUST -mfentry support...
+
+I think you are getting way too ahead.
+
+Merging the Rust support now is meant to evaluate whether Rust _as a
+language_ makes sense for the kernel, whether we can write enough % of
+kernel code in the safe subset (and whether that brings enough
+advantages), etc.
+
+It is not meant to provide "day 1 support" for everything. In fact,
+getting merged now is what will allow to grow support for everything
+needed everywhere: not just in terms of compiler flags, faster
+integration of LLVM codegen/mitigation features in `rustc`, new
+frontends and backends (`rustc_codegen_gcc` and GCC Rust), etc.; but
+also within the kernel, in terms of safe abstractions for kernel APIs,
+kernel maintainers' experience with Rust, etc.
+
+Cheers,
+Miguel

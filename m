@@ -2,169 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422455764BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDB35764C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235547AbiGOPtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 11:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53208 "EHLO
+        id S229663AbiGOPyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 11:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232977AbiGOPtd (ORCPT
+        with ESMTP id S229510AbiGOPyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 11:49:33 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E29F1583F
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:49:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657900172; x=1689436172;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tMJM0gpoSjUX4klaDrEskeTxkKDpiAsTsQ/4ST94qrE=;
-  b=RrWUt7migTCSoVRGh5yXmXwqBYDVBhnC9AEnwH59V/xkp21J4nLqtx7Y
-   7ejLgtRBE4fly2jRtjubiX86T6Avg11UeyO3SWOk0FUs0W6jhn7avOpPT
-   slI/XoXNEyV6qhIzGDLOVrUmfQnDVABwKIvqbGKMN/O/9591zn97ot/z2
-   E0nNLGFTa2c476/YxyoowT/keG0PuUOrpofuyFSXYgFOLXlnce8YOqPAt
-   uN1FrEDUG3y3fs9S7sVNiF2Xm/NKOxGpjA5eEdx/efeJxu5SJ08f7801w
-   v2yRfYDM2uZtMAbu/ljmwhBbPlOpmjTlsOJ5/IKXVn2DVJeh1uJ1vIDuu
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="265615124"
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="265615124"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 08:49:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="686000927"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Jul 2022 08:49:31 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCNZK-0000M7-DE;
-        Fri, 15 Jul 2022 15:49:30 +0000
-Date:   Fri, 15 Jul 2022 23:48:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.19-rc1 25/35]
- arch/mips/include/asm/io.h:114:27: error: conflicting types for
- 'virt_to_phys'; have 'phys_addr_t(const volatile void *)' {aka 'long long
- unsigned int(const volatile void *)'}
-Message-ID: <202207152323.Zu5bzaHS-lkp@intel.com>
+        Fri, 15 Jul 2022 11:54:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991E261D5C;
+        Fri, 15 Jul 2022 08:54:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35A0962135;
+        Fri, 15 Jul 2022 15:54:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F4EBC34115;
+        Fri, 15 Jul 2022 15:54:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657900456;
+        bh=5daCr9QK24Hj+RUwhhq6jII9Hqcph8xnR3ZzTxWqL1Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eYpNxXxCNO7Q/dPoOq3aAeCPsQ3Az8oDxckCVf2lTsgFb1OwUbsRgPl7L32GEa4YC
+         9t8kbfwtOxmJGEVdh7pR6jQjjBzEamEfqblSQtxndBRnmhX+emy6GsfUAjk7BavTEp
+         ooh+TU5bskMLvEd2hQwsBkvqG0pkqbGkJ/hb8CyRagp+RHHonYcGJMbAfpymKp3zV7
+         TDntmKYo0lSQoD62KovtiMX8SD2u1uI+29K3PYjaAM3ZwrsRWvaZbY+jAWW8nOGm60
+         AgCOZb9EOmrR702cJ8fKuW+WKT0lVV6A4hnImGxj/qyI5hA6dhoI8fgmUbPlxmMiiu
+         AZAHUibkIm5Hg==
+Date:   Fri, 15 Jul 2022 16:54:05 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
+Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "git@xilinx.com" <git@xilinx.com>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Subject: Re: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
+ device
+Message-ID: <YtGNnT2cP5HIayp3@sirena.org.uk>
+References: <20220606112607.20800-1-amit.kumar-mahapatra@xilinx.com>
+ <20220606112607.20800-2-amit.kumar-mahapatra@xilinx.com>
+ <YqHfccvhy7e5Bc6m@sirena.org.uk>
+ <DM6PR12MB2809F6C7D80B60556218D627DCB59@DM6PR12MB2809.namprd12.prod.outlook.com>
+ <YrRXTrYN3BuShbzg@sirena.org.uk>
+ <DM6PR12MB28091BEB013B6F1903B5CDE3DC8B9@DM6PR12MB2809.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WLnYk1lIzSJ4ADtF"
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <DM6PR12MB28091BEB013B6F1903B5CDE3DC8B9@DM6PR12MB2809.namprd12.prod.outlook.com>
+X-Cookie: You dialed 5483.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.19-rc1
-head:   144435741b0a6f31403d3084103678da3b4f9d11
-commit: f9b8d36b54a1776051d8adb548924d14cbe57535 [25/35] MIPS: Make virt_to_pfn() a static inline
-config: mips-bigsur_defconfig (https://download.01.org/0day-ci/archive/20220715/202207152323.Zu5bzaHS-lkp@intel.com/config)
-compiler: mips64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=f9b8d36b54a1776051d8adb548924d14cbe57535
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.19-rc1
-        git checkout f9b8d36b54a1776051d8adb548924d14cbe57535
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips prepare
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+--WLnYk1lIzSJ4ADtF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All errors (new ones prefixed by >>):
+On Fri, Jul 15, 2022 at 03:35:49PM +0000, Mahapatra, Amit Kumar wrote:
 
-   In file included from arch/mips/include/asm/page.h:73,
-                    from arch/mips/include/asm/io.h:29,
-                    from include/linux/io.h:13,
-                    from arch/mips/include/asm/mips-cps.h:11,
-                    from arch/mips/include/asm/smp-ops.h:16,
-                    from arch/mips/include/asm/smp.h:21,
-                    from include/linux/smp.h:113,
-                    from arch/mips/include/asm/cpu-type.h:12,
-                    from arch/mips/include/asm/timex.h:19,
-                    from include/linux/timex.h:67,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/compat.h:10,
-                    from arch/mips/kernel/asm-offsets.c:12:
-   arch/mips/include/asm/page.h: In function 'virt_to_pfn':
-   arch/mips/include/asm/page.h:262:40: error: implicit declaration of function 'virt_to_phys'; did you mean 'virt_to_pfn'? [-Werror=implicit-function-declaration]
-     262 |         return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
-         |                                        ^~~~~~~~~~~~
-   include/linux/pfn.h:20:27: note: in definition of macro 'PFN_DOWN'
-      20 | #define PFN_DOWN(x)     ((x) >> PAGE_SHIFT)
-         |                           ^
-   arch/mips/include/asm/io.h: At top level:
->> arch/mips/include/asm/io.h:114:27: error: conflicting types for 'virt_to_phys'; have 'phys_addr_t(const volatile void *)' {aka 'long long unsigned int(const volatile void *)'}
-     114 | static inline phys_addr_t virt_to_phys(const volatile void *x)
-         |                           ^~~~~~~~~~~~
-   arch/mips/include/asm/page.h:262:40: note: previous implicit declaration of 'virt_to_phys' with type 'int()'
-     262 |         return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
-         |                                        ^~~~~~~~~~~~
-   include/linux/pfn.h:20:27: note: in definition of macro 'PFN_DOWN'
-      20 | #define PFN_DOWN(x)     ((x) >> PAGE_SHIFT)
-         |                           ^
-   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
-      26 | void output_ptreg_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
-      78 | void output_task_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
-      92 | void output_thread_info_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
-     108 | void output_thread_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:136:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
-     136 | void output_thread_fpu_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
-     179 | void output_mm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:240:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
-     240 | void output_sc_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:253:6: warning: no previous prototype for 'output_signal_defined' [-Wmissing-prototypes]
-     253 | void output_signal_defined(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:346:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
-     346 | void output_kvm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-   make[2]: *** [scripts/Makefile.build:117: arch/mips/kernel/asm-offsets.s] Error 1
-   make[2]: Target 'missing-syscalls' not remade because of errors.
-   make[1]: *** [arch/mips/Makefile:408: archprepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+> > That doesn't address the issue, the issue is checking that the driver c=
+an
+> > support multiple chip selects.
 
+> To address this issue, in spi core we will check the number of items=20
+> in the "reg" property of the flash node(which is nothing but the=20
+> number of chip selects) against the "num-cs" property of the spi=20
+> controller(which is total number of chip selects supported by the=20
+> controller). If the number of items mentioned in the "reg" property=20
+> is greater than "num-cs" value then we error out.
 
-vim +114 arch/mips/include/asm/io.h
+> For eg.,
 
-dfad83cb7193ef Florian Fainelli 2021-03-30  113  
-dfad83cb7193ef Florian Fainelli 2021-03-30 @114  static inline phys_addr_t virt_to_phys(const volatile void *x)
-dfad83cb7193ef Florian Fainelli 2021-03-30  115  {
-dfad83cb7193ef Florian Fainelli 2021-03-30  116  	return __virt_to_phys(x);
-dfad83cb7193ef Florian Fainelli 2021-03-30  117  }
-dfad83cb7193ef Florian Fainelli 2021-03-30  118  
+> rc =3D of_property_read_variable_u32_array(nc, "reg", &cs[0], 1,=20
+> 						SPI_CS_CNT_MAX);
+> if(rc > ctlr->num_chipselect) {
+> 	dev_err(&ctlr->dev, "%pOF has invalid 'reg' property (%d)\n",=20
+> 							nc, rc);
+> 	return -EINVAL;
+> }
 
-:::::: The code at line 114 was first introduced by commit
-:::::: dfad83cb7193effb6c853a5c7337ac2274a2e2fc MIPS: Add support for CONFIG_DEBUG_VIRTUAL
+This would check that the controller has at least the number of chip
+selects specified but it would not check that the controller is actually
+capable of using more than one chip select at once.  We should be
+validating both that the chip selects are available and that the
+controller can do something useful with them (and probably have an
+implementation in the core for doing so via GPIO).
 
-:::::: TO: Florian Fainelli <f.fainelli@gmail.com>
-:::::: CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+--WLnYk1lIzSJ4ADtF
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLRjZ0ACgkQJNaLcl1U
+h9DvNgf8CXWe2TL7deZzQsKFmwm4r44oFp98ORLdX9fjwHjXyvyWACyJHEKdf/DO
+Tpngc2qCEoBpumurCNRrB8sUI7w6GoikYd0Q25+u6ggKF1Qr5bgkPr+jWVyEx9PY
+XoJDU5nqv7GTLDkc88KG1pf3yyebiJfkyG1ZckcE0Gi7CMtVjTbPTJ9D+wFptMQM
+FiHctGpxjWx6GNDefyyO7Rdc7f0brEiDy5WoRoLGRlF2RoKGOEUtjtPBNkoFQVSl
+ldtIrzip4BxzLTfeDayqEyi2MRHqYlpYCH6gtlMVsRGwNq2fNejEa3KhSo4evar3
+vql8mcvRgsrJgTDzC/aBH1VojkTC0A==
+=AAV5
+-----END PGP SIGNATURE-----
+
+--WLnYk1lIzSJ4ADtF--

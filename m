@@ -2,52 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C9D575BFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C142A575BF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbiGOG7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 02:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
+        id S229593AbiGOG7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 02:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGOG7D (ORCPT
+        with ESMTP id S229462AbiGOG7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 02:59:03 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12391A042;
-        Thu, 14 Jul 2022 23:59:02 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 15 Jul 2022 02:59:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A5D1A042;
+        Thu, 14 Jul 2022 23:59:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 0473D22238;
-        Fri, 15 Jul 2022 08:59:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657868340;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 876AE1FB95;
+        Fri, 15 Jul 2022 06:59:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657868382; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+mLRTaRDGXgpkH+hihE3uyVt6q2SF/pcz5ieGtWUJKU=;
-        b=GERYpNTOyfh5jTSDGbiShfTzmio1GZJux7pai8jiEuykBGlqzwEuJ4catXYuKkDHELAGZc
-        Sc1RgJNNkSltzoaUpkleNV+99fSOsQ6BJvHi1AYzbE6TY+WEfHJqbhTtXCNlaR+lY4yhxi
-        uIxLyvxqntHE0JKTmqCuVetBwn8fJYU=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 15 Jul 2022 08:58:59 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: Re: [PATCH 1/2] tty: serial: fsl_lpuart: correct the count of break
- characters
-In-Reply-To: <20220715025944.11076-2-sherry.sun@nxp.com>
-References: <20220715025944.11076-1-sherry.sun@nxp.com>
- <20220715025944.11076-2-sherry.sun@nxp.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <f480572d82310c3ed14e476b7cfbe7f2@walle.cc>
-X-Sender: michael@walle.cc
+        bh=8+AxnKMTC58vbic8Krxz7ulgXdK0s9k4FRLZIjqwtS8=;
+        b=iaOyxd/49RYSd2zA3+0tNQUcTvDD7022BfqYOwY71q2807Coi19nzWtf3+/x7j2xnYYAd0
+        kHtX0gzc7szrPBCMRzkNTyQNuEzwKZW1zJ4LrbwXpdb7l7GTBMq2jh7q4HYo7Yum5HpwIY
+        kc9CjGWU0W1zCv8lZLN0pta5lR5m30Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657868382;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8+AxnKMTC58vbic8Krxz7ulgXdK0s9k4FRLZIjqwtS8=;
+        b=U4FvlXJIyPATwQjmF/yLObj/Ed82tlKb6s8Lyh0Vhr88mhfH39Sjuf+v6TgcDXvyyHfGkJ
+        oXC2YvNu2X26V1BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4A9D613754;
+        Fri, 15 Jul 2022 06:59:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +r1CEV4Q0WJSfgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 15 Jul 2022 06:59:42 +0000
+Date:   Fri, 15 Jul 2022 08:59:41 +0200
+Message-ID: <878roux3mq.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Takashi Iwai <tiwai@suse.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] firmware_loader: Replace kmap() with kmap_local_page()
+In-Reply-To: <20220714235030.12732-1-fmdefrancesco@gmail.com>
+References: <20220714235030.12732-1-fmdefrancesco@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-7
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -58,64 +79,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-07-15 04:59, schrieb Sherry Sun:
-> The LPUART can't distinguish between a break signal and a framing 
-> error,
-> so need to count the break characters if there is a framing error and
-> received data is zero instead of the parity error.
-
-Ah, it seems I mixed up the framing and the partiy error. Did you test
-the break in the receive path, though?
-
--michael
-
+On Fri, 15 Jul 2022 01:50:30 +0200,
+Fabio M. De Francesco wrote:
 > 
-> Fixes: 5541a9bacfe5 ("serial: fsl_lpuart: handle break and make sysrq 
-> work")
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+> The use of kmap() is being deprecated in favor of kmap_local_page().
+> 
+> Two main problems with kmap(): (1) It comes with an overhead as mapping
+> space is restricted and protected by a global lock for synchronization and
+> (2) kmap() also requires global TLB invalidation when the kmap¢s pool
+> wraps and it might block when the mapping space is fully utilized until a
+> slot becomes available.
+> 
+> kmap_local_page() is preferred over kmap() and kmap_atomic(). Where it
+> cannot mechanically replace the latters, code refactor should be considered
+> (special care must be taken if kernel virtual addresses are aliases in
+> different contexts).
+> 
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page faults, and can be called from any context (including interrupts).
+> 
+> Call kmap_local_page() in firmware_loader wherever kmap() is currently
+> used. In firmware_rw() use the helpers copy_{from,to}_page() instead of
+> open coding the local mappings + memcpy().
+> 
+> Successfully tested with "firmware" selftests on a QEMU/KVM 32-bits VM
+> with 4GB RAM, booting a kernel with HIGHMEM64GB enabled.
+> 
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
+
+
+thanks,
+
+Takashi
+
 > ---
->  drivers/tty/serial/fsl_lpuart.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/tty/serial/fsl_lpuart.c 
-> b/drivers/tty/serial/fsl_lpuart.c
-> index fc7d235a1e27..b6365566a460 100644
-> --- a/drivers/tty/serial/fsl_lpuart.c
-> +++ b/drivers/tty/serial/fsl_lpuart.c
-> @@ -990,12 +990,12 @@ static void lpuart32_rxint(struct lpuart_port 
-> *sport)
+> v1->v2: According to the comments from Greg Kroah-Hartman (thanks!),
+> extend the commit message adding information about why kmap() should be
+> avoided. Delete an unused variable left in the code of v1, which has been
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
->  		if (sr & (UARTSTAT_PE | UARTSTAT_OR | UARTSTAT_FE)) {
->  			if (sr & UARTSTAT_PE) {
-> +				sport->port.icount.parity++;
-> +			} else if (sr & UARTSTAT_FE) {
->  				if (is_break)
->  					sport->port.icount.brk++;
->  				else
-> -					sport->port.icount.parity++;
-> -			} else if (sr & UARTSTAT_FE) {
-> -				sport->port.icount.frame++;
-> +					sport->port.icount.frame++;
->  			}
+>  drivers/base/firmware_loader/main.c  |  4 ++--
+>  drivers/base/firmware_loader/sysfs.c | 10 ++++------
+>  2 files changed, 6 insertions(+), 8 deletions(-)
 > 
->  			if (sr & UARTSTAT_OR)
-> @@ -1010,12 +1010,12 @@ static void lpuart32_rxint(struct lpuart_port 
-> *sport)
->  			sr &= sport->port.read_status_mask;
+> diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
+> index ac3f34e80194..7c3590fd97c2 100644
+> --- a/drivers/base/firmware_loader/main.c
+> +++ b/drivers/base/firmware_loader/main.c
+> @@ -435,11 +435,11 @@ static int fw_decompress_xz_pages(struct device *dev, struct fw_priv *fw_priv,
+>  
+>  		/* decompress onto the new allocated page */
+>  		page = fw_priv->pages[fw_priv->nr_pages - 1];
+> -		xz_buf.out = kmap(page);
+> +		xz_buf.out = kmap_local_page(page);
+>  		xz_buf.out_pos = 0;
+>  		xz_buf.out_size = PAGE_SIZE;
+>  		xz_ret = xz_dec_run(xz_dec, &xz_buf);
+> -		kunmap(page);
+> +		kunmap_local(xz_buf.out);
+>  		fw_priv->size += xz_buf.out_pos;
+>  		/* partial decompression means either end or error */
+>  		if (xz_buf.out_pos != PAGE_SIZE)
+> diff --git a/drivers/base/firmware_loader/sysfs.c b/drivers/base/firmware_loader/sysfs.c
+> index 5b0b85b70b6f..77bad32c481a 100644
+> --- a/drivers/base/firmware_loader/sysfs.c
+> +++ b/drivers/base/firmware_loader/sysfs.c
+> @@ -242,19 +242,17 @@ static void firmware_rw(struct fw_priv *fw_priv, char *buffer,
+>  			loff_t offset, size_t count, bool read)
+>  {
+>  	while (count) {
+> -		void *page_data;
+>  		int page_nr = offset >> PAGE_SHIFT;
+>  		int page_ofs = offset & (PAGE_SIZE - 1);
+>  		int page_cnt = min_t(size_t, PAGE_SIZE - page_ofs, count);
+>  
+> -		page_data = kmap(fw_priv->pages[page_nr]);
+> -
+>  		if (read)
+> -			memcpy(buffer, page_data + page_ofs, page_cnt);
+> +			memcpy_from_page(buffer, fw_priv->pages[page_nr],
+> +					 page_ofs, page_cnt);
+>  		else
+> -			memcpy(page_data + page_ofs, buffer, page_cnt);
+> +			memcpy_to_page(fw_priv->pages[page_nr], page_ofs,
+> +				       buffer, page_cnt);
+>  
+> -		kunmap(fw_priv->pages[page_nr]);
+>  		buffer += page_cnt;
+>  		offset += page_cnt;
+>  		count -= page_cnt;
+> -- 
+> 2.37.0
 > 
->  			if (sr & UARTSTAT_PE) {
-> +				flg = TTY_PARITY;
-> +			} else if (sr & UARTSTAT_FE) {
->  				if (is_break)
->  					flg = TTY_BREAK;
->  				else
-> -					flg = TTY_PARITY;
-> -			} else if (sr & UARTSTAT_FE) {
-> -				flg = TTY_FRAME;
-> +					flg = TTY_FRAME;
->  			}
-> 
->  			if (sr & UARTSTAT_OR)
-
--- 
--michael

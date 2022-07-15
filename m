@@ -2,109 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC5E5769B3
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 941D85769B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbiGOWK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
+        id S232775AbiGOWLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbiGOWJI (ORCPT
+        with ESMTP id S232698AbiGOWLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:09:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2942611E
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:03:58 -0700 (PDT)
+        Fri, 15 Jul 2022 18:11:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F4E9B9EB;
+        Fri, 15 Jul 2022 15:06:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F341B82E7F
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 22:03:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4852C3411E;
-        Fri, 15 Jul 2022 22:03:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657922619;
-        bh=Sxvx6ZHcxXw95g7niFss2ltUxP6XT+4ml9qxAH9/Dic=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fAkqHOXCK1TaTNDQkSOMJO+BZs9I6BOPwTnnLhXdr/yXY3wuxJrggS/WkNULPuaJO
-         Qfc1DFswd2PV6chgslUh08mBt1H2+GTtxUQCdsYfQbFucQ8c3seFtNgk/CmxnxXRg+
-         SsGvBUrcWg2zUROCz6AtWPi9rW8kZXZa+5AJVnZ2XqdGit1yd1na7MqzTVDngpkroS
-         y4AnC7nWUcHP80aG8Uz0RXpTW7x+yIjkuYtJjmsuA98bekcD1ZuSrb91cQ154nXVZL
-         NzTS41wsksuY6ebTmyUE4XsQuAXQeddz41k/UqbTnSBoKzQLWxb87tt9DR1vPUVypu
-         z1a0WxzYLIdJg==
-Date:   Fri, 15 Jul 2022 15:03:37 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Petko Manolov <petko.manolov@konsulko.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: GCC fails to spot uninitialized variable
-Message-ID: <YtHkOQJ8E5cCk+Gj@dev-arch.thelio-3990X>
-References: <YtHJbckxy1FJ3ts7@carbon.gago.life>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7141DB82EB3;
+        Fri, 15 Jul 2022 22:06:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50143C3411E;
+        Fri, 15 Jul 2022 22:06:09 +0000 (UTC)
+Date:   Fri, 15 Jul 2022 18:06:07 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Zheng Yejian <zhengyejian1@huawei.com>
+Cc:     <stable@vger.kernel.org>, <paulmck@linux.vnet.ibm.com>,
+        <josh@joshtriplett.org>, <mathieu.desnoyers@efficios.com>,
+        <jiangshanlai@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <peterz@infradead.org>, <xukuohai@huawei.com>
+Subject: Re: [PATCH 4.19] rcu/tree: Mark functions as notrace
+Message-ID: <20220715180607.4509fb86@gandalf.local.home>
+In-Reply-To: <20220713102009.126339-1-zhengyejian1@huawei.com>
+References: <20220713102009.126339-1-zhengyejian1@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtHJbckxy1FJ3ts7@carbon.gago.life>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 11:09:17PM +0300, Petko Manolov wrote:
-> 	Guys,
-> 
-> Today i was bitten by a stupid bug that i introduced myself while writing some
-> v4l2 code.  Looking at it a bit more carefully i was surprised that GCC didn't
-> catch this one, as it was something that should definitely emit a warning.
-> 
-> When included into the driver, this particular code:
-> 
-> int blah(int a, int *b)
-> {
-> 	int ret;
-> 
-> 	switch (a) {
-> 	case 0:
-> 		ret = a;
-> 		break;
-> 	case 1:
-> 		ret = *b;
-> 		break;
-> 	case 2:
-> 		*b = a;
-> 		break;
-> 	default:
-> 		ret = 0;
-> 	}
-> 
-> 	return ret;
-> }
-> 
-> somehow managed to defeat GCC checks.  Compiling it as a standalone .c file
-> with:
-> 
-> 	gcc -Wall -O2 -c t.c
-> 
-> gives me nice:
-> 
-> t.c:19:16: warning: 'ret' may be used uninitialized in this function [-Wmaybe-uninitialized]
->    19 |         return ret;
->       |                ^~~
-> 
-> Any idea what might have gone wrong?
+On Wed, 13 Jul 2022 18:20:09 +0800
+Zheng Yejian <zhengyejian1@huawei.com> wrote:
 
-See commit 78a5255ffb6a ("Stop the ad-hoc games with
--Wno-maybe-initialized") in 5.7, which disabled that warning for a
-default kernel build. You have to either include 'W=2' (which will
-introduce other warnings which might be noisy) or
-'KCFLAGS=-Wmaybe-uninitialized' (which will just add that warning) in
-your make command to see those warnings.
+> This patch and problem analysis is based on v4.19 LTS, but v5.4 LTS
+> and below seem to be involved.
+> 
+> Hulk Robot reports a softlockup problem, see following logs:
+>   [   41.463870] watchdog: BUG: soft lockup - CPU#0 stuck for 22s!  [ksoftirqd/0:9]
 
-As an aside, your mailer adds a "Mail-Followup-To:" header that was set
-to LKML, meaning that you would not have seen this reply unless you were
-subscribed to LKML. Might be something worth looking into.
+This detects something that is spinning with preemption disabled but
+interrupts enabled.
 
-Cheers,
-Nathan
+> Look into above call stack, there is a recursive call in
+> 'ftrace_graph_call', and the direct cause of above recursion is that
+> 'rcu_dynticks_curr_cpu_in_eqs' is traced, see following snippet:
+>     __read_once_size_nocheck.constprop.0
+>       ftrace_graph_call    <-- 1. first call
+>         ......
+>           rcu_dynticks_curr_cpu_in_eqs
+>             ftrace_graph_call    <-- 2. recursive call here!!!
+
+This is not the bug. That code can handle a recursion:
+
+ftrace_graph_call is assembly that is converted to call
+
+void prepare_ftrace_return(unsigned long ip, unsigned long *parent,
+			   unsigned long frame_pointer)
+{
+ [..]
+
+	bit = ftrace_test_recursion_trylock(ip, *parent);
+	if (bit < 0)
+		return;
+
+This will stop the code as "bit" will be < 0 on the second call to
+ftrace_graph_call. If it was a real recursion issue, it would crash the
+machine when the recursion runs out of stack space.
+
+> 
+> Comparing with mainline kernel, commit ff5c4f5cad33 ("rcu/tree:
+> Mark the idle relevant functions noinstr") mark related functions as
+> 'noinstr' which implies notrace, noinline and sticks things in the
+> .noinstr.text section.
+> Link: https://lore.kernel.org/all/20200416114706.625340212@infradead.org/
+> 
+> But we cannot directly backport that commit, because there seems to be
+> many prepatches. Instead, marking the functions as 'notrace' where it is
+> 'noinstr' in that commit and mark 'rcu_dynticks_curr_cpu_in_eqs' as
+> inline look like it resolves the problem.
+
+That will not fix your problem.
+
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+
+Can you reproduce this consistently without this patch, and then not so
+with this patch?
+
+Or are you just assuming that this fixes a bug because you observed a
+recursion?
+
+Please explain to me why this would cause the hang?
+
+-- Steve

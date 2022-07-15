@@ -2,119 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DD0575935
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 03:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E6557593A
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 03:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239913AbiGOBs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 21:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
+        id S240749AbiGOBxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 21:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiGOBsZ (ORCPT
+        with ESMTP id S229996AbiGOBxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 21:48:25 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1807866BA5;
-        Thu, 14 Jul 2022 18:48:23 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Thu, 14 Jul 2022 21:53:11 -0400
+X-Greylist: delayed 23574 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Jul 2022 18:53:09 PDT
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE5926AF8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 18:53:09 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LkZ502Xqbz4xj3;
-        Fri, 15 Jul 2022 11:48:19 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657849701;
-        bh=yV9vq1Lt3C+nO9r4f9S/GlxG5/N8GYHsFwZ8YFzwp38=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tQV2ZliHVY9T1TSHIX2YmWHGjy3+I7QsAZPXRGrMdoUII8MhmY/hlMTJPiz9ShD4M
-         P9rqe7bcks2DYlKVZZzFERTl2EyJfHL0/BOyZmNmo1XDyZLiL3OL+US1iHp5AxL4xF
-         A0igBfrmlFrLYEZsJZJdiC+XIkpt8OINMA6j/dKzO+dJrVFQiAzhAE+GcgpKS2JUJX
-         s6j9w8HAIkScxQWTDfKZbuGd3lHYlh9Vx8Nu5J2OdxNYUD8EJL1rdWMx4UCeLCJIsL
-         vAglA+1POzN+rYtbfAtYTq2BjOfqUr/xGjQpLCmzwvRpwME54U4RG+mbx4BnUE8Lio
-         8GAroiKHba0QQ==
-Date:   Fri, 15 Jul 2022 11:48:16 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: linux-next: manual merge of the net-next tree with Linus' tree
-Message-ID: <20220715114816.671335e2@canb.auug.org.au>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4LkZBX4S6Sz9s70;
+        Fri, 15 Jul 2022 01:53:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1657849989; bh=iQ93V62DS9sEblzPl4Vk0V3BaTjejwm6A0Ko5LWfBjA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Aq5253y8bEE+y+IYWA+rw3baNz6Tvwn/Zt99FOE5reGvMgiEuVKxbJSBzyXuWuOvf
+         ijmhMejpiWO34ztGHMMR3uCbDv1d0RC21KeNRmZzDKotlJIItVVrnQpy0Pmb1c+cQZ
+         1tlJygp+ST2K2Px0hv1KKbFfOf49md6nD1nQVpRw=
+X-Riseup-User-ID: 5B35ACADA9D97D3B2D72F32A4B86BBEC1F0D45334CD6E60A7BD06D0F4F61CEE1
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4LkZBR2J4fz5vTJ;
+        Fri, 15 Jul 2022 01:53:03 +0000 (UTC)
+Message-ID: <e5a3bcc7-e179-9eb9-1c19-b8998de7af8a@riseup.net>
+Date:   Thu, 14 Jul 2022 22:53:00 -0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WlX1wDD_8Q5BjVh6UzueOm2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 12/12] drm/amd/display: Rewrite CalculateWriteBackDISPCLK
+ function
+Content-Language: en-US
+To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+Cc:     amd-gfx@lists.freedesktop.org, Xinhui.Pan@amd.com,
+        David Airlie <airlied@linux.ie>, christian.koenig@amd.com,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        mwen@igalia.com, Isabella Basso <isabbasso@riseup.net>,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com
+References: <20220714164507.561751-1-mairacanal@riseup.net>
+ <20220714164507.561751-12-mairacanal@riseup.net>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@riseup.net>
+In-Reply-To: <20220714164507.561751-12-mairacanal@riseup.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WlX1wDD_8Q5BjVh6UzueOm2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Às 13:45 de 14/07/22, Maíra Canal escreveu:
+> Based on the dml30_CalculateWriteBackDISPCLK, it separates the
+> DISPCLK calculations on three variables, making no functional changes, in order
+> to make it more readable and better express that three values are being compared
+> on dml_max.
+> 
+> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+> ---
+>  .../drm/amd/display/dc/dml/display_mode_vba.c | 31 ++++++++++++-------
+>  1 file changed, 20 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
+> index c5a0a3649e9a..5fc1d16a2e15 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
+> @@ -1113,20 +1113,29 @@ double CalculateWriteBackDISPCLK(
+>  		unsigned int HTotal,
+>  		unsigned int WritebackChromaLineBufferWidth)
+>  {
+> -	double CalculateWriteBackDISPCLK = 1.01 * PixelClock * dml_max(
+> -		dml_ceil(WritebackLumaHTaps / 4.0, 1) / WritebackHRatio,
+> -		dml_max((WritebackLumaVTaps * dml_ceil(1.0 / WritebackVRatio, 1) * dml_ceil(WritebackDestinationWidth / 4.0, 1)
+> +
+> +	double DISPCLK_H = 0, DISPCLK_V = 0, DISPCLK_HB = 0;
+> +	double CalculateWriteBackDISPCLK = 0;
+> +
 
-Hi all,
+Small nit: no need to initialize to 0 those variables here. They are
+getting initialized bellow anyway.
 
-Today's linux-next merge of the net-next tree got a conflict in:
-
-  net/ipv4/fib_semantics.c
-
-between commit:
-
-  747c14307214 ("ip: fix dflt addr selection for connected nexthop")
-
-from Linus' tree and commit:
-
-  d62607c3fe45 ("net: rename reference+tracking helpers")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc net/ipv4/fib_semantics.c
-index d9fdcbae16ee,a5439a8414d4..000000000000
---- a/net/ipv4/fib_semantics.c
-+++ b/net/ipv4/fib_semantics.c
-@@@ -1229,8 -1230,8 +1230,8 @@@ static int fib_check_nh_nongw(struct ne
-  	}
- =20
-  	nh->fib_nh_dev =3D in_dev->dev;
-- 	dev_hold_track(nh->fib_nh_dev, &nh->fib_nh_dev_tracker, GFP_ATOMIC);
-+ 	netdev_hold(nh->fib_nh_dev, &nh->fib_nh_dev_tracker, GFP_ATOMIC);
- -	nh->fib_nh_scope =3D RT_SCOPE_HOST;
- +	nh->fib_nh_scope =3D RT_SCOPE_LINK;
-  	if (!netif_carrier_ok(nh->fib_nh_dev))
-  		nh->fib_nh_flags |=3D RTNH_F_LINKDOWN;
-  	err =3D 0;
-
---Sig_/WlX1wDD_8Q5BjVh6UzueOm2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLQx2AACgkQAVBC80lX
-0GzZbwf/cZvD+gHvsN/EER7RKngzUIHySDYlqp82TwWJsGhAW55exVprRrjbZRvt
-RkzNL5EfnlRz26TBar9z4jU9PyxiAwCGFpx3be/2ai6wOAyo8tpDWvSl+c4lQmgN
-RAjpcSUBF+p54rIwdYhx2OJNxWpNQsqmgRo7quP/NWT6dqzWw35mt1gxfeWiqUke
-KlSM7JQ23kJ+189Shlts/MjP+LL3AR5pGo+uWqgQ1P/LDSPLNRD/78rP/AuDDXnn
-G0MXdEHqjizTSjQAVF6y/1fp19z3MEXmCkM9FyOj3Vg9b9TGa3l1m3VqPpU73TA0
-SUQpcIe5mSNo843UOmg0tinaltN1uA==
-=Hu04
------END PGP SIGNATURE-----
-
---Sig_/WlX1wDD_8Q5BjVh6UzueOm2--
+> +	DISPCLK_H = dml_ceil(WritebackLumaHTaps / 4.0, 1) / WritebackHRatio;
+> +	DISPCLK_V = (WritebackLumaVTaps * dml_ceil(1.0 / WritebackVRatio, 1) * dml_ceil(WritebackDestinationWidth / 4.0, 1)
+>  			+ dml_ceil(WritebackDestinationWidth / 4.0, 1)) / (double) HTotal + dml_ceil(1.0 / WritebackVRatio, 1)
+> -			* (dml_ceil(WritebackLumaVTaps / 4.0, 1) + 4.0) / (double) HTotal,
+> -			dml_ceil(1.0 / WritebackVRatio, 1) * WritebackDestinationWidth / (double) HTotal));
+> +			* (dml_ceil(WritebackLumaVTaps / 4.0, 1) + 4.0) / (double) HTotal;
+> +	DISPCLK_HB = dml_ceil(1.0 / WritebackVRatio, 1) * WritebackDestinationWidth / (double) HTotal;
+> +
+> +	CalculateWriteBackDISPCLK = 1.01 * PixelClock * dml_max3(DISPCLK_H, DISPCLK_V, DISPCLK_HB);
+> +
+>  	if (WritebackPixelFormat != dm_444_32) {
+> -		CalculateWriteBackDISPCLK = dml_max(CalculateWriteBackDISPCLK, 1.01 * PixelClock * dml_max(
+> -			dml_ceil(WritebackChromaHTaps / 2.0, 1) / (2 * WritebackHRatio),
+> -			dml_max((WritebackChromaVTaps * dml_ceil(1 / (2 * WritebackVRatio), 1) * dml_ceil(WritebackDestinationWidth / 2.0 / 2.0, 1)
+> -				+ dml_ceil(WritebackDestinationWidth / 2.0 / WritebackChromaLineBufferWidth, 1)) / HTotal
+> -				+ dml_ceil(1 / (2 * WritebackVRatio), 1) * (dml_ceil(WritebackChromaVTaps / 4.0, 1) + 4) / HTotal,
+> -				dml_ceil(1.0 / (2 * WritebackVRatio), 1) * WritebackDestinationWidth / 2.0 / HTotal)));
+> +		DISPCLK_H = dml_ceil(WritebackChromaHTaps / 2.0, 1) / (2 * WritebackHRatio);
+> +		DISPCLK_V = (WritebackChromaVTaps * dml_ceil(1 / (2 * WritebackVRatio), 1) *
+> +				dml_ceil(WritebackDestinationWidth / 4.0, 1) +
+> +				dml_ceil(WritebackDestinationWidth / 2.0 / WritebackChromaLineBufferWidth, 1)) / HTotal +
+> +			dml_ceil(1 / (2 * WritebackVRatio), 1) *(dml_ceil(WritebackChromaVTaps / 4.0, 1) + 4) / HTotal;
+> +		DISPCLK_HB = dml_ceil(1.0 / (2 * WritebackVRatio), 1) * WritebackDestinationWidth / 2.0 / HTotal;
+> +		CalculateWriteBackDISPCLK = dml_max(CalculateWriteBackDISPCLK,
+> +				1.01 * PixelClock * dml_max3(DISPCLK_H, DISPCLK_V, DISPCLK_HB));
+>  	}
+> +
+>  	return CalculateWriteBackDISPCLK;
+>  }
+>  

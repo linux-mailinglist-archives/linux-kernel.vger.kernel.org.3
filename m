@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E63A576A1B
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A94576A1F
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbiGOWo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S229725AbiGOWqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232585AbiGOWoF (ORCPT
+        with ESMTP id S229580AbiGOWqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:44:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1EE904FF;
-        Fri, 15 Jul 2022 15:43:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4381B80B9D;
-        Fri, 15 Jul 2022 22:43:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4027CC34115;
-        Fri, 15 Jul 2022 22:43:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657924995;
-        bh=SYs1CcavLTZPQ9Ht+CPL2jtfT27xIDO5hQjAOP1TFNU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KIKoFMWfzIZ5TA1kgJXoEfDnhmk1OBAGITW/xdyeC0YFlSqDqOxkUcTFCTXQDsf+G
-         M8M2moR/Vb3cZTD25WQG/pLwBlhLlGHsm7i/faVG+4zjXKtAdmwAUHlF9JuhZIS4h5
-         6YvpqY63DFKa3RufjHVhSLn3wxFyFZ/OnAIvQcxVq/dSdnpGVDNJHY47cgMo43B4WR
-         tYd/7sALjqyDk02a+fHDxHbZUD+fZ1f7U1ipBGhvGo36EZKqvuvrGPfPRrvBaLsaqZ
-         QG+4D6hGTgdoREXpxRxDj2okxy0LfZxrMdvw2O+c8Nt99Fg8yYJmdpABgaLKD9U3BX
-         435n5TzDGhHgg==
-Date:   Fri, 15 Jul 2022 15:43:14 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Bernard f6bvp <f6bvp@free.fr>
-Cc:     duoming@zju.edu.cn, davem@davemloft.net, edumazet@google.com,
-        linux-hams@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, ralf@linux-mips.org
-Subject: Re: [PATCH] net: rose: fix unregistered netdevice: waiting for
- rose0 to become free
-Message-ID: <20220715154314.510ca2fb@kernel.org>
-In-Reply-To: <ab0eac7b-3041-6772-21dd-273e1b8fc43e@free.fr>
-References: <26cdbcc8.3f44f.181f6cc848f.Coremail.duoming@zju.edu.cn>
-        <4c604039-ffb8-bca3-90bb-d8014249c9a2@free.fr>
-        <ab0eac7b-3041-6772-21dd-273e1b8fc43e@free.fr>
+        Fri, 15 Jul 2022 18:46:16 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE27E6
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:46:14 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id l68so3602329wml.3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:46:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=O6YPhUIsYt5zf8i0l2JyQAe9jcHRbVM0oIcZOZ33z6U=;
+        b=ckw2HGIS6manAr2IHB8ErYSVb5zaE8+bpeNaLyKODzDo9GmmxSUpDLRrymGYbYNKbl
+         OpMJ+27oHDi4aPJ5k7gEDZoLT0MePyO/MoTujSfFMwYi5qtnXFGM02uvqXh1e04Cxb6z
+         Af1cCNsHQ0DuywDxMYWt+8o4CDelDbDDbJ9uYHHSBg0KNZm6HxWxTBVqb2+9I5VfhEsd
+         BF1LNughZVNeIoyip/bEdesQ3l6bxX8VA5VlDzhq2eFPfzuXnb4bGduElwWULwSXNRt5
+         FFtptbKAANMtVOb31/0CtaXNY7SaRAg1F7Lm5kO4xKss7eoKibZrSN8f6gINI0OlM1yi
+         0eNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=O6YPhUIsYt5zf8i0l2JyQAe9jcHRbVM0oIcZOZ33z6U=;
+        b=wqPVSTbH4HSu2Y1iRRhIExftwWtkdHDAcnSKqD1c1Wu4Ag379vLTICTQZDCIazfrZH
+         8vbaWcby864X6r1JQ+7xCQs5tlonZz5PtIP3rW3aKWrC1ixN5z9ieeHADn9rvylm3JTP
+         4Gxwk2DsCpcIw403V/7vqUosgJuNFqf1MQOhv7fpE2mI+ufnbaEU36HLh6ay9z6g/U40
+         SaxY45N4Y764084T7WmM74jVDaNgHHSrJubWgdYvw0tjZ0fxFy9WikKVaPp5hhQ/k7Dq
+         bRFtoPmsiCC5r66lEB7tVTKhJtE79i0IuWuTBj0uZA4Y1A8cq5bM5wr4MmkhROoKldtQ
+         b4nQ==
+X-Gm-Message-State: AJIora80q+2W92roYATiHravFGrm3KogtHq8SGkxjjjelQ9QUq9XEGcb
+        6loXpVD+uxdqZl69LawCdhg/sQ==
+X-Google-Smtp-Source: AGRyM1vG1ddo3/gBI/TFeHyXh4sWLdA+O8E0G9ff6jmxVXmcwUUk9h30Grs/AMIZy96GvueRtpM0tg==
+X-Received: by 2002:a05:600c:600b:b0:3a3:1176:222d with SMTP id az11-20020a05600c600b00b003a31176222dmr1324990wmb.42.1657925173426;
+        Fri, 15 Jul 2022 15:46:13 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:a223:f4b3:40c9:43fa? ([2a05:6e02:1041:c10:a223:f4b3:40c9:43fa])
+        by smtp.googlemail.com with ESMTPSA id j27-20020a05600c1c1b00b0039c4ba160absm17815546wms.2.2022.07.15.15.46.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 15:46:12 -0700 (PDT)
+Message-ID: <ff463957-e85b-27d3-7e10-1cae55404fc8@linaro.org>
+Date:   Sat, 16 Jul 2022 00:46:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] thermal: rcar_gen3_thermal: Add r8a779f0 support
+Content-Language: en-US
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org
+Cc:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220705195520.2581-1-wsa+renesas@sang-engineering.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220705195520.2581-1-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,65 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Jul 2022 17:59:06 +0200 Bernard f6bvp wrote:
-> Here is the context.
->=20
-> This patch adds dev_put(dev) in order to allow removal of rose module=20
-> after use of AX25 and ROSE via rose0 device.
->=20
-> Otherwise when trying to remove rose module via rmmod rose an infinite=20
-> loop message was displayed on all consoles with xx being a random number.
->=20
-> unregistered_netdevice: waiting for rose0 to become free. Usage count =3D=
- xx
->=20
-> unregistered_netdevice: waiting for rose0 to become free. Usage count =3D=
- xx
->=20
-> ...
->=20
-> With the patch it is ok to rmmod rose.
->=20
-> This bug appeared with kernel 4.10 and was tentatively repaired five=20
-> years ago.
+On 05/07/2022 21:55, Wolfram Sang wrote:
+> Add support for R-Car S4.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Reviewed-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Please try resending with git send-email.
-Your current email contains HTML so it won't make it to netdev@
-and other vger lists.
+Applied, thanks
 
-> *Subject: [BUG] unregistered netdevice: wainting for rose0 to become=20
-> free. Usage count =3D xx <https://marc.info/?t=3D148811830800001&r=3D1&w=
-=3D2>=20
-> From: f6bvp <f6bvp () free ! fr>=20
-> <https://marc.info/?a=3D128152583500001&r=3D1&w=3D2> Date: 2017-02-26 14:=
-09:08=20
-> <https://marc.info/?l=3Dlinux-hams&r=3D1&w=3D2&b=3D201702> Message-ID:=20
-> ce03a972-a3b0-ca24-5195-2fe2fd5c44d3 () free ! fr=20
-> <https://marc.info/?i=3Dce03a972-a3b0-ca24-5195-2fe2fd5c44d3%20()%20free%=
-20!%20fr>*=20
->=20
->=20
-> Since then the bug reamains.
 
-Is it possible to use a link to the lore.kernel.org archive? It's the
-most common way of referring to past threads these days.
 
-> Signed-off-by: Bernard f6bvp / ai7bg
 
-Well formed s-o-b is required, "the name you'd use if you were signing
-a legal document".
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> diff --git a/a/net/rose/af_rose.c b/b/net/rose/af_rose.c
-> index bf2d986..41e106a 100644
-> --- a/a/net/rose/af_rose.c
-> +++ b/b/net/rose/af_rose.c
-> @@ -711,6 +711,7 @@ static int rose_bind(struct socket *sock, struct=20
-> sockaddr *uaddr, int addr_len)
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rose_insert_socket(sk);
->=20
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sock_reset_flag(sk, SOCK_ZAPP=
-ED);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_put(dev);
->=20
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
->  =C2=A0}
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,108 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95CC575A27
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 06:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03E0575A2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 06:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234620AbiGOEEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 00:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S229847AbiGOEKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 00:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241322AbiGOEEE (ORCPT
+        with ESMTP id S229549AbiGOEKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 00:04:04 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4DC13F88
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 21:04:01 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31d17879672so31642217b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 21:04:01 -0700 (PDT)
+        Fri, 15 Jul 2022 00:10:16 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471F477A64;
+        Thu, 14 Jul 2022 21:10:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=dOShst8oggqOssAr1ulsAnblCITkep7trvJdY0C5eLU=;
-        b=Of15lLAbml49VYHRN9m0VDbCfogr3SovyJGfgCQ7iaWxO2/arZgSm1JkWoAtfuWQlX
-         luM3GfvnpmaLCfLXFRTXVP3skXL2hUMumL8ELP8qkLOb1o1ll5w6FN6C0XjjNbS9TDdN
-         PsqVD12No9NSstS6gjWYJmxvG6m6l5eJSTmC4BXr+uKXuWjOQIM6AsEDP/qr9/oqEkP3
-         zufyGVCthz1+/0+RbafqMV5x2ThixKyaYAePnveQzH/m8OkFCG4EgRf+6VnW42hlEdhv
-         4dTf12NWb9TPo54ObWif+TwN/RlIsIBtA8+dlDJXCAmbeUPx84nRTKncRwJc0ouSdHDt
-         eMvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=dOShst8oggqOssAr1ulsAnblCITkep7trvJdY0C5eLU=;
-        b=zhIWyeWPKY+QqL7G0W/KTC6+U2n0b3oC2VO2GwBk6li3ubHNnxtWLfR2hm0SWxCN59
-         uWgB7mUZ2W+kw01gchNeRlunp3TaU8FgP18DrrMsmH4cSioy1QvZfTbjuj8VO6p1/e4g
-         SvQ5ui+3ERNIv/E2Kyv5Fnoau+r1QCNtKngkgjmzMRoq5OiE47/KKIhC2aN+MRS433Ai
-         lwy+SswsUPnxLLLNKc1Nq+Fbrff6g7lOwnSVaJDNHLFvrmiZsIqy9Ar7wr9Yg8saM7Ve
-         OD5SH5l6zLUxqQ9lHPD2VWRcYF+S/7fPiG7WQmW/eq/ySG9PXCpcMTT0UWWDgptZGrZ1
-         0WUQ==
-X-Gm-Message-State: AJIora8Adw/WmIPKBkN4oWUnkciV1G/25ER4SCAgatJHbd1S1FsdXPPO
-        aIjAZMdbwLbAlbDszQQV8guqq5CR2DkpcQ==
-X-Google-Smtp-Source: AGRyM1vFpZrFOoq2yapQ0vGl3znNKM4Dn0ax0wtn3S4i2Fs4lp4ajUnIeHklnWD7RiS+zlb4i05wgHyYdzKpWw==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a5b:bc2:0:b0:66e:4a75:e5ff with SMTP id
- c2-20020a5b0bc2000000b0066e4a75e5ffmr12004512ybr.642.1657857840574; Thu, 14
- Jul 2022 21:04:00 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 12:03:54 +0800
-Message-Id: <20220715040354.2629856-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH] mmc: sdhci-of-aspeed: test: Fix dependencies when KUNIT=m
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, Sadiya Kazi <sadiyakazi@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657858215; x=1689394215;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tDMdnTAa5rCH0eTMZ3wo3oD7Hgn5Zdv3oboxs9IxU00=;
+  b=XZGrHYl2r5FxJHScGmupveRXCSJpAo6M1L35wE5O8GkwslpnMNg+pWSY
+   yJkL7Q6lipXqa66JwuP6g/wRC/tBEarMa+K9nxYDSj4D54+GUe4zIcguY
+   qdXoeDzLCyAFdXrPDCyDdUPPyPq1ZPu+LZiPcci72/eZrI10WLIhHIKXd
+   8=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Jul 2022 21:10:15 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 21:10:14 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 14 Jul 2022 21:10:14 -0700
+Received: from hu-kshivnan-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 14 Jul 2022 21:10:11 -0700
+From:   Shivnandan Kumar <quic_kshivnan@quicinc.com>
+To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Shivnandan Kumar" <quic_kshivnan@quicinc.com>
+Subject: [PATCH v3]PM: QoS: Add check to make sure CPU freq is non-negative
+Date:   Fri, 15 Jul 2022 09:39:49 +0530
+Message-ID: <20220715040949.3807070-1-quic_kshivnan@quicinc.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While the sdhci-of-aspeed KUnit tests do work when builtin, and do work
-when KUnit itself is being built as a module, the two together break.
+	CPU frequency should never be negative.
+	If some client driver calls freq_qos_update_request with
+	negative value which will be very high in absolute terms,
+	then qos driver set max CPU freq at fmax as it consider
+	it's absolute value but it will add plist node with negative
+	priority. plist node has priority from INT_MIN (highest)
+	to INT_MAX(lowest). Once priority is set as negative,
+	another client will not be able to reduce CPU frequency.
+	Adding check to make sure CPU freq is non-negative will
+	fix this problem.
 
-This is because the KUnit tests (understandably) depend on KUnit, so a
-built-in test cannot build if KUnit is a module.
-
-Fix this by adding a dependency on (MMC_SDHCI_OF_ASPEED=m || KUNIT=y),
-which only excludes this one problematic configuration.
-
-This was reported on a nasty openrisc-randconfig run by the kernel test
-robot, though for some reason (compiler optimisations removing the test
-code?) I wasn't able to reproduce it locally on x86:
-https://lore.kernel.org/linux-mm/202207140122.fzhlf60k-lkp@intel.com/T/
-
-Fixes: 291cd54e5b05 ("mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: David Gow <davidgow@google.com>
+Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
 ---
- drivers/mmc/host/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+v2->v3 
+	-changed commit text
+v1->v2
+	-addressed comments from Rafael
+	-changed commit text accordingly
+ kernel/power/qos.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index 10c563999d3d..e63608834411 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -171,6 +171,7 @@ config MMC_SDHCI_OF_ASPEED
- config MMC_SDHCI_OF_ASPEED_TEST
- 	bool "Tests for the ASPEED SDHCI driver" if !KUNIT_ALL_TESTS
- 	depends on MMC_SDHCI_OF_ASPEED && KUNIT
-+	depends on (MMC_SDHCI_OF_ASPEED=m || KUNIT=y)
- 	default KUNIT_ALL_TESTS
- 	help
- 	  Enable KUnit tests for the ASPEED SDHCI driver. Select this
+diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+index ec7e1e85923e..27e6596f287a 100644
+--- a/kernel/power/qos.c
++++ b/kernel/power/qos.c
+@@ -531,7 +531,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
+ {
+ 	int ret;
+ 
+-	if (IS_ERR_OR_NULL(qos) || !req)
++	if (IS_ERR_OR_NULL(qos) || !req || value < FREQ_QOS_MIN_DEFAULT_VALUE)
+ 		return -EINVAL;
+ 
+ 	if (WARN(freq_qos_request_active(req),
+@@ -563,7 +563,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
+  */
+ int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
+ {
+-	if (!req)
++	if (!req || new_value < FREQ_QOS_MIN_DEFAULT_VALUE)
+ 		return -EINVAL;
+ 
+ 	if (WARN(!freq_qos_request_active(req),
 -- 
-2.37.0.170.g444d1eabd0-goog
+2.25.1
 

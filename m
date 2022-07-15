@@ -2,86 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B1857624E
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 14:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24545762E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234091AbiGOMyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 08:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        id S233482AbiGONjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 09:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbiGOMyO (ORCPT
+        with ESMTP id S233136AbiGONjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 08:54:14 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1E625C2;
-        Fri, 15 Jul 2022 05:54:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6E392CE2F46;
-        Fri, 15 Jul 2022 12:54:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45039C34115;
-        Fri, 15 Jul 2022 12:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657889649;
-        bh=4JUzNF30UbskSiAI32cNuM3JoK+YAPBzhkadD+xwspY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DsfOnxT1yqCXtBBnWJBaAiPF/UOaH5vXBERn/AAxvHT+wWhX5RmJmBXMX4q23xG5D
-         Qwh2F8In+DhZ37MWI/ak8r6A4DrvTKBQ0t4bL8ethHIQ55PQN3q8AAP+h6onoA1nX8
-         CT+frFLJTLNbztDIyD3B8BJwV2ArqRMPtvTjApj8=
-Date:   Fri, 15 Jul 2022 14:54:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] interconnect changes for 5.20
-Message-ID: <YtFjbhn3pveplLQb@kroah.com>
-References: <20220715101021.30109-1-djakov@kernel.org>
- <YtFjOW77wGnToYt8@kroah.com>
+        Fri, 15 Jul 2022 09:39:33 -0400
+Received: from syslogsrv (unknown [217.20.186.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B340F5B1;
+        Fri, 15 Jul 2022 06:39:32 -0700 (PDT)
+Received: from fg200.ow.s ([172.20.254.44] helo=localhost.localdomain)
+        by syslogsrv with esmtp (Exim 4.90_1)
+        (envelope-from <maksym.glubokiy@plvision.eu>)
+        id 1oCKrJ-0001SM-KU; Fri, 15 Jul 2022 15:55:53 +0300
+From:   Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+To:     Taras Chornyi <tchornyi@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yevhen Orlov <yevhen.orlov@plvision.eu>,
+        Volodymyr Mytnyk <vmytnyk@marvell.com>
+Cc:     Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net] net: prestera: acl: use proper mask for port selector
+Date:   Fri, 15 Jul 2022 15:55:50 +0300
+Message-Id: <20220715125550.19352-1-maksym.glubokiy@plvision.eu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtFjOW77wGnToYt8@kroah.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
+        HELO_NO_DOMAIN,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 02:53:13PM +0200, Greg KH wrote:
-> On Fri, Jul 15, 2022 at 01:10:21PM +0300, Georgi Djakov wrote:
-> > Hello Greg,
-> > 
-> > This is the pull request with interconnect changes for the 5.20-rc1 merge
-> > window. It contains driver updates. The details are in the signed tag.
-> > 
-> > All patches have been in linux-next during the last few days. No issues have
-> > been reported so far. Please pull into char-misc-next.
-> > 
-> > Thanks,
-> > Georgi
-> > 
-> > The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-> > 
-> >   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.20-rc1
-> 
-> Pulled and pushed out, thanks.
+Adjusted as per packet processor documentation.
+This allows to properly match 'indev' for clsact rules.
 
-Oops, nope, I got the following error:
+Fixes: 47327e198d42 ("net: prestera: acl: migrate to new vTCAM api")
 
-Fixes tag: Fixes: f0d8048525d7d("interconnect: Add imx core driver")
-	Has these problem(s):
-		- missing space between the SHA1 and the subject
+Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+---
+ drivers/net/ethernet/marvell/prestera/prestera_flower.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I can rebase this and fix it up myself, or you can do it, which ever is
-easier for you.
+diff --git a/drivers/net/ethernet/marvell/prestera/prestera_flower.c b/drivers/net/ethernet/marvell/prestera/prestera_flower.c
+index d43e503c644f..4d93ad6a284c 100644
+--- a/drivers/net/ethernet/marvell/prestera/prestera_flower.c
++++ b/drivers/net/ethernet/marvell/prestera/prestera_flower.c
+@@ -167,12 +167,12 @@ static int prestera_flower_parse_meta(struct prestera_acl_rule *rule,
+ 	}
+ 	port = netdev_priv(ingress_dev);
+ 
+-	mask = htons(0x1FFF);
+-	key = htons(port->hw_id);
++	mask = htons(0x1FFF << 3);
++	key = htons(port->hw_id << 3);
+ 	rule_match_set(r_match->key, SYS_PORT, key);
+ 	rule_match_set(r_match->mask, SYS_PORT, mask);
+ 
+-	mask = htons(0x1FF);
++	mask = htons(0x3FF);
+ 	key = htons(port->dev_id);
+ 	rule_match_set(r_match->key, SYS_DEV, key);
+ 	rule_match_set(r_match->mask, SYS_DEV, mask);
+-- 
+2.25.1
 
-thanks,
-
-greg k-h

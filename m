@@ -2,95 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F90E5764CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A905764CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbiGOP6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 11:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
+        id S231307AbiGOP6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 11:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiGOP6V (ORCPT
+        with ESMTP id S229510AbiGOP62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 11:58:21 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC56E65D4D
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:58:20 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso11943549pjc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:58:20 -0700 (PDT)
+        Fri, 15 Jul 2022 11:58:28 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5A86A9E1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:58:27 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id w16so2264200ilh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:58:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xsKYhSLwsE8/SUXFxlsoQGizq/ndscv+1fEJX7G56IY=;
-        b=WcGQ3p99TKasjnSfcWoBHd0IlimUMNYF7oGcVhFYwjkB1bYUS8HG3RfUQo9rksrGYI
-         vmegpOSM1MfpWMTrkTNxNzAZT0+AiprGuV7mAdN0unBZI4+NN244skhoiJSAXDl4C7fJ
-         8T5Mw6gZtDzLfE75JYN817ArQfyivhjWJ3pScPwPOEsqURQES0odQuxCNJxwKG4Bmke5
-         j9O9SG72ZogYopzZnJrobPJot83KAwCreHM6aRrrQkCZ9EfFPYj16Lc7PiZKer59xpVg
-         pR51RMvs8vIbYPzYWRqeSLJVnQHAznii+MgM2Rf+mIJX4WgmHw1pw8F9TVtyKw1a+NkM
-         mXKQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=njHUUTRkwNmezhjrHml0mpe3Yz515QMHQkK9aErxP34=;
+        b=HNVXW1r1X+A7eh+QQhT/jKYYaWKylGxr9yzFRK/bECvW8S+9f6RpcR2ig3YUEbqjg2
+         izLKurM2kjUOn12ZTHxWvTiE7W/NTbQkOROc4shmRYtOO35gETP9LoazMvRlUhpyqiIF
+         Ng9ROxuXXVhoVojpT2lWG2rTlQe4hiDUnF6KThJqac1YVNEIKUGdMxFlvZDaL4GKdrbE
+         JaAFV8cTYnKnpAEp3rJGzO+9und1R9Iu3QlqGhYO2nPRnbBgsK8m133VN9fJ2nagL1F/
+         9JhrzJzCRtMLvSoHbg9UU/0Nr5sutj2nlgiK9uBV0pZx/LQR0QyNdMGYv6aTDsV/O+7j
+         UNYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xsKYhSLwsE8/SUXFxlsoQGizq/ndscv+1fEJX7G56IY=;
-        b=fa9xoxNK9aWaoDlmfgm/3EqQ3qJy9P+9CVjQxTYf8F8+boIUOPnZW7VxP+JeYh4G3l
-         MfUaBL71cHgt2/JUB18MWocMA6UlpuykrfhVGn5fA0YLziC1ExjhPhffjCwT9bAQD3jr
-         snYzYSRIU1gbBKAd9UZlCZTfzaTORvuNQgDgfn9Xu6nS0wC9BU9xHPBNQtFngJAdCOvg
-         u5iU1aA+mge7zG0nyGi7fGJaMiJ9AbiCF+jiqMJ92MIo+nDO2CN32jyvnwlY82k5ygj1
-         wWmZJ7EJohwwiU2ZxucDGCS7rqEFK/l7BpHMRzAH9u8YGgZfiMyqLQkADO3ZDE04qP74
-         dEUA==
-X-Gm-Message-State: AJIora/+4Pv5NywREs6F+48HY0QPvLU7V5ZeH6rO8LcOxCXg5dilrbki
-        mVuBvDZoGXJe3iyZ/GV/ZKUl/g==
-X-Google-Smtp-Source: AGRyM1tqzKoamzwlhHnc+IM9pZxIoOzEVydP45L6Isk2EsXkeVmHXci+zPyFL6vkZ7f5VwiGiuTyYA==
-X-Received: by 2002:a17:90b:341:b0:1e0:cf43:df4f with SMTP id fh1-20020a17090b034100b001e0cf43df4fmr16491919pjb.126.1657900700196;
-        Fri, 15 Jul 2022 08:58:20 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id k2-20020a170902ce0200b0016c09e23b18sm3676427plg.154.2022.07.15.08.58.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 08:58:19 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 15:58:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Yang, Weijiang" <weijiang.yang@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rick.p.edgecombe@intel.com
-Subject: Re: [PATCH 00/19] Refresh queued CET virtualization series
-Message-ID: <YtGOmEeMW1BbC3Ne@google.com>
-References: <20220616084643.19564-1-weijiang.yang@intel.com>
- <YqsB9upUystxvl+d@hirez.programming.kicks-ass.net>
- <62d4f7f0-e7b2-83ad-a2c7-a90153129da2@redhat.com>
- <Yqs7qjjbqxpw62B/@hirez.programming.kicks-ass.net>
- <8a38488d-fb6e-72f9-3529-b098a97d8c97@redhat.com>
- <2855f8a9-1f77-0265-f02c-b7d584bd8990@intel.com>
- <YtBwRIiZi262hHiE@google.com>
- <950988cd-708c-af25-9d0e-47062aded504@intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=njHUUTRkwNmezhjrHml0mpe3Yz515QMHQkK9aErxP34=;
+        b=ws5VeE2P80nKjzR7luCXMxDxGskJcvlxKP9Ev0M1AIRH2KBLKIZJ1G9CR97nxLIqlo
+         30GdbyNbjitM4FQVNPpXepk7YvEmU7pgHci5D33i0okqQpGiF6wc96t7CpLXLzEmQkGz
+         CPQiwJnE9TNrye5J3k9wngYbjWKEXNRJTTlGIRlFoLXdWgbBAeDELn3FgyshpFIxmWR3
+         GLuoJ1sY3D85Z+oJi6xwMoJuTH/EB54BS/gx7wxH9KfrDJwAn6EFCtzoLtoSqORDFgmD
+         wWccDsvBPAFS+VTTuwXc204k8xHW5pFF1YdCiooP0VAmQG/6Cv9LucSm21/R1QbVPned
+         qCtw==
+X-Gm-Message-State: AJIora8Wu0ab823IEPfZNwQVQ+Eu7cUGZl5ZkjTOCnoeCLRjAapB1dDr
+        cEH2FMqWLgovTxninAtO/Tjq//Ilf31/Ow==
+X-Google-Smtp-Source: AGRyM1vfYuTFCuR3ahysJXP4YouQC50dvGwPmjhXLczZkazqXOvo9kytNyAd01U6EKPYOpWy9M9nDw==
+X-Received: by 2002:a05:6e02:190a:b0:2dc:852c:bb4a with SMTP id w10-20020a056e02190a00b002dc852cbb4amr7721800ilu.208.1657900706818;
+        Fri, 15 Jul 2022 08:58:26 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id f96-20020a0284e9000000b0033cbbf0b762sm2089065jai.116.2022.07.15.08.58.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 08:58:26 -0700 (PDT)
+Message-ID: <26d913ea-7aa0-467d-4caf-a93f8ca5b3ff@kernel.dk>
+Date:   Fri, 15 Jul 2022 09:58:24 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <950988cd-708c-af25-9d0e-47062aded504@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [LKP] Re: [io_uring] 584b0180f0:
+ phoronix-test-suite.fio.SequentialWrite.IO_uring.Yes.Yes.1MB.DefaultTestDirectory.mb_s
+ -10.2% regression
+Content-Language: en-US
+To:     Yin Fengwei <fengwei.yin@intel.com>,
+        kernel test robot <oliver.sang@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        lkp@lists.01.org, lkp@intel.com
+References: <20220527092432.GE11731@xsang-OptiPlex-9020>
+ <2085bfef-a91c-8adb-402b-242e8c5d5c55@kernel.dk>
+ <0d60aa42-a519-12ad-3c69-72ed12398865@intel.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <0d60aa42-a519-12ad-3c69-72ed12398865@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022, Yang, Weijiang wrote:
+On 7/12/22 2:06 AM, Yin Fengwei wrote:
+> Hi Jens,
 > 
-> On 7/15/2022 3:36 AM, Sean Christopherson wrote:
-> > It's definitely uncommon; unless I'm forgetting features, LA57 is the only feature
-> > that KVM fully virtualizes (as opposed to emulates in software) without requiring
-> > host enablement.  Ah, and good ol' MPX, which is probably the best prior are since
-> > it shares the same XSAVE+VMCS for user+supervisor state management.  So more than
-> > one, but still not very many.
+> On 5/27/2022 9:50 PM, Jens Axboe wrote:
+>> I'm a bit skeptical on this, but I'd like to try and run the test case.
+>> Since it's just a fio test case, why can't I find it somewhere? Seems
+>> very convoluted to have to setup lkp-tests just for this. Besides, I
+>> tried, but it doesn't work on aarch64...
+> Recheck this regression report. The regression could be reproduced if
+> the following config file is used with fio (tag: fio-3.25) :
 > 
-> Speaking of MPX, is it really active in recent kernel? I can find little
-> piece of code at native side, instead, more code in KVM.
+> 	[global]
+> 	rw=write
+> 	ioengine=io_uring
+> 	iodepth=64
+> 	size=1g
+> 	direct=1
+> 	buffered=1
+> 	startdelay=5
+> 	force_async=4
+> 	ramp_time=5
+> 	runtime=20
+> 	time_based
+> 	clat_percentiles=0
+> 	disable_lat=1
+> 	disable_clat=1
+> 	disable_slat=1
+> 	filename=test_fiofile
+> 	[test]
+> 	name=test
+> 	bs=1M
+> 	stonewall
+> 
+> Just FYI, a small change to commit: 584b0180f0f4d67d7145950fe68c625f06c88b10:
+> 
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index 969f65de9972..616d857f8fc6 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -3181,8 +3181,13 @@ static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+>  {
+>         struct kiocb *kiocb = &req->rw.kiocb;
+>         unsigned ioprio;
+> +       struct file *file = req->file;
+>         int ret;
+> 
+> +       if (likely(file && (file->f_mode & FMODE_WRITE)))
+> +               if (!io_req_ffs_set(req))
+> +                       req->flags |= io_file_get_flags(file) << REQ_F_SUPPORT_NOWAIT_BIT;
+> +
+>         kiocb->ki_pos = READ_ONCE(sqe->off);
+> 
+>         ioprio = READ_ONCE(sqe->ioprio);
+> 
+> could make regression gone. No idea how req->flags impact the write
+> performance. Thanks.
 
-Nope, native MPX support was ripped out a year or two ago.  The kernel provides
-just enough save+restore support so that KVM can continue to virtualize MPX.
+I can't really explain that either, at least not immediately. I tried
+running with and without that patch, and don't see any difference here.
+In terms of making this more obvious, does the below also fix it for
+you?
+
+And what filesystem is this being run on?
+
+
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index a01ea49f3017..797fad99780d 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -4269,9 +4269,6 @@ static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
+ 	if (unlikely(!file || !(file->f_mode & mode)))
+ 		return -EBADF;
+ 
+-	if (!io_req_ffs_set(req))
+-		req->flags |= io_file_get_flags(file) << REQ_F_SUPPORT_NOWAIT_BIT;
+-
+ 	kiocb->ki_flags = iocb_flags(file);
+ 	ret = kiocb_set_rw_flags(kiocb, req->rw.flags);
+ 	if (unlikely(ret))
+@@ -8309,7 +8306,13 @@ static bool io_assign_file(struct io_kiocb *req, unsigned int issue_flags)
+ 	else
+ 		req->file = io_file_get_normal(req, req->cqe.fd);
+ 
+-	return !!req->file;
++	if (unlikely(!req->file))
++		return false;
++
++	if (!io_req_ffs_set(req))
++		req->flags |= io_file_get_flags(file) << REQ_F_SUPPORT_NOWAIT_BIT;
++
++	return true;
+ }
+ 
+ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
+
+-- 
+Jens Axboe
+

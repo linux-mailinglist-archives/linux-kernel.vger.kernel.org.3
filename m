@@ -2,832 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C9A57632D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D72576332
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234731AbiGONyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 09:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
+        id S234912AbiGON4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 09:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbiGONyi (ORCPT
+        with ESMTP id S233141AbiGONz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 09:54:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7FA4D4C3
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 06:54:36 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 012151FEA8;
-        Fri, 15 Jul 2022 13:54:35 +0000 (UTC)
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id DD99E2C141;
-        Fri, 15 Jul 2022 13:54:34 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] pcmcia: remove VR41XX PCMCIA driver
-Date:   Fri, 15 Jul 2022 15:54:31 +0200
-Message-Id: <20220715135431.134844-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.29.2
+        Fri, 15 Jul 2022 09:55:59 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215B66872E
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 06:55:58 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id w81so6214357oiw.0
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 06:55:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fmTpiXQsRGba6Ab2CmL1NtPiLfD0z73ZyAdaCn9pALw=;
+        b=H7fWj0XkAq8MDBI1mBbQ1020de9SLOGyH72c6VSc+FqcYsBfX+OgMVfxFlb0q3RXLR
+         quVkqfwqd0ImP99UyZyuBvTzG1tOgfTfD0gUaqKSWA2BgvaK9LI4BTNSyuCL6pU7gAPP
+         q74pdZGJb2YIkvSSO8wqIkGuI5+sx4Xu+GXrZ06YbQo0yJDZjNKJlmINJfA/WGE99HCM
+         Q4FlqllVKRBjMEvmlQhC08Qr5ze+Xd8nAsbwNVlj14N1IV7esFJ1eak1e7ei9hPhah5z
+         w8mz8H9jy44cZ7w3gRMjNh8hlgmHFAfT0ULFxEGBjURn40N5PW5GZ9YS+qPK2VPAx2kt
+         HaUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fmTpiXQsRGba6Ab2CmL1NtPiLfD0z73ZyAdaCn9pALw=;
+        b=CsDfPU4YrwVrhtM8E0AC5GlCyywC+IwFx3dE4o2rzhaox+BOGaLdRFSt3QngewL8pJ
+         NAtms52qWvJQuxu9vNnWR+Wf9iXm5f25vwFiZ4nJ1+5RqwYVI5RaOB8oa0DKfmnBsVcC
+         mTPwgUL8FVw8vyDYn66q/kZM/GuVWGQxasRF2UvQ4wtCYN8WvTrQiGa/H3zih++4agRY
+         4G+XIHPPcHUV5OzfIloV4V+bJbUy2TodPSIFqQ053SYSSMyqigZOeJbLg2PaB9fM+sK+
+         Bew9Laxg9qLk+XC9ebWb8vQjoGAfuD/00RRGiPVOHrL9701VO/hXmNP66CcFJcIuZb1h
+         nDnA==
+X-Gm-Message-State: AJIora9YGPeFMzuIq/WkRPNJneFuLbF0AlKGsBvHFpomT9EStVp79BHT
+        kCuy1RYhig4jIPclx68N0i0JXstPVdFuoHNjZxPoeg==
+X-Google-Smtp-Source: AGRyM1te6pRsqRJI/o6//1EtStQg49wCaMpJRijOqffmG8CLlNXMADlHS0l7R6s1wXrzSW3eurlZBWpmbRR3FfXtC80=
+X-Received: by 2002:a05:6808:1596:b0:337:8c17:b17f with SMTP id
+ t22-20020a056808159600b003378c17b17fmr7427949oiw.294.1657893355814; Fri, 15
+ Jul 2022 06:55:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715061027.1612149-1-kaleshsingh@google.com>
+In-Reply-To: <20220715061027.1612149-1-kaleshsingh@google.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Fri, 15 Jul 2022 14:55:19 +0100
+Message-ID: <CA+EHjTzPu9hticW4sPbVsxp43swRGOv4ou843S=Q5q=oQ6ii=g@mail.gmail.com>
+Subject: Re: [PATCH v4 00/18] KVM nVHE Hypervisor stack unwinder
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     maz@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
+        madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com,
+        james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com,
+        andreyknvl@gmail.com, russell.king@oracle.com,
+        vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org,
+        drjones@redhat.com, wangkefeng.wang@huawei.com, elver@google.com,
+        keirf@google.com, yuzenghui@huawei.com, ardb@kernel.org,
+        oupton@google.com, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        android-mm@google.com, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit d3164e2f3b0a ("MIPS: Remove VR41xx support") removed support
-for MIPS VR41xx platform, so remove exclusive drivers for this
-platform, too.
+Hi Kalesh,
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- drivers/pcmcia/Kconfig        |   4 -
- drivers/pcmcia/Makefile       |   1 -
- drivers/pcmcia/vrc4171_card.c | 745 ----------------------------------
- 3 files changed, 750 deletions(-)
- delete mode 100644 drivers/pcmcia/vrc4171_card.c
+On Fri, Jul 15, 2022 at 7:10 AM Kalesh Singh <kaleshsingh@google.com> wrote:
+>
+> Hi all,
+>
+> This is v4 of the series adding support for nVHE hypervisor stacktraces;
+> and is based on arm64 for-next/stacktrace.
+>
+> Thanks all for your feedback on previous revisions. Mark Brown, I
+> appreciate your Reviewed-by on the v3, I have dropped the tags in this
+> new verision since I think the series has changed quite a bit.
+>
+> The previous versions were posted at:
+> v3: https://lore.kernel.org/r/20220607165105.639716-1-kaleshsingh@google.com/
+> v2: https://lore.kernel.org/r/20220502191222.4192768-1-kaleshsingh@google.com/
+> v1: https://lore.kernel.org/r/20220427184716.1949239-1-kaleshsingh@google.com/
+>
+> The main updates in this version are to address concerens from Marc on the
+> memory usage and reusing the common code by refactoring into a shared header.
+>
+> Thanks,
+> Kalesh
 
-diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
-index bf495bf0f48a..90ebc688ec05 100644
---- a/drivers/pcmcia/Kconfig
-+++ b/drivers/pcmcia/Kconfig
-@@ -240,10 +240,6 @@ config PCMCIA_PROBE
- 	bool
- 	default y if ISA && !ARCH_SA1100 && !PARISC
- 
--config PCMCIA_VRC4171
--	tristate "NEC VRC4171 Card Controllers support"
--	depends on CPU_VR41XX && ISA && PCMCIA
--
- config OMAP_CF
- 	tristate "OMAP CompactFlash Controller"
- 	depends on PCMCIA
-diff --git a/drivers/pcmcia/Makefile b/drivers/pcmcia/Makefile
-index c59ddde42007..1c3ae8888e5f 100644
---- a/drivers/pcmcia/Makefile
-+++ b/drivers/pcmcia/Makefile
-@@ -29,7 +29,6 @@ obj-$(CONFIG_PCMCIA_SA11XX_BASE)		+= sa11xx_base.o
- obj-$(CONFIG_PCMCIA_SA1100)			+= sa1100_cs.o
- obj-$(CONFIG_PCMCIA_SA1111)			+= sa1111_cs.o
- obj-$(CONFIG_PCMCIA_BCM63XX)			+= bcm63xx_pcmcia.o
--obj-$(CONFIG_PCMCIA_VRC4171)			+= vrc4171_card.o
- obj-$(CONFIG_OMAP_CF)				+= omap_cf.o
- obj-$(CONFIG_AT91_CF)				+= at91_cf.o
- obj-$(CONFIG_ELECTRA_CF)			+= electra_cf.o
-diff --git a/drivers/pcmcia/vrc4171_card.c b/drivers/pcmcia/vrc4171_card.c
-deleted file mode 100644
-index 177d77892144..000000000000
---- a/drivers/pcmcia/vrc4171_card.c
-+++ /dev/null
-@@ -1,745 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * vrc4171_card.c, NEC VRC4171 Card Controller driver for Socket Services.
-- *
-- * Copyright (C) 2003-2005  Yoichi Yuasa <yuasa@linux-mips.org>
-- */
--#include <linux/init.h>
--#include <linux/ioport.h>
--#include <linux/interrupt.h>
--#include <linux/module.h>
--#include <linux/spinlock.h>
--#include <linux/types.h>
--#include <linux/platform_device.h>
--
--#include <asm/io.h>
--
--#include <pcmcia/ss.h>
--
--#include "i82365.h"
--
--MODULE_DESCRIPTION("NEC VRC4171 Card Controllers driver for Socket Services");
--MODULE_AUTHOR("Yoichi Yuasa <yuasa@linux-mips.org>");
--MODULE_LICENSE("GPL");
--
--#define CARD_MAX_SLOTS		2
--#define CARD_SLOTA		0
--#define CARD_SLOTB		1
--#define CARD_SLOTB_OFFSET	0x40
--
--#define CARD_MEM_START		0x10000000
--#define CARD_MEM_END		0x13ffffff
--#define CARD_MAX_MEM_OFFSET	0x3ffffff
--#define CARD_MAX_MEM_SPEED	1000
--
--#define CARD_CONTROLLER_INDEX	0x03e0
--#define CARD_CONTROLLER_DATA	0x03e1
-- /* Power register */
--  #define VPP_GET_VCC		0x01
--  #define POWER_ENABLE		0x10
-- #define CARD_VOLTAGE_SENSE	0x1f
--  #define VCC_3VORXV_CAPABLE	0x00
--  #define VCC_XV_ONLY		0x01
--  #define VCC_3V_CAPABLE	0x02
--  #define VCC_5V_ONLY		0x03
-- #define CARD_VOLTAGE_SELECT	0x2f
--  #define VCC_3V		0x01
--  #define VCC_5V		0x00
--  #define VCC_XV		0x02
--  #define VCC_STATUS_3V		0x02
--  #define VCC_STATUS_5V		0x01
--  #define VCC_STATUS_XV		0x03
-- #define GLOBAL_CONTROL		0x1e
--  #define EXWRBK		0x04
--  #define IRQPM_EN		0x08
--  #define CLRPMIRQ		0x10
--
--#define INTERRUPT_STATUS	0x05fa
-- #define IRQ_A			0x02
-- #define IRQ_B			0x04
--
--#define CONFIGURATION1		0x05fe
-- #define SLOTB_CONFIG		0xc000
-- #define SLOTB_NONE		0x0000
-- #define SLOTB_PCCARD		0x4000
-- #define SLOTB_CF		0x8000
-- #define SLOTB_FLASHROM		0xc000
--
--#define CARD_CONTROLLER_START	CARD_CONTROLLER_INDEX
--#define CARD_CONTROLLER_END	CARD_CONTROLLER_DATA
--
--#define IO_MAX_MAPS	2
--#define MEM_MAX_MAPS	5
--
--enum vrc4171_slot {
--	SLOT_PROBE = 0,
--	SLOT_NOPROBE_IO,
--	SLOT_NOPROBE_MEM,
--	SLOT_NOPROBE_ALL,
--	SLOT_INITIALIZED,
--};
--
--enum vrc4171_slotb {
--	SLOTB_IS_NONE,
--	SLOTB_IS_PCCARD,
--	SLOTB_IS_CF,
--	SLOTB_IS_FLASHROM,
--};
--
--struct vrc4171_socket {
--	enum vrc4171_slot slot;
--	struct pcmcia_socket pcmcia_socket;
--	char name[24];
--	int csc_irq;
--	int io_irq;
--	spinlock_t lock;
--};
--
--static struct vrc4171_socket vrc4171_sockets[CARD_MAX_SLOTS];
--static enum vrc4171_slotb vrc4171_slotb = SLOTB_IS_NONE;
--static char vrc4171_card_name[] = "NEC VRC4171 Card Controller";
--static unsigned int vrc4171_irq;
--static uint16_t vrc4171_irq_mask = 0xdeb8;
--
--static struct resource vrc4171_card_resource[3] = {
--	{	.name		= vrc4171_card_name,
--		.start		= CARD_CONTROLLER_START,
--		.end		= CARD_CONTROLLER_END,
--		.flags		= IORESOURCE_IO,	},
--	{	.name		= vrc4171_card_name,
--		.start		= INTERRUPT_STATUS,
--		.end		= INTERRUPT_STATUS,
--		.flags		= IORESOURCE_IO,	},
--	{	.name		= vrc4171_card_name,
--		.start		= CONFIGURATION1,
--		.end		= CONFIGURATION1,
--		.flags		= IORESOURCE_IO,	},
--};
--
--static struct platform_device vrc4171_card_device = {
--	.name		= vrc4171_card_name,
--	.id		= 0,
--	.num_resources	= 3,
--	.resource	= vrc4171_card_resource,
--};
--
--static inline uint16_t vrc4171_get_irq_status(void)
--{
--	return inw(INTERRUPT_STATUS);
--}
--
--static inline void vrc4171_set_multifunction_pin(enum vrc4171_slotb config)
--{
--	uint16_t config1;
--
--	config1 = inw(CONFIGURATION1);
--	config1 &= ~SLOTB_CONFIG;
--
--	switch (config) {
--	case SLOTB_IS_NONE:
--		config1 |= SLOTB_NONE;
--		break;
--	case SLOTB_IS_PCCARD:
--		config1 |= SLOTB_PCCARD;
--		break;
--	case SLOTB_IS_CF:
--		config1 |= SLOTB_CF;
--		break;
--	case SLOTB_IS_FLASHROM:
--		config1 |= SLOTB_FLASHROM;
--		break;
--	default:
--		break;
--	}
--
--	outw(config1, CONFIGURATION1);
--}
--
--static inline uint8_t exca_read_byte(int slot, uint8_t index)
--{
--	if (slot == CARD_SLOTB)
--		index += CARD_SLOTB_OFFSET;
--
--	outb(index, CARD_CONTROLLER_INDEX);
--	return inb(CARD_CONTROLLER_DATA);
--}
--
--static inline uint16_t exca_read_word(int slot, uint8_t index)
--{
--	uint16_t data;
--
--	if (slot == CARD_SLOTB)
--		index += CARD_SLOTB_OFFSET;
--
--	outb(index++, CARD_CONTROLLER_INDEX);
--	data = inb(CARD_CONTROLLER_DATA);
--
--	outb(index, CARD_CONTROLLER_INDEX);
--	data |= ((uint16_t)inb(CARD_CONTROLLER_DATA)) << 8;
--
--	return data;
--}
--
--static inline uint8_t exca_write_byte(int slot, uint8_t index, uint8_t data)
--{
--	if (slot == CARD_SLOTB)
--		index += CARD_SLOTB_OFFSET;
--
--	outb(index, CARD_CONTROLLER_INDEX);
--	outb(data, CARD_CONTROLLER_DATA);
--
--	return data;
--}
--
--static inline uint16_t exca_write_word(int slot, uint8_t index, uint16_t data)
--{
--	if (slot == CARD_SLOTB)
--		index += CARD_SLOTB_OFFSET;
--
--	outb(index++, CARD_CONTROLLER_INDEX);
--	outb(data, CARD_CONTROLLER_DATA);
--
--	outb(index, CARD_CONTROLLER_INDEX);
--	outb((uint8_t)(data >> 8), CARD_CONTROLLER_DATA);
--
--	return data;
--}
--
--static inline int search_nonuse_irq(void)
--{
--	int i;
--
--	for (i = 0; i < 16; i++) {
--		if (vrc4171_irq_mask & (1 << i)) {
--			vrc4171_irq_mask &= ~(1 << i);
--			return i;
--		}
--	}
--
--	return -1;
--}
--
--static int pccard_init(struct pcmcia_socket *sock)
--{
--	struct vrc4171_socket *socket;
--	unsigned int slot;
--
--	sock->features |= SS_CAP_PCCARD | SS_CAP_PAGE_REGS;
--	sock->irq_mask = 0;
--	sock->map_size = 0x1000;
--	sock->pci_irq = vrc4171_irq;
--
--	slot = sock->sock;
--	socket = &vrc4171_sockets[slot];
--	socket->csc_irq = search_nonuse_irq();
--	socket->io_irq = search_nonuse_irq();
--	spin_lock_init(&socket->lock);
--
--	return 0;
--}
--
--static int pccard_get_status(struct pcmcia_socket *sock, u_int *value)
--{
--	unsigned int slot;
--	uint8_t status, sense;
--	u_int val = 0;
--
--	if (sock == NULL || sock->sock >= CARD_MAX_SLOTS || value == NULL)
--		return -EINVAL;
--
--	slot = sock->sock;
--
--	status = exca_read_byte(slot, I365_STATUS);
--	if (exca_read_byte(slot, I365_INTCTL) & I365_PC_IOCARD) {
--		if (status & I365_CS_STSCHG)
--			val |= SS_STSCHG;
--	} else {
--		if (!(status & I365_CS_BVD1))
--			val |= SS_BATDEAD;
--		else if ((status & (I365_CS_BVD1 | I365_CS_BVD2)) == I365_CS_BVD1)
--			val |= SS_BATWARN;
--	}
--	if ((status & I365_CS_DETECT) == I365_CS_DETECT)
--		val |= SS_DETECT;
--	if (status & I365_CS_WRPROT)
--		val |= SS_WRPROT;
--	if (status & I365_CS_READY)
--		val |= SS_READY;
--	if (status & I365_CS_POWERON)
--		val |= SS_POWERON;
--
--	sense = exca_read_byte(slot, CARD_VOLTAGE_SENSE);
--	switch (sense) {
--	case VCC_3VORXV_CAPABLE:
--		val |= SS_3VCARD | SS_XVCARD;
--		break;
--	case VCC_XV_ONLY:
--		val |= SS_XVCARD;
--		break;
--	case VCC_3V_CAPABLE:
--		val |= SS_3VCARD;
--		break;
--	default:
--		/* 5V only */
--		break;
--	}
--
--	*value = val;
--
--	return 0;
--}
--
--static inline uint8_t set_Vcc_value(u_char Vcc)
--{
--	switch (Vcc) {
--	case 33:
--		return VCC_3V;
--	case 50:
--		return VCC_5V;
--	}
--
--	/* Small voltage is chosen for safety. */
--	return VCC_3V;
--}
--
--static int pccard_set_socket(struct pcmcia_socket *sock, socket_state_t *state)
--{
--	struct vrc4171_socket *socket;
--	unsigned int slot;
--	uint8_t voltage, power, control, cscint;
--
--	if (sock == NULL || sock->sock >= CARD_MAX_SLOTS ||
--	    (state->Vpp != state->Vcc && state->Vpp != 0) ||
--	    (state->Vcc != 50 && state->Vcc != 33 && state->Vcc != 0))
--		return -EINVAL;
--
--	slot = sock->sock;
--	socket = &vrc4171_sockets[slot];
--
--	spin_lock_irq(&socket->lock);
--
--	voltage = set_Vcc_value(state->Vcc);
--	exca_write_byte(slot, CARD_VOLTAGE_SELECT, voltage);
--
--	power = POWER_ENABLE;
--	if (state->Vpp == state->Vcc)
--		power |= VPP_GET_VCC;
--	if (state->flags & SS_OUTPUT_ENA)
--		power |= I365_PWR_OUT;
--	exca_write_byte(slot, I365_POWER, power);
--
--	control = 0;
--	if (state->io_irq != 0)
--		control |= socket->io_irq;
--	if (state->flags & SS_IOCARD)
--		control |= I365_PC_IOCARD;
--	if (state->flags & SS_RESET)
--		control	&= ~I365_PC_RESET;
--	else
--		control |= I365_PC_RESET;
--	exca_write_byte(slot, I365_INTCTL, control);
--
--        cscint = 0;
--        exca_write_byte(slot, I365_CSCINT, cscint);
--	exca_read_byte(slot, I365_CSC);	/* clear CardStatus change */
--	if (state->csc_mask != 0)
--		cscint |= socket->csc_irq << 8;
--	if (state->flags & SS_IOCARD) {
--		if (state->csc_mask & SS_STSCHG)
--			cscint |= I365_CSC_STSCHG;
--	} else {
--		if (state->csc_mask & SS_BATDEAD)
--			cscint |= I365_CSC_BVD1;
--		if (state->csc_mask & SS_BATWARN)
--			cscint |= I365_CSC_BVD2;
--	}
--	if (state->csc_mask & SS_READY)
--		cscint |= I365_CSC_READY;
--	if (state->csc_mask & SS_DETECT)
--		cscint |= I365_CSC_DETECT;
--        exca_write_byte(slot, I365_CSCINT, cscint);
--
--	spin_unlock_irq(&socket->lock);
--
--	return 0;
--}
--
--static int pccard_set_io_map(struct pcmcia_socket *sock, struct pccard_io_map *io)
--{
--	unsigned int slot;
--	uint8_t ioctl, addrwin;
--	u_char map;
--
--	if (sock == NULL || sock->sock >= CARD_MAX_SLOTS ||
--	    io == NULL || io->map >= IO_MAX_MAPS ||
--	    io->start > 0xffff || io->stop > 0xffff || io->start > io->stop)
--		return -EINVAL;
--
--	slot = sock->sock;
--	map = io->map;
--
--	addrwin = exca_read_byte(slot, I365_ADDRWIN);
--	if (addrwin & I365_ENA_IO(map)) {
--		addrwin &= ~I365_ENA_IO(map);
--		exca_write_byte(slot, I365_ADDRWIN, addrwin);
--	}
--
--	exca_write_word(slot, I365_IO(map)+I365_W_START, io->start);
--	exca_write_word(slot, I365_IO(map)+I365_W_STOP, io->stop);
--
--	ioctl = 0;
--	if (io->speed > 0)
--		ioctl |= I365_IOCTL_WAIT(map);
--	if (io->flags & MAP_16BIT)
--		ioctl |= I365_IOCTL_16BIT(map);
--	if (io->flags & MAP_AUTOSZ)
--		ioctl |= I365_IOCTL_IOCS16(map);
--	if (io->flags & MAP_0WS)
--		ioctl |= I365_IOCTL_0WS(map);
--	exca_write_byte(slot, I365_IOCTL, ioctl);
--
--	if (io->flags & MAP_ACTIVE) {
--		addrwin |= I365_ENA_IO(map);
--		exca_write_byte(slot, I365_ADDRWIN, addrwin);
--	}
--
--	return 0;
--}
--
--static int pccard_set_mem_map(struct pcmcia_socket *sock, struct pccard_mem_map *mem)
--{
--	unsigned int slot;
--	uint16_t start, stop, offset;
--	uint8_t addrwin;
--	u_char map;
--
--	if (sock == NULL || sock->sock >= CARD_MAX_SLOTS ||
--	    mem == NULL || mem->map >= MEM_MAX_MAPS ||
--	    mem->res->start < CARD_MEM_START || mem->res->start > CARD_MEM_END ||
--	    mem->res->end < CARD_MEM_START || mem->res->end > CARD_MEM_END ||
--	    mem->res->start > mem->res->end ||
--	    mem->card_start > CARD_MAX_MEM_OFFSET ||
--	    mem->speed > CARD_MAX_MEM_SPEED)
--		return -EINVAL;
--
--	slot = sock->sock;
--	map = mem->map;
--
--	addrwin = exca_read_byte(slot, I365_ADDRWIN);
--	if (addrwin & I365_ENA_MEM(map)) {
--		addrwin &= ~I365_ENA_MEM(map);
--		exca_write_byte(slot, I365_ADDRWIN, addrwin);
--	}
--
--	start = (mem->res->start >> 12) & 0x3fff;
--	if (mem->flags & MAP_16BIT)
--		start |= I365_MEM_16BIT;
--	exca_write_word(slot, I365_MEM(map)+I365_W_START, start);
--
--	stop = (mem->res->end >> 12) & 0x3fff;
--	switch (mem->speed) {
--	case 0:
--		break;
--	case 1:
--		stop |= I365_MEM_WS0;
--		break;
--	case 2:
--		stop |= I365_MEM_WS1;
--		break;
--	default:
--		stop |= I365_MEM_WS0 | I365_MEM_WS1;
--		break;
--	}
--	exca_write_word(slot, I365_MEM(map)+I365_W_STOP, stop);
--
--	offset = (mem->card_start >> 12) & 0x3fff;
--	if (mem->flags & MAP_ATTRIB)
--		offset |= I365_MEM_REG;
--	if (mem->flags & MAP_WRPROT)
--		offset |= I365_MEM_WRPROT;
--	exca_write_word(slot, I365_MEM(map)+I365_W_OFF, offset);
--
--	if (mem->flags & MAP_ACTIVE) {
--		addrwin |= I365_ENA_MEM(map);
--		exca_write_byte(slot, I365_ADDRWIN, addrwin);
--	}
--
--	return 0;
--}
--
--static struct pccard_operations vrc4171_pccard_operations = {
--	.init			= pccard_init,
--	.get_status		= pccard_get_status,
--	.set_socket		= pccard_set_socket,
--	.set_io_map		= pccard_set_io_map,
--	.set_mem_map		= pccard_set_mem_map,
--};
--
--static inline unsigned int get_events(int slot)
--{
--	unsigned int events = 0;
--	uint8_t status, csc;
--
--	status = exca_read_byte(slot, I365_STATUS);
--	csc = exca_read_byte(slot, I365_CSC);
--
--	if (exca_read_byte(slot, I365_INTCTL) & I365_PC_IOCARD) {
--		if ((csc & I365_CSC_STSCHG) && (status & I365_CS_STSCHG))
--			events |= SS_STSCHG;
--	} else {
--		if (csc & (I365_CSC_BVD1 | I365_CSC_BVD2)) {
--			if (!(status & I365_CS_BVD1))
--				events |= SS_BATDEAD;
--			else if ((status & (I365_CS_BVD1 | I365_CS_BVD2)) == I365_CS_BVD1)
--				events |= SS_BATWARN;
--		}
--	}
--	if ((csc & I365_CSC_READY) && (status & I365_CS_READY))
--		events |= SS_READY;
--	if ((csc & I365_CSC_DETECT) && ((status & I365_CS_DETECT) == I365_CS_DETECT))
--		events |= SS_DETECT;
--
--	return events;
--}
--
--static irqreturn_t pccard_interrupt(int irq, void *dev_id)
--{
--	struct vrc4171_socket *socket;
--	unsigned int events;
--	irqreturn_t retval = IRQ_NONE;
--	uint16_t status;
--
--	status = vrc4171_get_irq_status();
--	if (status & IRQ_A) {
--		socket = &vrc4171_sockets[CARD_SLOTA];
--		if (socket->slot == SLOT_INITIALIZED) {
--			if (status & (1 << socket->csc_irq)) {
--				events = get_events(CARD_SLOTA);
--				if (events != 0) {
--					pcmcia_parse_events(&socket->pcmcia_socket, events);
--					retval = IRQ_HANDLED;
--				}
--			}
--		}
--	}
--
--	if (status & IRQ_B) {
--		socket = &vrc4171_sockets[CARD_SLOTB];
--		if (socket->slot == SLOT_INITIALIZED) {
--			if (status & (1 << socket->csc_irq)) {
--				events = get_events(CARD_SLOTB);
--				if (events != 0) {
--					pcmcia_parse_events(&socket->pcmcia_socket, events);
--					retval = IRQ_HANDLED;
--				}
--			}
--		}
--	}
--
--	return retval;
--}
--
--static inline void reserve_using_irq(int slot)
--{
--	unsigned int irq;
--
--	irq = exca_read_byte(slot, I365_INTCTL);
--	irq &= 0x0f;
--	vrc4171_irq_mask &= ~(1 << irq);
--
--	irq = exca_read_byte(slot, I365_CSCINT);
--	irq = (irq & 0xf0) >> 4;
--	vrc4171_irq_mask &= ~(1 << irq);
--}
--
--static int vrc4171_add_sockets(void)
--{
--	struct vrc4171_socket *socket;
--	int slot, retval;
--
--	for (slot = 0; slot < CARD_MAX_SLOTS; slot++) {
--		if (slot == CARD_SLOTB && vrc4171_slotb == SLOTB_IS_NONE)
--			continue;
--
--		socket = &vrc4171_sockets[slot];
--		if (socket->slot != SLOT_PROBE) {
--			uint8_t addrwin;
--
--			switch (socket->slot) {
--			case SLOT_NOPROBE_MEM:
--				addrwin = exca_read_byte(slot, I365_ADDRWIN);
--				addrwin &= 0x1f;
--				exca_write_byte(slot, I365_ADDRWIN, addrwin);
--				break;
--			case SLOT_NOPROBE_IO:
--				addrwin = exca_read_byte(slot, I365_ADDRWIN);
--				addrwin &= 0xc0;
--				exca_write_byte(slot, I365_ADDRWIN, addrwin);
--				break;
--			default:
--				break;
--			}
--
--			reserve_using_irq(slot);
--			continue;
--		}
--
--		sprintf(socket->name, "NEC VRC4171 Card Slot %1c", 'A' + slot);
--		socket->pcmcia_socket.dev.parent = &vrc4171_card_device.dev;
--		socket->pcmcia_socket.ops = &vrc4171_pccard_operations;
--		socket->pcmcia_socket.owner = THIS_MODULE;
--
--		retval = pcmcia_register_socket(&socket->pcmcia_socket);
--		if (retval < 0)
--			return retval;
--
--		exca_write_byte(slot, I365_ADDRWIN, 0);
--		exca_write_byte(slot, GLOBAL_CONTROL, 0);
--
--		socket->slot = SLOT_INITIALIZED;
--	}
--
--	return 0;
--}
--
--static void vrc4171_remove_sockets(void)
--{
--	struct vrc4171_socket *socket;
--	int slot;
--
--	for (slot = 0; slot < CARD_MAX_SLOTS; slot++) {
--		if (slot == CARD_SLOTB && vrc4171_slotb == SLOTB_IS_NONE)
--			continue;
--
--		socket = &vrc4171_sockets[slot];
--		if (socket->slot == SLOT_INITIALIZED)
--			pcmcia_unregister_socket(&socket->pcmcia_socket);
--
--		socket->slot = SLOT_PROBE;
--	}
--}
--
--static int vrc4171_card_setup(char *options)
--{
--	if (options == NULL || *options == '\0')
--		return 1;
--
--	if (strncmp(options, "irq:", 4) == 0) {
--		int irq;
--		options += 4;
--		irq = simple_strtoul(options, &options, 0);
--		if (irq >= 0 && irq < nr_irqs)
--			vrc4171_irq = irq;
--
--		if (*options != ',')
--			return 1;
--		options++;
--	}
--
--	if (strncmp(options, "slota:", 6) == 0) {
--		options += 6;
--		if (*options != '\0') {
--			if (strncmp(options, "memnoprobe", 10) == 0) {
--				vrc4171_sockets[CARD_SLOTA].slot = SLOT_NOPROBE_MEM;
--				options += 10;
--			} else if (strncmp(options, "ionoprobe", 9) == 0) {
--				vrc4171_sockets[CARD_SLOTA].slot = SLOT_NOPROBE_IO;
--				options += 9;
--			} else if ( strncmp(options, "noprobe", 7) == 0) {
--				vrc4171_sockets[CARD_SLOTA].slot = SLOT_NOPROBE_ALL;
--				options += 7;
--			}
--
--			if (*options != ',')
--				return 1;
--			options++;
--		} else
--			return 1;
--
--	}
--
--	if (strncmp(options, "slotb:", 6) == 0) {
--		options += 6;
--		if (*options != '\0') {
--			if (strncmp(options, "pccard", 6) == 0) {
--				vrc4171_slotb = SLOTB_IS_PCCARD;
--				options += 6;
--			} else if (strncmp(options, "cf", 2) == 0) {
--				vrc4171_slotb = SLOTB_IS_CF;
--				options += 2;
--			} else if (strncmp(options, "flashrom", 8) == 0) {
--				vrc4171_slotb = SLOTB_IS_FLASHROM;
--				options += 8;
--			} else if (strncmp(options, "none", 4) == 0) {
--				vrc4171_slotb = SLOTB_IS_NONE;
--				options += 4;
--			}
--
--			if (*options != ',')
--				return 1;
--			options++;
--
--			if (strncmp(options, "memnoprobe", 10) == 0)
--				vrc4171_sockets[CARD_SLOTB].slot = SLOT_NOPROBE_MEM;
--			if (strncmp(options, "ionoprobe", 9) == 0)
--				vrc4171_sockets[CARD_SLOTB].slot = SLOT_NOPROBE_IO;
--			if (strncmp(options, "noprobe", 7) == 0)
--				vrc4171_sockets[CARD_SLOTB].slot = SLOT_NOPROBE_ALL;
--		}
--	}
--
--	return 1;
--}
--
--__setup("vrc4171_card=", vrc4171_card_setup);
--
--static struct platform_driver vrc4171_card_driver = {
--	.driver = {
--		.name		= vrc4171_card_name,
--	},
--};
--
--static int vrc4171_card_init(void)
--{
--	int retval;
--
--	retval = platform_driver_register(&vrc4171_card_driver);
--	if (retval < 0)
--		return retval;
--
--	retval = platform_device_register(&vrc4171_card_device);
--	if (retval < 0) {
--		platform_driver_unregister(&vrc4171_card_driver);
--		return retval;
--	}
--
--	vrc4171_set_multifunction_pin(vrc4171_slotb);
--
--	retval = vrc4171_add_sockets();
--	if (retval == 0)
--		retval = request_irq(vrc4171_irq, pccard_interrupt, IRQF_SHARED,
--		                     vrc4171_card_name, vrc4171_sockets);
--
--	if (retval < 0) {
--		vrc4171_remove_sockets();
--		platform_device_unregister(&vrc4171_card_device);
--		platform_driver_unregister(&vrc4171_card_driver);
--		return retval;
--	}
--
--	printk(KERN_INFO "%s, connected to IRQ %d\n",
--		vrc4171_card_driver.driver.name, vrc4171_irq);
--
--	return 0;
--}
--
--static void vrc4171_card_exit(void)
--{
--	free_irq(vrc4171_irq, vrc4171_sockets);
--	vrc4171_remove_sockets();
--	platform_device_unregister(&vrc4171_card_device);
--	platform_driver_unregister(&vrc4171_card_driver);
--}
--
--module_init(vrc4171_card_init);
--module_exit(vrc4171_card_exit);
--- 
-2.29.2
+I tested an earlier version of this patch series, and it worked fine,
+with symbolization. However, testing it now, both with nvhe and with
+pkvm the symbolization isn't working for me. e.g.
 
+[   32.986706] kvm [251]: Protected nVHE HYP call trace:
+[   32.986796] kvm [251]:  [<ffff800008f8b0e0>] 0xffff800008f8b0e0
+[   32.987391] kvm [251]:  [<ffff800008f8b388>] 0xffff800008f8b388
+[   32.987493] kvm [251]:  [<ffff800008f8d230>] 0xffff800008f8d230
+[   32.987591] kvm [251]:  [<ffff800008f8d51c>] 0xffff800008f8d51c
+[   32.987695] kvm [251]:  [<ffff800008f8c064>] 0xffff800008f8c064
+[   32.987803] kvm [251]: ---- End of Protected nVHE HYP call trace ----
+
+CONFIG_PROTECTED_NVHE_STACKTRACE CONFIG_NVHE_EL2_DEBUG and
+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT are all enabled. Generating
+a backtrace in the host I get proper symbolisation.
+
+Is there anything else you'd like to know about my setup that would
+help get to the bottom of this?
+
+Thanks,
+/fuad
+
+
+
+
+>
+> ============
+>
+> KVM nVHE Stack unwinding.
+> ===
+>
+> nVHE has two modes of operation: protected (pKVM) and unprotected
+> (conventional nVHE). Depending on the mode, a slightly different approach
+> is used to dump the hyperviosr stacktrace but the core unwinding logic
+> remains the same.
+>
+> Protected nVHE (pKVM) stacktraces
+> ====
+>
+> In protected nVHE mode, the host cannot directly access hypervisor memory.
+>
+> The hypervisor stack unwinding happens in EL2 and is made accessible to
+> the host via a shared buffer. Symbolizing and printing the stacktrace
+> addresses is delegated to the host and happens in EL1.
+>
+> Non-protected (Conventional) nVHE stacktraces
+> ====
+>
+> In non-protected mode, the host is able to directly access the hypervisor
+> stack pages.
+>
+> The hypervisor stack unwinding and dumping of the stacktrace is performed
+> by the host in EL1, as this avoids the memory overhead of setting up
+> shared buffers between the host and hypervisor.
+>
+> Resuing the Core Unwinding Logic
+> ====
+>
+> Since the hypervisor cannot link against the kernel code in proteced mode.
+> The common stack unwinding code is moved to a shared header to allow reuse
+> in the nVHE hypervisor.
+>
+> Reducing the memory footprint
+> ====
+>
+> In this version the below steps were taken to reduce the memory usage of
+> nVHE stack unwinding:
+>
+>     1) The nVHE overflow stack is reduced from PAGE_SIZE to 4KB; benificial
+>        for configurations with non 4KB pages (16KB or 64KB pages).
+>     2) In protected nVHE mode (pKVM), the shared stacktrace buffers with the
+>        host are reduced from PAGE_SIZE to the minimum size required.
+>     3) In systems other than Android, conventional nVHE makes up the vast
+>        majority of use case. So the pKVM stack tracing is disabled by default
+>        (!CONFIG_PROTECTED_NVHE_STACKTRACE), which avoid the memory usage for
+>        setting up shared buffers.
+>     4) In non-protected nVHE mode (conventional nVHE), the stack unwinding
+>        is done directly in EL1 by the host and no shared buffers with the
+>        hyperviosr are needed.
+>
+> Sample Output
+> ====
+>
+> The below shows an example output from a simple stack overflow test:
+>
+> [  126.862960] kvm [371]: nVHE hyp panic at: [<ffff8000090a51d0>] __kvm_nvhe_recursive_death+0x10/0x34!
+> [  126.869920] kvm [371]: Protected nVHE HYP call trace:
+> [  126.870528] kvm [371]:  [<ffff8000090a5570>] __kvm_nvhe_hyp_panic+0xac/0xf8
+> [  126.871342] kvm [371]:  [<ffff8000090a55cc>] __kvm_nvhe_hyp_panic_bad_stack+0x10/0x10
+> [  126.872174] kvm [371]:  [<ffff8000090a51e4>] __kvm_nvhe_recursive_death+0x24/0x34
+> [  126.872971] kvm [371]:  [<ffff8000090a51e4>] __kvm_nvhe_recursive_death+0x24/0x34
+>    . . .
+>
+> [  126.927314] kvm [371]:  [<ffff8000090a51e4>] __kvm_nvhe_recursive_death+0x24/0x34
+> [  126.927727] kvm [371]:  [<ffff8000090a51e4>] __kvm_nvhe_recursive_death+0x24/0x34
+> [  126.928137] kvm [371]:  [<ffff8000090a4de4>] __kvm_nvhe___kvm_vcpu_run+0x30/0x40c
+> [  126.928561] kvm [371]:  [<ffff8000090a7b64>] __kvm_nvhe_handle___kvm_vcpu_run+0x30/0x48
+> [  126.928984] kvm [371]:  [<ffff8000090a78b8>] __kvm_nvhe_handle_trap+0xc4/0x128
+> [  126.929385] kvm [371]:  [<ffff8000090a6864>] __kvm_nvhe___host_exit+0x64/0x64
+> [  126.929804] kvm [371]: ---- End of Protected nVHE HYP call trace ----
+>
+> ============
+>
+>
+> Kalesh Singh (18):
+>   arm64: stacktrace: Add shared header for common stack unwinding code
+>   arm64: stacktrace: Factor out on_accessible_stack_common()
+>   arm64: stacktrace: Factor out unwind_next_common()
+>   arm64: stacktrace: Handle frame pointer from different address spaces
+>   arm64: stacktrace: Factor out common unwind()
+>   arm64: stacktrace: Add description of stacktrace/common.h
+>   KVM: arm64: On stack overflow switch to hyp overflow_stack
+>   KVM: arm64: Add PROTECTED_NVHE_STACKTRACE Kconfig
+>   KVM: arm64: Allocate shared pKVM hyp stacktrace buffers
+>   KVM: arm64: Stub implementation of pKVM HYP stack unwinder
+>   KVM: arm64: Stub implementation of non-protected nVHE HYP stack
+>     unwinder
+>   KVM: arm64: Save protected-nVHE (pKVM) hyp stacktrace
+>   KVM: arm64: Prepare non-protected nVHE hypervisor stacktrace
+>   KVM: arm64: Implement protected nVHE hyp stack unwinder
+>   KVM: arm64: Implement non-protected nVHE hyp stack unwinder
+>   KVM: arm64: Introduce pkvm_dump_backtrace()
+>   KVM: arm64: Introduce hyp_dump_backtrace()
+>   KVM: arm64: Dump nVHE hypervisor stack on panic
+>
+>  arch/arm64/include/asm/kvm_asm.h           |  16 ++
+>  arch/arm64/include/asm/memory.h            |   7 +
+>  arch/arm64/include/asm/stacktrace.h        |  92 ++++---
+>  arch/arm64/include/asm/stacktrace/common.h | 224 ++++++++++++++++
+>  arch/arm64/include/asm/stacktrace/nvhe.h   | 291 +++++++++++++++++++++
+>  arch/arm64/kernel/stacktrace.c             | 157 -----------
+>  arch/arm64/kvm/Kconfig                     |  15 ++
+>  arch/arm64/kvm/arm.c                       |   2 +-
+>  arch/arm64/kvm/handle_exit.c               |   4 +
+>  arch/arm64/kvm/hyp/nvhe/Makefile           |   2 +-
+>  arch/arm64/kvm/hyp/nvhe/host.S             |   9 +-
+>  arch/arm64/kvm/hyp/nvhe/stacktrace.c       | 108 ++++++++
+>  arch/arm64/kvm/hyp/nvhe/switch.c           |   5 +
+>  13 files changed, 727 insertions(+), 205 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/stacktrace/common.h
+>  create mode 100644 arch/arm64/include/asm/stacktrace/nvhe.h
+>  create mode 100644 arch/arm64/kvm/hyp/nvhe/stacktrace.c
+>
+>
+> base-commit: 82a592c13b0aeff94d84d54183dae0b26384c95f
+> --
+> 2.37.0.170.g444d1eabd0-goog
+>

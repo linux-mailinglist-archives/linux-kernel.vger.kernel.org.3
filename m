@@ -2,98 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2B15762CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896C85762CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiGON2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 09:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
+        id S232367AbiGON3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 09:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbiGON22 (ORCPT
+        with ESMTP id S234625AbiGON3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 09:28:28 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2070.outbound.protection.outlook.com [40.107.20.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABB078DDF;
-        Fri, 15 Jul 2022 06:28:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KDV7S02357N4Y9xv7ibRghB/DnbPo+OyeV6LyJgQj+OrNJVMko4oi70FzxvHbiOsT3ehiqcwKMhULlph1FiYt1AM1FSJqJZN1qF8cwbAezyfKDxywWB92fXT7KT56wkslNPVg/A5OYZOQ+C4mMNMESFKMbk7ndlZtF8FH3C/RIwwAi6DWSgEFwOckFHobGtqqgizQQggwDOzy0IS2G0LGUWsjT54omH/5YsnWyLWf8fjAgCzxhoQydSHRHJuyVVmD1xcMw5QX3+av9blprtC++DXKXA+W1S4yLQlYOK6dYDhMJxqrOFbdPOB6Z4poGR8PQrtZKyl/q6sMq+d1/V2NQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DQnHQRE4XcKwhuLaI/t0iiaa21iKoxzvGgzXnm+iB8Y=;
- b=AT2uMxLIuUuH550G3Pc8NyPdLcFL+tREuskTrATNEZKg6SugOKUSfGJA8T5MO+0A+5U+h7L530pBQB65csWSerDYofx5AdX4Y8wW65qgOp0J6dKkegXeGxsiP0XqGY5SP1qvKH8q/ze0GJG0JUAmJbWFnqdqCo+X5N6aWSQ/Wqt2A7FaPY4Pu5IFczJaXnLPyf+KzZL1AH/rOVqtClGcmhdp7IXhX3DRVk0/CiCYVbnBPKMVAQF4Fi96riy7byIOIKiR+QEAoAPUosPFU9j2iCG8L067LPtvzfGy5T5CWxhlRSrl+EXeu1H2j6eQuFoEqv6APdVX8qjGmzf3/yPkCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 151.1.184.193) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=asem.it;
- dmarc=fail (p=none sp=none pct=100) action=none header.from=asem.it;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=asem.it; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DQnHQRE4XcKwhuLaI/t0iiaa21iKoxzvGgzXnm+iB8Y=;
- b=UJ19b53VjmskKOWDLzdklnKM9EaCoUxYw7+55GWbkIQcE/hpwwrVyEmO8j6nMAUbydPjaZyLw/gVBKDpMLSLwfwXU6yL6hB/v3O9fprFimTYsADzvMsYeYXp6vYCCv3enHzgezMSPVx+iCj6tIMd9TcKLPTXFnin/5BZ5hTByMg=
-Received: from DB6PR0301CA0102.eurprd03.prod.outlook.com (2603:10a6:6:30::49)
- by AM7PR01MB6994.eurprd01.prod.exchangelabs.com (2603:10a6:20b:1c2::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.21; Fri, 15 Jul
- 2022 13:28:22 +0000
-Received: from DB5EUR01FT013.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:6:30:cafe::d0) by DB6PR0301CA0102.outlook.office365.com
- (2603:10a6:6:30::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.19 via Frontend
- Transport; Fri, 15 Jul 2022 13:28:22 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 151.1.184.193) smtp.mailfrom=asem.it; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=asem.it;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- asem.it discourages use of 151.1.184.193 as permitted sender)
-Received: from asas054.asem.intra (151.1.184.193) by
- DB5EUR01FT013.mail.protection.outlook.com (10.152.4.239) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5438.14 via Frontend Transport; Fri, 15 Jul 2022 13:28:21 +0000
-Received: from flavio-x.asem.intra ([172.16.17.64]) by asas054.asem.intra with Microsoft SMTPSVC(10.0.14393.0);
-         Fri, 15 Jul 2022 15:28:21 +0200
-From:   Flavio Suligoi <f.suligoi@asem.it>
-To:     Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        Flavio Suligoi <f.suligoi@asem.it>
-Subject: [PATCH v1] 2c: imx: fix typo in comment
-Date:   Fri, 15 Jul 2022 15:28:16 +0200
-Message-Id: <20220715132816.592657-1-f.suligoi@asem.it>
+        Fri, 15 Jul 2022 09:29:24 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E091237FF;
+        Fri, 15 Jul 2022 06:29:23 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id l124so4654350pfl.8;
+        Fri, 15 Jul 2022 06:29:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lmEbAYKWlOqPX2RjEuea2Sgy80PtCQ6vAnGW/GIiSPU=;
+        b=nW1VzwudviEYvqFXOa/22wLsBmSaClxipxEjXsDbuunL/jtsRLkzRJ0XgaCdDTlQCG
+         vd1Iy14VPseOW1lSpRlmdwD4ZJC683VIQfD58Pa74De44nwY3neCWRcGgBoOvS3jVEiU
+         zX0fNm7uMrBSi57//klwfRHxHdgsTA6mhPHyoq91szD6UGrdQRmSpIIwvGp8ytAD7xaE
+         TzOrZA2j40YTfZnFE+GW5bOc38g8h0JJxk9rqmgJdWRMJN8jeMVRNEZ0E+fKIcDfirX0
+         hgsW4Vh5+jhaf/cv9/8fNyDk49bAp697pV2KT79h+jaXe/iPRpI7xBoG3fGUz8udmfE1
+         +uIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lmEbAYKWlOqPX2RjEuea2Sgy80PtCQ6vAnGW/GIiSPU=;
+        b=wkBJ+fKtTIFuY1GppvdLQzsHFZkrPKPabBxMw49zEKoDOdfMG9vbhkwWvXr+GvP04z
+         aVEs3BdKRCfqEPPlQ5vldvzH2GXjoo11mhnUTIINp1fAQrKE/SC9vOE9bY1BlYs53zBV
+         p+/u6AmD8Zd0h9VNLBoO6IU59gu2qTOMm0JhYdPfVYP1TrfWrj9+mgsGDfB399SbU1b2
+         vQseaY+qsnPLJEael2lvAcWMbxt9id6VvpgRXgxiJUfpVju/FPubdb7GpzF5yQ6EczQU
+         GdTOMWyKXSFYfe9JOvrBMtbTd16PQaH1RUMdSBKcxq2rQ+EqONB7Q+8Zd7cSOICiLMxJ
+         hwpA==
+X-Gm-Message-State: AJIora9FeJPt96wWJpRJFLsi9CHBHXjZ83TmNEr4qnFxFUSwckaElgL/
+        sbX3Hx2z0ZlaL+hjd66MIw==
+X-Google-Smtp-Source: AGRyM1vAiEUCIHGxamaoKHk4eRp56pEf+4nacB8IWdx8UvYeFXHCvGjCB2QPDzWpnqo9Xbxw/UeaKw==
+X-Received: by 2002:a63:e955:0:b0:419:66f8:e331 with SMTP id q21-20020a63e955000000b0041966f8e331mr11835579pgj.585.1657891763075;
+        Fri, 15 Jul 2022 06:29:23 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id a4-20020a1709027d8400b0015e8d4eb2ddsm3493893plm.295.2022.07.15.06.29.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 06:29:22 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     jic23@kernel.org, lars@metafoo.de
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH] iio: light: isl29028: Fix the warning in isl29028_remove()
+Date:   Fri, 15 Jul 2022 21:29:09 +0800
+Message-Id: <20220715132909.480548-1-zheyuma97@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-OriginalArrivalTime: 15 Jul 2022 13:28:21.0281 (UTC) FILETIME=[C08DA910:01D8984E]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 8a09c203-bff9-4d04-98ac-08da6665e36f
-X-MS-TrafficTypeDiagnostic: AM7PR01MB6994:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: szfOPd7NwCr92X+gRNhgtk9s/0rbTzg/r2hUw4Kgl0kyh2VAo6d5nAZVlh3gaOOEcn7s/NGcGG7uIReZiTNErZNxlvVA2wqKSiauYeA88VeDwvDtd1ZBmmEJ/NC4MYT1DTLoj91jHNMhAh9r9deEJP+jXl6PWIl35TdEb5IHxDyvoanK8p5T3C+pRdPkzuxHWWtYwae1SUNh0DcE8cxLuEQQui0JcnA+9QubXyRgkuY+TZZJ9qO4vibVXukgj6FHfKoLLAauS13XgoA3tpbwJw/rPE4KmhUsBHlbst7i+V6V6wFpHNgaxIub0UlAnNde43FcFHEqtDZ9LqdgUxQacN7os7/7RUrltFWHXzBc94iXXVjXvlnMqcnGd27NV1QZWJirZQLbWmbLVLHqc3q7+5/TxqY90j68mhFz16APXVlr0PtVKu2wVXWS7HFpS2xgRbxCmwOJb3FPznmQ36qVfPBTR1V2dA8McH7UNgD/NfZCBKRvn+IP//Jg1+nnusogLEOcJI2Mg5b9/7bnaScOCJJ03o4qBIETb7uqJdRLD0sgkE+OQ8GS6Z/6SuuoyMVJWvNj87kZPq7BMWZiUmdM64eSuuZLz3hSgvjpo07d//Fes78C2BEgcX6otJkNsNmx7PKP8IuUucXSaOohSvmI9zz6yy64U7YkDu5y5+uzSO1iRcS61D1I0N5MX7aSp8rk6GLaQpZze9TDNZoU5NadC9RGTzCid/QP3BBvUZeUMWWL33A20lT3Ww8l1/8uuwEco6liHZQeyQDbonqs81OoT0mDmlihnn9PnCUqZig7JNrvRNfEf9K7kVCaUiJSTfFv
-X-Forefront-Antispam-Report: CIP:151.1.184.193;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:asas054.asem.intra;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(136003)(346002)(376002)(396003)(39840400004)(46966006)(36840700001)(110136005)(70206006)(81166007)(47076005)(70586007)(356005)(450100002)(1076003)(316002)(41300700001)(6666004)(336012)(2616005)(107886003)(186003)(26005)(36860700001)(478600001)(36756003)(8676002)(86362001)(2906002)(4326008)(40480700001)(82310400005)(4744005)(5660300002)(8936002)(83380400001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: asem.it
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 13:28:21.8568
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a09c203-bff9-4d04-98ac-08da6665e36f
-X-MS-Exchange-CrossTenant-Id: d0a766c6-7992-4344-a4a2-a467a7bb1ed2
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d0a766c6-7992-4344-a4a2-a467a7bb1ed2;Ip=[151.1.184.193];Helo=[asas054.asem.intra]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT013.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR01MB6994
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,26 +68,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-to provid --> to provide
+The driver uses managed resource API to register the iio device, so it
+is unnecessarg to unregister the device manually.
 
-Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
+The following log reveals it:
+
+[   32.374955] isl29028 0-0010: remove
+[   32.376861] general protection fault, probably for non-canonical address 0xdffffc0000000006: 0000 [#1] PREEMPT SMP KASAN PTI
+[   32.377676] KASAN: null-ptr-deref in range [0x0000000000000030-0x0000000000000037]
+[   32.379432] RIP: 0010:kernfs_find_and_get_ns+0x28/0xe0
+[   32.385461] Call Trace:
+[   32.385807]  sysfs_unmerge_group+0x59/0x110
+[   32.386110]  dpm_sysfs_remove+0x58/0xc0
+[   32.386391]  device_del+0x296/0xe50
+[   32.386959]  cdev_device_del+0x1d/0xd0
+[   32.387231]  devm_iio_device_unreg+0x27/0xb0
+[   32.387542]  devres_release_group+0x319/0x3d0
+[   32.388162]  i2c_device_remove+0x93/0x1f0
+
+Fixes: 2db5054ac28d ("staging: iio: isl29028: add runtime power management support")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 ---
- drivers/i2c/busses/i2c-imx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/light/isl29028.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index e9e2db68b9fb..78fb1a4274a6 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -66,7 +66,7 @@
+diff --git a/drivers/iio/light/isl29028.c b/drivers/iio/light/isl29028.c
+index 9de3262aa688..505235903bd8 100644
+--- a/drivers/iio/light/isl29028.c
++++ b/drivers/iio/light/isl29028.c
+@@ -641,8 +641,6 @@ static int isl29028_remove(struct i2c_client *client)
+ 	struct iio_dev *indio_dev = i2c_get_clientdata(client);
+ 	struct isl29028_chip *chip = iio_priv(indio_dev);
  
- /* IMX I2C registers:
-  * the I2C register offset is different between SoCs,
-- * to provid support for all these chips, split the
-+ * to provide support for all these chips, split the
-  * register offset into a fixed base address and a
-  * variable shift value, then the full register offset
-  * will be calculated by
+-	iio_device_unregister(indio_dev);
+-
+ 	pm_runtime_disable(&client->dev);
+ 	pm_runtime_set_suspended(&client->dev);
+ 
 -- 
 2.25.1
 

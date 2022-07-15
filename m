@@ -2,206 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31643576310
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A065576318
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbiGONuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 09:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S231807AbiGONvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 09:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbiGONt7 (ORCPT
+        with ESMTP id S229671AbiGONvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 09:49:59 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054D08053F;
-        Fri, 15 Jul 2022 06:49:55 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id y141so4711689pfb.7;
-        Fri, 15 Jul 2022 06:49:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Rs46+iydynCKHLHZ1GP3rF0W0E38SP1veulXa6gwRZ4=;
-        b=U2LPKLM/AjT1a2LjEeJbIoC7cMGOq1yROmt0cZz2Ais3HJJbyhb17PcE+5FV+ybUP8
-         +DSpyzNvjpXy8F2wrmZ0lTlqucMS7kjrw4Q9h/Tne1y2K9xW3tm2zMzEVInk6+Y2kNSK
-         xK5+NjqnN7jZRM20X7NKghDHD1GEMUwYqciGlk2cObJdUKWdRpmYfuyS/zSPa7rtAs0J
-         /eL2zWxi2I+kPcM56S+S1qVAVJaJURtunnq0/WI/1FWTaavZX0kfTCaS9YaUXyinPP0X
-         /r6r+fcRBASD1bIPLyE3iFMUJV6F7KavxvqQHCWQ7TydHLHLIKdC54p0qZnsEtBjn01F
-         8XWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Rs46+iydynCKHLHZ1GP3rF0W0E38SP1veulXa6gwRZ4=;
-        b=QC7rrCtOyszSEMwMtJG1r6NUo0URaExBzKprKszNI96OIX0gTeU8/2oadbv5D0g8GN
-         RByUKGiK6E7cKL6CDsZKTUaVgJTpS7b+YWUjuG4YarUAd0DMKuONAKvraRkuBWEQMOjc
-         YiVf9iDP+l3yNNWmlv+N/Kv88cUgDLeE66LfPkF4gH0n752b+oUg2jrCi4SV9ckAjdtr
-         ku3dIAz2HevCywRo++wHR6xgj3YV7XSGfJOvWfTgcU7rJlsYXLqNjqU21sP9D7zHaVgn
-         o0WRw+4YrCdfGQVK9pjYt84CGdZCF4Fj2Ra5tFzA+hBQEvoY+LWJVdBRJ9CojRfXXk9Y
-         gejA==
-X-Gm-Message-State: AJIora8sixEwBKavGXmr2fmmjBgfjbgnOFn+86GBRHM2vX/+N67rXmno
-        2NjL9I7iICSgxJdW2pDNStA=
-X-Google-Smtp-Source: AGRyM1ulOtzAhHCGu6ywxJM6sk+U6dmHRqZvwpjYFjdMEiuPSMe0ZWPIPMhh5EKAD2SvIvDk3Xu89Q==
-X-Received: by 2002:a63:d94a:0:b0:412:6986:326e with SMTP id e10-20020a63d94a000000b004126986326emr12641651pgj.56.1657892990012;
-        Fri, 15 Jul 2022 06:49:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v21-20020a170902ca9500b0016b80d2fac8sm3468442pld.248.2022.07.15.06.49.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 06:49:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8c949bd4-d25a-d5f5-49be-59d52e4b6c9d@roeck-us.net>
-Date:   Fri, 15 Jul 2022 06:49:46 -0700
+        Fri, 15 Jul 2022 09:51:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C93A7FE5B;
+        Fri, 15 Jul 2022 06:51:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0422B82C6E;
+        Fri, 15 Jul 2022 13:51:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6864EC34115;
+        Fri, 15 Jul 2022 13:51:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657893107;
+        bh=xYedmqGMctnUXEDc/PAZZ+61FbVfXucK13vS2m5RINU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rvf7FizhpDT2XZSqEN2uAHDeuyFCsC+9OcDI2hKMYDPbYWekFCNT1Y4QJjn687HrY
+         UPMF9qHyUqkL+Pi/adJ1D1UowiGO7Ou85JS1c08bEV83Ypf/kgP+BcPULTudScSOFz
+         9iRevHEUvG6zR4xEU8NsM8bdyEZZY/4q0+Y2T8rjvbzofsIAjvofb5BlAiNjo8gVmD
+         Ja4lRfAzc51LUBGzY5Na+L1AZ9O7sjV9/dmL4PZSGQhMcNfnvZwjExTZ6B3dcIu6rN
+         77Awg9WDU+HwYs/Shuy4t1k8vz6v0nVLXKh9YkQAvDspR4zzkThQWyoDvAslH4Jk2O
+         0g9jQkCdQvy3w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oCLjV-0006Qo-0S; Fri, 15 Jul 2022 15:51:53 +0200
+Date:   Fri, 15 Jul 2022 15:51:53 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, quic_vbadigan@quicinc.com,
+        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
+        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
+        dmitry.baryshkov@linaro.org, Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH v4 2/2] PCI: qcom: Restrict pci transactions after pci
+ suspend
+Message-ID: <YtFw+ezt6s/yXaLY@hovoldconsulting.com>
+References: <1656684800-31278-1-git-send-email-quic_krichai@quicinc.com>
+ <1657118425-10304-1-git-send-email-quic_krichai@quicinc.com>
+ <1657118425-10304-3-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 6/9] bitops: let optimize out non-atomic bitops on
- compile-time constants
-Content-Language: en-US
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
- <20220624121313.2382500-7-alexandr.lobakin@intel.com>
- <20220715000402.GA512558@roeck-us.net>
- <20220715132633.61480-1-alexandr.lobakin@intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220715132633.61480-1-alexandr.lobakin@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1657118425-10304-3-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/15/22 06:26, Alexander Lobakin wrote:
-> From: Guenter Roeck <linux@roeck-us.net>
-> Date: Thu, 14 Jul 2022 17:04:02 -0700
+On Wed, Jul 06, 2022 at 08:10:25PM +0530, Krishna chaitanya chundru wrote:
+> If the endpoint device state is D0 and irq's are not freed, then
+> kernel try to mask interrupts in system suspend path by writing
+> in to the vector table (for MSIX interrupts) and config space (for MSI's).
 > 
->> On Fri, Jun 24, 2022 at 02:13:10PM +0200, Alexander Lobakin wrote:
->>> Currently, many architecture-specific non-atomic bitop
->>> implementations use inline asm or other hacks which are faster or
+> These transactions are initiated in the pm suspend after pcie clocks got
+> disabled as part of platform driver pm  suspend call. Due to it, these
+> transactions are resulting in un-clocked access and eventually to crashes.
 > 
-> [...]
+> So added a logic in qcom driver to restrict these unclocked access.
+> And updated the logic to check the link state before masking
+> or unmasking the interrupts.
 > 
->>> Cc: Mark Rutland <mark.rutland@arm.com>
->>> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
->>> Reviewed-by: Marco Elver <elver@google.com>
->>
->> Building i386:allyesconfig ... failed
->> --------------
->> Error log:
->> arch/x86/platform/olpc/olpc-xo1-sci.c: In function 'send_ebook_state':
->> arch/x86/platform/olpc/olpc-xo1-sci.c:83:63: error: logical not is only applied to the left hand side of comparison
-> 
-> Looks like a trigger, not a cause... Anyway, this construct:
-> 
-> 	unsigned char state;
-> 
-> 	[...]
-> 
-> 	if (!!test_bit(SW_TABLET_MODE, ebook_switch_idev->sw) == state)
-> 
-> doesn't look legit enough.
-> That redundant double-negation [of boolean value], together with
-> comparing boolean to char, provokes compilers to think the author
-> made logical mistakes here, although it works as expected.
-> Could you please try (if it's not automated build which you can't
-> modify) the following:
-> 
-
-Agreed, the existing code seems wrong. The change below looks correct
-and fixes the problem. Feel free to add
-
-Reviewed-and-tested-by: Guenter Roeck <linux@roeck-us.net>
-
-to the real patch.
-
-Thanks,
-Guenter
-
-> --- a/arch/x86/platform/olpc/olpc-xo1-sci.c
-> +++ b/arch/x86/platform/olpc/olpc-xo1-sci.c
-> @@ -80,7 +80,7 @@ static void send_ebook_state(void)
->   		return;
->   	}
->   
-> -	if (!!test_bit(SW_TABLET_MODE, ebook_switch_idev->sw) == state)
-> +	if (test_bit(SW_TABLET_MODE, ebook_switch_idev->sw) == !!state)
->   		return; /* Nothing new to report. */
->   
->   	input_report_switch(ebook_switch_idev, SW_TABLET_MODE, state);
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
 > ---
+>  drivers/pci/controller/dwc/pcie-designware-host.c | 14 +++++++--
+>  drivers/pci/controller/dwc/pcie-qcom.c            | 36 +++++++++++++++++++++--
+>  2 files changed, 46 insertions(+), 4 deletions(-)
 > 
-> We'd take it into the bitmap tree then. The series revealed
-> a fistful of existing code issues already :)
-> 
->>
->> Bisect log attached.
->>
->> Guenter
->>
->> ---
->> # bad: [4662b7adea50bb62e993a67f611f3be625d3df0d] Add linux-next specific files for 20220713
->> # good: [32346491ddf24599decca06190ebca03ff9de7f8] Linux 5.19-rc6
->> git bisect start 'HEAD' 'v5.19-rc6'
->> # good: [8b7e002d8bc6e17c94092d25e7261db4e6e5f2cc] Merge branch 'drm-next' of git://git.freedesktop.org/git/drm/drm.git
->> git bisect good 8b7e002d8bc6e17c94092d25e7261db4e6e5f2cc
->> # good: [07f6d21d6e33c1e28e24ae84e9d26e4e7d4853f5] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git
->> git bisect good 07f6d21d6e33c1e28e24ae84e9d26e4e7d4853f5
->> # good: [5ff085e5d4f6700e03635d5e700f52163a6dc2a7] Merge branch 'staging-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
->> git bisect good 5ff085e5d4f6700e03635d5e700f52163a6dc2a7
->> # good: [eb9e3fdbdd8b61ef0f4bee23259fe6ab69e463ab] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
->> git bisect good eb9e3fdbdd8b61ef0f4bee23259fe6ab69e463ab
->> # good: [9f2183cd961e5ddb7954eafb6bb01a495c6a9c7b] hexagon/mm: enable ARCH_HAS_VM_GET_PAGE_PROT
->> git bisect good 9f2183cd961e5ddb7954eafb6bb01a495c6a9c7b
->> # bad: [e878aa5faf9ac8c0b5d0c3f293389c194c250fff] Merge branch 'mm-nonmm-stable' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
->> git bisect bad e878aa5faf9ac8c0b5d0c3f293389c194c250fff
->> # good: [cf95d50205f62c4f5f538676def847292cf39fa9] fs: don't call ->writepage from __mpage_writepage
->> git bisect good cf95d50205f62c4f5f538676def847292cf39fa9
->> # good: [5103cbfd92d3587713476f94f9485b96e02f0146] Merge branch 'for-next/execve' of git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
->> git bisect good 5103cbfd92d3587713476f94f9485b96e02f0146
->> # good: [ee56c3e8eec166f4e4a2ca842b7804d14f3a0208] Merge branch 'master' into mm-nonmm-stable
->> git bisect good ee56c3e8eec166f4e4a2ca842b7804d14f3a0208
->> # bad: [dc34d5036692c614eef23c1130ee42a201c316bf] lib: test_bitmap: add compile-time optimization/evaluations assertions
->> git bisect bad dc34d5036692c614eef23c1130ee42a201c316bf
->> # good: [bb7379bfa680bd48b468e856475778db2ad866c1] bitops: define const_*() versions of the non-atomics
->> git bisect good bb7379bfa680bd48b468e856475778db2ad866c1
->> # bad: [b03fc1173c0c2bb8fad61902a862985cecdc4b1b] bitops: let optimize out non-atomic bitops on compile-time constants
->> git bisect bad b03fc1173c0c2bb8fad61902a862985cecdc4b1b
->> # good: [e69eb9c460f128b71c6b995d75a05244e4b6cc3e] bitops: wrap non-atomic bitops with a transparent macro
->> git bisect good e69eb9c460f128b71c6b995d75a05244e4b6cc3e
->> # first bad commit: [b03fc1173c0c2bb8fad61902a862985cecdc4b1b] bitops: let optimize out non-atomic bitops on compile-time constants
-> 
-> Thanks,
-> Olek
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> index 2fa86f3..2a46b40 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> @@ -29,13 +29,23 @@ static void dw_msi_ack_irq(struct irq_data *d)
+>  
+>  static void dw_msi_mask_irq(struct irq_data *d)
+>  {
+> -	pci_msi_mask_irq(d);
+> +	struct pcie_port *pp = irq_data_get_irq_chip_data(d->parent_data);
+> +	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
 
+When rebasing you'll notice that struct pcie_port has now been renamed:
+
+	60b3c27fb9b9 ("PCI: dwc: Rename struct pcie_port to dw_pcie_rp")
+
+Johan

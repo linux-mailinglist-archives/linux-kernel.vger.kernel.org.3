@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040CA575F56
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 12:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8195575F57
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 12:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbiGOK0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 06:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
+        id S232127AbiGOK01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 06:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbiGOK0T (ORCPT
+        with ESMTP id S232538AbiGOK0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 06:26:19 -0400
+        Fri, 15 Jul 2022 06:26:22 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74379796A6
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 03:26:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1BFA796A6
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 03:26:21 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 942BD1474;
-        Fri, 15 Jul 2022 03:26:18 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB4281D13;
+        Fri, 15 Jul 2022 03:26:21 -0700 (PDT)
 Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C99223F792;
-        Fri, 15 Jul 2022 03:26:16 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1E0403F792;
+        Fri, 15 Jul 2022 03:26:20 -0700 (PDT)
 From:   Sudeep Holla <sudeep.holla@arm.com>
 To:     linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,10 +32,12 @@ Cc:     Sudeep Holla <sudeep.holla@arm.com>,
         Pierre Gondois <pierre.gondois@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH -next v2 1/2] cacheinfo: Use atomic allocation for percpu cache attributes
-Date:   Fri, 15 Jul 2022 11:26:08 +0100
-Message-Id: <20220715102609.2160689-1-sudeep.holla@arm.com>
+Subject: [PATCH -next v2 2/2] arch_topology: Fix cache attributes detection in the CPU hotplug path
+Date:   Fri, 15 Jul 2022 11:26:09 +0100
+Message-Id: <20220715102609.2160689-2-sudeep.holla@arm.com>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220715102609.2160689-1-sudeep.holla@arm.com>
+References: <20220715102609.2160689-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
@@ -46,46 +48,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On couple of architectures like RISC-V and ARM64, we need to detect
-cache attribues quite early during the boot when the secondary CPUs
-start. So we will call detect_cache_attributes in the atomic context
-and since use of normal allocation can sleep, we will end up getting
-"sleeping in the atomic context" bug splat.
+init_cpu_topology() is called only once at the boot and all the cache
+attributes are detected early for all the possible CPUs. However when
+the CPUs are hotplugged out, the cacheinfo gets removed. While the
+attributes are added back when the CPUs are hotplugged back in as part
+of CPU hotplug state machine, it ends up called quite late after the
+update_siblings_masks() are called in the secondary_start_kernel()
+resulting in wrong llc_sibling_masks.
 
-In order avoid that, move the allocation to use atomic version in
-preparation to move the actual detection of cache attributes in the
-CPU hotplug path which is atomic.
+Move the call to detect_cache_attributes() inside update_siblings_masks()
+to ensure the cacheinfo is updated before the LLC sibling masks are
+updated. This will fix the incorrect LLC sibling masks generated when
+the CPUs are hotplugged out and hotplugged back in again.
 
-Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
+Reported-by: Ionela Voinescu <ionela.voinescu@arm.com>
+Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
 Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
- drivers/base/cacheinfo.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/base/arch_topology.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-Hi Greg,
+v1->v2:
+	- No change in this patch, but 1/2 was added to fix possible
+	  bug "sleeping in the atomic context" with this patch.
+	- Added all the received tags
 
-Can you apply these couple of patches directly if and when you are happy
-with them ?
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 441e14ac33a4..0424b59b695e 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -732,7 +732,11 @@ const struct cpumask *cpu_clustergroup_mask(int cpu)
+ void update_siblings_masks(unsigned int cpuid)
+ {
+ 	struct cpu_topology *cpu_topo, *cpuid_topo = &cpu_topology[cpuid];
+-	int cpu;
++	int cpu, ret;
++
++	ret = detect_cache_attributes(cpuid);
++	if (ret)
++		pr_info("Early cacheinfo failed, ret = %d\n", ret);
 
-Regards,
-Sudeep
+ 	/* update core and thread sibling masks */
+ 	for_each_online_cpu(cpu) {
+@@ -821,7 +825,7 @@ __weak int __init parse_acpi_topology(void)
+ #if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
+ void __init init_cpu_topology(void)
+ {
+-	int ret, cpu;
++	int ret;
 
-v1->v2: This was added in v2
-
-diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-index 65d566ff24c4..4b5cd08c5a65 100644
---- a/drivers/base/cacheinfo.c
-+++ b/drivers/base/cacheinfo.c
-@@ -356,7 +356,7 @@ int detect_cache_attributes(unsigned int cpu)
- 		return -ENOENT;
-
- 	per_cpu_cacheinfo(cpu) = kcalloc(cache_leaves(cpu),
--					 sizeof(struct cacheinfo), GFP_KERNEL);
-+					 sizeof(struct cacheinfo), GFP_ATOMIC);
- 	if (per_cpu_cacheinfo(cpu) == NULL) {
- 		cache_leaves(cpu) = 0;
- 		return -ENOMEM;
+ 	reset_cpu_topology();
+ 	ret = parse_acpi_topology();
+@@ -836,13 +840,5 @@ void __init init_cpu_topology(void)
+ 		reset_cpu_topology();
+ 		return;
+ 	}
+-
+-	for_each_possible_cpu(cpu) {
+-		ret = detect_cache_attributes(cpu);
+-		if (ret) {
+-			pr_info("Early cacheinfo failed, ret = %d\n", ret);
+-			break;
+-		}
+-	}
+ }
+ #endif
 --
 2.37.1
 

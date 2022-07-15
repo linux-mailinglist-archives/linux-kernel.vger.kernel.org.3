@@ -2,113 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A485758B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DD15758B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240271AbiGOAsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 20:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S240738AbiGOAwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 20:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbiGOAsW (ORCPT
+        with ESMTP id S232576AbiGOAwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 20:48:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51DC2E6B2;
-        Thu, 14 Jul 2022 17:48:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47EE7620D5;
-        Fri, 15 Jul 2022 00:48:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 152F9C34114;
-        Fri, 15 Jul 2022 00:48:18 +0000 (UTC)
-Date:   Thu, 14 Jul 2022 20:48:17 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>, Networking <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 bpf-next 3/5] ftrace: introduce
- FTRACE_OPS_FL_SHARE_IPMODIFY
-Message-ID: <20220714204817.2889e280@rorschach.local.home>
-In-Reply-To: <AA1D9833-DF67-4AFD-815C-DD89AB57B3A2@fb.com>
-References: <20220602193706.2607681-1-song@kernel.org>
-        <20220602193706.2607681-4-song@kernel.org>
-        <20220713203343.4997eb71@rorschach.local.home>
-        <AA1D9833-DF67-4AFD-815C-DD89AB57B3A2@fb.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 14 Jul 2022 20:52:38 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9AF47B9C;
+        Thu, 14 Jul 2022 17:52:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Z8kOPQco54RZV7WyIfV3pg4It53JMw8lFGZmv04yyFI=; b=LpPeQBNyw1PqozGc6RwnbDkGpj
+        eAUPzpHMZFG2gJaR256d2Tgk3ya0g7W+g6OySThVLdDrxxuO2sdDWfQrd6ikfv62P+g5tF0LhVwHf
+        WbyKpt6Al1HFJDvqAoD6KPhWRNv6mse21Q3HYZOKr4d+JQHA6oisRfxnwG6XjHC7zr0U4zdayogct
+        5NItiuCUiTNkc6hn65V3difsAqr/TuOheaCaTTYcwxFSiog1LyP4AuqR3xdoTnAcIzevHLNTSLp8K
+        F92X1O0z0GAwbjTdNcgRxC0sFZCvBYKnNsZy1lOMw7Diu4KZUiDl6wI6ocnkzbcxmpqdmeOK8rvf1
+        5bSlaS5Q==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oC9ZB-00C8Ac-G5;
+        Fri, 15 Jul 2022 00:52:25 +0000
+Date:   Fri, 15 Jul 2022 01:52:25 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Keith Busch <kbusch@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the block tree with the vfs tree
+Message-ID: <YtC6SUmyaCSKe2HX@ZenIV>
+References: <20220714120840.1e1f8c63@canb.auug.org.au>
+ <0904ae71-972f-f183-f295-bce3b8518fcf@kernel.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0904ae71-972f-f183-f295-bce3b8518fcf@kernel.dk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Jul 2022 00:13:51 +0000
-Song Liu <songliubraving@fb.com> wrote:
-
-> I think there is one more problem here. If we force all direct trampoline
-> set IPMODIFY, and remove the SHARE_IPMODIFY flag. It may cause confusion 
-> and/or extra work here (__ftrace_hash_update_ipmodify). 
-
-I'm saying that the caller (BPF) does not need to set IPMODIFY. Just
-change the ftrace.c to treat IPMODIFY the same as direct. In fact, the
-two should be mutually exclusive (from a ftrace point of view). That
-is, if DIRECT is set, then IPMODIFY must not be.
-
-Again, ftrace will take care of the accounting of if a rec has both
-IPMODIFY and DIRECT on it.
-
+On Thu, Jul 14, 2022 at 10:36:35AM -0600, Jens Axboe wrote:
+> On 7/13/22 8:08 PM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the block tree got a conflict in:
+> > 
+> >   block/bio.c
+> > 
+> > between commits:
+> > 
+> >   35006342b739 ("block: ensure iov_iter advances for added pages")
+> >   248022ffae3f ("block: ensure bio_iov_add_page can't fail")
+> >   7b1ccdf617ca ("block: fix leaking page ref on truncated direct io")
+> >   9a6469060316 ("block: convert to advancing variants of iov_iter_get_pages{,_alloc}()")
+> > 
+> > from the vfs tree and commits:
+> > 
+> >   5a044eef1265 ("block: ensure iov_iter advances for added pages")
+> >   ac3c48e32c04 ("block: ensure bio_iov_add_page can't fail")
+> >   44b6b0b0e980 ("block: fix leaking page ref on truncated direct io")
+> > 
+> > from the block tree.
 > 
-> Say __ftrace_hash_update_ipmodify() tries to attach an ops with IPMODIFY, 
-> and found the rec already has IPMODIFY. At this point, we have to iterate
-> all ftrace ops (do_for_each_ftrace_op) to confirm whether the IPMODIFY is 
-> from 
+> I pinged Al about this the other day, but haven't heard back yet. It's
+> not clear to me what block bits he has in his tree. We'll get it sorted
+> out.
 
-What I'm suggesting is that a DIRECT ops will never set IPMODIFY. Like
-I mentioned before, ftrace doesn't care if the direct trampoline
-modifies IP or not. All ftrace will do is ask the owner of the direct
-ops if it is safe to have an IP modify attached to it or not. And at
-the same time will tell the direct ops owner that it is adding an
-IPMODIFY ops such that it can take the appropriate actions.
+Ones from Keith's branch - #alignment-fixes-rebased in there.  Looks like
+one of the commits in it got changed since then - the difference in
+__bio_iov_iter_get_pages() (unsigned int i initialization).
 
-In other words, IPMODIFY on the rec means that it can not attach
-anything else with an IPMODIFY on it.
+Sigh...  I'll rebase on top of that.
 
-The direct ops should only set the DIRECT flag. If an IPMODIFY ops is
-being added, if it already has an IPMODIFY then it will fail right there.
-
-If direct is set, then a loop for the direct ops will be done and the
-callback is made. If the direct ops is OK with the IPMODIFY then it
-will adjust itself to work with the IPMODIFY and the IPMODIFY will
-continue to be added (and then set the rec IPMODIFY flag).
-
-> 
-> 1) a direct ops that can share IPMODIFY, or 
-> 2) a direct ops that cannot share IPMODIFY, or 
-> 3) another non-direct ops with IPMODIFY. 
-> 
-> For the 1), this attach works, while for 2) and 3), the attach doesn't work. 
-> 
-> OTOH, with current version (v2), we trust the direct ops to set or clear 
-> IPMODIFY. rec with IPMODIFY makes it clear that it cannot share with another
-> ops with IPMODIFY. Then we don't have to iterate over all ftrace ops here. 
-
-The only time an iterate should be done is if rec->flags is DIRECT and !IPMODIFY.
-
-> 
-> Does this make sense? Did I miss some better solutions?
-
-Did I fill in the holes? ;-)
-
--- Steve
+Al, digging through the vicinity of propagate_umount() and cursing himself
+and ebiederman in about equal proportions since the last weekend...

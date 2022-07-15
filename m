@@ -2,119 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 855145760DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA325760E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234739AbiGOLtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 07:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
+        id S234755AbiGOLub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 07:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiGOLti (ORCPT
+        with ESMTP id S229747AbiGOLu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 07:49:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD4A5371AD
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 04:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657885777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ie8S/4kslSZgdmx6wrSNJRQWWqTbqopyobh+d0XIkq8=;
-        b=LMB5TmBpk793gob/kfQTpstn4BGOJfSVXPWC7GL7gDbon9g7A4dxxv6tSj5B4V/Zorp9fU
-        P3y7OVeZM30UdC9vKBaa6XNnUi2NmsEpcE6u89V70itJy9//xaJSd9ROHK7DYGSUrTngAw
-        dZZNKpbw7da/Wbi9gWcybpBqNG54fRw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-644-seCiYla0MFacY20sMg_2JA-1; Fri, 15 Jul 2022 07:49:27 -0400
-X-MC-Unique: seCiYla0MFacY20sMg_2JA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 67777801590;
-        Fri, 15 Jul 2022 11:49:27 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 397E5140EBE3;
-        Fri, 15 Jul 2022 11:49:27 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     x86@kernel.org, peterz@infradead.org, bp@suse.de,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH] KVM: emulate: do not adjust size of fastop and setcc subroutines
-Date:   Fri, 15 Jul 2022 07:49:27 -0400
-Message-Id: <20220715114927.1460356-1-pbonzini@redhat.com>
+        Fri, 15 Jul 2022 07:50:28 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF533CBE9;
+        Fri, 15 Jul 2022 04:50:28 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-31bf3656517so44253307b3.12;
+        Fri, 15 Jul 2022 04:50:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ODlRaYl4nNRZcLflmQwFsIPgbljwKqGpNV/7h9powFk=;
+        b=2lChuzPi2HlMc6hYANmHzd4zeumeQTXQU+F1ZkMNmwD625scgBW5FGYlV5zk4iJfkY
+         bmjY5tg7uzkndb1j2kWL+Ihaj/Go/18glCSUpJYMikKwRcDX5Bzj7pW9djFSX6eSCgFh
+         VJ/Rw4N54fBe8xNCoxKJzFiwuCfZhbwfpqjhCxaGlXg6taAkmgjikDRqdQ3jaeLOp6KI
+         ULL1YuhYcf4/ef/i+mWQ+OouI95d11s8ISDHFStn087R/41C5EgYUecMsz39MHvvsBsO
+         owloJcnUtS6QkKfkyovsuFE+v3pwpqgGOSWpL6+ScmpPCCqNPBaBWMG+gNrtCO8O+AnC
+         sT5g==
+X-Gm-Message-State: AJIora9uRE9GB5p9HsSPoFlECyJLes5MYf8uiZhbVAnsnEHVyvRZZNxq
+        2xOr1Qy0g92f45ynW2aIl+/mdCsmfWiyPLy9KczA2ybSGJU=
+X-Google-Smtp-Source: AGRyM1tpHdel1yo/M53zZ2Ww9xBIekgUzwaULf7gOTm7kr6pdXL+fsmU3yQDoD7D+tAriRliTJE2Ah2eDdXb0IXHako=
+X-Received: by 2002:a81:5957:0:b0:31c:f620:17ef with SMTP id
+ n84-20020a815957000000b0031cf62017efmr14883687ywb.19.1657885827529; Fri, 15
+ Jul 2022 04:50:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715040949.3807070-1-quic_kshivnan@quicinc.com>
+In-Reply-To: <20220715040949.3807070-1-quic_kshivnan@quicinc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 15 Jul 2022 13:50:15 +0200
+Message-ID: <CAJZ5v0hBTGJ3K5VMnef22-6yEU7rDn1wMBmgqeu41wKQyydNgA@mail.gmail.com>
+Subject: Re: [PATCH v3]PM: QoS: Add check to make sure CPU freq is non-negative
+To:     Shivnandan Kumar <quic_kshivnan@quicinc.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of doing complicated calculations to find the size of the subroutines
-(which are even more complicated because they need to be stringified into
-an asm statement), just hardcode to 16.
+On Fri, Jul 15, 2022 at 6:10 AM Shivnandan Kumar
+<quic_kshivnan@quicinc.com> wrote:
+>
+>         CPU frequency should never be negative.
+>         If some client driver calls freq_qos_update_request with
+>         negative value which will be very high in absolute terms,
+>         then qos driver set max CPU freq at fmax as it consider
+>         it's absolute value but it will add plist node with negative
+>         priority. plist node has priority from INT_MIN (highest)
+>         to INT_MAX(lowest). Once priority is set as negative,
+>         another client will not be able to reduce CPU frequency.
+>         Adding check to make sure CPU freq is non-negative will
+>         fix this problem.
+>
+> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+> ---
+> v2->v3
+>         -changed commit text
+> v1->v2
+>         -addressed comments from Rafael
+>         -changed commit text accordingly
+>  kernel/power/qos.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+> index ec7e1e85923e..27e6596f287a 100644
+> --- a/kernel/power/qos.c
+> +++ b/kernel/power/qos.c
+> @@ -531,7 +531,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
+>  {
+>         int ret;
+>
+> -       if (IS_ERR_OR_NULL(qos) || !req)
+> +       if (IS_ERR_OR_NULL(qos) || !req || value < FREQ_QOS_MIN_DEFAULT_VALUE)
 
-It is less dense for a few combinations of IBT/SLS/retbleed, but it has
-the advantage of being really simple.
+Why not just put 0 in there directly instead of FREQ_QOS_MIN_DEFAULT_VALUE?
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/emulate.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+As is, it is somewhat confusing (and same below).
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 0a15b0fec6d9..f8382abe22ff 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -189,13 +189,6 @@
- #define X8(x...) X4(x), X4(x)
- #define X16(x...) X8(x), X8(x)
- 
--#define NR_FASTOP	(ilog2(sizeof(ulong)) + 1)
--#define RET_LENGTH	(1 + (4 * IS_ENABLED(CONFIG_RETHUNK)) + \
--			 IS_ENABLED(CONFIG_SLS))
--#define FASTOP_LENGTH	(ENDBR_INSN_SIZE + 7 + RET_LENGTH)
--#define FASTOP_SIZE	(8 << ((FASTOP_LENGTH > 8) & 1) << ((FASTOP_LENGTH > 16) & 1))
--static_assert(FASTOP_LENGTH <= FASTOP_SIZE);
--
- struct opcode {
- 	u64 flags;
- 	u8 intercept;
-@@ -310,9 +303,15 @@ static void invalidate_registers(struct x86_emulate_ctxt *ctxt)
-  * Moreover, they are all exactly FASTOP_SIZE bytes long, so functions for
-  * different operand sizes can be reached by calculation, rather than a jump
-  * table (which would be bigger than the code).
-+ *
-+ * The 16 byte alignment, considering 5 bytes for the RET thunk, 3 for ENDBR
-+ * and 1 for the straight line speculation INT3, leaves 7 bytes for the
-+ * body of the function.  Currently none is larger than 4.
-  */
- static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
- 
-+#define FASTOP_SIZE	16
-+
- #define __FOP_FUNC(name) \
- 	".align " __stringify(FASTOP_SIZE) " \n\t" \
- 	".type " name ", @function \n\t" \
-@@ -446,9 +445,7 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
-  * RET | JMP __x86_return_thunk	[1,5 bytes; CONFIG_RETHUNK]
-  * INT3				[1 byte; CONFIG_SLS]
-  */
--#define SETCC_LENGTH	(ENDBR_INSN_SIZE + 3 + RET_LENGTH)
--#define SETCC_ALIGN	(4 << ((SETCC_LENGTH > 4) & 1) << ((SETCC_LENGTH > 8) & 1))
--static_assert(SETCC_LENGTH <= SETCC_ALIGN);
-+#define SETCC_ALIGN	16
- 
- #define FOP_SETCC(op) \
- 	".align " __stringify(SETCC_ALIGN) " \n\t" \
--- 
-2.31.1
-
+>                 return -EINVAL;
+>
+>         if (WARN(freq_qos_request_active(req),
+> @@ -563,7 +563,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
+>   */
+>  int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
+>  {
+> -       if (!req)
+> +       if (!req || new_value < FREQ_QOS_MIN_DEFAULT_VALUE)
+>                 return -EINVAL;
+>
+>         if (WARN(!freq_qos_request_active(req),
+> --
+> 2.25.1
+>

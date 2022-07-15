@@ -2,112 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D25D575EDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 11:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DEF575EE2
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 11:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbiGOJ4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 05:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
+        id S232504AbiGOJ5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 05:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiGOJ4r (ORCPT
+        with ESMTP id S232501AbiGOJ5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 05:56:47 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6E711155;
-        Fri, 15 Jul 2022 02:56:45 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bp15so8096180ejb.6;
-        Fri, 15 Jul 2022 02:56:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W6/njTJhbblJdaS78KnMlJaVOm5XBe95k1aZo4s+bAo=;
-        b=W+DS+qxnzxSxSJ8oOVhMDb6bGkzTFsS8K4TTg+9uHkBgVLfrg4oDfG1k25let+IBd0
-         GW8mA/cn3iaxUW1tfln396K2Aj2pORHlzohmCr+6nyUNPbFPvQ2/4DZJ4t4ij9VLNn2j
-         IaT8km2bEWRBSpfLo+hl57Bo6d03bHcV+1GWRxAeGlIJew/HJbWOHx3w+E2R+MNYtJr5
-         DaZkff7lSU30RBMU/swhX6+Jq/c2nB4o2pMkRfrcuoVpWPwtxBuqpxszFzDQRWkbyQ5r
-         7w0WP4F586IUxIHmJqNv1pKdiZGUZQNWP+nbq7iOa42b2XKa0+/S60Po0jhxFmz9H5Zx
-         kVpw==
+        Fri, 15 Jul 2022 05:57:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 471F78149E
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 02:57:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657879021;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8Hrnh4xSI/kevtIOtrai4yHB4Q/NHMbskcGk41P5Ttk=;
+        b=MKp0+mwCEOXN6K8gmXaAsHrro0ft0z88s4Y5uaKh0g/Lo0ZfC6CQOGkbKp+fomFafSHH4h
+        GvAfY+sRqv3/B96U2CPa6AvpYKDc4clLjaIQzsj2FH9E4I4OUhA8lOrpOQ58LhjlGi6pG2
+        nbAsOXajvvJWhNOuia2OVmaJwq5UipE=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-70-eoheucOMPjm3Ky9vMHmlzw-1; Fri, 15 Jul 2022 05:56:59 -0400
+X-MC-Unique: eoheucOMPjm3Ky9vMHmlzw-1
+Received: by mail-pj1-f69.google.com with SMTP id c18-20020a17090a8d1200b001ef85196fb4so5075156pjo.4
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 02:56:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W6/njTJhbblJdaS78KnMlJaVOm5XBe95k1aZo4s+bAo=;
-        b=4tyom1pPI4kGsPyL/vhssrhvy4wCn1xA36r8wCtx3TFdfXbnsDjo8EWIvh0/4EbOkL
-         ZZs3UkPAVTKJyYu7V9rk9/qlUY/hVauftvB21gPYvrmmGOEIrGa+f81pgMXSFGDutIb3
-         2yFDuPGe3My+eaHnrZ0u4RVP3F+iID272yS3gzMXoG/JAc6iGhPAAfBBlPIIgvrKgrEP
-         R5MRysMvTsXhoJLMlNsduWVXsUU1m6OZ92Exy9rER2OHkab8vm+PlceDBLMlf785Qbd9
-         3XJhDhXtgirZi9BpQNYOqP1412W14G+4/gc+MncZSi7nTGKKqXqR8Bg0Jyu3uDVgQLm9
-         IVIg==
-X-Gm-Message-State: AJIora+oTkwgdg/EjUhpYSWJTybDUSvdvsBIRyJ9vZoDXNaHTIOA0zNZ
-        P8G6HQVso/YKFjtLHVc63rNT4RtcZMeUYw==
-X-Google-Smtp-Source: AGRyM1sBSZZRCBk6S+oCCQ1x092DjVZIGdzQLuz6UsaK3FznGSUppL+v6g4P9EOiam927z0ne53Hjw==
-X-Received: by 2002:a17:907:7781:b0:6fe:4398:47b3 with SMTP id ky1-20020a170907778100b006fe439847b3mr12840889ejc.513.1657879004200;
-        Fri, 15 Jul 2022 02:56:44 -0700 (PDT)
-Received: from localhost.localdomain (2a02-a466-aae1-1-52eb-71ff-fe56-bb66.fixed6.kpn.net. [2a02:a466:aae1:1:52eb:71ff:fe56:bb66])
-        by smtp.gmail.com with ESMTPSA id w23-20020a1709060a1700b0072b2378027csm1823612ejf.26.2022.07.15.02.56.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 02:56:43 -0700 (PDT)
-From:   Frans Klaver <fransklaver@gmail.com>
-X-Google-Original-From: Frans Klaver <frans.klaver@vislink.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Frans Klaver <frans.klaver@vislink.com>, stable@vger.kernel.org
-Subject: [PATCH v2] usb: serial: qcserial: add EM9191 support
-Date:   Fri, 15 Jul 2022 11:56:23 +0200
-Message-Id: <20220715095623.28002-1-frans.klaver@vislink.com>
-X-Mailer: git-send-email 2.37.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8Hrnh4xSI/kevtIOtrai4yHB4Q/NHMbskcGk41P5Ttk=;
+        b=RxD9002zlJQCWEf3k83BX7WUenCaxbk8s2Tc3nvLsTqQU3aSX3gcu07JHG+cjHQaIh
+         0AFYo2UXX3az2YeVfJpriAGgMGIdmxpH+smi2kpd9rpaZC62HpvxWjjpPPvBiZLV9o/a
+         Rq3b6VArhrrgu4FAjnduQVMnkQiYJhVqwLLKbIahTvC38DKOTRBDu7sO8agEcNWxOEMs
+         e8qQQuqqmcRhsjo2te2qex1uchdPxav5MhjGdf0b2yLj8A5Zh1zKo1+zX8/Vh2o2f3gw
+         CNu1LS8ZlgTml634OENQP46YnVyCJidfp24rRH7V/pIzr+SL7jzVB9ZLm2bYv7kacE8u
+         k4gg==
+X-Gm-Message-State: AJIora/89DqmUgYtgRBwVO1tLCVFsH+un1UrZx/CQ4QtsrNns4H3lfAb
+        kGGLuO6Y/QwFNDjsEJatIEv9N7lw66urBrMNLoHdIL9u24DuNnraPqDV+Gg92oZhTzLsyDfJBkN
+        FwTikgzeWDQJQA/QoeoW59xmh7RVEU98o12UxFPgs
+X-Received: by 2002:a17:90a:be0c:b0:1ef:accb:23a5 with SMTP id a12-20020a17090abe0c00b001efaccb23a5mr14728445pjs.113.1657879018490;
+        Fri, 15 Jul 2022 02:56:58 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vH3VKnUSifYcKOV2DL1yCJLfK4VppjP4mBn1OJIP42LQAI4oYiGA7TAcUy7OJJe7owCfc/M0euZYcsf4hCj2s=
+X-Received: by 2002:a17:90a:be0c:b0:1ef:accb:23a5 with SMTP id
+ a12-20020a17090abe0c00b001efaccb23a5mr14728406pjs.113.1657879018230; Fri, 15
+ Jul 2022 02:56:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+ <20220712145850.599666-13-benjamin.tissoires@redhat.com> <YtD09KwkxvJAbgCy@kroah.com>
+In-Reply-To: <YtD09KwkxvJAbgCy@kroah.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 15 Jul 2022 11:56:46 +0200
+Message-ID: <CAO-hwJ+d6mNO2L5kZtOC6QVrDy+LZ6ECoY2f83C93GFPKbSx7g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 12/23] HID: initial BPF implementation
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frans Klaver <frans.klaver@vislink.com>
+On Fri, Jul 15, 2022 at 7:02 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Jul 12, 2022 at 04:58:39PM +0200, Benjamin Tissoires wrote:
+> > --- /dev/null
+> > +++ b/drivers/hid/bpf/Kconfig
+> > @@ -0,0 +1,19 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +menu "HID-BPF support"
+> > +     #depends on x86_64
+> > +
+> > +config HID_BPF
+> > +     bool "HID-BPF support"
+> > +     default y
+>
+> Things are only default y if you can't boot your machine without it.
+> Perhaps just mirror what HID is to start with and do not select HID?
+>
+> > +     depends on BPF && BPF_SYSCALL
+> > +     select HID
+>
+> select is rough, why not depend?
 
-Support for QDL mode is already present for EM9191 modules, but the
-non-QDL mode appears to be missing. Add it now.
+Let me try to explain this mess, maybe you can give me the piece that
+I am missing:
 
-T:  Bus=03 Lev=03 Prnt=04 Port=01 Cnt=02 Dev#= 17 Spd=480 MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1199 ProdID=90d3 Rev=00.06
-S:  Manufacturer=Sierra Wireless, Incorporated
-S:  Product=Sierra Wireless EM9191
-S:  SerialNumber=8W0463003002A114
-C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=qcserial
-I:  If#=0x4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=qcserial
+The requirements I have (or want) are:
+- HID-BPF should be "part" of HID-core (or something similar of "part"):
+  I intend to have device fixes as part of the regular HID flow, so
+allowing distros to opt out seems a little bit dangerous
+- the HID tree is not as clean as some other trees:
+  drivers/hid/ sees both core elements and leaf drivers
+  transport layers are slightly better, they are in their own
+subdirectories, but some transport layers are everywhere in the kernel
+code or directly in drivers/hid (uhid and hid-logitech-dj for
+instance)
+- HID can be loaded as a module (only ubuntu is using that), and this
+is less and less relevant because of all of the various transport
+layers we have basically prevent a clean unloading of the module
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Frans Klaver <frans.klaver@vislink.com>
----
-I noticed an e-mail address discrepancy that git-send-email didn't
-magically fix for me. No change otherwise.
+These made me think that I should have a separate bpf subdir for
+HID-BPF, to keep things separated, which means I can not include
+HID-BPF in hid.ko directly, it goes into a separate driver. And then I
+have a chicken and egg problem:
+- HID-core needs to call functions from HID-BPF (to hook into it)
+- but HID-BPF needs to also call functions from HID-core (for
+accessing HID internals)
 
- drivers/usb/serial/qcserial.c | 1 +
- 1 file changed, 1 insertion(+)
+I have solved that situation with struct hid_bpf_ops but it is not the
+cleanest possible way.
 
-diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-index 586ef5551e76e..73f6d3a37c0c4 100644
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -166,6 +166,7 @@ static const struct usb_device_id id_table[] = {
- 	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
- 	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
- 	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
-+	{DEVICE_SWI(0x1199, 0x90d3)},	/* Sierra Wireless EM9191 */
- 	{DEVICE_SWI(0x1199, 0xc080)},	/* Sierra Wireless EM7590 QDL */
- 	{DEVICE_SWI(0x1199, 0xc081)},	/* Sierra Wireless EM7590 */
- 	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
--- 
-2.37.1
+And that's also why I did "select HID", because HID-BPF without HID is
+pointless.
+
+One last bit I should add. hid-bpf.ko should be allowed to be compiled
+in as a module, but I had issues at boot because kfuncs were not
+getting registered properly (though it works for the net test driver).
+So I decided to make hid-bpf a boolean instead of a tristate.
+
+As I type all of this, I am starting to wonder if I should not tackle
+the very first point and separate hid-core in its own subdir. This way
+I can have a directory with only the core part, and having hid-bpf in
+here wouldn't be too much of an issue.
+
+Thoughts?
+
+Cheers,
+Benjamin
 

@@ -2,122 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A419575B96
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF943575B9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbiGOGcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 02:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
+        id S231696AbiGOGdJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 15 Jul 2022 02:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiGOGcR (ORCPT
+        with ESMTP id S231649AbiGOGdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 02:32:17 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CDB186EE;
-        Thu, 14 Jul 2022 23:32:10 -0700 (PDT)
-X-UUID: 3d0e87fc9e8c40ab947928917b85845f-20220715
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:0e331e9d-0f9b-4888-b02d-931748d1e7d6,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:0f94e32,CLOUDID:a8280f33-b9e4-42b8-b28a-6364427c76bb,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 3d0e87fc9e8c40ab947928917b85845f-20220715
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2075644891; Fri, 15 Jul 2022 14:32:07 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 15 Jul 2022 14:32:05 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Fri, 15 Jul 2022 14:32:05 +0800
-Message-ID: <1267b234b09280b9b475cfe2bb32580e967e2dac.camel@mediatek.com>
-Subject: Re: [for-next][PATCH 13/23] USB: mtu3: tracing: Use the new
- __vstring() helper
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date:   Fri, 15 Jul 2022 14:32:05 +0800
-In-Reply-To: <20220714164330.311734558@goodmis.org>
-References: <20220714164256.403842845@goodmis.org>
-         <20220714164330.311734558@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 15 Jul 2022 02:33:04 -0400
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EB1237D9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:33:01 -0700 (PDT)
+Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay11.hostedemail.com (Postfix) with ESMTP id A206D803A7;
+        Fri, 15 Jul 2022 06:32:58 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id 391E81C;
+        Fri, 15 Jul 2022 06:32:54 +0000 (UTC)
+Message-ID: <84e873c27f2426ce003e650004fe856bf72c634b.camel@perches.com>
+Subject: Re: [PATCH] mediatek: mt7601u: fix clang -Wformat warning
+From:   Joe Perches <joe@perches.com>
+To:     Justin Stitt <justinstitt@google.com>,
+        Jakub Kicinski <kubakici@wp.pl>, Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Date:   Thu, 14 Jul 2022 23:32:53 -0700
+In-Reply-To: <20220711212932.1501592-1-justinstitt@google.com>
+References: <20220711212932.1501592-1-justinstitt@google.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: 1hso3syzywufyzhw636x1fz9p96yse9u
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 391E81C
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18D0NiRIZaOhSqXbeaEBffV+4ygx6yiPXw=
+X-HE-Tag: 1657866774-101434
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
-
-On Thu, 2022-07-14 at 12:43 -0400, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Mon, 2022-07-11 at 14:29 -0700, Justin Stitt wrote:
+> When building with Clang we encounter this warning:
+> > drivers/net/wireless/mediatek/mt7601u/debugfs.c:92:6: error: format
+> > specifies type 'unsigned char' but the argument has type 'int'
+> > [-Werror,-Wformat] dev->ee->reg.start + dev->ee->reg.num - 1);
 > 
-> Instead of open coding a __dynamic_array() with a fixed length (which
-> defeats the purpose of the dynamic array in the first place). Use the
-> new
-> __vstring() helper that will use a va_list and only write enough of
-> the
-> string into the ring buffer that is needed.
-> 
-> Link: 
-> https://urldefense.com/v3/__https://lkml.kernel.org/r/20220705224750.354926535@goodmis.org__;!!CTRNKA9wMg0ARbw!w8nx66BKDTtyusp5i2pyzOGNb-QyxIAWjoZwmSQY0zzor_rqvBgUm5__vKK98ApKcDic$
->  
-> 
-> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mediatek@lists.infradead.org
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  drivers/usb/mtu3/mtu3_trace.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/mtu3/mtu3_trace.h
-> b/drivers/usb/mtu3/mtu3_trace.h
-> index 1b897636daf2..ef3c17e2f8a6 100644
-> --- a/drivers/usb/mtu3/mtu3_trace.h
-> +++ b/drivers/usb/mtu3/mtu3_trace.h
-> @@ -25,11 +25,11 @@ TRACE_EVENT(mtu3_log,
->  	TP_ARGS(dev, vaf),
->  	TP_STRUCT__entry(
->  		__string(name, dev_name(dev))
-> -		__dynamic_array(char, msg, MTU3_MSG_MAX)
-> +		__vstring(msg, vaf->fmt, vaf->va)
->  	),
->  	TP_fast_assign(
->  		__assign_str(name, dev_name(dev));
-> -		vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf-
-> >va);
-> +		__assign_vstr(msg, vaf->fmt, vaf->va);
->  	),
->  	TP_printk("%s: %s", __get_str(name), __get_str(msg))
->  );
+> The format specifier used is `%hhu` which describes a u8. Both
+> `dev->ee->reg.start` and `.num` are u8 as well. However, the expression
+> as a whole is promoted to an int as you cannot get smaller-than-int from
+> addition. Therefore, to fix the warning, use the promoted-to-type's
+> format specifier -- in this case `%d`.
 
-Can you help to remove macro "MTU3_MSG_MAX" and one blank line after it
-in this file, this macro is not used anymore after apply this patch.
+I think whenever a sizeof(unsigned type) that is less than sizeof(int) is
+emitted with vsprintf, the preferred format specifier should be %u not %d.
 
-Thanks a lot
+> diff --git a/drivers/net/wireless/mediatek/mt7601u/debugfs.c b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
+[]
+> @@ -88,7 +88,7 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
+>  		   dev->ee->rssi_offset[0], dev->ee->rssi_offset[1]);
+>  	seq_printf(file, "Reference temp: %hhx\n", dev->ee->ref_temp);
+>  	seq_printf(file, "LNA gain: %hhx\n", dev->ee->lna_gain);
+> -	seq_printf(file, "Reg channels: %hhu-%hhu\n", dev->ee->reg.start,
+> +	seq_printf(file, "Reg channels: %hhu-%d\n", dev->ee->reg.start,
+>  		   dev->ee->reg.start + dev->ee->reg.num - 1);
 
+And this is not a promotion of an argument to int via varargs.
+The arithmetic did the promotion.
 
+I suggest s/%hh/%/ for all the uses here, not just this one.
+
+checkpatch could do this somewhat automatically.
+Of course any changes it suggests need human review.
+
+$ ./scripts/checkpatch.pl -f drivers/net/wireless/mediatek/mt7601u/debugfs.c --show-types --types=unnecessary_modifier --fix-inplace
+$ git diff --stat -p drivers/net/wireless/mediatek/mt7601u/debugfs.c
+---
+ drivers/net/wireless/mediatek/mt7601u/debugfs.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/net/wireless/mediatek/mt7601u/debugfs.c b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
+index 20669eacb66ea..b7a6376e3352e 100644
+--- a/drivers/net/wireless/mediatek/mt7601u/debugfs.c
++++ b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
+@@ -83,28 +83,28 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
+ 	struct tssi_data *td = &dev->ee->tssi_data;
+ 	int i;
+ 
+-	seq_printf(file, "RF freq offset: %hhx\n", dev->ee->rf_freq_off);
+-	seq_printf(file, "RSSI offset: %hhx %hhx\n",
++	seq_printf(file, "RF freq offset: %x\n", dev->ee->rf_freq_off);
++	seq_printf(file, "RSSI offset: %x %x\n",
+ 		   dev->ee->rssi_offset[0], dev->ee->rssi_offset[1]);
+-	seq_printf(file, "Reference temp: %hhx\n", dev->ee->ref_temp);
+-	seq_printf(file, "LNA gain: %hhx\n", dev->ee->lna_gain);
+-	seq_printf(file, "Reg channels: %hhu-%hhu\n", dev->ee->reg.start,
++	seq_printf(file, "Reference temp: %x\n", dev->ee->ref_temp);
++	seq_printf(file, "LNA gain: %x\n", dev->ee->lna_gain);
++	seq_printf(file, "Reg channels: %u-%u\n", dev->ee->reg.start,
+ 		   dev->ee->reg.start + dev->ee->reg.num - 1);
+ 
+ 	seq_puts(file, "Per rate power:\n");
+ 	for (i = 0; i < 2; i++)
+-		seq_printf(file, "\t raw:%02hhx bw20:%02hhx bw40:%02hhx\n",
++		seq_printf(file, "\t raw:%02x bw20:%02x bw40:%02x\n",
+ 			   rp->cck[i].raw, rp->cck[i].bw20, rp->cck[i].bw40);
+ 	for (i = 0; i < 4; i++)
+-		seq_printf(file, "\t raw:%02hhx bw20:%02hhx bw40:%02hhx\n",
++		seq_printf(file, "\t raw:%02x bw20:%02x bw40:%02x\n",
+ 			   rp->ofdm[i].raw, rp->ofdm[i].bw20, rp->ofdm[i].bw40);
+ 	for (i = 0; i < 4; i++)
+-		seq_printf(file, "\t raw:%02hhx bw20:%02hhx bw40:%02hhx\n",
++		seq_printf(file, "\t raw:%02x bw20:%02x bw40:%02x\n",
+ 			   rp->ht[i].raw, rp->ht[i].bw20, rp->ht[i].bw40);
+ 
+ 	seq_puts(file, "Per channel power:\n");
+ 	for (i = 0; i < 7; i++)
+-		seq_printf(file, "\t tx_power  ch%u:%02hhx ch%u:%02hhx\n",
++		seq_printf(file, "\t tx_power  ch%u:%02x ch%u:%02x\n",
+ 			   i * 2 + 1, dev->ee->chan_pwr[i * 2],
+ 			   i * 2 + 2, dev->ee->chan_pwr[i * 2 + 1]);
+ 
+@@ -112,8 +112,8 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
+ 		return 0;
+ 
+ 	seq_puts(file, "TSSI:\n");
+-	seq_printf(file, "\t slope:%02hhx\n", td->slope);
+-	seq_printf(file, "\t offset=%02hhx %02hhx %02hhx\n",
++	seq_printf(file, "\t slope:%02x\n", td->slope);
++	seq_printf(file, "\t offset=%02x %02x %02x\n",
+ 		   td->offset[0], td->offset[1], td->offset[2]);
+ 	seq_printf(file, "\t delta_off:%08x\n", td->tx0_delta_offset);
+ 
 

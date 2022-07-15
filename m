@@ -2,65 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C655C57594B
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 03:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0F857594C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 03:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241079AbiGOB4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 21:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
+        id S241093AbiGOB7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 21:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240987AbiGOB4j (ORCPT
+        with ESMTP id S241098AbiGOB7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 21:56:39 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF5432DBF
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 18:56:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mmLStNRkF6W9seC2izW5SAo9LagXYzdl6jVNyMVhXFs=; b=ek0RSbCy45pDM3TxkSejUNPs/4
-        jLvmev/r92eB4fcXsy0EI7Y4gqzX+Bg8S9A1qZrkVKzhpBrBPBkmdR77miLIj+H1OFPpUNJxTODjh
-        mjga5gok8197ak/jSXYvawiHwQownqn/NK0j1ZeP3DeJvxVsPOslmlvMY4V11tmJM0kgvubuk+78h
-        dKjEnGMgeovRXGQ/3MlEno3uAcyvN7EHxAJ5885zI/5AwdDa/C0NBmesdVLdhNPqmLPRtQvNo9F1P
-        ztEEw4qWpcupgO+XZx5faCYUv27fg4eRsPxBTiSX2jBUuJhiAlh1O53B4s07PJyg0hzj1FqwPHFEh
-        DyurutLw==;
-Received: from [177.139.47.106] (helo=[192.168.15.109])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oCAZB-00H9j4-N7; Fri, 15 Jul 2022 03:56:29 +0200
-Message-ID: <086abf6b-60ab-c0f5-e1e5-c39f0c33484c@igalia.com>
-Date:   Thu, 14 Jul 2022 22:56:10 -0300
+        Thu, 14 Jul 2022 21:59:06 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FA62B639
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 18:59:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=Yst2yccGqVsHHqDRowt/OQDTK10KawgyD2WvW7jbQUM=; b=UaAp8IxGBlD9H4eVA9Ft/ypU2D
+        cP4+Ouaakuhu9jH5mY8QKwXSNYBJPbkC+Cb1GhkN63oyGBKHLCZrAergphBC7g3k3sBEoe+MMl9Rc
+        F1QERcGtYQHlNE7YQ2ACv4McRJk0Dt2wtkVulEGpuuja8aKWMsbEZKcL82gUTmn9O6+ulpVnX0oKN
+        uwql9JrcdiVbIXb3Fl9h7KV9g7JvJLdYzBpXDJXdbIBONgjpLWg+pPJUow7RAZy05x2e7Kmg9J+ne
+        r+Cpc0aMKFfArXZqinWtpakxdmT+87GhYcxfcCtugdq+emr/OUECxTk8DBpOk/kVmf1qdbLRfIUOe
+        ssCt8Qiw==;
+Received: from [2601:1c0:6280:3f0::a6b3] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oCAba-009sW1-9c; Fri, 15 Jul 2022 01:58:58 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] clocksource: arm_global_timer: fix Kconfig "its" grammar
+Date:   Thu, 14 Jul 2022 18:58:52 -0700
+Message-Id: <20220715015852.12523-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 01/12] drm/amdgpu: Write masked value to control register
-Content-Language: en-US
-To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>
-Cc:     magalilemes00@gmail.com, tales.aparecida@gmail.com,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        mwen@igalia.com, Isabella Basso <isabbasso@riseup.net>,
-        andrealmeid@riseup.net
-References: <20220714164507.561751-1-mairacanal@riseup.net>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <20220714164507.561751-1-mairacanal@riseup.net>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,12 +51,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Às 13:44 de 14/07/22, Maíra Canal escreveu:
-> On the dce_v6_0 and dce_v8_0 hpd tear down callback, the tmp variable
-> should be written into the control register instead of 0.
-> 
-> Fixes: b00861b9 ("drm/amd/amdgpu: port of DCE v6 to new headers (v3)")
-> Fixes: 2285b91c ("drm/amdgpu/dce8: simplify hpd code")
-> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+Use the possessive "its" instead of the contraction "it's"
+where appropriate.
 
-Series is Reviewed-by: André Almeida <andrealmeid@igalia.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ drivers/clocksource/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -373,7 +373,7 @@ config ARM_GT_INITIAL_PRESCALER_VAL
+ 	depends on ARM_GLOBAL_TIMER
+ 	help
+ 	  When the ARM global timer initializes, its current rate is declared
+-	  to the kernel and maintained forever. Should it's parent clock
++	  to the kernel and maintained forever. Should its parent clock
+ 	  change, the driver tries to fix the timer's internal prescaler.
+ 	  On some machs (i.e. Zynq) the initial prescaler value thus poses
+ 	  bounds about how much the parent clock is allowed to decrease or

@@ -2,48 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE435759D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 05:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A1F5759DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 05:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241133AbiGODJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 23:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
+        id S241234AbiGODNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 23:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbiGODJG (ORCPT
+        with ESMTP id S229945AbiGODNQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 23:09:06 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9165727B16;
-        Thu, 14 Jul 2022 20:09:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lkbt60vgmz4xbm;
-        Fri, 15 Jul 2022 13:09:01 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657854542;
-        bh=7BwLNlroG6v3sM9DCELXiBe/wL7sCsIzP8f78nOCOcU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=uPLUlGbfNywSVBFtEduHMbhvVOErInrR9tB8Mn4g/oXj/gN7XfBAkZF+O2JYLpERH
-         vy+vNg4mcFAgi1PmWj+Fm6/dNMt442/XZiC1XYA0iBHrleYMmsmFeFSb2gHoq12G8r
-         3x2UengZ1twS1eAOjp9vacFf70IohPhh+a20CG82jQFLZBlOUGbKGnzIDSmuDQ9yZl
-         m+kCDt9mA9UyzJY2QCu2jL48uYmaGfZBNYCT8EyXlg+UTC95C1/FqsMGNwHRXGKd+i
-         os/w45wbuF2ic01nhtISUOwyUWIVWSUHmN3iUrHBc8yJu/jdPxXqd2mg9IPQ4Vtbms
-         /QqdhxrBxNC/w==
-Date:   Fri, 15 Jul 2022 13:09:00 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the block tree with the vfs tree
-Message-ID: <20220715130900.75322a55@canb.auug.org.au>
+        Thu, 14 Jul 2022 23:13:16 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A052CC91;
+        Thu, 14 Jul 2022 20:13:15 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 23so3273293pgc.8;
+        Thu, 14 Jul 2022 20:13:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0kNvzHNczTALecfT9wto6CsS50awskOSoxCbfvaNPgc=;
+        b=d6rOttoave+cYYycQLZVtn7+6/EvvZMoC4KlEKnu5+Iy0CvIZB6RZvM+yDNYgjVsg2
+         zExWP1Kt2mvHL2caS42uLQwLfFdIGT+vt+VNkOv6EFVEz1IJ1Ei1z/SUwomvWvL9yqs/
+         LsfjR3vwcHDm1bfvDdBsjVXVCIzYFoJ6KMcatcAC61WXc2/vMcOjiKCXnv0z+ZYpPW1D
+         29300GYk48m1QvWYlTwrWUJ2ga8Ap1QJw6DN92YdxZnF6aT4PwJr+48L7OzWyifSHnIo
+         bBliGjA2A7iI1JHvd2yG0VTITazqxx3xOm38zhCb9ZIUiYeXEPs2TlvdcILgJvPCljIq
+         R2+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0kNvzHNczTALecfT9wto6CsS50awskOSoxCbfvaNPgc=;
+        b=QN1KHrm48rAJD5fzBNOgZjhfCzLL8XI17G9WwVqedi0xmXJr+o4BaGjxNFXWcshhUC
+         CmHS6PrTCfGBrnbZ9z4vGHmXJ+SL//YgSGSzEtX6lBI19hHyXLtjSBs9HctMfkGtO8ml
+         0X9hX9AlLkBpQXtn1QQ5jdSmNs+WGL0Jk1Lk3arotJV5+ANfLEgRLd7sS7cRoK04QdK5
+         b3hxuKptjV7JNBQnFwgpsHI5UcaJeOqyfLIA1IDX2EmNzpCp490SxVhvM69ihquIZeOd
+         rPXrHv86Nkbp/d28j3C/DMopZHJJHhmRfkIGHsxWayrIdb6LHd94G3taAg8koCq+59N7
+         L0+Q==
+X-Gm-Message-State: AJIora/SCLgVhagKduoZ2Bldj4py96FUWu4qtip08JTEn/nvRD2iAyXq
+        /rHgr7ZE3NSmYeZkhSv0VcQ+s5MPcxY=
+X-Google-Smtp-Source: AGRyM1vK5uqkhNs5DYoiUnUKiOfj2RRKOpP4xHProAEOYr/w1Br1ZQPpNcitPwDkSe+/qgFCXMCFZg==
+X-Received: by 2002:a63:2051:0:b0:412:6d61:ab0a with SMTP id r17-20020a632051000000b004126d61ab0amr10627004pgm.52.1657854794876;
+        Thu, 14 Jul 2022 20:13:14 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170903230c00b0016c6a6d8967sm2236563plh.83.2022.07.14.20.13.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 20:13:14 -0700 (PDT)
+Message-ID: <d95d1afe-655c-3526-0c7e-949dfad8c6ba@gmail.com>
+Date:   Thu, 14 Jul 2022 20:13:12 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MI8Y+eEld9Tan6HyyvPZ5OJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH V12 01/20] uapi: simplify __ARCH_FLOCK{,64}_PAD a little
+Content-Language: en-US
+To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
+        naresh.kamboju@linaro.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        heiko@sntech.de
+References: <20220405071314.3225832-1-guoren@kernel.org>
+ <20220405071314.3225832-2-guoren@kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220405071314.3225832-2-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,77 +81,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/MI8Y+eEld9Tan6HyyvPZ5OJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the block tree got a conflict in:
+On 4/5/2022 12:12 AM, guoren@kernel.org wrote:
+> From: Christoph Hellwig <hch@lst.de>
+> 
+> Don't bother to define the symbols empty, just don't use them.
+> That makes the intent a little more clear.
+> 
+> Remove the unused HAVE_ARCH_STRUCT_FLOCK64 define and merge the
+> 32-bit mips struct flock into the generic one.
+> 
+> Add a new __ARCH_FLOCK_EXTRA_SYSID macro following the style of
+> __ARCH_FLOCK_PAD to avoid having a separate definition just for
+> one architecture.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Tested-by: Heiko Stuebner <heiko@sntech.de>
 
-  block/fops.c
+Being late to this, but this breaks the perf build for me using a MIPS 
+toolchain with the following:
 
-between commit:
+   CC 
+/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o
+In file included from 
+../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:77,
+                  from ../include/uapi/linux/fcntl.h:5,
+                  from trace/beauty/fcntl.c:10:
+../include/uapi/asm-generic/fcntl.h:188:8: error: redefinition of 
+'struct flock'
+  struct flock {
+         ^~~~~
+In file included from ../include/uapi/linux/fcntl.h:5,
+                  from trace/beauty/fcntl.c:10:
+../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:63:8: 
+note: originally defined here
+  struct flock {
+         ^~~~~
+make[6]: *** 
+[/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/build/Makefile.build:97: 
+/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o] 
+Error 1
 
-  91b94c5d6ae5 ("iocb: delay evaluation of IS_SYNC(...) until we want to ch=
-eck IOCB_DSYNC")
+the kernel headers are set to 4.1.31 which is arguably old but 
+toolchains using newer kernel headers do not fare much better either 
+unfortunately as I tried a toolchain with kernel headers 4.9.x.
 
-from the vfs tree and commit:
+I will start doing more regular MIPS builds of the perf tools since that 
+seems to escape our testing.
 
-  16458cf3bd15 ("block: Use the new blk_opf_t type")
-
-from the block tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc block/fops.c
-index 7a40bc87d80f,29066ac5a2fa..000000000000
---- a/block/fops.c
-+++ b/block/fops.c
-@@@ -32,14 -32,14 +32,14 @@@ static int blkdev_get_block(struct inod
-  	return 0;
-  }
- =20
-- static unsigned int dio_bio_write_op(struct kiocb *iocb)
-+ static blk_opf_t dio_bio_write_op(struct kiocb *iocb)
-  {
-- 	unsigned int op =3D REQ_OP_WRITE | REQ_SYNC | REQ_IDLE;
-+ 	blk_opf_t opf =3D REQ_OP_WRITE | REQ_SYNC | REQ_IDLE;
- =20
-  	/* avoid the need for a I/O completion work item */
- -	if (iocb->ki_flags & IOCB_DSYNC)
- +	if (iocb_is_dsync(iocb))
-- 		op |=3D REQ_FUA;
-- 	return op;
-+ 		opf |=3D REQ_FUA;
-+ 	return opf;
-  }
- =20
-  static bool blkdev_dio_unaligned(struct block_device *bdev, loff_t pos,
-
---Sig_/MI8Y+eEld9Tan6HyyvPZ5OJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLQ2k0ACgkQAVBC80lX
-0GwBLwf/T/ovlmLquJjZlA3K3kRnAtD+HQlNKyjlf2++Nk/hOY7Ncib+vU+HJBDK
-YMzasHrtm2QmbL07IatADeE7qADFia5BqcTF1jlM2A7QIo6AkzMQgm8H2gHEi6Hn
-tZ8YPlhqPI27pTdpG2nYhtdmRLo1wcEnWkmpdJDdTh/jTtIVUTXsNIuH9o3mfx3y
-DWULaVgz3oPtQ7oVVFeQp2CaZDX/214PrXqoYnns59KmjUEVxDrfnP6tu+fRToro
-mdzd10t8fbHja55vMT836L+0cNuLvmbVyOtKGlXz445Qst1sH7hkwYMywjJPAt9t
-Xa/5oy2W2YMKHX1j7/BQkPV5YkTpmA==
-=x2Rv
------END PGP SIGNATURE-----
-
---Sig_/MI8Y+eEld9Tan6HyyvPZ5OJ--
+Thanks!
+-- 
+Florian

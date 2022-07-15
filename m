@@ -2,88 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E236F5769E5
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EB25769E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbiGOW3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
+        id S231823AbiGOWbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiGOW3S (ORCPT
+        with ESMTP id S230218AbiGOWbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:29:18 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A65E13DFF
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:29:18 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id l12so4310447plk.13
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:29:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=w3QF+mqIdIdR+R36va/733YMOXOaPdDML9FH6gUUqFA=;
-        b=G5cuCJ891R57WGUJ1irdVBPjDVWdPoZX6NNK/l8lnWzjf8CeoC82pP621ZbLrLTyyi
-         XopjQnSAGM3EOIRGcNnaBzIVCyRJnf1qvOoJz9pXB0fqu7/3cecY6JowaBFdB+w8VSxz
-         RnqFa2Y6Lap7qmVsR0cZEfrp6J+j9oSiVJGUsvpBYrMq2q9edCBtVYXDPSBNX60AaO4l
-         sbUgwCp/m+au6prWl6SbC3oHNNgwcZrmHRy5ILgQ+ecDI6P5xYZkKpUzth1Wb/6hHF8Q
-         Kut5HGtVWlHkfZtpciNhhvT+uCtclj3d4Xq7mzBuoBb7KXJpJVfoFHZuPIyOYAQAlNEe
-         8New==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=w3QF+mqIdIdR+R36va/733YMOXOaPdDML9FH6gUUqFA=;
-        b=VcS50GiNPl4n4zMui6MXipIEehWoULcZiLZjjeP6MtfI4sZ3s4r3jQ8+hN++cmo8no
-         xrDV54psyNevJ80qKgl4uGf6/hndVjEtgqhHyZGIO7MhF5y7ZekukbfUux/5OfPtuJEL
-         ogPBiAHtz4odMJEtY37nn39zUXqFBvPA6TZMSdVpF5VPsLw7ojaRAnUzMMH1xCSsnjSB
-         n8K1WsuabEJKztvHeaY+bXFw1YI6/k8V3MYFrbsAcxdB0vqkTej2Bsmhv11bTd062drl
-         INPg+2wG0v34V18lisZfDaavmXNc8HCGtDCJ4L1JeKtFPvjeoP/wt6UoLeiOwHvEpJWn
-         LbWQ==
-X-Gm-Message-State: AJIora/B4E2aAKrvz2bhW6ifk08zgymxtcLpZSIyEG0/M/WUSK1SE8Iy
-        RZzhlitTBglQ1kukUIjN5pw=
-X-Google-Smtp-Source: AGRyM1spubbZtDmGfMgnReOERvHEBbD48Tf4BG2WcXzh3lbNLBJRwybZ1rqluyjvu4QvfKPvSAy1Cg==
-X-Received: by 2002:a17:903:230c:b0:16c:4c65:18be with SMTP id d12-20020a170903230c00b0016c4c6518bemr15526720plh.138.1657924157671;
-        Fri, 15 Jul 2022 15:29:17 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id s1-20020a655841000000b003db7de758besm3714787pgr.5.2022.07.15.15.29.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 15:29:17 -0700 (PDT)
-Message-ID: <1a96de8c-4dc9-7f94-9e14-a223aec56428@gmail.com>
-Date:   Fri, 15 Jul 2022 15:29:15 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ARM: bcm: NSP: Removed forced thermal selection
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Russell King <linux@armlinux.org.uk>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220711222919.4048833-1-f.fainelli@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220711222919.4048833-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 15 Jul 2022 18:31:10 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050A157E01;
+        Fri, 15 Jul 2022 15:31:07 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id AB30DC01E; Sat, 16 Jul 2022 00:31:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657924265; bh=XVWBfw25/xbELFTjDfF1NZ0Lppo6CvFhF/8lmkwM8Tc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=y0l4aIPQuM9ZuawOHbdnwDk2TF9dPuWBEvzrKzLGpgTjDHRIR5EPAJ1nCZxP/YrNs
+         +P/2ivp8/TZfFF2FCnBQNbCdY3YDNCuYARBr9mHvUFcfAHCHbDAXqb8dXNDCEZN2mI
+         wrDPZFLmS+8ve8bObhvJ1FKnEFkR7hWTJjs47IsmOfmXSr4DGddEqjhbiGci/o08hC
+         aREWswUGHyxqC5kFlObTLWEcsuXor8e96Uq2HWr3U9alT6+oq0zrUSr4r1yGAYkSqK
+         AF9MGHg9cCGbUdpdFhbhHDgoCTkmk0EUvywYo5fORRxPo+IjhcXbiDEOTQwumHDCR8
+         CVGYduC+Luzvw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id E2533C009;
+        Sat, 16 Jul 2022 00:31:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657924265; bh=XVWBfw25/xbELFTjDfF1NZ0Lppo6CvFhF/8lmkwM8Tc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=y0l4aIPQuM9ZuawOHbdnwDk2TF9dPuWBEvzrKzLGpgTjDHRIR5EPAJ1nCZxP/YrNs
+         +P/2ivp8/TZfFF2FCnBQNbCdY3YDNCuYARBr9mHvUFcfAHCHbDAXqb8dXNDCEZN2mI
+         wrDPZFLmS+8ve8bObhvJ1FKnEFkR7hWTJjs47IsmOfmXSr4DGddEqjhbiGci/o08hC
+         aREWswUGHyxqC5kFlObTLWEcsuXor8e96Uq2HWr3U9alT6+oq0zrUSr4r1yGAYkSqK
+         AF9MGHg9cCGbUdpdFhbhHDgoCTkmk0EUvywYo5fORRxPo+IjhcXbiDEOTQwumHDCR8
+         CVGYduC+Luzvw==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 83975ade;
+        Fri, 15 Jul 2022 22:31:00 +0000 (UTC)
+Date:   Sat, 16 Jul 2022 07:30:45 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Nikolay Kichukov <nikolay@oldum.net>
+Subject: Re: [PATCH v6 00/11] remove msize limit in virtio transport
+Message-ID: <YtHqlVx9/joj+AXH@codewreck.org>
+References: <cover.1657920926.git.linux_oss@crudebyte.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cover.1657920926.git.linux_oss@crudebyte.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/11/22 15:29, Florian Fainelli wrote:
-> Both THERMAL and THERMA_OF are user-selectable and we should not force
-> the selection of those Kconfig entries.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Christian Schoenebeck wrote on Fri, Jul 15, 2022 at 11:35:26PM +0200:
+> * Patches 7..11 tremendously reduce unnecessarily huge 9p message sizes and
+>   therefore provide performance gain as well. So far, almost all 9p messages
+>   simply allocated message buffers exactly msize large, even for messages
+>   that actually just needed few bytes. So these patches make sense by
+>   themselves, independent of this overall series, however for this series
+>   even more, because the larger msize, the more this issue would have hurt
+>   otherwise.
 
-Applied to https://github.com/Broadcom/stblinux/commits/soc/next, thanks!
+Unless they got stuck somewhere the mails are missing patches 10 and 11,
+one too many 0s to git send-email ?
+
+I'll do a quick review from github commit meanwhile
 -- 
-Florian
+Dominique

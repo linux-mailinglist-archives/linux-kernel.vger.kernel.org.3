@@ -2,133 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9A3575B99
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A419575B96
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiGOGbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 02:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
+        id S231616AbiGOGcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 02:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiGOGaw (ORCPT
+        with ESMTP id S229504AbiGOGcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 02:30:52 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B0F17046;
-        Thu, 14 Jul 2022 23:30:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657866651; x=1689402651;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=IKTE0WsoHbdtCDClI7Fv5lrmNNiRt8z95iB21d4OgXE=;
-  b=PfAUa8jbYjjqES2iv10HPKqFzxPUHJEBg+dR2WSTLRmLb5dbuO6ZbA5t
-   bLJX7EbKepBkti2OfsTxv6cMB+KpWW6l+tnOd0OwA0KoClLAmkfgSqCQF
-   rO1UER3a+ZAYfA/ZwqkP/n0rFViMZRx9dwfDwRMaBVaJbXDWNq5kXxHid
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Jul 2022 23:30:50 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 23:30:50 -0700
-Received: from zijuhu-gv.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 14 Jul 2022 23:30:45 -0700
-From:   Zijun Hu <quic_zijuhu@quicinc.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <luiz.dentz@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <luiz.von.dentz@intel.com>, <quic_zijuhu@quicinc.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: [PATCH v3] Bluetooth: hci_sync: Remove redundant func definition
-Date:   Fri, 15 Jul 2022 14:30:41 +0800
-Message-ID: <1657866641-16668-1-git-send-email-quic_zijuhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 15 Jul 2022 02:32:17 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CDB186EE;
+        Thu, 14 Jul 2022 23:32:10 -0700 (PDT)
+X-UUID: 3d0e87fc9e8c40ab947928917b85845f-20220715
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:0e331e9d-0f9b-4888-b02d-931748d1e7d6,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:a8280f33-b9e4-42b8-b28a-6364427c76bb,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 3d0e87fc9e8c40ab947928917b85845f-20220715
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2075644891; Fri, 15 Jul 2022 14:32:07 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 15 Jul 2022 14:32:05 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 15 Jul 2022 14:32:05 +0800
+Message-ID: <1267b234b09280b9b475cfe2bb32580e967e2dac.camel@mediatek.com>
+Subject: Re: [for-next][PATCH 13/23] USB: mtu3: tracing: Use the new
+ __vstring() helper
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date:   Fri, 15 Jul 2022 14:32:05 +0800
+In-Reply-To: <20220714164330.311734558@goodmis.org>
+References: <20220714164256.403842845@goodmis.org>
+         <20220714164330.311734558@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-both hci_request.c and hci_sync.c have the same definition
-for disconnected_accept_list_entries(), so remove a redundant
-copy.
+Hi Steven,
 
-Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
----
-v2->v3
- -remove table char to solve gitlint checking failure
-v1->v2
- -remove the func copy within hci_request.c instead of hci_sync.c
- net/bluetooth/hci_request.c | 18 ------------------
- net/bluetooth/hci_request.h |  2 ++
- net/bluetooth/hci_sync.c    |  2 +-
- 3 files changed, 3 insertions(+), 19 deletions(-)
+On Thu, 2022-07-14 at 12:43 -0400, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> Instead of open coding a __dynamic_array() with a fixed length (which
+> defeats the purpose of the dynamic array in the first place). Use the
+> new
+> __vstring() helper that will use a va_list and only write enough of
+> the
+> string into the ring buffer that is needed.
+> 
+> Link: 
+> https://urldefense.com/v3/__https://lkml.kernel.org/r/20220705224750.354926535@goodmis.org__;!!CTRNKA9wMg0ARbw!w8nx66BKDTtyusp5i2pyzOGNb-QyxIAWjoZwmSQY0zzor_rqvBgUm5__vKK98ApKcDic$
+>  
+> 
+> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-mediatek@lists.infradead.org
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  drivers/usb/mtu3/mtu3_trace.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/mtu3/mtu3_trace.h
+> b/drivers/usb/mtu3/mtu3_trace.h
+> index 1b897636daf2..ef3c17e2f8a6 100644
+> --- a/drivers/usb/mtu3/mtu3_trace.h
+> +++ b/drivers/usb/mtu3/mtu3_trace.h
+> @@ -25,11 +25,11 @@ TRACE_EVENT(mtu3_log,
+>  	TP_ARGS(dev, vaf),
+>  	TP_STRUCT__entry(
+>  		__string(name, dev_name(dev))
+> -		__dynamic_array(char, msg, MTU3_MSG_MAX)
+> +		__vstring(msg, vaf->fmt, vaf->va)
+>  	),
+>  	TP_fast_assign(
+>  		__assign_str(name, dev_name(dev));
+> -		vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf-
+> >va);
+> +		__assign_vstr(msg, vaf->fmt, vaf->va);
+>  	),
+>  	TP_printk("%s: %s", __get_str(name), __get_str(msg))
+>  );
 
-diff --git a/net/bluetooth/hci_request.c b/net/bluetooth/hci_request.c
-index 635cc5fb451e..edec0447aaa7 100644
---- a/net/bluetooth/hci_request.c
-+++ b/net/bluetooth/hci_request.c
-@@ -1784,24 +1784,6 @@ int hci_update_random_address(struct hci_request *req, bool require_privacy,
- 	return 0;
- }
- 
--static bool disconnected_accept_list_entries(struct hci_dev *hdev)
--{
--	struct bdaddr_list *b;
--
--	list_for_each_entry(b, &hdev->accept_list, list) {
--		struct hci_conn *conn;
--
--		conn = hci_conn_hash_lookup_ba(hdev, ACL_LINK, &b->bdaddr);
--		if (!conn)
--			return true;
--
--		if (conn->state != BT_CONNECTED && conn->state != BT_CONFIG)
--			return true;
--	}
--
--	return false;
--}
--
- void __hci_req_update_scan(struct hci_request *req)
- {
- 	struct hci_dev *hdev = req->hdev;
-diff --git a/net/bluetooth/hci_request.h b/net/bluetooth/hci_request.h
-index 7f8df258e295..e80b500878d9 100644
---- a/net/bluetooth/hci_request.h
-+++ b/net/bluetooth/hci_request.h
-@@ -120,6 +120,8 @@ void __hci_req_update_scan(struct hci_request *req);
- int hci_update_random_address(struct hci_request *req, bool require_privacy,
- 			      bool use_rpa, u8 *own_addr_type);
- 
-+bool disconnected_accept_list_entries(struct hci_dev *hdev);
-+
- int hci_abort_conn(struct hci_conn *conn, u8 reason);
- void __hci_abort_conn(struct hci_request *req, struct hci_conn *conn,
- 		      u8 reason);
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 212b0cdb25f5..48a262f0ae49 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -2419,7 +2419,7 @@ int hci_write_fast_connectable_sync(struct hci_dev *hdev, bool enable)
- 	return err;
- }
- 
--static bool disconnected_accept_list_entries(struct hci_dev *hdev)
-+bool disconnected_accept_list_entries(struct hci_dev *hdev)
- {
- 	struct bdaddr_list *b;
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+Can you help to remove macro "MTU3_MSG_MAX" and one blank line after it
+in this file, this macro is not used anymore after apply this patch.
+
+Thanks a lot
+
+
 

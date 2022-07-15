@@ -2,157 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9868A575DA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C0D575D90
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbiGOIe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 04:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S231356AbiGOIeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 04:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232745AbiGOIeQ (ORCPT
+        with ESMTP id S232729AbiGOIeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:34:16 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976B32A412
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:34:15 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id bu42so6785509lfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:34:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=a9XRqXHxQeqHgzxMR3XBbO4lnwgsjCZAWCSiuY+LFq4=;
-        b=L/VSt+//pCHUgmC2XJNpaJzs7B1wIvaPRUFDXi+rTW21A9pMGPmUda1JnQ+sUbC6Vn
-         L/kjZqWVz8zpvqEgQK8pyvrSuSKTDkBfofqgYPrcr9/HY5Za3cjdi6ce/XoRwNxLc9qH
-         VGJxCrrOyY/e0ZjEj8Q+AvXFeA8EKgUBk+NIueJ9pGCvfFOHx778Z96CuFf5qVFdccOc
-         ZLnLWrXawOo/PxQubfgGPgRJIR0rhMc8DSfF7shOVZS9CNk0SwGA86lznFU97YAWQtZM
-         0JlAIpV2SwrQbNV2PMm3aIWwuwGEV9cVwgVtLKQibagMWlDf+odU25sXqslmwuvmljUf
-         fgGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=a9XRqXHxQeqHgzxMR3XBbO4lnwgsjCZAWCSiuY+LFq4=;
-        b=KWUUYk+VDNn17y2v+/JZ2uz5CvJvxQ+J1oLwp3yQ9f3lECok805Vd6X1sxdlAOMHA5
-         Uls+PYGeMgvlpDbfwmxhXPGdUComZ+MDvdQst1tCOyHcxYPmT+xGKpsUq8ieqgHSDzQT
-         p6ilm9rtP9fdLaSaFgr12n1TFNvB0Y2J/G8r/5VOOCeN8cAujkczBI+l6Ed1xW7eyJ28
-         Q4c264xmfzJMSPojJVc+Q0+JkUjdxBG7FfWFXMAzu7X2FW3xVq0w4yu0Q5esdJFQMyDQ
-         yh+0tvKVDfJV2tlwJhH4r/4QuuuXtDeLvjtkMApZbCN5R6aFc+OW8byjtBbdLnntU1Dl
-         zjHg==
-X-Gm-Message-State: AJIora8LJJpbBhK2PTcMP5KW6zks6CAg9FqidBKQy/wN7QGVuusMeuNf
-        qSRoiShhxj0mqmMflSbjiaRnkcmqWh68726tRsxteQ==
-X-Google-Smtp-Source: AGRyM1uXGIv2oypdMMb0kZdiNq2tc6jrAqle0xF0fVdanjMwSKuuGriweh5n3wFGSKTHxeth1/RswnNTKELc0XOzZQQ=
-X-Received: by 2002:a05:6512:2315:b0:489:cbc1:886a with SMTP id
- o21-20020a056512231500b00489cbc1886amr6859122lfu.428.1657874053862; Fri, 15
- Jul 2022 01:34:13 -0700 (PDT)
+        Fri, 15 Jul 2022 04:34:14 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E88A29C83;
+        Fri, 15 Jul 2022 01:34:14 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6D8E96601A3F;
+        Fri, 15 Jul 2022 09:34:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657874052;
+        bh=GqdfRsVfLCo2VWTEZGi7k9cm/HFoOJvuQH77gu2Dunk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KDykdN7WZCR7CkUpY6NB2K+XHNXANiCEgbnbDDyNtLQO+Qv9R7uewhqvy+GEBUG+m
+         zF0dpvL03LKbH0xuWIZTe0YM9siRdZPpvMPwmXml/sWj7pZgzyVIuQ7LMKvzr4B1Gy
+         +o2wih/tmqc/VMear4eT7zwT5JJsM+/JmLQ9l2wbJ2C6JaK46t85ICGq3y+thP4oij
+         SdAhjQoblPVlXJr9gi1X5H2A5EVGDu54+XGwNL40UItP0cinnqzLoW3mY2pFCIT2WY
+         KZ8u9J1TpPTDdnJrIliFzslcKliKjGlIerzie0waovd8PpYSPUVI+jpDOeMjc7lFya
+         DDOQ6Kybdxq2Q==
+Message-ID: <6d8aeee4-9732-1c62-67e0-6e8f56373aa6@collabora.com>
+Date:   Fri, 15 Jul 2022 10:34:09 +0200
 MIME-Version: 1.0
-References: <20220714010021.1786616-1-mw@semihalf.com> <YtAMw7Sp06Kiv9PK@shell.armlinux.org.uk>
- <CAPv3WKcxH=b01ikuUESczWeX8SJjc2fg3GjSCp7Q8p72uSt_og@mail.gmail.com> <YtByJhYpo5BzX4GV@shell.armlinux.org.uk>
-In-Reply-To: <YtByJhYpo5BzX4GV@shell.armlinux.org.uk>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Fri, 15 Jul 2022 10:34:04 +0200
-Message-ID: <CAPv3WKdS-ocj_1uMC-aaw_QQ01FCb2xs-FyV2HHRG_Epd6V0CA@mail.gmail.com>
-Subject: Re: [net-next: PATCH] net: dsa: mv88e6xxx: fix speed setting for
- CPU/DSA ports
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND] media: mediatek: vcodec: Add to support VP9 inner racing
+ mode
+Content-Language: en-US
+To:     Mingjia Zhang <mingjia.zhang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220715064938.5812-1-mingjia.zhang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220715064938.5812-1-mingjia.zhang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Russell,
+Il 15/07/22 08:49, Mingjia Zhang ha scritto:
+> In order to reduce decoder latency, enable VP9 inner racing mode.
+> Send lat trans buffer information to core when trigger lat to work,
+> need not to wait until lat decode done.
+> 
+> Signed-off-by: mingjia zhang <mingjia.zhang@mediatek.com>
+> ---
+> CTS/GTS test pass
 
-czw., 14 lip 2022 o 21:44 Russell King (Oracle)
-<linux@armlinux.org.uk> napisa=C5=82(a):
->
-> On Thu, Jul 14, 2022 at 07:18:57PM +0200, Marcin Wojtas wrote:
-> > Hi Russell,
-> >
-> > czw., 14 lip 2022 o 14:32 Russell King (Oracle)
-> > <linux@armlinux.org.uk> napisa=C5=82(a):
-> > >
-> > > On Thu, Jul 14, 2022 at 03:00:21AM +0200, Marcin Wojtas wrote:
-> > > > Commit 3c783b83bd0f ("net: dsa: mv88e6xxx: get rid of SPEED_MAX set=
-ting")
-> > > > stopped relying on SPEED_MAX constant and hardcoded speed settings
-> > > > for the switch ports and rely on phylink configuration.
-> > > >
-> > > > It turned out, however, that when the relevant code is called,
-> > > > the mac_capabilites of CPU/DSA port remain unset.
-> > > > mv88e6xxx_setup_port() is called via mv88e6xxx_setup() in
-> > > > dsa_tree_setup_switches(), which precedes setting the caps in
-> > > > phylink_get_caps down in the chain of dsa_tree_setup_ports().
-> > > >
-> > > > As a result the mac_capabilites are 0 and the default speed for CPU=
-/DSA
-> > > > port is 10M at the start. To fix that execute phylink_get_caps() ca=
-llback
-> > > > which fills port's mac_capabilities before they are processed.
-> > > >
-> > > > Fixes: 3c783b83bd0f ("net: dsa: mv88e6xxx: get rid of SPEED_MAX set=
-ting")
-> > > > Signed-off-by: Marcin Wojtas <mw@semihalf.com>
-> > >
-> > > Please don't merge this - the plan is to submit the RFC series I sent=
- on
-> > > Wednesday which deletes this code, and I'd rather not re-spin the ser=
-ies
-> > > and go through the testing again because someone else changed the cod=
-e.
-> >
-> > Thank for the heads-up. Are you planning to resend the series or
-> > willing to get it merged as-is? I have perhaps one comment, but I can
-> > apply it later as a part of fwnode_/device_ migration.
-> >
-> > >
-> > > Marcin - please can you test with my RFC series, which can be found a=
-t:
-> > >
-> > > https://lore.kernel.org/all/Ys7RdzGgHbYiPyB1@shell.armlinux.org.uk/
-> > >
-> >
-> > The thing is my v2 of DSA fwnode_/device_ migration is tested and
-> > ready to send. There will be conflicts (rather easy) with your
-> > patchset - I volunteer to resolve it this way or another, depending on
-> > what lands first. I have 2 platforms to test it with + also ACPI case
-> > locally.
-> >
-> > I'd like to make things as smooth as possible and make it before the
-> > upcoming merge window - please share your thoughts on this.
->
-> I've also been trying to get the mv88e6xxx PCS conversion in, but
-> it's been held up because there's a fundamental problem in DSA that
-> this series is addressing.
->
-> This series is addressing a faux pas on my part, where I had forgotten
-> that phylink doesn't get used in DSA unless firmware specifies a
-> fixed-link (or a PHY) - in other words when the firmware lacks a
-> description of the link.
->
-> So, what do we do...
->
+CTS/GTS passing is a good indication but, please, test with GStreamer (and
+show the output, as well!).
 
-Ok, thanks. I tested your patchset in 2 setups with multiple
-combinations - all worked fine, so this patch can be abandoned.
+Thanks,
+Angelo
 
-I already rebased my series on top of yours, so I'll submit my v2 this way.
-
-Best regards,
-Marcin
+> ---
+>   .../vcodec/vdec/vdec_vp9_req_lat_if.c         | 64 ++++++++++++-------
+>   1 file changed, 40 insertions(+), 24 deletions(-)
+> 

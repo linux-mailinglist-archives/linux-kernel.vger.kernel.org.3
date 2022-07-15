@@ -2,129 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20237575CF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF75575CF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbiGOIDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 04:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
+        id S232651AbiGOIET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 04:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbiGOID1 (ORCPT
+        with ESMTP id S230225AbiGOIEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:03:27 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC4C7E01D;
-        Fri, 15 Jul 2022 01:03:26 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26F7MnnW027336;
-        Fri, 15 Jul 2022 08:03:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=NBUwyhowEQys1JjcN3CXThBF5Vo7fLtS996n4hCauS0=;
- b=MhWfDJCyvHcSth21Rn7xjUnahD+hrqLjCqxKUGMYRlxoVU50vVWC41nAX8pCblOkmw5q
- Hdpu972eNHmoPK0J+gEmnI+XIYTLjsV4mxanurxtyteik8h7BbVrWbG9/cqDsUOu5i//
- 80xYZJvCAgzm4xBrRJ7hZ8aG2S89qAq4AxvffxrMXvO65pDpGdqEUycRYvYwkgRMyaIx
- 9+Xvwkt8h6h3q7Fg7V1hozIDDsoyUPSlEnkc0Pj0ESmL/4PgvfWDv21MOykm/vJP3kIN
- Jm8OXzTOPjhR2uw3fwkO+Qt3gsb5E0uhwG3Mz7HT+Lx56GX2s15i0K+iE4UHidQdBMEH qA== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hb3t1gtnh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 08:03:25 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26F7wVKS017500;
-        Fri, 15 Jul 2022 08:03:23 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3h71a903yg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 08:03:22 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26F83Jxo13500694
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 15 Jul 2022 08:03:19 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B4B10A404D;
-        Fri, 15 Jul 2022 08:03:19 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9F1E3A4040;
-        Fri, 15 Jul 2022 08:03:19 +0000 (GMT)
-Received: from vela (unknown [9.145.26.36])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 15 Jul 2022 08:03:19 +0000 (GMT)
-Received: from brueckner by vela with local (Exim 4.94.2)
-        (envelope-from <brueckner@linux.ibm.com>)
-        id 1oCGI9-0002ga-SE; Fri, 15 Jul 2022 10:03:17 +0200
-Date:   Fri, 15 Jul 2022 10:03:17 +0200
-From:   Hendrik Brueckner <brueckner@linux.ibm.com>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Steffen Eiden <seiden@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, nrb@linux.ibm.com
-Subject: Re: [PATCH 1/3] s390/cpufeature: rework to allow more than only
- hwcap bits
-Message-ID: <YtEfReThyg0/jyK+@linux.ibm.com>
-References: <20220712105220.325010-1-seiden@linux.ibm.com>
- <20220712105220.325010-2-seiden@linux.ibm.com>
- <Ys3Kt7nG2jtE8H3H@osiris>
- <4132ba2a-f5ad-25ba-7f74-72369b8a140b@linux.ibm.com>
- <Ys/1ab1BXPw1RWuy@osiris>
+        Fri, 15 Jul 2022 04:04:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064E961D65;
+        Fri, 15 Jul 2022 01:04:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A019F61F35;
+        Fri, 15 Jul 2022 08:04:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD348C34115;
+        Fri, 15 Jul 2022 08:04:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657872255;
+        bh=4eoGergpOqcE4ttRkFKv9ntlQ2YzgMrnZ25BFzNcBqY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D0dK6sy/O9Dk8HVk3XO7fvxqQU6LlwDlISzOnkl4kuVK7gqEfKT6ZidxklB+TTNOQ
+         b7eJmZFltqKmYrC6wegXx6K7ZD7TvPfcapE0HTT+XYcLHq563j9iPfKBrISIbLNQQx
+         uRTT0xJPqEl8XWbdC9yFXZCeSSdWzeESB4wUiT2Zkx1uV3N+uCMbZa28ozT4T7tWLC
+         KX88ycWSAZwuHKmY1xt7eH931uNbbzFb2ZztQeqmoSa+nOAwRo2rORAqfeAmpKjmKj
+         z0835q1QJo+c9ZiWErMhAb6dP7W+BMq0SwOXT06fAGxSO7ok/ue+mkkpOYaUxNleKg
+         v9FiOyj7X0VLg==
+Received: by pali.im (Postfix)
+        id 35632A32; Fri, 15 Jul 2022 10:04:12 +0200 (CEST)
+Date:   Fri, 15 Jul 2022 10:04:12 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH] arm: ioremap: Fix compilation of code which use
+ pci_remap_iospace() without CONFIG_MMU
+Message-ID: <20220715080412.j3wgvzlv5evp5zbb@pali>
+References: <20220714185700.6137-1-pali@kernel.org>
+ <20220714200443.GA1036464@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Ys/1ab1BXPw1RWuy@osiris>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: OIzIy2TV7U-wGyj2fSInnTs3SmfU5BgO
-X-Proofpoint-ORIG-GUID: OIzIy2TV7U-wGyj2fSInnTs3SmfU5BgO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-15_02,2022-07-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- impostorscore=0 phishscore=0 adultscore=0 malwarescore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 priorityscore=1501 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207150034
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220714200443.GA1036464@bhelgaas>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 12:52:25PM +0200, Heiko Carstens wrote:
-> > > > +static struct s390_cpu_feature s390_cpu_features[MAX_CPU_FEATURES] = {
-> > > > +	[S390_CPU_FEATURE_ESAN3]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_ESAN3},
-> > > > +	[S390_CPU_FEATURE_ZARCH]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_ZARCH},
-> ...
-> > > I only realized now that you added all HWCAP bits here. It was
-> > > intentional that I added only the two bits which are currently used
-> > > for several reasons:
-> > > 
-> > > - Keep the array as small as possible.
-> > > - No need to keep this array in sync with HWCAPs, if new ones are added.
-> > > - There is a for loop in print_cpu_modalias() which iterates over all
-> > >    MAX_CPU_FEATURES entries; this should be as fast as possible. Adding
-> > >    extra entries burns cycles for no added value.
-> > The loop in print_cpu_modalias() was the reason why I added all
-> > current HWCAPs. The current implementation runs through all HWCAPs
-> > using cpu_have_feature() and I feared that reducing to just MSA and
-> > VXRS has effects in the reporting of CPU-features to userspace.
-> > 
-> > I double checked the output of 'grep features /proc/cpuinfo' and it
-> > stays the same, for 5.19-rc6, 5.19-rc6+this series, 5.19-rc6+this series
-> > with just the two S390_CPU_FEATUREs. I might have misunderstood what happens
-> > in that loop in print_cpu_modalias().
+On Thursday 14 July 2022 15:04:43 Bjorn Helgaas wrote:
+> [+cc linux-pci, update Lorenzo's email addr]
 > 
-> It is used on cpu hotplug to generate a MODALIAS environment
-> variable. You can check that by running "udevadm monitor -p"
-> and then switching a cpu off/on.
+> Hi Pali,
 > 
-> This environment variable is then used by systemd/udev to load
-> feature matching modules via kmod.
+> Thanks for cc'ing me.  I think your previous notes didn't include
+> linux-pci or me, so I missed them.
 
-See also some notes on the cpu feature in KRN1305 spec (introduced w/ VX
-support).
+https://lore.kernel.org/r/20211205123209.lyx76daqdwzqwex4@pali/
+
+> It looks like bc02973a06a6 was merged via the PCI tree for v5.17 [1],
+> so we should probably merge the fix the same way.
+> 
+> Russell, let me know if you object.  Otherwise, I put it on pci/misc
+> for v5.20.
+> 
+> [1] https://lore.kernel.org/r/20220114155608.GA557997@bhelgaas
+> 
+> On Thu, Jul 14, 2022 at 08:57:00PM +0200, Pali Rohár wrote:
+> > Custom ARM version of pci_remap_iospace() is implemented only for MMU
+> > kernel builds. So do not define pci_remap_iospace() without CONFIG_MMU.
+> >
+> > See compilation failures:
+> > https://lore.kernel.org/r/202112040150.wvyJZIZO-lkp@intel.com/
+> > https://lore.kernel.org/r/202112261802.u9iXqdWh-lkp@intel.com/
+> > https://lore.kernel.org/r/202201131529.A2s7rKQc-lkp@intel.com/
+> > https://lore.kernel.org/r/202203090147.24cUL0De-lkp@intel.com/
+> > 
+> > Fixes: bc02973a06a6 ("arm: ioremap: Implement standard PCI function pci_remap_iospace()")
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > 
+> > ---
+> > 
+> > PING!!!! Is somebody interested in fixing these compile errors? As nobody
+> > answered to my emails where I proposed this fix more than half year ago and
+> > asked for opinion...
+> > 
+> > https://lore.kernel.org/r/20211204022131.bmhla4gkph7s7hy2@pali/
+> > https://lore.kernel.org/r/20211205123209.lyx76daqdwzqwex4@pali/
+> > https://lore.kernel.org/r/20211226215135.blcnafbuwhrq5ram@pali/
+> > https://lore.kernel.org/r/20220113134938.3tx7iiukphvazvsq@pali/
+> > https://lore.kernel.org/r/20220308184851.jmw2xvrapy5wzwof@pali/
+> > 
+> > If nobody is interested then please STOP sending me these Intel "0-DAY CI
+> > Kernel Test Service" emails. Thanks!
+> > ---
+> >  arch/arm/include/asm/io.h | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/arch/arm/include/asm/io.h b/arch/arm/include/asm/io.h
+> > index eba7cbc93b86..47cf79229b7c 100644
+> > --- a/arch/arm/include/asm/io.h
+> > +++ b/arch/arm/include/asm/io.h
+> > @@ -180,10 +180,12 @@ void pci_ioremap_set_mem_type(int mem_type);
+> >  static inline void pci_ioremap_set_mem_type(int mem_type) {}
+> >  #endif
+> >  
+> > +#ifdef CONFIG_MMU
+> >  struct resource;
+> >  
+> >  #define pci_remap_iospace pci_remap_iospace
+> >  int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr);
+> > +#endif
+> >  
+> >  /*
+> >   * PCI configuration space mapping function.
+> > -- 
+> > 2.20.1
+> > 
+> > 
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

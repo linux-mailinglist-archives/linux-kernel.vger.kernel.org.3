@@ -2,123 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CEF5769C1
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B1C5769C3
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbiGOWQ3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 15 Jul 2022 18:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
+        id S229957AbiGOWQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbiGOWQR (ORCPT
+        with ESMTP id S232036AbiGOWQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:16:17 -0400
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B590F07
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:16:16 -0700 (PDT)
-Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay12.hostedemail.com (Postfix) with ESMTP id 358A512095E;
-        Fri, 15 Jul 2022 22:16:15 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id 01E912000D;
-        Fri, 15 Jul 2022 22:16:05 +0000 (UTC)
-Message-ID: <f6ab40860cd4f8079e6e169c7d6465f211b8dbd3.camel@perches.com>
-Subject: Re: [PATCH v2 24/39] drm/i915: dvo_sil164.c: use SPDX header
-From:   Joe Perches <joe@perches.com>
-To:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Date:   Fri, 15 Jul 2022 15:16:05 -0700
-In-Reply-To: <YtHdp6ju3IfjF8Bq@intel.com>
-References: <cover.1657699522.git.mchehab@kernel.org>
-         <002a8d51244a70572744de86cacbdae293e7d503.1657699522.git.mchehab@kernel.org>
-         <YtHdp6ju3IfjF8Bq@intel.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Fri, 15 Jul 2022 18:16:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72628262;
+        Fri, 15 Jul 2022 15:16:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1185161701;
+        Fri, 15 Jul 2022 22:16:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C99AC34115;
+        Fri, 15 Jul 2022 22:16:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657923390;
+        bh=5/bcyrjFpp5Iuv4UCuUwJcz8BDDH3Jj7t4EoceoC5iE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NvfK/jLzTa/S0wO9Yu7D5Jj5Fqj2YFjk1gi1svN5MtA8ehbFBJQc2RMO9X4ScthVs
+         QsizMcGJn7zk4W0Q3qGAkYt5Xj7DUH3MiVecJWCNDWVTicNQBpujr5kpgNbSeEotZJ
+         OL7a0dy1v8P4oiwQ2lzX1fSSWGN5aJz9TvIhxB8GxpoV6utwwratBETIkCoPtKgB8G
+         zgF1NCIytZlL2WQlSg6UoeibjYVBrB6HeYMze2quwYG0Tc0fnlsZ57dLrUSVvRgN9V
+         m/k5ebjsanBpcE15qxEz7qp7QPV+iB5uoCnQDAXTMlzemLomd7+ODKbJzYMRAGSxkc
+         peojgDaJNTxsQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     roger.pau@citrix.com, axboe@kernel.dk, boris.ostrovsky@oracle.com,
+        jgross@suse.com, olekstysh@gmail.com, andrii.chepurnyi82@gmail.com,
+        mheyne@amazon.de, xen-devel@lists.xenproject.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] Fix persistent grants negotiation with a behavior change
+Date:   Fri, 15 Jul 2022 22:16:27 +0000
+Message-Id: <20220715221627.127648-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220715181226.126714-1-sj@kernel.org>
+References: 
 MIME-Version: 1.0
-X-Stat-Signature: 9shq7dagh5qa1dpwkohcwaxcpnds4xbk
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 01E912000D
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19aezajI8aTJN8t18DoGrRvtF8w07Xpt2A=
-X-HE-Tag: 1657923365-889008
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-15 at 17:35 -0400, Rodrigo Vivi wrote:
-> On Wed, Jul 13, 2022 at 09:12:12AM +0100, Mauro Carvalho Chehab wrote:
-> > This file is licensed with MIT license.	Change its license text
-> > to use SPDX.
-> > 
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Hi all,
+
+On Fri, 15 Jul 2022 18:12:26 +0000 SeongJae Park <sj@kernel.org> wrote:
+
+> Hi all,
 > 
-> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-
-Not exactly the MIT license as it's missing "or copyright holders"
+> On Fri, 15 Jul 2022 17:55:19 +0000 SeongJae Park <sj@kernel.org> wrote:
 > 
-> > ---
-> > 
-> > To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> > See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
-> > 
-> >  drivers/gpu/drm/i915/display/dvo_sil164.c | 32 +++++------------------
-> >  1 file changed, 6 insertions(+), 26 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/i915/display/dvo_sil164.c b/drivers/gpu/drm/i915/display/dvo_sil164.c
-> > index 0dfa0a0209ff..12974f7c9dc1 100644
-> > --- a/drivers/gpu/drm/i915/display/dvo_sil164.c
-> > +++ b/drivers/gpu/drm/i915/display/dvo_sil164.c
-> > @@ -1,30 +1,10 @@
-> > -/**************************************************************************
-> > +// SPDX-License-Identifier: MIT
-> >  
-> > -Copyright © 2006 Dave Airlie
-> > -
-> > -All Rights Reserved.
-> > -
-> > -Permission is hereby granted, free of charge, to any person obtaining a
-> > -copy of this software and associated documentation files (the
-> > -"Software"), to deal in the Software without restriction, including
-> > -without limitation the rights to use, copy, modify, merge, publish,
-> > -distribute, sub license, and/or sell copies of the Software, and to
-> > -permit persons to whom the Software is furnished to do so, subject to
-> > -the following conditions:
-> > -
-> > -The above copyright notice and this permission notice (including the
-> > -next paragraph) shall be included in all copies or substantial portions
-> > -of the Software.
-> > -
-> > -THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-> > -OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-> > -MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
-> > -IN NO EVENT SHALL THE AUTHOR
+> > The first patch of this patchset fixes 'feature_persistent' parameter
+> > handling in 'blkback' to respect the frontend's persistent grants
+> > support always.  The fix makes a behavioral change, so the second patch
+> > makes the counterpart of 'blkfront' to consistently follow the behavior
+> > change.
+> 
+> I made the behavior change as requested by Andrii[1].  I therefore made similar
+> behavior change to blkfront and Cc-ed stable for the second change, too.
 
-Missing "Authors or copyright holders"
+Now I realize that commit aac8a70db24b ("xen-blkback: add a parameter for
+disabling of persistent grants") introduced two issues.  One is what Max
+reported with his patch, and the second one is unintended behavioral change
+that broke Andrii's use case.
 
-> > BE LIABLE FOR
-> > -ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-> > -TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-> > -SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-> > -
-> > -**************************************************************************/
-> > +/*
-> > + * Copyright © 2006 Dave Airlie
-> > + *
-> > + * All Rights Reserved.
-> > + */
-> >  
-> >  #include "intel_display_types.h"
-> >  #include "intel_dvo_dev.h"
-> > -- 
-> > 2.36.1
-> > 
+That is, Andrii's use case should had no problem at all before the introduction
+of 'feature_persistent', as at that time 'blkback' checked if the frontend
+support the persistent grants for every 'reconnect()' and enables it if so.
+However, introduction of the parameter made it behaves differently.
 
+Yes, we intended to make the prameter to make effects to newly created devices.
+But, as it breaks user workflows, this should be fixed.  Same for the
+'blkfront' side 'feature_persistent'.
+
+> 
+> To make the change history clear and reduce the stable side overhead, however,
+> it might be better to apply the v2, which don't make behavior change but only
+> fix the issue, Cc stable@ for it, make the behavior change commits for both
+> blkback and blkfront, update the documents, and don't Cc stable@ for the
+> behavior change and documents update commits.
+
+I'd say having one patch for each issue would be the right way to go, and all
+fixes should Cc stable@.
+
+> 
+> One downside of that would be that it will make a behavioral difference in
+> pre-5.19.x and post-5.19.x.
+
+The unintended behavioral fix should also be considered fix and therefore
+should be merged into stable@, so above concern is not valid.
+
+I will send the next spin soon.
+
+
+Thanks,
+SJ
+
+[...]

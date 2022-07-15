@@ -2,126 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDB35764C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A835764C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiGOPyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 11:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
+        id S229846AbiGOP4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 11:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiGOPyS (ORCPT
+        with ESMTP id S229510AbiGOP4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 11:54:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991E261D5C;
-        Fri, 15 Jul 2022 08:54:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35A0962135;
-        Fri, 15 Jul 2022 15:54:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F4EBC34115;
-        Fri, 15 Jul 2022 15:54:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657900456;
-        bh=5daCr9QK24Hj+RUwhhq6jII9Hqcph8xnR3ZzTxWqL1Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eYpNxXxCNO7Q/dPoOq3aAeCPsQ3Az8oDxckCVf2lTsgFb1OwUbsRgPl7L32GEa4YC
-         9t8kbfwtOxmJGEVdh7pR6jQjjBzEamEfqblSQtxndBRnmhX+emy6GsfUAjk7BavTEp
-         ooh+TU5bskMLvEd2hQwsBkvqG0pkqbGkJ/hb8CyRagp+RHHonYcGJMbAfpymKp3zV7
-         TDntmKYo0lSQoD62KovtiMX8SD2u1uI+29K3PYjaAM3ZwrsRWvaZbY+jAWW8nOGm60
-         AgCOZb9EOmrR702cJ8fKuW+WKT0lVV6A4hnImGxj/qyI5hA6dhoI8fgmUbPlxmMiiu
-         AZAHUibkIm5Hg==
-Date:   Fri, 15 Jul 2022 16:54:05 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
-Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "git@xilinx.com" <git@xilinx.com>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Subject: Re: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
- device
-Message-ID: <YtGNnT2cP5HIayp3@sirena.org.uk>
-References: <20220606112607.20800-1-amit.kumar-mahapatra@xilinx.com>
- <20220606112607.20800-2-amit.kumar-mahapatra@xilinx.com>
- <YqHfccvhy7e5Bc6m@sirena.org.uk>
- <DM6PR12MB2809F6C7D80B60556218D627DCB59@DM6PR12MB2809.namprd12.prod.outlook.com>
- <YrRXTrYN3BuShbzg@sirena.org.uk>
- <DM6PR12MB28091BEB013B6F1903B5CDE3DC8B9@DM6PR12MB2809.namprd12.prod.outlook.com>
+        Fri, 15 Jul 2022 11:56:38 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C9B61D7C
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:56:36 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id f11so4762859pgj.7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qqQJfEW0FN6IJIkIF+XHc3snQAtucZYIpI8xrgMEOoU=;
+        b=EC3/IaGbcVPQ8bqDXMt14CoyLb16sGjTQbFo06922wf0cfkug2o8tB7M4h3Qh0Gi9M
+         RNzZywpE7iovQRA5Tz209+E9u1G5p0iukRjD33zFw/SUV+GoNa9GVzOIcoeSTv+1Rx6a
+         RDhZz5GzuCOp1kHXcQHkF1pgrBW/9MOvI7y4iCNHO3PZvd2RQUri67QqSJ2+PWMI/wBo
+         YLfPiULvgDYI6og0Q/tXwkab1RkDLMRp7o0maXmshq5Bk4pqh9MeSZ0bQrzAiEd6Z5zS
+         93BhX8mc0lZcWlPJOKQNyLw+KPZD8vuzFMP5PPcg+2IZw8NaqNH6NlcLuGsOfr54D6Gg
+         2TRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qqQJfEW0FN6IJIkIF+XHc3snQAtucZYIpI8xrgMEOoU=;
+        b=sjoJgDlrxQhkpjQ15zc4I1s9E7Ez3Hw/nzpn66FcsqXnnEu+wLj0lSDrQ2sgOOtTrX
+         xFNJxdGl01gCgbjOKrEF+N3IO2Jgl5ZrDKn/elmB7XSXXaDo81+IQiZE1O9+S8h2BjJL
+         wgZP97n2aTuysurcMadbiFwCtamC55Vhh49gVpD+BPrmKDBt3VgOYtP6h+lhTeMQ79Ex
+         TzKcSLQ2eAoBcF9b+gVVgZMxI89XR9Q/+1IRDgYFmHaDKmrh3yu6QKEw6ZMG6in7xdB8
+         TMkJvvxZx65lad5LfWBU2T/AHZEHWJM9L5WQEax6jdJi57+Cmd8vGF3i97XLg1dBp+Kb
+         FxDA==
+X-Gm-Message-State: AJIora8ZjnW0VVrbBt/TraMulIEK1CdfZujjDl8+3nTWzFh50eX9BF0b
+        yPNO9uoX+X3YlZiOmqDXYKNJ8Q==
+X-Google-Smtp-Source: AGRyM1s6+DI7Oybp0uYSwgx+a5aoVOH/SoXueo79bvrT1WydGkWEHfu0gWEbdlwjEqCYL7WiR8BhOg==
+X-Received: by 2002:a63:a47:0:b0:419:d02c:289e with SMTP id z7-20020a630a47000000b00419d02c289emr5281352pgk.46.1657900595490;
+        Fri, 15 Jul 2022 08:56:35 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170902cecc00b0016c0d531448sm3744333plg.276.2022.07.15.08.56.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 08:56:35 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 15:56:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yu Zhang <yu.c.zhang@linux.intel.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, jmattson@google.com,
+        joro@8bytes.org, wanpengli@tencent.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] KVM: X86: Fix the comments in prepare_vmcs02_rare()
+Message-ID: <YtGOL4jIMQwoW5vb@google.com>
+References: <20220715114211.53175-1-yu.c.zhang@linux.intel.com>
+ <20220715114211.53175-3-yu.c.zhang@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WLnYk1lIzSJ4ADtF"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM6PR12MB28091BEB013B6F1903B5CDE3DC8B9@DM6PR12MB2809.namprd12.prod.outlook.com>
-X-Cookie: You dialed 5483.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220715114211.53175-3-yu.c.zhang@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 15, 2022, Yu Zhang wrote:
+> Although EB.PF in vmcs02 is still set by simply "or"ing the EB of
+> vmcs01 and vmcs12, the explanation is obsolete. "enable_ept" being
+> set is not the only reason for L0 to clear its EB.PF.
+> 
+> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> ---
+>  arch/x86/kvm/vmx/nested.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index 778f82015f03..634a7d218048 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -2451,10 +2451,10 @@ static void prepare_vmcs02_rare(struct vcpu_vmx *vmx, struct vmcs12 *vmcs12)
+>  	 * is not easy (if at all possible?) to merge L0 and L1's desires, we
+>  	 * simply ask to exit on each and every L2 page fault. This is done by
+>  	 * setting MASK=MATCH=0 and (see below) EB.PF=1.
+> -	 * Note that below we don't need special code to set EB.PF beyond the
+> -	 * "or"ing of the EB of vmcs01 and vmcs12, because when enable_ept,
+> -	 * vmcs01's EB.PF is 0 so the "or" will take vmcs12's value, and when
+> -	 * !enable_ept, EB.PF is 1, so the "or" will always be 1.
+> +	 * Note that EB.PF is set by "or"ing of the EB of vmcs01 and vmcs12,
+> +	 * because when L0 has no desire to intercept #PF, vmcs01's EB.PF is 0
+> +	 * so the "or" will take vmcs12's value, otherwise EB.PF is 1, so the
+> +	 * "or" will always be 1.
 
---WLnYk1lIzSJ4ADtF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Oof!  I was going to respond with a variety of nits (about the existing comment),
+and even suggest that we address the TODO just out of sight, but looking at all
+of this made me realize there's a bug here!  vmx_update_exception_bitmap() doesn't
+update MASK and MATCH!
 
-On Fri, Jul 15, 2022 at 03:35:49PM +0000, Mahapatra, Amit Kumar wrote:
+Hitting the bug is extremely unlikely, as it would require changing the guest's
+MAXPHYADDR via KVM_SET_CPUID2 _after_ KVM_SET_NESTED_STATE, but before KVM_RUN
+(because KVM now disallows changin CPUID after KVM_RUN).
 
-> > That doesn't address the issue, the issue is checking that the driver c=
-an
-> > support multiple chip selects.
+During KVM_SET_CPUID2, KVM will invoke vmx_update_exception_bitmap() to refresh
+the exception bitmap to handle the ept=1 && allow_smaller_maxphyaddr=1 scenario.
+But when L2 is active, vmx_update_exception_bitmap() assumes vmcs02 already has
+the correct MASK+MATCH because of the "clear both if KVM and L1 both want #PF"
+behavior.  But if KVM's desire to intercept #PF changes from 0=>1, then KVM will
+run L2 with the MASK+MATCH from vmcs12 because vmx_need_pf_intercept() would have
+returned false at the time of prepare_vmcs02_rare().
 
-> To address this issue, in spi core we will check the number of items=20
-> in the "reg" property of the flash node(which is nothing but the=20
-> number of chip selects) against the "num-cs" property of the spi=20
-> controller(which is total number of chip selects supported by the=20
-> controller). If the number of items mentioned in the "reg" property=20
-> is greater than "num-cs" value then we error out.
+Fixing the bug is fairly straightforward, and presents a good opportunity to
+clean up the code (and this comment) and address the TODO.
 
-> For eg.,
+Unless someone objects to my suggestion for patch 01, can you send a new version
+of patch 01?  I'll send a separate series to fix this theoretical bug, avoid
+writing MASK+MATCH when vmcs0x.EXCEPTION_BITMAP.PF+0, and to address the TODO.
 
-> rc =3D of_property_read_variable_u32_array(nc, "reg", &cs[0], 1,=20
-> 						SPI_CS_CNT_MAX);
-> if(rc > ctlr->num_chipselect) {
-> 	dev_err(&ctlr->dev, "%pOF has invalid 'reg' property (%d)\n",=20
-> 							nc, rc);
-> 	return -EINVAL;
-> }
+E.g. I believe this is what we want to end up with:
 
-This would check that the controller has at least the number of chip
-selects specified but it would not check that the controller is actually
-capable of using more than one chip select at once.  We should be
-validating both that the chip selects are available and that the
-controller can do something useful with them (and probably have an
-implementation in the core for doing so via GPIO).
+	if (vmcs12)
+		eb |= vmcs12->exception_bitmap;
 
---WLnYk1lIzSJ4ADtF
-Content-Type: application/pgp-signature; name="signature.asc"
+	/*
+	 * #PF is conditionally intercepted based on the #PF error code (PFEC)
+	 * combined with the exception bitmap.  #PF is intercept if:
+	 *
+	 *    EXCEPTION_BITMAP.PF=1 && ((PFEC & MASK) == MATCH).
+	 *
+	 * If any #PF is being intercepted, update MASK+MATCH, otherwise leave
+	 * them alone they do not affect interception (EXCEPTION_BITMAP.PF=0).
+	 */
+	if (eb & (1u << PF_VECTOR)) {
+		/*
+		 * If EPT is enabled, #PF is only intercepted if MAXPHYADDR is
+		 * smaller on the guest than on the host.  In that case, KVM
+		 * only needs to intercept present, non-reserved #PF.  If EPT
+		 * is disabled, i.e. KVM is using shadow paging, KVM needs to
+		 * intercept all #PF.  Note, whether or not KVM wants to
+		 * intercept _any_ #PF is handled below.
+		 */
+		if (enable_ept) {
+			pfec_mask = PFERR_PRESENT_MASK | PFERR_RSVD_MASK;
+			pfec_match = PFERR_PRESENT_MASK;
+		} else {
+			pfec_mask = 0;
+			pfec_match = 0;
+		}
 
------BEGIN PGP SIGNATURE-----
+		if (!(vmcs12->exception_bitmap & (1u << PF_VECTOR))) {
+			/* L1 doesn't want to intercept #PF, use KVM's MASK+MATCH. */
+		} else if (!kvm_needs_pf_intercept) {
+			/* KVM doesn't want to intercept #PF, use L1's MASK+MATCH. */
+			pfec_mask = vmcs12->page_fault_error_code_mask;
+			pfec_match = vmcs12->page_fault_error_code_match;
+		} else if (pfec_mask != vmcs12->page_fault_error_code_mask ||
+			   pfec_match != vmcs12->page_fault_error_code_mask) {
+			/*
+			 * KVM and L1 want to intercept #PF with different MASK
+			 * and/or MATCH.  For simplicity, intercept all #PF by
+			 * clearing MASK+MATCH.  Merging KVM's and L1's desires
+			 * is quite complex, while the odds of meaningfully
+			 * reducing what #PFs are intercept are low.
+			 */
+			pfec_mask = 0;
+			pfec_match = 0;
+		} else {
+			/* KVM and L1 have identical MASK+MATCH. */
+		}
+		vmcs_write32(PAGE_FAULT_ERROR_CODE_MASK, pfec_mask);
+		vmcs_write32(PAGE_FAULT_ERROR_CODE_MATCH, pfec_match);
+	}
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLRjZ0ACgkQJNaLcl1U
-h9DvNgf8CXWe2TL7deZzQsKFmwm4r44oFp98ORLdX9fjwHjXyvyWACyJHEKdf/DO
-Tpngc2qCEoBpumurCNRrB8sUI7w6GoikYd0Q25+u6ggKF1Qr5bgkPr+jWVyEx9PY
-XoJDU5nqv7GTLDkc88KG1pf3yyebiJfkyG1ZckcE0Gi7CMtVjTbPTJ9D+wFptMQM
-FiHctGpxjWx6GNDefyyO7Rdc7f0brEiDy5WoRoLGRlF2RoKGOEUtjtPBNkoFQVSl
-ldtIrzip4BxzLTfeDayqEyi2MRHqYlpYCH6gtlMVsRGwNq2fNejEa3KhSo4evar3
-vql8mcvRgsrJgTDzC/aBH1VojkTC0A==
-=AAV5
------END PGP SIGNATURE-----
-
---WLnYk1lIzSJ4ADtF--

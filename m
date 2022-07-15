@@ -2,101 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76901575D17
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CAF575D28
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbiGOILe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 04:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
+        id S231945AbiGOIPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 04:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiGOILc (ORCPT
+        with ESMTP id S231858AbiGOIPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:11:32 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA1A7E820;
-        Fri, 15 Jul 2022 01:11:31 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id w12so5287482edd.13;
-        Fri, 15 Jul 2022 01:11:31 -0700 (PDT)
+        Fri, 15 Jul 2022 04:15:16 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5197C7E00C
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:15:15 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id o12so4907068ljc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:15:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/WT3O/iaEN8ZI+k9sQWWRlrclbEh4N1aPfEXOoHcef0=;
-        b=QZavUBjxaC4/hGgbODR950XscjvP9bmaeH2lRJBzmMSReOjB9VvfUrmY4K8QWmUn9g
-         LkiEbaJh7T6ph0sMxmpfm0jlTEJ1wpV4UpzO1WTa99klN6zrFEU3TChReJqnXyRj5ifp
-         Cl6mg7/rXqOFUdMa+XmMECQtR4Fx4POGaW0UI9qpxoJTfgJPfDZ0SzzkQYPNcRZt7B2A
-         2MYxNP3NYwQXUik34Nw5ZhXZ6a8eZYY2LbX6U0EuFD1hXjpMRoRYteY4BGLv8aDRJfNn
-         5PggjQawr/XuKWyjvfqbOhfxof2BTqBKezTrJjGmj8eQ+gxLc0r9t/YPjTT/37l4XfoT
-         dFdw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=e+ERE0KIoScFnNn+zM8jJN/meHoLJnU/KJ0nScp1cAM=;
+        b=ej3ctc4UQJ654wtTtLiTxBvgpCnZNLjLyuOrdNOd4+CszA6zehRmllfuaZyRbmchIW
+         fBkyZGtvSC/ZH5Cqqs/qqQpp5QGpdeDQkpQ3unibnm79+FkU37BUoMSM6Ow9yQOMOSa3
+         xX9sIIHxstIPDfNtEeikuNKW5bG/+RBrTvUU5nCWNiqxnbZQSm8p0/mFvaYqqug9jkMg
+         gVul9xFyT+rmkbxV7/ysJLSv25941FpziMavn0n4MR+pUtrdUHj3UnzY9u+7RshYbrxe
+         9IPYQ3QcGDIcPrhE8EkFnx0ht343qSG0X68toTsNL/ymMAY7OaTaenZ51p7VM0UWbSsw
+         hRPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=/WT3O/iaEN8ZI+k9sQWWRlrclbEh4N1aPfEXOoHcef0=;
-        b=BtjaIr3b1sazmpD1/9j4jJkOMTEct4BvDMTElSOCgv/anm3hgrp+Z8f/vUcmXZmXL8
-         1CbkkM1HDYfu78cbMQAstmfNq62dI+8xfehruI6dDY7VNM7LOgPa7QTvs8UxxIuRuO9q
-         vPbVUlyuIUZya6YOYI34Lj54SNbbY323Uvm8UiJouoLk46MQTlfa+HfQs59ifoJOh1Di
-         NBLmcgP6z2LQrzuJT46nHHnJHWZ2LK7KOImN8om8US3QzIFIhf3Wh2fTJ32xUvSkMF7x
-         CcANwhWw7tizNNidC3gNiuqJagu2I9zHV6kIF1zqNRwC1yEtimcg2ZBztfpEf5k5Xsai
-         FKfw==
-X-Gm-Message-State: AJIora+X+Zn6zBTR5WiSfajLPxvtpj92TGpvnnbRkNyqzCuwBfO03L85
-        H9e6HIW8ri8udWm6qea2Hwo=
-X-Google-Smtp-Source: AGRyM1srrvHd0wd+c0mqmiFtnTU7PpeHR6s6xc/yzdHG2oy+kWoRM9LA5K3cHcZ2ExozHwQ2fXyF8Q==
-X-Received: by 2002:aa7:ce8a:0:b0:43a:7b0e:9950 with SMTP id y10-20020aa7ce8a000000b0043a7b0e9950mr17559858edv.58.1657872690017;
-        Fri, 15 Jul 2022 01:11:30 -0700 (PDT)
-Received: from [192.168.178.23] (h081217087223.dyn.cm.kabsi.at. [81.217.87.223])
-        by smtp.gmail.com with ESMTPSA id v10-20020a1709061dca00b0072b32de7794sm1719447ejh.70.2022.07.15.01.11.29
+        bh=e+ERE0KIoScFnNn+zM8jJN/meHoLJnU/KJ0nScp1cAM=;
+        b=LPZYhD6fImiiAwIQLbWzqrO0Il0/vt8ljv+/l9Neentw8UAch84chhZ1F4MZmNzmcL
+         fOfsBYC0/blLL3FT+4wpu4lCXonpHyD74sIfavkRMqwvbImmuKq57bY/HhYOfudKWe/d
+         f3x/+kZTWeMT6GFvENpunWYpv/X+wvzTydowtN41S5BjOudt1NEA/7KZSzGv2XgtEZS5
+         rdTEBtorDuZn96mswbdaTwOhyRGofFDYsi66GtNJbbpIV/rUvLKHJ7t58esQ4/I//5a2
+         XrJKEKxMUx3xxLYPHLavGAXtkhNS9Vxz6YWVFXxypt6WKYdKtpF6Dpxj+xTyQOybQh6M
+         8qwQ==
+X-Gm-Message-State: AJIora+ovwk7KOVVS1MMulSdo5ljfdosEO8aoZ4RS/ntWyluyI8afaEv
+        1EhACyCEy3F/J4t1rqFGXNhXNQ==
+X-Google-Smtp-Source: AGRyM1sMtUQaH6P6ehwbJuYCX/2dAmVEbQZVwJArYB54qbYI9BEIAead4/d8WxFm00HQoj3oVBoAyQ==
+X-Received: by 2002:a2e:8719:0:b0:25d:7650:6c06 with SMTP id m25-20020a2e8719000000b0025d76506c06mr6336445lji.330.1657872913617;
+        Fri, 15 Jul 2022 01:15:13 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id p22-20020a2eba16000000b0025d87966100sm632898lja.140.2022.07.15.01.15.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 01:11:29 -0700 (PDT)
-Message-ID: <efca1b16-2492-fa68-119b-8c3cfa05cadb@gmail.com>
-Date:   Fri, 15 Jul 2022 10:11:28 +0200
+        Fri, 15 Jul 2022 01:15:13 -0700 (PDT)
+Message-ID: <631560b2-58f7-064a-020b-d8029f04e451@linaro.org>
+Date:   Fri, 15 Jul 2022 10:15:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2] Documentation: process: Update email client
- instructions for Thunderbird
+Subject: Re: [PATCH v2 05/19] dt-bindings: power: mediatek: Refine multiple
+ level power domain nodes
 Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, corbet@lwn.net
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bagasdotme@gmail.com
-References: <20220714131152.12709-1-sndanailov@gmail.com>
- <ae06388f-a062-132b-ee61-8ad68f227970@infradead.org>
-From:   Sotir Danailov <sndanailov@gmail.com>
-In-Reply-To: <ae06388f-a062-132b-ee61-8ad68f227970@infradead.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>
+Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220714122837.20094-1-tinghan.shen@mediatek.com>
+ <20220714122837.20094-6-tinghan.shen@mediatek.com>
+ <c2e9f890-98c2-8f09-952d-495f2b57a254@linaro.org>
+In-Reply-To: <c2e9f890-98c2-8f09-952d-495f2b57a254@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for taking the time!
-I didn't expect the original author to participate. :D
-I probably should've sent a cc to you and others as well, sorry about that!
-Didn't do my research good enough I guess.
+On 15/07/2022 10:07, Krzysztof Kozlowski wrote:
+> On 14/07/2022 14:28, Tinghan Shen wrote:
+>> Extract duplicated properties and support more levels of power
+>> domain nodes.
 
-On Fri 15 07 2022 01:18, Randy Dunlap wrote:
-> 
-> Does thunderbird v91.11.0 qualify as newer or older?
-> 
-> I tried to use the external-editor-revived yesterday with v1 of the patch..
-> no success.
+Can you guys stop cc-ing all the non-working @mediatek.com emails? Every
+time I got a bunch of bounced:
 
-Do you think that the whole section about the
-old "External Editor" extension should be removed?
+550 Relaying mail to weiyi.lu@mediatek.com is not allowed
 
-> v2 of the patch has more useful info (about native-messaging), so I installed
-> that and still not happy.
-> After pressing "External Editor" in a tbird reply window, nothing happens.
-> 
-> Wait -- hold everything!  Exiting tbird and reloading it
-> fixed all problems. :)
+and other like that.
 
-I probably should add in the document that the user should
-restart Thunderbird after all modifications, just to be sure.
+Really, it's being since some time and it became extra annoying.
+
+Best regards,
+Krzysztof

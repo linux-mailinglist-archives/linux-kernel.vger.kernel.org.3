@@ -2,184 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1977576684
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BFD576687
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiGOSBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 14:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
+        id S230056AbiGOSDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 14:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiGOSBq (ORCPT
+        with ESMTP id S229506AbiGOSDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 14:01:46 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94FF4330A;
-        Fri, 15 Jul 2022 11:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657908105; x=1689444105;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jHZoGwfY+YAWaEvmFIs9T/MUj4oMs56kBoAM3CyGWwU=;
-  b=ZUREJxi3wLpmQVANnZxby4KgZEuM+qOcZYI24AvAndOTCRCi1TPnCueJ
-   XsPV+W9+5AHMjFBDEPDEMYCSQ5Rcq5XifYssIwSkivO1mjOdOj7FUHQka
-   UPdjM13i/rdgMt/kJSLkHR+TvmSPg8CT028oLW4sH5LH4E2H/hsXSb9u4
-   KYBfehecnnO/E36nWQqIhiuYzX42UuCSxKIonNnNa1Bxgq75mVc8ajUQR
-   vh34SXlrrLSvyypF1Vtq5IN9mjshYn7oIxgF8VVUwnV0Rt8YFvyXHiUfo
-   qQl2Nw9XrXIyDOCguwA+xItWQCeqCzE71y10kprO7i+iWiAiSSiqjIRRK
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="285890729"
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="285890729"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 11:01:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="773060392"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 15 Jul 2022 11:01:40 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCPdD-0000c9-Gw;
-        Fri, 15 Jul 2022 18:01:39 +0000
-Date:   Sat, 16 Jul 2022 02:01:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
-        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
-        airlied@linux.ie
-Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, granquet@baylibre.com,
-        jitao.shi@mediatek.com, liangxu.xu@mediatek.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        msp@baylibre.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>,
-        linux-mediatek@lists.infradead.org, wenst@chromium.org,
-        linux-arm-kernel@lists.infradead.org,
-        angelogioacchino.delregno@collabora.com
-Subject: Re: [PATCH v14 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-Message-ID: <202207160102.zyueiI7S-lkp@intel.com>
-References: <20220712111223.13080-6-rex-bc.chen@mediatek.com>
+        Fri, 15 Jul 2022 14:03:23 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D625542AD0;
+        Fri, 15 Jul 2022 11:03:22 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id s21so6279256pjq.4;
+        Fri, 15 Jul 2022 11:03:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=82CEaTbPG5hRrKufgDuMl8R+gnz9vTnIDmFc+J3kvLs=;
+        b=mS6SGZnqBxs6zBiQDMMbYqq1t1OADDFPaNO8IC2b1/cmmQF4XjF8YZYPKhTRECATiv
+         LLG8iEG2GZDAqIloJ/l+7k1dezrL+UyuU6ScAVfOBgxZkgbnFJNvTYLtYdRIUlxgvtQS
+         MGf35eiT1yZDjjYJp7IrVVs09i5buYYi1wPr9RiGKYH0wLJ61T266xZ+JaMRPp0OSR1L
+         jdUAd58fQSGD1b0WBfBIkMQVT0L/4BqRGJbQsASXnRZ6lObtPCFUoOInvqU8YFYaqbJH
+         AYztprdigI6blCGWs65eK4U7aCYX0cZJ5ZkAzktbNWAB7Mtx60vbecICHEwHP79pp9ec
+         xfAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=82CEaTbPG5hRrKufgDuMl8R+gnz9vTnIDmFc+J3kvLs=;
+        b=mUQgILbXevU5fglEbfd1Wm7xVk7yAFvImx8Q0wHJ/LsQEfzDygKHwNLFHdVKVcqZ4e
+         hLWu13v2Vs9qV0c1uLtHJ3qGI2Kvrh+NHdy8Z8hbaudqt8OV9qlniLTP5530l8MXV6/E
+         Oa5rYZCobfRSGNBD9dVh7n+pRbGvtfz33VyYh7zlwR4q275qGP3YjLSthsEOOq1X4qG3
+         lCgkg+MhtxQLDmXVd57VCbZJYTHnvwWm7rmBqg/Jyq00GU90DddlPLDdw/6Vll6npEID
+         yYff5DNcOrPggLH7Kj2KM6aL3F2H2uH2KOt//s2xh8rdK7bqkpL0CVZMfJIjfdIKDK81
+         nY9g==
+X-Gm-Message-State: AJIora+3qkvuvnllkMFHgA6b5uQaWbYABHkqFA0hDZyEpqu/ppoMTunJ
+        nDFNz40YxpHaGPrYhIU83S1yR+qR0vc=
+X-Google-Smtp-Source: AGRyM1vERXA6u2bO16oEvEDdFxRpgtr5+ZU6yasU0gnfdlN9ZH5WlAbBu+BHoT5EVFKk6OtHITRArQ==
+X-Received: by 2002:a17:90b:1b48:b0:1ef:a90d:eae1 with SMTP id nv8-20020a17090b1b4800b001efa90deae1mr22951161pjb.68.1657908202280;
+        Fri, 15 Jul 2022 11:03:22 -0700 (PDT)
+Received: from [172.30.1.47] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id x1-20020a170902a38100b0015ee60ef65bsm3870042pla.260.2022.07.15.11.03.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 11:03:21 -0700 (PDT)
+Message-ID: <06ba1e63-16a5-5659-e062-3c7e12f7e5cd@gmail.com>
+Date:   Sat, 16 Jul 2022 03:03:12 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Chanwoo Choi <chanwoo@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Subject: [GIT PULL] devfreq next for 5.20
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bo-Chen,
+Dear Rafael,
 
-Thank you for the patch! Perhaps something to improve:
+This is devfreq-next pull request for v5.20-rc1. I add detailed description of
+this pull request on the following tag. Please pull devfreq with
+following updates.
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on drm/drm-next pza/reset/next linus/master v5.19-rc6 next-20220715]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bo-Chen-Chen/drm-mediatek-Add-MT8195-DisplayPort-driver/20220712-191341
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220716/202207160102.zyueiI7S-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a3869f524e16c38015e0f124c6597927fc6d26b0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bo-Chen-Chen/drm-mediatek-Add-MT8195-DisplayPort-driver/20220712-191341
-        git checkout a3869f524e16c38015e0f124c6597927fc6d26b0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/mediatek/ drivers/pci/controller/dwc/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/gpu/drm/mediatek/mtk_dp.c: In function 'mtk_dp_train_tps_1':
->> drivers/gpu/drm/mediatek/mtk_dp.c:1092:12: warning: variable 'val' set but not used [-Wunused-but-set-variable]
-    1092 |         u8 val;
-         |            ^~~
-   drivers/gpu/drm/mediatek/mtk_dp.c: In function 'mtk_dp_bridge_atomic_get_output_bus_fmts':
-   drivers/gpu/drm/mediatek/mtk_dp.c:1865:26: error: 'MEDIA_BUS_FMT_FIXED' undeclared (first use in this function)
-    1865 |         output_fmts[0] = MEDIA_BUS_FMT_FIXED;
-         |                          ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/mediatek/mtk_dp.c:1865:26: note: each undeclared identifier is reported only once for each function it appears in
-   drivers/gpu/drm/mediatek/mtk_dp.c: At top level:
-   drivers/gpu/drm/mediatek/mtk_dp.c:1870:9: error: 'MEDIA_BUS_FMT_RGB888_1X24' undeclared here (not in a function)
-    1870 |         MEDIA_BUS_FMT_RGB888_1X24,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/mediatek/mtk_dp.c:1871:9: error: 'MEDIA_BUS_FMT_YUV8_1X24' undeclared here (not in a function)
-    1871 |         MEDIA_BUS_FMT_YUV8_1X24,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/mediatek/mtk_dp.c:1872:9: error: 'MEDIA_BUS_FMT_YUYV8_1X16' undeclared here (not in a function)
-    1872 |         MEDIA_BUS_FMT_YUYV8_1X16,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+Best Regards,
+Chanwoo Choi
 
 
-vim +/val +1092 drivers/gpu/drm/mediatek/mtk_dp.c
+The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
 
-  1087	
-  1088	static int mtk_dp_train_tps_1(struct mtk_dp *mtk_dp, u8 target_lane_count,
-  1089				      int *iteration_count, u8 *lane_adjust,
-  1090				      int *status_control, u8 *prev_lane_adjust)
-  1091	{
-> 1092		u8 val;
-  1093		u8 link_status[DP_LINK_STATUS_SIZE] = {};
-  1094	
-  1095		mtk_dp_training_set_scramble(mtk_dp, false);
-  1096	
-  1097		if (*status_control == 0) {
-  1098			mtk_dp_train_set_pattern(mtk_dp, 1);
-  1099			val = DP_LINK_SCRAMBLING_DISABLE |
-  1100				DP_TRAINING_PATTERN_1;
-  1101			drm_dp_dpcd_writeb(&mtk_dp->aux,
-  1102					   DP_TRAINING_PATTERN_SET,
-  1103					   DP_LINK_SCRAMBLING_DISABLE |
-  1104					   DP_TRAINING_PATTERN_1);
-  1105			drm_dp_dpcd_read(&mtk_dp->aux,
-  1106					 DP_ADJUST_REQUEST_LANE0_1,
-  1107					 lane_adjust,
-  1108					 sizeof(*lane_adjust) * 2);
-  1109	
-  1110			mtk_dp_train_update_swing_pre(mtk_dp,
-  1111						      target_lane_count, lane_adjust);
-  1112			*status_control = 1;
-  1113			(*iteration_count)++;
-  1114		}
-  1115	
-  1116		drm_dp_link_train_clock_recovery_delay(&mtk_dp->aux, mtk_dp->rx_cap);
-  1117		drm_dp_dpcd_read_link_status(&mtk_dp->aux, link_status);
-  1118	
-  1119		if (drm_dp_clock_recovery_ok(link_status,
-  1120					     target_lane_count)) {
-  1121			mtk_dp->train_info.cr_done = true;
-  1122			*iteration_count = 1;
-  1123			dev_dbg(mtk_dp->dev, "Link train CR pass\n");
-  1124			return 0;
-  1125		} else if (*prev_lane_adjust == link_status[4]) {
-  1126			(*iteration_count)++;
-  1127			if (*prev_lane_adjust & DP_ADJUST_VOLTAGE_SWING_LANE0_MASK) {
-  1128				dev_dbg(mtk_dp->dev, "Link train CQ fail\n");
-  1129				return -EINVAL;
-  1130			}
-  1131		} else {
-  1132			*prev_lane_adjust = link_status[4];
-  1133		}
-  1134		return -EAGAIN;
-  1135	}
-  1136	
+  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.20
+
+for you to fetch changes up to 53f853d55e312a639eaa910154248ce06eb754ac:
+
+  PM / devfreq: tegra30: Add error message for devm_devfreq_add_device() (2022-07-15 11:40:08 +0900)
+----------------------------------------------------------------
+
+Update devfreq next for v5.20
+
+Detailed description for this pull request:
+1. Add new Mediatek CCI (Cache Coherent Interconnect) devfreq driver
+- Add new MediaTek Cache Coherent Interconnect (CCI) devfreq drviver
+  which supports the dynamic voltage and clock scaling.
+  This driver uses the passive devfreq governor to get target frequencies
+  and adjust voltages because it depends on MediaTek cpu frequency
+  driver. In MT8183 and MT8186, the MediaTek CCI is supplied
+  by the same regulators with the little core CPUs.
+
+2. Update the devfreq drivers
+- Convert the Samsung Exynos SoC Bus bindings to DT schema of exynos-bus.c
+
+- Remove kernel-doc warnings by adding the description for unused
+  fucntio parameters on devfreq core.
+
+- Use NULL to pass a null pointer rather than zero according to function
+  propotype on imx-bus.c
+
+- Print error message instead of error interger value on tegra30-devfreq.c
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      PM / devfreq: imx-bus: use NULL to pass a null pointer rather than zero
+
+Dmitry Osipenko (1):
+      PM / devfreq: tegra30: Add error message for devm_devfreq_add_device()
+
+Johnson Wang (2):
+      dt-bindings: interconnect: Add MediaTek CCI dt-bindings
+      PM / devfreq: mediatek: Introduce MediaTek CCI devfreq driver
+
+Krzysztof Kozlowski (1):
+      dt-bindings: interconnect: samsung,exynos-bus: convert to dtschema
+
+Mauro Carvalho Chehab (1):
+      PM / devfreq: shut up kernel-doc warnings
+
+ .../devicetree/bindings/devfreq/exynos-bus.txt     | 488 ---------------------
+ .../bindings/interconnect/mediatek,cci.yaml        | 141 ++++++
+ .../bindings/interconnect/samsung,exynos-bus.yaml  | 290 ++++++++++++
+ MAINTAINERS                                        |   3 +-
+ drivers/devfreq/Kconfig                            |  10 +
+ drivers/devfreq/Makefile                           |   1 +
+ drivers/devfreq/devfreq.c                          |   4 +
+ drivers/devfreq/imx-bus.c                          |   2 +-
+ drivers/devfreq/mtk-cci-devfreq.c                  | 440 +++++++++++++++++++
+ drivers/devfreq/tegra30-devfreq.c                  |   4 +-
+ 10 files changed, 892 insertions(+), 491 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/exynos-bus.txt
+ create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+ create mode 100644 Documentation/devicetree/bindings/interconnect/samsung,exynos-bus.yaml
+ create mode 100644 drivers/devfreq/mtk-cci-devfreq.c

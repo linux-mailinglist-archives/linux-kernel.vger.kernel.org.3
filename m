@@ -2,80 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B69B5766CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E455766CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbiGOSd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 14:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
+        id S230218AbiGOSeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 14:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiGOSdx (ORCPT
+        with ESMTP id S230151AbiGOSeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 14:33:53 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7484EBCBA;
-        Fri, 15 Jul 2022 11:33:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=eHY8ml2kSNhWyc+Lu2y+Au3hBhDY7pHCci4IztLK7Xc=; b=T+0xYXeuOGrOK3gFQFS+sISKGh
-        SDcLCeRHEaBPMmX4jDC7KMCJofTE7poUJ25T5Hm5Ghl3XGw6nWsSxelviFUhyN/YlhEzgdbj9f5ih
-        olPqVatvSPG5Sc5rZOo06VaWxw6lfj5ZPP2fOAW/5wgVOWaCaY7QSOji3e0Qu1oz+DbUaxNRgKbRX
-        OaOi/f4vU6kiIXqyJ6eCFVFPeLdxxNLk85+O8x5Zq6ixFC3LSE6iIyVwm4PBNS/iq6PyHxOWoKS08
-        78UnOdFJvuZ13GZT2WXs5AF/18wy9kkVeN0xISlEW/m+DNkWZsbGzOvzLmQUtEjf+9+Rawd9DEcgE
-        AMaaI8/w==;
-Received: from 201-42-109-188.dsl.telesp.net.br ([201.42.109.188] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oCQ7j-000aT2-DH; Fri, 15 Jul 2022 20:33:12 +0200
-Message-ID: <15432ee0-3a33-0b53-b39b-f8b53a7e4345@igalia.com>
-Date:   Fri, 15 Jul 2022 15:32:56 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 1/2] powerpc/pci: Add config option for using OF 'reg'
- for PCI domain
-Content-Language: en-US
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Guowen Shan <gshan@redhat.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        Fri, 15 Jul 2022 14:34:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96FD12D33
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 11:34:16 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8E1AD200D9;
+        Fri, 15 Jul 2022 18:34:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1657910055; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=WTuW+7pySv2mjnvZPDaFyWvMrGPz00ceUXfdENQm05M=;
+        b=e9s34Ix4huMzITijFglCxZ1MvWSjRs76ErU3q/NpmnBXTgbscqiXomTeJL0lVqjqMyOH7k
+        2XG6B5CGQEhCdIVttBfoCMDEkRoLWWPz3JmKaNr+mRbqfboNjLh31fZHG6kbBhdes/ZRMT
+        wJigatkkuf2JObmaXrokJfSPugq3Pw8=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 37F672C141;
+        Fri, 15 Jul 2022 18:34:15 +0000 (UTC)
+Date:   Fri, 15 Jul 2022 20:34:11 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>,
+        Todd Brandt <todd.e.brandt@linux.intel.com>,
         linux-kernel@vger.kernel.org
-References: <20220706102148.5060-1-pali@kernel.org>
- <17fb8d12-60f9-09d5-91fa-09d5a5a9a4fd@igalia.com>
- <20220715171132.ujaexzm4ipad7o4f@pali>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220715171132.ujaexzm4ipad7o4f@pali>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Subject: [GIT PULL] printk fixup for 5.19-rc7
+Message-ID: <YtGzI9tWpB2wpioB@alley>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/07/2022 14:11, Pali Rohár wrote:
-> [...]
->>
->> I found this sentence a bit weird, "in the similar way like it is doing
->> kernel for other architectures", but other than that:
-> 
-> If you have some idea how to improve commit description, let me know and
-> I can change it.
-> 
+Hi Linus,
 
-Oh, for example: "in similar way the kernel is doing for other
-architectures". The sentence idea is perfectly fine, it's just that it's
-a bit oddly constructed IMHO heh
+please pull a printk fixup
 
-Cheers!
+git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git tags/printk-for-5.19-rc7
+
+======================================
+
+- Make pr_flush() fast when consoles are suspended.
+
+======================================
+
+pr_flush() was added together with the printk kthreads but it
+makes sense on its own. This is why we kept it. It is pity
+that the regression was found this late. But it is trivial
+to fix.
+
+----------------------------------------------------------------
+John Ogness (1):
+      printk: do not wait for consoles when suspended
+
+Petr Mladek (1):
+      Merge branch 'rework/kthreads' into for-linus
+
+ kernel/printk/printk.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)

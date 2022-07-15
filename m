@@ -2,126 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E3D575E45
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 11:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF55575E4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 11:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232398AbiGOJOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 05:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
+        id S233187AbiGOJQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 05:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232919AbiGOJNV (ORCPT
+        with ESMTP id S233688AbiGOJP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 05:13:21 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B5A5B78F;
-        Fri, 15 Jul 2022 02:13:08 -0700 (PDT)
-X-UUID: 1d41d199e36a4cd49238f9f5cc354333-20220715
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:b02bc9aa-c130-4672-95a5-f92fc34312b7,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:071f6464-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 1d41d199e36a4cd49238f9f5cc354333-20220715
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 901452969; Fri, 15 Jul 2022 17:13:03 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 15 Jul 2022 17:13:03 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 15 Jul 2022 17:13:03 +0800
-Message-ID: <ba34c4aafcb667eba778cbb0ec7cd12f6fac6400.camel@mediatek.com>
-Subject: Re: [PATCH v14 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 15 Jul 2022 17:13:03 +0800
-In-Reply-To: <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
-         <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 15 Jul 2022 05:15:26 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EC25B7AD
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 02:14:16 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B1FA333AF3;
+        Fri, 15 Jul 2022 09:14:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1657876454; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H11xd9RiwcHM8/pUTz7ymtF6A03GOByxCIR1ZLzFjSs=;
+        b=nJYDbJFtZ/G68D5T1IS0mEbrBeduiWgwYOP9o2jjcy4ki1lEpfbg1cbb/pfF7VRc9/gAkr
+        WkOymkTR7mtkBgJXsyb2fQvTOnAg8Gm/P+eFLcbrUh1f09rZ57pWmcfPBMI21TZbfCpsa3
+        XxAoGbhRvRrI0WKQyu4NFQwK1naOiBc=
+Received: from suse.cz (pathway.suse.cz [10.100.12.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 639A92C141;
+        Fri, 15 Jul 2022 09:14:14 +0000 (UTC)
+Date:   Fri, 15 Jul 2022 11:14:14 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org,
+        Todd Brandt <todd.e.brandt@linux.intel.com>
+Subject: Re: [PATCH v3] printk: do not wait for consoles when suspended
+Message-ID: <20220715091413.GC24338@pathway.suse.cz>
+References: <20220715061042.373640-1-john.ogness@linutronix.de>
+ <20220715061042.373640-2-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715061042.373640-2-john.ogness@linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
-
-On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Fri 2022-07-15 08:16:42, John Ogness wrote:
+> The console_stop() and console_start() functions call pr_flush().
+> When suspending, these functions are called by the serial subsystem
+> while the serial port is suspended. In this scenario, if there are
+> any pending messages, a call to pr_flush() will always result in a
+> timeout because the serial port cannot make forward progress. This
+> causes longer suspend and resume times.
 > 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
+> Add a check in pr_flush() so that it will immediately timeout if
+> the consoles are suspended.
 > 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
+> Fixes: 3b604ca81202 ("printk: add pr_flush()")
+> Reported-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> Tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
 
-[snip]
+The patch is committed in printk/linux.git, branch rework/kthreads.
 
-> +
-> +static int mtk_dp_set_color_depth(struct mtk_dp *mtk_dp)
+I think about creating pull request for 5.19 later today or tomorrow
+so that it is in the last rc.
 
-This function just return 0, so let this function to be void.
-
-Regards,
-CK
-
-> +{
-> +	/* Only support 8 bits currently */
-> +	mtk_dp->info.depth = DP_MSA_MISC_8_BPC;
-> +
-> +	/* Update MISC0 */
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3034,
-> +			   DP_MSA_MISC_8_BPC, DP_TEST_BIT_DEPTH_MASK);
-> +
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_303C,
-> +			   VIDEO_COLOR_DEPTH_DP_ENC0_P0_8BIT,
-> +			   VIDEO_COLOR_DEPTH_DP_ENC0_P0_MASK);
-> +	return 0;
-> +}
-> +
-
+Best Regards,
+Petr

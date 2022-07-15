@@ -2,113 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F39D85763CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791765763D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235297AbiGOOnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 10:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
+        id S233221AbiGOOro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 10:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiGOOnB (ORCPT
+        with ESMTP id S229510AbiGOOrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 10:43:01 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C1474DC2
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:43:01 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id w16so2156502ilh.0
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:43:01 -0700 (PDT)
+        Fri, 15 Jul 2022 10:47:42 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2E3753BF
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:47:41 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so11772442pjm.2
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:47:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xk8a+l++rWgkTq50yVGHgr4FTNm3uMWmqHNOlMKJ2yY=;
-        b=irIFRF1PGBXVjKT0EyhMeBzL5zNDmcf66s6OkDheHVZQB2sAlNPjyphmxT8EzehMGm
-         emD+ckTpKwGESRVErzWPSOFgBul4XR9AcSwF+cxbJCRCZZcy05kvoWkmdQAjfEQlZTiu
-         QL+YvQyGVecx9suRhd8rf9xH6wrVLuodCn5dAgXiEWgjgEMY5nWvBirv6OZWKequkcdf
-         XcOXwYaLnd47/88sJ9YyT4n9o7+XVrzfxKg5lK6DYIvNMDn5xZ/Y810rzxsdwWx+KsHf
-         6OXeleobam8ufdSfdGY7O6lAu/N4/xECWlaLPtY+V+KwR9TgnGXiVwVfgb1anPBe5Zhz
-         hUIQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3tUNFb/MgVcjx+q+xnHzJmvjWkinIDyAxRghu8rwyXg=;
+        b=Rym6NMECh44r0rwd+1g0imZUyyBEkDdo3kxGbrMPCZFbCbLl/8BZolpTX8W+VAh9J4
+         LD7SKH80SdA/NeNTOJFsfxYM8GTz1SGNA0gP0NIwSRANXAG0FNukKoxH1KK97dQAdNdZ
+         8wD6skWaNDKebwz+6vNNVeNOvyVxqY0MWM2VLATFbOa72eeqbsLdt8PujtPqPaJ0jmHm
+         9Vd+jdFjPnQF0klX7fMRdkrRegi+DQc/Vz8loSDSwCry9LFXOU5I3DsNPpjtNIZJPACo
+         tv6/7lXuWQA3HOUAH5sR1YEVV3j6ZJzbWs2uSZxZWowxWWMiXS/qdJtnKJABP3YCVV4n
+         fVSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xk8a+l++rWgkTq50yVGHgr4FTNm3uMWmqHNOlMKJ2yY=;
-        b=FvzdMsKoYLVCM3MWJ6q0qmE3sL+VwqHhHE+E13myk0D5I/07zGdPU1quoJXwuIywes
-         d9NGDIBRip4cpWw5LNgAuLtCuGhFfmrxfJtdYP/mgSq170QxDerbWWscAN6y1kYBMCMV
-         UTC0SGvJt//7LCtsmD7Fp4w9rI3RLCNBYGrmMWZjvrTGhg58LLYWi2c/n5EYYEQrvv/8
-         G0yErNR798sOD2nfICQzOBG6x0JSUKitTL/K1NkGI05pdSVDamaX8GBoLHGdJHMm8rso
-         iwIelvwD76Axl0UStVltk7bmTgPz0WLTP57FwK5rO+LP5mvXpbAnEP9i/wheJi1dzN2Z
-         I/0Q==
-X-Gm-Message-State: AJIora+iOa+nJdSCBMZOdssjWHARKk+AbZVFVbYGh1WcRh2wkmDW/MW0
-        VFJFStfCGUCESu/geVCUq74syw==
-X-Google-Smtp-Source: AGRyM1vw6arlVWDR2sztJ/KCl9xkKybS345EYMCO/XurHiZLInhyDg7mRHdbJ9zCdNKHER8AmvDSkw==
-X-Received: by 2002:a05:6e02:4d1:b0:2dc:f85:2fed with SMTP id f17-20020a056e0204d100b002dc0f852fedmr7497276ils.94.1657896180444;
-        Fri, 15 Jul 2022 07:43:00 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id w4-20020a92db44000000b002db4e72ead5sm1760167ilq.50.2022.07.15.07.42.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 07:42:59 -0700 (PDT)
-Message-ID: <5614fbc0-509a-6341-bef2-8857f4fe610e@kernel.dk>
-Date:   Fri, 15 Jul 2022 08:42:57 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3tUNFb/MgVcjx+q+xnHzJmvjWkinIDyAxRghu8rwyXg=;
+        b=TgVsPKaY8xH08vrq93nbQB0l8JdHNOmXQYefIpQTDvTf6K7zcKMV3RIcmzU0HpMMvD
+         5bn3MxGS2UwF5OBRe8S+ZFtAC2E+3YNhM+gEbrGLbY0MpyRpbuDprBA1if2fH++3NBLw
+         H+Ug9OuoPj/hm0qfIcy1EmUhBkHnl5v7A/I1mMHo7bllf1Dpl3Be3Bv0db8q4hAPpu9Q
+         wnpOk684cOlJGLoMO8Yarjb2jfbJaoTkyzr+fkGBB/4WZd+PFOlbF0h+UjuaC3UcANb7
+         1rUTsvvO+wRAHmt0I0qEn2FblAHHLEEsj6MDZevBxEEkEVyPVH6UApwXfUhDdFgj8bQA
+         Hvjg==
+X-Gm-Message-State: AJIora+W+ZdbH7Mcdxn4DErqDIa2dJfFuOAaqoM0q+Nu45/Gnj8GL5Dv
+        uo1rFG3MrWQq+IBx521vijoqnQ==
+X-Google-Smtp-Source: AGRyM1s+NPdiYftBQZwlpnh1yi1YFLFqWcXd2bsDwLI/KbcXrV5CTmR6Cwvi9UcyTn2+4UBAiJ4TEw==
+X-Received: by 2002:a17:902:b612:b0:16c:7e2d:ff39 with SMTP id b18-20020a170902b61200b0016c7e2dff39mr12737288pls.111.1657896460825;
+        Fri, 15 Jul 2022 07:47:40 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id e2-20020a17090a118200b001ef3f85d1aasm5821172pja.9.2022.07.15.07.47.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 07:47:40 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 14:47:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yu Zhang <yu.c.zhang@linux.intel.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, jmattson@google.com,
+        joro@8bytes.org, wanpengli@tencent.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] KVM: X86: Initialize 'fault' in
+ kvm_fixup_and_inject_pf_error().
+Message-ID: <YtF+CF2FkS7Ho1d5@google.com>
+References: <20220715114211.53175-1-yu.c.zhang@linux.intel.com>
+ <20220715114211.53175-2-yu.c.zhang@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: linux-next: build failure after merge of the block tree
-Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220715140259.205ef267@canb.auug.org.au>
- <YtDoqhuAt6Sv6qgV@ZenIV>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YtDoqhuAt6Sv6qgV@ZenIV>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715114211.53175-2-yu.c.zhang@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/14/22 10:10 PM, Al Viro wrote:
-> On Fri, Jul 15, 2022 at 02:02:59PM +1000, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the block tree, today's linux-next build (x86_64
->> allmodconfig) failed like this:
->>
->> drivers/block/ublk_drv.c:951:19: error: 'no_llseek' undeclared here (not in a function); did you mean 'noop_llseek'?
->>   951 |         .llseek = no_llseek,
->>       |                   ^~~~~~~~~
->>       |                   noop_llseek
->>
->> Caused by commit
->>
->>   71f28f3136af ("ublk_drv: add io_uring based userspace block driver")
->>
->> interacting with commit
->>
->>   8804bffa93a1 ("fs: remove no_llseek")
->>
->> from the vfs tree.
+On Fri, Jul 15, 2022, Yu Zhang wrote:
+> kvm_fixup_and_inject_pf_error() was introduced to fixup the error code(
+> e.g., to add RSVD flag) and inject the #PF to the guest, when guest
+> MAXPHYADDR is smaller than the host one.
 > 
-> I suspect that it would be a good idea to slap
-> #define no_llseek NULL
-> into include/linux/fs.h for the merge window, then remove it (and all
-> stray no_llseek initializers) at -rc1.  Linus, would you be OK with
-> that approach?
+> When it comes to nested, L0 is expected to intercept and fix up the #PF
+> and then inject to L2 directly if
+> - L2.MAXPHYADDR < L0.MAXPHYADDR and
+> - L1 has no intention to intercept L2's #PF (e.g., L2 and L1 have the
+>   same MAXPHYADDR value && L1 is using EPT for L2),
+> instead of constructing a #PF VM Exit to L1. Currently, with PFEC_MASK
+> and PFEC_MATCH both set to 0 in vmcs02, the interception and injection
+> may happen on all L2 #PFs.
+> 
+> However, failing to initialize 'fault' in kvm_fixup_and_inject_pf_error()
+> may cause the fault.async_page_fault being NOT zeroed, and later the #PF
+> being treated as a nested async page fault, and then being injected to L1.
+> So just fix it by initialize the 'fault' value in the beginning.
 
-Not Linus, but I think that's a good idea as it'll reduce the pain for
-any new users added in other trees.
+Ouch.
 
--- 
-Jens Axboe
+> Fixes: 897861479c064 ("KVM: x86: Add helper functions for illegal GPA checking and page fault injection")
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216178
+> Reported-by: Yang Lixiao <lixiao.yang@intel.com>
+> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> ---
+>  arch/x86/kvm/x86.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 031678eff28e..3246b3c9dfb3 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -12983,7 +12983,7 @@ EXPORT_SYMBOL_GPL(kvm_spec_ctrl_test_value);
+>  void kvm_fixup_and_inject_pf_error(struct kvm_vcpu *vcpu, gva_t gva, u16 error_code)
+>  {
+>  	struct kvm_mmu *mmu = vcpu->arch.walk_mmu;
+> -	struct x86_exception fault;
+> +	struct x86_exception fault = {0};
+>  	u64 access = error_code &
+>  		(PFERR_WRITE_MASK | PFERR_FETCH_MASK | PFERR_USER_MASK);
+
+As stupid as it may be to intentionally not fix the uninitialized data in a robust
+way, I'd actually prefer to manually clear fault.async_page_fault instead of
+zero-initializing the struct.  Unlike a similar bug fix in commit 159e037d2e36
+("KVM: x86: Fully initialize 'struct kvm_lapic_irq' in kvm_pv_kick_cpu_op()"),
+this code actually cares about async_page_fault being false as opposed to just
+being _initialized_.
+
+And if another field is added to struct x86_exception in the future, leaving the
+struct uninitialized means that if such a patch were to miss this case, running
+with various sanitizers should in theory be able to detect such a bug.  I suspect
+no one has found this with syzkaller due to the need to opt into running with
+allow_smaller_maxphyaddr=1.
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index f389691d8c04..aeed737b55c2 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -12996,6 +12996,7 @@ void kvm_fixup_and_inject_pf_error(struct kvm_vcpu *vcpu, gva_t gva, u16 error_c
+                fault.error_code = error_code;
+                fault.nested_page_fault = false;
+                fault.address = gva;
++               fault.async_page_fault = false;
+        }
+        vcpu->arch.walk_mmu->inject_page_fault(vcpu, &fault);
+ }
 

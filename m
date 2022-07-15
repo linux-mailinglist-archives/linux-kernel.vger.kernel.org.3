@@ -2,286 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC2B5766C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626125766C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiGOSaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 14:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
+        id S229975AbiGOSao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 14:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGOSaV (ORCPT
+        with ESMTP id S229948AbiGOSam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 14:30:21 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5F1747B7;
-        Fri, 15 Jul 2022 11:30:19 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-31caffa4a45so55017947b3.3;
-        Fri, 15 Jul 2022 11:30:19 -0700 (PDT)
+        Fri, 15 Jul 2022 14:30:42 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FBC74DE9
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 11:30:40 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id b11so10375590eju.10
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 11:30:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=broadcom.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=nt4bJMHyhYZZNJmsHG+jvKocDnQ/uRBuL8blfA1ku0E=;
-        b=JugXTEP6dHNPhtEvF7a+5JHtnQB0Wezxj3mXkDrGYozqfRojDQsyF1yaMm4ScB7/Jm
-         WsEkXJ0SEUGVVrZkC8BCoP0SfwdVW7GCvaD3VfdXQIsQWYFdR6LU4jAozR5eLknvx1TA
-         ImyChQqdYXJ0emEU0f1Dn5cGjmGGfK8hvylIv7olh1kv26+7rkg/ROqYp55f4+j0shBF
-         rb8dsgfz2gABDl/R7/RQA/+frn3Nz/VTzWGjxNJ696EP7aWkPhW2AZ98uCXxLlWzju6y
-         gW9J1WwQmK2wGdyYn3ZQfH/AHS1DVivoCmAvm5pg5MqTybZj012lhFCUjYCBV37kdAdW
-         bB7w==
+        bh=rcohKVzf62hz7TCRtAP0isZHDhSAXM0hQfb5zGh0hFw=;
+        b=BcTdBz/mEiSeVpJjR4W19JiYVuG69yHFqxDkYnDbCFTIuuchOSwy8DX11SRnwTtqSO
+         wmrzdTooiXPJQxpTnQHo9i7NFp1/MmaizXF5nDyuHKVYlQyaL1wlPrwn8ZLltZNNZJGb
+         /NBzUyLsVvPQyINp8FZQb96j8GnEgFD1FN++I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nt4bJMHyhYZZNJmsHG+jvKocDnQ/uRBuL8blfA1ku0E=;
-        b=3GYe1k6x2hqr9kIsNoQ/zb7wc0Ujbfox0Zajs6Ld4jLgZ/63llqcZgvumMs+wU6+tM
-         b7lDsmPUY11ZDNVej89c5CM7IVSivkJZ5Gjs81v+n31srnyVKtR28fmcfOxctvePtOfC
-         rlT4a3Q+A+rJyKa6Nx6QEbQ3UZJb87KQQNsE6FBxZqzFtD2uPROmeXwmQLmVbXll9oyx
-         imX8wppsjv3p8AEw4uMsBEfCCIh3Obyspi6E757DinJvwuTFFYKk0DgDRbixTozp/zjZ
-         nNSbbrB0mqOHesAYESI9gO0n+ToarpMjRh8q5oP582zc6milmVeyiSaxdaNKLp7IT3zl
-         wp3g==
-X-Gm-Message-State: AJIora/YuE7Gq4sb0NRHl0/Mw8jVopFPnVqoYK5bUa3tA6WOz7UHA23l
-        W++HU9yCQQ0I8MYYgDhXsQbRtrodTq6qnaN2Vhs=
-X-Google-Smtp-Source: AGRyM1vzP7L4rkzgqFevRJH1d667ZKPy7GjYyztLTPXytxkGqbpO4dyGE5UlcSEsEn68hi2rmxg67+K7y1Uib8FAXL0=
-X-Received: by 2002:a81:54c1:0:b0:31d:ec18:fd5d with SMTP id
- i184-20020a8154c1000000b0031dec18fd5dmr7586417ywb.277.1657909819017; Fri, 15
- Jul 2022 11:30:19 -0700 (PDT)
+        bh=rcohKVzf62hz7TCRtAP0isZHDhSAXM0hQfb5zGh0hFw=;
+        b=wfY+XIqMaxyQvai8yES3P6bESbmk2rxzXQI1G16EwHJUCF6LdhSnfSQSUjCbIwtROT
+         HRTR1bly9WmHnmBAMU1NpN+B5jxe+vh0TYCrEexqDZ5QHeR1GvReuddQ7DKFnZEEG954
+         phggdv2Zoyey9gAIKU2nYHCXsXPY3LhZ4+vKZv+HcKCM2oTMXjbF70AA/KejSL1z48+f
+         X8TU1/Zcxsny/CsXwgtQW0N8NZme5XTjyVXsc2lE2eCw5STjji9Yc2MkKn8louFi+yLk
+         L0TF8fCRm0pgdhStvNvhEcfNsMIwQd410ZD6ISRnNMMOtb2K5VqBqf0ZLL8vF3iQOZpU
+         fZWg==
+X-Gm-Message-State: AJIora+SaX19rPk3Bt5Op/n7gtO+VtdROkyVGhDviORUEt8ab1yyxeD0
+        DR3Fxw4FQdwpETjQwKUNMH9IgNbpzSG1zPdl2kiX8w==
+X-Google-Smtp-Source: AGRyM1ujTUF1fz/dx+0Tg7YTncxOi8f6rB+7zn/qVN+tuuy61R+aZc5UmYIOz+yICpq2bChkWOpP+/qngHYQqv2Nj84=
+X-Received: by 2002:a17:907:6d8f:b0:72b:6b87:81f1 with SMTP id
+ sb15-20020a1709076d8f00b0072b6b8781f1mr14880886ejc.674.1657909838599; Fri, 15
+ Jul 2022 11:30:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220715112607.591-1-peterwu.pub@gmail.com> <20220715112607.591-12-peterwu.pub@gmail.com>
-In-Reply-To: <20220715112607.591-12-peterwu.pub@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 15 Jul 2022 20:29:42 +0200
-Message-ID: <CAHp75VfyVufzf7CK38BVu_j0B4ax_d1gLAGYDE3H1zaKkuUB=A@mail.gmail.com>
-Subject: Re: [PATCH v5 11/13] leds: mt6370: Add MediaTek MT6370 current sink
- type LED Indicator support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220701162726.31346-1-jim2101024@gmail.com> <20220715182715.GA1145359@bhelgaas>
+In-Reply-To: <20220715182715.GA1145359@bhelgaas>
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+Date:   Fri, 15 Jul 2022 14:30:27 -0400
+Message-ID: <CA+-6iNxb=QAUFb=sYLetQTGzYu8zkPRSdA1tWutE90tt6KhzzA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] PCI: brcmstb: Re-submit reverted patchset
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jim Quinlan <jim2101024@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000000981f405e3dc3758"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 1:29 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+--0000000000000981f405e3dc3758
+Content-Type: text/plain; charset="UTF-8"
+
+On Fri, Jul 15, 2022 at 2:27 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
 >
-> From: ChiYuan Huang <cy_huang@richtek.com>
+> On Fri, Jul 01, 2022 at 12:27:21PM -0400, Jim Quinlan wrote:
+> > A submission [1] was made to enable a PCIe root port to turn on regulators
+> > for downstream devices.  It was accepted.  Months later, a regression was
+> > discovered on an RPi CM4 [2].  The patchset was reverted [3] as the fix
+> > came too late in the release cycle.  The regression in question is
+> > triggered only when the PCIe RC DT node has no root port subnode, which is
+> > a perfectly reasonsable configuration.
+> > ...
 >
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual
-> Flash LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
+> > Jim Quinlan (4):
+> >   PCI: brcmstb: Split brcm_pcie_setup() into two funcs
+> >   PCI: brcmstb: Add mechanism to turn on subdev regulators
+> >   PCI: brcmstb: oAdd control of subdevice voltage regulators
+> >   PCI: brcmstb: Do not turn off WOL regulators on suspend
+> >
+> >  drivers/pci/controller/pcie-brcmstb.c | 257 +++++++++++++++++++++++---
+> >  1 file changed, 227 insertions(+), 30 deletions(-)
 >
-> In MediaTek MT6370, there are four channel current-sink RGB LEDs that
-> support hardware pattern for constant current, PWM, and breath mode.
-> Isink4 channel can also be used as a CHG_VIN power good indicator.
+> I'm assuming there's a v2 coming soonish?  We should see -rc7 this
+> weekend and likely a final v5.19 release on July 24, so v5.20 material
+> should be tidied up by then.
+Hi Bjorn,
 
-...
+Yes, it has been ready for a few days but I am bumping into unrelated
+issues while
+trying to do suspend/resume tests with the latest upstream.  Hopefully
+I will send
+it out tonight or this WE.
 
-> +         This driver can also be built as a module. If so the module
+Regards,
+Jim Quinlan
+Broadcom STB
+>
+> Bjorn
 
-so, the
+--0000000000000981f405e3dc3758
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> +         will be called "leds-mt6370.ko".
-
-No ".ko".
-
-Why did you ignore these comments? Please go and fix _everywhere_ in
-your series.
-It's basically the rule of thumb, if the reviewer gives a comment
-against an occurrence of something, go through entire series and check
-if there are other places like commented one and address them all.
-
-...
-
-> + * Author: Alice Chen <alice_chen@richtek.com>
-
-Strange, the commit message doesn't have a corresponding SoB, why?
-
-...
-
-> +#define MT6370_PWM_DUTY                                31
-> +#define MT6372_PMW_DUTY                                255
-
-Looks like these are limits by hardware?
-Check with the datasheet if (BIT(x) - 1) makes more sense here.
-
-...
-
-> +       switch (led_no) {
-> +       case MT6370_LED_ISNK1:
-> +               sel_field = F_LED1_DUTY;
-> +               break;
-> +       case MT6370_LED_ISNK2:
-> +               sel_field = F_LED2_DUTY;
-> +               break;
-> +       case MT6370_LED_ISNK3:
-> +               sel_field = F_LED3_DUTY;
-> +               break;
-> +       default:
-> +               sel_field = F_LED4_DUTY;
-
-Missed break;
-
-> +       }
-
-...
-
-> +       switch (led_no) {
-> +       case MT6370_LED_ISNK1:
-> +               sel_field = F_LED1_FREQ;
-> +               break;
-> +       case MT6370_LED_ISNK2:
-> +               sel_field = F_LED2_FREQ;
-> +               break;
-> +       case MT6370_LED_ISNK3:
-> +               sel_field = F_LED3_FREQ;
-> +               break;
-> +       default:
-> +               sel_field = F_LED4_FREQ;
-
-Ditto.
-
-> +       }
-
-...
-
-> +       switch (led_no) {
-> +       case MT6370_LED_ISNK1:
-> +       case MT6370_LED_ISNK2:
-> +       case MT6370_LED_ISNK3:
-> +               *base = MT6370_REG_RGB1_TR + led_no * 3;
-> +               break;
-> +       default:
-> +               *base = MT6370_REG_RGB_CHRIND_TR;
-
-Ditto.
-It seems you dropped them for all switch-cases. It's not goot, please
-restore them back.
-
-> +       }
-
-...
-
-> +       u8 val[P_MAX_PATTERNS / 2] = {0};
-
-{ } should suffice
-
-
-> +       /*
-> +        * Pattern list
-> +        * tr1: byte 0, b'[7: 4]
-> +        * tr2: byte 0, b'[3: 0]
-> +        * tf1: byte 1, b'[7: 4]
-> +        * tf2: byte 1, b'[3: 0]
-> +        * ton: byte 2, b'[7: 4]
-> +        * toff: byte 2, b'[3: 0]
-> +        */
-> +       for (i = 0; i < P_MAX_PATTERNS; i++) {
-> +               curr = pattern + i;
-> +
-> +               sel_range = i == P_LED_TOFF ? R_LED_TOFF : R_LED_TRFON;
-> +
-> +               linear_range_get_selector_within(priv->ranges + sel_range,
-> +                                                curr->delta_t, &sel);
-> +
-> +               val[i / 2] |= sel << (4 * ((i + 1) % 2));
-> +       }
-> +
-> +       memcpy(pattern_val, val, 3);
-> +       return 0;
-> +}
-
-...
-
-> +out:
-
-out_unlock:
-
-> +       mutex_unlock(&priv->lock);
-> +
-> +       return ret;
-
-...
-
-> +out:
-
-Ditto. And so on.
-
-> +       mutex_unlock(&priv->lock);
-> +
-> +       return ret;
-
-...
-
-> +               sub_led = devm_kzalloc(priv->dev,
-> +                                      sizeof(*sub_led) * MC_CHANNEL_NUM,
-> +                                      GFP_KERNEL);
-
-NIH devm_kcalloc(). Also check if you really need zeroed data.
-
-> +               if (!sub_led)
-> +                       return -ENOMEM;
-
-...
-
-> +                       ret = fwnode_property_read_u32(child, "color", &color);
-> +                       if (ret) {
-> +                               dev_err(priv->dev,
-> +                                       "led %d, no color specified\n",
-> +                                       led->index);
-> +                               return ret;
-
-return dev_err_probe(...) ; ?
-
-Ditto for many places in your entire series.
-
-> +                       }
-
-...
-
-> +       priv = devm_kzalloc(&pdev->dev,
-> +                           struct_size(priv, leds, count), GFP_KERNEL);
-
-At least one parameter can be placed on the previous line.
-
-> +       if (!priv)
-> +               return -ENOMEM;
-
--- 
-With Best Regards,
-Andy Shevchenko
+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
+LeylbuEJGL9I80yqq8e6Z+Q6ulLxa6SopzpoysJe/vEVHgp9jPNppZzwKngVd2iDBRqpKlCngIAM
+DXgVGyEojXnuEbRs3NlB7wq1kJGlYysrnDug55ncJM8CAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
+BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
+VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFCeTeUYv84Mo3T1V+OyDdxib
+DDLvMA0GCSqGSIb3DQEBCwUAA4IBAQCCqR1PBVtHPvQHuG8bjMFQ94ZB7jmFEGhgfAsFJMaSMLov
+qyt8DKr8suCYF4dKGzqalbxo5QU9mmZXdLifqceHdt/Satxb+iGJjBhZg4E0cDds24ofYq+Lbww2
+YlIKC2HHxIN+JX2mFpavSXkshR5GT29B9EIJ8hgSjbs61XXeAcrmVIDfYbXQEmGbsnwqxdq+DJpQ
+S2kM2wvSlgSWDb6pL7myuKR5lCkQhj7piGSgrVLJRDRrMPw1L4MvnV9DjUFMlGCB40Hm6xqn/jm0
+8FCLlWhxve5mj+hgUOPETiKbjhCxJhhAPDdCvDRkZtJlQ8oxUVvXHugG8jm1YqB5AWx7MYICbTCC
+AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
+AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMI+Aj9XRk/wFexb9/
+MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC2gn31Gjk+LgSRZsxDwY1ihBPfqRWt
+1IN2hutL8OwFCzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3
+MTUxODMwMzlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
+hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
+AgEwDQYJKoZIhvcNAQEBBQAEggEApCD/w1f5n2rJq8FlbbNoOjgGa3soF5R0GITaKjuTqcpVUJX3
+BvSdmN5hif3Njrxj9rhURj/e/PYhjRiKcYHnVIHUl5VrlBC523Nt+qikL9PU19x0t+6GdQRUh4JR
+9W7prPCMgZvxkWx7KSfEGmIWNvWXZxDCL1x1myo2U3O1CoxVNegoV9wS3KcHDQ+Hl+I9yjW7au7u
+kPpk+z+i80Ig7UrS4VOmlwcdZv3SS1flOqx6B48+1QUS9sNCKvuV5c/+e6m1fTeryEyg3StkrK7i
+bNSXH3XdkHsl2xjMVL4aOQ4T5ZPx6B8znbcgB6gFbfqGmRp54U/uCVVEslUZfpVxAA==
+--0000000000000981f405e3dc3758--

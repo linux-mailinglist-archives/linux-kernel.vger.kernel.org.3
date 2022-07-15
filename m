@@ -2,74 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626125766C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429A15766C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiGOSao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 14:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
+        id S230047AbiGOScr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 14:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiGOSam (ORCPT
+        with ESMTP id S229528AbiGOScp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 14:30:42 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FBC74DE9
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 11:30:40 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id b11so10375590eju.10
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 11:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rcohKVzf62hz7TCRtAP0isZHDhSAXM0hQfb5zGh0hFw=;
-        b=BcTdBz/mEiSeVpJjR4W19JiYVuG69yHFqxDkYnDbCFTIuuchOSwy8DX11SRnwTtqSO
-         wmrzdTooiXPJQxpTnQHo9i7NFp1/MmaizXF5nDyuHKVYlQyaL1wlPrwn8ZLltZNNZJGb
-         /NBzUyLsVvPQyINp8FZQb96j8GnEgFD1FN++I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rcohKVzf62hz7TCRtAP0isZHDhSAXM0hQfb5zGh0hFw=;
-        b=wfY+XIqMaxyQvai8yES3P6bESbmk2rxzXQI1G16EwHJUCF6LdhSnfSQSUjCbIwtROT
-         HRTR1bly9WmHnmBAMU1NpN+B5jxe+vh0TYCrEexqDZ5QHeR1GvReuddQ7DKFnZEEG954
-         phggdv2Zoyey9gAIKU2nYHCXsXPY3LhZ4+vKZv+HcKCM2oTMXjbF70AA/KejSL1z48+f
-         X8TU1/Zcxsny/CsXwgtQW0N8NZme5XTjyVXsc2lE2eCw5STjji9Yc2MkKn8louFi+yLk
-         L0TF8fCRm0pgdhStvNvhEcfNsMIwQd410ZD6ISRnNMMOtb2K5VqBqf0ZLL8vF3iQOZpU
-         fZWg==
-X-Gm-Message-State: AJIora+SaX19rPk3Bt5Op/n7gtO+VtdROkyVGhDviORUEt8ab1yyxeD0
-        DR3Fxw4FQdwpETjQwKUNMH9IgNbpzSG1zPdl2kiX8w==
-X-Google-Smtp-Source: AGRyM1ujTUF1fz/dx+0Tg7YTncxOi8f6rB+7zn/qVN+tuuy61R+aZc5UmYIOz+yICpq2bChkWOpP+/qngHYQqv2Nj84=
-X-Received: by 2002:a17:907:6d8f:b0:72b:6b87:81f1 with SMTP id
- sb15-20020a1709076d8f00b0072b6b8781f1mr14880886ejc.674.1657909838599; Fri, 15
- Jul 2022 11:30:38 -0700 (PDT)
+        Fri, 15 Jul 2022 14:32:45 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE2E747BE
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 11:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657909963; x=1689445963;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CQ7UmEGuDaQHrnVHebaIcYHqVFDdWO47r6fGCP9l/0M=;
+  b=VxLqXp+hQMflKkbsqUkDRxpvcqrPUkY+OO0J+Gkl3BZTXXSUiyEinL5s
+   ojgUQdFvUzENLZgJTFCBEHHIDmHQPwrLPr8CHZsVzn74NfwqrgzXB/cpg
+   RRIEib/NTZayCZD/Y8O+0bnmQW1TTUoyGKytutJGYganM4qup5X3WEFiX
+   5CyoPrMNgTcr4AQmgvhjxCnaLXboPswmIITp7hBCgCInFL3JY5ZQ13Ci8
+   mGlG+OJ2B14MYZQCwg7iW/Mw0sbzGtAdQDLjrOBUXpF1pTMISILJFzVlf
+   fGhYrWvzRgPY/Pjm2Fmb8vKIx4etjVKNsImKrSn8y72ztfqvuaE34xCg0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="283431934"
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="283431934"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 11:32:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="773071558"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 15 Jul 2022 11:32:42 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCQ7F-0000e6-DY;
+        Fri, 15 Jul 2022 18:32:41 +0000
+Date:   Sat, 16 Jul 2022 02:31:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Janne Grunau <j@jannau.net>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/090-spi-hid 11/18]
+ drivers/hid/spi-hid/spi-hid-apple-core.c:709:17: sparse: sparse: incorrect
+ type in argument 3 (different base types)
+Message-ID: <202207160237.e6yo0GPd-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220701162726.31346-1-jim2101024@gmail.com> <20220715182715.GA1145359@bhelgaas>
-In-Reply-To: <20220715182715.GA1145359@bhelgaas>
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-Date:   Fri, 15 Jul 2022 14:30:27 -0400
-Message-ID: <CA+-6iNxb=QAUFb=sYLetQTGzYu8zkPRSdA1tWutE90tt6KhzzA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] PCI: brcmstb: Re-submit reverted patchset
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jim Quinlan <jim2101024@gmail.com>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        Rob Herring <robh@kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000000981f405e3dc3758"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,124 +62,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000000981f405e3dc3758
-Content-Type: text/plain; charset="UTF-8"
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   2902ed1bd2d6ac439a835c53841122c7f3455a6c
+commit: caee9bbb3f5dd71fbcc4690a7c2e97ff6964ab92 [11/18] WIP: HID: transport: spi: add Apple SPI transport
+config: sparc-randconfig-s041-20220715 (https://download.01.org/0day-ci/archive/20220716/202207160237.e6yo0GPd-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/AsahiLinux/linux/commit/caee9bbb3f5dd71fbcc4690a7c2e97ff6964ab92
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout caee9bbb3f5dd71fbcc4690a7c2e97ff6964ab92
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc SHELL=/bin/bash drivers/hid/spi-hid/
 
-On Fri, Jul 15, 2022 at 2:27 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Fri, Jul 01, 2022 at 12:27:21PM -0400, Jim Quinlan wrote:
-> > A submission [1] was made to enable a PCIe root port to turn on regulators
-> > for downstream devices.  It was accepted.  Months later, a regression was
-> > discovered on an RPi CM4 [2].  The patchset was reverted [3] as the fix
-> > came too late in the release cycle.  The regression in question is
-> > triggered only when the PCIe RC DT node has no root port subnode, which is
-> > a perfectly reasonsable configuration.
-> > ...
->
-> > Jim Quinlan (4):
-> >   PCI: brcmstb: Split brcm_pcie_setup() into two funcs
-> >   PCI: brcmstb: Add mechanism to turn on subdev regulators
-> >   PCI: brcmstb: oAdd control of subdevice voltage regulators
-> >   PCI: brcmstb: Do not turn off WOL regulators on suspend
-> >
-> >  drivers/pci/controller/pcie-brcmstb.c | 257 +++++++++++++++++++++++---
-> >  1 file changed, 227 insertions(+), 30 deletions(-)
->
-> I'm assuming there's a v2 coming soonish?  We should see -rc7 this
-> weekend and likely a final v5.19 release on July 24, so v5.20 material
-> should be tidied up by then.
-Hi Bjorn,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yes, it has been ready for a few days but I am bumping into unrelated
-issues while
-trying to do suspend/resume tests with the latest upstream.  Hopefully
-I will send
-it out tonight or this WE.
 
-Regards,
-Jim Quinlan
-Broadcom STB
->
-> Bjorn
+sparse warnings: (new ones prefixed by >>)
+   drivers/hid/spi-hid/spi-hid-apple-core.c:233:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] length @@     got unsigned long @@
+   drivers/hid/spi-hid/spi-hid-apple-core.c:233:21: sparse:     expected restricted __le16 [usertype] length
+   drivers/hid/spi-hid/spi-hid-apple-core.c:233:21: sparse:     got unsigned long
+   drivers/hid/spi-hid/spi-hid-apple-core.c:248:20: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] crc16 @@     got unsigned short @@
+   drivers/hid/spi-hid/spi-hid-apple-core.c:248:20: sparse:     expected restricted __le16 [usertype] crc16
+   drivers/hid/spi-hid/spi-hid-apple-core.c:248:20: sparse:     got unsigned short
+   drivers/hid/spi-hid/spi-hid-apple-core.c:259:21: sparse: sparse: symbol 'spihid_get_data' was not declared. Should it be static?
+   drivers/hid/spi-hid/spi-hid-apple-core.c:639:67: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected unsigned long [usertype] len @@     got restricted __le16 [usertype] length @@
+   drivers/hid/spi-hid/spi-hid-apple-core.c:639:67: sparse:     expected unsigned long [usertype] len
+   drivers/hid/spi-hid/spi-hid-apple-core.c:639:67: sparse:     got restricted __le16 [usertype] length
+   drivers/hid/spi-hid/spi-hid-apple-core.c:643:54: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected unsigned long [usertype] len @@     got restricted __le16 [usertype] length @@
+   drivers/hid/spi-hid/spi-hid-apple-core.c:643:54: sparse:     expected unsigned long [usertype] len
+   drivers/hid/spi-hid/spi-hid-apple-core.c:643:54: sparse:     got restricted __le16 [usertype] length
+   drivers/hid/spi-hid/spi-hid-apple-core.c:665:50: sparse: sparse: incorrect type in argument 6 (different base types) @@     expected unsigned long [usertype] len @@     got restricted __le16 [usertype] length @@
+   drivers/hid/spi-hid/spi-hid-apple-core.c:665:50: sparse:     expected unsigned long [usertype] len
+   drivers/hid/spi-hid/spi-hid-apple-core.c:665:50: sparse:     got restricted __le16 [usertype] length
+   drivers/hid/spi-hid/spi-hid-apple-core.c:686:16: sparse: sparse: restricted __le16 degrades to integer
+   drivers/hid/spi-hid/spi-hid-apple-core.c:700:43: sparse: sparse: restricted __le16 degrades to integer
+   drivers/hid/spi-hid/spi-hid-apple-core.c:703:23: sparse: sparse: restricted __le16 degrades to integer
+   drivers/hid/spi-hid/spi-hid-apple-core.c:704:24: sparse: sparse: restricted __le16 degrades to integer
+   drivers/hid/spi-hid/spi-hid-apple-core.c:704:47: sparse: sparse: restricted __le16 degrades to integer
+   drivers/hid/spi-hid/spi-hid-apple-core.c:709:17: sparse: sparse: restricted __le16 degrades to integer
+>> drivers/hid/spi-hid/spi-hid-apple-core.c:709:17: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned long @@     got restricted __le16 [usertype] length @@
+   drivers/hid/spi-hid/spi-hid-apple-core.c:709:17: sparse:     expected unsigned long
+   drivers/hid/spi-hid/spi-hid-apple-core.c:709:17: sparse:     got restricted __le16 [usertype] length
+   drivers/hid/spi-hid/spi-hid-apple-core.c:710:29: sparse: sparse: invalid assignment: +=
+   drivers/hid/spi-hid/spi-hid-apple-core.c:710:29: sparse:    left side has type unsigned int
+   drivers/hid/spi-hid/spi-hid-apple-core.c:710:29: sparse:    right side has type restricted __le16
+   drivers/hid/spi-hid/spi-hid-apple-core.c:735:23: sparse: sparse: restricted __le16 degrades to integer
 
---0000000000000981f405e3dc3758
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+vim +709 drivers/hid/spi-hid/spi-hid-apple-core.c
 
-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
-LeylbuEJGL9I80yqq8e6Z+Q6ulLxa6SopzpoysJe/vEVHgp9jPNppZzwKngVd2iDBRqpKlCngIAM
-DXgVGyEojXnuEbRs3NlB7wq1kJGlYysrnDug55ncJM8CAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
-BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
-VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFCeTeUYv84Mo3T1V+OyDdxib
-DDLvMA0GCSqGSIb3DQEBCwUAA4IBAQCCqR1PBVtHPvQHuG8bjMFQ94ZB7jmFEGhgfAsFJMaSMLov
-qyt8DKr8suCYF4dKGzqalbxo5QU9mmZXdLifqceHdt/Satxb+iGJjBhZg4E0cDds24ofYq+Lbww2
-YlIKC2HHxIN+JX2mFpavSXkshR5GT29B9EIJ8hgSjbs61XXeAcrmVIDfYbXQEmGbsnwqxdq+DJpQ
-S2kM2wvSlgSWDb6pL7myuKR5lCkQhj7piGSgrVLJRDRrMPw1L4MvnV9DjUFMlGCB40Hm6xqn/jm0
-8FCLlWhxve5mj+hgUOPETiKbjhCxJhhAPDdCvDRkZtJlQ8oxUVvXHugG8jm1YqB5AWx7MYICbTCC
-AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
-AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMI+Aj9XRk/wFexb9/
-MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC2gn31Gjk+LgSRZsxDwY1ihBPfqRWt
-1IN2hutL8OwFCzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3
-MTUxODMwMzlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
-hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
-AgEwDQYJKoZIhvcNAQEBBQAEggEApCD/w1f5n2rJq8FlbbNoOjgGa3soF5R0GITaKjuTqcpVUJX3
-BvSdmN5hif3Njrxj9rhURj/e/PYhjRiKcYHnVIHUl5VrlBC523Nt+qikL9PU19x0t+6GdQRUh4JR
-9W7prPCMgZvxkWx7KSfEGmIWNvWXZxDCL1x1myo2U3O1CoxVNegoV9wS3KcHDQ+Hl+I9yjW7au7u
-kPpk+z+i80Ig7UrS4VOmlwcdZv3SS1flOqx6B48+1QUS9sNCKvuV5c/+e6m1fTeryEyg3StkrK7i
-bNSXH3XdkHsl2xjMVL4aOQ4T5ZPx6B8znbcgB6gFbfqGmRp54U/uCVVEslUZfpVxAA==
---0000000000000981f405e3dc3758--
+   617	
+   618	static void spihid_process_message(struct spihid_apple *spihid, u8 *data,
+   619					   size_t length, u8 device, u8 flags)
+   620	{
+   621		struct device *dev = &spihid->spidev->dev;
+   622		struct spihid_msg_hdr *hdr;
+   623		bool handled = false;
+   624		u8 *payload;
+   625	
+   626		if (!spihid_verify_msg(spihid, data, length))
+   627			return;
+   628	
+   629		hdr = (struct spihid_msg_hdr *)data;
+   630	
+   631		if (hdr->length == 0)
+   632			return;
+   633	
+   634		payload = data + sizeof(struct spihid_msg_hdr);
+   635	
+   636		switch (flags) {
+   637		case SPIHID_READ_PACKET:
+   638			handled = spihid_process_input_report(spihid, device, hdr,
+   639							      payload, hdr->length);
+   640			break;
+   641		case SPIHID_WRITE_PACKET:
+   642			handled = spihid_process_response(spihid, hdr, payload,
+   643							  hdr->length);
+   644			break;
+   645		default:
+   646			break;
+   647		}
+   648	
+   649	#if defined(DEBUG) && DEBUG > 1
+   650		{
+   651			dev_dbg(dev,
+   652				"R msg: req:%02hhx rep:%02hhx dev:%02hhx id:%hu len:%hu\n",
+   653				hdr->unknown0, hdr->unknown1, hdr->unknown2, hdr->id,
+   654				hdr->length);
+   655			print_hex_dump_debug("spihid msg: ", DUMP_PREFIX_OFFSET, 16, 1,
+   656					     payload, hdr->length, true);
+   657		}
+   658	#else
+   659		if (!handled) {
+   660			dev_dbg(dev,
+   661				"R unhandled msg: req:%02hhx rep:%02hhx dev:%02hhx id:%hu len:%hu\n",
+   662				hdr->unknown0, hdr->unknown1, hdr->unknown2, hdr->id,
+   663				hdr->length);
+   664			print_hex_dump_debug("spihid msg: ", DUMP_PREFIX_OFFSET, 16, 1,
+ > 665					     payload, hdr->length, true);
+   666		}
+   667	#endif
+   668	}
+   669	
+   670	static void spihid_assemble_meesage(struct spihid_apple *spihid,
+   671					    struct spihid_transfer_packet *pkt)
+   672	{
+   673		size_t length, offset, remain;
+   674		struct device *dev = &spihid->spidev->dev;
+   675		struct spihid_input_report *rep = &spihid->report;
+   676	
+   677		length = le16_to_cpu(pkt->length);
+   678		remain = le16_to_cpu(pkt->remain);
+   679		offset = le16_to_cpu(pkt->offset);
+   680	
+   681		if (offset + length + remain > U16_MAX) {
+   682			return;
+   683		}
+   684	
+   685		if (pkt->device != rep->device || pkt->flags != rep->flags ||
+   686		    pkt->offset != rep->offset) {
+   687			rep->device = 0;
+   688			rep->flags = 0;
+   689			rep->offset = 0;
+   690			rep->length = 0;
+   691		}
+   692	
+   693		if (pkt->offset == 0) {
+   694			if (rep->offset != 0) {
+   695				dev_warn(dev, "incomplete report off:%u len:%u",
+   696					 rep->offset, rep->length);
+   697			}
+   698			memcpy(rep->buf, pkt->data, length);
+   699			rep->offset = length;
+   700			rep->length = length + pkt->remain;
+   701			rep->device = pkt->device;
+   702			rep->flags = pkt->flags;
+   703		} else if (pkt->offset == rep->offset) {
+   704			if (pkt->offset + length + pkt->remain != rep->length) {
+   705				dev_warn(dev, "incomplete report off:%u len:%u",
+   706					 rep->offset, rep->length);
+   707				return;
+   708			}
+ > 709			memcpy(rep->buf + pkt->offset, pkt->data, pkt->length);
+   710			rep->offset += pkt->length;
+   711	
+   712			if (rep->offset == rep->length) {
+   713				spihid_process_message(spihid, rep->buf, rep->length,
+   714						       rep->device, rep->flags);
+   715				rep->device = 0;
+   716				rep->flags = 0;
+   717				rep->offset = 0;
+   718				rep->length = 0;
+   719			}
+   720		}
+   721	}
+   722	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

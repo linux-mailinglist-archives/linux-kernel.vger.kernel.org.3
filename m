@@ -2,130 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE44576556
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 18:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEED576557
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 18:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbiGOQff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 12:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S233840AbiGOQfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 12:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiGOQfd (ORCPT
+        with ESMTP id S229475AbiGOQfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 12:35:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BC7C31DC6
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 09:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657902931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hbKyrXjYLCzg3wZ9PZeUdCqdnt+jGnJCesOG5YLa6eU=;
-        b=Fm5YNeC8EtLEu3+aidG6vskpZnQ7r9i4SAnybxUWdC+ltSUN5FKSgi5mEsmZeHDNAREGZp
-        Xgx2T7IjKCtBHT0/nal3dOJeIqz55pazHE2UFuT0kGG+KJhapSdIjH2AvnNdfCcMENxYk+
-        KY5Nsb3n9jamEtTMCQRCB3dW6TL3tUc=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617-vxJu1kuXNWexLX_5YsY5ZA-1; Fri, 15 Jul 2022 12:35:30 -0400
-X-MC-Unique: vxJu1kuXNWexLX_5YsY5ZA-1
-Received: by mail-qk1-f199.google.com with SMTP id u18-20020a05620a455200b006b5d08c0ee7so1333036qkp.12
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 09:35:30 -0700 (PDT)
+        Fri, 15 Jul 2022 12:35:38 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7207239B84
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 09:35:36 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id e16so5068257pfm.11
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 09:35:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lKWmBSTCMlmIEeA4zRqvclaf/qy9ca8IGkb6K9HUTlc=;
+        b=enu3kLeeE4/6bWKrtxdgNTcYL/Tm1XiFS61nhgw0d5zIh0wKfe7OiQVjFEkJzpgKVx
+         cqhZEvsJQTONiuOgmig3u8v3wxtnXTZSgSUqhNZoNj9utSud78pbcUBq9DNyLjuftVVp
+         soE8bIjibPdyMFNsxJa3AHUJ5gYE3WDZGzNYRBUQcGickNY3n/62BaLnby0L49BKZ4fx
+         CqBVNH01g8sGXuhPadPHUlM2zdiV/pedJFU+YnR76HYNqOIg4DXxrw8pGSGPlwIypJIh
+         CQS4YMYa96J8Z+EHXBHoTumD8MynLDk2R403WnOQodUYrUrRz3Jwdh5eH4wn+T3fEsix
+         XM6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hbKyrXjYLCzg3wZ9PZeUdCqdnt+jGnJCesOG5YLa6eU=;
-        b=gmamt0dQRAHGuapiNgAXSHxCuYtr0tWXPlzxC1wdupfp4UuAdk/flDXdzYQsBPIZN9
-         SJrhwJxHas+pOeZvxXFQ7oy2cWuuupOtC/9tsM1lHidsBWURjhQ++eQXVD3EoKaZU4hd
-         qwgAjOA0qohUEhs5u/qeWpiAlNFWNhhdpOil7dLaKAtnwGMl8RYWaiwFU+qLSB0pnX5C
-         6I5RLacMit86J5sC7S7ppuMWgFnyMAtxdr7nmhdoTTm/Qx2I9cR9kc5VQU+9sCNoDxDi
-         t9kEsQKJb9VA7sMgREVg3qvabJGv3PRf1P2h67UoNKYFoFunmSJAGFHPljmMyYW21Fsx
-         2Q5A==
-X-Gm-Message-State: AJIora/armEg3qFWmQ4edQhe9iIjvN04FEQ0AIeCgF+Dd1+JNb6HIII1
-        C/YmN0CIRS34Xhb0hjHTwPnLNzQDqtAPE8DR3onpG3XzO+AFHFo4mIqIsI6y0IW+U99L9r6Vhrf
-        TJfzeBZnpUw/JRsFUGZNHaRAH
-X-Received: by 2002:a05:620a:25c6:b0:6ae:2408:6e05 with SMTP id y6-20020a05620a25c600b006ae24086e05mr9854573qko.240.1657902929677;
-        Fri, 15 Jul 2022 09:35:29 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uM91supN2njnue234jkDW7W3Aj6JhU4hnWcoyNJTPy9B5v1i6uw/W0GfbjAR5yvUPKxUPfEA==
-X-Received: by 2002:a05:620a:25c6:b0:6ae:2408:6e05 with SMTP id y6-20020a05620a25c600b006ae24086e05mr9854556qko.240.1657902929352;
-        Fri, 15 Jul 2022 09:35:29 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
-        by smtp.gmail.com with ESMTPSA id t13-20020ac8760d000000b0031eb5648b86sm3834603qtq.41.2022.07.15.09.35.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 09:35:27 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 12:35:26 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 07/26] hugetlb: add hugetlb_pte to track HugeTLB page
- table entries
-Message-ID: <YtGXTlyRs3oVVPA5@xz-m1.local>
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <20220624173656.2033256-8-jthoughton@google.com>
- <YsyzGMS+MS0kZoP8@monkey>
- <Ys1B+fXo2uSPd46B@work-vm>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lKWmBSTCMlmIEeA4zRqvclaf/qy9ca8IGkb6K9HUTlc=;
+        b=mzEDxKFuwQbVve5nZ/giwh00KEI1xOnWHNb/4483PjH24r8LN0I6ya5TWEK1CFBdKY
+         mFxC/BcBJf8IP+QaI9zB7pO4aIH2uGaQDYgYyOzUvLNyWRYGr0uWSuC1JeRSvp7RnNbh
+         yMYzvtJ3GmBtRJOzGbZ5D/3Bd3IW5eSu5MFnZ0J9mYIrUgay2cXnPKQ1GZ19O8Q1Yc5g
+         7Bp6AhMlsru7mWCMGxJXAs6q61IcZQKSe/UH9xS3Wq5ufOtrLRgSdLot519diLSHqUvX
+         KGqyEjWiELASL+qaVW+HojLMU7ExCFFtP6xfINQk3GYB2dl3sSLkWJjdfxfI9Ac8J1HN
+         lzTw==
+X-Gm-Message-State: AJIora8sNoWzjJbDgHx9c0kpBUjHISQgQ8u4AjBfRy7Wv4QO4t/fM8XJ
+        1FOK8xwuJ9UxGwNtjaje7iVx6w==
+X-Google-Smtp-Source: AGRyM1uJou4x2IkNmR+pqvxyd9OYV4elaqT7GwPZmP2P2plAk5seFMlGzHIE/evqVtx6tOrm+k82oQ==
+X-Received: by 2002:a63:5366:0:b0:411:415a:5888 with SMTP id t38-20020a635366000000b00411415a5888mr12786096pgl.286.1657902935909;
+        Fri, 15 Jul 2022 09:35:35 -0700 (PDT)
+Received: from [10.255.246.141] ([139.177.225.243])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170902784900b0016bea2a0a8dsm3712427pln.91.2022.07.15.09.35.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 09:35:35 -0700 (PDT)
+Message-ID: <8a54fbcc-16f5-8b0a-7254-2b14810827b1@bytedance.com>
+Date:   Sat, 16 Jul 2022 00:35:30 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ys1B+fXo2uSPd46B@work-vm>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.1
+Subject: Re: [External] Re: [PATCH v2 09/10] sched/fair: stop load tracking
+ when task switched_from_fair()
+Content-Language: en-US
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20220713040430.25778-1-zhouchengming@bytedance.com>
+ <20220713040430.25778-10-zhouchengming@bytedance.com>
+ <27f0675e-8ac3-2200-749f-7290a256e3d9@arm.com>
+ <fe40bae5-7ec4-d5d2-ffb8-1387300dbbaf@bytedance.com>
+ <7eae9f41-7b33-2fc1-6b31-bbfd8d7b1364@arm.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <7eae9f41-7b33-2fc1-6b31-bbfd8d7b1364@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 10:42:17AM +0100, Dr. David Alan Gilbert wrote:
-> * Mike Kravetz (mike.kravetz@oracle.com) wrote:
-> > On 06/24/22 17:36, James Houghton wrote:
-> > > After high-granularity mapping, page table entries for HugeTLB pages can
-> > > be of any size/type. (For example, we can have a 1G page mapped with a
-> > > mix of PMDs and PTEs.) This struct is to help keep track of a HugeTLB
-> > > PTE after we have done a page table walk.
-> > 
-> > This has been rolling around in my head.
-> > 
-> > Will this first use case (live migration) actually make use of this
-> > 'mixed mapping' model where hugetlb pages could be mapped at the PUD,
-> > PMD and PTE level all within the same vma?  I only understand the use
-> > case from a high level.  But, it seems that we would want to only want
-> > to migrate PTE (or PMD) sized pages and not necessarily a mix.
+On 2022/7/15 19:15, Dietmar Eggemann wrote:
+> On 14/07/2022 15:43, Chengming Zhou wrote:
+>> On 2022/7/14 20:33, Dietmar Eggemann wrote:
+>>> On 13/07/2022 06:04, Chengming Zhou wrote:
 > 
-> I suspect we would pick one size and use that size for all transfers
-> when in postcopy; not sure if there are any side cases though.
+> [...]
+> 
+>>> IMHO, a queued !fair task when switching back to fair will already be
+>>> enqueued (attached) as a fair task in __sched_setscheduler() prior to
+>>> the check_class_changed() call.
+>>
+>> Right, this is true for a queued !fair task, it will enqueued (attached) before
+>> check_class_changed().
+>>
+>> enqueue_task_fair()
+>>   enqueue_entity()
+>>     update_load_avg(cfs_rq, se, UPDATE_TG | DO_ATTACH)
+>>       if (se->avg.last_update_time && !(flags & SKIP_AGE_LOAD))  --> true
+>>         __update_load_avg_se(now, cfs_rq, se)  --> (1)
+>> check_class_changed()
+>>   switched_to_fair()
+>>     attach_task_cfs_rq()
+>>       attach_entity_cfs_rq()
+>>         update_load_avg(cfs_rq, se, sched_feat(ATTACH_AGE_LOAD) ? 0 : SKIP_AGE_LOAD)
+>>           if (se->avg.last_update_time && !(flags & SKIP_AGE_LOAD))  --> true
+>>             __update_load_avg_se(now, cfs_rq, se)  --> (2)
+>>
+>>
+>> 1. for queued !fair: (1) delta = (now - last_update_time), last_update_time is the time
+>>    when switched_from_fair().
+>>
+>> 2. for !queued !fair: (2) delta = (now - last_update_time), last_update_time is the time
+>>    when switched_from_fair().
+>>
+>> The scenario in the commit message only cover !queued !fair case, I forget the queued !fair
+>> case, their problem is the same.
+> 
+> OK, that makes sense to me then.
+> 
+>>> I can't see how this will work with your proposed change in using
+>>> last_update_time=0 for fair->!fair->fair class changes?
+>> If we reset last_update_time=0 for !fair task, then:
+>>
+>> 1. for queued !fair: will not do (1) since the if condition is false.
+>>
+>> 2. for !queued !fair: will not do (2) since the if condition is false.
+> OK.
+> 
+> [...]
+> 
+>>>> This patch reset it's sched_avg last_update_time to 0, stop load
+>>>> tracking for !fair task, later in switched_to_fair() ->
+>>>> update_load_avg(), we can use its saved sched_avg.
+>>>>
+>>>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+>>>> ---
+>>>>  kernel/sched/fair.c | 5 +++++
+>>>>  1 file changed, 5 insertions(+)
+>>>>
+>>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>>>> index 50f65a2ede32..576028f5a09e 100644
+>>>> --- a/kernel/sched/fair.c
+>>>> +++ b/kernel/sched/fair.c
+>>>> @@ -11552,6 +11552,11 @@ static void attach_task_cfs_rq(struct task_struct *p)
+>>>>  static void switched_from_fair(struct rq *rq, struct task_struct *p)
+>>>>  {
+>>>>  	detach_task_cfs_rq(p);
+>>>> +
+>>>> +#ifdef CONFIG_SMP
+>>>> +	/* Stop load tracking for !fair task */
+> 
+> You're not really stopping p->se load tracking by doing this. We don't
+> do this outside fair anyway. IMHO, you freeze p->se's PELT _avg/_sum
+> values to be used as initial values when re-entering fair.
+> 
 
-Yes, I'm also curious whether the series can be much simplified if we have
-a static way to do sub-page mappings, e.g., when sub-page mapping enabled
-we always map to PAGE_SIZE only; if not we keep the old hpage size mappings
-only.
+Yes, you are right, this comment is misleading and wrong, will delete it.
 
-> > Looking to the future when supporting memory error handling/page poisoning
-> > it seems like we would certainly want multiple size mappings.
+Thanks very much for your review!
 
-If we treat page poisoning as very rare events anyway, IMHO it'll even be
-acceptable if we always split 1G pages into 4K ones but only rule out the
-real poisoned 4K phys page.  After all IIUC the major goal is for reducing
-poisoned memory footprint.
 
-It'll be definitely nicer if we can keep 511 2M pages and 511 4K pages in
-that case so the 511 2M pages performs slightly better, but it'll be
-something extra to me.  It can always be something worked upon a simpler
-version of sub-page mapping which is only PAGE_SIZE based.
-
-Thanks,
-
--- 
-Peter Xu
-
+>>>> +	p->se.avg.last_update_time = 0;
+>>>> +#endif
+>>>>  }
+>>>>  
+>>>>  static void switched_to_fair(struct rq *rq, struct task_struct *p)
+> 

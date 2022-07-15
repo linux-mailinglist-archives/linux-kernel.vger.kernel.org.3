@@ -2,70 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638D4575E58
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 11:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 290C5575E5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 11:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbiGOJTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 05:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S229481AbiGOJUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 05:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbiGOJS4 (ORCPT
+        with ESMTP id S231168AbiGOJUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 05:18:56 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA0EE15FFD;
-        Fri, 15 Jul 2022 02:18:49 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id CA52C1E80D19;
-        Fri, 15 Jul 2022 17:15:16 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id J2h_zqWIEWNU; Fri, 15 Jul 2022 17:15:14 +0800 (CST)
-Received: from localhost.localdomain.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: xupengfei@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 1BDF21E80D11;
-        Fri, 15 Jul 2022 17:15:14 +0800 (CST)
-From:   XU pengfei <xupengfei@nfschina.com>
-To:     dhowells@redhat.com, jarkko@kernel.org, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kernel@nfschina.com,
-        XU pengfei <xupengfei@nfschina.com>
-Subject: [PATCH 1/1] keys/keyrings: Fix typo in string
-Date:   Fri, 15 Jul 2022 17:18:42 +0800
-Message-Id: <20220715091842.4419-1-xupengfei@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+        Fri, 15 Jul 2022 05:20:03 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DD15F98A;
+        Fri, 15 Jul 2022 02:20:01 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lkm666Rpfz4xXj;
+        Fri, 15 Jul 2022 19:19:58 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657876800;
+        bh=DwsFSwXzYbJyvmexY1lfoxg4soPoIZNKP9oPL8Oe2QY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gBShlSqETpygiIuVsnRryAut+u+r2jFwlZsidRp1h6kGPJz7br4Q+RCHNkDe3J5Mg
+         gtgEQUbU1PaUV1kdVqwTxObIEAXKNTfwU4u2gMvS5oyELj1FWkGYr5udtBqihgr9Eb
+         Ic4tRK6EQMNA4jLJ02OicYMUSwC/bFGr2X7gObaGQRq1MXCBMAO4u3HVANyNCsEkDM
+         gzZnk00F60QJlTZTtwWNuEflqOgWaV1NtQgGWOQtNuRwep5tmpjuEvdlgv9TSeEtbH
+         ySFoL9IqgdBy+fTs86inehjfe5pV+G9KkS/0EmyyQXWWN0+TD7ajfC/pxrawPEIPPS
+         KocG9Z914KLKQ==
+Date:   Fri, 15 Jul 2022 19:19:57 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the folio tree with the block tree
+Message-ID: <20220715191957.63d3d644@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/syXU_ujpZLgbG6j3cSzLV1C";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the repeated ',' from string
+--Sig_/syXU_ujpZLgbG6j3cSzLV1C
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: XU pengfei <xupengfei@nfschina.com>
----
- security/keys/request_key.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi all,
 
-diff --git a/security/keys/request_key.c b/security/keys/request_key.c
-index 2da4404276f0..190608719f3d 100644
---- a/security/keys/request_key.c
-+++ b/security/keys/request_key.c
-@@ -375,7 +375,7 @@ static int construct_alloc_key(struct keyring_search_context *ctx,
- 	key_ref_t key_ref;
- 	int ret;
- 
--	kenter("%s,%s,,,",
-+	kenter("%s,%s",
- 	       ctx->index_key.type->name, ctx->index_key.description);
- 
- 	*_key = NULL;
--- 
-2.18.2
+Today's linux-next merge of the folio tree got a conflict in:
 
+  fs/buffer.c
+
+between commit:
+
+  1420c4a549bf ("fs/buffer: Combine two submit_bh() and ll_rw_block() argum=
+ents")
+
+from the block tree and commit:
+
+  215e71b6ee7a ("fs: remove the nobh helpers")
+
+from the folio tree.
+
+I fixed it up (the latter removed some code that was updated by the
+former) and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be mentioned
+to your upstream maintainer when your tree is submitted for merging.
+You may also want to consider cooperating with the maintainer of the
+conflicting tree to minimise any particularly complex conflicts.
+
+BTW: the latter commit missed a reference to nobh_write_begin in
+Documentation/filesystems/porting.rst.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/syXU_ujpZLgbG6j3cSzLV1C
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLRMT4ACgkQAVBC80lX
+0GyJWwgAlFtRgC8ZcJ2X7QhKClWh6NaYM7tz5HZ1lPX3ewo0KzlD6gvZ5MkIjSYl
+iP9eImd8LQ++tjUvD70kmO+GgBexom7c7oNWqE5svki0TYxLt7qufOk/QRuw9qU4
+z3TPbPM99dKW7PUIxp309RlhmjaF+UsgL/IJSdB6ZwtJcd9gJBaEfVRWDbGWsff0
+40IK6zaCbeSca1qIBvXdd/SyxGDO4kJVZi7G87qUQccxCDlZdGrYoZqu9YyPH2fH
+pvrKnWkqO9VJwt8oPAtJUshMhBqoRcxm0lKwPYZIt3vJtVy669RMzDDuI334x4Gp
+pMkj73mTx/qfLqTGQG/NBxvOL/1ddA==
+=Eg9H
+-----END PGP SIGNATURE-----
+
+--Sig_/syXU_ujpZLgbG6j3cSzLV1C--

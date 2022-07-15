@@ -2,95 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5343576803
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6219F576806
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbiGOUMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 16:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
+        id S229847AbiGOUPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 16:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiGOUL7 (ORCPT
+        with ESMTP id S229532AbiGOUPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 16:11:59 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8040367C89
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:11:58 -0700 (PDT)
-Received: from martin by viti.kaiser.cx with local (Exim 4.89)
-        (envelope-from <martin@viti.kaiser.cx>)
-        id 1oCRfC-0006TK-7c; Fri, 15 Jul 2022 22:11:50 +0200
-Date:   Fri, 15 Jul 2022 22:11:50 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH] staging: r888eu: use dynamic allocation for efuse buffer
-Message-ID: <20220715201150.nnbdfc4tgj67zyic@viti.kaiser.cx>
-References: <20220713075804.140986-1-martin@kaiser.cx>
- <5445d915-0c6c-b84f-158e-160e7645cbbd@gmail.com>
+        Fri, 15 Jul 2022 16:15:53 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C8F4598A
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:15:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657916151; x=1689452151;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=1nlVhVKZtrdns47gN14LRSO9NKMtthGr23polt2Dpsk=;
+  b=zcFMkzA+ry8sh7pR2A01YB6PgZsbDk/PsGAZr7J6UYRThEN2KGeKMlol
+   GA9NS0fQrvYQRXDSRBZi0PJraRtIDmvowkURgqwscMC4Z4WA2ciTFyty9
+   yXhf+JVYJrqIUQ5pNsQ+uFb2s2pSh//CoPzbOe4QexiVANka4gGuoIAmd
+   4=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Jul 2022 13:15:51 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 13:15:51 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Jul 2022 13:15:50 -0700
+Received: from [10.110.97.72] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 15 Jul
+ 2022 13:15:49 -0700
+Message-ID: <b42cb229-f241-6e29-a138-29023ce316d9@quicinc.com>
+Date:   Fri, 15 Jul 2022 13:15:44 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5445d915-0c6c-b84f-158e-160e7645cbbd@gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-Sender: Martin Kaiser <martin@viti.kaiser.cx>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mtd: spi-nor: winbond: add support for W25Q512NW-IQ/IN
+Content-Language: en-US
+From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <clg@kaod.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <p.yadav@ti.com>,
+        <quic_ggregory@quicinc.com>, <quic_jiles@quicinc.com>,
+        <tudor.ambarus@microchip.com>
+References: <20220710145721.1207157-1-quic_jaehyoo@quicinc.com>
+ <20220711095042.2095360-1-michael@walle.cc>
+ <a42fbef2-3eff-9e88-233e-a805cfbe2376@quicinc.com>
+ <4972a85d04e39ebb7b4a5872f6632c45@walle.cc>
+ <2260955b-354d-ceda-cadc-49453bfca3e4@quicinc.com>
+ <00f0c9d480ef5a414f1c34492661bd9e@walle.cc>
+ <63cedfce-34bb-ed63-3871-75a6c3dd5d73@quicinc.com>
+ <6be710bb5c1bf0449e54a54b78f6f7a0@walle.cc>
+ <47c01d768ea56edc9a2f9d317af7b495@walle.cc>
+ <114fcde6-bdf7-68ee-d031-35a916027aee@quicinc.com>
+In-Reply-To: <114fcde6-bdf7-68ee-d031-35a916027aee@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel,
+Hi Michael,
 
-Thus wrote Pavel Skripkin (paskripkin@gmail.com):
+On 7/14/2022 7:30 AM, Jae Hyun Yoo wrote:
+> On 7/14/2022 7:21 AM, Michael Walle wrote:
+>> Am 2022-07-14 16:16, schrieb Michael Walle:
+>>> Am 2022-07-14 15:47, schrieb Jae Hyun Yoo:
+>>>> On 7/14/2022 12:41 AM, Michael Walle wrote:
+>>>>> What does "doesn't boot at all" mean? Are there any kernel startup
+>>>>> messages?
+>>>>
+>>>> I'm sharing the error messages below.
+>>>
+>>> Thanks.
+>>>
+>>>> [    0.748594] spi-nor spi0.0: w25q512nwq (65536 Kbytes)
+>>>> [    0.865216] spi-aspeed-smc 1e620000.spi: CE0 read buswidth:4 
+>>>> [0x406c0741]
+>>>> [    0.872833] ------------[ cut here ]------------
+>>>> [    0.877984] WARNING: CPU: 1 PID: 1 at drivers/mtd/mtdcore.c:583
+>>>> add_mtd_device+0x28c/0x53c
+>>>> [    0.887237] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
+>>>> 5.15.43-AUTOINC-dirty-23801a6 #1
+>>>
+>>> Could you please try it on the latest (vanilla) linux-next?
+>>
+>> or spi-nor/next [1] as there are quite a lot of changes. The
+>> patches shall be based on that.
+> 
+> Okay. Let me try that. I tested it using 5.15.43 with back-ported
+> spi-nor patches from the latest. I'll back-port more changes from
+> the spi-nor/next and will test the INFO(0xef6020, 0, 0, 0) setting
+> again.
 
-> Hi Martin,
+I tested the setting again after cherry picking all SPI relating changes
+from the 'for-next' branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi repository.
 
-> Martin Kaiser <martin@kaiser.cx> says:
-> > Use kmalloc to allocate the efuse buffer in ReadAdapterInfo8188EU and
-> > free it on exit. This is better than using a 512 byte array on the stack.
+No luck! It's still making the same warning dump at 'add_mtd_device'
+since 'mtd->erasesize' is checked as 0.
 
-> > It's ok to drop the __aligned(4) qualifier. kmalloc aligns to
-> > ARCH_KMALLOC_MINALIGN, this is at least 8 bytes.
+I traced it further to check if the erasesize is properly parsed from
+the sfdp and checked that erase map seems parsed and initialized
+correctly in 'spi_nor_parse_bfpt' but problem is, a target
+mtd->erasesize is not properly selected in 'spi_nor_select_erase' since
+the 'wanted_size' variable is initialized as sector size of info table
+so a selected target mtd->erasesize is also 0 so looks like it's the
+reason why it can't initialize mtd device if we use
+INFO(0xef6020, 0, 0, 0).
 
-> > Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > Suggested-by: Larry Finger <Larry.Finger@lwfinger.net>
-> > Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-> > ---
-> >   drivers/staging/r8188eu/hal/usb_halinit.c | 8 ++++++--
-> >   1 file changed, 6 insertions(+), 2 deletions(-)
+Also, checked that the mtd->erasesize is set to 4096 if I enable
+CONFIG_MTD_SPI_NOR_USE_4K_SECTORS so the SPI flash can be initialized 
+with the INFO(0xef6020, 0, 0, 0) setting but, it should cover even when
+the configuration is not enabled. I think, this patch should go as it
+is. The erasesize selecting issue could be fixed using a separate
+patch.
 
-> > diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-> > index 8902dda7b8d8..421fe7c40390 100644
-> > --- a/drivers/staging/r8188eu/hal/usb_halinit.c
-> > +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-> > @@ -926,7 +926,7 @@ void ReadAdapterInfo8188EU(struct adapter *Adapter)
-> >   {
-> >   	struct eeprom_priv *eeprom = &Adapter->eeprompriv;
-> >   	struct led_priv *ledpriv = &Adapter->ledpriv;
-> > -	u8 efuse_buf[EFUSE_MAP_LEN_88E] __aligned(4);
-> > +	u8 *efuse_buf;
-> >   	u8 eeValue;
-> >   	int res;
-> > @@ -937,7 +937,10 @@ void ReadAdapterInfo8188EU(struct adapter *Adapter)
-> >   	eeprom->bautoload_fail_flag	= !(eeValue & EEPROM_EN);
-> > -	memset(efuse_buf, 0xFF, sizeof(efuse_buf));
-> > +	efuse_buf = kmalloc(EFUSE_MAP_LEN_88E, GFP_KERNEL);
-> > +	if (!efuse_buf)
-> > +		return;
-
-> I think, it worth returning an error to caller. Functions right after the
-> allocation do initialization, so leaving fields as-is seems to be dangerous
-
-yes, that makes sense. We could refuse to load the driver in this case.
-
-Larry and Greg already accepted the patch as is, I'll add error handling
-in a separate patch.
+Are you still sure that the INFO(0xef6020, 0, 0, 0) works in the
+latest spi-next?
 
 Thanks,
-   Martin
+
+Jae
+
+> -Jae
+> 
+>> -michael
+>>
+>> [1] 
+>> git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git#spi-nor/next

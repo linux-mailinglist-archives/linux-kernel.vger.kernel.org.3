@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BD4576A0F
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2596C576A16
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbiGOWnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44598 "EHLO
+        id S230470AbiGOWnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbiGOWmi (ORCPT
+        with ESMTP id S231934AbiGOWmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:42:38 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F48E6F7E3
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:42:37 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id k7-20020a17090a62c700b001ef9c16ba10so5891856pjs.1
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:42:37 -0700 (PDT)
+        Fri, 15 Jul 2022 18:42:39 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154EB88F14
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:42:39 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id g67-20020a636b46000000b0040e64eee874so3343082pgc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:42:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=XlISLMq7DUhoDRb1LI7vRx3HrCaF8EsMmRgAz27TFSk=;
-        b=Y6WBWa+D1e9x3Po+uA3SjZzShUCRyhFJ4G5xAIWeK4BQd3vH2JZtrIP2GrytmD66Wq
-         hEmyy/xGN/RogqpQVYsWFq/YsNjYpUSItqZVrJ5g9K4BI8k+VfFrm8GsplkoprbUbqBq
-         OfNJ3INyZuLqF/3XrVlcYk1Wzn7E98dErU17JePGEU9FVIuxIO5vNvh800rGSjcENqKj
-         Vswj998YQSbPPEc2Kup0XFgY2stoTUq49kosg6Dhhoee6FinWbc2m+E8P+NXN/rRU9Fi
-         1RV9LAnhCvrPD+nXHsKIfXAESsOaMM0xfP9LkHb3pxWkEATJz+S6+neLCZdZzJaY1wmU
-         vedw==
+        bh=YUNiTgLPlTD8QV7YwB9Lsk9uX244WLJ/qPBCKSza37Q=;
+        b=IEIzxaU10/GgaiEDgvEaEQUdhsFDRh726RllkQBTvaIzeUYiYjOq9O/4cKSO3yn1av
+         fjwH3yERNl2ZmXcYEB3qpBbLg/4GYMzC+lEQ8X4D0FxzjlRyExjLfSrJh18dIHgs9KQ9
+         +IZCQyxjPSJWnHpauWOjHmGeLLQYHXmmm2hnJfEP9L0J3qyq1i92wVYnfgaYwt1PODDB
+         dtONou66ojHYah8BSF1Dk+tphN285ve7P7oKJEIpR0mBL4SkFy7ibQhNIeMAuVJz2v+g
+         0USILFSaWh46CBozYPJQz+HteVHmIU5KXBf/foany0yNV2QvMdDpW3nEySBhFbDCpqfE
+         eWMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=XlISLMq7DUhoDRb1LI7vRx3HrCaF8EsMmRgAz27TFSk=;
-        b=sG5VEy4LLKPXsMcIAmYv6YSI5Ka5pvgBJezl7vbR5g0MNoNNYl5a4W84BKj4QAhIpi
-         ABEvw/BEsBWsDqmBJzoR3avWO5Am22pHxV49QDuqJRr2k8skeFp9c5PZVydRA9RjvUn+
-         5X4bN+ddDCc80fr4JI2H2fMfPTyaI0HEAycPjbd6rQuGr8qeBBNsIPjcQzY3Xn8H44fy
-         taPTuYHEeFZbC6xxKJXqEnuKJh13Xela9a0gxLrijk4XyyfYHY5n6ntkrPlp6pr3ypKm
-         SpKRAL/3ky3bZLW6ilD4ly9J1w+pNMSA/GI+hT9OJial95qzpo16RX0+BNhdfpFeKPgD
-         qhZg==
-X-Gm-Message-State: AJIora8oRgK1zYvDI7BL/eiQFib5W8NZ/0Bq1e6Gwt94NbmyU/erMprU
-        eMnypMv35LXI072xHzBJKJIMStd5+jM=
-X-Google-Smtp-Source: AGRyM1t6gLb6QV5n8NSWm5gkyOjFMc42imJYvjF0symnXsuCoQ210KaqhchuM2V2TZrD4dfroq8gaYfDkr8=
+        bh=YUNiTgLPlTD8QV7YwB9Lsk9uX244WLJ/qPBCKSza37Q=;
+        b=zPRLMXKHI12oqVaE+LUPJOrHwic521O2nTkckr6kVBl9w6e7EjirPHd7d7IhBZEafU
+         feOkdEVFEDE4WlZarHLvi/FzFs+5g5XLvZ1JBzUH3orfcW3MH/higOjDgeHQk6THK7nN
+         5nVSXIRkQMhZ+ijIW8ba0H4Q8Izjprb8JjoYEEd/QGKPG3PwJoKRzYHE1fKw/z4Iaqi2
+         u1bLo+8O89CUi6uUNdr+6bIJ2mOChNst0+LBHbc6zkZ8FNbJ5arJRcMFq1CvzXAlww/y
+         iSknXT8JIagiCRxZ3H8aSjIQHhMUiJLm1wFAP/9yBXZLJLEkrlZv50IcZlWkl3yi1OMV
+         12kQ==
+X-Gm-Message-State: AJIora98psuDBaXZz8i1Izm52a4syeCYe/HrkYyQgzhvSsGU+IxrSn24
+        ZX6M5SXb6is/AQTCNd1yYIP8KG5PRMk=
+X-Google-Smtp-Source: AGRyM1sXZxYSvsaFGZilN07gFLC+EzEuB3h5XG2oq27eh58j9hdmAtoxmikPALQXg9NtxhdEJXKodqTUEHo=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:9ae3:0:b0:528:d881:9ff with SMTP id
- y3-20020aa79ae3000000b00528d88109ffmr16408512pfp.66.1657924956812; Fri, 15
- Jul 2022 15:42:36 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:b785:b0:16b:d978:3899 with SMTP id
+ e5-20020a170902b78500b0016bd9783899mr15693788pls.109.1657924958641; Fri, 15
+ Jul 2022 15:42:38 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 15 Jul 2022 22:42:22 +0000
+Date:   Fri, 15 Jul 2022 22:42:23 +0000
 In-Reply-To: <20220715224226.3749507-1-seanjc@google.com>
-Message-Id: <20220715224226.3749507-4-seanjc@google.com>
+Message-Id: <20220715224226.3749507-5-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220715224226.3749507-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v2 3/7] KVM: x86/mmu: Drop the "p is for pointer" from rmap helpers
+Subject: [PATCH v2 4/7] KVM: x86/mmu: Rename __kvm_zap_rmaps() to align with
+ other nomenclature
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -69,134 +70,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the trailing "p" from rmap helpers, i.e. rename functions to simply
-be kvm_<action>_rmap().  Declaring that a function takes a pointer is
-completely unnecessary and goes against kernel style.
+Rename __kvm_zap_rmaps() to kvm_rmap_zap_gfn_range() to avoid future
+confusion with a soon-to-be-introduced __kvm_zap_rmap().  Using a plural
+"rmaps" is somewhat ambiguous without additional context, as it's not
+obvious whether it's referring to multiple rmap lists, versus multiple
+rmap entries within a single list.
+
+Use kvm_rmap_zap_gfn_range() to align with the pattern established by
+kvm_rmap_zap_collapsible_sptes(), without losing the information that it
+zaps only rmap-based MMUs, i.e. don't rename it to __kvm_zap_gfn_range().
 
 No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 43 +++++++++++++++++++++---------------------
- 1 file changed, 21 insertions(+), 22 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 92fcffec0227..fec999d2fc13 100644
+index fec999d2fc13..61c32d8d1f6d 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -403,7 +403,7 @@ static u64 __update_clear_spte_slow(u64 *sptep, u64 spte)
-  * The idea using the light way get the spte on x86_32 guest is from
-  * gup_get_pte (mm/gup.c).
-  *
-- * An spte tlb flush may be pending, because kvm_set_pte_rmapp
-+ * An spte tlb flush may be pending, because kvm_set_pte_rmap
-  * coalesces them and we are running out of the MMU lock.  Therefore
-  * we need to protect against in-progress updates of the spte.
-  *
-@@ -1383,22 +1383,22 @@ static bool kvm_vcpu_write_protect_gfn(struct kvm_vcpu *vcpu, u64 gfn)
- 	return kvm_mmu_slot_gfn_write_protect(vcpu->kvm, slot, gfn, PG_LEVEL_4K);
+@@ -5982,7 +5982,7 @@ void kvm_mmu_uninit_vm(struct kvm *kvm)
+ 	mmu_free_vm_memory_caches(kvm);
  }
  
--static bool kvm_zap_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--			  const struct kvm_memory_slot *slot)
-+static bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+			 const struct kvm_memory_slot *slot)
+-static bool __kvm_zap_rmaps(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
++static bool kvm_rmap_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
  {
- 	return pte_list_destroy(kvm, rmap_head);
- }
+ 	const struct kvm_memory_slot *memslot;
+ 	struct kvm_memslots *slots;
+@@ -6029,7 +6029,7 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
  
--static bool kvm_unmap_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--			    struct kvm_memory_slot *slot, gfn_t gfn, int level,
--			    pte_t unused)
-+static bool kvm_unmap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+			   struct kvm_memory_slot *slot, gfn_t gfn, int level,
-+			   pte_t unused)
- {
--	return kvm_zap_rmapp(kvm, rmap_head, slot);
-+	return kvm_zap_rmap(kvm, rmap_head, slot);
- }
+ 	kvm_inc_notifier_count(kvm, gfn_start, gfn_end);
  
--static bool kvm_set_pte_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--			      struct kvm_memory_slot *slot, gfn_t gfn, int level,
--			      pte_t pte)
-+static bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+			     struct kvm_memory_slot *slot, gfn_t gfn, int level,
-+			     pte_t pte)
- {
- 	u64 *sptep;
- 	struct rmap_iterator iter;
-@@ -1529,7 +1529,7 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
- 	bool flush = false;
+-	flush = __kvm_zap_rmaps(kvm, gfn_start, gfn_end);
++	flush = kvm_rmap_zap_gfn_range(kvm, gfn_start, gfn_end);
  
- 	if (kvm_memslots_have_rmaps(kvm))
--		flush = kvm_handle_gfn_range(kvm, range, kvm_unmap_rmapp);
-+		flush = kvm_handle_gfn_range(kvm, range, kvm_unmap_rmap);
- 
- 	if (is_tdp_mmu_enabled(kvm))
- 		flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush);
-@@ -1542,7 +1542,7 @@ bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- 	bool flush = false;
- 
- 	if (kvm_memslots_have_rmaps(kvm))
--		flush = kvm_handle_gfn_range(kvm, range, kvm_set_pte_rmapp);
-+		flush = kvm_handle_gfn_range(kvm, range, kvm_set_pte_rmap);
- 
- 	if (is_tdp_mmu_enabled(kvm))
- 		flush |= kvm_tdp_mmu_set_spte_gfn(kvm, range);
-@@ -1550,9 +1550,9 @@ bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- 	return flush;
- }
- 
--static bool kvm_age_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--			  struct kvm_memory_slot *slot, gfn_t gfn, int level,
--			  pte_t unused)
-+static bool kvm_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+			 struct kvm_memory_slot *slot, gfn_t gfn, int level,
-+			 pte_t unused)
- {
- 	u64 *sptep;
- 	struct rmap_iterator iter;
-@@ -1564,9 +1564,9 @@ static bool kvm_age_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 	return young;
- }
- 
--static bool kvm_test_age_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--			       struct kvm_memory_slot *slot, gfn_t gfn,
--			       int level, pte_t unused)
-+static bool kvm_test_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+			      struct kvm_memory_slot *slot, gfn_t gfn,
-+			      int level, pte_t unused)
- {
- 	u64 *sptep;
- 	struct rmap_iterator iter;
-@@ -1615,7 +1615,7 @@ bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- 	bool young = false;
- 
- 	if (kvm_memslots_have_rmaps(kvm))
--		young = kvm_handle_gfn_range(kvm, range, kvm_age_rmapp);
-+		young = kvm_handle_gfn_range(kvm, range, kvm_age_rmap);
- 
- 	if (is_tdp_mmu_enabled(kvm))
- 		young |= kvm_tdp_mmu_age_gfn_range(kvm, range);
-@@ -1628,7 +1628,7 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- 	bool young = false;
- 
- 	if (kvm_memslots_have_rmaps(kvm))
--		young = kvm_handle_gfn_range(kvm, range, kvm_test_age_rmapp);
-+		young = kvm_handle_gfn_range(kvm, range, kvm_test_age_rmap);
- 
- 	if (is_tdp_mmu_enabled(kvm))
- 		young |= kvm_tdp_mmu_test_age_gfn(kvm, range);
-@@ -6004,8 +6004,7 @@ static bool __kvm_zap_rmaps(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
- 			if (WARN_ON_ONCE(start >= end))
- 				continue;
- 
--			flush = slot_handle_level_range(kvm, memslot, kvm_zap_rmapp,
--
-+			flush = slot_handle_level_range(kvm, memslot, kvm_zap_rmap,
- 							PG_LEVEL_4K, KVM_MAX_HUGEPAGE_LEVEL,
- 							start, end - 1, true, flush);
- 		}
+ 	if (is_tdp_mmu_enabled(kvm)) {
+ 		for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++)
 -- 
 2.37.0.170.g444d1eabd0-goog
 

@@ -2,167 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DEED576557
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 18:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13C757655F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 18:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233840AbiGOQfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 12:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        id S229897AbiGOQjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 12:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiGOQfi (ORCPT
+        with ESMTP id S234293AbiGOQjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 12:35:38 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7207239B84
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 09:35:36 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id e16so5068257pfm.11
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 09:35:36 -0700 (PDT)
+        Fri, 15 Jul 2022 12:39:09 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439F6CE03;
+        Fri, 15 Jul 2022 09:39:08 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id k30so6980852edk.8;
+        Fri, 15 Jul 2022 09:39:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lKWmBSTCMlmIEeA4zRqvclaf/qy9ca8IGkb6K9HUTlc=;
-        b=enu3kLeeE4/6bWKrtxdgNTcYL/Tm1XiFS61nhgw0d5zIh0wKfe7OiQVjFEkJzpgKVx
-         cqhZEvsJQTONiuOgmig3u8v3wxtnXTZSgSUqhNZoNj9utSud78pbcUBq9DNyLjuftVVp
-         soE8bIjibPdyMFNsxJa3AHUJ5gYE3WDZGzNYRBUQcGickNY3n/62BaLnby0L49BKZ4fx
-         CqBVNH01g8sGXuhPadPHUlM2zdiV/pedJFU+YnR76HYNqOIg4DXxrw8pGSGPlwIypJIh
-         CQS4YMYa96J8Z+EHXBHoTumD8MynLDk2R403WnOQodUYrUrRz3Jwdh5eH4wn+T3fEsix
-         XM6A==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XvhJn0S9vThyG29jKQokHXLUcesyw2+MD4EcSS/waNs=;
+        b=VP6d032bLh9GUakmfJFN/99OsICffhB7LIxn0V2jLbf5WK1vT82XPIpJGW0+po4I39
+         y+VD1rCISE0JYfjYStuCfzYvku9iOd+EbMhvW2TI766DvBhbdlW6vcjwfAF05m8obMbp
+         T9v0SiZ2XjTgN0cg7oubmXYchbA83ECyP53M5GrSFod2wsQKvcSO6kePuly7/ySRaf1Y
+         E+7ypRhbUVSSZa/S9gaXqqdC0JwD8kMj3IBk9H3q3rzZQqw4ydcpUMN/oQY16FKI8YKA
+         JrmeBr/lUZa0jUDVwSOAZNLtoZhFREuDJMfCmPVbdfWEmF+BaKpX4aR/NGu+O6vV3jip
+         ykfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lKWmBSTCMlmIEeA4zRqvclaf/qy9ca8IGkb6K9HUTlc=;
-        b=mzEDxKFuwQbVve5nZ/giwh00KEI1xOnWHNb/4483PjH24r8LN0I6ya5TWEK1CFBdKY
-         mFxC/BcBJf8IP+QaI9zB7pO4aIH2uGaQDYgYyOzUvLNyWRYGr0uWSuC1JeRSvp7RnNbh
-         yMYzvtJ3GmBtRJOzGbZ5D/3Bd3IW5eSu5MFnZ0J9mYIrUgay2cXnPKQ1GZ19O8Q1Yc5g
-         7Bp6AhMlsru7mWCMGxJXAs6q61IcZQKSe/UH9xS3Wq5ufOtrLRgSdLot519diLSHqUvX
-         KGqyEjWiELASL+qaVW+HojLMU7ExCFFtP6xfINQk3GYB2dl3sSLkWJjdfxfI9Ac8J1HN
-         lzTw==
-X-Gm-Message-State: AJIora8sNoWzjJbDgHx9c0kpBUjHISQgQ8u4AjBfRy7Wv4QO4t/fM8XJ
-        1FOK8xwuJ9UxGwNtjaje7iVx6w==
-X-Google-Smtp-Source: AGRyM1uJou4x2IkNmR+pqvxyd9OYV4elaqT7GwPZmP2P2plAk5seFMlGzHIE/evqVtx6tOrm+k82oQ==
-X-Received: by 2002:a63:5366:0:b0:411:415a:5888 with SMTP id t38-20020a635366000000b00411415a5888mr12786096pgl.286.1657902935909;
-        Fri, 15 Jul 2022 09:35:35 -0700 (PDT)
-Received: from [10.255.246.141] ([139.177.225.243])
-        by smtp.gmail.com with ESMTPSA id e9-20020a170902784900b0016bea2a0a8dsm3712427pln.91.2022.07.15.09.35.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 09:35:35 -0700 (PDT)
-Message-ID: <8a54fbcc-16f5-8b0a-7254-2b14810827b1@bytedance.com>
-Date:   Sat, 16 Jul 2022 00:35:30 +0800
+        bh=XvhJn0S9vThyG29jKQokHXLUcesyw2+MD4EcSS/waNs=;
+        b=VWnXKyb26E6Geu6e8lKb+4P7zs2GWv95Av2NvyWyj3h86k5rHxScUwGJGNTDgfxbOB
+         TFYYi4MDMUFzFyo92yl+189jGEMU36PcCC4ABccVOPDBnSuX94GiX/rdbTo2Ne29WS/5
+         BO4d0j9qo+dLT+dIlZtM258E6wkhVRFytSUR0WP1Z0st1B72nsfe1BJvZ0HHWWyLs+UC
+         pQpc9ZU5j0dcKd/mPk9BuAsjG8MWUzH7g2eOu1jhaX49wVfvizGQdCAmhenhRPxsrVQw
+         YcHVCNgRz28tdZKpZrysqe76qSAzL30Rc9pn7TV22oW4BWe0v10jfloq135Lq9QWfxIH
+         TEjg==
+X-Gm-Message-State: AJIora8NyWXRGDAA46VNbAeYX4BkRa10Y5O714QnnJSP/n0Z+ZxE4pxK
+        pSOWFOHVc+kXLL/PFiE1TtrjAfZmZMk=
+X-Google-Smtp-Source: AGRyM1vpPD+akTTTBupGIXyQOUMc6Rc3zoPpZqKTi9XIVgT8lPhTPbWAFcPXq4mMNqnAInTnHJ6nJQ==
+X-Received: by 2002:a05:6402:26c3:b0:43a:a846:b2c1 with SMTP id x3-20020a05640226c300b0043aa846b2c1mr20252243edd.133.1657903146842;
+        Fri, 15 Jul 2022 09:39:06 -0700 (PDT)
+Received: from kwango.redhat.com (ip-94-112-17-81.bb.vodafone.cz. [94.112.17.81])
+        by smtp.gmail.com with ESMTPSA id t6-20020aa7d706000000b0043a85d7d15esm3045460edq.12.2022.07.15.09.39.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 09:39:06 -0700 (PDT)
+From:   Ilya Dryomov <idryomov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Ceph fix for 5.19-rc7
+Date:   Fri, 15 Jul 2022 18:38:45 +0200
+Message-Id: <20220715163845.14481-1-idryomov@gmail.com>
+X-Mailer: git-send-email 2.19.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.1
-Subject: Re: [External] Re: [PATCH v2 09/10] sched/fair: stop load tracking
- when task switched_from_fair()
-Content-Language: en-US
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20220713040430.25778-1-zhouchengming@bytedance.com>
- <20220713040430.25778-10-zhouchengming@bytedance.com>
- <27f0675e-8ac3-2200-749f-7290a256e3d9@arm.com>
- <fe40bae5-7ec4-d5d2-ffb8-1387300dbbaf@bytedance.com>
- <7eae9f41-7b33-2fc1-6b31-bbfd8d7b1364@arm.com>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <7eae9f41-7b33-2fc1-6b31-bbfd8d7b1364@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/15 19:15, Dietmar Eggemann wrote:
-> On 14/07/2022 15:43, Chengming Zhou wrote:
->> On 2022/7/14 20:33, Dietmar Eggemann wrote:
->>> On 13/07/2022 06:04, Chengming Zhou wrote:
-> 
-> [...]
-> 
->>> IMHO, a queued !fair task when switching back to fair will already be
->>> enqueued (attached) as a fair task in __sched_setscheduler() prior to
->>> the check_class_changed() call.
->>
->> Right, this is true for a queued !fair task, it will enqueued (attached) before
->> check_class_changed().
->>
->> enqueue_task_fair()
->>   enqueue_entity()
->>     update_load_avg(cfs_rq, se, UPDATE_TG | DO_ATTACH)
->>       if (se->avg.last_update_time && !(flags & SKIP_AGE_LOAD))  --> true
->>         __update_load_avg_se(now, cfs_rq, se)  --> (1)
->> check_class_changed()
->>   switched_to_fair()
->>     attach_task_cfs_rq()
->>       attach_entity_cfs_rq()
->>         update_load_avg(cfs_rq, se, sched_feat(ATTACH_AGE_LOAD) ? 0 : SKIP_AGE_LOAD)
->>           if (se->avg.last_update_time && !(flags & SKIP_AGE_LOAD))  --> true
->>             __update_load_avg_se(now, cfs_rq, se)  --> (2)
->>
->>
->> 1. for queued !fair: (1) delta = (now - last_update_time), last_update_time is the time
->>    when switched_from_fair().
->>
->> 2. for !queued !fair: (2) delta = (now - last_update_time), last_update_time is the time
->>    when switched_from_fair().
->>
->> The scenario in the commit message only cover !queued !fair case, I forget the queued !fair
->> case, their problem is the same.
-> 
-> OK, that makes sense to me then.
-> 
->>> I can't see how this will work with your proposed change in using
->>> last_update_time=0 for fair->!fair->fair class changes?
->> If we reset last_update_time=0 for !fair task, then:
->>
->> 1. for queued !fair: will not do (1) since the if condition is false.
->>
->> 2. for !queued !fair: will not do (2) since the if condition is false.
-> OK.
-> 
-> [...]
-> 
->>>> This patch reset it's sched_avg last_update_time to 0, stop load
->>>> tracking for !fair task, later in switched_to_fair() ->
->>>> update_load_avg(), we can use its saved sched_avg.
->>>>
->>>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
->>>> ---
->>>>  kernel/sched/fair.c | 5 +++++
->>>>  1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>>> index 50f65a2ede32..576028f5a09e 100644
->>>> --- a/kernel/sched/fair.c
->>>> +++ b/kernel/sched/fair.c
->>>> @@ -11552,6 +11552,11 @@ static void attach_task_cfs_rq(struct task_struct *p)
->>>>  static void switched_from_fair(struct rq *rq, struct task_struct *p)
->>>>  {
->>>>  	detach_task_cfs_rq(p);
->>>> +
->>>> +#ifdef CONFIG_SMP
->>>> +	/* Stop load tracking for !fair task */
-> 
-> You're not really stopping p->se load tracking by doing this. We don't
-> do this outside fair anyway. IMHO, you freeze p->se's PELT _avg/_sum
-> values to be used as initial values when re-entering fair.
-> 
+Hi Linus,
 
-Yes, you are right, this comment is misleading and wrong, will delete it.
+The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
 
-Thanks very much for your review!
+  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
 
+are available in the Git repository at:
 
->>>> +	p->se.avg.last_update_time = 0;
->>>> +#endif
->>>>  }
->>>>  
->>>>  static void switched_to_fair(struct rq *rq, struct task_struct *p)
-> 
+  https://github.com/ceph/ceph-client.git tags/ceph-for-5.19-rc7
+
+for you to fetch changes up to fac47b43c760ea90e64b895dba60df0327be7775:
+
+  netfs: do not unlock and put the folio twice (2022-07-14 10:10:12 +0200)
+
+----------------------------------------------------------------
+A folio locking fixup that Xiubo and David cooperated on, marked for
+stable.  Most of it is in netfs but I picked it up into ceph tree on
+agreement with David.
+
+----------------------------------------------------------------
+Xiubo Li (1):
+      netfs: do not unlock and put the folio twice
+
+ Documentation/filesystems/netfs_library.rst |  8 +++++---
+ fs/afs/file.c                               |  2 +-
+ fs/ceph/addr.c                              | 11 ++++++-----
+ fs/netfs/buffered_read.c                    | 17 ++++++++++-------
+ include/linux/netfs.h                       |  2 +-
+ 5 files changed, 23 insertions(+), 17 deletions(-)

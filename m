@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11B0576585
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBF7576595
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234639AbiGOQ4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 12:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
+        id S234966AbiGOQ5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 12:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234399AbiGOQ4I (ORCPT
+        with ESMTP id S234734AbiGOQ46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 12:56:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB9479EF7;
-        Fri, 15 Jul 2022 09:56:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E392B82D61;
-        Fri, 15 Jul 2022 16:56:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BFD6C34115;
-        Fri, 15 Jul 2022 16:56:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657904164;
-        bh=nElAzVIAv0nLtGkLSpnk4sOMhdMwLfbRx9XjW5h8H4M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=raha1B32W4+ZrSGPi+rMQqE1vCSRzVr95GlL6ZOL7TWkdUwO6kNztk8j1xBSrYFxE
-         cgxYyveCQu3xsRiD8tVpMOUmfSd7srNQDXDSEkQLJwVCDZArTqjBT4vGKLo9yz/7PS
-         XFQJyG89a+DuNaA5QASqdmpGZSP2OcZsGtOMIlhKUTvMQH53nYHQ9SWjPoDOiYJing
-         Vd0X03m+WFJ4aTdlD/Z/aAzPvo0MoU9qwA9RjAXLJnJ5Oa06UBkmWxIWQGsuoYUBrM
-         9A1al3M41cZ1btJQr+GAAi7PRq7psCN1ZPCKom11veCBksJ1W0XJJpMjwVBXjL9GVs
-         8+tbTj6T3oT1Q==
-Date:   Fri, 15 Jul 2022 11:56:01 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: qcom: Add support for modular builds
-Message-ID: <20220715165601.GA1139849@bhelgaas>
+        Fri, 15 Jul 2022 12:56:58 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6255F7AB1F;
+        Fri, 15 Jul 2022 09:56:57 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id y8so7074176eda.3;
+        Fri, 15 Jul 2022 09:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y+DDDWv8vNM5PdR14plMoRMklo8MIh+lniAAcBYuf10=;
+        b=qV4xJmyOIfgtqLCC4K8RkabXNksmOb8+rPBWPdJ8dU82l45EO0JX09/X4v66i1XfSj
+         PD2kBzcqdCXZo8oieUmvpIZyJd+WxKLvXHHrWpAJawhN5C5RWSo/lzOdWdYMrRqMUunr
+         8nwLtwC8lV3/ZS+diAAM7eCdU4Sor1sbJ9rLlrd+GZ5suVE4ZvntTatxbqIUn2VaMDnZ
+         gkKr1dQ7j4wqKUyP6F4G582PCLJ2sSg15jRodBOncfpyHUmr8CjSkLyto3PYPI5EJxzs
+         W/gbzOfcwoHo/qu4TSlVsuywdu8oOgH5/cnjcBIPwLk7EO4iwNALZ8oUNCwRedjeTozc
+         XVJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y+DDDWv8vNM5PdR14plMoRMklo8MIh+lniAAcBYuf10=;
+        b=SjmeQ4MAv71OrY/3nMUzJXukCqTIYz0eOPByQDdsX9zv7WsdYHWde0M6rlbyUVIQU1
+         pzL7xnvo1qzdMqt5oCe2Of5yZXDXRW79y6g+ktkuKrgDwF0By+pxXKVcB7WsIBLS0ghG
+         SPKiqx5bxm2KPHnvHAqiiL8jEU4FSP3xObG1eLjLowIt7iNSGdFSDRc2dXj/Qkcp/JkV
+         7L4qJIosLlaqk2xLx6oxK5IsekHV/j7SKiTAf2fFGK4aQyq1PbXwDK8gm+Jc59EF6GW7
+         7TB2dSKeFth5d429I01APhHLgjEINcWbz9IrvWHduXWIZHCVnr0ZTuG/F3BGyaXVazb/
+         qnKQ==
+X-Gm-Message-State: AJIora9hwiHSGAp+y3PscloQPocjBjC49dAhAM5bHrlUKw3KPaMCbjfr
+        Mree6RUsH8Ht66FkTv6VLNp1cb102SAmJzkxpEA=
+X-Google-Smtp-Source: AGRyM1t5U0NQTYmztP5y3p4mrePMiL4H99HoxqbYm+yMB3ZIFmWMdoA4GfQLBP3dljrdl79ooGNQNNh89/szlJySGR0=
+X-Received: by 2002:a05:6402:1c01:b0:43a:f714:bcbe with SMTP id
+ ck1-20020a0564021c0100b0043af714bcbemr20619834edb.14.1657904215610; Fri, 15
+ Jul 2022 09:56:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ef036db-2ac8-2723-93de-ac841d94ba51@linaro.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220714024612.944071-1-pulehui@huawei.com>
+In-Reply-To: <20220714024612.944071-1-pulehui@huawei.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 15 Jul 2022 09:56:44 -0700
+Message-ID: <CAEf4BzZ_L+94O00mMDUh8ps8RTF=kcvX1zS5ocK8fPk4uw-_kg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/3] Use lightweigt version of bpftool
+To:     Pu Lehui <pulehui@huawei.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 04:05:41PM +0300, Dmitry Baryshkov wrote:
-> On 14/07/2022 15:19, Stanimir Varbanov wrote:
-> > Please take a look why we made it built-in first [1].
-> > 
-> > If arguments there are still valid I don't see why to make it a module
-> > again.
-> > 
-> > [1] https://lkml.org/lkml/2016/8/24/694
-> 
-> It looks like there is a move to make all non-essential drivers buildable as
-> modules. For example, the Kirin, dra7xx, Meson PCI controllers are now
-> buildable as modules. So I think we can follow that and allow building the
-> pcie-qcom as a module.
+On Wed, Jul 13, 2022 at 7:16 PM Pu Lehui <pulehui@huawei.com> wrote:
+>
+> Currently, samples/bpf, tools/runqslower and bpf/iterators use bpftool
+> for vmlinux.h, skeleton, and static linking only. We can uselightweight
+> bootstrap version of bpftool to handle these, and it will be faster.
+>
+> v2:
+> - make libbpf and bootstrap bpftool independent. and make it simple.
+>
 
-IIUC the arguments in [1] are that:
+Quentin, does this patch set look good to you?
 
-  - Kconfig is bool, so it can't be built as a module
-  - there's no sensible use case for unbind
-
-Those described the situation at the time, and there's no point in
-having .remove() and using module_platform_driver() if Kconfig is
-bool.
-
-But they don't seem like arguments for why the driver couldn't be
-*made* modular.
-
-I think drivers *should* be modular unless there's a technical reason
-they can't be.
-
-Bjorn
+> v1: https://lore.kernel.org/bpf/20220712030813.865410-1-pulehui@huawei.com
+>
+> Pu Lehui (3):
+>   samples: bpf: Fix cross-compiling error by using bootstrap bpftool
+>   tools: runqslower: build and use lightweight bootstrap version of
+>     bpftool
+>   bpf: iterators: build and use lightweight bootstrap version of bpftool
+>
+>  kernel/bpf/preload/iterators/Makefile | 10 +++-------
+>  samples/bpf/Makefile                  | 10 ++++------
+>  tools/bpf/runqslower/Makefile         |  7 +++----
+>  3 files changed, 10 insertions(+), 17 deletions(-)
+>
+> --
+> 2.25.1
+>

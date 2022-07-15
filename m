@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E04B576A92
+	by mail.lfdr.de (Postfix) with ESMTP id 32612576A91
 	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbiGOXVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 19:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
+        id S232198AbiGOXVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 19:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbiGOXVB (ORCPT
+        with ESMTP id S232161AbiGOXVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 19:21:01 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9378492843;
-        Fri, 15 Jul 2022 16:21:00 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id h17so8715013wrx.0;
-        Fri, 15 Jul 2022 16:21:00 -0700 (PDT)
+        Fri, 15 Jul 2022 19:21:11 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF9692862
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:21:10 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id l16-20020a170902f69000b0016bf6a77effso2756798plg.2
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:21:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=WP1k9JR3q2kpU+9oKdGOJLSJzHWZD7K59YLDv38ZoL0=;
-        b=grQe+yEXMAPCAHSAunuX+EoiVPfPaejhQT4VwaCEMeCUCYiS6l2SyQ+aeoyOJw3W/7
-         b/jqE9cF3bCn2ziZdfSb6fEy0GX2ElksprrDd81oEOgXVTI3qsGlBoKAQa6y3nwSwsRG
-         sEMczA5h4N/eFYB44M5Az2PDZ0Yjbz6Zi13/hOvpc5c/nFP8lgWlrMYbfAYWe38h4/m/
-         /V0lqiT4mi3lZ2yMbMIiXL0Obh7J+PAv5ltruzfU8STtUMcLI0c558Lz4vW/pRLc6CCb
-         1Q9wT4cNdz0XdKTAlZR0vNdpNfWVoE4RSDZtTGmzHv9QotuiAu0xUblginxYtzkgUAKS
-         AIzw==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=3P3Bs+udSQsz1sUF6b+IjzihKr791n8qO5rKr7yYqSE=;
+        b=VAVneBoVZS7wuVCC3aUBkJFUZzF0WCarFPBNN4kA6OH/iochWiQiaPSvniKfnAf+YG
+         dZtuls0lliPtyKtiiA4cwGjh2ERAZqLms+8VAt5QR0ieI7qPZB2JPcJQ0jjrmCN+HBxa
+         4jRzzEv5cIjBSbHZKlIfwG3XxeI0Rx2YYAu1Lc97xnzed66QaB1GOI9o49Jnt53NuAu6
+         mN6+1aK+S/J+Vwr3SzuvCdiL7AodCdLjjYqKg6WogcxbQ+gXqXPGXDnZNSpGcUl7iay3
+         gPGwEnOVaXesnGLeoT49N3DuNWJOYuGkeS7F/HVJzZth9+lQEbCFlUM0jPpcmsZmj5P8
+         V0jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=WP1k9JR3q2kpU+9oKdGOJLSJzHWZD7K59YLDv38ZoL0=;
-        b=ZH6JdfNsZ1rQDm1pu9ile8LggVtFjgX4fDyXBPufm4MkIkZJm5R3Duu3PFj0lOyXeZ
-         A8qrRqSIXKZes2FTPgXoUFp3Gx3XHh4FtnWJUnmNmRgYpeQpZoVWd1teu5jXEgayCHP+
-         jUZMplx0sHutVjX6h7VPXnO8sWHAsqFMzf4RzrtVkU9SzPVFXr75npl1UNWkUGH4YEHJ
-         PtwdQ5Ex+Hmtk8aqUEHe15dt379OUjCvKdLG25OnBShOuV2X6C86gTNMJUJB1pclHVN1
-         RydZWXnilngiyYoWzEV4G54Iho1YnRN67Lg2Q4ceaXNZHLIW12LZRWzPACbQy1yl8N/T
-         uXVQ==
-X-Gm-Message-State: AJIora+Mp47cAF1aeQWM/CMLQDCxf2ba9czaqC7ftzY8j40QiO4nzxHe
-        6GQdX3KPgCCcZHUjLNkIKlGrGvvZyiMo9Q==
-X-Google-Smtp-Source: AGRyM1ssL3Q4jhmsPST6RCt9ekVCAqNaz9O0eEbF9UXtJQnJA9Q78S9gWF30tP2AdTeHULgC1Ae6NQ==
-X-Received: by 2002:a5d:59ac:0:b0:21d:944a:8a0e with SMTP id p12-20020a5d59ac000000b0021d944a8a0emr14342183wrr.61.1657927259108;
-        Fri, 15 Jul 2022 16:20:59 -0700 (PDT)
-Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
-        by smtp.gmail.com with ESMTPSA id bg10-20020a05600c3c8a00b003a0323463absm8144010wmb.45.2022.07.15.16.20.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 16:20:58 -0700 (PDT)
-Date:   Sat, 16 Jul 2022 00:20:56 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     mpi3mr-linuxdrv.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: build failure of next-20220715 due to "cast from pointer to integer
- of different size"
-Message-ID: <YtH2WLmSXX7qLV5X@debian>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=3P3Bs+udSQsz1sUF6b+IjzihKr791n8qO5rKr7yYqSE=;
+        b=vcfEtCnu80C7TyySFfnCDz+ZHiA4zDJh2nFDtD0fqBmc4fRS4Yave3s5iUt3kdGDJz
+         EGKXV5fCVMT33qB+vwdOOAmndRX4gu4gt3b6WaowCi4mpawlmJARyTYoxhfn/EM4XWNK
+         QEPjtAYP3XbFKpZCxG3pa7YZxH+XyeVCw6QVHSCg55gMBQGeMjCvT4L5xgvfRjlCBP1U
+         LiqYIuPM+C3EWfrooyAfsJmfG9zDb62KqGJZ29FumM0+dFEs3C/ORRTyhPP/JgDLqB14
+         5MXc8iAvrDVPOBA6jKaT9ZcwapBbHf6esJA0qT4q0ddsUgFAuTpJ6VtEwy4Qr5lye9Rh
+         g3vw==
+X-Gm-Message-State: AJIora+oqhOrdeSEaCCxYOhYxOs3CqnPywvCdBWGFQk2MQ6AVBwFfTVO
+        F5YM6xKMS/PsAahAthj6SD7BgYxYS+Q=
+X-Google-Smtp-Source: AGRyM1upZZkkOKDTARRJzNwIaT/POrzwuzwSs1Kl9kDJrRql3nC8/r1FEQQqKVfyugyXaZvb4zbRhDESNrw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:760f:b0:16c:ae59:c9b2 with SMTP id
+ k15-20020a170902760f00b0016cae59c9b2mr10707642pll.0.1657927270100; Fri, 15
+ Jul 2022 16:21:10 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 15 Jul 2022 23:21:03 +0000
+Message-Id: <20220715232107.3775620-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH 0/4] Huge page related cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,21 +67,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Simplify (hopefully it's simpler) zapping collapsible SPTEs by first
+simplifying retrieving the host mapping level.  KVM currently requires
+memory be backed by a refcounted struct page in order to be mapped as
+a huge page.  This requires KVM to acquire the pfn that corresponds to
+the gfn/hva before checking whether or not the gfn/hva can be mapped
+huge.
 
-Not sure if it has been reported, builds of xtensa, csky and mips allmodsconfig
-have failed to build next-20220715 with the error:
+Dropping that requirement allow the "zap collapsible" path to detect
+that a shadow page can be zapped without having to first bottom out on
+leaf entries.  This could theoretically be a minor performance win,
+e.g. then KVM doesn't need to walk all not-present leaf SPTEs to find
+out that a shadow page has no children.  In basic testing I didn't see
+any meaningful difference (the actual zapping dominates).
 
-drivers/scsi/mpi3mr/mpi3mr_os.c: In function 'mpi3mr_queue_qd_reduction_event':
-drivers/scsi/mpi3mr/mpi3mr_os.c:389:40: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
-  389 |         *(__le64 *)fwevt->event_data = (__le64)tg;
-      |                                        ^
-drivers/scsi/mpi3mr/mpi3mr_os.c: In function 'mpi3mr_fwevt_bh':
-drivers/scsi/mpi3mr/mpi3mr_os.c:1655:22: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
- 1655 |                 tg = (struct mpi3mr_throttle_group_info *)
-      |                   
+There are also potential use cases for allow any mappings to be huge,
+e.g. GPU buffers (IIUC).  Dropping the struct page requirement makes
+KVM play nice with those.
+
+This is most definitely post-5.20 material.
+
+Sean Christopherson (4):
+  KVM: x86/mmu: Don't require refcounted "struct page" to create huge
+    SPTEs
+  KVM: x86/mmu: Document the "rules" for using host_pfn_mapping_level()
+  KVM: x86/mmu: Don't bottom out on leafs when zapping collapsible SPTEs
+  KVM: selftests: Add an option to run vCPUs while disabling dirty
+    logging
+
+ arch/x86/kvm/mmu/mmu.c                        | 65 ++++++++++++-------
+ arch/x86/kvm/mmu/mmu_internal.h               |  2 +-
+ arch/x86/kvm/mmu/tdp_iter.c                   |  9 ---
+ arch/x86/kvm/mmu/tdp_iter.h                   |  1 -
+ arch/x86/kvm/mmu/tdp_mmu.c                    | 61 ++++++++---------
+ .../selftests/kvm/dirty_log_perf_test.c       | 30 ++++++++-
+ 6 files changed, 94 insertions(+), 74 deletions(-)
 
 
---
-Regards
-Sudip
+base-commit: 8031d87aa9953ddeb047a5356ebd0b240c30f233
+-- 
+2.37.0.170.g444d1eabd0-goog
+

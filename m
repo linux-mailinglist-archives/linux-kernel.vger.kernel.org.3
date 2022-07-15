@@ -2,134 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3FE575C9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8254575C90
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiGOHpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 03:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S231246AbiGOHoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 03:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiGOHpM (ORCPT
+        with ESMTP id S231244AbiGOHoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 03:45:12 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C987C1B0;
-        Fri, 15 Jul 2022 00:45:10 -0700 (PDT)
+        Fri, 15 Jul 2022 03:44:10 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F74E57E30
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 00:44:09 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id l12so2558560plk.13
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 00:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657871111; x=1689407111;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=cAWB2gvkwfL1+i+RY7OasDLomscjFUmMo/Lsjsnp0B8=;
-  b=l9DhfHcctup4rbPqdpLiVIDs76oO3sLjlegsS/Lw1EW4VQHlS0SNkhJM
-   4K3EEREao1nxHpvvy/duDPN4U3rxsxo8bu5X0Ja59QBxOHeM1Q1juTGzs
-   W6wVHODLhzFOKZIBNjn450pHrmznC5niG1/fOv8KDclvnmCvAaa8mo8U9
-   Y=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Jul 2022 00:45:10 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 00:45:10 -0700
-Received: from zijuhu-gv.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 15 Jul 2022 00:45:06 -0700
-From:   Zijun Hu <quic_zijuhu@quicinc.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <luiz.dentz@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <luiz.von.dentz@intel.com>, <quic_zijuhu@quicinc.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: [PATCH v4] Bluetooth: hci_sync: Remove redundant func definition
-Date:   Fri, 15 Jul 2022 15:45:02 +0800
-Message-ID: <1657871102-26907-1-git-send-email-quic_zijuhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=avIvPkXnH4SzoYsvQQ3wX9xzRxcp+KK0o8HXPKUV/IE=;
+        b=mSh4pzzIpXEloPc9V5bLiMFg43NSDwzfV8P5RYg4xbMKDQ3m8yx50pQcKM57obdU6k
+         iUoDXjXFzQK7wAvMS+QGgpIzeTw4XCSKiHnNPXpcyXLBOj0q2o8a2p+7Vx4HaykgWdSz
+         3cWehxBsAn7z2EcC3PdUesMa4b+uMoHfWfuEdjtPJ9b2rrUHNSr6HyDmtfk7Gh8HSR+P
+         RptNpT1h6qAZJ7MICp0GZouSomyEPh45qEEDvLcO8fwTyWSevcXXIMCax6Z5lSiLXKmq
+         GMr69r4tGe5YFi+OTCNzbM+Zb4ZU6nLM2aohWXEZxyfwQihHkgij84pqNfm8x8vfoGve
+         q2fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=avIvPkXnH4SzoYsvQQ3wX9xzRxcp+KK0o8HXPKUV/IE=;
+        b=vsMjhXTsJeBjMSaF+J2oIiEyXfCV3kFWbzf1L82plWXbflwbnBoNA7qP3sTrjWl+QD
+         Th9K3gddSmZLc3LfYh9gNzQ8yE/xBsYZKlH9ZsI/hrCW+LESJBaPiV8UaCim970iivHK
+         sdt+j3cUTwBschEfEf5hNDkG1hE7drCG7DOvfESG0cjvLtyMkPcVt0RlxWXbe3b7n9ZP
+         JnPE5J+3ovfmiBPhF4ZN17oyujxJHyVmjAo7wrJAvmn1QeyhOzBXypRH+zUj/Vci4CT7
+         TgDw4elBv/y57QQHUDc7MfqDo7bmwp/P3Kcq2+a1gQa+SspXiqrPg7+EQHdsjpei3h5V
+         m6Eg==
+X-Gm-Message-State: AJIora/Mm61IllK7PdwWqcq+J/GI/M3VXn6BX2PAGqE7PWZunNsocy3R
+        tLbYFb2tXGKq2Rw9pt12fv0=
+X-Google-Smtp-Source: AGRyM1vaDyYSLJnrEGMuCac23Hk82LYQVuGvvv4seL7ZU6BSHWE12BwXlG1YUvAMNkm6SOCwKZqRJQ==
+X-Received: by 2002:a17:902:f691:b0:16c:4fb6:e08b with SMTP id l17-20020a170902f69100b0016c4fb6e08bmr12610701plg.174.1657871048772;
+        Fri, 15 Jul 2022 00:44:08 -0700 (PDT)
+Received: from localhost ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id d1-20020a170902cec100b0016a091eb88esm2851078plg.126.2022.07.15.00.44.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 15 Jul 2022 00:44:08 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 15:45:31 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, zhangwen@coolpad.com
+Subject: Re: [PATCH 05/16] erofs: drop the old pagevec approach
+Message-ID: <20220715154531.00005153.zbestahu@gmail.com>
+In-Reply-To: <YtEVEtTOD2peFXum@B-P7TQMD6M-0146.local>
+References: <20220714132051.46012-1-hsiangkao@linux.alibaba.com>
+        <20220714132051.46012-6-hsiangkao@linux.alibaba.com>
+        <20220715150737.00006764.zbestahu@gmail.com>
+        <YtEVEtTOD2peFXum@B-P7TQMD6M-0146.local>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-both hci_request.c and hci_sync.c have the same definition for
-disconnected_accept_list_entries(), so remove a redundant copy.
+On Fri, 15 Jul 2022 15:19:46 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
----
-v3->v4
- -use 75 characters per line for Linux commit message bodies
-v2->v3
- -remove table char to solve gitlint checking failure
-v1->v2
- -remove the func copy within hci_request.c instead of hci_sync.c
- net/bluetooth/hci_request.c | 18 ------------------
- net/bluetooth/hci_request.h |  2 ++
- net/bluetooth/hci_sync.c    |  2 +-
- 3 files changed, 3 insertions(+), 19 deletions(-)
+> On Fri, Jul 15, 2022 at 03:07:37PM +0800, Yue Hu wrote:
+> > On Thu, 14 Jul 2022 21:20:40 +0800
+> > Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+> >   
+> > > Remove the old pagevec approach but keep z_erofs_page_type for now.
+> > > It will be reworked in the following commits as well.
+> > > 
+> > > Also rename Z_EROFS_NR_INLINE_PAGEVECS as Z_EROFS_INLINE_BVECS with
+> > > the new value 2 since it's actually enough to bootstrap.  
+> > 
+> > I notice there are 2 comments as below which still use pagevec, should we
+> > update it as well?
+> > 
+> > [1] 
+> > * pagevec) since it can be directly decoded without I/O submission.
+> > [2]
+> > * for inplace I/O or pagevec (should be processed in strict order.)  
+> 
+> Yeah, thanks for reminder... I will update it in this patch in the next
+> version.
+> 
+> > 
+> > BTW, utils.c includes needles <pagevec.h>, we can remove it along with the patchset
+> > or remove it later.  
+> 
+> That is a completely different stuff, would you mind submitting a patch
+> to remove it if needed?
 
-diff --git a/net/bluetooth/hci_request.c b/net/bluetooth/hci_request.c
-index 635cc5fb451e..edec0447aaa7 100644
---- a/net/bluetooth/hci_request.c
-+++ b/net/bluetooth/hci_request.c
-@@ -1784,24 +1784,6 @@ int hci_update_random_address(struct hci_request *req, bool require_privacy,
- 	return 0;
- }
- 
--static bool disconnected_accept_list_entries(struct hci_dev *hdev)
--{
--	struct bdaddr_list *b;
--
--	list_for_each_entry(b, &hdev->accept_list, list) {
--		struct hci_conn *conn;
--
--		conn = hci_conn_hash_lookup_ba(hdev, ACL_LINK, &b->bdaddr);
--		if (!conn)
--			return true;
--
--		if (conn->state != BT_CONNECTED && conn->state != BT_CONFIG)
--			return true;
--	}
--
--	return false;
--}
--
- void __hci_req_update_scan(struct hci_request *req)
- {
- 	struct hci_dev *hdev = req->hdev;
-diff --git a/net/bluetooth/hci_request.h b/net/bluetooth/hci_request.h
-index 7f8df258e295..e80b500878d9 100644
---- a/net/bluetooth/hci_request.h
-+++ b/net/bluetooth/hci_request.h
-@@ -120,6 +120,8 @@ void __hci_req_update_scan(struct hci_request *req);
- int hci_update_random_address(struct hci_request *req, bool require_privacy,
- 			      bool use_rpa, u8 *own_addr_type);
- 
-+bool disconnected_accept_list_entries(struct hci_dev *hdev);
-+
- int hci_abort_conn(struct hci_conn *conn, u8 reason);
- void __hci_abort_conn(struct hci_request *req, struct hci_conn *conn,
- 		      u8 reason);
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 212b0cdb25f5..48a262f0ae49 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -2419,7 +2419,7 @@ int hci_write_fast_connectable_sync(struct hci_dev *hdev, bool enable)
- 	return err;
- }
- 
--static bool disconnected_accept_list_entries(struct hci_dev *hdev)
-+bool disconnected_accept_list_entries(struct hci_dev *hdev)
- {
- 	struct bdaddr_list *b;
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+ok, may submit later.
+
+> 
+> Thanks,
+> Gao Xiang
 

@@ -2,79 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E79575D93
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9868A575DA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbiGOIdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 04:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
+        id S232815AbiGOIe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 04:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiGOIdf (ORCPT
+        with ESMTP id S232745AbiGOIeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:33:35 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CCD1E8;
-        Fri, 15 Jul 2022 01:33:33 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oCGl9-000ndq-8p; Fri, 15 Jul 2022 18:33:16 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 15 Jul 2022 16:33:15 +0800
-Date:   Fri, 15 Jul 2022 16:33:15 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Yang Shen <shenyang39@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH] crypto: hisilicon/zip: Use the bitmap API to allocate
- bitmaps
-Message-ID: <YtEmS//eV3Ok08BD@gondor.apana.org.au>
-References: <49a1b5bf6e8f7c2ad06a0e2dbc35e00169d4ebe2.1657383385.git.christophe.jaillet@wanadoo.fr>
+        Fri, 15 Jul 2022 04:34:16 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976B32A412
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:34:15 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id bu42so6785509lfb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=a9XRqXHxQeqHgzxMR3XBbO4lnwgsjCZAWCSiuY+LFq4=;
+        b=L/VSt+//pCHUgmC2XJNpaJzs7B1wIvaPRUFDXi+rTW21A9pMGPmUda1JnQ+sUbC6Vn
+         L/kjZqWVz8zpvqEgQK8pyvrSuSKTDkBfofqgYPrcr9/HY5Za3cjdi6ce/XoRwNxLc9qH
+         VGJxCrrOyY/e0ZjEj8Q+AvXFeA8EKgUBk+NIueJ9pGCvfFOHx778Z96CuFf5qVFdccOc
+         ZLnLWrXawOo/PxQubfgGPgRJIR0rhMc8DSfF7shOVZS9CNk0SwGA86lznFU97YAWQtZM
+         0JlAIpV2SwrQbNV2PMm3aIWwuwGEV9cVwgVtLKQibagMWlDf+odU25sXqslmwuvmljUf
+         fgGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=a9XRqXHxQeqHgzxMR3XBbO4lnwgsjCZAWCSiuY+LFq4=;
+        b=KWUUYk+VDNn17y2v+/JZ2uz5CvJvxQ+J1oLwp3yQ9f3lECok805Vd6X1sxdlAOMHA5
+         Uls+PYGeMgvlpDbfwmxhXPGdUComZ+MDvdQst1tCOyHcxYPmT+xGKpsUq8ieqgHSDzQT
+         p6ilm9rtP9fdLaSaFgr12n1TFNvB0Y2J/G8r/5VOOCeN8cAujkczBI+l6Ed1xW7eyJ28
+         Q4c264xmfzJMSPojJVc+Q0+JkUjdxBG7FfWFXMAzu7X2FW3xVq0w4yu0Q5esdJFQMyDQ
+         yh+0tvKVDfJV2tlwJhH4r/4QuuuXtDeLvjtkMApZbCN5R6aFc+OW8byjtBbdLnntU1Dl
+         zjHg==
+X-Gm-Message-State: AJIora8LJJpbBhK2PTcMP5KW6zks6CAg9FqidBKQy/wN7QGVuusMeuNf
+        qSRoiShhxj0mqmMflSbjiaRnkcmqWh68726tRsxteQ==
+X-Google-Smtp-Source: AGRyM1uXGIv2oypdMMb0kZdiNq2tc6jrAqle0xF0fVdanjMwSKuuGriweh5n3wFGSKTHxeth1/RswnNTKELc0XOzZQQ=
+X-Received: by 2002:a05:6512:2315:b0:489:cbc1:886a with SMTP id
+ o21-20020a056512231500b00489cbc1886amr6859122lfu.428.1657874053862; Fri, 15
+ Jul 2022 01:34:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49a1b5bf6e8f7c2ad06a0e2dbc35e00169d4ebe2.1657383385.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220714010021.1786616-1-mw@semihalf.com> <YtAMw7Sp06Kiv9PK@shell.armlinux.org.uk>
+ <CAPv3WKcxH=b01ikuUESczWeX8SJjc2fg3GjSCp7Q8p72uSt_og@mail.gmail.com> <YtByJhYpo5BzX4GV@shell.armlinux.org.uk>
+In-Reply-To: <YtByJhYpo5BzX4GV@shell.armlinux.org.uk>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Fri, 15 Jul 2022 10:34:04 +0200
+Message-ID: <CAPv3WKdS-ocj_1uMC-aaw_QQ01FCb2xs-FyV2HHRG_Epd6V0CA@mail.gmail.com>
+Subject: Re: [net-next: PATCH] net: dsa: mv88e6xxx: fix speed setting for
+ CPU/DSA ports
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 09, 2022 at 06:16:46PM +0200, Christophe JAILLET wrote:
-> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
-> 
-> It is less verbose and it improves the semantic.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/crypto/hisilicon/zip/zip_crypto.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/crypto/hisilicon/zip/zip_crypto.c b/drivers/crypto/hisilicon/zip/zip_crypto.c
-> index 67869513e48c..7bf53877e508 100644
-> --- a/drivers/crypto/hisilicon/zip/zip_crypto.c
-> +++ b/drivers/crypto/hisilicon/zip/zip_crypto.c
-> @@ -606,8 +606,7 @@ static int hisi_zip_create_req_q(struct hisi_zip_ctx *ctx)
->  		req_q = &ctx->qp_ctx[i].req_q;
->  		req_q->size = QM_Q_DEPTH;
->  
-> -		req_q->req_bitmap = kcalloc(BITS_TO_LONGS(req_q->size),
-> -					    sizeof(long), GFP_KERNEL);
-> +		req_q->req_bitmap = bitmap_zalloc(req_q->size, GFP_KERNEL);
->  		if (!req_q->req_bitmap) {
->  			ret = -ENOMEM;
->  			if (i == 0)
+Hi Russell,
 
-You should add an include for linux/bitmap.h instead of relying
-on implicit inclusion through some random header file.
+czw., 14 lip 2022 o 21:44 Russell King (Oracle)
+<linux@armlinux.org.uk> napisa=C5=82(a):
+>
+> On Thu, Jul 14, 2022 at 07:18:57PM +0200, Marcin Wojtas wrote:
+> > Hi Russell,
+> >
+> > czw., 14 lip 2022 o 14:32 Russell King (Oracle)
+> > <linux@armlinux.org.uk> napisa=C5=82(a):
+> > >
+> > > On Thu, Jul 14, 2022 at 03:00:21AM +0200, Marcin Wojtas wrote:
+> > > > Commit 3c783b83bd0f ("net: dsa: mv88e6xxx: get rid of SPEED_MAX set=
+ting")
+> > > > stopped relying on SPEED_MAX constant and hardcoded speed settings
+> > > > for the switch ports and rely on phylink configuration.
+> > > >
+> > > > It turned out, however, that when the relevant code is called,
+> > > > the mac_capabilites of CPU/DSA port remain unset.
+> > > > mv88e6xxx_setup_port() is called via mv88e6xxx_setup() in
+> > > > dsa_tree_setup_switches(), which precedes setting the caps in
+> > > > phylink_get_caps down in the chain of dsa_tree_setup_ports().
+> > > >
+> > > > As a result the mac_capabilites are 0 and the default speed for CPU=
+/DSA
+> > > > port is 10M at the start. To fix that execute phylink_get_caps() ca=
+llback
+> > > > which fills port's mac_capabilities before they are processed.
+> > > >
+> > > > Fixes: 3c783b83bd0f ("net: dsa: mv88e6xxx: get rid of SPEED_MAX set=
+ting")
+> > > > Signed-off-by: Marcin Wojtas <mw@semihalf.com>
+> > >
+> > > Please don't merge this - the plan is to submit the RFC series I sent=
+ on
+> > > Wednesday which deletes this code, and I'd rather not re-spin the ser=
+ies
+> > > and go through the testing again because someone else changed the cod=
+e.
+> >
+> > Thank for the heads-up. Are you planning to resend the series or
+> > willing to get it merged as-is? I have perhaps one comment, but I can
+> > apply it later as a part of fwnode_/device_ migration.
+> >
+> > >
+> > > Marcin - please can you test with my RFC series, which can be found a=
+t:
+> > >
+> > > https://lore.kernel.org/all/Ys7RdzGgHbYiPyB1@shell.armlinux.org.uk/
+> > >
+> >
+> > The thing is my v2 of DSA fwnode_/device_ migration is tested and
+> > ready to send. There will be conflicts (rather easy) with your
+> > patchset - I volunteer to resolve it this way or another, depending on
+> > what lands first. I have 2 platforms to test it with + also ACPI case
+> > locally.
+> >
+> > I'd like to make things as smooth as possible and make it before the
+> > upcoming merge window - please share your thoughts on this.
+>
+> I've also been trying to get the mv88e6xxx PCS conversion in, but
+> it's been held up because there's a fundamental problem in DSA that
+> this series is addressing.
+>
+> This series is addressing a faux pas on my part, where I had forgotten
+> that phylink doesn't get used in DSA unless firmware specifies a
+> fixed-link (or a PHY) - in other words when the firmware lacks a
+> description of the link.
+>
+> So, what do we do...
+>
 
-The same goes for all your other patches too.
+Ok, thanks. I tested your patchset in 2 setups with multiple
+combinations - all worked fine, so this patch can be abandoned.
 
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+I already rebased my series on top of yours, so I'll submit my v2 this way.
+
+Best regards,
+Marcin

@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3BA576A15
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E63A576A1B
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiGOWn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
+        id S231995AbiGOWo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbiGOWm6 (ORCPT
+        with ESMTP id S232585AbiGOWoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:42:58 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89418C147
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:42:44 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id cu12-20020a17090afa8c00b001efdd3bac65so2687903pjb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:42:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=12pAoMG7eqUpSjBxIvOnNJnEwyKK8LrfDPX8olcQNKs=;
-        b=byCtTANhDQqGzobjfvR7dIeBxKJXRj9f4WjvncLqxasPzh2o5H8X/IPljjW2Ey8jZy
-         +eoPB5V0ZDvJ2dBhL4uTf24x6vfC/c7050s049hXISAkUbvVlOHOgAtQG4gFO+RYQpML
-         l0SOhdeMpJGIMNTvySvhtTbMntz1feob2FN52Sn692iRK2j0W/JLUSk39CaeZbeZFeKt
-         Lyc7ehni3ryxB2Hw0pza6UgYFMnk5vTK0M6Py5MSbrDHE7rGSAUbfHU4QbZFfa12x2Md
-         I3kklLPd4TMwvnUAo2nkOS55mDilXcguEdQuaWsJkq57fqiu0vot30r9djl+Tt0rewAh
-         X9fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=12pAoMG7eqUpSjBxIvOnNJnEwyKK8LrfDPX8olcQNKs=;
-        b=qZFdMbfsHokV52uJxsz/EvtNBmZW6g0iODd+HLzLveEHGORfbLeV1DkZZRt6G+9X8a
-         eb2h3rewGYKhhJOP+4V5EGT1JfSuHib8iUAyYu1p8wutTCh7ACgbHFG5hhMtieXM2BA3
-         b/4YqDvYv+1ZqJZugmfuXWiA01/hQzOrJsnzHp8jQ3sLmyQD1wcpY/8WnBOc9Efi2Cx2
-         RPdhCmCVxhp6c8OMlVK41aQzeDTJefYxRpLtAalPkLgc2ytAhyELgyYTJNath/nYeVQD
-         X7f1XwysqncyPTKZjmlBQUJJCaFUbe63TXIWkktcOsh+sf1FSY+mILu3mhWlima7uIBU
-         QeHQ==
-X-Gm-Message-State: AJIora8vDZcj8evIBfe+zBxbvrvwN2VukrJPxJDI4I8/jQ+hLWlAmxa4
-        Uw4IChoubG/+x8hhONpKnveNVDUZ4jY=
-X-Google-Smtp-Source: AGRyM1uNRYq10LMeXTESy4mNUWMPIr8lGyZaxJ19QKoiM47J1hE2CGcDTLs2w0Eod1PKupNoYlp2xhx/KPE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:11d0:b0:16b:80cf:5d9 with SMTP id
- q16-20020a17090311d000b0016b80cf05d9mr16043328plh.91.1657924964208; Fri, 15
- Jul 2022 15:42:44 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 15 Jul 2022 22:42:26 +0000
-In-Reply-To: <20220715224226.3749507-1-seanjc@google.com>
-Message-Id: <20220715224226.3749507-8-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220715224226.3749507-1-seanjc@google.com>
-X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v2 7/7] KVM: x86/mmu: Remove underscores from __pte_list_remove()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 15 Jul 2022 18:44:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1EE904FF;
+        Fri, 15 Jul 2022 15:43:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4381B80B9D;
+        Fri, 15 Jul 2022 22:43:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4027CC34115;
+        Fri, 15 Jul 2022 22:43:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657924995;
+        bh=SYs1CcavLTZPQ9Ht+CPL2jtfT27xIDO5hQjAOP1TFNU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KIKoFMWfzIZ5TA1kgJXoEfDnhmk1OBAGITW/xdyeC0YFlSqDqOxkUcTFCTXQDsf+G
+         M8M2moR/Vb3cZTD25WQG/pLwBlhLlGHsm7i/faVG+4zjXKtAdmwAUHlF9JuhZIS4h5
+         6YvpqY63DFKa3RufjHVhSLn3wxFyFZ/OnAIvQcxVq/dSdnpGVDNJHY47cgMo43B4WR
+         tYd/7sALjqyDk02a+fHDxHbZUD+fZ1f7U1ipBGhvGo36EZKqvuvrGPfPRrvBaLsaqZ
+         QG+4D6hGTgdoREXpxRxDj2okxy0LfZxrMdvw2O+c8Nt99Fg8yYJmdpABgaLKD9U3BX
+         435n5TzDGhHgg==
+Date:   Fri, 15 Jul 2022 15:43:14 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Bernard f6bvp <f6bvp@free.fr>
+Cc:     duoming@zju.edu.cn, davem@davemloft.net, edumazet@google.com,
+        linux-hams@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, ralf@linux-mips.org
+Subject: Re: [PATCH] net: rose: fix unregistered netdevice: waiting for
+ rose0 to become free
+Message-ID: <20220715154314.510ca2fb@kernel.org>
+In-Reply-To: <ab0eac7b-3041-6772-21dd-273e1b8fc43e@free.fr>
+References: <26cdbcc8.3f44f.181f6cc848f.Coremail.duoming@zju.edu.cn>
+        <4c604039-ffb8-bca3-90bb-d8014249c9a2@free.fr>
+        <ab0eac7b-3041-6772-21dd-273e1b8fc43e@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the underscores from __pte_list_remove(), the function formerly
-known as pte_list_remove() is now named kvm_zap_one_rmap_spte() to show
-that it zaps rmaps/PTEs, i.e. doesn't just remove an entry from a list.
+On Fri, 15 Jul 2022 17:59:06 +0200 Bernard f6bvp wrote:
+> Here is the context.
+>=20
+> This patch adds dev_put(dev) in order to allow removal of rose module=20
+> after use of AX25 and ROSE via rose0 device.
+>=20
+> Otherwise when trying to remove rose module via rmmod rose an infinite=20
+> loop message was displayed on all consoles with xx being a random number.
+>=20
+> unregistered_netdevice: waiting for rose0 to become free. Usage count =3D=
+ xx
+>=20
+> unregistered_netdevice: waiting for rose0 to become free. Usage count =3D=
+ xx
+>=20
+> ...
+>=20
+> With the patch it is ok to rmmod rose.
+>=20
+> This bug appeared with kernel 4.10 and was tentatively repaired five=20
+> years ago.
 
-No functional change intended.
+Please try resending with git send-email.
+Your current email contains HTML so it won't make it to netdev@
+and other vger lists.
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> *Subject: [BUG] unregistered netdevice: wainting for rose0 to become=20
+> free. Usage count =3D xx <https://marc.info/?t=3D148811830800001&r=3D1&w=
+=3D2>=20
+> From: f6bvp <f6bvp () free ! fr>=20
+> <https://marc.info/?a=3D128152583500001&r=3D1&w=3D2> Date: 2017-02-26 14:=
+09:08=20
+> <https://marc.info/?l=3Dlinux-hams&r=3D1&w=3D2&b=3D201702> Message-ID:=20
+> ce03a972-a3b0-ca24-5195-2fe2fd5c44d3 () free ! fr=20
+> <https://marc.info/?i=3Dce03a972-a3b0-ca24-5195-2fe2fd5c44d3%20()%20free%=
+20!%20fr>*=20
+>=20
+>=20
+> Since then the bug reamains.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 282e7e2ab446..5957c3e66b77 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -921,7 +921,7 @@ pte_list_desc_remove_entry(struct kvm_rmap_head *rmap_head,
- 	mmu_free_pte_list_desc(desc);
- }
- 
--static void __pte_list_remove(u64 *spte, struct kvm_rmap_head *rmap_head)
-+static void pte_list_remove(u64 *spte, struct kvm_rmap_head *rmap_head)
- {
- 	struct pte_list_desc *desc;
- 	struct pte_list_desc *prev_desc;
-@@ -961,7 +961,7 @@ static void kvm_zap_one_rmap_spte(struct kvm *kvm,
- 				  struct kvm_rmap_head *rmap_head, u64 *sptep)
- {
- 	mmu_spte_clear_track_bits(kvm, sptep);
--	__pte_list_remove(sptep, rmap_head);
-+	pte_list_remove(sptep, rmap_head);
- }
- 
- /* Return true if at least one SPTE was zapped, false otherwise */
-@@ -1051,7 +1051,7 @@ static void rmap_remove(struct kvm *kvm, u64 *spte)
- 	slot = __gfn_to_memslot(slots, gfn);
- 	rmap_head = gfn_to_rmap(gfn, sp->role.level, slot);
- 
--	__pte_list_remove(spte, rmap_head);
-+	pte_list_remove(spte, rmap_head);
- }
- 
- /*
-@@ -1693,7 +1693,7 @@ static void mmu_page_add_parent_pte(struct kvm_mmu_memory_cache *cache,
- static void mmu_page_remove_parent_pte(struct kvm_mmu_page *sp,
- 				       u64 *parent_pte)
- {
--	__pte_list_remove(parent_pte, &sp->parent_ptes);
-+	pte_list_remove(parent_pte, &sp->parent_ptes);
- }
- 
- static void drop_parent_pte(struct kvm_mmu_page *sp,
--- 
-2.37.0.170.g444d1eabd0-goog
+Is it possible to use a link to the lore.kernel.org archive? It's the
+most common way of referring to past threads these days.
 
+> Signed-off-by: Bernard f6bvp / ai7bg
+
+Well formed s-o-b is required, "the name you'd use if you were signing
+a legal document".
+
+> diff --git a/a/net/rose/af_rose.c b/b/net/rose/af_rose.c
+> index bf2d986..41e106a 100644
+> --- a/a/net/rose/af_rose.c
+> +++ b/b/net/rose/af_rose.c
+> @@ -711,6 +711,7 @@ static int rose_bind(struct socket *sock, struct=20
+> sockaddr *uaddr, int addr_len)
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rose_insert_socket(sk);
+>=20
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sock_reset_flag(sk, SOCK_ZAPP=
+ED);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_put(dev);
+>=20
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
+>  =C2=A0}

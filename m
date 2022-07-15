@@ -2,49 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34389575E0E
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 11:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67DA575E03
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 11:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiGOI4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 04:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
+        id S233797AbiGOI7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 04:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiGOI4q (ORCPT
+        with ESMTP id S233135AbiGOI7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:56:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEB2F2AE5;
-        Fri, 15 Jul 2022 01:56:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F79C1474;
-        Fri, 15 Jul 2022 01:56:46 -0700 (PDT)
-Received: from [10.57.11.112] (unknown [10.57.11.112])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 428F43F792;
-        Fri, 15 Jul 2022 01:56:43 -0700 (PDT)
-Message-ID: <c334d692-9787-7591-54d7-f152ecbd559e@arm.com>
-Date:   Fri, 15 Jul 2022 09:56:41 +0100
+        Fri, 15 Jul 2022 04:59:21 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA951EC78
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:59:18 -0700 (PDT)
+X-UUID: 6e502313beb149518269aba087ed8746-20220715
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:02bc9567-691b-4517-b854-ade556a6e057,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:abeb95d7-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 6e502313beb149518269aba087ed8746-20220715
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <chunxu.li@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1752240523; Fri, 15 Jul 2022 16:59:11 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 15 Jul 2022 16:59:10 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 15 Jul 2022 16:59:09 +0800
+From:   Chunxu Li <chunxu.li@mediatek.com>
+To:     <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>
+CC:     <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
+        <tzungbi@google.com>, <linux-kernel@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Chunxu Li <chunxu.li@mediatek.com>
+Subject: [PATCH v2] ASoC: mediatek: mt8195: extract SOF common code
+Date:   Fri, 15 Jul 2022 16:59:03 +0800
+Message-ID: <20220715085903.7796-1-chunxu.li@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 0/4] Energy Model power in micro-Watts and SCMI v3.1
- alignment
-Content-Language: en-US
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     rafael@kernel.org
-Cc:     daniel.lezcano@linaro.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, rui.zhang@intel.com,
-        viresh.kumar@linaro.org, dietmar.eggemann@arm.com, nm@ti.com,
-        sboyd@kernel.org, linux-kernel@vger.kernel.org,
-        sudeep.holla@arm.com, cristian.marussi@arm.com,
-        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220707071555.10085-1-lukasz.luba@arm.com>
- <41c333e1-2545-f6be-2db2-9061297d0b9a@arm.com>
-In-Reply-To: <41c333e1-2545-f6be-2db2-9061297d0b9a@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,69 +60,639 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
+The functions related to SOF can be reused in different machine drivers,
+such as mt8195 or mt8186, so extract the common code to avoid duplication.
 
-gentle ping.
+Set mtk_soc_card_data which include machine private data and SOF private
+data as card drvdata, then the difference between machine private can be
+ignored such as mt8195_mt6359_priv or mt8186_mt6366_priv, at the same
+time the SOF related code can be reused in different machine drivers.
 
-On 7/7/22 11:46, Lukasz Luba wrote:
-> Hi Rafael,
-> 
-> On 7/7/22 08:15, Lukasz Luba wrote:
->> Hi all,
->>
->> This is a patch set which changes Energy Model power values scale to
->> micro-Watts. It also upgrades the SCMI performance layer + scmi-cpufreq
->> driver to leverage the SCMI v3.1 spec and process micro-Watts power 
->> values
->> coming from FW. The higher precision in EM power field solves an issue
->> of a rounding error, which then can be misinterpreted as 'inefficient 
->> OPP'.
->> An example rounding issue calculation is present in patch 1/4 
->> description.
->>
->> Changes:
->> v2
->> - simplified 32bit checks for max number of CPUs preventing energy
->>    estimation overflow
->> - added Reviewed-by and ACKs
->> v1 [1]
->>
->> Regards,
->> Lukasz Luba
->>
->> [1] 
->> https://lore.kernel.org/lkml/20220622145802.13032-1-lukasz.luba@arm.com/
->>
->> Lukasz Luba (4):
->>    PM: EM: convert power field to micro-Watts precision and align drivers
->>    Documentation: EM: Switch to micro-Watts scale
->>    firmware: arm_scmi: Get detailed power scale from perf
->>    cpufreq: scmi: Support the power scale in micro-Watts in SCMI v3.1
->>
->>   Documentation/power/energy-model.rst  | 14 +++----
->>   drivers/cpufreq/mediatek-cpufreq-hw.c |  7 ++--
->>   drivers/cpufreq/scmi-cpufreq.c        | 15 +++++++-
->>   drivers/firmware/arm_scmi/perf.c      | 18 +++++----
->>   drivers/opp/of.c                      | 15 ++++----
->>   drivers/powercap/dtpm_cpu.c           |  5 +--
->>   drivers/thermal/cpufreq_cooling.c     | 13 ++++++-
->>   drivers/thermal/devfreq_cooling.c     | 19 ++++++++--
->>   include/linux/energy_model.h          | 54 +++++++++++++++++++--------
->>   include/linux/scmi_protocol.h         |  8 +++-
->>   kernel/power/energy_model.c           | 24 ++++++++----
->>   11 files changed, 132 insertions(+), 60 deletions(-)
->>
-> 
-> I got ACKs (and on Reviewed-by) for this patch set.
-> Could you take this via your PM tree, please?
+Signed-off-by: Chunxu Li <chunxu.li@mediatek.com>
+---
+ sound/soc/mediatek/common/Makefile            |   2 +-
+ .../soc/mediatek/common/mtk-dsp-sof-common.c  | 196 +++++++++++++++
+ .../soc/mediatek/common/mtk-dsp-sof-common.h  |  36 +++
+ sound/soc/mediatek/common/mtk-soc-card.h      |  17 ++
+ sound/soc/mediatek/mt8195/mt8195-mt6359.c     | 233 ++++--------------
+ 5 files changed, 301 insertions(+), 183 deletions(-)
+ create mode 100644 sound/soc/mediatek/common/mtk-dsp-sof-common.c
+ create mode 100644 sound/soc/mediatek/common/mtk-dsp-sof-common.h
+ create mode 100644 sound/soc/mediatek/common/mtk-soc-card.h
 
-This patch set is on our roadmap and would be good if it could
-go as v5.20 material.
+diff --git a/sound/soc/mediatek/common/Makefile b/sound/soc/mediatek/common/Makefile
+index acbe01e9e928..576deb7f8cce 100644
+--- a/sound/soc/mediatek/common/Makefile
++++ b/sound/soc/mediatek/common/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # platform driver
+-snd-soc-mtk-common-objs := mtk-afe-platform-driver.o mtk-afe-fe-dai.o
++snd-soc-mtk-common-objs := mtk-afe-platform-driver.o mtk-afe-fe-dai.o mtk-dsp-sof-common.o
+ obj-$(CONFIG_SND_SOC_MEDIATEK) += snd-soc-mtk-common.o
+ 
+ obj-$(CONFIG_SND_SOC_MTK_BTCVSD) += mtk-btcvsd.o
+diff --git a/sound/soc/mediatek/common/mtk-dsp-sof-common.c b/sound/soc/mediatek/common/mtk-dsp-sof-common.c
+new file mode 100644
+index 000000000000..8b1b623207be
+--- /dev/null
++++ b/sound/soc/mediatek/common/mtk-dsp-sof-common.c
+@@ -0,0 +1,196 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * mtk-dsp-sof-common.c  --  MediaTek dsp sof common ctrl
++ *
++ * Copyright (c) 2022 MediaTek Inc.
++ * Author: Chunxu Li <chunxu.li@mediatek.com>
++ */
++
++#include "mtk-dsp-sof-common.h"
++#include "mtk-soc-card.h"
++
++/* fixup the BE DAI link to match any values from topology */
++int mtk_sof_dai_link_fixup(struct snd_soc_pcm_runtime *rtd,
++			   struct snd_pcm_hw_params *params)
++{
++	struct snd_soc_card *card = rtd->card;
++	struct mtk_soc_card_data *soc_card_data = snd_soc_card_get_drvdata(card);
++	struct mtk_sof_priv *sof_priv = soc_card_data->sof_priv;
++	int i, j, ret = 0;
++
++	for (i = 0; i < sof_priv->num_streams; i++) {
++		struct snd_soc_dai *cpu_dai;
++		struct snd_soc_pcm_runtime *runtime;
++		struct snd_soc_dai_link *sof_dai_link = NULL;
++		const struct sof_conn_stream *conn = &sof_priv->conn_streams[i];
++
++		if (strcmp(rtd->dai_link->name, conn->normal_link))
++			continue;
++
++		for_each_card_rtds(card, runtime) {
++			if (strcmp(runtime->dai_link->name, conn->sof_link))
++				continue;
++
++			for_each_rtd_cpu_dais(runtime, j, cpu_dai) {
++				if (cpu_dai->stream_active[conn->stream_dir] > 0) {
++					sof_dai_link = runtime->dai_link;
++					break;
++				}
++			}
++			break;
++		}
++
++		if (sof_dai_link && sof_dai_link->be_hw_params_fixup)
++			ret = sof_dai_link->be_hw_params_fixup(runtime, params);
++
++		break;
++	}
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(mtk_sof_dai_link_fixup);
++
++int mtk_sof_card_probe(struct snd_soc_card *card)
++{
++	int i;
++	struct snd_soc_dai_link *dai_link;
++
++	/* Set stream_name to help sof bind widgets */
++	for_each_card_prelinks(card, i, dai_link) {
++		if (dai_link->no_pcm && !dai_link->stream_name && dai_link->name)
++			dai_link->stream_name = dai_link->name;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(mtk_sof_card_probe);
++
++int mtk_sof_card_late_probe(struct snd_soc_card *card)
++{
++	struct snd_soc_pcm_runtime *rtd;
++	struct snd_soc_component *sof_comp = NULL;
++	struct mtk_soc_card_data *soc_card_data =
++		snd_soc_card_get_drvdata(card);
++	struct mtk_sof_priv *sof_priv = soc_card_data->sof_priv;
++	int i;
++
++	/* 1. find sof component */
++	for_each_card_rtds(card, rtd) {
++		sof_comp = snd_soc_rtdcom_lookup(rtd, "sof-audio-component");
++		if (sof_comp)
++			break;
++	}
++
++	if (!sof_comp) {
++		dev_info(card->dev, "probe without sof-audio-component\n");
++		return 0;
++	}
++
++	/* 2. add route path and fixup callback */
++	for (i = 0; i < sof_priv->num_streams; i++) {
++		const struct sof_conn_stream *conn = &sof_priv->conn_streams[i];
++		struct snd_soc_pcm_runtime *sof_rtd = NULL;
++		struct snd_soc_pcm_runtime *normal_rtd = NULL;
++
++		for_each_card_rtds(card, rtd) {
++			if (!strcmp(rtd->dai_link->name, conn->sof_link)) {
++				sof_rtd = rtd;
++				continue;
++			}
++			if (!strcmp(rtd->dai_link->name, conn->normal_link)) {
++				normal_rtd = rtd;
++				continue;
++			}
++			if (normal_rtd && sof_rtd)
++				break;
++		}
++		if (normal_rtd && sof_rtd) {
++			int j;
++			struct snd_soc_dai *cpu_dai;
++
++			for_each_rtd_cpu_dais(sof_rtd, j, cpu_dai) {
++				struct snd_soc_dapm_route route;
++				struct snd_soc_dapm_path *p = NULL;
++				struct snd_soc_dapm_widget *play_widget =
++					cpu_dai->playback_widget;
++				struct snd_soc_dapm_widget *cap_widget =
++					cpu_dai->capture_widget;
++				memset(&route, 0, sizeof(route));
++				if (conn->stream_dir == SNDRV_PCM_STREAM_CAPTURE &&
++				    cap_widget) {
++					snd_soc_dapm_widget_for_each_sink_path(cap_widget, p) {
++						route.source = conn->sof_dma;
++						route.sink = p->sink->name;
++						snd_soc_dapm_add_routes(&card->dapm, &route, 1);
++					}
++				} else if (conn->stream_dir == SNDRV_PCM_STREAM_PLAYBACK &&
++						play_widget) {
++					snd_soc_dapm_widget_for_each_source_path(play_widget, p) {
++						route.source = p->source->name;
++						route.sink = conn->sof_dma;
++						snd_soc_dapm_add_routes(&card->dapm, &route, 1);
++					}
++				} else {
++					dev_err(cpu_dai->dev, "stream dir and widget not pair\n");
++				}
++			}
++
++			sof_rtd->dai_link->be_hw_params_fixup =
++				sof_comp->driver->be_hw_params_fixup;
++			if (sof_priv->sof_dai_link_fixup)
++				normal_rtd->dai_link->be_hw_params_fixup =
++					sof_priv->sof_dai_link_fixup;
++			else
++				normal_rtd->dai_link->be_hw_params_fixup = mtk_sof_dai_link_fixup;
++		}
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(mtk_sof_card_late_probe);
++
++int mtk_sof_dailink_parse_of(struct snd_soc_card *card, struct device_node *np,
++			     const char *propname, struct snd_soc_dai_link *pre_dai_links,
++			     int pre_num_links)
++{
++	struct device *dev = card->dev;
++	struct snd_soc_dai_link *parsed_dai_link;
++	const char *dai_name = NULL;
++	int i, j, ret, num_links, parsed_num_links = 0;
++
++	num_links = of_property_count_strings(np, "mediatek,dai-link");
++	if (num_links < 0 || num_links > card->num_links) {
++		dev_dbg(dev, "number of dai-link is invalid\n");
++		return -EINVAL;
++	}
++
++	parsed_dai_link = devm_kcalloc(dev, num_links, sizeof(*parsed_dai_link), GFP_KERNEL);
++	if (!parsed_dai_link)
++		return -ENOMEM;
++
++	for (i = 0; i < num_links; i++) {
++		ret = of_property_read_string_index(np, propname, i, &dai_name);
++		if (ret) {
++			dev_dbg(dev, "ASoC: Property '%s' index %d could not be read: %d\n",
++				propname, i, ret);
++			return ret;
++		}
++		dev_dbg(dev, "ASoC: Property get dai_name:%s\n", dai_name);
++		for (j = 0; j < pre_num_links; j++) {
++			if (!strcmp(dai_name, pre_dai_links[j].name)) {
++				memcpy(&parsed_dai_link[parsed_num_links++], &pre_dai_links[j],
++				       sizeof(struct snd_soc_dai_link));
++				break;
++			}
++		}
++	}
++
++	if (parsed_num_links != num_links)
++		return -EINVAL;
++
++	card->dai_link = parsed_dai_link;
++	card->num_links = parsed_num_links;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(mtk_sof_dailink_parse_of);
+diff --git a/sound/soc/mediatek/common/mtk-dsp-sof-common.h b/sound/soc/mediatek/common/mtk-dsp-sof-common.h
+new file mode 100644
+index 000000000000..dd38c4a93574
+--- /dev/null
++++ b/sound/soc/mediatek/common/mtk-dsp-sof-common.h
+@@ -0,0 +1,36 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * mtk-dsp-sof-common.h  --  MediaTek dsp sof common definition
++ *
++ * Copyright (c) 2022 MediaTek Inc.
++ * Author: Chunxu Li <chunxu.li@mediatek.com>
++ */
++
++#ifndef _MTK_DSP_SOF_COMMON_H_
++#define _MTK_DSP_SOF_COMMON_H_
++
++#include <sound/soc.h>
++
++struct sof_conn_stream {
++	const char *normal_link;
++	const char *sof_link;
++	const char *sof_dma;
++	int stream_dir;
++};
++
++struct mtk_sof_priv {
++	const struct sof_conn_stream *conn_streams;
++	int num_streams;
++	int (*sof_dai_link_fixup)(struct snd_soc_pcm_runtime *rtd,
++				  struct snd_pcm_hw_params *params);
++};
++
++int mtk_sof_dai_link_fixup(struct snd_soc_pcm_runtime *rtd,
++			   struct snd_pcm_hw_params *params);
++int mtk_sof_card_probe(struct snd_soc_card *card);
++int mtk_sof_card_late_probe(struct snd_soc_card *card);
++int mtk_sof_dailink_parse_of(struct snd_soc_card *card, struct device_node *np,
++			     const char *propname, struct snd_soc_dai_link *pre_dai_links,
++			     int pre_num_links);
++
++#endif
+diff --git a/sound/soc/mediatek/common/mtk-soc-card.h b/sound/soc/mediatek/common/mtk-soc-card.h
+new file mode 100644
+index 000000000000..eeda79370049
+--- /dev/null
++++ b/sound/soc/mediatek/common/mtk-soc-card.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * mtk-soc-card.h  --  MediaTek soc card data definition
++ *
++ * Copyright (c) 2022 MediaTek Inc.
++ * Author: Chunxu Li <chunxu.li@mediatek.com>
++ */
++
++#ifndef _MTK_SOC_CARD_H_
++#define _MTK_SOC_CARD_H_
++
++struct mtk_soc_card_data {
++	void *mach_priv;
++	void *sof_priv;
++};
++
++#endif
+diff --git a/sound/soc/mediatek/mt8195/mt8195-mt6359.c b/sound/soc/mediatek/mt8195/mt8195-mt6359.c
+index 54a00b0699b1..c530e3fc27e4 100644
+--- a/sound/soc/mediatek/mt8195/mt8195-mt6359.c
++++ b/sound/soc/mediatek/mt8195/mt8195-mt6359.c
+@@ -20,6 +20,8 @@
+ #include "../../codecs/rt1011.h"
+ #include "../../codecs/rt5682.h"
+ #include "../common/mtk-afe-platform-driver.h"
++#include "../common/mtk-dsp-sof-common.h"
++#include "../common/mtk-soc-card.h"
+ #include "mt8195-afe-clk.h"
+ #include "mt8195-afe-common.h"
+ 
+@@ -54,13 +56,6 @@ struct mt8195_card_data {
+ 	unsigned long quirk;
+ };
+ 
+-struct sof_conn_stream {
+-	const char *normal_link;
+-	const char *sof_link;
+-	const char *sof_dma;
+-	int stream_dir;
+-};
+-
+ struct mt8195_mt6359_priv {
+ 	struct snd_soc_jack headset_jack;
+ 	struct snd_soc_jack dp_jack;
+@@ -374,7 +369,8 @@ static const struct snd_soc_ops mt8195_dptx_ops = {
+ 
+ static int mt8195_dptx_codec_init(struct snd_soc_pcm_runtime *rtd)
+ {
+-	struct mt8195_mt6359_priv *priv = snd_soc_card_get_drvdata(rtd->card);
++	struct mtk_soc_card_data *soc_card_data = snd_soc_card_get_drvdata(rtd->card);
++	struct mt8195_mt6359_priv *priv = soc_card_data->mach_priv;
+ 	struct snd_soc_component *cmpnt_codec =
+ 		asoc_rtd_to_codec(rtd, 0)->component;
+ 	int ret;
+@@ -389,7 +385,8 @@ static int mt8195_dptx_codec_init(struct snd_soc_pcm_runtime *rtd)
+ 
+ static int mt8195_hdmi_codec_init(struct snd_soc_pcm_runtime *rtd)
+ {
+-	struct mt8195_mt6359_priv *priv = snd_soc_card_get_drvdata(rtd->card);
++	struct mtk_soc_card_data *soc_card_data = snd_soc_card_get_drvdata(rtd->card);
++	struct mt8195_mt6359_priv *priv = soc_card_data->mach_priv;
+ 	struct snd_soc_component *cmpnt_codec =
+ 		asoc_rtd_to_codec(rtd, 0)->component;
+ 	int ret;
+@@ -555,7 +552,8 @@ static int mt8195_rt5682_init(struct snd_soc_pcm_runtime *rtd)
+ {
+ 	struct snd_soc_component *cmpnt_codec =
+ 		asoc_rtd_to_codec(rtd, 0)->component;
+-	struct mt8195_mt6359_priv *priv = snd_soc_card_get_drvdata(rtd->card);
++	struct mtk_soc_card_data *soc_card_data = snd_soc_card_get_drvdata(rtd->card);
++	struct mt8195_mt6359_priv *priv = soc_card_data->mach_priv;
+ 	struct snd_soc_jack *jack = &priv->headset_jack;
+ 	struct snd_soc_component *cmpnt_afe =
+ 		snd_soc_rtdcom_lookup(rtd, AFE_PCM_NAME);
+@@ -722,7 +720,8 @@ static int mt8195_set_bias_level_post(struct snd_soc_card *card,
+ 	struct snd_soc_dapm_context *dapm, enum snd_soc_bias_level level)
+ {
+ 	struct snd_soc_component *component = dapm->component;
+-	struct mt8195_mt6359_priv *priv = snd_soc_card_get_drvdata(card);
++	struct mtk_soc_card_data *soc_card_data = snd_soc_card_get_drvdata(card);
++	struct mt8195_mt6359_priv *priv = soc_card_data->mach_priv;
+ 	int ret;
+ 
+ 	/*
+@@ -1321,175 +1320,24 @@ static struct snd_soc_card mt8195_mt6359_soc_card = {
+ static int mt8195_dai_link_fixup(struct snd_soc_pcm_runtime *rtd,
+ 				 struct snd_pcm_hw_params *params)
+ {
+-	struct snd_soc_card *card = rtd->card;
+-	struct snd_soc_dai_link *sof_dai_link = NULL;
+-	struct snd_soc_pcm_runtime *runtime;
+-	struct snd_soc_dai *cpu_dai;
+-	int i, j, ret = 0;
+-
+-	for (i = 0; i < ARRAY_SIZE(g_sof_conn_streams); i++) {
+-		const struct sof_conn_stream *conn = &g_sof_conn_streams[i];
+-
+-		if (strcmp(rtd->dai_link->name, conn->normal_link))
+-			continue;
+-
+-		for_each_card_rtds(card, runtime) {
+-			if (strcmp(runtime->dai_link->name, conn->sof_link))
+-				continue;
+-
+-			for_each_rtd_cpu_dais(runtime, j, cpu_dai) {
+-				if (cpu_dai->stream_active[conn->stream_dir] > 0) {
+-					sof_dai_link = runtime->dai_link;
+-					break;
+-				}
+-			}
+-			break;
+-		}
++	int ret;
+ 
+-		if (sof_dai_link && sof_dai_link->be_hw_params_fixup)
+-			ret = sof_dai_link->be_hw_params_fixup(runtime, params);
+-
+-		break;
+-	}
++	ret = mtk_sof_dai_link_fixup(rtd, params);
+ 
+ 	if (!strcmp(rtd->dai_link->name, "ETDM2_IN_BE") ||
+ 	    !strcmp(rtd->dai_link->name, "ETDM1_OUT_BE")) {
+-		mt8195_etdm_hw_params_fixup(runtime, params);
++		mt8195_etdm_hw_params_fixup(rtd, params);
+ 	}
+ 
+ 	return ret;
+ }
+ 
+-static int mt8195_mt6359_card_late_probe(struct snd_soc_card *card)
+-{
+-	struct snd_soc_pcm_runtime *runtime;
+-	struct snd_soc_component *sof_comp = NULL;
+-	int i;
+-
+-	/* 1. find sof component */
+-	for_each_card_rtds(card, runtime) {
+-		for (i = 0; i < runtime->num_components; i++) {
+-			if (!runtime->components[i]->driver->name)
+-				continue;
+-			if (!strcmp(runtime->components[i]->driver->name, "sof-audio-component")) {
+-				sof_comp = runtime->components[i];
+-				break;
+-			}
+-		}
+-	}
+-
+-	if (!sof_comp) {
+-		dev_info(card->dev, " probe without component\n");
+-		return 0;
+-	}
+-	/* 2. add route path and fixup callback */
+-	for (i = 0; i < ARRAY_SIZE(g_sof_conn_streams); i++) {
+-		const struct sof_conn_stream *conn = &g_sof_conn_streams[i];
+-		struct snd_soc_pcm_runtime *sof_rtd = NULL;
+-		struct snd_soc_pcm_runtime *normal_rtd = NULL;
+-		struct snd_soc_pcm_runtime *rtd = NULL;
+-
+-		for_each_card_rtds(card, rtd) {
+-			if (!strcmp(rtd->dai_link->name, conn->sof_link)) {
+-				sof_rtd = rtd;
+-				continue;
+-			}
+-			if (!strcmp(rtd->dai_link->name, conn->normal_link)) {
+-				normal_rtd = rtd;
+-				continue;
+-			}
+-			if (normal_rtd && sof_rtd)
+-				break;
+-		}
+-		if (normal_rtd && sof_rtd) {
+-			int j;
+-			struct snd_soc_dai *cpu_dai;
+-
+-			for_each_rtd_cpu_dais(sof_rtd, j, cpu_dai) {
+-				struct snd_soc_dapm_route route;
+-				struct snd_soc_dapm_path *p = NULL;
+-				struct snd_soc_dapm_widget *play_widget =
+-					cpu_dai->playback_widget;
+-				struct snd_soc_dapm_widget *cap_widget =
+-					cpu_dai->capture_widget;
+-				memset(&route, 0, sizeof(route));
+-				if (conn->stream_dir == SNDRV_PCM_STREAM_CAPTURE &&
+-				    cap_widget) {
+-					snd_soc_dapm_widget_for_each_sink_path(cap_widget, p) {
+-						route.source = conn->sof_dma;
+-						route.sink = p->sink->name;
+-						snd_soc_dapm_add_routes(&card->dapm, &route, 1);
+-					}
+-				} else if (conn->stream_dir == SNDRV_PCM_STREAM_PLAYBACK &&
+-						play_widget){
+-					snd_soc_dapm_widget_for_each_source_path(play_widget, p) {
+-						route.source = p->source->name;
+-						route.sink = conn->sof_dma;
+-						snd_soc_dapm_add_routes(&card->dapm, &route, 1);
+-					}
+-				} else {
+-					dev_err(cpu_dai->dev, "stream dir and widget not pair\n");
+-				}
+-			}
+-			normal_rtd->dai_link->be_hw_params_fixup = mt8195_dai_link_fixup;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static int mt8195_dailink_parse_of(struct snd_soc_card *card, struct device_node *np,
+-				   const char *propname)
+-{
+-	struct device *dev = card->dev;
+-	struct snd_soc_dai_link *link;
+-	const char *dai_name = NULL;
+-	int i, j, ret, num_links;
+-
+-	num_links = of_property_count_strings(np, "mediatek,dai-link");
+-
+-	if (num_links < 0 || num_links > ARRAY_SIZE(mt8195_mt6359_dai_links)) {
+-		dev_dbg(dev, "number of dai-link is invalid\n");
+-		return -EINVAL;
+-	}
+-
+-	card->dai_link = devm_kcalloc(dev, num_links, sizeof(*link), GFP_KERNEL);
+-	if (!card->dai_link)
+-		return -ENOMEM;
+-
+-	card->num_links = 0;
+-	link = card->dai_link;
+-
+-	for (i = 0; i < num_links; i++) {
+-		ret = of_property_read_string_index(np, propname, i, &dai_name);
+-		if (ret) {
+-			dev_dbg(dev, "ASoC: Property '%s' index %d could not be read: %d\n",
+-				propname, i, ret);
+-			return -EINVAL;
+-		}
+-
+-		for (j = 0; j < ARRAY_SIZE(mt8195_mt6359_dai_links); j++) {
+-			if (!strcmp(dai_name, mt8195_mt6359_dai_links[j].name)) {
+-				memcpy(link, &mt8195_mt6359_dai_links[j],
+-				       sizeof(struct snd_soc_dai_link));
+-				link++;
+-				card->num_links++;
+-				break;
+-			}
+-		}
+-	}
+-
+-	if (card->num_links != num_links)
+-		return -EINVAL;
+-
+-	return 0;
+-}
+-
+ static int mt8195_mt6359_dev_probe(struct platform_device *pdev)
+ {
+ 	struct snd_soc_card *card = &mt8195_mt6359_soc_card;
+ 	struct snd_soc_dai_link *dai_link;
+-	struct mt8195_mt6359_priv *priv;
++	struct mtk_soc_card_data *soc_card_data;
++	struct mt8195_mt6359_priv *mach_priv;
+ 	struct device_node *platform_node, *adsp_node, *dp_node, *hdmi_node;
+ 	struct mt8195_card_data *card_data;
+ 	int is5682s = 0;
+@@ -1512,17 +1360,41 @@ static int mt8195_mt6359_dev_probe(struct platform_device *pdev)
+ 
+ 	if (strstr(card->name, "_5682s"))
+ 		is5682s = 1;
++	soc_card_data = devm_kzalloc(&pdev->dev, sizeof(*card_data), GFP_KERNEL);
++	if (!soc_card_data)
++		return -ENOMEM;
+ 
+-	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+-	if (!priv)
++	mach_priv = devm_kzalloc(&pdev->dev, sizeof(*mach_priv), GFP_KERNEL);
++	if (!mach_priv)
+ 		return -ENOMEM;
+ 
++	soc_card_data->mach_priv = mach_priv;
++
++	adsp_node = of_parse_phandle(pdev->dev.of_node, "mediatek,adsp", 0);
++	if (adsp_node) {
++		struct mtk_sof_priv *sof_priv;
++
++		sof_priv = devm_kzalloc(&pdev->dev, sizeof(*sof_priv), GFP_KERNEL);
++		if (!sof_priv) {
++			ret = -ENOMEM;
++			goto err_kzalloc;
++		}
++		sof_priv->conn_streams = g_sof_conn_streams;
++		sof_priv->num_streams = ARRAY_SIZE(g_sof_conn_streams);
++		sof_priv->sof_dai_link_fixup = mt8195_dai_link_fixup;
++		soc_card_data->sof_priv = sof_priv;
++		card->late_probe = mtk_sof_card_late_probe;
++		sof_on = 1;
++	}
++
+ 	if (of_property_read_bool(pdev->dev.of_node, "mediatek,dai-link")) {
+-		ret = mt8195_dailink_parse_of(card, pdev->dev.of_node,
+-					      "mediatek,dai-link");
++		ret = mtk_sof_dailink_parse_of(card, pdev->dev.of_node,
++					       "mediatek,dai-link",
++					       mt8195_mt6359_dai_links,
++					       ARRAY_SIZE(mt8195_mt6359_dai_links));
+ 		if (ret) {
+ 			dev_dbg(&pdev->dev, "Parse dai-link fail\n");
+-			return -EINVAL;
++			goto err_parse_of;
+ 		}
+ 	} else {
+ 		if (!sof_on)
+@@ -1533,13 +1405,10 @@ static int mt8195_mt6359_dev_probe(struct platform_device *pdev)
+ 					 "mediatek,platform", 0);
+ 	if (!platform_node) {
+ 		dev_dbg(&pdev->dev, "Property 'platform' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto err_platform_node;
+ 	}
+ 
+-	adsp_node = of_parse_phandle(pdev->dev.of_node, "mediatek,adsp", 0);
+-	if (adsp_node)
+-		sof_on = 1;
+-
+ 	dp_node = of_parse_phandle(pdev->dev.of_node, "mediatek,dptx-codec", 0);
+ 	hdmi_node = of_parse_phandle(pdev->dev.of_node,
+ 				     "mediatek,hdmi-codec", 0);
+@@ -1612,17 +1481,17 @@ static int mt8195_mt6359_dev_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	if (sof_on)
+-		card->late_probe = mt8195_mt6359_card_late_probe;
+-
+-	snd_soc_card_set_drvdata(card, priv);
++	snd_soc_card_set_drvdata(card, soc_card_data);
+ 
+ 	ret = devm_snd_soc_register_card(&pdev->dev, card);
+ 
+ 	of_node_put(platform_node);
+-	of_node_put(adsp_node);
+ 	of_node_put(dp_node);
+ 	of_node_put(hdmi_node);
++err_kzalloc:
++err_parse_of:
++err_platform_node:
++	of_node_put(adsp_node);
+ 	return ret;
+ }
+ 
+-- 
+2.25.1
 
-There are Acks for these patch set. If you need some
-help with this (like rebasing, etc), just ping me.
-
-Could you take them, please?
-
-Regards,
-Lukasz

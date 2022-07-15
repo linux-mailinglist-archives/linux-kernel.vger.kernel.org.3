@@ -2,112 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B1C5769C3
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB525769C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiGOWQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S232348AbiGOWTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbiGOWQc (ORCPT
+        with ESMTP id S232261AbiGOWTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:16:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72628262;
-        Fri, 15 Jul 2022 15:16:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1185161701;
-        Fri, 15 Jul 2022 22:16:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C99AC34115;
-        Fri, 15 Jul 2022 22:16:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657923390;
-        bh=5/bcyrjFpp5Iuv4UCuUwJcz8BDDH3Jj7t4EoceoC5iE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NvfK/jLzTa/S0wO9Yu7D5Jj5Fqj2YFjk1gi1svN5MtA8ehbFBJQc2RMO9X4ScthVs
-         QsizMcGJn7zk4W0Q3qGAkYt5Xj7DUH3MiVecJWCNDWVTicNQBpujr5kpgNbSeEotZJ
-         OL7a0dy1v8P4oiwQ2lzX1fSSWGN5aJz9TvIhxB8GxpoV6utwwratBETIkCoPtKgB8G
-         zgF1NCIytZlL2WQlSg6UoeibjYVBrB6HeYMze2quwYG0Tc0fnlsZ57dLrUSVvRgN9V
-         m/k5ebjsanBpcE15qxEz7qp7QPV+iB5uoCnQDAXTMlzemLomd7+ODKbJzYMRAGSxkc
-         peojgDaJNTxsQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     roger.pau@citrix.com, axboe@kernel.dk, boris.ostrovsky@oracle.com,
-        jgross@suse.com, olekstysh@gmail.com, andrii.chepurnyi82@gmail.com,
-        mheyne@amazon.de, xen-devel@lists.xenproject.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] Fix persistent grants negotiation with a behavior change
-Date:   Fri, 15 Jul 2022 22:16:27 +0000
-Message-Id: <20220715221627.127648-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220715181226.126714-1-sj@kernel.org>
-References: 
+        Fri, 15 Jul 2022 18:19:04 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDE92FFC0
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:19:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657923542; x=1689459542;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=xnWTDDkvZxK97nPFhgEOirEMn9dek1e45fh3eUTV/c4=;
+  b=mG7EPNTNec1GgdDkeA2q9myJ9ijRzKlbl+VHaUXBd+ZWBM0Xc7Y4lCxj
+   FdZfcFoBz1DqffKCpDH1PnpB+LoghD9W61vb8c4mR9n2TM1JaXykp0HpR
+   C/5r5AfyYIYpiGVXOilW6Q+/nVuPPwcgUQVce00uhnA3N831VAz2WkEUt
+   Thwgq1q5L3JmjR3Um2lEuX4aA740sX9mVELhfVlyLNHSNajQfHQQWEPmc
+   zGKY6eexLWjTh0rhcm0io69KuO57q0/xY02ERNhYkqyowppu067QAlfa2
+   QkdY801vH1ykGTc+z1HfOnLj5z5ONmCdI20V1ksH0nCumT4xmEhOkoysE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="286647291"
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="286647291"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 15:19:02 -0700
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="629267300"
+Received: from kjhoig-mobl.amr.corp.intel.com (HELO desk) ([10.209.99.4])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 15:19:02 -0700
+Date:   Fri, 15 Jul 2022 15:19:01 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, lkft-triage@lists.linaro.org,
+        Borislav Petkov <bp@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: RETBleed: WARNING: Spectre v2 mitigation leaves CPU vulnerable
+ to RETBleed attacks, data leaks possible!
+Message-ID: <20220715221901.xm3c4w4idqt67uja@desk>
+References: <CA+G9fYv0N0FcYRp5irO_7TpheLcUY8LRMQbcZqwEmiRTEccEjA@mail.gmail.com>
+ <Ys/bWIk0F5srkkpF@kroah.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Ys/bWIk0F5srkkpF@kroah.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
-
-On Fri, 15 Jul 2022 18:12:26 +0000 SeongJae Park <sj@kernel.org> wrote:
-
-> Hi all,
+On Thu, Jul 14, 2022 at 11:01:12AM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Jul 14, 2022 at 02:15:07PM +0530, Naresh Kamboju wrote:
+> > Results from Linaro’s test farm.
+> > 
+> > We are booting the i386 kernel on an x86 machine.
+> > With Spectre V2 patches merged into Linux mainline we have been noticing
+> > RETBleed: WARNING: Spectre v2 mitigation leaves CPU vulnerable to
+> > RETBleed attacks, data leaks possible!
 > 
-> On Fri, 15 Jul 2022 17:55:19 +0000 SeongJae Park <sj@kernel.org> wrote:
-> 
-> > The first patch of this patchset fixes 'feature_persistent' parameter
-> > handling in 'blkback' to respect the frontend's persistent grants
-> > support always.  The fix makes a behavioral change, so the second patch
-> > makes the counterpart of 'blkfront' to consistently follow the behavior
-> > change.
-> 
-> I made the behavior change as requested by Andrii[1].  I therefore made similar
-> behavior change to blkfront and Cc-ed stable for the second change, too.
+> That's funny.  I don't think that's a valid combination that should be
+> cared about, but I'll leave it to Pawan to comment if it is something
+> that is "real" to be concerned for.
 
-Now I realize that commit aac8a70db24b ("xen-blkback: add a parameter for
-disabling of persistent grants") introduced two issues.  One is what Max
-reported with his patch, and the second one is unintended behavioral change
-that broke Andrii's use case.
-
-That is, Andrii's use case should had no problem at all before the introduction
-of 'feature_persistent', as at that time 'blkback' checked if the frontend
-support the persistent grants for every 'reconnect()' and enables it if so.
-However, introduction of the parameter made it behaves differently.
-
-Yes, we intended to make the prameter to make effects to newly created devices.
-But, as it breaks user workflows, this should be fixed.  Same for the
-'blkfront' side 'feature_persistent'.
-
-> 
-> To make the change history clear and reduce the stable side overhead, however,
-> it might be better to apply the v2, which don't make behavior change but only
-> fix the issue, Cc stable@ for it, make the behavior change commits for both
-> blkback and blkfront, update the documents, and don't Cc stable@ for the
-> behavior change and documents update commits.
-
-I'd say having one patch for each issue would be the right way to go, and all
-fixes should Cc stable@.
-
-> 
-> One downside of that would be that it will make a behavioral difference in
-> pre-5.19.x and post-5.19.x.
-
-The unintended behavioral fix should also be considered fix and therefore
-should be merged into stable@, so above concern is not valid.
-
-I will send the next spin soon.
-
+Intel is not aware of production environments that use 32-bit mode on
+Skylake-gen CPUs. So this should not be a concern.
 
 Thanks,
-SJ
-
-[...]
+Pawan

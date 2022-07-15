@@ -2,141 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F08575962
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 04:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A05357589C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241218AbiGOCCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 22:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        id S241152AbiGOAWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 20:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241215AbiGOCCN (ORCPT
+        with ESMTP id S241031AbiGOAWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 22:02:13 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C7973902
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 19:02:11 -0700 (PDT)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220715020208epoutp025543a6fc4fb166285f4f18dc0084f61b~B3kWzaAGH1989819898epoutp02a
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 02:02:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220715020208epoutp025543a6fc4fb166285f4f18dc0084f61b~B3kWzaAGH1989819898epoutp02a
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1657850528;
-        bh=wyxcBunwFkuku59dj613W+/U6vWm11KQddqiSNeGaiA=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=junLhXk3myh7KF9cKKqnwVAyDxL1ybBsvWQrJXAou70qRbEXCm3zR50WIqRrgepUD
-         sPvmRoiGDawU2EhJb7qhqgIl7yd9WOjB+Zh4OSLGtmoWl2fG8vDPgfXwJBtyZ1AieA
-         lQENr+tH6INkybRMHy8eRNHAQmGHMdiOmISJ1JUw=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220715020208epcas1p28302417daadc2e071a2ab40cb85234a0~B3kWOf1Bf2222322223epcas1p2-;
-        Fri, 15 Jul 2022 02:02:08 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.36.68]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4LkZNv65G4z4x9Pw; Fri, 15 Jul
-        2022 02:02:07 +0000 (GMT)
-X-AuditID: b6c32a36-05fff700000025a1-e2-62d0ca9f4e51
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        64.2F.09633.F9AC0D26; Fri, 15 Jul 2022 11:02:07 +0900 (KST)
-Mime-Version: 1.0
-Subject: Re: [PATCH 2/4] firmware: Samsung: Add secure monitor driver
-Reply-To: dj76.yang@samsung.com
-Sender: Dongjin Yang <dj76.yang@samsung.com>
-From:   Dongjin Yang <dj76.yang@samsung.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>
-CC:     "javierm@redhat.com" <javierm@redhat.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Wangseok Lee <wangseok.lee@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <f4585789-cec9-0787-cd80-57afed424ee4@infradead.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220715020207epcms1p43819fd2dd937e567fc540af7b62c59a5@epcms1p4>
-Date:   Fri, 15 Jul 2022 11:02:07 +0900
-X-CMS-MailID: 20220715020207epcms1p43819fd2dd937e567fc540af7b62c59a5
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMJsWRmVeSWpSXmKPExsWy7bCmvu78UxeSDKa+0rc4vf8di8XLQ5oW
-        84+cY7WYOfUMs8XCacsZLZ4fmsVs8XLWPTaLI28+Mlvc/3qU0WL/8ZVMFpd3zWGzOLc40+Lt
-        neksFq17j7Bb3Dl8lsWB3+P6ugCPzSu0PDat6mTzuHNtD5vH+31X2Tz6tqxi9Pi8SS6APSrb
-        JiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoaCWFssSc
-        UqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgXmBXnFibnFpXrpeXmqJlaGBgZEpUGFCdsb0
-        pn1MBW3CFWcOPGNtYDwm1MXIySEhYCKxqGszYxcjF4eQwA5Gieft59m7GDk4eAUEJf7uEAap
-        ERZwlThx6zpYWEhAXuLzxEqIsI5Ex9unLCBhNgEtidn9iSBTRARmMkm8u/SDHcRhFpjDLLFq
-        zis2iF28EjPaQRpAbGmJ7cu3MoLYnAKOErN77kDFNSR+LOtlhrBFJW6ufssOY78/Np8RwhaR
-        aL13FqpGUOLBz91QcSmJR80HoOxqiXPtvWBHSAg0MEoc/LyRDeRSCQF9iR3XjUFqeAV8JQ4+
-        PQJ2G4uAqsSkiVeYIHpdJGa+W8wKYjMLaEssW/iaGaSVWUBTYv0ufYgpyhJHbrHAfNWw8Tc7
-        OptZgE/i3dceVpj4jnlPoKYrS3xufs0ygVF5FiKcZyHZNQth1wJG5lWMYqkFxbnpqcWGBUbw
-        qE3Oz93ECE69WmY7GCe9/aB3iJGJg/EQowQHs5IIb/ehc0lCvCmJlVWpRfnxRaU5qcWHGE2B
-        vpzILCWanA9M/nkl8YYmlgYmZkampoYGFiZK4ryrpp1OFBJITyxJzU5NLUgtgulj4uCUamCa
-        67X6hbqmyKTth9NfmFrK8x1gWJK8tk7hvoeVw8mwyb0tOXsdtDRMk1qfcPXps9t7v7h1XiQq
-        Mcqg/tH01/fq6ivl1dm0PvS3Lq3yqTxqe0lf8Y/XyS3TJqX5O1/7+mCpcdSzFzeOeSmnPO02
-        uWb3uGrVPumOrHV3zir9DykpWt698dTR+kQL27wp4j9zYptv8tXP8WWdErcrpip8W/sCTauw
-        FpGMRTqOHd/+W5vm3WFnumb+4ekC61ztwlsbLOt989Tr5s1c3q29/JnnQS6bNcp9E5bFPQ7n
-        Ds/j3KD480SavURT1zLRD+eTi79Hp+lfbra84DepTcG5w9BnWWviirtVykcWOkxRufzjtxJL
-        cUaioRZzUXEiAKhAHJFGBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220713045516epcms1p86b3f6a8795d767faac65eb947405f911
-References: <f4585789-cec9-0787-cd80-57afed424ee4@infradead.org>
-        <20220713045516epcms1p86b3f6a8795d767faac65eb947405f911@epcms1p8>
-        <CGME20220713045516epcms1p86b3f6a8795d767faac65eb947405f911@epcms1p4>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 14 Jul 2022 20:22:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 486A266BB9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 17:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657844534;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JDKBdO2ynojitcW0UwD3EnMXjp2f1L6/iJQpfcNZFPM=;
+        b=PtnqULuIHBD3o/pYJRqNQgRPRoJbX5eB5eBvP5+ZM4tba9SHj/HzY36iGy1eOW0bGxeh/y
+        r/OXEEFao8vxEFxHPx0n9Trl9flpkuz4fW8z//GLuOyLLKUOhsXpudyUQGQkBpUHykOiqa
+        2jNCCiXbJ+PrJsKaRi2hdFpb708KhP4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-108-tIbxiXzvM4-kc2o0I5BDCQ-1; Thu, 14 Jul 2022 20:22:08 -0400
+X-MC-Unique: tIbxiXzvM4-kc2o0I5BDCQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 530FC3C01E15;
+        Fri, 15 Jul 2022 00:22:08 +0000 (UTC)
+Received: from [10.64.54.37] (vpn2-54-37.bne.redhat.com [10.64.54.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9448D40885A1;
+        Fri, 15 Jul 2022 00:22:03 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH] KVM: selftests: Double check on the current CPU in
+ rseq_test
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mathieu.desnoyers@efficios.com, shuah@kernel.org, maz@kernel.org,
+        oliver.upton@linux.dev, shan.gavin@gmail.com
+References: <20220714080642.3376618-1-gshan@redhat.com>
+ <cd5d029c-b396-45ef-917b-92e054659623@redhat.com>
+ <YtA3s0VRj3x7vO7B@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <be806f9c-861a-8da8-d42e-1d4271c3a326@redhat.com>
+Date:   Fri, 15 Jul 2022 12:21:42 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
+MIME-Version: 1.0
+In-Reply-To: <YtA3s0VRj3x7vO7B@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On=C2=A07/13/22=C2=A004:58,=C2=A0Randy=20Dunlap=C2=A0wrote:=0D=0A>=20Hi--=
-=0D=0A>=20=0D=0A>=20On=C2=A07/12/22=C2=A021:55,=C2=A0Dongjin=C2=A0Yang=C2=
-=A0wrote:=0D=0A>=20>=C2=A0diff=C2=A0--git=C2=A0a/drivers/firmware/Kconfig=
-=C2=A0b/drivers/firmware/Kconfig=0D=0A>=20>=C2=A0index=C2=A0e5cfb01353d8..4=
-b0f2d033f58=C2=A0100644=0D=0A>=20>=C2=A0---=C2=A0a/drivers/firmware/Kconfig=
-=0D=0A>=20>=C2=A0+++=C2=A0b/drivers/firmware/Kconfig=0D=0A>=20>=C2=A0=40=40=
-=C2=A0-217,6=C2=A0+217,17=C2=A0=40=40=C2=A0config=C2=A0QCOM_SCM_DOWNLOAD_MO=
-DE_DEFAULT=0D=0A>=20>=C2=A0=C2=A0=0D=0A>=20>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Say=C2=A0Y=C2=A0here=C2=A0to=C2=
-=A0enable=C2=A0=22download=C2=A0mode=22=C2=A0by=C2=A0default.=0D=0A>=20>=C2=
-=A0=C2=A0=0D=0A>=20>=C2=A0+config=C2=A0SAMSUNG_SECURE_SERVICE=0D=0A>=20>=C2=
-=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool=C2=A0=22Samsung=C2=
-=A0Foundry=C2=A0Secure=C2=A0Service=C2=A0Layer=22=0D=0A>=20>=C2=A0+=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends=C2=A0on=C2=A0HAVE_ARM_SMC=
-CC=0D=0A>=20>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default=
-=C2=A0n=0D=0A>=20=0D=0A>=20Drop=C2=A0that=C2=A0line,=C2=A0it's=C2=A0the=C2=
-=A0default=C2=A0anyway.=0D=0A=0D=0ASure=20thanks.=0D=0A=0D=0A>=20=0D=0A>=20=
->=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0help=0D=0A>=20>=C2=
-=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Support=C2=
-=A0secure=C2=A0service=C2=A0layer=C2=A0for=C2=A0SoCs=C2=A0which=C2=A0is=C2=
-=A0manufactured=C2=A0by=0D=0A>=20=0D=0A>=20=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0which=C2=A0are=0D=0A=0D=0AThanks=20for=20c=
-orrecting.=0D=0A=0D=0A>=20=0D=0A>=20>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Samsung=C2=A0Foundry.=0D=0A>=20>=C2=A0+=0D=0A=
->=20>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Thi=
-s=C2=A0option=C2=A0provide=C2=A0support=C2=A0of=C2=A0secure=C2=A0monitor=C2=
-=A0service=C2=A0call=C2=A0using=0D=0A>=20>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Trusted=C2=A0Foundations.=0D=0A>=20=0D=
-=0A>=20--=C2=A0=0D=0A>=20=7ERandy=0D=0A
+Hi Paolo and Sean,
+
+On 7/15/22 1:35 AM, Sean Christopherson wrote:
+> On Thu, Jul 14, 2022, Paolo Bonzini wrote:
+>> On 7/14/22 10:06, Gavin Shan wrote:
+>>> In rseq_test, there are two threads created. Those two threads are
+>>> 'main' and 'migration_thread' separately. We also have the assumption
+>>> that non-migration status on 'migration-worker' thread guarantees the
+>>> same non-migration status on 'main' thread. Unfortunately, the assumption
+>>> isn't true. The 'main' thread can be migrated from one CPU to another
+>>> one between the calls to sched_getcpu() and READ_ONCE(__rseq.cpu_id).
+>>> The following assert is raised eventually because of the mismatched
+>>> CPU numbers.
+>>>
+>>> The issue can be reproduced on arm64 system occasionally.
+>>
+>> Hmm, this does not seem a correct patch - the threads are already
+>> synchronizing using seq_cnt, like this:
+>>
+>> 	migration			main
+>> 	----------------------		--------------------------------
+>> 	seq_cnt = 1
+>> 	smp_wmb()
+>> 					snapshot = 0
+>> 					smp_rmb()
+>> 					cpu = sched_getcpu() reads 23
+>> 	sched_setaffinity()
+>> 					rseq_cpu = __rseq.cpuid reads 35
+>> 					smp_rmb()
+>> 					snapshot != seq_cnt -> retry
+>> 	smp_wmb()
+>> 	seq_cnt = 2
+>>
+>> sched_setaffinity() is guaranteed to block until the task is enqueued on an
+>> allowed CPU.
+> 
+> Yes, and retrying could suppress detection of kernel bugs that this test is intended
+> to catch.
+> 
+
+Well, I don't think migration_worker() does correct thing, if I'm understanding
+correctly. The intention seems to force migration on 'main' thread by 'migration'
+thread?  If that is the case, I don't think the following function call has correct
+parameters.
+
+     r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
+
+     it should be something like:
+
+     r = sched_setaffinity(getpid(), sizeof(allowed_mask), &allowed_mask);
+
+If we're using sched_setaffinity(0, ...) in the 'migration' thread, the CPU
+affinity of 'main' thread won't be affected. It means 'main' thread can be
+migrated from one CPU to another at any time, even in the following point:
+
+     int main(...)
+     {
+           :
+           /*
+            * migration can happen immediately after sched_getcpu(). If
+            * CPU affinity of 'main' thread is sticky to one particular
+            * CPU, which 'migration' thread supposes to do, then there
+            * should have no migration.
+            */
+           cpu = sched_getcpu();
+           rseq_cpu = READ_ONCE(__rseq.cpu_id);
+           :
+     }
+
+So I think the correct fix is to have sched_setaffinity(getpid(), ...) ?
+Please refer to the manpage.
+
+    https://man7.org/linux/man-pages/man2/sched_setaffinity.2.html
+    'If pid is zero, then the calling thread is used'
+
+>> Can you check that smp_rmb() and smp_wmb() generate correct instructions on
+>> arm64?
+> 
+> That seems like the most likely scenario (or a kernel bug), I distinctly remember
+> the barriers provided by tools/ being rather bizarre.
+> 
+
+I don't see any problems for smp_rmb() and smp_wmb() in my case. They have
+been translated to correct instructions, as expected.
+
+#define smp_mb()        asm volatile("dmb ish" ::: "memory")
+#define smp_wmb()       asm volatile("dmb ishst" ::: "memory")
+#define smp_rmb()       asm volatile("dmb ishld" ::: "memory")
+
+--------------
+
+One more experiment for sched_setaffinity(). I run the following program,
+the CPU affinity of 'main' thread isn't changed, until the correct
+parameter is used, to have sched_setaffinity(getpid(), ...).
+
+sched_setaffinity(0, ...)
+-------------------------
+[root@virtlab-arm01 tmp]# ./a
+thread_func: cpu=0
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+thread_func: cpu=1
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+main: mask=0x000000ff
+   :
+
+sched_setaffinity(getpid(), ...)
+--------------------------------
+thread_func: cpu=198
+main: mask=0x00000001
+main: mask=0x00000001
+main: mask=0x00000001
+main: mask=0x00000001
+main: mask=0x00000001
+main: mask=0x00000001
+main: mask=0x00000001
+main: mask=0x00000001
+main: mask=0x00000001
+thread_func: cpu=198
+main: mask=0x00000002
+main: mask=0x00000002
+main: mask=0x00000002
+main: mask=0x00000002
+main: mask=0x00000002
+main: mask=0x00000002
+main: mask=0x00000002
+main: mask=0x00000002
+main: mask=0x00000002
+main: mask=0x00000002
+   :
+
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <sched.h>
+
+#define NR_CPUS	8
+static int thread_exit = 0;
+
+static void *thread_func(void *data)
+{
+	cpu_set_t allowed_mask;
+	int ret, i;
+
+	for (i = 0; i < NR_CPUS; i++) {
+		CPU_ZERO(&allowed_mask);
+		CPU_SET(i, &allowed_mask);
+#if 1
+		sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
+#else
+                 sched_setaffinity(getpid(), sizeof(allowed_mask), &allowed_mask);
+#endif
+		fprintf(stdout, "%s: cpu=%d\n", __func__, sched_getcpu());
+
+		sleep(1);
+	}
+
+	thread_exit = 1;
+	return NULL;
+}
+
+int main(int argc, char **argv)
+{
+	pthread_t thread;
+	cpu_set_t allowed_mask;
+	int mask, i, count = 0;
+
+	pthread_create(&thread, NULL, thread_func, NULL);
+
+	while (!thread_exit) {
+		usleep(100000);
+
+		mask = 0;
+		sched_getaffinity(0, sizeof(allowed_mask), &allowed_mask);
+		for (i = 0; i < NR_CPUS; i++) {
+			if (CPU_ISSET(i, &allowed_mask))
+				mask |= (1 << i);
+		}
+
+		fprintf(stdout, "%s: mask=0x%08x\n", __func__, mask);
+	}
+
+	return 0;
+}
+
+
+Thanks,
+Gavin
+
+

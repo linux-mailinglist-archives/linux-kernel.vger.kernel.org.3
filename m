@@ -2,142 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C335765C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8765765DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233093AbiGORQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 13:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
+        id S233419AbiGORTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 13:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiGORQl (ORCPT
+        with ESMTP id S231818AbiGORTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 13:16:41 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E90E43E6C
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:16:23 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id z23so10085174eju.8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:16:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=k9mYwQ4GZm0yX1uaonHMP1HNEcS1yGmWnGbQClcs4i0=;
-        b=zFID5lvPR8/gCoMoKCKoy9rjEMsXVDH8styUKWjnB9OpkSx33TYhV9J4WZFvM6fW0U
-         wi0Ki8iHWle+06SAd9C4E9SZqG3ioGoMmc2kbEdZV5HF74a0OWFlipC+4UM1jyL+gUtC
-         mtZnctRxLTV1Red2PjGsuYaHdlmGnt/+V05EwivTqBK+p6sbIS37C2IPpCKdmXeCW1O0
-         K2BlX8dvQesrp01srzrt1e8J85tnylx45T0fS+ntK8EblgVMsa+F/sdMGcL5Q+PufqSk
-         K6DlfaDLk2TnQRjL/AN1wp2Zi/h6s5L23r61AaWV86P3f/84bf96pOiCEtEFmn1REXtO
-         IfAw==
+        Fri, 15 Jul 2022 13:19:10 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4DD27B2F;
+        Fri, 15 Jul 2022 10:19:08 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-31cf1adbf92so53355287b3.4;
+        Fri, 15 Jul 2022 10:19:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=k9mYwQ4GZm0yX1uaonHMP1HNEcS1yGmWnGbQClcs4i0=;
-        b=jCzDrz6M9eGGl2y6q3PSCu03uzvSqvdSd7sYb43+O446+SnHiVZ/VXaKo0jN4IqiI2
-         JZdMElhHMxgkbj0crpOWoQlh4oZz6IiUo4WHEbdaK7EncbpBSPUdb5MKBooEVTM8f+jT
-         YK7t+lN14bUfHTI5xvqPOXcP6UpJppeTddVAx8vPBoa+ZYhAvB2MZ3HGg4gRI4G96Yro
-         lyj5aEU6BaZoHOdWEvV9aaztqoioxfx5qlfHF7Bzryr5E3TjRG6lqK0o3DWXUcvAviR1
-         2XeWh7vKdK1E70yv3gAo9j/eZ6PrtMr69vYPJa+PQfdhxu8kZ6361n0upJg+Jr8SsA8a
-         WI7A==
-X-Gm-Message-State: AJIora/Ixv9GxWtgDycut4lzSngYk2QTDkwlBhYIQVOfnNrZnACyjzCM
-        /nHN8+j9jVCHqSjUszBIicz5Dbvj6pfeZ6X1
-X-Google-Smtp-Source: AGRyM1uWNXum1+XVv8QGfp0x8H8XzhBoBjU8AmosT0BHbLLPoFKM6gMxNHYuTmTumVbYDj6ukgHArw==
-X-Received: by 2002:a17:906:6545:b0:722:7c99:1ad7 with SMTP id u5-20020a170906654500b007227c991ad7mr14438736ejn.325.1657905381857;
-        Fri, 15 Jul 2022 10:16:21 -0700 (PDT)
-Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
-        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b0072a55ec6f3bsm2259246ejg.165.2022.07.15.10.16.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 15 Jul 2022 10:16:21 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH v4] arm64: dts: rockchip: Fix SD card init on
- rk3399-nanopi4
-From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-In-Reply-To: <73F9AED0-D2A8-4294-B6E1-1B92D2A36529@kohlschutter.com>
-Date:   Fri, 15 Jul 2022 19:16:20 +0200
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <115AD6A4-021B-4879-BFB5-BC7689A0203E@kohlschutter.com>
-References: <C639AD88-77A1-4485-BAEA-2FF8FC15A844@kohlschutter.com>
- <12878108.O9o76ZdvQC@diego> <103b714c-b07c-f016-1062-84bd94786b22@arm.com>
- <9AF1E75F-5947-49B0-887D-82C426527B99@kohlschutter.com>
- <590f7a08-a6ca-be54-4254-363343642a52@arm.com>
- <A6B896E5-CD25-4441-B6A5-0BE1FA284B2C@kohlschutter.com>
- <A9634366-A012-43D2-B253-8BB9BF6005C7@kohlschutter.com>
- <CAGb2v65Ehbu1wrib2CzF1fDZuD3fHZQDhKfVusyUF9KnxTvi+Q@mail.gmail.com>
- <5ca9bd94-54d9-04f8-0098-a56ffb6f5fe1@arm.com>
- <502b3fbe-3077-407e-6010-a8cb3ffce7d6@arm.com>
- <449292CA-CE60-4B90-90F7-295FBFEAB3F8@kohlschutter.com>
- <73F9AED0-D2A8-4294-B6E1-1B92D2A36529@kohlschutter.com>
-To:     Robin Murphy <robin.murphy@arm.com>, wens@kernel.org,
-        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Markus Reichl <m.reichl@fivetechno.de>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RV4CgMt4Uhdx+RPlbigIu5+LuSwk2m9JdabT6Izy3ss=;
+        b=jpMiC0hKRVWeMFyemVgo+LMt9O+GJeCbV00wNsQChCPKVkFtsvV+NP+sEvcirfda2J
+         qSq2JelO0W2E/tcsqU6FJmTOWC6AlVdlUBWW9e2z9LpTiI5ruEOtsAM977viYYxjl3a/
+         FhbkS1zA7P9HbRkKGpoCBXA3faeBuD3HZuXfRCfR3ubtET01szgO0m7GNiKxKWYudDfD
+         rOiTgnOOFgaHQHuu9qzftTN/MmSg7GtsYf8klYSFRHYC1nEjCx+FdNelBXM/zMbWLOjC
+         GmsXH7qgj+mD4IpJWQUHmNFRQNQsSqj6tdFCw9MRNWDMZcr1xArFryg7697r0Sw5LDxE
+         gEsg==
+X-Gm-Message-State: AJIora/3/dFB7cABQqn0gHPgySYS0lQa9IeR+8PiOuL8pQMPn/Euj2zT
+        RuEKZFr8Uf9Fa303xLYGqZ7KrVnuxms/ayiRVwY=
+X-Google-Smtp-Source: AGRyM1taAq+iVG6nrCvqbpzS3ZVBPbzQldku4nRuJGDklibMRpmYSt09XTo2pnmCZnRhRQIuFgU+qvp3vDt6Vn3VASc=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr16470414ywb.326.1657905547640; Fri, 15
+ Jul 2022 10:19:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220707071555.10085-1-lukasz.luba@arm.com> <41c333e1-2545-f6be-2db2-9061297d0b9a@arm.com>
+ <c334d692-9787-7591-54d7-f152ecbd559e@arm.com>
+In-Reply-To: <c334d692-9787-7591-54d7-f152ecbd559e@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 15 Jul 2022 19:18:56 +0200
+Message-ID: <CAJZ5v0iKT5nK56PYjnXJP__TrZs0v0B5h+Zi1=3ZNKCOF=ByxA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Energy Model power in micro-Watts and SCMI v3.1 alignment
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OK, this took me a while to figure out.
+On Fri, Jul 15, 2022 at 10:56 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> Hi Rafael,
+>
+> gentle ping.
+>
+> On 7/7/22 11:46, Lukasz Luba wrote:
+> > Hi Rafael,
+> >
+> > On 7/7/22 08:15, Lukasz Luba wrote:
+> >> Hi all,
+> >>
+> >> This is a patch set which changes Energy Model power values scale to
+> >> micro-Watts. It also upgrades the SCMI performance layer + scmi-cpufreq
+> >> driver to leverage the SCMI v3.1 spec and process micro-Watts power
+> >> values
+> >> coming from FW. The higher precision in EM power field solves an issue
+> >> of a rounding error, which then can be misinterpreted as 'inefficient
+> >> OPP'.
+> >> An example rounding issue calculation is present in patch 1/4
+> >> description.
+> >>
+> >> Changes:
+> >> v2
+> >> - simplified 32bit checks for max number of CPUs preventing energy
+> >>    estimation overflow
+> >> - added Reviewed-by and ACKs
+> >> v1 [1]
+> >>
+> >> Regards,
+> >> Lukasz Luba
+> >>
+> >> [1]
+> >> https://lore.kernel.org/lkml/20220622145802.13032-1-lukasz.luba@arm.com/
+> >>
+> >> Lukasz Luba (4):
+> >>    PM: EM: convert power field to micro-Watts precision and align drivers
+> >>    Documentation: EM: Switch to micro-Watts scale
+> >>    firmware: arm_scmi: Get detailed power scale from perf
+> >>    cpufreq: scmi: Support the power scale in micro-Watts in SCMI v3.1
+> >>
+> >>   Documentation/power/energy-model.rst  | 14 +++----
+> >>   drivers/cpufreq/mediatek-cpufreq-hw.c |  7 ++--
+> >>   drivers/cpufreq/scmi-cpufreq.c        | 15 +++++++-
+> >>   drivers/firmware/arm_scmi/perf.c      | 18 +++++----
+> >>   drivers/opp/of.c                      | 15 ++++----
+> >>   drivers/powercap/dtpm_cpu.c           |  5 +--
+> >>   drivers/thermal/cpufreq_cooling.c     | 13 ++++++-
+> >>   drivers/thermal/devfreq_cooling.c     | 19 ++++++++--
+> >>   include/linux/energy_model.h          | 54 +++++++++++++++++++--------
+> >>   include/linux/scmi_protocol.h         |  8 +++-
+> >>   kernel/power/energy_model.c           | 24 ++++++++----
+> >>   11 files changed, 132 insertions(+), 60 deletions(-)
+> >>
+> >
+> > I got ACKs (and on Reviewed-by) for this patch set.
+> > Could you take this via your PM tree, please?
+>
+> This patch set is on our roadmap and would be good if it could
+> go as v5.20 material.
+>
+> There are Acks for these patch set. If you need some
+> help with this (like rebasing, etc), just ping me.
+>
+> Could you take them, please?
 
-When no undervoltage limit is configured, I can reliably trigger the =
-initialization bug upon boot.
-When the limit is set to 3.0V, it rarely occurs, but just after I send =
-the v3 patch, I was able to reproduce...
-
-> Am 15.07.2022 um 19:12 schrieb Christian Kohlsch=C3=BCtter =
-<christian@kohlschutter.com>:
->=20
-> mmc/SD-card initialization may fail on NanoPi R4S with
-> "mmc1: problem reading SD Status register" /
-> "mmc1: error -110 whilst initialising SD card"
-> either on cold boot or after a reboot.
->=20
-> Moreover, the system would also sometimes hang upon reboot.
->=20
-> This is prevented by setting an explicit undervoltage protection limit
-> for the SD-card-specific vcc3v0_sd voltage regulator.
->=20
-> Set the undervoltage protection limit to 2.7V, which is the minimum
-> permissible SD card operating voltage.
->=20
-> Signed-off-by: Christian Kohlsch=C3=BCtter =
-<christian@kohlschutter.com>
-> ---
-> arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi | 4 ++++
-> 1 file changed, 4 insertions(+)
-> mode change 100644 =3D> 100755 =
-arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
->=20
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi =
-b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-> old mode 100644
-> new mode 100755
-> index 8c0ff6c96e03..669c74ce4d13
-> --- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-> @@ -73,6 +73,10 @@ vcc3v0_sd: vcc3v0-sd {
-> 		regulator-always-on;
-> 		regulator-min-microvolt =3D <3000000>;
-> 		regulator-max-microvolt =3D <3000000>;
-> +
-> +		// must be configured or SD card may fail to initialize =
-occasionally
-> +		regulator-uv-protection-microvolt =3D <2700000>;
-> +
-> 		regulator-name =3D "vcc3v0_sd";
-> 		vin-supply =3D <&vcc3v3_sys>;
-> 	};
-> --=20
-> 2.36.1
-
+All patches in the series applied as 5.20 material, thanks!

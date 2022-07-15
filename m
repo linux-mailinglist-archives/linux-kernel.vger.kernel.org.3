@@ -2,154 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC39D575834
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 01:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4051B57583B
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240931AbiGNX7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 19:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
+        id S240994AbiGOAA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 20:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiGNX7k (ORCPT
+        with ESMTP id S240879AbiGOAAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 19:59:40 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E73F23BCB
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 16:59:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657843179; x=1689379179;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=xUBgmjQGNjbBk0d4a8kCNh07KWPIDLV0t+hpereXsc8=;
-  b=b6Akp+AUlbxWJTctPvIEt35aEDePlOre0CWvFzZXuRklIiHdadEr/OOP
-   gsEVOCZYoi0NWdz6hTAIOKYfr366gsRj8xDrmnyIkazJ0uufHh7tzJqh0
-   h90oqa5VujeE36BT1EMRpbPiHcRWOlxJBVprZd2qqldbKa219/ubrnthL
-   86Yza+PNOzEiOJy+7lDk2f/oUNBZbLnx4k0WDJOntgPddk96WKPIjMsJR
-   D57cC0N8CfV0ol0ugf4H7ksIaKQVyXFHcj9ToM598+DTTU7nX8KgfnLgy
-   vp6y5b8k3faVplZJCUTOqELIOgEv5gSN4X/pza4A5IRjEo4LvsspphSqi
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="286798861"
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="286798861"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 16:58:12 -0700
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="654090407"
-Received: from abiswal-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.1.97])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 16:58:08 -0700
-Message-ID: <5773db7f639871e840247579fc9a7835277ede74.camel@intel.com>
-Subject: Re: [PATCH v8 2/5] x86/tdx: Add TDX Guest event notify interrupt
- support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Yao, Jiewen" <jiewen.yao@intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
-        "tim.gardner@canonical.com" <tim.gardner@canonical.com>,
-        "khalid.elmously@canonical.com" <khalid.elmously@canonical.com>,
-        "Cox, Philip" <philip.cox@canonical.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Fri, 15 Jul 2022 11:58:06 +1200
-In-Reply-To: <4421372e-14b5-1c6d-e4bf-5a88a2c88ab8@linux.intel.com>
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220609025220.2615197-3-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <78873cc1db47ba00a4c01f38290521c1a6072820.camel@intel.com>
-         <efb2cdab-289b-8757-fe5e-5348519b0474@linux.intel.com>
-         <385B219C-4DB2-480C-913C-411AB4D644ED@intel.com>
-         <MW4PR11MB5872E3B775A680678331D6358CB79@MW4PR11MB5872.namprd11.prod.outlook.com>
-         <9c7d99469179340eeecabaf3e9c414fc98900626.camel@intel.com>
-         <503e7135-782c-b72b-6f55-3c4acf55921b@linux.intel.com>
-         <434ff0edcd5a0f1eb671bb2850ef5444ac1359a3.camel@intel.com>
-         <4421372e-14b5-1c6d-e4bf-5a88a2c88ab8@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Thu, 14 Jul 2022 20:00:51 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6DF27FF3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 17:00:50 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id r186so2988706pgr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 17:00:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7kQcbuUpYF4D2BnaWIUhPJeFUYzIn6+Qgr3BLmvM4Yw=;
+        b=Ww/hsP1MY82xo12KIVt4OgyeqvT1sRQBHFWuE8zAZHSRmd/pig+6qvG/tUm+17L6Xq
+         kOpudqH7nzu0nHLkbvZlGTUMLA2dfpMf/iKXHonqjpTdUm9HXYntGUWpOu8S1ep9s0ap
+         SgJ+I0gUVrRwJPfvv7bxqaSEi9tNAL/XHGDxO/qQTrdFxSjqjImw9NH5xNmW4aGQ5KN4
+         shUtsd6TrEC5yZyv0AhxuKD0hzzdGOnXIazAI92IRdOZp2cKSVhiLzBOJxypbeIyUMas
+         i7N1nnnbSLyvJtmpAJc3JagJQN5r8k/QDU2P2OK68VuW84jUNq9O2VpSoSz80c+lutN9
+         RVYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7kQcbuUpYF4D2BnaWIUhPJeFUYzIn6+Qgr3BLmvM4Yw=;
+        b=WDRnFEttObqapPL1kZqowWOMJvZDIAXsF4hlmbNzRtAvuyDOKq2wAlXDWW874ewLT4
+         4Dv4P54RrvJ8gGjjzdMPvQoqj/glb4uwZjhjgb0c6X2GDSe91OnboGXEm7xReisZGU4d
+         nH3ZfjcpYQ5UyvhmfPdIvIgZ6c2V4fFrNpZQ1bTDLACqPEg+yqU05U8fvR+n+DeUeCmm
+         WGkQiM3hdWcJ9KHDNXfeiXst6kQAUnUi4jNZ2jY6R7m8h1Zt3l2yDDloBmn7LKYlBkIJ
+         ya27VtWsDmoJayzSoBeGW33BM+9eVHO9PCT7NvF2tnoYEYMNG4cUOgeqcJcprhbx3bqn
+         jc0A==
+X-Gm-Message-State: AJIora+mrxGgE7w9T33xt6nNXeZFO10zDk1lximImHtv2ywSohe47yAR
+        EQPkQLBxXmz+T36FLZL7Z0ik4A==
+X-Google-Smtp-Source: AGRyM1vB1Bx0JIdA2uKlH7N/GZYabyRhn+4zGmjeXbgLfPo6T5PvUMOywAs5A1ZieCWcXkppBuQHvg==
+X-Received: by 2002:a05:6a00:998:b0:52a:db4c:541b with SMTP id u24-20020a056a00099800b0052adb4c541bmr10834227pfg.35.1657843249678;
+        Thu, 14 Jul 2022 17:00:49 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id w6-20020a17090a780600b001f09d9b6673sm2029731pjk.7.2022.07.14.17.00.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 17:00:47 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 00:00:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH] KVM: SVM: fix task switch emulation on INTn instruction.
+Message-ID: <YtCuK36YnKp/sojH@google.com>
+References: <20220714124453.188655-1-mlevitsk@redhat.com>
+ <52d44630-21ad-1291-4185-40d5728eaea6@maciej.szmigiero.name>
+ <034401953bc935d997c143153938edb1034b52cd.camel@redhat.com>
+ <84646f56-dcb0-b0f8-f485-eb0d69a84c9c@maciej.szmigiero.name>
+ <YtClmOgBV8j3eDkG@google.com>
+ <CALMp9eTZKyFM4oFNJbDDe69xfqtSmj5jZnPbe0aQaxxCvqdFTA@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALMp9eTZKyFM4oFNJbDDe69xfqtSmj5jZnPbe0aQaxxCvqdFTA@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 14, 2022, Jim Mattson wrote:
+> On Thu, Jul 14, 2022 at 4:24 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Fri, Jul 15, 2022, Maciej S. Szmigiero wrote:
+> > > On 14.07.2022 15:57, Maxim Levitsky wrote:
+> > > > On Thu, 2022-07-14 at 15:50 +0200, Maciej S. Szmigiero wrote:
+> > > > > On 14.07.2022 14:44, Maxim Levitsky wrote:
+> > > > > > Recently KVM's SVM code switched to re-injecting software interrupt events,
+> > > > > > if something prevented their delivery.
+> > > > > >
+> > > > > > Task switch due to task gate in the IDT, however is an exception
+> > > > > > to this rule, because in this case, INTn instruction causes
+> > > > > > a task switch intercept and its emulation completes the INTn
+> > > > > > emulation as well.
+> > > > > >
+> > > > > > Add a missing case to task_switch_interception for that.
+> > > > > >
+> > > > > > This fixes 32 bit kvm unit test taskswitch2.
+> > > > > >
+> > > > > > Fixes: 7e5b5ef8dca322 ("KVM: SVM: Re-inject INTn instead of retrying the insn on "failure"")
+> > > > > >
+> > > > > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > > > > > ---
+> > > > >
+> > > > > That's a good catch, your patch looks totally sensible to me.
+> > > > > People running Win 3.x or OS/2 on top of KVM will surely be grateful for it :)
+> > > >
+> > > > Yes and also people who run 32 bit kvm unit tests :)
+> > >
+> > > It looks like more people need to do this regularly :)
+> >
+> > I do run KUT on 32-bit KVM, but until I hadn't done so on AMD for a long time and
+> > so didn't realize the taskswitch2 failure was a regression.  My goal/hope is to
+> > we'll get to a state where we're able to run the full gamut of tests before things
+> > hit kvm/queue, but the number of permutations of configs and module params means
+> > that's easier said than done.
+> >
+> > Honestly, it'd be a waste of people's time to expect anyone else beyond us few
+> > (and CI if we can get there) to test 32-bit KVM.  We do want to keep it healthy
+> > for a variety of reasons, but I'm quite convinced that outside of us developers,
+> > there's literally no one running 32-bit KVM.
+> 
+> It shouldn't be necessary to run 32-bit KVM to run 32-bit guests! Or
+> am I not understanding the issue that was fixed here?
 
-> > > +/*
-> > > + * Handler used to report notifications about
-> > > + * TDX_GUEST_EVENT_NOTIFY_VECTOR IRQ. Currently it will be
-> > > + * used only by the attestation driver. So, race condition
-> > > + * with read/write operation is not considered.
-> > > + */
-> > > +static void (*tdx_event_notify_handler)(void);
-> > > +
-> > > +/* Helper function to register tdx_event_notify_handler */
-> > > +void tdx_setup_ev_notify_handler(void (*handler)(void))
-> > > +{
-> > > +       tdx_event_notify_handler =3D handler;
-> > > +}
-> > > +
-> > > +/* Helper function to unregister tdx_event_notify_handler */
-> > > +void tdx_remove_ev_notify_handler(void)
-> > > +{
-> > > +       tdx_event_notify_handler =3D NULL;
-> > > +}
-> > > +
-> >=20
-> > Looks it's weird that you still need it.  Couldn't we pass the function=
- to
-> > handle GetQuote directly to request_irq()?
->=20
->=20
-> Since event notification is not only specific to attestation, I did not w=
-ant to
-> directly tie it to GetQuote handler.
->=20
-> Alternative approach is, to make this IRQ vector shared and let its users=
- do
-> request_irq() and free_irq() directly.
-
-I think IRQF_SHARED is the logic.  We don't need it now as for now we have =
-only
-one user, though.
-
-The "multiple users" case may never happen, so doesn't justify the addition=
-al
-'tdx_event_notify_handler' code at this moment.
-
->=20
-> Something like below?
->=20
-> --- a/arch/x86/coco/tdx/attest.c
-> +++ b/arch/x86/coco/tdx/attest.c
-> @@ -399,7 +399,7 @@ static const struct file_operations tdx_attest_fops =
-=3D {
-> =20
->  static int __init tdx_attestation_init(void)
->  {
-> -       int ret;
-> +       int ret, irq;
-> =20
->         /* Make sure we are in a valid TDX platform */
->         if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-> @@ -422,6 +422,14 @@ static int __init tdx_attestation_init(void)
->                 return ret;
->         }
-> =20
-> +       irq =3D tdx_get_evirq();
-
-The function seems unnecessary.  You can put 'extern int tdx_evtirq;' to
-asm/tdx.h if needed and use it directly.
-
+Ah, no, I'm the one off in the weeds.  I only ever run 32-bit KUT on 32-bit VMs
+because I've been too lazy to "cross"-compile.  Time to remedy that...

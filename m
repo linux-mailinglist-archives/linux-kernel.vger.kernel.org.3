@@ -2,177 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A07575D73
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1746F575D75
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbiGOI3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 04:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
+        id S232517AbiGOI32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 04:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiGOI3B (ORCPT
+        with ESMTP id S232388AbiGOI3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:29:01 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B360C3A49B
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:28:58 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id fz10so5053005pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=0WR/mFAWfJJysvnTsFiFts05A6ZUT1nV5g4wTH/0EpM=;
-        b=ENSA6Prmo7gAqp/Yu1lqDRjkcBr9zTp8FHgrine5fObrInJkZPsaeSS/D7KeI4w+AT
-         Vuc6TT0FBpi45DzZI6RkDBNeChXvu6+joKbss9ybN+0NFhttCzr1HA04ddQjCLpiY98p
-         T/D1rpGm4pRLO8/hYRiRD76PPaqbzcmNjuWZZXZqzzedZYEBXpaEK2diZPWB8R199/xl
-         ul6pDJe9nFMgJ6NBXckrtFBaeyKI5/wBSqWEZ4x8EJxmSCcv4YYVbUIffexyXxTUdRBO
-         ySjgkXLbBsvlsXwiAep3utD3dzl/ONPjjfrEcOGle2am2vv4giQP5Xj6M+x/2pC20Gnb
-         f0QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0WR/mFAWfJJysvnTsFiFts05A6ZUT1nV5g4wTH/0EpM=;
-        b=itfxr4dxLAd7OEfBI172uXdlgauN7vT51aVsTK/t7iA6ULEjku5HnT++M6++/B1H/B
-         iO4Yp6gvF3u7V7S/Y6Xrdw5oQN6w9CoJSQtk2YfaSP8gpjir4/BeZlG9Sa1uVNNEgB8f
-         A4yaPf50Ry6dSv7iXPDlQcQorMJWgERdUR/MHK3WskpJUWt+UeFlkJlEth1OsWqPJ/HH
-         9ALw5Uajdfp1Lq8TPyPOwbB2ueGz6cLYWLMtIZMHj8uTM03Wajdijle39JbZOnUJSqtz
-         XH6pGsCcmp29xgU1H2g/vIiIkxLtF4vwVgZoXOFVQd5ZF4IfeIHm/ELY2pgbQnW0L78F
-         7Osg==
-X-Gm-Message-State: AJIora+qnTnPgeO1xGL6/u+ueJ4WSXst8Q8KVkSqjSW6DvCKXWTNqhEr
-        xwCuTbO4SxHrC/zk4j1944gZf80EhXaR
-X-Google-Smtp-Source: AGRyM1sjOB7YbJxuz5YY5jecM+1Fk2v9O75Q+ZA+MGlkid5m0umKveG6PXck6AQ5+7u0MWnOX8ywyA==
-X-Received: by 2002:a17:902:7406:b0:16b:dbe3:ee0c with SMTP id g6-20020a170902740600b0016bdbe3ee0cmr12194054pll.123.1657873738207;
-        Fri, 15 Jul 2022 01:28:58 -0700 (PDT)
-Received: from workstation ([117.248.1.85])
-        by smtp.gmail.com with ESMTPSA id h27-20020aa79f5b000000b00528c16966casm3214721pfr.174.2022.07.15.01.28.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 15 Jul 2022 01:28:57 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 13:58:52 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, swboyd@chromium.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        Rajat Jain <rajatja@google.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        helgaas@kernel.org
-Subject: Re: [PATCH v5] PCI/ASPM: Update LTR threshold based upon reported
- max latencies
-Message-ID: <20220715082852.GC12197@workstation>
-References: <1654242861-15695-1-git-send-email-quic_krichai@quicinc.com>
- <1654837710-30561-1-git-send-email-quic_krichai@quicinc.com>
- <20f88022-e9b1-53b3-8832-85edc713ef6a@quicinc.com>
+        Fri, 15 Jul 2022 04:29:25 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9BF5885E
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 01:29:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657873764; x=1689409764;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=unf53x4o1mo9OvqXE99tnKwyqyec5nc6m4hit56NSFw=;
+  b=aI/jznXuEJS69AoPwM6KZthyPCjfLJWTBGKNbMXEVW3XK0qOS+hM+zn+
+   chV1tDprRKWwjv1/pVzokmJKv9a9M5ydiRDpG/YEUqg8y76U1wqK/jjsy
+   XVxsGLtTFGOchwK++WNf1cWbVBLgoZF6hG+4dHuDYe7SnIhTQ57yUql3q
+   xqxiauLVS23d9Qx00TLmFc/V4nguC5xwu4ftXzydPvGohfnNRolk3+4N3
+   yh8INaJTLYGi66mKFj+WY+qxf1lhDyKw47+AIR2TeuZrvKa/bCdtacUve
+   ef4YDN9L/1O6DWRcQWFVlCxsW0ce4h5Bqx2KW7vqK6NfBY/l8mU/+ii+v
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="268760047"
+X-IronPort-AV: E=Sophos;i="5.92,273,1650956400"; 
+   d="scan'208";a="268760047"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 01:29:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,273,1650956400"; 
+   d="scan'208";a="571438868"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by orsmga006.jf.intel.com with ESMTP; 15 Jul 2022 01:29:20 -0700
+Date:   Fri, 15 Jul 2022 16:29:22 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, dave.hansen@intel.com,
+        Robin Murphy <robin.murphy@arm.com>,
+        John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH v1] mm/slub: enable debugging memory wasting of kmalloc
+Message-ID: <20220715082922.GA88035@shbuild999.sh.intel.com>
+References: <20220701135954.45045-1-feng.tang@intel.com>
+ <41763154-f923-ae99-55c0-0f3717636779@suse.cz>
+ <20220713073642.GA69088@shbuild999.sh.intel.com>
+ <45906408-34ce-4b79-fbe4-768335ffbf96@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20f88022-e9b1-53b3-8832-85edc713ef6a@quicinc.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <45906408-34ce-4b79-fbe4-768335ffbf96@suse.cz>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 06:53:18PM +0530, Krishna Chaitanya Chundru wrote:
-> A Gentle remainder please review it.
+On Thu, Jul 14, 2022 at 10:11:32PM +0200, Vlastimil Babka wrote:
+> On 7/13/22 09:36, Feng Tang wrote:
+> > Hi Vlastimil,
+> > 
+> > On Mon, Jul 11, 2022 at 10:15:21AM +0200, Vlastimil Babka wrote:
+> >> On 7/1/22 15:59, Feng Tang wrote:
+> >> > kmalloc's API family is critical for mm, with one shortcoming that
+> >> > its object size is fixed to be power of 2. When user requests memory
+> >> > for '2^n + 1' bytes, actually 2^(n+1) bytes will be allocated, so
+> >> > in worst case, there is around 50% memory space waste.
+> >> > 
+> >> > We've met a kernel boot OOM panic (v5.10), and from the dumped slab info:
+> >> > 
+> >> >     [   26.062145] kmalloc-2k            814056KB     814056KB
+> >> > 
+> >> > From debug we found there are huge number of 'struct iova_magazine',
+> >> > whose size is 1032 bytes (1024 + 8), so each allocation will waste
+> >> > 1016 bytes. Though the issue was solved by giving the right (bigger)
+> >> > size of RAM, it is still nice to optimize the size (either use a
+> >> > kmalloc friendly size or create a dedicated slab for it).
+> > [...]
+> >> 
+> >> Hi and thanks.
+> >> I would suggest some improvements to consider:
+> >> 
+> >> - don't use the struct track to store orig_size, although it's an obvious
+> >> first choice. It's unused waste for the free_track, and also for any
+> >> non-kmalloc caches. I'd carve out an extra int next to the struct tracks.
+> >> Only for kmalloc caches (probably a new kmem cache flag set on creation will
+> >> be needed to easily distinguish them).
+> >> Besides the saved space, you can then set the field from ___slab_alloc()
+> >> directly and not need to pass the orig_size also to alloc_debug_processing()
+> >> etc.
+> >  
+> > Here is a draft patch fowlling your suggestion, please check if I missed
+> > anything? (Quick test showed it achived similar effect as v1 patch). Thanks!
 > 
-> On 6/10/2022 10:38 AM, Krishna chaitanya chundru wrote:
-> > From: Prasad Malisetty <quic_pmaliset@quicinc.com>
-> > 
-> > In ASPM driver, LTR threshold scale and value are updated based on
-> > tcommon_mode and t_poweron values. In kioxia NVMe L1.2 is failing due to
-> > LTR threshold scale and value are greater values than max snoop/non-snoop
-> > value.
-> > 
-> > Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
-> > reported snoop/no-snoop values is greather than or equal to
-> > LTR_L1.2_THRESHOLD value.
-> > 
-> > Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
-> > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> Thanks, overal it looks at first glance!
 
-As Stephen noted in previous verison, you should sent the newer versions
-separately and not as a reply to previous ones. So please sent v6 with
-my tag as well.
+Thanks!
+
+> > ---
+> > diff --git a/include/linux/slab.h b/include/linux/slab.h
+> > index 0fefdf528e0d..d3dacb0f013f 100644
+> > --- a/include/linux/slab.h
+> > +++ b/include/linux/slab.h
+> > @@ -29,6 +29,8 @@
+> >  #define SLAB_RED_ZONE		((slab_flags_t __force)0x00000400U)
+> >  /* DEBUG: Poison objects */
+> >  #define SLAB_POISON		((slab_flags_t __force)0x00000800U)
+> > +/* Indicate a slab of kmalloc */
+> 
+> "Indicate a kmalloc cache" would be more precise.
+ 
+Will use this in next version.
+
+> > +#define SLAB_KMALLOC		((slab_flags_t __force)0x00001000U)
+> >  /* Align objs on cache lines */
+> >  #define SLAB_HWCACHE_ALIGN	((slab_flags_t __force)0x00002000U)
+> >  /* Use GFP_DMA memory */
+> > diff --git a/mm/slub.c b/mm/slub.c
+> > index 26b00951aad1..3b0f80927817 100644
+> 
+> <snip>
+> 
+> > 
+> >> - the knowledge of actual size could be used to improve poisoning checks as
+> >> well, detect cases when there's buffer overrun over the orig_size but not
+> >> cache's size. e.g. if you kmalloc(48) and overrun up to 64 we won't detect
+> >> it now, but with orig_size stored we could?
+> > 
+> > The above patch doesn't touch this. As I have a question, for the
+> > [orib_size, object_size) area, shall we fill it with POISON_XXX no matter
+> > REDZONE flag is set or not?
+> 
+> Ah, looks like we use redzoning, not poisoning, for padding from
+> s->object_size to word boundary. So it would be more consistent to use the
+> redzone pattern (RED_ACTIVE) and check with the dynamic orig_size. Probably
+> no change for RED_INACTIVE handling is needed though.
+
+Thanks for clarifying, will go this way and do more test. Also I'd 
+make it a separate patch, as it is logically different from the space
+wastage.
 
 Thanks,
-Mani
-
-> > ---
-> > 
-> > I am taking this patch forward as prasad is no more working with our org.
-> > Changes since v4:
-> > 	- Replaced conditional statements with min and max.
-> > changes since v3:
-> > 	- Changed the logic to include this condition "snoop/nosnoop
-> > 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
-> > Changes since v2:
-> > 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
-> > Changes since v1:
-> > 	- Added missing variable declaration in v1 patch
-> > ---
-> >   drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
-> >   1 file changed, 30 insertions(+)
-> > 
-> > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> > index a96b742..676c03e 100644
-> > --- a/drivers/pci/pcie/aspm.c
-> > +++ b/drivers/pci/pcie/aspm.c
-> > @@ -461,14 +461,36 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> >   {
-> >   	struct pci_dev *child = link->downstream, *parent = link->pdev;
-> >   	u32 val1, val2, scale1, scale2;
-> > +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
-> >   	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
-> >   	u32 ctl1 = 0, ctl2 = 0;
-> >   	u32 pctl1, pctl2, cctl1, cctl2;
-> >   	u32 pl1_2_enables, cl1_2_enables;
-> > +	u16 ltr;
-> > +	u16 max_snoop_lat, max_nosnoop_lat;
-> >   	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
-> >   		return;
-> > +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
-> > +	if (!ltr)
-> > +		return;
-> > +
-> > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
-> > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
-> > +
-> > +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> > +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
-> > +
-> > +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> > +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
-> > +
-> > +	/* choose the greater max scale value between snoop and no snoop value*/
-> > +	max_scale = max(max_snp_scale, max_nsnp_scale);
-> > +
-> > +	/* choose the greater max value between snoop and no snoop scales */
-> > +	max_val = max(max_snp_val, max_nsnp_val);
-> > +
-> >   	/* Choose the greater of the two Port Common_Mode_Restore_Times */
-> >   	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> >   	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> > @@ -501,6 +523,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> >   	 */
-> >   	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
-> >   	encode_l12_threshold(l1_2_threshold, &scale, &value);
-> > +
-> > +	/*
-> > +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
-> > +	 * snoop/no-snoop values are greather than or equal to LTR_L1.2_THRESHOLD value.
-> > +	 */
-> > +	scale = min(scale, max_scale);
-> > +	value = min(value, max_val);
-> > +
-> >   	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
-> >   	/* Some broken devices only support dword access to L1 SS */
+Feng

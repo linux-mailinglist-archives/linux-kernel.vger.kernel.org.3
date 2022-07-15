@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7635576849
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6542157684C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiGOUkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 16:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
+        id S229902AbiGOUmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 16:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiGOUkQ (ORCPT
+        with ESMTP id S229680AbiGOUmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 16:40:16 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B341A528A6
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:40:15 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-10bd4812c29so8644660fac.11
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:40:15 -0700 (PDT)
+        Fri, 15 Jul 2022 16:42:00 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672AF528A6
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:41:59 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id o12so5599320pfp.5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:41:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UClsEqV3JD19ACu3JsNCWl/cLZeryKIb1irorP73Kww=;
-        b=RVUd2g3PIrxABLRIB1PNNTftaU79wvj5UgCLSgXOAFRI4kW3+YteNAOmOYEvtd5aEg
-         NF9EHuEcCgzN7/GDIJPlhLl+rxA9j8Yhx4LwFUQPW60/Wf+hEcqlR9Q9V8FgHZt6q+Gp
-         U5QACBFUVwS1hHAYaIWlTNQ7TxJF2wM2ut0aPMXNt2nYKA5xaWLhaaW9XXSVXnbG+Jc2
-         u08x2aCitbp+mejBem5CxkqiiKYVhMkuNw6kFAhnvIBTv98gdQhEYMUjncv78a1nq9vT
-         slXdcanwItyVoZgzdBaTrVL+bM38aB/FSZsIiq+okBUw7cdWVPfky50mBo0+D/JP5G42
-         B1IQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WtZRDzM8YJ97S/1Li5D/D44YAKcdEwJfblvdKCPMsAc=;
+        b=h9mO28BVHHbGShv1uBCtq7ZZifV3OOTDANCsGvtddURVoUa57Ouy0cRfb8h/UxuZUn
+         wHWtFVlfeAly/PSS/772SluwtFygGQYZrM+pSzu07xnsKlX06xwKk3lXfQqTnzgpPYgs
+         vG9B137tWetNmkSVx/6ucFo/nv10tm0kBnsjc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UClsEqV3JD19ACu3JsNCWl/cLZeryKIb1irorP73Kww=;
-        b=WhmvLV7pxgUawtmdSCZ276nkFXdHc1kwqaCfPLygMDJzfR4JoqrnxCSVf7XmZml8ii
-         epujiRLyY/CajXjUYhF/ZUBW9+NQZI53dOwp2317SO4u53pFwMqVmqKdL2VY3DGRO/h8
-         6hUDGgieVJ6GWlJPeBDvw00E4gAE2nWHy/Y1NYDnaV5+z5N8fEYJznOreMIe6p1+p1g8
-         v3e5lunYx1Oh3ec++qZPDbjTrHp6Vf8PQ5Km/Ib0IOES3X7u2ucuGJJ8e3kmyWi6/Ar7
-         3l37YbfEh1yVLLvkFW2LDCKr5hnWa+ZlPAIw2YjAEQxpGGUZNIaVhpSXAo9B0hPMrfPW
-         m37g==
-X-Gm-Message-State: AJIora/iNzzvJ8jjwwo1zih+fXhN52SsWgkui+UsVKMHrPIdVupI32Ei
-        QQdY4OHk5NpKWEH2wfImhNKuDBmHEdbGZdDcWihZAiBKSTQ=
-X-Google-Smtp-Source: AGRyM1tfRbAM589Ft1sdKHiA3BtukLPlMAhE/lLFiqPbTB8j7bIekBpV6v1Ndn5hJL0aCl1+ULCZ+Yn5GmTQA793onM=
-X-Received: by 2002:a05:6808:2292:b0:33a:5ec2:8f63 with SMTP id
- bo18-20020a056808229200b0033a5ec28f63mr666595oib.112.1657917614793; Fri, 15
- Jul 2022 13:40:14 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WtZRDzM8YJ97S/1Li5D/D44YAKcdEwJfblvdKCPMsAc=;
+        b=i09bxE8I1IggRqB0T7t1RThBT4AjSOx+kTwdJxxU8Y16/YVw5l+Tz/jMVnI0cP/aIA
+         1h0/dOS+cMY1ES7tsdMhaNIqajNj/l9sQWMyAZcl+RMeHKWbIBUehJFBUcoyyvHV+aBE
+         IiNe68ftG2swLh/t/i5+wLL28bXV6rGh4p9azcoILz/u6xh3cQ5/YUfCcy+3Z0Xr7lAT
+         64YSxw5DZkVXtDgB7ii3CNuqbYav4NxXSbrB6exAHkBtqC8AHGIS3FDtBytX1NEJ8Tq1
+         icVdfkU4H3Xq7ltvt3c81LkxH71+4rUp5rB+4DTr4cnXAYGJmljN/jxXpwcwnX/vZ4HT
+         yCOA==
+X-Gm-Message-State: AJIora8A/50bbx5/hqbzBo4FLb6kv871+zZRvrGXyOehB1CjEJJUVwGm
+        FjKPsvCgphFP/dDikAcA03PMLQ==
+X-Google-Smtp-Source: AGRyM1vr9Gi++zE+26ugt96VQljO9f6LQq5uJA99uXorvAUYnr7XDA1roHUKlradhlJytAU1JAbaOQ==
+X-Received: by 2002:a63:2486:0:b0:412:9de2:eb49 with SMTP id k128-20020a632486000000b004129de2eb49mr13912375pgk.224.1657917718974;
+        Fri, 15 Jul 2022 13:41:58 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:835b:7656:818:a69a])
+        by smtp.gmail.com with UTF8SMTPSA id 187-20020a6205c4000000b0051c4f6d2d95sm4309705pff.106.2022.07.15.13.41.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 13:41:58 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 13:41:57 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
+ probed properly
+Message-ID: <YtHRFcol5uslEel1@google.com>
+References: <1657891312-21748-1-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-References: <CALMp9eS5pBrKWe=LbWXON6bhTdhbX9rB2aF+c-h_a0=SXfyj7A@mail.gmail.com>
- <f68c283c-cfc9-bc63-5d0f-143295a575d4@citrix.com>
-In-Reply-To: <f68c283c-cfc9-bc63-5d0f-143295a575d4@citrix.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 15 Jul 2022 13:40:03 -0700
-Message-ID: <CALMp9eSe6dRvSAa6CQp9P_dO5840OqSmhXrS2AabZeCyL_3j=g@mail.gmail.com>
-Subject: Re: Retbleed (RSBA vs BTC)
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1657891312-21748-1-git-send-email-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 6:07 PM Andrew Cooper <Andrew.Cooper3@citrix.com> wrote:
->
-> On 15/07/2022 01:29, Jim Mattson wrote:
-> > What is the value in conflating the Intel and AMD findings under the
-> > same moniker (arch/x86/kernel/cpu/common.c)? The vulnerabilities seem
-> > quite different to me.
->
-> They are entirely different, beyond the fact that they both pertain to
-> the `ret` instruction.
+On Fri, Jul 15, 2022 at 06:51:52PM +0530, Krishna Kurapati wrote:
 
-BTC affects much more than just the 'ret' instruction.
+> Subject: usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't probed properly
 
-> Suffice it to say that I tried very hard to prevent this confusion...
->
-> > The Intel CPUs tagged with RETBLEED should already report RSBA. The
-> > paper just highlights this previously disclosed vulnerability. Or are
-> > there Intel CPUs subject to Retbleed that don't report RSBA, and I'm
-> > just confused?
->
-> There are CPUs which suffer from RSBA, that don't have MSR_ARCH_CAPS and
-> therefore can't enumerate it.
->
-> IIRC, MSR_ARCH_CAPS only appeared with Cascade Lake (or thereabouts), so
-> the earlier Skylake CPUs (which are the majority subject of "Intel
-> Retbleed") lack the RSBA enumeration.
+nit: "isn't probed properly" sounds like a bug or HW issue. In case
+you re-spin maybe change it to "hasn't probed yet" or similar.
 
-Ah, right. I was thinking that we got IA32_ARCH_CAPABILITIES on older
-parts with microcode updates, but I was mistaken.
+> On SC7180 devices, it is observed that dwc3 probing is deferred
+> because device_links_check_suppliers() finds that '88e3000.phy'
+> isn't ready yet.
+> 
+> As a part of its probe call, dwc3-qcom driver checks if dwc3 core
+> is wakeup capable or not. If the dwc3 core is wakeup capable, driver
+> configures dwc-qcom's power domain to be always ON. Also it configures
+> dp/dm interrupts accordingly to support wakeup from system suspend.
+> 
+> More info regarding the same can be found at:
+> commit d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller status")
+> commit 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
+> 
+> In the event, dwc3 probe gets deferred and is processed after dwc3-qcom
+> probe, driver ends up reading the wakeup capability of dwc3 core as false
+> leading to instability in suspend/resume path.
+> 
+> To avoid this scenario, ensure dwc3_probe is successful by checking
+> if appropriate driver is assigned to it or not after the of_platform_populate
+> call. If it isn't then defer dwc3-qcom probe as well.
+> 
+> Fixes: 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system suspend")
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 
-> > On the AMD side, however, Branch Type Confusion is a much bigger deal.
-> > All instructions are subject to steering by BTI, not just returns with
-> > an empty RSB.
-> >
-> > Don't these two vulnerabilities deserve separate names (and don't we
-> > already have a name for the first one)?
-> >
-> > Tangentially, I believe that the following line is wrong:
-> > VULNBL_INTEL_STEPPINGS(SKYLAKE_X, X86_STEPPING_ANY, MMIO | RETBLEED),
-> >
-> > Steppings 5, 6, and 7 are "Cascade Lake," with eIBRS, and I don't
-> > think Cascade Lake suffers from RSBA.
->
-> As documented, Cascade Lake does suffer RSBA when eIBRS isn't active, so
-> it's not a binary affliction state.
+Reported-by: Matthias Kaehlcke <mka@chromium.org>
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 
-Is there no value in separating RRSBA from RSBA? Per Table 1 in
-Intel's "Return Stack Buffer Underflow" technical paper, Cascade Lake
-exhibits RRSBA behavior, but not RSBA behavior.
+Please make sure to add reviewers of previous versions or other folks you
+would like to review your patches in cc. I found v2 accidentally while
+looking for something else.

@@ -2,112 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0CA575C97
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3FE575C9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbiGOHnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 03:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
+        id S232207AbiGOHpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 03:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbiGOHne (ORCPT
+        with ESMTP id S230151AbiGOHpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 03:43:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A085D1DF;
-        Fri, 15 Jul 2022 00:43:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D518619CB;
-        Fri, 15 Jul 2022 07:43:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A3E4C34115;
-        Fri, 15 Jul 2022 07:43:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657871012;
-        bh=0iGDNIkKNv/Up65EK2U2773EXnDVZqycw7MK0mT2K0U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gGAovutajNnUoHyY93NBbHukld9fKKNu1xIGKtRyYAsdFeIrQdRy0CLI0IaVZnGpW
-         pHnbRPPireGo6J5ShQxtpjDP2gd/YitIEvRc2ALODmhP6EdGSICookvTZsxbVXa/Sf
-         RG5PVN9W+CCe8YuikNVmRcbOKRLUlkmMFqb0vXWhKeaSdyi6EcK2xuMDAkgflXqpRN
-         b83WEOPD8/QT5nKJanjqA1SDkrNfWP/P1jbBRP9IiAm1KnTS3DaTPP2ESt2jwdrFwe
-         JLRY7zh+CCI8FW2rt504Bb8snjLg6Nv/CgpGgrzb1cy0gEnHABe3HZg/SUidN9DL3X
-         BI7hDF7fAdCWw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oCFz6-0007tQ-Od; Fri, 15 Jul 2022 09:43:37 +0200
-Date:   Fri, 15 Jul 2022 09:43:36 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] PCI: qcom: Sort device-id table
-Message-ID: <YtEaqHT7NdXPhK+y@hovoldconsulting.com>
-References: <20220714071348.6792-1-johan+linaro@kernel.org>
- <20220714071348.6792-9-johan+linaro@kernel.org>
- <YtAny03L/RLk9nv6@xps13>
+        Fri, 15 Jul 2022 03:45:12 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C987C1B0;
+        Fri, 15 Jul 2022 00:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657871111; x=1689407111;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=cAWB2gvkwfL1+i+RY7OasDLomscjFUmMo/Lsjsnp0B8=;
+  b=l9DhfHcctup4rbPqdpLiVIDs76oO3sLjlegsS/Lw1EW4VQHlS0SNkhJM
+   4K3EEREao1nxHpvvy/duDPN4U3rxsxo8bu5X0Ja59QBxOHeM1Q1juTGzs
+   W6wVHODLhzFOKZIBNjn450pHrmznC5niG1/fOv8KDclvnmCvAaa8mo8U9
+   Y=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Jul 2022 00:45:10 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 00:45:10 -0700
+Received: from zijuhu-gv.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Jul 2022 00:45:06 -0700
+From:   Zijun Hu <quic_zijuhu@quicinc.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
+        <luiz.dentz@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <luiz.von.dentz@intel.com>, <quic_zijuhu@quicinc.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: [PATCH v4] Bluetooth: hci_sync: Remove redundant func definition
+Date:   Fri, 15 Jul 2022 15:45:02 +0800
+Message-ID: <1657871102-26907-1-git-send-email-quic_zijuhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtAny03L/RLk9nv6@xps13>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 10:27:23AM -0400, Brian Masney wrote:
-> On Thu, Jul 14, 2022 at 09:13:48AM +0200, Johan Hovold wrote:
-> > Sort the device-id table entries alphabetically by compatible string to
-> > make it easier to find entries and add new ones.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  drivers/pci/controller/dwc/pcie-qcom.c | 12 ++++++------
-> >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > index 8dddb72f8647..fea921cca8fa 100644
-> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > @@ -1749,24 +1749,24 @@ static int qcom_pcie_remove(struct platform_device *pdev)
-> >  }
-> >  
-> >  static const struct of_device_id qcom_pcie_match[] = {
-> > +	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
-> >  	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
-> > +	{ .compatible = "qcom,pcie-ipq6018", .data = &cfg_2_9_0 },
-> >  	{ .compatible = "qcom,pcie-ipq8064", .data = &cfg_2_1_0 },
-> >  	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
-> > -	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
-> > -	{ .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
-> >  	{ .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
-> >  	{ .compatible = "qcom,pcie-ipq4019", .data = &cfg_2_4_0 },
-> 
-> qcom,pcie-ipq4019 should be moved up above qcom,pcie-ipq6018.
+both hci_request.c and hci_sync.c have the same definition for
+disconnected_accept_list_entries(), so remove a redundant copy.
 
-If we only had some sort of machine that could sort strings for us... ;)
-I'll rely on vim for this from now on.
+Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+---
+v3->v4
+ -use 75 characters per line for Linux commit message bodies
+v2->v3
+ -remove table char to solve gitlint checking failure
+v1->v2
+ -remove the func copy within hci_request.c instead of hci_sync.c
+ net/bluetooth/hci_request.c | 18 ------------------
+ net/bluetooth/hci_request.h |  2 ++
+ net/bluetooth/hci_sync.c    |  2 +-
+ 3 files changed, 3 insertions(+), 19 deletions(-)
 
-Perhaps Bjorn H can fix that up when applying unless I'll be sending a
-v3 for some other reason. This series still depends on the MSI rework to
-be applied first.
+diff --git a/net/bluetooth/hci_request.c b/net/bluetooth/hci_request.c
+index 635cc5fb451e..edec0447aaa7 100644
+--- a/net/bluetooth/hci_request.c
++++ b/net/bluetooth/hci_request.c
+@@ -1784,24 +1784,6 @@ int hci_update_random_address(struct hci_request *req, bool require_privacy,
+ 	return 0;
+ }
+ 
+-static bool disconnected_accept_list_entries(struct hci_dev *hdev)
+-{
+-	struct bdaddr_list *b;
+-
+-	list_for_each_entry(b, &hdev->accept_list, list) {
+-		struct hci_conn *conn;
+-
+-		conn = hci_conn_hash_lookup_ba(hdev, ACL_LINK, &b->bdaddr);
+-		if (!conn)
+-			return true;
+-
+-		if (conn->state != BT_CONNECTED && conn->state != BT_CONFIG)
+-			return true;
+-	}
+-
+-	return false;
+-}
+-
+ void __hci_req_update_scan(struct hci_request *req)
+ {
+ 	struct hci_dev *hdev = req->hdev;
+diff --git a/net/bluetooth/hci_request.h b/net/bluetooth/hci_request.h
+index 7f8df258e295..e80b500878d9 100644
+--- a/net/bluetooth/hci_request.h
++++ b/net/bluetooth/hci_request.h
+@@ -120,6 +120,8 @@ void __hci_req_update_scan(struct hci_request *req);
+ int hci_update_random_address(struct hci_request *req, bool require_privacy,
+ 			      bool use_rpa, u8 *own_addr_type);
+ 
++bool disconnected_accept_list_entries(struct hci_dev *hdev);
++
+ int hci_abort_conn(struct hci_conn *conn, u8 reason);
+ void __hci_abort_conn(struct hci_request *req, struct hci_conn *conn,
+ 		      u8 reason);
+diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+index 212b0cdb25f5..48a262f0ae49 100644
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -2419,7 +2419,7 @@ int hci_write_fast_connectable_sync(struct hci_dev *hdev, bool enable)
+ 	return err;
+ }
+ 
+-static bool disconnected_accept_list_entries(struct hci_dev *hdev)
++bool disconnected_accept_list_entries(struct hci_dev *hdev)
+ {
+ 	struct bdaddr_list *b;
+ 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
 
-Thanks for reviewing.
-
-Johan

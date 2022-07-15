@@ -2,291 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27554576817
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F3F576826
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbiGOU2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 16:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S230236AbiGOUcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 16:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiGOU2U (ORCPT
+        with ESMTP id S229691AbiGOUcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 16:28:20 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5545C9E4
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:28:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657916896; x=1689452896;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=6hr0AO+ycGUSP0um2EOi0OroHtHaNKxXRJ5jIcs2tC4=;
-  b=nCktzDSlEAyOSX2h3Fe9Axbc7t6TPirL/qSBE3JoS6lF0enHP3aMrJ+0
-   w2ytTI379mZm3cdjqe5RGSNuIn1BNjzt4iTGt7RdfZ+xUtpK9jBmKItaX
-   81Apg3TaBTSfkcvNDTZHUfDUOKpGVOioLN+mUL9XvPDThZh7RHH5iEHeX
-   qyH4oOZ3hhM5MJjfCZkcC3QkAYIhqmEoxEhE48GBJdG/BhLS5w6ZL9NAf
-   lqzOlh5MR581GurYVCc3MfVpoi93zbpeWWIPGuK+Mwsai/rSh9b4RmSM4
-   ZZRDjXDxg8w8NlIwnskVha2fh5qD5xUP2GXcQHXUsvwkF5RvcTgT0Pwda
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="287033890"
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="287033890"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 13:28:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="686092245"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Jul 2022 13:28:16 -0700
-Received: from fmsmsx606.amr.corp.intel.com (10.18.126.86) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 15 Jul 2022 13:28:15 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 15 Jul 2022 13:28:15 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.43) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 15 Jul 2022 13:28:15 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bLmrUQcOJyVjW8lZdZpCzmQE2cezDSpQmXbsSMF/ZtwP2WILBQVUlpAexfljZtUVxsUKq4MChYMPprpmAvQkAVM1Fr1jTVsXb7y539Yzz+CI/Kl6DcvBmRuqdTG4kkKblLb4XfnbasFdDk6/nLgXXiFR7cB9BWV49filJ20C2RKX5B8xpkdBhZvMUfKzW6W7EcyQjXRjnA0FxDulkaf3jx8qPVafYY2dby8oojfabcjbX7vSu1nFGW4jypUvu3SEDYbeJNFvr/dB6FBYdIF1bMDLYJj/HokNchufs8Ft6sibJm2/wcsCY5BmCQVuYPn7wCkxTMUwqHsp+ZQMpwMR1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C6MkzIb0AF/v7r+ys38ErG4ZlGG44pjc1wGf2kab0+g=;
- b=XJ/XAVIkmGEnEsED1/kRib4QWcV9LvW951mgz5jSwRbo33APl3vdRR1ZIu4QYg78aZ5KbmxaUY44+vhjzfKLpB3+moAAdFnd0kC+WvhJ6pxHBbQrtioYIey13EyGoDOqbHlEr005jHyXdJH8/f0R2pALJ89KjUNlj6uJC9LAFIhfOIKfUBwwdAkz+Php2Zdw1uiHHgZO/xwoS92FL/mx8/eCMA1hRpLxNGmclvEStjiJztD7raMInt0BKRuvlrUybtWypX4GPuxDajRhBxh9vjIwlah/dbVMdxZE7qqlx/biXsT7N2c3bSnYnAjX3KVYqfYzruD0xYuZMdOE1R7TmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by BN7PR11MB2724.namprd11.prod.outlook.com (2603:10b6:406:b3::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.13; Fri, 15 Jul
- 2022 20:28:13 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::8053:3c59:9f5d:b615]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::8053:3c59:9f5d:b615%9]) with mapi id 15.20.5417.026; Fri, 15 Jul 2022
- 20:28:13 +0000
-Date:   Fri, 15 Jul 2022 16:28:09 -0400
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        "Chris Wilson" <chris@chris-wilson.co.uk>,
-        <intel-gfx@lists.freedesktop.org>,
-        "Matthew Auld" <matthew.auld@intel.com>
-Subject: Re: [Intel-gfx] [PATCH RFC] drm/i915/gt: Retry RING_HEAD reset until
- it sticks
-Message-ID: <YtHN2ZXvpuIWYBpo@intel.com>
-References: <2378da383d043de17172d928e59da0ec423cae76.1657873550.git.mchehab@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2378da383d043de17172d928e59da0ec423cae76.1657873550.git.mchehab@kernel.org>
-X-ClientProxiedBy: BYAPR02CA0035.namprd02.prod.outlook.com
- (2603:10b6:a02:ee::48) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fa7013df-9b10-4572-c311-08da66a08a6a
-X-MS-TrafficTypeDiagnostic: BN7PR11MB2724:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DNRP2qK5OtjUQKc77OgM53g+NNNIWM3an225MLl1EHbJ41UlI39uLHfKFebS1DJiE7eWsG2pdpJTIDiBd0mD0VA1OXx7FIPd5thhLcnIIHice9w30wNw3nw0tPZ+qH98XTxvYd2GCGTkiKE+fnai8FVXGKjmg3IXJ7f7OIrzVmPins4uIJzA1odz8gOAAp1dCCNtYGPs3uWRpNSbynO4KvgSmZ14lA/6NtFGiosgfdwxIdXR2uaThhZYH3c1wWv4RF/faMYOOMH8qwBD1K/1MNxBeOP1dkZuMf1iuT7OCj0ekY7FGJdnePph0Y3BHV19xoeO8o6j8FecdcP0vd9mpJAVoEx8Y4JOxKWg+dYINMFpHTYbNf0ww2UxrWIeB1hEHOKvGipqQq5l4qDsNc/X/TYNb6muJQsAQBLBnuPR+cc2KbXnXEZNOI+jqwACl6bpFz2c21F8T7LYPEeTRRiOe4Xh6SEzS0jWakRYdco12Hlbf8kvOP8XegjJRl1In8k1gBsBiffB7d+tf0evdiBM2Nz3Z6exmJDsmRv5+X0CIrS02d2Vb2yiMNTnZlV9kAvHsDmQx2cissjOBvZwuH7HRXpgmeNg5VLx6yokHU/vPHPyvhHlaPAODyZ9pRkjM/xtEp1Jk2yl8DaNGhgGaTbwTBTjLPRV3uFpOhdMlAm2wpSh1NwMN3+fnJYTcLPi3zNlibowvfGUyaQaPLcpQ8k2OQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(346002)(396003)(366004)(39860400002)(376002)(36756003)(5660300002)(38100700002)(2906002)(44832011)(83380400001)(8936002)(82960400001)(2616005)(66556008)(316002)(8676002)(4326008)(186003)(478600001)(6666004)(66476007)(66946007)(86362001)(6512007)(54906003)(6916009)(41300700001)(966005)(6486002)(26005)(6506007)(107886003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3mfqARPYdSjzQ3rapdH6tA4ZricKmYSPErs3rJ8FPpGz/zy9CRgZ2IVhOomB?=
- =?us-ascii?Q?MRO8ooYakiFKgIquAMW6LMUaHT4JfVzTC0Z8ragpj1RxrHPTPLWq/k7fMhMx?=
- =?us-ascii?Q?/ZG/L9T+YjB7zdoqK/WTQrVMcx8zUjOcNGWr8tVZ+WJIpb4j6sKWR+tIMijb?=
- =?us-ascii?Q?3WrfFX0oWjPpxQR3j/sSWJMG5F4yhS9GsuftpR8z1pqWphwpJhns1iGclVNe?=
- =?us-ascii?Q?1Sblaq9Km79+NMeaOsWnmLXDGhwi+Fp/sN39mV3tZWZk9Squx9pc0PTjx0IV?=
- =?us-ascii?Q?7f4geirUPAmGYoHmAJ7dxaZeOHvYI3uIadr1a2/u4gATgCn/kDwDKOFVs0Vo?=
- =?us-ascii?Q?TnkjhQHLu4UW1hbhmBewI44OajdaEbdEIuZX4g40Th5/sIFqh4oPPx84sjd5?=
- =?us-ascii?Q?pIYwJ3C6VodLLMEi97691ihxcEJoWOvkUYz93EnHNa1WRFmszI7KkyY+dSIf?=
- =?us-ascii?Q?m/+Z5VZz7o8ONBonQ3Ad/yDW0aoAwp3nmbb7pMzIctrXLMkR5bxiS2xWcLaX?=
- =?us-ascii?Q?qqqfo0yVvYXn1xi1+Ob3KIi3c6NLJOXbriOUtyhKYOQy2sa23bLFTBBmFSwi?=
- =?us-ascii?Q?NYp8J7WSKrrAz3wQ/ZmJCYMphkNxcFeQtiN/Pp+eP25fez9MhqCeBgwvm4OQ?=
- =?us-ascii?Q?gkrJJhmYW0ZEu5grmC3ZRrDt1ssjtOxaitJkoGB8MoRwAPJuTxrPDNb7fSsF?=
- =?us-ascii?Q?3VsDsrmIuO3Tea+wN1rTyLn4SYZ8UNQAriFTaBeR7BdtrsmFmJsrMRef6RyB?=
- =?us-ascii?Q?8Alh+RTstqo+Db6Wu6vk0+GpkLXSD/SGG/mydUjHAXhnn0IVWLo64ryxau6r?=
- =?us-ascii?Q?t30ww3OcUMm9NnKEZlS7K86yc+kwdhnc/eJc4k33JLrbqzJoo/cvwvGoQdU5?=
- =?us-ascii?Q?G005JhlM9EAPELrZfVJtFcnEt87mgzB0Rm4Mv48RH7vsoVvqFCWeFcp4zMvy?=
- =?us-ascii?Q?omnG5s6HBbsVRtp8UzI2rqmCx8EC0BrzJYu6eCsrH3Ags5RlRncVh0KIc+zc?=
- =?us-ascii?Q?PaHG/oVJWObB3EW8NRkag4+gJBWuEgvwMAIOfyqPzD1Ag0nyGsw/PMLYJ/ON?=
- =?us-ascii?Q?mmrmVdNbT/oQ0QD1rE1Eo90ArVGMgv9EbkHP+Y56MGgXVQT+EMCJiV+v4zZy?=
- =?us-ascii?Q?9qckA1h+bb8uiT6x+bXNaMOEzOBsMgXkr46BFto2DDSbyHKmBhgNb68k2Jh3?=
- =?us-ascii?Q?7laX9lmkfJ1+V4rpdSo4Ysiju9/pGC374B2iopgqQMNtrvaaUR4lXka54/8A?=
- =?us-ascii?Q?uolzJChxkCbpPqXbb2afe/4npaP8n0mCD9ENbiRgkdmts+/cemzY/FnhMd13?=
- =?us-ascii?Q?i/9Mu9TZg/dzO6r1EppWbgV+bPfdiMdk2McMR5D7hk6O45Xx/FRYQ9GIp5vf?=
- =?us-ascii?Q?vgckLAOFxtVo4SmrFii2mhtXqdxna4RMxH/4xuxOBov78vpHMkrnaWiJ1nRx?=
- =?us-ascii?Q?FH4C6iLoUgaY/1tHHs4vADJoha4KduhfYXH3AJuDt6nqRLaLRvLjl6xDS/g/?=
- =?us-ascii?Q?8JcnNm7w5g28lDngAMi9DnVu523BXARCnEG0HF5quSwAmIJYyEpwe7gkyJCh?=
- =?us-ascii?Q?tUT1cizVsV7QW9O31kqF3iJ88Z80suEnA39mTetpmRwEw/NWOtlyWpdeGRoD?=
- =?us-ascii?Q?OA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa7013df-9b10-4572-c311-08da66a08a6a
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 20:28:13.2836
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ElML3heDenoy386MVqL64V0dzCwEGGgsMyAi0Mh96JM0KDk17v84DVdCJT5WYQNfUU3dR3mcZrqUMcvXLAliWA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR11MB2724
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 15 Jul 2022 16:32:22 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D67D186E1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:32:19 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id fy29so9761487ejc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
+        h=from:content-transfer-encoding:mime-version:subject:message-id:date
+         :cc:to;
+        bh=QyhOR01DoxGCYnC4bLLESVLmV3qWJRFD3wmuOiKUM+s=;
+        b=Z6VzxmO6hGDfHH8LKcLYuVI2nHVAeXPXEXU8HNTLXXfNsSamzoe7i1tvTSpIqGwnRX
+         eb7uCb86aYA6r3Ymrl/fR2gyC+47oOTKX+SPPBtB3y+avXE52ROk7wcBBUrNBqtCLMlZ
+         KGRP7NVaSEBG2ZRN3jrjcWJRx2mtwJT++GeRcCN381prDLZR977xf9Bi/9Qji60mBZAP
+         Zi1UhzdRx3SYrHNE7l61cl/03Pe7GLS5B09Es0Ykf6YZDP8et4SjN7IOSByRn85s3ePC
+         dzwy99tLcPsDy/MS9DPZu+YSExOjhogvC9DZ1TrU3sNesAfiB72SoZByHsVCfI9Rd/Rq
+         JjVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:content-transfer-encoding:mime-version
+         :subject:message-id:date:cc:to;
+        bh=QyhOR01DoxGCYnC4bLLESVLmV3qWJRFD3wmuOiKUM+s=;
+        b=fUonVOFu/raEiLescnBMR61g+R19CCE3z2hD992U0Otph1/rDj9ofP3J3/S9J2JqRP
+         0sk0pWNYoxT/47apaUwIGos0JSaT10tYCbpmptMsOfhLf0rDPaQPM3ak0h4Rl4QcnVE7
+         ETraT0pBkFTP3LR2aiUwkvFTm4vwBfe1rzh2oIwOv0ODbxmjDQFnKlkt50/NQe2B6ytx
+         Ny9uOaRigg9VlKv+x5C+yyKaSFNoUZbjZhBZU1rUdhIOYKLI7UZ+kYzqHCzmgpUK3WkZ
+         FcnFtLGZtBvrX6+YPKMzc4zWlwlKj1joCHctLl+J580r4V+jeXTGEtC2+k0gniqte0LV
+         APRw==
+X-Gm-Message-State: AJIora9WzfHTYXXcawrQPzy9ekBhcIAB3UBUUkgox/w388v+TnMvdR6a
+        hew/vbp2iHFG3g2FsPURBlxK0A==
+X-Google-Smtp-Source: AGRyM1snP/L4DiOZS/0MJdzbFUPKreO0jk3IPQtyANLnH4rMZRf2ATr75Ln58SBsVbEfxUEbkunwCg==
+X-Received: by 2002:a17:906:5343:b0:722:ea54:fe67 with SMTP id j3-20020a170906534300b00722ea54fe67mr15579245ejo.181.1657917138169;
+        Fri, 15 Jul 2022 13:32:18 -0700 (PDT)
+Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
+        by smtp.gmail.com with ESMTPSA id a15-20020a1709066d4f00b00715705dd23asm2375834ejt.89.2022.07.15.13.32.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 15 Jul 2022 13:32:17 -0700 (PDT)
+From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: [PATCH] regulator: core: Resolve supply name earlier to prevent
+ double-init
+Message-Id: <3B4AE882-0C28-41E3-9466-F8E301567627@kohlschutter.com>
+Date:   Fri, 15 Jul 2022 22:32:16 +0200
+Cc:     Robin Murphy <robin.murphy@arm.com>, wens@kernel.org,
+        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 09:26:16AM +0100, Mauro Carvalho Chehab wrote:
-> From: Chris Wilson <chris@chris-wilson.co.uk>
-> 
-> On Haswell, in particular, we see an issue where resets fails because
+Previously, an unresolved regulator supply reference upon calling
+regulator_register on an always-on or boot-on regulator caused
+set_machine_constraints to be called twice.
 
-Can we then make this platform specific?
-Only because some older hw doesn't behave like expected we shouldn't
-make this a default & global workaround.
+This in turn may initialize the regulator twice, leading to voltage
+glitches that are timing-dependent. A simple, unrelated configuration
+change may be enough to hide this problem, only to be surfaced by
+chance.
 
-> the engine resumes from an incorrect RING_HEAD. Since the RING_HEAD
-> doesn't point to the remaining requests to re-run, but may instead point
-> into the uninitialised portion of the ring, the GPU may be then fed
-> invalid instructions from a privileged context, oft pushing the GPU into
-> an unrecoverable hang.
-> 
-> If at first the write doesn't succeed, try, try again.
-> 
-> References: https://gitlab.freedesktop.org/drm/intel/-/issues/5432
-> Testcase: igt/i915_selftest/hangcheck
-> Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Mika Kuoppala <mika.kuoppala@linux.intel.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
->  .../gpu/drm/i915/gt/intel_ring_submission.c   | 44 +++++++++++++------
->  drivers/gpu/drm/i915/i915_utils.h             | 10 +++++
->  2 files changed, 40 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gt/intel_ring_submission.c b/drivers/gpu/drm/i915/gt/intel_ring_submission.c
-> index d5d6f1fadcae..cc53feb1f8ed 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_ring_submission.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_ring_submission.c
-> @@ -190,6 +190,7 @@ static bool stop_ring(struct intel_engine_cs *engine)
->  static int xcs_resume(struct intel_engine_cs *engine)
->  {
->  	struct intel_ring *ring = engine->legacy.ring;
-> +	ktime_t kt;
->  
->  	ENGINE_TRACE(engine, "ring:{HEAD:%04x, TAIL:%04x}\n",
->  		     ring->head, ring->tail);
-> @@ -228,9 +229,20 @@ static int xcs_resume(struct intel_engine_cs *engine)
->  	set_pp_dir(engine);
->  
->  	/* First wake the ring up to an empty/idle ring */
-> -	ENGINE_WRITE_FW(engine, RING_HEAD, ring->head);
-> +	until_timeout_ns(kt, 2 * NSEC_PER_MSEC) {
-> +		ENGINE_WRITE_FW(engine, RING_HEAD, ring->head);
-> +		if (ENGINE_READ_FW(engine, RING_HEAD) == ring->head)
-> +			break;
-> +	}
-> +
->  	ENGINE_WRITE_FW(engine, RING_TAIL, ring->head);
-> -	ENGINE_POSTING_READ(engine, RING_TAIL);
-> +	if (ENGINE_READ_FW(engine, RING_HEAD) != ENGINE_READ_FW(engine, RING_TAIL)) {
-> +		ENGINE_TRACE(engine, "failed to reset empty ring: [%x, %x]: %x\n",
-> +			     ENGINE_READ_FW(engine, RING_HEAD),
-> +			     ENGINE_READ_FW(engine, RING_TAIL),
-> +			     ring->head);
-> +		goto err;
-> +	}
+One such example is the SD-Card voltage regulator in a NanoPI R4S that
+would not initialize reliably unless the registration flow was just
+complex enough to allow the regulator to properly reset between calls.
 
-commit message mentions until this point I'm afraid... everything below
-(except the new until_timeout_ns) looks like a different patch to me,
-or deserves some mention in the commit msg.
+Fix this by re-arranging regulator_register, trying resolve the
+regulator's supply early enough that set_machine_constraints does not
+need to be called twice.
 
->  
->  	ENGINE_WRITE_FW(engine, RING_CTL,
->  			RING_CTL_SIZE(ring->size) | RING_VALID);
-> @@ -239,12 +251,16 @@ static int xcs_resume(struct intel_engine_cs *engine)
->  	if (__intel_wait_for_register_fw(engine->uncore,
->  					 RING_CTL(engine->mmio_base),
->  					 RING_VALID, RING_VALID,
-> -					 5000, 0, NULL))
-> +					 5000, 0, NULL)) {
-> +		ENGINE_TRACE(engine, "failed to restart\n");
->  		goto err;
-> +	}
->  
-> -	if (GRAPHICS_VER(engine->i915) > 2)
-> +	if (GRAPHICS_VER(engine->i915) > 2) {
->  		ENGINE_WRITE_FW(engine,
->  				RING_MI_MODE, _MASKED_BIT_DISABLE(STOP_RING));
-> +		ENGINE_POSTING_READ(engine, RING_MI_MODE);
-> +	}
->  
->  	/* Now awake, let it get started */
->  	if (ring->tail != ring->head) {
-> @@ -257,16 +273,16 @@ static int xcs_resume(struct intel_engine_cs *engine)
->  	return 0;
->  
->  err:
-> -	drm_err(&engine->i915->drm,
-> -		"%s initialization failed; "
-> -		"ctl %08x (valid? %d) head %08x [%08x] tail %08x [%08x] start %08x [expected %08x]\n",
-> -		engine->name,
-> -		ENGINE_READ(engine, RING_CTL),
-> -		ENGINE_READ(engine, RING_CTL) & RING_VALID,
-> -		ENGINE_READ(engine, RING_HEAD), ring->head,
-> -		ENGINE_READ(engine, RING_TAIL), ring->tail,
-> -		ENGINE_READ(engine, RING_START),
-> -		i915_ggtt_offset(ring->vma));
-> +	ENGINE_TRACE(engine,
-> +		     "initialization failed; "
-> +		     "ctl %08x (valid? %d) head %08x [%08x] tail %08x [%08x] start %08x [expected %08x]\n",
-> +		     ENGINE_READ(engine, RING_CTL),
-> +		     ENGINE_READ(engine, RING_CTL) & RING_VALID,
-> +		     ENGINE_READ(engine, RING_HEAD), ring->head,
-> +		     ENGINE_READ(engine, RING_TAIL), ring->tail,
-> +		     ENGINE_READ(engine, RING_START),
-> +		     i915_ggtt_offset(ring->vma));
-> +	GEM_TRACE_DUMP();
->  	return -EIO;
->  }
->  
-> diff --git a/drivers/gpu/drm/i915/i915_utils.h b/drivers/gpu/drm/i915/i915_utils.h
-> index c10d68cdc3ca..717fb6b9cc15 100644
-> --- a/drivers/gpu/drm/i915/i915_utils.h
-> +++ b/drivers/gpu/drm/i915/i915_utils.h
-> @@ -256,6 +256,16 @@ wait_remaining_ms_from_jiffies(unsigned long timestamp_jiffies, int to_wait_ms)
->  	}
->  }
->  
-> +/**
-> + * until_timeout_ns - Keep retrying (busy spin) until the duration has passed
-> + * @end: temporary var to be used to track the spent time
-> + * @timeout_ns: Maximum timeout, in nanosseconds
-> + */
-> +#define until_timeout_ns(end, timeout_ns) \
-> +	for ((end) = ktime_get() + (timeout_ns); \
-> +	     ktime_before(ktime_get(), (end)); \
-> +	     cpu_relax())
-> +
+Signed-off-by: Christian Kohlsch=C3=BCtter <christian@kohlschutter.com>
+---
+ drivers/regulator/core.c | 42 ++++++++++++++++++++++++++--------------
+ 1 file changed, 28 insertions(+), 14 deletions(-)
 
-why do we need yet another timeout macro and cannot use any of the existent ways?
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index c4d844ffad7a..728840827e9c 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -5433,7 +5433,34 @@ regulator_register(const struct regulator_desc =
+*regulator_desc,
+ 	BLOCKING_INIT_NOTIFIER_HEAD(&rdev->notifier);
+ 	INIT_DELAYED_WORK(&rdev->disable_work, regulator_disable_work);
+=20
+-	/* preform any regulator specific init */
++	/* set regulator constraints */
++	if (init_data)
++		rdev->constraints =3D kmemdup(&init_data->constraints,
++					    sizeof(*rdev->constraints),
++					    GFP_KERNEL);
++	else
++		rdev->constraints =3D =
+kzalloc(sizeof(*rdev->constraints),
++					    GFP_KERNEL);
++
++	if (init_data && init_data->supply_regulator)
++		rdev->supply_name =3D init_data->supply_regulator;
++	else if (regulator_desc->supply_name)
++		rdev->supply_name =3D regulator_desc->supply_name;
++
++	if ((rdev->supply_name && !rdev->supply) && rdev->constraints
++		&& (rdev->constraints->always_on || =
+rdev->constraints->boot_on)) {
++		/* Try to resolve the name of the supplying regulator =
+here first
++		 * so we prevent double-initializing the regulator, =
+which may
++		 * cause timing-specific voltage brownouts/glitches that =
+are
++		 * hard to debug.
++		 */
++		ret =3D regulator_resolve_supply(rdev);
++		if (ret)
++			rdev_dbg(rdev, "unable to resolve supply early: =
+%pe\n",
++					 ERR_PTR(ret));
++	}
++
++	/* perform any regulator specific init */
+ 	if (init_data && init_data->regulator_init) {
+ 		ret =3D init_data->regulator_init(rdev->reg_data);
+ 		if (ret < 0)
+@@ -5459,24 +5486,11 @@ regulator_register(const struct regulator_desc =
+*regulator_desc,
+ 		    (unsigned long) atomic_inc_return(&regulator_no));
+ 	dev_set_drvdata(&rdev->dev, rdev);
+=20
+-	/* set regulator constraints */
+-	if (init_data)
+-		rdev->constraints =3D kmemdup(&init_data->constraints,
+-					    sizeof(*rdev->constraints),
+-					    GFP_KERNEL);
+-	else
+-		rdev->constraints =3D =
+kzalloc(sizeof(*rdev->constraints),
+-					    GFP_KERNEL);
+ 	if (!rdev->constraints) {
+ 		ret =3D -ENOMEM;
+ 		goto wash;
+ 	}
+=20
+-	if (init_data && init_data->supply_regulator)
+-		rdev->supply_name =3D init_data->supply_regulator;
+-	else if (regulator_desc->supply_name)
+-		rdev->supply_name =3D regulator_desc->supply_name;
+-
+ 	ret =3D set_machine_constraints(rdev);
+ 	if (ret =3D=3D -EPROBE_DEFER) {
+ 		/* Regulator might be in bypass mode and so needs its =
+supply
+--=20
+2.36.1
 
->  /**
->   * __wait_for - magic wait macro
->   *
-> -- 
-> 2.36.1
-> 
-> 

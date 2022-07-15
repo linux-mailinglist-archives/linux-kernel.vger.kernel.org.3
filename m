@@ -2,88 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7135F575FC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49AAF575FCC
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiGOLKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 07:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33990 "EHLO
+        id S233250AbiGOLK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 07:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiGOLKQ (ORCPT
+        with ESMTP id S233339AbiGOLKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 07:10:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F6486896;
-        Fri, 15 Jul 2022 04:10:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A3B362288;
-        Fri, 15 Jul 2022 11:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5AD9CC341CD;
-        Fri, 15 Jul 2022 11:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657883414;
-        bh=35zKBueGnyzYxrAS5X+/n4rmS5AwWglaqmiCs4ziBMc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=avQDVyPkFTOavgiQ6BmUqQ/ratCRa0Mz9SZyrna4ftoG4dbvg9T7YIE4Mg4MFjK1w
-         334LvMuOrMK6PpwOz12e3JjAGMtw9kRX1oO3k2CV1PVzINapUEiPXO7S5Xe4Zfq06k
-         wzrznaLWxJQx5vDrfXBTRvGNfedUxwxjbZ06ep+CyscuE/cTzZqKKmx2OqJ8f+6IUT
-         I0GMYZI30g8HmdRaIzaY7d9j1/d1cWK3haYfVoP8fx7b5VChtjga5em6HuErOWmqig
-         9ZioDmI9lA4U/oPXokQNWg/Myevm4A/ZTXAO9kBG8i3MHbdy7TzRTsydfpDcbjHySd
-         VHghaXy993cjw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3A423E4522E;
-        Fri, 15 Jul 2022 11:10:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 15 Jul 2022 07:10:45 -0400
+Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43E8487C33
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 04:10:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cydZm
+        lZhSk+JBLjhav67ZXf+fCTQCxLg7ins/X8dtkw=; b=h8u2hiIgIZXunSdvJXs2W
+        6K00/s6JWQ7n9GMmoX4s6vI5sTkHoeAjicuDfkneZncOftQt8d2a+T9DZa2Qdv0j
+        Js2Hmf9/k2XBjXZ4YUbGqX+v1ADJ8FHlfWZU8cDOdjqtBd+TdjcFvjLu1E0VgflW
+        Lz6xXlG8kW0dBF7u67c+8c=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp2 (Coremail) with SMTP id DMmowAC3x_8jS9Fi0vOyEw--.59040S2;
+        Fri, 15 Jul 2022 19:10:28 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org,
+        linux-kernel@vger.kernel.org, windhl@126.com
+Subject: [PATCH] regulator: of: Fix refcount leak bug in of_get_regulation_constraints()
+Date:   Fri, 15 Jul 2022 19:10:27 +0800
+Message-Id: <20220715111027.391032-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next PATCH] net: dsa: qca8k: move driver to qca dir
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165788341423.15583.10070357441922135556.git-patchwork-notify@kernel.org>
-Date:   Fri, 15 Jul 2022 11:10:14 +0000
-References: <20220713205350.18357-1-ansuelsmth@gmail.com>
-In-Reply-To: <20220713205350.18357-1-ansuelsmth@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, gregkh@linuxfoundation.org,
-        axboe@kernel.dk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: DMmowAC3x_8jS9Fi0vOyEw--.59040S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKFy8tw43KF1UXryrXFy5urg_yoWkAFcEkw
+        nxG3WxJrsrZr47GF92va1qy3s8tr1vgF47Xa1xtFWfJr1jya45Jw17Z347A39rZ3y7Ar92
+        vwnrJwsFkr1Y9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRWWl97UUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7QU-F1pEAZ3xlgAAsl
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+We should call the of_node_put() for the reference returned by
+of_get_child_by_name() which has increased the refcount.
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Fixes: 40e20d68bb3f ("regulator: of: Add support for parsing regulator_state for suspend state")
+Signed-off-by: Liang He <windhl@126.com>
+---
+I think no matter what the 'suspend_state' value is, it should call
+of_node_put() when 'suspend_np' is not NULL as it will be replaced
+in 'continue' to next loop.
 
-On Wed, 13 Jul 2022 22:53:50 +0200 you wrote:
-> Move qca8k driver to qca dir in preparation for code split and
-> introduction of ipq4019 switch based on qca8k.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
-> 
-> This is a start for the required changes for code
-> split. Greg wasn't so negative about this kind of change
-> so I think we can finally make the move.
-> 
-> [...]
+ drivers/regulator/of_regulator.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Here is the summary with links:
-  - [net-next] net: dsa: qca8k: move driver to qca dir
-    https://git.kernel.org/netdev/net-next/c/4bbaf764e1e1
-
-You are awesome, thank you!
+diff --git a/drivers/regulator/of_regulator.c b/drivers/regulator/of_regulator.c
+index f54d4f176882..e12b681c72e5 100644
+--- a/drivers/regulator/of_regulator.c
++++ b/drivers/regulator/of_regulator.c
+@@ -264,8 +264,12 @@ static int of_get_regulation_constraints(struct device *dev,
+ 		}
+ 
+ 		suspend_np = of_get_child_by_name(np, regulator_states[i]);
+-		if (!suspend_np || !suspend_state)
++		if (!suspend_np)
+ 			continue;
++		if (!suspend_state) {
++			of_node_put(suspend_np);
++			continue;
++		}
+ 
+ 		if (!of_property_read_u32(suspend_np, "regulator-mode",
+ 					  &pval)) {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 

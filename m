@@ -2,116 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF4C576794
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 21:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A8A576797
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 21:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbiGOTiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 15:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
+        id S230078AbiGOTjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 15:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiGOTin (ORCPT
+        with ESMTP id S229448AbiGOTjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 15:38:43 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CBC638D
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 12:38:41 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id r6so7565129edd.7
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 12:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EcHI0RFme1P+FHdB6sWN7r2D7IfzNHh0dba57jzLiec=;
-        b=PVXIyx1Jlo5l6dsDhDIeAOd52cDUe7BouKInskEDgw8F3WFBCdhmvz5PfRtKvdKW/Q
-         EfXTW+WHLZIdjdc9lyi5A7r3n5erxOZ/T/gqpmwD5/EnofvbaSNz07NwKK9UpEs554sx
-         oo8GPoaNK6MZMEhkEv39Aw5p1G3EBnVHea05lqXnaXP+rlaQfkpWttPoqd0YnL6KhmF2
-         lnzGUXm/xRRhVUKh2ooV37jau1IJjnD9J/9byJZ1BJqRVt60YyD61RkZU9LTOm/6CTM+
-         rAqQTki+ZLUhz2rcrbFTSUVUjKPjvfIwnGvhbSSd1cSUihw5EPCcblzhJOaYisyKfxnr
-         tsRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EcHI0RFme1P+FHdB6sWN7r2D7IfzNHh0dba57jzLiec=;
-        b=R26mxxE4Vdo62Wb+vUPQPvxkSQg6Rv9zo7wpzjtSvlLk19W0b9zY4FspzTkbAg8W6U
-         XSVxSiP7hesD1UlynbqNhx2jn6sEJxP7ttFl5+Jp2RajL/wrGam0rmMbOFNoRfTDRvng
-         1ziPHxnYIHJWDeFVVIMF2FC9jGY7zv9rKJLgsoMyMVz5Rjrfxiy6HoVRIOo77JHmkP5q
-         jt/MGYLY+km5jD4kEv+HECiHI7iwJXWOikQoxOwZvGEg6DXzcSzuOprtdcu5wTR8Flzv
-         oC8t1w6NgNFHC1kkeyE9uGBF2I5xUEm4lHpA8pLOz5DbF5Y7dlrj3J7V+K2qLJ+0sSqp
-         l93w==
-X-Gm-Message-State: AJIora/p7uGnKe11SuzEXHCcc1Ave0PGbm0I58+hHbIv3HmvtoqFq2/z
-        nJvmHD4KlLGnFfrw9lfkzE0=
-X-Google-Smtp-Source: AGRyM1t7ZLWeZqKRDMnbSZm440nvKe3q7hq5HnywN8/NkfbVf3xIOHWfjSVlGbYdoxccZXlAOXhWPg==
-X-Received: by 2002:aa7:dcd5:0:b0:43a:70f7:8e4d with SMTP id w21-20020aa7dcd5000000b0043a70f78e4dmr20604931edu.85.1657913919826;
-        Fri, 15 Jul 2022 12:38:39 -0700 (PDT)
-Received: from [192.168.1.4] (78-3-70-107.adsl.net.t-com.hr. [78.3.70.107])
-        by smtp.gmail.com with ESMTPSA id cw11-20020a056402228b00b0043a8f40a038sm3370511edb.93.2022.07.15.12.38.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 12:38:39 -0700 (PDT)
-Message-ID: <cca5b463-a860-de8d-b7e4-a8d30aef2ff2@gmail.com>
-Date:   Fri, 15 Jul 2022 21:38:35 +0200
+        Fri, 15 Jul 2022 15:39:31 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D05D13D1A;
+        Fri, 15 Jul 2022 12:39:31 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 09F343200D0E;
+        Fri, 15 Jul 2022 15:39:29 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 15 Jul 2022 15:39:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1657913969; x=1658000369; bh=vvnov30v3c
+        CA2/+HpVJAC1RG0rtOfKvgTbe1umHi+vI=; b=NTzMn1Pifdmp4VPIulbx8zQFKH
+        CAQfwJYfECBd4jbfM65uay90fz1OViqQ9zLXMhI1qdkHJfGH8qwEkay9tfYHTzVP
+        Kd9SVk3Aqfzayd1Qxz3dH6cGlcW9R+papSIS0mTh7snQaxi2paXUDS5XGsWeCEkK
+        eElEu5obqBdg8+qRU4w83Vp2FvFUnuqcaDT++OW1cytPCfxyYfbQG8O+p6ORpP7I
+        ZwgcVIZKzGXetIAGYirDg/3WNFqMBdbQHplJ6cCAblFpuNntIbewqwI0547MYRnG
+        ApEnHzTarBkKt7GvZWG9mmxm11bXL7XSB5RF1pZ8ur5SX9oVG3kMoY3Auxdg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1657913969; x=1658000369; bh=vvnov30v3cCA2/+HpVJAC1RG0rtO
+        fKvgTbe1umHi+vI=; b=Pw8AC5dKC4DqPaFbyFZpF+ZpGtWqmDuAxzD/34xvXtLp
+        5W15EIqRSnHOMMxqQzn53hBOwlZKGm7tWvMa7uqX1ItKMLuxoY+FO0OB38qoFqoB
+        n7AEBCCNLdIzJGgF1ryV3eyXJFxiAptK2mLtUIeDK+xIzMOnkVxnEwwMkCk3uAsf
+        ZlNIny9nlBA/QowWa88bHhYcmFEsBFZw3WYr3csJDVxXRD23KckOGPuJBaDCulTk
+        AG+9x6s9kM3kvtnvflXYoIO6iBXInvlALg+9PJmueKwEV0dTItrj/M29r5/v2ato
+        54Q3On+6XV+e8i5+ruDgAKcUfVQaMMVW+3qkLiN9Yg==
+X-ME-Sender: <xms:ccLRYjCoiSUN63ON_mfms8vyWNIIr5FyL5HVe5Sfkdxuy8eZemVfFQ>
+    <xme:ccLRYpjY7ZyAUxVn-wLJN0nsBANnilhWBMcJIexcukBX86kDaLo3MpelsQAgNOgF8
+    k1ufaGP4sHy0Ro23A>
+X-ME-Received: <xmr:ccLRYukgXvVIAaez72e6DRJdToNfacXTeBzhg5pFWbaYVpIvl3uzOkfpVMuF9CNMPqGMlE0ummPiYbXAPjAdqAQcnJzdK60LiQ5U8chp7qeZssvsI3BDQa-ltJ0G>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudekuddgudegvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
+    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
+    frrghtthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteev
+    udeitedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvshesrghnrghrrgiivghlrdguvg
+X-ME-Proxy: <xmx:ccLRYlzFVLRRTGo967KEZn0DGLBG2_LpVNOtfAOqhsQvMl5MQto1ew>
+    <xmx:ccLRYoR0fOZDXwxCbcpKkOs3Exc8h69egJPsJHHUPOYOP-osb5fT5g>
+    <xmx:ccLRYobQQlbcfHk5Nmh8-xlUM9NK0o1G2jLhM2Dr2jdREPBZaPkQWg>
+    <xmx:ccLRYtL3S6q3w8LHT6C165tNZuaDlqMFvL8x2nyP0Njpm3zXFVvowA>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 15 Jul 2022 15:39:29 -0400 (EDT)
+Date:   Fri, 15 Jul 2022 12:39:27 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+Subject: Re: [PATCH v2 2/5] tools include: add dis-asm-compat.h to handle
+ version differences
+Message-ID: <20220715193927.x6xy4h7n5rrh2ndc@awork3.anarazel.de>
+References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
+ <20220703212551.1114923-1-andres@anarazel.de>
+ <20220703212551.1114923-3-andres@anarazel.de>
+ <fc1be6d4-446b-2b34-21cb-5e364742c3a2@isovalent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [dm-devel] [PATCH 1/1] dm: add message command to disallow device
- open
-Content-Language: en-US
-To:     Mikulas Patocka <mpatocka@redhat.com>,
-        Daniil Lunev <dlunev@chromium.org>
-Cc:     dm-devel@redhat.com, Mike Snitzer <snitzer@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Alasdair Kergon <agk@redhat.com>, linux-kernel@vger.kernel.org
-References: <20220704000225.345536-1-dlunev@chromium.org>
- <20220704100221.1.I15b3f7a84ba5a97fde9276648e391b54957103ff@changeid>
- <YtB45Lte5UhlEE6y@redhat.com>
- <CAONX=-dEG121RQ6L-4fPMXrLXb3JeYNVNiPzHXNaRLbwRzb3bw@mail.gmail.com>
- <alpine.LRH.2.02.2207150528170.5197@file01.intranet.prod.int.rdu2.redhat.com>
-From:   Zdenek Kabelac <zdenek.kabelac@gmail.com>
-In-Reply-To: <alpine.LRH.2.02.2207150528170.5197@file01.intranet.prod.int.rdu2.redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fc1be6d4-446b-2b34-21cb-5e364742c3a2@isovalent.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne 15. 07. 22 v 11:36 Mikulas Patocka napsal(a):
->
-> On Fri, 15 Jul 2022, Daniil Lunev wrote:
->
->> Hi Mike,
->> Thank you for your response. I should have probably added more context
->> to the commit message that I specified in the cover letter. The idea is to
->> prohibit access of all userspace, including the root. The main concern here
->> is potential system applications' vulnerabilities that can trick the system to
->> operate on non-intended files with elevated permissions. While those could
->> also be exploited to get more access to the regular file systems, those firstly
->> has to be useable by userspace for normal system operation (e.g. to store
->> user data), secondly, never contain plain text secrets. Swap content is a
->> different story - access to it can leak very sensitive information, which
->> otherwise is never available as plaintext on any persistent media - e.g. raw
->> user secrets, raw disk encryption keys etc, other security related tokens.
->> Thus we propose a mechanism to enable such a lockdown after necessary
->> configuration has been done to the device at boot time.
->> --Daniil
-> If someone gains root, he can do anything on the system.
->
-> I'm quite skeptical about these attempts; protecting the system from the
-> root user is never-ending whack-a-mole game.
+Hi,
 
+On 2022-07-05 14:44:07 +0100, Quentin Monnet wrote:
+> > diff --git a/tools/include/tools/dis-asm-compat.h b/tools/include/tools/dis-asm-compat.h
+> > new file mode 100644
+> > index 000000000000..d1d003ee3e2f
+> > --- /dev/null
+> > +++ b/tools/include/tools/dis-asm-compat.h
+> > @@ -0,0 +1,53 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> 
+> Any chance you could contribute this wrapper as dual-licenced
+> (GPL-2.0-only OR BSD-2-Clause), for better compatibility with the rest
+> of bpftool's code?
 
-It's in fact a 'design feature' of whole DM  that root can always open any 
-device in device stack (although cause some troubles to i.e. some lvm2 logic) 
-such feature is useful i.e. for debugging device problems. There was never an 
-intention to prohibit root user from 'seeing' all stacked devices.
+Happy to do that from my end - however, right now it includes
+linux/compiler.h, which is GPL-2.0. I don't know what the policy around that
+is - is it just a statement about the licence of the header itself, or does it
+effectively include its dependencies?
 
-Regards
+FWIW, linux/compiler.h is also included from bpftool.
 
-Zdenek
+If preferrable, I can replace the linux/compiler.h include by just using
+__attribute__((__unused__)) directly or by using a (void) cast to avoid the
+unused-parameter pedantry.
 
+Greetings,
+
+Andres Freund

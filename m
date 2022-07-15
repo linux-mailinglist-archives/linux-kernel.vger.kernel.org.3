@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFB8576A4D
+	by mail.lfdr.de (Postfix) with ESMTP id 616BB576A4C
 	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiGOXA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 19:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
+        id S231655AbiGOXBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 19:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiGOXA1 (ORCPT
+        with ESMTP id S230371AbiGOXA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 19:00:27 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296844D4EB
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:00:25 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31cbcba2f28so49521767b3.19
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:00:25 -0700 (PDT)
+        Fri, 15 Jul 2022 19:00:28 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF844E851
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:00:27 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id l71-20020a63914a000000b00419deb1ba88so1533623pge.5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:00:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=yUjqGaXxNRIkWFGwl+2pUdgstDXS94lxvTblB9yzYuE=;
-        b=d0HtqcngCGEWckrmfolh8CY2i0XJnzrFb5U6PGDeVR1h0nBWTx0oQovQksQedcqaw5
-         rNIEvehYP/e2WByw7UXCle8v5tnX9eUF2ixPX/LeaN32FU0RS43PhyHsktjm7mRl9kCx
-         doOlYb7OJsbiz3CvdzNyLZJfaxmHMCvjtfJF3wTxPbYjHHoz9N2QJslDF/oOxCp1ysxU
-         sEAKUl41bbj251CIbRBdBNFCB3nPXrHNA1IXyyN8rh9ycMtnsuGKxk9kPqTN/nUgyl6t
-         ibjUEGvETaptRy5VB8ovSHwrKh1+6LxooBefTD6Tv8D2FL9GLC7UBbdFtd3ghJwAqq47
-         0eAA==
+        bh=qyJeBdXwF5dNNWMBDELyZ0rPk0zOo8cNBsAR84NI3Pc=;
+        b=s9nFvsxyVGJKS1GkkPlQocaGQPmzqZ8uonf6tpQY6iPa8ARVd585TI3w+2MAYJChA6
+         RL8d3MEoa4I/hstCMnfcU73XTiSG9gtZ4upagsnWDVM6B5KevwWwwSPCGqYRrtcSdRnw
+         Foh0IHfWfS2P5NERSQOrvWXjXllKqbvD5mjBoawU6eGxdc194RqjecJKFmBAl8JQuMmA
+         uj6mJb3MhGsGETgB2WJn5DSmZkZv1p8LRakMXhYPd6QzzyvZOyQts7GIuwB6/jKgCdtI
+         JcTfbAOBThkzGrTnkEaSsVcPmzYsTXvyNEvGauh13geubQFqttp8ZimYmHjPdSvIDVDZ
+         x6mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=yUjqGaXxNRIkWFGwl+2pUdgstDXS94lxvTblB9yzYuE=;
-        b=kGoGXYoOafQctrzz39rP9nQLHSMN1ivxnV6uWoHADEtov+v3UmM/Kkp70Un+V1tngp
-         6YpCEXaWtlyVJGN/SH8dlJZxYPZfOsKPLsZlZm3XgphPvILzUHldm/0H3W75AQLe9D56
-         1axY2sl/lnJLda1Cvl/Ag+Prkcxpy+RhYAmUJdBGQTDyWgi1KhWtsQCCZ4TuJY+cV95f
-         EYEdF3B7solZcLIY/gbQHAeL0I5n7bKJs/gUd1wlI2s97SNeN/RykoF6fC6aCVx3pQ6C
-         ZkZZN0pIFJtpeH1ABE2Zw09zj8+u99a/VphippelM6X9WbuXharAHF6Tgfm8mtj2A/Yj
-         W+xQ==
-X-Gm-Message-State: AJIora8smm1/a8QMEms4TTGTEEUd5LFAd/mMqWrxXTEvcGfJmyHLTeT0
-        +qU8op7bdq8EeaiBh8XcI0LLP/W4/Og=
-X-Google-Smtp-Source: AGRyM1tq+cKZgY4d++EmVCawqmZ05GuVHpsnrWVt/0hYjlpfSVIk4z9NrsOkzJTeXpY7o67QjtJoJD4vVbc=
+        bh=qyJeBdXwF5dNNWMBDELyZ0rPk0zOo8cNBsAR84NI3Pc=;
+        b=2yUDUNtFeEjMtm8sKP9Nyx0WF40GNBJG8+GJ5b9uWxZ/aoAzUJLHVYLH3pjAgUkHFA
+         v0H0ifCnOUUXNaUJrNkBIb/Xm4bLrsQaKzu/jvmihR7U85fXdSsVAzEHM9uQPXGwXN1H
+         KESYCAAoqk6iDUWuY7ObeZoYcZ94xnva26Hl6p3U+tWqF0QiAorE8js2NowjfI4CKjX5
+         OFTV/pY/Vi428ZJwWZVoImGGVNc8ESqwckDt8ZlEceTgI5FK8xPoAgMur3e523uvrpc1
+         3E+i9bm5Hic3An9vsEsJgfYzxL2BPBILpSaVfvF+GmIS9gDnK9XEO+pLg+870vnShQJ5
+         UUEw==
+X-Gm-Message-State: AJIora+Nqc5okr1Dgzl8kr17KvG6cYN/NBXRGCUX6dUjvBrNFc9D7eBV
+        Egnv8ratOK/DW8UjQrMIisTlzFfyaqc=
+X-Google-Smtp-Source: AGRyM1sOQH8hQ8hf4xM2w/u1OrR0ibxbHFPEKSoDDrbPxn2n+mONs5jxdLyEZrumJUwzh4RWPB/CyyZIFsk=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:13d7:0:b0:31c:c22b:4727 with SMTP id
- 206-20020a8113d7000000b0031cc22b4727mr19236561ywt.38.1657926024502; Fri, 15
- Jul 2022 16:00:24 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:181:b0:1ef:c348:6835 with SMTP id
+ t1-20020a17090b018100b001efc3486835mr913262pjs.1.1657926026078; Fri, 15 Jul
+ 2022 16:00:26 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 15 Jul 2022 23:00:15 +0000
+Date:   Fri, 15 Jul 2022 23:00:16 +0000
 In-Reply-To: <20220715230016.3762909-1-seanjc@google.com>
-Message-Id: <20220715230016.3762909-4-seanjc@google.com>
+Message-Id: <20220715230016.3762909-5-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220715230016.3762909-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH 3/4] KVM: x86/mmu: Add shadow mask for effective host MTRR memtype
+Subject: [PATCH 4/4] KVM: x86/mmu: Restrict mapping level based on guest MTRR
+ iff they're used
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -69,85 +70,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add shadow_memtype_mask to capture that EPT needs a non-zero memtype mask
-instead of relying on TDP being enabled, as NPT doesn't need a non-zero
-mask.  This is a glorified nop as kvm_x86_ops.get_mt_mask() returns zero
-for NPT anyways.
+Restrict the mapping level for SPTEs based on the guest MTRRs if and only
+if KVM may actually use the guest MTRRs to compute the "real" memtype.
+For all forms of paging, guest MTRRs are purely virtual in the sense that
+they are completely ignored by hardware, i.e. they affect the memtype
+only if software manually consumes them.  The only scenario where KVM
+consumes the guest MTRRs is when shadow_memtype_mask is non-zero and the
+guest has non-coherent DMA, in all other cases KVM simply leaves the PAT
+field in SPTEs as '0' to encode WB memtype.
 
-No functional change intended.
+Note, KVM may still ultimately ignore guest MTRRs, e.g. if the backing
+pfn is host MMIO, but false positives are ok as they only cause a slight
+performance blip (unless the guest is doing weird things with its MTRRs,
+which is extremely unlikely).
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/spte.c | 21 ++++++++++++++++++---
- arch/x86/kvm/mmu/spte.h |  1 +
- 2 files changed, 19 insertions(+), 3 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-index fb1f17504138..7314d27d57a4 100644
---- a/arch/x86/kvm/mmu/spte.c
-+++ b/arch/x86/kvm/mmu/spte.c
-@@ -33,6 +33,7 @@ u64 __read_mostly shadow_mmio_value;
- u64 __read_mostly shadow_mmio_mask;
- u64 __read_mostly shadow_mmio_access_mask;
- u64 __read_mostly shadow_present_mask;
-+u64 __read_mostly shadow_memtype_mask;
- u64 __read_mostly shadow_me_value;
- u64 __read_mostly shadow_me_mask;
- u64 __read_mostly shadow_acc_track_mask;
-@@ -161,10 +162,10 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 52664c3caaab..82f38af06f5c 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -4295,14 +4295,26 @@ EXPORT_SYMBOL_GPL(kvm_handle_page_fault);
  
- 	if (level > PG_LEVEL_4K)
- 		spte |= PT_PAGE_SIZE_MASK;
--	if (tdp_enabled)
-+
-+	if (shadow_memtype_mask)
- 		spte |= static_call(kvm_x86_get_mt_mask)(vcpu, gfn,
--			kvm_is_mmio_pfn(pfn));
+ int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+ {
+-	while (fault->max_level > PG_LEVEL_4K) {
+-		int page_num = KVM_PAGES_PER_HPAGE(fault->max_level);
+-		gfn_t base = (fault->addr >> PAGE_SHIFT) & ~(page_num - 1);
++	/*
++	 * If the guest's MTRRs may be used to compute the "real" memtype,
++	 * restrict the mapping level to ensure KVM uses a consistent memtype
++	 * across the entire mapping.  If the host MTRRs are ignored by TDP
++	 * (shadow_memtype_mask is non-zero), and the VM has non-coherent DMA
++	 * (DMA doesn't snoop CPU caches), KVM's ABI is to honor the memtype
++	 * from the guest's MTRRs so that guest accesses to memory that is
++	 * DMA'd aren't cached against the guest's wishes.
++	 *
++	 * Note, KVM may still ultimately ignore guest MTRRs for certain PFNs,
++	 * e.g. KVM will force UC memtype for host MMIO.
++	 */
++	if (shadow_memtype_mask && kvm_arch_has_noncoherent_dma(vcpu->kvm)) {
++		for ( ; fault->max_level > PG_LEVEL_4K; --fault->max_level) {
++			int page_num = KVM_PAGES_PER_HPAGE(fault->max_level);
++			gfn_t base = (fault->addr >> PAGE_SHIFT) & ~(page_num - 1);
+ 
+-		if (kvm_mtrr_check_gfn_range_consistency(vcpu, base, page_num))
+-			break;
 -
-+							 kvm_is_mmio_pfn(pfn));
- 	if (host_writable)
- 		spte |= shadow_host_writable_mask;
- 	else
-@@ -391,6 +392,13 @@ void kvm_mmu_set_ept_masks(bool has_ad_bits, bool has_exec_only)
- 	shadow_nx_mask		= 0ull;
- 	shadow_x_mask		= VMX_EPT_EXECUTABLE_MASK;
- 	shadow_present_mask	= has_exec_only ? 0ull : VMX_EPT_READABLE_MASK;
-+	/*
-+	 * EPT overrides the host MTRRs, and so KVM must program the desired
-+	 * memtype directly into the SPTEs.  Note, this mask is just the mask
-+	 * of all bits that factor into the memtype, the actual memtype must be
-+	 * dynamically calculated, e.g. to ensure host MMIO is mapped UC.
-+	 */
-+	shadow_memtype_mask	= VMX_EPT_MT_MASK | VMX_EPT_IPAT_BIT;
- 	shadow_acc_track_mask	= VMX_EPT_RWX_MASK;
- 	shadow_host_writable_mask = EPT_SPTE_HOST_WRITABLE;
- 	shadow_mmu_writable_mask  = EPT_SPTE_MMU_WRITABLE;
-@@ -441,6 +449,13 @@ void kvm_mmu_reset_all_pte_masks(void)
- 	shadow_nx_mask		= PT64_NX_MASK;
- 	shadow_x_mask		= 0;
- 	shadow_present_mask	= PT_PRESENT_MASK;
-+
-+	/*
-+	 * For shadow paging and NPT, KVM uses PAT entry '0' to encode WB
-+	 * memtype in the SPTEs, i.e. relies on host MTRRs to provide the
-+	 * correct memtype (WB is the "weakest" memtype).
-+	 */
-+	shadow_memtype_mask	= 0;
- 	shadow_acc_track_mask	= 0;
- 	shadow_me_mask		= 0;
- 	shadow_me_value		= 0;
-diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-index ba3dccb202bc..cabe3fbb4f39 100644
---- a/arch/x86/kvm/mmu/spte.h
-+++ b/arch/x86/kvm/mmu/spte.h
-@@ -147,6 +147,7 @@ extern u64 __read_mostly shadow_mmio_value;
- extern u64 __read_mostly shadow_mmio_mask;
- extern u64 __read_mostly shadow_mmio_access_mask;
- extern u64 __read_mostly shadow_present_mask;
-+extern u64 __read_mostly shadow_memtype_mask;
- extern u64 __read_mostly shadow_me_value;
- extern u64 __read_mostly shadow_me_mask;
+-		--fault->max_level;
++			if (kvm_mtrr_check_gfn_range_consistency(vcpu, base, page_num))
++				break;
++		}
+ 	}
  
+ 	return direct_page_fault(vcpu, fault);
 -- 
 2.37.0.170.g444d1eabd0-goog
 

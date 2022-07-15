@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD39D578260
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B604A578266
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234340AbiGRMcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
+        id S233381AbiGRMfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiGRMcA (ORCPT
+        with ESMTP id S230324AbiGRMfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:32:00 -0400
+        Mon, 18 Jul 2022 08:35:37 -0400
 Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC765205F7
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:31:55 -0700 (PDT)
-X-QQ-mid: bizesmtp64t1658147496tsq7f7fx
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6F265C1;
+        Mon, 18 Jul 2022 05:35:31 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1658147718tnnfcad5
 Received: from localhost.localdomain ( [171.223.96.21])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 18 Jul 2022 20:31:34 +0800 (CST)
+        id ; Mon, 18 Jul 2022 20:35:16 +0800 (CST)
 X-QQ-SSF: 01000000002000E0U000C00A0000020
-X-QQ-FEAT: NGMqyHdgFPa1Gj72Kw5wrqYn+EJjFCyEoyJqb7OCrR7aLICFqKVdIJFb3ATVj
-        C+akZGMII4OLL9eHCAYABUr8spJh1l4x5J3HDJIclhlgdZ3uK5TI5sYXhlR9/6lq33Z2D9c
-        K4P2Nh6uXx4L7QAXMULEBsy9xky1OJ1KkI0BB2IQGRCuqu1SPAwTKA/fN7obPKwy5m/ZRjd
-        Y+3IoPXOy9Dkld8AAFhb3LNhvls0uU50sGBojgTrIU5r9e2jP+I+oHxMNmqDWrd6RqiVltd
-        MEfarR3ZT3zvBIhdIq3E6TuSTSbe47R7h7468G30Z80YUt7kz0EM11VOd++CUYkLb7KT+tu
-        eauBgw4cP38wGC63O30hru9w4UUDBNqS+4I7frgncznO7Qwsw11rkQnXPIF1v6f6Extnhe6
-        5VHEu6cs2cQ=
+X-QQ-FEAT: DoD8xN2rKoy4KxEtW1/GxhANRbHFlo9pFXGP3x67oSPlCUa3hAjx41NXbAcY0
+        Z11m4PtlKrEWfWciILzge3FQQ8oR90FjEGuvgK/Q4TinZ0ZmUZE+T98BeCWJqhnPoKzsguo
+        bLcskR/g3GjNMXELuMAQgdp6ay/Ohrf1KjNN96LQjPKd+PHM3R8m1OQyBW9uZApcfDDMPcs
+        KmrOkSCfkjUvt1mgR0Cb+5QRL0WbcRs6rbzE7cN3PJSNjDEKEE8lwlbEDIdjiVvVsL6N8Kj
+        C60DnvyAxyP/idClq/a/5NMiFH6pzktNe0uALGG1BbRJq4k6Fp/hst4jHjLUfSwGmCpGRns
+        FBKQLGgPtp5QYGQPMvs7FWQ4ZyL39KXTdolckF+GFHO1RogYsboG7BquHsu25MQLXMc3+2k
+        0VOSyElFZwI=
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     anton.ivanov@cambridgegreys.com
-Cc:     richard@nod.at, johannes@sipsolutions.net,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] um: Fix comment typo
-Date:   Fri, 15 Jul 2022 12:29:38 +0800
-Message-Id: <20220715042938.15291-1-wangborong@cdjrlc.com>
+To:     ink@jurassic.park.msu.ru
+Cc:     rth@twiddle.net, mattst88@gmail.com, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] alpha: Fix comment typo
+Date:   Fri, 15 Jul 2022 12:33:04 +0800
+Message-Id: <20220715043304.16551-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -50,26 +49,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `in' is duplicated in line 172, remove one.
+The double `and' is duplicated in line 150, remove one.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- arch/um/kernel/physmem.c | 2 +-
+ arch/alpha/kernel/irq_i8259.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/um/kernel/physmem.c b/arch/um/kernel/physmem.c
-index e7c7b53a1435..91485119ae67 100644
---- a/arch/um/kernel/physmem.c
-+++ b/arch/um/kernel/physmem.c
-@@ -169,7 +169,7 @@ __uml_setup("iomem=", parse_iomem,
- );
- 
- /*
-- * This list is constructed in parse_iomem and addresses filled in in
-+ * This list is constructed in parse_iomem and addresses filled in
-  * setup_iomem, both of which run during early boot.  Afterwards, it's
-  * unchanged.
-  */
+diff --git a/arch/alpha/kernel/irq_i8259.c b/arch/alpha/kernel/irq_i8259.c
+index 1dcf0d9038fd..db574dcd6675 100644
+--- a/arch/alpha/kernel/irq_i8259.c
++++ b/arch/alpha/kernel/irq_i8259.c
+@@ -147,7 +147,7 @@ isa_no_iack_sc_device_interrupt(unsigned long vector)
+ 	 */
+ 	/* 
+ 	 *  The first read of gives you *all* interrupting lines.
+-	 *  Therefore, read the mask register and and out those lines
++	 *  Therefore, read the mask register and out those lines
+ 	 *  not enabled.  Note that some documentation has 21 and a1 
+ 	 *  write only.  This is not true.
+ 	 */
 -- 
 2.35.1
 

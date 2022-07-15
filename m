@@ -2,79 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C0A575DCC
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85043575DD7
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbiGOIsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 04:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
+        id S231788AbiGOIre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 04:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbiGOIsi (ORCPT
+        with ESMTP id S231512AbiGOIrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:48:38 -0400
-Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B2E9820E8;
-        Fri, 15 Jul 2022 01:47:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=m4hKf
-        BL4nqs53oqPJrYtedixI9QUO8tbMKID97bcLtQ=; b=nGSiZat0lo8s5aZbxB5l2
-        2E4bJMot39JFljAszn5zg+aCCy5zWkGSpkB4F/F7BtrTAhBozqaAPpwzxl3hFh1y
-        0yusMN6VMvNj2OQCs4W0v+JspmvjLnIJ3gLsEMmCxzZS5NbsOKfVRjwrZVd5ijPt
-        CCzzON/hPoJgyY7VnqUhJs=
-Received: from localhost.localdomain (unknown [111.48.58.12])
-        by smtp13 (Coremail) with SMTP id EcCowAB3kp+fKdFiiizJNg--.6037S2;
-        Fri, 15 Jul 2022 16:47:30 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] KVM: Fix spelling typo in comment
-Date:   Fri, 15 Jul 2022 16:47:12 +0800
-Message-Id: <20220715084712.998150-1-13667453960@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 15 Jul 2022 04:47:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFE4E814AE;
+        Fri, 15 Jul 2022 01:47:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B74171474;
+        Fri, 15 Jul 2022 01:47:30 -0700 (PDT)
+Received: from [10.57.11.112] (unknown [10.57.11.112])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 203983F792;
+        Fri, 15 Jul 2022 01:47:28 -0700 (PDT)
+Message-ID: <1198724e-d94f-0b7c-9c4a-90595f8426d2@arm.com>
+Date:   Fri, 15 Jul 2022 09:47:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EcCowAB3kp+fKdFiiizJNg--.6037S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5Jw4rGw47XFb_yoWDZrb_Z3
-        Z3Gw4xWrWrGFs3Zr1vkFsIyF1Igw4UGFWjvF95Aryaqa98Aws8Gw4kZr1ava4UGrWI9Fs3
-        Zas5W34rGw12gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0U5r7UUUUU==
-X-Originating-IP: [111.48.58.12]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbizQI-+1c7NglsvwAAsL
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] cpufreq: schedutil: Move max CPU capacity to sugov_policy
+Content-Language: en-US
+To:     rafael@kernel.org
+Cc:     viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dietmar.eggemann@arm.com,
+        vincent.guittot@linaro.org
+References: <20220711124229.16516-1-lukasz.luba@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220711124229.16516-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+Hi Rafael,
 
-Fix spelling typo in comment.
+gentle ping.
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- include/linux/kvm_host.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 7/11/22 13:42, Lukasz Luba wrote:
+> There is no need to keep the max CPU capacity in the per_cpu instance.
+> Furthermore, there is no need to check and update that variable
+> (sg_cpu->max) everytime in the frequency change request, which is part
+> of hot path. Instead use struct sugov_policy to store that information.
+> Initialize the max CPU capacity during the setup and start callback.
+> We can do that since all CPUs in the same frequency domain have the same
+> max capacity (capacity setup and thermal pressure are based on that).
+> 
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>   kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
+>   1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 83cf7fd842e0..3fd6c198d222 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1311,7 +1311,7 @@ bool kvm_gfn_to_pfn_cache_check(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
-  *                 -EFAULT for an untranslatable guest physical address.
-  *
-  * This will attempt to refresh a gfn_to_pfn_cache. Note that a successful
-- * returm from this function does not mean the page can be immediately
-+ * return from this function does not mean the page can be immediately
-  * accessed because it may have raced with an invalidation. Callers must
-  * still lock and check the cache status, as this function does not return
-  * with the lock still held to permit access.
--- 
-2.25.1
+The patch got Ack from Viresh.
+Could you take it?
 
+Regards,
+Lukasz

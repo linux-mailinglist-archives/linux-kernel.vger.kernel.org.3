@@ -2,78 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB645762E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6475762E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234865AbiGONjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 09:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
+        id S234318AbiGONlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 09:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiGONjV (ORCPT
+        with ESMTP id S229820AbiGONlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 09:39:21 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEAB6555;
-        Fri, 15 Jul 2022 06:39:20 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id b2so3259192plx.7;
-        Fri, 15 Jul 2022 06:39:20 -0700 (PDT)
+        Fri, 15 Jul 2022 09:41:02 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C857E00D;
+        Fri, 15 Jul 2022 06:41:00 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id s204so6098648oif.5;
+        Fri, 15 Jul 2022 06:41:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n3zcReKKPCl4pQfStU8KJyyb526NKeaNzK/QPxFbU0Q=;
-        b=oUISVFpG2W55igRVsZbMaXRwe6/uSGv+PhyFZMdIaAtvafigw/8rvLLhiGWUP3at7f
-         3Sh+fHjIn7OItecWS9qDWZqKWXpO8CqjhKbc629XakaDhyX+RBoSfktJHzczjytVNcdU
-         puApFAv92FIdbQlha8wSF+kedozyyQrAGPGJWa1a2h5UOWOAovMSmMxErNCXnDZRZK0n
-         YEW22oVy9sgfjIk2orT7C3d+Pm/N7onyHNmL18Nwdkc6WRFC8KkabtbFuk++LJHEQkpG
-         XwEw3oXw5pg4Sxstvr+VLcUoZ12WYC+LyyyZX1WpLc5j0SaMI0aXbIBXB294VOp+Gq2o
-         Z/tQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=e7J6lrL0WNeRPirg+hsgGpyVmncfl7kTniNmX54mAOs=;
+        b=nm64lUXu5oveTkQskxEPiDkfL7ef9auSBw+ZGiXSB8MaFpuTysdPm7oQAqxcmzW+lF
+         KsTCm6gWO9eGrPFUiWTtRoPnXKcxrUiut5R8vP6s5/C1EYoHZEKnIHCGwuAUzbY7kcmG
+         qG8NMaFgdVrVBGYPIw4CxnPZFxerRWtANjOG8MmnyYpYXsHHzu+2upcLz+84fOEsm7Zz
+         CHcsYHiOXl1ovojHwteYFBbKtV9bMhABRHtJtGSZlPJW0g7qbDf4HeTvRVpOFgVWny1V
+         PRmAGdsZfA6NPpWH9GrZbS1gAiBD8/YcV7plcWnC9vU/x0l7EEq2pa9MlMP0K8xfP63C
+         X3cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n3zcReKKPCl4pQfStU8KJyyb526NKeaNzK/QPxFbU0Q=;
-        b=ujDFyQzaxLr2Nqn81s7jYfq6ITDduTXRMRmsY2fO4sXZODHLpitFag5sxgICOizDqv
-         8C0kz6oTTdX7f5owZGH3TkolasY7ByylkcNWc9KW5r4JlWBvuGKz+/R9fRt6OclGpn7e
-         1C217neS6tHhMBcggbYhGI1io595m19SX4soyIkynABI04twKU9+TgJNHZN2ZrR2lDHG
-         0HUlingXs0QT/a/RPL3qUfCFvbsmdHc+wkhQbmDyk9LLqdpem9lAzrNeBmatXEj3dCeJ
-         PcTrm1NEG1rIOYFQLdbIN6i01DEQfdn6NI/U+wzX95lr2aZ866fYat9txZW1Gq/+IGPb
-         p0aA==
-X-Gm-Message-State: AJIora9Gmfw3aOlQgllBpi+Z2Wmidz5IJ00rQ0PAlFtVNa82GuAAmE8f
-        vS0wPpecfy2OMFTzS38KKLg=
-X-Google-Smtp-Source: AGRyM1sfhzLSOw1MRORpdrgpiHdtGYM58C0qdHhaqmyY8XX5GHleb7w2KfrsakPVDHnml2MeVRz/OQ==
-X-Received: by 2002:a17:90b:17d1:b0:1f0:6f1:90d1 with SMTP id me17-20020a17090b17d100b001f006f190d1mr15544509pjb.221.1657892360080;
-        Fri, 15 Jul 2022 06:39:20 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u16-20020a170903125000b001690d398401sm3621963plh.88.2022.07.15.06.39.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 06:39:18 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <39602911-2520-65fd-9479-9abed301f3f7@roeck-us.net>
-Date:   Fri, 15 Jul 2022 06:39:17 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e7J6lrL0WNeRPirg+hsgGpyVmncfl7kTniNmX54mAOs=;
+        b=xVu8tw/y0uT4hetyDjs7G4dPJ1pZpuXtmQlU+f3iY52oCzeTuSRY/V7mnrwrzUz/pf
+         ILsK8/wgMsX/H/e8I+FQTupkXtn9EuvfwY5nYk8XvSeZOAzteUO0Qs70RmWO7e9S3DKd
+         faD8kplIRNzBDxTzPjJdLo0k3Z+JFLW4SdcHSVUQBjALaLhNgutDgImTlmRm6cHVIGW4
+         gwChbLK4kzkOzbAo+z4qFR1cw0iwu6QRnH5yrl8MMfYic9vdXeHAPqIm2aDJrOgsuCIO
+         CIp+r8tI3rdnW3lmIzxr3w8Unt8UsstK8+SBCQ1skWJGkyQ2OR2cQLQqBMp761b1GA4f
+         HROA==
+X-Gm-Message-State: AJIora/JLixUZ1hZWT2MDwu7W0OJt7O/1t5ixOg68SDs3mhuDhKGeDek
+        Ko1JfC3KDzvr4+MJT91pJQQ+jEXktEMKKw==
+X-Google-Smtp-Source: AGRyM1tzfC5Gi+cV4oh/9elVlqEF3MUF7EXlJafOwpnC/3rJo6dGXN0UJ4r+hFk39SMsa1Ku3eCNOA==
+X-Received: by 2002:a05:6808:111:b0:33a:5c75:fffa with SMTP id b17-20020a056808011100b0033a5c75fffamr129423oie.73.1657892459982;
+        Fri, 15 Jul 2022 06:40:59 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id b1-20020a4aba01000000b00425ce891cd8sm1825342oop.34.2022.07.15.06.40.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 06:40:59 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 06:40:50 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the bitmap tree
+Message-ID: <YtFuYtlMSxGFEDGn@yury-laptop>
+References: <20220715222255.2e7fae53@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/3] usb: typec: tcpci: Add get cc tcpci callback
-Content-Language: en-US
-To:     Gene Chen <gene.chen.richtek@gmail.com>,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, gene_chen@richtek.com,
-        cy_huang@richtek.com
-References: <20220715100418.155011-1-gene.chen.richtek@gmail.com>
- <20220715100418.155011-3-gene.chen.richtek@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220715100418.155011-3-gene.chen.richtek@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715222255.2e7fae53@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,52 +70,239 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/15/22 03:04, Gene Chen wrote:
-> From: Gene Chen <gene_chen@richtek.com>
+On Fri, Jul 15, 2022 at 10:22:55PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Add set_vbus tcpci callback for vendor IC workaround.
-> According to different rp level detected, set corresponding
-> rx dead zone threshold in order to decode right pd message.
+> After merging the bitmap tree, today's linux-next build (arm64 defconfig)
+> produced this warning:
+
+Fixed, thanks.
+
+(I found some issues of this sort with allyesconfig, but not this one.)
+ 
+> In file included from include/linux/device.h:15,
+>                  from include/linux/dmaengine.h:8,
+>                  from drivers/dma/ti/k3-udma.c:9:
+> drivers/dma/ti/k3-udma.c: In function 'setup_resources':
+> drivers/dma/ti/k3-udma.c:5000:26: warning: format '%u' expects argument of type 'unsigned int', but argument 4 has type 'long unsigned int' [-Wformat=]
+>  5000 |                          "Channels: %d (tchan: %u, rchan: %u, gp-rflow: %u)\n",
+>       |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+>   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>       |                              ^~~
+> include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+>   150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>       |                                                          ^~~~~~~
+> drivers/dma/ti/k3-udma.c:4999:17: note: in expansion of macro 'dev_info'
+>  4999 |                 dev_info(dev,
+>       |                 ^~~~~~~~
+> drivers/dma/ti/k3-udma.c:5000:49: note: format string is defined here
+>  5000 |                          "Channels: %d (tchan: %u, rchan: %u, gp-rflow: %u)\n",
+>       |                                                ~^
+>       |                                                 |
+>       |                                                 unsigned int
+>       |                                                %lu
+> In file included from include/linux/device.h:15,
+>                  from include/linux/dmaengine.h:8,
+>                  from drivers/dma/ti/k3-udma.c:9:
+> drivers/dma/ti/k3-udma.c:5000:26: warning: format '%u' expects argument of type 'unsigned int', but argument 5 has type 'long unsigned int' [-Wformat=]
+>  5000 |                          "Channels: %d (tchan: %u, rchan: %u, gp-rflow: %u)\n",
+>       |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+>   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>       |                              ^~~
+> include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+>   150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>       |                                                          ^~~~~~~
+> drivers/dma/ti/k3-udma.c:4999:17: note: in expansion of macro 'dev_info'
+>  4999 |                 dev_info(dev,
+>       |                 ^~~~~~~~
+> drivers/dma/ti/k3-udma.c:5000:60: note: format string is defined here
+>  5000 |                          "Channels: %d (tchan: %u, rchan: %u, gp-rflow: %u)\n",
+>       |                                                           ~^
+>       |                                                            |
+>       |                                                            unsigned int
+>       |                                                           %lu
+> In file included from include/linux/device.h:15,
+>                  from include/linux/dmaengine.h:8,
+>                  from drivers/dma/ti/k3-udma.c:9:
+> drivers/dma/ti/k3-udma.c:5000:26: warning: format '%u' expects argument of type 'unsigned int', but argument 6 has type 'long unsigned int' [-Wformat=]
+>  5000 |                          "Channels: %d (tchan: %u, rchan: %u, gp-rflow: %u)\n",
+>       |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+>   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>       |                              ^~~
+> include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+>   150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>       |                                                          ^~~~~~~
+> drivers/dma/ti/k3-udma.c:4999:17: note: in expansion of macro 'dev_info'
+>  4999 |                 dev_info(dev,
+>       |                 ^~~~~~~~
+> drivers/dma/ti/k3-udma.c:5000:74: note: format string is defined here
+>  5000 |                          "Channels: %d (tchan: %u, rchan: %u, gp-rflow: %u)\n",
+>       |                                                                         ~^
+>       |                                                                          |
+>       |                                                                          unsigned int
+>       |                                                                         %lu
+> In file included from include/linux/device.h:15,
+>                  from include/linux/dmaengine.h:8,
+>                  from drivers/dma/ti/k3-udma.c:9:
+> drivers/dma/ti/k3-udma.c:5011:26: warning: format '%u' expects argument of type 'unsigned int', but argument 4 has type 'long unsigned int' [-Wformat=]
+>  5011 |                          "Channels: %d (bchan: %u, tchan: %u, rchan: %u)\n",
+>       |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+>   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>       |                              ^~~
+> include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+>   150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>       |                                                          ^~~~~~~
+> drivers/dma/ti/k3-udma.c:5010:17: note: in expansion of macro 'dev_info'
+>  5010 |                 dev_info(dev,
+>       |                 ^~~~~~~~
+> drivers/dma/ti/k3-udma.c:5011:49: note: format string is defined here
+>  5011 |                          "Channels: %d (bchan: %u, tchan: %u, rchan: %u)\n",
+>       |                                                ~^
+>       |                                                 |
+>       |                                                 unsigned int
+>       |                                                %lu
+> In file included from include/linux/device.h:15,
+>                  from include/linux/dmaengine.h:8,
+>                  from drivers/dma/ti/k3-udma.c:9:
+> drivers/dma/ti/k3-udma.c:5011:26: warning: format '%u' expects argument of type 'unsigned int', but argument 5 has type 'long unsigned int' [-Wformat=]
+>  5011 |                          "Channels: %d (bchan: %u, tchan: %u, rchan: %u)\n",
+>       |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+>   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>       |                              ^~~
+> include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+>   150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>       |                                                          ^~~~~~~
+> drivers/dma/ti/k3-udma.c:5010:17: note: in expansion of macro 'dev_info'
+>  5010 |                 dev_info(dev,
+>       |                 ^~~~~~~~
+> drivers/dma/ti/k3-udma.c:5011:60: note: format string is defined here
+>  5011 |                          "Channels: %d (bchan: %u, tchan: %u, rchan: %u)\n",
+>       |                                                           ~^
+>       |                                                            |
+>       |                                                            unsigned int
+>       |                                                           %lu
+> In file included from include/linux/device.h:15,
+>                  from include/linux/dmaengine.h:8,
+>                  from drivers/dma/ti/k3-udma.c:9:
+> drivers/dma/ti/k3-udma.c:5011:26: warning: format '%u' expects argument of type 'unsigned int', but argument 6 has type 'long unsigned int' [-Wformat=]
+>  5011 |                          "Channels: %d (bchan: %u, tchan: %u, rchan: %u)\n",
+>       |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+>   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>       |                              ^~~
+> include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+>   150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>       |                                                          ^~~~~~~
+> drivers/dma/ti/k3-udma.c:5010:17: note: in expansion of macro 'dev_info'
+>  5010 |                 dev_info(dev,
+>       |                 ^~~~~~~~
+> drivers/dma/ti/k3-udma.c:5011:71: note: format string is defined here
+>  5011 |                          "Channels: %d (bchan: %u, tchan: %u, rchan: %u)\n",
+>       |                                                                      ~^
+>       |                                                                       |
+>       |                                                                       unsigned int
+>       |                                                                      %lu
+> In file included from include/linux/device.h:15,
+>                  from include/linux/dmaengine.h:8,
+>                  from drivers/dma/ti/k3-udma.c:9:
+> drivers/dma/ti/k3-udma.c:5022:26: warning: format '%u' expects argument of type 'unsigned int', but argument 4 has type 'long unsigned int' [-Wformat=]
+>  5022 |                          "Channels: %d (tchan: %u, rchan: %u)\n",
+>       |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+>   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>       |                              ^~~
+> include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+>   150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>       |                                                          ^~~~~~~
+> drivers/dma/ti/k3-udma.c:5021:17: note: in expansion of macro 'dev_info'
+>  5021 |                 dev_info(dev,
+>       |                 ^~~~~~~~
+> drivers/dma/ti/k3-udma.c:5022:49: note: format string is defined here
+>  5022 |                          "Channels: %d (tchan: %u, rchan: %u)\n",
+>       |                                                ~^
+>       |                                                 |
+>       |                                                 unsigned int
+>       |                                                %lu
+> In file included from include/linux/device.h:15,
+>                  from include/linux/dmaengine.h:8,
+>                  from drivers/dma/ti/k3-udma.c:9:
+> drivers/dma/ti/k3-udma.c:5022:26: warning: format '%u' expects argument of type 'unsigned int', but argument 5 has type 'long unsigned int' [-Wformat=]
+>  5022 |                          "Channels: %d (tchan: %u, rchan: %u)\n",
+>       |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+>   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>       |                              ^~~
+> include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+>   150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>       |                                                          ^~~~~~~
+> drivers/dma/ti/k3-udma.c:5021:17: note: in expansion of macro 'dev_info'
+>  5021 |                 dev_info(dev,
+>       |                 ^~~~~~~~
+> drivers/dma/ti/k3-udma.c:5022:60: note: format string is defined here
+>  5022 |                          "Channels: %d (tchan: %u, rchan: %u)\n",
+>       |                                                           ~^
+>       |                                                            |
+>       |                                                            unsigned int
+>       |                                                           %lu
 > 
-
-Looking at the next patch, I dispute the need for this callback.
- From what I can see, the additional code should be implemented
-in the driver's interrupt handler whenever CC changes, not when
-CC values are read from higher level drivers.
-
-Guenter
-
-> Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> Introduced by commit
+> 
+>   31563fb891aa ("lib/bitmap: change type of bitmap_weight to unsigned long")
+> 
+> I have applied the following patch for today:
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 15 Jul 2022 22:15:40 +1000
+> Subject: [PATCH] fix up for k3-udma.c
+> 
+> due to "lib/bitmap: change type of bitmap_weight to unsigned long"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 > ---
->   drivers/usb/typec/tcpm/tcpci.c | 3 +++
->   drivers/usb/typec/tcpm/tcpci.h | 2 ++
->   2 files changed, 5 insertions(+)
+>  drivers/dma/ti/k3-udma.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index f33e08eb7670..fc2f6191b7d3 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -243,6 +243,9 @@ static int tcpci_get_cc(struct tcpc_dev *tcpc,
->   	unsigned int reg, role_control;
->   	int ret;
->   
-> +	if (tcpci->data->get_cc)
-> +		return tcpci->data->get_cc(tcpci, tcpci->data, cc1, cc2);
-> +
->   	ret = regmap_read(tcpci->regmap, TCPC_ROLE_CTRL, &role_control);
->   	if (ret < 0)
->   		return ret;
-> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
-> index b2edd45f13c6..2cef19e131f8 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.h
-> +++ b/drivers/usb/typec/tcpm/tcpci.h
-> @@ -190,6 +190,8 @@ struct tcpci_data {
->   	unsigned char vbus_vsafe0v:1;
->   
->   	int (*init)(struct tcpci *tcpci, struct tcpci_data *data);
-> +	int (*get_cc)(struct tcpci *tcpci, struct tcpci_data *data,
-> +		      enum typec_cc_status *cc1, enum typec_cc_status *cc2);
->   	int (*set_vconn)(struct tcpci *tcpci, struct tcpci_data *data,
->   			 bool enable);
->   	int (*start_drp_toggling)(struct tcpci *tcpci, struct tcpci_data *data,
+> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
+> index 2f0d2c68c93c..07cb48db76ba 100644
+> --- a/drivers/dma/ti/k3-udma.c
+> +++ b/drivers/dma/ti/k3-udma.c
+> @@ -4997,7 +4997,7 @@ static int setup_resources(struct udma_dev *ud)
+>  	switch (ud->match_data->type) {
+>  	case DMA_TYPE_UDMA:
+>  		dev_info(dev,
+> -			 "Channels: %d (tchan: %u, rchan: %u, gp-rflow: %u)\n",
+> +			 "Channels: %d (tchan: %lu, rchan: %lu, gp-rflow: %lu)\n",
+>  			 ch_count,
+>  			 ud->tchan_cnt - bitmap_weight(ud->tchan_map,
+>  						       ud->tchan_cnt),
+> @@ -5008,7 +5008,7 @@ static int setup_resources(struct udma_dev *ud)
+>  		break;
+>  	case DMA_TYPE_BCDMA:
+>  		dev_info(dev,
+> -			 "Channels: %d (bchan: %u, tchan: %u, rchan: %u)\n",
+> +			 "Channels: %d (bchan: %lu, tchan: %lu, rchan: %lu)\n",
+>  			 ch_count,
+>  			 ud->bchan_cnt - bitmap_weight(ud->bchan_map,
+>  						       ud->bchan_cnt),
+> @@ -5019,7 +5019,7 @@ static int setup_resources(struct udma_dev *ud)
+>  		break;
+>  	case DMA_TYPE_PKTDMA:
+>  		dev_info(dev,
+> -			 "Channels: %d (tchan: %u, rchan: %u)\n",
+> +			 "Channels: %d (tchan: %lu, rchan: %lu)\n",
+>  			 ch_count,
+>  			 ud->tchan_cnt - bitmap_weight(ud->tchan_map,
+>  						       ud->tchan_cnt),
+> -- 
+> 2.35.1
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+
 

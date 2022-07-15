@@ -2,165 +2,637 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12CC576389
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023D457638B
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233545AbiGOOTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 10:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
+        id S229951AbiGOOUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 10:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGOOTP (ORCPT
+        with ESMTP id S229532AbiGOOUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 10:19:15 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B18F57235;
-        Fri, 15 Jul 2022 07:19:14 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id j3so6208799oif.8;
-        Fri, 15 Jul 2022 07:19:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VM8umUUF8nWEq+3AaJAtV0L0dG1DVjrEYAJskHQ0LoQ=;
-        b=oPyPC8JND1jmk0qt6wIXCgqcuLOOl8rGUp32GLJy5a41WTs+t/zQKDnMPfvvn9vQYG
-         hVNBmIiqK0CZJ7KeXvsfaLz5vgoIdjp4xEo6HcryvOJ98g7OVrHRBi+33W44+bXjbIH5
-         YTxxqMTh3CAaGcgmPDUM6IDfsaSWOJEpSpSzax//VcMzEfSiDPKfKy5X9/uWPGIMq9/y
-         OeaA8Q6pvUv8mQay4ZtyK/hv8ZgKNk7gzzL0D5IazIZCptUcaMBMEKuq1L6v3n/0eq4Y
-         jp3xHaJTKOhHzVpoh4jgNGbZoiH7M3R8hbqK5sFOwtVyzVo8kMBlwqPLUiV42dTI7CkI
-         X85w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VM8umUUF8nWEq+3AaJAtV0L0dG1DVjrEYAJskHQ0LoQ=;
-        b=F2I1PhEYcTCcq0ARxr6bNwki5D8p+OZwmTmD7iE4otN2wCeIvvq+Tx7u2nWMuWhrj7
-         vBCOP0fFmsebnkOCM+2edT2/rk4hLqXFMK4dQWkpsTdB3AuTpt+5Vb/6BNHAdYcKCrqp
-         EfVbNrlrMvAnHfKMv5wo25kSouAcOtonIFCh3Obh/094afIpITHuGuNMadzRt9cx2N6i
-         9um3kJG2J1XUswl0/aphTYFxSZf/9imSRtgkF5nIYacVUBdLwXv3Gs16FMEVZ8immAV6
-         D//2RH1BVthik7fQJtpZhTxX8XWJoQPXUMVQLXPic7pnbqnDiDkWutrkMvEALymVBI9q
-         jYfw==
-X-Gm-Message-State: AJIora9WVWkRYSGklmrvD68eN+G2e3ynGnhEBnaOikYgD7zKk++v1Sal
-        JjCmCoBoKbixC9R11wMDts0=
-X-Google-Smtp-Source: AGRyM1uVWqa+GN8TzJ+A70cSXNJpr/BZo6b1/5X1mjoS3V5CWTYfwZgVL70qGC+R317T+9zJh7IRug==
-X-Received: by 2002:a05:6808:120a:b0:333:54f1:351 with SMTP id a10-20020a056808120a00b0033354f10351mr7215208oil.70.1657894753352;
-        Fri, 15 Jul 2022 07:19:13 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id t3-20020a056870608300b00101c9597c6fsm2302385oae.28.2022.07.15.07.19.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 07:19:13 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 07:19:12 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 6/9] bitops: let optimize out non-atomic bitops on
- compile-time constants
-Message-ID: <YtF3YIBA0Dd4KXZ+@yury-laptop>
-References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
- <20220624121313.2382500-7-alexandr.lobakin@intel.com>
- <20220715000402.GA512558@roeck-us.net>
- <20220715132633.61480-1-alexandr.lobakin@intel.com>
- <8c949bd4-d25a-d5f5-49be-59d52e4b6c9d@roeck-us.net>
+        Fri, 15 Jul 2022 10:20:09 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528A05C9C7;
+        Fri, 15 Jul 2022 07:20:06 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2446734DC8;
+        Fri, 15 Jul 2022 14:20:03 +0000 (UTC)
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id 0BF6F2C141;
+        Fri, 15 Jul 2022 14:20:03 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: [PATCH v3] gpio: remove VR41XX related gpio driver
+Date:   Fri, 15 Jul 2022 16:19:59 +0200
+Message-Id: <20220715142000.136855-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8c949bd4-d25a-d5f5-49be-59d52e4b6c9d@roeck-us.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 06:49:46AM -0700, Guenter Roeck wrote:
-> On 7/15/22 06:26, Alexander Lobakin wrote:
-> > From: Guenter Roeck <linux@roeck-us.net>
-> > Date: Thu, 14 Jul 2022 17:04:02 -0700
-> > 
-> > > On Fri, Jun 24, 2022 at 02:13:10PM +0200, Alexander Lobakin wrote:
-> > > > Currently, many architecture-specific non-atomic bitop
-> > > > implementations use inline asm or other hacks which are faster or
-> > 
-> > [...]
-> > 
-> > > > Cc: Mark Rutland <mark.rutland@arm.com>
-> > > > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > > > Reviewed-by: Marco Elver <elver@google.com>
-> > > 
-> > > Building i386:allyesconfig ... failed
-> > > --------------
-> > > Error log:
-> > > arch/x86/platform/olpc/olpc-xo1-sci.c: In function 'send_ebook_state':
-> > > arch/x86/platform/olpc/olpc-xo1-sci.c:83:63: error: logical not is only applied to the left hand side of comparison
-> > 
-> > Looks like a trigger, not a cause... Anyway, this construct:
-> > 
-> > 	unsigned char state;
-> > 
-> > 	[...]
-> > 
-> > 	if (!!test_bit(SW_TABLET_MODE, ebook_switch_idev->sw) == state)
-> > 
-> > doesn't look legit enough.
-> > That redundant double-negation [of boolean value], together with
-> > comparing boolean to char, provokes compilers to think the author
-> > made logical mistakes here, although it works as expected.
-> > Could you please try (if it's not automated build which you can't
-> > modify) the following:
-> > 
-> 
-> Agreed, the existing code seems wrong. The change below looks correct
-> and fixes the problem. Feel free to add
-> 
-> Reviewed-and-tested-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> to the real patch.
-> 
-> Thanks,
-> Guenter
-> 
-> > --- a/arch/x86/platform/olpc/olpc-xo1-sci.c
-> > +++ b/arch/x86/platform/olpc/olpc-xo1-sci.c
-> > @@ -80,7 +80,7 @@ static void send_ebook_state(void)
-> >   		return;
-> >   	}
-> > -	if (!!test_bit(SW_TABLET_MODE, ebook_switch_idev->sw) == state)
-> > +	if (test_bit(SW_TABLET_MODE, ebook_switch_idev->sw) == !!state)
-> >   		return; /* Nothing new to report. */
-> >   	input_report_switch(ebook_switch_idev, SW_TABLET_MODE, state);
-> > ---
-> > 
-> > We'd take it into the bitmap tree then. The series revealed
-> > a fistful of existing code issues already :)
+Commit d3164e2f3b0a ("MIPS: Remove VR41xx support") removed support
+for MIPS VR41xx platform, so remove exclusive drivers for this
+platform, too.
 
-Would you like me to add your signed-off-by and apply, or you prefer
-to send it out as a patch?
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+Changes in v3:
+	removed drivers/char changes
 
-Thanks,
-Yury
+Changes in v2:
+	sent with correct mail address
+
+ drivers/gpio/Kconfig       |   6 -
+ drivers/gpio/Makefile      |   1 -
+ drivers/gpio/gpio-vr41xx.c | 541 -------------------------------------
+ 3 files changed, 548 deletions(-)
+ delete mode 100644 drivers/gpio/gpio-vr41xx.c
+
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index b01961999ced..224d5ead27bd 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -690,12 +690,6 @@ config GPIO_VISCONTI
+ 	help
+ 	  Say yes here to support GPIO on Tohisba Visconti.
+ 
+-config GPIO_VR41XX
+-	tristate "NEC VR4100 series General-purpose I/O Unit support"
+-	depends on CPU_VR41XX
+-	help
+-	  Say yes here to support the NEC VR4100 series General-purpose I/O Unit.
+-
+ config GPIO_VX855
+ 	tristate "VIA VX855/VX875 GPIO"
+ 	depends on (X86 || COMPILE_TEST) && PCI
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index 14352f6dfe8e..9d4805b2b60b 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -169,7 +169,6 @@ obj-$(CONFIG_GPIO_VF610)		+= gpio-vf610.o
+ obj-$(CONFIG_GPIO_VIPERBOARD)		+= gpio-viperboard.o
+ obj-$(CONFIG_GPIO_VIRTIO)		+= gpio-virtio.o
+ obj-$(CONFIG_GPIO_VISCONTI)		+= gpio-visconti.o
+-obj-$(CONFIG_GPIO_VR41XX)		+= gpio-vr41xx.o
+ obj-$(CONFIG_GPIO_VX855)		+= gpio-vx855.o
+ obj-$(CONFIG_GPIO_WCD934X)		+= gpio-wcd934x.o
+ obj-$(CONFIG_GPIO_WHISKEY_COVE)		+= gpio-wcove.o
+diff --git a/drivers/gpio/gpio-vr41xx.c b/drivers/gpio/gpio-vr41xx.c
+deleted file mode 100644
+index 8d09b619c166..000000000000
+--- a/drivers/gpio/gpio-vr41xx.c
++++ /dev/null
+@@ -1,541 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0+
+-/*
+- *  Driver for NEC VR4100 series General-purpose I/O Unit.
+- *
+- *  Copyright (C) 2002 MontaVista Software Inc.
+- *	Author: Yoichi Yuasa <source@mvista.com>
+- *  Copyright (C) 2003-2009  Yoichi Yuasa <yuasa@linux-mips.org>
+- */
+-#include <linux/errno.h>
+-#include <linux/fs.h>
+-#include <linux/gpio/driver.h>
+-#include <linux/init.h>
+-#include <linux/interrupt.h>
+-#include <linux/io.h>
+-#include <linux/irq.h>
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/platform_device.h>
+-#include <linux/spinlock.h>
+-#include <linux/types.h>
+-
+-#include <asm/vr41xx/giu.h>
+-#include <asm/vr41xx/irq.h>
+-#include <asm/vr41xx/vr41xx.h>
+-
+-MODULE_AUTHOR("Yoichi Yuasa <yuasa@linux-mips.org>");
+-MODULE_DESCRIPTION("NEC VR4100 series General-purpose I/O Unit driver");
+-MODULE_LICENSE("GPL");
+-
+-#define GIUIOSELL	0x00
+-#define GIUIOSELH	0x02
+-#define GIUPIODL	0x04
+-#define GIUPIODH	0x06
+-#define GIUINTSTATL	0x08
+-#define GIUINTSTATH	0x0a
+-#define GIUINTENL	0x0c
+-#define GIUINTENH	0x0e
+-#define GIUINTTYPL	0x10
+-#define GIUINTTYPH	0x12
+-#define GIUINTALSELL	0x14
+-#define GIUINTALSELH	0x16
+-#define GIUINTHTSELL	0x18
+-#define GIUINTHTSELH	0x1a
+-#define GIUPODATL	0x1c
+-#define GIUPODATEN	0x1c
+-#define GIUPODATH	0x1e
+- #define PIOEN0		0x0100
+- #define PIOEN1		0x0200
+-#define GIUPODAT	0x1e
+-#define GIUFEDGEINHL	0x20
+-#define GIUFEDGEINHH	0x22
+-#define GIUREDGEINHL	0x24
+-#define GIUREDGEINHH	0x26
+-
+-#define GIUUSEUPDN	0x1e0
+-#define GIUTERMUPDN	0x1e2
+-
+-#define GPIO_HAS_PULLUPDOWN_IO		0x0001
+-#define GPIO_HAS_OUTPUT_ENABLE		0x0002
+-#define GPIO_HAS_INTERRUPT_EDGE_SELECT	0x0100
+-
+-enum {
+-	GPIO_INPUT,
+-	GPIO_OUTPUT,
+-};
+-
+-static DEFINE_SPINLOCK(giu_lock);
+-static unsigned long giu_flags;
+-
+-static void __iomem *giu_base;
+-static struct gpio_chip vr41xx_gpio_chip;
+-
+-#define giu_read(offset)		readw(giu_base + (offset))
+-#define giu_write(offset, value)	writew((value), giu_base + (offset))
+-
+-#define GPIO_PIN_OF_IRQ(irq)	((irq) - GIU_IRQ_BASE)
+-#define GIUINT_HIGH_OFFSET	16
+-#define GIUINT_HIGH_MAX		32
+-
+-static inline u16 giu_set(u16 offset, u16 set)
+-{
+-	u16 data;
+-
+-	data = giu_read(offset);
+-	data |= set;
+-	giu_write(offset, data);
+-
+-	return data;
+-}
+-
+-static inline u16 giu_clear(u16 offset, u16 clear)
+-{
+-	u16 data;
+-
+-	data = giu_read(offset);
+-	data &= ~clear;
+-	giu_write(offset, data);
+-
+-	return data;
+-}
+-
+-static void ack_giuint_low(struct irq_data *d)
+-{
+-	giu_write(GIUINTSTATL, 1 << GPIO_PIN_OF_IRQ(d->irq));
+-}
+-
+-static void mask_giuint_low(struct irq_data *d)
+-{
+-	giu_clear(GIUINTENL, 1 << GPIO_PIN_OF_IRQ(d->irq));
+-}
+-
+-static void mask_ack_giuint_low(struct irq_data *d)
+-{
+-	unsigned int pin;
+-
+-	pin = GPIO_PIN_OF_IRQ(d->irq);
+-	giu_clear(GIUINTENL, 1 << pin);
+-	giu_write(GIUINTSTATL, 1 << pin);
+-}
+-
+-static void unmask_giuint_low(struct irq_data *d)
+-{
+-	giu_set(GIUINTENL, 1 << GPIO_PIN_OF_IRQ(d->irq));
+-}
+-
+-static unsigned int startup_giuint(struct irq_data *data)
+-{
+-	int ret;
+-
+-	ret = gpiochip_lock_as_irq(&vr41xx_gpio_chip, irqd_to_hwirq(data));
+-	if (ret) {
+-		dev_err(vr41xx_gpio_chip.parent,
+-			"unable to lock HW IRQ %lu for IRQ\n",
+-			data->hwirq);
+-		return ret;
+-	}
+-
+-	/* Satisfy the .enable semantics by unmasking the line */
+-	unmask_giuint_low(data);
+-	return 0;
+-}
+-
+-static void shutdown_giuint(struct irq_data *data)
+-{
+-	mask_giuint_low(data);
+-	gpiochip_unlock_as_irq(&vr41xx_gpio_chip, data->hwirq);
+-}
+-
+-static struct irq_chip giuint_low_irq_chip = {
+-	.name		= "GIUINTL",
+-	.irq_ack	= ack_giuint_low,
+-	.irq_mask	= mask_giuint_low,
+-	.irq_mask_ack	= mask_ack_giuint_low,
+-	.irq_unmask	= unmask_giuint_low,
+-	.irq_startup	= startup_giuint,
+-	.irq_shutdown	= shutdown_giuint,
+-};
+-
+-static void ack_giuint_high(struct irq_data *d)
+-{
+-	giu_write(GIUINTSTATH,
+-		  1 << (GPIO_PIN_OF_IRQ(d->irq) - GIUINT_HIGH_OFFSET));
+-}
+-
+-static void mask_giuint_high(struct irq_data *d)
+-{
+-	giu_clear(GIUINTENH, 1 << (GPIO_PIN_OF_IRQ(d->irq) - GIUINT_HIGH_OFFSET));
+-}
+-
+-static void mask_ack_giuint_high(struct irq_data *d)
+-{
+-	unsigned int pin;
+-
+-	pin = GPIO_PIN_OF_IRQ(d->irq) - GIUINT_HIGH_OFFSET;
+-	giu_clear(GIUINTENH, 1 << pin);
+-	giu_write(GIUINTSTATH, 1 << pin);
+-}
+-
+-static void unmask_giuint_high(struct irq_data *d)
+-{
+-	giu_set(GIUINTENH, 1 << (GPIO_PIN_OF_IRQ(d->irq) - GIUINT_HIGH_OFFSET));
+-}
+-
+-static struct irq_chip giuint_high_irq_chip = {
+-	.name		= "GIUINTH",
+-	.irq_ack	= ack_giuint_high,
+-	.irq_mask	= mask_giuint_high,
+-	.irq_mask_ack	= mask_ack_giuint_high,
+-	.irq_unmask	= unmask_giuint_high,
+-};
+-
+-static int giu_get_irq(unsigned int irq)
+-{
+-	u16 pendl, pendh, maskl, maskh;
+-	int i;
+-
+-	pendl = giu_read(GIUINTSTATL);
+-	pendh = giu_read(GIUINTSTATH);
+-	maskl = giu_read(GIUINTENL);
+-	maskh = giu_read(GIUINTENH);
+-
+-	maskl &= pendl;
+-	maskh &= pendh;
+-
+-	if (maskl) {
+-		for (i = 0; i < 16; i++) {
+-			if (maskl & (1 << i))
+-				return GIU_IRQ(i);
+-		}
+-	} else if (maskh) {
+-		for (i = 0; i < 16; i++) {
+-			if (maskh & (1 << i))
+-				return GIU_IRQ(i + GIUINT_HIGH_OFFSET);
+-		}
+-	}
+-
+-	printk(KERN_ERR "spurious GIU interrupt: %04x(%04x),%04x(%04x)\n",
+-	       maskl, pendl, maskh, pendh);
+-
+-	return -EINVAL;
+-}
+-
+-void vr41xx_set_irq_trigger(unsigned int pin, irq_trigger_t trigger,
+-			    irq_signal_t signal)
+-{
+-	u16 mask;
+-
+-	if (pin < GIUINT_HIGH_OFFSET) {
+-		mask = 1 << pin;
+-		if (trigger != IRQ_TRIGGER_LEVEL) {
+-			giu_set(GIUINTTYPL, mask);
+-			if (signal == IRQ_SIGNAL_HOLD)
+-				giu_set(GIUINTHTSELL, mask);
+-			else
+-				giu_clear(GIUINTHTSELL, mask);
+-			if (giu_flags & GPIO_HAS_INTERRUPT_EDGE_SELECT) {
+-				switch (trigger) {
+-				case IRQ_TRIGGER_EDGE_FALLING:
+-					giu_set(GIUFEDGEINHL, mask);
+-					giu_clear(GIUREDGEINHL, mask);
+-					break;
+-				case IRQ_TRIGGER_EDGE_RISING:
+-					giu_clear(GIUFEDGEINHL, mask);
+-					giu_set(GIUREDGEINHL, mask);
+-					break;
+-				default:
+-					giu_set(GIUFEDGEINHL, mask);
+-					giu_set(GIUREDGEINHL, mask);
+-					break;
+-				}
+-			}
+-			irq_set_chip_and_handler(GIU_IRQ(pin),
+-						 &giuint_low_irq_chip,
+-						 handle_edge_irq);
+-		} else {
+-			giu_clear(GIUINTTYPL, mask);
+-			giu_clear(GIUINTHTSELL, mask);
+-			irq_set_chip_and_handler(GIU_IRQ(pin),
+-						 &giuint_low_irq_chip,
+-						 handle_level_irq);
+-		}
+-		giu_write(GIUINTSTATL, mask);
+-	} else if (pin < GIUINT_HIGH_MAX) {
+-		mask = 1 << (pin - GIUINT_HIGH_OFFSET);
+-		if (trigger != IRQ_TRIGGER_LEVEL) {
+-			giu_set(GIUINTTYPH, mask);
+-			if (signal == IRQ_SIGNAL_HOLD)
+-				giu_set(GIUINTHTSELH, mask);
+-			else
+-				giu_clear(GIUINTHTSELH, mask);
+-			if (giu_flags & GPIO_HAS_INTERRUPT_EDGE_SELECT) {
+-				switch (trigger) {
+-				case IRQ_TRIGGER_EDGE_FALLING:
+-					giu_set(GIUFEDGEINHH, mask);
+-					giu_clear(GIUREDGEINHH, mask);
+-					break;
+-				case IRQ_TRIGGER_EDGE_RISING:
+-					giu_clear(GIUFEDGEINHH, mask);
+-					giu_set(GIUREDGEINHH, mask);
+-					break;
+-				default:
+-					giu_set(GIUFEDGEINHH, mask);
+-					giu_set(GIUREDGEINHH, mask);
+-					break;
+-				}
+-			}
+-			irq_set_chip_and_handler(GIU_IRQ(pin),
+-						 &giuint_high_irq_chip,
+-						 handle_edge_irq);
+-		} else {
+-			giu_clear(GIUINTTYPH, mask);
+-			giu_clear(GIUINTHTSELH, mask);
+-			irq_set_chip_and_handler(GIU_IRQ(pin),
+-						 &giuint_high_irq_chip,
+-						 handle_level_irq);
+-		}
+-		giu_write(GIUINTSTATH, mask);
+-	}
+-}
+-EXPORT_SYMBOL_GPL(vr41xx_set_irq_trigger);
+-
+-void vr41xx_set_irq_level(unsigned int pin, irq_level_t level)
+-{
+-	u16 mask;
+-
+-	if (pin < GIUINT_HIGH_OFFSET) {
+-		mask = 1 << pin;
+-		if (level == IRQ_LEVEL_HIGH)
+-			giu_set(GIUINTALSELL, mask);
+-		else
+-			giu_clear(GIUINTALSELL, mask);
+-		giu_write(GIUINTSTATL, mask);
+-	} else if (pin < GIUINT_HIGH_MAX) {
+-		mask = 1 << (pin - GIUINT_HIGH_OFFSET);
+-		if (level == IRQ_LEVEL_HIGH)
+-			giu_set(GIUINTALSELH, mask);
+-		else
+-			giu_clear(GIUINTALSELH, mask);
+-		giu_write(GIUINTSTATH, mask);
+-	}
+-}
+-EXPORT_SYMBOL_GPL(vr41xx_set_irq_level);
+-
+-static int giu_set_direction(struct gpio_chip *chip, unsigned pin, int dir)
+-{
+-	u16 offset, mask, reg;
+-	unsigned long flags;
+-
+-	if (pin >= chip->ngpio)
+-		return -EINVAL;
+-
+-	if (pin < 16) {
+-		offset = GIUIOSELL;
+-		mask = 1 << pin;
+-	} else if (pin < 32) {
+-		offset = GIUIOSELH;
+-		mask = 1 << (pin - 16);
+-	} else {
+-		if (giu_flags & GPIO_HAS_OUTPUT_ENABLE) {
+-			offset = GIUPODATEN;
+-			mask = 1 << (pin - 32);
+-		} else {
+-			switch (pin) {
+-			case 48:
+-				offset = GIUPODATH;
+-				mask = PIOEN0;
+-				break;
+-			case 49:
+-				offset = GIUPODATH;
+-				mask = PIOEN1;
+-				break;
+-			default:
+-				return -EINVAL;
+-			}
+-		}
+-	}
+-
+-	spin_lock_irqsave(&giu_lock, flags);
+-
+-	reg = giu_read(offset);
+-	if (dir == GPIO_OUTPUT)
+-		reg |= mask;
+-	else
+-		reg &= ~mask;
+-	giu_write(offset, reg);
+-
+-	spin_unlock_irqrestore(&giu_lock, flags);
+-
+-	return 0;
+-}
+-
+-static int vr41xx_gpio_get(struct gpio_chip *chip, unsigned pin)
+-{
+-	u16 reg, mask;
+-
+-	if (pin >= chip->ngpio)
+-		return -EINVAL;
+-
+-	if (pin < 16) {
+-		reg = giu_read(GIUPIODL);
+-		mask = 1 << pin;
+-	} else if (pin < 32) {
+-		reg = giu_read(GIUPIODH);
+-		mask = 1 << (pin - 16);
+-	} else if (pin < 48) {
+-		reg = giu_read(GIUPODATL);
+-		mask = 1 << (pin - 32);
+-	} else {
+-		reg = giu_read(GIUPODATH);
+-		mask = 1 << (pin - 48);
+-	}
+-
+-	if (reg & mask)
+-		return 1;
+-
+-	return 0;
+-}
+-
+-static void vr41xx_gpio_set(struct gpio_chip *chip, unsigned pin,
+-			    int value)
+-{
+-	u16 offset, mask, reg;
+-	unsigned long flags;
+-
+-	if (pin >= chip->ngpio)
+-		return;
+-
+-	if (pin < 16) {
+-		offset = GIUPIODL;
+-		mask = 1 << pin;
+-	} else if (pin < 32) {
+-		offset = GIUPIODH;
+-		mask = 1 << (pin - 16);
+-	} else if (pin < 48) {
+-		offset = GIUPODATL;
+-		mask = 1 << (pin - 32);
+-	} else {
+-		offset = GIUPODATH;
+-		mask = 1 << (pin - 48);
+-	}
+-
+-	spin_lock_irqsave(&giu_lock, flags);
+-
+-	reg = giu_read(offset);
+-	if (value)
+-		reg |= mask;
+-	else
+-		reg &= ~mask;
+-	giu_write(offset, reg);
+-
+-	spin_unlock_irqrestore(&giu_lock, flags);
+-}
+-
+-
+-static int vr41xx_gpio_direction_input(struct gpio_chip *chip, unsigned offset)
+-{
+-	return giu_set_direction(chip, offset, GPIO_INPUT);
+-}
+-
+-static int vr41xx_gpio_direction_output(struct gpio_chip *chip, unsigned offset,
+-				int value)
+-{
+-	vr41xx_gpio_set(chip, offset, value);
+-
+-	return giu_set_direction(chip, offset, GPIO_OUTPUT);
+-}
+-
+-static int vr41xx_gpio_to_irq(struct gpio_chip *chip, unsigned offset)
+-{
+-	if (offset >= chip->ngpio)
+-		return -EINVAL;
+-
+-	return GIU_IRQ_BASE + offset;
+-}
+-
+-static struct gpio_chip vr41xx_gpio_chip = {
+-	.label			= "vr41xx",
+-	.owner			= THIS_MODULE,
+-	.direction_input	= vr41xx_gpio_direction_input,
+-	.get			= vr41xx_gpio_get,
+-	.direction_output	= vr41xx_gpio_direction_output,
+-	.set			= vr41xx_gpio_set,
+-	.to_irq			= vr41xx_gpio_to_irq,
+-};
+-
+-static int giu_probe(struct platform_device *pdev)
+-{
+-	unsigned int trigger, i, pin;
+-	struct irq_chip *chip;
+-	int irq;
+-
+-	switch (pdev->id) {
+-	case GPIO_50PINS_PULLUPDOWN:
+-		giu_flags = GPIO_HAS_PULLUPDOWN_IO;
+-		vr41xx_gpio_chip.ngpio = 50;
+-		break;
+-	case GPIO_36PINS:
+-		vr41xx_gpio_chip.ngpio = 36;
+-		break;
+-	case GPIO_48PINS_EDGE_SELECT:
+-		giu_flags = GPIO_HAS_INTERRUPT_EDGE_SELECT;
+-		vr41xx_gpio_chip.ngpio = 48;
+-		break;
+-	default:
+-		dev_err(&pdev->dev, "GIU: unknown ID %d\n", pdev->id);
+-		return -ENODEV;
+-	}
+-
+-	giu_base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(giu_base))
+-		return PTR_ERR(giu_base);
+-
+-	vr41xx_gpio_chip.parent = &pdev->dev;
+-
+-	if (gpiochip_add_data(&vr41xx_gpio_chip, NULL))
+-		return -ENODEV;
+-
+-	giu_write(GIUINTENL, 0);
+-	giu_write(GIUINTENH, 0);
+-
+-	trigger = giu_read(GIUINTTYPH) << 16;
+-	trigger |= giu_read(GIUINTTYPL);
+-	for (i = GIU_IRQ_BASE; i <= GIU_IRQ_LAST; i++) {
+-		pin = GPIO_PIN_OF_IRQ(i);
+-		if (pin < GIUINT_HIGH_OFFSET)
+-			chip = &giuint_low_irq_chip;
+-		else
+-			chip = &giuint_high_irq_chip;
+-
+-		if (trigger & (1 << pin))
+-			irq_set_chip_and_handler(i, chip, handle_edge_irq);
+-		else
+-			irq_set_chip_and_handler(i, chip, handle_level_irq);
+-
+-	}
+-
+-	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0 || irq >= nr_irqs)
+-		return -EBUSY;
+-
+-	return cascade_irq(irq, giu_get_irq);
+-}
+-
+-static int giu_remove(struct platform_device *pdev)
+-{
+-	if (giu_base) {
+-		giu_base = NULL;
+-	}
+-
+-	return 0;
+-}
+-
+-static struct platform_driver giu_device_driver = {
+-	.probe		= giu_probe,
+-	.remove		= giu_remove,
+-	.driver		= {
+-		.name	= "GIU",
+-	},
+-};
+-
+-module_platform_driver(giu_device_driver);
+-- 
+2.29.2
+

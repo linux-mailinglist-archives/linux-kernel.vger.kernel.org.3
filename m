@@ -2,92 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E40576A8A
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0F7576A8D
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbiGOXSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 19:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
+        id S231555AbiGOXUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 19:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbiGOXSI (ORCPT
+        with ESMTP id S229594AbiGOXUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 19:18:08 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317EF90D9E
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:18:08 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id a15so6954023pjs.0
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:18:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XbW4ugQp+4Ks3aPPXecdjoIRykNNddTdltbpwPKe1dg=;
-        b=AqupWTdfkCcwL2MkYOsMqRrMSV/a7tM0rRAIbHGRtwELMYjOPNPvTxm9ck4bRZ1LJL
-         C+GsN6QPyU9IZu0yfL5Hgm1h0+17s2LZYsOW91bZ6cFdcMh0EGwB9pERCkCjGIgHX/sA
-         75BbexmZoonEtKYsSNhYrh0PfX2kPtAIYusu0mprQ9KgDHOH6ThMFDC7dh/Ta9g3cGv4
-         apb0wR/PWrWT6FsSLLxOb7Cgiqk2/C7Kh/1JjLL8dtlUWesUmYgAYWlNbkKGoi0qk97N
-         jNwyZJjwpHDaYJnzuklojThL047k0a1K2rL3VK54fbnn8WNi0fun1SE3rTUCQe5gRGNH
-         7Eng==
+        Fri, 15 Jul 2022 19:20:43 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD64491CF7;
+        Fri, 15 Jul 2022 16:20:42 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id p81so5030231iod.2;
+        Fri, 15 Jul 2022 16:20:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=XbW4ugQp+4Ks3aPPXecdjoIRykNNddTdltbpwPKe1dg=;
-        b=dXknkHb/JPTv6GQZ/t759ELWjx8RrvyEbwMIGnoTrRd89xhV2rRd6dGQJ3Wc31nInz
-         43au2rb1fCp0h8YdKrxOt8o6jMAzoxbkxyOKi7r7RPGFTFychUvx9iH71Taw2WP08YWp
-         T/DqjcPyipz1OboSzNk//MlNYMEqgsIY4+oAKrLKPv4Y641kByRje0GwOwqhi6ARgzv9
-         wFUCOiN36PEASsHsaJKdFOezSDjWp1dBZEFOBpWDgzZfVhfPtwdp19O1fW6Fivy4QUiE
-         YiGA+xYH7i9hGBiVytfFko2WOFGHuVEH0/K6Gclu+E5tuWWG5gxBzC6acK2Xs7vtSJxL
-         tmNQ==
-X-Gm-Message-State: AJIora9PTKbPTTozh4iNGQWfBrk1vRsHs26vaWnE71Yk6F4NxGJZ1wTN
-        4NoN1vSjGhxONTBJR8zPH7yCqw==
-X-Google-Smtp-Source: AGRyM1tgMaamoYyeQMvHcg5nmNj0M22GhP3i8TJXo4psF2lgAUpv4/BagImN3kbzKBXY+aA3OoWDJA==
-X-Received: by 2002:a17:902:c64b:b0:16b:d51a:dc24 with SMTP id s11-20020a170902c64b00b0016bd51adc24mr15965401pls.48.1657927087608;
-        Fri, 15 Jul 2022 16:18:07 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170902ce8d00b0016c1a1c1405sm4204066plg.222.2022.07.15.16.18.06
+        bh=357WJpKqK4n072gUDP2xO7EDnU9lyZF13OaAt7W+XvU=;
+        b=2t71NgR3qCQ7mEg9vO0bZm0xoEmgVwYgvDYvOJOL81usXcQonEb/Nhn9ePoRqWLLgN
+         ZA4CPj7Fu3naAjgN+ohG+7eXJBm4paugOdCxqdcs0ypljFPoozSfrv61m8P7YCd6gp8x
+         BGeftFLZBOyftqo/jIlfuNTDa66VoChcUaPYOMpP+noOc9uNpcwl00U7YCVB0F5OPDyw
+         jin0hMhlQ9xXj3mSiWuroP631L+P7VNGi1R3LEzYBLUcZ4SLw2jANYqBjlRdRIp0HgRi
+         6lHfEB9+Y2wnmCiJ0D/7a3f6vdfs1S2e1oSEcsBd/mmr23CvdE6APylCq3O6C0vKdT+D
+         K71g==
+X-Gm-Message-State: AJIora9Y9iasRHZx5PIrjBIipFP7l/L1iCA/9KoLD2DTkE8poatBP5Zs
+        vaSym2XNsf8nXXNqnlf/HA==
+X-Google-Smtp-Source: AGRyM1tQ46xHJYDafNFQLDzbX9yaXJPf1IJ35ZWUtezEz3nl7DXHI+lRSk0NX8wn7O6/zhUIHiuMjg==
+X-Received: by 2002:a6b:ed14:0:b0:675:9593:483e with SMTP id n20-20020a6bed14000000b006759593483emr7665689iog.65.1657927241909;
+        Fri, 15 Jul 2022 16:20:41 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id k7-20020a02c767000000b003415545d938sm600126jao.166.2022.07.15.16.20.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 16:18:06 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 23:18:03 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] KVM: x86: Reject loading KVM if host.PAT[0] != WB
-Message-ID: <YtH1q3C4F+LAEDTf@google.com>
-References: <20220715230016.3762909-1-seanjc@google.com>
- <20220715230016.3762909-2-seanjc@google.com>
- <CALMp9eQdzZK4ZAyQZXUWff_zuRRdr=ugkujWfFrt9dP8uFcs=Q@mail.gmail.com>
+        Fri, 15 Jul 2022 16:20:41 -0700 (PDT)
+Received: (nullmailer pid 1651421 invoked by uid 1000);
+        Fri, 15 Jul 2022 23:20:39 -0000
+Date:   Fri, 15 Jul 2022 17:20:39 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, sean.wang@mediatek.com,
+        matthias.bgg@gmail.com, nfraprado@collabora.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: pinctrl: mt8195: Use
+ drive-strength-microamp in examples
+Message-ID: <20220715232039.GA1648171-robh@kernel.org>
+References: <20220715103029.204500-1-angelogioacchino.delregno@collabora.com>
+ <1657892575.852530.520283.nullmailer@robh.at.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALMp9eQdzZK4ZAyQZXUWff_zuRRdr=ugkujWfFrt9dP8uFcs=Q@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1657892575.852530.520283.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022, Jim Mattson wrote:
-> On Fri, Jul 15, 2022 at 4:02 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > Reject KVM if entry '0' in the host's IA32_PAT MSR is not programmed to
-> > writeback (WB) memtype.  KVM subtly relies on IA32_PAT entry '0' to be
-> > programmed to WB by leaving the PAT bits in shadow paging and NPT SPTEs
-> > as '0'.  If something other than WB is in PAT[0], at _best_ guests will
-> > suffer very poor performance, and at worst KVM will crash the system by
-> > breaking cache-coherency expecations (e.g. using WC for guest memory).
-> >
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Fri, Jul 15, 2022 at 07:42:55AM -0600, Rob Herring wrote:
+> On Fri, 15 Jul 2022 12:30:29 +0200, AngeloGioacchino Del Regno wrote:
+> > The property mediatek,drive-strength-adv was deprecated: change the
+> > example for i2c0-pins to use drive-strength-microamp.
+> > 
+> > Fixes: b6d9af2c6b69 ("dt-bindings: pinctrl: mt8195: Add and use drive-strength-microamp")
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > > ---
-> What if someone changes the host's PAT to violate this rule *after*
-> kvm is loaded?
+> >  Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.example.dtb: pinctrl@10005000: i2c0-pins:pins: 'drive-strength-microamp' does not match any of the regexes: 'pinctrl-[0-9]+'
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
 
-Then KVM (and probably many other things in the kernel) is hosed.  The same argument
-(that KVM isn't paranoid enough) can likely be made for a number of MSRs and critical
-registers.
+Seems to be a false positive since commit b6d9af2c6b69 was not present 
+in the test.
+
+Acked-by: Rob Herring <robh@kernel.org>

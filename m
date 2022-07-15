@@ -2,108 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823415769F0
+	by mail.lfdr.de (Postfix) with ESMTP id 372725769EF
 	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbiGOWfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
+        id S231728AbiGOWf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiGOWf1 (ORCPT
+        with ESMTP id S230144AbiGOWfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:35:27 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5F76BC03
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:26 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id o5-20020a170902d4c500b0016c643623e8so2730722plg.13
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:26 -0700 (PDT)
+        Fri, 15 Jul 2022 18:35:24 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAB86B26A
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Uj8SeARJLMyg9DKNAY9bhB9140qxBdG/Kjci8bJYAcA=;
-        b=B3mv3BlHwHMDgtvov1Ex0MLQMTBHWfAjEw5B98QgJ10P4WsUB7Hy0Iuv/h2Ddm22Yd
-         1kAx+gsJSeNNS7hcFZwLJ0Iy6NKjM9EOSq2DLHkp4shetdd+QkMRP3pV0XDUM+hw6lK4
-         lJFoo13P+QpUdXVaNQ8uhiUfMo0VJOy97oxhIGpucim/MJ0PWEy9+Un8UZXO1ovLjdKT
-         tJGIGgWQHw7p4syJxZFPHxZXtg7aZcTtmjfhxezdgJ5mlAHRU2L15GkM5bjq65pr2z0p
-         mTP/FUyRJTeZbS5Grbv4Xnv+r76K2lIJATz41DbiHYp3n/83gCEkHvAU6kC/Vl/X6wVe
-         7ilQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Uj8SeARJLMyg9DKNAY9bhB9140qxBdG/Kjci8bJYAcA=;
-        b=7IPB8yEGxMWCsBCmHkP00kLC4c1z86PJfDLjhPxYGRDAMqimrOWLWmyxyPOa5jMAOx
-         GVcCwlJRdjnIIYJp/Jm001ZwPvapK9WU6E0mK/dVzrc37FoCoSfZEy+hF+1jACjtADw/
-         qWg+ES3Yo0xn6PtHSbNlokMLLkRU91XTCooYh7zppQUFu6yxG+gYqnnJTP08ujp1h3tM
-         gca7Z1M3UaA89YOYUNq4KQXcHLZ2hnTy/1LKUcvuowlg2PnlmoF5w6pq2BQPrWREM2lS
-         K9Rrlyzi+nm9JyKAAzRORra2vgt2nnPnSAKMzrskmsShvkI+1zZET0zxdcD1J1kebPIU
-         qtTQ==
-X-Gm-Message-State: AJIora/sezHhl/z74mdM53czZ0Lh0RtFDYa5IReMwFNh/wUOurAr9Kv9
-        zYJy5Q1Z5RkAO9unMbccF/az1IP08oqB
-X-Google-Smtp-Source: AGRyM1uSAOMdbZrHCTFno/wdibRMWE6UTsIa2Rm/sYU3ri4fJ2Yh2RItC7fxs2mk+32HpyRDzEtGwQOnAUzb
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:72de:b499:63be:efe1])
- (user=irogers job=sendgmr) by 2002:a05:6a00:2347:b0:52a:cf39:59a5 with SMTP
- id j7-20020a056a00234700b0052acf3959a5mr15760131pfj.28.1657924526164; Fri, 15
- Jul 2022 15:35:26 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657924523; x=1689460523;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=Z0oFswyC/YbNkGH8IOxwbYw/Sv54sKTTQJpfl46exPo=;
+  b=MdQ6yE7IyQ74g2/KmDltx1z+cN3uFGSx/TuAaJA6jT87U19VE81XXpoR
+   VxwSQDTSZVBHTi4wYjntIWZjtgshpT1qOJpds+YJY8sQJfS+UXqJqTtRg
+   +N4TPTQKL/lyNnPcFd+Xxk2ywCP66oXqdMDQiKVAZXdkfFg1fJlp0H4Pi
+   c=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Jul 2022 15:35:22 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 15:35:22 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Jul 2022 15:35:22 -0700
+Received: from [10.110.97.72] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 15 Jul
+ 2022 15:35:20 -0700
+Message-ID: <c628e868-5c73-ca4b-1f99-60cc149806bf@quicinc.com>
 Date:   Fri, 15 Jul 2022 15:35:19 -0700
-Message-Id: <20220715223521.3389971-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v3 0/2] Add arch TSC frequency information
-From:   Ian Rogers <irogers@google.com>
-To:     perry.taylor@intel.com, caleb.biggers@intel.com,
-        kshipra.bopardikar@intel.com,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mtd: spi-nor: winbond: add support for W25Q512NW-IQ/IN
+Content-Language: en-US
+From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <clg@kaod.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <p.yadav@ti.com>,
+        <quic_ggregory@quicinc.com>, <quic_jiles@quicinc.com>,
+        <tudor.ambarus@microchip.com>
+References: <20220710145721.1207157-1-quic_jaehyoo@quicinc.com>
+ <20220711095042.2095360-1-michael@walle.cc>
+ <a42fbef2-3eff-9e88-233e-a805cfbe2376@quicinc.com>
+ <4972a85d04e39ebb7b4a5872f6632c45@walle.cc>
+ <2260955b-354d-ceda-cadc-49453bfca3e4@quicinc.com>
+ <00f0c9d480ef5a414f1c34492661bd9e@walle.cc>
+ <63cedfce-34bb-ed63-3871-75a6c3dd5d73@quicinc.com>
+ <6be710bb5c1bf0449e54a54b78f6f7a0@walle.cc>
+ <47c01d768ea56edc9a2f9d317af7b495@walle.cc>
+ <114fcde6-bdf7-68ee-d031-35a916027aee@quicinc.com>
+ <b42cb229-f241-6e29-a138-29023ce316d9@quicinc.com>
+In-Reply-To: <b42cb229-f241-6e29-a138-29023ce316d9@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The first patch adds support for deriving from /proc/cpuinfo and adds
-tests. The second patch from Kan Liang derives it from CPUID available
-on newer Intel processors as discussed here:
-https://lore.kernel.org/lkml/20220527040407.4193232-1-irogers@google.com/#t
+Hi Michael,
 
-v2. Adds warnings to make clear if things have changed/broken on future
-    Intel platforms. It also adds caching and an Intel specific that a
-    value is computed.
+On 7/15/2022 1:15 PM, Jae Hyun Yoo wrote:
+> Hi Michael,
+> 
+> On 7/14/2022 7:30 AM, Jae Hyun Yoo wrote:
+>> On 7/14/2022 7:21 AM, Michael Walle wrote:
+>>> Am 2022-07-14 16:16, schrieb Michael Walle:
+>>>> Am 2022-07-14 15:47, schrieb Jae Hyun Yoo:
+>>>>> On 7/14/2022 12:41 AM, Michael Walle wrote:
+>>>>>> What does "doesn't boot at all" mean? Are there any kernel startup
+>>>>>> messages?
+>>>>>
+>>>>> I'm sharing the error messages below.
+>>>>
+>>>> Thanks.
+>>>>
+>>>>> [    0.748594] spi-nor spi0.0: w25q512nwq (65536 Kbytes)
+>>>>> [    0.865216] spi-aspeed-smc 1e620000.spi: CE0 read buswidth:4 
+>>>>> [0x406c0741]
+>>>>> [    0.872833] ------------[ cut here ]------------
+>>>>> [    0.877984] WARNING: CPU: 1 PID: 1 at drivers/mtd/mtdcore.c:583
+>>>>> add_mtd_device+0x28c/0x53c
+>>>>> [    0.887237] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
+>>>>> 5.15.43-AUTOINC-dirty-23801a6 #1
+>>>>
+>>>> Could you please try it on the latest (vanilla) linux-next?
+>>>
+>>> or spi-nor/next [1] as there are quite a lot of changes. The
+>>> patches shall be based on that.
+>>
+>> Okay. Let me try that. I tested it using 5.15.43 with back-ported
+>> spi-nor patches from the latest. I'll back-port more changes from
+>> the spi-nor/next and will test the INFO(0xef6020, 0, 0, 0) setting
+>> again.
+> 
+> I tested the setting again after cherry picking all SPI relating changes
+> from the 'for-next' branch of
+> git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi repository.
+> 
+> No luck! It's still making the same warning dump at 'add_mtd_device'
+> since 'mtd->erasesize' is checked as 0.
+> 
+> I traced it further to check if the erasesize is properly parsed from
+> the sfdp and checked that erase map seems parsed and initialized
+> correctly in 'spi_nor_parse_bfpt' but problem is, a target
+> mtd->erasesize is not properly selected in 'spi_nor_select_erase' since
+> the 'wanted_size' variable is initialized as sector size of info table
+> so a selected target mtd->erasesize is also 0 so looks like it's the
+> reason why it can't initialize mtd device if we use
+> INFO(0xef6020, 0, 0, 0).
+> 
+> Also, checked that the mtd->erasesize is set to 4096 if I enable
+> CONFIG_MTD_SPI_NOR_USE_4K_SECTORS so the SPI flash can be initialized 
+> with the INFO(0xef6020, 0, 0, 0) setting but, it should cover even when
+> the configuration is not enabled. I think, this patch should go as it
+> is. The erasesize selecting issue could be fixed using a separate
+> patch.
+> 
+> Are you still sure that the INFO(0xef6020, 0, 0, 0) works in the
+> latest spi-next?
 
-Ian Rogers (1):
-  perf metrics: Add literal for system TSC frequency
+I also tried to fix the issue and made a fix like below.
 
-Kan Liang (1):
-  perf tsc: Add arch TSC frequency information
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 502967c76c5f..f8a020f80a56 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -2117,7 +2117,7 @@ spi_nor_select_uniform_erase(struct 
+spi_nor_erase_map *map,
+                  * If the current erase size is the one, stop here:
+                  * we have found the right uniform Sector Erase command.
+                  */
+-               if (tested_erase->size == wanted_size) {
++               if (wanted_size && tested_erase->size == wanted_size) {
+                         erase = tested_erase;
+                         break;
+                 }
 
- tools/perf/arch/x86/util/cpuid.h  | 34 +++++++++++++++++
- tools/perf/arch/x86/util/header.c | 27 ++++++--------
- tools/perf/arch/x86/util/tsc.c    | 33 ++++++++++++++++
- tools/perf/tests/expr.c           | 15 ++++++++
- tools/perf/util/expr.c            | 62 +++++++++++++++++++++++++++++++
- tools/perf/util/tsc.h             |  1 +
- 6 files changed, 156 insertions(+), 16 deletions(-)
- create mode 100644 tools/perf/arch/x86/util/cpuid.h
+Tested that it makes the INFO(0xef6020, 0, 0, 0) setting work and a
+selected mtd->erasesize is 65536 which is what I expected for this
+device.
 
--- 
-2.37.0.170.g444d1eabd0-goog
+Not sure if it's a right fix or not. Please review and let me know if
+it's good to submit or not.
 
+Thanks,
+
+Jae
+
+> Thanks,
+> 
+> Jae
+> 
+>> -Jae
+>>
+>>> -michael
+>>>
+>>> [1] 
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git#spi-nor/next

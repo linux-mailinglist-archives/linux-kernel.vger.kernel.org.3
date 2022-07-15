@@ -2,165 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B3857665C
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E34576660
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbiGORrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 13:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
+        id S230096AbiGORur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 13:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiGORro (ORCPT
+        with ESMTP id S229879AbiGORuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 13:47:44 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5732F3A5;
-        Fri, 15 Jul 2022 10:47:43 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31c89111f23so54414037b3.0;
-        Fri, 15 Jul 2022 10:47:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QLat8Q/2ROY2Kt2jHQc4a4l6+yIDdGjl086waEjxxKE=;
-        b=XL/J2hlgksL1wbvaFMJVRCZJZjdsoBfyLKhywFoDx/Kv0npGAy3ykA3+yOdAaPLAYW
-         dxLNfyQMUnTPsNlZzMw4C3QN8iBPLll5/kWGwkAqhh2Noy7nMESMVDNj2+SEi+JgNNAb
-         jRUK5w6izhfqlkcvZihN4JK2tFiwAVhfhQ3FFPi7WSGla9uI4RoYKckBQoDWdmfKTAbR
-         j84gf1h14OeVOllj9DJKod6Y2Q5/Y7AxTxJMmcCtH+eec9dqwou2nJEQQ41QienVe73z
-         X3gM1O6D5YAZkDSv30PHPEgU1H/jrAF7C6g8NrECz2pP7dmqFuUj53ZnxInH5suRLBxG
-         cuCg==
-X-Gm-Message-State: AJIora+zweu0sLM5XIG5fLKU9kJR1EVkZQ3Akos8Xvp6bsMAI3TA4HyS
-        kIcNxELkNelNUqr4n57j36ysrhghj0+IUTbVEaB3Ze7A
-X-Google-Smtp-Source: AGRyM1u2kEEEFmdEOQxahhMYKJGY6tuAPHAaxtme8gcImgb36PXMz5xzib4wQEKqNyLKPEXkYJZobj+k727mYZWXYTc=
-X-Received: by 2002:a81:17d0:0:b0:31c:c5e2:fc1e with SMTP id
- 199-20020a8117d0000000b0031cc5e2fc1emr17548698ywx.196.1657907262218; Fri, 15
- Jul 2022 10:47:42 -0700 (PDT)
+        Fri, 15 Jul 2022 13:50:44 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF66822517
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jTcOrPA+ocFbinFbt5VpQCoXRpjbOrc2oieHhF7HDbU=; b=B1PHL2D/OoKCq1vGITDu2dnvgR
+        lSeZv2qJY8qSk3+YDMMci0r+pa2+qIhvYmF2748kPNIl0IwOtrvI5zSCeVML+rpNOojkFMpYfba/Q
+        X8floWxTJloOg7zhAIt2yegLLvTI0L9GTJIAPWBqi38WNgUyhyMGgJOjzotJQukTVcud8tZmGpye3
+        SwMdNc9D8zy9YwXSnmYIk0UWELw+eszyyPHo7kvdYtz44g8b8AofzhI/+vUhkDA6YZzKX63y5/599
+        c4dpC0SQVA/rU6ynqsCQmer5e+LFDDHf2WGxeWyyuJUj5rZk0VB8vlvhC8MxRHLkmTIyx36Z1dOoc
+        UOGd6o5A==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oCPSW-00ARIe-AS; Fri, 15 Jul 2022 17:50:36 +0000
+Date:   Fri, 15 Jul 2022 18:50:36 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Zhou Guanghui <zhouguanghui1@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] mm/huge_memory: Return from zap_huge_pmd after WARN_ONCE.
+Message-ID: <YtGo7GS5l4WxZA/R@casper.infradead.org>
+References: <20220715092238.22663-1-zhouguanghui1@huawei.com>
 MIME-Version: 1.0
-References: <20220712121832.3659769-1-martin.kepplinger@puri.sm>
-In-Reply-To: <20220712121832.3659769-1-martin.kepplinger@puri.sm>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Jul 2022 19:47:31 +0200
-Message-ID: <CAJZ5v0g_2Lwpdks6+NSuemxSKvdTbM0Rhot9vAy=psEiCn+MMQ@mail.gmail.com>
-Subject: Re: [PATCH v2] power: domain: handle power supplies that need interrupts
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Kevin Hilman <khilman@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, kernel@puri.sm,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>, aford173@gmail.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715092238.22663-1-zhouguanghui1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 2:19 PM Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
->
-> If the power-domains' power-supply node (regulator) needs
-> interrupts to work, the current setup with noirq callbacks cannot
-> work; for example a pmic regulator on i2c, when suspending, usually already
-> times out during suspend_noirq:
->
-> [   41.024193] buck4: failed to disable: -ETIMEDOUT
->
-> So fix system suspend and resume for these power-domains by using the
-> "outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5
-> board, but by looking at the dts, this will fix imx8mq-evk and possibly
-> other boards too.
->
-> Possibly one can find more changes than suspend/resume for this case. They
-> can be added later when testing them.
->
-> Initially system suspend problems had been discussed at
-> https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> which led to discussing the pmic that contains the regulators which
-> serve as power-domain power-supplies:
-> https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
+On Fri, Jul 15, 2022 at 09:22:38AM +0000, Zhou Guanghui wrote:
+> After WARN_ONCE is processed, the subsequent page judgment results
+> in NULL pointer access. It is more reasonable to return from the
+> function here.
 
-I need Ulf to look at this.  Ulf?
+I'm not sure this is a good idea.  Probably better to crash than
+continue.
 
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
 > ---
->
-> revision history
-> ----------------
-> v2: (thank you Krzysztof)
-> * rewrite: find possible regulators' interrupts property in parents
->   instead of inventing a new property.
->
-> v1: (initial idea)
-> https://lore.kernel.org/linux-arm-kernel/20220711094549.3445566-1-martin.kepplinger@puri.sm/T/#t
->
->
->  drivers/base/power/domain.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 3e86772d5fac..ca3e3500939d 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2298,6 +2298,28 @@ static bool genpd_present(const struct generic_pm_domain *genpd)
->         return ret;
->  }
->
-> +/**
-> + * of_genpd_get_power_supply_irq() - Adjust if power-supply needs interrupts
-> + * @genpd: Pointer to PM domain associated with the PM domain provider.
-> + */
-> +static void of_genpd_get_power_supply_irq(struct generic_pm_domain *pd)
-> +{
-> +       struct device_node *dn;
-> +
-> +       dn = of_parse_phandle(pd->dev.of_node, "power-supply", 0);
-> +       if (!dn)
-> +               return;
-> +
-> +       while ((dn = of_get_next_parent(dn))) {
-> +               if (of_get_property(dn, "interrupts", NULL)) {
-> +                       pd->domain.ops.suspend = genpd_suspend_noirq;
-> +                       pd->domain.ops.resume = genpd_resume_noirq;
-> +                       pd->domain.ops.suspend_noirq = NULL;
-> +                       pd->domain.ops.resume_noirq = NULL;
-> +               }
-> +       }
-> +}
-> +
->  /**
->   * of_genpd_add_provider_simple() - Register a simple PM domain provider
->   * @np: Device node pointer associated with the PM domain provider.
-> @@ -2343,6 +2365,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
->         genpd->provider = &np->fwnode;
->         genpd->has_provider = true;
->
-> +       of_genpd_get_power_supply_irq(genpd);
-> +
->         return 0;
->  }
->  EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
-> @@ -2394,6 +2418,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
->
->                 genpd->provider = &np->fwnode;
->                 genpd->has_provider = true;
-> +
-> +               of_genpd_get_power_supply_irq(genpd);
->         }
->
->         ret = genpd_add_provider(np, data->xlate, data);
-> --
-> 2.30.2
->
+>  mm/huge_memory.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 834f288b3769..7f5ccca6792a 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -1601,8 +1601,11 @@ int zap_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+>  			entry = pmd_to_swp_entry(orig_pmd);
+>  			page = pfn_swap_entry_to_page(entry);
+>  			flush_needed = 0;
+> -		} else
+> +		} else {
+> +			spin_unlock(ptl);
+>  			WARN_ONCE(1, "Non present huge pmd without pmd migration enabled!");
+> +			return 1;
+> +		}
+>  
+>  		if (PageAnon(page)) {
+>  			zap_deposited_table(tlb->mm, pmd);
+> -- 
+> 2.17.1
+> 
+> 

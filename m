@@ -2,90 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3899575BC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84749575BCE
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbiGOGrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 02:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
+        id S230396AbiGOGtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 02:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGOGrG (ORCPT
+        with ESMTP id S229835AbiGOGtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 02:47:06 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AED5F9A0;
-        Thu, 14 Jul 2022 23:47:05 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 163A522238;
-        Fri, 15 Jul 2022 08:47:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657867623;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CRJxTYWXPZ5JA1fWKuNn+jOkdWIehOfaUm8WdJ9gjCA=;
-        b=ScBd4qhCTKZVKbldt2EiJ7l1++sNujZ5Kzc+HNtX9LxQYn1mRzgH5LvVBRPaPs9fcBJr9f
-        104mPrix9HB4f0aUx7OFIDOBEhgVKq5iNB/M1GMKS2Ux+FFE4aswXySGouhWCl27Zmm6co
-        12lIucsi+2mL6CyUXA+YCjGtjxWGW64=
+        Fri, 15 Jul 2022 02:49:47 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7715253D25
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:49:46 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id z12so5453868wrq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:49:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VdptCOL2VW32BY8/rU/JuxrcRY0Hrsh4NodFU3M3eVI=;
+        b=NRuXxUltQNkkRwo9DtN9gpt2pV8gfClZRpWDE9g2gyXiUaCccp/lGBfKhL6RlAjR2J
+         l3vUgO9rw0WeT40ZY3cAT5pHXbbnF3hZkIN0MTljXgiuaFtVNlAXlfYMtwateyEjAbwm
+         DnEL8ER3h3LpnIK340D7WyqLje8nNYkfCzQG2rmr2JaJN7K/LvhKXrfJKdqGvibVNLsf
+         5/upHpMrls3Lcg+mXFLppDf25Ep+hqdCwOlei6pRVgGcO2zRQjUsv8l0X+9c8l3B6Mlp
+         JfptbDLxnJFNMqEYSlSA6AD7bH9tk/HH0QdrFE2Ht0CH+zNhZiqt8gmYEOgt62AUK+cq
+         M59A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VdptCOL2VW32BY8/rU/JuxrcRY0Hrsh4NodFU3M3eVI=;
+        b=g+bAWb+ekQRoVPiDVs5bANypJqpeScLuE2+AuECHhmq4xuByul1eMIt/na6HD0rHZ9
+         kjqNx40FZ+k0X/ECE0yOhIsaVKYLsXytlThznLYXbvsTdGav/YXOu8SsGHIPdAmre4/X
+         +ARagzaWnm12jrzy2ypIFDe6izvjI4q/es47U88PTGA0k1Dkupo6mowmhFE4jqSFe5N4
+         pfdDu0Hts8zeJXO2S8x/8iMtWnP+Gljp+BKaySN0D+FnszNMGhYlt9h58anbC6Zc8/7w
+         quwyGrMeQiFWudDHXJnm7JGCJx1lcJz7ctP/KGcMXO9sJjmqe4dDl0C44FbB/8Bwss4r
+         GuFg==
+X-Gm-Message-State: AJIora8j6UAVXJXiL9oy8Vk1kbgNZ0QNOfnePoq9Uke8bJ0cn0gXYpFR
+        6ezpL3MnslAaMx6VstCXbJ3m4yeTW2aYBAS/4SMIIQ==
+X-Google-Smtp-Source: AGRyM1spS0A9XyUAjzNKptCozoKQpSOM4yj8yB7lV4IQ7nzqzA0j7GNtj5+JXp2msed0t09Cn2Tp87p9xK9XuMBgJKk=
+X-Received: by 2002:adf:fd4a:0:b0:21d:8b59:dcb1 with SMTP id
+ h10-20020adffd4a000000b0021d8b59dcb1mr11302010wrs.622.1657867784809; Thu, 14
+ Jul 2022 23:49:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 15 Jul 2022 08:47:00 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: Re: [PATCH 2/2] tty: serial: fsl_lpuart: writing a 1 and then a 0 to
- trigger a break character
-In-Reply-To: <20220715025944.11076-3-sherry.sun@nxp.com>
-References: <20220715025944.11076-1-sherry.sun@nxp.com>
- <20220715025944.11076-3-sherry.sun@nxp.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <509669b26b5899088e9b77ed94d103ee@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220518073232.526443-1-davidgow@google.com> <20220518073232.526443-2-davidgow@google.com>
+ <YoS6rthXi9VRXpkg@elver.google.com> <CABVgOSmyApbC7en25ZBr7hLJye0mOnUY5ETR-VVEWmbaXq3bdQ@mail.gmail.com>
+ <CANpmjNOdSy6DuO6CYZ4UxhGxqhjzx4tn0sJMbRqo2xRFv9kX6Q@mail.gmail.com>
+ <CAGS_qxr_+KgqXRG-f9XMWsZ+ASOxSHFy9_4OZKnvS5eZAaAT7g@mail.gmail.com>
+ <CANpmjNP-YYB05skVuJkk9CRB=KVvS+5Yd+yTAzXC7MAkKAe4jw@mail.gmail.com>
+ <CAGS_qxq5AAe0vB8N5Eq+WKKNBchEW++Cap2UDo=2hqGzjAekCg@mail.gmail.com> <CAGS_qxpNHrWxGBV6jcee7wPzkWTb1Mh0fpE7j4_0LrgeLv+4Ow@mail.gmail.com>
+In-Reply-To: <CAGS_qxpNHrWxGBV6jcee7wPzkWTb1Mh0fpE7j4_0LrgeLv+4Ow@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 15 Jul 2022 14:49:33 +0800
+Message-ID: <CABVgOSnK6pd2yPdxX6F+JNCdtk+xKVzbWyy9ffJeDM1eC5SsTQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kcsan: test: Add a .kunitconfig to run KCSAN tests
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Marco Elver <elver@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000006c623b05e3d26c76"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--0000000000006c623b05e3d26c76
+Content-Type: text/plain; charset="UTF-8"
 
-Am 2022-07-15 04:59, schrieb Sherry Sun:
-> According to the lpuart reference manual, need to writing a 1 and then 
-> a
-> 0 to the UARTCTRL_SBK field queues a break character in the transmit
-> data stream. Only writing a 1 cannot trigger the break character, so 
-> fix
-> it.
+On Fri, Jul 15, 2022 at 7:48 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Thu, Jul 14, 2022 at 4:45 PM Daniel Latypov <dlatypov@google.com> wrote:
+> > Ack.
+> > So concretely, so then a final result like this?
+> >
+> > $ cat kernel/kcsan/.kunitconfig
+> > # Note that the KCSAN tests need to run on an SMP setup.
+> > # Under kunit_tool, this can be done by using the x86_64-smp
+> > # qemu-based architecture:
+>
+> Oops, this bit would need to be updated to something like:
+>
+> # Under kunit_tool, this can be done by using --qemu_args:
+>
+> > # ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
+> > --arch=x86_64 --qemu_args='-smp 8'
+> >
+> > CONFIG_KUNIT=y
+> >
+> > CONFIG_DEBUG_KERNEL=y
+> >
+> > CONFIG_KCSAN=y
+> > CONFIG_KCSAN_KUNIT_TEST=y
+> >
+> > # Need some level of concurrency to test a concurrency sanitizer.
+> > CONFIG_SMP=y
+> >
+> > # This prevents the test from timing out on many setups. Feel free to remove
+> > # (or alter) this, in conjunction with setting a different test timeout with,
+> > # for example, the --timeout kunit_tool option.
+> > CONFIG_KCSAN_REPORT_ONCE_IN_MS=100
 
-I don't think this is correct. The tty core will already call this:
-   .break_ctl(port, 1)
-   usleep()
-   .break_ctl(port, 0)
 
-So you'll have your 1->0 transition.
+Thanks everyone. I've sent out a v2 with just this patch here:
+https://lore.kernel.org/linux-kselftest/20220715064052.2673958-1-davidgow@google.com/
 
-My RM from the LS1028A says the following:
+I expect we'll take it in via the KUnit branch, as it's most useful
+with the --qemu_args option.
 
-| Writing a 1 and then a 0 to SBK queues a break character in the
-| transmit data stream. Additional break characters of 10 to 13,
-| or 13 to 16 if LPUART_STATBRK13] is set, bit times of logic 0
-| are queued as long as SBK is set. Depending on the timing of
-| the set and clear of SBK relative to the information currently
-| being transmitted, a second break character may be queued
-| before software clears SBK.
+Cheers,
+-- David
 
-To me it seems that setting the SBK bit just pulls the TX line
-low and releasing it will return to normal transmitter mode.
+--0000000000006c623b05e3d26c76
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
--michael
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD6
+Gi0j2hMDLEzvaBl193pAKOfw6C/mR9ImhmUaK3wwqzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA3MTUwNjQ5NDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAZ8bjw0I4IHzJa1/jxZsX
+09uyTuCgJuGkJuuLGlGoQ4cWZ+kFt+QGSuTZzG3z1LlriPJI6yU+tp3ICCpznawFsvj7g9YoalK8
+TO2kqfy/YKKm+I1pahWLZt1s2pAA69Q01sZwZZaEwILAQMfdnfcv+AgwATFSTLLJBvQqZvNIEj0N
+Wg7H/CjNGLjILymYq77k2N9KosE/7rf+6mV1NhdDNXYryzdIP01WvK6uhy2uKnvzCzoZqe57OyN6
+qgxQ6+GZxg8DHkVs29KYmehc1XIQEDW0EDIepY613udBQ3Sh3trbMwo52cPLIhCIOI5YnYgrjdld
+Y/znKCgzyvRU+MHrhg==
+--0000000000006c623b05e3d26c76--

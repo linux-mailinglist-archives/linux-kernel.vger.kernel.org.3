@@ -2,125 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25073576378
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D956257637D
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235352AbiGOOOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 10:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S235423AbiGOOO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 10:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235359AbiGOOOM (ORCPT
+        with ESMTP id S235385AbiGOOOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 10:14:12 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E3714091;
-        Fri, 15 Jul 2022 07:14:10 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id EA2735C00ED;
-        Fri, 15 Jul 2022 10:14:07 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 15 Jul 2022 10:14:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1657894447; x=1657980847; bh=xUs+Fa77kr
-        OyO5S4vACFreFi4W0sYUD0E2jG/FaLPJ0=; b=uaewZsONjI/FGiYO1CmrPp94pQ
-        +EbTpYs0zltsiN2zMcbuHKqz+tMuJBG+Sfyoi+Aqaea1aUVFy353BG9zI0sp+lPQ
-        d4ikMUtESrDAACgDP8/Mwa0TB18rkhZyhHvR8tHBlnCeadx80VWnpbJ9ChQY4oZx
-        5IDXfBc9IufgaZsEr80vvyqBgtHfEuRuL87trpnzs/jzyZRdD0gpNll6V2t7XNac
-        0+ybP8HVbyc9Q/xc/9+WymO1XojBSD+/gziOUM/S1Vo3J7bLVaJRD8il3c3BLYPr
-        ui9ozAf8Bg8fSr/ZmSCltcx2Fy5vTF50KUYT/+Np7PzNSO1yxuJlBXKIZQXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1657894447; x=1657980847; bh=xUs+Fa77krOyO5S4vACFreFi4W0s
-        YUD0E2jG/FaLPJ0=; b=SNTD2mKFMG7hVD/tArK44XjJLKLmu4pB0SPLWpq46sWe
-        xuTJBQp/aMsPpt/b+0ZAQEGh+1j/d+mGrvkNWDtJYlHim4UJSXAHP/wAhtFIfmiX
-        Fu8NoCYXo3mq/eywmwzNuNn44Q8c37zpLSxI7ktB2V0gz4819KN69EwQFuUNNNi+
-        3JDTxUeruv+F9+yU892LZslG2HkThCroJktB5kAmjKGtwq1NJYE9rAG1R9mXucU2
-        DMj/r+Q8p08ZWN/STNeSgyogRekKO1/LKNZQ5A4TbTLzU7arSL7HqXr+L3IMnw10
-        KpEjSsePRapzvA4eHB0QuiyG3tgGCzAsKvN21FH3qg==
-X-ME-Sender: <xms:LnbRYu6JK8A7QOtt4SbNnQ449ycSfQ-JE4mnwika5sFRRGpmZ3ndbA>
-    <xme:LnbRYn6q08OotmzFw85NojQZ2m5YZBrs6LSjBHegrMScM4FptF699GdBiQcCqE4xW
-    R873XoyMPHtng>
-X-ME-Received: <xmr:LnbRYtcj1fNhVrkPq-fKecq3nK8fQ7RAm0DWiSsTMrCjip7kqTqMCjBpLuSmWUljeQSpc3TWJt-OM_17kQJezGwSFcfy-lua>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudekuddgjeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeehue
-    ehgfdtledutdelkeefgeejteegieekheefudeiffdvudeffeelvedttddvnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:LnbRYrLYChHAFVJRn5QfggQl0gIp_TOWK68oBJDa1Y4UMJKfYfVELw>
-    <xmx:LnbRYiL0qVztBl62gRF6IhfIHg8tDmlBEc8UPnVlHzdLXyy5CVwEgg>
-    <xmx:LnbRYswa8jHVHu00hk_UZQ7a2SMFNuB-8zFP31uv4XaGkDwV1emNJA>
-    <xmx:L3bRYhUmyk13avp4LuEqBpwv2OrsMg-Hv7rezY9IfN7Ze7iviscOGw>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 15 Jul 2022 10:14:05 -0400 (EDT)
-Date:   Fri, 15 Jul 2022 16:14:01 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        yj.chiang@mediatek.com,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 5.4] sched/rt: Disable RT_RUNTIME_SHARE by default
-Message-ID: <YtF2KVJkAnUlx5li@kroah.com>
-References: <20220714073055.15049-1-mark-pk.tsai@mediatek.com>
+        Fri, 15 Jul 2022 10:14:24 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AA215813
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:14:23 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id ez10so9161349ejc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0gmpAzq1QLQJvy1sF1qsN2KHunfvdectBOUVazsFT0c=;
+        b=M7DPLx6wiUJsGIxyF+Mfs16brKcddihTLDDfbseDRC0UoXNlRRl5Tk7c84fYx+qxK0
+         HipLuAx8IOhv9YAWcHpvJL2VSY6g8vwXNJPBQleA650i8RJDezv4aXGTdaAVFlOOJgFX
+         bQW2PSWuaNK8v7zyIeFh7rmx+svJvoQkrywDo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0gmpAzq1QLQJvy1sF1qsN2KHunfvdectBOUVazsFT0c=;
+        b=Yp1kCVpv3YUbfTq6bRSy8HtSBStsIgbx3DQ52VZrCT4DAY75FzRTYX+N6W7N75SMfu
+         EsPnl/pFLAg5Vr7xA/vWq4D5rx53UPYO14rBweuMYkvXp+5HuSRqPW015tblDhhdJIAN
+         hHn2hq4vAZQ0MIeoWI4RkG3gFaIxC1b/8cAUKRRvbA490G78JdCFWosz6rGcH+W9XCR9
+         90cusG2wqmdjMxRvrVOLSZNwlcVYxHKRL+BJD7UE/RGm3d42zVScBjNp05xfew3CGAiy
+         4DvUIjzFhsESD4cvLwI8Sbzrtsblps8Cqb71aiL2popoc1U9xn2moZ9tOHmkMKJlcK9f
+         KnFg==
+X-Gm-Message-State: AJIora+t0A/S1Lr/ZtJsZgIdWWMKcftnFgtZ8hsub0Li+ng3hEZWcRbF
+        G51VisfJwL3vQMe/3bmBX7qIvp7Isy4DoNkt
+X-Google-Smtp-Source: AGRyM1vTViNXnjZrQuh6YlSNVA5uNgixncGrz1QxmLankY5lPF3TVhW1++Cl7nqPoJjd+/K1CVbvag==
+X-Received: by 2002:a17:907:7214:b0:72b:8720:487f with SMTP id dr20-20020a170907721400b0072b8720487fmr14091070ejc.640.1657894461385;
+        Fri, 15 Jul 2022 07:14:21 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id c17-20020a17090618b100b006fe9e717143sm2087520ejf.94.2022.07.15.07.14.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 07:14:20 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id e15so1671055wro.5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:14:20 -0700 (PDT)
+X-Received: by 2002:adf:ead2:0:b0:21d:8b49:6138 with SMTP id
+ o18-20020adfead2000000b0021d8b496138mr13033418wrn.138.1657894460100; Fri, 15
+ Jul 2022 07:14:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220714073055.15049-1-mark-pk.tsai@mediatek.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715084442.115021-1-jinghung.chen3@hotmail.com> <SG2PR03MB5006FEBF794767B52DD80152CC8B9@SG2PR03MB5006.apcprd03.prod.outlook.com>
+In-Reply-To: <SG2PR03MB5006FEBF794767B52DD80152CC8B9@SG2PR03MB5006.apcprd03.prod.outlook.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 15 Jul 2022 07:14:08 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Vad82p+Oz6kxJpiB9NLan67qF1+bDfiOmSEE9NaTEs2A@mail.gmail.com>
+Message-ID: <CAD=FV=Vad82p+Oz6kxJpiB9NLan67qF1+bDfiOmSEE9NaTEs2A@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] arm64: dts: qcom: Add LTE SKUs for sc7280-villager family
+To:     Jimmy Chen <jinghung.chen3@hotmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Alan Huang <alan-huang@quanta.corp-partner.google.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 03:30:52PM +0800, Mark-PK Tsai wrote:
-> From: Daniel Bristot de Oliveira <bristot@redhat.com>
-> 
-> commit 2586af1ac187f6b3a50930a4e33497074e81762d upstream.
-> 
-> The RT_RUNTIME_SHARE sched feature enables the sharing of rt_runtime
-> between CPUs, allowing a CPU to run a real-time task up to 100% of the
-> time while leaving more space for non-real-time tasks to run on the CPU
-> that lend rt_runtime.
-> 
-> The problem is that a CPU can easily borrow enough rt_runtime to allow
-> a spinning rt-task to run forever, starving per-cpu tasks like kworkers,
-> which are non-real-time by design.
-> 
-> This patch disables RT_RUNTIME_SHARE by default, avoiding this problem.
-> The feature will still be present for users that want to enable it,
-> though.
-> 
-> Signed-off-by: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Tested-by: Wei Wang <wvw@google.com>
-> Link: https://lkml.kernel.org/r/b776ab46817e3db5d8ef79175fa0d71073c051c7.1600697903.git.bristot@redhat.com
-> Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-> Cc: stable@vger.kernel.org
+Hi,
+
+On Fri, Jul 15, 2022 at 1:45 AM Jimmy Chen <jinghung.chen3@hotmail.com> wrote:
+>
+> This adds LTE skus for villager device tree files.
+>
+> Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
 > ---
->  kernel/sched/features.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> Changes in v5:
+> - Reorder '.dtb' in Makefile
+> - Put the "interconnects" line back
+>
+> Changes in v4:
+> - Reorder 'status' last
+>
+>  arch/arm64/boot/dts/qcom/Makefile               |  2 ++
+>  .../boot/dts/qcom/sc7280-chrome-common.dtsi     | 11 -----------
+>  .../boot/dts/qcom/sc7280-herobrine-crd.dts      |  1 +
+>  .../qcom/sc7280-herobrine-herobrine-r1-lte.dts  | 14 ++++++++++++++
 
-Now queued up, thanks.
-
-greg k-h
+Your v5 accidentally added the file
+"sc7280-herobrine-herobrine-r1-lte.dts". Please remove it.

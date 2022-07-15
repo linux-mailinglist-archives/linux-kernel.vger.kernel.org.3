@@ -2,102 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8973E576129
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 14:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3716576141
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 14:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232627AbiGOMQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 08:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
+        id S234237AbiGOMZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 08:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiGOMQm (ORCPT
+        with ESMTP id S229771AbiGOMZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 08:16:42 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0532F64A;
-        Fri, 15 Jul 2022 05:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657887401; x=1689423401;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7orHDdnehrqRlxB1JS1kp4d9GAAR3NEIVdEeTd0qlyU=;
-  b=FBCKb+lKdXa1G9mLXcrxiHjcCL4UsQ1NWWWnixyR5PM/4QPH9v4ML5Xs
-   BCZ2hOUnYOnaCrHq6dPakjfSqZUJIA0Xk2eMy/V/o1JSVJg2vOyy58t/+
-   ujZ2HMUxQfAOBWmSK4raEdY8QzkMrAm7cPPnlxn7rVQGMT9SbRrjyCbHR
-   9mYupIVoLkzavOUokpFN5kQv+Nl2aNe4a/cC+tUNfyF4NVblPuDzWc1rw
-   Arpc5GmaENFpREXwnnVFY6qZvEe6h55M6bVKpMg4ABC+/iTpGx1vPRdRJ
-   6i392/PnRWQ27XDc7QmmnJWQqFBOAGZy9+lDrlWstbwQcG36E7B7wBR+m
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="285804401"
-X-IronPort-AV: E=Sophos;i="5.92,273,1650956400"; 
-   d="scan'208";a="285804401"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 05:16:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,273,1650956400"; 
-   d="scan'208";a="723065193"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga004.jf.intel.com with ESMTP; 15 Jul 2022 05:16:40 -0700
-Received: from P12HL01TMIN.png.intel.com (P12HL01TMIN.png.intel.com [10.158.65.216])
-        by linux.intel.com (Postfix) with ESMTP id DAE87580970;
-        Fri, 15 Jul 2022 05:16:37 -0700 (PDT)
-From:   Wong Vee Khee <vee.khee.wong@linux.intel.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Wong Vee Khee <vee.khee.wong@linux.intel.com>
-Subject: [PATCH net 1/1] net: stmmac: remove redunctant disable xPCS EEE call
-Date:   Fri, 15 Jul 2022 20:24:02 +0800
-Message-Id: <20220715122402.1017470-1-vee.khee.wong@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 15 Jul 2022 08:25:54 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 539EC814B2;
+        Fri, 15 Jul 2022 05:25:53 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oCKOG-00082w-00; Fri, 15 Jul 2022 14:25:52 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id BAF77C0499; Fri, 15 Jul 2022 14:24:36 +0200 (CEST)
+Date:   Fri, 15 Jul 2022 14:24:36 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-mips@vger.kernel.org, fancer.lancer@gmail.com,
+        gerg@kernel.org, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] MIPS: Fixed __debug_virt_addr_valid()
+Message-ID: <20220715122436.GA2705@alpha.franken.de>
+References: <20220714222514.1570617-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714222514.1570617-1-f.fainelli@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Disable is done in stmmac_init_eee() on the event of MAC link down.
-Since setting enable/disable EEE via ethtool will eventually trigger
-a MAC down, removing this redunctant call in stmmac_ethtool.c to avoid
-calling xpcs_config_eee() twice.
+On Thu, Jul 14, 2022 at 03:25:12PM -0700, Florian Fainelli wrote:
+> It is permissible for kernel code to call virt_to_phys() against virtual
+> addresses that are in KSEG0 or KSEG1 and we need to be dealing with both
+> types. Rewrite the test condition to ensure that the kernel virtual
+> addresses are above PAGE_OFFSET which they must be, and below KSEG2
+> where the non-linear mapping starts.
+> 
+> For EVA, there is not much that we can do given the linear address range
+> that is offered, so just return any virtual address as being valid.
+> 
+> Finally, when HIGHMEM is not enabled, all virtual addresses are assumed
+> to be valid as well.
+> 
+> Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+> Changes in v2:
+> 
+> - handle lack of HIGHMEM and EVA
+> 
+>  arch/mips/mm/physaddr.c | 14 ++++----------
+>  1 file changed, 4 insertions(+), 10 deletions(-)
 
-Fixes: d4aeaed80b0e ("net: stmmac: trigger PCS to turn off on link down")
-Signed-off-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c | 8 --------
- 1 file changed, 8 deletions(-)
+applied to mips-next.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
-index abfb3cd5958d..9c3055ee2608 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
-@@ -803,14 +803,6 @@ static int stmmac_ethtool_op_set_eee(struct net_device *dev,
- 		netdev_warn(priv->dev,
- 			    "Setting EEE tx-lpi is not supported\n");
- 
--	if (priv->hw->xpcs) {
--		ret = xpcs_config_eee(priv->hw->xpcs,
--				      priv->plat->mult_fact_100ns,
--				      edata->eee_enabled);
--		if (ret)
--			return ret;
--	}
--
- 	if (!edata->eee_enabled)
- 		stmmac_disable_eee_mode(priv);
- 
+Thomas.
+
 -- 
-2.25.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

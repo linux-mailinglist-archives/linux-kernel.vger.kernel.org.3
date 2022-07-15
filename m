@@ -2,177 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C159A5760EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A965760F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234828AbiGOLw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 07:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        id S234882AbiGOLy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 07:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbiGOLw1 (ORCPT
+        with ESMTP id S233039AbiGOLy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 07:52:27 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1528389EA7;
-        Fri, 15 Jul 2022 04:52:26 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id E906522175;
-        Fri, 15 Jul 2022 13:52:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657885944;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qHIQnN1CQKPRNKNPt8IY1glg9IKOeRpM3quFOgpAShQ=;
-        b=a0Hu8QXzwVmoABu7ntZQG/hoBsyTlCS7wQCMUZ5BChTxeQyggZrNPCzsvB0E+ke2Kn8mHA
-        WV47FoCkiQxBpIjOBV6/q/FxZDS7yI1/RoqKZCg8VJp9VkGJcDglkZpM+BwkqA9qqKCyBk
-        nn0N9Oy34YwynrNe+7UXznhWafk0slg=
+        Fri, 15 Jul 2022 07:54:58 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE2E88F0A;
+        Fri, 15 Jul 2022 04:54:56 -0700 (PDT)
+X-UUID: bf7906bc41b64bf29111a658b8e28b12-20220715
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:3b4fe7d1-76d3-44d0-80a7-6bb6936e1b08,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:0f94e32,CLOUDID:5d9c6764-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: bf7906bc41b64bf29111a658b8e28b12-20220715
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 933088656; Fri, 15 Jul 2022 19:54:51 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 15 Jul 2022 19:54:50 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Fri, 15 Jul 2022 19:54:50 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        "Chen-Yu Tsai" <wenst@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH] spi: dt-bindings: mediatek,spi-mtk-nor: Update bindings for nor flash
+Date:   Fri, 15 Jul 2022 19:54:43 +0800
+Message-ID: <20220715115443.4154-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 15 Jul 2022 13:52:23 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH 2/2] tty: serial: fsl_lpuart: writing a 1 and then a 0 to
- trigger a break character
-In-Reply-To: <AS8PR04MB8404B8E3EB0FFCEE8ADDA283928B9@AS8PR04MB8404.eurprd04.prod.outlook.com>
-References: <20220715025944.11076-1-sherry.sun@nxp.com>
- <20220715025944.11076-3-sherry.sun@nxp.com>
- <509669b26b5899088e9b77ed94d103ee@walle.cc>
- <AS8PR04MB840448675E64E4FCDEEF91A1928B9@AS8PR04MB8404.eurprd04.prod.outlook.com>
- <e2560f01fd1731ea2422d82c97efcc6f@walle.cc>
- <AS8PR04MB8404B8E3EB0FFCEE8ADDA283928B9@AS8PR04MB8404.eurprd04.prod.outlook.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <61c525fc87d6586c024cd6e42fcf876d@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-07-15 11:18, schrieb Sherry Sun:
->> Am 2022-07-15 09:20, schrieb Sherry Sun:
->> >> Subject: Re: [PATCH 2/2] tty: serial: fsl_lpuart: writing a 1 and
->> >> then a 0 to trigger a break character
->> >>
->> >> Hi,
->> >>
->> >> Am 2022-07-15 04:59, schrieb Sherry Sun:
->> >> > According to the lpuart reference manual, need to writing a 1 and
->> >> > then a
->> >> > 0 to the UARTCTRL_SBK field queues a break character in the
->> >> > transmit data stream. Only writing a 1 cannot trigger the break
->> >> > character, so fix it.
->> >>
->> >> I don't think this is correct. The tty core will already call this:
->> >>    .break_ctl(port, 1)
->> >>    usleep()
->> >>    .break_ctl(port, 0)
->> >>
->> >> So you'll have your 1->0 transition.
->> >>
->> >> My RM from the LS1028A says the following:
->> >>
->> >> | Writing a 1 and then a 0 to SBK queues a break character in the
->> >> | transmit data stream. Additional break characters of 10 to 13, or
->> >> | 13 to 16 if LPUART_STATBRK13] is set, bit times of logic 0 are
->> >> | queued
->> >> as
->> >> | long as SBK is set. Depending on the timing of the set and clear of
->> >> | SBK relative to the information currently being transmitted, a
->> >> second
->> >> | break character may be queued before software clears SBK.
->> >>
->> >> To me it seems that setting the SBK bit just pulls the TX line low
->> >> and releasing it will return to normal transmitter mode.
->> >>
->> >
->> > Hi Michael,
->> >
->> > Actually set break_ctl(tty, -1) then break_ctl(tty, 0) is only done in
->> > the send_break() function.
->> > If we call TIOCSBRK from user space, it will only set break_ctl(tty,
->> > -1) without break_ctl(tty, 0).
->> 
->> That is expected. no? There is also the TIOCCBRK which will clear the
->> break. TIOCSBRK will just turn the break on.
->> 
->> I'm not sure if the break is already transmitted when the SBK bit
->> is set, though. Is that your problem here? I'd need to check that
->> on the real hardware.
->> 
-> 
-> Hi Michael,
-> 
-> Seems we have the different understanding of the break_ctl(port,ctl)
-> callback. The original break_ctl(tty,-1) in lpuart will not send the
-> break signal until we call break_ctl(tty,0).
+The spi-mtk-nor controller of mt8173, mt8186 and mt8192 have their
+DT data. They don't use mt8173 as fallback.
 
-That is not correct. The TX linue goes low as soon as the SBK bit
-is set. See below.
+Using the fallback of mt8186 to enables the controllers to support
+mt8188.
 
-> Per my understanding of
-> "If ctl is nonzero, the break signal should be transmitted", call
-> break_ctl(tty,-1) is enough the send one break signal, now my patch
-> makes the behavior align with my understanding.
+Not all of spi-mtk-nor controller need interrupt property, so we
+don't mark interrupt as required.
 
-As I said, Greg should clarify here.
+Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+---
+ .../bindings/spi/mediatek,spi-mtk-nor.yaml        | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-In any case, I've checked the hardware (LS1028A) and as soon as you
-set the SBK bit, the TX line goes low (TTL levels) as expected. It
-will go to high again as soon as you clear the bit again.
+diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+index 41e60fe4b09f..970b1119898b 100644
+--- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
++++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+@@ -23,6 +23,10 @@ allOf:
+ properties:
+   compatible:
+     oneOf:
++      - enum:
++          - mediatek,mt8173-nor
++          - mediatek,mt8186-nor
++          - mediatek,mt8192-nor
+       - items:
+           - enum:
+               - mediatek,mt2701-nor
+@@ -30,13 +34,13 @@ properties:
+               - mediatek,mt7622-nor
+               - mediatek,mt7623-nor
+               - mediatek,mt7629-nor
+-              - mediatek,mt8186-nor
+-              - mediatek,mt8192-nor
+               - mediatek,mt8195-nor
+-          - enum:
+-              - mediatek,mt8173-nor
+-      - items:
+           - const: mediatek,mt8173-nor
++      - items:
++          - enum:
++              - mediatek,mt8188-nor
++          - const: mediatek,mt8186-nor
++
+   reg:
+     maxItems: 1
+ 
+@@ -64,7 +68,6 @@ properties:
+ required:
+   - compatible
+   - reg
+-  - interrupts
+   - clocks
+   - clock-names
+ 
+-- 
+2.18.0
 
-So to me it seems there is nothing wrong here. Also have a look
-at man ioctl_tty:
-
-        TIOCSBRK
-               Turn break on, that is, start sending zero bits.
-
-        TIOCCBRK
-               Turn break off, that is, stop sending zero bits.
-
-So to send one break "character", you need to do ioctl(TIOCSBRK)
-followed by an ioctl(TIOCCBRK).
-
--michael
-
-> And my understanding of break_ctl(tty,0) is that it will terminate the
-> break signal send requirement which has not been done instead of
-> cooperate with break_ctl(tty,-1) to finish one break character send
-> behavior.
-> 
->    | break_ctl(port,ctl)
->    | Control the transmission of a break signal.  If ctl is
->    | nonzero, the break signal should be transmitted.  The signal
->    | should be terminated when another call is made with a zero
->    | ctl.
-> 
-> Best regards
-> Sherry
-> 
-> 
->> > And from the definition of .break_ctl(port,ctl), the callback is used
->> > to Control the transmission of a break
->> > signal(Documentation/driver-api/serial/driver.rst), if ctl is nonzero,
->> > it should queues a break character. I don't think it is reasonable to
->> > call break_ctl() twice in order to send one break signal.
->> 
->> Maybe Gred can correct me, but to me it seems like the .break_ctl()
->> will set the *state* according to the argument, that is either
->> turning it on or turning it off (Except if TTY_DRIVER_HARDWARE_BREAK
->> is set, but that doesn't seem to be supported by the ioctl interface.)
->> 
->> > Also I have tried other uart IP, such as drivers/tty/serial/imx.c, it
->> > also queues a break character if we call break_ctl() once. So I
->> > believe the break_ctl() in lpuart driver should be fixed.

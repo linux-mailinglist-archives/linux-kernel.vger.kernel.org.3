@@ -2,55 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F38575DE0
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 10:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B648D575E32
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 11:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbiGOIrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 04:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
+        id S234227AbiGOJDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 05:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbiGOIrI (ORCPT
+        with ESMTP id S234164AbiGOJDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 04:47:08 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9172E814B2;
-        Fri, 15 Jul 2022 01:47:07 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oCGyS-000nsb-6M; Fri, 15 Jul 2022 18:47:01 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 15 Jul 2022 16:47:00 +0800
-Date:   Fri, 15 Jul 2022 16:47:00 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Yuan Can <yuancan@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        davem@davemloft.net, gilad@benyossef.com
-Subject: Re: [PATCH -next] crypto: ccree: Add missing clk_disable_unprepare()
- in cc_pm_resume()
-Message-ID: <YtEphJCnOOkh8pDf@gondor.apana.org.au>
-References: <20220704130145.103520-1-yuancan@huawei.com>
+        Fri, 15 Jul 2022 05:03:48 -0400
+Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD9EC12D3A;
+        Fri, 15 Jul 2022 02:03:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=m4hKf
+        BL4nqs53oqPJrYtedixI9QUO8tbMKID97bcLtQ=; b=nGSiZat0lo8s5aZbxB5l2
+        2E4bJMot39JFljAszn5zg+aCCy5zWkGSpkB4F/F7BtrTAhBozqaAPpwzxl3hFh1y
+        0yusMN6VMvNj2OQCs4W0v+JspmvjLnIJ3gLsEMmCxzZS5NbsOKfVRjwrZVd5ijPt
+        CCzzON/hPoJgyY7VnqUhJs=
+Received: from localhost.localdomain (unknown [111.48.58.12])
+        by smtp13 (Coremail) with SMTP id EcCowAB3kp+fKdFiiizJNg--.6037S2;
+        Fri, 15 Jul 2022 16:47:30 +0800 (CST)
+From:   Jiangshan Yi <13667453960@163.com>
+To:     pbonzini@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH] KVM: Fix spelling typo in comment
+Date:   Fri, 15 Jul 2022 16:47:12 +0800
+Message-Id: <20220715084712.998150-1-13667453960@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220704130145.103520-1-yuancan@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EcCowAB3kp+fKdFiiizJNg--.6037S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5Jw4rGw47XFb_yoWDZrb_Z3
+        Z3Gw4xWrWrGFs3Zr1vkFsIyF1Igw4UGFWjvF95Aryaqa98Aws8Gw4kZr1ava4UGrWI9Fs3
+        Zas5W34rGw12gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0U5r7UUUUU==
+X-Originating-IP: [111.48.58.12]
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbizQI-+1c7NglsvwAAsL
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 01:01:45PM +0000, Yuan Can wrote:
-> Add clk_disable_unprepare() on error path in cc_pm_resume().
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yuan Can <yuancan@huawei.com>
-> ---
->  drivers/crypto/ccree/cc_pm.c | 2 ++
->  1 file changed, 2 insertions(+)
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-Patch applied.  Thanks.
+Fix spelling typo in comment.
+
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+---
+ include/linux/kvm_host.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 83cf7fd842e0..3fd6c198d222 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1311,7 +1311,7 @@ bool kvm_gfn_to_pfn_cache_check(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
+  *                 -EFAULT for an untranslatable guest physical address.
+  *
+  * This will attempt to refresh a gfn_to_pfn_cache. Note that a successful
+- * returm from this function does not mean the page can be immediately
++ * return from this function does not mean the page can be immediately
+  * accessed because it may have raced with an invalidation. Callers must
+  * still lock and check the cache status, as this function does not return
+  * with the lock still held to permit access.
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.25.1
+

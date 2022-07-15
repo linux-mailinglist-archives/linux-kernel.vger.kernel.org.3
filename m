@@ -2,92 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597E05760B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2A15760BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 13:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbiGOLne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 07:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S230136AbiGOLoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 07:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbiGOLnb (ORCPT
+        with ESMTP id S232756AbiGOLn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 07:43:31 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930D288771;
-        Fri, 15 Jul 2022 04:43:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 15 Jul 2022 07:43:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976F01A390;
+        Fri, 15 Jul 2022 04:43:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LkqHc1fXbz4xj3;
-        Fri, 15 Jul 2022 21:43:23 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657885406;
-        bh=K4C9Ab6k4RFc7Z/Eo8aF4zVbgVqNEvSSiVdD8xWVEAY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rkaxqaRR6hJeEo4rXchlUa4+l9oXbC4/bT2oT4S2BbktN/Yk2lX+RXN3488mz21v2
-         SzY5E7q3KlTNLmR/FwuMU5Hehlb9XokuxDLlWDPU85X3yfJkuR1vss5afW2PFMLJ5K
-         g9l07gcusq46nnZSx/xn+iu/fZ+5zwjXGNVuSpKhjXDFZeAb7eZLfcZavVgNjOM0j7
-         SL3/tYZheQ3KgPZY7BDkd17/40tDsM/YP6vkeTM3XjLla4BQ0JLLUNxOHyrmXsPgKU
-         j9WoNhgAnz03wxJq13h439N12VjsNlY3IJ2oZ/mcjRj4cHXKCrX8e5uDdV60dqR1Ys
-         tGaofz3DU2jow==
-Date:   Fri, 15 Jul 2022 21:43:22 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Ang Tien Sung <tien.sung.ang@intel.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the char-misc tree
-Message-ID: <20220715214322.14731426@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05600B82BAD;
+        Fri, 15 Jul 2022 11:43:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5981C3411E;
+        Fri, 15 Jul 2022 11:43:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657885432;
+        bh=hNuEABddL7x5vN/uTy0dXWm4VUZCQSWhovOb0u9EKmw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VppUYKXdj2C5bnDrc6tbxaHQwx/IVjiAatDyq+Y0Fj3y1NmpwajyHYRktIof1qZd6
+         z8rnMS7Rl4tuvoSNHZRyaXyxmfFMqzClpdPyRjbzL6ThBs8MAXb8rQZcTshnrhl8G4
+         ArOtP/n1bcLuIawHaomRrSL0rPKd/zOWo2VjD61Y=
+Date:   Fri, 15 Jul 2022 13:43:49 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v6 12/23] HID: initial BPF implementation
+Message-ID: <YtFS9UeLF8ZefT/F@kroah.com>
+References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+ <20220712145850.599666-13-benjamin.tissoires@redhat.com>
+ <YtD09KwkxvJAbgCy@kroah.com>
+ <CAO-hwJ+d6mNO2L5kZtOC6QVrDy+LZ6ECoY2f83C93GFPKbSx7g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zSgMQC69_vCwSaOBGPp_7eA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAO-hwJ+d6mNO2L5kZtOC6QVrDy+LZ6ECoY2f83C93GFPKbSx7g@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/zSgMQC69_vCwSaOBGPp_7eA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jul 15, 2022 at 11:56:46AM +0200, Benjamin Tissoires wrote:
+> On Fri, Jul 15, 2022 at 7:02 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Tue, Jul 12, 2022 at 04:58:39PM +0200, Benjamin Tissoires wrote:
+> > > --- /dev/null
+> > > +++ b/drivers/hid/bpf/Kconfig
+> > > @@ -0,0 +1,19 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only
+> > > +menu "HID-BPF support"
+> > > +     #depends on x86_64
+> > > +
+> > > +config HID_BPF
+> > > +     bool "HID-BPF support"
+> > > +     default y
+> >
+> > Things are only default y if you can't boot your machine without it.
+> > Perhaps just mirror what HID is to start with and do not select HID?
+> >
+> > > +     depends on BPF && BPF_SYSCALL
+> > > +     select HID
+> >
+> > select is rough, why not depend?
+> 
+> Let me try to explain this mess, maybe you can give me the piece that
+> I am missing:
+> 
+> The requirements I have (or want) are:
+> - HID-BPF should be "part" of HID-core (or something similar of "part"):
+>   I intend to have device fixes as part of the regular HID flow, so
+> allowing distros to opt out seems a little bit dangerous
+> - the HID tree is not as clean as some other trees:
+>   drivers/hid/ sees both core elements and leaf drivers
+>   transport layers are slightly better, they are in their own
+> subdirectories, but some transport layers are everywhere in the kernel
+> code or directly in drivers/hid (uhid and hid-logitech-dj for
+> instance)
+> - HID can be loaded as a module (only ubuntu is using that), and this
+> is less and less relevant because of all of the various transport
+> layers we have basically prevent a clean unloading of the module
+> 
+> These made me think that I should have a separate bpf subdir for
+> HID-BPF, to keep things separated, which means I can not include
+> HID-BPF in hid.ko directly, it goes into a separate driver. And then I
+> have a chicken and egg problem:
+> - HID-core needs to call functions from HID-BPF (to hook into it)
+> - but HID-BPF needs to also call functions from HID-core (for
+> accessing HID internals)
+> 
+> I have solved that situation with struct hid_bpf_ops but it is not the
+> cleanest possible way.
+> 
+> And that's also why I did "select HID", because HID-BPF without HID is
+> pointless.
+> 
+> One last bit I should add. hid-bpf.ko should be allowed to be compiled
+> in as a module, but I had issues at boot because kfuncs were not
+> getting registered properly (though it works for the net test driver).
+> So I decided to make hid-bpf a boolean instead of a tristate.
+> 
+> As I type all of this, I am starting to wonder if I should not tackle
+> the very first point and separate hid-core in its own subdir. This way
+> I can have a directory with only the core part, and having hid-bpf in
+> here wouldn't be too much of an issue.
 
-Hi all,
+We've had this problem with the USB core in the past, and yes, that was
+the simplest solution (see drivers/usb/core/)
 
-After merging the char-misc tree, today's linux-next build (htmldocs)
-produced this warning:
+Otherwise you could do:
+	default HID
+as the dependancy here, but that might get messy if hid can be a module.
 
-include/linux/firmware/intel/stratix10-svc-client.h:55: warning: This comme=
-nt starts with '/**', but isn't a kernel-doc comment. Refer Documentation/d=
-oc-guide/kernel-doc.rst
- * Flag bit for COMMAND_RECONFIG
+Try splitting the hid core out first, you want to do that anyway and
+that should make this simpler as you found out :)
 
-Introduced by commit
+thanks,
 
-  4a4709d470e6 ("firmware: stratix10-svc: add new FCS commands")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/zSgMQC69_vCwSaOBGPp_7eA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLRUtoACgkQAVBC80lX
-0GxkNgf+Mwyt38l+QhYYUinwQYKPqS03nsbeszkJ2y6h6F0S5D7L/Ydwk8BK3rXC
-t/DxejIPNoyAshtKnLdq5QmMOJNXwBSLA8S7FvBtbCSli5V3PLxmLa0/I6eosoKq
-3MP5DjMVp7AwG1/P2xkLtm8pdVNMZ0cNQylV1rc1cmCYo9W5PLj984zLstivpfW0
-ZUJI3dUhWd81fmDr6EIMXjQlkl4F/B1QyT/PjHolfZVjPgV8JkBdrzHQcm16F62q
-JtDpr2bih61L/BmfmOMXMfpGqFlyFtz5ZRj8Kxb/hNpmY80ZR0a0N1kSb3mqpDH3
-qstpkfZBOS0VQfQ5F/c7b8iJwkef0Q==
-=JGTx
------END PGP SIGNATURE-----
-
---Sig_/zSgMQC69_vCwSaOBGPp_7eA--
+greg k-h

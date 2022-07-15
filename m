@@ -2,121 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EBE576A5D
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675DB576A5B
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbiGOXEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 19:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
+        id S231839AbiGOXEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 19:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbiGOXDq (ORCPT
+        with ESMTP id S231644AbiGOXDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 19:03:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A84511C928
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:03:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657926223;
+        Fri, 15 Jul 2022 19:03:42 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF9B65D1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:03:40 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id B69A822175;
+        Sat, 16 Jul 2022 01:03:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1657926219;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Icw+DEbSSX3MLPi/wiDEHSul5TtCehj1QjKG5ZBjsAI=;
-        b=PaeFWSfKpc31xoUbpdXZyAAVQFRWAI3N4AZ6XdevWq0gQnBjtPoMx1dQn3cD6V8pxWlW7B
-        KD0+Yg8NAkYD7hztwX53r5PRivYKWPxVwuqhCPq2v6vF9RYXkYOmvua3qNpAd3Lzp75cGL
-        6O7SIOacbVW2tm8xc4hte8TZnA+DRn4=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645-M1QEQ-KFPsuDJ2FcFMifLA-1; Fri, 15 Jul 2022 19:03:41 -0400
-X-MC-Unique: M1QEQ-KFPsuDJ2FcFMifLA-1
-Received: by mail-qt1-f198.google.com with SMTP id fx12-20020a05622a4acc00b0031e98cb703cso4452756qtb.18
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:03:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Icw+DEbSSX3MLPi/wiDEHSul5TtCehj1QjKG5ZBjsAI=;
-        b=QlrSnI8bPvMy42ANAdnuHDd8W8NwLO0JP3TXZ7VdTVgzk+HrG25erHMfkEZPGSquhW
-         JykuYRFZ694E7hMF7BS19LfKwlCrj75dm/n+0n4SEgJmTusy134YDOf/OHz623IHqBLP
-         GFQh3p7mNi3x0eiIc1dUpWGbhsKlid5JHqhFqj42/2TuE1IQw9XM4i/dkTu9BqGKB5Jo
-         sZ1BPi1OwA/sBItsrOY2wG/LzpkRGljfeI8Za2TL+vFRh3e0UEh6UWDZLH7gtSe/Nb0A
-         QB4aMaamr1edW0NJ77nMtmI2cxhs+qiX2VThlDsZYNGoj+/sc46AxUm3Emrb8KayBZ1T
-         LzcQ==
-X-Gm-Message-State: AJIora90zKIbC3oryQbeea18L6wSOewk3FeJPxD07/y/g/8YT5JMTfr5
-        0aS9kLWBdCu7mx9Sj3mjaEf1+x/Pr9DkHn4JdyXaerPC1y8OkuCHTmQlb0PE6UUiOR8ZQmPFAUS
-        kOcQTIJSH8EWlXDV7kpBcdd2k
-X-Received: by 2002:a05:620a:1a9b:b0:6a6:d3f6:5c97 with SMTP id bl27-20020a05620a1a9b00b006a6d3f65c97mr11062824qkb.225.1657926220596;
-        Fri, 15 Jul 2022 16:03:40 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v0QNYTL780R2LvwScBaG53gCdrmd38N/vQaAAVgRX3spItAx0R9rUcsdDRvws7EQJAr34eXw==
-X-Received: by 2002:a05:620a:1a9b:b0:6a6:d3f6:5c97 with SMTP id bl27-20020a05620a1a9b00b006a6d3f65c97mr11062801qkb.225.1657926220374;
-        Fri, 15 Jul 2022 16:03:40 -0700 (PDT)
-Received: from xz-m1.local ([74.12.30.48])
-        by smtp.gmail.com with ESMTPSA id s10-20020a05620a254a00b006a6d74f8fc9sm6098721qko.127.2022.07.15.16.03.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 16:03:39 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 19:03:34 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 07/26] hugetlb: add hugetlb_pte to track HugeTLB page
- table entries
-Message-ID: <YtHyRrkA+go+7D9D@xz-m1.local>
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <20220624173656.2033256-8-jthoughton@google.com>
- <YsyzGMS+MS0kZoP8@monkey>
- <Ys1B+fXo2uSPd46B@work-vm>
- <YtGXTlyRs3oVVPA5@xz-m1.local>
- <CAJHvVci+vBRnSNBnBC5tNKtesf0m5XQ943fWw9M+MRj7o7VDrQ@mail.gmail.com>
+        bh=oHA9hmkXfJHcRowuiSm/1pwyuW6mHTYJZjrpyrCLpu4=;
+        b=Y2NdEdDdvZsctAvY+X828e/O65uDqcdY5FDfSCbW40ShXS2PmzN7kqRJmcQ4NTVne1vJel
+        ONhC/unBbytMNSC+3yEDOKA0OL9V2ZxFY4oDLUDNry4mTwxa/OGK5l1dxhy1xt2w8XGhIe
+        7tX91q/YF2F2Ir2J9QUwwlNhytBw5o4=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJHvVci+vBRnSNBnBC5tNKtesf0m5XQ943fWw9M+MRj7o7VDrQ@mail.gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Sat, 16 Jul 2022 01:03:38 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Cc:     clg@kaod.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, p.yadav@ti.com,
+        quic_ggregory@quicinc.com, quic_jiles@quicinc.com,
+        tudor.ambarus@microchip.com
+Subject: Re: [PATCH] mtd: spi-nor: winbond: add support for W25Q512NW-IQ/IN
+In-Reply-To: <c628e868-5c73-ca4b-1f99-60cc149806bf@quicinc.com>
+References: <20220710145721.1207157-1-quic_jaehyoo@quicinc.com>
+ <20220711095042.2095360-1-michael@walle.cc>
+ <a42fbef2-3eff-9e88-233e-a805cfbe2376@quicinc.com>
+ <4972a85d04e39ebb7b4a5872f6632c45@walle.cc>
+ <2260955b-354d-ceda-cadc-49453bfca3e4@quicinc.com>
+ <00f0c9d480ef5a414f1c34492661bd9e@walle.cc>
+ <63cedfce-34bb-ed63-3871-75a6c3dd5d73@quicinc.com>
+ <6be710bb5c1bf0449e54a54b78f6f7a0@walle.cc>
+ <47c01d768ea56edc9a2f9d317af7b495@walle.cc>
+ <114fcde6-bdf7-68ee-d031-35a916027aee@quicinc.com>
+ <b42cb229-f241-6e29-a138-29023ce316d9@quicinc.com>
+ <c628e868-5c73-ca4b-1f99-60cc149806bf@quicinc.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <b00410c825486ec406ed1ae773b11792@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 02:52:27PM -0700, Axel Rasmussen wrote:
-> Guest access in terms of "physical" memory address is basically
-> random. So, actually filling in all 262k 4K PTEs making up a
-> contiguous 1G region might take quite some time. Once we've completed
-> any of the various 2M contiguous regions, it would be nice to go ahead
-> and collapse those right away. The benefit is, the guest will see some
-> performance benefit from the 2G page already, without having to wait
-> for the full 1G page to complete. Once we do complete a 1G page, it
-> would be nice to collapse that one level further. If we do this, the
-> whole guest memory will be a mix of 1G, 2M, and 4K.
+Hi,
 
-Just to mention that we've got quite some other things that drags perf down
-much more than tlb hits on page sizes during any VM migration process.
+Am 2022-07-16 00:35, schrieb Jae Hyun Yoo:
+> On 7/15/2022 1:15 PM, Jae Hyun Yoo wrote:
+>> On 7/14/2022 7:30 AM, Jae Hyun Yoo wrote:
+>>> On 7/14/2022 7:21 AM, Michael Walle wrote:
+>>>> Am 2022-07-14 16:16, schrieb Michael Walle:
+>>>>> Am 2022-07-14 15:47, schrieb Jae Hyun Yoo:
+>>>>>> On 7/14/2022 12:41 AM, Michael Walle wrote:
+>>>>>>> What does "doesn't boot at all" mean? Are there any kernel 
+>>>>>>> startup
+>>>>>>> messages?
+>>>>>> 
+>>>>>> I'm sharing the error messages below.
+>>>>> 
+>>>>> Thanks.
+>>>>> 
+>>>>>> [    0.748594] spi-nor spi0.0: w25q512nwq (65536 Kbytes)
+>>>>>> [    0.865216] spi-aspeed-smc 1e620000.spi: CE0 read buswidth:4 
+>>>>>> [0x406c0741]
+>>>>>> [    0.872833] ------------[ cut here ]------------
+>>>>>> [    0.877984] WARNING: CPU: 1 PID: 1 at drivers/mtd/mtdcore.c:583
+>>>>>> add_mtd_device+0x28c/0x53c
+>>>>>> [    0.887237] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
+>>>>>> 5.15.43-AUTOINC-dirty-23801a6 #1
+>>>>> 
+>>>>> Could you please try it on the latest (vanilla) linux-next?
+>>>> 
+>>>> or spi-nor/next [1] as there are quite a lot of changes. The
+>>>> patches shall be based on that.
+>>> 
+>>> Okay. Let me try that. I tested it using 5.15.43 with back-ported
+>>> spi-nor patches from the latest. I'll back-port more changes from
+>>> the spi-nor/next and will test the INFO(0xef6020, 0, 0, 0) setting
+>>> again.
+>> 
+>> I tested the setting again after cherry picking all SPI relating 
+>> changes
+>> from the 'for-next' branch of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi repository.
+>> 
+>> No luck! It's still making the same warning dump at 'add_mtd_device'
+>> since 'mtd->erasesize' is checked as 0.
+>> 
+>> I traced it further to check if the erasesize is properly parsed from
+>> the sfdp and checked that erase map seems parsed and initialized
+>> correctly in 'spi_nor_parse_bfpt' but problem is, a target
+>> mtd->erasesize is not properly selected in 'spi_nor_select_erase' 
+>> since
+>> the 'wanted_size' variable is initialized as sector size of info table
+>> so a selected target mtd->erasesize is also 0 so looks like it's the
+>> reason why it can't initialize mtd device if we use
+>> INFO(0xef6020, 0, 0, 0).
+>> 
+>> Also, checked that the mtd->erasesize is set to 4096 if I enable
+>> CONFIG_MTD_SPI_NOR_USE_4K_SECTORS so the SPI flash can be initialized 
+>> with the INFO(0xef6020, 0, 0, 0) setting but, it should cover even 
+>> when
+>> the configuration is not enabled. I think, this patch should go as it
+>> is. The erasesize selecting issue could be fixed using a separate
+>> patch.
+>> 
+>> Are you still sure that the INFO(0xef6020, 0, 0, 0) works in the
+>> latest spi-next?
+> 
+> I also tried to fix the issue and made a fix like below.
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 502967c76c5f..f8a020f80a56 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -2117,7 +2117,7 @@ spi_nor_select_uniform_erase(struct
+> spi_nor_erase_map *map,
+>                  * If the current erase size is the one, stop here:
+>                  * we have found the right uniform Sector Erase 
+> command.
+>                  */
+> -               if (tested_erase->size == wanted_size) {
+> +               if (wanted_size && tested_erase->size == wanted_size) {
+>                         erase = tested_erase;
+>                         break;
+>                 }
+> 
+> Tested that it makes the INFO(0xef6020, 0, 0, 0) setting work and a
+> selected mtd->erasesize is 65536 which is what I expected for this
+> device.
+> 
+> Not sure if it's a right fix or not. Please review and let me know if
+> it's good to submit or not.
 
-For example, when we split & wr-protect pages during the starting phase of
-migration on src host, it's not about 10% or 20% drop but much drastic.  In
-the postcopy case it's for dest but still it's part of the whole migration
-process and probably guest-aware too.  If the guest wants, it can simply
-start writting some pages continuously and it'll see obvious drag downs any
-time during migration I bet.
+Ahh, I think I know whats going wrong here. Thanks!
 
-It'll always be nice to have multi-level sub-mappings and I fully agree.
-IMHO it's a matter of whether keeping 4k-only would greatly simplify the
-work, especially on the rework of hugetlb sub-mage aware pgtable ops.
+4bait will set the erase size to 0 if there is no corresponding
+opcode for the 4byte erase. So you'll end up with
+et[0]: 4096 - 21h
+et[1]: 0 - FFh
+et[2]: 65536 - DCh
+et[3]: --
 
-Thanks,
+And spi_nor_select_uniform_erase() will select et[1].
 
--- 
-Peter Xu
+Could you try the following:
 
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index ce5d69317d46..a2c8de250e01 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -2113,6 +2113,10 @@ spi_nor_select_uniform_erase(struct 
+spi_nor_erase_map *map,
+
+                 tested_erase = &map->erase_type[i];
+
++               /* Skip masked erase types. */
++               if (!tested_erase->size)
++                       continue;
++
+                 /*
+                  * If the current erase size is the one, stop here:
+                  * we have found the right uniform Sector Erase command.
+
+
+-michael

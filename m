@@ -2,103 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373025759BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 05:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC905759BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 05:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241173AbiGODBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 23:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
+        id S241240AbiGODB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 23:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiGODBO (ORCPT
+        with ESMTP id S241190AbiGODBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 23:01:14 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80070.outbound.protection.outlook.com [40.107.8.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF4548C8D;
-        Thu, 14 Jul 2022 20:01:12 -0700 (PDT)
+        Thu, 14 Jul 2022 23:01:23 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80084.outbound.protection.outlook.com [40.107.8.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE3B48C8D;
+        Thu, 14 Jul 2022 20:01:21 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M8kMs8qCvUtV7oGI2cxX61WsuQuQhg21nZ3abGIbIyF1itup9aUARl/kHbCYN4rSHiqTZNSGkNQk+loSLuzHgMeFG7D3/5uozszPSZqrPlVSacWqMgBXvWfGK/VHdkWK5SF7vYAuOtjKac9LxTPFWo8KGQ0s2x2NbT+Bs6WnM+V5SWWbbddOt2rnVAhEoNN7Viu04w2rvN6zRlb5jtm86p4E8xsaW/uoLd1uBxxK/er365tjgC8kMksvuum1T0pOwxBRsVpLx9P2PvC4GQVMFr3cyDVKSF8gep/6fUXl2CAhC7rdfyw/YO/7XiAkcsHvCpRyWfqmOmrkKJhVdWwUCw==
+ b=cV0XiJe2WDZsP3mfktQ6FkW9e2MyIQemfEtr7PNFCd8mLRBFhVNDQbg4ljd2p2FVP9SYBbmSFJAgLXhuXzyiNZX3RR4zzYtZojPLSZB/x9KT72H7xaibOjDzTt9Cx+T0x8hSwWYhKdP5yrhgftLX/JIZtzYIwq6jlTqGEqu3x/eHp5ph5bCT2kquecOjlVOsqr2CdCi4lvZnnc6cyXVn0hUXtrE5a+nWCJ+wpM02lptxf7JQIl0PjHB8MQwXiZAW+b1CU1HCgo0XU8KLXu6Tn1GJwN87cRzL9H0Cm0RxRmllYIwK2hhY4e/4zr9Vmw+l3UAWEUSrwRmw8DWcYd5J3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bpphCbnvSGF05V8uwar8pb0AF+a94Tc/SJLKRUeM7+c=;
- b=R0zu/QyHT03hdBjij5u6d/tLOMwqdpbIk5u6SbSmTDOwmKFBxNzcjdgkLxH6U/XZVeq9hVutga13lBNeCxqJaztkB23ZqwD8vMqzlMCqPY88+2uwBKea0TV8jx0+9VSLqZSieNBDN3ef2neS6s5sH49pOh/eLtiOomIMkGDqErf6UqTFJvG/y6ZFpIvbVR/NRpnPy65JkZU//D+MHwabWewJvk2v3Jh+tmNqaoftv3LU5etZGwoIaacJ1ydtbr2Ns8P2MvnGpnGFZ+Qg3d9w8UkXhH1mxqOCrplxRXpl4U4eXPBmsZkU2t2BiZBQ05AftYsqKYofX9w1gmFIsO6Nmg==
+ bh=DEkzpSnvvSrT0u6PI1/8TnPGzwge9riiOLKhwoODTkI=;
+ b=iVoPo5XTaEGZoQ7y9q0F8Y2Ux21k5xjVEn75Fzxxk8vq/VnrhQiITlVahvlWjm74zIeIUq1FTJtmMaFCVfNav8VD+IH6+SmkGXhoJn/GpE9Fsp4djDl5TrBn0pzMj4r2ujEHrn2N9IwVOovz7M/BTyUN2NjQz4WIEoQE+MIAKKmVzB95+GQEQc5dSkjsN/1QL2pVnZ9KG+KdtiNLG7HmO9UeKEJx2Au+V283m+Bo991jhUltKThF1yv18iCFgNRJkXGz2A9UKblFQ5vSe364ASenW/66RM1y10GlPT/zPL70jU6z9EvVy+UdhjXzyAaG6azi+nlhoNAmdClBkFg7dQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bpphCbnvSGF05V8uwar8pb0AF+a94Tc/SJLKRUeM7+c=;
- b=ErNc6SqlHNRiaFGvFHAKs7MTyavgMsgbUPqaAA7pxHgsnkjzyerluDZsRijHeTzvtxy5ra/WIJPdQI3izpQmVWweq2N/8GUtbwCP4qAPuMQevr+LKYmCGMOLJn0K5piGEZsA3PkytVh7BBlkXTpCE1OtA5YX5/GEwd7RSb+k3uU=
+ bh=DEkzpSnvvSrT0u6PI1/8TnPGzwge9riiOLKhwoODTkI=;
+ b=EEv7T5mwiFDkFu9qsAMYjAkf6bn7NgBXT09qQgNOc4digXFhivNPQRTdr94ky+MOJJGqO5bNVboKp8y4pfTcdPgW2o76TgdZEUZn4NdYQeZFhwu0JGHj+W8G0OMgcQp/e+Q2L68Mypr12vz8fGpfadRakXIBsxt+N4mrDjqWYrQ=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
  by VE1PR04MB6477.eurprd04.prod.outlook.com (2603:10a6:803:11e::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Fri, 15 Jul
- 2022 03:01:09 +0000
+ 2022 03:01:19 +0000
 Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
  ([fe80::3cec:d61:3836:2826]) by AS8PR04MB8404.eurprd04.prod.outlook.com
  ([fe80::3cec:d61:3836:2826%5]) with mapi id 15.20.5438.017; Fri, 15 Jul 2022
- 03:01:09 +0000
+ 03:01:19 +0000
 From:   Sherry Sun <sherry.sun@nxp.com>
 To:     gregkh@linuxfoundation.org, jirislaby@kernel.org, michael@walle.cc
 Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-imx@nxp.com
-Subject: [PATCH 0/2] fsl_lpuart: fix the bugs in received break signal count and send break signal
-Date:   Fri, 15 Jul 2022 10:59:42 +0800
-Message-Id: <20220715025944.11076-1-sherry.sun@nxp.com>
+Subject: [PATCH 1/2] tty: serial: fsl_lpuart: correct the count of break characters
+Date:   Fri, 15 Jul 2022 10:59:43 +0800
+Message-Id: <20220715025944.11076-2-sherry.sun@nxp.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220715025944.11076-1-sherry.sun@nxp.com>
+References: <20220715025944.11076-1-sherry.sun@nxp.com>
 Content-Type: text/plain
 X-ClientProxiedBy: SG2PR01CA0163.apcprd01.prod.exchangelabs.com
  (2603:1096:4:28::19) To AS8PR04MB8404.eurprd04.prod.outlook.com
  (2603:10a6:20b:3f8::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 272df67b-3bb6-4840-9534-08da660e4493
+X-MS-Office365-Filtering-Correlation-Id: b9588dc2-19e2-4311-b24d-08da660e4a7b
 X-MS-TrafficTypeDiagnostic: VE1PR04MB6477:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MhPrOlCrI7CJop3Fx/5YH85OBCLhBG9m3BTEKMUo/65+DGj0yt+Djhybqn/OxkeIeUy1sFie3zyfbIBd3YWrl/AIPNw7IaMKaM6WkoBLnQl+HvJcw0d/NsPlLGGYOZhPZryPzxi8d/gMW13BUZlzyE4AiruSnisG9duanEs5f86Swj1DHLazJVmVPbHqDYUr5tffDCYF2U4bCtgLdOgXmIEh9UtSK9LyZ8qXjEhmsy4mC29zeoNoLDam5bfSeW1wBP/HigijkxSRyG1Fjn9Ck1/Pna1/qFYE50vu1LywZbDrxggiIVaiAZSH0xNKUtVtzhwrwxlKKo4HxaWgbe3D74Zz58iSgN8OUG+O6RRghqpIBaeGn3sRgBCkDkDfE/46N7qxiyQKkDZGFrCHqbqAKLMx9QTgID4mZIdMdx6JpWx3AbAy1jLAmf9r1/DqwATAvlsnrhZx9Eb31gJsOR6frGywvTHQIvA09W3cEENEGCsDx6GgMgfVp+7R/HeBfJnI9sRFX+BA/ZmcYThMMog29SWqRlNJLW6qLxaKzcaucT1loCUX8YullBHbun7InrIz4ytJ7kNqZxNmeGW9v/ezIrZh9KeNyqujWr0BTVSva0+kLrE4iUHSlMF6DwAzlAsB/ns3mjT4GuJWPNWk/U/hXdvvtX3zWTLmXfguhGI76cnloIPox0WcFLyVGtWGtgi0JTP2qzZ/hvJs7PXIqfDF17Rt1BNxhyId84UuSWlupLxj2JsYs67GUbxIQDhFxua0aYxH5C4EnbH5eKV/eV7xG1nrAM+UvQQY9djq/SBTwDT0I9CL1wSoTcAfBtiHroqL
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(136003)(346002)(39860400002)(376002)(8676002)(66946007)(66556008)(4326008)(26005)(5660300002)(38100700002)(83380400001)(1076003)(38350700002)(2906002)(2616005)(41300700001)(66476007)(6666004)(186003)(316002)(36756003)(52116002)(44832011)(6512007)(478600001)(8936002)(6486002)(86362001)(6506007)(4744005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Fxx37VtK+pabZiBSZl3kly0bl7iagNrj0Epg1tpgfKCvAQ0YYO+TTPggg9SoxADJ6Us+7RkTcnEf23F3pwD3m+dO2XwAOOYU+7bKfFbWhFZ+KGlzGssUkuOljk3sCwve3suxSLIocvvqC9d9F/5GjaIVld0MwgLSW4sY7cttYhTu3xVaiH5wJZ3sdHouMkP/jr1pieyNdOMKNOGLow9YuC6Mm0jPQQDWl+6FRrfTvxcQxjuviz8OJkfMoH3tiQwKLa0ooxDXbsVF3iI5F2E58RY+BaBkroIwcXUf+OJoAeM4qmfLaCYQZnNORYPLICVXJ1OM3/xl68bo+ENG5V9cd1ePUhquVY0l9Lgo2RnPvx/xM7inbfy19QGIfqsneU9TQGgjtjWnKoxuz5xVUoRX1vgKGhnTNKilS6FRy+uuz4hrjlSFfcNZMtSxdz7Uy76t8Bfu+73MeSIVJtgo0Kjk8QBbv+Ssx7/WDf33QsjzJnwsrsU519hm39mO1vU0gbGqkOQ1CHDYKFuyK6mnAaEgc5EwkVwwOB777KtJpA7Q38zIuoG/vqahRdhmvPCNE4XxBLuZK8M/ZE0gggNEAu2Ezj/E9mdfVFmoOy7FbOem9mpEpREZ3NI4qNzxYcZYoe19l7+fPK9FXQWFdjdqc3ckJpch+KHFw4LZgeyG4qvQvLJLG7VmOkfsTbbKTBUIANX5cYrFvUjTbHTJJJHVx7FwaaY7oeE0FLYI6lU6ooazZKtcBbex/XZfs/j5/MW/QzUL0z8L4Gz2quSlE1ECgH2yonUlRJ5XQffJrDhJq0DofWocvKmz4SoDhCxLMEm4bxlA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(136003)(346002)(39860400002)(376002)(8676002)(66946007)(66556008)(4326008)(26005)(5660300002)(38100700002)(83380400001)(1076003)(38350700002)(2906002)(2616005)(41300700001)(66476007)(6666004)(186003)(316002)(36756003)(52116002)(44832011)(6512007)(478600001)(8936002)(6486002)(86362001)(6506007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jbEz5gkMOBd8W8jiW6tdG/01mvl+HrLjDvIDihSkLcqNyIbXKhAcFbBC5e+k?=
- =?us-ascii?Q?3BR3QshdhMYWZ9ECPOeG/Rw3DUlxQMVEkzg0CMBV6/Z3lvW5GFnsOrTnczZa?=
- =?us-ascii?Q?rcK/EN8QdJUD5K1pmdWyg3qaTUwhYPBuId8Q9OVUQCdiSjoDoDL1l6KQwesJ?=
- =?us-ascii?Q?nWyc3dwK7SspzlOLBpZ+p9mHTIPhKLK+Yijro3UJXC99+wQT9t+P2SB35k3O?=
- =?us-ascii?Q?ltqOglF2cioOPdsB5a4n+4Bf7mW2G1ezVPDoOlmN3+TH0x0GhB3aC2OKEmNf?=
- =?us-ascii?Q?/eAo2yCqYzoy8YP8FTLZmB/yTb4KDX4Pnw3zexfiICAkCGH0LlUYk0fdoisk?=
- =?us-ascii?Q?60p672Ru/Alq039E8tuoL8OaTaBRCnCpZ2RdndseEMwmyDVhN4d1cIte5esA?=
- =?us-ascii?Q?YHzoHmcp0+fw02szQVHv4nq3FPMZMl2K7vVgYoJh/yZd1EfNnHsTekd9Dixo?=
- =?us-ascii?Q?UN/03BkD7PnmhpyHbDf04a+V7Lj6bznExqkWVA7ItjqgjAKu+5MTs3uscTJ/?=
- =?us-ascii?Q?6zB7Ec5u4W0mxbUEDnOrzAWORN67mpGFHdHziVuDCCeXNpNU8QwPMJjFOef1?=
- =?us-ascii?Q?tqBtgJqFOj+fDd9VA/ctIUu6qSVuvQA+lep7lVSaUEIJG5tsCJpCkocTMmI8?=
- =?us-ascii?Q?4DzM4kor5fcZ1MJ2ZA3sV2mvkeo7hHta+VrGmHwrd7qf4iCroBzkXh0tGaJa?=
- =?us-ascii?Q?ppsEDoXBElbNLB96MW3I9sbV3v7YuXDRtID4UEvWkQ4/LhfN0Kdnnyq9fnlT?=
- =?us-ascii?Q?NgLIDBZ6YFiG0ikNqWST+gDvR5mzvKff7sVfNLaqZJCxxcYgFP5CWNZ/2PRm?=
- =?us-ascii?Q?f4J4tw0LADtK8aNi4g/nqcLcf/4/QTJdICCGgqmlzToa5KpijE/KfsSBRDP/?=
- =?us-ascii?Q?UFoyk/LQeZ3OEgXbTnyRuUVZtbblKBXJIrRJ2fLidbhWLXRRlX6Tj6HwZBpj?=
- =?us-ascii?Q?j/vKxifoHQPq0wFetIYIa0mbUVzaUsRCceemYRSSga09BBqyVYlITlg5pCBO?=
- =?us-ascii?Q?Onr6Vu3PGq9W+2El5Z9hPY9DwryiCKTzyEVF3qfuMWHdtP5nWVRSx3w7gN4W?=
- =?us-ascii?Q?OavdaD/h9Bjf5YCwnl1KtszndJ1KRTitF8FpwrCRxPmui82sku+VlFypcRHI?=
- =?us-ascii?Q?pjjpGVGwDbLNnA5jBqYpgkoouAj3pYLm0qYyOBd6mBh+nUnsSuVvpqyc63tu?=
- =?us-ascii?Q?DMDQNdY/BhLO/s9hWITEh+v+k2pkjLAmnHh5G4L6E3XZ1VyXz2H40fD6UvY8?=
- =?us-ascii?Q?XNxF18kH5xASwnc4tZDf4Gm7UXkwFz2MLyD8JTbBuKHqrAHODH6hV+Jb1Q20?=
- =?us-ascii?Q?Qjwz8CEMzQUfgRZy33PaiVsCZQ7YpQ/XBOCO24GmBRjANL8XdrkPuiGhLola?=
- =?us-ascii?Q?piz+qPLS4RWpyhf/bpT+FZY9L1RmqyU6l36wV5n0C1JmJgVP2UDl0RDyROlK?=
- =?us-ascii?Q?6PaYF2fCfSi3y22zAgapbILEXBa5l/eTvRECsUoNyChHC5NvAn41lTtgOyU9?=
- =?us-ascii?Q?RoRe2dhFHXsB52cplxzfZ3gSyCSCpgnNHOAQaVACEehVREAcyyNS/aPOo+2Q?=
- =?us-ascii?Q?wdRuNuQtivgGi/ULhpF6EfGiIuOTr3YT53lIg06r?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cXQSnROJlA/59WM95nOpbh6fKBa1pVk/s2C9/Is4BjZbXy0s4RGJ9CtMspDj?=
+ =?us-ascii?Q?2qjG+mvnmoJoYNIH1B8WmLzwus33DzXwPz++bIFiC0tSvp8EiFq8OVvdLuFx?=
+ =?us-ascii?Q?+OCSmwrY21biNu9pb6vabU4BkOpwde+YOsKN4YYpb0M17MjIc30tPJhP9Q/C?=
+ =?us-ascii?Q?orpen434hWa7Ove3j7rynuvjdRbsWW7cTiGE4y1A5cms4qpC6ujGfrcvhat5?=
+ =?us-ascii?Q?trXKmbizO0iHx/NlApR6BIICcQMHS5LXZkldN43kklfoIdZbgP4+7VPHTODy?=
+ =?us-ascii?Q?zRNHW0NZeAOgMClyiZJGoj8b6CMcv5mTq+7tn7o2Wolb4w9wt965+ohYNr4L?=
+ =?us-ascii?Q?P3t7H21bBg1PTNdHRdtA99yE0vdoz4Sa3eUBvUboHXD5wOitw0Mr9MHZ/4mN?=
+ =?us-ascii?Q?h8WGA+XYJf27z9DFdT/Ue9J8T2mWkTjSrysn+C93GREsdrDEkwG9+pZFRG3A?=
+ =?us-ascii?Q?OJAtkUbZ5nGxfHgorg06hmbNB6PTAZ84cYddFS7caRQdqHHV7sMUTU3dyrgK?=
+ =?us-ascii?Q?ZzZT1va4k5tE6F/D9gDaQrO+RWmC4jT+JS+a9+MOOrFFc5edm6rRs6JGQReZ?=
+ =?us-ascii?Q?CDiSyC8+NOAilEm1MJCZafArWbEVBShruSRdvUEqXHJK7+sqC27ap3ngwJM+?=
+ =?us-ascii?Q?7Lj/j2aTGipURJf7fq+HOr44bXKgH3tQ21pmlJXqPjkOO/HXt8B3+3FGszQg?=
+ =?us-ascii?Q?+Z9Bja6/RygRRXEPFtNEs2Pd4mYMI7yBh83w5TYywphJE75SHEAelQBitfwe?=
+ =?us-ascii?Q?YNpek3S8uRtXwre9dqYyiYcc6rJj1GoLC40//tumgx/k42tWmh6Wv9i0G1h+?=
+ =?us-ascii?Q?3b/q94KVu6T0SMrHt5UgkWyCXoTv4K8ItJ9XwfxUN8f53nSn+yrrXw5e5Ca7?=
+ =?us-ascii?Q?RxLioYIFaeOeM/Poj2BroJvWjmSwrbxNEQR4c6a1w9y7+3we0k7uTmAYUfi+?=
+ =?us-ascii?Q?WZ3RA6WBZTmUeCJ5oS5pzouqIK3cEPmZ7poGfqblZzGKqy61FBmJf5xuaWll?=
+ =?us-ascii?Q?+gGEVa5vjiICorfFoF48VUct3CRHWBH67n+ZjA/sbCV9oGOwMR77vFt4Dnnt?=
+ =?us-ascii?Q?B8Te0cr6Wz/zWtRcSn3RS+or7tY3+zVcXzHh0x8nKdlJj0AuPXL3cUK34h4g?=
+ =?us-ascii?Q?VPeYOU9EgvNLinFfVnZWjagdv1AldnZmYcs2OFukYOFGVWYnqR/83g3Ub8VN?=
+ =?us-ascii?Q?zQXVix7SfKM+CKbRi+C2GX0GtcX8+wytojbDTIiufw3LB9pZGbOd0Y4OG619?=
+ =?us-ascii?Q?ctPAXzhyj0JvbcDS7cwRFrWCcpnrkD37pP5pvHBGG6BfiaA3vaU41/hnnbNB?=
+ =?us-ascii?Q?lTGPhuuL9cfJkg82auvycT09BylMWwe4yz92lhN4/ZhCGVHFUJ87YlJdLvDr?=
+ =?us-ascii?Q?WW8DrrJdsX6JHGsyiw8WzoBZMjdseTAPEgkgMShBd5oXyyIKbIijP34/sdd/?=
+ =?us-ascii?Q?w9Mneud0ZOcmsu9+s0p2xHFm5+pVokebQZwf8IuRffeldLcMd+DmF+sEFrHR?=
+ =?us-ascii?Q?M7mvbLGC6nuVx0V/1m1JS5FA++isqC5rXQqOw0W4WFNp6HwCS1N43MPzh2Yn?=
+ =?us-ascii?Q?AWGVdex1wFcqMuASeigF6gJoahfThprirSMQ0tl9?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 272df67b-3bb6-4840-9534-08da660e4493
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9588dc2-19e2-4311-b24d-08da660e4a7b
 X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 03:01:09.5882
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 03:01:19.3104
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bNy+pABiiHxvTQHY6sJXtACalPwYcdr87q/O+GeLB9OP/ZepKqBWcyyDms8b7/zEjHXbFuNUFXFr2iOcRW+d1w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: JcpQ904NRd3RAKqVKRSolkg+j/deWB5lpG9WcGx/y93K05bQRFr+UhHR9LjnLmF3uDIdy+FivZW/Gh8a032B7g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6477
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -110,17 +112,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset fix some issues in the received break characters counts and send
-break character in the lpuart driver.
+The LPUART can't distinguish between a break signal and a framing error,
+so need to count the break characters if there is a framing error and
+received data is zero instead of the parity error.
 
-Sherry Sun (2):
-  tty: serial: fsl_lpuart: correct the count of break characters
-  tty: serial: fsl_lpuart: writing a 1 and then a 0 to trigger a break
-    character
+Fixes: 5541a9bacfe5 ("serial: fsl_lpuart: handle break and make sysrq work")
+Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+---
+ drivers/tty/serial/fsl_lpuart.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
- drivers/tty/serial/fsl_lpuart.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index fc7d235a1e27..b6365566a460 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -990,12 +990,12 @@ static void lpuart32_rxint(struct lpuart_port *sport)
+ 
+ 		if (sr & (UARTSTAT_PE | UARTSTAT_OR | UARTSTAT_FE)) {
+ 			if (sr & UARTSTAT_PE) {
++				sport->port.icount.parity++;
++			} else if (sr & UARTSTAT_FE) {
+ 				if (is_break)
+ 					sport->port.icount.brk++;
+ 				else
+-					sport->port.icount.parity++;
+-			} else if (sr & UARTSTAT_FE) {
+-				sport->port.icount.frame++;
++					sport->port.icount.frame++;
+ 			}
+ 
+ 			if (sr & UARTSTAT_OR)
+@@ -1010,12 +1010,12 @@ static void lpuart32_rxint(struct lpuart_port *sport)
+ 			sr &= sport->port.read_status_mask;
+ 
+ 			if (sr & UARTSTAT_PE) {
++				flg = TTY_PARITY;
++			} else if (sr & UARTSTAT_FE) {
+ 				if (is_break)
+ 					flg = TTY_BREAK;
+ 				else
+-					flg = TTY_PARITY;
+-			} else if (sr & UARTSTAT_FE) {
+-				flg = TTY_FRAME;
++					flg = TTY_FRAME;
+ 			}
+ 
+ 			if (sr & UARTSTAT_OR)
 -- 
 2.17.1
 

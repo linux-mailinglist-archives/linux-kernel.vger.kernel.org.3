@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50AE57594E
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 03:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CACA575950
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 03:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241106AbiGOB7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 21:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
+        id S241139AbiGOB72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 21:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241096AbiGOB7M (ORCPT
+        with ESMTP id S241124AbiGOB7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 21:59:12 -0400
+        Thu, 14 Jul 2022 21:59:25 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25D83FA25;
-        Thu, 14 Jul 2022 18:59:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0740E709B3;
+        Thu, 14 Jul 2022 18:59:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
         Content-Description:In-Reply-To:References;
-        bh=ubmeGXB/9zYuFBNOFFQ6o10JlxydVtHtuhwBQg2+mgE=; b=MzLW3g5ro67FR7HjejRLHwcQN2
-        OITymdLB2eGRLv2ZlT0qejba47LlUXoWYLOy77nPSMbaQgzJ/pqd1DZ9UWR3vJC5vIClx1OWOqKzw
-        JzWV8hVwjnGBqzu1l17yWsoBR++WgDiYWqtqNrV7kbx+kyTcomHO8JHPdvV7eJ6mc+adqglnUq6qi
-        P8jlEbSOg1mD+RLWQzzV6pLWo1nfiZg2F6P4JNJU3BavO4XMIWBysGAfD3DlR+rDy9imuW73WzeCl
-        2uMIGQQu2SEmvm7UdSVVvifDBjUgRy/ooisLur+fGKbHpGxzbKVO7h9SWc8Hhu+eHkcg3DSySZOrT
-        e8tdtb2A==;
+        bh=3k5ynIPk5gFL8otZ8hN+0iIyufHA8XKN0Zzhb4ErqL4=; b=dW5mScD4AvqVDcJ8EB3BYEU1Sy
+        OLHbO3QZv4093cULF5MFmUXlOsEsay6ItGXIh9Er5G4fLOPJIFyvKSTh+vF3olnic4A3o+zrXy6L0
+        NHYUiN87Po0Z3qiE31B/DZagnUiIjp5YgVRCqe6bZcvItLnlEpbe8dBYGZ//oVbFN2JMB7zt0Pc5x
+        aqVqGtuAQYkN3zxakN77C+K+/jtOIGnMBEuAQrGbgfxHEnZvJl8IvnqoJJPbvy/Z1rlDvvck5ZC3f
+        WeE+n42NDFe7hZSNREuSOXmTjhGniaMlNbPTFc9nkOaID6ac7RFE5fLZUqtm9tPQ5wjgy8zGKshlF
+        iRLxRfiA==;
 Received: from [2601:1c0:6280:3f0::a6b3] (helo=casper.infradead.org)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oCAbk-009sWs-7P; Fri, 15 Jul 2022 01:59:08 +0000
+        id 1oCAbv-009sYI-2h; Fri, 15 Jul 2022 01:59:19 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH] cpufreq: loongson2: fix Kconfig "its" grammar
-Date:   Thu, 14 Jul 2022 18:59:03 -0700
-Message-Id: <20220715015903.12537-1-rdunlap@infradead.org>
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org
+Subject: [PATCH] crypto: rmd160: fix Kconfig "its" grammar
+Date:   Thu, 14 Jul 2022 18:59:14 -0700
+Message-Id: <20220715015914.12554-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,23 +54,21 @@ Use the possessive "its" instead of the contraction "it's"
 where appropriate.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-mips@vger.kernel.org
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: linux-crypto@vger.kernel.org
 ---
- drivers/cpufreq/Kconfig |    2 +-
+ crypto/Kconfig |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/cpufreq/Kconfig
-+++ b/drivers/cpufreq/Kconfig
-@@ -268,7 +268,7 @@ config LOONGSON2_CPUFREQ
- 	  This option adds a CPUFreq driver for loongson processors which
- 	  support software configurable cpu frequency.
+--- a/crypto/Kconfig
++++ b/crypto/Kconfig
+@@ -880,7 +880,7 @@ config CRYPTO_RMD160
  
--	  Loongson2F and it's successors support this feature.
-+	  Loongson2F and its successors support this feature.
+ 	  RIPEMD-160 is a 160-bit cryptographic hash function. It is intended
+ 	  to be used as a secure replacement for the 128-bit hash functions
+-	  MD4, MD5 and it's predecessor RIPEMD
++	  MD4, MD5 and its predecessor RIPEMD
+ 	  (not to be confused with RIPEMD-128).
  
- 	  If in doubt, say N.
- 
+ 	  It's speed is comparable to SHA1 and there are no known attacks

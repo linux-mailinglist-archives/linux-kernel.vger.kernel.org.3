@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7E2578381
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6CE6578383
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235039AbiGRNSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S235141AbiGRNS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiGRNS3 (ORCPT
+        with ESMTP id S234611AbiGRNS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:18:29 -0400
+        Mon, 18 Jul 2022 09:18:58 -0400
 Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4508D27B0E;
-        Mon, 18 Jul 2022 06:18:25 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1658150296t4dmd2js
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CA8263A;
+        Mon, 18 Jul 2022 06:18:53 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1658150324tyhblouv
 Received: from localhost.localdomain ( [171.223.96.21])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 18 Jul 2022 21:18:15 +0800 (CST)
+        id ; Mon, 18 Jul 2022 21:18:42 +0800 (CST)
 X-QQ-SSF: 01000000002000E0U000C00A0000020
-X-QQ-FEAT: zK0nlCs2Z6F0XWAXfajss1FWPt3X6ei3kB8dmrQOBIk3JU1itTUNqdxm/S6j+
-        3zYWDBOPGqhVj2isrzhObEyEcZUc1xlNANZiTnpclxNaKjfUkHXXhXTOqT7WnSPOUDDlMWE
-        0fy95lRwYY12aHnHeu2/AAyVu0C7xzRT9n78IoXrRuN2vcwR4ytnXyXvrx7QBnoF5b52A/o
-        Ff7SbzVo3jjHgBDH2cW/e8y1joRjP5dySWtcmMlthiLNeVw5BCVrBVjqbdW9ST5gRPv8US5
-        ux0Q0zqtcNqhOJkNb/z3MHNReyJIv8Ip0eBP9mEtF4loKmYoayxq1ETlBaG8JyghcnlP/W2
-        d/4ZLaIogtMDj2h9SMBm7IsgTLBc5H0zdFw3WMFqpsUsFAmHAW9D2PpFOGD9Cb4sjh5rYaB
-        uXmftVs2UR2zIAf7sXt+VQ==
+X-QQ-FEAT: +N0aDBfR9LXTO6ZJg5TfopyrXLWhhFXHRSu/cEfG7o3SlXbfc/MRy78YlqUPu
+        zAR9y+jE/8N5zfGqVg6wJsNuU7PFLj8iqU1U3xnS1jCz4U3Pzy4JeW7Wes1fDAhp4GsUs17
+        3Ohy7e9EfqmhORlLsOkH3rxUT4hG2nfrmkz1ICvPXv6kkmuxoQnhgxAhYsBWBgAS/Ld4uKY
+        imBYSgr3LoIkjC7HkhZlyu674NiX9Kpr0w2qVDMrvpIOmb5dc6ergwwEfBgl2UzmDeY6HBa
+        ghb7dCHVCFLjt6O0D8yiR0prclc/gfYTL+bqo16uEbwXrMFlzAf//weJmLooLmsy5A/fPry
+        4r9KQaTZSyfX+GgLLmwY80V9dkx4rbLy4wGJvQ4PTwEZBPIgSZ2eeHh8UVJRb94LL0yUF5u
+        g+L2g65w7ZoVV91bi/hR/w==
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
 To:     mchehab@kernel.org
-Cc:     hverkuil-cisco@xs4all.nl, zhou1615@umn.edu,
+Cc:     sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] media: dib8000: Fix comment typo
-Date:   Fri, 15 Jul 2022 13:16:16 +0800
-Message-Id: <20220715051616.29946-1-wangborong@cdjrlc.com>
+Subject: [PATCH] media: mc-request.c: Fix comment typo
+Date:   Fri, 15 Jul 2022 13:16:46 +0800
+Message-Id: <20220715051646.30195-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -50,26 +50,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `this' is duplicated in line 3215, remove one.
+The double `that' is duplicated in line 162, remove one.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- drivers/media/dvb-frontends/dib8000.c | 2 +-
+ drivers/media/mc/mc-request.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-frontends/dib8000.c b/drivers/media/dvb-frontends/dib8000.c
-index d67f2dd997d0..25980e90d6bf 100644
---- a/drivers/media/dvb-frontends/dib8000.c
-+++ b/drivers/media/dvb-frontends/dib8000.c
-@@ -3212,7 +3212,7 @@ static int dib8000_tune(struct dvb_frontend *fe)
- 
- 	case CT_DEMOD_STEP_6: /* (36)  if there is an input (diversity) */
- 		if ((state->fe[1] != NULL) && (state->output_mode != OUTMODE_DIVERSITY)) {
--			/* if there is a diversity fe in input and this fe is has not already failed : wait here until this this fe has succedeed or failed */
-+			/* if there is a diversity fe in input and this fe is has not already failed : wait here until this fe has succedeed or failed */
- 			if (dib8000_get_status(state->fe[1]) <= FE_STATUS_STD_SUCCESS) /* Something is locked on the input fe */
- 				*tune_state = CT_DEMOD_STEP_8; /* go for mpeg */
- 			else if (dib8000_get_status(state->fe[1]) >= FE_STATUS_TUNE_TIME_TOO_SHORT) { /* fe in input failed also, break the current one */
+diff --git a/drivers/media/mc/mc-request.c b/drivers/media/mc/mc-request.c
+index addb8f2d8939..752ea0bc804b 100644
+--- a/drivers/media/mc/mc-request.c
++++ b/drivers/media/mc/mc-request.c
+@@ -159,7 +159,7 @@ static long media_request_ioctl_queue(struct media_request *req)
+ 	 * state can only happen if either the driver changes the state or if
+ 	 * the user cancels the vb2 queue. The driver can only change the state
+ 	 * after each object is queued through the req_queue op (and note that
+-	 * that op cannot fail), so setting the state to QUEUED up front is
++	 * op cannot fail), so setting the state to QUEUED up front is
+ 	 * safe.
+ 	 *
+ 	 * The other reason for changing the state is if the vb2 queue is
 -- 
 2.35.1
 

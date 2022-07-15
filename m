@@ -2,120 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720E05766A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795105766A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbiGOSS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 14:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
+        id S229653AbiGOSVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 14:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiGOSSX (ORCPT
+        with ESMTP id S229537AbiGOSUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 14:18:23 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187175C34D;
-        Fri, 15 Jul 2022 11:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657909102; x=1689445102;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TUQ7avMuLxhf37gvjWMg7acpWzikzJL0j5/UqprSQsU=;
-  b=VLY+ZEqYYlBuqI9K36GnEjSd5+TQlc0/aS8oLYwbmKCpkCg7Xn2oGzDN
-   1BmBS/wICldkzQQXpAFAy/pTFcMoZttRJ9jwsDYVU3FOy8ojbzdCqZZpR
-   ipZDExGamnghdGeFO6OioVUy/U6MOpCOZdgZUiZ9TjAAMLHZoA2Nknufc
-   vB7qt1s/9xleRDdssPLi6SNhECYudSbPhLsp2DFbQTUIdJvrWpS8MkWTJ
-   T/pzxJt91d6BJR65CqQ2vggcGiWMc6Xil3TcyH+fCFxV3emYlBCxsZFoZ
-   iUuuX2RaZ3CdXf9nkmcBLgcDF8IjAqXD3UQEJPokyH8/9Rjw/YjftGTvE
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="266280341"
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="266280341"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 11:18:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="571621269"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 15 Jul 2022 11:18:21 -0700
-Received: from rjingar-desk5.amr.corp.intel.com (unknown [10.213.176.154])
-        by linux.intel.com (Postfix) with ESMTP id 4C168580BDB;
-        Fri, 15 Jul 2022 11:18:21 -0700 (PDT)
-From:   Rajvi Jingar <rajvi.jingar@linux.intel.com>
-To:     rafael.j.wysocki@intel.com, bhelgaas@google.com
-Cc:     rajvi.jingar@linux.intel.com, david.e.box@linux.intel.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v3 2/2] PCI/PTM: fix to maintain pci_dev->ptm_enabled
-Date:   Fri, 15 Jul 2022 11:18:09 -0700
-Message-Id: <20220715181809.232147-2-rajvi.jingar@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220715181809.232147-1-rajvi.jingar@linux.intel.com>
-References: <20220715181809.232147-1-rajvi.jingar@linux.intel.com>
+        Fri, 15 Jul 2022 14:20:53 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7746050A
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 11:20:52 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:41140)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oCPvm-001XGR-Ov; Fri, 15 Jul 2022 12:20:50 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:47566 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oCPvl-006d1V-Qv; Fri, 15 Jul 2022 12:20:50 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
+        longman@redhat.com, roman.gushchin@linux.dev, legion@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220715062301.19311-1-hbh25y@gmail.com>
+Date:   Fri, 15 Jul 2022 13:20:23 -0500
+In-Reply-To: <20220715062301.19311-1-hbh25y@gmail.com> (Hangyu Hua's message
+        of "Fri, 15 Jul 2022 14:23:01 +0800")
+Message-ID: <87v8ryz194.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oCPvl-006d1V-Qv;;;mid=<87v8ryz194.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19CcuBbg2Xt2eAPCP9wCMd7QXP6AefhaWQ=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Hangyu Hua <hbh25y@gmail.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 383 ms - load_scoreonly_sql: 0.10 (0.0%),
+        signal_user_changed: 14 (3.7%), b_tie_ro: 12 (3.1%), parse: 1.64
+        (0.4%), extract_message_metadata: 5 (1.4%), get_uri_detail_list: 1.44
+        (0.4%), tests_pri_-1000: 8 (2.0%), tests_pri_-950: 2.2 (0.6%),
+        tests_pri_-900: 1.92 (0.5%), tests_pri_-90: 95 (24.7%), check_bayes:
+        93 (24.2%), b_tokenize: 7 (1.9%), b_tok_get_all: 7 (1.7%),
+        b_comp_prob: 2.6 (0.7%), b_tok_touch_all: 71 (18.7%), b_finish: 1.28
+        (0.3%), tests_pri_0: 223 (58.3%), check_dkim_signature: 1.09 (0.3%),
+        check_dkim_adsp: 4.0 (1.0%), poll_dns_idle: 0.95 (0.2%), tests_pri_10:
+        2.3 (0.6%), tests_pri_500: 14 (3.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] ipc: mqueue: fix possible memory leak in init_mqueue_fs()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pci_dev->ptm_enabled needs to be maintained to reflect the current PTM
-state of the device. In pci_ptm_disable(), clear ptm_enabled from
-'struct pci_dev' on disabling PTM state for the device.
-In pci_restore_ptm_state(), set dev->ptm_enabled based on the restored
-PTM state of the device.
+Hangyu Hua <hbh25y@gmail.com> writes:
 
-In pci_ptm_disable(), perform ptm_enabled check to avoid config space
-access in case if PTM is already disabled for the device. ptm_enabled
-won't be set for non-PCIe devices so pci_is_pcie(dev) check is not
-needed anymore.
+> commit db7cfc380900 ("ipc: Free mq_sysctls if ipc namespace creation
+> failed")
+>
+> Here's a similar memory leak to the one fixed by the patch above.
+> retire_mq_sysctls need to be called when init_mqueue_fs fails after
+> setup_mq_sysctls.
 
-Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- v1->v2:
-   - add ptm_enabled check in pci_ptm_disable().
-   - set the dev->ptm_enabled value in pci_restore_ptm_state().
- v2->v3:
-   - remove pci_is_pcie(dev) check in pci_ptm_disable().
-   - add Reviewed-by tag in commit message
----
- drivers/pci/pcie/ptm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Alex can you review this change?
 
-diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
-index 368a254e3124..1ce241d4538f 100644
---- a/drivers/pci/pcie/ptm.c
-+++ b/drivers/pci/pcie/ptm.c
-@@ -34,7 +34,7 @@ void pci_disable_ptm(struct pci_dev *dev)
- 	int ptm;
- 	u16 ctrl;
- 
--	if (!pci_is_pcie(dev))
-+	if (!dev->ptm_enabled)
- 		return;
- 
- 	ptm = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_PTM);
-@@ -44,6 +44,7 @@ void pci_disable_ptm(struct pci_dev *dev)
- 	pci_read_config_word(dev, ptm + PCI_PTM_CTRL, &ctrl);
- 	ctrl &= ~(PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT);
- 	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, ctrl);
-+	dev->ptm_enabled = 0;
- }
- 
- void pci_save_ptm_state(struct pci_dev *dev)
-@@ -83,6 +84,7 @@ void pci_restore_ptm_state(struct pci_dev *dev)
- 
- 	cap = (u16 *)&save_state->cap.data[0];
- 	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, *cap);
-+	dev->ptm_enabled = !!(*cap & PCI_PTM_CTRL_ENABLE);
- }
- 
- void pci_ptm_init(struct pci_dev *dev)
--- 
-2.25.1
+> Fixes: dc55e35f9e81 ("ipc: Store mqueue sysctls in the ipc namespace")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+>  ipc/mqueue.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/ipc/mqueue.c b/ipc/mqueue.c
+> index 12ad7860bb88..83370fef8879 100644
+> --- a/ipc/mqueue.c
+> +++ b/ipc/mqueue.c
+> @@ -1746,6 +1746,7 @@ static int __init init_mqueue_fs(void)
+>  	unregister_filesystem(&mqueue_fs_type);
+>  out_sysctl:
+>  	kmem_cache_destroy(mqueue_inode_cachep);
+> +	retire_mq_sysctls(&init_ipc_ns);
+>  	return error;
+>  }
 
+Thanks,
+Eric

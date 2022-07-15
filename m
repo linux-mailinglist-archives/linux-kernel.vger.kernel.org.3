@@ -2,143 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791765763D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 822205763DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbiGOOro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 10:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
+        id S230367AbiGOOwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 10:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiGOOrm (ORCPT
+        with ESMTP id S229725AbiGOOwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 10:47:42 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2E3753BF
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:47:41 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so11772442pjm.2
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:47:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3tUNFb/MgVcjx+q+xnHzJmvjWkinIDyAxRghu8rwyXg=;
-        b=Rym6NMECh44r0rwd+1g0imZUyyBEkDdo3kxGbrMPCZFbCbLl/8BZolpTX8W+VAh9J4
-         LD7SKH80SdA/NeNTOJFsfxYM8GTz1SGNA0gP0NIwSRANXAG0FNukKoxH1KK97dQAdNdZ
-         8wD6skWaNDKebwz+6vNNVeNOvyVxqY0MWM2VLATFbOa72eeqbsLdt8PujtPqPaJ0jmHm
-         9Vd+jdFjPnQF0klX7fMRdkrRegi+DQc/Vz8loSDSwCry9LFXOU5I3DsNPpjtNIZJPACo
-         tv6/7lXuWQA3HOUAH5sR1YEVV3j6ZJzbWs2uSZxZWowxWWMiXS/qdJtnKJABP3YCVV4n
-         fVSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3tUNFb/MgVcjx+q+xnHzJmvjWkinIDyAxRghu8rwyXg=;
-        b=TgVsPKaY8xH08vrq93nbQB0l8JdHNOmXQYefIpQTDvTf6K7zcKMV3RIcmzU0HpMMvD
-         5bn3MxGS2UwF5OBRe8S+ZFtAC2E+3YNhM+gEbrGLbY0MpyRpbuDprBA1if2fH++3NBLw
-         H+Ug9OuoPj/hm0qfIcy1EmUhBkHnl5v7A/I1mMHo7bllf1Dpl3Be3Bv0db8q4hAPpu9Q
-         wnpOk684cOlJGLoMO8Yarjb2jfbJaoTkyzr+fkGBB/4WZd+PFOlbF0h+UjuaC3UcANb7
-         1rUTsvvO+wRAHmt0I0qEn2FblAHHLEEsj6MDZevBxEEkEVyPVH6UApwXfUhDdFgj8bQA
-         Hvjg==
-X-Gm-Message-State: AJIora+W+ZdbH7Mcdxn4DErqDIa2dJfFuOAaqoM0q+Nu45/Gnj8GL5Dv
-        uo1rFG3MrWQq+IBx521vijoqnQ==
-X-Google-Smtp-Source: AGRyM1s+NPdiYftBQZwlpnh1yi1YFLFqWcXd2bsDwLI/KbcXrV5CTmR6Cwvi9UcyTn2+4UBAiJ4TEw==
-X-Received: by 2002:a17:902:b612:b0:16c:7e2d:ff39 with SMTP id b18-20020a170902b61200b0016c7e2dff39mr12737288pls.111.1657896460825;
-        Fri, 15 Jul 2022 07:47:40 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id e2-20020a17090a118200b001ef3f85d1aasm5821172pja.9.2022.07.15.07.47.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 07:47:40 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 14:47:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, jmattson@google.com,
-        joro@8bytes.org, wanpengli@tencent.com, kvm@vger.kernel.org,
+        Fri, 15 Jul 2022 10:52:02 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCA2785A9;
+        Fri, 15 Jul 2022 07:51:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657896718; x=1689432718;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ZzyuoiCwqpLweGYOkG0+rKJpPglqwnxzM5a+WQyzOag=;
+  b=ZrSgvAFG8gkVc/meiW3eflT0A5FGXO0eK3uBAZmg8TH076LXjl2TQNiS
+   lllq6urSMj0UZ0OJMlEJMPMlb2gMktPYm1j4BC5DFr08ixZm0AtZB6QX0
+   Bpa0SoXsvHZniez3JpR+zTgC1UAvWOR8jKnpuRw2U/mSoTmi9NigfGbtO
+   NPrjU2VMqOLN9U8rxnoEYA0ldxQj9rXXGgPVJ15UIgaj2mo/ElvtyXrhG
+   NUp518FinAFbrB+hVQiXlxrRwoXY4yr4CcSuoYg4zfqh6giiySv79dUTm
+   6hb4DJj+eyVpaZQ6je7SVTghzSnJQgk358+Qyz8fduGMTwquYc4Ds+De+
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="265600278"
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="265600278"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 07:51:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
+   d="scan'208";a="654357301"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga008.fm.intel.com with ESMTP; 15 Jul 2022 07:51:52 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 26FEpnoA007626;
+        Fri, 15 Jul 2022 15:51:49 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] KVM: X86: Initialize 'fault' in
- kvm_fixup_and_inject_pf_error().
-Message-ID: <YtF+CF2FkS7Ho1d5@google.com>
-References: <20220715114211.53175-1-yu.c.zhang@linux.intel.com>
- <20220715114211.53175-2-yu.c.zhang@linux.intel.com>
+Subject: Re: [PATCH v5 6/9] bitops: let optimize out non-atomic bitops on compile-time constants
+Date:   Fri, 15 Jul 2022 16:50:53 +0200
+Message-Id: <20220715145053.64569-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <YtF3YIBA0Dd4KXZ+@yury-laptop>
+References: <20220624121313.2382500-1-alexandr.lobakin@intel.com> <20220624121313.2382500-7-alexandr.lobakin@intel.com> <20220715000402.GA512558@roeck-us.net> <20220715132633.61480-1-alexandr.lobakin@intel.com> <8c949bd4-d25a-d5f5-49be-59d52e4b6c9d@roeck-us.net> <YtF3YIBA0Dd4KXZ+@yury-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220715114211.53175-2-yu.c.zhang@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022, Yu Zhang wrote:
-> kvm_fixup_and_inject_pf_error() was introduced to fixup the error code(
-> e.g., to add RSVD flag) and inject the #PF to the guest, when guest
-> MAXPHYADDR is smaller than the host one.
+From: Yury Norov <yury.norov@gmail.com>
+Date: Fri, 15 Jul 2022 07:19:12 -0700
+
+> On Fri, Jul 15, 2022 at 06:49:46AM -0700, Guenter Roeck wrote:
+> > On 7/15/22 06:26, Alexander Lobakin wrote:
+> > > From: Guenter Roeck <linux@roeck-us.net>
+> > > Date: Thu, 14 Jul 2022 17:04:02 -0700
+> > > 
+> > > > On Fri, Jun 24, 2022 at 02:13:10PM +0200, Alexander Lobakin wrote:
+> > > > > Currently, many architecture-specific non-atomic bitop
+> > > > > implementations use inline asm or other hacks which are faster or
+> > > 
+> > > [...]
+> > > 
+> > > > > Cc: Mark Rutland <mark.rutland@arm.com>
+> > > > > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > > > > Reviewed-by: Marco Elver <elver@google.com>
+> > > > 
+> > > > Building i386:allyesconfig ... failed
+> > > > --------------
+> > > > Error log:
+> > > > arch/x86/platform/olpc/olpc-xo1-sci.c: In function 'send_ebook_state':
+> > > > arch/x86/platform/olpc/olpc-xo1-sci.c:83:63: error: logical not is only applied to the left hand side of comparison
+> > > 
+> > > Looks like a trigger, not a cause... Anyway, this construct:
+> > > 
+> > > 	unsigned char state;
+> > > 
+> > > 	[...]
+> > > 
+> > > 	if (!!test_bit(SW_TABLET_MODE, ebook_switch_idev->sw) == state)
+> > > 
+> > > doesn't look legit enough.
+> > > That redundant double-negation [of boolean value], together with
+> > > comparing boolean to char, provokes compilers to think the author
+> > > made logical mistakes here, although it works as expected.
+> > > Could you please try (if it's not automated build which you can't
+> > > modify) the following:
+> > > 
+> > 
+> > Agreed, the existing code seems wrong. The change below looks correct
+> > and fixes the problem. Feel free to add
+> > 
+> > Reviewed-and-tested-by: Guenter Roeck <linux@roeck-us.net>
+> > 
+> > to the real patch.
+> > 
+> > Thanks,
+> > Guenter
+> > 
+> > > --- a/arch/x86/platform/olpc/olpc-xo1-sci.c
+> > > +++ b/arch/x86/platform/olpc/olpc-xo1-sci.c
+> > > @@ -80,7 +80,7 @@ static void send_ebook_state(void)
+> > >   		return;
+> > >   	}
+> > > -	if (!!test_bit(SW_TABLET_MODE, ebook_switch_idev->sw) == state)
+> > > +	if (test_bit(SW_TABLET_MODE, ebook_switch_idev->sw) == !!state)
+> > >   		return; /* Nothing new to report. */
+> > >   	input_report_switch(ebook_switch_idev, SW_TABLET_MODE, state);
+> > > ---
+> > > 
+> > > We'd take it into the bitmap tree then. The series revealed
+> > > a fistful of existing code issues already :)
 > 
-> When it comes to nested, L0 is expected to intercept and fix up the #PF
-> and then inject to L2 directly if
-> - L2.MAXPHYADDR < L0.MAXPHYADDR and
-> - L1 has no intention to intercept L2's #PF (e.g., L2 and L1 have the
->   same MAXPHYADDR value && L1 is using EPT for L2),
-> instead of constructing a #PF VM Exit to L1. Currently, with PFEC_MASK
-> and PFEC_MATCH both set to 0 in vmcs02, the interception and injection
-> may happen on all L2 #PFs.
+> Would you like me to add your signed-off-by and apply, or you prefer
+> to send it out as a patch?
+
+I'm sending it in a couple minutes :)
+
 > 
-> However, failing to initialize 'fault' in kvm_fixup_and_inject_pf_error()
-> may cause the fault.async_page_fault being NOT zeroed, and later the #PF
-> being treated as a nested async page fault, and then being injected to L1.
-> So just fix it by initialize the 'fault' value in the beginning.
+> Thanks,
+> Yury
 
-Ouch.
-
-> Fixes: 897861479c064 ("KVM: x86: Add helper functions for illegal GPA checking and page fault injection")
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216178
-> Reported-by: Yang Lixiao <lixiao.yang@intel.com>
-> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> ---
->  arch/x86/kvm/x86.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 031678eff28e..3246b3c9dfb3 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -12983,7 +12983,7 @@ EXPORT_SYMBOL_GPL(kvm_spec_ctrl_test_value);
->  void kvm_fixup_and_inject_pf_error(struct kvm_vcpu *vcpu, gva_t gva, u16 error_code)
->  {
->  	struct kvm_mmu *mmu = vcpu->arch.walk_mmu;
-> -	struct x86_exception fault;
-> +	struct x86_exception fault = {0};
->  	u64 access = error_code &
->  		(PFERR_WRITE_MASK | PFERR_FETCH_MASK | PFERR_USER_MASK);
-
-As stupid as it may be to intentionally not fix the uninitialized data in a robust
-way, I'd actually prefer to manually clear fault.async_page_fault instead of
-zero-initializing the struct.  Unlike a similar bug fix in commit 159e037d2e36
-("KVM: x86: Fully initialize 'struct kvm_lapic_irq' in kvm_pv_kick_cpu_op()"),
-this code actually cares about async_page_fault being false as opposed to just
-being _initialized_.
-
-And if another field is added to struct x86_exception in the future, leaving the
-struct uninitialized means that if such a patch were to miss this case, running
-with various sanitizers should in theory be able to detect such a bug.  I suspect
-no one has found this with syzkaller due to the need to opt into running with
-allow_smaller_maxphyaddr=1.
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index f389691d8c04..aeed737b55c2 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -12996,6 +12996,7 @@ void kvm_fixup_and_inject_pf_error(struct kvm_vcpu *vcpu, gva_t gva, u16 error_c
-                fault.error_code = error_code;
-                fault.nested_page_fault = false;
-                fault.address = gva;
-+               fault.async_page_fault = false;
-        }
-        vcpu->arch.walk_mmu->inject_page_fault(vcpu, &fault);
- }
-
+Thanks,
+Olek

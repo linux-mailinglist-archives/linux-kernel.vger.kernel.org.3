@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E455766CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5EB5766D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 20:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiGOSeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 14:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
+        id S230188AbiGOSjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 14:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiGOSeR (ORCPT
+        with ESMTP id S229751AbiGOSjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 14:34:17 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96FD12D33
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 11:34:16 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 8E1AD200D9;
-        Fri, 15 Jul 2022 18:34:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1657910055; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=WTuW+7pySv2mjnvZPDaFyWvMrGPz00ceUXfdENQm05M=;
-        b=e9s34Ix4huMzITijFglCxZ1MvWSjRs76ErU3q/NpmnBXTgbscqiXomTeJL0lVqjqMyOH7k
-        2XG6B5CGQEhCdIVttBfoCMDEkRoLWWPz3JmKaNr+mRbqfboNjLh31fZHG6kbBhdes/ZRMT
-        wJigatkkuf2JObmaXrokJfSPugq3Pw8=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 37F672C141;
-        Fri, 15 Jul 2022 18:34:15 +0000 (UTC)
-Date:   Fri, 15 Jul 2022 20:34:11 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>,
-        Todd Brandt <todd.e.brandt@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] printk fixup for 5.19-rc7
-Message-ID: <YtGzI9tWpB2wpioB@alley>
+        Fri, 15 Jul 2022 14:39:43 -0400
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B724730542;
+        Fri, 15 Jul 2022 11:39:42 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-31c86fe1dddso55341907b3.1;
+        Fri, 15 Jul 2022 11:39:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=tZSAmkhI57/m5p5+yBVvC0sIcY5dskuse/7Nb3HZPtw=;
+        b=Om8aMkpLRaE4NIQrQBAiOZzpihcR/5duwqOByVUpOvdZDSRl/oLWX4f/gnZlT0D/LJ
+         kdGTkgODXoEbuLH5RpgFhkn8g3uNDRL63wv4HQnzoSN1o5lWrs6dxaQxufCP/SLm1kl/
+         nDpOXbqDp5s+nMQHmEa607iGSuzMkNnonMSEBY/LGc+KdPYrXMmCPGGrnSMHboHeolGb
+         aer4YNWhODngkZ4JLj//34+RwxWwu2UpwX/YKnVS5Pdn/akDsSGbnwmBzlz0rY5twEuZ
+         avaO182r1ORNOxx5U4mXusfgxQnCD8h1VBooFPlXY3zS5qggZ91vUQ2eExzzrOkoSpGP
+         nWgQ==
+X-Gm-Message-State: AJIora/4DaXykl26gFiO+SK1jnzgdhTEQWnUIXe073YzW5wYAn9p+bKu
+        nqHwA96WOx5R32x1pP3toV0UtXfLp+T5D+uX6bwNF9AiOhg=
+X-Google-Smtp-Source: AGRyM1vurSdoTVuN/RnJ8mniQ8GmkHS7VnOkQOqLbNTQBB5/DOQZHY3PYObZWlJ3HyMUjpZcEoamm2Dh5kxTiDrfVjk=
+X-Received: by 2002:a81:cd6:0:b0:31d:72e3:8b81 with SMTP id
+ 205-20020a810cd6000000b0031d72e38b81mr17281862ywm.301.1657910382016; Fri, 15
+ Jul 2022 11:39:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 15 Jul 2022 20:39:30 +0200
+Message-ID: <CAJZ5v0gDqO1fu=i9MOWuryMG7XNp+qMTTSRzNGyxY-+Jrx3wFQ@mail.gmail.com>
+Subject: [GIT PULL] ACPI fix for v5.19-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,27 +55,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Linus,
 
-please pull a printk fixup
+Please pull from the tag
 
-git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git tags/printk-for-5.19-rc7
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-5.19-rc7
 
-======================================
+with top-most commit fbd74d16890b9f5d08ea69b5282b123c894f8860
 
-- Make pr_flush() fast when consoles are suspended.
+ ACPI: CPPC: Fix enabling CPPC on AMD systems with shared memory
 
-======================================
+on top of commit 32346491ddf24599decca06190ebca03ff9de7f8
 
-pr_flush() was added together with the printk kthreads but it
-makes sense on its own. This is why we kept it. It is pity
-that the regression was found this late. But it is trivial
-to fix.
+ Linux 5.19-rc6
 
-----------------------------------------------------------------
-John Ogness (1):
-      printk: do not wait for consoles when suspended
+to receive an ACPI fix for 5.19-rc7.
 
-Petr Mladek (1):
-      Merge branch 'rework/kthreads' into for-linus
+This fixes more fallout from recent changes of the ACPI CPPC handling
+on AMD platforms (Mario Limonciello).
 
- kernel/printk/printk.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Thanks!
+
+
+---------------
+
+Mario Limonciello (1):
+      ACPI: CPPC: Fix enabling CPPC on AMD systems with shared memory
+
+---------------
+
+ arch/x86/kernel/acpi/cppc.c | 6 ++++++
+ 1 file changed, 6 insertions(+)

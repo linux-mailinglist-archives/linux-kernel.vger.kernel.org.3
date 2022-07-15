@@ -2,115 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843195758E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DAA5758E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241201AbiGOAy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 20:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
+        id S241166AbiGOAza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 20:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241035AbiGOAy1 (ORCPT
+        with ESMTP id S241180AbiGOAzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 20:54:27 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CFA74E07;
-        Thu, 14 Jul 2022 17:54:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657846451; x=1689382451;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fju0Ru0qBGMIRYB31mHEpQT0NkaHTGTKqnhaAAudPPM=;
-  b=ibmqRjf1It71WdUkrRLXO8ILC4eVS20DriAHetd7Dx1hG13TmtdhT00r
-   leP5M90urNg0D/ANJXLEHAAXyUA54FuLB6+B/UwnLIgF8ne1D+31zzd0f
-   ff5ra7QTZe4CZKLcHy2Sa2oo7b9xdCad/CKaJ11uZf9cgxgSWrJxrViIL
-   2DArIf8CR5ymQWUu2YbVyM/h6ckb5UYMPpptIUaTKdCseH2Xc0UpHbR5O
-   lynuS0TIqEcsTLFjqfdeSZ5a98u5C/gKVJCRFiDbvQhkdcEBfJv9tYCTv
-   YQOa8tRIaLqIbhvQx26SwDn6S3PHWnf4f09Lw8MjLLihpynYpUp/DEyu5
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="265459553"
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="265459553"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 17:53:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="923306854"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Jul 2022 17:53:53 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oC9aa-0001KH-Ib;
-        Fri, 15 Jul 2022 00:53:52 +0000
-Date:   Fri, 15 Jul 2022 08:53:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Benjamin Bara <bbara93@gmail.com>, dmitry.torokhov@gmail.com
-Cc:     kbuild-all@lists.01.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-Subject: Re: [PATCH] Input: tsc2007 - enable GPIO chips that can sleep
-Message-ID: <202207150801.7z40LFNI-lkp@intel.com>
-References: <20220713084247.3090353-1-bbara93@gmail.com>
+        Thu, 14 Jul 2022 20:55:09 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8AB474FB
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 17:55:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=i5V0rq365/EZ+PBYKdlyx+p+aeyqnp0HDqLpcN9uOvE=; b=PgbJ8vYzVGvJurKL9zxzlFf/iC
+        iZP6QSMY71LlILA+ejJyUuVc627DekfEDNGu6LzwlluaBmCu/DatLCbd5QUy49pjW5t94LO/lFjF1
+        jwQR6AgLk2iB3QdxpdUA19yRbaL7qRHbGLJFTUahvEEGnnNLr6jC0nj22C0ZgTP6Pw13H+/7ENziS
+        bb9bnWnOLXYLCHDU2AKn5YD9Nw6sM2lWOhFooxC7Nh7aFsG956BKW+1XMlFfFSyGKYABssfPEeWzs
+        HKwvHlegDqRZKfaUifm4kdRjqMIcfFsSggzc1CfDgPEcnrYzhVS/p5lVUPZ5XRy2HmbiBlw2bktIv
+        DL1SE+nA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oC9bi-00C8Cw-DN;
+        Fri, 15 Jul 2022 00:55:02 +0000
+Date:   Fri, 15 Jul 2022 01:55:02 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Liu Xinpeng <liuxp11@chinatelecom.cn>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iov_iter: Fix repeated minus operation
+Message-ID: <YtC65m42qMdOqSzT@ZenIV>
+References: <1657707820-124858-1-git-send-email-liuxp11@chinatelecom.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220713084247.3090353-1-bbara93@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1657707820-124858-1-git-send-email-liuxp11@chinatelecom.cn>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+On Wed, Jul 13, 2022 at 06:23:40PM +0800, Liu Xinpeng wrote:
+> After executing command 'cat /proc/cpuinfo', got a message:
+> 
+> [    6.909745] ------------[ cut here ]------------
+> [    6.910267] WARNING: CPU: 0 PID: 76 at lib/iov_iter.c:1026
+> iov_iter_pipe+0x34/0x40
+> [    6.910951] Modules linked in:
+> [    6.911584] CPU: 0 PID: 76 Comm: cat Not tainted 5.19.0-rc6-next-20220711 #9
+> [    6.911916] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+> [    6.912668] RIP: 0010:iov_iter_pipe+0x34/0x40
+> [    6.913062] Code: 72 54 39 72 5c 76 23 48 c7 07 00 00 00 00 48 c7 47 08 00 00
+> 00 00 c6 07 03 48 89 4f 10 48 89 57 18 89 47 20 89 47 24 c3 0f 0b <0f> 7
+> [    6.914341] RSP: 0018:ffffc900001c7d48 EFLAGS: 00000246
+> [    6.914647] RAX: 0000000000000010 RBX: ffff888004988700 RCX: 0000000000000000
+> [    6.914893] RDX: ffff88800490bc00 RSI: 0000000000000010 RDI: ffffc900001c7d58
+> [    6.915302] RBP: ffffc900001c7e00 R08: 0000000000000000 R09: ffff888004cafad8
+> [    6.915609] R10: 0000000000020000 R11: 0000000000001000 R12: ffff88800490bc00
+> [    6.915856] R13: ffffc900001c7e48 R14: 00000000000002d5 R15: ffff88800490bc00
+> [    6.916352] FS:  00000000016df8c0(0000) GS:ffff88800f600000(0000)
+> 
+> Checking the code, need to delete the duplicate minus in a loop.
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on linus/master v5.19-rc6 next-20220714]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Bara/Input-tsc2007-enable-GPIO-chips-that-can-sleep/20220713-164521
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220715/202207150801.7z40LFNI-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/13455f523263c4e90b5cc8c587ef2be97008ff5f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Benjamin-Bara/Input-tsc2007-enable-GPIO-chips-that-can-sleep/20220713-164521
-        git checkout 13455f523263c4e90b5cc8c587ef2be97008ff5f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/input/touchscreen/ sound/soc/codecs/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/input/touchscreen/tsc2007_core.c:112:6: warning: no previous prototype for 'tsc2007_is_pen_down_cansleep' [-Wmissing-prototypes]
-     112 | bool tsc2007_is_pen_down_cansleep(struct tsc2007 *ts)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/tsc2007_is_pen_down_cansleep +112 drivers/input/touchscreen/tsc2007_core.c
-
-   111	
- > 112	bool tsc2007_is_pen_down_cansleep(struct tsc2007 *ts)
-   113	{
-   114		if (!ts->get_pendown_state_cansleep)
-   115			return true;
-   116	
-   117		return ts->get_pendown_state_cansleep(&ts->client->dev);
-   118	}
-   119	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Nice catch.  Fix folded in...

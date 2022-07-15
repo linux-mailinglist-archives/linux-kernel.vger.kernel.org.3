@@ -2,128 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D00576A76
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D469F576A7D
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 01:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbiGOXNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 19:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
+        id S231528AbiGOXPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 19:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbiGOXNI (ORCPT
+        with ESMTP id S229580AbiGOXPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 19:13:08 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704838BAB6;
-        Fri, 15 Jul 2022 16:13:06 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j1so4181264wrs.4;
-        Fri, 15 Jul 2022 16:13:06 -0700 (PDT)
+        Fri, 15 Jul 2022 19:15:52 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EC190D90
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 16:15:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=IZ9+e1HnCqiTeYAjFblApCnx6Lp5ZXaovlWuKELwtI4=;
-        b=Q4QBOERZCmJKefQrMX2rfpgorYjIn3HRsKlVUddEAWQnpefW7BaDoo8APOt84xbXPx
-         AdVjS3NuN5yCo6hZvA7yeEgAC/jVHa7xyOnMUM3VweviiLTdwGcMDHS4tctCDulVeGle
-         SmGxtu0qofUwE2UrmD/UGI3b5eKoqDvpS1dSyv7ZOXjOSkGsRiUKeh322+h7UroOd6Co
-         wS60BDqI3wV3e3JCeihbrrsXG0dvtyHw3h1GbQ6LFNKKOSU0IMxm4ujGrrha7HG6w4Lg
-         OvLdCVWl6vOhywKrgFC2OS03jNuhgFdG0AIqDCC4eP9L33AQEwnfrSuItqciW8QQwhow
-         cqAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=IZ9+e1HnCqiTeYAjFblApCnx6Lp5ZXaovlWuKELwtI4=;
-        b=SGQ9MIISM6Zzb2D/epN85WhucztecdhuLPE7iWTS8ZozeE6GsdrOHc8325HF4olILw
-         fCUiFJaWaH5upYiepBeprmIZvAd3+RRRizoA66QtX29S42QsA65Fev3kYev8H6cfADdM
-         y4mUpLyy/7p+eK6YAuKqvIcuBQKnNKyHZrqmQNmYICNV6hgQsjteUh34ZyGWfWp4tr56
-         +5U9P95U3gG9m7IDEKM12JnmcOEdWmO4A2BSDbf+JBTdJKYyRi6xbcVfRpP6ikKV/FQN
-         krALe4/+O35jBWSPG+iMVIYwpDYXLE+LqrMKSDKE9M0tSDdi6Sjw+efy8nmEM1Yf8RYi
-         yRyg==
-X-Gm-Message-State: AJIora88WVZFWkcWp4uHePkYZBX3Yfo+yJPM5Sv1bEnWqc4j7pp37bBk
-        90VYmjCK6VhRK+aKY0P08j4=
-X-Google-Smtp-Source: AGRyM1sOoZxODX4Y6Y9MgmGI2BIvCNz/7jUbHSG79DLbNq84EIF/qBaY9icEx/1IGJpgy9l8T5ITuQ==
-X-Received: by 2002:a5d:6d89:0:b0:21d:a6db:df63 with SMTP id l9-20020a5d6d89000000b0021da6dbdf63mr14712106wrs.491.1657926784903;
-        Fri, 15 Jul 2022 16:13:04 -0700 (PDT)
-Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
-        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b003a2f96935c0sm14324140wmq.9.2022.07.15.16.13.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 16:13:04 -0700 (PDT)
-Date:   Sat, 16 Jul 2022 00:13:02 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Sagi Grimberg <sagi@grimberg.me>, Hannes Reinecke <hare@suse.de>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: build failure of next-20220715 due to "comparison will always
- evaluate as 'true'"
-Message-ID: <YtH0fux43jxgnCCC@debian>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657926952; x=1689462952;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WXUsaMRz28YkxL2UeAKB2Sj+cOJis/PzsUxzi3i8ndg=;
+  b=wB1yA28YxK06p0nL7yJiABaiKHliv1tVSx5el1rIbgZefnCVljxRLP5r
+   p3NMXXsZKiBI9DTpNnvNnvueTym8C3DxefDeK/CGHOEyGNzppAHphdeAg
+   hI7lmWZiImpp6Y2yJouU0UKiNYR+N2u2/cCRGrqIUgF87MdLeW8tMHKsq
+   0=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Jul 2022 16:15:51 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 16:15:51 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Jul 2022 16:15:51 -0700
+Received: from [10.110.97.72] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 15 Jul
+ 2022 16:15:50 -0700
+Message-ID: <2e0f02f3-0e0e-8690-a58e-bb74a21ab63e@quicinc.com>
+Date:   Fri, 15 Jul 2022 16:15:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mtd: spi-nor: winbond: add support for W25Q512NW-IQ/IN
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+CC:     <clg@kaod.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <p.yadav@ti.com>,
+        <quic_ggregory@quicinc.com>, <quic_jiles@quicinc.com>,
+        <tudor.ambarus@microchip.com>
+References: <20220710145721.1207157-1-quic_jaehyoo@quicinc.com>
+ <20220711095042.2095360-1-michael@walle.cc>
+ <a42fbef2-3eff-9e88-233e-a805cfbe2376@quicinc.com>
+ <4972a85d04e39ebb7b4a5872f6632c45@walle.cc>
+ <2260955b-354d-ceda-cadc-49453bfca3e4@quicinc.com>
+ <00f0c9d480ef5a414f1c34492661bd9e@walle.cc>
+ <63cedfce-34bb-ed63-3871-75a6c3dd5d73@quicinc.com>
+ <6be710bb5c1bf0449e54a54b78f6f7a0@walle.cc>
+ <47c01d768ea56edc9a2f9d317af7b495@walle.cc>
+ <114fcde6-bdf7-68ee-d031-35a916027aee@quicinc.com>
+ <b42cb229-f241-6e29-a138-29023ce316d9@quicinc.com>
+ <c628e868-5c73-ca4b-1f99-60cc149806bf@quicinc.com>
+ <b00410c825486ec406ed1ae773b11792@walle.cc>
+From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+In-Reply-To: <b00410c825486ec406ed1ae773b11792@walle.cc>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Hi,
 
-Not sure if it has been reported, gcc-12 builds of csky, s390 and x86_64
-have failed to build next-20220715 with the error:
+On 7/15/2022 4:03 PM, Michael Walle wrote:
+> Hi,
+> 
+> Am 2022-07-16 00:35, schrieb Jae Hyun Yoo:
+>> On 7/15/2022 1:15 PM, Jae Hyun Yoo wrote:
+>>> On 7/14/2022 7:30 AM, Jae Hyun Yoo wrote:
+>>>> On 7/14/2022 7:21 AM, Michael Walle wrote:
+>>>>> Am 2022-07-14 16:16, schrieb Michael Walle:
+>>>>>> Am 2022-07-14 15:47, schrieb Jae Hyun Yoo:
+>>>>>>> On 7/14/2022 12:41 AM, Michael Walle wrote:
+>>>>>>>> What does "doesn't boot at all" mean? Are there any kernel startup
+>>>>>>>> messages?
+>>>>>>>
+>>>>>>> I'm sharing the error messages below.
+>>>>>>
+>>>>>> Thanks.
+>>>>>>
+>>>>>>> [    0.748594] spi-nor spi0.0: w25q512nwq (65536 Kbytes)
+>>>>>>> [    0.865216] spi-aspeed-smc 1e620000.spi: CE0 read buswidth:4 
+>>>>>>> [0x406c0741]
+>>>>>>> [    0.872833] ------------[ cut here ]------------
+>>>>>>> [    0.877984] WARNING: CPU: 1 PID: 1 at drivers/mtd/mtdcore.c:583
+>>>>>>> add_mtd_device+0x28c/0x53c
+>>>>>>> [    0.887237] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
+>>>>>>> 5.15.43-AUTOINC-dirty-23801a6 #1
+>>>>>>
+>>>>>> Could you please try it on the latest (vanilla) linux-next?
+>>>>>
+>>>>> or spi-nor/next [1] as there are quite a lot of changes. The
+>>>>> patches shall be based on that.
+>>>>
+>>>> Okay. Let me try that. I tested it using 5.15.43 with back-ported
+>>>> spi-nor patches from the latest. I'll back-port more changes from
+>>>> the spi-nor/next and will test the INFO(0xef6020, 0, 0, 0) setting
+>>>> again.
+>>>
+>>> I tested the setting again after cherry picking all SPI relating changes
+>>> from the 'for-next' branch of
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi repository.
+>>>
+>>> No luck! It's still making the same warning dump at 'add_mtd_device'
+>>> since 'mtd->erasesize' is checked as 0.
+>>>
+>>> I traced it further to check if the erasesize is properly parsed from
+>>> the sfdp and checked that erase map seems parsed and initialized
+>>> correctly in 'spi_nor_parse_bfpt' but problem is, a target
+>>> mtd->erasesize is not properly selected in 'spi_nor_select_erase' since
+>>> the 'wanted_size' variable is initialized as sector size of info table
+>>> so a selected target mtd->erasesize is also 0 so looks like it's the
+>>> reason why it can't initialize mtd device if we use
+>>> INFO(0xef6020, 0, 0, 0).
+>>>
+>>> Also, checked that the mtd->erasesize is set to 4096 if I enable
+>>> CONFIG_MTD_SPI_NOR_USE_4K_SECTORS so the SPI flash can be initialized 
+>>> with the INFO(0xef6020, 0, 0, 0) setting but, it should cover even when
+>>> the configuration is not enabled. I think, this patch should go as it
+>>> is. The erasesize selecting issue could be fixed using a separate
+>>> patch.
+>>>
+>>> Are you still sure that the INFO(0xef6020, 0, 0, 0) works in the
+>>> latest spi-next?
+>>
+>> I also tried to fix the issue and made a fix like below.
+>>
+>> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+>> index 502967c76c5f..f8a020f80a56 100644
+>> --- a/drivers/mtd/spi-nor/core.c
+>> +++ b/drivers/mtd/spi-nor/core.c
+>> @@ -2117,7 +2117,7 @@ spi_nor_select_uniform_erase(struct
+>> spi_nor_erase_map *map,
+>>                  * If the current erase size is the one, stop here:
+>>                  * we have found the right uniform Sector Erase command.
+>>                  */
+>> -               if (tested_erase->size == wanted_size) {
+>> +               if (wanted_size && tested_erase->size == wanted_size) {
+>>                         erase = tested_erase;
+>>                         break;
+>>                 }
+>>
+>> Tested that it makes the INFO(0xef6020, 0, 0, 0) setting work and a
+>> selected mtd->erasesize is 65536 which is what I expected for this
+>> device.
+>>
+>> Not sure if it's a right fix or not. Please review and let me know if
+>> it's good to submit or not.
+> 
+> Ahh, I think I know whats going wrong here. Thanks!
+> 
+> 4bait will set the erase size to 0 if there is no corresponding
+> opcode for the 4byte erase. So you'll end up with
+> et[0]: 4096 - 21h
+> et[1]: 0 - FFh
+> et[2]: 65536 - DCh
+> et[3]: --
+> 
+> And spi_nor_select_uniform_erase() will select et[1].
+> 
+> Could you try the following:
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index ce5d69317d46..a2c8de250e01 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -2113,6 +2113,10 @@ spi_nor_select_uniform_erase(struct 
+> spi_nor_erase_map *map,
+> 
+>                  tested_erase = &map->erase_type[i];
+> 
+> +               /* Skip masked erase types. */
+> +               if (!tested_erase->size)
+> +                       continue;
 
-drivers/nvme/common/auth.c: In function 'nvme_auth_dhgroup_name':
-drivers/nvme/common/auth.c:59:13: error: the comparison will always evaluate as 'true' for the address of 'name' will never be NULL [-Werror=address]
-   59 |             !dhgroup_map[dhgroup_id].name ||
-      |             ^
-drivers/nvme/common/auth.c:39:20: note: 'name' declared here
-   39 |         const char name[16];
-      |                    ^~~~
-drivers/nvme/common/auth.c: In function 'nvme_auth_dhgroup_kpp':
-drivers/nvme/common/auth.c:69:13: error: the comparison will always evaluate as 'true' for the address of 'kpp' will never be NULL [-Werror=address]
-   69 |             !dhgroup_map[dhgroup_id].kpp ||
-      |             ^
-drivers/nvme/common/auth.c:40:20: note: 'kpp' declared here
-   40 |         const char kpp[16];
-      |                    ^~~
-drivers/nvme/common/auth.c: In function 'nvme_auth_dhgroup_id':
-drivers/nvme/common/auth.c:81:21: error: the comparison will always evaluate as 'true' for the address of 'name' will never be NULL [-Werror=address]
-   81 |                 if (!dhgroup_map[i].name ||
-      |                     ^
-drivers/nvme/common/auth.c:39:20: note: 'name' declared here
-   39 |         const char name[16];
-      |                    ^~~~
-drivers/nvme/common/auth.c: In function 'nvme_auth_hmac_name':
-drivers/nvme/common/auth.c:117:13: error: the comparison will always evaluate as 'true' for the address of 'hmac' will never be NULL [-Werror=address]
-  117 |             !hash_map[hmac_id].hmac ||
-      |             ^
-drivers/nvme/common/auth.c:94:20: note: 'hmac' declared here
-   94 |         const char hmac[15];
-      |                    ^~~~
-drivers/nvme/common/auth.c: In function 'nvme_auth_digest_name':
-drivers/nvme/common/auth.c:127:13: error: the comparison will always evaluate as 'true' for the address of 'digest' will never be NULL [-Werror=address]
-  127 |             !hash_map[hmac_id].digest ||
-      |             ^
-drivers/nvme/common/auth.c:95:20: note: 'digest' declared here
-   95 |         const char digest[8];
-      |                    ^~~~~~
-drivers/nvme/common/auth.c: In function 'nvme_auth_hmac_id':
-drivers/nvme/common/auth.c:139:21: error: the comparison will always evaluate as 'true' for the address of 'hmac' will never be NULL [-Werror=address]
-  139 |                 if (!hash_map[i].hmac || !strlen(hash_map[i].hmac))
-      |                     ^
-drivers/nvme/common/auth.c:94:20: note: 'hmac' declared here
-   94 |         const char hmac[15];
-      |                    ^~~~
-drivers/nvme/common/auth.c: In function 'nvme_auth_hmac_hash_len':
-drivers/nvme/common/auth.c:152:13: error: the comparison will always evaluate as 'true' for the address of 'hmac' will never be NULL [-Werror=address]
-  152 |             !hash_map[hmac_id].hmac ||
-      |             ^
-drivers/nvme/common/auth.c:94:20: note: 'hmac' declared here
-   94 |         const char hmac[15];
-      |                    ^~~~
+Yes, it also works. Do you want me to update this patch with adding this
+fix? Or is it good to go as is so that the INFO table can be replaced
+with SNOR_ID3 later after the fix is merged?
 
+Thanks,
+Jae
 
---
-Regards
-Sudip
+> +
+>                  /*
+>                   * If the current erase size is the one, stop here:
+>                   * we have found the right uniform Sector Erase command.
+> 
+> 
+> -michael

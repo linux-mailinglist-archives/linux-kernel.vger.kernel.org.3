@@ -2,152 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF943575B9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22DA4575BA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbiGOGdJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 15 Jul 2022 02:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
+        id S231717AbiGOGgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 02:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbiGOGdE (ORCPT
+        with ESMTP id S231649AbiGOGgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 02:33:04 -0400
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EB1237D9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:33:01 -0700 (PDT)
-Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay11.hostedemail.com (Postfix) with ESMTP id A206D803A7;
-        Fri, 15 Jul 2022 06:32:58 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id 391E81C;
-        Fri, 15 Jul 2022 06:32:54 +0000 (UTC)
-Message-ID: <84e873c27f2426ce003e650004fe856bf72c634b.camel@perches.com>
-Subject: Re: [PATCH] mediatek: mt7601u: fix clang -Wformat warning
-From:   Joe Perches <joe@perches.com>
-To:     Justin Stitt <justinstitt@google.com>,
-        Jakub Kicinski <kubakici@wp.pl>, Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Date:   Thu, 14 Jul 2022 23:32:53 -0700
-In-Reply-To: <20220711212932.1501592-1-justinstitt@google.com>
-References: <20220711212932.1501592-1-justinstitt@google.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Fri, 15 Jul 2022 02:36:16 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD9942AC7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:36:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R411e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VJO5cNB_1657866966;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VJO5cNB_1657866966)
+          by smtp.aliyun-inc.com;
+          Fri, 15 Jul 2022 14:36:07 +0800
+Date:   Fri, 15 Jul 2022 14:36:05 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Yue Hu <zbestahu@gmail.com>
+Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, zhangwen@coolpad.com
+Subject: Re: [PATCH 04/16] erofs: introduce bufvec to store decompressed
+ buffers
+Message-ID: <YtEK1UcH8wcUjpAc@B-P7TQMD6M-0146.local>
+References: <20220714132051.46012-1-hsiangkao@linux.alibaba.com>
+ <20220714132051.46012-5-hsiangkao@linux.alibaba.com>
+ <20220715142930.00001cdd.zbestahu@gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: 1hso3syzywufyzhw636x1fz9p96yse9u
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 391E81C
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18D0NiRIZaOhSqXbeaEBffV+4ygx6yiPXw=
-X-HE-Tag: 1657866774-101434
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220715142930.00001cdd.zbestahu@gmail.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-11 at 14:29 -0700, Justin Stitt wrote:
-> When building with Clang we encounter this warning:
-> > drivers/net/wireless/mediatek/mt7601u/debugfs.c:92:6: error: format
-> > specifies type 'unsigned char' but the argument has type 'int'
-> > [-Werror,-Wformat] dev->ee->reg.start + dev->ee->reg.num - 1);
+Hi Yue,
+
+On Fri, Jul 15, 2022 at 02:29:30PM +0800, Yue Hu wrote:
+> On Thu, 14 Jul 2022 21:20:39 +0800
+> Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 > 
-> The format specifier used is `%hhu` which describes a u8. Both
-> `dev->ee->reg.start` and `.num` are u8 as well. However, the expression
-> as a whole is promoted to an int as you cannot get smaller-than-int from
-> addition. Therefore, to fix the warning, use the promoted-to-type's
-> format specifier -- in this case `%d`.
+> > For each pcluster, the total compressed buffers are determined in
+> > advance, yet the number of decompressed buffers actually vary.  Too
+> > many decompressed pages can be recorded if one pcluster is highly
+> > compressed or its pcluster size is large.  That takes extra memory
+> > footprints compared to uncompressed filesystems, especially a lot of
+> > I/O in flight on low-ended devices.
+> > 
+> > Therefore, similar to inplace I/O, pagevec was introduced to reuse
+> > page cache to store these pointers in the time-sharing way since
+> > these pages are actually unused before decompressing.
+> > 
+> > In order to make it more flexable, a cleaner bufvec is used to
+> > replace the old pagevec stuffs so that
+> > 
+> >  - Decompressed offsets can be stored inline, thus it can be used
+> >    for the upcoming feature like compressed data deduplication;
+> > 
+> >  - Towards supporting large folios for compressed inodes since
+> >    our final goal is to completely avoid page->private but use
+> >    folio->private only for all page cache pages.
+> > 
+> > Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> > ---
+> >  fs/erofs/zdata.c | 177 +++++++++++++++++++++++++++++++++++------------
+> >  fs/erofs/zdata.h |  26 +++++--
+> >  2 files changed, 153 insertions(+), 50 deletions(-)
+> > 
+> > diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> > index c183cd0bc42b..f52c54058f31 100644
+> > --- a/fs/erofs/zdata.c
+> > +++ b/fs/erofs/zdata.c
+> > @@ -2,6 +2,7 @@
+> >  /*
+> >   * Copyright (C) 2018 HUAWEI, Inc.
+> >   *             https://www.huawei.com/
+> > + * Copyright (C) 2022 Alibaba Cloud
+> >   */
+> >  #include "zdata.h"
+> >  #include "compress.h"
+> > @@ -26,6 +27,82 @@ static struct z_erofs_pcluster_slab pcluster_pool[] __read_mostly = {
+> >  	_PCLP(Z_EROFS_PCLUSTER_MAX_PAGES)
+> >  };
+> >  
+> > +struct z_erofs_bvec_iter {
+> > +	struct page *bvpage;
+> > +	struct z_erofs_bvset *bvset;
+> > +	unsigned int nr, cur;
+> > +};
+> > +
+> > +static struct page *z_erofs_bvec_iter_end(struct z_erofs_bvec_iter *iter)
+> > +{
+> > +	if (iter->bvpage)
+> > +		kunmap_local(iter->bvset);
+> > +	return iter->bvpage;
+> > +}
+> > +
+> > +static struct page *z_erofs_bvset_flip(struct z_erofs_bvec_iter *iter)
+> > +{
+> > +	unsigned long base = (unsigned long)((struct z_erofs_bvset *)0)->bvec;
+> > +	/* have to access nextpage in advance, otherwise it will be unmapped */
+> > +	struct page *nextpage = iter->bvset->nextpage;
+> > +	struct page *oldpage;
+> > +
+> > +	DBG_BUGON(!nextpage);
+> > +	oldpage = z_erofs_bvec_iter_end(iter);
+> > +	iter->bvpage = nextpage;
+> > +	iter->bvset = kmap_local_page(nextpage);
+> > +	iter->nr = (PAGE_SIZE - base) / sizeof(struct z_erofs_bvec);
+> > +	iter->cur = 0;
+> > +	return oldpage;
+> > +}
+> > +
+> > +static void z_erofs_bvec_iter_begin(struct z_erofs_bvec_iter *iter,
+> > +				    struct z_erofs_bvset_inline *bvset,
+> > +				    unsigned int bootstrap_nr,
+> > +				    unsigned int cur)
+> > +{
+> > +	*iter = (struct z_erofs_bvec_iter) {
+> > +		.nr = bootstrap_nr,
+> > +		.bvset = (struct z_erofs_bvset *)bvset,
+> > +	};
+> > +
+> > +	while (cur > iter->nr) {
+> > +		cur -= iter->nr;
+> > +		z_erofs_bvset_flip(iter);
+> > +	}
+> > +	iter->cur = cur;
+> > +}
+> > +
+> > +static int z_erofs_bvec_enqueue(struct z_erofs_bvec_iter *iter,
+> > +				struct z_erofs_bvec *bvec,
+> > +				struct page **candidate_bvpage)
+> > +{
+> > +	if (iter->cur == iter->nr) {
+> > +		if (!*candidate_bvpage)
+> > +			return -EAGAIN;
+> > +
+> > +		DBG_BUGON(iter->bvset->nextpage);
+> > +		iter->bvset->nextpage = *candidate_bvpage;
+> > +		z_erofs_bvset_flip(iter);
+> > +
+> > +		iter->bvset->nextpage = NULL;
+> > +		*candidate_bvpage = NULL;
+> > +	}
+> > +	iter->bvset->bvec[iter->cur++] = *bvec;
+> > +	return 0;
+> > +}
+> > +
+> > +static void z_erofs_bvec_dequeue(struct z_erofs_bvec_iter *iter,
+> > +				 struct z_erofs_bvec *bvec,
+> > +				 struct page **old_bvpage)
+> > +{
+> > +	if (iter->cur == iter->nr)
+> > +		*old_bvpage = z_erofs_bvset_flip(iter);
+> > +	else
+> > +		*old_bvpage = NULL;
+> > +	*bvec = iter->bvset->bvec[iter->cur++];
+> > +}
+> > +
+> 
+> Touch a new file to include bufvec related code? call it zbvec.c/h?
 
-I think whenever a sizeof(unsigned type) that is less than sizeof(int) is
-emitted with vsprintf, the preferred format specifier should be %u not %d.
+Thanks for the suggestion. The new implementation is simple enough,
+so I tend to directly leave it in zdata.c instead of making more
+churn to add more new files and zpvec.h will be completely removed
+in the following patch.
 
-> diff --git a/drivers/net/wireless/mediatek/mt7601u/debugfs.c b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
-[]
-> @@ -88,7 +88,7 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
->  		   dev->ee->rssi_offset[0], dev->ee->rssi_offset[1]);
->  	seq_printf(file, "Reference temp: %hhx\n", dev->ee->ref_temp);
->  	seq_printf(file, "LNA gain: %hhx\n", dev->ee->lna_gain);
-> -	seq_printf(file, "Reg channels: %hhu-%hhu\n", dev->ee->reg.start,
-> +	seq_printf(file, "Reg channels: %hhu-%d\n", dev->ee->reg.start,
->  		   dev->ee->reg.start + dev->ee->reg.num - 1);
-
-And this is not a promotion of an argument to int via varargs.
-The arithmetic did the promotion.
-
-I suggest s/%hh/%/ for all the uses here, not just this one.
-
-checkpatch could do this somewhat automatically.
-Of course any changes it suggests need human review.
-
-$ ./scripts/checkpatch.pl -f drivers/net/wireless/mediatek/mt7601u/debugfs.c --show-types --types=unnecessary_modifier --fix-inplace
-$ git diff --stat -p drivers/net/wireless/mediatek/mt7601u/debugfs.c
----
- drivers/net/wireless/mediatek/mt7601u/debugfs.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/net/wireless/mediatek/mt7601u/debugfs.c b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
-index 20669eacb66ea..b7a6376e3352e 100644
---- a/drivers/net/wireless/mediatek/mt7601u/debugfs.c
-+++ b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
-@@ -83,28 +83,28 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
- 	struct tssi_data *td = &dev->ee->tssi_data;
- 	int i;
- 
--	seq_printf(file, "RF freq offset: %hhx\n", dev->ee->rf_freq_off);
--	seq_printf(file, "RSSI offset: %hhx %hhx\n",
-+	seq_printf(file, "RF freq offset: %x\n", dev->ee->rf_freq_off);
-+	seq_printf(file, "RSSI offset: %x %x\n",
- 		   dev->ee->rssi_offset[0], dev->ee->rssi_offset[1]);
--	seq_printf(file, "Reference temp: %hhx\n", dev->ee->ref_temp);
--	seq_printf(file, "LNA gain: %hhx\n", dev->ee->lna_gain);
--	seq_printf(file, "Reg channels: %hhu-%hhu\n", dev->ee->reg.start,
-+	seq_printf(file, "Reference temp: %x\n", dev->ee->ref_temp);
-+	seq_printf(file, "LNA gain: %x\n", dev->ee->lna_gain);
-+	seq_printf(file, "Reg channels: %u-%u\n", dev->ee->reg.start,
- 		   dev->ee->reg.start + dev->ee->reg.num - 1);
- 
- 	seq_puts(file, "Per rate power:\n");
- 	for (i = 0; i < 2; i++)
--		seq_printf(file, "\t raw:%02hhx bw20:%02hhx bw40:%02hhx\n",
-+		seq_printf(file, "\t raw:%02x bw20:%02x bw40:%02x\n",
- 			   rp->cck[i].raw, rp->cck[i].bw20, rp->cck[i].bw40);
- 	for (i = 0; i < 4; i++)
--		seq_printf(file, "\t raw:%02hhx bw20:%02hhx bw40:%02hhx\n",
-+		seq_printf(file, "\t raw:%02x bw20:%02x bw40:%02x\n",
- 			   rp->ofdm[i].raw, rp->ofdm[i].bw20, rp->ofdm[i].bw40);
- 	for (i = 0; i < 4; i++)
--		seq_printf(file, "\t raw:%02hhx bw20:%02hhx bw40:%02hhx\n",
-+		seq_printf(file, "\t raw:%02x bw20:%02x bw40:%02x\n",
- 			   rp->ht[i].raw, rp->ht[i].bw20, rp->ht[i].bw40);
- 
- 	seq_puts(file, "Per channel power:\n");
- 	for (i = 0; i < 7; i++)
--		seq_printf(file, "\t tx_power  ch%u:%02hhx ch%u:%02hhx\n",
-+		seq_printf(file, "\t tx_power  ch%u:%02x ch%u:%02x\n",
- 			   i * 2 + 1, dev->ee->chan_pwr[i * 2],
- 			   i * 2 + 2, dev->ee->chan_pwr[i * 2 + 1]);
- 
-@@ -112,8 +112,8 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
- 		return 0;
- 
- 	seq_puts(file, "TSSI:\n");
--	seq_printf(file, "\t slope:%02hhx\n", td->slope);
--	seq_printf(file, "\t offset=%02hhx %02hhx %02hhx\n",
-+	seq_printf(file, "\t slope:%02x\n", td->slope);
-+	seq_printf(file, "\t offset=%02x %02x %02x\n",
- 		   td->offset[0], td->offset[1], td->offset[2]);
- 	seq_printf(file, "\t delta_off:%08x\n", td->tx0_delta_offset);
- 
+Thanks,
+Gao Xiang
 

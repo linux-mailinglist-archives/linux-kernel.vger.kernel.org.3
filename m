@@ -2,155 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597D1576923
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 23:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676BB576925
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 23:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiGOVmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 17:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
+        id S229448AbiGOVnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 17:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbiGOVmk (ORCPT
+        with ESMTP id S229503AbiGOVnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 17:42:40 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BF989E99
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 14:42:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657921355; x=1689457355;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=6uV8DJH6N7TVINtjTLwamp8oalvI5U0aKjDcNTL2BvI=;
-  b=ea4Mrb8RGU2nIJBY7xT2WnDTRKDkVYmjhRrKiPLlLVRitT659uH6Zkr5
-   zE7shjDxKAoTTbvRwplFAUSMLbJjbU+Vi/GE3O1FdNSPVesl4EVWZRlMB
-   U7xfhaWdyX92jy0atMlxyTVo7gI23jjk2PVXwWdSDiEZIaaLcW+yIxfyF
-   1C9a7BUFL5i9cFA8NucbrIpOHKLOKZ+tuitNkYZ6wlI3g+8RNacw9FBhn
-   5Uj7eVipHwOvrXUIH4SvEYrh3dyvH5F/A7LCp0xjdY85GmIQIuQ6h11E8
-   HpPSdBbMHLCAv3flZJHdrCEFLDW40t35A8ALf9FPnSOuWsmfQQ48oji9J
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="286641932"
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="286641932"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 14:42:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="773126557"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by orsmga005.jf.intel.com with ESMTP; 15 Jul 2022 14:42:31 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 15 Jul 2022 14:42:31 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 15 Jul 2022 14:42:31 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 15 Jul 2022 14:42:31 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 15 Jul 2022 14:42:31 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F5nC2wT7y5kmes8PRkJbGcreO2UG6z3FNUYtkthUD77jKcb/sz2+NFi1MvRA5cwkcIDRLU4ZM6U5J1vdHxk2OYMeNu7Qzt8QFn6HtWjuDjh4Zv/AaL2YTHxVbmdyRzzfpzb0qKgtmmyH3y9KniPviOsqsBZVwSlUnYiS+yg4RXG4HlnQw4V6W4zUFClnreFFb7E+vq0bydvhwNsx43ffUp+Qzd5JKpCW715hx3YQNJ6KCB3shPIamzfGUU+KUMgeY/VZTJTLZUb9CzJvPa3I58aGqu8QSMRwlw9Vy33Ajjz+7i7q2WEPZfExzXXvrA7dNCL0b3nayIRf+ysf+OMhuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X/+92oYAbjQv5q6emaiCAyuqESZBfqplb+PMb6FcZoM=;
- b=ccORs8GpImiiSYUJBHshSxzUnp4GmmBiDpl1p9afS3IhsuTLOuYJbbqP4rpgn5mbr34hT7qCbS+WMut2Awyp6vHlhF0bLTSf5rk9rRpdol5op0aa2/fAqfofFjcU94AJo44+7cT1t3hneMzrtMXiWOQOukmpxaOHWu+TvAThzBMkofgCeJ5ux7ivmIuFnZxX2fXuVRbQz+ts7rP4a/JIh65UHQRBZ4XW4vMhZl4gGNLfoKaEItBUk4ayve0c+HzSc4daAxKsHi5kOGjTR+X32ZXR+rfbH1qp7jPxSkAAms9kRsu80x5JtP4ZNEhw5MO4eBwv2y66Um8YTVBf6joHeA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by MN2PR11MB3615.namprd11.prod.outlook.com (2603:10b6:208:ec::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Fri, 15 Jul
- 2022 21:42:29 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::8053:3c59:9f5d:b615]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::8053:3c59:9f5d:b615%9]) with mapi id 15.20.5417.026; Fri, 15 Jul 2022
- 21:42:29 +0000
-Date:   Fri, 15 Jul 2022 17:42:23 -0400
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        "Lucas De Marchi" <lucas.demarchi@intel.com>,
-        <linux-kernel@vger.kernel.org>,
-        "Tvrtko Ursulin" <tvrtko.ursulin@linux.intel.com>,
-        Manasi Navare <manasi.d.navare@intel.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>
-Subject: Re: [PATCH v2 17/39] drm/i915: skl_scaler: fix return value
- kernel-doc markup
-Message-ID: <YtHfP/SZj/WlGi6y@intel.com>
-References: <cover.1657699522.git.mchehab@kernel.org>
- <58fa90350ac1fc4f2b37a50179bdb38613d5fa5d.1657699522.git.mchehab@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+        Fri, 15 Jul 2022 17:43:40 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F0088752;
+        Fri, 15 Jul 2022 14:43:35 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26FJpwQc019889;
+        Fri, 15 Jul 2022 21:43:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : content-type : mime-version; s=pp1;
+ bh=g6gKrC0SyGpdDwDvywZHGJvJKARTqu53v60tvFRJWkc=;
+ b=X6Xpx/fF8ZwvS7HP7eZaThGg4fFiI/wq0nqqbVfj54ddlibRCl4fuawQC7EMWXMxwCWI
+ tAj7XHQZQ+/Ith1fTRw96UWm9g2rZRWknsnFiLFzy2PkeSsLpI6tW8vTMkLlGD3/Ygil
+ UTc+pasxHMf9r3c601tyH/Tm8jkSXYdfOQqP/+C87Exu7rFCcrS4TK4EieLOmDxNKYZB
+ sr1WPSas8RXp2OYeIwDhuQ+dO5Uaf1Cx9AFEaJcvftAJd8gXV+9SZ73XU3DHNtcs0vE8
+ QDHFDYiMFCTWnMvqoiGvwIXclb04KlFG21ZRjMitQt/NZVapkP33sHWZwDF5WXsBEgvU BQ== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hbes6hyw3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Jul 2022 21:43:34 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26FLaFrK021474;
+        Fri, 15 Jul 2022 21:43:31 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3hama9hr3v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Jul 2022 21:43:31 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26FLhdAg29491546
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 15 Jul 2022 21:43:39 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B8D411C04C;
+        Fri, 15 Jul 2022 21:43:28 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4BCF811C04A;
+        Fri, 15 Jul 2022 21:43:28 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 15 Jul 2022 21:43:28 +0000 (GMT)
+Date:   Fri, 15 Jul 2022 23:43:27 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] s390 updates for 5.19-rc7
+Message-ID: <YtHff24djpjhFL66@tuxmaker.boeblingen.de.ibm.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <58fa90350ac1fc4f2b37a50179bdb38613d5fa5d.1657699522.git.mchehab@kernel.org>
-X-ClientProxiedBy: BYAPR04CA0010.namprd04.prod.outlook.com
- (2603:10b6:a03:40::23) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: YV8XLXj_aobkItn3HocIN_fcUwkg803B
+X-Proofpoint-ORIG-GUID: YV8XLXj_aobkItn3HocIN_fcUwkg803B
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b588342e-6646-4598-d860-08da66aaea71
-X-MS-TrafficTypeDiagnostic: MN2PR11MB3615:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4Zv8Iy85JYlln/ibhcV1/Z1Qj+h/ZoQr/KJsySb6xtwciIsP9phavGuGITjJANLfXuo1E+aiyAtXFFRZ/F3ZFdzTKi1pyhQJQWqHytA6orkK4ayGcJumhKQ/L/BzI6u5DcUSSSRV7QRrZ36GGSXJqqHHvOKeX+1EwV7715M4hu3lN1UfTdz63YgUNXtOPXkrVb3cB7xisLirQrdinvKuO2r+h26Vl9HbMY0WqNqEapS+L0fb5wdCNeYC8OM1xFQ/Qxs7M3kAGXV9MgCbRfhGPK+qc4vCHNggce9dy95667MbQGLcw/ALl2U27NHq2O5/mfjh/cD9eiebnSThbpp9t03chFoevPdkd2tIIHBSKjHxaJqLNGXUJiyY7IA7FT7N2D9KyvV3f9vhHd22ZzrZmwju1siLRWwlVvZH1pAIgNnLPVmM68fm6a00QMNRGDYNOH2XgSYbkmM3saVmH6yifboRykXrxsTy8oarcnBgqtkdzrAF91y8RRKJPE9L2BGBqtagUPSzpBkKrDjzWqM93qQYd3tmeWq2vmnH9XAkQ/ZiSnTbAHDpnBW+Q1mL0bSVvvNnA6ZaPxz9zuWDA7HsU5bAgVmN7GOpJMA/XpA/gu0D8fBUbBq/FkdQF9Dk52kUOyE6cm5HhIfrq0K0froVzIlCpzd2LCZtEdBxWa6DuCDfIepe9cywuNmi9FN60nfLYdi0PDKbb8iEGzZ20WBW+9QqZQEAPIdQhXAFtQZxJTkEtoqK8/HvXQwWh97fTrksqpDl+EyMlV2UOFt1zm/cr4YlsT4ke94nr5U7dSiWz04=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(346002)(39860400002)(376002)(136003)(396003)(5660300002)(2906002)(8936002)(44832011)(4326008)(66476007)(8676002)(66556008)(83380400001)(86362001)(36756003)(38100700002)(82960400001)(478600001)(6486002)(966005)(66946007)(316002)(54906003)(186003)(2616005)(6916009)(41300700001)(6506007)(26005)(6666004)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xf6KD5uNm+/L6eDjeKZB2uLgOh1V4Yb2P1k3CqM0HJ7alfHIB6xDdsebDINS?=
- =?us-ascii?Q?DfGXiuG5GV0s3lHZBr8npjxacOJ0CwLF7yaEHJ4ULQIwakGcZfLqxkkQgqgx?=
- =?us-ascii?Q?f8cPda6fpA9Car9mon4A5XnVRcwbPKkow3XnYvWF/hqFGEn/x/My3pcMl0ku?=
- =?us-ascii?Q?c1g0bY5x0GagfjILx5ykpcFZ87gaWd+jchVZE6BnGMbZCT/+EUpjDdqX8ljV?=
- =?us-ascii?Q?EdtXCGP7hRv3N7eX0CXusUcDx8PLSl+Wz9t1bkOHrYtysRzA8yFirAPGxt5Y?=
- =?us-ascii?Q?J7CWQQ5Nc/oVjnSYeoDuZbttkH7Jy1O/8ued2i3ZM7najbg4C4BVUW+QCMPc?=
- =?us-ascii?Q?5RbPOKK9EDmdLP6eIr20Wj7//uGPPs8D4v8IIkj3jUfIuhPGc3ajITyAehVn?=
- =?us-ascii?Q?a5oW0UWMdOyrA+dkQkH7IPKOVkOf5aTN2WuDGbmuu4fzJ8PSLxOvOEklMeX7?=
- =?us-ascii?Q?IG+agudybkKj/P/+9SBkFbACLkqtS1dCJ/xU2DJ36U5r5XIYayRLa2df96gh?=
- =?us-ascii?Q?W3NATX9cu9flQ6cqpNj5wW1y5K6WDNzpmbPEuTU3ikrcOspSIYBW7Y5atlzj?=
- =?us-ascii?Q?cBAi2U8KDapsg3p7ZSOKrIm6WkLi9ofZQbWaGxYPousI8ctopWsP8KNaqRg4?=
- =?us-ascii?Q?5Plf+X5v4Ii1oWsSi008e+uDsJVnmePLjwE9t/YpTxhxLVFgN7FTEbrqrDUW?=
- =?us-ascii?Q?59Bvbmfk6YWxbMJ11LxB00//3m5t2xM0zu/BKKAkBsRJeQx2zGF7zlI4j0Oe?=
- =?us-ascii?Q?uKC9ThRU05qrPHABiUYZ7smwCqVG2qFpRnp+vGDrJmA0zh1qtske3kl7NdGf?=
- =?us-ascii?Q?rk7dHZIf3zRBBE+48D3sC08UFi+EMCW7/F98u4b3Oer4VcFNMsIWbTNVCIiU?=
- =?us-ascii?Q?E/LLsYIm3mdAoIpSjBz6abI1GK47gjNfL4XHv7P6bTFs2bySBVrf87r5v2MK?=
- =?us-ascii?Q?Hmb+6WzrDu26UNJFvOPyCmOBv2IS1GLNSz+h/YhbvnIFqCFVDwM+rKAGekZ9?=
- =?us-ascii?Q?UesMQKzmuUHudQi7gju18MH/Mg8J4zJshHaV0AJrQU8AkKRq44MEQAPt9Ss5?=
- =?us-ascii?Q?tlWXn59FRstXBhkj7RTF0WKEf9zscvFJ/UDZTkNVV7mfpCAXmBNArU7ppy33?=
- =?us-ascii?Q?oIp4BrmWQtYhRzocjwbXu0yWdeZ6eTMUXjHSG7+KHQ+U/IVWeMUmSE3+KimA?=
- =?us-ascii?Q?L1rOTeloJumeiUOe9W2WG3GkOEBggQA5PcNWd4pkj6bUGYS8iWc6gcUCSwUV?=
- =?us-ascii?Q?ST6dvG9Ie4jSfeSo6qs+Z2uguWFiMI8MIYtTblPpnG/3KcMcOqjpZFb2l3rt?=
- =?us-ascii?Q?r3cHvNzrFyj1qxW0OcAgi/J4DvVq/XzojDdp4ZZGXd8bWO7xjVPcRZIU1+Tu?=
- =?us-ascii?Q?TeHsJiEraE079k031sFXxiM9SzTekjITcPpQo1WTv2HZ/oLbByvs6jEhKTfz?=
- =?us-ascii?Q?D5BTZb4TCuESmlx5QRFArkGRmjk/M7Y5Bxc0o1Le5sTqwAdafeWKZ3PHclQJ?=
- =?us-ascii?Q?uuKYveLXPEA8z5eXKnHTOTRBT3iKP+Q8j7KXdGolP1xq0IEaZ6ke2PlUhD/C?=
- =?us-ascii?Q?FZ6HdHG4tZ0HaBsdEMXZluoVVFamiTbMTXdz0FjsI4x23FsUEsum7b9zWDR9?=
- =?us-ascii?Q?Tg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b588342e-6646-4598-d860-08da66aaea71
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 21:42:29.2961
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: f87K1X5lQwcQO+uoynlh7tWOX2srV5mPQwf/K2UHXNmCRnNS23gl+1u7PcTJ0RBJ7Ue+7WV4e4ocrQ9ARRYHrw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB3615
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-15_13,2022-07-15_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=901
+ phishscore=0 priorityscore=1501 impostorscore=0 spamscore=0 bulkscore=0
+ suspectscore=0 adultscore=0 mlxscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207150095
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -158,42 +82,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 09:12:05AM +0100, Mauro Carvalho Chehab wrote:
-> The way it is, it produces this warning:
-> 
-> 	Documentation/gpu/i915:150: ./drivers/gpu/drm/i915/display/skl_scaler.c:213: WARNING: Block quote ends without a blank line; unexpected unindent.
-> 
-> Use list markups to suppress the warning.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Hello Linus,
 
-Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+please pull s390 changes for 5.19-rc7.
 
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
-> 
->  drivers/gpu/drm/i915/display/skl_scaler.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/display/skl_scaler.c b/drivers/gpu/drm/i915/display/skl_scaler.c
-> index 4092679be21e..59099f793d3e 100644
-> --- a/drivers/gpu/drm/i915/display/skl_scaler.c
-> +++ b/drivers/gpu/drm/i915/display/skl_scaler.c
-> @@ -208,9 +208,9 @@ int skl_update_scaler_crtc(struct intel_crtc_state *crtc_state)
->   * @crtc_state: crtc's scaler state
->   * @plane_state: atomic plane state to update
->   *
-> - * Return
-> - *     0 - scaler_usage updated successfully
-> - *    error - requested scaling cannot be supported or other error condition
-> + * Return:
-> + * * 0 - scaler_usage updated successfully
-> + * * error - requested scaling cannot be supported or other error condition
->   */
->  int skl_update_scaler_plane(struct intel_crtc_state *crtc_state,
->  			    struct intel_plane_state *plane_state)
-> -- 
-> 2.36.1
-> 
+Note, a patch in linux-next has different description and misses Fixes & Link:
+"s390/ap: fixes bug in the AP bus's __verify_queue_reservations function" vs
+"s390/ap: fix error handling in __verify_queue_reservations()" in the pull
+request. Otherwise, the patch is exactly the same oneliner.
+
+Thank you,
+Alexander
+
+The following changes since commit d7d488f41b41a1b7a1df3c74f2f65eb4585f5d55:
+
+  s390/qdio: Fix spelling mistake (2022-06-23 14:05:43 +0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.19-6
+
+for you to fetch changes up to 2f23256c0ea20627c91ea2d468cda945f68c3395:
+
+  s390/ap: fix error handling in __verify_queue_reservations() (2022-07-06 17:43:29 -0400)
+
+----------------------------------------------------------------
+s390 updates for 5.19-rc7
+
+- Fix building of out-of-tree kernel modules without a pre-built
+  kernel in case CONFIG_EXPOLINE_EXTERN=y.
+
+- Fix a reference counting error that could prevent unloading of
+  zcrypt modules. 
+----------------------------------------------------------------
+
+Tony Krowiak (1):
+  s390/ap: fix error handling in __verify_queue_reservations()
+
+Vasily Gorbik (2):
+  s390/nospec: build expoline.o for modules_prepare target
+  s390/nospec: remove unneeded header includes
+
+ arch/s390/Makefile                      | 8 +++++++-
+ arch/s390/include/asm/nospec-insn.h     | 2 --
+ arch/s390/lib/Makefile                  | 3 ++-
+ arch/s390/lib/expoline/Makefile         | 3 +++
+ arch/s390/lib/{ => expoline}/expoline.S | 0
+ drivers/s390/crypto/ap_bus.c            | 2 +-
+ 6 files changed, 13 insertions(+), 5 deletions(-)
+ create mode 100644 arch/s390/lib/expoline/Makefile
+ rename arch/s390/lib/{ => expoline}/expoline.S (100%)

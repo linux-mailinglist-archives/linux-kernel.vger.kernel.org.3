@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6939576360
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78F0576364
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbiGOOGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 10:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
+        id S233071AbiGOOHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 10:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiGOOGa (ORCPT
+        with ESMTP id S230301AbiGOOHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 10:06:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16149D126;
-        Fri, 15 Jul 2022 07:06:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9628261302;
-        Fri, 15 Jul 2022 14:06:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83757C34115;
-        Fri, 15 Jul 2022 14:06:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657893986;
-        bh=9T4ThuiTJCtjRAjx9EJleMTz8+18XdDwvflltBOS1EQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oBgcdrA/2Vgol16khTl1g+brSL747ShsqwST4gYWiESSeg6/XGeJLh4iQaJyIE83I
-         rVBmVr9WFSQyotHp4PiIf5IOho7CNSK45sCZjVNT0qZuti+FEVcjfSOmZIUqjTeYL+
-         OyaLZ5DWbsh3UYVCZ7aVnBOchBBr4ukGp6XC4GHs=
-Date:   Fri, 15 Jul 2022 16:06:22 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH] gpio: remove VR41XX related gpio driver
-Message-ID: <YtF0Xt0Ja9biwwnt@kroah.com>
-References: <20220715135945.135351-1-tbogendoerfer@suse.de>
+        Fri, 15 Jul 2022 10:07:06 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1341261C
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:07:05 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id g1so6411520edb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:07:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tG8UwfM9XgsU2gpK8iZAI5QuO4Taq8sY6XWqWuLovpU=;
+        b=M3X5Tr7FPZHC+7bkRn7RRykQVi/wfaS3ybPSNR/xzd4iJZkrgXYUWFxjI5HWMhxv0M
+         9BOv9pkEYqlbio5/KLX6bt/3ju9AEDpu2LsiZi3WrH5mHJVk/gCyouJ67m2pt6ZPEPt6
+         VxGKJlEFF6Hsk/vkwoPwefkk0ZgwGzZzL7tME=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tG8UwfM9XgsU2gpK8iZAI5QuO4Taq8sY6XWqWuLovpU=;
+        b=t8hZEbdXzHSo4ZGoTM2iStWmWGTFE3iNxEZ/HudWLujHrhpTchaxodDHVZRcg5MRJ7
+         FzLg0KtTZydQgUQTwSELxR6mEzcU/Ae65E/nAHuxjKHAJWT7eg8V3F8REXxyCgyeMAkn
+         bSN6p1YjHxqUhSB1boh9YO+hL3mEn6zMYhxXwgzW7eCevL92uS0bRToACI9QBIICor9+
+         H3CUG1yR6RYDD4pzqnfXqeKplbb68vg+0YYxrRjL52ZlmJtTKmOgdZJYproXJ+Snturf
+         wM1vMHU8+XyjS8hUHBYY0RN728OTiiIPv4Ozg9tnvx48bHza0B+vNtAnDSZ4kEXY+JOd
+         dkPw==
+X-Gm-Message-State: AJIora8pf3eF6g1vsVB6XRXsMbNgcysiQQriCRNQMuURgZmzo1htQHnc
+        F1QrBEIakYrY3OLxqrEr2eUXUPGGffRbBWkOhY8gUw==
+X-Google-Smtp-Source: AGRyM1uq6Rh6Te7IY61z9eJaeA+04DZZ9mK0UQyF/K217FYesaE7A0mHMwzT6A9TAcC215uqb5P++5cm8U64EFQ5NIs=
+X-Received: by 2002:a05:6402:270d:b0:43a:d1e8:460b with SMTP id
+ y13-20020a056402270d00b0043ad1e8460bmr18857128edd.40.1657894022967; Fri, 15
+ Jul 2022 07:07:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220715135945.135351-1-tbogendoerfer@suse.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715075343.2730026-1-williamsukatube@163.com>
+In-Reply-To: <20220715075343.2730026-1-williamsukatube@163.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Fri, 15 Jul 2022 16:06:52 +0200
+Message-ID: <CAJfpegs4jRd=FrgDaLxcnbCKWCU=PrsdEzat58j0xB2XdTatZg@mail.gmail.com>
+Subject: Re: [PATCH] fuse: Fix a potential memory leak for kstrdup()
+To:     williamsukatube@163.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 03:59:44PM +0200, Thomas Bogendoerfer wrote:
-> From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> 
-> Commit d3164e2f3b0a ("MIPS: Remove VR41xx support") removed support
-> for MIPS VR41xx platform, so remove exclusive drivers for this
-> platform, too.
-> 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> ---
->  drivers/char/Kconfig       |   5 -
->  drivers/char/Makefile      |   1 -
->  drivers/char/tb0219.c      | 358 ------------------------
->  drivers/gpio/Kconfig       |   6 -
->  drivers/gpio/Makefile      |   1 -
->  drivers/gpio/gpio-vr41xx.c | 541 -------------------------------------
->  6 files changed, 912 deletions(-)
->  delete mode 100644 drivers/char/tb0219.c
->  delete mode 100644 drivers/gpio/gpio-vr41xx.c
+On Fri, 15 Jul 2022 at 09:54, <williamsukatube@163.com> wrote:
+>
+> From: William Dean <williamsukatube@gmail.com>
+>
+> kfree() is missing on an error path to free the memory allocated by
+> kstrdup():
+>
+>   sb->s_subtype = kstrdup(parent_sb->s_subtype, GFP_KERNEL);
+>
+> So it is better to free it via kfree(sb->s_subtype).
 
-This should be 2 patches, one for the char driver and one for the gpio
-driver.
+Not needed.  s_subtype will be freed in __put_super().
 
-thanks,
-
-greg k-h
+Thanks,
+Miklos

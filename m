@@ -2,81 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B395767BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 21:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 379AE576764
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 21:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiGOTtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 15:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
+        id S231249AbiGOTaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 15:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiGOTtE (ORCPT
+        with ESMTP id S231229AbiGOTaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 15:49:04 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A321113E94;
-        Fri, 15 Jul 2022 12:49:02 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id oy13so10734990ejb.1;
-        Fri, 15 Jul 2022 12:49:02 -0700 (PDT)
+        Fri, 15 Jul 2022 15:30:06 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5609814D36
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 12:30:05 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id j3-20020a17090a694300b001ef87826a62so3423208pjm.0
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 12:30:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nyNdhj7h4w1RZhYEVhON8j8fAKw3816cfmCoVqpY7Vc=;
-        b=OfnD2D1APF5Ahz+MfALD3wa03aF1C6CkiZ6G8icXCCRnwZW/btDn5A1wm0WlILrylj
-         yEtmwd36pSHI4lV63maegknIJpnrBDiRTNvjuOoGtg+dDqoNfiGbQj9TfMdSRBeFvTKd
-         m4U4H9b7/iEcE+YmJAfQ5ZXTlYextHCdZT8z3Wc7pL+VIaoyA1C2//na2fIlWC0is8vD
-         44dsw/pL0uNwWmCkpz/W1McXo8IJMUpR/VdjvNnDAyZSopegRWQQwtBdmYdZT4DEVMWx
-         CrfLSV043WbQTVIV7Ry+KWHzgBbGhFWHrDIn12GAeoq3JY+a9WftFRP+tATkafIpTry+
-         VVRw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=gkgKpwVwA4E3gWq6qL1j4dPhRtpeKr2Jzdx8/7HPNSs=;
+        b=aslo0vKzkT3JyIBadqQ5iK76yx3fZ4Vw0o/B/f6rwRPhrGp/ayrUVsSQtEoOmdCQeK
+         DcFwsTjumSG+cs59zXI3Mwy9wAhjclOp55v0FkyGkMH/F5PbXwtEU8dJ/+DHCaVCnceA
+         +WrcjHM5PTPK1o+ZXqAYejgZGbJqycswqGMkwmv0McKf8I+QNxc3MnNAbTlfhsVmdFPq
+         Y2NlMuEgcXerJ9e8OtcODzZNGVCYsXEErzwaeRu7kuLgbqTH48DiopLDsGOZts6tFqyA
+         xab1rp7DEuLj8WVA+xdesPykNtBtDNb9IRIrIdHeIumYC4dczKYB42h9wrlIf+Cs3JBL
+         4qWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nyNdhj7h4w1RZhYEVhON8j8fAKw3816cfmCoVqpY7Vc=;
-        b=gdlLHmcZW13OsucqSIj3GHvmZyDZpOqT9kUFLZt8mDyjLTJyZloMSRDra8LjYFulfq
-         2PAnCuRgUE6xgqLxPbzzx4VhVn8bw+kSNvuFWbnBBC+hJLaqN1JZP7JF6t90fA+/v8/Z
-         oOk5dbA/VsrAdVyB25jVzJsvAROMmnCC5n0Zs1j7dYM1/bj4pFZGtjSWGxBCA6+Wg1c4
-         nXR8720cu7Nzqy76XmqbJSpNSs5IQsZPjXvbVSJDTvjsVJd0OICqN0zLIxkGvazGs45E
-         3WeC3IpOge1mkluISOJ8X7ZNpfbq2z286SMvl5v+IVA5VIaA2JkYa0wQMWcQIMS00K94
-         jnpw==
-X-Gm-Message-State: AJIora8LNp2Cpgr7YnuY5/gyEPqoHQYrbFdQGdtBdJW4+gWGtxYnmXop
-        KdCJfNo84ybn4yBwm1DOsLw=
-X-Google-Smtp-Source: AGRyM1vWakNrsj+lGhP9My202oySEsrWktklkZej+gdmR5ILzJTYXJMroOm6suyydpwM2+38eQWwqA==
-X-Received: by 2002:a17:907:6da9:b0:72b:58ca:e3a8 with SMTP id sb41-20020a1709076da900b0072b58cae3a8mr15104929ejc.342.1657914540973;
-        Fri, 15 Jul 2022 12:49:00 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id kv14-20020a17090778ce00b0072b85a735afsm2305276ejc.113.2022.07.15.12.49.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 12:49:00 -0700 (PDT)
-Message-ID: <62d1c4ac.1c69fb81.a2fa0.5669@mx.google.com>
-X-Google-Original-Message-ID: <YtG/QmRUVNgSDA19@Ansuel-xps.>
-Date:   Fri, 15 Jul 2022 21:25:54 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [net-next PATCH] net: dsa: qca8k: move driver to qca dir
-References: <20220713205350.18357-1-ansuelsmth@gmail.com>
- <20220714220354.795c8992@kernel.org>
- <62d12418.1c69fb81.90737.3a8e@mx.google.com>
- <20220715123743.419537e7@kernel.org>
- <62d1c288.1c69fb81.45988.55fe@mx.google.com>
- <20220715124717.5472ceb3@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220715124717.5472ceb3@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=gkgKpwVwA4E3gWq6qL1j4dPhRtpeKr2Jzdx8/7HPNSs=;
+        b=Djhdt0GhZOoe1W22lvYi8NpqGUMAX37WIXaeEa3REtk1Q1dPco9Vg2xN21vcZ0tIhm
+         QvxxSYQuTGMrrlEsjEB/PB14HCFZeqiRLd3GBQoJTExyB9s1X096GCgLFPuTCAO+VQEM
+         RPW0cG7cze+BYtyKNPjupcbLzmsR7ZHhYb6r5q9hBohut7bf33e7SAglyD07AWIrsMhp
+         xymWFMbvm5gcxtyPrviiHBfQb7uORhbGB9CGFBCVGOZGibdKQOPXHAVlsxemTQc+QGvA
+         fa5+bQihmZ1rkMZ9IazmfQt6ToO8MmtxrRkWztfy/jSuvtESGu8q103resR0/v+5wNeG
+         Dy3Q==
+X-Gm-Message-State: AJIora82iZF8cfNjEtP/qj8AzV2PDRHbhtiqbDR6D+V5O5VCxa6rLWiC
+        0duSVEExPVWHXwEpBQpmALfuNBmj7mI=
+X-Google-Smtp-Source: AGRyM1sDzmuNLp8E8I/r8DKUVDldNx7DbXD2RlLHhysYjXKFPVqY+ZRy5difu7/iX0BqofSdlsyp9xNwEUs=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:bd4e:b81d:4780:497d])
+ (user=pgonda job=sendgmr) by 2002:a17:903:22d0:b0:16b:f798:1cff with SMTP id
+ y16-20020a17090322d000b0016bf7981cffmr14911719plg.23.1657913404935; Fri, 15
+ Jul 2022 12:30:04 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 12:29:45 -0700
+Message-Id: <20220715192956.1873315-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [RFC V1 00/10] *** KVM: selftests: Add simple SEV test
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, marcorr@google.com,
+        seanjc@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
+        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
+        Peter Gonda <pgonda@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,23 +66,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 12:47:17PM -0700, Jakub Kicinski wrote:
-> On Fri, 15 Jul 2022 21:16:46 +0200 Christian Marangi wrote:
-> > > > Or should I just propose the move and the code split in one series?  
-> > > 
-> > > Yup that's what I prefer.
-> > 
-> > Ok no problem, if the current merged commit is a problem, np for me with
-> > a revert! (it was really to prevent sending a bigger series, sorry for
-> > the mess)
-> 
-> Oh, I didn't realize Dave already merged it. No worries, it's not a big
-> deal. Would be great to prioritize getting the split done next. If both
-> are merged for before 5.19 final is cut - it doesn't really matter if
-> they were one series or two.
+This patch series combines the work Michael Roth has done in supporting
+SEV guests in selftests and the work Sean Christopherson suggested to
+allow ucalls from SEV guests. And the work Sean has sent to consolidate
+the ucall boilerplate code. Along with a very simple version of the
+SEV selftests Michael originally proposed.
 
-I'm just working on that... hoping to send a patch soon, just need to
-investigate regmap bulk read/write changes...
+Michael Roth (7):
+  KVM: selftests: move vm_phy_pages_alloc() earlier in file
+  KVM: selftests: sparsebit: add const where appropriate
+  KVM: selftests: add hooks for managing encrypted guest memory
+  KVM: selftests: handle encryption bits in page tables
+  KVM: selftests: add support for encrypted vm_vaddr_* allocations
+  KVM: selftests: add library for creating/interacting with SEV guests
+  KVM: selftests: Add simple sev vm testing
+
+Sean Christopherson (1):
+  KVM: selftests: Consolidate boilerplate code in get_ucall()
+
+Peter Gonda (2):
+  tools: Add atomic_test_and_set_bit()
+  KVM: selftests: Make ucall work with encrypted guests
+
+ tools/arch/x86/include/asm/atomic.h           |   7 +
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   4 +
+ .../selftests/kvm/include/kvm_util_base.h     |  50 +++-
+ .../testing/selftests/kvm/include/sparsebit.h |  36 +--
+ .../selftests/kvm/include/ucall_common.h      |  15 +-
+ .../selftests/kvm/include/x86_64/sev.h        |  44 +++
+ .../testing/selftests/kvm/lib/aarch64/ucall.c |  36 +--
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 268 +++++++++++++-----
+ .../selftests/kvm/lib/perf_test_util.c        |   2 +-
+ tools/testing/selftests/kvm/lib/riscv/ucall.c |  40 +--
+ tools/testing/selftests/kvm/lib/s390x/ucall.c |  37 +--
+ tools/testing/selftests/kvm/lib/sparsebit.c   |  48 ++--
+ .../testing/selftests/kvm/lib/ucall_common.c  | 140 +++++++++
+ .../selftests/kvm/lib/x86_64/processor.c      |  15 +-
+ tools/testing/selftests/kvm/lib/x86_64/sev.c  | 251 ++++++++++++++++
+ .../testing/selftests/kvm/lib/x86_64/ucall.c  |  37 +--
+ .../selftests/kvm/x86_64/sev_all_boot_test.c  | 134 +++++++++
+ 18 files changed, 903 insertions(+), 262 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/sev.h
+ create mode 100644 tools/testing/selftests/kvm/lib/ucall_common.c
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/sev.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
 
 -- 
-	Ansuel
+2.37.0.170.g444d1eabd0-goog
+

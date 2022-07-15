@@ -2,48 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED179575A15
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 05:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E322B575A18
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 05:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232932AbiGODwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 23:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
+        id S241084AbiGOD4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 23:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiGODwg (ORCPT
+        with ESMTP id S229481AbiGOD4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 23:52:36 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CF0774AB;
-        Thu, 14 Jul 2022 20:52:34 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LkcrK2Gvtz4xZD;
-        Fri, 15 Jul 2022 13:52:33 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657857153;
-        bh=NUSlK5LL8VwLPsQr8OytS3Qo6VM9VPQzWDZrNHjoa14=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eM02OFd0T5ZnxrvMysWv+z5Xo/84pEJqU+cIWTT1GqKsZ3hvuoYWQmHkjftBiOX8P
-         4E8XX62CvTMqz1Fc6ZW02KwwXI+8rXpSYBzzHrZk3kbJOUG0stc1c8IaBjFkGVizWV
-         FOC492xvvqQ1BY1e0Z0h0Lwou6SJfBpk0AhIVD0VOs3vqMk2ynsUX9NRjo7KJKN0q9
-         1EqZF066oaJT8NtARDb7kvY5ZSZu8ILJO07d6Zb/tc+FkQ9DrtZCijQg8wP9EYotK5
-         V2rrTURHWqGByZA3SzlU6SINXJwq9r09hHDdUvcq/buw/7ToOw+z6SuT+eeWv8cjHV
-         Kh22VJOLhgHuA==
-Date:   Fri, 15 Jul 2022 13:52:32 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Dylan Yudaken <dylany@fb.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the block tree
-Message-ID: <20220715135232.74b81bec@canb.auug.org.au>
+        Thu, 14 Jul 2022 23:56:44 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B9565583
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 20:56:43 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LkctV5XsQzkX3S;
+        Fri, 15 Jul 2022 11:54:26 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Jul 2022 11:56:41 +0800
+Subject: Re: [PATCH] mm/hugetlb: avoid corrupting page->mapping in
+ hugetlb_mcopy_atomic_pte
+To:     Peter Xu <peterx@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        <mike.kravetz@oracle.com>, <songmuchun@bytedance.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220712130542.18836-1-linmiaohe@huawei.com>
+ <20220713102357.8328614813db01b569650ffd@linux-foundation.org>
+ <a47922cf-eb30-1ad9-fc96-1896254564ef@huawei.com>
+ <YtA7svbn4MtuT7qJ@xz-m1.local>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <402ae708-4c86-8feb-75c4-9339e1deac3b@huawei.com>
+Date:   Fri, 15 Jul 2022 11:56:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tiJe.Mn_Y=i_88joI3T4J=o";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <YtA7svbn4MtuT7qJ@xz-m1.local>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,62 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/tiJe.Mn_Y=i_88joI3T4J=o
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2022/7/14 23:52, Peter Xu wrote:
+> On Thu, Jul 14, 2022 at 05:59:53PM +0800, Miaohe Lin wrote:
+>> On 2022/7/14 1:23, Andrew Morton wrote:
+>>> On Tue, 12 Jul 2022 21:05:42 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+>>>
+>>>> In MCOPY_ATOMIC_CONTINUE case with a non-shared VMA, pages in the page
+>>>> cache are installed in the ptes. But hugepage_add_new_anon_rmap is called
+>>>> for them mistakenly because they're not vm_shared. This will corrupt the
+>>>> page->mapping used by page cache code.
+>>>
+>>> Well that sounds bad.  And theories on why this has gone unnoticed for
+>>> over a year?  I assume this doesn't have coverage in our selftests?
+>>
+>> As discussed in another thread, when minor fault handling is proposed, only
+>> VM_SHARED vma is expected to be supported. And the test case is also missing.
+> 
+> Yes, after this patch applied it'll be great to have the test case covering
+> private mappings too.
+> 
+> It's just that it'll be a bit more than setting test_uffdio_minor=1 for
+> "hugetlb" test.  In hugetlb_allocate_area() we'll need to setup the alias
+> too for !shared case, it'll be a bit challenging since currently we're
+> using anonymous hugetlb mappings for private tests, and I'm not sure
+> whether we'll need the hugetlb path back just like what we have with
+> "hugetlb_shared" tests.
 
-Hi all,
+I'm afraid not. When minor fault handling is proposed, only VM_SHARED vma is
+expected to be supported. It seems it's hard to image how one might benefit
+from using it with a private mapping. But I'm not sure as I'm still a layman
+in userfaultfd now. Any further suggestions?
 
-After merging the block tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+> 
 
-In file included from include/linux/slab.h:16,
-                 from io_uring/net.c:5:
-io_uring/net.c: In function 'io_recvmsg_multishot_overflow':
-include/linux/overflow.h:67:22: warning: comparison of distinct pointer typ=
-es lacks a cast
-   67 |         (void) (&__a =3D=3D &__b);                  \
-      |                      ^~
-io_uring/net.c:332:13: note: in expansion of macro 'check_add_overflow'
-  332 |         if (check_add_overflow(sizeof(struct io_uring_recvmsg_out),
-      |             ^~~~~~~~~~~~~~~~~~
-include/linux/overflow.h:68:22: warning: comparison of distinct pointer typ=
-es lacks a cast
-   68 |         (void) (&__a =3D=3D __d);                   \
-      |                      ^~
-io_uring/net.c:332:13: note: in expansion of macro 'check_add_overflow'
-  332 |         if (check_add_overflow(sizeof(struct io_uring_recvmsg_out),
-      |             ^~~~~~~~~~~~~~~~~~
-include/linux/overflow.h:67:22: warning: comparison of distinct pointer typ=
-es lacks a cast
-   67 |         (void) (&__a =3D=3D &__b);                  \
-      |                      ^~
-io_uring/net.c:335:13: note: in expansion of macro 'check_add_overflow'
-  335 |         if (check_add_overflow(hdr, iomsg->controllen, &hdr))
-      |             ^~~~~~~~~~~~~~~~~~
-
-Introduced by commit
-
-  a8b38c4ce724 ("io_uring: support multishot in recvmsg")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/tiJe.Mn_Y=i_88joI3T4J=o
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLQ5IAACgkQAVBC80lX
-0GzHqgf8CaUfIbDDwCmPxUA7bVVMfaVuJI2aMf7zvq7xQWDDfgu16rX2CR4J5sIQ
-/kCJsg1uk8n//A88lG6nPYLj+f7HL+SijhGFnUxQXSyxOyd3mKy7sj0gqcfabC0B
-eRy7vtqj3jy0NPxpUJLMiiWeneWESBUj0KB+Jy8/wBsKfh4VTZWpM/1tqgLkzlC2
-k4rS2LNl6n0UiK62caiqQBxwo19+yN87MCeKWJrKNs+2h6yGeTOPR97jjKLnnq9/
-UsQZ75BgXTB/aShU8nOk6NnicQPaCZnUqHTdILj1TOicCyqEKYvjTsSPUhdGylix
-KA1DwYRF5ZUnz5kxecBtN7aCDudFGQ==
-=fxVZ
------END PGP SIGNATURE-----
-
---Sig_/tiJe.Mn_Y=i_88joI3T4J=o--
+Thanks!

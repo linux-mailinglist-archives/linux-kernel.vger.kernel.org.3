@@ -2,165 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F15D575997
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 04:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D6C57599F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 04:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241294AbiGOC1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 22:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        id S240976AbiGOCiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 22:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiGOC1o (ORCPT
+        with ESMTP id S229541AbiGOCiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 22:27:44 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70757538B;
-        Thu, 14 Jul 2022 19:27:43 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id 70so3500387pfx.1;
-        Thu, 14 Jul 2022 19:27:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2PHQEHiPUK5/kMXd0Tiaa/2KkMXqEO7YBVcbpRdWkzU=;
-        b=IEJMJOhzDLt+yfASXyPdeXR1oGGTsGDx3vl/pKDJYU0fM7xGoEYifRYmndgoDBn8V+
-         8KaH2UOTKaWNm2bcmSVrDZgCQRS5bZdc/JErVv0oiKI4D779tqf8qqqo8Y4iLSedLKu6
-         KJvBrd7MyyR0lBJJ++sR+EsLWE8c5/Kb5Z0fTJPJtZS1NwarGIQrRHk8mNKtsfmdVnsk
-         DdHkjkVUI3Go5QJOuWJ7tFYeVZyOTWJ1DVFRKCXBlPEbNV+fVinpn4yVP5n1HJQodgh9
-         gnwtaOMTLLw/5pbt9rN0/tXbYqausx/cGWYNWZ3PmgEiWfJZrxEj2bcNKssaqRx0mKTs
-         9LaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2PHQEHiPUK5/kMXd0Tiaa/2KkMXqEO7YBVcbpRdWkzU=;
-        b=anzorEmxO85UsEOGY79quda28Vup/O9mu/0P2oIsBhYfxOUJPiVm5chHxphIUi+qG8
-         4JKlUTYDfFuNQ2NdgKL7kYaFgHDjNzvTWC5SPjdUkoc7IK7oy4kcH7iMkaO0zqc19Ov6
-         hEebLt4VbY2sACEh5DmypErbaGEDKMBy4gjp9JnDMGrQ/Jj85i6pIOeVGDj3GkGptVle
-         hWNJ4bjSksMCBcYYStGk9+gXIKB4HVU7U5iqbIG/X7qYXz9/D7dUu2eeEfJNP0HpFm2p
-         mGQ1NyDrUwmqzIrqCUkQMX+c+u8jZJ/nkh6eRtPnlINY5r+zs4qkH0dUbANz428TkgjW
-         u73g==
-X-Gm-Message-State: AJIora8lPZykhRvvBAWD4qPP2kEntgbVxTreeZ7C766wrU0aAjiVrjT1
-        ZbEJ8hknm2iWb1TTMIHV398=
-X-Google-Smtp-Source: AGRyM1tFpAPO14ibbARmvlyA7Dm2i3y8ihIra24Y5oG5D9v2V9oCrT80IZwFQQ8AdtfnaIGZOBL3gA==
-X-Received: by 2002:a63:9547:0:b0:408:be53:b599 with SMTP id t7-20020a639547000000b00408be53b599mr10179125pgn.463.1657852063244;
-        Thu, 14 Jul 2022 19:27:43 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id v22-20020a631516000000b0040caab35e5bsm1998257pgl.89.2022.07.14.19.27.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 19:27:42 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 11:27:41 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE..." <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nick Child <nick.child@ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "open list:IA64 (Itanium) PL..." <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        "open list:SPARC + UltraSPAR..." <sparclinux@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, linux-pci@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Subject: Re: [RFC PATCH 1/2] asm-generic: Remove pci.h copying code out to
- architectures
-Message-ID: <YtDQnQOeDF6RID4g@antec>
-References: <20220714214657.2402250-1-shorne@gmail.com>
- <20220714214657.2402250-2-shorne@gmail.com>
- <CAMo8BfKkGRHiFq1vu1ZKkURkUqC+Ee7D42yuKrCeDF+578s9cw@mail.gmail.com>
+        Thu, 14 Jul 2022 22:38:05 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D705481E6
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 19:38:03 -0700 (PDT)
+Received: from lingfengzhe-ms7c94.loongson.cn (unknown [10.90.50.23])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf+ME09BiLbsfAA--.64763S2;
+        Fri, 15 Jul 2022 10:37:56 +0800 (CST)
+From:   Qi Hu <huqi@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Oleg Nesterov <oleg@redhat.com>
+Cc:     Xu Li <lixu@loongson.cn>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>, Qi Hu <huqi@loongson.cn>
+Subject: [PATCH v2] LoongArch: Fix missing fcsr in ptrace's fpr_set
+Date:   Fri, 15 Jul 2022 10:37:53 +0800
+Message-Id: <20220715023753.436226-1-huqi@loongson.cn>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMo8BfKkGRHiFq1vu1ZKkURkUqC+Ee7D42yuKrCeDF+578s9cw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dxf+ME09BiLbsfAA--.64763S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uryrtF1UJw4rWF1rXw1xuFg_yoW8XFWrpr
+        ZxAas3Wr4rGFWSvr4Dt3yv9ryDX3s2gFyS9393J3WfAwnrXrs8XryjyFZ2vFW2y348Wayx
+        XF9Y9r4YyFsFqaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svP
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: pkxtxqxorr0wxvrqhubq/1tbiAQAICV3QvP1zwwACs+
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 06:45:27PM -0700, Max Filippov wrote:
-> On Thu, Jul 14, 2022 at 2:47 PM Stafford Horne <shorne@gmail.com> wrote:
-> >
-> > The generic pci.h header provides a definition of pci_get_legacy_ide_irq
-> > which is used by architectures that use PC-style interrupt numbers.
-> >
-> > This patch removes the old pci.h in order to make room for a new
-> > pci.h to be used by arm64, riscv, openrisc, etc.
-> >
-> > The existing code in pci.h is moved out to architectures.
-> >
-> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> > Link: https://lore.kernel.org/lkml/CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com/
-> > Signed-off-by: Stafford Horne <shorne@gmail.com>
-> > ---
-> >  arch/alpha/include/asm/pci.h   |  1 -
-> >  arch/ia64/include/asm/pci.h    |  1 -
-> >  arch/m68k/include/asm/pci.h    |  7 +++++--
-> >  arch/powerpc/include/asm/pci.h |  1 -
-> >  arch/s390/include/asm/pci.h    |  6 +++++-
-> >  arch/sparc/include/asm/pci.h   |  5 ++++-
-> >  arch/x86/include/asm/pci.h     |  6 ++++--
-> >  arch/xtensa/include/asm/pci.h  |  6 ++++--
-> >  include/asm-generic/pci.h      | 17 -----------------
-> >  9 files changed, 22 insertions(+), 28 deletions(-)
-> >  delete mode 100644 include/asm-generic/pci.h
-> 
-> [...]
-> 
-> > diff --git a/arch/xtensa/include/asm/pci.h b/arch/xtensa/include/asm/pci.h
-> > index 8e2b48a268db..f57ede61f5db 100644
-> > --- a/arch/xtensa/include/asm/pci.h
-> > +++ b/arch/xtensa/include/asm/pci.h
-> > @@ -43,7 +43,9 @@
-> >  #define ARCH_GENERIC_PCI_MMAP_RESOURCE 1
-> >  #define arch_can_pci_mmap_io()         1
-> >
-> > -/* Generic PCI */
-> > -#include <asm-generic/pci.h>
-> 
-> Ok.
-> 
-> > +static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > +{
-> > +       return channel ? 15 : 14;
-> > +}
-> 
-> This addition does not make sense for the xtensa as it isn't even possible
-> to enable PNP support (the only user of this function) on xtensa.
+In file ptrace.c, function fpr_set does not copy fcsr data from ubuf
+to kbuf. That's the reason why fcsr cannot be modified by ptrace.
 
-Thanks for your feedback, this is the kind of feedback I was hoping to fish out
-with this patch.  I will look into completely removing this then.
+This patch fixs this problem and allows users using ptrace to modify
+the fcsr.
 
--Stafford
+Co-developed-by: Xu Li <lixu@loongson.cn>
+Signed-off-by: Qi Hu <huqi@loongson.cn>
+---
+V1 -> V2: Change Signed-off-by to Co-developed-by in the commit message.
+---
+ arch/loongarch/kernel/ptrace.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/arch/loongarch/kernel/ptrace.c b/arch/loongarch/kernel/ptrace.c
+index e6ab87948e1d..dc2b82ea894c 100644
+--- a/arch/loongarch/kernel/ptrace.c
++++ b/arch/loongarch/kernel/ptrace.c
+@@ -193,7 +193,7 @@ static int fpr_set(struct task_struct *target,
+ 		   const void *kbuf, const void __user *ubuf)
+ {
+ 	const int fcc_start = NUM_FPU_REGS * sizeof(elf_fpreg_t);
+-	const int fcc_end = fcc_start + sizeof(u64);
++	const int fcsr_start = fcc_start + sizeof(u64);
+ 	int err;
+ 
+ 	BUG_ON(count % sizeof(elf_fpreg_t));
+@@ -209,10 +209,12 @@ static int fpr_set(struct task_struct *target,
+ 	if (err)
+ 		return err;
+ 
+-	if (count > 0)
+-		err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
+-					  &target->thread.fpu.fcc,
+-					  fcc_start, fcc_end);
++	err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
++				  &target->thread.fpu.fcc, fcc_start,
++				  fcc_start + sizeof(u64));
++	err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
++				  &target->thread.fpu.fcsr, fcsr_start,
++				  fcsr_start + sizeof(u32));
+ 
+ 	return err;
+ }
+-- 
+2.37.0
+

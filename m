@@ -2,305 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EB3575A88
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 06:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1628575A87
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 06:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiGOEj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 00:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
+        id S229749AbiGOElV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 00:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiGOEj4 (ORCPT
+        with ESMTP id S229507AbiGOElS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 00:39:56 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9513178231;
-        Thu, 14 Jul 2022 21:39:54 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso5067116pjo.0;
-        Thu, 14 Jul 2022 21:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=JH2+fiBe06JTNvh0GPTBWfhuGVa1TxGN/+gL7HntMsg=;
-        b=Kizhjl5ExtsXFXEC21A7Cjro3onCExwptS2IVCClbqd/ErIkRaQqJ5sdAltY7amx1m
-         NNrAoeWMgleTZuSWbKt4EcMVMzaOQMoWtqbtRchHPiPB4iUh9X03Nj0lg+Wwqsn06eoh
-         Gg6M2P+rSZWVlV+JMDz2g3EWQYERABfjyIq4GZJxjff8Clr8rGK5YUZ4RMdsknph8b/J
-         Us3FxHxGRxHaxuDXf0PXHfS+8/ks9Nb+63GWeBPpcqLQ4MGMT7mV8mooui0BNJ55bo/k
-         snAZMib1QqzCwyP46eoSYN7Ho498PGbKH7aI9+AohdisCpdv4bY+hfQDI80NwcJ3gPFc
-         3eYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=JH2+fiBe06JTNvh0GPTBWfhuGVa1TxGN/+gL7HntMsg=;
-        b=UPdROcXLWKbBbOJdr/+mLHS0uS9pHcaEdKhsSkCrcyPhcOD45JBW5WTsTIfFZhOERu
-         ZF4YowKaqkdiLqbLJ+FG+1aC3jG5fyBizVUT7Kjh0/264GrFcj0j3NRTegpMnunlzfec
-         csQiZ+BzDhHavlmk2ZNwG0duUjE4lgUbPtvdGfcdyTbomsjDvbNwaTQaho1MHFumhM8T
-         BYBxbQrnzjK1IMyetFdzeVi1lWZjNboMBoHnkxELXVzDrArGdF4BbaTX/wu1G9nyUxBp
-         xWssucxN4oZkw9+kD6rcQm/dglYZj1KjLHZkz2PCQFf2LjZ0fV1J7zsb5dCz4euP57IS
-         Hk9Q==
-X-Gm-Message-State: AJIora+Uyd7omK46Bjy1Cqx6fthpZyfBM2h0V+GiJlICgPxmhG7+i2mq
-        jzhCF2wHDMBEtoWMCpy4NCo=
-X-Google-Smtp-Source: AGRyM1vjq8ADiBgp32J9dZBp+CK8HF6gPnYpniDEVVgogKckCFFk84PHX7XQXdk48mnmOOH8TZL1YA==
-X-Received: by 2002:a17:90b:1d8a:b0:1f0:419f:66b1 with SMTP id pf10-20020a17090b1d8a00b001f0419f66b1mr20502929pjb.119.1657859993949;
-        Thu, 14 Jul 2022 21:39:53 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id f67-20020a62db46000000b00525161431f5sm2620127pfg.36.2022.07.14.21.39.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 21:39:53 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 14 Jul 2022 18:39:51 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Dmitry Shmidt <dimitrysh@google.com>,
-        Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org
-Subject: [PATCH 3/3 cgroup/for-5.20] cgroup: Make !percpu threadgroup_rwsem
- operations optional
-Message-ID: <YtDvl7Qjc5zI3e/b@slm.duckdns.org>
-References: <YtDvN0wJ6CKaEPN8@slm.duckdns.org>
- <YtDvU4jRPSsarcNp@slm.duckdns.org>
+        Fri, 15 Jul 2022 00:41:18 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD4F78232;
+        Thu, 14 Jul 2022 21:41:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h/gBlcTOKXXruMXQZsFnuC0EilUrZuJgfYDM8XVNv1dfGKMEtDTGwaazOR/jTAXTJPCUNAGFZWeWYKZNnb9fbUgRZPSr9qmI/lfygAGvoacosPpiqYYNafLWpuOmmvz0MV2APJVRQts3V7rTlWAneGwEqH5HM4Dsn9rrB0x2Cl/IQW+8Xy+zbcaX5kantKHhr9wuiCODj5UA+EWfj8w9dfkq5qT7k1XiFi8J4gKqvorhaM4SdsrTLz+minYcLbRlTfsFUHQp51MKlGY1oTPnQ71AYRQ0VaBz3ljeTYc/NiaMR4Wm1xrKvH/PEtP2i3wTQEMf7GBh0+1mA+dq738Uug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IMAM+BYXFF2kx8V4g1r5txB63/6xIs7NDBVh+yuEQ5M=;
+ b=WYpMP4f+1Vr6J8EHVlhjJjdlob2MUApuAkU6w85rP3uSiALdyfJe9D0HIiKJ8h1XWoxzKf7ZHqoDnfHjgkls13U0JSaqUh/pJLbnNH4nM7uLW+1n6a3XCKpPkfd32rJxfE4Yu74UvTZ2bATS2xoIPLeBwQO2ir1de9WwZUIfdrcudSQn+hXrkUF+huPiVU+XD7roK+oAVVXlK/SyD59p0qwwngnMuGCFlw6rZHQTucf4g9RHucJgpdNCRLVPliuju5rMJ06tEXCFpT97ya8r9zPzmpMjqWWVVwa/vUO/ngZ4qZtJSCrJN+T+lXrPyfxciRxgeuHG70oCK9Y8galIpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IMAM+BYXFF2kx8V4g1r5txB63/6xIs7NDBVh+yuEQ5M=;
+ b=Dpzw6BwUlhHX13aoPub74xsF8/tuGOra5ws3K/wrsrwXEtAxYrB8iNjEimqW+i1aqNq8+eDrbe/BG5Mjhe2Yu+X1ri7KvtUNVD5U0kGAkmMP5pzJpZq+kzfnsBfwzLiEixFyHG4GC5Tu6H5rmoq8N2/J31nsvXnum/Ey31NaCsE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5040.namprd12.prod.outlook.com (2603:10b6:5:38b::19)
+ by CY4PR1201MB0245.namprd12.prod.outlook.com (2603:10b6:910:1e::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25; Fri, 15 Jul
+ 2022 04:41:16 +0000
+Received: from DM4PR12MB5040.namprd12.prod.outlook.com
+ ([fe80::2ddb:590a:f046:b38b]) by DM4PR12MB5040.namprd12.prod.outlook.com
+ ([fe80::2ddb:590a:f046:b38b%5]) with mapi id 15.20.5438.015; Fri, 15 Jul 2022
+ 04:41:15 +0000
+Message-ID: <87d96692-7dbf-f846-f644-5a81f92efcb9@amd.com>
+Date:   Fri, 15 Jul 2022 10:11:05 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] AMD_SFH: Add a DMI quirk entry for Chromebooks
+Content-Language: en-US
+To:     Akihiko Odaki <akihiko.odaki@gmail.com>
+Cc:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>
+References: <20220714053752.5124-1-akihiko.odaki@gmail.com>
+From:   Basavaraj Natikar <bnatikar@amd.com>
+In-Reply-To: <20220714053752.5124-1-akihiko.odaki@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0175.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:de::20) To DM4PR12MB5040.namprd12.prod.outlook.com
+ (2603:10b6:5:38b::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YtDvU4jRPSsarcNp@slm.duckdns.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 66a38b38-b0f4-4096-7bb6-08da661c408e
+X-MS-TrafficTypeDiagnostic: CY4PR1201MB0245:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: S1ZYaqEbnpPqZ9p17koIPHvaW6F8zewREdoJrmacNCu1KFTvd4yA6mvKlVFx7SaR+MPM8T1692kj8DT+fD7d495XH3V6k7II8tRiR64Yf0au+sy94+q3jfHaOICuTNpTVciJ0cZWFE68Nbh7uuG2cLBGEWhQsfGUSok4pvylshTLuwFRKVuKvUtyr4IwmsUg+AftFFzG2DC8RXNkp74OyAtpM42VH76vZ4aMjsV61DkIyQs9Jj9zplLqJu8fNiwDP8Kb/mduDRK24mm3VqxrQC4nShCH8Co2qIw1KfYNrVGTugGi6PoV4KaJsm1wsEXuI42Uh8sHqRUqLp4/9YIhBIaTgPFhinxjgCsJtPcM0dfDomgxb24htporMAWQKO9w6RCYIJRd397k8fMc1wCVQjUAYX09Qe0br7BtZFpQBFInPHlH4ia10Vl+ZgOCuzunEKWN0wC+zjyaY3S5zNjmI56GrbxcZc14I7ArEaRJbevocUoy8LzHuzSQjdTdRWXR4NuG/N3K+BjNiguy2lIGCSxiDeS3ANkgv3DfbaOCrep3OFLZ0XbTfa3fq+4fgz28FLJ436BuIK6NmddH1Fgu0B10K45fuBxMbQtqN9tu2COtfYhceIUUm83ArkweHdy606/sDF7gq6Jk05mz6vT/PfijN5j1plgxfmonJat+uMuFWolHdokiyweAe2CtCvO2E2GohWfWHW8ZbT4WMY2QcReCo8wgEqV5ooNFfJv1cSNOLKNE/Whz6f8lwfYD9qwlNOigY4tFAZmYdNzAouT9Uw1lzRPhN07Jv3KqDPIDDzFnbBFF758Kqt8NcnNVNOdyFYkPjdZ4Y72dPs/4pf9bNkeTZfW15trmP2K5ntF9o0M=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5040.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(136003)(376002)(396003)(366004)(2616005)(66946007)(186003)(478600001)(31696002)(6486002)(6506007)(4744005)(53546011)(26005)(6666004)(41300700001)(6512007)(2906002)(8936002)(66476007)(5660300002)(38100700002)(316002)(36756003)(54906003)(6916009)(8676002)(31686004)(66556008)(4326008)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bGdmV3hmM0k2WmZjeG15WHg4b2ovbnJ2TmJUVVlwOHZqaStUMlQzQzBOM3ND?=
+ =?utf-8?B?eTl6VVp4dFFUMzFYZmM0NFp0S0FpcEg1VHhOeWhHcDVlQ3NUUFczLzhySXdl?=
+ =?utf-8?B?YWpzMlZDREZpQWRCTnVkdkhHTUpYNzlsZ3VMcy9vajRhOEZFNkFZcWFVeVdG?=
+ =?utf-8?B?Y1lraWc3TWhWNUkraTl1b1hWc0cvMmNvSnM3SGxtNDJJeUtVei93WW4zV1Vk?=
+ =?utf-8?B?WnJSaVQ0YzQ4TlJWN3JaWFM4blhYZmlwbGVZNUVvRUZXR0hUUUp5TVNFK2Rj?=
+ =?utf-8?B?dU95clBpNDVCZFdOZGxOLzZuMDgyQzY1R3BXZzNHTDhULzVoSHYyM1F1ajBl?=
+ =?utf-8?B?TUQ1WEdIazI0ZUJuc1ZUOGxod3BpeUhadmU5V2J1aU1xR0xxOVd4SjRFSSt1?=
+ =?utf-8?B?UFh0UkxZRFpwVkVBMXNiMzcyTy9XcjdDcHJYY0lTY1BwclFYMnh5dEMyQjBn?=
+ =?utf-8?B?VUlqM0NKa1lvUGh1L3IyaDZSRlpJSzdCMmxjbnFBdVVBRnlYT3NQZnN3LzRG?=
+ =?utf-8?B?SUlqSG1obnNzb3IxaWtuRW5nclZtNzdJbW9vM0M0enI0MFZNTTV4eHFaQ2xE?=
+ =?utf-8?B?OWg2STBRY01EbVhGcXdLZWlMZklQZFlFWUJ1WEo2RHZGMy9FNVlZclFpbTFt?=
+ =?utf-8?B?SjlrL0k0bkcxamFZNGRZbnk3ejY4R2tSTi8vUy9OZEZGN3B4bitIdUlzTVdI?=
+ =?utf-8?B?cDFhdzUwM0JEQ2xsRk81clJkeHd3Z2NZUTFwcWptUkthaGxSODIrU0c0WDJF?=
+ =?utf-8?B?cFNmRzZieHVWdlc0cGVSazFuQW8vQzdVbU1Ray8zVGpqWmZVbmU3d0RsNFdo?=
+ =?utf-8?B?NEhGdmRPNFJJUlRiMUdUYTN3bC93MW9tcjBra2NrT0RRRFpiTXpKd1Z0YzdM?=
+ =?utf-8?B?bDU0aGM2QTVwNnkycHNZS29WWWRmMWJwVzJacC9IZC93VmJuTmdjVXpCQjZT?=
+ =?utf-8?B?Q0k3dHFsR3RONEp4TTYrYytzcnJoL0hEM0JGK2xLMUUzOTBjL2E2cWw0eGNk?=
+ =?utf-8?B?b2ZwTGVhNUtCRzlHdldEcGVmRkJlRExvQ2MyTDNsSzh2YWtwcDduQWNFS2Qr?=
+ =?utf-8?B?bzMvQ010RjVRTkhVUXhFVnE4VGNUeGxkejdvd0RIeHNFdEp5bGhJejM0RXdr?=
+ =?utf-8?B?dFBlcDRncFJnbDBKZTl0ZUw1aGoxcGJ6TFhjUVQ2WjkzVUE0MThna0laaW0v?=
+ =?utf-8?B?RERGTTJkWmZLdFh4Vk5EUEZVT1JNQjY3L0pQMWs0VGV1Q2FUbjNTdmE3TEwy?=
+ =?utf-8?B?eHJqVWtRWXZqbHhmb0hJZmd4S3JuQW5KeFpCaTZpMjNYZzhWNThSTy9xZ25Z?=
+ =?utf-8?B?K1RlZC95T0Q1ZFNxb3BwTjk1N1RXOGxNYWl4WDRxVnhXL0s4S25IVlErRThq?=
+ =?utf-8?B?Z0FiZi9YZEJ2THM2MWJlZ3J0MmJ6bUpSNDZEQUEzT1B1TnlQMTA2MXpncUIx?=
+ =?utf-8?B?WWNqbzltWVNhZ3EyVGdPWTFxdlNPeGV1eXFWYXVhb25OTXZLd3VPaUNGT3Rn?=
+ =?utf-8?B?OEJ3TU5qbGYwMGEydlllSVZ3enZJWkdkU3ZvYjdJeGpoODREdk95Yy9uZkRw?=
+ =?utf-8?B?SXNVYjRrRTZsRnFOSkNySFZsSmtkL09INzZTV013L0Q2cm02U3JvMzdVUnBL?=
+ =?utf-8?B?Mlg5Y1dxMUc0RTJ4QlBFZkl5QjE4bVBGMjkxZFEzLzF4Wjg4Q01PK3R1RE1a?=
+ =?utf-8?B?eE9pMWhsOWxsbkFyc3RzQkJvckdjZ2NsNjBnZ3BKZE9JaDZzL21PWFlUYUdu?=
+ =?utf-8?B?S2IyanlWNkMyd2NaWU43UDVYayttU2E3NVpQZWVkNXpQY3JPTUhia1F2cFAv?=
+ =?utf-8?B?dDhNT0x6b21UTmVnWVRTNGJMZDVmVVd2OGJZcXJLMTIyQm9rNHBZSHpGOTc2?=
+ =?utf-8?B?TU5oNlpaSFc3SFZ4aTlkU05zblhYcmM5aXpTRm1LU0l5VFVGWGxYcmdiOXYw?=
+ =?utf-8?B?Y0ZnWDVNa2RSVGJMMng3OVZ2UXVLTXoyU2VvZzhQc3NidGRWWTY4Y0RFSXVs?=
+ =?utf-8?B?MGZMZE55MHVuK2JoUXV0NVpMbVBzVVJOalhPdklDNkQzc3NIOTdvbmRSemZz?=
+ =?utf-8?B?b1gydDRQS0htdnZtbWdVdk9QZlpjM3J0VHA0NnNHVkhjVGpOaCsxTzBLSnBR?=
+ =?utf-8?Q?zJz29OQOK8cPCBZmo0VsAWAOb?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 66a38b38-b0f4-4096-7bb6-08da661c408e
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5040.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 04:41:15.8148
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: e50wi0Q+Sn/OF1CbWRVcER2aFquf4PdRD9YLIjlWSo7uleuewwvKvJbwL2MR6VgbcVJO2xiRIxa3f9c69o3Crg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0245
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-3942a9bd7b58 ("locking, rcu, cgroup: Avoid synchronize_sched() in
-__cgroup_procs_write()") disabled percpu operations on threadgroup_rwsem
-because the impiled synchronize_rcu() on write locking was pushing up the
-latencies too much for android which constantly moves processes between
-cgroups.
 
-This makes the hotter paths - fork and exit - slower as they're always
-forced into the slow path. There is no reason to force this on everyone
-especially given that more common static usage pattern can now completely
-avoid write-locking the rwsem. Write-locking is elided when turning on and
-off controllers on empty sub-trees and CLONE_INTO_CGROUP enables seeding a
-cgroup without grabbing the rwsem.
 
-Restore the default percpu operations and introduce the mount option
-"favordynmods" and config option CGROUP_FAVOR_DYNMODS for users who need
-lower latencies for the dynamic operations.
+On 7/14/2022 11:07 AM, Akihiko Odaki wrote:
+> Google Chromebooks use Chrome OS Embedded Controller Sensor Hub instead
+> of Sensor Hub Fusion and leaves MP2 uninitialized, which disables all
+> functionalities, even including the registers necessary for feature
+> detections.
+>
+> The behavior was observed with Lenovo ThinkPad C13 Yoga.
+>
+>
+This driver should not get loaded in chrome OS by default.
+Could you please provide details of Chrome OS Version and Kernel version to confirm the behavior.
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Michal Koutný <mkoutny@suse.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: John Stultz <john.stultz@linaro.org>
-Cc: Dmitry Shmidt <dimitrysh@google.com>
-Cc: Oleg Nesterov <oleg@redhat.com>
----
- Documentation/admin-guide/cgroup-v2.rst |    8 +++++
- kernel/cgroup/cgroup-v1.c               |   17 +++++++++++-
- kernel/cgroup/cgroup.c                  |   43 ++++++++++++++++++++++++++------
- 3 files changed, 60 insertions(+), 8 deletions(-)
+Are you enabling manually CONFIG_AMD_SFH_HID config? 
 
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -184,6 +184,14 @@ cgroup v2 currently supports the followi
- 	ignored on non-init namespace mounts.  Please refer to the
- 	Delegation section for details.
- 
-+  [no]favordynmods
-+        Reduce the latencies of dynamic cgroup modifications such as
-+        task migrations and controller on/offs at the cost of making
-+        hot path operations such as forks and exits more expensive.
-+        The static usage pattern of creating a cgroup, enabling
-+        controllers, and then seeding it with CLONE_INTO_CGROUP is
-+        not affected by this option.
-+
-   memory_[no]localevents
-         Only populate memory.events with data for the current cgroup,
-         and not any subtrees. This is legacy behaviour, the default
---- a/kernel/cgroup/cgroup-v1.c
-+++ b/kernel/cgroup/cgroup-v1.c
-@@ -875,6 +875,8 @@ static int cgroup1_show_options(struct s
- 		seq_puts(seq, ",xattr");
- 	if (root->flags & CGRP_ROOT_CPUSET_V2_MODE)
- 		seq_puts(seq, ",cpuset_v2_mode");
-+	if (root->flags & CGRP_ROOT_FAVOR_DYNMODS)
-+		seq_puts(seq, ",favordynmods");
- 
- 	spin_lock(&release_agent_path_lock);
- 	if (strlen(root->release_agent_path))
-@@ -898,6 +900,8 @@ enum cgroup1_param {
- 	Opt_noprefix,
- 	Opt_release_agent,
- 	Opt_xattr,
-+	Opt_favordynmods,
-+	Opt_nofavordynmods,
- };
- 
- const struct fs_parameter_spec cgroup1_fs_parameters[] = {
-@@ -909,6 +913,8 @@ const struct fs_parameter_spec cgroup1_f
- 	fsparam_flag  ("noprefix",	Opt_noprefix),
- 	fsparam_string("release_agent",	Opt_release_agent),
- 	fsparam_flag  ("xattr",		Opt_xattr),
-+	fsparam_flag  ("favordynmods",	Opt_favordynmods),
-+	fsparam_flag  ("nofavordynmods", Opt_nofavordynmods),
- 	{}
- };
- 
-@@ -960,6 +966,12 @@ int cgroup1_parse_param(struct fs_contex
- 	case Opt_xattr:
- 		ctx->flags |= CGRP_ROOT_XATTR;
- 		break;
-+	case Opt_favordynmods:
-+		ctx->flags |= CGRP_ROOT_FAVOR_DYNMODS;
-+		break;
-+	case Opt_nofavordynmods:
-+		ctx->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
-+		break;
- 	case Opt_release_agent:
- 		/* Specifying two release agents is forbidden */
- 		if (ctx->release_agent)
-@@ -1211,8 +1223,11 @@ static int cgroup1_root_to_use(struct fs
- 	init_cgroup_root(ctx);
- 
- 	ret = cgroup_setup_root(root, ctx->subsys_mask);
--	if (ret)
-+	if (!ret)
-+		cgroup_favor_dynmods(root, ctx->flags & CGRP_ROOT_FAVOR_DYNMODS);
-+	else
- 		cgroup_free_root(root);
-+
- 	return ret;
- }
- 
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -1305,6 +1305,20 @@ struct cgroup_root *cgroup_root_from_kf(
- 	return root_cgrp->root;
- }
- 
-+void cgroup_favor_dynmods(struct cgroup_root *root, bool favor)
-+{
-+	bool favoring = root->flags & CGRP_ROOT_FAVOR_DYNMODS;
-+
-+	/* see the comment above CGRP_ROOT_FAVOR_DYNMODS definition */
-+	if (favor && !favoring) {
-+		rcu_sync_enter(&cgroup_threadgroup_rwsem.rss);
-+		root->flags |= CGRP_ROOT_FAVOR_DYNMODS;
-+	} else if (!favor && favoring) {
-+		rcu_sync_exit(&cgroup_threadgroup_rwsem.rss);
-+		root->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
-+	}
-+}
-+
- static int cgroup_init_root_id(struct cgroup_root *root)
- {
- 	int id;
-@@ -1365,6 +1379,7 @@ static void cgroup_destroy_root(struct c
- 		cgroup_root_count--;
- 	}
- 
-+	cgroup_favor_dynmods(root, false);
- 	cgroup_exit_root_id(root);
- 
- 	mutex_unlock(&cgroup_mutex);
-@@ -1858,6 +1873,7 @@ int cgroup_show_path(struct seq_file *sf
- 
- enum cgroup2_param {
- 	Opt_nsdelegate, Opt_nonsdelegate,
-+	Opt_favordynmods, Opt_nofavordynmods,
- 	Opt_memory_localevents, Opt_memory_nolocalevents,
- 	Opt_memory_recursiveprot, Opt_memory_norecursiveprot,
- 	nr__cgroup2_params
-@@ -1866,6 +1882,8 @@ enum cgroup2_param {
- static const struct fs_parameter_spec cgroup2_fs_parameters[] = {
- 	fsparam_flag("nsdelegate",		Opt_nsdelegate),
- 	fsparam_flag("nonsdelegate",		Opt_nonsdelegate),
-+	fsparam_flag("favordynmods",		Opt_favordynmods),
-+	fsparam_flag("nofavordynmods",		Opt_nofavordynmods),
- 	fsparam_flag("memory_localevents",	Opt_memory_localevents),
- 	fsparam_flag("memory_nolocalevents",	Opt_memory_nolocalevents),
- 	fsparam_flag("memory_recursiveprot",	Opt_memory_recursiveprot),
-@@ -1890,6 +1908,12 @@ static int cgroup2_parse_param(struct fs
- 	case Opt_nonsdelegate:
- 		ctx->flags &= ~CGRP_ROOT_NS_DELEGATE;
- 		return 0;
-+	case Opt_favordynmods:
-+		ctx->flags |= CGRP_ROOT_FAVOR_DYNMODS;
-+		return 0;
-+	case Opt_nofavordynmods:
-+		ctx->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
-+		return 0;
- 	case Opt_memory_localevents:
- 		ctx->flags |= CGRP_ROOT_MEMORY_LOCAL_EVENTS;
- 		return 0;
-@@ -1914,6 +1938,9 @@ static void apply_cgroup_root_flags(unsi
- 		else
- 			cgrp_dfl_root.flags &= ~CGRP_ROOT_NS_DELEGATE;
- 
-+		cgroup_favor_dynmods(&cgrp_dfl_root,
-+				     root_flags & CGRP_ROOT_FAVOR_DYNMODS);
-+
- 		if (root_flags & CGRP_ROOT_MEMORY_LOCAL_EVENTS)
- 			cgrp_dfl_root.flags |= CGRP_ROOT_MEMORY_LOCAL_EVENTS;
- 		else
-@@ -1930,6 +1957,8 @@ static int cgroup_show_options(struct se
- {
- 	if (cgrp_dfl_root.flags & CGRP_ROOT_NS_DELEGATE)
- 		seq_puts(seq, ",nsdelegate");
-+	if (cgrp_dfl_root.flags & CGRP_ROOT_FAVOR_DYNMODS)
-+		seq_puts(seq, ",favordynmods");
- 	if (cgrp_dfl_root.flags & CGRP_ROOT_MEMORY_LOCAL_EVENTS)
- 		seq_puts(seq, ",memory_localevents");
- 	if (cgrp_dfl_root.flags & CGRP_ROOT_MEMORY_RECURSIVE_PROT)
-@@ -1980,7 +2009,8 @@ void init_cgroup_root(struct cgroup_fs_c
- 	cgrp->root = root;
- 	init_cgroup_housekeeping(cgrp);
- 
--	root->flags = ctx->flags;
-+	/* DYNMODS must be modified through cgroup_favor_dynmods() */
-+	root->flags = ctx->flags & ~CGRP_ROOT_FAVOR_DYNMODS;
- 	if (ctx->release_agent)
- 		strscpy(root->release_agent_path, ctx->release_agent, PATH_MAX);
- 	if (ctx->name)
-@@ -2202,6 +2232,10 @@ static int cgroup_init_fs_context(struct
- 	put_user_ns(fc->user_ns);
- 	fc->user_ns = get_user_ns(ctx->ns->user_ns);
- 	fc->global = true;
-+
-+#ifdef CONFIG_CGROUP_FAVOR_DYNMODS
-+	ctx->flags |= CGRP_ROOT_FAVOR_DYNMODS;
-+#endif
- 	return 0;
- }
- 
-@@ -5854,12 +5888,6 @@ int __init cgroup_init(void)
- 
- 	cgroup_rstat_boot();
- 
--	/*
--	 * The latency of the synchronize_rcu() is too high for cgroups,
--	 * avoid it at the cost of forcing all readers into the slow path.
--	 */
--	rcu_sync_enter_start(&cgroup_threadgroup_rwsem.rss);
--
- 	get_user_ns(init_cgroup_ns.user_ns);
- 
- 	mutex_lock(&cgroup_mutex);
-@@ -6771,6 +6799,7 @@ static ssize_t features_show(struct kobj
- {
- 	return snprintf(buf, PAGE_SIZE,
- 			"nsdelegate\n"
-+			"favordynmods\n"
- 			"memory_localevents\n"
- 			"memory_recursiveprot\n");
- }
+Thanks,
+Basavaraj
+

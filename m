@@ -2,88 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DA2575941
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 03:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8430575946
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 03:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240965AbiGOBym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 21:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
+        id S241053AbiGOB4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 21:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbiGOByl (ORCPT
+        with ESMTP id S230143AbiGOB4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 21:54:41 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC1F24F36;
-        Thu, 14 Jul 2022 18:54:39 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id e16so3412972pfm.11;
-        Thu, 14 Jul 2022 18:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=ukuk4UUTau+M7hloRbOEtJ/RljdTGD7URDkjl7/1nZU=;
-        b=VmP0wFGqB1AlcvqLtcnfEFilpp7NXdUTh85ygKrSB4mi1CoCUviCJrePqN9O4C8Hwn
-         RY7Ag0QHziv3kcjWF1gdK+eM8cbHxb6Z/SuoHNDMotG9NodgdKL9gV57bbqzMNimRS5F
-         jUV/FZ8N5hVF27UiMZdS9vZH0xeXonRwilVzduHIpST4BnLIuBrxbsTmHWhx3jcYfY8G
-         OKImIBYNlMD8JPLY2Nb17ml9sKzFEtYYh5gzTEaSVZz58SygCYp0+1WV5u4t+Bsq4bTe
-         +38T+OWb6okMBKTsSS74u99i9SMfb6+T8ooJGehACGwhjvaYP90USD6pGFa7bRGVWoWT
-         sL5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=ukuk4UUTau+M7hloRbOEtJ/RljdTGD7URDkjl7/1nZU=;
-        b=ZX9mLcYUxGKSFLJFTJTaIwKVxiiHccmTLK8kUs7iWmYQs97w4PmDpqToavJXz1n8iE
-         Ze8FCvdC/8vD+bl+b3P1ky2MynyU1hC4v/YEz9tPJ7aR6RVVI7R24j/TEhmMY8fGPLFL
-         UnqFvAScG0yh1ECufhDWDh30SS1iZcdsI7Lm1npZyvtYquKhZI52QZ4G9bp7VbqA2dy0
-         IyNe/l4POQz3a2YYzbgHknan8BnWNUQee05Xyd8dNxsd29Vrw1mPfcD6T37C2f2XrYNI
-         p3HfO+DubBWLT0xHYMgiuOaXLuWvt/L+DUJTTihdzReHIYxQ9XdxmRwhpJkFHHn7MlV9
-         r0wg==
-X-Gm-Message-State: AJIora9cIPoPyBp0qNwMeqfbkQi7O+KpyRBzDC6WyT5Oxo++iUuhTH7k
-        m9/wiiZcvIUeIYsT4dK+gV8vjmX6OtK8fDEhS8b5s5t050sbxRs=
-X-Google-Smtp-Source: AGRyM1vrifDFY3bikPBsvz7LwbrJQoyRLXnB1BpXInbo4fN0lh0lOVCEejbSFgkMQh0indMvihZC2h4bQadUMDUGzns=
-X-Received: by 2002:a05:6a02:113:b0:412:a7c0:da8e with SMTP id
- bg19-20020a056a02011300b00412a7c0da8emr10350315pgb.113.1657850079268; Thu, 14
- Jul 2022 18:54:39 -0700 (PDT)
+        Thu, 14 Jul 2022 21:56:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1225D6B75E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 18:55:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657850159; x=1689386159;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PvdmQ9w+gapwigO731le5cyFiNOvHbo1Pum/NKeja04=;
+  b=CemLdAbn2Rjgxp6D2ai92vv8ClEzuPpcrNYx+J0uK21R1WOcbRy+BB+6
+   sRW79IJXO2g8c0Kkj3FefNRhulQ5nX+OPjaMy72ZsLNNKGNWe6BxvNFXX
+   HImw++n4UNpZMmA9EW1L4rxJYIrh8roAtnhanitVcO1sKBquQDajLeDG3
+   oDlCrVSIOFznp13uuDZj1USf9m7+vV8aKcunSoq+dbGWGdL9eYCkRwiTt
+   20ko63+QyL+Yvvtr0++LCdfziSB7wtDJ4uehdPI6zBwA0Sg29rYcdYVz5
+   lG2CMo2mJI5qEa1y1BmBZMXBQDaadQ5eUDxR3NqNfw5w2iW3IWJ1CoD0z
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="268703588"
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="268703588"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 18:55:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
+   d="scan'208";a="623660962"
+Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 14 Jul 2022 18:55:57 -0700
+Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCAYe-0001Pn-FH;
+        Fri, 15 Jul 2022 01:55:56 +0000
+Date:   Fri, 15 Jul 2022 09:55:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [ast-bpf:memalloc 1/7] kernel/bpf/memalloc.c:158:10: error: call to
+ undeclared function 'get_mem_cgroup_from_objcg'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202207150914.NwhVRROz-lkp@intel.com>
 MIME-Version: 1.0
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Fri, 15 Jul 2022 09:54:28 +0800
-Message-ID: <CAMhUBj=bs8rbiPGX1qOv9FSU8m=TdRZqqJGvRcynKbaWwf_A-A@mail.gmail.com>
-Subject: [BUG] media: cx88-alsa: Found a bug at the probe time
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git memalloc
+head:   02e9f2eaae15bfdbc6ab59716ec63c471daa8822
+commit: a4e9a79dc137aa2436d0217a0ac415e884cfa862 [1/7] bpf: Introduce any context BPF specific memory allocator.
+config: hexagon-randconfig-r006-20220714 (https://download.01.org/0day-ci/archive/20220715/202207150914.NwhVRROz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 2da550140aa98cf6a3e96417c87f1e89e3a26047)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git/commit/?id=a4e9a79dc137aa2436d0217a0ac415e884cfa862
+        git remote add ast-bpf https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git
+        git fetch --no-tags ast-bpf memalloc
+        git checkout a4e9a79dc137aa2436d0217a0ac415e884cfa862
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
 
-I found a bug in the driver cx88-alsa.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-When the driver fails in the function snd_cx88_create() at the probe
-time, it will cause a UAF bug as follows:
+All error/warnings (new ones prefixed by >>):
 
-[   24.343899] Trying to free already-free IRQ 0
-[   24.344815] WARNING: CPU: 7 PID: 389 at kernel/irq/manage.c:1895
-free_irq+0x3a4/0x7c0
-[   24.348448] RIP: 0010:free_irq+0x3a4/0x7c0
-[   24.356716] Call Trace:
-[   24.357124]  snd_cx88_dev_free+0x71/0x100 [cx88_alsa]
-[   24.358008]  release_card_device+0x7d/0x190
-[   24.358699]  device_release+0x97/0x1c0
-[   24.359022]  kobject_put+0x144/0x1c0
-[   24.359329]  snd_card_free+0xec/0x150
-[   24.360078]  cx88_audio_initdev+0x8f4/0xce0 [cx88_alsa]
+>> kernel/bpf/memalloc.c:158:10: error: call to undeclared function 'get_mem_cgroup_from_objcg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   return get_mem_cgroup_from_objcg(c->objcg);
+                          ^
+   kernel/bpf/memalloc.c:158:10: note: did you mean 'get_mem_cgroup_from_mm'?
+   include/linux/memcontrol.h:1271:34: note: 'get_mem_cgroup_from_mm' declared here
+   static inline struct mem_cgroup *get_mem_cgroup_from_mm(struct mm_struct *mm)
+                                    ^
+>> kernel/bpf/memalloc.c:158:10: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct mem_cgroup *' [-Wint-conversion]
+                   return get_mem_cgroup_from_objcg(c->objcg);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
-Since I'm not familiar with the driver, could you please give me some
-hints to fix it?
 
-regards,
+vim +/get_mem_cgroup_from_objcg +158 kernel/bpf/memalloc.c
 
-Zheyu Ma
+   154	
+   155	static struct mem_cgroup *get_memcg(const struct bpf_mem_cache *c)
+   156	{
+   157		if (c->objcg)
+ > 158			return get_mem_cgroup_from_objcg(c->objcg);
+   159	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

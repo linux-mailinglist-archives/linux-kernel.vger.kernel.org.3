@@ -2,178 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372725769EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1AB5769F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiGOWf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S231383AbiGOWfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiGOWfY (ORCPT
+        with ESMTP id S232421AbiGOWfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:35:24 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAB86B26A
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:23 -0700 (PDT)
+        Fri, 15 Jul 2022 18:35:30 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECA26C108
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:29 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id r16-20020a257610000000b0066f5239588eso4783833ybc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:35:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657924523; x=1689460523;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=Z0oFswyC/YbNkGH8IOxwbYw/Sv54sKTTQJpfl46exPo=;
-  b=MdQ6yE7IyQ74g2/KmDltx1z+cN3uFGSx/TuAaJA6jT87U19VE81XXpoR
-   VxwSQDTSZVBHTi4wYjntIWZjtgshpT1qOJpds+YJY8sQJfS+UXqJqTtRg
-   +N4TPTQKL/lyNnPcFd+Xxk2ywCP66oXqdMDQiKVAZXdkfFg1fJlp0H4Pi
-   c=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Jul 2022 15:35:22 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 15:35:22 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 15 Jul 2022 15:35:22 -0700
-Received: from [10.110.97.72] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 15 Jul
- 2022 15:35:20 -0700
-Message-ID: <c628e868-5c73-ca4b-1f99-60cc149806bf@quicinc.com>
-Date:   Fri, 15 Jul 2022 15:35:19 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mtd: spi-nor: winbond: add support for W25Q512NW-IQ/IN
-Content-Language: en-US
-From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     <clg@kaod.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <p.yadav@ti.com>,
-        <quic_ggregory@quicinc.com>, <quic_jiles@quicinc.com>,
-        <tudor.ambarus@microchip.com>
-References: <20220710145721.1207157-1-quic_jaehyoo@quicinc.com>
- <20220711095042.2095360-1-michael@walle.cc>
- <a42fbef2-3eff-9e88-233e-a805cfbe2376@quicinc.com>
- <4972a85d04e39ebb7b4a5872f6632c45@walle.cc>
- <2260955b-354d-ceda-cadc-49453bfca3e4@quicinc.com>
- <00f0c9d480ef5a414f1c34492661bd9e@walle.cc>
- <63cedfce-34bb-ed63-3871-75a6c3dd5d73@quicinc.com>
- <6be710bb5c1bf0449e54a54b78f6f7a0@walle.cc>
- <47c01d768ea56edc9a2f9d317af7b495@walle.cc>
- <114fcde6-bdf7-68ee-d031-35a916027aee@quicinc.com>
- <b42cb229-f241-6e29-a138-29023ce316d9@quicinc.com>
-In-Reply-To: <b42cb229-f241-6e29-a138-29023ce316d9@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=Jr53tgo6pPtSm720C8wiHjlk7XjKJWW+YOa2HOTSwBk=;
+        b=nxCFMMK7okp6PcYQszzFL7Pkq85ar+xehe9K+lNxnEcxIix+Fllvyo8hDDDJIv59m4
+         0BrmBLRkkCD7gT8uFqKb1AJVaPdKCAgo9pAVHhdR400pdP24pyp08yCQtuQ6qbCOKNH0
+         ok/DVKokk/sYzVJHYOecs+hV6Mob8ATctQpItggNN4rAoZHRFZ8ebRcd+uPl8blCtogd
+         AJA3IH+2kSDDsHZkwboTb+XHMJhD9C2DHuDAI9bmVwPTkNUFk1N4owxnWN3lDmQlJC17
+         JGfCOXLgtzenGEPy3jAvoMq3s8LZ2AkVktQ5Nvd/H4+P+14Jm9/l2pxpk/rUnMLP9Bj5
+         BBIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=Jr53tgo6pPtSm720C8wiHjlk7XjKJWW+YOa2HOTSwBk=;
+        b=SgidoGQVxZvf0u/jMt9+upj5b/OWdMQBYeFta3Ep4x8RMV2l9IKGB3pdrxEBbpXh9o
+         UunchiIzSRSNYeR1UHemrJq5Axpbsr8vdS2fZOxnlD9EG2zfIWisbM7q0aFr+hnONXPa
+         cS+9sftmNWyi+57NtYU5qXlbAUXyuXOFc0aT5se5FwfIpr+B+sZUGy+ferlxyUMX+gGT
+         uEaT+05XJzIx/GRFb/DTPC29H057bRj+/GEpvdNa06USAh3ZVyTOuo3gb9DLcD4h4i2z
+         HzwmjgMDqP9lVGUaOLzRY4s/20w8N7vwJTmUxBv8UU31tcfic/16Z27yidp6aTsL/40K
+         L/ew==
+X-Gm-Message-State: AJIora82AsL4NG+KAbAcJL1aQtA/HsLrb+pSdr0cZA/wPhf+VXuYp85c
+        RbMq3drp/YSsiKOtCVtMYKhi8tE9gb3g
+X-Google-Smtp-Source: AGRyM1vgU8ro3WU7pMf71EqDWZhvbhbOjrSPyemVok5CitutWzRVlfFvrSr4djCS+u/ExEJUG7ZSOlBig+Qf
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:72de:b499:63be:efe1])
+ (user=irogers job=sendgmr) by 2002:a25:bdc6:0:b0:66e:3b23:55f6 with SMTP id
+ g6-20020a25bdc6000000b0066e3b2355f6mr16485350ybk.230.1657924528660; Fri, 15
+ Jul 2022 15:35:28 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 15:35:20 -0700
+In-Reply-To: <20220715223521.3389971-1-irogers@google.com>
+Message-Id: <20220715223521.3389971-2-irogers@google.com>
+Mime-Version: 1.0
+References: <20220715223521.3389971-1-irogers@google.com>
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH v3 1/2] perf metrics: Add literal for system TSC frequency
+From:   Ian Rogers <irogers@google.com>
+To:     perry.taylor@intel.com, caleb.biggers@intel.com,
+        kshipra.bopardikar@intel.com,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+Such a literal is useful to calculate things like the average frequency
+[1]. The TSC frequency isn't exposed by sysfs although some experimental
+drivers look to add it [2]. This change computes the value using the
+frequency in /proc/cpuinfo which is accruate at least on Intel
+processors.
 
-On 7/15/2022 1:15 PM, Jae Hyun Yoo wrote:
-> Hi Michael,
-> 
-> On 7/14/2022 7:30 AM, Jae Hyun Yoo wrote:
->> On 7/14/2022 7:21 AM, Michael Walle wrote:
->>> Am 2022-07-14 16:16, schrieb Michael Walle:
->>>> Am 2022-07-14 15:47, schrieb Jae Hyun Yoo:
->>>>> On 7/14/2022 12:41 AM, Michael Walle wrote:
->>>>>> What does "doesn't boot at all" mean? Are there any kernel startup
->>>>>> messages?
->>>>>
->>>>> I'm sharing the error messages below.
->>>>
->>>> Thanks.
->>>>
->>>>> [    0.748594] spi-nor spi0.0: w25q512nwq (65536 Kbytes)
->>>>> [    0.865216] spi-aspeed-smc 1e620000.spi: CE0 read buswidth:4 
->>>>> [0x406c0741]
->>>>> [    0.872833] ------------[ cut here ]------------
->>>>> [    0.877984] WARNING: CPU: 1 PID: 1 at drivers/mtd/mtdcore.c:583
->>>>> add_mtd_device+0x28c/0x53c
->>>>> [    0.887237] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
->>>>> 5.15.43-AUTOINC-dirty-23801a6 #1
->>>>
->>>> Could you please try it on the latest (vanilla) linux-next?
->>>
->>> or spi-nor/next [1] as there are quite a lot of changes. The
->>> patches shall be based on that.
->>
->> Okay. Let me try that. I tested it using 5.15.43 with back-ported
->> spi-nor patches from the latest. I'll back-port more changes from
->> the spi-nor/next and will test the INFO(0xef6020, 0, 0, 0) setting
->> again.
-> 
-> I tested the setting again after cherry picking all SPI relating changes
-> from the 'for-next' branch of
-> git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi repository.
-> 
-> No luck! It's still making the same warning dump at 'add_mtd_device'
-> since 'mtd->erasesize' is checked as 0.
-> 
-> I traced it further to check if the erasesize is properly parsed from
-> the sfdp and checked that erase map seems parsed and initialized
-> correctly in 'spi_nor_parse_bfpt' but problem is, a target
-> mtd->erasesize is not properly selected in 'spi_nor_select_erase' since
-> the 'wanted_size' variable is initialized as sector size of info table
-> so a selected target mtd->erasesize is also 0 so looks like it's the
-> reason why it can't initialize mtd device if we use
-> INFO(0xef6020, 0, 0, 0).
-> 
-> Also, checked that the mtd->erasesize is set to 4096 if I enable
-> CONFIG_MTD_SPI_NOR_USE_4K_SECTORS so the SPI flash can be initialized 
-> with the INFO(0xef6020, 0, 0, 0) setting but, it should cover even when
-> the configuration is not enabled. I think, this patch should go as it
-> is. The erasesize selecting issue could be fixed using a separate
-> patch.
-> 
-> Are you still sure that the INFO(0xef6020, 0, 0, 0) works in the
-> latest spi-next?
+[1] https://github.com/intel/perfmon-metrics/blob/5ad9ef7056f31075e8178b9f1fb732af183b2c8d/SKX/metrics/perf/skx_metric_perf.json#L11
+[2] https://github.com/trailofbits/tsc_freq_khz
 
-I also tried to fix the issue and made a fix like below.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/tests/expr.c | 15 +++++++++++++
+ tools/perf/util/expr.c  | 49 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 64 insertions(+)
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 502967c76c5f..f8a020f80a56 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -2117,7 +2117,7 @@ spi_nor_select_uniform_erase(struct 
-spi_nor_erase_map *map,
-                  * If the current erase size is the one, stop here:
-                  * we have found the right uniform Sector Erase command.
-                  */
--               if (tested_erase->size == wanted_size) {
-+               if (wanted_size && tested_erase->size == wanted_size) {
-                         erase = tested_erase;
-                         break;
-                 }
+diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
+index 5c0032fe93ae..45afe4f24859 100644
+--- a/tools/perf/tests/expr.c
++++ b/tools/perf/tests/expr.c
+@@ -1,8 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include "util/debug.h"
+ #include "util/expr.h"
++#include "util/header.h"
+ #include "util/smt.h"
+ #include "tests.h"
++#include <math.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <linux/zalloc.h>
+@@ -69,6 +71,11 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
+ 	double val, num_cpus, num_cores, num_dies, num_packages;
+ 	int ret;
+ 	struct expr_parse_ctx *ctx;
++	bool is_intel = false;
++	char buf[128];
++
++	if (!get_cpuid(buf, sizeof(buf)))
++		is_intel = strstr(buf, "Intel") != NULL;
+ 
+ 	TEST_ASSERT_EQUAL("ids_union", test_ids_union(), 0);
+ 
+@@ -175,6 +182,14 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
+ 	if (num_dies) // Some platforms do not have CPU die support, for example s390
+ 		TEST_ASSERT_VAL("#num_dies >= #num_packages", num_dies >= num_packages);
+ 
++	if (is_intel) {
++		double system_tsc_freq;
++
++		TEST_ASSERT_VAL("#system_tsc_freq", expr__parse(&system_tsc_freq, ctx,
++								"#system_tsc_freq") == 0);
++		TEST_ASSERT_VAL("!isnan(#system_tsc_freq)", !isnan(system_tsc_freq));
++	}
++
+ 	/*
+ 	 * Source count returns the number of events aggregating in a leader
+ 	 * event including the leader. Check parsing yields an id.
+diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+index 675f318ce7c1..4c81533e4b43 100644
+--- a/tools/perf/util/expr.c
++++ b/tools/perf/util/expr.c
+@@ -402,6 +402,50 @@ double expr_id_data__source_count(const struct expr_id_data *data)
+ 	return data->val.source_count;
+ }
+ 
++/*
++ * Derive the TSC frequency in Hz from the /proc/cpuinfo, for example:
++ * ...
++ * model name      : Intel(R) Xeon(R) Gold 6154 CPU @ 3.00GHz
++ * ...
++ * will return 3000000000.
++ */
++static double system_tsc_freq(void)
++{
++	static double result;
++	static bool computed;
++	FILE *cpuinfo;
++	char *line = NULL;
++	size_t len = 0;
++
++	if (computed)
++		return result;
++
++	computed = true;
++	result = NAN;
++	cpuinfo = fopen("/proc/cpuinfo", "r");
++	if (!cpuinfo) {
++		pr_err("Failed to read /proc/cpuinfo for TSC frequency");
++		return NAN;
++	}
++	while (getline(&line, &len, cpuinfo) > 0) {
++		if (!strncmp(line, "model name", 10)) {
++			char *pos = strstr(line + 11, " @ ");
++
++			if (pos && sscanf(pos, " @ %lfGHz", &result) == 1) {
++				result *= 1000000000;
++				goto out;
++			}
++		}
++	}
++out:
++	if (isnan(result))
++		pr_err("Failed to find TSC frequency in /proc/cpuinfo");
++
++	free(line);
++	fclose(cpuinfo);
++	return result;
++}
++
+ double expr__get_literal(const char *literal)
+ {
+ 	static struct cpu_topology *topology;
+@@ -417,6 +461,11 @@ double expr__get_literal(const char *literal)
+ 		goto out;
+ 	}
+ 
++	if (!strcasecmp("#system_tsc_freq", literal)) {
++		result = system_tsc_freq();
++		goto out;
++	}
++
+ 	/*
+ 	 * Assume that topology strings are consistent, such as CPUs "0-1"
+ 	 * wouldn't be listed as "0,1", and so after deduplication the number of
+-- 
+2.37.0.170.g444d1eabd0-goog
 
-Tested that it makes the INFO(0xef6020, 0, 0, 0) setting work and a
-selected mtd->erasesize is 65536 which is what I expected for this
-device.
-
-Not sure if it's a right fix or not. Please review and let me know if
-it's good to submit or not.
-
-Thanks,
-
-Jae
-
-> Thanks,
-> 
-> Jae
-> 
->> -Jae
->>
->>> -michael
->>>
->>> [1] 
->>> git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git#spi-nor/next

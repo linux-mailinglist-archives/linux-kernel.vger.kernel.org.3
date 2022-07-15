@@ -2,208 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA8E57647F
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4248A576482
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbiGOPf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 11:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        id S234909AbiGOPgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 11:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiGOPfx (ORCPT
+        with ESMTP id S233147AbiGOPgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 11:35:53 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2058.outbound.protection.outlook.com [40.107.243.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14BCCE20;
-        Fri, 15 Jul 2022 08:35:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bT2ITppzT+OXIdLRWGrQPdsMUMYsb19mxympZUXzvFI0Btn6SQuKaV4Qgjxkw4fNURX96Tc2UBDEYrPI1ekL1JIcrsq1AOYnwd/3GxI5YEXAtmXIkcEqlgakZIuDYie+Y2eNplF6vcBbT2TBad5mEoIfB9tHr9GC2G1l/JyycfynrP5SEVOfi79NRHwiZez1mYaZudnkSyQxtHFcedFEGDmDQ/b6kQSYUUCkDPQOoLT5U5nJq4QaCt/QBfgDA2sjq4gdHiEplzPbt5i+mIUI9C9nlv1HfAEcn1i79J3E9E+67V3OMu40W3veDO3stw2+jk2SmznRXdT8xUHcT8ka9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cDYmd+1FQ7QMFmpXFRip0Hi4q5QS9uZ6m1ibE3JabEo=;
- b=kFYWxzuIm1gUHakfkms/Kf1qQBHQkRqVBRzh8CKesZnX5CqKOnYWhdSpBkleNLxC+U3JL4xbni/Rq54myedZACDr2+N00zKeS47shxsJO3ZwfEpj5ie7sVV4yo8dowC2/9d59/Y+GkbkrKxy3NsGPuKr7GA3ogW2SpkYSX4tTzlwfAMD0oFuYyvFrDCnyFK4lZ5yTQ7X8y3OPfVJ4QhO75zYFi8TLH3kGNR4NPncwt00xDRR9IL8xdO1JgCWz5vBEDW8MyH29ffS7JX7B5oGaRh9O5fCbGcRDUJSNRjVkomrcb9fap1frhWoDZ2QQ4ojPvHlYYqAKpJzuOvAwxRFVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cDYmd+1FQ7QMFmpXFRip0Hi4q5QS9uZ6m1ibE3JabEo=;
- b=HNWZxcLmRnBM1GMA0qcBuDD3uk3sfStzLhQ95DNhaa6KCUMKfP155Hg+FEzY/Vx93/9SqsuE1un+7nJu86dgZnavCgAsrH5phVyyy/zFUgCB0KdvqTftr1etErLsktJYVQebAMwVSII/+PyXefHKsSb7GVNIl6OfQJEn7QJuhd0=
-Received: from DM6PR12MB2809.namprd12.prod.outlook.com (2603:10b6:5:4a::16) by
- CH2PR12MB4937.namprd12.prod.outlook.com (2603:10b6:610:64::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5417.20; Fri, 15 Jul 2022 15:35:50 +0000
-Received: from DM6PR12MB2809.namprd12.prod.outlook.com
- ([fe80::fcd1:f8aa:6c69:eacb]) by DM6PR12MB2809.namprd12.prod.outlook.com
- ([fe80::fcd1:f8aa:6c69:eacb%5]) with mapi id 15.20.5438.015; Fri, 15 Jul 2022
- 15:35:49 +0000
-From:   "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "git@xilinx.com" <git@xilinx.com>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
-Subject: RE: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
- device
-Thread-Topic: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
- device
-Thread-Index: AQHYeZhXApErq+32kkmuJFVVfXogSAG7F8aMAeAoVR+snXQgIICishAAgCJ4JhA=
-Date:   Fri, 15 Jul 2022 15:35:49 +0000
-Message-ID: <DM6PR12MB28091BEB013B6F1903B5CDE3DC8B9@DM6PR12MB2809.namprd12.prod.outlook.com>
-References: <20220606112607.20800-1-amit.kumar-mahapatra@xilinx.com>
- <20220606112607.20800-2-amit.kumar-mahapatra@xilinx.com>
- <YqHfccvhy7e5Bc6m@sirena.org.uk>
- <DM6PR12MB2809F6C7D80B60556218D627DCB59@DM6PR12MB2809.namprd12.prod.outlook.com>
- <YrRXTrYN3BuShbzg@sirena.org.uk>
-In-Reply-To: <YrRXTrYN3BuShbzg@sirena.org.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f33014ad-b0b9-41e1-981e-08da6677b1f9
-x-ms-traffictypediagnostic: CH2PR12MB4937:EE_
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hF4Aui7lDDBBTgCeOE5whNL8obJ79TtUNYERNmtbs2A1mlqrMqXDwqKK8LN81rLg8O+dQE6Il2/7siPxOqi954BIFJzXAF/VMCyzmeyxrE0WLK/0kAc3JtgVOUIr0O6kTgEEE0Y+kBjMdmmbl+5pakDxzwrEuYlpnxel8jIHIPkKTv9mZBMcgze3D38ey+kiRxPiqOWA/0zhSfduNy5SdWpoUAZGNhGmSwRajGf1BTqPmbIbDXlVjSHqSjGF8bO9lpezB54jLOTD8DJc+VodqiDwvZssjJl4l2W9KYVn5NbWw5ug0OitN/MpWfrFFlWNL9UQWT+01VoyJOoPie2lkFTXJGcW/AZhx3iK7uIYD1ccu2b/fGvoGNoTVozx65nmmQf9ywM3Efk9qryHcXsEX8dPzisjBg8L96upnTb0ux3qye5rdk9Udouc5kPWikwrlAYvljs6gMJrtEdh9k7eK3eVdrNPwOMgXuolHM8g1vmabUOjDNA9jLZqLt8JnElRWMeILUqUhuXiq5luAr6P/ngPNVcrmUvVXx6nFB/59BID2N2HXRu8VPPDIbRJVMf8pi8RoXaFDRfPvmxbG7mJmnOI/JhJk5uzW+3IHqMTLd0/85iKcWxgTyybxC+zZcpVSEizmfHtto99CWTuI3LjUFZWmNxIHNzUnB9Cxo1XkHLLamr6P6hkFmvuGhnghvoZMoDK3GxNu8S5W6O9YIAu3uoxcQASYgFV/qJAtOOT7J1z/UdmyO9pPpST2oCYVnFPWoQ2ErPdeTAVuQndKFDDHxk2dzuaJ9/ceLEnYnvOk6hWMcnM8Wv2RyPLYl7JFeCq
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2809.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(376002)(396003)(366004)(39860400002)(64756008)(66556008)(53546011)(8676002)(41300700001)(26005)(4326008)(2906002)(8936002)(66946007)(66446008)(6916009)(6506007)(9686003)(55016003)(478600001)(76116006)(316002)(71200400001)(66476007)(54906003)(86362001)(7696005)(38100700002)(38070700005)(122000001)(52536014)(7416002)(5660300002)(33656002)(83380400001)(186003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?r5C9uW3wjnWG7x92+3NKg1RvDRR9R1xfuflz0iQJ+UEB+MSOB73IkXAwiIyo?=
- =?us-ascii?Q?Ijd/YvvNzF/55aHrw6HC6gKRTKCGs+w5nQcoYdpPVN4rGHAANxINDuI8vbEh?=
- =?us-ascii?Q?9VkRPZxrKDGNvF9p//IrklofYDWzsnHNsiZuf3+NmSZDnmrTvYeCjPZbZJaw?=
- =?us-ascii?Q?X9ryNtun1rUK65q86g43wt92rCETR0fhHeBxRwSp2PIJ+d6YXxq4AuWxUct/?=
- =?us-ascii?Q?IDy13Hg8p8tgLW7Rpahx6ad2iDuYIyDxAeWdKxW2ViZ9jC9XndoX/5jv9ymf?=
- =?us-ascii?Q?w45EFfzzt+CRBIj+vv7/KHbC6LUfyYpXTFopI4aFfGgYkqQYES+9+Q3oQ93e?=
- =?us-ascii?Q?jYGb3Sn0e4a+JqxuZGIvEzgRLP08qNcclLooNYGEDD0XfLRKdhQmA42s3/X9?=
- =?us-ascii?Q?rV5KSv/WtJAnaNhoVKEuz8ESbzolqpIciJX83lHd3/Lsms1uwb+7ASQpb9Qa?=
- =?us-ascii?Q?zU0YeLZk8C84aOBFph5zUcO5hzEXMjvZRlmQ4eouYzUrcyFnxmbglGmn8uUv?=
- =?us-ascii?Q?Xzl11DBEwnqU5rcj/tmkKjeR03Xz6ZOR3Irxxt7AGFeoWnG1bGWfWu4RYFkU?=
- =?us-ascii?Q?AR1asSte2G9N/Sj6uymP+R40NDOF5lpH9fjbYjrTzD+l7Jk2Dn+WTuDqOxuL?=
- =?us-ascii?Q?QzM0A4boPcICY+LGokE1ra9yCIDNnF7PtJiXfSOB3Kw3R4ewFq00wt9XtH+i?=
- =?us-ascii?Q?xB2ajQX2fDwpHgclyn3qOJfCjEuZjDdeVNEEp/p2fRpBQdQ0wngr+EBExv/e?=
- =?us-ascii?Q?+w0MZO2LBU4S2gR4PmzRKeBQGkVpFEAXPBUnfsiG1AE6vlklYMZOuxLsqVil?=
- =?us-ascii?Q?4Y6i9JxE+gVac5N83CFrwr2318M65Z1f74JzzTrsV9H+m4Wk84mcy44DkbhM?=
- =?us-ascii?Q?0wOeUYk28wAe8yX0gaPOFUKhQf7mDusYxEiYKxZqM9u5ExSdY0NpTrpEyFSw?=
- =?us-ascii?Q?T3HDcLi4kX3TOVZTCG0LlmpX/pfXrhzNBWayvuuXMriBglOgPAWddxlIWAcc?=
- =?us-ascii?Q?9a1G8IHgxhhnuvLYVSTZKdxff/of8usBXLu1OJz9GCZtoONCzXe+jklOn+me?=
- =?us-ascii?Q?eLKfYybUv9Mx/nCjWF3kPNGUkzR6WG3hajIe3JIM7nq+7HmTKL/GtZ+CNzbD?=
- =?us-ascii?Q?k9tlgE9ujVAI7jHy3sBedTkOHeLKZ1hY1PrA8rn9OZKn+nDS6omUhtNhkyRX?=
- =?us-ascii?Q?l5xAVAjlV5D77jhAuByzVTVkq6UWBIPPW/xsnf6WalHwUG0W6Lh4vWRVPJB+?=
- =?us-ascii?Q?YEL7RK3aS3ZcAp4u7Yox2QnOXeiZ3QShb7DfIJDMqtAih7LpaKDiEJM58jCI?=
- =?us-ascii?Q?D1oIhhuO2vXDr5AuEBW8Hwfj4ojxrnzjzFQQ/d0jY0dlWWwW8QdS0nhecn/6?=
- =?us-ascii?Q?B3AldaZVOo19MhnuKmiWN2ABC8Gi08CXBdVTBysaAJQ5hNB3QsWcYL+yM+iz?=
- =?us-ascii?Q?BBDdaiTVsnMbNKA283AQJOC78lN7BQNTNSuERVYRe7vpsR5emPrPGPIKYL/9?=
- =?us-ascii?Q?aW9Uk7phVWsYZ9EhpCXSmFWzijNYTZpAV3Ztiv8BSYtdpx9W83tNRKiJKzhG?=
- =?us-ascii?Q?EKlfhTHycSf03fEM0Xw=3D?=
-Content-Type: text/plain; charset="us-ascii"
+        Fri, 15 Jul 2022 11:36:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BF855092;
+        Fri, 15 Jul 2022 08:36:14 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 285B266015B6;
+        Fri, 15 Jul 2022 16:36:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657899372;
+        bh=mjl2CHsK8OJyoPzlMniTRyLaHQrcz06eR01e4ukasMA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Yk0A4u7Xj3cGMN8T/r+L7HisSLtpW7ddZ73RI8AXjN0Dnh0J1A2VbzsneevyWcrAR
+         rVa5L9lCVmk1N7IM1U6AntDgxFaB6+sRTQWE1hTL6nHmAqhP4dsH9IcvM+xjC9+8iQ
+         QkRUFGNJvqMG8gRkwJQD3dfKohS2E0eCObj0t8yNRiEAeIUKdfGrAo+r8Gpsrbljy5
+         IaRdmstcB3UR5jS1KYJgDIaPQlFyuqDdVSjYAKHibshlfphso9/68NAZ0rSub/al/H
+         eX+QM5X4Opw/Z723mSkReDkMjUk/Es5rH5EkqUcBuXBCtFtE4EizfDkonVydgC8cOm
+         rIrpXGCe0T5qA==
+Message-ID: <f05896551f8545af3c7352a6bd38248e038b61d2.camel@collabora.com>
+Subject: Re: [PATCH 0/6] RkVDEC HEVC driver
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org
+Cc:     jernej.skrabec@gmail.com, knaerzche@gmail.com,
+        kernel@collabora.com, bob.beckett@collabora.com,
+        ezequiel@vanguardiasur.com.ar, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Date:   Fri, 15 Jul 2022 11:36:01 -0400
+In-Reply-To: <7be996ee-9977-129b-08e2-12bde7ac9cd7@arm.com>
+References: <20220713162449.133738-1-sebastian.fricke@collabora.com>
+         <7be996ee-9977-129b-08e2-12bde7ac9cd7@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2809.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f33014ad-b0b9-41e1-981e-08da6677b1f9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jul 2022 15:35:49.8787
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HY7lR6YttW1uv2LwnDVu6uDdMDvIdpn/yl2iEkUZRklV4XrGQNutolKxnJbDdC9dkv4grpaJhx3hDIqcGZ+Ymw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4937
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Mark,
+Le vendredi 15 juillet 2022 =C3=A0 12:04 +0100, Robin Murphy a =C3=A9crit=
+=C2=A0:
+> On 2022-07-13 17:24, Sebastian Fricke wrote:
+> > Implement the HEVC codec variation for the RkVDEC driver. Currently onl=
+y
+> > the RK3399 is supported, but it is possible to enable the RK3288 as it
+> > also supports this codec.
+> >=20
+> > Based on top of the media tree @ef7fcbbb9eabbe86d2287484bf366dd1821cc6b=
+8
+> > and the HEVC uABI MR by Benjamin Gaignard.
+> > (https://patchwork.linuxtv.org/project/linux-media/list/?series=3D8360)
+> >=20
+> > Tested with the GStreamer V4L2 HEVC plugin:
+> > (https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10=
+79)
+> >=20
+> > Current Fluster score:
+> > `Ran 131/147 tests successfully               in 278.568 secs`
+> > with
+> > `python3 fluster.py run -d GStreamer-H.265-V4L2SL-Gst1.0 -ts JCT-VC-HEV=
+C_V1 -j1`
+> >=20
+> > failed conformance tests:
+> > - DBLK_D_VIXS_2 (Success on Hantro G2)
+> > - DSLICE_A_HHI_5 (Success on Hantro G2)
+> > - EXT_A_ericsson_4 (Success on Hantro G2)
+> > - PICSIZE_A_Bossen_1 (Hardware limitation)
+> > - PICSIZE_B_Bossen_1 (Hardware limitation)
+> > - PICSIZE_C_Bossen_1 (Hardware limitation)
+> > - PICSIZE_D_Bossen_1 (Hardware limitation)
+> > - PPS_A_qualcomm_7 (Success on Hantro G2)
+> > - SAODBLK_A_MainConcept_4 (Success on Hantro G2)
+> > - SAODBLK_B_MainConcept_4 (Success on Hantro G2)
+> > - SLIST_B_Sony_9 (Success on Hantro G2)
+> > - SLIST_D_Sony_9 (Success on Hantro G2)
+> > - TSUNEQBD_A_MAIN10_Technicolor_2 (Success on Hantro G2)
+> > - VPSSPSPPS_A_MainConcept_1 (Success on Hantro G2)
+> > - WPP_D_ericsson_MAIN10_2 (Fail on Hantro G2)
+> > - WPP_D_ericsson_MAIN_2 (Fail on Hantro G2)
+> >=20
+> > Not tested with FFMpeg so far.
+> >=20
+> > Known issues:
+> > - Unable to reliably decode multiple videos concurrently
+> > - The SAODBLK_* tests timeout if the timeout time in fluster is lower t=
+han 120
+> > - Currently the uv_virstride is calculated in a manner that is hardcode=
+d
+> > for the two available formats NV12 and NV15. (@config_registers)
+> >=20
+> > Notable design decisions:
+> > - I opted for a bitfield to represent the PPS memory blob as it is the
+> > perfect tool for that job. It describes the memory layout with any
+> > additional required documentation, is easy to read and a native languag=
+e
+> > tool for that job
+>=20
+> Can I point out how terrible an idea this is? The C language gives=20
+> virtually zero guarantee about how bitfields are actually represented in=
+=20
+> memory. Platform ABIs (e.g. [1]) might nail things down a bit more, but=
+=20
+> different platforms are free to make completely different choices so=20
+> portability still goes out the window. Even for a single platform,=20
+> different compilers (or at worst even different version of one compiler)=
+=20
+> can still make incompatible choices e.g. WRT alignment of packed=20
+> members. Even if you narrow the scope as far as a specific version of=20
+> AArch64 GCC, I think this is still totally broken for big-endian.
+>=20
+> The fact that you've had to use nonsensical types to trick a compiler=20
+> into meeting your expectations should already be a clue to how fragile=
+=20
+> this is in general.
+>=20
+> > - The RPS memory blob is created using a bitmap implementation, which
+> > uses a common Kernel API to avoid reinventing the wheel and to keep the
+> > code clean.
+>=20
+> Similarly, Linux bitmaps are designed for use as, well, bitmaps. Abusing=
+=20
+> them as a data interchange format for bit-aligned numerical values is=20
+> far from "clean" semantically. And I'm pretty sure it's also broken for=
+=20
+> big-endian.
+>=20
+> This kind of stuff may be standard practice in embedded development=20
+> where you're targeting a specific MCU with a specific toolchain, but I=
+=20
+> don't believe it's suitable for upstream Linux. It would take pretty=20
+> much the same number of lines to use GENMASK definitions and bitfield.h=
+=20
+> helpers to pack values into words which can then be written to memory in=
+=20
+> a guaranteed format and endianness (certainly for the PPS; for the RPS=
+=20
+> it may well end up a bit longer, but would be self-documenting and=20
+> certainly more readable than those loops). It mostly just means that for=
+=20
+> any field which crosses a word boundary you'll end up with 2 definitions=
+=20
+> and 2 assignments, which is hardly a problem (and in some ways more=20
+> honest about what's actually going on).
 
-> -----Original Message-----
-> From: Mark Brown <broonie@kernel.org>
-> Sent: Thursday, June 23, 2022 5:37 PM
-> To: Mahapatra, Amit Kumar <amit.kumar-mahapatra@amd.com>
-> Cc: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>;
-> p.yadav@ti.com; miquel.raynal@bootlin.com; richard@nod.at;
-> vigneshr@ti.com; git@xilinx.com; michal.simek@xilinx.com; linux-
-> spi@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> kernel@vger.kernel.org; michael@walle.cc; linux-mtd@lists.infradead.org;
-> git (AMD-Xilinx) <git@amd.com>
-> Subject: Re: [RFC PATCH 1/2] spi: Add multiple CS support for a single SP=
-I
-> device
->=20
-> On Thu, Jun 23, 2022 at 11:39:19AM +0000, Mahapatra, Amit Kumar wrote:
->=20
-> > > >  	/* Mode (clock phase/polarity/etc.) */
-> > > >  	if (of_property_read_bool(nc, "spi-cpha"))
->=20
-> > > This is changing the DT binding but doesn't have any updates to the
-> > > binding document.  The binding code also doesn't validate that we
-> > > don't have too many chip selects.
->=20
-> > The following updates are done in the binding documents for adding
-> > multiple CS support:
-> > In jedec,spi-nor.yaml file " maxItems " of the "reg" DT property has
-> > been updated to accommodate two CS per SPI device.
->=20
-> This is a change to a binding for a specific driver, this is changing the=
- SPI
-> core.
->=20
-> > > I'm also not seeing anything here that checks that the driver
-> > > supports multiple chip selects - it seems like something that's
-> > > going to cause issues and we should probably have something to handle
-> that situation.
->=20
-> > In my approach the chip select member (chip_select) of the spi_device
-> > structure is changed to an array (chip_select[2]). This array is used
-> > to store the CS values coming from the "reg" DT property.
-> > In case of multiple chip selects  spi->chip_slect[0] will hold CS0
-> > value &
-> > spi->chip_select[1] wil hold CS1 value.
-> > In case of single chip select the spi->chip_select[0] will hold the chi=
-p select
-> value.
->=20
-> That doesn't address the issue, the issue is checking that the driver can
-> support multiple chip selects.
+Thanks for the feedback, in multimedia (unlike register programming), we do=
+n't
+really consider bitstreams as bitmap or bitfield. What we do really expect =
+is to
+use bit writer helpers (and sometimes a bit reader though we try and avoid =
+the
+second one in the  kernel). Its more of less a cursor (a bit position) into=
+ a
+memory that advance while writing. A bit writer should help protect against
+overflow too.
 
-To address this issue, in spi core we will check the number of items=20
-in the "reg" property of the flash node(which is nothing but the=20
-number of chip selects) against the "num-cs" property of the spi=20
-controller(which is total number of chip selects supported by the=20
-controller). If the number of items mentioned in the "reg" property=20
-is greater than "num-cs" value then we error out.
+When writing lets say a chain of 8 bits from a char, a proper helper is exp=
+ected
+to be very explicit on the ordering (write_u8_le/be or something better wor=
+ded).
+I would rather like to see all these blobs written this way personally then
+having a cleared buffer and writing using bit offsets.
 
-For eg.,
+Perhaps I may suggest to start with implementing just that inside this driv=
+er?
+It isn't very hard, and then the implementation can be reduced later and sh=
+ared
+later, with whatever exists without deviating from the intent of the existi=
+ng
+API ? I do believe that having this in linux-media can be useful in the fut=
+ure.
+We will notably need to extend such a helper with multimedia specific codin=
+g
+technique (golomb, boolean coding, etc.) for use in stateless encoder drive=
+rs.
 
-rc =3D of_property_read_variable_u32_array(nc, "reg", &cs[0], 1,=20
-						SPI_CS_CNT_MAX);
-if(rc > ctlr->num_chipselect) {
-	dev_err(&ctlr->dev, "%pOF has invalid 'reg' property (%d)\n",=20
-							nc, rc);
-	return -EINVAL;
-}
+Nicolas
 
-Please let us know if you have any other approach in mind.
+>=20
+> Thanks,
+> Robin.
+>=20
+> [1]=20
+> https://github.com/ARM-software/abi-aa/blob/main/aapcs64/aapcs64.rst#bit-=
+fields
+>=20
+> > - I deliberatly opted against the macro solution used in H264, which
+> > declares Macros in mid function and declares the fields of the memory
+> > blob as macros as well. And I would be glad to refactor the H264 code i=
+f
+> > desired by the maintainer to use common Kernel APIs and native language
+> > elements.
+> > - The giant static array of cabac values is moved to a separate c file,
+> > I did so because a separate .h file would be incorrect as it doesn't
+> > expose anything of any value for any other file than the rkvdec-hevc.c
+> > file. Other options were:
+> >    - Calculating the values instead of storing the results (doesn't see=
+m
+> >    to be worth it)
+> >    - Supply them via firmware (Adding firmware makes the whole software
+> >    way more complicated and the usage of the driver less obvious)
+> >=20
+> > Ignored Checkpatch warnings (as it fits to the current style of the fil=
+e):
+> > ```
+> > WARNING: line length of 162 exceeds 100 columns
+> > #115: FILE: drivers/media/v4l2-core/v4l2-common.c:265:
+> > +               { .format =3D V4L2_PIX_FMT_NV15,    .pixel_enc =3D V4L2=
+_PIXEL_ENC_YUV, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 5, 5, 0, =
+0 }, .hdiv =3D 2, .vdiv =3D 2,
+> >=20
+> > ERROR: trailing statements should be on next line
+> > #128: FILE: drivers/media/v4l2-core/v4l2-ioctl.c:1305:
+> > +       case V4L2_PIX_FMT_NV15:         descr =3D "10-bit Y/CbCr 4:2:0 =
+(Packed)"; break;
+> > ```
+> >=20
+> > v4l2-compliance test:
+> > ```
+> > Total for rkvdec device /dev/video3: 46, Succeeded: 46, Failed: 0, Warn=
+ings: 0
+> > ```
+> >=20
+> > kselftest module run for the bitmap changes:
+> > ```
+> > $ sudo insmod /usr/lib/modules/5.19.0-rc3-finalseries/kernel/lib/test_b=
+itmap.ko
+> > [   71.751716] test_bitmap: parselist: 14: input is '0-2047:128/256' OK=
+, Time: 1750
+> > [   71.751787] test_bitmap: bitmap_print_to_pagebuf: input is '0-32767
+> > [   71.751787] ', Time: 6708
+> > [   71.760373] test_bitmap: set_value: 6/6 tests correct
+> > ```
+> >=20
+> > Jonas Karlman (2):
+> >    media: v4l2: Add NV15 pixel format
+> >    media: v4l2-common: Add helpers to calculate bytesperline and
+> >      sizeimage
+> >=20
+> > Sebastian Fricke (4):
+> >    bitops: bitmap helper to set variable length values
+> >    staging: media: rkvdec: Add valid pixel format check
+> >    staging: media: rkvdec: Enable S_CTRL IOCTL
+> >    staging: media: rkvdec: Add HEVC backend
+> >=20
+> >   .../media/v4l/pixfmt-yuv-planar.rst           |   53 +
+> >   drivers/media/v4l2-core/v4l2-common.c         |   79 +-
+> >   drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+> >   drivers/staging/media/rkvdec/Makefile         |    2 +-
+> >   drivers/staging/media/rkvdec/TODO             |   22 +-
+> >   .../staging/media/rkvdec/rkvdec-hevc-data.c   | 1844 ++++++++++++++++=
++
+> >   drivers/staging/media/rkvdec/rkvdec-hevc.c    |  859 ++++++++
+> >   drivers/staging/media/rkvdec/rkvdec-regs.h    |    1 +
+> >   drivers/staging/media/rkvdec/rkvdec.c         |  182 +-
+> >   drivers/staging/media/rkvdec/rkvdec.h         |    3 +
+> >   include/linux/bitmap.h                        |   39 +
+> >   include/uapi/linux/videodev2.h                |    1 +
+> >   lib/test_bitmap.c                             |   47 +
+> >   13 files changed, 3066 insertions(+), 67 deletions(-)
+> >   create mode 100644 drivers/staging/media/rkvdec/rkvdec-hevc-data.c
+> >   create mode 100644 drivers/staging/media/rkvdec/rkvdec-hevc.c
+> >=20
+>=20
 
-Regards,
-Amit

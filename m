@@ -2,128 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF3257636E
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8000A576374
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbiGOOKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 10:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
+        id S235154AbiGOONX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 10:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbiGOOKp (ORCPT
+        with ESMTP id S229846AbiGOONU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 10:10:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C06768719;
-        Fri, 15 Jul 2022 07:10:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E76E260A10;
-        Fri, 15 Jul 2022 14:10:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAAFDC34115;
-        Fri, 15 Jul 2022 14:10:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657894242;
-        bh=kj4NlOqJqu0Eo6svXbTTcXeN2gwq/QeqbAMzhuAB04A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hrS7rNNWglr3i7GG8Pv6TyZOA0bF5OoOoTlexqNeuS4qER+zreY2m54z1+fmW7WnF
-         ZSgiYxmuZ1NyrKk/kV8sEutwL5ABk/0vUsDR6b3V2gYQerAH7Dv9++okJhsZdVu1Gt
-         KSHTfOp3t6R78EWDgN4gEsqy4QuP7RX2t/OFYbtc=
-Date:   Fri, 15 Jul 2022 16:10:39 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     stable@vger.kernel.org, linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        lczerner@redhat.com, enwlinux@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yebin10@huawei.com, yukuai3@huawei.com,
-        Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH 4.19] ext4: fix race condition between
- ext4_ioctl_setflags and ext4_fiemap
-Message-ID: <YtF1XygwvIo2Dwae@kroah.com>
-References: <20220715023928.2701166-1-libaokun1@huawei.com>
+        Fri, 15 Jul 2022 10:13:20 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3726BC37
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:13:19 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id f24-20020a1cc918000000b003a30178c022so2940363wmb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=riEJIfBpfcy57tk6eBP6zBDihsAq9M9ciWKjQSWTHns=;
+        b=N3qh55mWYG1MkCB5nWXF2U09nYYX5u0cooSnIAkTzZPECYivn+J9EbY8MvkWYlRG4f
+         tBIoH7tt0p+hFeC2pUWGpBDm8PQMZCj6FfsRjKUv7YPdwHiOGcj1KXm3XjPT8OlmS3hc
+         n8CylkNMOmB/jU1JFjFhH1Lp+qr0vwwDTjYSFyApmCsOK670NxDDyR6ZBFs0w3wFuBUi
+         pPWia79Tkl2dAqnYmtgBvXvy/TvYOLjMSlANbPpVU9j5Hrt0ULjPK1s1mIMBKKjoHn4I
+         jLZgqrqt/1UYC3iWMgZJZiRIfun6txB8ymQrPrZa3ef8cHWVyYxdXq09Ju8lzcEmlTw5
+         Pfpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=riEJIfBpfcy57tk6eBP6zBDihsAq9M9ciWKjQSWTHns=;
+        b=nSgQIiLrvU6TDqJ0IlF/k+jxPMOxyS4MwWp+ytEl1gAWn2g2kWbriHYJJSdHm0IbC3
+         bGGx9xMlWhN8Kzw2ipyHqi1VihIv31OeXqe4eTvK6y3GHZ1O95VAcfhTs6te/kiwSTP3
+         7MZX/b8uyp+h9eWNN5sl+kqUQy8Z7OU9jsJuTmxuKM/3A6YnXBIE6bwq0F/LpsCga7P1
+         GUGmsByVBPRrg23AhjCPfrF2b8VoMtENxSxtCMVhbFGUKmUp8GCApCNNHOK4mHjcdsRZ
+         YZSa7wRHftb8k/E/cc+BjWHVkFgR9+q0Uy1rbd7vYJ1CHUlJJclqAjscZjkOHa+AX2XM
+         JuSA==
+X-Gm-Message-State: AJIora+Dq2Unk3cFxZfNznJfK5Hv/BUOXc7vcJTXcHdViNiMQFvC8qev
+        GMq6Bb77o/8eqpZIw9vcB64EUkHsIYJ+kg==
+X-Google-Smtp-Source: AGRyM1v2MFrUcnY3vJQMzm0gPXoQLK1rF1PKQ5KZzsadM6EF94IHEeXLuKtzZlBXGzCTe6LSEy8v+Q==
+X-Received: by 2002:a7b:c442:0:b0:3a3:bdb:e84c with SMTP id l2-20020a7bc442000000b003a30bdbe84cmr3771592wmi.101.1657894397744;
+        Fri, 15 Jul 2022 07:13:17 -0700 (PDT)
+Received: from C02FT09GML7L ([2a01:4b00:8019:4b00:1b0:435a:f49:c81])
+        by smtp.gmail.com with ESMTPSA id r21-20020a05600c425500b003a2cf5eb900sm5175095wmm.40.2022.07.15.07.13.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 07:13:17 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 15:13:13 +0100
+From:   William Lam <william.lam@bytedance.com>
+To:     Punit Agrawal <punit.agrawal@bytedance.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: compaction: include compound page count for scanning
+ in pageblock isolation
+Message-ID: <YtF1+bv0gPB7pqNL@C02FT09GML7L>
+References: <20220711202806.22296-1-william.lam@bytedance.com>
+ <874jzin30k.fsf@stealth>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220715023928.2701166-1-libaokun1@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <874jzin30k.fsf@stealth>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 10:39:28AM +0800, Baokun Li wrote:
-> This patch and problem analysis is based on v4.19 LTS.
-> The d3b6f23f7167("ext4: move ext4_fiemap to use iomap framework") patch
-> is incorporated in v5.7-rc1. This patch avoids this problem by switching
-> to iomap in ext4_fiemap.
+On Fri, Jul 15, 2022 at 10:23:07AM +0100, Punit Agrawal wrote:
+> Hi William,
 > 
-> Hulk Robot reported a BUG on stable 4.19.252:
-> ==================================================================
-> kernel BUG at fs/ext4/extents_status.c:762!
-> invalid opcode: 0000 [#1] SMP KASAN PTI
-> CPU: 7 PID: 2845 Comm: syz-executor Not tainted 4.19.252 #46
-> RIP: 0010:ext4_es_cache_extent+0x30e/0x370
-> [...]
-> Call Trace:
->  ext4_cache_extents+0x238/0x2f0
->  ext4_find_extent+0x785/0xa40
->  ext4_fiemap+0x36d/0xe90
->  do_vfs_ioctl+0x6af/0x1200
-> [...]
-> ==================================================================
+> William Lam <william.lam@bytedance.com> writes:
 > 
-> Above issue may happen as follows:
-> -------------------------------------
->            cpu1		    cpu2
-> _____________________|_____________________
-> do_vfs_ioctl
->  ext4_ioctl
->   ext4_ioctl_setflags
->    ext4_ind_migrate
->                         do_vfs_ioctl
->                          ioctl_fiemap
->                           ext4_fiemap
->                            ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)
->                            ext4_fill_fiemap_extents
->     down_write(&EXT4_I(inode)->i_data_sem);
->     ext4_ext_check_inode
->     ext4_clear_inode_flag(inode, EXT4_INODE_EXTENTS)
->     memset(ei->i_data, 0, sizeof(ei->i_data))
->     up_write(&EXT4_I(inode)->i_data_sem);
->                             down_read(&EXT4_I(inode)->i_data_sem);
->                             ext4_find_extent
->                              ext4_cache_extents
->                               ext4_es_cache_extent
->                                BUG_ON(end < lblk)
+> > The number of scanned pages can be lower than the number of isolated
+> > pages when isolating mirgratable or free pageblock. The metric is being
+> > reported in trace event and also used in vmstat.
+> >
+> > This behaviour is confusing since currently the count for isolated pages
+> > takes account of compound page but not for the case of scanned pages.
+> > And given that the number of isolated pages(nr_taken) reported in
+> > mm_compaction_isolate_template trace event is on a single-page basis,
+> > the ambiguity when reporting the number of scanned pages can be removed
+> > by also including compound page count.
 > 
-> We can easily reproduce this problem with the syzkaller testcase:
-> ```
-> 02:37:07 executing program 3:
-> r0 = openat(0xffffffffffffff9c, &(0x7f0000000040)='./file0\x00', 0x26e1, 0x0)
-> ioctl$FS_IOC_FSSETXATTR(r0, 0x40086602, &(0x7f0000000080)={0x17e})
-> mkdirat(0xffffffffffffff9c, &(0x7f00000000c0)='./file1\x00', 0x1ff)
-> r1 = openat(0xffffffffffffff9c, &(0x7f0000000100)='./file1\x00', 0x0, 0x0)
-> ioctl$FS_IOC_FIEMAP(r1, 0xc020660b, &(0x7f0000000180)={0x0, 0x1, 0x0, 0xef3, 0x6, []}) (async, rerun: 32)
-> ioctl$FS_IOC_FSSETXATTR(r1, 0x40086602, &(0x7f0000000140)={0x17e}) (rerun: 32)
-> ```
+> A minor suggestion - It maybe useful to include an example trace output
+> to highlight the issue.
 > 
-> To solve this issue, we use __generic_block_fiemap() instead of
-> generic_block_fiemap() and add inode_lock_shared to avoid race condition.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> ---
->  fs/ext4/extents.c | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
 
-What is the git commit id of this change in Linus's tree?
+some example output from trace where it shows nr_taken can be greater
+than nr_scanned:
 
-If it is not in Linus's tree, why not?
+Produced by kernel v5.19-rc6
+kcompactd0-42      [001] .....  1210.268022: mm_compaction_isolate_migratepages: range=(0x107ae4 ~ 0x107c00) nr_scanned=265 nr_taken=255
+[...]
+kcompactd0-42      [001] .....  1210.268382: mm_compaction_isolate_freepages: range=(0x215800 ~ 0x215a00) nr_scanned=13 nr_taken=128
+kcompactd0-42      [001] .....  1210.268383: mm_compaction_isolate_freepages: range=(0x215600 ~ 0x215680) nr_scanned=1 nr_taken=128
 
-confused,
+mm_compaction_isolate_migratepages does not seem to have this behaviour,
+but for the reason of consistency, nr_scanned should also be taken care
+of in that side.
 
-greg k-h
+> >
+> > Signed-off-by: William Lam <william.lam@bytedance.com>
+> > ---
+> >  mm/compaction.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/mm/compaction.c b/mm/compaction.c
+> > index 1f89b969c12b..1b51cf2d32b6 100644
+> > --- a/mm/compaction.c
+> > +++ b/mm/compaction.c
+> > @@ -616,6 +616,7 @@ static unsigned long isolate_freepages_block(struct compact_control *cc,
+> >  			break;
+> >  		set_page_private(page, order);
+> >  
+> > +		nr_scanned += isolated - 1;
+> >  		total_isolated += isolated;
+> >  		cc->nr_freepages += isolated;
+> >  		list_add_tail(&page->lru, freelist);
+> > @@ -1101,6 +1102,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+> >  isolate_success_no_list:
+> >  		cc->nr_migratepages += compound_nr(page);
+> >  		nr_isolated += compound_nr(page);
+> > +		nr_scanned += compound_nr(page) - 1;
+> >  
+> >  		/*
+> >  		 * Avoid isolating too much unless this block is being
+> > @@ -1504,6 +1506,7 @@ fast_isolate_freepages(struct compact_control *cc)
+> >  			if (__isolate_free_page(page, order)) {
+> >  				set_page_private(page, order);
+> >  				nr_isolated = 1 << order;
+> > +				nr_scanned += nr_isolated - 1;
+> >  				cc->nr_freepages += nr_isolated;
+> >  				list_add_tail(&page->lru, &cc->freepages);
+> >  				count_compact_events(COMPACTISOLATED, nr_isolated);
+> 
+> Regardless of the comment above -
+> 
+> Reviewed-by: Punit Agrawal <punit.agrawal@bytedance.com>

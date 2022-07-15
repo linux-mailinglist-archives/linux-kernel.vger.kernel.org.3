@@ -2,136 +2,383 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666355769B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97205769BC
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbiGOWM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
+        id S232499AbiGOWOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232306AbiGOWMm (ORCPT
+        with ESMTP id S232838AbiGOWNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:12:42 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB3C9FE15
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:07:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657922865; x=1689458865;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yRFnz2WAfpy3Rhsy48bPrFC2JPBlkCyDDi9nM+TP2BY=;
-  b=DhVRD6EaZt/mOcdbZDNLqwYNz1bidm5O87HAdB5SkpFZU/UImo66lgXR
-   ysbwVFIhE4n1BslzBRKumqC6cgB7drTN3pUIEFSp0uY+sGPoYd56dNdM4
-   EGnKB00tl+7urT+y0zp6b8navOb6ZutwyQlSjFJrPZfhWi8VVzYVpnAlX
-   QTVZE6ce6buNI2Wp93bVGN5+YDmzzqQSJ58wwNaa/yT0uvShvk7imfhuz
-   1yAY9J1QZVWtT6nZRDv8lNmDYJ0eA8/o9GTKGwRW/HjlQHX41dwtG+pqq
-   RJSuevwjWk8uFeR6yu/YHiAReSIz4Nxx8WmtR3wFpS7cPp5LYDiFtuaQw
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="284668250"
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="284668250"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 15:06:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="571700024"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 15 Jul 2022 15:06:46 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCTSP-0000nM-Pt;
-        Fri, 15 Jul 2022 22:06:45 +0000
-Date:   Sat, 16 Jul 2022 06:06:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vineet Gupta <vgupta@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org
-Subject: net/ipv4/tcp_cong.c:238:24: sparse: sparse: incorrect type in
- initializer (different address spaces)
-Message-ID: <202207160525.YA4HOIPa-lkp@intel.com>
+        Fri, 15 Jul 2022 18:13:38 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28589183A9
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:08:53 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31d85f82f0bso59306517b3.7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:08:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=izcD1HnHb6lJxMaZm59KAnOWoNAatpAmAKZnItVmAVs=;
+        b=ApKlwkDvFAtogzg5Em18xQHqDMazDxjj8wvfsl2QZ/FA85GqR2OHyB6bNXvnTqi/+a
+         nS5RDQln03OGLmxvD4R87jiBQoJqC/G1LUOr7J/BuD5QWpwRAhDhAlNXe/PPdCLfOeG9
+         ylk9j3M3Mc3fTEYVoAfyxKooSc+WoZsMas0XqG6q3rpiFMpuiynljbowF7PdC3Q8T7Nm
+         9jLCLyQXrNzX+kQbSrv8c32kD346RW13sSH14J+II30usTKOTRNt3c5LLOZA1ug2Sqi9
+         N8YbkELAKL0fCLJbuqOm6P1utw4OcsBjUjrbB+WM0tCDIUlW6mXrDJUEy2qgBOyIYyiX
+         GjQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=izcD1HnHb6lJxMaZm59KAnOWoNAatpAmAKZnItVmAVs=;
+        b=1gH0ESpoSQAINlGuHuhIN3hEtk50+N1pTck6PFAUO11ilYk7rLTVYg+Lyh/rKJjZOd
+         ZDDzNJQNBuwrzcFwi56l9ntsii5+0q5tdFTQviEV7ohtc49hKZvOGkYPmFfpOPFenCFZ
+         3gt+c2DXV+WPxkyzgCwABtBSClFwSxYDe9iaNwSlTu7mMw3LbZ4rohRQkW9XwmVzhbpG
+         /qQE+QU7JNcy36mBFCtDZ2JvPpduQXu/iCmssuDuHRqu78gqQe1TGh9WGPQsQG1p2Inu
+         I61bicJaFvtgHn1IUAASM39t9lke7zgHqZcvBpYwE76oBZQJhLkVN3InikXsO7+oNhle
+         asjA==
+X-Gm-Message-State: AJIora9wcFNbR+u5GlF1yr43v1pQPgEkB9O5uYBMel8NjfNBvrot1j2S
+        c4n1ISVtfKsw3J93Y5PjB43lFgP3DZTxK8GprIiy0Q==
+X-Google-Smtp-Source: AGRyM1s6lD3+S3MaeEqIv8ER+1Q/n5NS5AlYeg7rFAFlRdDaCxlbMW3MnyaB8Y3RCXdl1QCA2dgnEiqF7RumJd4RBXc=
+X-Received: by 2002:a0d:eb83:0:b0:31c:8741:a033 with SMTP id
+ u125-20020a0deb83000000b0031c8741a033mr18690024ywe.455.1657922924688; Fri, 15
+ Jul 2022 15:08:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <6079032.MhkbZ0Pkbq@steina-w> <CAGETcx8-kx7RGTPhdyEHfFoxCyaojn5BnAr_f1==b=qeWZ6itQ@mail.gmail.com>
+ <1822575.tdWV9SEqCh@steina-w>
+In-Reply-To: <1822575.tdWV9SEqCh@steina-w>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 15 Jul 2022 15:08:08 -0700
+Message-ID: <CAGETcx_SNicqGG62y+n-jPH-peW4j6SB=bekTOs3KqEq8z0wSQ@mail.gmail.com>
+Subject: Re: Re: Re: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     l.stach@pengutronix.de, Tony Lindgren <tony@atomide.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9b59ec8d50a1f28747ceff9a4f39af5deba9540e
-commit: e188f3330a13df904d77003846eafd3edf99009d ARC: cmpxchg/xchg: rewrite as macros to make type safe
-date:   11 months ago
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220716/202207160525.YA4HOIPa-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e188f3330a13df904d77003846eafd3edf99009d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e188f3330a13df904d77003846eafd3edf99009d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash net/ipv4/
+On Wed, Jul 13, 2022 at 11:41 PM Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
+>
+> Am Mittwoch, 13. Juli 2022, 02:45:06 CEST schrieb Saravana Kannan:
+> > On Wed, Jul 6, 2022 at 6:02 AM Alexander Stein
+> > <alexander.stein@ew.tq-group.com> wrote:
+> >
+> >
+> > Thanks for testing all my patches and helping me debug this.
+> >
+> > Btw, can you try to keep the subject the same please? Looks like
+> > somewhere in your path [EXT] is added sometimes. lore.kernel.org keeps
+> > the thread together, but my email client (gmail) gets confused.
+>
+> Sorry about that. Unfortunately [EXT] is inserted automatically and it is
+> tedious and error-prone to remove it manually...
+>
+> > > Am Dienstag, 5. Juli 2022, 03:24:33 CEST schrieb Saravana Kannan:
+> > > > On Mon, Jul 4, 2022 at 12:07 AM Alexander Stein
+> > > >
+> > > > <alexander.stein@ew.tq-group.com> wrote:
+> > > > > Am Freitag, 1. Juli 2022, 09:02:22 CEST schrieb Saravana Kannan:
+> > > > > > On Thu, Jun 30, 2022 at 11:02 PM Alexander Stein
+> > > > > >
+> > > > > > <alexander.stein@ew.tq-group.com> wrote:
+> > > > > > > Hi Saravana,
+> > > > > > >
+> > > > > > > Am Freitag, 1. Juli 2022, 02:37:14 CEST schrieb Saravana Kannan:
+> > > > > > > > On Thu, Jun 23, 2022 at 5:08 AM Alexander Stein
+> > > > > > > >
+> > > > > > > > <alexander.stein@ew.tq-group.com> wrote:
+> > > > > > > > > Hi,
+> > > > > > > > >
+> > > > > > > > > Am Dienstag, 21. Juni 2022, 09:28:43 CEST schrieb Tony
+> Lindgren:
+> > > > > > > > > > Hi,
+> > > > > > > > > >
+> > > > > > > > > > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
+> > > > > > > > > > > Now that fw_devlink=on by default and fw_devlink supports
+> > > > > > > > > > > "power-domains" property, the execution will never get to
+> > > > > > > > > > > the
+> > > > > > > > > > > point
+> > > > > > > > > > > where driver_deferred_probe_check_state() is called before
+> > > > > > > > > > > the
+> > > > > > > > > > > supplier
+> > > > > > > > > > > has probed successfully or before deferred probe timeout
+> > > > > > > > > > > has
+> > > > > > > > > > > expired.
+> > > > > > > > > > >
+> > > > > > > > > > > So, delete the call and replace it with -ENODEV.
+> > > > > > > > > >
+> > > > > > > > > > Looks like this causes omaps to not boot in Linux next. With
+> > > > > > > > > > this
+> > > > > > > > > > simple-pm-bus fails to probe initially as the power-domain
+> > > > > > > > > > is
+> > > > > > > > > > not
+> > > > > > > > > > yet available. On platform_probe() genpd_get_from_provider()
+> > > > > > > > > > returns
+> > > > > > > > > > -ENOENT.
+> > > > > > > > > >
+> > > > > > > > > > Seems like other stuff is potentially broken too, any ideas
+> > > > > > > > > > on
+> > > > > > > > > > how to fix this?
+> > > > > > > > >
+> > > > > > > > > I think I'm hit by this as well, although I do not get a
+> > > > > > > > > lockup.
+> > > > > > > > > In my case I'm using
+> > > > > > > > > arch/arm64/boot/dts/freescale/imx8mq-tqma8mq-mba8mx.dts and
+> > > > > > > > > probing of
+> > > > > > > > > 38320000.blk-ctrl fails as the power-domain is not (yet)
+> > > > > > > > > registed.
+> > > > > > > >
+> > > > > > > > Ok, took a look.
+> > > > > > > >
+> > > > > > > > The problem is that there are two drivers for the same device
+> > > > > > > > and
+> > > > > > > > they
+> > > > > > > > both initialize this device.
+> > > > > > > >
+> > > > > > > >     gpc: gpc@303a0000 {
+> > > > > > > >
+> > > > > > > >         compatible = "fsl,imx8mq-gpc";
+> > > > > > > >
+> > > > > > > >     }
+> > > > > > > >
+> > > > > > > > $ git grep -l "fsl,imx7d-gpc" -- drivers/
+> > > > > > > > drivers/irqchip/irq-imx-gpcv2.c
+> > > > > > > > drivers/soc/imx/gpcv2.c
+> > > > > > > >
+> > > > > > > > IMHO, this is a bad/broken design.
+> > > > > > > >
+> > > > > > > > So what's happening is that fw_devlink will block the probe of
+> > > > > > > > 38320000.blk-ctrl until 303a0000.gpc is initialized. And it
+> > > > > > > > stops
+> > > > > > > > blocking the probe of 38320000.blk-ctrl as soon as the first
+> > > > > > > > driver
+> > > > > > > > initializes the device. In this case, it's the irqchip driver.
+> > > > > > > >
+> > > > > > > > I'd recommend combining these drivers into one. Something like
+> > > > > > > > the
+> > > > > > > > patch I'm attaching (sorry for the attachment, copy-paste is
+> > > > > > > > mangling
+> > > > > > > > the tabs). Can you give it a shot please?
+> > > > > > >
+> > > > > > > I tried this patch and it delayed the driver initialization (those
+> > > > > > > of
+> > > > > > > UART
+> > > > > > > as
+> > > > > >
+> > > > > > > well BTW). Unfortunately the driver fails the same way:
+> > > > > > Thanks for testing the patch!
+> > > > > >
+> > > > > > > > [    1.125253] imx8m-blk-ctrl 38320000.blk-ctrl: error -ENODEV:
+> > > > > > > > failed
+> > > > > > > > to
+> > > > > > >
+> > > > > > > attach power domain "bus"
+> > > > > > >
+> > > > > > > More than that it even introduced some more errors:
+> > > > > > > > [    0.008160] irq: no irq domain found for gpc@303a0000 !
+> > > > > >
+> > > > > > So the idea behind my change was that as long as the irqchip isn't
+> > > > > > the
+> > > > > > root of the irqdomain (might be using the terms incorrectly) like
+> > > > > > the
+> > > > > > gic, you can make it a platform driver. And I was trying to hack up
+> > > > > > a
+> > > > > > patch that's the equivalent of platform_irqchip_probe() (which just
+> > > > > > ends up eventually calling the callback you use in
+> > > > > > IRQCHIP_DECLARE().
+> > > > > > I probably made some mistake in the quick hack that I'm sure if
+> > > > > > fixable.
+> > > > > >
+> > > > > > > > [    0.013251] Failed to map interrupt for
+> > > > > > > > /soc@0/bus@30400000/timer@306a0000
+> > > > > >
+> > > > > > However, this timer driver also uses TIMER_OF_DECLARE() which can't
+> > > > > > handle failure to get the IRQ (because it's can't -EPROBE_DEFER).
+> > > > > > So,
+> > > > > > this means, the timer driver inturn needs to be converted to a
+> > > > > > platform driver if it's supposed to work with the IRQCHIP_DECLARE()
+> > > > > > being converted to a platform driver.
+> > > > > >
+> > > > > > But that's a can of worms not worth opening. But then I remembered
+> > > > > > this simpler workaround will work and it is pretty much a variant of
+> > > > > > the workaround that's already in the gpc's irqchip driver to allow
+> > > > > > two
+> > > > > > drivers to probe the same device (people really should stop doing
+> > > > > > that).
+> > > > > >
+> > > > > > Can you drop my previous hack patch and try this instead please? I'm
+> > > > > > 99% sure this will work.
+> > > > > >
+> > > > > > diff --git a/drivers/irqchip/irq-imx-gpcv2.c
+> > > > > > b/drivers/irqchip/irq-imx-gpcv2.c index b9c22f764b4d..8a0e82067924
+> > > > > > 100644
+> > > > > > --- a/drivers/irqchip/irq-imx-gpcv2.c
+> > > > > > +++ b/drivers/irqchip/irq-imx-gpcv2.c
+> > > > > > @@ -283,6 +283,7 @@ static int __init imx_gpcv2_irqchip_init(struct
+> > > > > > device_node *node,
+> > > > > >
+> > > > > >          * later the GPC power domain driver will not be skipped.
+> > > > > >          */
+> > > > > >
+> > > > > >         of_node_clear_flag(node, OF_POPULATED);
+> > > > > >
+> > > > > > +       fwnode_dev_initialized(domain->fwnode, false);
+> > > > > >
+> > > > > >         return 0;
+> > > > > >
+> > > > > >  }
+> > > > >
+> > > > > Just to be sure here, I tried this patch on top of next-20220701 but
+> > > > > unfortunately this doesn't fix the original problem either. The timer
+> > > > > errors are gone though.
+> > > >
+> > > > To clarify, you had the timer issue only with my "combine drivers"
+> > > > patch,
+> > > > right?
+> > >
+> > > That's correct.
+> > >
+> > > > > The probe of imx8m-blk-ctrl got slightly delayed (from 0.74 to 0.90s
+> > > > > printk
+> > > > > time) but results in the identical error message.
+> > > >
+> > > > My guess is that the probe attempt of blk-ctrl is delayed now till gpc
+> > > > probes (because of the device links getting created with the
+> > > > fwnode_dev_initialized() fix), but by the time gpc probe finishes, the
+> > > > power domains aren't registered yet because of the additional level of
+> > > > device addition and probing.
+> > > >
+> > > > Can you try the attached patch please?
+> > >
+> > > Sure, it needed some small fixes though. But the error still is present.
+> > >
+> > > > And if that doesn't fix the issues, then enable the debug logs in the
+> > > > following functions please and share the logs from boot till the
+> > > > failure? If you can enable CONFIG_PRINTK_CALLER, that'd help too.
+> > > > device_link_add()
+> > > > fwnode_link_add()
+> > > > fw_devlink_relax_cycle()
+> > >
+> > > I switched fw_devlink_relax_cycle() for fw_devlink_relax_link() as the
+> > > former has no debug output here.
+> > >
+> > > For the record I added the following line to my kernel command line:
+> > > > dyndbg="func device_link_add +p; func fwnode_link_add +p; func
+> > >
+> > > fw_devlink_relax_link +p"
+> > >
+> > > I attached the dmesg until the probe error to this mail. But I noticed the
+> > >
+> > > following lines which seem interesting:
+> > > > [    1.466620][    T8] imx-pgc imx-pgc-domain.5: Linked as a consumer to
+> > > > regulator.8
+> > > > [    1.466743][    T8] imx-pgc imx-pgc-domain.5: imx_pgc_domain_probe:
+> > > > Probe>
+> > > succeeded
+> > >
+> > > > [    1.474733][    T8] imx-pgc imx-pgc-domain.6: Linked as a consumer to
+> > >
+> > > regulator.9
+> > >
+> > > > [    1.474774][    T8] imx-pgc imx-pgc-domain.6: imx_pgc_domain_probe:
+> > > > Probe>
+> > > succeeded
+> >
+> > I'm guessing this happens after the probe error.
+> >
+> > Ok, I looked at the dmesg logs and this pretty much confirms my
+> > thought on why the probe ordering wasn't maintained.
+> >
+> > The power domains lack a compatible property, so the blk-ctrl is
+> > linked as a consumer of the gpc instead:
+> > [    0.343905][    T1] blk-ctrl@38320000 Linked as a fwnode consumer
+> > to gpc@303a0000
+> > [    0.343943][    T1] blk-ctrl@38320000 Linked as a fwnode consumer
+> > to clock-controller@30380000
+> > This ^^ is the device tree parsing figuring out the dependencies
+> > between the DT nodes.
+> >
+> > [    0.368462][    T1] platform 38320000.blk-ctrl: Linked as a
+> > consumer to 30380000.clock-controller
+> > [    0.368542][    T1] platform 38320000.blk-ctrl: Linked as a
+> > consumer to 303a0000.gpc
+> > This ^^ is converting the DT node dependencies into device links.
+> >
+> > So, the only real options are:
+> > 1. Fix DT and add a compatible string to the DT nodes.
+> > 2. Move the initcall level of the regulator driver so the powerdomain
+> > probe doesn't get deferred. Not ideal that we are playing initcall
+> > chicken to handle the feature meant to remove the need for initcall
+> > chicken. But I see these "device, but won't have a compatible
+> > property" as exceptions and feel it's okay to have to play with
+> > initcall levels to handle those.
+> > 3. Provide a helper function that driver that do this (creating
+> > devices for child DT nodes without compatible property) can use to
+> > move/copy their consumer device links to the child devices they add.
+> > And then fix up the gpc driver so that it copies the gpc -- blk-ctrl
+> > device link to the proper power domain.
+> > 4. I have another idea for how I could fix that at a driver core
+> > level, but I'm not sure it'll work yet and its definitely not
+> > something I want to try and get in for 5.19 -- too late for that IMHO.
+> >
+> > Want to give (2) a shot so that I can still try to keep the cleanup
+> > series that caused this problem (that's the long term goal) while I
+> > give (3) and (4) a shot for 5.20?
+>
+> Sure, I can give (2) a shot. Which initcall needs to be modified? You have a
+> diff snippet?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+All initcall for all the regulator drivers that feed this gpc power domain.
 
+> BTW: this potentially affects all imx8m and imx7d as they have the same gpc
+> binding.
 
-sparse warnings: (new ones prefixed by >>)
->> net/ipv4/tcp_cong.c:238:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct tcp_congestion_ops const [noderef] __rcu *_val_ @@     got struct tcp_congestion_ops *[assigned] ca @@
-   net/ipv4/tcp_cong.c:238:24: sparse:     expected struct tcp_congestion_ops const [noderef] __rcu *_val_
-   net/ipv4/tcp_cong.c:238:24: sparse:     got struct tcp_congestion_ops *[assigned] ca
-   net/ipv4/tcp_cong.c:238:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct tcp_congestion_ops const *prev @@     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_ @@
-   net/ipv4/tcp_cong.c:238:22: sparse:     expected struct tcp_congestion_ops const *prev
-   net/ipv4/tcp_cong.c:238:22: sparse:     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_
+Good point. That's why I was asking for your help :) -- you have more
+context on these hardware.
 
-vim +238 net/ipv4/tcp_cong.c
+> Can't say much about (1). I added Lucas Stach to recipients, he did a lot on
+> this gpc driver.
+> @Lucas: Do you have some input why the gpc power domains do not have a
+> compatible? Is it reasonable to add them?
 
-317a76f9a44b43 Stephen Hemminger 2005-06-23  219  
-317a76f9a44b43 Stephen Hemminger 2005-06-23  220  /* Used by sysctl to change default congestion control */
-6670e152447732 Stephen Hemminger 2017-11-14  221  int tcp_set_default_congestion_control(struct net *net, const char *name)
-317a76f9a44b43 Stephen Hemminger 2005-06-23  222  {
-317a76f9a44b43 Stephen Hemminger 2005-06-23  223  	struct tcp_congestion_ops *ca;
-6670e152447732 Stephen Hemminger 2017-11-14  224  	const struct tcp_congestion_ops *prev;
-6670e152447732 Stephen Hemminger 2017-11-14  225  	int ret;
-317a76f9a44b43 Stephen Hemminger 2005-06-23  226  
-6670e152447732 Stephen Hemminger 2017-11-14  227  	rcu_read_lock();
-6670e152447732 Stephen Hemminger 2017-11-14  228  	ca = tcp_ca_find_autoload(net, name);
-6670e152447732 Stephen Hemminger 2017-11-14  229  	if (!ca) {
-6670e152447732 Stephen Hemminger 2017-11-14  230  		ret = -ENOENT;
-0baf26b0fcd74b Martin KaFai Lau  2020-01-08  231  	} else if (!bpf_try_module_get(ca, ca->owner)) {
-6670e152447732 Stephen Hemminger 2017-11-14  232  		ret = -EBUSY;
-8d432592f30fcc Jonathon Reinhart 2021-05-01  233  	} else if (!net_eq(net, &init_net) &&
-8d432592f30fcc Jonathon Reinhart 2021-05-01  234  			!(ca->flags & TCP_CONG_NON_RESTRICTED)) {
-8d432592f30fcc Jonathon Reinhart 2021-05-01  235  		/* Only init netns can set default to a restricted algorithm */
-8d432592f30fcc Jonathon Reinhart 2021-05-01  236  		ret = -EPERM;
-6670e152447732 Stephen Hemminger 2017-11-14  237  	} else {
-6670e152447732 Stephen Hemminger 2017-11-14 @238  		prev = xchg(&net->ipv4.tcp_congestion_control, ca);
-6670e152447732 Stephen Hemminger 2017-11-14  239  		if (prev)
-0baf26b0fcd74b Martin KaFai Lau  2020-01-08  240  			bpf_module_put(prev, prev->owner);
-317a76f9a44b43 Stephen Hemminger 2005-06-23  241  
-6670e152447732 Stephen Hemminger 2017-11-14  242  		ca->flags |= TCP_CONG_NON_RESTRICTED;
-317a76f9a44b43 Stephen Hemminger 2005-06-23  243  		ret = 0;
-317a76f9a44b43 Stephen Hemminger 2005-06-23  244  	}
-6670e152447732 Stephen Hemminger 2017-11-14  245  	rcu_read_unlock();
-317a76f9a44b43 Stephen Hemminger 2005-06-23  246  
-317a76f9a44b43 Stephen Hemminger 2005-06-23  247  	return ret;
-317a76f9a44b43 Stephen Hemminger 2005-06-23  248  }
-317a76f9a44b43 Stephen Hemminger 2005-06-23  249  
+It's generally frowned upon to update the kernel in a way that it
+breaks backwards compatibility with an older DT binary. That's why I
+didn't ask about (1).
 
-:::::: The code at line 238 was first introduced by commit
-:::::: 6670e152447732ba90626f36dfc015a13fbf150e tcp: Namespace-ify sysctl_tcp_default_congestion_control
+It's fairly trivial to get it to work if we (who is "we" here?) agree
+it's okay to add the compatible property and break DT backwards
+compatibility in this case.
 
-:::::: TO: Stephen Hemminger <stephen@networkplumber.org>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-Saravana

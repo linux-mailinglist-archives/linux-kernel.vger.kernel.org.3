@@ -2,112 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACE3575C77
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394B3575C7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 09:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbiGOHgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 03:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
+        id S231241AbiGOHib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 03:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbiGOHgB (ORCPT
+        with ESMTP id S230132AbiGOHi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 03:36:01 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7117BE3B
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 00:36:00 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id u15so4772842lji.10
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 00:36:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mqhVEUWoJhyGaRXatPdO6jF7+Eft9kIRbLVR6FWlzs8=;
-        b=qjvMjtSFhMHa6WnM74siqopulg6O3rjmx3IiBooXy24W/I4PZDNd+xl+uQGyiC1DZb
-         lWSfhBY62FfqUJPPAXUjczFT0aIo4m6S8H0G2jRVq8b5ye6HG/pii+GGvDCQtIvh+fnO
-         XRT06LG1Jrsu9wN0TpvNrdx+gSWPx6A80gCufY3qCCovtvtHOgGRPlxsaSSmDvfOs+Kx
-         8gMkrLffn5LHOlrIxv7+/xe1caZMYMya/z7j91Oec0mGl4cN/XYqMSkWSqkbC9ckT/LP
-         CPFq0oj54KUPsoZaR86X2Te9VAE0jtoZgM7Td6AvTmm6RDdgwd5pakE6FUb5ZdfDhFkV
-         uNXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mqhVEUWoJhyGaRXatPdO6jF7+Eft9kIRbLVR6FWlzs8=;
-        b=qQlqlaD02j9h/di/HkmJmbu9GeiNFa8bKTVVp9/BnLMQD+UL84sKthJjV+yV8ySrgU
-         X7vI/DJ8zQK4j5ung7A2pN25LfBKwC6YUFJqTjHjtHDCa7vSRIpyDBg2apg8STd1OH5I
-         DJ5TDcO4Bzws2OBL+H7sR4He+O8vrt+1ogQZRkXZ/4FdanQmeR84c5TGDo2ap7yZBtYi
-         WUWvYT06oDNH5+bmLgw124iFDVzQO8C7U6+hgQzqEYJyZ7raWDCgPZe2PKA/5M9sxD1s
-         8soSB3HPcllCQYDGI03YQ3hdLYcgqf3D1UzuR49uf2ADTZRNRN+NWKi2QsAlp7Pg7Pp3
-         JMtg==
-X-Gm-Message-State: AJIora/By1N9G23gCK6AY7HaeoWGXKL5dOQ9UljKed3fXIX8fMyFCZZB
-        AW8AKDDJOxwIeBEWWAq27qqLPQ==
-X-Google-Smtp-Source: AGRyM1tOzrr9Yq9VEdfdXk1wmZFGhIc3cdIcL/0dwI8mv3a3rDX0Kkzg3QqLlEmjX7QvHubznwMfXQ==
-X-Received: by 2002:a05:651c:1a0a:b0:25d:a17d:9c23 with SMTP id by10-20020a05651c1a0a00b0025da17d9c23mr1419736ljb.480.1657870558571;
-        Fri, 15 Jul 2022 00:35:58 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id 3-20020ac25f03000000b004790a4ce3e5sm771300lfq.278.2022.07.15.00.35.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 00:35:58 -0700 (PDT)
-Message-ID: <9f8217f5-7369-0abe-cf8a-d501e163580f@linaro.org>
-Date:   Fri, 15 Jul 2022 09:35:55 +0200
+        Fri, 15 Jul 2022 03:38:27 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80040.outbound.protection.outlook.com [40.107.8.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728267BE3F;
+        Fri, 15 Jul 2022 00:38:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qvcq1f45d8YmFyKZNr6zi4u+XRqmaUjv3erYkJ5kly34C8l7bP7nhF9H+ibutG/VAlu3XVWg4rENolq15mDcvoGJhJVBeYiB6D8MO8aYmlrg7r0FpfvNIvZx1t99y9GONvcEXVkgyRvWWpaauoZyImIxIjejcQRbylAVOAvOTNOkKsyNIkgxLNOzqZ7gjUEwW999XYKiqUjCa8+0bJ0iMYnZphP0qp4a4TX1vPKHb7ZzksNRmaHzBbvNgd8y3/g3HXomZY7qg1DQNP4ryjAjPq0yjhlW5Xb6MCt+pgc3lE6DXGDIMlMy1YScjIZ+0DwqEuz1d6XqD2vZEHqM4USzQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mk1HscuILBLIFPDz1yyxhRcAiq5JCH84m49FGkbG2SM=;
+ b=cwH5rZnDhksaQY08Vd9t5AwqJrT7siKgRvAjgSk1NyzKPt0sVe/Mlet9dI1gH5QckZxElXA80p+HxNVSOEe9TOmWaLwtzKYuGIO/zc+ZRBsmZGGbAZ8jL/oAyqtjSQGf+Nelkv3a6jH9pEB1WVZQhgMT7XeVHQTC9gYkgZ9Ky4wIHeCY6PU/tOVy0uUBZf2y7+WhRiL36DYx9eBYjRtq4oaqtjBA+tveQi+ExkhlHSrgISG686mANEBVdvxyf9aVVJBlc6nzI1Cefd17OkhxbheAXFlYNmcsdHjY6S15C0ugDlVQ+4JfYpYWkUphi/fOiwpaO9Au6Nd5nv0H3k/WkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mk1HscuILBLIFPDz1yyxhRcAiq5JCH84m49FGkbG2SM=;
+ b=sVH+m9HRjpethjre6jxsuxbtycjJUw+GhfsT2/5zWcbHbnSJtjkdwzRdY/a0RqejoEbPYGQvBKJ+lPROuxEqKWGnZpf0tsqdXaE2YHQ3C3wRmTGxbDapIlCFQAuqf9goJoa+3k+gAUGY2ztc5DSrJTaoZQQ8+VaYEUuNs5Fp6eo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by AM6PR04MB6615.eurprd04.prod.outlook.com (2603:10a6:20b:fd::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.16; Fri, 15 Jul
+ 2022 07:38:22 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::5ed:ec65:3631:aca8]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::5ed:ec65:3631:aca8%4]) with mapi id 15.20.5438.014; Fri, 15 Jul 2022
+ 07:38:22 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
+Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] media: amphion: adjust the encoder's value range of gop size
+Date:   Fri, 15 Jul 2022 15:38:00 +0800
+Message-Id: <20220715073800.11321-1-ming.qian@nxp.com>
+X-Mailer: git-send-email 2.36.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0013.APCP153.PROD.OUTLOOK.COM (2603:1096::23) To
+ AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 02/19] dt-bindings: memory: mediatek: Update condition
- for mt8195 smi node
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        MandyJH Liu <mandyjh.liu@mediatek.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>
-Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220714122837.20094-1-tinghan.shen@mediatek.com>
- <20220714122837.20094-3-tinghan.shen@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220714122837.20094-3-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a9507227-a1d2-4f9e-e8a7-08da6634fe0f
+X-MS-TrafficTypeDiagnostic: AM6PR04MB6615:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3PgQHL+0pihVJU+K5Xia2HcMBcN2+82D+qCoCa6DpOhPX4mpdktjxOtCX/oQMoZB96YfmDxjPG2aYi05o6EpX1jnRpcDHSCYrzIMn4GWrwlZgIdg3mzrnyF/GvEJ5X8Lht3TvTMgj8joYNXPh0xdI9uuN/Ry2wYa0xICMyBOzzqVjoxHxEkkjeeyaWVlrbjSny0ddGtVB7Aa6W3my80IyBjWY/an5TK99nhg8qvvjJsDZD9a9MtPbEMu2DKhgMGTKfqS57UauwFJ3NOLUbNEjdNcR5MRjN4cJ3aE0+VYj9Bq+wO0HELKFliJNjncJEeMfBtOtjJ3lqbU/95omaA7KZDrslOxDbHG8GQdTdP2hBUi6q32G3Z6kDBxIz/7nHM/Qdrxkj+UMi4JM6Qg/2psdKo6/aKaatdtGROcEhY9v6X7A749xw69wTpYQG2/EJPJHcZtEwm4SOtwQCqPk1sXMwIkz1gIn9VjFmsyW4FVQmTeoDWG1Kq8RjAToSs5hIW2ZHy7hLfSoxPgdwRAOCi/Hp91mglM5MfqTUle94WJHOHgxtpyNJYTZfdtd7u1aompqI5ZjYwemOIrcEHJ6aD3sX9bXV1mhKKPYCunGJ+SSEGxkhAffS8FPdg9w+FT41cmuk0G+Z7NXDEKubnJoEDn3sd7+u+JHBP+BotH51uczHR4NtMwWU6DxRbM/oBStHqyJPysw6/upbd192Tktf0RZgmcftAeLyfI4hjioVKpaODjznKJZql5w5tIR9ckWht0Ff3atFVYuLlEtzFXbgyjiGJyyjX0bLY1dpDP2pQO3kMkonJdKAHNKY5ovU4WafGy
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(136003)(39860400002)(396003)(376002)(44832011)(4744005)(2906002)(7416002)(5660300002)(316002)(66476007)(8676002)(66556008)(66946007)(6512007)(52116002)(26005)(6486002)(6506007)(478600001)(6666004)(41300700001)(8936002)(186003)(2616005)(38350700002)(38100700002)(86362001)(83380400001)(4326008)(36756003)(1076003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iJMb8+y+VZBHVe995BPS2z958LThxN3qfd3VgmxYh3K/BaXCg2EvvWPs+w5V?=
+ =?us-ascii?Q?jsmdyHALiTLvE4lCSHFiQgFSqSTd/ZXbLBq4wDgSKuUq1H0Wr8C27dK2B3lT?=
+ =?us-ascii?Q?cKPdm3W573OyctRltjsNr6DHfVH8TWYp9E/f+IgnbClJKr40BwswlX3PYR9r?=
+ =?us-ascii?Q?F07Icnk/Y/NnHBwCrxlz7fkE8V2S85Y9N/sGUgY+XKSRC8r7BEyjVpVrUDRM?=
+ =?us-ascii?Q?MGLnHs0CfCh+vJVvVcZoQXzCaKVVIcw6R3Xo9jKYZ2uaDR4lsct/WtAVXBMi?=
+ =?us-ascii?Q?Axf8XnYlJNuOKNO0p7tx2aDI1wAGYg1FlEgBocMcnKZmq9He6P+UyIpWYZbd?=
+ =?us-ascii?Q?S+Jw1KDVvfuCbHQJY8oki6bu3lGQHsPpqcml5btsgLwBcEZmn11KoKNy5eUm?=
+ =?us-ascii?Q?AM/IceKLSYa9TLlhR7XnOpBmXG/n/JHiqoTcL8alWMKtLWa1THu5KY3xC44X?=
+ =?us-ascii?Q?XNdNNyYfeNZw1MuBNHvFF9p03dUmful5weMif/pFUWJ8GXDsdvWJLpVpX3mB?=
+ =?us-ascii?Q?mHTo8nsVjqfDKKn1XdzMUUOBANY84qPMGShjiQcUAvj4v4SF7qJIBA1gtwjb?=
+ =?us-ascii?Q?zKY536UwDtdznPsy/KzWLHJe3aY8yWd3otsdPb6XtLzu8NYjmftI/afXujxu?=
+ =?us-ascii?Q?Gtw4njPfqweI3XYKwYEAhphS4y0BMoAAb50QjlGFX0JT/Rt3pjIEFtGWFXoL?=
+ =?us-ascii?Q?B8a5HlRql3pOwka57jhNTbtxz9i8zJtP0gpuVNqk3EnUZPZaHjHOnUdi5dXP?=
+ =?us-ascii?Q?R7EcmtP5QbjkwnYO7hkmMNxAAX2mwqkKshFD9kO6Ri4BFb7BTKCEIvHOBYqv?=
+ =?us-ascii?Q?aEfM6dCu6bzLlZdC2r6jrIkCKvzXA3XLpRRXmiaMPxMhSGo/RcO4xc6lFYnf?=
+ =?us-ascii?Q?RrVERZa2mWP9GWMsORd/Z2cHZk9VsmsBK+GRHujJaQ/nDG50gjAAvcQfgBlv?=
+ =?us-ascii?Q?I4vTTsW/7PKqgBEhKnauq17wO9XTulRwOZ2BUU3aeK0FVkMVF7Aav32/8bm3?=
+ =?us-ascii?Q?VSdG0FJbmPZcdyZVNXv5EEe5K7WDQPli82zq/YYMLaBquyWQqTbPnIYHgChC?=
+ =?us-ascii?Q?lEAbni/38Obqi4vWFbGmUZZkru6bmAJ1n7CPfw4teriJ5vKm/QsJO2mUHA+b?=
+ =?us-ascii?Q?+KSxG7yS06Km+Ulsp8tI5iVhNgWumJJFKfiwqrSC3tgq6xAvWVaMtZGYPVMR?=
+ =?us-ascii?Q?/72GIf/Y5nKBDiCoYWUfpXiyEcQ3RxyThzVuwsBxe+5WqriuphxAk30fbBJu?=
+ =?us-ascii?Q?83vE5B2NLi34C+rH0P1VuoXlkwENekrfnNxypnvX0O4Oe7Kfv5WcVr0mU5ie?=
+ =?us-ascii?Q?Kdu2wzVXWJ7Nw8aYTA0PKViQEZA8hTjMLHSzpmtatepv3Fh+e/tPjvwRLDIL?=
+ =?us-ascii?Q?GkX9MfgVQc/dCWdGBCmUIzTXMozLu2Djggu9iUlCrSOXpkZ1MLOLwK+yLFvO?=
+ =?us-ascii?Q?vEbWJltIzzZ8DJs1tLPiqfSkEyRH6FI/jMYqhHhBqfyua3s040dsx4CF/hSZ?=
+ =?us-ascii?Q?cWLcjobeNHzN9mXClUMgPjSdKqZDU7Ocufu+G8x+8truDGmTknuImGz8y+Ni?=
+ =?us-ascii?Q?/dLoXwJq8Z5zICXjuGj2RXA2nmaQOBehQiQX7J0I?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9507227-a1d2-4f9e-e8a7-08da6634fe0f
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 07:38:22.6102
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FnMzM53jHt4r0QRv5fyykIu0Py/KJ1urbY9bYMMMFWI1gagqoANEawoy54vYYf48NAxXqbnsUdKJ0rcxrd5ohA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6615
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/07/2022 14:28, Tinghan Shen wrote:
-> The max clock items for the dts node with compatible
-> 'mediatek,mt8195-smi-sub-common' should be 3.
-> 
-> However, the dtbs_check of such node will get following message,
-> arch/arm64/boot/dts/mediatek/mt8195-evb.dtb: smi@14010000: clock-names: ['apb', 'smi', 'gals0'] is too long
->          From schema: Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
-> 
-> It's because the 'mediatek,mt8195-smi-sub-common' compatible incorrectly
-> matches the 'else' conditions for gen2 HW without gals.
-> 
-> Rewrite the 'else' condition to specifically identify the compatibles
-> that utilizing gen2 HW without gals.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+adjust the value range of gop size from [0, 65535] to [1, 8000].
+when the gop size is set to a too large value,
+it may affect the encoded picture quality.
+so constrain it to a reasonable range.
 
+Fixes: 0401e659c1f92 ("media: amphion: add v4l2 m2m vpu encoder stateful driver")
+Signed-off-by: Ming Qian <ming.qian@nxp.com>
+---
+ drivers/media/platform/amphion/venc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/drivers/media/platform/amphion/venc.c b/drivers/media/platform/amphion/venc.c
+index 461524dd1e44..37212f087fdd 100644
+--- a/drivers/media/platform/amphion/venc.c
++++ b/drivers/media/platform/amphion/venc.c
+@@ -644,7 +644,7 @@ static int venc_ctrl_init(struct vpu_inst *inst)
+ 			  BITRATE_DEFAULT_PEAK);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_GOP_SIZE, 0, (1 << 16) - 1, 1, 30);
++			  V4L2_CID_MPEG_VIDEO_GOP_SIZE, 1, 8000, 1, 30);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+ 			  V4L2_CID_MPEG_VIDEO_B_FRAMES, 0, 4, 1, 0);
+-- 
+2.36.1
 
-
-Best regards,
-Krzysztof

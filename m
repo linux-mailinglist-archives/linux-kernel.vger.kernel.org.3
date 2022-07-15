@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9725763AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C000F5763AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiGOOcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 10:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
+        id S231214AbiGOOdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 10:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGOOcj (ORCPT
+        with ESMTP id S229456AbiGOOdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 10:32:39 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3974AD77
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:32:38 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id l12so3372002plk.13
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:32:38 -0700 (PDT)
+        Fri, 15 Jul 2022 10:33:41 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3602510C2
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:33:40 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so11738132pjm.2
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:33:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KGDc8EbuqC0PvAxCnIwTKvxHYhgAZfQOE+/RAi143ug=;
-        b=JCgSYiRX6HA4YO0cyySvx4Bzs0RhBJGyDuDQdzypDWRq6F+EUrMezPWwe6pBZ73dAd
-         RIil1PTT1JVXwkO/GPq8J7pKkkIlUqXw66FyY+PFbO2HMF6uHZW1wMwMhjtAB6PhjkEv
-         0qii89D5ckU+mD87QNqOlWnP6SLyUNb9gs8XVHiMXJpuul1mKMa/inhbicja9fNM8h6Q
-         0oHBLCdQVMZrvJnVVDP9dE9xdiO6LgxvXAG67eued3ZtvkhbkAJyKCyXO7K2BPkIc6x3
-         23HcMu1gMWtTgfRsduOFKcOmxZTgjRlkd9Qrid0PSb5xRXusMzxkNShxTgSyBr3vrndt
-         wluQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding:content-disposition;
+        bh=ETS6R/gPq2RSjpJtoZ0ZInyQq2hDybN3Ayjsi3IlLeQ=;
+        b=bt8pTM+aN67HKKD/sVIEtuHlnT/Pt7AtIIZATXfKcX5praNunXoKiIofKwdM8W1AsJ
+         DsYuBrx1T/jCu+r7Bo9O7u75BqSWspiTMihYjqILSnEKKKisqRHuOIlPmaiD/kbdlrT4
+         ITzlNCKawahSqTB6XAGABwOegu8/O0iX2unSifM68NMmeTJC+GFghqv84dEkQXpOSplo
+         keHMuyLOJlpDx+h/TqizPludICSz/Df16R4noXpBgypJbLccOPA5lwlrV0vNdtWejHES
+         +ARlMb4puUIMJV6ZiiPoM3K0a8jtB7pjk+FWiiSUMmWDNxuh2yYoZAMhBFFchHS7Wlh5
+         tsvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KGDc8EbuqC0PvAxCnIwTKvxHYhgAZfQOE+/RAi143ug=;
-        b=UtwyzpJPww/pI4tWLtTDUy5aqGYEzASQpdl7+uYYJZsGxkLkKBqR6V9bnuj3C6HKHu
-         HOhesJrR+awiAEFcwK5n2gQOz/wYElFR00ppZ0/eGdkK+usy6s8IOJDcsjQFQDnIF2cI
-         Tn4Zzc+3hkaHszpm0msy0uZ92+kT8S4Oxsi3DcqkdKbV/hwCDuvkUE7IyE0Cc9DiK/Hs
-         kdHftWl9N45n2cxRl3MECp8dmhE0UJJXslcTM4NAhju+SMOCS3oRebqUf00Re8GlODbm
-         0qx/v8VIieWQ6Xm0I8uw+6lFwDoEhyezBQqzIe/g1RohLMphJR0IKT6xqPb5Ov80pcqp
-         SN8Q==
-X-Gm-Message-State: AJIora++C0exlDCtoZgQqmrDzKceX9HQMJyryLyMiZJa74caSBic8Q0p
-        pIeBVbE1kg5CpSItnU/jsQzCwA==
-X-Google-Smtp-Source: AGRyM1vrP4fMl5xqO1RnpN7iB0+xQmieg3i1s2EH5bpDyK5MEzUlgFWBRCAR7K8wHJxGL+selF7gqA==
-X-Received: by 2002:a17:90b:2242:b0:1f0:6d85:e196 with SMTP id hk2-20020a17090b224200b001f06d85e196mr16405063pjb.3.1657895557596;
-        Fri, 15 Jul 2022 07:32:37 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id x62-20020a628641000000b0052842527052sm3844497pfd.189.2022.07.15.07.32.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 07:32:37 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 14:32:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
-        shuah@kernel.org, maz@kernel.org, oliver.upton@linux.dev,
-        shan.gavin@gmail.com
-Subject: Re: [PATCH] KVM: selftests: Double check on the current CPU in
- rseq_test
-Message-ID: <YtF6gVYgMhoiD0Pe@google.com>
-References: <20220714080642.3376618-1-gshan@redhat.com>
- <cd5d029c-b396-45ef-917b-92e054659623@redhat.com>
- <YtA3s0VRj3x7vO7B@google.com>
- <be806f9c-861a-8da8-d42e-1d4271c3a326@redhat.com>
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding
+         :content-disposition;
+        bh=ETS6R/gPq2RSjpJtoZ0ZInyQq2hDybN3Ayjsi3IlLeQ=;
+        b=oKMgRT3LrbFH+/W+EXnRdWtjz6CyF7vPcxzlVhbkRMmlNpc7goWPfNNNFxEWTgY90Q
+         t6auQ11H/L1DN6Fnbm7lHfBd17WO7mvDLOITb9PDakm/mVdv5hwZpn4chhzU3+vnqejf
+         Ao5EDbZfuLEMQ+CaorLk0geHwfSJbZq3uikH1EApWQrzVyooPXD+48hrATILqa0okNjN
+         M3IfrK3vtBvBdXYJwVzn6XOXTomxdKykJmFgzASJgTA8cLKU5El48RzP7FoZ6eQb/UMm
+         1jwrEd9UrKKLhsSB+EEWu9ZIJ5mHzFIRM9TULbCX1f3B/floFcueApRkujdeqQrqdRnc
+         hzIQ==
+X-Gm-Message-State: AJIora9QmoNAxP5ZX/VkzsKPAHjri7AvEuykPTDyhR/SrLd3KTdlT2JS
+        3hwGLeMXkPsCfVNhqnTvb5I=
+X-Google-Smtp-Source: AGRyM1v7KZnjovARbUtknd+OdMFw3XSHwS0vLlBBAaDMu3927zuuWFNgwauB/PQtQy7lvjMrRP0AWA==
+X-Received: by 2002:a17:902:cf4b:b0:16c:4634:72 with SMTP id e11-20020a170902cf4b00b0016c46340072mr13722268plg.15.1657895619748;
+        Fri, 15 Jul 2022 07:33:39 -0700 (PDT)
+Received: from pc ([103.142.140.127])
+        by smtp.gmail.com with ESMTPSA id r16-20020a63fc50000000b0041245ccb6b1sm3237116pgk.62.2022.07.15.07.33.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 15 Jul 2022 07:33:39 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 22:33:30 +0800
+From:   Zackary Liu <zackary.liu.pro@gmail.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     "=?utf-8?Q?mingo=40redhat.com?=" <mingo@redhat.com>,
+        "=?utf-8?Q?peterz=40infradead.org?=" <peterz@infradead.org>,
+        "=?utf-8?Q?juri.lelli=40redhat.com?=" <juri.lelli@redhat.com>,
+        "=?utf-8?Q?dietmar.eggemann=40arm.com?=" <dietmar.eggemann@arm.com>,
+        "=?utf-8?Q?rostedt=40goodmis.org?=" <rostedt@goodmis.org>,
+        "=?utf-8?Q?bsegall=40google.com?=" <bsegall@google.com>,
+        "=?utf-8?Q?mgorman=40suse.de?=" <mgorman@suse.de>,
+        "=?utf-8?Q?bristot=40redhat.com?=" <bristot@redhat.com>,
+        "=?utf-8?Q?vschneid=40redhat.com?=" <vschneid@redhat.com>,
+        "=?utf-8?Q?kuyo.chang=40mediatek.com?=" <kuyo.chang@mediatek.com>,
+        "=?utf-8?Q?linux-kernel=40vger.kernel.org?=" 
+        <linux-kernel@vger.kernel.org>
+Message-ID: <F1E08DFA-40E8-447E-B37A-DEE651E87F80@getmailspring.com>
+In-Reply-To: <7CD2EF28-F810-4733-8246-28D9821C180B@getmailspring.com>
+References: <7CD2EF28-F810-4733-8246-28D9821C180B@getmailspring.com>
+Subject: Re: [PATCH] sched/pelt: simplify load_sum assignment code in
+ attach_entity_load_avg()
+X-Mailer: Mailspring
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
-In-Reply-To: <be806f9c-861a-8da8-d42e-1d4271c3a326@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,68 +84,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022, Gavin Shan wrote:
-> Hi Paolo and Sean,
-> 
-> On 7/15/22 1:35 AM, Sean Christopherson wrote:
-> > On Thu, Jul 14, 2022, Paolo Bonzini wrote:
-> Well, I don't think migration_worker() does correct thing, if I'm understanding
-> correctly. The intention seems to force migration on 'main' thread by 'migration'
-> thread?  If that is the case, I don't think the following function call has correct
-> parameters.
-> 
->     r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
-> 
->     it should be something like:
-> 
->     r = sched_setaffinity(getpid(), sizeof(allowed_mask), &allowed_mask);
-> 
-> If we're using sched_setaffinity(0, ...) in the 'migration' thread, the CPU
-> affinity of 'main' thread won't be affected. It means 'main' thread can be
-> migrated from one CPU to another at any time, even in the following point:
-> 
->     int main(...)
->     {
->           :
->           /*
->            * migration can happen immediately after sched_getcpu(). If
->            * CPU affinity of 'main' thread is sticky to one particular
->            * CPU, which 'migration' thread supposes to do, then there
->            * should have no migration.
->            */
->           cpu = sched_getcpu();
->           rseq_cpu = READ_ONCE(__rseq.cpu_id);
->           :
->     }
-> 
-> So I think the correct fix is to have sched_setaffinity(getpid(), ...) ?
-> Please refer to the manpage.
-> 
->    https://man7.org/linux/man-pages/man2/sched_setaffinity.2.html
->    'If pid is zero, then the calling thread is used'
 
-Oof, and more explicitly the rest of that sentence clarifies that the result of
-getpid() will target the main thread (I assume "main" means thread group leader).
 
-   Specifying pid as 0 will set the attribute for the calling thread, and passing
-   the value returned from a call to getpid(2) will set the attribute for the main
-   thread of the thread group.
+On Jun 22 2022, at 11:49 pm, Zackary Liu <zackary.liu.pro@gmail.com> wrote:
 
-I'm guessing my test worked (in that it reproduced the bug) by virtue of the
-scheduler trying to colocate all threads in the process.
+> On Jun 22 2022, at 11:20 pm, Vincent Guittot
+> <vincent.guittot@linaro.org> wrote:
+> 
+>> On Tue, 21 Jun 2022 at 17:45, Zhaoyu Liu <zackary.liu.pro@gmail.com> wrote:
+>>> 
+>>> In commit 40f5aa4c5eae ("sched/pelt: Fix attach_entity_load_avg()
+>>> corner case"),
+>>> these code was committed:
+>>>         if (se_weight(se) < se->avg.load_sum)
+>>>                 se->avg.load_sum = div_u64(se->avg.load_sum, se_weight(se));
+>>>         else
+>>>                 se->avg.load_sum = 1;
+>>> 
+>>> they could be replace with:
+>>>         se->avg.load_sum = div_u64(se->avg.load_sum, se_weight(se))
+>>> ?: 1;
+>>> 
+>>> to make the code cleaner.
+>> 
+>> This quite subjective as I consider current version cleaner than your proposal
+> 
+> Thanks for your reply, vincent
+> 
+> Perhaps, this code is more concise, and this form can exist in many
+> places in the kernel, and can be searched with 'grep "?: 1;" -nR kernel'
+> 
+> --
+> zackary
 
-In my defense, the die.net copy of the manpages quite clearly uses "process"[1],
-but that was fixed in the manpages in 2013[2]!?!!?  So I guess the takeaway is
-to use only the official manpages.
+I have sent a patch couple days ago but still i don't get the reply,
+I am looking forward to your reply,
+thank you
 
-Anyways, for the code, my preference would be to snapshot gettid() in main() before
-spawning the migration worker.  Same result, but I would rather the test explicitly
-target the thread doing rseq instead of relying on (a) getpid() targeting only the
-main thread and (b) the main thread always being the rseq thread.  E.g. if for some
-reason a future patch moves the rseq code to its own worker thread, then getpid()
-would be incorrect.
-
-Thanks for figuring this out!
-
-[1] https://linux.die.net/man/2/sched_setaffinity
-[2] 6a7fcf3cc ("sched_setaffinity.2: Clarify that these system calls affect a per-thread attribute")
+--
+zackary

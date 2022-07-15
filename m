@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB31576656
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4CD576650
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbiGORq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 13:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
+        id S230363AbiGORqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 13:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiGORpl (ORCPT
+        with ESMTP id S230224AbiGORpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 13:45:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670C12F3BF;
-        Fri, 15 Jul 2022 10:45:37 -0700 (PDT)
+        Fri, 15 Jul 2022 13:45:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD5032051;
+        Fri, 15 Jul 2022 10:45:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 192FECE3081;
-        Fri, 15 Jul 2022 17:45:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 86427C36AF3;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48566622D1;
+        Fri, 15 Jul 2022 17:45:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B0F11C36AE3;
         Fri, 15 Jul 2022 17:45:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1657907134;
-        bh=FKwuPmbifdJp05q/AXewulk5IWiHNM6MudgMXbvD4BY=;
+        bh=sl9S1Nd36uJ6hxsL45EvPqB72+obWxJZbjL9QOBYeYU=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Dkvu4gOZe5ozMAQBkRfmq243/9LI/A6UgVaHCiC1uhdPquTaN1a7CrNC2XX3j/rRe
-         TQIQ33CoBIaQvx5eirRR9UhnfAe8/rP5kcdlSGBd56rww4xho4W2dUb7uOyKsXG2qL
-         daTovYbH9o89xjz3fvCwWnxO782tFMM0HNqCtIYb3IDMEoBCBiIWYv98L06gQHsBDc
-         BoZMQbgAZv4wJ5L2DGEl4+ZuEn2+aFv0hj+iQPBqs7CP8KuZORmZRp6FBBOtrBD0yt
-         LeTqNtyslUpZcZVsGpuiutsgp/dFcLmYJun0ubSeSxyfMXPBe9ekc5iFBusae16FJQ
-         IddwhROLRECJg==
+        b=XE8ZRH4tjLL/mpvBTbHyhiq7jecaaP+yFC+Lt2h75Q75VzUgt8VYHumAlG6g91dmr
+         lwl09R5E2wZlzHUKqorDsCpis212wLZhNYm0Vou5Cqzyunt44j8OaVs8xnSIqRY1P7
+         ALddiJQnnCtJYnOjOYURrPbPX2qWMgF2J9hcebs46Z/35FFn+dgEHWXH09xLdIOJhH
+         HVjWGjo+WvmJzJQxGzxWmpZKw5YyYneqPmb2jke3ZC6haU0wgVb+e1ityji5Avm/j4
+         FaP37xNHJ/xkTmhIMVg5jnJmDnsYm5b1MmEuiY6Tlpl15GJs2nmXZRck4MB2rRQVDt
+         EiohudG++A7Vw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6F3B1E45230;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 950E5E4521F;
         Fri, 15 Jul 2022 17:45:34 +0000 (UTC)
-Subject: Re: [GIT PULL] platform-drivers-x86 for 5.19-4
+Subject: Re: [GIT PULL] SPI fixes for v5.19-rc4
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <fc307e0b-2b4d-165d-230d-8c5cddf64dd4@redhat.com>
-References: <fc307e0b-2b4d-165d-230d-8c5cddf64dd4@redhat.com>
+In-Reply-To: <20220715133200.2A098C34115@smtp.kernel.org>
+References: <20220715133200.2A098C34115@smtp.kernel.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <fc307e0b-2b4d-165d-230d-8c5cddf64dd4@redhat.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.19-4
-X-PR-Tracked-Commit-Id: 5ad26161a371e4aa2d2553286f0cac580987a493
+X-PR-Tracked-Message-Id: <20220715133200.2A098C34115@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.19-rc4
+X-PR-Tracked-Commit-Id: 73d5fe046270281a46344e06bf986c607632f7ea
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 2a347a06ebb1b186a5cb919c9f5ab6e040554be7
-Message-Id: <165790713444.27298.509695428095453831.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 8006112d6c4137bc48ca723261198c63d9e6d38a
+Message-Id: <165790713460.27298.2486708565414581628.pr-tracker-bot@kernel.org>
 Date:   Fri, 15 Jul 2022 17:45:34 +0000
-To:     Hans de Goede <hdegoede@redhat.com>
+To:     Mark Brown <broonie@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 15 Jul 2022 13:24:59 +0200:
+The pull request you sent on Fri, 15 Jul 2022 14:31:50 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.19-4
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.19-rc4
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/2a347a06ebb1b186a5cb919c9f5ab6e040554be7
+https://git.kernel.org/torvalds/c/8006112d6c4137bc48ca723261198c63d9e6d38a
 
 Thank you!
 

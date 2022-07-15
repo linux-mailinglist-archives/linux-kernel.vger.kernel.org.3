@@ -2,159 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AAB5758DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0293A5758E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241181AbiGOAyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 20:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
+        id S241205AbiGOAyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 20:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241046AbiGOAxw (ORCPT
+        with ESMTP id S241147AbiGOAyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 20:53:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4666420;
-        Thu, 14 Jul 2022 17:53:35 -0700 (PDT)
-Received: from dimapc.. (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9D2B16601A58;
-        Fri, 15 Jul 2022 01:53:31 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657846414;
-        bh=dr1tdx4u+QvM7fiw6wlWFPP0AWqXDJCr42blBc4VyZo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ro35pEWIBbDVr6SddC5oV5g2IzAdYCQ3y39D9s1jFkM7smnJyAgxodZSXxxyi3By8
-         vMPfDkSHreXz6dIrXY8zBhAWBr1SM9hPDKzcb1APoGPjVGznW4DbygpAPhmM4v4iqy
-         kNNVNMXe48miNTWrShOswaJRdmoyXxS+0Vc5FpskaDX7p6X/PMys3epI9Nmfk8p88w
-         W05tRtqheMg9fof74rfgYjOepSdS637dIAmjASMEhKQqWj6B1RlfwPWmspDEMsVozQ
-         9wRaNESK5yw9FLxoEgVom8kYmxVCD9KC6cScU7I+CCyZasFjtY2KBGQMWY6R6v6p3h
-         1UaDnXFpv8SQQ==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas_os@shipmail.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v1 6/6] dma-buf: Remove internal lock
-Date:   Fri, 15 Jul 2022 03:52:44 +0300
-Message-Id: <20220715005244.42198-7-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220715005244.42198-1-dmitry.osipenko@collabora.com>
-References: <20220715005244.42198-1-dmitry.osipenko@collabora.com>
+        Thu, 14 Jul 2022 20:54:17 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A7A7478E;
+        Thu, 14 Jul 2022 17:53:57 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LkXq422mjzjWy3;
+        Fri, 15 Jul 2022 08:51:12 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Jul 2022 08:53:49 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Jul 2022 08:53:48 +0800
+Subject: Re: [PATCH 5.10 000/131] 5.10.131-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
+References: <20220713094820.698453505@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <545ebb5f-164d-c627-4528-4b1acc988450@huawei.com>
+Date:   Fri, 15 Jul 2022 08:53:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220713094820.698453505@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The internal dma-buf lock isn't needed anymore because the updated
-locking specification claims that dma-buf reservation must be locked
-by importers, and thus, the internal data is already protected by the
-reservation lock. Remove the obsoleted internal lock.
 
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- drivers/dma-buf/dma-buf.c | 5 -----
- include/linux/dma-buf.h   | 9 ---------
- 2 files changed, 14 deletions(-)
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 37545ecb845a..4cc739537ebd 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -656,7 +656,6 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
- 
- 	dmabuf->file = file;
- 
--	mutex_init(&dmabuf->lock);
- 	INIT_LIST_HEAD(&dmabuf->attachments);
- 
- 	mutex_lock(&db_list.lock);
-@@ -1459,7 +1458,6 @@ int dma_buf_vmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map)
- 		return -EINVAL;
- 
- 	dma_resv_lock(dmabuf->resv, NULL);
--	mutex_lock(&dmabuf->lock);
- 	if (dmabuf->vmapping_counter) {
- 		dmabuf->vmapping_counter++;
- 		BUG_ON(iosys_map_is_null(&dmabuf->vmap_ptr));
-@@ -1479,7 +1477,6 @@ int dma_buf_vmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map)
- 	*map = dmabuf->vmap_ptr;
- 
- out_unlock:
--	mutex_unlock(&dmabuf->lock);
- 	dma_resv_unlock(dmabuf->resv);
- 	return ret;
- }
-@@ -1500,13 +1497,11 @@ void dma_buf_vunmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map)
- 	BUG_ON(!iosys_map_is_equal(&dmabuf->vmap_ptr, map));
- 
- 	dma_resv_lock(dmabuf->resv, NULL);
--	mutex_lock(&dmabuf->lock);
- 	if (--dmabuf->vmapping_counter == 0) {
- 		if (dmabuf->ops->vunmap)
- 			dmabuf->ops->vunmap(dmabuf, map);
- 		iosys_map_clear(&dmabuf->vmap_ptr);
- 	}
--	mutex_unlock(&dmabuf->lock);
- 	dma_resv_unlock(dmabuf->resv);
- }
- EXPORT_SYMBOL_NS_GPL(dma_buf_vunmap_unlocked, DMA_BUF);
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index da924a56d58f..abdd99042c77 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -326,15 +326,6 @@ struct dma_buf {
- 	/** @ops: dma_buf_ops associated with this buffer object. */
- 	const struct dma_buf_ops *ops;
- 
--	/**
--	 * @lock:
--	 *
--	 * Used internally to serialize list manipulation, attach/detach and
--	 * vmap/unmap. Note that in many cases this is superseeded by
--	 * dma_resv_lock() on @resv.
--	 */
--	struct mutex lock;
--
- 	/**
- 	 * @vmapping_counter:
- 	 *
--- 
-2.36.1
+On 2022/7/13 21:10, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.131 release.
+> There are 131 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 15 Jul 2022 09:47:55 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.131-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
+Tested on arm64 and x86 for 5.10.131-rc2,
+
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-5.10.y
+Version: 5.10.131-rc2
+Commit: 6729599d99f8543a9c2525f3fbaccabccc04ad09
+Compiler: gcc version 7.3.0 (GCC)
+
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9022
+passed: 9022
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9022
+passed: 9022
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

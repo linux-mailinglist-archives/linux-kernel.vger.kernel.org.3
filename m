@@ -2,61 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F095767FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99605767FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 22:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiGOUJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 16:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S231183AbiGOUKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 16:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiGOUJU (ORCPT
+        with ESMTP id S229546AbiGOUKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 16:09:20 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABE919C22
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:09:20 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id mf4so10825940ejc.3
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:09:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=date:from:to:subject:message-id:mail-followup-to:mime-version
-         :content-disposition;
-        bh=5FVWOTGRmBd67THME281A+u5iAgShcfjsnGpyMupojg=;
-        b=XsQvy/WWy6icvWBcyL/XJHCfJ0ZwBi70qT3bkJBFyYJlhJIlVrGYIAlSXRRiNq/tF0
-         LYp7CAQaQq2kF1aLGW+HpskqAW1oIuAkknzk57VFx89NQniv63hdLOtJoo+Q4Jgzsxmw
-         MGTN3rh0EDW1GqQzjarXm8wf7RuAxYlXmMbb0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mail-followup-to
-         :mime-version:content-disposition;
-        bh=5FVWOTGRmBd67THME281A+u5iAgShcfjsnGpyMupojg=;
-        b=zk/8IQ6morPHCPdPlLVIkjWB4dhxXk0dWJkkOOi259Lid5i4b54eiBZ5ZJGdGqzj6R
-         XYN79HNrv+68Pw8QK7hT/Vw/m7hc+DR32Bkt28O5beK+yA4wZhnailp2mMorcs873T0l
-         b/+moUf9Z3932GUntz9e9K/y54vO8TIRV9aou1Tlhx+En/qG3nHH7FzHK2DG5/blrS8q
-         lE1v9d118dOGTrDi5F1+vI6HK2kgbgqB7B8OykrsXTxt2gd2SvGf3EsSAcIvv8t98KuF
-         aElh8EK2FEC0LD5CBHT/SgtuzME10WPYsS8tnydoESbwTBSFQ7YBZlg1nZiJxAUw0sas
-         hU7w==
-X-Gm-Message-State: AJIora955AC83wADsLnKp5b2v8KMhN/VtvCy5DW7ONIMSm5J27bRuTeF
-        G1bBNOdmymbtDV6Y245YFg16dKq2Jyefeg==
-X-Google-Smtp-Source: AGRyM1vLRmUfqHYfwZ4yI8yNE6b56e1USctVg4mLVZQ7+MxexcrClBw48fj0C4QI+1Poj+dHkpgiMQ==
-X-Received: by 2002:a17:907:60c7:b0:72b:5651:e1f8 with SMTP id hv7-20020a17090760c700b0072b5651e1f8mr15154093ejc.375.1657915758449;
-        Fri, 15 Jul 2022 13:09:18 -0700 (PDT)
-Received: from carbon.gago.life (78-83-68-78.spectrumnet.bg. [78.83.68.78])
-        by smtp.gmail.com with ESMTPSA id e23-20020a170906315700b0072b810897desm2331678eje.105.2022.07.15.13.09.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 13:09:18 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 23:09:17 +0300
-From:   Petko Manolov <petko.manolov@konsulko.com>
-To:     linux-kernel@vger.kernel.org
-Subject: GCC fails to spot uninitialized variable
-Message-ID: <YtHJbckxy1FJ3ts7@carbon.gago.life>
-Mail-Followup-To: linux-kernel@vger.kernel.org
+        Fri, 15 Jul 2022 16:10:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA8A4B0F4
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 13:10:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0816AB82E4C
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 20:10:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A72C341C0;
+        Fri, 15 Jul 2022 20:10:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657915805;
+        bh=HJoPFEFLh4BbRDqJRXWZVqcGp9gCtdCVTUp8CpfJo00=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e9jtgz8TBxYvw4iLTMWuVKyJqUZQlf1rMd3lHZeDy9NOj7+AjOr0DQBgGiLocunWW
+         T1wdkDyQrlbYzIM28qPdLQn3yBt2YHC+/XVOstYOgBF4oUtiliRLinfsNZOUP+60nM
+         yYCtzrLVDM8yxKWNS7ldpXaLXzplYV1JQkumDFQC0CfWv16eZXeNcB9wVopjaCnswv
+         tRFRZuWmoGbGLOO2TYemv38NF3+VupdTxCmnbj1h7Av9QLIosoXDcW7q9GUJ6KWG3m
+         5ea5qBAGcVw6nWX6Er71OXbwY3h7k/TtlyhudFqUkFe2NA26bu1/H4WvopUnZWtWuV
+         zWc3+xRZG1vyQ==
+Date:   Fri, 15 Jul 2022 13:10:03 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: <instantiation>:3:3: error: invalid instruction mnemonic
+ 'annotate_unret_safe'
+Message-ID: <YtHJm0Uiv4c7ihTf@dev-arch.thelio-3990X>
+References: <202207160308.NAwtZPxG-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <202207160308.NAwtZPxG-lkp@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,48 +56,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	Guys,
+On Sat, Jul 16, 2022 at 03:22:46AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   9b59ec8d50a1f28747ceff9a4f39af5deba9540e
+> commit: 9bb2ec608a209018080ca262f771e6a9ff203b6f objtool: Update Retpoline validation
+> date:   3 weeks ago
+> config: i386-randconfig-a011-20220704 (https://download.01.org/0day-ci/archive/20220716/202207160308.NAwtZPxG-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 2da550140aa98cf6a3e96417c87f1e89e3a26047)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9bb2ec608a209018080ca262f771e6a9ff203b6f
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 9bb2ec608a209018080ca262f771e6a9ff203b6f
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> <instantiation>:3:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:11:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:19:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:27:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:35:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:43:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:51:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:59:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:67:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:75:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:83:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:91:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:99:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:107:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:115:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:123:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
+>     ^
+>    <instantiation>:131:3: error: invalid instruction mnemonic 'annotate_unret_safe'
+>      ANNOTATE_UNRET_SAFE
+>      ^~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/../../x86/xen/xen-head.S:26:2: note: while in macro instantiation
+>     .rept ((1 << 12) / 32)
 
-Today i was bitten by a stupid bug that i introduced myself while writing some
-v4l2 code.  Looking at it a bit more carefully i was surprised that GCC didn't
-catch this one, as it was something that should definitely emit a warning.
+Looks like https://git.kernel.org/tip/3131ef39fb03bbde237d0b8260445898f3dfda5b
+should take care of this (not clang specific, GCC errors too with the
+same configuration).
 
-When included into the driver, this particular code:
-
-int blah(int a, int *b)
-{
-	int ret;
-
-	switch (a) {
-	case 0:
-		ret = a;
-		break;
-	case 1:
-		ret = *b;
-		break;
-	case 2:
-		*b = a;
-		break;
-	default:
-		ret = 0;
-	}
-
-	return ret;
-}
-
-somehow managed to defeat GCC checks.  Compiling it as a standalone .c file
-with:
-
-	gcc -Wall -O2 -c t.c
-
-gives me nice:
-
-t.c:19:16: warning: 'ret' may be used uninitialized in this function [-Wmaybe-uninitialized]
-   19 |         return ret;
-      |                ^~~
-
-Any idea what might have gone wrong?
-
-
-cheers,
-Petko
+Cheers,
+Nathan

@@ -2,70 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93640575EFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 12:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3B9575EFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 12:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232813AbiGOKEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 06:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
+        id S232764AbiGOKF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 06:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbiGOKEn (ORCPT
+        with ESMTP id S232684AbiGOKFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 06:04:43 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5D229837;
-        Fri, 15 Jul 2022 03:04:41 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id x184so4280247pfx.2;
-        Fri, 15 Jul 2022 03:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fo6J+XbkB7jjFutwN0VEI7YAOj/+xVVF5CCYclhdBW8=;
-        b=cpZqSeLeXgdFr2xselYTiiyS8QmVWfuiDmxChj7HxYmgiUfjLE8/1PgSKTdXI2l6AY
-         hDVqVGF8dd9yNNRSx+ar2TvH/V4prpOelnV9VCpx6zeWFGdsf+aYsYw+2Ea4rIHWsSqF
-         tNg9bQagye59J/1AAQy8y0pbU4lyXJH7H+FWPM8uIvg1WjPQNB6zF8MIKhMhNWb8ptvt
-         7NbqvmrV1pjyRfVFhhd2UArs2lM0Fhw/hFtZ1OlfT3KrTAAajj+LRSF7IpIAxaEA2ZmP
-         QkviGo1oZ6fm4BGxoCSQIQyQYrdMaiTZzSFbQwq2SQ4IisfhWe+izHODLXyFZyWS9Bmv
-         ZDCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fo6J+XbkB7jjFutwN0VEI7YAOj/+xVVF5CCYclhdBW8=;
-        b=T00zc1G+q5ptnahUDonJzuHFwdVnU6EW+SjsjyO/Bb1ibTeqPIenPqmFXRjxUvdUCt
-         idLr60xqjV8VmJWICL6/WSBLXnrx7HzxkElsxBkY1nZjvb+axnbyEf+NR1N5oCyvcgjm
-         fD4WP2Ctya4VN44vnIEdkQ6rmhBYG92sFBAyIcv29GfLH5ID8CTv+qpd1Lp5+FQ6pezh
-         x0GR9TEQaIWvs+pUbXeEb4w418dWM/kMpyTUDx2Qged1wGdKYKYuQhACH1ZYFtji68VB
-         c9Lngf8mm+fKLWoFiU157mbqdsSflQfhQJhjimoQBXTB7PrQa7HglNNjxDhVv7jQ92dP
-         HR1Q==
-X-Gm-Message-State: AJIora9J2SPrPl3ChtDE/eLJyivacFPO4RkbEZksOBGvE+leOOpLkOdn
-        jEZAanit+U2fLs7yH4hEnwU=
-X-Google-Smtp-Source: AGRyM1tIJYCQbdShB8m/Lq0TBH8HHecZlnvolRiCPWc6nIJdTSDw0VUSFNsGsQCNp4wIVp0QnCZ4bA==
-X-Received: by 2002:a05:6a00:1d8f:b0:52a:b787:b480 with SMTP id z15-20020a056a001d8f00b0052ab787b480mr13150767pfw.71.1657879480774;
-        Fri, 15 Jul 2022 03:04:40 -0700 (PDT)
-Received: from genechen-System-Product-Name.richtek.com ([2402:7500:569:4518:3851:6d9:846d:fbd1])
-        by smtp.gmail.com with ESMTPSA id v12-20020a1709028d8c00b0016c1948ef7esm3033791plo.296.2022.07.15.03.04.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 03:04:40 -0700 (PDT)
-From:   Gene Chen <gene.chen.richtek@gmail.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, gene_chen@richtek.com,
-        cy_huang@richtek.com
-Subject: [PATCH 3/3] usb: typec: tcpci_rt1711h: Add compatible with rt1715
-Date:   Fri, 15 Jul 2022 18:04:18 +0800
-Message-Id: <20220715100418.155011-4-gene.chen.richtek@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220715100418.155011-1-gene.chen.richtek@gmail.com>
-References: <20220715100418.155011-1-gene.chen.richtek@gmail.com>
+        Fri, 15 Jul 2022 06:05:10 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2070.outbound.protection.outlook.com [40.107.244.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E6882F95;
+        Fri, 15 Jul 2022 03:04:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hexZHENE4tjFFtsrMSez40gypjcnHzCrdMP/dtnYc8T2i3V8f88qqfo1k0zZ8XC4VanxeQxnt7SKD1EdD71tfaxYMhnVI1h0BtHZ7Aq8D9E8WyGk07ErkfCw4Iro6hHLX+fk9dtivSgWnoJ1A8F2C4BvSH1zq1qn1zYVuwX1eUC5P23cSq0KFWFmU+BiZxL3HqxfwPBnN8hq+slELmGQBihRDd3E+eR2nhXMsiRAHlkN3tBGE0IvXPy/FMngvDgdbXc0v+nHAEK2u7ygezmvdh/SMK+1RUW8qzuWEtaLTfXWZ7rjimQplrlyhe5zhiXliH+9oxXb5zfPTkV4KJYtwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pXVfjQaeiZA12KoI9/XHeAV8GzSiN8BYTgOJedGrHB4=;
+ b=GFhpcWIgkWjgXX45+fOgwKdmZ89X1UgIXgecO9SF4zlRwYMH830K8GAlDCpCT5MtF936z+nEgMXf72gPNaFaIo1a3eN59QfiRCZA11w8v5eCIz2KXH2gqjoqPFTqLxEG1njhKnLEgLfsaLM/kPinhqLI9oLaiGck16ObdnCk8nmF5xJZG8p0gHMsopr75a4TrFbSHe+1/A/J2lLNGYMNYEXkgzFD8sGoRRRJbRyimMHGvFexPfuazMEDay657ZsOLzVccN8gzBmqc9senSRsPcRmRpeNLIRg/aFe9642/oKTGGgLIJqLm2SoRTA76qZBpQNpEUSmRdiQhQejZZTX3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pXVfjQaeiZA12KoI9/XHeAV8GzSiN8BYTgOJedGrHB4=;
+ b=XVZKiZGcitkidedOY3/s6ikiYiURt3jpvDSKSVGZZN5ZGSPdWoNu3h0KoEFACgjfdhS2MCrsCUQqolYjpOIrMZFrYgqFTsFelbqM12H3NVO9nqsPSQKQFDUf8Ba1OCc9hohAcucKR9+h3Sg2U+ta4Kaa8lW8XPVrrezHM61x7Dc=
+Received: from BN6PR22CA0070.namprd22.prod.outlook.com (2603:10b6:404:ca::32)
+ by MW3PR12MB4522.namprd12.prod.outlook.com (2603:10b6:303:5f::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Fri, 15 Jul
+ 2022 10:04:52 +0000
+Received: from BN8NAM11FT057.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:ca:cafe::55) by BN6PR22CA0070.outlook.office365.com
+ (2603:10b6:404:ca::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26 via Frontend
+ Transport; Fri, 15 Jul 2022 10:04:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT057.mail.protection.outlook.com (10.13.177.49) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5438.12 via Frontend Transport; Fri, 15 Jul 2022 10:04:52 +0000
+Received: from AerithDEV2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 15 Jul
+ 2022 05:04:47 -0500
+From:   Perry Yuan <Perry.Yuan@amd.com>
+To:     <rafael.j.wysocki@intel.com>, <viresh.kumar@linaro.org>,
+        <Ray.Huang@amd.com>
+CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
+        <Nathan.Fontenot@amd.com>, <Alexander.Deucher@amd.com>,
+        <Jinzhou.Su@amd.com>, <Xinmei.Huang@amd.com>,
+        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Perry Yuan <Perry.Yuan@amd.com>
+Subject: [PATCH v4 01/13] x86/msr: Add the MSR definition for AMD CPPC hardware control.
+Date:   Fri, 15 Jul 2022 06:04:20 -0400
+Message-ID: <ca830355f1470ce53cd56917b0adee66c0b50f00.1657876961.git.Perry.Yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1657876961.git.Perry.Yuan@amd.com>
+References: <cover.1657876961.git.Perry.Yuan@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bb677de1-3489-4cdf-c13b-08da664975d8
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4522:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ++99bUqeRG2RfTv4szQcl6WOdfRJML0FyP3/LPueCKRjFmWwshILYSWYw0GMKtnxtwlKa1DdNe3Yqzizo54Eo2dDkinFXAtcUuvXzy9GYHS1iTxnU5oPtMFnF+jxOd7GNjkfM//1CvfTUfHjlzefIcutiuWSgHh3MtBXR4eKSnPtN1tpHAkeBEFS4x7857x4oqGI+pDQtvxlRz/S2Oz1wFQpEfz1L9jS7JZvlyuMX5yrgx953l8pEmQgLuhJYG2dhBoshf6+kGvoq/K1kpq7AnM1Dbxa5ryLHe6zTaqxb6QCeX1JrgJ/18c0AxzfuzRnJtAEu8dxP0Z0bkoE0v3u8W5qIO+h8cqbBY0tSGssJz5jx4NiJ4k6yincNoR6cOvjr9d3B2rXaAGgTuO5tthDoIgKuXlI07nC4O92CAKscrJ78r3pX68M4TpkQTZ3ezqcB3+rBgGP9dA2tXt44neYu7Efnfz6jJbQxeCYxN+WHC9sQSr8Izui/Q0ZaAyoC8UanVCqXK7UhrJLDWkZCw4wWNqmDh1yjQW06NsrxMn3WZgiqTyzy/fYYozp2mp9UZsoYwe0iHH/vBtt4inlsSSNyvTRbyOQwybrJktykb0C6szeV07FIgUS0g9hCPzyxYHUObVRkyctzyZhKE1n25a0Y0vT/AS1QNhVa2ecuoJZb0ni0mes7TVCdQY3loiRL0APbsNffMqLR7k9cT/sFKmVk6p7m1H1nGeGpZLyDN7Z2vW2K+M9sxuefRT6Nz7V8/OkngbYaLB+1haI0KtnheEOzBZclgAdd2/3jYogZTeExWcJjH5Gzo/6GXlMqy4IgviZ11Ttqs6z7WOn5M9DAEm1uUPRz2KIcNaSMiFVG6kZAz00Z3Lx5w+CtM7w5PBR8HtOUMwjrBw91j6dUgaY9H2zGITW1rwGvHhhBX52uedHkf8=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(136003)(396003)(346002)(46966006)(40470700004)(36840700001)(966005)(70586007)(110136005)(316002)(426003)(6636002)(54906003)(26005)(40460700003)(70206006)(186003)(2906002)(4744005)(6666004)(36756003)(336012)(41300700001)(7696005)(16526019)(4326008)(8676002)(81166007)(82740400003)(47076005)(82310400005)(86362001)(40480700001)(356005)(478600001)(5660300002)(2616005)(8936002)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 10:04:52.1506
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb677de1-3489-4cdf-c13b-08da664975d8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT057.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4522
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,285 +104,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gene Chen <gene_chen@richtek.com>
+This MSR can be used for controlling whether the CPU boost state
+is enabled in the hardware.
 
-Add compatible with rt1715
+AMD Processor Programming Reference (PPR)
+Link: https://www.amd.com/system/files/TechDocs/40332.pdf [p1095]
+Link: https://www.amd.com/system/files/TechDocs/56569-A1-PUB.zip [p162]
 
-Signed-off-by: Gene Chen <gene_chen@richtek.com>
+Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 ---
- drivers/usb/typec/tcpm/tcpci_rt1711h.c | 168 +++++++++++++++++++++++--
- 1 file changed, 161 insertions(+), 7 deletions(-)
+ arch/x86/include/asm/msr-index.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-index b56a0880a044..1fba98e4ef03 100644
---- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-+++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-@@ -10,22 +10,31 @@
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/usb/tcpm.h>
- #include <linux/regmap.h>
- #include "tcpci.h"
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index d27e0581b777..869508de8269 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -548,6 +548,7 @@
+ #define MSR_AMD_CPPC_CAP2		0xc00102b2
+ #define MSR_AMD_CPPC_REQ		0xc00102b3
+ #define MSR_AMD_CPPC_STATUS		0xc00102b4
++#define MSR_AMD_CPPC_HW_CTL		0xc0010015
  
- #define RT1711H_VID		0x29CF
- #define RT1711H_PID		0x1711
-+#define RT1715_DID		0x2173
- 
--#define RT1711H_RTCTRL8		0x9B
-+#define RT1711H_PHYCTRL1	0x80
-+#define RT1711H_PHYCTRL2	0x81
-+
-+#define RT1711H_RTCTRL4		0x93
-+/* rx threshold of rd/rp: 1b0 for level 0.4V/0.7V, 1b1 for 0.35V/0.75V */
-+#define RT1711H_BMCIO_RXDZSEL	BIT(0)
- 
-+#define RT1711H_RTCTRL8		0x9B
- /* Autoidle timeout = (tout * 2 + 1) * 6.4ms */
- #define RT1711H_RTCTRL8_SET(ck300, ship_off, auto_idle, tout) \
- 			    (((ck300) << 7) | ((ship_off) << 5) | \
- 			    ((auto_idle) << 3) | ((tout) & 0x07))
-+#define RT1711H_AUTOIDLEEN_MASK	BIT(3)
-+#define RT1711H_ENEXTMSG_MASK	BIT(4)
- 
- #define RT1711H_RTCTRL11	0x9E
--
- /* I2C timeout = (tout + 1) * 12.5ms */
- #define RT1711H_RTCTRL11_SET(en, tout) \
- 			     (((en) << 7) | ((tout) & 0x0F))
-@@ -35,10 +44,17 @@
- #define RT1711H_RTCTRL15	0xA2
- #define RT1711H_RTCTRL16	0xA3
- 
-+#define RT1711H_RTCTRL18	0xAF
-+/* 1b0 as fixed rx threshold of rd/rp 0.55V, 1b1 depends on RTCRTL4[0] */
-+#define BMCIO_RXDZEN_MASK	BIT(0)
-+
- struct rt1711h_chip {
- 	struct tcpci_data data;
- 	struct tcpci *tcpci;
- 	struct device *dev;
-+	struct regulator *vbus;
-+	bool src_en;
-+	u16 did;
- };
- 
- static int rt1711h_read16(struct rt1711h_chip *chip, unsigned int reg, u16 *val)
-@@ -75,8 +91,9 @@ static struct rt1711h_chip *tdata_to_rt1711h(struct tcpci_data *tdata)
- 
- static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
- {
--	int ret;
- 	struct rt1711h_chip *chip = tdata_to_rt1711h(tdata);
-+	struct regmap *regmap = chip->data.regmap;
-+	int ret;
- 
- 	/* CK 300K from 320K, shipping off, auto_idle enable, tout = 32ms */
- 	ret = rt1711h_write8(chip, RT1711H_RTCTRL8,
-@@ -84,6 +101,14 @@ static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
- 	if (ret < 0)
- 		return ret;
- 
-+	/* Enable PD30 extended message for RT1715 */
-+	if (chip->did == RT1715_DID) {
-+		ret = regmap_update_bits(regmap, RT1711H_RTCTRL8,
-+					 RT1711H_ENEXTMSG_MASK, 0xFF);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	/* I2C reset : (val + 1) * 12.5ms */
- 	ret = rt1711h_write8(chip, RT1711H_RTCTRL11,
- 			     RT1711H_RTCTRL11_SET(1, 0x0F));
-@@ -101,7 +126,37 @@ static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
- 		return ret;
- 
- 	/* dcSRC.DRP : 33% */
--	return rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
-+	ret = rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Enable phy discard retry, retry count 7, rx filter deglitech 100 us */
-+	ret = rt1711h_write8(chip, RT1711H_PHYCTRL1, 0xF1);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Decrease wait time of BMC-encoded 1 bit from 2.67us to 2.55us */
-+	/* wait time : (val * .4167) us */
-+	return rt1711h_write8(chip, RT1711H_PHYCTRL2, 62);
-+}
-+
-+static int rt1711h_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata,
-+			    bool src, bool snk)
-+{
-+	struct rt1711h_chip *chip = tdata_to_rt1711h(tdata);
-+	int ret;
-+
-+	if (chip->src_en == src)
-+		return 1;
-+
-+	if (src)
-+		ret = regulator_enable(chip->vbus);
-+	else
-+		ret = regulator_disable(chip->vbus);
-+
-+	if (!ret)
-+		chip->src_en = src;
-+	return ret ? ret : 1;
- }
- 
- static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *tdata,
-@@ -109,8 +164,93 @@ static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *tdata,
- {
- 	struct rt1711h_chip *chip = tdata_to_rt1711h(tdata);
- 
--	return rt1711h_write8(chip, RT1711H_RTCTRL8,
--			      RT1711H_RTCTRL8_SET(0, 1, !enable, 2));
-+	return regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL8,
-+				  RT1711H_AUTOIDLEEN_MASK, enable ? 0 : 0xFF);
-+}
-+
-+/*
-+ * Selects the CC PHY noise filter voltage level according to the current
-+ * CC voltage level.
-+ *
-+ * @param cc_level The CC voltage level for the port's current role
-+ * @return EC_SUCCESS if writes succeed; failure code otherwise
-+ */
-+static inline int rt1711h_init_cc_params(struct rt1711h_chip *chip,
-+	enum typec_cc_status cc1, enum typec_cc_status cc2)
-+{
-+	u32 rxdz_en = 0, rxdz_sel = 0;
-+	int ret;
-+
-+	if ((cc1 >= TYPEC_CC_RP_1_5 && cc2 < TYPEC_CC_RP_DEF) ||
-+	    (cc2 >= TYPEC_CC_RP_1_5 && cc1 < TYPEC_CC_RP_DEF)) {
-+		if (chip->did == RT1715_DID) {
-+			rxdz_en = 1;
-+			rxdz_sel = 1;
-+		} else {
-+			rxdz_en = 1;
-+			rxdz_sel = 0;
-+		}
-+	} else {
-+		rxdz_en = 0;
-+		rxdz_sel = 1;
-+	}
-+
-+	ret = regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL18,
-+				 BMCIO_RXDZEN_MASK, rxdz_en);
-+	if (ret < 0)
-+		return ret;
-+
-+	return regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL4,
-+				  RT1711H_BMCIO_RXDZSEL, rxdz_en);
-+}
-+
-+#define tcpc_presenting_rd(reg, cc) \
-+	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
-+	 (((reg) & (TCPC_ROLE_CTRL_## cc ##_MASK << TCPC_ROLE_CTRL_## cc ##_SHIFT)) == \
-+	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_## cc ##_SHIFT)))
-+
-+static enum typec_cc_status tcpci_to_typec_cc(unsigned int cc, bool sink)
-+{
-+	switch (cc) {
-+	case 0x1:
-+		return sink ? TYPEC_CC_RP_DEF : TYPEC_CC_RA;
-+	case 0x2:
-+		return sink ? TYPEC_CC_RP_1_5 : TYPEC_CC_RD;
-+	case 0x3:
-+		if (sink)
-+			return TYPEC_CC_RP_3_0;
-+		fallthrough;
-+	case 0x0:
-+	default:
-+		return TYPEC_CC_OPEN;
-+	}
-+}
-+
-+static int rt1711h_get_cc(struct tcpci *tcpci, struct tcpci_data *tdata,
-+			  enum typec_cc_status *cc1, enum typec_cc_status *cc2)
-+{
-+	struct rt1711h_chip *chip = tdata_to_rt1711h(tdata);
-+	unsigned int reg, role_control;
-+	int ret;
-+
-+	ret = regmap_read(chip->data.regmap, TCPC_ROLE_CTRL, &role_control);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_read(chip->data.regmap, TCPC_CC_STATUS, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	*cc1 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC1_SHIFT) &
-+				 TCPC_CC_STATUS_CC1_MASK,
-+				 reg & TCPC_CC_STATUS_TERM ||
-+				 tcpc_presenting_rd(role_control, CC1));
-+	*cc2 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC2_SHIFT) &
-+				 TCPC_CC_STATUS_CC2_MASK,
-+				 reg & TCPC_CC_STATUS_TERM ||
-+				 tcpc_presenting_rd(role_control, CC2));
-+
-+	return rt1711h_init_cc_params(chip, *cc1, *cc2);
- }
- 
- static int rt1711h_start_drp_toggling(struct tcpci *tcpci,
-@@ -209,7 +349,11 @@ static int rt1711h_check_revision(struct i2c_client *i2c)
- 		dev_err(&i2c->dev, "pid is not correct, 0x%04x\n", ret);
- 		return -ENODEV;
- 	}
--	return 0;
-+	ret = i2c_smbus_read_word_data(i2c, TCPC_BCD_DEV);
-+	if (ret < 0)
-+		return ret;
-+	dev_info(&i2c->dev, "did is 0x%04x\n", ret);
-+	return ret;
- }
- 
- static int rt1711h_probe(struct i2c_client *client,
-@@ -228,6 +372,8 @@ static int rt1711h_probe(struct i2c_client *client,
- 	if (!chip)
- 		return -ENOMEM;
- 
-+	chip->did = ret;
-+
- 	chip->data.regmap = devm_regmap_init_i2c(client,
- 						 &rt1711h_regmap_config);
- 	if (IS_ERR(chip->data.regmap))
-@@ -245,8 +391,14 @@ static int rt1711h_probe(struct i2c_client *client,
- 	if (ret < 0)
- 		return ret;
- 
-+	chip->vbus = devm_regulator_get(&client->dev, "vbus");
-+	if (IS_ERR(chip->vbus))
-+		return PTR_ERR(chip->vbus);
-+
- 	chip->data.init = rt1711h_init;
-+	chip->data.set_vbus = rt1711h_set_vbus;
- 	chip->data.set_vconn = rt1711h_set_vconn;
-+	chip->data.get_cc = rt1711h_get_cc;
- 	chip->data.start_drp_toggling = rt1711h_start_drp_toggling;
- 	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
- 	if (IS_ERR_OR_NULL(chip->tcpci))
-@@ -273,6 +425,7 @@ static int rt1711h_remove(struct i2c_client *client)
- 
- static const struct i2c_device_id rt1711h_id[] = {
- 	{ "rt1711h", 0 },
-+	{ "rt1715", 0 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, rt1711h_id);
-@@ -280,6 +433,7 @@ MODULE_DEVICE_TABLE(i2c, rt1711h_id);
- #ifdef CONFIG_OF
- static const struct of_device_id rt1711h_of_match[] = {
- 	{ .compatible = "richtek,rt1711h", },
-+	{ .compatible = "richtek,rt1715", },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, rt1711h_of_match);
+ #define AMD_CPPC_LOWEST_PERF(x)		(((x) >> 0) & 0xff)
+ #define AMD_CPPC_LOWNONLIN_PERF(x)	(((x) >> 8) & 0xff)
 -- 
-2.25.1
+2.32.0
 

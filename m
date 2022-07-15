@@ -2,139 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4C2575F51
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 12:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2E8575F54
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 12:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbiGOKZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 06:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
+        id S233258AbiGOKZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 06:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233258AbiGOKZJ (ORCPT
+        with ESMTP id S232263AbiGOKZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 06:25:09 -0400
-Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C44282F95;
-        Fri, 15 Jul 2022 03:25:08 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 10:25:03 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1657880706; x=1658139906;
-        bh=zPqdR+HafcwDy1W0JQxmXtHI+hMl6rra+AYRnvrWqpM=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=Z7MD4Xjv8hln3g+8ABCao0ivtjTYtaLMuOFSS9XlNcVo3KA2qKxSxYz+ZY+eUjvNy
-         YR1wYfIFFBPPb4zRqdrHSMrp9YSar7pVR3/yjmWOYpy8jg9p6cFaXoYzDvds8Q8i9Z
-         Ag75usy/AB765k564FuAOBaGuD/Z+MYflB5r1zC8KRkhjB/6cNnuwPGF/QdRH+jX0v
-         kvnNK0CcciB+fZykVRuPh4FrNdqWQ7aFXuYu8v6Re3tpr18TiZnDtWS6Vhv5QOEaED
-         fUmLN73Dp2Fk9FyvLL5iePPcE1iYpuwuN4X9OjvjAQ2DKFVatqICLUvH9rBtZdbqNY
-         07jtbaavddqug==
-To:     devicetree@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Reply-To: "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Subject: [RESEND PATCH 4/4] arm64: dts: qcom: msm8916-samsung-e2015: Add touchkey
-Message-ID: <20220715102413.4119-1-linmengbo0689@protonmail.com>
-In-Reply-To: <20220715102055.3844-1-linmengbo0689@protonmail.com>
-References: <20220715102055.3844-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Fri, 15 Jul 2022 06:25:48 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2989C82F89;
+        Fri, 15 Jul 2022 03:25:46 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LknZ03WwZz4xMW;
+        Fri, 15 Jul 2022 20:25:44 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657880744;
+        bh=4vjOOOwfoF4KOdfvvxHNqQQD9CGszcxtnLonMPLZijg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DWtUwNJP9HPBg/4QOFjEtH1xKL0L7JEfLue3r5ApubZ+VyHt4SNHhvMIKkmNxAaRN
+         Kn8lo2JJ98cc141pjxNnk0Ngf1GE5xsFnQL/MUUilleU8AZWxrOnMnq15ozlMUtvRi
+         KZ3BXTbdE9HogIMIOwvTdjQx9tOmMRboYNN1gZngNWiffms3abOe/J+drYZqpfsfbB
+         P3VglX9q5c017d7WB5iwEEdzrnuCoKXVl15dacqArj35QG4/urzyiZVJBH5I6l1rRA
+         5w2X6lBMz6+mpgt9zprkRBp0XotDuApRmUfzTiPj5joZxOdZHkUyqHZzwqOmGtT3FW
+         eTIp6US/+Q51w==
+Date:   Fri, 15 Jul 2022 20:25:43 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Yury Norov <yury.norov@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the bitmap tree with the arm64 tree
+Message-ID: <20220715202543.4062514e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/sUAzOhAiNBY2NoANo9iAbkc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On the Samsung Galaxy E5 and E7 the touch key is supplied by a single
-fixed regulator (enabled via GPIO 97) that supplies both MCU and LED.
-Add it to the device tree.
+--Sig_/sUAzOhAiNBY2NoANo9iAbkc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+Hi all,
+
+Today's linux-next merge of the bitmap tree got a conflict in:
+
+  include/linux/gfp.h
+
+between commit:
+
+  70c248aca9e7 ("mm: kasan: Skip unpoisoning of user pages")
+
+from the arm64 tree and commit:
+
+  34973181c728 ("headers/deps: mm: Split <linux/gfp_types.h> out of <linux/=
+gfp.h>")
+
+from the bitmap tree.
+
+I fixed it up (I used the latter version of this files and applied the
+following merge resolution patch) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 15 Jul 2022 19:45:25 +1000
+Subject: [PATCH] fix up for "mm: kasan: Skip unpoisoning of user pages"
+
+interacting with "headers/deps: mm: Split <linux/gfp_types.h> out of
+<linux/gfp.h>"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- .../qcom/msm8916-samsung-e2015-common.dtsi    | 26 +++++++++++++++++++
- .../dts/qcom/msm8916-samsung-grandmax.dts     |  4 +++
- 2 files changed, 30 insertions(+)
+ include/linux/gfp_types.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi b/a=
-rch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
-index 373154ee2643..9f3aca17130d 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
-@@ -19,6 +19,19 @@ muic: extcon@14 {
- =09=09};
- =09};
+diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
+index 06fc85cee23f..d88c46ca82e1 100644
+--- a/include/linux/gfp_types.h
++++ b/include/linux/gfp_types.h
+@@ -340,7 +340,7 @@ typedef unsigned int __bitwise gfp_t;
+ #define GFP_DMA32	__GFP_DMA32
+ #define GFP_HIGHUSER	(GFP_USER | __GFP_HIGHMEM)
+ #define GFP_HIGHUSER_MOVABLE	(GFP_HIGHUSER | __GFP_MOVABLE | \
+-			 __GFP_SKIP_KASAN_POISON)
++			 __GFP_SKIP_KASAN_POISON | __GFP_SKIP_KASAN_UNPOISON)
+ #define GFP_TRANSHUGE_LIGHT	((GFP_HIGHUSER_MOVABLE | __GFP_COMP | \
+ 			 __GFP_NOMEMALLOC | __GFP_NOWARN) & ~__GFP_RECLAIM)
+ #define GFP_TRANSHUGE	(GFP_TRANSHUGE_LIGHT | __GFP_DIRECT_RECLAIM)
+--=20
+2.35.1
 
-+=09reg_touch_key: regulator-touch-key {
-+=09=09compatible =3D "regulator-fixed";
-+=09=09regulator-name =3D "touch_key";
-+=09=09regulator-min-microvolt =3D <3300000>;
-+=09=09regulator-max-microvolt =3D <3300000>;
-+
-+=09=09gpio =3D <&msmgpio 97 GPIO_ACTIVE_HIGH>;
-+=09=09enable-active-high;
-+
-+=09=09pinctrl-names =3D "default";
-+=09=09pinctrl-0 =3D <&tkey_en_default>;
-+=09};
-+
- =09vibrator: vibrator {
- =09=09compatible =3D "gpio-vibrator";
- =09=09enable-gpios =3D <&msmgpio 76 GPIO_ACTIVE_HIGH>;
-@@ -28,6 +41,11 @@ vibrator: vibrator {
- =09};
- };
+--=20
+Cheers,
+Stephen Rothwell
 
-+&touchkey {
-+=09vcc-supply =3D <&reg_touch_key>;
-+=09vdd-supply =3D <&reg_touch_key>;
-+};
-+
- &msmgpio {
- =09motor_en_default: motor-en-default {
- =09=09pins =3D "gpio76";
-@@ -36,4 +54,12 @@ motor_en_default: motor-en-default {
- =09=09drive-strength =3D <2>;
- =09=09bias-disable;
- =09};
-+
-+=09tkey_en_default: tkey-en-default {
-+=09=09pins =3D "gpio97";
-+=09=09function =3D "gpio";
-+
-+=09=09drive-strength =3D <2>;
-+=09=09bias-disable;
-+=09};
- };
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-grandmax.dts b/arch/a=
-rm64/boot/dts/qcom/msm8916-samsung-grandmax.dts
-index 41aada4bfb80..f68dd3d69a33 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-grandmax.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-grandmax.dts
-@@ -27,6 +27,10 @@ / {
- =09/delete-node/ i2c-tkey;
- };
+--Sig_/sUAzOhAiNBY2NoANo9iAbkc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-+&reg_touch_key {
-+=09status =3D "disabled";
-+};
-+
- &vibrator {
- =09enable-gpios =3D <&msmgpio 72 GPIO_ACTIVE_HIGH>;
- };
---
-2.30.2
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLRQKcACgkQAVBC80lX
+0Gz0Vwf/aHEnJuOQ1ytugT/PfKOau5wXvMxSZ47sMS1EuXR3h2/dkS/L6xLn+z6h
+lfN59c10aExt4pnFP4AftZN7Yd3nqpMnLyOKvyj0ArVlt610rjb3wwSfGftbxY1l
+IgQhn3/RXNAQ7ndaQwKXFa1i4jbGtnhqlAp2OLNSylNrBGnR5XDyzTH/dE1V4G38
+eF0ZC2g/rA5QUh4QTTZiZXsUQBtoJRyfJjmdlmpAOKJOhY47W7nCwZpqwbfVXCPV
+uaxSJJ19OS7KQLCKZOe0Ham3SQFR/FrKJSOdtZcB3VAbpGFa9WYmO1hDFl1eLf6V
+9msetJPxWjSx5zMYismORSU57hzvHQ==
+=wMuj
+-----END PGP SIGNATURE-----
 
+--Sig_/sUAzOhAiNBY2NoANo9iAbkc--

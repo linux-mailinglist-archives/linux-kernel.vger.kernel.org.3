@@ -2,143 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8000A576374
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB12157637A
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbiGOONX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 10:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40934 "EHLO
+        id S235325AbiGOOOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 10:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiGOONU (ORCPT
+        with ESMTP id S235267AbiGOOOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 10:13:20 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3726BC37
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:13:19 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id f24-20020a1cc918000000b003a30178c022so2940363wmb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:13:19 -0700 (PDT)
+        Fri, 15 Jul 2022 10:14:01 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C3D14031
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:14:00 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id y8so6477451eda.3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:13:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=riEJIfBpfcy57tk6eBP6zBDihsAq9M9ciWKjQSWTHns=;
-        b=N3qh55mWYG1MkCB5nWXF2U09nYYX5u0cooSnIAkTzZPECYivn+J9EbY8MvkWYlRG4f
-         tBIoH7tt0p+hFeC2pUWGpBDm8PQMZCj6FfsRjKUv7YPdwHiOGcj1KXm3XjPT8OlmS3hc
-         n8CylkNMOmB/jU1JFjFhH1Lp+qr0vwwDTjYSFyApmCsOK670NxDDyR6ZBFs0w3wFuBUi
-         pPWia79Tkl2dAqnYmtgBvXvy/TvYOLjMSlANbPpVU9j5Hrt0ULjPK1s1mIMBKKjoHn4I
-         jLZgqrqt/1UYC3iWMgZJZiRIfun6txB8ymQrPrZa3ef8cHWVyYxdXq09Ju8lzcEmlTw5
-         Pfpg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gW/a2mOXib1anWeNlYWktVJh3lMiqjsROInCujAz3Rg=;
+        b=YNl+MMCxEe3MHxh8BvAkFfag4BqIUEEw/2+ie9AGPk91mgDe9VI8p0TmMWiXp9z/Qh
+         1ODz85KrguLaJgJKqIQaCQ/kS/+C0Gu29k9Qr6nyCjdl3TPwtA2K1lX5H6G/xsnMABj9
+         nURRSweYZ1b0bNfPesonxURXYfi3BeBMJkpFg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=riEJIfBpfcy57tk6eBP6zBDihsAq9M9ciWKjQSWTHns=;
-        b=nSgQIiLrvU6TDqJ0IlF/k+jxPMOxyS4MwWp+ytEl1gAWn2g2kWbriHYJJSdHm0IbC3
-         bGGx9xMlWhN8Kzw2ipyHqi1VihIv31OeXqe4eTvK6y3GHZ1O95VAcfhTs6te/kiwSTP3
-         7MZX/b8uyp+h9eWNN5sl+kqUQy8Z7OU9jsJuTmxuKM/3A6YnXBIE6bwq0F/LpsCga7P1
-         GUGmsByVBPRrg23AhjCPfrF2b8VoMtENxSxtCMVhbFGUKmUp8GCApCNNHOK4mHjcdsRZ
-         YZSa7wRHftb8k/E/cc+BjWHVkFgR9+q0Uy1rbd7vYJ1CHUlJJclqAjscZjkOHa+AX2XM
-         JuSA==
-X-Gm-Message-State: AJIora+Dq2Unk3cFxZfNznJfK5Hv/BUOXc7vcJTXcHdViNiMQFvC8qev
-        GMq6Bb77o/8eqpZIw9vcB64EUkHsIYJ+kg==
-X-Google-Smtp-Source: AGRyM1v2MFrUcnY3vJQMzm0gPXoQLK1rF1PKQ5KZzsadM6EF94IHEeXLuKtzZlBXGzCTe6LSEy8v+Q==
-X-Received: by 2002:a7b:c442:0:b0:3a3:bdb:e84c with SMTP id l2-20020a7bc442000000b003a30bdbe84cmr3771592wmi.101.1657894397744;
-        Fri, 15 Jul 2022 07:13:17 -0700 (PDT)
-Received: from C02FT09GML7L ([2a01:4b00:8019:4b00:1b0:435a:f49:c81])
-        by smtp.gmail.com with ESMTPSA id r21-20020a05600c425500b003a2cf5eb900sm5175095wmm.40.2022.07.15.07.13.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 07:13:17 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 15:13:13 +0100
-From:   William Lam <william.lam@bytedance.com>
-To:     Punit Agrawal <punit.agrawal@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: compaction: include compound page count for scanning
- in pageblock isolation
-Message-ID: <YtF1+bv0gPB7pqNL@C02FT09GML7L>
-References: <20220711202806.22296-1-william.lam@bytedance.com>
- <874jzin30k.fsf@stealth>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gW/a2mOXib1anWeNlYWktVJh3lMiqjsROInCujAz3Rg=;
+        b=U2D6pv2FZqoT/otkGmXf3xq+e5mvLP0uzhqX60IgwAbrm/bjqqfH5q+76A68Z2p8Do
+         mHE6qkUYAOSdj+3otKGTlJlJ0RfCX0ex3ezm5d10EJQ0ObprkXUCaUZKi7sJ3xgdgdBF
+         fPGW6Aq88WWtKPMyzMNw3JBEEfE+/P22/h6LvAy4ZYA4B4HoPPo5AgWCqaqgswL4LINb
+         MZyrLmsBK01ZxI202ngaZTbAg6yROo1iE2MKndIFYbbxNUF00WAMJB3HeM8zsJCHv12Y
+         1jNyC0/nbe9FYPo0VUNuCJ6Kq7zbwx66t1kwsKT2nViZRVuiUtS2rHpcdA5tbwr4MgBA
+         W2tA==
+X-Gm-Message-State: AJIora/1uKfskdYfNkKyAiyQztjAXXMcRrO2DGzcd9VPdXqYIkemrHWn
+        i/fnioHW5b0gZLrotcVsKJnMvU5Xren4gcI0
+X-Google-Smtp-Source: AGRyM1tBmxhfleX7zs+URtYF/YZJI4JLNCs8M62ALQVYLHhVvydKX71No1blpqdhUUOq4jA3g4u8jQ==
+X-Received: by 2002:a05:6402:3551:b0:43a:a5c0:2fbc with SMTP id f17-20020a056402355100b0043aa5c02fbcmr18801286edd.288.1657894438337;
+        Fri, 15 Jul 2022 07:13:58 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id k8-20020a056402048800b00435a08a3557sm2839988edv.27.2022.07.15.07.13.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 07:13:57 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id d16so6892555wrv.10
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:13:57 -0700 (PDT)
+X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id
+ b13-20020adff90d000000b0020cde324d35mr12818655wrr.583.1657894437105; Fri, 15
+ Jul 2022 07:13:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <874jzin30k.fsf@stealth>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220715084442.115021-1-jinghung.chen3@hotmail.com> <SG2PR03MB5006D3E109835FCAD1B01A47CC8B9@SG2PR03MB5006.apcprd03.prod.outlook.com>
+In-Reply-To: <SG2PR03MB5006D3E109835FCAD1B01A47CC8B9@SG2PR03MB5006.apcprd03.prod.outlook.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 15 Jul 2022 07:13:45 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WB4ZjdimA+p0wWfqGKiLo64Vt+hg7C1_bM3hrF2DwAQg@mail.gmail.com>
+Message-ID: <CAD=FV=WB4ZjdimA+p0wWfqGKiLo64Vt+hg7C1_bM3hrF2DwAQg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] arm64: dts: qcom: sc7280: Add herobrine-villager-r1
+To:     Jimmy Chen <jinghung.chen3@hotmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Alan Huang <alan-huang@quanta.corp-partner.google.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Judy Hsiao <judyhsiao@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 10:23:07AM +0100, Punit Agrawal wrote:
-> Hi William,
-> 
-> William Lam <william.lam@bytedance.com> writes:
-> 
-> > The number of scanned pages can be lower than the number of isolated
-> > pages when isolating mirgratable or free pageblock. The metric is being
-> > reported in trace event and also used in vmstat.
-> >
-> > This behaviour is confusing since currently the count for isolated pages
-> > takes account of compound page but not for the case of scanned pages.
-> > And given that the number of isolated pages(nr_taken) reported in
-> > mm_compaction_isolate_template trace event is on a single-page basis,
-> > the ambiguity when reporting the number of scanned pages can be removed
-> > by also including compound page count.
-> 
-> A minor suggestion - It maybe useful to include an example trace output
-> to highlight the issue.
-> 
+Hi,
 
-some example output from trace where it shows nr_taken can be greater
-than nr_scanned:
+On Fri, Jul 15, 2022 at 1:45 AM Jimmy Chen <jinghung.chen3@hotmail.com> wrote:
+>
+> This adds sc7280-herobrine-villager-r1.dts for villager device tree files.
+> Herobrine-r1 is exactly the same as -r0 except that it uses a
+> different audio solution (it uses the same one as the CRD).
+>
+> Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
+> ---
+>
+> Changes in v5:
+> -Revise rev0+ to rev0
+> -Add -r1 line to the Makefile
+>
+> Changes in v4:
+> -Add this patch
+>
+>  arch/arm64/boot/dts/qcom/Makefile                  |  1 +
+>  .../boot/dts/qcom/sc7280-herobrine-villager-r0.dts |  4 ++--
+>  .../boot/dts/qcom/sc7280-herobrine-villager-r1.dts | 14 ++++++++++++++
+>  3 files changed, 17 insertions(+), 2 deletions(-)
 
-Produced by kernel v5.19-rc6
-kcompactd0-42      [001] .....  1210.268022: mm_compaction_isolate_migratepages: range=(0x107ae4 ~ 0x107c00) nr_scanned=265 nr_taken=255
-[...]
-kcompactd0-42      [001] .....  1210.268382: mm_compaction_isolate_freepages: range=(0x215800 ~ 0x215a00) nr_scanned=13 nr_taken=128
-kcompactd0-42      [001] .....  1210.268383: mm_compaction_isolate_freepages: range=(0x215600 ~ 0x215680) nr_scanned=1 nr_taken=128
+Other than the unclear race between your series and Judy's patches
+[1], this looks good to me now.
 
-mm_compaction_isolate_migratepages does not seem to have this behaviour,
-but for the reason of consistency, nr_scanned should also be taken care
-of in that side.
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-> >
-> > Signed-off-by: William Lam <william.lam@bytedance.com>
-> > ---
-> >  mm/compaction.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/mm/compaction.c b/mm/compaction.c
-> > index 1f89b969c12b..1b51cf2d32b6 100644
-> > --- a/mm/compaction.c
-> > +++ b/mm/compaction.c
-> > @@ -616,6 +616,7 @@ static unsigned long isolate_freepages_block(struct compact_control *cc,
-> >  			break;
-> >  		set_page_private(page, order);
-> >  
-> > +		nr_scanned += isolated - 1;
-> >  		total_isolated += isolated;
-> >  		cc->nr_freepages += isolated;
-> >  		list_add_tail(&page->lru, freelist);
-> > @@ -1101,6 +1102,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
-> >  isolate_success_no_list:
-> >  		cc->nr_migratepages += compound_nr(page);
-> >  		nr_isolated += compound_nr(page);
-> > +		nr_scanned += compound_nr(page) - 1;
-> >  
-> >  		/*
-> >  		 * Avoid isolating too much unless this block is being
-> > @@ -1504,6 +1506,7 @@ fast_isolate_freepages(struct compact_control *cc)
-> >  			if (__isolate_free_page(page, order)) {
-> >  				set_page_private(page, order);
-> >  				nr_isolated = 1 << order;
-> > +				nr_scanned += nr_isolated - 1;
-> >  				cc->nr_freepages += nr_isolated;
-> >  				list_add_tail(&page->lru, &cc->freepages);
-> >  				count_compact_events(COMPACTISOLATED, nr_isolated);
-> 
-> Regardless of the comment above -
-> 
-> Reviewed-by: Punit Agrawal <punit.agrawal@bytedance.com>
+[1] https://lore.kernel.org/r/20220714061151.2126288-4-judyhsiao@chromium.org

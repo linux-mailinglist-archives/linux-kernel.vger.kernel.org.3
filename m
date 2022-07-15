@@ -2,119 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E880576662
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A14576663
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiGORv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 13:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
+        id S229662AbiGORxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 13:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGORvz (ORCPT
+        with ESMTP id S229630AbiGORxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 13:51:55 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC3052882
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:51:53 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id m20so2887256ili.3
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:51:53 -0700 (PDT)
+        Fri, 15 Jul 2022 13:53:42 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA494FF9
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:53:39 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id z12so7738352wrq.7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:53:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8Ib/oWEoGNGAe7E62KsRy28LW0NH5ciDw5Z/ulJeK9w=;
-        b=tK1+WtJdz6cJlCyxtgNS1wI18oypYIQlGknflDLiNCH+xw8kUdINNgFKKm0sdyscsU
-         ha8qV+52x/+QiIPqi7KhkKArzKCc0XA5iWw3Q6ZaR/w7Qfy74sEXpkdk+wgf+rLvFS60
-         ymUVB+Z5u31zayhCPJgC2Rrak2PA6eIxbbx3AUeytu+n3TX772N5HIx5mfN/0vpukQ+k
-         LDtat6ZoyjAPQOeUjatqEOgurIyszwUl8A6zAzuX+qrJO7k/xBMFIloY/Y0jdcBSrAKw
-         aEOhq0Pj/dpdVkkA0KRAR9mKbxvL3vEP+8DR5p4jqW2HrhU44ch/Epm4/tdtnxgQJ3vb
-         Znhg==
+        d=conchuod.ie; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H7FdqtQskr0feGEMESNye0rnehyoWZm9I2IR2qQbWhw=;
+        b=JXY9tG2WRrIfIGRKFohwcnYsUQVcSdNBZ0QIGMlDIRqOWRYIzyrwhMfXSxiZolGhlz
+         UWrxE1UeKpDBH5S9j/w3Oe0wOc0gaEMnZoj8v6PyId4PI0r0rxgKn5Tztce2L/BFxYIl
+         MBrrLnvciZ/KnPWkPpgpubUUVfrvJA2VXNl1ur33S/pN3jhfrvHYwkLphcBcOzXm5UOB
+         kbQeKNF63/K44eKvMFOwEhd1+uvrrkhzcGjfSf8Gk2QY7QPBm+WPHbyAAfSCMS+eCOiW
+         swSCRO0Fu0G0IgVCoEP3escuvfEGpga6GeL3RBEFg1OGRftF39s4qfhdXMgBJ3AAxocU
+         dLrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8Ib/oWEoGNGAe7E62KsRy28LW0NH5ciDw5Z/ulJeK9w=;
-        b=Zo4rOkKqkqEKlVDvQm6yxmq64XBzbuUm+BkkvufFYH4djbFF+yP1jgp0Ee6pN3vyi0
-         wSpjaGWljx9Ow8kKAFxNwDhu5o+axEXhQp0UbENF5KWJPmdPzfGZSDN9g2hQNKdbkYL5
-         7ArLrIDYB6TARCUOBY4pcCB8oqus3jZXrnyePmtLv/HiD5zzMoujvNfGaUdS9MmxSALN
-         EHZnC1hSQMBd5xlf+seOpz3Y6m2O9IMMcRG3T+MKHiZ7+yO52FP3d9OxCl4i5pb7SZig
-         FOB3vR+9C+xKRwMLCxCtt+fzlkR+DVwa1aOZESM2NKhCAkkQ1Vnd7RS4LX15OedSgBbu
-         m9pA==
-X-Gm-Message-State: AJIora9ZXNyCtQJX+jcRgwIIClaXJZMmQSiwx2hnqLgarw2nr+CeMQS/
-        PCLACvPH56rVgfmzuaXdZXYvmofrjXBya3x7BJJZFg==
-X-Google-Smtp-Source: AGRyM1vjbj4Rr5c3VI89RJFhwTarTUoUUR0HUujz6m8LUxrXbX9MxdKDJ9M/9+Lw5IdM9QDk6cfWrgwM0B3OEz20LrY=
-X-Received: by 2002:a05:6e02:1885:b0:2dc:5ede:8537 with SMTP id
- o5-20020a056e02188500b002dc5ede8537mr7729954ilu.275.1657907512419; Fri, 15
- Jul 2022 10:51:52 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H7FdqtQskr0feGEMESNye0rnehyoWZm9I2IR2qQbWhw=;
+        b=FHObFp07w2mQVrjF3/KoazmRmYgfsQSkxI1N7qTFmOWNf5Kal+JX1hmxQf5jq6qcEc
+         65r5Eu+yP16OTRzD93GQDD7Ou4Hn14PKSiYCSsHrLI3PW+XnzeYn4Lab2pgmwDBZ/hth
+         Kt60Rc/SAzMTYoJuUAa1djCnuO6r1AUBwCNHkaZwXcDca13dVdaAV0md9PHT5j6gaGRc
+         RpXmxhuDmDSYE04RsEQ+E6oYZivsXAl+I2YEund7JlZntA+6K1WiMlmtSAuRKhBVHGTm
+         DjrWwp8N1zzHc2BZ+jE3bkg/YjrvrPiiztB6ivPDVVCMVKX/gCdA5OW1G+SMAx5QZZSZ
+         rTkA==
+X-Gm-Message-State: AJIora8IHmNhxhrzWJhnIdbew5OSUVHEtM6MMhtWYoWs/TYeSulr4du5
+        VQ8UCbqkv7YaMGMGwlLWQbXwjQ==
+X-Google-Smtp-Source: AGRyM1vAaj7pVFqqnelORFYKWYhdT3B3rL63PBVd14yEq7ucjnt/2MVUoT9Qyfj1fcyeS3ao5/kSog==
+X-Received: by 2002:a5d:6c63:0:b0:21d:bf45:f90f with SMTP id r3-20020a5d6c63000000b0021dbf45f90fmr11182223wrz.715.1657907618412;
+        Fri, 15 Jul 2022 10:53:38 -0700 (PDT)
+Received: from henark71.. ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id n9-20020a5d4c49000000b002167efdd549sm4364131wrt.38.2022.07.15.10.53.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 10:53:37 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Zong Li <zong.li@sifive.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Brice Goglin <Brice.Goglin@inria.fr>
+Subject: [PATCH v4 0/2] Fix RISC-V's arch-topology reporting
+Date:   Fri, 15 Jul 2022 18:51:54 +0100
+Message-Id: <20220715175155.3567243-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20220712130542.18836-1-linmiaohe@huawei.com> <20220713102357.8328614813db01b569650ffd@linux-foundation.org>
- <a47922cf-eb30-1ad9-fc96-1896254564ef@huawei.com> <YtA7svbn4MtuT7qJ@xz-m1.local>
- <402ae708-4c86-8feb-75c4-9339e1deac3b@huawei.com> <YtFfHU3fb/ncCG6O@xz-m1.local>
- <CAJHvVcgFY2uXM=CkxYmHc32Vqb5qmr8vFv0dpFk-2=Ef+Kssqw@mail.gmail.com>
- <YtGe2qIO038e627p@xz-m1.local> <CAJHvVcji14hUsqg=yrtevEqwMtZi7Xwyj4yUnLMaZi0DBqPTHA@mail.gmail.com>
- <YtGmPI41S4w9iwr9@xz-m1.local>
-In-Reply-To: <YtGmPI41S4w9iwr9@xz-m1.local>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Fri, 15 Jul 2022 10:51:16 -0700
-Message-ID: <CAJHvVchMbJjOp4U+5K83YN0XHMRKfGzTLgCnzKd8mjYMQPRWaw@mail.gmail.com>
-Subject: Re: [PATCH] mm/hugetlb: avoid corrupting page->mapping in hugetlb_mcopy_atomic_pte
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 10:39 AM Peter Xu <peterx@redhat.com> wrote:
->
-> On Fri, Jul 15, 2022 at 10:28:44AM -0700, Axel Rasmussen wrote:
-> > On Fri, Jul 15, 2022 at 10:07 AM Peter Xu <peterx@redhat.com> wrote:
-> > >
-> > > On Fri, Jul 15, 2022 at 09:45:37AM -0700, Axel Rasmussen wrote:
-> > > > I agree we should either:
-> > > > - Update the UFFD selftest to exercise this case
-> > > > - Or, don't allow it, update vma_can_userfault() to also require VM_SHARED
-> > > > for VM_UFFD_MINOR registration.
-> > > >
-> > > > The first one is unfortunately not completely straightforward as Peter
-> > > > described. I would say it's probably not worth holding up this fix while we
-> > > > wait for it to happen?
-> > >
-> > > Agreed, Andrew has already queued it.  It actually is a real fix since we
-> > > never forbid the user running private mappings upon minor faults, so
-> > > it's literally a bug in kernel irrelevant of the kselftest.
-> > >
-> > > >
-> > > > I don't really have a strong preference between the two. The second option
-> > > > is what I originally proposed in the first version of the minor fault
-> > > > series, so going back to that isn't a problem at least from my perspective.
-> > > > If in the future we find a real use case for this, we could always easily
-> > > > re-enable it and add selftests for it at that point.
-> > >
-> > > I'd go for fixing the test case if possible.  Mike, would it be fine if we
-> > > go back to /dev/hugepages path based approach in the test case?
-> >
-> > One possible alternative, can we use memfd_create() with MFD_HUGE_*?
-> > This afaict lets us have an fd so we can create two mappings,
-> > without having to mount hugetlbfs, pass in a path to the test, ...
->
-> Sounds good. :) We can also rework the shared hugetlb too.  Wanna post a
-> patch?  I can do that too, let me know otherwise.  Thanks!
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Sure, I'll take a whack at it.
+Hey all,
+It's my first time messing around with arch/ code at all, let alone
+more than one arch, so forgive me if I have screwed up how to do a
+migration like this.
 
->
-> --
-> Peter Xu
->
+The goal here is the fix the incorrectly reported arch topology on
+RISC-V which seems to have been broken since it was added.
+cpu, package and thread IDs are all currently reported as -1, so tools
+like lstopo think systems have multiple threads on the same core when
+this is not true:
+https://github.com/open-mpi/hwloc/issues/536
+
+arm64's topology code basically applies to RISC-V too, so it has been
+made generic along with the removal of MPIDR related code, which
+appears to be redudant code since '3102bc0e6ac7 ("arm64: topology: Stop
+using MPIDR for topology information")' replaced the code that actually
+interacted with MPIDR with default values.
+
+I only built tested for arm{,64} , so hopefully it is not broken when
+used. Testing on both arm64 & !SMP RISC-V would really be appreciated!
+
+For V2, I dropped the idea of doing a RISC-V specific implementation
+followed by a move to the generic code & just went for the more straight
+forward method of moving to the shared version first. I also dropped the
+RFC.
+
+V3 moves store_cpu_topology()'s definition down inside the arch check
+alongside the init function so that boot on 32bit arm is not broken.
+
+V4 has moved the RISC-V boot hart's call to store_cpu_topology() later
+into the boot process it is now right before SMP is brought up (or not
+in the case of !SMP). This prevents calling detect_cache_attributes()
+while we cannot allocate memory.
+
+V4 is also rebased on next-20220715 to get Sudeep's most recent
+arch_topology patchset.
+
+Thanks,
+Conor
+
+Conor Dooley (2):
+  arm64: topology: move store_cpu_topology() to shared code
+  riscv: topology: fix default topology reporting
+
+ arch/arm64/kernel/topology.c | 40 ------------------------------------
+ arch/riscv/Kconfig           |  2 +-
+ arch/riscv/kernel/smpboot.c  |  3 ++-
+ drivers/base/arch_topology.c | 19 +++++++++++++++++
+ 4 files changed, 22 insertions(+), 42 deletions(-)
+
+
+base-commit: 6014cfa5bf32cf8c5c58b3cfd5ee0e1542c8a825
+-- 
+2.37.1
+

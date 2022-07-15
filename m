@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8173D575BAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722B6575BB0
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 08:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbiGOGiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 02:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
+        id S231478AbiGOGi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 02:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbiGOGhw (ORCPT
+        with ESMTP id S231228AbiGOGh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 02:37:52 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BAF675A0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:37:37 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id j2-20020a2597c2000000b0064b3e54191aso3367174ybo.20
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:37:37 -0700 (PDT)
+        Fri, 15 Jul 2022 02:37:58 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBFD6A9C7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:37:39 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31dfe25bd47so1029887b3.18
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 23:37:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Z9xTFRxAbsalmBAh8aaG1sGBphgh09dtR9lwa15eXZE=;
-        b=D422lL+jg65vnEDoVO0nwAQk1n1l2e9Cs3fOdNChQD4L7VQjBuT8+f0bkqEvMhaXs9
-         KOAyhD4PvpQBIZ2W6KO/95lAPxVHya6U5NaA62gYJD0YZuX+/iTVjDLVyEuv5MiDnBEa
-         IMWKQa0tJQcaEICRP7Nvq4vR2k43NbILtb1aHxVVPGbrEGc5pVhvbUnXRAGFKhayM+Fu
-         yokduYexmTN5j2qsDh3qO3Gaxnrm8W+bXhNP8WOqqR/wPJpl+G+CagiyCMKasbiZ2l/y
-         1AKRiL/SgZFLLtMtwqP7KGO8ylxcBdWmUzduo9JFBd7odf7sgOY2QAX8DaeY5fow7kl6
-         0R4w==
+        bh=heM+cYHlj6vP221hxJBcWNj4VjfXKtGYwQwPpYWB198=;
+        b=JrG0JMAzXe7dvFygrnJt3fZ7vRSFbR8eW8Okqca1BNxTJJFa9/hvFIFoERMTjlvLTy
+         osiGbL9NXBKF6xV6MJ6qsrcw082WHZ9k29za5kQUGw1OwdHjPfbKVTnvEskww0xXrRSm
+         Tx3GteU4uQtNgVHZ0vBKrylHve+1VRetFuZ9adP7LSpett44WcHLMhRlvnnA7I2i6oT0
+         EoaEGQjxOIWD79Kghj7UefsupZSn28oN5+TONjPaS/XdzJCi5VeEWDcbsxTa5dPWMcVv
+         0iqZBR0/Z7nXAiDUtVC6Jk+KO7anHu/UkzZb2yrKTqig7CUlD5WW+UCIwcMxhvYwA7Nt
+         kJwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Z9xTFRxAbsalmBAh8aaG1sGBphgh09dtR9lwa15eXZE=;
-        b=jVBpBuok26zmSs9o3UwG1wrFWeU9d5ZCd8Gs1Y573uUAOyxnl67Jo5BMOj3KKrNx8D
-         GwEQauIpqOFPFgTFvXR01s+c+S36AeTw29NxJzlx9u9ey91E1FxTbgKfzC2DtghOYLM0
-         JaKrNNi8eRP784hwKbGQNDB1mMl1ZIDEcIxFAgTcQuJOG1A7R+y90QAJeap7JyCmkW6x
-         G1XgxAQ/mMgq66UNRtgBHdMAATvkXp4zCL5wEvC1ZUVWHH73r7E3u9YK2VcRs30n23i/
-         ss2zkslFQ8fMJLqMRowqj7GI9i+r95p+h0Whp8yNq3/wOrz33833UCtc/vBY1ft0sZqU
-         Lxbg==
-X-Gm-Message-State: AJIora/8PTplQrF0hGMzSXAzb0L8rSK4dRjCaLAcmrPjd3dM7Y0ril5o
-        FiRPLAJeyixBlNW1zY56WZFl4FEVg45t
-X-Google-Smtp-Source: AGRyM1s6yorOIQnW6oCrz6vS+65nPHWdPdTf6qoeXtxnBu8a9eC0o9WZokksDQkIRk193GSmVuCP32laP9PY
+        bh=heM+cYHlj6vP221hxJBcWNj4VjfXKtGYwQwPpYWB198=;
+        b=7ajatZkPtRcRSO2sNUYcu8U0oJCv3ylrR/rex7YPGjiIYvdccpPO62VX2bTBppbYZl
+         SLkXLkwaKbEuQ6i9hlYIAggDRmTtS083xCJkaj7XZIKlKnC5qm22Ia6FWP16ju9OBC3T
+         kzcrMP+mb6S4vSVvLTr3+mKTe/1IJnqkG0tv823sBNOrXa0kHuyA5zaGD+MbvLNzwFkr
+         ieSYYOyrLBPfnvm9E1s9pAEOABIJAqst3UP0OgsS5N4qQpWxmo3rtCZPH8CPwp1TnhuC
+         Ccxg23bIcJ42ZGi6U9LdATX5iqr0N3E6mkWon3g8q5XDMQPyITpdp2hRLPBosPhysmJ8
+         bRqA==
+X-Gm-Message-State: AJIora9RXXGmNerQqj198/TojMRCFN8W4A+TFmL30rFb/UsleguXqWOp
+        yDyqV5GuzeiAmHsKgTZTvp+9wmwM17Pz
+X-Google-Smtp-Source: AGRyM1u7paE8z2b/HR/0D6RZuBLguyUxsags1T1DZeWNY+7dyKwGqOLtna4VlkaoLAH/yGqfAgtf2u1x/P2j
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:e8fe:2a8e:e0f6:318d])
- (user=irogers job=sendgmr) by 2002:a05:6902:1184:b0:66e:756d:3baa with SMTP
- id m4-20020a056902118400b0066e756d3baamr12308695ybu.533.1657867056537; Thu,
- 14 Jul 2022 23:37:36 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 23:36:47 -0700
+ (user=irogers job=sendgmr) by 2002:a25:9f87:0:b0:669:4345:a8c0 with SMTP id
+ u7-20020a259f87000000b006694345a8c0mr12581178ybq.472.1657867058918; Thu, 14
+ Jul 2022 23:37:38 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 23:36:48 -0700
 In-Reply-To: <20220715063653.3203761-1-irogers@google.com>
-Message-Id: <20220715063653.3203761-10-irogers@google.com>
+Message-Id: <20220715063653.3203761-11-irogers@google.com>
 Mime-Version: 1.0
 References: <20220715063653.3203761-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v1 09/15] perf pmu-events: Hide pmu_events_map
+Subject: [PATCH v1 10/15] perf test: Use full metric resolution
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
         James Clark <james.clark@arm.com>,
@@ -78,722 +78,304 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move usage of the table to pmu-events.c so it may be hidden. By
-abstracting the table the implementation can later be changed.
+The simple metric resolution doesn't handle recursion properly, switch
+to use the full resolution as with the parse-metric tests which also
+increases coverage. Don't set the values for the metric backward as
+failures to generate a result are ignored.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/empty-pmu-events.c |  81 ++++++++-
- tools/perf/pmu-events/jevents.py         |  81 ++++++++-
- tools/perf/pmu-events/pmu-events.h       |  29 +--
- tools/perf/tests/pmu-events.c            | 218 +++++++++++------------
- tools/perf/util/metricgroup.c            |  15 +-
- tools/perf/util/pmu.c                    |  34 +---
- tools/perf/util/pmu.h                    |   2 +-
- 7 files changed, 280 insertions(+), 180 deletions(-)
+ tools/perf/tests/pmu-events.c | 222 ++++++++++++----------------------
+ 1 file changed, 77 insertions(+), 145 deletions(-)
 
-diff --git a/tools/perf/pmu-events/empty-pmu-events.c b/tools/perf/pmu-events/empty-pmu-events.c
-index 216ea0482c37..8ef75aff996c 100644
---- a/tools/perf/pmu-events/empty-pmu-events.c
-+++ b/tools/perf/pmu-events/empty-pmu-events.c
-@@ -6,6 +6,8 @@
-  * The test cpu/soc is provided for testing.
-  */
- #include "pmu-events/pmu-events.h"
-+#include "util/header.h"
-+#include "util/pmu.h"
- #include <string.h>
- #include <stddef.h>
- 
-@@ -110,7 +112,26 @@ static const struct pmu_event pme_test_soc_cpu[] = {
- 	},
- };
- 
--const struct pmu_events_map pmu_events_map[] = {
-+
-+/*
-+ * Map a CPU to its table of PMU events. The CPU is identified by the
-+ * cpuid field, which is an arch-specific identifier for the CPU.
-+ * The identifier specified in tools/perf/pmu-events/arch/xxx/mapfile
-+ * must match the get_cpuid_str() in tools/perf/arch/xxx/util/header.c)
-+ *
-+ * The  cpuid can contain any character other than the comma.
-+ */
-+struct pmu_events_map {
-+	const char *arch;
-+	const char *cpuid;
-+	const struct pmu_event *table;
-+};
-+
-+/*
-+ * Global table mapping each known CPU for the architecture to its
-+ * table of PMU events.
-+ */
-+static const struct pmu_events_map pmu_events_map[] = {
- 	{
- 		.arch = "testarch",
- 		.cpuid = "testcpu",
-@@ -162,6 +183,62 @@ static const struct pmu_sys_events pmu_sys_event_tables[] = {
- 	},
- };
- 
-+const struct pmu_event *perf_pmu__find_table(struct perf_pmu *pmu)
-+{
-+	const struct pmu_event *table = NULL;
-+	char *cpuid = perf_pmu__getcpuid(pmu);
-+	int i;
-+
-+	/* on some platforms which uses cpus map, cpuid can be NULL for
-+	 * PMUs other than CORE PMUs.
-+	 */
-+	if (!cpuid)
-+		return NULL;
-+
-+	i = 0;
-+	for (;;) {
-+		const struct pmu_events_map *map = &pmu_events_map[i++];
-+
-+		if (!map->table)
-+			break;
-+
-+		if (!strcmp_cpuid_str(map->cpuid, cpuid)) {
-+			table = map->table;
-+			break;
-+		}
-+	}
-+	free(cpuid);
-+	return table;
-+}
-+
-+const struct pmu_event *find_core_events_table(const char *arch, const char *cpuid)
-+{
-+	for (const struct pmu_events_map *tables = &pmu_events_map[0];
-+	     tables->table;
-+	     tables++) {
-+		if (!strcmp(tables->arch, arch) && !strcmp_cpuid_str(tables->cpuid, cpuid))
-+			return tables->table;
-+	}
-+	return NULL;
-+}
-+
-+int pmu_for_each_core_event(pmu_event_iter_fn fn, void *data)
-+{
-+	for (const struct pmu_events_map *tables = &pmu_events_map[0];
-+	     tables->table;
-+	     tables++) {
-+		for (const struct pmu_event *pe = &tables->table[0];
-+		     pe->name || pe->metric_group || pe->metric_name;
-+		     pe++) {
-+			int ret = fn(pe, &tables->table[0], data);
-+
-+			if (ret)
-+				return ret;
-+		}
-+	}
-+	return 0;
-+}
-+
- const struct pmu_event *find_sys_events_table(const char *name)
- {
- 	for (const struct pmu_sys_events *tables = &pmu_sys_event_tables[0];
-@@ -181,7 +258,7 @@ int pmu_for_each_sys_event(pmu_event_iter_fn fn, void *data)
- 		for (const struct pmu_event *pe = &tables->table[0];
- 		     pe->name || pe->metric_group || pe->metric_name;
- 		     pe++) {
--			int ret = fn(pe, data);
-+			int ret = fn(pe, &tables->table[0], data);
- 
- 			if (ret)
- 				return ret;
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 432ecb5a33f5..800db6364078 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -334,7 +334,27 @@ def process_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
- 
- def print_mapping_table(archs: Sequence[str]) -> None:
-   """Read the mapfile and generate the struct from cpuid string to event table."""
--  _args.output_file.write('const struct pmu_events_map pmu_events_map[] = {\n')
-+  _args.output_file.write("""
-+/*
-+ * Map a CPU to its table of PMU events. The CPU is identified by the
-+ * cpuid field, which is an arch-specific identifier for the CPU.
-+ * The identifier specified in tools/perf/pmu-events/arch/xxx/mapfile
-+ * must match the get_cpuid_str() in tools/perf/arch/xxx/util/header.c)
-+ *
-+ * The  cpuid can contain any character other than the comma.
-+ */
-+struct pmu_events_map {
-+        const char *arch;
-+        const char *cpuid;
-+        const struct pmu_event *table;
-+};
-+
-+/*
-+ * Global table mapping each known CPU for the architecture to its
-+ * table of PMU events.
-+ */
-+const struct pmu_events_map pmu_events_map[] = {
-+""")
-   for arch in archs:
-     if arch == 'test':
-       _args.output_file.write("""{
-@@ -390,6 +410,61 @@ static const struct pmu_sys_events pmu_sys_event_tables[] = {
- \t},
- };
- 
-+const struct pmu_event *perf_pmu__find_table(struct perf_pmu *pmu)
-+{
-+        const struct pmu_event *table = NULL;
-+        char *cpuid = perf_pmu__getcpuid(pmu);
-+        int i;
-+
-+        /* on some platforms which uses cpus map, cpuid can be NULL for
-+         * PMUs other than CORE PMUs.
-+         */
-+        if (!cpuid)
-+                return NULL;
-+
-+        i = 0;
-+        for (;;) {
-+                const struct pmu_events_map *map = &pmu_events_map[i++];
-+                if (!map->table)
-+                        break;
-+
-+                if (!strcmp_cpuid_str(map->cpuid, cpuid)) {
-+                        table = map->table;
-+                        break;
-+                }
-+        }
-+        free(cpuid);
-+        return table;
-+}
-+
-+const struct pmu_event *find_core_events_table(const char *arch, const char *cpuid)
-+{
-+        for (const struct pmu_events_map *tables = &pmu_events_map[0];
-+             tables->table;
-+             tables++) {
-+                if (!strcmp(tables->arch, arch) && !strcmp_cpuid_str(tables->cpuid, cpuid))
-+                        return tables->table;
-+        }
-+        return NULL;
-+}
-+
-+int pmu_for_each_core_event(pmu_event_iter_fn fn, void *data)
-+{
-+        for (const struct pmu_events_map *tables = &pmu_events_map[0];
-+             tables->table;
-+             tables++) {
-+                for (const struct pmu_event *pe = &tables->table[0];
-+                     pe->name || pe->metric_group || pe->metric_name;
-+                     pe++) {
-+                        int ret = fn(pe, &tables->table[0], data);
-+
-+                        if (ret)
-+                                return ret;
-+                }
-+        }
-+        return 0;
-+}
-+
- const struct pmu_event *find_sys_events_table(const char *name)
- {
-         for (const struct pmu_sys_events *tables = &pmu_sys_event_tables[0];
-@@ -409,7 +484,7 @@ int pmu_for_each_sys_event(pmu_event_iter_fn fn, void *data)
-                 for (const struct pmu_event *pe = &tables->table[0];
-                      pe->name || pe->metric_group || pe->metric_name;
-                      pe++) {
--                        int ret = fn(pe, data);
-+                        int ret = fn(pe, &tables->table[0], data);
- 
-                         if (ret)
-                                 return ret;
-@@ -450,6 +525,8 @@ def main() -> None:
- 
-   _args.output_file.write("""
- #include "pmu-events/pmu-events.h"
-+#include "util/header.h"
-+#include "util/pmu.h"
- #include <string.h>
- #include <stddef.h>
- 
-diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/pmu-events.h
-index 2386212b1df0..485e730f9922 100644
---- a/tools/perf/pmu-events/pmu-events.h
-+++ b/tools/perf/pmu-events/pmu-events.h
-@@ -2,6 +2,8 @@
- #ifndef PMU_EVENTS_H
- #define PMU_EVENTS_H
- 
-+struct perf_pmu;
-+
- enum aggr_mode_class {
- 	PerChip = 1,
- 	PerCore
-@@ -28,30 +30,15 @@ struct pmu_event {
- 	const char *metric_constraint;
- };
- 
--/*
-- *
-- * Map a CPU to its table of PMU events. The CPU is identified by the
-- * cpuid field, which is an arch-specific identifier for the CPU.
-- * The identifier specified in tools/perf/pmu-events/arch/xxx/mapfile
-- * must match the get_cpuid_str() in tools/perf/arch/xxx/util/header.c)
-- *
-- * The  cpuid can contain any character other than the comma.
-- */
--struct pmu_events_map {
--	const char *arch;
--	const char *cpuid;
--	const struct pmu_event *table;
--};
-+typedef int (*pmu_event_iter_fn)(const struct pmu_event *pe,
-+				 const struct pmu_event *table,
-+				 void *data);
- 
--/*
-- * Global table mapping each known CPU for the architecture to its
-- * table of PMU events.
-- */
--extern const struct pmu_events_map pmu_events_map[];
-+const struct pmu_event *perf_pmu__find_table(struct perf_pmu *pmu);
-+const struct pmu_event *find_core_events_table(const char *arch, const char *cpuid);
-+int pmu_for_each_core_event(pmu_event_iter_fn fn, void *data);
- 
- const struct pmu_event *find_sys_events_table(const char *name);
--
--typedef int (*pmu_event_iter_fn)(const struct pmu_event *pe, void *data);
- int pmu_for_each_sys_event(pmu_event_iter_fn fn, void *data);
- 
- #endif
 diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
-index 6c3d22d00219..62e41b9c67dd 100644
+index 62e41b9c67dd..ccbf1057ba4c 100644
 --- a/tools/perf/tests/pmu-events.c
 +++ b/tools/perf/tests/pmu-events.c
-@@ -272,18 +272,6 @@ static bool is_same(const char *reference, const char *test)
- 	return !strcmp(reference, test);
- }
+@@ -9,10 +9,12 @@
+ #include <linux/zalloc.h>
+ #include "debug.h"
+ #include "../pmu-events/pmu-events.h"
++#include <perf/evlist.h>
+ #include "util/evlist.h"
+ #include "util/expr.h"
+ #include "util/parse-events.h"
+ #include "metricgroup.h"
++#include "stat.h"
  
--static const struct pmu_event *__test_pmu_get_events_table(void)
--{
--	for (const struct pmu_events_map *map = &pmu_events_map[0]; map->cpuid; map++) {
--		if (!strcmp(map->cpuid, "testcpu"))
--			return map->table;
--	}
--
--	pr_err("could not find test events map\n");
--
--	return NULL;
--}
--
- static int compare_pmu_events(const struct pmu_event *e1, const struct pmu_event *e2)
- {
- 	if (!is_same(e1->name, e2->name)) {
-@@ -438,7 +426,7 @@ static int test__pmu_event_table(struct test_suite *test __maybe_unused,
- 				 int subtest __maybe_unused)
- {
- 	const struct pmu_event *sys_event_tables = find_sys_events_table("pme_test_soc_sys");
--	const struct pmu_event *table = __test_pmu_get_events_table();
-+	const struct pmu_event *table = find_core_events_table("testarch", "testcpu");
- 	int map_events = 0, expected_events;
- 
- 	/* ignore 3x sentinels */
-@@ -534,7 +522,7 @@ static int __test_core_pmu_event_aliases(char *pmu_name, int *count)
- 	struct perf_pmu *pmu;
- 	LIST_HEAD(aliases);
- 	int res = 0;
--	const struct pmu_event *table = __test_pmu_get_events_table();
-+	const struct pmu_event *table = find_core_events_table("testarch", "testcpu");
- 	struct perf_pmu_alias *a, *tmp;
- 
- 	if (!table)
-@@ -591,7 +579,7 @@ static int __test_uncore_pmu_event_aliases(struct perf_pmu_test_pmu *test_pmu)
- 	LIST_HEAD(aliases);
- 	int res = 0;
- 
--	events_table = __test_pmu_get_events_table();
-+	events_table = find_core_events_table("testarch", "testcpu");
- 	if (!events_table)
- 		return -1;
- 	pmu_add_cpu_aliases_map(&aliases, pmu, events_table);
-@@ -836,11 +824,6 @@ static int check_parse_fake(const char *id)
+ struct perf_pmu_test_event {
+ 	/* used for matching against events from generated pmu-events.c */
+@@ -792,27 +794,6 @@ static int check_parse_id(const char *id, struct parse_events_error *error,
  	return ret;
  }
  
+-static int check_parse_cpu(const char *id, bool same_cpu, const struct pmu_event *pe)
+-{
+-	struct parse_events_error error;
+-	int ret;
+-
+-	parse_events_error__init(&error);
+-	ret = check_parse_id(id, &error, NULL);
+-	if (ret && same_cpu) {
+-		pr_warning("Parse event failed metric '%s' id '%s' expr '%s'\n",
+-			pe->metric_name, id, pe->metric_expr);
+-		pr_warning("Error string '%s' help '%s'\n", error.str,
+-			error.help);
+-	} else if (ret) {
+-		pr_debug3("Parse event failed, but for an event that may not be supported by this CPU.\nid '%s' metric '%s' expr '%s'\n",
+-			  id, pe->metric_name, pe->metric_expr);
+-		ret = 0;
+-	}
+-	parse_events_error__exit(&error);
+-	return ret;
+-}
+-
+ static int check_parse_fake(const char *id)
+ {
+ 	struct parse_events_error error;
+@@ -829,160 +810,111 @@ struct metric {
+ 	struct metric_ref metric_ref;
+ };
+ 
+-static int resolve_metric_simple(struct expr_parse_ctx *pctx,
+-				 struct list_head *compound_list,
+-				 const struct pmu_event *map,
+-				 const char *metric_name)
+-{
+-	struct hashmap_entry *cur, *cur_tmp;
+-	struct metric *metric, *tmp;
+-	size_t bkt;
+-	bool all;
+-	int rc;
+-
+-	do {
+-		all = true;
+-		hashmap__for_each_entry_safe(pctx->ids, cur, cur_tmp, bkt) {
+-			struct metric_ref *ref;
+-			const struct pmu_event *pe;
+-
+-			pe = metricgroup__find_metric(cur->key, map);
+-			if (!pe)
+-				continue;
+-
+-			if (!strcmp(metric_name, (char *)cur->key)) {
+-				pr_warning("Recursion detected for metric %s\n", metric_name);
+-				rc = -1;
+-				goto out_err;
+-			}
+-
+-			all = false;
+-
+-			/* The metric key itself needs to go out.. */
+-			expr__del_id(pctx, cur->key);
+-
+-			metric = malloc(sizeof(*metric));
+-			if (!metric) {
+-				rc = -ENOMEM;
+-				goto out_err;
+-			}
+-
+-			ref = &metric->metric_ref;
+-			ref->metric_name = pe->metric_name;
+-			ref->metric_expr = pe->metric_expr;
+-			list_add_tail(&metric->list, compound_list);
+-
+-			rc = expr__find_ids(pe->metric_expr, NULL, pctx);
+-			if (rc)
+-				goto out_err;
+-			break; /* The hashmap has been modified, so restart */
+-		}
+-	} while (!all);
+-
+-	return 0;
+-
+-out_err:
+-	list_for_each_entry_safe(metric, tmp, compound_list, list)
+-		free(metric);
+-
+-	return rc;
+-
+-}
+-
 -static void expr_failure(const char *msg, const struct pmu_event *pe)
 -{
 -	pr_debug("%s\nOn metric %s\nOn expression %s\n", msg, pe->metric_name, pe->metric_expr);
 -}
 -
- struct metric {
- 	struct list_head list;
- 	struct metric_ref metric_ref;
-@@ -906,93 +889,100 @@ static int resolve_metric_simple(struct expr_parse_ctx *pctx,
- 
- }
- 
--static int test__parsing(struct test_suite *test __maybe_unused,
--			 int subtest __maybe_unused)
-+static void expr_failure(const char *msg, const struct pmu_event *pe)
+-
+-struct test__parsing_data {
+-	const struct pmu_event *cpus_table;
+-	struct expr_parse_ctx *ctx;
+-	int failures;
+-};
+-
+ static int test__parsing_callback(const struct pmu_event *pe, const struct pmu_event *table,
+-				  void *vdata)
++				  void *data)
  {
--	const struct pmu_event *cpus_table = pmu_events_map__find();
--	const struct pmu_event *pe;
--	int i, j, k;
--	int ret = 0;
-+	pr_debug("%s\nOn metric %s\nOn expression %s\n", msg, pe->metric_name, pe->metric_expr);
-+}
-+
-+
-+struct test__parsing_data {
-+	const struct pmu_event *cpus_table;
- 	struct expr_parse_ctx *ctx;
-+	int failures;
-+};
-+
-+static int test__parsing_callback(const struct pmu_event *pe, const struct pmu_event *table,
-+				  void *vdata)
-+{
-+	struct test__parsing_data *data = vdata;
-+	struct metric *metric, *tmp;
-+	struct hashmap_entry *cur;
-+	LIST_HEAD(compound_list);
-+	size_t bkt;
-+	int k;
- 	double result;
+-	struct test__parsing_data *data = vdata;
+-	struct metric *metric, *tmp;
+-	struct hashmap_entry *cur;
+-	LIST_HEAD(compound_list);
+-	size_t bkt;
++	int *failures = data;
+ 	int k;
+-	double result;
++	struct evlist *evlist;
++	struct perf_cpu_map *cpus;
++	struct runtime_stat st;
++	struct evsel *evsel;
++	struct rblist metric_events = {
++		.nr_entries = 0,
++	};
++	int err = 0;
  
--	ctx = expr__ctx_new();
--	if (!ctx) {
--		pr_debug("expr__ctx_new failed");
--		return TEST_FAIL;
-+	if (!pe->metric_expr)
-+		return 0;
-+
-+	pr_debug("Found metric '%s'\n", pe->metric_name);
-+
-+	expr__ctx_clear(data->ctx);
-+	if (expr__find_ids(pe->metric_expr, NULL, data->ctx) < 0) {
-+		expr_failure("Parse find ids failed", pe);
-+		data->failures++;
-+		return 0;
- 	}
--	i = 0;
--	for (;;) {
--		const struct pmu_events_map *map = &pmu_events_map[i++];
+ 	if (!pe->metric_expr)
+ 		return 0;
  
--		if (!map->table)
--			break;
--		j = 0;
--		for (;;) {
--			struct metric *metric, *tmp;
--			struct hashmap_entry *cur;
--			LIST_HEAD(compound_list);
--			size_t bkt;
--
--			pe = &map->table[j++];
--			if (!pe->name && !pe->metric_group && !pe->metric_name)
--				break;
--			if (!pe->metric_expr)
--				continue;
--			expr__ctx_clear(ctx);
--			if (expr__find_ids(pe->metric_expr, NULL, ctx) < 0) {
--				expr_failure("Parse find ids failed", pe);
--				ret++;
--				continue;
--			}
-+	if (resolve_metric_simple(data->ctx, &compound_list, table,
-+				  pe->metric_name)) {
-+		expr_failure("Could not resolve metrics", pe);
-+		data->failures++;
-+		return TEST_FAIL; /* Don't tolerate errors due to severity */
-+	}
+ 	pr_debug("Found metric '%s'\n", pe->metric_name);
++	(*failures)++;
  
--			if (resolve_metric_simple(ctx, &compound_list, map->table,
--						  pe->metric_name)) {
--				expr_failure("Could not resolve metrics", pe);
--				ret++;
--				goto exit; /* Don't tolerate errors due to severity */
--			}
+-	expr__ctx_clear(data->ctx);
+-	if (expr__find_ids(pe->metric_expr, NULL, data->ctx) < 0) {
+-		expr_failure("Parse find ids failed", pe);
+-		data->failures++;
+-		return 0;
 +	/*
-+	 * Add all ids with a made up value. The value may trigger divide by
-+	 * zero when subtracted and so try to make them unique.
++	 * We need to prepare evlist for stat mode running on CPU 0
++	 * because that's where all the stats are going to be created.
 +	 */
-+	k = 1;
-+	hashmap__for_each_entry(data->ctx->ids, cur, bkt)
-+		expr__add_id_val(data->ctx, strdup(cur->key), k++);
++	evlist = evlist__new();
++	if (!evlist)
++		return -ENOMEM;
++
++	cpus = perf_cpu_map__new("0");
++	if (!cpus) {
++		evlist__delete(evlist);
++		return -ENOMEM;
+ 	}
  
--			/*
--			 * Add all ids with a made up value. The value may
--			 * trigger divide by zero when subtracted and so try to
--			 * make them unique.
--			 */
--			k = 1;
--			hashmap__for_each_entry(ctx->ids, cur, bkt)
--				expr__add_id_val(ctx, strdup(cur->key), k++);
+-	if (resolve_metric_simple(data->ctx, &compound_list, table,
+-				  pe->metric_name)) {
+-		expr_failure("Could not resolve metrics", pe);
+-		data->failures++;
+-		return TEST_FAIL; /* Don't tolerate errors due to severity */
++	perf_evlist__set_maps(&evlist->core, cpus, NULL);
++	runtime_stat__init(&st);
++
++	err = metricgroup__parse_groups_test(evlist, table, pe->metric_name,
++					     false, false,
++					     &metric_events);
++	if (err) {
++		if (!strcmp(pe->metric_name, "M1") || !strcmp(pe->metric_name, "M2") ||
++		    !strcmp(pe->metric_name, "M3")) {
++			(*failures)--;
++			pr_debug("Expected broken metric %s skipping\n", pe->metric_name);
++			err = 0;
++		}
++		goto out_err;
+ 	}
+ 
++	err = evlist__alloc_stats(evlist, false);
++	if (err)
++		goto out_err;
+ 	/*
+ 	 * Add all ids with a made up value. The value may trigger divide by
+ 	 * zero when subtracted and so try to make them unique.
+ 	 */
+ 	k = 1;
+-	hashmap__for_each_entry(data->ctx->ids, cur, bkt)
+-		expr__add_id_val(data->ctx, strdup(cur->key), k++);
 -
--			hashmap__for_each_entry(ctx->ids, cur, bkt) {
--				if (check_parse_cpu(cur->key, map->table == cpus_table,
--						   pe))
--					ret++;
--			}
-+	hashmap__for_each_entry(data->ctx->ids, cur, bkt) {
-+		if (check_parse_cpu(cur->key, table == data->cpus_table, pe))
-+			data->failures++;
-+	}
+-	hashmap__for_each_entry(data->ctx->ids, cur, bkt) {
+-		if (check_parse_cpu(cur->key, table == data->cpus_table, pe))
+-			data->failures++;
++	perf_stat__reset_shadow_stats();
++	evlist__for_each_entry(evlist, evsel) {
++		perf_stat__update_shadow_stats(evsel, k, 0, &st);
++		if (!strcmp(evsel->name, "duration_time"))
++			update_stats(&walltime_nsecs_stats, k);
++		k++;
+ 	}
++	evlist__for_each_entry(evlist, evsel) {
++		struct metric_event *me = metricgroup__lookup(&metric_events, evsel, false);
  
--			list_for_each_entry_safe(metric, tmp, &compound_list, list) {
--				expr__add_ref(ctx, &metric->metric_ref);
--				free(metric);
--			}
-+	list_for_each_entry_safe(metric, tmp, &compound_list, list) {
-+		expr__add_ref(data->ctx, &metric->metric_ref);
-+		free(metric);
-+	}
+-	list_for_each_entry_safe(metric, tmp, &compound_list, list) {
+-		expr__add_ref(data->ctx, &metric->metric_ref);
+-		free(metric);
+-	}
++		if (me != NULL) {
++			struct metric_expr *mexp;
  
--			if (expr__parse(&result, ctx, pe->metric_expr)) {
--				/*
--				 * Parsing failed, make numbers go from large to
--				 * small which can resolve divide by zero
--				 * issues.
--				 */
--				k = 1024;
--				hashmap__for_each_entry(ctx->ids, cur, bkt)
--					expr__add_id_val(ctx, strdup(cur->key), k--);
--				if (expr__parse(&result, ctx, pe->metric_expr)) {
--					expr_failure("Parse failed", pe);
--					ret++;
--				}
--			}
-+	if (expr__parse(&result, data->ctx, pe->metric_expr)) {
-+		/*
-+		 * Parsing failed, make numbers go from large to small which can
-+		 * resolve divide by zero issues.
-+		 */
-+		k = 1024;
-+		hashmap__for_each_entry(data->ctx->ids, cur, bkt)
-+			expr__add_id_val(data->ctx, strdup(cur->key), k--);
-+		if (expr__parse(&result, data->ctx, pe->metric_expr)) {
-+			expr_failure("Parse failed", pe);
-+			data->failures++;
+-	if (expr__parse(&result, data->ctx, pe->metric_expr)) {
+-		/*
+-		 * Parsing failed, make numbers go from large to small which can
+-		 * resolve divide by zero issues.
+-		 */
+-		k = 1024;
+-		hashmap__for_each_entry(data->ctx->ids, cur, bkt)
+-			expr__add_id_val(data->ctx, strdup(cur->key), k--);
+-		if (expr__parse(&result, data->ctx, pe->metric_expr)) {
+-			expr_failure("Parse failed", pe);
+-			data->failures++;
++			list_for_each_entry (mexp, &me->head, nd) {
++				if (strcmp(mexp->metric_name, pe->metric_name))
++					continue;
++				pr_debug("Result %f\n", test_generic_metric(mexp, 0, &st));
++				err = 0;
++				(*failures)--;
++				goto out_err;
++			}
  		}
  	}
--	expr__ctx_free(ctx);
--	/* TODO: fail when not ok */
--exit:
--	return ret == 0 ? TEST_OK : TEST_SKIP;
-+	return 0;
-+}
+-	return 0;
++	pr_debug("Didn't find parsed metric %s", pe->metric_name);
++	err = 1;
++out_err:
++	if (err)
++		pr_debug("Broken metric %s\n", pe->metric_name);
 +
-+static int test__parsing(struct test_suite *test __maybe_unused,
-+			 int subtest __maybe_unused)
-+{
-+	struct test__parsing_data data = {
-+		.cpus_table = pmu_events_map__find(),
-+		.ctx = expr__ctx_new(),
-+		.failures = 0,
-+	};
-+
-+	if (!data.ctx) {
-+		pr_debug("expr__ctx_new failed");
-+		return TEST_FAIL;
-+	}
-+	pmu_for_each_core_event(test__parsing_callback, &data);
-+	pmu_for_each_sys_event(test__parsing_callback, &data);
-+
-+	expr__ctx_free(data.ctx);
-+	return data.failures == 0 ? TEST_OK : TEST_FAIL;
++	/* ... cleanup. */
++	metricgroup__rblist_exit(&metric_events);
++	runtime_stat__exit(&st);
++	evlist__free_stats(evlist);
++	perf_cpu_map__put(cpus);
++	evlist__delete(evlist);
++	return err;
+ }
+ 
+ static int test__parsing(struct test_suite *test __maybe_unused,
+ 			 int subtest __maybe_unused)
+ {
+-	struct test__parsing_data data = {
+-		.cpus_table = pmu_events_map__find(),
+-		.ctx = expr__ctx_new(),
+-		.failures = 0,
+-	};
++	int failures = 0;
+ 
+-	if (!data.ctx) {
+-		pr_debug("expr__ctx_new failed");
+-		return TEST_FAIL;
+-	}
+-	pmu_for_each_core_event(test__parsing_callback, &data);
+-	pmu_for_each_sys_event(test__parsing_callback, &data);
++	pmu_for_each_core_event(test__parsing_callback, &failures);
++	pmu_for_each_sys_event(test__parsing_callback, &failures);
+ 
+-	expr__ctx_free(data.ctx);
+-	return data.failures == 0 ? TEST_OK : TEST_FAIL;
++	return failures == 0 ? TEST_OK : TEST_FAIL;
  }
  
  struct test_metric {
-@@ -1064,6 +1054,16 @@ static int metric_parse_fake(const char *str)
- 	return ret;
- }
- 
-+static int test__parsing_fake_callback(const struct pmu_event *pe,
-+				       const struct pmu_event *table __maybe_unused,
-+				       void *data __maybe_unused)
-+{
-+	if (!pe->metric_expr)
-+		return 0;
-+
-+	return metric_parse_fake(pe->metric_expr);
-+}
-+
- /*
-  * Parse all the metrics for current architecture,
-  * or all defined cpus via the 'fake_pmu'
-@@ -1072,37 +1072,19 @@ static int metric_parse_fake(const char *str)
- static int test__parsing_fake(struct test_suite *test __maybe_unused,
- 			      int subtest __maybe_unused)
- {
--	unsigned int i, j;
- 	int err = 0;
- 
--	for (i = 0; i < ARRAY_SIZE(metrics); i++) {
-+	for (size_t i = 0; i < ARRAY_SIZE(metrics); i++) {
- 		err = metric_parse_fake(metrics[i].str);
- 		if (err)
- 			return err;
- 	}
- 
--	i = 0;
--	for (;;) {
--		const struct pmu_events_map *map = &pmu_events_map[i++];
-+	err = pmu_for_each_core_event(test__parsing_fake_callback, NULL);
-+	if (err)
-+		return err;
- 
--		if (!map->table)
--			break;
--		j = 0;
--		for (;;) {
--			const struct pmu_event *pe = &map->table[j++];
--
--			if (!pe->name && !pe->metric_group && !pe->metric_name)
--				break;
--			if (!pe->metric_expr)
--				continue;
--			pr_debug("Found metric '%s' for '%s'\n", pe->metric_name, map->cpuid);
--			err = metric_parse_fake(pe->metric_expr);
--			if (err)
--				return err;
--		}
--	}
--
--	return 0;
-+	return pmu_for_each_sys_event(test__parsing_fake_callback, NULL);
- }
- 
- static struct test_case pmu_events_tests[] = {
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index 4d32b4fbf67d..680f7c63838d 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -502,14 +502,14 @@ struct metricgroup_print_sys_idata {
- 	bool details;
- };
- 
--typedef int (*metricgroup_sys_event_iter_fn)(const struct pmu_event *pe, void *);
--
- struct metricgroup_iter_data {
--	metricgroup_sys_event_iter_fn fn;
-+	pmu_event_iter_fn fn;
- 	void *data;
- };
- 
--static int metricgroup__sys_event_iter(const struct pmu_event *pe, void *data)
-+static int metricgroup__sys_event_iter(const struct pmu_event *pe,
-+				       const struct pmu_event *table __maybe_unused,
-+				       void *data)
- {
- 	struct metricgroup_iter_data *d = data;
- 	struct perf_pmu *pmu = NULL;
-@@ -522,13 +522,15 @@ static int metricgroup__sys_event_iter(const struct pmu_event *pe, void *data)
- 		if (!pmu->id || strcmp(pmu->id, pe->compat))
- 			continue;
- 
--		return d->fn(pe, d->data);
-+		return d->fn(pe, table, d->data);
- 	}
- 
- 	return 0;
- }
- 
--static int metricgroup__print_sys_event_iter(const struct pmu_event *pe, void *data)
-+static int metricgroup__print_sys_event_iter(const struct pmu_event *pe,
-+					     const struct pmu_event *table __maybe_unused,
-+					     void *data)
- {
- 	struct metricgroup_print_sys_idata *d = data;
- 
-@@ -1101,6 +1103,7 @@ static int add_metric(struct list_head *metric_list,
- }
- 
- static int metricgroup__add_metric_sys_event_iter(const struct pmu_event *pe,
-+						  const struct pmu_event *table __maybe_unused,
- 						  void *data)
- {
- 	struct metricgroup_add_iter_data *d = data;
-diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index 6dd533106156..893cc0ff7758 100644
---- a/tools/perf/util/pmu.c
-+++ b/tools/perf/util/pmu.c
-@@ -690,7 +690,7 @@ static int is_arm_pmu_core(const char *name)
- 	return file_available(path);
- }
- 
--static char *perf_pmu__getcpuid(struct perf_pmu *pmu)
-+char *perf_pmu__getcpuid(struct perf_pmu *pmu)
- {
- 	char *cpuid;
- 	static bool printed;
-@@ -710,34 +710,6 @@ static char *perf_pmu__getcpuid(struct perf_pmu *pmu)
- 	return cpuid;
- }
- 
--const struct pmu_event *perf_pmu__find_table(struct perf_pmu *pmu)
--{
--	const struct pmu_event *table = NULL;
--	char *cpuid = perf_pmu__getcpuid(pmu);
--	int i;
--
--	/* on some platforms which uses cpus map, cpuid can be NULL for
--	 * PMUs other than CORE PMUs.
--	 */
--	if (!cpuid)
--		return NULL;
--
--	i = 0;
--	for (;;) {
--		const struct pmu_events_map *map = &pmu_events_map[i++];
--
--		if (!map->table)
--			break;
--
--		if (!strcmp_cpuid_str(map->cpuid, cpuid)) {
--			table = map->table;
--			break;
--		}
--	}
--	free(cpuid);
--	return table;
--}
--
- const struct pmu_event *pmu_events_map__find(void)
- {
- 	return perf_pmu__find_table(NULL);
-@@ -874,7 +846,9 @@ struct pmu_sys_event_iter_data {
- 	struct perf_pmu *pmu;
- };
- 
--static int pmu_add_sys_aliases_iter_fn(const struct pmu_event *pe, void *data)
-+static int pmu_add_sys_aliases_iter_fn(const struct pmu_event *pe,
-+				       const struct pmu_event *table __maybe_unused,
-+				       void *data)
- {
- 	struct pmu_sys_event_iter_data *idata = data;
- 	struct perf_pmu *pmu = idata->pmu;
-diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-index 015242c83698..06df99ba2029 100644
---- a/tools/perf/util/pmu.h
-+++ b/tools/perf/util/pmu.h
-@@ -128,7 +128,7 @@ struct perf_event_attr *perf_pmu__get_default_config(struct perf_pmu *pmu);
- void pmu_add_cpu_aliases_map(struct list_head *head, struct perf_pmu *pmu,
- 			     const struct pmu_event *map);
- 
--const struct pmu_event *perf_pmu__find_table(struct perf_pmu *pmu);
-+char *perf_pmu__getcpuid(struct perf_pmu *pmu);
- const struct pmu_event *pmu_events_map__find(void);
- bool pmu_uncore_alias_match(const char *pmu_name, const char *name);
- void perf_pmu_free_alias(struct perf_pmu_alias *alias);
 -- 
 2.37.0.170.g444d1eabd0-goog
 

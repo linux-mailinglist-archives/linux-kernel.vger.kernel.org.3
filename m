@@ -2,129 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7E2576609
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE5957660B
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiGORaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 13:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
+        id S230318AbiGORbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 13:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiGORaO (ORCPT
+        with ESMTP id S229716AbiGORbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 13:30:14 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034A55C9F6
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:30:13 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id a5so7611343wrx.12
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:30:12 -0700 (PDT)
+        Fri, 15 Jul 2022 13:31:12 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CF418341
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:31:11 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id g126so5219533pfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 10:31:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EAcx1njQwBghPgOSLJ20hXn1wwyIMm8g8klbF3NQvA4=;
-        b=niGhtTjG+YF4Z4gFD+l2ajQOXAg0BQLn7ZaJ4yfmqSLFRXQg1OU7/uARkQsMVORFnf
-         J/5t9mZHzl4pDaode4/AL827oDmBiIESBdYMlkFr2xX0qqBU09P2SW5CxKDJQjYCtZLG
-         nztFNc1a2DDHleJfQwgrkOSZ8/j1jNtAQsQ5HMh8RSfAFCHsxZjrUlRcF72D0ky7fobj
-         nyD2gHkEbVRPf/xeyTUkNJCiFBn7u+gW2yWf9SIM7jQSoi6f4CyBnM1WU4YwL4sHOUpA
-         JMAGxauA/KeOH5J2IjqAAgcsoJ4tWJXiUApWxaxnS1w77RYxRE3tiJ+13xVjKfZ7i6WO
-         vMGA==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:cc:from:to:message-id;
+        bh=Zz8Y77yoAGNRfrRZsS32slqkoRu0n2tXilRPTny1hNk=;
+        b=U+HKY/vtJgiL6UI2Gho2wjd2mWjcGrbj6+j9CQ1oTRQk7ptpDKp2u9+Ki0ZW+sBIbf
+         NxJRSvvPdkdiN0sT2Ccz44VD0NxFZL1r2gSvczreME+0oiZezv8MU4Qjwj2Qn4w1xAWy
+         U42bC7no0E91NFnaMDU8Qpu5WV27GOFrrjemuxwmAaLnNBPRUY6gvsJG9B/yzwGSpgR2
+         uUYKCLXaiBgOGrZVk2ODbC4d9foXbk/I2L++BxvaesgQjVTOUTQLiJLSntB1nSZz1SM1
+         7Hi7MyoXiIjS5wzsrti3LKGJaYeG80gqMS9gJ4Ay27kdYMgYGlIm8R5Xi6LpRqcZUIz0
+         YNWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EAcx1njQwBghPgOSLJ20hXn1wwyIMm8g8klbF3NQvA4=;
-        b=FdpkGp6S/k2RnUZnLVavSwxYC1n7SOE2xxukjYnVh1oydMpmWwOSS9SYGZn/2+hGKF
-         h0Qty0cq3vBqz2fMHTV9y0BZZMQNfenBj31qgGbNXamEZWN+oKzAri/Lxf9EYZuCSyo7
-         OdyMOrPCvoBX52qXBAW9KTvsg9x+1NpfZbRtA5sHwWwcu/W9vfYCoPLw7s3AvzLHh6MY
-         3phvFg98Afz6JzwxANlx95mwvWMtTvFB+GovCybC7kMo8zYWWBTsFynSmPjE+C4eL4k7
-         I/HIusTwWwDGX1gmrkueHmCdoVuyFhJAS2RgqS71+dse8yxM1y+nlpw95ZDu/JOwnuuO
-         aGCw==
-X-Gm-Message-State: AJIora9xWlX+IJZegFUw1ut1N4n+orJlc3t9o9BqIkbcGUV3qMEcF6Z1
-        ZHInmJkTHc2eWq1oJz9DsJ4N/p+6Wh4Csc6R
-X-Google-Smtp-Source: AGRyM1vmIhMojhicKpyLdQBXLalJ67mKLbI2oesntM5L1Qsv9SY4RQ7EP93+4M6ijZZ5E+SRMeBZpA==
-X-Received: by 2002:adf:e786:0:b0:21d:6ec1:ee5c with SMTP id n6-20020adfe786000000b0021d6ec1ee5cmr13233245wrm.285.1657906211410;
-        Fri, 15 Jul 2022 10:30:11 -0700 (PDT)
-Received: from rainbowdash.office.codethink.co.uk ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id m65-20020a1ca344000000b0039c5a765388sm5930842wme.28.2022.07.15.10.30.10
+        h=x-gm-message-state:date:subject:cc:from:to:message-id;
+        bh=Zz8Y77yoAGNRfrRZsS32slqkoRu0n2tXilRPTny1hNk=;
+        b=PLp1mL4hwYKLHeRx7gLClu+z7K8dVsheV6RvYXIF5DrGalsSZAp+koDfCe6tjnIt5S
+         Uh6wamzk1JB5Qmt3urwJIFzjq7R93ItmNqDoSpfRerI3beX0R8wOlMC9UuCxMqt0zDsc
+         VS+qXQNMirLxVFoyAc4qK6RqB4a4T/YPN0cvzRmiqQ8xmlIFJzAWaetCGM8SfPWxmtTs
+         o0NSLxtUCS+BM5LYilDVpgXlMT5qpk3/lq2OWV8ivORSvg1iNAEWfphQ33HrLV2p/epV
+         SGSCx/5jwscUloH05pjIf0Pm7g0yzgqm7hUGpQpAwjelG3dXx+EKH6TrsUre0y0+Tbi7
+         gH6A==
+X-Gm-Message-State: AJIora+1mboRpn899cmo2+495nqbloLFW5QwgqQCt4RkXksIW4MWEwml
+        oks5+sBlW5QkxHJ8tmcRts0uIuXt6FRCoQ==
+X-Google-Smtp-Source: AGRyM1uK6H62+1FI7CSjQPix+i5ysBrKbtH/rgd1suwn/D7CP71+5XnCnfYwW5dIr5nQ5w5uqvJE+A==
+X-Received: by 2002:a05:6a00:1908:b0:525:5dad:cb1c with SMTP id y8-20020a056a00190800b005255dadcb1cmr15080303pfi.47.1657906270704;
+        Fri, 15 Jul 2022 10:31:10 -0700 (PDT)
+Received: from localhost ([50.221.140.186])
+        by smtp.gmail.com with ESMTPSA id 125-20020a620483000000b00528c4c770c5sm4134320pfe.77.2022.07.15.10.31.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 10:30:10 -0700 (PDT)
-From:   Ben Dooks <ben.dooks@sifive.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ben Dooks <ben.dooks@sifive.com>
-Subject: [PATCH v2] net: macb: fixup sparse warnings on __be16 ports
-Date:   Fri, 15 Jul 2022 18:30:09 +0100
-Message-Id: <20220715173009.526126-1-ben.dooks@sifive.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 15 Jul 2022 10:31:09 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 10:31:09 -0700 (PDT)
+X-Google-Original-Date: Fri, 15 Jul 2022 10:31:01 PDT (-0700)
+Subject: [GIT PULL] RISC-V Fixes for 5.19-rc7
+CC:        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-077c44de-b969-4894-9547-066c73040835@palmer-ri-x1c9>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The port fields in the ethool flow structures are defined
-to be __be16 types, so sparse is showing issues where these
-are being passed to htons(). Fix these warnings by passing
-them to be16_to_cpu() instead.
+The following changes since commit e83031564137cf37e07c2d10ad468046ff48a0cf:
 
-These are being used in netdev_dbg() so should only effect
-anyone doing debug.
+  riscv: Fix ALT_THEAD_PMA's asm parameters (2022-06-17 06:16:46 -0700)
 
-Fixes the following sparse warnings:
+are available in the Git repository at:
 
-drivers/net/ethernet/cadence/macb_main.c:3366:9: warning: cast from restricted __be16
-drivers/net/ethernet/cadence/macb_main.c:3366:9: warning: cast from restricted __be16
-drivers/net/ethernet/cadence/macb_main.c:3366:9: warning: cast from restricted __be16
-drivers/net/ethernet/cadence/macb_main.c:3419:25: warning: cast from restricted __be16
-drivers/net/ethernet/cadence/macb_main.c:3419:25: warning: cast from restricted __be16
-drivers/net/ethernet/cadence/macb_main.c:3419:25: warning: cast from restricted __be16
-drivers/net/ethernet/cadence/macb_main.c:3419:25: warning: cast from restricted __be16
+  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.19-rc7
 
-Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+for you to fetch changes up to 7fccd723912702acfc2d75e8f0596982534f7f24:
 
---
-Note, given the IP is also being passed ot htons() should
-this either be changed to be32_to_cpu() or better passed
-as a pointre and the %pI4 be used to print it.
----
- drivers/net/ethernet/cadence/macb_main.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+  Merge tag 'dt-fixes-for-palmer-5.19-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git into fixes (2022-07-13 10:44:22 -0700)
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index d89098f4ede8..ea5cbfe9ac88 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -3482,7 +3482,8 @@ static int gem_add_flow_filter(struct net_device *netdev,
- 			fs->flow_type, (int)fs->ring_cookie, fs->location,
- 			htonl(fs->h_u.tcp_ip4_spec.ip4src),
- 			htonl(fs->h_u.tcp_ip4_spec.ip4dst),
--			htons(fs->h_u.tcp_ip4_spec.psrc), htons(fs->h_u.tcp_ip4_spec.pdst));
-+			be16_to_cpu(fs->h_u.tcp_ip4_spec.psrc),
-+			be16_to_cpu(fs->h_u.tcp_ip4_spec.pdst));
- 
- 	spin_lock_irqsave(&bp->rx_fs_lock, flags);
- 
-@@ -3535,8 +3536,8 @@ static int gem_del_flow_filter(struct net_device *netdev,
- 					fs->flow_type, (int)fs->ring_cookie, fs->location,
- 					htonl(fs->h_u.tcp_ip4_spec.ip4src),
- 					htonl(fs->h_u.tcp_ip4_spec.ip4dst),
--					htons(fs->h_u.tcp_ip4_spec.psrc),
--					htons(fs->h_u.tcp_ip4_spec.pdst));
-+					be16_to_cpu(fs->h_u.tcp_ip4_spec.psrc),
-+					be16_to_cpu(fs->h_u.tcp_ip4_spec.pdst));
- 
- 			gem_writel_n(bp, SCRT2, fs->location, 0);
- 
--- 
-2.35.1
+----------------------------------------------------------------
+RISC-V Fixes for 5.19-rc7
 
+* A fix to avoid printing a warning when modules do not exercise any
+  errata-dependent behavior and the SiFive errata are enabled.
+* A fix to the Microchip PFSOC to attach the L2 cache to the CPU nodes.
+
+----------------------------------------------------------------
+Conor Dooley (1):
+      riscv: dts: microchip: hook up the mpfs' l2cache
+
+Heiko Stuebner (1):
+      riscv: don't warn for sifive erratas in modules
+
+Palmer Dabbelt (1):
+      Merge tag 'dt-fixes-for-palmer-5.19-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git into fixes
+
+ arch/riscv/boot/dts/microchip/mpfs.dtsi | 4 ++++
+ arch/riscv/errata/sifive/errata.c       | 3 ++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)

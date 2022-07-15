@@ -2,326 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68285764AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C40A5764B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 17:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235854AbiGOPnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 11:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S229603AbiGOPpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 11:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235463AbiGOPmk (ORCPT
+        with ESMTP id S235771AbiGOPos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 11:42:40 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AB05C9C7
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 08:42:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R581e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VJPnC9n_1657899750;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VJPnC9n_1657899750)
-          by smtp.aliyun-inc.com;
-          Fri, 15 Jul 2022 23:42:31 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH v2 16/16] erofs: introduce multi-reference pclusters (fully-referenced)
-Date:   Fri, 15 Jul 2022 23:42:03 +0800
-Message-Id: <20220715154203.48093-17-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
-In-Reply-To: <20220715154203.48093-1-hsiangkao@linux.alibaba.com>
-References: <20220715154203.48093-1-hsiangkao@linux.alibaba.com>
+        Fri, 15 Jul 2022 11:44:48 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A803B3;
+        Fri, 15 Jul 2022 08:44:47 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E15F220247;
+        Fri, 15 Jul 2022 15:44:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1657899885; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nL34y1qYFraBx68T2BEQkpXsOQD15F7byblMz6APRsw=;
+        b=tiAdnkdx/G9tsjwcOjDwBrX4tMh3u0Gj4OHzRtHLpRlZyHejpi/CsTEogQxckjnc0NKPOv
+        YT/zJtIRKJ7s1KVtQhaeWIeVhxeex6ZDTn8WfKgAE6e5Uh6lhUkiatGsSmScWNn6/l5zU9
+        DmllE/Be5BVGWwjxh86l2r8JWfNQ9/M=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B937C13AC3;
+        Fri, 15 Jul 2022 15:44:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iloYLG2L0WJHYQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Fri, 15 Jul 2022 15:44:45 +0000
+Date:   Fri, 15 Jul 2022 17:44:44 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Usama Arif <usama.arif@bytedance.com>
+Cc:     io-uring@vger.kernel.org, axboe@kernel.dk, asml.silence@gmail.com,
+        linux-kernel@vger.kernel.org, fam.zheng@bytedance.com
+Subject: Re: [PATCH v6 5/5] io_uring: remove ring quiesce for
+ io_uring_register
+Message-ID: <20220715154444.GA17123@blackbody.suse.cz>
+References: <20220204145117.1186568-1-usama.arif@bytedance.com>
+ <20220204145117.1186568-6-usama.arif@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204145117.1186568-6-usama.arif@bytedance.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's introduce multi-reference pclusters at runtime. In details,
-if one pcluster is requested by multiple extents at almost the same
-time (even belong to different files), the longest extent will be
-decompressed as representative and the other extents are actually
-copied from the longest one.
+Hello.
 
-After this patch, fully-referenced extents can be correctly handled
-and the full decoding check needs to be bypassed for
-partial-referenced extents.
+On Fri, Feb 04, 2022 at 02:51:17PM +0000, Usama Arif <usama.arif@bytedance.com> wrote:
+> -	percpu_ref_resurrect(ref);
+> [...]
+> -		percpu_ref_reinit(&ctx->refs);
 
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
- fs/erofs/compress.h     |   2 +-
- fs/erofs/decompressor.c |   2 +-
- fs/erofs/zdata.c        | 118 ++++++++++++++++++++++++++++------------
- fs/erofs/zdata.h        |   3 +
- 4 files changed, 87 insertions(+), 38 deletions(-)
+It seems to me that this patch could have also changed
 
-diff --git a/fs/erofs/compress.h b/fs/erofs/compress.h
-index 19e6c56a9f47..26fa170090b8 100644
---- a/fs/erofs/compress.h
-+++ b/fs/erofs/compress.h
-@@ -17,7 +17,7 @@ struct z_erofs_decompress_req {
- 
- 	/* indicate the algorithm will be used for decompression */
- 	unsigned int alg;
--	bool inplace_io, partial_decoding;
-+	bool inplace_io, partial_decoding, fillgaps;
- };
- 
- struct z_erofs_decompressor {
-diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
-index 45be8f4aeb68..2d55569f96ac 100644
---- a/fs/erofs/decompressor.c
-+++ b/fs/erofs/decompressor.c
-@@ -83,7 +83,7 @@ static int z_erofs_lz4_prepare_dstpages(struct z_erofs_lz4_decompress_ctx *ctx,
- 			j = 0;
- 
- 		/* 'valid' bounced can only be tested after a complete round */
--		if (test_bit(j, bounced)) {
-+		if (!rq->fillgaps && test_bit(j, bounced)) {
- 			DBG_BUGON(i < lz4_max_distance_pages);
- 			DBG_BUGON(top >= lz4_max_distance_pages);
- 			availables[top++] = rq->out[i - lz4_max_distance_pages];
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 0ef672372a69..d2b8bc20965c 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -467,7 +467,8 @@ static void z_erofs_try_to_claim_pcluster(struct z_erofs_decompress_frontend *f)
- 	 * type 2, link to the end of an existing open chain, be careful
- 	 * that its submission is controlled by the original attached chain.
- 	 */
--	if (cmpxchg(&pcl->next, Z_EROFS_PCLUSTER_TAIL,
-+	if (*owned_head != &pcl->next && pcl != f->tailpcl &&
-+	    cmpxchg(&pcl->next, Z_EROFS_PCLUSTER_TAIL,
- 		    *owned_head) == Z_EROFS_PCLUSTER_TAIL) {
- 		*owned_head = Z_EROFS_PCLUSTER_TAIL;
- 		f->mode = Z_EROFS_PCLUSTER_HOOKED;
-@@ -480,20 +481,8 @@ static void z_erofs_try_to_claim_pcluster(struct z_erofs_decompress_frontend *f)
- 
- static int z_erofs_lookup_pcluster(struct z_erofs_decompress_frontend *fe)
- {
--	struct erofs_map_blocks *map = &fe->map;
- 	struct z_erofs_pcluster *pcl = fe->pcl;
- 
--	/* to avoid unexpected loop formed by corrupted images */
--	if (fe->owned_head == &pcl->next || pcl == fe->tailpcl) {
--		DBG_BUGON(1);
--		return -EFSCORRUPTED;
--	}
--
--	if (pcl->pageofs_out != (map->m_la & ~PAGE_MASK)) {
--		DBG_BUGON(1);
--		return -EFSCORRUPTED;
--	}
--
- 	mutex_lock(&pcl->lock);
- 	/* used to check tail merging loop due to corrupted images */
- 	if (fe->owned_head == Z_EROFS_PCLUSTER_TAIL)
-@@ -785,6 +774,8 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
- 	z_erofs_onlinepage_split(page);
- 	/* bump up the number of spiltted parts of a page */
- 	++spiltted;
-+	if (fe->pcl->pageofs_out != (map->m_la & ~PAGE_MASK))
-+		fe->pcl->multibases = true;
- 
- 	if ((map->m_flags & EROFS_MAP_FULL_MAPPED) &&
- 	    fe->pcl->length == map->m_llen)
-@@ -842,36 +833,90 @@ struct z_erofs_decompress_backend {
- 	/* pages to keep the compressed data */
- 	struct page **compressed_pages;
- 
-+	struct list_head decompressed_secondary_bvecs;
- 	struct page **pagepool;
- 	unsigned int onstack_used, nr_pages;
- };
- 
--static int z_erofs_do_decompressed_bvec(struct z_erofs_decompress_backend *be,
--					struct z_erofs_bvec *bvec)
-+struct z_erofs_bvec_item {
-+	struct z_erofs_bvec bvec;
-+	struct list_head list;
-+};
-+
-+static void z_erofs_do_decompressed_bvec(struct z_erofs_decompress_backend *be,
-+					 struct z_erofs_bvec *bvec)
- {
--	unsigned int pgnr = (bvec->offset + be->pcl->pageofs_out) >> PAGE_SHIFT;
--	struct page *oldpage;
-+	struct z_erofs_bvec_item *item;
- 
--	DBG_BUGON(pgnr >= be->nr_pages);
--	oldpage = be->decompressed_pages[pgnr];
--	be->decompressed_pages[pgnr] = bvec->page;
-+	if (!((bvec->offset + be->pcl->pageofs_out) & ~PAGE_MASK)) {
-+		unsigned int pgnr;
-+		struct page *oldpage;
- 
--	/* error out if one pcluster is refenenced multiple times. */
--	if (oldpage) {
--		DBG_BUGON(1);
--		z_erofs_page_mark_eio(oldpage);
--		z_erofs_onlinepage_endio(oldpage);
--		return -EFSCORRUPTED;
-+		pgnr = (bvec->offset + be->pcl->pageofs_out) >> PAGE_SHIFT;
-+		DBG_BUGON(pgnr >= be->nr_pages);
-+		oldpage = be->decompressed_pages[pgnr];
-+		be->decompressed_pages[pgnr] = bvec->page;
-+
-+		if (!oldpage)
-+			return;
-+	}
-+
-+	/* (cold path) one pcluster is requested multiple times */
-+	item = kmalloc(sizeof(*item), GFP_KERNEL | __GFP_NOFAIL);
-+	item->bvec = *bvec;
-+	list_add(&item->list, &be->decompressed_secondary_bvecs);
-+}
-+
-+static void z_erofs_fill_other_copies(struct z_erofs_decompress_backend *be,
-+				      int err)
-+{
-+	unsigned int off0 = be->pcl->pageofs_out;
-+	struct list_head *p, *n;
-+
-+	list_for_each_safe(p, n, &be->decompressed_secondary_bvecs) {
-+		struct z_erofs_bvec_item *bvi;
-+		unsigned int end, cur;
-+		void *dst, *src;
-+
-+		bvi = container_of(p, struct z_erofs_bvec_item, list);
-+		cur = bvi->bvec.offset < 0 ? -bvi->bvec.offset : 0;
-+		end = min_t(unsigned int, be->pcl->length - bvi->bvec.offset,
-+			    bvi->bvec.end);
-+		dst = kmap_local_page(bvi->bvec.page);
-+		while (cur < end) {
-+			unsigned int pgnr, scur, len;
-+
-+			pgnr = (bvi->bvec.offset + cur + off0) >> PAGE_SHIFT;
-+			DBG_BUGON(pgnr >= be->nr_pages);
-+
-+			scur = bvi->bvec.offset + cur -
-+					((pgnr << PAGE_SHIFT) - off0);
-+			len = min_t(unsigned int, end - cur, PAGE_SIZE - scur);
-+			if (!be->decompressed_pages[pgnr]) {
-+				err = -EFSCORRUPTED;
-+				cur += len;
-+				continue;
-+			}
-+			src = kmap_local_page(be->decompressed_pages[pgnr]);
-+			memcpy(dst + cur, src + scur, len);
-+			kunmap_local(src);
-+			cur += len;
-+		}
-+		kunmap_local(dst);
-+		if (err)
-+			z_erofs_page_mark_eio(bvi->bvec.page);
-+		z_erofs_onlinepage_endio(bvi->bvec.page);
-+		list_del(p);
-+		kfree(bvi);
- 	}
--	return 0;
- }
- 
--static int z_erofs_parse_out_bvecs(struct z_erofs_decompress_backend *be)
-+static void z_erofs_parse_out_bvecs(struct z_erofs_decompress_backend *be)
- {
- 	struct z_erofs_pcluster *pcl = be->pcl;
- 	struct z_erofs_bvec_iter biter;
- 	struct page *old_bvpage;
--	int i, err = 0;
-+	int i;
- 
- 	z_erofs_bvec_iter_begin(&biter, &pcl->bvset, Z_EROFS_INLINE_BVECS, 0);
- 	for (i = 0; i < pcl->vcnt; ++i) {
-@@ -883,13 +928,12 @@ static int z_erofs_parse_out_bvecs(struct z_erofs_decompress_backend *be)
- 			z_erofs_put_shortlivedpage(be->pagepool, old_bvpage);
- 
- 		DBG_BUGON(z_erofs_page_is_invalidated(bvec.page));
--		err = z_erofs_do_decompressed_bvec(be, &bvec);
-+		z_erofs_do_decompressed_bvec(be, &bvec);
- 	}
- 
- 	old_bvpage = z_erofs_bvec_iter_end(&biter);
- 	if (old_bvpage)
- 		z_erofs_put_shortlivedpage(be->pagepool, old_bvpage);
--	return err;
- }
- 
- static int z_erofs_parse_in_bvecs(struct z_erofs_decompress_backend *be,
-@@ -924,7 +968,7 @@ static int z_erofs_parse_in_bvecs(struct z_erofs_decompress_backend *be,
- 					err = -EIO;
- 				continue;
- 			}
--			err = z_erofs_do_decompressed_bvec(be, bvec);
-+			z_erofs_do_decompressed_bvec(be, bvec);
- 			*overlapped = true;
- 		}
- 	}
-@@ -971,13 +1015,10 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
- 			kvcalloc(pclusterpages, sizeof(struct page *),
- 				 GFP_KERNEL | __GFP_NOFAIL);
- 
--	err2 = z_erofs_parse_out_bvecs(be);
--	if (err2)
--		err = err2;
-+	z_erofs_parse_out_bvecs(be);
- 	err2 = z_erofs_parse_in_bvecs(be, &overlapped);
- 	if (err2)
- 		err = err2;
--
- 	if (err)
- 		goto out;
- 
-@@ -997,6 +1038,7 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
- 					.alg = pcl->algorithmformat,
- 					.inplace_io = overlapped,
- 					.partial_decoding = pcl->partial,
-+					.fillgaps = pcl->multibases,
- 				 }, be->pagepool);
- 
- out:
-@@ -1020,6 +1062,7 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
- 	if (be->compressed_pages < be->onstack_pages ||
- 	    be->compressed_pages >= be->onstack_pages + Z_EROFS_ONSTACK_PAGES)
- 		kvfree(be->compressed_pages);
-+	z_erofs_fill_other_copies(be, err);
- 
- 	for (i = 0; i < be->nr_pages; ++i) {
- 		page = be->decompressed_pages[i];
-@@ -1041,6 +1084,7 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
- 
- 	pcl->length = 0;
- 	pcl->partial = true;
-+	pcl->multibases = false;
- 	pcl->bvset.nextpage = NULL;
- 	pcl->vcnt = 0;
- 
-@@ -1056,6 +1100,8 @@ static void z_erofs_decompress_queue(const struct z_erofs_decompressqueue *io,
- 	struct z_erofs_decompress_backend be = {
- 		.sb = io->sb,
- 		.pagepool = pagepool,
-+		.decompressed_secondary_bvecs =
-+			LIST_HEAD_INIT(be.decompressed_secondary_bvecs),
- 	};
- 	z_erofs_next_pcluster_t owned = io->head;
- 
-diff --git a/fs/erofs/zdata.h b/fs/erofs/zdata.h
-index 4ae3b763bc27..e7f04c4fbb81 100644
---- a/fs/erofs/zdata.h
-+++ b/fs/erofs/zdata.h
-@@ -84,6 +84,9 @@ struct z_erofs_pcluster {
- 	/* L: whether partial decompression or not */
- 	bool partial;
- 
-+	/* L: indicate several pageofs_outs or not */
-+	bool multibases;
-+
- 	/* A: compressed bvecs (can be cached or inplaced pages) */
- 	struct z_erofs_bvec compressed_bvecs[];
- };
--- 
-2.24.4
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -1911,7 +1911,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+        ctx->dummy_ubuf->ubuf = -1UL;
 
+        if (percpu_ref_init(&ctx->refs, io_ring_ctx_ref_free,
+-                           PERCPU_REF_ALLOW_REINIT, GFP_KERNEL))
++                           0, GFP_KERNEL))
+                goto err;
+
+        ctx->flags = p->flags;
+
+Or are there any plans to still use the reinit/resurrect functionality
+of the percpu counter?
+
+Thanks,
+Michal

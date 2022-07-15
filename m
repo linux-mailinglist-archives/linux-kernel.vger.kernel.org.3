@@ -2,243 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A024A57587D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7D3575877
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 02:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241101AbiGOAFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Jul 2022 20:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
+        id S241085AbiGOAFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Jul 2022 20:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241063AbiGOAFP (ORCPT
+        with ESMTP id S241053AbiGOAFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Jul 2022 20:05:15 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622E8735B6;
-        Thu, 14 Jul 2022 17:05:13 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A2DB69DA;
-        Fri, 15 Jul 2022 02:05:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1657843510;
-        bh=eUrWlueduRgSkr9QAPg6mJaG55bmEBeshRDPqeUsPhM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t+ys3+MLbVdT5iTS6NTWCpHz2R2ecFFLvH78hMoP1bCBqV2mo10mZexYRSrVHjbYU
-         GWBBMHR6M0jGcPcPiCqI/Nzq2TqdHia5FWD5f6IlWXqxDTqAmebfa/q0yV+gzc68RV
-         BI5KJTGx+8rBVCIso+Dsuboay3jPlBa6SC4PgyVw=
-Date:   Fri, 15 Jul 2022 03:04:39 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org, jernej.skrabec@gmail.com,
-        knaerzche@gmail.com, kernel@collabora.com,
-        bob.beckett@collabora.com, ezequiel@vanguardiasur.com.ar,
-        mchehab@kernel.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, Jonas Karlman <jonas@kwiboo.se>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH 1/6] media: v4l2: Add NV15 pixel format
-Message-ID: <YtCvF+kAfeiTduW+@pendragon.ideasonboard.com>
-References: <20220713162449.133738-1-sebastian.fricke@collabora.com>
- <20220713162449.133738-2-sebastian.fricke@collabora.com>
- <Ys8OzDzXmmCHI9qb@pendragon.ideasonboard.com>
- <acded11db2957b4e9d4f8df44f82dc1babe7aae0.camel@collabora.com>
+        Thu, 14 Jul 2022 20:05:00 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B6073594;
+        Thu, 14 Jul 2022 17:05:00 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id g4so3002662pgc.1;
+        Thu, 14 Jul 2022 17:05:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=aLkKRaOcJkecC7a7hCUl2f3zvdxWOhT4lQJMyspC0FM=;
+        b=IqeRqPZ3qF8cGKCO52T4NT7b0KClEh8Mtu298guXjrnlWQAtq0lDeurmiocTHaLH77
+         FFwBhHmHZpa8IhF6c5ZBXzSpG+IQpozgVAyYpbYVpHUhPW6pcfLRkxkNdjA3WP8q6si8
+         jU91uyXqS6KOTRFDGmFoaU91W+yPsnbsRnCXNFMCAZTxTHoPHyjMm5cfo3S873x/p90k
+         FYgD90AeidbGiba/MSFxzd/hKmJpROhaF/CvP5C/jUv8/40lVT2wIxFa/ixlFBpJb1h3
+         662CpB1q40lEoqvNRNcZ9W7TYJAbIWVXaBzs4oh4z65c4wUATKcvCoNiNhqMzHOXeOUy
+         W1JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=aLkKRaOcJkecC7a7hCUl2f3zvdxWOhT4lQJMyspC0FM=;
+        b=PrAQ4fJBiGgkNoBp2yJvlsQBpTj4UsewmD8uKg8ms9ktJihbsNoi+fqZ+FUgRuLBw/
+         qKr8EOfGCxK73LB/UxKOkjIUM7gHOyvHQO38LfqZkWdMoweZkQjcBKuVFLHk55pZ5lkF
+         PxNCzTTxRbwD1ffQkDe+nMrY6YCvqvyAfVUmG51CwPXtpAXzE8PR3IFTPB0kIq5bR0HA
+         541NSuzUhnWeQX9SIy2aIFFfGLL2CG4DnTnT4kg99Prd9ABnvOjJGLJ+z/3VoU6NNBsC
+         MWJw3r/GrQE4jQYra5w5BrS0BlH6Puw9w0ci51Ergc9FVbV3Pvylpeh1cXnPZz+0OHbh
+         9/Vg==
+X-Gm-Message-State: AJIora8qboCtM8Neh36wbctJH3nEeN1LG5ZCu31qpyKjpMrDh3tiGYvk
+        FsNS/iTQaxv7I+2VdRbgjZM=
+X-Google-Smtp-Source: AGRyM1txesrCDgR42eBBij0RG2Z8x5Rlh9hy1SdbxF1Y4yW+++AjNOqM6ckBYKqRJg5/k6yZszigMQ==
+X-Received: by 2002:a05:6a00:198f:b0:52a:dc25:cc78 with SMTP id d15-20020a056a00198f00b0052adc25cc78mr10815233pfl.20.1657843499626;
+        Thu, 14 Jul 2022 17:04:59 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g30-20020aa79dde000000b005251b9102dbsm2355500pfq.144.2022.07.14.17.04.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 17:04:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 14 Jul 2022 17:04:58 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
+Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        brendanhiggins@google.com, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 4/9] drm: selftest: convert drm_format selftest to
+ KUnit
+Message-ID: <20220715000458.GA537048@roeck-us.net>
+References: <20220708203052.236290-1-maira.canal@usp.br>
+ <20220708203052.236290-5-maira.canal@usp.br>
+ <20220714235137.GA485839@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <acded11db2957b4e9d4f8df44f82dc1babe7aae0.camel@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220714235137.GA485839@roeck-us.net>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 09:02:38AM -0400, Nicolas Dufresne wrote:
-> Le mercredi 13 juillet 2022 Ã  21:28 +0300, Laurent Pinchart a Ã©critÂ :
-> > Hi Sebastian and Jonas,
+On Thu, Jul 14, 2022 at 04:51:40PM -0700, Guenter Roeck wrote:
+> On Fri, Jul 08, 2022 at 05:30:47PM -0300, Maíra Canal wrote:
+> > Considering the current adoption of the KUnit framework, convert the
+> > DRM format selftest to the KUnit API.
 > > 
-> > Thank you for the patch.
-> > 
-> > On Wed, Jul 13, 2022 at 06:24:46PM +0200, Sebastian Fricke wrote:
-> > > From: Jonas Karlman <jonas@kwiboo.se>
-> > > 
-> > > Add the NV15 pixel format used by the Rockchip Video Decoder for 10-bit
-> > > buffers.
-> > > 
-> > > NV15 is a packed 10-bit 4:2:0 Y/CbCr format similar to P010 and P210 but
-> > > has no padding between components. Instead, luminance and chrominance
-> > > samples are grouped into 4s so that each group is packed into an integer
-> > > number of bytes:
-> > > 
-> > > YYYY = UVUV = 4 * 10 bits = 40 bits = 5 bytes
-> > > 
-> > > The '15' suffix refers to the optimum effective bits per pixel which is
-> > > achieved when the total number of luminance samples is a multiple of 8
-> > > for NV15.
-> > > 
-> > > Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-> > > Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-> > > ---
-> > >  .../media/v4l/pixfmt-yuv-planar.rst           | 53 +++++++++++++++++++
-> > >  drivers/media/v4l2-core/v4l2-common.c         |  2 +
-> > >  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
-> > >  include/uapi/linux/videodev2.h                |  1 +
-> > >  4 files changed, 57 insertions(+)
-> > > 
-> > > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > > index a900ff66911a..42ab3fe4667f 100644
-> > > --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > > +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > > @@ -79,6 +79,13 @@ All components are stored with the same number of bits per component.
-> > >        - Cr, Cb
-> > >        - Yes
-> > >        - Linear
-> > > +    * - V4L2_PIX_FMT_NV15
-> > > +      - 'NV15'
-> > > +      - 15
-> > > +      - 4:2:0
-> > > +      - Cb, Cr
-> > > +      - Yes
-> > > +      - Linear
-> > >      * - V4L2_PIX_FMT_NV12M
-> > >        - 'NM12'
-> > >        - 8
-> > > @@ -176,6 +183,7 @@ horizontally.
-> > >  
-> > >  .. _V4L2-PIX-FMT-NV12:
-> > >  .. _V4L2-PIX-FMT-NV21:
-> > > +.. _V4L2-PIX-FMT-NV15:
-> > >  .. _V4L2-PIX-FMT-NV12M:
-> > >  .. _V4L2-PIX-FMT-NV21M:
-> > >  .. _V4L2-PIX-FMT-P010:
-> > > @@ -570,6 +578,51 @@ Data in the 10 high bits, zeros in the 6 low bits, arranged in little endian ord
-> > >        - Cb\ :sub:`11`
-> > >        - Cr\ :sub:`11`
-> > >  
-> > > +.. _V4L2_PIX_FMT_NV15:
-> > > +
-> > > +NV15
-> > > +----
-> > > +
-> > > +Like P010 but a packed 10-bit 4:2:0 semi-planar Y/CbCr format without padding between components.
-> > 
-> > "packed 10-bit semi-planar" sounds confusing, as "packed YUV" usually
-> > refers to YUYV-style formats, but I'm not sure how to express that
-> > better.
+> > Tested-by: David Gow <davidgow@google.com>
+> > Acked-by: Daniel Latypov <dlatypov@google.com>
+> > Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> > Signed-off-by: Maíra Canal <maira.canal@usp.br>
 > 
-> Perhaps:
+> This patch results in:
 > 
-> "Similar to P010 (10-bit 4:":0 semi-planer Y/CbCr), though unlike P010, the
-> there is not padding between components."
+> Building powerpc:allmodconfig ... failed
+> --------------
+> Error log:
+> drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_format_min_pitch':
+> drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of 3712 bytes is larger than 2048 bytes
 > 
-> > > +Instead, luminance and chrominance samples are grouped into 4s so that each group is packed into an integer
-> > > +number of bytes:
-> > 
-> > Could you please wrap the description at 80 columns ?
-> > 
-> > > +YYYY = UVUV = 4 * 10 bits = 40 bits = 5 bytes
-> > > +
-> > > +.. flat-table:: Sample 4x4 NV15 Image
-> > > +    :header-rows:  0
-> > > +    :stub-columns: 0
-> > > +
-> > > +    * - start + 0:
-> > > +      - Y'\ :sub:`00`
-> > > +      - Y'\ :sub:`01`
-> > > +      - Y'\ :sub:`02`
-> > > +      - Y'\ :sub:`03`
-> > > +    * - start + 8:
-> > > +      - Y'\ :sub:`10`
-> > > +      - Y'\ :sub:`11`
-> > > +      - Y'\ :sub:`12`
-> > > +      - Y'\ :sub:`13`
-> > > +    * - start + 16:
-> > > +      - Y'\ :sub:`20`
-> > > +      - Y'\ :sub:`21`
-> > > +      - Y'\ :sub:`22`
-> > > +      - Y'\ :sub:`23`
-> > > +    * - start + 24:
-> > > +      - Y'\ :sub:`30`
-> > > +      - Y'\ :sub:`31`
-> > > +      - Y'\ :sub:`32`
-> > > +      - Y'\ :sub:`33`
-> > > +    * - start + 32:
-> > > +      - Cb\ :sub:`00`
-> > > +      - Cr\ :sub:`00`
-> > > +      - Cb\ :sub:`01`
-> > > +      - Cr\ :sub:`01`
-> > > +    * - start + 40:
-> > > +      - Cb\ :sub:`10`
-> > > +      - Cr\ :sub:`10`
-> > > +      - Cb\ :sub:`11`
-> > > +      - Cr\ :sub:`11`
-> > 
-> > This doesn't look right. You need to describe the data at the bit level,
-> > so show how the 10-bit samples are packed into bytes.
-> 
-> A word of NV15 is 40 bits, so 1 word of NV12 is 5 bytes, 4 pixels. I believe
-> there is no choice here but to describe 4 pixels for Y plane, and 4 pixels for
-> CbCr plane. This might be a bit big though.
 
-I agree, it may not be the prettiest, but I'd rather have a larger table
-than a format that is understood differently by different drivers. Been
-there, done that, not again :-)
+Also seen with i386:allyesconfig:
 
-> > > +
-> > >  .. raw:: latex
-> > >  
-> > >      \endgroup
-> > > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> > > index 1e38ad8906a2..23a0cb02ea3a 100644
-> > > --- a/drivers/media/v4l2-core/v4l2-common.c
-> > > +++ b/drivers/media/v4l2-core/v4l2-common.c
-> > > @@ -262,6 +262,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
-> > >  		/* YUV planar formats */
-> > >  		{ .format = V4L2_PIX_FMT_NV12,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> > >  		{ .format = V4L2_PIX_FMT_NV21,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> > > +		{ .format = V4L2_PIX_FMT_NV15,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 5, 5, 0, 0 }, .hdiv = 2, .vdiv = 2,
-> > > +		  .block_w = { 4, 2, 0, 0 }, .block_h = { 1, 1, 0, 0 } },
-> > >  		{ .format = V4L2_PIX_FMT_NV16,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> > >  		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> > >  		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > index e2526701294e..9e5510cb255e 100644
-> > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > @@ -1302,6 +1302,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
-> > >  	case V4L2_PIX_FMT_M420:		descr = "YUV 4:2:0 (M420)"; break;
-> > >  	case V4L2_PIX_FMT_NV12:		descr = "Y/CbCr 4:2:0"; break;
-> > >  	case V4L2_PIX_FMT_NV21:		descr = "Y/CrCb 4:2:0"; break;
-> > > +	case V4L2_PIX_FMT_NV15:		descr = "10-bit Y/CbCr 4:2:0 (Packed)"; break;
-> > >  	case V4L2_PIX_FMT_NV16:		descr = "Y/CbCr 4:2:2"; break;
-> > >  	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
-> > >  	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
-> > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> > > index 5a73b92ffe4d..47ff34d6b79f 100644
-> > > --- a/include/uapi/linux/videodev2.h
-> > > +++ b/include/uapi/linux/videodev2.h
-> > > @@ -598,6 +598,7 @@ struct v4l2_pix_format {
-> > >  /* two planes -- one Y, one Cr + Cb interleaved  */
-> > >  #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/CbCr 4:2:0  */
-> > >  #define V4L2_PIX_FMT_NV21    v4l2_fourcc('N', 'V', '2', '1') /* 12  Y/CrCb 4:2:0  */
-> > > +#define V4L2_PIX_FMT_NV15    v4l2_fourcc('N', 'V', '1', '5') /* 15  Y/CbCr 4:2:0 10-bit packed */
-> > >  #define V4L2_PIX_FMT_NV16    v4l2_fourcc('N', 'V', '1', '6') /* 16  Y/CbCr 4:2:2  */
-> > >  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
-> > >  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
+drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_format_min_pitch':
+drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of 2572 bytes is larger than 2048 bytes
 
--- 
-Regards,
-
-Laurent Pinchart
+Guenter

@@ -2,245 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562EB576308
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31643576310
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 15:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiGONtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 09:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
+        id S231480AbiGONuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 09:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiGONtj (ORCPT
+        with ESMTP id S231371AbiGONt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 09:49:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6324525EA4
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 06:49:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657892977;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=amabN4tTEMh+/YwAFG30tjFcz2ElQGektMQtXLodpFI=;
-        b=PFwA2mHD6VSlTQHUBX0wXH77XzID2Hx+kAOYiRo6azs4DeIFWlqkk46rgWLwSQdOMvWq8/
-        HRBBF7PUr3GP8goqkgP0JFhWmrUuDX2IMsx0TV+4LszJwcxnDhG+d9XetqEf9DA+j9k/c4
-        4N73cWPOzgawtvmAVKL0Uf04YWLou74=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-660-Z4EXuOs0NA6ZvoCz4bRe6Q-1; Fri, 15 Jul 2022 09:49:26 -0400
-X-MC-Unique: Z4EXuOs0NA6ZvoCz4bRe6Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 02723185A7A4;
-        Fri, 15 Jul 2022 13:49:26 +0000 (UTC)
-Received: from pauld.bos.com (dhcp-17-237.bos.redhat.com [10.18.17.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7C6842166B26;
-        Fri, 15 Jul 2022 13:49:25 +0000 (UTC)
-From:   Phil Auld <pauld@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Yury Norov <yury.norov@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH v5] drivers/base: fix userspace break from using bin_attributes for cpumap and cpulist
-Date:   Fri, 15 Jul 2022 09:49:24 -0400
-Message-Id: <20220715134924.3466194-1-pauld@redhat.com>
+        Fri, 15 Jul 2022 09:49:59 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054D08053F;
+        Fri, 15 Jul 2022 06:49:55 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id y141so4711689pfb.7;
+        Fri, 15 Jul 2022 06:49:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Rs46+iydynCKHLHZ1GP3rF0W0E38SP1veulXa6gwRZ4=;
+        b=U2LPKLM/AjT1a2LjEeJbIoC7cMGOq1yROmt0cZz2Ais3HJJbyhb17PcE+5FV+ybUP8
+         +DSpyzNvjpXy8F2wrmZ0lTlqucMS7kjrw4Q9h/Tne1y2K9xW3tm2zMzEVInk6+Y2kNSK
+         xK5+NjqnN7jZRM20X7NKghDHD1GEMUwYqciGlk2cObJdUKWdRpmYfuyS/zSPa7rtAs0J
+         /eL2zWxi2I+kPcM56S+S1qVAVJaJURtunnq0/WI/1FWTaavZX0kfTCaS9YaUXyinPP0X
+         /r6r+fcRBASD1bIPLyE3iFMUJV6F7KavxvqQHCWQ7TydHLHLIKdC54p0qZnsEtBjn01F
+         8XWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Rs46+iydynCKHLHZ1GP3rF0W0E38SP1veulXa6gwRZ4=;
+        b=QC7rrCtOyszSEMwMtJG1r6NUo0URaExBzKprKszNI96OIX0gTeU8/2oadbv5D0g8GN
+         RByUKGiK6E7cKL6CDsZKTUaVgJTpS7b+YWUjuG4YarUAd0DMKuONAKvraRkuBWEQMOjc
+         YiVf9iDP+l3yNNWmlv+N/Kv88cUgDLeE66LfPkF4gH0n752b+oUg2jrCi4SV9ckAjdtr
+         ku3dIAz2HevCywRo++wHR6xgj3YV7XSGfJOvWfTgcU7rJlsYXLqNjqU21sP9D7zHaVgn
+         o0WRw+4YrCdfGQVK9pjYt84CGdZCF4Fj2Ra5tFzA+hBQEvoY+LWJVdBRJ9CojRfXXk9Y
+         gejA==
+X-Gm-Message-State: AJIora8sixEwBKavGXmr2fmmjBgfjbgnOFn+86GBRHM2vX/+N67rXmno
+        2NjL9I7iICSgxJdW2pDNStA=
+X-Google-Smtp-Source: AGRyM1ulOtzAhHCGu6ywxJM6sk+U6dmHRqZvwpjYFjdMEiuPSMe0ZWPIPMhh5EKAD2SvIvDk3Xu89Q==
+X-Received: by 2002:a63:d94a:0:b0:412:6986:326e with SMTP id e10-20020a63d94a000000b004126986326emr12641651pgj.56.1657892990012;
+        Fri, 15 Jul 2022 06:49:50 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v21-20020a170902ca9500b0016b80d2fac8sm3468442pld.248.2022.07.15.06.49.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 06:49:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8c949bd4-d25a-d5f5-49be-59d52e4b6c9d@roeck-us.net>
+Date:   Fri, 15 Jul 2022 06:49:46 -0700
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 6/9] bitops: let optimize out non-atomic bitops on
+ compile-time constants
+Content-Language: en-US
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
+ <20220624121313.2382500-7-alexandr.lobakin@intel.com>
+ <20220715000402.GA512558@roeck-us.net>
+ <20220715132633.61480-1-alexandr.lobakin@intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220715132633.61480-1-alexandr.lobakin@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using bin_attributes with a 0 size causes fstat and friends to return that
-0 size. This breaks userspace code that retrieves the size before reading
-the file. Rather than reverting 75bd50fa841 ("drivers/base/node.c: use
-bin_attribute to break the size limitation of cpumap ABI") let's put in a
-size value at compile time.
+On 7/15/22 06:26, Alexander Lobakin wrote:
+> From: Guenter Roeck <linux@roeck-us.net>
+> Date: Thu, 14 Jul 2022 17:04:02 -0700
+> 
+>> On Fri, Jun 24, 2022 at 02:13:10PM +0200, Alexander Lobakin wrote:
+>>> Currently, many architecture-specific non-atomic bitop
+>>> implementations use inline asm or other hacks which are faster or
+> 
+> [...]
+> 
+>>> Cc: Mark Rutland <mark.rutland@arm.com>
+>>> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+>>> Reviewed-by: Marco Elver <elver@google.com>
+>>
+>> Building i386:allyesconfig ... failed
+>> --------------
+>> Error log:
+>> arch/x86/platform/olpc/olpc-xo1-sci.c: In function 'send_ebook_state':
+>> arch/x86/platform/olpc/olpc-xo1-sci.c:83:63: error: logical not is only applied to the left hand side of comparison
+> 
+> Looks like a trigger, not a cause... Anyway, this construct:
+> 
+> 	unsigned char state;
+> 
+> 	[...]
+> 
+> 	if (!!test_bit(SW_TABLET_MODE, ebook_switch_idev->sw) == state)
+> 
+> doesn't look legit enough.
+> That redundant double-negation [of boolean value], together with
+> comparing boolean to char, provokes compilers to think the author
+> made logical mistakes here, although it works as expected.
+> Could you please try (if it's not automated build which you can't
+> modify) the following:
+> 
 
-For cpulist the maximum size is on the order of
-	NR_CPUS * (ceil(log10(NR_CPUS)) + 1)/2
+Agreed, the existing code seems wrong. The change below looks correct
+and fixes the problem. Feel free to add
 
-which for 8192 is 20480 (8192 * 5)/2. In order to get near that you'd need
-a system with every other CPU on one node. For example: (0,2,4,8, ... ).
-To simplify the math and support larger NR_CPUS in the future we are using
-(NR_CPUS * 7)/2. We also set it to a min of PAGE_SIZE to retain the older
-behavior for smaller NR_CPUS.
+Reviewed-and-tested-by: Guenter Roeck <linux@roeck-us.net>
 
-The cpumap file the size works out to be NR_CPUS/4 + NR_CPUS/32 - 1
-(or NR_CPUS * 9/32 - 1) including the ","s.
+to the real patch.
 
-Add a set of macros for these values to cpumask.h so they can be used in
-multiple places. Apply these to the handful of such files in
-drivers/base/topology.c as well as node.c.
+Thanks,
+Guenter
 
-As an example, on an 80 cpu 4-node system (NR_CPUS == 8192):
-
-before:
-
--r--r--r--. 1 root root 0 Jul 12 14:08 system/node/node0/cpulist
--r--r--r--. 1 root root 0 Jul 11 17:25 system/node/node0/cpumap
-
-after:
-
--r--r--r--. 1 root root 28672 Jul 13 11:32 system/node/node0/cpulist
--r--r--r--. 1 root root  4096 Jul 13 11:31 system/node/node0/cpumap
-
-CONFIG_NR_CPUS = 16384
--r--r--r--. 1 root root 57344 Jul 13 14:03 system/node/node0/cpulist
--r--r--r--. 1 root root  4607 Jul 13 14:02 system/node/node0/cpumap
-
-The actual number of cpus doesn't matter for the reported size since they
-are based on NR_CPUS.
-
-Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
-Fixes: bb9ec13d156 ("topology: use bin_attribute to break the size limitation of cpumap ABI")
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Yury Norov <yury.norov@gmail.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Phil Auld <pauld@redhat.com>
----
-v2: Fix cpumap size calculation. Increase multiplier for cpulist size.
-
-v3: Add comments in code.
-
-v4: Define constants in cpumask.h. Move comments there. Also fix
-topology.c.
-
-v5: Fixed math based on Yury's corrections.
-
- drivers/base/node.c     |  4 ++--
- drivers/base/topology.c | 32 ++++++++++++++++----------------
- include/linux/cpumask.h | 18 ++++++++++++++++++
- 3 files changed, 36 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/base/node.c b/drivers/base/node.c
-index 0ac6376ef7a1..eb0f43784c2b 100644
---- a/drivers/base/node.c
-+++ b/drivers/base/node.c
-@@ -45,7 +45,7 @@ static inline ssize_t cpumap_read(struct file *file, struct kobject *kobj,
- 	return n;
- }
- 
--static BIN_ATTR_RO(cpumap, 0);
-+static BIN_ATTR_RO(cpumap, CPUMAP_FILE_MAX_BYTES);
- 
- static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
- 				   struct bin_attribute *attr, char *buf,
-@@ -66,7 +66,7 @@ static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
- 	return n;
- }
- 
--static BIN_ATTR_RO(cpulist, 0);
-+static BIN_ATTR_RO(cpulist, CPULIST_FILE_MAX_BYTES);
- 
- /**
-  * struct node_access_nodes - Access class device to hold user visible
-diff --git a/drivers/base/topology.c b/drivers/base/topology.c
-index ac6ad9ab67f9..89f98be5c5b9 100644
---- a/drivers/base/topology.c
-+++ b/drivers/base/topology.c
-@@ -62,47 +62,47 @@ define_id_show_func(ppin, "0x%llx");
- static DEVICE_ATTR_ADMIN_RO(ppin);
- 
- define_siblings_read_func(thread_siblings, sibling_cpumask);
--static BIN_ATTR_RO(thread_siblings, 0);
--static BIN_ATTR_RO(thread_siblings_list, 0);
-+static BIN_ATTR_RO(thread_siblings, CPUMAP_FILE_MAX_BYTES);
-+static BIN_ATTR_RO(thread_siblings_list, CPULIST_FILE_MAX_BYTES);
- 
- define_siblings_read_func(core_cpus, sibling_cpumask);
--static BIN_ATTR_RO(core_cpus, 0);
--static BIN_ATTR_RO(core_cpus_list, 0);
-+static BIN_ATTR_RO(core_cpus, CPUMAP_FILE_MAX_BYTES);
-+static BIN_ATTR_RO(core_cpus_list, CPULIST_FILE_MAX_BYTES);
- 
- define_siblings_read_func(core_siblings, core_cpumask);
--static BIN_ATTR_RO(core_siblings, 0);
--static BIN_ATTR_RO(core_siblings_list, 0);
-+static BIN_ATTR_RO(core_siblings, CPUMAP_FILE_MAX_BYTES);
-+static BIN_ATTR_RO(core_siblings_list, CPULIST_FILE_MAX_BYTES);
- 
- #ifdef TOPOLOGY_CLUSTER_SYSFS
- define_siblings_read_func(cluster_cpus, cluster_cpumask);
--static BIN_ATTR_RO(cluster_cpus, 0);
--static BIN_ATTR_RO(cluster_cpus_list, 0);
-+static BIN_ATTR_RO(cluster_cpus, CPUMAP_FILE_MAX_BYTES);
-+static BIN_ATTR_RO(cluster_cpus_list, CPULIST_FILE_MAX_BYTES);
- #endif
- 
- #ifdef TOPOLOGY_DIE_SYSFS
- define_siblings_read_func(die_cpus, die_cpumask);
--static BIN_ATTR_RO(die_cpus, 0);
--static BIN_ATTR_RO(die_cpus_list, 0);
-+static BIN_ATTR_RO(die_cpus, CPUMAP_FILE_MAX_BYTES);
-+static BIN_ATTR_RO(die_cpus_list, CPULIST_FILE_MAX_BYTES);
- #endif
- 
- define_siblings_read_func(package_cpus, core_cpumask);
--static BIN_ATTR_RO(package_cpus, 0);
--static BIN_ATTR_RO(package_cpus_list, 0);
-+static BIN_ATTR_RO(package_cpus, CPUMAP_FILE_MAX_BYTES);
-+static BIN_ATTR_RO(package_cpus_list, CPULIST_FILE_MAX_BYTES);
- 
- #ifdef TOPOLOGY_BOOK_SYSFS
- define_id_show_func(book_id, "%d");
- static DEVICE_ATTR_RO(book_id);
- define_siblings_read_func(book_siblings, book_cpumask);
--static BIN_ATTR_RO(book_siblings, 0);
--static BIN_ATTR_RO(book_siblings_list, 0);
-+static BIN_ATTR_RO(book_siblings, CPUMAP_FILE_MAX_BYTES);
-+static BIN_ATTR_RO(book_siblings_list, CPULIST_FILE_MAX_BYTES);
- #endif
- 
- #ifdef TOPOLOGY_DRAWER_SYSFS
- define_id_show_func(drawer_id, "%d");
- static DEVICE_ATTR_RO(drawer_id);
- define_siblings_read_func(drawer_siblings, drawer_cpumask);
--static BIN_ATTR_RO(drawer_siblings, 0);
--static BIN_ATTR_RO(drawer_siblings_list, 0);
-+static BIN_ATTR_RO(drawer_siblings, CPUMAP_FILE_MAX_BYTES);
-+static BIN_ATTR_RO(drawer_siblings_list, CPULIST_FILE_MAX_BYTES);
- #endif
- 
- static struct bin_attribute *bin_attrs[] = {
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index fe29ac7cc469..4592d0845941 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -1071,4 +1071,22 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
- 	[0] =  1UL							\
- } }
- 
-+/*
-+ * Provide a valid theoretical max size for cpumap and cpulist sysfs files
-+ * to avoid breaking userspace which may allocate a buffer based on the size
-+ * reported by e.g. fstat.
-+ *
-+ * for cpumap NR_CPUS * 9/32 - 1 should be an exact length.
-+ *
-+ * For cpulist 7 is (ceil(log10(NR_CPUS)) + 1) allowing for NR_CPUS to be up
-+ * to 2 orders of magnitude larger than 8192. And then we divide by 2 to
-+ * cover a worst-case of every other cpu being on one of two nodes for a
-+ * very large NR_CPUS.
-+ *
-+ *  Use PAGE_SIZE as a minimum for smaller configurations.
-+ */
-+#define CPUMAP_FILE_MAX_BYTES  ((((NR_CPUS * 9)/32 - 1) > PAGE_SIZE) \
-+					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
-+#define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
-+
- #endif /* __LINUX_CPUMASK_H */
--- 
-2.31.1
+> --- a/arch/x86/platform/olpc/olpc-xo1-sci.c
+> +++ b/arch/x86/platform/olpc/olpc-xo1-sci.c
+> @@ -80,7 +80,7 @@ static void send_ebook_state(void)
+>   		return;
+>   	}
+>   
+> -	if (!!test_bit(SW_TABLET_MODE, ebook_switch_idev->sw) == state)
+> +	if (test_bit(SW_TABLET_MODE, ebook_switch_idev->sw) == !!state)
+>   		return; /* Nothing new to report. */
+>   
+>   	input_report_switch(ebook_switch_idev, SW_TABLET_MODE, state);
+> ---
+> 
+> We'd take it into the bitmap tree then. The series revealed
+> a fistful of existing code issues already :)
+> 
+>>
+>> Bisect log attached.
+>>
+>> Guenter
+>>
+>> ---
+>> # bad: [4662b7adea50bb62e993a67f611f3be625d3df0d] Add linux-next specific files for 20220713
+>> # good: [32346491ddf24599decca06190ebca03ff9de7f8] Linux 5.19-rc6
+>> git bisect start 'HEAD' 'v5.19-rc6'
+>> # good: [8b7e002d8bc6e17c94092d25e7261db4e6e5f2cc] Merge branch 'drm-next' of git://git.freedesktop.org/git/drm/drm.git
+>> git bisect good 8b7e002d8bc6e17c94092d25e7261db4e6e5f2cc
+>> # good: [07f6d21d6e33c1e28e24ae84e9d26e4e7d4853f5] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git
+>> git bisect good 07f6d21d6e33c1e28e24ae84e9d26e4e7d4853f5
+>> # good: [5ff085e5d4f6700e03635d5e700f52163a6dc2a7] Merge branch 'staging-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
+>> git bisect good 5ff085e5d4f6700e03635d5e700f52163a6dc2a7
+>> # good: [eb9e3fdbdd8b61ef0f4bee23259fe6ab69e463ab] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
+>> git bisect good eb9e3fdbdd8b61ef0f4bee23259fe6ab69e463ab
+>> # good: [9f2183cd961e5ddb7954eafb6bb01a495c6a9c7b] hexagon/mm: enable ARCH_HAS_VM_GET_PAGE_PROT
+>> git bisect good 9f2183cd961e5ddb7954eafb6bb01a495c6a9c7b
+>> # bad: [e878aa5faf9ac8c0b5d0c3f293389c194c250fff] Merge branch 'mm-nonmm-stable' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+>> git bisect bad e878aa5faf9ac8c0b5d0c3f293389c194c250fff
+>> # good: [cf95d50205f62c4f5f538676def847292cf39fa9] fs: don't call ->writepage from __mpage_writepage
+>> git bisect good cf95d50205f62c4f5f538676def847292cf39fa9
+>> # good: [5103cbfd92d3587713476f94f9485b96e02f0146] Merge branch 'for-next/execve' of git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
+>> git bisect good 5103cbfd92d3587713476f94f9485b96e02f0146
+>> # good: [ee56c3e8eec166f4e4a2ca842b7804d14f3a0208] Merge branch 'master' into mm-nonmm-stable
+>> git bisect good ee56c3e8eec166f4e4a2ca842b7804d14f3a0208
+>> # bad: [dc34d5036692c614eef23c1130ee42a201c316bf] lib: test_bitmap: add compile-time optimization/evaluations assertions
+>> git bisect bad dc34d5036692c614eef23c1130ee42a201c316bf
+>> # good: [bb7379bfa680bd48b468e856475778db2ad866c1] bitops: define const_*() versions of the non-atomics
+>> git bisect good bb7379bfa680bd48b468e856475778db2ad866c1
+>> # bad: [b03fc1173c0c2bb8fad61902a862985cecdc4b1b] bitops: let optimize out non-atomic bitops on compile-time constants
+>> git bisect bad b03fc1173c0c2bb8fad61902a862985cecdc4b1b
+>> # good: [e69eb9c460f128b71c6b995d75a05244e4b6cc3e] bitops: wrap non-atomic bitops with a transparent macro
+>> git bisect good e69eb9c460f128b71c6b995d75a05244e4b6cc3e
+>> # first bad commit: [b03fc1173c0c2bb8fad61902a862985cecdc4b1b] bitops: let optimize out non-atomic bitops on compile-time constants
+> 
+> Thanks,
+> Olek
 

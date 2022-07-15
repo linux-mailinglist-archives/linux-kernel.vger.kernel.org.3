@@ -2,136 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB9F576596
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E30E576584
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 19:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235070AbiGOQ5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 12:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
+        id S235080AbiGOQ54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 12:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235004AbiGOQ5d (ORCPT
+        with ESMTP id S235241AbiGOQ5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 12:57:33 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C647A519;
-        Fri, 15 Jul 2022 09:57:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mC/I1TGVynLxX6gCwbhhhvIs9Ywe5U9HmzmxGzHJ5FyvqRi16qIAOZ/KsCyCNk11bP9NlHLKlTPQcE4LFmYc8yDOR8PSYRab5IancpRzi0m76J2f01QWxBncLdnYTKASnHC3hv6WATLffqxf3fYODmNPXWpaKU/M95N5dm50pyvu+kURHNMp+Mv2c2V82KnoWq+u8JiFN4q6fkW6y3YejlukOYK/QiuUVPcUVOCmecOmnEatVja6Fsvv2AZk3a6ukHY6sP8ZOVWMmpamPyZ36dcCWSFr1agZe1+bNDXgOBL0MxgKVGUBzvflI9y1kGTAtskjmqlqsKBvaxXltwE6Hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gD4gazgNu9PW3lMT1FhAM8irxci+wgDlQnavQZouMhM=;
- b=fxnbBMcnel6J7qniEiR2Ci9PW7ACKtL2+V8IxmSJQKa6uEVaYc1RVyIQq4+StfwW6Ohi6gfQ7n7Y1DCLK/sN+xP/07PL5rX+LY1KiiysrcgpahhXy32wPpA2uuQrRfb4u5SSllosFJmbc1qwMg39QOFL2DE7inMLn9GBiwhBaWaOxsaXaUukiXTyTxHMNT8xa9O+pHnrmpiro4plr2jOmjO9FQa/GWkZU0k/TzBdwYoPLeqLUPTyTLDbCtvaegC/Vq1t88K8lNo8I7kEymfhMY03U0hp2ADGS5ulH7cYr+b5MrZZyxzl7Zui94l5wu6gbnY5Okfw1/fwkHrE/nleFw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gD4gazgNu9PW3lMT1FhAM8irxci+wgDlQnavQZouMhM=;
- b=v4/pd4ZkEw0/lwWwd1+y5VR9yWf/4/dJ6NkaEx7KkuAwc2/+b3JY07qndl5YC3hpbEKvmyIBS3y5qUA71uN6z04+eE0MqsgRT3sXWAUwFJLeuI0JCiBF4sQyIhNtrGcjKA9nYPHCqfP4hQrZackn3Xl5VGVvuwPaVSwGeiLC5i0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by BLAPR10MB4867.namprd10.prod.outlook.com
- (2603:10b6:208:321::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.17; Fri, 15 Jul
- 2022 16:57:29 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::712f:6916:3431:e74e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::712f:6916:3431:e74e%6]) with mapi id 15.20.5395.020; Fri, 15 Jul 2022
- 16:57:28 +0000
-Date:   Fri, 15 Jul 2022 09:57:24 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        "katie.morris@in-advantage.com" <katie.morris@in-advantage.com>
-Subject: Re: [PATCH v13 net-next 0/9] add support for VSC7512 control over SPI
-Message-ID: <YtGcdGj6yi546oWk@euler>
-References: <20220705204743.3224692-1-colin.foster@in-advantage.com>
- <20220708200918.131c0950@kernel.org>
- <YsvWh8YJGeJNbQFB@google.com>
- <20220711112116.2f931390@kernel.org>
- <YszYKLxNyuLdH35Q@COLIN-DESKTOP1.localdomain>
- <20220712220856.qbfyhll5o7ygloka@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712220856.qbfyhll5o7ygloka@skbuf>
-X-ClientProxiedBy: SJ0PR13CA0135.namprd13.prod.outlook.com
- (2603:10b6:a03:2c6::20) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        Fri, 15 Jul 2022 12:57:48 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12DC8239B
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 09:57:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Cn4wcriowaGYu8eeMZByXT9E1O6xdgI/ywBqJ6L01LU=; b=MrXdNZ1HzYMugD8LROzBp1KGoC
+        c60YYE5taT5clE4TIoJ0R9w7Y7d12nVBgjAvDJLTqwLieKtBUWQjmEEUeK19+/FcyhNF9iGQU2EqM
+        ABe6bzkwRVTjOurdzgekjeOn7LHG/kEHLWG52GuCTumnBBXQz6fP8Hlmg8G0XKhOf8BWKFHu7fQM5
+        VQfiqqOzJiOuY5Ql3iAb5TbFHzPwTXTMwLsjkr+58HzAj0WtAaK6Mk+vhjyx3S8G/3u2yV7gsnvQd
+        btud61hrDXszi17iVnlCcP56a6cQIWBrNRGSLqsgqnCrmxTwvICoBiu8ZlaWLYVQPPZAwNlFSCx+m
+        T+iSLTHQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33360)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oCOd8-0007JN-Tb; Fri, 15 Jul 2022 17:57:30 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oCOd5-0007i5-3g; Fri, 15 Jul 2022 17:57:27 +0100
+Date:   Fri, 15 Jul 2022 17:57:27 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm: ioremap: Fix compilation of code which use
+ pci_remap_iospace() without CONFIG_MMU
+Message-ID: <YtGcd2YXU24j3MB7@shell.armlinux.org.uk>
+References: <20220714185700.6137-1-pali@kernel.org>
+ <YtBy/318C/uNntUN@shell.armlinux.org.uk>
+ <20220715080252.b5ofnrjdkubc4qkh@pali>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bb47ac58-5e83-47b8-7dcc-08da668319be
-X-MS-TrafficTypeDiagnostic: BLAPR10MB4867:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ipFxhs8LyiZcL5MZNzwFNhYA2NTNUQrzV1zhGOczaENQ8cxr3Sra9uLRniJfPiSpFngUMcEaxWdZIIXKJ3Y+dBreKnt8MCMGyXDbYer5gZY6XkAnr+QByVbNJGP9QoBq7/UtuQ+DUPvciyfYh8+VLZ5Ly1Hdh9NxtQy+N7brcdkCqq4vHSZV6FobwcBvvNIOfBHQsefKOTjjjE0oeOy/5Blr3RPw4O1KCdPGfwc6WMZLGG+E34JaTdAeZlDTg3FRhn3q+ge2qcul9GG8FK8oBEvNnIhA9BhQnZmi/X6NjRjPBJwqz9j4hRSDB+FH+dsQRVlNySOXY9bgV6liDj0GnGlG3ZOpB/kirgn9D9wE3cp/artfU5ZKB/CCm3LOjDIWIJbwdmUiAsn3T2tSFVL/uTKn2SvUkZjAZiiImhaTv+926Q6TL/7Yok8mZkA1U2Wieb7F3Y3eJuz15G91w48qvPtB6wZE1hrqN3TTVJXLoJB/ONyhWA4WpzcDNdtvo8P3Z6ehVG/XU4Oq/G2pWBcCUqF+ukV572SZiIg3OhJ4i7PoDeLVbwLIMUh3wxYto8MGgcG/Irrd4IR3uNsD8TfRsXb8yYpOSyGoT4auyYluwQ95+Hso9YgYbubP7OwW1j2Ou3AXIO8eFYxKduo+sPTXXdMowy3pwqocTy8kG2bCgs6CvW8ZJOmPHSFUbtJ9euqSqtoH8oGYc7SACe4+aQUM2laVm3Fss0j6ZVeGOy0iObYc4C3s04nhnbWVbaZMWRod
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(396003)(346002)(136003)(39830400003)(366004)(41300700001)(6486002)(6506007)(86362001)(478600001)(107886003)(6666004)(186003)(6512007)(9686003)(83380400001)(38100700002)(26005)(2906002)(8936002)(5660300002)(7416002)(8676002)(6916009)(33716001)(66476007)(66556008)(66946007)(44832011)(54906003)(316002)(4326008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MbtvOdWfDMM4fGYIXkmzg4WE1jAEe9C0zxiWfXAkrSCOeiKpBS1oqrgjkfBC?=
- =?us-ascii?Q?uUZUKrVXadu4a2cH+90eSNXFfWBZPNDnZVbSsmNv3Ll+dvSH1bcskPjfdcTq?=
- =?us-ascii?Q?SQ8y5qrmC24J2qamh0etppzoU3dvsRVlQP/CTEwhjAnQQWDLKiVWP82Ts58R?=
- =?us-ascii?Q?kSc3eUtVzHMKLVPf+hS0c3WpepuNw7tTQhlN1gFej1WwYsoPizQY/sfWrv17?=
- =?us-ascii?Q?5llz76k0c6jKs5937C8mqLoyi5RixHKV0UEPFNCTq3XLb3FPHBlSDC67HHsh?=
- =?us-ascii?Q?u/JbDlwQYE4hOjoVtnSYVZphX4XtjpjW6op7u6l4dE7VovoagHdC+MMGAqIq?=
- =?us-ascii?Q?ySrQfnJPuU2ZQOVrG+Qy66XqRTcfiHb2D4x9939oAHe6BaIQT4LPAXpI6n66?=
- =?us-ascii?Q?Ilf8WOA2NtszqFbrkYNMN3zJwn44M3oQB+P1M5Die4YEQ+nDxUTarSIsARAU?=
- =?us-ascii?Q?C5cEeAnwFXmGzmhOeAxHwxe8mgWD9slmegzVl60k8WcMGtnTPFWelwg/ivOs?=
- =?us-ascii?Q?xurEYzqF4znb1jFpg1OEPiLVy250k0LBRJkCR2vXLMUB/xg8GjcltfpjXF0X?=
- =?us-ascii?Q?lqEFa4XUY02NNi0IKm/502Lbr8y7lZRZXeAWofOouru1hzUBGiMUxEBYMjdA?=
- =?us-ascii?Q?0l7rQZKml7SeejyEeW7jrbxpAcq+6t8UZIbKb/rKX2EW9DmsGbKTI7QuSv8V?=
- =?us-ascii?Q?9u5Enk5ynWSTDTvtQPXKK+XZhDV+8ltXv/sK++3OUDigP7FRjyM/zps8yn6O?=
- =?us-ascii?Q?EUUmADlodvH4Icjnk8yiSGc74L9FVcgqA4hMqgMNaHf8FvHNACqWtTRTQ7n7?=
- =?us-ascii?Q?v0AHupaRmuq7BjDVDm92JMjdZEaEXCocp3CZccohUKM3UxsEPKAILpMr/UFh?=
- =?us-ascii?Q?31RHHOu5b4yNdgnuxKZQJ264QFDonV8mqlJjw0AJRopciDcM6B//otULCPMJ?=
- =?us-ascii?Q?fp8b20Dj0PAjyIB3ZsaWmp9Ssb6EjTVg6Bi9R5n9cKH0yOoi6445MW/GtQR5?=
- =?us-ascii?Q?fA+2HX06roYfRQWq+wC4owhiKob/LpAO5WTqkhDkB+bC58A7DNJvHpdDXDIN?=
- =?us-ascii?Q?mL/Ox7UDlBz+EHmy8F3GsRg0C7/+krO1SuQAbWaHwT9qDWuHDSmo+ATFdJtS?=
- =?us-ascii?Q?GaHZHGLf2ONpGKdtj7OK7uZd23qrdUYE395PIsSIOHl0wTbeb801WYQ7Uqni?=
- =?us-ascii?Q?f1hFUOSMbPxqiS0M49LlbgUFSWaaMkbgs92T4rRxJSZQ5QmirG3LewYX5n0Z?=
- =?us-ascii?Q?BmoVOwkTMtpj/z/pEkQ7PnL69wUJI3Wq8oYmFt2x2+1vjRzmyiTNmsbDzuGq?=
- =?us-ascii?Q?5vhfT7bOZknygwLLtAFOZmut/HmUnxcSlRBjVG7lHYEDZh2f/uF7j49FfKGg?=
- =?us-ascii?Q?AnaBb+NOxOFPxRtd3Mk53FQOZj4p9Sz+21BH45NkjiSGxoaXEVR9pDC9QHbF?=
- =?us-ascii?Q?EieBjQbSYaMtqDlSXUBKqAZ4JZyKs8Nk+TKCqQZ65KemigWz9ItkN2tTePuP?=
- =?us-ascii?Q?aSzf3rhVXjHgPVRQGqm3ljY3gI524XTFJ52fG69QNYM4QiAE8kElYrAIqdlN?=
- =?us-ascii?Q?7EtNFv7KSF2ivroGYvP/P/9wYFB3CRv8gczj6LdRCU7No9Y06hyMDXZel/pU?=
- =?us-ascii?Q?Kg=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb47ac58-5e83-47b8-7dcc-08da668319be
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 16:57:28.7822
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zlSEVrMS7saN3oZpjz4w6kbF99DYYWgQN1BPCv56Sp2MH4UhQiEltvuXK1xE9i8FHlxwjikmHhHmgVeeUVidu9muFJ8VmqkoRh8gS08QeSY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4867
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220715080252.b5ofnrjdkubc4qkh@pali>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -139,44 +63,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 10:08:57PM +0000, Vladimir Oltean wrote:
-> On Mon, Jul 11, 2022 at 07:10:48PM -0700, Colin Foster wrote:
-> > On Mon, Jul 11, 2022 at 11:21:16AM -0700, Jakub Kicinski wrote:
-> > > On Mon, 11 Jul 2022 08:51:35 +0100 Lee Jones wrote:
-> > > > > Can this go into net-next if there are no more complains over the
-> > > > > weekend? Anyone still planning to review?  
-> > > > 
-> > > > As the subsystem with the fewest changes, I'm not sure why it would.
+On Fri, Jul 15, 2022 at 10:02:52AM +0200, Pali Rohár wrote:
+> On Thursday 14 July 2022 20:48:15 Russell King (Oracle) wrote:
+> > On Thu, Jul 14, 2022 at 08:57:00PM +0200, Pali Rohár wrote:
+> > > Custom ARM version of pci_remap_iospace() is implemented only for MMU
+> > > kernel builds. So do not define pci_remap_iospace() without CONFIG_MMU.
 > > > 
-> > > Yeah, just going by the tag in the subject. I have no preference,
-> > > looks like it applies cleanly to Linus'.
+> > > See compilation failures:
+> > > https://lore.kernel.org/r/202112040150.wvyJZIZO-lkp@intel.com/
+> > > https://lore.kernel.org/r/202112261802.u9iXqdWh-lkp@intel.com/
+> > > https://lore.kernel.org/r/202201131529.A2s7rKQc-lkp@intel.com/
+> > > https://lore.kernel.org/r/202203090147.24cUL0De-lkp@intel.com/
 > > > 
-> > > > I'd planed to route this in via MFD and send out a pull-request for
-> > > > other sub-system maintainers to pull from.
-> > > > 
-> > > > If you would like to co-ordinate it instead, you'd be welcome to.
-> > > > However, I (and probably Linus) would need a succinct immutable branch
-> > > > to pull from.
+> > > Fixes: bc02973a06a6 ("arm: ioremap: Implement standard PCI function pci_remap_iospace()")
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
 > > > 
-> > > Oh, that'd be perfect, sorry, I didn't realize there was already a plan.
-> > > If you're willing to carry on as intended, please do.
+> > > ---
 > > > 
-> > > Colin if there is another version please make a note of the above
-> > > merging plan in the cover letter and drop the net-next tag. 
-> > > Just in  case my goldfish brain forgets.
+> > > PING!!!! Is somebody interested in fixing these compile errors? As nobody
+> > > answered to my emails where I proposed this fix more than half year ago and
+> > > asked for opinion...
+> > > 
+> > > https://lore.kernel.org/r/20211204022131.bmhla4gkph7s7hy2@pali/
+> > > https://lore.kernel.org/r/20211205123209.lyx76daqdwzqwex4@pali/
+> > > https://lore.kernel.org/r/20211226215135.blcnafbuwhrq5ram@pali/
+> > > https://lore.kernel.org/r/20220113134938.3tx7iiukphvazvsq@pali/
+> > > https://lore.kernel.org/r/20220308184851.jmw2xvrapy5wzwof@pali/
+> > > 
+> > > If nobody is interested then please STOP sending me these Intel "0-DAY CI
+> > > Kernel Test Service" emails. Thanks!
 > > 
-> > I wasn't sure of the plan, but this makes sense to bring it through MFD.
-> > Fortunately there's enough work for me on the DSA front that there's no
-> > way that'll land before this merge window - so I have no objection to it
-> > going any non-net-next path.
+> > It needs to be sent to the patch system to be merged, which has been
+> > the process with 32-bit ARM for getting on the last quarter of a
+> > century.
 > > 
-> > I'll look to Lee as to whether there should be a v14 with the header
-> > guard addition per Vladimir's review, or whether that should be in a
-> > future patch set. I'm happy to go either way.
+> > Thanks.
+> > 
+> > -- 
+> > RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> > FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
 > 
-> From my side, the changes to this patch set can be incremental, I'd be
-> happy if Lee would take them as is.
+> I do not need this patch. It is bot who is complaining. So if you do
+> neither, then please STOP sending me these emails.
 
-Just making sure this hasn't slipped through the cracks. Should I resend
-this next week (Monday / Tuesday?) with the Reviewed-by tags and switch
-it to MFD instead of net-next?
+I don't need the patch, but I'm not sending you those emails.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,130 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A4B576729
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 21:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE9E576730
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 21:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbiGOTKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 15:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
+        id S231168AbiGOTLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 15:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiGOTKu (ORCPT
+        with ESMTP id S230372AbiGOTLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 15:10:50 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC90D40BD8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 12:10:49 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id z25so9349687lfr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 12:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vWjC7NS5BQ1MpGzvs1XfRmOfXwBAovBmo/t8uOYuvZQ=;
-        b=pb6921aqIKlrzl7PxAmpJ/d2ulZWZMSPR4XuGKomz+Az4VpNno2NOSkDr9KTS5ik1c
-         virPNQ+SqLCfsuOQM0M4UYKEfi0SiBwms2N4KuapUZjGEbW9nN7HB+EBGBUbCRuwQC7X
-         SL0EmUn4Kh/PNH4APoqovd1kHkvdcvmhPvxM/3FoPNWznjWFoYO6QoLw95YZZymxdTN/
-         EHfU/OxMKyUelrin9u1wdLc6ojjx1C3YJ4efoLz9g46WtkEhMmH/fvU0DCmVE8G1Gy1n
-         sYs8QqWsjdlwzxMUvfWGTWtcNUZrY/Ds8TGIkmTqx/NnEA4hCyIkaj/n8M3kpx/jV0qZ
-         /+Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vWjC7NS5BQ1MpGzvs1XfRmOfXwBAovBmo/t8uOYuvZQ=;
-        b=fremZKKAULfecnLPaTCZawu93FMA1+4NYnVHBuluGvV97E4cxTOI8WbVJLwIY2y8If
-         nzSkTspFGDMzqfLBl7pJoNGMo4Y30i1BwTUwoJkq6Cb0MGXxsBhcIBbM1wmddt8KJcqy
-         Ha72W8YSDoBUxG+0sG3mIOIWAU7ZZICxgsCAlZe6ZDkyVWbgGns1sXSuxE0Of7myXTa2
-         VepkOj5Qtg1uJU1Ix9GK1t1YEmgwwKwTuCU5aI0yBnXWA2mwYu0j2D3cJlkudOZPgnIc
-         EY6PiASPMzbcsZwl+qf2wYlbiqVkSPROlpbGa/HktCyUe5MUYlfqeKH0CO2ICVzAUeqf
-         mcDQ==
-X-Gm-Message-State: AJIora86GT/lo7Z1aeZKhl71b0cV7lgLW6a9XrN6atjKf+jarRyVSoPC
-        PopKn8fYhQhD6TFftJWZ6YwwDV6qOBVhn4w0E09K0g==
-X-Google-Smtp-Source: AGRyM1sijNtGrHfNIa/mURAz2tJo+sqLJCG47hellV6iaDCF573UPhaoN0hUKORERf0Hj//ZYm3/etEttP/OBIyqHRM=
-X-Received: by 2002:a05:6512:2285:b0:487:2538:f0e0 with SMTP id
- f5-20020a056512228500b004872538f0e0mr9341297lfu.614.1657912248155; Fri, 15
- Jul 2022 12:10:48 -0700 (PDT)
+        Fri, 15 Jul 2022 15:11:16 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FAE402CC;
+        Fri, 15 Jul 2022 12:11:15 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1FA18993;
+        Fri, 15 Jul 2022 21:11:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1657912273;
+        bh=c3uyxB2MmrAa8po96PTo2NR+WAA78v7/sF+HW/0PaCg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LK4oZTkkgx+vyCyWQoTl9FqQY/jyo/N1Mg4k0ctYb1jfp9Vdj1I4RKCXk0E72EHqi
+         QafJCG3W2IpyjasxN9K5CImLAdypT+px8YRn+3f2r+q0Gsczzc5fMYk1zVfKHkwMda
+         pDT2B4I5DepIrIaoupMHVeKN0MriUUydRzDqSC+o=
+Date:   Fri, 15 Jul 2022 22:10:41 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ribalda@chromium.org
+Subject: Re: [PATCH RESEND v2] media: uvcvideo: Fix memory leak in
+ uvc_gpio_parse
+Message-ID: <YtG7sRuSIeZNhzNK@pendragon.ideasonboard.com>
+References: <20220108170439.49984-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-References: <20220715085012.2630214-1-mw@semihalf.com> <20220715085012.2630214-2-mw@semihalf.com>
- <a5b55fb3-3326-eb3c-99e6-3fd6b7e4c2fe@gmail.com>
-In-Reply-To: <a5b55fb3-3326-eb3c-99e6-3fd6b7e4c2fe@gmail.com>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Fri, 15 Jul 2022 21:10:37 +0200
-Message-ID: <CAPv3WKcSNrYiABLzHrYsL1gx9vZZ6ja2ZQiOj1hGTKzDmOKYAQ@mail.gmail.com>
-Subject: Re: [net-next: PATCH v2 1/8] net: phy: fixed_phy: switch to fwnode_ API
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220108170439.49984-1-jose.exposito89@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pt., 15 lip 2022 o 19:21 Florian Fainelli <f.fainelli@gmail.com> napisa=C5=
-=82(a):
->
-> On 7/15/22 01:50, Marcin Wojtas wrote:
-> > This patch allows to use fixed_phy driver and its helper
-> > functions without Device Tree dependency, by swtiching from
-> > of_ to fwnode_ API.
-> >
-> > Signed-off-by: Marcin Wojtas <mw@semihalf.com>
-> > ---
-> >  include/linux/phy_fixed.h   |  4 +-
-> >  drivers/net/mdio/of_mdio.c  |  2 +-
-> >  drivers/net/phy/fixed_phy.c | 39 +++++++-------------
-> >  3 files changed, 17 insertions(+), 28 deletions(-)
-> >
-> > diff --git a/include/linux/phy_fixed.h b/include/linux/phy_fixed.h
-> > index 52bc8e487ef7..449a927231ec 100644
-> > --- a/include/linux/phy_fixed.h
-> > +++ b/include/linux/phy_fixed.h
-> > @@ -19,7 +19,7 @@ extern int fixed_phy_add(unsigned int irq, int phy_id=
-,
-> >                        struct fixed_phy_status *status);
-> >  extern struct phy_device *fixed_phy_register(unsigned int irq,
-> >                                            struct fixed_phy_status *sta=
-tus,
-> > -                                          struct device_node *np);
-> > +                                          struct fwnode_handle *fwnode=
-);
->
-> I think this ought to require a forward declaration of struct fwnode_hand=
-le and a removal of the forward declaration of device_node.
->
+Hi José,
 
-Ok, I'll replace the declaration.
+Thank you for the patch.
 
-> With that fixes:
->
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
->
+On Sat, Jan 08, 2022 at 06:04:39PM +0100, José Expósito wrote:
 
-Thanks,
-Marcin
+I can't believe I've managed to ignore this patch for so long :-( Sorry.
+
+> Previously the unit buffer was allocated before checking the IRQ for
+> privacy GPIO.
+> In case of error, the unit buffer was leaked.
+> 
+> Allocate the unit buffer after the IRQ to avoid it.
+> 
+> Addresses-Coverity-ID: 1474639 ("Resource leak")
+> Fixes: 2886477ff987 ("media: uvcvideo: Implement UVC_EXT_GPIO_UNIT")
+> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+> 
+> v2: Add Fixes and Reviewed-by tags
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 7c007426e082..9e83e2002710 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -1533,10 +1533,6 @@ static int uvc_gpio_parse(struct uvc_device *dev)
+>  	if (IS_ERR_OR_NULL(gpio_privacy))
+>  		return PTR_ERR_OR_ZERO(gpio_privacy);
+>  
+> -	unit = uvc_alloc_entity(UVC_EXT_GPIO_UNIT, UVC_EXT_GPIO_UNIT_ID, 0, 1);
+> -	if (!unit)
+> -		return -ENOMEM;
+> -
+>  	irq = gpiod_to_irq(gpio_privacy);
+>  	if (irq < 0) {
+>  		if (irq != EPROBE_DEFER)
+> @@ -1545,6 +1541,10 @@ static int uvc_gpio_parse(struct uvc_device *dev)
+>  		return irq;
+>  	}
+>  
+> +	unit = uvc_alloc_entity(UVC_EXT_GPIO_UNIT, UVC_EXT_GPIO_UNIT_ID, 0, 1);
+> +	if (!unit)
+> +		return -ENOMEM;
+> +
+>  	unit->gpio.gpio_privacy = gpio_privacy;
+>  	unit->gpio.irq = irq;
+>  	unit->gpio.bControlSize = 1;
+
+-- 
+Regards,
+
+Laurent Pinchart

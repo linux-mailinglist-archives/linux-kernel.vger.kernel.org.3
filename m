@@ -2,176 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3D4575F28
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 12:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5237575F2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 12:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234523AbiGOKKb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 15 Jul 2022 06:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S234289AbiGOKK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 06:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbiGOKJi (ORCPT
+        with ESMTP id S234429AbiGOKKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 06:09:38 -0400
-Received: from smtpproxy21.qq.com (smtpbg701.qq.com [203.205.195.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7CC72EDF
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 03:09:18 -0700 (PDT)
-X-QQ-mid: bizesmtp79t1657879739tk8lr0p1
-Received: from smtpclient.apple ( [111.193.9.146])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 15 Jul 2022 18:08:58 +0800 (CST)
-X-QQ-SSF: 01400000002000B0U000000A0000000
-X-QQ-FEAT: AaMJIBoe/i0PYt0j3uURsT23Wjes0aFSd1C6tj6TMSJkZTvI5P8XxHZd2Yg7C
-        xzwbSw2Z1yAc1+LdpDoAbda+iFzyaYwKkD1lKuu0WWMlJyNTJJC0JTP5jg4oiMw8G3RTMVr
-        9Lc8D9KvES/suF5SgATopO19q6k2CN7BWmcOsyeK5edru2MJKikvLaKaKnzIQ6HaslLG0Bq
-        8k2Qi8Nw/c1SH7s2+C10lFWxVfIJ0phRPx3o2WeYkAPVnNclDHJmZRvOYgK+1zHhAjJfrU6
-        iEqRuy8s+hNho8BS2KUVD4QhPoXyZw/3AV/rSRk5o5zvEATcZZ9HsrF1YO90BR0N9xi7vw3
-        lzriChWpwSEo+8CbZ4QojmvFi3HK+uIDYp7EnRJ89iVBXzEq0JoKKs/C/GoSw==
-X-QQ-GoodBg: 2
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH] USB: serial: option: adding support for OPPO R11 diag
- port
-From:   sdlyyxy <sdlyyxy@bupt.edu.cn>
-In-Reply-To: <YtEO51uf0RQNZIRP@kroah.com>
-Date:   Fri, 15 Jul 2022 18:08:58 +0800
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <893094CE-73FF-4874-8F5E-2F5ED267B623@bupt.edu.cn>
-References: <20220714102037.4113889-1-sdlyyxy@bupt.edu.cn>
- <Ys/2dN9ktCirZsd9@kroah.com>
- <5F187A64-2C88-4F7E-98AD-2A52B17B0DA4@bupt.edu.cn>
- <YtENDiIpq++2l6yD@kroah.com> <YtEO51uf0RQNZIRP@kroah.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign3
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 15 Jul 2022 06:10:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4744507F;
+        Fri, 15 Jul 2022 03:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8606A621FC;
+        Fri, 15 Jul 2022 10:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4643C3411E;
+        Fri, 15 Jul 2022 10:10:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657879821;
+        bh=nCsXa5ZFGrbu262yYQWKqZiivsswmtmgAQogIcWjQtw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gLCsfMlixBVJcXktim2Jc6xKKjjgqCF5UQqTMYtIqlU98ouxW3KqtiVdIDbr45tWA
+         YvKcD8spwpBS/7yzZFWUVlq5N4k6gsK7v3uXSxo2iWutg1GmibYlU/IWNK0MAVdLO3
+         jjOltYi/ifFU6BFeKtclqExuIIA83zz+0urjSJl+7GfelLdBG7PA9so7HT3jiEy1vA
+         DEJBNvtmxI1MHlACTVZQlZOezDnOQErrR2Gb8mMUt+xr4BXQIkRJX//5+aNmGfg6DK
+         ykNO3m1LtXtPjSsJaiM7xu5yC+4B/VsgH/TNk9ez7mCJFTW2X6oZd28Gk6451zW9XX
+         LsLW4mVxGHP/w==
+From:   Georgi Djakov <djakov@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        djakov@kernel.org
+Subject: [GIT PULL] interconnect changes for 5.20
+Date:   Fri, 15 Jul 2022 13:10:21 +0300
+Message-Id: <20220715101021.30109-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.29.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Greg,
 
-> On Jul 15, 2022, at 14:53, Greg KH <gregkh@linuxfoundation.org> wrote:
-> 
-> On Fri, Jul 15, 2022 at 08:45:34AM +0200, Greg KH wrote:
->> On Fri, Jul 15, 2022 at 02:39:06PM +0800, sdlyyxy wrote:
->>> Hi Greg,
->>> Thanks for your comments!
->>> 
->>>> On Jul 14, 2022, at 18:56, Greg KH <gregkh@linuxfoundation.org> wrote:
->>>> 
->>>> On Thu, Jul 14, 2022 at 06:20:37PM +0800, sdlyyxy wrote:
->>>>> From: Yan Xinyu <sdlyyxy@bupt.edu.cn>
->>>>> 
->>>>> This patch adds support for OPPO R11 USB diag serial port to option
->>>>> driver. This phone uses Qualcomm Snapdragon 660 SoC.
->>>>> 
->>>>> usb-devices output:
->>>>> T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
->>>>> D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
->>>>> P: Vendor=22d9 ProdID=276c Rev=04.04
->>>>> S: Manufacturer=OPPO
->>>>> S: Product=SDM660-MTP _SN:09C6BCA7
->>>>> S: SerialNumber=beb2c403
->>>>> C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
->>>>> I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
->>>> 
->>>> I do not think this has an option usb-serial chip in the device, this is
->>>> a phone with a debug port instead.
->>>> 
->>> Yeah, this phone uses a Qualcomm chip, not an option usb-serial chip.
->>> It has the functionality to enter into a special mode, which provides 
->>> a QCDM-capable diag port as the same behaviour of USB modems. For
->>> Qualcomm devices, there are several drivers: qcserial, qcaux, and 
->>> option. According to qcserial.c, qcaux.c source code and mailing list
->>> conversations [1], this device with diag+adb layout should be driven
->>> by option.
->> 
->> No, this is not an option chip, and does not follow the option device
->> protocols at all.  So this is not the driver to use here.
->> 
->> We should probably switch those other devices as well, they aren't
->> really option devices either.
->> 
->>>>> I: If#=0x1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
->>>> 
->>>> What userspace program is bound to this endpoint?
->>>> 
->>> I think it is used by adb via libusb.
->>>>> 
->>>>> Signed-off-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
->>>>> ---
->>>>> drivers/usb/serial/option.c | 5 +++++
->>>>> 1 file changed, 5 insertions(+)
->>>>> 
->>>>> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
->>>>> index de59fa919540..cf65cb84c3ca 100644
->>>>> --- a/drivers/usb/serial/option.c
->>>>> +++ b/drivers/usb/serial/option.c
->>>>> @@ -573,6 +573,10 @@ static void option_instat_callback(struct urb *urb);
->>>>> #define WETELECOM_PRODUCT_6802			0x6802
->>>>> #define WETELECOM_PRODUCT_WMD300		0x6803
->>>>> 
->>>>> +/* OPPO products */
->>>>> +#define OPPO_VENDOR_ID				0x22d9
->>>>> +#define OPPO_PRODUCT_R11			0x276c
->>>>> +
->>>>> 
->>>>> /* Device flags */
->>>>> 
->>>>> @@ -2155,6 +2159,7 @@ static const struct usb_device_id option_ids[] = {
->>>>> 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
->>>>> 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
->>>>> 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
->>>>> +	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
->>>> 
->>>> This does not look correct, sorry. Try using the usbserial generic
->>>> driver instead to transmit and recieve?
->>>> 
->>> Yes I have tried using usbserial generic driver. As for the interface
->>> #0x0 diag port, it seems working. However, in the same time the 
->>> generic driver will also be attached to interface #0x1, which causes
->>> nonfunction of adb. Using this patch, diag and adb can run 
->>> simultaneously. So it's better than the generic driver?
->> 
->> Ah, we should just bind the simple usb-serial driver to this interface
->> and not bind the generic usb-serial driver to this interface.
->> 
->> Let me make up a simple patch for this for you to test...
-> 
-> Can you try the patch here for this, it should work the same as your
-> patch:
-> 
-> 
-> diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
-> index 4c6747889a19..eb832b94aa3a 100644
-> --- a/drivers/usb/serial/usb-serial-simple.c
-> +++ b/drivers/usb/serial/usb-serial-simple.c
-> @@ -60,7 +60,9 @@ DEVICE(flashloader, FLASHLOADER_IDS);
-> 	{ USB_VENDOR_AND_INTERFACE_INFO(0x18d1,			\
-> 					USB_CLASS_VENDOR_SPEC,	\
-> 					0x50,			\
-> -					0x01) }
-> +					0x01) },		\
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x22d9, 0x276c,		\
-> +					0xff, 0xff, 0x30) }
-> DEVICE(google, GOOGLE_IDS);
-> 
-> /* Libtransistor USB console */
-> 
-Great, this patch works as intended. The VendorID 0x22d9 does not
-belong to Google, shall I add a separate section for OPPO in 
-usb-serial-simple.c and create a new patch?
+This is the pull request with interconnect changes for the 5.20-rc1 merge
+window. It contains driver updates. The details are in the signed tag.
+
+All patches have been in linux-next during the last few days. No issues have
+been reported so far. Please pull into char-misc-next.
 
 Thanks,
-sdlyyxy
+Georgi
 
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.20-rc1
+
+for you to fetch changes up to a6339ac8a1048f316c95c3fcbe22497cfdcc8da0:
+
+  Merge branch 'icc-rpm' into icc-next (2022-07-12 10:05:55 +0300)
+
+----------------------------------------------------------------
+interconnect changes for 5.20
+
+Here are the interconnect changes for the 5.20-rc1 merge window consisting
+of two new drivers, misc driver improvements and new device managed API.
+
+ Core change:
+- Add device managed bulk API
+
+ Driver changes:
+- New driver for NXP i.MX8MP platforms
+- New driver for Qualcomm SM6350 platforms
+- Multiple bucket support for Qualcomm RPM-based drivers.
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Bryan O'Donoghue (1):
+      interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth
+
+Georgi Djakov (3):
+      Merge branch 'icc-sm6350' into icc-next
+      Merge branch 'icc-imx8mp' into icc-next
+      Merge branch 'icc-rpm' into icc-next
+
+Leo Yan (6):
+      interconnect: qcom: msm8939: Use icc_sync_state
+      dt-bindings: interconnect: Update property for icc-rpm path tag
+      interconnect: qcom: Move qcom_icc_xlate_extended() to a common file
+      interconnect: qcom: icc-rpm: Change to use qcom_icc_xlate_extended()
+      interconnect: qcom: icc-rpm: Support multiple buckets
+      interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
+
+Luca Weiss (4):
+      interconnect: qcom: icc-rpmh: Support child NoC device probe
+      dt-bindings: interconnect: qcom: Split out rpmh-common bindings
+      dt-bindings: interconnect: Add Qualcomm SM6350 NoC support
+      interconnect: qcom: Add SM6350 driver support
+
+Peng Fan (9):
+      dt-bindings: interconnect: imx8m: Add bindings for imx8mp noc
+      dt-bindings: interconnect: add fsl,imx8mp.h
+      interconnect: add device managed bulk API
+      interconnect: imx: fix max_node_id
+      interconnect: imx: set src node
+      interconnect: imx: introduce imx_icc_provider
+      interconnect: imx: configure NoC mode/prioriry/ext_control
+      interconnect: imx: Add platform driver for imx8mp
+      PM / devfreq: imx: Register i.MX8MP interconnect device
+
+ .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml         |   6 +-
+ Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml    |   6 +-
+ .../devicetree/bindings/interconnect/qcom,rpmh-common.yaml      |  43 +
+ Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml   |  22 +-
+ .../devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml      |  82 ++
+ drivers/devfreq/imx-bus.c                                       |   1 +
+ drivers/interconnect/bulk.c                                     |  42 +
+ drivers/interconnect/imx/Kconfig                                |   4 +
+ drivers/interconnect/imx/Makefile                               |   2 +
+ drivers/interconnect/imx/imx.c                                  |  84 +-
+ drivers/interconnect/imx/imx.h                                  |  49 +-
+ drivers/interconnect/imx/imx8mm.c                               |   2 +-
+ drivers/interconnect/imx/imx8mn.c                               |   2 +-
+ drivers/interconnect/imx/imx8mp.c                               | 259 ++++
+ drivers/interconnect/imx/imx8mq.c                               |   2 +-
+ drivers/interconnect/qcom/Kconfig                               |   9 +
+ drivers/interconnect/qcom/Makefile                              |   5 +
+ drivers/interconnect/qcom/icc-common.c                          |  34 +
+ drivers/interconnect/qcom/icc-common.h                          |  13 +
+ drivers/interconnect/qcom/icc-rpm.c                             | 168 ++-
+ drivers/interconnect/qcom/icc-rpm.h                             |   6 +
+ drivers/interconnect/qcom/icc-rpmh.c                            |  30 +-
+ drivers/interconnect/qcom/icc-rpmh.h                            |   1 -
+ drivers/interconnect/qcom/msm8939.c                             |   1 +
+ drivers/interconnect/qcom/sm6350.c                              | 493 ++++++++
+ drivers/interconnect/qcom/sm6350.h                              | 139 ++
+ drivers/interconnect/qcom/sm8450.c                              |   1 +
+ include/dt-bindings/interconnect/fsl,imx8mp.h                   |  59 +
+ include/dt-bindings/interconnect/qcom,sm6350.h                  | 148 +++
+ include/linux/interconnect.h                                    |   7 +
+ 30 files changed, 1627 insertions(+), 93 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
+ create mode 100644 drivers/interconnect/imx/imx8mp.c
+ create mode 100644 drivers/interconnect/qcom/icc-common.c
+ create mode 100644 drivers/interconnect/qcom/icc-common.h
+ create mode 100644 drivers/interconnect/qcom/sm6350.c
+ create mode 100644 drivers/interconnect/qcom/sm6350.h
+ create mode 100644 include/dt-bindings/interconnect/fsl,imx8mp.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm6350.h

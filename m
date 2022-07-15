@@ -2,128 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D906576A38
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1415576A3E
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 00:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbiGOWvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 18:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        id S231563AbiGOWwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 18:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbiGOWv1 (ORCPT
+        with ESMTP id S231876AbiGOWwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 18:51:27 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDCE45987;
-        Fri, 15 Jul 2022 15:51:26 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso7491630pjo.0;
-        Fri, 15 Jul 2022 15:51:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8LRdXnGBkh1a1Ag07+rxl01ofzEnK6fRJxzyJOKUGrY=;
-        b=XS3Z2gA2bLok1BviOoFR20EFum6E32EdzNTg8lz3RcXaR9CKnwHU5jEl8cCwB/5zxP
-         lWg74saq9rF69oeq6z190xvyuNiPvPxRfpQEkXDzQ56K5avOqUVA28tuZqmNaZ2e1ztU
-         OWxA4QhCJsNHPeYVGlloz1wRXWRTKPXfMMxKfEESYiOYaT1UQdZUVfZ2u8O4xIHwPDi6
-         f5WPXsjMK9jP9kPsfRnQeUFJV+O2gkA90F8ryajynYiPLzf8s9OE9JwkKF/CLi7Q4R0s
-         gnG6c2BN6FVuztpQi6ONCQmT/kSqm7nJXdIVZOrGHuckAB2Un0b94zHGgxH0TE225coI
-         bt9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=8LRdXnGBkh1a1Ag07+rxl01ofzEnK6fRJxzyJOKUGrY=;
-        b=VHDQ+X7WuMB21rVVjSjlGghjLrMvi3nYPKoKjt17nS2psZwYmhomesqucP0MJLQ3Ir
-         garhfBINNU5rRztiouHOM1Vvs4R9cyoXFXfv+gk+wCOsSOescKXBn9qm7zztkhTAE9zS
-         lAdm5u1ZLQ4lWqPhOYVB2GDK6G8zLyrov6XQq6KTTTSGtZL270fCLdMfWpJnbd2bLMvl
-         geFW00VMxDZJyhvPk5JykAcA8AJS+Gnwl8FMGmSpMIBjEkk0Zeg7hj+2C80gr3c0/DOf
-         NWDI/jMlEdn704+AwAFovhAazHRQAGZ+1PRm5y9c9VMhJCuJfA6hHDbgNtslH4adYReT
-         Tk8w==
-X-Gm-Message-State: AJIora9upYrC7UdXgu9Fylxc67C4oYCd7TqixzYxjnwC9Z9vaKG2ISdN
-        R8lTtztnQ/s1T3kICr+oU+wex8TL1Vpw7w==
-X-Google-Smtp-Source: AGRyM1vDxDrRVno9jxas99X+Zh9FOmVCnHGLHj5I+mX6XzjJnOPXn8u8AHCmvBiDqqpyXHTxATkelw==
-X-Received: by 2002:a17:902:f152:b0:16b:e29c:fbd5 with SMTP id d18-20020a170902f15200b0016be29cfbd5mr15776217plb.67.1657925485953;
-        Fri, 15 Jul 2022 15:51:25 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m5-20020a170902db0500b001677d4a9654sm4111063plx.265.2022.07.15.15.51.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 15:51:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 15 Jul 2022 15:51:23 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        x86@kernel.org, ardb@kernel.org, tglx@linutronix.de,
-        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] efi/x86: use naked RET on mixed mode call wrapper
-Message-ID: <20220715225123.GA2177570@roeck-us.net>
-References: <20220715194550.793957-1-cascardo@canonical.com>
+        Fri, 15 Jul 2022 18:52:16 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6702446D8D
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 15:52:11 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 0ED3022175;
+        Sat, 16 Jul 2022 00:52:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1657925529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cE+oDGj+om8lhuzJzV1Y3FduLHUTrtVw+CNorJfqVPk=;
+        b=rZd1K5eChfz7xO8uVX3E9KvzneH/+lPRqb0RLFje3dPxFYunWcGtSKVKBvJ6mO412pb4uV
+        eLYaLaYQEWUph6iEDgfwMX55RYcxWQOJ5l1ZUgs5pz6uGi9Su1Nx8TbI1YRmGk5zqd+MJZ
+        2f8VxH2TqNTuvSfd86OV1j5BJ+vH70A=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220715194550.793957-1-cascardo@canonical.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Sat, 16 Jul 2022 00:52:06 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Cc:     clg@kaod.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, p.yadav@ti.com,
+        quic_ggregory@quicinc.com, quic_jiles@quicinc.com,
+        tudor.ambarus@microchip.com
+Subject: Re: [PATCH] mtd: spi-nor: winbond: add support for W25Q512NW-IQ/IN
+In-Reply-To: <b42cb229-f241-6e29-a138-29023ce316d9@quicinc.com>
+References: <20220710145721.1207157-1-quic_jaehyoo@quicinc.com>
+ <20220711095042.2095360-1-michael@walle.cc>
+ <a42fbef2-3eff-9e88-233e-a805cfbe2376@quicinc.com>
+ <4972a85d04e39ebb7b4a5872f6632c45@walle.cc>
+ <2260955b-354d-ceda-cadc-49453bfca3e4@quicinc.com>
+ <00f0c9d480ef5a414f1c34492661bd9e@walle.cc>
+ <63cedfce-34bb-ed63-3871-75a6c3dd5d73@quicinc.com>
+ <6be710bb5c1bf0449e54a54b78f6f7a0@walle.cc>
+ <47c01d768ea56edc9a2f9d317af7b495@walle.cc>
+ <114fcde6-bdf7-68ee-d031-35a916027aee@quicinc.com>
+ <b42cb229-f241-6e29-a138-29023ce316d9@quicinc.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <1ce1ac2fabf7e46e303da01782469355@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 04:45:50PM -0300, Thadeu Lima de Souza Cascardo wrote:
-> When running with return thunks enabled under 32-bit EFI, the system
-> crashes with:
-> 
-> [    0.137688] kernel tried to execute NX-protected page - exploit attempt? (uid: 0)
-> [    0.138136] BUG: unable to handle page fault for address: 000000005bc02900
-> [    0.138136] #PF: supervisor instruction fetch in kernel mode
-> [    0.138136] #PF: error_code(0x0011) - permissions violation
-> [    0.138136] PGD 18f7063 P4D 18f7063 PUD 18ff063 PMD 190e063 PTE 800000005bc02063
-> [    0.138136] Oops: 0011 [#1] PREEMPT SMP PTI
-> [    0.138136] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc6+ #166
-> [    0.138136] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
-> [    0.138136] RIP: 0010:0x5bc02900
-> [    0.138136] Code: Unable to access opcode bytes at RIP 0x5bc028d6.
-> [    0.138136] RSP: 0018:ffffffffb3203e10 EFLAGS: 00010046
-> [    0.138136] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000048
-> [    0.138136] RDX: 000000000190dfac RSI: 0000000000001710 RDI: 000000007eae823b
-> [    0.138136] RBP: ffffffffb3203e70 R08: 0000000001970000 R09: ffffffffb3203e28
-> [    0.138136] R10: 747563657865206c R11: 6c6977203a696665 R12: 0000000000001710
-> [    0.138136] R13: 0000000000000030 R14: 0000000001970000 R15: 0000000000000001
-> [    0.138136] FS:  0000000000000000(0000) GS:ffff8e013ca00000(0000) knlGS:0000000000000000
-> [    0.138136] CS:  0010 DS: 0018 ES: 0018 CR0: 0000000080050033
-> [    0.138136] CR2: 000000005bc02900 CR3: 0000000001930000 CR4: 00000000000006f0
-> [    0.138136] Call Trace:
-> [    0.138136]  <TASK>
-> [    0.138136]  ? efi_set_virtual_address_map+0x9c/0x175
-> [    0.138136]  efi_enter_virtual_mode+0x4a6/0x53e
-> [    0.138136]  start_kernel+0x67c/0x71e
-> [    0.138136]  x86_64_start_reservations+0x24/0x2a
-> [    0.138136]  x86_64_start_kernel+0xe9/0xf4
-> [    0.138136]  secondary_startup_64_no_verify+0xe5/0xeb
-> [    0.138136]  </TASK>
-> 
-> That's because it cannot jump to the return thunk from the 32-bit code.
-> Using a naked RET and marking it as safe allows the system to proceed
-> booting.
-> 
-> Fixes: aa3d480315ba ("x86: Use return-thunk in asm code")
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Cc: Borislav Petkov <bp@suse.de>
-> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-> Cc: <stable@vger.kernel.org>
+Hi,
 
-No more crashes with this patch applies on top of the mainline kernel
-(sha e5d523f1ae8f).
+Am 2022-07-15 22:15, schrieb Jae Hyun Yoo:
+> On 7/14/2022 7:30 AM, Jae Hyun Yoo wrote:
+>> On 7/14/2022 7:21 AM, Michael Walle wrote:
+>>> Am 2022-07-14 16:16, schrieb Michael Walle:
+>>>> Am 2022-07-14 15:47, schrieb Jae Hyun Yoo:
+>>>>> On 7/14/2022 12:41 AM, Michael Walle wrote:
+>>>>>> What does "doesn't boot at all" mean? Are there any kernel startup
+>>>>>> messages?
+>>>>> 
+>>>>> I'm sharing the error messages below.
+>>>> 
+>>>> Thanks.
+>>>> 
+>>>>> [    0.748594] spi-nor spi0.0: w25q512nwq (65536 Kbytes)
+>>>>> [    0.865216] spi-aspeed-smc 1e620000.spi: CE0 read buswidth:4 
+>>>>> [0x406c0741]
+>>>>> [    0.872833] ------------[ cut here ]------------
+>>>>> [    0.877984] WARNING: CPU: 1 PID: 1 at drivers/mtd/mtdcore.c:583
+>>>>> add_mtd_device+0x28c/0x53c
+>>>>> [    0.887237] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
+>>>>> 5.15.43-AUTOINC-dirty-23801a6 #1
+>>>> 
+>>>> Could you please try it on the latest (vanilla) linux-next?
+>>> 
+>>> or spi-nor/next [1] as there are quite a lot of changes. The
+>>> patches shall be based on that.
+>> 
+>> Okay. Let me try that. I tested it using 5.15.43 with back-ported
+>> spi-nor patches from the latest. I'll back-port more changes from
+>> the spi-nor/next and will test the INFO(0xef6020, 0, 0, 0) setting
+>> again.
+> 
+> I tested the setting again after cherry picking all SPI relating 
+> changes
+> from the 'for-next' branch of
+> git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi repository.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+That is not the tree I mentioned in my previous mail. Why do you
+cherry-pick the changes instead of just trying the spi-nor/next
+tree?
 
-Guenter
+> No luck! It's still making the same warning dump at 'add_mtd_device'
+> since 'mtd->erasesize' is checked as 0.
+> 
+> I traced it further to check if the erasesize is properly parsed from
+> the sfdp and checked that erase map seems parsed and initialized
+> correctly in 'spi_nor_parse_bfpt' but problem is, a target
+> mtd->erasesize is not properly selected in 'spi_nor_select_erase' since
+> the 'wanted_size' variable is initialized as sector size of info table
+> so a selected target mtd->erasesize is also 0 so looks like it's the
+> reason why it can't initialize mtd device if we use
+> INFO(0xef6020, 0, 0, 0).
+
+Have a look at
+https://lore.kernel.org/linux-mtd/20220510140232.3519184-2-michael@walle.cc/
+wanted_size can be 0. In this case spi_nor_select_uniform_erase()
+should return the biggest valid erase type. Could you please check that
+(1) spi_nor_select_uniform_erase() return non-NULL
+(2) check what value erase->size has (I guess it should be 64k in your 
+case)
+
+ From what you tell me erase->size should be zero. If that is the
+case look at spi_nor_parse_bfpt() where the erase sizes are parsed.
+Also take a look at spi_nor_parse_4bait() where the erase types might
+be cleared again.
+
+I've checked your SFDP data and it contains three valid erase sizes
+and opcodes for 3byte addressing and two valid erase opcodes for 4
+byte addressing. So that looks all good. After all the SFDP parsing
+I expect that you have two valid erase types:
+  - erase size 4096 with erase opcode 21h
+  - erase size 65536 with erase opcode DCh
+
+> Also, checked that the mtd->erasesize is set to 4096 if I enable
+> CONFIG_MTD_SPI_NOR_USE_4K_SECTORS so the SPI flash can be initialized
+> with the INFO(0xef6020, 0, 0, 0) setting but, it should cover even
+> when
+> the configuration is not enabled. I think, this patch should go as it
+> is. The erasesize selecting issue could be fixed using a separate
+> patch.
+> Are you still sure that the INFO(0xef6020, 0, 0, 0) works in the
+> latest spi-next?
+
+I've got two tested-by's with two different flashes, so yes, I'm
+pretty sure it works in principle. It might still be something
+wrong with your flash though.
+
+-michael

@@ -2,170 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9E3575A22
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 06:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A95CC575A27
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 06:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241199AbiGOEDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 00:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
+        id S234620AbiGOEEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 00:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231527AbiGOEDu (ORCPT
+        with ESMTP id S241322AbiGOEEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 00:03:50 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EACDF86;
-        Thu, 14 Jul 2022 21:03:49 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bp17so5950668lfb.3;
-        Thu, 14 Jul 2022 21:03:48 -0700 (PDT)
+        Fri, 15 Jul 2022 00:04:04 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4DC13F88
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 21:04:01 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31d17879672so31642217b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Jul 2022 21:04:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ujVXyns3rNmS/Ee8BcP+uYwQE6ICtpjGNYjLOoQ+tU8=;
-        b=Ox1HJcwTb7MthahIQENHD5tBkuboDbyGAQTfg2UqO2VuubsvBgg5sIkz6V6ZdqDiqX
-         NAvLcXwP4V2wIC1udQK7uDh5L/FyRvfOAnLHieyYna7G/hIKCgU/NL6M76tn+7eiA6vh
-         2nbkVimNjFi8qo4Y0SeoSWJ6RoiLZ9LYWmwrCA8BP9ZWAmENsUlfdPUMxGlHQzG4Cpwm
-         vNRu3EVCOgPei8EW9FUUBwX5DhSyj0LRPvEO2EQbu4k6PQtWp+cTPQcvv78QMG+OsSpy
-         8nQE75BwybEqIuUBmpOctAAydx6k3vp0jBb3bj1TFuxJo8ZhuaxeM6uHcQ2ekDE1hmo5
-         2Onw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=dOShst8oggqOssAr1ulsAnblCITkep7trvJdY0C5eLU=;
+        b=Of15lLAbml49VYHRN9m0VDbCfogr3SovyJGfgCQ7iaWxO2/arZgSm1JkWoAtfuWQlX
+         luM3GfvnpmaLCfLXFRTXVP3skXL2hUMumL8ELP8qkLOb1o1ll5w6FN6C0XjjNbS9TDdN
+         PsqVD12No9NSstS6gjWYJmxvG6m6l5eJSTmC4BXr+uKXuWjOQIM6AsEDP/qr9/oqEkP3
+         zufyGVCthz1+/0+RbafqMV5x2ThixKyaYAePnveQzH/m8OkFCG4EgRf+6VnW42hlEdhv
+         4dTf12NWb9TPo54ObWif+TwN/RlIsIBtA8+dlDJXCAmbeUPx84nRTKncRwJc0ouSdHDt
+         eMvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ujVXyns3rNmS/Ee8BcP+uYwQE6ICtpjGNYjLOoQ+tU8=;
-        b=AtyJVc5XTfvRl+tAUAgkTREdhg7fvIPWGQxvTpHZBr0PrkxBFwFyB9LEnfwNIXZ91J
-         LqTVK7Hwgg0OczbywtoHf0r1kL8wpDyryWKE3alcns29Kq+NTdlTzNp3rI9b4rZPiZrN
-         3uTUt9AqyDessKPAb/Gp7AWNvNQr6g9VDJBRvE/nPwoJ22Mh1jYJWWEVoquZza59dO9q
-         JxRVgqxOetH0aX0BOM7XSm4hJblev+zx3ntFoAyFqBVf52rHdtt60ukra4YwSAKOMimJ
-         S6iAhekv0Sj9/WMqGrcmCy2V5F7hdXBoLB8NBZKnAD2hnEslO9USPgz7c3HCjJtT+HUF
-         aO0w==
-X-Gm-Message-State: AJIora9VDBdczIHVbhho7VXH6mxdWD4eWdokGcPVOVJziuNSKSc8/54V
-        wXeoCPR8tBa12KMAiwLyrWd/tLiloKPe+d7r4+Za9cvjVAqk6A==
-X-Google-Smtp-Source: AGRyM1u/NWI2p+FhH48FvrLKcDj3y/n3k05FggqhijpfU1pAkK23Kq3D0cyYziiIU/ffLUDx8UAoVatnsNyoQTdFWaA=
-X-Received: by 2002:a05:6512:3409:b0:489:c549:4693 with SMTP id
- i9-20020a056512340900b00489c5494693mr6571084lfr.26.1657857827176; Thu, 14 Jul
- 2022 21:03:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <1657774452-4497-1-git-send-email-quic_zijuhu@quicinc.com>
- <CABBYNZJG8uKv-270u1P4NTr-gML5=uR2Syhjs=x4LMhJOnqSxA@mail.gmail.com> <2cb4f711-5e7c-6fc7-263f-0ed6437f0edb@quicinc.com>
-In-Reply-To: <2cb4f711-5e7c-6fc7-263f-0ed6437f0edb@quicinc.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Thu, 14 Jul 2022 21:03:35 -0700
-Message-ID: <CABBYNZJso0QxYhnuaYxu0SYimm7vGvUOPGmuRAYf8LnnHOYxRQ@mail.gmail.com>
-Subject: Re: [PATCH v1] Bluetooth: hci_sync: Remove redundant func definition
-To:     quic_zijuhu <quic_zijuhu@quicinc.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Luiz Augusto Von Dentz <luiz.von.dentz@intel.com>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=dOShst8oggqOssAr1ulsAnblCITkep7trvJdY0C5eLU=;
+        b=zhIWyeWPKY+QqL7G0W/KTC6+U2n0b3oC2VO2GwBk6li3ubHNnxtWLfR2hm0SWxCN59
+         uWgB7mUZ2W+kw01gchNeRlunp3TaU8FgP18DrrMsmH4cSioy1QvZfTbjuj8VO6p1/e4g
+         SvQ5ui+3ERNIv/E2Kyv5Fnoau+r1QCNtKngkgjmzMRoq5OiE47/KKIhC2aN+MRS433Ai
+         lwy+SswsUPnxLLLNKc1Nq+Fbrff6g7lOwnSVaJDNHLFvrmiZsIqy9Ar7wr9Yg8saM7Ve
+         OD5SH5l6zLUxqQ9lHPD2VWRcYF+S/7fPiG7WQmW/eq/ySG9PXCpcMTT0UWWDgptZGrZ1
+         0WUQ==
+X-Gm-Message-State: AJIora8Adw/WmIPKBkN4oWUnkciV1G/25ER4SCAgatJHbd1S1FsdXPPO
+        aIjAZMdbwLbAlbDszQQV8guqq5CR2DkpcQ==
+X-Google-Smtp-Source: AGRyM1vFpZrFOoq2yapQ0vGl3znNKM4Dn0ax0wtn3S4i2Fs4lp4ajUnIeHklnWD7RiS+zlb4i05wgHyYdzKpWw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a5b:bc2:0:b0:66e:4a75:e5ff with SMTP id
+ c2-20020a5b0bc2000000b0066e4a75e5ffmr12004512ybr.642.1657857840574; Thu, 14
+ Jul 2022 21:04:00 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 12:03:54 +0800
+Message-Id: <20220715040354.2629856-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH] mmc: sdhci-of-aspeed: test: Fix dependencies when KUNIT=m
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, Sadiya Kazi <sadiyakazi@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Quic_zijuhu,
+While the sdhci-of-aspeed KUnit tests do work when builtin, and do work
+when KUnit itself is being built as a module, the two together break.
 
-On Thu, Jul 14, 2022 at 7:12 PM quic_zijuhu <quic_zijuhu@quicinc.com> wrote:
->
-> On 7/15/2022 4:52 AM, Luiz Augusto von Dentz wrote:
-> > Hi Zijun,
-> >
-> > On Wed, Jul 13, 2022 at 9:54 PM Zijun Hu <quic_zijuhu@quicinc.com> wrote:
-> >>
-> >> both hci_request.c and hci_sync.c have the same definition
-> >> for disconnected_accept_list_entries(), so remove a redundant
-> >> copy.
-> >>
-> >> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
-> >> ---
-> >>  net/bluetooth/hci_request.c |  2 +-
-> >>  net/bluetooth/hci_request.h |  2 ++
-> >>  net/bluetooth/hci_sync.c    | 18 ------------------
-> >>  3 files changed, 3 insertions(+), 19 deletions(-)
-> >
-> > We are actually deprecating hci_request functions in favor of hci_sync
-> > ones so this is going in the opposite direction.
-> >
-> should remove disconnected_accept_list_entries() definition within hci_request.c instead of
-> hci_sync.c, right?
+This is because the KUnit tests (understandably) depend on KUnit, so a
+built-in test cannot build if KUnit is a module.
 
-Correct
+Fix this by adding a dependency on (MMC_SDHCI_OF_ASPEED=m || KUNIT=y),
+which only excludes this one problematic configuration.
 
-> >> diff --git a/net/bluetooth/hci_request.c b/net/bluetooth/hci_request.c
-> >> index 635cc5fb451e..38e6c66a3327 100644
-> >> --- a/net/bluetooth/hci_request.c
-> >> +++ b/net/bluetooth/hci_request.c
-> >> @@ -1784,7 +1784,7 @@ int hci_update_random_address(struct hci_request *req, bool require_privacy,
-> >>         return 0;
-> >>  }
-> >>
-> >> -static bool disconnected_accept_list_entries(struct hci_dev *hdev)
-> >> +bool disconnected_accept_list_entries(struct hci_dev *hdev)
-> >>  {
-> >>         struct bdaddr_list *b;
-> >>
-> >> diff --git a/net/bluetooth/hci_request.h b/net/bluetooth/hci_request.h
-> >> index 7f8df258e295..e80b500878d9 100644
-> >> --- a/net/bluetooth/hci_request.h
-> >> +++ b/net/bluetooth/hci_request.h
-> >> @@ -120,6 +120,8 @@ void __hci_req_update_scan(struct hci_request *req);
-> >>  int hci_update_random_address(struct hci_request *req, bool require_privacy,
-> >>                               bool use_rpa, u8 *own_addr_type);
-> >>
-> >> +bool disconnected_accept_list_entries(struct hci_dev *hdev);
-> >> +
-> >>  int hci_abort_conn(struct hci_conn *conn, u8 reason);
-> >>  void __hci_abort_conn(struct hci_request *req, struct hci_conn *conn,
-> >>                       u8 reason);
-> >> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> >> index 212b0cdb25f5..99ffac6c5e8c 100644
-> >> --- a/net/bluetooth/hci_sync.c
-> >> +++ b/net/bluetooth/hci_sync.c
-> >> @@ -2419,24 +2419,6 @@ int hci_write_fast_connectable_sync(struct hci_dev *hdev, bool enable)
-> >>         return err;
-> >>  }
-> >>
-> >> -static bool disconnected_accept_list_entries(struct hci_dev *hdev)
-> >> -{
-> >> -       struct bdaddr_list *b;
-> >> -
-> >> -       list_for_each_entry(b, &hdev->accept_list, list) {
-> >> -               struct hci_conn *conn;
-> >> -
-> >> -               conn = hci_conn_hash_lookup_ba(hdev, ACL_LINK, &b->bdaddr);
-> >> -               if (!conn)
-> >> -                       return true;
-> >> -
-> >> -               if (conn->state != BT_CONNECTED && conn->state != BT_CONFIG)
-> >> -                       return true;
-> >> -       }
-> >> -
-> >> -       return false;
-> >> -}
-> >> -
-> >>  static int hci_write_scan_enable_sync(struct hci_dev *hdev, u8 val)
-> >>  {
-> >>         return __hci_cmd_sync_status(hdev, HCI_OP_WRITE_SCAN_ENABLE,
-> >> --
-> >> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
-> >>
-> >
-> >
->
+This was reported on a nasty openrisc-randconfig run by the kernel test
+robot, though for some reason (compiler optimisations removing the test
+code?) I wasn't able to reproduce it locally on x86:
+https://lore.kernel.org/linux-mm/202207140122.fzhlf60k-lkp@intel.com/T/
 
+Fixes: 291cd54e5b05 ("mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ drivers/mmc/host/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+index 10c563999d3d..e63608834411 100644
+--- a/drivers/mmc/host/Kconfig
++++ b/drivers/mmc/host/Kconfig
+@@ -171,6 +171,7 @@ config MMC_SDHCI_OF_ASPEED
+ config MMC_SDHCI_OF_ASPEED_TEST
+ 	bool "Tests for the ASPEED SDHCI driver" if !KUNIT_ALL_TESTS
+ 	depends on MMC_SDHCI_OF_ASPEED && KUNIT
++	depends on (MMC_SDHCI_OF_ASPEED=m || KUNIT=y)
+ 	default KUNIT_ALL_TESTS
+ 	help
+ 	  Enable KUnit tests for the ASPEED SDHCI driver. Select this
 -- 
-Luiz Augusto von Dentz
+2.37.0.170.g444d1eabd0-goog
+

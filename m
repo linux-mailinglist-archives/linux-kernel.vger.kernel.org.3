@@ -2,447 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1613E576390
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952C0576392
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Jul 2022 16:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbiGOOYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 10:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
+        id S230503AbiGOOZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 10:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiGOOYn (ORCPT
+        with ESMTP id S231394AbiGOOY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 10:24:43 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE973B965
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 07:24:41 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 962791FB79;
-        Fri, 15 Jul 2022 14:24:40 +0000 (UTC)
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 7FBF92C141;
-        Fri, 15 Jul 2022 14:24:40 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Arnd Bergmann <arnd@arndb.de>,
+        Fri, 15 Jul 2022 10:24:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B355D6C11C;
+        Fri, 15 Jul 2022 07:24:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2671B619BA;
+        Fri, 15 Jul 2022 14:24:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 023F4C34115;
+        Fri, 15 Jul 2022 14:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657895094;
+        bh=gqsoRO92+mlK0ZwNvJsGoKnNnTCOYRtKI3/YidxBbgA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pWnBapWadb8KavruX98mihY0W9d4gGhIWwwBhQUThI3GIWNzhnmsujkRtyQEng2pN
+         ZMpT6O1TOnGYC8NXyhr7fQu8qnvYNs3BkTkrp6FfsiYjlFPUkzqBclF8ASTP8PJXat
+         p7GR2osWup7j2ocp/WKjZtbCPXhZDHW4yLdtnX08=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     johan@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] char: remove VR41XX related char driver
-Date:   Fri, 15 Jul 2022 16:24:36 +0200
-Message-Id: <20220715142437.137411-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.29.2
+        Yan Xinyu <sdlyyxy@bupt.edu.cn>
+Subject: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
+Date:   Fri, 15 Jul 2022 16:24:44 +0200
+Message-Id: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1360; i=gregkh@linuxfoundation.org; h=from:subject; bh=gqsoRO92+mlK0ZwNvJsGoKnNnTCOYRtKI3/YidxBbgA=; b=owGbwMvMwCRo6H6F97bub03G02pJDEkXK5aus/rpLdgjOL9H9Jiv4bRXwcUGUv7cXyV+7112Ibcp ZKthRywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAExkdhzD/Ciuc7Iy/sZV6penqcrKJH 88suJlPcM82+csPNmlrwRCzAIWFE7arJD+4cZWAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit d3164e2f3b0a ("MIPS: Remove VR41xx support") removed support
-for MIPS VR41xx platform, so remove exclusive drivers for this
-platform, too.
+The Oppo R11 diagnostic USB connection needs to be bound to the
+usb-serial-simple driver as it just wants to use a dumb pipe to
+communicate to the host.
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+usb-devices output:
+ T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
+ D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
+ P: Vendor=22d9 ProdID=276c Rev=04.04
+ S: Manufacturer=OPPO
+ S: Product=SDM660-MTP _SN:09C6BCA7
+ S: SerialNumber=beb2c403
+ C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
+ I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30
+
+Reported-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+Cc: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/Kconfig  |   5 -
- drivers/char/Makefile |   1 -
- drivers/char/tb0219.c | 358 ------------------------------------------
- 3 files changed, 364 deletions(-)
- delete mode 100644 drivers/char/tb0219.c
+ drivers/usb/serial/usb-serial-simple.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
-index 30192e123e5f..0f378d29dab0 100644
---- a/drivers/char/Kconfig
-+++ b/drivers/char/Kconfig
-@@ -247,11 +247,6 @@ config SONYPI
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called sonypi.
+diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+index 4c6747889a19..eb832b94aa3a 100644
+--- a/drivers/usb/serial/usb-serial-simple.c
++++ b/drivers/usb/serial/usb-serial-simple.c
+@@ -60,7 +60,9 @@ DEVICE(flashloader, FLASHLOADER_IDS);
+ 	{ USB_VENDOR_AND_INTERFACE_INFO(0x18d1,			\
+ 					USB_CLASS_VENDOR_SPEC,	\
+ 					0x50,			\
+-					0x01) }
++					0x01) },		\
++	{ USB_DEVICE_AND_INTERFACE_INFO(0x22d9, 0x276c,		\
++					0xff, 0xff, 0x30) }
+ DEVICE(google, GOOGLE_IDS);
  
--config GPIO_TB0219
--	tristate "TANBAC TB0219 GPIO support"
--	depends on TANBAC_TB022X
--	select GPIO_VR41XX
--
- source "drivers/char/pcmcia/Kconfig"
- 
- config MWAVE
-diff --git a/drivers/char/Makefile b/drivers/char/Makefile
-index 264eb398fdd4..1b35d1724565 100644
---- a/drivers/char/Makefile
-+++ b/drivers/char/Makefile
-@@ -31,7 +31,6 @@ obj-$(CONFIG_NWFLASH)		+= nwflash.o
- obj-$(CONFIG_SCx200_GPIO)	+= scx200_gpio.o
- obj-$(CONFIG_PC8736x_GPIO)	+= pc8736x_gpio.o
- obj-$(CONFIG_NSC_GPIO)		+= nsc_gpio.o
--obj-$(CONFIG_GPIO_TB0219)	+= tb0219.o
- obj-$(CONFIG_TELCLOCK)		+= tlclk.o
- 
- obj-$(CONFIG_MWAVE)		+= mwave/
-diff --git a/drivers/char/tb0219.c b/drivers/char/tb0219.c
-deleted file mode 100644
-index 13c20b6594c3..000000000000
---- a/drivers/char/tb0219.c
-+++ /dev/null
-@@ -1,358 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- *  Driver for TANBAC TB0219 base board.
-- *
-- *  Copyright (C) 2005  Yoichi Yuasa <yuasa@linux-mips.org>
-- */
--#include <linux/platform_device.h>
--#include <linux/fs.h>
--#include <linux/init.h>
--#include <linux/module.h>
--#include <linux/uaccess.h>
--
--#include <asm/io.h>
--#include <asm/reboot.h>
--#include <asm/vr41xx/giu.h>
--#include <asm/vr41xx/tb0219.h>
--
--MODULE_AUTHOR("Yoichi Yuasa <yuasa@linux-mips.org>");
--MODULE_DESCRIPTION("TANBAC TB0219 base board driver");
--MODULE_LICENSE("GPL");
--
--static int major;	/* default is dynamic major device number */
--module_param(major, int, 0);
--MODULE_PARM_DESC(major, "Major device number");
--
--static void (*old_machine_restart)(char *command);
--static void __iomem *tb0219_base;
--static DEFINE_SPINLOCK(tb0219_lock);
--
--#define tb0219_read(offset)		readw(tb0219_base + (offset))
--#define tb0219_write(offset, value)	writew((value), tb0219_base + (offset))
--
--#define TB0219_START	0x0a000000UL
--#define TB0219_SIZE	0x20UL
--
--#define TB0219_LED			0x00
--#define TB0219_GPIO_INPUT		0x02
--#define TB0219_GPIO_OUTPUT		0x04
--#define TB0219_DIP_SWITCH		0x06
--#define TB0219_MISC			0x08
--#define TB0219_RESET			0x0e
--#define TB0219_PCI_SLOT1_IRQ_STATUS	0x10
--#define TB0219_PCI_SLOT2_IRQ_STATUS	0x12
--#define TB0219_PCI_SLOT3_IRQ_STATUS	0x14
--
--typedef enum {
--	TYPE_LED,
--	TYPE_GPIO_OUTPUT,
--} tb0219_type_t;
--
--/*
-- * Minor device number
-- *	 0 = 7 segment LED
-- *
-- *	16 = GPIO IN 0
-- *	17 = GPIO IN 1
-- *	18 = GPIO IN 2
-- *	19 = GPIO IN 3
-- *	20 = GPIO IN 4
-- *	21 = GPIO IN 5
-- *	22 = GPIO IN 6
-- *	23 = GPIO IN 7
-- *
-- *	32 = GPIO OUT 0
-- *	33 = GPIO OUT 1
-- *	34 = GPIO OUT 2
-- *	35 = GPIO OUT 3
-- *	36 = GPIO OUT 4
-- *	37 = GPIO OUT 5
-- *	38 = GPIO OUT 6
-- *	39 = GPIO OUT 7
-- *
-- *	48 = DIP switch 1
-- *	49 = DIP switch 2
-- *	50 = DIP switch 3
-- *	51 = DIP switch 4
-- *	52 = DIP switch 5
-- *	53 = DIP switch 6
-- *	54 = DIP switch 7
-- *	55 = DIP switch 8
-- */
--
--static inline char get_led(void)
--{
--	return (char)tb0219_read(TB0219_LED);
--}
--
--static inline char get_gpio_input_pin(unsigned int pin)
--{
--	uint16_t values;
--
--	values = tb0219_read(TB0219_GPIO_INPUT);
--	if (values & (1 << pin))
--		return '1';
--
--	return '0';
--}
--
--static inline char get_gpio_output_pin(unsigned int pin)
--{
--	uint16_t values;
--
--	values = tb0219_read(TB0219_GPIO_OUTPUT);
--	if (values & (1 << pin))
--		return '1';
--
--	return '0';
--}
--
--static inline char get_dip_switch(unsigned int pin)
--{
--	uint16_t values;
--
--	values = tb0219_read(TB0219_DIP_SWITCH);
--	if (values & (1 << pin))
--		return '1';
--
--	return '0';
--}
--
--static inline int set_led(char command)
--{
--	tb0219_write(TB0219_LED, command);
--
--	return 0;
--}
--
--static inline int set_gpio_output_pin(unsigned int pin, char command)
--{
--	unsigned long flags;
--	uint16_t value;
--
--	if (command != '0' && command != '1')
--		return -EINVAL;
--
--	spin_lock_irqsave(&tb0219_lock, flags);
--	value = tb0219_read(TB0219_GPIO_OUTPUT);
--	if (command == '0')
--		value &= ~(1 << pin);
--	else
--		value |= 1 << pin;
--	tb0219_write(TB0219_GPIO_OUTPUT, value);
--	spin_unlock_irqrestore(&tb0219_lock, flags);
--
--	return 0;
--
--}
--
--static ssize_t tanbac_tb0219_read(struct file *file, char __user *buf, size_t len,
--                                  loff_t *ppos)
--{
--	unsigned int minor;
--	char value;
--
--	minor = iminor(file_inode(file));
--	switch (minor) {
--	case 0:
--		value = get_led();
--		break;
--	case 16 ... 23:
--		value = get_gpio_input_pin(minor - 16);
--		break;
--	case 32 ... 39:
--		value = get_gpio_output_pin(minor - 32);
--		break;
--	case 48 ... 55:
--		value = get_dip_switch(minor - 48);
--		break;
--	default:
--		return -EBADF;
--	}
--
--	if (len <= 0)
--		return -EFAULT;
--
--	if (put_user(value, buf))
--		return -EFAULT;
--
--	return 1;
--}
--
--static ssize_t tanbac_tb0219_write(struct file *file, const char __user *data,
--                                   size_t len, loff_t *ppos)
--{
--	unsigned int minor;
--	tb0219_type_t type;
--	size_t i;
--	int retval = 0;
--	char c;
--
--	minor = iminor(file_inode(file));
--	switch (minor) {
--	case 0:
--		type = TYPE_LED;
--		break;
--	case 32 ... 39:
--		type = TYPE_GPIO_OUTPUT;
--		break;
--	default:
--		return -EBADF;
--	}
--
--	for (i = 0; i < len; i++) {
--		if (get_user(c, data + i))
--			return -EFAULT;
--
--		switch (type) {
--		case TYPE_LED:
--			retval = set_led(c);
--			break;
--		case TYPE_GPIO_OUTPUT:
--			retval = set_gpio_output_pin(minor - 32, c);
--			break;
--		}
--
--		if (retval < 0)
--			break;
--	}
--
--	return i;
--}
--
--static int tanbac_tb0219_open(struct inode *inode, struct file *file)
--{
--	unsigned int minor;
--
--	minor = iminor(inode);
--	switch (minor) {
--	case 0:
--	case 16 ... 23:
--	case 32 ... 39:
--	case 48 ... 55:
--		return stream_open(inode, file);
--	default:
--		break;
--	}
--
--	return -EBADF;
--}
--
--static int tanbac_tb0219_release(struct inode *inode, struct file *file)
--{
--	return 0;
--}
--
--static const struct file_operations tb0219_fops = {
--	.owner		= THIS_MODULE,
--	.read		= tanbac_tb0219_read,
--	.write		= tanbac_tb0219_write,
--	.open		= tanbac_tb0219_open,
--	.release	= tanbac_tb0219_release,
--};
--
--static void tb0219_restart(char *command)
--{
--	tb0219_write(TB0219_RESET, 0);
--}
--
--static void tb0219_pci_irq_init(void)
--{
--	/* PCI Slot 1 */
--	vr41xx_set_irq_trigger(TB0219_PCI_SLOT1_PIN, IRQ_TRIGGER_LEVEL, IRQ_SIGNAL_THROUGH);
--	vr41xx_set_irq_level(TB0219_PCI_SLOT1_PIN, IRQ_LEVEL_LOW);
--
--	/* PCI Slot 2 */
--	vr41xx_set_irq_trigger(TB0219_PCI_SLOT2_PIN, IRQ_TRIGGER_LEVEL, IRQ_SIGNAL_THROUGH);
--	vr41xx_set_irq_level(TB0219_PCI_SLOT2_PIN, IRQ_LEVEL_LOW);
--
--	/* PCI Slot 3 */
--	vr41xx_set_irq_trigger(TB0219_PCI_SLOT3_PIN, IRQ_TRIGGER_LEVEL, IRQ_SIGNAL_THROUGH);
--	vr41xx_set_irq_level(TB0219_PCI_SLOT3_PIN, IRQ_LEVEL_LOW);
--}
--
--static int tb0219_probe(struct platform_device *dev)
--{
--	int retval;
--
--	if (request_mem_region(TB0219_START, TB0219_SIZE, "TB0219") == NULL)
--		return -EBUSY;
--
--	tb0219_base = ioremap(TB0219_START, TB0219_SIZE);
--	if (tb0219_base == NULL) {
--		release_mem_region(TB0219_START, TB0219_SIZE);
--		return -ENOMEM;
--	}
--
--	retval = register_chrdev(major, "TB0219", &tb0219_fops);
--	if (retval < 0) {
--		iounmap(tb0219_base);
--		tb0219_base = NULL;
--		release_mem_region(TB0219_START, TB0219_SIZE);
--		return retval;
--	}
--
--	old_machine_restart = _machine_restart;
--	_machine_restart = tb0219_restart;
--
--	tb0219_pci_irq_init();
--
--	if (major == 0) {
--		major = retval;
--		printk(KERN_INFO "TB0219: major number %d\n", major);
--	}
--
--	return 0;
--}
--
--static int tb0219_remove(struct platform_device *dev)
--{
--	_machine_restart = old_machine_restart;
--
--	iounmap(tb0219_base);
--	tb0219_base = NULL;
--
--	release_mem_region(TB0219_START, TB0219_SIZE);
--
--	return 0;
--}
--
--static struct platform_device *tb0219_platform_device;
--
--static struct platform_driver tb0219_device_driver = {
--	.probe		= tb0219_probe,
--	.remove		= tb0219_remove,
--	.driver		= {
--		.name	= "TB0219",
--	},
--};
--
--static int __init tanbac_tb0219_init(void)
--{
--	int retval;
--
--	tb0219_platform_device = platform_device_alloc("TB0219", -1);
--	if (!tb0219_platform_device)
--		return -ENOMEM;
--
--	retval = platform_device_add(tb0219_platform_device);
--	if (retval < 0) {
--		platform_device_put(tb0219_platform_device);
--		return retval;
--	}
--
--	retval = platform_driver_register(&tb0219_device_driver);
--	if (retval < 0)
--		platform_device_unregister(tb0219_platform_device);
--
--	return retval;
--}
--
--static void __exit tanbac_tb0219_exit(void)
--{
--	platform_driver_unregister(&tb0219_device_driver);
--	platform_device_unregister(tb0219_platform_device);
--}
--
--module_init(tanbac_tb0219_init);
--module_exit(tanbac_tb0219_exit);
+ /* Libtransistor USB console */
 -- 
-2.29.2
+2.37.1
 

@@ -2,150 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D56576D19
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489D4576D28
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232441AbiGPJig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 05:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
+        id S232488AbiGPJjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 05:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiGPJiY (ORCPT
+        with ESMTP id S232955AbiGPJjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 05:38:24 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BDE2B1B5;
-        Sat, 16 Jul 2022 02:38:22 -0700 (PDT)
-X-UUID: 0e249f29ffdf47f5ba60e6ac2fc003e4-20220716
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:5870c23f-a4f2-45f8-a0c3-d0cf757498bc,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:100
-X-CID-INFO: VERSION:1.1.8,REQID:5870c23f-a4f2-45f8-a0c3-d0cf757498bc,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:100
-X-CID-META: VersionHash:0f94e32,CLOUDID:c8947464-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:409a75ef775f,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 0e249f29ffdf47f5ba60e6ac2fc003e4-20220716
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 927492231; Sat, 16 Jul 2022 17:38:19 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Sat, 16 Jul 2022 17:38:17 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Sat, 16 Jul 2022 17:38:16 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sat, 16 Jul 2022 05:39:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A70E19026;
+        Sat, 16 Jul 2022 02:38:54 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 15F583467D;
+        Sat, 16 Jul 2022 09:38:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657964333; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rjjB2Tj1v7P2/Hzk3+SDyFTeccso1IKFKW5WqPOEy9o=;
+        b=FYLcjTomd9RwzKd0WH1grD27nlv90mrvwHhBqMpTwZ84b+ud/KCg/G66kuAwXewZT9WNZU
+        KUoXV78aY9h0pGD3tU6wC1NUWMnnTut96DlEP8y9eH50+DJF9g9B7MqJejwpseg6NN+3AP
+        aztwoEHqp/val4a46OzLLJze3puCCvw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657964333;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rjjB2Tj1v7P2/Hzk3+SDyFTeccso1IKFKW5WqPOEy9o=;
+        b=4zswoA0zLnplqlg+Z+74ZePirnVjDWStv2fDsZyruYBHwedU1AwvfDaucAqi2kwIgvOWD+
+        zq/RYOljlEdPZGDQ==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 592212C141;
+        Sat, 16 Jul 2022 09:38:51 +0000 (UTC)
+Date:   Sat, 16 Jul 2022 11:38:50 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Pratyush Yadav <p.yadav@ti.com>, linux-sunxi@lists.linux.dev,
         Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-CC:     Yong Wu <yong.wu@mediatek.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Irui Wang <irui.wang@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 5/5] media: mediatek: vcodec: Fix encoder multi-instance deadlock
-Date:   Sat, 16 Jul 2022 17:38:08 +0800
-Message-ID: <20220716093808.29894-6-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220716093808.29894-1-irui.wang@mediatek.com>
-References: <20220716093808.29894-1-irui.wang@mediatek.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 1/2] mtd: spi-nor: When a flash memory is missing do not
+ report an error
+Message-ID: <20220716093850.GL17705@kitsune.suse.cz>
+References: <701967b0c418db333c66b48d225df60aa9d03ead.1657826188.git.msuchanek@suse.de>
+ <d8de86aa0331be697fbef33d5ab2c57a@walle.cc>
+ <20220714205529.GE17705@kitsune.suse.cz>
+ <33abf7b84860049c4a22605578303ff2@walle.cc>
+ <20220714220744.GF17705@kitsune.suse.cz>
+ <20220715092017.2ftoyzm22i4amrbt@ti.com>
+ <20220716082027.GK17705@kitsune.suse.cz>
+ <c6955eed3a445f4b87920fe0d47e7230@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c6955eed3a445f4b87920fe0d47e7230@walle.cc>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vb2_queue lock can be set by encoder context, the deadlock
-may occur when running multi-instance encoding if use device
-mutex lock.
+On Sat, Jul 16, 2022 at 11:30:12AM +0200, Michael Walle wrote:
+> Am 2022-07-16 10:20, schrieb Michal Suchánek:
+> 
+> > > So if DT says there isn't a flash on a specific CS when there is, then
+> > > DT should be fixed to describe the flash, and then we can probe it.
+> > > You
+> > > both seem to be saying the same thing here, and I agree.
+> > 
+> > The disagreement is about the situation when there is sometimes a flash
+> > chip.
+> 
+> No. The disagreement is what should happen if the DT says there is
+> a device but there isn't. Which right now is an error and it should
+> stay that way. Your hardware description says there is a flash
+> but it cannot be probed, so it is an error. What about a board
+> which has an actual error and the flash isn't responding? You
+> trade one use case for another.
 
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
----
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h     | 3 +++
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c     | 6 +++---
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c | 1 +
- 3 files changed, 7 insertions(+), 3 deletions(-)
+And what if you have a SATA controller with a bad cable?
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-index ab80e1b1979e..25fe539e6db5 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-@@ -324,6 +324,9 @@ struct mtk_vcodec_ctx {
- 	int hw_id;
- 
- 	struct vdec_msg_queue msg_queue;
-+
-+	/*q_mutex: vb2_queue mutex*/
-+	struct mutex q_mutex;
- };
- 
- /*
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-index c310bb1dbbcf..63e7fe958406 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-@@ -1300,7 +1300,7 @@ void mtk_vcodec_enc_set_default_params(struct mtk_vcodec_ctx *ctx)
- {
- 	struct mtk_q_data *q_data;
- 
--	ctx->m2m_ctx->q_lock = &ctx->dev->dev_mutex;
-+	ctx->m2m_ctx->q_lock = &ctx->q_mutex;
- 	ctx->fh.m2m_ctx = ctx->m2m_ctx;
- 	ctx->fh.ctrl_handler = &ctx->ctrl_hdl;
- 	INIT_WORK(&ctx->encode_work, mtk_venc_worker);
-@@ -1435,7 +1435,7 @@ int mtk_vcodec_enc_queue_init(void *priv, struct vb2_queue *src_vq,
- 	src_vq->ops		= &mtk_venc_vb2_ops;
- 	src_vq->mem_ops		= &vb2_dma_contig_memops;
- 	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
--	src_vq->lock		= &ctx->dev->dev_mutex;
-+	src_vq->lock		= &ctx->q_mutex;
- 	src_vq->dev		= &ctx->dev->plat_dev->dev;
- 
- 	ret = vb2_queue_init(src_vq);
-@@ -1449,7 +1449,7 @@ int mtk_vcodec_enc_queue_init(void *priv, struct vb2_queue *src_vq,
- 	dst_vq->ops		= &mtk_venc_vb2_ops;
- 	dst_vq->mem_ops		= &vb2_dma_contig_memops;
- 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
--	dst_vq->lock		= &ctx->dev->dev_mutex;
-+	dst_vq->lock		= &ctx->q_mutex;
- 	dst_vq->dev		= &ctx->dev->plat_dev->dev;
- 
- 	return vb2_queue_init(dst_vq);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-index 6b0688b4872d..782563e636e4 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-@@ -130,6 +130,7 @@ static int fops_vcodec_open(struct file *file)
- 	INIT_LIST_HEAD(&ctx->list);
- 	ctx->dev = dev;
- 	init_waitqueue_head(&ctx->queue[0]);
-+	mutex_init(&ctx->q_mutex);
- 
- 	ctx->type = MTK_INST_ENCODER;
- 	ret = mtk_vcodec_enc_ctrls_setup(ctx);
--- 
-2.18.0
+Or a bad connection to a mmc card?
 
+Then the kernel also does not say there is an error and simply does not
+see the device.
+
+This is normal. Not all devices that can potentially exist do exist. It
+is up to the user to decide if it's an error that the device is missing.
+
+> Also I've looked at the PHY subsystem and there, if a PHY is described
+> in the DT but isn't there, the following error will be printed:
+>   dev_err(&mdio->dev, "MDIO device at address %d is missing.\n", addr);
+> 
+> And that is for a bus which can even be automatically be
+> probed/detected.
+
+If there is no use case for having a card with unpopulated PHY then it
+makes sense.
+
+Here we do have a use case so the comparison is moot.
+
+Thanks
+
+Michal

@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4C3577272
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C15057725A
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbiGPXRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 19:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
+        id S232191AbiGPXR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 19:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232637AbiGPXRS (ORCPT
+        with ESMTP id S232616AbiGPXRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 19:17:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4C81AF3D
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:17:17 -0700 (PDT)
-Message-ID: <20220716230952.845576840@linutronix.de>
+        Sat, 16 Jul 2022 19:17:19 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903FE1EC43
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:17:18 -0700 (PDT)
+Message-ID: <20220716230952.904222100@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658013435;
+        s=2020; t=1658013436;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=aIQ/Ky4BkhWj1e8pSb5b8EYVCLX1295GSYYZn2MYdwA=;
-        b=QuSWrgtgRwGZys91cSn4NGs8TkUNFwNue/6Hjr5kYy5OM9Rg7kxZ8e4V3WKG9K7iLAX4pE
-        k2vjjoaM7zG0A7+fm7S/iQPMa7xMSVkklXcl58e0z+2fQG0wdA49DO3Z+5zXdNRKcI0A6m
-        sd9eVa26Ne1Lbjj3XGcRpofQNEIeKmij1cTcCMrOgkvyFBlYADe36xounUc8Z1+G6iQjwh
-        wWNSFokPU6PWEH3Lobox+Sh+hCtCl5fgsGg93DNYpESy7V0kKoysIU5E7igJwHxoYLA3NN
-        ayt+EnbRjVS3G06uifxkAspfooH5unadYyREb3PTtTlqkrLf+J3t6CAkJpTVlg==
+         references:references; bh=Cm9gDiq7932M5/ZYpz8elqQRxbwWGV28kDDII2hlkOA=;
+        b=v3v7Iw3vOR9bmz6pVjlYRxB+3YnO8YAarmwol4Wh6T3AkL3tpO25bazr3/zogptxF4eeJw
+        tgdBjyzpiB0Abquly1hFkOIrycKZ48No12716IgNfaae4Ogj8u5Nz21+akZwDdBeuIXhbL
+        7I5iH9g/KAnEsdkbPC7AxEFQA20oib7MjdBCLr55Qcb1aXRYjhyvuzfdZBfePR+SbTD9OE
+        hXFR7dVJQbPrLkbJVgckBT1S2bQB3i3u+uHQQqEQoa/uVKgEYea05mIV/OdI8wnq9BPmpC
+        gHTNTBHSCUdWkRGMXoyp4y6H8BaNAZ2caITxPbay0T2r7ArLbuLwUPnOZ3xDFw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658013435;
+        s=2020e; t=1658013436;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=aIQ/Ky4BkhWj1e8pSb5b8EYVCLX1295GSYYZn2MYdwA=;
-        b=Up8R0aCMnjmqjTKLM5LijbQByYHJVUFiU1yDjTDDBiUqprrZUsKN1Jdlxxh+yp1cn8hsCO
-        ldYoZdnSsKL4rYCw==
+         references:references; bh=Cm9gDiq7932M5/ZYpz8elqQRxbwWGV28kDDII2hlkOA=;
+        b=z2fuZfBwMoJ6mfiZO1n1hzfp2JSG/rkToGzN33KttWWE8YWi/yalHppY+yHtv00FKH7T47
+        ICY5IoQ4zPp+0JCg==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
@@ -46,11 +46,11 @@ Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
         Joao Moreira <joao.moreira@intel.com>,
         Joseph Nuzman <joseph.nuzman@intel.com>,
         Steven Rostedt <rostedt@goodmis.org>
-Subject: [patch 03/38] x86/modules: Set VM_FLUSH_RESET_PERMS in module_alloc()
+Subject: [patch 04/38] x86/vdso: Ensure all kernel code is seen by objtool
 References: <20220716230344.239749011@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 17 Jul 2022 01:17:14 +0200 (CEST)
+Date:   Sun, 17 Jul 2022 01:17:16 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,54 +60,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of resetting permissions all over the place when freeing module
-memory tell the vmalloc code to do so. Avoids the exercise for the next
-upcoming user.
+extable.c is kernel code and not part of the VDSO
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/kernel/ftrace.c       |    2 --
- arch/x86/kernel/kprobes/core.c |    1 -
- arch/x86/kernel/module.c       |    9 +++++----
- 3 files changed, 5 insertions(+), 7 deletions(-)
+ arch/x86/entry/vdso/Makefile |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -412,8 +412,6 @@ create_trampoline(struct ftrace_ops *ops
- 	/* ALLOC_TRAMP flags lets us know we created it */
- 	ops->flags |= FTRACE_OPS_FL_ALLOC_TRAMP;
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -30,11 +30,12 @@ vobjs32-y += vdso32/vclock_gettime.o
+ vobjs-$(CONFIG_X86_SGX)	+= vsgx.o
  
--	set_vm_flush_reset_perms(trampoline);
--
- 	if (likely(system_state != SYSTEM_BOOTING))
- 		set_memory_ro((unsigned long)trampoline, npages);
- 	set_memory_x((unsigned long)trampoline, npages);
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -416,7 +416,6 @@ void *alloc_insn_page(void)
- 	if (!page)
- 		return NULL;
+ # files to link into kernel
+-obj-y				+= vma.o extable.o
+-KASAN_SANITIZE_vma.o		:= y
+-UBSAN_SANITIZE_vma.o		:= y
+-KCSAN_SANITIZE_vma.o		:= y
+-OBJECT_FILES_NON_STANDARD_vma.o	:= n
++obj-y					+= vma.o extable.o
++KASAN_SANITIZE_vma.o			:= y
++UBSAN_SANITIZE_vma.o			:= y
++KCSAN_SANITIZE_vma.o			:= y
++OBJECT_FILES_NON_STANDARD_vma.o		:= n
++OBJECT_FILES_NON_STANDARD_extable.o	:= n
  
--	set_vm_flush_reset_perms(page);
- 	/*
- 	 * First make the page read-only, and only then make it executable to
- 	 * prevent it from being W+X in between.
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -74,10 +74,11 @@ void *module_alloc(unsigned long size)
- 		return NULL;
- 
- 	p = __vmalloc_node_range(size, MODULE_ALIGN,
--				    MODULES_VADDR + get_module_load_offset(),
--				    MODULES_END, gfp_mask,
--				    PAGE_KERNEL, VM_DEFER_KMEMLEAK, NUMA_NO_NODE,
--				    __builtin_return_address(0));
-+				 MODULES_VADDR + get_module_load_offset(),
-+				 MODULES_END, gfp_mask, PAGE_KERNEL,
-+				 VM_FLUSH_RESET_PERMS | VM_DEFER_KMEMLEAK,
-+				 NUMA_NO_NODE, __builtin_return_address(0));
-+
- 	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
- 		vfree(p);
- 		return NULL;
+ # vDSO images to build
+ vdso_img-$(VDSO64-y)		+= 64
 

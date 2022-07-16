@@ -2,183 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAA95771DA
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 00:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D275771E6
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 00:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232762AbiGPWZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 18:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
+        id S232489AbiGPWaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 18:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbiGPWZS (ORCPT
+        with ESMTP id S229579AbiGPWaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 18:25:18 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5A31C936;
-        Sat, 16 Jul 2022 15:25:17 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so14757524pjo.3;
-        Sat, 16 Jul 2022 15:25:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=HeZBaSe2b0OdhqH1Akhrcs1GY2Xz94hdQRqqwnsXn8k=;
-        b=X63dXK3oXI9/A7LLN4VeFHqJdv5ssf8srCUQDCtmm9vqeQcEob+XIwVHfJymyawNvQ
-         Dd3427QaH8Ql4rLsQkHBZrpJsBtuMP1LzAwyGSppm05rNbwrFwRBdt0OFgBskl/mU2F0
-         m321DUYtIcTGmqgyk8YtsNYlbxwljCxQHkRcPUlvOmT12dj9MKTELbK6FfocRtMLPbUA
-         MfZXxOdcT7zjD8MDgAwGnLYK5zz1MOv5GoDsuQtQAOXgGxybP9x2AGNcG4IcEnB/Et+O
-         p2kQWVCtR7oqMroZpK+TBx+ahUfKXi+78aR2YkzNgJsG1zRO+VW6Kb5yAEAMmJ3SD+Aq
-         U2+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=HeZBaSe2b0OdhqH1Akhrcs1GY2Xz94hdQRqqwnsXn8k=;
-        b=EvQFEGuvmqujf9gc/JlgmRwENLse3hbqj7JYfIJpNWIfrfQho4QsvqHrEEX8Xoe5BP
-         qGR9T5Bocb/4VpI8/iN/dPIC/A5DgYt0/b0DQfmbhUxY1p2p7aznOUkjM4tHPfVoaMJK
-         wURCHvbZGHLGBi839bJO7wuL/OVHzLWNBpbgQ2LhT9geWAApFHiV773HtxpmvAwO+10v
-         qXZCOf7AQHvK8SaT2eAHZ94yJUaWbf33VlHxCPde0NrWP4irHPGTqajO2kSErOO199wV
-         tkj61Tukd7MEaBr3ywgoUnjaIngmHWHS4bJ0DmZmJEKSNhZxFBv20aaw/4Rdz9sQE2CV
-         Ec3g==
-X-Gm-Message-State: AJIora8h27HJO+L1l3wJFZ/6ACwGbLpcdRTmUp1ZC4aFs3LgL+/Mf1IT
-        ejrPM2ervyW/r6nb3Vlv/n5YM6Xhfzg=
-X-Google-Smtp-Source: AGRyM1uGmPxUgdybb+yGepSh9vUg1gbQESh8TvcQKrkppQEGDwrJuzFtyujlBWx1CzxylLxgmBywDA==
-X-Received: by 2002:a17:90a:f2d7:b0:1ef:8859:d61 with SMTP id gt23-20020a17090af2d700b001ef88590d61mr30585783pjb.215.1658010316742;
-        Sat, 16 Jul 2022 15:25:16 -0700 (PDT)
-Received: from stbsrv-and-01.and.broadcom.net ([192.19.144.250])
-        by smtp.gmail.com with ESMTPSA id y12-20020aa78f2c000000b00528c149fe97sm6318662pfr.89.2022.07.16.15.25.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Jul 2022 15:25:16 -0700 (PDT)
-From:   Jim Quinlan <jim2101024@gmail.com>
-To:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list@broadcom.com, jim2101024@gmail.com,
-        james.quinlan@broadcom.com
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 6/6] PCI: brcmstb: Do not turn off WOL regulators on suspend
-Date:   Sat, 16 Jul 2022 18:24:53 -0400
-Message-Id: <20220716222454.29914-7-jim2101024@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220716222454.29914-1-jim2101024@gmail.com>
-References: <20220716222454.29914-1-jim2101024@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 16 Jul 2022 18:30:01 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6AA1A071;
+        Sat, 16 Jul 2022 15:30:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658010600; x=1689546600;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vdVrKIqLKuu781c8bGUbY3U5ko4MozA4QmJy7sX3wbk=;
+  b=j9YDRMEGFsLXawTnZmODfgEHkOwKPgdXQ90DvWtw1d+nIblu+nSwZ5an
+   OxXWa0wBr+zoGqD9HlS36YtRmus/8764dNhFEajJKOY4qCFbWdL4eMQ5S
+   wChd53t4pYnnUN3QDfrtSxSgzKkn/8fiwGVJn7C7CpDYLunpm8ZwRK9Qr
+   CHx8qsPhrqftGlNVfWA8QZtK7ketRTVRL6Xb7TdrudP1AX/wgkCMR8dOO
+   ztmi9b9KtCUNHRpEuBalc9K9XU6nplgsj8k9ZgTT/4at0wU2UgnUNKKeX
+   Dgcg6bOnOTYaykISXKND47czcnFkt3pbn9OSLTbijFc/pniPCvV+aceoD
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="284766490"
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="284766490"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 15:30:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="739041817"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Jul 2022 15:29:57 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCqIO-0002Ek-D7;
+        Sat, 16 Jul 2022 22:29:56 +0000
+Date:   Sun, 17 Jul 2022 06:29:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shreeya Patel <shreeya.patel@collabora.com>, jic23@kernel.org,
+        lars@metafoo.de, robh+dt@kernel.org, dmitry.osipenko@collabora.com,
+        Zhigang.Shi@liteon.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        krisman@collabora.com, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, alvaro.soliverez@collabora.com,
+        andy.shevchenko@gmail.com,
+        Shreeya Patel <shreeya.patel@collabora.com>
+Subject: Re: [PATCH v9 2/2] iio: light: Add support for ltrf216a sensor
+Message-ID: <202207170630.lcfpHu8v-lkp@intel.com>
+References: <20220715111626.1066513-3-shreeya.patel@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715111626.1066513-3-shreeya.patel@collabora.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If any downstream device can be a wakeup device, do not turn off the
-regulators as the device will need them on.
+Hi Shreeya,
 
-Link: https://lore.kernel.org/r/20220106160332.2143-8-jim2101024@gmail.com
-Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
----
- drivers/pci/controller/pcie-brcmstb.c | 54 ++++++++++++++++++++++-----
- 1 file changed, 44 insertions(+), 10 deletions(-)
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-index 88339fde0df7..570c98594d47 100644
---- a/drivers/pci/controller/pcie-brcmstb.c
-+++ b/drivers/pci/controller/pcie-brcmstb.c
-@@ -264,6 +264,7 @@ struct brcm_pcie {
- 	bool			refusal_mode;
- 	bool			regulator_oops;
- 	struct subdev_regulators *sr;
-+	bool			ep_wakeup_capable;
- };
- 
- static inline bool is_bmips(const struct brcm_pcie *pcie)
-@@ -1301,9 +1302,21 @@ static void brcm_pcie_turn_off(struct brcm_pcie *pcie)
- 	pcie->bridge_sw_init_set(pcie, 1);
- }
- 
-+static int pci_dev_may_wakeup(struct pci_dev *dev, void *data)
-+{
-+	bool *ret = data;
-+
-+	if (device_may_wakeup(&dev->dev)) {
-+		*ret = true;
-+		dev_info(&dev->dev, "disable cancelled for wake-up device\n");
-+	}
-+	return (int) *ret;
-+}
-+
- static int brcm_pcie_suspend_noirq(struct device *dev)
- {
- 	struct brcm_pcie *pcie = dev_get_drvdata(dev);
-+	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
- 	int ret;
- 
- 	brcm_pcie_turn_off(pcie);
-@@ -1322,11 +1335,22 @@ static int brcm_pcie_suspend_noirq(struct device *dev)
- 	}
- 
- 	if (pcie->sr) {
--		ret = regulator_bulk_disable(pcie->sr->num_supplies, pcie->sr->supplies);
--		if (ret) {
--			dev_err(dev, "Could not turn off regulators\n");
--			reset_control_reset(pcie->rescal);
--			return ret;
-+		/*
-+		 * Now turn off the regulators, but if at least one
-+		 * downstream device is enabled as a wake-up source, do not
-+		 * turn off regulators.
-+		 */
-+		pcie->ep_wakeup_capable = false;
-+		pci_walk_bus(bridge->bus, pci_dev_may_wakeup,
-+			     &pcie->ep_wakeup_capable);
-+		if (!pcie->ep_wakeup_capable) {
-+			ret = regulator_bulk_disable(pcie->sr->num_supplies,
-+						     pcie->sr->supplies);
-+			if (ret) {
-+				dev_err(dev, "Could not turn off regulators\n");
-+				reset_control_reset(pcie->rescal);
-+				return ret;
-+			}
- 		}
- 	}
- 	clk_disable_unprepare(pcie->clk);
-@@ -1371,11 +1395,21 @@ static int brcm_pcie_resume_noirq(struct device *dev)
- 		goto err_reset;
- 
- 	if (pcie->sr) {
--		ret = regulator_bulk_enable(pcie->sr->num_supplies,
--					    pcie->sr->supplies);
--		if (ret) {
--			dev_err(dev, "Could not turn on regulators\n");
--			goto err_reset;
-+		if (pcie->ep_wakeup_capable) {
-+			/*
-+			 * We are resuming from a suspend.  In the suspend we
-+			 * did not disable the power supplies, so there is
-+			 * no need to enable them (and falsely increase their
-+			 * usage count).
-+			 */
-+			pcie->ep_wakeup_capable = false;
-+		} else {
-+			ret = regulator_bulk_enable(pcie->sr->num_supplies,
-+						    pcie->sr->supplies);
-+			if (ret) {
-+				dev_err(dev, "Could not turn on regulators\n");
-+				goto err_reset;
-+			}
- 		}
- 	}
- 
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on linus/master v5.19-rc6 next-20220715]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Shreeya-Patel/Add-LTRF216A-Driver/20220716-210741
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: s390-randconfig-r023-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170630.lcfpHu8v-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/6db354952f0013dd461d2338761ef8ae3399f2d8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shreeya-Patel/Add-LTRF216A-Driver/20220716-210741
+        git checkout 6db354952f0013dd461d2338761ef8ae3399f2d8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/iio/light/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/iio/light/ltrf216a.c:19:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/iio/light/ltrf216a.c:19:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/iio/light/ltrf216a.c:19:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/iio/light/ltrf216a.c:188:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (on) {
+               ^~
+   drivers/iio/light/ltrf216a.c:199:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/iio/light/ltrf216a.c:188:2: note: remove the 'if' if its condition is always true
+           if (on) {
+           ^~~~~~~~
+   drivers/iio/light/ltrf216a.c:186:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   13 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_DP_AUX_BUS
+   Depends on HAS_IOMEM && DRM && OF
+   Selected by
+   - DRM_MSM && HAS_IOMEM && DRM && (ARCH_QCOM || SOC_IMX5 || COMPILE_TEST && COMMON_CLK && IOMMU_SUPPORT && (QCOM_OCMEM || QCOM_OCMEM && (QCOM_LLCC || QCOM_LLCC && (QCOM_COMMAND_DB || QCOM_COMMAND_DB
+
+
+vim +188 drivers/iio/light/ltrf216a.c
+
+   182	
+   183	static int ltrf216a_set_power_state(struct ltrf216a_data *data, bool on)
+   184	{
+   185		struct device *dev = &data->client->dev;
+   186		int ret;
+   187	
+ > 188		if (on) {
+   189			ret = pm_runtime_resume_and_get(dev);
+   190			if (ret) {
+   191				dev_err(dev, "failed to resume runtime PM: %d\n", ret);
+   192				return ret;
+   193			}
+   194		} else {
+   195			pm_runtime_mark_last_busy(dev);
+   196			pm_runtime_put_autosuspend(dev);
+   197		}
+   198	
+   199		return ret;
+   200	}
+   201	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

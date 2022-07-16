@@ -2,91 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC15576D47
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 12:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C1B576D4F
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 12:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiGPKRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 06:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
+        id S229780AbiGPKdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 06:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGPKRD (ORCPT
+        with ESMTP id S229469AbiGPKdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 06:17:03 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A291F606;
-        Sat, 16 Jul 2022 03:17:01 -0700 (PDT)
-Date:   Sat, 16 Jul 2022 10:16:57 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657966619;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=03rJrkcm4eRexferty6ACY8Inioj54wnKeQjgCXIcls=;
-        b=Vu9MhKB4PCtnzUOXR4ILMp01toVOKH69SJUkCdOGBmykhX81F2k0yGlPuA0wjGW2+5K1VE
-        JG+lETVh0YbGlYk+V5dU/LKdPkDyAO4nhVMVmnZsYVI6ukOaQLrJqqV8BxdYN2tdf0JIYn
-        ogLTwB/7f5nyOhgWnYKKD7OPQkacpISTNJ8TwZvqPxXLQsMs6o2iLnSanl4bd/tz1E9c6c
-        dry2x69n9mf/wOSvQBsSag0qGKZXiNQME3iEZ4OWCrX7nLxFoghM3bptpcYam43IkBOklV
-        k3w9SzXBLLaqg/iwhkk+K/g/9enc3THZQ9BR62XBhS5rE1VN7S2J2Py+LRYvQQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657966619;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=03rJrkcm4eRexferty6ACY8Inioj54wnKeQjgCXIcls=;
-        b=qdg/3BoBedHbK35QvH4p7AlrF3JWJ+VopY+fwg4mKWoM6Apavm7NGM1YqDJfNwhYcwJclo
-        LfM7rOwpgni/40AQ==
-From:   "tip-bot2 for Kim Phillips" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/bugs: Remove apostrophe typo
-Cc:     Kim Phillips <kim.phillips@amd.com>, Borislav Petkov <bp@suse.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-MIME-Version: 1.0
-Message-ID: <165796661764.15455.12429701839910697115.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 16 Jul 2022 06:33:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC2D6584;
+        Sat, 16 Jul 2022 03:33:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94C6D60F9B;
+        Sat, 16 Jul 2022 10:33:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8ACAC34114;
+        Sat, 16 Jul 2022 10:33:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657967598;
+        bh=fb7zcFr0KnXxkQp0xpdk4Mcd+9GKD+xwhdHZmcfcxGM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SFmHR5nFB+nKOqpu5Q04w6uop28XC7xK6cMvxDQaREF2HMd6r3jtvPck5KRlWzpPt
+         ZAqPYOh3GcX7t1x08di4o+ogeZcjpS5gbe7lLzRcDOXhNLhpqHuJmttXcT79B9TNU6
+         zip+sWCL1VN2i1A37PvY70STaJWY8ViWKU+cdVEfepMom4cXEGNe/yvbpIxu5k16f+
+         GkDkLw6B8ooc17oyg4WHKA5Gu9oQ0sphFtAEbIRRPX1jD+G7BQwzQZufSlvVfmeA4n
+         kGnzZ/L1Ln64G+T76u3rYxNu4QxL45rP36+edMzzWb+U+zyVoS4mCoOU1TFN3OJfnM
+         eQSH9r4o8AWSQ==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oCf6p-007rDL-Ga;
+        Sat, 16 Jul 2022 11:33:15 +0100
+Date:   Sat, 16 Jul 2022 11:33:08 +0100
+Message-ID: <87r12l4aaj.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     <lewis.hanly@microchip.com>
+Cc:     <linux-gpio@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
+        <linux-kernel@vger.kernel.org>, <palmer@dabbelt.com>,
+        <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>
+Subject: Re: [PATCH v3 1/1] gpio: mpfs: add polarfire soc gpio support
+In-Reply-To: <20220716071113.1646887-2-lewis.hanly@microchip.com>
+References: <20220716071113.1646887-1-lewis.hanly@microchip.com>
+        <20220716071113.1646887-2-lewis.hanly@microchip.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: lewis.hanly@microchip.com, linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org, linus.walleij@linaro.org, brgl@bgdev.pl, linux-kernel@vger.kernel.org, palmer@dabbelt.com, conor.dooley@microchip.com, daire.mcnamara@microchip.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Sat, 16 Jul 2022 08:11:13 +0100,
+<lewis.hanly@microchip.com> wrote:
+> 
+> From: Lewis Hanly <lewis.hanly@microchip.com>
+> 
+> Add a driver to support the Polarfire SoC gpio controller.
+> 
+> Signed-off-by: Lewis Hanly <lewis.hanly@microchip.com>
 
-Commit-ID:     bcf163150cd37348a0cb59e95c916a83a9344b0e
-Gitweb:        https://git.kernel.org/tip/bcf163150cd37348a0cb59e95c916a83a9344b0e
-Author:        Kim Phillips <kim.phillips@amd.com>
-AuthorDate:    Fri, 08 Jul 2022 16:21:28 -05:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Sat, 16 Jul 2022 11:39:23 +02:00
+[...]
 
-x86/bugs: Remove apostrophe typo
+> +static int mpfs_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
+> +					   unsigned int child,
+> +					   unsigned int child_type,
+> +					   unsigned int *parent,
+> +					   unsigned int *parent_type)
+> +{
+> +	struct mpfs_gpio_chip *mpfs_gpio = gpiochip_get_data(gc);
+> +	struct irq_data *d = irq_get_irq_data(mpfs_gpio->irq_number[child]);
 
-Remove a superfluous ' in the mitigation string.
+This looks totally wrong. It means that you have already instantiated
+part of the hierarchy, and it is likely that you will get multiple
+hierarchy sharing some levels, which isn't intended.
 
-Fixes: e8ec1b6e08a2 ("x86/bugs: Enable STIBP for JMP2RET")
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- arch/x86/kernel/cpu/bugs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +	*parent_type = IRQ_TYPE_NONE;
+> +	*parent = irqd_to_hwirq(d);
+> +
+> +	return 0;
+> +}
+> +
+> +static int mpfs_gpio_probe(struct platform_device *pdev)
+> +{
+> +	struct clk *clk;
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *node = pdev->dev.of_node;
+> +	struct device_node *irq_parent;
+> +	struct gpio_irq_chip *girq;
+> +	struct irq_domain *parent;
+> +	struct mpfs_gpio_chip *mpfs_gpio;
+> +	int i, ret, ngpio;
+> +
+> +	mpfs_gpio = devm_kzalloc(dev, sizeof(*mpfs_gpio), GFP_KERNEL);
+> +	if (!mpfs_gpio)
+> +		return -ENOMEM;
+> +
+> +	mpfs_gpio->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(mpfs_gpio->base))
+> +		return dev_err_probe(dev, PTR_ERR(mpfs_gpio->clk), "input clock not found.\n");
+> +
+> +	clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(clk))
+> +		return dev_err_probe(dev, PTR_ERR(clk), "devm_clk_get failed\n");
+> +
+> +	ret = clk_prepare_enable(clk);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to enable clock\n");
+> +
+> +	mpfs_gpio->clk = clk;
+> +
+> +	ngpio = of_irq_count(node);
+> +	if (ngpio > NUM_GPIO) {
+> +		ret = -ENXIO;
+> +		goto cleanup_clock;
+> +	}
+> +
+> +	irq_parent = of_irq_find_parent(node);
+> +	if (!irq_parent) {
+> +		ret = -ENODEV;
+> +		goto cleanup_clock;
+> +	}
+> +	parent = irq_find_host(irq_parent);
+> +	if (!parent) {
+> +		ret = -ENODEV;
+> +		goto cleanup_clock;
+> +	}
+> +
+> +	/* Get the interrupt numbers. */
+> +	/* Clear/Disable All interrupts before enabling parent interrupts. */
+> +	for (i = 0; i < ngpio; i++) {
+> +		mpfs_gpio->irq_number[i] = platform_get_irq(pdev, i);
 
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 3a0787a..aa34f90 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -1181,7 +1181,7 @@ spectre_v2_user_select_mitigation(void)
- 	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
- 		if (mode != SPECTRE_V2_USER_STRICT &&
- 		    mode != SPECTRE_V2_USER_STRICT_PREFERRED)
--			pr_info("Selecting STIBP always-on mode to complement retbleed mitigation'\n");
-+			pr_info("Selecting STIBP always-on mode to complement retbleed mitigation\n");
- 		mode = SPECTRE_V2_USER_STRICT_PREFERRED;
- 	}
- 
+Bingo. You are allocating the interrupt for the level below. You
+really shouldn't do that.
+
+If you need to retrieve the *hwirq* for the level below, you need to
+parse the DT without triggering an IRQ allocation (of_irq_parse_one()
+and co).
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

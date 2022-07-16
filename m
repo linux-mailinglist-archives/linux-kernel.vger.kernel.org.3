@@ -2,229 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1EF57701F
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 18:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B69577021
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 18:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiGPQ1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 12:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
+        id S229949AbiGPQca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 12:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiGPQ1W (ORCPT
+        with ESMTP id S229473AbiGPQc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 12:27:22 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE9A19C27;
-        Sat, 16 Jul 2022 09:27:20 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id bp15so13962466ejb.6;
-        Sat, 16 Jul 2022 09:27:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cSbRrDfyD8mYPyFsquOKcfKAo9CPxKk0tzLTj6gXbu8=;
-        b=VWnrrSA6N7wFVb37K0MGiAtQM+2zxTcFCVlXwH1U4k+VMsEwYydOoKVKX8R1IKybt8
-         MHCuloGkXE30Q5WhePls81BBC1quaZwvonHpU2VVYZZjNcPdf6zRmaMfQENE1yvGAzss
-         pJxARwbMGopXL2u1tqs7dNKY+bPXn8Yz6GJdNwvIOE/M0xTLpR5QyjWDruXFo0CCYim3
-         IhG4O/IeFFG1aKZ7vms4Z6oR4yzAvmcmltLBkvR2vb5+cjB1RfEb15kk9I32Ew04pDyp
-         VuK5Xiz9lnDx8JHSFPFe4tEl/xYTd+lLRN54x8p+vbce7rsmETUt3Hr7d6bIUTq/QmrO
-         Dr8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cSbRrDfyD8mYPyFsquOKcfKAo9CPxKk0tzLTj6gXbu8=;
-        b=DOW3Buz+qswxntqps6xjLWgYo4HWEHeYfhic+grFg2t6GETR+mSiGLs9ZGPuseL8fC
-         9PlBzSdULBrliUNHDUkyPulayVZjXauKKTYdqzb+nJnR21SAo5J5gftKvf248RHh93dG
-         zvlU3y0z66WHx44V+xhXVx8rfsyWXArgV4Y4/8ehTSFbvPqSPp5Z0OhGIUfUMS2/7ybr
-         4r4FBRbA0690oQNN3b7/gpB5dbFDI7B7vZb0kFZaNRagdeI7c1UbwaZq2irRYU5qRjWg
-         X8XYKIPFscPSomqd3fn8E3K+3KSk3uDjtlfMzBDP8va6wuzc1NreEYacifcz2CBJP9Ma
-         qCRw==
-X-Gm-Message-State: AJIora8n4D8S2HVUoXO5ecZFlVHlVeaj2zM+CxFR/bJUUNOUnQNEEZeS
-        9R22RONtE1FwI+SBDNlQFA==
-X-Google-Smtp-Source: AGRyM1sO+RTTsqXiQq2lPyGyiZ9eZ8LzALSjZIyOA/1vtvujTE316Nw3ewmqRDzxQxlt/ntLGEbmow==
-X-Received: by 2002:a17:907:2807:b0:72b:4530:29d5 with SMTP id eb7-20020a170907280700b0072b453029d5mr19034629ejc.69.1657988839049;
-        Sat, 16 Jul 2022 09:27:19 -0700 (PDT)
-Received: from ?IPV6:2001:9e8:b948:1100:598c:2a19:1408:7aa7? ([2001:9e8:b948:1100:598c:2a19:1408:7aa7])
-        by smtp.gmail.com with ESMTPSA id g21-20020a1709063b1500b00722dcb4629bsm3421014ejf.14.2022.07.16.09.27.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Jul 2022 09:27:18 -0700 (PDT)
-Message-ID: <20685980-dc81-8fc9-d049-f393071feb20@gmail.com>
-Date:   Sat, 16 Jul 2022 18:27:17 +0200
+        Sat, 16 Jul 2022 12:32:28 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4805E1C90E
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 09:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657989147; x=1689525147;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xz22xLhXEgfLfQ885/Ke0sez+mHNdtV5CCAwywlhiCQ=;
+  b=gVEhVw2ciV8Hb3GGVlrMTM708QRX/PXyw7hWGB8CaFWc2pAhA4r543QS
+   IS0UtycaWiAlcy/j44/svxIJ5CDEhO7GyahStGHnP84FT6VOnIfOQMD7y
+   ppI7repCO+cwtQzZfCMVuSfqwKuk3N84QG+R+7xj4CTmQPNvT3iaQjQ/n
+   Sio3Hc9sZLXkRaVbGlRdh2iEjl7QFs4bRQydRM2T9QWLIPCji6WiuRl/9
+   4DFusPXDAo/x6c1d9TGrQ4JOQOZ481QwcOGgEFjw5ZPESApIqZOc0tpPP
+   igF9ODkI/RaurLHzaKIh+1oFzQGxwpTHWwz1DaRq2NfjgJgsUQLpq6H5r
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="286722683"
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="286722683"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 09:32:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="842839976"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 16 Jul 2022 09:32:24 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCkiO-0001p8-Bm;
+        Sat, 16 Jul 2022 16:32:24 +0000
+Date:   Sun, 17 Jul 2022 00:31:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [ammarfaizi2-block:axboe/linux-block/for-next 38/112]
+ include/trace/events/f2fs.h:1027:1: sparse: sparse: restricted blk_opf_t
+ degrades to integer
+Message-ID: <202207170048.aN01rjrc-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/6] RkVDEC HEVC driver
-Content-Language: en-US
-To:     Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org
-Cc:     jernej.skrabec@gmail.com, kernel@collabora.com,
-        bob.beckett@collabora.com, ezequiel@vanguardiasur.com.ar,
-        mchehab@kernel.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, nicolas.dufresne@collabora.com,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-References: <20220713162449.133738-1-sebastian.fricke@collabora.com>
-From:   Alex Bee <knaerzche@gmail.com>
-In-Reply-To: <20220713162449.133738-1-sebastian.fricke@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/for-next
+head:   b1fc9e8ad3d2d294d15e87d57af00890cd23cfc4
+commit: 342a72a334073f163da924b69c3d3fb4685eb33a [38/112] block: Introduce the type blk_opf_t
+config: csky-randconfig-s053-20220715 (https://download.01.org/0day-ci/archive/20220717/202207170048.aN01rjrc-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/342a72a334073f163da924b69c3d3fb4685eb33a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/for-next
+        git checkout 342a72a334073f163da924b69c3d3fb4685eb33a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky SHELL=/bin/bash drivers/block/null_blk/./ fs/f2fs/ fs/jbd2/
 
-thanks a lot for your work on upstreaming this driver.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-See some general comments below.
 
-> Implement the HEVC codec variation for the RkVDEC driver. Currently only
-> the RK3399 is supported, but it is possible to enable the RK3288 as it
-> also supports this codec.
->
-> Based on top of the media tree @ef7fcbbb9eabbe86d2287484bf366dd1821cc6b8
-> and the HEVC uABI MR by Benjamin Gaignard.
-> (https://patchwork.linuxtv.org/project/linux-media/list/?series=8360)
->
-> Tested with the GStreamer V4L2 HEVC plugin:
-> (https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1079)
->
-> Current Fluster score:
-> `Ran 131/147 tests successfully               in 278.568 secs`
-> with
-> `python3 fluster.py run -d GStreamer-H.265-V4L2SL-Gst1.0 -ts JCT-VC-HEVC_V1 -j1`
->
-> failed conformance tests:
-> - DBLK_D_VIXS_2 (Success on Hantro G2)
-> - DSLICE_A_HHI_5 (Success on Hantro G2)
-> - EXT_A_ericsson_4 (Success on Hantro G2)
-> - PICSIZE_A_Bossen_1 (Hardware limitation)
-> - PICSIZE_B_Bossen_1 (Hardware limitation)
-> - PICSIZE_C_Bossen_1 (Hardware limitation)
-> - PICSIZE_D_Bossen_1 (Hardware limitation)
-> - PPS_A_qualcomm_7 (Success on Hantro G2)
-> - SAODBLK_A_MainConcept_4 (Success on Hantro G2)
-> - SAODBLK_B_MainConcept_4 (Success on Hantro G2)
-> - SLIST_B_Sony_9 (Success on Hantro G2)
-> - SLIST_D_Sony_9 (Success on Hantro G2)
-> - TSUNEQBD_A_MAIN10_Technicolor_2 (Success on Hantro G2)
-> - VPSSPSPPS_A_MainConcept_1 (Success on Hantro G2)
-> - WPP_D_ericsson_MAIN10_2 (Fail on Hantro G2)
-> - WPP_D_ericsson_MAIN_2 (Fail on Hantro G2)
->
-> Not tested with FFMpeg so far.
->
-> Known issues:
-> - Unable to reliably decode multiple videos concurrently
-> - The SAODBLK_* tests timeout if the timeout time in fluster is lower than 120
-> - Currently the uv_virstride is calculated in a manner that is hardcoded
-> for the two available formats NV12 and NV15. (@config_registers)
->
-> Notable design decisions:
-> - I opted for a bitfield to represent the PPS memory blob as it is the
-> perfect tool for that job. It describes the memory layout with any
-> additional required documentation, is easy to read and a native language
-> tool for that job
-> - The RPS memory blob is created using a bitmap implementation, which
-> uses a common Kernel API to avoid reinventing the wheel and to keep the
-> code clean.
-> - I deliberatly opted against the macro solution used in H264, which
-> declares Macros in mid function and declares the fields of the memory
-> blob as macros as well. And I would be glad to refactor the H264 code if
-> desired by the maintainer to use common Kernel APIs and native language
-> elements.
+sparse warnings: (new ones prefixed by >>)
+   fs/f2fs/super.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/f2fs.h):
+   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted blk_opf_t enum req_op op @@     got int op @@
+   include/trace/events/f2fs.h:1027:1: sparse:     expected restricted blk_opf_t enum req_op op
+   include/trace/events/f2fs.h:1027:1: sparse:     got int op
+   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
+   include/trace/events/f2fs.h:1027:1: sparse:     expected unsigned long mask
+   include/trace/events/f2fs.h:1027:1: sparse:     got restricted blk_opf_t [usertype]
+   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
+   include/trace/events/f2fs.h:1027:1: sparse:     expected unsigned long mask
+   include/trace/events/f2fs.h:1027:1: sparse:     got restricted blk_opf_t [usertype]
+   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
+   include/trace/events/f2fs.h:1027:1: sparse:     expected unsigned long mask
+   include/trace/events/f2fs.h:1027:1: sparse:     got restricted blk_opf_t [usertype]
+   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
+   include/trace/events/f2fs.h:1027:1: sparse:     expected unsigned long mask
+   include/trace/events/f2fs.h:1027:1: sparse:     got restricted blk_opf_t [usertype]
+   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
+   include/trace/events/f2fs.h:1027:1: sparse:     expected unsigned long mask
+   include/trace/events/f2fs.h:1027:1: sparse:     got restricted blk_opf_t [usertype]
+   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
+   include/trace/events/f2fs.h:1027:1: sparse:     expected unsigned long mask
+   include/trace/events/f2fs.h:1027:1: sparse:     got restricted blk_opf_t [usertype]
+>> include/trace/events/f2fs.h:1027:1: sparse: sparse: restricted blk_opf_t degrades to integer
+   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted blk_opf_t enum req_op op @@     got int op @@
+   include/trace/events/f2fs.h:1086:1: sparse:     expected restricted blk_opf_t enum req_op op
+   include/trace/events/f2fs.h:1086:1: sparse:     got int op
+   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
+   include/trace/events/f2fs.h:1086:1: sparse:     expected unsigned long mask
+   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype]
+   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
+   include/trace/events/f2fs.h:1086:1: sparse:     expected unsigned long mask
+   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype]
+   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
+   include/trace/events/f2fs.h:1086:1: sparse:     expected unsigned long mask
+   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype]
+   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
+   include/trace/events/f2fs.h:1086:1: sparse:     expected unsigned long mask
+   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype]
+   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
+   include/trace/events/f2fs.h:1086:1: sparse:     expected unsigned long mask
+   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype]
+   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
+   include/trace/events/f2fs.h:1086:1: sparse:     expected unsigned long mask
+   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype]
+   include/trace/events/f2fs.h:1086:1: sparse: sparse: restricted blk_opf_t degrades to integer
+   fs/f2fs/super.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/f2fs.h):
+   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected int op @@     got restricted blk_opf_t enum req_op @@
+   include/trace/events/f2fs.h:1086:1: sparse:     expected int op
+   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t enum req_op
+   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected int op_flags @@     got restricted blk_opf_t [usertype] bi_opf @@
+   include/trace/events/f2fs.h:1086:1: sparse:     expected int op_flags
+   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype] bi_opf
+   fs/f2fs/super.c:3125:64: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int op_flags @@     got restricted blk_opf_t @@
+   fs/f2fs/super.c:3125:64: sparse:     expected int op_flags
+   fs/f2fs/super.c:3125:64: sparse:     got restricted blk_opf_t
+   fs/f2fs/super.c: note: in included file (through arch/csky/include/asm/atomic.h, include/linux/atomic.h, include/asm-generic/bitops/lock.h, ...):
+   include/asm-generic/atomic.h:105:1: sparse: sparse: context imbalance in 'f2fs_drop_inode' - unexpected unlock
 
-I fully disagree here: That way the code is much less 
-read-/understandable - your are putting  bits at some random hardcoded 
-positions with not relation to the codec/hardware and expect everyone to 
-read and understand that huge docblock - the code should be more 
-self-explaining and we should at least try to get rid of those hardcoded 
-positions which, btw, will differ for newer versions of that hardware block.
+vim +1027 include/trace/events/f2fs.h
 
-I'm also not sure what makes you call that a "blob": It's configuration 
-of the hardware which in that case isn't put in registers, but in memory.
+c01e285324793a8 Namjae Jeon   2013-04-23  1026  
+3e1c8f125eeea0f Chao Yu       2014-12-23 @1027  DECLARE_EVENT_CLASS(f2fs__submit_page_bio,
+3e1c8f125eeea0f Chao Yu       2014-12-23  1028  
+2ace38e00e54f5c Chao Yu       2014-12-24  1029  	TP_PROTO(struct page *page, struct f2fs_io_info *fio),
+3e1c8f125eeea0f Chao Yu       2014-12-23  1030  
+2ace38e00e54f5c Chao Yu       2014-12-24  1031  	TP_ARGS(page, fio),
+3e1c8f125eeea0f Chao Yu       2014-12-23  1032  
+3e1c8f125eeea0f Chao Yu       2014-12-23  1033  	TP_STRUCT__entry(
+3e1c8f125eeea0f Chao Yu       2014-12-23  1034  		__field(dev_t, dev)
+3e1c8f125eeea0f Chao Yu       2014-12-23  1035  		__field(ino_t, ino)
+3e1c8f125eeea0f Chao Yu       2014-12-23  1036  		__field(pgoff_t, index)
+7a9d75481b85d59 Chao Yu       2016-02-22  1037  		__field(block_t, old_blkaddr)
+7a9d75481b85d59 Chao Yu       2016-02-22  1038  		__field(block_t, new_blkaddr)
+04d328defd06257 Mike Christie 2016-06-05  1039  		__field(int, op)
+04d328defd06257 Mike Christie 2016-06-05  1040  		__field(int, op_flags)
+a912b54d3aaa011 Jaegeuk Kim   2017-05-10  1041  		__field(int, temp)
+3e1c8f125eeea0f Chao Yu       2014-12-23  1042  		__field(int, type)
+3e1c8f125eeea0f Chao Yu       2014-12-23  1043  	),
+3e1c8f125eeea0f Chao Yu       2014-12-23  1044  
+3e1c8f125eeea0f Chao Yu       2014-12-23  1045  	TP_fast_assign(
+4969c06a0d83c9c Jaegeuk Kim   2019-07-01  1046  		__entry->dev		= page_file_mapping(page)->host->i_sb->s_dev;
+4969c06a0d83c9c Jaegeuk Kim   2019-07-01  1047  		__entry->ino		= page_file_mapping(page)->host->i_ino;
+3e1c8f125eeea0f Chao Yu       2014-12-23  1048  		__entry->index		= page->index;
+7a9d75481b85d59 Chao Yu       2016-02-22  1049  		__entry->old_blkaddr	= fio->old_blkaddr;
+7a9d75481b85d59 Chao Yu       2016-02-22  1050  		__entry->new_blkaddr	= fio->new_blkaddr;
+04d328defd06257 Mike Christie 2016-06-05  1051  		__entry->op		= fio->op;
+04d328defd06257 Mike Christie 2016-06-05  1052  		__entry->op_flags	= fio->op_flags;
+a912b54d3aaa011 Jaegeuk Kim   2017-05-10  1053  		__entry->temp		= fio->temp;
+2ace38e00e54f5c Chao Yu       2014-12-24  1054  		__entry->type		= fio->type;
+3e1c8f125eeea0f Chao Yu       2014-12-23  1055  	),
+3e1c8f125eeea0f Chao Yu       2014-12-23  1056  
+3e1c8f125eeea0f Chao Yu       2014-12-23  1057  	TP_printk("dev = (%d,%d), ino = %lu, page_index = 0x%lx, "
+a912b54d3aaa011 Jaegeuk Kim   2017-05-10  1058  		"oldaddr = 0x%llx, newaddr = 0x%llx, rw = %s(%s), type = %s_%s",
+3e1c8f125eeea0f Chao Yu       2014-12-23  1059  		show_dev_ino(__entry),
+3e1c8f125eeea0f Chao Yu       2014-12-23  1060  		(unsigned long)__entry->index,
+7a9d75481b85d59 Chao Yu       2016-02-22  1061  		(unsigned long long)__entry->old_blkaddr,
+7a9d75481b85d59 Chao Yu       2016-02-22  1062  		(unsigned long long)__entry->new_blkaddr,
+d621e6b3707f4c3 Jaegeuk Kim   2016-12-21  1063  		show_bio_type(__entry->op, __entry->op_flags),
+a912b54d3aaa011 Jaegeuk Kim   2017-05-10  1064  		show_block_temp(__entry->temp),
+3e1c8f125eeea0f Chao Yu       2014-12-23  1065  		show_block_type(__entry->type))
+3e1c8f125eeea0f Chao Yu       2014-12-23  1066  );
+3e1c8f125eeea0f Chao Yu       2014-12-23  1067  
 
-> - The giant static array of cabac values is moved to a separate c file,
-> I did so because a separate .h file would be incorrect as it doesn't
-> expose anything of any value for any other file than the rkvdec-hevc.c
-> file. Other options were:
->    - Calculating the values instead of storing the results (doesn't seem
->    to be worth it)
+:::::: The code at line 1027 was first introduced by commit
+:::::: 3e1c8f125eeea0f8111e2b9131162bfba32c6381 f2fs: cleanup trace event of f2fs_submit_page_{m,}bio with DECLARE_EVENT_CLASS
 
-I'm not sure "not worth it" should be argument for not doing doing 
-anything in general; especially not if it can explain the relation 
-between the standard and this driver.
+:::::: TO: Chao Yu <chao2.yu@samsung.com>
+:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
 
-Looking at  tables of ITU-T Rec. H.265 "9.3.2.2 Initialization process 
-for context variables" and comparing to the first elements of that huge 
-array: It should be doable.
-
->    - Supply them via firmware (Adding firmware makes the whole software
->    way more complicated and the usage of the driver less obvious)
->
-> Ignored Checkpatch warnings (as it fits to the current style of the file):
-> ```
-> WARNING: line length of 162 exceeds 100 columns
-> #115: FILE: drivers/media/v4l2-core/v4l2-common.c:265:
-> +               { .format = V4L2_PIX_FMT_NV15,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 5, 5, 0, 0 }, .hdiv = 2, .vdiv = 2,
->
-> ERROR: trailing statements should be on next line
-> #128: FILE: drivers/media/v4l2-core/v4l2-ioctl.c:1305:
-> +       case V4L2_PIX_FMT_NV15:         descr = "10-bit Y/CbCr 4:2:0 (Packed)"; break;
-> ```
->
-> v4l2-compliance test:
-> ```
-> Total for rkvdec device /dev/video3: 46, Succeeded: 46, Failed: 0, Warnings: 0
-> ```
->
-> kselftest module run for the bitmap changes:
-> ```
-> $ sudo insmod /usr/lib/modules/5.19.0-rc3-finalseries/kernel/lib/test_bitmap.ko
-> [   71.751716] test_bitmap: parselist: 14: input is '0-2047:128/256' OK, Time: 1750
-> [   71.751787] test_bitmap: bitmap_print_to_pagebuf: input is '0-32767
-> [   71.751787] ', Time: 6708
-> [   71.760373] test_bitmap: set_value: 6/6 tests correct
-> ```
->
-> Jonas Karlman (2):
->    media: v4l2: Add NV15 pixel format
->    media: v4l2-common: Add helpers to calculate bytesperline and
->      sizeimage
->
-> Sebastian Fricke (4):
->    bitops: bitmap helper to set variable length values
->    staging: media: rkvdec: Add valid pixel format check
->    staging: media: rkvdec: Enable S_CTRL IOCTL
->    staging: media: rkvdec: Add HEVC backend
->
->   .../media/v4l/pixfmt-yuv-planar.rst           |   53 +
->   drivers/media/v4l2-core/v4l2-common.c         |   79 +-
->   drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
->   drivers/staging/media/rkvdec/Makefile         |    2 +-
->   drivers/staging/media/rkvdec/TODO             |   22 +-
->   .../staging/media/rkvdec/rkvdec-hevc-data.c   | 1844 +++++++++++++++++
->   drivers/staging/media/rkvdec/rkvdec-hevc.c    |  859 ++++++++
->   drivers/staging/media/rkvdec/rkvdec-regs.h    |    1 +
->   drivers/staging/media/rkvdec/rkvdec.c         |  182 +-
->   drivers/staging/media/rkvdec/rkvdec.h         |    3 +
->   include/linux/bitmap.h                        |   39 +
->   include/uapi/linux/videodev2.h                |    1 +
->   lib/test_bitmap.c                             |   47 +
->   13 files changed, 3066 insertions(+), 67 deletions(-)
->   create mode 100644 drivers/staging/media/rkvdec/rkvdec-hevc-data.c
->   create mode 100644 drivers/staging/media/rkvdec/rkvdec-hevc.c
->
-Regards,
-
-Alex
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

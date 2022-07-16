@@ -2,201 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E679577212
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0A5577213
 	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 00:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbiGPWvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 18:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
+        id S232778AbiGPWvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 18:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiGPWvA (ORCPT
+        with ESMTP id S229501AbiGPWvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 18:51:00 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A91918341
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 15:50:59 -0700 (PDT)
+        Sat, 16 Jul 2022 18:51:04 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA62F1C92D;
+        Sat, 16 Jul 2022 15:51:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658011859; x=1689547859;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IzorPhwJ89/U7tpVrw1rKrYgZ6dL6q1fMlWVlbJmymc=;
-  b=iWHkHiZXQRwKM2H+W273UpjmcczLKxorNYM784795425neWOnUZ14kj2
-   D5Wpzg8sHyXF+jbAyZeCUkgKDRX96cRPgjThcetfVHS9Rld3V84Mbnmn4
-   OEuacrGJxHYBSR2ODOqJLN1B8oC5aK6KVT/wf7oNZMcaYNCrT9GWBxb+U
-   4K0ggRJJHZm9pigD5n/sQJjNqNL3hHdNQRmGMyib6jnTrrR0N+xUlNyFE
-   GAT1ZxzG2Vzq2LwhoyH1MaPZk4iOiN3EC36NbmB3F9wvkLVMxulzSKLvW
-   iOMCMAgZ04N8mODJzv75Ls8lQRYYjlG8kswE+34dG9DOfcFb5iC6KKksK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="283575844"
+  t=1658011862; x=1689547862;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eMZB5HTy1IP+QRRyebpuxHhRvBKz1HhDrHDYvMYNKVk=;
+  b=S1qi46K7nLw8Bk6V9+AJ/Hm9Iyk16oyoQu1PY8lW9TCBhEOOCBRUE6oT
+   /VIAkE257c6hX3ieexiPWF5+Qb6erqEJI2w+GpdczhPkT2+0FJQ122nBa
+   A6wu347jy5oaq+18eLOCTh4d1BkNinVg0hcwBMjptJNuckjmDNPl+AEnA
+   Msis2WOYyE/I2om1qlgyYagwr8oHgNU9uC1mpSlNid/4fxOmCdF8eky7T
+   /FnQBBaLs8fjeDDo1kFM8zghQUhVNZA0/jUB39PJrXRdEP6mCi0+kyA7o
+   uRnLyHlN+CDjnMkPh2M721YfvuPeQ8lgMcHvwb+dgyTr4NE4ymuCzoCqt
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="311683649"
 X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="283575844"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 15:50:59 -0700
+   d="scan'208";a="311683649"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 15:51:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="571962627"
+   d="scan'208";a="842889559"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Jul 2022 15:50:57 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 16 Jul 2022 15:50:57 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1oCqcj-0002GI-9o;
+        id 1oCqcj-0002GK-AI;
         Sat, 16 Jul 2022 22:50:57 +0000
-Date:   Sun, 17 Jul 2022 06:50:01 +0800
+Date:   Sun, 17 Jul 2022 06:50:02 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/mtd/nand/raw/hisi504_nand.c:465:17: sparse: sparse:
- incorrect type in argument 1 (different address spaces)
-Message-ID: <202207170656.8VUpADeW-lkp@intel.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        netdev@vger.kernel.org, Christian Marangi <ansuelsmth@gmail.com>
+Subject: Re: [net-next PATCH v2 3/5] net: ethernet: stmicro: stmmac: move dma
+ conf to dedicated struct
+Message-ID: <202207170639.k8cXFREA-lkp@intel.com>
+References: <20220716184533.2962-4-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220716184533.2962-4-ansuelsmth@gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c5fe7a97f20c7f3070ac870144515c0fabc6b999
-commit: 28e77cc1c0686621a4d416f599cee5ab369daa0a fortify: Detect struct member overflows in memset() at compile-time
-date:   5 months ago
-config: arm64-randconfig-s031-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170656.8VUpADeW-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
+Hi Christian,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/Add-MTU-change-with-stmmac-interface-running/20220717-025128
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 2acd1022549e210edc4cfc9fc65b07b88751f0d9
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220717/202207170639.k8cXFREA-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=28e77cc1c0686621a4d416f599cee5ab369daa0a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 28e77cc1c0686621a4d416f599cee5ab369daa0a
+        # https://github.com/intel-lab-lkp/linux/commit/acdac2fef543d7b7fc85c7a5627e5e833ee756d8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christian-Marangi/Add-MTU-change-with-stmmac-interface-running/20220717-025128
+        git checkout acdac2fef543d7b7fc85c7a5627e5e833ee756d8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/mtd/nand/raw/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/stmicro/stmmac/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/mtd/nand/raw/hisi504_nand.c:362:26: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/mtd/nand/raw/hisi504_nand.c:367:26: sparse: sparse: cast removes address space '__iomem' of expression
->> drivers/mtd/nand/raw/hisi504_nand.c:465:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *mmio @@
-   drivers/mtd/nand/raw/hisi504_nand.c:465:17: sparse:     expected void const *
-   drivers/mtd/nand/raw/hisi504_nand.c:465:17: sparse:     got void [noderef] __iomem *mmio
->> drivers/mtd/nand/raw/hisi504_nand.c:465:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *mmio @@
-   drivers/mtd/nand/raw/hisi504_nand.c:465:17: sparse:     expected void const *
-   drivers/mtd/nand/raw/hisi504_nand.c:465:17: sparse:     got void [noderef] __iomem *mmio
-   drivers/mtd/nand/raw/hisi504_nand.c:465:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *mmio @@
-   drivers/mtd/nand/raw/hisi504_nand.c:465:17: sparse:     expected void *
-   drivers/mtd/nand/raw/hisi504_nand.c:465:17: sparse:     got void [noderef] __iomem *mmio
-   drivers/mtd/nand/raw/hisi504_nand.c:477:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *mmio @@
-   drivers/mtd/nand/raw/hisi504_nand.c:477:17: sparse:     expected void const *
-   drivers/mtd/nand/raw/hisi504_nand.c:477:17: sparse:     got void [noderef] __iomem *mmio
-   drivers/mtd/nand/raw/hisi504_nand.c:477:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *mmio @@
-   drivers/mtd/nand/raw/hisi504_nand.c:477:17: sparse:     expected void const *
-   drivers/mtd/nand/raw/hisi504_nand.c:477:17: sparse:     got void [noderef] __iomem *mmio
-   drivers/mtd/nand/raw/hisi504_nand.c:477:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *mmio @@
-   drivers/mtd/nand/raw/hisi504_nand.c:477:17: sparse:     expected void *
-   drivers/mtd/nand/raw/hisi504_nand.c:477:17: sparse:     got void [noderef] __iomem *mmio
-   drivers/mtd/nand/raw/hisi504_nand.c:603:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *mmio @@
-   drivers/mtd/nand/raw/hisi504_nand.c:603:9: sparse:     expected void const *
-   drivers/mtd/nand/raw/hisi504_nand.c:603:9: sparse:     got void [noderef] __iomem *mmio
-   drivers/mtd/nand/raw/hisi504_nand.c:603:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *mmio @@
-   drivers/mtd/nand/raw/hisi504_nand.c:603:9: sparse:     expected void const *
-   drivers/mtd/nand/raw/hisi504_nand.c:603:9: sparse:     got void [noderef] __iomem *mmio
-   drivers/mtd/nand/raw/hisi504_nand.c:603:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *mmio @@
-   drivers/mtd/nand/raw/hisi504_nand.c:603:9: sparse:     expected void *
-   drivers/mtd/nand/raw/hisi504_nand.c:603:9: sparse:     got void [noderef] __iomem *mmio
+>> drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c:1094:14: error: no member named 'tx_queue' in 'struct stmmac_priv'
+           if (!(priv->tx_queue[qopt->queue].tbs & STMMAC_TBS_AVAIL))
+                 ~~~~  ^
+   drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c:1098:9: error: no member named 'tx_queue' in 'struct stmmac_priv'
+                   priv->tx_queue[qopt->queue].tbs |= STMMAC_TBS_EN;
+                   ~~~~  ^
+   drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c:1100:9: error: no member named 'tx_queue' in 'struct stmmac_priv'
+                   priv->tx_queue[qopt->queue].tbs &= ~STMMAC_TBS_EN;
+                   ~~~~  ^
+   3 errors generated.
 
-vim +465 drivers/mtd/nand/raw/hisi504_nand.c
 
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  422  
-5295cf2e047cf6 drivers/mtd/nand/raw/hisi504_nand.c Boris Brezillon 2018-09-06  423  static void hisi_nfc_cmdfunc(struct nand_chip *chip, unsigned command,
-5295cf2e047cf6 drivers/mtd/nand/raw/hisi504_nand.c Boris Brezillon 2018-09-06  424  			     int column, int page_addr)
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  425  {
-5295cf2e047cf6 drivers/mtd/nand/raw/hisi504_nand.c Boris Brezillon 2018-09-06  426  	struct mtd_info *mtd = nand_to_mtd(chip);
-d699ed250c0738 drivers/mtd/nand/hisi504_nand.c     Boris Brezillon 2015-12-10  427  	struct hinfc_host *host = nand_get_controller_data(chip);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  428  	int is_cache_invalid = 1;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  429  	unsigned int flag = 0;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  430  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  431  	host->command =  command;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  432  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  433  	switch (command) {
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  434  	case NAND_CMD_READ0:
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  435  	case NAND_CMD_READOOB:
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  436  		if (command == NAND_CMD_READ0)
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  437  			host->offset = column;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  438  		else
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  439  			host->offset = column + mtd->writesize;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  440  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  441  		is_cache_invalid = 0;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  442  		set_addr(mtd, column, page_addr);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  443  		hisi_nfc_send_cmd_readstart(host);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  444  		break;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  445  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  446  	case NAND_CMD_SEQIN:
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  447  		host->offset = column;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  448  		set_addr(mtd, column, page_addr);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  449  		break;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  450  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  451  	case NAND_CMD_ERASE1:
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  452  		set_addr(mtd, column, page_addr);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  453  		break;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  454  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  455  	case NAND_CMD_PAGEPROG:
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  456  		hisi_nfc_send_cmd_pageprog(host);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  457  		break;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  458  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  459  	case NAND_CMD_ERASE2:
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  460  		hisi_nfc_send_cmd_erase(host);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  461  		break;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  462  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  463  	case NAND_CMD_READID:
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  464  		host->offset = column;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25 @465  		memset(host->mmio, 0, 0x10);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  466  		hisi_nfc_send_cmd_readid(host);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  467  		break;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  468  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  469  	case NAND_CMD_STATUS:
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  470  		flag = hinfc_read(host, HINFC504_CON);
-bace41f80f65dc drivers/mtd/nand/raw/hisi504_nand.c Miquel Raynal   2020-08-27  471  		if (chip->ecc.engine_type == NAND_ECC_ENGINE_TYPE_ON_HOST)
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  472  			hinfc_write(host,
-dd58d38fb30aa9 drivers/mtd/nand/hisi504_nand.c     Dan Carpenter   2015-02-11  473  				    flag & ~(HINFC504_CON_ECCTYPE_MASK <<
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  474  				    HINFC504_CON_ECCTYPE_SHIFT), HINFC504_CON);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  475  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  476  		host->offset = 0;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  477  		memset(host->mmio, 0, 0x10);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  478  		hisi_nfc_send_cmd_status(host);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  479  		hinfc_write(host, flag, HINFC504_CON);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  480  		break;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  481  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  482  	case NAND_CMD_RESET:
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  483  		hisi_nfc_send_cmd_reset(host, host->chipselect);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  484  		break;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  485  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  486  	default:
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  487  		dev_err(host->dev, "Error: unsupported cmd(cmd=%x, col=%x, page=%x)\n",
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  488  			command, column, page_addr);
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  489  	}
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  490  
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  491  	if (is_cache_invalid) {
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  492  		host->cache_addr_value[0] = ~0;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  493  		host->cache_addr_value[1] = ~0;
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  494  	}
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  495  }
-54f531f6e33287 drivers/mtd/nand/hisi504_nand.c     Zhou Wang       2015-01-25  496  
+vim +1094 drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c
 
-:::::: The code at line 465 was first introduced by commit
-:::::: 54f531f6e332875bd8a604871532f7f1174adc0e mtd: hisilicon: add a new NAND controller driver for hisilicon hip04 Soc
-
-:::::: TO: Zhou Wang <wangzhou1@hisilicon.com>
-:::::: CC: Brian Norris <computersforpeace@gmail.com>
+b60189e0392fa0 Jose Abreu 2019-12-18  1086  
+430b383c737ca0 Jose Abreu 2020-01-13  1087  static int tc_setup_etf(struct stmmac_priv *priv,
+430b383c737ca0 Jose Abreu 2020-01-13  1088  			struct tc_etf_qopt_offload *qopt)
+430b383c737ca0 Jose Abreu 2020-01-13  1089  {
+430b383c737ca0 Jose Abreu 2020-01-13  1090  	if (!priv->dma_cap.tbssel)
+430b383c737ca0 Jose Abreu 2020-01-13  1091  		return -EOPNOTSUPP;
+430b383c737ca0 Jose Abreu 2020-01-13  1092  	if (qopt->queue >= priv->plat->tx_queues_to_use)
+430b383c737ca0 Jose Abreu 2020-01-13  1093  		return -EINVAL;
+430b383c737ca0 Jose Abreu 2020-01-13 @1094  	if (!(priv->tx_queue[qopt->queue].tbs & STMMAC_TBS_AVAIL))
+430b383c737ca0 Jose Abreu 2020-01-13  1095  		return -EINVAL;
+430b383c737ca0 Jose Abreu 2020-01-13  1096  
+430b383c737ca0 Jose Abreu 2020-01-13  1097  	if (qopt->enable)
+430b383c737ca0 Jose Abreu 2020-01-13  1098  		priv->tx_queue[qopt->queue].tbs |= STMMAC_TBS_EN;
+430b383c737ca0 Jose Abreu 2020-01-13  1099  	else
+430b383c737ca0 Jose Abreu 2020-01-13  1100  		priv->tx_queue[qopt->queue].tbs &= ~STMMAC_TBS_EN;
+430b383c737ca0 Jose Abreu 2020-01-13  1101  
+430b383c737ca0 Jose Abreu 2020-01-13  1102  	netdev_info(priv->dev, "%s ETF for Queue %d\n",
+430b383c737ca0 Jose Abreu 2020-01-13  1103  		    qopt->enable ? "enabled" : "disabled", qopt->queue);
+430b383c737ca0 Jose Abreu 2020-01-13  1104  	return 0;
+430b383c737ca0 Jose Abreu 2020-01-13  1105  }
+430b383c737ca0 Jose Abreu 2020-01-13  1106  
 
 -- 
 0-DAY CI Kernel Test Service

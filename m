@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C2D57724F
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D52F2577264
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233240AbiGPXTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 19:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
+        id S233183AbiGPXTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 19:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233024AbiGPXSE (ORCPT
+        with ESMTP id S232986AbiGPXSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 16 Jul 2022 19:18:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC19240B4
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5768E240B6
         for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:17:51 -0700 (PDT)
-Message-ID: <20220716230954.036332074@linutronix.de>
+Message-ID: <20220716230954.095980377@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658013467;
+        s=2020; t=1658013469;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=qQeZCKMBlh2YkZXAFPUoFtNKnasF/QEaf/ud1By5XWI=;
-        b=hsGD31w67pi+rnQ+BBw+ZClQrfryZAXaKSh+00H9y4wPv/uRIhF0R8tcuIHJ3Rhwq9fSEd
-        LhvY6X3cfu0vZ2L6woUBWIFXWRiux7QMVDebCTcHxuNZTVsuVOxWLMR3PQLb0Cx18Gwgde
-        3u58iO52hjbVgWrvZNzG+oQRCx0tDN0SHgC3D/2bnIRy8P5P9VEGxbLsj2vQU2xqmWbMK+
-        umdF/mB96AaSfhhzD0MHhnd9g8q0KMX4Xl8rN6I2BjQHzLJtWLvCWLpCVsGPdkNiDp70lI
-        HgUbrorMdaVjqP1Yt1pp/gTGKmfJ3OuJin1hM1msGWHHL/09/7b/eXqVsU5+4Q==
+         references:references; bh=TLRAvZyLEqsQnwkoOe77XpgKA72Xpqcnn5aNrBgcecY=;
+        b=zu68aOfoTqg7NypD3iZoMno0+P25QhX7HLERWL4CZTTSaxsTUfvg4Z+FAVZj/gf1yTDIOt
+        m9yMKN/2AzBe0fIWHNyi7f1hC5fqxe1b4ENRp63p1zpJJNeHRkIYewLA1lVwBFzsT+RcVI
+        90J6W4K2GWoWLjWGy7W+eOrMnAQ1WEuhoYL2AC2uINHrxgAMV40xqPgZgTwiGcESbYy4Ej
+        c9ujKGfN7fBRJdjZeryA+CykR1NJ234iJt9BqCHM24h+U8uOVojDnlWfyb1sj7nQM1LFa0
+        QDxAp87oNzkwiLPRxvqECQFsNrhr8Fut7cSERXYkSTpXgW0peG0JWfapnx9TXg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658013467;
+        s=2020e; t=1658013469;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=qQeZCKMBlh2YkZXAFPUoFtNKnasF/QEaf/ud1By5XWI=;
-        b=Q7NdlC7Bxtejmfy2Et3ALTfJqBP6CauIJlkf5Va5072+v55qjJsoq43J2lyMvh5TSy+9iP
-        ENeEbP693xX3LxAg==
+         references:references; bh=TLRAvZyLEqsQnwkoOe77XpgKA72Xpqcnn5aNrBgcecY=;
+        b=bDKQoKtEz/awFA0KCCwZ5LGnaiaLhvF3ypOdgvTOzoN/FOQEp1pvTHrWBg7l/HaOZv1hKf
+        ppuZ84PmuQK7ZHAA==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
@@ -45,12 +45,13 @@ Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
         Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
         Joao Moreira <joao.moreira@intel.com>,
         Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [patch 23/38] x86/callthunks: Add call patching for call depth tracking
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [patch 24/38] module: Add layout for callthunks tracking
 References: <20220716230344.239749011@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 17 Jul 2022 01:17:46 +0200 (CEST)
+Date:   Sun, 17 Jul 2022 01:17:48 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,585 +61,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mitigating the Intel SKL RSB underflow issue in software requires to track
-the call depth. This could be done with help of the compiler by adding at
-least 7 bytes NOPs before every direct call, which amounts to a 15+ percent
-text size increase for a vmlinux built with a Debian kernel config. While
-CPUs are quite efficient in ignoring NOPs this still is a massive penalty
-in terms of I-cache for all CPUs which do not have this issue.
+From: Peter Zijlstra <peterz@infradead.org>
 
-Inflict the pain only on SKL CPUs by creating call thunks for each function
-and patching the calls to invoke the thunks instead.
+Various things will need to be able to tell if a specific address is a
+callthunk or not (ORC, BPF, static_call). In order to answer this
+question in the face of modules it is necessary to (quickly) find the
+module associated with a specific (callthunk) address.
 
-The thunks are created in module memory to stay within the 32bit
-displacement boundary. The thunk then does:
+Extend the __module_address() infrastructure with knowledge of the
+(per module) callthunk range.
 
-	 ACCOUNT_DEPTH
-	 JMP function
-
-The functions and call sites lists are generated by objtool. The memory
-requirement is 16 bytes per call thunk and btree memory for keeping track
-of them. For a Debian distro config this amounts to ~1.6MB thunk memory and
-2MB btree storage. This is only required when the call depth tracking is
-enabled on the kernel command line. So the burden is solely on SKL[-X].
-
-The thunks are all stored in one 2MB memory region which is mapped with a
-large TLB to prevent ITLB pressure.
-
-The thunks are generated from a template and the btree is used to store
-them by destination address. The actual call patching retrieves the thunks
-from the btree and replaces the original function call by a call to the
-thunk.
-
-Module handling and the actual thunk code for SKL will be added in
-subsequent steps.
-
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/Kconfig                   |   13 +
- arch/x86/include/asm/alternative.h |   13 +
- arch/x86/kernel/Makefile           |    2 
- arch/x86/kernel/alternative.c      |    6 
- arch/x86/kernel/callthunks.c       |  459 +++++++++++++++++++++++++++++++++++++
- 5 files changed, 493 insertions(+)
+ include/linux/module.h      |   21 +++++++++++++++++++--
+ kernel/module/internal.h    |    8 ++++++++
+ kernel/module/main.c        |    6 ++++++
+ kernel/module/tree_lookup.c |   17 ++++++++++++++++-
+ 4 files changed, 49 insertions(+), 3 deletions(-)
 
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -125,6 +125,7 @@ config X86
- 	select ARCH_WANT_LD_ORPHAN_WARN
- 	select ARCH_WANTS_THP_SWAP		if X86_64
- 	select ARCH_HAS_PARANOID_L1D_FLUSH
-+	select BTREE				if CALL_DEPTH_TRACKING
- 	select BUILDTIME_TABLE_SORT
- 	select CLKEVT_I8253
- 	select CLOCKSOURCE_VALIDATE_LAST_CYCLE
-@@ -2511,6 +2512,18 @@ config CALL_DEPTH_TRACKING
- 	  of this option is marginal as the call depth tracking is using
- 	  run-time generated call thunks and call patching.
- 
-+config CALL_THUNKS_DEBUG
-+	bool "Enable call thunks and call depth tracking debugging"
-+	depends on CALL_DEPTH_TRACKING
-+	default n
-+	help
-+	  Enable call/ret counters for imbalance detection and build in
-+	  a noisy dmesg about callthunks generation and call patching for
-+	  trouble shooting. The debug prints need to be enabled on the
-+	  kernel command line with 'debug-callthunks'.
-+	  Only enable this, when you are debugging call thunks as this
-+	  creates a noticable runtime overhead. If unsure say N.
-+
- config CPU_IBPB_ENTRY
- 	bool "Enable IBPB on kernel entry"
- 	depends on CPU_SUP_AMD
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -80,6 +80,19 @@ extern void apply_returns(s32 *start, s3
- extern void apply_ibt_endbr(s32 *start, s32 *end);
- 
- struct module;
-+struct paravirt_patch_site;
-+
-+struct callthunk_sites {
-+	s32				*syms_start, *syms_end;
-+	s32				*call_start, *call_end;
-+	struct paravirt_patch_site	*pv_start, *pv_end;
-+};
-+
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -424,6 +424,9 @@ struct module {
+ 	/* Core layout: rbtree is accessed frequently, so keep together. */
+ 	struct module_layout core_layout __module_layout_align;
+ 	struct module_layout init_layout;
 +#ifdef CONFIG_CALL_THUNKS
-+extern void callthunks_patch_builtin_calls(void);
++	struct module_layout thunk_layout;
++#endif
+ #ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+ 	struct module_layout data_layout;
+ #endif
+@@ -590,9 +593,23 @@ static inline bool within_module_init(un
+ 	       addr < (unsigned long)mod->init_layout.base + mod->init_layout.size;
+ }
+ 
+-static inline bool within_module(unsigned long addr, const struct module *mod)
++static inline bool within_module_thunk(unsigned long addr,
++				       const struct module *mod)
++{
++#ifdef CONFIG_CALL_THUNKS
++	return (unsigned long)mod->thunk_layout.base <= addr &&
++	       addr < (unsigned long)mod->thunk_layout.base + mod->thunk_layout.size;
 +#else
-+static __always_inline void callthunks_patch_builtin_calls(void) {}
-+#endif
- 
- #ifdef CONFIG_SMP
- extern void alternatives_smp_module_add(struct module *mod, char *name,
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -141,6 +141,8 @@ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_
- 
- obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
- 
-+obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
-+
- ###
- # 64 bit specific files
- ifeq ($(CONFIG_X86_64),y)
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -936,6 +936,12 @@ void __init alternative_instructions(voi
- 	 */
- 	apply_alternatives(__alt_instructions, __alt_instructions_end);
- 
-+	/*
-+	 * Now all calls are established. Apply the call thunks if
-+	 * required.
-+	 */
-+	callthunks_patch_builtin_calls();
-+
- 	apply_ibt_endbr(__ibt_endbr_seal, __ibt_endbr_seal_end);
- 
- #ifdef CONFIG_SMP
---- /dev/null
-+++ b/arch/x86/kernel/callthunks.c
-@@ -0,0 +1,459 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#define pr_fmt(fmt) "callthunks: " fmt
-+
-+#include <linux/btree.h>
-+#include <linux/memory.h>
-+#include <linux/moduleloader.h>
-+#include <linux/set_memory.h>
-+#include <linux/vmalloc.h>
-+
-+#include <asm/alternative.h>
-+#include <asm/insn.h>
-+#include <asm/nospec-branch.h>
-+#include <asm/paravirt.h>
-+#include <asm/sections.h>
-+#include <asm/switch_to.h>
-+#include <asm/sync_core.h>
-+#include <asm/text-patching.h>
-+
-+#ifdef CONFIG_CALL_THUNKS_DEBUG
-+static int __initdata_or_module debug_callthunks;
-+
-+#define prdbg(fmt, args...)					\
-+do {								\
-+	if (debug_callthunks)					\
-+		printk(KERN_DEBUG pr_fmt(fmt), ##args);	\
-+} while(0)
-+
-+static int __init debug_thunks(char *str)
-+{
-+	debug_callthunks = 1;
-+	return 1;
-+}
-+__setup("debug-callthunks", debug_thunks);
-+#else
-+#define prdbg(fmt, args...)	do { } while(0)
-+#endif
-+
-+extern s32 __call_sites[], __call_sites_end[];
-+extern s32 __sym_sites[], __sym_sites_end[];
-+
-+static struct btree_head64 call_thunks;
-+
-+static bool thunks_initialized __ro_after_init;
-+static struct module_layout builtin_layout __ro_after_init;
-+
-+struct thunk_desc {
-+	void		*template;
-+	unsigned int	template_size;
-+	unsigned int	thunk_size;
-+};
-+
-+static struct thunk_desc callthunk_desc __ro_after_init;
-+
-+struct thunk_mem {
-+	void			*base;
-+	unsigned int		size;
-+	unsigned int		nthunks;
-+	bool			is_rx;
-+	struct list_head	list;
-+	unsigned long		map[0];
-+};
-+
-+struct thunk_mem_area {
-+	struct thunk_mem	*tmem;
-+	unsigned long		start;
-+	unsigned long		nthunks;
-+};
-+
-+static LIST_HEAD(thunk_mem_list);
-+
-+extern void error_entry(void);
-+extern void xen_error_entry(void);
-+extern void paranoid_entry(void);
-+
-+static inline bool is_inittext(struct module_layout *layout, void *addr)
-+{
-+	if (!layout->mtn.mod)
-+		return is_kernel_inittext((unsigned long)addr);
-+
-+	return within_module_init((unsigned long)addr, layout->mtn.mod);
-+}
-+
-+static __init_or_module bool skip_addr(void *dest)
-+{
-+	if (dest == error_entry)
-+		return true;
-+	if (dest == paranoid_entry)
-+		return true;
-+	if (dest == xen_error_entry)
-+		return true;
-+	/* Does FILL_RSB... */
-+	if (dest == __switch_to_asm)
-+		return true;
-+	/* Accounts directly */
-+	if (dest == ret_from_fork)
-+		return true;
-+#ifdef CONFIG_FUNCTION_TRACER
-+	if (dest == __fentry__)
-+		return true;
-+#endif
 +	return false;
-+}
-+
-+static __init_or_module void *call_get_dest(void *addr)
-+{
-+	struct insn insn;
-+	void *dest;
-+	int ret;
-+
-+	ret = insn_decode_kernel(&insn, addr);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	/* Patched out call? */
-+	if (insn.opcode.bytes[0] != CALL_INSN_OPCODE)
-+		return NULL;
-+
-+	dest = addr + insn.length + insn.immediate.value;
-+	if (skip_addr(dest))
-+		return NULL;
-+	return dest;
-+}
-+
-+static void *jump_get_dest(void *addr)
-+{
-+	struct insn insn;
-+	int ret;
-+
-+	ret = insn_decode_kernel(&insn, addr);
-+	if (WARN_ON_ONCE(ret))
-+		return NULL;
-+
-+	if (insn.opcode.bytes[0] != JMP32_INSN_OPCODE) {
-+		WARN_ON_ONCE(insn.opcode.bytes[0] != INT3_INSN_OPCODE);
-+		return NULL;
-+	}
-+
-+	return addr + insn.length + insn.immediate.value;
-+}
-+
-+static __init_or_module void callthunk_free(struct thunk_mem_area *area,
-+					    bool set_int3)
-+{
-+	struct thunk_mem *tmem = area->tmem;
-+	unsigned int i, size;
-+	u8 *thunk, *tp;
-+
-+	lockdep_assert_held(&text_mutex);
-+
-+	prdbg("Freeing tmem %px %px %lu %lu\n", tmem->base,
-+	      tmem->base + area->start * callthunk_desc.thunk_size,
-+	      area->start, area->nthunks);
-+
-+	/* Jump starts right after the template */
-+	thunk = tmem->base + area->start * callthunk_desc.thunk_size;
-+	tp = thunk + callthunk_desc.template_size;
-+
-+	for (i = 0; i < area->nthunks; i++) {
-+		void *dest = jump_get_dest(tp);
-+
-+		if (dest)
-+			btree_remove64(&call_thunks, (unsigned long)dest);
-+		tp += callthunk_desc.thunk_size;
-+	}
-+	bitmap_clear(tmem->map, area->start, area->nthunks);
-+
-+	if (bitmap_empty(tmem->map, tmem->nthunks)) {
-+		list_del(&tmem->list);
-+		prdbg("Freeing empty tmem: %px %u %u\n", tmem->base,
-+		      tmem->size, tmem->nthunks);
-+		vfree(tmem->base);
-+		kfree(tmem);
-+	} else if (set_int3) {
-+		size = area->nthunks * callthunk_desc.thunk_size;
-+		text_poke_set_locked(thunk, 0xcc, size);
-+	}
-+	kfree(area);
-+}
-+
-+static __init_or_module
-+int callthunk_setup_one(void *dest, u8 *thunk, u8 *buffer,
-+			struct module_layout *layout)
-+{
-+	unsigned long key = (unsigned long)dest;
-+	u8 *jmp;
-+
-+	if (is_inittext(layout, dest)) {
-+		prdbg("Ignoring init dest: %pS %px\n", dest, dest);
-+		return 0;
-+	}
-+
-+	/* Multiple symbols can have the same location. */
-+	if (btree_lookup64(&call_thunks, key)) {
-+		prdbg("Ignoring duplicate dest: %pS %px\n", dest, dest);
-+		return 0;
-+	}
-+
-+	memcpy(buffer, callthunk_desc.template, callthunk_desc.template_size);
-+	jmp = thunk + callthunk_desc.template_size;
-+	buffer += callthunk_desc.template_size;
-+	__text_gen_insn(buffer, JMP32_INSN_OPCODE, jmp, dest, JMP32_INSN_SIZE);
-+
-+	return btree_insert64(&call_thunks, key, (void *)thunk, GFP_KERNEL) ? : 1;
-+}
-+
-+static __always_inline char *layout_getname(struct module_layout *layout)
-+{
-+#ifdef CONFIG_MODULES
-+	if (layout->mtn.mod)
-+		return layout->mtn.mod->name;
 +#endif
-+	return "builtin";
 +}
 +
-+static __init_or_module void patch_call(void *addr, struct module_layout *layout)
++static inline bool within_module(unsigned long addr,
++				 const struct module *mod)
+ {
+-	return within_module_init(addr, mod) || within_module_core(addr, mod);
++	return within_module_core(addr, mod)  ||
++	       within_module_thunk(addr, mod) ||
++	       within_module_init(addr, mod);
+ }
+ 
+ /* Search for module by name: must be in a RCU-sched critical section. */
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -219,6 +219,14 @@ static inline struct module *mod_find(un
+ }
+ #endif /* CONFIG_MODULES_TREE_LOOKUP */
+ 
++#if defined(CONFIG_MODULES_TREE_LOOKUP) && defined(CONFIG_CALL_THUNKS)
++void mod_tree_insert_thunk(struct module *mod);
++void mod_tree_remove_thunk(struct module *mod);
++#else
++static inline void mod_tree_insert_thunk(struct module *mod) { }
++static inline void mod_tree_remove_thunk(struct module *mod) { }
++#endif
++
+ void module_enable_ro(const struct module *mod, bool after_init);
+ void module_enable_nx(const struct module *mod);
+ void module_enable_x(const struct module *mod);
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1154,6 +1154,7 @@ static void free_module(struct module *m
+ 	 */
+ 	mutex_lock(&module_mutex);
+ 	mod->state = MODULE_STATE_UNFORMED;
++	mod_tree_remove_thunk(mod);
+ 	mutex_unlock(&module_mutex);
+ 
+ 	/* Remove dynamic debug info */
+@@ -2770,6 +2771,10 @@ static int load_module(struct load_info
+ 	if (err < 0)
+ 		goto free_modinfo;
+ 
++	mutex_lock(&module_mutex);
++	mod_tree_insert_thunk(mod);
++	mutex_unlock(&module_mutex);
++
+ 	flush_module_icache(mod);
+ 
+ 	/* Setup CFI for the module. */
+@@ -2859,6 +2864,7 @@ static int load_module(struct load_info
+ 	mutex_lock(&module_mutex);
+ 	/* Unlink carefully: kallsyms could be walking list. */
+ 	list_del_rcu(&mod->list);
++	mod_tree_remove_thunk(mod);
+ 	mod_tree_remove(mod);
+ 	wake_up_all(&module_wq);
+ 	/* Wait for RCU-sched synchronizing before releasing mod->list. */
+--- a/kernel/module/tree_lookup.c
++++ b/kernel/module/tree_lookup.c
+@@ -66,11 +66,26 @@ static noinline void __mod_tree_insert(s
+ 	latch_tree_insert(&node->node, &tree->root, &mod_tree_ops);
+ }
+ 
+-static void __mod_tree_remove(struct mod_tree_node *node, struct mod_tree_root *tree)
++static noinline void __mod_tree_remove(struct mod_tree_node *node, struct mod_tree_root *tree)
+ {
+ 	latch_tree_erase(&node->node, &tree->root, &mod_tree_ops);
+ }
+ 
++#ifdef CONFIG_CALL_THUNKS
++void mod_tree_insert_thunk(struct module *mod)
 +{
-+	void *thunk, *dest;
-+	unsigned long key;
-+	u8 bytes[8];
-+
-+	if (is_inittext(layout, addr))
-+		return;
-+
-+	dest = call_get_dest(addr);
-+	if (!dest || WARN_ON_ONCE(IS_ERR(dest)))
-+		return;
-+
-+	key = (unsigned long)dest;
-+	thunk = btree_lookup64(&call_thunks, key);
-+
-+	if (!thunk) {
-+		WARN_ONCE(!is_inittext(layout, dest),
-+			  "Lookup %s thunk for %pS -> %pS %016lx failed\n",
-+			  layout_getname(layout), addr, dest, key);
-+		return;
-+	}
-+
-+	__text_gen_insn(bytes, CALL_INSN_OPCODE, addr, thunk, CALL_INSN_SIZE);
-+	text_poke_early(addr, bytes, CALL_INSN_SIZE);
++	mod->thunk_layout.mtn.mod = mod;
++	if (mod->thunk_layout.size)
++		__mod_tree_insert(&mod->thunk_layout.mtn, &mod_tree);
 +}
 +
-+static __init_or_module void patch_call_sites(s32 *start, s32 *end,
-+					      struct module_layout *layout)
++void mod_tree_remove_thunk(struct module *mod)
 +{
-+	s32 *s;
-+
-+	for (s = start; s < end; s++)
-+		patch_call((void *)s + *s, layout);
++	if (mod->thunk_layout.size)
++		__mod_tree_remove(&mod->thunk_layout.mtn, &mod_tree);
 +}
++#endif
 +
-+static __init_or_module void
-+patch_paravirt_call_sites(struct paravirt_patch_site *start,
-+			  struct paravirt_patch_site *end,
-+			  struct module_layout *layout)
-+{
-+	struct paravirt_patch_site *p;
-+
-+	for (p = start; p < end; p++)
-+		patch_call(p->instr, layout);
-+}
-+
-+static struct thunk_mem_area *callthunks_alloc(unsigned int nthunks)
-+{
-+	struct thunk_mem_area *area;
-+	unsigned int size, mapsize;
-+	struct thunk_mem *tmem;
-+
-+	area = kzalloc(sizeof(*area), GFP_KERNEL);
-+	if (!area)
-+		return NULL;
-+
-+	list_for_each_entry(tmem, &thunk_mem_list, list) {
-+		unsigned long start;
-+
-+		start = bitmap_find_next_zero_area(tmem->map, tmem->nthunks,
-+						   0, nthunks, 0);
-+		if (start >= tmem->nthunks)
-+			continue;
-+		area->tmem = tmem;
-+		area->start = start;
-+		prdbg("Using tmem %px %px %lu %u\n", tmem->base,
-+		      tmem->base + start * callthunk_desc.thunk_size,
-+		      start, nthunks);
-+		return area;
-+	}
-+
-+	size = nthunks * callthunk_desc.thunk_size;
-+	size = round_up(size, PMD_SIZE);
-+	nthunks = size / callthunk_desc.thunk_size;
-+	mapsize = nthunks / 8;
-+
-+	tmem = kzalloc(sizeof(*tmem) + mapsize, GFP_KERNEL);
-+	if (!tmem)
-+		goto free_area;
-+	INIT_LIST_HEAD(&tmem->list);
-+
-+	tmem->base = __module_alloc(size, VM_HUGE_VMAP);
-+	if (!tmem->base)
-+		goto free_tmem;
-+	memset(tmem->base, INT3_INSN_OPCODE, size);
-+	tmem->size = size;
-+	tmem->nthunks = nthunks;
-+	list_add(&tmem->list, &thunk_mem_list);
-+
-+	area->tmem = tmem;
-+	area->start = 0;
-+	prdbg("Allocated tmem %px %x %u\n", tmem->base, size, nthunks);
-+	return area;
-+
-+free_tmem:
-+	kfree(tmem);
-+free_area:
-+	kfree(area);
-+	return NULL;
-+}
-+
-+static __init_or_module void callthunk_area_set_rx(struct thunk_mem_area *area)
-+{
-+	unsigned long base, size;
-+
-+	base = (unsigned long)area->tmem->base;
-+	size = area->tmem->size / PAGE_SIZE;
-+
-+	prdbg("Set RX: %016lx %lx\n", base, size);
-+	set_memory_ro(base, size);
-+	set_memory_x(base, size);
-+
-+	area->tmem->is_rx = true;
-+}
-+
-+static __init_or_module int callthunks_setup(struct callthunk_sites *cs,
-+					     struct module_layout *layout)
-+{
-+	u8 *tp, *thunk, *buffer, *vbuf = NULL;
-+	unsigned int nthunks, bitpos;
-+	struct thunk_mem_area *area;
-+	int ret, text_size, size;
-+	s32 *s;
-+
-+	lockdep_assert_held(&text_mutex);
-+
-+	prdbg("Setup %s\n", layout_getname(layout));
-+	/* Calculate the number of thunks required */
-+	nthunks = cs->syms_end - cs->syms_start;
-+
-+	/*
-+	 * thunk_size can be 0 when there are no intra module calls,
-+	 * but there might be still sites to patch.
-+	 */
-+	if (!nthunks)
-+		goto patch;
-+
-+	area = callthunks_alloc(nthunks);
-+	if (!area)
-+		return -ENOMEM;
-+
-+	bitpos = area->start;
-+	thunk = area->tmem->base + bitpos * callthunk_desc.thunk_size;
-+	tp = thunk;
-+
-+	prdbg("Thunk %px\n", tp);
-+	/*
-+	 * If the memory area is already RX, use a temporary
-+	 * buffer. Otherwise just copy into the unused area
-+	 */
-+	if (!area->tmem->is_rx) {
-+		prdbg("Using thunk direct\n");
-+		buffer = thunk;
-+	} else {
-+		size = nthunks * callthunk_desc.thunk_size;
-+		vbuf = vmalloc(size);
-+		if (!vbuf) {
-+			ret = -ENOMEM;
-+			goto fail;
-+		}
-+		memset(vbuf, INT3_INSN_OPCODE, size);
-+		buffer = vbuf;
-+		prdbg("Using thunk vbuf %px\n", vbuf);
-+	}
-+
-+	for (s = cs->syms_start; s < cs->syms_end; s++, bitpos++) {
-+		void *dest = (void *)s + *s;
-+
-+		ret = callthunk_setup_one(dest, tp, buffer, layout);
-+		if (ret)
-+			goto fail;
-+		buffer += callthunk_desc.thunk_size;
-+		tp += callthunk_desc.thunk_size;
-+		bitmap_set(area->tmem->map, bitpos, 1);
-+		area->nthunks++;
-+	}
-+
-+	text_size = tp - thunk;
-+	prdbg("Thunk %px .. %px 0x%x\n", thunk, tp, text_size);
-+
-+	/*
-+	 * If thunk memory is already RX, poke the buffer into it.
-+	 * Otherwise make the memory RX.
-+	 */
-+	if (vbuf)
-+		text_poke_copy_locked(thunk, vbuf, text_size);
-+	else
-+		callthunk_area_set_rx(area);
-+	sync_core();
-+
-+	layout->base = thunk;
-+	layout->size = text_size;
-+	layout->text_size = text_size;
-+	layout->arch_data = area;
-+
-+	vfree(vbuf);
-+
-+patch:
-+	prdbg("Patching call sites %s\n", layout_getname(layout));
-+	patch_call_sites(cs->call_start, cs->call_end, layout);
-+	patch_paravirt_call_sites(cs->pv_start, cs->pv_end, layout);
-+	prdbg("Patching call sites done%s\n", layout_getname(layout));
-+	return 0;
-+
-+fail:
-+	WARN_ON_ONCE(ret);
-+	callthunk_free(area, false);
-+	vfree(vbuf);
-+	return ret;
-+}
-+
-+static __init noinline void callthunks_init(struct callthunk_sites *cs)
-+{
-+	int ret;
-+
-+	if (!callthunk_desc.template)
-+		return;
-+
-+	if (WARN_ON_ONCE(btree_init64(&call_thunks)))
-+		return;
-+
-+	ret = callthunks_setup(cs, &builtin_layout);
-+	if (WARN_ON_ONCE(ret))
-+		return;
-+
-+	thunks_initialized = true;
-+}
-+
-+void __init callthunks_patch_builtin_calls(void)
-+{
-+	struct callthunk_sites cs = {
-+		.syms_start	= __sym_sites,
-+		.syms_end	= __sym_sites_end,
-+		.call_start	= __call_sites,
-+		.call_end	= __call_sites_end,
-+		.pv_start	= __parainstructions,
-+		.pv_end		= __parainstructions_end
-+	};
-+
-+	mutex_lock(&text_mutex);
-+	callthunks_init(&cs);
-+	mutex_unlock(&text_mutex);
-+}
+ /*
+  * These modifications: insert, remove_init and remove; are serialized by the
+  * module_mutex.
 

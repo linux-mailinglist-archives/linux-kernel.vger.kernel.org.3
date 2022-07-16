@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BB357725F
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD15577249
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233226AbiGPXTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 19:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39980 "EHLO
+        id S233340AbiGPXTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 19:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233041AbiGPXSm (ORCPT
+        with ESMTP id S233073AbiGPXSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 16 Jul 2022 19:18:42 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B101A23174
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:18:05 -0700 (PDT)
-Message-ID: <20220716230954.592165541@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2E223BEC
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:18:06 -0700 (PDT)
+Message-ID: <20220716230954.651974187@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658013482;
+        s=2020; t=1658013484;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=5S6jiCi7pbggp/7rldxDyrEBlWY5m7T5K4YVZOSbqFw=;
-        b=yrr0kPjQ+TXB6ttnMnbR7NNnxuozNMzJ9iH73qPOOls2sKXZn7uXp5p9ypUQJHK3DoIxer
-        PGyloZYYll0pgGJfu6iEJqegftHAD9RLKZcc6jBy3FWOBMsMV79qclMfs+HVip4EEgtb8s
-        lq2/Xu/rixXXRR5P8fxFHCCG/rOLdZ8FmRnWy+OFG8ltddsFidXe878eQeFcyslR1vs0uB
-        j1UPaMBGc8KAK3fjL2ldWJLyCnxAblCqlJp4pWMHMpPsOy2XTu6ThPmgsQa6MNmg+17tcp
-        hv+rc+BaVZ/QWoHGLRhzcsfbV9z1xbIFwW6MOJt6GPx4KbtkTjwrVHoSH+t/fg==
+         references:references; bh=ClwOwqNEOMfbSYwIuxbNweOtgmvdarLY2d+mT83kdoA=;
+        b=V+I/80uZtQGL80itUgyEvjUXgke6eWnrtjG5YhyYrrw/OL831hP4h6F0R0VVw969bTLl95
+        mKdVmE34l4evnFyOlueBgCd5YYefTihzZr+cql2sXCrQyDOvnYg3W++x9MJx4ufo79xe2Q
+        E2Xqu5D6iweziFoVulfOqpwoH5sklvnuMJcisCQlWSvt1LHlNqsO/od7bGwe5aaoj+0+aq
+        ZNz6hW33p3mzhBx6FPdpcf6ZQ/bXlnYgKlTNLL/j2MoZnvH7on0hGetbct3tAXDl9n/3Rg
+        6bgLXuWJR83S0WDQfakVukzalGQBoFHXXXmaaSpMSnE8VI930VE1YrLpd5UMNg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658013482;
+        s=2020e; t=1658013484;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=5S6jiCi7pbggp/7rldxDyrEBlWY5m7T5K4YVZOSbqFw=;
-        b=RWX0luHjkHNuVZX4E++IoRMgZj4/e6aYd9O7QHOlkPaCSNpaXaqKhlH+wwDBQVTFPschsu
-        fwmGHJKe9LHSizDg==
+         references:references; bh=ClwOwqNEOMfbSYwIuxbNweOtgmvdarLY2d+mT83kdoA=;
+        b=MGpaN4YaztpvyGHR5iqeV1A3YllhUw4g0wMH9rWNV5tG+IqpslOR4DZi3h7KwRDs16CCHS
+        FkazDGMYwYwiC7Bw==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
@@ -46,12 +46,13 @@ Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
         Joao Moreira <joao.moreira@intel.com>,
         Joseph Nuzman <joseph.nuzman@intel.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [patch 32/38] static_call: Add call depth tracking support
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [patch 33/38] kallsyms: Take callthunks into account
 References: <20220716230344.239749011@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 17 Jul 2022 01:18:01 +0200 (CEST)
+Date:   Sun, 17 Jul 2022 01:18:03 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,68 +64,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-When indirect calls are switched to direct calls then it has to be ensured
-that the call target is not the function, but the call thunk when call
-depth tracking is enabled. But static calls are available before call
-thunks have been set up.
+Similar to ftrace and bpf call thunks are creating symbols which are
+interesting for things like printing stack-traces, perf, live-patching
+and things like that.
 
-Ensure a second run through the static call patching code after call thunks
-have been created. When call thunks are not enabled this has no side
-effects.
+Add the required functionality to the core and implement it in x86.
+
+Callthunks will report the same function name as their target, but
+their module name will be "callthunk" or "callthunk:${modname}" for
+modules.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- arch/x86/include/asm/alternative.h |    5 +++++
- arch/x86/kernel/callthunks.c       |   37 +++++++++++++++++++++++++++++++++++++
- arch/x86/kernel/static_call.c      |    1 +
- include/linux/static_call.h        |    2 ++
- kernel/static_call_inline.c        |   23 ++++++++++++++++++-----
- 5 files changed, 63 insertions(+), 5 deletions(-)
+ arch/x86/kernel/callthunks.c |  155 +++++++++++++++++++++++++++++++++++++++++++
+ include/linux/kallsyms.h     |   24 ++++++
+ kernel/kallsyms.c            |   23 ++++++
+ 3 files changed, 202 insertions(+)
 
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -93,12 +93,17 @@ extern void callthunks_patch_builtin_cal
- extern void callthunks_patch_module_calls(struct callthunk_sites *sites,
- 					  struct module *mod);
- extern void callthunks_module_free(struct module *mod);
-+extern void *callthunks_translate_call_dest(void *dest);
- #else
- static __always_inline void callthunks_patch_builtin_calls(void) {}
- static __always_inline void
- callthunks_patch_module_calls(struct callthunk_sites *sites,
- 			      struct module *mod) {}
- static __always_inline void callthunks_module_free(struct module *mod) { }
-+static __always_inline void *callthunks_translate_call_dest(void *dest)
-+{
-+	return dest;
-+}
- #endif
- 
- #ifdef CONFIG_SMP
 --- a/arch/x86/kernel/callthunks.c
 +++ b/arch/x86/kernel/callthunks.c
-@@ -7,6 +7,7 @@
+@@ -4,6 +4,7 @@
+ 
+ #include <linux/btree.h>
+ #include <linux/debugfs.h>
++#include <linux/kallsyms.h>
  #include <linux/memory.h>
  #include <linux/moduleloader.h>
  #include <linux/set_memory.h>
-+#include <linux/static_call.h>
- #include <linux/vmalloc.h>
- 
- #include <asm/alternative.h>
-@@ -492,6 +493,7 @@ static __init noinline void callthunks_i
- 	if (WARN_ON_ONCE(ret))
- 		return;
- 
-+	static_call_force_reinit();
- 	thunks_initialized = true;
+@@ -548,6 +549,160 @@ void *callthunks_translate_call_dest(voi
+ 	return dest;
  }
  
-@@ -511,6 +513,41 @@ void __init callthunks_patch_builtin_cal
- 	mutex_unlock(&text_mutex);
- }
- 
-+static bool is_module_init_dest(void *dest)
++static bool is_module_callthunk(void *addr)
 +{
 +	bool ret = false;
 +
@@ -132,103 +105,239 @@ Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 +	struct module *mod;
 +
 +	preempt_disable();
-+	mod = __module_address((unsigned long)dest);
-+	if (mod && within_module_init((unsigned long)dest, mod))
++	mod = __module_address((unsigned long)addr);
++	if (mod && within_module_thunk((unsigned long)addr, mod))
 +		ret = true;
 +	preempt_enable();
 +#endif
 +	return ret;
 +}
 +
-+void *callthunks_translate_call_dest(void *dest)
++static bool is_callthunk(void *addr)
 +{
++	if (builtin_layout.base <= addr &&
++	    addr < builtin_layout.base + builtin_layout.size)
++		return true;
++	return is_module_callthunk(addr);
++}
++
++static void *__callthunk_dest(void *addr)
++{
++	unsigned long mask = callthunk_desc.thunk_size - 1;
 +	void *thunk;
 +
-+	lockdep_assert_held(&text_mutex);
++	thunk = (void *)((unsigned long)addr & ~mask);
++	thunk += callthunk_desc.template_size;
++	return jump_get_dest(thunk);
++}
 +
-+	if (!thunks_initialized || skip_addr(dest))
-+		return dest;
++static void *callthunk_dest(void *addr)
++{
++	if (!is_callthunk(addr))
++		return NULL;
++	return __callthunk_dest(addr);
++}
 +
-+	thunk = btree_lookup64(&call_thunks, (unsigned long)dest);
++static void set_modname(char **modname, unsigned long addr)
++{
++	if (!modname || !IS_ENABLED(CONFIG_MODULES))
++		*modname = "callthunk";
 +
-+	if (thunk)
-+		return thunk;
++#ifdef CONFIG_MODULES
++	else {
++		struct module * mod;
 +
-+	WARN_ON_ONCE(!is_kernel_inittext((unsigned long)dest) &&
-+		     !is_module_init_dest(dest));
-+	return dest;
++		preempt_disable();
++		mod = __module_address(addr);
++		*modname = mod->callthunk_name;
++		preempt_enable();
++	}
++#endif
++}
++
++const char *
++callthunk_address_lookup(unsigned long addr, unsigned long *size,
++			 unsigned long *off, char **modname, char *sym)
++{
++	unsigned long dest, mask = callthunk_desc.thunk_size - 1;
++	const char *ret;
++
++	if (!thunks_initialized)
++		return NULL;
++
++	dest = (unsigned long)callthunk_dest((void *)addr);
++	if (!dest)
++		return NULL;
++
++	ret = kallsyms_lookup(dest, size, off, modname, sym);
++	if (!ret)
++		return NULL;
++
++	*off = addr & mask;
++	*size = callthunk_desc.thunk_size;
++
++	set_modname(modname, addr);
++	return ret;
++}
++
++static int get_module_thunk(char **modname, struct module_layout **layoutp,
++			    unsigned int symthunk)
++{
++#ifdef CONFIG_MODULES
++	extern struct list_head modules;
++	struct module *mod;
++	unsigned int size;
++
++	symthunk -= (*layoutp)->text_size;
++	list_for_each_entry_rcu(mod, &modules, list) {
++		if (mod->state == MODULE_STATE_UNFORMED)
++			continue;
++
++		*layoutp = &mod->thunk_layout;
++		size = mod->thunk_layout.text_size;
++
++		if (symthunk >= size) {
++			symthunk -= size;
++			continue;
++		}
++		*modname = mod->callthunk_name;
++		return symthunk;
++	}
++#endif
++	return -ERANGE;
++}
++
++int callthunk_get_kallsym(unsigned int symnum, unsigned long *value,
++			  char *type, char *name, char *module_name,
++			  int *exported)
++{
++	int symthunk = symnum * callthunk_desc.thunk_size;
++	struct module_layout *layout = &builtin_layout;
++	char *modname = "callthunk";
++	void *thunk, *dest;
++	int ret = -ERANGE;
++
++	if (!thunks_initialized)
++		return -ERANGE;
++
++	preempt_disable();
++
++	if (symthunk >= layout->text_size) {
++		symthunk = get_module_thunk(&modname, &layout, symthunk);
++		if (symthunk < 0)
++			goto out;
++	}
++
++	thunk = layout->base + symthunk;
++	dest = __callthunk_dest(thunk);
++
++	if (!dest) {
++		strlcpy(name, "(unknown callthunk)", KSYM_NAME_LEN);
++		ret = 0;
++		goto out;
++	}
++
++	ret = lookup_symbol_name((unsigned long)dest, name);
++	if (ret)
++		goto out;
++
++	*value = (unsigned long)thunk;
++	*exported = 0;
++	*type = 't';
++	strlcpy(module_name, modname, MODULE_NAME_LEN);
++
++out:
++	preempt_enable();
++	return ret;
 +}
 +
  #ifdef CONFIG_MODULES
  void noinline callthunks_patch_module_calls(struct callthunk_sites *cs,
  					    struct module *mod)
---- a/arch/x86/kernel/static_call.c
-+++ b/arch/x86/kernel/static_call.c
-@@ -34,6 +34,7 @@ static void __ref __static_call_transfor
- 
- 	switch (type) {
- 	case CALL:
-+		func = callthunks_translate_call_dest(func);
- 		code = text_gen_insn(CALL_INSN_OPCODE, insn, func);
- 		if (func == &__static_call_return0) {
- 			emulate = code;
---- a/include/linux/static_call.h
-+++ b/include/linux/static_call.h
-@@ -162,6 +162,8 @@ extern void arch_static_call_transform(v
- 
- extern int __init static_call_init(void);
- 
-+extern void static_call_force_reinit(void);
-+
- struct static_call_mod {
- 	struct static_call_mod *next;
- 	struct module *mod; /* for vmlinux, mod == NULL */
---- a/kernel/static_call_inline.c
-+++ b/kernel/static_call_inline.c
-@@ -15,7 +15,18 @@ extern struct static_call_site __start_s
- extern struct static_call_tramp_key __start_static_call_tramp_key[],
- 				    __stop_static_call_tramp_key[];
- 
--static bool static_call_initialized;
-+static int static_call_initialized;
-+
-+/*
-+ * Must be called before early_initcall() to be effective.
-+ */
-+void static_call_force_reinit(void)
-+{
-+	if (WARN_ON_ONCE(!static_call_initialized))
-+		return;
-+
-+	static_call_initialized++;
-+}
- 
- /* mutex to protect key modules/sites */
- static DEFINE_MUTEX(static_call_mutex);
-@@ -475,7 +486,8 @@ int __init static_call_init(void)
- {
- 	int ret;
- 
--	if (static_call_initialized)
-+	/* See static_call_force_reinit(). */
-+	if (static_call_initialized == 1)
- 		return 0;
- 
- 	cpus_read_lock();
-@@ -490,11 +502,12 @@ int __init static_call_init(void)
- 		BUG();
- 	}
- 
--	static_call_initialized = true;
--
- #ifdef CONFIG_MODULES
--	register_module_notifier(&static_call_module_nb);
-+	if (!static_call_initialized)
-+		register_module_notifier(&static_call_module_nb);
- #endif
-+
-+	static_call_initialized = 1;
- 	return 0;
+--- a/include/linux/kallsyms.h
++++ b/include/linux/kallsyms.h
+@@ -65,6 +65,30 @@ static inline void *dereference_symbol_d
+ 	return ptr;
  }
- early_initcall(static_call_init);
+ 
++#ifdef CONFIG_CALL_THUNKS
++extern const char *
++callthunk_address_lookup(unsigned long addr, unsigned long *size,
++			 unsigned long *off, char **modname, char *sym);
++extern int callthunk_get_kallsym(unsigned int symnum, unsigned long *value,
++				 char *type, char *name, char *module_name,
++				 int *exported);
++#else
++static inline const char *
++callthunk_address_lookup(unsigned long addr, unsigned long *size,
++			 unsigned long *off, char **modname, char *sym)
++{
++	return NULL;
++}
++
++static inline
++int callthunk_get_kallsym(unsigned int symnum, unsigned long *value,
++			  char *type, char *name, char *module_name,
++			  int *exported)
++{
++	return -1;
++}
++#endif
++
+ #ifdef CONFIG_KALLSYMS
+ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+ 				      unsigned long),
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -365,6 +365,10 @@ static const char *kallsyms_lookup_build
+ 		ret = ftrace_mod_address_lookup(addr, symbolsize,
+ 						offset, modname, namebuf);
+ 
++	if (!ret)
++		ret = callthunk_address_lookup(addr, symbolsize,
++					       offset, modname, namebuf);
++
+ found:
+ 	cleanup_symbol_name(namebuf);
+ 	return ret;
+@@ -578,6 +582,7 @@ struct kallsym_iter {
+ 	loff_t pos_mod_end;
+ 	loff_t pos_ftrace_mod_end;
+ 	loff_t pos_bpf_end;
++	loff_t pos_callthunk_end;
+ 	unsigned long value;
+ 	unsigned int nameoff; /* If iterating in core kernel symbols. */
+ 	char type;
+@@ -657,6 +662,20 @@ static int get_ksymbol_bpf(struct kallsy
+ 	return 1;
+ }
+ 
++static int get_ksymbol_callthunk(struct kallsym_iter *iter)
++{
++	int ret = callthunk_get_kallsym(iter->pos - iter->pos_bpf_end,
++					&iter->value, &iter->type,
++					iter->name, iter->module_name,
++					&iter->exported);
++	if (ret < 0) {
++		iter->pos_callthunk_end = iter->pos;
++		return 0;
++	}
++
++	return 1;
++}
++
+ /*
+  * This uses "__builtin__kprobes" as a module name for symbols for pages
+  * allocated for kprobes' purposes, even though "__builtin__kprobes" is not a
+@@ -724,6 +743,10 @@ static int update_iter_mod(struct kallsy
+ 	    get_ksymbol_bpf(iter))
+ 		return 1;
+ 
++	if ((!iter->pos_callthunk_end || iter->pos_callthunk_end > pos) &&
++	    get_ksymbol_callthunk(iter))
++		return 1;
++
+ 	return get_ksymbol_kprobe(iter);
+ }
+ 
 

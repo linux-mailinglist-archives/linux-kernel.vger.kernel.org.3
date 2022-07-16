@@ -2,88 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911BE576D3A
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E23B576D3C
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 12:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbiGPJ7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 05:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
+        id S232094AbiGPKDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 06:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiGPJ7S (ORCPT
+        with ESMTP id S229540AbiGPKDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 05:59:18 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF351C111
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 02:59:15 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LlNtK4QvPzkWKB;
-        Sat, 16 Jul 2022 17:56:57 +0800 (CST)
-Received: from [10.67.110.176] (10.67.110.176) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Jul 2022 17:59:13 +0800
-Subject: Re: [PATCH -next] nvmem: core: Fix memleak in nvmem_register()
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <srinivas.kandagatla@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <gongruiqi1@huawei.com>, <wangweiyang2@huawei.com>
-References: <20220716075352.2622809-1-cuigaosheng1@huawei.com>
- <YtJ1mthCP+4laqOn@kroah.com>
-From:   cuigaosheng <cuigaosheng1@huawei.com>
-Message-ID: <544cfbdb-9005-3d4d-58f9-258f875984dd@huawei.com>
-Date:   Sat, 16 Jul 2022 17:59:02 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Sat, 16 Jul 2022 06:03:49 -0400
+X-Greylist: delayed 4292 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 16 Jul 2022 03:03:45 PDT
+Received: from a1-bg02.venev.name (a1-bg02.venev.name [IPv6:2001:470:20aa::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A5426D4;
+        Sat, 16 Jul 2022 03:03:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=venev.name;
+        s=default; h=Content-Transfer-Encoding:Message-Id:Date:Subject:To:From:
+        Content-Type:Reply-To:Sender; bh=fPmDHOyG2Rqp5CIpnIIQbmLxoYS8Nalj3lW5lVyk8Ps=
+        ; b=iLqyE3/Ft7mvjmD9vgScixnQsyaDSgyE/ttsEIWIj3cX5stt6ncxfxQtutaqjWEWNbZwo5vyu
+        N5n9FzAnjqT/EvMSBhcIKuCNMDbLokI6f9LzdGdFGtyRc0xGUh+VI0M4eB9XEi9hcH8qh4UZuFjl9
+        Fhhv8YgBJLssXAFOE2KWd9qeJP+UqTXYpFNaqIqD7NGHgT2ZyYPyJmZyKGxGuz3WPFmT6GBSkkTug
+        +Nt8Rv6eCcAkgOeeM1VovHb7y7/AvbMbaxI17reKnujiMzzykVZKIc1eoxI3Gqa7uXmhpnZ0jvzdL
+        sFZLdd2xEiD1Llxbki1ZDsd9baJsQtbd5ugex6VuJ0RO/qklIAWsAJaCZ/nDfHrIO7Sn/KACVrSYL
+        0DBOyeUPygbUtro4HiVhXNShm1AQbQ1vrhc6zfKCW0MEmCugruYn3uOTMR8Ijo1AYiC8UUV8Jy1hq
+        dklP8sV6vlEzkr3L3+DdhW0MQqNO9DbMFT4edV5jeQ4INWsxFUHxFdnE2sbqpwdsv03iqyrSz144i
+        rrZ8ynq3fd5/M7ZjxsBlzMddOuqQevbE59y3BZeUO3Ts+aU92MTZVVDvx+2f5omtURATe7KpRkf+6
+        5HE+aQ/oxSe1r8g2lexZ9yoYdnLWRw2As+MNa1jSUQ5VSYy0tKd3yNkF64cvZtTl436cxno=;
+X-Check-Malware: ok
+Received: from a1-bg02.venev.name ([213.240.239.49] helo=pmx1.venev.name)
+        by a1-bg02.venev.name with esmtps
+        id 1oCdWt-0001az-T6
+        (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+        (envelope-from <hristo@venev.name>);
+        Sat, 16 Jul 2022 08:52:04 +0000
+Received: from venev.name ([213.240.239.49])
+        by pmx1.venev.name with ESMTPSA
+        id jwWRIDJ80mL1FwAAdB6GMg
+        (envelope-from <hristo@venev.name>); Sat, 16 Jul 2022 08:52:03 +0000
+From:   Hristo Venev <hristo@venev.name>
+To:     netdev@vger.kernel.org
+Cc:     Hristo Venev <hristo@venev.name>,
+        Ajit Khaparde <ajit.khaparde@broadcom.com>,
+        Sriharsha Basavapatna <sriharsha.basavapatna@broadcom.com>,
+        Somnath Kotur <somnath.kotur@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mark Leonard <mark.leonard@emulex.com>,
+        Sathya Perla <sathya.perla@emulex.com>,
+        Suresh Reddy <Suresh.Reddy@emulex.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] be2net: Fix buffer overflow in be_get_module_eeprom
+Date:   Sat, 16 Jul 2022 11:51:34 +0300
+Message-Id: <20220716085134.6095-1-hristo@venev.name>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-In-Reply-To: <YtJ1mthCP+4laqOn@kroah.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.176]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your time.
+be_cmd_read_port_transceiver_data assumes that it is given a buffer that
+is at least PAGE_DATA_LEN long, or twice that if the module supports SFF
+8472. However, this is not always the case.
 
-I have made the v2 patch and moving dev_set_name after nvmem_validate_keepouts
-to fix the issue, hope you can provide some advice.
+Fix this by passing the desired offset and length to
+be_cmd_read_port_transceiver_data so that we only copy the bytes once.
 
-Thanks.
+Fixes: e36edd9d26cf ("be2net: add ethtool "-m" option support")
+Signed-off-by: Hristo Venev <hristo@venev.name>
+---
+ drivers/net/ethernet/emulex/benet/be_cmds.c   | 10 +++---
+ drivers/net/ethernet/emulex/benet/be_cmds.h   |  2 +-
+ .../net/ethernet/emulex/benet/be_ethtool.c    | 31 ++++++++++++-------
+ 3 files changed, 25 insertions(+), 18 deletions(-)
 
-ÔÚ 2022/7/16 16:23, Greg KH Ð´µÀ:
-> On Sat, Jul 16, 2022 at 03:53:52PM +0800, Gaosheng Cui wrote:
->> dev_set_name will alloc memory for nvmem->dev.kobj.name in
->> nvmem_register, when nvmem_validate_keepouts failed, nvmem's
->> memory will be freed and return, but nobody will free memory
->> for nvmem->dev.kobj.name, there will be memleak, so using
->> kfree_const(nvmem->dev.kobj.name) to fix it.
->>
->> Fixes: de0534df9347 ("nvmem: core: fix error handling while validating keepout regions")
->> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
->> ---
->>   drivers/nvmem/core.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
->> index 1e3c754efd0d..6c75c9afa5f3 100644
->> --- a/drivers/nvmem/core.c
->> +++ b/drivers/nvmem/core.c
->> @@ -833,6 +833,7 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->>   		rval = nvmem_validate_keepouts(nvmem);
->>   		if (rval) {
->>   			ida_free(&nvmem_ida, nvmem->id);
->> +			kfree_const(nvmem->dev.kobj.name);
->>   			kfree(nvmem);
-> Something is really wrong, you should never be touching the name pointer
-> of a kobject directly like this.  Also the device structure itself
-> should be cleaning up the memory, not a kfree.  So this feels wrong...
->
-> greg k-h
-> .
+diff --git a/drivers/net/ethernet/emulex/benet/be_cmds.c b/drivers/net/ethernet/emulex/benet/be_cmds.c
+index 528eb0f223b1..b4f5e57d0285 100644
+--- a/drivers/net/ethernet/emulex/benet/be_cmds.c
++++ b/drivers/net/ethernet/emulex/benet/be_cmds.c
+@@ -2287,7 +2287,7 @@ int be_cmd_get_beacon_state(struct be_adapter *adapter, u8 port_num, u32 *state)
+ 
+ /* Uses sync mcc */
+ int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
+-				      u8 page_num, u8 *data)
++				      u8 page_num, u32 off, u32 len, u8 *data)
+ {
+ 	struct be_dma_mem cmd;
+ 	struct be_mcc_wrb *wrb;
+@@ -2321,10 +2321,10 @@ int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
+ 	req->port = cpu_to_le32(adapter->hba_port_num);
+ 	req->page_num = cpu_to_le32(page_num);
+ 	status = be_mcc_notify_wait(adapter);
+-	if (!status) {
++	if (!status && len > 0) {
+ 		struct be_cmd_resp_port_type *resp = cmd.va;
+ 
+-		memcpy(data, resp->page_data, PAGE_DATA_LEN);
++		memcpy(data, resp->page_data + off, len);
+ 	}
+ err:
+ 	mutex_unlock(&adapter->mcc_lock);
+@@ -2415,7 +2415,7 @@ int be_cmd_query_cable_type(struct be_adapter *adapter)
+ 	int status;
+ 
+ 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
+-						   page_data);
++						   0, PAGE_DATA_LEN, page_data);
+ 	if (!status) {
+ 		switch (adapter->phy.interface_type) {
+ 		case PHY_TYPE_QSFP:
+@@ -2440,7 +2440,7 @@ int be_cmd_query_sfp_info(struct be_adapter *adapter)
+ 	int status;
+ 
+ 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
+-						   page_data);
++						   0, PAGE_DATA_LEN, page_data);
+ 	if (!status) {
+ 		strlcpy(adapter->phy.vendor_name, page_data +
+ 			SFP_VENDOR_NAME_OFFSET, SFP_VENDOR_NAME_LEN - 1);
+diff --git a/drivers/net/ethernet/emulex/benet/be_cmds.h b/drivers/net/ethernet/emulex/benet/be_cmds.h
+index db1f3b908582..e2085c68c0ee 100644
+--- a/drivers/net/ethernet/emulex/benet/be_cmds.h
++++ b/drivers/net/ethernet/emulex/benet/be_cmds.h
+@@ -2427,7 +2427,7 @@ int be_cmd_set_beacon_state(struct be_adapter *adapter, u8 port_num, u8 beacon,
+ int be_cmd_get_beacon_state(struct be_adapter *adapter, u8 port_num,
+ 			    u32 *state);
+ int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
+-				      u8 page_num, u8 *data);
++				      u8 page_num, u32 off, u32 len, u8 *data);
+ int be_cmd_query_cable_type(struct be_adapter *adapter);
+ int be_cmd_query_sfp_info(struct be_adapter *adapter);
+ int lancer_cmd_read_object(struct be_adapter *adapter, struct be_dma_mem *cmd,
+diff --git a/drivers/net/ethernet/emulex/benet/be_ethtool.c b/drivers/net/ethernet/emulex/benet/be_ethtool.c
+index dfa784339781..bd0df189d871 100644
+--- a/drivers/net/ethernet/emulex/benet/be_ethtool.c
++++ b/drivers/net/ethernet/emulex/benet/be_ethtool.c
+@@ -1344,7 +1344,7 @@ static int be_get_module_info(struct net_device *netdev,
+ 		return -EOPNOTSUPP;
+ 
+ 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
+-						   page_data);
++						   0, PAGE_DATA_LEN, page_data);
+ 	if (!status) {
+ 		if (!page_data[SFP_PLUS_SFF_8472_COMP]) {
+ 			modinfo->type = ETH_MODULE_SFF_8079;
+@@ -1362,25 +1362,32 @@ static int be_get_module_eeprom(struct net_device *netdev,
+ {
+ 	struct be_adapter *adapter = netdev_priv(netdev);
+ 	int status;
++	u32 begin, end;
+ 
+ 	if (!check_privilege(adapter, MAX_PRIVILEGES))
+ 		return -EOPNOTSUPP;
+ 
+-	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
+-						   data);
+-	if (status)
+-		goto err;
++	begin = eeprom->offset;
++	end = eeprom->offset + eeprom->len;
++
++	if (begin < PAGE_DATA_LEN) {
++		status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0, begin,
++							   min_t(u32, end, PAGE_DATA_LEN) - begin,
++							   data);
++		if (status)
++			goto err;
++
++		data += PAGE_DATA_LEN - begin;
++		begin = PAGE_DATA_LEN;
++	}
+ 
+-	if (eeprom->offset + eeprom->len > PAGE_DATA_LEN) {
+-		status = be_cmd_read_port_transceiver_data(adapter,
+-							   TR_PAGE_A2,
+-							   data +
+-							   PAGE_DATA_LEN);
++	if (end > PAGE_DATA_LEN) {
++		status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A2,
++							   begin - PAGE_DATA_LEN,
++							   end - begin, data);
+ 		if (status)
+ 			goto err;
+ 	}
+-	if (eeprom->offset)
+-		memcpy(data, data + eeprom->offset, eeprom->len);
+ err:
+ 	return be_cmd_status(status);
+ }
+-- 
+2.37.1
+

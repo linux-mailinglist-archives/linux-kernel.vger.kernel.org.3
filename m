@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6A757724D
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BB357725F
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbiGPXTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 19:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
+        id S233226AbiGPXTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 19:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233194AbiGPXSe (ORCPT
+        with ESMTP id S233041AbiGPXSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 19:18:34 -0400
+        Sat, 16 Jul 2022 19:18:42 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A67722521
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:18:04 -0700 (PDT)
-Message-ID: <20220716230954.531875572@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B101A23174
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:18:05 -0700 (PDT)
+Message-ID: <20220716230954.592165541@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658013480;
+        s=2020; t=1658013482;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=n/x/B8Fp0Zw1KyBer7r29adRRpTb/pJqU9PpL7Cx/VI=;
-        b=g6C2o++/uTV7cr+0ZZ3+X1pSHMQ2ov/nbYmTaNVTZv4NIDNY06tWRjhHe/vxoNFqyIkG9m
-        g1f8CeJ+s1qahgOsdMWCeKVL6EIulZsQOe3UjCZt/lXDhJu3wLQjUyKea311cq4gr+rzhu
-        PWMYJ9pmKHjmZeLGogOyU+E5DoFfsnsDK7B+svxQybkm5W1hsrM6gXUNzQSGZ1Ab9+2a29
-        0qgy3MaQfU+zBJsXUlIRifGRIs5A4T/HB5B8x4GtRG/ORkjC6G6uoFIh+A1QruVmLz0C0o
-        lb6Guz2hXMA1vL6wvH0BJ3UHdT0mMwcRc6kWBS+/hQL3eGKc43MXt8JQv1Y4gg==
+         references:references; bh=5S6jiCi7pbggp/7rldxDyrEBlWY5m7T5K4YVZOSbqFw=;
+        b=yrr0kPjQ+TXB6ttnMnbR7NNnxuozNMzJ9iH73qPOOls2sKXZn7uXp5p9ypUQJHK3DoIxer
+        PGyloZYYll0pgGJfu6iEJqegftHAD9RLKZcc6jBy3FWOBMsMV79qclMfs+HVip4EEgtb8s
+        lq2/Xu/rixXXRR5P8fxFHCCG/rOLdZ8FmRnWy+OFG8ltddsFidXe878eQeFcyslR1vs0uB
+        j1UPaMBGc8KAK3fjL2ldWJLyCnxAblCqlJp4pWMHMpPsOy2XTu6ThPmgsQa6MNmg+17tcp
+        hv+rc+BaVZ/QWoHGLRhzcsfbV9z1xbIFwW6MOJt6GPx4KbtkTjwrVHoSH+t/fg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658013480;
+        s=2020e; t=1658013482;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=n/x/B8Fp0Zw1KyBer7r29adRRpTb/pJqU9PpL7Cx/VI=;
-        b=QugiXolVRHGq7pGLiEqOkpR+DA+aFx3u/3BOdtTSeNFGzi1ZSLd4Ohbi5miisZ+aEZOxIG
-        NtxWMyuULqud9wCQ==
+         references:references; bh=5S6jiCi7pbggp/7rldxDyrEBlWY5m7T5K4YVZOSbqFw=;
+        b=RWX0luHjkHNuVZX4E++IoRMgZj4/e6aYd9O7QHOlkPaCSNpaXaqKhlH+wwDBQVTFPschsu
+        fwmGHJKe9LHSizDg==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
@@ -45,12 +45,13 @@ Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
         Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
         Joao Moreira <joao.moreira@intel.com>,
         Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [patch 31/38] x86/calldepth: Add ret/call counting for debug
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [patch 32/38] static_call: Add call depth tracking support
 References: <20220716230344.239749011@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 17 Jul 2022 01:18:00 +0200 (CEST)
+Date:   Sun, 17 Jul 2022 01:18:01 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,171 +61,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a debuigfs mechanism to validate the accounting, e.g. vs. call/ret
-balance and to gather statistics about the stuffing to call ratio.
+From: Peter Zijlstra <peterz@infradead.org>
 
+When indirect calls are switched to direct calls then it has to be ensured
+that the call target is not the function, but the call thunk when call
+depth tracking is enabled. But static calls are available before call
+thunks have been set up.
+
+Ensure a second run through the static call patching code after call thunks
+have been created. When call thunks are not enabled this has no side
+effects.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/include/asm/nospec-branch.h |   32 +++++++++++++++++++--
- arch/x86/kernel/callthunks.c         |   51 +++++++++++++++++++++++++++++++++++
- arch/x86/lib/retpoline.S             |    7 ++++
- 3 files changed, 86 insertions(+), 4 deletions(-)
+ arch/x86/include/asm/alternative.h |    5 +++++
+ arch/x86/kernel/callthunks.c       |   37 +++++++++++++++++++++++++++++++++++++
+ arch/x86/kernel/static_call.c      |    1 +
+ include/linux/static_call.h        |    2 ++
+ kernel/static_call_inline.c        |   23 ++++++++++++++++++-----
+ 5 files changed, 63 insertions(+), 5 deletions(-)
 
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -77,6 +77,23 @@
-  */
- 
- #ifdef CONFIG_CALL_DEPTH_TRACKING
-+
-+#ifdef CONFIG_CALL_THUNKS_DEBUG
-+# define CALL_THUNKS_DEBUG_INC_CALLS				\
-+	incq	%gs:__x86_call_count;
-+# define CALL_THUNKS_DEBUG_INC_RETS				\
-+	incq	%gs:__x86_ret_count;
-+# define CALL_THUNKS_DEBUG_INC_STUFFS				\
-+	incq	%gs:__x86_stuffs_count;
-+# define CALL_THUNKS_DEBUG_INC_CTXSW				\
-+	incq	%gs:__x86_ctxsw_count;
-+#else
-+# define CALL_THUNKS_DEBUG_INC_CALLS
-+# define CALL_THUNKS_DEBUG_INC_RETS
-+# define CALL_THUNKS_DEBUG_INC_STUFFS
-+# define CALL_THUNKS_DEBUG_INC_CTXSW
-+#endif
-+
- #define CREDIT_CALL_DEPTH					\
- 	movq	$-1, PER_CPU_VAR(__x86_call_depth);
- 
-@@ -88,10 +105,12 @@
- #define RESET_CALL_DEPTH_FROM_CALL				\
- 	mov	$0xfc, %rax;					\
- 	shl	$56, %rax;					\
--	movq	%rax, PER_CPU_VAR(__x86_call_depth);
-+	movq	%rax, PER_CPU_VAR(__x86_call_depth);		\
-+	CALL_THUNKS_DEBUG_INC_CALLS
- 
- #define INCREMENT_CALL_DEPTH					\
--	sarq	$5, %gs:__x86_call_depth
-+	sarq	$5, %gs:__x86_call_depth;			\
-+	CALL_THUNKS_DEBUG_INC_CALLS
+--- a/arch/x86/include/asm/alternative.h
++++ b/arch/x86/include/asm/alternative.h
+@@ -93,12 +93,17 @@ extern void callthunks_patch_builtin_cal
+ extern void callthunks_patch_module_calls(struct callthunk_sites *sites,
+ 					  struct module *mod);
+ extern void callthunks_module_free(struct module *mod);
++extern void *callthunks_translate_call_dest(void *dest);
  #else
- #define CREDIT_CALL_DEPTH
- #define RESET_CALL_DEPTH
-@@ -127,7 +146,8 @@
- 	dec	reg;				\
- 	jnz	771b;				\
- 						\
--	CREDIT_CALL_DEPTH
-+	CREDIT_CALL_DEPTH			\
-+	CALL_THUNKS_DEBUG_INC_CTXSW
- 
- #ifdef __ASSEMBLY__
- 
-@@ -274,6 +294,12 @@ static inline void x86_set_skl_return_th
- }
- 
- DECLARE_PER_CPU(u64, __x86_call_depth);
-+#ifdef CONFIG_CALL_THUNKS_DEBUG
-+DECLARE_PER_CPU(u64, __x86_call_count);
-+DECLARE_PER_CPU(u64, __x86_ret_count);
-+DECLARE_PER_CPU(u64, __x86_stuffs_count);
-+DECLARE_PER_CPU(u64, __x86_ctxsw_count);
-+#endif
- #else
- static inline void x86_set_skl_return_thunk(void) {}
+ static __always_inline void callthunks_patch_builtin_calls(void) {}
+ static __always_inline void
+ callthunks_patch_module_calls(struct callthunk_sites *sites,
+ 			      struct module *mod) {}
+ static __always_inline void callthunks_module_free(struct module *mod) { }
++static __always_inline void *callthunks_translate_call_dest(void *dest)
++{
++	return dest;
++}
  #endif
+ 
+ #ifdef CONFIG_SMP
 --- a/arch/x86/kernel/callthunks.c
 +++ b/arch/x86/kernel/callthunks.c
-@@ -3,6 +3,7 @@
- #define pr_fmt(fmt) "callthunks: " fmt
- 
- #include <linux/btree.h>
-+#include <linux/debugfs.h>
+@@ -7,6 +7,7 @@
  #include <linux/memory.h>
  #include <linux/moduleloader.h>
  #include <linux/set_memory.h>
-@@ -32,6 +33,13 @@ static int __init debug_thunks(char *str
- 	return 1;
++#include <linux/static_call.h>
+ #include <linux/vmalloc.h>
+ 
+ #include <asm/alternative.h>
+@@ -492,6 +493,7 @@ static __init noinline void callthunks_i
+ 	if (WARN_ON_ONCE(ret))
+ 		return;
+ 
++	static_call_force_reinit();
+ 	thunks_initialized = true;
  }
- __setup("debug-callthunks", debug_thunks);
-+
-+DEFINE_PER_CPU(u64, __x86_call_count);
-+DEFINE_PER_CPU(u64, __x86_ret_count);
-+DEFINE_PER_CPU(u64, __x86_stuffs_count);
-+DEFINE_PER_CPU(u64, __x86_ctxsw_count);
-+EXPORT_SYMBOL_GPL(__x86_ctxsw_count);
-+
- #else
- #define prdbg(fmt, args...)	do { } while(0)
- #endif
-@@ -530,3 +538,46 @@ void callthunks_module_free(struct modul
+ 
+@@ -511,6 +513,41 @@ void __init callthunks_patch_builtin_cal
  	mutex_unlock(&text_mutex);
  }
- #endif /* CONFIG_MODULES */
-+
-+#if defined(CONFIG_CALL_THUNKS_DEBUG) && defined(CONFIG_DEBUG_FS)
-+static int callthunks_debug_show(struct seq_file *m, void *p)
+ 
++static bool is_module_init_dest(void *dest)
 +{
-+	unsigned long cpu = (unsigned long)m->private;
++	bool ret = false;
 +
-+	seq_printf(m, "C: %16llu R: %16llu S: %16llu X: %16llu\n,",
-+		   per_cpu(__x86_call_count, cpu),
-+		   per_cpu(__x86_ret_count, cpu),
-+		   per_cpu(__x86_stuffs_count, cpu),
-+		   per_cpu(__x86_ctxsw_count, cpu));
-+	return 0;
-+}
++#ifdef CONFIG_MODULES
++	struct module *mod;
 +
-+static int callthunks_debug_open(struct inode *inode, struct file *file)
-+{
-+	return single_open(file, callthunks_debug_show, inode->i_private);
-+}
-+
-+static const struct file_operations dfs_ops = {
-+	.open		= callthunks_debug_open,
-+	.read		= seq_read,
-+	.llseek		= seq_lseek,
-+	.release	= single_release,
-+};
-+
-+static int __init callthunks_debugfs_init(void)
-+{
-+	struct dentry *dir;
-+	unsigned long cpu;
-+
-+	dir = debugfs_create_dir("callthunks", NULL);
-+	for_each_possible_cpu(cpu) {
-+		void *arg = (void *)cpu;
-+		char name [10];
-+
-+		sprintf(name, "cpu%lu", cpu);
-+		debugfs_create_file(name, 0644, dir, arg, &dfs_ops);
-+	}
-+	return 0;
-+}
-+__initcall(callthunks_debugfs_init);
++	preempt_disable();
++	mod = __module_address((unsigned long)dest);
++	if (mod && within_module_init((unsigned long)dest, mod))
++		ret = true;
++	preempt_enable();
 +#endif
---- a/arch/x86/lib/retpoline.S
-+++ b/arch/x86/lib/retpoline.S
-@@ -202,13 +202,18 @@ EXPORT_SYMBOL(__x86_return_thunk)
- 	.align 64
- SYM_FUNC_START(__x86_return_skl)
- 	ANNOTATE_NOENDBR
--	/* Keep the hotpath in a 16byte I-fetch */
-+	/*
-+	 * Keep the hotpath in a 16byte I-fetch for the non-debug
-+	 * case.
-+	 */
-+	CALL_THUNKS_DEBUG_INC_RETS
- 	shlq	$5, PER_CPU_VAR(__x86_call_depth)
- 	jz	1f
- 	ANNOTATE_UNRET_SAFE
- 	ret
- 	int3
- 1:
-+	CALL_THUNKS_DEBUG_INC_STUFFS
- 	.rept	16
- 	ANNOTATE_INTRA_FUNCTION_CALL
- 	call	2f
++	return ret;
++}
++
++void *callthunks_translate_call_dest(void *dest)
++{
++	void *thunk;
++
++	lockdep_assert_held(&text_mutex);
++
++	if (!thunks_initialized || skip_addr(dest))
++		return dest;
++
++	thunk = btree_lookup64(&call_thunks, (unsigned long)dest);
++
++	if (thunk)
++		return thunk;
++
++	WARN_ON_ONCE(!is_kernel_inittext((unsigned long)dest) &&
++		     !is_module_init_dest(dest));
++	return dest;
++}
++
+ #ifdef CONFIG_MODULES
+ void noinline callthunks_patch_module_calls(struct callthunk_sites *cs,
+ 					    struct module *mod)
+--- a/arch/x86/kernel/static_call.c
++++ b/arch/x86/kernel/static_call.c
+@@ -34,6 +34,7 @@ static void __ref __static_call_transfor
+ 
+ 	switch (type) {
+ 	case CALL:
++		func = callthunks_translate_call_dest(func);
+ 		code = text_gen_insn(CALL_INSN_OPCODE, insn, func);
+ 		if (func == &__static_call_return0) {
+ 			emulate = code;
+--- a/include/linux/static_call.h
++++ b/include/linux/static_call.h
+@@ -162,6 +162,8 @@ extern void arch_static_call_transform(v
+ 
+ extern int __init static_call_init(void);
+ 
++extern void static_call_force_reinit(void);
++
+ struct static_call_mod {
+ 	struct static_call_mod *next;
+ 	struct module *mod; /* for vmlinux, mod == NULL */
+--- a/kernel/static_call_inline.c
++++ b/kernel/static_call_inline.c
+@@ -15,7 +15,18 @@ extern struct static_call_site __start_s
+ extern struct static_call_tramp_key __start_static_call_tramp_key[],
+ 				    __stop_static_call_tramp_key[];
+ 
+-static bool static_call_initialized;
++static int static_call_initialized;
++
++/*
++ * Must be called before early_initcall() to be effective.
++ */
++void static_call_force_reinit(void)
++{
++	if (WARN_ON_ONCE(!static_call_initialized))
++		return;
++
++	static_call_initialized++;
++}
+ 
+ /* mutex to protect key modules/sites */
+ static DEFINE_MUTEX(static_call_mutex);
+@@ -475,7 +486,8 @@ int __init static_call_init(void)
+ {
+ 	int ret;
+ 
+-	if (static_call_initialized)
++	/* See static_call_force_reinit(). */
++	if (static_call_initialized == 1)
+ 		return 0;
+ 
+ 	cpus_read_lock();
+@@ -490,11 +502,12 @@ int __init static_call_init(void)
+ 		BUG();
+ 	}
+ 
+-	static_call_initialized = true;
+-
+ #ifdef CONFIG_MODULES
+-	register_module_notifier(&static_call_module_nb);
++	if (!static_call_initialized)
++		register_module_notifier(&static_call_module_nb);
+ #endif
++
++	static_call_initialized = 1;
+ 	return 0;
+ }
+ early_initcall(static_call_init);
 

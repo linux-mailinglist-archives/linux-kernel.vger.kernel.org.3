@@ -2,121 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D12D576D59
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 12:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D09576D5E
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 13:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiGPK4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 06:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
+        id S229937AbiGPLAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 07:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGPK4L (ORCPT
+        with ESMTP id S229469AbiGPLAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 06:56:11 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5FACE2A
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 03:56:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657968969; x=1689504969;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=grnTWgXhzfLD9ND8ntiGCpjQ1qbsNzpWO6Ixj5ZvrMg=;
-  b=aaWa7WRxkWnXM8AB40vRtWRYjG47E/9UZJcCjVbK8MjZwALvvMnKBKVs
-   xAapx0WCeAXwXmqVHkE/cnxawWhakDzYNy5noOxsw32uadKUeXoudRmhj
-   qm8TUCs2Rcb9Vi32UHNq1gDHJxWgX4mA5NwqHWM2ru18eG4fsRCigQj6Q
-   0EQv17t7dLdhw9JcBW28pss1YwCVCz6q0JNn1jF6MfA4DiKfys3vxtchB
-   cDzB6Hol0vOeyXS4Iuylfi04Ui9mrCvDnsJqPukczma5p+67DjCeuDOAi
-   9wcs/yJwdQbuF/f95nRu+noBr+FTtXo432GT31UKS/ueers/vRSvqEuDv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="285991556"
-X-IronPort-AV: E=Sophos;i="5.92,276,1650956400"; 
-   d="scan'208";a="285991556"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 03:56:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,276,1650956400"; 
-   d="scan'208";a="624165384"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 16 Jul 2022 03:56:07 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCfSw-0001OC-ED;
-        Sat, 16 Jul 2022 10:56:06 +0000
-Date:   Sat, 16 Jul 2022 18:55:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [linux-stable-rc:linux-5.15.y 5373/8464]
- arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit
- (1024) in 'kvm_hv_hypercall'
-Message-ID: <202207161843.WnHPjB0l-lkp@intel.com>
+        Sat, 16 Jul 2022 07:00:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F0A51E3FF;
+        Sat, 16 Jul 2022 04:00:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9B8181063;
+        Sat, 16 Jul 2022 04:00:03 -0700 (PDT)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 407D03F73D;
+        Sat, 16 Jul 2022 04:00:00 -0700 (PDT)
+Date:   Sat, 16 Jul 2022 11:58:49 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Michal =?UTF-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>,
+        Michael Walle <michael@walle.cc>, linux-sunxi@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 1/2] mtd: spi-nor: When a flash memory is missing do not
+ report an error
+Message-ID: <20220716115849.75a27753@slackpad.lan>
+In-Reply-To: <2d4f200c-1ce3-19c6-179f-8d8e0545adfe@sholland.org>
+References: <701967b0c418db333c66b48d225df60aa9d03ead.1657826188.git.msuchanek@suse.de>
+        <d8de86aa0331be697fbef33d5ab2c57a@walle.cc>
+        <20220714205529.GE17705@kitsune.suse.cz>
+        <33abf7b84860049c4a22605578303ff2@walle.cc>
+        <20220714220744.GF17705@kitsune.suse.cz>
+        <20220715132006.077c90f8@donnerap.cambridge.arm.com>
+        <2d4f200c-1ce3-19c6-179f-8d8e0545adfe@sholland.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-head:   baefa2315cb1371486f6661a628e96fa3336f573
-commit: cb188e07105f2216f5efbefac95df4b6ce266906 [5373/8464] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220716/202207161843.WnHPjB0l-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=cb188e07105f2216f5efbefac95df4b6ce266906
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.15.y
-        git checkout cb188e07105f2216f5efbefac95df4b6ce266906
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+On Fri, 15 Jul 2022 21:28:57 -0500
+Samuel Holland <samuel@sholland.org> wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi,
 
-All warnings (new ones prefixed by >>):
+> On 7/15/22 7:20 AM, Andre Przywara wrote:
+> >>>> However, when the board is designed for a specific kind of device which
+> >>>> is not always present, and the kernel can detect the device, it is
+> >>>> perfectly fine to describe it.
+> >>>>
+> >>>> The alternative is to not use the device at all, even when present,
+> >>>> which is kind of useless.    
+> >>>
+> >>> Or let the bootloader update your device tree and disable the device
+> >>> if it's not there?    
+> > 
+> > Yes, this is what I was suggesting already: U-Boot can do the job, because
+> > a U-Boot build is device specific, and we can take certain risks that the
+> > generic and single-image kernel wants to avoid.
+> > In this case we know that there is a SPI flash footprint, and it does no
+> > harm in trying to check on CS0. So I was thinking about introducing a
+> > U-Boot Kconfig variable to probe for and potentially disable the SPI flash
+> > DT node. We would set this variable in defconfigs of boards with optional
+> > SPI flash.  
+> 
+> To support the "does no harm" assertion: the Allwinner Boot ROM will probe for
+> NOR flash (and possibly SPI NAND) on SPI0 + CS0 if no bootable MMC device is
+> found. So the board designer must already assume that JEDEC Read ID commands
+> will be sent over that bus.
+> 
+> >> But then it must be in the device tree?  
+> > 
+> > However this indeed means that the SPI flash DT node must be in and enabled
+> > in the DT, because we (try hard to) only use original Linux DT files, and
+> > DTs must have been reviewed through the kernel ML first. The U-Boot driver
+> > relies on the DT as well, so the official kernel DT copy would need to come
+> > with that node enabled. Ideally U-Boot would disable it, if needed, and
+> > the kernel error message would never appear.  
+> 
+> I don't think this works for newer SoCs where the Boot ROM supports both NOR and
+> SPI NAND. If the board is sold with the flash chip unpopulated, the user could
+> install either kind of chip. So we cannot statically assume which binding will
+> be used. We would need to add a node with the right compatible string after
+> probing for both in the bootloader.
 
->> arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Wframe-larger-than]
-   int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
-       ^
-   1 warning generated.
+If a *user* decides to *change* the board, it's up to the user
+to make sure the DT matches. Overlays are the typical answer, or people
+change the DT before they build U-Boot. If someone decides to hack
+their board, they have to take care of the respective DT description
+hack as well.
 
+This case here is about the *vendor* shipping different versions of the
+board, which I think is a different case. Technically we now would need
+two DTs: one with, one without the SPI flash node, and let the user
+decide which one to include in U-Boot at build time, depending on which
+version they have.
 
-vim +/kvm_hv_hypercall +2185 arch/x86/kvm/hyperv.c
+What I was suggesting is a U-Boot config switch, which would only be
+enabled on those boards where we have this situation (OPi Zero):
+That avoids dangerous situations (because we know it's safe *on this
+particular board*), and avoids the hassle of shipping two firmware
+versions.
 
-4ad81a91119df7 Vitaly Kuznetsov         2021-05-21  2184  
-e83d58874ba1de Andrey Smetanin          2015-07-03 @2185  int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
-e83d58874ba1de Andrey Smetanin          2015-07-03  2186  {
-4e62aa96d6e55c Vitaly Kuznetsov         2021-07-30  2187  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2188  	struct kvm_hv_hcall hc;
-bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2189  	u64 ret = HV_STATUS_SUCCESS;
-e83d58874ba1de Andrey Smetanin          2015-07-03  2190  
-e83d58874ba1de Andrey Smetanin          2015-07-03  2191  	/*
-e83d58874ba1de Andrey Smetanin          2015-07-03  2192  	 * hypercall generates UD from non zero cpl and real mode
-e83d58874ba1de Andrey Smetanin          2015-07-03  2193  	 * per HYPER-V spec
-e83d58874ba1de Andrey Smetanin          2015-07-03  2194  	 */
-b3646477d458fb Jason Baron              2021-01-14  2195  	if (static_call(kvm_x86_get_cpl)(vcpu) != 0 || !is_protmode(vcpu)) {
-e83d58874ba1de Andrey Smetanin          2015-07-03  2196  		kvm_queue_exception(vcpu, UD_VECTOR);
-0d9c055eaaf41b Andrey Smetanin          2016-02-11  2197  		return 1;
-e83d58874ba1de Andrey Smetanin          2015-07-03  2198  	}
-e83d58874ba1de Andrey Smetanin          2015-07-03  2199  
-
-:::::: The code at line 2185 was first introduced by commit
-:::::: e83d58874ba1de74c13d3c6b05f95a023c860d25 kvm/x86: move Hyper-V MSR's/hypercall code into hyperv.c file
-
-:::::: TO: Andrey Smetanin <asmetanin@virtuozzo.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Andre

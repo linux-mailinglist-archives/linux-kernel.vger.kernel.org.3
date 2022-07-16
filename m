@@ -2,73 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0362576C79
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 10:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D93576C7F
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 10:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbiGPIEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 04:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
+        id S231627AbiGPIHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 04:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbiGPIEO (ORCPT
+        with ESMTP id S229497AbiGPIG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 04:04:14 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070193DBD4
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 01:04:13 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LlLLJ30rDzlVmw;
-        Sat, 16 Jul 2022 16:02:32 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 16 Jul
- 2022 16:04:09 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linmiaohe@huawei.com>
-Subject: [PATCH] mm: remove obsolete comment in do_fault_around()
-Date:   Sat, 16 Jul 2022 16:03:59 +0800
-Message-ID: <20220716080359.38791-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
+        Sat, 16 Jul 2022 04:06:58 -0400
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45C43DBF7;
+        Sat, 16 Jul 2022 01:06:56 -0700 (PDT)
+Received: from grover.sesame ([133.106.62.13]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id 26G85cuH025507;
+        Sat, 16 Jul 2022 17:05:38 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 26G85cuH025507
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1657958739;
+        bh=Mish1EGS9OnRhZSErhkuI8lcWASUDHcpplqcuJEg0Yo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Bzx+XMKaxm97o5XUo6aMJRA8K/U3rT1KtcFSxBqphtBQfigNJJPOjbdno5i6U1BZ1
+         bRJP14MWq4P6BQY/d6px4oAz3HmVlWGKLNPmEXUVl9fELse86XGvHKRPvD2nVGJpaT
+         X4Ssg403z5UngUCg+MhW43RsiapxsZYWEjIsfwDvH8Xk+57kNF1GPE8oIMBn92gwjm
+         Mt5EWpqHswFp0X3edZyibvgYYbatCkl6ozBuZM0+8AEYESD0GP0/xqRQOLiw7H0a6h
+         wK5J0JKTfAGty3mWfC2QGXJRNFzGlbm2/c6lIoFn52akgCChd1uiuMkWLX6B1BUpGA
+         aeHJYv8EJmLyA==
+X-Nifty-SrcIP: [133.106.62.13]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kbuild: remove RCS_TAR_IGNORE
+Date:   Sat, 16 Jul 2022 17:05:30 +0900
+Message-Id: <20220716080530.119961-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 7267ec008b5c ("mm: postpone page table allocation until we
-have page to map"), do_fault_around is not called with page table lock
-held. Cleanup the corresponding comments.
+This reverts the 20-year-old commit [1], hard-coding '--exclude .git'
+instead of '--exclude CVS'.
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+RCS_TAR_IGNORE is used for packaging the mainline kernel, so I cannot
+imagine other version control systems would be used.
+
+I keep RCS_FIND_IGNORE because it is used for external modules, e.g.
+'make clean M=...', where git may not be used.
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=c2dd03a9e2d8bf508f6b3d9ee327c37a928b3351
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- mm/memory.c | 4 ----
- 1 file changed, 4 deletions(-)
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 14f0986af084..f671b2dce1fe 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -4458,10 +4458,6 @@ late_initcall(fault_around_debugfs);
-  * It uses vm_ops->map_pages() to map the pages, which skips the page if it's
-  * not ready to be mapped: not up-to-date, locked, etc.
-  *
-- * This function is called with the page table lock taken. In the split ptlock
-- * case the page table lock only protects only those entries which belong to
-- * the page table corresponding to the fault address.
-- *
-  * This function doesn't cross the VMA boundaries, in order to call map_pages()
-  * only once.
-  *
+ Makefile                 | 5 +----
+ scripts/Makefile.package | 2 +-
+ scripts/package/mkspec   | 2 +-
+ 3 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 80b19675ae91..8b166766b4ef 100644
+--- a/Makefile
++++ b/Makefile
+@@ -552,13 +552,10 @@ export KBUILD_AFLAGS_KERNEL KBUILD_CFLAGS_KERNEL
+ export PAHOLE_FLAGS
+ 
+ # Files to ignore in find ... statements
+-
++# (Take care of various version control systems for external modules?)
+ export RCS_FIND_IGNORE := \( -name SCCS -o -name BitKeeper -o -name .svn -o    \
+ 			  -name CVS -o -name .pc -o -name .hg -o -name .git \) \
+ 			  -prune -o
+-export RCS_TAR_IGNORE := --exclude SCCS --exclude BitKeeper --exclude .svn \
+-			 --exclude CVS --exclude .pc --exclude .hg --exclude .git
+-
+ # ===========================================================================
+ # Rules shared between *config targets and build targets
+ 
+diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+index 5017f6b2da80..d9c91ebcf2bf 100644
+--- a/scripts/Makefile.package
++++ b/scripts/Makefile.package
+@@ -45,7 +45,7 @@ if test "$(objtree)" != "$(srctree)"; then \
+ 	false; \
+ fi ; \
+ $(srctree)/scripts/setlocalversion --save-scmversion; \
+-tar -I $(KGZIP) -c $(RCS_TAR_IGNORE) -f $(2).tar.gz \
++tar -I $(KGZIP) -c --exclude=.git -f $(2).tar.gz \
+ 	--transform 's:^:$(2)/:S' $(TAR_CONTENT) $(3); \
+ rm -f $(objtree)/.scmversion
+ 
+diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+index 54906174bda2..97efc85b845c 100755
+--- a/scripts/package/mkspec
++++ b/scripts/package/mkspec
+@@ -29,7 +29,7 @@ fi
+ 
+ PROVIDES="$PROVIDES kernel-$KERNELRELEASE"
+ __KERNELRELEASE=$(echo $KERNELRELEASE | sed -e "s/-/_/g")
+-EXCLUDES="$RCS_TAR_IGNORE --exclude=*vmlinux* --exclude=*.mod \
++EXCLUDES="--exclude=.git --exclude=*vmlinux* --exclude=*.mod \
+ --exclude=*.o --exclude=*.ko --exclude=*.cmd --exclude=Documentation \
+ --exclude=.config.old --exclude=.missing-syscalls.d --exclude=*.s"
+ 
 -- 
-2.23.0
+2.34.1
 

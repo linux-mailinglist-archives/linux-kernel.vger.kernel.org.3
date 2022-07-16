@@ -2,111 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D8A576C6C
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 09:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C912E576C70
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 09:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiGPHvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 03:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
+        id S230315AbiGPHyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 03:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGPHvJ (ORCPT
+        with ESMTP id S229588AbiGPHx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 03:51:09 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B6E165B6;
-        Sat, 16 Jul 2022 00:51:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657957868; x=1689493868;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4kybbQfKyma5R7luiQh44ufZEmN4Kly6z7nCh2v/Ij4=;
-  b=YgXGnqbd14hbOoAiUKsPgrb+JahmMLYgdw4zVgKhKwBGLTIeziH1WbCm
-   VKWjveq9wk0axAq7KCcNDprGMGAKShpFWq1DDHvimBsB2rcY56m9rI74h
-   WOg2UYF/axBx+5+dGVcTTk5ozLEObGrkOsWLtuGN6w/XL1LgEOADfMqq+
-   zZiAMB6ijwmi+8KrysbOXWi1FIqJJLUy6hzQcKHjdS5+cT73NIvz0PPU/
-   iiRe9M+laVPcjwC6JvIY9hfjvCtNImFxsWko9iQVkDCIkxm7oFNRMQUeo
-   SGliBUGSCXuv3Da/1qv5gmxShRB6AHz9nLppRaxzIx/7vpQoLIlaQQQUD
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="284717619"
-X-IronPort-AV: E=Sophos;i="5.92,276,1650956400"; 
-   d="scan'208";a="284717619"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 00:51:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,276,1650956400"; 
-   d="scan'208";a="738917041"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Jul 2022 00:51:03 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCcZq-0001HI-NV;
-        Sat, 16 Jul 2022 07:51:02 +0000
-Date:   Sat, 16 Jul 2022 15:50:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, l.stach@pengutronix.de
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        paul.elder@ideasonboard.com, aford173@gmail.com,
-        Markus.Niebel@ew.tq-group.com, alexander.stein@ew.tq-group.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V2 6/6] arm64: dts: imx8mp: add VPU blk ctrl node
-Message-ID: <202207161526.eF3Q4LDD-lkp@intel.com>
-References: <20220713063653.2584488-7-peng.fan@oss.nxp.com>
+        Sat, 16 Jul 2022 03:53:58 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7FBFD14
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 00:53:55 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LlL7B4wQ6zFq1y;
+        Sat, 16 Jul 2022 15:52:54 +0800 (CST)
+Received: from dggphis33418.huawei.com (10.244.148.83) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 16 Jul 2022 15:53:52 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <cuigaosheng1@huawei.com>, <srinivas.kandagatla@linaro.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <gongruiqi1@huawei.com>,
+        <wangweiyang2@huawei.com>
+Subject: [PATCH -next] nvmem: core: Fix memleak in nvmem_register()
+Date:   Sat, 16 Jul 2022 15:53:52 +0800
+Message-ID: <20220716075352.2622809-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713063653.2584488-7-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Peng,
+dev_set_name will alloc memory for nvmem->dev.kobj.name in
+nvmem_register, when nvmem_validate_keepouts failed, nvmem's
+memory will be freed and return, but nobody will free memory
+for nvmem->dev.kobj.name, there will be memleak, so using
+kfree_const(nvmem->dev.kobj.name) to fix it.
 
-Thank you for the patch! Yet something to improve:
+Fixes: de0534df9347 ("nvmem: core: fix error handling while validating keepout regions")
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+---
+ drivers/nvmem/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-[auto build test ERROR on shawnguo/for-next]
-[also build test ERROR on linus/master v5.19-rc6 next-20220715]
-[cannot apply to robh/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/imx-add-i-MX8MP-hdmi-blk-ctrl-hdcp-hrv-and-vpu-blk-ctrl/20220713-143746
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-config: arm64-buildonly-randconfig-r003-20220714 (https://download.01.org/0day-ci/archive/20220716/202207161526.eF3Q4LDD-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e61b9c556267086ef9b743a0b57df302eef831b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/be95b11efe846d01a6f40eda8a8c7750f53155e4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peng-Fan-OSS/imx-add-i-MX8MP-hdmi-blk-ctrl-hdcp-hrv-and-vpu-blk-ctrl/20220713-143746
-        git checkout be95b11efe846d01a6f40eda8a8c7750f53155e4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm64/boot/dts/freescale/imx8mp.dtsi:1181.26-27 syntax error
-   FATAL ERROR: Unable to parse input tree
-
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 1e3c754efd0d..6c75c9afa5f3 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -833,6 +833,7 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ 		rval = nvmem_validate_keepouts(nvmem);
+ 		if (rval) {
+ 			ida_free(&nvmem_ida, nvmem->id);
++			kfree_const(nvmem->dev.kobj.name);
+ 			kfree(nvmem);
+ 			return ERR_PTR(rval);
+ 		}
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

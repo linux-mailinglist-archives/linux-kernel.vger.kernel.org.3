@@ -2,166 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D58B57713A
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 21:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2371857713C
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 21:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbiGPTnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 15:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
+        id S231651AbiGPTpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 15:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbiGPTnv (ORCPT
+        with ESMTP id S229815AbiGPTph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 15:43:51 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E789B65D0
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 12:43:49 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id va17so14624935ejb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 12:43:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
-        h=from:content-transfer-encoding:mime-version:subject:date:references
-         :to:in-reply-to:message-id;
-        bh=H/T5SCRTZnvNt4JlT7zW83Ocmb/ZGFQfFEQNlDPUCI8=;
-        b=n9MXmbtnvdtjnx5J2nrdopHTJx07KpjcmhDzg7sg6Qf5Y4FALt6HjxT8YXyIeYVkmt
-         ufyrYXmuOYn1BpWZfcyYRtOz8/BOA5iemqNLy5SeSaDz26yp0/HgPHwJ5d530GTfovMC
-         l7XyKXc6Ma+vlFjc+SQw1jdgT2mLgpkPRusTZ3H9bGSOkTgCiXtreMkEvGtmcmv9zf3I
-         ti3l8jlLXSNLR34055wrdpBMguTfCMHh+fGGrQ05IbxjyFWlfxYSM5eSUisfmpQUUgeR
-         YQ82luhh7y69WCpF4pMnpTTtvVzAwUgTVi4cwrNFcM46vAhZ1odde3p05bNKm3d0UHGc
-         +f9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:content-transfer-encoding:mime-version
-         :subject:date:references:to:in-reply-to:message-id;
-        bh=H/T5SCRTZnvNt4JlT7zW83Ocmb/ZGFQfFEQNlDPUCI8=;
-        b=501ZMbW8eDGr10KGl4ABttM91Uk63dC3Iw7QOKgplMmiZsQsZ3GqKcDqnkA2kvVO5o
-         OfaOngu9PbCT62GvRtZc6Nes3UOhDjlWcPqyf3zTviTqlAhIhvvBWmycnaE1NNirRG53
-         Ad7HiyxYqHkbxTyT9dK7Vbn7n+HG+436No9HBHhNJedICXmXNeEt+WTaRU4EnB0kcj3q
-         zCDx+hcsXcayMSyRgfGPc2+gaJO22Z0t/GjGWTaLgenSFuXf5XUsOOgZBlnyTjIrnXP6
-         ZCLm9PPFsEXSk6DEpJAHxLy7qh0Uc/WY+R2sz/2pvZzRJUo1rY41Cxx6wMu/wPkAVz13
-         uxrA==
-X-Gm-Message-State: AJIora9qx+lZSI14Lj1bGBSAsHG35wDfG7LqtpNJZ4YpmYBjcp5FgoSO
-        b7nipueRTnVtU3YY+BG5HXSrNw==
-X-Google-Smtp-Source: AGRyM1tfaw6taoKWBs3jjagj6BkI+UEYOKsGCFybdoJ0w7ESh2k81dmaxHS3p8Oue9CB1K3uUXCiaA==
-X-Received: by 2002:a17:906:2da:b0:712:14b:62da with SMTP id 26-20020a17090602da00b00712014b62damr19317613ejk.351.1658000628431;
-        Sat, 16 Jul 2022 12:43:48 -0700 (PDT)
-Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
-        by smtp.gmail.com with ESMTPSA id q25-20020a1709066ad900b0072b2ef2757csm3489152ejs.180.2022.07.16.12.43.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 16 Jul 2022 12:43:47 -0700 (PDT)
-From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-Content-Type: text/plain;
-        charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: [PATCH v5] arm64: dts: rockchip: Fix SD card init on rk3399-nanopi4
-Date:   Sat, 16 Jul 2022 21:43:46 +0200
-References: <C639AD88-77A1-4485-BAEA-2FF8FC15A844@kohlschutter.com>
- <12878108.O9o76ZdvQC@diego> <103b714c-b07c-f016-1062-84bd94786b22@arm.com>
- <9AF1E75F-5947-49B0-887D-82C426527B99@kohlschutter.com>
- <590f7a08-a6ca-be54-4254-363343642a52@arm.com>
- <A6B896E5-CD25-4441-B6A5-0BE1FA284B2C@kohlschutter.com>
- <A9634366-A012-43D2-B253-8BB9BF6005C7@kohlschutter.com>
- <CAGb2v65Ehbu1wrib2CzF1fDZuD3fHZQDhKfVusyUF9KnxTvi+Q@mail.gmail.com>
- <5ca9bd94-54d9-04f8-0098-a56ffb6f5fe1@arm.com>
- <502b3fbe-3077-407e-6010-a8cb3ffce7d6@arm.com>
- <449292CA-CE60-4B90-90F7-295FBFEAB3F8@kohlschutter.com>
- <73F9AED0-D2A8-4294-B6E1-1B92D2A36529@kohlschutter.com>
- <115AD6A4-021B-4879-BFB5-BC7689A0203E@kohlschutter.com>
- <17a4c6f6-d79c-a7b2-860f-e5944b778f9f@arm.com>
- <9405b97a-6758-ad4e-ccff-eed072096539@arm.com>
- <BF7CC548-88C9-4889-8A41-8E99C31EF81C@kohlschutter.com>
- <daf3b61c-d886-98eb-0443-de233d742041@arm.com>
- <CDF716FC-F6CF-44A9-84D9-B48C46E6AC2C@kohlschutter.com>
- <3912A668-9F73-40FD-8993-5060F632238A@kohlschutter.com>
-To:     Robin Murphy <robin.murphy@arm.com>, wens@kernel.org,
-        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>
-In-Reply-To: <3912A668-9F73-40FD-8993-5060F632238A@kohlschutter.com>
-Message-Id: <7E830C9F-BB5D-4EFC-B3F4-1C580E9326A3@kohlschutter.com>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Sat, 16 Jul 2022 15:45:37 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64C11DA69;
+        Sat, 16 Jul 2022 12:45:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658000735; x=1689536735;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZN0hQdqAgRa63AaJQs7N1RWNIWr04yZNa39M13Q1EYk=;
+  b=hlVTeqmO6e34+ERzwGPIz6NAFo7ca+WrKySOHmnqX/JlUgmjwwXuTE4S
+   gcOGVQHKZklMuBlz4Bws/MpAGYlRSDBTDIekvY57RrzIjXgBGcgZ2rSCB
+   JOtShR8yQfzzrOI5x4arBl3Gg507EF/vdMcqbmjwMwds6VWtUmJGc9iYs
+   9TAm9TvzMwsuV9ELfy371A60sbg5ptW6c87az4R3fliBGVR4vEGoxUjn/
+   hDQtj2r6wfajtsYSxSWmEvDw30JAOP+u7rZAObS9zKvWJ+H3sEnRcpy0/
+   6WjmWagbTayghmAJ/nKdllp3GUhQ082CQEDmH0xSgmCJ//RcIy0UYjF7L
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="283567185"
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="283567185"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 12:45:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="923882314"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Jul 2022 12:45:34 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCnjJ-00023P-Lg;
+        Sat, 16 Jul 2022 19:45:33 +0000
+Date:   Sun, 17 Jul 2022 03:44:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stephen Kitt <steve@sk2.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     kbuild-all@lists.01.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephen Kitt <steve@sk2.org>
+Subject: Re: [PATCH 5/5] docs: sysctl/fs: re-order, prettify
+Message-ID: <202207170303.ThkAWAGX-lkp@intel.com>
+References: <20220712172619.359052-5-steve@sk2.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712172619.359052-5-steve@sk2.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mmc/SD-card initialization may fail on NanoPi R4S with
-"mmc1: problem reading SD Status register" /
-"mmc1: error -110 whilst initialising SD card"
-either on cold boot or after a reboot.
+Hi Stephen,
 
-Moreover, the system would also sometimes hang upon reboot.
+Thank you for the patch! Perhaps something to improve:
 
-This is caused by vcc3v0-sd's "regulator-always-on", which triggers
-an erroneous double-initialization of the regulator. This causes
-voltage fluctuations that can, depending on timing, prevent the
-SD card from initializing correctly.
+[auto build test WARNING on 50fd82b3a9a9335df5d50c7ddcb81c81d358c4fc]
 
-Adding some liberal delay via "off-on-delay-us" is ineffective since
-that codepath is skipped as long "regulator-always-on" is set.
+url:    https://github.com/intel-lab-lkp/linux/commits/Stephen-Kitt/docs-sysctl-remove-references-to-inode-max/20220713-014344
+base:   50fd82b3a9a9335df5d50c7ddcb81c81d358c4fc
+reproduce: make htmldocs
 
-Removing "regulator-always-on" alone is not sufficient because that
-would allow the system to set GPIO0_A1 to LOW upon reboot, which may
-cause the system to hang.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-In order to allow the system to set GPIO0_A1 to HIGH upon initialization
-but prevent it from changing it back to LOW, this patch increases the
-usage count of vcc3v0-sd from 1 to 2, whereas the additional reference,
-"vcc1v8_s3", is marked as "always-on", causing permanent retention.
+All warnings (new ones prefixed by >>):
 
-As a welcome side-effect, this change allows the SD card voltage to be
-set back to 3.0V upon reboot, allowing bootloaders to use the card right
-away, obsoleting further patching.
+>> Documentation/admin-guide/sysctl/fs.rst:260: WARNING: undefined label: core_pattern (if the link has no caption the label must precede a section header)
 
-Signed-off-by: Christian Kohlsch=C3=BCtter <christian@kohlschutter.com>
----
- arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+vim +260 Documentation/admin-guide/sysctl/fs.rst
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi =
-b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-index 8c0ff6c96e03..38507a6e3046 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-@@ -61,7 +61,17 @@ vcc1v8_s3: vcc1v8-s3 {
- 		regulator-min-microvolt =3D <1800000>;
- 		regulator-max-microvolt =3D <1800000>;
- 		regulator-name =3D "vcc1v8_s3";
--		vin-supply =3D <&vcc_1v8>;
-+
-+		/*
-+		 * Workaround to skip setting gpio0 RK_PA1 to LOW upon =
-reboot,
-+		 * which may freeze the system.
-+		 *
-+		 * Adding a reference to vcc3v0_sd increases its =
-num_users
-+		 * count to 2, preventing deactivation since this =
-regulator is
-+		 * marked "always-on".
-+		 */
-+		// vin-supply =3D <&vcc_1v8>; // actual supply
-+		vin-supply =3D <&vcc3v0_sd>;
- 	};
-=20
- 	vcc3v0_sd: vcc3v0-sd {
-@@ -70,7 +80,6 @@ vcc3v0_sd: vcc3v0-sd {
- 		gpio =3D <&gpio0 RK_PA1 GPIO_ACTIVE_HIGH>;
- 		pinctrl-names =3D "default";
- 		pinctrl-0 =3D <&sdmmc0_pwr_h>;
--		regulator-always-on;
- 		regulator-min-microvolt =3D <3000000>;
- 		regulator-max-microvolt =3D <3000000>;
- 		regulator-name =3D "vcc3v0_sd";
---=20
-2.36.1
+   249	
+   250	=   ==========  ===============================================================
+   251	0   (default)	Traditional behaviour. Any process which has changed
+   252			privilege levels or is execute only will not be dumped.
+   253	1   (debug)	All processes dump core when possible. The core dump is
+   254			owned by the current user and no security is applied. This is
+   255			intended for system debugging situations only.
+   256			Ptrace is unchecked.
+   257			This is insecure as it allows regular users to examine the
+   258			memory contents of privileged processes.
+   259	2   (suidsafe)	Any binary which normally would not be dumped is dumped
+ > 260			anyway, but only if the ``core_pattern`` kernel sysctl (see
+   261			:ref:`Documentation/admin-guide/sysctl/kernel.rst <core_pattern>`)
+   262			is set to
+   263			either a pipe handler or a fully qualified path. (For more
+   264			details on this limitation, see CVE-2006-2451.) This mode is
+   265			appropriate when administrators are attempting to debug
+   266			problems in a normal environment, and either have a core dump
+   267			pipe handler that knows to treat privileged core dumps with
+   268			care, or specific directory defined for catching core dumps.
+   269			If a core dump happens without a pipe handler or fully
+   270			qualified path, a message will be emitted to syslog warning
+   271			about the lack of a correct setting.
+   272	=   ==========  ===============================================================
+   273	
+   274	
+   275	
 
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

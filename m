@@ -2,92 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436A5576CB6
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAE7576CBC
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiGPJLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 05:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
+        id S231776AbiGPJM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 05:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiGPJLj (ORCPT
+        with ESMTP id S229571AbiGPJMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 05:11:39 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589301D0FF
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 02:11:38 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id D9C4222239;
-        Sat, 16 Jul 2022 11:11:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657962696;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yQGL23JsPeSeAEQf+zFFrbIZAmWH8zEFfmNMuLuPhpc=;
-        b=adivtjJ8EP/gIxSf5jgl/wyTKIUeMTPJctYdpQUagTsYiY/I1+k09dm4e8QVscwkFtWpm+
-        we9xa/wMvvkraVLkJjqGs+PspYY7dJflaK+RM5eSb6N0qX+4xNhnv1EWOyXJztxj4c3Fhq
-        h9nP3QjkbhljrVJjDoG+Lapm6FDmjYQ=
+        Sat, 16 Jul 2022 05:12:53 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5872C1D0FF
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 02:12:51 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id p6so8033532ljc.8
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 02:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=3QZVtFqHuiCcgoTBA6HrO6NXKNNvRGFtA2MSu5wIdn4=;
+        b=dbbs3X4fgMBMXFvWiNCEDftamKZ1RI3KOuv75zfbBp1d8JFb8UxgsU1xs5xJLewqku
+         4dXIjgzUHwELozlQ2KlIGII7KGxu/+lcUbcCNlaGk1UXPlr5OP/nVV09iWKZ7aC2NalV
+         kzu7gpUkPLOy5sq6SaGf6GMaFN2Sd/9kfLlXGaicexa++GWAYVhvYXOOw0lsllaeC9El
+         wOYXN6oMtMxSPylytkP3IGB+2Kq9de8n/nUtn9aCMkkxJ+CWg+j5rjW0zbH0tYg++9sU
+         ufMK1zHELV//6pLiRjw2wOxoQ4hSBdKZEvIF+SeAI6o0UykrIFGA1SDYr+hkhzIsSvXz
+         dEjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=3QZVtFqHuiCcgoTBA6HrO6NXKNNvRGFtA2MSu5wIdn4=;
+        b=hcy19mqHBFuK7eMs3iw6FdARMaHgSIa1WKy8znbhvBhHalBPeV6boQftJRikj+0WwQ
+         GsHtH4Uj0C80hgiwRsEVXyS4QjUG4sqkeM+Z57bRlny/idVdMnzEzs5SiIWekGjSj8Ni
+         9elTutNMTRo6qrsWfvynTw+WP5dIcORm/GkWDB7tCA/UPAHb1Yv3DUX315+AetFxkxam
+         EIRyh7kCi1oFyQaI7zZipZFvyDwo2PS9YNTMivKUNVE0onVOqulRdVgCcx6KwPOsETOF
+         uXS/w8hHRprMdPLcCO1VzEVOguX1qC7PpOGxEY9AysdHgJOSlkBNyqnkgZjsellE7+0O
+         YP6w==
+X-Gm-Message-State: AJIora8d/UoEduhHE+LK+kpv14voPI/bBlfdAky8dv8OkC4FxJs2G9WW
+        faeO9yInh99ecMcj5b4SFa+Wl8JldPftr6Fe/w==
+X-Google-Smtp-Source: AGRyM1upNDloBaniyi/j3Rv19qKaeBnKgqtHrM/AqseVD7CcIUvnnXp3WdY2eHY/m7wN8RPHsF1KnDpdMNxFXSKG9PE=
+X-Received: by 2002:a2e:bc17:0:b0:25d:50b7:74fa with SMTP id
+ b23-20020a2ebc17000000b0025d50b774famr8666342ljf.444.1657962769637; Sat, 16
+ Jul 2022 02:12:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Sat, 16 Jul 2022 11:11:35 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Graeme Gregory <quic_ggregory@quicinc.com>,
-        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] mtd: spi-nor: winbond: add support for
- W25Q512NW-IQ
-In-Reply-To: <20220716000643.3541839-2-quic_jaehyoo@quicinc.com>
-References: <20220716000643.3541839-1-quic_jaehyoo@quicinc.com>
- <20220716000643.3541839-2-quic_jaehyoo@quicinc.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <52fb683e27b3208d07d9f9d1ab44148d@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Sat, 16 Jul 2022 17:12:38 +0800
+Message-ID: <CAMhUBjm2KOZZj=M3=yLvLm4QcNYpOTa+2_dPcHr7nHm4GE73DA@mail.gmail.com>
+Subject: [BUG] ASoC: nau8821: Found a bug when removing the module
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        wtli@nuvoton.com, steve@sk2.org, Vijendar.Mukunda@amd.com
+Cc:     alsa-devel@alsa-project.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-Am 2022-07-16 02:06, schrieb Jae Hyun Yoo:
-> Add support for Winbond W25Q512NW-IQ/IN
-> 
-> Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-> Link: 
-> https://www.winbond.com/resource-files/W25Q512NW%20RevB%2007192021.pdf
-> Reviewed-by: Cédric Le Goater <clg@kaod.org>
+I found a bug in the driver nau8821.
 
-Thanks again for finding the real issue here!
+When removing the module, I got a warning:
 
-Reviewed-by: Michael Walle <michael@walle.cc>
+[   64.226442] nau8821 0-0010: remove
+[   64.227621] ------------[ cut here ]------------
+[   64.227918] WARNING: CPU: 5 PID: 243 at kernel/irq/devres.c:144
+devm_free_irq+0x80/0x8c
+[   64.235307] Call trace:
+[   64.235501]  devm_free_irq+0x80/0x8c
+[   64.235746]  nau8821_i2c_remove+0x28/0x3c [snd_soc_nau8821]
+[   64.236982]  i2c_device_remove+0xcc/0xf8
+[   64.237173]  device_release_driver_internal+0x208/0x368
+[   64.237406]  driver_detach+0xd8/0x12c
+[   64.237583]  bus_remove_driver+0x90/0xd0
+[   64.237768]  driver_unregister+0x3c/0x6c
+[   64.237952]  i2c_del_driver+0x54/0x74
+[   64.238127]  cleanup_module+0x1c/0x1d0 [snd_soc_nau8821]
 
-But also see below.
+regards,
 
-> $ hexdump
-> /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/sfdp
-> 0000000 4653 5044 0106 ff01 0600 1001 0080 ff00
-> 0000010 0084 0201 00d0 ff00 ffff ffff ffff ffff
-> 0000020 6f00 7074 7420 7365 ff74 ffff ffff ffff
-
-Did you noticed your SFDP data changed compared to:
-https://lore.kernel.org/linux-mtd/20220710145721.1207157-1-quic_jaehyoo@quicinc.com/
-
-Which makes me wonder if you ever had an offset 0
-with the OTP_INFO(). For Winbond the first OTP
-region is actually the SFDP.. So you might
-accidentally modified it.
-
--michael
+Zheyu Ma

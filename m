@@ -2,230 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8467576D57
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 12:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38FE576D58
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 12:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiGPKuP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 16 Jul 2022 06:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S229865AbiGPKvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 06:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGPKuN (ORCPT
+        with ESMTP id S229469AbiGPKvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 06:50:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 718C11261D;
-        Sat, 16 Jul 2022 03:50:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C9931063;
-        Sat, 16 Jul 2022 03:50:11 -0700 (PDT)
-Received: from slackpad.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E723F3F73D;
-        Sat, 16 Jul 2022 03:50:07 -0700 (PDT)
-Date:   Sat, 16 Jul 2022 11:49:04 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Michal =?UTF-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>
-Cc:     Michael Walle <michael@walle.cc>, linux-sunxi@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH 1/2] mtd: spi-nor: When a flash memory is missing do not
- report an error
-Message-ID: <20220716114904.4d058637@slackpad.lan>
-In-Reply-To: <20220716075421.GJ17705@kitsune.suse.cz>
-References: <701967b0c418db333c66b48d225df60aa9d03ead.1657826188.git.msuchanek@suse.de>
-        <d8de86aa0331be697fbef33d5ab2c57a@walle.cc>
-        <20220714205529.GE17705@kitsune.suse.cz>
-        <33abf7b84860049c4a22605578303ff2@walle.cc>
-        <20220714220744.GF17705@kitsune.suse.cz>
-        <20220715132006.077c90f8@donnerap.cambridge.arm.com>
-        <20220716075421.GJ17705@kitsune.suse.cz>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+        Sat, 16 Jul 2022 06:51:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBFD1261D
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 03:51:20 -0700 (PDT)
+Date:   Sat, 16 Jul 2022 10:51:17 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1657968679;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0ToVnBR8bVfwYff6uOctrSKz9LEqnHLVISbMa8FmLdY=;
+        b=voCQ6g8S1traEjaju7S1pW9SIMzktpb94gWgQIvr9ePXf3rho2ApjmpAU9A9jWimYTZD1e
+        IQSXgbHKjzQhQBzIMEjeV3J5cPLYDpnqhDu1Q3y9snzdWvbUmsXgRR5x8PqA/wA7i40Ist
+        T0bWek6kMiR6WHxr/VAblJgQDH9JhJBv8g1FWJTKqvKUwctLrHCzLGabQrKOUC2YBmHtil
+        YF7xrFEfD+iOaa9r87631xlfuzzGujCiEgZF+CO0vtJKg6Gf2DVabS+jpFXTGCqfUqrC/V
+        vhwKXJr1P/7Upo7qHOHiEShAzMutG1My7aNDpVqHDgMgo4297yrCrwI+wShxaQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1657968679;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0ToVnBR8bVfwYff6uOctrSKz9LEqnHLVISbMa8FmLdY=;
+        b=BS76s1S+JeZlFvFCb6oUymYcnogO9pTIdaoJ63E6ouwi/qpKoN00zpFxW/IJ19efWCcyvt
+        ociKcaxfbwWvA4DQ==
+From:   "irqchip-bot for Michael Walle" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] pinctrl: ocelot: Make irq_chip immutable
+Cc:     Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220706151553.1580790-2-michael@walle.cc>
+References: <20220706151553.1580790-2-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <165796867790.15455.12863870206141352541.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 16 Jul 2022 09:54:21 +0200
-Michal Suchánek <msuchanek@suse.de> wrote:
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Hi,
+Commit-ID:     51ff93923e21ed2862e83f208706e3ca31d6f409
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/51ff93923e21ed2862e83f208706e3ca31d6f409
+Author:        Michael Walle <michael@walle.cc>
+AuthorDate:    Wed, 06 Jul 2022 17:15:53 +02:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Sat, 16 Jul 2022 11:47:45 +01:00
 
-> On Fri, Jul 15, 2022 at 01:20:06PM +0100, Andre Przywara wrote:
-> > On Fri, 15 Jul 2022 00:07:44 +0200
-> > Michal Suchï¿½nek <msuchanek@suse.de> wrote:
-> > 
-> > Hi,
-> >   
-> > > On Thu, Jul 14, 2022 at 11:51:56PM +0200, Michael Walle wrote:  
-> > > > Am 2022-07-14 22:55, schrieb Michal Suchï¿½nek:    
-> > > > > On Thu, Jul 14, 2022 at 09:41:48PM +0200, Michael Walle wrote:    
-> > > > > > Hi,
-> > > > > > 
-> > > > > > Am 2022-07-14 21:19, schrieb Michal Suchanek:    
-> > > > > > > It is normal that devices are designed with multiple types of storage,
-> > > > > > > and only some types of storage are present.
-> > > > > > >
-> > > > > > > The kernel can handle this situation gracefully for many types of
-> > > > > > > storage devices such as mmc or ata but it reports and error when spi
-> > > > > > > flash is not present.
-> > > > > > >
-> > > > > > > Only print a notice that the storage device is missing when no response
-> > > > > > > to the identify command is received.
-> > > > > > >
-> > > > > > > Consider reply buffers with all bits set to the same value no response.    
-> > > > > > 
-> > > > > > I'm not sure you can compare SPI with ATA and MMC. I'm just speaking
-> > > > > > of
-> > > > > > DT now, but there, for ATA and MMC you just describe the controller
-> > > > > > and
-> > > > > > it will auto-detect the connected storage. Whereas with SPI you
-> > > > > > describe    
-> > > > > 
-> > > > > Why does mmc assume storage and SDIO must be descibed? Why the special
-> > > > > casing?    
-> > > > 
-> > > > I can't follow you here. My SDIO wireless card just works in an SD
-> > > > slot and doesn't have to be described.  
-> > 
-> > I think the difference is that MMC (so also SDIO) is a discoverable bus,
-> > whereas SPI is not.
-> > It's conceptually dangerous to blindly probe for SPI chips, and the kernel
-> > tries to stay out of guessing games, in general, and leaves that up to
-> > firmware.  
-> 
-> There is no guessing game involved. The SPI NOR is fully described in
-> the device tree. The only missing bit of information is if it is mounted
-> on this particular board. That can be brobed safely and reliably.
+pinctrl: ocelot: Make irq_chip immutable
 
-For this particular board: maybe. In general: no. I don't think the
-kernel is the place to make those decisions. As Michael said: if the DT
-explicitly says there is a SPI flash, and there isn't, it's an error.
+Since recently, the kernel is nagging about mutable irq_chips:
 
-> > > > > > both the controller and the flash. So I'd argue that your hardware
-> > > > > > description is wrong if it describes a flash which is not present.    
-> > > > > 
-> > > > > At any rate the situation is the same - the storage may be present
-> > > > > sometimes. I don't think assuming some kind of device by defualt is a
-> > > > > sound practice.    
-> > > > 
-> > > > Where is the assumption when the DT tells you there is a flash
-> > > > on a specific chip select but actually there it isn't. Shouldn't
-> > > > the DT then be fixed?    
-> > > 
-> > > The DT says there isn't a flash on a specific chip select when there is.
-> > > Shouldn't that be fixed?
-> > >   
-> > > > Maybe I don't understand your problem. What are you trying to
-> > > > solve? I mean this just demotes an error to an info message.  
-> > 
-> > The particular problem at hand is that on those cheap development boards
-> > SPI flash is somewhat optional. The PCB often has the footprint for it, but
-> > sometimes it is not populated, because the vendor wants to save pennies.
-> > 
-> > In this case (OrangePi Zero) there was no SPI chip soldered on the first
-> > batches, but later boards are shipped with a flash chip. The footprint is
-> > on every version, and I for instance soldered a chip on an early board.
-> >   
-> > > Many boards provide multiple storage options - you get a PCB designed to
-> > > carry different kinds of storage, some may be socketed, some can be
-> > > soldered on in some production batches and not others.
-> > > 
-> > > The kernel can handle this for many kinds of storage but not SPI flash.
-> > > 
-> > > I don't see any reason why SPI flash should be a second class storage.  
-> > 
-> > See above, SPI is not discoverable, you need to know about the slave
-> > devices.  
-> 
-> Which we do, from the device tree. Except the device is disabled in the
-> device tree so the kernel does not probe it.
+[    2.593426] gpio gpiochip0: (ocelot-gpio): not an immutable chip, please consider fixing it!
 
-That doesn't count, status = "disable" has the same effect as the node
-removed, the kernel doesn't use it. It's disabled because it's broken,
-or the board catches fires when it's accessed, or the SPI flash is
-secure only, and the kernel receives an SError when accessing it and
-panics. We don't care exactly why, the kernel just skips it.
+Make it const, flag it as IRQCHIP_IMMUTABLE, add the new helper
+functions and call the appropriate gpiolib functions.
 
-In this case having the node in DT and marking it as disabled was a
-concession to users, to allow simple enablement, like this:
-=> fdt addr $fdtcontroladdr
-=> fdt set /soc/spi status "okay"
-(on the U-Boot prompt)
+Signed-off-by: Michael Walle <michael@walle.cc>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220706151553.1580790-2-michael@walle.cc
+---
+ drivers/pinctrl/pinctrl-ocelot.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-And it's actually a hint that U-Boot can do this automatically, only we
-need it the other way around then ("okay" from the beginning, switching
-to "disabled" if needed).
-
-> > > > > However, when the board is designed for a specific kind of device which
-> > > > > is not always present, and the kernel can detect the device, it is
-> > > > > perfectly fine to describe it.
-> > > > > 
-> > > > > The alternative is to not use the device at all, even when present,
-> > > > > which is kind of useless.    
-> > > > 
-> > > > Or let the bootloader update your device tree and disable the device
-> > > > if it's not there?    
-> > 
-> > Yes, this is what I was suggesting already: U-Boot can do the job, because
-> > a U-Boot build is device specific, and we can take certain risks that the
-> > generic and single-image kernel wants to avoid.  
-> 
-> For some cases this may be warranted.
-> 
-> However, in this case no additional device-specific knowledge beyond
-> what is alrready specified in the device tree is needed.
-> 
-> A generic kernel can probe the device just fine.
-
-The fact that sometimes there is a SPI flash and sometimes not, is a
-pity device specific problem. The kernel does not have and does not
-want to have any knowledge of this particular problem: we have the DT
-to tell us exactly what devices are there. Firmware is encouraged to
-tweak the DT, if needed.
-
-> > In this case we know that there is a SPI flash footprint, and it does no
-> > harm in trying to check on CS0. So I was thinking about introducing a
-> > U-Boot Kconfig variable to probe for and potentially disable the SPI flash
-> > DT node. We would set this variable in defconfigs of boards with optional
-> > SPI flash.
-> >   
-> > > But then it must be in the device tree?  
-> > 
-> > However this indeed means that the SPI flash DT node must be in and enabled
-> > in the DT, because we (try hard to) only use original Linux DT files, and
-> > DTs must have been reviewed through the kernel ML first. The U-Boot driver
-> > relies on the DT as well, so the official kernel DT copy would need to come
-> > with that node enabled. Ideally U-Boot would disable it, if needed, and
-> > the kernel error message would never appear.  
-> 
-> Yes, that's a good point - even if it's decided that the kernel will not
-> handle this, the device tree still needs to contain the node enabled for
-> the bootloader to handle the device, anyway.
-
-Yes, and I am happy to support that case when we send a patch to change
-the DT in the kernel repo.
-But I don't think we need an actual kernel patch to address this
-problem.
-
-Cheers,
-Andre
-
-P.S. I just see that status = "disabled" is in the wrong node, it
-should be in the SPI slave node, as the controller and the SPI bus
-itself are fine.
+diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
+index 5f4a8c5..425c1a9 100644
+--- a/drivers/pinctrl/pinctrl-ocelot.c
++++ b/drivers/pinctrl/pinctrl-ocelot.c
+@@ -1761,6 +1761,7 @@ static void ocelot_irq_mask(struct irq_data *data)
+ 
+ 	regmap_update_bits(info->map, REG(OCELOT_GPIO_INTR_ENA, info, gpio),
+ 			   BIT(gpio % 32), 0);
++	gpiochip_disable_irq(chip, gpio);
+ }
+ 
+ static void ocelot_irq_unmask(struct irq_data *data)
+@@ -1769,6 +1770,7 @@ static void ocelot_irq_unmask(struct irq_data *data)
+ 	struct ocelot_pinctrl *info = gpiochip_get_data(chip);
+ 	unsigned int gpio = irqd_to_hwirq(data);
+ 
++	gpiochip_enable_irq(chip, gpio);
+ 	regmap_update_bits(info->map, REG(OCELOT_GPIO_INTR_ENA, info, gpio),
+ 			   BIT(gpio % 32), BIT(gpio % 32));
+ }
+@@ -1790,8 +1792,10 @@ static struct irq_chip ocelot_eoi_irqchip = {
+ 	.irq_mask	= ocelot_irq_mask,
+ 	.irq_eoi	= ocelot_irq_ack,
+ 	.irq_unmask	= ocelot_irq_unmask,
+-	.flags          = IRQCHIP_EOI_THREADED | IRQCHIP_EOI_IF_HANDLED,
++	.flags          = IRQCHIP_EOI_THREADED | IRQCHIP_EOI_IF_HANDLED |
++			  IRQCHIP_IMMUTABLE,
+ 	.irq_set_type	= ocelot_irq_set_type,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS
+ };
+ 
+ static struct irq_chip ocelot_irqchip = {
+@@ -1800,6 +1804,8 @@ static struct irq_chip ocelot_irqchip = {
+ 	.irq_ack	= ocelot_irq_ack,
+ 	.irq_unmask	= ocelot_irq_unmask,
+ 	.irq_set_type	= ocelot_irq_set_type,
++	.flags          = IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS
+ };
+ 
+ static int ocelot_irq_set_type(struct irq_data *data, unsigned int type)
+@@ -1863,7 +1869,7 @@ static int ocelot_gpiochip_register(struct platform_device *pdev,
+ 	irq = platform_get_irq_optional(pdev, 0);
+ 	if (irq > 0) {
+ 		girq = &gc->irq;
+-		girq->chip = &ocelot_irqchip;
++		gpio_irq_chip_set_chip(girq, &ocelot_irqchip);
+ 		girq->parent_handler = ocelot_irq_handler;
+ 		girq->num_parents = 1;
+ 		girq->parents = devm_kcalloc(&pdev->dev, 1,

@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD3E579D83
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73357579D85
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242001AbiGSMwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S241902AbiGSMwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241766AbiGSMuS (ORCPT
+        with ESMTP id S241612AbiGSMuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:50:18 -0400
+        Tue, 19 Jul 2022 08:50:55 -0400
 Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97C28FD64;
-        Tue, 19 Jul 2022 05:19:59 -0700 (PDT)
-X-QQ-mid: bizesmtp84t1658232992tcyg0vfy
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4025926C;
+        Tue, 19 Jul 2022 05:20:01 -0700 (PDT)
+X-QQ-mid: bizesmtp84t1658233113tf3r0e4k
 Received: from localhost.localdomain ( [171.223.96.21])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 19 Jul 2022 20:16:30 +0800 (CST)
+        id ; Tue, 19 Jul 2022 20:18:32 +0800 (CST)
 X-QQ-SSF: 01000000002000F0U000B00A0000020
-X-QQ-FEAT: 4rCmCcmdMHdi35qznvqNxxvnEWdSiRmmST1u+A2o6peXFM/RSPwShRDt80gHA
-        y5DVAxaORbKKdxdxy0RXOWPAkhqBXotrr90r8Qf4Fi65bbCAqQWvR+03tN+lHkZi7TSZNv9
-        YoX+BR/arF0CSkVM85USAgAIDuf0wu4iiLQdvhsq4Ocr/CJpCJofS+HLnDok5GJZIB1rDqi
-        J6rFXe2FhiUBBzfDsiDdyKVIREWrAb0bSisepF97ZleNonM52r0awyxf0NnR5e1YOOBqY1N
-        v3oRZHhM6xhmec09WOtHr94pWHAVP9DKk/Ty1NJKxSCEDjcfjcqjrQSma+V3qWnFgCzR5Sl
-        y6VHSuQJNuBjinDlb9d4ay4X9oLx2CXW8D7CFc8MQzb1KZKp3V2Y1HdEIWxfmHri3jJ+1RU
-        4xvtfeMJsrs=
+X-QQ-FEAT: bQsUcYFpAAZCL2K0fSWXqSFtpi8ZcffXy0TgbFPYGm0V4LCUMvUBbQin92pm6
+        nrtiZHhtFFcJLhNG8O4Sn+pV4ThKUbAdyoYuX06CE6OtxxYUpQ2mpcq0Ig9Fs4/ltV5+5QX
+        IE5wHbNJysFeDsdqcWtUVPQMOb6YBddIe8HyWRn7UIrC9Zo1siUUutohpux3cEviUVrl/4Y
+        RPJRk3aMVxgYN0jabtH9bo+5IEJ3N/EfI166UkOp28zSKXzmPnwkELIfFhwKDEJRaPGzyLO
+        qi55iIaOViJabhfPzFP08Ht0ut1WqHIzMdERy55bEg5uu3kH00WYEYr0qjcPadvZUlqELdm
+        R1nI/hGYeSX1hvtuKs0KWpeC4Pqc4NI3o+Qd6PxPCA8N1pS37zAJcRqR/QsBcxpHUB7X4gy
+        mQJI3hrZcE0=
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     axboe@kernel.dk
-Cc:     philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
-        christoph.boehmwalder@linbit.com, drbd-dev@lists.linbit.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] block/drbd: Fix comment typo
-Date:   Sat, 16 Jul 2022 12:14:34 +0800
-Message-Id: <20220716041434.33148-1-wangborong@cdjrlc.com>
+To:     maz@kernel.org
+Cc:     tsbogend@alpha.franken.de, fancer.lancer@gmail.com,
+        tglx@linutronix.de, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] irqchip/mips-gic: Fix comment typo
+Date:   Sat, 16 Jul 2022 12:16:19 +0800
+Message-Id: <20220716041619.33629-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,26 +50,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `and' is duplicated in line 89, remove one.
+The double `the' is duplicated in the comment, remove one.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- drivers/block/drbd/drbd_bitmap.c | 2 +-
+ drivers/irqchip/irq-mips-gic.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/block/drbd/drbd_bitmap.c b/drivers/block/drbd/drbd_bitmap.c
-index 7d9db33363de..736416186c2f 100644
---- a/drivers/block/drbd/drbd_bitmap.c
-+++ b/drivers/block/drbd/drbd_bitmap.c
-@@ -86,7 +86,7 @@ struct drbd_bitmap {
+diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+index 8a9efb6ae587..9464af4b53e7 100644
+--- a/drivers/irqchip/irq-mips-gic.c
++++ b/drivers/irqchip/irq-mips-gic.c
+@@ -494,7 +494,7 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int virq,
+ 	map = GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin;
  
- 	/* exclusively to be used by __al_write_transaction(),
- 	 * drbd_bm_mark_for_writeout() and
--	 * and drbd_bm_write_hinted() -> bm_rw() called from there.
-+	 * drbd_bm_write_hinted() -> bm_rw() called from there.
+ 	/*
+-	 * If adding support for more per-cpu interrupts, keep the the
++	 * If adding support for more per-cpu interrupts, keep the
+ 	 * array in gic_all_vpes_irq_cpu_online() in sync.
  	 */
- 	unsigned int n_bitmap_hints;
- 	unsigned int al_bitmap_hints[AL_UPDATES_PER_TRANSACTION];
+ 	switch (intr) {
 -- 
 2.35.1
 

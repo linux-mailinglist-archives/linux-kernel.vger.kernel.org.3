@@ -2,168 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7FB576DA9
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 13:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA393576DB3
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 14:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiGPL6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 07:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
+        id S231290AbiGPMDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 08:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiGPL6K (ORCPT
+        with ESMTP id S230273AbiGPMD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 07:58:10 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D0C22BE1;
-        Sat, 16 Jul 2022 04:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1657972653;
-        bh=mr/pCYiVaMNMV+tbkPhD40SBlpbSeCNm1zKJ+o4vbaM=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=k35R4OnElnQiIEBbrBO2jLhjxs/arS4e9u8sBwC7wxXWp7z9QVZQjpn20Xw4yASl9
-         D43cI7VbghaqzWgFB3ZnLSjMre1XiR4LxpsxSBk3yrDInhWgd/xFGsnDKwe2BikAQA
-         PZG5dalEB/VLrWFyxkQT5CxhGLsNsDmAjr9kdq6c=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.77.159] ([80.245.77.159]) by web-mail.gmx.net
- (3c-app-gmx-bap26.server.lan [172.19.172.96]) (via HTTP); Sat, 16 Jul 2022
- 13:57:33 +0200
+        Sat, 16 Jul 2022 08:03:29 -0400
+Received: from sonic304-51.consmr.mail.gq1.yahoo.com (sonic304-51.consmr.mail.gq1.yahoo.com [98.137.68.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D45A24085
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 05:03:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1657973005; bh=DAM/bEP7xnNDHYTVl67GsU8rgaN43Xl0MJMznYJcJ8k=; h=Date:Subject:From:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=NP41fgjAshEYihUjHn3vCQb5C01OBhdiioWHeY+5uv9KuLa77wA7bT4hLSKPulU9KLcAuP8QA/fWGSI/yZJA1J53tBLGn2vbgKWXokQTnrcbThcmY51hB54mvG7ddAD0Wnpot/g0gSYer8FzyjqSPTryrZeVmZn1hX0f/lg0TroTzRgwBPluhI7HciiC40Day7CFXrIGeYs65PK4bH93MSmaFjMgNs+UzoohkjzYIGCc3wlzqGYn3x+erVkcQerCs5WN6pTr53KiTbZ6J6PgqpoXcMC+xxdIJCiGDKBMLr7Dp9J4G09dumyL6/8978uBPTD3hoKxiQZPGsDtKO3tNQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1657973005; bh=+hW1DQW7YFURSc4bkniM2nFGuTDWQjmcm2vfVIrE9Y4=; h=X-Sonic-MF:Date:Subject:From:To:From:Subject; b=Q6+0mwXVEJtGc2uIcAK2YSoWUszCUKu85XQX8U7hqhjlvxPOQRVEwEsrLx+6kSqiaoRGpbJZDkjYx5teYXBtqd39zPFyESjBxiMIIAoxyYY/P/sg5EsLND0AMHNKLb1hGvUvdbqGzYGuBbNQBjGcLbRdcyIz9yXF/gMSJBkg+n1NKsk1WjfKJcQN5YdZ7qfJCKqceeA2LhRmJlfOz6IiFoGup9N8FQrO4e9qyAq1StQPeRKPtFq1bkyYS6Vw/gxh/SOK5FEBq9FSYYXeK+L2sADzU4HxpjBm/yE//2mb/TQoame8aHGwjG4AJAcuo7MLPB/S79SHpr9tbDBBLgn9hw==
+X-YMail-OSG: UyYPEY8VM1knZXXCuCD9X7SMCCLHmK47it_NQ7T3OD6p35j98RQWU0OArQdTxwE
+ Tv5lMIOAFO6E2gQX.W6NBOoIY59Fn9QsdL0WKVOpcQqcUkJM3YzpvCeRt3EgtT.n_ys8T6z6YTDy
+ lhVqxN2uFxa.o.KQWB4ZgUvrG4x0ZfZ9Gd8hXfeYlg6jwQxzbg.UqjGrXYvpCmB6YRp0GkpuYn6z
+ pYL2pjjizzaTCsWS1kdTNsa9LVPYpdc_uuvnKSuvSLY05TDnD8tniwtBriJf3mexDfrvMNDFdgAX
+ un7ODWI9OQBr.ZFWroiKNWXsL_iWcypAbHGseQMpalAkzuCact3nvSPnEJWR2yxcoxWuOCJzBiix
+ 44wMH6uoLZQovIue0xCp7dKoRXFlSRAW5VNggCqK7hqnWE3umaku5_yGtayouv2fla2VmF0XnsUs
+ M5tmI9GdLz1GMuth_9NJhkQCAZ.5iI79inO1OAkdIfWqzSnmQaCPgF71SsTe256sJhN5ue7ld.Ak
+ KeRaJIBKNoUDWTpgI5wWhbK3JTgSC9FYgy_WxuIYLjZiPlBfoZrPtktHErLisikKqOXArXD6x.s0
+ KWCqQz1i06Ch2AavloZ1K54HPiXYkcnw_SVd5fpN7.E4jBFS9EIs9ec7SgooW3S6WZc_1ZNJZoZt
+ limpkLNDPG9TSt_fxWaaMdh3vKnDJYGe_sqLo0NRObJZz5qBQMJmyZNaahD.5I_JU9GvnLHMh1KO
+ _Iz88ifTyBgGe5X0HNWLPwy56ivkxPoMvL.LRkAlf_6Rzkp.DzhZZOjIKT3EQs9L3.nT24zXxoH7
+ zNS8HDJruz__GJb4NYNmAUzAOT78aEzZ_Wr5g1pKkt94h8TUsfGHT_KqnobnEAe0MqhCed6UaCda
+ L8X3veByAOWVfuRjqrYqcdjzxosEaj1vJE0zMolLBVQDSCWHPuuMOw8GJR9OygNL68OYl2YDbLFI
+ 36qiT5T9cf_yqCyM4IOGcWmNZ_7oP80TqLU7MzkTZVoIpOK6ZckdLqmG4MwDhfwePWkSy32QLrIm
+ 03fA7cUK1Z0XdYzN9tqh9l2Sx7DqxTbhmj5vCcXpjZjOeMwfLmmqnN4SeBhXg862LdHzql._q3or
+ zp8ccokJmgb.SBEXUbgpkHFbcnjmGEIMIyrbUnuyH2wm0TXyAqvYcXSre8_s3b5H_WLB_ms_eBjx
+ 0yNy3dWFNV1YsPhix5KFACxsrj8jqjrwCKIylbhRSQ6JeEx.ADf0M2sIsrXzvRSHTq0N33dbQcBf
+ cm4mHGzsgolEroBnnIrWlPvKFkFqYdlFuA_9pcTXWUvatBwalFEupzp7NZZj3K8MgiN8pDUPGJRe
+ ymuVULKAMnLxOCjuXqfBEv4HFBsxSR9.E0MH9rRukA59.wXby33kr0Q3VEmzKEoOcWkxi7zvi7gm
+ pWSngiyu5i0b2Ff05ruxewFf_4bYC.XKAHrH9PtMcqBGfvnmgoM_qnlv0z7Bu7oEMUccunlRjBm6
+ LgY7wBBlFCx0xPUUArhXv4s.xPLRkCZG7_40fqtB7nvqME2c.9iTQVQVjcrgoC6792I5A8HzwBTi
+ 1y46aQjhUp26giE52sFny7k72JkjmdZ5TOiYBi9Omjw.FyQHofL5DonUzl46T8sf.80uAS0m5MF7
+ QMVmkf4VytjBOtuxcwPca67UseXeYoDee2uz6Vi9drl0wRnHJVo7By4EUW1V7WFm_a.oT3_bfXyL
+ oMEpf8.zN0AZJwqbglnUXZb.VW4vSh1EAGBpfJOr6oeQP_bWyMpbpfLkZjw.MCU0hoAZFK_K8Xts
+ eHFnU.RpR98uMGoB1dzQqrC4flHL.QyyneeGOHuxoPyLjffmObTueEbtxQiIWWp3SnKvqrBWxdfj
+ 2wp6Bf6DETmwz6rMpC74pdJqNKEQ_by8cqXyK8kSIU4FjOBcNcXYyYh5A2OZybWv9MsNwJgnAIyC
+ mV29Bd7EvTpcjm_FYghulo9hevzrXcSQE9l836ACoaTzty79ShCgiZEyS0P0jPvTOSO_Wgufr4HW
+ Q7uJXRCij_P3B7yBfay9QVNTQ48Rq_EV0EBSyX9D3T5SfPl.qFr4g.YXv_FBwQ9c1ZzYpcKHPq4.
+ wluTRmXIyIM6RFDKzwoVLvXRz1mSAn_26s4_AJ1mGGE_myeHJBLXotfMCLDlx1W2Q2BuuDrzrZbq
+ sWfgP6QesGJrR10ZdZKhY4RDE04GDrnLxlqppV7cTfQXBf32jMlfMfnB1jYkWxOUwinpplyTPIbM
+ x9HwiLw7xhm4AIwJ4Xh.Op5rnDa2W1MPm
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.gq1.yahoo.com with HTTP; Sat, 16 Jul 2022 12:03:25 +0000
+Received: by hermes--production-bf1-58957fb66f-qrtmg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 15342210b74ec2b3efb792f6ae39851b;
+          Sat, 16 Jul 2022 12:01:22 +0000 (UTC)
+Message-ID: <a5fd5d8f-c360-ce4c-57fb-504f8998190c@netscape.net>
+Date:   Sat, 16 Jul 2022 08:01:22 -0400
 MIME-Version: 1.0
-Message-ID: <trinity-7c08bee0-07dc-4e45-8157-50aa7fa7c3cc-1657972653195@3c-app-gmx-bap26>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Liang Chen <cl@rock-chips.com>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-rockchip@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Simon Xue <xxm@rock-chips.com>, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>,
-        Liang Chen <cl@rock-chips.com>
-Subject: Aw: Re: [PATCH v4 3/5] phy: rockchip: Support PCIe v3
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+Content-Language: en-US
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "# 5 . 17" <stable@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <7bf307c7-0b05-781b-a2a3-19b47589eb8a@netscape.net>
+In-Reply-To: <7bf307c7-0b05-781b-a2a3-19b47589eb8a@netscape.net>
 Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 16 Jul 2022 13:57:33 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <YtFTrEzefxIYswnj@matsya>
-References: <20220619082605.7935-1-linux@fw-web.de>
- <20220619082605.7935-4-linux@fw-web.de> <YtFTrEzefxIYswnj@matsya>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:Ll0lW5FfOy8PK39ATKJ4/5EoQQotC9SLpE+mR2q2O3zLIVgoCKp1HAEYafnZ2klS2sSAg
- rOHkZVbW243ld09DQApdR5rPZOgmo3j8OZAfCIN8ObpP9JzuULItUViL2vPtyhGjcHC952WOQydW
- pSbIgnn/ufx/w9G/WaWKaPl/D8V0lFf6QHSkCv2vqFFAOmRgph11FjcSIxMnzsLmlkPYUQT6jsrW
- EAfi17jfK9lzMkTfvzY3BqosHPZ2AzpEryhLVO+GVCdCFPw4DnSgTLBuUZCdjgiQtoHwrhEMlf+r
- wk=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:WtWHZiRozh8=:gbLjeos4Y+pt3jyN6qW9cs
- gYBkeTFO9vX/UGcr7AzIYKcMm9zvwZk0fAwkWac5adpiV2lm4J2ynqjJaNvuv0coQ9Pc1WNwY
- oqGG2uCUNi2eZRNatQu2i9+ThGdvgsPuE8KIaKvWzkf5rNnRdiZT3MhZDqT6dhBR5DCkvNXGd
- Qvc0DpsYMq9FTYGnbP2sVLij3jj798d92c6ELBK2465eT8MZSHxwIywCK281T5J4FjqOfadN5
- SBtarvHQ7r2oXUO7ZQNywMw7F8fDtaZM/OGswmz60F7RtO1EbqZ2XuaYnF08OdDu7SDgsvDET
- iUKKmY4bvfFT8rrJGooZq2rRi6sCQ9iHs1jPJGUxd+jWg7pECVoP7pNm5Xe5JjBA3P8aS/OgM
- J6idQYvrc/BpeN6WQ6Zzx3p0477/UEBnTxN/IURgxdzkUWdtKm1ZcNby0c2zcPdq+XjP8iv3O
- mYBWbKB1VFqsMp/CBZb7lInSwB2NzC+BkdpCsB/8ij/ELFz9yBnqSCdKM2BIhjThD1sVSXPvb
- TCNb5bPW9jf/9gZiUWDhkPyPZ0VkMpQ+phJA00M4OB1zhv+kPWgZ8d1ysWP2gT6aCotlUnn+3
- mOgcLP1W2NcB+kerxAlVbwCLKJbbuUp0GWH7kpqmasyWeUcTnGaq1wfZvDs7DPjRuIxoWB8yy
- Dwp1akwpexbmyIY+Wlkr0tMFpq2sEXkrgycwJAWChf2RKuxSNF4FMopu55hx1rhpm5vKcnKor
- YN1eNE25CdlB4jMynamVbJ41Db86oxrgoGzKSIsri4HHbWfNmWndEvV9XIFC8q8xwmPMgXhTu
- oimi6gI
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20407 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-
-thanks for review.
-
-> Gesendet: Freitag, 15. Juli 2022 um 13:46 Uhr
-> Von: "Vinod Koul" <vkoul@kernel.org>
-> > + * Copyright (C) 2020 Rockchip Electronics Co., Ltd.
+On 7/16/2022 7:32 AM, Chuck Zmudzinski wrote:
+> On 7/15/2022 10:25 AM, Juergen Gross wrote:
+> > Today PAT can't be used without MTRR being available, unless MTRR is at
+> > least configured via CONFIG_MTRR and the system is running as Xen PV
+> > guest. In this case PAT is automatically available via the hypervisor,
+> > but the PAT MSR can't be modified by the kernel and MTRR is disabled.
+> >
+> > As an additional complexity the availability of PAT can't be queried
+> > via pat_enabled() in the Xen PV case, as the lack of MTRR will set PAT
+> > to be disabled. This leads to some drivers believing that not all cache
+> > modes are available, resulting in failures or degraded functionality.
+> >
+> > The same applies to a kernel built with no MTRR support: it won't
+> > allow to use the PAT MSR, even if there is no technical reason for
+> > that, other than setting up PAT on all cpus the same way (which is a
+> > requirement of the processor's cache management) is relying on some
+> > MTRR specific code.
+> >
+> > Fix all of that by:
+> >
+> > - moving the function needed by PAT from MTRR specific code one level
+> >   up
+> > - adding a PAT indirection layer supporting the 3 cases "no or disabled
+> >   PAT", "PAT under kernel control", and "PAT under Xen control"
+> > - removing the dependency of PAT on MTRR
+> >
+> > Juergen Gross (3):
+> >   x86: move some code out of arch/x86/kernel/cpu/mtrr
+> >   x86: add wrapper functions for mtrr functions handling also pat
+> >   x86: decouple pat and mtrr handling
+> >
+> >  arch/x86/include/asm/memtype.h     |  13 ++-
+> >  arch/x86/include/asm/mtrr.h        |  27 ++++--
+> >  arch/x86/include/asm/processor.h   |  10 +++
+> >  arch/x86/kernel/cpu/common.c       | 123 +++++++++++++++++++++++++++-
+> >  arch/x86/kernel/cpu/mtrr/generic.c |  90 ++------------------
+> >  arch/x86/kernel/cpu/mtrr/mtrr.c    |  58 ++++---------
+> >  arch/x86/kernel/cpu/mtrr/mtrr.h    |   1 -
+> >  arch/x86/kernel/setup.c            |  12 +--
+> >  arch/x86/kernel/smpboot.c          |   8 +-
+> >  arch/x86/mm/pat/memtype.c          | 127 +++++++++++++++++++++--------
+> >  arch/x86/power/cpu.c               |   2 +-
+> >  arch/x86/xen/enlighten_pv.c        |   4 +
+> >  12 files changed, 289 insertions(+), 186 deletions(-)
+> >
 >
-> 2022 now :)
+> This patch series seems related to the regression reported
+> here on May 5, 2022:
 
-ok, i change it
+I'm sorry, the date of that report was May 4, 2022, not
+May 5, 2022 - just to avoid any doubt about which regression
+I am referring to.
 
-> > +	/* Deassert PCIe PMA output clamp mode */
-> > +	regmap_write(priv->phy_grf, GRF_PCIE30PHY_CON9, BIT(15) | BIT(31));
+Chuck
+
 >
-> Can we define these bits..?
-
-i have no naming found for it as these are not described in the TRM
-
-maybe Peter or Liang/Shawn has these?
-
-> > +
-> > +	for (int i =3D 0; i < priv->num_lanes; i++) {
-> > +		dev_info(&phy->dev, "lane number %d, val %d\n", i, priv->lanes[i]);
-> > +		if (priv->lanes[i] > 1)
-> > +			bifurcation =3D true;
-> > +	}
-> > +
-> > +	/* Set bifurcation if needed, and it doesn't care RC/EP */
-> > +	if (bifurcation) {
-> > +		dev_info(&phy->dev, "bifurcation enabled\n");
-> > +		regmap_write(priv->phy_grf, GRF_PCIE30PHY_CON6,
-> > +			     (0xf << 16) | RK3568_BIFURCATION_LANE_0_1);
+> https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
 >
-> upper word 0xf?
+> I am experiencing that regression 
 
-afaik yes (write-enable), is there any other more readable way?
+or a very similar regression that is caused by the same commit:
 
-> > +		regmap_write(priv->phy_grf, GRF_PCIE30PHY_CON1,
-> > +			     BIT(15) | BIT(31));
+bdd8b6c98239cad
+("drm/i915: replace X86_FEATURE_PAT with pat_enabled()")
+
+> and could test this patch
+> on my system.
 >
-> again define bits please
-
-these are not documented too
-
-> > +	} else {
-> > +		dev_info(&phy->dev, "bifurcation disabled\n");
+> Can you confirm that with this patch series you are trying
+> to fix that regression?
 >
-> debug level?
+> Chuck
 
-i made them same as the "bifurcation enabled" to have always an info about=
- it in dmesg.
-
-> > +	if (ret)
-> > +		pr_err("%s: lock failed 0x%x, check input refclk and power supply\n=
-",
-> > +		       __func__, reg);
->
-> Can this be made dev_err too, I still see bunch of pr_ and at least here
-> you have driver context... while at it drop the __func__ from these logs
-> too please
-
-ok, i'll change it
-
-> > diff --git a/include/linux/phy/pcie.h b/include/linux/phy/pcie.h
-> > new file mode 100644
-> > index 000000000000..93c997f520fe
-> > --- /dev/null
-> > +++ b/include/linux/phy/pcie.h
-> > @@ -0,0 +1,12 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
->
-> Header is 2021 !
-
-i'll change
-
-> --
-> ~Vinod
-
-regards Frank
+Chuck

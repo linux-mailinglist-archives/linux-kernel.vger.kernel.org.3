@@ -2,114 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE38577136
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 21:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D58B57713A
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 21:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbiGPTjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 15:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53564 "EHLO
+        id S232614AbiGPTnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 15:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiGPTjt (ORCPT
+        with ESMTP id S232559AbiGPTnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 15:39:49 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0D3140A8;
-        Sat, 16 Jul 2022 12:39:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=LtAtzCZ8cJhp8hFf9hMUPei/xAdhBC+XgYV77Uq9zYg=; b=YznQjFgd0fk/tF9iA6Yg9Xs1a+
-        sGg2QRsnbTm4gU896SJ/a2Oq1PN1C9xSt3N7My9hmdSxS2cv0hG/SabHxT5Izk7frk4E5c6pVnN8j
-        13WII0yIuYfyc0HLtOa4N7htN9NFjT1Nqf3V+nQBDK8Z05iWM0jgtvTiEboUsf04X/5E=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oCndR-00AZPu-Sb; Sat, 16 Jul 2022 21:39:29 +0200
-Date:   Sat, 16 Jul 2022 21:39:29 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: Re: [PATCH net-next v3 07/47] net: phy: Add support for rate
- adaptation
-Message-ID: <YtMT8V4PNkxJ9lMm@lunn.ch>
-References: <20220715215954.1449214-1-sean.anderson@seco.com>
- <20220715215954.1449214-8-sean.anderson@seco.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220715215954.1449214-8-sean.anderson@seco.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 16 Jul 2022 15:43:51 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E789B65D0
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 12:43:49 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id va17so14624935ejb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 12:43:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
+        h=from:content-transfer-encoding:mime-version:subject:date:references
+         :to:in-reply-to:message-id;
+        bh=H/T5SCRTZnvNt4JlT7zW83Ocmb/ZGFQfFEQNlDPUCI8=;
+        b=n9MXmbtnvdtjnx5J2nrdopHTJx07KpjcmhDzg7sg6Qf5Y4FALt6HjxT8YXyIeYVkmt
+         ufyrYXmuOYn1BpWZfcyYRtOz8/BOA5iemqNLy5SeSaDz26yp0/HgPHwJ5d530GTfovMC
+         l7XyKXc6Ma+vlFjc+SQw1jdgT2mLgpkPRusTZ3H9bGSOkTgCiXtreMkEvGtmcmv9zf3I
+         ti3l8jlLXSNLR34055wrdpBMguTfCMHh+fGGrQ05IbxjyFWlfxYSM5eSUisfmpQUUgeR
+         YQ82luhh7y69WCpF4pMnpTTtvVzAwUgTVi4cwrNFcM46vAhZ1odde3p05bNKm3d0UHGc
+         +f9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:content-transfer-encoding:mime-version
+         :subject:date:references:to:in-reply-to:message-id;
+        bh=H/T5SCRTZnvNt4JlT7zW83Ocmb/ZGFQfFEQNlDPUCI8=;
+        b=501ZMbW8eDGr10KGl4ABttM91Uk63dC3Iw7QOKgplMmiZsQsZ3GqKcDqnkA2kvVO5o
+         OfaOngu9PbCT62GvRtZc6Nes3UOhDjlWcPqyf3zTviTqlAhIhvvBWmycnaE1NNirRG53
+         Ad7HiyxYqHkbxTyT9dK7Vbn7n+HG+436No9HBHhNJedICXmXNeEt+WTaRU4EnB0kcj3q
+         zCDx+hcsXcayMSyRgfGPc2+gaJO22Z0t/GjGWTaLgenSFuXf5XUsOOgZBlnyTjIrnXP6
+         ZCLm9PPFsEXSk6DEpJAHxLy7qh0Uc/WY+R2sz/2pvZzRJUo1rY41Cxx6wMu/wPkAVz13
+         uxrA==
+X-Gm-Message-State: AJIora9qx+lZSI14Lj1bGBSAsHG35wDfG7LqtpNJZ4YpmYBjcp5FgoSO
+        b7nipueRTnVtU3YY+BG5HXSrNw==
+X-Google-Smtp-Source: AGRyM1tfaw6taoKWBs3jjagj6BkI+UEYOKsGCFybdoJ0w7ESh2k81dmaxHS3p8Oue9CB1K3uUXCiaA==
+X-Received: by 2002:a17:906:2da:b0:712:14b:62da with SMTP id 26-20020a17090602da00b00712014b62damr19317613ejk.351.1658000628431;
+        Sat, 16 Jul 2022 12:43:48 -0700 (PDT)
+Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
+        by smtp.gmail.com with ESMTPSA id q25-20020a1709066ad900b0072b2ef2757csm3489152ejs.180.2022.07.16.12.43.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 16 Jul 2022 12:43:47 -0700 (PDT)
+From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: [PATCH v5] arm64: dts: rockchip: Fix SD card init on rk3399-nanopi4
+Date:   Sat, 16 Jul 2022 21:43:46 +0200
+References: <C639AD88-77A1-4485-BAEA-2FF8FC15A844@kohlschutter.com>
+ <12878108.O9o76ZdvQC@diego> <103b714c-b07c-f016-1062-84bd94786b22@arm.com>
+ <9AF1E75F-5947-49B0-887D-82C426527B99@kohlschutter.com>
+ <590f7a08-a6ca-be54-4254-363343642a52@arm.com>
+ <A6B896E5-CD25-4441-B6A5-0BE1FA284B2C@kohlschutter.com>
+ <A9634366-A012-43D2-B253-8BB9BF6005C7@kohlschutter.com>
+ <CAGb2v65Ehbu1wrib2CzF1fDZuD3fHZQDhKfVusyUF9KnxTvi+Q@mail.gmail.com>
+ <5ca9bd94-54d9-04f8-0098-a56ffb6f5fe1@arm.com>
+ <502b3fbe-3077-407e-6010-a8cb3ffce7d6@arm.com>
+ <449292CA-CE60-4B90-90F7-295FBFEAB3F8@kohlschutter.com>
+ <73F9AED0-D2A8-4294-B6E1-1B92D2A36529@kohlschutter.com>
+ <115AD6A4-021B-4879-BFB5-BC7689A0203E@kohlschutter.com>
+ <17a4c6f6-d79c-a7b2-860f-e5944b778f9f@arm.com>
+ <9405b97a-6758-ad4e-ccff-eed072096539@arm.com>
+ <BF7CC548-88C9-4889-8A41-8E99C31EF81C@kohlschutter.com>
+ <daf3b61c-d886-98eb-0443-de233d742041@arm.com>
+ <CDF716FC-F6CF-44A9-84D9-B48C46E6AC2C@kohlschutter.com>
+ <3912A668-9F73-40FD-8993-5060F632238A@kohlschutter.com>
+To:     Robin Murphy <robin.murphy@arm.com>, wens@kernel.org,
+        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>
+In-Reply-To: <3912A668-9F73-40FD-8993-5060F632238A@kohlschutter.com>
+Message-Id: <7E830C9F-BB5D-4EFC-B3F4-1C580E9326A3@kohlschutter.com>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->  drivers/net/phy/phy.c | 21 +++++++++++++++++++++
->  include/linux/phy.h   | 38 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 59 insertions(+)
-> 
-> diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
-> index 8d3ee3a6495b..cf4a8b055a42 100644
-> --- a/drivers/net/phy/phy.c
-> +++ b/drivers/net/phy/phy.c
-> @@ -114,6 +114,27 @@ void phy_print_status(struct phy_device *phydev)
->  }
->  EXPORT_SYMBOL(phy_print_status);
->  
-> +/**
-> + * phy_get_rate_adaptation - determine if rate adaptation is supported
-> + * @phydev: The phy device to return rate adaptation for
-> + * @iface: The interface mode to use
-> + *
-> + * This determines the type of rate adaptation (if any) that @phy supports
-> + * using @iface. @iface may be %PHY_INTERFACE_MODE_NA to determine if any
-> + * interface supports rate adaptation.
-> + *
-> + * Return: The type of rate adaptation @phy supports for @iface, or
-> + *         %RATE_ADAPT_NONE.
-> + */
-> +enum rate_adaptation phy_get_rate_adaptation(struct phy_device *phydev,
-> +					     phy_interface_t iface)
-> +{
-> +	if (phydev->drv->get_rate_adaptation)
-> +		return phydev->drv->get_rate_adaptation(phydev, iface);
+mmc/SD-card initialization may fail on NanoPi R4S with
+"mmc1: problem reading SD Status register" /
+"mmc1: error -110 whilst initialising SD card"
+either on cold boot or after a reboot.
 
-It is normal that any call into the driver is performed with the
-phydev->lock held.
+Moreover, the system would also sometimes hang upon reboot.
 
->  #define PHY_INIT_TIMEOUT	100000
->  #define PHY_FORCE_TIMEOUT	10
-> @@ -570,6 +588,7 @@ struct macsec_ops;
->   * @lp_advertising: Current link partner advertised linkmodes
->   * @eee_broken_modes: Energy efficient ethernet modes which should be prohibited
->   * @autoneg: Flag autoneg being used
-> + * @rate_adaptation: Current rate adaptation mode
->   * @link: Current link state
->   * @autoneg_complete: Flag auto negotiation of the link has completed
->   * @mdix: Current crossover
-> @@ -637,6 +656,8 @@ struct phy_device {
->  	unsigned irq_suspended:1;
->  	unsigned irq_rerun:1;
->  
-> +	enum rate_adaptation rate_adaptation;
+This is caused by vcc3v0-sd's "regulator-always-on", which triggers
+an erroneous double-initialization of the regulator. This causes
+voltage fluctuations that can, depending on timing, prevent the
+SD card from initializing correctly.
 
-It is not clear what the locking is on this member. Is it only safe to
-access it during the adjust_link callback, when it is guaranteed that
-the phydev->lock is held, so the value is consistent? Or is the MAC
-allowed to access this at other times?
+Adding some liberal delay via "off-on-delay-us" is ineffective since
+that codepath is skipped as long "regulator-always-on" is set.
 
-	Andrew
+Removing "regulator-always-on" alone is not sufficient because that
+would allow the system to set GPIO0_A1 to LOW upon reboot, which may
+cause the system to hang.
+
+In order to allow the system to set GPIO0_A1 to HIGH upon initialization
+but prevent it from changing it back to LOW, this patch increases the
+usage count of vcc3v0-sd from 1 to 2, whereas the additional reference,
+"vcc1v8_s3", is marked as "always-on", causing permanent retention.
+
+As a welcome side-effect, this change allows the SD card voltage to be
+set back to 3.0V upon reboot, allowing bootloaders to use the card right
+away, obsoleting further patching.
+
+Signed-off-by: Christian Kohlsch=C3=BCtter <christian@kohlschutter.com>
+---
+ arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi =
+b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
+index 8c0ff6c96e03..38507a6e3046 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
+@@ -61,7 +61,17 @@ vcc1v8_s3: vcc1v8-s3 {
+ 		regulator-min-microvolt =3D <1800000>;
+ 		regulator-max-microvolt =3D <1800000>;
+ 		regulator-name =3D "vcc1v8_s3";
+-		vin-supply =3D <&vcc_1v8>;
++
++		/*
++		 * Workaround to skip setting gpio0 RK_PA1 to LOW upon =
+reboot,
++		 * which may freeze the system.
++		 *
++		 * Adding a reference to vcc3v0_sd increases its =
+num_users
++		 * count to 2, preventing deactivation since this =
+regulator is
++		 * marked "always-on".
++		 */
++		// vin-supply =3D <&vcc_1v8>; // actual supply
++		vin-supply =3D <&vcc3v0_sd>;
+ 	};
+=20
+ 	vcc3v0_sd: vcc3v0-sd {
+@@ -70,7 +80,6 @@ vcc3v0_sd: vcc3v0-sd {
+ 		gpio =3D <&gpio0 RK_PA1 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names =3D "default";
+ 		pinctrl-0 =3D <&sdmmc0_pwr_h>;
+-		regulator-always-on;
+ 		regulator-min-microvolt =3D <3000000>;
+ 		regulator-max-microvolt =3D <3000000>;
+ 		regulator-name =3D "vcc3v0_sd";
+--=20
+2.36.1
+
+

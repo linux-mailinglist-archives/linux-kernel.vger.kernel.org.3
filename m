@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60C9576C2A
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 08:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB1E576C2C
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 08:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbiGPGYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 02:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
+        id S231765AbiGPGYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 02:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGPGYD (ORCPT
+        with ESMTP id S231651AbiGPGYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 02:24:03 -0400
+        Sat, 16 Jul 2022 02:24:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EA31166;
-        Fri, 15 Jul 2022 23:24:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13F912AF5;
+        Fri, 15 Jul 2022 23:24:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1054AB82F59;
-        Sat, 16 Jul 2022 06:24:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ED4EC34114;
-        Sat, 16 Jul 2022 06:23:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 538F5B82F5B;
+        Sat, 16 Jul 2022 06:24:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62985C34114;
+        Sat, 16 Jul 2022 06:24:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657952639;
-        bh=frL6siHTa6fUVExEQbZVmGTfG0v/tIpGTzGGqskWCYw=;
+        s=korg; t=1657952665;
+        bh=AkmbZ57L8DAjMKN8cVHc0da89FpXYgpW0mPMHQg5OMI=;
         h=Date:From:To:Cc:Subject:From;
-        b=Rg3c867podKrznMOMMlTIT4O+xOF4VjJuhl9Nl9PkaX43bTN9CsJnd1LSEm71e8Jf
-         9xL/caoqrOhSi0wDOa8IMmYiQDXkO7Cu/A/oVSZ9mObJHljekOXZdr+o/bOYEv977p
-         wxBIPTZ0Qb/I1gsc/w+4uVrm2YLYT5RkQOeKkzBk=
-Date:   Sat, 16 Jul 2022 08:23:54 +0200
+        b=wsXKBF9zduaYzJLdTzRCEY8H6DlBD/Bt2TAis1ZmhogzALzTWLU6ZDHDiPqFLmiOF
+         zr3lmeWHM5Aut37dm9PIZHHbEIb74XXV+JaDX8WM8WDHvLQb3xZHDr+jW5BLV1/Hx2
+         cAEiPaeCpj9oFu7GGFowVPM3lbKD88ptdSTK14kc=
+Date:   Sat, 16 Jul 2022 08:24:20 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [GIT PULL] TTY/Serial driver fixes for 5.19-rc7
-Message-ID: <YtJZegRfm6IsdY/i@kroah.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 5.19-rc7
+Message-ID: <YtJZlE1lf8EdUYRM@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,80 +48,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
+The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
 
-  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
+  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.19-rc7
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc7
 
-for you to fetch changes up to a501ab75e7624d133a5a3c7ec010687c8b961d23:
+for you to fetch changes up to 3486af89dd3c0b0bef194c4bccf17c31ef16b99f:
 
-  tty: use new tty_insert_flip_string_and_push_buffer() in pty_write() (2022-07-08 15:16:28 +0200)
+  Merge tag 'usb-serial-5.19-rc7' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2022-07-14 16:22:12 +0200)
 
 ----------------------------------------------------------------
-TTY / Serial driver fixes for 5.19-rc7
+USB driver fixes for 5.19-rc7
 
-Here are some TTY and Serial driver fixes for 5.19-rc7.  They resolve a
-number of reported problems including:
-	- long time bug in pty_write() that has been reported in the
-	  past.
-	- 8250 driver fixes
-	- new serial device ids
-	- vt overlapping data copy bugfix
-	- other tiny serial driver bugfixes
+Here are some small USB driver fixes and new device ids for 5.19-rc7.
+They include:
+	- new usb-serial driver ids
+	- typec uevent fix
+	- uvc gadget driver fix
+	- dwc3 driver fixes
+	- ehci-fsl driver fix
+
+Note, I had to merge in 5.19-rc6 into this branch in order to do a clean
+merge with the usb-serial fixes tree as they were based on that tag of
+yours.
 
 All of these have been in linux-next for a while with no reported
-problems.
+issues.
 
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ----------------------------------------------------------------
-Biju Das (1):
-      serial: 8250: dw: Fix the macro RZN1_UART_xDMACR_8_WORD_BURST
+Darren Stevens (1):
+      drivers/usb/host/ehci-fsl: Fix interrupt setup in host mode.
 
-Chanho Park (1):
-      tty: serial: samsung_tty: set dma burst_size to 1
+Greg Kroah-Hartman (2):
+      Merge tag 'v5.19-rc6' into usb-linus
+      Merge tag 'usb-serial-5.19-rc7' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
 
-Ilpo Järvinen (4):
-      serial: pl011: UPSTAT_AUTORTS requires .throttle/unthrottle
-      serial: 8250: Fix __stop_tx() & DMA Tx restart races
-      serial: stm32: Clear prev values before setting RTS delays
-      serial: 8250: Fix PM usage_count for console handover
+Linyu Yuan (1):
+      usb: typec: add missing uevent when partner support PD
 
-Jiri Slaby (2):
-      tty: extract tty_flip_buffer_commit() from tty_flip_buffer_push()
-      tty: use new tty_insert_flip_string_and_push_buffer() in pty_write()
+Lucien Buchmann (1):
+      USB: serial: ftdi_sio: add Belimo device ids
 
-Marcin Wojtas (1):
-      serial: 8250: dw: enable using pdata with ACPI
+Michael Grzeschik (1):
+      usb: gadget: uvc: fix changing interface name via configfs
 
-Max Staudt (1):
-      tty: Add N_CAN327 line discipline ID for ELM327 based CAN driver
+Thinh Nguyen (1):
+      usb: dwc3: gadget: Fix event pending check
 
-Pali Rohár (1):
-      serial: mvebu-uart: correctly report configured baudrate value
+Yang Yingliang (1):
+      usb: dwc3-am62: remove unnecesary clk_put()
 
-Yangxi Xiang (1):
-      vt: fix memory overlapping when deleting chars in the buffer
-
-Yi Yang (1):
-      serial: 8250: fix return error code in serial8250_request_std_resource()
-
- drivers/tty/pty.c                   | 14 ++---------
- drivers/tty/serial/8250/8250_core.c |  4 ++++
- drivers/tty/serial/8250/8250_dma.c  |  6 ++---
- drivers/tty/serial/8250/8250_dw.c   | 26 ++++++++++-----------
- drivers/tty/serial/8250/8250_port.c |  6 +++--
- drivers/tty/serial/amba-pl011.c     | 23 +++++++++++++++++--
- drivers/tty/serial/mvebu-uart.c     | 25 ++++++++++----------
- drivers/tty/serial/samsung_tty.c    |  5 ++--
- drivers/tty/serial/serial_core.c    |  5 ----
- drivers/tty/serial/stm32-usart.c    |  2 ++
- drivers/tty/tty.h                   |  3 +++
- drivers/tty/tty_buffer.c            | 46 +++++++++++++++++++++++++++++++++----
- drivers/tty/vt/vt.c                 |  2 +-
- include/linux/serial_core.h         |  5 ++++
- include/uapi/linux/tty.h            |  3 ++-
- 15 files changed, 116 insertions(+), 59 deletions(-)
+ drivers/usb/dwc3/dwc3-am62.c               |  8 ++------
+ drivers/usb/dwc3/gadget.c                  |  4 +++-
+ drivers/usb/gadget/function/uvc_configfs.c |  6 ++++--
+ drivers/usb/host/ehci-fsl.c                | 11 +++--------
+ drivers/usb/host/fsl-mph-dr-of.c           |  3 +++
+ drivers/usb/serial/ftdi_sio.c              |  3 +++
+ drivers/usb/serial/ftdi_sio_ids.h          |  6 ++++++
+ drivers/usb/typec/class.c                  |  1 +
+ 8 files changed, 25 insertions(+), 17 deletions(-)

@@ -2,149 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D09576E8A
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 16:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0729E576F1D
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 16:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbiGPO3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 10:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
+        id S230488AbiGPOku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 10:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiGPO3S (ORCPT
+        with ESMTP id S229784AbiGPOkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 10:29:18 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E908411160
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 07:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657981757; x=1689517757;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6ArMyUK0om5E+XznwVtCh1MIkJjTsHayzf1pxzCAi5U=;
-  b=LahCy5eK2E+FLReP417X7XmOsYVNJPLK83O1tw2xoyQE95nKVlmQXXUb
-   5y1NGn5UVhywhN+gptZ4SJSWNpjWKFfr0PoHWAiM7M65q5FxRXPT4Dn7h
-   3CXl5XSby0CdGnn3TXbYzDnkHhtl+YAkYFNfZnbDJsnLxiKTCTQ8hBsBu
-   u4rcGfMqCAM5Zwh5X1NTT9+QDwv3eUZE9VH0rIsAPoFc8D4thObqWcoov
-   oGeSMWw0pj5fQ5Dk3q8ITQudXODFTJgEyIimBlS3kW8b29aSyW+bX2OBb
-   3ZgUpB4FQALpUhD0cAPjIEXZWD7O3qyzp9PesWa8Bs1TG0DloCGpNibiK
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="283544923"
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="283544923"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 07:29:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="546984166"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 16 Jul 2022 07:29:16 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCinD-0001dA-Ft;
-        Sat, 16 Jul 2022 14:29:15 +0000
-Date:   Sat, 16 Jul 2022 22:29:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/090-spi-hid 16/18]
- drivers/soc/apple/dockchannel.c:225:25: sparse: sparse: cast removes address
- space '__iomem' of expression
-Message-ID: <202207162221.jMZrbhSG-lkp@intel.com>
+        Sat, 16 Jul 2022 10:40:49 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269E6175B2
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 07:40:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oCiy9-0001mp-Lg; Sat, 16 Jul 2022 16:40:33 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oCiy7-001Kfv-TI; Sat, 16 Jul 2022 16:40:31 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oCiy6-005ZA4-Rm; Sat, 16 Jul 2022 16:40:30 +0200
+Date:   Sat, 16 Jul 2022 16:40:28 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 3/4] ARM: dts: armada-38x: Fix compatible string for
+ gpios
+Message-ID: <20220716144028.rzwcn4wl5uyxepjd@pengutronix.de>
+References: <20220714115515.5748-1-pali@kernel.org>
+ <20220714183328.4137-1-pali@kernel.org>
+ <20220714183328.4137-3-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zalewdgjudxxklrt"
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220714183328.4137-3-pali@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   2902ed1bd2d6ac439a835c53841122c7f3455a6c
-commit: 6b3956f7b0e18f8280252c5e03f4773c361768cf [16/18] soc: apple: Add DockChannel driver
-config: parisc-randconfig-s041-20220715 (https://download.01.org/0day-ci/archive/20220716/202207162221.jMZrbhSG-lkp@intel.com/config)
-compiler: hppa64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/AsahiLinux/linux/commit/6b3956f7b0e18f8280252c5e03f4773c361768cf
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout 6b3956f7b0e18f8280252c5e03f4773c361768cf
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc64 SHELL=/bin/bash drivers/bluetooth/ drivers/media/i2c/ drivers/net/wireless/broadcom/brcm80211/brcmfmac/ drivers/pci/ drivers/soc/apple/ kernel/trace/ security/apparmor/ sound/soc/codecs/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+--zalewdgjudxxklrt
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Jul 14, 2022 at 08:33:27PM +0200, Pali Roh=E1r wrote:
+> Armada 38x supports per CPU interrupts for gpios, like Armada XP. Pre-XP
+> variants like Armada 370 do not support per CPU interrupts for gpios.
+>=20
+> So change compatible string for Armada 38x from "marvell,armada-370-gpio"
+> which indicates pre-XP variant to "marvell,armadaxp-gpio" which indicates
+> XP variant or new.
+>=20
+> Driver gpio-mvebu.c which handles both pre-XP and XP variants already
+> provides support for per CPU interrupts on XP and newer variants.
+>=20
+> Signed-off-by: Pali Roh=E1r <pali@kernel.org>
+> Fixes: 7cb2acb3fbae ("ARM: dts: mvebu: Add PWM properties for armada-38x")
+> ---
+>  arch/arm/boot/dts/armada-38x.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/arm/boot/dts/armada-38x.dtsi b/arch/arm/boot/dts/armada=
+-38x.dtsi
+> index df3c8d1d8f64..9343de6947b3 100644
+> --- a/arch/arm/boot/dts/armada-38x.dtsi
+> +++ b/arch/arm/boot/dts/armada-38x.dtsi
+> @@ -292,7 +292,7 @@
+>  			};
+> =20
+>  			gpio0: gpio@18100 {
+> -				compatible =3D "marvell,armada-370-gpio",
+> +				compatible =3D "marvell,armadaxp-gpio",
+>  					     "marvell,orion-gpio";
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/soc/apple/dockchannel.c:225:25: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/soc/apple/dockchannel.c:229:25: sparse: sparse: cast removes address space '__iomem' of expression
+If you can treat the XP variant as 370 and everything that is supposed
+to work on 370 works then, then maybe the right incarnation is:
 
-vim +/__iomem +225 drivers/soc/apple/dockchannel.c
+	compatible =3D "marvell,armadaxp-gpio", "marvell,armada-370-gpio", "marvel=
+l,orion-gpio";
 
-   211	
-   212	struct dockchannel *dockchannel_init(struct platform_device *pdev)
-   213	{
-   214		struct device *dev = &pdev->dev;
-   215		struct dockchannel *dockchannel;
-   216		int ret;
-   217	
-   218		dockchannel = devm_kzalloc(dev, sizeof(*dockchannel), GFP_KERNEL);
-   219		if (!dockchannel)
-   220			return ERR_PTR(-ENOMEM);
-   221	
-   222		dockchannel->dev = dev;
-   223		dockchannel->config_base = devm_platform_ioremap_resource_byname(pdev, "config");
-   224		if (IS_ERR(dockchannel->config_base))
- > 225			return (void *)dockchannel->config_base;
-   226	
-   227		dockchannel->data_base = devm_platform_ioremap_resource_byname(pdev, "data");
-   228		if (IS_ERR(dockchannel->data_base))
-   229			return (void *)dockchannel->data_base;
-   230	
-   231		ret = of_property_read_u32(dev->of_node, "apple,fifo-size", &dockchannel->fifo_size);
-   232		if (ret)
-   233			return ERR_PTR(dev_err_probe(dev, ret, "Missing apple,fifo-size property"));
-   234	
-   235		init_completion(&dockchannel->tx_comp);
-   236		init_completion(&dockchannel->rx_comp);
-   237	
-   238		dockchannel->tx_irq = platform_get_irq_byname(pdev, "tx");
-   239		if (dockchannel->tx_irq <= 0) {
-   240			return ERR_PTR(dev_err_probe(dev, dockchannel->tx_irq,
-   241					     "Failed to get TX IRQ"));
-   242		}
-   243	
-   244		dockchannel->rx_irq = platform_get_irq_byname(pdev, "rx");
-   245		if (dockchannel->rx_irq <= 0) {
-   246			return ERR_PTR(dev_err_probe(dev, dockchannel->rx_irq,
-   247					     "Failed to get RX IRQ"));
-   248		}
-   249	
-   250		ret = devm_request_irq(dev, dockchannel->tx_irq, dockchannel_tx_irq, IRQF_NO_AUTOEN,
-   251				       "apple-dockchannel-tx", dockchannel);
-   252		if (ret)
-   253			return ERR_PTR(dev_err_probe(dev, ret, "Failed to request TX IRQ"));
-   254	
-   255		ret = devm_request_threaded_irq(dev, dockchannel->rx_irq, dockchannel_rx_irq,
-   256						dockchannel_rx_irq_thread, IRQF_NO_AUTOEN,
-   257						"apple-dockchannel-rx", dockchannel);
-   258		if (ret)
-   259			return ERR_PTR(dev_err_probe(dev, ret, "Failed to request RX IRQ"));
-   260	
-   261		return dockchannel;
-   262	}
-   263	EXPORT_SYMBOL(dockchannel_init);
-   264	
-   265	
+?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--zalewdgjudxxklrt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLSzdkACgkQwfwUeK3K
+7Akz2wf+JF6UmqztBz7omhK1mGfW33SmnWY7c88XTanbchqiMR/xEQSaimY4mLAo
+zad+Y0rz8FY7GhVlnp76zFnGkXKKBDy6PR/RUw4BA0PJPYi1UkYPXINES3PW5Hzj
+P1/i9jC6IGdcWTkwIl+wLWTXcLm4XaJuJEq63zDtPDEifeYIKpF7dcmh7py2Jd3l
+7V71pUvjMLBBGLHpHCMtn3EOfAjpHczxS6krmkadFLbG9YjDKH2t4Fdzn5n1HOUc
+ofA4Ei4OVgRiQ+pN0YdxEFxeJeW1ipk1DiFHZwhOUQWQV+LuWKHksHGme+w9xX6y
+C1ZEwTuTRFizN2nkb+imT79hdtgg2g==
+=XF96
+-----END PGP SIGNATURE-----
+
+--zalewdgjudxxklrt--

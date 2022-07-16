@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BC5576E2A
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 15:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C67D576E2C
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 15:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiGPNYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 09:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
+        id S231599AbiGPN0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 09:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiGPNYa (ORCPT
+        with ESMTP id S229502AbiGPN0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 09:24:30 -0400
+        Sat, 16 Jul 2022 09:26:09 -0400
 Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24FCB861;
-        Sat, 16 Jul 2022 06:24:24 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1657977852tbzk9yep
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2322D6351;
+        Sat, 16 Jul 2022 06:26:03 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1657977954tdqkh9if
 Received: from localhost.localdomain ( [182.148.15.157])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 16 Jul 2022 21:24:10 +0800 (CST)
+        id ; Sat, 16 Jul 2022 21:25:48 +0800 (CST)
 X-QQ-SSF: 01000000002000B0D000B00A0000000
-X-QQ-FEAT: XBN7tc9DADLcu2uX1djkO7Gts01/A6b0NkR6RGNeCs+SC6nJ8/WEgj7daYA3l
-        yIpX+/FdIw/TIuQgryNA/GRuB/FxuZAvKtu4jntTNLuvMdx83L9fecKmc8eoSACGUbiDTbX
-        N4BrumRnJNQ/uxE3ArqI3wA53TdfsM8tRkgwno6iqb2cTLMOtGUVf11TZ6crEFAJ/IxPZ9+
-        I3yBRWIYgVXANBIfotj+BIrvl8kmbeCCWPy0SRQoqIXpXS2yAmiU+GpPYyE6zeahGnF8o9+
-        urM91KN3LPYKdrEYsEKSAUur/vQwcigFngHuX0KUdLWfM1CdeKiWnJzhxu/s7jSiL1eSE41
-        YKLQe9oFkJ8NFOQld22KEQf1qPmEvhuFaZNJPp5XjBah0FNHt7jwrX/ILjjHeC7ZQIpJBXV
+X-QQ-FEAT: 7jw2iSiCazo6mfR54gyfAPPcUCmAkvQgnJgY3OkKQ5sjVXFzBzlwqTdzYL1Ej
+        zz+MXo+ddPtXjlfvTfPfad4GSnCKssME/zNAAicf9PF726qktrCpdABBRjIbRfZ15eOrswV
+        GjsU7qwsS98Mpk/Y8UpyleIXmiJthdYCXSz9gW66JydRfb8NHS3wQVH56e43Nhy8hZxoe4M
+        2xIThDvzMXn2lWypQGYW10qIQxylpMhX3FF114t/7NYGRyoBh0YoknRAdSNZ8/P5ULU+zZm
+        HKmpPVGd9cl8rdt5wPHIc30CvNUXVMoap4N/u6cl37RrS4n90ecQdRs0a6d4iacIVpvWxzT
+        fGsrE35gSkZQE8/oMb/qUMOcwt/ZNhZZjgkJLRCNG4Hf0gesqjEkdaTnpKLVl7NbA4p2l9t
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     gregkh@linuxfoundation.org, jj251510319013@gmail.com,
-        heikki.krogerus@linux.intel.com
+To:     hminas@synopsys.com, gregkh@linuxfoundation.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] usb/core: fix repeated words in comments
-Date:   Sat, 16 Jul 2022 21:24:03 +0800
-Message-Id: <20220716132403.35270-1-yuanjilin@cdjrlc.com>
+Subject: [PATCH] usb/dwc2: fix repeated words in comments
+Date:   Sat, 16 Jul 2022 21:25:40 +0800
+Message-Id: <20220716132540.36840-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -52,36 +51,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- drivers/usb/core/driver.c | 2 +-
- drivers/usb/core/usb.c    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/dwc2/hcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index b87452e22835..7e7e119c253f 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -1482,7 +1482,7 @@ static int usb_suspend_both(struct usb_device *udev, pm_message_t msg)
-  * @msg: Power Management message describing this state transition
-  *
-  * This is the central routine for resuming USB devices.  It calls the
-- * the resume method for @udev and then calls the resume methods for all
-+ * resume method for @udev and then calls the resume methods for all
-  * the interface drivers in @udev.
-  *
-  * Autoresume requests originating from a child device or an interface
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index 2f71636af6e1..11b15d7b357a 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -801,7 +801,7 @@ EXPORT_SYMBOL_GPL(usb_intf_get_dma_device);
-  * is simple:
-  *
-  *	When locking both a device and its parent, always lock the
-- *	the parent first.
-+ *	parent first.
-  */
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index f63a27d11fac..a9731169d378 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -999,7 +999,7 @@ static void dwc2_hc_set_even_odd_frame(struct dwc2_hsotg *hsotg,
  
- /**
+ 		/*
+ 		 * Try to figure out if we're an even or odd frame. If we set
+-		 * even and the current frame number is even the the transfer
++		 * even and the current frame number is even the transfer
+ 		 * will happen immediately.  Similar if both are odd. If one is
+ 		 * even and the other is odd then the transfer will happen when
+ 		 * the frame number ticks.
 -- 
 2.36.1
 

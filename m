@@ -2,177 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF8B577265
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34880577245
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbiGPXUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 19:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
+        id S233188AbiGPXXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 19:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233328AbiGPXTn (ORCPT
+        with ESMTP id S233127AbiGPXWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 19:19:43 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AAF25585
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:18:21 -0700 (PDT)
-Message-ID: <20220716230954.957997370@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658013492;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=LlS7WcBzrKcFWrbZQU5y98/DeyvCwTJOWzMBgWM/naQ=;
-        b=2hfUTazQRr066bAX5raUP9gbSJmxMwdj7QKWxfZAuqgqZCxohzxSVqI2IICyuiW0NGQgeN
-        v6+gydnZcWlmVWA6B+Bpzz3Oy9cj0YSDIt9NEskcXBwb/mpEVfpDmRcqWZfTJn4VoHP3E5
-        TFTk/6SjxpGf6vrkbx3ZhOrqzfQpHYr9gZhH1Masy8dirFHRvdfYzgzMcQoC2bnODxzQ+Y
-        6Fz2OaD+gdqDTlnAYXxSFW0ENqsEtbyhJr1KE0KKhGV0PnXeunOvnX5nfIw1UlXmUxCysO
-        HKm1Fmpe6CsdgJB4m/E5rQbfl9PZn4iY2uccN/tISljhmjzbKVAZ4vEvYZhM7A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658013492;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=LlS7WcBzrKcFWrbZQU5y98/DeyvCwTJOWzMBgWM/naQ=;
-        b=cmTN5WRV36zThjlAigj/rQupHTAWHCf31mQk9irjEnTBZqFHWnR3Q1YuiN7jgLPfhz0gYD
-        Mx5nC5IxuV5uG0BA==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [patch 38/38] x86/retbleed: Add call depth tracking mitigation
-References: <20220716230344.239749011@linutronix.de>
+        Sat, 16 Jul 2022 19:22:52 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38091208A
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:20:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658013659; x=1689549659;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wykNfR/iep6HPkaJF69DpWCCPgF53zZVnjM3Ja3R8ho=;
+  b=PwWk5HnPsijRCWokixQL1OGokBRm4GRZH6FXiqJIcrHTmzuRsVO7KFr0
+   +E9ODpwqcRyzsvnWUM81bcY5rlG+9lGVIIeQxyEHhe/I9h2tdz2cBORLQ
+   wTdZLFw7lPaUJvJgXq17WPODNsxcp4Xqy0n6MHaf9dHvU0gTKGWU448HP
+   1jwwwx2u+Goyn3bzH+5o57Q+nRa5jxIMedObaTnnzuDsXyfaxumKHUbJk
+   VGMUdwMEVd7z7mPnVJLMblY8y9ECRdcpvyrXtEQFUzU5nmbl0CN6tCpI1
+   F7znTole9r1s9xndRMSjFP/aqVe+ppIR8kRBb7gx1zJ7zLdj1oHejj6oz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="266419901"
+X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
+   d="scan'208";a="266419901"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 16:20:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
+   d="scan'208";a="699604349"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 16 Jul 2022 16:20:58 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCr5m-0002I2-0t;
+        Sat, 16 Jul 2022 23:20:58 +0000
+Date:   Sun, 17 Jul 2022 07:20:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arm-linux-gnueabi-ld: error: .btf.vmlinux.bin.o is already in final
+ BE8 format
+Message-ID: <202207170709.VKgrHNoN-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 17 Jul 2022 01:18:11 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The fully secure mitigation for RSB underflow on Intel SKL CPUs is IBRS,
-which inflicts up to 30% penalty for pathological syscall heavy work loads.
+Hi Arnd,
 
-Software based call depth tracking and RSB refill is not perfect, but
-reduces the attack surface massively. The penalty for the pathological case
-is about 8% which is still annoying but definitely more palatable than IBRS.
+FYI, the error/warning still remains.
 
-Add a retbleed=stuff command line option to enable the call depth tracking
-and software refill of the RSB.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   972a278fe60c361eb8f37619f562f092e8786d7c
+commit: 5d6f52671e76ca2d55d74e676ac4c38ceb14a2d3 ARM: rework endianess selection
+date:   3 months ago
+config: arm-randconfig-r014-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170709.VKgrHNoN-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5d6f52671e76ca2d55d74e676ac4c38ceb14a2d3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 5d6f52671e76ca2d55d74e676ac4c38ceb14a2d3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-This gives admins a choice. IBeeRS are safe and cause headaches, call depth
-tracking is considered to be s(t)ufficiently safe.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- arch/x86/kernel/cpu/bugs.c |   32 ++++++++++++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
+All errors (new ones prefixed by >>):
 
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -784,6 +784,7 @@ enum retbleed_mitigation {
- 	RETBLEED_MITIGATION_IBPB,
- 	RETBLEED_MITIGATION_IBRS,
- 	RETBLEED_MITIGATION_EIBRS,
-+	RETBLEED_MITIGATION_STUFF,
- };
- 
- enum retbleed_mitigation_cmd {
-@@ -791,6 +792,7 @@ enum retbleed_mitigation_cmd {
- 	RETBLEED_CMD_AUTO,
- 	RETBLEED_CMD_UNRET,
- 	RETBLEED_CMD_IBPB,
-+	RETBLEED_CMD_STUFF,
- };
- 
- const char * const retbleed_strings[] = {
-@@ -799,6 +801,7 @@ const char * const retbleed_strings[] =
- 	[RETBLEED_MITIGATION_IBPB]	= "Mitigation: IBPB",
- 	[RETBLEED_MITIGATION_IBRS]	= "Mitigation: IBRS",
- 	[RETBLEED_MITIGATION_EIBRS]	= "Mitigation: Enhanced IBRS",
-+	[RETBLEED_MITIGATION_STUFF]	= "Mitigation: Stuffing",
- };
- 
- static enum retbleed_mitigation retbleed_mitigation __ro_after_init =
-@@ -828,6 +831,8 @@ static int __init retbleed_parse_cmdline
- 			retbleed_cmd = RETBLEED_CMD_UNRET;
- 		} else if (!strcmp(str, "ibpb")) {
- 			retbleed_cmd = RETBLEED_CMD_IBPB;
-+		} else if (!strcmp(str, "stuff")) {
-+			retbleed_cmd = RETBLEED_CMD_STUFF;
- 		} else if (!strcmp(str, "nosmt")) {
- 			retbleed_nosmt = true;
- 		} else {
-@@ -876,6 +881,21 @@ static void __init retbleed_select_mitig
- 		}
- 		break;
- 
-+	case RETBLEED_CMD_STUFF:
-+		if (IS_ENABLED(CONFIG_CALL_DEPTH_TRACKING) &&
-+		    spectre_v2_enabled == SPECTRE_V2_RETPOLINE) {
-+			retbleed_mitigation = RETBLEED_MITIGATION_STUFF;
-+
-+		} else {
-+			if (IS_ENABLED(CONFIG_CALL_DEPTH_TRACKING))
-+				pr_err("WARNING: retbleed=stuff depends on spectre_v2=retpoline\n");
-+			else
-+				pr_err("WARNING: kernel not compiled with CALL_DEPTH_TRACKING.\n");
-+
-+			goto do_cmd_auto;
-+		}
-+		break;
-+
- do_cmd_auto:
- 	case RETBLEED_CMD_AUTO:
- 	default:
-@@ -913,6 +933,12 @@ static void __init retbleed_select_mitig
- 		mitigate_smt = true;
- 		break;
- 
-+	case RETBLEED_MITIGATION_STUFF:
-+		setup_force_cpu_cap(X86_FEATURE_RETHUNK);
-+		setup_force_cpu_cap(X86_FEATURE_CALL_DEPTH);
-+		x86_set_skl_return_thunk();
-+		break;
-+
- 	default:
- 		break;
- 	}
-@@ -923,7 +949,7 @@ static void __init retbleed_select_mitig
- 
- 	/*
- 	 * Let IBRS trump all on Intel without affecting the effects of the
--	 * retbleed= cmdline option.
-+	 * retbleed= cmdline option except for call depth based stuffing
- 	 */
- 	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL) {
- 		switch (spectre_v2_enabled) {
-@@ -936,7 +962,8 @@ static void __init retbleed_select_mitig
- 			retbleed_mitigation = RETBLEED_MITIGATION_EIBRS;
- 			break;
- 		default:
--			pr_err(RETBLEED_INTEL_MSG);
-+			if (retbleed_mitigation != RETBLEED_MITIGATION_STUFF)
-+				pr_err(RETBLEED_INTEL_MSG);
- 		}
- 	}
- 
-@@ -1361,6 +1388,7 @@ static void __init spectre_v2_select_mit
- 		if (IS_ENABLED(CONFIG_CPU_IBRS_ENTRY) &&
- 		    boot_cpu_has_bug(X86_BUG_RETBLEED) &&
- 		    retbleed_cmd != RETBLEED_CMD_OFF &&
-+		    retbleed_cmd != RETBLEED_CMD_STUFF &&
- 		    boot_cpu_has(X86_FEATURE_IBRS) &&
- 		    boot_cpu_data.x86_vendor == X86_VENDOR_INTEL) {
- 			mode = SPECTRE_V2_IBRS;
+>> arm-linux-gnueabi-ld: error: .btf.vmlinux.bin.o is already in final BE8 format
+   arm-linux-gnueabi-ld: failed to merge target specific data of file .btf.vmlinux.bin.o
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

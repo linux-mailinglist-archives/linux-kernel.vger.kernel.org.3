@@ -2,103 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E6F576E89
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 16:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D09576E8A
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 16:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiGPO0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 10:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
+        id S231972AbiGPO3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 10:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiGPO0a (ORCPT
+        with ESMTP id S229538AbiGPO3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 10:26:30 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA761EAE9
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 07:26:28 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id t5-20020a17090a6a0500b001ef965b262eso8616846pjj.5
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 07:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vAhxXzlwc0d/w/M6f1DCLNnaAhsawHdFInLCFqusdAU=;
-        b=3YeUX20hZeUltQxwI4xQg05CZQgo5wK6MGeswzNMDOfobg4pkVheVPngI4hX40CiyE
-         LcUvaIc2M2uxFVTDdujB3rHj0BTId5OeL1ilDk6PjnPNwVQCNMfklL+DdIePb6hcDhxN
-         nZaRzNH3i2ljUhJGYags7olKOjwxgK3xQQ+ePhEoPeA2+9athQmABg3OZFoWfYWUNwQY
-         i9bO4dq0GNfy4TgJIgDtNIZGO744bwcU7H93Hm19vjMQGqHbG03scgj3s6FCpBu3SEyc
-         1JLhSVa96z43uMFlQsOMTRHGF3P+gK/LjDsRfGbyc43qxFlfTeG//ItqCTE1/Bm6i60n
-         Hv5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vAhxXzlwc0d/w/M6f1DCLNnaAhsawHdFInLCFqusdAU=;
-        b=5v0k4OLSW5UGMSqNmTt1GfifnPxRbXtFxG/OuwiLCYb2qeF0++XJ68VloXUZvA81rv
-         dT8tphzhUbkHv1nLTYrFJGhwVaqEK0nLTKXEaDqwTEVsz8ffPgu0AXfqnZpaCTehJXz4
-         orRKDM7DMkGPesIMQHqxLje00AmYTm5AgXksffME2yMvydzc8am3z1UMjYV6QLfDK23Z
-         DbqZEOAfPv3n1wRs7eOFtNVTh3cE0H3WECFj2by7ZAkHYucXPKzmwccvjjbbaES2jjxt
-         2hvzZu+/vHT0gdrPJiX5sspCxCrYbgx5pN22Sav0FvTxdhG3NcvfRtf8GqRqZ39GbENQ
-         XdDg==
-X-Gm-Message-State: AJIora/T6/XAoJ5ZoAc9O2O+0kGI2aDc5ZZH3M+LC+I+ZXK8ayEjMGue
-        syzOv1e+HsBm9W5044d4womzTg==
-X-Google-Smtp-Source: AGRyM1uDqyFLDoYwDAAmT5wVcDPFuPmb2tl9y8zTliTryA3LepSzTMsdbZLnQY5ugSET0TqRQC1DUg==
-X-Received: by 2002:a17:90a:c906:b0:1f0:47ed:59bd with SMTP id v6-20020a17090ac90600b001f047ed59bdmr28269640pjt.40.1657981588100;
-        Sat, 16 Jul 2022 07:26:28 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id n5-20020a17090a394500b001f1694dafb1sm1928423pjf.44.2022.07.16.07.26.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Jul 2022 07:26:27 -0700 (PDT)
-Message-ID: <f7f30927-9f36-ec92-cfdc-cb216115a39f@kernel.dk>
-Date:   Sat, 16 Jul 2022 08:26:26 -0600
+        Sat, 16 Jul 2022 10:29:18 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E908411160
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 07:29:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657981757; x=1689517757;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6ArMyUK0om5E+XznwVtCh1MIkJjTsHayzf1pxzCAi5U=;
+  b=LahCy5eK2E+FLReP417X7XmOsYVNJPLK83O1tw2xoyQE95nKVlmQXXUb
+   5y1NGn5UVhywhN+gptZ4SJSWNpjWKFfr0PoHWAiM7M65q5FxRXPT4Dn7h
+   3CXl5XSby0CdGnn3TXbYzDnkHhtl+YAkYFNfZnbDJsnLxiKTCTQ8hBsBu
+   u4rcGfMqCAM5Zwh5X1NTT9+QDwv3eUZE9VH0rIsAPoFc8D4thObqWcoov
+   oGeSMWw0pj5fQ5Dk3q8ITQudXODFTJgEyIimBlS3kW8b29aSyW+bX2OBb
+   3ZgUpB4FQALpUhD0cAPjIEXZWD7O3qyzp9PesWa8Bs1TG0DloCGpNibiK
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="283544923"
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="283544923"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 07:29:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="546984166"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 16 Jul 2022 07:29:16 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCinD-0001dA-Ft;
+        Sat, 16 Jul 2022 14:29:15 +0000
+Date:   Sat, 16 Jul 2022 22:29:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/090-spi-hid 16/18]
+ drivers/soc/apple/dockchannel.c:225:25: sparse: sparse: cast removes address
+ space '__iomem' of expression
+Message-ID: <202207162221.jMZrbhSG-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [net] 65a1e5c409: canonical_address#:#[##]
-Content-Language: en-US
-To:     kernel test robot <oliver.sang@intel.com>,
-        Dylan Yudaken <dylany@fb.com>
-Cc:     0day robot <lkp@intel.com>, Paolo Abeni <pabeni@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
-        lkp@lists.01.org, Pavel Begunkov <asml.silence@gmail.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        io-uring@vger.kernel.org, Kernel-team@fb.com
-References: <YtLGmrJEJy2pnLaO@xsang-OptiPlex-9020>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YtLGmrJEJy2pnLaO@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/16/22 8:09 AM, kernel test robot wrote:
-> 
-> 
-> Greeting,
-> 
-> FYI, we noticed the following commit (built with gcc-11):
-> 
-> commit: 65a1e5c409f2b56b025f913b9cfbc8ae3a717c9a ("[PATCH v3 for-next 2/3] net: copy from user before calling __get_compat_msghdr")
-> url: https://github.com/intel-lab-lkp/linux/commits/Dylan-Yudaken/io_uring-multishot-recvmsg/20220714-190504
-> patch link: https://lore.kernel.org/io-uring/20220714110258.1336200-3-dylany@fb.com
-> 
-> in testcase: boot
-> 
-> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   2902ed1bd2d6ac439a835c53841122c7f3455a6c
+commit: 6b3956f7b0e18f8280252c5e03f4773c361768cf [16/18] soc: apple: Add DockChannel driver
+config: parisc-randconfig-s041-20220715 (https://download.01.org/0day-ci/archive/20220716/202207162221.jMZrbhSG-lkp@intel.com/config)
+compiler: hppa64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/AsahiLinux/linux/commit/6b3956f7b0e18f8280252c5e03f4773c361768cf
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout 6b3956f7b0e18f8280252c5e03f4773c361768cf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc64 SHELL=/bin/bash drivers/bluetooth/ drivers/media/i2c/ drivers/net/wireless/broadcom/brcm80211/brcmfmac/ drivers/pci/ drivers/soc/apple/ kernel/trace/ security/apparmor/ sound/soc/codecs/
 
-This is the same as the issue reported by Marek, should be fixed by:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-https://git.kernel.dk/cgit/linux-block/commit/?h=for-5.20/io_uring&id=e544477ca928416bf3897b8461672752eb6581fe
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/soc/apple/dockchannel.c:225:25: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/soc/apple/dockchannel.c:229:25: sparse: sparse: cast removes address space '__iomem' of expression
+
+vim +/__iomem +225 drivers/soc/apple/dockchannel.c
+
+   211	
+   212	struct dockchannel *dockchannel_init(struct platform_device *pdev)
+   213	{
+   214		struct device *dev = &pdev->dev;
+   215		struct dockchannel *dockchannel;
+   216		int ret;
+   217	
+   218		dockchannel = devm_kzalloc(dev, sizeof(*dockchannel), GFP_KERNEL);
+   219		if (!dockchannel)
+   220			return ERR_PTR(-ENOMEM);
+   221	
+   222		dockchannel->dev = dev;
+   223		dockchannel->config_base = devm_platform_ioremap_resource_byname(pdev, "config");
+   224		if (IS_ERR(dockchannel->config_base))
+ > 225			return (void *)dockchannel->config_base;
+   226	
+   227		dockchannel->data_base = devm_platform_ioremap_resource_byname(pdev, "data");
+   228		if (IS_ERR(dockchannel->data_base))
+   229			return (void *)dockchannel->data_base;
+   230	
+   231		ret = of_property_read_u32(dev->of_node, "apple,fifo-size", &dockchannel->fifo_size);
+   232		if (ret)
+   233			return ERR_PTR(dev_err_probe(dev, ret, "Missing apple,fifo-size property"));
+   234	
+   235		init_completion(&dockchannel->tx_comp);
+   236		init_completion(&dockchannel->rx_comp);
+   237	
+   238		dockchannel->tx_irq = platform_get_irq_byname(pdev, "tx");
+   239		if (dockchannel->tx_irq <= 0) {
+   240			return ERR_PTR(dev_err_probe(dev, dockchannel->tx_irq,
+   241					     "Failed to get TX IRQ"));
+   242		}
+   243	
+   244		dockchannel->rx_irq = platform_get_irq_byname(pdev, "rx");
+   245		if (dockchannel->rx_irq <= 0) {
+   246			return ERR_PTR(dev_err_probe(dev, dockchannel->rx_irq,
+   247					     "Failed to get RX IRQ"));
+   248		}
+   249	
+   250		ret = devm_request_irq(dev, dockchannel->tx_irq, dockchannel_tx_irq, IRQF_NO_AUTOEN,
+   251				       "apple-dockchannel-tx", dockchannel);
+   252		if (ret)
+   253			return ERR_PTR(dev_err_probe(dev, ret, "Failed to request TX IRQ"));
+   254	
+   255		ret = devm_request_threaded_irq(dev, dockchannel->rx_irq, dockchannel_rx_irq,
+   256						dockchannel_rx_irq_thread, IRQF_NO_AUTOEN,
+   257						"apple-dockchannel-rx", dockchannel);
+   258		if (ret)
+   259			return ERR_PTR(dev_err_probe(dev, ret, "Failed to request RX IRQ"));
+   260	
+   261		return dockchannel;
+   262	}
+   263	EXPORT_SYMBOL(dockchannel_init);
+   264	
+   265	
 
 -- 
-Jens Axboe
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

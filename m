@@ -2,136 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFA657718B
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 23:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70608577193
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 23:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiGPVb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 17:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
+        id S231398AbiGPVgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 17:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiGPVb2 (ORCPT
+        with ESMTP id S229619AbiGPVgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 17:31:28 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397D255A7
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 14:31:28 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:53112)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oCpNl-003XHC-Sw; Sat, 16 Jul 2022 15:31:25 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:48014 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oCpNk-0096qh-SE; Sat, 16 Jul 2022 15:31:25 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Keno Fischer <keno@juliacomputing.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mingo@kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        "Robert O'Callahan" <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Oleg Nesterov <oleg@redhat.com>
-References: <20220421150248.667412396@infradead.org>
-        <20220421150654.817117821@infradead.org>
-        <87czhap9dy.fsf@email.froward.int.ebiederm.org>
-        <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
-        <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-        <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
-        <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
-        <87r13gd4xy.fsf_-_@email.froward.int.ebiederm.org>
-        <87edyvgs2s.fsf@email.froward.int.ebiederm.org>
-        <CABV8kRxQNPUzLaJ1tFF8H-E_iqCkz0+Ac5rPBurnmA3GcofMmQ@mail.gmail.com>
-        <875yk22j5z.fsf@email.froward.int.ebiederm.org>
-Date:   Sat, 16 Jul 2022 16:29:49 -0500
-In-Reply-To: <875yk22j5z.fsf@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Tue, 12 Jul 2022 15:03:04 -0500")
-Message-ID: <87pmi4ycdu.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sat, 16 Jul 2022 17:36:15 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FB5186C6
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 14:36:13 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id ez10so14788647ejc.13
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 14:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D5MNxF6HQt18ArNx99k1EypgpgmCjDyR8Pgj+dEhqhE=;
+        b=B7B0Xx/vBB5LIfAfDpoYoyPOQo37uenioUBXSGhILkCVV4sHVWRC83NB0qjuxYFTzS
+         rzVH6KZBFO4wYFFdNm0C7hvH70V/FyLc0FuEtb4VuqsHQNobrz1MVOQiXpWwdXpdxmCx
+         YvaLa+rtQZIXTV5+sBkl0CNz3WyXmqhFu1vac=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D5MNxF6HQt18ArNx99k1EypgpgmCjDyR8Pgj+dEhqhE=;
+        b=1wkg19p+8E99XDqvC7LPNMRUo+sz+f/54xWUGDMf5mmvmFPZOKmNZS9fJbSbDbEIQZ
+         5prlIY/UQJaQRLOcou0P3OqVT0OFZX2iVlQvQQL6lZWiWHqHEMlOWC9LNZ0PM8/7Pq9J
+         YxTrPVi4uPLKSbuhM8bpIiFh73WXclIISsUhvCmQbP9pZ25o7/UZ1YsAsDizJX8bWeiH
+         YiH659aH/I1beF1qhueeC8+XMi3ZPvD7ZiE+87Wb1owRc3iXT6fvTHmRqZMCIZMT+4UT
+         jdRe6Tibgd5h+qyQ+86Zv9eo4WlqslKzGTw0C6gz5kAzojrNJXpawq7pQ5yMI9rISOZX
+         T7QQ==
+X-Gm-Message-State: AJIora9MxL9wNQP7cR2Owt0WrVriuxqFTBakLlp6zIF9tPgabtzf6OML
+        GGZ3MM5LhizF5cB8MDeCvMhGo9RZqih7Imrs
+X-Google-Smtp-Source: AGRyM1vhmGfuUbd/JmofojW7SND8kcCwVbn0yMwRg99pBVNJildXfTw/1gZHczkI4M9iyl9RCbGtBQ==
+X-Received: by 2002:a17:906:4fc4:b0:6da:b4c6:fadb with SMTP id i4-20020a1709064fc400b006dab4c6fadbmr19698884ejw.282.1658007371813;
+        Sat, 16 Jul 2022 14:36:11 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id x10-20020a170906148a00b00705cdfec71esm3653759ejc.7.2022.07.16.14.36.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Jul 2022 14:36:10 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id p26-20020a1c545a000000b003a2fb7c1274so2676546wmi.1
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 14:36:10 -0700 (PDT)
+X-Received: by 2002:a05:600c:34c9:b0:3a0:5072:9abe with SMTP id
+ d9-20020a05600c34c900b003a050729abemr19959278wmq.8.1658007370148; Sat, 16 Jul
+ 2022 14:36:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oCpNk-0096qh-SE;;;mid=<87pmi4ycdu.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+/Vjcg1LG+PkIixgXe8YCIN4VRwU6Ap+E=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <CAPM=9twM75GDM9t+9-CSCPDZG3QdcEpQ-X+FzQ4CLUCM7cKLkw@mail.gmail.com>
+ <YtHXe4PcWXfihF9Q@dev-arch.thelio-3990X>
+In-Reply-To: <YtHXe4PcWXfihF9Q@dev-arch.thelio-3990X>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 16 Jul 2022 14:35:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh5DB+OL2QvWPqRhpLLCqW7u_bLucFJpm4v6rZT3T5+zQ@mail.gmail.com>
+Message-ID: <CAHk-=wh5DB+OL2QvWPqRhpLLCqW7u_bLucFJpm4v6rZT3T5+zQ@mail.gmail.com>
+Subject: Re: [git pull] drm fixes for 5.19-rc7
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Keno Fischer <keno@juliacomputing.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 445 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 12 (2.7%), b_tie_ro: 11 (2.4%), parse: 1.34
-        (0.3%), extract_message_metadata: 21 (4.6%), get_uri_detail_list: 2.4
-        (0.5%), tests_pri_-1000: 33 (7.5%), tests_pri_-950: 1.45 (0.3%),
-        tests_pri_-900: 1.15 (0.3%), tests_pri_-90: 82 (18.5%), check_bayes:
-        80 (18.0%), b_tokenize: 8 (1.9%), b_tok_get_all: 8 (1.8%),
-        b_comp_prob: 3.0 (0.7%), b_tok_touch_all: 56 (12.7%), b_finish: 1.20
-        (0.3%), tests_pri_0: 280 (62.8%), check_dkim_signature: 0.77 (0.2%),
-        check_dkim_adsp: 3.7 (0.8%), poll_dns_idle: 1.08 (0.2%), tests_pri_10:
-        2.1 (0.5%), tests_pri_500: 7 (1.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 0/3] ptrace: Stop supporting SIGKILL for PTRACE_EVENT_EXIT
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Eric W. Biederman" <ebiederm@xmission.com> writes:
-
-> Keno Fischer <keno@juliacomputing.com> writes:
+On Fri, Jul 15, 2022 at 2:09 PM Nathan Chancellor <nathan@kernel.org> wrote:
 >
->> Hi Eric,
->>
->> On Fri, Jul 8, 2022 at 6:25 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->>> > Recently I had a conversation where it was pointed out to me that
->>> > SIGKILL sent to a tracee stropped in PTRACE_EVENT_EXIT is quite
->>> > difficult for a tracer to handle.
->>> >
->>>
->>> RR folks any comments?
->>>
->>> Did I properly understand what Keno Fischer was asking for when we
->>> talked in person?
->>
->> Yes, this is indeed what I had in mind. I have not yet had the opportunity
->> to try out your patch series (sorry), but from visual inspection, it does indeed
->> do what I wanted, which is to make sure that a tracee stays in
->> PTRACE_EVENT_EXIT for the tracer to inspect, even if there is another
->> SIGKILL incoming simultaneously (since otherwise it may be impossible
->> for the tracer to observe the PTRACE_EVENT_EXIT if two SIGKILLs
->> come in rapid succession). I will try to take this series for a proper spin
->> shortly.
+> On Fri, Jul 15, 2022 at 01:36:17PM +1000, Dave Airlie wrote:
+> > Matthew Auld (1):
+> >       drm/i915/ttm: fix sg_table construction
 >
-> Thanks,
+> This patch breaks i386_defconfig with both GCC and clang:
 >
-> I haven't yet figured out how to get the rr test suite to run
-> successfully.  Something about my test machine and lack of perf counters
-> seems to be causing problems.  So if you can perform the testing on your
-> side that would be fantastic.
+>   ld: drivers/gpu/drm/i915/i915_scatterlist.o: in function `i915_rsgt_from_mm_node':
+>   i915_scatterlist.c:(.text+0x1a7): undefined reference to `__udivdi3'
 
-Ok.  I finally found a machine where I can run rr and the rr test suite.
+Yeah, we definitely don't want arbitrary 64x64 divides in the kernel,
+and the fact that we don't include libgcc.a once again caught this
+horrid issue.
 
-It looks like there are a couple of the rr 5.5.0 test that fail on
-Linus's lastest kernel simply because of changes in kernel behavior.  In
-particular clone_cleartid_coredump, and fcntl_rw_hints.  The
-clone_cleartid_coredump appears to fail because SIGSEGV no longer kills
-all processes that share an mm.  Which was a deliberate change.
+The offending code is
 
-With the lastest development version of rr, only detach_sigkill appears
-to be failing on Linus's latest.  That failure appears to be independent
-of the patches in question as well.  When run manually the
-detach_sigkill test succeeds so I am not quite certain what is going on,
-any thoughts?
+        if (sg_alloc_table(st, DIV_ROUND_UP(node->size, segment_pages),
+                           GFP_KERNEL)) {
 
-As for my patchset it looks like it does not cause any new test failures
-for rr so I will plan on getting it into linux-next shortly.
+and I have to say that all of those games with "u64 page_alignment"
+that commit aff1e0b09b54 ("drm/i915/ttm: fix sg_table construction")
+introduces are absolutely disgusting.
 
-Eric
+And they are just *pointlessly* disgusting.
 
+Why is that "page_alignment" a "u64"?
+
+And why is it a "size", instead of being a "number of bits"?
+
+The code literally does things like
+
+        const u64 max_segment = round_down(UINT_MAX, page_alignment);
+
+which means that
+
+ (a) page_alignment must be a power-of-two for this to work
+(round_down() only works in powers of two)
+
+ (b) the result obviously must fit in an "unsigned int", since it's
+rounding down a UINT_MAX!
+
+So (a) makes it doubtful that "page_alignment" should have been a
+value (as opposed to mask), and (b) then questions why was that made
+an "u64" value when it cannot have a u64 range?
+
+And if max_segments cannot have a 64-bit range, then segment_pages here:
+
+        u64 segment_pages = max_segment >> PAGE_SHIFT;
+
+sure cannot.
+
+Fixing those then uncovers other things:
+
+                len = min(block_size, max_segment - sg->length);
+
+now complains about mixing types ("max_segment - sg->length" being
+u32), because 'block_size' is 64, bit, and that does seem to make some
+amount of sense:
+
+        block_size = node->size << PAGE_SHIFT;
+
+with the 'node->size' being from drm_mm_node, and that size is a
+'u64'. That I *could* see being more than 32 bits on a 64-bit
+architecture. Ok.
+
+But then that means that 'len' cannot be a 64-bit value either, and it
+should probably have been
+
+                u32 len;
+    ..
+                len = min_t(u64, block_size, max_segment - sg->length);
+
+and that would just have been a lot nicer on 32-bit x86, avoiding a
+lot of pointlessly 64-bit things.
+
+That said, even those type simplifications do not fix the fundamental
+issue. That "DIV_ROUND_UP()" still ends up being a 64-bit divide,
+although now it's at least a "64-by-32" bit divide.
+
+Which needs to be handled by "do_div()" rather than the generic
+DIV_ROUND_UP() helper, because sadly, at least gcc still generates a
+full __udivdi3() even for the 64-by-32 divides.
+
+Can Intel GPU people please take a look?
+
+             Linus

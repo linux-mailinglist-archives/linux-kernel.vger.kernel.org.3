@@ -2,95 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF48F576B5B
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 05:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B7F576B67
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 05:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiGPDAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 23:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        id S231512AbiGPDEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 23:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiGPDAU (ORCPT
+        with ESMTP id S230012AbiGPDEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 23:00:20 -0400
+        Fri, 15 Jul 2022 23:04:48 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB383A4AA;
-        Fri, 15 Jul 2022 20:00:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0F017056
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 20:04:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D5DDB82F44;
-        Sat, 16 Jul 2022 03:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BA012C341C6;
-        Sat, 16 Jul 2022 03:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657940414;
-        bh=WesvKr+3zgDR6OKOPO4nXw36zLe4wI89fpPU7PRtOxw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=pwOi4xRqa3sfInzx7tBHPxeZPndDjiem9mW3Hc8rZSQQMTjrpNWC2/C2rCF1Ayj1Q
-         xd6dclTqL2MHv7WMadXtScIaEMgps+dThSScXjsMhFNGfz8DVhwDSHClKeatMvc2/w
-         ewkZ3sTyDIN11Hyp89LWRWnDmd/y0DjqezErSjrV45ZdsNl/yxj1j2aL8OYstKfbLG
-         DkaEunRTzqzk6pOxpbR6rq9O53Gr2AJWIUIkIjBpoZEPwA0nEJ3Tb1T1UI8aOzzGtG
-         V/A57Vta0YUBzrDBeKQQ9AxGgwimiCDZhFgtFzMkgutJWUPR5/IxPrd2NM7q1Q1Jrn
-         RLaOzJWcGk+Ew==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A41ADE4522F;
-        Sat, 16 Jul 2022 03:00:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F134B82EEA
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 03:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA81C34115;
+        Sat, 16 Jul 2022 03:04:43 +0000 (UTC)
+Date:   Fri, 15 Jul 2022 23:04:41 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [ammarfaizi2-block:rostedt/linux-trace/ftrace/core 30/30]
+ include/linux/cpumask.h:95:42: warning: function
+ 'trace_event_get_offsets_foo_bar' might be a candidate for 'gnu_printf'
+ format attribute
+Message-ID: <20220715230441.64c89d63@gandalf.local.home>
+In-Reply-To: <202207160905.GmOfByea-lkp@intel.com>
+References: <202207160905.GmOfByea-lkp@intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 net-next 0/3] net: ipv4/ipv6: new option to accept
- garp/untracked na only if in-network
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165794041466.22960.16853534349610766541.git-patchwork-notify@kernel.org>
-Date:   Sat, 16 Jul 2022 03:00:14 +0000
-References: <cover.1657755188.git.jhpark1013@gmail.com>
-In-Reply-To: <cover.1657755188.git.jhpark1013@gmail.com>
-To:     Jaehee <jhpark1013@gmail.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, dsahern@gmail.com,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, linux-kernel@vger.kernel.org, aajith@arista.com,
-        roopa@nvidia.com, roopa.prabhu@gmail.com, aroulin@nvidia.com,
-        sbrivio@redhat.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Sat, 16 Jul 2022 09:09:15 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 13 Jul 2022 16:40:46 -0700 you wrote:
-> The first patch adds an option to learn a neighbor from garp only if
-> the source ip is in the same subnet as an address configured on the
-> interface that received the garp message. The option has been added
-> to arp_accept in ipv4.
+> All warnings (new ones prefixed by >>):
 > 
-> The same feature has been added to ndisc (patch 2). For ipv6, the
-> subnet filtering knob is an extension of the accept_untracked_na
-> option introduced in these patches:
-> https://lore.kernel.org/all/642672cb-8b11-c78f-8975-f287ece9e89e@gmail.com/t/
-> https://lore.kernel.org/netdev/20220530101414.65439-1-aajith@arista.com/T/
-> 
-> [...]
+>    In file included from include/trace/define_trace.h:102,
+>                     from samples/trace_events/trace-events-sample.h:608,
+>                     from samples/trace_events/trace-events-sample.c:12:
+>    samples/trace_events/./trace-events-sample.h: In function 'trace_event_get_offsets_foo_bar':
+> >> include/linux/cpumask.h:95:42: warning: function 'trace_event_get_offsets_foo_bar' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]  
+>       95 | #define cpu_possible_mask ((const struct cpumask *)&__cpu_possible_mask)
+>          |                                          ^~~~~~~
 
-Here is the summary with links:
-  - [v3,net-next,1/3] net: ipv4: new arp_accept option to accept garp only if in-network
-    https://git.kernel.org/netdev/net-next/c/e68c5dcf0aac
-  - [v3,net-next,2/3] net: ipv6: new accept_untracked_na option to accept na only if in-network
-    https://git.kernel.org/netdev/net-next/c/aaa5f515b16b
-  - [v3,net-next,3/3] selftests: net: arp_ndisc_untracked_subnets: test for arp_accept and accept_untracked_na
-    https://git.kernel.org/netdev/net-next/c/0ea7b0a454ca
+Please quiet the gnu_printf warning. I actually missed a real build issue
+from the kernel test robot in the last patch set because it was the needle
+in the gnu_printf haystack :-p
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+That is, after having 10 of these warnings, I missed the one that actually
+mattered.
 
-
+-- Steve

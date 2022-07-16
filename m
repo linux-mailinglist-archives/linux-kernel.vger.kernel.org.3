@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74000579FBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8F9579FCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiGSNfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
+        id S237752AbiGSNha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237743AbiGSNfC (ORCPT
+        with ESMTP id S238268AbiGSNhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:35:02 -0400
-Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3578665CB
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 05:50:08 -0700 (PDT)
-X-QQ-mid: bizesmtp83t1658235004ts0gvr5d
+        Tue, 19 Jul 2022 09:37:16 -0400
+Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6740EEEA11
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 05:51:49 -0700 (PDT)
+X-QQ-mid: bizesmtp84t1658235103t7w1xz26
 Received: from localhost.localdomain ( [171.223.96.21])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 19 Jul 2022 20:50:03 +0800 (CST)
+        id ; Tue, 19 Jul 2022 20:51:41 +0800 (CST)
 X-QQ-SSF: 01000000002000F0U000C00A0000020
-X-QQ-FEAT: y5UFFkuhlmLJay+iUMfn5ZoRmWc5c/R+3h7kUQ/Xuhb+fjBpyfO3hH/QSLVlb
-        5EyC+PfLl5v1Qm+pDYWpAycfmlYlO+vSXcAjLdTIv9ekq9A/X6NYmfjd4mv0xWyLk0i7hDi
-        Zdi0/vKVLTPTsg2rzjmrCn330Aa2TzaX3iaAIvT/i/d1dG+Slg05+PCE9w6JUwL3iikXK8D
-        wUVEJFZifaPC8I+e4NVGJhh/9T70Iv7ZFVSF/YGYEpVvNHwgL9oRMRFcFyJp/LWBLtUVvRk
-        vSSFkydtO/3GRtU/R1a876XoBWH8VwKdjKAzfQ1Gl0lbNWH+Jvp5RiV8juMRVdMg2j25Ou4
-        pYnK5Uej+i+2flsIPd35FY1uoFCaOs/rEu71YHg3qmo07YwYTXb8hG69WUTKSgToLkHUjcl
-        CmG2HqClHOw=
+X-QQ-FEAT: DoD8xN2rKoxRd00XGB/LgIRzQWRmbxoBGTC/FBkbJV5tSlrju5SuaYtLIyLU/
+        0oUjv3XNZvI7GDvsOsWc8GqIE2SU+lAXpzqXXg1zAi2iJbv64Mgrv1rcYFQLE0o2lxg/CLe
+        mKzqjHdS0RLD3XfGFNnVi+lEo3p6l5XI8qAnLZGUwnsA5Z96n1bp4HteYqM8iKJIU/3ucoa
+        F6JG7U4oYl1rP4xLpGAbcJHjTnEsGFW791XDlSjxBW2tV8PxCCgS92qJjWGl1hvCQmnGcyd
+        In2zGP4ViytA77L8rj51mBYKbMAMVIPGkwjISPECLy2UeJ8MiQ5sn00w11qAb9oIEfXizjb
+        eYLa+6V32XSXyEQE0f0gwgIWfr97pViiCf3KJGxWmCio3JIE+PQhJpN45czfWofx3KYO5Wk
+        JiZOFodu4Q4=
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     terrelln@fb.com
-Cc:     linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] lib: zstd: Fix comment typo
-Date:   Sat, 16 Jul 2022 12:47:59 +0800
-Message-Id: <20220716044759.44603-1-wangborong@cdjrlc.com>
+To:     mingo@redhat.com
+Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] tracing/user_events: Fix comment typo
+Date:   Sat, 16 Jul 2022 12:49:40 +0800
+Message-Id: <20220716044940.45032-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
+        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `when' is duplicated in the comment, remove one.
+The double `have' is duplicated in the comment, remove one.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- lib/zstd/decompress/zstd_decompress.c | 2 +-
+ kernel/trace/trace_events_user.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/zstd/decompress/zstd_decompress.c b/lib/zstd/decompress/zstd_decompress.c
-index b4d81d84479a..6928e85f9d19 100644
---- a/lib/zstd/decompress/zstd_decompress.c
-+++ b/lib/zstd/decompress/zstd_decompress.c
-@@ -996,7 +996,7 @@ size_t ZSTD_decompress(void* dst, size_t dstCapacity, const void* src, size_t sr
- size_t ZSTD_nextSrcSizeToDecompress(ZSTD_DCtx* dctx) { return dctx->expected; }
- 
- /*
-- * Similar to ZSTD_nextSrcSizeToDecompress(), but when when a block input can be streamed,
-+ * Similar to ZSTD_nextSrcSizeToDecompress(), but when a block input can be streamed,
-  * we allow taking a partial block as the input. Currently only raw uncompressed blocks can
-  * be streamed.
-  *
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index 706e1686b5eb..a6621c52ce45 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -567,7 +567,7 @@ static int user_event_set_call_visible(struct user_event *user, bool visible)
+ 	 * to allow user_event files to be less locked down. The extreme case
+ 	 * being "other" has read/write access to user_events_data/status.
+ 	 *
+-	 * When not locked down, processes may not have have permissions to
++	 * When not locked down, processes may not have permissions to
+ 	 * add/remove calls themselves to tracefs. We need to temporarily
+ 	 * switch to root file permission to allow for this scenario.
+ 	 */
 -- 
 2.35.1
 

@@ -2,97 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F121576CC5
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15AA6576CC6
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbiGPJaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 05:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S231956AbiGPJab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 05:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGPJaQ (ORCPT
+        with ESMTP id S229436AbiGPJa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 05:30:16 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0569F1DA71;
-        Sat, 16 Jul 2022 02:30:16 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        Sat, 16 Jul 2022 05:30:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DFF237EA
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 02:30:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 577BB22239;
-        Sat, 16 Jul 2022 11:30:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657963814;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=alWQWqJmW7ZADT7MYc2k0cPnPrjW8BlVpk1tN0F8YTw=;
-        b=sS/BtGpoDtyTxY4EdLTptKbkjwAr0HDroLGkiJzisbXIXU+WH+OkV+4FDIt4WdFSJoO22g
-        9E6mMeRLFw1DxTw5GQd1lkgHQcBzQdUL5cUV/ek0bJ6l+urZi/zXN/rmJuQnbIcSaNsrtT
-        5J7MYCx0RTPCSOP+R/0DGqJgt2soMNQ=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Sat, 16 Jul 2022 11:30:12 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>
-Cc:     Pratyush Yadav <p.yadav@ti.com>, linux-sunxi@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH 1/2] mtd: spi-nor: When a flash memory is missing do not
- report an error
-In-Reply-To: <20220716082027.GK17705@kitsune.suse.cz>
-References: <701967b0c418db333c66b48d225df60aa9d03ead.1657826188.git.msuchanek@suse.de>
- <d8de86aa0331be697fbef33d5ab2c57a@walle.cc>
- <20220714205529.GE17705@kitsune.suse.cz>
- <33abf7b84860049c4a22605578303ff2@walle.cc>
- <20220714220744.GF17705@kitsune.suse.cz>
- <20220715092017.2ftoyzm22i4amrbt@ti.com>
- <20220716082027.GK17705@kitsune.suse.cz>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <c6955eed3a445f4b87920fe0d47e7230@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFB8760EF9
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 09:30:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 358B3C34114;
+        Sat, 16 Jul 2022 09:30:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657963827;
+        bh=xALARx27ExrETfczld+coksaXc6HSQOm9eT+LzkxAGc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=s1wyWdbiKf4wfnGzA6xiOSS2h/88MqQZIF5ud4qmofP/kdOCn8V/L1t6jF7shkZ24
+         GqDeTCnJtgThgT+5WNRvjfN8qOLBRuZiRg5jTnqt1eEFdPgWMM46qfpBDSb/d9tzUg
+         3mozFRYqDhLpE1ePEorpT5fTkz+kcOtVBcstdNG0pfw6+GEJv5KZ+CIqo1NlDoL8kj
+         BGjEmO/O2oMIqOb8HhExC0/K5EulEawpEskIdzUo+LdGbKoxFBOJj6xgeaofzmrkM4
+         obdtovwFCChuit5QQ+J23Aq5AQrkq7vtlBIGWS58ADQevg2RZnKPcEgx9L8cQFPFP9
+         5jNrHRP8v/kCA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oCe80-007qgf-Nb;
+        Sat, 16 Jul 2022 10:30:24 +0100
+Date:   Sat, 16 Jul 2022 10:30:19 +0100
+Message-ID: <87tu7h4d78.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     wangwudi <wangwudi@hisilicon.com>
+Cc:     <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] drivers: irqchip: Allocate alignment addr by ITS_BASER.Page_size
+In-Reply-To: <1657955136-6622-1-git-send-email-wangwudi@hisilicon.com>
+References: <1657955136-6622-1-git-send-email-wangwudi@hisilicon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: wangwudi@hisilicon.com, linux-kernel@vger.kernel.org, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-07-16 10:20, schrieb Michal Suchánek:
-
->> So if DT says there isn't a flash on a specific CS when there is, then
->> DT should be fixed to describe the flash, and then we can probe it. 
->> You
->> both seem to be saying the same thing here, and I agree.
+On Sat, 16 Jul 2022 08:05:36 +0100,
+wangwudi <wangwudi@hisilicon.com> wrote:
 > 
-> The disagreement is about the situation when there is sometimes a flash
-> chip.
+> The description of the ITS_BASER.Physical_Address field in the ARM GIC spec is as 
+> follows:
+> "The address must be aligned to the size specified in the Page Size field."
+> The Page_Size field in ITS_BASER might be RO.
+> 
+> Currently, the address is aligned based on the system page_size, not the HW 
+> Page_Size field. In some case, this is in contradiction with the spec.
+> 
+> For example:
+> ITS_BASER.Page_Size indicate 16K, and kernel page size is 4K.
+> If HW need 4K-size memory, the driver may alloc a 4K aligned address.
+> This has been proven in hardware.
 
-No. The disagreement is what should happen if the DT says there is
-a device but there isn't. Which right now is an error and it should
-stay that way. Your hardware description says there is a flash
-but it cannot be probed, so it is an error. What about a board
-which has an actual error and the flash isn't responding? You
-trade one use case for another.
+Ah, interesting bug. Thanks for bringing this up. Can you describe how
+this occurs? I suspect you are using indirect tables.
 
-Also I've looked at the PHY subsystem and there, if a PHY is described
-in the DT but isn't there, the following error will be printed:
-   dev_err(&mdio->dev, "MDIO device at address %d is missing.\n", addr);
+> 
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: wangwudi <wangwudi@hisilicon.com>
+> ---
+>  drivers/irqchip/irq-gic-v3-its.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> index 5ff09de6c48f..0e25e887d45c 100644
+> --- a/drivers/irqchip/irq-gic-v3-its.c
+> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> @@ -2310,6 +2310,9 @@ static int its_setup_baser(struct its_node *its, struct its_baser *baser,
+>  		order = get_order(GITS_BASER_PAGES_MAX * psz);
+>  	}
+>  
+> +	if ((psz > PAGE_SIZE) && (PAGE_ORDER_TO_SIZE(order) < psz)) {
+> +		order = get_order(psz);
+> +	}
+>  	page = alloc_pages_node(its->numa_node, GFP_KERNEL | __GFP_ZERO, order);
+>  	if (!page)
+>  		return -ENOMEM;
 
-And that is for a bus which can even be automatically be
-probed/detected.
+However, I don't see how you end-up with the incorrect value here.
 
--michael
+* No indirect table:
+	alloc_its_tables():
+		order = get_order(baser->psz);
+
+* Indirect tables:
+	alloc_its_tables():
+		order = get_order(baser->psz);
+	its_parse_indirect_baser():
+		new_order = *order;
+		new_order = max_t(u32, get_order(esz << ids), new_order);
+
+So in both cases, we should end-up with order >= get_order(psz).
+
+Clearly, I'm missing a path, but your commit message doesn't make it
+obvious. Can you please enlighten me?
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

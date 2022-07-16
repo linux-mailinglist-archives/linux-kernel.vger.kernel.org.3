@@ -2,167 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E25576B02
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 02:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EF2576B04
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 02:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbiGPAED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 20:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
+        id S231744AbiGPAEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 20:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiGPAEB (ORCPT
+        with ESMTP id S231548AbiGPAEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 20:04:01 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C5214D2C;
-        Fri, 15 Jul 2022 17:03:59 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26FKnLCd026456;
-        Fri, 15 Jul 2022 17:03:31 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=YjEwYTQODu+htH+ET6TKFtzX0f8MG5w39Q/sUQ2uJXk=;
- b=jaW32/hRBtU89sJh/h/udKZBm1NiQh1/o/kQvLX4ZCI/bdy44CtalSPq3scFGEESEar5
- EWXFUzUEdwniEFOTGcO86SmUuNNyHhIdUITJtHvhBDiN/LuFEeoQqkQr6dNaEdes3RVM
- muJYhAbeWNH5JB8pebPyA0VVNi0Li3alqLI= 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3haxdg6hdd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 17:03:30 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Erl0DP6P/mwZogE598eZZ6Hab4GC/CpAlBm/rAjWF9o+c3MfEuLYkyO8OShSfXhgG1pexMuoyBglUiXTJkEb2jzSGv0V2I3FNo9ncvbuFcQUuUW5Ie7Rw6qa8eDY0MXqCmdkvkw9M2aU1nxS5ZL9TJaQAAMhrcgvIs3rpB4tjuGnuRssKVQexN83sTnmDpefzH/57mHc4yNHPHk61bhNmPjIILGYOieGDGFElvKzxr4m9S6ylOsRFurpV5+dQPHnJ+jF1LNRBifx3jvY02+5j/PuyQi9sJuUC1gZEYfdyJqzXliwQEZ9EAIgp3KoPL+3mcqIoXaD0PUZE+0bkZc+lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YjEwYTQODu+htH+ET6TKFtzX0f8MG5w39Q/sUQ2uJXk=;
- b=TQVEArPCkXWd6DklYlvYI+ZOJ8MSyOhrDiUXq/4T9mDk0A2EK/gRqDH5gWYfPR4DqiN/8QGzRxGFkSe0L9sPH1cgAVVE5pTh3v7mMgwZXYyZwkJ/AT5kM9EEn7mb+k7O4MwinXQFsdt/X+3x0Z+5DkdZlftpHKhlGeT4Un7izxxY/W1Bp1qcoK+iJTLkvPDCSz6uByiXvZF1xUnFiechzO1I4Z4drIicHupxDpi5m6CmjZjy8pq18wjnAYn6sAh+hr1W0z2Lg2ZEMfC5eFF4eSdxggaihKjgIgwRqZ/mIAdErEH8jQ72pGw4l/fxR2Y4HS6B5FDRB43ZihiyZdfrfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BYAPR15MB3448.namprd15.prod.outlook.com (2603:10b6:a03:103::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Sat, 16 Jul
- 2022 00:03:27 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::9568:e5d9:b8ab:bb23]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::9568:e5d9:b8ab:bb23%6]) with mapi id 15.20.5438.017; Sat, 16 Jul 2022
- 00:03:27 +0000
-Message-ID: <fad1edd4-ac10-e913-5fc5-38863fd83c21@fb.com>
-Date:   Fri, 15 Jul 2022 17:03:24 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH bpf-next v6 03/23] bpf/verifier: do not clear meta in
- check_mem_size
-Content-Language: en-US
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
- <20220712145850.599666-4-benjamin.tissoires@redhat.com>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <20220712145850.599666-4-benjamin.tissoires@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR06CA0033.namprd06.prod.outlook.com
- (2603:10b6:a03:d4::46) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Fri, 15 Jul 2022 20:04:23 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC3F15832
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 17:04:21 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id z12so8756447wrq.7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 17:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uf0srQbpFYrNNrM0jqWKuXQT5QmcQQrUmQNh2wbUS0U=;
+        b=LTnFPl/CbhOoxLLQ31hBxQso7S8OkuVxhELcoEtSbLC/gdfIwgBnJuKh147M4jFAu7
+         BT9IwFPUnrU9SYf7S/cT9WpsExwlXMhW0+Mo4baWFHjRdgZcqfAer88au4TV95h2zZ9H
+         GfP/59H65jv95ZuM8Y06qeBDntqiRXrQvdayXrdvd2+xfsdFl1hVAdgXuGOwYWpKCrth
+         xrWtcpZ+aqngWFVP3lPn6uZlnLpWKNqchcJdGubogjo0vh2kKuT58qtSRG9EmCf7i8DB
+         IO0kgRIO1KyqZTG3LhYRXJ8k1+rpDVEy2uwvzM7OPi1+pn5VP3RXzM45aHVWAs0skPQV
+         Sozw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uf0srQbpFYrNNrM0jqWKuXQT5QmcQQrUmQNh2wbUS0U=;
+        b=k9m4aQZFMGJ0CPk8miW/So55M/viTigFzW8iBa+Lknq8oFjV6q+gFv1TCcKahmpmcB
+         B7454NdgYi0IVsJa3rwLC7tgChs92qku9KBidghOMgzsifttSXPe0h6eZdANOl/C3stz
+         jpW9x0HnixA6CGnvA+T6DYkX9Xrx3LVDEVCV8NERVjfKlDn6afSplNOPw9tMLcYwunJb
+         zjQn30Li3WtSlTAiJMM+lwPSGhGtgw5HM5nKBjD7WaDVRopvJejQ17NGPXu+IuiGwEKU
+         wdNL2hThkMzctdLI/ujXR9vLU2W+gxqW0dOYISCJRmbU/WeM1ckD+PmflRzNHGb+QK/z
+         0wbA==
+X-Gm-Message-State: AJIora+HFfGZZAfeqYRPnpjfBatV4pZbQ3iyHOrf1NpfOCmBCcfdj6Bg
+        sUwHoTL2qry2ENLbc10VEyWyjYpwHvVtj9BInKu0bA==
+X-Google-Smtp-Source: AGRyM1vGXuydbbq93zEtHE42jwnNUd/y9sKf0zweRReA5r15WW9XsVQrXfaXnnk7X0iZQbkkzdCamTO5zBBwa3G/KY8=
+X-Received: by 2002:a5d:6c65:0:b0:21d:b7c0:9930 with SMTP id
+ r5-20020a5d6c65000000b0021db7c09930mr14209311wrz.500.1657929859332; Fri, 15
+ Jul 2022 17:04:19 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 38a1b64b-a2a1-4541-5041-08da66be9be4
-X-MS-TrafficTypeDiagnostic: BYAPR15MB3448:EE_
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VldV/hRVrJF1j1aQArVoWuYhB74zjMJ4AkuvSvBu90jv0wlTSw/OKV1erWyJIj01mjGaXAl7c9sVdHB0XHPqQPBxNz4CrmkJ3LnjmFwtDIAEtJD1pVbjKz5d7Fd8Jtil/ggHarWaorFpKOfXa/HXgHtNCZFZqBi2IboAzEnIySH+GlCFxqVT/FfhTy7f6k7N1+K+fpqtFQyNEsfkfDeRTAzH5RnAEobtvliTNlifHvLRhJfyGcmhGePTQ+bT52GeQd2V+BNR1yUFoJp+GsXYO83+sZ4TFQ4ccVa9OAy9G1zMy1KvvhVy4v+c/VmeHm/CCSMZ7sVg6OFgclBClvJsN8FEp5tpR3EM1u3Xel/mrEhxaPnZtnyYqEU38AVcNQCY12fCwzAC77D/liQRjOCgqhPl6NiAhQkOLfQczdv2wtOKpNK+PQFipBwcYsK6MfPPghnNH7UekVOBZNnkbNH1P6pPho/Cc7yaEz6cM+05VZUkNr4tPAt54NE/UJKhhuVVka9hcm5rhM/S/NiMoNaTiGHxopzAmCCw7mCIYF7IIo3wdTpvzm0SvN8I9AyWQ/pVZAg3+iPtT1KyodV53SRQW4yUEfHfVEwpoNf4XNPu+T4wDbTVSFLudLSaoG8tPvB8OsDidf9arNeqBcHsoty34feVHHK7f6kgiwcLd5Y/B1jqf1laz57x7KmITCA15Ib53vHSkGNNutU6C4BMWydJZd/UpnMpRHNMfQcPPOtDXKYmksAh/4KgkypXOtCbapoJr6Olos/z5jex86ssq0inf440S9diiXP20UlVJai2gCRAbWfN13iLYF8sIpEF2KPmaFKvNauMqcoRScm5yLy39CqsUkuNsYdscTZnC2qPgcqhXe+fvG9qeM15IfyDFXsz
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(39860400002)(346002)(136003)(396003)(366004)(31696002)(86362001)(921005)(4744005)(38100700002)(8936002)(478600001)(6486002)(5660300002)(7416002)(316002)(110136005)(66946007)(8676002)(66556008)(4326008)(186003)(36756003)(6506007)(31686004)(53546011)(41300700001)(2616005)(2906002)(6512007)(6666004)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NHZKODZwYW5HZzJ3RWg1dGdLd0NxVS9aVWNLNWQ0Tjd0RmN6eStRTUFxY29G?=
- =?utf-8?B?cUZmcEVQeU5xZm03VHFxdUhqODQrVTE2NlNZL3dYUUYrYnh1S3VuaGgxRUw1?=
- =?utf-8?B?bWo5Zzh2aU95Nnh3R2lwM2JnNWN5a1dXcmNjZnJOSHJ0bTd3UitrdFhVcFRn?=
- =?utf-8?B?dVcrOHp1TkhvZFFQbmtac21NU0RzeFJ3WUR4eGdQZlY2Y0NvVHp3MWFVZlBw?=
- =?utf-8?B?Q2RxUjJZZ3BwRTIrdk9lTk9ZRFozTXJYL2tpczJGRTBNRUNLcU15QzR0Mk80?=
- =?utf-8?B?OVByaXB1SUdna014cHpxOEd1dXd0eGxnMEtVU1RTbGN5ZFVxd0o1L3VURkl5?=
- =?utf-8?B?VEJ1QXBmekhzVzIwQmFPMVdLRGhpdU4vaC9pWTk5SjViTjl2aU10QURhTU53?=
- =?utf-8?B?N3d4ZkVjSGRYWDJWN2dDYnFDcnBiVHB4MW91VGVyNWJQOEhaeGNPanZmRHNp?=
- =?utf-8?B?WWQxb1Q0UWx1Y09tSEJQdGkrOFY0NEZDajNXSkY0WHNTVUZpcDVtTDNzd05l?=
- =?utf-8?B?MXNqM0syTlcxSk85OGxhZExmVVZUblgzenBVNldRUUU3SncyZEgxME95SHZB?=
- =?utf-8?B?SzlmYU1XNnBlczREdnJQcTBjaFdBUnkyRE02NXNWMVlhQk81d0diNWJvSnJZ?=
- =?utf-8?B?L04rcUM2REk0ZFgyWml4V2U3bEtwc2t3ejJIQW1VWUJ0R1FFSjRaWWFuQ3hF?=
- =?utf-8?B?dDdpVEp5Z3FaS1UxbEVxYmJzeDZYV29FaTdoWkpvUkUzN01oR0NqVDRyS3Nt?=
- =?utf-8?B?d2ZRQVkvbE5XUFBaczE4eG5JU05VeEUyYWk4NzY5SXp6SHI3MGJTaWpRWGZ5?=
- =?utf-8?B?Q1h1bmpqZlgvT25Rb292bklxTWZmTTZyMVVhUXlSRklST1lPUnBHSFI5K3Bh?=
- =?utf-8?B?M29aNzFuQXczMmhCRTAzL3ZSL3lSTDI5OFpiTlBjVEs4Uks2UVprQjhieTFn?=
- =?utf-8?B?MnoxYzU2Q0syS0VmcHFKaTJhTmZEemZKdFZ0TlBzWHhiNGlDU0lCbi9KbFVz?=
- =?utf-8?B?Q3d3eXZxRVR0SUNGellwcXFCNTVBZk9VTXMyWXRHYitxMk01Z1FGYklSSE56?=
- =?utf-8?B?a1VaeW1QTGZwOUkvN1laVVlJNkxlVG5RaWlDMlM1ZXR2RkNZQnZpTnFFTGVR?=
- =?utf-8?B?clovUUMxMklFc016TU42cGl5WE5LclBRRVlJelJtbDNXQmVNQm5reFEzOTlW?=
- =?utf-8?B?V3Vpd3owb0NwT0ppS3Q2L3ozZ3cycko4QzdhNllwdVdxWVlNSElOb3dCUWZw?=
- =?utf-8?B?MXNyeTk4dHlvdDd5ZmZ1dVRaZjN3cUsrRnNGeWZ2dXRCTEpvdnlhbUdTRjZ5?=
- =?utf-8?B?emk5dlNFbERQc01yN21XSGRJd2huaGxYUHpucHI4b3M4QkFtMCs2a2Z1enM5?=
- =?utf-8?B?c3ltZzVtR3I5djM4YW95NlpDUzZ3aDBiaXZlTTNkc0lTbGdZRlE4RHkxQ2w3?=
- =?utf-8?B?U2laQmMyNU1iRytvbkp3aGpTMkpBNVhjcytmUmR5WkNKNEtJY3ZkMTdmU2xV?=
- =?utf-8?B?d01hS1IwM05LeCtHcW1ZV2dMcS8xMzZTM1lTK0tCdURHRjFpTXVBdEpPN3U5?=
- =?utf-8?B?V3dFM0U1Q0ZrZVhyb21aZVlzVTgvSFc4d2Y2aDhDeitCT0RVdTBqV3dzaFdM?=
- =?utf-8?B?SVVsalBnZ3Rhb215RFMxNDZ3a0t2dEZrZVg3Vk5EY0V4ZXE5MEtseWJPSFZn?=
- =?utf-8?B?TzFZZzlUVTJVUEdhWGdUVlR6NEVBd3BiWGEvUjFvNktOR2hwSk5nKzVTNmRr?=
- =?utf-8?B?Tk9QZ1BUU28wTis1UUNYeERJYklldVdFdVhlT0RPMFM1SFlYeUVxMEdDemRp?=
- =?utf-8?B?ZW02SkZSSVdlWFMyb3hsUlEvdGxhR1BIdlhpUExUejc1ejlOMVl4ZVlIMjdw?=
- =?utf-8?B?L3RpTGFacllPNHJJSDZYUXpmYXpUcFBxRDhnRnF3ZnpJZjhaY0EyVW1teUY5?=
- =?utf-8?B?RWVLVlNpeUtlYldmeUdzZnJLMzZiTjhrUGlvUEd2YmY3SHUyUWZCOUFSaUp1?=
- =?utf-8?B?MWZwNEtaSGdTbHl4bWkvK2JBb3o3Q0ZKV0JxQzI0N21ienRjMnFsbDB5YUtn?=
- =?utf-8?B?a05zWmFiOEswQTRoT3UyNDVoalVNaFlRd3IySW1HbVk4a3pPa3RhM2FsaHBi?=
- =?utf-8?B?TXlySWZNZHFMQllPTDd4b1VKajA0bkFYaUEzYmliTjBKMVBwQlk2eUdKcExC?=
- =?utf-8?B?NEE9PQ==?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38a1b64b-a2a1-4541-5041-08da66be9be4
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2022 00:03:27.3628
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zytoKnwQm2bo4Z/a8PQeYij7x46XTxdM8M6NXl2c3qA5eU+HSEgiTkJ2MaDt6Ht9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3448
-X-Proofpoint-GUID: ZGrSHWwx4ttG7yDUzq9c8mE11eNY0Opu
-X-Proofpoint-ORIG-GUID: ZGrSHWwx4ttG7yDUzq9c8mE11eNY0Opu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-15_15,2022-07-15_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715061027.1612149-1-kaleshsingh@google.com>
+ <CA+EHjTzPu9hticW4sPbVsxp43swRGOv4ou843S=Q5q=oQ6ii=g@mail.gmail.com> <CAC_TJveK_nfaD1=DyQ4oAvRpuWkC_qbBhoEEqWgtcOo1TOvAag@mail.gmail.com>
+In-Reply-To: <CAC_TJveK_nfaD1=DyQ4oAvRpuWkC_qbBhoEEqWgtcOo1TOvAag@mail.gmail.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Fri, 15 Jul 2022 17:04:08 -0700
+Message-ID: <CAC_TJvfedZ2JDo4=Lt+M7i6_DgkYu---dM5ztAF1K8CK_6G1TA@mail.gmail.com>
+Subject: Re: [PATCH v4 00/18] KVM nVHE Hypervisor stack unwinder
+To:     Fuad Tabba <tabba@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        andreyknvl@gmail.com, russell.king@oracle.com,
+        vincenzo.frascino@arm.com, Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Marco Elver <elver@google.com>, Keir Fraser <keirf@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        LKML <linux-kernel@vger.kernel.org>, android-mm@google.com,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 15, 2022 at 11:58 AM Kalesh Singh <kaleshsingh@google.com> wrote:
+>
+> On Fri, Jul 15, 2022 at 6:55 AM 'Fuad Tabba' via kernel-team
+> <kernel-team@android.com> wrote:
+> >
+> > Hi Kalesh,
+> >
+> > On Fri, Jul 15, 2022 at 7:10 AM Kalesh Singh <kaleshsingh@google.com> wrote:
+> > >
+> > > Hi all,
+> > >
+> > > This is v4 of the series adding support for nVHE hypervisor stacktraces;
+> > > and is based on arm64 for-next/stacktrace.
+> > >
+> > > Thanks all for your feedback on previous revisions. Mark Brown, I
+> > > appreciate your Reviewed-by on the v3, I have dropped the tags in this
+> > > new verision since I think the series has changed quite a bit.
+> > >
+> > > The previous versions were posted at:
+> > > v3: https://lore.kernel.org/r/20220607165105.639716-1-kaleshsingh@google.com/
+> > > v2: https://lore.kernel.org/r/20220502191222.4192768-1-kaleshsingh@google.com/
+> > > v1: https://lore.kernel.org/r/20220427184716.1949239-1-kaleshsingh@google.com/
+> > >
+> > > The main updates in this version are to address concerens from Marc on the
+> > > memory usage and reusing the common code by refactoring into a shared header.
+> > >
+> > > Thanks,
+> > > Kalesh
+> >
+> > I tested an earlier version of this patch series, and it worked fine,
+> > with symbolization. However, testing it now, both with nvhe and with
+> > pkvm the symbolization isn't working for me. e.g.
+> >
+> > [   32.986706] kvm [251]: Protected nVHE HYP call trace:
+> > [   32.986796] kvm [251]:  [<ffff800008f8b0e0>] 0xffff800008f8b0e0
+> > [   32.987391] kvm [251]:  [<ffff800008f8b388>] 0xffff800008f8b388
+> > [   32.987493] kvm [251]:  [<ffff800008f8d230>] 0xffff800008f8d230
+> > [   32.987591] kvm [251]:  [<ffff800008f8d51c>] 0xffff800008f8d51c
+> > [   32.987695] kvm [251]:  [<ffff800008f8c064>] 0xffff800008f8c064
+> > [   32.987803] kvm [251]: ---- End of Protected nVHE HYP call trace ----
+> >
+> > CONFIG_PROTECTED_NVHE_STACKTRACE CONFIG_NVHE_EL2_DEBUG and
+> > CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT are all enabled. Generating
+> > a backtrace in the host I get proper symbolisation.
+> >
+> > Is there anything else you'd like to know about my setup that would
+> > help get to the bottom of this?
+>
+> Hi Fuad,
+>
+> Thanks for reviewing it. Can you attach the .config when you have a
+> chance please? I will try reproducing it on my end.
 
+My local config had CONFIG_RANDOMIZE_BASE off. I have posted a fix for
+the existing occurrences [1]. I'll address those for the unwinder in
+the next version of this series.
 
-On 7/12/22 7:58 AM, Benjamin Tissoires wrote:
-> The purpose of this clear is to prevent meta->raw_mode to be evaluated
-> at true, but this also prevents to forward any other data to the other
-> callees.
-> 
-> Only switch back raw_mode to false so we don't entirely clear meta.
-> 
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+[1] https://lore.kernel.org/r/20220715235824.2549012-1-kaleshsingh@google.com/
 
-Acked-by: Yonghong Song <yhs@fb.com>
+Thanks,
+Kalesh
+
+>
+> --Kalesh
+>
+> >
+> > Thanks,
+> > /fuad
+> >
+> >
+> >
+> >
+> > >
+> > > ============
+> > >
+> > > KVM nVHE Stack unwinding.
+> > > ===
+> > >
+> > > nVHE has two modes of operation: protected (pKVM) and unprotected
+> > > (conventional nVHE). Depending on the mode, a slightly different approach
+> > > is used to dump the hyperviosr stacktrace but the core unwinding logic
+> > > remains the same.
+> > >
+> > > Protected nVHE (pKVM) stacktraces
+> > > ====
+> > >
+> > > In protected nVHE mode, the host cannot directly access hypervisor memory.
+> > >
+> > > The hypervisor stack unwinding happens in EL2 and is made accessible to
+> > > the host via a shared buffer. Symbolizing and printing the stacktrace
+> > > addresses is delegated to the host and happens in EL1.
+> > >
+> > > Non-protected (Conventional) nVHE stacktraces
+> > > ====
+> > >
+> > > In non-protected mode, the host is able to directly access the hypervisor
+> > > stack pages.
+> > >
+> > > The hypervisor stack unwinding and dumping of the stacktrace is performed
+> > > by the host in EL1, as this avoids the memory overhead of setting up
+> > > shared buffers between the host and hypervisor.
+> > >
+> > > Resuing the Core Unwinding Logic
+> > > ====
+> > >
+> > > Since the hypervisor cannot link against the kernel code in proteced mode.
+> > > The common stack unwinding code is moved to a shared header to allow reuse
+> > > in the nVHE hypervisor.
+> > >
+> > > Reducing the memory footprint
+> > > ====
+> > >
+> > > In this version the below steps were taken to reduce the memory usage of
+> > > nVHE stack unwinding:
+> > >
+> > >     1) The nVHE overflow stack is reduced from PAGE_SIZE to 4KB; benificial
+> > >        for configurations with non 4KB pages (16KB or 64KB pages).
+> > >     2) In protected nVHE mode (pKVM), the shared stacktrace buffers with the
+> > >        host are reduced from PAGE_SIZE to the minimum size required.
+> > >     3) In systems other than Android, conventional nVHE makes up the vast
+> > >        majority of use case. So the pKVM stack tracing is disabled by default
+> > >        (!CONFIG_PROTECTED_NVHE_STACKTRACE), which avoid the memory usage for
+> > >        setting up shared buffers.
+> > >     4) In non-protected nVHE mode (conventional nVHE), the stack unwinding
+> > >        is done directly in EL1 by the host and no shared buffers with the
+> > >        hyperviosr are needed.
+> > >
+> > > Sample Output
+> > > ====
+> > >
+> > > The below shows an example output from a simple stack overflow test:
+> > >
+> > > [  126.862960] kvm [371]: nVHE hyp panic at: [<ffff8000090a51d0>] __kvm_nvhe_recursive_death+0x10/0x34!
+> > > [  126.869920] kvm [371]: Protected nVHE HYP call trace:
+> > > [  126.870528] kvm [371]:  [<ffff8000090a5570>] __kvm_nvhe_hyp_panic+0xac/0xf8
+> > > [  126.871342] kvm [371]:  [<ffff8000090a55cc>] __kvm_nvhe_hyp_panic_bad_stack+0x10/0x10
+> > > [  126.872174] kvm [371]:  [<ffff8000090a51e4>] __kvm_nvhe_recursive_death+0x24/0x34
+> > > [  126.872971] kvm [371]:  [<ffff8000090a51e4>] __kvm_nvhe_recursive_death+0x24/0x34
+> > >    . . .
+> > >
+> > > [  126.927314] kvm [371]:  [<ffff8000090a51e4>] __kvm_nvhe_recursive_death+0x24/0x34
+> > > [  126.927727] kvm [371]:  [<ffff8000090a51e4>] __kvm_nvhe_recursive_death+0x24/0x34
+> > > [  126.928137] kvm [371]:  [<ffff8000090a4de4>] __kvm_nvhe___kvm_vcpu_run+0x30/0x40c
+> > > [  126.928561] kvm [371]:  [<ffff8000090a7b64>] __kvm_nvhe_handle___kvm_vcpu_run+0x30/0x48
+> > > [  126.928984] kvm [371]:  [<ffff8000090a78b8>] __kvm_nvhe_handle_trap+0xc4/0x128
+> > > [  126.929385] kvm [371]:  [<ffff8000090a6864>] __kvm_nvhe___host_exit+0x64/0x64
+> > > [  126.929804] kvm [371]: ---- End of Protected nVHE HYP call trace ----
+> > >
+> > > ============
+> > >
+> > >
+> > > Kalesh Singh (18):
+> > >   arm64: stacktrace: Add shared header for common stack unwinding code
+> > >   arm64: stacktrace: Factor out on_accessible_stack_common()
+> > >   arm64: stacktrace: Factor out unwind_next_common()
+> > >   arm64: stacktrace: Handle frame pointer from different address spaces
+> > >   arm64: stacktrace: Factor out common unwind()
+> > >   arm64: stacktrace: Add description of stacktrace/common.h
+> > >   KVM: arm64: On stack overflow switch to hyp overflow_stack
+> > >   KVM: arm64: Add PROTECTED_NVHE_STACKTRACE Kconfig
+> > >   KVM: arm64: Allocate shared pKVM hyp stacktrace buffers
+> > >   KVM: arm64: Stub implementation of pKVM HYP stack unwinder
+> > >   KVM: arm64: Stub implementation of non-protected nVHE HYP stack
+> > >     unwinder
+> > >   KVM: arm64: Save protected-nVHE (pKVM) hyp stacktrace
+> > >   KVM: arm64: Prepare non-protected nVHE hypervisor stacktrace
+> > >   KVM: arm64: Implement protected nVHE hyp stack unwinder
+> > >   KVM: arm64: Implement non-protected nVHE hyp stack unwinder
+> > >   KVM: arm64: Introduce pkvm_dump_backtrace()
+> > >   KVM: arm64: Introduce hyp_dump_backtrace()
+> > >   KVM: arm64: Dump nVHE hypervisor stack on panic
+> > >
+> > >  arch/arm64/include/asm/kvm_asm.h           |  16 ++
+> > >  arch/arm64/include/asm/memory.h            |   7 +
+> > >  arch/arm64/include/asm/stacktrace.h        |  92 ++++---
+> > >  arch/arm64/include/asm/stacktrace/common.h | 224 ++++++++++++++++
+> > >  arch/arm64/include/asm/stacktrace/nvhe.h   | 291 +++++++++++++++++++++
+> > >  arch/arm64/kernel/stacktrace.c             | 157 -----------
+> > >  arch/arm64/kvm/Kconfig                     |  15 ++
+> > >  arch/arm64/kvm/arm.c                       |   2 +-
+> > >  arch/arm64/kvm/handle_exit.c               |   4 +
+> > >  arch/arm64/kvm/hyp/nvhe/Makefile           |   2 +-
+> > >  arch/arm64/kvm/hyp/nvhe/host.S             |   9 +-
+> > >  arch/arm64/kvm/hyp/nvhe/stacktrace.c       | 108 ++++++++
+> > >  arch/arm64/kvm/hyp/nvhe/switch.c           |   5 +
+> > >  13 files changed, 727 insertions(+), 205 deletions(-)
+> > >  create mode 100644 arch/arm64/include/asm/stacktrace/common.h
+> > >  create mode 100644 arch/arm64/include/asm/stacktrace/nvhe.h
+> > >  create mode 100644 arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> > >
+> > >
+> > > base-commit: 82a592c13b0aeff94d84d54183dae0b26384c95f
+> > > --
+> > > 2.37.0.170.g444d1eabd0-goog
+> > >
+> >
+> > --
+> > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> >

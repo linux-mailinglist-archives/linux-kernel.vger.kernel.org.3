@@ -2,200 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B69577021
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 18:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002B3577025
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 18:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiGPQca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 12:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        id S230426AbiGPQff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 12:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiGPQc2 (ORCPT
+        with ESMTP id S229683AbiGPQfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 12:32:28 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4805E1C90E
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 09:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657989147; x=1689525147;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xz22xLhXEgfLfQ885/Ke0sez+mHNdtV5CCAwywlhiCQ=;
-  b=gVEhVw2ciV8Hb3GGVlrMTM708QRX/PXyw7hWGB8CaFWc2pAhA4r543QS
-   IS0UtycaWiAlcy/j44/svxIJ5CDEhO7GyahStGHnP84FT6VOnIfOQMD7y
-   ppI7repCO+cwtQzZfCMVuSfqwKuk3N84QG+R+7xj4CTmQPNvT3iaQjQ/n
-   Sio3Hc9sZLXkRaVbGlRdh2iEjl7QFs4bRQydRM2T9QWLIPCji6WiuRl/9
-   4DFusPXDAo/x6c1d9TGrQ4JOQOZ481QwcOGgEFjw5ZPESApIqZOc0tpPP
-   igF9ODkI/RaurLHzaKIh+1oFzQGxwpTHWwz1DaRq2NfjgJgsUQLpq6H5r
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="286722683"
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="286722683"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 09:32:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="842839976"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Jul 2022 09:32:24 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCkiO-0001p8-Bm;
-        Sat, 16 Jul 2022 16:32:24 +0000
-Date:   Sun, 17 Jul 2022 00:31:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: [ammarfaizi2-block:axboe/linux-block/for-next 38/112]
- include/trace/events/f2fs.h:1027:1: sparse: sparse: restricted blk_opf_t
- degrades to integer
-Message-ID: <202207170048.aN01rjrc-lkp@intel.com>
+        Sat, 16 Jul 2022 12:35:34 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684691EC7B
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 09:35:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F0837202E4;
+        Sat, 16 Jul 2022 16:35:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657989330; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ou8Rl3rKdNin3iFI14DAAcINBGak3oEAgpZ2DwPHU24=;
+        b=h2RyGvFZRNu1j239mKDyQg+j7qJ/jd7VwXWZgEFZyK9SHH3Yg7cTBC0MhwLFrfkg0Bg/XK
+        kOUrPpE5EcgMxvhAw9n5jZpoPuN2+Z0d28R0eyGtXst7y/YUwJNZgB59kz5W2MRSsGhzJW
+        zdtef5jJRiqQ058zvI09cl6+/wJcl3I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657989330;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ou8Rl3rKdNin3iFI14DAAcINBGak3oEAgpZ2DwPHU24=;
+        b=h3HhjFZuj75cKW79F2SYwnpVgjphh1wfpkaUmhihoh9HRjQTIpvR2xUEozkj3RjoNPESIQ
+        H1hifNVornz8VhDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 94E591351D;
+        Sat, 16 Jul 2022 16:35:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YKsHI9Lo0mIjBgAAMHmgww
+        (envelope-from <nstange@suse.de>); Sat, 16 Jul 2022 16:35:30 +0000
+From:   Nicolai Stange <nstange@suse.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org, jpoimboe@redhat.com,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: Re: Build warnings in Xen 5.15.y and 5.10.y with retbleed backports
+References: <Ys2jlGMqAe6+h1SX@kroah.com>
+        <ddcdd531-fc33-39df-a69f-5352d7a1c8af@oracle.com>
+        <Ys3MI7cv2yKj9RFc@kroah.com>
+        <1b8fee7f-5af2-332e-d2c9-ceecd6ff487b@oracle.com>
+Date:   Sat, 16 Jul 2022 18:35:29 +0200
+In-Reply-To: <1b8fee7f-5af2-332e-d2c9-ceecd6ff487b@oracle.com> (Boris
+        Ostrovsky's message of "Tue, 12 Jul 2022 16:22:41 -0400")
+Message-ID: <875yjxrp66.fsf@linux.fritz.box>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/for-next
-head:   b1fc9e8ad3d2d294d15e87d57af00890cd23cfc4
-commit: 342a72a334073f163da924b69c3d3fb4685eb33a [38/112] block: Introduce the type blk_opf_t
-config: csky-randconfig-s053-20220715 (https://download.01.org/0day-ci/archive/20220717/202207170048.aN01rjrc-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/342a72a334073f163da924b69c3d3fb4685eb33a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block axboe/linux-block/for-next
-        git checkout 342a72a334073f163da924b69c3d3fb4685eb33a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky SHELL=/bin/bash drivers/block/null_blk/./ fs/f2fs/ fs/jbd2/
+Hi,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I see a patch for this has been queued up for 5.10 already ([1]), I'm
+just sharing my findings in support of this patch here -- it doesn't
+merely exchange one warning for another, but fixes a real issue and
+should perhaps get applied to other stable branches as well.
+
+TL;DR: for this particular warning, objtool would exit early and fail to
+create any .orc_unwind* ELF sections for head_64.o, which are consumed
+by the ORC unwinder at runtime.
 
 
-sparse warnings: (new ones prefixed by >>)
-   fs/f2fs/super.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/f2fs.h):
-   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted blk_opf_t enum req_op op @@     got int op @@
-   include/trace/events/f2fs.h:1027:1: sparse:     expected restricted blk_opf_t enum req_op op
-   include/trace/events/f2fs.h:1027:1: sparse:     got int op
-   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
-   include/trace/events/f2fs.h:1027:1: sparse:     expected unsigned long mask
-   include/trace/events/f2fs.h:1027:1: sparse:     got restricted blk_opf_t [usertype]
-   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
-   include/trace/events/f2fs.h:1027:1: sparse:     expected unsigned long mask
-   include/trace/events/f2fs.h:1027:1: sparse:     got restricted blk_opf_t [usertype]
-   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
-   include/trace/events/f2fs.h:1027:1: sparse:     expected unsigned long mask
-   include/trace/events/f2fs.h:1027:1: sparse:     got restricted blk_opf_t [usertype]
-   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
-   include/trace/events/f2fs.h:1027:1: sparse:     expected unsigned long mask
-   include/trace/events/f2fs.h:1027:1: sparse:     got restricted blk_opf_t [usertype]
-   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
-   include/trace/events/f2fs.h:1027:1: sparse:     expected unsigned long mask
-   include/trace/events/f2fs.h:1027:1: sparse:     got restricted blk_opf_t [usertype]
-   include/trace/events/f2fs.h:1027:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
-   include/trace/events/f2fs.h:1027:1: sparse:     expected unsigned long mask
-   include/trace/events/f2fs.h:1027:1: sparse:     got restricted blk_opf_t [usertype]
->> include/trace/events/f2fs.h:1027:1: sparse: sparse: restricted blk_opf_t degrades to integer
-   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted blk_opf_t enum req_op op @@     got int op @@
-   include/trace/events/f2fs.h:1086:1: sparse:     expected restricted blk_opf_t enum req_op op
-   include/trace/events/f2fs.h:1086:1: sparse:     got int op
-   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
-   include/trace/events/f2fs.h:1086:1: sparse:     expected unsigned long mask
-   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype]
-   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
-   include/trace/events/f2fs.h:1086:1: sparse:     expected unsigned long mask
-   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype]
-   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
-   include/trace/events/f2fs.h:1086:1: sparse:     expected unsigned long mask
-   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype]
-   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
-   include/trace/events/f2fs.h:1086:1: sparse:     expected unsigned long mask
-   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype]
-   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
-   include/trace/events/f2fs.h:1086:1: sparse:     expected unsigned long mask
-   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype]
-   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long mask @@     got restricted blk_opf_t [usertype] @@
-   include/trace/events/f2fs.h:1086:1: sparse:     expected unsigned long mask
-   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype]
-   include/trace/events/f2fs.h:1086:1: sparse: sparse: restricted blk_opf_t degrades to integer
-   fs/f2fs/super.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/f2fs.h):
-   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected int op @@     got restricted blk_opf_t enum req_op @@
-   include/trace/events/f2fs.h:1086:1: sparse:     expected int op
-   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t enum req_op
-   include/trace/events/f2fs.h:1086:1: sparse: sparse: incorrect type in assignment (different base types) @@     expected int op_flags @@     got restricted blk_opf_t [usertype] bi_opf @@
-   include/trace/events/f2fs.h:1086:1: sparse:     expected int op_flags
-   include/trace/events/f2fs.h:1086:1: sparse:     got restricted blk_opf_t [usertype] bi_opf
-   fs/f2fs/super.c:3125:64: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int op_flags @@     got restricted blk_opf_t @@
-   fs/f2fs/super.c:3125:64: sparse:     expected int op_flags
-   fs/f2fs/super.c:3125:64: sparse:     got restricted blk_opf_t
-   fs/f2fs/super.c: note: in included file (through arch/csky/include/asm/atomic.h, include/linux/atomic.h, include/asm-generic/bitops/lock.h, ...):
-   include/asm-generic/atomic.h:105:1: sparse: sparse: context imbalance in 'f2fs_drop_inode' - unexpected unlock
+Boris Ostrovsky <boris.ostrovsky@oracle.com> writes:
 
-vim +1027 include/trace/events/f2fs.h
+> On 7/12/22 3:31 PM, Greg KH wrote:
+>> On Tue, Jul 12, 2022 at 03:19:39PM -0400, Boris Ostrovsky wrote:
+>>>
+>>> On 7/12/22 12:38 PM, Greg KH wrote:
+>>>> Hi all,
+>>>>
+>>>> I'm seeing the following build warning:
+>>>> 	arch/x86/kernel/head_64.o: warning: objtool: xen_hypercall_mmu_update=
+(): can't find starting instruction
+>>>> in the 5.15.y and 5.10.y retbleed backports.
 
-c01e285324793a8 Namjae Jeon   2013-04-23  1026  
-3e1c8f125eeea0f Chao Yu       2014-12-23 @1027  DECLARE_EVENT_CLASS(f2fs__submit_page_bio,
-3e1c8f125eeea0f Chao Yu       2014-12-23  1028  
-2ace38e00e54f5c Chao Yu       2014-12-24  1029  	TP_PROTO(struct page *page, struct f2fs_io_info *fio),
-3e1c8f125eeea0f Chao Yu       2014-12-23  1030  
-2ace38e00e54f5c Chao Yu       2014-12-24  1031  	TP_ARGS(page, fio),
-3e1c8f125eeea0f Chao Yu       2014-12-23  1032  
-3e1c8f125eeea0f Chao Yu       2014-12-23  1033  	TP_STRUCT__entry(
-3e1c8f125eeea0f Chao Yu       2014-12-23  1034  		__field(dev_t, dev)
-3e1c8f125eeea0f Chao Yu       2014-12-23  1035  		__field(ino_t, ino)
-3e1c8f125eeea0f Chao Yu       2014-12-23  1036  		__field(pgoff_t, index)
-7a9d75481b85d59 Chao Yu       2016-02-22  1037  		__field(block_t, old_blkaddr)
-7a9d75481b85d59 Chao Yu       2016-02-22  1038  		__field(block_t, new_blkaddr)
-04d328defd06257 Mike Christie 2016-06-05  1039  		__field(int, op)
-04d328defd06257 Mike Christie 2016-06-05  1040  		__field(int, op_flags)
-a912b54d3aaa011 Jaegeuk Kim   2017-05-10  1041  		__field(int, temp)
-3e1c8f125eeea0f Chao Yu       2014-12-23  1042  		__field(int, type)
-3e1c8f125eeea0f Chao Yu       2014-12-23  1043  	),
-3e1c8f125eeea0f Chao Yu       2014-12-23  1044  
-3e1c8f125eeea0f Chao Yu       2014-12-23  1045  	TP_fast_assign(
-4969c06a0d83c9c Jaegeuk Kim   2019-07-01  1046  		__entry->dev		= page_file_mapping(page)->host->i_sb->s_dev;
-4969c06a0d83c9c Jaegeuk Kim   2019-07-01  1047  		__entry->ino		= page_file_mapping(page)->host->i_ino;
-3e1c8f125eeea0f Chao Yu       2014-12-23  1048  		__entry->index		= page->index;
-7a9d75481b85d59 Chao Yu       2016-02-22  1049  		__entry->old_blkaddr	= fio->old_blkaddr;
-7a9d75481b85d59 Chao Yu       2016-02-22  1050  		__entry->new_blkaddr	= fio->new_blkaddr;
-04d328defd06257 Mike Christie 2016-06-05  1051  		__entry->op		= fio->op;
-04d328defd06257 Mike Christie 2016-06-05  1052  		__entry->op_flags	= fio->op_flags;
-a912b54d3aaa011 Jaegeuk Kim   2017-05-10  1053  		__entry->temp		= fio->temp;
-2ace38e00e54f5c Chao Yu       2014-12-24  1054  		__entry->type		= fio->type;
-3e1c8f125eeea0f Chao Yu       2014-12-23  1055  	),
-3e1c8f125eeea0f Chao Yu       2014-12-23  1056  
-3e1c8f125eeea0f Chao Yu       2014-12-23  1057  	TP_printk("dev = (%d,%d), ino = %lu, page_index = 0x%lx, "
-a912b54d3aaa011 Jaegeuk Kim   2017-05-10  1058  		"oldaddr = 0x%llx, newaddr = 0x%llx, rw = %s(%s), type = %s_%s",
-3e1c8f125eeea0f Chao Yu       2014-12-23  1059  		show_dev_ino(__entry),
-3e1c8f125eeea0f Chao Yu       2014-12-23  1060  		(unsigned long)__entry->index,
-7a9d75481b85d59 Chao Yu       2016-02-22  1061  		(unsigned long long)__entry->old_blkaddr,
-7a9d75481b85d59 Chao Yu       2016-02-22  1062  		(unsigned long long)__entry->new_blkaddr,
-d621e6b3707f4c3 Jaegeuk Kim   2016-12-21  1063  		show_bio_type(__entry->op, __entry->op_flags),
-a912b54d3aaa011 Jaegeuk Kim   2017-05-10  1064  		show_block_temp(__entry->temp),
-3e1c8f125eeea0f Chao Yu       2014-12-23  1065  		show_block_type(__entry->type))
-3e1c8f125eeea0f Chao Yu       2014-12-23  1066  );
-3e1c8f125eeea0f Chao Yu       2014-12-23  1067  
+The reason for this is that with RET being multibyte, it can cross those
+"xen_hypecall_*" symbol boundaries, because ...
 
-:::::: The code at line 1027 was first introduced by commit
-:::::: 3e1c8f125eeea0f8111e2b9131162bfba32c6381 f2fs: cleanup trace event of f2fs_submit_page_{m,}bio with DECLARE_EVENT_CLASS
+>>>>
+>>>> I don't know why just this one hypercall is being called out by objtoo=
+l,
+>>>> and this warning isn't in 5.18 and Linus's tree due to I think commit
+>>>> 5b2fc51576ef ("x86/ibt,xen: Sprinkle the ENDBR") being there.
+>>>>
+>>>> But, is this a ret call that we "forgot" here?  It's a "real" ret in
+>>>> Linus's branch:
+>>>>
+>>>> .pushsection .noinstr.text, "ax"
+>>>> 	.balign PAGE_SIZE
+>>>> SYM_CODE_START(hypercall_page)
+>>>> 	.rept (PAGE_SIZE / 32)
+>>>> 		UNWIND_HINT_FUNC
+>>>> 		ANNOTATE_NOENDBR
+>>>> 		ANNOTATE_UNRET_SAFE
+>>>> 		ret
+>>>> 		/*
+>>>> 		 * Xen will write the hypercall page, and sort out ENDBR.
+>>>> 		 */
+>>>> 		.skip 31, 0xcc
+>>>> 	.endr
+>>>>
+>>>> while 5.15.y and older has:
+>>>> .pushsection .text
+>>>> 	.balign PAGE_SIZE
+>>>> SYM_CODE_START(hypercall_page)
+>>>> 	.rept (PAGE_SIZE / 32)
+>>>> 		UNWIND_HINT_FUNC
+>>>> 		.skip 31, 0x90
 
-:::::: TO: Chao Yu <chao2.yu@samsung.com>
-:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
+... the "31" is no longer correct, ...
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>>>> 		ANNOTATE_UNRET_SAFE
+>>>> 		RET
+
+... as with RET occupying more than one byte, the resulting hypercall
+entry's total size won't add up to 32 anymore.
+
+Note that those xen_hypercall_* symbols' values are getting statically
+calculated as 'hypercall page + n * 32' in the HYPERCALL() #define from
+xen-head.S. So there's a mismatch and with RET =3D=3D 'ret; int3', the
+resulting .text effectively becomes
+
+    101e:       90                      nop
+    101f:       c3                      ret=20=20=20=20
+
+0000000000001020 <xen_hypercall_mmu_update>:
+    1020:       cc                      int3=20=20=20
+    1021:       90                      nop
+    1022:       90                      nop
+
+
+This is probably already not what has been intended, but because 'ret'
+and 'int3' both are single-byte encoded, objtool would still be able to
+find at least some "starting instruction" at this point.
+
+But with RET =3D=3D 'jmp __x86_return_thunk', it becomes
+
+    101e:       90                      nop
+    101f:       e9                      .byte 0xe9
+
+0000000000001020 <xen_hypercall_mmu_update>:
+    1020:       00 00                   add    %al,(%rax)
+    1022:       00 00                   add    %al,(%rax)
+    1024:       90                      nop
+
+Here the 'e9 00 00 00 00' jmp crosses the symbol boundary and objtool
+errors out.
+
+>>>> 	.endr
+>>>>
+>>>> So should the "ret" remain or be turned into "RET" in mainline right
+>>>> now?
+>>>
+>>>
+>>> It doesn't matter --- this is overwritten by the hypervisor during
+>>> initialization when Xen fills in actual hypercall code.
+
+It does makes a difference though: even though objtool reports only a
+warning, it still exits early in this particular case and won't create
+any of the .orc_unwind* or .return_sites sections for head_64.o as it's
+supposed to.
+
+The significance of not having .orc_unwind* for head_64.o is that the
+reliable stacktracing implementation would mark the swapper tasks'
+stacktraces as unreliable at runtime, because the ORC unwinder would
+fail to recognize their final secondary_startup_64() from head_64.o as
+being the end. Note that livepatching relies on reliable stacktraces
+when transitioning tasks.
+
+
+>>>
+>>>
+>>> So f4b4bc10b0b85ec66f1a9bf5dddf475e6695b6d2 added 'ret' to make objtool=
+ happy and then 14b476e07fab6 replaced 'ret' with RET as part of SLS fixes.=
+ The latter was not really necessary but harmless.
+>>>
+>>>
+>>> So it can be 'ret', RET, or anything else that tools don't complain abo=
+ut. It will not be executed.
+>> Cool, thanks.
+>> But what about the objtool warning that I now see?  Is that "real"?
+>
+>
+>
+> It's not real in the sense that the code there is not real, it will be ov=
+erwritten. (Originally the whole page was 'nop's)
+>
+>
+> I am getting a different error BTW:
+>
+> 	arch/x86/kernel/head_64.o: warning: objtool: .text+0x5: unreachable inst=
+ruction
+>
+
+I think this one is (mostly?) harmless, at least as as far as the
+.orc_unwind* generation is concerned. Josh would know more.
+
+
+Thanks,
+
+Nicolai
+
+[1] https://lore.kernel.org/r/Ys+8ZYxkDmSCcDWv@kroah.com
+
+>
+>
+>> I don't run any Xen systems, so I can't test any of this myself.
+>
+>
+> You can't test any changes to that code --- it is rewritten when Xen gues=
+t is running.
+>
+>
+> We probably do want to shut up objtool. Josh, any suggestions?
+>
+>
+> -boris
+>
+
+--=20
+SUSE Software Solutions Germany GmbH, Frankenstra=C3=9Fe 146, 90461 N=C3=BC=
+rnberg, Germany
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+(HRB 36809, AG N=C3=BCrnberg)

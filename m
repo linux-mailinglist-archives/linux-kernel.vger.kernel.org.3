@@ -2,55 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EA4577000
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 17:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10EE57700B
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 18:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232391AbiGPPzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 11:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        id S229776AbiGPQJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 12:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiGPPzt (ORCPT
+        with ESMTP id S229457AbiGPQJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 11:55:49 -0400
+        Sat, 16 Jul 2022 12:09:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1505E120A2;
-        Sat, 16 Jul 2022 08:55:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C2065F9;
+        Sat, 16 Jul 2022 09:09:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4B0261137;
-        Sat, 16 Jul 2022 15:55:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1DEC34114;
-        Sat, 16 Jul 2022 15:55:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E462611A0;
+        Sat, 16 Jul 2022 16:09:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 234B0C34114;
+        Sat, 16 Jul 2022 16:09:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657986948;
-        bh=iKJk2iY7/xXpJdIBMRXKwzFi0/z2BbDmJmuPi7R5wOE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YGUrcHpUg+X9jNbTj2Cqjg8a7ngo4h9R9LvQzzkrCRQH5orMpx2YXEfHYOnLrGJ0O
-         eTCmhxYqUa4wV1twut1+m7STcQgCtxC5pQ5zTJU0KsTaNf2JbpdAYRJNmP550s1TVW
-         8cpfyMxKULB0awb2a0z9uf8t9UKhQsgDpuz/kjfKn6jPNHsuL2Fn2e0Y5n1fY6mc4d
-         C6C3qUkzLZSDFmxim/LZQGJJjP2z2B916Cr/4Zq/vm+93uDFM7D1yds8+mxgzjep3Q
-         wVY6McsOugd4EOavAqUQIXYDBKBxTPb5WpWUBI4UqWhFVvHtftIcvSmIQPU5RBn6uU
-         oMNX5KSlc6ABQ==
-Date:   Sat, 16 Jul 2022 17:05:40 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] iio: pressure: bmp280: Adds more tunable config
- parameters for BMP380
-Message-ID: <20220716170540.0d767e2f@jic23-huawei>
-In-Reply-To: <5f47527553a3e191e8e458401c1ad9abddd598dc.camel@gmail.com>
-References: <20220625151039.48148-1-ang.iglesiasg@gmail.com>
-        <20220626153908.5b71d2ac@jic23-huawei>
-        <5f47527553a3e191e8e458401c1ad9abddd598dc.camel@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        s=k20201202; t=1657987760;
+        bh=nuK8GK3uKLya8oToFj66vEMC13us5ufvacB/Y1/YHR0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sPJSozviix4Hz3h/Ln2GbrVWzORwGVK9GBOFiW/u2egcTXJqlDjjHnvWHyJlfl9jM
+         5szkTR/EjgPJ6Pyoq0Xl7TPREBwaFx11KtsMQO8WmwwrUehku6DkVn2VLP7sCPTnj2
+         bOt9FicTOU7ygEthnMiM4u/IhLXZt3nXzsEKFz3bIpqDpSfsUF4qqjf7Jdr9sVOtxT
+         vZUuFYyPHsOE+HSzZrC6uq4I66Wj4avbNFY1PyeI2e4iHxI2gIX85vC3I2+gqJc6xO
+         GW9gxYe3HjKVMPuu7ZtG47Ygv1hEW4vMWi8X76jg2GnmtLiK7NTZe5jBIPXW+0Ok7h
+         GbijlDI3fO5Tw==
+Received: by pali.im (Postfix)
+        id DC602A52; Sat, 16 Jul 2022 18:09:16 +0200 (CEST)
+Date:   Sat, 16 Jul 2022 18:09:16 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 3/4] ARM: dts: armada-38x: Fix compatible string for
+ gpios
+Message-ID: <20220716160916.jp37siznitgzw6qf@pali>
+References: <20220714115515.5748-1-pali@kernel.org>
+ <20220714183328.4137-1-pali@kernel.org>
+ <20220714183328.4137-3-pali@kernel.org>
+ <20220716144028.rzwcn4wl5uyxepjd@pengutronix.de>
+ <20220716145019.nps3oh4a22fsuzup@pali>
+ <20220716150751.6yaknmo3qwusyy5h@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220716150751.6yaknmo3qwusyy5h@pengutronix.de>
+User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,95 +74,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Jun 2022 18:10:48 +0200
-Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
+On Saturday 16 July 2022 17:07:51 Uwe Kleine-König wrote:
+> On Sat, Jul 16, 2022 at 04:50:19PM +0200, Pali Rohár wrote:
+> > On Saturday 16 July 2022 16:40:28 Uwe Kleine-König wrote:
+> > > On Thu, Jul 14, 2022 at 08:33:27PM +0200, Pali Rohár wrote:
+> > > > Armada 38x supports per CPU interrupts for gpios, like Armada XP. Pre-XP
+> > > > variants like Armada 370 do not support per CPU interrupts for gpios.
+> > > > 
+> > > > So change compatible string for Armada 38x from "marvell,armada-370-gpio"
+> > > > which indicates pre-XP variant to "marvell,armadaxp-gpio" which indicates
+> > > > XP variant or new.
+> > > > 
+> > > > Driver gpio-mvebu.c which handles both pre-XP and XP variants already
+> > > > provides support for per CPU interrupts on XP and newer variants.
+> > > > 
+> > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > Fixes: 7cb2acb3fbae ("ARM: dts: mvebu: Add PWM properties for armada-38x")
+> > > > ---
+> > > >  arch/arm/boot/dts/armada-38x.dtsi | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/arch/arm/boot/dts/armada-38x.dtsi b/arch/arm/boot/dts/armada-38x.dtsi
+> > > > index df3c8d1d8f64..9343de6947b3 100644
+> > > > --- a/arch/arm/boot/dts/armada-38x.dtsi
+> > > > +++ b/arch/arm/boot/dts/armada-38x.dtsi
+> > > > @@ -292,7 +292,7 @@
+> > > >  			};
+> > > >  
+> > > >  			gpio0: gpio@18100 {
+> > > > -				compatible = "marvell,armada-370-gpio",
+> > > > +				compatible = "marvell,armadaxp-gpio",
+> > > >  					     "marvell,orion-gpio";
+> > > 
+> > > If you can treat the XP variant as 370 and everything that is supposed
+> > > to work on 370 works then, then maybe the right incarnation is:
+> > > 
+> > > 	compatible = "marvell,armadaxp-gpio", "marvell,armada-370-gpio", "marvell,orion-gpio";
+> > > 
+> > > ?
+> > 
+> > For pre-XP variants is "marvell,orion-gpio" enough and for XP + post-XP
+> > is needed "marvell,armadaxp-gpio" (with possible "marvell,orion-gpio"
+> > for backward compatibility).
+> > 
+> > So I do not see reason why to add "marvell,armada-370-gpio" nor what
+> > value it brings.
+> 
+> If you boot an older kernel (i.e. one that doesn't support
+> marvell,armadaxp-gpio, but does support marvell,armada-370-gpio), it
 
-> On dom, 2022-06-26 at 15:39 +0100, Jonathan Cameron wrote:
-> > On Sat, 25 Jun 2022 17:10:36 +0200
-> > Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
-> >  =20
-> > > Allows to configure the IIR filter coefficient and the sampling
-> > > frequency
-> > > The IIR filter coefficient is exposed using the sysfs attribute
-> > > "filter_low_pass_3db_frequency"
-> > >=20
-> > > Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com> =20
-> > Hi Angel
-> >=20
-> > A few comments inline, =20
-> > > ---
+Is there such kernel version?
 
->=20
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0*val2 =3D data->chip_info->sampling_freq_avail[data=
-- =20
-> > > >sampling_freq][1]; =20
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0ret =3D IIO_VAL_INT_PLUS_MICRO;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0break;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case IIO_CHAN_INFO_LOW_PAS=
-S_FILTER_3DB_FREQUENCY:
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0*val =3D data->chip_info- =20
-> > > >iir_filter_coeffs_avail[data->iir_filter_coeff]; =20
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0ret =3D IIO_VAL_INT;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0break;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default:
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D -EINVAL;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0break;
-> > > @@ -577,6 +647,39 @@ static int
-> > > bmp280_write_oversampling_ratio_press(struct bmp280_data *data,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
-> > > =C2=A0}
-> > > =C2=A0
-> > > +static int bmp280_write_sampling_frequency(struct bmp280_data
-> > > *data,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int val, int val2)
-> > > +{
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int i;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const int (*avail)[2] =3D =
-data->chip_info- =20
-> > > >sampling_freq_avail; =20
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const int n =3D data->chip=
-_info->num_sampling_freq_avail;
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (i =3D 0; i < n; i++) {
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0if (avail[i][0] =3D=3D val && avail[i][1] =3D=3D va=
-l2) {
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dat=
-a->sampling_freq =3D i; =20
-> > better to only set the cached value if the write succeeds.
-> >=20
-> > e.g.
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-ret =3D data->chip_info->chip_config(data);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-if (ret)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret;
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-data->sampling_freq =3D i;
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-return 0; =20
->=20
-> Ok! Should I restore the previous value in case of failure?
+> will work better as there are relevant differences between
+> marvell,orion-gpio and marvell,armada-370-gpio.
 
-The condition is pretty much unknowable, so normally we just assume
-failure means it didn't write.
+And if yes, do we really need this in DTS files for new kernel
+versions? I can imagine that such change can be relevant for old LTS
+kernel version, but not for new versions.
+
+> For example some
+> registers seem to have a different offset ...
+
+armada-370-gpio is mapped to MVEBU_GPIO_SOC_VARIANT_ORION, so it will
+get same offsets as orion-gpio. So no change.

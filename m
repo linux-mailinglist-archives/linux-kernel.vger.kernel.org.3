@@ -2,137 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6D55771C8
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 00:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D675771CA
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 00:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232513AbiGPWUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 18:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
+        id S232549AbiGPWZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 18:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiGPWT7 (ORCPT
+        with ESMTP id S229619AbiGPWZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 18:19:59 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5EC18E2B
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 15:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658009998; x=1689545998;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ufvwV4ixnLX1+1hIZGjDLBj9Eq1g9Ryobutjp7mbHSE=;
-  b=STISRy+7IGiWBLNigazbcdVwbzP2WUjiI+HtHHt4TkPMzR465jZW1CKa
-   +3HFBqbYRCun3FOjjBqpmAIbbbALiQieoWcZQs2WDEr3TDWn0bQactIAR
-   quizyAN1wdJVATixEC51lHpsrAwhLhOkCMORbkCjs3gEXgtOxMN6268LY
-   aXvHETChTwSziVqGpMRYORHHZBrgSuIr/8iJpWacurudGZr6vuLX0PuMq
-   lMxcpsiA+PAX9h8QgL5IiVTw6W5RKM74LnPWkXKNCT6NZuL7EGiWACLtr
-   /dKOElhAjFlM5P/jkXhhP58nca5JwBoJYwLZV29QllvebBs0GmC1ix2hy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="284766138"
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="284766138"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 15:19:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="686333534"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Jul 2022 15:19:56 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCq8h-0002E6-SU;
-        Sat, 16 Jul 2022 22:19:55 +0000
-Date:   Sun, 17 Jul 2022 06:19:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [asahilinux:bits/080-wifi 22/29]
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse:
- sparse: incorrect type in assignment (different base types)
-Message-ID: <202207170607.LQUVasBU-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 16 Jul 2022 18:25:02 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2275D1C90D;
+        Sat, 16 Jul 2022 15:25:01 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 23so7471232pgc.8;
+        Sat, 16 Jul 2022 15:25:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=DD9+PSwr6U6sHyRODEYS90F8ToJiRT1Fstf8yvbN2dY=;
+        b=mOlGlmoVlrkAh9J+MareGX9X6NFNX2mFkM9+DhYHDooKBT3BQ03XwCuHddQ1xI9mK9
+         2VH7LIDVqSZwM/OTIAIonH+ZMG9ikVqRWRfNS1n78mAIhOki8satfZoFeRgs7ecQKHKb
+         8rJy6Obg7vjLSt13yyw91WgR7S9llNj7T53GI1iSrCz3fhPhIOupeKZXmMp3OsE4BLsv
+         t3CjRhcTCx1f9+PAvD9NfoRl1Ox6gAsEs1wqlgk2gzwiTNI9MgHQ6ds73rZpmzWbc0pD
+         DDz0z2xvMsGuz2DmQF5EWDMJYah3Wb1nwQDrRxzcqCQZS6iPUq5e3cM7OM18gfFaIGow
+         hXgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=DD9+PSwr6U6sHyRODEYS90F8ToJiRT1Fstf8yvbN2dY=;
+        b=j0dTGE3yTkssP8RthcToCDjVvJnI2AY5CIT8KpVH9Rv4hrnFUTsdMLHc/xVZNV8uQ9
+         ncrdegNyF8K1lfbc9qo/I55OLM3kQ7ukX0ogY6YeTTlTlQIsDPPKe942CvwNxoBAwY0r
+         N7H5fJmb62HxQSD2u8RLecpEvaBvmFetHm0kUOOZXB8dQDoRpSs6cVSm0JEUTUlst/QU
+         klBHoDb6DjUYk5TmkeRQo9HgkpQ5UFvXYuUFL7n+Ovz4XPD/97d3BdGVvyp23xO0jWI0
+         l4k14Spk2co0n8TRBiL00oKbhI74XUz1Impjs3TzKY81RIpZSkjoIyCqCg++enZSmO0B
+         V+dA==
+X-Gm-Message-State: AJIora9BN5nn5TMa3s//5lH2GA48fSn6PE2g6AwPMS0nq5r3MC50zd20
+        FqRGj9111C0lSzNUdy/TmAyGvdalyO4=
+X-Google-Smtp-Source: AGRyM1sevGz6TvgsR/3v2+nd0Kl/YAE4nAjg1/EV+OylXhhmE0kDW8PJjvm3WkoXnlHg1yki3Nb80Q==
+X-Received: by 2002:a63:4c05:0:b0:419:78b2:d775 with SMTP id z5-20020a634c05000000b0041978b2d775mr18068145pga.62.1658010300468;
+        Sat, 16 Jul 2022 15:25:00 -0700 (PDT)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.144.250])
+        by smtp.gmail.com with ESMTPSA id y12-20020aa78f2c000000b00528c149fe97sm6318662pfr.89.2022.07.16.15.24.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Jul 2022 15:25:00 -0700 (PDT)
+From:   Jim Quinlan <jim2101024@gmail.com>
+To:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list@broadcom.com, jim2101024@gmail.com,
+        james.quinlan@broadcom.com
+Cc:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE),
+        linux-kernel@vger.kernel.org (open list),
+        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE), Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 0/6] PCI: brcmstb: Re-submit reverted patchset
+Date:   Sat, 16 Jul 2022 18:24:47 -0400
+Message-Id: <20220716222454.29914-1-jim2101024@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/080-wifi
-head:   17fbadf936c0875886e8b4f48a777eca5acf3b20
-commit: cb8c1e6eaed57ea1268f71d306e4a7e4708992d8 [22/29] brcmfmac: cfg80211: Add support for PMKID_V3 operations
-config: parisc-randconfig-s041-20220715 (https://download.01.org/0day-ci/archive/20220717/202207170607.LQUVasBU-lkp@intel.com/config)
-compiler: hppa64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/AsahiLinux/linux/commit/cb8c1e6eaed57ea1268f71d306e4a7e4708992d8
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/080-wifi
-        git checkout cb8c1e6eaed57ea1268f71d306e4a7e4708992d8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc64 SHELL=/bin/bash drivers/bluetooth/ drivers/media/i2c/ drivers/net/wireless/broadcom/brcm80211/brcmfmac/ drivers/pci/ kernel/trace/ sound/soc/codecs/
+V2  -- As v1 included the minimal code to fix a regression.  v2 does
+       the same but adds some improvements suggested by Bjorn.
+    -- In the unlikely but possible case that some other driver
+       starts using the port driver's dev_data field, do not overwrite
+       it but issue an error and return.
+    -- Functions probe() and resume() do similar operations but
+       did them in a different order; make this order consistent
+       for both.
+    -- New commit to remove forward declarations.
+    -- New commit for only the PCIe config-space access "refusal mode".
+    -- brcm_pcie_linkup renamed to brcm_pcie_start_link
+    -- Add '_noirq' to the brcm_pcie_{suspend,resume} function names
+       to match the dev_pm_ops names.
+    -- Changes to commit messages:
+           o Explain why we are splitting a function in two parts.
+           o s/RB/Root Port/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+    NOTE for Bjorn: The two commits "add mechanism .." and "add control ..."
+        would probably be more clear if they were squashed.  They are kept
+        separate as the first one's code may someday be moved under the Port
+        driver.  As such, there's some churn.
+
+    NOTE for Bjorn: There is no hurry on Broadcom's side wrt which
+        release cycle/phase this patchset is applied.  It goes in
+        when you think it is ready.
+
+V1 -- Resubmission of patchset after original was reverted for a
+    regression.
+
+    A submission [1] was made to enable a PCIe root port to turn on
+    regulators for downstream devices.  It was accepted.  Months later, a
+    regression was discovered on an RPi CM4 [2].  The patchset was reverted
+    [3] as the fix came too late in the release cycle.  The regression in
+    question is triggered only when the PCIe RC DT node has no root port
+    subnode, which is a perfectly reasonsable configuration.
+
+    The original commits are now being resubmitted with some modifications
+    to fix the regression.  The modifcations on the original commits are
+    described below (the SHA is that of the original commit):
+
+    [830aa6f29f07  PCI: brcmstb: Split brcm_pcie_setup() into two funcs]
+        NOTE: In the originally submitted patchset, this commit introduced a
+        regression that was corrected by a subsequent commit in the same
+        patchset.  Let's not do this again.
+
+        @@ -1411,6 +1411,10 @@ static int brcm_pcie_probe(struct platform_device *pdev)
+            if (ret)
+                    goto fail;
+
+        +       ret = brcm_pcie_linkup(pcie);
+        +       if (ret)
+        +               goto fail;
 
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] version @@     got int @@
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse:     expected restricted __le16 [usertype] version
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse:     got int
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] scan_type @@     got int @@
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse:     expected restricted __le32 [usertype] scan_type
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse:     got int
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned char [usertype] scan_type @@     got restricted __le32 [usertype] scan_type @@
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse:     expected unsigned char [usertype] scan_type
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse:     got restricted __le32 [usertype] scan_type
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] time_left @@     got unsigned int @@
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse:     expected restricted __le32 [usertype] time_left
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse:     got unsigned int
+    [67211aadcb4b  PCI: brcmstb: Add mechanism to turn on subdev regulators]
+        NOTE: Not related to the regression, the regulators must be freed whenever
+        the PCIe tree is dismantled:
 
-vim +4075 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
+        @@ -507,6 +507,7 @@ static void pci_subdev_regulators_remove_bus(struct pci_bus *bus)
 
-  4053	
-  4054	static s32
-  4055	brcmf_pmksa_v3_op(struct brcmf_if *ifp, struct cfg80211_pmksa *pmksa,
-  4056			  bool alive)
-  4057	{
-  4058		struct brcmf_pmk_op_v3_le *pmk_op;
-  4059		int length = offsetof(struct brcmf_pmk_op_v3_le, pmk);
-  4060		int ret;
-  4061	
-  4062		pmk_op = kzalloc(sizeof(*pmk_op), GFP_KERNEL);
-  4063		pmk_op->version = cpu_to_le16(BRCMF_PMKSA_VER_3);
-  4064	
-  4065		if (!pmksa) {
-  4066			/* Flush operation, operate on entire list */
-  4067			pmk_op->count = cpu_to_le16(0);
-  4068		} else {
-  4069			/* Single PMK operation */
-  4070			pmk_op->count = cpu_to_le16(1);
-  4071			length += sizeof(struct brcmf_pmksa_v3);
-  4072			memcpy(pmk_op->pmk[0].bssid, pmksa->bssid, ETH_ALEN);
-  4073			memcpy(pmk_op->pmk[0].pmkid, pmksa->pmkid, WLAN_PMKID_LEN);
-  4074			pmk_op->pmk[0].pmkid_len = WLAN_PMKID_LEN;
-> 4075			pmk_op->pmk[0].time_left = alive ? BRCMF_PMKSA_NO_EXPIRY : 0;
-  4076		}
-  4077	
-  4078		pmk_op->length = cpu_to_le16(length);
-  4079	
-  4080		ret = brcmf_fil_iovar_data_set(ifp, "pmkid_info", pmk_op, sizeof(*pmk_op));
-  4081		kfree(pmk_op);
-  4082		return ret;
-  4083	}
-  4084	
+        if (regulator_bulk_disable(sr->num_supplies, sr->supplies))
+                    dev_err(dev, "failed to disable regulators for downstream device\n");
+        +       regulator_bulk_free(sr->num_supplies, sr->supplies);
+            dev->driver_data = NULL;
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+    [93e41f3fca3d  PCI: brcmstb: Add control of subdevice voltage regulators]
+        NOTE: If the PCIe RC DT node was missing a Root Port subnode, the PCIe
+        link-up was skipped.  This is the regression.  Fix it by attempting
+        link-up even if the Root Port DT subnode is missing.
+
+        @@ -503,11 +503,10 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
+
+         static int brcm_pcie_add_bus(struct pci_bus *bus)
+         {
+        -       struct device *dev = &bus->dev;
+            struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
+            int ret;
+
+        -       if (!dev->of_node || !bus->parent || !pci_is_root_bus(bus->parent))
+        +       if (!bus->parent || !pci_is_root_bus(bus->parent))
+                    return 0;
+
+            ret = pci_subdev_regulators_add_bus(bus);
+
+    [1] https://lore.kernel.org/r/20220106160332.2143-1-jim2101024@gmail.com
+    [2] https://bugzilla.kernel.org/show_bug.cgi?id=215925
+    [3] https://lore.kernel.org/linux-pci/20220511201856.808690-1-helgaas@kernel.org/
+
+Jim Quinlan (6):
+  PCI: brcmstb: Remove unnecessary forward declarations
+  PCI: brcmstb: Split brcm_pcie_setup() into two funcs
+  PCI: brcmstb: Add "refusal mode" to preclude PCIe-induced CPU aborts
+  PCI: brcmstb: Add mechanism to turn on subdev regulators
+  PCI: brcmstb: Add control of subdevice voltage regulators
+  PCI: brcmstb: Do not turn off WOL regulators on suspend
+
+ drivers/pci/controller/pcie-brcmstb.c | 438 +++++++++++++++++++-------
+ 1 file changed, 332 insertions(+), 106 deletions(-)
+
+
+base-commit: c5fe7a97f20c7f3070ac870144515c0fabc6b999
+--
+2.17.1

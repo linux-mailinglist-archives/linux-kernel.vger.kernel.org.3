@@ -2,545 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728F9576FA1
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 17:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989BE576FD8
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 17:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbiGPPKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 11:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S231716AbiGPPV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 11:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiGPPKN (ORCPT
+        with ESMTP id S229501AbiGPPV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 11:10:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D8217594;
-        Sat, 16 Jul 2022 08:10:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34B3AB80975;
-        Sat, 16 Jul 2022 15:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56B3CC34114;
-        Sat, 16 Jul 2022 15:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657984208;
-        bh=JsL/GtIKmz6fZtTEgNOO6NloNRUtc7+dtHN7Dfm77AU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UtG9O6E5dxTvXl2GtIz3p0Q7DpCi2naQQvAw52MRfSlGHhtiQAi54/r+s41Zz4nuA
-         WtsS85PyJw+qaHFrfpe2qeIduDta6rhX0D2pCch6lAieTdX5w/sgkwnoGioXxBgEbM
-         iUgAhnO35MAQbZNrhBGKtUEVA+8e592eZLwuymI97O3v7wlMuXVj1hh0Fhu9t5sUYz
-         JIt+UMuNvg5hruVc969r3+TVGPAPsC4X3w4s7QGUe2zjRVnTh4ZjsT8quXksQM9Dkf
-         0uh5FjPOycd9BxhnBwK7pl4HbTWfRJq7efb7jOfQUgfGwmgXALLxGG3Jckv6QX879Q
-         M7tCEzv2iQtrQ==
-Date:   Sat, 16 Jul 2022 16:20:01 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v1 2/2] iio: accel: bma400: Add support for single and
- double tap events
-Message-ID: <20220716162001.054cd77f@jic23-huawei>
-In-Reply-To: <CAM+2Eu+n40_WiQFJDWDeJxoSLxEKjNY1_vGxC_86DX7+jquPeg@mail.gmail.com>
-References: <20220613191706.31239-1-jagathjog1996@gmail.com>
-        <20220613191706.31239-3-jagathjog1996@gmail.com>
-        <20220619141814.4b2b3dee@jic23-huawei>
-        <CAM+2Eu+n40_WiQFJDWDeJxoSLxEKjNY1_vGxC_86DX7+jquPeg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 16 Jul 2022 11:21:57 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6961CB29;
+        Sat, 16 Jul 2022 08:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657984915; x=1689520915;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=wCaL2JbHF7/CxwR35tWrdwL5PQ8qkqOcTZbW31EUqVs=;
+  b=cUcLwFFYpePJHNbyNh8eu+EIPqS9htkAjbt7OMMHo0ob/ig9My13tGSu
+   bRb1JGkZpULL2MeZHcuHBFEiyQBWbEe2vXd9zPQpgffRE56152Xygl/q6
+   DrZSaElNHPZUUCNhb3ChlBaC+gSj3v4UcDBCIZhSRC3zpp8x+NFirZrqU
+   o8w6wFeoLPZmHcuxcfzVmmEjqkUY+dHpmg/7S4S2gSCkzbDolB8MlaE92
+   DJhXxGn0fEyMWUIJPAzv6/qa1B/OteqPQw+m2mOncxPrNl6JPcSwB91ud
+   VcQ4i7gXvLn7m8VCo71F8gvbIg7bYxX+gmIENdkqHQcgmQ4XeNAgN/QTo
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="168147391"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jul 2022 08:21:54 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sat, 16 Jul 2022 08:21:54 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Sat, 16 Jul 2022 08:21:54 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ogFVlDRPiqJ0C6xbGIqMPgdU1hFvbxk9YUPPUIZ0Wlk7cZniNl2Fzg+tPYpzauzCbwGJROGu+9Y3BzECpttholSY6k5ZrGDRivG6Pzqsql3wf4J+0jNA72M+DUqoaoTzUNNzNpHcirojjg/6pbQ2o2SIy6Bu10PUHxFKGsuo+m947DeEOII0u9Mfr1dPO22jXgYAIWXFBLRx+k9WWmIatGWRV237H2pzQVS+pK1P9VZpZTdMdMckg9lk6+oxpdGL10n6Q/bPdPB9NNEMofAb3MduvNsGh+VmsC4U4BcCSv0aLUNasYNhnuQ3P2DXlQHx9xeAGaSPXG9uhZ00xe+RDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wCaL2JbHF7/CxwR35tWrdwL5PQ8qkqOcTZbW31EUqVs=;
+ b=KqIX4sQqIsT1u2+Sg0yBNCmrQuEx1U0TdUnWLeIFrGjWBZV2PUBFXPrtu/GatuM6MQwYLOVaCZSxyRYzYlrY8T3xSMQlJBebQ0I7iskZltgi6F8srrS6kTOFozsFFQHjmEVPj+e5hj77SL9v2mS7bp/2pazmg1pqZbVN42qnswMeNpacl/qOIWYVv5upLrqnDJNtJN7ZWK7Jls7FH273BtSyVeSQRM/oiFPbKMwqNs8+cB7XpWDQnPhH/sM2a5+OjJH/Lik3qVj1Nw4bdxPqqOpiYedepIN9iplixpM0VxLN2Jk7KPuVT08vLYQbbJl2XIq9shWz99fcsMXsOXk/eg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wCaL2JbHF7/CxwR35tWrdwL5PQ8qkqOcTZbW31EUqVs=;
+ b=tU8oPhTpPNK8iMZIdSZFLgxIVMZ5WW3UAZ6JPQDc6oaY263Sg8y6+ZKoC5y+Xing/AjQFi+GK+5mH7lPwd3LRYwEmNrJlD4BCu5V4bOi3t5+uq7c/zlrxJZ4spZtYQlq9G0dP1k/tMCg9Exn3GPk/Wu5UgW92i5gww36fzY5Avc=
+Received: from PH0PR11MB5925.namprd11.prod.outlook.com (2603:10b6:510:143::10)
+ by BY5PR11MB3960.namprd11.prod.outlook.com (2603:10b6:a03:185::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.21; Sat, 16 Jul
+ 2022 15:21:48 +0000
+Received: from PH0PR11MB5925.namprd11.prod.outlook.com
+ ([fe80::5c03:1f60:ee1d:3928]) by PH0PR11MB5925.namprd11.prod.outlook.com
+ ([fe80::5c03:1f60:ee1d:3928%7]) with mapi id 15.20.5417.026; Sat, 16 Jul 2022
+ 15:21:48 +0000
+From:   <Lewis.Hanly@microchip.com>
+To:     <maz@kernel.org>
+CC:     <linux-riscv@lists.infradead.org>, <Conor.Dooley@microchip.com>,
+        <brgl@bgdev.pl>, <linux-gpio@vger.kernel.org>,
+        <linus.walleij@linaro.org>, <palmer@dabbelt.com>,
+        <linux-kernel@vger.kernel.org>, <Daire.McNamara@microchip.com>
+Subject: Re: [PATCH v3 1/1] gpio: mpfs: add polarfire soc gpio support
+Thread-Topic: [PATCH v3 1/1] gpio: mpfs: add polarfire soc gpio support
+Thread-Index: AQHYmONEe8u9iky0lEWQnR2PO9enTa2AzRoAgABQpQA=
+Date:   Sat, 16 Jul 2022 15:21:48 +0000
+Message-ID: <2d7f72d3e89686d3ba5cff5df8cfe443d04fc5f4.camel@microchip.com>
+References: <20220716071113.1646887-1-lewis.hanly@microchip.com>
+         <20220716071113.1646887-2-lewis.hanly@microchip.com>
+         <87r12l4aaj.wl-maz@kernel.org>
+In-Reply-To: <87r12l4aaj.wl-maz@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.5-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a378170c-53b8-4c76-e284-08da673ee6f7
+x-ms-traffictypediagnostic: BY5PR11MB3960:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1490JFRPUr6KSOHK7uxbwQVEUJaj88eRweOQXdpPrBi6BH8OELrNkQHJgsxNm8+TRdb5GoEr3aFMmuQrE0HFjnjWZNE3ZKLpNqoOgxUmwT87+wPJ889//3LlD8QvKw0K9fSEYJzo3xVhxlH8LPjLtGTtTNXpXlvdjThYo/zQR+DNyiFnOBYFod2pAlUFFz5nFy+Sj36MA+bq4i9NBYKwc26ei9pkRSyhaBFBSZ08VDdmFWTXpZEJn/mCC9SOTXarBjJEjwEWfurUinK03byhTtJHCNXtAABtVcj5q0wpPaQQoNGV7AlDqS4nY/a9BDtpQ2qYo+DlDDNKBi2kubBF+uN55FsbGaAZPb7WM7HpA28HxD/+DwwXViLnlCtZw4vHPKlkaa3vDz02lKhr1J90RP1Yw/AJs4AzSnK0LPl60KhQmP8y6pHF2lxuFeRN7hfAzk9i+HQtsf1kzulFuCb8IfYJ7rgANz0DOCtsfNJ1h1xpyTUWTS6zLCBrrRVf+SndaEgx02xRUEL0Bvx0WbB8oZ4dPtqZQVjw5sL7hL57ALAJTujQzxK+DB7pIrcsUMfzKesCdhc44FL+g5cKYoytwQ0BWs+lbDnnsH4lZMosCoZ6KIR+o67MnZwpbXMQa/HFUt7dXto1oakCfUkZPvl/bpr6iOSID9dXlSAQTyy0a5I5WPdSbAqt78kTqwuJbWHOvreAHXkWCgyApwpqoZUwzbyekhx+U1LtoE2PBACl2RqZKzVPD3iiI4lfblRUoII+K7VCGE0CwpZO3OxNCVeQca8D654ovR5QJp8isD7GB6KEVHbW2Tnf0SDmvCjUpbHR
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5925.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39850400004)(346002)(376002)(136003)(366004)(396003)(316002)(91956017)(76116006)(66446008)(64756008)(66556008)(66476007)(66946007)(38070700005)(38100700002)(54906003)(122000001)(6916009)(6512007)(26005)(5660300002)(8936002)(36756003)(2906002)(41300700001)(6506007)(4326008)(83380400001)(8676002)(71200400001)(6486002)(2616005)(478600001)(186003)(107886003)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UlhrWDZITzhYKzI2YUo4R3lLRUdVRkxGeWNEbUt6UkNraVczaHBWY1RIWVdX?=
+ =?utf-8?B?Y3lBbnF4R0xDdVBaSWczK2twLzMyYXk1WGpZTGZ2aVRBU1BXMWYvMkpmOVZ0?=
+ =?utf-8?B?WnhnNmNHRUw2V1FzUjBSWHFxNUtPampFK1gzTU4wSHk5Z2o3bEpMQWRTaUFn?=
+ =?utf-8?B?RGZuTTZGS1VlRmVuN0JjSU50Nm5acDBCRDcxeVIzVVZySUh2b1M4NW00MFhW?=
+ =?utf-8?B?WkNLL0JKUk5EU3A3REVEZm5wZU0zWUFtVjAwL2Q1Y09MMzJ4clF4T3QxbUNW?=
+ =?utf-8?B?NU9DYXFSZVIzMGRTSHFib2E1Uk5yNnN6RXBYdDN0SkNuTFVrdy9ZNklDYk85?=
+ =?utf-8?B?R1NPYjRtcG1pVnBuSmJtb3JGdnBlOVo0TXVtSkxoL0JScFY3eGQ3d2ZkaHhV?=
+ =?utf-8?B?N0h4UFhNa2pJdUdJQmZueDFUNlovZElRVHlqcmdzWndhVXRsWFpPZE9TSmdN?=
+ =?utf-8?B?cnJjMWFGRTI0cWMzcWZ3MklqeUJjRDlwTWdOb0FLOXBiSnJKOGg2dzloWFRR?=
+ =?utf-8?B?WDRNNzFCSUJ4dDZjTGU2QkRJVENnRHFsc1VwZUV0bDFsb3gxVThRYkRHTFVD?=
+ =?utf-8?B?ZEc1Uld1N1BwdnRxR2dIek95YTl2T1hITmZkT3QyS0VZblpPeVFGa0JjZUdZ?=
+ =?utf-8?B?MlFDSUxKNmo0WVpWU1VVaXg0T3hBak9FVGo5MUZURGtET3pTUVZRbm85c1Bh?=
+ =?utf-8?B?VS9ZeGZuTzk1T2VqOEpjclNqTVZER0hmUmZYa254UG5qb2p4VzZ1ZmxUMjN2?=
+ =?utf-8?B?YStBaGtCMHF4WURhQXZEUk1lMlRBdkxvMmplUEhrSTAvcFF3OERaNFRQb0JI?=
+ =?utf-8?B?VmNBdERzMTdKVUFmTlREVHZPRE1HeXJlTnFxY2ROeE5wZkpGRGdmLy8yZ1Rx?=
+ =?utf-8?B?bTdoV2huTUt2Rms3WEdwV3F1SjIxUFFrUmY5RlFpeUNNdnRmOFA4alZmeFk4?=
+ =?utf-8?B?ekwwSFhRSmdSd0xTWEdzSTJ4bzd1SmtHSFdnM3NSbTBYK2FEQzZyMWhjQUdo?=
+ =?utf-8?B?MjhsazBmT0FYcGpZbFdqL1Ywd0dDLzN2bUh6RVVvU1hVZFY1MHlzQm11ZEdR?=
+ =?utf-8?B?TFU2dkh2UlVxVDd6RkYySTREZjRrdnFQbVhVYmlYdkFNUXBuYmlVOHJZeVNW?=
+ =?utf-8?B?d3g4cTNYbmY1OXQyNFBZcmFzSmhYWVQ3TncxdVBnRVpyTmFpaGtUSGNucUJ4?=
+ =?utf-8?B?a3FPMzNzeVM2TGhXNHZhdkJIRHpNYmo4QXpURXBXT1lwNUx0d2JWbk5CM3hN?=
+ =?utf-8?B?L2p5SDV0VDRFZzlzTVNKR05LeUN6Ym91NmZkY3lKcElrQ3cvdFlqR3M4SVV0?=
+ =?utf-8?B?ek1uSVg1SjdDOWlPMzVyd1dHV1d4OURhRmo5NzU4SlVsWXJUK2tROHphVURh?=
+ =?utf-8?B?aktCRm1jZ0RQZndjQU1tQytWS0VTaWE3YlkzQ1BCeHRoWFEwdGFOR1JxRGNx?=
+ =?utf-8?B?c2UxSWcxaGFHUFZQV09DaTAvRVFRbktjU0VseVUzTDVFcUtSaysrYlNqTmFG?=
+ =?utf-8?B?M0lOejl2UHJURGlJd3B1V0VrdHMzMHN1VklEMFJvbGw0MnNvRTUwdnUrYU41?=
+ =?utf-8?B?VDNNL3ZNM1B3NnlWZ3JGMEJhSmpiZEdoV0pPdEt6bkNjdmVUWk53ZEI5aEFG?=
+ =?utf-8?B?b09uU2poZ2t1R0w1VkRXdHROUmZmakNEMHcvNit0bURmMmNuUEJOUDRCdHNM?=
+ =?utf-8?B?YVNNTEo2dDlQaTBidUFiRkhEbU52TzMrNGltVWxMMHBUUW9MeEYxRmVGQjNG?=
+ =?utf-8?B?ZTk5d3YzOHZlVmVSMWRpUUR4dGRHTUMrNkZSb1ZWTDdVS3hsaS9MQ0dwZWU1?=
+ =?utf-8?B?SWQyVy9NWkprL3JWaGZqbjUwdTBnajhwNXQvMjVWbFdnOFF5UVh0UjBWNTJH?=
+ =?utf-8?B?VkxwbjNKV2R1ay9FMlMyL05JdzZvNXNQUFVzWmRxdEFWTU5lajV6SS9kTjdl?=
+ =?utf-8?B?c0Znd3M5SHlRR0h4ZEd2UGEyekM1NGJyYjFkRktCeVB6Nmd6ckdRNEpHZHAy?=
+ =?utf-8?B?cnFKcVMxdkxJYkc1UlNYSVJtYzRSc3g5dVVYTUhHa2Y2Vlg4OUZ3YUdmZnFi?=
+ =?utf-8?B?cFluSUdUTUFlZXZ6NXovSWFUZ2ZzeEZkRndhRXpzNlBJQkw2YUU5ckFXbDA1?=
+ =?utf-8?B?MW5UdUtFU2JsMVA5aWNSK0NBc2xzRjRQazh1ZkFFZ2hDUVd2QkYzVDVMdFUz?=
+ =?utf-8?B?M2c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0359106946BB044FAA32D4DFB17ECA1E@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5925.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a378170c-53b8-4c76-e284-08da673ee6f7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jul 2022 15:21:48.6359
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: P4J7elq5YoKkfTU/QXMoy0GbZJPwEbuum0CGEpYyIWvmxmGZ2s4Am2112tv/EWqd7e2NmnHpy6HXWj24Yh22w2dDLzCafqthl5uEG1utIdg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB3960
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 26 Jun 2022 18:53:11 +0530
-Jagath Jog J <jagathjog1996@gmail.com> wrote:
-
-> Hi Jonathan,
-> 
-> On Sun, Jun 19, 2022 at 6:38 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> >
-> > On Tue, 14 Jun 2022 00:47:06 +0530
-> > Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> >  
-> > > Add support for single and double tap events based on the tap threshold
-> > > value and minimum quiet time value between the taps. The INT1 pin is used
-> > > to interrupt and event is pushed to userspace.
-> > >
-> > > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
-> > > ---
-> > >  drivers/iio/accel/bma400.h      |  11 ++
-> > >  drivers/iio/accel/bma400_core.c | 210 ++++++++++++++++++++++++++++++--
-> > >  2 files changed, 211 insertions(+), 10 deletions(-)
-> > >
-> > > diff --git a/drivers/iio/accel/bma400.h b/drivers/iio/accel/bma400.h
-> > > index e8f802a82300..d05edd9b009a 100644
-> > > --- a/drivers/iio/accel/bma400.h
-> > > +++ b/drivers/iio/accel/bma400.h
-> > > @@ -40,6 +40,7 @@
-> > >  #define BMA400_INT_STAT1_REG        0x0f
-> > >  #define BMA400_INT_STAT2_REG        0x10
-> > >  #define BMA400_INT12_MAP_REG        0x23
-> > > +#define BMA400_INT_ENG_OVRUN_MSK    BIT(4)
-> > >
-> > >  /* Temperature register */
-> > >  #define BMA400_TEMP_DATA_REG        0x11
-> > > @@ -105,6 +106,16 @@
-> > >  #define BMA400_INT_GEN2_MSK         BIT(3)
-> > >  #define BMA400_GEN_HYST_MSK         GENMASK(1, 0)
-> > >
-> > > +/* TAP config registers */
-> > > +#define BMA400_TAP_CONFIG           0x57
-> > > +#define BMA400_TAP_CONFIG1          0x58
-> > > +#define BMA400_S_TAP_MSK            BIT(2)
-> > > +#define BMA400_D_TAP_MSK            BIT(3)
-> > > +#define BMA400_INT_S_TAP_MSK        BIT(10)
-> > > +#define BMA400_INT_D_TAP_MSK        BIT(11)
-> > > +#define BMA400_TAP_SEN_MSK          GENMASK(2, 0)
-> > > +#define BMA400_TAP_QUIET_MSK        GENMASK(3, 2)  
-> >
-> > So following up on the 'what is the maximum time between double taps
-> > question I took a look at the datasheet.
-> >
-> > What about quiet_dt and tics_th?  
-> 
-> I kept both of them as default values since there is only _period attribute
-> which matches these values.
-
-Understood.  Definitely feels like we are stretching that ABI too far.
-
-> 
-> >
-> > quiet_dt seems to be min time between taps in a double tap, and tics_th
-> > is about the 'tap' algorithm itself.
-> >
-> > Interesting, tics_th is kind of the opposite of what we'd normally use period
-> > for.  We only get event if the max to min of tap occur closer together than
-> > this value.
-> >
-> > quiet_dt seems a closer fit to what you documented period for.  quiet
-> > controls min space between single taps.  So related but indirectly to
-> > double tap detection.
-> > If I have understood this correctly.
-> >
-> > * If two taps are more that quiet apart then we get 2 single taps.
-> > * If two taps are more than quiet_dt apart but less than quiet apart then
-> >   we get a double tap.
-> > * If two taps are less than quiet_dt apart, then we probably detect them
-> >   as a single tap, as long as the tics_th timing condition is met.
-> >
-> > Whilst quiet effects both single and double tap I think we would have
-> > to define it as controls on both of them (linked by changing value of
-> > one effecting the other).
-> >
-> > Period doesn't fit any of these but I'm struggling to come up with
-> > good ABI.
-> >
-> > Maybe use "holdoff" for single tap to indicate minimum time after
-> > first tap before we can have another one.  (lifted from naming of
-> > controls on oscilloscope triggers).
-> >
-> > What to call the same time for double taps (which it's a limit on how
-> > far apart they can be) isn't obvious.  Nor is what would map to quiet_dt
-> > a they are both very specific to double taps.
-> > Maybe "period" makes sense for quiet (not quiet_dt) when applied to a double
-> > tap as it's time within which the event must have completed (got 2 taps)
-> > but it's a stetch.
-> >
-> > Anyhow, this needs more thought.  All suggestions welcome!  
-> 
-> Thanks for the suggestion,
-> For double-tap, the quiet value represents window time which means both taps
-> should occur within this period of time.
-> 
-> Please give me suggestions for the name "pulse window" or only "window" for
-> double tap quiet value and "latency" for the quiet_dt.
-
-Window doesn't really describe anything - it's too vague. 
-
-> 
-> Most of the accelerometer sensors which support tap feature define
-> quite, quite_dt
-> register field with different names then, can I add these attributes in the core
-> with the final suggested name?
-
-ABI definition is tricky.  Normal trick is to look at other similar sorts of things
-(like oscilloscope triggers). https://download.tek.com/document/55W_17291_6_0.pdf (1st
-hit in google)
-So, one option is to use the concept of triggers resetting.
-
-Hence quiet might work as
-gesture_singletap_resettimeout (in seconds)  Until this time has passed the
-detector is not reset to look for another event.
-
-It's a bit of a stretch to use this for quiet_dt. There is a similar concept
-in the above scope manual, but it's defined as AB triggers and that's complex
-and doesn't map great to simple naming.
-gesture_doubletap_tap2mindelay (in seconds)
-maybe?  Note these are only vague suggestions.  There are a various userspace
-folk who are often kind enough to give us feedback on things affecting ABI. 
-So +CC
-Bastien Nocera <hadess@hadess.net>
-Hans de Goede <hdegoede@redhat.com>
-
-(for Bastien and Hans: the aim here is to finally add ABI to IIO for single and double
- tap detection from accelerometers - in particular trying to come up with sensible tunables
- that are suitable for the algorithms various devices implement).
-
-> 
-> Since tics_th is specific to bma400 can I define this by creating custom
-> attributes with the same name using IIO_DEVICE_ATTR_RW()?
-
-No.  Custom ABI is fine for a driver if needed like here, but it needs to be inline with
-the standard ABI such that if we make it standard later, we can hopefully make
-use of it.   I'm not sure this will ever be standards, but let's aim for
-something readable(ish).
-
-_maxtomin_time  (in seconds)  might work perhaps?
-
-I've not looked at what the input subsystem does for touch screens. Feels like they'll
-have at least some of the same controls.  Perhaps there is something to be learnt
-from there?
-
-Jonathan
-
-
-> 
-> Thank you,
-> Jagath
-> 
-> 
-> >
-> >
-> > A few trivial things inline as well.
-> >
-> >
-> >  
-> > > +
-> > >  /*
-> > >   * BMA400_SCALE_MIN macro value represents m/s^2 for 1 LSB before
-> > >   * converting to micro values for +-2g range.
-> > > diff --git a/drivers/iio/accel/bma400_core.c b/drivers/iio/accel/bma400_core.c
-> > > index c31bdd9b168e..f8945dc0de04 100644
-> > > --- a/drivers/iio/accel/bma400_core.c
-> > > +++ b/drivers/iio/accel/bma400_core.c
-> > > @@ -29,6 +29,7 @@
-> > >  #include <linux/iio/trigger.h>
-> > >  #include <linux/iio/trigger_consumer.h>
-> > >  #include <linux/iio/triggered_buffer.h>
-> > > +#include <linux/iio/sysfs.h>
-> > >
-> > >  #include "bma400.h"
-> > >
-> > > @@ -88,6 +89,7 @@ struct bma400_data {
-> > >       bool step_event_en;
-> > >       bool activity_event_en;
-> > >       unsigned int generic_event_en;
-> > > +     unsigned int tap_event_en;
-> > >       /* Correct time stamp alignment */
-> > >       struct {
-> > >               __le16 buff[3];
-> > > @@ -216,6 +218,36 @@ static const struct iio_event_spec bma400_accel_event[] = {
-> > >                                      BIT(IIO_EV_INFO_HYSTERESIS) |
-> > >                                      BIT(IIO_EV_INFO_ENABLE),
-> > >       },
-> > > +     {
-> > > +             .type = IIO_EV_TYPE_GESTURE,
-> > > +             .dir = IIO_EV_DIR_SINGLETAP,
-> > > +             .mask_shared_by_type = BIT(IIO_EV_INFO_VALUE) |
-> > > +                                    BIT(IIO_EV_INFO_ENABLE),
-> > > +     },
-> > > +     {
-> > > +             .type = IIO_EV_TYPE_GESTURE,
-> > > +             .dir = IIO_EV_DIR_DOUBLETAP,
-> > > +             .mask_shared_by_type = BIT(IIO_EV_INFO_VALUE) |
-> > > +                                    BIT(IIO_EV_INFO_PERIOD) |
-> > > +                                    BIT(IIO_EV_INFO_ENABLE),
-> > > +     },
-> > > +};
-> > > +
-> > > +/* List of sensitivity values available to configure tap interrupts */
-> > > +static IIO_CONST_ATTR(in_accel_gesture_value_available, "0 1 2 3 4 5 6 7");
-> > > +
-> > > +/* List of minimum quiet time before and after double tap, in data samples. */
-> > > +static IIO_CONST_ATTR(in_accel_gesture_doubletap_period_available,
-> > > +                   "60 80 100 120");
-> > > +
-> > > +static struct attribute *bma400_event_attributes[] = {
-> > > +     &iio_const_attr_in_accel_gesture_value_available.dev_attr.attr,
-> > > +     &iio_const_attr_in_accel_gesture_doubletap_period_available.dev_attr.attr,
-> > > +     NULL
-> > > +};
-> > > +
-> > > +static const struct attribute_group bma400_event_attribute_group = {
-> > > +     .attrs = bma400_event_attributes,
-> > >  };
-> > >
-> > >  #define BMA400_ACC_CHANNEL(_index, _axis) { \
-> > > @@ -1012,6 +1044,10 @@ static int bma400_read_event_config(struct iio_dev *indio_dev,
-> > >               case IIO_EV_DIR_FALLING:
-> > >                       return FIELD_GET(BMA400_INT_GEN2_MSK,
-> > >                                        data->generic_event_en);
-> > > +             case IIO_EV_DIR_SINGLETAP:
-> > > +                     return FIELD_GET(BMA400_S_TAP_MSK, data->tap_event_en);
-> > > +             case IIO_EV_DIR_DOUBLETAP:
-> > > +                     return FIELD_GET(BMA400_D_TAP_MSK, data->tap_event_en);
-> > >               default:
-> > >                       return -EINVAL;
-> > >               }
-> > > @@ -1101,6 +1137,80 @@ static int bma400_activity_event_en(struct bma400_data *data,
-> > >       return 0;
-> > >  }
-> > >
-> > > +static int bma400_tap_event_en(struct bma400_data *data,
-> > > +                            enum iio_event_direction dir, int state)
-> > > +{
-> > > +     int ret;
-> > > +     unsigned int mask, field_value;
-> > > +
-> > > +     /*
-> > > +      * Tap interrupts can be configured only in normal mode.
-> > > +      * See table in section 4.3 "Power modes - performance modes" of
-> > > +      * datasheet v1.2.
-> > > +      */
-> > > +     if (data->power_mode != POWER_MODE_NORMAL)
-> > > +             return -EINVAL;
-> > > +
-> > > +     /*
-> > > +      * Tap interrupts are operating with the data rate of 200Hz.
-> > > +      * See section 4.7 "Tap sensing interrupt" in datasheet v1.2.
-> > > +      */
-> > > +     if (data->sample_freq.hz != 200) {
-> > > +             dev_err(data->dev, "Invalid data rate for tap interrupts.\n");
-> > > +             return -EINVAL;
-> > > +     }
-> > > +
-> > > +     ret = regmap_update_bits(data->regmap, BMA400_INT12_MAP_REG,
-> > > +                              BMA400_S_TAP_MSK,
-> > > +                              FIELD_PREP(BMA400_S_TAP_MSK, state));
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     switch (dir) {
-> > > +     case IIO_EV_DIR_SINGLETAP:
-> > > +             mask = BMA400_S_TAP_MSK;
-> > > +             set_mask_bits(&field_value, BMA400_S_TAP_MSK,
-> > > +                           FIELD_PREP(BMA400_S_TAP_MSK, state));
-> > > +             break;
-> > > +     case IIO_EV_DIR_DOUBLETAP:
-> > > +             mask = BMA400_D_TAP_MSK;
-> > > +             set_mask_bits(&field_value, BMA400_D_TAP_MSK,
-> > > +                           FIELD_PREP(BMA400_D_TAP_MSK, state));
-> > > +             break;
-> > > +     default:
-> > > +             return -EINVAL;
-> > > +     }
-> > > +
-> > > +     ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG1_REG, mask,
-> > > +                              field_value);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     set_mask_bits(&data->tap_event_en, mask, field_value);
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int bma400_disable_adv_interrupt(struct bma400_data *data)
-> > > +{
-> > > +     int ret;
-> > > +
-> > > +     ret = regmap_write(data->regmap, BMA400_INT_CONFIG0_REG, 0);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     ret = regmap_write(data->regmap, BMA400_INT_CONFIG1_REG, 0);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     data->tap_event_en = 0;
-> > > +     data->generic_event_en = 0;
-> > > +     data->step_event_en = 0;
-> > > +     data->activity_event_en = 0;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > >  static int bma400_write_event_config(struct iio_dev *indio_dev,
-> > >                                    const struct iio_chan_spec *chan,
-> > >                                    enum iio_event_type type,
-> > > @@ -1111,10 +1221,20 @@ static int bma400_write_event_config(struct iio_dev *indio_dev,
-> > >
-> > >       switch (chan->type) {
-> > >       case IIO_ACCEL:
-> > > -             mutex_lock(&data->mutex);
-> > > -             ret = bma400_activity_event_en(data, dir, state);
-> > > -             mutex_unlock(&data->mutex);
-> > > -             return ret;
-> > > +             switch (type) {
-> > > +             case IIO_EV_TYPE_MAG:
-> > > +                     mutex_lock(&data->mutex);
-> > > +                     ret = bma400_activity_event_en(data, dir, state);
-> > > +                     mutex_unlock(&data->mutex);
-> > > +                     return ret;
-> > > +             case IIO_EV_TYPE_GESTURE:
-> > > +                     mutex_lock(&data->mutex);
-> > > +                     ret = bma400_tap_event_en(data, dir, state);
-> > > +                     mutex_unlock(&data->mutex);
-> > > +                     return ret;
-> > > +             default:
-> > > +                     return -EINVAL;
-> > > +             }
-> > >       case IIO_STEPS:
-> > >               mutex_lock(&data->mutex);
-> > >               ret = bma400_steps_event_enable(data, state);
-> > > @@ -1159,8 +1279,8 @@ static int bma400_read_event_value(struct iio_dev *indio_dev,
-> > >       struct bma400_data *data = iio_priv(indio_dev);
-> > >       int ret, reg;
-> > >
-> > > -     switch (chan->type) {
-> > > -     case IIO_ACCEL:
-> > > +     switch (type) {
-> > > +     case IIO_EV_TYPE_MAG:
-> > >               reg = get_gen_config_reg(dir);
-> > >               if (reg < 0)
-> > >                       return -EINVAL;
-> > > @@ -1196,6 +1316,25 @@ static int bma400_read_event_value(struct iio_dev *indio_dev,
-> > >               default:
-> > >                       return -EINVAL;
-> > >               }
-> > > +     case IIO_EV_TYPE_GESTURE:
-> > > +             switch (info) {
-> > > +             case IIO_EV_INFO_VALUE:
-> > > +                     ret = regmap_read(data->regmap, BMA400_TAP_CONFIG,
-> > > +                                       val);
-> > > +                     if (ret)
-> > > +                             return ret;
-> > > +                     *val = FIELD_GET(BMA400_TAP_SEN_MSK, *val);  
-> >
-> > I'd prefer a local variable for regval into which the regmap_read goes.
-> >
-> > Slightly more readable that way as *val then only ever means one thing.
-> >  
-> > > +                     return IIO_VAL_INT;
-> > > +             case IIO_EV_INFO_PERIOD:
-> > > +                     ret = regmap_read(data->regmap, BMA400_TAP_CONFIG1,
-> > > +                                       val);
-> > > +                     if (ret)
-> > > +                             return ret;
-> > > +                     *val = FIELD_GET(BMA400_TAP_QUIET_MSK, *val);
-> > > +                     return IIO_VAL_INT;
-> > > +             default:
-> > > +                     return -EINVAL;
-> > > +             }
-> > >       default:
-> > >               return -EINVAL;
-> > >       }
-> > > @@ -1209,10 +1348,10 @@ static int bma400_write_event_value(struct iio_dev *indio_dev,
-> > >                                   int val, int val2)
-> > >  {
-> > >       struct bma400_data *data = iio_priv(indio_dev);
-> > > -     int reg, ret;
-> > > +     int reg, ret, quiet_period;
-> > >
-> > > -     switch (chan->type) {
-> > > -     case IIO_ACCEL:
-> > > +     switch (type) {
-> > > +     case IIO_EV_TYPE_MAG:
-> > >               reg = get_gen_config_reg(dir);
-> > >               if (reg < 0)
-> > >                       return -EINVAL;
-> > > @@ -1228,7 +1367,6 @@ static int bma400_write_event_value(struct iio_dev *indio_dev,
-> > >               case IIO_EV_INFO_PERIOD:
-> > >                       if (val < 1 || val > 65535)
-> > >                               return -EINVAL;
-> > > -  
-> >
-> > Clear out this noise.
-> >  
-> > >                       mutex_lock(&data->mutex);
-> > >                       put_unaligned_be16(val, &data->duration);
-> > >                       ret = regmap_bulk_write(data->regmap,
-> > > @@ -1248,6 +1386,31 @@ static int bma400_write_event_value(struct iio_dev *indio_dev,
-> > >               default:
-> > >                       return -EINVAL;
-> > >               }
-> > > +     case IIO_EV_TYPE_GESTURE:
-> > > +             switch (info) {
-> > > +             case IIO_EV_INFO_VALUE:
-> > > +                     if (val < 0 || val > 7)
-> > > +                             return -EINVAL;
-> > > +
-> > > +                     return regmap_update_bits(data->regmap,
-> > > +                                               BMA400_TAP_CONFIG,
-> > > +                                               BMA400_TAP_SEN_MSK,
-> > > +                                               FIELD_PREP(BMA400_TAP_SEN_MSK,
-> > > +                                                          val));
-> > > +
-> > > +             case IIO_EV_INFO_PERIOD:
-> > > +                     quiet_period = (val / 20) - 3;
-> > > +                     if (quiet_period < 0 || quiet_period > 3)
-> > > +                             return -EINVAL;
-> > > +
-> > > +                     return regmap_update_bits(data->regmap,
-> > > +                                               BMA400_TAP_CONFIG1,
-> > > +                                               BMA400_TAP_QUIET_MSK,
-> > > +                                               FIELD_PREP(BMA400_TAP_QUIET_MSK,
-> > > +                                                          quiet_period));
-> > > +             default:
-> > > +                     return -EINVAL;
-> > > +             }
-> > >       default:
-> > >               return -EINVAL;
-> > >       }
-> > > @@ -1287,6 +1450,7 @@ static const struct iio_info bma400_info = {
-> > >       .write_event_config = bma400_write_event_config,
-> > >       .write_event_value = bma400_write_event_value,
-> > >       .read_event_value = bma400_read_event_value,
-> > > +     .event_attrs = &bma400_event_attribute_group,
-> > >  };
-> > >
-> > >  static const struct iio_trigger_ops bma400_trigger_ops = {
-> > > @@ -1350,6 +1514,32 @@ static irqreturn_t bma400_interrupt(int irq, void *private)
-> > >       if (ret || !data->status)
-> > >               goto unlock_err;
-> > >
-> > > +     /*
-> > > +      * Disable all advance interrupts if interrupt engine overrun occurs.
-> > > +      * See section 4.7 "Interrupt engine overrun" in datasheet v1.2.
-> > > +      */
-> > > +     if (FIELD_GET(BMA400_INT_ENG_OVRUN_MSK, le16_to_cpu(data->status))) {
-> > > +             bma400_disable_adv_interrupt(data);
-> > > +             dev_err(data->dev, "Interrupt engine overrun\n");
-> > > +             goto unlock_err;
-> > > +     }
-> > > +
-> > > +     if (FIELD_GET(BMA400_INT_S_TAP_MSK, le16_to_cpu(data->status)))
-> > > +             iio_push_event(indio_dev,
-> > > +                            IIO_MOD_EVENT_CODE(IIO_ACCEL, 0,
-> > > +                                               IIO_MOD_X_OR_Y_OR_Z,
-> > > +                                               IIO_EV_TYPE_GESTURE,
-> > > +                                               IIO_EV_DIR_SINGLETAP),
-> > > +                            timestamp);
-> > > +
-> > > +     if (FIELD_GET(BMA400_INT_D_TAP_MSK, le16_to_cpu(data->status)))
-> > > +             iio_push_event(indio_dev,
-> > > +                            IIO_MOD_EVENT_CODE(IIO_ACCEL, 0,
-> > > +                                               IIO_MOD_X_OR_Y_OR_Z,
-> > > +                                               IIO_EV_TYPE_GESTURE,
-> > > +                                               IIO_EV_DIR_DOUBLETAP),
-> > > +                            timestamp);
-> > > +
-> > >       if (FIELD_GET(BMA400_INT_GEN1_MSK, le16_to_cpu(data->status)))
-> > >               ev_dir = IIO_EV_DIR_RISING;
-> > >  
-> >  
-
+VGhhbmtzIE1hcmMsDQoNCk9uIFNhdCwgMjAyMi0wNy0xNiBhdCAxMTozMyArMDEwMCwgTWFyYyBa
+eW5naWVyIHdyb3RlOg0KPiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9w
+ZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdQ0KPiBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4g
+DQo+IE9uIFNhdCwgMTYgSnVsIDIwMjIgMDg6MTE6MTMgKzAxMDAsDQo+IDxsZXdpcy5oYW5seUBt
+aWNyb2NoaXAuY29tPiB3cm90ZToNCj4gPiBGcm9tOiBMZXdpcyBIYW5seSA8bGV3aXMuaGFubHlA
+bWljcm9jaGlwLmNvbT4NCj4gPiANCj4gPiBBZGQgYSBkcml2ZXIgdG8gc3VwcG9ydCB0aGUgUG9s
+YXJmaXJlIFNvQyBncGlvIGNvbnRyb2xsZXIuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogTGV3
+aXMgSGFubHkgPGxld2lzLmhhbmx5QG1pY3JvY2hpcC5jb20+DQo+IA0KPiBbLi4uXQ0KPiANCj4g
+PiArc3RhdGljIGludCBtcGZzX2dwaW9fY2hpbGRfdG9fcGFyZW50X2h3aXJxKHN0cnVjdCBncGlv
+X2NoaXAgKmdjLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+dW5zaWduZWQgaW50IGNoaWxkLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgdW5zaWduZWQgaW50IGNoaWxkX3R5cGUsDQo+ID4gKyAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICB1bnNpZ25lZCBpbnQgKnBhcmVudCwNCj4gPiArICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGludCAqcGFyZW50X3R5
+cGUpDQo+ID4gK3sNCj4gPiArICAgICBzdHJ1Y3QgbXBmc19ncGlvX2NoaXAgKm1wZnNfZ3BpbyA9
+IGdwaW9jaGlwX2dldF9kYXRhKGdjKTsNCj4gPiArICAgICBzdHJ1Y3QgaXJxX2RhdGEgKmQgPSBp
+cnFfZ2V0X2lycV9kYXRhKG1wZnNfZ3Bpby0NCj4gPiA+aXJxX251bWJlcltjaGlsZF0pOw0KPiAN
+Cj4gVGhpcyBsb29rcyB0b3RhbGx5IHdyb25nLiBJdCBtZWFucyB0aGF0IHlvdSBoYXZlIGFscmVh
+ZHkgaW5zdGFudGlhdGVkDQo+IHBhcnQgb2YgdGhlIGhpZXJhcmNoeSwgYW5kIGl0IGlzIGxpa2Vs
+eSB0aGF0IHlvdSB3aWxsIGdldCBtdWx0aXBsZQ0KPiBoaWVyYXJjaHkgc2hhcmluZyBzb21lIGxl
+dmVscywgd2hpY2ggaXNuJ3QgaW50ZW5kZWQuDQoNClNvbWUgYmFja2dyb3VuZCB3aHkgSSB1c2Ug
+dGhlIGFib3ZlLg0KV2UgbmVlZCB0byBzdXBwb3J0IGJvdGggZGlyZWN0IGFuZCBub24tZGlyZWN0
+IElSUSBjb25uZWN0aW9ucyB0byB0aGUNClBMSUMuIA0KSW4gZGlyZWN0IG1vZGUgdGhlIEdQSU8g
+SVJRJ3MgYXJlIGNvbm5lY3RlZCBkaXJlY3RseSB0byB0aGUgUExJQyBhbmQNCmNlcnRhaW5seSBu
+byBuZWVkIGZvciB0aGUgYWJvdmUuIEdQSU8ncyBjYW4gYWxzbyBiZSBjb25maWd1cmVkIGluIG5v
+bi0NCmRpcmVjdCwgd2hpY2ggbWVhbnMgdGhleSB1c2UgYSBzaGFyZWQgSVJRLCBoZW5jZSB0aGUg
+YWJvdmUuDQoNCg0KPiANCj4gPiArICAgICAqcGFyZW50X3R5cGUgPSBJUlFfVFlQRV9OT05FOw0K
+PiA+ICsgICAgICpwYXJlbnQgPSBpcnFkX3RvX2h3aXJxKGQpOw0KPiA+ICsNCj4gPiArICAgICBy
+ZXR1cm4gMDsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGludCBtcGZzX2dwaW9fcHJvYmUo
+c3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4gPiArew0KPiA+ICsgICAgIHN0cnVjdCBj
+bGsgKmNsazsNCj4gPiArICAgICBzdHJ1Y3QgZGV2aWNlICpkZXYgPSAmcGRldi0+ZGV2Ow0KPiA+
+ICsgICAgIHN0cnVjdCBkZXZpY2Vfbm9kZSAqbm9kZSA9IHBkZXYtPmRldi5vZl9ub2RlOw0KPiA+
+ICsgICAgIHN0cnVjdCBkZXZpY2Vfbm9kZSAqaXJxX3BhcmVudDsNCj4gPiArICAgICBzdHJ1Y3Qg
+Z3Bpb19pcnFfY2hpcCAqZ2lycTsNCj4gPiArICAgICBzdHJ1Y3QgaXJxX2RvbWFpbiAqcGFyZW50
+Ow0KPiA+ICsgICAgIHN0cnVjdCBtcGZzX2dwaW9fY2hpcCAqbXBmc19ncGlvOw0KPiA+ICsgICAg
+IGludCBpLCByZXQsIG5ncGlvOw0KPiA+ICsNCj4gPiArICAgICBtcGZzX2dwaW8gPSBkZXZtX2t6
+YWxsb2MoZGV2LCBzaXplb2YoKm1wZnNfZ3BpbyksDQo+ID4gR0ZQX0tFUk5FTCk7DQo+ID4gKyAg
+ICAgaWYgKCFtcGZzX2dwaW8pDQo+ID4gKyAgICAgICAgICAgICByZXR1cm4gLUVOT01FTTsNCj4g
+PiArDQo+ID4gKyAgICAgbXBmc19ncGlvLT5iYXNlID0gZGV2bV9wbGF0Zm9ybV9pb3JlbWFwX3Jl
+c291cmNlKHBkZXYsIDApOw0KPiA+ICsgICAgIGlmIChJU19FUlIobXBmc19ncGlvLT5iYXNlKSkN
+Cj4gPiArICAgICAgICAgICAgIHJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgUFRSX0VSUihtcGZz
+X2dwaW8tPmNsayksDQo+ID4gImlucHV0IGNsb2NrIG5vdCBmb3VuZC5cbiIpOw0KPiA+ICsNCj4g
+PiArICAgICBjbGsgPSBkZXZtX2Nsa19nZXQoZGV2LCBOVUxMKTsNCj4gPiArICAgICBpZiAoSVNf
+RVJSKGNsaykpDQo+ID4gKyAgICAgICAgICAgICByZXR1cm4gZGV2X2Vycl9wcm9iZShkZXYsIFBU
+Ul9FUlIoY2xrKSwgImRldm1fY2xrX2dldA0KPiA+IGZhaWxlZFxuIik7DQo+ID4gKw0KPiA+ICsg
+ICAgIHJldCA9IGNsa19wcmVwYXJlX2VuYWJsZShjbGspOw0KPiA+ICsgICAgIGlmIChyZXQpDQo+
+ID4gKyAgICAgICAgICAgICByZXR1cm4gZGV2X2Vycl9wcm9iZShkZXYsIHJldCwgImZhaWxlZCB0
+byBlbmFibGUNCj4gPiBjbG9ja1xuIik7DQo+ID4gKw0KPiA+ICsgICAgIG1wZnNfZ3Bpby0+Y2xr
+ID0gY2xrOw0KPiA+ICsNCj4gPiArICAgICBuZ3BpbyA9IG9mX2lycV9jb3VudChub2RlKTsNCj4g
+PiArICAgICBpZiAobmdwaW8gPiBOVU1fR1BJTykgew0KPiA+ICsgICAgICAgICAgICAgcmV0ID0g
+LUVOWElPOw0KPiA+ICsgICAgICAgICAgICAgZ290byBjbGVhbnVwX2Nsb2NrOw0KPiA+ICsgICAg
+IH0NCj4gPiArDQo+ID4gKyAgICAgaXJxX3BhcmVudCA9IG9mX2lycV9maW5kX3BhcmVudChub2Rl
+KTsNCj4gPiArICAgICBpZiAoIWlycV9wYXJlbnQpIHsNCj4gPiArICAgICAgICAgICAgIHJldCA9
+IC1FTk9ERVY7DQo+ID4gKyAgICAgICAgICAgICBnb3RvIGNsZWFudXBfY2xvY2s7DQo+ID4gKyAg
+ICAgfQ0KPiA+ICsgICAgIHBhcmVudCA9IGlycV9maW5kX2hvc3QoaXJxX3BhcmVudCk7DQo+ID4g
+KyAgICAgaWYgKCFwYXJlbnQpIHsNCj4gPiArICAgICAgICAgICAgIHJldCA9IC1FTk9ERVY7DQo+
+ID4gKyAgICAgICAgICAgICBnb3RvIGNsZWFudXBfY2xvY2s7DQo+ID4gKyAgICAgfQ0KPiA+ICsN
+Cj4gPiArICAgICAvKiBHZXQgdGhlIGludGVycnVwdCBudW1iZXJzLiAqLw0KPiA+ICsgICAgIC8q
+IENsZWFyL0Rpc2FibGUgQWxsIGludGVycnVwdHMgYmVmb3JlIGVuYWJsaW5nIHBhcmVudA0KPiA+
+IGludGVycnVwdHMuICovDQo+ID4gKyAgICAgZm9yIChpID0gMDsgaSA8IG5ncGlvOyBpKyspIHsN
+Cj4gPiArICAgICAgICAgICAgIG1wZnNfZ3Bpby0+aXJxX251bWJlcltpXSA9IHBsYXRmb3JtX2dl
+dF9pcnEocGRldiwgaSk7DQo+IA0KPiBCaW5nby4gWW91IGFyZSBhbGxvY2F0aW5nIHRoZSBpbnRl
+cnJ1cHQgZm9yIHRoZSBsZXZlbCBiZWxvdy4gWW91DQo+IHJlYWxseSBzaG91bGRuJ3QgZG8gdGhh
+dC4NCj4gDQo+IElmIHlvdSBuZWVkIHRvIHJldHJpZXZlIHRoZSAqaHdpcnEqIGZvciB0aGUgbGV2
+ZWwgYmVsb3csIHlvdSBuZWVkIHRvDQo+IHBhcnNlIHRoZSBEVCB3aXRob3V0IHRyaWdnZXJpbmcg
+YW4gSVJRIGFsbG9jYXRpb24gKG9mX2lycV9wYXJzZV9vbmUoKQ0KPiBhbmQgY28pLg0KPiANCj4g
+ICAgICAgICBNLg0KPiANCj4gLS0NCj4gV2l0aG91dCBkZXZpYXRpb24gZnJvbSB0aGUgbm9ybSwg
+cHJvZ3Jlc3MgaXMgbm90IHBvc3NpYmxlLg0K

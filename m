@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EC3576CCD
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83133576CE3
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbiGPJdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 05:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
+        id S232251AbiGPJe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 05:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbiGPJdF (ORCPT
+        with ESMTP id S231927AbiGPJe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 05:33:05 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF98627B11
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 02:33:03 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id b6so3599310wmq.5
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 02:33:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IXUFnxzh0MWzrVELnnE4PkMmsT2CVGJCAod4eg/9eH0=;
-        b=d/NGkczug91/3rTXhLUEz37a80RiGUKz4Luf9UG23ZPOnOaj6HfkixMlOm1w2aolsG
-         3zgy2ZD/TwXBpgUpcGzEKNriozpJ2UhUwbewgchqPJjXZrcvkPlT487wpeItzYHgOE8h
-         Ci7b5QUkPRCwijdgzPl4ShxUxCYpdM4NMHutg+iVOOn3E4wcGphEmcRr01wnWBQmiSZG
-         nVabbAEe4Zfk9DExczEt/Q49eeUP6vIgOoc8kObK5LcBzErgWaNykC3T21qGHizkOoX1
-         fRbsxbrJRJiFPsZMK9A44AkkZZ0asEXmHtMu0YUQFquGgLMV0B8Z/OXOarRbFE3Nkm2u
-         kq6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IXUFnxzh0MWzrVELnnE4PkMmsT2CVGJCAod4eg/9eH0=;
-        b=FsptapH3nqplWbJ+B8PXyCf0uZ6haHzG2ZGf5ANrwLWyjwArVO5Iyu8pII3mBnt4n5
-         y5mbkJyQuuxrdbirzurw2i/o794BtE564HpyCuRvHikSvas9t9Sak+nlkb+d9gzF1KJO
-         r0b8cvM8+IapQvPYPHvYPQx6ZAMTts3qxNFwznp7C7SgUA5ywPHlKXu+iK9e6o6wm1Tl
-         0DoAqDnFexAxz0zIN6zx/auDel6EJQYhGF02XNfIG7IIuyl2Q1nYZbizHPcqeG9iY6eY
-         qOk9/IWsdnB9Y/jYBLI0D25Fp5KW4BeB9PsTv9E5enVTuxtYxKHreD7Ipj2cfKztbhlN
-         RXUQ==
-X-Gm-Message-State: AJIora+dR91Ji5LgylDdGIH/eCuuxqtTtSmQYCI1JPEDzTTa5+3h3hgz
-        nAKqcXR8i/1GmUrhl6Hz2G3Z80FvztXaP37vK9iDDw==
-X-Google-Smtp-Source: AGRyM1tNeS5k/SDblsJe4hiov0HrdwLQDGA8Kuhys141gwIsundY9b1Ah87XFPfSwvLN/LopcdrCcvba9Tl8KCzQRsk=
-X-Received: by 2002:a7b:ce06:0:b0:3a0:39e0:b322 with SMTP id
- m6-20020a7bce06000000b003a039e0b322mr24737064wmc.55.1657963982253; Sat, 16
- Jul 2022 02:33:02 -0700 (PDT)
+        Sat, 16 Jul 2022 05:34:26 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C4EFA;
+        Sat, 16 Jul 2022 02:34:19 -0700 (PDT)
+X-UUID: 7c3d04953ac4499f80cfcfc984a6bbb7-20220716
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:3d1e8b93-3694-41e6-a6da-1ac5f70148d7,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:95
+X-CID-INFO: VERSION:1.1.8,REQID:3d1e8b93-3694-41e6-a6da-1ac5f70148d7,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:95
+X-CID-META: VersionHash:0f94e32,CLOUDID:83d5a6d7-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:68c961e9a692,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 7c3d04953ac4499f80cfcfc984a6bbb7-20220716
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1846794100; Sat, 16 Jul 2022 17:34:13 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Sat, 16 Jul 2022 17:34:11 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Sat, 16 Jul 2022 17:34:10 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <nicolas.dufresne@collabora.com>, <wenst@chromium.org>,
+        kyrie wu <kyrie.wu@mediatek.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
+        <maoguang.meng@mediatek.com>, <srv_heupstream@mediatek.com>
+Subject: [V5,0/8] Support multi-hardware jpeg decoder for MT8195
+Date:   Sat, 16 Jul 2022 17:34:00 +0800
+Message-ID: <20220716093408.29734-1-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220709115837.560877-1-jose.exposito89@gmail.com> <20220709115837.560877-5-jose.exposito89@gmail.com>
-In-Reply-To: <20220709115837.560877-5-jose.exposito89@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 16 Jul 2022 17:32:51 +0800
-Message-ID: <CABVgOSmhOBdXPH_=B_WRcUjMGC-wVPTLBwCdbgZLb0o3-O8pKw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb565()
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        maarten.lankhorst@linux.intel.com,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, dri-devel@lists.freedesktop.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003b4bed05e3e8d2af"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_PASS,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,272 +72,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000003b4bed05e3e8d2af
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: kyrie wu <kyrie.wu@mediatek.com>
 
-On Sat, Jul 9, 2022 at 7:58 PM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gma=
-il.com> wrote:
->
-> Extend the existing test cases to test the conversion from XRGB8888 to
-> RGB565.
->
-> The documentation and the color picker available on [1] are useful
-> resources to understand this patch and validate the values returned by
-> the conversion function.
->
-> Tested-by: Tales L. Aparecida <tales.aparecida@gmail.com>
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
-> Link: http://www.barth-dev.de/online/rgb565-color-picker/ # [1]
-> ---
+This series adds support for multi hardware jpeg decoding,
+by first adding use of_platform_populate to manage each hardware
+information: interrupt, clock, register bases and power.
+Secondly add decoding work queue to deal with the decoding requests
+of multi-hardware at the same time. Lastly, add output picture
+reorder function interface to eliminate the out of order images.
 
-Looks good and passes here.
+This series has been tested with both MT8195.
+Decoding worked for this chip.
 
-Reviewed-by: David Gow <davidgow@google.com>
+Patch 1 Adds jpeg decoder dt-bindings for mt8195
 
-Thanks,
--- David
+Patches 2 jpeg decoder builds three module for using Multi-HW,
+export some functions to make them visible by other modules.
 
+Patch 3 use of_platform_populate to manage multi-hardware.
 
->  .../gpu/drm/tests/drm_format_helper_test.c    | 76 ++++++++++++++++++-
->  1 file changed, 75 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu=
-/drm/tests/drm_format_helper_test.c
-> index 0a490ad4fd32..c0592c1235cf 100644
-> --- a/drivers/gpu/drm/tests/drm_format_helper_test.c
-> +++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-> @@ -21,12 +21,19 @@ struct convert_to_rgb332_result {
->         const u8 expected[TEST_BUF_SIZE];
->  };
->
-> +struct convert_to_rgb565_result {
-> +       unsigned int dst_pitch;
-> +       const u16 expected[TEST_BUF_SIZE];
-> +       const u16 expected_swab[TEST_BUF_SIZE];
-> +};
-> +
->  struct convert_xrgb8888_case {
->         const char *name;
->         unsigned int pitch;
->         struct drm_rect clip;
->         const u32 xrgb8888[TEST_BUF_SIZE];
->         struct convert_to_rgb332_result rgb332_result;
-> +       struct convert_to_rgb565_result rgb565_result;
->  };
->
->  static struct convert_xrgb8888_case convert_xrgb8888_cases[] =3D {
-> @@ -39,6 +46,11 @@ static struct convert_xrgb8888_case convert_xrgb8888_c=
-ases[] =3D {
->                         .dst_pitch =3D 0,
->                         .expected =3D { 0xE0 },
->                 },
-> +               .rgb565_result =3D {
-> +                       .dst_pitch =3D 0,
-> +                       .expected =3D { 0xF800 },
-> +                       .expected_swab =3D { 0x00F8 },
-> +               },
->         },
->         {
->                 .name =3D "single_pixel_clip_rectangle",
-> @@ -52,6 +64,11 @@ static struct convert_xrgb8888_case convert_xrgb8888_c=
-ases[] =3D {
->                         .dst_pitch =3D 0,
->                         .expected =3D { 0xE0 },
->                 },
-> +               .rgb565_result =3D {
-> +                       .dst_pitch =3D 0,
-> +                       .expected =3D { 0xF800 },
-> +                       .expected_swab =3D { 0x00F8 },
-> +               },
->         },
->         {
->                 /* Well known colors: White, black, red, green, blue, mag=
-enta,
-> @@ -77,6 +94,21 @@ static struct convert_xrgb8888_case convert_xrgb8888_c=
-ases[] =3D {
->                                 0xFC, 0x1F,
->                         },
->                 },
-> +               .rgb565_result =3D {
-> +                       .dst_pitch =3D 0,
-> +                       .expected =3D {
-> +                               0xFFFF, 0x0000,
-> +                               0xF800, 0x07E0,
-> +                               0x001F, 0xF81F,
-> +                               0xFFE0, 0x07FF,
-> +                       },
-> +                       .expected_swab =3D {
-> +                               0xFFFF, 0x0000,
-> +                               0x00F8, 0xE007,
-> +                               0x1F00, 0x1FF8,
-> +                               0xE0FF, 0xFF07,
-> +                       },
-> +               },
->         },
->         {
->                 /* Randomly picked colors. Full buffer within the clip ar=
-ea. */
-> @@ -96,6 +128,19 @@ static struct convert_xrgb8888_case convert_xrgb8888_=
-cases[] =3D {
->                                 0xA0, 0x6D, 0x0A, 0x00, 0x00,
->                         },
->                 },
-> +               .rgb565_result =3D {
-> +                       .dst_pitch =3D 10,
-> +                       .expected =3D {
-> +                               0x0A33, 0x1260, 0xA800, 0x0000, 0x0000,
-> +                               0x6B8E, 0x0A33, 0x1260, 0x0000, 0x0000,
-> +                               0xA800, 0x6B8E, 0x0A33, 0x0000, 0x0000,
-> +                       },
-> +                       .expected_swab =3D {
-> +                               0x330A, 0x6012, 0x00A8, 0x0000, 0x0000,
-> +                               0x8E6B, 0x330A, 0x6012, 0x0000, 0x0000,
-> +                               0x00A8, 0x8E6B, 0x330A, 0x0000, 0x0000,
-> +                       },
-> +               },
->         },
->  };
->
-> @@ -120,7 +165,7 @@ static size_t conversion_buf_size(u32 dst_format, uns=
-igned int dst_pitch,
->         if (!dst_pitch)
->                 dst_pitch =3D drm_rect_width(clip) * dst_fi->cpp[0];
->
-> -       return dst_pitch * drm_rect_height(clip);
-> +       return (dst_pitch * drm_rect_height(clip)) / (dst_fi->depth / 8);
->  }
->
->  static u32 *le32buf_to_cpu(struct kunit *test, const u32 *buf, size_t bu=
-f_size)
-> @@ -175,8 +220,37 @@ static void xrgb8888_to_rgb332_test(struct kunit *te=
-st)
->         KUNIT_EXPECT_EQ(test, memcmp(dst, result->expected, dst_size), 0)=
-;
->  }
->
-> +static void xrgb8888_to_rgb565_test(struct kunit *test)
-> +{
-> +       const struct convert_xrgb8888_case *params =3D test->param_value;
-> +       const struct convert_to_rgb565_result *result =3D &params->rgb565=
-_result;
-> +       size_t dst_size;
-> +       __u16 *dst =3D NULL;
-> +
-> +       struct drm_framebuffer fb =3D {
-> +               .format =3D drm_format_info(DRM_FORMAT_XRGB8888),
-> +               .pitches =3D { params->pitch, 0, 0 },
-> +       };
-> +
-> +       dst_size =3D conversion_buf_size(DRM_FORMAT_RGB565, result->dst_p=
-itch,
-> +                                      &params->clip);
-> +       KUNIT_ASSERT_GT(test, dst_size, 0);
-> +
-> +       dst =3D kunit_kzalloc(test, dst_size, GFP_KERNEL);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dst);
-> +
-> +       drm_fb_xrgb8888_to_rgb565(dst, result->dst_pitch, params->xrgb888=
-8, &fb,
-> +                                 &params->clip, false);
-> +       KUNIT_EXPECT_EQ(test, memcmp(dst, result->expected, dst_size), 0)=
-;
-> +
-> +       drm_fb_xrgb8888_to_rgb565(dst, result->dst_pitch, params->xrgb888=
-8, &fb,
-> +                                 &params->clip, true);
-> +       KUNIT_EXPECT_EQ(test, memcmp(dst, result->expected_swab, dst_size=
-), 0);
-> +}
-> +
->  static struct kunit_case drm_format_helper_test_cases[] =3D {
->         KUNIT_CASE_PARAM(xrgb8888_to_rgb332_test, convert_xrgb8888_gen_pa=
-rams),
-> +       KUNIT_CASE_PARAM(xrgb8888_to_rgb565_test, convert_xrgb8888_gen_pa=
-rams),
->         {}
->  };
->
-> --
-> 2.25.1
->
+Patch 4 add jpeg decoding timeout function to judge hardware timeout.
 
---0000000000003b4bed05e3e8d2af
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Patch 5 add decoding work queue to deal with multi-hardware decoding
+at the same time.
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
-bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
-TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
-TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
-CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
-El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
-A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
-MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
-MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
-MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
-BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
-Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
-l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
-pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
-6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
-+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
-S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
-bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
-ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
-q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
-hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAGH0uAg+eV8wUdHQOJ7
-yfswDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
-c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMjA2MjAw
-MjAzNTNaFw0yMjEyMTcwMjAzNTNaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
-b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCv9aO5pJtu5ZPHSb99iASzp2mcnJtk
-JIh8xsJ+fNj9OOm0B7Rbg2l0+F4c19b1DyIzz/DHXIX9Gc55kfd4TBzhITOJmB+WdbaWS8Lnr9gu
-SVO8OISymO6uVA0Lmkfne3zV0TwRtFkEeff0+P+MqdaLutOmOcLQRp8eAzb/TNKToSROBYmBRcuA
-hDOMCVZZozIJ7T4nHBjfOrR+nJ4mjBIDRnDucs4dazypyiYiHYLfedCxp8vldywHMsTxl59Ue9Yk
-RVewDw3HWvWUIMbc+Y636UXdUn4axP1TXN0khUpexMoc5qCHxpBIE/AyeS4WPASlE8uVY9Qg8dT6
-kJmeOT+ZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
-DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFDyAvtuc
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBs
-nigxcoMNZjhWoKRJ6Fblw2M4ge9J/wZ0W9G9hUORazAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MTYwOTMzMDJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAeiLZClxOliAyKAy9DPoS
-9i1rIAz3jZN1t83Cyl15PC3AO9/uS+b2Yea2yCVvqDVruU4Qal90QvxMu6f+ltyIad2IM2DNL6mi
-Itz9EMrYDbXHkfxoKCig0iskNA1BedVfCnHbu1A4oKd1fsroSiC1vLWN46hU2+9ebhgezJ9qqP+w
-0a0zmG6ntzpCBHjxFp9jg9//UHIY0DMkw4q5DoFdDur8TP3DT7v40mUQEuCykJI9Kvnt6iGnHtoa
-lLk7Hd+xvAg75BVntd+JmklSikvCh/C9Qeogvafl4TRJC1nsRXNsn34/k9hYthSg/KTEFSbFRQwL
-Qb4kdxcIbbA8R/K7Aw==
---0000000000003b4bed05e3e8d2af--
+Patch 6 add output picture reorder function to order images.
+
+Patch 7 refactor jpegdec func interface for HW working.
+
+Patch 8 add stop cmd function to deal with EOS operation.
+
+---
+This series patches dependent on:
+media_stage tree:
+[1]
+https://git.linuxtv.org/media_stage.git/commit/?id=b3627647f9ea7473d10fb08a95fd7c4133a17ca4
+
+patch1 new jpegdec dt-bindings included files
+[2] MM IOMMU binding:
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220217113453.13658-2-yong.wu@mediatek.com/
+
+[3] MT8195 power domain:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=580579
+
+Changes compared with v4:
+- some modifications for patch v4's review comments.
+- fix Gstreamer test errors.
+
+Changes compared with v3:
+- some modifications for patch v3's review comments.
+
+Changes compared with v2:
+- add stop cmd function.
+- some modifications for patch v1's review comments.
+
+Changes compared with v1:
+- new yaml file for mt8195 jpeg decoder.
+- some modifications for patch v1's review comments.
+
+kyrie wu (8):
+  dt-bindings: mediatek: Add mediatek,mt8195-jpgdec compatible
+  media: mtk-jpegdec: export jpeg decoder functions
+  media: mtk-jpegdec: manage jpegdec multi-hardware
+  media: mtk-jpegdec: add jpegdec timeout func interface
+  media: mtk-jpegdec: add jpeg decode worker interface
+  media: mtk-jpegdec: add output pic reorder interface
+  media: mtk-jpegdec: refactor jpegdec func interface
+  mtk-jpegdec: add stop cmd interface for jpgdec
+
+ .../media/mediatek,mt8195-jpegdec.yaml        | 160 +++++++++
+ drivers/media/platform/mediatek/jpeg/Makefile |   5 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 232 ++++++++++++-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.h    |  46 +++
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 317 ++++++++++++++++--
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.h  |   3 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_reg.h |   1 +
+ 7 files changed, 732 insertions(+), 32 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+
+-- 
+2.18.0
+

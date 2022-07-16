@@ -2,127 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7AE9576B24
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 02:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D171D576B27
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 02:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiGPAs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 20:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
+        id S230136AbiGPAyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 20:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiGPAsx (ORCPT
+        with ESMTP id S229625AbiGPAyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 20:48:53 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BF512D2F
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 17:48:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657932531; x=1689468531;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=D36AQo3H5K/5p5hq8Y1LVT2dPfzu1gIzRHfMGeljxQw=;
-  b=HTQvIHnR2GUOtU+WWZ73xf4nBXgezAKm0jc0/NqBTOXAH3QVGdziSY0p
-   V5UTGjO4pJCOWcAlOkT/N9mJRAEj4WjZCV9PdXR1klQTN6d2eVzp1gmA8
-   Pk5VXrhS9U2cL2ape57Td71ZlTtLhKV1pMirAO2P0c8pEr7Zdoj2DLING
-   hZasFjhYvEYu4b+g9o/5+XZCZVqAZMUvRmh/eFZoHUVlaK2x6r03V4Zhs
-   qcoC1yniOpT/3Tmf75ecmDJV7V7nBYHjRjkSJgUEueSUmMP6R3T2h0Yel
-   efmHyo7qlY43qZoIJnklFsS1lCFXr9u6qigIX1fzEegwV3uV8XpR08srr
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="285955467"
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="285955467"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 17:48:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="773172011"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 15 Jul 2022 17:48:50 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCVzF-0000u4-HW;
-        Sat, 16 Jul 2022 00:48:49 +0000
-Date:   Sat, 16 Jul 2022 08:48:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Loic Poulain <loic.poulain@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/net/wwan/iosm/iosm_ipc_mux_codec.c:833:21: sparse: sparse:
- Using plain integer as NULL pointer
-Message-ID: <202207160836.RlSIXAvl-lkp@intel.com>
+        Fri, 15 Jul 2022 20:54:02 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D97012AD9;
+        Fri, 15 Jul 2022 17:54:01 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id h22so5011362qta.3;
+        Fri, 15 Jul 2022 17:54:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1IkFEFuHKxBSmk2ERSe1RdUN0F0xBF4E1Hci9y4zc3M=;
+        b=ZeRWwzwro/RsDD5GMb13S+MK2ByiCIbvDaGChJUQKS5IS4T9m57lATzt8ygeWaJgax
+         u7foT3Ngv4Po7dVhBKwrqVt06OqhztE0wlM89wqb+SDj9zWdLv4HZMDpRZP33F39kZ8j
+         9V21IZCTJ+Ccp32CxQbK4bboreF7lY+F3FFc3hAYTtjIGU+jBnIiSrDR6ATPUcrpmATg
+         2Fp7V/k3Kk8eerypcqrPTT7dpYYdx1l7d6fL37/ppH2Be5qNFgxwsN6uMzNuOwyG+pzG
+         tmEES/tVGQuGOK3yH9JaC/00n3ABF5DGuR2Gg6ZU7vnY6aZpnpXJ46ZSCpcfHPb36IPi
+         P+5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1IkFEFuHKxBSmk2ERSe1RdUN0F0xBF4E1Hci9y4zc3M=;
+        b=JEPglzKdDGqQjXMBXad/0yNChD1E6naz7NaY5NK6fHgWQuDpqOvlbHU2/PyvMbILjb
+         iN3t+2rGcP0q6NP49C24l8FtobEMjdOIN8rew4YOPXXOztCk9S5MeSxK+efAauHI4m/i
+         6LxcgOV2DwG85KN5GmoecO7vLoyPX+QrtbPe9g+NHr/8O1HUzjEpYiEbpvK9NuEvJu/v
+         pK3GM2AD68kOvPK2dVE/fgli0T4fAfYmy5T3Sw4VoBgHjmrDriJXMessWcusFuDcqwQn
+         LqOx27LPyWGL4DH5L/45XCuYYv5mPcBnAq6sXPFIfk0CWB5XdQgO0QkIBGpL0reEsZ8m
+         R0Hw==
+X-Gm-Message-State: AJIora9ZwKDXzlWYrIJEd2+5OL4NfxMMxI1/X+pk/FBh3tX1yCOr84Jl
+        ieufLDwHxh6mPpUv2rD95Ods/8Pv0ns=
+X-Google-Smtp-Source: AGRyM1tEKz81Bqip/gmBYz47mQGPd7kVywaWh1dmkQwhE+HzP1l99Myjm2h4WUqLPas9jRtpiEdUxQ==
+X-Received: by 2002:a05:622a:30a:b0:319:294b:cb88 with SMTP id q10-20020a05622a030a00b00319294bcb88mr14116256qtw.336.1657932840241;
+        Fri, 15 Jul 2022 17:54:00 -0700 (PDT)
+Received: from localhost.localdomain ([136.56.17.68])
+        by smtp.gmail.com with ESMTPSA id bk35-20020a05620a1a2300b006b5b33915besm5431226qkb.85.2022.07.15.17.53.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 17:53:59 -0700 (PDT)
+From:   Josh Hant <joshuahant@gmail.com>
+To:     jbaron@akamai.com
+Cc:     joshuahant@gmail.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] EDAC/ie31200: Add Skylake-S support
+Date:   Fri, 15 Jul 2022 20:53:48 -0400
+Message-Id: <20220716005348.13756-1-joshuahant@gmail.com>
+X-Mailer: git-send-email 2.34.3
+In-Reply-To: <ab77d779-31a6-62f7-a81c-97d6b9a35018@akamai.com>
+References: <ab77d779-31a6-62f7-a81c-97d6b9a35018@akamai.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Loic,
+Add device IDs for Skylake-S CPUs according to datasheet.
 
-First bad commit (maybe != root cause):
+Signed-off-by: Josh Hant <joshuahant@gmail.com>
+---
+Here is the patch with both documents included.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9b59ec8d50a1f28747ceff9a4f39af5deba9540e
-commit: 89212e160b81e778f829b89743570665810e3b13 net: wwan: Fix WWAN config symbols
-date:   1 year, 1 month ago
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220716/202207160836.RlSIXAvl-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=89212e160b81e778f829b89743570665810e3b13
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 89212e160b81e778f829b89743570665810e3b13
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/wwan/iosm/
+Thanks,
+Josh
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+ drivers/edac/ie31200_edac.c | 28 +++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
+index 9a9ff5ad611a..9ef13570f2e5 100644
+--- a/drivers/edac/ie31200_edac.c
++++ b/drivers/edac/ie31200_edac.c
+@@ -20,11 +20,15 @@
+  * 0c08: Xeon E3-1200 v3 Processor DRAM Controller
+  * 1918: Xeon E3-1200 v5 Skylake Host Bridge/DRAM Registers
+  * 5918: Xeon E3-1200 Xeon E3-1200 v6/7th Gen Core Processor Host Bridge/DRAM Registers
++ * 190f: 6th Gen Core Dual-Core Processor Host Bridge/DRAM Registers
++ * 191f: 6th Gen Core Quad-Core Processor Host Bridge/DRAM Registers
+  * 3e..: 8th/9th Gen Core Processor Host Bridge/DRAM Registers
+  *
+  * Based on Intel specification:
+  * https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/xeon-e3-1200v3-vol-2-datasheet.pdf
+  * http://www.intel.com/content/www/us/en/processors/xeon/xeon-e3-1200-family-vol-2-datasheet.html
++ * https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/desktop-6th-gen-core-family-datasheet-vol-2.pdf
++ * https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/xeon-e3-1200v6-vol-2-datasheet.pdf
+  * https://www.intel.com/content/www/us/en/processors/core/7th-gen-core-family-mobile-h-processor-lines-datasheet-vol-2.html
+  * https://www.intel.com/content/www/us/en/products/docs/processors/core/8th-gen-core-family-datasheet-vol-2.html
+  *
+@@ -53,15 +57,17 @@
+ #define ie31200_printk(level, fmt, arg...) \
+ 	edac_printk(level, "ie31200", fmt, ##arg)
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/net/wwan/iosm/iosm_ipc_mux_codec.c:833:21: sparse: sparse: Using plain integer as NULL pointer
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_1 0x0108
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_2 0x010c
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_3 0x0150
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_4 0x0158
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_5 0x015c
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_6 0x0c04
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_7 0x0c08
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_8 0x1918
+-#define PCI_DEVICE_ID_INTEL_IE31200_HB_9 0x5918
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_1  0x0108
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_2  0x010c
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_3  0x0150
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_4  0x0158
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_5  0x015c
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_6  0x0c04
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_7  0x0c08
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_8  0x190F
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_9  0x1918
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_10 0x191F
++#define PCI_DEVICE_ID_INTEL_IE31200_HB_11 0x5918
 
-vim +833 drivers/net/wwan/iosm/iosm_ipc_mux_codec.c
+ /* Coffee Lake-S */
+ #define PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK 0x3e00
+@@ -80,6 +86,8 @@
+ #define DEVICE_ID_SKYLAKE_OR_LATER(did)                                        \
+ 	(((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_8) ||                        \
+ 	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_9) ||                        \
++	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_10) ||                       \
++	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_11) ||                       \
+ 	 (((did) & PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK) ==                 \
+ 	  PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK))
 
-9413491e20e1aba M Chetan Kumar 2021-06-13  814  
-9413491e20e1aba M Chetan Kumar 2021-06-13  815  void ipc_mux_ul_encoded_process(struct iosm_mux *ipc_mux, struct sk_buff *skb)
-9413491e20e1aba M Chetan Kumar 2021-06-13  816  {
-9413491e20e1aba M Chetan Kumar 2021-06-13  817  	struct mux_adgh *adgh;
-9413491e20e1aba M Chetan Kumar 2021-06-13  818  	u16 adgh_len;
-9413491e20e1aba M Chetan Kumar 2021-06-13  819  
-9413491e20e1aba M Chetan Kumar 2021-06-13  820  	adgh = (struct mux_adgh *)skb->data;
-9413491e20e1aba M Chetan Kumar 2021-06-13  821  	adgh_len = le16_to_cpu(adgh->length);
-9413491e20e1aba M Chetan Kumar 2021-06-13  822  
-9413491e20e1aba M Chetan Kumar 2021-06-13  823  	if (adgh->signature == cpu_to_le32(MUX_SIG_ADGH) &&
-9413491e20e1aba M Chetan Kumar 2021-06-13  824  	    ipc_mux->ul_flow == MUX_UL)
-9413491e20e1aba M Chetan Kumar 2021-06-13  825  		ipc_mux->ul_data_pend_bytes = ipc_mux->ul_data_pend_bytes -
-9413491e20e1aba M Chetan Kumar 2021-06-13  826  					      adgh_len;
-9413491e20e1aba M Chetan Kumar 2021-06-13  827  
-9413491e20e1aba M Chetan Kumar 2021-06-13  828  	if (ipc_mux->ul_flow == MUX_UL)
-9413491e20e1aba M Chetan Kumar 2021-06-13  829  		dev_dbg(ipc_mux->dev, "ul_data_pend_bytes: %lld",
-9413491e20e1aba M Chetan Kumar 2021-06-13  830  			ipc_mux->ul_data_pend_bytes);
-9413491e20e1aba M Chetan Kumar 2021-06-13  831  
-9413491e20e1aba M Chetan Kumar 2021-06-13  832  	/* Reset the skb settings. */
-9413491e20e1aba M Chetan Kumar 2021-06-13 @833  	skb->tail = 0;
-9413491e20e1aba M Chetan Kumar 2021-06-13  834  	skb->len = 0;
-9413491e20e1aba M Chetan Kumar 2021-06-13  835  
-9413491e20e1aba M Chetan Kumar 2021-06-13  836  	/* Add the consumed ADB to the free list. */
-9413491e20e1aba M Chetan Kumar 2021-06-13  837  	skb_queue_tail((&ipc_mux->ul_adb.free_list), skb);
-9413491e20e1aba M Chetan Kumar 2021-06-13  838  }
-9413491e20e1aba M Chetan Kumar 2021-06-13  839  
+@@ -577,6 +585,8 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_7),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_8),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_9),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
++	{ PCI_VEND_DEV(INTEL, IE31200_HB_10),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
++	{ PCI_VEND_DEV(INTEL, IE31200_HB_11),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_1),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_2),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+ 	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_3),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+--
+2.34.3
 
-:::::: The code at line 833 was first introduced by commit
-:::::: 9413491e20e1aba6e471d90c19cc43e523216a4d net: iosm: encode or decode datagram
-
-:::::: TO: M Chetan Kumar <m.chetan.kumar@intel.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489D4576D28
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED392576D2A
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbiGPJjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 05:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S232182AbiGPJmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 05:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232955AbiGPJjF (ORCPT
+        with ESMTP id S229776AbiGPJmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 05:39:05 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A70E19026;
-        Sat, 16 Jul 2022 02:38:54 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 15F583467D;
-        Sat, 16 Jul 2022 09:38:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1657964333; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rjjB2Tj1v7P2/Hzk3+SDyFTeccso1IKFKW5WqPOEy9o=;
-        b=FYLcjTomd9RwzKd0WH1grD27nlv90mrvwHhBqMpTwZ84b+ud/KCg/G66kuAwXewZT9WNZU
-        KUoXV78aY9h0pGD3tU6wC1NUWMnnTut96DlEP8y9eH50+DJF9g9B7MqJejwpseg6NN+3AP
-        aztwoEHqp/val4a46OzLLJze3puCCvw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1657964333;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rjjB2Tj1v7P2/Hzk3+SDyFTeccso1IKFKW5WqPOEy9o=;
-        b=4zswoA0zLnplqlg+Z+74ZePirnVjDWStv2fDsZyruYBHwedU1AwvfDaucAqi2kwIgvOWD+
-        zq/RYOljlEdPZGDQ==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        Sat, 16 Jul 2022 05:42:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E425718E
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 02:42:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 592212C141;
-        Sat, 16 Jul 2022 09:38:51 +0000 (UTC)
-Date:   Sat, 16 Jul 2022 11:38:50 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Pratyush Yadav <p.yadav@ti.com>, linux-sunxi@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH 1/2] mtd: spi-nor: When a flash memory is missing do not
- report an error
-Message-ID: <20220716093850.GL17705@kitsune.suse.cz>
-References: <701967b0c418db333c66b48d225df60aa9d03ead.1657826188.git.msuchanek@suse.de>
- <d8de86aa0331be697fbef33d5ab2c57a@walle.cc>
- <20220714205529.GE17705@kitsune.suse.cz>
- <33abf7b84860049c4a22605578303ff2@walle.cc>
- <20220714220744.GF17705@kitsune.suse.cz>
- <20220715092017.2ftoyzm22i4amrbt@ti.com>
- <20220716082027.GK17705@kitsune.suse.cz>
- <c6955eed3a445f4b87920fe0d47e7230@walle.cc>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c6955eed3a445f4b87920fe0d47e7230@walle.cc>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F3BFB8252D
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 09:42:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82B13C34114;
+        Sat, 16 Jul 2022 09:42:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657964524;
+        bh=G7vrycS8jIH6nYlm9Kst7bOhdSSjtay89I3eNL5Em8E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DA8Mi6XiF5qTUvt4BGv/G+aleDLA4akgFnwjL/PYvGzxeVz43L5NNiAJsFyJltZl3
+         y4FtmGYe8pKMAaodrU3WY7dorT+Eax8bPm9E7qm3BTaXnXkkeWwd9GX6Z08gESmFdt
+         J3IVyHaHxqZnmNF6PFAZ7gZvHXq9kcvDdsb9DKzDOpH/bUpo2DGCCryDZ+vZOT2XDa
+         CJIs7hnYqUF4zqYirqODcrlrVggUBlSQqZOtyYnzkw3J8NEALn2qDP8dLFNVnQrTpN
+         Q7xqxCWdrLN8/t/g29zlemXdgD+0z+zPlUt99ebWxyjgUP8tvNfwfB8wV7wTN6m/Pl
+         rhUDdugLckOZQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oCeJG-007quR-7a;
+        Sat, 16 Jul 2022 10:42:02 +0100
+Date:   Sat, 16 Jul 2022 10:41:59 +0100
+Message-ID: <87sfn14cns.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Antonio Borneo <antonio.borneo@foss.st.com>,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Subject: Re: [PATCH v1 1/1] irqchip/stm32-exti: Use INVALID_HWIRQ definition
+In-Reply-To: <20220715205203.82591-1-andriy.shevchenko@linux.intel.com>
+References: <20220715205203.82591-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: andriy.shevchenko@linux.intel.com, antonio.borneo@foss.st.com, linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, tglx@linutronix.de, mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 11:30:12AM +0200, Michael Walle wrote:
-> Am 2022-07-16 10:20, schrieb Michal Suchánek:
+On Fri, 15 Jul 2022 21:52:03 +0100,
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 > 
-> > > So if DT says there isn't a flash on a specific CS when there is, then
-> > > DT should be fixed to describe the flash, and then we can probe it.
-> > > You
-> > > both seem to be saying the same thing here, and I agree.
-> > 
-> > The disagreement is about the situation when there is sometimes a flash
-> > chip.
+> Use specific definition for invalid IRQ. It makes the
+> code uniform in respect to the constant used for that.
+> No functional change intended.
 > 
-> No. The disagreement is what should happen if the DT says there is
-> a device but there isn't. Which right now is an error and it should
-> stay that way. Your hardware description says there is a flash
-> but it cannot be probed, so it is an error. What about a board
-> which has an actual error and the flash isn't responding? You
-> trade one use case for another.
-
-And what if you have a SATA controller with a bad cable?
-
-Or a bad connection to a mmc card?
-
-Then the kernel also does not say there is an error and simply does not
-see the device.
-
-This is normal. Not all devices that can potentially exist do exist. It
-is up to the user to decide if it's an error that the device is missing.
-
-> Also I've looked at the PHY subsystem and there, if a PHY is described
-> in the DT but isn't there, the following error will be printed:
->   dev_err(&mdio->dev, "MDIO device at address %d is missing.\n", addr);
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/irqchip/irq-stm32-exti.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> And that is for a bus which can even be automatically be
-> probed/detected.
+> diff --git a/drivers/irqchip/irq-stm32-exti.c b/drivers/irqchip/irq-stm32-exti.c
+> index a73763d475f0..a6ae9f38aaf0 100644
+> --- a/drivers/irqchip/irq-stm32-exti.c
+> +++ b/drivers/irqchip/irq-stm32-exti.c
+> @@ -170,7 +170,7 @@ static const struct stm32_exti_bank *stm32mp1_exti_banks[] = {
+>  static struct irq_chip stm32_exti_h_chip;
+>  static struct irq_chip stm32_exti_h_chip_direct;
+>  
+> -#define EXTI_INVALID_IRQ       U8_MAX
+> +#define EXTI_INVALID_IRQ       ((u8)INVALID_HWIRQ)
 
-If there is no use case for having a card with unpopulated PHY then it
-makes sense.
+This looks like a terrible idea. It gives the impression that you can
+now rely on comparing the internal data structure field to
+INVALID_HWIRQ. Which is of course bound to fail.
 
-Here we do have a use case so the comparison is moot.
+To be honest, I'd rather *kill* INVALID_HWIRQ, because apart from
+cherryview, nobody even *checks* for this value by that name. So much
+for the "code uniformity"...
 
-Thanks
+	M.
 
-Michal
+-- 
+Without deviation from the norm, progress is not possible.

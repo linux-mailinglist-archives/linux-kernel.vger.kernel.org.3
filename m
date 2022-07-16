@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C1B576D4F
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 12:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087D5576D54
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 12:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiGPKdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 06:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
+        id S229619AbiGPKoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 06:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGPKdT (ORCPT
+        with ESMTP id S229469AbiGPKog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 06:33:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC2D6584;
-        Sat, 16 Jul 2022 03:33:19 -0700 (PDT)
+        Sat, 16 Jul 2022 06:44:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B351B7A8;
+        Sat, 16 Jul 2022 03:44:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94C6D60F9B;
-        Sat, 16 Jul 2022 10:33:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8ACAC34114;
-        Sat, 16 Jul 2022 10:33:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D7E1B80ECB;
+        Sat, 16 Jul 2022 10:44:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A137C34114;
+        Sat, 16 Jul 2022 10:44:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657967598;
-        bh=fb7zcFr0KnXxkQp0xpdk4Mcd+9GKD+xwhdHZmcfcxGM=;
+        s=k20201202; t=1657968273;
+        bh=MT/ioChApAV3Fbzdv9gL+KtbbUDKSiObJMHNjAz1Iwk=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SFmHR5nFB+nKOqpu5Q04w6uop28XC7xK6cMvxDQaREF2HMd6r3jtvPck5KRlWzpPt
-         ZAqPYOh3GcX7t1x08di4o+ogeZcjpS5gbe7lLzRcDOXhNLhpqHuJmttXcT79B9TNU6
-         zip+sWCL1VN2i1A37PvY70STaJWY8ViWKU+cdVEfepMom4cXEGNe/yvbpIxu5k16f+
-         GkDkLw6B8ooc17oyg4WHKA5Gu9oQ0sphFtAEbIRRPX1jD+G7BQwzQZufSlvVfmeA4n
-         kGnzZ/L1Ln64G+T76u3rYxNu4QxL45rP36+edMzzWb+U+zyVoS4mCoOU1TFN3OJfnM
-         eQSH9r4o8AWSQ==
+        b=N8I1FwXwIlaoSQq9N9cUgqE2zMOuBH932SIkqKWogyNUG3LefcXTehPghN6c/39Pj
+         RVVX/7SgcJEL7AGz21Gir6Dow1kiXbRBUAU+fi0gN+lcs1IVH4iSNweCWVVqF4ZCHo
+         cvZWz4sVhN5WAN22S+yeFaohJHNBLbcslRxi+XCsTya5JZFqG0ohFCfaDjr0jin/ew
+         Mdspnl0BVP6KkZpf5wDXBgHsyBRA8JojgybzA3FGgMlRzDSQzHQF+MYATcp9i5ofjd
+         kuxQIPv0HxsVpKBfS95Q2VWwgR/3h8y0dPMb/B4fp3BCKT47bP5EIv/wzptcYRQu+k
+         rUqWUgfaS+dUA==
 Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1oCf6p-007rDL-Ga;
-        Sat, 16 Jul 2022 11:33:15 +0100
-Date:   Sat, 16 Jul 2022 11:33:08 +0100
-Message-ID: <87r12l4aaj.wl-maz@kernel.org>
+        id 1oCfHi-007rH6-P9;
+        Sat, 16 Jul 2022 11:44:31 +0100
+Date:   Sat, 16 Jul 2022 11:44:26 +0100
+Message-ID: <87pmi549rp.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     <lewis.hanly@microchip.com>
 Cc:     <linux-gpio@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
@@ -76,85 +76,36 @@ On Sat, 16 Jul 2022 08:11:13 +0100,
 > Add a driver to support the Polarfire SoC gpio controller.
 > 
 > Signed-off-by: Lewis Hanly <lewis.hanly@microchip.com>
+> ---
+>  drivers/gpio/Kconfig     |   9 +
+>  drivers/gpio/Makefile    |   1 +
+>  drivers/gpio/gpio-mpfs.c | 361 +++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 371 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-mpfs.c
 
-[...]
+A couple of other nits:
 
-> +static int mpfs_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
-> +					   unsigned int child,
-> +					   unsigned int child_type,
-> +					   unsigned int *parent,
-> +					   unsigned int *parent_type)
-> +{
-> +	struct mpfs_gpio_chip *mpfs_gpio = gpiochip_get_data(gc);
-> +	struct irq_data *d = irq_get_irq_data(mpfs_gpio->irq_number[child]);
+> +static const struct of_device_id mpfs_of_ids[] = {
+> +	{ .compatible = "microchip,mpfs-gpio", },
 
-This looks totally wrong. It means that you have already instantiated
-part of the hierarchy, and it is likely that you will get multiple
-hierarchy sharing some levels, which isn't intended.
+Where is the DT binding for this?
 
-> +	*parent_type = IRQ_TYPE_NONE;
-> +	*parent = irqd_to_hwirq(d);
+> +	{ /* end of list */ }
+> +};
 > +
-> +	return 0;
-> +}
-> +
-> +static int mpfs_gpio_probe(struct platform_device *pdev)
-> +{
-> +	struct clk *clk;
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *node = pdev->dev.of_node;
-> +	struct device_node *irq_parent;
-> +	struct gpio_irq_chip *girq;
-> +	struct irq_domain *parent;
-> +	struct mpfs_gpio_chip *mpfs_gpio;
-> +	int i, ret, ngpio;
-> +
-> +	mpfs_gpio = devm_kzalloc(dev, sizeof(*mpfs_gpio), GFP_KERNEL);
-> +	if (!mpfs_gpio)
-> +		return -ENOMEM;
-> +
-> +	mpfs_gpio->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(mpfs_gpio->base))
-> +		return dev_err_probe(dev, PTR_ERR(mpfs_gpio->clk), "input clock not found.\n");
-> +
-> +	clk = devm_clk_get(dev, NULL);
-> +	if (IS_ERR(clk))
-> +		return dev_err_probe(dev, PTR_ERR(clk), "devm_clk_get failed\n");
-> +
-> +	ret = clk_prepare_enable(clk);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "failed to enable clock\n");
-> +
-> +	mpfs_gpio->clk = clk;
-> +
-> +	ngpio = of_irq_count(node);
-> +	if (ngpio > NUM_GPIO) {
-> +		ret = -ENXIO;
-> +		goto cleanup_clock;
-> +	}
-> +
-> +	irq_parent = of_irq_find_parent(node);
-> +	if (!irq_parent) {
-> +		ret = -ENODEV;
-> +		goto cleanup_clock;
-> +	}
-> +	parent = irq_find_host(irq_parent);
-> +	if (!parent) {
-> +		ret = -ENODEV;
-> +		goto cleanup_clock;
-> +	}
-> +
-> +	/* Get the interrupt numbers. */
-> +	/* Clear/Disable All interrupts before enabling parent interrupts. */
-> +	for (i = 0; i < ngpio; i++) {
-> +		mpfs_gpio->irq_number[i] = platform_get_irq(pdev, i);
+> +static struct platform_driver mpfs_gpio_driver = {
+> +	.probe = mpfs_gpio_probe,
+> +	.driver = {
+> +		.name = "microchip,mpfs-gpio",
+> +		.of_match_table = mpfs_of_ids,
+> +	},
+> +	.remove = mpfs_gpio_remove,
 
-Bingo. You are allocating the interrupt for the level below. You
-really shouldn't do that.
-
-If you need to retrieve the *hwirq* for the level below, you need to
-parse the DT without triggering an IRQ allocation (of_irq_parse_one()
-and co).
+No, please. You cannot enforce that there are no interrupts being used
+(and nothing checks for this), and you're pretty much guaranteed that
+the system will catch fire on the first interrupt being delivered.
+Moreover, your "remove" callback only turns the clock off, which is
+yet another nail on that coffin.
 
 	M.
 

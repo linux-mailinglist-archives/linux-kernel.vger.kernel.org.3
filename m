@@ -2,84 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7374F5770C5
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 20:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD735770C7
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 20:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbiGPSi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 14:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
+        id S231998AbiGPSkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 14:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbiGPSi1 (ORCPT
+        with ESMTP id S229558AbiGPSj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 14:38:27 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDF91BE92;
-        Sat, 16 Jul 2022 11:38:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=onfoaPsdX3RFZ3bYkRBbMxnProfuyX/n3YmA+bW3vc0=; b=sHyuiH4CYPfNXOrMR3SW6ghS9e
-        tG+cyqtBOuvCksgfC3gvVvHO7WrSmNDxSi+2J+3EAVomEVbn0ZO+Rp+AZO5G3KJ3RDSeo65jw0uif
-        TZH8NbZjP5TR6yJvqvgeZay9tJVORDS6a6TpzH9aMpMbVAuAq6wtIUsCQYgLlzZrg+xA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oCmgA-00AZAp-2A; Sat, 16 Jul 2022 20:38:14 +0200
-Date:   Sat, 16 Jul 2022 20:38:14 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: Re: [PATCH net-next v3 14/47] net: phy: aquantia: Add support for
- rate adaptation
-Message-ID: <YtMFljr/I7UtSr+y@lunn.ch>
-References: <20220715215954.1449214-1-sean.anderson@seco.com>
- <20220715215954.1449214-15-sean.anderson@seco.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220715215954.1449214-15-sean.anderson@seco.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 16 Jul 2022 14:39:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09311F4
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 11:39:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77FB8B80CB1
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 18:39:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01CE9C34114;
+        Sat, 16 Jul 2022 18:39:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657996794;
+        bh=jHD1xGVxd+hAY4K3c4gWTjcSl0wcbkWVstMVctO5jc8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=E36SIMXrsVUJVvtJDnLBtfkG/YAefrt81suS7zC1xBbj5L39HlIZADJ/elBxGe0Oe
+         VwaZjWuPmMo1V2R1wTnAR326IIQ4C6k9AgGURirNiNZ8jeBE1mQz6lC+cn7MQX3j5M
+         NddcgWmH7HHZoRVILTqyCnQPDPfXGT6vjshyy2JVtqEoqvCuAqzAZWwD4aAlvfGh2c
+         wzUOnMla/bA6tevi4O1BFBni0YGBzgL70jy+IpbprGeF7gZuXDcHXbvWCmg+v4SWdv
+         msBFX4sLQsQX22dLKPlpP++SMQWZVe1caA77rCtfTKJra33ZcmrvL4zGccEMUhf5AA
+         L+nCly2nNLntw==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oCmhj-007uJh-Lx;
+        Sat, 16 Jul 2022 19:39:51 +0100
+Date:   Sat, 16 Jul 2022 19:39:46 +0100
+Message-ID: <87less52bx.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V15 00/15] irqchip: Add LoongArch-related irqchip drivers
+In-Reply-To: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
+References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +#define VEND1_GLOBAL_CFG_10M			0x0310
-> +#define VEND1_GLOBAL_CFG_100M			0x031b
-> +#define VEND1_GLOBAL_CFG_1G			0x031c
-> +#define VEND1_GLOBAL_CFG_2_5G			0x031d
-> +#define VEND1_GLOBAL_CFG_5G			0x031e
-> +#define VEND1_GLOBAL_CFG_10G			0x031f
+On Fri, 15 Jul 2022 08:05:36 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> are already added in the ACPI Specification 6.5(which may be published in
+> early June this year and the board is reviewing the draft).
+> 
+> Currently, LoongArch based processors (e.g. Loongson-3A5000) can only
+> work together with LS7A chipsets. The irq chips in LoongArch computers
+> include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
+> Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller),
+> HTVECINTC (Hyper-Transport Vector Interrupt Controller), PCH-PIC (Main
+> Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
+> in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
 
-I completely read this wrong the first time... The common meaning of
-#defines line this is
+[...]
 
-VEND1_GLOBAL_CFG_ is the register and what follows indicates some bits
-in the register.
+Compiling this series for loongarch with loongson3_defconfig on top of
+5.19-rc3 results in the following:
 
-However, this is not true here, these are all registers. Maybe add
-_REG to the end? It makes them different to other defines for
-registers, but if i parsed it wrong, probably other will as well?
+loongarch64-linux-ld: drivers/irqchip/irq-loongson-eiointc.o: in function `.L60':
+irq-loongson-eiointc.c:(.init.text+0x4c): undefined reference to `pch_msi_acpi_init'
+loongarch64-linux-ld: drivers/irqchip/irq-loongson-htvec.o: in function `pch_msi_parse_madt':
+irq-loongson-htvec.c:(.init.text+0x14): undefined reference to `pch_msi_acpi_init'
+make: *** [Makefile:1164: vmlinux] Error 1
 
->  static int aqr107_read_rate(struct phy_device *phydev)
->  {
->  	int val;
-> +	u32 config_reg;
+I *really* would have expected this series to be in a better shape
+after over 15 rounds, but it looks like I'm expecting too much. I
+haven't investigated the breakage, but this should (at the very least)
+pass the defconfig test and optional drivers not being selected.
 
-Revere Christmass tree. config_reg should be first.
+The corresponding MIPS configuration seems to build fine.
 
-       Andrew
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

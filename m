@@ -2,451 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1961576E1A
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 15:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61004576E1D
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 15:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbiGPNIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 09:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
+        id S229776AbiGPNK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 09:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiGPNII (ORCPT
+        with ESMTP id S229499AbiGPNKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 09:08:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329A81275C
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 06:08:05 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 504F02057C;
-        Sat, 16 Jul 2022 13:08:04 +0000 (UTC)
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 3765A2C141;
-        Sat, 16 Jul 2022 13:08:04 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] char: remove VR41XX related char driver
-Date:   Sat, 16 Jul 2022 15:08:01 +0200
-Message-Id: <20220716130802.11660-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.29.2
+        Sat, 16 Jul 2022 09:10:24 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4751E2125A;
+        Sat, 16 Jul 2022 06:10:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1657977022;
+        bh=vUqUtmUEDZfWFKsn92CnDaPfM6DHV7s9AN7k1vumVNc=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=wjfxfVjIuAA4L96If5G0Vwo3f+5ZuByCh3iUH+Wkouoe13ize9JG5j0keerAbnts2
+         cH2CtLYDO3eW/oMoOZDIy6R0Tw0+EY2fghsgeujP0Q4ImRQtIGBMYRbtuSaQMobBIk
+         lmtl43pSIz6IERD9n5bwnN8ymS91ZxNgHp/9hVaI=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 174BF1280DB8;
+        Sat, 16 Jul 2022 09:10:22 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VAhJjgHU5la5; Sat, 16 Jul 2022 09:10:21 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1657977021;
+        bh=vUqUtmUEDZfWFKsn92CnDaPfM6DHV7s9AN7k1vumVNc=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=KNgeYhkV09nGBIhz3i7jhYhn6solcdxTWdTP39oQ8xoPt/v/YScXkcdyQvD9+dz3m
+         +RG00X2jt1sQsEhYLqqeiQKjCpDiXTQXk3mlKMKX/ulhLhsr5jJViG6MWYCqmh5n9u
+         VI2O8qiqgGr7mztIyDK/GPZnYe66Ku/4Rrsq4zu0=
+Received: from [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b] (unknown [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 6BFF11280C16;
+        Sat, 16 Jul 2022 09:10:21 -0400 (EDT)
+Message-ID: <ce185648f24041886a7194ab8eee23f9649b8a85.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.19-rc6
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Sat, 16 Jul 2022 09:10:20 -0400
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit d3164e2f3b0a ("MIPS: Remove VR41xx support") removed support
-for MIPS VR41xx platform, so remove exclusive drivers for this
-platform, too.
+Six small and reasonably obvious fixes, all in drivers.
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+The patch is available here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+
+The short changelog is:
+
+Bjorn Andersson (1):
+      scsi: ufs: core: Drop loglevel of WriteBoost message
+
+Changyuan Lyu (2):
+      scsi: pm80xx: Set stopped phy's linkrate to Disabled
+      scsi: pm80xx: Fix 'Unknown' max/min linkrate
+
+Mike Christie (1):
+      scsi: target: Fix WRITE_SAME No Data Buffer crash
+
+Ming Lei (1):
+      scsi: megaraid: Clear READ queue map's nr_queues
+
+Po-Wen Kao (1):
+      scsi: ufs: core: Fix missing clk change notification on host reset
+
+And the diffstat:
+
+ drivers/scsi/megaraid/megaraid_sas_base.c |  3 +++
+ drivers/scsi/pm8001/pm8001_hwi.c          | 19 +++----------------
+ drivers/scsi/pm8001/pm8001_init.c         |  2 ++
+ drivers/scsi/pm8001/pm80xx_hwi.c          |  6 +++++-
+ drivers/target/target_core_file.c         |  3 +++
+ drivers/target/target_core_iblock.c       |  4 ++++
+ drivers/target/target_core_sbc.c          |  6 ++++++
+ drivers/ufs/core/ufshcd.c                 |  4 ++--
+ 8 files changed, 28 insertions(+), 19 deletions(-)
+
+With full diff below.
+
+James
+
 ---
-Changes in v2:
-	rebased to char-misc-next
 
- drivers/char/Kconfig  |   5 -
- drivers/char/Makefile |   1 -
- drivers/char/tb0219.c | 359 ------------------------------------------
- 3 files changed, 365 deletions(-)
- delete mode 100644 drivers/char/tb0219.c
-
-diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
-index 0b6c03643ddc..1c9ed699cbca 100644
---- a/drivers/char/Kconfig
-+++ b/drivers/char/Kconfig
-@@ -247,11 +247,6 @@ config SONYPI
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called sonypi.
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index c95360a3c186..0917b05059b4 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -3195,6 +3195,9 @@ static int megasas_map_queues(struct Scsi_Host *shost)
+ 	qoff += map->nr_queues;
+ 	offset += map->nr_queues;
  
--config GPIO_TB0219
--	tristate "TANBAC TB0219 GPIO support"
--	depends on TANBAC_TB022X
--	select GPIO_VR41XX
--
- source "drivers/char/pcmcia/Kconfig"
++	/* we never use READ queue, so can't cheat blk-mq */
++	shost->tag_set.map[HCTX_TYPE_READ].nr_queues = 0;
++
+ 	/* Setup Poll hctx */
+ 	map = &shost->tag_set.map[HCTX_TYPE_POLL];
+ 	map->nr_queues = instance->iopoll_q_count;
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index f7466a895d3b..991eb01bb1e0 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -3145,15 +3145,6 @@ void pm8001_bytes_dmaed(struct pm8001_hba_info *pm8001_ha, int i)
+ 	if (!phy->phy_attached)
+ 		return;
  
- config MWAVE
-diff --git a/drivers/char/Makefile b/drivers/char/Makefile
-index 264eb398fdd4..1b35d1724565 100644
---- a/drivers/char/Makefile
-+++ b/drivers/char/Makefile
-@@ -31,7 +31,6 @@ obj-$(CONFIG_NWFLASH)		+= nwflash.o
- obj-$(CONFIG_SCx200_GPIO)	+= scx200_gpio.o
- obj-$(CONFIG_PC8736x_GPIO)	+= pc8736x_gpio.o
- obj-$(CONFIG_NSC_GPIO)		+= nsc_gpio.o
--obj-$(CONFIG_GPIO_TB0219)	+= tb0219.o
- obj-$(CONFIG_TELCLOCK)		+= tlclk.o
+-	if (sas_phy->phy) {
+-		struct sas_phy *sphy = sas_phy->phy;
+-		sphy->negotiated_linkrate = sas_phy->linkrate;
+-		sphy->minimum_linkrate = phy->minimum_linkrate;
+-		sphy->minimum_linkrate_hw = SAS_LINK_RATE_1_5_GBPS;
+-		sphy->maximum_linkrate = phy->maximum_linkrate;
+-		sphy->maximum_linkrate_hw = phy->maximum_linkrate;
+-	}
+-
+ 	if (phy->phy_type & PORT_TYPE_SAS) {
+ 		struct sas_identify_frame *id;
+ 		id = (struct sas_identify_frame *)phy->frame_rcvd;
+@@ -3177,26 +3168,22 @@ void pm8001_get_lrate_mode(struct pm8001_phy *phy, u8 link_rate)
+ 	switch (link_rate) {
+ 	case PHY_SPEED_120:
+ 		phy->sas_phy.linkrate = SAS_LINK_RATE_12_0_GBPS;
+-		phy->sas_phy.phy->negotiated_linkrate = SAS_LINK_RATE_12_0_GBPS;
+ 		break;
+ 	case PHY_SPEED_60:
+ 		phy->sas_phy.linkrate = SAS_LINK_RATE_6_0_GBPS;
+-		phy->sas_phy.phy->negotiated_linkrate = SAS_LINK_RATE_6_0_GBPS;
+ 		break;
+ 	case PHY_SPEED_30:
+ 		phy->sas_phy.linkrate = SAS_LINK_RATE_3_0_GBPS;
+-		phy->sas_phy.phy->negotiated_linkrate = SAS_LINK_RATE_3_0_GBPS;
+ 		break;
+ 	case PHY_SPEED_15:
+ 		phy->sas_phy.linkrate = SAS_LINK_RATE_1_5_GBPS;
+-		phy->sas_phy.phy->negotiated_linkrate = SAS_LINK_RATE_1_5_GBPS;
+ 		break;
+ 	}
+ 	sas_phy->negotiated_linkrate = phy->sas_phy.linkrate;
+-	sas_phy->maximum_linkrate_hw = SAS_LINK_RATE_6_0_GBPS;
++	sas_phy->maximum_linkrate_hw = phy->maximum_linkrate;
+ 	sas_phy->minimum_linkrate_hw = SAS_LINK_RATE_1_5_GBPS;
+-	sas_phy->maximum_linkrate = SAS_LINK_RATE_6_0_GBPS;
+-	sas_phy->minimum_linkrate = SAS_LINK_RATE_1_5_GBPS;
++	sas_phy->maximum_linkrate = phy->maximum_linkrate;
++	sas_phy->minimum_linkrate = phy->minimum_linkrate;
+ }
  
- obj-$(CONFIG_MWAVE)		+= mwave/
-diff --git a/drivers/char/tb0219.c b/drivers/char/tb0219.c
-deleted file mode 100644
-index 1f36be14978f..000000000000
---- a/drivers/char/tb0219.c
-+++ /dev/null
-@@ -1,359 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- *  Driver for TANBAC TB0219 base board.
-- *
-- *  Copyright (C) 2005  Yoichi Yuasa <yuasa@linux-mips.org>
-- */
--#include <linux/platform_device.h>
--#include <linux/fs.h>
--#include <linux/init.h>
--#include <linux/module.h>
--#include <linux/uaccess.h>
--
--#include <asm/io.h>
--#include <asm/reboot.h>
--#include <asm/vr41xx/giu.h>
--#include <asm/vr41xx/tb0219.h>
--
--MODULE_AUTHOR("Yoichi Yuasa <yuasa@linux-mips.org>");
--MODULE_DESCRIPTION("TANBAC TB0219 base board driver");
--MODULE_LICENSE("GPL");
--
--static int major;	/* default is dynamic major device number */
--module_param(major, int, 0);
--MODULE_PARM_DESC(major, "Major device number");
--
--static void (*old_machine_restart)(char *command);
--static void __iomem *tb0219_base;
--static DEFINE_SPINLOCK(tb0219_lock);
--
--#define tb0219_read(offset)		readw(tb0219_base + (offset))
--#define tb0219_write(offset, value)	writew((value), tb0219_base + (offset))
--
--#define TB0219_START	0x0a000000UL
--#define TB0219_SIZE	0x20UL
--
--#define TB0219_LED			0x00
--#define TB0219_GPIO_INPUT		0x02
--#define TB0219_GPIO_OUTPUT		0x04
--#define TB0219_DIP_SWITCH		0x06
--#define TB0219_MISC			0x08
--#define TB0219_RESET			0x0e
--#define TB0219_PCI_SLOT1_IRQ_STATUS	0x10
--#define TB0219_PCI_SLOT2_IRQ_STATUS	0x12
--#define TB0219_PCI_SLOT3_IRQ_STATUS	0x14
--
--typedef enum {
--	TYPE_LED,
--	TYPE_GPIO_OUTPUT,
--} tb0219_type_t;
--
--/*
-- * Minor device number
-- *	 0 = 7 segment LED
-- *
-- *	16 = GPIO IN 0
-- *	17 = GPIO IN 1
-- *	18 = GPIO IN 2
-- *	19 = GPIO IN 3
-- *	20 = GPIO IN 4
-- *	21 = GPIO IN 5
-- *	22 = GPIO IN 6
-- *	23 = GPIO IN 7
-- *
-- *	32 = GPIO OUT 0
-- *	33 = GPIO OUT 1
-- *	34 = GPIO OUT 2
-- *	35 = GPIO OUT 3
-- *	36 = GPIO OUT 4
-- *	37 = GPIO OUT 5
-- *	38 = GPIO OUT 6
-- *	39 = GPIO OUT 7
-- *
-- *	48 = DIP switch 1
-- *	49 = DIP switch 2
-- *	50 = DIP switch 3
-- *	51 = DIP switch 4
-- *	52 = DIP switch 5
-- *	53 = DIP switch 6
-- *	54 = DIP switch 7
-- *	55 = DIP switch 8
-- */
--
--static inline char get_led(void)
--{
--	return (char)tb0219_read(TB0219_LED);
--}
--
--static inline char get_gpio_input_pin(unsigned int pin)
--{
--	uint16_t values;
--
--	values = tb0219_read(TB0219_GPIO_INPUT);
--	if (values & (1 << pin))
--		return '1';
--
--	return '0';
--}
--
--static inline char get_gpio_output_pin(unsigned int pin)
--{
--	uint16_t values;
--
--	values = tb0219_read(TB0219_GPIO_OUTPUT);
--	if (values & (1 << pin))
--		return '1';
--
--	return '0';
--}
--
--static inline char get_dip_switch(unsigned int pin)
--{
--	uint16_t values;
--
--	values = tb0219_read(TB0219_DIP_SWITCH);
--	if (values & (1 << pin))
--		return '1';
--
--	return '0';
--}
--
--static inline int set_led(char command)
--{
--	tb0219_write(TB0219_LED, command);
--
--	return 0;
--}
--
--static inline int set_gpio_output_pin(unsigned int pin, char command)
--{
--	unsigned long flags;
--	uint16_t value;
--
--	if (command != '0' && command != '1')
--		return -EINVAL;
--
--	spin_lock_irqsave(&tb0219_lock, flags);
--	value = tb0219_read(TB0219_GPIO_OUTPUT);
--	if (command == '0')
--		value &= ~(1 << pin);
--	else
--		value |= 1 << pin;
--	tb0219_write(TB0219_GPIO_OUTPUT, value);
--	spin_unlock_irqrestore(&tb0219_lock, flags);
--
--	return 0;
--
--}
--
--static ssize_t tanbac_tb0219_read(struct file *file, char __user *buf, size_t len,
--                                  loff_t *ppos)
--{
--	unsigned int minor;
--	char value;
--
--	minor = iminor(file_inode(file));
--	switch (minor) {
--	case 0:
--		value = get_led();
--		break;
--	case 16 ... 23:
--		value = get_gpio_input_pin(minor - 16);
--		break;
--	case 32 ... 39:
--		value = get_gpio_output_pin(minor - 32);
--		break;
--	case 48 ... 55:
--		value = get_dip_switch(minor - 48);
--		break;
--	default:
--		return -EBADF;
--	}
--
--	if (len <= 0)
--		return -EFAULT;
--
--	if (put_user(value, buf))
--		return -EFAULT;
--
--	return 1;
--}
--
--static ssize_t tanbac_tb0219_write(struct file *file, const char __user *data,
--                                   size_t len, loff_t *ppos)
--{
--	unsigned int minor;
--	tb0219_type_t type;
--	size_t i;
--	int retval = 0;
--	char c;
--
--	minor = iminor(file_inode(file));
--	switch (minor) {
--	case 0:
--		type = TYPE_LED;
--		break;
--	case 32 ... 39:
--		type = TYPE_GPIO_OUTPUT;
--		break;
--	default:
--		return -EBADF;
--	}
--
--	for (i = 0; i < len; i++) {
--		if (get_user(c, data + i))
--			return -EFAULT;
--
--		switch (type) {
--		case TYPE_LED:
--			retval = set_led(c);
--			break;
--		case TYPE_GPIO_OUTPUT:
--			retval = set_gpio_output_pin(minor - 32, c);
--			break;
--		}
--
--		if (retval < 0)
--			break;
--	}
--
--	return i;
--}
--
--static int tanbac_tb0219_open(struct inode *inode, struct file *file)
--{
--	unsigned int minor;
--
--	minor = iminor(inode);
--	switch (minor) {
--	case 0:
--	case 16 ... 23:
--	case 32 ... 39:
--	case 48 ... 55:
--		return stream_open(inode, file);
--	default:
--		break;
--	}
--
--	return -EBADF;
--}
--
--static int tanbac_tb0219_release(struct inode *inode, struct file *file)
--{
--	return 0;
--}
--
--static const struct file_operations tb0219_fops = {
--	.owner		= THIS_MODULE,
--	.read		= tanbac_tb0219_read,
--	.write		= tanbac_tb0219_write,
--	.open		= tanbac_tb0219_open,
--	.release	= tanbac_tb0219_release,
--	.llseek		= no_llseek,
--};
--
--static void tb0219_restart(char *command)
--{
--	tb0219_write(TB0219_RESET, 0);
--}
--
--static void tb0219_pci_irq_init(void)
--{
--	/* PCI Slot 1 */
--	vr41xx_set_irq_trigger(TB0219_PCI_SLOT1_PIN, IRQ_TRIGGER_LEVEL, IRQ_SIGNAL_THROUGH);
--	vr41xx_set_irq_level(TB0219_PCI_SLOT1_PIN, IRQ_LEVEL_LOW);
--
--	/* PCI Slot 2 */
--	vr41xx_set_irq_trigger(TB0219_PCI_SLOT2_PIN, IRQ_TRIGGER_LEVEL, IRQ_SIGNAL_THROUGH);
--	vr41xx_set_irq_level(TB0219_PCI_SLOT2_PIN, IRQ_LEVEL_LOW);
--
--	/* PCI Slot 3 */
--	vr41xx_set_irq_trigger(TB0219_PCI_SLOT3_PIN, IRQ_TRIGGER_LEVEL, IRQ_SIGNAL_THROUGH);
--	vr41xx_set_irq_level(TB0219_PCI_SLOT3_PIN, IRQ_LEVEL_LOW);
--}
--
--static int tb0219_probe(struct platform_device *dev)
--{
--	int retval;
--
--	if (request_mem_region(TB0219_START, TB0219_SIZE, "TB0219") == NULL)
--		return -EBUSY;
--
--	tb0219_base = ioremap(TB0219_START, TB0219_SIZE);
--	if (tb0219_base == NULL) {
--		release_mem_region(TB0219_START, TB0219_SIZE);
--		return -ENOMEM;
--	}
--
--	retval = register_chrdev(major, "TB0219", &tb0219_fops);
--	if (retval < 0) {
--		iounmap(tb0219_base);
--		tb0219_base = NULL;
--		release_mem_region(TB0219_START, TB0219_SIZE);
--		return retval;
--	}
--
--	old_machine_restart = _machine_restart;
--	_machine_restart = tb0219_restart;
--
--	tb0219_pci_irq_init();
--
--	if (major == 0) {
--		major = retval;
--		printk(KERN_INFO "TB0219: major number %d\n", major);
--	}
--
--	return 0;
--}
--
--static int tb0219_remove(struct platform_device *dev)
--{
--	_machine_restart = old_machine_restart;
--
--	iounmap(tb0219_base);
--	tb0219_base = NULL;
--
--	release_mem_region(TB0219_START, TB0219_SIZE);
--
--	return 0;
--}
--
--static struct platform_device *tb0219_platform_device;
--
--static struct platform_driver tb0219_device_driver = {
--	.probe		= tb0219_probe,
--	.remove		= tb0219_remove,
--	.driver		= {
--		.name	= "TB0219",
--	},
--};
--
--static int __init tanbac_tb0219_init(void)
--{
--	int retval;
--
--	tb0219_platform_device = platform_device_alloc("TB0219", -1);
--	if (!tb0219_platform_device)
--		return -ENOMEM;
--
--	retval = platform_device_add(tb0219_platform_device);
--	if (retval < 0) {
--		platform_device_put(tb0219_platform_device);
--		return retval;
--	}
--
--	retval = platform_driver_register(&tb0219_device_driver);
--	if (retval < 0)
--		platform_device_unregister(tb0219_platform_device);
--
--	return retval;
--}
--
--static void __exit tanbac_tb0219_exit(void)
--{
--	platform_driver_unregister(&tb0219_device_driver);
--	platform_device_unregister(tb0219_platform_device);
--}
--
--module_init(tanbac_tb0219_init);
--module_exit(tanbac_tb0219_exit);
--- 
-2.29.2
+ /**
+diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+index 9b04f1a6a67d..01f2f41928eb 100644
+--- a/drivers/scsi/pm8001/pm8001_init.c
++++ b/drivers/scsi/pm8001/pm8001_init.c
+@@ -143,6 +143,8 @@ static void pm8001_phy_init(struct pm8001_hba_info *pm8001_ha, int phy_id)
+ 	struct asd_sas_phy *sas_phy = &phy->sas_phy;
+ 	phy->phy_state = PHY_LINK_DISABLE;
+ 	phy->pm8001_ha = pm8001_ha;
++	phy->minimum_linkrate = SAS_LINK_RATE_1_5_GBPS;
++	phy->maximum_linkrate = SAS_LINK_RATE_6_0_GBPS;
+ 	sas_phy->enabled = (phy_id < pm8001_ha->chip->n_phy) ? 1 : 0;
+ 	sas_phy->class = SAS;
+ 	sas_phy->iproto = SAS_PROTOCOL_ALL;
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 01c5e8ff4cc5..303cd05fec50 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -3723,8 +3723,12 @@ static int mpi_phy_stop_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
+ 	pm8001_dbg(pm8001_ha, MSG, "phy:0x%x status:0x%x\n",
+ 		   phyid, status);
+ 	if (status == PHY_STOP_SUCCESS ||
+-		status == PHY_STOP_ERR_DEVICE_ATTACHED)
++		status == PHY_STOP_ERR_DEVICE_ATTACHED) {
+ 		phy->phy_state = PHY_LINK_DISABLE;
++		phy->sas_phy.phy->negotiated_linkrate = SAS_PHY_DISABLED;
++		phy->sas_phy.linkrate = SAS_PHY_DISABLED;
++	}
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/target/target_core_file.c b/drivers/target/target_core_file.c
+index e68f1cc8ef98..6c8d8b051bfd 100644
+--- a/drivers/target/target_core_file.c
++++ b/drivers/target/target_core_file.c
+@@ -448,6 +448,9 @@ fd_execute_write_same(struct se_cmd *cmd)
+ 		return TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE;
+ 	}
+ 
++	if (!cmd->t_data_nents)
++		return TCM_INVALID_CDB_FIELD;
++
+ 	if (cmd->t_data_nents > 1 ||
+ 	    cmd->t_data_sg[0].length != cmd->se_dev->dev_attrib.block_size) {
+ 		pr_err("WRITE_SAME: Illegal SGL t_data_nents: %u length: %u"
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index 378c80313a0f..1ed9381751e6 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+@@ -494,6 +494,10 @@ iblock_execute_write_same(struct se_cmd *cmd)
+ 		       " backends not supported\n");
+ 		return TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE;
+ 	}
++
++	if (!cmd->t_data_nents)
++		return TCM_INVALID_CDB_FIELD;
++
+ 	sg = &cmd->t_data_sg[0];
+ 
+ 	if (cmd->t_data_nents > 1 ||
+diff --git a/drivers/target/target_core_sbc.c b/drivers/target/target_core_sbc.c
+index ca1b2312d6e7..f6132836eb38 100644
+--- a/drivers/target/target_core_sbc.c
++++ b/drivers/target/target_core_sbc.c
+@@ -312,6 +312,12 @@ sbc_setup_write_same(struct se_cmd *cmd, unsigned char flags, struct sbc_ops *op
+ 		pr_warn("WRITE SAME with ANCHOR not supported\n");
+ 		return TCM_INVALID_CDB_FIELD;
+ 	}
++
++	if (flags & 0x01) {
++		pr_warn("WRITE SAME with NDOB not supported\n");
++		return TCM_INVALID_CDB_FIELD;
++	}
++
+ 	/*
+ 	 * Special case for WRITE_SAME w/ UNMAP=1 that ends up getting
+ 	 * translated into block discard requests within backend code.
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index ce86d1b790c0..c7b337480e3e 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -5738,7 +5738,7 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
+ 	}
+ 
+ 	hba->dev_info.wb_enabled = enable;
+-	dev_info(hba->dev, "%s Write Booster %s\n",
++	dev_dbg(hba->dev, "%s Write Booster %s\n",
+ 			__func__, enable ? "enabled" : "disabled");
+ 
+ 	return ret;
+@@ -7253,7 +7253,7 @@ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba)
+ 	hba->silence_err_logs = false;
+ 
+ 	/* scale up clocks to max frequency before full reinitialization */
+-	ufshcd_set_clk_freq(hba, true);
++	ufshcd_scale_clks(hba, true);
+ 
+ 	err = ufshcd_hba_enable(hba);
+ 
 

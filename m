@@ -2,88 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D28576FE4
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 17:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243BE576FFC
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 17:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiGPPdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 11:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S232358AbiGPPvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 11:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiGPPc7 (ORCPT
+        with ESMTP id S229867AbiGPPvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 11:32:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3871EACD;
-        Sat, 16 Jul 2022 08:32:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A325EB8090C;
-        Sat, 16 Jul 2022 15:32:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2311C34114;
-        Sat, 16 Jul 2022 15:32:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657985576;
-        bh=Fsb9/P/keB7qnvgsRy6sGL+85mVi6LM3d8slXwrJvwM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PPFpcOrt52ueYzaqnmYuw9eKJLzc3RIL4BdHTKjwREeoY1R3fk9RPOWpySM8YQgmF
-         NVXox/QKw2AQXeIxo68EhxiZBhSFnPqM8T7fAbKOj2bN/pE4IzPcdBQxZltkdME8EO
-         oldF3oqcyqKNXuP3rnhX7bFpqIlqtDBH8oM7wP7ZspGBfaiVwMhkC5sWP7wZvY5BBD
-         aipmqIFgKgQh3NTIvSb84ChFv+K8J2o9klFALLcuyUzhdY7qVG1gMUeowJzMjVrTKZ
-         PNsk24eyQUbpurUNg1lmwqhobonxpwXqkmH4OQ1Y6RlWaExbuEwS8gujQr3KEDPCoa
-         eW2baAuzKIsOA==
-Date:   Sat, 16 Jul 2022 16:42:49 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Gwendal Grignou <gwendal@chromium.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v2 2/2] iio: proximity: sx_common: Allow IIO core to
- take care of firmware node
-Message-ID: <20220716164249.4cb9c942@jic23-huawei>
-In-Reply-To: <YsG5qCQMXKHm3DWm@smile.fi.intel.com>
-References: <20220615114746.2767-1-andriy.shevchenko@linux.intel.com>
-        <20220615114746.2767-2-andriy.shevchenko@linux.intel.com>
-        <CAPUE2use-nt7LRQ0g_L7EW7wWfPQ-c7LinRoyx_WeMzLfdWOag@mail.gmail.com>
-        <YsG5qCQMXKHm3DWm@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 16 Jul 2022 11:51:23 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB56118B0C
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 08:51:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657986682; x=1689522682;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LaO484dNnKjtU1b9v96aU9pgzCv4lbAKkmwsfMZ3azw=;
+  b=Qdi5JtWTa8RwoixBmpDJef8cVa1s6Pc973SGssdUz4iaKCRbHt5tE5Yo
+   UQVI0lLKkvx3uyQrtcDTGM0DkjFa38J05ZAnbIjhp89XFUxIQZjR9md8y
+   e4iv+NoqQshTmuOWANlfXxGibBb9ONxl71vGrbYckNcu8U+myolXPXdjS
+   rfFPMQdiMkZu+KGaRGF/GwMs8re+vOa8FDPagBSHeAfifv/lcsHoPrMhM
+   xahtHux7Is/5WEva8Coe2YP6fj3vRWFyYu6+z2GjZdoh65DcfHt7GfcHI
+   BbAkoGz2lH4Keb6lXXY8dOGhgWmSK0/yfLW+YgTWZ1Mjg3qKLCQhK8u23
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="266394148"
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="266394148"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 08:51:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="629438321"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 16 Jul 2022 08:51:20 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCk4d-0001lK-Vh;
+        Sat, 16 Jul 2022 15:51:19 +0000
+Date:   Sat, 16 Jul 2022 23:50:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning:
+ no previous prototype for '__ashldi3'
+Message-ID: <202207162318.iryfcTQP-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 3 Jul 2022 18:45:44 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+Hi Masahiro,
 
-> On Wed, Jun 29, 2022 at 10:07:40AM -0700, Gwendal Grignou wrote:
-> > On Wed, Jun 15, 2022 at 4:47 AM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:  
-> > >
-> > > IIO core correctly will take care of firmware node if it's not set in
-> > > the driver. Drop ACPI and OF specifics from the driver and allow IIO
-> > > core to handle this.
-> > >
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>  
-> > Reviewed-by: Gwendal Grignou <gwendal@chromium.org>  
-> 
-> Thanks!
-> 
-> Jonathan, I guess we are ready with this series. What do you think?
-> 
-Gwendal's happy and seems straight forwards to me.
+FYI, the error/warning still remains.
 
-Applied to the togreg branch of iio.git and pushed out as testing.
-Note, unlikely to make this cycle so I'll probably hold it in testing only
-until I can rebase on rc1.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9b59ec8d50a1f28747ceff9a4f39af5deba9540e
+commit: f78b25ee922ef6faf59a258af1b9388ca894cfd9 mips: decompressor: do not copy source files while building
+date:   8 months ago
+config: mips-randconfig-r012-20220715 (https://download.01.org/0day-ci/archive/20220716/202207162318.iryfcTQP-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Thanks,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Jonathan
+Note: functions only called from assembly code should be annotated with the asmlinkage attribute
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/mips/boot/compressed/ashldi3.c:2:
+>> arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning: no previous prototype for '__ashldi3' [-Wmissing-prototypes]
+       9 | long long notrace __ashldi3(long long u, word_type b)
+         |                   ^~~~~~~~~
+
+
+vim +/__ashldi3 +9 arch/mips/boot/compressed/../../../../lib/ashldi3.c
+
+b35cd9884fa5d8 Palmer Dabbelt 2017-05-23  8  
+b35cd9884fa5d8 Palmer Dabbelt 2017-05-23 @9  long long notrace __ashldi3(long long u, word_type b)
+
+:::::: The code at line 9 was first introduced by commit
+:::::: b35cd9884fa5d81c9d5e7f57c9d03264ae2bd835 lib: Add shared copies of some GCC library routines
+
+:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
+:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

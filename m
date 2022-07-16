@@ -2,130 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9B1576B2F
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 03:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C15576B35
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 03:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbiGPB1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 21:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S231441AbiGPBhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 21:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiGPB1g (ORCPT
+        with ESMTP id S230072AbiGPBhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 21:27:36 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7028AEDB
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 18:27:34 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31dfe25bd47so18406817b3.18
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 18:27:34 -0700 (PDT)
+        Fri, 15 Jul 2022 21:37:36 -0400
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EFC8EED7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 18:37:35 -0700 (PDT)
+Received: by mail-oo1-xc32.google.com with SMTP id c203-20020a4a4fd4000000b0043566a4e265so1201759oob.2
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 18:37:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=oNUmtpieKLTpKC9Phy1E+O2Qwr+LcgpjVlKPKz6ZsMY=;
-        b=o3YYx9oRz4vs+i20GvTWtA2fo2ETFMeVSiAqrPAjMumbgk6QsUfn/L2857Y1U4kr91
-         vklLL5DSuzEDM920bdCqKAMwVm4TZrdIbmt15k1jgJIHxfR2M3E7zYEP8JAC7UfjbOPP
-         BUfsSW6TIpP5Zd+0767BBU6jYGQIuKTH6NuHwbuI8Ok0AGwudcmQcNEJKE0uPakdLJha
-         BSQHl/QlbT7Tx2Gt4EzHMIkcAgxAelFpUjH17w/t9BXELeqSi0tBgNQP9F0wr/k6HFmy
-         H0kpyAk/8g5j0lUBzM1Q5DdfBFyv+9bdMt4D3AGxguc5NSFR9q3njhxZLt3co38DKu8I
-         5FYQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=xRsMeE0Yj2Rv8TilyM94TWwDFZvW9MSpwYsml569wBo=;
+        b=IKf28YiZunQDmR/W17C0ckt8NTIwf+mTaTesWluvZbF5Y07kWK7vOREWEDuyyLm2n0
+         XLiHRbz0492FUyU5ILfztzO9mPDh8zbIL/hSrYov4qvakNBfSprZy4+X46Huyvd4LxS2
+         bUxHj+vBMAllqgsLiz7GcKBRu48Ub7mcMOClvrmbXZOpD/H2N/zsJAR7ksnYBt9pp09m
+         01P6llZ3RufB6iBG5s8kgZeQ2X5UQo0s0FM2kKNc/D7Qcfq2+hkUw75zF73Ka5XMxIGn
+         kf4NJZJXnKUGVUGMY5Cu/NPxAF8Ldcp0fhUbhPgF3wHhAiInzxktZ2iT+aRr6GZHXf9a
+         20Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=oNUmtpieKLTpKC9Phy1E+O2Qwr+LcgpjVlKPKz6ZsMY=;
-        b=zSr3Wk7PXtElL0ZxU1mWwygqR0ZTpXj30wGchg/0FRRn593Y/0b28lvHXj3fTatP+T
-         OYvyaQl13vaxLvzEYdyKRgt4QjZM2hO5UzCe0sQCgqcGCDMXBPNqX0YJvD9YT/VPARd6
-         1C2jeEeri+kxeWdd/5Kn2GA+GOU03vOnoGVjpphLDnEk4uAsL4aIvDaN7q8Pcv92m4OJ
-         oa+SXhx/M0uTOY/xH+Ok37IH/rC12qxn7NiI9Tm036YoEeKyEPkLIzZgiV2VWjzDJxpo
-         hIFvHQXKm6WvNWR0u+ioEkzE/c19ESPMhWnbf5bfkxZEs5diOz45zoOkEgIAjUdPSV/y
-         Lbvw==
-X-Gm-Message-State: AJIora/n8r4Y3XOGncOkHY8ux3stfbJXWrSSiF93ohQwhpOvr1kn1e4Y
-        I3vceCTr2/Jt9ZAu+akp7S8L6pA7kHxaEg==
-X-Google-Smtp-Source: AGRyM1tgce6Og74FBQ8kWDBrQFEYIJs1vYjRR78miz5377H8QoZuC/el3NaKqVJGVtRTP4sANPPWTE2wuKnhCw==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
- (user=shakeelb job=sendgmr) by 2002:a25:e74d:0:b0:66e:5c8e:609 with SMTP id
- e74-20020a25e74d000000b0066e5c8e0609mr16394088ybh.585.1657934854024; Fri, 15
- Jul 2022 18:27:34 -0700 (PDT)
-Date:   Sat, 16 Jul 2022 01:27:31 +0000
-In-Reply-To: <CALvZod5hJ8VJ4E9jhqjCKc8au8_b-h_q+g=2pbQVUSBvappE6g@mail.gmail.com>
-Message-Id: <20220716012731.2zz7hpg3qbhwgeqd@google.com>
-Mime-Version: 1.0
-References: <xm26fsjotqda.fsf@google.com> <20220629165542.da7fc8a2a5dbd53cf99572aa@linux-foundation.org>
- <CALvZod5KX7XEHR9h_jFHf5pJcYB+dODEeaLKrQLtSy9EUqgvWw@mail.gmail.com>
- <20220629192435.df27c0dbb07ef72165e1de5e@linux-foundation.org> <CALvZod5hJ8VJ4E9jhqjCKc8au8_b-h_q+g=2pbQVUSBvappE6g@mail.gmail.com>
-Subject: Re: [RESEND RFC PATCH] epoll: autoremove wakers even more aggressively
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Benjamin Segall <bsegall@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Roman Penyaev <rpenyaev@suse.de>,
-        Jason Baron <jbaron@akamai.com>,
-        Khazhismel Kumykov <khazhy@google.com>, Heiher <r@hev.cc>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=xRsMeE0Yj2Rv8TilyM94TWwDFZvW9MSpwYsml569wBo=;
+        b=oGOMEfOwyijAdSULvGbIvJCFnnVG4+wa2AEj78I4NC39kkR6yCpaGjOLuaWVCONMUe
+         TmaNCIy4yqX7xxrJRm+5KvuWd41BSV+6s+f4UMFFNl5lblbDmDgBYaeP9IhT65BlzI2c
+         S15FErdSp14huyR9G7f/QfsvnoHdjmWAXMQgsgOya8kZnPzO1isFNXbiWOjQAEjWawIX
+         aSayoSOI1Jlt/d3fnpwFmT7b5HfsNwaydTIBGBU0DaB1434cprGh+FfKFTbeTBMUmk59
+         XwPTxZhfUwAg7rAiORcqRzFm38jvxNFUTGQVaLW9BHGInJ4bCWdziRjQRnF3FdS2QCkd
+         oJRA==
+X-Gm-Message-State: AJIora8GSiUQqO0du+Ff+LMN3wcp7vjSp1NuCtpRsdUTeoQSsw+Nsrwf
+        4Mc8QBNsjJQJ8iqiFN44ZpjOQVGmKMXakD9Kr2bRAfL7m+QsOd1g
+X-Google-Smtp-Source: AGRyM1uyzY8xZd8hi49QXYmkqGz3HY+otTFkafFhRCcTWUwWBpIgPPiPwVRP9NPMvU1XxzfZxMtK7pypL8We0uy6kQM=
+X-Received: by 2002:a25:d652:0:b0:66e:c998:53ef with SMTP id
+ n79-20020a25d652000000b0066ec99853efmr17473918ybg.335.1657935014847; Fri, 15
+ Jul 2022 18:30:14 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a0d:e856:0:0:0:0:0 with HTTP; Fri, 15 Jul 2022 18:30:14
+ -0700 (PDT)
+From:   nebolise iran <neboliseiran00@gmail.com>
+Date:   Sat, 16 Jul 2022 02:30:14 +0100
+Message-ID: <CAA9js4mSCyZYQBgdvzSzKww7_HD8KAnvjEujnjUE80hpH1trvA@mail.gmail.com>
+Subject: Sir / Ma
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 07:59:05AM -0700, Shakeel Butt wrote:
-> On Wed, Jun 29, 2022 at 7:24 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Wed, 29 Jun 2022 18:12:46 -0700 Shakeel Butt <shakeelb@google.com> wrote:
-> >
-> > > On Wed, Jun 29, 2022 at 4:55 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > > >
-> > > > On Wed, 15 Jun 2022 14:24:23 -0700 Benjamin Segall <bsegall@google.com> wrote:
-> > > >
-> > > > > If a process is killed or otherwise exits while having active network
-> > > > > connections and many threads waiting on epoll_wait, the threads will all
-> > > > > be woken immediately, but not removed from ep->wq. Then when network
-> > > > > traffic scans ep->wq in wake_up, every wakeup attempt will fail, and
-> > > > > will not remove the entries from the list.
-> > > > >
-> > > > > This means that the cost of the wakeup attempt is far higher than usual,
-> > > > > does not decrease, and this also competes with the dying threads trying
-> > > > > to actually make progress and remove themselves from the wq.
-> > > > >
-> > > > > Handle this by removing visited epoll wq entries unconditionally, rather
-> > > > > than only when the wakeup succeeds - the structure of ep_poll means that
-> > > > > the only potential loss is the timed_out->eavail heuristic, which now
-> > > > > can race and result in a redundant ep_send_events attempt. (But only
-> > > > > when incoming data and a timeout actually race, not on every timeout)
-> > > > >
-> > > >
-> > > > Thanks.  I added people from 412895f03cbf96 ("epoll: atomically remove
-> > > > wait entry on wake up") to cc.  Hopefully someone there can help review
-> > > > and maybe test this.
-> > > >
-> > > >
-> > >
-> > > Thanks Andrew. Just wanted to add that we are seeing this issue in
-> > > production with real workloads and it has caused hard lockups.
-> > > Particularly network heavy workloads with a lot of threads in
-> > > epoll_wait() can easily trigger this issue if they get killed
-> > > (oom-killed in our case).
-> >
-> > Hard lockups are undesirable.  Is a cc:stable justified here?
-> 
-> Not for now as I don't know if we can blame a patch which might be the
-> source of this behavior.
+Continental Exchange Solutions Inc
+United Kingdom
+London
+Email : maliksman663@gmail.com
 
-I am able to repro the epoll hard lockup on next-20220715 with Ben's
-patch reverted. The repro is a simple TCP server and tens of clients
-communicating over loopback. Though to cause the hard lockup I have to
-create a couple thousand threads in epoll_wait() in server and also
-reduce the kernel.watchdog_thresh. With Ben's patch the repro does not
-cause the hard lockup even with kernel.watchdog.thresh=1.
+Sir / Ma
+My name is Malik Usman of Continental Exchange Solutions London U.K. I
+am an independent external auditor for IFC SERVE and the World Bank
+handling the Foreign Banks Debt Management Office for all transactions
+in the year 2013/2014 and later.
 
-Please add:
+I have in front of me an abandoned transfer file containing details to
+an escrow account setup in your name. The file shows that you have
+correctly made application to have your funds released to you. It is
+also clearly noted on the file that the beneficiary could not handle
+the financial commitment required of him. Due to this the funds were
+pegged and abandoned.As an international independent external auditor
+I think it is very absurd to abandon ones funds for this simple
+reason.
 
-Tested-by: Shakeel Butt <shakeelb@google.com>
+To tell you the truth I do not believe this to be true and my reason
+is simply because of the irregularities I noticed while compiling the
+audit report for the end of the financial year.I have perfected plans
+to have this funds transferred to you within the shortest possible
+Upon your confirmation I will give you further directives. Please
+kindly reply to maliksman663@gmail.com with your full details.
+
+
+Regards,
+Malik Usman.

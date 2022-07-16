@@ -2,117 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D053577268
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A635B577258
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbiGPXXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 19:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
+        id S233193AbiGPXXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 19:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233033AbiGPXWy (ORCPT
+        with ESMTP id S232773AbiGPXXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 19:22:54 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C35611826;
-        Sat, 16 Jul 2022 16:21:03 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o15so8688919pjh.1;
-        Sat, 16 Jul 2022 16:21:03 -0700 (PDT)
+        Sat, 16 Jul 2022 19:23:01 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1751D303
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:22:05 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id bh13so7553182pgb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:22:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6Lujf1vjjpR4foXbN5bgN3Hs30sniIkF599g7wlKOBQ=;
-        b=afJ5B8n3Efj0vZiNhW3XG5MYLzNKjqROPIDDKlOhtBJQzFemzmYA8ZxyKh/ydoPc2r
-         VD4DkeYgmLoQIn7MzMrjhU9ysrp651Xdhdgo3hr5QfhRq8nN3ZDIzgAD7sU9e+ixBCku
-         mqRNFPzOZHu/TENAPPVc3DrgFsdNxsGzxcVUXA8ZDS+IyxzJXI+AgHvY9U/8S4DhOMlI
-         wdiWnFeAKtoZkRSAZ+JdbBPTAYxnqHq9/WXs86J5/SZy9G17wXVkAOnrsP2UQCLFNGsK
-         4NAWACLUuoANVeMvWwZMn+JIDlWuxnEYyAS3JdAYKJdDXl4Gh3qG+hwG0AVvXPfdyPI0
-         7b1Q==
+        d=pernos.co; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+p7VBoIu+rN42R7PZDCKsDCbEeNsD8gVtwYGmVdHSCs=;
+        b=DDx0lJMz+s7Xrx3Hz7Kp9FaVoh5/r9+9HEegjLZoFdCvBxUVLBXWzo9A6auoiI9xWN
+         hkn/kMYh29CGW2pq+YP9NLN2PryEtEiKUylb53S3gtNu+3krS6nkqPKLJe2n01mGS0g9
+         hk7QdFwJqo7fBoKerdpVhYyWdRms+fvoZWZ1k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6Lujf1vjjpR4foXbN5bgN3Hs30sniIkF599g7wlKOBQ=;
-        b=dNMe5YHqP93kKpxPCLfAtfxW+w2RpiIMyi0jZ8986H2R0mGV9/hSyzzHq5LCLMtfnd
-         XDMSq3huuQV2Fh83dJiW3y1wc5ehVGkTbI4TXur5bhLUMF1M32Z0OQPdhZmH7cYhubkL
-         bfzFQq4O8WO9uMF3PJRcRnj0NKv+B7HE6tYZ87LChRWauMT6k5XGdJhwRObyTPlOmLxP
-         i1EZ8b1BFKL6sNvL6ZpYXoB1X95Nydn/EGgHVb7MdhEF1685Vksw6Y6y5vam3mGg7bIR
-         ZqyG5MlVRMkXjnK5O3AexpfwSuMmGQNBdGST9F4Y0Aj6YLU4ORhnB0v6ZmiNSCy7R6Ta
-         4J0A==
-X-Gm-Message-State: AJIora+hSRb7wXKskEJtNuYs2Q+uXKFNS6MNQuKIwZc+Typ8hQpA1Jst
-        h4OYGkFk3BwxmuSzdUoYayoWyBQypGE=
-X-Google-Smtp-Source: AGRyM1vOzZdM3a33bUnAbTJcBI7b9OKriE+uVyKu8lm6JhHM285LWF+zuzFdz3DxaowA2HExgRCgzA==
-X-Received: by 2002:a17:902:eb8e:b0:16c:5764:7dc0 with SMTP id q14-20020a170902eb8e00b0016c57647dc0mr21552372plg.63.1658013662622;
-        Sat, 16 Jul 2022 16:21:02 -0700 (PDT)
-Received: from ?IPV6:2600:8802:b00:4a48:22cf:30ff:fe38:5254? ([2600:8802:b00:4a48:22cf:30ff:fe38:5254])
-        by smtp.googlemail.com with ESMTPSA id j6-20020a17090a318600b001ece32cbec9sm8182604pjb.24.2022.07.16.16.21.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Jul 2022 16:21:01 -0700 (PDT)
-Message-ID: <846d3845-1536-3306-b68d-d0097a2ff8ff@gmail.com>
-Date:   Sat, 16 Jul 2022 16:21:00 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+p7VBoIu+rN42R7PZDCKsDCbEeNsD8gVtwYGmVdHSCs=;
+        b=gM5t5PIY+af0W/roWnvMab6k3EJ3Kg5p6bvyDaAGukOf3/Tajz7wHIQOXpEXTlOVo4
+         CheoccYfvvfe+D7t9hZRrFFQxj253sscjw7nIlCZJWWe5sLqxs95tSKD28WJIBGuqBjs
+         OaCeWRXdoEc3kBI7Qp5FckdR5PHPM66ZWpdnGVh/vnQvHyyiqDz4+zg/X6wdtbE+8bKn
+         NIvaR7qKCuIXTwRORHoeIqhUGRIp+OTHNRpkUHLkiMCTxNB7Oopq6glrp+ZD7w82SOcD
+         k3ZwGZJ5V0OtMclcw/GXpZqDCz46aAH9uXwtwenN1uorqZyLePxCbGi/xhCQFhTYXmZM
+         qEyg==
+X-Gm-Message-State: AJIora8VVhmCgZ8FC5sadgYjoGEQ9F0M4OpAKdm8YdbildFjRIUGtC/h
+        5idUzTBepFkSGKukHROFC4/zMtftGNkf4wGoCyyijw==
+X-Google-Smtp-Source: AGRyM1txg7DbUa6tmxdDiyGLkK0xuTspY0VqjP64dM0R2ERhrbjlV//l9WX+hm2ejdnaQfhzGRmzkrl7b1FcyCdw8ok=
+X-Received: by 2002:a62:79d7:0:b0:52a:b557:2796 with SMTP id
+ u206-20020a6279d7000000b0052ab5572796mr20898846pfc.34.1658013724699; Sat, 16
+ Jul 2022 16:22:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH] tools: Fixed MIPS builds due to struct flock
- re-definition
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, hch@lst.de,
-        Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Cc:     nathan@kernel.org, naresh.kamboju@linaro.org, heiko@sntech.de,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Guo Ren <guoren@kernel.org>
-References: <20220715185551.3951955-1-f.fainelli@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220715185551.3951955-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220421150248.667412396@infradead.org> <20220421150654.817117821@infradead.org>
+ <87czhap9dy.fsf@email.froward.int.ebiederm.org> <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org> <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+ <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org> <87r13gd4xy.fsf_-_@email.froward.int.ebiederm.org>
+ <87edyvgs2s.fsf@email.froward.int.ebiederm.org> <CABV8kRxQNPUzLaJ1tFF8H-E_iqCkz0+Ac5rPBurnmA3GcofMmQ@mail.gmail.com>
+ <875yk22j5z.fsf@email.froward.int.ebiederm.org> <87pmi4ycdu.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87pmi4ycdu.fsf@email.froward.int.ebiederm.org>
+From:   Kyle Huey <khuey@pernos.co>
+Date:   Sat, 16 Jul 2022 16:21:50 -0700
+Message-ID: <CALWUPBeS7sgu+F_49HsDkR+3r7aaC+++mOpb9bKHuytkdsVxbw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] ptrace: Stop supporting SIGKILL for PTRACE_EVENT_EXIT
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Keno Fischer <keno@juliacomputing.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mingo@kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        "Robert O'Callahan" <roc@pernos.co>,
+        Oleg Nesterov <oleg@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 15/07/2022 à 11:55, Florian Fainelli a écrit :
-> Building perf for MIPS failed after 9f79b8b72339 ("uapi: simplify
-> __ARCH_FLOCK{,64}_PAD a little") with the following error:
-> 
->    CC
-> /home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o
-> In file included from
-> ../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:77,
->                   from ../include/uapi/linux/fcntl.h:5,
->                   from trace/beauty/fcntl.c:10:
-> ../include/uapi/asm-generic/fcntl.h:188:8: error: redefinition of
-> 'struct flock'
->   struct flock {
->          ^~~~~
-> In file included from ../include/uapi/linux/fcntl.h:5,
->                   from trace/beauty/fcntl.c:10:
-> ../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:63:8:
-> note: originally defined here
->   struct flock {
->          ^~~~~
-> 
-> This is due to the local copy under
-> tools/include/uapi/asm-generic/fcntl.h including the toolchain's kernel
-> headers which already define 'struct flock' and define
-> HAVE_ARCH_STRUCT_FLOCK to future inclusions make a decision as to
-> whether re-defining 'struct flock' is appropriate or not.
-> 
-> Make sure what do not re-define 'struct flock'
-> when HAVE_ARCH_STRUCT_FLOCK is already defined.
-> 
-> Fixes: 9f79b8b72339 ("uapi: simplify __ARCH_FLOCK{,64}_PAD a little")
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
+On Sat, Jul 16, 2022 at 2:31 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>
+> "Eric W. Biederman" <ebiederm@xmission.com> writes:
+>
+> > Keno Fischer <keno@juliacomputing.com> writes:
+> >
+> >> Hi Eric,
+> >>
+> >> On Fri, Jul 8, 2022 at 6:25 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> >>> > Recently I had a conversation where it was pointed out to me that
+> >>> > SIGKILL sent to a tracee stropped in PTRACE_EVENT_EXIT is quite
+> >>> > difficult for a tracer to handle.
+> >>> >
+> >>>
+> >>> RR folks any comments?
+> >>>
+> >>> Did I properly understand what Keno Fischer was asking for when we
+> >>> talked in person?
+> >>
+> >> Yes, this is indeed what I had in mind. I have not yet had the opportunity
+> >> to try out your patch series (sorry), but from visual inspection, it does indeed
+> >> do what I wanted, which is to make sure that a tracee stays in
+> >> PTRACE_EVENT_EXIT for the tracer to inspect, even if there is another
+> >> SIGKILL incoming simultaneously (since otherwise it may be impossible
+> >> for the tracer to observe the PTRACE_EVENT_EXIT if two SIGKILLs
+> >> come in rapid succession). I will try to take this series for a proper spin
+> >> shortly.
+> >
+> > Thanks,
+> >
+> > I haven't yet figured out how to get the rr test suite to run
+> > successfully.  Something about my test machine and lack of perf counters
+> > seems to be causing problems.  So if you can perform the testing on your
+> > side that would be fantastic.
+>
+> Ok.  I finally found a machine where I can run rr and the rr test suite.
+>
+> It looks like there are a couple of the rr 5.5.0 test that fail on
+> Linus's lastest kernel simply because of changes in kernel behavior.  In
+> particular clone_cleartid_coredump, and fcntl_rw_hints.  The
+> clone_cleartid_coredump appears to fail because SIGSEGV no longer kills
+> all processes that share an mm.  Which was a deliberate change.
 
-Any chance to apply this patch prior to v5.19 being final? Thanks!
--- 
-Florian
+Yeah, we changed to handle this in
+https://github.com/rr-debugger/rr/commit/04bbacdbaba1cc496e92060014442bd1fd26b41d
+and https://github.com/rr-debugger/rr/commit/1a3b389c2956e1844c0d07bf4297398bb6c561ea.
+
+> With the lastest development version of rr, only detach_sigkill appears
+> to be failing on Linus's latest.  That failure appears to be independent
+> of the patches in question as well.  When run manually the
+> detach_sigkill test succeeds so I am not quite certain what is going on,
+> any thoughts?
+
+If it fails before your changes I wouldn't worry about it too much,
+there's been some other failures in that test lately.
+
+- Kyle
+
+> As for my patchset it looks like it does not cause any new test failures
+> for rr so I will plan on getting it into linux-next shortly.
+>
+> Eric
+>

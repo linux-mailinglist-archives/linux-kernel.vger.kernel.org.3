@@ -2,57 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F875577209
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 00:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FE057720D
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 00:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232677AbiGPWrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 18:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
+        id S232723AbiGPWr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 18:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232308AbiGPWrf (ORCPT
+        with ESMTP id S232308AbiGPWr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 18:47:35 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89FD1D32F;
-        Sat, 16 Jul 2022 15:47:34 -0700 (PDT)
+        Sat, 16 Jul 2022 18:47:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B176B1D337;
+        Sat, 16 Jul 2022 15:47:56 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.172])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9228A6601656;
-        Sat, 16 Jul 2022 23:47:33 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 785B96601656;
+        Sat, 16 Jul 2022 23:47:55 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658011653;
-        bh=7FNi7T4eB1twiUmJolfwgafVKwxysc+ocRSmHJ/8Jcg=;
+        s=mail; t=1658011675;
+        bh=2Pu3AZ1yFuNoD7g1t6OJHWoQeW3uaFFW4sDkRlgdN1c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C/A6IMmovSxQA/bN1uCnb2RdaUj6KWy6PK558zJW4LpxT7vz3+RRbFpCmk6XFRUUM
-         3Z+iT6OvwZHpq3KEYMRbMW2xTup9qJiu91J/nF5JMPe7z9RXf4N0GyMVN1YAvodmDD
-         0tK/nHwUbbtFuXVqOYb00Es3mYJIl5H/6j0TBroy7e2uLbPmfABL5YUgb/vCY0HmWw
-         ce3DLJ8pvxK169pwTmkYtfPPMO4TzeRH4NMkIDzFLiIdRB+9z0ZFQG8P0cA/kQ139+
-         k5iUjwdCRoRa2wLv16L3DirWGaRcm3TlEbhm4NhIpHAuM2Q+KSv6VAo/KTybblfSbF
-         zKF/cHR7MXQcw==
+        b=RSAcvowOMdLTmowzz9lyHwJzD7ZpqZShkOFL/gKfK0NCySX6SHoh1Tm1f9az/Mt3D
+         qlaMFzzzu0Wd9BnHQ1HywVIdofeAKtbQ9iNMpwiH7v9W/eD9mRzXWXO6UvnJKglL7K
+         +Qm8kQ2bXSmzIDkbSLPKLmgjjFLOsFcn5sAbW8ccQ+ciSkv5XrJrVWfbzfkI5sbBZy
+         Z32IznVTAKnjPYZKno4LzHeIzmnlV0YWGF7x1gDL9C0u6iWaA0xBI+1T0W0djm/6KF
+         /XgSZ4VXxKp20/gNYZhcxgecxTzu92aOoaKXlbik3FkJRubdzee4gEHuFYhLX+aeKa
+         PZulq22CmjOEQ==
 Received: by mercury (Postfix, from userid 1000)
-        id 877971060428; Sun, 17 Jul 2022 00:47:31 +0200 (CEST)
-Date:   Sun, 17 Jul 2022 00:47:31 +0200
+        id CAB971060428; Sun, 17 Jul 2022 00:47:52 +0200 (CEST)
+Date:   Sun, 17 Jul 2022 00:47:52 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: power: reset: qcom,pshold: convert to
- dtschema
-Message-ID: <20220716224731.hqfyjflj2fgavqzk@mercury.elektranox.org>
-References: <20220629123804.94906-1-krzysztof.kozlowski@linaro.org>
- <20220701173601.GA1190424-robh@kernel.org>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     myungjoo.ham@samsung.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: Fix typo in power_supply_check_supplies
+Message-ID: <20220716224752.zvee6zml42ezomjj@mercury.elektranox.org>
+References: <20220705033244.5791-1-schspa@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4excbmbreoxb3cwi"
+        protocol="application/pgp-signature"; boundary="2gzyvp2kaanvj5ev"
 Content-Disposition: inline
-In-Reply-To: <20220701173601.GA1190424-robh@kernel.org>
+In-Reply-To: <20220705033244.5791-1-schspa@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -63,52 +57,74 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---4excbmbreoxb3cwi
+--2gzyvp2kaanvj5ev
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Jul 01, 2022 at 11:36:01AM -0600, Rob Herring wrote:
-> On Wed, 29 Jun 2022 14:38:04 +0200, Krzysztof Kozlowski wrote:
-> > Convert the Qualcomm Power Supply Hold Reset bindings to DT schema.
-> >=20
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> >  .../bindings/power/reset/msm-poweroff.txt     | 17 ---------
-> >  .../bindings/power/reset/qcom,pshold.yaml     | 35 +++++++++++++++++++
-> >  2 files changed, 35 insertions(+), 17 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/power/reset/msm-p=
-oweroff.txt
-> >  create mode 100644 Documentation/devicetree/bindings/power/reset/qcom,=
-pshold.yaml
-> >=20
+On Tue, Jul 05, 2022 at 11:32:44AM +0800, Schspa Shi wrote:
+> It seems to be a typo, there is no actual BUG, but it's better to
+> fix it to avoid any possible BUG after we change the type of
+> supplied_from.
 >=20
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
+> ---
 
 Thanks, queued.
 
 -- Sebastian
 
---4excbmbreoxb3cwi
+>  drivers/power/supply/power_supply_core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
+ply/power_supply_core.c
+> index fad5890c899e..02228d68c599 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -263,13 +263,13 @@ static int power_supply_check_supplies(struct power=
+_supply *psy)
+>  		return 0;
+> =20
+>  	/* All supplies found, allocate char ** array for filling */
+> -	psy->supplied_from =3D devm_kzalloc(&psy->dev, sizeof(psy->supplied_fro=
+m),
+> +	psy->supplied_from =3D devm_kzalloc(&psy->dev, sizeof(*psy->supplied_fr=
+om),
+>  					  GFP_KERNEL);
+>  	if (!psy->supplied_from)
+>  		return -ENOMEM;
+> =20
+>  	*psy->supplied_from =3D devm_kcalloc(&psy->dev,
+> -					   cnt - 1, sizeof(char *),
+> +					   cnt - 1, sizeof(**psy->supplied_from),
+>  					   GFP_KERNEL);
+>  	if (!*psy->supplied_from)
+>  		return -ENOMEM;
+> --=20
+> 2.29.0
+>=20
+
+--2gzyvp2kaanvj5ev
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmLTQAMACgkQ2O7X88g7
-+po3tQ/8Da5CXpld4aDEDNmR+nv3ukpVThQAEtmxKTu7nRJ3Qps4/cL0xR23QKAp
-sdSzJ/cYDkqAYA5tzDMyX1B1GfrJtcT3cQwcX7OIZQflm6LusBUakO1DNr0lro0x
-aBkT4HFSAZHHX7eBtPmlWgPoje06Tkxrx6m2iXsZnbbHGNtDGK5ZhC9c0Eae4Pty
-2DtdRhcfF5A9XI7zVL/YYUqhAPRY+oN4iOzFaNcKxD7EHs7bTpUOlZg5uUDa+a+a
-3z1y9HY8qPYuGTz2FYhwtFRoTJ+5OXIXxxe2rcnnAhJAXa+bqjctSXxstU7SuvNk
-SXpu6lWoKHkkDhH08MFCPuyZNvE6Bh2txeQoXFWDJsy4WJ42Kx0getxc2XBANVKG
-KxbUE7OmfAlDMAcHZySfBhlDDy6XWzur05QW8NTAKrSMk3rETGb0ct434/fBMTrQ
-n6gvpcIGj+zQM0Sf3G0PBb4pwGhdOBDA7y9ujOHd7uvljx2wHwj6x0DNz9kGFKrV
-c5bljIiMg2RtrrhvYmI1uIz1YgkFrczXfinwUPSQVC/iSLlKJ5UZJQxOB2/Eeacg
-rqeRfkMzeMC/OB8kHOGp0l22AjISeO7G+lqeh6FcKQGp3HAan8vbkvAajs8kdN44
-5ZHvFDCyr1d8A0BedTZE46MYcnVV318a7ejYB9SrJyLN0SgF2OM=
-=WQkT
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmLTQBgACgkQ2O7X88g7
++pqkOhAAk8PjxHluM5z8cE5okLdna7x94NWtXT7DVCe0ryxWOSKQv9+1XFa4Motx
+Mjdtb6z0OCXV2FgC1Ryyi0SvldhU/ywI+p5DkrMGubbFTQ7Q39s6/itFSNULOR9o
+0WC6BIsbIexF3OnruM+EzGhNw6XOAE76rebJvd0C/LASB+G8QpsOiKcnFlemwjVk
+WOoYT87wg5cItJsaJW0ORFKloL4O8kv3MNPJGi0poXB7pVpkGCPPUfWzGfcmRO+u
+oGCDr6If/9Eg2PlfJMAdB5VJ1GO35xClHbt3OujQ8XRYyke48etTZAhX/ay6bi2f
+nHc/jJsiCh2xa1v20ul3Ew5JsGL30N5zYXHrzIG+HkMTZDo9GMdIqPang4bThoS4
+3hOPuUO6QzH5lD1NMPVR7FQXYv2WfLejKS/2zwn6tePR+xDDe6UmItZFAF4cJwGa
+VWtwlYC9LTjajTTPReavCwHNDtzY9oUwvwMJzxuPTFkMtmSBAyuTi/Q24X5Ry2YO
+o5v5M5xNo+ZWtL+1qQJ6oe/QqGcjpC6+Ixq+rh2yQLPPBooVgxV59eOPey/J/5B1
+3tOTIpdifeVSSc6WNwn9xSqdSY3oTlcL0qiJnyRiKFKR8KEzZWL7f35G5vZtb89o
+vYgRZWIsrh66XKjMKTLQIBLgojDKhb3bsXnINfwbex4i/H6wXA8=
+=c38s
 -----END PGP SIGNATURE-----
 
---4excbmbreoxb3cwi--
+--2gzyvp2kaanvj5ev--

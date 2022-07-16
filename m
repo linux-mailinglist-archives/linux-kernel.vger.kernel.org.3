@@ -2,90 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215EA576D89
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 13:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33B0576D95
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 13:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiGPLfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 07:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
+        id S230472AbiGPLmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 07:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiGPLfM (ORCPT
+        with ESMTP id S229745AbiGPLmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 07:35:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC4C20F41;
-        Sat, 16 Jul 2022 04:35:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sat, 16 Jul 2022 07:42:19 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C257C13D63;
+        Sat, 16 Jul 2022 04:42:18 -0700 (PDT)
+Received: from zn.tnic (p200300ea9729766f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:766f:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A03660C73;
-        Sat, 16 Jul 2022 11:35:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BC54C34115;
-        Sat, 16 Jul 2022 11:35:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657971310;
-        bh=1Nv+mrJbMC45A/7YReRl2eFPsTnci26We2C7a/b5Mzc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RJe1fSMV5+cEBdR7OMYrY9fZdu/PpceJZ5o5CTouutuwbhIwfjx/GsNWZV9Q/F823
-         jXarhqth2tqCOg1ix2FLIYe8Xa4QtKzP3nsiFUHot2EgtLts/UpJ+KxGSy+GK1nbMh
-         tDMGNI/9q9c7wsR8kw97fKwDrYVc9+I4ljxXII15hZAm05ARyR1szRaPKiMee+19hy
-         GNbt8w79Oj3n6XiuW4Z/RUg5UI3JWCKINCdPAvzGjGPLF/yzQXk2jf1efl3jBGCCSD
-         sc50r8NcGNPjzFF760LL0fG+C6/lGvXTiUpjM9GYFwKw0UsfTUC9jaPA0qz30TFiTy
-         frli5dg1lr9lA==
-Received: by pali.im (Postfix)
-        id 4079EA52; Sat, 16 Jul 2022 13:35:07 +0200 (CEST)
-Date:   Sat, 16 Jul 2022 13:35:07 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Guowen Shan <gshan@redhat.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] powerpc/pci: Add config option for using OF 'reg'
- for PCI domain
-Message-ID: <20220716113507.c6loaltpuaj4hrs5@pali>
-References: <20220706102148.5060-1-pali@kernel.org>
- <17fb8d12-60f9-09d5-91fa-09d5a5a9a4fd@igalia.com>
- <20220715171132.ujaexzm4ipad7o4f@pali>
- <15432ee0-3a33-0b53-b39b-f8b53a7e4345@igalia.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B7A2F1EC02AD;
+        Sat, 16 Jul 2022 13:42:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1657971732;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=TrWzbl6mvGD+VhoF3wfcgTYjQ8begmaufTzu3BvWSfI=;
+        b=C1ExD3plau1kTCEQtER4H4Afs2+xeOeYPdQkVI3hVtoyEHvXXh4x8ST6pfJ8nCPkw5vdB6
+        V/2P5mRnswj3HgN4AytzdE54tUOQgR8o4d6HIrp5I000qDMrxEZopxWIJ4elhwERZ9O4iV
+        6zUwd1IRMq3uG3UdGZ568ut+/m+6Clo=
+Date:   Sat, 16 Jul 2022 13:42:08 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Chuck Zmudzinski <brchuckz@netscape.net>
+Cc:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "# 5 . 17" <stable@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+Message-ID: <YtKkECIpM5q+TCT9@zn.tnic>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <7bf307c7-0b05-781b-a2a3-19b47589eb8a@netscape.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <15432ee0-3a33-0b53-b39b-f8b53a7e4345@igalia.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7bf307c7-0b05-781b-a2a3-19b47589eb8a@netscape.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 15 July 2022 15:32:56 Guilherme G. Piccoli wrote:
-> On 15/07/2022 14:11, Pali Rohár wrote:
-> > [...]
-> >>
-> >> I found this sentence a bit weird, "in the similar way like it is doing
-> >> kernel for other architectures", but other than that:
-> > 
-> > If you have some idea how to improve commit description, let me know and
-> > I can change it.
-> > 
-> 
-> Oh, for example: "in similar way the kernel is doing for other
-> architectures". The sentence idea is perfectly fine, it's just that it's
-> a bit oddly constructed IMHO heh
-> 
-> Cheers!
+On Sat, Jul 16, 2022 at 07:32:46AM -0400, Chuck Zmudzinski wrote:
+> Can you confirm that with this patch series you are trying
+> to fix that regression?
 
-Ou, sorry. English is not my first nor second language.
+Yes, this patchset is aimed to fix the whole situation but please don't
+do anything yet - I need to find time and look at the whole approach
+before you can test it. Just be patient and we'll ping you when the time
+comes.
 
-Michael, should I resend this patch series with Guilherme's suggestion
-for changing working in commit description? Or will you adjust it
-manually?
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

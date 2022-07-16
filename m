@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605A5577161
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 22:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF30577162
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 22:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbiGPURs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 16:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
+        id S229828AbiGPU0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 16:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiGPURq (ORCPT
+        with ESMTP id S229501AbiGPU0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 16:17:46 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF161D33D;
-        Sat, 16 Jul 2022 13:17:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=6/LpxNTgfIFVpFyT+1SyAzsuJadiHFoxBMUFer3AfIY=; b=J7bVVD7ZP6L2tVzSkC88sqaGAO
-        JZuVTg10klYERKYYqGzwcDMLxwF4SvR/AtT9uUtd54UBe4teBnYGgvBhxxtWEmT0Lp0Uu4FgEBvzu
-        oVltpqfw38PYtPm6z3iR+8BVQJPHGQ5phg1voIt0URz+E2Akn+6vR1de7MshiZTXkbgA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oCoEE-00AZYJ-P2; Sat, 16 Jul 2022 22:17:30 +0200
-Date:   Sat, 16 Jul 2022 22:17:30 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: Re: [PATCH net-next v3 10/47] net: phylink: Adjust link settings
- based on rate adaptation
-Message-ID: <YtMc2qYWKRn2PxRY@lunn.ch>
-References: <20220715215954.1449214-1-sean.anderson@seco.com>
- <20220715215954.1449214-11-sean.anderson@seco.com>
+        Sat, 16 Jul 2022 16:26:38 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F55C19007
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 13:26:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658003197; x=1689539197;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6vyY9P5WvxJeEuK66JMqgx1au9mRSozwt7+9rrERgF4=;
+  b=dQV1cC4smPhnfr4bM9E60UTm8cDLyxVqHNXoUY/+tTGZfQQKvD8Lb9sd
+   bX237qwdEhby3khsLGUHq6PMom3flcKzk5i38GMCWmagCiPMH5gFHs24T
+   u+/p0uc4w+mtfcL1D4dffDzjRoIDzQzh2kb322QClBS3rK/blxVz4o1pk
+   DhdHiXKGESxeMpqIQCnXtyuQB+84GMNDLU/yj4w/gIr6L+/lTRG4e7Wvu
+   sysJxSDi30c7k5YsmRtCsaOsxRzGy2NnYq8vT016fyuiMAkR1E2TFh94p
+   32QK2elhQ/8yX7dadmx08MZRJltWzfSI4hnX66880Hnakf54QXD7J4LKK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="286740374"
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="286740374"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 13:26:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="547037799"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 16 Jul 2022 13:26:35 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCoN1-00026K-8V;
+        Sat, 16 Jul 2022 20:26:35 +0000
+Date:   Sun, 17 Jul 2022 04:25:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Julien Massot <julien.massot@iot.bzh>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: drivers/remoteproc/rcar_rproc.c:45:20: sparse: sparse: incorrect
+ type in argument 1 (different address spaces)
+Message-ID: <202207170418.y871sITG-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220715215954.1449214-11-sean.anderson@seco.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,41 +62,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 05:59:17PM -0400, Sean Anderson wrote:
-> If the phy is configured to use pause-based rate adaptation, ensure that
-> the link is full duplex with pause frame reception enabled. Note that these
-> settings may be overridden by ethtool.
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> ---
-> 
-> Changes in v3:
-> - New
-> 
->  drivers/net/phy/phylink.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-> index 7fa21941878e..7f65413aa778 100644
-> --- a/drivers/net/phy/phylink.c
-> +++ b/drivers/net/phy/phylink.c
-> @@ -1445,6 +1445,10 @@ static void phylink_phy_change(struct phy_device *phydev, bool up)
->  	pl->phy_state.speed = phy_interface_speed(phydev->interface,
->  						  phydev->speed);
->  	pl->phy_state.duplex = phydev->duplex;
-> +	if (phydev->rate_adaptation == RATE_ADAPT_PAUSE) {
-> +		pl->phy_state.duplex = DUPLEX_FULL;
-> +		rx_pause = true;
-> +	}
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c5fe7a97f20c7f3070ac870144515c0fabc6b999
+commit: 285892a74f1370a12249f765c6a4e3b16194852e remoteproc: Add Renesas rcar driver
+date:   7 months ago
+config: arc-randconfig-s043-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170418.y871sITG-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=285892a74f1370a12249f765c6a4e3b16194852e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 285892a74f1370a12249f765c6a4e3b16194852e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash drivers/remoteproc/
 
-I would not do this. If the requirements for rate adaptation are not
-fulfilled, you should turn off rate adaptation.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-A MAC which knows rate adaptation is going on can help out, by not
-advertising 10Half, 100Half etc. Autoneg will then fail for modes
-where rate adaptation does not work.
 
-The MAC should also be declaring what sort of pause it supports, so
-disable rate adaptation if it does not have async pause.
+sparse warnings: (new ones prefixed by >>)
+   drivers/remoteproc/rcar_rproc.c:28:12: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *va @@     got void [noderef] __iomem * @@
+   drivers/remoteproc/rcar_rproc.c:28:12: sparse:     expected void *va
+   drivers/remoteproc/rcar_rproc.c:28:12: sparse:     got void [noderef] __iomem *
+>> drivers/remoteproc/rcar_rproc.c:45:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got void *va @@
+   drivers/remoteproc/rcar_rproc.c:45:20: sparse:     expected void const [noderef] __iomem *addr
+   drivers/remoteproc/rcar_rproc.c:45:20: sparse:     got void *va
 
-      Andrew
+vim +45 drivers/remoteproc/rcar_rproc.c
+
+    40	
+    41	static int rcar_rproc_mem_release(struct rproc *rproc,
+    42					   struct rproc_mem_entry *mem)
+    43	{
+    44		dev_dbg(&rproc->dev, "unmap memory: %pa\n", &mem->dma);
+  > 45		iounmap(mem->va);
+    46	
+    47		return 0;
+    48	}
+    49	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,46 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21ACC576E63
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 15:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA28576E07
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 14:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiGPN5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 09:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
+        id S232075AbiGPMqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 08:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiGPN5h (ORCPT
+        with ESMTP id S232016AbiGPMqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 09:57:37 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268651F2E8;
-        Sat, 16 Jul 2022 06:57:32 -0700 (PDT)
-X-QQ-mid: bizesmtp88t1657979811tq99e2f2
-Received: from localhost.localdomain ( [182.148.15.157])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 16 Jul 2022 21:56:48 +0800 (CST)
-X-QQ-SSF: 01000000002000B0D000B00A0000000
-X-QQ-FEAT: IB0NYmI01jL2njAYgN1Dw1LFRKlaFuVqGCKx3LicXb0VSJF5LIg+5fCodeJxO
-        AY43AMgPCRju6xF/y0XkZCB60DqsCRdkeKB34qrSRV4C8SaJQ0//ry+jQvlfFsXNJcL+ReP
-        QaisOetH8okZreLlwqIqejTR0lL3aSCnG8PM3SKa8sluLT03urItdZ0Do6AwsglkCD3wpwe
-        8Nymk2iyhi1s3+x98993aRMFrCQN1PY8uaCmQtYwWLZhwJsD2hLjPdFCNi44TX190WGKB4G
-        rbYgFoBKbbj5q5ttLh2XyCaxB87vsjNhnWs57S79M9JJkesWrc1apW2GI+iiP/2hC2cQs1d
-        nMBjwgwB4WdkCHgq8Jmz4sLGeHOSuF2YnQNz2dxMB7/1iIplIPM9aAUwqEAdHW99GAMe+SO
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] usb/typec/tcpm: fix repeated words in comments
-Date:   Sat, 16 Jul 2022 21:56:42 +0800
-Message-Id: <20220716135642.52460-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Sat, 16 Jul 2022 08:46:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FE3B1FCD0
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 05:46:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657975578;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6jdgBr8qPyYQ7wIItqpQ8nbtb9ewBI0uvepqAzRBm0w=;
+        b=RPyy9rqh2TBJrRkEyXATULKq6W5rfv7Vg8lSdk+zsTeSEcwgcpv5kXgQCcEmofadbsivzf
+        LMbWFKLmf2i5CCIwPA+RMJHMkywyg0EDI7IaL8wrMTllIt4yZjUJnQ3Yv7Okj4fjqzwIaz
+        SqfVmfvbz1YcU3Tt27sct5jpXhtgROk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-jVl0NklINweQDDm3TzrjdQ-1; Sat, 16 Jul 2022 08:46:15 -0400
+X-MC-Unique: jVl0NklINweQDDm3TzrjdQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4A358037B7;
+        Sat, 16 Jul 2022 12:46:14 +0000 (UTC)
+Received: from gshan.redhat.com (vpn2-54-37.bne.redhat.com [10.64.54.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id ED01E492C3B;
+        Sat, 16 Jul 2022 12:46:10 +0000 (UTC)
+From:   Gavin Shan <gshan@redhat.com>
+To:     kvmarm@lists.cs.columbia.edu
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, seanjc@google.com,
+        pbonzini@redhat.com, maz@kernel.org, shuah@kernel.org,
+        oliver.upton@linux.dev, shan.gavin@gmail.com
+Subject: [PATCH v2] KVM: selftests: Fix target thread to be migrated in rseq_test
+Date:   Sat, 16 Jul 2022 22:45:37 +0800
+Message-Id: <20220716144537.3436743-1-gshan@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,26 +60,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'to'.
+In rseq_test, there are two threads, which are thread group leader
+and migration worker. The migration worker relies on sched_setaffinity()
+to force migration on the thread group leader. Unfortunately, we
+have wrong parameter (0) passed to sched_getaffinity(). It's actually
+forcing migration on the migration worker instead of the thread group
+leader. It also means migration can happen on the thread group leader
+at any time, which eventually leads to failure as the following logs
+show.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+  host# uname -r
+  5.19.0-rc6-gavin+
+  host# # cat /proc/cpuinfo | grep processor | tail -n 1
+  processor    : 223
+  host# pwd
+  /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
+  host# for i in `seq 1 100`;                \
+        do echo "--------> $i"; ./rseq_test; done
+  --------> 1
+  --------> 2
+  --------> 3
+  --------> 4
+  --------> 5
+  --------> 6
+  ==== Test Assertion Failure ====
+    rseq_test.c:265: rseq_cpu == cpu
+    pid=3925 tid=3925 errno=4 - Interrupted system call
+       1  0x0000000000401963: main at rseq_test.c:265 (discriminator 2)
+       2  0x0000ffffb044affb: ?? ??:0
+       3  0x0000ffffb044b0c7: ?? ??:0
+       4  0x0000000000401a6f: _start at ??:?
+    rseq CPU = 4, sched CPU = 27
+
+This fixes the issue by passing correct parameter, tid of the group
+thread leader, to sched_setaffinity().
+
+Fixes: 61e52f1630f5 ("KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs")
+Signed-off-by: Gavin Shan <gshan@redhat.com>
 ---
- drivers/usb/typec/tcpm/tcpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/rseq_test.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 3bc2f4ebd1fe..2d80b5b17ea4 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -4453,7 +4453,7 @@ static void run_state_machine(struct tcpm_port *port)
- 		 * The specification suggests that dual mode ports in sink
- 		 * mode should transition to state PE_SRC_Transition_to_default.
- 		 * See USB power delivery specification chapter 8.3.3.6.1.3.
--		 * This would mean to to
-+		 * This would mean to
- 		 * - turn off VCONN, reset power supply
- 		 * - request hardware reset
- 		 * - turn on VCONN
+diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+index 4158da0da2bb..c83ac7b467f8 100644
+--- a/tools/testing/selftests/kvm/rseq_test.c
++++ b/tools/testing/selftests/kvm/rseq_test.c
+@@ -38,6 +38,7 @@ static __thread volatile struct rseq __rseq = {
+  */
+ #define NR_TASK_MIGRATIONS 100000
+ 
++static pid_t rseq_tid;
+ static pthread_t migration_thread;
+ static cpu_set_t possible_mask;
+ static int min_cpu, max_cpu;
+@@ -106,7 +107,8 @@ static void *migration_worker(void *ign)
+ 		 * stable, i.e. while changing affinity is in-progress.
+ 		 */
+ 		smp_wmb();
+-		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
++		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask),
++				      &allowed_mask);
+ 		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
+ 			    errno, strerror(errno));
+ 		smp_wmb();
+@@ -231,6 +233,7 @@ int main(int argc, char *argv[])
+ 	vm = vm_create_default(VCPU_ID, 0, guest_code);
+ 	ucall_init(vm, NULL);
+ 
++	rseq_tid = gettid();
+ 	pthread_create(&migration_thread, NULL, migration_worker, 0);
+ 
+ 	for (i = 0; !done; i++) {
 -- 
-2.36.1
+2.23.0
 

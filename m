@@ -2,143 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A968F5770CA
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 20:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB66C5770D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 20:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbiGPSnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 14:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
+        id S229589AbiGPSr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 14:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiGPSnW (ORCPT
+        with ESMTP id S229544AbiGPSr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 14:43:22 -0400
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547A313EB2
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 11:43:20 -0700 (PDT)
-Received: by mail-qk1-f180.google.com with SMTP id n2so4559882qkk.8
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 11:43:20 -0700 (PDT)
+        Sat, 16 Jul 2022 14:47:57 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CCC15727;
+        Sat, 16 Jul 2022 11:47:56 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id a5so11113129wrx.12;
+        Sat, 16 Jul 2022 11:47:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c0H4SZGJGUqTZkEbdcEov2Q3qqoTqkSn+ntdBtnS/KM=;
+        b=WTP+PwRdz3/NeNA3azbbdQYgZuEHW+wCcX2zlJdgKdgCavP8KQVX7cgpbz8xbvg9dT
+         CVCAjaCCKXsI51eH04MoxFh9pYCNiprUc+6DB/upF+ts+HmJYWsJ8/n4jL6prVfsPgwC
+         UJkJQY9TJWWP+85XiJJIV6loYx1w9jSI/8wYw1KIUuZKQMNTMyJO9lVC4e2fA/tMW/Dk
+         z6K7wkAKoSw9NJuSGNCJUZdiuzNcYV4WCuuXaJCnotrTC1qX4PsXAtefwndQM9RQNutl
+         2iZwuMppDNyTDakxaANhHlHz/33xeYlZtmWYmHPA7uIBBL4cHP1XBjMATBLmrFNX3x19
+         4fEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WsEhwdLdNfwHR9LCxaWkzLk9jCaKVkk47P3wBYbLRH0=;
-        b=k/Eyk5Aqnev5dHm/HZO7ZktvGtHfaXF9BbhwZH9QJyH9fLF9C7wROz9o1aWxQvKYeW
-         +Jl0JfZ+Bl/NDYLsuwB57QsSJTK2nNTovwhIm3tvHkHQXOpgZX5EYrrVe8FUzPj336YB
-         0qTIqD4ChuuK4nNC7Yld5JxjrX01gPFkxFwoc+cL1OaGJ1C1/ZckCwTVoDPUPwqmNc+U
-         lvk0wsk681s0iJR74Z/baidJuipv+l4KIRzaflh4GaQGIgsqKlYM//mjZXMDfnypl86J
-         kn9Z14MISvP7s6oMnaRq+DUZUNIgUPhXougJEhpoH3o3k6gPV+oBNtLSAqulMEqeC3qh
-         AE4Q==
-X-Gm-Message-State: AJIora9EdPaaEuNMlY9fsU1SqRCMwte2yS2B1m4ANBvQAWzX/w93BmbL
-        k47pnQSv1V80pcLq3FDLtVwuLd/9NgVk6A==
-X-Google-Smtp-Source: AGRyM1sUsnEM4/8trGrVVSVAV4792uw4N46VY+iNOs2YqaO2vpQIyO1N5A0LsJi5nwGQ6BO1Ra7qIA==
-X-Received: by 2002:a37:6544:0:b0:6b5:bc75:1058 with SMTP id z65-20020a376544000000b006b5bc751058mr11711153qkb.248.1657996998976;
-        Sat, 16 Jul 2022 11:43:18 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id h7-20020a05620a284700b0069fe1dfbeffsm7192630qkp.92.2022.07.16.11.43.18
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Jul 2022 11:43:18 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 6so13885827ybc.8
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 11:43:18 -0700 (PDT)
-X-Received: by 2002:a05:6902:1246:b0:66e:ea31:8d05 with SMTP id
- t6-20020a056902124600b0066eea318d05mr20988380ybu.89.1657996997798; Sat, 16
- Jul 2022 11:43:17 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c0H4SZGJGUqTZkEbdcEov2Q3qqoTqkSn+ntdBtnS/KM=;
+        b=3cTSjN56d8OiOcmhNEzekkUv+ExWwAoaSC2tR9SSjzHIOYe1IJmHpyv5UByrq1LoZY
+         KrelYaw1mi6K6wlsyD3ITLMLLoXYTkx0HC9///vu9u3G62wBCI/oh5wU2zXq1FGAgLgy
+         R9JZu3bCOBtItirBsu2QTjazzBcbDLx2+QJT5PMfmm7Ra7R9HuU0q6pn1euWPWBTGV7J
+         tvfL6AZDVXW48FCRoVOEyO6qjoigmNrZtTtK5Y5XP6qJ5OP7MbBimE9Eq5rx5mDZrcMG
+         W9sICp04Kk3K4qGuBlJujd8Kb9LqoBskckszSRyuQwEw5uP7Pq4/4qtAXJlEoW4zn8VJ
+         +q+A==
+X-Gm-Message-State: AJIora+DO5QBt1oFRvrXTedgDW0iDEGr5dAUMNFGk4Lgk7aNF9rtrNxP
+        NhYDWj6D764tzckGlDkNeprkUVO3yhg=
+X-Google-Smtp-Source: AGRyM1vxWmXVZdIyvKjsfCiLfQST70cTYy6Zs18aWyI1GzP13g44mwZBjouRPWLAxAgn0Di1wM0E3g==
+X-Received: by 2002:adf:e604:0:b0:21d:6ddb:d0ec with SMTP id p4-20020adfe604000000b0021d6ddbd0ecmr17520358wrm.177.1657997274381;
+        Sat, 16 Jul 2022 11:47:54 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id u18-20020a05600c19d200b003973c54bd69sm13649961wmq.1.2022.07.16.11.47.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Jul 2022 11:47:54 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [net-next PATCH v2 0/5] Add MTU change with stmmac interface running
+Date:   Sat, 16 Jul 2022 20:45:28 +0200
+Message-Id: <20220716184533.2962-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220628113714.7792-1-yee.lee@mediatek.com> <20220628113714.7792-2-yee.lee@mediatek.com>
- <CAMuHMdX=MTsmo5ZVa8ya3xmr4Mx7f0PB3gvFF42pdaTYB6-u5A@mail.gmail.com> <20220715163305.e70c8542d5e7d96c5fd87185@linux-foundation.org>
-In-Reply-To: <20220715163305.e70c8542d5e7d96c5fd87185@linux-foundation.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sat, 16 Jul 2022 20:43:06 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWSsibmL=LauLm+OTn0SByLA4tGsbhbMsnvSRdb381RTQ@mail.gmail.com>
-Message-ID: <CAMuHMdWSsibmL=LauLm+OTn0SByLA4tGsbhbMsnvSRdb381RTQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] mm: kfence: apply kmemleak_ignore_phys on early
- allocated pool
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     yee.lee@mediatek.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:KFENCE" <kasan-dev@googlegroups.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+This series is to permit MTU change while the interface is running.
+Major rework are needed to permit to allocate a new dma conf based on
+the new MTU before applying it. This is to make sure there is enough
+space to allocate all the DMA queue before releasing the stmmac driver.
 
-On Sat, Jul 16, 2022 at 1:33 AM Andrew Morton <akpm@linux-foundation.org> wrote:
-> On Fri, 15 Jul 2022 10:17:43 +0200 Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Tue, Jun 28, 2022 at 1:42 PM <yee.lee@mediatek.com> wrote:
-> > > From: Yee Lee <yee.lee@mediatek.com>
-> > >
-> > > This patch solves two issues.
-> > >
-> > > (1) The pool allocated by memblock needs to unregister from
-> > > kmemleak scanning. Apply kmemleak_ignore_phys to replace the
-> > > original kmemleak_free as its address now is stored in the phys tree.
-> > >
-> > > (2) The pool late allocated by page-alloc doesn't need to unregister.
-> > > Move out the freeing operation from its call path.
-> > >
-> > > Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
-> > > Suggested-by: Marco Elver <elver@google.com>
-> > > Signed-off-by: Yee Lee <yee.lee@mediatek.com>
-> >
-> > Thank you, this fixes the storm of
-> >
-> >     BUG: KFENCE: invalid read in scan_block+0x78/0x130
-> >     BUG: KFENCE: use-after-free read in scan_block+0x78/0x130
-> >     BUG: KFENCE: out-of-bounds read in scan_block+0x78/0x130
-> >
-> > messages I was seeing on arm64.
->
-> Thanks, but...
->
-> - It would be great if we could identify a Fixes: for this.
+This was tested with a simple way to stress the network while the
+interface is running.
 
-IIRC, I started seeing the issue with "[PATCH v4 3/4] mm:
-kmemleak: add rbtree and store physical address for objects
-allocated with PA" (i.e. commit 0c24e061196c21d5 ("mm: kmemleak:
-add rbtree and store physical address for objects allocated
-with PA")) of series "[PATCH v4 0/4] mm: kmemleak: store objects
-allocated with physical address separately and check when scan"
-(https://lore.kernel.org/all/20220611035551.1823303-1-patrick.wang.shcn@gmail.com),
-in an arm64 config that had enabled kfence.
-So I think this patch is sort of a dependency for that series.
+2 ssh connection to the device:
+- One generating simple traffic with while true; do free; done
+- The other making the mtu change with a delay of 1 second
 
-I had cherry-picked that series after bisecting a regression to
-commit 23c2d497de21f258 ("mm: kmemleak: take a full lowmem check in
-kmemleak_*_phys()") in v5.18-rc3, and having a look around.
+The connection is correctly stopped and recovered after the MTU is changed.
 
-> - This patch has been accused of crashing the kernel:
->
->         https://lkml.kernel.org/r/YsFeUHkrFTQ7T51Q@xsang-OptiPlex-9020
->
->   Do we think that report is bogus?
+The first 2 patch of this series are minor fixup that fix problems presented
+while testing this. One fix a problem when we renable a queue while we are
+generating a new dma conf. The other is a corner case that was notice while
+stressing the driver and turning down the interface while there was some
+traffic.
 
-I think all of this is highly architecture-specific...
+(this is a follow-up of a simpler patch that wanted to add the same feature.
+It was suggested to first try to check if it was possible to apply the new
+configuration. Posting as RFC as it does major rework for the new concept of
+DMA conf)
 
-Gr{oetje,eeting}s,
+v2:
+- Put it out of RFC
 
-                        Geert
+Christian Marangi (5):
+  net: ethernet: stmicro: stmmac: move queue reset to dedicated
+    functions
+  net: ethernet: stmicro: stmmac: first disable all queues in release
+  net: ethernet: stmicro: stmmac: move dma conf to dedicated struct
+  net: ethernet: stmicro: stmmac: generate stmmac dma conf before open
+  net: ethernet: stmicro: stmmac: permit MTU change with interface up
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+ .../net/ethernet/stmicro/stmmac/chain_mode.c  |   6 +-
+ .../net/ethernet/stmicro/stmmac/ring_mode.c   |   4 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  21 +-
+ .../ethernet/stmicro/stmmac/stmmac_ethtool.c  |   4 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 722 +++++++++++-------
+ 5 files changed, 450 insertions(+), 307 deletions(-)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+2.36.1
+

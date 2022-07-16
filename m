@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1458576CDC
+	by mail.lfdr.de (Postfix) with ESMTP id 083D4576CDA
 	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232213AbiGPJdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 05:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
+        id S232140AbiGPJdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 05:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbiGPJdo (ORCPT
+        with ESMTP id S229540AbiGPJdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 05:33:44 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AF4182;
-        Sat, 16 Jul 2022 02:33:40 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so13722442pjn.0;
-        Sat, 16 Jul 2022 02:33:40 -0700 (PDT)
+        Sat, 16 Jul 2022 05:33:39 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C91E2655C;
+        Sat, 16 Jul 2022 02:33:39 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so13619775pjr.4;
+        Sat, 16 Jul 2022 02:33:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xhq++96SwqP8iCLJj1mxjf4nsafc6aa4I9geuOUsTYc=;
-        b=arQXmVNjfmYBDpNRP5PRNWJoI8kfTbc5ypG0ZQEZDHfwB8FX3FTfhpHVNwRCERCZdR
-         kK7A7fU20oJR6WneJQb8VqwOa5cffhmvzxj+qfyb0+JLNVGJRZ0XsZmX1SKtv7L7V+n2
-         vtdgpsw3g/PFkNb7W0d406eVRYjY2ouuxnzMsy6pI8+7vEU+56+jTMxoNr1FeNQqfpWP
-         fKfyr35Oe78cXWxxXxXngBPY6eRotbwcLmElAhiA3mxvVgYX2d4bbPJw2JbYsUyQEYvJ
-         s/iRQ7ilUZk1qwHgfsGrRrkcknx/yJrF7PLiiKA/57v1TeNeUOoM+bIrj2a8yJ/DovOW
-         Sayg==
+        bh=NaserlcC6hSl3SwHUAah5zXW3IuFUW5WcFOL2/suCG8=;
+        b=ByuL8OG9nl+Vf3yYQ4gi7DetKcxMxUMuJrV9E2E9JpIX5/jB8cp9mk57+YYI0NNSmV
+         yaKq8Rr2yWGGDal8VYKW8NGP1kN+M7+xu/3q+KPIiBZUc1I8BMA2YvE8B/GELvSEEKOX
+         i3yTCqFrmSekzm4KVTcvE/sEyqdgZ7EE8fwGsOcMN6f8ZAcSCovWerdNjxIg1FvYOfip
+         bSg+hk+OGzkm9ctvm/h892XJ/5fusGSquZnpBwsDEBFfpoxqxm1AvbFWqD5c+bji4Bhg
+         fPDoY9gDMs/bwV+eEITI+/xe50gVPOvkPEs9Pd9KJTTwzsD3S/+O7NfBbibePgTjZtC5
+         cgSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xhq++96SwqP8iCLJj1mxjf4nsafc6aa4I9geuOUsTYc=;
-        b=V36ucEBkKQcSuMJGAh+/OnnOBEEHjA5NSOVbxaoV5sWbMO8m+MWg4sxQZQraw5p6j/
-         NwHjEsRRxrfw5Dcmt5tm81r2XHbdBSoGvE5gWi5GWzjuF5SSnJvUSOPkhS5EtoiPBZVv
-         KMPRbcww8T2C6ufEEvoosXb42CgBSg3S9W3ahyVo/AVw9+BXDleYBVGfl7+X79yqrUXb
-         zL8R5q2WTDpFr+8UXALvnmVw2ZcoPUMglMelWZE96P5VAC+T5VEixsSLmBj68P3ZCwtn
-         4NzQ+/U4aatBvFKMOZkpJ+6AMrNXjjGDLbmnvrTa4/4PND9wKIoCsXGC9XJhyxocW8uh
-         cYbg==
-X-Gm-Message-State: AJIora/99K1BZl15jewVC/4U83aqdmeXFWSJmGgzUrFPwNKJOArWXCTr
-        9vpvHCZamwJtq6hSS23HvJE=
-X-Google-Smtp-Source: AGRyM1sCsMunfbPOuymvkXTYD/IzPE6crrGnwwbagMZeRKOYiRRbdJW7sSMgIpbhgwrbS+WipRyRqg==
-X-Received: by 2002:a17:902:eec2:b0:16c:9837:cd4 with SMTP id h2-20020a170902eec200b0016c98370cd4mr15342704plb.132.1657964019824;
-        Sat, 16 Jul 2022 02:33:39 -0700 (PDT)
+        bh=NaserlcC6hSl3SwHUAah5zXW3IuFUW5WcFOL2/suCG8=;
+        b=opii/Plb1Nch9WTo4RPRH4MrrxEhxgO39hkj41ZXe7qaPuOhABBGe5yTz+jD3vHTZ6
+         Nip0yRchZ7sm8BlERe52rXkm7SsRIUkeEHggwpWJ5JFDbrnATW+T2FXFcJog21QxhX9f
+         EyXn+GrdZKQEH1mUGJMffc+MOBS8lWicvwSxKk7pDsss9D1lmFnpHg3zevBq0ePVhKmO
+         4TgcNx9n9GzbE9tnP/y0vzzo3uWMm/i3jpWP22WlOK9OX/kCK1Z1ay15/Zxq1ZBVQNn9
+         tVu9MELdKXtCZpguTRHyvjlLwwZYOjpw0F2lEMDzcD36I8cvnjKbUXliliz73ZklRrOp
+         jXFQ==
+X-Gm-Message-State: AJIora86or7q2nBSrnq6G5aceqh4obT94tuG16Ezzub8resT/6TmMouc
+        TX01WpnsqC4eA+0/SPgXLvU=
+X-Google-Smtp-Source: AGRyM1uSAFRt/vvd1YRX/u/uEw6Wixbw2nFqqMIBxadlr/p7/1iu7OmearIrb10VU4zG23rgJgwv9g==
+X-Received: by 2002:a17:902:f64c:b0:16c:131:73ff with SMTP id m12-20020a170902f64c00b0016c013173ffmr17492991plg.170.1657964018733;
+        Sat, 16 Jul 2022 02:33:38 -0700 (PDT)
 Received: from debian.me (subs32-116-206-28-23.three.co.id. [116.206.28.23])
-        by smtp.gmail.com with ESMTPSA id 199-20020a6218d0000000b0052abc2438f1sm5352747pfy.55.2022.07.16.02.33.37
+        by smtp.gmail.com with ESMTPSA id c5-20020a170903234500b0016be8da658fsm5057280plh.130.2022.07.16.02.33.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 16 Jul 2022 02:33:38 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id 60BCD103840; Sat, 16 Jul 2022 16:33:33 +0700 (WIB)
+        id 8C956103844; Sat, 16 Jul 2022 16:33:33 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     linux-doc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -59,10 +59,11 @@ Cc:     linux-kernel@vger.kernel.org,
         Jonathan Corbet <corbet@lwn.net>,
         Martin Liska <mliska@suse.cz>, Andi Kleen <ak@linux.intel.com>,
         Jiri Slaby <jirislaby@kernel.org>,
-        linux-kbuild@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH 3/4] Documentation: lto: use bullet lists for external link references list
-Date:   Sat, 16 Jul 2022 16:32:49 +0700
-Message-Id: <20220716093249.19326-4-bagasdotme@gmail.com>
+        linux-kbuild@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH 4/4] Documentation: lto: add LTO documentation to toc index
+Date:   Sat, 16 Jul 2022 16:32:50 +0700
+Message-Id: <20220716093249.19326-5-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220716093249.19326-1-bagasdotme@gmail.com>
 References: <20220716093249.19326-1-bagasdotme@gmail.com>
@@ -78,48 +79,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to the FAQ, use bullet lists in References section since it
-contains list of external reference links.
+kernel test robot reported toctree warning:
 
+Documentation/kbuild/lto-build.rst: WARNING: document isn't included in any toctree
+
+Add LTO documentation (lto-build.rst) to kbuild table of contents.
+
+Link: https://lore.kernel.org/linux-doc/202207161100.lCdR6Unx-lkp@intel.com/
+Fixes: 0350b4dd55922f ("Kbuild, lto: Add Link Time Optimization support")
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- Documentation/kbuild/lto-build.rst | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+ Documentation/kbuild/index.rst | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/kbuild/lto-build.rst b/Documentation/kbuild/lto-build.rst
-index 9e3e14042dda4c..3fb17342e72fd6 100644
---- a/Documentation/kbuild/lto-build.rst
-+++ b/Documentation/kbuild/lto-build.rst
-@@ -56,17 +56,20 @@ FAQs:
- References:
- -----------
+diff --git a/Documentation/kbuild/index.rst b/Documentation/kbuild/index.rst
+index cee2f99f734b5a..1937eee7c43705 100644
+--- a/Documentation/kbuild/index.rst
++++ b/Documentation/kbuild/index.rst
+@@ -22,6 +22,8 @@ Kernel Build System
+     gcc-plugins
+     llvm
  
--Presentation on Kernel LTO
--(note, performance numbers/details totally outdated.)
--http://halobates.de/kernel-lto.pdf
-+* Presentation on Kernel LTO
-+  (note, performance numbers/details totally outdated.)
- 
--Generic gcc LTO:
--http://www.ucw.cz/~hubicka/slides/labs2013.pdf
--http://www.hipeac.net/system/files/barcelona.pdf
-+  http://halobates.de/kernel-lto.pdf
- 
--Somewhat outdated too:
--http://gcc.gnu.org/projects/lto/lto.pdf
--http://gcc.gnu.org/projects/lto/whopr.pdf
-+* Generic gcc LTO:
++    lto-build
 +
-+  * http://www.ucw.cz/~hubicka/slides/labs2013.pdf
-+  * http://www.hipeac.net/system/files/barcelona.pdf
-+
-+* Somewhat outdated too (from GCC site):
-+
-+  * http://gcc.gnu.org/projects/lto/lto.pdf
-+  * http://gcc.gnu.org/projects/lto/whopr.pdf
+ .. only::  subproject and html
  
- Happy Link-Time-Optimizing!
- 
+    Indices
 -- 
 An old man doll... just what I always wanted! - Clara
 

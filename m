@@ -2,79 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D06579FA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D6E579FAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239740AbiGSN3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
+        id S237885AbiGSNbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234727AbiGSN2z (ORCPT
+        with ESMTP id S236202AbiGSN24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:28:55 -0400
-Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B0585FA7;
-        Tue, 19 Jul 2022 05:45:00 -0700 (PDT)
-X-QQ-mid: bizesmtp80t1658234559t2p9cey4
+        Tue, 19 Jul 2022 09:28:56 -0400
+Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7363F3B;
+        Tue, 19 Jul 2022 05:45:10 -0700 (PDT)
+X-QQ-mid: bizesmtp87t1658234618tow9aldu
 Received: from localhost.localdomain ( [171.223.96.21])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 19 Jul 2022 20:42:36 +0800 (CST)
-X-QQ-SSF: 01000000002000F0U000C00A0000000
-X-QQ-FEAT: y5UFFkuhlmK39uWOV5DqxqO5Tj6sfllocKrJ3xpJ4Ql7ghLqcnTFoyRD0Jlz4
-        T9GCnfbcgXnuSaMGurHxa235FaSzMv38wkVLuU5wn5hh5moxRWhflt2EcxO4PpZurlO99os
-        3tGnptID4OLyB/WzTtg8CwV/7dwPVAjxVtcCi11rFauTITrqJC9ld1IdxVKS0DMquctFHBv
-        vtjDI76lHhIK9BTctzalu/a5etFkU1tnzBSQUYkG7JnL4wjKhhEleo1n5sG30QPdEi8jGav
-        GuBgL6bUBOBdynMTCBsePY5n/Jkdlv7fhZQ38XEGr45ECYgswIKL4fKwB3ppOX20Ky8YENf
-        g0zM9OgBUIrSHx9WsAari2C9qBjnoWBxjMwfKG4dXKetEbcEf8tkgKb+62617ca7lQ59AHk
-        ly4VldHOX9o=
+        id ; Tue, 19 Jul 2022 20:43:36 +0800 (CST)
+X-QQ-SSF: 01000000002000F0U000C00A0000020
+X-QQ-FEAT: DoD8xN2rKozQC/kjGZt735i/xZHRjUYTGwuqaur9oE6jomqBMNjqvkBQ7sNPD
+        y5C4OKaeQ5UvEGQlxWShEut3pfCk+bKPAa65GNpdKEMiAUgli1hmFKWCphVFXBMEMZNk3Oz
+        GiMFskcamGoTKVL4HfX+HhnxUx4xeP8Ku3zmxSzFwTfwHurG/6KN+Vzrh/v5K0j6vMubz6Z
+        CQ00stvh/dJ3tNEBiCy9dp4bWv6zUNeyaTW01Ucy77cmeC10WYhzIxA5R8UsMHEhp9m37md
+        tl1do1NDC6TF5riPf/MAlSdTlaUwDQT6byxY7w1BzM/CM18CjYIn82R0C5LgofHJoHqynxm
+        c5e8VwVRsZEJ5kGBZ/YGULrUd/Yxa1xAi+A2SoGcjHPUAKZS2xtrLXRMuMU8/HAjT3Kc4jQ
+        H2isXTaajBY=
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     suzuki.poulose@arm.com
-Cc:     mathieu.poirier@linaro.org, mike.leach@linaro.org,
-        leo.yan@linaro.org, john.garry@huawei.com, will@kernel.org,
-        james.clark@arm.com, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     edumazet@google.com
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] perf cs-etm: Fix comment typo
-Date:   Sat, 16 Jul 2022 12:40:40 +0800
-Message-Id: <20220716044040.43123-1-wangborong@cdjrlc.com>
+Subject: [PATCH] net: llc: Fix comment typo
+Date:   Sat, 16 Jul 2022 12:41:39 +0800
+Message-Id: <20220716044139.43330-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
+        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `the' is duplicated in the comment, remove one.
+The double `all' is duplicated in the comment, remove one.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- tools/perf/util/cs-etm.c | 2 +-
+ net/llc/llc_conn.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-index 8b95fb3c4d7b..16db965ac995 100644
---- a/tools/perf/util/cs-etm.c
-+++ b/tools/perf/util/cs-etm.c
-@@ -1451,7 +1451,7 @@ static int cs_etm__sample(struct cs_etm_queue *etmq,
- 		 * tidq->packet->instr_count represents the number of
- 		 * instructions in the current etm packet.
- 		 *
--		 * Period instructions (Pi) contains the the number of
-+		 * Period instructions (Pi) contains the number of
- 		 * instructions executed after the sample point(n) from the
- 		 * previous etm packet.  This will always be less than
- 		 * etm->instructions_sample_period.
+diff --git a/net/llc/llc_conn.c b/net/llc/llc_conn.c
+index 912aa9bd5e29..ce5d154c94f5 100644
+--- a/net/llc/llc_conn.c
++++ b/net/llc/llc_conn.c
+@@ -198,7 +198,7 @@ void llc_conn_rtn_pdu(struct sock *sk, struct sk_buff *skb)
+ }
+ 
+ /**
+- *	llc_conn_resend_i_pdu_as_cmd - resend all all unacknowledged I PDUs
++ *	llc_conn_resend_i_pdu_as_cmd - resend all unacknowledged I PDUs
+  *	@sk: active connection
+  *	@nr: NR
+  *	@first_p_bit: p_bit value of first pdu
 -- 
 2.35.1
 

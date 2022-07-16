@@ -2,105 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA795770B3
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 20:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 631205770BE
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 20:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbiGPSTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 14:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S230501AbiGPS3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 14:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiGPSTB (ORCPT
+        with ESMTP id S229505AbiGPS3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 14:19:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783FDCE1E;
-        Sat, 16 Jul 2022 11:18:59 -0700 (PDT)
+        Sat, 16 Jul 2022 14:29:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9249117582
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 11:29:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30BD3B80C85;
-        Sat, 16 Jul 2022 18:18:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943B1C34115;
-        Sat, 16 Jul 2022 18:18:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657995536;
-        bh=9AbXPRBr5uZ4dK0zA9NCwEvirkJr7WqQ+79fBtM453I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XjAv2iWm7xWVQh2LHkcmBOuXRak21Vg8U7keqOtoUC+Wjq+/f8s70j4W6XTUg04uq
-         chxjHeA40+x9BYgsfpc/be0WvIc2iqiPIJD6ZPqPkOj7v5b1ev1IAkcdqqiVUmj5Mp
-         BsKMISsMPM+zRPHLreE2Y9sfGvyxZJFvcQr9Mi3Qnn8t0FniUvC5LnWOt1Xpl7QsCi
-         Tu/tRLnN6BIBO1krfQ2hNlnWlhvZDhIpzQrmOm7dlbZPvW53hixPGsZHast8MvOjCe
-         9VgbdGHMjrDrmi9O7FTs04thXxuK4aQOYMXi5xxMb43fqfq2htzrj1gjoirXkeq6p/
-         KpCERiBkRxdhQ==
-Date:   Sat, 16 Jul 2022 19:28:50 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Zheyu Ma <zheyuma97@gmail.com>
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: light: isl29028: Fix the warning in
- isl29028_remove()
-Message-ID: <20220716192850.2becdc44@jic23-huawei>
-In-Reply-To: <20220715132909.480548-1-zheyuma97@gmail.com>
-References: <20220715132909.480548-1-zheyuma97@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BD63611D6
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 18:29:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF38C34114;
+        Sat, 16 Jul 2022 18:29:14 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="SWNlm1B0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1657996153;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kozS06OyS0xBHMQiwrn8PPEbEmlJYFwVaVSdQVH4P/Q=;
+        b=SWNlm1B0KYnwKsdoqsVERfUtBJwBgzSA7Q8zagEE7G3tkxFfL9Ew3fHSnDosziwVbtDd3o
+        L8UPbF3sg86CPwBsbeSxQE+RxzNGd0owwYTpbUGAIFDiZhw/u31zpDP28b9+sVT1OJszIf
+        3PnRH3k1e427PXlmwoniHf8wj9CXFlc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8a3e529f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 16 Jul 2022 18:29:12 +0000 (UTC)
+Date:   Sat, 16 Jul 2022 20:29:12 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH] random: Use try_cmpxchg in _credit_init_bits
+Message-ID: <YtMDeHO93SQh0ufA@zx2c4.com>
+References: <20220714182822.25142-1-ubizjak@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220714182822.25142-1-ubizjak@gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Jul 2022 21:29:09 +0800
-Zheyu Ma <zheyuma97@gmail.com> wrote:
+Hi Uros,
 
-> The driver uses managed resource API to register the iio device, so it
-> is unnecessarg to unregister the device manually.
+On Thu, Jul 14, 2022 at 08:28:22PM +0200, Uros Bizjak wrote:
+> Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
+> _credit_init_bits. x86 CMPXCHG instruction returns success in ZF flag,
+> so this change saves a compare after cmpxchg (and related move
+> instruction in front of cmpxchg).
 > 
-> The following log reveals it:
+> Also, try_cmpxchg implicitly assigns old *ptr value to "old"
+> when cmpxchg fails, enabling further code simplifications.
 > 
-> [   32.374955] isl29028 0-0010: remove
-> [   32.376861] general protection fault, probably for non-canonical address 0xdffffc0000000006: 0000 [#1] PREEMPT SMP KASAN PTI
-> [   32.377676] KASAN: null-ptr-deref in range [0x0000000000000030-0x0000000000000037]
-> [   32.379432] RIP: 0010:kernfs_find_and_get_ns+0x28/0xe0
-> [   32.385461] Call Trace:
-> [   32.385807]  sysfs_unmerge_group+0x59/0x110
-> [   32.386110]  dpm_sysfs_remove+0x58/0xc0
-> [   32.386391]  device_del+0x296/0xe50
-> [   32.386959]  cdev_device_del+0x1d/0xd0
-> [   32.387231]  devm_iio_device_unreg+0x27/0xb0
-> [   32.387542]  devres_release_group+0x319/0x3d0
-> [   32.388162]  i2c_device_remove+0x93/0x1f0
-> 
-> Fixes: 2db5054ac28d ("staging: iio: isl29028: add runtime power management support")
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> No functional change intended.
 
-Unfortunately the fix still leaves the release order as not mirroring the ordering
-in probe.  As such, I think the right fix is to not use devm_iio_device_register()
-but rather use the non managed form.
+Applied as:
+  https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=6a66e096619e3a737297eb2f9f535a287af43a95
 
-Thanks,
+Thanks for the patch.
 
-Jonathan
-> ---
->  drivers/iio/light/isl29028.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/iio/light/isl29028.c b/drivers/iio/light/isl29028.c
-> index 9de3262aa688..505235903bd8 100644
-> --- a/drivers/iio/light/isl29028.c
-> +++ b/drivers/iio/light/isl29028.c
-> @@ -641,8 +641,6 @@ static int isl29028_remove(struct i2c_client *client)
->  	struct iio_dev *indio_dev = i2c_get_clientdata(client);
->  	struct isl29028_chip *chip = iio_priv(indio_dev);
->  
-> -	iio_device_unregister(indio_dev);
-> -
->  	pm_runtime_disable(&client->dev);
->  	pm_runtime_set_suspended(&client->dev);
->  
-
+Jason

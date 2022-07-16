@@ -2,94 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29AF576BED
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 06:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9AA5576BF4
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 07:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbiGPEzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 00:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
+        id S230239AbiGPFHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 01:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGPEzb (ORCPT
+        with ESMTP id S229448AbiGPFHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 00:55:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8538488F25;
-        Fri, 15 Jul 2022 21:55:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DE9260A6E;
-        Sat, 16 Jul 2022 04:55:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16D4FC34114;
-        Sat, 16 Jul 2022 04:55:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1657947329;
-        bh=pMVy+7ApQ1a3/ZhtsqYbelRKmEogN0bTAJep1ceVhbo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hCSI4gJTo+N76KhNPvtEgm53nX9O3Bt3RV5RH49+RR7CuTQ1Xa1jKnwhiMsOjhPkL
-         OGOaUrQbFdJsLCktWDenvSOy0vtgTuudcvyeO1g8cgxn2uU9EYf2ow+nGm5jNjMjAy
-         SAWUVSzI+z9X5aUvqSmfCJm3G6QqnV9zmn+q2edg=
-Date:   Fri, 15 Jul 2022 21:55:28 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Benjamin Segall <bsegall@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Roman Penyaev <rpenyaev@suse.de>,
-        Jason Baron <jbaron@akamai.com>,
-        Khazhismel Kumykov <khazhy@google.com>, Heiher <r@hev.cc>
-Subject: Re: [RESEND RFC PATCH] epoll: autoremove wakers even more
- aggressively
-Message-Id: <20220715215528.213e9340e62df36320e89b22@linux-foundation.org>
-In-Reply-To: <20220716012731.2zz7hpg3qbhwgeqd@google.com>
-References: <xm26fsjotqda.fsf@google.com>
-        <20220629165542.da7fc8a2a5dbd53cf99572aa@linux-foundation.org>
-        <CALvZod5KX7XEHR9h_jFHf5pJcYB+dODEeaLKrQLtSy9EUqgvWw@mail.gmail.com>
-        <20220629192435.df27c0dbb07ef72165e1de5e@linux-foundation.org>
-        <CALvZod5hJ8VJ4E9jhqjCKc8au8_b-h_q+g=2pbQVUSBvappE6g@mail.gmail.com>
-        <20220716012731.2zz7hpg3qbhwgeqd@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 16 Jul 2022 01:07:11 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AB48AB2C
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 22:07:11 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id e9-20020a056e020b2900b002dc6c27849cso3844448ilu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 22:07:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=wsNtLY4uf8Mk90EQSUPSsoQBuXCjz2+6TE1cEUqJH04=;
+        b=IYgdAqGGbCNwwnwgIC8ZGOXTYzoXErr0tYuD6qKv2/aMW+QVUXt1hZTdOZVPP1NV5c
+         Q3U4XygIJoIAs0f4iuGHktYzQb42tNoM91Q1ydyLSL6mGzFcY68/QGuovZWd8Ovl3Cik
+         ulVOUJml0BhKSqDPPNIjNhQf+h90bXfyq2w80gLAZhwiVDQ9oDxz6CBaHGAEJ1+nLDIJ
+         nDmbfAJZGUVj7+1NDxzfqzJB1c76gS1mS/njUKkX7GO1eizzbLUShpMSXJcTJEniwK00
+         zBw1nzMo5TqUU256/Zfywo2wFBIV/kiTfPGz0K4ifZ6DxERdsN4a/cQdHklwmQmzy/LF
+         h1dg==
+X-Gm-Message-State: AJIora8eGFw6yak1CJInP6kgqV0yeXY2fMmRsZCeJbVRN1NFT/GvbFU0
+        WuRqSFEWj3b/BDHcrPJ2HXX4i0MwBPxVZumIIoWFpHJvVy6R
+X-Google-Smtp-Source: AGRyM1vDmPGPZK9UW3EJJufd+UAOmWjx4eE1a8jxhRfollVXY+LyMq8EeKITAcWHs4k7QSS83fWcm7HFA9TFy3mELpo+/zr+x+gB
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:1c89:b0:2dc:7f32:793b with SMTP id
+ w9-20020a056e021c8900b002dc7f32793bmr9193085ill.189.1657948030189; Fri, 15
+ Jul 2022 22:07:10 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 22:07:10 -0700
+In-Reply-To: <20220716045105.1420-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000065485805e3e51b42@google.com>
+Subject: Re: [syzbot] INFO: trying to register non-static key in ieee80211_do_stop
+From:   syzbot <syzbot+eceab52db7c4b961e9d6@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 16 Jul 2022 01:27:31 +0000 Shakeel Butt <shakeelb@google.com> wrote:
+Hello,
 
->
-> ...
->
-> > > > production with real workloads and it has caused hard lockups.
-> > > > Particularly network heavy workloads with a lot of threads in
-> > > > epoll_wait() can easily trigger this issue if they get killed
-> > > > (oom-killed in our case).
-> > >
-> > > Hard lockups are undesirable.  Is a cc:stable justified here?
-> > 
-> > Not for now as I don't know if we can blame a patch which might be the
-> > source of this behavior.
-> 
-> I am able to repro the epoll hard lockup on next-20220715 with Ben's
-> patch reverted. The repro is a simple TCP server and tens of clients
-> communicating over loopback. Though to cause the hard lockup I have to
-> create a couple thousand threads in epoll_wait() in server and also
-> reduce the kernel.watchdog_thresh. With Ben's patch the repro does not
-> cause the hard lockup even with kernel.watchdog.thresh=1.
-> 
-> Please add:
-> 
-> Tested-by: Shakeel Butt <shakeelb@google.com>
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+SYZFATAL: executor failed NUM times: executor NUM: failed to write control pipe: write |NUM: broken pipe
 
-OK, thanks.  I added the cc:stable.  No Fixes:, as it has presumably
-been there for a long time, perhaps for all time.
+2022/07/16 05:06:15 SYZFATAL: executor failed 11 times: executor 5: failed to write control pipe: write |1: broken pipe
+SYZFAIL: wrong response packet
+ (errno 16: Device or resource busy)
+loop exited with status 67
+
+
+Tested on:
+
+commit:         9b59ec8d Merge tag 'riscv-for-linus-5.19-rc7' of git:/..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=17e216dc080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8a04cbcc193add96
+dashboard link: https://syzkaller.appspot.com/bug?extid=eceab52db7c4b961e9d6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1292a4fc080000
 

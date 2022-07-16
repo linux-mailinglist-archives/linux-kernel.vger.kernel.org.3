@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48EAF5771B9
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 00:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35CC5771BC
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 00:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbiGPWGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 18:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
+        id S232504AbiGPWJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 18:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiGPWGw (ORCPT
+        with ESMTP id S232444AbiGPWJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 18:06:52 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172FE1B784;
-        Sat, 16 Jul 2022 15:06:51 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-10bffc214ffso14614834fac.1;
-        Sat, 16 Jul 2022 15:06:51 -0700 (PDT)
+        Sat, 16 Jul 2022 18:09:02 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAB55F90
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 15:09:00 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id va17so15005450ejb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 15:09:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jFXTa/SH7cE+B+NIP6axrNxpESGy99suDlQCA7kSd50=;
-        b=ok0iPES9kQ9HZOaMtVuYihJm71d8eraNHSmuA1jbl+xp4lKn30+ZV+s4G+OZ/EoOMh
-         O/tWWSRV9QCEUMbz0jGkcl/gaSZhHUnr8eYQWc4Ch8SYRo14sgBll2w9dicmHq0HK4BO
-         V4nsANhW2MjbDcihpGAcb44B6quHsLuCWBxC7xG8xEa9/TEmEm3CDE/k63d0mQujve7P
-         S1safR2csWc4PKOoNo+Q2+AupB3mmsIgXMr+F+UCBHSl6nkKqD6M+OyoygZ5Wg6hGtu2
-         kjrgKoibqfIIZNptXldMBEVPqkLPvSLGVs7akdunWXlzEEJ5agdSNGNBM0+27EowBOXT
-         LtJw==
+        bh=AcjWh/Vyv/p487/TiHDxM9foCDPT53sV1cJadscCohE=;
+        b=PgN9wmVjO3lR3KoSzFAY1iWb2IFmaxa116V4LWyxcRywTrML/HZOcILWc+leY52aWj
+         D1DdypmH28pNlpnSvS8eWcv5N65gLyHTT9NsoIE3FS1bYMyYqlKVpJ8x7p+ob0ZtLJV8
+         szWud/nfhwbnu0JcZmnJ7/ClpeGR8eTdIZxbU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jFXTa/SH7cE+B+NIP6axrNxpESGy99suDlQCA7kSd50=;
-        b=aKF/gC4VQb8cQmSl/OetNTEmPKTzONSmuXB80ER2pAkjEVLlon+esAC69dc1QQ2Yi3
-         c3yqjAhEpe06pd0dGPYcSx7e6fCvGm/IhPRClkwW0eaAObLxwo9gRGM6j5esGUCJj/ZY
-         lLXzofwEwE1KOn1IDWVVEf5bEbBjoMPdxhHAuNgjSg0BnMwzFkc1nbM3maNsIu3UbKFF
-         RKET3ryB4ftWH3SUs5y2iW/Jr/dEOB951/yhWXJsPwTVgJwny3G7RjGwFxpkrgcIPnf9
-         l0pOuJIPPA2sNk9tJLCwqdW8OWOC22i7lA60vmszWa1gnZ9R8UNcNcW+TeA1cNFTBL++
-         D+Rg==
-X-Gm-Message-State: AJIora+OmfzyKj4EXbtSmlu4XzAvCsVqIfQ/lhCVKNAAG2IsJMLXHPNL
-        KHiE9BiBhr/KzuGLTOQCatSBJ9GNhbINKB7QVYM=
-X-Google-Smtp-Source: AGRyM1sogW/U6Kbdivuues1D57lbscRCybveYUagL0BSa4+nUew2O/9Z4Ej6ADDSf5l7q6cHGTtFQWZ2kKxScZEW0Bo=
-X-Received: by 2002:a05:6870:311b:b0:10d:96:733a with SMTP id
- v27-20020a056870311b00b0010d0096733amr6882683oaa.190.1658009210333; Sat, 16
- Jul 2022 15:06:50 -0700 (PDT)
+        bh=AcjWh/Vyv/p487/TiHDxM9foCDPT53sV1cJadscCohE=;
+        b=Hi2afLmwRwBUqpPM31NTtH/R4lDKU8nxnBWVtUzC82m2peKLGcy8gFvW5J8/F4yVup
+         xqP3K2aV0re6cd3blrgcX66ksDi+xffvpVYkJvhQilBSN2fVC7ouLeOvLFype9b4GE8j
+         6jeRa2LLXvyn6R2VKeTHqZ4CmQq2jTLmym+76qPBExTK+bFI+qb28yR9WqqMfJkCvDlI
+         5azcRsEqu510wmSUS5Vvw8z0FKIn8sCcSzuojt/St2hJy/FM4pOakU+vPv2Mf7SlHRxj
+         V1/qTQd+Adt7qjfbNLbiRwNo3lNq7rPJa7h6qhCNTXOsGGD2dGSF/d1njukzTV4S++r8
+         7bnw==
+X-Gm-Message-State: AJIora/WFCMpXQKAJdKMrE6+SHcuI6A0thkzTOaIUhNdafM+X3PAUg6D
+        BBmt5YRSdhbki8GEEe0edG8/2U1RNih+Wzt0
+X-Google-Smtp-Source: AGRyM1tGjTBKqmT/1QEwnbSqXVFNdDtSZPNParv8URE69JRkU+vv/GZ1H4s1OSA75afhxqtVPsP55A==
+X-Received: by 2002:a17:907:2bde:b0:72b:4da0:6f3c with SMTP id gv30-20020a1709072bde00b0072b4da06f3cmr19593994ejc.623.1658009339300;
+        Sat, 16 Jul 2022 15:08:59 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id e14-20020a170906314e00b00711d546f8a8sm3577160eje.139.2022.07.16.15.08.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Jul 2022 15:08:57 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id h17so11772747wrx.0
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 15:08:56 -0700 (PDT)
+X-Received: by 2002:a05:6000:1f8c:b0:21d:7e98:51ba with SMTP id
+ bw12-20020a0560001f8c00b0021d7e9851bamr16864641wrb.442.1658009335873; Sat, 16
+ Jul 2022 15:08:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAO4mrfcUYjEi69mcSt_vXyb3VGFTAAq3dyNeWueucgw0DGABfg@mail.gmail.com>
- <CAO4mrfcB0d+qbwtfndzqcrL+QEQgfOmJYQMAdzwxRePmP8TY1A@mail.gmail.com>
-In-Reply-To: <CAO4mrfcB0d+qbwtfndzqcrL+QEQgfOmJYQMAdzwxRePmP8TY1A@mail.gmail.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Sat, 16 Jul 2022 18:06:08 -0400
-Message-ID: <CADvbK_dWMO0XdAf950Q14pUv99ahS1MRnOtppvosU2w33sO=kw@mail.gmail.com>
-Subject: Re: BUG: unable to handle kernel NULL pointer dereference in sctp_sched_dequeue_common
-To:     Wei Chen <harperchen1110@gmail.com>
-Cc:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        davem <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CAPM=9twM75GDM9t+9-CSCPDZG3QdcEpQ-X+FzQ4CLUCM7cKLkw@mail.gmail.com>
+ <YtHXe4PcWXfihF9Q@dev-arch.thelio-3990X> <CAHk-=wh5DB+OL2QvWPqRhpLLCqW7u_bLucFJpm4v6rZT3T5+zQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wh5DB+OL2QvWPqRhpLLCqW7u_bLucFJpm4v6rZT3T5+zQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 16 Jul 2022 15:08:39 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgcECb3cwnB=7Zgf8CBfEYaTWcSzAjfQpTM75_Q5aO7dA@mail.gmail.com>
+Message-ID: <CAHk-=wgcECb3cwnB=7Zgf8CBfEYaTWcSzAjfQpTM75_Q5aO7dA@mail.gmail.com>
+Subject: Re: [git pull] drm fixes for 5.19-rc7
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="00000000000080390c05e3f36106"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,133 +81,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 2:52 AM Wei Chen <harperchen1110@gmail.com> wrote:
->
-> Dear Linux Developer,
->
-> Recently when using our tool to fuzz kernel, the following crash was triggered:
->
-> HEAD commit:  c5eb0a61238d Linux 5.18-rc6
-> git tree: upstream
-> compiler: clang 12.0.0
-> console output:
-> https://drive.google.com/file/d/1zbd9t-NNorzTXESdQ3bxE-q9uLu-Bm9d/view?usp=sharing
-> Syzlang reproducer:
-> https://drive.google.com/file/d/18wnwTf53Ln4K8e4G9d8hS4-e0URQKHet/view?usp=sharing
-> C reproducer: https://drive.google.com/file/d/1ttiMq0WYi46zFP1II8O9eee_dvDweIb6/view?usp=sharing
-> kernel config: https://drive.google.com/file/d/1fITkvcuglspvuhI0mhXUndx112fJmcOZ/view?usp=sharing
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: Wei Chen <harperchen1110@gmail.com>
->
-> BUG: kernel NULL pointer dereference, address: 0000000000000000
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 12f83067 P4D 12f83067 PUD 0
-> Oops: 0000 [#1] PREEMPT SMP
-> CPU: 0 PID: 13 Comm: ksoftirqd/0 Not tainted 5.18.0-rc6 #12
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> 1.13.0-1ubuntu1.1 04/01/2014
-> RIP: 0010:__list_del_entry_valid+0x26/0x80
-> Code: 00 00 00 00 55 48 89 e5 48 89 fe 48 ba 00 01 00 00 00 00 ad de
-> 48 8b 0f 48 39 d1 74 22 48 8b 46 08 48 83 c2 22 48 39 d0 74 25 <48> 8b
-> 10 48 39 f2 75 2d 48 8b 51 08 48 39 f2 75 37 b0 01 5d c3 48
-> RSP: 0018:ffff888007313720 EFLAGS: 00010217
-> RAX: 0000000000000000 RBX: ffff88800c6283e8 RCX: 0000000000000000
-> RDX: dead000000000122 RSI: ffff88800c6283e8 RDI: ffff88800c6283e8
-> RBP: ffff888007313720 R08: ffffffff84399732 R09: ffffffff84392a74
-> R10: 0000000000000042 R11: ffff8880072a2f80 R12: ffff8880138be238
-> R13: ffff888016cdb000 R14: ffff888016cdb5a0 R15: ffff888016cdb000
-> FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000000 CR3: 0000000012f82000 CR4: 0000000000750ef0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> PKRU: 55555554
-> Call Trace:
->  <TASK>
->  sctp_sched_dequeue_common+0x1c/0x90
->  sctp_sched_prio_dequeue+0x67/0x80
->  __sctp_outq_teardown+0x299/0x380
->  sctp_outq_free+0x15/0x20
->  sctp_association_free+0xc3/0x440
->  sctp_do_sm+0x1ca7/0x2210
->  sctp_assoc_bh_rcv+0x1f6/0x340
-sctp_stream_init() is also called in processing SCTP_CMD_PEER_INIT
-generated in sctp_sf_do_5_1C_ack(). At that time some chunk might be
-already in the outq and stream outq. Failure in sctp_stream_init() will
-cause stream->out to be freed, which still holds some schedule information.
+--00000000000080390c05e3f36106
+Content-Type: text/plain; charset="UTF-8"
 
-So 2 things should be done when this happens:
-1. call sctp_stream_free() in err path to avoid memleak in
-SCTP_SO(stream, i)->ext in sctp_stream_init().
-2. set asoc->outqueue.sched back to &sctp_sched_fcfs to fix the
-scheduler's dequeue crash.
+On Sat, Jul 16, 2022 at 2:35 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> That said, even those type simplifications do not fix the fundamental
+> issue. That "DIV_ROUND_UP()" still ends up being a 64-bit divide,
+> although now it's at least a "64-by-32" bit divide.
 
-Will prepare a fix.
-Thanks.
+Hmm. The "DIV_ROUND_UP()" issue could be solved by just making the
+rule be that the max_segment size is always a power of two.
 
->  sctp_inq_push+0x98/0xb0
->  sctp_rcv+0x134e/0x16b0
->  sctp6_rcv+0x1b/0x30
->  ip6_protocol_deliver_rcu+0x5b7/0x930
->  ip6_input+0x80/0x140
->  ip6_rcv_finish+0x16e/0x1d0
->  ipv6_rcv+0x72/0x110
->  __netif_receive_skb+0x66/0x140
->  process_backlog+0x13d/0x230
->  __napi_poll+0x4b/0x310
->  net_rx_action+0x1ae/0x410
->  __do_softirq+0x16e/0x30f
->  run_ksoftirqd+0x23/0x30
->  smpboot_thread_fn+0x210/0x370
->  kthread+0x124/0x160
->  ret_from_fork+0x1f/0x30
->  </TASK>
-> Modules linked in:
-> Dumping ftrace buffer:
->    (ftrace buffer empty)
-> CR2: 0000000000000000
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:__list_del_entry_valid+0x26/0x80
-> Code: 00 00 00 00 55 48 89 e5 48 89 fe 48 ba 00 01 00 00 00 00 ad de
-> 48 8b 0f 48 39 d1 74 22 48 8b 46 08 48 83 c2 22 48 39 d0 74 25 <48> 8b
-> 10 48 39 f2 75 2d 48 8b 51 08 48 39 f2 75 37 b0 01 5d c3 48
-> RSP: 0018:ffff888007313720 EFLAGS: 00010217
-> RAX: 0000000000000000 RBX: ffff88800c6283e8 RCX: 0000000000000000
-> RDX: dead000000000122 RSI: ffff88800c6283e8 RDI: ffff88800c6283e8
-> RBP: ffff888007313720 R08: ffffffff84399732 R09: ffffffff84392a74
-> R10: 0000000000000042 R11: ffff8880072a2f80 R12: ffff8880138be238
-> R13: ffff888016cdb000 R14: ffff888016cdb5a0 R15: ffff888016cdb000
-> FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000000 CR3: 0000000012f82000 CR4: 0000000000750ef0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> PKRU: 55555554
-> ----------------
-> Code disassembly (best guess):
->    0: 00 00                          add    %al,(%rax)
->    2: 00 00                          add    %al,(%rax)
->    4: 55                               push   %rbp
->    5: 48 89 e5                     mov    %rsp,%rbp
->    8: 48 89 fe                      mov    %rdi,%rsi
->    b: 48 ba 00 01 00 00 00 movabs $0xdead000000000100,%rdx
->   12: 00 ad de
->   15: 48 8b 0f                     mov    (%rdi),%rcx
->   18: 48 39 d1                    cmp    %rdx,%rcx
->   1b: 74 22                         je     0x3f
->   1d: 48 8b 46 08               mov    0x8(%rsi),%rax
->   21: 48 83 c2 22               add    $0x22,%rdx
->   25: 48 39 d0                    cmp    %rdx,%rax
->   28: 74 25                         je     0x4f
-> * 2a: 48 8b 10                   mov    (%rax),%rdx <-- trapping instruction
->   2d: 48 39 f2                    cmp    %rsi,%rdx
->   30: 75 2d                        jne    0x5f
->   32: 48 8b 51 08              mov    0x8(%rcx),%rdx
->   36: 48 39 f2                    cmp    %rsi,%rdx
->   39: 75 37                        jne    0x72
->   3b: b0 01                        mov    $0x1,%al
->   3d: 5d                             pop    %rbp
->   3e: c3                             retq
->   3f: 48                              rex.W
+Then you don't need the (expensive!) DIV_ROUND_UP(), and can just use
+the regular "round_up()" that works on powers-of-two.
+
+And the simplest way to do that is to just make "max_segments" be 2GB.
+
+The whole "round_down(UINT_MAX, page_alignment)" seems entirely
+pointless. Do you really want segments that are some odd number just
+under the 4GB mark, and force expensive divides?
+
+For consistency, I used the same value in
+i915_rsgt_from_buddy_resource(). I have no idea if that makes sense.
+
+Anyway, the attached patch is COMPLETELY UNTESTED. But it at least
+seems to compile. Maybe.
+
+                  Linus
+
+--00000000000080390c05e3f36106
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l5ofxmky0>
+X-Attachment-Id: f_l5ofxmky0
+
+IGRyaXZlcnMvZ3B1L2RybS9pOTE1L2k5MTVfc2NhdHRlcmxpc3QuYyB8IDggKysrKystLS0KIDEg
+ZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0
+IGEvZHJpdmVycy9ncHUvZHJtL2k5MTUvaTkxNV9zY2F0dGVybGlzdC5jIGIvZHJpdmVycy9ncHUv
+ZHJtL2k5MTUvaTkxNV9zY2F0dGVybGlzdC5jCmluZGV4IGY2M2I1MGI3MWUxMC4uODMwZGNkODMz
+ZDRlIDEwMDY0NAotLS0gYS9kcml2ZXJzL2dwdS9kcm0vaTkxNS9pOTE1X3NjYXR0ZXJsaXN0LmMK
+KysrIGIvZHJpdmVycy9ncHUvZHJtL2k5MTUvaTkxNV9zY2F0dGVybGlzdC5jCkBAIC04MSw3ICs4
+MSw5IEBAIHN0cnVjdCBpOTE1X3JlZmN0X3NndCAqaTkxNV9yc2d0X2Zyb21fbW1fbm9kZShjb25z
+dCBzdHJ1Y3QgZHJtX21tX25vZGUgKm5vZGUsCiAJCQkJCSAgICAgIHU2NCByZWdpb25fc3RhcnQs
+CiAJCQkJCSAgICAgIHU2NCBwYWdlX2FsaWdubWVudCkKIHsKLQljb25zdCB1NjQgbWF4X3NlZ21l
+bnQgPSByb3VuZF9kb3duKFVJTlRfTUFYLCBwYWdlX2FsaWdubWVudCk7CisJLy8gTWFrZSBzdXJl
+IG1heF9zZWdtZW50IChhbmQgdGh1cyBzZWdtZW50X3BhZ2VzKSBpcworCS8vIGEgcG93ZXIgb2Yg
+dHdvIHRoYXQgZml0cyBpbiAzMiBiaXRzLgorCWNvbnN0IHU2NCBtYXhfc2VnbWVudCA9IDF1bCA8
+PCAzMTsKIAl1NjQgc2VnbWVudF9wYWdlcyA9IG1heF9zZWdtZW50ID4+IFBBR0VfU0hJRlQ7CiAJ
+dTY0IGJsb2NrX3NpemUsIG9mZnNldCwgcHJldl9lbmQ7CiAJc3RydWN0IGk5MTVfcmVmY3Rfc2d0
+ICpyc2d0OwpAQCAtOTYsNyArOTgsNyBAQCBzdHJ1Y3QgaTkxNV9yZWZjdF9zZ3QgKmk5MTVfcnNn
+dF9mcm9tX21tX25vZGUoY29uc3Qgc3RydWN0IGRybV9tbV9ub2RlICpub2RlLAogCiAJaTkxNV9y
+ZWZjdF9zZ3RfaW5pdChyc2d0LCBub2RlLT5zaXplIDw8IFBBR0VfU0hJRlQpOwogCXN0ID0gJnJz
+Z3QtPnRhYmxlOwotCWlmIChzZ19hbGxvY190YWJsZShzdCwgRElWX1JPVU5EX1VQKG5vZGUtPnNp
+emUsIHNlZ21lbnRfcGFnZXMpLAorCWlmIChzZ19hbGxvY190YWJsZShzdCwgcm91bmRfdXAobm9k
+ZS0+c2l6ZSwgc2VnbWVudF9wYWdlcyksCiAJCQkgICBHRlBfS0VSTkVMKSkgewogCQlpOTE1X3Jl
+ZmN0X3NndF9wdXQocnNndCk7CiAJCXJldHVybiBFUlJfUFRSKC1FTk9NRU0pOwpAQCAtMTU5LDcg
+KzE2MSw3IEBAIHN0cnVjdCBpOTE1X3JlZmN0X3NndCAqaTkxNV9yc2d0X2Zyb21fYnVkZHlfcmVz
+b3VyY2Uoc3RydWN0IHR0bV9yZXNvdXJjZSAqcmVzLAogewogCXN0cnVjdCBpOTE1X3R0bV9idWRk
+eV9yZXNvdXJjZSAqYm1hbl9yZXMgPSB0b190dG1fYnVkZHlfcmVzb3VyY2UocmVzKTsKIAljb25z
+dCB1NjQgc2l6ZSA9IHJlcy0+bnVtX3BhZ2VzIDw8IFBBR0VfU0hJRlQ7Ci0JY29uc3QgdTY0IG1h
+eF9zZWdtZW50ID0gcm91bmRfZG93bihVSU5UX01BWCwgcGFnZV9hbGlnbm1lbnQpOworCWNvbnN0
+IHU2NCBtYXhfc2VnbWVudCA9IDF1IDw8IDMxOwogCXN0cnVjdCBkcm1fYnVkZHkgKm1tID0gYm1h
+bl9yZXMtPm1tOwogCXN0cnVjdCBsaXN0X2hlYWQgKmJsb2NrcyA9ICZibWFuX3Jlcy0+YmxvY2tz
+OwogCXN0cnVjdCBkcm1fYnVkZHlfYmxvY2sgKmJsb2NrOwo=
+--00000000000080390c05e3f36106--

@@ -2,76 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A482D576BF0
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 07:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670FA576C1F
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 08:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiGPFAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 01:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        id S231596AbiGPGGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 02:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGPFAl (ORCPT
+        with ESMTP id S229538AbiGPGGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 01:00:41 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026A440BD6;
-        Fri, 15 Jul 2022 22:00:34 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1657947577tegsdf7s
-Received: from localhost.localdomain ( [223.86.65.215])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 16 Jul 2022 12:59:35 +0800 (CST)
-X-QQ-SSF: 01000000002000E0U000B00A0000000
-X-QQ-FEAT: PXJK6C+SdL1zWBD2r1dwXVWoJNFGSxML4kNGB47Zd/vMvHzldRq1HCJXarKEW
-        UmWtuorVig3z4d2+/wTKtMKvNj38eVh7uKRzSWxxWhIN8pdJWXVvs95rwhrkFbkxdUceivp
-        GctfELb/61rM6FwAyZrxhnLps69L7fqO2d4oD7jY+b0d6J2/O1bHhx5lN9rum4kXrM4B5ql
-        ABb33lz1HSobucNDQQ4FsrHKBz3qjC76kpOoq6vQbWn0Hyh1aYuItGEyJIwV8C7bg0NsviS
-        hcqT4ij0mMYVC2/HmQLga0fL2/gRk2PNkqD7D+AJo6BJvAp8YxGR9vEq83pOxDbTuPxVNn6
-        GwigwVMdnYYW6xBQnAAfHJh22aF0g==
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     mchehab@kernel.org
-Cc:     mirela.rabulea@nxp.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, linux-imx@nxp.com, kernel@pengutronix.de,
-        festevam@gmail.com, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] media: imx-jpeg: Remove unnecessary memset() after dma_alloc_coherent()
-Date:   Sat, 16 Jul 2022 20:25:43 +0800
-Message-Id: <20220716122543.34218-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Sat, 16 Jul 2022 02:06:07 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB7283F01
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 23:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657951564; x=1689487564;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zVQJmvZD4ugZa4TvRGKOUU52CcOALczf3amrSfgIGEE=;
+  b=es/HFhBoG0SI0mJDGUggnK5B6iF/0fD4uN4Ukmpon7XbCVi+oRsP/LFd
+   QnvUWcKCmWRBJsWn/gLv6E4HWu5m7U4mIR5IjcbncpSb1sxu3A0CVYlwG
+   jZW9RQcHiIFvQyuB60amDo+NIK+9/5hIo0/wog1aKXvxMcxAEiigW63X7
+   ueAhezkSaN5qXnbozqrC4bYqsiSLu/uMssnEefo+zZAtwzWymd5M/MDdD
+   UwTbE5GWrTzuk68TNm87TpWOR5nQkfDLHmsEMcs8v/UuYKErbJVjz3X6X
+   jvITYP+y6JJSadcU3p3rfsMoODtMT09lzkAKzODeoxl3awRQRynuNw5sg
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="287091370"
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="287091370"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 23:06:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="624122850"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 15 Jul 2022 23:06:00 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCawB-0001Cc-Fz;
+        Sat, 16 Jul 2022 06:05:59 +0000
+Date:   Sat, 16 Jul 2022 14:05:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: drivers/cpufreq/tegra194-cpufreq.c:337:32: sparse: sparse: symbol
+ 'tegra194_cpufreq_soc' was not declared. Should it be static?
+Message-ID: <202207161302.50mELF4P-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        RDNS_DYNAMIC,SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The `dma_alloc_coherent()' already zeroes out memory for us, so we don't
-need the redundant memset().
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9b59ec8d50a1f28747ceff9a4f39af5deba9540e
+commit: 0839ed1fd7aca2cc67fbe19b8c6394e8a6e58453 cpufreq: tegra194: add soc data to support multiple soc
+date:   3 months ago
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220716/202207161302.50mELF4P-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0839ed1fd7aca2cc67fbe19b8c6394e8a6e58453
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0839ed1fd7aca2cc67fbe19b8c6394e8a6e58453
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/cpufreq/
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 1 -
- 1 file changed, 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index 32fd04a3d8bb..482177ee01b6 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -519,7 +519,6 @@ static bool mxc_jpeg_alloc_slot_data(struct mxc_jpeg_dev *jpeg,
- 				     GFP_ATOMIC);
- 	if (!cfg_stm)
- 		goto err;
--	memset(cfg_stm, 0, MXC_JPEG_MAX_CFG_STREAM);
- 	jpeg->slot_data[slot].cfg_stream_vaddr = cfg_stm;
- 
- skip_alloc:
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/cpufreq/tegra194-cpufreq.c:337:32: sparse: sparse: symbol 'tegra194_cpufreq_soc' was not declared. Should it be static?
+
+vim +/tegra194_cpufreq_soc +337 drivers/cpufreq/tegra194-cpufreq.c
+
+   335	
+   336	static unsigned int tegra194_get_speed(u32 cpu)
+ > 337	{
+   338		struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
+   339		struct cpufreq_frequency_table *pos;
+   340		u32 cpuid, clusterid;
+   341		unsigned int rate;
+   342		u64 ndiv;
+   343		int ret;
+   344	
+   345		data->soc->ops->get_cpu_cluster_id(cpu, &cpuid, &clusterid);
+   346	
+   347		/* reconstruct actual cpu freq using counters */
+   348		rate = tegra194_calculate_speed(cpu);
+   349	
+   350		/* get last written ndiv value */
+   351		ret = data->soc->ops->get_cpu_ndiv(cpu, cpuid, clusterid, &ndiv);
+   352		if (WARN_ON_ONCE(ret))
+   353			return rate;
+   354	
+   355		/*
+   356		 * If the reconstructed frequency has acceptable delta from
+   357		 * the last written value, then return freq corresponding
+   358		 * to the last written ndiv value from freq_table. This is
+   359		 * done to return consistent value.
+   360		 */
+   361		cpufreq_for_each_valid_entry(pos, data->tables[clusterid]) {
+   362			if (pos->driver_data != ndiv)
+   363				continue;
+   364	
+   365			if (abs(pos->frequency - rate) > 115200) {
+   366				pr_warn("cpufreq: cpu%d,cur:%u,set:%u,set ndiv:%llu\n",
+   367					cpu, rate, pos->frequency, ndiv);
+   368			} else {
+   369				rate = pos->frequency;
+   370			}
+   371			break;
+   372		}
+   373		return rate;
+   374	}
+   375	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

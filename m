@@ -2,100 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8123576B23
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 02:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7AE9576B24
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 02:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiGPAjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 20:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
+        id S229772AbiGPAs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 20:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiGPAjJ (ORCPT
+        with ESMTP id S229625AbiGPAsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 20:39:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41FEA3E77D
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 17:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657931945;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=oxMsgHgkOs0K1Xf4snqsrkPHTjlyIKqMwEhVdQleeuM=;
-        b=aHBLpFAAdcJV/Wr4m01CcewJmEy3folTFDIozVeQsrPkuQzHgfehHITQON/umXFoXc3KFK
-        bRmSgACCChkJI/CUH3yFgy+G/SvLRSaX3VmxyiM9eMsRbBUQQQ96DDdDtHGcwvXbPWuh35
-        sFStUwqC4KA6NlYBQSEoA0ESNBgeRbw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-208-T9rEP0h4O9q6fqMoIf1kBg-1; Fri, 15 Jul 2022 20:38:55 -0400
-X-MC-Unique: T9rEP0h4O9q6fqMoIf1kBg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EE8CF80418F;
-        Sat, 16 Jul 2022 00:38:54 +0000 (UTC)
-Received: from localhost (unknown [10.22.32.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0509040E80E0;
-        Sat, 16 Jul 2022 00:38:53 +0000 (UTC)
-Date:   Fri, 15 Jul 2022 21:38:53 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        Jeff Brady <jeffreyjbrady@gmail.com>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: [ANNOUNCE] 5.10.131-rt72
-Message-ID: <YtIIneq0NCXILs8T@uudg.org>
+        Fri, 15 Jul 2022 20:48:53 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BF512D2F
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 17:48:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657932531; x=1689468531;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=D36AQo3H5K/5p5hq8Y1LVT2dPfzu1gIzRHfMGeljxQw=;
+  b=HTQvIHnR2GUOtU+WWZ73xf4nBXgezAKm0jc0/NqBTOXAH3QVGdziSY0p
+   V5UTGjO4pJCOWcAlOkT/N9mJRAEj4WjZCV9PdXR1klQTN6d2eVzp1gmA8
+   Pk5VXrhS9U2cL2ape57Td71ZlTtLhKV1pMirAO2P0c8pEr7Zdoj2DLING
+   hZasFjhYvEYu4b+g9o/5+XZCZVqAZMUvRmh/eFZoHUVlaK2x6r03V4Zhs
+   qcoC1yniOpT/3Tmf75ecmDJV7V7nBYHjRjkSJgUEueSUmMP6R3T2h0Yel
+   efmHyo7qlY43qZoIJnklFsS1lCFXr9u6qigIX1fzEegwV3uV8XpR08srr
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="285955467"
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="285955467"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 17:48:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="773172011"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 15 Jul 2022 17:48:50 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCVzF-0000u4-HW;
+        Sat, 16 Jul 2022 00:48:49 +0000
+Date:   Sat, 16 Jul 2022 08:48:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Loic Poulain <loic.poulain@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/net/wwan/iosm/iosm_ipc_mux_codec.c:833:21: sparse: sparse:
+ Using plain integer as NULL pointer
+Message-ID: <202207160836.RlSIXAvl-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+Hi Loic,
 
-I'm pleased to announce the 5.10.131-rt72 stable release.
+First bad commit (maybe != root cause):
 
-You can get this release via the git tree at:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9b59ec8d50a1f28747ceff9a4f39af5deba9540e
+commit: 89212e160b81e778f829b89743570665810e3b13 net: wwan: Fix WWAN config symbols
+date:   1 year, 1 month ago
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220716/202207160836.RlSIXAvl-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=89212e160b81e778f829b89743570665810e3b13
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 89212e160b81e778f829b89743570665810e3b13
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/wwan/iosm/
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-  branch: v5.10-rt
-  Head SHA1: 708e7c0b39cf6f804901396f0bb1e620fe7c429b
 
-Or to build 5.10.131-rt72 directly, the following patches should be applied:
+sparse warnings: (new ones prefixed by >>)
+>> drivers/net/wwan/iosm/iosm_ipc_mux_codec.c:833:21: sparse: sparse: Using plain integer as NULL pointer
 
-  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
+vim +833 drivers/net/wwan/iosm/iosm_ipc_mux_codec.c
 
-  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.131.xz
+9413491e20e1aba M Chetan Kumar 2021-06-13  814  
+9413491e20e1aba M Chetan Kumar 2021-06-13  815  void ipc_mux_ul_encoded_process(struct iosm_mux *ipc_mux, struct sk_buff *skb)
+9413491e20e1aba M Chetan Kumar 2021-06-13  816  {
+9413491e20e1aba M Chetan Kumar 2021-06-13  817  	struct mux_adgh *adgh;
+9413491e20e1aba M Chetan Kumar 2021-06-13  818  	u16 adgh_len;
+9413491e20e1aba M Chetan Kumar 2021-06-13  819  
+9413491e20e1aba M Chetan Kumar 2021-06-13  820  	adgh = (struct mux_adgh *)skb->data;
+9413491e20e1aba M Chetan Kumar 2021-06-13  821  	adgh_len = le16_to_cpu(adgh->length);
+9413491e20e1aba M Chetan Kumar 2021-06-13  822  
+9413491e20e1aba M Chetan Kumar 2021-06-13  823  	if (adgh->signature == cpu_to_le32(MUX_SIG_ADGH) &&
+9413491e20e1aba M Chetan Kumar 2021-06-13  824  	    ipc_mux->ul_flow == MUX_UL)
+9413491e20e1aba M Chetan Kumar 2021-06-13  825  		ipc_mux->ul_data_pend_bytes = ipc_mux->ul_data_pend_bytes -
+9413491e20e1aba M Chetan Kumar 2021-06-13  826  					      adgh_len;
+9413491e20e1aba M Chetan Kumar 2021-06-13  827  
+9413491e20e1aba M Chetan Kumar 2021-06-13  828  	if (ipc_mux->ul_flow == MUX_UL)
+9413491e20e1aba M Chetan Kumar 2021-06-13  829  		dev_dbg(ipc_mux->dev, "ul_data_pend_bytes: %lld",
+9413491e20e1aba M Chetan Kumar 2021-06-13  830  			ipc_mux->ul_data_pend_bytes);
+9413491e20e1aba M Chetan Kumar 2021-06-13  831  
+9413491e20e1aba M Chetan Kumar 2021-06-13  832  	/* Reset the skb settings. */
+9413491e20e1aba M Chetan Kumar 2021-06-13 @833  	skb->tail = 0;
+9413491e20e1aba M Chetan Kumar 2021-06-13  834  	skb->len = 0;
+9413491e20e1aba M Chetan Kumar 2021-06-13  835  
+9413491e20e1aba M Chetan Kumar 2021-06-13  836  	/* Add the consumed ADB to the free list. */
+9413491e20e1aba M Chetan Kumar 2021-06-13  837  	skb_queue_tail((&ipc_mux->ul_adb.free_list), skb);
+9413491e20e1aba M Chetan Kumar 2021-06-13  838  }
+9413491e20e1aba M Chetan Kumar 2021-06-13  839  
 
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/older/patch-5.10.131-rt72.patch.xz
+:::::: The code at line 833 was first introduced by commit
+:::::: 9413491e20e1aba6e471d90c19cc43e523216a4d net: iosm: encode or decode datagram
 
-Signing key fingerprint:
+:::::: TO: M Chetan Kumar <m.chetan.kumar@intel.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
-  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
-
-All keys used for the above files and repositories can be found on the
-following git repository:
-
-   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-Enjoy!
-Luis
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

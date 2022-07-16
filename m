@@ -2,141 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38FE576D58
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 12:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D12D576D59
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 12:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiGPKvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 06:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
+        id S229877AbiGPK4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 06:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGPKvW (ORCPT
+        with ESMTP id S229469AbiGPK4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 06:51:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBFD1261D
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 03:51:20 -0700 (PDT)
-Date:   Sat, 16 Jul 2022 10:51:17 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657968679;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0ToVnBR8bVfwYff6uOctrSKz9LEqnHLVISbMa8FmLdY=;
-        b=voCQ6g8S1traEjaju7S1pW9SIMzktpb94gWgQIvr9ePXf3rho2ApjmpAU9A9jWimYTZD1e
-        IQSXgbHKjzQhQBzIMEjeV3J5cPLYDpnqhDu1Q3y9snzdWvbUmsXgRR5x8PqA/wA7i40Ist
-        T0bWek6kMiR6WHxr/VAblJgQDH9JhJBv8g1FWJTKqvKUwctLrHCzLGabQrKOUC2YBmHtil
-        YF7xrFEfD+iOaa9r87631xlfuzzGujCiEgZF+CO0vtJKg6Gf2DVabS+jpFXTGCqfUqrC/V
-        vhwKXJr1P/7Upo7qHOHiEShAzMutG1My7aNDpVqHDgMgo4297yrCrwI+wShxaQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657968679;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0ToVnBR8bVfwYff6uOctrSKz9LEqnHLVISbMa8FmLdY=;
-        b=BS76s1S+JeZlFvFCb6oUymYcnogO9pTIdaoJ63E6ouwi/qpKoN00zpFxW/IJ19efWCcyvt
-        ociKcaxfbwWvA4DQ==
-From:   "irqchip-bot for Michael Walle" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] pinctrl: ocelot: Make irq_chip immutable
-Cc:     Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220706151553.1580790-2-michael@walle.cc>
-References: <20220706151553.1580790-2-michael@walle.cc>
+        Sat, 16 Jul 2022 06:56:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5FACE2A
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 03:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657968969; x=1689504969;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=grnTWgXhzfLD9ND8ntiGCpjQ1qbsNzpWO6Ixj5ZvrMg=;
+  b=aaWa7WRxkWnXM8AB40vRtWRYjG47E/9UZJcCjVbK8MjZwALvvMnKBKVs
+   xAapx0WCeAXwXmqVHkE/cnxawWhakDzYNy5noOxsw32uadKUeXoudRmhj
+   qm8TUCs2Rcb9Vi32UHNq1gDHJxWgX4mA5NwqHWM2ru18eG4fsRCigQj6Q
+   0EQv17t7dLdhw9JcBW28pss1YwCVCz6q0JNn1jF6MfA4DiKfys3vxtchB
+   cDzB6Hol0vOeyXS4Iuylfi04Ui9mrCvDnsJqPukczma5p+67DjCeuDOAi
+   9wcs/yJwdQbuF/f95nRu+noBr+FTtXo432GT31UKS/ueers/vRSvqEuDv
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="285991556"
+X-IronPort-AV: E=Sophos;i="5.92,276,1650956400"; 
+   d="scan'208";a="285991556"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 03:56:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,276,1650956400"; 
+   d="scan'208";a="624165384"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 16 Jul 2022 03:56:07 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCfSw-0001OC-ED;
+        Sat, 16 Jul 2022 10:56:06 +0000
+Date:   Sat, 16 Jul 2022 18:55:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [linux-stable-rc:linux-5.15.y 5373/8464]
+ arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit
+ (1024) in 'kvm_hv_hypercall'
+Message-ID: <202207161843.WnHPjB0l-lkp@intel.com>
 MIME-Version: 1.0
-Message-ID: <165796867790.15455.12863870206141352541.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+head:   baefa2315cb1371486f6661a628e96fa3336f573
+commit: cb188e07105f2216f5efbefac95df4b6ce266906 [5373/8464] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220716/202207161843.WnHPjB0l-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=cb188e07105f2216f5efbefac95df4b6ce266906
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.15.y
+        git checkout cb188e07105f2216f5efbefac95df4b6ce266906
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
-Commit-ID:     51ff93923e21ed2862e83f208706e3ca31d6f409
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/51ff93923e21ed2862e83f208706e3ca31d6f409
-Author:        Michael Walle <michael@walle.cc>
-AuthorDate:    Wed, 06 Jul 2022 17:15:53 +02:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Sat, 16 Jul 2022 11:47:45 +01:00
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-pinctrl: ocelot: Make irq_chip immutable
+All warnings (new ones prefixed by >>):
 
-Since recently, the kernel is nagging about mutable irq_chips:
+>> arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Wframe-larger-than]
+   int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+       ^
+   1 warning generated.
 
-[    2.593426] gpio gpiochip0: (ocelot-gpio): not an immutable chip, please consider fixing it!
 
-Make it const, flag it as IRQCHIP_IMMUTABLE, add the new helper
-functions and call the appropriate gpiolib functions.
+vim +/kvm_hv_hypercall +2185 arch/x86/kvm/hyperv.c
 
-Signed-off-by: Michael Walle <michael@walle.cc>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220706151553.1580790-2-michael@walle.cc
----
- drivers/pinctrl/pinctrl-ocelot.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+4ad81a91119df7 Vitaly Kuznetsov         2021-05-21  2184  
+e83d58874ba1de Andrey Smetanin          2015-07-03 @2185  int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+e83d58874ba1de Andrey Smetanin          2015-07-03  2186  {
+4e62aa96d6e55c Vitaly Kuznetsov         2021-07-30  2187  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2188  	struct kvm_hv_hcall hc;
+bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2189  	u64 ret = HV_STATUS_SUCCESS;
+e83d58874ba1de Andrey Smetanin          2015-07-03  2190  
+e83d58874ba1de Andrey Smetanin          2015-07-03  2191  	/*
+e83d58874ba1de Andrey Smetanin          2015-07-03  2192  	 * hypercall generates UD from non zero cpl and real mode
+e83d58874ba1de Andrey Smetanin          2015-07-03  2193  	 * per HYPER-V spec
+e83d58874ba1de Andrey Smetanin          2015-07-03  2194  	 */
+b3646477d458fb Jason Baron              2021-01-14  2195  	if (static_call(kvm_x86_get_cpl)(vcpu) != 0 || !is_protmode(vcpu)) {
+e83d58874ba1de Andrey Smetanin          2015-07-03  2196  		kvm_queue_exception(vcpu, UD_VECTOR);
+0d9c055eaaf41b Andrey Smetanin          2016-02-11  2197  		return 1;
+e83d58874ba1de Andrey Smetanin          2015-07-03  2198  	}
+e83d58874ba1de Andrey Smetanin          2015-07-03  2199  
 
-diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
-index 5f4a8c5..425c1a9 100644
---- a/drivers/pinctrl/pinctrl-ocelot.c
-+++ b/drivers/pinctrl/pinctrl-ocelot.c
-@@ -1761,6 +1761,7 @@ static void ocelot_irq_mask(struct irq_data *data)
- 
- 	regmap_update_bits(info->map, REG(OCELOT_GPIO_INTR_ENA, info, gpio),
- 			   BIT(gpio % 32), 0);
-+	gpiochip_disable_irq(chip, gpio);
- }
- 
- static void ocelot_irq_unmask(struct irq_data *data)
-@@ -1769,6 +1770,7 @@ static void ocelot_irq_unmask(struct irq_data *data)
- 	struct ocelot_pinctrl *info = gpiochip_get_data(chip);
- 	unsigned int gpio = irqd_to_hwirq(data);
- 
-+	gpiochip_enable_irq(chip, gpio);
- 	regmap_update_bits(info->map, REG(OCELOT_GPIO_INTR_ENA, info, gpio),
- 			   BIT(gpio % 32), BIT(gpio % 32));
- }
-@@ -1790,8 +1792,10 @@ static struct irq_chip ocelot_eoi_irqchip = {
- 	.irq_mask	= ocelot_irq_mask,
- 	.irq_eoi	= ocelot_irq_ack,
- 	.irq_unmask	= ocelot_irq_unmask,
--	.flags          = IRQCHIP_EOI_THREADED | IRQCHIP_EOI_IF_HANDLED,
-+	.flags          = IRQCHIP_EOI_THREADED | IRQCHIP_EOI_IF_HANDLED |
-+			  IRQCHIP_IMMUTABLE,
- 	.irq_set_type	= ocelot_irq_set_type,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS
- };
- 
- static struct irq_chip ocelot_irqchip = {
-@@ -1800,6 +1804,8 @@ static struct irq_chip ocelot_irqchip = {
- 	.irq_ack	= ocelot_irq_ack,
- 	.irq_unmask	= ocelot_irq_unmask,
- 	.irq_set_type	= ocelot_irq_set_type,
-+	.flags          = IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS
- };
- 
- static int ocelot_irq_set_type(struct irq_data *data, unsigned int type)
-@@ -1863,7 +1869,7 @@ static int ocelot_gpiochip_register(struct platform_device *pdev,
- 	irq = platform_get_irq_optional(pdev, 0);
- 	if (irq > 0) {
- 		girq = &gc->irq;
--		girq->chip = &ocelot_irqchip;
-+		gpio_irq_chip_set_chip(girq, &ocelot_irqchip);
- 		girq->parent_handler = ocelot_irq_handler;
- 		girq->num_parents = 1;
- 		girq->parents = devm_kcalloc(&pdev->dev, 1,
+:::::: The code at line 2185 was first introduced by commit
+:::::: e83d58874ba1de74c13d3c6b05f95a023c860d25 kvm/x86: move Hyper-V MSR's/hypercall code into hyperv.c file
+
+:::::: TO: Andrey Smetanin <asmetanin@virtuozzo.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

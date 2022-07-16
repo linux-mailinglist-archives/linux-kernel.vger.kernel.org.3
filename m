@@ -2,175 +2,451 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B70C576E19
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 15:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1961576E1A
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 15:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbiGPNFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 09:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
+        id S231697AbiGPNIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 09:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiGPNFW (ORCPT
+        with ESMTP id S229499AbiGPNII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 09:05:22 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED55260A;
-        Sat, 16 Jul 2022 06:05:21 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id y15so613991plp.10;
-        Sat, 16 Jul 2022 06:05:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jjGe3L9TiFV6FJ+E5XvhpZkMgf2NPsXY2lR2l1aKcOw=;
-        b=LuJB6kFsh4VY/mnIXcqQJrOwgfXgxeB0fhwqOD19C18NFhqJlobgI207hSjyUFSm/K
-         wtu8073cDoTMp9bp7sQP7hM441QxRazaD6h4T+2/wE0UP0BYYWr/FS7W6VKJ6qRTTOX0
-         eGNe3kEZEAeKiS20iqQf+VfaL5vY2EcemsrydY4dqFTqwzZJ1DHBPQE3tTbNg5YsbtKH
-         tzK98El1Q24VgN1WMYBHyecdzXhY8K5lblupRN3uTdHQYxixIsy+FW/n2YNG1DfnjxyS
-         2nW72M1rTWg/PR1HsjiHMglT0sMtnJd8ElzINgVl/sr5qRjX0rXtGTmspLaUMobIIjfg
-         zJkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jjGe3L9TiFV6FJ+E5XvhpZkMgf2NPsXY2lR2l1aKcOw=;
-        b=JAjti+vgsGQGXbs4gfSHbf3B7TmpfwtITlM8virfrdqChoIjyR+8qOl6kIZUgP8kK1
-         ModVJWeF8UCpEfSd6uXDu6q25HK8AfqMrH6vecd2tMv6U2EVmIyBITeI25Yx0FePbEVx
-         Rlklb4w8Ks2XV+KPI4FG3PUHn5S1aR3Zjn1U2XGUqcGA1VKha/n8OLgAyeYpGI0YcOOT
-         Cf/Em19VhoEPUIW++kwxUQ2BCvJo39IZ5vxnmoiZHYF3sGx22scJIX58aRAqtzvq2vk6
-         Gd4g6FGU9Acexpj8OVydKKSqsGw2EdHMQXOjSxDtzxKCkwEM9Ba9hsUlo729P8kyZ+5w
-         Z/8A==
-X-Gm-Message-State: AJIora8qI0t3XJX3bmUR9MT4WKA5y4gTrPQXWATNSAT+trlwz3epkw5P
-        0NCwNDcbb8+NYJCdUcvoDA==
-X-Google-Smtp-Source: AGRyM1tpLyZ3E7V+hBKicc0Of0PUmmRR1fbvKmZuhak2HBexH8vuX/nJGgNi2qA/021ABkNhrh4ELA==
-X-Received: by 2002:a17:902:b712:b0:16b:d667:ab59 with SMTP id d18-20020a170902b71200b0016bd667ab59mr18826698pls.74.1657976720928;
-        Sat, 16 Jul 2022 06:05:20 -0700 (PDT)
-Received: from localhost.localdomain ([144.202.91.207])
-        by smtp.gmail.com with ESMTPSA id g3-20020a170902e38300b0015e8d4eb1c8sm5456831ple.18.2022.07.16.06.05.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Jul 2022 06:05:20 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     Jes.Sorensen@gmail.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH] rtl8xxxu: Fix the error handling of the probe function
-Date:   Sat, 16 Jul 2022 21:04:44 +0800
-Message-Id: <20220716130444.2950690-1-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 16 Jul 2022 09:08:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329A81275C
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 06:08:05 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 504F02057C;
+        Sat, 16 Jul 2022 13:08:04 +0000 (UTC)
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id 3765A2C141;
+        Sat, 16 Jul 2022 13:08:04 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] char: remove VR41XX related char driver
+Date:   Sat, 16 Jul 2022 15:08:01 +0200
+Message-Id: <20220716130802.11660-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the driver fails at ieee80211_alloc_hw() at the probe time, the
-driver will free the 'hw' which is not allocated, causing a bug.
+Commit d3164e2f3b0a ("MIPS: Remove VR41xx support") removed support
+for MIPS VR41xx platform, so remove exclusive drivers for this
+platform, too.
 
-The following log can reveal it:
-
-[   15.981294] BUG: KASAN: user-memory-access in mutex_is_locked+0xe/0x40
-[   15.981558] Read of size 8 at addr 0000000000001ab0 by task modprobe/373
-[   15.982583] Call Trace:
-[   15.984282]  ieee80211_free_hw+0x22/0x390
-[   15.984446]  rtl8xxxu_probe+0x3a1/0xab30 [rtl8xxxu]
-
-Fix the bug by changing the order of the error handling.
-
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 ---
- .../wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 21 ++++++++++---------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+Changes in v2:
+	rebased to char-misc-next
 
-diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-index 8b2ca9e8eac6..567ada2e665a 100644
---- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-+++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-@@ -6657,7 +6657,7 @@ static int rtl8xxxu_probe(struct usb_interface *interface,
- 	if (!hw) {
- 		ret = -ENOMEM;
- 		priv = NULL;
--		goto exit;
-+		goto err_put_dev;
- 	}
+ drivers/char/Kconfig  |   5 -
+ drivers/char/Makefile |   1 -
+ drivers/char/tb0219.c | 359 ------------------------------------------
+ 3 files changed, 365 deletions(-)
+ delete mode 100644 drivers/char/tb0219.c
+
+diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+index 0b6c03643ddc..1c9ed699cbca 100644
+--- a/drivers/char/Kconfig
++++ b/drivers/char/Kconfig
+@@ -247,11 +247,6 @@ config SONYPI
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called sonypi.
  
- 	priv = hw->priv;
-@@ -6679,24 +6679,24 @@ static int rtl8xxxu_probe(struct usb_interface *interface,
+-config GPIO_TB0219
+-	tristate "TANBAC TB0219 GPIO support"
+-	depends on TANBAC_TB022X
+-	select GPIO_VR41XX
+-
+ source "drivers/char/pcmcia/Kconfig"
  
- 	ret = rtl8xxxu_parse_usb(priv, interface);
- 	if (ret)
--		goto exit;
-+		goto err_set_intfdata;
+ config MWAVE
+diff --git a/drivers/char/Makefile b/drivers/char/Makefile
+index 264eb398fdd4..1b35d1724565 100644
+--- a/drivers/char/Makefile
++++ b/drivers/char/Makefile
+@@ -31,7 +31,6 @@ obj-$(CONFIG_NWFLASH)		+= nwflash.o
+ obj-$(CONFIG_SCx200_GPIO)	+= scx200_gpio.o
+ obj-$(CONFIG_PC8736x_GPIO)	+= pc8736x_gpio.o
+ obj-$(CONFIG_NSC_GPIO)		+= nsc_gpio.o
+-obj-$(CONFIG_GPIO_TB0219)	+= tb0219.o
+ obj-$(CONFIG_TELCLOCK)		+= tlclk.o
  
- 	ret = rtl8xxxu_identify_chip(priv);
- 	if (ret) {
- 		dev_err(&udev->dev, "Fatal - failed to identify chip\n");
--		goto exit;
-+		goto err_set_intfdata;
- 	}
- 
- 	ret = rtl8xxxu_read_efuse(priv);
- 	if (ret) {
- 		dev_err(&udev->dev, "Fatal - failed to read EFuse\n");
--		goto exit;
-+		goto err_set_intfdata;
- 	}
- 
- 	ret = priv->fops->parse_efuse(priv);
- 	if (ret) {
- 		dev_err(&udev->dev, "Fatal - failed to parse EFuse\n");
--		goto exit;
-+		goto err_set_intfdata;
- 	}
- 
- 	rtl8xxxu_print_chipinfo(priv);
-@@ -6704,12 +6704,12 @@ static int rtl8xxxu_probe(struct usb_interface *interface,
- 	ret = priv->fops->load_firmware(priv);
- 	if (ret) {
- 		dev_err(&udev->dev, "Fatal - failed to load firmware\n");
--		goto exit;
-+		goto err_set_intfdata;
- 	}
- 
- 	ret = rtl8xxxu_init_device(hw);
- 	if (ret)
--		goto exit;
-+		goto err_set_intfdata;
- 
- 	hw->wiphy->max_scan_ssids = 1;
- 	hw->wiphy->max_scan_ie_len = IEEE80211_MAX_DATA_LEN;
-@@ -6759,12 +6759,12 @@ static int rtl8xxxu_probe(struct usb_interface *interface,
- 	if (ret) {
- 		dev_err(&udev->dev, "%s: Failed to register: %i\n",
- 			__func__, ret);
--		goto exit;
-+		goto err_set_intfdata;
- 	}
- 
- 	return 0;
- 
--exit:
-+err_set_intfdata:
- 	usb_set_intfdata(interface, NULL);
- 
- 	if (priv) {
-@@ -6772,9 +6772,10 @@ static int rtl8xxxu_probe(struct usb_interface *interface,
- 		mutex_destroy(&priv->usb_buf_mutex);
- 		mutex_destroy(&priv->h2c_mutex);
- 	}
--	usb_put_dev(udev);
- 
- 	ieee80211_free_hw(hw);
-+err_put_dev:
-+	usb_put_dev(udev);
- 
- 	return ret;
- }
+ obj-$(CONFIG_MWAVE)		+= mwave/
+diff --git a/drivers/char/tb0219.c b/drivers/char/tb0219.c
+deleted file mode 100644
+index 1f36be14978f..000000000000
+--- a/drivers/char/tb0219.c
++++ /dev/null
+@@ -1,359 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- *  Driver for TANBAC TB0219 base board.
+- *
+- *  Copyright (C) 2005  Yoichi Yuasa <yuasa@linux-mips.org>
+- */
+-#include <linux/platform_device.h>
+-#include <linux/fs.h>
+-#include <linux/init.h>
+-#include <linux/module.h>
+-#include <linux/uaccess.h>
+-
+-#include <asm/io.h>
+-#include <asm/reboot.h>
+-#include <asm/vr41xx/giu.h>
+-#include <asm/vr41xx/tb0219.h>
+-
+-MODULE_AUTHOR("Yoichi Yuasa <yuasa@linux-mips.org>");
+-MODULE_DESCRIPTION("TANBAC TB0219 base board driver");
+-MODULE_LICENSE("GPL");
+-
+-static int major;	/* default is dynamic major device number */
+-module_param(major, int, 0);
+-MODULE_PARM_DESC(major, "Major device number");
+-
+-static void (*old_machine_restart)(char *command);
+-static void __iomem *tb0219_base;
+-static DEFINE_SPINLOCK(tb0219_lock);
+-
+-#define tb0219_read(offset)		readw(tb0219_base + (offset))
+-#define tb0219_write(offset, value)	writew((value), tb0219_base + (offset))
+-
+-#define TB0219_START	0x0a000000UL
+-#define TB0219_SIZE	0x20UL
+-
+-#define TB0219_LED			0x00
+-#define TB0219_GPIO_INPUT		0x02
+-#define TB0219_GPIO_OUTPUT		0x04
+-#define TB0219_DIP_SWITCH		0x06
+-#define TB0219_MISC			0x08
+-#define TB0219_RESET			0x0e
+-#define TB0219_PCI_SLOT1_IRQ_STATUS	0x10
+-#define TB0219_PCI_SLOT2_IRQ_STATUS	0x12
+-#define TB0219_PCI_SLOT3_IRQ_STATUS	0x14
+-
+-typedef enum {
+-	TYPE_LED,
+-	TYPE_GPIO_OUTPUT,
+-} tb0219_type_t;
+-
+-/*
+- * Minor device number
+- *	 0 = 7 segment LED
+- *
+- *	16 = GPIO IN 0
+- *	17 = GPIO IN 1
+- *	18 = GPIO IN 2
+- *	19 = GPIO IN 3
+- *	20 = GPIO IN 4
+- *	21 = GPIO IN 5
+- *	22 = GPIO IN 6
+- *	23 = GPIO IN 7
+- *
+- *	32 = GPIO OUT 0
+- *	33 = GPIO OUT 1
+- *	34 = GPIO OUT 2
+- *	35 = GPIO OUT 3
+- *	36 = GPIO OUT 4
+- *	37 = GPIO OUT 5
+- *	38 = GPIO OUT 6
+- *	39 = GPIO OUT 7
+- *
+- *	48 = DIP switch 1
+- *	49 = DIP switch 2
+- *	50 = DIP switch 3
+- *	51 = DIP switch 4
+- *	52 = DIP switch 5
+- *	53 = DIP switch 6
+- *	54 = DIP switch 7
+- *	55 = DIP switch 8
+- */
+-
+-static inline char get_led(void)
+-{
+-	return (char)tb0219_read(TB0219_LED);
+-}
+-
+-static inline char get_gpio_input_pin(unsigned int pin)
+-{
+-	uint16_t values;
+-
+-	values = tb0219_read(TB0219_GPIO_INPUT);
+-	if (values & (1 << pin))
+-		return '1';
+-
+-	return '0';
+-}
+-
+-static inline char get_gpio_output_pin(unsigned int pin)
+-{
+-	uint16_t values;
+-
+-	values = tb0219_read(TB0219_GPIO_OUTPUT);
+-	if (values & (1 << pin))
+-		return '1';
+-
+-	return '0';
+-}
+-
+-static inline char get_dip_switch(unsigned int pin)
+-{
+-	uint16_t values;
+-
+-	values = tb0219_read(TB0219_DIP_SWITCH);
+-	if (values & (1 << pin))
+-		return '1';
+-
+-	return '0';
+-}
+-
+-static inline int set_led(char command)
+-{
+-	tb0219_write(TB0219_LED, command);
+-
+-	return 0;
+-}
+-
+-static inline int set_gpio_output_pin(unsigned int pin, char command)
+-{
+-	unsigned long flags;
+-	uint16_t value;
+-
+-	if (command != '0' && command != '1')
+-		return -EINVAL;
+-
+-	spin_lock_irqsave(&tb0219_lock, flags);
+-	value = tb0219_read(TB0219_GPIO_OUTPUT);
+-	if (command == '0')
+-		value &= ~(1 << pin);
+-	else
+-		value |= 1 << pin;
+-	tb0219_write(TB0219_GPIO_OUTPUT, value);
+-	spin_unlock_irqrestore(&tb0219_lock, flags);
+-
+-	return 0;
+-
+-}
+-
+-static ssize_t tanbac_tb0219_read(struct file *file, char __user *buf, size_t len,
+-                                  loff_t *ppos)
+-{
+-	unsigned int minor;
+-	char value;
+-
+-	minor = iminor(file_inode(file));
+-	switch (minor) {
+-	case 0:
+-		value = get_led();
+-		break;
+-	case 16 ... 23:
+-		value = get_gpio_input_pin(minor - 16);
+-		break;
+-	case 32 ... 39:
+-		value = get_gpio_output_pin(minor - 32);
+-		break;
+-	case 48 ... 55:
+-		value = get_dip_switch(minor - 48);
+-		break;
+-	default:
+-		return -EBADF;
+-	}
+-
+-	if (len <= 0)
+-		return -EFAULT;
+-
+-	if (put_user(value, buf))
+-		return -EFAULT;
+-
+-	return 1;
+-}
+-
+-static ssize_t tanbac_tb0219_write(struct file *file, const char __user *data,
+-                                   size_t len, loff_t *ppos)
+-{
+-	unsigned int minor;
+-	tb0219_type_t type;
+-	size_t i;
+-	int retval = 0;
+-	char c;
+-
+-	minor = iminor(file_inode(file));
+-	switch (minor) {
+-	case 0:
+-		type = TYPE_LED;
+-		break;
+-	case 32 ... 39:
+-		type = TYPE_GPIO_OUTPUT;
+-		break;
+-	default:
+-		return -EBADF;
+-	}
+-
+-	for (i = 0; i < len; i++) {
+-		if (get_user(c, data + i))
+-			return -EFAULT;
+-
+-		switch (type) {
+-		case TYPE_LED:
+-			retval = set_led(c);
+-			break;
+-		case TYPE_GPIO_OUTPUT:
+-			retval = set_gpio_output_pin(minor - 32, c);
+-			break;
+-		}
+-
+-		if (retval < 0)
+-			break;
+-	}
+-
+-	return i;
+-}
+-
+-static int tanbac_tb0219_open(struct inode *inode, struct file *file)
+-{
+-	unsigned int minor;
+-
+-	minor = iminor(inode);
+-	switch (minor) {
+-	case 0:
+-	case 16 ... 23:
+-	case 32 ... 39:
+-	case 48 ... 55:
+-		return stream_open(inode, file);
+-	default:
+-		break;
+-	}
+-
+-	return -EBADF;
+-}
+-
+-static int tanbac_tb0219_release(struct inode *inode, struct file *file)
+-{
+-	return 0;
+-}
+-
+-static const struct file_operations tb0219_fops = {
+-	.owner		= THIS_MODULE,
+-	.read		= tanbac_tb0219_read,
+-	.write		= tanbac_tb0219_write,
+-	.open		= tanbac_tb0219_open,
+-	.release	= tanbac_tb0219_release,
+-	.llseek		= no_llseek,
+-};
+-
+-static void tb0219_restart(char *command)
+-{
+-	tb0219_write(TB0219_RESET, 0);
+-}
+-
+-static void tb0219_pci_irq_init(void)
+-{
+-	/* PCI Slot 1 */
+-	vr41xx_set_irq_trigger(TB0219_PCI_SLOT1_PIN, IRQ_TRIGGER_LEVEL, IRQ_SIGNAL_THROUGH);
+-	vr41xx_set_irq_level(TB0219_PCI_SLOT1_PIN, IRQ_LEVEL_LOW);
+-
+-	/* PCI Slot 2 */
+-	vr41xx_set_irq_trigger(TB0219_PCI_SLOT2_PIN, IRQ_TRIGGER_LEVEL, IRQ_SIGNAL_THROUGH);
+-	vr41xx_set_irq_level(TB0219_PCI_SLOT2_PIN, IRQ_LEVEL_LOW);
+-
+-	/* PCI Slot 3 */
+-	vr41xx_set_irq_trigger(TB0219_PCI_SLOT3_PIN, IRQ_TRIGGER_LEVEL, IRQ_SIGNAL_THROUGH);
+-	vr41xx_set_irq_level(TB0219_PCI_SLOT3_PIN, IRQ_LEVEL_LOW);
+-}
+-
+-static int tb0219_probe(struct platform_device *dev)
+-{
+-	int retval;
+-
+-	if (request_mem_region(TB0219_START, TB0219_SIZE, "TB0219") == NULL)
+-		return -EBUSY;
+-
+-	tb0219_base = ioremap(TB0219_START, TB0219_SIZE);
+-	if (tb0219_base == NULL) {
+-		release_mem_region(TB0219_START, TB0219_SIZE);
+-		return -ENOMEM;
+-	}
+-
+-	retval = register_chrdev(major, "TB0219", &tb0219_fops);
+-	if (retval < 0) {
+-		iounmap(tb0219_base);
+-		tb0219_base = NULL;
+-		release_mem_region(TB0219_START, TB0219_SIZE);
+-		return retval;
+-	}
+-
+-	old_machine_restart = _machine_restart;
+-	_machine_restart = tb0219_restart;
+-
+-	tb0219_pci_irq_init();
+-
+-	if (major == 0) {
+-		major = retval;
+-		printk(KERN_INFO "TB0219: major number %d\n", major);
+-	}
+-
+-	return 0;
+-}
+-
+-static int tb0219_remove(struct platform_device *dev)
+-{
+-	_machine_restart = old_machine_restart;
+-
+-	iounmap(tb0219_base);
+-	tb0219_base = NULL;
+-
+-	release_mem_region(TB0219_START, TB0219_SIZE);
+-
+-	return 0;
+-}
+-
+-static struct platform_device *tb0219_platform_device;
+-
+-static struct platform_driver tb0219_device_driver = {
+-	.probe		= tb0219_probe,
+-	.remove		= tb0219_remove,
+-	.driver		= {
+-		.name	= "TB0219",
+-	},
+-};
+-
+-static int __init tanbac_tb0219_init(void)
+-{
+-	int retval;
+-
+-	tb0219_platform_device = platform_device_alloc("TB0219", -1);
+-	if (!tb0219_platform_device)
+-		return -ENOMEM;
+-
+-	retval = platform_device_add(tb0219_platform_device);
+-	if (retval < 0) {
+-		platform_device_put(tb0219_platform_device);
+-		return retval;
+-	}
+-
+-	retval = platform_driver_register(&tb0219_device_driver);
+-	if (retval < 0)
+-		platform_device_unregister(tb0219_platform_device);
+-
+-	return retval;
+-}
+-
+-static void __exit tanbac_tb0219_exit(void)
+-{
+-	platform_driver_unregister(&tb0219_device_driver);
+-	platform_device_unregister(tb0219_platform_device);
+-}
+-
+-module_init(tanbac_tb0219_init);
+-module_exit(tanbac_tb0219_exit);
 -- 
-2.25.1
+2.29.2
 

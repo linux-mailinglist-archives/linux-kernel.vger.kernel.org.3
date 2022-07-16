@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7105576C85
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 10:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD27576C83
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 10:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231793AbiGPINo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 04:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
+        id S231713AbiGPINX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 04:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiGPINn (ORCPT
+        with ESMTP id S229497AbiGPINT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 04:13:43 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCA8311;
-        Sat, 16 Jul 2022 01:13:41 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 26G8DIfZ029242;
-        Sat, 16 Jul 2022 17:13:18 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 26G8DIfZ029242
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1657959199;
-        bh=+v1uQMo3ZvSGLmyQ08/uYCDWhLeGHbb+CTN6DjFWfno=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TQsEstghDthg8mhcEQtKay7sVd894ZCIceJqFvoWrKxe6AC9W0MtETPaSXseMru3j
-         PFdGCMyIXx9zPJXZkvHPOAoQ2obIAV/WMApJ7NxL2tR1hMd8FujR/npYL6n8fPOkG9
-         Womk1TLl4zyWNU4TkvIVzqPqABSjlRtC7MiBsLxRUFt6peiZQKiX4XKoAzBwekDxbO
-         Cb0oXNozlWWcrkPPZp1sqP7X5HUtvOSW7gbXDJl0k1qaq6WRQ58MJmC8jq8pAu81uz
-         zkoVZgxzqYv3tgRZUSAZ51KqBT+8NEbPhgnHbEr0u9gKzIVu7areR8iEd9Bhgw4BCm
-         o98n+53YN7epg==
-X-Nifty-SrcIP: [209.85.221.43]
-Received: by mail-wr1-f43.google.com with SMTP id r14so9675602wrg.1;
-        Sat, 16 Jul 2022 01:13:18 -0700 (PDT)
-X-Gm-Message-State: AJIora95OyzQnn7TwwA/4XNfygwGAcXdnbJWpUe45qtF/pLey904OM8B
-        rFtH68d7r7YTcNeIipa1IN6owLwt1P8/UAQ+874=
-X-Google-Smtp-Source: AGRyM1tFDgDUOKrocw3ze5eE6GIC91t1YbhGR1tyjE4wXbjW08NtqHFzsdP4Fgnwub89UXf8TNq75evk0g5D5iJJUiA=
-X-Received: by 2002:a05:6000:104c:b0:21d:87bf:63a2 with SMTP id
- c12-20020a056000104c00b0021d87bf63a2mr15224596wrx.461.1657959197095; Sat, 16
- Jul 2022 01:13:17 -0700 (PDT)
+        Sat, 16 Jul 2022 04:13:19 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93311CB11
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 01:13:17 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id s21so7500333pjq.4
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 01:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1P8qGPqtLup1zCD2NBNT17hEogDJpB8QEo6UaLfvv0o=;
+        b=Za/r1Bas6Hj9UBtwuo1lLNZ3ZyZMtKO+l1B9Y0JYO7wB6rPOvBrxmZC8IX8TnRNS8v
+         x7lSB2226nubmuT3SYS5phSH95jSvUzuzbA8O1tKfLC/7Ia+WX4yzYZohO9nHYdKTlmr
+         jNBrYKmTekEUUT1f8yXjZgliQfOZzLMhuKVuf552osnUwA5V8Hjd75t1e1GPfr3Cq6oX
+         T0E1NQDefyIAZ04o8WgzQWtirp/wi27NY55bOxrxzvhyGpJwBzqMvV2i/TREbDeMT2rJ
+         NWElPZqYguenrKXiJQfiarT56ACITUw3qfAju5hkp7b9cbME9MvNScQnIYV5Wx/5FJpT
+         qsBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1P8qGPqtLup1zCD2NBNT17hEogDJpB8QEo6UaLfvv0o=;
+        b=cCZtnxlw7Jmu35JtiB1lgWr3ZqZTYlYBDy5xPGdJqxVAeV531jgUrJNiOszZ4gj0pO
+         p+WDiFfcrF6d5JEjXjAG5ltznrYMOC0jqPemq9MmmMnKRum4NoA7EvTwjSzGziiXwWVK
+         Fjygs+0DuC5lXPIlPirf9v9yK8y1f1q+kEl1jc/koKHQRt4goCF8qrhOmiSnpf19w/a4
+         oRqA76nn8AsshTWVuI0mWyWwMVUHhXHWy4K7tTk5KKwZWeaHxMPW+GOKorcLxijrShm/
+         /TI2qG4wykogEHV4EKiZrM3bC2sGEf4wM0YAd904zvr7Dd3BYC1VMXE4YhwIgrR+KNje
+         Lijw==
+X-Gm-Message-State: AJIora86y6vBW3ivdsARJgwtA5T1mDaWFn+QPm06Zo+5sLPhb7VIF2Kq
+        i7en+dibJwbEmGvOsCuzJg==
+X-Google-Smtp-Source: AGRyM1tnZq+/bLJYqGjgFo6Lzwy5BZtlWW05MsVDzdFLwTY1up1XNNTabOhGYPk+qtDSvW9aUsFfJg==
+X-Received: by 2002:a17:90a:7ac4:b0:1ef:a606:4974 with SMTP id b4-20020a17090a7ac400b001efa6064974mr27026041pjl.51.1657959197244;
+        Sat, 16 Jul 2022 01:13:17 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id o62-20020a625a41000000b0052b4f4c6a8fsm645838pfb.209.2022.07.16.01.13.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Jul 2022 01:13:16 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     peter.senna@gmail.com, martin.donnelly@ge.com,
+        martyn.welch@collabora.co.uk, andrzej.hajda@intel.com,
+        narmstrong@baylibre.com, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH] drm/bridge: megachips: Fix a null pointer dereference bug
+Date:   Sat, 16 Jul 2022 16:13:04 +0800
+Message-Id: <20220716081304.2762135-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220623144357.297252-1-dmitry.baryshkov@linaro.org> <CAL_JsqLi31FPBdYPzEW__UmfMTur-0428okopFYVaCbwm045gg@mail.gmail.com>
-In-Reply-To: <CAL_JsqLi31FPBdYPzEW__UmfMTur-0428okopFYVaCbwm045gg@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 16 Jul 2022 17:12:38 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASMUoPh8sBWWjenf8p6R1kv80ar17-qN-wH9zjNMtnfrQ@mail.gmail.com>
-Message-ID: <CAK7LNASMUoPh8sBWWjenf8p6R1kv80ar17-qN-wH9zjNMtnfrQ@mail.gmail.com>
-Subject: Re: [PATCH v3] kbuild: Enable DT schema checks for %.dtb targets
-To:     Rob Herring <robh@kernel.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Tom Rini <trini@konsulko.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,102 +72,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 8:02 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, Jun 23, 2022 at 8:44 AM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > It is possible to build a single dtb, but not with DT schema validation
-> > enabled. Enable the schema validation to run for %.dtb and %.dtbo
-> > targets. Anyone building a dtb for a specific platform *should* pay
-> > attention to schema warnings.
-> >
-> > This could be supported with a separate %.dt.yaml target instead.
-> > However, the .dt.yaml format is considered an intermediate format and
-> > could possibly go away at some point if schema checking is integrated
-> > into dtc. Also, the plan is to enable the schema checks by default once
-> > platforms are free of warnings, and this is a move in that direction.
-> >
-> > This patch differs from the previous one ([1]) in the fact that it
-> > requires specifying VALIDATE_DT=1 to run the checks while doing the
-> > build. Thus default build procedures would not obtain additional build
-> > dependency, while maintainers can still build a single DTB file an get
-> > only corresponding warnings.
->
-> I'd rather this be a kconfig option, so that eventually 'make
-> allmodconfig; make dtbs' also runs the schema checks. If something can
-> be enabled for allmodconfig, then builders will automatically start
-> testing it. Though the extra dependency is a problem here.
+When removing the module we will get the following warning:
 
+[   31.911505] i2c-core: driver [stdp2690-ge-b850v3-fw] unregistered
+[   31.912484] general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN PTI
+[   31.913338] KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+[   31.915280] RIP: 0010:drm_bridge_remove+0x97/0x130
+[   31.921825] Call Trace:
+[   31.922533]  stdp4028_ge_b850v3_fw_remove+0x34/0x60 [megachips_stdpxxxx_ge_b850v3_fw]
+[   31.923139]  i2c_device_remove+0x181/0x1f0
 
-The dependency on libyaml is gone.
+The two bridges (stdp2690, stdp4028) do not probe at the same time, so
+the driver does not call ge_b850v3_resgiter() when probing, causing the
+driver to try to remove the object that has not been initialized.
 
-As for the dependency on dt-schema, is it a good idea to
-pull it into the kernel tree somewhere,
-like we periodically sync scripts/dtc/ with its upstream?
+Fix this by checking whether both the bridges are probed.
 
-Any other problematic tool dependency?
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+ drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c b/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+index cce98bf2a4e7..c68a4cdf4625 100644
+--- a/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
++++ b/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+@@ -296,7 +296,9 @@ static void ge_b850v3_lvds_remove(void)
+ 	 * This check is to avoid both the drivers
+ 	 * removing the bridge in their remove() function
+ 	 */
+-	if (!ge_b850v3_lvds_ptr)
++	if (!ge_b850v3_lvds_ptr ||
++		!ge_b850v3_lvds_ptr->stdp2690_i2c ||
++		!ge_b850v3_lvds_ptr->stdp4028_i2c)
+ 		goto out;
+ 
+ 	drm_bridge_remove(&ge_b850v3_lvds_ptr->bridge);
+-- 
+2.25.1
 
-
-
-
->
-> >
-> > [1] https://lore.kernel.org/all/20210913145146.766080-1-robh@kernel.org/
-> >
-> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Cc: Tom Rini <trini@konsulko.com>
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: linux-kbuild@vger.kernel.org
-> > Co-developed-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> >  Makefile | 18 ++++++++++++++----
-> >  1 file changed, 14 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index c43d825a3c4c..0942922384c4 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1365,11 +1365,17 @@ endif
-> >
-> >  ifneq ($(dtstree),)
-> >
-> > -%.dtb: include/config/kernel.release scripts_dtc
-> > -       $(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
-> > +ifneq ($(VALIDATE_DT),)
-> > +DT_YAML = $(dtstree)/$*.dt.yaml
->
-> .dt.yaml files are deprecated now. This probably doesn't do anything.
-
-Right, this causes a build error.
-
-
-masahiro@grover:~/ref/linux$ make ARCH=arm64 VALIDATE_DT=1
-arm/foundation-v8.dtb
-arch/arm64/Makefile:36: Detected assembler with broken .inst;
-disassembly will be unreliable
-  DTC     arch/arm64/boot/dts/arm/foundation-v8.dtb
-  CHECK   arch/arm64/boot/dts/arm/foundation-v8.dtb
-/home/masahiro/ref/linux/arch/arm64/boot/dts/arm/foundation-v8.dtb:
-sysreg@10000: '#address-cells' is a required property
-From schema: /home/masahiro/ref/linux/Documentation/devicetree/bindings/arm/vexpress-sysreg.yaml
-/home/masahiro/ref/linux/arch/arm64/boot/dts/arm/foundation-v8.dtb:
-sysreg@10000: '#size-cells' is a required property
-From schema: /home/masahiro/ref/linux/Documentation/devicetree/bindings/arm/vexpress-sysreg.yaml
-make[1]: *** No rule to make target
-'arch/arm64/boot/dts/arm/foundation-v8.dt.yaml'.  Stop.
-make: *** [Makefile:1379: arm/foundation-v8.dtb] Error 2
-
-
-
-
-
-
-
---
-Best Regards
-
-Masahiro Yamada

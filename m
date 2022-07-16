@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B568577252
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF6857725D
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233263AbiGPXTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 19:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
+        id S232810AbiGPXT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 19:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233269AbiGPXTM (ORCPT
+        with ESMTP id S233189AbiGPXTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 19:19:12 -0400
+        Sat, 16 Jul 2022 19:19:31 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D319B2497F
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:18:10 -0700 (PDT)
-Message-ID: <20220716230954.711882354@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752B523BC9
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:18:13 -0700 (PDT)
+Message-ID: <20220716230954.772385338@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658013485;
+        s=2020; t=1658013487;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=wIsBjcmnUXYyQorogZuJM115Z5C9SKbZzs0zRjSGzDo=;
-        b=BLiqNuZBv5FNCiLedEBNSeLn4iH8ifZyowSQ4gror1C3a7dYWVSAS4ut8j/G+cnLrxf7rN
-        ntwUhSqfL/AOIf7JD6tUDrW6LyBp4gzOOifdWW2cbX4nwp3r+F3ZyMZ1oUIoQVTStemwOJ
-        Gsbb+fJpW4WTCAiRVc/Pm1l6nI6H48F5HU7UToPiD3GGLCTkMHTQuVNdX8kZ+aaN5cQZ/g
-        3HZ44VINy7nvrw8PcmgSdUKdeCqbywzJdm6X/iJZSHACuKh05/UCdkyokHCOvlTewgzrra
-        G5CMuMBy/JCV58K9u/zkG6yxrNlCNZWBSZJPOTXa90vjerAgYeAmA2nL3VCBGg==
+         references:references; bh=Kf2G1rz5pONni7MT992YEuxpma07TxS3Y+PewVU2bX4=;
+        b=UqtU09MxfNOF1FVYOUtExn/u/selQX/fZnoqeuCXfBR0kBVJ41hIWPAge7J2aOoGIiuq/g
+        N2RoL7NnRABnj40DdCkDMNeXM19Nn2WCgnfoIsiTkWKRaUdbcLQvVzeP2GFWEOUFRNS5kq
+        0RUzPBskCk2D5P4810gSSdCMBpJfwBJLaTt92sKVm/KrTLBZo7VH3y7JCkwBSO8mp6nY6J
+        KTFc5FsFbnU1+K2gSeOLW3tR4J2WVP3Jw/Mr+qq2kRGUtNbraz2vP1RjvpZnW931u35lBy
+        zioHOn8LsFuQcv2BILOONAejwDotk5nz1oSH7VdZzIS498lizUj7qu976COahg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658013485;
+        s=2020e; t=1658013487;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=wIsBjcmnUXYyQorogZuJM115Z5C9SKbZzs0zRjSGzDo=;
-        b=4IMs+4ayq3xlICKiYVfzxXcMIFK033YDvt6E7HCoBYmgeFbDQF9hE0BKYlrQeVqtwyqxDO
-        Hf5d/4QBBeGi0MBw==
+         references:references; bh=Kf2G1rz5pONni7MT992YEuxpma07TxS3Y+PewVU2bX4=;
+        b=dYB1/mTvB2NH2OUTBq9mvLvtbaGbzKNkQxLkc4ixf8hSad7Kkv7owhcqfKvtbUodjhOhdw
+        xZz1gIIE9U9VrkBA==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
@@ -46,12 +46,13 @@ Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
         Joao Moreira <joao.moreira@intel.com>,
         Joseph Nuzman <joseph.nuzman@intel.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [patch 34/38] x86/orc: Make it callthunk aware
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [patch 35/38] kprobes: Add callthunk blacklisting
 References: <20220716230344.239749011@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 17 Jul 2022 01:18:05 +0200 (CEST)
+Date:   Sun, 17 Jul 2022 01:18:06 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,85 +64,133 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-Callthunks addresses on the stack would confuse the ORC unwinder. Handle
-them correctly and tell ORC to proceed further down the stack.
+Callthunks are not safe for probing. Add them to the kprobes black listed
+areas.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- arch/x86/include/asm/alternative.h |    5 +++++
- arch/x86/kernel/callthunks.c       |    2 +-
- arch/x86/kernel/unwind_orc.c       |   21 ++++++++++++++++++++-
- 3 files changed, 26 insertions(+), 2 deletions(-)
+ arch/x86/kernel/callthunks.c |    5 ++++
+ kernel/kprobes.c             |   52 +++++++++++++++++++++++++++----------------
+ 2 files changed, 38 insertions(+), 19 deletions(-)
 
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -94,6 +94,7 @@ extern void callthunks_patch_module_call
- 					  struct module *mod);
- extern void callthunks_module_free(struct module *mod);
- extern void *callthunks_translate_call_dest(void *dest);
-+extern bool is_callthunk(void *addr);
- #else
- static __always_inline void callthunks_patch_builtin_calls(void) {}
- static __always_inline void
-@@ -104,6 +105,10 @@ static __always_inline void *callthunks_
- {
- 	return dest;
- }
-+static __always_inline bool is_callthunk(void *addr)
-+{
-+	return false;
-+}
- #endif
- 
- #ifdef CONFIG_SMP
 --- a/arch/x86/kernel/callthunks.c
 +++ b/arch/x86/kernel/callthunks.c
-@@ -565,7 +565,7 @@ static bool is_module_callthunk(void *ad
- 	return ret;
- }
+@@ -6,6 +6,7 @@
+ #include <linux/debugfs.h>
+ #include <linux/kallsyms.h>
+ #include <linux/memory.h>
++#include <linux/kprobes.h>
+ #include <linux/moduleloader.h>
+ #include <linux/set_memory.h>
+ #include <linux/static_call.h>
+@@ -476,6 +477,7 @@ static __init_or_module int callthunks_s
  
--static bool is_callthunk(void *addr)
-+bool is_callthunk(void *addr)
+ static __init noinline void callthunks_init(struct callthunk_sites *cs)
  {
- 	if (builtin_layout.base <= addr &&
- 	    addr < builtin_layout.base + builtin_layout.size)
---- a/arch/x86/kernel/unwind_orc.c
-+++ b/arch/x86/kernel/unwind_orc.c
-@@ -131,6 +131,21 @@ static struct orc_entry null_orc_entry =
- 	.type = UNWIND_HINT_TYPE_CALL
- };
++	unsigned long base, size;
+ 	int ret;
  
-+#ifdef CONFIG_CALL_THUNKS
-+static struct orc_entry *orc_callthunk_find(unsigned long ip)
-+{
-+	if (!is_callthunk((void *)ip))
-+		return NULL;
-+
-+	return &null_orc_entry;
-+}
-+#else
-+static struct orc_entry *orc_callthunk_find(unsigned long ip)
-+{
-+	return NULL;
-+}
-+#endif
-+
- /* Fake frame pointer entry -- used as a fallback for generated code */
- static struct orc_entry orc_fp_entry = {
- 	.type		= UNWIND_HINT_TYPE_CALL,
-@@ -184,7 +199,11 @@ static struct orc_entry *orc_find(unsign
- 	if (orc)
- 		return orc;
+ 	if (cpu_feature_enabled(X86_FEATURE_CALL_DEPTH)) {
+@@ -494,6 +496,9 @@ static __init noinline void callthunks_i
+ 	if (WARN_ON_ONCE(ret))
+ 		return;
  
--	return orc_ftrace_find(ip);
-+	orc =  orc_ftrace_find(ip);
-+	if (orc)
-+		return orc;
++	base = (unsigned long)builtin_layout.base;
++	size = builtin_layout.size;
++	kprobe_add_area_blacklist(base, base + size);
+ 	static_call_force_reinit();
+ 	thunks_initialized = true;
+ }
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -2439,40 +2439,38 @@ void dump_kprobe(struct kprobe *kp)
+ }
+ NOKPROBE_SYMBOL(dump_kprobe);
+ 
+-int kprobe_add_ksym_blacklist(unsigned long entry)
++static int __kprobe_add_ksym_blacklist(unsigned long start, unsigned long end)
+ {
+ 	struct kprobe_blacklist_entry *ent;
+-	unsigned long offset = 0, size = 0;
+-
+-	if (!kernel_text_address(entry) ||
+-	    !kallsyms_lookup_size_offset(entry, &size, &offset))
+-		return -EINVAL;
+ 
+ 	ent = kmalloc(sizeof(*ent), GFP_KERNEL);
+ 	if (!ent)
+ 		return -ENOMEM;
+-	ent->start_addr = entry;
+-	ent->end_addr = entry + size;
++	ent->start_addr = start;
++	ent->end_addr = end;
+ 	INIT_LIST_HEAD(&ent->list);
+ 	list_add_tail(&ent->list, &kprobe_blacklist);
+ 
+-	return (int)size;
++	return (int)(end - start);
++}
 +
-+	return orc_callthunk_find(ip);
++int kprobe_add_ksym_blacklist(unsigned long entry)
++{
++	unsigned long offset = 0, size = 0;
++
++	if (!kernel_text_address(entry) ||
++	    !kallsyms_lookup_size_offset(entry, &size, &offset))
++		return -EINVAL;
++
++	return __kprobe_add_ksym_blacklist(entry, entry + size);
  }
  
- #ifdef CONFIG_MODULES
+ /* Add all symbols in given area into kprobe blacklist */
+ int kprobe_add_area_blacklist(unsigned long start, unsigned long end)
+ {
+-	unsigned long entry;
+-	int ret = 0;
++	int ret = __kprobe_add_ksym_blacklist(start, end);
+ 
+-	for (entry = start; entry < end; entry += ret) {
+-		ret = kprobe_add_ksym_blacklist(entry);
+-		if (ret < 0)
+-			return ret;
+-		if (ret == 0)	/* In case of alias symbol */
+-			ret = 1;
+-	}
+-	return 0;
++	return ret < 0 ? ret : 0;
+ }
+ 
+ /* Remove all symbols in given area from kprobe blacklist */
+@@ -2578,6 +2576,14 @@ static void add_module_kprobe_blacklist(
+ 		end = start + mod->noinstr_text_size;
+ 		kprobe_add_area_blacklist(start, end);
+ 	}
++
++#ifdef CONFIG_CALL_THUNKS
++	start = (unsigned long)mod->thunk_layout.base;
++	if (start) {
++		end = start + mod->thunk_layout.size;
++		kprobe_remove_area_blacklist(start, end);
++	}
++#endif
+ }
+ 
+ static void remove_module_kprobe_blacklist(struct module *mod)
+@@ -2601,6 +2607,14 @@ static void remove_module_kprobe_blackli
+ 		end = start + mod->noinstr_text_size;
+ 		kprobe_remove_area_blacklist(start, end);
+ 	}
++
++#ifdef CONFIG_CALL_THUNKS
++	start = (unsigned long)mod->thunk_layout.base;
++	if (start) {
++		end = start + mod->thunk_layout.size;
++		kprobe_remove_area_blacklist(start, end);
++	}
++#endif
+ }
+ 
+ /* Module notifier call back, checking kprobes on the module */
 

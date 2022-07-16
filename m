@@ -2,85 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944B1576B58
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 04:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF48F576B5B
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 05:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiGPCvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 22:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38390 "EHLO
+        id S231190AbiGPDAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 23:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiGPCvn (ORCPT
+        with ESMTP id S229588AbiGPDAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 22:51:43 -0400
-Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF67B8E4D0
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 19:51:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=QdtRh
-        cz3Z5bsklW/JB6Jypy0TZQYgpcSFPOxW1n+Le8=; b=BneFbrvEyCt2i/xpGbr3E
-        5G5Ofmv/1YvtPZ26j+ev5/1jSCuEbf9GK80i+b9Qp08V3pLBYGZJx5pKhfEkN8bM
-        6eXkU0UGk6J0OOUI0ByczyEK1Wgcw6toxjuiOFPJxpgBrYnibY+Tc03uwL/01POa
-        WUiYYGsfTEZdM3y+xoCvAg=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp10 (Coremail) with SMTP id NuRpCgDnJK2FJ9Ji6xmEGg--.19071S2;
-        Sat, 16 Jul 2022 10:50:46 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     krzysztof.kozlowski@linaro.org, windhl@126.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] memory: of: Add of_node_put() when breaking out of for_each_child_of_node()
-Date:   Sat, 16 Jul 2022 10:50:43 +0800
-Message-Id: <20220716025043.447036-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 15 Jul 2022 23:00:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB383A4AA;
+        Fri, 15 Jul 2022 20:00:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D5DDB82F44;
+        Sat, 16 Jul 2022 03:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BA012C341C6;
+        Sat, 16 Jul 2022 03:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657940414;
+        bh=WesvKr+3zgDR6OKOPO4nXw36zLe4wI89fpPU7PRtOxw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=pwOi4xRqa3sfInzx7tBHPxeZPndDjiem9mW3Hc8rZSQQMTjrpNWC2/C2rCF1Ayj1Q
+         xd6dclTqL2MHv7WMadXtScIaEMgps+dThSScXjsMhFNGfz8DVhwDSHClKeatMvc2/w
+         ewkZ3sTyDIN11Hyp89LWRWnDmd/y0DjqezErSjrV45ZdsNl/yxj1j2aL8OYstKfbLG
+         DkaEunRTzqzk6pOxpbR6rq9O53Gr2AJWIUIkIjBpoZEPwA0nEJ3Tb1T1UI8aOzzGtG
+         V/A57Vta0YUBzrDBeKQQ9AxGgwimiCDZhFgtFzMkgutJWUPR5/IxPrd2NM7q1Q1Jrn
+         RLaOzJWcGk+Ew==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A41ADE4522F;
+        Sat, 16 Jul 2022 03:00:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NuRpCgDnJK2FJ9Ji6xmEGg--.19071S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WFW5tFyxXw15AF47Zw43KFg_yoW8Jw1kpF
-        4xur9IyrW0vrW7Ars5Jwn7uFyYg3W0q3y5KFyIk39Y9rsxGFyrZrZ2kryUArnxJFWfZF13
-        GFnYga18X3WxWr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEbyZUUUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7QZAF1pEAaHSJAAAs0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 net-next 0/3] net: ipv4/ipv6: new option to accept
+ garp/untracked na only if in-network
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165794041466.22960.16853534349610766541.git-patchwork-notify@kernel.org>
+Date:   Sat, 16 Jul 2022 03:00:14 +0000
+References: <cover.1657755188.git.jhpark1013@gmail.com>
+In-Reply-To: <cover.1657755188.git.jhpark1013@gmail.com>
+To:     Jaehee <jhpark1013@gmail.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, dsahern@gmail.com,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        shuah@kernel.org, linux-kernel@vger.kernel.org, aajith@arista.com,
+        roopa@nvidia.com, roopa.prabhu@gmail.com, aroulin@nvidia.com,
+        sbrivio@redhat.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In of_get_ddr_timings() and of_lpddr3_get_ddr_timings(), we should
-add the of_node_put() when breaking out of for_each_child_of_node()
-as it will automatically increase and decrease the refcount.
+Hello:
 
-Fixes: 976897dd96db ("memory: Extend of_memory with LPDDR3 support")
-Fixes: e6b42eb6a66c ("memory: emif: add device tree support to emif driver")
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/memory/of_memory.c | 2 ++
- 1 file changed, 2 insertions(+)
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/drivers/memory/of_memory.c b/drivers/memory/of_memory.c
-index dbdf87bc0b78..cd57af9e5ff6 100644
---- a/drivers/memory/of_memory.c
-+++ b/drivers/memory/of_memory.c
-@@ -134,6 +134,7 @@ const struct lpddr2_timings *of_get_ddr_timings(struct device_node *np_ddr,
- 	for_each_child_of_node(np_ddr, np_tim) {
- 		if (of_device_is_compatible(np_tim, tim_compat)) {
- 			if (of_do_get_timings(np_tim, &timings[i])) {
-+				of_node_put(np_tim);
- 				devm_kfree(dev, timings);
- 				goto default_timings;
- 			}
-@@ -283,6 +284,7 @@ const struct lpddr3_timings
- 	for_each_child_of_node(np_ddr, np_tim) {
- 		if (of_device_is_compatible(np_tim, tim_compat)) {
- 			if (of_lpddr3_do_get_timings(np_tim, &timings[i])) {
-+				of_node_put(np_tim);
- 				devm_kfree(dev, timings);
- 				goto default_timings;
- 			}
+On Wed, 13 Jul 2022 16:40:46 -0700 you wrote:
+> The first patch adds an option to learn a neighbor from garp only if
+> the source ip is in the same subnet as an address configured on the
+> interface that received the garp message. The option has been added
+> to arp_accept in ipv4.
+> 
+> The same feature has been added to ndisc (patch 2). For ipv6, the
+> subnet filtering knob is an extension of the accept_untracked_na
+> option introduced in these patches:
+> https://lore.kernel.org/all/642672cb-8b11-c78f-8975-f287ece9e89e@gmail.com/t/
+> https://lore.kernel.org/netdev/20220530101414.65439-1-aajith@arista.com/T/
+> 
+> [...]
+
+Here is the summary with links:
+  - [v3,net-next,1/3] net: ipv4: new arp_accept option to accept garp only if in-network
+    https://git.kernel.org/netdev/net-next/c/e68c5dcf0aac
+  - [v3,net-next,2/3] net: ipv6: new accept_untracked_na option to accept na only if in-network
+    https://git.kernel.org/netdev/net-next/c/aaa5f515b16b
+  - [v3,net-next,3/3] selftests: net: arp_ndisc_untracked_subnets: test for arp_accept and accept_untracked_na
+    https://git.kernel.org/netdev/net-next/c/0ea7b0a454ca
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

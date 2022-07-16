@@ -2,54 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88330576DFF
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 14:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8558576E12
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 14:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbiGPMmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 08:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
+        id S231161AbiGPMwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 08:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiGPMmX (ORCPT
+        with ESMTP id S229694AbiGPMwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 08:42:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981DF18385;
-        Sat, 16 Jul 2022 05:42:22 -0700 (PDT)
+        Sat, 16 Jul 2022 08:52:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6EE18380
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 05:52:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50BDCB80108;
-        Sat, 16 Jul 2022 12:42:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6CBCC34114;
-        Sat, 16 Jul 2022 12:42:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B348061011
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 12:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A06C34114;
+        Sat, 16 Jul 2022 12:52:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657975340;
-        bh=HjF+NeyLSXs/BPREprBA9T9P63b0wfvdyRWiqF26LnM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u23P2EU6qRL1vu6U1ohiYHNRckhBNC8KYLKdsiszyMvWP2H18PzeER3z0ZoCqs8Oz
-         jcDv58i75lMPxVsyThQIDpuusbS1ggqazOvkBjc0XIBMWOOCt6FhnBOHk0SQrwKruJ
-         XSo7j0jgJemcDPs9KTaC7peucwxSOMt4rJMAHkA5uwdtU7P3TVe7D9jWyfRcSJNhkk
-         ZBSZAiI0ucFmL1fK5Dskz6B94ZFS2WZrK5KXL25yE+Q8WIfgxDRTt01tLNXdu4Q7N8
-         DZobomePyEVsHwva8L8DkFKlH7VjnXfoKcEaNJxI9vUeO+aItFS6E/0zfWyfDmlOhH
-         6F5kuracHfOdw==
-From:   Conor Dooley <conor@kernel.org>
-To:     ojeda@kernel.org
-Cc:     gregkh@linuxfoundation.org, jarkko@kernel.org,
-        kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, live-patching@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, torvalds@linux-foundation.org
-Subject: Re: [PATCH v7 00/25] Rust support
-Date:   Sat, 16 Jul 2022 13:42:14 +0100
-Message-Id: <20220716124214.329949-1-conor@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220523020209.11810-1-ojeda@kernel.org>
-References: <20220523020209.11810-1-ojeda@kernel.org>
+        s=k20201202; t=1657975928;
+        bh=mPv+630BhvvE0YS0JSf3EHlCURgNl9vN+gPkhW7hZkY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mgbx++rjNsKuAFOI9bNpZ3EbRpj2TF1IOs5J3v/URWQHELByGIvoxa0dwCe5IX9Dk
+         ODdxhrhNu2p2TNTicwIdHJX1RgmXLrBMBvyfwu9ULv5zWuMuUeBn2Sbi6lILqPpNlB
+         F6AnhG4hjXiccVfWaY92Ykau2sSnI02tO/gqXfLkm0NeIVpQxl32OBL8/IQMNAw8mM
+         GenhEu6tt6qbIA2CCjx0pCTJSOGbO9W2P4vznUfdlptqJgdJzR7oXfIxpFG32PKLh0
+         DkAyQT5O5/DMb3jTr8YtD2b2gjXDazbHKKwEyuhZcnGYgsqF5XadkDgTjA3bps7VRR
+         eYZicXp0z2FQw==
+Date:   Sat, 16 Jul 2022 20:43:09 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Dao Lu <daolu@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Rob Herring <robh@kernel.org>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v4] arch/riscv: add Zihintpause support
+Message-ID: <YtKyXSsgxhKs8/nH@xhacker>
+References: <20220620201530.3929352-1-daolu@rivosinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220620201530.3929352-1-daolu@rivosinc.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,134 +66,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
+On Mon, Jun 20, 2022 at 01:15:25PM -0700, Dao Lu wrote:
+> Implement support for the ZiHintPause extension.
+> 
+> The PAUSE instruction is a HINT that indicates the current hart’s rate
+> of instruction retirement should be temporarily reduced or paused.
+> 
+> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> Tested-by: Heiko Stuebner <heiko@sntech.de>
+> Signed-off-by: Dao Lu <daolu@rivosinc.com>
 
-Maybe I am just missing something blatantly obvious here, but trying
-to build rust support in -next fails for me. I am using ClangBuiltLinux
-clang version 15.0.0 5b0788fef86ed7008a11f6ee19b9d86d42b6fcfa and LLD
-15.0.0. Is it just expected that building -next with rust support is
-not a good idea?
-My defconfig is the default RISC-V one plus:
-CONFIG_RUST=y
-CONFIG_SAMPLES=y
-CONFIG_SAMPLES_RUST=y
-CONFIG_SAMPLE_RUST_MINIMAL=y
+Reviewed-by: Jisheng Zhang<jszhang@kernel.org>
 
-Thanks,
-Conor.
-
-Fail log:
-  UPD     rust/target.json
-  BINDGEN rust/bindings_generated.rs
-  BINDGEN rust/bindings_helpers_generated.rs
-  RUSTC L rust/core.o
-  EXPORTS rust/exports_core_generated.h
-  RUSTC P rust/libmacros.so
-  RUSTC L rust/compiler_builtins.o
-  RUSTC L rust/alloc.o
-  RUSTC L rust/build_error.o
-  EXPORTS rust/exports_alloc_generated.h
-  RUSTC L rust/kernel.o
-error[E0428]: the name `maple_enode` is defined multiple times
-     --> linux/rust/bindings_generated.rs:18009:1
-      |
-18006 | pub struct maple_enode {
-      | ---------------------- previous definition of the type `maple_enode` here
-...
-18009 | pub type maple_enode = *mut maple_enode;
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `maple_enode` redefined here
-      |
-      = note: `maple_enode` must be defined only once in the type namespace of this module
-
-error[E0428]: the name `maple_pnode` is defined multiple times
-     --> linux/rust/bindings_generated.rs:18015:1
-      |
-18012 | pub struct maple_pnode {
-      | ---------------------- previous definition of the type `maple_pnode` here
-...
-18015 | pub type maple_pnode = *mut maple_pnode;
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `maple_pnode` redefined here
-      |
-      = note: `maple_pnode` must be defined only once in the type namespace of this module
-
-error[E0391]: cycle detected when expanding type alias `bindings::bindings_raw::maple_pnode`
-     --> linux/rust/bindings_generated.rs:18015:29
-      |
-18015 | pub type maple_pnode = *mut maple_pnode;
-      |                             ^^^^^^^^^^^
-      |
-      = note: ...which immediately requires expanding type alias `bindings::bindings_raw::maple_pnode` again
-      = note: type aliases cannot be recursive
-      = help: consider using a struct, enum, or union instead to break the cycle
-      = help: see <https://doc.rust-lang.org/reference/types.html#recursive-types> for more information
-note: cycle used when computing type of `bindings::bindings_raw::maple_range_64::parent`
-     --> linux/rust/bindings_generated.rs:18058:22
-      |
-18058 |     pub parent: *mut maple_pnode,
-      |                      ^^^^^^^^^^^
-
-error[E0391]: cycle detected when expanding type alias `bindings::bindings_raw::maple_enode`
-     --> linux/rust/bindings_generated.rs:18009:29
-      |
-18009 | pub type maple_enode = *mut maple_enode;
-      |                             ^^^^^^^^^^^
-      |
-      = note: ...which immediately requires expanding type alias `bindings::bindings_raw::maple_enode` again
-      = note: type aliases cannot be recursive
-      = help: consider using a struct, enum, or union instead to break the cycle
-      = help: see <https://doc.rust-lang.org/reference/types.html#recursive-types> for more information
-note: cycle used when computing type of `bindings::bindings_raw::maple_topiary::next`
-     --> linux/rust/bindings_generated.rs:18340:20
-      |
-18340 |     pub next: *mut maple_enode,
-      |                    ^^^^^^^^^^^
-
-error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
-     --> linux/rust/bindings_generated.rs:18005:10
-      |
-18005 | #[derive(Copy, Clone)]
-      |          ^^^^
-      |          |
-      |          impl doesn't use only types from inside the current crate
-      |          `*mut [type error]` is not defined in the current crate
-      |
-      = note: define and implement a trait or new type instead
-      = note: this error originates in the derive macro `Copy` (in Nightly builds, run with -Z macro-backtrace for more info)
-
-error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
-     --> linux/rust/bindings_generated.rs:18011:10
-      |
-18011 | #[derive(Copy, Clone)]
-      |          ^^^^
-      |          |
-      |          impl doesn't use only types from inside the current crate
-      |          `*mut [type error]` is not defined in the current crate
-      |
-      = note: define and implement a trait or new type instead
-      = note: this error originates in the derive macro `Copy` (in Nightly builds, run with -Z macro-backtrace for more info)
-
-error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
-     --> linux/rust/bindings_generated.rs:18005:16
-      |
-18005 | #[derive(Copy, Clone)]
-      |                ^^^^^
-      |                |
-      |                impl doesn't use only types from inside the current crate
-      |                `*mut [type error]` is not defined in the current crate
-      |
-      = note: define and implement a trait or new type instead
-      = note: this error originates in the derive macro `Clone` (in Nightly builds, run with -Z macro-backtrace for more info)
-
-error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
-     --> linux/rust/bindings_generated.rs:18011:16
-      |
-18011 | #[derive(Copy, Clone)]
-      |                ^^^^^
-      |                |
-      |                impl doesn't use only types from inside the current crate
-      |                `*mut [type error]` is not defined in the current crate
-      |
-      = note: define and implement a trait or new type instead
-      = note: this error originates in the derive macro `Clone` (in Nightly builds, run with -Z macro-backtrace for more info)
-
-error: aborting due to 8 previous errors
+> ---
+> 
+> v1 -> v2:
+>  Remove the usage of static branch, use PAUSE if toolchain supports it
+> v2 -> v3:
+>  Added the static branch back, cpu_relax() behavior is kept the same for
+> systems that do not support ZiHintPause
+> v3 -> v4:
+>  Adopted the newly added unified static keys for extensions
+> ---
+>  arch/riscv/Makefile                     |  4 ++++
+>  arch/riscv/include/asm/hwcap.h          |  5 +++++
+>  arch/riscv/include/asm/vdso/processor.h | 21 ++++++++++++++++++---
+>  arch/riscv/kernel/cpu.c                 |  1 +
+>  arch/riscv/kernel/cpufeature.c          |  1 +
+>  5 files changed, 29 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index 34cf8a598617..6ddacc6f44b9 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -56,6 +56,10 @@ riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
+>  toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
+>  riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
+>  
+> +# Check if the toolchain supports Zihintpause extension
+> +toolchain-supports-zihintpause := $(call cc-option-yn, -march=$(riscv-march-y)_zihintpause)
+> +riscv-march-$(toolchain-supports-zihintpause) := $(riscv-march-y)_zihintpause
+> +
+>  KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
+>  KBUILD_AFLAGS += -march=$(riscv-march-y)
+>  
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> index e48eebdd2631..dc47019a0b38 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -8,6 +8,7 @@
+>  #ifndef _ASM_RISCV_HWCAP_H
+>  #define _ASM_RISCV_HWCAP_H
+>  
+> +#include <asm/errno.h>
+>  #include <linux/bits.h>
+>  #include <uapi/asm/hwcap.h>
+>  
+> @@ -54,6 +55,7 @@ extern unsigned long elf_hwcap;
+>  enum riscv_isa_ext_id {
+>  	RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
+>  	RISCV_ISA_EXT_SVPBMT,
+> +	RISCV_ISA_EXT_ZIHINTPAUSE,
+>  	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
+>  };
+>  
+> @@ -64,6 +66,7 @@ enum riscv_isa_ext_id {
+>   */
+>  enum riscv_isa_ext_key {
+>  	RISCV_ISA_EXT_KEY_FPU,		/* For 'F' and 'D' */
+> +	RISCV_ISA_EXT_KEY_ZIHINTPAUSE,
+>  	RISCV_ISA_EXT_KEY_MAX,
+>  };
+>  
+> @@ -83,6 +86,8 @@ static __always_inline int riscv_isa_ext2key(int num)
+>  		return RISCV_ISA_EXT_KEY_FPU;
+>  	case RISCV_ISA_EXT_d:
+>  		return RISCV_ISA_EXT_KEY_FPU;
+> +	case RISCV_ISA_EXT_ZIHINTPAUSE:
+> +		return RISCV_ISA_EXT_KEY_ZIHINTPAUSE;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/include/asm/vdso/processor.h
+> index 134388cbaaa1..1e4f8b4aef79 100644
+> --- a/arch/riscv/include/asm/vdso/processor.h
+> +++ b/arch/riscv/include/asm/vdso/processor.h
+> @@ -4,15 +4,30 @@
+>  
+>  #ifndef __ASSEMBLY__
+>  
+> +#include <linux/jump_label.h>
+>  #include <asm/barrier.h>
+> +#include <asm/hwcap.h>
+>  
+>  static inline void cpu_relax(void)
+>  {
+> +	if (!static_branch_likely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_ZIHINTPAUSE])) {
+>  #ifdef __riscv_muldiv
+> -	int dummy;
+> -	/* In lieu of a halt instruction, induce a long-latency stall. */
+> -	__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
+> +		int dummy;
+> +		/* In lieu of a halt instruction, induce a long-latency stall. */
+> +		__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
+>  #endif
+> +	} else {
+> +		/*
+> +		 * Reduce instruction retirement.
+> +		 * This assumes the PC changes.
+> +		 */
+> +#ifdef __riscv_zihintpause
+> +		__asm__ __volatile__ ("pause");
+> +#else
+> +		/* Encoding of the pause instruction */
+> +		__asm__ __volatile__ (".4byte 0x100000F");
+> +#endif
+> +	}
+>  	barrier();
+>  }
+>  
+> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> index fba9e9f46a8c..a123e92b14dd 100644
+> --- a/arch/riscv/kernel/cpu.c
+> +++ b/arch/riscv/kernel/cpu.c
+> @@ -89,6 +89,7 @@ int riscv_of_parent_hartid(struct device_node *node)
+>  static struct riscv_isa_ext_data isa_ext_arr[] = {
+>  	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+>  	__RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
+> +	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+>  	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
+>  };
+>  
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index 1b3ec44e25f5..708df2c0bc34 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -198,6 +198,7 @@ void __init riscv_fill_hwcap(void)
+>  			} else {
+>  				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
+>  				SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
+> +				SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
+>  			}
+>  #undef SET_ISA_EXT_MAP
+>  		}
+> -- 
+> 2.25.1
+> 

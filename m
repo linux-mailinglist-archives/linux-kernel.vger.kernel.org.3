@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80D2576D38
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 911BE576D3A
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 11:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbiGPJyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 05:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        id S232359AbiGPJ7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 05:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiGPJyj (ORCPT
+        with ESMTP id S230083AbiGPJ7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 05:54:39 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C60BE00C;
-        Sat, 16 Jul 2022 02:54:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=GA5oE+W/bwGhbahSm4RvG4PVxOwv8L+ex/kt0Pn3hT8=; b=fFO9l0uw/uTwB+tqGvHipuxlqN
-        GSIUkkssehpqjJ/e4noi4vPnshdggGeYB94HH1A64Q+qtb0yUCTCOjBudKJFLwvuVFDSwSoXEZmOu
-        ysHnupcxGDDa+16pcqSG1qHRRS7bcPseISLSQSQqbFO9Cfu1Uiz3ovzWjJ6q78lO13g6MQJZTbeXd
-        xtXuD5yjhL8AVRj058exssU1+5NcPQ+qgMG/BbJdRDayDwmtY9hZX6hmDtRUw74F1zveaY+7nf101
-        ywyXoqNf25DzYzdumwCHsLllGUMJf/nkKadvDtEBewG3YWKRNBUdfHaMekt2225vKDG6oz4kUFQ49
-        Ubg4DhIjCIkBqiWUcd3WOo/LwOT13RWashEuya7duNyq2H3782SzsSUirVCGs8N2VegUwC/dv3Yb4
-        kZghelwxYzT8UGsqOLq40HnTRAfRNdJe9jBXrANOYuPHSwJqzdJcQ0nQ3T2XREHitTCSRpge0MUIJ
-        6n/esUfiBxASqmaZWEgcvehOg7sYx8Hfpkr1rmnABLdaLQwX1Q3X0s4BoO5l0b5siIrjaD7qh73DZ
-        KP2YEfv/T55GfRCuZDDEuX6FifI69/AZqK0LiE7q2AfeIdkIutaGY06mxfrbCdWfS3/GcoSl3JI9y
-        z9sk5rIzJfdcxyvf2EuBRxz8+bUfX/N3H4wagTk4A=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Nikolay Kichukov <nikolay@oldum.net>
-Subject: Re: [PATCH v6 00/11] remove msize limit in virtio transport
-Date:   Sat, 16 Jul 2022 11:54:29 +0200
-Message-ID: <6713865.4mp09fW1HV@silver>
-In-Reply-To: <YtH4M9GvVdAsSCz2@codewreck.org>
-References: <cover.1657920926.git.linux_oss@crudebyte.com>
- <YtHqlVx9/joj+AXH@codewreck.org> <YtH4M9GvVdAsSCz2@codewreck.org>
+        Sat, 16 Jul 2022 05:59:18 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF351C111
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 02:59:15 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LlNtK4QvPzkWKB;
+        Sat, 16 Jul 2022 17:56:57 +0800 (CST)
+Received: from [10.67.110.176] (10.67.110.176) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 16 Jul 2022 17:59:13 +0800
+Subject: Re: [PATCH -next] nvmem: core: Fix memleak in nvmem_register()
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <srinivas.kandagatla@linaro.org>, <linux-kernel@vger.kernel.org>,
+        <gongruiqi1@huawei.com>, <wangweiyang2@huawei.com>
+References: <20220716075352.2622809-1-cuigaosheng1@huawei.com>
+ <YtJ1mthCP+4laqOn@kroah.com>
+From:   cuigaosheng <cuigaosheng1@huawei.com>
+Message-ID: <544cfbdb-9005-3d4d-58f9-258f875984dd@huawei.com>
+Date:   Sat, 16 Jul 2022 17:59:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YtJ1mthCP+4laqOn@kroah.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.176]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Samstag, 16. Juli 2022 01:28:51 CEST Dominique Martinet wrote:
-> Dominique Martinet wrote on Sat, Jul 16, 2022 at 07:30:45AM +0900:
-> > Christian Schoenebeck wrote on Fri, Jul 15, 2022 at 11:35:26PM +0200:
-> > > * Patches 7..11 tremendously reduce unnecessarily huge 9p message sizes
-> > > and
-> > > 
-> > >   therefore provide performance gain as well. So far, almost all 9p
-> > >   messages
-> > >   simply allocated message buffers exactly msize large, even for
-> > >   messages
-> > >   that actually just needed few bytes. So these patches make sense by
-> > >   themselves, independent of this overall series, however for this
-> > >   series
-> > >   even more, because the larger msize, the more this issue would have
-> > >   hurt
-> > >   otherwise.
-> > 
-> > Unless they got stuck somewhere the mails are missing patches 10 and 11,
-> > one too many 0s to git send-email ?
-> 
-> nevermind, they just got in after 1h30... I thought it'd been 1h since
-> the first mails because the first ones were already 50 mins late and I
-> hadn't noticed! I wonder where they're stuck, that's the time
-> lizzy.crudebyte.com received them and it filters earlier headers so
-> probably between you and it?
+Thanks for your time.
 
-Certainly an outbound SMTP greylisting delay, i.e. lack of karma. Sometimes my 
-patches make it to lists after 3 hours. I haven't figured out though why some 
-patches within the same series arrive significantly faster than certain other 
-ones, which is especially weird when that happens not in order they were sent.
+I have made the v2 patch and moving dev_set_name after nvmem_validate_keepouts
+to fix the issue, hope you can provide some advice.
 
-> ohwell.
-> 
-> > I'll do a quick review from github commit meanwhile
-> 
-> Looks good to me, I'll try to get some tcp/rdma testing done this
-> weekend and stash them up to next
+Thanks.
 
-Great, thanks!
-
-> --
-> Dominique
-
-
-
-
+ÔÚ 2022/7/16 16:23, Greg KH Ð´µÀ:
+> On Sat, Jul 16, 2022 at 03:53:52PM +0800, Gaosheng Cui wrote:
+>> dev_set_name will alloc memory for nvmem->dev.kobj.name in
+>> nvmem_register, when nvmem_validate_keepouts failed, nvmem's
+>> memory will be freed and return, but nobody will free memory
+>> for nvmem->dev.kobj.name, there will be memleak, so using
+>> kfree_const(nvmem->dev.kobj.name) to fix it.
+>>
+>> Fixes: de0534df9347 ("nvmem: core: fix error handling while validating keepout regions")
+>> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+>> ---
+>>   drivers/nvmem/core.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+>> index 1e3c754efd0d..6c75c9afa5f3 100644
+>> --- a/drivers/nvmem/core.c
+>> +++ b/drivers/nvmem/core.c
+>> @@ -833,6 +833,7 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+>>   		rval = nvmem_validate_keepouts(nvmem);
+>>   		if (rval) {
+>>   			ida_free(&nvmem_ida, nvmem->id);
+>> +			kfree_const(nvmem->dev.kobj.name);
+>>   			kfree(nvmem);
+> Something is really wrong, you should never be touching the name pointer
+> of a kobject directly like this.  Also the device structure itself
+> should be cleaning up the memory, not a kfree.  So this feels wrong...
+>
+> greg k-h
+> .

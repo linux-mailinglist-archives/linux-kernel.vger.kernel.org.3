@@ -2,217 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C747B577187
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 23:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFA657718B
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 23:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiGPV2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 17:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41068 "EHLO
+        id S230379AbiGPVb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 17:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiGPV2n (ORCPT
+        with ESMTP id S229619AbiGPVb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 17:28:43 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B918518C;
-        Sat, 16 Jul 2022 14:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658006921; x=1689542921;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EEL23caroc+d4CCnU9uw3CMXv5macOIBlqJPu2/nrTM=;
-  b=QQ5dCgU1GzsekqA+TB1CWpnOBRXVDmNIeidWOvwcDU2Q7QiH4FPV7Apu
-   seaPGt5yQ35QB4Pp1nCydw1b/Tyxpgepx1IyN48NiMWMOqmA9PP68Ex5e
-   GT1AHKwzqhLGJd9afNt94IkJ7+TN7x+rQNMc+JmKjp6cjNezIxqNXQPoI
-   grnxp2TPI8UxAtK0BH0hI66iRGmOeGbfxvTJqs8WBvzP5eSD+GFTB6WP2
-   9ItwccsQ8Ngvudfxlv1/7Bw4RZKiOxhyvdzdCwuxTc/BzC8yswXA37mI8
-   L2M0m6F8qzZC5SJv8nOLnWOzdRQ6JH1IHBiIAdR0pX8NH2EvNwWxUdJ5y
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="286743295"
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="286743295"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 14:28:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="547047135"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 16 Jul 2022 14:28:37 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCpL3-0002AQ-8W;
-        Sat, 16 Jul 2022 21:28:37 +0000
-Date:   Sun, 17 Jul 2022 05:27:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Anderson <sean.anderson@seco.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: Re: [PATCH net-next v3 41/47] [RFT] net: dpaa: Convert to phylink
-Message-ID: <202207170518.RygxqhFI-lkp@intel.com>
-References: <20220715215954.1449214-42-sean.anderson@seco.com>
+        Sat, 16 Jul 2022 17:31:28 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397D255A7
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 14:31:28 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:53112)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oCpNl-003XHC-Sw; Sat, 16 Jul 2022 15:31:25 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:48014 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oCpNk-0096qh-SE; Sat, 16 Jul 2022 15:31:25 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Keno Fischer <keno@juliacomputing.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mingo@kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        "Robert O'Callahan" <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Oleg Nesterov <oleg@redhat.com>
+References: <20220421150248.667412396@infradead.org>
+        <20220421150654.817117821@infradead.org>
+        <87czhap9dy.fsf@email.froward.int.ebiederm.org>
+        <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+        <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+        <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+        <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+        <87r13gd4xy.fsf_-_@email.froward.int.ebiederm.org>
+        <87edyvgs2s.fsf@email.froward.int.ebiederm.org>
+        <CABV8kRxQNPUzLaJ1tFF8H-E_iqCkz0+Ac5rPBurnmA3GcofMmQ@mail.gmail.com>
+        <875yk22j5z.fsf@email.froward.int.ebiederm.org>
+Date:   Sat, 16 Jul 2022 16:29:49 -0500
+In-Reply-To: <875yk22j5z.fsf@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Tue, 12 Jul 2022 15:03:04 -0500")
+Message-ID: <87pmi4ycdu.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220715215954.1449214-42-sean.anderson@seco.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oCpNk-0096qh-SE;;;mid=<87pmi4ycdu.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+/Vjcg1LG+PkIixgXe8YCIN4VRwU6Ap+E=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Keno Fischer <keno@juliacomputing.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 445 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 12 (2.7%), b_tie_ro: 11 (2.4%), parse: 1.34
+        (0.3%), extract_message_metadata: 21 (4.6%), get_uri_detail_list: 2.4
+        (0.5%), tests_pri_-1000: 33 (7.5%), tests_pri_-950: 1.45 (0.3%),
+        tests_pri_-900: 1.15 (0.3%), tests_pri_-90: 82 (18.5%), check_bayes:
+        80 (18.0%), b_tokenize: 8 (1.9%), b_tok_get_all: 8 (1.8%),
+        b_comp_prob: 3.0 (0.7%), b_tok_touch_all: 56 (12.7%), b_finish: 1.20
+        (0.3%), tests_pri_0: 280 (62.8%), check_dkim_signature: 0.77 (0.2%),
+        check_dkim_adsp: 3.7 (0.8%), poll_dns_idle: 1.08 (0.2%), tests_pri_10:
+        2.1 (0.5%), tests_pri_500: 7 (1.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 0/3] ptrace: Stop supporting SIGKILL for PTRACE_EVENT_EXIT
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+"Eric W. Biederman" <ebiederm@xmission.com> writes:
 
-I love your patch! Perhaps something to improve:
+> Keno Fischer <keno@juliacomputing.com> writes:
+>
+>> Hi Eric,
+>>
+>> On Fri, Jul 8, 2022 at 6:25 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>>> > Recently I had a conversation where it was pointed out to me that
+>>> > SIGKILL sent to a tracee stropped in PTRACE_EVENT_EXIT is quite
+>>> > difficult for a tracer to handle.
+>>> >
+>>>
+>>> RR folks any comments?
+>>>
+>>> Did I properly understand what Keno Fischer was asking for when we
+>>> talked in person?
+>>
+>> Yes, this is indeed what I had in mind. I have not yet had the opportunity
+>> to try out your patch series (sorry), but from visual inspection, it does indeed
+>> do what I wanted, which is to make sure that a tracee stays in
+>> PTRACE_EVENT_EXIT for the tracer to inspect, even if there is another
+>> SIGKILL incoming simultaneously (since otherwise it may be impossible
+>> for the tracer to observe the PTRACE_EVENT_EXIT if two SIGKILLs
+>> come in rapid succession). I will try to take this series for a proper spin
+>> shortly.
+>
+> Thanks,
+>
+> I haven't yet figured out how to get the rr test suite to run
+> successfully.  Something about my test machine and lack of perf counters
+> seems to be causing problems.  So if you can perform the testing on your
+> side that would be fantastic.
 
-[auto build test WARNING on net-next/master]
+Ok.  I finally found a machine where I can run rr and the rr test suite.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/net-dpaa-Convert-to-phylink/20220717-002036
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 2acd1022549e210edc4cfc9fc65b07b88751f0d9
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220717/202207170518.RygxqhFI-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4411e66d2bb3fe21094f63ed67d2c2ebce69eaee
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sean-Anderson/net-dpaa-Convert-to-phylink/20220717-002036
-        git checkout 4411e66d2bb3fe21094f63ed67d2c2ebce69eaee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/freescale/fman/
+It looks like there are a couple of the rr 5.5.0 test that fail on
+Linus's lastest kernel simply because of changes in kernel behavior.  In
+particular clone_cleartid_coredump, and fcntl_rw_hints.  The
+clone_cleartid_coredump appears to fail because SIGSEGV no longer kills
+all processes that share an mm.  Which was a deliberate change.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+With the lastest development version of rr, only detach_sigkill appears
+to be failing on Linus's latest.  That failure appears to be independent
+of the patches in question as well.  When run manually the
+detach_sigkill test succeeds so I am not quite certain what is going on,
+any thoughts?
 
-All warnings (new ones prefixed by >>):
+As for my patchset it looks like it does not cause any new test failures
+for rr so I will plan on getting it into linux-next shortly.
 
-   drivers/net/ethernet/freescale/fman/fman_dtsec.c: In function 'init.constprop':
->> drivers/net/ethernet/freescale/fman/fman_dtsec.c:368:21: warning: 'tmp' is used uninitialized [-Wuninitialized]
-     368 |                 tmp |= cfg->tx_pause_time;
-         |                 ~~~~^~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/freescale/fman/fman_dtsec.c:360:13: note: 'tmp' was declared here
-     360 |         u32 tmp;
-         |             ^~~
+Eric
 
-
-vim +/tmp +368 drivers/net/ethernet/freescale/fman/fman_dtsec.c
-
-6b995bdefc10b4 Madalin Bucur  2020-03-05  354  
-57ba4c9b56d898 Igal Liberman  2015-12-21  355  static int init(struct dtsec_regs __iomem *regs, struct dtsec_cfg *cfg,
-6b995bdefc10b4 Madalin Bucur  2020-03-05  356  		phy_interface_t iface, u16 iface_speed, u64 addr,
-57ba4c9b56d898 Igal Liberman  2015-12-21  357  		u32 exception_mask, u8 tbi_addr)
-57ba4c9b56d898 Igal Liberman  2015-12-21  358  {
-6b995bdefc10b4 Madalin Bucur  2020-03-05  359  	enet_addr_t eth_addr;
-57ba4c9b56d898 Igal Liberman  2015-12-21  360  	u32 tmp;
-6b995bdefc10b4 Madalin Bucur  2020-03-05  361  	int i;
-57ba4c9b56d898 Igal Liberman  2015-12-21  362  
-57ba4c9b56d898 Igal Liberman  2015-12-21  363  	/* Soft reset */
-57ba4c9b56d898 Igal Liberman  2015-12-21  364  	iowrite32be(MACCFG1_SOFT_RESET, &regs->maccfg1);
-57ba4c9b56d898 Igal Liberman  2015-12-21  365  	iowrite32be(0, &regs->maccfg1);
-57ba4c9b56d898 Igal Liberman  2015-12-21  366  
-57ba4c9b56d898 Igal Liberman  2015-12-21  367  	if (cfg->tx_pause_time)
-57ba4c9b56d898 Igal Liberman  2015-12-21 @368  		tmp |= cfg->tx_pause_time;
-57ba4c9b56d898 Igal Liberman  2015-12-21  369  	if (cfg->tx_pause_time_extd)
-57ba4c9b56d898 Igal Liberman  2015-12-21  370  		tmp |= cfg->tx_pause_time_extd << PTV_PTE_SHIFT;
-57ba4c9b56d898 Igal Liberman  2015-12-21  371  	iowrite32be(tmp, &regs->ptv);
-57ba4c9b56d898 Igal Liberman  2015-12-21  372  
-57ba4c9b56d898 Igal Liberman  2015-12-21  373  	tmp = 0;
-57ba4c9b56d898 Igal Liberman  2015-12-21  374  	tmp |= (cfg->rx_prepend << RCTRL_PAL_SHIFT) & RCTRL_PAL_MASK;
-57ba4c9b56d898 Igal Liberman  2015-12-21  375  	/* Accept short frames */
-57ba4c9b56d898 Igal Liberman  2015-12-21  376  	tmp |= RCTRL_RSF;
-57ba4c9b56d898 Igal Liberman  2015-12-21  377  
-57ba4c9b56d898 Igal Liberman  2015-12-21  378  	iowrite32be(tmp, &regs->rctrl);
-57ba4c9b56d898 Igal Liberman  2015-12-21  379  
-57ba4c9b56d898 Igal Liberman  2015-12-21  380  	/* Assign a Phy Address to the TBI (TBIPA).
-57ba4c9b56d898 Igal Liberman  2015-12-21  381  	 * Done also in cases where TBI is not selected to avoid conflict with
-57ba4c9b56d898 Igal Liberman  2015-12-21  382  	 * the external PHY's Physical address
-57ba4c9b56d898 Igal Liberman  2015-12-21  383  	 */
-57ba4c9b56d898 Igal Liberman  2015-12-21  384  	iowrite32be(tbi_addr, &regs->tbipa);
-57ba4c9b56d898 Igal Liberman  2015-12-21  385  
-57ba4c9b56d898 Igal Liberman  2015-12-21  386  	iowrite32be(0, &regs->tmr_ctrl);
-57ba4c9b56d898 Igal Liberman  2015-12-21  387  
-57ba4c9b56d898 Igal Liberman  2015-12-21  388  	if (cfg->ptp_tsu_en) {
-57ba4c9b56d898 Igal Liberman  2015-12-21  389  		tmp = 0;
-57ba4c9b56d898 Igal Liberman  2015-12-21  390  		tmp |= TMR_PEVENT_TSRE;
-57ba4c9b56d898 Igal Liberman  2015-12-21  391  		iowrite32be(tmp, &regs->tmr_pevent);
-57ba4c9b56d898 Igal Liberman  2015-12-21  392  
-57ba4c9b56d898 Igal Liberman  2015-12-21  393  		if (cfg->ptp_exception_en) {
-57ba4c9b56d898 Igal Liberman  2015-12-21  394  			tmp = 0;
-57ba4c9b56d898 Igal Liberman  2015-12-21  395  			tmp |= TMR_PEMASK_TSREEN;
-57ba4c9b56d898 Igal Liberman  2015-12-21  396  			iowrite32be(tmp, &regs->tmr_pemask);
-57ba4c9b56d898 Igal Liberman  2015-12-21  397  		}
-57ba4c9b56d898 Igal Liberman  2015-12-21  398  	}
-57ba4c9b56d898 Igal Liberman  2015-12-21  399  
-57ba4c9b56d898 Igal Liberman  2015-12-21  400  	tmp = 0;
-57ba4c9b56d898 Igal Liberman  2015-12-21  401  	tmp |= MACCFG1_RX_FLOW;
-57ba4c9b56d898 Igal Liberman  2015-12-21  402  	tmp |= MACCFG1_TX_FLOW;
-57ba4c9b56d898 Igal Liberman  2015-12-21  403  	iowrite32be(tmp, &regs->maccfg1);
-57ba4c9b56d898 Igal Liberman  2015-12-21  404  
-57ba4c9b56d898 Igal Liberman  2015-12-21  405  	tmp = 0;
-57ba4c9b56d898 Igal Liberman  2015-12-21  406  
-57ba4c9b56d898 Igal Liberman  2015-12-21  407  	tmp |= (cfg->preamble_len << MACCFG2_PREAMBLE_LENGTH_SHIFT) &
-57ba4c9b56d898 Igal Liberman  2015-12-21  408  		MACCFG2_PREAMBLE_LENGTH_MASK;
-57ba4c9b56d898 Igal Liberman  2015-12-21  409  	if (cfg->tx_pad_crc)
-57ba4c9b56d898 Igal Liberman  2015-12-21  410  		tmp |= MACCFG2_PAD_CRC_EN;
-57ba4c9b56d898 Igal Liberman  2015-12-21  411  	iowrite32be(tmp, &regs->maccfg2);
-57ba4c9b56d898 Igal Liberman  2015-12-21  412  
-57ba4c9b56d898 Igal Liberman  2015-12-21  413  	tmp = (((cfg->non_back_to_back_ipg1 <<
-57ba4c9b56d898 Igal Liberman  2015-12-21  414  		 IPGIFG_NON_BACK_TO_BACK_IPG_1_SHIFT)
-57ba4c9b56d898 Igal Liberman  2015-12-21  415  		& IPGIFG_NON_BACK_TO_BACK_IPG_1)
-57ba4c9b56d898 Igal Liberman  2015-12-21  416  	       | ((cfg->non_back_to_back_ipg2 <<
-57ba4c9b56d898 Igal Liberman  2015-12-21  417  		   IPGIFG_NON_BACK_TO_BACK_IPG_2_SHIFT)
-57ba4c9b56d898 Igal Liberman  2015-12-21  418  		 & IPGIFG_NON_BACK_TO_BACK_IPG_2)
-57ba4c9b56d898 Igal Liberman  2015-12-21  419  	       | ((cfg->min_ifg_enforcement << IPGIFG_MIN_IFG_ENFORCEMENT_SHIFT)
-57ba4c9b56d898 Igal Liberman  2015-12-21  420  		 & IPGIFG_MIN_IFG_ENFORCEMENT)
-57ba4c9b56d898 Igal Liberman  2015-12-21  421  	       | (cfg->back_to_back_ipg & IPGIFG_BACK_TO_BACK_IPG));
-57ba4c9b56d898 Igal Liberman  2015-12-21  422  	iowrite32be(tmp, &regs->ipgifg);
-57ba4c9b56d898 Igal Liberman  2015-12-21  423  
-57ba4c9b56d898 Igal Liberman  2015-12-21  424  	tmp = 0;
-57ba4c9b56d898 Igal Liberman  2015-12-21  425  	tmp |= HAFDUP_EXCESS_DEFER;
-57ba4c9b56d898 Igal Liberman  2015-12-21  426  	tmp |= ((cfg->halfdup_retransmit << HAFDUP_RETRANSMISSION_MAX_SHIFT)
-57ba4c9b56d898 Igal Liberman  2015-12-21  427  		& HAFDUP_RETRANSMISSION_MAX);
-57ba4c9b56d898 Igal Liberman  2015-12-21  428  	tmp |= (cfg->halfdup_coll_window & HAFDUP_COLLISION_WINDOW);
-57ba4c9b56d898 Igal Liberman  2015-12-21  429  
-57ba4c9b56d898 Igal Liberman  2015-12-21  430  	iowrite32be(tmp, &regs->hafdup);
-57ba4c9b56d898 Igal Liberman  2015-12-21  431  
-57ba4c9b56d898 Igal Liberman  2015-12-21  432  	/* Initialize Maximum frame length */
-57ba4c9b56d898 Igal Liberman  2015-12-21  433  	iowrite32be(cfg->maximum_frame, &regs->maxfrm);
-57ba4c9b56d898 Igal Liberman  2015-12-21  434  
-57ba4c9b56d898 Igal Liberman  2015-12-21  435  	iowrite32be(0xffffffff, &regs->cam1);
-57ba4c9b56d898 Igal Liberman  2015-12-21  436  	iowrite32be(0xffffffff, &regs->cam2);
-57ba4c9b56d898 Igal Liberman  2015-12-21  437  
-57ba4c9b56d898 Igal Liberman  2015-12-21  438  	iowrite32be(exception_mask, &regs->imask);
-57ba4c9b56d898 Igal Liberman  2015-12-21  439  
-57ba4c9b56d898 Igal Liberman  2015-12-21  440  	iowrite32be(0xffffffff, &regs->ievent);
-57ba4c9b56d898 Igal Liberman  2015-12-21  441  
-f3353b99022583 Madalin Bucur  2020-03-05  442  	if (addr) {
-6b995bdefc10b4 Madalin Bucur  2020-03-05  443  		MAKE_ENET_ADDR_FROM_UINT64(addr, eth_addr);
-766607570becbd Jakub Kicinski 2021-10-14  444  		set_mac_address(regs, (const u8 *)eth_addr);
-f3353b99022583 Madalin Bucur  2020-03-05  445  	}
-57ba4c9b56d898 Igal Liberman  2015-12-21  446  
-57ba4c9b56d898 Igal Liberman  2015-12-21  447  	/* HASH */
-57ba4c9b56d898 Igal Liberman  2015-12-21  448  	for (i = 0; i < NUM_OF_HASH_REGS; i++) {
-57ba4c9b56d898 Igal Liberman  2015-12-21  449  		/* Initialize IADDRx */
-57ba4c9b56d898 Igal Liberman  2015-12-21  450  		iowrite32be(0, &regs->igaddr[i]);
-57ba4c9b56d898 Igal Liberman  2015-12-21  451  		/* Initialize GADDRx */
-57ba4c9b56d898 Igal Liberman  2015-12-21  452  		iowrite32be(0, &regs->gaddr[i]);
-57ba4c9b56d898 Igal Liberman  2015-12-21  453  	}
-57ba4c9b56d898 Igal Liberman  2015-12-21  454  
-57ba4c9b56d898 Igal Liberman  2015-12-21  455  	return 0;
-57ba4c9b56d898 Igal Liberman  2015-12-21  456  }
-57ba4c9b56d898 Igal Liberman  2015-12-21  457  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

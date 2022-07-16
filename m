@@ -2,150 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61489577063
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 19:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34985577075
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 19:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbiGPR31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 13:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
+        id S231462AbiGPRne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 13:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiGPR3Z (ORCPT
+        with ESMTP id S229501AbiGPRnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 13:29:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC17658C;
-        Sat, 16 Jul 2022 10:29:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99DC3611A6;
-        Sat, 16 Jul 2022 17:29:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6AB4C34114;
-        Sat, 16 Jul 2022 17:29:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657992564;
-        bh=s8zWDI7l/NEtm0Ui8Ues2MDYedJLomU5WQ+1kwrGMTc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RzYkRM9JYVwJFJLryAPipOhrM/XTg33zf9V5Qw46GjTEvCx+MR1Nf+91hJyf4jnu8
-         VQgnvKCuVquFBKAZYJvBZpaz/RLgxT0AnbB39bsxVSwKe/nzD2WqCXNhdjizKnJJO9
-         KKUbH9rCWRPBaAjha1TwQ+YG81Zv1+4Qhy9JYQHVeQid7O7/Ei0OIzEHxQzBoYwWRf
-         EZusq9rIeWXhGTf8F1vw6ELestdytxXTej/AQymc4lr0O/g5pBo0LD6uvOUCS0DZWD
-         miOTetATkThg/oN6H15XWhJ0PVToeZE9g+/xtDJknHM4kJXkynWV31h7ejxjxUvKC9
-         tEhQdIKH0pKjg==
-Date:   Sat, 16 Jul 2022 18:39:16 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     ChiYuan Huang <u0084500@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        cy_huang <cy_huang@richtek.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v5 2/2] iio: adc: Add rtq6056 support
-Message-ID: <20220716183916.7b40d9d5@jic23-huawei>
-In-Reply-To: <CADiBU39KYyd9=JK5wLRN1yKn9hxRHVSOATkWrPMpAdTJY04ZxQ@mail.gmail.com>
-References: <1657116702-24161-1-git-send-email-u0084500@gmail.com>
-        <1657116702-24161-3-git-send-email-u0084500@gmail.com>
-        <20220707183027.342f6c88@jic23-huawei>
-        <CADiBU3_KQ=WvD-1E4SODkdEY254_b-covw-0SHcAaF3XQqdbaQ@mail.gmail.com>
-        <CADiBU39KYyd9=JK5wLRN1yKn9hxRHVSOATkWrPMpAdTJY04ZxQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 16 Jul 2022 13:43:32 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDFA1C108
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 10:43:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657993411; x=1689529411;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1KVXMHQMW6RKfp8RUFLESXDiTcg/Sa7+X74MV9ssqV4=;
+  b=SGLQZ1Z4FaqHngC+8Lw6/+xBAuHYvnsVLIcrmQ2asM3JZow6KdA0ZY23
+   X6qrh7Fzrg8XJNSrzPL6259KX3/hNjlJ8YbWjtwGewR9QtEO1smn++kq3
+   IdzRwCuADDLHjvFAS56a7P2XAK5kH8g4vwKmEKU3cl/gWzigNYCzY5LLB
+   plqwVOdWmkmglC8WF/Kou5tPr6oawQ/9ufBXpd11ms1IAtw6WVK7Z32T4
+   Zj3kaAGIckwLk5o6/2XV6WGMmvOs020xL5RGT3mmJLsjW4gyaZz6UIKgU
+   UJqjShOqTG0Zxzl1+ZZAnLrn/BYYFx7TWCzDjyYoiKg0BpszCCGIkRg7Y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="269016686"
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="269016686"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 10:43:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
+   d="scan'208";a="842851551"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 16 Jul 2022 10:43:28 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oClp9-0001tu-V7;
+        Sat, 16 Jul 2022 17:43:27 +0000
+Date:   Sun, 17 Jul 2022 01:42:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jth@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [ammarfaizi2-block:axboe/linux-block/for-next 96/112]
+ fs/zonefs/./trace.h:22:1: sparse: sparse: cast to restricted blk_opf_t
+Message-ID: <202207170156.khJQtN9O-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/for-next
+head:   b1fc9e8ad3d2d294d15e87d57af00890cd23cfc4
+commit: e46b5970496705127f9ae494c66e0242773097e8 [96/112] fs/zonefs: Use the enum req_op type for tracing request operations
+config: mips-randconfig-s033-20220715 (https://download.01.org/0day-ci/archive/20220717/202207170156.khJQtN9O-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/e46b5970496705127f9ae494c66e0242773097e8
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/for-next
+        git checkout e46b5970496705127f9ae494c66e0242773097e8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash fs/zonefs/
 
-> > > > +
-> > > > +static int rtq6056_probe(struct i2c_client *i2c)
-> > > > +{
-> > > > +     struct iio_dev *indio_dev;
-> > > > +     struct rtq6056_priv *priv;
-> > > > +     struct device *dev = &i2c->dev;
-> > > > +     struct regmap *regmap;
-> > > > +     unsigned int vendor_id, shunt_resistor_uohm;
-> > > > +     int ret;
-> > > > +
-> > > > +     if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_SMBUS_WORD_DATA))
-> > > > +             return -EOPNOTSUPP;
-> > > > +
-> > > > +     indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
-> > > > +     if (!indio_dev)
-> > > > +             return -ENOMEM;
-> > > > +
-> > > > +     priv = iio_priv(indio_dev);
-> > > > +     priv->dev = dev;
-> > > > +     priv->vshuntct_us = priv->vbusct_us = 1037;
-> > > > +     priv->avg_sample = 1;
-> > > > +     i2c_set_clientdata(i2c, priv);
-> > > > +
-> > > > +     regmap = devm_regmap_init_i2c(i2c, &rtq6056_regmap_config);
-> > > > +     if (IS_ERR(regmap))
-> > > > +             return dev_err_probe(dev, PTR_ERR(regmap),
-> > > > +                                  "Failed to init regmap\n");
-> > > > +
-> > > > +     priv->regmap = regmap;
-> > > > +
-> > > > +     ret = regmap_read(regmap, RTQ6056_REG_MANUFACTID, &vendor_id);
-> > > > +     if (ret)
-> > > > +             return dev_err_probe(dev, ret,
-> > > > +                                  "Failed to get manufacturer info\n");
-> > > > +
-> > > > +     if (vendor_id != RTQ6056_VENDOR_ID)
-> > > > +             return dev_err_probe(dev, -ENODEV,
-> > > > +                                  "Invalid vendor id 0x%04x\n", vendor_id);
-> > > > +
-> > > > +     ret = devm_regmap_field_bulk_alloc(dev, regmap, priv->rm_fields,
-> > > > +                                        rtq6056_reg_fields, F_MAX_FIELDS);
-> > > > +     if (ret)
-> > > > +             return dev_err_probe(dev, ret, "Failed to init regmap field\n");
-> > > > +
-> > > > +     /*
-> > > > +      * By default, configure average sample as 1, bus and shunt conversion
-> > > > +      * timea as 1037 microsecond, and operating mode to all on.
-> > > > +      */
-> > > > +     ret = regmap_write(regmap, RTQ6056_REG_CONFIG, RTQ6056_DEFAULT_CONFIG);
-> > > > +     if (ret)
-> > > > +             return dev_err_probe(dev, ret,
-> > > > +                                  "Failed to enable continuous sensing\n");
-> > > > +
-> > > > +     pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
-> > > > +     pm_runtime_use_autosuspend(dev);
-> > > > +     pm_runtime_set_active(dev);
-> > > > +     pm_runtime_mark_last_busy(dev);
-> > > > +     pm_runtime_enable(dev);  
-> > >
-> > > Look at whether you can use devm_pm_runtime_enable()
-> > > Note it handles disabling autosuspend for you.
-> > >
-> > > When using runtime_pm() you want to ensure that the device works without
-> > > runtime pm support being enabled.  As such, you turn the device on before
-> > > enabling runtime_pm() and (this is missing I think) turn it off after disabling
-> > > runtime pm.  So I'd expect a devm_add_action_or_reset() call to unwind
-> > > setting the device into continuous sending above.
-> > >  
-> > If so, I think it's better to configure the device keep in off state
-> > in probe stage.
-> > The calling order may need to be changed as below
-> > devm_add_action_or_reset...
-> >
-> > pm_runtime_set_autosuspend_delay
-> > pm_runtime_use_auto_suspend
-> > devm_pm_runtime_enable
-> >  
-> Ah, not correct. How about if 'PM_RUNTIME' is not enabled?
-> Do we need to consider about this case?
-> 
-> If yes, the original flow about 'pm_runtime' is correct.
-I don't follow.  Perhaps next version will make it clear what you mean.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Jonathan
+
+sparse warnings: (new ones prefixed by >>)
+   fs/zonefs/super.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, fs/zonefs/trace.h):
+>> fs/zonefs/./trace.h:22:1: sparse: sparse: cast to restricted blk_opf_t
+>> fs/zonefs/./trace.h:22:1: sparse: sparse: cast to restricted blk_opf_t
+>> fs/zonefs/./trace.h:22:1: sparse: sparse: restricted blk_opf_t degrades to integer
+>> fs/zonefs/./trace.h:22:1: sparse: sparse: restricted blk_opf_t degrades to integer
+
+vim +22 fs/zonefs/./trace.h
+
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  21  
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27 @22  TRACE_EVENT(zonefs_zone_mgmt,
+ff07a02e9e8e64 Bart Van Assche    2022-07-14  23  	    TP_PROTO(struct inode *inode, enum req_op op),
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  24  	    TP_ARGS(inode, op),
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  25  	    TP_STRUCT__entry(
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  26  			     __field(dev_t, dev)
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  27  			     __field(ino_t, ino)
+e46b5970496705 Bart Van Assche    2022-07-14  28  			     __field(enum req_op, op)
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  29  			     __field(sector_t, sector)
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  30  			     __field(sector_t, nr_sectors)
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  31  	    ),
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  32  	    TP_fast_assign(
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  33  			   __entry->dev = inode->i_sb->s_dev;
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  34  			   __entry->ino = inode->i_ino;
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  35  			   __entry->op = op;
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  36  			   __entry->sector = ZONEFS_I(inode)->i_zsector;
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  37  			   __entry->nr_sectors =
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  38  				   ZONEFS_I(inode)->i_zone_size >> SECTOR_SHIFT;
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  39  	    ),
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  40  	    TP_printk("bdev=(%d,%d), ino=%lu op=%s, sector=%llu, nr_sectors=%llu",
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  41  		      show_dev(__entry->dev), (unsigned long)__entry->ino,
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  42  		      blk_op_str(__entry->op), __entry->sector,
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  43  		      __entry->nr_sectors
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  44  	    )
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  45  );
+62ab1aadcccd03 Johannes Thumshirn 2021-01-27  46  
+
+:::::: The code at line 22 was first introduced by commit
+:::::: 62ab1aadcccd037a7ced4ed99b4d46d2b4190183 zonefs: add tracepoints for file operations
+
+:::::: TO: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+:::::: CC: Damien Le Moal <damien.lemoal@wdc.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,91 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C52576B7C
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 05:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A6A576B7E
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 05:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiGPDnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 23:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S229891AbiGPDoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 23:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiGPDm7 (ORCPT
+        with ESMTP id S230269AbiGPDok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 23:42:59 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C081A1262C;
-        Fri, 15 Jul 2022 20:42:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657942978; x=1689478978;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZhDaWO1LXpQhv4EjItP/P50Nc3AtU/RtqFlWKF3v0lg=;
-  b=MkFcljd0xC0qIIbQPUrdA6j9d5cWP0+uiRU6D0maK0QcyuUc/2X7gXgO
-   6a77O0kPfZI4D0m79VKeNjoXOMOwp1jTC72oimrObivZCjES42acTW5Rn
-   xvVlEXK9FSgAmbZoZ7kq4kpNY0Lqu/v1Z3WiiG0qP6spe5LbvH+tLmMru
-   BgM72ZQUw763vdlcc/lIHbjFecB1B2kFjwGcnZgngjKXT6X5ERIdcrXam
-   fcSm+0ahG9j6qBOneN0T3qeddpb1HX6/oCtngn98xUaFZT3fzIf4O/qKp
-   tqNtQaz4z5EARUw81LmWIy3FYyufyCDYIA4dgIYUG+w+Of+rci7aRO5to
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="286679560"
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="286679560"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 20:42:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="773198671"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 15 Jul 2022 20:42:56 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCYhk-00016i-8C;
-        Sat, 16 Jul 2022 03:42:56 +0000
-Date:   Sat, 16 Jul 2022 11:42:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Martin Liska <mliska@suse.cz>, linux-doc@vger.kernel.org
-Subject: [jirislaby:lto 18/48] htmldocs:
- Documentation/kbuild/lto-build.rst:40: WARNING: Bullet list ends without a
- blank line; unexpected unindent.
-Message-ID: <202207161100.lCdR6Unx-lkp@intel.com>
+        Fri, 15 Jul 2022 23:44:40 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAD54D4E2;
+        Fri, 15 Jul 2022 20:44:39 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id i8-20020a17090a4b8800b001ef8a65bfbdso7802806pjh.1;
+        Fri, 15 Jul 2022 20:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EvhfMqDZx/5Jqi9/oIuh1bgwJC6dzv6oFttrqLY1GbQ=;
+        b=nXobtFIIY5a/pltN9remCAJQhSvo2v5qbXrOryONiOZCrpvldhVl9SF1Zh8QUWLIwN
+         JOvZlCA14GeahXFHiho+IfuUIfFBDmq6q2AUCrYj8N/J5BnRy9dT1YwxdaBO5BRbkyat
+         Xm/2ZKVuklYdBxlggZAQvo72R80/qIQVEVfHXlR2PkR+asgc+69D7s8zuwpWEtxYTLz4
+         ZybU+JKb6q8nUokT2mIo31Vz4Ee8kX/FbVoWkUMd3aq7Ovo8gKIoMLZ+OQm7XaC4FAj8
+         ZBQqQBoSTO2VI2TJkohXjyx5vB0JXbHiRQqfCFC2K0GHYWTbIkZcy+SuTpttAXV0Xnc0
+         H8pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EvhfMqDZx/5Jqi9/oIuh1bgwJC6dzv6oFttrqLY1GbQ=;
+        b=HHPs4dIx1O8HAt+AsqYYBQ6rwjTbSZ/8R9CtwDzHHDnBhBTdKupTKqeqhGuJKOk0SB
+         fez5C9EDwcQjZq8tb2SBzXTc+RSuta3zMCEGEp0vPijsH73hUjVGrxEiwOr1b9xQyF66
+         FU94W5olGbcVPETj3TfNjvQMMOEVh2mlY39v5PUC4+8+zPNL+pBOJTZrMrl9AVdLjd7S
+         ZWwYUytmNARNGTshELg48XKf45dt0YcPtlcMWFWuDNex94CJ0/6HymWmZ2YNahb3vRsg
+         N1QnI/CqvZR/ztBO/FFNCZoryyUd4lKHCZQFg7mSBIJolyAzeP6ZIunLZH8GIpJy14VR
+         xKxg==
+X-Gm-Message-State: AJIora/g+u2Nzp5yx/es1I7NGyqVSoRwmkhRlsaUa4pcDprCLPzspe+B
+        8j3tARM2dNwp/XaT4w9yBcA=
+X-Google-Smtp-Source: AGRyM1uv/+MMvCaei6sHImm1N1dwo3ObgVHZ7/83WHrRaTIluY5X0aT278OgP4rMFykw2YZM4t18ZQ==
+X-Received: by 2002:a17:902:e0d3:b0:16b:de4d:555b with SMTP id e19-20020a170902e0d300b0016bde4d555bmr17191377pla.79.1657943078966;
+        Fri, 15 Jul 2022 20:44:38 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-53.three.co.id. [116.206.28.53])
+        by smtp.gmail.com with ESMTPSA id m5-20020a17090a2c0500b001ef8397571asm6422617pjd.35.2022.07.15.20.44.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 20:44:38 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id D9F14103843; Sat, 16 Jul 2022 10:44:34 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] Documentation: tdx: fix tainted kernels table
+Date:   Sat, 16 Jul 2022 10:44:32 +0700
+Message-Id: <20220716034432.207574-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <202207150911.eR0W0c9D-lkp@intel.com>
+References: <202207150911.eR0W0c9D-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git lto
-head:   79a278f10955da2801240f52efb828d158b2b36c
-commit: 0350b4dd55922f586c4007f2612f91d2d2925749 [18/48] Kbuild, lto: Add Link Time Optimization support
-reproduce: make htmldocs
+kernel test robot reported htmldocs warning on guest-filter branch of
+tdx tree:
 
-If you fix the issue, kindly add following tag where applicable
+Documentation/admin-guide/tainted-kernels.rst:82: WARNING: Malformed table.
+
+The full warning is:
+
+Documentation/admin-guide/tainted-kernels.rst:82: WARNING: Malformed table.
+Bottom/header table border does not match top border.
+
+===  ===  ======  ========================================================
+Bit  Log  Number  Reason that got the kernel tainted
+===  ===  ======  ========================================================
+<content snipped>
+===  ===  ======  =========================================================
+
+Fix the warning by matching header border length with bottom border.
+
+Link: https://lore.kernel.org/linux-doc/202207150911.eR0W0c9D-lkp@intel.com/
+Fixes: 7acbe4e1dcfb9d ("Add taint flag for TDX overrides")
 Reported-by: kernel test robot <lkp@intel.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ tdx tree is at https://github.com/intel/tdx.git
 
-All warnings (new ones prefixed by >>):
+ Documentation/admin-guide/tainted-kernels.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->> Documentation/kbuild/lto-build.rst:40: WARNING: Bullet list ends without a blank line; unexpected unindent.
->> Documentation/kbuild/lto-build.rst: WARNING: document isn't included in any toctree
+diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
+index 65c58092ec354b..1146bce7e32e49 100644
+--- a/Documentation/admin-guide/tainted-kernels.rst
++++ b/Documentation/admin-guide/tainted-kernels.rst
+@@ -79,9 +79,9 @@ which bits are set::
+ Table for decoding tainted state
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+-===  ===  ======  ========================================================
++===  ===  ======  =========================================================
+ Bit  Log  Number  Reason that got the kernel tainted
+-===  ===  ======  ========================================================
++===  ===  ======  =========================================================
+   0  G/P       1  proprietary module was loaded
+   1  _/F       2  module was force loaded
+   2  _/S       4  kernel running on an out of specification system
 
-vim +40 Documentation/kbuild/lto-build.rst
-
-    36	
-    37	Requirements:
-    38	-------------
-    39	- Enough memory: 4GB for a standard build, more for allyesconfig
-  > 40	The peak memory usage happens single threaded (when lto-wpa merges types),
-    41	so dialing back -j options will not help much.
-    42	
-
+base-commit: 0a555e67b143701a81612d819e693cf5786de418
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+An old man doll... just what I always wanted! - Clara
+

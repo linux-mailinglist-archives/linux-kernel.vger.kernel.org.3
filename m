@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34880577245
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D053577268
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 01:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbiGPXXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 19:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S233130AbiGPXXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 19:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233127AbiGPXWw (ORCPT
+        with ESMTP id S233033AbiGPXWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 19:22:52 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38091208A
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 16:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658013659; x=1689549659;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wykNfR/iep6HPkaJF69DpWCCPgF53zZVnjM3Ja3R8ho=;
-  b=PwWk5HnPsijRCWokixQL1OGokBRm4GRZH6FXiqJIcrHTmzuRsVO7KFr0
-   +E9ODpwqcRyzsvnWUM81bcY5rlG+9lGVIIeQxyEHhe/I9h2tdz2cBORLQ
-   wTdZLFw7lPaUJvJgXq17WPODNsxcp4Xqy0n6MHaf9dHvU0gTKGWU448HP
-   1jwwwx2u+Goyn3bzH+5o57Q+nRa5jxIMedObaTnnzuDsXyfaxumKHUbJk
-   VGMUdwMEVd7z7mPnVJLMblY8y9ECRdcpvyrXtEQFUzU5nmbl0CN6tCpI1
-   F7znTole9r1s9xndRMSjFP/aqVe+ppIR8kRBb7gx1zJ7zLdj1oHejj6oz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="266419901"
-X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
-   d="scan'208";a="266419901"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 16:20:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
-   d="scan'208";a="699604349"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Jul 2022 16:20:58 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCr5m-0002I2-0t;
-        Sat, 16 Jul 2022 23:20:58 +0000
-Date:   Sun, 17 Jul 2022 07:20:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arm-linux-gnueabi-ld: error: .btf.vmlinux.bin.o is already in final
- BE8 format
-Message-ID: <202207170709.VKgrHNoN-lkp@intel.com>
+        Sat, 16 Jul 2022 19:22:54 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C35611826;
+        Sat, 16 Jul 2022 16:21:03 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id o15so8688919pjh.1;
+        Sat, 16 Jul 2022 16:21:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6Lujf1vjjpR4foXbN5bgN3Hs30sniIkF599g7wlKOBQ=;
+        b=afJ5B8n3Efj0vZiNhW3XG5MYLzNKjqROPIDDKlOhtBJQzFemzmYA8ZxyKh/ydoPc2r
+         VD4DkeYgmLoQIn7MzMrjhU9ysrp651Xdhdgo3hr5QfhRq8nN3ZDIzgAD7sU9e+ixBCku
+         mqRNFPzOZHu/TENAPPVc3DrgFsdNxsGzxcVUXA8ZDS+IyxzJXI+AgHvY9U/8S4DhOMlI
+         wdiWnFeAKtoZkRSAZ+JdbBPTAYxnqHq9/WXs86J5/SZy9G17wXVkAOnrsP2UQCLFNGsK
+         4NAWACLUuoANVeMvWwZMn+JIDlWuxnEYyAS3JdAYKJdDXl4Gh3qG+hwG0AVvXPfdyPI0
+         7b1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6Lujf1vjjpR4foXbN5bgN3Hs30sniIkF599g7wlKOBQ=;
+        b=dNMe5YHqP93kKpxPCLfAtfxW+w2RpiIMyi0jZ8986H2R0mGV9/hSyzzHq5LCLMtfnd
+         XDMSq3huuQV2Fh83dJiW3y1wc5ehVGkTbI4TXur5bhLUMF1M32Z0OQPdhZmH7cYhubkL
+         bfzFQq4O8WO9uMF3PJRcRnj0NKv+B7HE6tYZ87LChRWauMT6k5XGdJhwRObyTPlOmLxP
+         i1EZ8b1BFKL6sNvL6ZpYXoB1X95Nydn/EGgHVb7MdhEF1685Vksw6Y6y5vam3mGg7bIR
+         ZqyG5MlVRMkXjnK5O3AexpfwSuMmGQNBdGST9F4Y0Aj6YLU4ORhnB0v6ZmiNSCy7R6Ta
+         4J0A==
+X-Gm-Message-State: AJIora+hSRb7wXKskEJtNuYs2Q+uXKFNS6MNQuKIwZc+Typ8hQpA1Jst
+        h4OYGkFk3BwxmuSzdUoYayoWyBQypGE=
+X-Google-Smtp-Source: AGRyM1vOzZdM3a33bUnAbTJcBI7b9OKriE+uVyKu8lm6JhHM285LWF+zuzFdz3DxaowA2HExgRCgzA==
+X-Received: by 2002:a17:902:eb8e:b0:16c:5764:7dc0 with SMTP id q14-20020a170902eb8e00b0016c57647dc0mr21552372plg.63.1658013662622;
+        Sat, 16 Jul 2022 16:21:02 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:22cf:30ff:fe38:5254? ([2600:8802:b00:4a48:22cf:30ff:fe38:5254])
+        by smtp.googlemail.com with ESMTPSA id j6-20020a17090a318600b001ece32cbec9sm8182604pjb.24.2022.07.16.16.21.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Jul 2022 16:21:01 -0700 (PDT)
+Message-ID: <846d3845-1536-3306-b68d-d0097a2ff8ff@gmail.com>
+Date:   Sat, 16 Jul 2022 16:21:00 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH] tools: Fixed MIPS builds due to struct flock
+ re-definition
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, hch@lst.de,
+        Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Cc:     nathan@kernel.org, naresh.kamboju@linaro.org, heiko@sntech.de,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Guo Ren <guoren@kernel.org>
+References: <20220715185551.3951955-1-f.fainelli@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220715185551.3951955-1-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Le 15/07/2022 à 11:55, Florian Fainelli a écrit :
+> Building perf for MIPS failed after 9f79b8b72339 ("uapi: simplify
+> __ARCH_FLOCK{,64}_PAD a little") with the following error:
+> 
+>    CC
+> /home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o
+> In file included from
+> ../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:77,
+>                   from ../include/uapi/linux/fcntl.h:5,
+>                   from trace/beauty/fcntl.c:10:
+> ../include/uapi/asm-generic/fcntl.h:188:8: error: redefinition of
+> 'struct flock'
+>   struct flock {
+>          ^~~~~
+> In file included from ../include/uapi/linux/fcntl.h:5,
+>                   from trace/beauty/fcntl.c:10:
+> ../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:63:8:
+> note: originally defined here
+>   struct flock {
+>          ^~~~~
+> 
+> This is due to the local copy under
+> tools/include/uapi/asm-generic/fcntl.h including the toolchain's kernel
+> headers which already define 'struct flock' and define
+> HAVE_ARCH_STRUCT_FLOCK to future inclusions make a decision as to
+> whether re-defining 'struct flock' is appropriate or not.
+> 
+> Make sure what do not re-define 'struct flock'
+> when HAVE_ARCH_STRUCT_FLOCK is already defined.
+> 
+> Fixes: 9f79b8b72339 ("uapi: simplify __ARCH_FLOCK{,64}_PAD a little")
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   972a278fe60c361eb8f37619f562f092e8786d7c
-commit: 5d6f52671e76ca2d55d74e676ac4c38ceb14a2d3 ARM: rework endianess selection
-date:   3 months ago
-config: arm-randconfig-r014-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170709.VKgrHNoN-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5d6f52671e76ca2d55d74e676ac4c38ceb14a2d3
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 5d6f52671e76ca2d55d74e676ac4c38ceb14a2d3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arm-linux-gnueabi-ld: error: .btf.vmlinux.bin.o is already in final BE8 format
-   arm-linux-gnueabi-ld: failed to merge target specific data of file .btf.vmlinux.bin.o
-
+Any chance to apply this patch prior to v5.19 being final? Thanks!
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Florian

@@ -2,109 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243BE576FFC
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 17:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34284576FF3
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 17:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbiGPPvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 11:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
+        id S232332AbiGPPle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 11:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiGPPvX (ORCPT
+        with ESMTP id S229501AbiGPPld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 11:51:23 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB56118B0C
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 08:51:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657986682; x=1689522682;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LaO484dNnKjtU1b9v96aU9pgzCv4lbAKkmwsfMZ3azw=;
-  b=Qdi5JtWTa8RwoixBmpDJef8cVa1s6Pc973SGssdUz4iaKCRbHt5tE5Yo
-   UQVI0lLKkvx3uyQrtcDTGM0DkjFa38J05ZAnbIjhp89XFUxIQZjR9md8y
-   e4iv+NoqQshTmuOWANlfXxGibBb9ONxl71vGrbYckNcu8U+myolXPXdjS
-   rfFPMQdiMkZu+KGaRGF/GwMs8re+vOa8FDPagBSHeAfifv/lcsHoPrMhM
-   xahtHux7Is/5WEva8Coe2YP6fj3vRWFyYu6+z2GjZdoh65DcfHt7GfcHI
-   BbAkoGz2lH4Keb6lXXY8dOGhgWmSK0/yfLW+YgTWZ1Mjg3qKLCQhK8u23
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="266394148"
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="266394148"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 08:51:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="629438321"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 16 Jul 2022 08:51:20 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCk4d-0001lK-Vh;
-        Sat, 16 Jul 2022 15:51:19 +0000
-Date:   Sat, 16 Jul 2022 23:50:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning:
- no previous prototype for '__ashldi3'
-Message-ID: <202207162318.iryfcTQP-lkp@intel.com>
+        Sat, 16 Jul 2022 11:41:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9231DA51;
+        Sat, 16 Jul 2022 08:41:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D9D6B80AB9;
+        Sat, 16 Jul 2022 15:41:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F38EC34114;
+        Sat, 16 Jul 2022 15:41:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657986090;
+        bh=u/RKJ6oT43C5tacik6enadpoU+M83shrDq4oCRky09Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Td3MKs+VV2MR0gd+gXcPIwTeIHB+pa9ZYRGy0sYlof7buXRVWABwtCbAfQF2v9RwL
+         0jOXbaYKd1XyUrG4vHEepNK24IkHP6Zq83Z+ceJ6Xi6EcDCIEwVg59IWoqCDKo2TlW
+         /T8+Omm/AWv+6Eetf/uJ0JTF2ou95MASsH8BG4b7eZnK6GuEOCNcv4JTP0ObO0Y4IS
+         2MPfAu7qvbg7tlsl0lXyuarA2X3WRrecxGNyZll/MktylOs4d+KNu44X4HQoK+Jyet
+         PHpIQDk07rPw9cIuM/eJDlZAHNu8LvYtpErDx+FL089S6DzlyLBBsCFfzJ2X+dfdcZ
+         nCuqWM9DdK6jg==
+Date:   Sat, 16 Jul 2022 16:51:21 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
+ driver
+Message-ID: <20220716165121.3f0120df@jic23-huawei>
+In-Reply-To: <20220701134734.nfc6xa4q7rhfi3r7@CAB-WSD-L081021.sigma.sbrf.ru>
+References: <20220616104211.9257-1-ddrokosov@sberdevices.ru>
+        <20220616104211.9257-3-ddrokosov@sberdevices.ru>
+        <20220619132703.5cf3b090@jic23-huawei>
+        <20220701134734.nfc6xa4q7rhfi3r7@CAB-WSD-L081021.sigma.sbrf.ru>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
+On Fri, 1 Jul 2022 13:49:10 +0000
+Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
 
-FYI, the error/warning still remains.
+> Hello Jonathan,
+> 
+> Sorry for the delayed response.
+> 
+> On Sun, Jun 19, 2022 at 01:27:03PM +0100, Jonathan Cameron wrote:
+> > On Thu, 16 Jun 2022 10:42:14 +0000
+> > Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+> >   
+> > > MSA311 is a tri-axial, low-g accelerometer with I2C digital output for
+> > > sensitivity consumer applications. It has dynamical user selectable full
+> > > scales range of +-2g/+-4g/+-8g/+-16g and allows acceleration measurements
+> > > with output data rates from 1Hz to 1000Hz.
+> > > 
+> > > Datasheet can be found at following URL:
+> > > https://cdn-shop.adafruit.com/product-files/5309/MSA311-V1.1-ENG.pdf
+> > > 
+> > > This driver supports following MSA311 features:
+> > >     - IIO interface
+> > >     - Different power modes: NORMAL and SUSPEND (using pm_runtime)
+> > >     - ODR (Output Data Rate) selection
+> > >     - Scale and samp_freq selection
+> > >     - IIO triggered buffer, IIO reg access
+> > >     - NEW_DATA interrupt + trigger
+> > > 
+> > > Below features to be done:
+> > >     - Motion Events: ACTIVE, TAP, ORIENT, FREEFALL
+> > >     - Low Power mode
+> > > 
+> > > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>  
+> > Hi Dmitry,
+> > 
+> > A few things I missed before + I'm still not happy with the runtime
+> > pm handling.  One case that isn't covered well is !CONFIG_RUNTIME_PM
+> > 
+> > Thanks,
+> > 
+> > Jonathan
+> >   
+> 
+> ...
+> 
+> > > +static irqreturn_t msa311_buffer_thread(int irq, void *p)
+> > > +{
+> > > +	struct iio_poll_func *pf = p;
+> > > +	struct iio_dev *indio_dev = pf->indio_dev;
+> > > +	struct msa311_priv *msa311 = iio_priv(indio_dev);
+> > > +	struct device *dev = &msa311->i2c->dev;
+> > > +	const struct iio_chan_spec *chan;
+> > > +	__le16 axis;
+> > > +	int bit = 0, err, i = 0;
+> > > +
+> > > +	/* Ensure correct alignment of time stamp when present */
+> > > +	struct {
+> > > +		__le16 channels[MSA311_SI_Z + 1];
+> > > +		s64 ts __aligned(8);
+> > > +	} buf;
+> > > +
+> > > +	memset(&buf, 0, sizeof(buf));
+> > > +
+> > > +	mutex_lock(&msa311->lock);
+> > > +
+> > > +	for_each_set_bit(bit, indio_dev->active_scan_mask,
+> > > +			 indio_dev->masklength) {
+> > > +		chan = &msa311_channels[bit];  
+> > 
+> > Nothing to do with your driver, but feels like it's worth
+> > exploring a
+> > 	for_each_chan_in_iio_scan(struct iio_chan_spec, struct iio_dev) macro.
+> > 
+> > I'll add that to my todo list.
+> >   
+> 
+> If you don't mind, I can prepare such a patch.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9b59ec8d50a1f28747ceff9a4f39af5deba9540e
-commit: f78b25ee922ef6faf59a258af1b9388ca894cfd9 mips: decompressor: do not copy source files while building
-date:   8 months ago
-config: mips-randconfig-r012-20220715 (https://download.01.org/0day-ci/archive/20220716/202207162318.iryfcTQP-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f78b25ee922ef6faf59a258af1b9388ca894cfd9
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f78b25ee922ef6faf59a258af1b9388ca894cfd9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+I had a look at this whilst travelling and it's a lot more complex than I
+thought it would be because of gaps in the scan_index in some drivers (not
+all channels have scan indexes and not all scan indexes are used)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+If we write such a thing we need to resolve that in the core and I suspect
+it will require creation of an indirection structure that lets us
+do scan_index based look up of channels.  Whilst that works in many drivers
+because there is a nice 1 to 1 mapping, there are exceptions.
+Hence I think we would be looking at:
 
-Note: functions only called from assembly code should be annotated with the asmlinkage attribute
-All warnings (new ones prefixed by >>):
+1) Check at registration time on whether scan_index == location in
+iio_dev->channels, if so set another pointer say iio_dev->channels_linear =
+iio_dev->channels.
+2) If not, create a lookup table and make iio_dev->channels_linear
+point to that.
+3) Finally introduce a macro that uses channels_linear.
 
-   In file included from arch/mips/boot/compressed/ashldi3.c:2:
->> arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning: no previous prototype for '__ashldi3' [-Wmissing-prototypes]
-       9 | long long notrace __ashldi3(long long u, word_type b)
-         |                   ^~~~~~~~~
+What fun ;)
+
+Jonathan
+ 
 
 
-vim +/__ashldi3 +9 arch/mips/boot/compressed/../../../../lib/ashldi3.c
-
-b35cd9884fa5d8 Palmer Dabbelt 2017-05-23  8  
-b35cd9884fa5d8 Palmer Dabbelt 2017-05-23 @9  long long notrace __ashldi3(long long u, word_type b)
-
-:::::: The code at line 9 was first introduced by commit
-:::::: b35cd9884fa5d81c9d5e7f57c9d03264ae2bd835 lib: Add shared copies of some GCC library routines
-
-:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
-:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

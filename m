@@ -2,87 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7A7576C4C
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 09:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4534576C52
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 09:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbiGPHGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 03:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S231713AbiGPHL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 03:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGPHGl (ORCPT
+        with ESMTP id S229436AbiGPHL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 03:06:41 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18552FFE3
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 00:06:37 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LlK3r5rqKzlVld;
-        Sat, 16 Jul 2022 15:04:56 +0800 (CST)
-Received: from dggpemm500003.china.huawei.com (7.185.36.56) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+        Sat, 16 Jul 2022 03:11:28 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18220658A;
+        Sat, 16 Jul 2022 00:11:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657955483; x=1689491483;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YVU5qJLCsSc6SFHbZNFSgBEov8vHAhENYn8Xttvn/x8=;
+  b=Y6zoS3wqPakWHm4wgEO1aYJZyE+aP/bszXRBYCdXWX4Bfpimimbqr2Kk
+   ASL1BE2Xkyl+1pESZ8pgkwEvjYLNLd5Muy8DVUUCORtlGiLM2MHpEt9XO
+   kLZQf4KB7hbXPiFJMX3P7CCAcHMhrs7CJv5lEhRlGdDneXQeizDGYleM2
+   SfegVsx9dIRW0+k+PhRyZ3yIZzVwT8DhOlwc+vNkbAMA4UsUSatREgR/f
+   E4dSMHk97H/7xF1lY2N6NQMr7iv0aDPGZnZvHyza5R0JJVF9ft28iJMp7
+   8g/1EhW4hwMXVWbHDtIPsdMKvCbEOgkhcFLsWhBKb+CMUq4D6UawXeNgv
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,276,1650956400"; 
+   d="scan'208";a="104740574"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jul 2022 00:11:20 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Jul 2022 15:06:34 +0800
-Received: from localhost.localdomain (10.28.77.120) by
- dggpemm500003.china.huawei.com (7.185.36.56) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Jul 2022 15:06:34 +0800
-From:   wangwudi <wangwudi@hisilicon.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     wangwudi <wangwudi@hisilicon.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH] drivers: irqchip: Allocate alignment addr by ITS_BASER.Page_size
-Date:   Sat, 16 Jul 2022 15:05:36 +0800
-Message-ID: <1657955136-6622-1-git-send-email-wangwudi@hisilicon.com>
-X-Mailer: git-send-email 2.7.4
+ 15.1.2375.17; Sat, 16 Jul 2022 00:11:19 -0700
+Received: from dev-powerhorse.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Sat, 16 Jul 2022 00:11:17 -0700
+From:   <lewis.hanly@microchip.com>
+To:     <linux-gpio@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
+        <linux-kernel@vger.kernel.org>, <palmer@dabbelt.com>,
+        <maz@kernel.org>
+CC:     <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
+        <lewis.hanly@microchip.com>
+Subject: [PATCH v3 0/1] Add Polarfire SoC GPIO support
+Date:   Sat, 16 Jul 2022 08:11:12 +0100
+Message-ID: <20220716071113.1646887-1-lewis.hanly@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.28.77.120]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500003.china.huawei.com (7.185.36.56)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The description of the ITS_BASER.Physical_Address field in the ARM GIC spec is as 
-follows:
-"The address must be aligned to the size specified in the Page Size field."
-The Page_Size field in ITS_BASER might be RO.
+From: Lewis Hanly <lewis.hanly@microchip.com>
 
-Currently, the address is aligned based on the system page_size, not the HW 
-Page_Size field. In some case, this is in contradiction with the spec.
+Add a driver to support the Polarfire SoC gpio controller.
+Tested with 5.19-rc5
 
-For example:
-ITS_BASER.Page_Size indicate 16K, and kernel page size is 4K.
-If HW need 4K-size memory, the driver may alloc a 4K aligned address.
-This has been proven in hardware.
+MPFS gpio interrupts can be configured as direct or
+non direct connections to the PLIC (Platform Level Interrupt Controller).
+GPIO_INTERRUPT_FAB_CR(31:0) system register will enable GPIO2(31:0)
+corresponding interrupt on PLIC. e.g. If GPIO_INTERRUPT_FAB_CR bit0 is set
+then GPIO2 bit0 interrupt is available on the direct input pin on the PLIC.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <maz@kernel.org>
-Signed-off-by: wangwudi <wangwudi@hisilicon.com>
----
- drivers/irqchip/irq-gic-v3-its.c | 3 +++
- 1 file changed, 3 insertions(+)
+Changes in v3:
+Changed order in kconfig.
+Removed blank lines in driver header/source file.
+Removed BYTE_BOUNDARY variable and use macro to do *4.
+mpfs_gpio_assign_bit parameter uses macro instead of (i * BYTE_BOUNDARY).
+Add correct definitions for direction.
+Change order of variables in mpfs_gpio_irq_set_type function.
+Return dev_err_probe instead of dev_err.
+Remove noise of dev_inf.
+Avoid using of_match_ptr.
+use devm_gpiochip_add_data(..)
+Update mpfs_gpio_remove. 
 
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index 5ff09de6c48f..0e25e887d45c 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -2310,6 +2310,9 @@ static int its_setup_baser(struct its_node *its, struct its_baser *baser,
- 		order = get_order(GITS_BASER_PAGES_MAX * psz);
- 	}
- 
-+	if ((psz > PAGE_SIZE) && (PAGE_ORDER_TO_SIZE(order) < psz)) {
-+		order = get_order(psz);
-+	}
- 	page = alloc_pages_node(its->numa_node, GFP_KERNEL | __GFP_ZERO, order);
- 	if (!page)
- 		return -ENOMEM;
+Changes in v2:
+Use raw_spinlock.
+Use __assign_bit() to assign bit, added a bool variable for value.
+Remove unnecessary checking gpio_index.
+Remove default from switch statement.
+Use const for irq_chip, name updated and use mask/unmask.
+Use latest kernel api irq set_chip.
+Implemented hierarchical interrupt chip support, although
+suggested to use chained interrupt flow I believe this fits better.
+
+Lewis Hanly (1):
+  gpio: mpfs: add polarfire soc gpio support
+
+ drivers/gpio/Kconfig     |   9 +
+ drivers/gpio/Makefile    |   1 +
+ drivers/gpio/gpio-mpfs.c | 361 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 371 insertions(+)
+ create mode 100644 drivers/gpio/gpio-mpfs.c
+
 -- 
-2.7.4
+2.25.1
 

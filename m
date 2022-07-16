@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62115576E41
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 15:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE16576E44
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 15:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiGPNiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 09:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
+        id S231229AbiGPNlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 09:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiGPNis (ORCPT
+        with ESMTP id S229499AbiGPNlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 09:38:48 -0400
+        Sat, 16 Jul 2022 09:41:36 -0400
 Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFDE213;
-        Sat, 16 Jul 2022 06:38:42 -0700 (PDT)
-X-QQ-mid: bizesmtp76t1657978717ts20f4ix
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3051CFD5;
+        Sat, 16 Jul 2022 06:41:30 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1657978885tcpa5y94
 Received: from localhost.localdomain ( [182.148.15.157])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 16 Jul 2022 21:38:32 +0800 (CST)
+        id ; Sat, 16 Jul 2022 21:41:22 +0800 (CST)
 X-QQ-SSF: 01000000002000B0D000B00A0000000
-X-QQ-FEAT: zK0nlCs2Z6HAdltJbsCKbdC2wcaj4eyRd7aC4uBhsez2cY7937vDU9f66xjVT
-        P1rFgHJ6gZK2WI4hPT1fgKhZomaDTKD4i7ps8pBUyHyN7hWOsrnuHXY/6LiiP06AMKbWsgC
-        ZqogqEAu9D6NE42wGrdcfD3rxGXIfif6nZKWXAMIY3FyN+k1uBkERePG1Z0q9ayOm7hOjP5
-        gK5EAMo1jtZesL9D01nStpdHAx6bQpZLB4mrltVVwJbQVOVQlHtkutyDpm8YkhbV/XW16dx
-        /AFAiJ2W9HdyOdTLk+R2FqPT5k9QpeSEVGjjNXXxVyRDeqnNr5xjtj6OIRipzKsGDjHZcha
-        MQBDTjrvbUdVkXHX0p1sFlqxUe9hRudsKtKSBhgZHhPcD5K2DMZd8wY62Z2Rg==
+X-QQ-FEAT: hItiEz2SZNLkk3ygyGT3GTihHMkj0G0d5Fnkl/yQq2zuSbclJocP4T2FXA+Uy
+        T8LJ4f6k5BUpIDVs+kmFLpgCFbLBd0Su9z4UkCWxlBPo+3SrjODmWkqKDBBLWvubdEkaRUe
+        0lSjdqyK1RNPtO7BLXWpOYZxwBXkK3Q5rtOFkRS3q7CglAYsgoVyhE1xAXzUIvQE/FxDzCf
+        Eb117pE/qlSCMyC8snshuQ6b1WnMyh/gInvVArQxl5a0SQ77EbUEDU6skoRaGUAF7QaKIdG
+        /7DDZGmlZU7suOzJp0ZGSqQQUX2fwlO+ZKKOAWQF4bBr9suLYTQN+yF8FNYSTjfarMAaARn
+        TYaxs1hTRtyQ+UQPHwaOx8yLud7jy5Jgpa2h33LD4bynGqWYg1/P25QuR0ZcQ==
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] usb/image: fix repeated words in comments
-Date:   Sat, 16 Jul 2022 21:38:25 +0800
-Message-Id: <20220716133825.43161-1-yuanjilin@cdjrlc.com>
+Subject: [PATCH] usb/misc: fix repeated words in comments
+Date:   Sat, 16 Jul 2022 21:41:05 +0800
+Message-Id: <20220716134105.44710-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,26 +47,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'the'.
+ Delete the redundant word 'with'.
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- drivers/usb/image/mdc800.c | 2 +-
+ drivers/usb/misc/usbtest.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/image/mdc800.c b/drivers/usb/image/mdc800.c
-index fc0e22cc6fda..67f098579fb4 100644
---- a/drivers/usb/image/mdc800.c
-+++ b/drivers/usb/image/mdc800.c
-@@ -38,7 +38,7 @@
+diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
+index 150090ee4ec1..ac0d75ac2d2f 100644
+--- a/drivers/usb/misc/usbtest.c
++++ b/drivers/usb/misc/usbtest.c
+@@ -2638,7 +2638,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
+  * different busses) to use when testing, and allocate one thread per
+  * test.  So discovery is simplified, and we have no device naming issues.
   *
-  * version 0.7.3
-  * bugfix : The mdc800->state field gets set to READY after the
-- * the disconnect function sets it to NOT_CONNECTED. This makes the
-+ * disconnect function sets it to NOT_CONNECTED. This makes the
-  * driver running like the camera is connected and causes some
-  * hang ups.
-  *
+- * Don't use these only as stress/load tests.  Use them along with with
++ * Don't use these only as stress/load tests.  Use them along with
+  * other USB bus activity:  plugging, unplugging, mousing, mp3 playback,
+  * video capture, and so on.  Run different tests at different times, in
+  * different sequences.  Nothing here should interact with other devices,
 -- 
 2.36.1
 

@@ -2,128 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7A2576B1D
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 02:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3A8576B21
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 02:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiGPAY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 20:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
+        id S230254AbiGPAi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 20:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiGPAYy (ORCPT
+        with ESMTP id S229588AbiGPAiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 20:24:54 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E226A5A47C
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 17:24:52 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id g1so8181764edb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 17:24:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=8jfxx4RE1L6PObFpgYLe3VGx/xPkN6IIKKF2vyixvto=;
-        b=ttBa2UbBKeBcedM5VCbE2dF8Fb8R/tnG19G+WXwTVbSTqG1oTp0u3QXSuu1yDvokh5
-         QXrrUTBTPgr3mZoAe3NujogoGOPhJdD2szIDo2vVUq3JJk2MePiO/6tGLzFXgX44/krw
-         LMaZ469mjAQqsvWglYLYkHeSrFiElKTVV43gRkho0rZagwiCj71D7bKSEmJK93pf6XQQ
-         Rnbc1PfQESfvMLcDXLcxF5mkioWaARjstUxs1yJ/rlWOPxYXGtUzwiXDFL1eg5WnBe+C
-         g5TVlKenKgBYv06m4uUJCVYS9n02AocDoDUnJ/tFBuW+kUj+wFYw7atCNe8IJ18JXRUx
-         wrnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=8jfxx4RE1L6PObFpgYLe3VGx/xPkN6IIKKF2vyixvto=;
-        b=f0/YJKN9G6epTYDqUXlETOWyEtVOrjko5G3MhoT9v0e6q++dBNN3v5IJ6Xk4RAD6Oa
-         GCDupjiS69s2ybFKRHYFxcmFyAduB10V3J5XmKqpbbf5z4qZcNMDXneaUuu3scKI6F1j
-         FtbV2tkzTfyhGAb8zI2WtJaVhcoPJh48LTyOtv1RFi0je0S0jQjzcongrB2EtvFyfy7p
-         mKOuxweTw1lFioquQuywcN3I6EPKoWR8FHu5N9yzlbqZ+0o4XRMzIhdhY2H72k9Oy2ei
-         7EdGO+VwDlQStpVbfcunCIJUJLuxE5JbooAk6cS6FXdurgjwkX/Gm6BkNs9VONfEMYbp
-         ei8w==
-X-Gm-Message-State: AJIora8pyOU96RfqVvyaed6eIY8pE0qxMX7vAYY2jdhJ1uj7Fl+DWhAX
-        Ks62lzCyXyT43qJcHGSvStaToQ==
-X-Google-Smtp-Source: AGRyM1tNcup+VZRbETUlw1suyFlV8QtfS2LSShbACHnJArc2NkI0rR1/KyBV9KTkE5dfB2Ut08q/Cw==
-X-Received: by 2002:a05:6402:148d:b0:43a:8f93:1d1 with SMTP id e13-20020a056402148d00b0043a8f9301d1mr22124080edv.57.1657931091445;
-        Fri, 15 Jul 2022 17:24:51 -0700 (PDT)
-Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
-        by smtp.gmail.com with ESMTPSA id gj10-20020a170907740a00b00726c0e63b94sm2547537ejc.27.2022.07.15.17.24.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 15 Jul 2022 17:24:50 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH v4] arm64: dts: rockchip: Fix SD card init on
- rk3399-nanopi4
-From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-In-Reply-To: <CDF716FC-F6CF-44A9-84D9-B48C46E6AC2C@kohlschutter.com>
-Date:   Sat, 16 Jul 2022 02:24:49 +0200
-Cc:     wens@kernel.org, =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3912A668-9F73-40FD-8993-5060F632238A@kohlschutter.com>
-References: <C639AD88-77A1-4485-BAEA-2FF8FC15A844@kohlschutter.com>
- <12878108.O9o76ZdvQC@diego> <103b714c-b07c-f016-1062-84bd94786b22@arm.com>
- <9AF1E75F-5947-49B0-887D-82C426527B99@kohlschutter.com>
- <590f7a08-a6ca-be54-4254-363343642a52@arm.com>
- <A6B896E5-CD25-4441-B6A5-0BE1FA284B2C@kohlschutter.com>
- <A9634366-A012-43D2-B253-8BB9BF6005C7@kohlschutter.com>
- <CAGb2v65Ehbu1wrib2CzF1fDZuD3fHZQDhKfVusyUF9KnxTvi+Q@mail.gmail.com>
- <5ca9bd94-54d9-04f8-0098-a56ffb6f5fe1@arm.com>
- <502b3fbe-3077-407e-6010-a8cb3ffce7d6@arm.com>
- <449292CA-CE60-4B90-90F7-295FBFEAB3F8@kohlschutter.com>
- <73F9AED0-D2A8-4294-B6E1-1B92D2A36529@kohlschutter.com>
- <115AD6A4-021B-4879-BFB5-BC7689A0203E@kohlschutter.com>
- <17a4c6f6-d79c-a7b2-860f-e5944b778f9f@arm.com>
- <9405b97a-6758-ad4e-ccff-eed072096539@arm.com>
- <BF7CC548-88C9-4889-8A41-8E99C31EF81C@kohlschutter.com>
- <daf3b61c-d886-98eb-0443-de233d742041@arm.com>
- <CDF716FC-F6CF-44A9-84D9-B48C46E6AC2C@kohlschutter.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Fri, 15 Jul 2022 20:38:54 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3908415713;
+        Fri, 15 Jul 2022 17:38:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657931933; x=1689467933;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kA0/QSLOElTCWHwqX1Noco5mDpydNCMPS39Y/xSReS4=;
+  b=gWshTn86/Qqq+1UXwuZ93w+YRwJLbvOeYV/u4ipLni2/1dYprWf0Z66l
+   Uwdil4yM30eV5IqxFnq82HDCE5m+S2iLhvcGs33L+uHBrqFoVzBGw+7qT
+   2riyf/59Y6/AB61NCwjqDyiiB8Z0SfQZCKL6FfDyW/DWz1uLxF4W1kqc4
+   xbybiX8Vk4kEeUvyfBNJ6gjzyCudX6O4DSr8II4aF//FqgjjTWExY/eyc
+   4SYdU3auDA/q7FK5V5SBhIEtPomX/v+6Ah82Scgt8iqwdPsGIb78ED50H
+   GPwc3rafPqM38kCkzQLmMFjOoGOZVVtdHncQtXadiGrw0mMDj/LtQiOOO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="283494084"
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="283494084"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 17:38:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="923713805"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Jul 2022 17:38:50 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCVpZ-0000tw-Fv;
+        Sat, 16 Jul 2022 00:38:49 +0000
+Date:   Sat, 16 Jul 2022 08:38:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Li Chen <me@linux.beauty>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Li Chen <lchen@ambarella.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/4] of: add struct page support to rmem
+Message-ID: <202207160854.nSdKYSY8-lkp@intel.com>
+References: <20220711122459.13773-2-me@linux.beauty>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220711122459.13773-2-me@linux.beauty>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>=20
->>> There may well be another bug slumbering in the codebase that is =
-circumvented by 1. adding a delay in the code and 2. not turning the =
-regulator off upon shutdown.
->>=20
->> Yes, it seems suboptimal that the regulator core allows this glitch =
-where an always-on regulator which is already on gets turned off at all, =
-but I guess that's its own problem. In the meantime, off-on-delay-us =
-sounds like the most likely property to bandage this locally. I'm seeing =
-a fall time in the order of milliseconds (attached), so we'd probably =
-want a fair chunk of that to be safe.
->>=20
->> Robin.<SDS00003.png>
->=20
-> I think we have a way where there's no need to pick a delay value that =
-may ultimately not work in all cases.
-> Following up with "[PATCH] regulator: core: Resolve supply name =
-earlier to prevent double-init" [1]
->=20
-> Thank you so much for helping me getting that far! It would be great =
-if you'd keep following the thread.
->=20
-> Best,
-> Christian
->=20
-> [1] https://www.spinics.net/lists/kernel/msg4440365.html
+Hi Li,
 
-@Robin,
+Thank you for the patch! Perhaps something to improve:
 
-oddly enough, setting off-on-delay-us with values of up to a second =
-(1000000 us) still results in failed inits.
-I hope we can find another bandage until the regular-core patch gets =
-merged.
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on arm64/for-next/core arm-perf/for-next/perf linus/master v5.19-rc6 next-20220715]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Chen/add-struct-page-and-Direct-I-O-support-to-reserved-memory/20220711-202957
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220716/202207160854.nSdKYSY8-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8b66b4b9614f1c7bb8b2d8fac17d5a2a73acf954
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Li-Chen/add-struct-page-and-Direct-I-O-support-to-reserved-memory/20220711-202957
+        git checkout 8b66b4b9614f1c7bb8b2d8fac17d5a2a73acf954
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/mailbox/ drivers/of/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/of/of_reserved_mem.c: In function 'reserved_mem_memremap_pages':
+   drivers/of/of_reserved_mem.c:633:50: error: invalid application of 'sizeof' to incomplete type 'struct dev_pagemap'
+     633 |         pgmap_rmem_dio = devm_kzalloc(dev, sizeof(*pgmap_rmem_dio), GFP_KERNEL);
+         |                                                  ^
+   drivers/of/of_reserved_mem.c:635:23: error: invalid use of undefined type 'struct dev_pagemap'
+     635 |         pgmap_rmem_dio->range.start = rmem->base;
+         |                       ^~
+   drivers/of/of_reserved_mem.c:636:23: error: invalid use of undefined type 'struct dev_pagemap'
+     636 |         pgmap_rmem_dio->range.end = rmem->base + rmem->size - 1;
+         |                       ^~
+   drivers/of/of_reserved_mem.c:637:23: error: invalid use of undefined type 'struct dev_pagemap'
+     637 |         pgmap_rmem_dio->nr_range = 1;
+         |                       ^~
+   drivers/of/of_reserved_mem.c:638:23: error: invalid use of undefined type 'struct dev_pagemap'
+     638 |         pgmap_rmem_dio->type = MEMORY_DEVICE_GENERIC;
+         |                       ^~
+   drivers/of/of_reserved_mem.c:638:32: error: 'MEMORY_DEVICE_GENERIC' undeclared (first use in this function)
+     638 |         pgmap_rmem_dio->type = MEMORY_DEVICE_GENERIC;
+         |                                ^~~~~~~~~~~~~~~~~~~~~
+   drivers/of/of_reserved_mem.c:638:32: note: each undeclared identifier is reported only once for each function it appears in
+   In file included from include/linux/printk.h:584,
+                    from include/linux/kernel.h:29,
+                    from include/linux/cpumask.h:10,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/mutex.h:17,
+                    from include/linux/kernfs.h:11,
+                    from include/linux/sysfs.h:16,
+                    from include/linux/kobject.h:20,
+                    from include/linux/of.h:17,
+                    from drivers/of/of_reserved_mem.c:15:
+   drivers/of/of_reserved_mem.c:641:42: error: invalid use of undefined type 'struct dev_pagemap'
+     641 |                  __func__, pgmap_rmem_dio->range.start, pgmap_rmem_dio->range.end);
+         |                                          ^~
+   include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynamic_func_call'
+     134 |                 func(&id, ##__VA_ARGS__);               \
+         |                             ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_func_call'
+     162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:599:9: note: in expansion of macro 'dynamic_pr_debug'
+     599 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~
+   drivers/of/of_reserved_mem.c:640:9: note: in expansion of macro 'pr_debug'
+     640 |         pr_debug("%s, will do devm_memremap_pages, start from %llx, to %llx\n",
+         |         ^~~~~~~~
+   drivers/of/of_reserved_mem.c:641:71: error: invalid use of undefined type 'struct dev_pagemap'
+     641 |                  __func__, pgmap_rmem_dio->range.start, pgmap_rmem_dio->range.end);
+         |                                                                       ^~
+   include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynamic_func_call'
+     134 |                 func(&id, ##__VA_ARGS__);               \
+         |                             ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_func_call'
+     162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:599:9: note: in expansion of macro 'dynamic_pr_debug'
+     599 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~
+   drivers/of/of_reserved_mem.c:640:9: note: in expansion of macro 'pr_debug'
+     640 |         pr_debug("%s, will do devm_memremap_pages, start from %llx, to %llx\n",
+         |         ^~~~~~~~
+   drivers/of/of_reserved_mem.c:643:17: error: implicit declaration of function 'devm_memremap_pages'; did you mean 'devm_free_pages'? [-Werror=implicit-function-declaration]
+     643 |         vaddr = devm_memremap_pages(dev, pgmap_rmem_dio);
+         |                 ^~~~~~~~~~~~~~~~~~~
+         |                 devm_free_pages
+>> drivers/of/of_reserved_mem.c:643:15: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     643 |         vaddr = devm_memremap_pages(dev, pgmap_rmem_dio);
+         |               ^
+   cc1: some warnings being treated as errors
+
+
+vim +643 drivers/of/of_reserved_mem.c
+
+   610	
+   611	/**
+   612	 * reserved_mem_memremap_pages() - build struct pages for reserved mem
+   613	 * @dev: device pointer
+   614	 * @rmem: reserved memory region from dts, which can be get by
+   615	 *        get_reserved_mem_from_dev(dev)
+   616	 *
+   617	 * Returns: 0 on success or a negative error-code on failure.
+   618	 */
+   619	void *reserved_mem_memremap_pages(struct device *dev, struct reserved_mem *rmem)
+   620	{
+   621		struct dev_pagemap *pgmap_rmem_dio;
+   622		void *vaddr;
+   623		struct page **pages;
+   624		int i;
+   625		unsigned long offset = 0;
+   626		struct page *page;
+   627	
+   628		rmem->nr_pages = DIV_ROUND_UP(rmem->size, PAGE_SIZE);
+   629		pages = kvmalloc_array(rmem->nr_pages, sizeof(*pages), GFP_KERNEL);
+   630		if (!pages)
+   631			return ERR_PTR(-ENOMEM);
+   632	
+   633		pgmap_rmem_dio = devm_kzalloc(dev, sizeof(*pgmap_rmem_dio), GFP_KERNEL);
+   634	
+   635		pgmap_rmem_dio->range.start = rmem->base;
+   636		pgmap_rmem_dio->range.end = rmem->base + rmem->size - 1;
+   637		pgmap_rmem_dio->nr_range = 1;
+   638		pgmap_rmem_dio->type = MEMORY_DEVICE_GENERIC;
+   639	
+   640		pr_debug("%s, will do devm_memremap_pages, start from %llx, to %llx\n",
+   641			 __func__, pgmap_rmem_dio->range.start, pgmap_rmem_dio->range.end);
+   642	
+ > 643		vaddr = devm_memremap_pages(dev, pgmap_rmem_dio);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

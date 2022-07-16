@@ -2,289 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EF2576B04
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 02:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8739576B05
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Jul 2022 02:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbiGPAEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Jul 2022 20:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
+        id S231761AbiGPAHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Jul 2022 20:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbiGPAEX (ORCPT
+        with ESMTP id S231286AbiGPAHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Jul 2022 20:04:23 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC3F15832
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 17:04:21 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id z12so8756447wrq.7
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 17:04:21 -0700 (PDT)
+        Fri, 15 Jul 2022 20:07:08 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B850215FD3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Jul 2022 17:07:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uf0srQbpFYrNNrM0jqWKuXQT5QmcQQrUmQNh2wbUS0U=;
-        b=LTnFPl/CbhOoxLLQ31hBxQso7S8OkuVxhELcoEtSbLC/gdfIwgBnJuKh147M4jFAu7
-         BT9IwFPUnrU9SYf7S/cT9WpsExwlXMhW0+Mo4baWFHjRdgZcqfAer88au4TV95h2zZ9H
-         GfP/59H65jv95ZuM8Y06qeBDntqiRXrQvdayXrdvd2+xfsdFl1hVAdgXuGOwYWpKCrth
-         xrWtcpZ+aqngWFVP3lPn6uZlnLpWKNqchcJdGubogjo0vh2kKuT58qtSRG9EmCf7i8DB
-         IO0kgRIO1KyqZTG3LhYRXJ8k1+rpDVEy2uwvzM7OPi1+pn5VP3RXzM45aHVWAs0skPQV
-         Sozw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uf0srQbpFYrNNrM0jqWKuXQT5QmcQQrUmQNh2wbUS0U=;
-        b=k9m4aQZFMGJ0CPk8miW/So55M/viTigFzW8iBa+Lknq8oFjV6q+gFv1TCcKahmpmcB
-         B7454NdgYi0IVsJa3rwLC7tgChs92qku9KBidghOMgzsifttSXPe0h6eZdANOl/C3stz
-         jpW9x0HnixA6CGnvA+T6DYkX9Xrx3LVDEVCV8NERVjfKlDn6afSplNOPw9tMLcYwunJb
-         zjQn30Li3WtSlTAiJMM+lwPSGhGtgw5HM5nKBjD7WaDVRopvJejQ17NGPXu+IuiGwEKU
-         wdNL2hThkMzctdLI/ujXR9vLU2W+gxqW0dOYISCJRmbU/WeM1ckD+PmflRzNHGb+QK/z
-         0wbA==
-X-Gm-Message-State: AJIora+HFfGZZAfeqYRPnpjfBatV4pZbQ3iyHOrf1NpfOCmBCcfdj6Bg
-        sUwHoTL2qry2ENLbc10VEyWyjYpwHvVtj9BInKu0bA==
-X-Google-Smtp-Source: AGRyM1vGXuydbbq93zEtHE42jwnNUd/y9sKf0zweRReA5r15WW9XsVQrXfaXnnk7X0iZQbkkzdCamTO5zBBwa3G/KY8=
-X-Received: by 2002:a5d:6c65:0:b0:21d:b7c0:9930 with SMTP id
- r5-20020a5d6c65000000b0021db7c09930mr14209311wrz.500.1657929859332; Fri, 15
- Jul 2022 17:04:19 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657930027; x=1689466027;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=B0NmcVWqBiIJwuMdhqHTpX2jPTKLv5AzIu63NOheRms=;
+  b=vqiWTO6yMVu/vajEF3vmmtwNSIVzbGDP3eYiqMn5cWF8yYEq7Nf8/u1h
+   hwZ08tF8Yf/QTGd3H0ozUcYX1JmiXhNNt7Oo/lhMFHTPAuA98zIleNKhU
+   /5Kln8GN/JIBKN1TQ515G7ZK8MdBEZkKArBfogaRGZD91u4CTXGepa+LJ
+   U=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Jul 2022 17:07:07 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 17:07:07 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Jul 2022 17:07:06 -0700
+Received: from maru.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 15 Jul
+ 2022 17:07:05 -0700
+From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>
+CC:     Jamie Iles <quic_jiles@quicinc.com>,
+        Graeme Gregory <quic_ggregory@quicinc.com>,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
+        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 1/2] mtd: spi-nor: fix select_uniform_erase to skip 0 erase size
+Date:   Fri, 15 Jul 2022 17:06:42 -0700
+Message-ID: <20220716000643.3541839-1-quic_jaehyoo@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220715061027.1612149-1-kaleshsingh@google.com>
- <CA+EHjTzPu9hticW4sPbVsxp43swRGOv4ou843S=Q5q=oQ6ii=g@mail.gmail.com> <CAC_TJveK_nfaD1=DyQ4oAvRpuWkC_qbBhoEEqWgtcOo1TOvAag@mail.gmail.com>
-In-Reply-To: <CAC_TJveK_nfaD1=DyQ4oAvRpuWkC_qbBhoEEqWgtcOo1TOvAag@mail.gmail.com>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Fri, 15 Jul 2022 17:04:08 -0700
-Message-ID: <CAC_TJvfedZ2JDo4=Lt+M7i6_DgkYu---dM5ztAF1K8CK_6G1TA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/18] KVM nVHE Hypervisor stack unwinder
-To:     Fuad Tabba <tabba@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Will Deacon <will@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        andreyknvl@gmail.com, russell.king@oracle.com,
-        vincenzo.frascino@arm.com, Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Marco Elver <elver@google.com>, Keir Fraser <keirf@google.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Oliver Upton <oupton@google.com>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvmarm <kvmarm@lists.cs.columbia.edu>,
-        LKML <linux-kernel@vger.kernel.org>, android-mm@google.com,
-        "Cc: Android Kernel" <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 11:58 AM Kalesh Singh <kaleshsingh@google.com> wrote:
->
-> On Fri, Jul 15, 2022 at 6:55 AM 'Fuad Tabba' via kernel-team
-> <kernel-team@android.com> wrote:
-> >
-> > Hi Kalesh,
-> >
-> > On Fri, Jul 15, 2022 at 7:10 AM Kalesh Singh <kaleshsingh@google.com> wrote:
-> > >
-> > > Hi all,
-> > >
-> > > This is v4 of the series adding support for nVHE hypervisor stacktraces;
-> > > and is based on arm64 for-next/stacktrace.
-> > >
-> > > Thanks all for your feedback on previous revisions. Mark Brown, I
-> > > appreciate your Reviewed-by on the v3, I have dropped the tags in this
-> > > new verision since I think the series has changed quite a bit.
-> > >
-> > > The previous versions were posted at:
-> > > v3: https://lore.kernel.org/r/20220607165105.639716-1-kaleshsingh@google.com/
-> > > v2: https://lore.kernel.org/r/20220502191222.4192768-1-kaleshsingh@google.com/
-> > > v1: https://lore.kernel.org/r/20220427184716.1949239-1-kaleshsingh@google.com/
-> > >
-> > > The main updates in this version are to address concerens from Marc on the
-> > > memory usage and reusing the common code by refactoring into a shared header.
-> > >
-> > > Thanks,
-> > > Kalesh
-> >
-> > I tested an earlier version of this patch series, and it worked fine,
-> > with symbolization. However, testing it now, both with nvhe and with
-> > pkvm the symbolization isn't working for me. e.g.
-> >
-> > [   32.986706] kvm [251]: Protected nVHE HYP call trace:
-> > [   32.986796] kvm [251]:  [<ffff800008f8b0e0>] 0xffff800008f8b0e0
-> > [   32.987391] kvm [251]:  [<ffff800008f8b388>] 0xffff800008f8b388
-> > [   32.987493] kvm [251]:  [<ffff800008f8d230>] 0xffff800008f8d230
-> > [   32.987591] kvm [251]:  [<ffff800008f8d51c>] 0xffff800008f8d51c
-> > [   32.987695] kvm [251]:  [<ffff800008f8c064>] 0xffff800008f8c064
-> > [   32.987803] kvm [251]: ---- End of Protected nVHE HYP call trace ----
-> >
-> > CONFIG_PROTECTED_NVHE_STACKTRACE CONFIG_NVHE_EL2_DEBUG and
-> > CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT are all enabled. Generating
-> > a backtrace in the host I get proper symbolisation.
-> >
-> > Is there anything else you'd like to know about my setup that would
-> > help get to the bottom of this?
->
-> Hi Fuad,
->
-> Thanks for reviewing it. Can you attach the .config when you have a
-> chance please? I will try reproducing it on my end.
+From: Michael Walle <michael@walle.cc>
 
-My local config had CONFIG_RANDOMIZE_BASE off. I have posted a fix for
-the existing occurrences [1]. I'll address those for the unwinder in
-the next version of this series.
+4bait will set the erase size to 0 if there is no corresponding
+opcode for the 4byte erase. Fix spi_nor_select_uniform_erase to skip
+the 0 erase size to avoid mtd device registration failure cases.
 
-[1] https://lore.kernel.org/r/20220715235824.2549012-1-kaleshsingh@google.com/
+Reported-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+---
+Changes in v3:
+ * Added newly in v3.
 
-Thanks,
-Kalesh
+ drivers/mtd/spi-nor/core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
->
-> --Kalesh
->
-> >
-> > Thanks,
-> > /fuad
-> >
-> >
-> >
-> >
-> > >
-> > > ============
-> > >
-> > > KVM nVHE Stack unwinding.
-> > > ===
-> > >
-> > > nVHE has two modes of operation: protected (pKVM) and unprotected
-> > > (conventional nVHE). Depending on the mode, a slightly different approach
-> > > is used to dump the hyperviosr stacktrace but the core unwinding logic
-> > > remains the same.
-> > >
-> > > Protected nVHE (pKVM) stacktraces
-> > > ====
-> > >
-> > > In protected nVHE mode, the host cannot directly access hypervisor memory.
-> > >
-> > > The hypervisor stack unwinding happens in EL2 and is made accessible to
-> > > the host via a shared buffer. Symbolizing and printing the stacktrace
-> > > addresses is delegated to the host and happens in EL1.
-> > >
-> > > Non-protected (Conventional) nVHE stacktraces
-> > > ====
-> > >
-> > > In non-protected mode, the host is able to directly access the hypervisor
-> > > stack pages.
-> > >
-> > > The hypervisor stack unwinding and dumping of the stacktrace is performed
-> > > by the host in EL1, as this avoids the memory overhead of setting up
-> > > shared buffers between the host and hypervisor.
-> > >
-> > > Resuing the Core Unwinding Logic
-> > > ====
-> > >
-> > > Since the hypervisor cannot link against the kernel code in proteced mode.
-> > > The common stack unwinding code is moved to a shared header to allow reuse
-> > > in the nVHE hypervisor.
-> > >
-> > > Reducing the memory footprint
-> > > ====
-> > >
-> > > In this version the below steps were taken to reduce the memory usage of
-> > > nVHE stack unwinding:
-> > >
-> > >     1) The nVHE overflow stack is reduced from PAGE_SIZE to 4KB; benificial
-> > >        for configurations with non 4KB pages (16KB or 64KB pages).
-> > >     2) In protected nVHE mode (pKVM), the shared stacktrace buffers with the
-> > >        host are reduced from PAGE_SIZE to the minimum size required.
-> > >     3) In systems other than Android, conventional nVHE makes up the vast
-> > >        majority of use case. So the pKVM stack tracing is disabled by default
-> > >        (!CONFIG_PROTECTED_NVHE_STACKTRACE), which avoid the memory usage for
-> > >        setting up shared buffers.
-> > >     4) In non-protected nVHE mode (conventional nVHE), the stack unwinding
-> > >        is done directly in EL1 by the host and no shared buffers with the
-> > >        hyperviosr are needed.
-> > >
-> > > Sample Output
-> > > ====
-> > >
-> > > The below shows an example output from a simple stack overflow test:
-> > >
-> > > [  126.862960] kvm [371]: nVHE hyp panic at: [<ffff8000090a51d0>] __kvm_nvhe_recursive_death+0x10/0x34!
-> > > [  126.869920] kvm [371]: Protected nVHE HYP call trace:
-> > > [  126.870528] kvm [371]:  [<ffff8000090a5570>] __kvm_nvhe_hyp_panic+0xac/0xf8
-> > > [  126.871342] kvm [371]:  [<ffff8000090a55cc>] __kvm_nvhe_hyp_panic_bad_stack+0x10/0x10
-> > > [  126.872174] kvm [371]:  [<ffff8000090a51e4>] __kvm_nvhe_recursive_death+0x24/0x34
-> > > [  126.872971] kvm [371]:  [<ffff8000090a51e4>] __kvm_nvhe_recursive_death+0x24/0x34
-> > >    . . .
-> > >
-> > > [  126.927314] kvm [371]:  [<ffff8000090a51e4>] __kvm_nvhe_recursive_death+0x24/0x34
-> > > [  126.927727] kvm [371]:  [<ffff8000090a51e4>] __kvm_nvhe_recursive_death+0x24/0x34
-> > > [  126.928137] kvm [371]:  [<ffff8000090a4de4>] __kvm_nvhe___kvm_vcpu_run+0x30/0x40c
-> > > [  126.928561] kvm [371]:  [<ffff8000090a7b64>] __kvm_nvhe_handle___kvm_vcpu_run+0x30/0x48
-> > > [  126.928984] kvm [371]:  [<ffff8000090a78b8>] __kvm_nvhe_handle_trap+0xc4/0x128
-> > > [  126.929385] kvm [371]:  [<ffff8000090a6864>] __kvm_nvhe___host_exit+0x64/0x64
-> > > [  126.929804] kvm [371]: ---- End of Protected nVHE HYP call trace ----
-> > >
-> > > ============
-> > >
-> > >
-> > > Kalesh Singh (18):
-> > >   arm64: stacktrace: Add shared header for common stack unwinding code
-> > >   arm64: stacktrace: Factor out on_accessible_stack_common()
-> > >   arm64: stacktrace: Factor out unwind_next_common()
-> > >   arm64: stacktrace: Handle frame pointer from different address spaces
-> > >   arm64: stacktrace: Factor out common unwind()
-> > >   arm64: stacktrace: Add description of stacktrace/common.h
-> > >   KVM: arm64: On stack overflow switch to hyp overflow_stack
-> > >   KVM: arm64: Add PROTECTED_NVHE_STACKTRACE Kconfig
-> > >   KVM: arm64: Allocate shared pKVM hyp stacktrace buffers
-> > >   KVM: arm64: Stub implementation of pKVM HYP stack unwinder
-> > >   KVM: arm64: Stub implementation of non-protected nVHE HYP stack
-> > >     unwinder
-> > >   KVM: arm64: Save protected-nVHE (pKVM) hyp stacktrace
-> > >   KVM: arm64: Prepare non-protected nVHE hypervisor stacktrace
-> > >   KVM: arm64: Implement protected nVHE hyp stack unwinder
-> > >   KVM: arm64: Implement non-protected nVHE hyp stack unwinder
-> > >   KVM: arm64: Introduce pkvm_dump_backtrace()
-> > >   KVM: arm64: Introduce hyp_dump_backtrace()
-> > >   KVM: arm64: Dump nVHE hypervisor stack on panic
-> > >
-> > >  arch/arm64/include/asm/kvm_asm.h           |  16 ++
-> > >  arch/arm64/include/asm/memory.h            |   7 +
-> > >  arch/arm64/include/asm/stacktrace.h        |  92 ++++---
-> > >  arch/arm64/include/asm/stacktrace/common.h | 224 ++++++++++++++++
-> > >  arch/arm64/include/asm/stacktrace/nvhe.h   | 291 +++++++++++++++++++++
-> > >  arch/arm64/kernel/stacktrace.c             | 157 -----------
-> > >  arch/arm64/kvm/Kconfig                     |  15 ++
-> > >  arch/arm64/kvm/arm.c                       |   2 +-
-> > >  arch/arm64/kvm/handle_exit.c               |   4 +
-> > >  arch/arm64/kvm/hyp/nvhe/Makefile           |   2 +-
-> > >  arch/arm64/kvm/hyp/nvhe/host.S             |   9 +-
-> > >  arch/arm64/kvm/hyp/nvhe/stacktrace.c       | 108 ++++++++
-> > >  arch/arm64/kvm/hyp/nvhe/switch.c           |   5 +
-> > >  13 files changed, 727 insertions(+), 205 deletions(-)
-> > >  create mode 100644 arch/arm64/include/asm/stacktrace/common.h
-> > >  create mode 100644 arch/arm64/include/asm/stacktrace/nvhe.h
-> > >  create mode 100644 arch/arm64/kvm/hyp/nvhe/stacktrace.c
-> > >
-> > >
-> > > base-commit: 82a592c13b0aeff94d84d54183dae0b26384c95f
-> > > --
-> > > 2.37.0.170.g444d1eabd0-goog
-> > >
-> >
-> > --
-> > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
-> >
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 502967c76c5f..666ef6ce9549 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -2113,6 +2113,10 @@ spi_nor_select_uniform_erase(struct spi_nor_erase_map *map,
+ 
+ 		tested_erase = &map->erase_type[i];
+ 
++		/* Skip masked erase types. */
++		if (!tested_erase->size)
++			continue;
++
+ 		/*
+ 		 * If the current erase size is the one, stop here:
+ 		 * we have found the right uniform Sector Erase command.
+-- 
+2.25.1
+

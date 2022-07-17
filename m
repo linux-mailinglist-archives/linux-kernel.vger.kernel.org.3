@@ -2,99 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E99F577519
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 10:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 053CE577521
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 10:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbiGQIpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 04:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S231784AbiGQIqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 04:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiGQIpD (ORCPT
+        with ESMTP id S230137AbiGQIqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 04:45:03 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCF819013
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 01:45:01 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id q9so12812298wrd.8
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 01:45:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ng6rzazS6Tk6UvbQ3R5jjWEIXMg8N4bQvPfxnlyfNbo=;
-        b=CmxKx+nQvad3HTpNlJ+avnudMtN9Xm9fUthF9bwqnIyq4X2u5I1j5jJ291kh14HPOX
-         hWcHS0gJKQyuWaTG8JR5BewIbjlvCzHQUf9ThjOi9vax59L8X7IOHcOnSUcUmO++MWMQ
-         rw0hSi1NyV6t0l8nVrcpGoQs0DnW3cD58YkAc+YKINqm4+bqKGD3JyIxKM6E+FjkNO0L
-         NAF04D/Rb9NJkS9CjbdJYHWw6uZT2ZXWJMiaHOHRGS76ccA+NqDeSftnSBQ6kojdeQeC
-         RAXTnf7+jwyc1ff8/awsOdy71tRoHnTecbTPgwg3u+Oc46bithtxnCI30Q3QVbbAJrr9
-         fMFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ng6rzazS6Tk6UvbQ3R5jjWEIXMg8N4bQvPfxnlyfNbo=;
-        b=OW7g5EvU4c9I7Tzwp9uBYIUFksZ5O8v9rlZk/+2y8e8ddgX1+DgZJcy7jegQhbnrBt
-         ke3f8URI6CLu1sDir5MEsZpAfuiSReo3cY6Oh3d0ndcVh91D1jQbn3XBy7Bbx6YuJnWR
-         ONbk7CSePgyQsT2hlS5BDWt+Sb93u00kbdJUv05Aipzqa8bZ8n8RU/271ZXN+GKd5nB1
-         vfxugm7oqWi0zrqTlJBirKmYfWOb3kBxX1A2NJr3gx8TIxQFjXiYmzd7oi8NLSRwLK12
-         k+sqQQhjxV2Y0DvhtFPU0Zw/W3MLmJx23euWnY3fVEaNC30Zuun/2X6idWNsfyNRfs22
-         wsng==
-X-Gm-Message-State: AJIora8rvhbiFG/jGXPmbvHsqSUnD+LINAGKLKc8n6iy+OsHaUV7adWz
-        4dgDRASe8qVNoPvuSgEHf7c=
-X-Google-Smtp-Source: AGRyM1tlcDXmc2ygbyHwkdkHRrUNbu0SA9UGzRD63/Giacky8V4oJwhQ/b+B6fBr0vh5CYemqnykiQ==
-X-Received: by 2002:a05:6000:508:b0:21d:4105:caf9 with SMTP id a8-20020a056000050800b0021d4105caf9mr19435437wrf.699.1658047500076;
-        Sun, 17 Jul 2022 01:45:00 -0700 (PDT)
-Received: from opensuse.localnet (host-95-235-102-55.retail.telecomitalia.it. [95.235.102.55])
-        by smtp.gmail.com with ESMTPSA id f2-20020a1c6a02000000b003a2e89d1fb5sm14360941wmc.42.2022.07.17.01.44.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 01:44:58 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Nick Terrell <terrelln@fb.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH] f2fs: Use memcpy_page() in f2fs_copy_page()
-Date:   Sun, 17 Jul 2022 10:44:57 +0200
-Message-ID: <4431767.LvFx2qVVIh@opensuse>
-In-Reply-To: <YtOyWOKFN9ramUyb@infradead.org>
-References: <20220716204353.22049-1-fmdefrancesco@gmail.com> <YtOyWOKFN9ramUyb@infradead.org>
+        Sun, 17 Jul 2022 04:46:47 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43C119013;
+        Sun, 17 Jul 2022 01:46:45 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id A19441C0003; Sun, 17 Jul 2022 10:46:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1658047603;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4f64FZhtfQR2a3FCAYRr0ogYWj/q8DKyVYT+VvicBeQ=;
+        b=X/BFAsMq23/Z925NfDrqcBTa1+NMdOyKTvWC/jcKDAR6LqTUqqHZoUtcXNlv78JOtxgGnV
+        KEEYsSPoUk1QuhIMUdjyfj3xzKKwVS0zAwbCUcypphXNu5ux3xhohdBfmM7V0g4XNKdvZk
+        vtsZgzTGRnv3Kh57WLG7g5U2h7I81C8=
+Date:   Sun, 17 Jul 2022 10:46:43 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     lee.jones@linaro.org, daniel.thompson@linaro.org,
+        jingoohan1@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+Subject: Re: [PATCH v5 11/13] leds: mt6370: Add MediaTek MT6370 current sink
+ type LED Indicator support
+Message-ID: <20220717084643.GA14285@duo.ucw.cz>
+References: <20220715112607.591-1-peterwu.pub@gmail.com>
+ <20220715112607.591-12-peterwu.pub@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="M9NhX3UHpAaciwkO"
+Content-Disposition: inline
+In-Reply-To: <20220715112607.591-12-peterwu.pub@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On domenica 17 luglio 2022 08:55:20 CEST Christoph Hellwig wrote:
-> On Sat, Jul 16, 2022 at 10:43:53PM +0200, Fabio M. De Francesco wrote:
-> >  static inline void f2fs_copy_page(struct page *src, struct page *dst)
-> >  {
-> > -	char *src_kaddr = kmap(src);
-> > -	char *dst_kaddr = kmap(dst);
-> >  
-> > -	memcpy(dst_kaddr, src_kaddr, PAGE_SIZE);
-> > -	kunmap(dst);
-> > -	kunmap(src);
-> > +	memcpy_page(dst, 0, src, 0, PAGE_SIZE);
-> 
-> Please remove f2fs_copy_page entirely and open code this in the only
-> caller.
-> 
-I've changed the subject of the new patch, therefore we won't have a second 
-version of this:
 
-"f2fs: Delete f2fs_copy_page() and replace with memcpy_page()" is at
-https://lore.kernel.org/lkml/20220717083613.3861-1-fmdefrancesco@gmail.com/
+--M9NhX3UHpAaciwkO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your suggestion,
+Hi!
 
-Fabio
+> The MediaTek MT6370 is a highly-integrated smart power management IC,
+> which includes a single cell Li-Ion/Li-Polymer switching battery
+> charger, a USB Type-C & Power Delivery (PD) controller, dual
+> Flash LED current sources, a RGB LED driver, a backlight WLED driver,
+> a display bias driver and a general LDO for portable devices.
+>=20
+> In MediaTek MT6370, there are four channel current-sink RGB LEDs that
+> support hardware pattern for constant current, PWM, and breath mode.
+> Isink4 channel can also be used as a CHG_VIN power good indicator.
+>=20
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 
+> index a49979f..71bacb5 100644
+> --- a/drivers/leds/Kconfig
+> +++ b/drivers/leds/Kconfig
+> @@ -244,6 +244,20 @@ config LEDS_MT6323
+>  	  This option enables support for on-chip LED drivers found on
+>  	  Mediatek MT6323 PMIC.
+> =20
+> +config LEDS_MT6370_RGB
+> +	tristate "LED Support for MediaTek MT6370 PMIC"
+> +	depends on LEDS_CLASS
+> +	depends on MFD_MT6370
+> +	select LINEAR_RANGE
+> +	help
+> +	  Say Y here to enable support for MT6370_RGB LED device.
+> +	  In MT6370, there are four channel current-sink LED drivers that
+> +	  support hardware pattern for constant current, PWM, and breath mode.
+> +	  Isink4 channel can also be used as a CHG_VIN power good
 
+Should this go to leds/rgb directory, and should it depend on
+multicolor framework?
+
+Best regards,
+							Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--M9NhX3UHpAaciwkO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYtPMcwAKCRAw5/Bqldv6
+8kpOAJ9ibEmS72bgf9dapQwzhfeNWkBoRACdEEQFY+HUneM6yUqd3lRjlWgYdx0=
+=17QR
+-----END PGP SIGNATURE-----
+
+--M9NhX3UHpAaciwkO--

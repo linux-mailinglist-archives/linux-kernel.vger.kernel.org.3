@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0B1577289
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 02:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A1C57728C
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 02:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbiGQAMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 20:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
+        id S232549AbiGQANE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 20:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiGQAMD (ORCPT
+        with ESMTP id S229619AbiGQANC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 20:12:03 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8552719C3F;
-        Sat, 16 Jul 2022 17:12:02 -0700 (PDT)
+        Sat, 16 Jul 2022 20:13:02 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C73C1A06F
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 17:13:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658016722; x=1689552722;
+  t=1658016781; x=1689552781;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HFHgTs6YcSEEVWfkRgiSn0j5/xmOi9Hqq1hD2gQcRO8=;
-  b=NLYVH6sHvE4f4xwSAwFpgI+jZBR342jA1m7ImtYAYL0+RDwklwjtQ6Jh
-   OjOtBUHIHclaoNUyD/0wgnvNW7SPf4gKe0jl79vjTdhRt90G+hjzmBpQ6
-   ioxGglMN+onHUjWATg27I/hS9XnfVI8iZngpHVmXnTtxsWXrE4IWjpBFx
-   CH59v8g5IJPZukfb5vlidsEcY18oJHGo56OlGQ5gM8C6+MQmuskgl7qBw
-   qmQTYNnoh43/CjrTpae3gtw86x/QeZRIaCar3AfJDl3J/lWOGVJ+7kVQN
-   Itjw6uPp5Ogv+jFaiEHf7zDRPTYG+kz6WZzP+uzuBYaJyBu/qxPXmy+2S
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="266422036"
+  bh=J+nDn8BM7+c4AvlRTcjbQJKOCNR/rcHzy0vcyXBAGuU=;
+  b=FfdGfmRWZ3hboBach17DCrk8xJIfRqHCtFB7YJx6Kp54eQw5ZyKc9lbJ
+   jIXy7pbhtWmtVIQ3WbSpJovwTp9rlKCLeDzCcWc9RAWrbkaWKoOgSaUME
+   eJoS+FOE8O5qU7TZ2MAV/EH0VZJQwSmoa1DhI8aFkLAsnbe7PbWmhfSjh
+   shYE5dDUe7E/EHB80h9Y3qF26ypdTeOIO83lOS/Ti6exu+TVlOukFiHB3
+   ggxry4yuz/0CKqJl/wXA/0XricPRFXhqnACV3MRNeiIaJ0tNAIfpBGpUp
+   1To7tnYM3tilZrs0iDlkQxy/CA0SH1UEu+b8VKjXbIhhJZ0f2abSh3fFs
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="372325953"
 X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
-   d="scan'208";a="266422036"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 17:12:01 -0700
+   d="scan'208";a="372325953"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 17:13:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
-   d="scan'208";a="547067558"
+   d="scan'208";a="773347853"
 Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 16 Jul 2022 17:12:00 -0700
+  by orsmga005.jf.intel.com with ESMTP; 16 Jul 2022 17:13:00 -0700
 Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1oCrt9-0002L8-96;
-        Sun, 17 Jul 2022 00:11:59 +0000
-Date:   Sun, 17 Jul 2022 08:11:57 +0800
+        id 1oCru7-0002LG-AV;
+        Sun, 17 Jul 2022 00:12:59 +0000
+Date:   Sun, 17 Jul 2022 08:11:59 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34:
- warning: unused variable 'samsung_jpeg_match'
-Message-ID: <202207170810.jqfLUIpt-lkp@intel.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:bluetooth-wip 9/9]
+ drivers/bluetooth/hci_bcm4377.c:886:68: sparse: sparse: incorrect type in
+ assignment (different base types)
+Message-ID: <202207170823.npuKuaKC-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -61,70 +61,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   972a278fe60c361eb8f37619f562f092e8786d7c
-commit: f4104b7851a8d8b9a70899dcbecdb393eb16cd8a media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
-date:   4 months ago
-config: hexagon-buildonly-randconfig-r005-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170810.jqfLUIpt-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
-reproduce (this is a W=1 build):
+tree:   https://github.com/AsahiLinux/linux bluetooth-wip
+head:   0148a507e34696326e2b63e626cf0dd46c047cfd
+commit: 0148a507e34696326e2b63e626cf0dd46c047cfd [9/9] Bluetooth: hci_bcm4377: Add new driver for BCM4377 PCI boards
+config: parisc-randconfig-s041-20220715 (https://download.01.org/0day-ci/archive/20220717/202207170823.npuKuaKC-lkp@intel.com/config)
+compiler: hppa64-linux-gcc (GCC) 12.1.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/AsahiLinux/linux/commit/0148a507e34696326e2b63e626cf0dd46c047cfd
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bluetooth-wip
+        git checkout 0148a507e34696326e2b63e626cf0dd46c047cfd
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/samsung/s5p-jpeg/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc64 SHELL=/bin/bash drivers/bluetooth/ drivers/media/i2c/ drivers/pci/ kernel/trace/ sound/soc/codecs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
-   static const struct of_device_id samsung_jpeg_match[] = {
-                                    ^
-   1 warning generated.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/bluetooth/hci_bcm4377.c:886:68: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 @@     got int @@
+   drivers/bluetooth/hci_bcm4377.c:886:68: sparse:     expected restricted __le16
+   drivers/bluetooth/hci_bcm4377.c:886:68: sparse:     got int
+>> drivers/bluetooth/hci_bcm4377.c:1352:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] enabled_caps @@     got restricted __le16 [usertype] @@
+   drivers/bluetooth/hci_bcm4377.c:1352:36: sparse:     expected restricted __le32 [usertype] enabled_caps
+   drivers/bluetooth/hci_bcm4377.c:1352:36: sparse:     got restricted __le16 [usertype]
 
+vim +886 drivers/bluetooth/hci_bcm4377.c
 
-vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
-
-:::::: The code at line 3126 was first introduced by commit
-:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
-
-:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+   830	
+   831	static int bcm4377_create_transfer_ring(struct bcm4377_data *bcm4377,
+   832						struct bcm4377_transfer_ring *ring)
+   833	{
+   834		struct bcm4377_create_transfer_ring_msg msg;
+   835		u16 flags = 0;
+   836		int ret, i;
+   837		unsigned long spinlock_flags;
+   838	
+   839		if (ring->virtual)
+   840			flags |= BCM4377_XFER_RING_FLAG_VIRTUAL;
+   841		if (ring->sync)
+   842			flags |= BCM4377_XFER_RING_FLAG_SYNC;
+   843	
+   844		spin_lock_irqsave(&ring->lock, spinlock_flags);
+   845		memset(&msg, 0, sizeof(msg));
+   846		msg.msg_type = BCM4377_CONTROL_MSG_CREATE_XFER_RING;
+   847		msg.ring_id = cpu_to_le16(ring->ring_id);
+   848		msg.ring_id_again = cpu_to_le16(ring->ring_id);
+   849		msg.ring_iova = cpu_to_le64(ring->ring_dma);
+   850		msg.n_elements = cpu_to_le16(ring->n_entries);
+   851		msg.completion_ring_id = cpu_to_le16(ring->completion_ring);
+   852		msg.doorbell = cpu_to_le16(ring->doorbell);
+   853		msg.flags = cpu_to_le16(flags);
+   854		msg.footer_size = ring->payload_size / 4;
+   855	
+   856		bcm4377->ring_state->xfer_ring_head[ring->ring_id] = 0;
+   857		bcm4377->ring_state->xfer_ring_tail[ring->ring_id] = 0;
+   858		ring->generation++;
+   859		spin_unlock_irqrestore(&ring->lock, spinlock_flags);
+   860	
+   861		ret = bcm4377_enqueue(bcm4377, &bcm4377->control_h2d_ring, &msg,
+   862				      sizeof(msg), true);
+   863	
+   864		spin_lock_irqsave(&ring->lock, spinlock_flags);
+   865	
+   866		if (ring->d2h_buffers_only) {
+   867			for (i = 0; i < ring->n_entries; ++i) {
+   868				struct bcm4377_xfer_ring_entry *entry =
+   869					ring->ring + i * sizeof(*entry);
+   870				u16 raw_msgid = FIELD_PREP(BCM4377_MSGID_GENERATION,
+   871							   ring->generation);
+   872				raw_msgid |= FIELD_PREP(BCM4377_MSGID_ID, i);
+   873	
+   874				memset(entry, 0, sizeof(*entry));
+   875				entry->id = cpu_to_le16(raw_msgid);
+   876				entry->len = cpu_to_le16(ring->mapped_payload_size);
+   877				entry->flags = BCM4377_XFER_RING_FLAG_PAYLOAD_MAPPED;
+   878				entry->payload =
+   879					cpu_to_le64(ring->payloads_dma +
+   880						    i * ring->mapped_payload_size);
+   881			}
+   882		}
+   883	
+   884		/* this primes the device->host side */
+   885		if (ring->virtual || ring->d2h_buffers_only) {
+ > 886			bcm4377->ring_state->xfer_ring_head[ring->ring_id] = 0xf;
+   887			bcm4377_ring_doorbell(bcm4377, ring->doorbell, 0xf);
+   888		}
+   889	
+   890		ring->enabled = true;
+   891		spin_unlock_irqrestore(&ring->lock, spinlock_flags);
+   892	
+   893		return ret;
+   894	}
+   895	
 
 -- 
 0-DAY CI Kernel Test Service

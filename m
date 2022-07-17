@@ -2,219 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25740577666
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 15:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803A4577664
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 15:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232947AbiGQNiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 09:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S232848AbiGQNiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 09:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbiGQNiT (ORCPT
+        with ESMTP id S229463AbiGQNiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 09:38:19 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E75F13CD4
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 06:38:17 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id r14so13426297wrg.1
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 06:38:17 -0700 (PDT)
+        Sun, 17 Jul 2022 09:38:15 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA64613CCF;
+        Sun, 17 Jul 2022 06:38:14 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id y15so2197434plp.10;
+        Sun, 17 Jul 2022 06:38:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tO4q7M2lI/iidv19V2kJrp1hO3+/sn5b23CytNfxuD4=;
-        b=Ji5f1OT1RAP4T5HEDtWa6t0DdTp8shMUnB/Ac02h5eIUhNwtN5aMctLPjlFzmwb99C
-         u/vbkFN/PtsH0DGPB7x267OB8AGPt/6TQ7RqMV45oUDqXpIV6HorCGiEvZHuVVOkU/qM
-         7NDgfnmxLN0npMCHUoAgOiOfERWxPox71gIYM=
+        bh=pjCptrwTCqzyeOFeqcjeBA84+aupixrF+Oo0LbeI1pA=;
+        b=D8MVRPT8Eb3HOVIq+fyV26qLXpi3Zy/EAKcQbh9oVpIobBFwBWKecS4bDBRio8cg6N
+         V3vDXu80PjakXJM12wXxipbS+T2rgwnHcRzrFmj/vfp0FRPM/TZcUd2j6ai6ztPl/dla
+         /xNGAUEQktbnjz6pwVLz5SFgmdOmnxEInGv2Lg2zscmDls6wgtqAmMSs8c4QdDBHHwSu
+         hyukifsrUsJdewr5wIYSIezsSkTM6FTN8GYfTXVYlTtmbtBNC5jrdjZjhtCazWkF2E58
+         h6lO1qA4uOs6p6pyxafaO5xnFBXCryWdUHwfaqQVGGQGNwwloGqweU7c0AJrRTyWlE6l
+         WpNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tO4q7M2lI/iidv19V2kJrp1hO3+/sn5b23CytNfxuD4=;
-        b=XwfimU17hbQKuxHRGVWpP0mAHxLryIiO87hujsPwY5IkNXyXHoNetqAP5bO6mnL5y1
-         Y8AkM6nEDvOCau/ljFcXHQ8m9lJxdSJmx8IKySHiahNy84M8OIEiE/elN9GclycrES8h
-         rfO8n/YOap6jTjWW4JHr8Ul52XKps/6nN3iH9jCGLjRKfFTQh+WDDJOD05isy1iHqj2j
-         9BM95ksn7rAujWHKJoqaLf7BHQsqFyUseySoNeAa3JcRfsRP28EW72dT1LSrRL97cvm2
-         pd9uOVmgqQZNjAXGbLmzJS+MMd0EwyjSfOdLG+qi4lTxIXkFiSgUyjfJL1hiZuhZwrU0
-         G18w==
-X-Gm-Message-State: AJIora95omPrwQ8pqDcHqQVZVSeA7m9CZDP42+U5kslVy4vrYpcw39ps
-        DK3q9jQ5WS0K/sD9QD4oAR+0pw==
-X-Google-Smtp-Source: AGRyM1sSm2x8UNLoQdTtyxEUeJgzbPSdwtAiGr5OVRf3Iuqsv5PsNQASTWOODA17nhLXeZiBC0MqZQ==
-X-Received: by 2002:a05:6000:144f:b0:21d:a3cc:a6fa with SMTP id v15-20020a056000144f00b0021da3cca6famr19588138wrx.191.1658065095538;
-        Sun, 17 Jul 2022 06:38:15 -0700 (PDT)
-Received: from localhost.localdomain ([8.42.172.104])
-        by smtp.gmail.com with ESMTPSA id g1-20020a5d5541000000b0021d728d687asm9752316wrw.36.2022.07.17.06.38.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=pjCptrwTCqzyeOFeqcjeBA84+aupixrF+Oo0LbeI1pA=;
+        b=2ZvTfxR3/fjFkG57xB0wssCfXKpszzik4r+TSYi8aHUEEScncKkJgC6NFFbGTMbeig
+         eoMSEBWTtUlmJ6el2VU+8cp1l2KRftEYBYRaQQvlxASm40lspt9LzseAIXz0gLZa8Q/k
+         xEyfqx4UYMTus+lpLuGq+c7FU4UfefF6B3wPXVDH3LHnL/EBKG1CE8CjShPGpWoej3Oi
+         xj7cm/dCS+js4H2TIivqPO/nfUSi8tZFPwjX6ju/VWknMmnLX1uqbgPc1I17Ev8R2Bmy
+         GfBML+iCFPkFlF03BUEFfEUUN9O7Pv8AdRlFjsM1VFMnIw4tOV1Q4e/DXjekBuDXJCcK
+         r6vQ==
+X-Gm-Message-State: AJIora+TbSN0VALeNoo2/lmSCP83CnoUqqa6Tm/9uOuLU6Ev3Ld5xgBs
+        aOM1/dKogJsVhijeZ+Dxuno=
+X-Google-Smtp-Source: AGRyM1u3D5EsZy5ThFn9Gz06wyR2U7uyzcynnndletJOt8PrBO5LQm0fCb7NVZ1yb/88RWcymkKJIw==
+X-Received: by 2002:a17:90b:3807:b0:1f0:a86:6875 with SMTP id mq7-20020a17090b380700b001f00a866875mr33281553pjb.103.1658065094159;
         Sun, 17 Jul 2022 06:38:14 -0700 (PDT)
-From:   Ignat Korchagin <ignat@cloudflare.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
+Received: from fedora.. ([103.159.189.134])
+        by smtp.gmail.com with ESMTPSA id r16-20020aa79890000000b005254e44b748sm7279166pfl.84.2022.07.17.06.38.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jul 2022 06:38:13 -0700 (PDT)
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+To:     linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
         "David S . Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel-team@cloudflare.com, Ignat Korchagin <ignat@cloudflare.com>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH] crypto: testmgr - some more fixes to RSA test vectors
-Date:   Sun, 17 Jul 2022 14:37:46 +0100
-Message-Id: <20220717133746.918-1-ignat@cloudflare.com>
-X-Mailer: git-send-email 2.30.2
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        Khalid Masum <khalid.masum.92@gmail.com>
+Subject: [PATCH] Bluetooth: hci_core: Use ERR_PTR instead of NULL
+Date:   Sun, 17 Jul 2022 19:37:58 +0600
+Message-Id: <20220717133759.8479-1-khalid.masum.92@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two more fixes:
+Failure of kzalloc to allocate memory is not reported. Return Error
+pointer to ENOMEM if memory allocation fails. This will increase
+readability and will make the function easier to use in future.
 
-  * some test vectors in commit 79e6e2f3f3ff ("crypto: testmgr - populate
-    RSA CRT parameters in RSA test vectors") had misplaced commas, which
-    break the test and trigger KASAN warnings at least on x86-64
-
-  * pkcs1pad test vector did not have its CRT parameters
-
-Fixes: 79e6e2f3f3ff ("crypto: testmgr - populate RSA CRT parameters in RSA test vectors")
-Reported-by: Eric Biggers <ebiggers@kernel.org>
-Signed-off-by: Ignat Korchagin <ignat@cloudflare.com>
+Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
 ---
- crypto/testmgr.h | 102 +++++++++++++++++++++++++++++------------------
- 1 file changed, 63 insertions(+), 39 deletions(-)
+ drivers/bluetooth/btusb.c | 4 ++--
+ net/bluetooth/hci_core.c  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/crypto/testmgr.h b/crypto/testmgr.h
-index dee88510f58d..d6088e26f326 100644
---- a/crypto/testmgr.h
-+++ b/crypto/testmgr.h
-@@ -273,7 +273,7 @@ static const struct akcipher_testvec rsa_tv_template[] = {
- 	"\x61\xAD\xBD\x3A\x8A\x7E\x99\x1C\x5C\x05\x56\xA9\x4C\x31\x46\xA7"
- 	"\xF9\x80\x3F\x8F\x6F\x8A\xE3\x42\xE9\x31\xFD\x8A\xE4\x7A\x22\x0D"
- 	"\x1B\x99\xA4\x95\x84\x98\x07\xFE\x39\xF9\x24\x5A\x98\x36\xDA\x3D"
--	"\x02\x41", /* coefficient - integer of 65 bytes */
-+	"\x02\x41" /* coefficient - integer of 65 bytes */
- 	"\x00\xB0\x6C\x4F\xDA\xBB\x63\x01\x19\x8D\x26\x5B\xDB\xAE\x94\x23"
- 	"\xB3\x80\xF2\x71\xF7\x34\x53\x88\x50\x93\x07\x7F\xCD\x39\xE2\x11"
- 	"\x9F\xC9\x86\x32\x15\x4F\x58\x83\xB1\x67\xA9\x67\xBF\x40\x2B\x4E"
-@@ -370,7 +370,7 @@ static const struct akcipher_testvec rsa_tv_template[] = {
- 	"\x6A\x37\x3B\x86\x6C\x51\x37\x5B\x1D\x79\xF2\xA3\x43\x10\xC6\xA7"
- 	"\x21\x79\x6D\xF9\xE9\x04\x6A\xE8\x32\xFF\xAE\xFD\x1C\x7B\x8C\x29"
- 	"\x13\xA3\x0C\xB2\xAD\xEC\x6C\x0F\x8D\x27\x12\x7B\x48\xB2\xDB\x31"
--	"\x02\x81\x81", /* coefficient - integer of 129 bytes */
-+	"\x02\x81\x81" /* coefficient - integer of 129 bytes */
- 	"\x00\x8D\x1B\x05\xCA\x24\x1F\x0C\x53\x19\x52\x74\x63\x21\xFA\x78"
- 	"\x46\x79\xAF\x5C\xDE\x30\xA4\x6C\x20\x38\xE6\x97\x39\xB8\x7A\x70"
- 	"\x0D\x8B\x6C\x6D\x13\x74\xD5\x1C\xDE\xA9\xF4\x60\x37\xFE\x68\x77"
-@@ -1231,7 +1231,7 @@ static const struct akcipher_testvec ecrdsa_tv_template[] = {
- static const struct akcipher_testvec pkcs1pad_rsa_tv_template[] = {
- 	{
- 	.key =
--	"\x30\x82\x03\x1f\x02\x01\x00\x02\x82\x01\x01\x00\xd7\x1e\x77\x82"
-+	"\x30\x82\x04\xa5\x02\x01\x00\x02\x82\x01\x01\x00\xd7\x1e\x77\x82"
- 	"\x8c\x92\x31\xe7\x69\x02\xa2\xd5\x5c\x78\xde\xa2\x0c\x8f\xfe\x28"
- 	"\x59\x31\xdf\x40\x9c\x60\x61\x06\xb9\x2f\x62\x40\x80\x76\xcb\x67"
- 	"\x4a\xb5\x59\x56\x69\x17\x07\xfa\xf9\x4c\xbd\x6c\x37\x7a\x46\x7d"
-@@ -1247,42 +1247,66 @@ static const struct akcipher_testvec pkcs1pad_rsa_tv_template[] = {
- 	"\x9e\x49\x63\x6e\x02\xc1\xc9\x3a\x9b\xa5\x22\x1b\x07\x95\xd6\x10"
- 	"\x02\x50\xfd\xfd\xd1\x9b\xbe\xab\xc2\xc0\x74\xd7\xec\x00\xfb\x11"
- 	"\x71\xcb\x7a\xdc\x81\x79\x9f\x86\x68\x46\x63\x82\x4d\xb7\xf1\xe6"
--	"\x16\x6f\x42\x63\xf4\x94\xa0\xca\x33\xcc\x75\x13\x02\x82\x01\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
--	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01"
--	"\x02\x82\x01\x00\x62\xb5\x60\x31\x4f\x3f\x66\x16\xc1\x60\xac\x47"
--	"\x2a\xff\x6b\x69\x00\x4a\xb2\x5c\xe1\x50\xb9\x18\x74\xa8\xe4\xdc"
--	"\xa8\xec\xcd\x30\xbb\xc1\xc6\xe3\xc6\xac\x20\x2a\x3e\x5e\x8b\x12"
--	"\xe6\x82\x08\x09\x38\x0b\xab\x7c\xb3\xcc\x9c\xce\x97\x67\xdd\xef"
--	"\x95\x40\x4e\x92\xe2\x44\xe9\x1d\xc1\x14\xfd\xa9\xb1\xdc\x71\x9c"
--	"\x46\x21\xbd\x58\x88\x6e\x22\x15\x56\xc1\xef\xe0\xc9\x8d\xe5\x80"
--	"\x3e\xda\x7e\x93\x0f\x52\xf6\xf5\xc1\x91\x90\x9e\x42\x49\x4f\x8d"
--	"\x9c\xba\x38\x83\xe9\x33\xc2\x50\x4f\xec\xc2\xf0\xa8\xb7\x6e\x28"
--	"\x25\x56\x6b\x62\x67\xfe\x08\xf1\x56\xe5\x6f\x0e\x99\xf1\xe5\x95"
--	"\x7b\xef\xeb\x0a\x2c\x92\x97\x57\x23\x33\x36\x07\xdd\xfb\xae\xf1"
--	"\xb1\xd8\x33\xb7\x96\x71\x42\x36\xc5\xa4\xa9\x19\x4b\x1b\x52\x4c"
--	"\x50\x69\x91\xf0\x0e\xfa\x80\x37\x4b\xb5\xd0\x2f\xb7\x44\x0d\xd4"
--	"\xf8\x39\x8d\xab\x71\x67\x59\x05\x88\x3d\xeb\x48\x48\x33\x88\x4e"
--	"\xfe\xf8\x27\x1b\xd6\x55\x60\x5e\x48\xb7\x6d\x9a\xa8\x37\xf9\x7a"
--	"\xde\x1b\xcd\x5d\x1a\x30\xd4\xe9\x9e\x5b\x3c\x15\xf8\x9c\x1f\xda"
--	"\xd1\x86\x48\x55\xce\x83\xee\x8e\x51\xc7\xde\x32\x12\x47\x7d\x46"
--	"\xb8\x35\xdf\x41\x02\x01\x00\x02\x01\x00\x02\x01\x00\x02\x01\x00"
--	"\x02\x01\x00",
--	.key_len = 803,
-+	"\x16\x6f\x42\x63\xf4\x94\xa0\xca\x33\xcc\x75\x13\x02\x03\x01\x00"
-+	"\x01\x02\x82\x01\x00\x62\xb5\x60\x31\x4f\x3f\x66\x16\xc1\x60\xac"
-+	"\x47\x2a\xff\x6b\x69\x00\x4a\xb2\x5c\xe1\x50\xb9\x18\x74\xa8\xe4"
-+	"\xdc\xa8\xec\xcd\x30\xbb\xc1\xc6\xe3\xc6\xac\x20\x2a\x3e\x5e\x8b"
-+	"\x12\xe6\x82\x08\x09\x38\x0b\xab\x7c\xb3\xcc\x9c\xce\x97\x67\xdd"
-+	"\xef\x95\x40\x4e\x92\xe2\x44\xe9\x1d\xc1\x14\xfd\xa9\xb1\xdc\x71"
-+	"\x9c\x46\x21\xbd\x58\x88\x6e\x22\x15\x56\xc1\xef\xe0\xc9\x8d\xe5"
-+	"\x80\x3e\xda\x7e\x93\x0f\x52\xf6\xf5\xc1\x91\x90\x9e\x42\x49\x4f"
-+	"\x8d\x9c\xba\x38\x83\xe9\x33\xc2\x50\x4f\xec\xc2\xf0\xa8\xb7\x6e"
-+	"\x28\x25\x56\x6b\x62\x67\xfe\x08\xf1\x56\xe5\x6f\x0e\x99\xf1\xe5"
-+	"\x95\x7b\xef\xeb\x0a\x2c\x92\x97\x57\x23\x33\x36\x07\xdd\xfb\xae"
-+	"\xf1\xb1\xd8\x33\xb7\x96\x71\x42\x36\xc5\xa4\xa9\x19\x4b\x1b\x52"
-+	"\x4c\x50\x69\x91\xf0\x0e\xfa\x80\x37\x4b\xb5\xd0\x2f\xb7\x44\x0d"
-+	"\xd4\xf8\x39\x8d\xab\x71\x67\x59\x05\x88\x3d\xeb\x48\x48\x33\x88"
-+	"\x4e\xfe\xf8\x27\x1b\xd6\x55\x60\x5e\x48\xb7\x6d\x9a\xa8\x37\xf9"
-+	"\x7a\xde\x1b\xcd\x5d\x1a\x30\xd4\xe9\x9e\x5b\x3c\x15\xf8\x9c\x1f"
-+	"\xda\xd1\x86\x48\x55\xce\x83\xee\x8e\x51\xc7\xde\x32\x12\x47\x7d"
-+	"\x46\xb8\x35\xdf\x41\x02\x81\x81\x00\xe4\x4c\xae\xde\x16\xfd\x9f"
-+	"\x83\x55\x5b\x84\x4a\xcf\x1c\xf1\x37\x95\xad\xca\x29\x7f\x2d\x6e"
-+	"\x32\x81\xa4\x2b\x26\x14\x96\x1d\x40\x05\xec\x0c\xaf\x3f\x2c\x6f"
-+	"\x2c\xe8\xbf\x1d\xee\xd0\xb3\xef\x7c\x5b\x9e\x88\x4f\x2a\x8b\x0e"
-+	"\x4a\xbd\xb7\x8c\xfa\x10\x0e\x3b\xda\x68\xad\x41\x2b\xe4\x96\xfa"
-+	"\x7f\x80\x52\x5f\x07\x9f\x0e\x3b\x5e\x96\x45\x1a\x13\x2b\x94\xce"
-+	"\x1f\x07\x69\x85\x35\xfc\x69\x63\x5b\xf8\xf8\x3f\xce\x9d\x40\x1e"
-+	"\x7c\xad\xfb\x9e\xce\xe0\x01\xf8\xef\x59\x5d\xdc\x00\x79\xab\x8a"
-+	"\x3f\x80\xa2\x76\x32\x94\xa9\xea\x65\x02\x81\x81\x00\xf1\x38\x60"
-+	"\x90\x0d\x0c\x2e\x3d\x34\xe5\x90\xea\x21\x43\x1f\x68\x63\x16\x7b"
-+	"\x25\x8d\xde\x82\x2b\x52\xf8\xa3\xfd\x0f\x39\xe7\xe9\x5e\x32\x75"
-+	"\x15\x7d\xd0\xc9\xce\x06\xe5\xfb\xa9\xcb\x22\xe5\xdb\x49\x09\xf2"
-+	"\xe6\xb7\xa5\xa7\x75\x2e\x91\x2d\x2b\x5d\xf1\x48\x61\x45\x43\xd7"
-+	"\xbd\xfc\x11\x73\xb5\x11\x9f\xb2\x18\x3a\x6f\x36\xa7\xc2\xd3\x18"
-+	"\x4d\xf0\xc5\x1f\x70\x8c\x9b\xc5\x1d\x95\xa8\x5a\x9e\x8c\xb1\x4b"
-+	"\x6a\x2a\x84\x76\x2c\xd8\x4f\x47\xb0\x81\x84\x02\x45\xf0\x85\xf8"
-+	"\x0c\x6d\xa7\x0c\x4d\x2c\xb2\x5b\x81\x70\xfd\x6e\x17\x02\x81\x81"
-+	"\x00\x8d\x07\xc5\xfa\x92\x4f\x48\xcb\xd3\xdd\xfe\x02\x4c\xa1\x7f"
-+	"\x6d\xab\xfc\x38\xe7\x9b\x95\xcf\xfe\x49\x51\xc6\x09\xf7\x2b\xa8"
-+	"\x94\x15\x54\x75\x9d\x88\xb4\x05\x55\xc3\xcd\xd4\x4a\xe4\x08\x53"
-+	"\xc8\x09\xbd\x0c\x4d\x83\x65\x75\x85\xbc\x5e\xf8\x2a\xbd\xe2\x5d"
-+	"\x1d\x16\x0e\xf9\x34\x89\x38\xaf\x34\x36\x6c\x2c\x22\x44\x22\x81"
-+	"\x90\x73\xd9\xea\x3a\xaf\x70\x74\x48\x7c\xc6\xb5\xb0\xdc\xe5\xa9"
-+	"\xa8\x76\x4b\xbc\xf7\x00\xf3\x4c\x22\x0f\x44\x62\x1d\x40\x0a\x57"
-+	"\xe2\x5b\xdd\x7c\x7b\x9a\xad\xda\x70\x52\x21\x8a\x4c\xc2\xc3\x98"
-+	"\x75\x02\x81\x81\x00\xed\x24\x5c\xa2\x21\x81\xa1\x0f\xa1\x2a\x33"
-+	"\x0e\x49\xc7\x00\x60\x92\x51\x6e\x9d\x9b\xdc\x6d\x22\x04\x7e\xd6"
-+	"\x51\x19\x9f\xf6\xe3\x91\x2c\x8f\xb8\xa2\x29\x19\xcc\x47\x31\xdf"
-+	"\xf8\xab\xf0\xd2\x02\x83\xca\x99\x16\xc2\xe2\xc3\x3f\x4b\x99\x83"
-+	"\xcb\x87\x9e\x86\x66\xc2\x3e\x91\x21\x80\x66\xf3\xd6\xc5\xcd\xb6"
-+	"\xbb\x64\xef\x22\xcf\x48\x94\x58\xe7\x7e\xd5\x7c\x34\x1c\xb7\xa2"
-+	"\xd0\x93\xe9\x9f\xb5\x11\x61\xd7\x5f\x37\x0f\x64\x52\x70\x11\x78"
-+	"\xcc\x08\x77\xeb\xf8\x30\x1e\xb4\x9e\x1b\x4a\xc7\xa8\x33\x51\xe0"
-+	"\xed\xdf\x53\xf6\xdf\x02\x81\x81\x00\x86\xd9\x4c\xee\x65\x61\xc1"
-+	"\x19\xa9\xd5\x74\x9b\xd5\xca\xf6\x83\x2b\x06\xb4\x20\xfe\x45\x29"
-+	"\xe8\xe3\xfa\xe1\x4f\x28\x8e\x63\x2f\x74\xc3\x3a\x5c\x9a\xf5\x9e"
-+	"\x0e\x0d\xc5\xfe\xa0\x4c\x00\xce\x7b\xa4\x19\x17\x59\xaf\x13\x3a"
-+	"\x03\x8f\x54\xf5\x60\x39\x2e\xd9\x06\xb3\x7c\xd6\x90\x06\x41\x77"
-+	"\xf3\x93\xe1\x7a\x01\x41\xc1\x8f\xfe\x4c\x88\x39\xdb\xde\x71\x9e"
-+	"\x58\xd1\x49\x50\x80\xb2\x5a\x4f\x69\x8b\xb8\xfe\x63\xd4\x42\x3d"
-+	"\x37\x61\xa8\x4c\xff\xb6\x99\x4c\xf4\x51\xe0\x44\xaa\x69\x79\x3f"
-+	"\x81\xa4\x61\x3d\x26\xe9\x04\x52\x64",
-+	.key_len = 1193,
- 	/*
- 	 * m is SHA256 hash of following message:
- 	 * "\x49\x41\xbe\x0a\x0c\xc9\xf6\x35\x51\xe4\x27\x56\x13\x71\x4b\xd0"
---
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index e25fcd49db70..3407762b3b15 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -3692,8 +3692,8 @@ static int btusb_probe(struct usb_interface *intf,
+ 	data->recv_acl = hci_recv_frame;
+ 
+ 	hdev = hci_alloc_dev_priv(priv_size);
+-	if (!hdev)
+-		return -ENOMEM;
++	if (IS_ERR(hdev))
++		return PTR_ERR(hdev);
+ 
+ 	hdev->bus = HCI_USB;
+ 	hci_set_drvdata(hdev, data);
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index a0f99baafd35..ea50767e02bf 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -2419,7 +2419,7 @@ struct hci_dev *hci_alloc_dev_priv(int sizeof_priv)
+ 
+ 	hdev = kzalloc(alloc_size, GFP_KERNEL);
+ 	if (!hdev)
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	hdev->pkt_type  = (HCI_DM1 | HCI_DH1 | HCI_HV1);
+ 	hdev->esco_type = (ESCO_HV1);
+-- 
 2.36.1
 

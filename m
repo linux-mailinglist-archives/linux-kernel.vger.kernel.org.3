@@ -2,101 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B655778BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 01:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A995778D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 01:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbiGQXEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 19:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S231408AbiGQXdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 19:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbiGQXEF (ORCPT
+        with ESMTP id S229818AbiGQXdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 19:04:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBCB12A8C;
-        Sun, 17 Jul 2022 16:04:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12B9060ECE;
-        Sun, 17 Jul 2022 23:04:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C09EC341C0;
-        Sun, 17 Jul 2022 23:04:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658099043;
-        bh=IPeBIHmETf2O6wdyfCK0PR/zEOWzTcVCzm7iP2DJHDU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RgQq0B6e+i5l9xDOvXFdov0SJX+cZ0qaW54Lug3UowEykKCTpf0es9VM+tS4CCAnF
-         IrDb1y+v1xkrc2+PnqpVOG2BiaTC5AZF6C7HZbin9M/fOttDIW/SKcEJOnearBm0E4
-         W+F5k/2NR24Ac454Qlmzojs0ohoF2FHzIYm3MW0UjKQeQWeEFnMYrvP424BXeJG4Xl
-         omuV/ZWdxgZxNM6fJlvQTom2tmNIuTTLRxhdxw4WTirATWgHQPF52iFOrfh08ddE/O
-         farPpHz/MVdnbi8+mHXmvCCVnNwNE2Tw1fNcwRmD4bXITd8qlkeItkN5g3k35ST3x6
-         viaQ2ogp096vg==
-Date:   Sun, 17 Jul 2022 19:04:02 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Mark Brown <broonie@kernel.org>, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, heiko@sntech.de,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH AUTOSEL 5.15 12/28] ASoC: rockchip: i2s: switch BCLK to
- GPIO
-Message-ID: <YtSVYq/47XmF6V0b@sashalap>
-References: <20220714042429.281816-1-sashal@kernel.org>
- <20220714042429.281816-12-sashal@kernel.org>
- <CAGXv+5Fnj4-bHksi5ymy6LwOrmv_9yQ1aBSOpM4wGbGy2QGZUQ@mail.gmail.com>
+        Sun, 17 Jul 2022 19:33:49 -0400
+X-Greylist: delayed 1327 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 17 Jul 2022 16:33:48 PDT
+Received: from tartarus.angband.pl (tartarus.angband.pl [51.83.246.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F69A100A;
+        Sun, 17 Jul 2022 16:33:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=angband.pl;
+        s=tartarus; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=g9c6Fw5wegV7nRqLgN+7yazf4jmfsQdfONU8hlkeEdI=; b=X3mu+6Pz5w36at7DZfspAK8G7v
+        XcvdCLxE18vzw/UEz46gBPs8kOxSDI/1rXQiV13AEtMjF2fWyYsGLhgKiHEzRr8u11fNncPlB+cuS
+        ge/+r4IOSwEmOmYZUl6YUnJBFLT3TJBO8TCbkPZbriJ/ES7MVpBv9Lwk05qVQM8ujids=;
+Received: from 89-73-149-240.dynamic.chello.pl ([89.73.149.240] helo=barad-dur.angband.pl)
+        by tartarus.angband.pl with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <kilobyte@angband.pl>)
+        id 1oDDPw-002l3o-RJ; Mon, 18 Jul 2022 01:11:20 +0200
+Received: from [2a02:a31c:8144:c400::4] (helo=valinor.angband.pl)
+        by barad-dur.angband.pl with esmtp (Exim 4.94.2)
+        (envelope-from <kilobyte@angband.pl>)
+        id 1oDDPu-0007TW-WF; Mon, 18 Jul 2022 01:11:15 +0200
+Received: from kilobyte by valinor.angband.pl with local (Exim 4.96)
+        (envelope-from <kilobyte@valinor.angband.pl>)
+        id 1oDDPr-0008aZ-0d;
+        Mon, 18 Jul 2022 01:11:11 +0200
+From:   Adam Borowski <kilobyte@angband.pl>
+To:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Adam Borowski <kilobyte@angband.pl>
+Date:   Mon, 18 Jul 2022 01:11:05 +0200
+Message-Id: <20220717231105.33005-1-kilobyte@angband.pl>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAGXv+5Fnj4-bHksi5ymy6LwOrmv_9yQ1aBSOpM4wGbGy2QGZUQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 89.73.149.240
+X-SA-Exim-Mail-From: kilobyte@angband.pl
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH] certs: make system keyring depend on x509 parser
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on tartarus.angband.pl)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 12:29:27PM +0800, Chen-Yu Tsai wrote:
->Hi,
->
->On Thu, Jul 14, 2022 at 12:25 PM Sasha Levin <sashal@kernel.org> wrote:
->>
->> From: Judy Hsiao <judyhsiao@chromium.org>
->>
->> [ Upstream commit a5450aba737dae3ee1a64b282e609d8375d6700c ]
->>
->> We discoverd that the state of BCLK on, LRCLK off and SD_MODE on
->> may cause the speaker melting issue. Removing LRCLK while BCLK
->> is present can cause unexpected output behavior including a large
->> DC output voltage as described in the Max98357a datasheet.
->>
->> In order to:
->>   1. prevent BCLK from turning on by other component.
->>   2. keep BCLK and LRCLK being present at the same time
->>
->> This patch switches BCLK to GPIO func before LRCLK output, and
->> configures BCLK func back during LRCLK is output.
->>
->> Without this fix, BCLK is turned on 11 ms earlier than LRCK by the
->> da7219.
->> With this fix, BCLK is turned on only 0.4 ms earlier than LRCK by
->> the rockchip codec.
->>
->> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
->> Link: https://lore.kernel.org/r/20220615045643.3137287-1-judyhsiao@chromium.org
->> Signed-off-by: Mark Brown <broonie@kernel.org>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->Please drop this one from all stable branches. It caused more problems
->than it fixed and will be reverted for 5.19 [1]. The same patch, along
->with a proper follow-up fix, are queued up for 5.20.
+This code requires x509_load_certificate_list() to be built-in.
 
-Now dropped, thanks!
+Fixes: 60050ffe3d770dd1df5b641aa48f49d07a54bd84
+Signed-off-by: Adam Borowski <kilobyte@angband.pl>
+---
+Otherwise, we get a build failure.
 
+ certs/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/certs/Kconfig b/certs/Kconfig
+index 476755703cf8..bf9b511573d7 100644
+--- a/certs/Kconfig
++++ b/certs/Kconfig
+@@ -43,6 +43,7 @@ config SYSTEM_TRUSTED_KEYRING
+ 	bool "Provide system-wide ring of trusted keys"
+ 	depends on KEYS
+ 	depends on ASYMMETRIC_KEY_TYPE
++	depends on X509_CERTIFICATE_PARSER
+ 	help
+ 	  Provide a system keyring to which trusted keys can be added.  Keys in
+ 	  the keyring are considered to be trusted.  Keys may be added at will
 -- 
-Thanks,
-Sasha
+2.36.1
+

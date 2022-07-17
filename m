@@ -2,154 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 844E157758E
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 11:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2325577587
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 11:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbiGQJXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 05:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
+        id S233018AbiGQJXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 05:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233066AbiGQJXk (ORCPT
+        with ESMTP id S229476AbiGQJXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 05:23:40 -0400
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E30B60F2;
-        Sun, 17 Jul 2022 02:23:38 -0700 (PDT)
-Received: by mail-qv1-f49.google.com with SMTP id v5so6821805qvq.8;
-        Sun, 17 Jul 2022 02:23:38 -0700 (PDT)
+        Sun, 17 Jul 2022 05:23:33 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49075BF4;
+        Sun, 17 Jul 2022 02:23:32 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id r83-20020a1c4456000000b003a2fa488efdso763302wma.4;
+        Sun, 17 Jul 2022 02:23:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8YTr2X8svIbJnTpbF7x5tnLHp9hIZERbO+Kgz/ZPYT8=;
+        b=FvwqRGpcS2qa45206mLsjOytt4/TCoTHHYYX7Gl0v1hZGLv6KF70gCpGLNgGBbEoAn
+         xXQYv8a3PpneoWUWIotTMhlbzvVAf9jfOa2XGR3qWBLSjclpO2Ihd624PVu5VVtd/1NX
+         plLFzJX0xOMnJjNp4SXy3PJ4mVwzvm4ODVoHcgF9KB3f0v+um9xQuN/JPARm5S2mVjka
+         7CndBoPAwI3Z6D8aKqva/BPQzD318kuyN7rLI24cCosg5Z+ZGrELBxp2fJYwhJoumBFL
+         QX5rwH39PgZ/JpERJzHwhyQYSNGCUTJIaYT/xnM0plahZNeo2tbnj7dwWNGxXdnNt6m4
+         reug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wc3nIaC4TGrabTRR6ZU1E+ucBztRvo43HV92KBQYbRU=;
-        b=h2MAkKSs+RER3S36NySpEgdWBqDUEDTz8bcQ3yyLDR6Mrmw2+Fh7a+TC+ahsak+4q5
-         9sXmPJzF8eR0KLnEreWzymlfzzK5FkflQHr1nwHh7zDZSGyxnOFDPxnLFrQy2nbHb7eb
-         wqSBqNa6d5oQ1mgZthLmewje9QqK0iCige/y9zvGnDhZ16INcP37ECIFXUiESQpT77IE
-         N/2vUvzLd15UY8YXPI33lxyjHcxYPmSrxmNvLJUPSjC7JrTi9HupvruIG0OmNXPivBH+
-         7kF2ZQojOu7aDcDdW5hAfoiQ3qr4i9QcM8duxpzc/6pNNMabTZq9yKjEgy6c0r9I4s90
-         D0YQ==
-X-Gm-Message-State: AJIora9BgCzHI/FCYpKBJch9JLBgAtfrtHu8WaPNTRBecZQQmVWDO/yW
-        BkTMqXvKHDtgwvAqS4gMe5dDKfNnHJmeQg==
-X-Google-Smtp-Source: AGRyM1t51WwmhbtfyGxOcmUWrsVBMYC6D23aukovVLV8+WYPG9Sdoc3xGe3oxOfFLfpjT3lZBM60Uw==
-X-Received: by 2002:a05:6214:509c:b0:473:4d8b:1ffa with SMTP id kk28-20020a056214509c00b004734d8b1ffamr17310401qvb.125.1658049817451;
-        Sun, 17 Jul 2022 02:23:37 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id ay31-20020a05620a179f00b006b5de51ec1asm3022771qkb.26.2022.07.17.02.23.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Jul 2022 02:23:36 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-31c8a1e9e33so82581587b3.5;
-        Sun, 17 Jul 2022 02:23:35 -0700 (PDT)
-X-Received: by 2002:a81:af27:0:b0:31c:833f:eda5 with SMTP id
- n39-20020a81af27000000b0031c833feda5mr24448251ywh.358.1658049815479; Sun, 17
- Jul 2022 02:23:35 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8YTr2X8svIbJnTpbF7x5tnLHp9hIZERbO+Kgz/ZPYT8=;
+        b=iUe84LH1tGdRkXGlSixhbTyizwhOv+HyobXYivulinSfLF6YaLUrWPF9sI17n93Msg
+         qznSH3ehu+ZYMNvEmgooegFbKJBeyObxqW1heSbi+eprmwGMWRJzn+tPWqTDiThHqkeU
+         uCTs5nNO7NjDDuT5guHAPa3oAREM3dIuf19N4gxuMGBjSC4agZc8mT1U8fwSLpFit9j0
+         zqP4YB4JhFejL7T6zyFXh9CH3ZeVvxa7zNrx7383sIelyHA1Lnhh/CnkuLnjqKwxvC5y
+         dL+952EeB1U+ZgullA6Kq6lNmJXjVTQcQ7ZALy8DDJ3SCBbjz8au7LtuFgfO2HmRuWmE
+         C0Yg==
+X-Gm-Message-State: AJIora9LuHbNLNZLylWMuQgboXnQ629oqVDB8VWAiukRWsR8lOUr4Tfp
+        V1Lx3/QFjpcuJpCyyzhRoQA=
+X-Google-Smtp-Source: AGRyM1taStmAGCfMxAnd9fr1zaGcAoYHIrE8NCunwSoSJCBhDGvLLtg8QmNcNokv28dSJbEOE+2KjQ==
+X-Received: by 2002:a7b:c84a:0:b0:3a2:cf6b:290d with SMTP id c10-20020a7bc84a000000b003a2cf6b290dmr28857462wml.137.1658049810732;
+        Sun, 17 Jul 2022 02:23:30 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id m17-20020a05600c3b1100b003976fbfbf00sm13374295wms.30.2022.07.17.02.23.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jul 2022 02:23:30 -0700 (PDT)
+Message-ID: <62d3d512.1c69fb81.6e086.d251@mx.google.com>
+X-Google-Original-Message-ID: <YtPVEAbMFiYFMcJp@Ansuel-xps.>
+Date:   Sun, 17 Jul 2022 11:23:28 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 2/3] ARM: dts: qcom: add missing hwlock for ipq8064
+ dtsi
+References: <20220707102040.1859-1-ansuelsmth@gmail.com>
+ <20220707102040.1859-2-ansuelsmth@gmail.com>
+ <YtN8R1eRTccJ+dUn@builder.lan>
 MIME-Version: 1.0
-References: <20220717033453.2896843-1-shorne@gmail.com> <20220717033453.2896843-2-shorne@gmail.com>
-In-Reply-To: <20220717033453.2896843-2-shorne@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 17 Jul 2022 11:23:24 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUT6nEft8v30sq0WP49RW2qUn+1sunk+ow2_EEyVEieEQ@mail.gmail.com>
-Message-ID: <CAMuHMdUT6nEft8v30sq0WP49RW2qUn+1sunk+ow2_EEyVEieEQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] asm-generic: Remove pci.h copying remaining code
- to x86
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nick Child <nick.child@ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtN8R1eRTccJ+dUn@builder.lan>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stafford,
+On Sat, Jul 16, 2022 at 10:04:39PM -0500, Bjorn Andersson wrote:
+> On Thu 07 Jul 05:20 CDT 2022, Christian Marangi wrote:
+> 
+> > Add missing hwlock for ipq8064 dtsi provided by qcom,sfpb-mutex.
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> >  arch/arm/boot/dts/qcom-ipq8064.dtsi | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> > index 4b475d98343c..cd1b43e2cab4 100644
+> > --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> > +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> > @@ -1224,4 +1224,11 @@ sdcc3: mmc@12180000 {
+> >  			};
+> >  		};
+> >  	};
+> > +
+> > +	sfpb_mutex: hwlock@1200600 {
+> 
+> This is an mmio device, so it should live under /soc, so I moved it
+> there while applying the patch.
+> 
+> 
+> But it would be nice if this file followed others and kept all nodes
+> sorted by address (or name if they don't have an address). Also if
+> addresses were padded to 8 digits, to make sorting easier.
+> 
+> I would much appreciate if you could find the time to prepare such a
+> patch.
 
-On Sun, Jul 17, 2022 at 5:35 AM Stafford Horne <shorne@gmail.com> wrote:
-> The generic pci.h header now only provides a definition of
-> pci_get_legacy_ide_irq which is used by architectures that support PNP.
-> Of the architectures that use asm-generic/pci.h this is only x86.
->
-> This patch removes the old pci.h in order to make room for a new
-> pci.h to be used by arm64, riscv, openrisc, etc.
->
-> The existing code in pci.h is moved out to x86.  On other architectures
-> we clean up any outstanding references.
->
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Link: https://lore.kernel.org/lkml/CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com/
-> Signed-off-by: Stafford Horne <shorne@gmail.com>
+That will take tons of changes, but yes will make a patch to reorder all
+the nodes.
 
-Thanks for your patch!
+> 
+> > +		compatible = "qcom,sfpb-mutex";
+> > +		reg = <0x01200600 0x100>;
+> > +
+> > +		#hwlock-cells = <1>;
+> > +	};
+> >  };
+> > -- 
+> > 2.36.1
+> > 
 
-> --- a/arch/m68k/include/asm/pci.h
-> +++ b/arch/m68k/include/asm/pci.h
-> @@ -2,11 +2,14 @@
->  #ifndef _ASM_M68K_PCI_H
->  #define _ASM_M68K_PCI_H
->
-> -#include <asm-generic/pci.h>
-> -
->  #define        pcibios_assign_all_busses()     1
->
->  #define        PCIBIOS_MIN_IO          0x00000100
->  #define        PCIBIOS_MIN_MEM         0x02000000
->
-> +static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> +{
-> +       return channel ? 15 : 14;
-> +}
-> +
-
-I thought you were not going to add this?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+	Ansuel

@@ -2,143 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB0A577516
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 10:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6E9577518
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 10:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbiGQIgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 04:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
+        id S232711AbiGQImL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 04:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGQIgY (ORCPT
+        with ESMTP id S231390AbiGQImJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 04:36:24 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908B617599
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 01:36:21 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id r83-20020a1c4456000000b003a2fa488efdso724617wma.4
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 01:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KPdpIj6+zuOLFfGVczdnmA1kYYpvkGTEpBqmCCkcOr0=;
-        b=ho0FfW0pzlLfTloSwm6NgaWVW4pOv3rtpTRxR10iGG3jkA9gzty0hmbnjYYKm4MVu1
-         6KL5aXu14gFYJo419YFIBHhoNhaKn7cCtWnm6VIi8mpaFVy2w6gP+OpHpUZMxTKYMssv
-         Bw5QNXHf9h65o+bnmZ/A7EcOzv2z/jeoczzZswXfyLQqtf5dzkcJRoSmLx7eUDB8tK0m
-         F6NYIoJQb+rH8WRfEoq7DEYRGHZTraUcf9Wh3VuffqtuRC/CGSPU/ivWkpxj1N6e2wr2
-         lkcB0CHehDxga/HVL1qJG2aUZnOohW420anJm1Nsy3GD5F5CBjg9MJ0c7Si3y8loiPgp
-         bdkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KPdpIj6+zuOLFfGVczdnmA1kYYpvkGTEpBqmCCkcOr0=;
-        b=qU+PLbF+q75awJZjnKTEyk7IGZmuiTmv55appMaPSeWGBuBF3VLcNePD2VAMWgFM5E
-         V1EompCxxuHwAwaE5s4IUlRrrqFSnywObZyRh0yfa6168dKQbkWLWQGtJOgSwZpflAsN
-         bQKUHFn6dS924BkBC28XdbCtxuaqpM9EUfWzUDHRby0Idyjrn9cpOryhZYYEF2FRkMsy
-         SmYPw9aB14jlh7tvF0j+66IHnp/2LUzUwTnoL1JKCKiD6x8wiLtMZnIBoTzApsO36Czv
-         kLv+KLICpfk7wCcYzfV3gIDHxalyGSC+He6jypWBik5ZVngUf6NEl6/QdzZe1Cpiv8Vm
-         ICHA==
-X-Gm-Message-State: AJIora89DdD8A75P6S46GiZ0RZqWeOd3FcIaLYCnrsiJfq40nwsmYjiM
-        TG6BjZDUNPtEL04z1NtFhJV7XpFwmls=
-X-Google-Smtp-Source: AGRyM1sqobUZzrErJtyW6GoiEJMsugB4ZhdeqcqwoPOaR3IhOIV61PAuC34TD9zvVdZFbfTK/NPJdg==
-X-Received: by 2002:a05:600c:3399:b0:3a3:f1e:ebd8 with SMTP id o25-20020a05600c339900b003a30f1eebd8mr9493905wmp.6.1658046979942;
-        Sun, 17 Jul 2022 01:36:19 -0700 (PDT)
-Received: from localhost.localdomain (host-95-235-102-55.retail.telecomitalia.it. [95.235.102.55])
-        by smtp.gmail.com with ESMTPSA id r8-20020a5d52c8000000b0021d65e9d449sm8117515wrv.73.2022.07.17.01.36.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 01:36:18 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Nick Terrell <terrelln@fb.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] f2fs: Delete f2fs_copy_page() and replace with memcpy_page()
-Date:   Sun, 17 Jul 2022 10:36:13 +0200
-Message-Id: <20220717083613.3861-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Sun, 17 Jul 2022 04:42:09 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB82C183AA;
+        Sun, 17 Jul 2022 01:42:07 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkwl20tj04snw15cjtflt-3.rev.dnainternet.fi [IPv6:2001:14ba:4493:6f40:fec3:d72a:e447:8113])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 126981B00101;
+        Sun, 17 Jul 2022 11:42:04 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1658047324;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ljpNRllBYzcmautrfzTavCMGgs6vk6O9O+uG2n9i8/M=;
+        b=tBhMwHrPAR5xJYtlfw1Phj1uKwG96fw8sI6k+KHevOEihOvXNaKXJHsUgPTj7UBAFobY2R
+        PhMsKwQovJsV35JSMjzi6g3KN94oMruxkDyttalrbzVx5jAs7YLT7sdJgFWxgXEvsYP1LU
+        359zS+NBZmtarizIGM6ozpJ1aycODmOmuQXsBdSY2esxFQu6iWtJu/dP4dDbV3Q60CKjSb
+        RMW7gEcEaXCmoaZGW1xDHWXF89mik85VejoHyhLF0MBmIEf08cTlekN+FWYa7kY0UouuRR
+        OvhOpmUYybg5mYnqh5B3jdyRODkChSRIzGHDv1ZrwhMFYWbjcN3fTeUe05f/Kw==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id AB051634D5F;
+        Sun, 17 Jul 2022 11:42:03 +0300 (EEST)
+Date:   Sun, 17 Jul 2022 11:42:03 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v1 1/1] media: atomisp_gmin_platform: Switch to use
+ acpi_evaluate_dsm_typed()
+Message-ID: <YtPLW+utY/XuCnbl@valkosipuli.retiisi.eu>
+References: <20220715160641.73526-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715160641.73526-1-andriy.shevchenko@linux.intel.com>
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1658047324; a=rsa-sha256;
+        cv=none;
+        b=LQrKe+1OIBdSoYRLtLmtaGPw6dALDUXYan0o/OmwNHrpH+Q7FKzLDcjzxVRo3qjPA03L+f
+        HmXRQYt2/UAfl/FxoEBuap+fJx//FTaW1Gngd/7O4iIbm6umDFB2BSZFGJH0oyTl2adYKx
+        wAgu3XoQpxtesbt6WjiXdvoyv8l/f8I/pM2gNludkzlMxHnzgdYdgyWP61pwyhLDmSrgza
+        hlrISc+G2kKeRVwMTva4ntuUaPkoCC5B5LISn5bvTWKmdAXRW6Mu/eONUP3RU72B8tN8Y3
+        gWv5gM+06qzQIWMjo44TOM2OyleIRijVhmEIQNwyMqHSWOg59TbLPD/hUfy5gg==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1658047324;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ljpNRllBYzcmautrfzTavCMGgs6vk6O9O+uG2n9i8/M=;
+        b=IA3BDP1+vwx8bP7hFa6ZzNPhkuD1bgimg8IGdRrBAsxk17akX3XbZHhPOUv81CpTosav2s
+        3Xe3BZVGywB6lOkpfpcZ5mVLtbZKTQ4mzDGQxVrv5kVQMlChOU9EOE1A2RY/xuWMZgOkm1
+        1kk/Q4ESM/lOUshMr9Vzh9zBiMzybVpW6msqyHV0/qX6db71ruztbs4t1NQiiqA10KfdFZ
+        Yr5oP737kGZwhg0tprX0+x4osxvTROPeChoHRIF88PCyTBeVRl5nTxkaA0wNPA1yeweEcW
+        Xm8Tdt8unsN7oF5VMSaUMeBBmWV3N6Pqi5vpgbG/naexmM1RSebY8+wwryMy2g==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-f2fs_copy_page() is a wrapper around two kmap() + one memcpy() from/to
-the mapped pages. It unnecessarily duplicates a kernel API and it makes
-use of kmap(), which is being deprecated in favor of kmap_local_page().
+Hi Andy,
 
-Two main problems with kmap(): (1) It comes with an overhead as mapping
-space is restricted and protected by a global lock for synchronization and
-(2) it also requires global TLB invalidation when the kmap’s pool wraps
-and it might block when the mapping space is fully utilized until a slot
-becomes available.
+On Fri, Jul 15, 2022 at 07:06:41PM +0300, Andy Shevchenko wrote:
+> The acpi_evaluate_dsm_typed() provides a way to check the type of the
+> object evaluated by _DSM call. Use it instead of open coded variant.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+> index bf527b366ab3..d4cfda07f7fb 100644
+> --- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+> +++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+> @@ -1207,16 +1207,13 @@ static int gmin_get_config_dsm_var(struct device *dev,
+>  	if (!strcmp(var, "CamClk"))
+>  		return -EINVAL;
+>  
+> -	obj = acpi_evaluate_dsm(handle, &atomisp_dsm_guid, 0, 0, NULL);
+> +	/* Return on unexpected object type */
+> +	obj = acpi_evaluate_dsm_typed(handle, &atomisp_dsm_guid, 0, 0, NULL, ACPI_TYPE_PACKAGE);
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. Therefore, its
-use in __clone_blkaddrs() is safe and should be preferred.
+Can you please run:
 
-Delete f2fs_copy_page() and use a plain memcpy_page() in the only one
-site calling the removed function. memcpy_page() avoids open coding two
-kmap_local_page() + one memcpy() between the two kernel virtual addresses.
+	$ ./scripts/checkpatch.pl --strict --max-line-length=80
 
-Suggested-by: Christoph Hellwig <hch@infradead.org>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
+I.e. the preferred line length is 80 or less, unless there are other
+reasons to keep it longer.
 
-This patch extends the scope and replaces "f2fs: Use memcpy_page() in
-f2fs_copy_page()", as suggested by Christoph Hellwig (thanks!):
-https://lore.kernel.org/lkml/YtOyWOKFN9ramUyb@infradead.org/
+>  	if (!obj) {
+>  		dev_info_once(dev, "Didn't find ACPI _DSM table.\n");
+>  		return -EINVAL;
+>  	}
+>  
+> -	/* Return on unexpected object type */
+> -	if (obj->type != ACPI_TYPE_PACKAGE)
+> -		return -EINVAL;
+> -
+>  #if 0 /* Just for debugging purposes */
+>  	for (i = 0; i < obj->package.count; i++) {
+>  		union acpi_object *cur = &obj->package.elements[i];
 
- fs/f2fs/f2fs.h | 10 ----------
- fs/f2fs/file.c |  2 +-
- 2 files changed, 1 insertion(+), 11 deletions(-)
-
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index d9bbecd008d2..52be3e23ae7c 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -2696,16 +2696,6 @@ static inline struct page *f2fs_pagecache_get_page(
- 	return pagecache_get_page(mapping, index, fgp_flags, gfp_mask);
- }
- 
--static inline void f2fs_copy_page(struct page *src, struct page *dst)
--{
--	char *src_kaddr = kmap(src);
--	char *dst_kaddr = kmap(dst);
--
--	memcpy(dst_kaddr, src_kaddr, PAGE_SIZE);
--	kunmap(dst);
--	kunmap(src);
--}
--
- static inline void f2fs_put_page(struct page *page, int unlock)
- {
- 	if (!page)
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index bd14cef1b08f..8d984aeb270f 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -1278,7 +1278,7 @@ static int __clone_blkaddrs(struct inode *src_inode, struct inode *dst_inode,
- 				f2fs_put_page(psrc, 1);
- 				return PTR_ERR(pdst);
- 			}
--			f2fs_copy_page(psrc, pdst);
-+			memcpy_page(pdst, 0, psrc, 0, PAGE_SIZE);
- 			set_page_dirty(pdst);
- 			f2fs_put_page(pdst, 1);
- 			f2fs_put_page(psrc, 1);
 -- 
-2.37.1
+Kind regards,
 
+Sakari Ailus

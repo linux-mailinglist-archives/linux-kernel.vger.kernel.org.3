@@ -2,141 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA085777DE
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 21:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB545777DF
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 21:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbiGQTCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 15:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53208 "EHLO
+        id S231535AbiGQTIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 15:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGQTCN (ORCPT
+        with ESMTP id S231269AbiGQTIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 15:02:13 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5041120B6
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 12:02:12 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id l68so5976926wml.3
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 12:02:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Lk12/tpXTVU6up0Wt2/X99tShnjn+1oi0pbFBCCHdiY=;
-        b=k8dg2dnozSZK58gGe/uYCFWyHCllyYsYNtTj3/11ajimjpONsm4zkGbvrfalM1N2Xd
-         XAJEGHQOOW3s4iTeVPmiAjaauCx+bZIZgyrEn4MTcttTNr4WaGgh1+YTb4/S/d86/oX5
-         vvt6eQDKQQdgin/SnREFbe4yxGZh/FqwaCFJPiyJTJtVDCHvxD7KkNdkdCAUxN0DXdgp
-         NuFnc+a6h8yImF6GsoVa620DgsaA2rNGi3X9ibQTl6zd5TOWG+t4uEcSCmpxDThwp92J
-         6B+weZuVGIcFloTQoamwsXUcezI917Z+Jx2/L+gTlwhC82fsj6cv1CeN0ISYNLVx3Uk4
-         b6sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Lk12/tpXTVU6up0Wt2/X99tShnjn+1oi0pbFBCCHdiY=;
-        b=k5AqVY0Pwaav2zLRLcyM3Zoo1BF77VTJmLnezjHt1ZG4JiOLKen+RHdCo+ddcdLMpR
-         Sy20/OfJTdU3hnmzx+J9+6kQR1eeLQazg5Q80Xe4Ahi6dV72XGWf1pIXOjCU5D5lPISs
-         dAaIQ8oERuuxMotqPo6CNiLS4aC8WU+duMg7reAxGHH4WCjGpBVj0vBhAC8yp2zSD43A
-         T8nDAGdISeTM538vcGFNd/DSIhJP+9AzX+6jPKU+fQIwVsuKh14qejrFmP3ECtt+SEaD
-         HvAZg7qyGZFe3APLHVrcCUv6aMNJr1YbEZpGb9uX58Dw6jwvktFWQBv4y6+bG6aWuPVO
-         VIhg==
-X-Gm-Message-State: AJIora/FXdKQiOjiUroe8Nbp7pao/LevNuy1Lu32f2IJek47oK/0NGsO
-        cmRiM63v2BhlcwJECcD1CcDHNxHQdSlF+mzUDM3i6A==
-X-Google-Smtp-Source: AGRyM1txM6jdFQSAihKOCcCQ02JZOMHBF4S9utIUHEL5wAa8Yd7D1Z3rq2vr36XdQB1ibThKxK+VFG5OnZx+sJbPO7A=
-X-Received: by 2002:a05:600c:4eca:b0:3a1:9c39:ac20 with SMTP id
- g10-20020a05600c4eca00b003a19c39ac20mr29653002wmq.61.1658084531022; Sun, 17
- Jul 2022 12:02:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220715235824.2549012-1-kaleshsingh@google.com> <87zgh8yq7q.wl-maz@kernel.org>
-In-Reply-To: <87zgh8yq7q.wl-maz@kernel.org>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Sun, 17 Jul 2022 12:02:00 -0700
-Message-ID: <CAC_TJveFHh1ykT0ctZC7zK_6rwNSgMe+242h_aVZ_48GD3Xtaw@mail.gmail.com>
-Subject: Re: [PATCH] KVM: arm64: Fix hypervisor address symbolization
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Fuad Tabba <tabba@google.com>, Will Deacon <will@kernel.org>,
-        Quentin Perret <qperret@google.com>, android-mm@google.com,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        Sun, 17 Jul 2022 15:08:47 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B73B50
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 12:08:45 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658084923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=35pBj3j945cPov6myYlDwKCg2pzfpExowA2dmczpaCA=;
+        b=ZpugCNJbNnFJt6ppDgxTehkV5C9RkF3SIosg2s3W1ftGLJ3CH1DmCgkkxitkSCzoB3Iwfu
+        vt5hM5ASCl+hrTZWwpLq3wBVIVUYJb9Fn26JIPn6BJvNiRIWoYsoi+BPJJSxVUXdXmAT+W
+        N5ixXU8XUn/ak6yOzm2kLWHI499Sohb85CQhaenMHfm/hFkF97ihz3DXQHkB9Ki10wibR0
+        x36pIjFb40Yk20HvfeU6Vd0/YuFuzKbFNQduRBNSIt5LwB5EfwrM7LRNBphJpYmBgJNiHH
+        JolH4BwRmUSwIIBDWCJ4izGImWNegYF+cvMJjeKshxt1p6yDq7eCX9r1l+RWxw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658084923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=35pBj3j945cPov6myYlDwKCg2pzfpExowA2dmczpaCA=;
+        b=3h9+9t4lUwBF/mWct6OY+54XvCPQmFOTzPMnqpnj4u+BN8/fDwo3FcbOvaYtexdLKtwOEY
+        j7f7uR5VdvuaPhCA==
+To:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [patch 02/38] x86/cpu: Use native_wrmsrl() in
+ load_percpu_segment()
+In-Reply-To: <0bec8fe2-d1e3-f01c-6e52-06ab542efdd8@citrix.com>
+References: <20220716230344.239749011@linutronix.de>
+ <20220716230952.787452088@linutronix.de>
+ <0bec8fe2-d1e3-f01c-6e52-06ab542efdd8@citrix.com>
+Date:   Sun, 17 Jul 2022 21:08:42 +0200
+Message-ID: <87zgh7wo91.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 3:43 AM Marc Zyngier <maz@kernel.org> wrote:
+On Sun, Jul 17 2022 at 00:22, Andrew Cooper wrote:
+>> -void load_percpu_segment(int cpu)
+>> +static noinstr void load_percpu_segment(int cpu)
+>>  {
+>>  #ifdef CONFIG_X86_32
+>>  	loadsegment(fs, __KERNEL_PERCPU);
+>>  #else
+>>  	__loadsegment_simple(gs, 0);
+>> -	wrmsrl(MSR_GS_BASE, cpu_kernelmode_gs_base(cpu));
+>> +	/*
+>> +	 * Because of the __loadsegment_simple(gs, 0) above, any GS-prefixed
+>> +	 * instruction will explode right about here. As such, we must not have
+>> +	 * any CALL-thunks using per-cpu data.
+>> +	 *
+>> +	 * Therefore, use native_wrmsrl() and have XenPV take the fault and
+>> +	 * emulate.
+>> +	 */
+>> +	native_wrmsrl(MSR_GS_BASE, cpu_kernelmode_gs_base(cpu));
+>>  #endif
 >
-> On Sat, 16 Jul 2022 00:58:24 +0100,
-> Kalesh Singh <kaleshsingh@google.com> wrote:
-> >
-> > With CONFIG_RANDOMIZE_BASE=y vmlinux addresses will resolve correctly
+> Lovely :-/
 >
-> I guess you mean *incorrectly* here, right?
+> But I still don't see how that works, because __loadsegment_simple() is
+> a memory clobber and cpu_kernelmode_gs_base() has a per-cpu lookup in
+> it.
 
-Yes, sorry. "INcorrectly" I meant to say.
+No. It uses an array lookup :)
 
+> That said, this only has a sole caller, and in context, it's bogus for
+> 64bit.=C2=A0 Can't we fix all the problems by just doing this:
 >
-> > from kallsyms. Fix this by adding the KASLR offset before printing the
-> > symbols.
-> >
-> > Based on arm64 for-next/stacktrace.
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 736262a76a12..6f393bc9d89d 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -701,16 +701,6 @@ static const char *table_lookup_model(struct
+> cpuinfo_x86 *c)
+> =C2=A0__u32 cpu_caps_cleared[NCAPINTS + NBUGINTS] __aligned(sizeof(unsign=
+ed
+> long));
+> =C2=A0__u32 cpu_caps_set[NCAPINTS + NBUGINTS] __aligned(sizeof(unsigned l=
+ong));
+> =C2=A0
+> -void load_percpu_segment(int cpu)
+> -{
+> -#ifdef CONFIG_X86_32
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 loadsegment(fs, __KERNEL_PERCPU);
+> -#else
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __loadsegment_simple(gs, 0);
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wrmsrl(MSR_GS_BASE, cpu_kernelmode_=
+gs_base(cpu));
+> -#endif
+> -}
+> -
+> =C2=A0#ifdef CONFIG_X86_32
+> =C2=A0/* The 32-bit entry code needs to find cpu_entry_area. */
+> =C2=A0DEFINE_PER_CPU(struct cpu_entry_area *, cpu_entry_area);
+> @@ -742,12 +732,15 @@ EXPORT_SYMBOL_GPL(load_fixmap_gdt);
+> =C2=A0 * Current gdt points %fs at the "master" per-cpu area: after this,
+> =C2=A0 * it's on the real one.
+> =C2=A0 */
+> -void switch_to_new_gdt(int cpu)
+> +void __noinstr switch_to_new_gdt(int cpu)
+> =C2=A0{
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Load the original GDT */
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 load_direct_gdt(cpu);
+> +
+> +#ifdef CONFIG_X86_32
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Reload the per-cpu base */
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 load_percpu_segment(cpu);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 loadsegment(fs, __KERNEL_PERCPU);
+> +#endif
+> =C2=A0}
+> =C2=A0
+> =C2=A0static const struct cpu_dev *cpu_devs[X86_VENDOR_NUM] =3D {};
 >
-> In general, place these remarks after the '---' line, as they don't
-> really make sense in the commit itself (which is likely to be merged
-> on a different base anyway).
 >
-> >
-> > Fixes: 6ccf9cb557bd ("KVM: arm64: Symbolize the nVHE HYP addresses")
-> > Reported-by: Fuad Tabba <tabba@google.com>
-> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > ---
-> >  arch/arm64/kvm/handle_exit.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
-> > index f66c0142b335..e43926ef2bc2 100644
-> > --- a/arch/arm64/kvm/handle_exit.c
-> > +++ b/arch/arm64/kvm/handle_exit.c
-> > @@ -347,10 +347,10 @@ void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr,
-> >                       kvm_err("nVHE hyp BUG at: %s:%u!\n", file, line);
-> >               else
-> >                       kvm_err("nVHE hyp BUG at: [<%016llx>] %pB!\n", panic_addr,
-> > -                                     (void *)panic_addr);
-> > +                                     (void *)(panic_addr + kaslr_offset()));
-> >       } else {
-> >               kvm_err("nVHE hyp panic at: [<%016llx>] %pB!\n", panic_addr,
-> > -                             (void *)panic_addr);
-> > +                             (void *)(panic_addr + kaslr_offset()));
-> >       }
-> >
-> >       /*
-> >
+> It's only 32bit where the percpu pointer is tied to the GDT.=C2=A0 On 64b=
+it,
+> gsbase is good before this, and remains good after.
 >
-> I'll fix the above as I apply the patch, no need to respin.
+> With this change,
+>
+> # Make sure load_percpu_segment has no stackprotector
+> CFLAGS_common.o=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 :=3D -fno=
+-stack-protector
+>
+> comes up for re-evaluation too.
 
-Thanks Marc.
+Good point. Let me stare at it some more.
 
--- Kalesh
+Thanks,
 
->
-> Thanks,
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+        tglx

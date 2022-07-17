@@ -2,125 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E06577753
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 18:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A003577755
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 18:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiGQQhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 12:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S232852AbiGQQmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 12:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiGQQhb (ORCPT
+        with ESMTP id S229536AbiGQQma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 12:37:31 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3C9F59F;
-        Sun, 17 Jul 2022 09:37:30 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id k30so12407413edk.8;
-        Sun, 17 Jul 2022 09:37:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fnHOU5H0h54e4hmVEYXh4fffVBg0SrfLMy1uXRyX8Fc=;
-        b=fOOq6yIKprD57x4+UWAJb88fD+Uj2AtOPlvaSHUZVbBExCmhUiJPU6m2P9RCfS5h6b
-         lLBMhM6wIF10d9oeV2dGiKeEwl4DodSVgugThnn4Y1tBXsUuwHfOg2iIR7jNae8NU15q
-         E2IejwS/gxBzXfie1vgdfjmAPv//gS78Qy5b92yvCICAseRu01stzysmhHrYKU02HTiA
-         LH+huUNirycECmnlcibFw6eL+zlY/2bD0re3ZKzXRszdZaQSZE3gxJW+EtX/dgv3oVsN
-         wlvlireWXSSO6PxCd09fl69smxWqWW+/MSsiE6QRzbC0IBxYq+fUcYb5wqR09EFICHzL
-         bNuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fnHOU5H0h54e4hmVEYXh4fffVBg0SrfLMy1uXRyX8Fc=;
-        b=G7AIjdLhN/00/8791qGn+Rx68SzTOr8koCjNiRBOECmewSG1Wu0jXmyLgvkN2GOPb7
-         //Ooo9G4vKIo1lrHp9bn2DmzSm+c/nLdXo4h7YcjdSH/rfK+gI4EHbrB63/+6yzRbz/e
-         QYYYxN4pfBI5JqCNNKTtyCDKQEnRxyZrNrF8iKsnXZ4WtJzLzDjXVsEoAzJZcgqKCNj5
-         hmqisnVMMlpZCNaWbjs+PaIA+KZwgUSkLjcDCTiUulB+7q2m2MFoOimAMdxonpP85F08
-         CDpM7qPIVtDsd51YXISITGpDeQ7biA/Lw8QoOqvQaH3X74qGsauG3KDxoxHYDDuK5Kxl
-         FgZQ==
-X-Gm-Message-State: AJIora9RHrYlIxojR5/TsuN3bOKp0lDWg0wMir3BrtSswy8qugU9khhd
-        Bm/8/iBsylIMNh0t0viJtdVvf9ISwl6vIA==
-X-Google-Smtp-Source: AGRyM1vE2DMkPrFV880xiQgE5ci6m7CXIzNdwOS++naJLKKSZxQLlNDeMBE3LcmSjq7wXM//KrqVww==
-X-Received: by 2002:a05:6402:6c2:b0:43b:b89:3c31 with SMTP id n2-20020a05640206c200b0043b0b893c31mr32105014edy.239.1658075848986;
-        Sun, 17 Jul 2022 09:37:28 -0700 (PDT)
-Received: from DESKTOP-A98GP49 (cable-178-148-254-8.dynamic.sbb.rs. [178.148.254.8])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906311100b0072b7d76211dsm1540597ejx.107.2022.07.17.09.37.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 09:37:28 -0700 (PDT)
-Date:   Sun, 17 Jul 2022 18:37:26 +0200
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add D5 Next fan control
- support
-Message-ID: <YtQ6xg60lYNrgF0V@DESKTOP-A98GP49>
-References: <20220717154114.7545-1-savicaleksa83@gmail.com>
- <4141c603-a153-adc1-ee08-f0ba0d99ade7@roeck-us.net>
+        Sun, 17 Jul 2022 12:42:30 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAB813E01
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 09:42:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=liusong@linux.alibaba.com;NM=1;PH=DW;RN=3;SR=0;TI=W4_0.1.30_DEFAULT_21283DCF_1658058041727_o7001c175l;
+Received: from WS-web (liusong@linux.alibaba.com[W4_0.1.30_DEFAULT_21283DCF_1658058041727_o7001c175l]) at Mon, 18 Jul 2022 00:42:24 +0800
+Date:   Mon, 18 Jul 2022 00:42:24 +0800
+From:   "liusong" <liusong@linux.alibaba.com>
+To:     "Andrew Morton" <akpm@linux-foundation.org>
+Cc:     "linux-mm" <linux-mm@kvack.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>
+Reply-To: "liusong" <liusong@linux.alibaba.com>
+Message-ID: <13d6bf0e-b22b-4414-a091-264877904ab9.liusong@linux.alibaba.com>
+Subject: =?UTF-8?B?UmU6IFtQQVRDSF0gbW0vZG1hcG9vbC5jOiBhdm9pZCBkdXBsaWNhdGUgbWVtc2V0IHdpdGhp?=
+  =?UTF-8?B?biBkbWFfcG9vbF9hbGxvYw==?=
+X-Mailer: [Alimail-Mailagent revision 7410][W4_0.1.30][DEFAULT][Chrome]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4141c603-a153-adc1-ee08-f0ba0d99ade7@roeck-us.net>
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <1657769100-66142-1-git-send-email-liusong@linux.alibaba.com>,<20220716180110.eb9402180137d0ce84e3971c@linux-foundation.org>
+x-aliyun-mail-creator: W4_0.1.30_DEFAULT_QvNTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTVfNykgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzEwMy4wLjAuMCBTYWZhcmkvNTM3LjM2La
+In-Reply-To: <20220716180110.eb9402180137d0ce84e3971c@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 09:14:13AM -0700, Guenter Roeck wrote:
-> On 7/17/22 08:41, Aleksa Savic wrote:
-> > Define pump and fan speed register offsets in
-> > D5 Next control report, as well as its size, to expose PWM fan control.
-> > 
-> > Signed-off-by: Jack Doan <me@jackdoan.com>
-> > Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
-> 
-> This suggests that Jack Doan was the author of this patch, not
-> Aleksa Savic. However, that is not reflected in the patch itself.
-> Please either use Originally-from: instead of Signed-off-by:
-> or make sure that the original author is listed correctly.
-> 
-> Thanks,
-> Guenter
->
-
-Thanks for the clarification. I'll send a v2.
-
-Aleksa
-
-> > ---
-> >   drivers/hwmon/aquacomputer_d5next.c | 6 ++++++
-> >   1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-> > index 0e56cc711a26..997d72ea6182 100644
-> > --- a/drivers/hwmon/aquacomputer_d5next.c
-> > +++ b/drivers/hwmon/aquacomputer_d5next.c
-> > @@ -71,8 +71,12 @@ static u8 secondary_ctrl_report[] = {
-> >   #define D5NEXT_PUMP_OFFSET		0x6c
-> >   #define D5NEXT_FAN_OFFSET		0x5f
-> >   #define D5NEXT_5V_VOLTAGE		0x39
-> > +#define D5NEXT_CTRL_REPORT_SIZE		0x329
-> >   static u8 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET };
-> > +/* Pump and fan speed registers in D5 Next control report (from 0-100%) */
-> > +static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
-> > +
-> >   /* Register offsets for the Farbwerk RGB controller */
-> >   #define FARBWERK_NUM_SENSORS		4
-> >   #define FARBWERK_SENSOR_START		0x2f
-> > @@ -667,9 +671,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
-> >   		priv->num_fans = D5NEXT_NUM_FANS;
-> >   		priv->fan_sensor_offsets = d5next_sensor_fan_offsets;
-> > +		priv->fan_ctrl_offsets = d5next_ctrl_fan_offsets;
-> >   		priv->num_temp_sensors = D5NEXT_NUM_SENSORS;
-> >   		priv->temp_sensor_start_offset = D5NEXT_COOLANT_TEMP;
-> >   		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
-> > +		priv->buffer_size = D5NEXT_CTRL_REPORT_SIZE;
-> >   		priv->temp_label = label_d5next_temp;
-> >   		priv->speed_label = label_d5next_speeds;
-> 
+Pj4gRnJvbTogTGl1IFNvbmcgPGxpdXNvbmdAbGludXguYWxpYmFiYS5jb20+Cj4+Cj4+IEluICJk
+bWFfZGlyZWN0X2FsbG9jIiwgdGhlIGFsbG9jYXRlZCBtZW1vcnkgaXMgZXhwbGljaXRseSBzZXQg
+dG8gMC4KPj4gSWYgdXNlIGRpcmVjdCBhbGxvYywgd2UgbmVlZCB0byBhdm9pZCBwb3NzaWJsZSBk
+dXBsaWNhdGUgbWVtc2V0IGluCj4+IGRtYV9wb29sX2FsbG9jLgo+Cj5JJ20gaGF2aW5nIHRyb3Vi
+bGUgc2VlaW5nIGhvdyB0aGlzIGNoYW5nZSBpcyBzYWZlIGFuZCBjb3JyZWN0IGFuZAo+bWFpbnRh
+aW5hYmxlLiAgUGxlYXNlIGRlc2NyaWJlIHRoZSBjb2RlIGZsb3cgbW9yZSBjb21wbGV0ZWx5PwpU
+aGUgZm9sbG93aW5nIGlzIHRoZSBjb2RlIGZsb3fvvIwgCmRtYV9wb29sX2FsbG9jCiAgICB8LS0+
+IHBvb2xfYWxsb2NfcGFnZQogICAgICAgICAgIHwtLT4gZG1hX2FsbG9jX2NvaGVyZW50CiAgICAg
+ICAgICAgICAgICAgIHwtLT4gZG1hX2FsbG9jX2F0dHJzCkluICJkbWFfYWxsb2NfYXR0cnMiLCBp
+ZiAiZG1hX2FsbG9jX2RpcmVjdCIgaXMgdHJ1ZSwgdGhlbiBlbnRlciAiZG1hX2RpcmVjdF9hbGxv
+YyIsCmFuZCBpbiAiZG1hX2RpcmVjdF9hbGxvYyIsIGFzIGxvbmcgYXMgdGhlIG1lbW9yeSBhbGxv
+Y2F0aW9uIGlzIHN1Y2Nlc3NmdWwsIHdpbGwgZXhlY3V0ZQoibWVtc2V0KHJldCwgMCwgc2l6ZSk7
+Iiwgd2hpY2ggc2V0IG1lbW9yeSB0byB6ZXJvLgpLZXJuZWwgdXNlICJkbWFfZ29fZGlyZWN0IiB0
+byBkZXRlcm1pbmUgd2hldGhlciB0byB1c2UgZGlyZWN0IGFsbG9jYXRpb24sIHdoaWNoIG1haW5s
+eQpieSBqdWRnaW5nIHdoZXRoZXIgImRtYV9tYXBfb3BzIiBleGlzdHMuCgpTbyB0aGlzIHBhdGNo
+IGRldGVybWluZXMgd2hldGhlciBkaXJlY3QgYWxsb2Mgd2lsbCBiZSB1c2VkIGJ5IGp1ZGdpbmcg
+ZG9lcyAiZG1hX21hcF9vcHMiIGV4aXN0cywKdGhlcmVieSBhdm9pZGluZyByZXBlYXRlZCBtZW1z
+ZXQuCgo+Cj4+IC0tLSBhL21tL2RtYXBvb2wuYwo+PiArKysgYi9tbS9kbWFwb29sLmMKPj4gQEAg
+LTIxLDYgKzIxLDcgQEAKPj4gIAo+PiAgI2luY2x1ZGUgPGxpbnV4L2RldmljZS5oPgo+PiAgI2lu
+Y2x1ZGUgPGxpbnV4L2RtYS1tYXBwaW5nLmg+Cj4+ICsjaW5jbHVkZSA8bGludXgvZG1hLW1hcC1v
+cHMuaD4KPj4gICNpbmNsdWRlIDxsaW51eC9kbWFwb29sLmg+Cj4+ICAjaW5jbHVkZSA8bGludXgv
+a2VybmVsLmg+Cj4+ICAjaW5jbHVkZSA8bGludXgvbGlzdC5oPgo+PiBAQCAtMzcyLDcgKzM3Myw3
+IEBAIHZvaWQgKmRtYV9wb29sX2FsbG9jKHN0cnVjdCBkbWFfcG9vbCAqcG9vbCwgZ2ZwX3QgbWVt
+X2ZsYWdzLAo+PiAgI2VuZGlmCj4+ICAgc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmcG9vbC0+bG9j
+aywgZmxhZ3MpOwo+PiAgIAo+PiAtIGlmICh3YW50X2luaXRfb25fYWxsb2MobWVtX2ZsYWdzKSkK
+Pj4gKyBpZiAod2FudF9pbml0X29uX2FsbG9jKG1lbV9mbGFncykgJiYgZ2V0X2RtYV9vcHMocG9v
+bC0+ZGV2KSkKPj4gICAgbWVtc2V0KHJldHZhbCwgMCwgcG9vbC0+c2l6ZSk7Cj4KPlRoYXQgRE1B
+UE9PTF9ERUJVRyBtZW1zZXQgYSBjb3VwbGUgb2YgbGluZXMgZWFybGllciBjb3VsZC9zaG91bGQg
+YmUKPnRlc3RpbmcgdGhlIHNhbWUgY29uZGl0aW9uIC0gdGhlcmUncyBubyBwb2ludCBpbiBwb2lz
+b25pbmcgYW4gYXJlYQo+d2hpY2ggd2UncmUgYWJvdXQgdG8gemVybyBvdXQuCgpJZiBETUFQT09M
+X0RFQlVHIGlzIGNvbmZpZ3VyZWQsIGl0cyBsb2dpYyBpcyBpbnRlcm5hbGx5IHNlbGYtY29uc2lz
+dGVudC4KSWYgdGhlIHVzZXIgbmVlZHMgX19HRlBfWkVSTywgdGhlIGNvcnJlc3BvbmRpbmcgbWVt
+b3J5IHdpbGwgYmUgc2V0IHRvIDAu

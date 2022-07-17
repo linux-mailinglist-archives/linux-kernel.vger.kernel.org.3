@@ -2,128 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD7E57776D
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 19:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2874577772
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 19:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232753AbiGQRPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 13:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
+        id S233000AbiGQRQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 13:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiGQRPA (ORCPT
+        with ESMTP id S232951AbiGQRQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 13:15:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB4F11476
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 10:14:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658078099; x=1689614099;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wTgXB9EGh/mezg4ReL7bWkSJ8/7ra5y/gb4D6RCzBUk=;
-  b=HLWeUM5IvfU1uPjNMs4qXsplvLT4avV8c62Y4sFga/vZ0FuQCgkEH9bC
-   cbhVZpYmtGzGf3St3OpJtVy+9VMwxxJnZZ7IYeW7TRRgAWFuUTuZO11J8
-   NFboPCbut6mYouf1U6wrlN5PFUvviVu0NOPNuv0ddasrwySPR88ACua4K
-   6SfuuuBmxZNAFewSMNtgXpADNCuJI8okI3GuC6Lh4hR39lkVgDdKrCRHy
-   kfI9NQQUCFiPYi6M/oX4/8gfLpFQsCsWRyCF6WmkuNY24/7A41qTQ505Z
-   ekyuDphkFg56/KZW7Z6lTMmiahlzTzd0aRvqLpTB4Vm4cll56FzO8iUMK
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="350041820"
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="350041820"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 10:14:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="843044307"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Jul 2022 10:14:57 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oD7r6-0003WE-PY;
-        Sun, 17 Jul 2022 17:14:56 +0000
-Date:   Mon, 18 Jul 2022 01:14:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     ran jianping <ran.jianping@zte.com.cn>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [andersson-remoteproc:ci-next 32/51]
- drivers/remoteproc/qcom_q6v5_adsp.c:178:56: error: expected ';' before 'if'
-Message-ID: <202207180116.3mf56M5t-lkp@intel.com>
+        Sun, 17 Jul 2022 13:16:44 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF721122;
+        Sun, 17 Jul 2022 10:16:43 -0700 (PDT)
+Received: from zn.tnic (p200300ea97297694329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7694:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 213E61EC00F8;
+        Sun, 17 Jul 2022 19:16:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658078197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=YMyRMtPkAHFEJeFlvvh7As/CmA56O06Fs8vTb9G0On4=;
+        b=NjA9bS4O6bVxhNEDGAr9WgB6eGW0WbnqYgLiVPeKtwN7ATIzlWyhQOvcxnxfqJ6yoEX2XE
+        Bh8d+arMLXrlPA7tVeGKYc+VD5FScRS0U3BhUUovD/2iMNW2PwiCT9Xp3Q2fEZNkJKwtEd
+        R1JtfB7Btx8JubJXOlp3JKhR+eTf0yQ=
+Date:   Sun, 17 Jul 2022 19:16:32 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv7 05/14] x86/boot: Add infrastructure required for
+ unaccepted memory support
+Message-ID: <YtRD8MJGTJLzRRV2@zn.tnic>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-6-kirill.shutemov@linux.intel.com>
+ <YqmyQZa4CTHkH3gT@hirez.programming.kicks-ass.net>
+ <20220615150534.ylkref3runa4kmyj@box.shutemov.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220615150534.ylkref3runa4kmyj@box.shutemov.name>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/andersson/remoteproc ci-next
-head:   7bd43ecf97f8237f4e2a7fdc27a26740b6afa92a
-commit: dd0e63e9e8273d34512eed1d936640cba51f9c2a [32/51] remoteproc: qcom: using pm_runtime_resume_and_get to simplify the code
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220718/202207180116.3mf56M5t-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/andersson/remoteproc/commit/dd0e63e9e8273d34512eed1d936640cba51f9c2a
-        git remote add andersson-remoteproc https://github.com/andersson/remoteproc
-        git fetch --no-tags andersson-remoteproc ci-next
-        git checkout dd0e63e9e8273d34512eed1d936640cba51f9c2a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+On Wed, Jun 15, 2022 at 06:05:34PM +0300, Kirill A. Shutemov wrote:
+> It also sounds painfully similar to uapi/ project. I'm not sure we want to
+> go this path.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+It is the same path perf tool is taking - see first paragraph:
 
-All errors (new ones prefixed by >>):
+https://lore.kernel.org/r/YtQM40VmiLTkPND2@kernel.org
 
-   drivers/remoteproc/qcom_q6v5_adsp.c: In function 'qcom_rproc_pds_enable':
->> drivers/remoteproc/qcom_q6v5_adsp.c:178:56: error: expected ';' before 'if'
-     178 |                 ret = pm_runtime_resume_and_get(pds[i])
-         |                                                        ^
-         |                                                        ;
-     179 |                 if (ret < 0) {
-         |                 ~~                                      
-   drivers/remoteproc/qcom_q6v5_adsp.c:187:1: warning: label 'unroll_pd_votes' defined but not used [-Wunused-label]
-     187 | unroll_pd_votes:
-         | ^~~~~~~~~~~~~~~
-
-
-vim +178 drivers/remoteproc/qcom_q6v5_adsp.c
-
-   169	
-   170	static int qcom_rproc_pds_enable(struct qcom_adsp *adsp, struct device **pds,
-   171					 size_t pd_count)
-   172	{
-   173		int ret;
-   174		int i;
-   175	
-   176		for (i = 0; i < pd_count; i++) {
-   177			dev_pm_genpd_set_performance_state(pds[i], INT_MAX);
- > 178			ret = pm_runtime_resume_and_get(pds[i])
-   179			if (ret < 0) {
-   180				dev_pm_genpd_set_performance_state(pds[i], 0);
-   181				goto unroll_pd_votes;
-   182			}
-   183		}
-   184	
-   185		return 0;
-   186	
-   187	unroll_pd_votes:
-   188		for (i--; i >= 0; i--) {
-   189			dev_pm_genpd_set_performance_state(pds[i], 0);
-   190			pm_runtime_put(pds[i]);
-   191		}
-   192	
-   193		return ret;
-   194	}
-   195	
+I don't want to deal with the regular breakages or hacks to
+boot/compressed/ just because little duplication. We copy the header
+once and that's it - it doesn't even have to get updated like perf tool
+does from time to time.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

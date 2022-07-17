@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67675776BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 16:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044A55776C5
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 16:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233088AbiGQOoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 10:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
+        id S232823AbiGQOpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 10:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbiGQOnt (ORCPT
+        with ESMTP id S233311AbiGQOop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 10:43:49 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3F32DEF;
-        Sun, 17 Jul 2022 07:43:44 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id f2so13515378wrr.6;
-        Sun, 17 Jul 2022 07:43:44 -0700 (PDT)
+        Sun, 17 Jul 2022 10:44:45 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FF8FD17
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 07:44:42 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id j22so17110840ejs.2
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 07:44:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LM0lgQs2BA1X3p/kw499UJ/iLAvQnGCmtoBS9FDHPxY=;
-        b=cFM43fkyj8iTvUYNU8VmF4oJsJWrobp09MEUk5vA8lZI/hzJP0m5zcufHDk2MbRt4z
-         b/M84mcuJc27iitT4XDubfvPSApPZ8dm7Fn7h9LufZZDJcR+aAZ8AXENyqpZ5hb79QAL
-         5fZ6OGXBgTBdqowdrFvRJRXo6QDrfS8VAbFzyzxbI7+u2h2eicPoXTb/ViWEM6KACUho
-         tyqbI7acXfpihqgODtoT5zipuGCrZzhESRRpM8SyTi8+4C375BGqzIykLHK0c5qHmGH+
-         yeAxQ21Rnusr8K0a5yIEOOogCXw0ORyI1Vgncq+CulYDyslA76awYn/yvXBAYsm6CYWk
-         i62A==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HlrziZZ76Peg4qV5xEsTcKPFlstjpM1SL9BDNiXfu2c=;
+        b=DS8vDfy5PisUHpo8QkxoxfYYXqiO9hj+fmk/WC8pM7VlVfPf4QI7fKq+8iWyFlBosN
+         xOaKReN1tr6gKUlm2poGf/qYOY0t1sShwW+dhRV//mwtfmSuMpaD81F4Kwf9rs0vMp7F
+         xavWty7gfUG6G+PTd+tLOjuyv7MUqoAAUViF4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LM0lgQs2BA1X3p/kw499UJ/iLAvQnGCmtoBS9FDHPxY=;
-        b=62o4Fyjk8Nbkv4wk0li6IWp4IaeL7XcMSxushyguJEFqwkp54k7AoVtySS3sW0mKsX
-         l/khR5A+HA8/bfS+B36n2ByAuqwwmQLTKC47P35VkJ4pbBPbwDY7YH0MiMj6+KC2Oopb
-         TxEdKRwMwF+WwpJu0FHvX9KCSKElGdmfFaEn/+tzxSsI7R2+GrZoqO7WvKHLN9PN6PVY
-         uEwT45yz/bgYdyFBm7MTR/jvvmrapl+8wZOu/yKglJB0habgpNmVN1fgsny5Ubiye33J
-         HJ97ZS/SPWUMrCdTVfk/IFEsyGqr+KJjAGbuLvthFOWKRn7PFYDncc8XcVEbGqQyiJgA
-         TZLg==
-X-Gm-Message-State: AJIora+bMCK0BGntMmMnVC2EVRLCiSOocqwVXFTyPwi8n+Jv+NAxPwRA
-        4d7RjYI8cARGwm0z4fRMT94nBiGh3yBMFw==
-X-Google-Smtp-Source: AGRyM1ty2yw20Y/EIbS0zt0GrcOpmgcAT0co7Lbx8vjUa7EFqWpUV5YQtnnvvDFIHtSGjUG7QY7Ylw==
-X-Received: by 2002:adf:f1d1:0:b0:21d:7f88:d638 with SMTP id z17-20020adff1d1000000b0021d7f88d638mr19545964wro.586.1658069022975;
-        Sun, 17 Jul 2022 07:43:42 -0700 (PDT)
-Received: from localhost.localdomain ([94.73.36.185])
-        by smtp.gmail.com with ESMTPSA id h8-20020adff4c8000000b0021d887f9468sm8432001wrp.25.2022.07.17.07.43.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 07:43:42 -0700 (PDT)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        j.witteveen@gmail.com, stefanberzl@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH v2 7/7] HID: uclogic: Add support for XP-PEN Deco Pro S
-Date:   Sun, 17 Jul 2022 16:43:33 +0200
-Message-Id: <20220717144333.251190-8-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220717144333.251190-1-jose.exposito89@gmail.com>
-References: <20220717144333.251190-1-jose.exposito89@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HlrziZZ76Peg4qV5xEsTcKPFlstjpM1SL9BDNiXfu2c=;
+        b=u8e8IByuGQ5KsGpAxI4tRi7hiAHDF8n4cqcPAglau1iTBtOQSY8UZDM4aKI0IlD0kN
+         nlqpF/T8RftFr+HoocJ54zBkZ/AfkHF1Gz1FNwaBn0v0aJFhfZnCJDjamPBQZgvl5Fxb
+         Spt/FM5S3CK7aPQA/xvYNMoh0HLEG9BZDJEwK2xnZc6ZstcMZdhdYnSJFo6djc7wzXhK
+         5WQWbkx7hUVaofJmC77o2S5yuEn/ybS1NyFINIDbpyNSvxgdGrJfojo8c1xh6H04X80y
+         c0+KXCUIHQY3rTJ/tE4YmpFRFWkQlMYTsi4KDh06NIMolV/UJRJM+yMPIZ/0NarsrVTQ
+         YsaQ==
+X-Gm-Message-State: AJIora8LOpBtSYL/mA2Fn6XvPKtaGWqHj1DuLyidGyXyuOEexs+2RsSL
+        Bp7kgUX2e7L3cR3oNwet31GLDpXhfcxS92GY
+X-Google-Smtp-Source: AGRyM1uLTNXaC/VB2Mah7h34XLkkxNjD7i5/VWQ4iQre1smzDT9M+ihN2ocycP8vK0q+6V//8NBH/A==
+X-Received: by 2002:a17:906:6a21:b0:72f:2174:16e6 with SMTP id qw33-20020a1709066a2100b0072f217416e6mr3819294ejc.177.1658069081073;
+        Sun, 17 Jul 2022 07:44:41 -0700 (PDT)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
+        by smtp.gmail.com with ESMTPSA id ey9-20020a1709070b8900b0072ed72072aesm4375420ejc.192.2022.07.17.07.44.39
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Jul 2022 07:44:40 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id e15so8286482wro.5
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 07:44:39 -0700 (PDT)
+X-Received: by 2002:a05:6000:1f8c:b0:21d:7e98:51ba with SMTP id
+ bw12-20020a0560001f8c00b0021d7e9851bamr18844596wrb.442.1658069078907; Sun, 17
+ Jul 2022 07:44:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <Ys/aDKZNhhsENH9S@debian> <CADVatmO9XzFnX+N0TuOtr0FYyxKr1oe5RAhCEJjmnvjteT5QNw@mail.gmail.com>
+In-Reply-To: <CADVatmO9XzFnX+N0TuOtr0FYyxKr1oe5RAhCEJjmnvjteT5QNw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 17 Jul 2022 07:44:22 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whc3Uvhrmrr27xp5=oOhSDjXc5s1ZxC3B7xMYV6oj4WRQ@mail.gmail.com>
+Message-ID: <CAHk-=whc3Uvhrmrr27xp5=oOhSDjXc5s1ZxC3B7xMYV6oj4WRQ@mail.gmail.com>
+Subject: Re: mainline build failure of powerpc allmodconfig for prom_init_check
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Kees Cook <keescook@chromium.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,63 +78,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The XP-PEN Deco Pro S is a UGEE v2 device with a frame with 8 buttons,
-a bitmap dial and a mouse. Its pen has 2 buttons, supports tilt and
-pressure.
+On Sun, Jul 17, 2022 at 2:13 AM Sudip Mukherjee
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> I was trying to check it. With gcc-11 the assembly code generated is
+> not using memset, but using __memset.
+> But with gcc-12, I can see the assembly code is using memset. One
+> example from the assembly:
 
-All the pieces to support it are already in place. Add its ID in order
-to support the device.
+You could try making the 'args' array in 'struct prom_args' be marked
+'volatile'.
 
-The required Wireshark traces were captured by Jouke Witteveen.
-For more information check [1].
+Ie something like this:
 
-Link: https://gitlab.freedesktop.org/libinput/libinput/-/issues/738  [1]
-Tested-by: Jouke Witteveen <j.witteveen@gmail.com>
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/hid/hid-ids.h            | 1 +
- drivers/hid/hid-uclogic-core.c   | 2 ++
- drivers/hid/hid-uclogic-params.c | 2 ++
- 3 files changed, 5 insertions(+)
+  --- a/arch/powerpc/kernel/prom_init.c
+  +++ b/arch/powerpc/kernel/prom_init.c
+  @@ -115,6 +115,6 @@ struct prom_args {
+           __be32 service;
+           __be32 nargs;
+           __be32 nret;
+  -          __be32 args[10];
+  +        volatile __be32 args[10];
+   };
 
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 139910034c17..ee6d27a5dd1c 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -1279,6 +1279,7 @@
- #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_G640	0x0094
- #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO01	0x0042
- #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_L	0x0935
-+#define USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_PRO_S	0x0909
- #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_STAR06	0x0078
- #define USB_DEVICE_ID_UGEE_TABLET_G5		0x0074
- #define USB_DEVICE_ID_UGEE_TABLET_EX07S		0x0071
-diff --git a/drivers/hid/hid-uclogic-core.c b/drivers/hid/hid-uclogic-core.c
-index 47a17375c7fc..6fcdb141acec 100644
---- a/drivers/hid/hid-uclogic-core.c
-+++ b/drivers/hid/hid-uclogic-core.c
-@@ -523,6 +523,8 @@ static const struct hid_device_id uclogic_devices[] = {
- 				USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO01) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_UGEE,
- 				USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_L) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_UGEE,
-+				USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_PRO_S) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_UGEE,
- 				USB_DEVICE_ID_UGEE_XPPEN_TABLET_STAR06) },
- 	{ }
-diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-index f25c483b794b..2407e927d1bf 100644
---- a/drivers/hid/hid-uclogic-params.c
-+++ b/drivers/hid/hid-uclogic-params.c
-@@ -1583,6 +1583,8 @@ int uclogic_params_init(struct uclogic_params *params,
- 		break;
- 	case VID_PID(USB_VENDOR_ID_UGEE,
- 		     USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_L):
-+	case VID_PID(USB_VENDOR_ID_UGEE,
-+		     USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO_PRO_S):
- 		rc = uclogic_params_ugee_v2_init(&p, hdev);
- 		if (rc != 0)
- 			goto cleanup;
--- 
-2.25.1
+because I think it's just the compilers turning the small loop over
+those fields into a "memset()".
 
+              Linus

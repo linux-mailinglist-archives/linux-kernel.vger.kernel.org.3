@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB3A577500
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 09:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9807577504
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 09:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbiGQHil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 03:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
+        id S232882AbiGQHzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 03:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGQHii (ORCPT
+        with ESMTP id S229476AbiGQHzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 03:38:38 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB76B1A3BC
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 00:38:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 825B9344CB;
-        Sun, 17 Jul 2022 07:38:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658043516; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Ubmf2jdfrEylZ3YufCEISDKiKXE1AV4P4/DNT/E+kEc=;
-        b=TFr066nnnMV59g1G4HYCF0LSySIugE6E4WtkCU8oZAI8poo00qxgYUcCqIGe0YPfUVvO4T
-        XhgU7U0NH1qQmM/KPyz9GuTUl9AFq0Wa9OK15od+48fjgmTasN4P/R9+H1+E7y9jAbrf6U
-        QV/PmD9YbEAx6q0is8XoOhO624qbihQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658043516;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Ubmf2jdfrEylZ3YufCEISDKiKXE1AV4P4/DNT/E+kEc=;
-        b=FH8GTBDT+Mw+cJ9qKGCrRTjCcABImXczsQddz0OnR0tqhPV8MxVpQFtDHesZGcE9eQkgxB
-        HWlEChbpVWayvSDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7520E13A89;
-        Sun, 17 Jul 2022 07:38:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Mld4HHy802LPcwAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 17 Jul 2022 07:38:36 +0000
-Date:   Sun, 17 Jul 2022 09:38:35 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] perf/urgent for 5.19-rc7
-Message-ID: <YtO8e45NSh13PVRl@zn.tnic>
+        Sun, 17 Jul 2022 03:55:09 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9377115834;
+        Sun, 17 Jul 2022 00:55:08 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oCz7G-0003PZ-5e; Sun, 17 Jul 2022 09:55:02 +0200
+Message-ID: <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+Date:   Sun, 17 Jul 2022 09:55:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+Content-Language: en-US
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     brchuckz@netscape.net, jbeulich@suse.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "# 5 . 17" <stable@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+References: <20220715142549.25223-1-jgross@suse.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20220715142549.25223-1-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1658044508;3110b8b4;
+X-HE-SMSGID: 1oCz7G-0003PZ-5e
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Juergen!
 
-please pull a single urgent perf fix for 5.19-rc7.
+On 15.07.22 16:25, Juergen Gross wrote:
+> Today PAT can't be used without MTRR being available, unless MTRR is at
+> least configured via CONFIG_MTRR and the system is running as Xen PV
+> guest. In this case PAT is automatically available via the hypervisor,
+> but the PAT MSR can't be modified by the kernel and MTRR is disabled.
+> 
+> As an additional complexity the availability of PAT can't be queried
+> via pat_enabled() in the Xen PV case, as the lack of MTRR will set PAT
+> to be disabled. This leads to some drivers believing that not all cache
+> modes are available, resulting in failures or degraded functionality.
+> 
+> The same applies to a kernel built with no MTRR support: it won't
+> allow to use the PAT MSR, even if there is no technical reason for
+> that, other than setting up PAT on all cpus the same way (which is a
+> requirement of the processor's cache management) is relying on some
+> MTRR specific code.
+> 
+> Fix all of that by:
+> 
+> - moving the function needed by PAT from MTRR specific code one level
+>   up
+> - adding a PAT indirection layer supporting the 3 cases "no or disabled
+>   PAT", "PAT under kernel control", and "PAT under Xen control"
+> - removing the dependency of PAT on MTRR
 
-Thx.
+Thx for working on this. If you need to respin these patches for one
+reason or another, could you do me a favor and add proper 'Link:' tags
+pointing to all reports about this issue? e.g. like this:
 
----
+ Link: https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
 
-The following changes since commit 88084a3df1672e131ddc1b4e39eeacfd39864acf:
+These tags are considered important by Linus[1] and others, as they
+allow anyone to look into the backstory weeks or years from now. That is
+why they should be placed in cases like this, as
+Documentation/process/submitting-patches.rst and
+Documentation/process/5.Posting.rst explain in more detail. I care
+personally, because these tags make my regression tracking efforts a
+whole lot easier, as they allow my tracking bot 'regzbot' to
+automatically connect reports with patches posted or committed to fix
+tracked regressions.
 
-  Linux 5.19-rc5 (2022-07-03 15:39:28 -0700)
+[1] see for example:
+https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
+https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
+https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/
 
-are available in the Git repository at:
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_urgent_for_v5.19_rc7
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
 
-for you to fetch changes up to 68e3c69803dada336893640110cb87221bb01dcf:
+BTW, let me tell regzbot to monitor this thread:
 
-  perf/core: Fix data race between perf_event_set_output() and perf_mmap_close() (2022-07-13 11:29:12 +0200)
-
-----------------------------------------------------------------
-- A single data race fix on the perf event cleanup path to avoid endless
-loops due to insufficient locking
-
-----------------------------------------------------------------
-Peter Zijlstra (1):
-      perf/core: Fix data race between perf_event_set_output() and perf_mmap_close()
-
- kernel/events/core.c | 45 +++++++++++++++++++++++++++++++--------------
- 1 file changed, 31 insertions(+), 14 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
+#regzbot ^backmonitor:
+https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/

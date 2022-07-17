@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A4057760B
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 14:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1B657760D
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 14:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbiGQMCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 08:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
+        id S232010AbiGQMHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 08:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbiGQMCo (ORCPT
+        with ESMTP id S229567AbiGQMHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 08:02:44 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92937140F1;
-        Sun, 17 Jul 2022 05:02:43 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id l2so6981994qvt.2;
-        Sun, 17 Jul 2022 05:02:43 -0700 (PDT)
+        Sun, 17 Jul 2022 08:07:49 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128D915813;
+        Sun, 17 Jul 2022 05:07:45 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id l22-20020a05600c4f1600b003a2e10c8cdeso6337761wmq.1;
+        Sun, 17 Jul 2022 05:07:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rHjViDcG19nS2v6Pk4XSV3A4LQsUZw5sRXj1ES5xELM=;
-        b=RBYkPgOReA/ncSIusSlg/GESvpRLCL+a90i48n8n902vK3lQWCKmsSC6OfKAb55j8A
-         D1a1MGhcpZoTCPyX7dn9gjGsKmKfgzKL2pgD5Yx0Hk1gQ5G/kTOcG1Oe9ZiY1P7xW4bd
-         rwiTLGzIzZ1ML6hkBRx+vToHtS2KHxFh2FtfjSWFbsrRwXMvqf0B+o2Z2iRwLi3Glynz
-         3ueSMPW06llj8Nvk9Ms3scQGFuCUBupvaQwDuvlKw8+6gf38/32ob9v3+a+5/Ex1u0c2
-         tMXoh0FPMJ0tH7lgHZXC5CXkJo9goiRbkkgABbeJpIkvWX7B1ufAI1i7CthYEXvO4efx
-         ULRA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eyGGShEtJ5QngHNH1K1pLBz5li6ed+QkJBaQv+XwZiI=;
+        b=PWIdhjoscQZbm5ADgJnYohKqIsKWLtf9ju97xPrnOXe+r+K6GZUSF3tfsj/aCbTqrb
+         F/LbLCCQTTCfifo/RD8KSt2dPqPFzcpyMPeS8ctW8SHsQQKsrU8IErMhKKxRMWgj/359
+         e6DjlWf1J82stxHU+kwgV7Exl/oOfeJL9vg9dWjL1t4qiC8HnmwcovSlVCPDyrGRNwzq
+         OmznekccZqI7RrC5O/7ENb1H7RL4UyL2nS1Uqp4vcw38H7liMHVo8J0XFo804hctVutq
+         hfesxY3bwOgYGyFEVNY02dN+nH0wrGJidrxkOkAQxUmq/Ixf2Mypvhz+iTPPLHGwc2v7
+         WQtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rHjViDcG19nS2v6Pk4XSV3A4LQsUZw5sRXj1ES5xELM=;
-        b=1tnMu0fprjf9IDnLw9ePpUAqj7T1QXBPhJFhLvGfskw4Y2gUgGG9ClUpNqnXyLL0II
-         XKalvjeIsdfE1uTf/mAOrjqpT/8nQSHo7siQP/5IAIrLWbqv2eJ/3bMhmhq5SuzcRxdj
-         hRpC9sJ/gNT01jHb5klwasrSJs+/EG4t7MmnE7aQ1aBD+lwtxYFIZemogQWOo+RQ7J2g
-         w0BwDlpqUXoGhGkK2+9hx8lqdAclgUH7YADRazJSLLzRU6KZtdyKB0cIYp1S/vQEPzO9
-         aQqnbBQeVB4WMHoJtxV01/nxyUC5dHcvtyVF57xy1noqmZ+9CBnNQ2bjFNm+6sFmDkGO
-         aAfw==
-X-Gm-Message-State: AJIora9PEwfdurZiFNXSOXNEPRhHyNLY+NtDggjONrzamUdVmNYjpJTr
-        tc9syC3n4r+tZNlTwaVZVJH1Zmrq4VmNtUbe7im9rYxOX0c=
-X-Google-Smtp-Source: AGRyM1sXxE4UwrVwgtOVJD5djOBq9v3b8Ndl5YS71faupar7eTOdYwgrkBIRmcjomOfrqst66O1q/hxyLojPIyTNWgk=
-X-Received: by 2002:a0c:eb4a:0:b0:472:f936:3ea0 with SMTP id
- c10-20020a0ceb4a000000b00472f9363ea0mr18456835qvq.43.1658059362518; Sun, 17
- Jul 2022 05:02:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eyGGShEtJ5QngHNH1K1pLBz5li6ed+QkJBaQv+XwZiI=;
+        b=xKgCWtuHZB7JcFRJ2amlYTtoMQQMFz3PW2CEQhu49FAj80b3T1dMZBwkdFIU1C49Bf
+         44Sdjb0H2vE+GgD7UpEP+K3cw5L2tc0osCe2TNPIKeBnkBQ2kioh3wtqT/omXjkCy1mV
+         /+CBnbRQhtBdFuQelBXgmQLIbnPWVwCFd3Si0rLkk4+HtVn+LUu/LGlwuAY6gEhml7Xt
+         U90HwGvrBuRJW7WdsWrirWDW0QDt/v6K96SFoIGGqK+F82fe5pnaQIKwyJd1GEaRaW3s
+         e1oFuK9KVYuKNSlGUQRKqJTPf2/iilaxfsdeUR5d3kIWv/yADO9Wle6fdbW3+qT8C2dL
+         XG5w==
+X-Gm-Message-State: AJIora9P/rW7gi/O14KuEJWSzb5RNG/j79kY8ZN0LrsHq2WTfxouZwMV
+        b/rPO8ACMNf/Z5s9J15O5z4=
+X-Google-Smtp-Source: AGRyM1tO7vuOsF+0/JqzXCNNfyASqaxGNaareyrNlCthAXRzf8BXtQqQNdPj+tFxw9k15VtGTCoZaw==
+X-Received: by 2002:a7b:c381:0:b0:3a2:fe96:2ce4 with SMTP id s1-20020a7bc381000000b003a2fe962ce4mr19633955wmj.70.1658059663508;
+        Sun, 17 Jul 2022 05:07:43 -0700 (PDT)
+Received: from xws.localdomain (pd9ea330d.dip0.t-ipconnect.de. [217.234.51.13])
+        by smtp.gmail.com with ESMTPSA id f7-20020a05600c154700b003a2fcc32031sm16584324wmg.3.2022.07.17.05.07.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jul 2022 05:07:43 -0700 (PDT)
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] platform/surface: tabletsw: Fix __le32 integer access
+Date:   Sun, 17 Jul 2022 14:07:35 +0200
+Message-Id: <20220717120735.2052160-1-luzmaximilian@gmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-References: <20220707173733.404947-1-robimarko@gmail.com> <20220707173733.404947-4-robimarko@gmail.com>
- <165798474063.1679948.3824406237045424067.b4-ty@linaro.org>
-In-Reply-To: <165798474063.1679948.3824406237045424067.b4-ty@linaro.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Sun, 17 Jul 2022 14:02:29 +0200
-Message-ID: <CAOX2RU7myXLcJ4S3p=kyeugczTEikoTjpyLDaZ45=btR-M95pQ@mail.gmail.com>
-Subject: Re: (subset) [PATCH v6 4/4] arm64: dts: ipq8074: add APCS node
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,36 +70,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 16 Jul 2022 at 17:19, Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> On Thu, 7 Jul 2022 19:37:33 +0200, Robert Marko wrote:
-> > APCS now has support for providing the APSS clocks as the child device
-> > for IPQ8074.
-> >
-> > So, add the required DT node for it as it will later be used as the CPU
-> > clocksource.
-> >
-> >
-> > [...]
->
-> Applied, thanks!
->
-> [4/4] arm64: dts: ipq8074: add APCS node
->       commit: 50ed9fffec3aed88bc1ffed277d291f81153bd5d
+The sources.count field is a __le32 inside a packed struct. So use the
+proper functions to access it.
 
-Bjorn,
-can you please apply the v8 series instead which superseded the v6
-series, DTS is different
-as it relies on PLL being separate and is much simpler.
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 9f794056db5b ("platform/surface: Add KIP/POS tablet-mode switch driver")
+Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+---
+ drivers/platform/surface/surface_aggregator_tabletsw.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v6 is superseded and should be ignored.
+diff --git a/drivers/platform/surface/surface_aggregator_tabletsw.c b/drivers/platform/surface/surface_aggregator_tabletsw.c
+index 596ca6c80681..27d95a6a7851 100644
+--- a/drivers/platform/surface/surface_aggregator_tabletsw.c
++++ b/drivers/platform/surface/surface_aggregator_tabletsw.c
+@@ -410,7 +410,7 @@ static int ssam_pos_get_source(struct ssam_tablet_sw *sw, u32 *source_id)
+ 	if (status)
+ 		return status;
+ 
+-	if (sources.count == 0) {
++	if (get_unaligned_le32(&sources.count) == 0) {
+ 		dev_err(&sw->sdev->dev, "no posture sources found\n");
+ 		return -ENODEV;
+ 	}
+@@ -422,7 +422,7 @@ static int ssam_pos_get_source(struct ssam_tablet_sw *sw, u32 *source_id)
+ 	 * is a device that provides multiple sources, at which point we can
+ 	 * then try to figure out how to handle them.
+ 	 */
+-	WARN_ON(sources.count > 1);
++	WARN_ON(get_unaligned_le32(&sources.count) > 1);
+ 
+ 	*source_id = get_unaligned_le32(&sources.id[0]);
+ 	return 0;
+-- 
+2.37.0
 
-https://patchwork.kernel.org/project/linux-arm-msm/patch/20220712100733.34261-4-robimarko@gmail.com/
-
-Regards,
-Robert
->
-> Best regards,
-> --
-> Bjorn Andersson <bjorn.andersson@linaro.org>

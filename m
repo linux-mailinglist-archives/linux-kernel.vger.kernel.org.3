@@ -2,119 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C995772A7
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 03:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54167577308
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 03:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbiGQBGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 21:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
+        id S232578AbiGQB1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 21:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbiGQBGX (ORCPT
+        with ESMTP id S230282AbiGQB1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 21:06:23 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A5E711801
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 18:06:21 -0700 (PDT)
-Received: from [10.20.42.19] (unknown [10.20.42.19])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9GFYNNiHRYkAA--.6968S3;
-        Sun, 17 Jul 2022 09:06:13 +0800 (CST)
-Subject: Re: [PATCH V15 00/15] irqchip: Add LoongArch-related irqchip drivers
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
- <87less52bx.wl-maz@kernel.org>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <6e9def1e-31fe-787d-1b2b-a328424352f0@loongson.cn>
-Date:   Sun, 17 Jul 2022 09:06:12 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sat, 16 Jul 2022 21:27:15 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB9718355;
+        Sat, 16 Jul 2022 18:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=qd9d0TWrYfbH/1upWcwyDbOCOCV8wK8IsG0AeW32CH0=; b=nH90wlz8CH75ouGFLhmOgVtAx8
+        yM/jx0Pc5149RDkbarhuy+WaV9m8tgb9ULd/wW8Y+IV2cTCvduXrvV1Yyvsdxb+T6h+bpiVak1cCx
+        3WGJOH5gCDQLc14d3+0XLkExJh1fqPXDVWeg8uiS/qi3V2f7fiISq8JpJQ8eIlziLoG0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oCt3c-00Aaif-8B; Sun, 17 Jul 2022 03:26:52 +0200
+Date:   Sun, 17 Jul 2022 03:26:52 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org,
+        Alexandru Marginean <alexandru.marginean@nxp.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: Re: [PATCH net-next v3 08/47] net: phylink: Support differing link
+ speeds and interface speeds
+Message-ID: <YtNlXA4lBeG+gRXH@lunn.ch>
+References: <20220715215954.1449214-1-sean.anderson@seco.com>
+ <20220715215954.1449214-9-sean.anderson@seco.com>
+ <YtMaKWZyC/lgAQ0i@lunn.ch>
+ <984fec49-4c08-9d5a-d62f-c59f106f8fe5@seco.com>
 MIME-Version: 1.0
-In-Reply-To: <87less52bx.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxn9GFYNNiHRYkAA--.6968S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr15XrWxtrWfCF1xKFyrCrg_yoW5JFWUpF
-        W7WFW2ka1UArWUAw1kJ3yFqa4Sv3s3Kr97Jan3uw4UCrnxuw1DX347tFs3uFy7Cr4DK3W0
-        9ayrtws5Wa1DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvE1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2
-        jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_
-        JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
-        ACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl
-        42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW8JVW3JwCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjfUF9a9DUUUU
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <984fec49-4c08-9d5a-d62f-c59f106f8fe5@seco.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/7/17 上午2:39, Marc Zyngier wrote:
-> On Fri, 15 Jul 2022 08:05:36 +0100,
-> Jianmin Lv <lvjianmin@loongson.cn> wrote:
->>
->> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
->> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
->> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
->> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
->> are already added in the ACPI Specification 6.5(which may be published in
->> early June this year and the board is reviewing the draft).
->>
->> Currently, LoongArch based processors (e.g. Loongson-3A5000) can only
->> work together with LS7A chipsets. The irq chips in LoongArch computers
->> include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
->> Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller),
->> HTVECINTC (Hyper-Transport Vector Interrupt Controller), PCH-PIC (Main
->> Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
->> in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
+> > This seem error prone when new PHY_INTERFACE_MODES are added. I would
+> > prefer a WARN_ON_ONCE() in the default: so we get to know about such
+> > problems.
 > 
-> [...]
-> 
-> Compiling this series for loongarch with loongson3_defconfig on top of
-> 5.19-rc3 results in the following:
-> 
-> loongarch64-linux-ld: drivers/irqchip/irq-loongson-eiointc.o: in function `.L60':
-> irq-loongson-eiointc.c:(.init.text+0x4c): undefined reference to `pch_msi_acpi_init'
-> loongarch64-linux-ld: drivers/irqchip/irq-loongson-htvec.o: in function `pch_msi_parse_madt':
-> irq-loongson-htvec.c:(.init.text+0x14): undefined reference to `pch_msi_acpi_init'
-> make: *** [Makefile:1164: vmlinux] Error 1
-> 
-> I *really* would have expected this series to be in a better shape
-> after over 15 rounds, but it looks like I'm expecting too much. I
-> haven't investigated the breakage, but this should (at the very least)
-> pass the defconfig test and optional drivers not being selected.
-> 
-> The corresponding MIPS configuration seems to build fine.
-> 
-> 	M.
-> 
+> Actually, this is the reason I did not add a default: clause to the
+> switch (and instead listed everything out). If a new interface mode is
+> added, there will be a warning (as I discovered when preparing this
+> patch).
 
-Hi, Marc
+Ah, the compiler produces a warning. O.K. that is good. Better than an
+WARN_ON_ONCE at runtime.
 
-Sorry for that first, pch_msi_acpi_init is defined in pch_msi driver 
-which is compiled depend on CONFIG_PCI, and I test the patches each time 
-with PCI patches and other(or else, kernel can not be boot), so I'm ok 
-for testing the patches. The PCI patches has been accepted by PCI 
-maintainers and will be merged in this merge window.
+> > Bike shedding a bit, but would it be better to use host_side_speed and
+> > line_side_speed? When you say link_speed, which link are your
+> > referring to? Since we are talking about the different sides of the
+> > PHY doing different speeds, the naming does need to be clear.
+> When I say "link" I mean the thing that the PMD speaks. That is, one of
+> the ethtool link mode bits. I am thinking of a topology like
+> 
+> 
+> MAC (+PCS) <-- phy interface mode (MII) --> phy <-- link mode --> far-end phy
+> 
+> The way it has been done up to now, the phy interface mode and the link
+> mode have the same speed. For some MIIs, (such as MII or GMII) this is
+> actually the case, since the data clock changes depending on the data
+> speed. For others (SGMII/USXGMII) the data is repeated, but the clock
+> rate stays the same. In particular, the MAC doesn't care what the actual
+> link speed is, just what configuration it has to use (so it selects the
+> right clock etc).
+> 
+> The exception to the above is when you have no phy (such as for
+> 1000BASE-X):
+> 
+> MAC (+PCS) <-- MDI --> PMD <-- link mode --> far-end PMD
+> 
+> All of the phy interface modes which can be used this way are
+> "non-adaptive." That is, in the above case they have a fixed speed.
+> 
+> That said, I would like to keep the "phy interface mode speed" named
+> "speed" so I don't have to write up a semantic patch to rename it in all
+> the drivers.
 
-I don't know how to deal with this situation. Should I add *#ifdef 
-CONFIG_PCI* at position of calling pch_msi_acpi_init or some other way?
+So you want phydev->speed to be the host side speed. That leaves the
+line side speed as a new variable, so it can be called line_side_speed?
 
-Thanks sincerely.
+I just find link_speed ambiguous, and line_side_speed less so.
 
+The documentation for phydev->speed needs updating to make it clear it
+is the host side speed.
+
+   Andrew

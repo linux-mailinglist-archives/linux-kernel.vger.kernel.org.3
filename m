@@ -2,100 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBC75774FA
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 09:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB3A577500
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 09:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbiGQHgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 03:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S232865AbiGQHil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 03:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGQHgK (ORCPT
+        with ESMTP id S229476AbiGQHii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 03:36:10 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E065E1A39E
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 00:36:07 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id d16so12672694wrv.10
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 00:36:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7w9i54EGf9yZrZAfY6N7mI7xz0lXHUja3CmKUzTVCns=;
-        b=VhunYHCAjPP2T+WTf1ZP44QgKs4Zf60fq5Kr4dY1/6NRwJEuV7fVU1o39vmfbIsErz
-         NyKDs6qFdEpp2tY504xEi43zIcEi8K+0r8OjP/xTEhPr4d+n6Nl7PfGKw092uCUr9pAH
-         IeRZWeVCxBGXn3RYz9gNwdVTa/hYsmZQgiIB+mXTeRQ0nLmRXmzNjUq8KgI5HYNSQEC3
-         XfygVJ4U/zb8BlVJEEIeM+5/rhnM6gBl4ppPNLIuh8UQbQ8tT2Lwk+cQxxoEHfGw2RV/
-         xeyudrp1uixo0vQkzitKKY4FRDB46/djmWaGHv+MwB29DA0QKux8TcXL7mWLJM14P4Dx
-         mGMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7w9i54EGf9yZrZAfY6N7mI7xz0lXHUja3CmKUzTVCns=;
-        b=iT2ngMDk/ZdnkD8eOKXf2P0fjSD9HrBnEVnOkSn9jL5r6kqhrCiDet553BemjUoiKn
-         wOEDJC7SrReCbRYz4WBx9M7YjMmDZG/RKqyiiAVoqOFP4oWADrl9EE/tliYB5yVnmfrM
-         ypOTaOM2F92xU3qy5pKwlQUmZnY30OKCcOShaxFFOA+zSZLUwJLzrAGeH4q4amIKfVNV
-         fKHYH1sj6TKaEyf4TlKFIMxleTW3vifKqYa4mjtQj+3sMdKBDEnTo7/fKPrqQk4Kzypk
-         u0l5QlPICUU7ZQm7yrAgFuKXFokXkotDWUkFesbRScABRUyGKexsGuyR+lEd+8Kh3ZjS
-         aVRA==
-X-Gm-Message-State: AJIora+tc4KyaeucxR25vJwmiTORGVXLLlgOz6FjhEeJ3lm9rseU21Gz
-        E50tQoJvYJtEKrLMUf2Zo6xC5w==
-X-Google-Smtp-Source: AGRyM1sX6tuRJLMH9vemB/T67Mb7se6fqe4Qy4Xq4gSW4x6bij0QVnr4gIHOAs09sq+PKtv5QGLstA==
-X-Received: by 2002:adf:ea50:0:b0:21d:6547:1154 with SMTP id j16-20020adfea50000000b0021d65471154mr17676760wrn.186.1658043366393;
-        Sun, 17 Jul 2022 00:36:06 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:6051:99a2:ab7f:63ce])
-        by smtp.gmail.com with ESMTPSA id i16-20020a5d5230000000b0021d9d13bf6csm7653757wra.97.2022.07.17.00.36.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 00:36:06 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
+        Sun, 17 Jul 2022 03:38:38 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB76B1A3BC
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 00:38:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 825B9344CB;
+        Sun, 17 Jul 2022 07:38:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658043516; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Ubmf2jdfrEylZ3YufCEISDKiKXE1AV4P4/DNT/E+kEc=;
+        b=TFr066nnnMV59g1G4HYCF0LSySIugE6E4WtkCU8oZAI8poo00qxgYUcCqIGe0YPfUVvO4T
+        XhgU7U0NH1qQmM/KPyz9GuTUl9AFq0Wa9OK15od+48fjgmTasN4P/R9+H1+E7y9jAbrf6U
+        QV/PmD9YbEAx6q0is8XoOhO624qbihQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658043516;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Ubmf2jdfrEylZ3YufCEISDKiKXE1AV4P4/DNT/E+kEc=;
+        b=FH8GTBDT+Mw+cJ9qKGCrRTjCcABImXczsQddz0OnR0tqhPV8MxVpQFtDHesZGcE9eQkgxB
+        HWlEChbpVWayvSDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7520E13A89;
+        Sun, 17 Jul 2022 07:38:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Mld4HHy802LPcwAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 17 Jul 2022 07:38:36 +0000
+Date:   Sun, 17 Jul 2022 09:38:35 +0200
+From:   Borislav Petkov <bp@suse.de>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [GIT PULL] gpio: fixes for v5.19-rc7
-Date:   Sun, 17 Jul 2022 09:36:02 +0200
-Message-Id: <20220717073602.4801-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.34.1
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] perf/urgent for 5.19-rc7
+Message-ID: <YtO8e45NSh13PVRl@zn.tnic>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Hi Linus,
 
-Please pull the following fix for the gpio simulator for the next rc.
+please pull a single urgent perf fix for 5.19-rc7.
 
-Thanks!
-Bartosz Golaszewski
+Thx.
 
-The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
+---
 
-  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
+The following changes since commit 88084a3df1672e131ddc1b4e39eeacfd39864acf:
+
+  Linux 5.19-rc5 (2022-07-03 15:39:28 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.19-rc7
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_urgent_for_v5.19_rc7
 
-for you to fetch changes up to 7329b071729645e243b6207e76bca2f4951c991b:
+for you to fetch changes up to 68e3c69803dada336893640110cb87221bb01dcf:
 
-  gpio: sim: fix the chip_name configfs item (2022-07-12 13:41:25 +0200)
-
-----------------------------------------------------------------
-gpio fixes for v5.19-rc7
-
-- fix a configfs attribute of the gpio-sim module
+  perf/core: Fix data race between perf_event_set_output() and perf_mmap_close() (2022-07-13 11:29:12 +0200)
 
 ----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      gpio: sim: fix the chip_name configfs item
+- A single data race fix on the perf event cleanup path to avoid endless
+loops due to insufficient locking
 
- drivers/gpio/gpio-sim.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+----------------------------------------------------------------
+Peter Zijlstra (1):
+      perf/core: Fix data race between perf_event_set_output() and perf_mmap_close()
+
+ kernel/events/core.c | 45 +++++++++++++++++++++++++++++++--------------
+ 1 file changed, 31 insertions(+), 14 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

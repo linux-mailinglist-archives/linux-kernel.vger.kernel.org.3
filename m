@@ -2,114 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24D65778B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 01:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B655778BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 01:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232819AbiGQXCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 19:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
+        id S232835AbiGQXEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 19:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGQXCn (ORCPT
+        with ESMTP id S232300AbiGQXEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 19:02:43 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9260312618;
-        Sun, 17 Jul 2022 16:02:42 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id p9so10196109pjd.3;
-        Sun, 17 Jul 2022 16:02:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9duI1rSpswAXnRq3urEW1hM9QxHEE1skc8fMorpNRtM=;
-        b=Bx419kWJ5uk7pbzZCokXEhQ7DRPh7mtVCaztg7LXosqvEYYqxHD/NfuIYwQfJpz/4i
-         lqPECExSYKWZ9/9zx0mxoHwPZv2d4MtmTZTJEd42aqZQ0fkkWHVogmEXWAjN2sqIvGUk
-         A8b9mCQcU5RUfk+Ln51//K+Sz2mthahh1rAdzDKJVrwYnKGqoNgHuDVmPP/yb50zYnm0
-         GvNLc7XqQkhi0xZaS0+OWmAb6NPRasw5DSnyUcVsYFiv3RQ/qklRt5gDTPIDM0dkPa7h
-         kMHKBIC0F+AozCbKsaGvdsOGOjbbnfqskEYMG1qjgoExvS/sES1Vu+qEajndEYcOq4Ox
-         UXRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9duI1rSpswAXnRq3urEW1hM9QxHEE1skc8fMorpNRtM=;
-        b=YhUXjkOMGh97xVG5nN+05q310g220CgXvaDMvBNRWDNHK3MOJqoMxV6iRXZNxgkwzH
-         gV+4RsKl6cTAYGe2ngRT5poZjM/fPFw8GjaXKHQOYgU5PRE/wFgVujwG2BuD7A0O3JGY
-         Q6p9okAqUJeP2uq0ZDhUDlXQXCknzmGV0Cts4w5wg2PMDoHMQoXaYx3Xa9zY1CpZQwaf
-         svBgUsQREP0cN+2DCtPIySBYFesYLdhtxYmbD7AAWkRWRfBmjjxz+dPTehCdHaOjwSGG
-         A1cmZpNnbsTggA7suLrBg7GPKJbUJjj7lADihJxyiDjK/Ems0HkOSbkgMEpnMavYbhIU
-         lXeQ==
-X-Gm-Message-State: AJIora9cbfXBhQHl/8nJQFXP+m8dClbnvadbnf9tMVaz7aQjY2lfD9/s
-        kWGqEVXmsq9UsVAfvPI1Pdo=
-X-Google-Smtp-Source: AGRyM1s2OwobGDzORrPZHucygkybI/3hmpBr8Ni1Lah7murhJ3EfiGFcUanLyWGjdHC/P7DK+DlDgA==
-X-Received: by 2002:a17:90b:3502:b0:1f0:986:e36b with SMTP id ls2-20020a17090b350200b001f00986e36bmr35970479pjb.154.1658098962056;
-        Sun, 17 Jul 2022 16:02:42 -0700 (PDT)
-Received: from ?IPV6:2001:df0:0:200c:6c17:ca15:3733:a6a1? ([2001:df0:0:200c:6c17:ca15:3733:a6a1])
-        by smtp.gmail.com with ESMTPSA id b3-20020a170902650300b0016be96e07d1sm7766371plk.121.2022.07.17.16.02.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Jul 2022 16:02:41 -0700 (PDT)
-Message-ID: <77ecffbd-7568-f653-5273-1f3dffb17891@gmail.com>
-Date:   Mon, 18 Jul 2022 11:02:36 +1200
+        Sun, 17 Jul 2022 19:04:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBCB12A8C;
+        Sun, 17 Jul 2022 16:04:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12B9060ECE;
+        Sun, 17 Jul 2022 23:04:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C09EC341C0;
+        Sun, 17 Jul 2022 23:04:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658099043;
+        bh=IPeBIHmETf2O6wdyfCK0PR/zEOWzTcVCzm7iP2DJHDU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RgQq0B6e+i5l9xDOvXFdov0SJX+cZ0qaW54Lug3UowEykKCTpf0es9VM+tS4CCAnF
+         IrDb1y+v1xkrc2+PnqpVOG2BiaTC5AZF6C7HZbin9M/fOttDIW/SKcEJOnearBm0E4
+         W+F5k/2NR24Ac454Qlmzojs0ohoF2FHzIYm3MW0UjKQeQWeEFnMYrvP424BXeJG4Xl
+         omuV/ZWdxgZxNM6fJlvQTom2tmNIuTTLRxhdxw4WTirATWgHQPF52iFOrfh08ddE/O
+         farPpHz/MVdnbi8+mHXmvCCVnNwNE2Tw1fNcwRmD4bXITd8qlkeItkN5g3k35ST3x6
+         viaQ2ogp096vg==
+Date:   Sun, 17 Jul 2022 19:04:02 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Mark Brown <broonie@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, heiko@sntech.de,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 5.15 12/28] ASoC: rockchip: i2s: switch BCLK to
+ GPIO
+Message-ID: <YtSVYq/47XmF6V0b@sashalap>
+References: <20220714042429.281816-1-sashal@kernel.org>
+ <20220714042429.281816-12-sashal@kernel.org>
+ <CAGXv+5Fnj4-bHksi5ymy6LwOrmv_9yQ1aBSOpM4wGbGy2QGZUQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 00/10] video: fbdev: atari: Miscellaneous fixes and
- cleanups
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Helge Deller <deller@gmx.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-fbdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1657554353.git.geert@linux-m68k.org>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-In-Reply-To: <cover.1657554353.git.geert@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAGXv+5Fnj4-bHksi5ymy6LwOrmv_9yQ1aBSOpM4wGbGy2QGZUQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Thu, Jul 14, 2022 at 12:29:27PM +0800, Chen-Yu Tsai wrote:
+>Hi,
+>
+>On Thu, Jul 14, 2022 at 12:25 PM Sasha Levin <sashal@kernel.org> wrote:
+>>
+>> From: Judy Hsiao <judyhsiao@chromium.org>
+>>
+>> [ Upstream commit a5450aba737dae3ee1a64b282e609d8375d6700c ]
+>>
+>> We discoverd that the state of BCLK on, LRCLK off and SD_MODE on
+>> may cause the speaker melting issue. Removing LRCLK while BCLK
+>> is present can cause unexpected output behavior including a large
+>> DC output voltage as described in the Max98357a datasheet.
+>>
+>> In order to:
+>>   1. prevent BCLK from turning on by other component.
+>>   2. keep BCLK and LRCLK being present at the same time
+>>
+>> This patch switches BCLK to GPIO func before LRCLK output, and
+>> configures BCLK func back during LRCLK is output.
+>>
+>> Without this fix, BCLK is turned on 11 ms earlier than LRCK by the
+>> da7219.
+>> With this fix, BCLK is turned on only 0.4 ms earlier than LRCK by
+>> the rockchip codec.
+>>
+>> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+>> Link: https://lore.kernel.org/r/20220615045643.3137287-1-judyhsiao@chromium.org
+>> Signed-off-by: Mark Brown <broonie@kernel.org>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>
+>Please drop this one from all stable branches. It caused more problems
+>than it fixed and will be reverted for 5.19 [1]. The same patch, along
+>with a proper follow-up fix, are queued up for 5.20.
 
-On 12/07/22 03:50, Geert Uytterhoeven wrote:
-> 	Hi all,
->
-> This patch series contains miscellaneous fixes and cleanups for the
-> Atari frame buffer device driver, which were identified while working on
-> the Atari DRM driver.
->
-> Most of them have been tested on ARAnyM, and should be sa<fe to apply,
-> except perhaps for the last one, which is marked RFC.
->
-> Thanks for your comments!
->
-> Geert Uytterhoeven (10):
->    video: fbdev: atari: Simplify atafb_pan_display()
->    video: fbdev: atari: Remove bogus FB_VMODE_YWRAP flags
->    video: fbdev: atari: Fix inverse handling
->    video: fbdev: atari: Fix ext_setcolreg()
->    video: fbdev: atari: Remove unneeded casts from void *
->    video: fbdev: atari: Remove unneeded casts to void *
->    video: fbdev: atari: Fix TT High video mode vertical refresh
->    video: fbdev: atari: Fix VGA modes
->    video: fbdev: atari: Remove unused definitions and variables
->    [RFC] video: fbdev: atari: Remove backward bug-compatibility
->
->   Documentation/m68k/kernel-options.rst |   4 +-
->   drivers/video/fbdev/atafb.c           | 101 +++++++-------------------
->   2 files changed, 29 insertions(+), 76 deletions(-)
->
-Works OK on my Falcon (except for the falh* modes, but that is not a 
-regression - might be something I miscoded in these modes, ages ago).
+Now dropped, thanks!
 
-Tested-by: Michael Schmitz <schmitzmic@gmail.com>
-
-
+-- 
+Thanks,
+Sasha

@@ -2,93 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D63B5778AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 00:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B185778B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 01:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbiGQW65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 18:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        id S232502AbiGQXB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 19:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiGQW6z (ORCPT
+        with ESMTP id S229535AbiGQXB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 18:58:55 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29345F6F
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 15:58:50 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so16551750pjo.3
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 15:58:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nZfKPEzrFSWnD4VyW5avsdp1T5dDlLEjwOKs9E9j9Io=;
-        b=4rdc9IcZS5Y9hlo7H/x+W9QLnojcgSmuqjAZ+WYCB7jY4H+rTelSerf9HlDd2Ycr9t
-         VR6sT+iF4XtEZiaA/cYg4s5pN1dpqQG7mT9OvKICcxPe8JnhjQaVaYheWTtqL1fL2uUH
-         K3K0kFEe/HjPcGqKbpXPJrCNiM410PtFNEF1ixeusEB4B9LmDRi94nn4MhLBL89eG+7R
-         C6QY8VJOz0bSXP8GmNl5lrS8jrFWAEbTWHOmHEBBpCzi7+daf+PFS8v+MxW55rHV6Rb8
-         SeZxZrL5/vE8FlVCSPptcmxhxFta9BYGGvwiYk9SQ2Y02QpISJ5T+Yeh143KY/S4EM6O
-         YnGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nZfKPEzrFSWnD4VyW5avsdp1T5dDlLEjwOKs9E9j9Io=;
-        b=lM9n+1MinIKcthrApVBu4cBFMBwAON2w7CDlr4hP/0/NzHVextZS6FcPk56weOFRIr
-         3bgSeTitKwFX+XRUVEUbN+qk7HKlVWKOUOYdwQk/dboJ5NYxHEyE90RQyZzodHBI0TsX
-         GBQW+xnQT9W9BYz/ux79qRBAdg8cyBMwetNp6eBNLjOx6gzm9QbUOm1yVhdaThUbAFJm
-         KyL34pcvVYtwlnU171dhA+W3vX2ubFv6EV+NzBhw4atyABatFYGYO3AL3B0B4dUU+DZB
-         75ls6iILXjKwmatb/OxOX8TiwBqQp+iHFB4p182A1gppPOGKzbSEKTLktky7WcikKxD2
-         T8wA==
-X-Gm-Message-State: AJIora8iruwZyHFp96fiX7u/RWcRuHWItJl4YpQcNZa8/SrOuCbkmzCh
-        d7Ym5tDqzaEgpo5Y5r8XceGYXA==
-X-Google-Smtp-Source: AGRyM1tNh+v5YxjZZicTtlUmmxCaGTCHhNcXislwvxO23JXT3CWeQnrqKIR5SsH3vUWoAJ/NZGsAig==
-X-Received: by 2002:a17:902:d490:b0:16b:f101:b295 with SMTP id c16-20020a170902d49000b0016bf101b295mr24686581plg.52.1658098730176;
-        Sun, 17 Jul 2022 15:58:50 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id s9-20020a17090a764900b001ed1444df67sm9996856pjl.6.2022.07.17.15.58.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Jul 2022 15:58:49 -0700 (PDT)
-Message-ID: <a1cb7271-def9-0387-96fc-93e55f85cd1c@kernel.dk>
-Date:   Sun, 17 Jul 2022 16:58:48 -0600
+        Sun, 17 Jul 2022 19:01:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D03120BB;
+        Sun, 17 Jul 2022 16:01:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45FB0B80EA5;
+        Sun, 17 Jul 2022 23:01:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF23EC3411E;
+        Sun, 17 Jul 2022 23:01:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658098882;
+        bh=qvKpwS2oAz58xErVnVqqeNlH1V1bOLYcNo9RbFb07e8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G7yuCSMHtGjZZKlXxN4KUsT20AvUEHjAm1L1hgW1tcRVsYd9aVugALSYRtxJgfTYt
+         /wXithn7iS/GJz0ArUttX4eO4a8UeWnr4Svp7wIzmR+NsvJS7Z6xiMeZA8dNCqkWhu
+         h+pnz7nDPCANZd2pUTW3d+M8CatYMNmnal5rD8i7uUpxX59QN9ug+8tT6GpT4vDSOO
+         kh49GdtL4Z7v3fGO6VqZvQTphXA8u2yLUfluKUMcYSafBzFz9sqffAvNQx1RRPv8KS
+         GXpXKQSeLV46Av+uPTHWOCxYbqRATTXsAOuqJ+UsVD/8nLXeIbxF0Ki8Ewtvfp2xC4
+         1cVhAccOVyPIw==
+Date:   Sun, 17 Jul 2022 19:01:21 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, wireguard@lists.zx2c4.com,
+        netdev <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH AUTOSEL 5.18 39/41] wireguard: selftests: use virt
+ machine on m68k
+Message-ID: <YtSUwWn1SK+B83v5@sashalap>
+References: <20220714042221.281187-1-sashal@kernel.org>
+ <20220714042221.281187-39-sashal@kernel.org>
+ <CAMuHMdWumKeJmsOsd7_=F-+8znY=0YtH-CbeLN7knSJ1LDOR_w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: KASAN: use-after-free Read in io_iopoll_getevents
-Content-Language: en-US
-To:     mail.dipanjan.das@gmail.com, viro@zeniv.linux.org.uk,
-        io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     syzkaller@googlegroups.com
-References: <CAEK-7JLEwuC8z1+Mdcc8gcZoSkL=h_3iW0aTtVvE1i3PjaR7cQ@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAEK-7JLEwuC8z1+Mdcc8gcZoSkL=h_3iW0aTtVvE1i3PjaR7cQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWumKeJmsOsd7_=F-+8znY=0YtH-CbeLN7knSJ1LDOR_w@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/17/22 4:55 PM, Dipanjan Das wrote:
-> Hi,
-> 
-> We would like to report the following bug which has been found by our
-> modified version of syzkaller.
-> 
-> ======================================================
-> description: KASAN: use-after-free Read in io_iopoll_getevents
-> affected file: fs/io_uring.c
-> kernel version: 5.7
+On Thu, Jul 14, 2022 at 09:08:49AM +0200, Geert Uytterhoeven wrote:
+>Hi Sasha,
+>
+>On Thu, Jul 14, 2022 at 6:29 AM Sasha Levin <sashal@kernel.org> wrote:
+>> From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+>>
+>> [ Upstream commit 1f2f341a62639c7066ee4c76b7d9ebe867e0a1d5 ]
+>>
+>> This should be a bit more stable hopefully.
+>>
+>> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+>> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>
+>Thanks for your patch!
+>
+>> --- a/tools/testing/selftests/wireguard/qemu/arch/m68k.config
+>> +++ b/tools/testing/selftests/wireguard/qemu/arch/m68k.config
+>> @@ -1,10 +1,7 @@
+>>  CONFIG_MMU=y
+>> +CONFIG_VIRT=y
+>
+>The m68k virt machine was introduced in v5.19-rc1, so this patch
+>must not be backported to v5.18 and earlier.
 
-Unless you can trigger this in a stable release, there's nothing we can do
-about it as 5.7 has been dead for a long time. No more releases of that
-branch will be happening.
+I'll drop it, thanks!
 
 -- 
-Jens Axboe
-
+Thanks,
+Sasha

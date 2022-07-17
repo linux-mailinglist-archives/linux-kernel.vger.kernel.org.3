@@ -2,144 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13ACB577727
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 17:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE6F57772E
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 17:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiGQPtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 11:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
+        id S231346AbiGQPx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 11:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiGQPtN (ORCPT
+        with ESMTP id S229508AbiGQPx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 11:49:13 -0400
-Received: from mr6.vodafonemail.de (mr6.vodafonemail.de [145.253.228.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87FE2BE2;
-        Sun, 17 Jul 2022 08:49:10 -0700 (PDT)
-Received: from smtp.vodafone.de (unknown [10.0.0.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mr6.vodafonemail.de (Postfix) with ESMTPS id 4Lm8fD1xVSz1xx9;
-        Sun, 17 Jul 2022 15:49:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arcor.de;
-        s=vfde-mb-mr2-21dec; t=1658072948;
-        bh=PF6nWxuBOXzIE7XKrJKCBgfjoHc7MKXOocbJ7Nggc/g=;
-        h=Date:From:To:Subject:Message-ID:References:Content-Type:
-         In-Reply-To:From;
-        b=Ji28z80D5sXXJaDYxGERGepNjHr4+cXKVK8IQ93C75C1pvXvUaOIi0fHWW9Vx6NdF
-         Zxr/mdL1EkOY9CSTW3/AUXBnJZujMuEYdTbkgacUZHSCdsP6n/rpNz139p178YHZHE
-         x2BAjMGJvgP6w/DfUb83oNbqTVIfjxeaXqxWA9hE=
-Received: from arcor.de (p3ee2c31a.dip0.t-ipconnect.de [62.226.195.26])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp.vodafone.de (Postfix) with ESMTPSA id 4Lm8dy4kRNzMkrv;
-        Sun, 17 Jul 2022 15:48:50 +0000 (UTC)
-Date:   Sun, 17 Jul 2022 17:48:33 +0200
-From:   Reinhard Speyerer <rspmn@arcor.de>
-To:     sdlyyxy <sdlyyxy@bupt.edu.cn>
-Cc:     johan@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
-Message-ID: <YtQuMJz+0MCxMAPk@arcor.de>
-References: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
- <119D7B0F-7809-464A-AFF1-DF72FFF9E63F@bupt.edu.cn>
- <YtKrbucYNulPEKUp@arcor.de>
- <333E5B85-7534-4CE5-8AB6-464571CBF61E@bupt.edu.cn>
+        Sun, 17 Jul 2022 11:53:26 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAA0DF69;
+        Sun, 17 Jul 2022 08:53:23 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 76F881884D64;
+        Sun, 17 Jul 2022 15:53:22 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 5FACA25032B7;
+        Sun, 17 Jul 2022 15:53:22 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 56240A1E00AF; Sun, 17 Jul 2022 15:53:22 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <333E5B85-7534-4CE5-8AB6-464571CBF61E@bupt.edu.cn>
-X-purgate-type: clean
-X-purgate: clean
-X-purgate-size: 3127
-X-purgate-ID: 155817::1658072946-3F09F395-5A8F6379/0/0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sun, 17 Jul 2022 17:53:22 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+In-Reply-To: <YtQosZV0exwyH6qo@shredder>
+References: <20220708084904.33otb6x256huddps@skbuf>
+ <e6f418705e19df370c8d644993aa9a6f@kapio-technology.com>
+ <20220708091550.2qcu3tyqkhgiudjg@skbuf>
+ <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
+ <20220708115624.rrjzjtidlhcqczjv@skbuf>
+ <723e2995314b41ff323272536ef27341@kapio-technology.com>
+ <YsqPWK67U0+Iw2Ru@shredder>
+ <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
+ <Ys69DiAwT0Md+6ai@shredder>
+ <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
+ <YtQosZV0exwyH6qo@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <4500e01ec4e2f34a8bbb58ac9b657a40@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM28,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yan,
-
-On Sat, Jul 16, 2022 at 09:36:27PM +0800, sdlyyxy wrote:
-> Hi Reinhard,
+On 2022-07-17 17:20, Ido Schimmel wrote:
+> On Sun, Jul 17, 2022 at 02:21:47PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-07-13 14:39, Ido Schimmel wrote:
+>> > On Wed, Jul 13, 2022 at 09:09:58AM +0200, netdev@kapio-technology.com
+>> > wrote:
+>> 
+>> >
+>> > What are "Storm Prevention" and "zero-DPV" FDB entries?
+>> 
+>> They are both FDB entries that at the HW level drops all packets 
+>> having a
+>> specific SA, thus using minimum resources.
+>> (thus the name "Storm Prevention" aka, protection against DOS attacks. 
+>> We
+>> must remember that we operate with CPU based learning.)
+>> 
+>> >
+>> > There is no decision that I'm aware of. I'm simply trying to understand
+>> > how FDB entries that have 'BR_FDB_ENTRY_LOCKED' set are handled in
+>> > mv88e6xxx and other devices in this class. We have at least three
+>> > different implementations to consolidate:
+>> >
+>> > 1. The bridge driver, pure software forwarding. The locked entry is
+>> > dynamically created by the bridge. Packets received via the locked port
+>> > with a SA corresponding to the locked entry will be dropped, but will
+>> > refresh the entry. On the other hand, packets with a DA corresponding to
+>> > the locked entry will be forwarded as known unicast through the locked
+>> > port.
+>> >
+>> > 2. Hardware implementations like Spectrum that can be programmed to trap
+>> > packets that incurred an FDB miss. Like in the first case, the locked
+>> > entry is dynamically created by the bridge driver and also aged by it.
+>> > Unlike in the first case, since this entry is not present in hardware,
+>> > packets with a DA corresponding to the locked entry will be flooded as
+>> > unknown unicast.
+>> >
+>> > 3. Hardware implementations like mv88e6xxx that fire an interrupt upon
+>> > FDB miss. Need your help to understand how the above works there and
+>> > why. Specifically, how locked entries are represented in hardware (if at
+>> > all) and what is the significance of not installing corresponding
+>> > entries in hardware.
+>> >
+>> 
+>> With the mv88e6xxx, a miss violation with the SA occurs when there is 
+>> no
+>> entry. If you then add a normal entry with the SA, the port is open 
+>> for that
+>> SA of course.
 > 
-> > On Jul 16, 2022, at 20:13, Reinhard Speyerer <rspmn@arcor.de> wrote:
-> > 
-> > On Fri, Jul 15, 2022 at 10:59:13PM +0800, sdlyyxy wrote:
-> >> 
-> >>> On Jul 15, 2022, at 22:24, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> >>> 
-> >>> The Oppo R11 diagnostic USB connection needs to be bound to the
-> >>> usb-serial-simple driver as it just wants to use a dumb pipe to
-> >>> communicate to the host.
-> >>> 
-> >>> usb-devices output:
-> >>> T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
-> >>> D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
-> >>> P: Vendor=22d9 ProdID=276c Rev=04.04
-> >>> S: Manufacturer=OPPO
-> >>> S: Product=SDM660-MTP _SN:09C6BCA7
-> >>> S: SerialNumber=beb2c403
-> >>> C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
-> >>> I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30
-> >>> 
-> >>> Reported-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
-> >>> Cc: Johan Hovold <johan@kernel.org>
-> >>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >>> ---
-> >>> drivers/usb/serial/usb-serial-simple.c | 4 +++-
-> >>> 1 file changed, 3 insertions(+), 1 deletion(-)
-> >>> 
-> >>> diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
-> >>> index 4c6747889a19..eb832b94aa3a 100644
-> >>> --- a/drivers/usb/serial/usb-serial-simple.c
-> >>> +++ b/drivers/usb/serial/usb-serial-simple.c
-> >>> @@ -60,7 +60,9 @@ DEVICE(flashloader, FLASHLOADER_IDS);
-> >>> 	{ USB_VENDOR_AND_INTERFACE_INFO(0x18d1,			\
-> >>> 					USB_CLASS_VENDOR_SPEC,	\
-> >>> 					0x50,			\
-> >>> -					0x01) }
-> >>> +					0x01) },		\
-> >>> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x22d9, 0x276c,		\
-> >>> +					0xff, 0xff, 0x30) }
-> >>> DEVICE(google, GOOGLE_IDS);
-> >>> 
-> >>> /* Libtransistor USB console */
-> >>> -- 
-> >>> 2.37.1
-> >> Tested-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
-> > 
-> > While this may work sufficiently well for real low-volume diag traffic I'd
-> > expect a significant percentage of diag messages to be lost in practice
-> > with the usb-serial-simple driver.
-> > 
-> > According to the usb-devices output this looks like the Qualcomm USB gadget
-> > in the DIAG + ADB composition to me.
-> > 
-> > Since the option driver uses the usb-wwan framework my suggestion would be
-> > for the original patch to be applied instead similar to what has been done
-> > e.g. for the Quectel RM500Q diag port.
-> > 
-> > Regards,
-> > Reinhard
-> > 
-> I tested the diag port using two userspace programs: QCSuper[1] 
-> and scat[2]. Both option and usb-serial-simple drivers generate
-> similar output, so I cannot comfirm diag message loss. Do you
-> have any test method suggestions to generate high-volume diag 
-> traffic and detect message loss?
+> Good
 > 
+>> The zero-DPV entry is an entry that ensures that there is no more miss
+>> violation interrupts from that SA, while dropping all entries with the
+>> SA.
+> 
+> Few questions:
+> 
+> 1. Is it correct to think of this entry as an entry pointing to a
+> special /dev/null port?
 
-in my experience activating all message logs on the device with a
-mask value like 0xf or 0x1f is a good way to generate more diag traffic.
-Please refer to https://source.codeaurora.org/quic/imm/imm/sources/diag
-(DIAG_CMD_OP_SET_ALL_MSG_MASK) for details.
+I guess you can think of it like that. It's internal to the chipset how 
+it does it.
 
-Regards,
-Reinhard
+> 
+> 2. After installing this entry, you no longer get miss violation
+> interrupts because packets with this SA incur a mismatch violation
+> (src_port != /dev/null) and therefore discarded in hardware?
+
+Yes, and mismatch violations are suppressed in this implementation when 
+locking the port.
+
+> 
+> 3. What happens to packets with a DA matching the zero-DPV entry, are
+> they also discarded in hardware? If so, here we differ from the bridge
+> driver implementation where such packets will be forwarded according to
+> the locked entry and egress the locked port
+
+I understand that egress will follow what is setup with regard to UC, MC 
+and BC, though I haven't tested that. But no replies will get through of 
+course as long as the port hasn't been opened for the iface behind the 
+locked port.
+
+> 
+> 4. The reason for installing this entry is to suppress further miss
+> violation interrupts?
+
+Yes, while still HW dropping all ingress packets with the same (SA-mac, 
+vlan) on  the port.
+
+> 
+> 5. If not replaced, will this entry always age out after the ageing
+> time? Not sure what can refresh it given that traffic does not ingress
+> from the /dev/null port.
+
+That is where my implementation keeps the entries in a list and removes 
+them after the bridge timeout using a kernel worker and jiffies.
+So by default they age out after approx. 5 min.
+
+> 
+> Thanks

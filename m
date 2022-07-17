@@ -2,68 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982ED5776D9
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 16:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0005776DE
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 17:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbiGQO6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 10:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
+        id S232207AbiGQPD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 11:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiGQO5z (ORCPT
+        with ESMTP id S230334AbiGQPD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 10:57:55 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7826613CD6;
-        Sun, 17 Jul 2022 07:57:53 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 1409A1886609;
-        Sun, 17 Jul 2022 14:57:51 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 0A60E25032B8;
-        Sun, 17 Jul 2022 14:57:51 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id EA7C7A1E00AF; Sun, 17 Jul 2022 14:57:50 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Sun, 17 Jul 2022 11:03:27 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC5C13DCC;
+        Sun, 17 Jul 2022 08:03:26 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id os14so17168875ejb.4;
+        Sun, 17 Jul 2022 08:03:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=Dv/p7nIIHn8hT8UchBSA1/4q6QSRvBvNjEZvxKQbyo8=;
+        b=mI3kAqolKJgIMErLRLmU220y2pf1R3sVUCBZ48ZmrtB9/qm4CWeIBjsaUqo6TrqNng
+         yl7MTD2nmTkTbkA1Cz64bJnNezfsstOddleBs2IRYZXxR2JHYtQHBx5xI0xEWP/w1lqH
+         GHS674QDl1KZ/c69QdmmiA6fyj9RRVXH+P+WPHUOHENXxKstvGWeou3Uv54thCkm1YWP
+         Z1PGTT+QcuppkLjB6RRhVdrDJqH+RGtWkBJWUmUutcWbIkS5Z5N2aXTQ4v7c+JknP4u0
+         qfN0OXt6cUmY3wcEur23i5aFHVxOZ8K9T0Z2Oq0KklazzFei0gIV87SozXvwSCz20C6m
+         Y9Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Dv/p7nIIHn8hT8UchBSA1/4q6QSRvBvNjEZvxKQbyo8=;
+        b=vQNGbQs3109hCqiTIbI7B4dy9egk7XKoApN0C3BCIzU71quYlJ8cj5l7S8908NkWn6
+         WubZM9wo6Q2wTW6Yxv7vd7o8kJreTLpYNpmlVhyTLUTP0wvV9bBC4gOWNlg3jAdrKr/N
+         bSLmr3NNusn+8bRYb2sHhor9laP96ZkHQmOWsdVJkDiAPJ1SvvrIXfesnxdQ5HqD8Mbt
+         5ZlTlhDgoNjEDTKKRRJ8V7oVA4s1YE2P/5Vk+ld6b/qvkylehKfxWbyebQKNYnMeNkpU
+         0O3FPzhwG1DXECocjC8+r1NzCXtq4+xP8G23szdQwXXpPanUKbb23mZhLZ4V5rkoAd09
+         01ZQ==
+X-Gm-Message-State: AJIora9ARzC667pYT4jxnY+e4zBr2Q+VzNUz1MUGgY/NpnEY2rntcQJF
+        WSJ9lmPif5us+508JC4UNOkyRfUdldkzIzQhNpLOV1KR9/8YzA+a
+X-Google-Smtp-Source: AGRyM1uOuPqlK5ptYLbZNVxzFCT39fPMVgLt6uh8ewQOJiucginsvXn8XqJj3WtSh7l0p/ZWCB2s1ggEe/mcOj0OuP4=
+X-Received: by 2002:a17:907:c27:b0:72b:8118:b899 with SMTP id
+ ga39-20020a1709070c2700b0072b8118b899mr22465859ejc.739.1658070204720; Sun, 17
+ Jul 2022 08:03:24 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Sun, 17 Jul 2022 16:57:50 +0200
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <20220717135951.ho4raw3bzwlgixpb@skbuf>
-References: <20220708091550.2qcu3tyqkhgiudjg@skbuf>
- <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
- <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
- <20220717125718.mj7b3j3jmltu6gm5@skbuf>
- <a6ec816279b282a4ea72252a7400d5b3@kapio-technology.com>
- <20220717135951.ho4raw3bzwlgixpb@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <e1c1e7c114f0226b116d9549cea8e7a9@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM28,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=no
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Sun, 17 Jul 2022 23:02:49 +0800
+Message-ID: <CAO4mrfdjv2TZf7dc=ei61NBmLePLUGCJ9WbmvWGWa8Q4o=bRkw@mail.gmail.com>
+Subject: WARNING in floppy_interrupt
+To:     efremov@linux.com, axboe@kernel.dk, linux-kernel@vger.kernel.org
+Cc:     linux-block@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,63 +61,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-17 15:59, Vladimir Oltean wrote:
-> On Sun, Jul 17, 2022 at 03:09:10PM +0200, netdev@kapio-technology.com 
-> wrote:
->> On 2022-07-17 14:57, Vladimir Oltean wrote:
->> > On Sun, Jul 17, 2022 at 02:21:47PM +0200, netdev@kapio-technology.com
->> > wrote:
->> > > On 2022-07-13 14:39, Ido Schimmel wrote:
->> > > > On Wed, Jul 13, 2022 at 09:09:58AM +0200, netdev@kapio-technology.com
->> > > > wrote:
->> > >
->> > > >
->> > > > What are "Storm Prevention" and "zero-DPV" FDB entries?
->> > >
->> > > They are both FDB entries that at the HW level drops all packets
->> > > having a
->> > > specific SA, thus using minimum resources.
->> > > (thus the name "Storm Prevention" aka, protection against DOS
->> > > attacks. We
->> > > must remember that we operate with CPU based learning.)
->> >
->> > DPV means Destination Port Vector, and an ATU entry with a DPV of 0
->> > essentially means a FDB entry pointing nowhere, so it will drop the
->> > packet. That's a slight problem with Hans' implementation, the bridge
->> > thinks that the locked FDB entry belongs to port X, but in reality it
->> > matches on all bridged ports (since it matches by FID). FID allocation
->> > in mv88e6xxx is slightly strange, all VLAN-unaware bridge ports,
->> > belonging to any bridge, share the same FID, so the FDB databases are
->> > not exactly isolated from each other.
->> 
->> But if the locked port is vlan aware and has a pvid, it should not 
->> block
->> other ports.
-> 
-> I don't understand what you want to say by that. It will block all 
-> other
-> packets with the same MAC SA that are classified to the same FID.
-> In case of VLAN-aware bridges, the mv88e6xxx driver allocates a new FID
-> for each VID (see mv88e6xxx_atu_new). In other words, if a locked port
-> is VLAN-aware and has a pvid, then whatever the PVID may be, all ports
-> in that same VLAN are still blocked in the same way.
+Dear Linux Developer,
 
-Maybe I am just trying to understand the problem you are posing, so 
-afaics MAC addresses should be unique and having the same MAC address 
-behind a locked port and a not-locked port seems like a 
-mis-configuration regardless of vlan setup? As the zero-DPV entry only 
-blocks the specific SA MAC on a specific vlan, which is behind a locked 
-port, there shouldn't be any problem...?
+Recently when using our tool to fuzz kernel, the following crash was triggered:
 
-If the host behind a locked port starts sending on another vlan than 
-where it got the first locked entry, another locked entry will occur, as 
-the locked entries are MAC + vlan.
+HEAD commit: fc74e0a40e4f Linux 5.16-rc7
+git tree: upstream
+compiler: clang 12.0.0
+console output:
+https://drive.google.com/file/d/1bTS1Khxq5ZVwEPK-QIzGMJ24DcBhlZNW/view?usp=sharing
+Syzlang reproducer:
+https://drive.google.com/file/d/11TW-_hd6xARpzEv05ZzN5njdyKjPV4ku/view?usp=sharing
+C reproducer: https://drive.google.com/file/d/1vLLyr50AtjVUYr3ZFyypwB0WcNa0dloj/view?usp=sharing
+kernel config: https://drive.google.com/file/d/1L16y3aFu5mPQbKNsc7eQc6RH55YRd1zd/view?usp=sharing
 
-> 
->> Besides the fid will be zero with vlan unaware afaik, and all with
->> zero fid do not create locked entries.
-> 
-> If by 0 you mean 1 (MV88E6XXX_FID_BRIDGED), then you are correct: ports
-> with FID 0 (MV88E6XXX_FID_STANDALONE) should not create locked FDB
-> entries, because they are, well, standalone and not bridged.
-> Again I don't exactly see the relevance though.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: Wei Chen <harperchen1110@gmail.com>
+
+WARNING: CPU: 0 PID: 38 at drivers/block/floppy.c:1000
+floppy_interrupt+0x694/0x6d0
+Modules linked in:
+CPU: 0 PID: 38 Comm: kworker/u2:2 Not tainted 5.16.0-rc7 #4
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Workqueue: floppy floppy_work_workfn
+RIP: 0010:floppy_interrupt+0x694/0x6d0
+Code: 21 0c 31 ed 48 c7 c7 00 a6 f4 8a 48 c7 c2 6d c1 52 8c 48 c7 c1
+e0 a4 f4 8a 31 c0 e8 9d 68 26 05 e9 e7 fd ff ff e8 1c 38 ac fc <0f> 0b
+e9 63 fb ff ff 89 d9 80 e1 07 38 c1 0f 8c a6 fa ff ff 48 89
+RSP: 0018:ffffc90000007d28 EFLAGS: 00010046
+RAX: ffffffff84d5d9d4 RBX: 0000000000000001 RCX: ffff8880149523c0
+RDX: 0000000080010000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff84d5d530 R09: fffffbfff1a56ead
+R10: fffffbfff1a56ead R11: 0000000000000000 R12: dffffc0000000000
+R13: 0000000000000000 R14: ffffffff84d65f30 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff888063c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007efe73921000 CR3: 000000000c88e000 CR4: 0000000000752ef0
+DR0: 00000000200000c0 DR1: 0000000020000080 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
+PKRU: 55555554
+Call Trace:
+ <IRQ>
+ __handle_irq_event_percpu+0x20a/0x6d0
+ handle_irq_event+0x10a/0x300
+ handle_edge_irq+0x245/0xbe0
+ __common_interrupt+0xce/0x1e0
+ common_interrupt+0x9f/0xc0
+ </IRQ>
+ <TASK>
+ asm_common_interrupt+0x1e/0x40
+RIP: 0010:reset_fdc+0x36b/0x520
+Code: 80 cb 80 48 8d 2c ed 70 a9 f7 90 48 89 e8 48 c1 e8 03 42 80 3c
+30 00 74 08 48 89 ef e8 1e d9 f6 fc 8b 55 00 83 c2 04 89 d8 ee <e9> aa
+00 00 00 e8 6b b4 ab fc 48 8d 1c ed 6d a9 f7 90 48 89 d8 48
+RSP: 0018:ffffc90000cbfc28 EFLAGS: 00000202
+RAX: 0000000090f7a981 RBX: ffffffff90f7a981 RCX: ffff8880149523c0
+RDX: 00000000000003f4 RSI: 0000000000000062 RDI: 0000000000000044
+RBP: ffffffff90f7a970 R08: ffffffff84d65d27 R09: fffffbfff1ff5bd0
+R10: fffffbfff1ff5bd0 R11: 0000000000000000 R12: 0000000000000000
+R13: 1ffffffff21ef52f R14: dffffc0000000000 R15: ffffffff90f7a978
+ process_one_work+0x853/0x1140
+ worker_thread+0xac1/0x1320
+ kthread+0x410/0x500
+ ret_from_fork+0x1f/0x30
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0: 80 cb 80              or     $0x80,%bl
+   3: 48 8d 2c ed 70 a9 f7 lea    -0x6f085690(,%rbp,8),%rbp
+   a: 90
+   b: 48 89 e8              mov    %rbp,%rax
+   e: 48 c1 e8 03          shr    $0x3,%rax
+  12: 42 80 3c 30 00        cmpb   $0x0,(%rax,%r14,1)
+  17: 74 08                je     0x21
+  19: 48 89 ef              mov    %rbp,%rdi
+  1c: e8 1e d9 f6 fc        callq  0xfcf6d93f
+  21: 8b 55 00              mov    0x0(%rbp),%edx
+  24: 83 c2 04              add    $0x4,%edx
+  27: 89 d8                mov    %ebx,%eax
+  29: ee                    out    %al,(%dx)
+* 2a: e9 aa 00 00 00        jmpq   0xd9 <-- trapping instruction
+  2f: e8 6b b4 ab fc        callq  0xfcabb49f
+  34: 48 8d 1c ed 6d a9 f7 lea    -0x6f085693(,%rbp,8),%rbx
+  3b: 90
+  3c: 48 89 d8              mov    %rbx,%rax
+  3f: 48                    rex.W
+
+Best,
+Wei

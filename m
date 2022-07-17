@@ -2,137 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6F1577682
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 16:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0357577688
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 16:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbiGQN77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 09:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S233066AbiGQOBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 10:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiGQN76 (ORCPT
+        with ESMTP id S233048AbiGQOBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 09:59:58 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24BE1400C;
-        Sun, 17 Jul 2022 06:59:56 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id k30so12076063edk.8;
-        Sun, 17 Jul 2022 06:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LbXvWfEaQpT3EOvVscba33ymf3op3INZ0urZAjVoQ+c=;
-        b=GOZVLSmxUnmmok7nuMBDud3xiCRYe8eu91x9Qvgxc9cJaBQehuLzC3GA6UqGhwru53
-         BHuY1Kk/C6M+StYzq7IsGg0gOcozgvgbA5Kj2hht9Nav7qPpTWi2k9XSlljKSO+JpJMX
-         Z3Qu9EiRiTn2OIs0tiU7fWX5zVSlzz28tET+tAmXA2y1J7HU7xOF/jJy7ENI8BX6BPXD
-         wHbrmfH7vtJeMT1SfokQhDGBil4sC2dPZfNPVTvOAgXco60vf+iR5YJDthf+rgUV/FT6
-         A+l7WkBrCBx6yEvA/l3Oyt1Evqp+HUgzgYv4l43DAlW5yzcWWIGsHJlF9WgAt/FyIeff
-         8GWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LbXvWfEaQpT3EOvVscba33ymf3op3INZ0urZAjVoQ+c=;
-        b=7dgKVAqFUJKiyWLWSJtM6VIT+uybUfq1tPKKPjs8JajjMDnOPmmERy9sKNWquiQoWi
-         qN5oiMTMUedp5J3zeHDNjWVRX+sHxQl9pvoMcYMqyod5sPL3gzm9m4B+nxv9TFtxirMZ
-         o2aLi3b4nsJSnCIK73LYWy6sdPDavuDN/dqURbPA1GU59nmvlp+7NHLgt9AwUDhprJMw
-         1pfme4SRLoGeZJFRdRejZtPcphww7RTHEuPetV+EECbOfuJsm/t+Hj+pQTVX7G2Mfwky
-         sdvFZ/npThr3UyYJRyXShsPHhOP0witj7H0Vx0PVS4uI3mkWadwwEP6nW4uRdYXKvFW0
-         cHnA==
-X-Gm-Message-State: AJIora/EZFIN86r3rQ4EmAjnOfS3mhASn8EkmxH6w3kbkcSH/Q/oWTgZ
-        F7laHLFBBWsEuHRCiR2MG3E=
-X-Google-Smtp-Source: AGRyM1slHNXAJnCxBZ/BWP8T3k0+2yJe1JC18WCLjCcfhqljeNhmrcHHXAAzZTZUlJ/j1k5rsI/uVw==
-X-Received: by 2002:aa7:dd16:0:b0:43a:e850:a245 with SMTP id i22-20020aa7dd16000000b0043ae850a245mr30728413edv.127.1658066395289;
-        Sun, 17 Jul 2022 06:59:55 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id p4-20020a05640243c400b0043b5fb04e76sm1297707edc.27.2022.07.17.06.59.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 06:59:54 -0700 (PDT)
-Date:   Sun, 17 Jul 2022 16:59:51 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <20220717135951.ho4raw3bzwlgixpb@skbuf>
-References: <20220708091550.2qcu3tyqkhgiudjg@skbuf>
- <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
- <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
- <20220717125718.mj7b3j3jmltu6gm5@skbuf>
- <a6ec816279b282a4ea72252a7400d5b3@kapio-technology.com>
+        Sun, 17 Jul 2022 10:01:51 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FDA15705
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 07:01:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658066511; x=1689602511;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iyOzKAUhOadH0m9kdJ3so1jF1AEZfB9VPoKY5YUM1z4=;
+  b=ZHyHqlOda/qlxtvt7/2UyO6ciE6oY5XuPFrSxoPY41W5ZffkcovTsJ09
+   TkiPq0QUSC0OtFRs0vuAiWsUaowORhQV7gj6J1IPJEO3oSpFnJxiRcgXs
+   19TCqlyFHHs9MK8TOxAsiaaxu2/bNvTv1z8T9XrnxQ8RQAkVwtaAlKzJi
+   pRrv9EkinR9WBqrbnUSoow3MLxVFW/u+xcLsF2kOawJbPWlMwR27/NkwC
+   NHZglp3PxzvCMAykM3rRy/B3185oRf1bH763+WHx4ZBA/Lgk0EFZzIq9a
+   jQXrF6z7a3Qj0mLQfPe0rIRBvxfXHRoo2pdNpZF4njPlKRKNzdXUPQDEs
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="347752561"
+X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
+   d="scan'208";a="347752561"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 07:01:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
+   d="scan'208";a="547187510"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 17 Jul 2022 07:01:49 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oD4qC-0003L8-Qz;
+        Sun, 17 Jul 2022 14:01:48 +0000
+Date:   Sun, 17 Jul 2022 22:00:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     kbuild-all@lists.01.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [pdx86-platform-drivers-x86:for-next 56/92]
+ drivers/platform/surface/surface_aggregator_tabletsw.c:425:9: sparse:
+ sparse: restricted __le32 degrades to integer
+Message-ID: <202207172113.nx0S1Njc-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a6ec816279b282a4ea72252a7400d5b3@kapio-technology.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 03:09:10PM +0200, netdev@kapio-technology.com wrote:
-> On 2022-07-17 14:57, Vladimir Oltean wrote:
-> > On Sun, Jul 17, 2022 at 02:21:47PM +0200, netdev@kapio-technology.com
-> > wrote:
-> > > On 2022-07-13 14:39, Ido Schimmel wrote:
-> > > > On Wed, Jul 13, 2022 at 09:09:58AM +0200, netdev@kapio-technology.com
-> > > > wrote:
-> > > 
-> > > >
-> > > > What are "Storm Prevention" and "zero-DPV" FDB entries?
-> > > 
-> > > They are both FDB entries that at the HW level drops all packets
-> > > having a
-> > > specific SA, thus using minimum resources.
-> > > (thus the name "Storm Prevention" aka, protection against DOS
-> > > attacks. We
-> > > must remember that we operate with CPU based learning.)
-> > 
-> > DPV means Destination Port Vector, and an ATU entry with a DPV of 0
-> > essentially means a FDB entry pointing nowhere, so it will drop the
-> > packet. That's a slight problem with Hans' implementation, the bridge
-> > thinks that the locked FDB entry belongs to port X, but in reality it
-> > matches on all bridged ports (since it matches by FID). FID allocation
-> > in mv88e6xxx is slightly strange, all VLAN-unaware bridge ports,
-> > belonging to any bridge, share the same FID, so the FDB databases are
-> > not exactly isolated from each other.
-> 
-> But if the locked port is vlan aware and has a pvid, it should not block
-> other ports.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git for-next
+head:   5c8b3f11565e64366d53295e8004edaa1fcf1ec9
+commit: 9f794056db5bb1e1add83ed553b6aec57298358c [56/92] platform/surface: Add KIP/POS tablet-mode switch driver
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220717/202207172113.nx0S1Njc-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?id=9f794056db5bb1e1add83ed553b6aec57298358c
+        git remote add pdx86-platform-drivers-x86 https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
+        git fetch --no-tags pdx86-platform-drivers-x86 for-next
+        git checkout 9f794056db5bb1e1add83ed553b6aec57298358c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/misc/lkdtm/ drivers/platform/surface/ drivers/platform/x86/intel/ kernel/trace/
 
-I don't understand what you want to say by that. It will block all other
-packets with the same MAC SA that are classified to the same FID.
-In case of VLAN-aware bridges, the mv88e6xxx driver allocates a new FID
-for each VID (see mv88e6xxx_atu_new). In other words, if a locked port
-is VLAN-aware and has a pvid, then whatever the PVID may be, all ports
-in that same VLAN are still blocked in the same way.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Besides the fid will be zero with vlan unaware afaik, and all with
-> zero fid do not create locked entries.
 
-If by 0 you mean 1 (MV88E6XXX_FID_BRIDGED), then you are correct: ports
-with FID 0 (MV88E6XXX_FID_STANDALONE) should not create locked FDB
-entries, because they are, well, standalone and not bridged.
-Again I don't exactly see the relevance though.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/platform/surface/surface_aggregator_tabletsw.c:425:9: sparse: sparse: restricted __le32 degrades to integer
+
+vim +425 drivers/platform/surface/surface_aggregator_tabletsw.c
+
+   403	
+   404	static int ssam_pos_get_source(struct ssam_tablet_sw *sw, u32 *source_id)
+   405	{
+   406		struct ssam_sources_list sources = {};
+   407		int status;
+   408	
+   409		status = ssam_pos_get_sources_list(sw, &sources);
+   410		if (status)
+   411			return status;
+   412	
+   413		if (sources.count == 0) {
+   414			dev_err(&sw->sdev->dev, "no posture sources found\n");
+   415			return -ENODEV;
+   416		}
+   417	
+   418		/*
+   419		 * We currently don't know what to do with more than one posture
+   420		 * source. At the moment, only one source seems to be used/provided.
+   421		 * The WARN_ON() here should hopefully let us know quickly once there
+   422		 * is a device that provides multiple sources, at which point we can
+   423		 * then try to figure out how to handle them.
+   424		 */
+ > 425		WARN_ON(sources.count > 1);
+   426	
+   427		*source_id = get_unaligned_le32(&sources.id[0]);
+   428		return 0;
+   429	}
+   430	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

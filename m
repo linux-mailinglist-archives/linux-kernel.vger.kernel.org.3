@@ -2,106 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1B657760D
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 14:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3126557760F
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 14:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbiGQMHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 08:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
+        id S232508AbiGQMJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 08:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiGQMHt (ORCPT
+        with ESMTP id S229801AbiGQMJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 08:07:49 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128D915813;
-        Sun, 17 Jul 2022 05:07:45 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id l22-20020a05600c4f1600b003a2e10c8cdeso6337761wmq.1;
-        Sun, 17 Jul 2022 05:07:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eyGGShEtJ5QngHNH1K1pLBz5li6ed+QkJBaQv+XwZiI=;
-        b=PWIdhjoscQZbm5ADgJnYohKqIsKWLtf9ju97xPrnOXe+r+K6GZUSF3tfsj/aCbTqrb
-         F/LbLCCQTTCfifo/RD8KSt2dPqPFzcpyMPeS8ctW8SHsQQKsrU8IErMhKKxRMWgj/359
-         e6DjlWf1J82stxHU+kwgV7Exl/oOfeJL9vg9dWjL1t4qiC8HnmwcovSlVCPDyrGRNwzq
-         OmznekccZqI7RrC5O/7ENb1H7RL4UyL2nS1Uqp4vcw38H7liMHVo8J0XFo804hctVutq
-         hfesxY3bwOgYGyFEVNY02dN+nH0wrGJidrxkOkAQxUmq/Ixf2Mypvhz+iTPPLHGwc2v7
-         WQtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eyGGShEtJ5QngHNH1K1pLBz5li6ed+QkJBaQv+XwZiI=;
-        b=xKgCWtuHZB7JcFRJ2amlYTtoMQQMFz3PW2CEQhu49FAj80b3T1dMZBwkdFIU1C49Bf
-         44Sdjb0H2vE+GgD7UpEP+K3cw5L2tc0osCe2TNPIKeBnkBQ2kioh3wtqT/omXjkCy1mV
-         /+CBnbRQhtBdFuQelBXgmQLIbnPWVwCFd3Si0rLkk4+HtVn+LUu/LGlwuAY6gEhml7Xt
-         U90HwGvrBuRJW7WdsWrirWDW0QDt/v6K96SFoIGGqK+F82fe5pnaQIKwyJd1GEaRaW3s
-         e1oFuK9KVYuKNSlGUQRKqJTPf2/iilaxfsdeUR5d3kIWv/yADO9Wle6fdbW3+qT8C2dL
-         XG5w==
-X-Gm-Message-State: AJIora9P/rW7gi/O14KuEJWSzb5RNG/j79kY8ZN0LrsHq2WTfxouZwMV
-        b/rPO8ACMNf/Z5s9J15O5z4=
-X-Google-Smtp-Source: AGRyM1tO7vuOsF+0/JqzXCNNfyASqaxGNaareyrNlCthAXRzf8BXtQqQNdPj+tFxw9k15VtGTCoZaw==
-X-Received: by 2002:a7b:c381:0:b0:3a2:fe96:2ce4 with SMTP id s1-20020a7bc381000000b003a2fe962ce4mr19633955wmj.70.1658059663508;
-        Sun, 17 Jul 2022 05:07:43 -0700 (PDT)
-Received: from xws.localdomain (pd9ea330d.dip0.t-ipconnect.de. [217.234.51.13])
-        by smtp.gmail.com with ESMTPSA id f7-20020a05600c154700b003a2fcc32031sm16584324wmg.3.2022.07.17.05.07.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 05:07:43 -0700 (PDT)
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] platform/surface: tabletsw: Fix __le32 integer access
-Date:   Sun, 17 Jul 2022 14:07:35 +0200
-Message-Id: <20220717120735.2052160-1-luzmaximilian@gmail.com>
-X-Mailer: git-send-email 2.37.0
+        Sun, 17 Jul 2022 08:09:33 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561C0165AD
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 05:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658059772; x=1689595772;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mOBqbPxMQSmz0DK9+ahJue3yqOR5Vp8Bb8ZfgqCxyQo=;
+  b=aT2Q5ekd/WapCR8+y8V7WsefBrjv/w1qNxHMmAAbc6SpNrkEpHbt6+m2
+   Nj3I4SFpFLT8+IPhqYkWtvmnVhgCCj+eci0fuX8WiBsd0bImMWg1TBnaS
+   Ig9OvNnzCdXnjvBLTt/XXddKSZV7jlOfxFpkmv8tLNFWPdgoOcppRl3rd
+   29SzqS3bNdfY9dhrRV8kSKwD9qh6l2Rvo6MTUO8r/Jk3H0FUzdlHn2BYq
+   LJ4mKLACuTX05QWVXaa/69E0JkPOj6BJFeIDZBsNI4YKStRMIlslxQsyK
+   AGGMVFQunq07Mz99DzWwLzEhNU2uiOjmlyck03PU/7mTwz/O+HBanKmh7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="265839960"
+X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
+   d="scan'208";a="265839960"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 05:09:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
+   d="scan'208";a="624391710"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 17 Jul 2022 05:09:30 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oD35V-0003Cw-P2;
+        Sun, 17 Jul 2022 12:09:29 +0000
+Date:   Sun, 17 Jul 2022 20:08:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Janne Grunau <j@jannau.net>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/090-spi-hid 11/18]
+ drivers/hid/spi-hid/spi-hid-apple-core.c:233:21: sparse: sparse: incorrect
+ type in assignment (different base types)
+Message-ID: <202207172015.ryhFu6Kh-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sources.count field is a __le32 inside a packed struct. So use the
-proper functions to access it.
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   2902ed1bd2d6ac439a835c53841122c7f3455a6c
+commit: caee9bbb3f5dd71fbcc4690a7c2e97ff6964ab92 [11/18] WIP: HID: transport: spi: add Apple SPI transport
+config: parisc-randconfig-s041-20220715 (https://download.01.org/0day-ci/archive/20220717/202207172015.ryhFu6Kh-lkp@intel.com/config)
+compiler: hppa64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/AsahiLinux/linux/commit/caee9bbb3f5dd71fbcc4690a7c2e97ff6964ab92
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout caee9bbb3f5dd71fbcc4690a7c2e97ff6964ab92
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc64 SHELL=/bin/bash drivers/bluetooth/ drivers/hid/spi-hid/ drivers/media/i2c/ drivers/net/wireless/broadcom/brcm80211/brcmfmac/ drivers/pci/ drivers/soc/apple/ kernel/trace/ security/apparmor/ sound/soc/codecs/
 
+If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 9f794056db5b ("platform/surface: Add KIP/POS tablet-mode switch driver")
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
----
- drivers/platform/surface/surface_aggregator_tabletsw.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/platform/surface/surface_aggregator_tabletsw.c b/drivers/platform/surface/surface_aggregator_tabletsw.c
-index 596ca6c80681..27d95a6a7851 100644
---- a/drivers/platform/surface/surface_aggregator_tabletsw.c
-+++ b/drivers/platform/surface/surface_aggregator_tabletsw.c
-@@ -410,7 +410,7 @@ static int ssam_pos_get_source(struct ssam_tablet_sw *sw, u32 *source_id)
- 	if (status)
- 		return status;
- 
--	if (sources.count == 0) {
-+	if (get_unaligned_le32(&sources.count) == 0) {
- 		dev_err(&sw->sdev->dev, "no posture sources found\n");
- 		return -ENODEV;
- 	}
-@@ -422,7 +422,7 @@ static int ssam_pos_get_source(struct ssam_tablet_sw *sw, u32 *source_id)
- 	 * is a device that provides multiple sources, at which point we can
- 	 * then try to figure out how to handle them.
- 	 */
--	WARN_ON(sources.count > 1);
-+	WARN_ON(get_unaligned_le32(&sources.count) > 1);
- 
- 	*source_id = get_unaligned_le32(&sources.id[0]);
- 	return 0;
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/hid/spi-hid/spi-hid-apple-core.c:233:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] length @@     got unsigned long @@
+   drivers/hid/spi-hid/spi-hid-apple-core.c:233:21: sparse:     expected restricted __le16 [usertype] length
+   drivers/hid/spi-hid/spi-hid-apple-core.c:233:21: sparse:     got unsigned long
+   drivers/hid/spi-hid/spi-hid-apple-core.c:248:20: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] crc16 @@     got unsigned short @@
+   drivers/hid/spi-hid/spi-hid-apple-core.c:248:20: sparse:     expected restricted __le16 [usertype] crc16
+   drivers/hid/spi-hid/spi-hid-apple-core.c:248:20: sparse:     got unsigned short
+   drivers/hid/spi-hid/spi-hid-apple-core.c:259:21: sparse: sparse: symbol 'spihid_get_data' was not declared. Should it be static?
+>> drivers/hid/spi-hid/spi-hid-apple-core.c:639:67: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected unsigned long [usertype] len @@     got restricted __le16 [usertype] length @@
+   drivers/hid/spi-hid/spi-hid-apple-core.c:639:67: sparse:     expected unsigned long [usertype] len
+   drivers/hid/spi-hid/spi-hid-apple-core.c:639:67: sparse:     got restricted __le16 [usertype] length
+   drivers/hid/spi-hid/spi-hid-apple-core.c:643:54: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected unsigned long [usertype] len @@     got restricted __le16 [usertype] length @@
+   drivers/hid/spi-hid/spi-hid-apple-core.c:643:54: sparse:     expected unsigned long [usertype] len
+   drivers/hid/spi-hid/spi-hid-apple-core.c:643:54: sparse:     got restricted __le16 [usertype] length
+   drivers/hid/spi-hid/spi-hid-apple-core.c:664:17: sparse: sparse: incorrect type in argument 7 (different base types) @@     expected unsigned long [usertype] len @@     got restricted __le16 [usertype] length @@
+   drivers/hid/spi-hid/spi-hid-apple-core.c:664:17: sparse:     expected unsigned long [usertype] len
+   drivers/hid/spi-hid/spi-hid-apple-core.c:664:17: sparse:     got restricted __le16 [usertype] length
+   drivers/hid/spi-hid/spi-hid-apple-core.c:686:16: sparse: sparse: restricted __le16 degrades to integer
+   drivers/hid/spi-hid/spi-hid-apple-core.c:700:43: sparse: sparse: restricted __le16 degrades to integer
+   drivers/hid/spi-hid/spi-hid-apple-core.c:703:23: sparse: sparse: restricted __le16 degrades to integer
+   drivers/hid/spi-hid/spi-hid-apple-core.c:704:24: sparse: sparse: restricted __le16 degrades to integer
+   drivers/hid/spi-hid/spi-hid-apple-core.c:704:47: sparse: sparse: restricted __le16 degrades to integer
+   drivers/hid/spi-hid/spi-hid-apple-core.c:709:38: sparse: sparse: restricted __le16 degrades to integer
+>> drivers/hid/spi-hid/spi-hid-apple-core.c:709:62: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned long [usertype] count @@     got restricted __le16 [usertype] length @@
+   drivers/hid/spi-hid/spi-hid-apple-core.c:709:62: sparse:     expected unsigned long [usertype] count
+   drivers/hid/spi-hid/spi-hid-apple-core.c:709:62: sparse:     got restricted __le16 [usertype] length
+   drivers/hid/spi-hid/spi-hid-apple-core.c:710:29: sparse: sparse: invalid assignment: +=
+   drivers/hid/spi-hid/spi-hid-apple-core.c:710:29: sparse:    left side has type unsigned int
+   drivers/hid/spi-hid/spi-hid-apple-core.c:710:29: sparse:    right side has type restricted __le16
+   drivers/hid/spi-hid/spi-hid-apple-core.c:735:23: sparse: sparse: restricted __le16 degrades to integer
+
+vim +233 drivers/hid/spi-hid/spi-hid-apple-core.c
+
+   187	
+   188	/*
+   189	 * how HID is mapped onto the protocol is not fully clear. This are the known
+   190	 * reports/request:
+   191	 *
+   192	 *			pkt.flags	pkt.dev?	msg.u0	msg.u1	msg.u2
+   193	 * info			0x40		0xd0		0x20	0x01	0xd0
+   194	 *
+   195	 * info mngt:		0x40		0xd0		0x20	0x10	0x00
+   196	 * info kbd:		0x40		0xd0		0x20	0x10	0x01
+   197	 * info tp:		0x40		0xd0		0x20	0x10	0x02
+   198	 *
+   199	 * desc kbd:		0x40		0xd0		0x20	0x10	0x01
+   200	 * desc trackpad:	0x40		0xd0		0x20	0x10	0x02
+   201	 *
+   202	 * mt mode:		0x40		0x02		0x52	0x02	0x00	set protocol?
+   203	 * capslock led		0x40		0x01		0x51	0x01	0x00	output report
+   204	 *
+   205	 * report kbd:		0x20		0x01		0x10	0x01	0x00	input report
+   206	 * report tp:		0x20		0x02		0x10	0x02	0x00	input report
+   207	 *
+   208	 */
+   209	
+   210	
+   211	static int spihid_apple_request(struct spihid_apple *spihid, u8 target, u8 unk0,
+   212					u8 unk1, u8 unk2, u16 resp_len, u8 *buf,
+   213					    size_t len)
+   214	{
+   215		struct spihid_transfer_packet *pkt;
+   216		struct spihid_msg_hdr *hdr;
+   217		u16 crc;
+   218		int err;
+   219	
+   220		/* know reports are small enoug to fit in a single packet */
+   221		if (len > sizeof(pkt->data) - sizeof(*hdr) - sizeof(__le16))
+   222			return -EINVAL;
+   223	
+   224		err = mutex_lock_interruptible(&spihid->tx_lock);
+   225		if (err < 0)
+   226			return err;
+   227	
+   228		pkt = (struct spihid_transfer_packet *)spihid->tx_buf;
+   229	
+   230		memset(pkt, 0, sizeof(*pkt));
+   231		pkt->flags = SPIHID_WRITE_PACKET;
+   232		pkt->device = target;
+ > 233		pkt->length = sizeof(*hdr) + len + sizeof(__le16);
+   234	
+   235		hdr = (struct spihid_msg_hdr *)&pkt->data[0];
+   236		hdr->unknown0 = unk0;
+   237		hdr->unknown1 = unk1;
+   238		hdr->unknown2 = unk2;
+   239		hdr->id = spihid->msg_id++;
+   240		hdr->rsplen = cpu_to_le16(resp_len);
+   241		hdr->length = cpu_to_le16(len);
+   242	
+   243		if (len)
+   244			memcpy(pkt->data + sizeof(*hdr), buf, len);
+   245		crc = crc16(0, &pkt->data[0], sizeof(*hdr) + len);
+   246		put_unaligned_le16(crc, pkt->data + sizeof(*hdr) + len);
+   247	
+   248		pkt->crc16 = crc16(0, spihid->tx_buf,
+   249				   offsetof(struct spihid_transfer_packet, crc16));
+   250	
+   251		err = spi_sync(spihid->spidev, &spihid->tx_msg);
+   252		mutex_unlock(&spihid->tx_lock);
+   253		if (err < 0)
+   254			return err;
+   255	
+   256		return (int)len;
+   257	}
+   258	
+
 -- 
-2.37.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

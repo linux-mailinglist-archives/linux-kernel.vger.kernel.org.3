@@ -2,170 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3305777E3
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 21:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1351D5777E6
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 21:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiGQTM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 15:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
+        id S231515AbiGQTQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 15:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGQTMZ (ORCPT
+        with ESMTP id S229437AbiGQTQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 15:12:25 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA782615B;
-        Sun, 17 Jul 2022 12:12:24 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso10719457pjk.3;
-        Sun, 17 Jul 2022 12:12:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vd4RXeTOy0VCuvAN3yoH7JTxP0Cym7SXxM02BMLPeF8=;
-        b=L+G+S+P1ytZ54S7XChoqfsGVVoKFXlRCX6M6xnZLg6bmEVdYppWSa5XjDcPLob0zaD
-         qTltledq5GwicXbJvpaf96iVpFrY5mby4KyNInbrYHIGXOfJLUqBo+ylsbSW5hCbg7kv
-         z4m2UvKRa5sIR2YuKdqj7tdPxXucyMt2lmOLuKDHgWLWvQbos/5JhzEHESqdnL0hNjQU
-         YtI2nLsOR/oHpRRhWmK4uaKnZjUscW0kMurSHlUaFebRzCYPqBlb7gJy2+CIc/ieHrO/
-         cJ4O+AErk2IL/eExWvGhyvmwSsW0I39mKoqeDL36kiELSCpGOeQX8G4THbk7SBwTJFhE
-         z52A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vd4RXeTOy0VCuvAN3yoH7JTxP0Cym7SXxM02BMLPeF8=;
-        b=E30aPZ+g/RaYXVKwI783OXdH2nU3J8gu1N3GxOeyZ/GsTwR5AOOCRI7Znt1+24uTNN
-         0GACVq0wtCLK2xAz5nlUcRSam1SmqdSiAGs7tXR4b2DrTfCYYP+MqbncuIIiY1bgRLL7
-         jh93pIqHJYkE7QQJKjZhTL7AKPxaOzuAi8aIjeKBFiYNGjaykd0SDhqeBW2o6fy8GSDj
-         KbsrxP0LRpy+mVmGh1OrNtueIYYBU4oHLNJ+EsaOEtSuHz4nd7B7qfmKiC9mdE9MiZ9I
-         VAK5sqqiLRR2Tydxe+MejEor3ARIwXcd9ilvDVgEhRRcGpUU1xKV7jKWtUvbfYqGe6P4
-         7wxA==
-X-Gm-Message-State: AJIora97OObIRhsJ4YtS12WIQiWa+2Egt4s+hUU24fRn7Wg7BRP13SD6
-        sKXxEckhHHkre4CAn1cDZ0U=
-X-Google-Smtp-Source: AGRyM1tKzF5spR+ad/2Fzzlrd80dKgB/zJ4SxJod+jViIfAfNENBZZnWyb43iI70Qp7ZSdO+iGHMgg==
-X-Received: by 2002:a17:90b:4f91:b0:1cd:3a73:3a5d with SMTP id qe17-20020a17090b4f9100b001cd3a733a5dmr27906645pjb.98.1658085144358;
-        Sun, 17 Jul 2022 12:12:24 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id oa12-20020a17090b1bcc00b001ef8de342b8sm7677799pjb.15.2022.07.17.12.12.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Jul 2022 12:12:20 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ce0c16d0-6c4c-6569-a254-14ae0904b4c7@roeck-us.net>
-Date:   Sun, 17 Jul 2022 12:12:17 -0700
+        Sun, 17 Jul 2022 15:16:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC1ADF1F
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 12:16:21 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658085344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FFwnWRc7IGxS0ZRT94RlPjA97CP88nVxc93qcbHA/Ow=;
+        b=sln340O3/2iUuiJ06gTUqABPkCRF9ZYktow7T/iiFSb9WRp7ZejtXJzn01nZd340pSnOQL
+        3cRX3zg4nh+3p+EwPSRvFqAbffVCZlYaA1JczX9rT+4vBnQmVw1cwwofL6VdBW3bmUSK1n
+        wE9HdUioMM2slNwBFKLtFlcfTmcBx4fqEfTRSftJdANvgNMzU+M1QYRGbXsMTp19qTUiSX
+        zbyXfwhJKIUtA2aKjxhBZ61CL/asudLLJYjSYxKtEoQKhgYe+7udfWTdCATfK0tErYsFZ2
+        WnmSKraztplHhYGAqtTzVQtQoH4yC9gVmrZB2XlrjZCJPgacOBwz5uvXeE+vZQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658085344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FFwnWRc7IGxS0ZRT94RlPjA97CP88nVxc93qcbHA/Ow=;
+        b=TVt5jDIyiH0B9YjBQPkEOtWDJoP5moTUaOhdy7Yk9aVVtGCZeiUcUtqvpZi1dqX/3Bc0ix
+        pgxRh6E5l+27GbBg==
+To:     David Laight <David.Laight@ACULAB.COM>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juergen Gross <jgross@suse.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: RE: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+In-Reply-To: <24673619e9e2411bb1d5f287aab2aa87@AcuMS.aculab.com>
+References: <20220716230344.239749011@linutronix.de>
+ <f9fd86acac4f49bc8f90b403978e9df3@AcuMS.aculab.com> <8735ezye00.ffs@tglx>
+ <24673619e9e2411bb1d5f287aab2aa87@AcuMS.aculab.com>
+Date:   Sun, 17 Jul 2022 21:15:44 +0200
+Message-ID: <87wncbwnxb.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] drm/tests: Split up test cases in
- igt_check_drm_format_min_pitch
-Content-Language: en-US
-To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <20220717184336.1197723-1-mairacanal@riseup.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220717184336.1197723-1-mairacanal@riseup.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/17/22 11:43, Maíra Canal wrote:
-> The igt_check_drm_format_min_pitch() function had a lot of
-> KUNIT_EXPECT_* calls, all of which ended up allocating and initializing
-> various test assertion structures on the stack.
-> 
-> This behavior was producing -Wframe-larger-than warnings on PowerPC, i386,
-> and MIPS architectures, such as:
-> 
-> drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_format_min_pitch':
-> drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of
-> 3712 bytes is larger than 2048 bytes
-> 
-> So, the igt_check_drm_format_min_pitch() test case was split into three
-> smaller functions: one testing single plane formats, one testing multiple
-> planes formats, and the other testing tiled formats.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+On Sun, Jul 17 2022 at 17:56, David Laight wrote:
+> From: Thomas Gleixner
+>> On Sun, Jul 17 2022 at 09:45, David Laight wrote:
+> I was thinking about what happens after the RSB has underflowed.
+> Which is when (I presume) the BTB based speculation happens.
+>
+>> The intra function call in the retpoline is of course adding a RSB entry
+>> which points to the speculation trap, but that gets popped immediately
+>> after that by the return which goes to the called function.
+>
+> I'm remembering the 'active' instructions in a retpoline being 'push; ret'.
+> Which is an RSB imbalance.
 
-I applied the patch to next-20220714 (the fixed file is gone
-in next-20220715) and tested with i386, ppc, and mips compilers.
-The problem is no longer seen after this patch is applied.
+Looking at the code might help to remember correctly:
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+        call   1f
+        speculation trap
+1:      mov     %reg, %rsp
+        ret
 
-Guenter
+Thanks,
 
-> ---
->   drivers/gpu/drm/tests/drm_format_test.c | 16 ++++++++++++++--
->   1 file changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/tests/drm_format_test.c b/drivers/gpu/drm/tests/drm_format_test.c
-> index 056cb8599d6d..28f2b8f88818 100644
-> --- a/drivers/gpu/drm/tests/drm_format_test.c
-> +++ b/drivers/gpu/drm/tests/drm_format_test.c
-> @@ -91,7 +91,7 @@ static void igt_check_drm_format_block_height(struct kunit *test)
->   	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, -1));
->   }
->   
-> -static void igt_check_drm_format_min_pitch(struct kunit *test)
-> +static void igt_check_drm_format_min_pitch_for_single_plane(struct kunit *test)
->   {
->   	const struct drm_format_info *info = NULL;
->   
-> @@ -175,6 +175,11 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
->   			(uint64_t)UINT_MAX * 4);
->   	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
->   			(uint64_t)(UINT_MAX - 1) * 4);
-> +}
-> +
-> +static void igt_check_drm_format_min_pitch_for_multiple_planes(struct kunit *test)
-> +{
-> +	const struct drm_format_info *info = NULL;
->   
->   	/* Test 2 planes format */
->   	info = drm_format_info(DRM_FORMAT_NV12);
-> @@ -249,6 +254,11 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
->   			(uint64_t)(UINT_MAX - 1) / 2);
->   	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, (UINT_MAX - 1) / 2),
->   			(uint64_t)(UINT_MAX - 1) / 2);
-> +}
-> +
-> +static void igt_check_drm_format_min_pitch_for_tiled_format(struct kunit *test)
-> +{
-> +	const struct drm_format_info *info = NULL;
->   
->   	/* Test tiled format */
->   	info = drm_format_info(DRM_FORMAT_X0L2);
-> @@ -273,7 +283,9 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
->   static struct kunit_case drm_format_tests[] = {
->   	KUNIT_CASE(igt_check_drm_format_block_width),
->   	KUNIT_CASE(igt_check_drm_format_block_height),
-> -	KUNIT_CASE(igt_check_drm_format_min_pitch),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_single_plane),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_multiple_planes),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_tiled_format),
->   	{ }
->   };
->   
-
+        tglx

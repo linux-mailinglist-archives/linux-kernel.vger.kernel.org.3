@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04754577742
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 18:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0BF577747
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 18:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232361AbiGQQOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 12:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
+        id S232592AbiGQQRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 12:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiGQQOU (ORCPT
+        with ESMTP id S229536AbiGQQRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 12:14:20 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6CCBF55;
-        Sun, 17 Jul 2022 09:14:19 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id o15so9735976pjh.1;
-        Sun, 17 Jul 2022 09:14:19 -0700 (PDT)
+        Sun, 17 Jul 2022 12:17:39 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B794BBF55;
+        Sun, 17 Jul 2022 09:17:37 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id z22so2077954lfu.7;
+        Sun, 17 Jul 2022 09:17:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uzmJq2JdSyiyV47Nf+Jr+oeguyxu9YLubRbJJqiEz7c=;
-        b=k5uWOEIuBt0SDsYRu+EI6DbLOGw6EIpVRBtGNvamKfgcTrljgUgSmluaVhMDdkA81d
-         d95b5BAsruKEmGRFng4pIlM97Zr+fxW57qtb9dPfQkP3DluTF3o+iAj80qG5IN5xD63L
-         FCVSlBWHru7H5gHoF2MvjexZP1vl3Nvp+xlELjuM7m0f26/y6QbitnZHRPjbwg2yzJbd
-         AYXacZl5G+D2l2hZDZYlvBcBtAw3JpgqAELeKA4RnoD8JInX/PO8ATq06PcC/t42bw/W
-         jV4kfjg3Uu6adT+McmDjr33UFIMr6KAhCbUOr5VS08J9Hw1O+KoCRCIhJpRznpCeTVQ2
-         hnMQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LVtaKxs7d9jWGW/ag4VeQH2lASOiSRK3darGXEw5b+U=;
+        b=gedTpL2OT34yCe/KuASkLyO3C/L80JXn9+OEqfQ+pGkTpW9/Y2ACVLp6MQGZhEQxrN
+         zK63Xc6ppPeUC42LbHqnVbKos2kVBh1pcE0c4t+FQFk+XL1dV9OP+SWPU586LraMUza5
+         Yk72O6cuPD2WgMIh8NPsL3m8y6SLHufSB+f4UTQ4k1WXKJYV7QZp88lTFfnI0CKNDedv
+         xPPFB13HySiOa0tOXAUfctc1UYtVGAVREHC/yzL6TmKxNiDcHect7/0oS58J5cWE0Q47
+         bNNcNPz26nA4qkhXajcLIjYb7z3AUxjEC29HsImU5T8koNWEu5xq/rFzZaU2S2M135/7
+         zB3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=uzmJq2JdSyiyV47Nf+Jr+oeguyxu9YLubRbJJqiEz7c=;
-        b=xL1jEdDfx2RZ+Y5pfka/stczdPRhT3UHhefD6hAF4U3p1oby+aOVe3zAXEDBfu3bf3
-         yqsE9RMBFF6po3quBNFVUM3/C6g7S1LRadI7YiqiWb1kMNf6RUk0AIMIZgU4i6zZOrn3
-         IzeSMca+0dGq/f0I0bucAc56zKzneywcxc2nw2Zktw1J8IdlTHFm8lnu2jviQa6UrRvm
-         gR+ZC/hcF2/jdQxL78dSAE3At25wflH3iX4TUZhGten47I8u4K78e0lpDGxG+orejI7J
-         /gmxmfZWjCoujRv8aluorYSj07ThxCB9bzRQLk6nF6NmEwuBK7Dx9fBSk/TadrPa+Ek4
-         r82A==
-X-Gm-Message-State: AJIora/4Fwpf2lIMv//AHjTKqtouEJ2N6QZxOgSPa27rn9UN2w4AKsR1
-        ybuGf/WdNEYfZpABv1TkIiWn837H52QaXQ==
-X-Google-Smtp-Source: AGRyM1vaMAtxif8fFZbLffWdwBs0Cp++VmGmzFMlmL6QsYlxT6SbHCUSwmUe8vmj9lJ5lm2ts+h7Tg==
-X-Received: by 2002:a17:90b:3890:b0:1f0:2abb:e7d1 with SMTP id mu16-20020a17090b389000b001f02abbe7d1mr34256178pjb.158.1658074458885;
-        Sun, 17 Jul 2022 09:14:18 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a8-20020a170902710800b0015e8d4eb1d7sm7387265pll.33.2022.07.17.09.14.14
+        bh=LVtaKxs7d9jWGW/ag4VeQH2lASOiSRK3darGXEw5b+U=;
+        b=jh4WKj0zsJfoJsFBzxVgIZdqCpxGvPWpDdZGgnYoX0e3moT2HnjK8dMdcaN1SejmXv
+         nmtmvoUpasSbL7jTlY72ViObmnSNAcJ/6U5TTzf2K9JcjK6wA13eaMJL1zFzOE5FKIed
+         dUmubLjWvAajYQj6RrpTY3oFpllqDW1ixX18/IIlIGJydokuZhdZnSZNLA7qc1wzKq9r
+         ZVyWDwUzY87VDTKn25sD2et4wbQe4vENeT/kY+ukAplwQ/IhGvE3PhirdhQh2vGziUVP
+         m519uMlPfiqV8arC7J4FoZGo4qiodZfS699f0OOkBkSKjeiziujcIHKmmzRCyeOLy/74
+         6rsw==
+X-Gm-Message-State: AJIora+l4uZnGzdJwQgTRLxhjy+xxTRQJaczfYxYYdB4HlwU8enWlLwW
+        RzkhbNbAYm3b+HmiYLnkJ+0=
+X-Google-Smtp-Source: AGRyM1usQ/hmPjYoBgRoc5730r0JGodxe2wwtcp8bDxVCiijxctBNh+Rbdu3DWbgJ+1LjgCBQ5w4Jw==
+X-Received: by 2002:a05:6512:31cf:b0:489:da0d:df52 with SMTP id j15-20020a05651231cf00b00489da0ddf52mr12952240lfe.221.1658074655836;
+        Sun, 17 Jul 2022 09:17:35 -0700 (PDT)
+Received: from [192.168.1.11] ([46.235.67.63])
+        by smtp.gmail.com with ESMTPSA id b17-20020a056512071100b0048a29c923e4sm1246402lfs.7.2022.07.17.09.17.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Jul 2022 09:14:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4141c603-a153-adc1-ee08-f0ba0d99ade7@roeck-us.net>
-Date:   Sun, 17 Jul 2022 09:14:13 -0700
+        Sun, 17 Jul 2022 09:17:35 -0700 (PDT)
+Message-ID: <3ea0ea90-48bf-ce19-e014-9443d732e831@gmail.com>
+Date:   Sun, 17 Jul 2022 19:17:33 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add D5 Next fan control
- support
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] Bluetooth: hci_core: Use ERR_PTR instead of NULL
 Content-Language: en-US
-To:     Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
-Cc:     Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+To:     Khalid Masum <khalid.masum.92@gmail.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
         linux-kernel@vger.kernel.org
-References: <20220717154114.7545-1-savicaleksa83@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220717154114.7545-1-savicaleksa83@gmail.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
+References: <20220717133759.8479-1-khalid.masum.92@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220717133759.8479-1-khalid.masum.92@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,52 +83,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/17/22 08:41, Aleksa Savic wrote:
-> Define pump and fan speed register offsets in
-> D5 Next control report, as well as its size, to expose PWM fan control.
-> 
-> Signed-off-by: Jack Doan <me@jackdoan.com>
-> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+Hi Khalid,
 
-This suggests that Jack Doan was the author of this patch, not
-Aleksa Savic. However, that is not reflected in the patch itself.
-Please either use Originally-from: instead of Signed-off-by:
-or make sure that the original author is listed correctly.
+Khalid Masum <khalid.masum.92@gmail.com> says:
+> Failure of kzalloc to allocate memory is not reported. Return Error
+> pointer to ENOMEM if memory allocation fails. This will increase
+> readability and will make the function easier to use in future.
+> 
+> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+> ---
+
+[snip]
+
+> index a0f99baafd35..ea50767e02bf 100644
+> --- a/net/bluetooth/hci_core.c
+> +++ b/net/bluetooth/hci_core.c
+> @@ -2419,7 +2419,7 @@ struct hci_dev *hci_alloc_dev_priv(int sizeof_priv)
+>   
+>   	hdev = kzalloc(alloc_size, GFP_KERNEL);
+>   	if (!hdev)
+> -		return NULL;
+> +		return ERR_PTR(-ENOMEM);
+>   
+
+This will break all callers of hci_alloc_dev(). All callers expect NULL 
+in case of an error, so you will leave them with wrong pointer.
+
+Also, allocation functionS return an error only in case of ENOMEM, so 
+initial code is fine, IMO
+
+
+
 
 Thanks,
-Guenter
-
-> ---
->   drivers/hwmon/aquacomputer_d5next.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-> index 0e56cc711a26..997d72ea6182 100644
-> --- a/drivers/hwmon/aquacomputer_d5next.c
-> +++ b/drivers/hwmon/aquacomputer_d5next.c
-> @@ -71,8 +71,12 @@ static u8 secondary_ctrl_report[] = {
->   #define D5NEXT_PUMP_OFFSET		0x6c
->   #define D5NEXT_FAN_OFFSET		0x5f
->   #define D5NEXT_5V_VOLTAGE		0x39
-> +#define D5NEXT_CTRL_REPORT_SIZE		0x329
->   static u8 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET };
->   
-> +/* Pump and fan speed registers in D5 Next control report (from 0-100%) */
-> +static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
-> +
->   /* Register offsets for the Farbwerk RGB controller */
->   #define FARBWERK_NUM_SENSORS		4
->   #define FARBWERK_SENSOR_START		0x2f
-> @@ -667,9 +671,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->   
->   		priv->num_fans = D5NEXT_NUM_FANS;
->   		priv->fan_sensor_offsets = d5next_sensor_fan_offsets;
-> +		priv->fan_ctrl_offsets = d5next_ctrl_fan_offsets;
->   		priv->num_temp_sensors = D5NEXT_NUM_SENSORS;
->   		priv->temp_sensor_start_offset = D5NEXT_COOLANT_TEMP;
->   		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
-> +		priv->buffer_size = D5NEXT_CTRL_REPORT_SIZE;
->   
->   		priv->temp_label = label_d5next_temp;
->   		priv->speed_label = label_d5next_speeds;
-
+--Pavel Skripkin

@@ -2,137 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8A757782E
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 22:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93C0577831
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 22:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbiGQUUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 16:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        id S232091AbiGQU0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 16:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiGQUUa (ORCPT
+        with ESMTP id S229680AbiGQUZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 16:20:30 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEE912604
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 13:20:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658089229; x=1689625229;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=u3BTU9s6wqgyMqlryXdvFK/JVmALAmGORBwys/OKIBM=;
-  b=YKrne1KPGh4q6a1VjJldSiDkwIDRRxZIWTuOzLSk/DzSDmIeEz8PoEM6
-   Yp271xBOVYB3O2H9gsZ3eNF6fFQTO9Mu1Zh41NsPJHhUeWrN1cTHJQbKP
-   JqihRFA7xT1gMPpP4hTQMSOrxDaPfdNWeXKlbRO1onWZvCtSDJsxW/w0X
-   CdKG+eZCnbxgmKO8MPERszZOv0DxhiakRYxZdKSQslwcMD6Q2jpA5TrUq
-   aUDgnIMwUrS3ZXFnSuSo6cnl3qY7vQYP2KxAJNGgVDqoZHgd70hLBvGpC
-   521fGoqg5FOWFNRv4nW5X910D1KhxoCLWoYJ9wnG9L0Ni8pWAUjZouwgj
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="347779846"
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="347779846"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 13:20:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="572153981"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 17 Jul 2022 13:20:27 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oDAkd-0003f3-0q;
-        Sun, 17 Jul 2022 20:20:27 +0000
-Date:   Mon, 18 Jul 2022 04:19:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [asahilinux:bits/080-wifi 22/29]
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse:
- sparse: incorrect type in assignment (different base types)
-Message-ID: <202207180442.juH2G4EL-lkp@intel.com>
+        Sun, 17 Jul 2022 16:25:58 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE481180D;
+        Sun, 17 Jul 2022 13:25:57 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 75so17769782ybf.4;
+        Sun, 17 Jul 2022 13:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WQJt1app/1+BamRnBVCCSfWXec050wLumfUNaLBnpKk=;
+        b=JVPZrBIWXwyVza1YQ8QkiNAfIvcukmRwqMGFXojnG0BcXqzkervd//1ZTSrsyyNvt1
+         EBcTmwMj1tnyAZSORZuQz9plll+SUJR2tEK7PxpxhMfETLD/wd6KbVgS6Uh3dGKTx2rH
+         9vpYT2VeflRtXyAGNrlt1NUbSnNcoFpvMOnNZdGpJ+PnjP9AIBZVjKIMJboBFgO50OtX
+         bYe6O4VG2xs90ySn79Xr/bJhWNd7moGr07CqEsy8XS/+4iTTbWxizNmHdch6HFOrV3Yb
+         JULodIET9iTjZ+jUymOqH+1+6Klo+V6Cwz1Iqd7NIsSi3+dIUba50CBY0eMo07VYKNSS
+         c5OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WQJt1app/1+BamRnBVCCSfWXec050wLumfUNaLBnpKk=;
+        b=3zXKP5janbe1n0xrkurMF4IJeOwn6ercuP1wsh9IMgeGUJrLn52GRL902NNu012JzG
+         urB1i+z5qSQZ/5CWAEAOnVyUFoHbaSKYiPEC7AdUWae99dy59lDD7JWpJhMwBcFFFjH7
+         9RKptU/uSekjP21wHkqPuFf2DgYGm4BPNK/mSS79YOhUy8LDaqSyyzMjxMhvjNtBafLu
+         SBNgtduUlmuviu8H/GPDuaoHHpEBpzpB1vFcTXyX2dQFiujugOpV2uJkI3VTwfap6REd
+         qUF5R71cMmm5lDjDFnimRINVVnU5ulECLnsUW12JYCv2WiJ/NJLyd8mAvS3U+FQddXA6
+         t2rw==
+X-Gm-Message-State: AJIora928iy73DqmIjAcBkLkUjbG60OXkjrcHGLSj162qxWC1WJ9a8MR
+        g+a15fJFRa4jD+R4BnySyWjmZqyaFaEnQOhrLhXnl4QPEdY=
+X-Google-Smtp-Source: AGRyM1uUaFp4jr9Q7LCoBIhWkwizwk+v22P6cWnEUs23PHHmkHZVztizIgKt9DyWUHUnc1D79SgpJ1/yhCHxHRLym/w=
+X-Received: by 2002:a25:b0a8:0:b0:66f:eb53:76ca with SMTP id
+ f40-20020a25b0a8000000b0066feb5376camr14168595ybj.617.1658089557008; Sun, 17
+ Jul 2022 13:25:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <Ys/aDKZNhhsENH9S@debian> <CADVatmO9XzFnX+N0TuOtr0FYyxKr1oe5RAhCEJjmnvjteT5QNw@mail.gmail.com>
+ <CAHk-=whc3Uvhrmrr27xp5=oOhSDjXc5s1ZxC3B7xMYV6oj4WRQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whc3Uvhrmrr27xp5=oOhSDjXc5s1ZxC3B7xMYV6oj4WRQ@mail.gmail.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Sun, 17 Jul 2022 21:25:20 +0100
+Message-ID: <CADVatmO1V8DiAgWMW9EFHwt+ghwfHhueigXh214tUa_=tVxiug@mail.gmail.com>
+Subject: Re: mainline build failure of powerpc allmodconfig for prom_init_check
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Kees Cook <keescook@chromium.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org,
+        Segher Boessenkool <segher@kernel.crashing.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/080-wifi
-head:   17fbadf936c0875886e8b4f48a777eca5acf3b20
-commit: cb8c1e6eaed57ea1268f71d306e4a7e4708992d8 [22/29] brcmfmac: cfg80211: Add support for PMKID_V3 operations
-config: parisc-randconfig-s041-20220715 (https://download.01.org/0day-ci/archive/20220718/202207180442.juH2G4EL-lkp@intel.com/config)
-compiler: hppa64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/AsahiLinux/linux/commit/cb8c1e6eaed57ea1268f71d306e4a7e4708992d8
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/080-wifi
-        git checkout cb8c1e6eaed57ea1268f71d306e4a7e4708992d8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc64 SHELL=/bin/bash drivers/bluetooth/ drivers/media/i2c/ drivers/net/wireless/broadcom/brcm80211/brcmfmac/ drivers/pci/ kernel/trace/ sound/soc/codecs/
+On Sun, Jul 17, 2022 at 3:44 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Sun, Jul 17, 2022 at 2:13 AM Sudip Mukherjee
+> <sudipm.mukherjee@gmail.com> wrote:
+> >
+> > I was trying to check it. With gcc-11 the assembly code generated is
+> > not using memset, but using __memset.
+> > But with gcc-12, I can see the assembly code is using memset. One
+> > example from the assembly:
+>
+> You could try making the 'args' array in 'struct prom_args' be marked
+> 'volatile'.
+>
+> Ie something like this:
+>
+>   --- a/arch/powerpc/kernel/prom_init.c
+>   +++ b/arch/powerpc/kernel/prom_init.c
+>   @@ -115,6 +115,6 @@ struct prom_args {
+>            __be32 service;
+>            __be32 nargs;
+>            __be32 nret;
+>   -          __be32 args[10];
+>   +        volatile __be32 args[10];
+>    };
+>
+> because I think it's just the compilers turning the small loop over
+> those fields into a "memset()".
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+That didn't work.
+"Error: External symbol 'memset' referenced from prom_init.c" is still
+there with this change.
+And the generated assembly still has the memset for "struct prom_args".
 
-
-sparse warnings: (new ones prefixed by >>)
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] version @@     got int @@
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse:     expected restricted __le16 [usertype] version
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse:     got int
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] scan_type @@     got int @@
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse:     expected restricted __le32 [usertype] scan_type
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse:     got int
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned char [usertype] scan_type @@     got restricted __le32 [usertype] scan_type @@
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse:     expected unsigned char [usertype] scan_type
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse:     got restricted __le32 [usertype] scan_type
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] time_left @@     got unsigned int @@
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse:     expected restricted __le32 [usertype] time_left
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse:     got unsigned int
-
-vim +4075 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-
-  4053	
-  4054	static s32
-  4055	brcmf_pmksa_v3_op(struct brcmf_if *ifp, struct cfg80211_pmksa *pmksa,
-  4056			  bool alive)
-  4057	{
-  4058		struct brcmf_pmk_op_v3_le *pmk_op;
-  4059		int length = offsetof(struct brcmf_pmk_op_v3_le, pmk);
-  4060		int ret;
-  4061	
-  4062		pmk_op = kzalloc(sizeof(*pmk_op), GFP_KERNEL);
-  4063		pmk_op->version = cpu_to_le16(BRCMF_PMKSA_VER_3);
-  4064	
-  4065		if (!pmksa) {
-  4066			/* Flush operation, operate on entire list */
-  4067			pmk_op->count = cpu_to_le16(0);
-  4068		} else {
-  4069			/* Single PMK operation */
-  4070			pmk_op->count = cpu_to_le16(1);
-  4071			length += sizeof(struct brcmf_pmksa_v3);
-  4072			memcpy(pmk_op->pmk[0].bssid, pmksa->bssid, ETH_ALEN);
-  4073			memcpy(pmk_op->pmk[0].pmkid, pmksa->pmkid, WLAN_PMKID_LEN);
-  4074			pmk_op->pmk[0].pmkid_len = WLAN_PMKID_LEN;
-> 4075			pmk_op->pmk[0].time_left = alive ? BRCMF_PMKSA_NO_EXPIRY : 0;
-  4076		}
-  4077	
-  4078		pmk_op->length = cpu_to_le16(length);
-  4079	
-  4080		ret = brcmf_fil_iovar_data_set(ifp, "pmkid_info", pmk_op, sizeof(*pmk_op));
-  4081		kfree(pmk_op);
-  4082		return ret;
-  4083	}
-  4084	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards
+Sudip

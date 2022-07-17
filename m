@@ -2,107 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68167577830
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 22:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8A757782E
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 22:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiGQUYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 16:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
+        id S231300AbiGQUUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 16:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiGQUY3 (ORCPT
+        with ESMTP id S229680AbiGQUUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 16:24:29 -0400
-X-Greylist: delayed 434 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 17 Jul 2022 13:24:25 PDT
-Received: from mailgate.kemenperin.go.id (mailgate.kemenperin.go.id [202.47.80.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB8810B2;
-        Sun, 17 Jul 2022 13:24:25 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id BEC3136E9EAA;
-        Mon, 18 Jul 2022 03:15:53 +0700 (WIB)
-Received: from mailgate.kemenperin.go.id ([127.0.0.1])
-        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id l73BfhGbvQlQ; Mon, 18 Jul 2022 03:15:52 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 50DA036E9EA4;
-        Mon, 18 Jul 2022 03:15:50 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mailgate.kemenperin.go.id 50DA036E9EA4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kemenperin.go.id;
-        s=3298A942-BBC6-11E3-B333-483736368EC2; t=1658088950;
-        bh=TDquzFYQPMurZmx1rlaYhCKpwMqfz12oYqREoXA5Sj4=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=RPURRHr7ndnVhlz7wAn0SvJJKM6ZkZHQDO48yFR5uwdD5nS9SmMYOVUrIy6uvNzh8
-         ki9sSv0vdcoWMI1o5cLNDa6DBOYKv9ZQFCTHI0cOlc37/tOVRDobXpzvPRVOdpZVRj
-         rs9mufki2pYDBu/3DnqleeVz9gA4y5nr8FmgnNHI=
-X-Virus-Scanned: amavisd-new at kemenperin.go.id
-Received: from mailgate.kemenperin.go.id ([127.0.0.1])
-        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qXFP-JQw_oPU; Mon, 18 Jul 2022 03:15:50 +0700 (WIB)
-Received: from mailgate.kemenperin.go.id (mailgate.kemenperin.go.id [10.1.0.89])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 4486736E9E9C;
-        Mon, 18 Jul 2022 03:15:45 +0700 (WIB)
-Date:   Mon, 18 Jul 2022 03:15:45 +0700 (WIB)
-From:   GLOBAL CREDIT CONSULTANT <alipan.d@kemenperin.go.id>
-Reply-To: "info@gccreditinternationalconsultancy.com" 
-          <info@gccreditinternationalconsultancy.com>
-Message-ID: <1057782731.1333371.1658088945232.JavaMail.zimbra@kemenperin.go.id>
-Subject: =?utf-8?Q?=E2=80=8B=E2=80=8BAufmerksamkeit!_(Darlehen_=E2=82=AC?=
- =?utf-8?Q?10.000,00_bis_=E2=82=AC10.000.000,00)?=
+        Sun, 17 Jul 2022 16:20:30 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEE912604
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 13:20:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658089229; x=1689625229;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=u3BTU9s6wqgyMqlryXdvFK/JVmALAmGORBwys/OKIBM=;
+  b=YKrne1KPGh4q6a1VjJldSiDkwIDRRxZIWTuOzLSk/DzSDmIeEz8PoEM6
+   Yp271xBOVYB3O2H9gsZ3eNF6fFQTO9Mu1Zh41NsPJHhUeWrN1cTHJQbKP
+   JqihRFA7xT1gMPpP4hTQMSOrxDaPfdNWeXKlbRO1onWZvCtSDJsxW/w0X
+   CdKG+eZCnbxgmKO8MPERszZOv0DxhiakRYxZdKSQslwcMD6Q2jpA5TrUq
+   aUDgnIMwUrS3ZXFnSuSo6cnl3qY7vQYP2KxAJNGgVDqoZHgd70hLBvGpC
+   521fGoqg5FOWFNRv4nW5X910D1KhxoCLWoYJ9wnG9L0Ni8pWAUjZouwgj
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="347779846"
+X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
+   d="scan'208";a="347779846"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 13:20:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
+   d="scan'208";a="572153981"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 17 Jul 2022 13:20:27 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDAkd-0003f3-0q;
+        Sun, 17 Jul 2022 20:20:27 +0000
+Date:   Mon, 18 Jul 2022 04:19:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [asahilinux:bits/080-wifi 22/29]
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse:
+ sparse: incorrect type in assignment (different base types)
+Message-ID: <202207180442.juH2G4EL-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [10.1.0.89]
-Thread-Index: aRa/jKdaTEmsY0va225Ml/d2owfL4w==
-Thread-Topic: =?utf-8?Q?=E2=80=8B=E2=80=8BAufmerksamkeit!_=28Darlehen_=E2=82=AC10=2E000=2C00_bis_=E2=82=AC10=2E000=2E000=2C00=29?=
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 0.9995]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 0.9995]
-        *  1.0 MISSING_HEADERS Missing To: header
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/AsahiLinux/linux bits/080-wifi
+head:   17fbadf936c0875886e8b4f48a777eca5acf3b20
+commit: cb8c1e6eaed57ea1268f71d306e4a7e4708992d8 [22/29] brcmfmac: cfg80211: Add support for PMKID_V3 operations
+config: parisc-randconfig-s041-20220715 (https://download.01.org/0day-ci/archive/20220718/202207180442.juH2G4EL-lkp@intel.com/config)
+compiler: hppa64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/AsahiLinux/linux/commit/cb8c1e6eaed57ea1268f71d306e4a7e4708992d8
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/080-wifi
+        git checkout cb8c1e6eaed57ea1268f71d306e4a7e4708992d8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc64 SHELL=/bin/bash drivers/bluetooth/ drivers/media/i2c/ drivers/net/wireless/broadcom/brcm80211/brcmfmac/ drivers/pci/ kernel/trace/ sound/soc/codecs/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-Aufmerksamkeit!
+sparse warnings: (new ones prefixed by >>)
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] version @@     got int @@
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse:     expected restricted __le16 [usertype] version
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse:     got int
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] scan_type @@     got int @@
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse:     expected restricted __le32 [usertype] scan_type
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse:     got int
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned char [usertype] scan_type @@     got restricted __le32 [usertype] scan_type @@
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse:     expected unsigned char [usertype] scan_type
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse:     got restricted __le32 [usertype] scan_type
+>> drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] time_left @@     got unsigned int @@
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse:     expected restricted __le32 [usertype] time_left
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse:     got unsigned int
 
-Mit rechtlicher Zertifizierung und Dokumentation bieten wir bei Gc Credit I=
-nternational Consultancy innerhalb von 48 Stunden gesicherte Sofortdarlehen=
- zu 1% an.
-Arten von Darlehen:
-Privatkredite, Gesch=C3=A4ftskredite, Projektkredite, Investitionskredite u=
-nd mehr.
-Erforderliche Bewerbungsdaten:
+vim +4075 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
 
-Vollst=C3=A4ndiger Name:__________________
-Vollst=C3=A4ndige Adresse:_________________
-Darlehensbetrag:__________
-Leihdauer:___________________
-Zweck des Darlehens:___________________
+  4053	
+  4054	static s32
+  4055	brcmf_pmksa_v3_op(struct brcmf_if *ifp, struct cfg80211_pmksa *pmksa,
+  4056			  bool alive)
+  4057	{
+  4058		struct brcmf_pmk_op_v3_le *pmk_op;
+  4059		int length = offsetof(struct brcmf_pmk_op_v3_le, pmk);
+  4060		int ret;
+  4061	
+  4062		pmk_op = kzalloc(sizeof(*pmk_op), GFP_KERNEL);
+  4063		pmk_op->version = cpu_to_le16(BRCMF_PMKSA_VER_3);
+  4064	
+  4065		if (!pmksa) {
+  4066			/* Flush operation, operate on entire list */
+  4067			pmk_op->count = cpu_to_le16(0);
+  4068		} else {
+  4069			/* Single PMK operation */
+  4070			pmk_op->count = cpu_to_le16(1);
+  4071			length += sizeof(struct brcmf_pmksa_v3);
+  4072			memcpy(pmk_op->pmk[0].bssid, pmksa->bssid, ETH_ALEN);
+  4073			memcpy(pmk_op->pmk[0].pmkid, pmksa->pmkid, WLAN_PMKID_LEN);
+  4074			pmk_op->pmk[0].pmkid_len = WLAN_PMKID_LEN;
+> 4075			pmk_op->pmk[0].time_left = alive ? BRCMF_PMKSA_NO_EXPIRY : 0;
+  4076		}
+  4077	
+  4078		pmk_op->length = cpu_to_le16(length);
+  4079	
+  4080		ret = brcmf_fil_iovar_data_set(ifp, "pmkid_info", pmk_op, sizeof(*pmk_op));
+  4081		kfree(pmk_op);
+  4082		return ret;
+  4083	}
+  4084	
 
-Hinweis: Unsere Dienstleistungen sind zu 100 % garantiert und die Erf=C3=BC=
-llung Ihrer finanziellen Bed=C3=BCrfnisse zur Zufriedenheit ist unsere ober=
-ste Priorit=C3=A4t.
-Verpassen Sie diese Chancen nicht.
-
-Kreditantragsschalter
-E-Mail: info@gccreditinternationalconsultancy.com
-Gc Internationale Kreditberatung
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

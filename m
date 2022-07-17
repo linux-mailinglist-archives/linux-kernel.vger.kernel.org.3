@@ -2,89 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72092577288
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 02:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0B1577289
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 02:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiGQAFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 20:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
+        id S232426AbiGQAMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 20:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiGQAFk (ORCPT
+        with ESMTP id S229619AbiGQAMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 20:05:40 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3198718361;
-        Sat, 16 Jul 2022 17:05:40 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id f65so7568118pgc.12;
-        Sat, 16 Jul 2022 17:05:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jvc5QnDNvevbD8cpU2SRqKC1urfkP+uvE5heBXUe2+4=;
-        b=oziB7A0EkBfra1KLj464rVXNuZ+pjC5Gy11QekAwFbnkzeBQPmwIgbzKzJh1LHW28N
-         PScexfbKTdQzicu/Cs27nZ4cVPYw7NtoZDc1sbJTmxVhNn2QhJA8HD9deL0geKK+M5St
-         d0C7ERHBbRUOW/n+vfMX0CvVHqhUkmEUiM+eyCTRqQp8igNmtZQXndgF87hcjnsGph42
-         MFdJquMa3WichkswOD0ounARqfTm8OAtNsGM68D4ltBzp+lsZNG2zdHOJUEADS2dMXEP
-         8OOf9gzgIDHw7GAVvmBg/enmiKwpfjAJhq6YhxzWUkE/wbVFq901yUmqDC+jJcS9JoJ+
-         6JhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jvc5QnDNvevbD8cpU2SRqKC1urfkP+uvE5heBXUe2+4=;
-        b=sI2kAnhuZoJYOcRoqcQ+QtUXbGc8Nvj3Z0yq+VL2SKZHD4X0Ze1MhkKISdlaz1cn2q
-         pT2X53Xmgm2nup8RKkBsA5h+AXpBtXuHjV12+oqzXW6nACT+to0NDjg9VTFe3b3hlzDq
-         I0iG4ygyF7XBHW+wkkyXPZPwQi2YlpPVXLtdkYjVRWvWFr7m1YbO9oO/fZ/WZu4ZzVuD
-         ii3Buqa4VmCUPuqq1Xu+74HvWytj9GPBynZvSlKWMUt75PWOBt7HnKTZFeb6IV+zjTTe
-         wII7adTntWVwRfS1ESxwXOQZAq75L7TCZQgbcFhYq8wYhYRXGrQqt7zr7FuKBzwBRDTg
-         XUnw==
-X-Gm-Message-State: AJIora/oW4vfkIohlvjDrjRQ8lXFTgCKb87SDf00BNfVx6kNr+GvGJPG
-        PbEJNxrnXa4c7ZeZ21pjE2dCq7onrD85xi9vuCYuAHidSmo1
-X-Google-Smtp-Source: AGRyM1voVlgt4czroxoBFv8HX05m2Y3yhAzDqzgeiwv2ZtzUUsyniDhVuS4w1kXpGSWfCkAZx0rW458wrb0WMnc+Pbw=
-X-Received: by 2002:a63:7d49:0:b0:408:c70a:9496 with SMTP id
- m9-20020a637d49000000b00408c70a9496mr19546538pgn.616.1658016339158; Sat, 16
- Jul 2022 17:05:39 -0700 (PDT)
+        Sat, 16 Jul 2022 20:12:03 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8552719C3F;
+        Sat, 16 Jul 2022 17:12:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658016722; x=1689552722;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HFHgTs6YcSEEVWfkRgiSn0j5/xmOi9Hqq1hD2gQcRO8=;
+  b=NLYVH6sHvE4f4xwSAwFpgI+jZBR342jA1m7ImtYAYL0+RDwklwjtQ6Jh
+   OjOtBUHIHclaoNUyD/0wgnvNW7SPf4gKe0jl79vjTdhRt90G+hjzmBpQ6
+   ioxGglMN+onHUjWATg27I/hS9XnfVI8iZngpHVmXnTtxsWXrE4IWjpBFx
+   CH59v8g5IJPZukfb5vlidsEcY18oJHGo56OlGQ5gM8C6+MQmuskgl7qBw
+   qmQTYNnoh43/CjrTpae3gtw86x/QeZRIaCar3AfJDl3J/lWOGVJ+7kVQN
+   Itjw6uPp5Ogv+jFaiEHf7zDRPTYG+kz6WZzP+uzuBYaJyBu/qxPXmy+2S
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="266422036"
+X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
+   d="scan'208";a="266422036"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 17:12:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
+   d="scan'208";a="547067558"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 16 Jul 2022 17:12:00 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCrt9-0002L8-96;
+        Sun, 17 Jul 2022 00:11:59 +0000
+Date:   Sun, 17 Jul 2022 08:11:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34:
+ warning: unused variable 'samsung_jpeg_match'
+Message-ID: <202207170810.jqfLUIpt-lkp@intel.com>
 MIME-Version: 1.0
-References: <CAMhUBj=bs8rbiPGX1qOv9FSU8m=TdRZqqJGvRcynKbaWwf_A-A@mail.gmail.com>
- <5fc2c89d-5aaf-3b81-64cc-7e69b16266c9@infradead.org>
-In-Reply-To: <5fc2c89d-5aaf-3b81-64cc-7e69b16266c9@infradead.org>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Sun, 17 Jul 2022 08:05:27 +0800
-Message-ID: <CAMhUBjnUfH6hKgP7nwoCXphwMtc838zjzJZuUuNzOo4b+cESHA@mail.gmail.com>
-Subject: Re: [BUG] media: cx88-alsa: Found a bug at the probe time
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 3:03 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Hi--
->
-> On 7/14/22 18:54, Zheyu Ma wrote:
-> > Hello,
-> >
-> > I found a bug in the driver cx88-alsa.
-> >
-> > When the driver fails in the function snd_cx88_create() at the probe
-> > time, it will cause a UAF bug as follows:
->
-> It's not a UAF. It's a WARN() macro with an IRQ management problem,
-> as shown in the next 2 lines below:
+Hi Mauro,
 
-You are right, that is indeed just a warning :)
+First bad commit (maybe != root cause):
 
-regards,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   972a278fe60c361eb8f37619f562f092e8786d7c
+commit: f4104b7851a8d8b9a70899dcbecdb393eb16cd8a media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
+date:   4 months ago
+config: hexagon-buildonly-randconfig-r005-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170810.jqfLUIpt-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/samsung/s5p-jpeg/
 
-Zheyu Ma
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
+   static const struct of_device_id samsung_jpeg_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
+
+:::::: The code at line 3126 was first introduced by commit
+:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
+
+:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

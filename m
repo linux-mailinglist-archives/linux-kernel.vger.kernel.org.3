@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0BF577747
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 18:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC8057774A
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 18:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbiGQQRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 12:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
+        id S232755AbiGQQUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 12:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiGQQRj (ORCPT
+        with ESMTP id S229536AbiGQQUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 12:17:39 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B794BBF55;
-        Sun, 17 Jul 2022 09:17:37 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id z22so2077954lfu.7;
-        Sun, 17 Jul 2022 09:17:37 -0700 (PDT)
+        Sun, 17 Jul 2022 12:20:52 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B33A18F
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 09:20:51 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id a15so9795587pjs.0
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 09:20:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LVtaKxs7d9jWGW/ag4VeQH2lASOiSRK3darGXEw5b+U=;
-        b=gedTpL2OT34yCe/KuASkLyO3C/L80JXn9+OEqfQ+pGkTpW9/Y2ACVLp6MQGZhEQxrN
-         zK63Xc6ppPeUC42LbHqnVbKos2kVBh1pcE0c4t+FQFk+XL1dV9OP+SWPU586LraMUza5
-         Yk72O6cuPD2WgMIh8NPsL3m8y6SLHufSB+f4UTQ4k1WXKJYV7QZp88lTFfnI0CKNDedv
-         xPPFB13HySiOa0tOXAUfctc1UYtVGAVREHC/yzL6TmKxNiDcHect7/0oS58J5cWE0Q47
-         bNNcNPz26nA4qkhXajcLIjYb7z3AUxjEC29HsImU5T8koNWEu5xq/rFzZaU2S2M135/7
-         zB3g==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u3QM0VGwZJMhBsJE0onY0hM94jbomNudisRDkMA5phA=;
+        b=XC49hl0Qoew2RD7oOXd1YLrAttGqaR8lA/xJayGMOA7KPOtm69P5LIAUTNSjlTIZBF
+         baH7+u+MkADowl23la0Ld7o2G1TyHaouqxPWE586BiPJNGyP1xxHHKeeqvroWR/uf+gO
+         9DhwKT4yDJHVTpieh7AIIaEzxnXdEuzC64nnTyPLU6+ygByfJAp7BHdWb9H5PPuXKhkc
+         NrbfQnOhxeYsVuhtGRBB39jn6q5iGyj67CohnEhYfYHOxu5hqW0GDCW4p0rRNO0JM+3O
+         lNTNvVRPno+ytNlKfCV2ikbLNUOjDepKmZVj5pc4Goxpiwz6xNMLou90aLu1s/XlDWjU
+         EL+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LVtaKxs7d9jWGW/ag4VeQH2lASOiSRK3darGXEw5b+U=;
-        b=jh4WKj0zsJfoJsFBzxVgIZdqCpxGvPWpDdZGgnYoX0e3moT2HnjK8dMdcaN1SejmXv
-         nmtmvoUpasSbL7jTlY72ViObmnSNAcJ/6U5TTzf2K9JcjK6wA13eaMJL1zFzOE5FKIed
-         dUmubLjWvAajYQj6RrpTY3oFpllqDW1ixX18/IIlIGJydokuZhdZnSZNLA7qc1wzKq9r
-         ZVyWDwUzY87VDTKn25sD2et4wbQe4vENeT/kY+ukAplwQ/IhGvE3PhirdhQh2vGziUVP
-         m519uMlPfiqV8arC7J4FoZGo4qiodZfS699f0OOkBkSKjeiziujcIHKmmzRCyeOLy/74
-         6rsw==
-X-Gm-Message-State: AJIora+l4uZnGzdJwQgTRLxhjy+xxTRQJaczfYxYYdB4HlwU8enWlLwW
-        RzkhbNbAYm3b+HmiYLnkJ+0=
-X-Google-Smtp-Source: AGRyM1usQ/hmPjYoBgRoc5730r0JGodxe2wwtcp8bDxVCiijxctBNh+Rbdu3DWbgJ+1LjgCBQ5w4Jw==
-X-Received: by 2002:a05:6512:31cf:b0:489:da0d:df52 with SMTP id j15-20020a05651231cf00b00489da0ddf52mr12952240lfe.221.1658074655836;
-        Sun, 17 Jul 2022 09:17:35 -0700 (PDT)
-Received: from [192.168.1.11] ([46.235.67.63])
-        by smtp.gmail.com with ESMTPSA id b17-20020a056512071100b0048a29c923e4sm1246402lfs.7.2022.07.17.09.17.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Jul 2022 09:17:35 -0700 (PDT)
-Message-ID: <3ea0ea90-48bf-ce19-e014-9443d732e831@gmail.com>
-Date:   Sun, 17 Jul 2022 19:17:33 +0300
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=u3QM0VGwZJMhBsJE0onY0hM94jbomNudisRDkMA5phA=;
+        b=U0d7N1DZ5Vbx6opk6N9K786mzgYL72eu1N9wnrQpUJ8W1Wxn8ndpwSG2XZg4Skn/lQ
+         k76jcLxcK/pYudYx/BY0sZl2+xXPkhVE6g5Zr4V8XFR6xeC0cqA1m6AUTGu4k5xDwDHa
+         cmdyKBAAEFMU9f4ssjtssaPEAVm7SKPxrDJiC97PerNhOTDcDnWVTkvu+5AzSxVZa0H5
+         /Xr0LDaZVzOhhmy24ZslipwDOaTlXidx3YPucctfJxkZYmWOM5SN2GVGrow63Cn6vI5I
+         nNgUDvo2XBLlRgiaiYiSz9gMYPz2HFVXatwg/HHaEmHf3cNZyFGKJV6GY/GL5zfG9wwT
+         iPBQ==
+X-Gm-Message-State: AJIora8AqbI0UXUxEPEQXxxwMhN8YGxah0Jsyy27E2w3xrqLYmPCmKk+
+        YC6en3UQJjdMZksfiixPgtjDa5O8kIwj2A==
+X-Google-Smtp-Source: AGRyM1ve/k7uBaojTv42vcU8qIxzNJZnzgL1eV24bkOlshzh2Z01ipo8jmARjSC9DhQ4kvDO93eO/Q==
+X-Received: by 2002:a17:90b:1a81:b0:1f0:77a7:907f with SMTP id ng1-20020a17090b1a8100b001f077a7907fmr29012948pjb.49.1658074850832;
+        Sun, 17 Jul 2022 09:20:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u142-20020a627994000000b0051c758a3957sm7690289pfc.149.2022.07.17.09.20.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jul 2022 09:20:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>
+Subject: [PATCH] drm/i915: Fix 32-bit build
+Date:   Sun, 17 Jul 2022 09:20:46 -0700
+Message-Id: <20220717162046.710290-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] Bluetooth: hci_core: Use ERR_PTR instead of NULL
-Content-Language: en-US
-To:     Khalid Masum <khalid.masum.92@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
-References: <20220717133759.8479-1-khalid.masum.92@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220717133759.8479-1-khalid.masum.92@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,37 +77,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Khalid,
+Commit aff1e0b09b54 ("drm/i915/ttm: fix sg_table construction") introduces
+an additional parameter to i915_rsgt_from_mm_node(). The parameter is used
+to calculate segment_pages. This in turn is used in DIV_ROUND_UP() as
+divisor. So far segment_pages was a constant and handled without divide
+operation. Since it is no longer constant, a divide operation is now
+necessary. This results in build errors on 32-bit builds.
 
-Khalid Masum <khalid.masum.92@gmail.com> says:
-> Failure of kzalloc to allocate memory is not reported. Return Error
-> pointer to ENOMEM if memory allocation fails. This will increase
-> readability and will make the function easier to use in future.
-> 
-> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> ---
+x86_64-linux-ld: drivers/gpu/drm/i915/i915_scatterlist.o:
+	in function `i915_rsgt_from_mm_node':
+i915_scatterlist.c:(.text+0x196): undefined reference to `__udivdi3'
 
-[snip]
+Fix the problem by using DIV_ROUND_UP_ULL() instead of DIV_ROUND_UP().
 
-> index a0f99baafd35..ea50767e02bf 100644
-> --- a/net/bluetooth/hci_core.c
-> +++ b/net/bluetooth/hci_core.c
-> @@ -2419,7 +2419,7 @@ struct hci_dev *hci_alloc_dev_priv(int sizeof_priv)
->   
->   	hdev = kzalloc(alloc_size, GFP_KERNEL);
->   	if (!hdev)
-> -		return NULL;
-> +		return ERR_PTR(-ENOMEM);
->   
+Fixes: aff1e0b09b54 ("drm/i915/ttm: fix sg_table construction")
+Cc: Matthew Auld <matthew.auld@intel.com>
+Cc: Nirmoy Das <nirmoy.das@intel.com>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+I took a stab at the problem. Please ignore the noise if it has already
+been fixed with a different patch.
 
-This will break all callers of hci_alloc_dev(). All callers expect NULL 
-in case of an error, so you will leave them with wrong pointer.
+ drivers/gpu/drm/i915/i915_scatterlist.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Also, allocation functionS return an error only in case of ENOMEM, so 
-initial code is fine, IMO
+diff --git a/drivers/gpu/drm/i915/i915_scatterlist.c b/drivers/gpu/drm/i915/i915_scatterlist.c
+index f63b50b71e10..b81d5658c222 100644
+--- a/drivers/gpu/drm/i915/i915_scatterlist.c
++++ b/drivers/gpu/drm/i915/i915_scatterlist.c
+@@ -96,7 +96,7 @@ struct i915_refct_sgt *i915_rsgt_from_mm_node(const struct drm_mm_node *node,
+ 
+ 	i915_refct_sgt_init(rsgt, node->size << PAGE_SHIFT);
+ 	st = &rsgt->table;
+-	if (sg_alloc_table(st, DIV_ROUND_UP(node->size, segment_pages),
++	if (sg_alloc_table(st, DIV_ROUND_UP_ULL(node->size, segment_pages),
+ 			   GFP_KERNEL)) {
+ 		i915_refct_sgt_put(rsgt);
+ 		return ERR_PTR(-ENOMEM);
+-- 
+2.36.2
 
-
-
-
-Thanks,
---Pavel Skripkin

@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D995776BE
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 16:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D73C5776C0
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 16:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232136AbiGQOnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 10:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        id S232763AbiGQOnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 10:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbiGQOnk (ORCPT
+        with ESMTP id S231434AbiGQOnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 10:43:40 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC8EFD0B;
-        Sun, 17 Jul 2022 07:43:38 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id p26-20020a1c545a000000b003a2fb7c1274so3538605wmi.1;
-        Sun, 17 Jul 2022 07:43:38 -0700 (PDT)
+        Sun, 17 Jul 2022 10:43:41 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732FFDF66;
+        Sun, 17 Jul 2022 07:43:39 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id c18so727847wmh.1;
+        Sun, 17 Jul 2022 07:43:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+nXzr6RXTjmwManVEd/M1NzDTHAv1xLQeADv/g9hsBw=;
-        b=Wh0Uk6J8JtbDSh+iS+CJvs962lJuYfDS91VIX4Y7C73tRWP743GDoiXSX+R0pTtCUE
-         BU3sZWunf0zQXKdHrYZVpC4F3IoOyJhagbgIaoCl9tApAdBdS+zCuAIcPrNOTHmEADTl
-         CdykEFAqgpFFYnklw61niymytzjHrbQQbb8N3OoVd9fNKVRft0boAWC/+LeIrpmGnPdU
-         jt3hb/aG65/vSuUDciIynxzbLBmXo3Q66SmwwwBcQzDx8et0GoBZ2Wo+A4tRtkyB/SsX
-         5I3cnN3MRg3/RxtGCWjyKsDMVEKp//lGWgbGdgc/1/uYpv0Vvm9BZ2bjcf5R5gBEzN32
-         c4sQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=hXEApsgmJM0YpgsYBqtez7wZ8rBpB7fQbxI7//Qi7zM=;
+        b=ojJqo8IOKmmUSk/fA9YV63avtcdtgVb8kpZp7yC8z17TJSoGl1hl3ehBANPKg7PyZF
+         bQznaBjZ8QPmUEru4GIfBLXXIParP3ArjiSruil5I6ZJDdSg+6PIv7JuiAvAyB2Jdj5r
+         mOk8lH1xj7npm0aIh5CMLlFxPEhr+gjeZBsdV2k0YjVli7qppsqYUL0P88cC+2V4Tvf8
+         y53SV0/dTdKB/Vnf+mll8V0gTd8RWYlePnPrhh3GFw24vvt0ewHR3ssErj/wibJFyedK
+         sH6fZwPDLupY5Mx/0QsLt1Xi0orVEbGXfcRk/pCb+SIVR9cxLJM3DqD4Lh3vh46ONsNJ
+         0lZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+nXzr6RXTjmwManVEd/M1NzDTHAv1xLQeADv/g9hsBw=;
-        b=BoM340WEP2k0nhKJHq/r6g6Ou8YlXyN4uSVcv7QDqaVG828TpAxeDvaJ6jXWQ/NUij
-         K9BbR6psfldQkyFoAaEnc1caXt+tKxqLZowSQbX3VOUHQlbN72U3D5wA4T2oFiLWNItY
-         Hv+b4ctclS2bW1H7V+nhZ4GiDo1ode9vTf5HF7EWCLgDvCfk5G3A8osjga7PXR5cOxM6
-         nOvoV9Q/D/i4Aun3OQiANz7Dwx/qxVaDrimt/BbLLZZXUA71cZNmIBR1qWGND3zgeHWf
-         PIm1Q+u5jsCo3/jWjLsjD/YLlfRtk1JcurnJhqEa4tvfw+F40IFAvIcn/h/QcZ5tWQCh
-         Fwqg==
-X-Gm-Message-State: AJIora/CGY+HrwbuIyKri7lPTVoQKxHzcHXT6JmW/nm3yGpDbajdFqzL
-        A6e/I6YaUIB8HvsGwQDPajU=
-X-Google-Smtp-Source: AGRyM1sivoj/mvrgjyl34nlF+tobq79sQiOhJIaZqIuygzddoBuAAg+kOklPQkoaks7ufrGA3FjzRg==
-X-Received: by 2002:a05:600c:a0b:b0:39e:22ef:1a0 with SMTP id z11-20020a05600c0a0b00b0039e22ef01a0mr22787319wmp.46.1658069017156;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=hXEApsgmJM0YpgsYBqtez7wZ8rBpB7fQbxI7//Qi7zM=;
+        b=j457/7p7aSwgBdzS7mRrqDIg73U02KyGJ2f3I1fdWMSZbadKyTR2eDzYKUdUbhWnAE
+         blsbZQqLs9VOIT5i0qJ2N4SDPjdWSyh/S/HhrlFtzIUC5/0UcOi0JkOvVe4fT27MrLWo
+         wSZ/dqOMVN67kNxAUDllM7IpK0N0YTkI+/+23U6rsf5sqwwlAkbNNoxez5Sxa6SiQAL5
+         Kbn7NhA0/YmCB8Oacmc1ruTOYNsyY0PpdVZ4OlhdKmGVqnng29dcJX1zNOE+ojFph8oa
+         D6WzhRcjOD51L4dbKVKWTcVV/GnP4CLYo27bZ1D371lqXPclOxGJ1BdOLQvmFEqBpnRt
+         CPCw==
+X-Gm-Message-State: AJIora+ly3/fvD7cVM8GXj3VtDzQAbymhHrLIKE800DDWYNqsLslGx5R
+        +BjwKV3BfVBVmOeArLVdFs8=
+X-Google-Smtp-Source: AGRyM1tSA49cvfq77Uxw6Je3aDDDizMBN9dWv1uxPVMqXw84zL+aeXKyPy5shPMgY+JSEMwtNeFpwg==
+X-Received: by 2002:a05:600c:28d:b0:3a2:d06d:3894 with SMTP id 13-20020a05600c028d00b003a2d06d3894mr29101031wmk.51.1658069017974;
         Sun, 17 Jul 2022 07:43:37 -0700 (PDT)
 Received: from localhost.localdomain ([94.73.36.185])
-        by smtp.gmail.com with ESMTPSA id h8-20020adff4c8000000b0021d887f9468sm8432001wrp.25.2022.07.17.07.43.36
+        by smtp.gmail.com with ESMTPSA id h8-20020adff4c8000000b0021d887f9468sm8432001wrp.25.2022.07.17.07.43.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 07:43:36 -0700 (PDT)
+        Sun, 17 Jul 2022 07:43:37 -0700 (PDT)
 From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 To:     jikos@kernel.org
 Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
         j.witteveen@gmail.com, stefanberzl@gmail.com,
         linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         kunit-dev@googlegroups.com,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH v2 0/7] XP-PEN Deco Pro S support (for-5.20/uclogic)
-Date:   Sun, 17 Jul 2022 16:43:26 +0200
-Message-Id: <20220717144333.251190-1-jose.exposito89@gmail.com>
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Daniel Latypov <dlatypov@google.com>
+Subject: [PATCH v2 1/7] HID: uclogic: KUnit best practices and naming conventions
+Date:   Sun, 17 Jul 2022 16:43:27 +0200
+Message-Id: <20220717144333.251190-2-jose.exposito89@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220717144333.251190-1-jose.exposito89@gmail.com>
+References: <20220717144333.251190-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -72,61 +75,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello everyone,
+The KUnit documentation [1] suggests allowing build tests as a module.
 
-This patchset adds support for the XP-PEN Deco Pro S.
+In addition, it is recommended [2] to use snake case names for
+kunit_suite and test cases.
 
-Like the Deco L (for-5.20/uclogic) this tablet is a UGEE v2 tablet.
+Change the Kconfig entry from bool to tristate and stick to the naming
+conventions to avoid style issues with future tests.
 
-The first patch is not related to this tablet. It fixes some naming
-conventions on the KUnit tests.
+Link: https://docs.kernel.org/dev-tools/kunit/style.html#test-kconfig-entries  [1]
+Link: https://www.kernel.org/doc/html/latest/dev-tools/kunit/style.html  [2]
+Acked-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+---
+ drivers/hid/Kconfig                  |  2 +-
+ drivers/hid/Makefile                 |  3 ++-
+ drivers/hid/hid-uclogic-rdesc-test.c | 22 +++++++++++-----------
+ 3 files changed, 14 insertions(+), 13 deletions(-)
 
-Patches 2 and 3 just move code to functions and add more unit tests.
-
-Patch 4 parses the tablet string descriptor to get its frame type. The
-values discovered so far are: only buttons, buttons + dial or
-buttons + dial + mouse.
-
-Patches 5 and 6 add the descriptors for the new frame types.
-
-The last patch uses all of this to add support for the tablet.
-
-I don't have access to the tablet. Credit for testing the patches and
-providing the required recordings goes to Jouke Witteveen.
-This fixes an issue reported in libinput:
-https://gitlab.freedesktop.org/libinput/libinput/-/issues/738
-
-Best wishes,
-José Expósito
-
-v1 -> v2:
-
- - First patch acked-by Daniel Latypov
-
-José Expósito (7):
-  HID: uclogic: KUnit best practices and naming conventions
-  HID: uclogic: Refactor UGEE v2 string descriptor parsing
-  HID: uclogic: Refactor UGEE v2 frame initialization
-  HID: uclogic: Parse the UGEE v2 frame type
-  HID: uclogic: Add support for UGEE v2 dial frames
-  HID: uclogic: Add support for UGEE v2 mouse frames
-  HID: uclogic: Add support for XP-PEN Deco Pro S
-
- drivers/hid/Kconfig                   |   2 +-
- drivers/hid/Makefile                  |   4 +-
- drivers/hid/hid-ids.h                 |   1 +
- drivers/hid/hid-uclogic-core.c        |   2 +
- drivers/hid/hid-uclogic-params-test.c | 192 ++++++++++++++++++++++
- drivers/hid/hid-uclogic-params.c      | 225 ++++++++++++++++++++++----
- drivers/hid/hid-uclogic-params.h      |  10 ++
- drivers/hid/hid-uclogic-rdesc-test.c  |  22 +--
- drivers/hid/hid-uclogic-rdesc.c       |  74 +++++++++
- drivers/hid/hid-uclogic-rdesc.h       |   8 +
- 10 files changed, 494 insertions(+), 46 deletions(-)
- create mode 100644 drivers/hid/hid-uclogic-params-test.c
-
-
-base-commit: 0cb1fc0988e32bda84c2b7218e0c761af1430baf
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 6ce92830b5d1..36a17958493f 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -1307,7 +1307,7 @@ config HID_MCP2221
+ 	will be called hid-mcp2221.ko.
+ 
+ config HID_KUNIT_TEST
+-	bool "KUnit tests for HID" if !KUNIT_ALL_TESTS
++	tristate "KUnit tests for HID" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT=y
+ 	depends on HID_UCLOGIC
+ 	default KUNIT_ALL_TESTS
+diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+index b0bef8098139..82d8fd97d96c 100644
+--- a/drivers/hid/Makefile
++++ b/drivers/hid/Makefile
+@@ -144,8 +144,9 @@ obj-$(CONFIG_HID_WIIMOTE)	+= hid-wiimote.o
+ obj-$(CONFIG_HID_SENSOR_HUB)	+= hid-sensor-hub.o
+ obj-$(CONFIG_HID_SENSOR_CUSTOM_SENSOR)	+= hid-sensor-custom.o
+ 
+-obj-$(CONFIG_HID_KUNIT_TEST)	+= hid-uclogic-rdesc.o \
++hid-uclogic-test-objs		:= hid-uclogic-rdesc.o \
+ 				   hid-uclogic-rdesc-test.o
++obj-$(CONFIG_HID_KUNIT_TEST)	+= hid-uclogic-test.o
+ 
+ obj-$(CONFIG_USB_HID)		+= usbhid/
+ obj-$(CONFIG_USB_MOUSE)		+= usbhid/
+diff --git a/drivers/hid/hid-uclogic-rdesc-test.c b/drivers/hid/hid-uclogic-rdesc-test.c
+index ebebffef5f8a..3971a0854c3e 100644
+--- a/drivers/hid/hid-uclogic-rdesc-test.c
++++ b/drivers/hid/hid-uclogic-rdesc-test.c
+@@ -97,7 +97,7 @@ static const __u8 template_params_none[] = {
+ 
+ static struct uclogic_template_case uclogic_template_cases[] = {
+ 	{
+-		.name = "Empty template",
++		.name = "empty_template",
+ 		.template = template_empty,
+ 		.template_size = sizeof(template_empty),
+ 		.param_list = params_pen_all,
+@@ -105,7 +105,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
+ 		.expected = template_empty,
+ 	},
+ 	{
+-		.name = "Template smaller than the placeholder",
++		.name = "template_smaller_than_the_placeholder",
+ 		.template = template_small,
+ 		.template_size = sizeof(template_small),
+ 		.param_list = params_pen_all,
+@@ -113,7 +113,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
+ 		.expected = template_small,
+ 	},
+ 	{
+-		.name = "No placeholder",
++		.name = "no_placeholder",
+ 		.template = template_no_ph,
+ 		.template_size = sizeof(template_no_ph),
+ 		.param_list = params_pen_all,
+@@ -121,7 +121,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
+ 		.expected = template_no_ph,
+ 	},
+ 	{
+-		.name = "Pen placeholder at the end, without ID",
++		.name = "pen_placeholder_at_the_end_without_id",
+ 		.template = template_pen_ph_end,
+ 		.template_size = sizeof(template_pen_ph_end),
+ 		.param_list = params_pen_all,
+@@ -129,7 +129,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
+ 		.expected = template_pen_ph_end,
+ 	},
+ 	{
+-		.name = "Frame button placeholder at the end, without ID",
++		.name = "frame_button_placeholder_at_the_end_without_id",
+ 		.template = template_btn_ph_end,
+ 		.template_size = sizeof(template_btn_ph_end),
+ 		.param_list = params_frame_all,
+@@ -137,7 +137,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
+ 		.expected = template_btn_ph_end,
+ 	},
+ 	{
+-		.name = "All params present in the pen template",
++		.name = "all_params_present_in_the_pen_template",
+ 		.template = template_pen_all_params,
+ 		.template_size = sizeof(template_pen_all_params),
+ 		.param_list = params_pen_all,
+@@ -145,7 +145,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
+ 		.expected = expected_pen_all_params,
+ 	},
+ 	{
+-		.name = "All params present in the frame template",
++		.name = "all_params_present_in_the_frame_template",
+ 		.template = template_frame_all_params,
+ 		.template_size = sizeof(template_frame_all_params),
+ 		.param_list = params_frame_all,
+@@ -153,7 +153,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
+ 		.expected = expected_frame_all_params,
+ 	},
+ 	{
+-		.name = "Some params present in the pen template (complete param list)",
++		.name = "some_params_present_in_the_pen_template_with_complete_param_list",
+ 		.template = template_pen_some_params,
+ 		.template_size = sizeof(template_pen_some_params),
+ 		.param_list = params_pen_all,
+@@ -161,7 +161,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
+ 		.expected = expected_pen_some_params,
+ 	},
+ 	{
+-		.name = "Some params present in the pen template (incomplete param list)",
++		.name = "some_params_present_in_the_pen_template_with_incomplete_param_list",
+ 		.template = template_pen_some_params,
+ 		.template_size = sizeof(template_pen_some_params),
+ 		.param_list = params_pen_some,
+@@ -169,7 +169,7 @@ static struct uclogic_template_case uclogic_template_cases[] = {
+ 		.expected = expected_pen_some_params,
+ 	},
+ 	{
+-		.name = "No params present in the template",
++		.name = "no_params_present_in_the_template",
+ 		.template = template_params_none,
+ 		.template_size = sizeof(template_params_none),
+ 		.param_list = params_pen_some,
+@@ -208,7 +208,7 @@ static struct kunit_case hid_uclogic_rdesc_test_cases[] = {
+ };
+ 
+ static struct kunit_suite hid_uclogic_rdesc_test_suite = {
+-	.name = "hid-uclogic-rdesc-test",
++	.name = "hid_uclogic_rdesc_test",
+ 	.test_cases = hid_uclogic_rdesc_test_cases,
+ };
+ 
 -- 
 2.25.1
 

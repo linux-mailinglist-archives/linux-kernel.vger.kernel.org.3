@@ -2,127 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2E25777C7
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 20:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52215777C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 20:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiGQSed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 14:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
+        id S230179AbiGQSgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 14:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGQSeb (ORCPT
+        with ESMTP id S229722AbiGQSgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 14:34:31 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5755912752;
-        Sun, 17 Jul 2022 11:34:30 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id v185so7762136ioe.11;
-        Sun, 17 Jul 2022 11:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7T1elb4VQwrC1sZg3F4EdxUouZCTWEFZq0pNjmM10H4=;
-        b=R+qaOJ/RIl3tbU2jrW/9rmGOvRSHh7KgGM8IOx/eYI3V0sYo9NQmH4FJw4hNkIeZEc
-         L6glhandgJX4/1fNKk9uOpAh1MYb1SmhGdyTTj/tiOqprl10s8pSnGVB8hls1Qro3O/Q
-         hsGU2inzEMgiQ3M+Peh0rABJjo7yZRQ0z3+WP9/nK4/XINkll/MVTwfkAyD/jpduSMc0
-         rBtyGjceHwVaO6EyN8BTRtKRyLxkSJU/V8PcuG4Nz2XUBJSB34BTcREnZNn+zCdok3fx
-         0lv26C9wusy4wO8CpSnZt9qonkLuT2UNIItzdLy8FDRALcJ8ZR0a7DiLQTrdajBmAXsE
-         wISA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7T1elb4VQwrC1sZg3F4EdxUouZCTWEFZq0pNjmM10H4=;
-        b=v57PEs1jnXfn7Ob4FJV5fHQMoh9HgSRlEkB/mpsJSW5Crqy6d5NttfQbTkEfSC+eB/
-         jZXLc5ViuBpoAHUM172OVeC5DEez3uUtrX8d4jKRn46olxUaBeipazKZ5vP9tuNOW990
-         APqcPulOvIN4zplaZjrzHj8u5Ax4JY37fgAFxDMy3cfIxtVf9LwHKx5hWq8rBeVZbObk
-         qnfb8CDqT9qnjEVbPNUAINOAFn5P+9d3OzazUhze9LmKTSFdEXkVJhlHSQ+UswqM1WbP
-         2FayBJYM3LTJqKXBHIUQZ1bxOowMd1lF6F+ZieUCc8lr5YY3AU/LSpENf7jK22p+nvqW
-         saYQ==
-X-Gm-Message-State: AJIora/GHvcFpqNIs0SQcD+PW5NhJcfz9Grh/C+ybUIQguGZA+JKonXQ
-        LplKp6oUpfkMyWg6Tktrer2VJbtpt16Q8kBC/SIqMIZBUW+UKUHg
-X-Google-Smtp-Source: AGRyM1uwKboyXHtiqj1uHFqFb9BJSoG9rYLgloobGhf3g81UQO0u3jikyOPgFmybtt+5ILMNrsR6hmzz46pfsolzH8c=
-X-Received: by 2002:a05:6638:4883:b0:33f:7948:e685 with SMTP id
- ct3-20020a056638488300b0033f7948e685mr12872724jab.138.1658082869800; Sun, 17
- Jul 2022 11:34:29 -0700 (PDT)
+        Sun, 17 Jul 2022 14:36:05 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFC212752
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 11:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658082961; x=1689618961;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mj0DK8nSoDg1DlxnyHy7eNjSESKokHmaS/AVgZwHn5U=;
+  b=I3G8d/N+Aads7u+PgQ+oFJn0FZ9GAapXYo4p15rc/QH7KBkQF0ZDkh+a
+   jqaX57beJTGgBEBJWxj9zu6PR7x9ekdWlXBZ4InP0bapqloI9sMVZyuCY
+   2k+ygQmhFBWi1pZL0p8XIVZgUH1sxDB7omCWKlVDmM0kJXyUCv1rsdrE5
+   RCuMt+8/EO2JaBnDwjzZ/ttai0ZDchntogxIk51cUNGZq0wD64NxEvhom
+   KY1nNcs3d5JzZbhVInsoVvA924q4utu74fyTAp9pVsA2wq9jMK/V6aj3I
+   CqVykpUyPRiz3qNqXSFPnuxNaB5bjzyHiR58QeSwfcK0Ztz0Hvy5I+sGP
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="269105360"
+X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
+   d="scan'208";a="269105360"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 11:36:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
+   d="scan'208";a="624457674"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 17 Jul 2022 11:35:59 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oD97W-0003ZW-SY;
+        Sun, 17 Jul 2022 18:35:58 +0000
+Date:   Mon, 18 Jul 2022 02:35:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [stffrdhrn:or1k-virt-3 4/6] WARNING: modpost:
+ drivers/net/ethernet/qlogic/qed/qed.o(.data+0x34f8): Section mismatch in
+ reference from the variable qed_mfw_ext_maps to the variable
+ .init.rodata:qed_mfw_ext_1g
+Message-ID: <202207180220.1WmjPVqM-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220717133759.8479-1-khalid.masum.92@gmail.com> <3ea0ea90-48bf-ce19-e014-9443d732e831@gmail.com>
-In-Reply-To: <3ea0ea90-48bf-ce19-e014-9443d732e831@gmail.com>
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-Date:   Mon, 18 Jul 2022 00:34:19 +0600
-Message-ID: <CAABMjtHiet1_SRvLBhoNxeEh865rwtZCkb510JmFPkHFMd5chQ@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: hci_core: Use ERR_PTR instead of NULL
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 10:17 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
->
-> Hi Khalid,
->
-> Khalid Masum <khalid.masum.92@gmail.com> says:
-> > Failure of kzalloc to allocate memory is not reported. Return Error
-> > pointer to ENOMEM if memory allocation fails. This will increase
-> > readability and will make the function easier to use in future.
-> >
-> > Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> > ---
->
-> [snip]
->
-> > index a0f99baafd35..ea50767e02bf 100644
-> > --- a/net/bluetooth/hci_core.c
-> > +++ b/net/bluetooth/hci_core.c
-> > @@ -2419,7 +2419,7 @@ struct hci_dev *hci_alloc_dev_priv(int sizeof_priv)
-> >
-> >       hdev = kzalloc(alloc_size, GFP_KERNEL);
-> >       if (!hdev)
-> > -             return NULL;
-> > +             return ERR_PTR(-ENOMEM);
-> >
->
-> This will break all callers of hci_alloc_dev(). All callers expect NULL
-> in case of an error, so you will leave them with wrong pointer.
+tree:   https://github.com/stffrdhrn/linux.git or1k-virt-3
+head:   4b1ece79cac02d6d81af76e47f8e7d493dcd50a0
+commit: 49a31c9ed530b7df3ec171a7f8f88d06ce720b0a [4/6] openrisc: Add pci bus support
+config: openrisc-randconfig-c033-20220717 (https://download.01.org/0day-ci/archive/20220718/202207180220.1WmjPVqM-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/stffrdhrn/linux/commit/49a31c9ed530b7df3ec171a7f8f88d06ce720b0a
+        git remote add stffrdhrn https://github.com/stffrdhrn/linux.git
+        git fetch --no-tags stffrdhrn or1k-virt-3
+        git checkout 49a31c9ed530b7df3ec171a7f8f88d06ce720b0a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash
 
-You are right. All callers of hci_alloc_dev() need to be able to handle
-the error pointer. I shall send a V2 with all the callers of hci_alloc_dev
-handling the ERR_PTR.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Also, allocation functionS return an error only in case of ENOMEM, so
-> initial code is fine, IMO
->
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-I think it makes the memory allocation error handling look to be a bit
-different from what we usually do while allocating memory which is,
-returning an error or an error pointer. Here we are returning a NULL
-without any context, making it a bit unreadable. So I think returning
-an error pointer is better. If I am not mistaken, this also complies with
-the return convention:
-https://www.kernel.org/doc/htmldocs/kernel-hacking/convention-returns.html
+>> WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x34f8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_ext_1g
+The variable qed_mfw_ext_maps references
+the variable __initconst qed_mfw_ext_1g
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
 
->
-> Thanks,
-> --Pavel Skripkin
+--
+>> WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3510): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_ext_10g
+The variable qed_mfw_ext_maps references
+the variable __initconst qed_mfw_ext_10g
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
 
+--
+>> WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35e8): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_20g
+The variable qed_mfw_legacy_maps references
+the variable __initconst qed_mfw_legacy_20g
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
 
-Thanks,
-  -- Khalid Masum
+--
+>> WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3600): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_25g
+The variable qed_mfw_legacy_maps references
+the variable __initconst qed_mfw_legacy_25g
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+--
+>> WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3618): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_40g
+The variable qed_mfw_legacy_maps references
+the variable __initconst qed_mfw_legacy_40g
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+--
+>> WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3630): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_50g
+The variable qed_mfw_legacy_maps references
+the variable __initconst qed_mfw_legacy_50g
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+--
+>> WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0xe0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_1000
+The variable qede_forced_speed_maps references
+the variable __initconst qede_forced_speed_1000
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+--
+>> WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0xf8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_10000
+The variable qede_forced_speed_maps references
+the variable __initconst qede_forced_speed_10000
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+--
+>> WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x110): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_20000
+The variable qede_forced_speed_maps references
+the variable __initconst qede_forced_speed_20000
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+--
+>> WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x128): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_25000
+The variable qede_forced_speed_maps references
+the variable __initconst qede_forced_speed_25000
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+--
+>> WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x140): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_40000
+The variable qede_forced_speed_maps references
+the variable __initconst qede_forced_speed_40000
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+..
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

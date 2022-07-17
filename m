@@ -2,124 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E995776EE
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 17:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4440C5776F1
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 17:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbiGQPI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 11:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
+        id S233014AbiGQPKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 11:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiGQPI1 (ORCPT
+        with ESMTP id S232792AbiGQPKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 11:08:27 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2ED13CF3;
-        Sun, 17 Jul 2022 08:08:26 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id m13so2072723edc.5;
-        Sun, 17 Jul 2022 08:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hMG19jnX3PRCbXZ+on0hHKlUdqbr9JhdKfsdJnBO8LI=;
-        b=XtRmz+aAA92yKbmzuHPW3+DHixLtci04vqzmWpp+cD5JXHKeheq9k0sZHk2ikywuVm
-         Ya+X1fi6i6DrekCrRvklz9kah/1l+vUSVxc3/+Mo/b6k5YPNZ+eK3YL+647np6c9eBFP
-         cO9KIo5RMa0ByDF+dwwXR4eyh8YRzFEzuatHQcbyx+ujWJ+4vGcFvAucRKmCNEWoeX4u
-         ThpQlP0hiaeXV53bOTqWltSSKxzTd6zlQxDZCwQuyEK1/Adg0B2cQW9bbz9ObD62iE7U
-         UoYgFTCDsjR1xYb042K9W2yv6zWdzbtgpK2vAbtId8LPh9ThtgW26QkbNbfRzBBH4Lgd
-         xVxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hMG19jnX3PRCbXZ+on0hHKlUdqbr9JhdKfsdJnBO8LI=;
-        b=lScCJPaqaYGE2wpRNPrcw+T863O+5lXlFlICDGBwsLCyDeSnV/vNpGUd1VtxP2zzZN
-         fcaXIxP4r0Udicj8UB5J/kQ1OhsQqQ6i23w3woCFckq5k8YnrMu60v39zUse2JTJpV8N
-         45bmQIyrNbMtqYih5gUp3JhlbT9oxr1NBJgTBuMiehSA1lb7fN9tmzzhWBIgj2woxl6A
-         gWHV+roZ5yqP4TLFfx3VCgeDv+FhG4x3sNo+mv0vGVntprEJ13GcwMK7mvEbgTnsZsKg
-         poWpTg/PLWxwPGOFyz2jHOTXfNDzEgYJvc1Pe4hmVpm/bi3qY+Buo1FobwCcGBkbG9pU
-         7LbA==
-X-Gm-Message-State: AJIora+fKtX/JanxU2EmWxo+RhXS8IMZWEvX2eLPqm3n8grZ66kuU6QF
-        V8xuf9DSO7BIxVPqGijGfFw=
-X-Google-Smtp-Source: AGRyM1vK5tMCFy4TTvk3ikk733WBr21RKIX8TZhTP+OIvOFvf3jJSDEYmgj2i91/pvFuoROXMSy8Gw==
-X-Received: by 2002:a05:6402:4504:b0:43b:4ec7:2ec1 with SMTP id ez4-20020a056402450400b0043b4ec72ec1mr11287321edb.7.1658070504655;
-        Sun, 17 Jul 2022 08:08:24 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id d2-20020a056402000200b0043a61f6c389sm6832967edu.4.2022.07.17.08.08.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 08:08:23 -0700 (PDT)
-Date:   Sun, 17 Jul 2022 18:08:21 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <20220717150821.ehgtbnh6kmcbmx6u@skbuf>
-References: <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
- <20220717125718.mj7b3j3jmltu6gm5@skbuf>
- <a6ec816279b282a4ea72252a7400d5b3@kapio-technology.com>
- <20220717135951.ho4raw3bzwlgixpb@skbuf>
- <e1c1e7c114f0226b116d9549cea8e7a9@kapio-technology.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e1c1e7c114f0226b116d9549cea8e7a9@kapio-technology.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 17 Jul 2022 11:10:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FD513DF1;
+        Sun, 17 Jul 2022 08:10:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30FB16121D;
+        Sun, 17 Jul 2022 15:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 929AEC341C0;
+        Sun, 17 Jul 2022 15:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658070617;
+        bh=rybZH6DoLiT5LxhHBMWSE4NOpgY5dKRPw/6azfiC4Q8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KkoYgdlqAlqLRzbPQE9SOtQx1JN770rHhKQpJXLnhvtp2TWySRhryYsjP1mIj9p8x
+         bgH8oDHylAJuIVbI+Z+297pe1R3Sl7fvszjKTHdHfliFxggR0uvSnQ1FXNdJIbVRts
+         dZK9mNSAPRiKHK8DpD8W0SjRH33aMHKb3QqL/9OX12b3yxS59yfF8PX1vIpJ+GrXq4
+         6HYQwKc/S8Srw209MZTMdmwUdf4DOur8XQ8qusfMk8g4O9XWMboyb8UvDd7DQryg+F
+         rCboeSgjRdyKLSLRFmJQjBS/wSiH5PvR0VP/v6e0slFZ8Dcb+HigEwLqAJxJoArG60
+         u6caSG04Ud4mw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oD5uR-0081Wv-AV;
+        Sun, 17 Jul 2022 16:10:15 +0100
+Date:   Sun, 17 Jul 2022 16:10:15 +0100
+Message-ID: <87v8rvzsfc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     <Conor.Dooley@microchip.com>
+Cc:     <Lewis.Hanly@microchip.com>, <linux-riscv@lists.infradead.org>,
+        <brgl@bgdev.pl>, <linux-gpio@vger.kernel.org>,
+        <linus.walleij@linaro.org>, <palmer@dabbelt.com>,
+        <linux-kernel@vger.kernel.org>, <Daire.McNamara@microchip.com>
+Subject: Re: [PATCH v3 1/1] gpio: mpfs: add polarfire soc gpio support
+In-Reply-To: <a50d0f6e-0b35-4090-2ba6-9de680d23aa2@microchip.com>
+References: <20220716071113.1646887-1-lewis.hanly@microchip.com>
+        <20220716071113.1646887-2-lewis.hanly@microchip.com>
+        <87r12l4aaj.wl-maz@kernel.org>
+        <2d7f72d3e89686d3ba5cff5df8cfe443d04fc5f4.camel@microchip.com>
+        <87o7xp3pz2.wl-maz@kernel.org>
+        <a50d0f6e-0b35-4090-2ba6-9de680d23aa2@microchip.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: Conor.Dooley@microchip.com, Lewis.Hanly@microchip.com, linux-riscv@lists.infradead.org, brgl@bgdev.pl, linux-gpio@vger.kernel.org, linus.walleij@linaro.org, palmer@dabbelt.com, linux-kernel@vger.kernel.org, Daire.McNamara@microchip.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 04:57:50PM +0200, netdev@kapio-technology.com wrote:
+On Sat, 16 Jul 2022 19:32:20 +0100,
+<Conor.Dooley@microchip.com> wrote:
 > 
-> Maybe I am just trying to understand the problem you are posing, so afaics
-> MAC addresses should be unique and having the same MAC address behind a
-> locked port and a not-locked port seems like a mis-configuration regardless
-> of vlan setup? As the zero-DPV entry only blocks the specific SA MAC on a
-> specific vlan, which is behind a locked port, there shouldn't be any
-> problem...?
+> On 16/07/2022 18:52, Marc Zyngier wrote:
+> > On Sat, 16 Jul 2022 16:21:48 +0100,
+> > <Lewis.Hanly@microchip.com> wrote:
+> >>
+> >> Thanks Marc,
+> >>
+> >> On Sat, 2022-07-16 at 11:33 +0100, Marc Zyngier wrote:
+> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you
+> >>> know the content is safe
+> >>>
+> >>> On Sat, 16 Jul 2022 08:11:13 +0100,
+> >>> <lewis.hanly@microchip.com> wrote:
+> >>>> From: Lewis Hanly <lewis.hanly@microchip.com>
+> >>>>
+> >>>> Add a driver to support the Polarfire SoC gpio controller.
+> >>>>
+> >>>> Signed-off-by: Lewis Hanly <lewis.hanly@microchip.com>
+> >>>
+> >>> [...]
+> >>>
+> >>>> +static int mpfs_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
+> >>>> +                                        unsigned int child,
+> >>>> +                                        unsigned int child_type,
+> >>>> +                                        unsigned int *parent,
+> >>>> +                                        unsigned int *parent_type)
+> >>>> +{
+> >>>> +     struct mpfs_gpio_chip *mpfs_gpio = gpiochip_get_data(gc);
+> >>>> +     struct irq_data *d = irq_get_irq_data(mpfs_gpio-
+> >>>>> irq_number[child]);
+> >>>
+> >>> This looks totally wrong. It means that you have already instantiated
+> >>> part of the hierarchy, and it is likely that you will get multiple
+> >>> hierarchy sharing some levels, which isn't intended.
+> >>
+> >> Some background why I use the above.
+> >> We need to support both direct and non-direct IRQ connections to the
+> >> PLIC. 
+> >> In direct mode the GPIO IRQ's are connected directly to the PLIC and
+> >> certainly no need for the above. GPIO's can also be configured in non-
+> >> direct, which means they use a shared IRQ, hence the above.
+> > 
+> > That's unfortunately not acceptable. You need to distinguish which one
+> > is which, and separate them. Your non-direct mode certainly requires
+> > special handling, and is not fit for a hierarchical mode.
 > 
-> If the host behind a locked port starts sending on another vlan than where
-> it got the first locked entry, another locked entry will occur, as the
-> locked entries are MAC + vlan.
+> Unfortunately, the configuration is not fixed on the silicon level. The
+> SoC has 3 GPIOs (with 32 lines each). The interrupt configuration looks
 
-I don't think it's an invalid configuration, I have a 17-port Marvell
-switch which I use as infrastructure to connect my PC with my board farm
-and to the Internet. I've cropped 4 out of those 17 ports for use in
-selftests, effectively now having 2 bridges (br0 used by the selftests
-and br-lan for systemd-networkd).
+Let's start with a bit of terminology so that we can understand each
+other:
+- GPIO: a single piece of wire
+- GPIO block: a set of wires with a common programming interface
 
-Currently all the traffic sent and received by the selftests is done
-through lan1-lan4, but if I wanted to run some bridge locked port tests
-with traffic from my PC, what I'd do is I'd connect a (locked) port from br0
-to a port from br-lan, and my PC would thus gain indirect connectivity to the
-locked port.
+As I understand it, you have 3 GPIO blocks, each with 32 GPIOs, for a
+total of 96 external lines. Correct?
 
-Then I'd send a packet and the switch would create a locked FDB entry
-for my PC's MAC address, but that FDB entry would span across the entire
-MV88E6XXX_FID_BRIDGED, so practically speaking, it would block my PC's
-MAC address from doing anything, including accessing the Internet, i.e.
-traffic that has nothing at all to do with the locked port in br0.
-That isn't quite ok.
+> something like the below:
+> GPIO#             width    IRQ#
+> ==================================
+> gpio0/2           14       [26:13]
+> gpio1/2           24       [50:27]
+> gpio0_non_direct  1         51
+> gpio1_non_direct  1         52
+> gpio2_non_direct  1         53
+>
+> Depending on what the bootloader/firmware does, these can be configured
+> differently (done prior to linux starting). By default, 14 GPIOs from
+> GPIO0 are fed into their own interrupt lines & ditto for 24 from GPIO1.
+> The remaining GPIO0 & GPIO1 lines go into the corresponding non-direct
+> interrupt. If they bootloader/firmware configures something different,
+> a "direct" interrupt line can be switched to a GPIO2 line instead.
+
+What does non-direct mean? Multiplexing inputs into a single output?
+Can you individually mask/unmask the input lines that are in this mode
+(the kernel calls this a "chained irqchip")?
+
+How does this switch between direct and non-direct happen? Do you have
+some sort of external pad to GPIO line routing? It would really help
+if you could point people at an actual specification for these blocks
+rather than paraphrasing things.
+
+> 
+> Something like the following (the interrupts are offset by 13 here, as
+> the global interrupts feed into the PLIC at an offset):
+> 
+> * global int  GPIO_INTERRUPT_FAB_CR
+>                 0               1
+>     0       GPIO0 bit 0     GPIO2 bit 0
+>     1       GPIO0 bit 1     GPIO2 bit 1
+>     .
+>     .
+>     12      GPIO0 bit 12    GPIO2 bit 12
+>     13      GPIO0 bit 13    GPIO2 bit 13
+>     14      GPIO1 bit 0     GPIO2 bit 14
+>     15      GPIO1 bit 1     GPIO2 bit 15
+>     .
+>     .
+>     .
+>     30      GPIO1 bit 16    GPIO2 bit 30
+>     31      GPIO1 bit 17    GPIO2 bit 31
+>     32          GPIO1 bit 18
+>     33          GPIO1 bit 19
+>     34          GPIO1 bit 20
+>     35          GPIO1 bit 21
+>     36          GPIO1 bit 22
+>     37          GPIO1 bit 23
+>     38  Or of all GPIO0 interrupts who do not have a direct connection enabled
+>     39  Or of all GPIO1 interrupts who do not have a direct connection enabled
+>     40  Or of all GPIO2 interrupts who do not have a direct connection enabled
+> 
+> Since we can tell based on the interrupt number in the device tree
+> whether a line is in direct mode - can you suggest what the most 
+> appropriate irq structure for the driver?
+
+The topology must be described in DT one way or another, and I don't
+really want to rely on a fixed interrupt number that will change from
+one version to another.
+
+In any case:
+
+- direct interrupts should be handled as a hierarchy, mostly like the
+  code currently does, but definitely without the probing hack.
+
+- muxed interrupts (non-direct?) should be handled via a chained
+  irqchip, using a different irqdomain, as the topology is radically
+  different.
+
+> Although for extending this driver to the "soft" IP core, it may be easier
+> to just create a "microchip,gpio-direct-mode-mask" property or similar and
+> use that to figure out what configuration a line is in.
+
+My guts feeling is that this will eventually end-up biting you, as
+people will want to change the direct/non-direct status of an
+interrupt at boot time, without depending on the FW to do that on
+their behalf.
+
+I'm not necessarily advocating for this as this is a lot more code and
+it could totally invalidate the existing binding, but this is worth
+keeping in mind.
+
+In any case, this driver needs some serious rewriting.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

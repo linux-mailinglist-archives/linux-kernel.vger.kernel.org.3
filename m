@@ -2,119 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48857577696
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 16:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB62577698
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 16:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233147AbiGQOG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 10:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S233171AbiGQOI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 10:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233033AbiGQOG4 (ORCPT
+        with ESMTP id S233033AbiGQOIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 10:06:56 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF89513E35;
-        Sun, 17 Jul 2022 07:06:52 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id oy13so16986835ejb.1;
-        Sun, 17 Jul 2022 07:06:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Y4vXOKtWt6QudNRwdhOrmI986Fj4AOLEo7FHegSVg8g=;
-        b=kNX4d5WosdHgzJsVD2eiy6059iYqeWB5SzY3EGaGAgQV7IiV7ge+qIEiI9iUgILkb+
-         /BI8HBipz8vobY5TMXvdW+baBYjd96keMJx10J1o9+gmnn+1xCvOMLMKgykSWvL0uLWb
-         YKzcw+cAoQblnymryIVyThStANtl4r8w7zRTYxJxQT1b9w4BHQ3Ily8VmvVz2Vgnh1pE
-         BldvVfgeSBFH6uEelWXrOqR4W8Nta+/1ZzrmrEXmigjPV5wkRfzPPsRgE8m9a3sE6jxA
-         DAqeIpE0UDHqzK3JrhXPRc2KPH6R5iB0q0QFLKDOZc1jLs8iM8d+vKkQHS7WGlVsYeQx
-         Vgtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Y4vXOKtWt6QudNRwdhOrmI986Fj4AOLEo7FHegSVg8g=;
-        b=JE0OVBntereW33kkpM1fSSkRD829Un6OSMOlCjgkoMSWrjUO1WlaJ1SR+iCQ0jyXwy
-         tYUD9NnUF1JoIZSQvNZ8KtUwuPNiyVuCci7d5wfwiuAnnMIes8ReYRgZP+t3N/H8RFN5
-         J3Qx6xijoJgh14VXgtWn0ZDUKNrNzWP9YlpGECfPpQslY2snEscHnvPljptm4fx0qhHz
-         dyRaD68wx0NqOg8zbbEaDvGWBJGBI+RE8GpEzRSIm/6Mm7Cd+BBX54yHZNFuU96vgXV0
-         qVbs0DWHwZrMJcZXR/FX4fqosYToahKjfH2mpYKCiwt7mA6JE+mFahT2GGpaFPwTvtp4
-         lSTQ==
-X-Gm-Message-State: AJIora+OTtYMhFcqPET2orVoQ8AuQ5ZY/sXOvmXMgwNdw94uud71CJDv
-        elmItiTr94HpHVEtHhS5vYl9ned4bLcl0GwvnduQQJ1rpAz8gA==
-X-Google-Smtp-Source: AGRyM1sYfrlVPB7NBbyP75uUtosZk5s563gw1ETMg5BJ3HvdpEMaoD0lNaSskF8CNrYxgdsX9MX/VH9RqWUVX0DyLG4=
-X-Received: by 2002:a17:907:6d1d:b0:72b:6d8a:ca64 with SMTP id
- sa29-20020a1709076d1d00b0072b6d8aca64mr21430968ejc.371.1658066811326; Sun, 17
- Jul 2022 07:06:51 -0700 (PDT)
+        Sun, 17 Jul 2022 10:08:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A78A13E35
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 07:08:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D853611FA
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 14:08:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086BDC341C0
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 14:08:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658066903;
+        bh=kqjy2M0sfvu/znr0s/7jq6FyGkpAU3MVfKEHp3dOWTg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hw6DQFCgo7mXtNuvJFNubMeDgOiFI9ZZ+/b6krl0vFlA+fmPHbdND9RoJfv8FbFic
+         YyhIvtJ2vmwGYC0vuaQGEbhpVPhSuZtNTZNMLjoS6bzS+cN1LJJ3/azOmNURhnjkJm
+         606t2nxxsQbf/U6zZ0omvRaFh+y+a/gysqduAP/TjUIJW65BSgYC7krq4SE4yDdjW2
+         zy3t232DpVIrXJUTz3I7g6L5OQf+eAltvitpNVt40MwOQ6cyKf0I7Gkxx66wMTFp2P
+         0bvCZpRpZD/MGvaRGWjnFpvi8sO04LBpR4wODWSovB/v12MGG+pyAh57QciyS3tg0M
+         bJBYhpyBVGgUQ==
+Received: by mail-ua1-f53.google.com with SMTP id t21so4322142uaq.3
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 07:08:22 -0700 (PDT)
+X-Gm-Message-State: AJIora/MrKAj8i3RbTII8KUHr8XdsPmSpDr0kM1fIUq0nTSS5RmNl31c
+        AeeL2e2KV5g7T7ssLz0QuR9XKEGNX+vGmFDQqTo=
+X-Google-Smtp-Source: AGRyM1vP1r+UwliYXMIkAfw8PDx2rqu2B1uP4KbzclIbVvVtfhLS6hiOfz5Dqytc4NMmLcJxSIJmNp9Z/dcr6kFcIYI=
+X-Received: by 2002:ab0:1393:0:b0:383:26e8:7bf3 with SMTP id
+ m19-20020ab01393000000b0038326e87bf3mr8259258uae.22.1658066901953; Sun, 17
+ Jul 2022 07:08:21 -0700 (PDT)
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Sun, 17 Jul 2022 22:06:16 +0800
-Message-ID: <CAO4mrfc=oS37CJtvPt+dWm-24mkV-5XRTGNZDr5ZopAE7pY3WQ@mail.gmail.com>
-Subject: WARNING in loop_add
-To:     axboe@kernel.dk, linux-kernel@vger.kernel.org
-Cc:     linux-block@vger.kernel.org
+References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
+ <87less52bx.wl-maz@kernel.org> <6e9def1e-31fe-787d-1b2b-a328424352f0@loongson.cn>
+ <87ilnw3vlg.wl-maz@kernel.org> <20994a99-b5b1-442d-d23d-2a11ecef24a0@loongson.cn>
+In-Reply-To: <20994a99-b5b1-442d-d23d-2a11ecef24a0@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sun, 17 Jul 2022 22:08:14 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6CJ-aF2s9D4QJ5zYZGt_=C4QHFCzKByT6urcFMgWv+4g@mail.gmail.com>
+Message-ID: <CAAhV-H6CJ-aF2s9D4QJ5zYZGt_=C4QHFCzKByT6urcFMgWv+4g@mail.gmail.com>
+Subject: Re: [PATCH V15 00/15] irqchip: Add LoongArch-related irqchip drivers
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
+Hi, Marc, Jianmin,
 
-Recently when using our tool to fuzz kernel, the following crash was triggered:
+On Sun, Jul 17, 2022 at 7:29 PM Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>
+>
+>
+> On 2022/7/17 =E4=B8=8B=E5=8D=886:02, Marc Zyngier wrote:
+> > On Sun, 17 Jul 2022 02:06:12 +0100,
+> > Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> >>
+> >>
+> >>
+> >> On 2022/7/17 =E4=B8=8A=E5=8D=882:39, Marc Zyngier wrote:
+> >>> On Fri, 15 Jul 2022 08:05:36 +0100,
+> >>> Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> >>>>
+> >>>> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> >>>> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-b=
+it
+> >>>> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as i=
+ts
+> >>>> boot protocol LoongArch-specific interrupt controllers (similar to A=
+PIC)
+> >>>> are already added in the ACPI Specification 6.5(which may be publish=
+ed in
+> >>>> early June this year and the board is reviewing the draft).
+> >>>>
+> >>>> Currently, LoongArch based processors (e.g. Loongson-3A5000) can onl=
+y
+> >>>> work together with LS7A chipsets. The irq chips in LoongArch compute=
+rs
+> >>>> include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
+> >>>> Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller),
+> >>>> HTVECINTC (Hyper-Transport Vector Interrupt Controller), PCH-PIC (Ma=
+in
+> >>>> Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Contro=
+ller
+> >>>> in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
+> >>>
+> >>> [...]
+> >>>
+> >>> Compiling this series for loongarch with loongson3_defconfig on top o=
+f
+> >>> 5.19-rc3 results in the following:
+> >>>
+> >>> loongarch64-linux-ld: drivers/irqchip/irq-loongson-eiointc.o: in func=
+tion `.L60':
+> >>> irq-loongson-eiointc.c:(.init.text+0x4c): undefined reference to `pch=
+_msi_acpi_init'
+> >>> loongarch64-linux-ld: drivers/irqchip/irq-loongson-htvec.o: in functi=
+on `pch_msi_parse_madt':
+> >>> irq-loongson-htvec.c:(.init.text+0x14): undefined reference to `pch_m=
+si_acpi_init'
+> >>> make: *** [Makefile:1164: vmlinux] Error 1
+> >>>
+> >>> I *really* would have expected this series to be in a better shape
+> >>> after over 15 rounds, but it looks like I'm expecting too much. I
+> >>> haven't investigated the breakage, but this should (at the very least=
+)
+> >>> pass the defconfig test and optional drivers not being selected.
+> >>>
+> >>> The corresponding MIPS configuration seems to build fine.
+> >>>
+> >>>     M.
+> >>>
+> >>
+> >> Hi, Marc
+> >>
+> >> Sorry for that first, pch_msi_acpi_init is defined in pch_msi driver
+> >> which is compiled depend on CONFIG_PCI, and I test the patches each
+> >> time with PCI patches and other(or else, kernel can not be boot), so
+> >> I'm ok for testing the patches. The PCI patches has been accepted by
+> >> PCI maintainers and will be merged in this merge window.
+> >
+> > But each series *must* at the very least compile in isolation.
+> >
+> >>
+> >> I don't know how to deal with this situation. Should I add *#ifdef
+> >> CONFIG_PCI* at position of calling pch_msi_acpi_init or some other
+> >> way?
+> >
+> > You could try something like this, which results in a kernel that
+> > fully links with defconfig and no additional patch:
+> >
+> > diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/=
+asm/irq.h
+> > index ca468564fc85..4479d95867ec 100644
+> > --- a/arch/loongarch/include/asm/irq.h
+> > +++ b/arch/loongarch/include/asm/irq.h
+> > @@ -99,8 +99,17 @@ int htvec_acpi_init(struct irq_domain *parent,
+> >                                       struct acpi_madt_ht_pic *acpi_htv=
+ec);
+> >   int pch_lpc_acpi_init(struct irq_domain *parent,
+> >                                       struct acpi_madt_lpc_pic *acpi_pc=
+hlpc);
+> > +#if IS_ENABLED(CONFIG_LOONGSON_PCH_MSI)
+> >   int pch_msi_acpi_init(struct irq_domain *parent,
+> > -                                     struct acpi_madt_msi_pic *acpi_pc=
+hmsi);
+> > +                   struct acpi_madt_msi_pic *acpi_pchmsi);
+> > +#else
+> > +static inline int pch_msi_acpi_init(struct irq_domain *parent,
+> > +                                 struct acpi_madt_msi_pic *acpi_pchmsi=
+)
+> > +{
+> > +     return 0;
+> > +
+> > +}
+> > +#endif
+> >   int pch_pic_acpi_init(struct irq_domain *parent,
+> >                                       struct acpi_madt_bio_pic *acpi_pc=
+hpic);
+> >   int find_pch_pic(u32 gsi);
+> >
+>
+> Ok, thanks, I'll add this into that patch.
+>
+>
+> > But the other issue is that you seem to call this function from two
+> > different locations. This cannot be right, as there should be only one
+> > probe order, and not multiple.
+> >
+>
+> As we described two IRQ models(Legacy and Extended) in this cover
+> letter, the parent domain of MSI domain can be htvec domain(Legacy) or
+> eiointc domain(Extended). In MADT, only one APIC(HTPIC for htvec or
+> EIOPIC for eiointc) is allowed to pass into kernel, and then in the
+> irqchip driver, only one kind APIC of them can be parsed from MADT, so
+> we have to support two probe order for them.
 
-HEAD commit: 64570fbc14f8 Linux 5.15-rc5
-git tree: upstream
-compiler: clang 12.0.0
-console output:
-https://drive.google.com/file/d/1JxspkioQiZrQQ9BwsRjm5KJVY6z2KCTW/view?usp=sharing
-Syzlang reproducer:
-https://drive.google.com/file/d/1b7QJc_OVw-U7ugxWyvisfMbyQe-aBjWZ/view?usp=sharing
-C reproducer: https://drive.google.com/file/d/1ymwqhBp9VYd7jRdpcfwiqUSUV0BnzCC0/view?usp=sharing
-kernel config: https://drive.google.com/file/d/1lNwvovjLNrcuyFGrg05IoSmgO5jaKBBJ/view?usp=sharing
+I have an idea but I don't know whether it is acceptable: Marc gives
+an Acked-by for the whole series, then this irqchip series goes
+through the loongarch tree together with the PCI patches, then we
+don't need other hacks except the ACPI definitions.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: Wei Chen <harperchen1110@gmail.com>
-
-WARNING: CPU: 0 PID: 8479 at block/genhd.c:537 device_add_disk+0x8aa/0xf20
-Modules linked in:
-CPU: 0 PID: 8479 Comm: syz-executor Not tainted 5.15.0-rc5+ #14
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:device_add_disk+0x8aa/0xf20
-Code: 00 48 8b 44 24 10 89 18 e8 93 8e 6a fd 4c 89 e7 e8 7b 66 fb ff
-4c 89 e7 e8 73 ca 03 00 45 31 f6 e9 b1 fe ff ff e8 76 8e 6a fd <0f> 0b
-e9 96 fe ff ff e8 6a 8e 6a fd 0f 0b 41 be ea ff ff ff e9 93
-RSP: 0018:ffffc9000b297d28 EFLAGS: 00010283
-RAX: ffffffff841b4a0a RBX: 0000000000000007 RCX: 0000000000040000
-RDX: ffffc90002211000 RSI: 000000000002f3b2 RDI: 000000000002f3b3
-RBP: ffff88803017bb00 R08: ffffffff841b4899 R09: ffffed100c7864a2
-R10: ffffed100c7864a2 R11: 0000000000000000 R12: ffff88802f915000
-R13: 00000000ffffffea R14: 1ffff11005f22a00 R15: 1ffff11005f22a01
-FS:  00007ff387033700(0000) GS:ffff888063c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f65c6510000 CR3: 0000000030409000 CR4: 0000000000750ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
- loop_add+0x62d/0x8c0
- loop_control_ioctl+0x11d/0x770
- __se_sys_ioctl+0x10a/0x190
- do_syscall_64+0x3d/0xb0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7ff389acac4d
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ff387032c58 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007ff389bf10a0 RCX: 00007ff389acac4d
-RDX: 0000000000000000 RSI: 0000000000004c80 RDI: 0000000000000004
-RBP: 00007ff387032c90 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000026
-R13: 00007fff0e90e49f R14: 00007fff0e90e640 R15: 00007ff387032dc0
-
-Best,
-Wei
+Huacai
+>
+> >       M.
+> >
+>
+>

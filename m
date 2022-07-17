@@ -2,48 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2253E5776AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 16:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6392E5776B4
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 16:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiGQOlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 10:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
+        id S231351AbiGQOn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 10:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiGQOlB (ORCPT
+        with ESMTP id S229654AbiGQOn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 10:41:01 -0400
+        Sun, 17 Jul 2022 10:43:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A28FE2;
-        Sun, 17 Jul 2022 07:41:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB89E0EB
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 07:43:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C3B6611C1;
-        Sun, 17 Jul 2022 14:40:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 596DDC3411E;
-        Sun, 17 Jul 2022 14:40:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AB07611F3
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 14:43:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C3C8C3411E;
+        Sun, 17 Jul 2022 14:43:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658068858;
-        bh=dqhyP+8gKpip9W8T3rXRIi1I/ss8fh95OtlNLlnaZOk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mN6oaNqhJWZfiZHBqD5gPoE3RISEwnyksTaYtzQvKEGC9o1D4c0fTEGQSP/CbJTt9
-         7CvXq2Y39OdCVUrsFN5bhbwJHFj74kQbeyv7aLv2z6/elFyezFX+xGyxrr2OeQx6nD
-         prM0jzrtrcYPM68TjQ3W5EfPd2aCRsPAA0JweMuMS1zUwaw7VD0CMAzUDO3ctpfG8X
-         ZZSFh9WBIEcnT267y+VocMWIl4tXRMEE1PX3ulIgG5igqqo8xyPuc2okxWTEDyG7xP
-         NtQ177S5/xF9YEVxTmt4OJIVVrFvAdnEXnnKk930+ROLeilLustkCR/AHa2uyitk8b
-         zqWw0rgITsQVA==
-Date:   Sun, 17 Jul 2022 08:40:56 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Wei Chen <harperchen1110@gmail.com>
-Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org
-Subject: Re: WARNING in loop_add
-Message-ID: <YtQfePz3+zeRDfMg@kbusch-mbp>
-References: <CAO4mrfc=oS37CJtvPt+dWm-24mkV-5XRTGNZDr5ZopAE7pY3WQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO4mrfc=oS37CJtvPt+dWm-24mkV-5XRTGNZDr5ZopAE7pY3WQ@mail.gmail.com>
+        s=k20201202; t=1658069004;
+        bh=yJW4HTI+ovKud+eldkUF/mQXo9HT1Yfd43N2viG3jjM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JMDTwY+o72tlXqwIIlbSZgwIDEEr6N0uQtPt3Kk+rm+ZD/XfKz0m0N4ouFYMoDAe0
+         Qjkcm0QhwDC0pWFSQAGAEvMhrmp5NIKvw1cAtgaEDHVUN7Ivc40nvMF3FmvXp55VUl
+         8fYZqNQJqTu/6D2AosCA8sZIZqLuBvDmWs46QBduwNGqvOXI0qSnSdgA6cWOYAkveM
+         cwrdI7VdYYPbUjosiEYmvh2VIIe8dX17+poZAp/4MOTsDukPXLfuz/+DBtxvYI8WPq
+         jCC8XfvAzq4GYw3+e/62oW+4Smm+2Jb/96+vGpiv7FTFcAszC2mcIG0r3sPXQRKYiT
+         cWUOVUoRqVhyg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oD5UP-0081Er-6E;
+        Sun, 17 Jul 2022 15:43:21 +0100
+Date:   Sun, 17 Jul 2022 15:43:20 +0100
+Message-ID: <87y1wrzto7.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V15 00/15] irqchip: Add LoongArch-related irqchip drivers
+In-Reply-To: <CAAhV-H6CJ-aF2s9D4QJ5zYZGt_=C4QHFCzKByT6urcFMgWv+4g@mail.gmail.com>
+References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
+        <87less52bx.wl-maz@kernel.org>
+        <6e9def1e-31fe-787d-1b2b-a328424352f0@loongson.cn>
+        <87ilnw3vlg.wl-maz@kernel.org>
+        <20994a99-b5b1-442d-d23d-2a11ecef24a0@loongson.cn>
+        <CAAhV-H6CJ-aF2s9D4QJ5zYZGt_=C4QHFCzKByT6urcFMgWv+4g@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: chenhuacai@kernel.org, lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,10 +75,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 10:06:16PM +0800, Wei Chen wrote:
-> Recently when using our tool to fuzz kernel, the following crash was triggered:
+On Sun, 17 Jul 2022 15:08:14 +0100,
+Huacai Chen <chenhuacai@kernel.org> wrote:
 > 
-> HEAD commit: 64570fbc14f8 Linux 5.15-rc5
+> Hi, Marc, Jianmin,
+> 
+> I have an idea but I don't know whether it is acceptable: Marc gives
+> an Acked-by for the whole series, then this irqchip series goes
+> through the loongarch tree together with the PCI patches, then we
+> don't need other hacks except the ACPI definitions.
 
-That's an unusual commit to be testing today. Why are you using such an old
-release candidate?
+Not sure how this solves the original problem. PCI should never be
+mandatory (it is actually super useful to be able to build a very
+small kernel without too many drivers), and there shouldn't be
+configurations where the kernel doesn't build.
+
+It is also my own responsibility to merge these things, and I'd rather
+not delegate this, specially as it touches a bunch of other
+subsystems.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

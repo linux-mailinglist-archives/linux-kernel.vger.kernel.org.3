@@ -2,112 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F3057771F
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 17:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F50577720
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 17:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbiGQPln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 11:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
+        id S232300AbiGQPm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 11:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiGQPll (ORCPT
+        with ESMTP id S229582AbiGQPmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 11:41:41 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879D1BC9;
-        Sun, 17 Jul 2022 08:41:40 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id k30so12290216edk.8;
-        Sun, 17 Jul 2022 08:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KVf7sB0l4zH/Rxpvh7W7/gvxcfaj5Mn8NQrlNnPne74=;
-        b=L8HlfeOnmQDe9wm4ZoNIAPSFWX7DVXaLkCY6zna+tOeC2pje4VGsnHanqViN4TC9/u
-         ZCTpL2iPwSYlbFecyEnd43kRy26lswwe37bpN+8d/2GqVANKu8t+fUyuo2DiZlG9sZxo
-         03igbGK/AnJH9uCdT4qKd0VCSfDJxnr1zRqA66B235IDOhpkWjmuEJlrB8+UAJ802ZAP
-         8nvVr/KyYTOTaJoSyav3Zj8X6sRjIieRi69EjMx12mbwTBr41yqxsXkkZrbpTBSZ2KIv
-         bTnaAB7S0VzJwpu75uVRWJNxCFsVGiubh+bo+NYxpAyMwmvO2g7Hf+PU9z6t57vdPUVL
-         MStw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KVf7sB0l4zH/Rxpvh7W7/gvxcfaj5Mn8NQrlNnPne74=;
-        b=DzAPRzggD5HL7bErT36F4pcM5q6Jbq976ofRietijBc7nZfJI/ytX6X+fMzf1vq9bL
-         /gYplsKE4HY7wrp29S66HJwVbeDcOlO0pitMI/pKlOQmbjQoe/YE+KSU+m3/t4Xh2vSw
-         Mo2b6oMgOejMM7mH0IiWsu+cObM0EOZESTQU/7ZF4TXt6bo4IYAmkDQ1Jy32R1dOudHz
-         zyTUx6gYwJOEP+xS0n9dwBYpJw8TIUYowRzlSn0Q5C2iVzoIu56wQjhr1sgVZLETHmCu
-         2ixAByYSJOkHRskX6XceZezBV8Tn9jlSVHno8XW3rNQtmtE/lXOktG5KKykN9GGPShHM
-         JOZQ==
-X-Gm-Message-State: AJIora/UUrEPtbe56rkfn7krk+5Ct1XEtStBy+RW/GuXsSauZIUPrgYB
-        RfgsxflUlmqGPLkGTOn8T3RmRFcj4UJ4pQ==
-X-Google-Smtp-Source: AGRyM1ta/dXiqsjEBSHiRWRBwI40AUDaODJxfn1wN5mnUQlCE/N8V3b6RDEWViWM/0EkeMfRft9M5A==
-X-Received: by 2002:a05:6402:2b93:b0:43a:5aad:73c2 with SMTP id fj19-20020a0564022b9300b0043a5aad73c2mr31983335edb.300.1658072498706;
-        Sun, 17 Jul 2022 08:41:38 -0700 (PDT)
-Received: from DESKTOP-A98GP49.. (cable-178-148-254-8.dynamic.sbb.rs. [178.148.254.8])
-        by smtp.gmail.com with ESMTPSA id q7-20020a170906388700b0072aac7446easm4403880ejd.47.2022.07.17.08.41.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 08:41:38 -0700 (PDT)
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (aquacomputer_d5next) Add D5 Next fan control support
-Date:   Sun, 17 Jul 2022 17:41:14 +0200
-Message-Id: <20220717154114.7545-1-savicaleksa83@gmail.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Sun, 17 Jul 2022 11:42:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EFABC9
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 08:42:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E57666125C
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 15:42:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 52934C3411E;
+        Sun, 17 Jul 2022 15:42:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658072544;
+        bh=M1Jz1dR0pxQTWC3V2dV2oZ6gvLTaErQCowrpQOp9FUA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Py5TegDyTSfcVqtWVQQIawMsRtdAhGUcV+zc+xUn20QaW2QAm/zJiQ03N2N+1yV4j
+         NYo+A4huIhovzGj6LJMcn34DNtX7fR78Nl9n+jZ8qTO1tGR8qDLPRWtoyOWhbcnCTx
+         OIe+2T63+NcZN+CO6S7/GrKbZWDf6AJyRtNEd9t+oSfuP+9kvLyFF0Loe2K0JgGABV
+         xOmwTQGPdrbwRvfADRB9ILzOkUFH481/h9+TCEO+//kZfdxy3w1XWbsGTDB/1XSqlM
+         cjDCWQmJdR/NOobt0P6D7yTlabWlXPTySUAP13u1m7TPEqtx/bJoSDRCkXyHrNZugH
+         K0+R8CvrrpY+w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33116E4521F;
+        Sun, 17 Jul 2022 15:42:24 +0000 (UTC)
+Subject: Re: [GIT PULL] x86/urgent for 5.19-rc7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YtO62/Za76bfGqIm@zn.tnic>
+References: <YtO62/Za76bfGqIm@zn.tnic>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YtO62/Za76bfGqIm@zn.tnic>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.19_rc7
+X-PR-Tracked-Commit-Id: bcf163150cd37348a0cb59e95c916a83a9344b0e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 59c80f053d50467758c8284348b463fa820b1b1f
+Message-Id: <165807254420.9863.6498605756952771877.pr-tracker-bot@kernel.org>
+Date:   Sun, 17 Jul 2022 15:42:24 +0000
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define pump and fan speed register offsets in
-D5 Next control report, as well as its size, to expose PWM fan control.
+The pull request you sent on Sun, 17 Jul 2022 09:31:39 +0200:
 
-Signed-off-by: Jack Doan <me@jackdoan.com>
-Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
----
- drivers/hwmon/aquacomputer_d5next.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.19_rc7
 
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index 0e56cc711a26..997d72ea6182 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -71,8 +71,12 @@ static u8 secondary_ctrl_report[] = {
- #define D5NEXT_PUMP_OFFSET		0x6c
- #define D5NEXT_FAN_OFFSET		0x5f
- #define D5NEXT_5V_VOLTAGE		0x39
-+#define D5NEXT_CTRL_REPORT_SIZE		0x329
- static u8 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET };
- 
-+/* Pump and fan speed registers in D5 Next control report (from 0-100%) */
-+static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
-+
- /* Register offsets for the Farbwerk RGB controller */
- #define FARBWERK_NUM_SENSORS		4
- #define FARBWERK_SENSOR_START		0x2f
-@@ -667,9 +671,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 
- 		priv->num_fans = D5NEXT_NUM_FANS;
- 		priv->fan_sensor_offsets = d5next_sensor_fan_offsets;
-+		priv->fan_ctrl_offsets = d5next_ctrl_fan_offsets;
- 		priv->num_temp_sensors = D5NEXT_NUM_SENSORS;
- 		priv->temp_sensor_start_offset = D5NEXT_COOLANT_TEMP;
- 		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
-+		priv->buffer_size = D5NEXT_CTRL_REPORT_SIZE;
- 
- 		priv->temp_label = label_d5next_temp;
- 		priv->speed_label = label_d5next_speeds;
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/59c80f053d50467758c8284348b463fa820b1b1f
+
+Thank you!
+
 -- 
-2.36.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

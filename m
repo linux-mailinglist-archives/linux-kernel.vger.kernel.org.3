@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54313577801
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 21:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B1E577804
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 21:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbiGQTc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 15:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
+        id S231587AbiGQTjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 15:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbiGQTc1 (ORCPT
+        with ESMTP id S229535AbiGQTjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 15:32:27 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5780011836
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 12:32:26 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id r18so12741868edb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 12:32:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=bzc8+SMTjAuL3hWfjVp5UNr8nKbzbn5xX+8BRCLvn/4=;
-        b=SOKAhVvf6ZDCy89DcFq/ROSdecedn2B5HAoiH+Zlxisou3tv6x1m9OCk4lR2Ptu4YX
-         7XT17iXG3fF0xyeDQcMEkQYDfMgaehCg8Y8j85DeA0HNp+6XWNKgPWafMZvkscRje2cS
-         WNOhnoLJytL/UErwoiQPnjDRuwCKx3/HV5cJT6GGUmBiLgrSMCehrIgNoUvPOyqMDJQT
-         /ahT+Hx6xANcVl6af018LBUYIUoh2cVbKE4aOHvg3cdTuFyWK0qNXj9LEY21RSUjgfaC
-         kxli4VW6VRzAPCGOVNGwGvnq/lWDHSS8ISlmzEWQBmR9b0kDCqUEq3d9pAGpAhDM17N1
-         vNgg==
+        Sun, 17 Jul 2022 15:39:15 -0400
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916D9212;
+        Sun, 17 Jul 2022 12:39:13 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-31e0d4ad6caso28902857b3.10;
+        Sun, 17 Jul 2022 12:39:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=bzc8+SMTjAuL3hWfjVp5UNr8nKbzbn5xX+8BRCLvn/4=;
-        b=MhrOj4IYD6KNcFreVu+3m+iN/IIvksgan2Wxk3s7ZomLN36jTtDwgWRihpzt0SBYeP
-         1dGG67Gu1Y2onr7I5P3PCbbCNLOafx4iGyY5AFp5fQhkN+yAorSjKwN9SAhNW7StVz3g
-         M3yM27YH+0l8cmNIrJaMhzK9fL0rWtkPiPXtmrw4RotqgwUa+UsHx33TgmSg3SGmFi6x
-         xAlcBVX8CC99O7X07plKbLJwwlRTaqCCGE1TZcepPq9GJFWvD18fH4O8qyW5rll1GecP
-         15k6BWkvSlOtHoC3WF1us2nX4+vvYOHDNz9Mysr2Tay0X2D1Gd/RWldeTFLR3M8CqPPT
-         nzeA==
-X-Gm-Message-State: AJIora8KzpJ5N1bA37HHMSG3XvhRereQ8hCEanI6QZl7Zzz6S9IuKuWH
-        AFeeWrgeiqSosccXQ6AULIHezA==
-X-Google-Smtp-Source: AGRyM1uF29btnV+ubkEnBmWrWy6/jD2F1VNvGsr1evGz6n+Z/04BFjDfx0RbVWmdkajKBB5gjDa+fA==
-X-Received: by 2002:a05:6402:4016:b0:43a:f310:9522 with SMTP id d22-20020a056402401600b0043af3109522mr32447659eda.200.1658086344896;
-        Sun, 17 Jul 2022 12:32:24 -0700 (PDT)
-Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05640210cd00b00435a62d35b5sm7177568edu.45.2022.07.17.12.32.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 17 Jul 2022 12:32:24 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH] arm64: dts: rockchip: rk3399-nanopi4: Fix voltage
- regulator config
-From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-In-Reply-To: <963AF33B-54B7-4172-92D1-E2898E256A7E@kohlschutter.com>
-Date:   Sun, 17 Jul 2022 21:32:23 +0200
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <750501EB-8A79-459B-89B8-E9064632A68B@kohlschutter.com>
-References: <963AF33B-54B7-4172-92D1-E2898E256A7E@kohlschutter.com>
-To:     Robin Murphy <robin.murphy@arm.com>, wens@kernel.org,
-        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CPCaSY0Eo4Egu4Za9o4rdwtMcin5MxefXpC2xwA0s3Y=;
+        b=uO/chpt2QI1GS+MZXJC8lijz7GMoTjvluh7XwP2bPIuK5bKxPavj9VBm/IKyS+RwR+
+         HQWSFAz9BfHSlA5ihoaYpvK3RHOovLJYaiGxMl4SJXdWvozykZUEZn1UDXF3hT1o+QMH
+         fI60HYRSJyR2Lx8cdm9G/NLzkb1gXMKBjjgw40j+rEk/B4CoXtEHrbLhOG+NCDrk/dnh
+         bpDONWnS9Mjy+d2yT9+E2dacUmysOSg5NL7bTHZZL98Kcd4YHnkEanb+xn5MnZSMEJW9
+         f1gXZuXrhclEaOQUVyzAo6Sc1g+nBxjru3ZdPteWgp0EAiDUkggD3ZYRhdjzBZwKhltn
+         Z10A==
+X-Gm-Message-State: AJIora/4HO7azRt3gQNM6fFzQDvyU5mZxNlN0uZKhQOxFoXbOUzAhtc7
+        XcKx8Hh278naF+wkT8NUL2C06BwbglvzlD0dthuIjO39akY=
+X-Google-Smtp-Source: AGRyM1vZy5fjO2CcnECaTla6jfCQu/66ceBy+p3K6R3EJbE5IDi6E70o2+y54qpZGcmMZ9WRwkpuufkm4Nvj4hkOEuI=
+X-Received: by 2002:a81:c24e:0:b0:31e:f02:e18e with SMTP id
+ t14-20020a81c24e000000b0031e0f02e18emr7471675ywg.515.1658086752837; Sun, 17
+ Jul 2022 12:39:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <12013659.O9o76ZdvQC@kreacher> <61311732eeea1f45e85537e911e4bb024c0a30b7.camel@intel.com>
+In-Reply-To: <61311732eeea1f45e85537e911e4bb024c0a30b7.camel@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 17 Jul 2022 21:39:01 +0200
+Message-ID: <CAJZ5v0j+FTX4UF-9Y0BQc2mYXQiphsnkt07CALhF7BPtSdDxgg@mail.gmail.com>
+Subject: Re: [PATCH] intel: thermal: PCH: Drop ACPI_FADT_LOW_POWER_S0 check
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch obviously requires "regulator: core: Resolve supply name =
-earlier to prevent double-init" and obsoletes "[PATCH v5] arm64: dts: =
-rockchip: Fix SD card init on rk3399-nanopi4".
-The latter patch may still be useful for existing kernels where one can =
-recompile the device tree separately.
+On Sun, Jul 17, 2022 at 8:14 AM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> On Thu, 2022-07-14 at 21:11 +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > If ACPI_FADT_LOW_POWER_S0 is not set, this doesn't mean that low-
+> > power
+> > S0 idle is not usable.  It merely means that using S3 on the given
+> > system is more beneficial from the energy saving perspective than
+> > using
+> > low-power S0 idle, as long as S3 is supported.
+>
+> Agreed.
+>
+> >
+> > Suspend-to-idle is still a valid suspend mode if
+> > ACPI_FADT_LOW_POWER_S0
+> > is not set and the pm_suspend_via_firmware() check in
+> > pch_wpt_suspend()
+> > is sufficient to distinguish suspend-to-idle from S3, so drop the
+> > confusing ACPI_FADT_LOW_POWER_S0 check.
+>
+> the cooling delay in the suspend callback is to make sure PCH
+> temperature won't block S0ix during s2idle. So if S0ix is not
+> supported, it is meaningless to invoke the cooling delay during s2idle.
 
-> Am 17.07.2022 um 21:29 schrieb Christian Kohlsch=C3=BCtter =
-<christian@kohlschutter.com>:
->=20
-> A series of issues exist around the "vcc3v0_sd" voltage regulator that
-> made it necessary to mark it "always-on".
->=20
-> With the patch "regulator: core: Resolve supply name earlier to =
-prevent
-> double-init", this option is no longer necessary.
->=20
-> Removing this option not only prevents a hang when rebooting Nanopi =
-R4S,
-> it also ensures that bootloaders like u-boot can boot from an SD card
-> right away, without out-of-tree patches that re-initialize voltage =
-levels.
->=20
-> Signed-off-by: Christian Kohlsch=C3=BCtter =
-<christian@kohlschutter.com>
-> ---
-> arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi | 1 -
-> 1 file changed, 1 deletion(-)
->=20
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi =
-b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-> index 8c0ff6c96e03..55b93eac2f99 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-> @@ -70,7 +70,6 @@ vcc3v0_sd: vcc3v0-sd {
-> 		gpio =3D <&gpio0 RK_PA1 GPIO_ACTIVE_HIGH>;
-> 		pinctrl-names =3D "default";
-> 		pinctrl-0 =3D <&sdmmc0_pwr_h>;
-> -		regulator-always-on;
-> 		regulator-min-microvolt =3D <3000000>;
-> 		regulator-max-microvolt =3D <3000000>;
-> 		regulator-name =3D "vcc3v0_sd";
-> --=20
-> 2.36.1
->=20
->=20
+But there is no way to determine whether or not S0ix is supported.  In
+particular, ACPI_FADT_LOW_POWER_S0 is not one.
 
+> so the problem is that we don't have an indicator for S0ix capability.
+> And this also applies to drivers/rtc/rtc-cmos.c, where we use ACPI SCI
+> for runtime RTC wakeup instead of HPET interrupt on "S0ix capable"
+> platforms because the HPET timer may block S0ix.
+
+"S0ix capable" doesn't matter.  What matters is whether or not the
+current transition under way is into S0 or into suspend-to-idle.  In
+the latter case there is no reason to avoid doing whatever is done in
+the expectation that S0ix may be entered going forward.

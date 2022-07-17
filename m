@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC8057774A
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 18:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70EF657774F
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 18:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbiGQQUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 12:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S232837AbiGQQZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 12:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiGQQUw (ORCPT
+        with ESMTP id S229536AbiGQQZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 12:20:52 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B33A18F
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 09:20:51 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id a15so9795587pjs.0
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 09:20:51 -0700 (PDT)
+        Sun, 17 Jul 2022 12:25:04 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C0513CE6;
+        Sun, 17 Jul 2022 09:25:03 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id a5so13756606wrx.12;
+        Sun, 17 Jul 2022 09:25:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u3QM0VGwZJMhBsJE0onY0hM94jbomNudisRDkMA5phA=;
-        b=XC49hl0Qoew2RD7oOXd1YLrAttGqaR8lA/xJayGMOA7KPOtm69P5LIAUTNSjlTIZBF
-         baH7+u+MkADowl23la0Ld7o2G1TyHaouqxPWE586BiPJNGyP1xxHHKeeqvroWR/uf+gO
-         9DhwKT4yDJHVTpieh7AIIaEzxnXdEuzC64nnTyPLU6+ygByfJAp7BHdWb9H5PPuXKhkc
-         NrbfQnOhxeYsVuhtGRBB39jn6q5iGyj67CohnEhYfYHOxu5hqW0GDCW4p0rRNO0JM+3O
-         lNTNvVRPno+ytNlKfCV2ikbLNUOjDepKmZVj5pc4Goxpiwz6xNMLou90aLu1s/XlDWjU
-         EL+g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rwSneiH5xSNmTYynHVLLuzHsfAWoKgKKKN3H7FS7rMk=;
+        b=Aa/n1738ntBuPAWlhWhRZjFLdhg8myxMR8iZ6ftlyCeOiQ/9YT8wiSQDcg0c7UVHIb
+         2Zf+Xsi8VkZXPDEp01hK59xKVY+ZeOj4PS2UxKfYEv4K3yTRf9K2tX6EMzePC9j4jIKH
+         KqE0qziR4v/rSbMbLc6LQsa3oLHRC90c3EkGtQFBzwWt46gIvb/hbxlvPS5EVjBA8Y6A
+         oA+BKnFpc7syZFnPPTRyec4XOuVWoPrd0uyUJ4vobAUIhE09YyViry6TZxnnzAauydiz
+         qsFW/1eGnCix7ZOzsUHc/RXx+Lpk23JF/BP9ido13S6OxIOCNapP3PBFdxuYeYy9NFdW
+         2UuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=u3QM0VGwZJMhBsJE0onY0hM94jbomNudisRDkMA5phA=;
-        b=U0d7N1DZ5Vbx6opk6N9K786mzgYL72eu1N9wnrQpUJ8W1Wxn8ndpwSG2XZg4Skn/lQ
-         k76jcLxcK/pYudYx/BY0sZl2+xXPkhVE6g5Zr4V8XFR6xeC0cqA1m6AUTGu4k5xDwDHa
-         cmdyKBAAEFMU9f4ssjtssaPEAVm7SKPxrDJiC97PerNhOTDcDnWVTkvu+5AzSxVZa0H5
-         /Xr0LDaZVzOhhmy24ZslipwDOaTlXidx3YPucctfJxkZYmWOM5SN2GVGrow63Cn6vI5I
-         nNgUDvo2XBLlRgiaiYiSz9gMYPz2HFVXatwg/HHaEmHf3cNZyFGKJV6GY/GL5zfG9wwT
-         iPBQ==
-X-Gm-Message-State: AJIora8AqbI0UXUxEPEQXxxwMhN8YGxah0Jsyy27E2w3xrqLYmPCmKk+
-        YC6en3UQJjdMZksfiixPgtjDa5O8kIwj2A==
-X-Google-Smtp-Source: AGRyM1ve/k7uBaojTv42vcU8qIxzNJZnzgL1eV24bkOlshzh2Z01ipo8jmARjSC9DhQ4kvDO93eO/Q==
-X-Received: by 2002:a17:90b:1a81:b0:1f0:77a7:907f with SMTP id ng1-20020a17090b1a8100b001f077a7907fmr29012948pjb.49.1658074850832;
-        Sun, 17 Jul 2022 09:20:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u142-20020a627994000000b0051c758a3957sm7690289pfc.149.2022.07.17.09.20.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 09:20:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>
-Subject: [PATCH] drm/i915: Fix 32-bit build
-Date:   Sun, 17 Jul 2022 09:20:46 -0700
-Message-Id: <20220717162046.710290-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.36.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rwSneiH5xSNmTYynHVLLuzHsfAWoKgKKKN3H7FS7rMk=;
+        b=FdDQGPf5JD/zrbwFO3Kw9nRo7F+Wq0BPW0jaLz9/JIInHr0dJ085tUiO2p7Rj/4I+p
+         dthNc8xGz73jjuQlVKoRC8puI4SRtFLtXyluGbAr3HM2LU3UuCA9D/jQaoepm626Ki+/
+         cQZ3DwErbPJGVM8L0gwkMrZrxa6SbCjXmGjBk4XR/vAx78+63JebxV3ctArvvESet5su
+         iAPlm+gqWX4zNEv65zLJM4QBAPm/rdDNTf/yOhNgvklt7qK3rTK6k0tn6wmTzYey3RS/
+         Cbvx/4Z1F/AfGDIxEtKVnbXncXMJnDf6QaVr+jRjEmG19lZAL0icPtP292TgW4QM2w8Z
+         yqdA==
+X-Gm-Message-State: AJIora/8lpWZLT0Fz8fbB5XEORa/RNp2VWDC+MdEXwJkQP53tQc/6B2v
+        EhWxF7PrFbYDDX6TK+YCPKVKhs+UYR3k8sy2g98=
+X-Google-Smtp-Source: AGRyM1tKKG1DTxpJhgljLKjM1b0ZBI1n3j2cO/EQg0uio6SMOdiW6aawdpL2hUIf0EJQ/Yx0Ma8Z86scLN5oUYig9mY=
+X-Received: by 2002:a5d:6a88:0:b0:21d:6ee4:1fb1 with SMTP id
+ s8-20020a5d6a88000000b0021d6ee41fb1mr19575491wru.249.1658075102011; Sun, 17
+ Jul 2022 09:25:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20220630111634.610320-1-hans@kapio-technology.com>
+ <Yr2LFI1dx6Oc7QBo@shredder> <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
+ <Yr778K/7L7Wqwws2@shredder> <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
+ <20220717134610.k3nw6mam256yxj37@skbuf> <20220717140325.p5ox5mhqedbyyiz4@skbuf>
+In-Reply-To: <20220717140325.p5ox5mhqedbyyiz4@skbuf>
+From:   Hans S <schultz.hans@gmail.com>
+Date:   Sun, 17 Jul 2022 18:22:57 +0200
+Message-ID: <CAKUejP6g3HxS=Scj-2yhsQRJApxnq1e31Nkcc995s7gzfMJOew@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
+ traffic cannot unlock a locked port
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,44 +84,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit aff1e0b09b54 ("drm/i915/ttm: fix sg_table construction") introduces
-an additional parameter to i915_rsgt_from_mm_node(). The parameter is used
-to calculate segment_pages. This in turn is used in DIV_ROUND_UP() as
-divisor. So far segment_pages was a constant and handled without divide
-operation. Since it is no longer constant, a divide operation is now
-necessary. This results in build errors on 32-bit builds.
+On Sun, Jul 17, 2022 at 4:03 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+>
+> On Sun, Jul 17, 2022 at 04:46:10PM +0300, Vladimir Oltean wrote:
+> > Here, what happens is that a locked port learns the MAC SA from the
+> > traffic it didn't drop, i.e. link-local. In other words, the bridge
+> > behaves as expected and instructed: +locked +learning will cause just
+> > that. It's the administrator's fault for not disabling learning.
+> > It's also the mv88e6xxx driver's fault for not validating the "locked" +
+> > "learning" brport flag *combination* until it properly supports "+locked
+> > +learning" (the feature you are currently working on).
+> >
+> > I'm still confused why we don't just say that "+locked -learning" means
+> > plain 802.1X, "+locked +learning" means MAB where we learn locked FDB entries.
+>
+> Or is it the problem that a "+locked +learning" bridge port will learn
+> MAC SA from link-local traffic, but it will create FDB entries without
+> the locked flag while doing so? The mv88e6xxx driver should react to the
+> 'locked' flag from both directions (ADD_TO_DEVICE too, not just ADD_TO_BRIDGE).
 
-x86_64-linux-ld: drivers/gpu/drm/i915/i915_scatterlist.o:
-	in function `i915_rsgt_from_mm_node':
-i915_scatterlist.c:(.text+0x196): undefined reference to `__udivdi3'
-
-Fix the problem by using DIV_ROUND_UP_ULL() instead of DIV_ROUND_UP().
-
-Fixes: aff1e0b09b54 ("drm/i915/ttm: fix sg_table construction")
-Cc: Matthew Auld <matthew.auld@intel.com>
-Cc: Nirmoy Das <nirmoy.das@intel.com>
-Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-I took a stab at the problem. Please ignore the noise if it has already
-been fixed with a different patch.
-
- drivers/gpu/drm/i915/i915_scatterlist.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/i915/i915_scatterlist.c b/drivers/gpu/drm/i915/i915_scatterlist.c
-index f63b50b71e10..b81d5658c222 100644
---- a/drivers/gpu/drm/i915/i915_scatterlist.c
-+++ b/drivers/gpu/drm/i915/i915_scatterlist.c
-@@ -96,7 +96,7 @@ struct i915_refct_sgt *i915_rsgt_from_mm_node(const struct drm_mm_node *node,
- 
- 	i915_refct_sgt_init(rsgt, node->size << PAGE_SHIFT);
- 	st = &rsgt->table;
--	if (sg_alloc_table(st, DIV_ROUND_UP(node->size, segment_pages),
-+	if (sg_alloc_table(st, DIV_ROUND_UP_ULL(node->size, segment_pages),
- 			   GFP_KERNEL)) {
- 		i915_refct_sgt_put(rsgt);
- 		return ERR_PTR(-ENOMEM);
--- 
-2.36.2
-
+Yes, it creates an FDB entry in the bridge without the locked flag
+set, and sends an ADD_TO_DEVICE notice with it.
+And furthermore link-local packets include of course EAPOL packets, so
+that's why +learning is a problem.

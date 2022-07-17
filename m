@@ -2,107 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C195777BF
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 20:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 848695777C2
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 20:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbiGQSVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 14:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
+        id S231509AbiGQS0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 14:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiGQSVh (ORCPT
+        with ESMTP id S229544AbiGQS0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 14:21:37 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F4E13F16
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 11:21:36 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id i3-20020a5d8403000000b0067bd73cc9eeso4236954ion.19
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 11:21:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=9lxHvDLp1NNRIHjnSmqb8mKhlE83vGlSB7ASV9SnxPQ=;
-        b=k1E0sxsviG8XThke/LDkEegmK2A+7jFZ70MPG169fKh39eyIlUqlmrvFyvoh1jAk+J
-         K6bL/YjAtgJl/P/nMylJ+3oTwSyuV8J7Hrsv+FGHIZHE+owVNpOYo+VWnWwufzIqX4kP
-         DMocQW+CGEGktlQKNL8fe+PRIoai3hYmcmvmEW2XlNSu2TfviVl/52sOqZO8FlFEg+U1
-         Yg437xuqbaq9za+lMam1L/NcZgSWOY497DHDpq99NOQtrecvlWiAGUHr57vDQs2NkeBw
-         +NDcjfq7uns3hjkN4pPHSngx8PNHPpEpZudWkvvGjUbPQko5yjIkk4KEnzHKwDWySbIM
-         aZOg==
-X-Gm-Message-State: AJIora9HFjcK/+exZa0D3OD4cuQoc+OdbrqDCoklD7+xVsdfjpIZvFt/
-        M3AyeYGoePyttyK5w8O3NsD1fODLJd/65PhKcnRav3QrVtBO
-X-Google-Smtp-Source: AGRyM1vdVhYapUGsZAz1GVQJQ8c+96LBjKEne+s2jtf8dpKMcy6OY5t4/UHfUpIImFfbQJwM1Eo6ePRGRJtYlRjh31O4dRBJbGVY
+        Sun, 17 Jul 2022 14:26:02 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200AF12090
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 11:26:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658082361; x=1689618361;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=njU9EQSSPra2TYQzCjcFgBQwyeni81otigjBmys3YUM=;
+  b=XfLyR1ni8lRhV9v8n+Qwv68FiEnfhbZ75GJaFO2q9XI8Eg5hlU0N3rIS
+   3M7J6mrm250/lhTvi1HbFGMcwFEik9+e+IFcarVwKU6EAHKRq1OxL8Z8D
+   JP/SXfg5OVFHAFznyMtUrkYMo7vn0v9F7EZKhxqcFi+fv8EQE/8r/mBbz
+   osbv7GPkVgqWNx9qhSV6T68FQnzne7oBItyJWZyCkIlOBoq6KY85W30c7
+   HJF/glh2BPjW6wok9DtOm/FBx6e3KDCkrAaOdtjdwxAok8Y+J/Iz6NORa
+   pMTzono0PL5NEYqGsQdyWvCTv6SZc2/49lWiQv0KWggz5JuWotkRqERyi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="350045601"
+X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
+   d="scan'208";a="350045601"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 11:26:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
+   d="scan'208";a="699785912"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 17 Jul 2022 11:25:59 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oD8xq-0003ZK-Mj;
+        Sun, 17 Jul 2022 18:25:58 +0000
+Date:   Mon, 18 Jul 2022 02:25:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/080-wifi 20/29]
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse:
+ sparse: incorrect type in assignment (different base types)
+Message-ID: <202207180208.JN9wWybB-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1885:b0:2dc:5ede:8537 with SMTP id
- o5-20020a056e02188500b002dc5ede8537mr11832936ilu.275.1658082096077; Sun, 17
- Jul 2022 11:21:36 -0700 (PDT)
-Date:   Sun, 17 Jul 2022 11:21:36 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000058626005e40452e6@google.com>
-Subject: [syzbot] memory leak in ipv6_renew_options
-From:   syzbot <syzbot+a8430774139ec3ab7176@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://github.com/AsahiLinux/linux bits/080-wifi
+head:   17fbadf936c0875886e8b4f48a777eca5acf3b20
+commit: ef271557a174ab5bf47549d93f05ee97a54ae145 [20/29] brcmfmac: cfg80211: Add support for scan params v2
+config: parisc-randconfig-s041-20220715 (https://download.01.org/0day-ci/archive/20220718/202207180208.JN9wWybB-lkp@intel.com/config)
+compiler: hppa64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/AsahiLinux/linux/commit/ef271557a174ab5bf47549d93f05ee97a54ae145
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/080-wifi
+        git checkout ef271557a174ab5bf47549d93f05ee97a54ae145
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc64 SHELL=/bin/bash drivers/bluetooth/ drivers/media/i2c/ drivers/net/wireless/broadcom/brcm80211/brcmfmac/ drivers/pci/ kernel/trace/ sound/soc/codecs/
 
-syzbot found the following issue on:
-
-HEAD commit:    b047602d579b Merge tag 'trace-v5.19-rc5' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1129c37c080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=689b5fe7168a1260
-dashboard link: https://syzkaller.appspot.com/bug?extid=a8430774139ec3ab7176
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1349421c080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=120fcc1c080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a8430774139ec3ab7176@syzkaller.appspotmail.com
-
-executing program
-executing program
-BUG: memory leak
-unreferenced object 0xffff88810b810f00 (size 96):
-  comm "syz-executor113", pid 3606, jiffies 4294944081 (age 12.460s)
-  hex dump (first 32 bytes):
-    01 00 00 00 48 00 00 00 00 00 08 00 00 00 00 00  ....H...........
-    00 00 00 00 00 00 00 00 40 0f 81 0b 81 88 ff ff  ........@.......
-  backtrace:
-    [<ffffffff83855781>] kmalloc include/linux/slab.h:605 [inline]
-    [<ffffffff83855781>] sock_kmalloc net/core/sock.c:2563 [inline]
-    [<ffffffff83855781>] sock_kmalloc+0x61/0x90 net/core/sock.c:2554
-    [<ffffffff83d3fa60>] ipv6_renew_options+0x120/0x440 net/ipv6/exthdrs.c:1318
-    [<ffffffff83d138ad>] ipv6_set_opt_hdr net/ipv6/ipv6_sockglue.c:354 [inline]
-    [<ffffffff83d138ad>] do_ipv6_setsockopt.constprop.0+0x49d/0x24d0 net/ipv6/ipv6_sockglue.c:668
-    [<ffffffff83d1599e>] ipv6_setsockopt+0xbe/0x120 net/ipv6/ipv6_sockglue.c:1021
-    [<ffffffff838517d0>] __sys_setsockopt+0x1b0/0x390 net/socket.c:2254
-    [<ffffffff838519d2>] __do_sys_setsockopt net/socket.c:2265 [inline]
-    [<ffffffff838519d2>] __se_sys_setsockopt net/socket.c:2262 [inline]
-    [<ffffffff838519d2>] __x64_sys_setsockopt+0x22/0x30 net/socket.c:2262
-    [<ffffffff845ad915>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845ad915>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
+sparse warnings: (new ones prefixed by >>)
+>> drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] version @@     got int @@
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse:     expected restricted __le16 [usertype] version
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse:     got int
+>> drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] scan_type @@     got int @@
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse:     expected restricted __le32 [usertype] scan_type
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse:     got int
+>> drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned char [usertype] scan_type @@     got restricted __le32 [usertype] scan_type @@
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse:     expected unsigned char [usertype] scan_type
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse:     got restricted __le32 [usertype] scan_type
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +1087 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+  1069	
+  1070	static void brcmf_escan_prep(struct brcmf_cfg80211_info *cfg,
+  1071				     struct brcmf_scan_params_v2_le *params_le,
+  1072				     struct cfg80211_scan_request *request)
+  1073	{
+  1074		u32 n_ssids;
+  1075		u32 n_channels;
+  1076		s32 i;
+  1077		s32 offset;
+  1078		u16 chanspec;
+  1079		char *ptr;
+  1080		int length;
+  1081		struct brcmf_ssid_le ssid_le;
+  1082	
+  1083		eth_broadcast_addr(params_le->bssid);
+  1084	
+  1085		length = BRCMF_SCAN_PARAMS_V2_FIXED_SIZE;
+  1086	
+> 1087		params_le->version = BRCMF_SCAN_PARAMS_VERSION_V2;
+  1088		params_le->bss_type = DOT11_BSSTYPE_ANY;
+  1089		params_le->scan_type = BRCMF_SCANTYPE_ACTIVE;
+  1090		params_le->channel_num = 0;
+  1091		params_le->nprobes = cpu_to_le32(-1);
+  1092		params_le->active_time = cpu_to_le32(-1);
+  1093		params_le->passive_time = cpu_to_le32(-1);
+  1094		params_le->home_time = cpu_to_le32(-1);
+  1095		memset(&params_le->ssid_le, 0, sizeof(params_le->ssid_le));
+  1096	
+  1097		/* Scan abort */
+  1098		if (!request) {
+  1099			length += sizeof(u16);
+  1100			params_le->channel_num = cpu_to_le32(1);
+  1101			params_le->channel_list[0] = cpu_to_le16(-1);
+  1102			params_le->length = cpu_to_le16(length);
+  1103			return;
+  1104		}
+  1105	
+  1106		n_ssids = request->n_ssids;
+  1107		n_channels = request->n_channels;
+  1108	
+  1109		/* Copy channel array if applicable */
+  1110		brcmf_dbg(SCAN, "### List of channelspecs to scan ### %d\n",
+  1111			  n_channels);
+  1112		if (n_channels > 0) {
+  1113			length += roundup(sizeof(u16) * n_channels, sizeof(u32));
+  1114			for (i = 0; i < n_channels; i++) {
+  1115				chanspec = channel_to_chanspec(&cfg->d11inf,
+  1116							       request->channels[i]);
+  1117				brcmf_dbg(SCAN, "Chan : %d, Channel spec: %x\n",
+  1118					  request->channels[i]->hw_value, chanspec);
+  1119				params_le->channel_list[i] = cpu_to_le16(chanspec);
+  1120			}
+  1121		} else {
+  1122			brcmf_dbg(SCAN, "Scanning all channels\n");
+  1123		}
+  1124	
+  1125		/* Copy ssid array if applicable */
+  1126		brcmf_dbg(SCAN, "### List of SSIDs to scan ### %d\n", n_ssids);
+  1127		if (n_ssids > 0) {
+  1128			offset = offsetof(struct brcmf_scan_params_v2_le, channel_list) +
+  1129					n_channels * sizeof(u16);
+  1130			offset = roundup(offset, sizeof(u32));
+  1131			length += sizeof(ssid_le) * n_ssids,
+  1132			ptr = (char *)params_le + offset;
+  1133			for (i = 0; i < n_ssids; i++) {
+  1134				memset(&ssid_le, 0, sizeof(ssid_le));
+  1135				ssid_le.SSID_len =
+  1136						cpu_to_le32(request->ssids[i].ssid_len);
+  1137				memcpy(ssid_le.SSID, request->ssids[i].ssid,
+  1138				       request->ssids[i].ssid_len);
+  1139				if (!ssid_le.SSID_len)
+  1140					brcmf_dbg(SCAN, "%d: Broadcast scan\n", i);
+  1141				else
+  1142					brcmf_dbg(SCAN, "%d: scan for  %.32s size=%d\n",
+  1143						  i, ssid_le.SSID, ssid_le.SSID_len);
+  1144				memcpy(ptr, &ssid_le, sizeof(ssid_le));
+  1145				ptr += sizeof(ssid_le);
+  1146			}
+  1147		} else {
+  1148			brcmf_dbg(SCAN, "Performing passive scan\n");
+> 1149			params_le->scan_type = BRCMF_SCANTYPE_PASSIVE;
+  1150		}
+  1151		params_le->length = cpu_to_le16(length);
+  1152		/* Adding mask to channel numbers */
+  1153		params_le->channel_num =
+  1154			cpu_to_le32((n_ssids << BRCMF_SCAN_PARAMS_NSSID_SHIFT) |
+  1155				(n_channels & BRCMF_SCAN_PARAMS_COUNT_MASK));
+  1156	}
+  1157	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,132 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DD35775F9
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 13:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93320577603
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 13:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbiGQLdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 07:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S232300AbiGQLhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 07:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiGQLdv (ORCPT
+        with ESMTP id S231918AbiGQLhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 07:33:51 -0400
-Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDA8DD0
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 04:33:49 -0700 (PDT)
-Received: from proxy02.sjtu.edu.cn (smtp188.sjtu.edu.cn [202.120.2.188])
-        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id 286C01008B388;
-        Sun, 17 Jul 2022 19:33:45 +0800 (CST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by proxy02.sjtu.edu.cn (Postfix) with ESMTP id 1729A2007EB67;
-        Sun, 17 Jul 2022 19:33:45 +0800 (CST)
-X-Virus-Scanned: amavisd-new at 
-Received: from proxy02.sjtu.edu.cn ([127.0.0.1])
-        by localhost (proxy02.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id seTJFmOmQv6T; Sun, 17 Jul 2022 19:33:45 +0800 (CST)
-Received: from [192.168.24.189] (unknown [202.120.40.82])
-        (Authenticated sender: qtxuning1999@sjtu.edu.cn)
-        by proxy02.sjtu.edu.cn (Postfix) with ESMTPSA id 3768B200BFDA8;
-        Sun, 17 Jul 2022 19:33:37 +0800 (CST)
-Message-ID: <47372b7c-15bf-ba9f-083c-e16bd4d1df04@sjtu.edu.cn>
-Date:   Sun, 17 Jul 2022 19:33:37 +0800
+        Sun, 17 Jul 2022 07:37:12 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31C015809;
+        Sun, 17 Jul 2022 04:37:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658057831; x=1689593831;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X6aY0q+5aDpSXPBzmndb3qPcsEz32yV4MXOhg75mJSM=;
+  b=KcQeF8j93oUy9TXzR1zuG2+aYnjzXn3BQc/i6gZCY8q6zNDN/1NM21Ht
+   syEMoTa4KVwKfYJMCu2DDm8IMx1OmLcleQDgar8JZw766hfpxtUG2VEzF
+   38Iktewmugkw5KooPQ7eWJhTfOvefzcG3nqC2zB+Yaqc0qxSr4qamwq0z
+   1NV5c8B+hz4HrDr94yTQCAPI6oU2ib0TvLTUJ3thhelrI7AUMHWMs1MOz
+   WIvCZVXeZV1D+8aGXOJ708jhxLbhNvNX+yeWKxDp+5X6BpIVvHKfk7afp
+   0mHA7SoyM6F3QFDYG98ctVOON+2fd+7ZWUWxkfMxIhaOXdV8T2nVTj+Eg
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="269076178"
+X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
+   d="scan'208";a="269076178"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 04:37:11 -0700
+X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
+   d="scan'208";a="739155206"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 04:37:07 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 16DCD20521;
+        Sun, 17 Jul 2022 14:37:05 +0300 (EEST)
+Date:   Sun, 17 Jul 2022 11:37:05 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v5 1/6] dt-bindings: media: Add Allwinner A31 ISP
+ bindings documentation
+Message-ID: <YtP0YfPteyzsBWn3@paasikivi.fi.intel.com>
+References: <20220704173523.76729-1-paul.kocialkowski@bootlin.com>
+ <20220704173523.76729-2-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 2/4] virtio_test: use random length scatterlists to
- test descriptor chain
-Content-Language: en-US
-To:     Eugenio Perez Martin <eperezma@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>, Michael Tsirkin <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stefano Garzarella <sgarzare@redhat.com>
-References: <20220709022745.21020-1-qtxuning1999@sjtu.edu.cn>
- <20220709022745.21020-3-qtxuning1999@sjtu.edu.cn>
- <CAJaqyWcFbxSSyY81_O_0AaTmw0e7_f+S_6F2Tjs1AHSbv-0jfg@mail.gmail.com>
-From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
-In-Reply-To: <CAJaqyWcFbxSSyY81_O_0AaTmw0e7_f+S_6F2Tjs1AHSbv-0jfg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704173523.76729-2-paul.kocialkowski@bootlin.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/11 23:35, Eugenio Perez Martin wrote:
-> On Sat, Jul 9, 2022 at 4:28 AM Guo Zhi <qtxuning1999@sjtu.edu.cn> wrote:
->> Prior implementation only use one descriptor for each io event, which
->> does't test code of descriptor chain. More importantly, one descriptor
->> will not use indirect feature even indirect feature is specified. Use
->> random length scatterlists here to test descriptor chain.
->>
->> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
->> ---
->> v3:
->> - drop fda270fcd virtio_test: move magic number in code as defined constant
->> ---
->>   tools/virtio/virtio_test.c | 11 ++++++++---
->>   1 file changed, 8 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
->> index 95f78b311..1408a4a20 100644
->> --- a/tools/virtio/virtio_test.c
->> +++ b/tools/virtio/virtio_test.c
->> @@ -20,6 +20,7 @@
->>   #include "../../drivers/vhost/test.h"
->>
->>   #define RANDOM_BATCH -1
->> +#define MAX_SG_FRAGS 8UL
->>
->>   /* Unused */
->>   void *__kmalloc_fake, *__kfree_ignore_start, *__kfree_ignore_end;
->> @@ -169,7 +170,8 @@ static void wait_for_interrupt(struct vdev_info *dev)
->>   static void run_test(struct vdev_info *dev, struct vq_info *vq,
->>                       bool delayed, int batch, int reset_n, int bufs)
->>   {
->> -       struct scatterlist sl;
->> +       struct scatterlist sg[MAX_SG_FRAGS];
->> +       int sg_size = 0;
->>          long started = 0, completed = 0, next_reset = reset_n;
->>          long completed_before, started_before;
->>          int r, test = 1;
->> @@ -194,8 +196,11 @@ static void run_test(struct vdev_info *dev, struct vq_info *vq,
->>
->>                          while (started < bufs &&
->>                                 (started - completed) < batch) {
->> -                               sg_init_one(&sl, dev->buf, dev->buf_size);
->> -                               r = virtqueue_add_outbuf(vq->vq, &sl, 1,
->> +                               sg_size = random() % (MAX_SG_FRAGS - 1) + 1;
-> I'm wondering if it would be simpler to reuse batch randomness here,
-> and make sg_size = MIN(started - completed, MAX_SG_FRAGS). Vhost test
-> should go faster because the longer chains, and I guess we should hit
-> a good range of chain lengths with the batch tail anyway.
->
-> Thanks!
+Hi Paul,
 
-IMHO, if we reuse batch randomness here, the random length of 
-scatterlist only appears when --batch=random selected.
+On Mon, Jul 04, 2022 at 07:35:18PM +0200, Paul Kocialkowski wrote:
+> This introduces YAML bindings documentation for the Allwinner A31 Image
+> Signal Processor (ISP).
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../media/allwinner,sun6i-a31-isp.yaml        | 97 +++++++++++++++++++
+>  1 file changed, 97 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> new file mode 100644
+> index 000000000000..2fda6e05e16c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> @@ -0,0 +1,97 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
+> +
+> +maintainers:
+> +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - allwinner,sun6i-a31-isp
+> +      - allwinner,sun8i-v3s-isp
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Bus Clock
+> +      - description: Module Clock
+> +      - description: DRAM Clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: bus
+> +      - const: mod
+> +      - const: ram
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: CSI0 input port
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: CSI1 input port
 
-Otherwise, when we have to specify the batch size(eg, 256), the 
-scatterlist( as well as the descriptor chain len) will not be randomed. 
-So I propose decouple the randomness of batch size and descriptor chain 
-length.
+Do both support a single PHY with a single data only? If multiple data lanes
+are supported, please require data-lanes property (on endpoint).
 
-If we have to achive better performance for vhost_test, just enlarge the 
-MAX_SG_FRAGS is ok.
+> +
+> +    anyOf:
+> +      - required:
+> +          - port@0
+> +      - required:
+> +          - port@1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
+> +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
+> +
+> +    isp: isp@1cb8000 {
+> +        compatible = "allwinner,sun8i-v3s-isp";
+> +        reg = <0x01cb8000 0x1000>;
+> +        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&ccu CLK_BUS_CSI>,
+> +             <&ccu CLK_CSI1_SCLK>,
+> +             <&ccu CLK_DRAM_CSI>;
+> +        clock-names = "bus", "mod", "ram";
+> +        resets = <&ccu RST_BUS_CSI>;
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            port@0 {
+> +                reg = <0>;
+> +
+> +                isp_in_csi0: endpoint {
+> +                    remote-endpoint = <&csi0_out_isp>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
 
->> +                               sg_init_table(sg, sg_size);
->> +                               for (int i = 0; i < sg_size; ++i)
->> +                                       sg_set_buf(&sg[i], dev->buf + i, 0x1);
->> +                               r = virtqueue_add_outbuf(vq->vq, sg, sg_size,
->>                                                           dev->buf + started,
->>                                                           GFP_ATOMIC);
->>                                  if (unlikely(r != 0)) {
->> --
->> 2.17.1
->>
-
+-- 
+Sakari Ailus

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5093B5773E8
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3DD5773E9
 	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 05:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233024AbiGQDsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 23:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
+        id S233041AbiGQDsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 23:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232775AbiGQDsI (ORCPT
+        with ESMTP id S232809AbiGQDsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 23:48:08 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C0E17E37
+        Sat, 16 Jul 2022 23:48:09 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F9F17A8C
         for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 20:48:08 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id r22-20020a056830419600b0061c6edc5dcfso6644920otu.12
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-10bf634bc50so15757562fac.3
         for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 20:48:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Yi8AkrlIqU4lv5oV/rNtUh5JaYHyOIwQpcON7vVHGsA=;
-        b=zr9iL6oISXOb1as1eSfmmqY3qOK3BV9grw3z5lf/C/WPw4ac1n1v8ar0WGrTWVBhVi
-         vIGNlI8SxWlKUK85JILoOVAnX4f4uK9Ua6tVeWX12b/1yc2RcCI5LS7WJikmdUPEOEOR
-         wCRaTAnWuwj46FQLcvRtEW0iqFszCpJmRj2EtpuTF4iq3AWA2/8caHFN+nNsrgpvFyab
-         lG+ApzwU4ZSCEPjX9MLHrocKe8TZObRh45ble4Zi78SlEssrh6q4IAwwyyK6QVEKtIK2
-         xAq6Nfo64ioTQi+hVFLXsWbVL6i2H8iYxYwE4try/xt9QZsSSuCLPL22RSTGFRWhX0iM
-         vUWQ==
+        bh=Y1Z7tiCUOCROwXa2SQqXBTnkJtu9davb+q/iCGv2BZ8=;
+        b=PGXDojd3zELY6mETwkMfKCyQ2Bl53TCqJ5W1D4jlWj/DprutvEUs4mSMnMnohxw8Zd
+         JLlN1rb5zIHKjLk3bz/gBS3DUJzTq1DA6d4xKM37lAnrsX5n7tSm9GXJIaJjfHbmL1aa
+         iwOQCkSWgJUlX+qnO4MKbs5YtYddnMScjRN8M7hPdiTvSh1SAwXcGH5iKvlOZuYSOVaa
+         IgfClQZxUJDGFZQGlYPZkDSibYMZN/PqYLaj/ULpShPcVIqzB5TbVrqrl2E7ARkXsTqv
+         NAD2yJY5zZDglwjBOQHyCCjPwoccMrMs9WOjlMcXaDSDNMlzh1/BKxMNsgyQv6mK523P
+         2ZwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Yi8AkrlIqU4lv5oV/rNtUh5JaYHyOIwQpcON7vVHGsA=;
-        b=yrax1mE3dVPwTV450is+/ucvbM0SexmUDaR4rufdB7dewcdRss5KCwGXlL4Sgbs1s6
-         ucK821PhlNCuWR9hwRh/xLYFwGnSHduJxnzrZ7FF1HA/rKYiotWXnL+1JrSUw1h4tlB0
-         59PrPMo9DCqphfa/E1J7+hx6GC6o9JttMtMja3CqPcM9OUgo4EoekITrHfEwqJyyTkmQ
-         g3uZc5C4J8ZnJL0uEit/8/XENA1BmpdoaOG61NzOW68rqaB62x8XauECTLgLACskmfRr
-         H4B9AX2GC5vIyx2jIKi88aW8B2zzmXbol14O/fLaRFzQJmbnE1EZAF/p+JZuz1UczvFd
-         rs2g==
-X-Gm-Message-State: AJIora8EqXIwMC0NrCgmmciBh518X3ozsie6jUitxVaqDyvDOnJhwfUP
-        8/qlDUDLLcRzACUrip6FxUWFlQ==
-X-Google-Smtp-Source: AGRyM1uUNBzlqa+eRg79c4zphI886hA7vGx8j8GA62jnmV2U5UdRidnlfYZUfKxTntxitQF3Ies2VQ==
-X-Received: by 2002:a9d:198c:0:b0:60c:7ecc:5c19 with SMTP id k12-20020a9d198c000000b0060c7ecc5c19mr8638762otk.160.1658029687487;
-        Sat, 16 Jul 2022 20:48:07 -0700 (PDT)
+        bh=Y1Z7tiCUOCROwXa2SQqXBTnkJtu9davb+q/iCGv2BZ8=;
+        b=xRxWcuF2enUilSPgPagITbHJR3U8xgaRL9ZuvuoK5Me5Uduy4hhLMd05EW1SFWqmVf
+         z61UIuqhxpdzOsKvG7SrYNNRUCSHM3FbTTkAy3l1nicfvXOyt+ICMEx/iYiMWO6ImtZ+
+         5e/Dq1eH0GAs7dDR8TDTxQhw4neg3YBqLdP1PlrP2ZeEIPuk+t/1komyRw9U98qnbMfO
+         m3MaZXWM47kERQJ4H1/uzqVia/q9jnpH/X62L4k531RRnWe5l74fQ/1v3Z/IHA6Pz7Am
+         VQqva1RbfMQwSdZKqvSarQLipoNlFHau8bFnQnrHbw/R2t8OqFhaMT4BIeVGy6WFJs36
+         8PAw==
+X-Gm-Message-State: AJIora/6E0wCcKxVBS7TOgI8tly6EERUlqloor6JN8/UbgYOLT0DmLsb
+        hj3jBzGY9w+JYJ/IdYDjbtMEvg==
+X-Google-Smtp-Source: AGRyM1v2PTYdi+yjjcTs9y0/ctAEeup5BimBWYWwGb4JyYeHa8XPuxOfHS5wHv5v+l7/nHRJX92SWQ==
+X-Received: by 2002:a05:6808:f02:b0:33a:59a3:3a12 with SMTP id m2-20020a0568080f0200b0033a59a33a12mr3954211oiw.181.1658029688441;
+        Sat, 16 Jul 2022 20:48:08 -0700 (PDT)
 Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id e65-20020aca3744000000b0033a169f9282sm3004515oia.52.2022.07.16.20.48.06
+        by smtp.gmail.com with ESMTPSA id e65-20020aca3744000000b0033a169f9282sm3004515oia.52.2022.07.16.20.48.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Jul 2022 20:48:07 -0700 (PDT)
+        Sat, 16 Jul 2022 20:48:08 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Vinod Koul <vkoul@kernel.org>, Wolfram Sang <wsa@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] i2c: qcom-geni: Use the correct return value
-Date:   Sat, 16 Jul 2022 20:50:25 -0700
-Message-Id: <20220717035027.2135106-2-bjorn.andersson@linaro.org>
+Subject: [PATCH 2/3] i2c: qcom-geni: Propagate GENI_ABORT_DONE to geni_i2c_abort_xfer()
+Date:   Sat, 16 Jul 2022 20:50:26 -0700
+Message-Id: <20220717035027.2135106-3-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220717035027.2135106-1-bjorn.andersson@linaro.org>
 References: <20220717035027.2135106-1-bjorn.andersson@linaro.org>
@@ -64,36 +64,81 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The introduction of GPI support moved things around and instead of
-returning the result from geni_i2c_xfer() the number of messages in the
-request was returned, ignoring the actual result. Fix this.
+Waiting for M_CMD_ABORT_EN in geni_i2c_abort_xfer() races with the
+interrupt handler which will read and clear the abort bit, the result is
+that every abort attempt takes 1 second and is followed by a message
+about the abort having times out.
 
-Fixes: d8703554f4de ("i2c: qcom-geni: Add support for GPI DMA")
+Introduce a new state variable to carry the abort_done state from the
+interrupt handler back to geni_i2c_abort_xfer().
+
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- drivers/i2c/busses/i2c-qcom-geni.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-qcom-geni.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 6ac402ea58fb..3bec7c782824 100644
+index 3bec7c782824..e212e7ae7ad2 100644
 --- a/drivers/i2c/busses/i2c-qcom-geni.c
 +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -688,7 +688,7 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 	pm_runtime_put_autosuspend(gi2c->se.dev);
- 	gi2c->cur = NULL;
- 	gi2c->err = 0;
--	return num;
-+	return ret;
+@@ -97,6 +97,7 @@ struct geni_i2c_dev {
+ 	struct dma_chan *tx_c;
+ 	struct dma_chan *rx_c;
+ 	bool gpi_mode;
++	bool abort_done;
+ };
+ 
+ struct geni_i2c_err_log {
+@@ -203,9 +204,14 @@ static void geni_i2c_err(struct geni_i2c_dev *gi2c, int err)
+ 		dev_dbg(gi2c->se.dev, "len:%d, slv-addr:0x%x, RD/WR:%d\n",
+ 			gi2c->cur->len, gi2c->cur->addr, gi2c->cur->flags);
+ 
+-	if (err != NACK && err != GENI_ABORT_DONE) {
++	switch (err) {
++	case GENI_ABORT_DONE:
++		gi2c->abort_done = true;
++		break;
++	default:
+ 		dev_err(gi2c->se.dev, "%s\n", gi2c_log[err].msg);
+ 		geni_i2c_err_misc(gi2c);
++		break;
+ 	}
  }
  
- static u32 geni_i2c_func(struct i2c_adapter *adap)
+@@ -311,21 +317,21 @@ static irqreturn_t geni_i2c_irq(int irq, void *dev)
+ 
+ static void geni_i2c_abort_xfer(struct geni_i2c_dev *gi2c)
+ {
+-	u32 val;
+ 	unsigned long time_left = ABORT_TIMEOUT;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&gi2c->lock, flags);
+ 	geni_i2c_err(gi2c, GENI_TIMEOUT);
+ 	gi2c->cur = NULL;
++	gi2c->abort_done = false;
+ 	geni_se_abort_m_cmd(&gi2c->se);
+ 	spin_unlock_irqrestore(&gi2c->lock, flags);
++
+ 	do {
+ 		time_left = wait_for_completion_timeout(&gi2c->done, time_left);
+-		val = readl_relaxed(gi2c->se.base + SE_GENI_M_IRQ_STATUS);
+-	} while (!(val & M_CMD_ABORT_EN) && time_left);
++	} while (!gi2c->abort_done && time_left);
+ 
+-	if (!(val & M_CMD_ABORT_EN))
++	if (!time_left)
+ 		dev_err(gi2c->se.dev, "Timeout abort_m_cmd\n");
+ }
+ 
 -- 
 2.35.1
 

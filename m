@@ -2,228 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D645775F3
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 13:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F98C5775EE
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 13:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbiGQL2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 07:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
+        id S231229AbiGQL3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 07:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiGQL2M (ORCPT
+        with ESMTP id S229535AbiGQL3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 07:28:12 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B469215708;
-        Sun, 17 Jul 2022 04:28:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1658057291; x=1689593291;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=+Ozo+aECynEsx1dEYhKgc8LSpIDCoEoIOiZXsMP8f44=;
-  b=eEZjZNCIztkiD2tWbRvawvgvAG08mkoxcto04wrL2/Wjo1Sk9AMRCY+O
-   gO5AHBwQplE1RudqFLuQkGZOju9c40Lp4D0BVS7bxvt1V3l+IdPMfrmj+
-   vMNf18ZVwwKwYDXO9K2TQSdOVKGiXWV+7y1fukZTwJnK27eKz55sLYZph
-   mvB8+JoKsHQAOnw8TbOP/EYlT+fLpxjyXUECPDwQzDX5fQe4rpqzuT4Ru
-   ZyvlPVwiUrVoF7F7P10daHJhJf0+qPIhlAO9y9arKSGUgaFdoZ9JbdOhm
-   WgQiPWDdgr5yjab5+OH6FgPnwO5heB6FbiV93htfksj3Gun05qxfgzIog
-   g==;
-X-IronPort-AV: E=Sophos;i="5.92,279,1650902400"; 
-   d="scan'208";a="206634075"
-Received: from mail-bn8nam11lp2169.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.169])
-  by ob1.hgst.iphmx.com with ESMTP; 17 Jul 2022 19:28:10 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hnCd0nlcXh8abxGLWCZLTLjugctpc+qzg9Iuw3TJEfASJ/85YL2TO9TwWH3gOE2Jj6zAO/lYXmWSql4bYUgyRv4DbUMqsVgSxuEFyGFQuY0Smwe3Gap3zUNyeWrphYGX6Y5FkxIz9vndGt8m+EnkhhF0rG1IsRvzC4eg75394qagsumHYyzBEpSiE6M1/ZR0snNgk48pff/8Lh8uchyhJY0lI/54CoeBc481m5l+QPbBiWelq0QVDxBc0RwuaPIA89hiT2uUt98T8KySLcnegikk1hT4JNvdi5S1Zrk2f7gf5zjbVUaoqOOAELCjUGixjx4OclqBmxruk3KAFkyS2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VDVxtsBzCmFDzXEb62qR+H12l0fwc1rTkic2bZaeH4k=;
- b=LBMjLOGlEfOl3dkrJlC1ltoO7nzwFyWdqdlE5jh1YmEA4OCceE1m7r2OWP5Jrdtjx4zu19TZktj117oBduZnRJj04l+6nGbhC0/KwcAlamC6k0iKDg+P4FBsaB5zmHWFYJaTuA2vpWoAp+udd+2IIp3E8YogJo49lI37aC05ujgSHJNRJiQ+0Hasjce/Zelj0j/KKeU9IDQuv235YYaumYY4iKvCR5RC3Wj3fmW6zfUEWyIGqP/Ew+MUirAvr6HvAfuod7KBJMeHviBNkjXL0Hi+Ozpj/IOIxX3ZWdvQHKe1sjIRjihOXGKPeo0NcGm7Fh3gV/dKqyiCY7TqGl41Sg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VDVxtsBzCmFDzXEb62qR+H12l0fwc1rTkic2bZaeH4k=;
- b=GLFY1Z86LUTpBBqVd3LYVkFUhLmq7g3u9lgRysMuebnmqSzViyMlZBB8KputhzfiPGS6CSJHSnX9Z7JmUTGVGFm76VKJ3NV2ezlDVHkYuUZVpBWFdtWF4hZEmJti0nIt5ICc8a5GeUTPpjiMJWDoAVOBDFvp/eqWGeMgTk6aDww=
-Received: from BY5PR04MB6327.namprd04.prod.outlook.com (2603:10b6:a03:1e8::20)
- by SN2PR04MB2334.namprd04.prod.outlook.com (2603:10b6:804:17::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Sun, 17 Jul
- 2022 11:28:07 +0000
-Received: from BY5PR04MB6327.namprd04.prod.outlook.com
- ([fe80::c5bf:1046:2bad:5e75]) by BY5PR04MB6327.namprd04.prod.outlook.com
- ([fe80::c5bf:1046:2bad:5e75%6]) with mapi id 15.20.5438.023; Sun, 17 Jul 2022
- 11:28:07 +0000
-From:   Arthur Simchaev <Arthur.Simchaev@wdc.com>
-To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        Avi Shchislowski <Avi.Shchislowski@wdc.com>
-Subject: RE: [PATCH] scsi: ufs-bsg: Remove ufs_bsg_get_query_desc_size
- function
-Thread-Topic: [PATCH] scsi: ufs-bsg: Remove ufs_bsg_get_query_desc_size
- function
-Thread-Index: AQHYhKDynvKkVtaQm0SrWhB5D1T9dq2Clh+w
-Date:   Sun, 17 Jul 2022 11:28:07 +0000
-Message-ID: <BY5PR04MB632776263A4B37AEB7373DE4ED8D9@BY5PR04MB6327.namprd04.prod.outlook.com>
-References: <1655727966-31584-1-git-send-email-Arthur.Simchaev@wdc.com>
-In-Reply-To: <1655727966-31584-1-git-send-email-Arthur.Simchaev@wdc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c7b8389d-d348-4d51-4186-08da67e76bfb
-x-ms-traffictypediagnostic: SN2PR04MB2334:EE_
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4mNKALFgzyOjSZenYc/gv3wKT2YOKvkRbjonhhUIGbJeMIKwY5/JjPjup5acJpWtcMjHyusldhua1UHPMg2+HJFPMl+xm5+8+q9wSgFeYr7wsquJezNlKlH89X+lcbqJZJCm8RaD7McYApRpvZtyr24F6f/orXRj/2aDRc5r5JEo0QrAK6Uh07991xi3GiFFGrbdzOS/o+etaz/zsB/K21Zj+3UL/3QDoNspfbPFNZYSV66lUwd+xJkqSV3n50a5WPiO/ddlYAp2xzFcdRuT0V0XjArRmNnd3My6iHshgMUzRm70lPgRdVJHFG9hYzL2dEv9wgyH9ssFP9z+YDtH27ZQJf9kRKdw7/C64mUjJ6CIPvAIZCFx+3e/Dmf1/FZ0ZeXC3TnWumNkQw6v0Wge/IOGeNg/Nvdm+KtTtYjyoP7t4SONTs28OwWbyreq8bMdlDitpVeDRUQaDDZWtSGh5kmQfUgXADBa2XZFrNzUtc8TV+j+0P9vmcgik86UWCqfLWUZQ5RpCahDfg1C/dwvdEMzi87/+urVIFzdG0jxKh1URsNQiCBQXuC+V5CAnV7CJ8A/C8eXRKvzMfZoMdI09RL1ffevmX05iMMAZKKqWm+MEHIGoL7YCcPU1q5/+Vh3sehmKRPS9muStIfPK3SG5GtBDJYcLd4q+0wwyBXp3640c+dfxcAVtMvUWCqFRY1ADJOHp39Kb4NQBTAIlXqTkSSWYTvDyUfsBlu4PuGupA+AKdvDReXwfrCzSDgN08/NkeJXWqJeX3gTT6//QwvyuRodiULSK2/HAM+G8nFatTabQ7mRicMhrtAYvGs2XPqo
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6327.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(39860400002)(396003)(366004)(9686003)(8936002)(86362001)(5660300002)(2906002)(64756008)(7696005)(6506007)(54906003)(110136005)(316002)(66476007)(8676002)(66946007)(66556008)(33656002)(4326008)(66446008)(76116006)(55016003)(52536014)(478600001)(122000001)(38100700002)(41300700001)(82960400001)(71200400001)(26005)(53546011)(83380400001)(38070700005)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?bbDvEYYgte0m7W0dHSyTKXONLT7253off+g8F0+Eh8zYUokxNcDOdXIuT76h?=
- =?us-ascii?Q?9O9W4mv1bSID5zMtxrUJp12o4ctXo/CNaX15zg6DUkDCdJaYzG8T8dLNoi62?=
- =?us-ascii?Q?1CYnWdCcmPINlOmx0ATuMUc8U5/zAzzzl4Xy2f2GDz+Y0lv9dcl9KG0xvpBA?=
- =?us-ascii?Q?AE+kSE+Q7f5KjQ/lo4DOXoYRCHaAhgYTdhtFnnt+U1FbDGxpBIsdDD0qQr3Q?=
- =?us-ascii?Q?BDmZx8ZgHH51Q3++NcXPHa+UqY4pCxNdiTy4mng2Nj5u4YeEuWykMT0cSVNF?=
- =?us-ascii?Q?X40oRo4fXpG7eTJEySxHaSKBLWS0hyIRCrYUDznodboEqIXdRDTQIDYIHc3H?=
- =?us-ascii?Q?8LbDQX4/YaFdiA7mJrH1nA7VYrGQHV0ZjI/1pcHA9Q+HDyjY7k+Y7mDOKkHK?=
- =?us-ascii?Q?hCViNiXZV9Tm3GOOtPW0N3a1PFVJAl5putBqnW8pPmlLqK3XPtiQp9LHJ+22?=
- =?us-ascii?Q?QqkAfghtvqQg/dnyKWEk8dMlk+ujD/Bc5lBGx1+MneQXSsyZs4UnnYdvcPV7?=
- =?us-ascii?Q?arRSPzc69pglYL51AeYwGu+gxK8Szwv0pper4z65RrJI/e5chH2ZhI+bDWm/?=
- =?us-ascii?Q?cYhCPvbaRgJR1Cw/Whifs9Q2jVanQ9jAJQQHiQHRXERJ7rXW9eHpan7qL2xN?=
- =?us-ascii?Q?LKEQ8Tus67JWuAHWmBvRTlpy5JfuOBzG9iPmJQ5RA+xnj3b6dKQQAIQZyW9A?=
- =?us-ascii?Q?CiwoIRzCdTiQZGikS89W8N92LR9hKYlxCNpsAs9g/qVIBJdMWn1FdXfr78ef?=
- =?us-ascii?Q?V3IUsc3IsRL/5cQpt+vL79L8mk4nhnDrcBBheBzJAR8swYiR38DIEZhOhVVC?=
- =?us-ascii?Q?QknE7o8DzcTMhnV3ewHdTlulAhhbkINSf9ME4a+bJwQv2qhGfJFwliHS3aMg?=
- =?us-ascii?Q?iULHF2xjkmE98jUX7F5mzyxCintxbW94ycbYO7iNLX+12MOIj8NNlRhVJE1h?=
- =?us-ascii?Q?j+xUs37CM8w7KghZBYNVAd0qql9EXxJcp5tKDmodbJsEIewez22ltK1SUb9s?=
- =?us-ascii?Q?ofqg3AnGe2JvGrXTd0pnlLfQx5bUzOT4qz7DgM01oO2q9HOXACmB2vi4Cvue?=
- =?us-ascii?Q?3f84FI+gG4RONket4Nn90gU93lIIXZvSfwuauKLx+rAAcoruh+ez3+2op3GR?=
- =?us-ascii?Q?Ov4sK5YQ4F+wPZJ0j9Nw+9EvWqqAyASMyvKJKn6SG3jl1RIVYz+V95FC7Hs2?=
- =?us-ascii?Q?TKrcBMhJF2r8lyj0oQU7NgwIUeYvKwJWeQq540D2ACR0/lfLvXYZnsOaIcGo?=
- =?us-ascii?Q?VDA2U4EDOrQxPfqdDdusfdKfXPgjn5C3nsB2ORf+J+IFmgFdi/BbNIUC8DwD?=
- =?us-ascii?Q?zCN1mUjmrR+ozj0KOs6/G9MfYPk+sueR9Drr0sZ1yCih/VZja/L/zdi2Upbf?=
- =?us-ascii?Q?dsvX92MaQ2jw7084wSdl/HJ9iM1QYMPVxF4kYxJ+ftEXP/AtZTifcpZxgzqE?=
- =?us-ascii?Q?bEoYqzcF+rD9VnPpLWOZjGPhz1Ab9m/0iEoEihoKSx5vR4eH3R73Rv3owDg3?=
- =?us-ascii?Q?Cw/5dO3MJRbAZsmAW0zko1iim+gEPg64ybChTiZa4USaEIWgrR30tacCcTXL?=
- =?us-ascii?Q?8U3K19/wHFXPaKRSTx9q9BEcOp6YrYG59lA8dCPk?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 17 Jul 2022 07:29:19 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6D4113E8E
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 04:29:17 -0700 (PDT)
+Received: from [10.20.42.19] (unknown [10.20.42.19])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxCeGB8tNisuAkAA--.6360S3;
+        Sun, 17 Jul 2022 19:29:05 +0800 (CST)
+Subject: Re: [PATCH V15 00/15] irqchip: Add LoongArch-related irqchip drivers
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
+ <87less52bx.wl-maz@kernel.org>
+ <6e9def1e-31fe-787d-1b2b-a328424352f0@loongson.cn>
+ <87ilnw3vlg.wl-maz@kernel.org>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <20994a99-b5b1-442d-d23d-2a11ecef24a0@loongson.cn>
+Date:   Sun, 17 Jul 2022 19:29:05 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6327.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7b8389d-d348-4d51-4186-08da67e76bfb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jul 2022 11:28:07.2924
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4CW41O05pMSnODn2CZFnp7q1zoZAveb9Y7AiyLCXxdPyX3014vvu1Bu+0jAZFPiF7FBW5CAY9DQvLgIFMXralQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN2PR04MB2334
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87ilnw3vlg.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxCeGB8tNisuAkAA--.6360S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrW8Cr17GrW3XF1kuw45Jrb_yoWrur17pF
+        WUXa9Fya1UArW5Ars7t3yFqrySv34fKrykWws5C34DArnI9w1DGr1xtF1UuFy7Cr48K3yj
+        vr4Fg3Z7uF4DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4x0Y4vEx4A2
+        jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzx
+        vE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        JVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm
+        -wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26ryrJr1UJwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin
 
-The bsg driver allows user space to send device management commands.
-As such, it is often used by field application engineers to debug various p=
-roblems, and as a test bed for new features as well.
 
-Let's not bound ourself to hard coded descriptor sizes, as the new Descript=
-ors that supports new features are not defined yet.
+On 2022/7/17 下午6:02, Marc Zyngier wrote:
+> On Sun, 17 Jul 2022 02:06:12 +0100,
+> Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>>
+>>
+>>
+>> On 2022/7/17 上午2:39, Marc Zyngier wrote:
+>>> On Fri, 15 Jul 2022 08:05:36 +0100,
+>>> Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>>>>
+>>>> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+>>>> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+>>>> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+>>>> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+>>>> are already added in the ACPI Specification 6.5(which may be published in
+>>>> early June this year and the board is reviewing the draft).
+>>>>
+>>>> Currently, LoongArch based processors (e.g. Loongson-3A5000) can only
+>>>> work together with LS7A chipsets. The irq chips in LoongArch computers
+>>>> include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
+>>>> Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller),
+>>>> HTVECINTC (Hyper-Transport Vector Interrupt Controller), PCH-PIC (Main
+>>>> Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
+>>>> in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
+>>>
+>>> [...]
+>>>
+>>> Compiling this series for loongarch with loongson3_defconfig on top of
+>>> 5.19-rc3 results in the following:
+>>>
+>>> loongarch64-linux-ld: drivers/irqchip/irq-loongson-eiointc.o: in function `.L60':
+>>> irq-loongson-eiointc.c:(.init.text+0x4c): undefined reference to `pch_msi_acpi_init'
+>>> loongarch64-linux-ld: drivers/irqchip/irq-loongson-htvec.o: in function `pch_msi_parse_madt':
+>>> irq-loongson-htvec.c:(.init.text+0x14): undefined reference to `pch_msi_acpi_init'
+>>> make: *** [Makefile:1164: vmlinux] Error 1
+>>>
+>>> I *really* would have expected this series to be in a better shape
+>>> after over 15 rounds, but it looks like I'm expecting too much. I
+>>> haven't investigated the breakage, but this should (at the very least)
+>>> pass the defconfig test and optional drivers not being selected.
+>>>
+>>> The corresponding MIPS configuration seems to build fine.
+>>>
+>>> 	M.
+>>>
+>>
+>> Hi, Marc
+>>
+>> Sorry for that first, pch_msi_acpi_init is defined in pch_msi driver
+>> which is compiled depend on CONFIG_PCI, and I test the patches each
+>> time with PCI patches and other(or else, kernel can not be boot), so
+>> I'm ok for testing the patches. The PCI patches has been accepted by
+>> PCI maintainers and will be merged in this merge window.
+> 
+> But each series *must* at the very least compile in isolation.
+> 
+>>
+>> I don't know how to deal with this situation. Should I add *#ifdef
+>> CONFIG_PCI* at position of calling pch_msi_acpi_init or some other
+>> way?
+> 
+> You could try something like this, which results in a kernel that
+> fully links with defconfig and no additional patch:
+> 
+> diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
+> index ca468564fc85..4479d95867ec 100644
+> --- a/arch/loongarch/include/asm/irq.h
+> +++ b/arch/loongarch/include/asm/irq.h
+> @@ -99,8 +99,17 @@ int htvec_acpi_init(struct irq_domain *parent,
+>   					struct acpi_madt_ht_pic *acpi_htvec);
+>   int pch_lpc_acpi_init(struct irq_domain *parent,
+>   					struct acpi_madt_lpc_pic *acpi_pchlpc);
+> +#if IS_ENABLED(CONFIG_LOONGSON_PCH_MSI)
+>   int pch_msi_acpi_init(struct irq_domain *parent,
+> -					struct acpi_madt_msi_pic *acpi_pchmsi);
+> +		      struct acpi_madt_msi_pic *acpi_pchmsi);
+> +#else
+> +static inline int pch_msi_acpi_init(struct irq_domain *parent,
+> +				    struct acpi_madt_msi_pic *acpi_pchmsi)
+> +{
+> +	return 0;
+> +
+> +}
+> +#endif
+>   int pch_pic_acpi_init(struct irq_domain *parent,
+>   					struct acpi_madt_bio_pic *acpi_pchpic);
+>   int find_pch_pic(u32 gsi);
+> 
 
-Please consider this patch series for kernel v5.20
+Ok, thanks, I'll add this into that patch.
 
-Regards
-Arthur
 
-> -----Original Message-----
-> From: Arthur Simchaev <Arthur.Simchaev@wdc.com>
-> Sent: Monday, June 20, 2022 3:26 PM
-> To: James; E.J.Bottomley; jejb@linux.vnet.ibm.com; Martin; K.Petersen;
-> martin.petersen@oracle.com
-> Cc: linux-scsi@vger.kernel.org; linux-kernel@vger.kernel.org; Bean; Huo;
-> beanhuo@micron.com; Arthur Simchaev <Arthur.Simchaev@wdc.com>
-> Subject: [PATCH] scsi: ufs-bsg: Remove ufs_bsg_get_query_desc_size functi=
-on
->=20
-> The bsg driver allows user space to send device management commands.
-> As such, it is often used by field application engineers to debug various
-> problems,
-> and as a test bed for new features as well.
->=20
-> Let's not bound ourself to hard coded descriptor sizes, as the new
-> Descriptors that supports new features are not defined yet.
->=20
-> Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
-> ---
->  drivers/scsi/ufs/ufs_bsg.c | 28 ++++------------------------
->  1 file changed, 4 insertions(+), 24 deletions(-)
->=20
-> diff --git a/drivers/scsi/ufs/ufs_bsg.c b/drivers/scsi/ufs/ufs_bsg.c
-> index 39bf204..7c56eba 100644
-> --- a/drivers/scsi/ufs/ufs_bsg.c
-> +++ b/drivers/scsi/ufs/ufs_bsg.c
-> @@ -6,24 +6,6 @@
->   */
->  #include "ufs_bsg.h"
->=20
-> -static int ufs_bsg_get_query_desc_size(struct ufs_hba *hba, int *desc_le=
-n,
-> -				       struct utp_upiu_query *qr)
-> -{
-> -	int desc_size =3D be16_to_cpu(qr->length);
-> -	int desc_id =3D qr->idn;
-> -
-> -	if (desc_size <=3D 0)
-> -		return -EINVAL;
-> -
-> -	ufshcd_map_desc_id_to_length(hba, desc_id, desc_len);
-> -	if (!*desc_len)
-> -		return -EINVAL;
-> -
-> -	*desc_len =3D min_t(int, *desc_len, desc_size);
-> -
-> -	return 0;
-> -}
-> -
->  static int ufs_bsg_verify_query_size(struct ufs_hba *hba,
->  				     unsigned int request_len,
->  				     unsigned int reply_len)
-> @@ -52,13 +34,11 @@ static int ufs_bsg_alloc_desc_buffer(struct ufs_hba
-> *hba, struct bsg_job *job,
->  		goto out;
->=20
->  	qr =3D &bsg_request->upiu_req.qr;
-> -	if (ufs_bsg_get_query_desc_size(hba, desc_len, qr)) {
-> -		dev_err(hba->dev, "Illegal desc size\n");
-> -		return -EINVAL;
-> -	}
-> +	*desc_len =3D be16_to_cpu(qr->length);
->=20
-> -	if (*desc_len > job->request_payload.payload_len) {
-> -		dev_err(hba->dev, "Illegal desc size\n");
-> +	if (*desc_len <=3D 0 || *desc_len > QUERY_DESC_MAX_SIZE ||
-> +	    *desc_len > job->request_payload.payload_len) {
-> +		dev_err(hba->dev, "Illegal desc size %d\n", *desc_len);
->  		return -EINVAL;
->  	}
->=20
-> --
-> 2.7.4
+> But the other issue is that you seem to call this function from two
+> different locations. This cannot be right, as there should be only one
+> probe order, and not multiple.
+> 
+
+As we described two IRQ models(Legacy and Extended) in this cover 
+letter, the parent domain of MSI domain can be htvec domain(Legacy) or 
+eiointc domain(Extended). In MADT, only one APIC(HTPIC for htvec or 
+EIOPIC for eiointc) is allowed to pass into kernel, and then in the 
+irqchip driver, only one kind APIC of them can be parsed from MADT, so 
+we have to support two probe order for them.
+
+> 	M.
+> 
 

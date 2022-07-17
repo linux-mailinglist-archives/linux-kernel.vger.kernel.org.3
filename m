@@ -2,94 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9BF5773E6
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 05:48:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EC35773E7
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 05:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232932AbiGQDsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 23:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
+        id S232985AbiGQDsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 23:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232755AbiGQDsI (ORCPT
+        with ESMTP id S232691AbiGQDsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 16 Jul 2022 23:48:08 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AD117E36;
-        Sat, 16 Jul 2022 20:48:07 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id f65so7801046pgc.12;
-        Sat, 16 Jul 2022 20:48:07 -0700 (PDT)
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F63E17E2A
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 20:48:07 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-10bf634bc50so15757475fac.3
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 20:48:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Z0QE6TqiTLpNVLq0d6Tn+LJm8jdHQlIKPBhpl1b1IvI=;
-        b=Hm/XZDORe8w/23YWh1ILjh5kveofdNCqQ0V7yu07TXBiadO710B4sQcFi584OFzxTg
-         MbAbTUZxhED4dxph0IUuYzrgaFeGgk+qs59KYL9dU6a4gT/Amg2JYMnVB+1qPNu3XDlL
-         R1CV6eXisR3zOqmF9wvS27nea+FsemZ6R9CtRQEC1ZE1UZ5Oq9V1E8Rb387rHvGuzrRw
-         9f/WdSbAJJzOIdI8t7bcdfwGoHSSV3KG0XUyDKKLroc6HTzX7n2UnG5JsSj8jenqMBhN
-         jVjVpUyZ5psvEY4DhPxJ1H2wqVxDINPWNUkibUyXCa1/AgSOx41fMuH/SKmrwwavgqDu
-         u9Tg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=21HY6wtQkPpfHZFWbTa1qvE3zEmY6IOji3PebPAf2LQ=;
+        b=bXo2IQlDVKcOFaIH1yTcLSmJgZp7Kecvs+uL31en3QWnmh+vQxvOYgRdAN9+BD2cb6
+         zrA2sBxbony9HyHcTYLVAuMn6njcPP1kb7ynSX9faXXxqVjbqyN8ZlSM1Jm0kmHd9IPp
+         wcmfWaiIb3BdZfENiEo5UGOVXLXaKE8fyTJNK+DxDGDo2L+qZn7UdvVyjKaxIKLGjioz
+         0EVcjFa7/DM4gr+LWir8I842j3evv/7KHOD0vxcuc37FkzFPQ/L0z7qXm++r4DKMY2Is
+         fTXJztpomi7COkPo1P9vbvQZVcjbJ+tepYIQ2w1Hnwe6/A0oPK1/tZhOfec2iAhSpEvX
+         mVpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Z0QE6TqiTLpNVLq0d6Tn+LJm8jdHQlIKPBhpl1b1IvI=;
-        b=Do6klEJY8Ym8UPzVOxIkeHwhZR0UPMHnd0U5x/qPesYSA+1tJv1b0fOtOOZsMNZPLK
-         V8qK28PhocpJrTov6/SU0+KO1CCjHc5trVEN29Gp6yoFpXneUN4dbCxUT9LlhpafS8CT
-         tamKSjJea1m4Jmx1nmmpdKiimBvQakLa37qbRgpIjEc5fyOsJZ3YCmKbci8JYHhRIgng
-         gaUA6JIB9Ie7BaOuNNREKZT1OnAAsGI78kAxGFb0ZBE7T69Ltrid0jgQ/7de6j6m8cgC
-         iIfemrQOfH3zHBdAJsPVlXCDAUEb9J6NUptWL+T/IVueamDrobdwVF1DLGAL9HukeP7u
-         sIag==
-X-Gm-Message-State: AJIora8gg7Mz9BKyfsU/Gp66UwLgXvCkpGlNZVROAznJxhNb0BxXNv/6
-        p56chyrY2biOonVeAm5qaypK8H0Ed73bPtmwFQ==
-X-Google-Smtp-Source: AGRyM1ts9KqXoDY4UHuc4G3SVfNilEGzmKzpCb1uTJFtaEWLMKAvCulqjjlSB/KMEm3RW8jR0HClTPzAZCj2jB06jKU=
-X-Received: by 2002:a05:6a02:113:b0:412:a7c0:da8e with SMTP id
- bg19-20020a056a02011300b00412a7c0da8emr19808019pgb.113.1658029687199; Sat, 16
- Jul 2022 20:48:07 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=21HY6wtQkPpfHZFWbTa1qvE3zEmY6IOji3PebPAf2LQ=;
+        b=hdHXKlBmcNllpcY6FAJNbTl8wqHmSs6o/a01xEphUHKPYf7fJ7g4PAkZmADNqBp0KN
+         wo1XZPFOBDhk2EAqUcqFDeNQmZ2cgM+Dk3DgQjr/7zbhDoervcHLkZn3MjNOhfuPqCIh
+         FVrq0GJigBKMa0aV8xobuOYb62ipm9PF8SQcNzVfrJPuKWw6hyXd6SLxfLnvFc/b8z2B
+         kIYXrwdpL3p9rU76ui+3DfO0KHXBSpVJsR6u/b3HgLJJBZ5G7400lkglw8y0NBgWNDW5
+         ap94WMujpNa/aErYq8BPEEklWOSwbV2uemCpHFr3De6/8/1/5E6hDqMncEifU8zb9SaL
+         RgSg==
+X-Gm-Message-State: AJIora/2y1/6aQZ/nbrODvJ2VxrdtqyocyUcQ7Akq+ualekL2P2wSazt
+        AdoAwX1rXf/8wLluDzkVJOh0yK+LUPVshA==
+X-Google-Smtp-Source: AGRyM1vUXPqKpA3j1kJ9W3eCSQbkpxW5XsuAg+p2hZ2dj/OQ74TkuMJpU/O6VVmho4mMOW7a14HciA==
+X-Received: by 2002:a05:6808:23d4:b0:33a:1441:bf0 with SMTP id bq20-20020a05680823d400b0033a14410bf0mr13921813oib.26.1658029686511;
+        Sat, 16 Jul 2022 20:48:06 -0700 (PDT)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id e65-20020aca3744000000b0033a169f9282sm3004515oia.52.2022.07.16.20.48.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Jul 2022 20:48:05 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>, Wolfram Sang <wsa@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] i2c: qcom-geni: Make it possible to run i2cdetect
+Date:   Sat, 16 Jul 2022 20:50:24 -0700
+Message-Id: <20220717035027.2135106-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Sun, 17 Jul 2022 11:47:56 +0800
-Message-ID: <CAMhUBjn=k-4DV0-u_30_rNQc9n__ZkwVFaLwfP1CP-uk1LjMpg@mail.gmail.com>
-Subject: [BUG] most: usb: Found a bug at the probe time
-To:     sumit.semwal@linaro.org, christian.koenig@amd.com
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linaro-mm-sig@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Attempting to run i2cdetect shows that error handling in the GENI I2C driver
+could be better.
 
-I found a bug in the most usb driver.
+The first issue is that errors aren't returned from the driver. Following this
+is an issue that if a timeout occurs the current operation is aborted, but the
+abort code races with the isr so the abort times out as well. Lastly when this
+happens, the driver is quite noisy, making it impossible to run i2cdetect on
+the serial console.
 
-When the driver fails at
+With this series in place, I was able to run i2cdetect on the db845c and two
+sc8180x devices - and get useful output.
 
-    mdev->conf = kcalloc(num_endpoints, sizeof(*mdev->conf), GFP_KERNEL);
+Bjorn Andersson (3):
+  i2c: qcom-geni: Use the correct return value
+  i2c: qcom-geni: Propagate GENI_ABORT_DONE to geni_i2c_abort_xfer()
+  i2c: qcom-geni: Silence NACK and GENI_TIMEOUT
 
-I got the following warning message:
+ drivers/i2c/busses/i2c-qcom-geni.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
+-- 
+2.35.1
 
-[   15.406256] kobject: '(null)' (ffff8881068f8000): is not
-initialized, yet kobject_put() is being called.
-[   15.406986] WARNING: CPU: 3 PID: 396 at lib/kobject.c:720
-kobject_put+0x6e/0x1c0
-[   15.410120] RIP: 0010:kobject_put+0x6e/0x1c0
-[   15.410470] Code: 01 75 29 4c 89 f8 48 c1 e8 03 80 3c 28 00 74 08
-4c 89 ff e8 14 2e 73 ff 49 8b 37 48 c7 c7 c0 fc de 85 4c 89 fa e8 e2
-61 21 ff <0f> 0b 49 8d 5f 38 48 89 df be 04 00 00 00 e8 df 2e 73 ff b8
-ff ff
-[   15.416529] Call Trace:
-[   15.416896]  hdm_probe+0xf3d/0x1090 [most_usb]
-
-Since I'm not familiar with the driver, I ask for your help to solve
-the warning.
-
-regards,
-
-Zheyu Ma

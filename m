@@ -2,127 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA43577529
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 11:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC394577551
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 11:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiGQJNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 05:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
+        id S233008AbiGQJQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 05:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGQJNU (ORCPT
+        with ESMTP id S232057AbiGQJQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 05:13:20 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A47214085;
-        Sun, 17 Jul 2022 02:13:19 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id h62so15863752ybb.11;
-        Sun, 17 Jul 2022 02:13:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uk9iE2xqsWDP3C6/qpL06kmkPCSpWSohZEixKNflFx4=;
-        b=FhkQ0Svj/+tJNsDc6DNnIVS70lQM2tZNF65w+E2+XmCspafhyy1ZbmSSxFtKCs62Bw
-         kR5R6AInk+RJVfOdkfa/kxDxYBuWaQa/Sc8Ytq+uOZB1j3NNM9QrG76BPsQa46KrmEaa
-         omQgPKFQ02xqfcQMW2t4OjSVx56fbbMOKRVj1H6IBw4rS09VAU1+9+Z1jLWuYgIp6mlK
-         F0ywUw3XJxW+T1E5aDt2V13U6Ec2zVnGbMRCMXQB0wiaU5RXgCEWnzloEi98Zi4Ox2nk
-         LMv3sOPFciC/RvZtsLr9wC8Ne2u2jSiOA00h7rpHo/0iCk54CmMbCCHmftxi9Z09zdAQ
-         009g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uk9iE2xqsWDP3C6/qpL06kmkPCSpWSohZEixKNflFx4=;
-        b=N1t0Chn1ekDUC6HiZfn/dN6wSilM7TPLUoL1u1Ao3sImJ7a7e25zuURrnQ2Vlc2vH2
-         1S7JpSzkcswHt/rQbo1kzh64Qt+89SOdYmr4qFTRsf0inLYAqhrlX/7jYzqqlV1g/uus
-         Ean+8GmxB2mUAJpM82r2I0DEc54oLdqOpWdjMKsub4vXIiSEyd6Pmd4bIeYtzJYjG4Yv
-         YsizaK+69vPAepM4zMChH9lT+7S9qC2pWsDbho4+edzxbq7qkNnYkh+kMn8ru+tAM2NM
-         Xu/m4v2bk8YMreFuV7qpSDAkw56jqIUAAiBcSLSjkMBqSBJz0/lFSZ1bXK2n+XMMKk4j
-         lurw==
-X-Gm-Message-State: AJIora9kwfALMxItYI9SYnCr2CaLkFFF0fm+aZorcPUx7IMW+ogXpssZ
-        CSpqfUYB/lEny6qFbksmSmdTsslOwKjUcPIH3ug=
-X-Google-Smtp-Source: AGRyM1uPYmGAEYb9p0WCn6+51xo81lzv+WhiEGpAx5V4Q7xhNVkaND+PiOC3wHRn30UHjy08DJZdv0dkPzxmu6zNlW4=
-X-Received: by 2002:a25:3c45:0:b0:664:cf75:c2d6 with SMTP id
- j66-20020a253c45000000b00664cf75c2d6mr21223452yba.446.1658049198400; Sun, 17
- Jul 2022 02:13:18 -0700 (PDT)
+        Sun, 17 Jul 2022 05:16:31 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17C4E15FC6;
+        Sun, 17 Jul 2022 02:16:28 -0700 (PDT)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id DD3AA1C8115D;
+        Sun, 17 Jul 2022 17:16:26 +0800 (CST)
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Sun, 17 Jul
+ 2022 17:16:26 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Sun, 17 Jul 2022 17:16:26 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id 3AB2763A23; Sun, 17 Jul 2022 12:16:25 +0300 (IDT)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
+        <gregkh@linuxfoundation.org>, <daniel.lezcano@linaro.org>,
+        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <arnd@arndb.de>, <olof@lixom.net>, <jirislaby@kernel.org>,
+        <shawnguo@kernel.org>, <bjorn.andersson@linaro.org>,
+        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
+        <vkoul@kernel.org>, <biju.das.jz@bp.renesas.com>,
+        <nobuhiro1.iwamatsu@toshiba.co.jp>, <robert.hancock@calian.com>,
+        <j.neuschaefer@gmx.net>, <lkundrak@v3.sk>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v9 00/16] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+Date:   Sun, 17 Jul 2022 12:15:53 +0300
+Message-ID: <20220717091609.122968-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <Ys/aDKZNhhsENH9S@debian>
-In-Reply-To: <Ys/aDKZNhhsENH9S@debian>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Sun, 17 Jul 2022 10:12:42 +0100
-Message-ID: <CADVatmO9XzFnX+N0TuOtr0FYyxKr1oe5RAhCEJjmnvjteT5QNw@mail.gmail.com>
-Subject: Re: mainline build failure of powerpc allmodconfig for prom_init_check
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 9:55 AM Sudip Mukherjee (Codethink)
-<sudipm.mukherjee@gmail.com> wrote:
->
-> Hi All,
->
-> Not sure if it has been reported before but the latest mainline kernel
-> branch fails to build for powerpc allmodconfig with gcc-12 and the error is:
->
-> Error: External symbol 'memset' referenced from prom_init.c
-> make[2]: *** [arch/powerpc/kernel/Makefile:204: arch/powerpc/kernel/prom_init_check] Error 1
+This patchset  adds initial support for the Nuvoton 
+Arbel NPCM8XX Board Management controller (BMC) SoC family. 
 
-I was trying to check it. With gcc-11 the assembly code generated is
-not using memset, but using __memset.
-But with gcc-12, I can see the assembly code is using memset. One
-example from the assembly:
+The Nuvoton Arbel NPCM8XX SoC is a fourth-generation BMC.
+The NPCM8XX computing subsystem comprises a quadcore ARM 
+Cortex A35 ARM-V8 architecture.
 
-call_prom:
-        .quad   .call_prom,.TOC.@tocbase,0
-        .previous
-        .size   call_prom,24
-        .type   .call_prom,@function
-.call_prom:
-        mflr 0           #,
-        std 29,-24(1)    #,
-        std 30,-16(1)    #,
-        std 31,-8(1)     #,
-        mr 29,3          # tmp166, service
-        mr 31,4          # nargs, tmp167
-        mr 30,5          # tmp168, nret
- # arch/powerpc/kernel/prom_init.c:396:         struct prom_args args;
-        li 4,254                 #,
-        li 5,52          #,
- # arch/powerpc/kernel/prom_init.c:394: {
-        std 0,16(1)      #,
-        stdu 1,-208(1)   #,,
- # arch/powerpc/kernel/prom_init.c:396:         struct prom_args args;
-        addi 3,1,112     # tmp174,,
- # arch/powerpc/kernel/prom_init.c:394: {
-        std 9,304(1)     #,
-        std 10,312(1)    #,
-        std 6,280(1)     #,
-        std 7,288(1)     #,
-        std 8,296(1)     #,
- # arch/powerpc/kernel/prom_init.c:396:         struct prom_args args;
-        bl .memset       #
-        nop
-        rldicl 9,31,0,32         # nargs, nargs
-        addi 9,9,1       # tmp163, nargs,
-        mtctr 9          # tmp163, tmp163
+This patchset adds minimal architecture and drivers such as:
+Clocksource, Clock, Reset, and WD.
 
+Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
 
+This patchset was tested on the Arbel NPCM8XX evaluation board.
+
+Addressed comments from:
+ - Stephen Boyd: https://www.spinics.net/lists/arm-kernel/msg996551.html
+
+Changes since version 8:
+ - NPCM8XX clock driver
+	- Move configuration place.
+	- Add space before and aftre '{' '}'.
+	- Handle devm_of_clk_add_hw_provider function error.
+
+Changes since version 7:
+ - NPCM8XX clock driver
+	- The clock and reset registers using the same memory region, 
+	  due to it the clock driver should claim the ioremap directly 
+	  without checking the memory region.
+
+Changes since version 6:
+ - NPCM reset driver
+	- Modify warning message.
+ - dt-bindings: serial: 8250: Add npcm845 compatible string patch accepted, due
+   to it the patch removed from the patchset.
+
+Changes since version 5:
+ - NPCM8XX clock driver
+	- Remove refclk if devm_of_clk_add_hw_provider function failed.
+ - NPCM8XX clock source driver
+	- Remove NPCM8XX TIMER_OF_DECLARE support, using the same as NPCM7XX.
+
+Changes since version 4:
+ - NPCM8XX clock driver
+	- Use the same quote in the dt-binding file.
+
+Changes since version 3:
+ - NPCM8XX clock driver
+	- Rename NPCM8xx clock dt-binding header file.
+	- Remove unused structures.
+	- Improve Handling the clocks registration.
+ - NPCM reset driver
+	- Add ref phandle to dt-binding.
+
+Changes since version 2:
+ - Remove NPCM8xx WDT compatible patch.
+ - Remove NPCM8xx UART compatible patch.
+ - NPCM8XX clock driver
+	- Add debug new line.
+	- Add 25M fixed rate clock.
+	- Remove unused clocks and clock name from dt-binding.
+ - NPCM reset driver
+	- Revert to npcm7xx dt-binding.
+	- Skip dt binding quotes.
+	- Adding DTS backward compatibility.
+	- Remove NPCM8xx binding include file.
+	- Warp commit message.
+- NPCM8XX device tree:
+	- Remove unused clock nodes (used in the clock driver)
+	- Modify gcr and rst node names.
+
+Changes since version 1:
+ - NPCM8XX clock driver
+	- Modify dt-binding.
+	- Remove unsed definition and include.
+	- Include alphabetically.
+	- Use clock devm.
+ - NPCM reset driver
+	- Modify dt-binding.
+	- Modify syscon name.
+	- Add syscon support to NPCM7XX dts reset node.
+	- use data structure.
+ - NPCM8XX device tree:
+	- Modify evb compatible name.
+	- Add NPCM7xx compatible.
+	- Remove disable nodes from the EVB DTS.
+
+Tomer Maimon (16):
+  dt-bindings: timer: npcm: Add npcm845 compatible string
+  dt-bindings: watchdog: npcm: Add npcm845 compatible string
+  dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
+  clk: npcm8xx: add clock controller
+  dt-bindings: reset: npcm: add GCR syscon property
+  ARM: dts: nuvoton: add reset syscon property
+  reset: npcm: using syscon instead of device data
+  dt-bindings: reset: npcm: Add support for NPCM8XX
+  reset: npcm: Add NPCM8XX support
+  dt-bindings: arm: npcm: Add maintainer
+  dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
+  dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
+  arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
+  arm64: dts: nuvoton: Add initial NPCM8XX device tree
+  arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
+  arm64: defconfig: Add Nuvoton NPCM family support
+
+ .../devicetree/bindings/arm/npcm/npcm.yaml    |   7 +
+ .../bindings/arm/npcm/nuvoton,gcr.yaml        |   2 +
+ .../bindings/clock/nuvoton,npcm845-clk.yaml   |  49 ++
+ .../bindings/reset/nuvoton,npcm750-reset.yaml |  10 +-
+ .../bindings/timer/nuvoton,npcm7xx-timer.yaml |   2 +
+ .../bindings/watchdog/nuvoton,npcm-wdt.txt    |   3 +-
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   1 +
+ arch/arm64/Kconfig.platforms                  |  11 +
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/nuvoton/Makefile          |   2 +
+ .../dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 170 +++++
+ .../boot/dts/nuvoton/nuvoton-npcm845-evb.dts  |  30 +
+ .../boot/dts/nuvoton/nuvoton-npcm845.dtsi     |  76 +++
+ arch/arm64/configs/defconfig                  |   3 +
+ drivers/clk/Kconfig                           |   6 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-npcm8xx.c                     | 610 ++++++++++++++++++
+ drivers/reset/reset-npcm.c                    | 207 +++++-
+ .../dt-bindings/clock/nuvoton,npcm845-clk.h   |  49 ++
+ 20 files changed, 1206 insertions(+), 36 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+ create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
+ create mode 100644 drivers/clk/clk-npcm8xx.c
+ create mode 100644 include/dt-bindings/clock/nuvoton,npcm845-clk.h
 
 -- 
-Regards
-Sudip
+2.33.0
+

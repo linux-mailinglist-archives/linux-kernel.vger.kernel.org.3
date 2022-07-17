@@ -2,108 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EF657774F
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 18:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E06577753
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 18:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232837AbiGQQZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 12:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
+        id S231611AbiGQQhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 12:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiGQQZE (ORCPT
+        with ESMTP id S229536AbiGQQhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 12:25:04 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C0513CE6;
-        Sun, 17 Jul 2022 09:25:03 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id a5so13756606wrx.12;
-        Sun, 17 Jul 2022 09:25:03 -0700 (PDT)
+        Sun, 17 Jul 2022 12:37:31 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3C9F59F;
+        Sun, 17 Jul 2022 09:37:30 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id k30so12407413edk.8;
+        Sun, 17 Jul 2022 09:37:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rwSneiH5xSNmTYynHVLLuzHsfAWoKgKKKN3H7FS7rMk=;
-        b=Aa/n1738ntBuPAWlhWhRZjFLdhg8myxMR8iZ6ftlyCeOiQ/9YT8wiSQDcg0c7UVHIb
-         2Zf+Xsi8VkZXPDEp01hK59xKVY+ZeOj4PS2UxKfYEv4K3yTRf9K2tX6EMzePC9j4jIKH
-         KqE0qziR4v/rSbMbLc6LQsa3oLHRC90c3EkGtQFBzwWt46gIvb/hbxlvPS5EVjBA8Y6A
-         oA+BKnFpc7syZFnPPTRyec4XOuVWoPrd0uyUJ4vobAUIhE09YyViry6TZxnnzAauydiz
-         qsFW/1eGnCix7ZOzsUHc/RXx+Lpk23JF/BP9ido13S6OxIOCNapP3PBFdxuYeYy9NFdW
-         2UuQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fnHOU5H0h54e4hmVEYXh4fffVBg0SrfLMy1uXRyX8Fc=;
+        b=fOOq6yIKprD57x4+UWAJb88fD+Uj2AtOPlvaSHUZVbBExCmhUiJPU6m2P9RCfS5h6b
+         lLBMhM6wIF10d9oeV2dGiKeEwl4DodSVgugThnn4Y1tBXsUuwHfOg2iIR7jNae8NU15q
+         E2IejwS/gxBzXfie1vgdfjmAPv//gS78Qy5b92yvCICAseRu01stzysmhHrYKU02HTiA
+         LH+huUNirycECmnlcibFw6eL+zlY/2bD0re3ZKzXRszdZaQSZE3gxJW+EtX/dgv3oVsN
+         wlvlireWXSSO6PxCd09fl69smxWqWW+/MSsiE6QRzbC0IBxYq+fUcYb5wqR09EFICHzL
+         bNuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rwSneiH5xSNmTYynHVLLuzHsfAWoKgKKKN3H7FS7rMk=;
-        b=FdDQGPf5JD/zrbwFO3Kw9nRo7F+Wq0BPW0jaLz9/JIInHr0dJ085tUiO2p7Rj/4I+p
-         dthNc8xGz73jjuQlVKoRC8puI4SRtFLtXyluGbAr3HM2LU3UuCA9D/jQaoepm626Ki+/
-         cQZ3DwErbPJGVM8L0gwkMrZrxa6SbCjXmGjBk4XR/vAx78+63JebxV3ctArvvESet5su
-         iAPlm+gqWX4zNEv65zLJM4QBAPm/rdDNTf/yOhNgvklt7qK3rTK6k0tn6wmTzYey3RS/
-         Cbvx/4Z1F/AfGDIxEtKVnbXncXMJnDf6QaVr+jRjEmG19lZAL0icPtP292TgW4QM2w8Z
-         yqdA==
-X-Gm-Message-State: AJIora/8lpWZLT0Fz8fbB5XEORa/RNp2VWDC+MdEXwJkQP53tQc/6B2v
-        EhWxF7PrFbYDDX6TK+YCPKVKhs+UYR3k8sy2g98=
-X-Google-Smtp-Source: AGRyM1tKKG1DTxpJhgljLKjM1b0ZBI1n3j2cO/EQg0uio6SMOdiW6aawdpL2hUIf0EJQ/Yx0Ma8Z86scLN5oUYig9mY=
-X-Received: by 2002:a5d:6a88:0:b0:21d:6ee4:1fb1 with SMTP id
- s8-20020a5d6a88000000b0021d6ee41fb1mr19575491wru.249.1658075102011; Sun, 17
- Jul 2022 09:25:02 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fnHOU5H0h54e4hmVEYXh4fffVBg0SrfLMy1uXRyX8Fc=;
+        b=G7AIjdLhN/00/8791qGn+Rx68SzTOr8koCjNiRBOECmewSG1Wu0jXmyLgvkN2GOPb7
+         //Ooo9G4vKIo1lrHp9bn2DmzSm+c/nLdXo4h7YcjdSH/rfK+gI4EHbrB63/+6yzRbz/e
+         QYYYxN4pfBI5JqCNNKTtyCDKQEnRxyZrNrF8iKsnXZ4WtJzLzDjXVsEoAzJZcgqKCNj5
+         hmqisnVMMlpZCNaWbjs+PaIA+KZwgUSkLjcDCTiUulB+7q2m2MFoOimAMdxonpP85F08
+         CDpM7qPIVtDsd51YXISITGpDeQ7biA/Lw8QoOqvQaH3X74qGsauG3KDxoxHYDDuK5Kxl
+         FgZQ==
+X-Gm-Message-State: AJIora9RHrYlIxojR5/TsuN3bOKp0lDWg0wMir3BrtSswy8qugU9khhd
+        Bm/8/iBsylIMNh0t0viJtdVvf9ISwl6vIA==
+X-Google-Smtp-Source: AGRyM1vE2DMkPrFV880xiQgE5ci6m7CXIzNdwOS++naJLKKSZxQLlNDeMBE3LcmSjq7wXM//KrqVww==
+X-Received: by 2002:a05:6402:6c2:b0:43b:b89:3c31 with SMTP id n2-20020a05640206c200b0043b0b893c31mr32105014edy.239.1658075848986;
+        Sun, 17 Jul 2022 09:37:28 -0700 (PDT)
+Received: from DESKTOP-A98GP49 (cable-178-148-254-8.dynamic.sbb.rs. [178.148.254.8])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906311100b0072b7d76211dsm1540597ejx.107.2022.07.17.09.37.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jul 2022 09:37:28 -0700 (PDT)
+Date:   Sun, 17 Jul 2022 18:37:26 +0200
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jack Doan <me@jackdoan.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add D5 Next fan control
+ support
+Message-ID: <YtQ6xg60lYNrgF0V@DESKTOP-A98GP49>
+References: <20220717154114.7545-1-savicaleksa83@gmail.com>
+ <4141c603-a153-adc1-ee08-f0ba0d99ade7@roeck-us.net>
 MIME-Version: 1.0
-References: <20220630111634.610320-1-hans@kapio-technology.com>
- <Yr2LFI1dx6Oc7QBo@shredder> <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
- <Yr778K/7L7Wqwws2@shredder> <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
- <20220717134610.k3nw6mam256yxj37@skbuf> <20220717140325.p5ox5mhqedbyyiz4@skbuf>
-In-Reply-To: <20220717140325.p5ox5mhqedbyyiz4@skbuf>
-From:   Hans S <schultz.hans@gmail.com>
-Date:   Sun, 17 Jul 2022 18:22:57 +0200
-Message-ID: <CAKUejP6g3HxS=Scj-2yhsQRJApxnq1e31Nkcc995s7gzfMJOew@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
- traffic cannot unlock a locked port
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ido Schimmel <idosch@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4141c603-a153-adc1-ee08-f0ba0d99ade7@roeck-us.net>
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 4:03 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+On Sun, Jul 17, 2022 at 09:14:13AM -0700, Guenter Roeck wrote:
+> On 7/17/22 08:41, Aleksa Savic wrote:
+> > Define pump and fan speed register offsets in
+> > D5 Next control report, as well as its size, to expose PWM fan control.
+> > 
+> > Signed-off-by: Jack Doan <me@jackdoan.com>
+> > Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+> 
+> This suggests that Jack Doan was the author of this patch, not
+> Aleksa Savic. However, that is not reflected in the patch itself.
+> Please either use Originally-from: instead of Signed-off-by:
+> or make sure that the original author is listed correctly.
+> 
+> Thanks,
+> Guenter
 >
-> On Sun, Jul 17, 2022 at 04:46:10PM +0300, Vladimir Oltean wrote:
-> > Here, what happens is that a locked port learns the MAC SA from the
-> > traffic it didn't drop, i.e. link-local. In other words, the bridge
-> > behaves as expected and instructed: +locked +learning will cause just
-> > that. It's the administrator's fault for not disabling learning.
-> > It's also the mv88e6xxx driver's fault for not validating the "locked" +
-> > "learning" brport flag *combination* until it properly supports "+locked
-> > +learning" (the feature you are currently working on).
-> >
-> > I'm still confused why we don't just say that "+locked -learning" means
-> > plain 802.1X, "+locked +learning" means MAB where we learn locked FDB entries.
->
-> Or is it the problem that a "+locked +learning" bridge port will learn
-> MAC SA from link-local traffic, but it will create FDB entries without
-> the locked flag while doing so? The mv88e6xxx driver should react to the
-> 'locked' flag from both directions (ADD_TO_DEVICE too, not just ADD_TO_BRIDGE).
 
-Yes, it creates an FDB entry in the bridge without the locked flag
-set, and sends an ADD_TO_DEVICE notice with it.
-And furthermore link-local packets include of course EAPOL packets, so
-that's why +learning is a problem.
+Thanks for the clarification. I'll send a v2.
+
+Aleksa
+
+> > ---
+> >   drivers/hwmon/aquacomputer_d5next.c | 6 ++++++
+> >   1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> > index 0e56cc711a26..997d72ea6182 100644
+> > --- a/drivers/hwmon/aquacomputer_d5next.c
+> > +++ b/drivers/hwmon/aquacomputer_d5next.c
+> > @@ -71,8 +71,12 @@ static u8 secondary_ctrl_report[] = {
+> >   #define D5NEXT_PUMP_OFFSET		0x6c
+> >   #define D5NEXT_FAN_OFFSET		0x5f
+> >   #define D5NEXT_5V_VOLTAGE		0x39
+> > +#define D5NEXT_CTRL_REPORT_SIZE		0x329
+> >   static u8 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET };
+> > +/* Pump and fan speed registers in D5 Next control report (from 0-100%) */
+> > +static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
+> > +
+> >   /* Register offsets for the Farbwerk RGB controller */
+> >   #define FARBWERK_NUM_SENSORS		4
+> >   #define FARBWERK_SENSOR_START		0x2f
+> > @@ -667,9 +671,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+> >   		priv->num_fans = D5NEXT_NUM_FANS;
+> >   		priv->fan_sensor_offsets = d5next_sensor_fan_offsets;
+> > +		priv->fan_ctrl_offsets = d5next_ctrl_fan_offsets;
+> >   		priv->num_temp_sensors = D5NEXT_NUM_SENSORS;
+> >   		priv->temp_sensor_start_offset = D5NEXT_COOLANT_TEMP;
+> >   		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
+> > +		priv->buffer_size = D5NEXT_CTRL_REPORT_SIZE;
+> >   		priv->temp_label = label_d5next_temp;
+> >   		priv->speed_label = label_d5next_speeds;
+> 

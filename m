@@ -2,199 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93320577603
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 13:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018325775FC
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 13:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbiGQLhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 07:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
+        id S232458AbiGQLjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 07:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbiGQLhM (ORCPT
+        with ESMTP id S229698AbiGQLjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 07:37:12 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31C015809;
-        Sun, 17 Jul 2022 04:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658057831; x=1689593831;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X6aY0q+5aDpSXPBzmndb3qPcsEz32yV4MXOhg75mJSM=;
-  b=KcQeF8j93oUy9TXzR1zuG2+aYnjzXn3BQc/i6gZCY8q6zNDN/1NM21Ht
-   syEMoTa4KVwKfYJMCu2DDm8IMx1OmLcleQDgar8JZw766hfpxtUG2VEzF
-   38Iktewmugkw5KooPQ7eWJhTfOvefzcG3nqC2zB+Yaqc0qxSr4qamwq0z
-   1NV5c8B+hz4HrDr94yTQCAPI6oU2ib0TvLTUJ3thhelrI7AUMHWMs1MOz
-   WIvCZVXeZV1D+8aGXOJ708jhxLbhNvNX+yeWKxDp+5X6BpIVvHKfk7afp
-   0mHA7SoyM6F3QFDYG98ctVOON+2fd+7ZWUWxkfMxIhaOXdV8T2nVTj+Eg
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="269076178"
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="269076178"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 04:37:11 -0700
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="739155206"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 04:37:07 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 16DCD20521;
-        Sun, 17 Jul 2022 14:37:05 +0300 (EEST)
-Date:   Sun, 17 Jul 2022 11:37:05 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v5 1/6] dt-bindings: media: Add Allwinner A31 ISP
- bindings documentation
-Message-ID: <YtP0YfPteyzsBWn3@paasikivi.fi.intel.com>
-References: <20220704173523.76729-1-paul.kocialkowski@bootlin.com>
- <20220704173523.76729-2-paul.kocialkowski@bootlin.com>
+        Sun, 17 Jul 2022 07:39:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF5ADFBC
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 04:38:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29D4B61150
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 11:38:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF8EAC3411E;
+        Sun, 17 Jul 2022 11:38:57 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ekpjo7lB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1658057935;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=brwdZATJTovt8GRY+M/HlMDnqYXX0lpO4VIGpnJMK2w=;
+        b=Ekpjo7lByBisNMzUm5XQy62PLu/26VMspcznLPMfSQu1VVmozuRw8UZu3RW3c6yODcjuWg
+        sIIHHo3dteMv5Y1sQGQFTFnQDKfec5rYINEmhOeUNDpiUUkdm57xGcIYUWdDxOamdWQyFT
+        TYe6tQaNit9FVHZ42d8QXMHIDW1bK10=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e43c08d1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sun, 17 Jul 2022 11:38:55 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, x86@kernel.org,
+        Theodore Ts'o <tytso@mit.edu>,
+        "H . Peter Anvin" <hpa@zytor.com>, Borislav Petkov <bp@suse.de>
+Subject: [PATCH v3] x86/rdrand: Remove "nordrand" flag in favor of "random.trust_cpu"
+Date:   Sun, 17 Jul 2022 13:38:45 +0200
+Message-Id: <20220717113845.8712-1-Jason@zx2c4.com>
+In-Reply-To: <20220709104306.1094431-1-Jason@zx2c4.com>
+References: <20220709104306.1094431-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220704173523.76729-2-paul.kocialkowski@bootlin.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+The decision of whether or not to trust RDRAND is controlled by the
+"random.trust_cpu" boot time parameter or the CONFIG_RANDOM_TRUST_CPU
+compile time default. The "nordrand" flag was added during the early
+days of RDRAND, when there were worries that merely using its values
+could compromise the RNG. However, these days, RDRAND values are not
+used directly but always go through the RNG's hash function, making
+"nordrand" no longer useful.
 
-On Mon, Jul 04, 2022 at 07:35:18PM +0200, Paul Kocialkowski wrote:
-> This introduces YAML bindings documentation for the Allwinner A31 Image
-> Signal Processor (ISP).
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../media/allwinner,sun6i-a31-isp.yaml        | 97 +++++++++++++++++++
->  1 file changed, 97 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> new file mode 100644
-> index 000000000000..2fda6e05e16c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> @@ -0,0 +1,97 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
-> +
-> +maintainers:
-> +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - allwinner,sun6i-a31-isp
-> +      - allwinner,sun8i-v3s-isp
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Bus Clock
-> +      - description: Module Clock
-> +      - description: DRAM Clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: bus
-> +      - const: mod
-> +      - const: ram
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: CSI0 input port
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: CSI1 input port
+Rather, the correct switch is "random.trust_cpu", which not only handles
+the relevant trust issue directly, but also is general to multiple CPU
+types, not just x86.
 
-Do both support a single PHY with a single data only? If multiple data lanes
-are supported, please require data-lanes property (on endpoint).
+However, x86 RDRAND does have a history of being occasionally
+problematic. Prior, when the kernel would notice something strange, it'd
+warn in dmesg and suggest enabling "nordrand". We can improve on that by
+making the test a little bit better and then taking the step of
+automatically disabling RDRAND if we detect it's problematic.
 
-> +
-> +    anyOf:
-> +      - required:
-> +          - port@0
-> +      - required:
-> +          - port@1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-> +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
-> +
-> +    isp: isp@1cb8000 {
-> +        compatible = "allwinner,sun8i-v3s-isp";
-> +        reg = <0x01cb8000 0x1000>;
-> +        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&ccu CLK_BUS_CSI>,
-> +             <&ccu CLK_CSI1_SCLK>,
-> +             <&ccu CLK_DRAM_CSI>;
-> +        clock-names = "bus", "mod", "ram";
-> +        resets = <&ccu RST_BUS_CSI>;
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            port@0 {
-> +                reg = <0>;
-> +
-> +                isp_in_csi0: endpoint {
-> +                    remote-endpoint = <&csi0_out_isp>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
+Also disable RDSEED if the RDRAND test fails.
 
+Cc: x86@kernel.org
+Cc: Theodore Ts'o <tytso@mit.edu>
+Suggested-by: H. Peter Anvin <hpa@zytor.com>
+Suggested-by: Borislav Petkov <bp@suse.de>
+Acked-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Changes v2->v3:
+- We can't call rdseed in a loop like we can rdrand because it's meant
+  to fail (return false) more often.
+
+ .../admin-guide/kernel-parameters.txt         |  5 --
+ arch/x86/kernel/cpu/amd.c                     |  2 +-
+ arch/x86/kernel/cpu/rdrand.c                  | 57 +++++++------------
+ 3 files changed, 22 insertions(+), 42 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index f2d26cb7e853..1e2307f11105 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3733,11 +3733,6 @@
+ 	noreplace-smp	[X86-32,SMP] Don't replace SMP instructions
+ 			with UP alternatives
+ 
+-	nordrand	[X86] Disable kernel use of the RDRAND and
+-			RDSEED instructions even if they are supported
+-			by the processor.  RDRAND and RDSEED are still
+-			available to user space applications.
+-
+ 	noresume	[SWSUSP] Disables resume and restores original swap
+ 			space.
+ 
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index 35d5288394cb..48276c0e479d 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -808,7 +808,7 @@ static void clear_rdrand_cpuid_bit(struct cpuinfo_x86 *c)
+ 		return;
+ 
+ 	/*
+-	 * The nordrand option can clear X86_FEATURE_RDRAND, so check for
++	 * The self-test can clear X86_FEATURE_RDRAND, so check for
+ 	 * RDRAND support using the CPUID function directly.
+ 	 */
+ 	if (!(cpuid_ecx(1) & BIT(30)) || rdrand_force)
+diff --git a/arch/x86/kernel/cpu/rdrand.c b/arch/x86/kernel/cpu/rdrand.c
+index 8f216669ecb8..26a427fa84ea 100644
+--- a/arch/x86/kernel/cpu/rdrand.c
++++ b/arch/x86/kernel/cpu/rdrand.c
+@@ -11,54 +11,39 @@
+ #include <asm/archrandom.h>
+ #include <asm/sections.h>
+ 
+-static int __init x86_rdrand_setup(char *s)
+-{
+-	setup_clear_cpu_cap(X86_FEATURE_RDRAND);
+-	setup_clear_cpu_cap(X86_FEATURE_RDSEED);
+-	return 1;
+-}
+-__setup("nordrand", x86_rdrand_setup);
+-
+ /*
+  * RDRAND has Built-In-Self-Test (BIST) that runs on every invocation.
+- * Run the instruction a few times as a sanity check.
+- * If it fails, it is simple to disable RDRAND here.
++ * Run the instruction a few times as a sanity check. Also make sure
++ * it's not outputting the same value over and over, which has happened
++ * as a result of past CPU bugs.
++ *
++ * If it fails, it is simple to disable RDRAND and RDSEED here.
+  */
+-#define SANITY_CHECK_LOOPS 8
+ 
+ void x86_init_rdrand(struct cpuinfo_x86 *c)
+ {
+-	unsigned int changed = 0;
+-	unsigned long tmp, prev;
+-	int i;
++	enum { SAMPLES = 8, MIN_CHANGE = 5 };
++	unsigned long sample, prev;
++	bool failure = false;
++	size_t i, changed;
+ 
+ 	if (!cpu_has(c, X86_FEATURE_RDRAND))
+ 		return;
+ 
+-	for (i = 0; i < SANITY_CHECK_LOOPS; i++) {
+-		if (!rdrand_long(&tmp)) {
+-			clear_cpu_cap(c, X86_FEATURE_RDRAND);
+-			pr_warn_once("rdrand: disabled\n");
+-			return;
++	for (changed = 0, i = 0; i < SAMPLES; ++i) {
++		if (!rdrand_long(&sample)) {
++			failure = true;
++			break;
+ 		}
++		changed += i && sample != prev;
++		prev = sample;
+ 	}
++	if (changed < MIN_CHANGE)
++		failure = true;
+ 
+-	/*
+-	 * Stupid sanity-check whether RDRAND does *actually* generate
+-	 * some at least random-looking data.
+-	 */
+-	prev = tmp;
+-	for (i = 0; i < SANITY_CHECK_LOOPS; i++) {
+-		if (rdrand_long(&tmp)) {
+-			if (prev != tmp)
+-				changed++;
+-
+-			prev = tmp;
+-		}
++	if (failure) {
++		clear_cpu_cap(c, X86_FEATURE_RDRAND);
++		clear_cpu_cap(c, X86_FEATURE_RDSEED);
++		pr_emerg("RDRAND is not reliable on this platform; disabling.\n");
+ 	}
+-
+-	if (WARN_ON_ONCE(!changed))
+-		pr_emerg(
+-"RDRAND gives funky smelling output, might consider not using it by booting with \"nordrand\"");
+-
+ }
 -- 
-Sakari Ailus
+2.35.1
+

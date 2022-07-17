@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5075776FF
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 17:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22660577702
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 17:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbiGQPTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 11:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
+        id S233158AbiGQPUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 11:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233064AbiGQPTh (ORCPT
+        with ESMTP id S229993AbiGQPUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 11:19:37 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A1ACE12;
-        Sun, 17 Jul 2022 08:19:36 -0700 (PDT)
-Date:   Sun, 17 Jul 2022 23:19:19 +0800
+        Sun, 17 Jul 2022 11:20:19 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733F513F36;
+        Sun, 17 Jul 2022 08:20:18 -0700 (PDT)
+Date:   Sun, 17 Jul 2022 23:20:09 +0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1658071174;
+        t=1658071216;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Dz1AwDi0TADJJc/MT4EIs1y66eRS6Ot3v2L/c0ATXYI=;
-        b=IM8u/HtG4g5eg9lWxdyAKv0n1q8t1zvT4Ief6w4+8mh1FmVTZDEdwMFoZTqNpmki07dLVb
-        H+TqCzyZx/1cjjUVZwqmajPP3DxLnFDZL9YgV5nYEFtTJNM5sChLDU0c0akDPGogWi6LWx
-        1SQq4XaJX3Pr7GDSal9moQX4fxqVV2U=
+        bh=G2ZX3O3RybhbBzgke2t4zD+2cEJa/QEfPTWE2QGMEn4=;
+        b=E97hW4yPB0AtNvu7MJDPSyC7Lp3FocapuwdGbLRwf2T0YmogmVVPzbniW52Xlz8RFbPRxD
+        JXOx6rtEhhtl+6MbaWiw06nf0DnYDnC/+L3npsKi7KQdErP4gW8JklTUzrppApgXnPpjs7
+        Gz01sj6CfDkzDoXFkymHmAwQxYvG92A=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   Tao Zhou <tao.zhou@linux.dev>
 To:     Daniel Bristot de Oliveira <bristot@kernel.org>
@@ -46,15 +46,16 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Clark Williams <williams@redhat.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [PATCH V5 06/16] Documentation/rv: Add a basic documentation
-Message-ID: <YtQodznMVSmwvhBr@geo.homenetwork>
+        linux-trace-devel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
+Subject: Re: [PATCH V5 11/16] Documentation/rv: Add deterministic automata
+ instrumentation documentation
+Message-ID: <YtQoqV8tMKh3fvTw@geo.homenetwork>
 References: <cover.1657745645.git.bristot@kernel.org>
- <72d6b6619c9c336b254f5e560ac4ee5f44cb3956.1657745645.git.bristot@kernel.org>
+ <d05105da043c091d03bdc0cb45409ff774600261.1657745645.git.bristot@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <72d6b6619c9c336b254f5e560ac4ee5f44cb3956.1657745645.git.bristot@kernel.org>
+In-Reply-To: <d05105da043c091d03bdc0cb45409ff774600261.1657745645.git.bristot@kernel.org>
 X-Migadu-Flow: FLOW_OUT
 X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -66,9 +67,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 11:17:22PM +0200, Daniel Bristot de Oliveira wrote:
-> Add the runtime-verification.rst document, explaining the basics of RV
-> and how to use the interface.
+On Wed, Jul 13, 2022 at 11:17:27PM +0200, Daniel Bristot de Oliveira wrote:
+> Add the da_monitor_instrumentation.rst. It describes the basics
+> of RV monitor instrumentation.
 > 
 > Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
 > Cc: Guenter Roeck <linux@roeck-us.net>
@@ -93,91 +94,110 @@ On Wed, Jul 13, 2022 at 11:17:22PM +0200, Daniel Bristot de Oliveira wrote:
 > Cc: linux-trace-devel@vger.kernel.org
 > Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 > ---
->  Documentation/trace/index.rst                 |   1 +
->  Documentation/trace/rv/index.rst              |   9 +
->  .../trace/rv/runtime-verification.rst         | 233 ++++++++++++++++++
->  kernel/trace/rv/Kconfig                       |   3 +
->  kernel/trace/rv/rv.c                          |   3 +
->  5 files changed, 249 insertions(+)
->  create mode 100644 Documentation/trace/rv/index.rst
->  create mode 100644 Documentation/trace/rv/runtime-verification.rst
-> +   runtime-verification.rst
+>  .../trace/rv/da_monitor_instrumentation.rst   | 169 ++++++++++++++++++
+>  Documentation/trace/rv/index.rst              |   1 +
+>  2 files changed, 170 insertions(+)
+>  create mode 100644 Documentation/trace/rv/da_monitor_instrumentation.rst
+> 
+> diff --git a/Documentation/trace/rv/da_monitor_instrumentation.rst b/Documentation/trace/rv/da_monitor_instrumentation.rst
+> new file mode 100644
+> index 000000000000..7b83d6c7dbed
+> --- /dev/null
+> +++ b/Documentation/trace/rv/da_monitor_instrumentation.rst
+> @@ -0,0 +1,169 @@
+> +Deterministic Automata Instrumentation
+> +========================================
+> +
+> +The RV monitor file created by dot2k, with the name "$MODEL_NAME.c"
+> +includes a section dedicated to instrumentation.
+> +
+> +In the example of the wip.dot monitor created on [1], it will look like::
+> +
+> +  /*
+> +   * This is the instrumentation part of the monitor.
+> +   *
+> +   * This is the section where manual work is required. Here the kernel events
+> +   * are translated into model's event.
+> +   *
+> +   */
+> +  static void handle_preempt_disable(void *data, /* XXX: fill header */)
+> +  {
+> +	da_handle_event_wip(preempt_disable_wip);
+> +  }
+> +
+> +  static void handle_preempt_enable(void *data, /* XXX: fill header */)
+> +  {
+> +	da_handle_event_wip(preempt_enable_wip);
+> +  }
+> +
+> +  static void handle_sched_waking(void *data, /* XXX: fill header */)
+> +  {
+> +	da_handle_event_wip(sched_waking_wip);
+> +  }
+> +
+> +  static int start_wip(void)
+> +  {
+> +	int retval;
+> +
+> +	retval = da_monitor_init_wip();
+> +	if (retval)
+> +		return retval;
+> +
+> +	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_disable);
+> +	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_enable);
+> +	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_sched_waking);
+> +
+> +	return 0;
+> +  }
+> +
+> +The comment at the top of the section explains the general idea: the
+> +instrumentation section translates *kernel events* into the *model's
+> +event*.
+> +
+> +Tracing callback functions
+> +-----------------------------
+> +
+> +The first three functions are the starting point of the callback *handler
+> +functions* for each of the three events from the wip model. The developer
+> +does not necessarily need to use them: they are just starting points.
+> +
+> +Using the example of::
+> +
+> + void handle_preempt_disable(void *data, /* XXX: fill header */)
+> + {
+> +        da_handle_event_wip(preempt_disable_wip);
+> + }
+> +
+> +The preempt_disable event from the model connects directly to the
+> +preemptirq:preempt_disable. The preemptirq:preempt_disable event
+> +has the following signature, from include/trace/events/preemptirq.h::
+> +
+> +  TP_PROTO(unsigned long ip, unsigned long parent_ip)
+> +
+> +Hence, the handle_preempt_disable() function will look like::
+> +
+> +  void handle_preempt_disable(void *data, unsigned long ip, unsigned long parent_ip)
+> +
+> +In this case, the kernel event translates one to one with the automata
+> +event, and indeed, no other change is required for this function.
+> +
+> +The next handler function, handle_preempt_enable() has the same argument
+> +list from the handle_preempt_disable(). The difference is that the
+> +preempt_enable event will be used to synchronize the system to the model.
+> +
+> +Initially, the *model* is placed in the initial state. However, the *system*
+> +might or might not be in the initial state. The monitor cannot start
+> +processing events until it knows that the system has reached the initial state.
+> +Otherwise, the monitor and the system could be out-of-sync.
+> +
+> +Looking at the automata definition, it is possible to see that the system
+> +and the model are expected to return to the initial state after the
+> +preempt_enable execution. Hence, it can be used to synchronize the
+> +system and the model at the initialization of the monitoring section.
+> +
+> +The initialization is informed via a special handle function, the
+> +"da_handle_init_event_$(MONITOR)(event)", in this case::
+> +
+> +  da_handle_event_wip(preempt_disable_wip);
 
-[snip]
-
-> +The user interface
-> +==================
-> +
-> +The user interface resembles the tracing interface (on purpose). It is
-> +currently at "/sys/kernel/tracing/rv/".
-> +
-> +The following files/folders are currently available:
-> +
-> +**available_monitors**
-> +
-> +- Reading list the available monitors, one per line
-> +
-> +For example::
-> +
-> +   # cat available_monitors
-> +   wip
-> +   wwnr
-> +
-> +**available_reactors**
-> +
-> +- Reading shows the available reactors, one per line.
-> +
-> +For example::
-> +
-> +   # cat available_reactors
-> +   nop
-> +   panic
-> +   printk
-> +
-> +**enabled_monitors**:
-> +
-> +- Reading lists the enabled monitors, one per line
-> +- Writing to it enables a given monitor
-> +- Writing a monitor name with a '-' prefix disables it
-
-s/-/!/
-
-> +- Truncating the file disables all enabled monitors
-> +
-> +For example::
-> +
-> +   # cat enabled_monitors
-> +   # echo wip > enabled_monitors
-> +   # echo wwnr >> enabled_monitors
-> +   # cat enabled_monitors
-> +   wip
-> +   wwnr
-> +   # echo '!wip' >> enabled_monitors
-> +   # cat enabled_monitors
-> +   wwnr
-> +   # echo > enabled_monitors
-> +   # cat enabled_monitors
-> +   #
-> +
-> +Note that it is possible to enable more than one monitor concurrently.
-> +
-> +
-> +**monitoring_on**
-> +
-> +This is an on/off general switcher for monitoring. It resembles the
-> +"tracing_on" switcher in the trace interface.
-> +
-> +- Writing "0" stops the monitoring
-> +- Writing "1" continues the monitoring
-> +- Reading returns the current status of the monitoring
-> +
-> +Note that it does not disable enabled monitors but stop the per-entity
-> +monitors monitoring the events received from the system.
-> +
-> +**reacting_on**
-> +
-> +- Writing "0" prevents reactions for happening
-> +- Writing "1" enable reactions
-> +- Reading returns the current status of the monitoring
-
-s/monitoring/reaction/
+In this case, it is da_handle_init_event_wip(preempt_disable_wip). Thanks.

@@ -2,284 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CA45772A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 03:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FBE55772A6
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 03:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbiGQBEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Jul 2022 21:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
+        id S232333AbiGQBFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Jul 2022 21:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiGQBEE (ORCPT
+        with ESMTP id S229941AbiGQBFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Jul 2022 21:04:04 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913A02DD9
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 18:04:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658019843; x=1689555843;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZoydKWyl2C9KuvhaAd9qdnGE2sIQGNs78KM6tyYba1E=;
-  b=NJwzGTsfL+iQfgwhqRadvmUSMR8Aoml9JJzcPp4SIxLLcbm4cnZDxdQx
-   nc/KHgDywteot/NNGxdoUyMmkEM7N6Ez6TuPdW8ZamYYxtWx/nfJSIVgx
-   Q+stdJTblH2GJCr7Us7aI0LP/JSJhqA/tLHorP+eyUbd3z7/OBOUADA8C
-   v4VnPYUIZvOsNYbwME0xyo4AWvdWa1NX2hYUdPL5pJCes2UsDjoJboY/X
-   XQEB3yX50oy9lsaq0BotqK5qjA4FapAam+XBb48zZ5EaCWUy2JKYqDaTH
-   Oto2j08CDexG/ZD2lXNt/wOKL42rrTnw9XDPRvHAbOOVLvjAuJ7mqHUy1
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="349980819"
-X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
-   d="scan'208";a="349980819"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 18:04:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
-   d="scan'208";a="739065462"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Jul 2022 18:04:01 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCshU-0002OW-JT;
-        Sun, 17 Jul 2022 01:04:00 +0000
-Date:   Sun, 17 Jul 2022 09:03:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: arch/nios2/kernel/misaligned.c:111:42: sparse: sparse: incorrect
- type in argument 1 (different address spaces)
-Message-ID: <202207170853.EBbbpie4-lkp@intel.com>
+        Sat, 16 Jul 2022 21:05:36 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE9F111801
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Jul 2022 18:05:33 -0700 (PDT)
+Received: from [10.20.42.19] (unknown [10.20.42.19])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axn+JLYNNi6hUkAA--.5306S3;
+        Sun, 17 Jul 2022 09:05:15 +0800 (CST)
+Subject: Re: [PATCH V15 01/15] ACPICA: MADT: Add LoongArch APICs support
+To:     Marc Zyngier <maz@kernel.org>,
+        Robert Moore <robert.moore@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
+ <1657868751-30444-2-git-send-email-lvjianmin@loongson.cn>
+ <87mtd93p3n.wl-maz@kernel.org>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <4a2d8f0f-7604-a943-b2e0-cb5a76159b41@loongson.cn>
+Date:   Sun, 17 Jul 2022 09:05:14 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87mtd93p3n.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Axn+JLYNNi6hUkAA--.5306S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3AFyxZw4DZr4DXFy7Cry7trb_yoWxAFW5pr
+        ZrCw17Kw4UXr1fKF1aqw4Fva43Ja4SkF1xuwsxCa4xCFnrKF47XF1vkr13WFZxta1rKayj
+        vw10q3W8Wa1UArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU901xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2
+        jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
+        ACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl
+        42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyU
+        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
+        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   972a278fe60c361eb8f37619f562f092e8786d7c
-commit: 90997c128049c75a74bd9ebb852b17e359066541 nios2: drop access_ok() check from __put_user()
-date:   5 months ago
-config: nios2-randconfig-s053-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170853.EBbbpie4-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=90997c128049c75a74bd9ebb852b17e359066541
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 90997c128049c75a74bd9ebb852b17e359066541
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
 
 
-sparse warnings: (new ones prefixed by >>)
-   arch/nios2/kernel/misaligned.c:98:34: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned char const [noderef] __user *__gu_ptr @@     got unsigned char [usertype] * @@
-   arch/nios2/kernel/misaligned.c:98:34: sparse:     expected unsigned char const [noderef] __user *__gu_ptr
-   arch/nios2/kernel/misaligned.c:98:34: sparse:     got unsigned char [usertype] *
-   arch/nios2/kernel/misaligned.c:99:34: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned char const [noderef] __user *__gu_ptr @@     got unsigned char [usertype] * @@
-   arch/nios2/kernel/misaligned.c:99:34: sparse:     expected unsigned char const [noderef] __user *__gu_ptr
-   arch/nios2/kernel/misaligned.c:99:34: sparse:     got unsigned char [usertype] *
->> arch/nios2/kernel/misaligned.c:111:42: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got unsigned char [usertype] *__pu_ptr @@
-   arch/nios2/kernel/misaligned.c:111:42: sparse:     expected void [noderef] __user *to
-   arch/nios2/kernel/misaligned.c:111:42: sparse:     got unsigned char [usertype] *__pu_ptr
-   arch/nios2/kernel/misaligned.c:112:42: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got unsigned char [usertype] *__pu_ptr @@
-   arch/nios2/kernel/misaligned.c:112:42: sparse:     expected void [noderef] __user *to
-   arch/nios2/kernel/misaligned.c:112:42: sparse:     got unsigned char [usertype] *__pu_ptr
-   arch/nios2/kernel/misaligned.c:116:34: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned char const [noderef] __user *__gu_ptr @@     got unsigned char [usertype] * @@
-   arch/nios2/kernel/misaligned.c:116:34: sparse:     expected unsigned char const [noderef] __user *__gu_ptr
-   arch/nios2/kernel/misaligned.c:116:34: sparse:     got unsigned char [usertype] *
-   arch/nios2/kernel/misaligned.c:117:34: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned char const [noderef] __user *__gu_ptr @@     got unsigned char [usertype] * @@
-   arch/nios2/kernel/misaligned.c:117:34: sparse:     expected unsigned char const [noderef] __user *__gu_ptr
-   arch/nios2/kernel/misaligned.c:117:34: sparse:     got unsigned char [usertype] *
-   arch/nios2/kernel/misaligned.c:133:42: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got unsigned char [usertype] *__pu_ptr @@
-   arch/nios2/kernel/misaligned.c:133:42: sparse:     expected void [noderef] __user *to
-   arch/nios2/kernel/misaligned.c:133:42: sparse:     got unsigned char [usertype] *__pu_ptr
-   arch/nios2/kernel/misaligned.c:134:42: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got unsigned char [usertype] *__pu_ptr @@
-   arch/nios2/kernel/misaligned.c:134:42: sparse:     expected void [noderef] __user *to
-   arch/nios2/kernel/misaligned.c:134:42: sparse:     got unsigned char [usertype] *__pu_ptr
-   arch/nios2/kernel/misaligned.c:135:42: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got unsigned char [usertype] *__pu_ptr @@
-   arch/nios2/kernel/misaligned.c:135:42: sparse:     expected void [noderef] __user *to
-   arch/nios2/kernel/misaligned.c:135:42: sparse:     got unsigned char [usertype] *__pu_ptr
-   arch/nios2/kernel/misaligned.c:136:42: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got unsigned char [usertype] *__pu_ptr @@
-   arch/nios2/kernel/misaligned.c:136:42: sparse:     expected void [noderef] __user *to
-   arch/nios2/kernel/misaligned.c:136:42: sparse:     got unsigned char [usertype] *__pu_ptr
-   arch/nios2/kernel/misaligned.c:140:34: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned char const [noderef] __user *__gu_ptr @@     got unsigned char [usertype] * @@
-   arch/nios2/kernel/misaligned.c:140:34: sparse:     expected unsigned char const [noderef] __user *__gu_ptr
-   arch/nios2/kernel/misaligned.c:140:34: sparse:     got unsigned char [usertype] *
-   arch/nios2/kernel/misaligned.c:141:34: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned char const [noderef] __user *__gu_ptr @@     got unsigned char [usertype] * @@
-   arch/nios2/kernel/misaligned.c:141:34: sparse:     expected unsigned char const [noderef] __user *__gu_ptr
-   arch/nios2/kernel/misaligned.c:141:34: sparse:     got unsigned char [usertype] *
-   arch/nios2/kernel/misaligned.c:142:34: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned char const [noderef] __user *__gu_ptr @@     got unsigned char [usertype] * @@
-   arch/nios2/kernel/misaligned.c:142:34: sparse:     expected unsigned char const [noderef] __user *__gu_ptr
-   arch/nios2/kernel/misaligned.c:142:34: sparse:     got unsigned char [usertype] *
-   arch/nios2/kernel/misaligned.c:143:34: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned char const [noderef] __user *__gu_ptr @@     got unsigned char [usertype] * @@
-   arch/nios2/kernel/misaligned.c:143:34: sparse:     expected unsigned char const [noderef] __user *__gu_ptr
-   arch/nios2/kernel/misaligned.c:143:34: sparse:     got unsigned char [usertype] *
+On 2022/7/17 上午2:10, Marc Zyngier wrote:
+> [+ Robert Moore]
+> 
+> On Fri, 15 Jul 2022 08:05:37 +0100,
+> Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>>
+>> From: Huacai Chen <chenhuacai@loongson.cn>
+>>
+>> LoongArch-specific interrupt controllers (similar to APIC) are added
+>> in the next revision of ACPI Specification (current revision is 6.4),
+>> which including CORE_PIC (CPUINTC), LIO_PIC (LIOINTC), EIO_PIC (EIOINTC),
+>> HT_PIC (HTVECINTC), BIO_PIC (PCHINTC), LPC_PIC (PCHLPC) and MSI_PIC
+>> (PCHMSI). This patch add their definition.
+>>
+>> ACPI changes of LoongArch-specific interrupt controllers have already
+>> been approved in the ECRs, and will be public in the next revision of
+>> ACPI Specification.
+>>
+>> Reference: https://mantis.uefi.org/mantis/view.php?id=2203
+>> Reference: https://mantis.uefi.org/mantis/view.php?id=2313
+>>
+>> Above links needs login(available for ASWG), so the following link(
+>> the ECR file for adding LoongArch APICs into ACPI spec) is provided
+>> for public:
+>>
+>> https://github.com/lvjianmin-loongson/acpica/blob/master/Add%20APIC%20Structures%20for%20Loongarch%20in%20MADT-rev3.pdf
+>>
+>> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> 
+> Since the ACPI maintainers are unwilling to take this patch (for
+> undisclosed reasons), we need something to unblock this sorry
+> situation, as I don't think it is fair on the LoongArch folks to be
+> blocked for another cycle on this ground only.
+> 
+> I'm proposing to replace this patch with the following, which will
+> allow the patches to be merged without breaking anything. Once the
+> ACPI support is updated, we'll be able to simply revert this patch.
+> 
+> Thanks,
+> 
+> 	M.
+> 
 
-vim +111 arch/nios2/kernel/misaligned.c
+Ok, Marc, thanks very much really, I'll add the patch in the patch series.
 
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   62  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   63  /*
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   64   * (mis)alignment handler
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   65   */
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   66  asmlinkage void handle_unaligned_c(struct pt_regs *fp, int cause)
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   67  {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   68  	u32 isn, addr, val;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   69  	int in_kernel;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   70  	u8 a, b, d0, d1, d2, d3;
-db5a7e55468147 Bernd Weiberg 2015-09-04   71  	s16 imm16;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   72  	unsigned int fault;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   73  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   74  	/* back up one instruction */
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   75  	fp->ea -= 4;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   76  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   77  	if (fixup_exception(fp)) {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   78  		return;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   79  	}
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   80  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   81  	in_kernel = !user_mode(fp);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   82  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   83  	isn = *(unsigned long *)(fp->ea);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   84  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   85  	fault = 0;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   86  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   87  	/* do fixup if in kernel or mode turned on */
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   88  	if (in_kernel || (ma_usermode & UM_FIXUP)) {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   89  		/* decompose instruction */
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   90  		a = (isn >> 27) & 0x1f;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   91  		b = (isn >> 22) & 0x1f;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   92  		imm16 = (isn >> 6) & 0xffff;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   93  		addr = get_reg_val(fp, a) + imm16;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   94  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   95  		/* do fixup to saved registers */
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   96  		switch (isn & 0x3f) {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   97  		case INST_LDHU:
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  @98  			fault |= __get_user(d0, (u8 *)(addr+0));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06   99  			fault |= __get_user(d1, (u8 *)(addr+1));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  100  			val = (d1 << 8) | d0;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  101  			put_reg_val(fp, b, val);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  102  			break;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  103  		case INST_STH:
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  104  			val = get_reg_val(fp, b);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  105  			d1 = val >> 8;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  106  			d0 = val >> 0;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  107  			if (in_kernel) {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  108  				*(u8 *)(addr+0) = d0;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  109  				*(u8 *)(addr+1) = d1;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  110  			} else {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06 @111  				fault |= __put_user(d0, (u8 *)(addr+0));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  112  				fault |= __put_user(d1, (u8 *)(addr+1));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  113  			}
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  114  			break;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  115  		case INST_LDH:
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  116  			fault |= __get_user(d0, (u8 *)(addr+0));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  117  			fault |= __get_user(d1, (u8 *)(addr+1));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  118  			val = (short)((d1 << 8) | d0);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  119  			put_reg_val(fp, b, val);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  120  			break;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  121  		case INST_STW:
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  122  			val = get_reg_val(fp, b);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  123  			d3 = val >> 24;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  124  			d2 = val >> 16;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  125  			d1 = val >> 8;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  126  			d0 = val >> 0;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  127  			if (in_kernel) {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  128  				*(u8 *)(addr+0) = d0;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  129  				*(u8 *)(addr+1) = d1;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  130  				*(u8 *)(addr+2) = d2;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  131  				*(u8 *)(addr+3) = d3;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  132  			} else {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  133  				fault |= __put_user(d0, (u8 *)(addr+0));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  134  				fault |= __put_user(d1, (u8 *)(addr+1));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  135  				fault |= __put_user(d2, (u8 *)(addr+2));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  136  				fault |= __put_user(d3, (u8 *)(addr+3));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  137  			}
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  138  			break;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  139  		case INST_LDW:
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  140  			fault |= __get_user(d0, (u8 *)(addr+0));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  141  			fault |= __get_user(d1, (u8 *)(addr+1));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  142  			fault |= __get_user(d2, (u8 *)(addr+2));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  143  			fault |= __get_user(d3, (u8 *)(addr+3));
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  144  			val = (d3 << 24) | (d2 << 16) | (d1 << 8) | d0;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  145  			put_reg_val(fp, b, val);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  146  			break;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  147  		}
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  148  	}
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  149  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  150  	addr = RDCTL(CTL_BADADDR);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  151  	cause >>= 2;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  152  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  153  	if (fault) {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  154  		if (in_kernel) {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  155  			pr_err("fault during kernel misaligned fixup @ %#lx; addr 0x%08x; isn=0x%08x\n",
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  156  				fp->ea, (unsigned int)addr,
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  157  				(unsigned int)isn);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  158  		} else {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  159  			pr_err("fault during user misaligned fixup @ %#lx; isn=%08x addr=0x%08x sp=0x%08lx pid=%d\n",
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  160  				fp->ea,
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  161  				(unsigned int)isn, addr, fp->sp,
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  162  				current->pid);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  163  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  164  			_exception(SIGSEGV, fp, SEGV_MAPERR, fp->ea);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  165  			return;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  166  		}
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  167  	}
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  168  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  169  	/*
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  170  	 * kernel mode -
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  171  	 *  note exception and skip bad instruction (return)
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  172  	 */
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  173  	if (in_kernel) {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  174  		fp->ea += 4;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  175  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  176  		if (ma_usermode & KM_WARN) {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  177  			pr_err("kernel unaligned access @ %#lx; BADADDR 0x%08x; cause=%d, isn=0x%08x\n",
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  178  				fp->ea,
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  179  				(unsigned int)addr, cause,
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  180  				(unsigned int)isn);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  181  			/* show_regs(fp); */
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  182  		}
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  183  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  184  		return;
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  185  	}
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  186  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  187  	/*
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  188  	 * user mode -
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  189  	 *  possibly warn,
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  190  	 *  possibly send SIGBUS signal to process
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  191  	 */
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  192  	if (ma_usermode & UM_WARN) {
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  193  		pr_err("user unaligned access @ %#lx; isn=0x%08lx ea=0x%08lx ra=0x%08lx sp=0x%08lx\n",
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  194  			(unsigned long)addr, (unsigned long)isn,
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  195  			fp->ea, fp->ra, fp->sp);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  196  	}
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  197  
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  198  	if (ma_usermode & UM_SIGNAL)
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  199  		_exception(SIGBUS, fp, BUS_ADRALN, fp->ea);
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  200  	else
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  201  		fp->ea += 4;	/* else advance */
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  202  }
-82ed08dd1b0e0e Ley Foon Tan  2014-11-06  203  
 
-:::::: The code at line 111 was first introduced by commit
-:::::: 82ed08dd1b0e0e0728f9188f66795c49dffe437d nios2: Exception handling
+>  From 43ec25d2dbde3c422cce430c9d5ec32fbe7b255c Mon Sep 17 00:00:00 2001
+> From: Marc Zyngier <maz@kernel.org>
+> Date: Sat, 16 Jul 2022 18:56:10 +0100
+> Subject: [PATCH] LoongArch: Provisionally add ACPICA data structures
+> 
+> The LoongArch architecture is using ACPI, but the spec containing
+> the required updates still is in an unreleased state.
+> 
+> Instead of preventing the inclusion of the IRQ support into the
+> kernel, add the missing bits to the arch-specific parts of
+> the ACPICA support.
+> 
+> Once the ACPICA bits are updated to the version that supports
+> LoongArch, these bits can eventually be removed.
+> 
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> ---
+>   arch/loongarch/include/asm/acpi.h | 138 ++++++++++++++++++++++++++++++
+>   1 file changed, 138 insertions(+)
+> 
+> diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include/asm/acpi.h
+> index 62044cd5b7bc..6155e46098af 100644
+> --- a/arch/loongarch/include/asm/acpi.h
+> +++ b/arch/loongarch/include/asm/acpi.h
+> @@ -31,6 +31,144 @@ static inline bool acpi_has_cpu_in_madt(void)
+>   
+>   extern struct list_head acpi_wakeup_device_list;
+>   
+> +/*
+> + * Temporary definitions until the core ACPICA code gets updated (see
+> + * 1656837932-18257-1-git-send-email-lvjianmin@loongson.cn and its
+> + * follow-ups for the "rationale").
+> + *
+> + * Once the "legal reasons" are cleared and that the code is merged,
+> + * this can be dropped entierely.
+> + */
+> +#if (ACPI_CA_VERSION == 0x20220331 && !defined(LOONGARCH_ACPICA_EXT))
+> +
+> +#define LOONGARCH_ACPICA_EXT	1
+> +
+> +#define	ACPI_MADT_TYPE_CORE_PIC		17
+> +#define	ACPI_MADT_TYPE_LIO_PIC		18
+> +#define	ACPI_MADT_TYPE_HT_PIC		19
+> +#define	ACPI_MADT_TYPE_EIO_PIC		20
+> +#define	ACPI_MADT_TYPE_MSI_PIC		21
+> +#define	ACPI_MADT_TYPE_BIO_PIC		22
+> +#define	ACPI_MADT_TYPE_LPC_PIC		23
+> +
+> +/* Values for Version field above */
+> +
+> +enum acpi_madt_core_pic_version {
+> +	ACPI_MADT_CORE_PIC_VERSION_NONE = 0,
+> +	ACPI_MADT_CORE_PIC_VERSION_V1 = 1,
+> +	ACPI_MADT_CORE_PIC_VERSION_RESERVED = 2	/* 2 and greater are reserved */
+> +};
+> +
+> +enum acpi_madt_lio_pic_version {
+> +	ACPI_MADT_LIO_PIC_VERSION_NONE = 0,
+> +	ACPI_MADT_LIO_PIC_VERSION_V1 = 1,
+> +	ACPI_MADT_LIO_PIC_VERSION_RESERVED = 2	/* 2 and greater are reserved */
+> +};
+> +
+> +enum acpi_madt_eio_pic_version {
+> +	ACPI_MADT_EIO_PIC_VERSION_NONE = 0,
+> +	ACPI_MADT_EIO_PIC_VERSION_V1 = 1,
+> +	ACPI_MADT_EIO_PIC_VERSION_RESERVED = 2	/* 2 and greater are reserved */
+> +};
+> +
+> +enum acpi_madt_ht_pic_version {
+> +	ACPI_MADT_HT_PIC_VERSION_NONE = 0,
+> +	ACPI_MADT_HT_PIC_VERSION_V1 = 1,
+> +	ACPI_MADT_HT_PIC_VERSION_RESERVED = 2	/* 2 and greater are reserved */
+> +};
+> +
+> +enum acpi_madt_bio_pic_version {
+> +	ACPI_MADT_BIO_PIC_VERSION_NONE = 0,
+> +	ACPI_MADT_BIO_PIC_VERSION_V1 = 1,
+> +	ACPI_MADT_BIO_PIC_VERSION_RESERVED = 2	/* 2 and greater are reserved */
+> +};
+> +
+> +enum acpi_madt_msi_pic_version {
+> +	ACPI_MADT_MSI_PIC_VERSION_NONE = 0,
+> +	ACPI_MADT_MSI_PIC_VERSION_V1 = 1,
+> +	ACPI_MADT_MSI_PIC_VERSION_RESERVED = 2	/* 2 and greater are reserved */
+> +};
+> +
+> +enum acpi_madt_lpc_pic_version {
+> +	ACPI_MADT_LPC_PIC_VERSION_NONE = 0,
+> +	ACPI_MADT_LPC_PIC_VERSION_V1 = 1,
+> +	ACPI_MADT_LPC_PIC_VERSION_RESERVED = 2	/* 2 and greater are reserved */
+> +};
+> +
+> +/* Core Interrupt Controller */
+> +
+> +struct acpi_madt_core_pic {
+> +	struct acpi_subtable_header header;
+> +	u8 version;
+> +	u32 processor_id;
+> +	u32 core_id;
+> +	u32 flags;
+> +};
+> +
+> +/* Legacy I/O Interrupt Controller */
+> +
+> +struct acpi_madt_lio_pic {
+> +	struct acpi_subtable_header header;
+> +	u8 version;
+> +	u64 address;
+> +	u16 size;
+> +	u8 cascade[2];
+> +	u32 cascade_map[2];
+> +};
+> +
+> +/* Extend I/O Interrupt Controller */
+> +
+> +struct acpi_madt_eio_pic {
+> +	struct acpi_subtable_header header;
+> +	u8 version;
+> +	u8 cascade;
+> +	u8 node;
+> +	u64 node_map;
+> +};
+> +
+> +/* HT Interrupt Controller */
+> +
+> +struct acpi_madt_ht_pic {
+> +	struct acpi_subtable_header header;
+> +	u8 version;
+> +	u64 address;
+> +	u16 size;
+> +	u8 cascade[8];
+> +};
+> +
+> +/* Bridge I/O Interrupt Controller */
+> +
+> +struct acpi_madt_bio_pic {
+> +	struct acpi_subtable_header header;
+> +	u8 version;
+> +	u64 address;
+> +	u16 size;
+> +	u16 id;
+> +	u16 gsi_base;
+> +};
+> +
+> +/* MSI Interrupt Controller */
+> +
+> +struct acpi_madt_msi_pic {
+> +	struct acpi_subtable_header header;
+> +	u8 version;
+> +	u64 msg_address;
+> +	u32 start;
+> +	u32 count;
+> +};
+> +
+> +/* LPC Interrupt Controller */
+> +
+> +struct acpi_madt_lpc_pic {
+> +	struct acpi_subtable_header header;
+> +	u8 version;
+> +	u64 address;
+> +	u16 size;
+> +	u8 cascade;
+> +};
+> +
+> +#endif
+> +
+>   #endif /* !CONFIG_ACPI */
+>   
+>   #define ACPI_TABLE_UPGRADE_MAX_PHYS ARCH_LOW_ADDRESS_LIMIT
+> 
 
-:::::: TO: Ley Foon Tan <lftan@altera.com>
-:::::: CC: Ley Foon Tan <lftan@altera.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

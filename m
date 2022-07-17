@@ -2,90 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A015775CB
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 12:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8852C5775CD
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 12:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiGQKqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 06:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
+        id S229629AbiGQKvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 06:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGQKqs (ORCPT
+        with ESMTP id S229463AbiGQKvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 06:46:48 -0400
+        Sun, 17 Jul 2022 06:51:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D498013D5F
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 03:46:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A4813DEE;
+        Sun, 17 Jul 2022 03:51:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9581BB80DA1
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 10:46:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECBFC3411E;
-        Sun, 17 Jul 2022 10:46:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658054805;
-        bh=QNZQ2MZGQpxSYRr7TfR+EAN42ddO5VU2MTMf/qjwilQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WJWIR1yGZWYGsqQM1lyLeN5MS7r/pKyJtHbApPHuamPyCo2gLPQw02jGyIQQUVtQ3
-         4M+7+jEqRF15IbwPRW+inPL9/pWIhFU9tASwyZCMG7LcYvgACn0gsKu0Mz8HavlgT4
-         4DLpOq5rW8jxMaAUmUTeRPRMFkEpk1L08jAel81Mrj66x6LD4uKByD4p/RyrlHloQM
-         rB4Ep6kjYRSCDhTOK/dl1V/bU2Kxv7L9aZ8ZzNHt0pR4JWNL5GCU0rQdEpAvYRxrSA
-         /T1kKzq6x/QjpalenOb6ELyfoXYsCKrnGdmgVohZq1oGx1c+VwgehYFlmYPGGfK3M+
-         7cEVq8pud+Nwg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1oD1nP-007zrB-5U;
-        Sun, 17 Jul 2022 11:46:43 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     mark.rutland@arm.com, broonie@kernel.org,
-        Kalesh Singh <kaleshsingh@google.com>, tabba@google.com,
-        madvenka@linux.microsoft.com
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Morse <james.morse@arm.com>, will@kernel.org,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        kernel-team@android.com, kvmarm@lists.cs.columbia.edu,
-        qperret@google.com, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: [PATCH] KVM: arm64: Fix hypervisor address symbolization
-Date:   Sun, 17 Jul 2022 11:46:39 +0100
-Message-Id: <165805475449.3537183.8979480362090216052.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220715235824.2549012-1-kaleshsingh@google.com>
-References: <20220715235824.2549012-1-kaleshsingh@google.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A240B80DA0;
+        Sun, 17 Jul 2022 10:50:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9D1CC3411E;
+        Sun, 17 Jul 2022 10:50:57 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="MEsuW0od"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1658055055;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ek6KalEqiR9K2C8TvXhyPaLq+7aoeM70tfVuh0PUCMo=;
+        b=MEsuW0odAWGidMsSM/69WVeX42IuiqW2M/PdgNLX2PzIUhM07EtKbTEjjynnsdDhvB3xwG
+        hm54lssCQ5pPA3ua8TKNYo7wXCiNoYytNsJ/kR60oBC1QmJRmaR5Cx+6eYwA8yi/+DLlAV
+        Uzc8RH0EWi1rD2Hf9QMVaoIA3yfbO+Y=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id def87755 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sun, 17 Jul 2022 10:50:55 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, stable@vger.kernel.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Subject: [PATCH v4] um: seed rng using host OS rng
+Date:   Sun, 17 Jul 2022 12:50:51 +0200
+Message-Id: <20220717105051.1539173-1-Jason@zx2c4.com>
+In-Reply-To: <20220717084652.1525087-1-Jason@zx2c4.com>
+References: <20220717084652.1525087-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: mark.rutland@arm.com, broonie@kernel.org, kaleshsingh@google.com, tabba@google.com, madvenka@linux.microsoft.com, linux-arm-kernel@lists.infradead.org, suzuki.poulose@arm.com, james.morse@arm.com, will@kernel.org, alexandru.elisei@arm.com, kernel-team@android.com, kvmarm@lists.cs.columbia.edu, qperret@google.com, linux-kernel@vger.kernel.org, catalin.marinas@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Jul 2022 16:58:24 -0700, Kalesh Singh wrote:
-> With CONFIG_RANDOMIZE_BASE=y vmlinux addresses will resolve correctly
-> from kallsyms. Fix this by adding the KASLR offset before printing the
-> symbols.
-> 
-> Based on arm64 for-next/stacktrace.
+UML generally does not provide access to special CPU instructions like
+RDRAND, and execution tends to be rather deterministic, with no real
+hardware interrupts, making good randomness really very hard, if not
+all together impossible. Not only is this a security eyebrow raiser, but
+it's also quite annoying when trying to do various pieces of UML-based
+automation that takes a long time to boot, if ever.
 
-Applied to next, thanks!
+Fix this by trivially calling getrandom() in the host and using that
+seed as "bootloader randomness", which initializes the rng immediately
+at UML boot.
 
-[1/1] KVM: arm64: Fix hypervisor address symbolization
-      commit: ed6313a93fd11d2015ad17046f3c418bf6a8dab1
+The old behavior can be restored the same way as on any other arch, by
+way of CONFIG_TRUST_BOOTLOADER_RANDOMNESS=n or
+random.trust_bootloader=0. So seen from that perspective, this just
+makes UML act like other archs, which is positive in its own right.
 
-Cheers,
+Additionally, wire up arch_get_random_{int,long}() in the same way, so
+that reseeds can also make use of the host RNG, controllable by
+CONFIG_TRUST_CPU_RANDOMNESS and random.trust_cpu, per usual.
 
-	M.
+Cc: stable@vger.kernel.org
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Acked-By: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Johannes - I need to take this through random.git, because it relies on
+some other changes living there. Is that okay with you? -Jason
+
+Changes v3->v4:
+- Don't include os.h, per Johannes' suggestion.
+
+ arch/um/include/asm/archrandom.h | 30 ++++++++++++++++++++++++++++++
+ arch/um/include/shared/os.h      |  7 +++++++
+ arch/um/kernel/um_arch.c         |  8 ++++++++
+ arch/um/os-Linux/util.c          |  6 ++++++
+ 4 files changed, 51 insertions(+)
+ create mode 100644 arch/um/include/asm/archrandom.h
+
+diff --git a/arch/um/include/asm/archrandom.h b/arch/um/include/asm/archrandom.h
+new file mode 100644
+index 000000000000..2f24cb96391d
+--- /dev/null
++++ b/arch/um/include/asm/archrandom.h
+@@ -0,0 +1,30 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_UM_ARCHRANDOM_H__
++#define __ASM_UM_ARCHRANDOM_H__
++
++#include <linux/types.h>
++
++/* This is from <os.h>, but better not to #include that in a global header here. */
++ssize_t os_getrandom(void *buf, size_t len, unsigned int flags);
++
++static inline bool __must_check arch_get_random_long(unsigned long *v)
++{
++	return os_getrandom(v, sizeof(*v), 0) == sizeof(*v);
++}
++
++static inline bool __must_check arch_get_random_int(unsigned int *v)
++{
++	return os_getrandom(v, sizeof(*v), 0) == sizeof(*v);
++}
++
++static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
++{
++	return false;
++}
++
++static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
++{
++	return false;
++}
++
++#endif
+diff --git a/arch/um/include/shared/os.h b/arch/um/include/shared/os.h
+index fafde1d5416e..0df646c6651e 100644
+--- a/arch/um/include/shared/os.h
++++ b/arch/um/include/shared/os.h
+@@ -11,6 +11,12 @@
+ #include <irq_user.h>
+ #include <longjmp.h>
+ #include <mm_id.h>
++/* This is to get size_t */
++#ifndef __UM_HOST__
++#include <linux/types.h>
++#else
++#include <sys/types.h>
++#endif
+ 
+ #define CATCH_EINTR(expr) while ((errno = 0, ((expr) < 0)) && (errno == EINTR))
+ 
+@@ -243,6 +249,7 @@ extern void stack_protections(unsigned long address);
+ extern int raw(int fd);
+ extern void setup_machinename(char *machine_out);
+ extern void setup_hostinfo(char *buf, int len);
++extern ssize_t os_getrandom(void *buf, size_t len, unsigned int flags);
+ extern void os_dump_core(void) __attribute__ ((noreturn));
+ extern void um_early_printk(const char *s, unsigned int n);
+ extern void os_fix_helper_signals(void);
+diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
+index 0760e24f2eba..74f3efd96bd4 100644
+--- a/arch/um/kernel/um_arch.c
++++ b/arch/um/kernel/um_arch.c
+@@ -16,6 +16,7 @@
+ #include <linux/sched/task.h>
+ #include <linux/kmsg_dump.h>
+ #include <linux/suspend.h>
++#include <linux/random.h>
+ 
+ #include <asm/processor.h>
+ #include <asm/cpufeature.h>
+@@ -406,6 +407,8 @@ int __init __weak read_initrd(void)
+ 
+ void __init setup_arch(char **cmdline_p)
+ {
++	u8 rng_seed[32];
++
+ 	stack_protections((unsigned long) &init_thread_info);
+ 	setup_physmem(uml_physmem, uml_reserved, physmem_size, highmem);
+ 	mem_total_pages(physmem_size, iomem_size, highmem);
+@@ -416,6 +419,11 @@ void __init setup_arch(char **cmdline_p)
+ 	strlcpy(boot_command_line, command_line, COMMAND_LINE_SIZE);
+ 	*cmdline_p = command_line;
+ 	setup_hostinfo(host_info, sizeof host_info);
++
++	if (os_getrandom(rng_seed, sizeof(rng_seed), 0) == sizeof(rng_seed)) {
++		add_bootloader_randomness(rng_seed, sizeof(rng_seed));
++		memzero_explicit(rng_seed, sizeof(rng_seed));
++	}
+ }
+ 
+ void __init check_bugs(void)
+diff --git a/arch/um/os-Linux/util.c b/arch/um/os-Linux/util.c
+index 41297ec404bf..fc0f2a9dee5a 100644
+--- a/arch/um/os-Linux/util.c
++++ b/arch/um/os-Linux/util.c
+@@ -14,6 +14,7 @@
+ #include <sys/wait.h>
+ #include <sys/mman.h>
+ #include <sys/utsname.h>
++#include <sys/random.h>
+ #include <init.h>
+ #include <os.h>
+ 
+@@ -96,6 +97,11 @@ static inline void __attribute__ ((noreturn)) uml_abort(void)
+ 			exit(127);
+ }
+ 
++ssize_t os_getrandom(void *buf, size_t len, unsigned int flags)
++{
++	return getrandom(buf, len, flags);
++}
++
+ /*
+  * UML helper threads must not handle SIGWINCH/INT/TERM
+  */
 -- 
-Marc Zyngier <maz@kernel.org>
+2.35.1
 

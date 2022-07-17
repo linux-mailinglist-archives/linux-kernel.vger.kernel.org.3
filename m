@@ -2,107 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C380A5777EA
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 21:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2666D5777F2
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 21:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbiGQTRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 15:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
+        id S231806AbiGQTXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 15:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGQTRE (ORCPT
+        with ESMTP id S231240AbiGQTXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 15:17:04 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50488DF1F
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 12:17:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658085423; x=1689621423;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7mf8+oh7Z5RFCHtFw7Hki9y+PXrX8mHg2vyaWdEeFco=;
-  b=R03VwzexXCMnl9RelINPRU4KWafR55xa6jur4UmU6rZj31okMjp9JbfL
-   g/r7NdBTx834a10S4jzNvb0J122R7p+Xh7BawTh6KhPjSkf2P3wdsFgCP
-   IGjbpIscX6vHwVEtoejaA4ypLI3ZbQePv2+MuczIS+WGhQXGb97Z5XWMh
-   1RNOdIQ16K44GOf235uNxvtCe4A3CbCegMcFKuaFuYdQr/CKsFOUK7tdE
-   GuLM2JMcmbAH33/VukBnFV/hHRHSNCy+GqJEP1OzZ1BWKWYRaGD6gsjFo
-   Lxrov6Vj5p4sLgwP0PjcLbM1AEnY8ngQBxmcju3Ry9wK9qyB+fr78ef3i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="286822584"
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="286822584"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 12:17:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="597029265"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 17 Jul 2022 12:17:01 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oD9lE-0003by-TU;
-        Sun, 17 Jul 2022 19:17:00 +0000
-Date:   Mon, 18 Jul 2022 03:16:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     kbuild-all@lists.01.org, Atish Patra <Atish.Patra@wdc.com>,
-        linux-kernel@vger.kernel.org
-Subject: [atishp04:kvm_perf_rfc_buildtest 15/24] WARNING: modpost:
- vmlinux.o(.text+0xa708): Section mismatch in reference from the function
- early_memremap_prot() to the function .init.text:early_ioremap()
-Message-ID: <202207180359.UjMwipSN-lkp@intel.com>
+        Sun, 17 Jul 2022 15:23:04 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F289DEFE;
+        Sun, 17 Jul 2022 12:23:03 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id d16so14302239wrv.10;
+        Sun, 17 Jul 2022 12:23:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qR5n9WUGINQgKnZyU5jQ5QNhAVmTXkoQM4VlFrsXDgk=;
+        b=ROVMbcMOPv+gSbm3EJ0AYvQs8xJipm3EB1VIKbnQn0ywYyjAGUA0Sburuurfmr9fUI
+         rXNM9c07v1017JK3vINOTZx/AP9ykov02Jip4XVZnRtdWqGlyYt0b7KURU1CVr5wzdhp
+         1lvZdqtbFjtmc7jGXNELiIePVrkhIL++Y0v1Aq7AwuWe0ansFrJW49xDHVWY7rdOoYVC
+         7Wsn78PS/3tFE8TP6FafTmxr6V3M3z9c7hZSHZVILX6qzAVgd+KXlezcymqZVSCDuiVV
+         SHKpRhuds0LZqUWv1a1DfGN/NCy+t8089iHEj92aJDiFrtNMqN/wlagxvmDCmnfmd39k
+         fK7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qR5n9WUGINQgKnZyU5jQ5QNhAVmTXkoQM4VlFrsXDgk=;
+        b=t/limwnQZrB0uI1QoVZJiFunrZqrv9z6aPMf26GLGpBfiYSIkh9GvyfJDwZ0SXxfcM
+         R6sJreh67n2GMTassuYfpWpKkd0IqSg1j5D1JqXDDluHOeYX6ssvORTGOEcptiPKa0Lh
+         RwbxAs7BnS3HNnTQBzM9rAGAvSmJoh58RHqBnfJ8KEefYExLity676cFKH8KIvjcxZd8
+         UNRdZzL/KqUnPwXJbTgv0h5G+bspyMACSv4hzC4G9R0tZpHoXqcatirOfoI4J3rrAU3Z
+         S+YpEs72jti4UBGMMgRDCQA09kLiOE1wJ19I6j6/vKld2MwK0mbyGGgKOPfehwFl044z
+         pk/g==
+X-Gm-Message-State: AJIora9VPCvZBEdGzXODqqL0XfTU40fwZc/Xi6mPAbCbncruHB7SDUg9
+        tu6v+32OXMMIdCVy2PdDulYltRmPeuc9rWsZGpo=
+X-Google-Smtp-Source: AGRyM1txFQkvnskZOx8Nkr/djQB1K/63SDxcCZP7vECAW1wAAJ2eJEJotJhzOPoLVauSB6Lzds4zlNU6k6ARgwyQb6w=
+X-Received: by 2002:a5d:6e8e:0:b0:21d:ea5:710f with SMTP id
+ k14-20020a5d6e8e000000b0021d0ea5710fmr27515wrz.48.1658085782164; Sun, 17 Jul
+ 2022 12:23:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220630111634.610320-1-hans@kapio-technology.com>
+ <Yr2LFI1dx6Oc7QBo@shredder> <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
+ <Yr778K/7L7Wqwws2@shredder> <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
+ <20220717134610.k3nw6mam256yxj37@skbuf> <20220717140325.p5ox5mhqedbyyiz4@skbuf>
+ <CAKUejP6g3HxS=Scj-2yhsQRJApxnq1e31Nkcc995s7gzfMJOew@mail.gmail.com> <20220717183852.oi6yg4tgc5vonorp@skbuf>
+In-Reply-To: <20220717183852.oi6yg4tgc5vonorp@skbuf>
+From:   Hans S <schultz.hans@gmail.com>
+Date:   Sun, 17 Jul 2022 21:20:57 +0200
+Message-ID: <CAKUejP7WyL2r03EiZU4hA63u2e=Wz3KM4X=rDdji5pdZ0ptaZg@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
+ traffic cannot unlock a locked port
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/atishp04/linux kvm_perf_rfc_buildtest
-head:   ff2f56ec4ff4f67ae3da3936939b1dcf53099a6e
-commit: 5faed77192c5455fe17fb4e6aea87e5bcc48a13d [15/24] COVER
-config: loongarch-randconfig-c004-20220717 (https://download.01.org/0day-ci=
-/archive/20220718/202207180359.UjMwipSN-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=3D1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
-make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/atishp04/linux/commit/5faed77192c5455fe17fb4e6=
-aea87e5bcc48a13d
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 kvm_perf_rfc_buildtest
-        git checkout 5faed77192c5455fe17fb4e6aea87e5bcc48a13d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cross=
- W=3D1 O=3Dbuild_dir ARCH=3Dloongarch SHELL=3D/bin/bash
+On Sun, Jul 17, 2022 at 8:38 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+>
+> On Sun, Jul 17, 2022 at 06:22:57PM +0200, Hans S wrote:
+> > On Sun, Jul 17, 2022 at 4:03 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+> >
+> > Yes, it creates an FDB entry in the bridge without the locked flag
+> > set, and sends an ADD_TO_DEVICE notice with it.
+> > And furthermore link-local packets include of course EAPOL packets, so
+> > that's why +learning is a problem.
+>
+> So if we fix that, and make the dynamically learned FDB entry be locked
+> because the port is locked (and offload them correctly in mv88e6xxx),
+> what would be the problem, exactly? The +learning is what would allow
+> these locked FDB entries to be created, and would allow the MAB to work.
+> User space may still decide to not authorize this address, and it will
+> remain locked.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
->> WARNING: modpost: vmlinux.o(.text+0xa708): Section mismatch in reference=
- from the function early_memremap_prot() to the function .init.text:early_i=
-oremap()
-The function early_memremap_prot() references
-the function __init early_ioremap().
-This is often because early_memremap_prot lacks a __init
-annotation or the annotation of early_ioremap is wrong.
-
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text.unlikely+0x15e40): Section mismatch in=
- reference from the variable L0=01 to the function .init.text:early_ioremap=
-()
-
---=20
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+The alternative is to have -learning and let the driver only enable
+the PAV to admit the interrupts, which is what this implementation
+does.
+The plus side of this is that having EAPOL packets triggering locked
+entries from the bridge side is not really so nice IMHO. In a
+situation with 802.1X and MAB on the same port, there will then not be
+any triggering of MAB when initiating the 802.1X session, which I
+think is the best option. It then also lessens the confusion between
+hostapd and the daemon that handles MAB sessions.

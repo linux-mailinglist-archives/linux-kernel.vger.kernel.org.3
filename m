@@ -2,121 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB945778E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 01:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA465778F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 02:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbiGQXxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 19:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
+        id S229862AbiGRAAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 20:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGQXxL (ORCPT
+        with ESMTP id S229535AbiGRAAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 19:53:11 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36A610FF0;
-        Sun, 17 Jul 2022 16:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658101990; x=1689637990;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9pF+52u5sIt8iKnb9u1XPMvY1nWRTKK736yt0w7idas=;
-  b=Uz1ZdOEWU1ks6zZDlYQyoiUF22njluq3RLkEUgfWOYU8pEF18XMvcn0A
-   I/W/7CvOH3idi0Vsiywpdb+9+imlZzP02iEEN5t6GiKQGd6T+HkyDw4v8
-   EipJKRncXZ0eWgxUB8Y0KDStidoH1GwmTFDYzhIosUh6x73TN1BOeMxU/
-   VpslscMRGEoQGrjDDsERwvQvv0nctdVHRUXJgb9xQ1HxYia2MzAtgxk4s
-   oM7DmHPwS8OojH4vGw6CTMxQn5PGBQKBqZQJ2TAw9LoRo/9ewHWPBnwSI
-   cc2e0dcXPRh7mJVXEDj7vfvYFiO24SgWnac29LMCu9ZOif99ZttlXhdBk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="287245441"
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="287245441"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 16:53:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="594283394"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 17 Jul 2022 16:53:05 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oDE4O-0003o3-FB;
-        Sun, 17 Jul 2022 23:53:04 +0000
-Date:   Mon, 18 Jul 2022 07:52:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     kbuild-all@lists.01.org,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Tao Zhou <tao.zhou@linux.dev>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [PATCH V5 15/16] rv/reactor: Add the printk reactor
-Message-ID: <202207180703.hiH5bbyO-lkp@intel.com>
-References: <5fcf3d21b51bc4c1a6d2968cfd0c60fdbc1d471b.1657745645.git.bristot@kernel.org>
+        Sun, 17 Jul 2022 20:00:01 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B228B84D;
+        Sun, 17 Jul 2022 17:00:00 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LmMXY1lg0z4xL4;
+        Mon, 18 Jul 2022 09:59:56 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658102398;
+        bh=y25cKpL4mmsIwu6PRnBc2l75aGiWNToeCVWmIij4Gdg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Fm8UeIJNv9AVk6r6x5BD1LU5Oy0uA+k5A+7na8iRACq1kWZZ+ag9R0RdMAY0e3fnO
+         ZGE6Dj99zOTF36wR4hl0O+SsMl0aLY5ax3QGQ0H1B0MmE0pgJA7AmaSXx1jAP6bwhp
+         JbZ+bJxvnCWWr2TvHHSEhbiof2zQtk2PsLaQpFfzROP01TFoQbqwY9If498aBxt0/V
+         PMhNVF402KB6dkB52vuXkOkDyqyA4qeu1Ly91pu64XCZIuddMX9pKh5XqPiNnIQeBQ
+         qdvLuXLSwC8GmZm6qT7nimbvfUM3CRstihNb/h0hPxSq/dKzyLuvxmkBSjWVczcKdN
+         0+KlzZhTFKsGQ==
+Date:   Mon, 18 Jul 2022 09:59:56 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Greg KH <greg@kroah.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: linux-next: manual merge of the arm-soc tree with the spdx tree
+Message-ID: <20220718095956.7282e081@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5fcf3d21b51bc4c1a6d2968cfd0c60fdbc1d471b.1657745645.git.bristot@kernel.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/QMh0T+vFGcvl48pfwSKPgbc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+--Sig_/QMh0T+vFGcvl48pfwSKPgbc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I love your patch! Perhaps something to improve:
+Hi all,
 
-[auto build test WARNING on rostedt-trace/for-next]
-[also build test WARNING on tip/sched/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Today's linux-next merge of the arm-soc tree got conflicts in:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220714-052220
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220718/202207180703.hiH5bbyO-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/d1746223447deb1d1646f968512a065a1cd63a9c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220714-052220
-        git checkout d1746223447deb1d1646f968512a065a1cd63a9c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/misc/lkdtm/ kernel/trace/rv/
+  arch/arm/mach-davinci/board-dm644x-evm.c
+  arch/arm/mach-davinci/board-dm646x-evm.c
+  arch/arm/mach-davinci/board-neuros-osd2.c
+  arch/arm/mach-davinci/dm644x.c
+  arch/arm/mach-davinci/dm646x.c
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+between commit:
 
+  0fdebc5ec2ca ("treewide: Replace GPLv2 boilerplate/reference with SPDX - =
+gpl-2.0_56.RULE (part 1)")
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/trace/rv/reactor_printk.c:20:19: sparse: sparse: symbol 'rv_printk' was not declared. Should it be static?
->> kernel/trace/rv/reactor_printk.c:26:5: sparse: sparse: symbol 'register_react_printk' was not declared. Should it be static?
->> kernel/trace/rv/reactor_printk.c:32:6: sparse: sparse: symbol 'unregister_react_printk' was not declared. Should it be static?
+from the spdx tree and commits:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  7dd33764486d ("ARM: davinci: Delete DM644x board files")
+  b4aed01de486 ("ARM: davinci: Delete DM646x board files")
+
+from the arm-soc tree.
+
+I fixed it up (I just removed the files) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/QMh0T+vFGcvl48pfwSKPgbc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLUonwACgkQAVBC80lX
+0GwdgQgAnrN78ZfE9DbTwAEFFnVrBwl90JTR+/VPTilDluGpyXSD05JN7JTMl5ig
+2/X8AVv2ZYWddJa+n8YVWTn+ToDRPSdldhwDCDAfToZ2K2JqxC/Ck/wFoZJoPCvA
+S0g3Vh8llljrZLSLIT5TSslKEZ7kC3Q7BVi/8NpyKkr+H49q3f1jMZENlhDgknjv
+0ywPbK++24q4xU3HIotd4ZDSaE3a1s29GhrgazTT+bqHMRCXPfCXAGe1P0aYJP/a
+hxm6cwzmzPJYw3ZkrvXML33jfU43lLUQNlGjA95BohcJ81VqpPiRGFF1v3+T/x4O
+hTFr7wF70eR4YuZJlcgIwJqgaHrkuw==
+=8hZ5
+-----END PGP SIGNATURE-----
+
+--Sig_/QMh0T+vFGcvl48pfwSKPgbc--

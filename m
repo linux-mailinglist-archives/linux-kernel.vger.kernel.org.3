@@ -2,249 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEE757759E
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 12:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DC35775A1
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 12:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbiGQKCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 06:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        id S232796AbiGQKDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 06:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGQKCM (ORCPT
+        with ESMTP id S229476AbiGQKDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 06:02:12 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF31D263A;
-        Sun, 17 Jul 2022 03:02:09 -0700 (PDT)
-Received: from zn.tnic (p200300ea97297694329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7694:329c:23ff:fea6:a903])
+        Sun, 17 Jul 2022 06:03:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216C6AE47
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 03:03:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 07EB11EC04E4;
-        Sun, 17 Jul 2022 12:02:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658052124;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=pMBoFPf5zDKeGeoUjhUKzQOtOyWqwWe2PwvFxR7Ybz0=;
-        b=VBdnYo50dmMvcVd+D94GdtPzBbGMJ6NxpJQtZVPOezfqfXJ6M5R3i+e/n8S9lpC18Nsq6u
-        5uaMHBVqABfE/H2QVzI55teoCuxVFSn4P6jMP1ac/cgA13L9mu8cPoPjU16avwZutPkzQ6
-        6+Mw4Wb1O6LHny7Va6tY063Rqcor2Og=
-Date:   Sun, 17 Jul 2022 12:01:59 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org
-Subject: Re: [PATCH Part2 v6 03/49] x86/sev: Add the host SEV-SNP
- initialization support
-Message-ID: <YtPeF0r69UbwNTMJ@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <8f4eef289aba5067582d0d3535299c22a4e5c4c4.1655761627.git.ashish.kalra@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8f4eef289aba5067582d0d3535299c22a4e5c4c4.1655761627.git.ashish.kalra@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id C550FB8074A
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 10:03:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7464EC3411E;
+        Sun, 17 Jul 2022 10:02:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658052179;
+        bh=wEAd2qSvbkYxJle9WMnfQqNa/vbPEDsBIBxaIP4bzJg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YtVHPZe6fiYIOV3ifgsOGmiyk3SYU8+OF8uiPpb2OADo/z/Pii+0IukakxVQegq5Q
+         zdTBZ6eVyHzBnMb2xNGntEGo8Tb+EkaPEAQx9cYnmz+TPZwJRVNCXGg7q1TEJE36/V
+         vyEKnQTYWF3Ajeh80ZHhEP41LN4ywvl8TMOxODcZKWP8ulybzU3bUKluxiMx91VGzE
+         PLs/320HhDyMr9U7f67cRPVAhWfapGn5p5lf7U3UhV9ZFHbPueZqibakf1aAy4Hx9C
+         h66igdeDRB1U4/auyU19PXCx9Ebh1uL7y5No7v4czq3dOyaRxh8ZytnZzI+0Yo0Koi
+         HNwmvmRguiCkg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oD173-007zbM-2Z;
+        Sun, 17 Jul 2022 11:02:57 +0100
+Date:   Sun, 17 Jul 2022 11:02:51 +0100
+Message-ID: <87ilnw3vlg.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V15 00/15] irqchip: Add LoongArch-related irqchip drivers
+In-Reply-To: <6e9def1e-31fe-787d-1b2b-a328424352f0@loongson.cn>
+References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
+        <87less52bx.wl-maz@kernel.org>
+        <6e9def1e-31fe-787d-1b2b-a328424352f0@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 11:02:01PM +0000, Ashish Kalra wrote:
-> +/*
-> + * The first 16KB from the RMP_BASE is used by the processor for the
-> + * bookkeeping, the range need to be added during the RMP entry lookup.
+On Sun, 17 Jul 2022 02:06:12 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>=20
+>=20
+>=20
+> On 2022/7/17 =E4=B8=8A=E5=8D=882:39, Marc Zyngier wrote:
+> > On Fri, 15 Jul 2022 08:05:36 +0100,
+> > Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> >>=20
+> >> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> >> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> >> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> >> boot protocol LoongArch-specific interrupt controllers (similar to API=
+C)
+> >> are already added in the ACPI Specification 6.5(which may be published=
+ in
+> >> early June this year and the board is reviewing the draft).
+> >>=20
+> >> Currently, LoongArch based processors (e.g. Loongson-3A5000) can only
+> >> work together with LS7A chipsets. The irq chips in LoongArch computers
+> >> include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
+> >> Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller),
+> >> HTVECINTC (Hyper-Transport Vector Interrupt Controller), PCH-PIC (Main
+> >> Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controll=
+er
+> >> in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
+> >=20
+> > [...]
+> >=20
+> > Compiling this series for loongarch with loongson3_defconfig on top of
+> > 5.19-rc3 results in the following:
+> >=20
+> > loongarch64-linux-ld: drivers/irqchip/irq-loongson-eiointc.o: in functi=
+on `.L60':
+> > irq-loongson-eiointc.c:(.init.text+0x4c): undefined reference to `pch_m=
+si_acpi_init'
+> > loongarch64-linux-ld: drivers/irqchip/irq-loongson-htvec.o: in function=
+ `pch_msi_parse_madt':
+> > irq-loongson-htvec.c:(.init.text+0x14): undefined reference to `pch_msi=
+_acpi_init'
+> > make: *** [Makefile:1164: vmlinux] Error 1
+> >=20
+> > I *really* would have expected this series to be in a better shape
+> > after over 15 rounds, but it looks like I'm expecting too much. I
+> > haven't investigated the breakage, but this should (at the very least)
+> > pass the defconfig test and optional drivers not being selected.
+> >=20
+> > The corresponding MIPS configuration seems to build fine.
+> >=20
+> > 	M.
+> >=20
+>=20
+> Hi, Marc
+>=20
+> Sorry for that first, pch_msi_acpi_init is defined in pch_msi driver
+> which is compiled depend on CONFIG_PCI, and I test the patches each
+> time with PCI patches and other(or else, kernel can not be boot), so
+> I'm ok for testing the patches. The PCI patches has been accepted by
+> PCI maintainers and will be merged in this merge window.
 
-needs
+But each series *must* at the very least compile in isolation.
 
-> +static int __snp_enable(unsigned int cpu)
-> +{
-> +	u64 val;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
-> +		return 0;
-> +
-> +	rdmsrl(MSR_AMD64_SYSCFG, val);
-> +
-> +	val |= MSR_AMD64_SYSCFG_SNP_EN;
-> +	val |= MSR_AMD64_SYSCFG_SNP_VMPL_EN;
-> +
-> +	wrmsrl(MSR_AMD64_SYSCFG, val);
-> +
-> +	return 0;
-> +}
-> +
-> +static __init void snp_enable(void *arg)
-> +{
-> +	__snp_enable(smp_processor_id());
-> +}
+>=20
+> I don't know how to deal with this situation. Should I add *#ifdef
+> CONFIG_PCI* at position of calling pch_msi_acpi_init or some other
+> way?
 
-Get rid of that silly wrapper - you're not even using that @cpu argument.
+You could try something like this, which results in a kernel that
+fully links with defconfig and no additional patch:
 
-> +static bool get_rmptable_info(u64 *start, u64 *len)
-> +{
-> +	u64 calc_rmp_sz, rmp_sz, rmp_base, rmp_end, nr_pages;
-> +
-> +	rdmsrl(MSR_AMD64_RMP_BASE, rmp_base);
-> +	rdmsrl(MSR_AMD64_RMP_END, rmp_end);
-> +
-> +	if (!rmp_base || !rmp_end) {
-> +		pr_info("Memory for the RMP table has not been reserved by BIOS\n");
+diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/=
+irq.h
+index ca468564fc85..4479d95867ec 100644
+--- a/arch/loongarch/include/asm/irq.h
++++ b/arch/loongarch/include/asm/irq.h
+@@ -99,8 +99,17 @@ int htvec_acpi_init(struct irq_domain *parent,
+ 					struct acpi_madt_ht_pic *acpi_htvec);
+ int pch_lpc_acpi_init(struct irq_domain *parent,
+ 					struct acpi_madt_lpc_pic *acpi_pchlpc);
++#if IS_ENABLED(CONFIG_LOONGSON_PCH_MSI)
+ int pch_msi_acpi_init(struct irq_domain *parent,
+-					struct acpi_madt_msi_pic *acpi_pchmsi);
++		      struct acpi_madt_msi_pic *acpi_pchmsi);
++#else
++static inline int pch_msi_acpi_init(struct irq_domain *parent,
++				    struct acpi_madt_msi_pic *acpi_pchmsi)
++{
++	return 0;
++
++}
++#endif
+ int pch_pic_acpi_init(struct irq_domain *parent,
+ 					struct acpi_madt_bio_pic *acpi_pchpic);
+ int find_pch_pic(u32 gsi);
 
-pr_err
+But the other issue is that you seem to call this function from two
+different locations. This cannot be right, as there should be only one
+probe order, and not multiple.
 
-> +		return false;
-> +	}
-> +
-> +	rmp_sz = rmp_end - rmp_base + 1;
-> +
-> +	/*
-> +	 * Calculate the amount the memory that must be reserved by the BIOS to
-> +	 * address the full system RAM. The reserved memory should also cover the
+	M.
 
-"... address the whole RAM."
-
-> +	 * RMP table itself.
-> +	 *
-> +	 * See PPR Family 19h Model 01h, Revision B1 section 2.1.4.2 for more
-> +	 * information on memory requirement.
-
-That section number will change over time - if you want to refer to some
-section just use its title so that people can at least grep for the
-relevant text.
-
-> +	 */
-> +	nr_pages = totalram_pages();
-> +	calc_rmp_sz = (((rmp_sz >> PAGE_SHIFT) + nr_pages) << 4) + RMPTABLE_CPU_BOOKKEEPING_SZ;
-
-use totalram_pages() directly and get rid of nr_pages.
-
-> +
-> +	if (calc_rmp_sz > rmp_sz) {
-> +		pr_info("Memory reserved for the RMP table does not cover full system RAM (expected 0x%llx got 0x%llx)\n",
-> +			calc_rmp_sz, rmp_sz);
-
-pr_err
-
-> +		return false;
-> +	}
-> +
-> +	*start = rmp_base;
-> +	*len = rmp_sz;
-> +
-> +	pr_info("RMP table physical address 0x%016llx - 0x%016llx\n", rmp_base, rmp_end);
-
-"RMP table physical address range: ...[0x.. - 0x..]"
-
-> +
-> +	return true;
-> +}
-> +
-> +static __init int __snp_rmptable_init(void)
-
-s/int/bool/
-
-> +{
-> +	u64 rmp_base, sz;
-> +	void *start;
-> +	u64 val;
-> +
-> +	if (!get_rmptable_info(&rmp_base, &sz))
-> +		return 1;
-> +
-> +	start = memremap(rmp_base, sz, MEMREMAP_WB);
-> +	if (!start) {
-> +		pr_err("Failed to map RMP table 0x%llx+0x%llx\n", rmp_base, sz);
-							^^^^^^
-
-either write the size in decimal or do a normal interval.
-
-> +		return 1;
-> +	}
-> +
-> +	/*
-> +	 * Check if SEV-SNP is already enabled, this can happen if we are coming from
-
-Who is "we"?
-
-Pls get rid of all "we" in the comments and use passive formulations.
-
-> +	 * kexec boot.
-> +	 */
-> +	rdmsrl(MSR_AMD64_SYSCFG, val);
-> +	if (val & MSR_AMD64_SYSCFG_SNP_EN)
-> +		goto skip_enable;
-> +
-> +	/* Initialize the RMP table to zero */
-> +	memset(start, 0, sz);
-
-Do I understand it correctly that in the kexec case the second, kexec-ed
-kernel is reusing the previous kernel's RMP table so it should not be
-cleared?
-
-> +
-> +	/* Flush the caches to ensure that data is written before SNP is enabled. */
-> +	wbinvd_on_all_cpus();
-> +
-> +	/* Enable SNP on all CPUs. */
-> +	on_each_cpu(snp_enable, NULL, 1);
-> +
-> +skip_enable:
-> +	rmptable_start = (unsigned long)start;
-> +	rmptable_end = rmptable_start + sz;
-> +
-> +	return 0;
-> +}
-> +
-> +static int __init snp_rmptable_init(void)
-> +{
-> +	if (!boot_cpu_has(X86_FEATURE_SEV_SNP))
-
-cpu_feature_enabled
-
-> +		return 0;
-> +
-> +	if (!iommu_sev_snp_supported())
-> +		goto nosnp;
-> +
-> +	if (__snp_rmptable_init())
-> +		goto nosnp;
-> +
-> +	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/rmptable_init:online", __snp_enable, NULL);
-> +
-> +	return 0;
-> +
-> +nosnp:
-> +	setup_clear_cpu_cap(X86_FEATURE_SEV_SNP);
-> +	return 1;
-> +}
-> +
-> +/*
-> + * This must be called after the PCI subsystem. This is because before enabling
-> + * the SNP feature we need to ensure that IOMMU supports the SEV-SNP feature.
-> + * The iommu_sev_snp_support() is used for checking the feature, and it is
-> + * available after subsys_initcall().
-
-I'd much more appreciate here a short formulation explaining why is
-IOMMU needed for SNP rather than the obvious.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+--=20
+Without deviation from the norm, progress is not possible.

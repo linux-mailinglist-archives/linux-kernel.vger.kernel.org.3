@@ -2,85 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86753577827
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 22:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF3A577829
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 22:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbiGQUNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 16:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
+        id S232286AbiGQUOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 16:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiGQUNN (ORCPT
+        with ESMTP id S229770AbiGQUOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 16:13:13 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996CD631B
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 13:13:12 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658088791;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kexTZTfmPKF4s2DqvpAl/OvqZteyp5V1sESoDgp4Y/M=;
-        b=DbnyA62w02O9p2tcHFNKOZTm274xeRIps++TMB5tVU6ZxmQ/OK7f+luCB3L3XKKaT7Z3Mv
-        SSmR4Mv2o10YXXzDl9wcd2LYhVp4GdPsFvOs5S2zbUtKguQ26EMDN3lOqGIh14IVUdBtA/
-        B5nSkJsUMTqNPfx9Q8p/YmXUv9wy2UdcHh7m61s16AhaZTPLDn0yUbHgGHtZgk8TsSBteU
-        0UPhp7ZLfXdETh7ZxD4m8oQQRxxZ6nQ3uUDCeGA11JsAiAubXSHEvqDFffL0Z4fq8mqrda
-        CwTbCj0EyNTiBXz16kD6fEWV8d8SUkAb8K5bQlK0io4iIoqcrZwhMq2wMTNoYg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658088791;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kexTZTfmPKF4s2DqvpAl/OvqZteyp5V1sESoDgp4Y/M=;
-        b=8rVQ2yNatV6QrpPK10MEDP7gM5wY7SmehIZYkhuh8bpcPdmSn4vLg1ui/fNZlIXovyTv+X
-        +AQgwuYuZemUuFCw==
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [patch 02/38] x86/cpu: Use native_wrmsrl() in
- load_percpu_segment()
-In-Reply-To: <87tu7fwlhr.ffs@tglx>
-References: <20220716230344.239749011@linutronix.de>
- <20220716230952.787452088@linutronix.de>
- <0bec8fe2-d1e3-f01c-6e52-06ab542efdd8@citrix.com> <87zgh7wo91.ffs@tglx>
- <87tu7fwlhr.ffs@tglx>
-Date:   Sun, 17 Jul 2022 22:13:10 +0200
-Message-ID: <87r12jwl9l.ffs@tglx>
+        Sun, 17 Jul 2022 16:14:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F4411A1B;
+        Sun, 17 Jul 2022 13:14:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1220B80DFF;
+        Sun, 17 Jul 2022 20:14:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93FF9C3411E;
+        Sun, 17 Jul 2022 20:14:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658088886;
+        bh=uk08sAzkVMY+XZxQEzLyrIPyICsHFAdaxskNvnRcQDI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CgpE/A8k8vJX0M0cBGOTf+pmR+w+H6NFZYcvPtv++HUDOAU+O15bX4tSEcEv3BAAJ
+         ss579Xvy/RCOFDBNhmt942Z6OK+72sHHaxr9rGX1Du27zrTNgz9oKecUhMDrPsgFju
+         d4/52pSKO1WHjjGEAy/hEqa+KSG1BtkjatwQA4d0=
+Date:   Sun, 17 Jul 2022 22:14:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Reinhard Speyerer <rspmn@arcor.de>
+Cc:     sdlyyxy <sdlyyxy@bupt.edu.cn>, johan@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
+Message-ID: <YtRtswctFMLxeglu@kroah.com>
+References: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
+ <119D7B0F-7809-464A-AFF1-DF72FFF9E63F@bupt.edu.cn>
+ <YtKrbucYNulPEKUp@arcor.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtKrbucYNulPEKUp@arcor.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17 2022 at 22:08, Thomas Gleixner wrote:
-> On Sun, Jul 17 2022 at 21:08, Thomas Gleixner wrote:
-> loadsegment_simple() was a red herring. The gs segment is already zero.
->
-> So what explodes here is the early boot when switching from early per
-> CPU to the real per CPU area.
->
-> start_kernel()
->         .....
->         setup_per_cpu_areas();
->         smp_prepare_boot_cpu()
+On Sat, Jul 16, 2022 at 02:13:34PM +0200, Reinhard Speyerer wrote:
+> On Fri, Jul 15, 2022 at 10:59:13PM +0800, sdlyyxy wrote:
+> > 
+> > > On Jul 15, 2022, at 22:24, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> > > 
+> > > The Oppo R11 diagnostic USB connection needs to be bound to the
+> > > usb-serial-simple driver as it just wants to use a dumb pipe to
+> > > communicate to the host.
+> > > 
+> > > usb-devices output:
+> > > T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
+> > > D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
+> > > P: Vendor=22d9 ProdID=276c Rev=04.04
+> > > S: Manufacturer=OPPO
+> > > S: Product=SDM660-MTP _SN:09C6BCA7
+> > > S: SerialNumber=beb2c403
+> > > C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
+> > > I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30
+> > > 
+> > > Reported-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+> > > Cc: Johan Hovold <johan@kernel.org>
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > > drivers/usb/serial/usb-serial-simple.c | 4 +++-
+> > > 1 file changed, 3 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+> > > index 4c6747889a19..eb832b94aa3a 100644
+> > > --- a/drivers/usb/serial/usb-serial-simple.c
+> > > +++ b/drivers/usb/serial/usb-serial-simple.c
+> > > @@ -60,7 +60,9 @@ DEVICE(flashloader, FLASHLOADER_IDS);
+> > > 	{ USB_VENDOR_AND_INTERFACE_INFO(0x18d1,			\
+> > > 					USB_CLASS_VENDOR_SPEC,	\
+> > > 					0x50,			\
+> > > -					0x01) }
+> > > +					0x01) },		\
+> > > +	{ USB_DEVICE_AND_INTERFACE_INFO(0x22d9, 0x276c,		\
+> > > +					0xff, 0xff, 0x30) }
+> > > DEVICE(google, GOOGLE_IDS);
+> > > 
+> > > /* Libtransistor USB console */
+> > > -- 
+> > > 2.37.1
+> > Tested-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+> 
+> While this may work sufficiently well for real low-volume diag traffic I'd
+> expect a significant percentage of diag messages to be lost in practice
+> with the usb-serial-simple driver.
+> 
+> According to the usb-devices output this looks like the Qualcomm USB gadget
+> in the DIAG + ADB composition to me.
+> 
+> Since the option driver uses the usb-wwan framework my suggestion would be
+> for the original patch to be applied instead similar to what has been done
+> e.g. for the Quectel RM500Q diag port.
 
-Bah. switch_to_new_gdt() is already invoked from setup_per_cpu_areas()
-and then again in smp_prepare_boot_cpu() and once more in cpu_init(),
+But this is not using the option chip, nor using the option flow control
+protocol at all, so it should not be showing up as a device controlled
+by the option driver.  It just will not work properly, the simple driver
+should be doing the exact same thing here.
 
-What a mess.
+thank,
+
+greg k-h

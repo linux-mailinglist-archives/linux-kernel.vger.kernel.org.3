@@ -2,135 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6635777C3
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 20:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2E25777C7
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Jul 2022 20:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbiGQS0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 14:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
+        id S229949AbiGQSed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 14:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiGQS0E (ORCPT
+        with ESMTP id S229437AbiGQSeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 14:26:04 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A04912613;
-        Sun, 17 Jul 2022 11:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658082362; x=1689618362;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Lev7I62R+ZkqbUI7VHug5zWd6VrLgETsZS6J/rKaTh4=;
-  b=fd4mhEviOKTZdNKWjWz1adon0TUAyVZ2rxS7mx8hgFyz8wB3rkAURtJc
-   4fiyw/uxVwqVi5BTteV26NzWeB8aXuxRC2/61ei022S/qm3jCoEDLje7Q
-   bZbQJlkwi3BC1s60Hlmd5PCKL7BgEB0CDYUWfg8Sd3foC9BCE0xkJ5xWw
-   oUTMpom5BL5h+eswURHSuoAG1fe52BuH0sY9Rp5ZNy75tdTH82sK9Np9W
-   wAZQnTdWEF6e7sLnqLk3DJBrFo3FLJKveCZxNIxVDheyqgerE8cssI+10
-   Z6yP0AdeqAKB+KeuQDcdOzqqUGGuscmyWCJts1quov4UfMCf4zO6v2a1W
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="347770619"
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="347770619"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 11:26:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,279,1650956400"; 
-   d="scan'208";a="624455965"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 17 Jul 2022 11:25:59 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oD8xq-0003ZM-NH;
-        Sun, 17 Jul 2022 18:25:58 +0000
-Date:   Mon, 18 Jul 2022 02:25:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zqiang <qiang1.zhang@intel.com>, paulmck@kernel.org,
-        frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu-tasks: Make RCU Tasks Trace checking for userspace
- execution
-Message-ID: <202207180246.5cKJdGrg-lkp@intel.com>
-References: <20220717143801.189865-1-qiang1.zhang@intel.com>
+        Sun, 17 Jul 2022 14:34:31 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5755912752;
+        Sun, 17 Jul 2022 11:34:30 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id v185so7762136ioe.11;
+        Sun, 17 Jul 2022 11:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7T1elb4VQwrC1sZg3F4EdxUouZCTWEFZq0pNjmM10H4=;
+        b=R+qaOJ/RIl3tbU2jrW/9rmGOvRSHh7KgGM8IOx/eYI3V0sYo9NQmH4FJw4hNkIeZEc
+         L6glhandgJX4/1fNKk9uOpAh1MYb1SmhGdyTTj/tiOqprl10s8pSnGVB8hls1Qro3O/Q
+         hsGU2inzEMgiQ3M+Peh0rABJjo7yZRQ0z3+WP9/nK4/XINkll/MVTwfkAyD/jpduSMc0
+         rBtyGjceHwVaO6EyN8BTRtKRyLxkSJU/V8PcuG4Nz2XUBJSB34BTcREnZNn+zCdok3fx
+         0lv26C9wusy4wO8CpSnZt9qonkLuT2UNIItzdLy8FDRALcJ8ZR0a7DiLQTrdajBmAXsE
+         wISA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7T1elb4VQwrC1sZg3F4EdxUouZCTWEFZq0pNjmM10H4=;
+        b=v57PEs1jnXfn7Ob4FJV5fHQMoh9HgSRlEkB/mpsJSW5Crqy6d5NttfQbTkEfSC+eB/
+         jZXLc5ViuBpoAHUM172OVeC5DEez3uUtrX8d4jKRn46olxUaBeipazKZ5vP9tuNOW990
+         APqcPulOvIN4zplaZjrzHj8u5Ax4JY37fgAFxDMy3cfIxtVf9LwHKx5hWq8rBeVZbObk
+         qnfb8CDqT9qnjEVbPNUAINOAFn5P+9d3OzazUhze9LmKTSFdEXkVJhlHSQ+UswqM1WbP
+         2FayBJYM3LTJqKXBHIUQZ1bxOowMd1lF6F+ZieUCc8lr5YY3AU/LSpENf7jK22p+nvqW
+         saYQ==
+X-Gm-Message-State: AJIora/GHvcFpqNIs0SQcD+PW5NhJcfz9Grh/C+ybUIQguGZA+JKonXQ
+        LplKp6oUpfkMyWg6Tktrer2VJbtpt16Q8kBC/SIqMIZBUW+UKUHg
+X-Google-Smtp-Source: AGRyM1uwKboyXHtiqj1uHFqFb9BJSoG9rYLgloobGhf3g81UQO0u3jikyOPgFmybtt+5ILMNrsR6hmzz46pfsolzH8c=
+X-Received: by 2002:a05:6638:4883:b0:33f:7948:e685 with SMTP id
+ ct3-20020a056638488300b0033f7948e685mr12872724jab.138.1658082869800; Sun, 17
+ Jul 2022 11:34:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220717143801.189865-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220717133759.8479-1-khalid.masum.92@gmail.com> <3ea0ea90-48bf-ce19-e014-9443d732e831@gmail.com>
+In-Reply-To: <3ea0ea90-48bf-ce19-e014-9443d732e831@gmail.com>
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+Date:   Mon, 18 Jul 2022 00:34:19 +0600
+Message-ID: <CAABMjtHiet1_SRvLBhoNxeEh865rwtZCkb510JmFPkHFMd5chQ@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: hci_core: Use ERR_PTR instead of NULL
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zqiang,
+On Sun, Jul 17, 2022 at 10:17 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+>
+> Hi Khalid,
+>
+> Khalid Masum <khalid.masum.92@gmail.com> says:
+> > Failure of kzalloc to allocate memory is not reported. Return Error
+> > pointer to ENOMEM if memory allocation fails. This will increase
+> > readability and will make the function easier to use in future.
+> >
+> > Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+> > ---
+>
+> [snip]
+>
+> > index a0f99baafd35..ea50767e02bf 100644
+> > --- a/net/bluetooth/hci_core.c
+> > +++ b/net/bluetooth/hci_core.c
+> > @@ -2419,7 +2419,7 @@ struct hci_dev *hci_alloc_dev_priv(int sizeof_priv)
+> >
+> >       hdev = kzalloc(alloc_size, GFP_KERNEL);
+> >       if (!hdev)
+> > -             return NULL;
+> > +             return ERR_PTR(-ENOMEM);
+> >
+>
+> This will break all callers of hci_alloc_dev(). All callers expect NULL
+> in case of an error, so you will leave them with wrong pointer.
 
-Thank you for the patch! Yet something to improve:
+You are right. All callers of hci_alloc_dev() need to be able to handle
+the error pointer. I shall send a V2 with all the callers of hci_alloc_dev
+handling the ERR_PTR.
 
-[auto build test ERROR on paulmck-rcu/dev]
-[also build test ERROR on linus/master v5.19-rc6 next-20220715]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Also, allocation functionS return an error only in case of ENOMEM, so
+> initial code is fine, IMO
+>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zqiang/rcu-tasks-Make-RCU-Tasks-Trace-checking-for-userspace-execution/20220717-223556
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
-config: hexagon-randconfig-r041-20220717 (https://download.01.org/0day-ci/archive/20220718/202207180246.5cKJdGrg-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 45067f8fbf61284839c739807c2da2e2505661eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d078656cad783fefa6506b05e7dfd1ce43f23eb0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zqiang/rcu-tasks-Make-RCU-Tasks-Trace-checking-for-userspace-execution/20220717-223556
-        git checkout d078656cad783fefa6506b05e7dfd1ce43f23eb0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+I think it makes the memory allocation error handling look to be a bit
+different from what we usually do while allocating memory which is,
+returning an error or an error pointer. Here we are returning a NULL
+without any context, making it a bit unreadable. So I think returning
+an error pointer is better. If I am not mistaken, this also complies with
+the return convention:
+https://www.kernel.org/doc/htmldocs/kernel-hacking/convention-returns.html
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/rcu/tree.c:4638:
->> kernel/rcu/tree_plugin.h:979:3: error: call to undeclared function 'rcu_tasks_trace_qs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   rcu_tasks_trace_qs(current);
-                   ^
-   1 error generated.
+>
+> Thanks,
+> --Pavel Skripkin
 
 
-vim +/rcu_tasks_trace_qs +979 kernel/rcu/tree_plugin.h
-
-   959	
-   960	/*
-   961	 * Check to see if this CPU is in a non-context-switch quiescent state,
-   962	 * namely user mode and idle loop.
-   963	 */
-   964	static void rcu_flavor_sched_clock_irq(int user)
-   965	{
-   966		if (user || rcu_is_cpu_rrupt_from_idle()) {
-   967	
-   968			/*
-   969			 * Get here if this CPU took its interrupt from user
-   970			 * mode or from the idle loop, and if this is not a
-   971			 * nested interrupt.  In this case, the CPU is in
-   972			 * a quiescent state, so note it.
-   973			 *
-   974			 * No memory barrier is required here because rcu_qs()
-   975			 * references only CPU-local variables that other CPUs
-   976			 * neither access nor modify, at least not while the
-   977			 * corresponding CPU is online.
-   978			 */
- > 979			rcu_tasks_trace_qs(current);
-   980			rcu_qs();
-   981		}
-   982	}
-   983	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+  -- Khalid Masum

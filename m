@@ -2,51 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8145781FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015B8578204
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234718AbiGRMQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S233960AbiGRMRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234697AbiGRMQZ (ORCPT
+        with ESMTP id S234526AbiGRMRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:16:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47B219C2C
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:16:24 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oDPfj-0006Vm-1w; Mon, 18 Jul 2022 14:16:23 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oDPfi-001i4a-BF; Mon, 18 Jul 2022 14:16:22 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oDPfh-005xWL-MB; Mon, 18 Jul 2022 14:16:21 +0200
-Date:   Mon, 18 Jul 2022 14:16:18 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 7/8] interconnect: Make icc_provider_del() return void
-Message-ID: <20220718121618.rpagy3vinzgdokxa@pengutronix.de>
-References: <20220715203652.89912-1-u.kleine-koenig@pengutronix.de>
- <20220715203652.89912-8-u.kleine-koenig@pengutronix.de>
- <7bd4f2fb-70ce-3724-130f-f5c75ee7bde2@kernel.org>
+        Mon, 18 Jul 2022 08:17:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A08F23BD6;
+        Mon, 18 Jul 2022 05:17:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D17AB81023;
+        Mon, 18 Jul 2022 12:17:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0B58C341CA;
+        Mon, 18 Jul 2022 12:17:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658146663;
+        bh=gSPYWrtefh7o03UpmnZKwVHqMxMyAtwC8qIBKGeufeI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m8xejPDZ1kQwRV7Cf1tvbT3QWcvA20KhW8Whv3AKt6rr/flPsl704hex+bWYewvGJ
+         JwBqo8NLrk7XFA2z5jQD2e1PrxPbSumTWD1irct0JhXnGG9J4qkR/CVlmVZgaV1fe8
+         fhbShZBqT4f1IHmn6zNfQdKqgZHwuMK2hjpAoGkCqjwkeRFzd+rAOP3B7377cjSypK
+         Z4qugd4t9bsfaPYmj6mWVGadyG8HN99xwFKv36b4YQPnqW3XZZi1m8CnztLN1UbhaY
+         wACpbI/r9lQJ6fJAArujGLzFasj4GT56IgMjRCsDNQJP02w85OJ0OMpsbQVuqTDqU3
+         mAUoi+EEZG+MQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oDPgt-0005sM-Rd; Mon, 18 Jul 2022 14:17:36 +0200
+Date:   Mon, 18 Jul 2022 14:17:35 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 00/30] phy: qcom,qmp: fix dt-bindings and deprecate
+ lane suffix
+Message-ID: <YtVPX2WHKU61MTo5@hovoldconsulting.com>
+References: <20220714124333.27643-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qrigaio6mwohcagq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7bd4f2fb-70ce-3724-130f-f5c75ee7bde2@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220714124333.27643-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,125 +64,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 14, 2022 at 02:43:03PM +0200, Johan Hovold wrote:
+> When adding support for SC8280XP to the QMP PHY driver I noticed that
+> the PHY provider child node was not described by the current DT schema.
+> 
+> The SC8280XP PHYs also need a second fixed-divider PIPE clock
+> ("pipediv2") and I didn't want to have to add a bogus "lane" suffix to
+> the clock name just to match the current "pipe0" name so I decided to
+> deprecate the unnecessary suffix in the current binding instead.
+> 
+> To be able to add the missing child-node schema and handle device
+> specifics like additional PIPE clocks, it quickly became obvious that
+> the binding needs to be split up.
+> 
+> This series clean up and fixes some issue with the current schema before
+> splitting it up in separate schemas for PCIe, UFS and USB and adding
+> missing parts like the child PHY provider nodes.
+> 
+> The MSM8996 PCIe PHY gets its own schema as this is the only non-combo
+> PHY that actually provides more than one PHY per IP block. Note that the
+> "lane" suffix is still unnecessary and misleading.
+> 
+> The final patches add support for the updated binding to the (recently
+> split up) PHY drivers. Included is also a related combo PHY cleanup.
 
---qrigaio6mwohcagq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Vinod,
 
-On Mon, Jul 18, 2022 at 12:10:34PM +0300, Georgi Djakov wrote:
->=20
-> Hi Uwe,
->=20
-> Thanks for the patchset!
->=20
-> On 15.07.22 23:36, Uwe Kleine-K=F6nig wrote:
-> > All users ignore the return value of icc_provider_del(). Consequently
-> > make it not return an error code.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> >   drivers/interconnect/core.c           | 10 +++-------
-> >   include/linux/interconnect-provider.h |  2 +-
-> >   2 files changed, 4 insertions(+), 8 deletions(-)
-> >=20
-> > diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> > index 808f6e7a8048..25debded65a8 100644
-> > --- a/drivers/interconnect/core.c
-> > +++ b/drivers/interconnect/core.c
-> > @@ -1057,29 +1057,25 @@ EXPORT_SYMBOL_GPL(icc_provider_add);
-> >   /**
-> >    * icc_provider_del() - delete previously added interconnect provider
-> >    * @provider: the interconnect provider that will be removed from top=
-ology
-> > - *
-> > - * Return: 0 on success, or an error code otherwise
-> >    */
-> > -int icc_provider_del(struct icc_provider *provider)
-> > +void icc_provider_del(struct icc_provider *provider)
-> >   {
-> >   	mutex_lock(&icc_lock);
-> >   	if (provider->users) {
-> >   		pr_warn("interconnect provider still has %d users\n",
-> >   			provider->users);
-> >   		mutex_unlock(&icc_lock);
-> > -		return -EBUSY;
-> > +		return;
-> >   	}
->=20
-> Looks like provider->users is now useless, so we should remove it. But th=
-at
-> could be a separate clean-up.
+any chance of getting these into 5.20?
 
-Well, it's still used to emit the warning. If this can trigger there is
-indeed a problem though. If there are still users, they should hold a
-reference to the device preventing its release.
+Note that there'll be an -rc8 on Sunday.
 
-> >   	if (!list_empty(&provider->nodes)) {
-> >   		pr_warn("interconnect provider still has nodes\n");
-> >   		mutex_unlock(&icc_lock);
-> > -		return -EBUSY;
-> > +		return;
-> >   	}
-> >   	list_del(&provider->provider_list);
-> >   	mutex_unlock(&icc_lock);
-> > -
-> > -	return 0;
-> >   }
-> >   EXPORT_SYMBOL_GPL(icc_provider_del);
-> > diff --git a/include/linux/interconnect-provider.h b/include/linux/inte=
-rconnect-provider.h
-> > index 6bd01f7159c6..191f083d1f3b 100644
-> > --- a/include/linux/interconnect-provider.h
-> > +++ b/include/linux/interconnect-provider.h
-> > @@ -123,7 +123,7 @@ void icc_node_add(struct icc_node *node, struct icc=
-_provider *provider);
-> >   void icc_node_del(struct icc_node *node);
-> >   int icc_nodes_remove(struct icc_provider *provider);
-> >   int icc_provider_add(struct icc_provider *provider);
-> > -int icc_provider_del(struct icc_provider *provider);
-> > +void icc_provider_del(struct icc_provider *provider);
-> >   struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args=
- *spec);
-> >   void icc_sync_state(struct device *dev);
->=20
-> We should also squash the following:
->=20
-> --- a/include/linux/interconnect-provider.h
-> +++ b/include/linux/interconnect-provider.h
-> @@ -172,7 +172,7 @@ static inline int icc_provider_add(struct icc_provide=
-r *provider)
->  	return -ENOTSUPP;
->  }
->=20
-> -static inline int icc_provider_del(struct icc_provider *provider)
-> +static inline void icc_provider_del(struct icc_provider *provider)
->  {
->  	return -ENOTSUPP;
->  }
-
-Sent a v2 with this change (and also removed the return statement).
-
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---qrigaio6mwohcagq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLVTw8ACgkQwfwUeK3K
-7AlgaQf/YQ7Rlm1PuTAUzeYj/3/wPqSWlFti8aneEGYZgWJJ+iUMHr/pGtlbfXcD
-QpFrCgYd36+g12jHddOV8zz5inPSyArQSjg34Vgs3lyWsdPYi9O3Kex49ht7SnOW
-YKLl+zD/jIB1RayidwBoRE2cPzXZAdERrXy9vI9LR6lSQKluCDvJEPqfDWIzSXgB
-k/mnHwhGwcg5BScnOh9rWkasFkqxMSwCVIx43CFaYmG1S/ykLAErzxBXDRUyUlSq
-b3+pmqInTaJQDYR8xkhoBLn4wkS52e01e8EV7t501CPJbkpnn5/oyNmUOjKIbRoM
-/XqT/KuSugVftsGc96nrCWZnj6brpw==
-=72Cu
------END PGP SIGNATURE-----
-
---qrigaio6mwohcagq--
+Johan

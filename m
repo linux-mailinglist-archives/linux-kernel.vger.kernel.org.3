@@ -2,86 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BFA577E5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3F8577E5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233966AbiGRJJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
+        id S234068AbiGRJKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233694AbiGRJJm (ORCPT
+        with ESMTP id S230491AbiGRJKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:09:42 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353FEB56
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:09:41 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id l23so20049631ejr.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:09:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mdf5q/qVt50lKlbFg9riuF5UqJk6aS++kMHubLi94hU=;
-        b=MyxoSBCz0+4WmzKije06wMMGwlLZnAyOl7DaKvuVIq+B8RQDKReiWmBYgLWrS/REsl
-         r9JB5KFrkHjbbD5Y9e0fKF0myB7/l7z0daobfSOEjZkRqILEa4cJj4vH8ILfqblaZHzh
-         IK7u3wmNUUziPzBJ/15x85nDjmwc7fqqKdXhL7WqVncz9FyWfrfrmzrMEOJhoZ+CLNWR
-         aJOTamW5Ch1XOP3R6aa9FafC7UN7Mvl7sFRvB/fzmxtYAQ1xRfGvokf0+dPOGTIuPbUB
-         f4grt/7hizM1GYX6XUscwQaKRqKBXQDaBKq0CFN3UrlZpC8dFhpWViORoUkC88Osv5Hc
-         T8tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mdf5q/qVt50lKlbFg9riuF5UqJk6aS++kMHubLi94hU=;
-        b=n1YjlRyHZn/xpdJ0a9dIuksThvEpYJK4AcKnD0R6xPINPC6AyGEX5+XyepnxxMfNYS
-         sYXDAtMXtR3bTmNFjexKORlezLTgT1lgJQc41IHC0ANFD2CPbN65GmsI6CdYJkpn7a65
-         lVBek9klPILDqQr8lYa6IyrOaIqbRrN9BU2NOs0RiRTh1Uyu4Q7vLIr/678LRuaehtrf
-         nlIutxkNXOKvOoMSh5LTM5E6Q5Oe13hEOX2jy9NsPJ6DUzYlA8+p21uT6qeE3EivNrii
-         iB39jgsESY4xbSgMOMeEdAFh9hknp/23MvLG5YY2cNTUo2+Pc4Ba3yhClM4M0kv1JNZW
-         VLXw==
-X-Gm-Message-State: AJIora8/pDPmmRBC7UWe2cjyhlQbot47o4g8UD7AN4czm5I2OKqt75nG
-        Wz0HkXEKCSmmAq+RD+yZa9Jt6RHATVD0ZWUm81dS1g==
-X-Google-Smtp-Source: AGRyM1uJqUvLGFX0HYNi7EiX1iff2QTsdFUBsk5ZFgYQlM7pHNjwdtj5TFwxgatScxITOJKZKA/rEeMAD3KXPgHUpfc=
-X-Received: by 2002:a17:907:1ddd:b0:72b:49ff:d39e with SMTP id
- og29-20020a1709071ddd00b0072b49ffd39emr25082012ejc.500.1658135379803; Mon, 18
- Jul 2022 02:09:39 -0700 (PDT)
+        Mon, 18 Jul 2022 05:10:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E225F58;
+        Mon, 18 Jul 2022 02:10:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA8CAB8107E;
+        Mon, 18 Jul 2022 09:10:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A91C341C0;
+        Mon, 18 Jul 2022 09:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658135439;
+        bh=o1w/414mT/mu4Ne8x1FYZpKVbby4IR+rfL+Mp7Ca0zQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=d43HkvOwZ+XvpcGhTj41nlophjfoP6HEXuATshkV/7XTgG98QQORD0D1UqmZzSSaK
+         fCGZk8/hobxTJ+ks00S4I+EsbyKm9dvDvy+BdlaNpyf3Ao/RFCMVsVr0tIdWJPaY6A
+         mkGiuG0u2aenLfPHtw8GGf1kdE19r9jUpH9ii+46IIu9okQxfClxuKrM1UdG8j5z2v
+         bVR+mgQZGKjuxksFLQNqBIezt63z586UUPQAkbeNE0cUjkkT/wBmQZ4NZrC6fZIHLh
+         tVgRBVEowFC0CMb8uXc4stAT01ofvi22Tp/fmNfYlPqq//M5HmRqRyRwmqgHub6j2R
+         nZk8zb7jIevYg==
+Message-ID: <7bd4f2fb-70ce-3724-130f-f5c75ee7bde2@kernel.org>
+Date:   Mon, 18 Jul 2022 12:10:34 +0300
 MIME-Version: 1.0
-References: <20220712021527.109921-1-lihuafei1@huawei.com> <20220712021527.109921-5-lihuafei1@huawei.com>
-In-Reply-To: <20220712021527.109921-5-lihuafei1@huawei.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 18 Jul 2022 11:09:18 +0200
-Message-ID: <CACRpkdaF4UXuiH_4StWZLwhrC8H7Le9rbnRtHYaRLrJ+fQT2_g@mail.gmail.com>
-Subject: Re: [PATCH 4/5] ARM: stacktrace: Make stack walk callback consistent
- with generic code
-To:     Li Huafei <lihuafei1@huawei.com>
-Cc:     linux@armlinux.org.uk, rmk+kernel@armlinux.org.uk, ardb@kernel.org,
-        will@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, arnd@arndb.de, rostedt@goodmis.org,
-        nick.hawkins@hpe.com, john@phrozen.org, mhiramat@kernel.org,
-        ast@kernel.org, linyujun809@huawei.com, ndesaulniers@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH 7/8] interconnect: Make icc_provider_del() return void
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220715203652.89912-1-u.kleine-koenig@pengutronix.de>
+ <20220715203652.89912-8-u.kleine-koenig@pengutronix.de>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20220715203652.89912-8-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 4:19 AM Li Huafei <lihuafei1@huawei.com> wrote:
 
-> In order to use generic arch_stack_walk() code, make stack walk callback
-> consistent with it.
->
-> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+Hi Uwe,
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Thanks for the patchset!
 
-Yours,
-Linus Walleij
+On 15.07.22 23:36, Uwe Kleine-König wrote:
+> All users ignore the return value of icc_provider_del(). Consequently
+> make it not return an error code.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>   drivers/interconnect/core.c           | 10 +++-------
+>   include/linux/interconnect-provider.h |  2 +-
+>   2 files changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 808f6e7a8048..25debded65a8 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -1057,29 +1057,25 @@ EXPORT_SYMBOL_GPL(icc_provider_add);
+>   /**
+>    * icc_provider_del() - delete previously added interconnect provider
+>    * @provider: the interconnect provider that will be removed from topology
+> - *
+> - * Return: 0 on success, or an error code otherwise
+>    */
+> -int icc_provider_del(struct icc_provider *provider)
+> +void icc_provider_del(struct icc_provider *provider)
+>   {
+>   	mutex_lock(&icc_lock);
+>   	if (provider->users) {
+>   		pr_warn("interconnect provider still has %d users\n",
+>   			provider->users);
+>   		mutex_unlock(&icc_lock);
+> -		return -EBUSY;
+> +		return;
+>   	}
+
+Looks like provider->users is now useless, so we should remove it. But that could be a separate 
+clean-up.
+
+>   
+>   	if (!list_empty(&provider->nodes)) {
+>   		pr_warn("interconnect provider still has nodes\n");
+>   		mutex_unlock(&icc_lock);
+> -		return -EBUSY;
+> +		return;
+>   	}
+>   
+>   	list_del(&provider->provider_list);
+>   	mutex_unlock(&icc_lock);
+> -
+> -	return 0;
+>   }
+>   EXPORT_SYMBOL_GPL(icc_provider_del);
+>   
+> diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
+> index 6bd01f7159c6..191f083d1f3b 100644
+> --- a/include/linux/interconnect-provider.h
+> +++ b/include/linux/interconnect-provider.h
+> @@ -123,7 +123,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider);
+>   void icc_node_del(struct icc_node *node);
+>   int icc_nodes_remove(struct icc_provider *provider);
+>   int icc_provider_add(struct icc_provider *provider);
+> -int icc_provider_del(struct icc_provider *provider);
+> +void icc_provider_del(struct icc_provider *provider);
+>   struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec);
+>   void icc_sync_state(struct device *dev);
+
+We should also squash the following:
+
+--- a/include/linux/interconnect-provider.h
++++ b/include/linux/interconnect-provider.h
+@@ -172,7 +172,7 @@ static inline int icc_provider_add(struct icc_provider *provider)
+  	return -ENOTSUPP;
+  }
+
+-static inline int icc_provider_del(struct icc_provider *provider)
++static inline void icc_provider_del(struct icc_provider *provider)
+  {
+  	return -ENOTSUPP;
+  }
+
+Thanks,
+Georgi

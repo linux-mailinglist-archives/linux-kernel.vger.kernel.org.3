@@ -2,103 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32269577F80
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE15577F87
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233907AbiGRKTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 06:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
+        id S234028AbiGRKUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 06:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiGRKTv (ORCPT
+        with ESMTP id S233940AbiGRKUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:19:51 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A411C901;
-        Mon, 18 Jul 2022 03:19:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ijs/RSv7qHQbvm9v+Fy+Qzb4VPBB1zdP6a7q0FZ2hyY=; b=mMUTuFO2xqKNFtna0kmQNGmRa+
-        WQr6Gj2zDbk2LspuJH11pLa6ym0tcz0Ptv/eQ5EbMRdIqykF6+pi5NX/WeqNHzIW5QlUaAVHRMKkn
-        MrfgUjKSDUZ2WFBi8cOnM/rxYytl7+sk6K6zWdO+n78+VU/wBimLTaZyUBJ22l5P7zmiN7TyYXsMH
-        gOtvcXXNpFNDbeTpzoB3jfJIgeeUHAerDtDX1FpOfaFHaEqzFWja7M5rmLlTeACcYrdsDFL/ScYiJ
-        Qqj7OWkWp42t++1844ZuMsPoXFb5tPRpaTo0lmPJtB2Aout9jPZRjJvXyAc3evas6rGs7IuOQIx8i
-        WZXQuiRA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oDNql-00CbGs-Kd; Mon, 18 Jul 2022 10:19:39 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 390EA980226; Mon, 18 Jul 2022 12:19:39 +0200 (CEST)
-Date:   Mon, 18 Jul 2022 12:19:39 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tariq Toukan <tariqt@nvidia.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] sched/topology: Expose
- sched_numa_find_closest
-Message-ID: <YtUzu4d9F+V621tw@worktop.programming.kicks-ass.net>
-References: <20220717052301.19067-1-tariqt@nvidia.com>
- <20220717052301.19067-2-tariqt@nvidia.com>
+        Mon, 18 Jul 2022 06:20:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B3E1CB0E;
+        Mon, 18 Jul 2022 03:20:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A767B8109E;
+        Mon, 18 Jul 2022 10:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1CD87C341CE;
+        Mon, 18 Jul 2022 10:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658139613;
+        bh=E6qUE/0FVI0925eqyIBrCUBMqK+zwWphena0m6VhbnE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=OXZHYC+qEMDbyEcHGefefVFx5QQEh19SO3NL1NUvgctLhdghYRDVb9FY035wu/N+O
+         6u6vYyd+HGT+B4XfoPk0KftlyAiu7yvGfNYsGoaFFVUJoi0UujqsNPMXSgy8cv1l63
+         8uxlKTvqrjlgx5v5I4amneLgPlkvK2rrxgqG/cUulwCxCDZVjfYTx5FevIm7bprTs4
+         w4LjLt3jiGqRXAjK1pwEfSQcC/gjsiqFNtHl2bIAIK3avwbb7PnS0TMyX6f2oIKXEX
+         dpT2g+hYqJAD6zl+WgvR/xX42fSQGIstkL2sNApHO04H1X9iO36z2WzNTqiQHk7rYL
+         +yvHBh5D2/5Bw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 01866E451AD;
+        Mon, 18 Jul 2022 10:20:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220717052301.19067-2-tariqt@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 1/1] net: stmmac: switch to use interrupt for hw
+ crosstimestamping
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165813961300.9736.8038169452034701746.git-patchwork-notify@kernel.org>
+Date:   Mon, 18 Jul 2022 10:20:13 +0000
+References: <20220714075428.1060984-1-vee.khee.wong@linux.intel.com>
+In-Reply-To: <20220714075428.1060984-1-vee.khee.wong@linux.intel.com>
+To:     Wong Vee Khee <vee.khee.wong@linux.intel.com>
+Cc:     davem@davemloft.net, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        kuba@kernel.org, mcoquelin.stm32@gmail.com, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        richardcochran@gmail.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 08:23:00AM +0300, Tariq Toukan wrote:
-> This logic can help device drivers prefer some remote cpus
-> over others, according to the NUMA distance metrics.
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 14 Jul 2022 15:54:27 +0800 you wrote:
+> Using current implementation of polling mode, there is high chances we
+> will hit into timeout error when running phc2sys. Hence, update the
+> implementation of hardware crosstimestamping to use the MAC interrupt
+> service routine instead of polling for TSIS bit in the MAC Timestamp
+> Interrupt Status register to be set.
 > 
-> Reviewed-by: Gal Pressman <gal@nvidia.com>
-> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-> ---
->  include/linux/sched/topology.h | 2 ++
->  kernel/sched/topology.c        | 1 +
->  2 files changed, 3 insertions(+)
+> Cc: Richard Cochran <richardcochran@gmail.com>
+> Signed-off-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
 > 
-> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-> index 56cffe42abbc..d467c30bdbb9 100644
-> --- a/include/linux/sched/topology.h
-> +++ b/include/linux/sched/topology.h
-> @@ -61,6 +61,8 @@ static inline int cpu_numa_flags(void)
->  {
->  	return SD_NUMA;
->  }
-> +
-> +int sched_numa_find_closest(const struct cpumask *cpus, int cpu);
->  #endif
->  
->  extern int arch_asym_cpu_priority(int cpu);
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index 05b6c2ad90b9..688334ac4980 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -2066,6 +2066,7 @@ int sched_numa_find_closest(const struct cpumask *cpus, int cpu)
->  
->  	return found;
->  }
-> +EXPORT_SYMBOL(sched_numa_find_closest);
+> [...]
 
-EXPORT_SYMBOL_GPL() if anything.
+Here is the summary with links:
+  - [1/1] net: stmmac: switch to use interrupt for hw crosstimestamping
+    https://git.kernel.org/netdev/net/c/76c16d3e1944
 
-Also, this thing will be subject to sched_domains, that means that if
-someone uses cpusets or other means to partition the machine, that
-effects the result.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Is that what you want?
+

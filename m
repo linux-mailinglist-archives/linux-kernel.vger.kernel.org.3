@@ -2,209 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8628577EEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4355B577EF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234247AbiGRJrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
+        id S234257AbiGRJt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233917AbiGRJrt (ORCPT
+        with ESMTP id S234221AbiGRJtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:47:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD9281AF16
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:47:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F33031042;
-        Mon, 18 Jul 2022 02:47:48 -0700 (PDT)
-Received: from [10.32.33.51] (e121896.warwick.arm.com [10.32.33.51])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 68D643F70D;
-        Mon, 18 Jul 2022 02:47:47 -0700 (PDT)
-Message-ID: <9a5359f1-84e3-c436-b8d9-1f3c356f8804@arm.com>
-Date:   Mon, 18 Jul 2022 10:47:46 +0100
+        Mon, 18 Jul 2022 05:49:25 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F28B2FE
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:49:23 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-31cf1adbf92so101091167b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:49:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SW/5uuPhfEIiVcFOfH8vJMrT6q6SXd8wiWSNhlWVZXE=;
+        b=yzDwRyaJYFlLD4KeR1jik570FoO+psDVavgR6382KBUsTWFF27tRs7D/1LwT+HWJjT
+         mDwjVM11MqgWhebI3orsvkCbbf2YP1wtIhQzDKUjD5BSOOBjO5AIHhhORzCbJMC7BiYS
+         gbgcKcBOUcarwDFW48tUxVcfkQKjoOJDB4GlHkG3YVk4r20YIfiF+bOuFKVS0k+Fc4Wc
+         o3b0kT/hRM1PkrLNjtK22jrtMiF50msOUsJ2ckaOm0IQH+kug8RmFM2Bsnuyh6PuUCw+
+         4kkK2pxWY0/C9h0kC3MTVzzTBzR1x/BmWQVDfIzgnkAYK/WbhpBlOiG6ouABV4qkL/zZ
+         RE4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SW/5uuPhfEIiVcFOfH8vJMrT6q6SXd8wiWSNhlWVZXE=;
+        b=Ir7iyy2lq2T7kLx0IrKuMaYDRoMFtggEyLRN7SjJnUgNMVuoJV2oPiIap8Uiy6b1ii
+         P7csnUeVX0EsgUPWOw39Ace5Fy0YqAssCnWtxSssjpdsdAXdkFMIfRhpMRU2gjeMRJGk
+         zz6ycVbq/WdQKf1+eBFI9QGWisY0eqyzjXXQQwalGoaGrM3aBYTjpzu47zrZrUoV2UtT
+         Mit5nRdsWT3crTE1d8sA9C6TSffQWfPzSKLDO6an8XK+3ey5Vrt0hYg7O5y6zzcabZDw
+         04m0OlrfHWo5dEsDDGf00BXv3+fVZVViTMqEPNPsOZHiHheOPHNla0/55OAq0yOavOMe
+         J9yw==
+X-Gm-Message-State: AJIora/1DpxagZJk357Jzggr1IxsLCPF2OTGjqrnrcsq+Xf1yX8I+FFe
+        cFWHG3XZclQl8a62XAnFLKJR6p7i2YPV6SpShD3G6g==
+X-Google-Smtp-Source: AGRyM1tzM5DcCUNp7Icsn2kKwLcC6+vNcmEZtwfuGcBZ0rm5Uh1mv4sFBP8itRqheGt0Ud9IOxM3/h2NPr9YzaYmmsA=
+X-Received: by 2002:a0d:e885:0:b0:31c:e456:c054 with SMTP id
+ r127-20020a0de885000000b0031ce456c054mr29022869ywe.299.1658137762876; Mon, 18
+ Jul 2022 02:49:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3] drivers/perf: arm_spe: Fix consistency of
- SYS_PMSCR_EL1.CX
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     german.gomez@arm.com, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexey Budankov <alexey.budankov@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20220714061302.2715102-1-anshuman.khandual@arm.com>
- <9b2982f1-023a-3499-7e87-f00b5a689ae9@arm.com>
- <e3aef6fd-973b-d7ef-6d6a-10f9e8ac3b04@arm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <e3aef6fd-973b-d7ef-6d6a-10f9e8ac3b04@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
+ <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com> <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com>
+In-Reply-To: <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 18 Jul 2022 11:49:11 +0200
+Message-ID: <CACRpkdb4qZSUNhEjRRJi=5H-GvBi_h-0BAfDHJct5SjLKZSc3g@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Max Krummenacher <max.oss.09@gmail.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 13, 2022 at 1:44 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 
+> > > IIRC this led to problems because we had to invent "atomic regulators"
+> > > because regulators use kernel abstractions that assume slowpath
+> > > (process context) and power domains does not, i.e. they execute in
+> > > fastpath, such as an interrupt handler.
+>
+> This isn't entirely correct. The callbacks of a genpd, *may* execute
+> in atomic context, but that depends on whether the GENPD_FLAG_IRQ_SAFE
+> is set for it or not.
+>
+> Similar to what we have for runtime PM callbacks, with pm_runtime_irq_safe().
 
-On 18/07/2022 10:42, Suzuki K Poulose wrote:
-> Hi James
-> 
-> On 18/07/2022 10:30, James Clark wrote:
->>
->>
->> On 14/07/2022 07:13, Anshuman Khandual wrote:
->>> The arm_spe_pmu driver will enable SYS_PMSCR_EL1.CX in order to add CONTEXT
->>> packets into the traces, if the owner of the perf event runs with required
->>> capabilities i.e CAP_PERFMON or CAP_SYS_ADMIN via perfmon_capable() helper.
->>>
->>> The value of this bit is computed in the arm_spe_event_to_pmscr() function
->>> but the check for capabilities happens in the pmu event init callback i.e
->>> arm_spe_pmu_event_init(). This suggests that the value of the CX bit should
->>> remain consistent for the duration of the perf session.
->>>
->>> However, the function arm_spe_event_to_pmscr() may be called later during
->>> the event start callback i.e arm_spe_pmu_start() when the "current" process
->>> is not the owner of the perf session, hence the CX bit setting is currently
->>> not consistent.
->>>
->>> One way to fix this, is by caching the required value of the CX bit during
->>> the initialization of the PMU event, so that it remains consistent for the
->>> duration of the session. It uses currently unused 'event->hw.flags' element
->>> to cache perfmon_capable() value, which can be referred during event start
->>> callback to compute SYS_PMSCR_EL1.CX. This ensures consistent availability
->>> of context packets in the trace as per event owner capabilities.
->>>
->>> Drop BIT(SYS_PMSCR_EL1_CX_SHIFT) check in arm_spe_pmu_event_init(), because
->>> now CX bit cannot be set in arm_spe_event_to_pmscr() with perfmon_capable()
->>> disabled.
->>>
->>> Cc: Will Deacon <will@kernel.org>
->>> Cc: Mark Rutland <mark.rutland@arm.com>
->>> Cc: Alexey Budankov <alexey.budankov@linux.intel.com>
->>> Cc: linux-arm-kernel@lists.infradead.org
->>> Cc: linux-kernel@vger.kernel.org
->>> Fixes: cea7d0d4a59b ("drivers/perf: Open access for CAP_PERFMON privileged process")
->>> Reported-by: German Gomez <german.gomez@arm.com>
->>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>> ---
->>> Changes in V3:
->>>
->>> - Moved set_spe_event_has_cx() before arm_spe_event_to_pmscr()
->>> - Reinstated perfmon_capable() back in arm_spe_pmu_event_init()
->>> - Dropped BIT(SYS_PMSCR_EL1_CX_SHIFT) check in arm_spe_pmu_event_init()
->>> - Updated the commit message
->>>   Changes in V2:
->>>
->>> https://lore.kernel.org/all/20220713085925.2627533-1-anshuman.khandual@arm.com/
->>>
->>> - Moved CONFIG_PID_IN_CONTEXTIDR config check inside the helper per Suzuki
->>> - Changed the comment per Suzuki
->>> - Renamed the helpers Per Suzuki
->>> - Added "Fixes: " tag per German
->>>
->>> Changes in V1:
->>>
->>> https://lore.kernel.org/all/20220712051404.2546851-1-anshuman.khandual@arm.com/
->>>
->>>
->>>   drivers/perf/arm_spe_pmu.c | 22 ++++++++++++++++++++--
->>>   1 file changed, 20 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
->>> index db670b265897..b65a7d9640e1 100644
->>> --- a/drivers/perf/arm_spe_pmu.c
->>> +++ b/drivers/perf/arm_spe_pmu.c
->>> @@ -39,6 +39,24 @@
->>>   #include <asm/mmu.h>
->>>   #include <asm/sysreg.h>
->>>   +/*
->>> + * Cache if the event is allowed to trace Context information.
->>> + * This allows us to perform the check, i.e, perfmon_capable(),
->>> + * in the context of the event owner, once, during the event_init().
->>> + */
->>> +#define SPE_PMU_HW_FLAGS_CX            BIT(0)
->>> +
->>> +static void set_spe_event_has_cx(struct perf_event *event)
->>> +{
->>> +    if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
->>> +        event->hw.flags |= SPE_PMU_HW_FLAGS_CX;
->>> +}
->>> +
->>> +static bool get_spe_event_has_cx(struct perf_event *event)
->>> +{
->>> +    return !!(event->hw.flags & SPE_PMU_HW_FLAGS_CX);
->>> +}
->>> +
->>>   #define ARM_SPE_BUF_PAD_BYTE            0
->>>     struct arm_spe_pmu_buf {
->>> @@ -272,7 +290,7 @@ static u64 arm_spe_event_to_pmscr(struct perf_event *event)
->>>       if (!attr->exclude_kernel)
->>>           reg |= BIT(SYS_PMSCR_EL1_E1SPE_SHIFT);
->>>   -    if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
->>> +    if (get_spe_event_has_cx(event))
->>>           reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
->>>         return reg;
->>> @@ -709,10 +727,10 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
->>>           !(spe_pmu->features & SPE_PMU_FEAT_FILT_LAT))
->>>           return -EOPNOTSUPP;
->>>   +    set_spe_event_has_cx(event);
->>>       reg = arm_spe_event_to_pmscr(event);
->>>       if (!perfmon_capable() &&
->>>           (reg & (BIT(SYS_PMSCR_EL1_PA_SHIFT) |
->>> -            BIT(SYS_PMSCR_EL1_CX_SHIFT) |
->>
->> The first part of the change looks ok, but I'm not sure about this removal here.
->>
->> Doesn't this mean that if you ask for context data when opening the event
->> without permission you don't get an error returned any more? It just silently
->> ignores it.
-> 
-> How do you ask for context data with SPE ? If there was a way, we don't
-> need this caching. The CX bit is set unconditionally on perfmon_capable() and is not controlled by an attribute. Ideally it is
-> better to switch to an attribute. But given that it was never there,
-> I wonder if this would be a problem for the existing perf users ?
+Aha I stand corrected!
 
-Oh yes sorry I thought one of those lines was checking the bit from the user
-request, but you are right it's unconditional. So this point should be dropped.
+> > > The atomic regulator was a subset of regulator that only handled
+> > > regulators that would result in something like an atomic register write.
+> > >
+> > > In the end it was not worth trying to upstream this approach, and
+> > > as I remember it, Ulf Hansson intended to let the power domains poke
+> > > these registers directly, which was easier. (It's on Ulfs TODO list to
+> > > actually implement this, hehe.)
+>
+> Yep, unfortunately I never got to the point. However, poking the
+> registers directly from the genpd provider's on/off callbacks has
+> never been my plan.
+>
+> Instead I would rather expect us to call into a Ux500 specific
+> interface for the prcmu FW. Simply because it's not really a regulator
+> and must not be modelled like it. Instead it is a voltage/frequency
+> domain that is managed behind a FW interface.
 
-I don't think it's actually a problem currently.
-> 
-> 
->>
->> That changes the semantics of the perf event open call and I don't see why that's
->> needed to fix the issue about only checking the permissions of the owning process.
->> At least it seems like a separate unrelated change.
->>
->> It's also worth noting that the value doesn't need to be cached, and another
->> one line solution is just to check the permissions of the owning process. This
->> avoids duplicating something that is already saved, will survive any future
->> refactors of the permissions system, and doesn't use up space in hw_flags:
->>
->>     if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) &&
->>         (has_capability(event->owner, CAP_PERFMON) || has_capability(event->owner, CAP_SYS_ADMIN)))
->>     {
->>     reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
->>     }
-> 
-> We don't use any bits in the hw_events for SPE. So using a bit for storing something doesn't seem to be a wasted effort. Any future
-> refactors to the permission system would need to take care of the
-> current users. So that argument is not valid in either case.
+We should take a stab at this, PostmarketOS just added support
+for three more U8500 phones so they support all the Samsung models
+and we have actual users of these systems. I think this would save
+them quite a lot of power. Also I use these targets for a lot of
+misc testing (like Kasan etc).
 
-I'm just thinking that if you can get something from existing data without
-saving something new, and do it in fewer lines, then it's more readable.
-
-Maybe the refactor argument is less strong. Either way, with my previous
-point dropped the patch is functionally the same to my suggestion so I
-don't have any strong feelings about this one.
-
-> 
-> Cheers
-> Suzuki
+Yours,
+Linus Walleij

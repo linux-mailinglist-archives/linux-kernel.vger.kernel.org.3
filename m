@@ -2,109 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860CF577C24
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD53577C27
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbiGRHFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
+        id S233728AbiGRHGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233728AbiGRHFd (ORCPT
+        with ESMTP id S233721AbiGRHGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:05:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F5917594
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:05:32 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1oDKog-00044T-6h; Mon, 18 Jul 2022 09:05:18 +0200
-Message-ID: <827f51b1-b280-3c99-241c-20af750277ba@pengutronix.de>
-Date:   Mon, 18 Jul 2022 09:05:16 +0200
+        Mon, 18 Jul 2022 03:06:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EDD2101EF
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658127960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2AXYS7uCk/tVowuSjgrZBEKhXee01EBJjWQb+hibTD4=;
+        b=iYGUd4O1C60XqQF3eTz7YnNBpUzY0MRjn+BRjxaO3+hEXg/PUrRa6MSV8VseBaCqCnqZsP
+        9Mb8l2ryOaJE+MI6XJFAPgJbvEfclsm0yh+1Z1JCbl2gqGP5C3a2DqiasXNE9kC2lahc2d
+        3KQWwcCFSOr0FRwOym80eiucGhYVIzA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-529-eIbNc7lmMPml5dtWSslBaQ-1; Mon, 18 Jul 2022 03:05:55 -0400
+X-MC-Unique: eIbNc7lmMPml5dtWSslBaQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AB28C1019C8E;
+        Mon, 18 Jul 2022 07:05:54 +0000 (UTC)
+Received: from dreadlord.bne.redhat.com (fdacunha.bne.redhat.com [10.64.0.157])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 204F42026D64;
+        Mon, 18 Jul 2022 07:05:51 +0000 (UTC)
+From:   Dave Airlie <airlied@redhat.com>
+To:     torvalds@linux-foundation.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, gregkh@linuxfoundation.org,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.sf.net,
+        Dave Airlie <airlied@redhat.com>
+Subject: [PATCH] docs: driver-api: firmware: add driver firmware guidelines.
+Date:   Mon, 18 Jul 2022 17:05:48 +1000
+Message-Id: <20220718070548.2699395-1-airlied@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V3 2/3] arm64: dts: imx8ulp: Add the fec support
-Content-Language: en-US
-To:     wei.fang@nxp.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     aisheng.dong@nxp.com, devicetree@vger.kernel.org, peng.fan@nxp.com,
-        ping.bai@nxp.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        kernel@pengutronix.de, sudeep.holla@arm.com, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20220718142257.556248-1-wei.fang@nxp.com>
- <20220718142257.556248-3-wei.fang@nxp.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20220718142257.556248-3-wei.fang@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.07.22 16:22, wei.fang@nxp.com wrote:
-> From: Wei Fang <wei.fang@nxp.com>
-> 
-> Add the fec support on i.MX8ULP platforms.
-> 
-> Signed-off-by: Wei Fang <wei.fang@nxp.com>
+A recent snafu where Intel ignored upstream feedback on a firmware
+change, led to a late rc6 fix being required. In order to avoid this
+in the future we should document some expectations around
+linux-firmware.
 
-Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+I was originally going to write this for drm, but it seems quite generic
+advice.
 
-> ---
-> V2 change:
-> Remove the external clocks which is related to specific board.
-> V3 change:
-> No change.
-> ---
->  arch/arm64/boot/dts/freescale/imx8ulp.dtsi | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-> index 60c1b018bf03..3e8a1e4f0fc2 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-> @@ -16,6 +16,7 @@ / {
->  	#size-cells = <2>;
->  
->  	aliases {
-> +		ethernet0 = &fec;
->  		gpio0 = &gpiod;
->  		gpio1 = &gpioe;
->  		gpio2 = &gpiof;
-> @@ -365,6 +366,16 @@ usdhc2: mmc@298f0000 {
->  				bus-width = <4>;
->  				status = "disabled";
->  			};
-> +
-> +			fec: ethernet@29950000 {
-> +				compatible = "fsl,imx8ulp-fec", "fsl,imx6ul-fec", "fsl,imx6q-fec";
-> +				reg = <0x29950000 0x10000>;
-> +				interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
-> +				interrupt-names = "int0";
-> +				fsl,num-tx-queues = <1>;
-> +				fsl,num-rx-queues = <1>;
-> +				status = "disabled";
-> +			};
->  		};
->  
->  		gpioe: gpio@2d000080 {
+Signed-off-by: Dave Airlie <airlied@redhat.com>
+---
+ Documentation/driver-api/firmware/core.rst    |  1 +
+ .../firmware/firmware-usage-guidelines.rst    | 34 +++++++++++++++++++
+ 2 files changed, 35 insertions(+)
+ create mode 100644 Documentation/driver-api/firmware/firmware-usage-guidelines.rst
 
-
+diff --git a/Documentation/driver-api/firmware/core.rst b/Documentation/driver-api/firmware/core.rst
+index 1d1688cbc078..803cd574bbd7 100644
+--- a/Documentation/driver-api/firmware/core.rst
++++ b/Documentation/driver-api/firmware/core.rst
+@@ -13,4 +13,5 @@ documents these features.
+    direct-fs-lookup
+    fallback-mechanisms
+    lookup-order
++   firmware-usage-guidelines
+ 
+diff --git a/Documentation/driver-api/firmware/firmware-usage-guidelines.rst b/Documentation/driver-api/firmware/firmware-usage-guidelines.rst
+new file mode 100644
+index 000000000000..34d2412e78c6
+--- /dev/null
++++ b/Documentation/driver-api/firmware/firmware-usage-guidelines.rst
+@@ -0,0 +1,34 @@
++===================
++Firmware Guidelines
++===================
++
++Drivers that use firmware from linux-firmware should attempt to follow
++the rules in this guide.
++
++* Firmware should be versioned with at least a major/minor version. It
++  is suggested that the firmware files in linux-firmware be named with
++  some device specific name, and just the major version. The
++  major/minor/patch versions should be stored in a header in the
++  firmware file for the driver to detect any non-ABI fixes/issues. The
++  firmware files in linux-firmware should be overwritten with the newest
++  compatible major version. Newer major version firmware should remain
++  compatible with all kernels that load that major number.
++
++* Users should *not* have to install newer firmware to use existing
++  hardware when they install a newer kernel.  If the hardware isn't
++  enabled by default or under development, this can be ignored, until
++  the first kernel release that enables that hardware.  This means no
++  major version bumps without the kernel retaining backwards
++  compatibility for the older major versions.  Minor version bumps
++  should not introduce new features that newer kernels depend on
++  non-optionally.
++
++* If a security fix needs lockstep firmware and kernel fixes in order to
++  be successful, then all supported major versions in the linux-firmware
++  repo should be updated with the security fix, and the kernel patches
++  should detect if the firmware is new enough to declare if the security
++  issue is fixed.  All communications around security fixes should point
++  at both the firmware and kernel fixes. If a security fix requires
++  deprecating old major versions, then this should only be done as a
++  last option, and be stated clearly in all communications.
++
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.36.1
+

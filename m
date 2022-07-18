@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DE657867B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC05578680
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235558AbiGRPfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 11:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S235597AbiGRPhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 11:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiGRPfw (ORCPT
+        with ESMTP id S234134AbiGRPhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 11:35:52 -0400
-Received: from smtpq1.tb.ukmail.iss.as9143.net (smtpq1.tb.ukmail.iss.as9143.net [212.54.57.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCE3BC81
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:35:51 -0700 (PDT)
-Received: from [212.54.57.107] (helo=csmtp3.tb.ukmail.iss.as9143.net)
-        by smtpq1.tb.ukmail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <zarniwhoop@ntlworld.com>)
-        id 1oDSmj-0007FO-Vz
-        for linux-kernel@vger.kernel.org; Mon, 18 Jul 2022 17:35:49 +0200
-Received: from llamedos.mydomain ([81.97.236.130])
-        by cmsmtp with ESMTPA
-        id DSmjoNpuq45FHDSmjowI7e; Mon, 18 Jul 2022 17:35:49 +0200
-X-SourceIP: 81.97.236.130
-X-Authenticated-Sender: zarniwhoop@ntlworld.com
-X-Spam: 0
-X-Authority: v=2.4 cv=e64V9Il/ c=1 sm=1 tr=0 ts=62d57dd5 cx=a_exe
- a=OGiDJHazYrvzwCbh7ZIPzQ==:117 a=OGiDJHazYrvzwCbh7ZIPzQ==:17
- a=IkcTkHD0fZMA:10 a=RgO8CyIxsXoA:10 a=zd2uoN0lAAAA:8 a=4XStSidSkjLePoVboTUA:9
- a=QEXdDO2ut3YA:10
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ntlworld.com;
-        s=meg.feb2017; t=1658158549;
-        bh=Re0gKM4VfIQOJwjWn6tHsiDwKiJQYs0aWH6W1FD15PY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=gcUpeJiR7N7eC8j6pJQaBd31PNU0EQS7cLYBAfF16suSjFgTAqHLoYG0TPKgHheWB
-         Yubl2gfz92RZE3p0pN5U4APu/1TstiSCNwKAd7RHAFkKql5Wc5Ty+NBTwIRHPifLLR
-         ET2R/D7pkXndW+kO1PC9PryoUgjqPudEfTkQHc7wTO4zdTRP0KtJVqIIgIU3Bs7tFl
-         8w5uzzaA9FGp0MB93dpDS5fFN59cdiqEhRdlNNyvN3SmJRMikVkIyDNOWzZFGbN5Sj
-         8/TRA5LXGNKFzfLdeqhDULBVWVfYxkRgBRaTh/CJoppaeQcMW2mjl/36h04cCJx/HB
-         jsSt5HirvpIVQ==
-Received: by llamedos.mydomain (Postfix, from userid 1000)
-        id 998748DB5C; Mon, 18 Jul 2022 16:35:49 +0100 (BST)
-Date:   Mon, 18 Jul 2022 16:35:49 +0100
-From:   Ken Moffat <zarniwhoop@ntlworld.com>
-To:     Alexandre Chartre <alexandre.chartre@oracle.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: Retbleed, Zen2 and STIBP
-Message-ID: <YtV91cuj/YAZ2k95@llamedos.localdomain>
-References: <YtUXda9ymAI0ED7n@llamedos.localdomain>
- <YtV1KT5l8KpoJWGT@localhost.localdomain>
+        Mon, 18 Jul 2022 11:37:12 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBADBC81;
+        Mon, 18 Jul 2022 08:37:10 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LmmHt66YzzlW4M;
+        Mon, 18 Jul 2022 23:35:22 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Jul 2022 23:37:02 +0800
+Message-ID: <b0e740c4-9630-c539-e811-a4ad93fcca5c@huawei.com>
+Date:   Mon, 18 Jul 2022 23:37:01 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Clacks-Overhead: GNU Terry Pratchett
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YtV1KT5l8KpoJWGT@localhost.localdomain>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-CMAE-Envelope: MS4xfMaG3l5YKsL1CAFyJJJs1Hja/9V8vSK6bQRG+j5COPqiH+Z1hj6Rz+1iIZD4+f85hDCK3kg+m3oDs+up2CTPzx4/l8KS821tjnve4MB90cWwSdlbm5R8
- o76oTUqjZIRlD5yakyU0Lka4gHiuPJ4SlPKY+GTOy8KQSlZpRQhONmYLq5cRWyFwC2nPL6CJFPpUSqeUUkJeDkwU6pdiEMrQD/jYDdFJGHuBLe3E4QKDrAiA
- bdFpsXOaoer4Z2wxYaOeuQ==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v9 3/4] bpf, arm64: Implement
+ bpf_arch_text_poke() for arm64
+Content-Language: en-US
+To:     Jon Hunter <jonathanh@nvidia.com>, <bpf@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Will Deacon <will@kernel.org>, KP Singh <kpsingh@kernel.org>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        James Morse <james.morse@arm.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>
+References: <20220711150823.2128542-1-xukuohai@huawei.com>
+ <20220711150823.2128542-4-xukuohai@huawei.com>
+ <8de014c1-aa63-5783-e5fd-53b7fdece805@nvidia.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <8de014c1-aa63-5783-e5fd-53b7fdece805@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,51 +77,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 04:58:49PM +0200, Alexandre Chartre wrote:
-> On Mon, Jul 18, 2022 at 09:19:01AM +0100, Ken Moffat wrote:
-> > Probably like most people, I find the detail of the available
-> > retbleed mitigations obscure.  In particular, for zen2 the options
-> > *might* include ibpb or unret.
-> > 
-> > But I have failed to find what 'unret' actually means.  Any
-> > pointers, please ?
-> > 
-> > While ibpb might be available (and slow), on my Renoir with
-> > microcode level (0860106h) there were no newer microcode versions
-> > available when I last looked (a few weeks ago) but note 7 at the
-> > bottom of
-> > https://www.amd.com/system/files/documents/technical-guidance-for-mitigating-branch-type-confusion_v
-> > 7_20220712.pdf
-> > implies that the relevant bit is only set on Renoir in 0860109h and
-> > later.
-> > 
-> > Some of the text in that pdf implies that at least one of the
-> > options could be set if not already set from the microcode, but the
-> > amount of detail leaves me totally lost.
-> > 
-> > Assuming, for the moment, that I might want to try this full
-> > mitigation, is there any way to set this in the absence of newer
-> > microcode ?
-> > 
-> > Or should I just accept that the best I can get is 'unret', whatever
-> > that means ?
-> > 
-> > ĸen
-> 
-> 'unret' = AMD JMP2RET i.e. replace all 'ret' instructions with
-> 'jmp __x86_return_thunk', and safe training the thunk code upon
-> kernel/hypervisor entry. This is a purely software mitigation,
-> it doesn't require any microcode.
-> 
-> AMD JMP2RET is described in this document:
-> https://www.amd.com/system/files/documents/technical-guidance-for-mitigating-branch-type-confusion_v7_20220712.pdf
-> 
-> alex.
+On 7/18/2022 9:52 PM, Jon Hunter wrote:
 
-Thanks!
+[..]
+> 
+> This change appears to be causing the build to fail ...
+> 
+> /tmp/cc52xO0c.s: Assembler messages:
+> /tmp/cc52xO0c.s:8: Error: operand 1 should be an integer register --
+> `mov lr,x9'
+> /tmp/cc52xO0c.s:7: Error: undefined symbol lr used as an immediate value
+> make[2]: *** [scripts/Makefile.build:250: arch/arm64/net/bpf_jit_comp.o]
+> Error 1
+> make[1]: *** [scripts/Makefile.build:525: arch/arm64/net] Error 2
+> 
+> Let me know if you have any thoughts.
+> 
 
-ĸen
--- 
- It is very easy to get ridiculously confused about the tenses of
- time travel, but most things can be resolved by a sufficiently
- large ego.        -- The Last Continent
+Sorry for this failure, but I can't reproduce it.
+
+I guess maybe your assembler doesn't recognize "lr". Could you give a
+try to replace "lr" with "x30"?
+
+ #if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
+ "      bti j\n" /* dummy_tramp is called via "br x10" */
+ #endif
+-"      mov x10, lr\n"
+-"      mov lr, x9\n"
++"      mov x10, x30\n"
++"      mov x30, x9\n"
+ "      ret x10\n"
+ "      .size dummy_tramp, .-dummy_tramp\n"
+ "      .popsection\n
+
+Thanks.
+
+> Cheers
+> Jon
+> 
+

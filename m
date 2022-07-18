@@ -2,155 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D94578577
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FADA578580
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234917AbiGROaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 10:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
+        id S233502AbiGROcy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 18 Jul 2022 10:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235425AbiGROah (ORCPT
+        with ESMTP id S229640AbiGROc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 10:30:37 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0BEBF1EAD6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:30:35 -0700 (PDT)
-Received: (qmail 122695 invoked by uid 1000); 18 Jul 2022 10:30:34 -0400
-Date:   Mon, 18 Jul 2022 10:30:34 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        gregkh@linuxfoundation.org, tony@atomide.com,
-        felipe.balbi@linux.intel.com, jgross@suse.com,
-        lukas.bulwahn@gmail.com, arnd@arndb.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, openbmc@lists.ozlabs.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] usb: host: npcm7xx: remove USB EHCI host reset
- sequence
-Message-ID: <YtVuildpxcI5By4x@rowland.harvard.edu>
-References: <20220718122922.9396-1-tmaimon77@gmail.com>
- <20220718122922.9396-2-tmaimon77@gmail.com>
+        Mon, 18 Jul 2022 10:32:26 -0400
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8FB23170
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:32:25 -0700 (PDT)
+Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay11.hostedemail.com (Postfix) with ESMTP id 5B8778091B;
+        Mon, 18 Jul 2022 14:32:24 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id C991F80013;
+        Mon, 18 Jul 2022 14:32:22 +0000 (UTC)
+Message-ID: <49a8099eb7dd01e9d2d190056171341d87cd442b.camel@perches.com>
+Subject: Re: [PATCH] nbd: add missing definition of pr_fmt
+From:   Joe Perches <joe@perches.com>
+To:     Yu Kuai <yukuai1@huaweicloud.com>, josef@toxicpanda.com,
+        axboe@kernel.dk, houtao1@huawei.com
+Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Date:   Mon, 18 Jul 2022 07:32:21 -0700
+In-Reply-To: <853a5164-78cf-1ccb-8e18-cff5b5bce4ff@huaweicloud.com>
+References: <20220706093320.1962871-1-yukuai1@huaweicloud.com>
+         <853a5164-78cf-1ccb-8e18-cff5b5bce4ff@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718122922.9396-2-tmaimon77@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: zn5wsm8bu3ibsfq9fmhf1s3698hxhkmh
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: C991F80013
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19u1lF+U+u5u4KTIb69mjPigTZKoouq7xY=
+X-HE-Tag: 1658154742-75497
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 03:29:20PM +0300, Tomer Maimon wrote:
-> Remove USB EHCI host controller reset sequence from NPCM7XX USB EHCI
-> host probe function because it is done in the NPCM reset driver.
+On Mon, 2022-07-18 at 21:52 +0800, Yu Kuai wrote:
+> 在 2022/07/06 17:33, Yu Kuai 写道:
+> > From: Yu Kuai <yukuai3@huawei.com>
+> > 
+> > commit 1243172d5894 ("nbd: use pr_err to output error message") tries
+> > to define pr_fmt and use short pr_err() to output error message,
+> > however, the definition is missed.
 > 
-> Due to it, NPCM7XX EHCI driver configuration is dependent on NPCM reset.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
+> friendly ping ...
+[]
+> > diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+[]
+> > @@ -44,6 +44,9 @@
+> >   #include <linux/nbd-netlink.h>
+> >   #include <net/genetlink.h>
+> >   
+> > +#undef pr_fmt
+> > +#define pr_fmt(fmt) "nbd: " fmt
+> > +
 
-Regarding the changes to ehci-npcm7xx.c:
+Typically, this #define is place before all #include lines
+so there is no need for an #undef
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
-But you probably should remove the "#include <linux/regmap.h>" line near 
-the start of the source file.
-
-Alan Stern
-
->  drivers/usb/host/Kconfig        |  2 +-
->  drivers/usb/host/ehci-npcm7xx.c | 47 ---------------------------------
->  2 files changed, 1 insertion(+), 48 deletions(-)
-> 
-> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> index 682b3d2da623..e05e2cf806f8 100644
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
-> @@ -206,7 +206,7 @@ config USB_EHCI_FSL
->  
->  config USB_EHCI_HCD_NPCM7XX
->  	tristate "Support for Nuvoton NPCM7XX on-chip EHCI USB controller"
-> -	depends on (USB_EHCI_HCD && ARCH_NPCM7XX) || COMPILE_TEST
-> +	depends on (USB_EHCI_HCD && ARCH_NPCM7XX && RESET_NPCM) || COMPILE_TEST
->  	default y if (USB_EHCI_HCD && ARCH_NPCM7XX)
->  	help
->  	  Enables support for the on-chip EHCI controller on
-> diff --git a/drivers/usb/host/ehci-npcm7xx.c b/drivers/usb/host/ehci-npcm7xx.c
-> index 6b5a7a873e01..955e7c8f3db8 100644
-> --- a/drivers/usb/host/ehci-npcm7xx.c
-> +++ b/drivers/usb/host/ehci-npcm7xx.c
-> @@ -28,13 +28,6 @@
->  #define DRIVER_DESC "EHCI npcm7xx driver"
->  
->  static const char hcd_name[] = "npcm7xx-ehci";
-> -
-> -#define  USB2PHYCTL_OFFSET 0x144
-> -
-> -#define  IPSRST2_OFFSET 0x24
-> -#define  IPSRST3_OFFSET 0x34
-> -
-> -
->  static struct hc_driver __read_mostly ehci_npcm7xx_hc_driver;
->  
->  static int __maybe_unused ehci_npcm7xx_drv_suspend(struct device *dev)
-> @@ -60,52 +53,12 @@ static int npcm7xx_ehci_hcd_drv_probe(struct platform_device *pdev)
->  {
->  	struct usb_hcd *hcd;
->  	struct resource *res;
-> -	struct regmap *gcr_regmap;
-> -	struct regmap *rst_regmap;
->  	const struct hc_driver *driver = &ehci_npcm7xx_hc_driver;
->  	int irq;
->  	int retval;
->  
->  	dev_dbg(&pdev->dev,	"initializing npcm7xx ehci USB Controller\n");
->  
-> -	gcr_regmap = syscon_regmap_lookup_by_compatible("nuvoton,npcm750-gcr");
-> -	if (IS_ERR(gcr_regmap)) {
-> -		dev_err(&pdev->dev, "%s: failed to find nuvoton,npcm750-gcr\n",
-> -			__func__);
-> -		return PTR_ERR(gcr_regmap);
-> -	}
-> -
-> -	rst_regmap = syscon_regmap_lookup_by_compatible("nuvoton,npcm750-rst");
-> -	if (IS_ERR(rst_regmap)) {
-> -		dev_err(&pdev->dev, "%s: failed to find nuvoton,npcm750-rst\n",
-> -			__func__);
-> -		return PTR_ERR(rst_regmap);
-> -	}
-> -
-> -	/********* phy init  ******/
-> -	// reset usb host
-> -	regmap_update_bits(rst_regmap, IPSRST2_OFFSET,
-> -			(0x1 << 26), (0x1 << 26));
-> -	regmap_update_bits(rst_regmap, IPSRST3_OFFSET,
-> -			(0x1 << 25), (0x1 << 25));
-> -	regmap_update_bits(gcr_regmap, USB2PHYCTL_OFFSET,
-> -			(0x1 << 28), 0);
-> -
-> -	udelay(1);
-> -
-> -	// enable phy
-> -	regmap_update_bits(rst_regmap, IPSRST3_OFFSET,
-> -			(0x1 << 25), 0);
-> -
-> -	udelay(50); // enable phy
-> -
-> -	regmap_update_bits(gcr_regmap, USB2PHYCTL_OFFSET,
-> -			(0x1 << 28), (0x1 << 28));
-> -
-> -	// enable host
-> -	regmap_update_bits(rst_regmap, IPSRST2_OFFSET,
-> -			(0x1 << 26), 0);
-> -
->  	if (usb_disabled())
->  		return -ENODEV;
->  
-> -- 
-> 2.33.0
-> 

@@ -2,145 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DB0577A51
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 07:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD3F577A59
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 07:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233293AbiGRFTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 01:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
+        id S233162AbiGRFWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 01:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiGRFTf (ORCPT
+        with ESMTP id S229680AbiGRFWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 01:19:35 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADACC6323;
-        Sun, 17 Jul 2022 22:19:33 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LmVdH5dVyz4xbm;
-        Mon, 18 Jul 2022 15:19:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658121572;
-        bh=B7cpHjbt5kcRv7FMz00EwdlkBbUF2kDdSz8ilusmmfg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=haMct5wFAsJuiog/mdopFUDOhVUSoPypTiwnZyMi9C5NP4iMucfGf213TB3DLitdq
-         WwJNLA8giKDRAZWsa5Hf4vQySnvtuPkJ4OSMxcLRt3SuCRvNeNl4XwUtQUXFRaOF5y
-         RG1G15RxeJ9XlpXrbJ5IubSHYhqFx1/ovnw93c+FrBuHFEXhPcdAO5tQs9qv4+Uz0+
-         rHV/NI5+3q2F/gYJbDAKD9Qyr/KXOaJ36LvO1ZRCngn11NtwLfSvv+VSFzeY3Nu8SZ
-         GKNVB0KmPayU5t3HzIHfQaob1ljqL55do+v5DMrICA70KKmDoSMwKyvboKOngDcEI+
-         i9wjjbIJowkfg==
-Date:   Mon, 18 Jul 2022 15:19:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     KVM <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>
-Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
-Message-ID: <20220718151930.42ae670f@canb.auug.org.au>
+        Mon, 18 Jul 2022 01:22:32 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EDFD13D;
+        Sun, 17 Jul 2022 22:22:24 -0700 (PDT)
+X-UUID: b28ad2cc59f84a09838358735489633a-20220718
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:d33da07d-5b9c-4cf5-8cb8-be85eec4cca6,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:0f94e32,CLOUDID:90b1c0d7-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: b28ad2cc59f84a09838358735489633a-20220718
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1812134666; Mon, 18 Jul 2022 13:22:20 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 18 Jul 2022 13:22:19 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Mon, 18 Jul 2022 13:22:19 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>
+CC:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <hsinyi@chromium.org>,
+        <fparent@baylibre.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH] dt-bindings: display: mediatek: dpi: add power-domains property
+Date:   Mon, 18 Jul 2022 13:22:17 +0800
+Message-ID: <20220718052217.29729-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hjS3Ic2IcCL1BS9qDRACH88";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/hjS3Ic2IcCL1BS9qDRACH88
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+DPI is part of the display / multimedia block in MediaTek SoCs
+and is managed using power controller in some platforms. We add
+the power-domains property to the binding documentation.
 
-Hi all,
+Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+---
+ .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml   | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Today's linux-next merge of the kvm-arm tree got a conflict in:
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+index 5bb23e97cf33..9f012afdf19b 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+@@ -58,6 +58,9 @@ properties:
+       Output port node. This port should be connected to the input port of an
+       attached HDMI, LVDS or DisplayPort encoder chip.
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+@@ -72,11 +75,13 @@ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     #include <dt-bindings/clock/mt8173-clk.h>
++    #include <dt-bindings/power/mt8173-power.h>
+ 
+     dpi0: dpi@1401d000 {
+         compatible = "mediatek,mt8173-dpi";
+         reg = <0x1401d000 0x1000>;
+         interrupts = <GIC_SPI 194 IRQ_TYPE_LEVEL_LOW>;
++        power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
+         clocks = <&mmsys CLK_MM_DPI_PIXEL>,
+              <&mmsys CLK_MM_DPI_ENGINE>,
+              <&apmixedsys CLK_APMIXED_TVDPLL>;
+-- 
+2.18.0
 
-  tools/testing/selftests/kvm/aarch64/vgic_init.c
-
-between commits:
-
-  98f94ce42ac6 ("KVM: selftests: Move KVM_CREATE_DEVICE_TEST code to separa=
-te helper")
-  7ed397d107d4 ("KVM: selftests: Add TEST_REQUIRE macros to reduce skipping=
- copy+paste")
-
-from the kvm tree and commit:
-
-  6a4f7fcd7504 ("KVM: arm64: selftests: Add support for GICv2 on v3")
-
-from the kvm-arm tree.
-
-I fixed it up (I think, see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/testing/selftests/kvm/aarch64/vgic_init.c
-index e8cab9840aa3,21ba4002fc18..000000000000
---- a/tools/testing/selftests/kvm/aarch64/vgic_init.c
-+++ b/tools/testing/selftests/kvm/aarch64/vgic_init.c
-@@@ -661,9 -668,9 +661,9 @@@ int test_kvm_device(uint32_t gic_dev_ty
-  	other =3D VGIC_DEV_IS_V2(gic_dev_type) ? KVM_DEV_TYPE_ARM_VGIC_V3
-  					     : KVM_DEV_TYPE_ARM_VGIC_V2;
- =20
- -	if (!_kvm_create_device(v.vm, other, true, &fd)) {
- -		ret =3D _kvm_create_device(v.vm, other, false, &fd);
- +	if (!__kvm_test_create_device(v.vm, other)) {
- +		ret =3D __kvm_test_create_device(v.vm, other);
-- 		TEST_ASSERT(ret && errno =3D=3D EINVAL,
-+ 		TEST_ASSERT(ret && (errno =3D=3D EINVAL || errno =3D=3D EEXIST),
-  				"create GIC device while other version exists");
-  	}
- =20
-@@@ -703,9 -711,15 +704,13 @@@ int main(int ac, char **av
-  	}
- =20
-  	ret =3D test_kvm_device(KVM_DEV_TYPE_ARM_VGIC_V2);
-- 	__TEST_REQUIRE(!ret, "No GICv2 nor GICv3 support");
-+ 	if (!ret) {
-+ 		pr_info("Running GIC_v2 tests.\n");
-+ 		run_tests(KVM_DEV_TYPE_ARM_VGIC_V2);
-+ 		cnt_impl++;
-+ 	}
-+=20
- -	if (!cnt_impl) {
- -		print_skip("No GICv2 nor GICv3 support");
- -		exit(KSFT_SKIP);
- -	}
-++	__TEST_REQUIRE(!cnt_impl, "No GICv2 nor GICv3 support");
- +
-- 	pr_info("Running GIC_v2 tests.\n");
-- 	run_tests(KVM_DEV_TYPE_ARM_VGIC_V2);
-  	return 0;
-  }
-
---Sig_/hjS3Ic2IcCL1BS9qDRACH88
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLU7WIACgkQAVBC80lX
-0Gwd5QgAlVWVIOS4ZLrhgdVmGIL/iLZEuoWSNuNv1NJbm3iQmUKmdVZi1wXqRyAe
-caXEN62U4PSiPAD+Jr4eK0w/CnIe4A74y9bo/pLM8C3T6Lx/A4jaxDqEDmqzdV7v
-2e+C9DHmjdZBT2TFGIkcNuPGUI0ZMMwe060phjFSExenEz6ssDji+UAayjSX44fb
-Y11euD+Vpy/yrjooljP/YPIA4KEEN0SxjSHKf/wWYiVKyOH+//UjcGP8dlRQfgCg
-fWG8g8SHsa18kClp2lRtvbozi1EUxz5lJarIHjkGCF3VX3m2CLXsiap59odKxEIl
-Y0qIvpMhZ4jRJBH37JGceAu40GgN5g==
-=6Ygb
------END PGP SIGNATURE-----
-
---Sig_/hjS3Ic2IcCL1BS9qDRACH88--

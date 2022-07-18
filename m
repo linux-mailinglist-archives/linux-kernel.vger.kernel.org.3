@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4855578DEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A1E578DF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236449AbiGRW7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 18:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S236455AbiGRW7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 18:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235690AbiGRW73 (ORCPT
+        with ESMTP id S236372AbiGRW7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 18:59:29 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A200B33353
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:59:25 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-10cf9f5b500so26725575fac.2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:59:25 -0700 (PDT)
+        Mon, 18 Jul 2022 18:59:30 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995142AE15
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:59:26 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-10c0d96953fso27886708fac.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:59:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=B31/aK7W3TCrHPuQWtF63vTS+y2Gujm3ucnWccu6dTg=;
-        b=p7EmA8FV/+eeA4a1RfsYFI4uAZNgUe/pOiK2TjdDjZzSifiWH8yFm70a1Y1cHvAfBU
-         DTzoE1Fut5+rz2Yfgdc/80eIYbzy14g+eawTDKkDSDzBesTaZDptbhFsQUthh8kdUvIr
-         W6YkSKZ42wjZqH1WrrjYM48GHUJIT1Y2IbP5vVvonCoV5wN9AxiJGKebBmeQoMYSAy4i
-         E4FSMSRNPucC5Vv7DCRY4jkE94rnwoJCcC92XGTqYiqnezCUZmN5rmp+ZNgnOZZJvuu+
-         E9VO8pyacmcj4VMAQumcWwfYhZfWdhlCHawyNS6YOLdMGGq6Xy2mzO3UE2y0ftBQZfpG
-         7Hjg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=eAfbIHpTFOAoRjGkD90y7LO/4GgqXtETFx3Gy0RgRVA=;
+        b=TaHYYcha7c1jmbc9+2dwQ0HCbWms1XRyIUpNXSDwRY+hLDP0Bhd/Tyo0BNcKvPaa4b
+         XsGCFnSlzPhiz8fnku5L61LhLhj8RYzkH0jnOlW3RszoOvn8MOhYOmHpggZjAVOPnxVx
+         Dklbw+rD+gVW03hoeT8lSCujbPUbo2yaABE2U/ICOyDCJujh9tBi5K4elCBxYg3Xs+lp
+         l2DpmaBhAYle4UlTFImCla9muF4HzT/OwE0fxr6lw3iGIGXjPleGK9EvxkqRtmKYLMAW
+         1LMmDyvTP5F8ZsxJU8Z1JYLhnnbRJ1FJOYwfcH50ZPHBiYg2nJK6aJ3MxfAoxnCxvpTc
+         PA0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=B31/aK7W3TCrHPuQWtF63vTS+y2Gujm3ucnWccu6dTg=;
-        b=IiTer1ReyJ0DgdDjS/wugOnH6TxLuloaQAn0buoFYCsWwZp/PVaRQLoc2ag6zkLihg
-         dA2h0XpqFLUwPSScsOjgC1XdaWmwZzO/ne3ZOYNjGTAmUAe+Pb6TP9E8sZuQNJz1QtRy
-         T8QL7B7zvQhrxev2ilnoc2kuOGPzjQGqjmHLP6EvTDesiG1pvVTlhDKnDlMsGxFLNZZx
-         HR82MRs08T2eIOJY1U/tHzr//MLBWcX7DgkCYF8M2nuljdIR13I3tLAISoo5gb4zoHnU
-         C3UfwQDv+Vvqma5/uNeaf6K1wrufmH2BNHO6T2xi+r53Qdg1HmhYlX2EAHVmNRgekYo6
-         bGRg==
-X-Gm-Message-State: AJIora/v8EJSKKYN0OSj1BhSAOVu/DNQTztax3iHMzqoMi13btcAC7L1
-        LsaY0Cx2oUCHOka5OfgBRkZgXA==
-X-Google-Smtp-Source: AGRyM1vPPm4kJZEo7j5jkYIz0IITIlMe4kGxXtBf7+dPGXwVcRpOmbyrsE1kMQ+Eb31aKfubxulxgA==
-X-Received: by 2002:a05:6870:581b:b0:10c:17cb:ebbd with SMTP id r27-20020a056870581b00b0010c17cbebbdmr18147295oap.131.1658185165336;
-        Mon, 18 Jul 2022 15:59:25 -0700 (PDT)
+        bh=eAfbIHpTFOAoRjGkD90y7LO/4GgqXtETFx3Gy0RgRVA=;
+        b=MJVFFz2tG0FkIn2TRWJ40CpptLiXUuOPQhIHtpgNxtpVUP0QDgfQ6scTfw66Dmid8S
+         oU7sEVIm3cA2ScfQYORZteEJRThxA8m0XQxz/mXyXF4zpvnIVZq9wZ51nwU38Mv/c6qk
+         aHgONWBiaJ/6co1jZw4oUub8569dXr3rrL2KnfyiaJs3qbXuxci4GXrPNfKIgWWD7XHN
+         K61u7b8QeVubmBg7OVQsFj2GcFALoX+rifv91vAg6KyrgSO002U8KcDHx64jN6FzV3Ee
+         1deS61LpxX53azDrtfk9LV0e2ozI1zkSika/5kFmqeqwJNXSPTSKoP2avvYv5dYcR1Tk
+         8apw==
+X-Gm-Message-State: AJIora8Dw1ItiMMECh+UBqjWPwD2QRorcbcgXGgrDMUzQzugG6fyY+Mq
+        eHFCKi0OunlHmJR9EYMyrPEhTNWsFM+p8A==
+X-Google-Smtp-Source: AGRyM1v62qUIegP2TKUu29j7B01aXZQ9P5qTkYtcyO/nWOruXXEqGU0+Shj61aOOuVm+pox2/ebbmw==
+X-Received: by 2002:a05:6808:1916:b0:335:5b1e:2594 with SMTP id bf22-20020a056808191600b003355b1e2594mr14190421oib.129.1658185166349;
+        Mon, 18 Jul 2022 15:59:26 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id j10-20020a4a908a000000b0041ba304546csm5330931oog.1.2022.07.18.15.59.24
+        by smtp.gmail.com with ESMTPSA id j10-20020a4a908a000000b0041ba304546csm5330931oog.1.2022.07.18.15.59.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 15:59:24 -0700 (PDT)
+        Mon, 18 Jul 2022 15:59:25 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mathieu.poirier@linaro.org, liuke94@huawei.com
-Subject: Re: (subset) [PATCH] remoteproc: Directly use ida_alloc()/free()
-Date:   Mon, 18 Jul 2022 17:59:10 -0500
-Message-Id: <165817634388.1905814.6362323743133289226.b4-ty@linaro.org>
+        quic_mojha@quicinc.com
+Cc:     mathieu.poirier@linaro.org
+Subject: Re: (subset) [PATCH v4 ] remoteproc: Use unbounded workqueue for recovery work
+Date:   Mon, 18 Jul 2022 17:59:11 -0500
+Message-Id: <165817634388.1905814.2453101244848449544.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220527073832.2474641-1-liuke94@huawei.com>
-References: <20220527073832.2474641-1-liuke94@huawei.com>
+In-Reply-To: <1650367554-15510-1-git-send-email-quic_mojha@quicinc.com>
+References: <1650367554-15510-1-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -69,16 +70,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 May 2022 07:38:32 +0000, keliu wrote:
-> Use ida_alloc()/ida_free() instead of deprecated
-> ida_simple_get()/ida_simple_remove() .
+On Tue, 19 Apr 2022 16:55:54 +0530, Mukesh Ojha wrote:
+> There could be a scenario when there is too much load on a core
+> (n number of tasks which is affined) or in a case when multiple
+> rproc subsystem is going for recovery, they queue their recovery
+> work to one core so even though subsystem are independent their
+> recovery will be delayed if one of the subsystem recovery work
+> is taking more time in completing.
 > 
-> 
+> [...]
 
 Applied, thanks!
 
-[1/1] remoteproc: Directly use ida_alloc()/free()
-      commit: 4953012caed20e3d341085a726b97a160d8847fd
+[1/1] remoteproc: Use unbounded workqueue for recovery work
+      commit: 0a7f201e4284b43a60ee286c0921002c7e42413d
 
 Best regards,
 -- 

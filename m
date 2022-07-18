@@ -2,103 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F642577924
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 03:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FA1577928
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 03:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbiGRBHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 21:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
+        id S231429AbiGRBO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 21:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGRBHh (ORCPT
+        with ESMTP id S229535AbiGRBO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 21:07:37 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04D5CBE2D
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:07:34 -0700 (PDT)
-Received: from [10.20.42.19] (unknown [10.20.42.19])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx39NJstRi39slAA--.32859S3;
-        Mon, 18 Jul 2022 09:07:22 +0800 (CST)
-Subject: Re: [PATCH V15 00/15] irqchip: Add LoongArch-related irqchip drivers
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
- <87less52bx.wl-maz@kernel.org>
- <6e9def1e-31fe-787d-1b2b-a328424352f0@loongson.cn>
- <87ilnw3vlg.wl-maz@kernel.org>
- <20994a99-b5b1-442d-d23d-2a11ecef24a0@loongson.cn>
- <87wncbzteg.wl-maz@kernel.org>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <058aed14-3644-5fc4-8eda-ec645df91836@loongson.cn>
-Date:   Mon, 18 Jul 2022 09:07:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sun, 17 Jul 2022 21:14:27 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07D81147C
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658106866; x=1689642866;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LIxgYK4hpIPP4H96x0zldktrRVfeG45n3WLLDlupRTI=;
+  b=kPoeicUH7w2jLWc6h+HkSran0FgxKBxw120bQKGCUSNL4plQFw/BKvLb
+   5rEnhqsXpsISkVPeIjGfoDztzBHN5yKvB2PFzwQS2FreAzxIUUJlzGHip
+   ZQyye8a6OXryBM3B2HinrXwsFFkdOKPpaJkzB5tf4bhsiyN7urC+DtY+Y
+   IXCWWyblx4+wGH+U4jX4AUQ1Gmozx40tkSKaLMsrXnJk16K34dCLZzTC0
+   zcYwI/zmDoZPUSBIp2b9HFFND6UPgY9OWXQ2tVoHEXGr+D/ltOT0u/rzS
+   xwB/zCVaq7NncP/cMTcS72CVoSikm+AMJMI9FMcVzzDM31sgOyZc3PyPQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="347794780"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="347794780"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 18:14:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="686562484"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Jul 2022 18:14:23 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDFL5-0003r0-A9;
+        Mon, 18 Jul 2022 01:14:23 +0000
+Date:   Mon, 18 Jul 2022 09:13:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Patricia Alfonso <trishalfonso@google.com>
+Cc:     kbuild-all@lists.01.org,
+        user-mode-linux-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        David Gow <davidgow@google.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>
+Subject: [rw-uml:linux-next 11/16] arch/um/os-Linux/mem.c:28:6: warning: no
+ previous prototype for 'kasan_map_memory'
+Message-ID: <202207180935.daaJausv-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <87wncbzteg.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dx39NJstRi39slAA--.32859S3
-X-Coremail-Antispam: 1UD129KBjvJXoWrtr4kWw48WFW5Gry8KFWruFg_yoW8JF1fpF
-        W3KF1Utr4qkFyjy342qa1Yqa1FkFWrA34kuFnY934xAr98Jw17ur1av3WUury7Cr18Cw4j
-        vrZag3s3ZFn8XaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
-        87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4
-        CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE
-        -syl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x
-        0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-        zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
-        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWr
-        Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git linux-next
+head:   af3e16101cee95efaa72095fe06c15ec0b8eb195
+commit: 5b301409e8bc5d7fad2ee138be44c5c529dd0874 [11/16] UML: add support for KASAN under x86_64
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220718/202207180935.daaJausv-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git/commit/?id=5b301409e8bc5d7fad2ee138be44c5c529dd0874
+        git remote add rw-uml https://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git
+        git fetch --no-tags rw-uml linux-next
+        git checkout 5b301409e8bc5d7fad2ee138be44c5c529dd0874
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/um/os-Linux/mem.c:28:6: warning: no previous prototype for 'kasan_map_memory' [-Wmissing-prototypes]
+      28 | void kasan_map_memory(void *start, size_t len)
+         |      ^~~~~~~~~~~~~~~~
+   arch/um/os-Linux/mem.c:212:13: warning: no previous prototype for 'check_tmpexec' [-Wmissing-prototypes]
+     212 | void __init check_tmpexec(void)
+         |             ^~~~~~~~~~~~~
 
 
-On 2022/7/17 下午10:49, Marc Zyngier wrote:
-> On Sun, 17 Jul 2022 12:29:05 +0100,
-> Jianmin Lv <lvjianmin@loongson.cn> wrote:
->>
->>
->>
->> On 2022/7/17 下午6:02, Marc Zyngier wrote:
->>> But the other issue is that you seem to call this function from two
->>> different locations. This cannot be right, as there should be only one
->>> probe order, and not multiple.
->>>
->>
->> As we described two IRQ models(Legacy and Extended) in this cover
->> letter, the parent domain of MSI domain can be htvec domain(Legacy) or
->> eiointc domain(Extended). In MADT, only one APIC(HTPIC for htvec or
->> EIOPIC for eiointc) is allowed to pass into kernel, and then in the
->> irqchip driver, only one kind APIC of them can be parsed from MADT, so
->> we have to support two probe order for them.
-> 
-> Do you really have the two variants in the wild? Or is this just
-> because this is a possibility?
-> 
+vim +/kasan_map_memory +28 arch/um/os-Linux/mem.c
 
-Currently, there are not CPUs(used for PC and server) based on LoongArch 
-shipped with only HTPIC, but with both HTPIC and EIOPIC, we just want to 
-provide two choices for designers(but obviously, EIOPIC may be enough 
-currently). Do you think we don't have to do like this, yes? If so, 
-maybe we don't have to support ACPI-way entry for htvec currently, and 
-do the work in future if required.
+    19	
+    20	/*
+    21	 * kasan_map_memory - maps memory from @start with a size of @len.
+    22	 * The allocated memory is filled with zeroes upon success.
+    23	 * @start: the start address of the memory to be mapped
+    24	 * @len: the length of the memory to be mapped
+    25	 *
+    26	 * This function is used to map shadow memory for KASAN in uml
+    27	 */
+  > 28	void kasan_map_memory(void *start, size_t len)
+    29	{
+    30		if (mmap(start,
+    31			 len,
+    32			 PROT_READ|PROT_WRITE,
+    33			 MAP_FIXED|MAP_ANONYMOUS|MAP_PRIVATE|MAP_NORESERVE,
+    34			 -1,
+    35			 0) == MAP_FAILED) {
+    36			os_info("Couldn't allocate shadow memory: %s\n.",
+    37				strerror(errno));
+    38			exit(1);
+    39		}
+    40	}
+    41	
 
-> 	M.
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D68B578B05
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C3B578B08
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236204AbiGRThV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
+        id S236219AbiGRTh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236171AbiGRThQ (ORCPT
+        with ESMTP id S236182AbiGRThQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Jul 2022 15:37:16 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF682D1E2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:11 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 72so11548760pge.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:11 -0700 (PDT)
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88CE2F67A
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:12 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id h132so11502194pgc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ztsUe2wZg/YICD33iqkzWz48lO96HPpWHQuuJ7tssIY=;
-        b=L6+6rmWmlW74N35sQK1UeLXbLRgio2fsQS6mHJKVKzCTV61e8UW1ZZTN3koJ/ZKhAc
-         Fuvodma7l4HTg6DZYvRj45/tMb7kCvzZw5K3JToemZFvQ1c5i9J+9IHlZylJfJHA8nmc
-         uoiAVOLKXgLbMrTehDka9krReSTVnxLoS+Pghk2tFsInE1OztwnvEOqn4jNqft/Etn2w
-         jjh/vGyNDH6Vj+uXcHOgy8ww40jB0eIPjLweUE55/vH6SgXA/XVlD1I8fHOnP35ZIRdB
-         XkPCLZoHaJrwMPAIT4pU6iMAvGGNwFLN6atUCLJsOAvQHbVbxWALAXD8mmcQKOHMfINI
-         qscw==
+        bh=VCDxDoUSCrnTZdtdcyuvlf+NNtVJJIcoOQ0MDquBzAY=;
+        b=WpzOa1eCI6gKdwOYRlP/7uAcBkP9V49tEy6TRy1l2Khiu+GZnm10Q5jyVbyYM1tYJ0
+         r1e+kLptD6I/s6ViDo6K3ZWQxtQqTivN9316p9KbowhoCjz6+CLLmK18EEI8JLQoLMTw
+         6hJP+pqwUio5gv5yYp+Q5f9oq+Nlk4vL7U3Nr2uzyliGndyYJu/aty4nLWwUOlzgE7f3
+         XKi59Yz5xUZS3IH7VwQS7RSyx2mkvafbnQ3f/hs9aloww2hNMJj8gDsL4ymdSB9RE3Xb
+         MzJM2PoJh3hUc1G7Ka+jmv39doe16fxqrhkTV1xozTVG+hkSSQ0CDqVkr23SSAAypVrA
+         ptew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ztsUe2wZg/YICD33iqkzWz48lO96HPpWHQuuJ7tssIY=;
-        b=EkAAfLru/MUM3TA+6tS7NUftUc7WP27afLom4G2Fy9UurxeblN9dLq+a2NebV8C0/N
-         WkMgnbmrj9vD422w+bVoXs8ua3dR4fAX/RTNEy2XmQ3goL07ok55Eir4l+9B2MLcAYuI
-         ghju2KigT1LNAh3cms0zkPwVaxHFIFqkzyWLIkI495Lj+MMo7ND4kZ6zn0ieIKWud0bp
-         xxIbnsUn2VCFL3LkLmk3PXiXwYszrbNEg1Oj/K7ypObyf0WLMXzMFTOvVK/G3on146yB
-         RN/ulOen5vG5i5trcb//5LPZ3Z6iVAd3xkde1WHczAWpRLSNvHPNQ3+FpAnkOr4Q3etk
-         PBrQ==
-X-Gm-Message-State: AJIora/cV60WNmnQNUza9qiv5+zUIs6jqvob+dFBiZB7MKo4twCZQfxo
-        qCNMcY7bjbK5GTqQteIMvgs=
-X-Google-Smtp-Source: AGRyM1ta8bb059Mp7zmutlWdMZ80ywE9XEnxT7RsTULurbViUhAfTouO49B+QsXkfMAuN7Zpzky0+Q==
-X-Received: by 2002:a05:6a00:889:b0:510:91e6:6463 with SMTP id q9-20020a056a00088900b0051091e66463mr29798403pfj.58.1658173030299;
-        Mon, 18 Jul 2022 12:37:10 -0700 (PDT)
+        bh=VCDxDoUSCrnTZdtdcyuvlf+NNtVJJIcoOQ0MDquBzAY=;
+        b=2HKMR4ElqOQVT3oOxcbjcvJAxl9zqQda4XT7P3wFPyG1Us3oEMYoGBjNidaC0zdht7
+         wiCVr2mE7ZDD4Qn/q1rgzbKyZ01B/r+n/xcQf8TssMMhVGBhAbofKpMiw4DQ+XHB223z
+         hnTwkyaUql9glXPW8tidWEC1buZ/hqZqsMLHrz+al92h82D76Scv12gNGENnaS0IeHuj
+         LjlaqCGRvO6ecG2Hp6iTNN/cdU1a6u9OHibZ+RBurpD7t9BLlfYtL3qL3ng/600psw8j
+         bIpuVWdSwdwXcK9mVcHqaug4DsNZKUk6ZYZqljb0qDSrXUIVjPapaKWuESj3n+86Trbn
+         xeJA==
+X-Gm-Message-State: AJIora8JFC6CZzNkiKkvdElfhm1uyUQJXL4i9C+jdHLrcbfS8sLtgi6z
+        6NTtZLQN6B27Sth2lOiK4NA=
+X-Google-Smtp-Source: AGRyM1vGJivctvX5ZkdLIJ4O9MXoDMilDP3XL2pp+bNJOG2Zy6lN3VLUtfwzhoCDKo97VJCK/R1iTA==
+X-Received: by 2002:a63:fc48:0:b0:40d:ad0a:a868 with SMTP id r8-20020a63fc48000000b0040dad0aa868mr25533373pgk.204.1658173031839;
+        Mon, 18 Jul 2022 12:37:11 -0700 (PDT)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b0016bc4a6ce28sm9907887plb.98.2022.07.18.12.37.08
+        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b0016bc4a6ce28sm9907887plb.98.2022.07.18.12.37.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:37:09 -0700 (PDT)
+        Mon, 18 Jul 2022 12:37:11 -0700 (PDT)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
 To:     linux-mm@kvack.org
@@ -65,10 +65,10 @@ Cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Nick Piggin <npiggin@gmail.com>, x86@kernel.org
-Subject: [RFC PATCH 05/14] x86/mm: check exec permissions on fault
-Date:   Mon, 18 Jul 2022 05:02:03 -0700
-Message-Id: <20220718120212.3180-6-namit@vmware.com>
+        Nick Piggin <npiggin@gmail.com>
+Subject: [RFC PATCH 06/14] mm/rmap: avoid flushing on page_vma_mkclean_one() when possible
+Date:   Mon, 18 Jul 2022 05:02:04 -0700
+Message-Id: <20220718120212.3180-7-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220718120212.3180-1-namit@vmware.com>
 References: <20220718120212.3180-1-namit@vmware.com>
@@ -85,22 +85,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-access_error() currently does not check for execution permission
-violation. As a result, spurious page-faults due to execution permission
-violation cause SIGSEGV.
-
-It appears not to be an issue so far, but the next patches avoid TLB
-flushes on permission promotion, which can lead to this scenario. nodejs
-for instance crashes when TLB flush is avoided on permission promotion.
-
-Add a check to prevent access_error() from returning mistakenly that
-spurious page-faults due to instruction fetch are a reason for an access
-error.
-
-It is assumed that error code bits of "instruction fetch" and "write" in
-the hardware error code are mutual exclusive, and the change assumes so.
-However, to be on the safe side, especially if hypervisors misbehave,
-assert this is the case and warn otherwise.
+x86 is capable to avoid TLB flush on clean writable entries.
+page_vma_mkclean_one() does not take advantage of this behavior. Adapt
+it.
 
 Cc: Andrea Arcangeli <aarcange@redhat.com>
 Cc: Andrew Cooper <andrew.cooper3@citrix.com>
@@ -114,47 +101,45 @@ Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Will Deacon <will@kernel.org>
 Cc: Yu Zhao <yuzhao@google.com>
 Cc: Nick Piggin <npiggin@gmail.com>
-Cc: x86@kernel.org
 Signed-off-by: Nadav Amit <namit@vmware.com>
 ---
- arch/x86/mm/fault.c | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+ mm/rmap.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index fe10c6d76bac..00013c1fac3f 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -1107,10 +1107,28 @@ access_error(unsigned long error_code, struct vm_area_struct *vma)
- 				       (error_code & X86_PF_INSTR), foreign))
- 		return 1;
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 83172ee0ea35..23997c387858 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -961,17 +961,25 @@ static int page_vma_mkclean_one(struct page_vma_mapped_walk *pvmw)
  
--	if (error_code & X86_PF_WRITE) {
-+	if (error_code & (X86_PF_WRITE | X86_PF_INSTR)) {
-+		/*
-+		 * CPUs are not expected to set the two error code bits
-+		 * together, but to ensure that hypervisors do not misbehave,
-+		 * run an additional sanity check.
-+		 */
-+		if ((error_code & (X86_PF_WRITE|X86_PF_INSTR)) ==
-+					(X86_PF_WRITE|X86_PF_INSTR)) {
-+			WARN_ON_ONCE(1);
-+			return 1;
-+		}
-+
- 		/* write, present and write, not present: */
--		if (unlikely(!(vma->vm_flags & VM_WRITE)))
-+		if ((error_code & X86_PF_WRITE) &&
-+		    unlikely(!(vma->vm_flags & VM_WRITE)))
-+			return 1;
-+
-+		/* exec, present and exec, not present: */
-+		if ((error_code & X86_PF_INSTR) &&
-+		    unlikely(!(vma->vm_flags & VM_EXEC)))
- 			return 1;
-+
- 		return 0;
- 	}
+ 		address = pvmw->address;
+ 		if (pvmw->pte) {
+-			pte_t entry;
++			pte_t entry, oldpte;
+ 			pte_t *pte = pvmw->pte;
  
+ 			if (!pte_dirty(*pte) && !pte_write(*pte))
+ 				continue;
+ 
+ 			flush_cache_page(vma, address, pte_pfn(*pte));
+-			entry = ptep_clear_flush(vma, address, pte);
+-			entry = pte_wrprotect(entry);
++			oldpte = ptep_modify_prot_start(pvmw->vma, address,
++							pte);
++
++			entry = pte_wrprotect(oldpte);
+ 			entry = pte_mkclean(entry);
+-			set_pte_at(vma->vm_mm, address, pte, entry);
++
++			if (pte_needs_flush(oldpte, entry) ||
++			    mm_tlb_flush_pending(vma->vm_mm))
++				flush_tlb_page(vma, address);
++
++			ptep_modify_prot_commit(vma, address, pte, oldpte,
++						entry);
+ 			ret = 1;
+ 		} else {
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
 -- 
 2.25.1
 

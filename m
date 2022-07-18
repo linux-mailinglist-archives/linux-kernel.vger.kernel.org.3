@@ -2,109 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1E35779D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 05:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE48F5779E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 06:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbiGRDws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 23:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S231937AbiGREEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 00:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiGRDwp (ORCPT
+        with ESMTP id S229681AbiGREEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 23:52:45 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049D613CE1;
-        Sun, 17 Jul 2022 20:52:44 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LmSj62Gn2z4xdJ;
-        Mon, 18 Jul 2022 13:52:42 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1658116362;
-        bh=PAhbVquV8KMmPT0KbTUCb3rhFdvrE7pS8SUJl2k86NQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=abNf9MX4GToZ6jiZBngBosnaGO7J6cYxeNUtHJjScudZr25fDWl24rBpyIX65VBb8
-         UsLGOhmSjfXpcn6B8TuwACWUDoTD+0uOnbXkAK7zW5vL8jMsCQQIrHpH/DKoofWkAJ
-         Wa5uTJqVo6voEQzV+NIjrLGnWPWntFlxcdKDzmte+G7ez220tFzclj2p7XzHQU518/
-         L9h0KiQLxI94FEBrFBpFVy84BHz1Vj69336+PshS8riZ1OA5d4TwpO+ntrmWF8ftlH
-         cUYoLH9Y0AL0ldtOSxCReqfi8u0gC0ITOvkL31Y17LJ/2IBL5EJsQGVCSw2mrBdMC0
-         naA3RyWOj+3dQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Segher Boessenkool <segher@kernel.crashing.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-hardening@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: mainline build failure of powerpc allmodconfig for prom_init_check
-In-Reply-To: <20220717195448.GB25951@gate.crashing.org>
-References: <Ys/aDKZNhhsENH9S@debian>
- <CADVatmO9XzFnX+N0TuOtr0FYyxKr1oe5RAhCEJjmnvjteT5QNw@mail.gmail.com>
- <CAHk-=whc3Uvhrmrr27xp5=oOhSDjXc5s1ZxC3B7xMYV6oj4WRQ@mail.gmail.com>
- <20220717195448.GB25951@gate.crashing.org>
-Date:   Mon, 18 Jul 2022 13:52:38 +1000
-Message-ID: <87k08bdqm1.fsf@mpe.ellerman.id.au>
+        Mon, 18 Jul 2022 00:04:33 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69B411C37
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 21:04:28 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id n185so6389842wmn.4
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 21:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EsNHa5a7SYRE73Woad1Pm7o9hAag7TsYX0J/jHgYB7o=;
+        b=g4VJ8tJfoUHwr0f7YDkQKkA2v6ULPwzVFzxffb3/pOBGZWeRc9VcpfIi8GgVh01apL
+         EGkJik7CdGhR9BPWa8mqiVzx5QYd+vhhGjykJBI6EjIqzuxCyhDcApT2gdAhndSkjmOw
+         Y7lydZUx1es+7aBOqRlgDjEGmQRUYTYX+YnrfmwWmdUkf1v5HHFLlFcVogRKXs4Vs9hj
+         n8grMRfAXob3+G2SMsba001Dfuvtk27dCCVgZrkl2Xg8piE993Ccs7hvVSfUJFX6I87C
+         ZGxeMqyKG9exBMjSphCcDQKjtwHGfSlKZz9HTxj9Cj9ApFho6snHsD+u7VXjKwpwzqJc
+         OzPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EsNHa5a7SYRE73Woad1Pm7o9hAag7TsYX0J/jHgYB7o=;
+        b=MQXv3ks1dbFe4EJ2ejpj3xiJSE79DzWI+qu7eDJnxjWamlxJ3Eh3LKpPmuBrHgneyR
+         R3LUP8M2uwanlyddjzTkdhm7yK66rpBgZSx8nSVKvowBsF51U7ICdR3g1aMyuHd4kb79
+         6ELFurxQWYsp56dzi1ryX2LkyztCt2vDGsRL0ix3eNPSgqCmDSxr2JWXVsowRLjb7ZYI
+         0OX4G+rnHiU3eqrgf8IPUa+iToXCsWp/k/PpCcQPP1gi9fZaDbP2HbPe5iM7NjjdSEEL
+         NG1AWj4UTxAo5cZ1+j9YRUaEFopdJ0gzK2qGYE9u8zdmxOBAl+OQxpW2Beo6hu0BtoeD
+         /Btw==
+X-Gm-Message-State: AJIora9jYjmam9L/hNQFo3on7zo0cCJxjOmcBR1tt7VKUwjzfAt8t846
+        1CBTqDPubHUh+65pVYvfd3uAPPrXQM5lyxidm5k2pA==
+X-Google-Smtp-Source: AGRyM1uPK2XPDB2+i2fdHzYggyrdGIUO/R1IO1YCkIEJGgYoGsS7JVP4puAb7bkgO7oZNrpuaDKO9lthTTbezmNv0GQ=
+X-Received: by 2002:a05:600c:3caa:b0:394:8fb8:716 with SMTP id
+ bg42-20020a05600c3caa00b003948fb80716mr30056082wmb.105.1658117067083; Sun, 17
+ Jul 2022 21:04:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220707145248.458771-1-apatel@ventanamicro.com>
+ <20220707145248.458771-2-apatel@ventanamicro.com> <CAOnJCUKNaNz0iF5dfS9quRyDS_ZD1adWWAFjOnBPwqKEefpS8Q@mail.gmail.com>
+In-Reply-To: <CAOnJCUKNaNz0iF5dfS9quRyDS_ZD1adWWAFjOnBPwqKEefpS8Q@mail.gmail.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 18 Jul 2022 09:34:15 +0530
+Message-ID: <CAAhSdy2rN4rrKep=P4W_hen_OsHR8USQ7xGH5=fKd-5_t8NTew@mail.gmail.com>
+Subject: Re: [PATCH 1/5] KVM: Add gfp_custom flag in struct kvm_mmu_memory_cache
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Atish Patra <atishp@atishpatra.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Segher Boessenkool <segher@kernel.crashing.org> writes:
-> On Sun, Jul 17, 2022 at 07:44:22AM -0700, Linus Torvalds wrote:
->> On Sun, Jul 17, 2022 at 2:13 AM Sudip Mukherjee
->> <sudipm.mukherjee@gmail.com> wrote:
->> > I was trying to check it. With gcc-11 the assembly code generated is
->> > not using memset, but using __memset.
->> > But with gcc-12, I can see the assembly code is using memset. One
->> > example from the assembly:
->> 
->> You could try making the 'args' array in 'struct prom_args' be marked
->> 'volatile'.
->> 
->> Ie something like this:
->> 
->>   --- a/arch/powerpc/kernel/prom_init.c
->>   +++ b/arch/powerpc/kernel/prom_init.c
->>   @@ -115,6 +115,6 @@ struct prom_args {
->>            __be32 service;
->>            __be32 nargs;
->>            __be32 nret;
->>   -          __be32 args[10];
->>   +        volatile __be32 args[10];
->>    };
->> 
->> because I think it's just the compilers turning the small loop over
->> those fields into a "memset()".
+Hi Paolo,
+
+On Wed, Jul 13, 2022 at 6:57 AM Atish Patra <atishp@atishpatra.org> wrote:
 >
-> Yes.  See <https://gcc.gnu.org/onlinedocs/gcc/Standards.html#C-Language>
-> near the end:
->   Most of the compiler support routines used by GCC are present in
->   libgcc, but there are a few exceptions. GCC requires the freestanding
->   environment provide memcpy, memmove, memset and memcmp. Finally, if
->   __builtin_trap is used, and the target does not implement the trap
->   pattern, then GCC emits a call to abort.
+> On Thu, Jul 7, 2022 at 7:53 AM Anup Patel <apatel@ventanamicro.com> wrote:
+> >
+> > The kvm_mmu_topup_memory_cache() always uses GFP_KERNEL_ACCOUNT for
+> > memory allocation which prevents it's use in atomic context. To address
+> > this limitation of kvm_mmu_topup_memory_cache(), we add gfp_custom flag
+> > in struct kvm_mmu_memory_cache. When the gfp_custom flag is set to some
+> > GFP_xyz flags, the kvm_mmu_topup_memory_cache() will use that instead of
+> > GFP_KERNEL_ACCOUNT.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  include/linux/kvm_types.h | 1 +
+> >  virt/kvm/kvm_main.c       | 4 +++-
+> >  2 files changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+> > index ac1ebb37a0ff..1dcfba68076a 100644
+> > --- a/include/linux/kvm_types.h
+> > +++ b/include/linux/kvm_types.h
+> > @@ -87,6 +87,7 @@ struct gfn_to_pfn_cache {
+> >  struct kvm_mmu_memory_cache {
+> >         int nobjs;
+> >         gfp_t gfp_zero;
+> > +       gfp_t gfp_custom;
+> >         struct kmem_cache *kmem_cache;
+> >         void *objects[KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE];
+> >  };
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index a49df8988cd6..e3a6f7647474 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -386,7 +386,9 @@ int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+> >         if (mc->nobjs >= min)
+> >                 return 0;
+> >         while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
+> > -               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
+> > +               obj = mmu_memory_cache_alloc_obj(mc, (mc->gfp_custom) ?
+> > +                                                mc->gfp_custom :
+> > +                                                GFP_KERNEL_ACCOUNT);
+> >                 if (!obj)
+> >                         return mc->nobjs >= min ? 0 : -ENOMEM;
+> >                 mc->objects[mc->nobjs++] = obj;
+> > --
+> > 2.34.1
+> >
 >
-> Can't we simply have a small simple implementation of these functions in
-> arch/powerpc/boot/?  This stuff is not performance-critical, and this is
-> not the first time we hit these problems.
+> Acked-by: Atish Patra <atishp@rivosinc.com>
 
-prom_init.c isn't in arch/powerpc/boot :)
+I have queued this patch for 5.20.
 
-It's linked into the kernel proper, but we want it to behave like a
-pre-boot environment (because not all boot paths run it) which is why we
-restrict what symbols it can call.
+Please let me know if you are not okay or need changes in this patch.
 
-We could have a prom_memset() etc. but we'd need to do some tricks to
-rewrite references to memset() to prom_memset() before linking.
-
-cheers
+Thanks,
+Anup

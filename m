@@ -2,85 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B94577E8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F07577E8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233901AbiGRJYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
+        id S233584AbiGRJZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233584AbiGRJYL (ORCPT
+        with ESMTP id S233663AbiGRJZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:24:11 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873BC637E
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:24:10 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id v12so14389744edc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:24:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lvoARXVtfF7A5hOwKpACX9CK0G3DRgFceztlwnuv75Y=;
-        b=D7TbIEoBJuoHo8mOmNp5BfPAFmNuD/IA6LOkcBELV8S0s2YGwYPiXRTHhru4YIhVtL
-         0Ptji1nAVqkAX445vCixQ0D5IBfS16QxRLWcRbsGw5oiRaL81ScXuyuw6rDkawMB4lVB
-         oeFb/Jikr7c6/Klg//pe/s+0NuRhxboe+bRVEIDtCXKqu+6SsTF7Pqlz8rg2PF1uwmgV
-         XBCUhS929YuahCq00kTcUzlQkFQtHL0pVcsVYgHmTWi/IpKzb5MrpQp93dGp1Dc16yjr
-         F2QMGTBuRqP493T7XHqF0trt+E8Wm5Se24gubR02YIjGxwGm8TVIZJDmyHU+NOKi7QEe
-         b3/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lvoARXVtfF7A5hOwKpACX9CK0G3DRgFceztlwnuv75Y=;
-        b=XpEDwX+wmHQrzSpnTy4iGPAJalFDHogbdJfKwUJHO2Ay/Z/2LzLZJmEnwoDBqtP7PK
-         HrbcQycynZu+cauYtDCinfBnMK3ZBZXDr0USvYrBdZzPi8qtuaf2qRIpyoI3XhvxQX7j
-         MG0z0yUpxwpKudQh7jRNWPhAxDsFcZF3W0N4cdn5nxUU7PClfSj+i94Bwp+8xU7wOKjP
-         gNntz94Yrt8AGPCF5fi0ZjycKUKHzaJxYNNjMIjYTgoDw9LQEZMbA1IwKytvrDdMaY9O
-         C0DVzkY8YC1Al0GTybB/0QY4DTT/YX9AtNVdr/Kr9KYo6TAlK2MP5BhGRRKa6WUBj8g7
-         eu2g==
-X-Gm-Message-State: AJIora90X72KMEyMLc8rPnAq8x/gXM83e/EoI8rzyDNHlWnaRES9+GaR
-        j/+DWItm7H6Q9PtZYx/Tylj4+0IxjUFekbuxYwf0Tg==
-X-Google-Smtp-Source: AGRyM1uGi4Q4mleJl5vMkSM6KeV5yMhwkBxtFvSuW3ZnAAtQm5CDgDrdoOT1oRywfbzc5hXMSLaj3EQytWfkXAXLSUo=
-X-Received: by 2002:aa7:c0c4:0:b0:43a:20cf:3c68 with SMTP id
- j4-20020aa7c0c4000000b0043a20cf3c68mr36090978edp.172.1658136249130; Mon, 18
- Jul 2022 02:24:09 -0700 (PDT)
+        Mon, 18 Jul 2022 05:25:19 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC9F19025;
+        Mon, 18 Jul 2022 02:25:16 -0700 (PDT)
+Received: (Authenticated sender: contact@artur-rojek.eu)
+        by mail.gandi.net (Postfix) with ESMTPA id 23266FF80B;
+        Mon, 18 Jul 2022 09:25:12 +0000 (UTC)
 MIME-Version: 1.0
-References: <20220713193750.4079621-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20220713193750.4079621-1-horatiu.vultur@microchip.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 18 Jul 2022 11:23:57 +0200
-Message-ID: <CACRpkdawTmo2HW6kkkg=+rdCxM4EhghhgTahX+ZLKGdj8cYdmQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/2] pinctrl: ocelot: Add fixes for ocelot driver
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexandre.belloni@bootlin.com, kavyasree.kotagiri@microchip.com,
-        colin.foster@in-advantage.com, UNGLinuxDriver@microchip.com,
-        maxime.chevallier@bootlin.com, michael@walle.cc,
-        andy.shevchenko@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 18 Jul 2022 11:25:12 +0200
+From:   Artur Rojek <contact@artur-rojek.eu>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH] Input: adc-joystick - fix ordering in
+ adc_joystick_probe()
+In-Reply-To: <YskFh4NHnlcryMkk@google.com>
+References: <YskFh4NHnlcryMkk@google.com>
+Message-ID: <c93f12598af6d708d702e0538b5c700e@artur-rojek.eu>
+X-Sender: contact@artur-rojek.eu
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 9:33 PM Horatiu Vultur
-<horatiu.vultur@microchip.com> wrote:
+On 2022-07-09 06:35, Dmitry Torokhov wrote:
+> We should register the IIO buffer before we register the input device,
+> because as soon as the device is registered input handlers may attach 
+> to
+> it, resulting in a call to adc_joystick_open() which makes use of the 
+> said
+> buffer.
+> 
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+> 
+> Not tested on hardware...
+Hi Dmitry,
 
-> The patch series fixes 2 issues with pincfg.
-> - first issue is that on lan966x uses different offsets than sparx5
->   so it can't use directly the ocelot_confops
-> - second issue is pincfg stop working when regmap support was added.
+nice catch, thanks! I will verify the operation on hardware some time 
+over the weekend.
+Small nitpick inline. With that changed:
 
-v5 applied for fixes!
+Acked-by: Artur Rojek <contact@artur-rojek.eu>
 
-Thanks for fixing this Horatiu!
+> 
+>  drivers/input/joystick/adc-joystick.c | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/input/joystick/adc-joystick.c
+> b/drivers/input/joystick/adc-joystick.c
+> index 78ebca7d400a..e0cfdc84763f 100644
+> --- a/drivers/input/joystick/adc-joystick.c
+> +++ b/drivers/input/joystick/adc-joystick.c
+> @@ -222,13 +222,6 @@ static int adc_joystick_probe(struct 
+> platform_device *pdev)
+>  	if (error)
+>  		return error;
+> 
+> -	input_set_drvdata(input, joy);
+> -	error = input_register_device(input);
+> -	if (error) {
+> -		dev_err(dev, "Unable to register input device\n");
+> -		return error;
+> -	}
+> -
+>  	joy->buffer = iio_channel_get_all_cb(dev, adc_joystick_handle, joy);
+>  	if (IS_ERR(joy->buffer)) {
+>  		dev_err(dev, "Unable to allocate callback buffer\n");
+> @@ -241,6 +234,14 @@ static int adc_joystick_probe(struct 
+> platform_device *pdev)
+>  		return error;
+>  	}
+> 
+> +	input_set_drvdata(input, joy);
+> +
+> +	error = input_register_device(input);
+> +	if (error) {
+> +		dev_err(dev, "Unable to register input device\n");
+> +		return error;
+> +	}
+> +
+>  	return 0;
+Since this is now the last thing the function does, we can simplify the 
+code a bit:
+```
+	error = input_register_device(input);
+	if (error)
+		dev_err(dev, "Unable to register input device\n");
 
-Thanks to Andy for the usual first-class review as well.
+	return error;
+```
 
-Yours,
-Linus Walleij
+Cheers,
+Artur
+>  }
+> 
+> --
+> 2.37.0.144.g8ac04bfd2-goog

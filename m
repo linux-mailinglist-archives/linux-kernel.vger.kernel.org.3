@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28306578B00
+	by mail.lfdr.de (Postfix) with ESMTP id A249C578B01
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236148AbiGRThG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
+        id S236152AbiGRThI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbiGRThF (ORCPT
+        with ESMTP id S236113AbiGRThG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:37:05 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619E9E00D
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:03 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id p9so12675172pjd.3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:03 -0700 (PDT)
+        Mon, 18 Jul 2022 15:37:06 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD9F2A42A
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:04 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id o12so11561506pfp.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AYRHTvglS7MWBh2IBz4hMgwmIAyPT1erchZO9GO0BVY=;
-        b=NJrFfrNoY0iomel5JhiA0br3CbpKSCrsufXYanqZjtwMZXma7bd7mEMfYL1CLUSjGt
-         fIDf0Stc8+DdYK0eU0WPQvv6TiRDAHm1ebdjf9JoOts5WVUyxNzqPictNEGp9DNnSJiR
-         idoDH02j6T6QJOg9BE4HaSKMDSpb9QfqU81rCoauPMCPapL2S6yMMpkvsJMwid4rSMhr
-         /KTumfxfMVOr1arnTmZce7Pt1Eo0niD5eJZs2IeBx/rie2yt0ysT4KQfTfa6P5WRmGyd
-         RrB0+ZZKLGnmRy/aEgfIC+2txK4xgUytK2bD00tR1XlXmPyHX2jgudF2USo0o7xMsb7i
-         pKhg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=lqN6lUA6CKPQ6pXduKwXrnAjAVaaU8p/HZgGKWiS1UU=;
+        b=anEaeCdDUpWprBhzF25fJpAdtW+LgFlwZ2ebfZ8wM0kpnCfn2B96Ny11a5FiZPFqb+
+         8d217vnOhZgu2PfDrycJhxqOQiXud4xvWn2c80DYc99oVi3Ir9FehDJAGUmSeOUhksfr
+         QR+ahMTY316YC8qzqWOkrwI9aF+uUCzKo6Q+X7SXWicVhjcsJrIFPjQgPYBlrrFSkyza
+         nrpLpAgplwp8N1Y7IPDrjQick91Rj9cFFO7tm3RrwD9n6LXQmJHs9J6KNpKvgDrlFFhE
+         LWoW2wCSjvgnI+efvRVSp0tdhvWKQfmNMDQryOAu3HMUlJExJUMY0OFO8aRltUkZiSpA
+         eLoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AYRHTvglS7MWBh2IBz4hMgwmIAyPT1erchZO9GO0BVY=;
-        b=QxeP2s51xtiN9dDKlHN7fcE2flq3bBASpdqeUq7nMf8RbcNvbAS/D8T8DWoswlilTU
-         AOFgSGpAzEmy4LxDE2gQy3x66XxyPDDCJ0zvtn0tq4TZeWBZ3j6FPotuD6YNW/HfOkjD
-         OPqS8dQo2Umw+E1774W78ISvnZYdxhZVey5v+XR4pLeBhH/hYsHxo5A2PgmMviA6KLw+
-         HQvsMLN1ZpAtqL2HjAOFPcylUpyZaG/cw1dGMtw0+wGDS0yhND0HEyw/23QGbmLLV616
-         ZM3JSDB237MWmHn6fF3OEsqLBAE4wGxAatkBD4HQx/Uh0WUsUhAlNEBq2+Bf0YhlvZSa
-         K/Dg==
-X-Gm-Message-State: AJIora9e8FV56babhMIMK+gHyFXxK0G8h+1rofe+J/qvTB0bgXJ7r6Ev
-        y3LwZEvUZNbUUa7xptwkk/g=
-X-Google-Smtp-Source: AGRyM1sjCw3eN71l0ZNBBK4Ea+EYfYiyKGIlFtnAiU8rN+xalvfAonv5bu3IKlPhcpo9EL1S5AVPrA==
-X-Received: by 2002:a17:902:aa4b:b0:15f:b2c:73c7 with SMTP id c11-20020a170902aa4b00b0015f0b2c73c7mr29783790plr.164.1658173022360;
-        Mon, 18 Jul 2022 12:37:02 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lqN6lUA6CKPQ6pXduKwXrnAjAVaaU8p/HZgGKWiS1UU=;
+        b=0DO4pzxrliP/dqSm6i1TMjEcuUmJTOsiktjtipKQbU6qESLpd/fajXu8V0GbCccJvY
+         DoXADkPg2x/EfAaYCcVOLpJgxEv3Y3BYQhfUZTukrmxhQexzyNE0DU8ZNISKBx9SY4S8
+         xTKISLCKK3V88V5h6jCXG6naAck/g3JZSZ3fMU/cDy3Tlw8ljVNMRWovo5GWjWSkWkmN
+         kn0n5osuEYkwqU3v0gDhTNCb3hPxcq/qL5MQl72crBKi51UP2/9MtSuk/ziK+9GKf/vb
+         yhPHdKd0301uiCbsRH67y/HQVE0Y1kMJbnHoD3IfA5cyG9aAlpjVDpM+FSXcjinHIo50
+         HQmA==
+X-Gm-Message-State: AJIora/Sd2YxhNXWsLIJSAWKQ6SHyMpuDmaK4RnCH1g8kQ7A33ATm3CZ
+        8E/OGD7xhw05rJQEN6oVurQ=
+X-Google-Smtp-Source: AGRyM1t4cIpL6IVhzKiQES1MTghU8BQMTlI5pi0eeK/ksqsiBBWEFmy9twLEG4Iqd+Ne+Q/gUcyJmQ==
+X-Received: by 2002:a05:6a00:b92:b0:52a:e60d:dfbb with SMTP id g18-20020a056a000b9200b0052ae60ddfbbmr29561053pfj.72.1658173024046;
+        Mon, 18 Jul 2022 12:37:04 -0700 (PDT)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b0016bc4a6ce28sm9907887plb.98.2022.07.18.12.37.00
+        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b0016bc4a6ce28sm9907887plb.98.2022.07.18.12.37.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:37:02 -0700 (PDT)
+        Mon, 18 Jul 2022 12:37:03 -0700 (PDT)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
 To:     linux-mm@kvack.org
@@ -66,10 +66,12 @@ Cc:     linux-kernel@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
         Nick Piggin <npiggin@gmail.com>
-Subject: [RFC PATCH 00/14] mm: relaxed TLB flushes and other optimi.
-Date:   Mon, 18 Jul 2022 05:01:58 -0700
-Message-Id: <20220718120212.3180-1-namit@vmware.com>
+Subject: [RFC PATCH 01/14] userfaultfd: set dirty and young on writeprotect
+Date:   Mon, 18 Jul 2022 05:01:59 -0700
+Message-Id: <20220718120212.3180-2-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220718120212.3180-1-namit@vmware.com>
+References: <20220718120212.3180-1-namit@vmware.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
@@ -83,68 +85,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-Following the optimizations to avoid unnecessary TLB flushes [1],
-mprotect() and userfaultfd() did not cause unnecessary TLB flushes when
-protection was unchanged. This enabled userfaultfd to write-unprotect a
-page without triggering a TLB flush (and potentially shootdown).
+When userfaultfd makes a PTE writable, it can now change the PTE
+directly, in some cases, without going triggering a page-fault first.
+Yet, doing so might leave the PTE that was write-unprotected as old and
+clean. At least on x86, this would cause a >500 cycles overhead when the
+PTE is first accessed.
 
-After these changes, David added another feature to mprotect [2],
-allowing pages that can safely be mapped as writable, to be mapped as
-such directly from mprotect(), instead of going through the page fault
-handler. This saves the overhead of a page-fault when write-unprotecting
-private exclusive pages as writable, for instance.
-
-This change introduced, however, some undesired behaviors, especially if
-we adopt this new feature for userfaultfd. First, the newly mapped PTE
-is not set as dirty, which might induce on x86 over 500 cycles of
-overhead (if the page was not dirty before).  Second, once again we can
-have an expensive TLB shootdown when we write-unprotect a page: when we
-relax the protection (i.e., give more permission), we would do a TLB
-flush. If the application is multithreaded, or a userfaultfd monitor
-uses write-unprotect (which is a common case), a TLB shootdown would be
-needed.
-
-This patch-set allows userfaultfd to map pages as writeable directly
-upon write-(un)protect ioctl, while addressing the undesired behaviors
-that occur when one uses userfaultfd write-unprotect or mprotect to add
-permissions. It also does some cleanup and micro-optimizations along the
-way.
-
-The main change that is done in the patch-set - x86 specific, at the
-moment - is the introduction of "relaxed" TLB flushes when permissions
-are added. Upon a "relaxed" TLB flush, the mm's TLB generation is
-advanced and the local TLB is flushed, but no TLB shootdown takes place.
-If a spurious page-fault occurs and the local generation of the TLB is
-found to be out-of-sync with the mm generation, a full TLB flush is
-performed on the faulting core to prevent further spurious page-faults.
-
-To a certain extent "relaxed flushes" are similar to the changes that
-were proposed some time ago for kernel mappings [3]. However, it does
-not have any complicated interactions with with NMI handlers.
-
-Experiments on Haswell show the performance improvement.  Running, for a
-single page, a loop of (1) mprotect(READ); (2) mprotect(READ|WRITE) and
-then (3) access provides the following result (on bare metal this time):
-
-mprotect(PROT_READ) time in cycles:
-
-			1 Thread	2 Threads
-Before (5.19rc4+)	2499		4655
-+patch			2495		4363 (-6%)
-
-
-mprotect(PROT_READ|PROT_WRITE) in cycles:
-
-			1 Thread	2 Threads
-Before (5.19rc4+)	2529		4675
-+patch			2496		2615 (-44%)
-
-If we ran MADV_FREE or the page was not dirty, we can also shorten the
-PROT_READ time by skipping the TLB shootdown with this patch-set.
-
-[1] https://lore.kernel.org/all/20220401180821.1986781-1-namit@vmware.com/
-[2] https://lore.kernel.org/all/20220614093629.76309-1-david@redhat.com/
-[3] https://lore.kernel.org/all/4797D64D.1060105@goop.org/
+Use MM_CP_WILL_NEED to set the PTE as young and dirty when userfaultfd
+gets a hint that the page is likely to be used. Avoid changing the PTE
+to young and dirty in other cases to avoid excessive writeback and
+messing with the page reclamation logic.
 
 Cc: Andrea Arcangeli <aarcange@redhat.com>
 Cc: Andrew Cooper <andrew.cooper3@citrix.com>
@@ -158,44 +108,87 @@ Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Will Deacon <will@kernel.org>
 Cc: Yu Zhao <yuzhao@google.com>
 Cc: Nick Piggin <npiggin@gmail.com>
-Cc: Axel Rasmussen <axelrasmussen@google.com>
-Cc: Mike Rapoport <rppt@linux.ibm.com>
+---
+ include/linux/mm.h | 2 ++
+ mm/mprotect.c      | 9 ++++++++-
+ mm/userfaultfd.c   | 8 ++++++--
+ 3 files changed, 16 insertions(+), 3 deletions(-)
 
-Nadav Amit (14):
-  userfaultfd: set dirty and young on writeprotect
-  userfaultfd: try to map write-unprotected pages
-  mm/mprotect: allow exclusive anon pages to be writable
-  mm/mprotect: preserve write with MM_CP_TRY_CHANGE_WRITABLE
-  x86/mm: check exec permissions on fault
-  mm/rmap: avoid flushing on page_vma_mkclean_one() when possible
-  mm: do fix spurious page-faults for instruction faults
-  x86/mm: introduce flush_tlb_fix_spurious_fault
-  mm: introduce relaxed TLB flushes
-  x86/mm: introduce relaxed TLB flushes
-  x86/mm: use relaxed TLB flushes when protection is removed
-  x86/tlb: no flush on PTE change from RW->RO when PTE is clean
-  mm/mprotect: do not check flush type if a strict is needed
-  mm: conditional check of pfn in pte_flush_type
-
- arch/x86/include/asm/pgtable.h  |   4 +-
- arch/x86/include/asm/tlb.h      |   3 +-
- arch/x86/include/asm/tlbflush.h |  90 +++++++++++++++++--------
- arch/x86/kernel/alternative.c   |   2 +-
- arch/x86/kernel/ldt.c           |   3 +-
- arch/x86/mm/fault.c             |  22 +++++-
- arch/x86/mm/tlb.c               |  21 +++++-
- include/asm-generic/tlb.h       | 116 +++++++++++++++++++-------------
- include/linux/mm.h              |   2 +
- include/linux/mm_types.h        |   6 ++
- mm/huge_memory.c                |   9 ++-
- mm/hugetlb.c                    |   2 +-
- mm/memory.c                     |   2 +-
- mm/mmu_gather.c                 |   1 +
- mm/mprotect.c                   |  31 ++++++---
- mm/rmap.c                       |  16 +++--
- mm/userfaultfd.c                |  10 ++-
- 17 files changed, 237 insertions(+), 103 deletions(-)
-
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 9cc02a7e503b..4afd75ce5875 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1988,6 +1988,8 @@ extern unsigned long move_page_tables(struct vm_area_struct *vma,
+ /* Whether this change is for write protecting */
+ #define  MM_CP_UFFD_WP                     (1UL << 2) /* do wp */
+ #define  MM_CP_UFFD_WP_RESOLVE             (1UL << 3) /* Resolve wp */
++/* Whether to try to mark entries as dirty as they are to be written */
++#define  MM_CP_WILL_NEED		   (1UL << 4)
+ #define  MM_CP_UFFD_WP_ALL                 (MM_CP_UFFD_WP | \
+ 					    MM_CP_UFFD_WP_RESOLVE)
+ 
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 996a97e213ad..34c2dfb68c42 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -82,6 +82,7 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+ 	bool prot_numa = cp_flags & MM_CP_PROT_NUMA;
+ 	bool uffd_wp = cp_flags & MM_CP_UFFD_WP;
+ 	bool uffd_wp_resolve = cp_flags & MM_CP_UFFD_WP_RESOLVE;
++	bool will_need = cp_flags & MM_CP_WILL_NEED;
+ 
+ 	tlb_change_page_size(tlb, PAGE_SIZE);
+ 
+@@ -172,6 +173,9 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+ 				ptent = pte_clear_uffd_wp(ptent);
+ 			}
+ 
++			if (will_need)
++				ptent = pte_mkyoung(ptent);
++
+ 			/*
+ 			 * In some writable, shared mappings, we might want
+ 			 * to catch actual write access -- see
+@@ -187,8 +191,11 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+ 			 */
+ 			if ((cp_flags & MM_CP_TRY_CHANGE_WRITABLE) &&
+ 			    !pte_write(ptent) &&
+-			    can_change_pte_writable(vma, addr, ptent))
++			    can_change_pte_writable(vma, addr, ptent)) {
+ 				ptent = pte_mkwrite(ptent);
++				if (will_need)
++					ptent = pte_mkdirty(ptent);
++			}
+ 
+ 			ptep_modify_prot_commit(vma, addr, pte, oldpte, ptent);
+ 			if (pte_needs_flush(oldpte, ptent))
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 954c6980b29f..e0492f5f06a0 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -749,6 +749,7 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+ 	bool enable_wp = uffd_flags & UFFD_FLAGS_WP;
+ 	struct vm_area_struct *dst_vma;
+ 	unsigned long page_mask;
++	unsigned long cp_flags;
+ 	struct mmu_gather tlb;
+ 	pgprot_t newprot;
+ 	int err;
+@@ -795,9 +796,12 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+ 	else
+ 		newprot = vm_get_page_prot(dst_vma->vm_flags);
+ 
++	cp_flags = enable_wp ? MM_CP_UFFD_WP : MM_CP_UFFD_WP_RESOLVE;
++	if (uffd_flags & (UFFD_FLAGS_ACCESS_LIKELY|UFFD_FLAGS_WRITE_LIKELY))
++		cp_flags |= MM_CP_WILL_NEED;
++
+ 	tlb_gather_mmu(&tlb, dst_mm);
+-	change_protection(&tlb, dst_vma, start, start + len, newprot,
+-			  enable_wp ? MM_CP_UFFD_WP : MM_CP_UFFD_WP_RESOLVE);
++	change_protection(&tlb, dst_vma, start, start + len, newprot, cp_flags);
+ 	tlb_finish_mmu(&tlb);
+ 
+ 	err = 0;
 -- 
 2.25.1
 
